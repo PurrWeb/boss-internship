@@ -4,6 +4,7 @@ ruby "2.1.2"
 
 gem "rails", "~> 4.2.0"
 gem 'mysql2', "~> 0.3.20"
+gem "devise", "~> 3.4.0"
 gem "thin"
 gem "rollbar"
 gem "jquery-rails"
