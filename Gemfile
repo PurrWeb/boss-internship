@@ -10,6 +10,8 @@ gem "rollbar"
 gem "jquery-rails"
 gem "jquery-ui-rails"
 gem "uglifier"
+gem "fog"
+gem "carrierwave"
 
 group :development, :test do
   gem "byebug"
