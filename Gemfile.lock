@@ -59,6 +59,8 @@ GEM
     eventmachine (1.0.8)
     excon (0.44.2)
     execjs (2.3.0)
+    figaro (1.1.1)
+      thor (~> 0.14)
     fission (0.5.0)
       CFPropertyList (~> 2.2)
     fog (1.28.0)
@@ -236,6 +238,7 @@ DEPENDENCIES
   byebug
   carrierwave
   devise (~> 3.4.0)
+  figaro
   fog
   jquery-rails
   jquery-ui-rails

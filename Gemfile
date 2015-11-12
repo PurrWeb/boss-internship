@@ -12,6 +12,7 @@ gem "jquery-ui-rails"
 gem "uglifier"
 gem "fog"
 gem "carrierwave"
+gem "figaro"
 
 group :development, :test do
   gem "byebug"
