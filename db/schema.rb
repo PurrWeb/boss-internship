@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151111131818) do
+ActiveRecord::Schema.define(version: 20151112131155) do
+
+  create_table "backups", force: :cascade do |t|
+    t.integer  "size",       limit: 4,   default: 0, null: false
+    t.string   "dump",       limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
