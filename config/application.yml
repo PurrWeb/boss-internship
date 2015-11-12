@@ -1,0 +1,5 @@
+development:
+  DATABASE_URL: "mysql2://root@localhost/boss_development"
+
+test:
+  DATABASE_URL: "mysql2://root@localhost/boss_test"
