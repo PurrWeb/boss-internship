@@ -6,6 +6,14 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
+  require "sidekiq/web"
+  unless Rails.env.development?
+    Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+      username == "admin" && password == "60bde5437fdedsds9935d95c6c090"
+    end
+  end
+  mount Sidekiq::Web, at: "/queue"
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

@@ -13,6 +13,9 @@ gem "uglifier"
 gem "fog"
 gem "carrierwave"
 gem "figaro"
+gem "sidekiq"
+gem "sidekiq-failures"
+gem "sinatra", require: false
 
 group :development, :test do
   gem "byebug"
