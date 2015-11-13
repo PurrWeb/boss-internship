@@ -1,3 +1,4 @@
 web=1
 worker=1
+clock=1
 migrate=0
