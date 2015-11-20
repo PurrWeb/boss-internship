@@ -1,0 +1,9 @@
+development:
+  REDIS_DB: "0"
+  REDIS_URL: "redis://localhost:6379"
+  DATABASE_URL: "mysql2://root@localhost/boss_development"
+
+test:
+  REDIS_DB: "1"
+  REDIS_URL: "redis://localhost:6379"
+  DATABASE_URL: "mysql2://root@localhost/boss_test"

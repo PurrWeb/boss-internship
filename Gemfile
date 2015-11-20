@@ -10,6 +10,13 @@ gem "rollbar"
 gem "jquery-rails"
 gem "jquery-ui-rails"
 gem "uglifier"
+gem "fog"
+gem "carrierwave"
+gem "figaro"
+gem "sidekiq"
+gem "sidekiq-failures"
+gem "sinatra", require: false
+gem "clockwork"
 
 group :development, :test do
   gem "byebug"
