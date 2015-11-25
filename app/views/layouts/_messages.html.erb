@@ -1,0 +1,7 @@
+<% flash.each do |name, msg| %>
+  <% if msg.is_a?(String) %>
+    <% alert_class =  bootstrap_alert_class_for(name) %>
+    <% dismissible_class = bootstrap_alert_dismissable_class_for(name) %>
+    <%= content_tag :div, msg, :class => "alert #{alert_class} #{dismissible_class}", role: "alert" %>
+  <% end %>
+<% end %>
