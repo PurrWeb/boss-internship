@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   GENDERS = ['m', 'f']
 
   belongs_to :address, inverse_of: :user
+  has_many :venues
 
   include Enableable
 
