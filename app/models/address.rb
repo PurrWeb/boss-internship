@@ -1,4 +1,6 @@
 class Address < ActiveRecord::Base
+  has_one :user, inverse_of: :address
+
   validate  :address_fields_valid
   validates :region, presence: true
   validates :country, presence: true

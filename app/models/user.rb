@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   ROLES = ['admin', 'manager', 'staff']
   GENDERS = ['m', 'f']
 
+  belongs_to :address, inverse_of: :user
+
   include Enableable
 
   # Include default devise modules. Others available are:
@@ -17,6 +19,7 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :sir_name, presence: true
   validates :date_of_birth, presence: true
+  validates :address, presence: true
   validate  :national_insurance_number_valid
   validate  :password_is_numerical
 
