@@ -13,6 +13,18 @@
 
 ActiveRecord::Schema.define(version: 20151202141248) do
 
+  create_table "addresses", force: :cascade do |t|
+    t.string   "address_1",  limit: 255
+    t.string   "address_2",  limit: 255
+    t.string   "address_3",  limit: 255
+    t.string   "address_4",  limit: 255
+    t.string   "region",     limit: 255
+    t.string   "country",    limit: 255
+    t.string   "postcode",   limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "backups", force: :cascade do |t|
     t.integer  "size",       limit: 4,   default: 0, null: false
     t.string   "dump",       limit: 255
