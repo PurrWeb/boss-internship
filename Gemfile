@@ -7,8 +7,8 @@ gem 'mysql2', "~> 0.3.20"
 gem "devise", "~> 3.4.0"
 gem "thin"
 gem "rollbar"
-gem 'bootstrap-sass', '~> 3.3.6'
 gem 'sass-rails', '>= 3.2'
+gem 'bootstrap-sass', '~> 3.3.6'
 gem "jquery-rails"
 gem "jquery-ui-rails"
 gem "uglifier"
