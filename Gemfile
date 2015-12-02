@@ -23,6 +23,13 @@ gem "clockwork"
 group :development, :test do
   gem "byebug"
   gem "pry-rails"
+  gem "factory_girl_rails"
+end
+
+group :test do
+  gem "rspec-rails"
+  gem "capybara"
+  gem "database_cleaner"
 end
 
 group :test do
