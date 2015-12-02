@@ -5,13 +5,15 @@ RSpec.feature 'Login' do
   let(:password) { '123456789' }
   let(:user) { FactoryGirl.create(:user, :admin, email: email, password: password) }
 
+  let(:login_page) { LoginPage.new }
+  let(:home_page) { HomePage.new }
+
   context 'for a not logged in user' do
     scenario 'Logging in should take you to the homepage' do
       visit('/')
-      fill_in('Email', with: user.email)
-      fill_in('Password', with: password)
-      click_button('Sign in')
-      expect(page).to have_content('Welcome')
+      login_page.sign_in(email: user.email, password: password)
+
+      home_page.assert_on_correct_page
     end
   end
 end
