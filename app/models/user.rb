@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
 
   belongs_to :address, inverse_of: :user
   has_many :venues
+  accepts_nested_attributes_for :address, allow_destroy: false
 
   include Enableable
 
@@ -48,5 +49,9 @@ class User < ActiveRecord::Base
       !national_insurance_number_regex.match(national_insurance_number)
       errors.add(:national_insurance_number, 'format must be 2 letters, followed by 6 numbers, and a letter ')
     end
+  end
+
+  def full_name
+    [first_name, sir_name].join(' ')
   end
 end

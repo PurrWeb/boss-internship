@@ -1,22 +1,14 @@
-class UsersIndexPage < PageObject
+class AddUserPage < PageObject
   def surf_to
-    visit(url_helpers.users_path)
-  end
-
-  page_action :click_add_user_button do
-    click_link 'Add User'
-  end
-
-  page_action :ensure_flash_message_displayed do |message|
-    expect(find('.alert.message')).to have_text(message)
-  end
-
-  page_action :ensure_record_displayed_for do |user|
-    find(:css, ".users-index-listing[data-user-id=\"#{user.id}\"]")
+    visit(url_helpers.new_user_path)
   end
 
   def navigation
     @navigation ||= NavigationBar.new(self)
+  end
+
+  def form
+    @form ||= UserForm.new(self)
   end
 
   def assert_on_correct_page
@@ -32,6 +24,6 @@ class UsersIndexPage < PageObject
   end
 
   def expected_page_heading_text
-    'Users'
+    'Add User'
   end
 end

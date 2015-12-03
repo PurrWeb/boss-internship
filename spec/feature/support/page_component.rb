@@ -21,7 +21,6 @@ class PageComponent
     parent.url_helpers
   end
 
-  private
   def assert_on_correct_page
     parent.assert_on_correct_page
   end

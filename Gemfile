@@ -20,6 +20,7 @@ gem "sidekiq-failures"
 gem "sinatra", require: false
 gem "clockwork"
 gem 'require_all'
+gem 'bootstrap_form'
 
 group :development, :test do
   gem "byebug"
