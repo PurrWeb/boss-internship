@@ -3,6 +3,10 @@ class HomePage < PageObject
     visit('/')
   end
 
+  def navigation
+    @navigation ||= NavigationBar.new(self)
+  end
+
   def assert_on_correct_page
     expect(page_heading).to(
       have_text(expected_page_heading_text),

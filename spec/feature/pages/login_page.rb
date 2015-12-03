@@ -3,6 +3,10 @@ class LoginPage < PageObject
     visit(url_helpers.new_user_session_path)
   end
 
+  def navigation
+    NavigationBar.new(self)
+  end
+
   page_action :sign_in do |email:, password:|
     fill_in('Email', with: email)
     fill_in('Password', with: password)
