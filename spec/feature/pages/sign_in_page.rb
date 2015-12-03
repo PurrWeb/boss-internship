@@ -1,4 +1,4 @@
-class LoginPage < PageObject
+class SignInPage < PageObject
   def surf_to
     visit(url_helpers.new_user_session_path)
   end

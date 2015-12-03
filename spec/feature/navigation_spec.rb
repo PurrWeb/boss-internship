@@ -3,14 +3,14 @@ require 'feature/feature_spec_helper'
 RSpec.feature 'Navigation Bar' do
   let(:email) { 'joe@blogs.com' }
   let(:password) { '123456789' }
-  let(:login_page) { LoginPage.new }
+  let(:sign_in_page) { SignInPage.new }
 
   context 'a not logged in user' do
     scenario 'sees the default navbar' do
-      login_page.surf_to
-      login_page.assert_on_correct_page
+      sign_in_page.surf_to
+      sign_in_page.assert_on_correct_page
 
-      login_page.navigation.tap do |navigation|
+      sign_in_page.navigation.tap do |navigation|
         navigation.ensure_sections_only_appear(:brand)
       end
     end
