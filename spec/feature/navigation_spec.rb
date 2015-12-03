@@ -19,12 +19,14 @@ RSpec.feature 'Navigation Bar' do
       let(:user) { FactoryGirl.create(:user, :admin, email: email, password: password) }
       let(:home_page) { HomePage.new }
 
-      scenario 'sees the default navbar' do
+      scenario 'sees extra functionality' do
         login_as(user)
 
         home_page.surf_to
         home_page.navigation.tap do |navigation|
-          navigation.ensure_sections_only_appear(:brand)
+          navigation.ensure_sections_only_appear(:brand, :user)
+          navigation.ensure_login_details_displayed_in_user_section(user)
+          navigation.ensure_logout_link_displayed_in_user_section
         end
       end
     end

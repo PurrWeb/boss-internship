@@ -19,6 +19,15 @@ class NavigationBar < PageComponent
     end
   end
 
+  page_action :ensure_login_details_displayed_in_user_section do |user|
+    expect(user_section).to have_text("Signed in as #{user.email}")
+  end
+
+  page_action :ensure_logout_link_displayed_in_user_section do
+    link = user_section.find_link('Sign out')
+    expect(link['href']).to eq(url_helpers.destroy_user_session_path)
+  end
+
   def possible_sections
     section_data.keys
   end
@@ -28,10 +37,17 @@ class NavigationBar < PageComponent
   end
 
   private
+  def user_section
+    scope.find(section_selector(:user))
+  end
+
   def section_data
     {
       brand: {
         selector: '.nav-brand-section'
+      },
+      user: {
+        selector: '.nav-user-section'
       }
     }
   end
