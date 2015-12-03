@@ -53,6 +53,6 @@ class NavigationBar < PageComponent
   end
 
   def section_selector(section)
-    section_data.fetch(section, "'#{section}' section unsupported").fetch(:selector)
+    section_data.fetch(section) { raise "'#{section}' section unsupported" }.fetch(:selector)
   end
 end
