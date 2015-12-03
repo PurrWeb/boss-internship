@@ -1,16 +1,18 @@
 class NavigationBar < PageComponent
-  page_action :ensure_sections_appear do |*sections|
-    sections.each do |section|
-      expect(scope).to have_selector(section_selector(section))
-    end
+  page_action :ensure_branding_displayed do
+    link = header_section.find('a.navbar-brand')
+    expect(link).to have_text('Boss')
+    expect(link['href']).to eq('/')
   end
 
-  page_action :ensure_sections_only_appear do |*sections|
-    sections.each do |section|
+  page_action :ensure_only_sections_displayed do |*sections|
+    Array(sections).each do |section|
       expect(scope).to have_selector(section_selector(section))
     end
 
-    ensure_sections_dont_appear(*(possible_sections - sections))
+    (possible_sections - Array(sections)).each do |section|
+      expect(scope).not_to have_selector(section_selector(section))
+    end
   end
 
   page_action :ensure_sections_dont_appear do |*sections|
@@ -19,13 +21,13 @@ class NavigationBar < PageComponent
     end
   end
 
-  page_action :ensure_login_details_displayed_in_user_section do |user|
-    expect(user_section).to have_text("Signed in as #{user.email}")
+  page_action :ensure_user_section_not_displayed do
+    expect(scope).not_to have_selector(user_section_selector)
   end
 
-  page_action :ensure_logout_link_displayed_in_user_section do
-    link = user_section.find_link('Sign out')
-    expect(link['href']).to eq(url_helpers.destroy_user_session_path)
+  page_action :ensure_user_section_displayed_for do |user|
+    ensure_user_section_login_details_displayed_for(user)
+    ensure_user_section_logout_link_displayed
   end
 
   def possible_sections
@@ -37,19 +39,33 @@ class NavigationBar < PageComponent
   end
 
   private
+  def ensure_user_section_login_details_displayed_for(user)
+    expect(user_section).to have_text("Signed in as #{user.email}")
+  end
+
+  def ensure_user_section_logout_link_displayed
+    link = user_section.find_link('Sign out')
+    expect(link['href']).to eq(url_helpers.destroy_user_session_path)
+  end
+
+  def brand_section
+    scope.find(header_section)
+  end
+
+  def header_section
+    scope.find('.navbar-header')
+  end
+
   def user_section
-    scope.find(section_selector(:user))
+    scope.find(user_section_selector)
+  end
+
+  def user_section_selector
+    '.nav-user-section'
   end
 
   def section_data
-    {
-      brand: {
-        selector: '.nav-brand-section'
-      },
-      user: {
-        selector: '.nav-user-section'
-      }
-    }
+    {}
   end
 
   def section_selector(section)

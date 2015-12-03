@@ -11,7 +11,9 @@ RSpec.feature 'Navigation Bar' do
       sign_in_page.assert_on_correct_page
 
       sign_in_page.navigation.tap do |navigation|
-        navigation.ensure_sections_only_appear(:brand)
+        navigation.ensure_branding_displayed
+        navigation.ensure_only_sections_displayed(*[])
+        navigation.ensure_user_section_not_displayed
       end
     end
 
@@ -24,9 +26,9 @@ RSpec.feature 'Navigation Bar' do
 
         home_page.surf_to
         home_page.navigation.tap do |navigation|
-          navigation.ensure_sections_only_appear(:brand, :user)
-          navigation.ensure_login_details_displayed_in_user_section(user)
-          navigation.ensure_logout_link_displayed_in_user_section
+          navigation.ensure_branding_displayed
+          navigation.ensure_only_sections_displayed(*[])
+          navigation.ensure_user_section_displayed_for(user)
         end
       end
     end
