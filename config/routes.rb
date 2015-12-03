@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
+  resources :users, only: [:index]
+
   require "sidekiq/web"
   unless Rails.env.development?
     Sidekiq::Web.use Rack::Auth::Basic do |username, password|

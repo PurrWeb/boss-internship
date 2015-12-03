@@ -15,6 +15,18 @@ class NavigationBar < PageComponent
     end
   end
 
+  page_action :ensure_only_sections_highlighted do |*sections|
+    Array(sections).each do |section|
+      ensure_section_highlighted(section)
+    end
+
+    (possible_sections - Array(sections)).each do |section|
+      if section_displayed?(section)
+        ensure_sections_not_highlighted(section)
+      end
+    end
+  end
+
   page_action :ensure_sections_dont_appear do |*sections|
     sections.each do |section|
       expect(scope).to_not have_selector(section_selector(section))
@@ -39,6 +51,18 @@ class NavigationBar < PageComponent
   end
 
   private
+  def ensure_section_highlighted(section)
+    expect(scope.find(section_selector(section)).find('a')['class'].split(' ')).to include('active')
+  end
+
+  def ensure_section_not_highlighted(section)
+    expect(scope.find(section_selector(section)).find('a')['class'].split(' ')).to_not include('active')
+  end
+
+  def section_displayed?(section)
+    scope.has_selector?(section_selector(section))
+  end
+
   def ensure_user_section_login_details_displayed_for(user)
     expect(user_section).to have_text("Signed in as #{user.email}")
   end
@@ -65,7 +89,11 @@ class NavigationBar < PageComponent
   end
 
   def section_data
-    {}
+    {
+      users: {
+        selector: '.nav-users-section'
+      }
+    }
   end
 
   def section_selector(section)
