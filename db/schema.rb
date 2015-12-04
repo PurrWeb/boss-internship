@@ -82,8 +82,8 @@ ActiveRecord::Schema.define(version: 20151204172853) do
   add_index "users", ["enabled"], name: "index_users_on_enabled", using: :btree
   add_index "users", ["phone_number"], name: "index_users_on_phone_number", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
   add_index "users", ["role"], name: "index_users_on_role", using: :btree
+  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
   create_table "venues", force: :cascade do |t|
     t.string   "name",       limit: 255
