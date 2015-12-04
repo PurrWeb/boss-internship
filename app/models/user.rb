@@ -13,8 +13,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable,
          :validatable, :lockable, :confirmable
 
-  validates :role, presence: true, inclusion: { in: ROLES }
-  validates :gender, presence: true, inclusion: { in: GENDERS }
+  validates :role, inclusion: { in: ROLES, message: 'is required' }
+  validates :gender, inclusion: { in: GENDERS, message: 'is required' }
   validates :phone_number, presence: true
   validates :enabled, presence: true
   validates :first_name, presence: true
