@@ -9,7 +9,7 @@ FactoryGirl.define do
 
     password "999999999"
     phone_number "1234-567890"
-    gender 'f'
+    gender 'female'
     date_of_birth DateTime.new(2000, 1, 1)
 
     address

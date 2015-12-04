@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   ROLES = ['admin', 'manager', 'staff']
-  GENDERS = ['m', 'f']
+  GENDERS = ['male', 'female']
 
   belongs_to :address, inverse_of: :user
   has_many :venues

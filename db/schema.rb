@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151202141248) do
+ActiveRecord::Schema.define(version: 20151204172853) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20151202141248) do
     t.datetime "updated_at"
     t.integer  "address_id",                limit: 4,                    null: false
     t.string   "role",                      limit: 255,                  null: false
-    t.string   "gender",                    limit: 1,                    null: false
+    t.string   "gender",                    limit: 255,                  null: false
     t.string   "phone_number",              limit: 255,                  null: false
     t.boolean  "enabled",                                 default: true, null: false
     t.string   "first_name",                limit: 255,                  null: false
