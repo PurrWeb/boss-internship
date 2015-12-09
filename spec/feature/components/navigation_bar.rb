@@ -22,7 +22,7 @@ class NavigationBar < PageComponent
 
     (possible_sections - Array(sections)).each do |section|
       if section_displayed?(section)
-        ensure_sections_not_highlighted(section)
+        ensure_section_not_highlighted(section)
       end
     end
   end
@@ -92,6 +92,9 @@ class NavigationBar < PageComponent
     {
       users: {
         selector: '.nav-users-section'
+      },
+      staff_members: {
+        selector: '.nav-staff-members-section'
       }
     }
   end

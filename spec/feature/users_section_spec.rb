@@ -1,4 +1,3 @@
-
 require 'feature/feature_spec_helper'
 
 RSpec.feature 'Users Section Index page' do

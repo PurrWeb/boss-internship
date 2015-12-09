@@ -1,20 +1,14 @@
-class ShowUserPage < PageObject
-  def initialize(user)
-    @user = user
-    super()
-  end
-  attr_reader :user
-
+class AddStaffMemberPage < PageObject
   def surf_to
-    visit(url_helpers.user_path)
+    visit(url_helpers.new_staff_member_path)
   end
 
   def navigation
     @navigation ||= NavigationBar.new(self)
   end
 
-  page_action :ensure_flash_message_displayed do |message|
-    raise 'not implimented'
+  def form
+    @form ||= StaffMemberForm.new(self)
   end
 
   def assert_on_correct_page
@@ -30,6 +24,6 @@ class ShowUserPage < PageObject
   end
 
   def expected_page_heading_text
-    user.full_name
+    'Add Staff Member'
   end
 end

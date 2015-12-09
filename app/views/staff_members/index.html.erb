@@ -1,0 +1,16 @@
+<h1>Staff Members</h1>
+
+<%= link_to('Add Staff Member', new_staff_member_path, class: ['btn', 'btn-primary']) %>
+
+<% if staff_members.present? %>
+  <table class="table">
+    <tr>
+      <th>Name</th>
+    <tr>
+    <% staff_members.each do |staff_member| %>
+      <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
+        <td><%= staff_member.full_name %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

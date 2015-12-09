@@ -1,5 +1,5 @@
 class Address < ActiveRecord::Base
-  has_one :user, inverse_of: :address
+  has_one :staff_member, inverse_of: :address
 
   validate  :address_fields_valid
   validates :region, presence: true

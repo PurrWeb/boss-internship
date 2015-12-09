@@ -27,7 +27,7 @@ RSpec.feature 'Navigation Bar' do
         home_page.surf_to
         home_page.navigation.tap do |navigation|
           navigation.ensure_branding_displayed
-          navigation.ensure_only_sections_displayed(:users)
+          navigation.ensure_only_sections_displayed(:users, :staff_members)
           navigation.ensure_user_section_displayed_for(user)
         end
       end

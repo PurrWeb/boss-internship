@@ -19,6 +19,11 @@
               Users <% if in_user_section? %><span class="sr-only">(current)</span><% end %>
             <% end %>
           </li>
+          <li class="nav-staff-members-section">
+            <%= link_to(staff_members_path, class: "#{'active' if in_staff_members_section? }") do %>
+              Staff Members <% if in_staff_members_section? %><span class="sr-only">(current)</span><% end %>
+            <% end %>
+          </li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right nav-user-section">
