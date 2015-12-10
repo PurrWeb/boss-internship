@@ -7,7 +7,7 @@
     <%= render partial: 'shared/email_address_fields', locals: { form: email_address_fields } %>
   <% end %>
   <%= form.number_field :pin_code %>
-  <%= form.text_field :phone_number %>
+  <%= form.number_field :phone_number %>
   <%= form.text_field :national_insurance_number %>
 
   <%= form.date_select :date_of_birth, start_year: Time.now.year, end_year: 1940, include_blank: true %>
