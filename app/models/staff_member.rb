@@ -25,7 +25,7 @@ class StaffMember < ActiveRecord::Base
   before_validation :normalise_national_insurance_number
 
   def national_insurance_number_regex
-    /[A-Z]{2}[0-9]{6}(A|B|C|D)/
+    /^[A-Z]{2}[0-9]{6}(A|B|C|D)$/
   end
 
   def normalise_national_insurance_number
