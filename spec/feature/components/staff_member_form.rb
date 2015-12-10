@@ -1,8 +1,7 @@
 class StaffMemberForm < PageComponent
   page_action :fill_in_for do |staff_member|
     scope.select(staff_member.gender.titleize, from: 'Gender')
-    scope.fill_in('First name', with: staff_member.first_name)
-    scope.fill_in('Surname', with: staff_member.surname)
+    name_form.fill_in_for(staff_member.name)
     scope.fill_in('Email', with: staff_member.email)
     scope.fill_in('National insurance number', with: staff_member.national_insurance_number)
     scope.fill_in('Phone number', with: staff_member.phone_number)
@@ -14,6 +13,10 @@ class StaffMemberForm < PageComponent
 
   page_action :submit do
     click_button 'Submit'
+  end
+
+  def name_form
+    @name_form ||= NameForm.new(self)
   end
 
   def address_form

@@ -3,6 +3,9 @@ class User < ActiveRecord::Base
 
   has_many :venues
 
+  belongs_to :name
+  accepts_nested_attributes_for :name, allow_destroy: false
+
   include Enableable
 
   # Include default devise modules. Others available are:
@@ -13,10 +16,7 @@ class User < ActiveRecord::Base
 
   validates :role, inclusion: { in: ROLES, message: 'is required' }
   validates :enabled, presence: true
-  validates :first_name, presence: true
-  validates :surname, presence: true
+  validates :name, presence: true
 
-  def full_name
-    [first_name, surname].join(' ')
-  end
+  delegate :full_name, to: :name
 end

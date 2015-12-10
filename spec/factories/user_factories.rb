@@ -1,10 +1,9 @@
 FactoryGirl.define do
   factory :user do
-    first_name 'Anna'
-    surname 'Rennie'
+    name
 
     sequence :email do |n|
-      "#{first_name.downcase}.#{surname.downcase}#{n}@example.com"
+      "#{name.first_name.downcase}.#{name.surname.downcase}#{n}@example.com"
     end
 
     password "sdlksdsad"
