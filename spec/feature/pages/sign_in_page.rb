@@ -22,7 +22,7 @@ class SignInPage < PageObject
 
   private
   def page_heading
-    page.find('main h3')
+    page.find('main h1')
   end
 
   def expected_page_heading_text
