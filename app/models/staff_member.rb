@@ -26,7 +26,7 @@ class StaffMember < ActiveRecord::Base
   def normalise_national_insurance_number
     if national_insurance_number.present? &&
       !national_insurance_number_regex.match(national_insurance_number)
-      self.national_insurance_number = national_insurance_number.gsub(/(\W|_)/,'')
+      self.national_insurance_number = national_insurance_number.upcase.gsub(/(\W|_)/,'')
     end
   end
 
