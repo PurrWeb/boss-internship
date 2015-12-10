@@ -21,8 +21,20 @@ class StaffMember < ActiveRecord::Base
   validates :date_of_birth, presence: true
   validates :address, presence: true
   validate  :national_insurance_number_valid
+  validates :pin_code, presence: true
+  validate  :valid_pin_code_format
 
   before_validation :normalise_national_insurance_number
+
+  def valid_pin_code_format
+    if pin_code.present?
+      errors.add(:pin_code, 'must be numerical') unless pin_code.match(pin_code_regex)
+    end
+  end
+
+  def pin_code_regex
+    /^[0-9]+$/
+  end
 
   def national_insurance_number_regex
     /^[A-Z]{2}[0-9]{6}(A|B|C|D)$/

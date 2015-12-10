@@ -24,6 +24,7 @@ class StaffMembersController < ApplicationController
   private
   def staff_member_params
     params.require(:staff_member).permit(
+      :pin_code,
       :gender,
       :phone_number,
       :date_of_birth,

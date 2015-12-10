@@ -6,6 +6,7 @@
   <%= form.fields_for(:email_address, (form.object.email_address || EmailAddress.new)) do |email_address_fields| %>
     <%= render partial: 'shared/email_address_fields', locals: { form: email_address_fields } %>
   <% end %>
+  <%= form.number_field :pin_code %>
   <%= form.text_field :phone_number %>
   <%= form.text_field :national_insurance_number %>
 

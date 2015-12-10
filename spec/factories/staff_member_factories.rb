@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :staff_member do
+    pin_code '235340'
     name
     association :email_address, strategy: :build
     phone_number "1234-567890"
