@@ -4,6 +4,6 @@
 #  adapter: mysql2
 #  database: boss_development
 #
-#test:
-#  adapter: mysql2
-#  database: boss_test
+test:
+  adapter: mysql2
+  database: boss_test
