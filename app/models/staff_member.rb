@@ -8,10 +8,13 @@ class StaffMember < ActiveRecord::Base
   belongs_to :name
   accepts_nested_attributes_for :name, allow_destroy: false
 
+  belongs_to :email_address, inverse_of: :staff_members
+  accepts_nested_attributes_for :email_address, allow_destroy: false
+
   include Enableable
 
   validates :name, presence: true
-  validates :email, presence: true
+  validates :email_address, presence: true
   validates :gender, inclusion: { in: GENDERS, message: 'is required' }
   validates :phone_number, presence: true
   validates :enabled, presence: true
@@ -40,4 +43,8 @@ class StaffMember < ActiveRecord::Base
   end
 
   delegate :full_name, to: :name
+
+  def email
+    email_address.try(:email)
+  end
 end

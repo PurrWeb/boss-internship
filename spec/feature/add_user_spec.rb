@@ -19,7 +19,7 @@ RSpec.feature 'Adding a new user' do
     end
 
     user_index_page.ensure_flash_message_displayed('User added successfully')
-    user = User.find_by!(email: prospective_user.email)
+    user = User.joins(:email_address).merge(EmailAddress.where(email: prospective_user.email)).first
     user_index_page.ensure_record_displayed_for(user)
   end
 end

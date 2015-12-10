@@ -1,8 +1,6 @@
 require 'feature/feature_spec_helper'
 
 RSpec.feature 'Navigation Bar' do
-  let(:email) { 'joe@blogs.com' }
-  let(:password) { '123456789' }
   let(:sign_in_page) { SignInPage.new }
 
   context 'a not logged in user' do
@@ -18,7 +16,7 @@ RSpec.feature 'Navigation Bar' do
     end
 
     context 'a logged in admin user' do
-      let(:user) { FactoryGirl.create(:user, :admin, email: email, password: password) }
+      let(:user) { FactoryGirl.create(:user, :admin) }
       let(:home_page) { HomePage.new }
 
       scenario 'sees extra functionality' do

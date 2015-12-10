@@ -1,10 +1,7 @@
 FactoryGirl.define do
   factory :user do
     name
-
-    sequence :email do |n|
-      "#{name.first_name.downcase}.#{name.surname.downcase}#{n}@example.com"
-    end
+    association :email_address, strategy: :build
 
     password "sdlksdsad"
     role 'manager'

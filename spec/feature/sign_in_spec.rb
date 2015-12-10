@@ -1,9 +1,8 @@
 require 'feature/feature_spec_helper'
 
 RSpec.feature 'Sign in' do
-  let(:email) { 'joe@blogs.com' }
   let(:password) { '123456789' }
-  let(:user) { FactoryGirl.create(:user, :admin, email: email, password: password) }
+  let(:user) { FactoryGirl.create(:user, :admin, password: password) }
 
   let(:sign_in_page) { SignInPage.new }
   let(:home_page) { HomePage.new }

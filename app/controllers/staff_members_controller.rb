@@ -24,7 +24,6 @@ class StaffMembersController < ApplicationController
   private
   def staff_member_params
     params.require(:staff_member).permit(
-      :email,
       :gender,
       :phone_number,
       :date_of_birth,
@@ -40,6 +39,7 @@ class StaffMembersController < ApplicationController
         :country,
         :region
       ],
+      email_address_attributes: :email,
       name_attributes: [
         :first_name,
         :surname

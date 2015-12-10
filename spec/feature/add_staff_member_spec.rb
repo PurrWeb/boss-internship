@@ -19,7 +19,7 @@ RSpec.feature 'Adding a new staff member' do
     end
 
     staff_members_index_page.ensure_flash_message_displayed('Staff member added successfully')
-    staff_member = StaffMember.find_by!(email: prospective_staff_member.email)
+    staff_member = StaffMember.joins(:email_address).merge(EmailAddress.where(email: prospective_staff_member.email_address.email)).first
     staff_members_index_page.ensure_record_displayed_for(staff_member)
   end
 end
