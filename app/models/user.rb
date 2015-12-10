@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  ROLES = ['admin', 'manager', 'staff']
+  ROLES = ['admin', 'manager']
 
   has_many :venues
 
