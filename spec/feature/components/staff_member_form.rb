@@ -1,5 +1,6 @@
 class StaffMemberForm < PageComponent
   page_action :fill_in_for do |staff_member|
+    scope.select(staff_member.venue.name, from: 'Venue')
     scope.select(staff_member.gender.titleize, from: 'Gender')
     name_form.fill_in_for(staff_member.name)
     scope.fill_in('Email', with: staff_member.email)

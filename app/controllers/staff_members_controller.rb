@@ -12,6 +12,8 @@ class StaffMembersController < ApplicationController
   def create
     staff_member = StaffMember.new(staff_member_params)
 
+    staff_member.staff_member_venue.mark_for_destruction if staff_member.staff_member_venue.venue_id == nil
+
     if staff_member.save
       flash[:message] = "Staff member added successfully"
       redirect_to action: :index
@@ -44,7 +46,8 @@ class StaffMembersController < ApplicationController
       name_attributes: [
         :first_name,
         :surname
-      ]
+      ],
+      staff_member_venue_attributes: [:venue_id]
     )
   end
 end

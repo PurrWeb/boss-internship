@@ -1,7 +1,10 @@
 class StaffMember < ActiveRecord::Base
   GENDERS = ['male', 'female']
 
-  has_many :venues
+  has_one :staff_member_venue, inverse_of: :staff_member
+  has_one :venue, through: :staff_member_venue
+  accepts_nested_attributes_for :staff_member_venue
+
   belongs_to :address, inverse_of: :staff_member
   accepts_nested_attributes_for :address, allow_destroy: false
 

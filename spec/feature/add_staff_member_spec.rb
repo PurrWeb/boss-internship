@@ -2,11 +2,13 @@ require 'feature/feature_spec_helper'
 
 RSpec.feature 'Adding a new staff member' do
   let(:admin_user) { FactoryGirl.create(:user, :admin) }
-  let(:prospective_staff_member) { FactoryGirl.build(:staff_member) }
+  let(:venue) { FactoryGirl.create(:venue) }
+  let(:prospective_staff_member) { FactoryGirl.build(:staff_member, venue: venue) }
   let(:add_staff_member_page) { AddStaffMemberPage.new }
   let(:staff_members_index_page) { StaffMembersIndexPage.new }
 
   before do
+    venue
     login_as admin_user
   end
 

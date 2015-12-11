@@ -1,4 +1,9 @@
 <%= bootstrap_form_for(staff_member, html: { class: 'staff-member-form' }) do |form| %>
+  <% if Venue.count > 0 %>
+    <%= form.fields_for(:staff_member_venue, (form.object.staff_member_venue || form.object.build_staff_member_venue)) do |venue_fields| %>
+      <%= venue_fields.select(:venue_id, options_for_select(Venue.all.map{ |venue| [venue.name, venue.id] }, form.object.venue), include_blank: true) %>
+    <% end %>
+  <% end %>
   <%= form.select(:gender, options_for_select(StaffMember::GENDERS.map{ |role| [role.titleize, role] }, form.object.gender), include_blank: true, label_class: 'required') %>
   <%= form.fields_for(:name, (form.object.name || Name.new)) do |name_fields| %>
     <%= render partial: 'shared/name_fields', locals: { form: name_fields } %>

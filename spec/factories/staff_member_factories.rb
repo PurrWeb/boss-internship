@@ -8,5 +8,6 @@ FactoryGirl.define do
     date_of_birth DateTime.new(2000, 1, 1)
 
     address
+    venue
   end
 end
