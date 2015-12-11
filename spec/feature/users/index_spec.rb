@@ -24,14 +24,13 @@ RSpec.feature 'Users Section Index page' do
 
   scenario 'users details should be displayed in a table' do
     users_index_page.surf_to
-    users_index_page.ensure_details_displayed_for(admin_user)
+    users_index_page.user_table.ensure_details_displayed_for(admin_user)
   end
 
   scenario 'clicking on a users details should take you to their show page' do
-    details = [:name, :email, :role]
-    details.each do |detail|
+    UsersIndexTable.columns.each do |column|
       users_index_page.surf_to
-      users_index_page.click_on_detail(detail, user: admin_user)
+      users_index_page.user_table.click_on_detail(column, user: admin_user)
       user_show_page.assert_on_correct_page
     end
   end
