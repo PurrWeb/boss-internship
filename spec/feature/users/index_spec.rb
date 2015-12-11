@@ -20,4 +20,9 @@ RSpec.feature 'Users Section Index page' do
     users_index_page.click_add_user_button
     add_user_page.assert_on_correct_page
   end
+
+  scenario 'users details should be displayed in a table' do
+    users_index_page.surf_to
+    users_index_page.ensure_details_displayed_for(admin_user)
+  end
 end

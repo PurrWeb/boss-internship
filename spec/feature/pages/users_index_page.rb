@@ -11,8 +11,17 @@ class UsersIndexPage < PageObject
     expect(find('.alert.alert-success')).to have_text(message)
   end
 
-  page_action :ensure_record_displayed_for do |user|
-    find(:css, ".users-index-listing[data-user-id=\"#{user.id}\"]")
+  page_action :ensure_details_displayed_for do |user|
+    record = find(:css, ".users-index-listing[data-user-id=\"#{user.id}\"]")
+
+    name_section = record.find('td[data-role="name"]')
+    expect(name_section.text).to eq(user.full_name)
+
+    email_section = record.find('td[data-role="email"]')
+    expect(email_section.text).to eq(user.email)
+
+    role_section = record.find('td[data-role="role"]')
+    expect(role_section.text).to eq(user.role.titleize)
   end
 
   def navigation
