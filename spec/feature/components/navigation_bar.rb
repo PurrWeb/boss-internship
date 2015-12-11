@@ -95,6 +95,9 @@ class NavigationBar < PageComponent
       },
       staff_members: {
         selector: '.nav-staff-members-section'
+      },
+      venues: {
+        selector: '.nav-venues-section'
       }
     }
   end

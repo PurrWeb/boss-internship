@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :new, :create]
   resources :staff_members, only: [:index, :new, :create]
 
+  resources :venues, only: [:index, :create]
+
   require "sidekiq/web"
   unless Rails.env.development?
     Sidekiq::Web.use Rack::Auth::Basic do |username, password|
