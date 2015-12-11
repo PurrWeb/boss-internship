@@ -44,14 +44,6 @@ ActiveRecord::Schema.define(version: 20151210141629) do
 
   add_index "cron_jobs", ["started_at"], name: "index_cron_jobs_on_started_at", using: :btree
 
-  create_table "staff_member_venues", force: :cascade do |t|
-    t.integer  "staff_member_id", limit: 4, null: false
-    t.integer  "venue_id",        limit: 4, null: false
-    t.boolean  "enabled",                   null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
   create_table "email_addresses", force: :cascade do |t|
     t.string   "email",      limit: 255, null: false
     t.datetime "created_at",             null: false
@@ -69,6 +61,14 @@ ActiveRecord::Schema.define(version: 20151210141629) do
 
   add_index "names", ["first_name"], name: "index_names_on_first_name", using: :btree
   add_index "names", ["surname"], name: "index_names_on_surname", using: :btree
+
+  create_table "staff_member_venues", force: :cascade do |t|
+    t.integer  "staff_member_id", limit: 4, null: false
+    t.integer  "venue_id",        limit: 4, null: false
+    t.boolean  "enabled",                   null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
 
   create_table "staff_members", force: :cascade do |t|
     t.integer  "address_id",                limit: 4,                    null: false
