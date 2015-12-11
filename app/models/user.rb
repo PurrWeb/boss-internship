@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   # :registerable, :timeoutable, :validatable, and :omniauthable
   devise :database_authenticatable,
          :recoverable, :rememberable, :trackable,
-          :lockable, :confirmable
+          :lockable, :confirmable, :authentication_keys => [:devise_email]
 
   validates :role, inclusion: { in: ROLES, message: 'is required' }
   validates :enabled, presence: true
@@ -28,13 +28,14 @@ class User < ActiveRecord::Base
     email_address.try(:email)
   end
 
+  # Required to stop devise complaining about not using a proper email field
   def email_changed?
-    email_address.try(:email_changed?)
+    false
   end
 
-  def self.find_for_database_authentication(warden_conditions)
+  def self.find_for_database_authentication(warden_conditions={})
     conditions = warden_conditions.dup
-    if email = conditions.delete(:email)
+    if email = conditions.delete(:devise_email)
       where(conditions.to_hash).
         joins(:email_address).
         merge(EmailAddress.where(email: email)).
@@ -43,6 +44,14 @@ class User < ActiveRecord::Base
       where(conditions.to_hash).first
     end
   end
+
+    def devise_email=(devise_email)
+      @devise_email = devise_email
+    end
+
+    def devise_email
+      @devise_email || email
+    end
 
   def email_required?
     false
