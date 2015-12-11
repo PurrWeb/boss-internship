@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   validates :name, presence: true
   validates :email_address, presence: true
 
-  delegate :full_name, to: :name
+  delegate :full_name, :first_name, :surname, to: :name
 
   def email
     email_address.try(:email)
