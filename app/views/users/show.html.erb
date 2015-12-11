@@ -1,1 +1,33 @@
 <h1><%= user.full_name %></h1>
+
+<div class="container-fluid">
+  <ul class="list-unstyled">
+    <div class="row">
+      <li>
+        <div class="user-detail-heading">Name</div>
+        <div class="user-detail" data-detail="name"><%= user.full_name %></div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
+        <div class="user-detail-heading">Email Address</div>
+        <div class="user-detail" data-detail="email"><%= user.email %></div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
+        <div class="user-detail-heading">Status</div>
+        <div class="user-detail" data-detail="status"><%= user.status %></div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
+        <div class="user-detail-heading">Role</div>
+        <div class="user-detail" data-detail="role"><%= user.role.titleize %></div>
+      </li>
+    </div>
+  </ul>
+</div>

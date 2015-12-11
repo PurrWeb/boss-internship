@@ -56,4 +56,8 @@ class User < ActiveRecord::Base
   def email_required?
     false
   end
+
+  def status
+    enabled? ? 'Active' : 'Disabled'
+  end
 end
