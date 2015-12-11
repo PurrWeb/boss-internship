@@ -6,10 +6,12 @@
   <table class="table">
     <tr>
       <th>Name</th>
+      <th>Venue</th>
     <tr>
     <% staff_members.each do |staff_member| %>
       <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
         <td><%= staff_member.full_name %></td>
+        <td><%= staff_member.venue.try(:name) || 'N / A' %></td>
       </tr>
     <% end %>
   </table>
