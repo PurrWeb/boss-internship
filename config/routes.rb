@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
-  resources :users, only: [:index, :new, :create]
+  resources :users, only: [:show, :index, :new, :create]
   resources :staff_members, only: [:index, :new, :create]
 
   resources :venues, only: [:index, :create]
