@@ -9,7 +9,7 @@ class VenuesController < ApplicationController
     venue = Venue.new(venue_params)
 
     if venue.save
-      flash[:message] = "Venue added successfully"
+      flash[:success] = "Venue added successfully"
       redirect_to action: :index
     else
       flash.now[:error] = "There was a problem creating this venue"

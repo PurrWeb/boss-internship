@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     user = User.new(user_params)
 
     if user.save
-      flash[:message] = "User added successfully"
+      flash[:success] = "User added successfully"
       redirect_to action: :index
     else
       flash.now[:error] = "There was a problem creating this user"

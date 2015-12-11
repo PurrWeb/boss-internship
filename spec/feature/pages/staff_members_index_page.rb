@@ -7,8 +7,8 @@ class StaffMembersIndexPage < PageObject
     click_link 'Add Staff Member'
   end
 
-  page_action :ensure_flash_message_displayed do |message|
-    expect(find('.alert.message').text).to eq(message)
+  page_action :ensure_flash_success_message_displayed do |message|
+    expect(find('.alert.alert-success').text).to eq(message)
   end
 
   page_action :ensure_record_displayed_for do |user|

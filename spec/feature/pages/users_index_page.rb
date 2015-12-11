@@ -7,8 +7,8 @@ class UsersIndexPage < PageObject
     click_link 'Add User'
   end
 
-  page_action :ensure_flash_message_displayed do |message|
-    expect(find('.alert.message')).to have_text(message)
+  page_action :ensure_flash_success_message_displayed do |message|
+    expect(find('.alert.alert-success')).to have_text(message)
   end
 
   page_action :ensure_record_displayed_for do |user|

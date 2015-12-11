@@ -12,8 +12,8 @@ class VenuesIndexPage < PageObject
     create_venue_form.click_button('Add')
   end
 
-  page_action :ensure_flash_message_displayed do |message|
-    expect(find('.alert.message').text).to eq(message)
+  page_action :ensure_flash_success_message_displayed do |message|
+    expect(find('.alert.alert-success').text).to eq(message)
   end
 
   page_action :ensure_record_displayed_for do |venue|

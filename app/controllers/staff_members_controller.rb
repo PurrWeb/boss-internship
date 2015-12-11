@@ -15,7 +15,7 @@ class StaffMembersController < ApplicationController
     staff_member.staff_member_venue.mark_for_destruction if staff_member.staff_member_venue.venue_id == nil
 
     if staff_member.save
-      flash[:message] = "Staff member added successfully"
+      flash[:success] = "Staff member added successfully"
       redirect_to action: :index
     else
       flash.now[:error] = "There was a problem creating this staff member"
