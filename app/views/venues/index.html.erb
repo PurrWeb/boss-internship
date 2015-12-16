@@ -10,13 +10,15 @@
   </div>
 </div>
 
-<table class="table">
-  <tr>
-    <th>Name</th>
-  <tr>
-  <% venues.each do |venue| %>
-    <tr class="venues-index-listing" data-venue-id="<%= venue.id %>">
-      <td><%= venue.name %></td>
-    </tr>
-  <% end %>
-</table>
+<% if venues.present? %>
+  <table class="table">
+    <tr>
+      <th>Name</th>
+    <tr>
+    <% venues.each do |venue| %>
+      <tr class="venues-index-listing" data-venue-id="<%= venue.id %>">
+        <td><%= venue.name %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
