@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   # :registerable, :timeoutable, :validatable, and :omniauthable
   devise :database_authenticatable,
          :recoverable, :rememberable, :trackable,
-          :lockable, :confirmable, :authentication_keys => [:devise_email]
+          :lockable, :authentication_keys => [:devise_email]
 
   validates :role, inclusion: { in: ROLES, message: 'is required' }
   validates :enabled, presence: true
