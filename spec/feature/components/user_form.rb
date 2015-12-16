@@ -1,13 +1,11 @@
 class UserForm < PageComponent
   page_action :fill_in_for do |user|
-    scope.select(user.role.titleize, from: 'Role')
     name_form.fill_in_for(user.name)
-    scope.fill_in('Email', with: user.email)
     scope.fill_in('Password', with: user.password)
   end
 
   page_action :submit do
-    click_button 'Submit'
+    click_button 'Sign up'
   end
 
   def name_form
@@ -15,6 +13,6 @@ class UserForm < PageComponent
   end
 
   def scope
-    page.find('.user-form')
+    super.find('.user-form')
   end
 end

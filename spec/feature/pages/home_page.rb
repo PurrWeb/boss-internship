@@ -3,6 +3,10 @@ class HomePage < PageObject
     visit('/')
   end
 
+  page_action :ensure_welcome_text_displayed_for do |user|
+    expect(page_heading.text).to include("Welcome #{user.name.first_name}")
+  end
+
   def navigation
     @navigation ||= NavigationBar.new(self)
   end

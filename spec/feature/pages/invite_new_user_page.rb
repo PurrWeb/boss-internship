@@ -1,22 +1,18 @@
-class UsersIndexPage < PageObject
+class InviteNewUserPage < PageObject
   def surf_to
-    visit(url_helpers.users_path)
-  end
-
-  page_action :click_manage_invites_button do
-    click_link 'Manage Invites'
-  end
-
-  page_action :ensure_flash_success_message_displayed do |message|
-    expect(find('.alert.alert-success')).to have_text(message)
+    visit(url_helpers.new_invite_path)
   end
 
   def navigation
     @navigation ||= NavigationBar.new(self)
   end
 
-  def user_table
-    @user_table ||= UsersIndexTable.new(self)
+  def form
+    @form ||= InviteForm.new(self)
+  end
+
+  page_action :ensure_flash_error_message_displayed do |message|
+    expect(find('.alert.alert-danger')).to have_text(message)
   end
 
   def assert_on_correct_page
@@ -32,6 +28,6 @@ class UsersIndexPage < PageObject
   end
 
   def expected_page_heading_text
-    'Users'
+    'Invite new user'
   end
 end

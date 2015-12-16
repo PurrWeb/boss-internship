@@ -24,4 +24,12 @@ class PageComponent
   def assert_on_correct_page
     parent.assert_on_correct_page
   end
+
+  def scope
+    if parent.respond_to?(:scope)
+      parent.scope
+    else
+      page
+    end
+  end
 end

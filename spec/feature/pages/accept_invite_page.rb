@@ -1,22 +1,24 @@
-class UsersIndexPage < PageObject
+class AcceptInvitePage < PageObject
+  def initialize(invite)
+    @invite = invite
+    super()
+  end
+  attr_reader :invite
+
   def surf_to
-    visit(url_helpers.users_path)
+    visit(url_helpers.accept_invite_path(invite.token))
   end
 
-  page_action :click_manage_invites_button do
-    click_link 'Manage Invites'
+  page_action :ensure_sign_up_text_displayed do
+    expect(page.text).to match('Please fill in the following details to complete the sign up process')
   end
 
-  page_action :ensure_flash_success_message_displayed do |message|
-    expect(find('.alert.alert-success')).to have_text(message)
+  def user_form
+    @user_form ||= UserForm.new(self)
   end
 
   def navigation
     @navigation ||= NavigationBar.new(self)
-  end
-
-  def user_table
-    @user_table ||= UsersIndexTable.new(self)
   end
 
   def assert_on_correct_page
@@ -32,6 +34,6 @@ class UsersIndexPage < PageObject
   end
 
   def expected_page_heading_text
-    'Users'
+    'Accept Invite'
   end
 end

@@ -1,0 +1,7 @@
+<%= bootstrap_form_for(user, url: sign_up_invite_path, html: { method: 'post', class: 'user-form'}) do |form| %>
+  <%= form.fields_for(:name, (form.object.name || Name.new)) do |name_fields| %>
+    <%= render partial: 'shared/name_fields', locals: { form: name_fields } %>
+  <% end %>
+  <%= form.password_field(:password) %>
+  <%= form.submit('Sign up') %>
+<% end %>
