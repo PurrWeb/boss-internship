@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151210211713) do
+ActiveRecord::Schema.define(version: 20151216134924) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -51,6 +51,27 @@ ActiveRecord::Schema.define(version: 20151210211713) do
   end
 
   add_index "email_addresses", ["email"], name: "index_email_addresses_on_email", using: :btree
+
+  create_table "invites", force: :cascade do |t|
+    t.string   "role",        limit: 255, null: false
+    t.integer  "inviter_id",  limit: 4,   null: false
+    t.integer  "user_id",     limit: 4
+    t.string   "token",       limit: 255, null: false
+    t.string   "email",       limit: 255, null: false
+    t.integer  "revoker_id",  limit: 4
+    t.datetime "revoked_at"
+    t.datetime "sent_at"
+    t.datetime "accepted_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "invites", ["accepted_at"], name: "index_invites_on_accepted_at", using: :btree
+  add_index "invites", ["email"], name: "index_invites_on_email", using: :btree
+  add_index "invites", ["inviter_id"], name: "index_invites_on_inviter_id", using: :btree
+  add_index "invites", ["role"], name: "index_invites_on_role", using: :btree
+  add_index "invites", ["sent_at"], name: "index_invites_on_sent_at", using: :btree
+  add_index "invites", ["token"], name: "index_invites_on_token", unique: true, using: :btree
 
   create_table "names", force: :cascade do |t|
     t.string   "first_name", limit: 255, null: false
