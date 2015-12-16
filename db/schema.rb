@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151216134924) do
+ActiveRecord::Schema.define(version: 20151216155009) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -51,6 +51,19 @@ ActiveRecord::Schema.define(version: 20151216134924) do
   end
 
   add_index "email_addresses", ["email"], name: "index_email_addresses_on_email", using: :btree
+
+  create_table "invite_transitions", force: :cascade do |t|
+    t.string   "to_state",    limit: 255,   null: false
+    t.text     "metadata",    limit: 65535
+    t.integer  "sort_key",    limit: 4,     null: false
+    t.integer  "invite_id",   limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "invite_transitions", ["invite_id", "most_recent"], name: "index_invite_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "invite_transitions", ["invite_id", "sort_key"], name: "index_invite_transitions_parent_sort", unique: true, using: :btree
 
   create_table "invites", force: :cascade do |t|
     t.string   "role",        limit: 255, null: false
