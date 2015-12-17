@@ -1,0 +1,631 @@
+export default [{
+    "id": 12255,
+    "first_name": "Noah",
+    "surname": "Hewitt",
+    "staff_type": "kitchen",
+    "preferred_hours": "20",
+    "preferred_days": "Any evening but the 20th"
+}, {
+    "id": 62111,
+    "first_name": "Isabel",
+    "surname": "Patterson",
+    "staff_type": "bar_back",
+    "preferred_hours": "10",
+    "preferred_days": "Weekends"
+}, {
+    "id": 14234,
+    "first_name": "Skye",
+    "surname": "Bishop",
+    "staff_type": "bar_back",
+    "preferred_hours": "20",
+    "preferred_days": "Weekends"
+}, {
+    "id": 4123423,
+    "first_name": "Bailey",
+    "surname": "Lawrence",
+    "staff_type": "bar_back",
+    "preferred_hours": "35",
+    "preferred_days": "Weekends"
+}, {
+    "id": 12345,
+    "first_name": "Rachel",
+    "surname": "Vincent",
+    "staff_type": "security",
+    "preferred_hours": "40",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 6111,
+    "first_name": "Owen",
+    "surname": "Fowler",
+    "staff_type": "security",
+    "preferred_hours": "40",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 75653,
+    "first_name": "Nathan",
+    "surname": "Hammond",
+    "staff_type": "bar_back",
+    "preferred_hours": "35",
+    "preferred_days": "Any evening but the 20th"
+}, {
+    "id": 877,
+    "first_name": "Hollie",
+    "surname": "Morrison",
+    "staff_type": "security",
+    "preferred_hours": "40",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 988,
+    "first_name": "Samantha",
+    "surname": "Hanson",
+    "staff_type": "floor_staff",
+    "preferred_hours": "25",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 10,
+    "first_name": "Henry",
+    "surname": "Williamson",
+    "staff_type": "bar_back",
+    "preferred_hours": "20",
+    "preferred_days": "Weekends"
+}, {
+    "id": 11,
+    "first_name": "Tegan",
+    "surname": "Ali",
+    "staff_type": "bar_back",
+    "preferred_hours": "20+",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 12,
+    "first_name": "Yasmin",
+    "surname": "Murphy",
+    "staff_type": "kitchen",
+    "preferred_hours": "35",
+    "preferred_days": "Weekends"
+}, {
+    "id": 13,
+    "first_name": "Niamh",
+    "surname": "Knight",
+    "staff_type": "bar_back",
+    "preferred_hours": "40",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 14,
+    "first_name": "Jodie",
+    "surname": "Nixon",
+    "staff_type": "bar_back",
+    "preferred_hours": "20",
+    "preferred_days": "Weekends"
+}, {
+    "id": 15,
+    "first_name": "Declan",
+    "surname": "Ingram",
+    "staff_type": "bar_back",
+    "preferred_hours": "40",
+    "preferred_days": "Any evening but the 20th"
+}, {
+    "id": 16,
+    "first_name": "Poppy",
+    "surname": "Moran",
+    "staff_type": "bar_back",
+    "preferred_hours": "40",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 17,
+    "first_name": "Aimee",
+    "surname": "Freeman",
+    "staff_type": "bar_tender",
+    "preferred_hours": "20-30",
+    "preferred_days": "Weekends"
+}, {
+    "id": 18,
+    "first_name": "Ellis",
+    "surname": "Owen",
+    "staff_type": "pr",
+    "preferred_hours": "35",
+    "preferred_days": "Weekends"
+}, {
+    "id": 19,
+    "first_name": "Rosie",
+    "surname": "Harper",
+    "staff_type": "bar_tender",
+    "preferred_hours": "40",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 20,
+    "first_name": "Archie",
+    "surname": "Mellor",
+    "staff_type": "floor_staff",
+    "preferred_hours": "40",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 21,
+    "first_name": "Amy",
+    "surname": "Brady",
+    "staff_type": "bar_tender",
+    "preferred_hours": "35",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 22,
+    "first_name": "Josh",
+    "surname": "Lyons",
+    "staff_type": "pr",
+    "preferred_hours": "20",
+    "preferred_days": "Any evening but the 20th"
+}, {
+    "id": 23,
+    "first_name": "Lilly",
+    "surname": "Pritchard",
+    "staff_type": "kitchen",
+    "preferred_hours": "25",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 24,
+    "first_name": "Anna",
+    "surname": "Garner",
+    "staff_type": "bar_back",
+    "preferred_hours": "40",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 25,
+    "first_name": "James",
+    "surname": "Hurst",
+    "staff_type": "kitchen",
+    "preferred_hours": "40",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 26,
+    "first_name": "Lara",
+    "surname": "Jenkins",
+    "staff_type": "waitress",
+    "preferred_hours": "35",
+    "preferred_days": "Weekends"
+}, {
+    "id": 27,
+    "first_name": "Morgan",
+    "surname": "Goddard",
+    "staff_type": "floor_staff",
+    "preferred_hours": "40",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 28,
+    "first_name": "Sam",
+    "surname": "Williamson",
+    "staff_type": "kitchen",
+    "preferred_hours": "25",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 29,
+    "first_name": "Scott",
+    "surname": "Field",
+    "staff_type": "pr",
+    "preferred_hours": "35",
+    "preferred_days": "Weekends"
+}, {
+    "id": 30,
+    "first_name": "Sam",
+    "surname": "Banks",
+    "staff_type": "bar_tender",
+    "preferred_hours": "20+",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 31,
+    "first_name": "Ava",
+    "surname": "Buckley",
+    "staff_type": "floor_staff",
+    "preferred_hours": "25",
+    "preferred_days": "Weekends"
+}, {
+    "id": 32,
+    "first_name": "Ewan",
+    "surname": "Hayward",
+    "staff_type": "kitchen",
+    "preferred_hours": "40",
+    "preferred_days": "Weekends"
+}, {
+    "id": 33,
+    "first_name": "Leon",
+    "surname": "Campbell",
+    "staff_type": "pr",
+    "preferred_hours": "12",
+    "preferred_days": "Any evening but the 20th"
+}, {
+    "id": 34,
+    "first_name": "Jonathan",
+    "surname": "Kirby",
+    "staff_type": "pr",
+    "preferred_hours": "40",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 35,
+    "first_name": "Millie",
+    "surname": "Holmes",
+    "staff_type": "floor_staff",
+    "preferred_hours": "40",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 36,
+    "first_name": "Matthew",
+    "surname": "Hussain",
+    "staff_type": "bar_back",
+    "preferred_hours": "20",
+    "preferred_days": "Weekends"
+}, {
+    "id": 37,
+    "first_name": "Rhys",
+    "surname": "Kirk",
+    "staff_type": "kitchen",
+    "preferred_hours": "40",
+    "preferred_days": "Weekends"
+}, {
+    "id": 38,
+    "first_name": "Jacob",
+    "surname": "Mason",
+    "staff_type": "kitchen",
+    "preferred_hours": "12",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 39,
+    "first_name": "Holly",
+    "surname": "May",
+    "staff_type": "floor_staff",
+    "preferred_hours": "20",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 40,
+    "first_name": "Alexander",
+    "surname": "Rhodes",
+    "staff_type": "security",
+    "preferred_hours": "40",
+    "preferred_days": "Weekends"
+}, {
+    "id": 41,
+    "first_name": "Joel",
+    "surname": "Woods",
+    "staff_type": "bar_back",
+    "preferred_hours": "40",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 42,
+    "first_name": "Rebecca",
+    "surname": "Cooper",
+    "staff_type": "floor_staff",
+    "preferred_hours": "40",
+    "preferred_days": "Any evening but the 20th"
+}, {
+    "id": 43,
+    "first_name": "Liam",
+    "surname": "Cartwright",
+    "staff_type": "pr",
+    "preferred_hours": "10",
+    "preferred_days": "Weekends"
+}, {
+    "id": 44,
+    "first_name": "Tia",
+    "surname": "Clark",
+    "staff_type": "waitress",
+    "preferred_hours": "12",
+    "preferred_days": "Weekends"
+}, {
+    "id": 45,
+    "first_name": "Demi",
+    "surname": "Briggs",
+    "staff_type": "floor_staff",
+    "preferred_hours": "20",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 46,
+    "first_name": "Morgan",
+    "surname": "Coleman",
+    "staff_type": "pr",
+    "preferred_hours": "25",
+    "preferred_days": "Weekends"
+}, {
+    "id": 47,
+    "first_name": "Gracie",
+    "surname": "Frost",
+    "staff_type": "bar_back",
+    "preferred_hours": "20+",
+    "preferred_days": "Weekends"
+}, {
+    "id": 48,
+    "first_name": "Jodie",
+    "surname": "Graham",
+    "staff_type": "pr",
+    "preferred_hours": "10",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 49,
+    "first_name": "Cerys",
+    "surname": "Rice",
+    "staff_type": "kitchen",
+    "preferred_hours": "20",
+    "preferred_days": "Thursday, Firday, Saturday"
+}, {
+    "id": 50,
+    "first_name": "Isabella",
+    "surname": "Goddard",
+    "staff_type": "security",
+    "preferred_hours": "20+",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 51,
+    "first_name": "Kayleigh",
+    "surname": "Russell",
+    "staff_type": "waitress",
+    "preferred_hours": "12",
+    "preferred_days": "Thursday, Firday, Saturday"
+}, {
+    "id": 52,
+    "first_name": "Owen",
+    "surname": "Hopkins",
+    "staff_type": "bar_back",
+    "preferred_hours": "10",
+    "preferred_days": "Any evening but the 20th"
+}, {
+    "id": 53,
+    "first_name": "Jay",
+    "surname": "Mills",
+    "staff_type": "kitchen",
+    "preferred_hours": "40",
+    "preferred_days": "Weekends"
+}, {
+    "id": 54,
+    "first_name": "Sebastian",
+    "surname": "Mason",
+    "staff_type": "floor_staff",
+    "preferred_hours": "40",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 55,
+    "first_name": "Christopher",
+    "surname": "Reeves",
+    "staff_type": "waitress",
+    "preferred_hours": "20-30",
+    "preferred_days": "Weekends"
+}, {
+    "id": 56,
+    "first_name": "Christopher",
+    "surname": "Chambers",
+    "staff_type": "bar_tender",
+    "preferred_hours": "12",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 57,
+    "first_name": "David",
+    "surname": "Freeman",
+    "staff_type": "kitchen",
+    "preferred_hours": "20+",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 58,
+    "first_name": "Abby",
+    "surname": "Parker",
+    "staff_type": "bar_tender",
+    "preferred_hours": "25",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 59,
+    "first_name": "Anna",
+    "surname": "Gardiner",
+    "staff_type": "bar_back",
+    "preferred_hours": "20+",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 60,
+    "first_name": "Bradley",
+    "surname": "Rees",
+    "staff_type": "bar_back",
+    "preferred_hours": "40",
+    "preferred_days": "Weekends"
+}, {
+    "id": 61,
+    "first_name": "Corey",
+    "surname": "Blackburn",
+    "staff_type": "bar_back",
+    "preferred_hours": "40",
+    "preferred_days": "Weekends"
+}, {
+    "id": 62,
+    "first_name": "Lauren",
+    "surname": "Goddard",
+    "staff_type": "bar_tender",
+    "preferred_hours": "25",
+    "preferred_days": "Thursday, Firday, Saturday"
+}, {
+    "id": 63,
+    "first_name": "Connor",
+    "surname": "Hudson",
+    "staff_type": "kitchen",
+    "preferred_hours": "40",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 64,
+    "first_name": "Bradley",
+    "surname": "Hale",
+    "staff_type": "pr",
+    "preferred_hours": "12",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 65,
+    "first_name": "Anthony",
+    "surname": "Lee",
+    "staff_type": "kitchen",
+    "preferred_hours": "40",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 66,
+    "first_name": "Samuel",
+    "surname": "Newman",
+    "staff_type": "bar_tender",
+    "preferred_hours": "20",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 67,
+    "first_name": "Alice",
+    "surname": "Nolan",
+    "staff_type": "bar_tender",
+    "preferred_hours": "20-30",
+    "preferred_days": "Any evening but the 20th"
+}, {
+    "id": 68,
+    "first_name": "Lucy",
+    "surname": "Chamberlain",
+    "staff_type": "pr",
+    "preferred_hours": "35",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 69,
+    "first_name": "Molly",
+    "surname": "Yates",
+    "staff_type": "bar_tender",
+    "preferred_hours": "40",
+    "preferred_days": "Weekends"
+}, {
+    "id": 70,
+    "first_name": "Jade",
+    "surname": "Chan",
+    "staff_type": "kitchen",
+    "preferred_hours": "20",
+    "preferred_days": "Weekends"
+}, {
+    "id": 71,
+    "first_name": "Mohammad",
+    "surname": "Carter",
+    "staff_type": "floor_staff",
+    "preferred_hours": "25",
+    "preferred_days": "Weekends"
+}, {
+    "id": 72,
+    "first_name": "Harley",
+    "surname": "Naylor",
+    "staff_type": "bar_tender",
+    "preferred_hours": "10",
+    "preferred_days": "Any evening but the 20th"
+}, {
+    "id": 73,
+    "first_name": "Poppy",
+    "surname": "Chamberlain",
+    "staff_type": "floor_staff",
+    "preferred_hours": "40",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 74,
+    "first_name": "Rachel",
+    "surname": "Fleming",
+    "staff_type": "waitress",
+    "preferred_hours": "12",
+    "preferred_days": "Weekdays"
+}, {
+    "id": 75,
+    "first_name": "Samuel",
+    "surname": "Crawford",
+    "staff_type": "waitress",
+    "preferred_hours": "10",
+    "preferred_days": "Any evening but the 20th"
+}, {
+    "id": 76,
+    "first_name": "Charlotte",
+    "surname": "Mistry",
+    "staff_type": "bar_tender",
+    "preferred_hours": "35",
+    "preferred_days": "Thursday, Firday, Saturday"
+}, {
+    "id": 77,
+    "first_name": "David",
+    "surname": "Thorpe",
+    "staff_type": "floor_staff",
+    "preferred_hours": "40",
+    "preferred_days": "Weekends"
+}, {
+    "id": 78,
+    "first_name": "Benjamin",
+    "surname": "Woodward",
+    "staff_type": "pr",
+    "preferred_hours": "40",
+    "preferred_days": "Thursday, Firday, Saturday"
+}, {
+    "id": 79,
+    "first_name": "Ethan",
+    "surname": "Brown",
+    "staff_type": "kitchen",
+    "preferred_hours": "25",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 80,
+    "first_name": "Zoe",
+    "surname": "Kent",
+    "staff_type": "bar_back",
+    "preferred_hours": "40",
+    "preferred_days": "Any evening but the 20th"
+}, {
+    "id": 81,
+    "first_name": "Sebastian",
+    "surname": "Hicks",
+    "staff_type": "bar_tender",
+    "preferred_hours": "20+",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 82,
+    "first_name": "Sofia",
+    "surname": "Ball",
+    "staff_type": "kitchen",
+    "preferred_hours": "20+",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 83,
+    "first_name": "Finley",
+    "surname": "Carpenter",
+    "staff_type": "bar_back",
+    "preferred_hours": "20-30",
+    "preferred_days": "Weekdays and Weekends"
+}, {
+    "id": 84,
+    "first_name": "Tom",
+    "surname": "Reid",
+    "staff_type": "pr",
+    "preferred_hours": "20-30",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 85,
+    "first_name": "Rachel",
+    "surname": "Bray",
+    "staff_type": "kitchen",
+    "preferred_hours": "40",
+    "preferred_days": "Saturdays and Sundays"
+}, {
+    "id": 86,
+    "first_name": "Henry",
+    "surname": "Parker",
+    "staff_type": "bar_tender",
+    "preferred_hours": "20+",
+    "preferred_days": "Weekends"
+}, {
+    "id": 87,
+    "first_name": "Kyle",
+    "surname": "Burke",
+    "staff_type": "pr",
+    "preferred_hours": "40",
+    "preferred_days": "Thursday, Firday, Saturday"
+}, {
+    "id": 88,
+    "first_name": "Elizabeth",
+    "surname": "Riley",
+    "staff_type": "waitress",
+    "preferred_hours": "10",
+    "preferred_days": "Weekends"
+}, {
+    "id": 89,
+    "first_name": "Oliver",
+    "surname": "Hancock",
+    "staff_type": "floor_staff",
+    "preferred_hours": "20-30",
+    "preferred_days": "Weekends"
+}, {
+    "id": 90,
+    "first_name": "Jasmine",
+    "surname": "Ward",
+    "staff_type": "pr",
+    "preferred_hours": "12",
+    "preferred_days": "Any evening but the 20th"
+}]
