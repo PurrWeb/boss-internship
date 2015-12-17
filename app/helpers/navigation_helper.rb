@@ -10,4 +10,8 @@ module NavigationHelper
   def in_venues_section?
     controller_name == 'venues'
   end
+
+  def in_rotas_section?
+    controller_name == 'rotas'
+  end
 end
