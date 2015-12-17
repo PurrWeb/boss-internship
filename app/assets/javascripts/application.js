@@ -10,6 +10,8 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require react_integration
+//= require bundles/react_bundle
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery_ujs
