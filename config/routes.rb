@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 
   resources :venues, only: [:index, :create]
 
+  resources :rotas, only: [:index]
+
   require "sidekiq/web"
   unless Rails.env.development?
     Sidekiq::Web.use Rack::Auth::Basic do |username, password|

@@ -1,0 +1,650 @@
+import _ from "underscore"
+import userData from "./users"
+
+var defaultRotaShifts = [{
+    "starts_at": "2015-12-11T12:00:00.000Z",
+    "ends_at": "2015-12-11T23:00:00.000Z",
+    "staff_id": 57
+}, {
+    "starts_at": "2015-12-12T03:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 57
+}, {
+    "starts_at": "2015-12-11T19:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 88
+}, {
+    "starts_at": "2015-12-11T10:00:00.000Z",
+    "ends_at": "2015-12-11T22:00:00.000Z",
+    "staff_id": 28
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 28
+}, {
+    "starts_at": "2015-12-11T17:00:00.000Z",
+    "ends_at": "2015-12-12T02:00:00.000Z",
+    "staff_id": 13
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-11T23:00:00.000Z",
+    "staff_id": 86
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 86
+}, {
+    "starts_at": "2015-12-11T14:00:00.000Z",
+    "ends_at": "2015-12-11T20:00:00.000Z",
+    "staff_id": 76
+}, {
+    "starts_at": "2015-12-12T03:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 76
+}, {
+    "starts_at": "2015-12-11T13:00:00.000Z",
+    "ends_at": "2015-12-11T17:00:00.000Z",
+    "staff_id": 71
+}, {
+    "starts_at": "2015-12-12T03:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 71
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T18:00:00.000Z",
+    "staff_id": 18
+}, {
+    "starts_at": "2015-12-12T02:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 18
+}, {
+    "starts_at": "2015-12-11T17:00:00.000Z",
+    "ends_at": "2015-12-12T00:00:00.000Z",
+    "staff_id": 40
+}, {
+    "starts_at": "2015-12-11T14:00:00.000Z",
+    "ends_at": "2015-12-11T23:00:00.000Z",
+    "staff_id": 48
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T08:00:00.000Z",
+    "staff_id": 48
+}, {
+    "starts_at": "2015-12-11T12:00:00.000Z",
+    "ends_at": "2015-12-11T22:00:00.000Z",
+    "staff_id": 877
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 877
+}, {
+    "starts_at": "2015-12-11T18:00:00.000Z",
+    "ends_at": "2015-12-12T00:00:00.000Z",
+    "staff_id": 59
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T16:00:00.000Z",
+    "staff_id": 43
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 43
+}, {
+    "starts_at": "2015-12-11T17:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 61
+}, {
+    "starts_at": "2015-12-11T13:00:00.000Z",
+    "ends_at": "2015-12-11T21:00:00.000Z",
+    "staff_id": 38
+}, {
+    "starts_at": "2015-12-12T02:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 38
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-11T21:00:00.000Z",
+    "staff_id": 34
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 34
+}, {
+    "starts_at": "2015-12-11T10:00:00.000Z",
+    "ends_at": "2015-12-11T17:00:00.000Z",
+    "staff_id": 16
+}, {
+    "starts_at": "2015-12-12T00:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 16
+}, {
+    "starts_at": "2015-12-11T15:00:00.000Z",
+    "ends_at": "2015-12-11T20:00:00.000Z",
+    "staff_id": 24
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T08:00:00.000Z",
+    "staff_id": 24
+}, {
+    "starts_at": "2015-12-11T15:00:00.000Z",
+    "ends_at": "2015-12-12T02:00:00.000Z",
+    "staff_id": 65
+}, {
+    "starts_at": "2015-12-11T14:00:00.000Z",
+    "ends_at": "2015-12-11T18:00:00.000Z",
+    "staff_id": 19
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 19
+}, {
+    "starts_at": "2015-12-11T19:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 75
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-11T19:00:00.000Z",
+    "staff_id": 87
+}, {
+    "starts_at": "2015-12-12T00:00:00.000Z",
+    "ends_at": "2015-12-12T02:00:00.000Z",
+    "staff_id": 87
+}, {
+    "starts_at": "2015-12-11T20:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 33
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 67
+}, {
+    "starts_at": "2015-12-11T18:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 72
+}, {
+    "starts_at": "2015-12-11T14:00:00.000Z",
+    "ends_at": "2015-12-11T20:00:00.000Z",
+    "staff_id": 35
+}, {
+    "starts_at": "2015-12-12T00:00:00.000Z",
+    "ends_at": "2015-12-12T04:00:00.000Z",
+    "staff_id": 35
+}, {
+    "starts_at": "2015-12-11T17:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 83
+}, {
+    "starts_at": "2015-12-11T10:00:00.000Z",
+    "ends_at": "2015-12-11T19:00:00.000Z",
+    "staff_id": 64
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 64
+}, {
+    "starts_at": "2015-12-11T14:00:00.000Z",
+    "ends_at": "2015-12-12T02:00:00.000Z",
+    "staff_id": 988
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 52
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-11T19:00:00.000Z",
+    "staff_id": 80
+}, {
+    "starts_at": "2015-12-12T02:00:00.000Z",
+    "ends_at": "2015-12-12T04:00:00.000Z",
+    "staff_id": 80
+}, {
+    "starts_at": "2015-12-11T10:00:00.000Z",
+    "ends_at": "2015-12-11T21:00:00.000Z",
+    "staff_id": 29
+}, {
+    "starts_at": "2015-12-12T03:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 29
+}, {
+    "starts_at": "2015-12-11T14:00:00.000Z",
+    "ends_at": "2015-12-11T17:00:00.000Z",
+    "staff_id": 25
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T08:00:00.000Z",
+    "staff_id": 25
+}, {
+    "starts_at": "2015-12-11T10:00:00.000Z",
+    "ends_at": "2015-12-11T15:00:00.000Z",
+    "staff_id": 14234
+}, {
+    "starts_at": "2015-12-12T00:00:00.000Z",
+    "ends_at": "2015-12-12T02:00:00.000Z",
+    "staff_id": 14234
+}, {
+    "starts_at": "2015-12-11T14:00:00.000Z",
+    "ends_at": "2015-12-11T18:00:00.000Z",
+    "staff_id": 23
+}, {
+    "starts_at": "2015-12-12T03:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 23
+}, {
+    "starts_at": "2015-12-11T10:00:00.000Z",
+    "ends_at": "2015-12-11T19:00:00.000Z",
+    "staff_id": 53
+}, {
+    "starts_at": "2015-12-12T02:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 53
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T22:00:00.000Z",
+    "staff_id": 50
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T08:00:00.000Z",
+    "staff_id": 50
+}, {
+    "starts_at": "2015-12-11T13:00:00.000Z",
+    "ends_at": "2015-12-11T21:00:00.000Z",
+    "staff_id": 82
+}, {
+    "starts_at": "2015-12-12T03:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 82
+}, {
+    "starts_at": "2015-12-11T20:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 73
+}, {
+    "starts_at": "2015-12-11T20:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 90
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-11T20:00:00.000Z",
+    "staff_id": 11
+}, {
+    "starts_at": "2015-12-12T03:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 11
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T16:00:00.000Z",
+    "staff_id": 26
+}, {
+    "starts_at": "2015-12-12T03:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 26
+}, {
+    "starts_at": "2015-12-11T14:00:00.000Z",
+    "ends_at": "2015-12-12T02:00:00.000Z",
+    "staff_id": 44
+}, {
+    "starts_at": "2015-12-11T14:00:00.000Z",
+    "ends_at": "2015-12-11T23:00:00.000Z",
+    "staff_id": 41
+}, {
+    "starts_at": "2015-12-12T00:00:00.000Z",
+    "ends_at": "2015-12-12T04:00:00.000Z",
+    "staff_id": 41
+}, {
+    "starts_at": "2015-12-11T20:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 49
+}, {
+    "starts_at": "2015-12-11T14:00:00.000Z",
+    "ends_at": "2015-12-11T21:00:00.000Z",
+    "staff_id": 32
+}, {
+    "starts_at": "2015-12-12T02:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 32
+}, {
+    "starts_at": "2015-12-11T18:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 47
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T15:00:00.000Z",
+    "staff_id": 74
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 74
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-12T00:00:00.000Z",
+    "staff_id": 27
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T19:00:00.000Z",
+    "staff_id": 31
+}, {
+    "starts_at": "2015-12-12T00:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 31
+}, {
+    "starts_at": "2015-12-11T13:00:00.000Z",
+    "ends_at": "2015-12-11T20:00:00.000Z",
+    "staff_id": 85
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 85
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-11T19:00:00.000Z",
+    "staff_id": 17
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 17
+}, {
+    "starts_at": "2015-12-11T10:00:00.000Z",
+    "ends_at": "2015-12-11T17:00:00.000Z",
+    "staff_id": 46
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 46
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-12T01:00:00.000Z",
+    "staff_id": 12345
+}, {
+    "starts_at": "2015-12-11T17:00:00.000Z",
+    "ends_at": "2015-12-12T02:00:00.000Z",
+    "staff_id": 21
+}, {
+    "starts_at": "2015-12-11T15:00:00.000Z",
+    "ends_at": "2015-12-11T23:00:00.000Z",
+    "staff_id": 70
+}, {
+    "starts_at": "2015-12-12T03:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 70
+}, {
+    "starts_at": "2015-12-11T18:00:00.000Z",
+    "ends_at": "2015-12-12T01:00:00.000Z",
+    "staff_id": 75653
+}, {
+    "starts_at": "2015-12-11T18:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 69
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-11T23:00:00.000Z",
+    "staff_id": 45
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 45
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T23:00:00.000Z",
+    "staff_id": 37
+}, {
+    "starts_at": "2015-12-12T03:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 37
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T16:00:00.000Z",
+    "staff_id": 55
+}, {
+    "starts_at": "2015-12-12T03:00:00.000Z",
+    "ends_at": "2015-12-12T06:00:00.000Z",
+    "staff_id": 55
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-12T02:00:00.000Z",
+    "staff_id": 36
+}, {
+    "starts_at": "2015-12-11T18:00:00.000Z",
+    "ends_at": "2015-12-11T22:00:00.000Z",
+    "staff_id": 14
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T08:00:00.000Z",
+    "staff_id": 14
+}, {
+    "starts_at": "2015-12-11T12:00:00.000Z",
+    "ends_at": "2015-12-11T17:00:00.000Z",
+    "staff_id": 15
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T08:00:00.000Z",
+    "staff_id": 15
+}, {
+    "starts_at": "2015-12-11T19:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 20
+}, {
+    "starts_at": "2015-12-11T15:00:00.000Z",
+    "ends_at": "2015-12-11T23:00:00.000Z",
+    "staff_id": 30
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 30
+}, {
+    "starts_at": "2015-12-11T12:00:00.000Z",
+    "ends_at": "2015-12-11T18:00:00.000Z",
+    "staff_id": 62
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 62
+}, {
+    "starts_at": "2015-12-11T10:00:00.000Z",
+    "ends_at": "2015-12-11T15:00:00.000Z",
+    "staff_id": 81
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 81
+}, {
+    "starts_at": "2015-12-11T13:00:00.000Z",
+    "ends_at": "2015-12-11T22:00:00.000Z",
+    "staff_id": 6111
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 6111
+}, {
+    "starts_at": "2015-12-11T12:00:00.000Z",
+    "ends_at": "2015-12-11T18:00:00.000Z",
+    "staff_id": 66
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T08:00:00.000Z",
+    "staff_id": 66
+}, {
+    "starts_at": "2015-12-11T20:00:00.000Z",
+    "ends_at": "2015-12-12T01:00:00.000Z",
+    "staff_id": 42
+}, {
+    "starts_at": "2015-12-11T17:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 60
+}, {
+    "starts_at": "2015-12-11T18:00:00.000Z",
+    "ends_at": "2015-12-12T00:00:00.000Z",
+    "staff_id": 22
+}, {
+    "starts_at": "2015-12-11T12:00:00.000Z",
+    "ends_at": "2015-12-11T21:00:00.000Z",
+    "staff_id": 62111
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 62111
+}, {
+    "starts_at": "2015-12-11T17:00:00.000Z",
+    "ends_at": "2015-12-11T21:00:00.000Z",
+    "staff_id": 4123423
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 4123423
+}, {
+    "starts_at": "2015-12-11T18:00:00.000Z",
+    "ends_at": "2015-12-11T21:00:00.000Z",
+    "staff_id": 12255
+}, {
+    "starts_at": "2015-12-12T00:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 12255
+}, {
+    "starts_at": "2015-12-11T16:00:00.000Z",
+    "ends_at": "2015-12-11T21:00:00.000Z",
+    "staff_id": 12
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 12
+}, {
+    "starts_at": "2015-12-11T17:00:00.000Z",
+    "ends_at": "2015-12-11T21:00:00.000Z",
+    "staff_id": 63
+}, {
+    "starts_at": "2015-12-12T00:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 63
+}, {
+    "starts_at": "2015-12-11T17:00:00.000Z",
+    "ends_at": "2015-12-12T04:00:00.000Z",
+    "staff_id": 56
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T16:00:00.000Z",
+    "staff_id": 84
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T07:00:00.000Z",
+    "staff_id": 84
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T14:00:00.000Z",
+    "staff_id": 78
+}, {
+    "starts_at": "2015-12-12T01:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 78
+}, {
+    "starts_at": "2015-12-11T12:00:00.000Z",
+    "ends_at": "2015-12-11T15:00:00.000Z",
+    "staff_id": 58
+}, {
+    "starts_at": "2015-12-12T02:00:00.000Z",
+    "ends_at": "2015-12-12T05:00:00.000Z",
+    "staff_id": 58
+}, {
+    "starts_at": "2015-12-11T18:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 51
+}, {
+    "starts_at": "2015-12-11T15:00:00.000Z",
+    "ends_at": "2015-12-12T00:00:00.000Z",
+    "staff_id": 89
+}, {
+    "starts_at": "2015-12-11T19:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 39
+}, {
+    "starts_at": "2015-12-11T13:00:00.000Z",
+    "ends_at": "2015-12-11T17:00:00.000Z",
+    "staff_id": 68
+}, {
+    "starts_at": "2015-12-12T00:00:00.000Z",
+    "ends_at": "2015-12-12T02:00:00.000Z",
+    "staff_id": 68
+}, {
+    "starts_at": "2015-12-11T15:00:00.000Z",
+    "ends_at": "2015-12-12T03:00:00.000Z",
+    "staff_id": 54
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T23:00:00.000Z",
+    "staff_id": 10
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T08:00:00.000Z",
+    "staff_id": 10
+}, {
+    "starts_at": "2015-12-11T14:00:00.000Z",
+    "ends_at": "2015-12-11T23:00:00.000Z",
+    "staff_id": 77
+}, {
+    "starts_at": "2015-12-12T02:00:00.000Z",
+    "ends_at": "2015-12-12T04:00:00.000Z",
+    "staff_id": 77
+}, {
+    "starts_at": "2015-12-11T11:00:00.000Z",
+    "ends_at": "2015-12-11T16:00:00.000Z",
+    "staff_id": 79
+}, {
+    "starts_at": "2015-12-12T04:00:00.000Z",
+    "ends_at": "2015-12-12T08:00:00.000Z",
+    "staff_id": 79
+}]
+defaultRotaShifts = _(defaultRotaShifts).map(function(rotaShift){
+    rotaShift.starts_at = new Date(rotaShift.starts_at);
+    rotaShift.ends_at = new Date(rotaShift.ends_at);
+    rotaShift.id = Math.floor(Math.random() * 100000000000);
+    return rotaShift;
+});
+
+
+/*
+Used to generate default data.
+*/
+// import RotaDate from "./rota-date.js"
+// var defaultRotaShifts = [];
+// var defaultRotaDate = new RotaDate(new Date(2015, 11, 11, 18, 0, 0));
+// var staffWithShifts = _.sample(userData, 90)
+// staffWithShifts.forEach(function(staff){
+//     var staff_id = staff.id;
+
+//     var startHours = _.random(10, 20);
+//     var endHours = startHours + _.random(3, 12);
+//     var addSecondRotaShift = false;
+//     if (endHours >= 24) {
+//         endHours -= 24;
+//     } else {
+//         addSecondRotaShift = true;
+//     }
+
+//     var rotaShift = {
+//         starts_at: defaultRotaDate.getDateFromShiftStartTime(startHours, 0),
+//         ends_at: defaultRotaDate.getDateFromShiftEndTime(endHours, 0),
+//         staff_id: staff_id
+//     };
+//     defaultRotaShifts.push(rotaShift)
+
+//     if (addSecondRotaShift) {
+//         var startHours = _.random(0, 4);
+//         var endHours = startHours + _.random(2, 4);
+//         var addSecondRotaShift = false;
+//         if (endHours >= 24) {
+//             endHours -= 24;
+//         } else {
+//             addSecondRotaShift = true;
+//         }
+
+//         var rotaShift = {
+//             starts_at: defaultRotaDate.getDateFromShiftStartTime(startHours, 0),
+//             ends_at: defaultRotaDate.getDateFromShiftEndTime(endHours, 0),
+//             staff_id: staff_id
+//         };
+//         defaultRotaShifts.push(rotaShift)
+//     }
+
+
+// });
+
+
+
+export default defaultRotaShifts
