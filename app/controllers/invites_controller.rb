@@ -1,5 +1,5 @@
 class InvitesController < ApplicationController
-  skip_before_filter :authenticate_user!, only: [:accept, :sign_up]
+  skip_before_filter :authenticate_user!, only: [:accept]
 
   def index
     invites = Invite.all
@@ -26,12 +26,21 @@ class InvitesController < ApplicationController
 
   def accept
     invite = Invite.find_by!(token: params[:id])
+
+    if request.method == 'GET'
+      accept_new_action(invite)
+    elsif request.method == 'POST'
+      accept_create_action(invite)
+    end
+  end
+
+  private
+  def accept_new_action(invite)
     user = User.new
     render locals: { user: user, invite: invite }
   end
 
-  def sign_up
-    invite = Invite.find_by!(token: params[:id])
+  def accept_create_action(invite)
     email_address = EmailAddress.new(email: invite.email)
     user = User.new(user_params.merge(email_address: email_address, role: invite.role))
 
@@ -43,7 +52,6 @@ class InvitesController < ApplicationController
     end
   end
 
-  private
   def invite_params
     params.require(:invite).permit(
       :role,

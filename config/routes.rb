@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   resources :invites, only: [:index, :new, :create] do
     member do
       get :accept
-      post :sign_up
+      post :accept
     end
   end
 
