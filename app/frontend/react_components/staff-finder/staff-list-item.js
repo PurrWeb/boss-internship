@@ -13,6 +13,11 @@ export default class StaffListItem extends Component {
     render() {
         var staff = this.props.staff;
         var className = `staff-list-item ${this.state.isExpanded ? 'staff-list-item--expanded' : ''}`
+
+        var staffTypeStyle = {
+            backgroundColor: staff.staff_type_object.color
+        };
+
         return (
             <div className={className}>
                 <div className="row">
@@ -20,11 +25,13 @@ export default class StaffListItem extends Component {
                         <img src={"http://lorempixel.com/400/400/people/?" + Math.random()} style={{ width: "100%"}} />
                     </div>
                     <div className="col-md-8">
-                        <h3 className="staff-list-item__name">
-                            {staff.first_name} {staff.surname}
-                        </h3>
-                        <div className="staff-list-item__type">
-                            {staff.readable_staff_type}
+                        <div className="staff-list-item__header">
+                            <h3 className="staff-list-item__name">
+                                {staff.first_name} {staff.surname}
+                            </h3>
+                            <div className="staff-list-item__type" style={staffTypeStyle}>
+                                {staff.readable_staff_type}
+                            </div>
                         </div>
                         <div className="row">
                             <div className="col-md-6">
