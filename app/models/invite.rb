@@ -27,6 +27,10 @@ class Invite < ActiveRecord::Base
 
   delegate :transition_to!, :current_state, to: :state_machine
 
+  def accepted?
+    current_state == :accepted
+  end
+
   def open?
     current_state == :open
   end

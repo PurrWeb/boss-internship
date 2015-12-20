@@ -27,7 +27,10 @@ class InvitesController < ApplicationController
   def accept
     invite = Invite.find_by!(token: params[:id])
 
-    if request.method == 'GET'
+    if invite.accepted?
+      flash[:warning] = 'The invite has already been used please sign in to continue'
+      redirect_to new_user_session_path
+    elsif request.method == 'GET'
       accept_new_action(invite)
     elsif request.method == 'POST'
       accept_create_action(invite)

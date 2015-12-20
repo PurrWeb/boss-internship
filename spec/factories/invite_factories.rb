@@ -13,5 +13,11 @@ FactoryGirl.define do
     trait :manager do
       role "manager"
     end
+
+    trait :accepted do
+      after(:create) do |invite|
+        FactoryGirl.create(:invite_transition, :accepted, invite: invite)
+      end
+    end
   end
 end

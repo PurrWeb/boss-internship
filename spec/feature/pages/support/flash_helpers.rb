@@ -9,6 +9,10 @@ module PageObject
         page_action :ensure_flash_error_message_displayed do |message|
           expect(find('.alert.alert-danger')).to have_text(message)
         end
+
+        page_action :ensure_flash_warning_message_displayed do |message|
+          expect(find('.alert.alert-warning')).to have_text(message)
+        end
       end
     end
   end
