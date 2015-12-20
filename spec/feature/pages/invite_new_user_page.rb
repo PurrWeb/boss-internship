@@ -1,4 +1,6 @@
 class InviteNewUserPage < PageObject
+  include FlashHelpers
+
   def surf_to
     visit(url_helpers.new_invite_path)
   end
@@ -9,10 +11,6 @@ class InviteNewUserPage < PageObject
 
   def form
     @form ||= InviteForm.new(self)
-  end
-
-  page_action :ensure_flash_error_message_displayed do |message|
-    expect(find('.alert.alert-danger')).to have_text(message)
   end
 
   def assert_on_correct_page

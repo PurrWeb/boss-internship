@@ -1,4 +1,6 @@
 class InvitesIndexPage < PageObject
+  include FlashHelpers
+
   def surf_to
     visit(url_helpers.invites_path)
   end
@@ -9,10 +11,6 @@ class InvitesIndexPage < PageObject
 
   page_action :click_invite_new_user_button do
     click_link('Invite new user')
-  end
-
-  page_action :ensure_flash_success_message_displayed do |message|
-    expect(find('.alert.alert-success')).to have_text(message)
   end
 
   def invites_table
