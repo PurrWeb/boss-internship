@@ -17,7 +17,7 @@ export default class StaffListItem extends Component {
             <div className={className}>
                 <div className="row">
                     <div className="col-md-2 staff-list-item__image-column">
-                        <img src="http://placehold.it/200x200" style={{ width: "100%"}} />
+                        <img src={"http://lorempixel.com/400/400/people/?" + Math.random()} style={{ width: "100%"}} />
                     </div>
                     <div className="col-md-8">
                         <h3 className="staff-list-item__name">
