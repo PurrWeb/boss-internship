@@ -1,0 +1,66 @@
+@import "staff-finder/staff-list-item";
+@import "staff-finder/staff-finder";
+@import "rota-chart/staff-shift-editor";
+@import "staff-shift-list";
+@import "chart-and-filter";
+
+body {
+    color: #333;
+}
+
+#app .well {
+    background: #fafafa;
+}
+
+#rota-chart {
+    rect {
+        fill: steelblue;
+    }
+
+    text {
+        fill: black;
+        font: 10px sans-serif;
+        text-anchor: end;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+    }
+
+    .tick line {
+        stroke: #ddd;
+    }
+
+    .rota-chart__shift rect {
+        cursor: pointer;
+    }
+
+    .rota-chart__previewed-shift {
+        rect {
+            fill: #777 !important;
+        }
+        text {
+            fill: white;
+        }
+    }
+    .rota-chart__selected-shift {
+        rect {
+            fill: black !important;
+        }
+        text {
+            fill: white;
+        }
+    }
+
+    .rota-chart__shift-label {
+        text-anchor: start;
+        font-weight: bold;
+        dominant-baseline: central;
+        pointer-events: none;
+        fill: white;
+        // text-anchor: middle;
+    }
+}

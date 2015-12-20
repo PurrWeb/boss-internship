@@ -1,0 +1,32 @@
+.staff-list-item {
+    margin-top: 10px;
+}
+.staff-list-item__name {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    display: inline-block;
+}
+.staff-list-item__type {
+    display: inline-block;
+}
+.staff-list-item__h4 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    font-size: 16px;
+    font-weight: normal;
+    text-decoration: underline;
+}
+.staff-list-item__add-button {
+    margin-top: 44px;
+}
+.staff-list-item__image-column {
+    width: 12%;
+}
+.staff-list-item__extra-content {
+    display: none;
+    .staff-list-item--expanded & {
+        display: block;
+    }
+}

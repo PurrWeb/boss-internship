@@ -19,6 +19,7 @@
  @import "bootstrap-sprockets";
  @import "bootstrap";
  @import "bootstrap/theme";
+ @import "rota-page/rota-page";
 
 label.required:after {
   content:" *";
@@ -27,3 +28,4 @@ label.required:after {
 .user-detail-heading {
   font-weight: bold;
 }
+
