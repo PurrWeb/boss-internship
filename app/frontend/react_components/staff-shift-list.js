@@ -7,9 +7,9 @@ export default class StaffShiftList extends Component {
         var staffId = this.props.staffId;
         var shifts = this.getStaffShifts().map(function(shift, i){
             return <div className="staff-shift-list__shift" key={i}>
-                {moment(shift.starts_at).format("dd D MMM YYYY h:mm")}
+                {moment(shift.starts_at).format("dd D MMM YYYY H:mm")}
                 &nbsp;to&nbsp;
-                {moment(shift.ends_at).format("h:mm")}
+                {moment(shift.ends_at).format("H:mm")}
             </div>
         })
         return (
