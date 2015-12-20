@@ -23,7 +23,7 @@ export default class StaffFilter extends Component {
                     </div>
                     <div className="col-md-2">
                         <StaffTypeDropdown
-                            ref={(dropdown) => this.ui.staffType = dropdown}
+                            ref={(dropdown) => this.ui.staffTypes = dropdown}
                             staffTypes={this.props.staffTypes}
                             onChange={() => this.handleChange()} />
                     </div>
@@ -32,13 +32,13 @@ export default class StaffFilter extends Component {
         )
     }
     handleChange() {
-        var staffType = this.ui.staffType.value;
-
+        var staffTypes = this.ui.staffTypes.value;
+        
         var filterOptions = {
             name: this.ui.name.value,
-            staffType: staffType
+            staffTypes: staffTypes
         };
-        console.log(filterOptions)
+
         this.props.onChange(filterOptions);
     }
 }

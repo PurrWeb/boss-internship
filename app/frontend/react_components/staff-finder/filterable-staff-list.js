@@ -38,8 +38,10 @@ export default class FilterableStaffList extends Component {
             });
         }
 
-        if (filter.staffType !== null) {
-            staffToShow = _.filter(staffToShow, {staff_type: filter.staffType});
+        if (filter.staffTypes.length > 0) {
+            staffToShow = _.filter(staffToShow, function(staff){
+                return _(filter.staffTypes).contains(staff.staff_type);
+            });
         }
 
         return staffToShow;

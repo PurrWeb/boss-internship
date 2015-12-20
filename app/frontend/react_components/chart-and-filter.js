@@ -8,7 +8,7 @@ export default class ChartAndFilter extends Component {
     constructor(props){
         super(props);
         this.state = {
-            staffTypeFilter: null,
+            staffTypeFilter: [],
             shiftToShow: null,
             shiftToPreview: null
         };
@@ -73,8 +73,8 @@ export default class ChartAndFilter extends Component {
         var self = this;
         return _(this.props.rotaShifts).filter(function(rotaShift){
             var staff = self.props.staff[rotaShift.staff_id];
-            if (self.state.staffTypeFilter){
-                 if (staff.staff_type !== self.state.staffTypeFilter) {
+            if (self.state.staffTypeFilter.length > 0){
+                 if (!_(self.state.staffTypeFilter).contains(staff.staff_type)) {
                      return false;
                  }
             }

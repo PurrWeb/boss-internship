@@ -1,32 +1,31 @@
 import React, { Component } from "react"
 import _ from "underscore"
+import Select from "react-select"
 
 export default class StaffTypeDropdown extends Component {
     constructor(props) {
         super(props);
-        this.value = null;
+        this.value = [];
     }
     render(){
         var staffTypeOptions = _(this.props.staffTypes).mapValues(function(staffType){
-            return <option key={staffType.id} value={staffType.id}>{staffType.title}</option>
-        });
+            return {
+                value: staffType.id,
+                label: staffType.title
+            }
+        })
         staffTypeOptions = _.values(staffTypeOptions);
 
-        var allOption = <option>All</option>;
         return (
-            <select onChange={(e) => this.onChange(e)}>
-                {allOption}
-                {staffTypeOptions}
-            </select>
+            <Select
+                value={this.value.join(",")}
+                options={staffTypeOptions}
+                multi={true}
+                onChange={(value) => this.onChange(value)} />
         );
     }
-    onChange(e){
-        this.value = e.target.value;
-
-        if (this.value === "All") {
-            this.value = null;
-        }
-
+    onChange(value){
+        this.value = value.split(",");
         this.props.onChange(this.value);
     }
 }

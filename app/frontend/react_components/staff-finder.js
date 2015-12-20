@@ -9,7 +9,7 @@ export default class StaffFinder extends Component {
         this.state = {
             staffFilterSettings: {
                 name: "",
-                staffType: null
+                staffTypes: []
             }
         }
     }
