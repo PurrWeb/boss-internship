@@ -1,5 +1,5 @@
-class InvitesIndexPage < PageObject
-  include FlashHelpers
+class InvitesIndexPage < PageObject::Page
+  include PageObject::FlashHelpers
 
   def surf_to
     visit(url_helpers.invites_path)

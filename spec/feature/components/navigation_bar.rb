@@ -1,4 +1,4 @@
-class NavigationBar < PageComponent
+class NavigationBar < PageObject::Component
   page_action :ensure_branding_displayed do
     link = header_section.find('a.navbar-brand')
     expect(link).to have_text('Boss')

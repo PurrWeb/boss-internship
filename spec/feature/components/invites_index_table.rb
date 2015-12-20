@@ -1,4 +1,4 @@
-class InvitesIndexTable < PageComponent
+class InvitesIndexTable < PageObject::Component
   def self.columns
     [:email, :role, :status]
   end

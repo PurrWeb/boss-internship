@@ -1,5 +1,5 @@
-class InviteNewUserPage < PageObject
-  include FlashHelpers
+class InviteNewUserPage < PageObject::Page
+  include PageObject::FlashHelpers
 
   def surf_to
     visit(url_helpers.new_invite_path)

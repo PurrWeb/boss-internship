@@ -1,4 +1,4 @@
-class UsersIndexTable < PageComponent
+class UsersIndexTable < PageObject::Component
   def self.columns
     [:name, :email, :role]
   end

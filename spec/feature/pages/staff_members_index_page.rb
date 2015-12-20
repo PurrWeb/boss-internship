@@ -1,5 +1,5 @@
-class StaffMembersIndexPage < PageObject
-  include FlashHelpers
+class StaffMembersIndexPage < PageObject::Page
+  include PageObject::FlashHelpers
 
   def surf_to
     visit(url_helpers.staff_members_path)

@@ -1,4 +1,4 @@
-class UserShowPage < PageObject
+class UserShowPage < PageObject::Page
   def initialize(user)
     @user = user
     super()

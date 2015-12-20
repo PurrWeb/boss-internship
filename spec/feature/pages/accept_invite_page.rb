@@ -1,4 +1,4 @@
-class AcceptInvitePage < PageObject
+class AcceptInvitePage < PageObject::Page
   def initialize(invite)
     @invite = invite
     super()

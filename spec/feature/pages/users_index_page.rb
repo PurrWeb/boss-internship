@@ -1,4 +1,4 @@
-class UsersIndexPage < PageObject
+class UsersIndexPage < PageObject::Page
   def surf_to
     visit(url_helpers.users_path)
   end

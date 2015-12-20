@@ -1,4 +1,4 @@
-class InviteForm < PageComponent
+class InviteForm < PageObject::Component
   page_action :fill_in_for do |user|
     scope.select(user.role.titleize, from: 'Role')
     scope.fill_in('Email', with: user.email)

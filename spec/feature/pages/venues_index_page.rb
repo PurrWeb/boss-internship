@@ -1,5 +1,5 @@
-class VenuesIndexPage < PageObject
-  include FlashHelpers
+class VenuesIndexPage < PageObject::Page
+  include PageObject::FlashHelpers
 
   def surf_to
     visit(url_helpers.venues_path)

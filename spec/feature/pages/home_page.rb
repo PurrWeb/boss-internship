@@ -1,4 +1,4 @@
-class HomePage < PageObject
+class HomePage < PageObject::Page
   def surf_to
     visit('/')
   end

@@ -1,4 +1,4 @@
-class UserForm < PageComponent
+class UserForm < PageObject::Component
   page_action :fill_in_for do |user|
     name_form.fill_in_for(user.name)
     scope.fill_in('Password', with: user.password)
