@@ -27,7 +27,8 @@ export default class StaffFinder extends Component {
                 staff={this.props.staff}
                 proposedRotaStaff={this.props.proposedRotaStaff}
                 filterSettings={this.state.staffFilterSettings}
-                rotaShifts={this.props.rotaShifts} />
+                rotaShifts={this.props.rotaShifts}
+                addShift={this.props.addShift} />
             </div>
         </div>
     }

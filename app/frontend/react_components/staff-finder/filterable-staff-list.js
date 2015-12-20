@@ -9,10 +9,10 @@ export default class FilterableStaffList extends Component {
         var self = this;
         var staffListItems = staffToShow.map(function(staff, i){
             return <StaffListItem
-                proposedRotaStaff={self.props.proposedRotaStaff}
                 rotaShifts={self.props.rotaShifts}
                 key={i}
-                staff={staff} />
+                staff={staff}
+                addShift={self.props.addShift} />
         });
 
         return (

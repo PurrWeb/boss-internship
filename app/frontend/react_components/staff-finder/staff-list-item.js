@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { boundActionCreators } from "../../redux/store.js"
-import AddStaffToProposedRotaButton from "./add-staff-to-proposed-rota-button.js"
+import AddStaffToShiftButton from "./add-staff-to-shift-button"
 import StaffShiftList from "../staff-shift-list.js"
 
 export default class StaffListItem extends Component {
@@ -22,7 +22,7 @@ export default class StaffListItem extends Component {
             <div className={className}>
                 <div className="row">
                     <div className="col-md-2 staff-list-item__image-column">
-                        <img src={"http://lorempixel.com/400/400/people/?" + Math.random()} style={{ width: "100%"}} />
+                        <img src={"http://lorempixel.com/400/400/people/?" + staff.id} style={{ width: "100%"}} />
                     </div>
                     <div className="col-md-8">
                         <div className="staff-list-item__header">
@@ -57,9 +57,9 @@ export default class StaffListItem extends Component {
                     </div>
                     <div className="col-md-2">
                         <div className="staff-list-item__add-button">
-                            <AddStaffToProposedRotaButton
-                                proposedRotaStaff={this.props.proposedRotaStaff}
+                            <AddStaffToShiftButton
                                 staffId={staff.id}
+                                addShift={this.props.addShift}
                                 />
                         </div>
                     </div>

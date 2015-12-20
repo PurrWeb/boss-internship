@@ -18,48 +18,11 @@ export default class ProposedRotaAssignment extends Component {
         }
 
         return (
-            <div>
-                <div className="row">
-                    <div className="col-md-3">
-                        <div className="row">
-                            <div className="col-md-6">
-                                Start
-                            </div>
-                            <div className="col-md-6">
-                                End
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-6">
-                                <input ref={(el) => this.ui.startTime = el} type="time"></input>
-                            </div>
-                            <div className="col-md-6">
-                                <input ref={(el) => this.ui.endTime = el} type="time"></input>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-3">
-                        Staff<br/>
-                        {noStaffMessage}
-                        {userElements}
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-3">
-                        <a
-                            style={{ marginTop: "10px", display: "inline-block" }}
-                            onClick={() => this.createRotas()} className="btn btn-primary">
-                            Confirm
-                        </a>
-                    </div>
-                </div>
-            </div>
+            <div>aaa</div>
         );
     }
     getRotaStaff() {
-        return this.props.proposedRotaStaff.map(
-            (staffId) => this.props.staff[staffId]
-        );
+        return []
     }
     createRotas() {
         var rotaDate = this.props.rotaDate;

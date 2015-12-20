@@ -1,25 +1,13 @@
 import { createStore, combineReducers, bindActionCreators } from "redux";
 import _ from "underscore"
 import userData from "../data/users.js"
-import { DELETE_ROTA_SHIFT, REMOVE_STAFF_FROM_PROPOSED_ROTA,UPDATE_ROTA_SHIFT, ADD_STAFF_TO_PROPOSED_ROTA, ADD_ROTA_SHIFT, RESET_PROPOSED_ROTA_STAFF } from "./actions.js"
+import { DELETE_ROTA_SHIFT,UPDATE_ROTA_SHIFT, ADD_ROTA_SHIFT } from "./actions.js"
 import * as actionCreators from "./actions.js"
 
 var userDataById = _.indexBy(userData, "id");
 
 function staff(state=[], action){
     return userDataById;
-}
-
-function proposedRotaStaff(state=[], action) {
-    switch (action.type) {
-        case ADD_STAFF_TO_PROPOSED_ROTA:
-            return [...state, action.staff_id];
-        case REMOVE_STAFF_FROM_PROPOSED_ROTA:
-            return _(state).without(action.staff_id);
-        case RESET_PROPOSED_ROTA_STAFF:
-            return [];
-    }
-    return state;
 }
 
 import defaultRotaShifts from "../data/default-rota-shifts.js"
@@ -52,7 +40,6 @@ function rotaShifts(state=defaultRotaShifts, action){
 
 var store = createStore(combineReducers({
     staff,
-    proposedRotaStaff,
     rotaShifts
 }));
 
