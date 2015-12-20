@@ -49,7 +49,8 @@ export default class StaffListItem extends Component {
                                 <h4 className="staff-list-item__h4">
                                     Preferences
                                 </h4>
-                                Weekly Hours: {staff.preferred_hours} <br/>
+                                Weekly Hours: {staff.preferred_hours}<br/>
+                                Day Preferences:&nbsp;
                                 {staff.preferred_days}
                             </div>
                         </div>

@@ -59,8 +59,7 @@ export default class StaffShiftEditor extends Component {
                 <br/><br/>
                 <u>Preferences</u><br/>
                 Weekly Hours: {staff.preferred_hours}<br/>
-                {staff.preferred_days}
-
+                Day Preferences: {staff.preferred_days}
             </div>
         </div>
     }
