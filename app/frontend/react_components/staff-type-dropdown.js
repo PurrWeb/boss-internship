@@ -3,12 +3,15 @@ import _ from "underscore"
 import Select from "react-select"
 
 export default class StaffTypeDropdown extends Component {
+    static contextTypes = {
+        staffTypes: React.PropTypes.object
+    }
     constructor(props) {
         super(props);
         this.value = [];
     }
     render(){
-        var staffTypeOptions = _(this.props.staffTypes).mapValues(function(staffType){
+        var staffTypeOptions = _(this.context.staffTypes).mapValues(function(staffType){
             return {
                 value: staffType.id,
                 label: staffType.title

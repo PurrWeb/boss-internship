@@ -6,7 +6,10 @@ import _ from 'underscore'
 
 const MAX_HEIGHT_PER_PERSON = 20;
 
-export default class RotaChart extends Component {
+class RotaChart extends Component {
+    static contextTypes = {
+        staffTypes: React.PropTypes.object
+    }
     constructor(props){
         super(props);
     }
@@ -145,7 +148,7 @@ export default class RotaChart extends Component {
                 return xScale(hours)
             })
             .attr("style", function(shift){
-                return "fill:" + self.props.staffTypes[shift.staff.staff_type].color;
+                return "fill:" + self.context.staffTypes[shift.staff.staff_type].color;
             })
             .on("mouseenter", function(shift){
                 self.showShiftPreview(shift);
@@ -190,3 +193,5 @@ export default class RotaChart extends Component {
         this.props.updateShiftToPreview(null);
     }
 }
+
+export default RotaChart
