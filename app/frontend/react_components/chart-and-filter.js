@@ -3,6 +3,10 @@ import _ from "underscore"
 import RotaChart from "./rota-chart/rota-chart.js"
 import StaffShiftEditor from "./rota-chart/staff-shift-editor.js"
 import StaffTypeDropdown from "./staff-type-dropdown.js"
+import RotaDate from "../lib/rota-date"
+import utils from "../lib/utils"
+
+const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 
 export default class ChartAndFilter extends Component {
     constructor(props){
@@ -37,13 +41,16 @@ export default class ChartAndFilter extends Component {
                 staff={this.props.staff} />
         }
 
+        var rotaShifts = this.getRotaShifts();
+        var chartBoundaries = this.calculateChartBoundaries(rotaShifts);
+
         return (
             <div className="row">
                 <div className="col-md-9">
                     <RotaChart
-                        rotaShifts={this.getRotaShifts()}
-                        startTime={9}
-                        endTime={6}
+                        rotaShifts={rotaShifts}
+                        startTime={chartBoundaries.start}
+                        endTime={chartBoundaries.end}
                         staff={this.props.staff}
                         updateShiftToPreview={(shift) => this.setState({shiftToPreview: shift})}
                         updateShiftToShow={(shift) => this.setState({shiftToShow: shift})} />
@@ -68,6 +75,39 @@ export default class ChartAndFilter extends Component {
                 </div>
             </div>
         )
+    }
+    /**
+     * Many venues ony operate at certain times, so we detect the times where there are
+     * shifts and only show those.
+     * @return {object} Object with "start" and "end" values that can be passed into the rota chart.
+     */
+    calculateChartBoundaries(rotaShifts){
+        // Values indicating how many hours we're into the day
+        var startOffset = 23; // means 7am based on an 8am start
+        var endOffset = 1; // means 9am based on an 8am start
+        var rotaDate = new RotaDate(rotaShifts[0].starts_at)
+
+        rotaShifts.forEach(function(rotaShift){
+            var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(rotaShift.starts_at);
+            var shiftEndOffset = rotaDate.getHoursSinceStartOfDay(rotaShift.ends_at);
+            if (shiftStartOffset < startOffset) {
+                startOffset = Math.floor(shiftStartOffset);
+            }
+            if (shiftEndOffset > endOffset) {
+                endOffset =  Math.ceil(shiftEndOffset)
+            }
+        });
+
+        startOffset -= 1;
+        startOffset = utils.containNumberWithinRange(startOffset, [0, 24]);
+        endOffset += 1;
+        endOffset = utils.containNumberWithinRange(endOffset, [0, 24]);
+
+        var boundaries = {
+            start: new Date(rotaDate.startTime.valueOf() + startOffset * MILLISECONDS_PER_HOUR).getHours(),
+            end: new Date(rotaDate.endTime.valueOf() + endOffset * MILLISECONDS_PER_HOUR).getHours(),
+        };
+        return boundaries;
     }
     getRotaShifts(){
         var self = this;

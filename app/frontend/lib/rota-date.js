@@ -1,10 +1,12 @@
 const DAY_START_TIME = 8;
+const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 /**
  * A day that lasts from 8am till 8am the next day.
  */
 class RotaDate {
     /**
      * @param  {Date} baseDate
+     * (8am is always the current day, so don't create a RotaDate based on an ends_at value that might be 8am the next day.)
      */
     constructor(baseDate) {
         this.startTime = new Date(baseDate);
@@ -58,6 +60,10 @@ class RotaDate {
     }
     getDateFromShiftEndTimeString(timeString){
         return this._getDateAtTimeString(timeString, true);
+    }
+    getHoursSinceStartOfDay(date){
+        var msSinceStartOfDay =  date.valueOf() - this.startTime.valueOf();
+        return msSinceStartOfDay / MILLISECONDS_PER_HOUR;
     }
 
 }
