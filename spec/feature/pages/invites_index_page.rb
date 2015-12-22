@@ -1,18 +1,20 @@
-class UsersIndexPage < PageObject::Page
-  def surf_to
-    visit(url_helpers.users_path)
-  end
+class InvitesIndexPage < PageObject::Page
+  include PageObject::FlashHelpers
 
-  page_action :click_manage_invites_button do
-    click_link 'Manage Invites'
+  def surf_to
+    visit(url_helpers.invites_path)
   end
 
   def navigation
     @navigation ||= NavigationBar.new(self)
   end
 
-  def user_table
-    @user_table ||= UsersIndexTable.new(self)
+  page_action :click_invite_new_user_button do
+    click_link('Invite new user')
+  end
+
+  def invites_table
+    @invites_table ||= InvitesIndexTable.new(self)
   end
 
   def assert_on_correct_page
@@ -28,6 +30,6 @@ class UsersIndexPage < PageObject::Page
   end
 
   def expected_page_heading_text
-    'Users'
+    'Invites'
   end
 end

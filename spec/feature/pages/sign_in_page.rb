@@ -1,4 +1,6 @@
-class SignInPage < PageObject
+class SignInPage < PageObject::Page
+  include PageObject::FlashHelpers
+
   def surf_to
     visit(url_helpers.new_user_session_path)
   end

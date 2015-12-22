@@ -1,6 +1,8 @@
-class AddUserPage < PageObject
+class InviteNewUserPage < PageObject::Page
+  include PageObject::FlashHelpers
+
   def surf_to
-    visit(url_helpers.new_user_path)
+    visit(url_helpers.new_invite_path)
   end
 
   def navigation
@@ -8,7 +10,7 @@ class AddUserPage < PageObject
   end
 
   def form
-    @form ||= UserForm.new(self)
+    @form ||= InviteForm.new(self)
   end
 
   def assert_on_correct_page
@@ -24,6 +26,6 @@ class AddUserPage < PageObject
   end
 
   def expected_page_heading_text
-    'Add User'
+    'Invite new user'
   end
 end

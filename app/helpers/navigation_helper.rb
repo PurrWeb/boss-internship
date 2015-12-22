@@ -1,6 +1,6 @@
 module NavigationHelper
   def in_user_section?
-    controller_name == 'users'
+    controller_name == 'users' || controller_name == 'invites'
   end
 
   def in_staff_members_section?

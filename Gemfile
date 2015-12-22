@@ -22,6 +22,7 @@ gem "clockwork"
 gem 'require_all'
 gem 'bootstrap_form'
 gem 'react_webpack_rails'
+gem "statesman", '~> 1.3.1'
 
 group :development, :test do
   gem "byebug"

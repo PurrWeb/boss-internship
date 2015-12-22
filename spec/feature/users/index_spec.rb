@@ -3,7 +3,7 @@ require 'feature/feature_spec_helper'
 RSpec.feature 'Users Section Index page' do
   let(:admin_user) { FactoryGirl.create(:user, :admin) }
   let(:users_index_page) { UsersIndexPage.new }
-  let(:add_user_page) { AddUserPage.new }
+  let(:invites_index_page) { InvitesIndexPage.new }
   let(:user_show_page) { UserShowPage.new(admin_user) }
 
   before do
@@ -18,8 +18,8 @@ RSpec.feature 'Users Section Index page' do
 
   scenario 'clicking add new user button takes you to the add users page' do
     users_index_page.surf_to
-    users_index_page.click_add_user_button
-    add_user_page.assert_on_correct_page
+    users_index_page.click_manage_invites_button
+    invites_index_page.assert_on_correct_page
   end
 
   scenario 'users details should be displayed in a table' do

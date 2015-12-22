@@ -1,10 +1,20 @@
-class HomePage < PageObject::Page
+class AcceptInvitePage < PageObject::Page
+  def initialize(invite)
+    @invite = invite
+    super()
+  end
+  attr_reader :invite
+
   def surf_to
-    visit('/')
+    visit(url_helpers.accept_invite_path(invite.token))
   end
 
-  page_action :ensure_welcome_text_displayed_for do |user|
-    expect(page_heading.text).to include("Welcome #{user.name.first_name}")
+  page_action :ensure_sign_up_text_displayed do
+    expect(page.text).to match('Please fill in the following details to complete the sign up process')
+  end
+
+  def user_form
+    @user_form ||= UserForm.new(self)
   end
 
   def navigation
@@ -24,6 +34,6 @@ class HomePage < PageObject::Page
   end
 
   def expected_page_heading_text
-    'Welcome'
+    'Accept Invite'
   end
 end
