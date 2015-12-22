@@ -20,7 +20,6 @@ export default class StaffFinder extends Component {
                     Find Staff
                 </h3>
                 <StaffFilter
-                    staffTypes={this.props.staffTypes}
                     onChange={(arg) => this.onFilterChange(arg)} />
 
             <FilterableStaffList

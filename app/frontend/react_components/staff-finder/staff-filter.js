@@ -24,7 +24,6 @@ export default class StaffFilter extends Component {
                     <div className="col-md-2">
                         <StaffTypeDropdown
                             ref={(dropdown) => this.ui.staffTypes = dropdown}
-                            staffTypes={this.props.staffTypes}
                             onChange={() => this.handleChange()} />
                     </div>
                 </div>

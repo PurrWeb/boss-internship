@@ -34,8 +34,7 @@ class RotaView extends Component {
             <AddShiftView 
                 dateOfRota={dateOfRota}
                 staff={this.props.staff}
-                rotaShifts={this.props.rotaShifts}
-                staffTypes={this.props.staffTypes} />
+                rotaShifts={this.props.rotaShifts}/>
         </div>
     }
 }
