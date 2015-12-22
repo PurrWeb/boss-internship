@@ -6,17 +6,18 @@ import ChartAndFilter from "./chart-and-filter.js"
 import staffTypes from "../data/staff-types.js"
 import _ from 'underscore'
 import AddShiftView from "./add-shift-view"
+import { boundActionCreators } from "../redux/store.js"
 
 
 class RotaView extends Component {
     static childContextTypes = {
-        staffTypes: React.PropTypes.object
+        staffTypes: React.PropTypes.object,
+        boundActionCreators: React.PropTypes.object
     }
     getChildContext(){
         return {
-            // staff: this.props.staff,
             staffTypes: this.props.staffTypes,
-            // rotaShifts: this.props.rotaShifts
+            boundActionCreators: boundActionCreators
         }
     }
     render() {

@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import { boundActionCreators } from "../../redux/store.js"
 import AddStaffToShiftButton from "./add-staff-to-shift-button"
 import StaffShiftList from "../staff-shift-list.js"
 

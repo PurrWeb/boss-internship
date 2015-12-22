@@ -1,8 +1,10 @@
 import React, { Component } from "react"
 import ShiftTimeInput from "../shift-time-input.js"
-import { boundActionCreators } from "../../redux/store.js"
 
 export default class StaffShiftEditor extends Component {
+    static contextTypes = {
+        boundActionCreators: React.PropTypes.object
+    }
     constructor(props){
         super(props);
         this.state = {
@@ -67,10 +69,10 @@ export default class StaffShiftEditor extends Component {
         return this.props.staff[this.props.shift.staff_id];
     }
     deleteShift(){
-        boundActionCreators.deleteRotaShift(this.props.shift.id);
+        this.context.boundActionCreators.deleteRotaShift(this.props.shift.id);
     }
     updateShift(){
-        boundActionCreators.updateRotaShift({
+        this.context.boundActionCreators.updateRotaShift({
             starts_at: this.state.newStartsAt,
             ends_at: this.state.newEndsAt,
             shift_id: this.props.shift.id

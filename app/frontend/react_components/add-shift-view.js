@@ -2,10 +2,12 @@ import React, { Component } from "react"
 import RotaDate from "../lib/rota-date.js"
 import ShiftTimeSelector from "./shift-time-selector"
 import StaffFinder from "./staff-finder.js"
-import { boundActionCreators } from "../redux/store";
 
 
 export default class AddShiftView extends Component {
+    static contextTypes = {
+        boundActionCreators: React.PropTypes.object
+    }
     constructor(props){
         super(props)
 
@@ -35,7 +37,7 @@ export default class AddShiftView extends Component {
         );
     }
     addShift(staffId){
-        boundActionCreators.addRotaShift({
+        this.context.boundActionCreators.addRotaShift({
             starts_at: this.state.shiftTimes.starts_at,
             ends_at: this.state.shiftTimes.ends_at,
             staff_id: staffId
