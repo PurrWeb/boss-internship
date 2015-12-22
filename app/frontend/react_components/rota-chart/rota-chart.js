@@ -5,6 +5,7 @@ import moment from "moment"
 import _ from 'underscore'
 
 const MAX_HEIGHT_PER_PERSON = 20;
+const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 
 class RotaChart extends Component {
     static contextTypes = {
@@ -40,10 +41,13 @@ class RotaChart extends Component {
         staffList = _(staffList).sortBy("staff_type")
         return staffList;
     }
-    generateRotaShiftList(staffList){
+    getRotaDate(){
         var rotaBaseDate = new Date(this.props.rotaShifts[0].starts_at);
         var rotaDate = new RotaDate(rotaBaseDate);
-        const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
+        return rotaDate;
+    }
+    generateRotaShiftList(staffList){
+        var rotaDate = this.getRotaDate();
         function calculateOffsetInHours(date){
             var offsetInMilliseconds = date.valueOf() - rotaDate.startTime.valueOf();
             var offsetInHours = offsetInMilliseconds / MILLISECONDS_PER_HOUR;
@@ -100,9 +104,7 @@ class RotaChart extends Component {
             width = innerWidth + padding * 2,
             height = innerHeight + padding * 2;
 
-        var xScale = d3.scale.linear()
-            .domain([0, 24])
-            .range([0, innerWidth]);
+        var {xScale, barWidthScale} = this.getScales(innerWidth);
 
         var chart = d3.select(el)
             .attr("width", width)
@@ -110,17 +112,8 @@ class RotaChart extends Component {
             .append("g")
             .attr("transform", `translate(${padding}, ${padding})`)
 
-        var xAxis = d3.svg.axis();
-        xAxis.scale(xScale);
-        xAxis.ticks(24)
-        xAxis.tickSize(-500)
-        xAxis.tickFormat(function(offset){
-            var hours = offset + 8;
-            if (hours > 23) {
-                hours -= 24;
-            }
-            return hours
-        })
+        var xAxis = this.getXAxis(xScale);
+
         chart
             .append("g")
             .attr("transform", "translate(0," + (height - padding * 2) + ")")
@@ -145,7 +138,7 @@ class RotaChart extends Component {
         bar.append("rect")
             .attr("width", function(shift){
                 var hours = shift.endOffset - shift.startOffset
-                return xScale(hours)
+                return barWidthScale(hours)
             })
             .attr("style", function(shift){
                 return "fill:" + self.context.staffTypes[shift.staff.staff_type].color;
@@ -186,11 +179,59 @@ class RotaChart extends Component {
 
 
     }
+    getXAxis(xScale){
+        var xAxis = d3.svg.axis();
+        xAxis.scale(xScale);
+        xAxis.ticks(24 - this.getHoursNotShown())
+        xAxis.tickSize(-500)
+        xAxis.tickFormat(function(offset){
+            var hours = offset + 8;
+            if (hours > 23) {
+                hours -= 24;
+            }
+            return hours
+        })
+        return xAxis;
+    }
+    getScales(innerWidth){
+        var hoursNotShownOnTheLeft = this.getHoursNotShownOnTheLeft();
+        var hoursNotShownOnTheRight = this.getHoursNotShownOnTheRight();
+        var hoursNotShown = this.getHoursNotShown();
+
+        var xScale = d3.scale.linear()
+            .domain([hoursNotShownOnTheLeft, 24 - hoursNotShownOnTheRight])
+            .range([0, innerWidth]);
+        var barWidthScale = d3.scale.linear()
+            .domain([0, 24 - hoursNotShown])
+            .range([0, innerWidth]);
+
+        return {xScale, barWidthScale};
+    }
     showShiftPreview(shift) {
         this.props.updateShiftToPreview(shift.originalShiftObject);
     }
     stopShowingShiftPreview(shift) {
         this.props.updateShiftToPreview(null);
+    }
+    getHoursNotShown(){
+        var hoursNotShownOnTheLeft = this.getHoursNotShownOnTheLeft();
+        var hoursNotShownOnTheRight = this.getHoursNotShownOnTheRight();
+
+        return hoursNotShownOnTheLeft + hoursNotShownOnTheRight;
+    }
+    getHoursNotShownOnTheLeft(){
+        var rotaDate = this.getRotaDate();
+        var chartStartTime = rotaDate.getDateFromShiftStartTime(this.props.startTime, 0).valueOf();
+        var dayStartTime = rotaDate.startTime.valueOf();
+        var msNotShown = chartStartTime - dayStartTime;
+        return msNotShown / MILLISECONDS_PER_HOUR;
+    }
+    getHoursNotShownOnTheRight(){
+        var rotaDate = this.getRotaDate();
+        var chartEndTime = rotaDate.getDateFromShiftStartTime(this.props.endTime, 0).valueOf();
+        var dayEndTime = rotaDate.endTime.valueOf();
+        var msNotShown = dayEndTime - chartEndTime;
+        return msNotShown / MILLISECONDS_PER_HOUR;
     }
 }
 

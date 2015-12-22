@@ -42,6 +42,8 @@ export default class ChartAndFilter extends Component {
                 <div className="col-md-9">
                     <RotaChart
                         rotaShifts={this.getRotaShifts()}
+                        startTime={9}
+                        endTime={6}
                         staff={this.props.staff}
                         updateShiftToPreview={(shift) => this.setState({shiftToPreview: shift})}
                         updateShiftToShow={(shift) => this.setState({shiftToShow: shift})} />
