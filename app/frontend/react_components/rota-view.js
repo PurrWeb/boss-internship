@@ -12,12 +12,14 @@ import { boundActionCreators } from "../redux/store.js"
 class RotaView extends Component {
     static childContextTypes = {
         staffTypes: React.PropTypes.object,
-        boundActionCreators: React.PropTypes.object
+        boundActionCreators: React.PropTypes.object,
+        rotaShifts: React.PropTypes.array
     }
     getChildContext(){
         return {
             staffTypes: this.props.staffTypes,
-            boundActionCreators: boundActionCreators
+            boundActionCreators: boundActionCreators,
+            rotaShifts: this.props.rotaShifts
         }
     }
     render() {
@@ -30,12 +32,11 @@ class RotaView extends Component {
             <br/>
             <ChartAndFilter
                 rotaShifts={this.props.rotaShifts}
-                staff={this.props.staff}/>
+                staff={this.props.staff} />
             <hr />
             <AddShiftView 
                 dateOfRota={dateOfRota}
-                staff={this.props.staff}
-                rotaShifts={this.props.rotaShifts}/>
+                staff={this.props.staff} />
         </div>
     }
 }

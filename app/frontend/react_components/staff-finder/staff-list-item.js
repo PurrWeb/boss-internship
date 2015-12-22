@@ -38,8 +38,7 @@ export default class StaffListItem extends Component {
                                     Shifts
                                 </h4>
                                 <StaffShiftList
-                                    staffId={staff.id}
-                                    rotaShifts={this.props.rotaShifts} />
+                                    staffId={staff.id} />
                                 <a onClick={() => this.toggleShowMore()}>
                                     {this.state.isExpanded ? "Show Less" : "Show More"}
                                 </a>

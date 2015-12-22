@@ -9,7 +9,6 @@ export default class FilterableStaffList extends Component {
         var self = this;
         var staffListItems = staffToShow.map(function(staff, i){
             return <StaffListItem
-                rotaShifts={self.props.rotaShifts}
                 key={i}
                 staff={staff}
                 addShift={self.props.addShift} />

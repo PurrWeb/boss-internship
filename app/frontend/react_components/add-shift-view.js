@@ -30,7 +30,6 @@ export default class AddShiftView extends Component {
                 <hr/>
                 <StaffFinder
                     staff={this.props.staff}
-                    rotaShifts={this.props.rotaShifts}
                     addShift={(staffId) => this.addShift(staffId)}
                     />
             </div>
