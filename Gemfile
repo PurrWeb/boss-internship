@@ -23,6 +23,7 @@ gem 'require_all'
 gem 'bootstrap_form'
 gem 'react_webpack_rails'
 gem "statesman", '~> 1.3.1'
+gem "cancan"
 
 group :development, :test do
   gem "byebug"
