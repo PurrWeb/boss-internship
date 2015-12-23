@@ -42,7 +42,7 @@ export default class ChartAndFilter extends Component {
         }
 
         var rotaShifts = this.getRotaShifts();
-        var chartBoundaries = this.calculateChartBoundaries(rotaShifts);
+        var chartBoundaries = ChartAndFilter.calculateChartBoundaries(rotaShifts);
 
         return (
             <div className="row">
@@ -81,7 +81,7 @@ export default class ChartAndFilter extends Component {
      * shifts and only show those.
      * @return {object} Object with "start" and "end" values that can be passed into the rota chart.
      */
-    calculateChartBoundaries(rotaShifts){
+    static calculateChartBoundaries = function(rotaShifts){
         // Values indicating how many hours we're into the day
         var startOffset = 23; // means 7am based on an 8am start
         var endOffset = 1; // means 9am based on an 8am start
