@@ -183,7 +183,7 @@ class RotaChart extends Component {
         var xAxis = d3.svg.axis();
         xAxis.scale(xScale);
         xAxis.ticks(24 - this.getHoursNotShown())
-        xAxis.tickSize(-500)
+        xAxis.tickSize(-innerHeight) // draw lines across the whole chart for each tick
         xAxis.tickFormat(function(offset){
             var hours = offset + 8;
             if (hours > 23) {
