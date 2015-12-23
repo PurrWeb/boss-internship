@@ -228,7 +228,7 @@ class RotaChart extends Component {
     }
     getHoursNotShownOnTheRight(){
         var rotaDate = this.getRotaDate();
-        var chartEndTime = rotaDate.getDateFromShiftStartTime(this.props.endTime, 0).valueOf();
+        var chartEndTime = rotaDate.getDateFromShiftEndTime(this.props.endTime, 0).valueOf();
         var dayEndTime = rotaDate.endTime.valueOf();
         var msNotShown = dayEndTime - chartEndTime;
         return msNotShown / MILLISECONDS_PER_HOUR;
