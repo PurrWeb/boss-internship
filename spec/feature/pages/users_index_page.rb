@@ -1,14 +1,10 @@
-class UsersIndexPage < PageObject
+class UsersIndexPage < PageObject::Page
   def surf_to
     visit(url_helpers.users_path)
   end
 
-  page_action :click_add_user_button do
-    click_link 'Add User'
-  end
-
-  page_action :ensure_flash_success_message_displayed do |message|
-    expect(find('.alert.alert-success')).to have_text(message)
+  page_action :click_manage_invites_button do
+    click_link 'Manage Invites'
   end
 
   def navigation

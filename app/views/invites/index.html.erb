@@ -1,0 +1,26 @@
+<h1>Invites</h1>
+
+<%= link_to('Invite new user', new_invite_path, class: ['btn', 'btn-primary']) %>
+
+<% if invites.present? %>
+  <table class="table">
+    <tr>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Status</th>
+    <tr>
+    <% invites.each do |invite| %>
+      <tr class="invites-index-listing" data-invite-id="<%= invite.id %>">
+        <td data-role="email">
+          <%= invite.email %>
+        </td>
+        <td data-role="role">
+          <%= invite.role.titleize %>
+        </td>
+        <td data-role="status">
+          <%= invite.current_state.titleize %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

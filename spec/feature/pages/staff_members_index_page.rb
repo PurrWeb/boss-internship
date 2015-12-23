@@ -1,14 +1,12 @@
-class StaffMembersIndexPage < PageObject
+class StaffMembersIndexPage < PageObject::Page
+  include PageObject::FlashHelpers
+
   def surf_to
     visit(url_helpers.staff_members_path)
   end
 
   page_action :click_add_staff_member_button do
     click_link 'Add Staff Member'
-  end
-
-  page_action :ensure_flash_success_message_displayed do |message|
-    expect(find('.alert.alert-success').text).to eq(message)
   end
 
   page_action :ensure_record_displayed_for do |user|

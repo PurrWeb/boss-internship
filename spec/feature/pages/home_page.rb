@@ -1,6 +1,10 @@
-class HomePage < PageObject
+class HomePage < PageObject::Page
   def surf_to
     visit('/')
+  end
+
+  page_action :ensure_welcome_text_displayed_for do |user|
+    expect(page_heading.text).to include("Welcome #{user.name.first_name}")
   end
 
   def navigation

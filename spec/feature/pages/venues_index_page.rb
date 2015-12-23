@@ -1,4 +1,6 @@
-class VenuesIndexPage < PageObject
+class VenuesIndexPage < PageObject::Page
+  include PageObject::FlashHelpers
+
   def surf_to
     visit(url_helpers.venues_path)
   end
@@ -10,10 +12,6 @@ class VenuesIndexPage < PageObject
   page_action :add_venue do |venue|
     create_venue_form.fill_in('Name', with: venue.name)
     create_venue_form.click_button('Add')
-  end
-
-  page_action :ensure_flash_success_message_displayed do |message|
-    expect(find('.alert.alert-success').text).to eq(message)
   end
 
   page_action :ensure_record_displayed_for do |venue|

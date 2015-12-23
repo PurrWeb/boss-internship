@@ -1,0 +1,5 @@
+<%= bootstrap_form_for(invite, html: { class: 'invite-form' }) do |form| %>
+  <%= form.select(:role, options_for_select(current_user.can_create_roles.map{ |role| [role.titleize, role] }, form.object.role), include_blank: true, label_class: 'required') %>
+  <%= form.text_field(:email, label_class: 'required') %>
+  <button type="submit" class="btn btn-default">Submit</button>
+<% end %>

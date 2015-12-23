@@ -1,12 +1,12 @@
 require 'feature/feature_spec_helper'
 
 RSpec.feature 'Venues Section Index page' do
-  let(:admin_user) { FactoryGirl.create(:user, :admin) }
+  let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:venues_index_page) { VenuesIndexPage.new }
   let(:prospective_venue) { FactoryGirl.build(:venue, name: 'Party Place')}
 
   before do
-    login_as(admin_user)
+    login_as(dev_user)
   end
 
   scenario 'the venues section should be highlighted in the navigaiton' do

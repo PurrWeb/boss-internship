@@ -1,4 +1,4 @@
-class AddStaffMemberPage < PageObject
+class AddStaffMemberPage < PageObject::Page
   def surf_to
     visit(url_helpers.new_staff_member_path)
   end

@@ -1,4 +1,4 @@
-class NameForm < PageComponent
+class NameForm < PageObject::Component
   page_action :fill_in_for do |name|
     scope.fill_in('First name', with: name.first_name)
     scope.fill_in('Surname', with: name.surname)
