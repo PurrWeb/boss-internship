@@ -42,7 +42,14 @@ class RotaChart extends Component {
         return staffList;
     }
     getRotaDate(){
-        var rotaBaseDate = new Date(this.props.rotaShifts[0].starts_at);
+        var exampleDateFromTheDay;
+        if (this.props.rotaShifts.length > 0) {
+            exampleDateFromTheDay = this.props.rotaShifts[0].starts_at;
+        } else {
+            // Any date will do since there's no data anyway
+            exampleDateFromTheDay = new Date();
+        }
+        var rotaBaseDate = new Date(exampleDateFromTheDay);
         var rotaDate = new RotaDate(rotaBaseDate);
         return rotaDate;
     }
@@ -79,9 +86,6 @@ class RotaChart extends Component {
 
         var previousInnerHTML = el.innerHTML;
         el.innerHTML = "";
-        if (this.props.rotaShifts.length === 0) {
-            return;
-        }
 
         var self = this;
         var staffList = this.getStaffMembersOnRota();

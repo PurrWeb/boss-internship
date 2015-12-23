@@ -85,24 +85,32 @@ export default class ChartAndFilter extends Component {
         // Values indicating how many hours we're into the day
         var startOffset = 23; // means 7am based on an 8am start
         var endOffset = 1; // means 9am based on an 8am start
-        var rotaDate = new RotaDate(rotaShifts[0].starts_at)
 
-        // Adjust offset range everytime we find a shift that's not contained inside it
-        rotaShifts.forEach(function(rotaShift){
-            var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(rotaShift.starts_at);
-            var shiftEndOffset = rotaDate.getHoursSinceStartOfDay(rotaShift.ends_at);
-            if (shiftStartOffset < startOffset) {
-                startOffset = Math.floor(shiftStartOffset);
-            }
-            if (shiftEndOffset > endOffset) {
-                endOffset =  Math.ceil(shiftEndOffset)
-            }
-        });
+        var rotaDate;
+        if (_.isEmpty(rotaShifts)) {
+            startOffset = 0;
+            endOffset = 24;
+            rotaDate = new RotaDate(new Date());
+        } else {
+            rotaDate = new RotaDate(rotaShifts[0].starts_at);
 
-        startOffset -= 1;
-        startOffset = utils.containNumberWithinRange(startOffset, [0, 24]);
-        endOffset += 1;
-        endOffset = utils.containNumberWithinRange(endOffset, [0, 24]);
+            // Adjust offset range everytime we find a shift that's not contained inside it
+            rotaShifts.forEach(function(rotaShift){
+                var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(rotaShift.starts_at);
+                var shiftEndOffset = rotaDate.getHoursSinceStartOfDay(rotaShift.ends_at);
+                if (shiftStartOffset < startOffset) {
+                    startOffset = Math.floor(shiftStartOffset);
+                }
+                if (shiftEndOffset > endOffset) {
+                    endOffset =  Math.ceil(shiftEndOffset)
+                }
+            });
+
+            startOffset -= 1;
+            startOffset = utils.containNumberWithinRange(startOffset, [0, 24]);
+            endOffset += 1;
+            endOffset = utils.containNumberWithinRange(endOffset, [0, 24]);
+        }
 
         var boundaries = {
             start: new Date(rotaDate.startTime.valueOf() + startOffset * MILLISECONDS_PER_HOUR).getHours(),

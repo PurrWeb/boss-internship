@@ -31,10 +31,18 @@
           <% end %>
 
           <% if can?(:manage, :rotas) %>
-            <li class="nav-rota-section">
-              <%= link_to(rotas_path, class: "#{'active' if in_rotas_section? }") do %>
-                Rota <% if in_rotas_section? %><span class="sr-only">(current)</span><% end %>
-              <% end %>
+            <li class="nav-rota-section dropdown">
+              <a href="#" class="dropdown-toggle <%= "#{'active' if in_rotas_section? }" %>" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                Rota <% if in_rotas_section? %><span class="sr-only">(current)</span><% end %><span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <%= link_to('Prefilled Example', prefilled_example_rotas_path) %>
+                </li>
+                <li>
+                  <%= link_to('Empty Example', empty_example_rotas_path) %>
+                </li>
+              </ul>
             </li>
           <% end %>
 

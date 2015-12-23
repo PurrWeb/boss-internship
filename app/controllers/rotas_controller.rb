@@ -1,4 +1,7 @@
 class RotasController < ApplicationController
-  def index
+  def prefilled_example
+  end
+
+  def empty_example
   end
 end
