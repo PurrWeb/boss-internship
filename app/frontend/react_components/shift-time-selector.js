@@ -21,7 +21,7 @@ export default class ShiftTimeSelector extends Component {
                 <div className="row">
                     <div className="col-md-6">
                         <ShiftTimeInput
-                            endsAt={this.state.starts_at}
+                            startsAt={this.state.starts_at}
                             defaultDate={this.props.defaultShiftTimes.starts_at}
                             onChange={(newValue) => {
                                 this.setState({starts_at: newValue});
