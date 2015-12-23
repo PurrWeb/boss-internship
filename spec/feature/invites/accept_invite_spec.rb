@@ -18,6 +18,7 @@ RSpec.feature 'Accepting an invite' do
     end
 
     home_page.ensure_welcome_text_displayed_for(prospective_user)
+    expect(invite.reload).to be_accepted
     expect(User.joins(:email_address).merge(EmailAddress.where(email: invite.email)).first).to be_present
   end
 

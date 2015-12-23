@@ -44,10 +44,18 @@ class InvitesController < ApplicationController
   end
 
   def accept_create_action(invite)
-    email_address = EmailAddress.new(email: invite.email)
-    user = User.new(user_params.merge(email_address: email_address, role: invite.role))
+    user = User.new
 
-    if user.save
+    result = true
+    ActiveRecord::Base.transaction do
+      email_address = EmailAddress.new(email: invite.email)
+      result = user.update_attributes(user_params.merge(email_address: email_address, role: invite.role))
+      result = result && invite.transition_to(:accepted)
+
+      raise ActiveRecord::Rollbar unless result
+    end
+
+    if result
       sign_in(:user, user)
       redirect_to root_path
     else

@@ -17,7 +17,7 @@ class Invite < ActiveRecord::Base
     presence:   true,
     format:     { with: /\A[^@]+@[^@]+\z/ },
     uniqueness: {
-      conditions: -> { merge(Invite.open.enabled) },
+      conditions: -> { merge(Invite.in_state(:open)) },
       message: "has already been invited",
       case_sensitive: false,
       if: :open?
@@ -25,14 +25,14 @@ class Invite < ActiveRecord::Base
 
   validate :user_doesnt_already_exist, on: :create
 
-  delegate :transition_to!, :current_state, to: :state_machine
+  delegate :transition_to, :transition_to!, :current_state, to: :state_machine
 
   def accepted?
-    current_state == :accepted
+    current_state.to_sym == :accepted
   end
 
   def open?
-    current_state == :open
+    current_state.to_sym == :open
   end
 
   def generate_token
@@ -40,13 +40,21 @@ class Invite < ActiveRecord::Base
   end
 
   def state_machine
-    @state_machine ||= InviteStateMachine.new(self, transition_class: InviteTransition)
+    @state_machine ||= InviteStateMachine.new(
+      self,
+      transition_class: InviteTransition,
+      association_name: :invite_transitions
+    )
   end
 
   private
   # Needed for statesman
   def self.transition_class
     InviteTransition
+  end
+
+  def self.initial_state
+    InviteStateMachine.initial_state
   end
 
   def user_doesnt_already_exist
