@@ -20,13 +20,11 @@ export default class StaffFinder extends Component {
                     Find Staff
                 </h3>
                 <StaffFilter
-                    staffTypes={this.props.staffTypes}
                     onChange={(arg) => this.onFilterChange(arg)} />
 
             <FilterableStaffList
                 staff={this.props.staff}
                 filterSettings={this.state.staffFilterSettings}
-                rotaShifts={this.props.rotaShifts}
                 addShift={this.props.addShift} />
             </div>
         </div>

@@ -42,7 +42,6 @@ export default class ChartAndFilter extends Component {
                 <div className="col-md-9">
                     <RotaChart
                         rotaShifts={this.getRotaShifts()}
-                        staffTypes={this.props.staffTypes}
                         staff={this.props.staff}
                         updateShiftToPreview={(shift) => this.setState({shiftToPreview: shift})}
                         updateShiftToShow={(shift) => this.setState({shiftToShow: shift})} />
@@ -50,7 +49,6 @@ export default class ChartAndFilter extends Component {
                 <div className="col-md-3">
                     Filter chart
                     <StaffTypeDropdown
-                        staffTypes={this.props.staffTypes}
                         onChange={
                             (value) => this.setState({"staffTypeFilter": value})
                         } />

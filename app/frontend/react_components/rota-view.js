@@ -6,9 +6,22 @@ import ChartAndFilter from "./chart-and-filter.js"
 import staffTypes from "../data/staff-types.js"
 import _ from 'underscore'
 import AddShiftView from "./add-shift-view"
+import { boundActionCreators } from "../redux/store.js"
 
 
 class RotaView extends Component {
+    static childContextTypes = {
+        staffTypes: React.PropTypes.object,
+        boundActionCreators: React.PropTypes.object,
+        rotaShifts: React.PropTypes.array
+    }
+    getChildContext(){
+        return {
+            staffTypes: this.props.staffTypes,
+            boundActionCreators: boundActionCreators,
+            rotaShifts: this.props.rotaShifts
+        }
+    }
     render() {
         var dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
 
@@ -19,17 +32,11 @@ class RotaView extends Component {
             <br/>
             <ChartAndFilter
                 rotaShifts={this.props.rotaShifts}
-                staff={this.props.staff}
-                staffTypes={this.props.staffTypes} />
+                staff={this.props.staff} />
             <hr />
             <AddShiftView 
                 dateOfRota={dateOfRota}
-                staff={this.props.staff}
-                rotaShifts={this.props.rotaShifts}
-                staffTypes={this.props.staffTypes}
-                />
-
-
+                staff={this.props.staff} />
         </div>
     }
 }

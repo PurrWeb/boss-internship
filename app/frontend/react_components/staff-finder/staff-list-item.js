@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import { boundActionCreators } from "../../redux/store.js"
 import AddStaffToShiftButton from "./add-staff-to-shift-button"
 import StaffShiftList from "../staff-shift-list.js"
 
@@ -39,8 +38,7 @@ export default class StaffListItem extends Component {
                                     Shifts
                                 </h4>
                                 <StaffShiftList
-                                    staffId={staff.id}
-                                    rotaShifts={this.props.rotaShifts} />
+                                    staffId={staff.id} />
                                 <a onClick={() => this.toggleShowMore()}>
                                     {this.state.isExpanded ? "Show Less" : "Show More"}
                                 </a>
