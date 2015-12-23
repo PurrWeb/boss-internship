@@ -56,10 +56,13 @@ class InvitesController < ApplicationController
   end
 
   def invite_params
-    params.require(:invite).permit(
-      :role,
-      :email
-    )
+    permitted_params = [:email]
+
+    if current_user.can_create_roles.include?(params[:invite][:role])
+      permitted_params << :role
+    end
+
+    params.require(:invite).permit(permitted_params)
   end
 
   def user_params

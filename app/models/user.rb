@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  ROLES = ['admin', 'manager']
+  ROLES = ['admin', 'manager', 'dev']
 
   has_many :venues
 
@@ -55,6 +55,26 @@ class User < ActiveRecord::Base
 
   def email_required?
     false
+  end
+
+  def can_create_roles
+    if dev? || admin?
+      ROLES - ['dev']
+    else
+      []
+    end
+  end
+
+  def admin?
+    role == 'admin'
+  end
+
+  def dev?
+    role == 'dev'
+  end
+
+  def manager?
+    role == 'manager'
   end
 
   def status
