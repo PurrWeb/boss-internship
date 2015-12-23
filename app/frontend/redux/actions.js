@@ -6,7 +6,7 @@ export function addRotaShift (options) {
             starts_at: options.starts_at,
             ends_at: options.ends_at,
             staff_id: options.staff_id,
-            shift_id: Math.floor(Math.random() * 100000000000)
+            id: Math.floor(Math.random() * 100000000000)
         }
     }
 }
