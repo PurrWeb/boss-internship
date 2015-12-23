@@ -1,12 +1,12 @@
 require 'feature/feature_spec_helper'
 
 RSpec.feature 'Staff members section index page' do
-  let(:admin_user) { FactoryGirl.create(:user, :admin) }
+  let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:staff_members_index_page) { StaffMembersIndexPage.new }
   let(:add_staff_member_page) { AddStaffMemberPage.new }
 
   before do
-    login_as(admin_user)
+    login_as(dev_user)
   end
 
   scenario 'the staff members section should be highlighted in the navigaiton' do

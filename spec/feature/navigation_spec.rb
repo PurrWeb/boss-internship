@@ -15,8 +15,8 @@ RSpec.feature 'Navigation Bar' do
       end
     end
 
-    context 'a logged in admin user' do
-      let(:user) { FactoryGirl.create(:user, :admin) }
+    context 'a logged in dev' do
+      let(:user) { FactoryGirl.create(:user, :dev) }
       let(:home_page) { HomePage.new }
 
       scenario 'sees extra functionality' do
@@ -26,6 +26,38 @@ RSpec.feature 'Navigation Bar' do
         home_page.navigation.tap do |navigation|
           navigation.ensure_branding_displayed
           navigation.ensure_only_sections_displayed(:users, :staff_members, :venues)
+          navigation.ensure_user_section_displayed_for(user)
+        end
+      end
+    end
+
+    context 'a logged in admin' do
+      let(:user) { FactoryGirl.create(:user, :admin) }
+      let(:home_page) { HomePage.new }
+
+      scenario 'sees extra functionality' do
+        login_as(user)
+
+        home_page.surf_to
+        home_page.navigation.tap do |navigation|
+          navigation.ensure_branding_displayed
+          navigation.ensure_only_sections_displayed(:users)
+          navigation.ensure_user_section_displayed_for(user)
+        end
+      end
+    end
+
+    context 'a logged in manager' do
+      let(:user) { FactoryGirl.create(:user, :manager) }
+      let(:home_page) { HomePage.new }
+
+      scenario 'sees extra functionality' do
+        login_as(user)
+
+        home_page.surf_to
+        home_page.navigation.tap do |navigation|
+          navigation.ensure_branding_displayed
+          navigation.ensure_only_sections_displayed()
           navigation.ensure_user_section_displayed_for(user)
         end
       end

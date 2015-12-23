@@ -14,26 +14,37 @@
     <% if current_user.present? %>
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li class="nav-users-section">
-            <%= link_to(users_path, class: "#{'active' if in_user_section? }")do %>
-              Users <% if in_user_section? %><span class="sr-only">(current)</span><% end %>
-            <% end %>
-          </li>
-          <li class="nav-staff-members-section">
-            <%= link_to(staff_members_path, class: "#{'active' if in_staff_members_section? }") do %>
-              Staff Members <% if in_staff_members_section? %><span class="sr-only">(current)</span><% end %>
-            <% end %>
-          </li>
-          <li class="nav-rota-section">
-            <%= link_to(rotas_path, class: "#{'active' if in_rotas_section? }") do %>
-              Rota <% if in_rotas_section? %><span class="sr-only">(current)</span><% end %>
-            <% end %>
-          </li>
-          <li class="nav-venues-section">
-            <%= link_to(venues_path, class: "#{'active' if in_venues_section? }") do %>
-              Venues <% if in_venues_section? %><span class="sr-only">(current)</span><% end %>
-            <% end %>
-          </li>
+          <% if can?(:manage, :users) %>
+            <li class="nav-users-section">
+              <%= link_to(users_path, class: "#{'active' if in_user_section? }")do %>
+                Users <% if in_user_section? %><span class="sr-only">(current)</span><% end %>
+              <% end %>
+            </li>
+          <% end %>
+
+          <% if can?(:manage, :staff_members) %>
+            <li class="nav-staff-members-section">
+              <%= link_to(staff_members_path, class: "#{'active' if in_staff_members_section? }") do %>
+                Staff Members <% if in_staff_members_section? %><span class="sr-only">(current)</span><% end %>
+              <% end %>
+            </li>
+          <% end %>
+
+          <% if can?(:manage, :rotas) %>
+            <li class="nav-rota-section">
+              <%= link_to(rotas_path, class: "#{'active' if in_rotas_section? }") do %>
+                Rota <% if in_rotas_section? %><span class="sr-only">(current)</span><% end %>
+              <% end %>
+            </li>
+          <% end %>
+
+          <% if can?(:manage, :venues) %>
+            <li class="nav-venues-section">
+              <%= link_to(venues_path, class: "#{'active' if in_venues_section? }") do %>
+                Venues <% if in_venues_section? %><span class="sr-only">(current)</span><% end %>
+              <% end %>
+            </li>
+          <% end %>
         </ul>
 
         <ul class="nav navbar-nav navbar-right nav-user-section">
