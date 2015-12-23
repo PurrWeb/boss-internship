@@ -25,7 +25,11 @@ class Invite < ActiveRecord::Base
 
   validate :user_doesnt_already_exist, on: :create
 
-  delegate :transition_to, :transition_to!, :current_state, to: :state_machine
+  delegate :can_transition_to?, :transition_to, :transition_to!, :current_state, to: :state_machine
+
+  def revoke!
+    transition_to!(:revoked)
+  end
 
   def accepted?
     current_state.to_sym == :accepted
@@ -33,6 +37,10 @@ class Invite < ActiveRecord::Base
 
   def open?
     current_state.to_sym == :open
+  end
+
+  def revoked?
+    current_state.to_sym == :revoked
   end
 
   def generate_token

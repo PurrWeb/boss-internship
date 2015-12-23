@@ -8,5 +8,9 @@ FactoryGirl.define do
     trait :accepted do
       to_state :accepted
     end
+
+    trait :revoked do
+      to_state :revoked
+    end
   end
 end
