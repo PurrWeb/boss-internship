@@ -37,7 +37,6 @@ class RotaView extends Component {
 function mapStateToProps(state) {
     var props = _.clone(state);
 
-    // This needs to be moved into a separate file / folder
     props.staff = _(props.staff).mapValues(function(staff){
         staff = _.clone(staff);
         staff.readable_staff_type = staffTypes[staff.staff_type].title;
