@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :invite do
     sequence :email do |n|
-      "fake{n}@email.com"
+      "fake#{n}@email.com"
     end
 
     role "admin"
