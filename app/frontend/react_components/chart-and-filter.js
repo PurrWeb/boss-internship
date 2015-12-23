@@ -87,6 +87,7 @@ export default class ChartAndFilter extends Component {
         var endOffset = 1; // means 9am based on an 8am start
         var rotaDate = new RotaDate(rotaShifts[0].starts_at)
 
+        // Adjust offset range everytime we find a shift that's not contained inside it
         rotaShifts.forEach(function(rotaShift){
             var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(rotaShift.starts_at);
             var shiftEndOffset = rotaDate.getHoursSinceStartOfDay(rotaShift.ends_at);
