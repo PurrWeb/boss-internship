@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :invite do
     sequence :email do |n|
-      "fake{n}@email.com"
+      "fake#{n}@email.com"
     end
 
     role "admin"
@@ -17,6 +17,12 @@ FactoryGirl.define do
     trait :accepted do
       after(:create) do |invite|
         FactoryGirl.create(:invite_transition, :accepted, invite: invite)
+      end
+    end
+
+    trait :revoked do
+      after(:create) do |invite|
+        FactoryGirl.create(:invite_transition, :revoked, invite: invite)
       end
     end
   end

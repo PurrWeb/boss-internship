@@ -18,6 +18,16 @@ class InvitesIndexTable < PageObject::Component
     expect(detail_text(listing, :status)).to eq(invite.current_state.titleize)
   end
 
+  page_action :revoke_invite do |invite|
+    listing = index_listing_for(invite)
+    listing.click_button 'Revoke'
+  end
+
+  page_action :ensure_revoke_button_not_displayed_for do |invite|
+    listing = index_listing_for(invite)
+    expect(listing.has_button?('Revoke')).to eq(false)
+  end
+
   def scope
     page.find('table[data-role="invites-index-table"]')
   end

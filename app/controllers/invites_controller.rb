@@ -30,11 +30,22 @@ class InvitesController < ApplicationController
     if invite.accepted?
       flash[:alert] = 'The invite has already been used please sign in to continue'
       redirect_to new_user_session_path
+    elsif invite.revoked?
+      flash[:error] = 'The invite could not be used because it has been revoked'
+      redirect_to new_user_session_path
     elsif request.method == 'GET'
       accept_new_action(invite)
     elsif request.method == 'POST'
       accept_create_action(invite)
     end
+  end
+
+  def revoke
+    invite = Invite.find_by!(id: params[:id])
+    invite.revoke!
+
+    flash[:success] = 'The invite was sucessfully revoked'
+    redirect_to invites_path
   end
 
   private

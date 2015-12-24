@@ -8,6 +8,7 @@
       <th>Email</th>
       <th>Role</th>
       <th>Status</th>
+      <th></th>
     <tr>
     <% invites.each do |invite| %>
       <tr class="invites-index-listing" data-invite-id="<%= invite.id %>">
@@ -19,6 +20,11 @@
         </td>
         <td data-role="status">
           <%= invite.current_state.titleize %>
+        </td>
+        <td data-role="revoke-button">
+          <% if invite.can_transition_to?(:revoked) %>
+            <%= button_to 'Revoke', revoke_invite_path(invite), class: 'btn btn-danger' %>
+          <% end %>
         </td>
       </tr>
     <% end %>

@@ -30,4 +30,13 @@ RSpec.feature 'Accepting an invite' do
       sign_in_page.ensure_flash_warning_message_displayed('The invite has already been used please sign in to continue')
     end
   end
+
+  context 'Invite has been rejected' do
+    let(:invite) { FactoryGirl.create(:invite, :admin, :revoked, inviter: admin_user) }
+
+    scenario 'Attempting to accept a revoked invite' do
+      accept_invite_page.surf_to
+      sign_in_page.ensure_flash_error_message_displayed('The invite could not be used because it has been revoked')
+    end
+  end
 end
