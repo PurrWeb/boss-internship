@@ -33,6 +33,20 @@ class User < ActiveRecord::Base
     false
   end
 
+  def self.find_first_by_auth_conditions(conditions={})
+    if conditions.has_key?(:reset_password_token)
+      enabled.
+        where(reset_password_token: conditions.fetch(:reset_password_token)).
+        first
+    elsif conditions.has_key?(:email)
+      enabled.
+        joins(:email_address).
+        merge(
+          EmailAddress.where(email: conditions.fetch(:email))
+        ).first
+    end
+  end
+
   def self.find_for_database_authentication(warden_conditions={})
     conditions = warden_conditions.dup
     if email = conditions.delete(:devise_email)
