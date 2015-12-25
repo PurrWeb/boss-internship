@@ -24,8 +24,7 @@ export default class StaffFinder extends Component {
 
             <FilterableStaffList
                 staff={this.props.staff}
-                filterSettings={this.state.staffFilterSettings}
-                addShift={this.props.addShift} />
+                filterSettings={this.state.staffFilterSettings} />
             </div>
         </div>
     }

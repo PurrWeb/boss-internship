@@ -2,13 +2,26 @@ import React, { Component } from "react"
 import _ from "underscore"
 
 export default class AddStaffToShiftButton extends Component {
+    static contextTypes = {
+        addShift: React.PropTypes.func,
+        canAddShift: React.PropTypes.bool
+    }
     render() {
-        var className = `btn btn-default`;
-        return <a className={className} onClick={() => this.onClick()}>
+        var className = "btn btn-default";
+        if (!this.context.canAddShift) {
+            className += " disabled";
+        }
+
+        return <a
+            className={className}
+            onClick={() => this.onClick()}>
             Add shift
         </a>
     }
     onClick() {
-        this.props.addShift(this.props.staffId);
+        if (!this.context.canAddShift) {
+            return;
+        }
+        this.context.addShift(this.props.staffId);
     }
 }
