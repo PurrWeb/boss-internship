@@ -73,6 +73,6 @@ export default class ShiftTimeInput extends Component {
             newDate = rotaDate.getDateFromShiftEndTimeString(newValue);
         }
 
-        this.props.onChange(newDate, utils.isValid(newDate));
+        this.props.onChange(newDate, utils.dateIsValid(newDate));
     }
 }

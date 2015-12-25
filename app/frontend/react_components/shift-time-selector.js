@@ -23,7 +23,8 @@ export default class ShiftTimeSelector extends Component {
                         <ShiftTimeInput
                             startsAt={this.state.starts_at}
                             defaultDate={this.props.defaultShiftTimes.starts_at}
-                            onChange={(newValue) => {
+                            onChange={(newValue, dateIsValid) => {
+                                if (!dateIsValid) {return;}
                                 this.setState({starts_at: newValue});
                                 this.props.onChange({
                                     starts_at: newValue,
@@ -35,7 +36,8 @@ export default class ShiftTimeSelector extends Component {
                         <ShiftTimeInput
                             endsAt={this.state.ends_at}
                             defaultDate={this.props.defaultShiftTimes.ends_at}
-                            onChange={(newValue) => {
+                            onChange={(newValue, dateIsValid) => {
+                                if (!dateIsValid) {return;}
                                 this.setState({ends_at: newValue});
                                 this.props.onChange({
                                     starts_at: this.state.starts_at,
