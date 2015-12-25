@@ -57,21 +57,29 @@ export default class ShiftTimeInput extends Component {
             return null;
         }
 
+        var className = "";
+        if (!utils.dateIsValid(this.getDateFromTime(this.state.time))){
+            className += "shift-time-input--invalid";
+        }
+
         return <input
             type="time"
             value={this.state.time}
+            className={className}
             onChange={(e) => this.updateTime(e.target.value)} />
+    }
+    getDateFromTime(timeString){
+        var rotaDate = new RotaDate(this.state.defaultDate);
+        if (this.state.shiftTimeType === SHIFT_TIME_TYPES.START) {
+            return rotaDate.getDateFromShiftStartTimeString(timeString);
+        } else {
+            return rotaDate.getDateFromShiftEndTimeString(timeString);
+        }
     }
     updateTime(newValue){
         this.setState({time: newValue});
 
-        var rotaDate = new RotaDate(this.state.defaultDate);
-        var newDate;
-        if (this.state.shiftTimeType === SHIFT_TIME_TYPES.START) {
-            newDate = rotaDate.getDateFromShiftStartTimeString(newValue);
-        } else {
-            newDate = rotaDate.getDateFromShiftEndTimeString(newValue);
-        }
+        var newDate = this.getDateFromTime(newValue);
 
         this.props.onChange(newDate, utils.dateIsValid(newDate));
     }
