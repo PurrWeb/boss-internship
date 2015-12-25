@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import RotaDate from "../lib/rota-date.js"
 import moment from "moment"
+import utils from "../lib/utils"
 
 var SHIFT_TIME_TYPES = {
     START: 2,
@@ -14,7 +15,7 @@ export default class ShiftTimeInput extends Component {
             shiftTimeType: null,
             defaultDate: null,
             time: null
-        }
+        };
     }
     componentWillMount(){
         this.handlePotentialPropChange(this.props);
@@ -71,6 +72,7 @@ export default class ShiftTimeInput extends Component {
         } else {
             newDate = rotaDate.getDateFromShiftEndTimeString(newValue);
         }
-        this.props.onChange(newDate);
+
+        this.props.onChange(newDate, utils.isValid(newDate));
     }
 }
