@@ -26,7 +26,12 @@ Rails.application.routes.draw do
 
   resources :venues, only: [:index, :create]
 
-  resources :rotas, only: [:index]
+  resources :rotas, only: [] do
+    collection do
+      get :prefilled_example
+      get :empty_example
+    end
+  end
 
   require "sidekiq/web"
   unless Rails.env.development?

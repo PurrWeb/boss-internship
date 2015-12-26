@@ -3,6 +3,7 @@ import _ from "underscore"
 import userData from "../data/users.js"
 import { DELETE_ROTA_SHIFT,UPDATE_ROTA_SHIFT, ADD_ROTA_SHIFT } from "./actions.js"
 import * as actionCreators from "./actions.js"
+import defaultRotaShifts from "../data/default-rota-shifts.js"
 
 var userDataById = _.indexBy(userData, "id");
 
@@ -10,9 +11,14 @@ function staff(state=[], action){
     return userDataById;
 }
 
-import defaultRotaShifts from "../data/default-rota-shifts.js"
+let initialState;
+if(window.location.pathname === '/rotas/empty_example') {
+  initialState = [];
+} else {
+  initialState = defaultRotaShifts;
+}
 
-function rotaShifts(state=defaultRotaShifts, action){
+function rotaShifts(state=initialState, action){
     switch (action.type) {
         case ADD_ROTA_SHIFT:
             return [...state, action.rota];
