@@ -1,8 +1,7 @@
-import { createStore, combineReducers, bindActionCreators } from "redux";
+import { createStore, combineReducers } from "redux";
 import _ from "underscore"
 import userData from "../data/users.js"
 import { DELETE_ROTA_SHIFT,UPDATE_ROTA_SHIFT, ADD_ROTA_SHIFT } from "./actions.js"
-import * as actionCreators from "./actions.js"
 import defaultRotaShifts from "../data/default-rota-shifts.js"
 
 var userDataById = _.indexBy(userData, "id");
@@ -48,10 +47,5 @@ var store = createStore(combineReducers({
     staff,
     rotaShifts
 }));
-
-// Doing this here seems easier than manually passing the bound action
-// creators (or the dispatch function) all the way down the component
-// hierarchy.
-export const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
 
 export default store;
