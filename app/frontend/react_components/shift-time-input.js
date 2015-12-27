@@ -30,12 +30,12 @@ export default class ShiftTimeInput extends Component {
     handlePotentialPropChange(props){
         var defaultDate;
         var shiftTimeType;
-        if (props.startsAt) {
+        if (props.defaultStartsAt) {
             shiftTimeType = SHIFT_TIME_TYPES.START;
-            defaultDate = props.startsAt;
+            defaultDate = props.defaultStartsAt;
         } else {
             shiftTimeType = SHIFT_TIME_TYPES.END;
-            defaultDate = props.endsAt;
+            defaultDate = props.defaultEndsAt;
         }
 
         var hasDefaultDate = this.state.defaultDate !== null;

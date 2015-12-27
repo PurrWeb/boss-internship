@@ -14,18 +14,18 @@ export default class AddShiftView extends Component {
         boundActionCreators: React.PropTypes.object
     }
     getChildContext(){
+        var canAddShift = utils.dateIsValid(this.state.shiftTimes.starts_at) &&
+            utils.dateIsValid(this.state.shiftTimes.ends_at);
         return {
             addShift: (staffId) => this.addShift(staffId),
-            canAddShift: true
+            canAddShift
         }
     }
     constructor(props){
         super(props)
 
-        var starts_at = new Date(new Date(props.dateOfRota).setHours(18));
-        var ends_at = new Date(new Date(props.dateOfRota).setHours(20));
         var state = {
-            shiftTimes: {starts_at, ends_at}
+            shiftTimes: this.getDefaultShiftTimes(props)
         };
         this.state = state;
     }
@@ -34,7 +34,7 @@ export default class AddShiftView extends Component {
             <div className="well well-lg">
                 <h2 style={{ marginTop: 0 }}>New shift hours</h2>
                 <ShiftTimeSelector
-                    defaultShiftTimes={this.state.shiftTimes}
+                    defaultShiftTimes={this.getDefaultShiftTimes(this.props)}
                     rotaDate={new RotaDate(this.props.dateOfRota)}
                     onChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)}
                     dateOfRota={this.props.dateOfRota} />
@@ -44,6 +44,11 @@ export default class AddShiftView extends Component {
                     staff={this.props.staff} />
             </div>
         );
+    }
+    getDefaultShiftTimes(props) {
+        var starts_at = new Date(new Date(props.dateOfRota).setHours(18));
+        var ends_at = new Date(new Date(props.dateOfRota).setHours(20));
+        return {starts_at, ends_at};
     }
     addShift(staffId){
         this.context.boundActionCreators.addRotaShift({
