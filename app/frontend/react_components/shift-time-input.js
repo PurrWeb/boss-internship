@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import RotaDate from "../lib/rota-date.js"
 import moment from "moment"
+import utils from "../lib/utils"
 
 var SHIFT_TIME_TYPES = {
     START: 2,
@@ -14,7 +15,7 @@ export default class ShiftTimeInput extends Component {
             shiftTimeType: null,
             defaultDate: null,
             time: null
-        }
+        };
     }
     componentWillMount(){
         this.handlePotentialPropChange(this.props);
@@ -29,12 +30,12 @@ export default class ShiftTimeInput extends Component {
     handlePotentialPropChange(props){
         var defaultDate;
         var shiftTimeType;
-        if (props.startsAt) {
+        if (props.defaultStartsAt) {
             shiftTimeType = SHIFT_TIME_TYPES.START;
-            defaultDate = props.startsAt;
+            defaultDate = props.defaultStartsAt;
         } else {
             shiftTimeType = SHIFT_TIME_TYPES.END;
-            defaultDate = props.endsAt;
+            defaultDate = props.defaultEndsAt;
         }
 
         var hasDefaultDate = this.state.defaultDate !== null;
@@ -56,21 +57,30 @@ export default class ShiftTimeInput extends Component {
             return null;
         }
 
+        var className = "";
+        if (!utils.dateIsValid(this.getDateFromTime(this.state.time))){
+            className += "shift-time-input--invalid";
+        }
+
         return <input
             type="time"
             value={this.state.time}
+            className={className}
             onChange={(e) => this.updateTime(e.target.value)} />
+    }
+    getDateFromTime(timeString){
+        var rotaDate = new RotaDate(this.state.defaultDate);
+        if (this.state.shiftTimeType === SHIFT_TIME_TYPES.START) {
+            return rotaDate.getDateFromShiftStartTimeString(timeString);
+        } else {
+            return rotaDate.getDateFromShiftEndTimeString(timeString);
+        }
     }
     updateTime(newValue){
         this.setState({time: newValue});
 
-        var rotaDate = new RotaDate(this.state.defaultDate);
-        var newDate;
-        if (this.state.shiftTimeType === SHIFT_TIME_TYPES.START) {
-            newDate = rotaDate.getDateFromShiftStartTimeString(newValue);
-        } else {
-            newDate = rotaDate.getDateFromShiftEndTimeString(newValue);
-        }
-        this.props.onChange(newDate);
+        var newDate = this.getDateFromTime(newValue);
+
+        this.props.onChange(newDate, utils.dateIsValid(newDate));
     }
 }

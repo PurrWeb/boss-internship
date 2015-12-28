@@ -14,5 +14,8 @@ export default {
             number = max;
         }
         return number;
+    },
+    dateIsValid(date) {
+        return !isNaN(date.valueOf());
     }
 }

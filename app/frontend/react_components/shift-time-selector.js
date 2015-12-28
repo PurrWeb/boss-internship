@@ -5,9 +5,10 @@ export default class ShiftTimeSelector extends Component {
     constructor(props){
         super(props);
         var {starts_at, ends_at} = props.defaultShiftTimes;
-        this.state = {starts_at, ends_at}
+        this.state = {starts_at, ends_at};
     }
     render(){
+
         return <div>
             <div className="col-md-3">
                 <div className="row">
@@ -21,30 +22,34 @@ export default class ShiftTimeSelector extends Component {
                 <div className="row">
                     <div className="col-md-6">
                         <ShiftTimeInput
-                            startsAt={this.state.starts_at}
-                            defaultDate={this.props.defaultShiftTimes.starts_at}
-                            onChange={(newValue) => {
-                                this.setState({starts_at: newValue});
-                                this.props.onChange({
-                                    starts_at: newValue,
-                                    ends_at: this.state.ends_at
-                                })
+                            defaultStartsAt={this.props.defaultShiftTimes.starts_at}
+                            onChange={(newValue, dateIsValid) => {
+                                this.onChange("starts_at", newValue, dateIsValid);
                             } } />
                     </div>
                     <div className="col-md-6">
                         <ShiftTimeInput
-                            endsAt={this.state.ends_at}
-                            defaultDate={this.props.defaultShiftTimes.ends_at}
-                            onChange={(newValue) => {
-                                this.setState({ends_at: newValue});
-                                this.props.onChange({
-                                    starts_at: this.state.starts_at,
-                                    ends_at: newValue
-                                })
+                            defaultEndsAt={this.props.defaultShiftTimes.ends_at}
+                            onChange={(newValue, dateIsValid) => {
+                                this.onChange("ends_at", newValue, dateIsValid);
                             } } />
                     </div>
                 </div>
             </div>
         </div>
+    }
+    /**
+     * @param  {string} startOrEnd - "starts_at" or "ends_at"
+     */
+    onChange(startOrEnd, newValue, dateIsValid){
+        this.setState({[startOrEnd]: newValue});
+
+        var info = {
+            starts_at: this.state.starts_at,
+            ends_at: this.state.ends_at
+        };
+        info[startOrEnd] = newValue;
+
+        this.props.onChange(info);
     }
 }

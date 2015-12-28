@@ -41,12 +41,12 @@ export default class StaffShiftEditor extends Component {
                 <div className="row">
                     <div className="col-md-4">
                         <ShiftTimeInput
-                            startsAt={this.props.shift.starts_at}
+                            defaultStartsAt={this.props.shift.starts_at}
                             onChange={(newValue) => this.setState({newStartsAt: newValue}) } />
                     </div>
                     <div className="col-md-4">
                         <ShiftTimeInput
-                            endsAt={this.props.shift.ends_at}
+                            defaultEndsAt={this.props.shift.ends_at}
                             onChange={(newValue) => this.setState({newEndsAt: newValue}) } />
                     </div>
                     <div className="col-md-4">
