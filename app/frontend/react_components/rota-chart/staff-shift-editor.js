@@ -1,7 +1,7 @@
 import React, { Component } from "react"
-import ShiftTimeInput from "../shift-time-input"
 import ShiftTimeSelector from "../shift-time-selector"
 import RotaDate from "../../lib/rota-date"
+import utils from "../../lib/utils"
 
 export default class StaffShiftEditor extends Component {
     static contextTypes = {
@@ -24,6 +24,12 @@ export default class StaffShiftEditor extends Component {
 
         var staff = this.getStaff();
 
+
+        var updateButtonClassName = "btn btn-primary";
+        if (!this.areBothTimesValid()) {
+            updateButtonClassName += " disabled";
+        }
+
         console.log("render shift editor", `Shift ID ${this.props.shift.id} Staff ID ${staff.id}`)
 
         return <div>
@@ -45,7 +51,7 @@ export default class StaffShiftEditor extends Component {
                     </div>
                     <div className="col-md-3">
                         <br/>
-                        <a className="btn btn-primary" onClick={() => this.updateShift()} style={{marginTop: "-4px"}}>
+                        <a className={updateButtonClassName} onClick={() => this.updateShift()} style={{marginTop: "-4px"}}>
                             Update
                         </a>
                     </div>
@@ -60,6 +66,10 @@ export default class StaffShiftEditor extends Component {
                 Day Preferences: {staff.preferred_days}
             </div>
         </div>
+    }
+    areBothTimesValid(){
+        var {starts_at, ends_at} = this.state.newShiftTimes;
+        return utils.dateIsValid(starts_at) && utils.dateIsValid(ends_at);
     }
     getStaff(){
         return this.props.staff[this.props.shift.staff_id];
