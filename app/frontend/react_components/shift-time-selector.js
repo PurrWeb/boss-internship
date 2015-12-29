@@ -10,30 +10,28 @@ export default class ShiftTimeSelector extends Component {
     render(){
 
         return <div>
-            <div className="col-md-3">
-                <div className="row">
-                    <div className="col-md-6">
-                        Start
-                    </div>
-                    <div className="col-md-6">
-                        End
-                    </div>
+            <div className="row">
+                <div className="col-md-6">
+                    Start
                 </div>
-                <div className="row">
-                    <div className="col-md-6">
-                        <ShiftTimeInput
-                            defaultStartsAt={this.props.defaultShiftTimes.starts_at}
-                            onChange={(newValue, dateIsValid) => {
-                                this.onChange("starts_at", newValue, dateIsValid);
-                            } } />
-                    </div>
-                    <div className="col-md-6">
-                        <ShiftTimeInput
-                            defaultEndsAt={this.props.defaultShiftTimes.ends_at}
-                            onChange={(newValue, dateIsValid) => {
-                                this.onChange("ends_at", newValue, dateIsValid);
-                            } } />
-                    </div>
+                <div className="col-md-6">
+                    End
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-md-6">
+                    <ShiftTimeInput
+                        defaultStartsAt={this.props.defaultShiftTimes.starts_at}
+                        onChange={(newValue, dateIsValid) => {
+                            this.onChange("starts_at", newValue, dateIsValid);
+                        } } />
+                </div>
+                <div className="col-md-6">
+                    <ShiftTimeInput
+                        defaultEndsAt={this.props.defaultShiftTimes.ends_at}
+                        onChange={(newValue, dateIsValid) => {
+                            this.onChange("ends_at", newValue, dateIsValid);
+                        } } />
                 </div>
             </div>
         </div>

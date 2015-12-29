@@ -1,15 +1,20 @@
 import React, { Component } from "react"
-import ShiftTimeInput from "../shift-time-input.js"
+import ShiftTimeInput from "../shift-time-input"
+import ShiftTimeSelector from "../shift-time-selector"
+import RotaDate from "../../lib/rota-date"
 
 export default class StaffShiftEditor extends Component {
     static contextTypes = {
-        boundActionCreators: React.PropTypes.object
+        boundActionCreators: React.PropTypes.object,
+        dateOfRota: React.PropTypes.instanceOf(Date)
     }
     constructor(props){
         super(props);
+        var {starts_at, ends_at} = props.shift;
         this.state = {
-            newStartsAt: props.shift.starts_at,
-            newEndsAt: props.shift.ends_at
+            newShiftTimes: {
+                starts_at, ends_at
+            }
         }
     }
     render(){
@@ -31,30 +36,21 @@ export default class StaffShiftEditor extends Component {
 
             <div>
                 <div className="row">
-                    <div className="col-md-4">
-                        Start
+                    <div className="col-md-9">
+                        <ShiftTimeSelector
+                            defaultShiftTimes={this.props.shift}
+                            rotaDate={new RotaDate(this.context.dateOfRota)}
+                            onChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)}
+                            dateOfRota={this.context.dateOfRota} />
                     </div>
-                    <div className="col-md-4">
-                        End
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-4">
-                        <ShiftTimeInput
-                            defaultStartsAt={this.props.shift.starts_at}
-                            onChange={(newValue) => this.setState({newStartsAt: newValue}) } />
-                    </div>
-                    <div className="col-md-4">
-                        <ShiftTimeInput
-                            defaultEndsAt={this.props.shift.ends_at}
-                            onChange={(newValue) => this.setState({newEndsAt: newValue}) } />
-                    </div>
-                    <div className="col-md-4">
+                    <div className="col-md-3">
+                        <br/>
                         <a className="btn btn-primary" onClick={() => this.updateShift()} style={{marginTop: "-4px"}}>
                             Update
                         </a>
                     </div>
                 </div>
+            
                 <a onClick={() => this.deleteShift()}>
                     Delete shift
                 </a>
@@ -71,10 +67,13 @@ export default class StaffShiftEditor extends Component {
     deleteShift(){
         this.context.boundActionCreators.deleteRotaShift(this.props.shift.id);
     }
+    onShiftTimesChange(shiftTimes) {
+        this.setState({newShiftTimes: shiftTimes})
+    }
     updateShift(){
         this.context.boundActionCreators.updateRotaShift({
-            starts_at: this.state.newStartsAt,
-            ends_at: this.state.newEndsAt,
+            starts_at: this.state.newShiftTimes.starts_at,
+            ends_at: this.state.newShiftTimes.ends_at,
             shift_id: this.props.shift.id
         });
     }
