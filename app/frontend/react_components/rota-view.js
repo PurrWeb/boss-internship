@@ -15,18 +15,18 @@ class RotaView extends Component {
     static childContextTypes = {
         staffTypes: React.PropTypes.object,
         boundActionCreators: React.PropTypes.object,
-        rotaShifts: React.PropTypes.array
+        rotaShifts: React.PropTypes.array,
+        dateOfRota: React.PropTypes.instanceOf(Date)
     }
     getChildContext(){
         return {
             staffTypes: this.props.staffTypes,
             boundActionCreators: boundActionCreators,
-            rotaShifts: this.props.rotaShifts
+            rotaShifts: this.props.rotaShifts,
+            dateOfRota: this.props.dateOfRota
         }
     }
     render() {
-        var dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
-
         return <div className="container">
             <h1>
                 Rota: Friday 11th October 2015
@@ -37,7 +37,7 @@ class RotaView extends Component {
                 staff={this.props.staff} />
             <hr />
             <AddShiftView 
-                dateOfRota={dateOfRota}
+                dateOfRota={this.props.dateOfRota}
                 staff={this.props.staff} />
         </div>
     }
@@ -54,6 +54,7 @@ function mapStateToProps(state) {
     });
 
     props.staffTypes = staffTypes;
+    props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
 
     return props;
 }

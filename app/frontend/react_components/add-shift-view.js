@@ -33,11 +33,15 @@ export default class AddShiftView extends Component {
         return (
             <div className="well well-lg">
                 <h2 style={{ marginTop: 0 }}>New shift hours</h2>
-                <ShiftTimeSelector
-                    defaultShiftTimes={this.getDefaultShiftTimes(this.props)}
-                    rotaDate={new RotaDate(this.props.dateOfRota)}
-                    onChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)}
-                    dateOfRota={this.props.dateOfRota} />
+                <div className="row">
+                    <div className="col-md-3">
+                        <ShiftTimeSelector
+                            defaultShiftTimes={this.getDefaultShiftTimes(this.props)}
+                            rotaDate={new RotaDate(this.props.dateOfRota)}
+                            onChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)}
+                            dateOfRota={this.props.dateOfRota} />
+                    </div>
+                </div>
                 <br/>
                 <hr/>
                 <StaffFinder
