@@ -15,7 +15,6 @@ class RotaChart extends Component {
         super(props);
     }
     shouldComponentUpdate(nextProps, nextState){
-        console.log("shoudlcomponentupdate", this.props, nextProps)
         return JSON.stringify(this.props) !== JSON.stringify(nextProps);
     }
     render() {

@@ -21,14 +21,16 @@ export default class ShiftTimeSelector extends Component {
             <div className="row">
                 <div className="col-md-6">
                     <ShiftTimeInput
-                        defaultStartsAt={this.props.defaultShiftTimes.starts_at}
+                        startsAt={this.state.starts_at}
+                        rotaDate={this.props.rotaDate}
                         onChange={(newValue, dateIsValid) => {
                             this.onChange("starts_at", newValue, dateIsValid);
                         } } />
                 </div>
                 <div className="col-md-6">
                     <ShiftTimeInput
-                        defaultEndsAt={this.props.defaultShiftTimes.ends_at}
+                        endsAt={this.state.ends_at}
+                        rotaDate={this.props.rotaDate}
                         onChange={(newValue, dateIsValid) => {
                             this.onChange("ends_at", newValue, dateIsValid);
                         } } />

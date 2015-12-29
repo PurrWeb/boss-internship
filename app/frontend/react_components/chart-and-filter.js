@@ -29,9 +29,13 @@ export default class ChartAndFilter extends Component {
     render(){
         var shiftEditor, previewShiftEditor;
         if (this.state.shiftToShow) {
+            console.log("shiftToShow", this.state.shiftToShow)
             shiftEditor = <StaffShiftEditor
                 shift={this.state.shiftToShow}
                 rotaShifts={this.props.rotaShifts}
+                // We specify a key so the component is re-initialized when
+                // the shift changes - so we don't keep the previous state.
+                key={this.state.shiftToShow.id}
                 staff={this.props.staff} />
         }
         if (this.state.shiftToPreview) {
