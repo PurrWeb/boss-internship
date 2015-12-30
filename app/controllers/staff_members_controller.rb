@@ -4,6 +4,11 @@ class StaffMembersController < ApplicationController
     render locals: { staff_members: staff_members }
   end
 
+  def show
+    staff_member = StaffMember.find(params[:id])
+    render locals: { staff_member: staff_member }
+  end
+
   def new
     staff_member = StaffMember.new
     render locals: { staff_member: staff_member }
