@@ -29,6 +29,7 @@ RSpec.feature 'Password Reset' do
     ActionMailer::Base.deliveries.first.tap do |mail|
       expect(mail.subject).to eq('Reset password instructions')
       expect(mail.to).to eq([user.email])
+      expect(mail.from).to eq(['no-reply@jsmbars.co.uk'])
 
       reset_url = Rails.application.routes.url_helpers.edit_user_password_url
       reset_link_regex_with_token_capture = /<a .*href="#{Regexp.escape(reset_url + "?reset_password_token=")}(\S+)".*>.*<\/a>/
