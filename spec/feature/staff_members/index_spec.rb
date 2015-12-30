@@ -19,4 +19,17 @@ RSpec.feature 'Staff members section index page' do
     staff_members_index_page.click_add_staff_member_button
     add_staff_member_page.assert_on_correct_page
   end
+
+  context 'staff members exist' do
+    let(:staff_member) { FactoryGirl.create(:staff_member) }
+
+    before do
+      staff_member
+    end
+
+    scenario 'staff member details should be displayed in a table' do
+      staff_members_index_page.surf_to
+      staff_members_index_page.staff_members_table.ensure_details_displayed_for(staff_member)
+    end
+  end
 end
