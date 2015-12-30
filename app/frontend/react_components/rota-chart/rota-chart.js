@@ -1,241 +1,48 @@
+import RotaChartInner from "./rota-chart-inner"
 import React, { Component } from "react"
-import d3 from "d3"
-import RotaDate from "../../lib/rota-date.js"
-import moment from "moment"
-import _ from 'underscore'
+import ReactDOM from "react-dom"
 
-const MAX_HEIGHT_PER_PERSON = 20;
-const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
-
-class RotaChart extends Component {
-    static contextTypes = {
-        staffTypes: React.PropTypes.object
-    }
+/**
+This is a wrapper around the D3 rota chart that handles small state changes
+like hover highlighting that don't work well with a full re-render of the chart
+(due to e.g. mouseenter being re-triggered when a bar is replaced while under the cursor
+... which in turn would cause a re-render).
+ */
+export default class WrappedRotaChart extends Component {
     constructor(props){
         super(props);
     }
-    shouldComponentUpdate(nextProps, nextState){
-        return JSON.stringify(this.props) !== JSON.stringify(nextProps);
-    }
-    render() {
-        return (
-            <div>
-                <svg id="rota-chart"></svg>
-            </div>
-        )
+    render(){
+        return <RotaChartInner
+            rotaShifts={this.props.rotaShifts}
+            startTime={this.props.startTime}
+            endTime={this.props.endTime}
+            staff={this.props.staff}
+            updateShiftToPreview={this.props.updateShiftToPreview}
+            updateShiftToShow={this.props.updateShiftToShow} />
     }
     componentDidMount() {
-        this.initGraph(document.getElementById("rota-chart"));
+        this.applyAdditionalChartProps();
     }
     componentDidUpdate(prevProps, prevState){
-        this.initGraph(document.getElementById("rota-chart"));
+        this.applyAdditionalChartProps();
     }
-    getStaffMembersOnRota(){
-        var staffList = _.chain(this.props.rotaShifts)
-            .pluck("staff_id")
-            .unique()
-            .map((staff_id) => this.props.staff[staff_id])
-            .value();
+    applyAdditionalChartProps(){
+        var el = d3.select(ReactDOM.findDOMNode(this));
 
-        staffList = _(staffList).sortBy("staff_type")
-        return staffList;
-    }
-    getRotaDate(){
-        var exampleDateFromTheDay;
-        if (this.props.rotaShifts.length > 0) {
-            exampleDateFromTheDay = this.props.rotaShifts[0].starts_at;
-        } else {
-            // Any date will do since there's no data anyway
-            exampleDateFromTheDay = new Date();
-        }
-        var rotaBaseDate = new Date(exampleDateFromTheDay);
-        var rotaDate = new RotaDate(rotaBaseDate);
-        return rotaDate;
-    }
-    generateRotaShiftList(staffList){
-        var rotaDate = this.getRotaDate();
-        function calculateOffsetInHours(date){
-            var offsetInMilliseconds = date.valueOf() - rotaDate.startTime.valueOf();
-            var offsetInHours = offsetInMilliseconds / MILLISECONDS_PER_HOUR;
-            return offsetInHours;
-        }
-
-        var staffIdsInOrder = _(staffList).pluck("id");
-
-        var rotaShifts = this.props.rotaShifts.map(
-            (rotaShift, i) => {
-                var staff = this.props.staff[rotaShift.staff_id];
-
-                return {
-                    startOffset: calculateOffsetInHours(rotaShift.starts_at),
-                    endOffset: calculateOffsetInHours(rotaShift.ends_at),
-                    staff: staff,
-                    staffIndex: _(staffIdsInOrder).indexOf(staff.id),
-                    originalShiftObject: rotaShift
-                };
-            }
-        );
-        return rotaShifts;
-    }
-    initGraph(el) {
-        if (!el) {
-            console.log("not rendering graph, el is falsy")
-            return;
-        }
-
-        var previousInnerHTML = el.innerHTML;
-        el.innerHTML = "";
-
-        var self = this;
-        var staffList = this.getStaffMembersOnRota();
-        var rotaShifts = this.generateRotaShiftList(staffList);
-        var numberOfDifferentStaffMembers = staffList.length;
-
-        var innerHeight = 450;
-        // Using Math.floor means that there's some empty space at the top of the chart
-        var heightPerPerson = Math.floor(innerHeight / numberOfDifferentStaffMembers);
-        if (heightPerPerson > MAX_HEIGHT_PER_PERSON) {
-            heightPerPerson = MAX_HEIGHT_PER_PERSON;
-        }
-
-        var aggregateHeightOfBars = heightPerPerson * numberOfDifferentStaffMembers;
-        var verticalSpacingToPushBarsToBottom = innerHeight - aggregateHeightOfBars;
-
-
-        var innerWidth = 700,
-            padding = 20,
-            width = innerWidth + padding * 2,
-            height = innerHeight + padding * 2;
-
-        var {xScale, barWidthScale} = this.getScales(innerWidth);
-
-        var chart = d3.select(el)
-            .attr("width", width)
-            .attr("height", height)
-            .append("g")
-            .attr("transform", `translate(${padding}, ${padding})`)
-
-        var xAxis = this.getXAxis(xScale);
-
-        chart
-            .append("g")
-            .attr("transform", "translate(0," + (height - padding * 2) + ")")
-            .attr("class", "axis")
-            .call(xAxis);
-
-        console.log("verticalSpacingToPushBarsToBottom", verticalSpacingToPushBarsToBottom)
-
-        var bar = chart.append("g")
-            .selectAll("g")
-            .data(rotaShifts)
-            .enter().append("g")
-            .classed("rota-chart__shift", true)
-            .attr("transform", function(rotaShift, i) {
-                var transformX = xScale(rotaShift.startOffset);
-                return "translate(" +
-                    transformX
-                    + "," +
-                    (rotaShift.staffIndex * heightPerPerson + verticalSpacingToPushBarsToBottom)
-                 + ")";
+        var shiftToPreview = this.props.shiftToPreview;
+        if (shiftToPreview !== null) {
+            d3.selectAll(".rota-chart__shift").classed("rota-chart__previewed-shift", function(bar){
+                return bar.originalShiftObject.id === shiftToPreview.id;
             });
-        bar.append("rect")
-            .attr("width", function(shift){
-                var hours = shift.endOffset - shift.startOffset
-                return barWidthScale(hours)
-            })
-            .attr("style", function(shift){
-                return "fill:" + self.context.staffTypes[shift.staff.staff_type].color;
-            })
-            .on("mouseenter", function(shift){
-                self.showShiftPreview(shift);
-                d3.select(this.parentNode)
-                    .classed("rota-chart__previewed-shift", true)
-            })
-            .on("mouseout", function(shift){
-                self.stopShowingShiftPreview(shift);
-                d3.select(this.parentNode)
-                    .classed("rota-chart__previewed-shift", false);
-            })
-            .on("click", function(shift){
-                self.stopShowingShiftPreview();
-                self.props.updateShiftToShow(shift.originalShiftObject)
-                d3.select(".rota-chart__selected-shift")
-                    .classed("rota-chart__selected-shift", false);
-                d3.select(this.parentNode)
-                    .classed("rota-chart__selected-shift", true);
-            })
-            .attr("height", heightPerPerson - 1);
-        bar.append("text")
-            .text(function(shift){
-                if (heightPerPerson < 20) {
-                    return "";
-                }
-                var staff = shift.staff;
-                var formattedStartTime = moment(shift.originalShiftObject.starts_at).format("HH:mm");
-                var formattedEndTime = moment(shift.originalShiftObject.ends_at).format("HH:mm");
-                return `${staff.first_name} ${staff.surname} (${formattedStartTime} - ${formattedEndTime})`;
-            })
-            .attr("dx", 4)
-            .attr("dy", 8)
-            .classed("rota-chart__shift-label", true)
-            .attr("text-anchor", "middle");
+        }
 
+        var shiftToShow = this.props.shiftToShow;
+        if (shiftToShow !== null) {
+            d3.selectAll(".rota-chart__shift").classed("rota-chart__selected-shift", function(bar){
+                return bar.originalShiftObject.id === shiftToShow.id;
+            });
+        }
 
-    }
-    getXAxis(xScale){
-        var xAxis = d3.svg.axis();
-        xAxis.scale(xScale);
-        xAxis.ticks(24 - this.getHoursNotShown())
-        xAxis.tickSize(-innerHeight) // draw lines across the whole chart for each tick
-        xAxis.tickFormat(function(offset){
-            var hours = offset + 8;
-            if (hours > 23) {
-                hours -= 24;
-            }
-            return hours
-        })
-        return xAxis;
-    }
-    getScales(innerWidth){
-        var hoursNotShownOnTheLeft = this.getHoursNotShownOnTheLeft();
-        var hoursNotShownOnTheRight = this.getHoursNotShownOnTheRight();
-        var hoursNotShown = this.getHoursNotShown();
-
-        var xScale = d3.scale.linear()
-            .domain([hoursNotShownOnTheLeft, 24 - hoursNotShownOnTheRight])
-            .range([0, innerWidth]);
-        var barWidthScale = d3.scale.linear()
-            .domain([0, 24 - hoursNotShown])
-            .range([0, innerWidth]);
-
-        return {xScale, barWidthScale};
-    }
-    showShiftPreview(shift) {
-        this.props.updateShiftToPreview(shift.originalShiftObject);
-    }
-    stopShowingShiftPreview(shift) {
-        this.props.updateShiftToPreview(null);
-    }
-    getHoursNotShown(){
-        var hoursNotShownOnTheLeft = this.getHoursNotShownOnTheLeft();
-        var hoursNotShownOnTheRight = this.getHoursNotShownOnTheRight();
-
-        return hoursNotShownOnTheLeft + hoursNotShownOnTheRight;
-    }
-    getHoursNotShownOnTheLeft(){
-        var rotaDate = this.getRotaDate();
-        var chartStartTime = rotaDate.getDateFromShiftStartTime(this.props.startTime, 0).valueOf();
-        var dayStartTime = rotaDate.startTime.valueOf();
-        var msNotShown = chartStartTime - dayStartTime;
-        return msNotShown / MILLISECONDS_PER_HOUR;
-    }
-    getHoursNotShownOnTheRight(){
-        var rotaDate = this.getRotaDate();
-        var chartEndTime = rotaDate.getDateFromShiftEndTime(this.props.endTime, 0).valueOf();
-        var dayEndTime = rotaDate.endTime.valueOf();
-        var msNotShown = dayEndTime - chartEndTime;
-        return msNotShown / MILLISECONDS_PER_HOUR;
     }
 }
-
-export default RotaChart
