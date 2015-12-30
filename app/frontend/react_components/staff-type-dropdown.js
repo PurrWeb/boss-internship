@@ -21,13 +21,15 @@ export default class StaffTypeDropdown extends Component {
         staffTypeOptions = _.values(staffTypeOptions);
 
         return (
-            <Select
-                value={this.value.join(",")}
-                options={staffTypeOptions}
-                multi={true}
-                optionRenderer={(option) => this.renderOption(option, "option")}
-                valueRenderer={(option) => this.renderOption(option, "value")}
-                onChange={(value) => this.onChange(value)} />
+            <div className="staff-type-dropdown">
+                <Select
+                    value={this.value.join(",")}
+                    options={staffTypeOptions}
+                    multi={true}
+                    optionRenderer={(option) => this.renderOption(option, "option")}
+                    valueRenderer={(option) => this.renderOption(option, "value")}
+                    onChange={(value) => this.onChange(value)} />
+            </div>
         );
     }
     renderOption(option, itemType){
