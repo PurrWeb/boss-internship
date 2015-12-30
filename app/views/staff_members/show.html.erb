@@ -1,0 +1,80 @@
+<h1><%= staff_member.full_name %></h1>
+
+<div class="container-fluid">
+  <ul class="list-unstyled">
+    <div class="row">
+      <li>
+        <div class="show-page-detail-heading">Venue</div>
+        <div class="show-page-detail" data-detail="venue"><%= staff_member.venue.name %></div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
+        <div class="show-page-detail-heading">Name</div>
+        <div class="show-page-detail" data-detail="name"><%= staff_member.full_name %></div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
+        <div class="show-page-detail-heading">Status</div>
+        <div class="show-page-detail" data-detail="status"><%= staff_member.enabled? ? 'Active' : 'Disabled' %></div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
+        <div class="show-page-detail-heading">Gender</div>
+        <div class="show-page-detail" data-detail="gender"><%= staff_member.gender.titlecase %></div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
+        <div class="show-page-detail-heading">Email Address</div>
+        <div class="show-page-detail" data-detail="email"><%= staff_member.email %></div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
+        <div class="show-page-detail-heading">Phone number</div>
+        <div class="show-page-detail" data-detail="phone-number"><%= staff_member.phone_number %></div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
+        <div class="show-page-detail-heading">Date of Birth</div>
+        <div class="show-page-detail" data-detail="date-of-birth"><%= staff_member.date_of_birth.to_date.to_s %></div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
+        <div class="show-page-detail-heading">National Insurance Number</div>
+        <div class="show-page-detail" data-detail="national-insurance-number">
+          <% if staff_member.national_insurance_number.present? %>
+            <%= staff_member.national_insurance_number %>
+          <% else %>
+            <%= "Not Supplied" %>
+          <% end %>
+        </div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
+        <div class="show-page-detail-heading">Address</div>
+        <div class="show-page-detail" data-detail="address-1"><%= staff_member.address.address_1 %></div>
+        <div class="show-page-detail" data-detail="address-2"><%= staff_member.address.address_2 %></div>
+        <div class="show-page-detail" data-detail="address-3"><%= staff_member.address.address_3 %></div>
+        <div class="show-page-detail" data-detail="address-4"><%= staff_member.address.address_4 %></div>
+        <div class="show-page-detail" data-detail="region"><%= staff_member.address.region %></div>
+        <div class="show-page-detail" data-detail="country"><%= staff_member.address.country %></div>
+        <div class="show-page-detail" data-detail="postcode"><%= staff_member.address.postcode %></div>
+      </li>
+    </div>
+  </ul>
+</div>

@@ -26,6 +26,6 @@ class UserShowPage < PageObject::Page
   end
 
   def detail_section_selector_for(detail)
-    ".user-detail[data-detail=\"#{detail}\"]"
+    ".show-page-detail[data-detail=\"#{detail}\"]"
   end
 end

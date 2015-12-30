@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :staff_members, only: [:index, :new, :create]
+  resources :staff_members, only: [:show, :index, :new, :create]
 
   resources :venues, only: [:index, :create]
 
