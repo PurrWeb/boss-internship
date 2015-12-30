@@ -57,7 +57,10 @@ export default class ChartAndFilter extends Component {
                         endTime={chartBoundaries.end}
                         staff={this.props.staff}
                         updateShiftToPreview={(shift) => this.setState({shiftToPreview: shift})}
-                        updateShiftToShow={(shift) => this.setState({shiftToShow: shift})} />
+                        updateShiftToShow={(shift) => this.setState({shiftToShow: shift})}
+                        shiftToPreview={this.state.shiftToPreview}
+                        shiftToShow={this.state.shiftToShow}
+                        />
                 </div>
                 <div className="col-md-3">
                     Filter chart
