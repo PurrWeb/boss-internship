@@ -25,9 +25,9 @@ export default class StaffShiftEditor extends Component {
         var staff = this.getStaff();
 
 
-        var updateButtonClassName = "btn btn-primary";
+        var updateButtonClasses = ["btn", "btn-primary"];
         if (!this.areBothTimesValid()) {
-            updateButtonClassName += " disabled";
+            updateButtonClasses.push("disabled");
         }
 
         console.log("render shift editor", `Shift ID ${this.props.shift.id} Staff ID ${staff.id}`)
@@ -51,7 +51,7 @@ export default class StaffShiftEditor extends Component {
                     </div>
                     <div className="col-md-3">
                         <br/>
-                        <a className={updateButtonClassName} onClick={() => this.updateShift()} style={{marginTop: "-4px"}}>
+                        <a className={updateButtonClasses.join(" ")} onClick={() => this.updateShift()} style={{marginTop: "-4px"}}>
                             Update
                         </a>
                     </div>
