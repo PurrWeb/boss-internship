@@ -32,6 +32,30 @@ class User < ActiveRecord::Base
     email_address.try(:email)
   end
 
+  def can_create_roles
+    if dev? || admin?
+      ROLES - ['dev']
+    else
+      []
+    end
+  end
+
+  def admin?
+    role == 'admin'
+  end
+
+  def dev?
+    role == 'dev'
+  end
+
+  def manager?
+    role == 'manager'
+  end
+
+  def status
+    enabled? ? 'Active' : 'Disabled'
+  end
+
   # Required to stop devise complaining about not using a proper email field
   def email_changed?
     false
@@ -73,29 +97,5 @@ class User < ActiveRecord::Base
 
   def email_required?
     false
-  end
-
-  def can_create_roles
-    if dev? || admin?
-      ROLES - ['dev']
-    else
-      []
-    end
-  end
-
-  def admin?
-    role == 'admin'
-  end
-
-  def dev?
-    role == 'dev'
-  end
-
-  def manager?
-    role == 'manager'
-  end
-
-  def status
-    enabled? ? 'Active' : 'Disabled'
   end
 end
