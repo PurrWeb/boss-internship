@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151216155009) do
+ActiveRecord::Schema.define(version: 20151230115536) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 20151216155009) do
     t.integer  "name_id",                   limit: 4,                    null: false
     t.integer  "email_address_id",          limit: 4,                    null: false
     t.string   "pin_code",                  limit: 255,                  null: false
+    t.string   "avatar",                    limit: 255
   end
 
   add_index "staff_members", ["enabled"], name: "index_staff_members_on_enabled", using: :btree

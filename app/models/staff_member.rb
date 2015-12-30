@@ -14,6 +14,9 @@ class StaffMember < ActiveRecord::Base
   belongs_to :email_address, inverse_of: :staff_members
   accepts_nested_attributes_for :email_address, allow_destroy: false
 
+  mount_uploader :avatar, AvatarUploader
+  validates_presence_of :avatar
+
   include Enableable
 
   validates :name, presence: true

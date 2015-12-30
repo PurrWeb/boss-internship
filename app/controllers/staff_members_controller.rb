@@ -40,6 +40,8 @@ class StaffMembersController < ApplicationController
       :national_insurance_number,
       :hours_preference_note,
       :day_perference_note,
+      :avatar,
+      :avatar_cache,
       address_attributes: [
         :address_1,
         :address_2,

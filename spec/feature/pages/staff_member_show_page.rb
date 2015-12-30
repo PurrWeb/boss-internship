@@ -26,6 +26,11 @@ class StaffMemberShowPage < PageObject::Page
     expect(find(detail_section_selector_for(:postcode)).text).to eq(staff_member.address.postcode)
   end
 
+  page_action :ensure_avatar_image_displayed do |image_url:|
+    image = find('img.avatar-image')
+    expect(image['src']).to eq(image_url)
+  end
+
   def assert_on_correct_page
     expect(find('main h1').text).to eq(staff_member.full_name)
   end

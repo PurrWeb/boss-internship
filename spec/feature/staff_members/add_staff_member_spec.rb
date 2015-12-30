@@ -24,4 +24,14 @@ RSpec.feature 'Adding a new staff member' do
     staff_member = StaffMember.joins(:email_address).merge(EmailAddress.where(email: prospective_staff_member.email_address.email)).first
     staff_members_index_page.ensure_record_displayed_for(staff_member)
   end
+
+  scenario 'An uploaded avatar should persists when there is a validation error' do
+    add_staff_member_page.surf_to
+
+    add_staff_member_page.form.tap do |form|
+      form.upload_avatar_image
+      form.submit
+      form.ensure_photo_displayed
+    end
+  end
 end

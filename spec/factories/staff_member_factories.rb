@@ -10,5 +10,6 @@ FactoryGirl.define do
 
     address
     venue
+    avatar { Rack::Test::UploadedFile.new(TestImageHelper.arnie_face_path) }
   end
 end
