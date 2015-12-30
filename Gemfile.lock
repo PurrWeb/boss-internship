@@ -338,7 +338,7 @@ DEPENDENCIES
   byebug
   cancan
   capybara
-  carrierwave
+  carrierwave (~> 0.10)
   clockwork
   database_cleaner
   devise (~> 3.4.0)
