@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
 
   delegate :full_name, :first_name, :surname, to: :name
 
+  def self.with_email(email)
+    joins(:email_address).merge(EmailAddress.where(email: email))
+  end
+
   def email
     email_address.try(:email)
   end
