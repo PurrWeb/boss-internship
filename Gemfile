@@ -14,6 +14,7 @@ gem "jquery-ui-rails"
 gem "uglifier"
 gem "fog"
 gem "carrierwave", "~> 0.10"
+gem 'rmagick', '2.13.2', require: false
 gem "figaro"
 gem "sidekiq"
 gem "sidekiq-failures"

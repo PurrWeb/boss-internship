@@ -266,6 +266,7 @@ GEM
     require_all (1.3.3)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
+    rmagick (2.13.2)
     rollbar (2.6.3)
       multi_json
     rspec-core (3.2.1)
@@ -353,6 +354,7 @@ DEPENDENCIES
   rails (~> 4.2.0)
   react_webpack_rails
   require_all
+  rmagick (= 2.13.2)
   rollbar
   rspec-rails
   sass-rails (>= 3.2)
