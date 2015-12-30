@@ -10,8 +10,8 @@
     <tr>
     <% staff_members.each do |staff_member| %>
       <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
-        <td><%= staff_member.full_name %></td>
-        <td><%= staff_member.venue.try(:name) || 'N / A' %></td>
+        <td data-role="name"><%= staff_member.full_name %></td>
+        <td data-role="venue"><%= staff_member.venue.try(:name) || 'N / A' %></td>
       </tr>
     <% end %>
   </table>
