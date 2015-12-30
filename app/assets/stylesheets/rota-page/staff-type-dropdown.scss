@@ -9,6 +9,9 @@
 .staff-type-dropdown__item-content {
     position: absolute;
     color: white;
+    &:hover {
+        text-decoration: underline;
+    }
     .staff-type-dropdown__item--value & {
         top: -3px;
         bottom: -3px;
