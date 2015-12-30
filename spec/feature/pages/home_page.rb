@@ -1,4 +1,6 @@
 class HomePage < PageObject::Page
+  include PageObject::FlashHelpers
+
   def surf_to
     visit('/')
   end

@@ -15,6 +15,10 @@ class SignInPage < PageObject::Page
     click_button('Sign in')
   end
 
+  page_action :click_forgotten_password_link do
+    click_link('Forgot your password?')
+  end
+
   def assert_on_correct_page
     expect(page_heading).to(
       have_text(expected_page_heading_text),

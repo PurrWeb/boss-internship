@@ -10,9 +10,15 @@ class Users::PasswordsController < Devise::PasswordsController
   # end
 
   # GET /resource/password/edit?reset_password_token=abcdef
-  # def edit
-  #   super
-  # end
+  def edit
+    user = User.with_reset_password_token(params[:reset_password_token])
+    if user.present? && user.reset_password_sent_at.nil?
+      flash[:error] = 'The token could not be used because it expired.'
+      redirect_to new_user_session_path
+    else
+      super
+    end
+  end
 
   # PUT /resource/password
   # def update
