@@ -3,15 +3,9 @@ import AddStaffToShiftButton from "./add-staff-to-shift-button"
 import StaffShiftList from "../staff-shift-list.js"
 
 export default class StaffListItem extends Component {
-    constructor (props){
-        super(props);
-        this.state = {
-            isExpanded: false
-        };
-    }
     render() {
         var staff = this.props.staff;
-        var className = `staff-list-item ${this.state.isExpanded ? 'staff-list-item--expanded' : ''}`
+        var className = `staff-list-item`;
 
         var staffTypeStyle = {
             backgroundColor: staff.staff_type_object.color
@@ -39,9 +33,6 @@ export default class StaffListItem extends Component {
                                 </h4>
                                 <StaffShiftList
                                     staffId={staff.id} />
-                                <a onClick={() => this.toggleShowMore()}>
-                                    {this.state.isExpanded ? "Show Less" : "Show More"}
-                                </a>
                             </div>
                             <div className="col-md-6">
                                 <h4 className="staff-list-item__h4">
@@ -62,15 +53,7 @@ export default class StaffListItem extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="row staff-list-item__extra-content">
-                    <div className="col-md-12">
-                        No extra information available.
-                    </div>
-                </div>
             </div>
         );
-    }
-    toggleShowMore() {
-        this.setState({isExpanded: !this.state.isExpanded});
     }
 }

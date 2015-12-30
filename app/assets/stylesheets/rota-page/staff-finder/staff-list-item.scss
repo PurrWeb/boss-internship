@@ -39,9 +39,3 @@
 .staff-list-item__image-column {
     width: 12%;
 }
-.staff-list-item__extra-content {
-    display: none;
-    .staff-list-item--expanded & {
-        display: block;
-    }
-}
