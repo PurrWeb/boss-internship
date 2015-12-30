@@ -61,6 +61,7 @@ class User < ActiveRecord::Base
     false
   end
 
+  # Required for devise to work with non-standard email setup
   def self.find_first_by_auth_conditions(conditions={})
     if conditions.has_key?(:reset_password_token)
       enabled.
@@ -75,6 +76,7 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Required for devise to work with non-standard email setup
   def self.find_for_database_authentication(warden_conditions={})
     conditions = warden_conditions.dup
     if email = conditions.delete(:devise_email)
@@ -87,14 +89,17 @@ class User < ActiveRecord::Base
     end
   end
 
-    def devise_email=(devise_email)
-      @devise_email = devise_email
-    end
+  # Required for devise to work without email field
+  def devise_email=(devise_email)
+    @devise_email = devise_email
+  end
 
-    def devise_email
-      @devise_email || email
-    end
+  # Required for devise to work without email field
+  def devise_email
+    @devise_email || email
+  end
 
+  # Required for devise to work without email field
   def email_required?
     false
   end
