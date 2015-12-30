@@ -8,7 +8,7 @@ like hover highlighting that don't work well with a full re-render of the chart
 (due to e.g. mouseenter being re-triggered when a bar is replaced while under the cursor
 ... which in turn would cause a re-render).
  */
-export default class WrappedRotaChart extends Component {
+export default class RotaChart extends Component {
     constructor(props){
         super(props);
     }
