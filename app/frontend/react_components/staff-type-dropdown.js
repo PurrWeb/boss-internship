@@ -14,18 +14,31 @@ export default class StaffTypeDropdown extends Component {
         var staffTypeOptions = _(this.context.staffTypes).mapValues(function(staffType){
             return {
                 value: staffType.id,
-                label: staffType.title
+                label: staffType.title,
+                color: staffType.color
             }
         })
         staffTypeOptions = _.values(staffTypeOptions);
+
+        var optionRenderer = this.renderOption.bind(this);
 
         return (
             <Select
                 value={this.value.join(",")}
                 options={staffTypeOptions}
                 multi={true}
+                optionRenderer={optionRenderer}
+                valueRenderer={optionRenderer}
                 onChange={(value) => this.onChange(value)} />
         );
+    }
+    renderOption(option){
+        return <div className="staff-type-dropdown__value">
+            <div  style={{background: option.color}} className="staff-type-dropdown__value--content">
+                {option.label}
+            </div>
+            {option.label}
+        </div>
     }
     onChange(value){
         if (value === ""){
