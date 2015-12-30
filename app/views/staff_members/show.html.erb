@@ -5,7 +5,13 @@
     <div class="row">
       <li>
         <div class="show-page-detail-heading">Venue</div>
-        <div class="show-page-detail" data-detail="venue"><%= staff_member.venue.name %></div>
+        <div class="show-page-detail" data-detail="venue">
+          <% if staff_member.venue.present? %>
+            <%= staff_member.venue.name %>
+          <% else %>
+            N / A
+          <% end %>
+        </div>
       </li>
     </div>
 
