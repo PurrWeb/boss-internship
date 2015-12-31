@@ -13,6 +13,10 @@ class StaffMembersIndexPage < PageObject::Page
     find(:css, ".staff-members-index-listing[data-staff-member-id=\"#{user.id}\"]")
   end
 
+  def staff_members_table
+    @staff_members_table || StaffMembersIndexTable.new(self)
+  end
+
   def navigation
     @navigation ||= NavigationBar.new(self)
   end
