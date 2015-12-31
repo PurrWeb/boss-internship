@@ -25,6 +25,7 @@ gem 'bootstrap_form'
 gem 'react_webpack_rails'
 gem "statesman", '~> 1.3.1'
 gem "cancan"
+gem 'file_validators'
 
 group :development, :test do
   gem "byebug"

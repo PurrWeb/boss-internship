@@ -15,7 +15,10 @@ class StaffMember < ActiveRecord::Base
   accepts_nested_attributes_for :email_address, allow_destroy: false
 
   mount_uploader :avatar, AvatarUploader
-  validates_presence_of :avatar
+  validates :avatar, {
+    presence: true,
+    file_size: { less_than: 1.megabyte }
+  }
 
   include Enableable
 
