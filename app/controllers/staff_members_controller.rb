@@ -4,6 +4,11 @@ class StaffMembersController < ApplicationController
     render locals: { staff_members: staff_members }
   end
 
+  def show
+    staff_member = StaffMember.find(params[:id])
+    render locals: { staff_member: staff_member }
+  end
+
   def new
     staff_member = StaffMember.new
     render locals: { staff_member: staff_member }
@@ -12,7 +17,9 @@ class StaffMembersController < ApplicationController
   def create
     staff_member = StaffMember.new(staff_member_params)
 
-    staff_member.staff_member_venue.mark_for_destruction if staff_member.staff_member_venue.venue_id == nil
+    if staff_member.staff_member_venue.present? && staff_member.staff_member_venue.venue_id == nil
+      staff_member.staff_member_venue.mark_for_destruction
+    end
 
     if staff_member.save
       flash[:success] = "Staff member added successfully"

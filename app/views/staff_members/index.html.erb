@@ -10,8 +10,8 @@
     <tr>
     <% staff_members.each do |staff_member| %>
       <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
-        <td><%= staff_member.full_name %></td>
-        <td><%= staff_member.venue.try(:name) || 'N / A' %></td>
+        <td data-role="name"><%= link_to(staff_member.full_name, staff_member_path(staff_member)) %></td>
+        <td data-role="venue"><%= link_to("#{staff_member.venue.try(:name) || 'N / A'}", staff_member_path(staff_member)) %></td>
       </tr>
     <% end %>
   </table>
