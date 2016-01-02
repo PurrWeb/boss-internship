@@ -18,6 +18,7 @@ class StaffMemberShowPage < PageObject::Page
     expect(find(detail_section_selector_for(:phone_number)).text).to eq(staff_member.phone_number)
     expect(find(detail_section_selector_for(:date_of_birth)).text).to eq(staff_member.date_of_birth.to_date.to_s.strip)
     expect(find(detail_section_selector_for(:national_insurance_number)).text).to eq(staff_member.national_insurance_number)
+    expect(find(detail_section_selector_for(:staff_type)).text).to eq(staff_member.staff_type.name.titleize)
     expect(find(detail_section_selector_for(:address_1)).text).to eq(staff_member.address.address_1)
     expect(find(detail_section_selector_for(:address_2)).text).to eq(staff_member.address.address_2)
     expect(find(detail_section_selector_for(:address_3)).text).to eq(staff_member.address.address_3)

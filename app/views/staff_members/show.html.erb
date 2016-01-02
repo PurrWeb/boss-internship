@@ -26,6 +26,13 @@
 
     <div class="row">
       <li>
+        <div class="show-page-detail-heading">Type</div>
+        <div class="show-page-detail" data-detail="staff-type"><%= staff_member.staff_type.name.titlecase %></div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
         <div class="show-page-detail-heading">Status</div>
         <div class="show-page-detail" data-detail="status"><%= staff_member.enabled? ? 'Active' : 'Disabled' %></div>
       </li>

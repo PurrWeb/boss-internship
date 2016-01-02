@@ -42,6 +42,7 @@ class StaffMembersController < ApplicationController
       :day_perference_note,
       :avatar,
       :avatar_cache,
+      :staff_type,
       address_attributes: [
         :address_1,
         :address_2,
@@ -57,6 +58,10 @@ class StaffMembersController < ApplicationController
         :surname
       ],
       staff_member_venue_attributes: [:venue_id]
-    )
+    ).merge(staff_type: staff_type_from_params)
+  end
+
+  def staff_type_from_params
+    StaffType.find_by(id: params[:staff_member][:staff_type])
   end
 end
