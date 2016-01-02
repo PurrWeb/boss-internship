@@ -1,6 +1,17 @@
 class AddStaffTypePage < PageObject::Page
+  include PageObject::FlashHelpers
+
   def surf_to
     visit(url_helpers.new_staff_type_path)
+  end
+
+  page_action :fill_and_submit_form do |name:|
+    fill_in('Name', with: name)
+    _submit_form
+  end
+
+  page_action :submit_form do
+    _submit_form
   end
 
   def navigation
@@ -15,6 +26,10 @@ class AddStaffTypePage < PageObject::Page
   end
 
   private
+  def _submit_form
+    click_button('Submit')
+  end
+
   def page_heading
     page.find('main h1')
   end

@@ -11,7 +11,7 @@ class StaffTypesIndexPage < PageObject::Page
 
   page_action :ensure_staff_types_listed do |type_names:|
     list = find('.staff-types-list')
-    type_names.each do |name|
+    Array(type_names).each do |name|
       expect(list.text).to include(name)
     end
   end
