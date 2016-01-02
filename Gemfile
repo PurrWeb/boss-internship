@@ -13,7 +13,8 @@ gem "jquery-rails"
 gem "jquery-ui-rails"
 gem "uglifier"
 gem "fog"
-gem "carrierwave"
+gem "carrierwave", "~> 0.10"
+gem 'rmagick', '2.13.2', require: false
 gem "figaro"
 gem "sidekiq"
 gem "sidekiq-failures"
@@ -24,6 +25,7 @@ gem 'bootstrap_form'
 gem 'react_webpack_rails'
 gem "statesman", '~> 1.3.1'
 gem "cancan"
+gem 'file_validators'
 
 group :development, :test do
   gem "byebug"

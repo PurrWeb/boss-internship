@@ -13,4 +13,9 @@ RSpec.feature 'Viewing a staff member' do
     show_page.surf_to
     show_page.ensure_details_displayed_for(staff_member)
   end
+
+  scenario 'on the staff show page you should see the staff members avatar photo' do
+    show_page.surf_to
+    show_page.ensure_avatar_image_displayed(image_url: staff_member.avatar.medium.url)
+  end
 end
