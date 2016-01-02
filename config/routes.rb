@@ -24,6 +24,8 @@ Rails.application.routes.draw do
 
   resources :staff_members, only: [:show, :index, :new, :create]
 
+  resources :staff_types, only: [:index, :new]
+
   resources :venues, only: [:index, :create]
 
   resources :rotas, only: [] do

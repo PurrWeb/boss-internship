@@ -1,6 +1,7 @@
 <h1>Staff Members</h1>
 
 <%= link_to('Add Staff Member', new_staff_member_path, class: ['btn', 'btn-primary']) %>
+<%= link_to('Staff Types', staff_types_path, class: ['btn', 'btn-success']) %>
 
 <% if staff_members.present? %>
   <table class="table">

@@ -4,7 +4,7 @@ module NavigationHelper
   end
 
   def in_staff_members_section?
-    controller_name == 'staff_members'
+    controller_name == 'staff_members' || controller_name == 'staff_types'
   end
 
   def in_venues_section?
