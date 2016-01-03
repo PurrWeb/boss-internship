@@ -1,7 +1,12 @@
 class StaffMembersController < ApplicationController
   def index
-    staff_members = StaffMember.all
-    render locals: { staff_members: staff_members }
+    filter = StaffMemberIndexFilter.new(params[:filter])
+    staff_members = filter.query.all
+
+    render locals: {
+      staff_members: staff_members,
+      filter: filter
+    }
   end
 
   def show
