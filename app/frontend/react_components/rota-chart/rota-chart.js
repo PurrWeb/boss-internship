@@ -18,8 +18,8 @@ export default class RotaChart extends Component {
             startTime={this.props.startTime}
             endTime={this.props.endTime}
             staff={this.props.staff}
-            updateShiftToPreview={this.props.updateShiftToPreview}
-            updateShiftToShow={this.props.updateShiftToShow} />
+            updateStaffToPreview={this.props.updateStaffToPreview}
+            updateStaffToShow={this.props.updateStaffToShow} />
     }
     componentDidMount() {
         this.applyAdditionalChartProps();
@@ -30,17 +30,17 @@ export default class RotaChart extends Component {
     applyAdditionalChartProps(){
         var el = d3.select(ReactDOM.findDOMNode(this));
 
-        var shiftToPreview = this.props.shiftToPreview;
-        if (shiftToPreview !== null) {
-            d3.selectAll(".rota-chart__shift").classed("rota-chart__previewed-shift", function(bar){
-                return bar.originalShiftObject.id === shiftToPreview.id;
+        var {staffToPreview, staffToShow} = this.props;
+
+        if (staffToPreview !== null) {
+            d3.selectAll(".rota-chart__shift").classed("rota-chart__previewed-staff", function(bar){
+                return bar.originalShiftObject.staff_id === staffToPreview;
             });
         }
 
-        var shiftToShow = this.props.shiftToShow;
-        if (shiftToShow !== null) {
-            d3.selectAll(".rota-chart__shift").classed("rota-chart__selected-shift", function(bar){
-                return bar.originalShiftObject.id === shiftToShow.id;
+        if (staffToShow !== null) {
+            d3.selectAll(".rota-chart__shift").classed("rota-chart__selected-staff", function(bar){
+                return bar.originalShiftObject.staff_id === staffToShow;
             });
         }
 

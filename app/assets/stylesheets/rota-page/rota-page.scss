@@ -1,6 +1,6 @@
 @import "staff-finder/staff-list-item";
 @import "staff-finder/staff-finder";
-@import "rota-chart/staff-shift-editor";
+@import "rota-chart/staff-details-and-shifts";
 @import "staff-type-dropdown";
 @import "staff-shift-list";
 @import "chart-and-filter";
@@ -40,7 +40,7 @@ body {
         cursor: pointer;
     }
 
-    .rota-chart__previewed-shift {
+    .rota-chart__previewed-staff {
         rect {
             fill: #777 !important;
         }
@@ -48,7 +48,7 @@ body {
             fill: white;
         }
     }
-    .rota-chart__selected-shift {
+    .rota-chart__selected-staff {
         rect {
             fill: black !important;
         }

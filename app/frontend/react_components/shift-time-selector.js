@@ -8,7 +8,6 @@ export default class ShiftTimeSelector extends Component {
         this.state = {starts_at, ends_at};
     }
     render(){
-
         return <div>
             <div className="row">
                 <div className="col-md-6">

@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import _ from "underscore"
 import RotaChart from "./rota-chart/rota-chart.js"
-import StaffShiftEditor from "./rota-chart/staff-shift-editor.js"
+import StaffDetailsAndShifts from "./rota-chart/staff-details-and-shifts"
 import StaffTypeDropdown from "./staff-type-dropdown.js"
 import RotaDate from "../lib/rota-date"
 import utils from "../lib/utils"
@@ -13,40 +13,33 @@ export default class ChartAndFilter extends Component {
         super(props);
         this.state = {
             staffTypeFilter: [],
-            shiftToShow: null,
-            shiftToPreview: null
+            staffToShow: null,
+            staffToPreview: null
         };
     }
-    componentWillReceiveProps(nextProps){
-        if (this.state.shiftToShow === null) {
-            return;
-        }
-        var shiftToShowWasDeleted = !_(nextProps.rotaShifts).find({id: this.state.shiftToShow.id});
-        if (shiftToShowWasDeleted){
-            this.setState({shiftToShow: null})
-        }
-    }
     render(){
-        var shiftEditor, previewShiftEditor;
-        if (this.state.shiftToShow) {
-            console.log("shiftToShow", this.state.shiftToShow)
-            shiftEditor = <StaffShiftEditor
-                shift={this.state.shiftToShow}
+        var staffId, staffDetails, previewStaffDetails;
+        if (this.state.staffToShow) {
+            staffId = this.state.staffToShow;
+            staffDetails = <StaffDetailsAndShifts
+                staffId={staffId}
                 rotaShifts={this.props.rotaShifts}
                 // We specify a key so the component is re-initialized when
                 // the shift changes - so we don't keep the previous state.
-                key={this.state.shiftToShow.id}
+                key={this.state.staffToShow}
                 staff={this.props.staff} />
         }
-        if (this.state.shiftToPreview) {
-            previewShiftEditor = <StaffShiftEditor
-                shift={this.state.shiftToPreview}
+        if (this.state.staffToPreview) {
+            staffId = this.state.staffToPreview;
+            previewStaffDetails = <StaffDetailsAndShifts
+                staffId={staffId}
                 rotaShifts={this.props.rotaShifts}
                 staff={this.props.staff} />
         }
 
         var rotaShifts = this.getRotaShifts();
         var chartBoundaries = ChartAndFilter.calculateChartBoundaries(rotaShifts);
+
 
         return (
             <div className="row">
@@ -56,10 +49,10 @@ export default class ChartAndFilter extends Component {
                         startTime={chartBoundaries.start}
                         endTime={chartBoundaries.end}
                         staff={this.props.staff}
-                        updateShiftToPreview={(shift) => this.setState({shiftToPreview: shift})}
-                        updateShiftToShow={(shift) => this.setState({shiftToShow: shift})}
-                        shiftToPreview={this.state.shiftToPreview}
-                        shiftToShow={this.state.shiftToShow}
+                        updateStaffToPreview={(staffId) => this.setState({staffToPreview: staffId})}
+                        updateStaffToShow={(staffId) => this.setState({staffToShow: staffId})}
+                        staffToPreview={this.state.staffToPreview}
+                        staffToShow={this.state.staffToShow}
                         />
                 </div>
                 <div className="col-md-3">
@@ -77,11 +70,11 @@ export default class ChartAndFilter extends Component {
                         className="chart-and-filter__shift-editor-container" >
                         <div
                             className="chart-and-filter__selected-shift-editor"
-                            style={{opacity: this.state.shiftToPreview !== null ? "0": "1"}}>
-                            {shiftEditor}
+                            style={{opacity: this.state.staffToPreview !== null ? "0": "1"}}>
+                            {staffDetails}
                         </div>
                         <div className="chart-and-filter__preview-shift-editor">
-                            {previewShiftEditor}
+                            {previewStaffDetails}
                         </div>
                     </div>
                 </div>

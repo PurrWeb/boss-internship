@@ -22,7 +22,7 @@ class RotaChart extends Component {
             <div>
                 <svg id="rota-chart"></svg>
             </div>
-        )
+        );
     }
     componentDidMount() {
         this.initGraph(document.getElementById("rota-chart"));
@@ -79,7 +79,6 @@ class RotaChart extends Component {
     }
     initGraph(el) {
         if (!el) {
-            console.log("not rendering graph, el is falsy")
             return;
         }
 
@@ -145,14 +144,14 @@ class RotaChart extends Component {
                 return "fill:" + self.context.staffTypes[shift.staff.staff_type].color;
             })
             .on("mouseenter", function(shift){
-                self.showShiftPreview(shift);
+                self.showStaffPreview(shift);
             })
             .on("mouseout", function(shift){
-                self.stopShowingShiftPreview(shift);
+                self.stopShowingStaffPreview(shift);
             })
             .on("click", function(shift){
-                self.stopShowingShiftPreview();
-                self.props.updateShiftToShow(shift.originalShiftObject)
+                self.stopShowingStaffPreview();
+                self.props.updateStaffToShow(shift.originalShiftObject.staff_id)
             })
             .attr("height", heightPerPerson - 1);
         bar.append("text")
@@ -163,7 +162,7 @@ class RotaChart extends Component {
                 var staff = shift.staff;
                 var formattedStartTime = moment(shift.originalShiftObject.starts_at).format("HH:mm");
                 var formattedEndTime = moment(shift.originalShiftObject.ends_at).format("HH:mm");
-                return `${staff.first_name} ${staff.surname} (${formattedStartTime} - ${formattedEndTime})`;
+                return `${staff.id} ${staff.first_name} ${staff.surname} (${formattedStartTime} - ${formattedEndTime})`;
             })
             .attr("dx", 4)
             .attr("dy", 8)
@@ -200,11 +199,11 @@ class RotaChart extends Component {
 
         return {xScale, barWidthScale};
     }
-    showShiftPreview(shift) {
-        this.props.updateShiftToPreview(shift.originalShiftObject);
+    showStaffPreview(shift) {
+        this.props.updateStaffToPreview(shift.originalShiftObject.staff_id);
     }
-    stopShowingShiftPreview(shift) {
-        this.props.updateShiftToPreview(null);
+    stopShowingStaffPreview(shift) {
+        this.props.updateStaffToPreview(null);
     }
     getHoursNotShown(){
         var hoursNotShownOnTheLeft = this.getHoursNotShownOnTheLeft();
