@@ -1,0 +1,9 @@
+<h1>Staff Types</h1>
+
+<%= link_to 'Add Staff Type', new_staff_type_path %>
+
+<ul class="staff-types-list list-unstyled">
+  <% staff_types.each do |staff_type|  %>
+    <li><%= staff_type.name %></li>
+  <% end %>
+</ul>

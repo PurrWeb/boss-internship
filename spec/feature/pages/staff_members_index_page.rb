@@ -9,6 +9,10 @@ class StaffMembersIndexPage < PageObject::Page
     click_link 'Add Staff Member'
   end
 
+  page_action :click_staff_types_button do
+    click_link 'Staff Types'
+  end
+
   page_action :ensure_record_displayed_for do |user|
     find(:css, ".staff-members-index-listing[data-staff-member-id=\"#{user.id}\"]")
   end

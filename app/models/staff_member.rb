@@ -1,6 +1,7 @@
 class StaffMember < ActiveRecord::Base
   GENDERS = ['male', 'female']
 
+  belongs_to :staff_type
   has_one :staff_member_venue, inverse_of: :staff_member
   has_one :venue, through: :staff_member_venue
   accepts_nested_attributes_for :staff_member_venue
@@ -32,6 +33,7 @@ class StaffMember < ActiveRecord::Base
   validate  :national_insurance_number_valid
   validates :pin_code, presence: true
   validate  :valid_pin_code_format
+  validates :staff_type, presence: true
 
   before_validation :normalise_national_insurance_number
 

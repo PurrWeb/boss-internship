@@ -6,6 +6,7 @@ class StaffMemberForm < PageObject::Component
     name_form.fill_in_for(staff_member.name)
     scope.fill_in('Email', with: staff_member.email)
     scope.fill_in('National insurance number', with: staff_member.national_insurance_number)
+    scope.select(staff_member.staff_type.name.titleize, from: 'Staff type')
     scope.fill_in('Pin code', with: staff_member.pin_code)
     scope.fill_in('Phone number', with: staff_member.phone_number)
     scope.select(staff_member.date_of_birth.year, from: 'staff_member_date_of_birth_1i')

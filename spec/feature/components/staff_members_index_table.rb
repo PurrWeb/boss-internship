@@ -1,6 +1,6 @@
 class StaffMembersIndexTable < PageObject::Component
   def self.columns
-    [:name, :venue]
+    [:name, :venue, :staff_type]
   end
 
   page_action :click_on_detail do |column, staff_member:|
@@ -14,6 +14,8 @@ class StaffMembersIndexTable < PageObject::Component
     expect(detail_text(listing, :name)).to eq(staff_member.full_name)
 
     expect(detail_text(listing, :venue)).to eq(staff_member.venue.name)
+
+    expect(detail_text(listing, :staff_type)).to eq(staff_member.staff_type.name.titlecase)
   end
 
   def scope
@@ -39,7 +41,8 @@ class StaffMembersIndexTable < PageObject::Component
   def column_data
     {
       name:  { detail_selector: 'td[data-role="name"]'  },
-      venue:  { detail_selector: 'td[data-role="venue"]'  }
+      venue:  { detail_selector: 'td[data-role="venue"]'  },
+      staff_type:  { detail_selector: 'td[data-role="staff-type"]'  }
     }
   end
 
