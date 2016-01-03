@@ -19,7 +19,9 @@
     <% venues.each do |venue| %>
       <tr class="venues-index-listing" data-venue-id="<%= venue.id %>">
         <td data-role="name"><%= venue.name %></td>
-        <td data-role="staff-count"><%= venue.staff_members.count %></td>
+        <td data-role="staff-count">
+          <%= link_to(venue.staff_members.count, staff_members_path(filter: { venue: venue.id })) %>
+        </td>
       </tr>
     <% end %>
   </table>

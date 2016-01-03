@@ -4,6 +4,7 @@ RSpec.feature 'Venues Section Index page' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:venues_index_page) { VenuesIndexPage.new }
   let(:prospective_venue) { FactoryGirl.build(:venue, name: 'Party Place')}
+  let(:staff_member_index_page) { StaffMembersIndexPage.new }
 
   before do
     login_as(dev_user)
@@ -29,6 +30,12 @@ RSpec.feature 'Venues Section Index page' do
     scenario 'the venues deatails should be displayed in the table' do
       venues_index_page.surf_to
       venues_index_page.venues_table.ensure_details_displayed_for(venue)
+    end
+
+    scenario 'clicking the staff count should take you to a pre filtered staff members index' do
+      venues_index_page.surf_to
+      venues_index_page.venues_table.click_on_detail(:staff_count, venue: venue)
+      staff_member_index_page.filter.ui_shows_filtering_by_venue(venue)
     end
   end
 end
