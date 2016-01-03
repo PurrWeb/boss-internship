@@ -14,10 +14,12 @@
   <table class="table">
     <tr>
       <th>Name</th>
+      <th>Staff</th>
     <tr/>
     <% venues.each do |venue| %>
       <tr class="venues-index-listing" data-venue-id="<%= venue.id %>">
         <td data-role="name"><%= venue.name %></td>
+        <td data-role="staff-count"><%= venue.staff_members.count %></td>
       </tr>
     <% end %>
   </table>
