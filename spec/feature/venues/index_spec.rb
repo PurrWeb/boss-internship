@@ -22,4 +22,13 @@ RSpec.feature 'Venues Section Index page' do
     venue = Venue.find_by!(name: prospective_venue.name)
     venues_index_page.ensure_record_displayed_for(venue)
   end
+
+  context 'when venues exist' do
+    let!(:venue) { FactoryGirl.create(:venue) }
+
+    scenario 'the venues deatails should be displayed in the table' do
+      venues_index_page.surf_to
+      venues_index_page.venues_table.ensure_details_displayed_for(venue)
+    end
+  end
 end

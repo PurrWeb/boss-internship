@@ -17,7 +17,7 @@
     <tr/>
     <% venues.each do |venue| %>
       <tr class="venues-index-listing" data-venue-id="<%= venue.id %>">
-        <td><%= venue.name %></td>
+        <td data-role="name"><%= venue.name %></td>
       </tr>
     <% end %>
   </table>
