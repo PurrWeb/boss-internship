@@ -10,9 +10,9 @@ RSpec.feature 'Venues Section Index page' do
     login_as(dev_user)
   end
 
-  scenario 'the venues section should be highlighted in the navigaiton' do
+  scenario 'the admin section should be highlighted in the navigaiton' do
     venues_index_page.surf_to
-    venues_index_page.navigation.ensure_only_sections_highlighted(:venues)
+    venues_index_page.navigation.ensure_top_level_sections_highlighted(:admin)
   end
 
 

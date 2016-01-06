@@ -1,18 +1,18 @@
 require 'feature/feature_spec_helper'
 
 RSpec.feature 'Invites index page' do
-  let(:admin_user) { FactoryGirl.create(:user, :admin) }
+  let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:prospective_invite) { FactoryGirl.build(:invite) }
   let(:invites_index_page) { InvitesIndexPage.new }
   let(:invite_new_user_page) { InviteNewUserPage.new }
 
   before do
-    login_as admin_user
+    login_as dev_user
   end
 
   scenario 'the users section should be highlighted in the navigaiton' do
     invites_index_page.surf_to
-    invites_index_page.navigation.ensure_only_sections_highlighted(:users)
+    invites_index_page.navigation.ensure_top_level_sections_highlighted(:admin)
   end
 
   scenario 'clicking invite new user should take you to the invite new user page' do
@@ -22,7 +22,7 @@ RSpec.feature 'Invites index page' do
   end
 
   context 'when invited users exist' do
-    let(:inviter) { FactoryGirl.create(:user, :admin) }
+    let(:inviter) { FactoryGirl.create(:user, :dev) }
     let(:invite) { FactoryGirl.create(:invite, inviter: inviter) }
 
     before do

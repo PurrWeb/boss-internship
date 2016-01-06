@@ -6,7 +6,7 @@ class StaffTypesIndexPage < PageObject::Page
   end
 
   page_action :click_add_staff_type_button do
-    click_link 'Add Staff Type'
+    find('a.btn', text: "Add Staff Type").click
   end
 
   page_action :ensure_staff_types_listed do |type_names:|

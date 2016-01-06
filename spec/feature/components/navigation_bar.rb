@@ -5,31 +5,15 @@ class NavigationBar < PageObject::Component
     expect(link['href']).to eq('/')
   end
 
-  page_action :ensure_only_sections_displayed do |*sections|
+  page_action :ensure_top_level_sections_displayed do |*sections|
     Array(sections).each do |section|
       expect(scope).to have_selector(section_selector(section))
     end
-
-    (possible_sections - Array(sections)).each do |section|
-      expect(scope).not_to have_selector(section_selector(section))
-    end
   end
 
-  page_action :ensure_only_sections_highlighted do |*sections|
+  page_action :ensure_top_level_sections_highlighted do |*sections|
     Array(sections).each do |section|
       ensure_section_highlighted(section)
-    end
-
-    (possible_sections - Array(sections)).each do |section|
-      if section_displayed?(section)
-        ensure_section_not_highlighted(section)
-      end
-    end
-  end
-
-  page_action :ensure_sections_dont_appear do |*sections|
-    sections.each do |section|
-      expect(scope).to_not have_selector(section_selector(section))
     end
   end
 
@@ -42,8 +26,15 @@ class NavigationBar < PageObject::Component
     ensure_user_section_logout_link_displayed
   end
 
-  def possible_sections
-    section_data.keys
+  page_action :ensure_admin_sections_displayed do |*sections|
+    if Array(sections).present?
+        admin_section = scope.find(admin_section_selector)
+        Array(sections).each do |section|
+          expect(admin_section).to have_selector(section_selector(section, type: :admin))
+        end
+    else
+      expect(scope).to_not have_selector(admin_section_selector)
+    end
   end
 
   def scope
@@ -52,11 +43,7 @@ class NavigationBar < PageObject::Component
 
   private
   def ensure_section_highlighted(section)
-    expect(scope.find(section_selector(section)).find('a')['class'].split(' ')).to include('active')
-  end
-
-  def ensure_section_not_highlighted(section)
-    expect(scope.find(section_selector(section)).find('a')['class'].split(' ')).to_not include('active')
+    expect(scope.find(section_selector(section)).find('a.nav-section-header-link')['class'].split(' ')).to include('active')
   end
 
   def section_displayed?(section)
@@ -88,21 +75,43 @@ class NavigationBar < PageObject::Component
     '.nav-user-section'
   end
 
-  def section_data
+  def admin_section_selector
+    '.nav-admin-section'
+  end
+
+  def top_level_section_data
     {
-      users: {
-        selector: '.nav-users-section'
-      },
       staff_members: {
         selector: '.nav-staff-members-section'
       },
-      venues: {
-        selector: '.nav-venues-section'
+      rota: {
+        selector: '.nav-rota-section'
+      },
+      admin: {
+        selector: '.nav-admin-section'
       }
     }
   end
 
-  def section_selector(section)
-    section_data.fetch(section) { raise "'#{section}' section unsupported" }.fetch(:selector)
+  def admin_section_data
+    {
+      users: {
+        selector: '.nav-users-section'
+      },
+      venues: {
+        selector: '.nav-venues-section'
+      },
+      staff_types: {
+        selector: '.nav-staff-types-section'
+      },
+      invites: {
+        selector: '.nav-invites-section'
+      }
+    }
+  end
+
+  def section_selector(section, type: :normal)
+    data = type == :admin ? admin_section_data : top_level_section_data
+    data.fetch(section) { raise "'#{section}' section unsupported" }.fetch(:selector)
   end
 end
