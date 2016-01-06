@@ -4,9 +4,9 @@ RSpec.feature 'Accepting an invite' do
   let(:admin_user) { FactoryGirl.create(:user, :admin) }
   let(:invite) { FactoryGirl.create(:invite, :admin, inviter: admin_user) }
   let(:prospective_user) { FactoryGirl.build(:user) }
-  let(:accept_invite_page) { AcceptInvitePage.new(invite) }
-  let(:sign_in_page) { SignInPage.new }
-  let(:home_page) { HomePage.new }
+  let(:accept_invite_page) { PageObject::AcceptInvitePage.new(invite) }
+  let(:sign_in_page) { PageObject::SignInPage.new }
+  let(:home_page) { PageObject::HomePage.new }
 
   scenario 'Anonymous user clicks on accept invite link in email and fills out form' do
     accept_invite_page.surf_to

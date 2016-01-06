@@ -2,8 +2,8 @@ require 'feature/feature_spec_helper'
 
 RSpec.feature 'Staff types index page' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
-  let(:staff_types_index_page) { StaffTypesIndexPage.new }
-  let(:add_staff_type_page) { AddStaffTypePage.new }
+  let(:staff_types_index_page) { PageObject::StaffTypesIndexPage.new }
+  let(:add_staff_type_page) { PageObject::AddStaffTypePage.new }
 
   before do
     login_as(dev_user)

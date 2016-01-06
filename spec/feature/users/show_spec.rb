@@ -2,7 +2,7 @@ require 'feature/feature_spec_helper'
 
 RSpec.feature 'Viewing a user' do
   let(:admin_user) { FactoryGirl.create(:user, :admin) }
-  let(:show_page) { UserShowPage.new(admin_user) }
+  let(:show_page) { PageObject::UserShowPage.new(admin_user) }
 
   before do
     login_as admin_user
