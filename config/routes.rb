@@ -26,7 +26,7 @@ Rails.application.routes.draw do
 
   resources :staff_types, only: [:index, :new, :create]
 
-  resources :venues, only: [:index, :create]
+  resources :venues, only: [:index, :new, :create]
 
   resources :rotas, only: [] do
     collection do

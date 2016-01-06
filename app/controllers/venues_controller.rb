@@ -1,8 +1,12 @@
 class VenuesController < ApplicationController
   def index
-    form_venue  = Venue.new
     venues = Venue.all
-    render locals: { form_venue: form_venue, venues: venues }
+    render locals: { venues: venues }
+  end
+
+  def new
+    venue = Venue.new
+    render locals: { venue: venue }
   end
 
   def create
@@ -13,8 +17,7 @@ class VenuesController < ApplicationController
       redirect_to action: :index
     else
       flash.now[:error] = "There was a problem creating this venue"
-      venues = Venue.all
-      render action: :index, locals: { form_venue: venue, venues: venues }
+      render 'new', locals: { venue: venue }
     end
   end
 

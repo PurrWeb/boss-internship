@@ -5,6 +5,7 @@ RSpec.feature 'Venues Section Index page' do
   let(:venues_index_page) { VenuesIndexPage.new }
   let(:prospective_venue) { FactoryGirl.build(:venue, name: 'Party Place')}
   let(:staff_member_index_page) { StaffMembersIndexPage.new }
+  let(:add_venue_page) { AddVenuePage.new }
 
   before do
     login_as(dev_user)
@@ -15,13 +16,10 @@ RSpec.feature 'Venues Section Index page' do
     venues_index_page.navigation.ensure_top_level_sections_highlighted(:admin)
   end
 
-
   scenario 'clicking add venues button takes you to the add venue page' do
     venues_index_page.surf_to
-    venues_index_page.add_venue(prospective_venue)
-    venues_index_page.ensure_flash_success_message_displayed('Venue added successfully')
-    venue = Venue.find_by!(name: prospective_venue.name)
-    venues_index_page.ensure_record_displayed_for(venue)
+    venues_index_page.click_add_venue_button
+    add_venue_page.assert_on_correct_page
   end
 
   context 'when venues exist' do

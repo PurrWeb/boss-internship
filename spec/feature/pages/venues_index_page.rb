@@ -6,12 +6,7 @@ class VenuesIndexPage < PageObject::Page
   end
 
   page_action :click_add_venue_button do
-    click_link 'Add Venue'
-  end
-
-  page_action :add_venue do |venue|
-    create_venue_form.fill_in('Name', with: venue.name)
-    create_venue_form.click_button('Add')
+    find('a.btn', text: 'Add Venue').click
   end
 
   page_action :ensure_record_displayed_for do |venue|

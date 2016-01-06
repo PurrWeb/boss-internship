@@ -1,14 +1,6 @@
 <h1>Venues</h1>
 
-<div class="panel panel-default">
-  <div class="panel-heading">Add Venue</div>
-  <div class="panel-body">
-    <%= bootstrap_form_for(form_venue, html: { class: ['venue-form', 'form-inline'] }) do |form| %>
-      <%= form.text_field :name %>
-      <button type="submit" class="btn btn-default">Add</button>
-    <% end %>
-  </div>
-</div>
+<%= link_to('Add Venue', new_venue_path, class: ['btn', 'btn-primary']) %>
 
 <% if venues.present? %>
   <table class="table">
