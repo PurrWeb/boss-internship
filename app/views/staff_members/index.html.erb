@@ -3,6 +3,8 @@
 <%= link_to('Add Staff Member', new_staff_member_path, class: ['btn', 'btn-primary']) %>
 <%= link_to('Staff Types', staff_types_path, class: ['btn', 'btn-success']) %>
 
+<%= render partial: 'index_filter', locals: { filter: filter, staff_members: staff_members } %>
+
 <% if staff_members.present? %>
   <table class="table">
     <tr>

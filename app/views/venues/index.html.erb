@@ -14,10 +14,14 @@
   <table class="table">
     <tr>
       <th>Name</th>
+      <th>Staff</th>
     <tr/>
     <% venues.each do |venue| %>
       <tr class="venues-index-listing" data-venue-id="<%= venue.id %>">
-        <td><%= venue.name %></td>
+        <td data-role="name"><%= venue.name %></td>
+        <td data-role="staff-count">
+          <%= link_to(venue.staff_members.count, staff_members_path(filter: { venue: venue.id })) %>
+        </td>
       </tr>
     <% end %>
   </table>

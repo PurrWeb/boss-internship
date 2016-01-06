@@ -1,8 +1,13 @@
 <%= bootstrap_form_for(staff_member, html: { multipart: true, class: 'staff-member-form' }) do |form| %>
-  <% if Venue.count > 0 %>
-    <%= form.fields_for(:staff_member_venue, (form.object.staff_member_venue || form.object.build_staff_member_venue)) do |venue_fields| %>
-      <%= venue_fields.select(:venue_id, options_for_select(Venue.all.map{ |venue| [venue.name, venue.id] }, form.object.venue), include_blank: true) %>
-    <% end %>
+  <%= form.fields_for(:staff_member_venue, (form.object.staff_member_venue || form.object.build_staff_member_venue)) do |venue_fields| %>
+    <%= venue_fields.select(
+          :venue_id,
+          options_for_select(
+            Venue.all.map { |venue| [venue.name.titlecase, venue.id] },
+            form.object.try(:venue).try(:id)
+          ),
+          include_blank: true
+        ) %>
   <% end %>
   <% if form.object.avatar? %>
     <%= image_tag(form.object.avatar_url, class: "avatar_preview", height: 120, width: 120) %>

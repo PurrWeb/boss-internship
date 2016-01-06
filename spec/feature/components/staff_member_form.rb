@@ -1,7 +1,9 @@
 class StaffMemberForm < PageObject::Component
   page_action :fill_in_for do |staff_member|
     scope.attach_file("staff_member[avatar]", TestImageHelper.arnie_face_path)
-    scope.select(staff_member.venue.name, from: 'Venue')
+    if staff_member.venue.present?
+      scope.select(staff_member.venue.name, from: 'Venue')
+    end
     scope.select(staff_member.gender.titleize, from: 'Gender')
     name_form.fill_in_for(staff_member.name)
     scope.fill_in('Email', with: staff_member.email)

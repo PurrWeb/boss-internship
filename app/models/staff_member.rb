@@ -37,6 +37,10 @@ class StaffMember < ActiveRecord::Base
 
   before_validation :normalise_national_insurance_number
 
+  def self.for_venue(venue)
+    joins(:venue).merge(Venue.where(id: venue.id))
+  end
+
   def valid_pin_code_format
     if pin_code.present?
       errors.add(:pin_code, 'must be numerical') unless pin_code.match(pin_code_regex)
