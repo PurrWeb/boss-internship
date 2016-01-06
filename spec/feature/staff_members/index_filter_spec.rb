@@ -2,7 +2,7 @@ require 'feature/feature_spec_helper'
 
 RSpec.feature 'Staff members index page filtering' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
-  let(:staff_members_index_page) { StaffMembersIndexPage.new }
+  let(:staff_members_index_page) { PageObject::StaffMembersIndexPage.new }
 
   before do
     login_as(dev_user)

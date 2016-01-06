@@ -1,10 +1,12 @@
-class NameForm < PageObject::Component
-  page_action :fill_in_for do |name|
-    scope.fill_in('First name', with: name.first_name)
-    scope.fill_in('Surname', with: name.surname)
-  end
+module PageObject
+  class NameForm < Component
+    page_action :fill_in_for do |name|
+      scope.fill_in('First name', with: name.first_name)
+      scope.fill_in('Surname', with: name.surname)
+    end
 
-  def scope
-    parent.scope.find('.name-form')
+    def scope
+      parent.scope.find('.name-form')
+    end
   end
 end

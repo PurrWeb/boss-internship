@@ -5,8 +5,8 @@ RSpec.feature 'Inviting a new user' do
   let(:new_email) { FactoryGirl.build(:email_address, email: 'new.email@foo.com') }
   let(:admin_user) { FactoryGirl.create(:user, :admin, email_address: admin_email) }
   let(:prospective_user) { FactoryGirl.build(:user, email_address: new_email) }
-  let(:invite_new_user_page) { InviteNewUserPage.new }
-  let(:invites_index_page) { InvitesIndexPage.new }
+  let(:invite_new_user_page) { PageObject::InviteNewUserPage.new }
+  let(:invites_index_page) { PageObject::InvitesIndexPage.new }
 
   before do
     login_as admin_user

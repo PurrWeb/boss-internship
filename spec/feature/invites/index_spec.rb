@@ -3,8 +3,8 @@ require 'feature/feature_spec_helper'
 RSpec.feature 'Invites index page' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:prospective_invite) { FactoryGirl.build(:invite) }
-  let(:invites_index_page) { InvitesIndexPage.new }
-  let(:invite_new_user_page) { InviteNewUserPage.new }
+  let(:invites_index_page) { PageObject::InvitesIndexPage.new }
+  let(:invite_new_user_page) { PageObject::InviteNewUserPage.new }
 
   before do
     login_as dev_user

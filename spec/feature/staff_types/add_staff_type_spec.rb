@@ -3,8 +3,8 @@ require 'feature/feature_spec_helper'
 RSpec.feature 'Adding a new staff type' do
   let(:admin_user) { FactoryGirl.create(:user, :admin) }
   let(:staff_type_name) { 'Hard Worker' }
-  let(:add_staff_type_page) { AddStaffTypePage.new }
-  let(:staff_types_index_page) { StaffTypesIndexPage.new }
+  let(:add_staff_type_page) { PageObject::AddStaffTypePage.new }
+  let(:staff_types_index_page) { PageObject::StaffTypesIndexPage.new }
 
   before do
     login_as admin_user

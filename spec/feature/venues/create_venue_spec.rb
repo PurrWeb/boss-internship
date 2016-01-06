@@ -2,8 +2,8 @@ require 'feature/feature_spec_helper'
 
 RSpec.feature 'Creating a venue' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
-  let(:add_venue_page) { AddVenuePage.new }
-  let(:venues_index_page) { VenuesIndexPage.new }
+  let(:add_venue_page) { PageObject::AddVenuePage.new }
+  let(:venues_index_page) { PageObject::VenuesIndexPage.new }
   let(:prospective_venue) { FactoryGirl.build(:venue, name: 'Party Place')}
 
   before do

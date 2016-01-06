@@ -4,9 +4,9 @@ RSpec.feature 'Revoking an invite' do
   let(:admin_user) { FactoryGirl.create(:user, :admin) }
   let(:invite) { FactoryGirl.create(:invite, :admin, inviter: admin_user) }
   let(:prospective_user) { FactoryGirl.build(:user) }
-  let(:invites_index_page) { InvitesIndexPage.new }
-  let(:sign_in_page) { SignInPage.new }
-  let(:home_page) { HomePage.new }
+  let(:invites_index_page) { PageObject::InvitesIndexPage.new }
+  let(:sign_in_page) { PageObject::SignInPage.new }
+  let(:home_page) { PageObject::HomePage.new }
 
   before do
     invite

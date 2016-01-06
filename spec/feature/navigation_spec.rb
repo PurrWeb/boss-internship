@@ -1,7 +1,7 @@
 require 'feature/feature_spec_helper'
 
 RSpec.feature 'Navigation Bar' do
-  let(:sign_in_page) { SignInPage.new }
+  let(:sign_in_page) { PageObject::SignInPage.new }
 
   context 'a not logged in user' do
     scenario 'sees the default navbar' do
@@ -17,7 +17,7 @@ RSpec.feature 'Navigation Bar' do
 
     context 'a logged in dev' do
       let(:user) { FactoryGirl.create(:user, :dev) }
-      let(:home_page) { HomePage.new }
+      let(:home_page) { PageObject::HomePage.new }
 
       scenario 'sees the correct sections' do
         login_as(user)
@@ -34,7 +34,7 @@ RSpec.feature 'Navigation Bar' do
 
     context 'a logged in admin' do
       let(:user) { FactoryGirl.create(:user, :admin) }
-      let(:home_page) { HomePage.new }
+      let(:home_page) { PageObject::HomePage.new }
 
       scenario 'sees the correct sections' do
         login_as(user)
@@ -51,7 +51,7 @@ RSpec.feature 'Navigation Bar' do
 
     context 'a logged in manager' do
       let(:user) { FactoryGirl.create(:user, :manager) }
-      let(:home_page) { HomePage.new }
+      let(:home_page) { PageObject::HomePage.new }
 
       scenario 'sees the rota section' do
         login_as(user)

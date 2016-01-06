@@ -4,9 +4,9 @@ RSpec.feature 'Password Reset' do
   let(:password) { 'FORGOTTEN_PASSWORD' }
   let(:user) { FactoryGirl.create(:user, :admin, password: password) }
 
-  let(:sign_in_page) { SignInPage.new }
-  let(:forgotten_password_page) { ForgottenPasswordPage.new }
-  let(:home_page) { HomePage.new }
+  let(:sign_in_page) { PageObject::SignInPage.new }
+  let(:forgotten_password_page) { PageObject::ForgottenPasswordPage.new }
+  let(:home_page) { PageObject::HomePage.new }
 
   scenario "There should be a 'forgot your password?' link on the sign in page" do
     sign_in_page.surf_to
@@ -45,7 +45,7 @@ RSpec.feature 'Password Reset' do
 
   context 'user has a password reset' do
     let(:token) { user.send_reset_password_instructions }
-    let(:reset_password_page) { ResetPasswordPage.new(token) }
+    let(:reset_password_page) { PageObject::ResetPasswordPage.new(token) }
     let(:user) { FactoryGirl.create(:user, password: 'old_password') }
     let(:new_password) { 'new_password' }
 

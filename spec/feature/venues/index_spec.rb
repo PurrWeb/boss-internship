@@ -2,10 +2,10 @@ require 'feature/feature_spec_helper'
 
 RSpec.feature 'Venues Section Index page' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
-  let(:venues_index_page) { VenuesIndexPage.new }
+  let(:venues_index_page) { PageObject::VenuesIndexPage.new }
   let(:prospective_venue) { FactoryGirl.build(:venue, name: 'Party Place')}
-  let(:staff_member_index_page) { StaffMembersIndexPage.new }
-  let(:add_venue_page) { AddVenuePage.new }
+  let(:staff_member_index_page) { PageObject::StaffMembersIndexPage.new }
+  let(:add_venue_page) { PageObject::AddVenuePage.new }
 
   before do
     login_as(dev_user)

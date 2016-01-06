@@ -2,9 +2,9 @@ require 'feature/feature_spec_helper'
 
 RSpec.feature 'Users Section Index page' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
-  let(:users_index_page) { UsersIndexPage.new }
-  let(:invites_index_page) { InvitesIndexPage.new }
-  let(:user_show_page) { UserShowPage.new(dev_user) }
+  let(:users_index_page) { PageObject::UsersIndexPage.new }
+  let(:invites_index_page) { PageObject::InvitesIndexPage.new }
+  let(:user_show_page) { PageObject::UserShowPage.new(dev_user) }
 
   before do
     login_as(dev_user)
@@ -28,7 +28,7 @@ RSpec.feature 'Users Section Index page' do
   end
 
   scenario 'clicking on a users details should take you to their show page' do
-    UsersIndexTable.columns.each do |column|
+    PageObject::UsersIndexTable.columns.each do |column|
       users_index_page.surf_to
       users_index_page.user_table.click_on_detail(column, user: dev_user)
       user_show_page.assert_on_correct_page

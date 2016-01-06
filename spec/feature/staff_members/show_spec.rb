@@ -3,7 +3,7 @@ require 'feature/feature_spec_helper'
 RSpec.feature 'Viewing a staff member' do
   let(:admin_user) { FactoryGirl.create(:user, :admin) }
   let(:staff_member) { FactoryGirl.create(:staff_member) }
-  let(:show_page) { StaffMemberShowPage.new(staff_member) }
+  let(:show_page) { PageObject::StaffMemberShowPage.new(staff_member) }
 
   before do
     login_as admin_user

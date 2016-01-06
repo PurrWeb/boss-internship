@@ -4,8 +4,8 @@ RSpec.feature 'Sign in' do
   let(:password) { '123456789' }
   let(:user) { FactoryGirl.create(:user, :admin, password: password) }
 
-  let(:sign_in_page) { SignInPage.new }
-  let(:home_page) { HomePage.new }
+  let(:sign_in_page) { PageObject::SignInPage.new }
+  let(:home_page) { PageObject::HomePage.new }
 
   context 'for a not logged in user' do
     scenario 'Logging in should take you to the homepage' do

@@ -4,8 +4,8 @@ RSpec.feature 'Adding a new staff member' do
   let(:admin_user) { FactoryGirl.create(:user, :admin) }
   let(:staff_type) { FactoryGirl.create(:staff_type) }
   let(:prospective_staff_member) { FactoryGirl.build(:staff_member, venue: nil, staff_type: staff_type) }
-  let(:add_staff_member_page) { AddStaffMemberPage.new }
-  let(:staff_members_index_page) { StaffMembersIndexPage.new }
+  let(:add_staff_member_page) { PageObject::AddStaffMemberPage.new }
+  let(:staff_members_index_page) { PageObject::StaffMembersIndexPage.new }
 
   before do
     staff_type
