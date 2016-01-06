@@ -27,6 +27,7 @@ RSpec.feature 'Revoking an invite' do
 
     scenario 'Attempting to revoke an anready revoked invite' do
       invites_index_page.surf_to
+      invites_index_page.filter.filter_by_status(:revoked)
 
       invites_index_page.invites_table.ensure_revoke_button_not_displayed_for(invite)
     end
@@ -37,6 +38,7 @@ RSpec.feature 'Revoking an invite' do
 
     scenario 'Attempting to revoke an accepted invite' do
       invites_index_page.surf_to
+      invites_index_page.filter.filter_by_status(:accepted)
 
       invites_index_page.invites_table.ensure_revoke_button_not_displayed_for(invite)
     end

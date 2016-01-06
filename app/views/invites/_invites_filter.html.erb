@@ -1,0 +1,35 @@
+<div class="invites-index-filter">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">Filter</div>
+    </div>
+    <div class="panel-body">
+      <div>
+        <%= bootstrap_form_for(
+              'filter',
+              url: invites_path,
+              html: { method: :get, class: 'form-inline' }
+            ) do |form| %>
+          <%= form.select(
+                :status,
+                options_for_select(
+                  InviteStateMachine.states.map{ |status| [status.titlecase, status] },
+                  filter.status.to_s
+                ),
+                prompt: 'Any'
+              ) %>
+          <%= form.select(
+                :role,
+                options_for_select(
+                  User::ROLES.map{ |role| [role.titlecase, role] },
+                  filter.role.to_s
+                ),
+                prompt: 'Any'
+              ) %>
+          <%= form.submit('Update') %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div><span class="records-returned-count"><%= invites.count %></span> records returned</div>
+</div>

@@ -10,6 +10,10 @@ module PageObject
       @navigation ||= NavigationBar.new(self)
     end
 
+    def filter
+      @filter ||= InvitesIndexFilter.new(self)
+    end
+
     page_action :click_invite_new_user_button do
       click_link('Invite new user')
     end

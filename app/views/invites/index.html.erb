@@ -2,6 +2,8 @@
 
 <%= link_to('Invite new user', new_invite_path, class: ['btn', 'btn-primary']) %>
 
+<%= render partial: 'invites_filter', locals: { filter: filter, invites: invites } %>
+
 <% if invites.present? %>
   <table class="table">
     <tr>
