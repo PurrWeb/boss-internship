@@ -3,42 +3,7 @@
 <%= link_to('Add Staff Member', new_staff_member_path, class: ['btn', 'btn-primary']) %>
 <%= link_to('Staff Types', staff_types_path, class: ['btn', 'btn-success']) %>
 
-<div class="staff-members-index-filter">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <div class="panel-title">Filter</div>
-    </div>
-    <div class="panel-body">
-      <div>
-        <%= bootstrap_form_for(
-              'filter',
-              url: staff_members_path,
-              html: { method: :get, class: 'form-inline' }
-            ) do |form| %>
-          <%= form.select(
-                :venue,
-                options_for_select(
-                  Venue.all.map{ |venue| [venue.name.titlecase, venue.id] },
-                  filter.venue.try(:id)
-                ),
-                prompt: 'Any'
-              ) %>
-          <%= form.select(
-                :staff_type,
-                options_for_select(
-                  StaffType.all.map{ |type| [type.name.titlecase, type.id] },
-                  filter.staff_type.try(:id)
-                ),
-                prompt: 'Any'
-              ) %>
-          <%= form.submit('Update') %>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  <div><span class="records-returned-count"><%= staff_members.count %></span> records returned</div>
-</div>
-
+<%= render partial: 'index_filter', locals: { filter: filter, staff_members: staff_members } %>
 
 <% if staff_members.present? %>
   <table class="table">
