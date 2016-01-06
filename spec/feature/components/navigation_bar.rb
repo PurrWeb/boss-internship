@@ -103,6 +103,9 @@ class NavigationBar < PageObject::Component
       },
       staff_types: {
         selector: '.nav-staff-types-section'
+      },
+      invites: {
+        selector: '.nav-invites-section'
       }
     }
   end
