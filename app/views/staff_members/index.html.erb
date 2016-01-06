@@ -21,7 +21,7 @@
                   Venue.all.map{ |venue| [venue.name.titlecase, venue.id] },
                   filter.venue.try(:id)
                 ),
-                include_blank: true
+                prompt: 'Any'
               ) %>
           <%= form.select(
                 :staff_type,
@@ -29,7 +29,7 @@
                   StaffType.all.map{ |type| [type.name.titlecase, type.id] },
                   filter.staff_type.try(:id)
                 ),
-                include_blank: true
+                prompt: 'Any'
               ) %>
           <%= form.submit('Update') %>
         <% end %>
