@@ -26,7 +26,7 @@ RSpec.feature 'Navigation Bar' do
         home_page.navigation.tap do |navigation|
           navigation.ensure_branding_displayed
           navigation.ensure_top_level_sections_displayed(:staff_members, :rota, :admin)
-          navigation.ensure_admin_sections_displayed(:users, :venues)
+          navigation.ensure_admin_sections_displayed(:users, :venues, :staff_types)
           navigation.ensure_user_section_displayed_for(user)
         end
       end
