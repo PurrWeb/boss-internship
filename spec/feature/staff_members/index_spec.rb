@@ -12,7 +12,7 @@ RSpec.feature 'Staff members section index page' do
 
   scenario 'the staff members section should be highlighted in the navigaiton' do
     staff_members_index_page.surf_to
-    staff_members_index_page.navigation.ensure_only_sections_highlighted(:staff_members)
+    staff_members_index_page.navigation.ensure_top_level_sections_highlighted(:staff_members)
   end
 
   scenario 'clicking add new staff member button takes you to the add staff members page' do

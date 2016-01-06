@@ -9,7 +9,7 @@ class Ability
     end
 
     if user.admin?
-      can :manage, :users
+      can :manage, :admin
     end
 
     can :manage, :rotas
