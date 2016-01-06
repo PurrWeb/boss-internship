@@ -1,12 +1,22 @@
 class StaffMembersIndexFilter < PageObject::Component
   page_action :filter_by_staff_type do |staff_type|
     scope.select(staff_type.name.titlecase, from: 'Staff type')
-    scope.click_button('Update')
+    submit_form
   end
 
   page_action :ui_shows_filtering_by_staff_type do |staff_type|
     select = scope.find(:select, 'Staff type')
     expect(select.value).to eq(staff_type.try(:id).to_s)
+  end
+
+  page_action :filter_by_venue do |venue|
+    scope.select(venue.name.titlecase, from: "Venue")
+    submit_form
+  end
+
+  page_action :ui_shows_filtering_by_venue do |venue|
+    select = scope.find(:select, 'Venue')
+    expect(select.value).to eq(venue.try(:id).to_s)
   end
 
   page_action :ensure_records_returned do |count|
@@ -16,6 +26,10 @@ class StaffMembersIndexFilter < PageObject::Component
   private
   def scope
     page.find('.staff-members-index-filter')
+  end
+
+  def submit_form
+    scope.click_button('Update')
   end
 
   def records_returned_section

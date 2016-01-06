@@ -10,4 +10,18 @@ describe StaffMember do
       expect(staff_member.errors[:avatar]).to eq(["file size must be less than 1 MB"])
     end
   end
+
+  describe 'scopes' do
+    describe 'StaffMember#for_venue' do
+      let(:venue_1) { FactoryGirl.create(:venue) }
+      let(:venue_1_staff_member) { FactoryGirl.create(:staff_member, venue: venue_1) }
+      let(:venue_2) { FactoryGirl.create(:venue) }
+      let(:venue_2_staff_member) { FactoryGirl.create(:staff_member, venue: venue_2) }
+
+      it 'returns staff members assigned to the venue' do
+        expect(StaffMember.for_venue(venue_1)).to eq([venue_1_staff_member])
+        expect(StaffMember.for_venue(venue_2)).to eq([venue_2_staff_member])
+      end
+    end
+  end
 end

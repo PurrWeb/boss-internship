@@ -16,6 +16,14 @@
               html: { method: :get, class: 'form-inline' }
             ) do |form| %>
           <%= form.select(
+                :venue,
+                options_for_select(
+                  Venue.all.map{ |venue| [venue.name.titlecase, venue.id] },
+                  filter.venue.try(:id)
+                ),
+                include_blank: true
+              ) %>
+          <%= form.select(
                 :staff_type,
                 options_for_select(
                   StaffType.all.map{ |type| [type.name.titlecase, type.id] },
