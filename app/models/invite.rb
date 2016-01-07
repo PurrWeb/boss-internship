@@ -9,7 +9,7 @@ class Invite < ActiveRecord::Base
 
   before_validation :generate_token
 
-  validates :role, presence: true
+  validates :role, presence: true, inclusion: { in: User::ROLES, message: 'is required' }
 
   validates :token, presence: true, uniqueness: true
 
