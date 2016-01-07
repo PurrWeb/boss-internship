@@ -2,8 +2,9 @@ class InvitesController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:accept]
 
   def index
-    invites = Invite.all
-    render locals: { invites: invites }
+    filter = InvitesIndexFilter.new(params[:filter])
+    invites = filter.query.all
+    render locals: { filter: filter, invites: invites }
   end
 
   def new
