@@ -3,7 +3,7 @@ FactoryGirl.define do
     to_state :open
     invite
     sort_key 10
-    most_recent false
+    most_recent 1
 
     trait :accepted do
       to_state :accepted
