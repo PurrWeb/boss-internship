@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import { connect } from "react-redux"
-import { Provider} from "react-redux"
+import React, { Component } from "react"
+import { connect, Provider } from "react-redux"
 import { bindActionCreators } from "redux";
 import * as actionCreators from "../redux/actions.js"
 import ChartAndFilter from "./chart-and-filter.js"
 import staffTypes from "../data/staff-types.js"
-import _ from 'underscore'
+import _ from "underscore"
 import AddShiftView from "./add-shift-view"
 import store from "../redux/store.js"
+import { extendStaffTypeInformation } from "../redux/map-state-to-props-helpers"
 
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
 
@@ -46,12 +46,7 @@ class RotaView extends Component {
 function mapStateToProps(state) {
     var props = _.clone(state);
 
-    props.staff = _(props.staff).mapValues(function(staff){
-        staff = _.clone(staff);
-        staff.readable_staff_type = staffTypes[staff.staff_type].title;
-        staff.staff_type_object = staffTypes[staff.staff_type];
-        return staff;
-    });
+    props.staff = extendStaffTypeInformation(props.staff, staffTypes);
 
     props.staffTypes = staffTypes;
     props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
