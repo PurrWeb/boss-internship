@@ -1,0 +1,25 @@
+<div class="invites-index-filter">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">Filter</div>
+    </div>
+    <div class="panel-body">
+      <%= bootstrap_form_for(
+            'filter',
+            url: users_path,
+            html: { method: :get, class: 'form-inline' }
+          ) do |form| %>
+        <%= form.select(
+              :role,
+              options_for_select(
+                User::ROLES.map{ |role| [role.titlecase, role] },
+                filter.role.to_s
+              ),
+              prompt: 'Any'
+            ) %>
+        <%= form.submit('Update') %>
+      <% end %>
+    </div>
+  </div>
+  <div><span class="records-returned-count"><%= users.count %></span> records returned</div>
+</div>

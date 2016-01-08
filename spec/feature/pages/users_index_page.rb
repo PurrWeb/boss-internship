@@ -12,6 +12,10 @@ module PageObject
       @navigation ||= NavigationBar.new(self)
     end
 
+    def filter
+      @filter ||= UsersIndexFilter.new(self)
+    end
+
     def user_table
       @user_table ||= UsersIndexTable.new(self)
     end

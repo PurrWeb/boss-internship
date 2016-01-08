@@ -5,7 +5,8 @@ class UsersController < ApplicationController
   end
 
   def index
-    users = User.all
-    render locals: { users: users }
+    filter = UsersIndexFilter.new(params[:filter])
+    users = filter.query.all
+    render locals: { filter: filter, users: users }
   end
 end
