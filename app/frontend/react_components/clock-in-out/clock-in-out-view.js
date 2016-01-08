@@ -4,12 +4,16 @@ import _ from "underscore"
 import store from "../../redux/store"
 import staffTypes from "../../data/staff-types.js"
 import { extendStaffTypeInformation } from "../../redux/map-state-to-props-helpers"
+import moment from "moment"
 
 class ClockInOutView extends Component {
     render() {
         console.log(this.props)
+        window.moment = moment;
         return <div className="container">
-            {this.props.venue} - {this.props.dateOfRota.toString()}
+            <h1>
+                {this.props.venue} - {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
+            </h1>
         </div>
     }
 }
