@@ -10,3 +10,6 @@ registerComponent('StaffFinder', StaffFinder);
 
 import RotaApp from './react_components/rota-app'
 registerComponent('RotaApp', RotaApp)
+
+import ClockInOutApp from './react_components/clock-in-out/clock-in-out-app'
+registerComponent('ClockInOutApp', ClockInOutApp)
