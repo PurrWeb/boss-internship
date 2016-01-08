@@ -1,33 +1,39 @@
 <h1><%= user.full_name %></h1>
 
 <div class="container-fluid">
-  <ul class="list-unstyled">
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Name</div>
-        <div class="show-page-detail" data-detail="name"><%= user.full_name %></div>
-      </li>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span>Personal Details</span>
+      <span>
+        <%= link_to(
+              'Edit',
+              edit_user_path(user),
+              class: ['btn', 'btn-primary', 'btn-xs', 'user-edit-button']
+            ) %>
+      </span>
     </div>
+    <div class="panel-body">
+    <dl>
+      <dt class="show-page-detail-heading">Name</dt>
+      <dd class="show-page-detail" data-detail="name"><%= user.full_name %></dd>
 
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Email Address</div>
-        <div class="show-page-detail" data-detail="email"><%= user.email %></div>
-      </li>
+      <dt class="show-page-detail-heading">Email Address</dt>
+      <dd class="show-page-detail" data-detail="email"><%= user.email %></dd>
+    </dl>
     </div>
+  </div>
 
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Status</div>
-        <div class="show-page-detail" data-detail="status"><%= user.status %></div>
-      </li>
+  <div class="panel panel-default">
+    <div class="panel-heading">Status</div>
+    <div class="panel-body">
+      <div class="show-page-detail" data-detail="status"><%= user.status %></div>
     </div>
+  </div>
 
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Role</div>
-        <div class="show-page-detail" data-detail="role"><%= user.role.titleize %></div>
-      </li>
+  <div class="panel panel-default">
+    <div class="panel-heading">Role</div>
+    <div class="panel-body">
+      <div class="show-page-detail" data-detail="role"><%= user.role.titleize %></div>
     </div>
-  </ul>
+  </div>
 </div>
