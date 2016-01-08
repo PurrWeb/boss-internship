@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
-import StaffFilter from "./staff-finder/staff-filter.js"
-import FilterableStaffList from "./staff-finder/filterable-staff-list.js"
+import React, { Component } from "react"
+import StaffFilter from "./staff-finder/staff-filter"
+import FilterableStaffList from "./staff-finder/filterable-staff-list"
 import _ from "underscore"
+import StaffListItem from "./staff-finder/staff-list-item"
 
 export default class StaffFinder extends Component {
     constructor(props) {
@@ -24,6 +25,7 @@ export default class StaffFinder extends Component {
 
             <FilterableStaffList
                 staff={this.props.staff}
+                staffItemComponent={StaffListItem}
                 filterSettings={this.state.staffFilterSettings} />
             </div>
         </div>

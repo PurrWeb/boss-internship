@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import utils from "../../lib/utils.js"
-import StaffListItem from "./staff-list-item.js"
+import React, { Component } from "react"
+import utils from "../../lib/utils"
 import _ from 'underscore'
 
 export default class FilterableStaffList extends Component {
     render() {
         var staffToShow = this.getStaffToShow();
         var self = this;
-        var staffListItems = staffToShow.map(function(staff, i){
-            return <StaffListItem
-                key={i}
-                staff={staff} />
-        });
+        var staffListItems = staffToShow.map(
+            (staff, i) =>
+                <this.props.staffItemComponent
+                    key={i}
+                    staff={staff} />
+        );
 
         return (
             <div>

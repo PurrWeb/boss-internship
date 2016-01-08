@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect, Provider } from "react-redux"
 import _ from "underscore"
 import store from "../../redux/store"
-import staffTypes from "../../data/staff-types.js"
+import staffTypes from "../../data/staff-types"
 import { extendStaffTypeInformation } from "../../redux/map-state-to-props-helpers"
 import moment from "moment"
 
@@ -14,6 +14,7 @@ class ClockInOutView extends Component {
             <h1>
                 {this.props.venue} - {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>
+
         </div>
     }
 }
