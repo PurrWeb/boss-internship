@@ -15,7 +15,7 @@ module PageObject
     end
 
     def user_form
-      @user_form ||= UserForm.new(self)
+      @user_form ||= UserSignupForm.new(self)
     end
 
     def navigation

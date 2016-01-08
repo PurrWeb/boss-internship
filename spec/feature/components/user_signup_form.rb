@@ -1,5 +1,5 @@
 module PageObject
-  class UserForm < Component
+  class UserSignupForm < Component
     page_action :fill_in_for do |user|
       name_form.fill_in_for(user.name)
       scope.fill_in('Password', with: user.password)
@@ -14,7 +14,7 @@ module PageObject
     end
 
     def scope
-      super.find('.user-form')
+      super.find('.user-signup-form')
     end
   end
 end

@@ -22,7 +22,11 @@ class User < ActiveRecord::Base
   validates :name, presence: true
   validates :email_address, presence: true
 
-  delegate :full_name, :first_name, :surname, to: :name
+  delegate \
+    :full_name,
+    :first_name,
+    :surname,
+    to: :name
 
   def self.with_email(email)
     joins(:email_address).merge(EmailAddress.where(email: email))

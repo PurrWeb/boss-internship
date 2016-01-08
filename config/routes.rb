@@ -12,7 +12,12 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
-  resources :users, only: [:show, :index]
+  resources :users, only: [:show, :index] do
+    member do
+      get :edit_personal_details
+      post :update_personal_details
+    end
+  end
 
   resources :invites, only: [:index, :new, :create] do
     member do
