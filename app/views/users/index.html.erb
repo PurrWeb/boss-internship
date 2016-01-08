@@ -2,6 +2,8 @@
 
 <%= link_to('Manage Invites', invites_path, class: ['btn', 'btn-primary']) %>
 
+<%= render partial: 'users_filter', locals: { filter: filter, users: users } %>
+
 <% if users.present? %>
   <table class="table">
     <tr>
