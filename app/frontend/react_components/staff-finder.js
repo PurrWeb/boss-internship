@@ -8,10 +8,7 @@ export default class StaffFinder extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            staffFilterSettings: {
-                name: "",
-                staffTypes: []
-            }
+            staffFilterSettings: StaffFilter.getDefaultSettings()
         }
     }
     render() {

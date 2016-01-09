@@ -2,6 +2,12 @@ import React, { Component } from 'react'
 import StaffTypeDropdown from "../staff-type-dropdown.js"
 
 export default class StaffFilter extends Component {
+    static getDefaultSettings() {
+        return {
+            name: "",
+            staffTypes: []
+        }
+    }
     constructor(props) {
         super(props);
         this.ui = {};
@@ -19,7 +25,9 @@ export default class StaffFilter extends Component {
                 </div>
                 <div className="row">
                     <div className="col-md-2">
-                        <input ref={(input) => this.ui.name = input} onChange={() => this.handleChange()}/>
+                        <input
+                            ref={(input) => this.ui.name = input}
+                            onChange={() => this.handleChange()}/>
                     </div>
                     <div className="col-md-2">
                         <StaffTypeDropdown

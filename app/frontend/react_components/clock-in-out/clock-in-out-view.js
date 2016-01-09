@@ -5,8 +5,17 @@ import store from "../../redux/store"
 import staffTypes from "../../data/staff-types"
 import { extendStaffTypeInformation } from "../../redux/map-state-to-props-helpers"
 import moment from "moment"
+import ClockInOutStaffFinder from "./staff-finder"
 
 class ClockInOutView extends Component {
+    static childContextTypes = {
+        staffTypes: React.PropTypes.object
+    }
+    getChildContext(){
+        return {
+            staffTypes: this.props.staffTypes
+        }
+    }
     render() {
         console.log(this.props)
         window.moment = moment;
@@ -14,6 +23,8 @@ class ClockInOutView extends Component {
             <h1>
                 {this.props.venue} - {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>
+            <ClockInOutStaffFinder />
+
 
         </div>
     }

@@ -4,7 +4,7 @@ import Select from "react-select"
 
 export default class StaffTypeDropdown extends Component {
     static contextTypes = {
-        staffTypes: React.PropTypes.object
+        staffTypes: React.PropTypes.object.isRequired
     }
     constructor(props) {
         super(props);
