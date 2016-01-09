@@ -5,7 +5,7 @@ import store from "../../redux/store"
 import staffTypes from "../../data/staff-types"
 import { extendStaffTypeInformation } from "../../redux/map-state-to-props-helpers"
 import moment from "moment"
-import ClockInOutStaffFinder from "./staff-finder"
+import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 
 class ClockInOutView extends Component {
     static childContextTypes = {

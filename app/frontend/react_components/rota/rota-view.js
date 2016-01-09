@@ -1,13 +1,13 @@
 import React, { Component } from "react"
 import { connect, Provider } from "react-redux"
 import { bindActionCreators } from "redux";
-import * as actionCreators from "../redux/actions.js"
+import * as actionCreators from "../../redux/actions.js"
 import ChartAndFilter from "./chart-and-filter.js"
-import staffTypes from "../data/staff-types.js"
+import staffTypes from "../../data/staff-types.js"
 import _ from "underscore"
 import AddShiftView from "./add-shift-view"
-import store from "../redux/store.js"
-import { extendStaffTypeInformation } from "../redux/map-state-to-props-helpers"
+import store from "../../redux/store.js"
+import { extendStaffTypeInformation } from "../../redux/map-state-to-props-helpers"
 
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
 

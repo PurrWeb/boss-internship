@@ -1,7 +1,7 @@
 import React, { Component } from "react"
-import StaffFilter from "../staff-finder/staff-filter"
-import StaffListItem from "../staff-finder/staff-list-item"
-import FilterableStaffList from "../staff-finder/filterable-staff-list"
+import StaffFilter from "../../staff-finder/staff-filter"
+import StaffListItem from "../../rota/staff-finder/staff-list-item"
+import FilterableStaffList from "../../staff-finder/filterable-staff-list"
 
 export default class StaffFinder extends Component {
     static propTypes = {
