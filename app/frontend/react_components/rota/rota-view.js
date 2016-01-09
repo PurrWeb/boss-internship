@@ -7,7 +7,6 @@ import staffTypes from "../../data/staff-types.js"
 import _ from "underscore"
 import AddShiftView from "./add-shift-view"
 import store from "../../redux/store.js"
-import { extendStaffTypeInformation } from "../../redux/map-state-to-props-helpers"
 
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
 
@@ -45,8 +44,6 @@ class RotaView extends Component {
 
 function mapStateToProps(state) {
     var props = _.clone(state);
-
-    props.staff = extendStaffTypeInformation(props.staff, staffTypes);
 
     props.staffTypes = staffTypes;
     props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);

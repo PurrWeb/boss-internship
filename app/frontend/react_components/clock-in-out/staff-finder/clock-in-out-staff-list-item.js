@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import StaffShiftList from "../../staff-shift-list"
+import StaffTypeBadge from "../../staff-type-badge"
 
 export default class ClockInOutStaffListItem extends Component {
     render(){
@@ -13,7 +14,7 @@ export default class ClockInOutStaffListItem extends Component {
                     {staff.first_name} {staff.surname}
                 </div>
                 <div className="col-md-2">
-                    {staff.readable_staff_type}
+                    <StaffTypeBadge staffType={staff.staff_type} />
                 </div>
                 <div className="col-md-2">
                     Status<br/>

@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import ShiftEditor from "./shift-editor"
+import StaffTypeBadge from "../staff-type-badge"
 import _ from "underscore"
 
 export default class StaffDetailsAndShifts extends Component {
@@ -18,7 +19,7 @@ export default class StaffDetailsAndShifts extends Component {
                 {staff.first_name} {staff.surname}
             </h2>
             <div className="staff-details-and-shifts__staff-type">
-                {staff.readable_staff_type}
+                <StaffTypeBadge staffType={staff.staff_type} />
             </div>
             <br/>
 

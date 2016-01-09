@@ -8,9 +8,6 @@ describe('StaffListItem', function() {
     var staff = {
         first_name: "John",
         surname: "Doe",
-        staff_type_object: {
-            color: "red"
-        }
     };
 
     it("shows the person's first and last name", function(){

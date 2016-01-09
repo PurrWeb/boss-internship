@@ -1,14 +1,11 @@
 import React, { Component } from "react"
 import AddStaffToShiftButton from "./add-staff-to-shift-button"
 import StaffShiftList from "../../staff-shift-list.js"
+import StaffTypeBadge from "../../staff-type-badge"
 
 export default class StaffListItem extends Component {
     render() {
         var staff = this.props.staff;
-
-        var staffTypeStyle = {
-            backgroundColor: staff.staff_type_object.color
-        };
 
         return (
             <div className="staff-list-item rota-staff-list-item">
@@ -21,9 +18,7 @@ export default class StaffListItem extends Component {
                             <h3 className="rota-staff-list-item__name">
                                 {staff.first_name} {staff.surname}
                             </h3>
-                            <div className="rota-staff-list-item__type" style={staffTypeStyle}>
-                                {staff.readable_staff_type}
-                            </div>
+                            <StaffTypeBadge staffType={staff.staff_type} />
                         </div>
                         <div className="row">
                             <div className="col-md-6">
