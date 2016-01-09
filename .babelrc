@@ -1,3 +1,6 @@
 {
-  "stage": 1
+    "stage": 1,
+    "plugins": [
+        "./babel-plugins/root-import.js"
+    ]
 }
