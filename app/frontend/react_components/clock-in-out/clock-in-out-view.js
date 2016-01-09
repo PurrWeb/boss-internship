@@ -23,9 +23,9 @@ class ClockInOutView extends Component {
             <h1>
                 {this.props.venue} - {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>
-            <ClockInOutStaffFinder />
-
-
+            <ClockInOutStaffFinder
+                staff={this.props.staff}
+                />
         </div>
     }
 }

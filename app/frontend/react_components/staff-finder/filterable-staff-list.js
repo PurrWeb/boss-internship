@@ -3,6 +3,11 @@ import utils from "../../lib/utils"
 import _ from 'underscore'
 
 export default class FilterableStaffList extends Component {
+    static propTypes = {
+        staff: React.PropTypes.array.isRequired,
+        staffItemComponent: React.PropTypes.object.isRequired,
+        filterSettings: React.PropTypes.object.isRequired
+    }
     render() {
         var staffToShow = this.getStaffToShow();
         var self = this;
