@@ -1,0 +1,35 @@
+.rota-staff-list-item__header {
+    overflow: hidden;
+}
+.rota-staff-list-item__name {
+    float: left;
+    display: inline-block;
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+.rota-staff-list-item__type {
+    display: inline-block;
+    float: left;
+    
+    padding: 6px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 4px;
+    margin-top: 8px;
+    margin-left: 4px;
+
+    color: white;
+}
+.rota-staff-list-item__h4 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    font-size: 16px;
+    font-weight: normal;
+    text-decoration: underline;
+}
+.rota-staff-list-item__add-button {
+    margin-top: 44px;
+}

@@ -4,7 +4,7 @@ import _ from 'underscore'
 
 export default class StaffShiftList extends Component {
     static contextTypes = {
-        rotaShifts: React.PropTypes.array
+        rotaShifts: React.PropTypes.array.isRequired
     }
     render() {
         var staffId = this.props.staffId;

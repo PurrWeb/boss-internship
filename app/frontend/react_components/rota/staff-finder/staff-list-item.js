@@ -5,37 +5,36 @@ import StaffShiftList from "../../staff-shift-list.js"
 export default class StaffListItem extends Component {
     render() {
         var staff = this.props.staff;
-        var className = `staff-list-item`;
 
         var staffTypeStyle = {
             backgroundColor: staff.staff_type_object.color
         };
 
         return (
-            <div className={className}>
+            <div className="staff-list-item rota-staff-list-item">
                 <div className="row">
-                    <div className="col-md-2 staff-list-item__image-column">
-                        <img src={"http://lorempixel.com/400/400/people/?" + staff.id} style={{ width: "100%"}} />
+                    <div className="col-md-2 staff-list-item__avatar-column">
+                        <img src={staff.avatar_url} className="staff-list-item__avatar" />
                     </div>
                     <div className="col-md-8">
-                        <div className="staff-list-item__header">
-                            <h3 className="staff-list-item__name">
+                        <div className="rota-staff-list-item__header">
+                            <h3 className="rota-staff-list-item__name">
                                 {staff.first_name} {staff.surname}
                             </h3>
-                            <div className="staff-list-item__type" style={staffTypeStyle}>
+                            <div className="rota-staff-list-item__type" style={staffTypeStyle}>
                                 {staff.readable_staff_type}
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-md-6">
-                                <h4 className="staff-list-item__h4">
+                                <h4 className="rota-staff-list-item__h4">
                                     Shifts
                                 </h4>
                                 <StaffShiftList
                                     staffId={staff.id} />
                             </div>
                             <div className="col-md-6">
-                                <h4 className="staff-list-item__h4">
+                                <h4 className="rota-staff-list-item__h4">
                                     Preferences
                                 </h4>
                                 Weekly Hours: {staff.preferred_hours}<br/>
@@ -45,7 +44,7 @@ export default class StaffListItem extends Component {
                         </div>
                     </div>
                     <div className="col-md-2">
-                        <div className="staff-list-item__add-button">
+                        <div className="rota-staff-list-item__add-button">
                             <AddStaffToShiftButton
                                 staffId={staff.id}
                                 addShift={this.props.addShift}

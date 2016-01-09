@@ -9,11 +9,13 @@ import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 
 class ClockInOutView extends Component {
     static childContextTypes = {
-        staffTypes: React.PropTypes.object
+        staffTypes: React.PropTypes.object,
+        rotaShifts: React.PropTypes.array
     }
     getChildContext(){
         return {
-            staffTypes: this.props.staffTypes
+            staffTypes: this.props.staffTypes,
+            rotaShifts: this.props.rotaShifts
         }
     }
     render() {
