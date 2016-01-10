@@ -1,113 +1,117 @@
-<h1><%= staff_member.full_name %></h1>
-
-<img class="avatar-image avatar-image_medium" src="<%= staff_member.avatar.medium.url %>" />
+<div class="media">
+  <div class="media-left">
+    <img class="avatar-image avatar-image_medium" src="<%= staff_member.avatar.medium.url %>" />
+  </div>
+  <div class="media-body">
+    <h1 class="media-heading"><%= staff_member.full_name %></h1>
+  </div>
+</div
 
 <div class="container-fluid">
-  <ul class="list-unstyled">
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Venue</div>
-        <div class="show-page-detail" data-detail="venue">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span>Employment Details</span>
+    </div>
+    <div class="panel-body">
+      <dl>
+        <dt class="show-page-detail-heading">Venue</dt>
+        <dd class="show-page-detail" data-detail="venue">
           <% if staff_member.venue.present? %>
             <%= staff_member.venue.name %>
           <% else %>
             N / A
           <% end %>
-        </div>
-      </li>
-    </div>
+        </dd>
 
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Name</div>
-        <div class="show-page-detail" data-detail="name"><%= staff_member.full_name %></div>
-      </li>
-    </div>
+        <dt class="show-page-detail-heading">Job Type</dt>
+        <dd class="show-page-detail" data-detail="staff-type"><%= staff_member.staff_type.name.titlecase %></dd>
 
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Type</div>
-        <div class="show-page-detail" data-detail="staff-type"><%= staff_member.staff_type.name.titlecase %></div>
-      </li>
-    </div>
-
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Status</div>
-        <div class="show-page-detail" data-detail="status"><%= staff_member.enabled? ? 'Active' : 'Disabled' %></div>
-      </li>
-    </div>
-
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">User</div>
-        <div class="show-page-detail" data-detail="user">
-          <% if staff_member.user.present? %>
-            <%= link_to(
-                  'View',
-                  user_path(staff_member.user),
-                  class: ['view-user-button', 'btn', 'btn-success']
-                )
-            %>
-          <% else %>
-            <span>No assocaited user</span>
-          <% end %>
-        </div>
-      </li>
-    </div>
-
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Gender</div>
-        <div class="show-page-detail" data-detail="gender"><%= staff_member.gender.titlecase %></div>
-      </li>
-    </div>
-
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Email Address</div>
-        <div class="show-page-detail" data-detail="email"><%= staff_member.email %></div>
-      </li>
-    </div>
-
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Phone number</div>
-        <div class="show-page-detail" data-detail="phone-number"><%= staff_member.phone_number %></div>
-      </li>
-    </div>
-
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Date of Birth</div>
-        <div class="show-page-detail" data-detail="date-of-birth"><%= staff_member.date_of_birth.to_date.to_s %></div>
-      </li>
-    </div>
-
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">National Insurance Number</div>
-        <div class="show-page-detail" data-detail="national-insurance-number">
+        <dt class="show-page-detail-heading">National Insurance Number</dt>
+        <dd class="show-page-detail" data-detail="national-insurance-number">
           <% if staff_member.national_insurance_number.present? %>
             <%= staff_member.national_insurance_number %>
           <% else %>
             <%= "Not Supplied" %>
           <% end %>
-        </div>
-      </li>
+        </dd>
+      </dl>
     </div>
+  </div>
 
-    <div class="row">
-      <li>
-        <div class="show-page-detail-heading">Address</div>
-        <div class="show-page-detail" data-detail="address-1"><%= staff_member.address.address_1 %></div>
-        <div class="show-page-detail" data-detail="address-2"><%= staff_member.address.address_2 %></div>
-        <div class="show-page-detail" data-detail="address-3"><%= staff_member.address.address_3 %></div>
-        <div class="show-page-detail" data-detail="address-4"><%= staff_member.address.address_4 %></div>
-        <div class="show-page-detail" data-detail="region"><%= staff_member.address.region %></div>
-        <div class="show-page-detail" data-detail="country"><%= staff_member.address.country %></div>
-        <div class="show-page-detail" data-detail="postcode"><%= staff_member.address.postcode %></div>
-      </li>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span>Account Details</span>
     </div>
-  </ul>
+    <div class="panel-body">
+      <dt class="show-page-detail-heading">Created</dt>
+      <dd class="show-page-detail" data-detail="created-at"><%= staff_member.created_at.to_date.to_s %></dd>
+
+      <dt class="show-page-detail-heading">Status</dt>
+      <dd class="show-page-detail" data-detail="status"><%= staff_member.enabled? ? 'Active' : 'Disabled' %></dd>
+
+      <dt class="show-page-detail-heading">User</dt>
+      <dd class="show-page-detail" data-detail="user">
+        <% if staff_member.user.present? %>
+          <%= link_to(
+                'View',
+                user_path(staff_member.user),
+                class: ['view-user-button', 'btn', 'btn-success']
+              )
+          %>
+        <% else %>
+          <span>No assocaited user</span>
+        <% end %>
+      </dd>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span>Personal Details</span>
+    </div>
+    <div class="panel-body">
+      <dl>
+        <dt class="show-page-detail-heading">Name</dt>
+        <dd class="show-page-detail" data-detail="name"><%= staff_member.full_name %></dd>
+
+        <dt class="show-page-detail-heading">Gender</dt>
+        <dd class="show-page-detail" data-detail="gender"><%= staff_member.gender.titlecase %></dd>
+
+        <dt class="show-page-detail-heading">Date of Birth</dt>
+        <dd class="show-page-detail" data-detail="date-of-birth"><%= staff_member.date_of_birth.to_date.to_s %></dd>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span>Contact Details</span>
+    </div>
+    <div class="panel-body">
+      <dl>
+        <dt class="show-page-detail-heading">Email Address</dt>
+        <dd class="show-page-detail" data-detail="email"><%= staff_member.email %></dd>
+
+        <dt class="show-page-detail-heading">Phone number</dt>
+        <dd class="show-page-detail" data-detail="phone-number"><%= staff_member.phone_number %></dd>
+
+        <dt class="show-page-detail-heading">Address</dt>
+        <dd>
+          <div class="show-page-detail" data-detail="address-1"><%= staff_member.address.address_1 %></div>
+          <div class="show-page-detail" data-detail="address-2"><%= staff_member.address.address_2 %></div>
+          <div class="show-page-detail" data-detail="address-3"><%= staff_member.address.address_3 %></div>
+          <div class="show-page-detail" data-detail="address-4"><%= staff_member.address.address_4 %></div>
+        </dd>
+
+        <dt class="show-page-detail-heading">Region</dt>
+        <dd class="show-page-detail" data-detail="region"><%= staff_member.address.region %></dd>
+
+        <dt class="show-page-detail-heading">Country</dt>
+        <dd class="show-page-detail" data-detail="country"><%= staff_member.address.country %></dd>
+
+        <dt class="show-page-detail-heading">Postcode</dt>
+        <dd class="show-page-detail" data-detail="postcode"><%= staff_member.address.postcode %></dd>
+      </dl>
+    </div>
+  </div>
 </div>
