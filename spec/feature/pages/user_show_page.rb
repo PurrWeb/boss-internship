@@ -6,8 +6,15 @@ module PageObject
     end
     attr_reader :user
 
+    include FlashHelpers
+
     def surf_to
       visit(url_helpers.user_path(user))
+    end
+
+    page_action :click_edit_personal_details_button do
+      button = find('a.btn.user-edit-personal-details-button')
+      button.click
     end
 
     page_action :ensure_details_displayed_for do |user|
