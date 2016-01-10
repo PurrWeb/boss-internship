@@ -1,6 +1,7 @@
 import { createStore, combineReducers } from "redux";
 import _ from "underscore"
-import userData from "../data/users.js"
+import userData from "~data/users.js"
+import staffStatusMockData from "~data/staff-status-mock-data"
 import { DELETE_ROTA_SHIFT,UPDATE_ROTA_SHIFT, ADD_ROTA_SHIFT } from "./actions.js"
 import defaultRotaShifts from "../data/default-rota-shifts.js"
 
@@ -8,6 +9,10 @@ var userDataById = _.indexBy(userData, "id");
 
 function staff(state=[], action){
     return userDataById;
+}
+
+function staffStatuses(state={}, action){
+    return staffStatusMockData;
 }
 
 let initialState;
@@ -45,7 +50,8 @@ function rotaShifts(state=initialState, action){
 
 var store = createStore(combineReducers({
     staff,
-    rotaShifts
+    rotaShifts,
+    staffStatuses
 }));
 
 export default store;
