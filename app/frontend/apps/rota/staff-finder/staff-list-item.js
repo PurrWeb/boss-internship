@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import AddStaffToShiftButton from "./add-staff-to-shift-button"
-import StaffShiftList from "../../staff-shift-list.js"
-import StaffTypeBadge from "../../staff-type-badge"
+import StaffShiftList from "~components/staff-shift-list"
+import StaffTypeBadge from "~components/staff-type-badge"
 
 export default class StaffListItem extends Component {
     render() {

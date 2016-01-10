@@ -4,7 +4,7 @@
 // I think it's to do with passing options into the plugin, since I'm having the
 // same issue with this plugin.
 // So I'm just hard-coding the path in here rather than in the confif.
-const JS_ROOT = "/app/frontend/react_components";
+const JS_ROOT = "/app/frontend";
 
 module.exports = function (babel) {
     // get the working directory

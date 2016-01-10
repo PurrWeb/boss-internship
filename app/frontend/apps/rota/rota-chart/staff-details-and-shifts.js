@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import ShiftEditor from "./shift-editor"
-import StaffTypeBadge from "../staff-type-badge"
+import StaffTypeBadge from "~components/staff-type-badge"
 import _ from "underscore"
 
 export default class StaffDetailsAndShifts extends Component {

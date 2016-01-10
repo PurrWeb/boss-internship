@@ -1,7 +1,7 @@
 import React, { Component } from "react"
-import ShiftTimeSelector from "../shift-time-selector"
-import RotaDate from "../../lib/rota-date"
-import utils from "../../lib/utils"
+import ShiftTimeSelector from "~components/shift-time-selector"
+import RotaDate from "~lib/rota-date"
+import utils from "~lib/utils"
 
 export default class ShiftEditor extends Component {
     static contextTypes = {

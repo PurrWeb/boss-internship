@@ -1,6 +1,6 @@
 import React, { Component } from "react"
-import StaffFilter from "../../staff-finder/staff-filter"
-import FilterableStaffList from "../../staff-finder/filterable-staff-list"
+import StaffFilter from "~components/staff-finder/staff-filter"
+import FilterableStaffList from "~components/staff-finder/filterable-staff-list"
 import _ from "underscore"
 import StaffListItem from "./staff-list-item"
 

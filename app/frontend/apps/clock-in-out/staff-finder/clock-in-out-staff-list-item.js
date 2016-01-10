@@ -1,6 +1,6 @@
 import React, {Component} from "react"
-import StaffShiftList from "../../staff-shift-list"
-import StaffTypeBadge from "~staff-type-badge"
+import StaffShiftList from "~components/staff-shift-list"
+import StaffTypeBadge from "~components/staff-type-badge"
 
 export default class ClockInOutStaffListItem extends Component {
     render(){

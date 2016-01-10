@@ -1,8 +1,8 @@
 import React, { Component } from "react"
-import RotaDate from "../../lib/rota-date.js"
-import ShiftTimeSelector from "../shift-time-selector"
+import RotaDate from "~lib/rota-date.js"
+import ShiftTimeSelector from "~components/shift-time-selector"
 import StaffFinder from "./staff-finder/staff-finder"
-import utils from "../../lib/utils"
+import utils from "~lib/utils"
 
 
 export default class AddShiftView extends Component {

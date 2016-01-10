@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import _ from "underscore"
-import RotaChart from "../rota-chart/rota-chart"
-import StaffDetailsAndShifts from "../rota-chart/staff-details-and-shifts"
-import StaffTypeDropdown from "../staff-type-dropdown"
-import RotaDate from "../../lib/rota-date"
-import utils from "../../lib/utils"
+import RotaChart from "./rota-chart/rota-chart"
+import StaffDetailsAndShifts from "./rota-chart/staff-details-and-shifts"
+import StaffTypeDropdown from "~components/staff-type-dropdown"
+import RotaDate from "~lib/rota-date"
+import utils from "~lib/utils"
 
 const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 

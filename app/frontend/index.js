@@ -5,8 +5,8 @@ window.ReactDOM = ReactDOM;
 
 import "./lib/load-underscore-mixins"
 
-import RotaApp from './react_components/rota/rota-app'
+import RotaApp from './apps/rota/rota-app'
 registerComponent('RotaApp', RotaApp)
 
-import ClockInOutApp from './react_components/clock-in-out/clock-in-out-app'
+import ClockInOutApp from './apps/clock-in-out/clock-in-out-app'
 registerComponent('ClockInOutApp', ClockInOutApp)
