@@ -10,7 +10,7 @@ export default class StaffListItem extends Component {
         return (
             <div className="staff-list-item rota-staff-list-item">
                 <div className="row">
-                    <div className="col-md-2 staff-list-item__avatar-column">
+                    <div className="col-md-1">
                         <img src={staff.avatar_url} className="staff-list-item__avatar" />
                     </div>
                     <div className="col-md-8">

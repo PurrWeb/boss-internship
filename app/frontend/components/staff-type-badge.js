@@ -13,7 +13,7 @@ export default class StaffTypeBadge {
         var staffTypeStyle = {
             backgroundColor: staffType.color
         };
-        return <div className="staff-type-badge" style={staffTypeStyle}>
+        return <div className="staff-badge" style={staffTypeStyle}>
             {staffType.title}
         </div>
     }
