@@ -16,6 +16,8 @@ Rails.application.routes.draw do
     member do
       get :edit_personal_details
       post :update_personal_details
+      get :new_staff_member
+      post :create_staff_member
     end
   end
 

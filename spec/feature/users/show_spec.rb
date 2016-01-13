@@ -4,6 +4,7 @@ RSpec.feature 'Viewing a user' do
   let(:admin_user) { FactoryGirl.create(:user, :admin) }
   let(:show_page) { PageObject::UserShowPage.new(admin_user) }
   let(:edit_personal_details_page) { PageObject::UserEditPersonalDetailsPage.new(admin_user) }
+  let(:create_staff_member_from_user_page) { PageObject::CreateStaffMemberFromUserPage.new(admin_user) }
 
   before do
     login_as admin_user
@@ -24,6 +25,12 @@ RSpec.feature 'Viewing a user' do
   scenario 'page should have message explaining that user has no associated staff member' do
     show_page.surf_to
     show_page.ensure_no_associated_staff_member_message_displayed
+  end
+
+  scenario 'clicking the create staff member link takes you to the create staff member from user page' do
+    show_page.surf_to
+    show_page.click_create_staff_member_link
+    create_staff_member_from_user_page.assert_on_correct_page
   end
 
   context 'user has an associated staff member' do

@@ -18,13 +18,22 @@ module PageObject
     end
 
     page_action :ensure_no_associated_staff_member_message_displayed do
+      staff_member_detail_section = find(
+        detail_section_selector_for(:staff_member)
+      )
+
       expect(
-        find(detail_section_selector_for(:staff_member)).text
+        staff_member_detail_section.
+          find('.no-assocaited-staff-member-message').text
       ).to eq('No assocaited staff member')
     end
 
     page_action :click_view_staff_member_button do
       find('.view-staff-member-button.btn').click
+    end
+
+    page_action :click_create_staff_member_link do
+      find('.create-staff-member-button.btn').click
     end
 
     page_action :ensure_details_displayed_for do |user|

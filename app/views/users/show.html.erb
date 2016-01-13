@@ -42,7 +42,16 @@
                 )
             %>
           <% else %>
-            <span>No assocaited staff member</span>
+            <div class="no-assocaited-staff-member-message">
+              No assocaited staff member
+            </div>
+            <div>
+              <%= link_to(
+                    'Create',
+                    new_staff_member_user_path(user),
+                    class: ['create-staff-member-button', 'btn', 'btn-primary']
+                  ) %>
+            </div>
           <% end %>
         </dd>
       </dl>
