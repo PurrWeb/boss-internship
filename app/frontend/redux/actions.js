@@ -30,3 +30,10 @@ export function deleteRotaShift (shift_id) {
         shift_id: shift_id
     }
 }
+
+export const ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
+export function enterManagerMode () {
+    return {
+        type: ENTER_MANAGER_MODE
+    }
+}
