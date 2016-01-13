@@ -17,6 +17,9 @@ export default class ClockInOutStaffListItem extends Component {
                 </div>
                 <div className="col-md-2">
                     {staff.first_name} {staff.surname}
+                    <a class="btn btn-default show-in-manager-mode">
+                        Change Pin
+                    </a>
                 </div>
                 <div className="col-md-2">
                     Staff Type<br/>
@@ -32,9 +35,9 @@ export default class ClockInOutStaffListItem extends Component {
                         staffId={staff.id} />
                 </div>
                 <div className="col-md-1">
-                    TODO clock in
+                    TODO clock in out toggle
                 </div>
-                <div className="col-md-1">
+                <div className="col-md-1 show-in-manager-mode">
                     TODO break toggle
                 </div>
             </div>

@@ -7,6 +7,8 @@ import staffStatusOptions from "~data/staff-status-options"
 import moment from "moment"
 import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 
+window.store = store;
+
 class ClockInOutView extends Component {
     static childContextTypes = {
         staffTypes: React.PropTypes.object,

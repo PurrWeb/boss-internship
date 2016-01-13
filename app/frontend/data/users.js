@@ -72,7 +72,7 @@ var users = [{
     "id": 11,
     "first_name": "Tegan",
     "surname": "Ali",
-    "staff_type": "bar_back",
+    "staff_type": "manager",
     "preferred_hours": "20+",
     "preferred_days": "Weekdays"
 }, {

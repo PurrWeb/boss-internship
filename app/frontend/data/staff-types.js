@@ -31,6 +31,10 @@ var staffTypes = {
     "security": {
         title: "Security",
         color: color(210)
+    },
+    "manager": {
+        title: "Manager",
+        color: color(240)
     }
 };
 staffTypes = _.mapValues(staffTypes, function(staffType, staffTypeKey){
