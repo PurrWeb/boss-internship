@@ -37,3 +37,10 @@ export function enterManagerMode () {
         type: ENTER_MANAGER_MODE
     }
 }
+
+export const LEAVE_MANAGER_MODE = "LEAVE_MANAGER_MODE";
+export function leaveManagerMode () {
+    return {
+        type: LEAVE_MANAGER_MODE
+    }
+}

@@ -39,6 +39,12 @@ class ClockInOutView extends Component {
         }
 
         return <div className={classes.join(" ")}>
+            <a
+                className="btn btn-default show-in-manager-mode"
+                style={{float: "right"}}
+                onClick={() => boundActionCreators.leaveManagerMode()}>
+                Leave Manager Mode
+            </a>
             <h1>
                 {this.props.venue} - {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>

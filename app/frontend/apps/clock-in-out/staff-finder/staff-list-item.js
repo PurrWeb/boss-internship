@@ -6,7 +6,7 @@ import StaffStatusBadge from "~components/staff-status-badge"
 export default class ClockInOutStaffListItem extends Component {
     static contextTypes = {
         staffStatuses: React.PropTypes.object.isRequired,
-        boundActionCreators: React.PropTypes.func.isRequired
+        boundActionCreators: React.PropTypes.object.isRequired
     }
     render(){
         var staff = this.props.staff;
@@ -31,7 +31,7 @@ export default class ClockInOutStaffListItem extends Component {
         } else {
             managerColumns = <a
                 onClick={() => this.enterManagerMode()}
-                className="btn btn-default">
+                className="btn btn-default hide-in-manager-mode--inline-block">
                 Enter Manager Mode
             </a>
         }
