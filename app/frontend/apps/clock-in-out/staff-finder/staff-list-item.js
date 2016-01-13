@@ -10,6 +10,28 @@ export default class ClockInOutStaffListItem extends Component {
     render(){
         var staff = this.props.staff;
         var staffStatus = this.context.staffStatuses[staff.id];
+        var nonManagerColumns = null;
+        var managerColumns = null;
+
+        if (!staff.isManager) {
+                nonManagerColumns = <div>
+                <div className="col-md-3">
+                    Rotaed Shifts
+                     <StaffShiftList
+                        staffId={staff.id} />
+                </div>
+                <div className="col-md-1">
+                    TODO clock in out toggle
+                </div>
+                <div className="col-md-1 show-in-manager-mode">
+                    TODO break toggle
+                </div>
+            </div>;
+        } else {
+            managerColumns = <a class="btn btn-default">Enter Manager Mode</a>
+        }
+
+
         return <div className="staff-list-item">
             <div className="row">
                 <div className="col-md-1">
@@ -29,17 +51,8 @@ export default class ClockInOutStaffListItem extends Component {
                     Status <br/>
                     <StaffStatusBadge status={staffStatus} />
                 </div>
-                <div className="col-md-3">
-                    Rotaed Shifts
-                     <StaffShiftList
-                        staffId={staff.id} />
-                </div>
-                <div className="col-md-1">
-                    TODO clock in out toggle
-                </div>
-                <div className="col-md-1 show-in-manager-mode">
-                    TODO break toggle
-                </div>
+                {nonManagerColumns}
+                {managerColumns}
             </div>
         </div>
     }

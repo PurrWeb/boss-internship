@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import StaffFilter from "~components/staff-finder/staff-filter"
-import ClockInOutStaffListItem from "./clock-in-out-staff-list-item"
+import StaffListItem from "./staff-list-item"
 import FilterableStaffList from "~components/staff-finder/filterable-staff-list"
 
 export default class StaffFinder extends Component {
@@ -19,7 +19,7 @@ export default class StaffFinder extends Component {
                 onChange={(staffFilterSettings) => this.setState({staffFilterSettings})} />
             <FilterableStaffList
                 staff={this.props.staff}
-                staffItemComponent={ClockInOutStaffListItem}
+                staffItemComponent={StaffListItem}
                 filterSettings={this.state.staffFilterSettings} />
         </div>
 

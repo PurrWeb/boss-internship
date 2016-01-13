@@ -41,6 +41,11 @@ class ClockInOutView extends Component {
 function mapStateToProps(state) {
     var props = _.clone(state);
 
+    props.staff = _(props.staff).mapValues(function(staff){
+        staff.isManager = staff.staff_type === "manager";
+        return staff;
+    });
+
     props.staffTypes = staffTypes;
     props.venue = "The Rocket Bar";
     props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
