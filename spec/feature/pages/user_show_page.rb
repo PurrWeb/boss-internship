@@ -17,6 +17,16 @@ module PageObject
       button.click
     end
 
+    page_action :ensure_no_associated_staff_member_message_displayed do
+      expect(
+        find(detail_section_selector_for(:staff_member)).text
+      ).to eq('No assocaited staff member')
+    end
+
+    page_action :click_view_staff_member_button do
+      find('.view-staff-member-button.btn').click
+    end
+
     page_action :ensure_details_displayed_for do |user|
       expect(find(detail_section_selector_for(:name)).text).to eq(user.full_name)
       expect(find(detail_section_selector_for(:email)).text).to eq(user.email)
@@ -34,7 +44,7 @@ module PageObject
     end
 
     def detail_section_selector_for(detail)
-      ".show-page-detail[data-detail=\"#{detail}\"]"
+      ".show-page-detail[data-detail=\"#{detail.to_s.gsub('_', '-')}\"]"
     end
   end
 end

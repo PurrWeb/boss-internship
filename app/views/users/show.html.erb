@@ -31,7 +31,20 @@
         <dd class="show-page-detail" data-detail="status"><%= user.status %></dd>
 
         <dt class="show-page-detail-heading">Role</dt>
-        <dd class="show-page-detail" data-detail="role"><%= user.role.titleize %></div>
+        <dd class="show-page-detail" data-detail="role"><%= user.role.titleize %></dd>
+        <dt class="show-page-detail-heading">Staff Member</dt>
+        <dd class="show-page-detail" data-detail="staff-member">
+          <% if user.staff_member.present? %>
+            <%= link_to(
+                  'View',
+                  staff_member_path(user.staff_member),
+                  class: ['view-staff-member-button' ,'btn', 'btn-success']
+                )
+            %>
+          <% else %>
+            <span>No assocaited staff member</span>
+          <% end %>
+        </dd>
       </dl>
     </div>
   </div>
