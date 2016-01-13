@@ -61,7 +61,13 @@ class InvitesController < ApplicationController
     result = true
     ActiveRecord::Base.transaction do
       email_address = EmailAddress.new(email: invite.email)
-      result = user.update_attributes(user_params.merge(email_address: email_address, role: invite.role))
+      result = user.update_attributes(
+        user_params.merge(
+          email_address: email_address,
+          role: invite.role,
+          invite: invite
+        )
+      )
       result = result && invite.transition_to(:accepted)
 
       raise ActiveRecord::Rollbar unless result

@@ -23,6 +23,9 @@ class StaffTypesController < ApplicationController
 
   private
   def staff_type_params
-    params.require(:staff_type).permit(:name)
+    params.require(:staff_type).
+      permit(:name).merge(
+        creator: current_user
+      )
   end
 end

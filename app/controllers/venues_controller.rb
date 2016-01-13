@@ -23,6 +23,9 @@ class VenuesController < ApplicationController
 
   private
   def venue_params
-    params.require(:venue).permit(:name)
+    params.require(:venue).
+      permit(:name).merge(
+        creator: current_user
+      )
   end
 end

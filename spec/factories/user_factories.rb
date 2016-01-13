@@ -2,6 +2,8 @@ FactoryGirl.define do
   factory :user do
     name
     association :email_address, strategy: :build
+    invite nil
+    first true
 
     password "sdlksdsad"
     role 'manager'
