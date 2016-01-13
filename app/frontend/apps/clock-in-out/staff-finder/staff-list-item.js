@@ -2,6 +2,7 @@ import React, {Component} from "react"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
 import StaffStatusBadge from "~components/staff-status-badge"
+import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 
 export default class ClockInOutStaffListItem extends Component {
     static contextTypes = {
@@ -22,7 +23,8 @@ export default class ClockInOutStaffListItem extends Component {
                         staffId={staff.id} />
                 </div>
                 <div className="col-md-1">
-                    TODO clock in out toggle
+                    <ToggleStaffClockedInButton
+                        staffId={staff.id} />
                 </div>
                 <div className="col-md-1 show-in-manager-mode">
                     TODO break toggle

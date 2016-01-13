@@ -5,7 +5,7 @@ import _ from 'underscore'
 export default class FilterableStaffList extends Component {
     static propTypes = {
         staff: React.PropTypes.object.isRequired,
-        staffItemComponent: React.PropTypes.object.isRequired,
+        staffItemComponent: React.PropTypes.func.isRequired,
         filterSettings: React.PropTypes.func.isRequired
     }
     render() {

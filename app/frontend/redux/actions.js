@@ -44,3 +44,12 @@ export function leaveManagerMode () {
         type: LEAVE_MANAGER_MODE
     }
 }
+
+export const UPDATE_STAFF_STATUS = "UPDATE_STAFF_STATUS";
+export function updateStaffStatus(staffId, status) {
+    return {
+        type: UPDATE_STAFF_STATUS,
+        staffId,
+        status
+    }
+}
