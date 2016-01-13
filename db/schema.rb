@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160102223913) do
+ActiveRecord::Schema.define(version: 20160113000112) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -120,8 +120,10 @@ ActiveRecord::Schema.define(version: 20160102223913) do
     t.string   "pin_code",                  limit: 255,                  null: false
     t.string   "avatar",                    limit: 255
     t.integer  "staff_type_id",             limit: 4,                    null: false
+    t.integer  "creator_id",                limit: 4
   end
 
+  add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
   add_index "staff_members", ["enabled"], name: "index_staff_members_on_enabled", using: :btree
   add_index "staff_members", ["phone_number"], name: "index_staff_members_on_phone_number", using: :btree
   add_index "staff_members", ["staff_type_id"], name: "index_staff_members_on_staff_type_id", using: :btree
@@ -130,8 +132,10 @@ ActiveRecord::Schema.define(version: 20160102223913) do
     t.string   "name",       limit: 255, null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.integer  "creator_id", limit: 4
   end
 
+  add_index "staff_types", ["creator_id"], name: "index_staff_types_on_creator_id", using: :btree
   add_index "staff_types", ["name"], name: "index_staff_types_on_name", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -157,10 +161,13 @@ ActiveRecord::Schema.define(version: 20160102223913) do
     t.string   "unconfirmed_email",      limit: 255
     t.integer  "name_id",                limit: 4,                  null: false
     t.integer  "email_address_id",       limit: 4,                  null: false
+    t.integer  "invite_id",              limit: 4
+    t.boolean  "first"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["enabled"], name: "index_users_on_enabled", using: :btree
+  add_index "users", ["invite_id"], name: "index_users_on_invite_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["role"], name: "index_users_on_role", using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
@@ -169,8 +176,10 @@ ActiveRecord::Schema.define(version: 20160102223913) do
     t.string   "name",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "creator_id", limit: 4
   end
 
+  add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree
   add_index "venues", ["name"], name: "index_venues_on_name", using: :btree
 
   create_table "venues_users", force: :cascade do |t|

@@ -1,6 +1,7 @@
 class StaffMember < ActiveRecord::Base
   GENDERS = ['male', 'female']
 
+  belongs_to :creator, class_name: 'User'
   belongs_to :staff_type
   has_one :staff_member_venue, inverse_of: :staff_member
   has_one :venue, through: :staff_member_venue
@@ -34,6 +35,7 @@ class StaffMember < ActiveRecord::Base
   validates :pin_code, presence: true
   validate  :valid_pin_code_format
   validates :staff_type, presence: true
+  validates :creator, presence: true
 
   before_validation :normalise_national_insurance_number
 

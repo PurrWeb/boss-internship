@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   belongs_to :email_address, inverse_of: :users
   accepts_nested_attributes_for :email_address, allow_destroy: false
 
+  belongs_to :invite
+
   include Enableable
 
   # Include default devise modules. Others available are:
@@ -21,6 +23,7 @@ class User < ActiveRecord::Base
   validates :enabled, presence: true
   validates :name, presence: true
   validates :email_address, presence: true
+  validates :invite, presence: true, unless: :first?
 
   delegate \
     :full_name,

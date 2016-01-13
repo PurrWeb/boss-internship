@@ -63,7 +63,10 @@ class StaffMembersController < ApplicationController
         :surname
       ],
       staff_member_venue_attributes: [:venue_id]
-    ).merge(staff_type: staff_type_from_params)
+    ).merge(
+      staff_type: staff_type_from_params,
+      creator: current_user
+    )
   end
 
   def staff_type_from_params
