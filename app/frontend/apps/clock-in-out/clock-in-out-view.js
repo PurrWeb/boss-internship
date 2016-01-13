@@ -5,7 +5,11 @@ import store from "~redux/store"
 import staffTypes from "~data/staff-types"
 import staffStatusOptions from "~data/staff-status-options"
 import moment from "moment"
+import * as actionCreators from "~redux/actions.js"
+import { bindActionCreators } from "redux";
 import ClockInOutStaffFinder from "./staff-finder/staff-finder"
+
+const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
 
 // Expose for debugging
 window.store = store;
@@ -16,14 +20,16 @@ class ClockInOutView extends Component {
         staffTypes: React.PropTypes.object,
         rotaShifts: React.PropTypes.array,
         staffStatuses: React.PropTypes.object,
-        staffStatusOptions: React.PropTypes.object
+        staffStatusOptions: React.PropTypes.object,
+        boundActionCreators: React.PropTypes.object
     }
     getChildContext(){
         return {
             staffTypes: this.props.staffTypes,
             rotaShifts: this.props.rotaShifts,
             staffStatuses: this.props.staffStatuses,
-            staffStatusOptions: this.props.staffStatusOptions
+            staffStatusOptions: this.props.staffStatusOptions,
+            boundActionCreators: boundActionCreators
         }
     }
     render() {

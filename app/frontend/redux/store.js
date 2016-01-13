@@ -53,6 +53,7 @@ function appIsInManagerMode(state=false, action){
         case ACTIONS.ENTER_MANAGER_MODE:
             return true;
     }
+    return state;
 }
 
 var store = createStore(combineReducers({

@@ -5,7 +5,8 @@ import StaffStatusBadge from "~components/staff-status-badge"
 
 export default class ClockInOutStaffListItem extends Component {
     static contextTypes = {
-        staffStatuses: React.PropTypes.object.isRequired
+        staffStatuses: React.PropTypes.object.isRequired,
+        boundActionCreators: React.PropTypes.func.isRequired
     }
     render(){
         var staff = this.props.staff;
@@ -28,7 +29,11 @@ export default class ClockInOutStaffListItem extends Component {
                 </div>
             </div>;
         } else {
-            managerColumns = <a className="btn btn-default">Enter Manager Mode</a>
+            managerColumns = <a
+                onClick={() => this.enterManagerMode()}
+                className="btn btn-default">
+                Enter Manager Mode
+            </a>
         }
 
         return <div className="staff-list-item">
@@ -54,5 +59,8 @@ export default class ClockInOutStaffListItem extends Component {
                 {managerColumns}
             </div>
         </div>
+    }
+    enterManagerMode(){
+        this.context.boundActionCreators.enterManagerMode();
     }
 }
