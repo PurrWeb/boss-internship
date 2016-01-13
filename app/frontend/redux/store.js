@@ -48,10 +48,15 @@ function rotaShifts(state=initialState, action){
     return state;
 }
 
+function appIsInManagerMode(){
+    return true;
+}
+
 var store = createStore(combineReducers({
     staff,
     rotaShifts,
-    staffStatuses
+    staffStatuses,
+    appIsInManagerMode
 }));
 
 export default store;

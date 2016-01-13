@@ -1,0 +1,6 @@
+.show-in-manager-mode {
+    display: none;
+    .managerMode & {
+        display: block;
+    }
+}

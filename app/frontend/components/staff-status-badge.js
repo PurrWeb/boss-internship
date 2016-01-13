@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-export default class StaffStatusBadge {
+export default class StaffStatusBadge extends Component {
     static propTypes = {
         status: React.PropTypes.string.isRequired
     }

@@ -7,7 +7,9 @@ import staffStatusOptions from "~data/staff-status-options"
 import moment from "moment"
 import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 
+// Expose for debugging
 window.store = store;
+window.moment = moment;
 
 class ClockInOutView extends Component {
     static childContextTypes = {
@@ -25,9 +27,12 @@ class ClockInOutView extends Component {
         }
     }
     render() {
-        console.log(this.props)
-        window.moment = moment;
-        return <div className="container">
+        var classes = ["container"];
+        if (this.props.appIsInManagerMode) {
+            classes.push("managerMode");
+        }
+
+        return <div className={classes.join(" ")}>
             <h1>
                 {this.props.venue} - {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>

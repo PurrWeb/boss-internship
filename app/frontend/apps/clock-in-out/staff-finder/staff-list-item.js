@@ -28,9 +28,8 @@ export default class ClockInOutStaffListItem extends Component {
                 </div>
             </div>;
         } else {
-            managerColumns = <a class="btn btn-default">Enter Manager Mode</a>
+            managerColumns = <a className="btn btn-default">Enter Manager Mode</a>
         }
-
 
         return <div className="staff-list-item">
             <div className="row">
@@ -39,7 +38,7 @@ export default class ClockInOutStaffListItem extends Component {
                 </div>
                 <div className="col-md-2">
                     {staff.first_name} {staff.surname}
-                    <a class="btn btn-default show-in-manager-mode">
+                    <a className="btn btn-default show-in-manager-mode">
                         Change Pin
                     </a>
                 </div>
