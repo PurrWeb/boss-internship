@@ -1,0 +1,12 @@
+.show-in-manager-mode {
+    display: none;
+    .managerMode & {
+        display: block;
+    }
+}
+.hide-in-manager-mode--inline-block {
+    display: inline-block;
+    .managerMode & {
+        display: none;
+    }
+}

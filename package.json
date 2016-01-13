@@ -2,6 +2,7 @@
   "name": "Boss",
   "devDependencies": {
     "babel-eslint": "^4.1.3",
+    "babel-plugin-rewire": "^0.1.22",
     "eslint": "^1.7.3",
     "eslint-plugin-react": "^3.6.3",
     "expect": "^1.12.2",

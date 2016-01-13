@@ -1,4 +1,4 @@
-export default [{
+var users = [{
     "id": 12255,
     "first_name": "Noah",
     "surname": "Hewitt",
@@ -72,7 +72,7 @@ export default [{
     "id": 11,
     "first_name": "Tegan",
     "surname": "Ali",
-    "staff_type": "bar_back",
+    "staff_type": "manager",
     "preferred_hours": "20+",
     "preferred_days": "Weekdays"
 }, {
@@ -629,3 +629,9 @@ export default [{
     "preferred_hours": "12",
     "preferred_days": "Any evening but the 20th"
 }]
+
+users.forEach(function(staff){
+    staff.avatar_url = "http://lorempixel.com/400/400/people/?" + staff.id;
+})
+
+export default users

@@ -1,13 +1,18 @@
 import { createStore, combineReducers } from "redux";
 import _ from "underscore"
-import userData from "../data/users.js"
-import { DELETE_ROTA_SHIFT,UPDATE_ROTA_SHIFT, ADD_ROTA_SHIFT } from "./actions.js"
+import userData from "~data/users.js"
+import staffStatusMockData from "~data/staff-status-mock-data"
+import * as ACTIONS from "./actions.js"
 import defaultRotaShifts from "../data/default-rota-shifts.js"
 
 var userDataById = _.indexBy(userData, "id");
 
 function staff(state=[], action){
     return userDataById;
+}
+
+function staffStatuses(state={}, action){
+    return staffStatusMockData;
 }
 
 let initialState;
@@ -19,9 +24,9 @@ if(window.location.pathname === '/rotas/empty_example') {
 
 function rotaShifts(state=initialState, action){
     switch (action.type) {
-        case ADD_ROTA_SHIFT:
+        case ACTIONS.ADD_ROTA_SHIFT:
             return [...state, action.rota];
-        case UPDATE_ROTA_SHIFT:
+        case ACTIONS.UPDATE_ROTA_SHIFT:
             var rotaShiftIndex = _.findIndex(state, {id: action.rota.shift_id});
             var rotaShift = state[rotaShiftIndex];
             rotaShift = Object.assign({}, rotaShift, {
@@ -33,7 +38,7 @@ function rotaShifts(state=initialState, action){
                 rotaShift,
                 ...state.slice(rotaShiftIndex + 1)
             ];
-        case DELETE_ROTA_SHIFT:
+        case ACTIONS.DELETE_ROTA_SHIFT:
             var rotaShiftIndex = _.findIndex(state, {id: action.shift_id});
             return [
                 ...state.slice(0, rotaShiftIndex),
@@ -43,9 +48,21 @@ function rotaShifts(state=initialState, action){
     return state;
 }
 
+function appIsInManagerMode(state=false, action){
+    switch(action.type) {
+        case ACTIONS.ENTER_MANAGER_MODE:
+            return true;
+        case ACTIONS.LEAVE_MANAGER_MODE:
+            return false;
+    }
+    return state;
+}
+
 var store = createStore(combineReducers({
     staff,
-    rotaShifts
+    rotaShifts,
+    staffStatuses,
+    appIsInManagerMode
 }));
 
 export default store;

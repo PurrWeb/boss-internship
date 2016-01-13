@@ -40,6 +40,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :clock_in_clock_out, only: [:index]
+
   require "sidekiq/web"
   unless Rails.env.development?
     Sidekiq::Web.use Rack::Auth::Basic do |username, password|
