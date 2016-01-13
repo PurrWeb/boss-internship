@@ -4,6 +4,10 @@ import TestUtils from "react-addons-test-utils"
 import expect from "expect"
 import StaffListItem from "./staff-list-item"
 
+StaffListItem.__Rewire__('StaffTypeBadge', React.createClass({
+    render: function() { return null }
+}));
+
 describe('StaffListItem', function() {
     var staff = {
         first_name: "John",
