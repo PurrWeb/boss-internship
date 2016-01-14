@@ -5,6 +5,8 @@ window.React = React;
 window.ReactDOM = ReactDOM;
 window._ = _;
 
+window.webpackHotUpdate = function(){}
+
 import "./lib/load-underscore-mixins"
 
 import RotaApp from './apps/rota/rota-app'
