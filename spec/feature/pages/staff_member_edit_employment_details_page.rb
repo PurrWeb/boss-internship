@@ -11,6 +11,10 @@ module PageObject
       visit(url_helpers.edit_employment_details_staff_member_path(staff_member))
     end
 
+    def form
+      @form ||= StaffMemberEmploymentDetailsForm.new(self)
+    end
+
     def assert_on_correct_page
       expect(page).to have_selector("#staff-member-edit-employment-details-page[data-staff-member-id='#{staff_member.id}']")
     end

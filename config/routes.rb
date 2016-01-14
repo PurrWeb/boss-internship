@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   resources :staff_members, only: [:show, :index, :new, :create] do
     member do
       get :edit_employment_details
+      post :update_employment_details
     end
   end
 

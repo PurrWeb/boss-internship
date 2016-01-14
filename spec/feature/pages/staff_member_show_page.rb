@@ -5,6 +5,7 @@ module PageObject
       super()
     end
     attr_reader :staff_member
+    include FlashHelpers
 
     def surf_to
       visit(url_helpers.staff_member_path(staff_member))
