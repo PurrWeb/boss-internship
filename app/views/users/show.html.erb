@@ -24,16 +24,37 @@
   </div>
 
   <div class="panel panel-default">
-    <div class="panel-heading">Status</div>
+    <div class="panel-heading">Account Details</div>
     <div class="panel-body">
-      <div class="show-page-detail" data-detail="status"><%= user.status %></div>
-    </div>
-  </div>
+      <dl>
+        <dt class="show-page-detail-heading">Status</dt>
+        <dd class="show-page-detail" data-detail="status"><%= user.status %></dd>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">Role</div>
-    <div class="panel-body">
-      <div class="show-page-detail" data-detail="role"><%= user.role.titleize %></div>
+        <dt class="show-page-detail-heading">Role</dt>
+        <dd class="show-page-detail" data-detail="role"><%= user.role.titleize %></dd>
+        <dt class="show-page-detail-heading">Staff Member</dt>
+        <dd class="show-page-detail" data-detail="staff-member">
+          <% if user.staff_member.present? %>
+            <%= link_to(
+                  'View',
+                  staff_member_path(user.staff_member),
+                  class: ['view-staff-member-button' ,'btn', 'btn-success']
+                )
+            %>
+          <% else %>
+            <div class="no-assocaited-staff-member-message">
+              No assocaited staff member
+            </div>
+            <div>
+              <%= link_to(
+                    'Create',
+                    new_staff_member_user_path(user),
+                    class: ['create-staff-member-button', 'btn', 'btn-primary']
+                  ) %>
+            </div>
+          <% end %>
+        </dd>
+      </dl>
     </div>
   </div>
 </div>

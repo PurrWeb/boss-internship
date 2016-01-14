@@ -40,6 +40,24 @@
 
     <div class="row">
       <li>
+        <div class="show-page-detail-heading">User</div>
+        <div class="show-page-detail" data-detail="user">
+          <% if staff_member.user.present? %>
+            <%= link_to(
+                  'View',
+                  user_path(staff_member.user),
+                  class: ['view-user-button', 'btn', 'btn-success']
+                )
+            %>
+          <% else %>
+            <span>No assocaited user</span>
+          <% end %>
+        </div>
+      </li>
+    </div>
+
+    <div class="row">
+      <li>
         <div class="show-page-detail-heading">Gender</div>
         <div class="show-page-detail" data-detail="gender"><%= staff_member.gender.titlecase %></div>
       </li>

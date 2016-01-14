@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
 
   has_many :venues
 
+  belongs_to :staff_member
+
   belongs_to :name
   accepts_nested_attributes_for :name, allow_destroy: false
 

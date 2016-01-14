@@ -10,6 +10,16 @@ module PageObject
       visit(url_helpers.staff_member_path(staff_member))
     end
 
+    page_action :ensure_no_associated_user_message_displayed do
+      expect(
+        find(detail_section_selector_for(:user)).text
+      ).to eq('No assocaited user')
+    end
+
+    page_action :click_view_user_button do
+      find('.view-user-button.btn').click
+    end
+
     page_action :ensure_details_displayed_for do |staff_member|
       expect(find(detail_section_selector_for(:venue)).text).to eq(staff_member.venue.name)
       expect(find(detail_section_selector_for(:name)).text).to eq(staff_member.full_name)
