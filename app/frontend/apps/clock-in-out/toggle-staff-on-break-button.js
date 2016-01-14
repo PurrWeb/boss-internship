@@ -3,10 +3,11 @@ import ToggleStaffStatusButton from "./toggle-staff-status-button"
 
 export default class ToggleStaffOnBreakButton extends Component {
     render(){
-        return <ToggleStaffStatusButton
+        return <div>
+        <ToggleStaffStatusButton
             staffId={this.props.staffId}
             statusLabels={{
-                "clocked_in": "Clock In",
+                "clocked_in": "End break",
                 "on_break": "On Break", 
             }}
             getStatusAfterClicking={function(currentStatus){
@@ -15,6 +16,7 @@ export default class ToggleStaffOnBreakButton extends Component {
                     "clocked_out": null,
                     "on_break": "clocked_in"
                 }[currentStatus];
-            } } />;
+            } } />
+        </div>;
     }
 }

@@ -2,7 +2,7 @@ import React, {Component} from "react"
 
 export default class ToggleStaffStatusButton extends Component {
     static propTypes = {
-        staffStatuses: React.PropTypes.object.isRequired,
+        statusLabels: React.PropTypes.object.isRequired,
         // If `getStatusAfterClicking` returns null the button is not shown
         getStatusAfterClicking: React.PropTypes.func.isRequired,
         staffId: React.PropTypes.number.isRequired
