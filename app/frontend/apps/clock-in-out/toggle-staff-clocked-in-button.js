@@ -3,19 +3,23 @@ import React, {Component} from "react"
 export default class ToggleStaffClockedInButton extends Component {
     static contextTypes = {
         staffStatuses: React.PropTypes.object.isRequired,
-        boundActionCreators: React.PropTypes.object.isRequired
+        boundActionCreators: React.PropTypes.object.isRequired,
+        staffStatusOptions: React.PropTypes.object.isRequired
     }
     render(){
         var staffStatus = this.getStaffStatus();
         var nextStatusId = this.getStatusAfterClicking();
-        var style = {};
 
         var label = {
             "clocked_in": "Clock In",
             "clocked_out": "Clock Out"
         }[this.getStatusAfterClicking()]
 
-        return <a className="btn btn-default" style={style} onClick={() => this.onClick()}>
+        var style = {
+            backgroundColor: this.context.staffStatusOptions[nextStatusId].color
+        };
+
+        return <a className="btn btn-status-toggle" style={style} onClick={() => this.onClick()}>
             {label}
         </a>
     }
@@ -31,6 +35,6 @@ export default class ToggleStaffClockedInButton extends Component {
         }[this.getStaffStatus()];
     }
     onClick(){
-        alert("Todo")
+        this.context.boundActionCreators.updateStaffStatus(this.props.staffId, this.getStatusAfterClicking());
     }
 }

@@ -12,7 +12,6 @@ export default class StaffStatusBadge extends Component {
         var style = {
             backgroundColor: option.color
         };
-        console.log(option)
         return <div className="staff-badge" style={style}>
             {option.title}
         </div>

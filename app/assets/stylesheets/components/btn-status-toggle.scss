@@ -1,0 +1,9 @@
+.btn-status-toggle {
+    color: white;
+    text-shadow: none;
+    &:hover {
+        opacity: .8;
+        color: white;
+        text-decoration: underline;
+    }
+}
