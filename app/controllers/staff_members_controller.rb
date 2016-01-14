@@ -42,6 +42,11 @@ class StaffMembersController < ApplicationController
     end
   end
 
+  def edit_employment_details
+    staff_member = StaffMember.find(params[:id])
+    render locals: { staff_member: staff_member }
+  end
+
   private
   def staff_member_params
     params.require(:staff_member).permit(

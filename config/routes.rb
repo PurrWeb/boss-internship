@@ -29,7 +29,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :staff_members, only: [:show, :index, :new, :create]
+  resources :staff_members, only: [:show, :index, :new, :create] do
+    member do
+      get :edit_employment_details
+    end
+  end
 
   resources :staff_types, only: [:index, :new, :create]
 
