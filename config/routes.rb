@@ -44,6 +44,17 @@ Rails.application.routes.draw do
 
   resources :clock_in_clock_out, only: [:index]
 
+  namespace :api do
+    namespace :v1 do
+      resources :test, only: [] do
+        collection do
+          get :get
+          post :post
+        end
+      end
+    end
+  end
+
   require "sidekiq/web"
   unless Rails.env.development?
     Sidekiq::Web.use Rack::Auth::Basic do |username, password|
