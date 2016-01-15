@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_action :authorize_admin, except: [:new_staff_member, :create_staff_member]
+
   def show
     user = User.find(params[:id])
     render locals: { user: user }
@@ -27,6 +29,8 @@ class UsersController < ApplicationController
   end
 
   def new_staff_member
+    authorize! :manage, StaffMember
+
     user = User.find(params[:id])
 
     staff_member = StaffMember.new(
@@ -38,6 +42,8 @@ class UsersController < ApplicationController
   end
 
   def create_staff_member
+    authorize! :manage, StaffMember
+
     user = User.find(params[:id])
     staff_member = StaffMember.new(staff_member_params(user))
 
@@ -50,8 +56,11 @@ class UsersController < ApplicationController
     end
   end
 
-
   private
+  def authorize_admin
+    authorize! :manage, :admin
+  end
+
   def user_params(user)
     params.
       require(:user).
