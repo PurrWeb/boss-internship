@@ -2,10 +2,15 @@ import React, { Component } from "react"
 import AddStaffToShiftButton from "./add-staff-to-shift-button"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
+import Spinner from "~components/spinner"
 
 export default class StaffListItem extends Component {
     render() {
         var staff = this.props.staff;
+        var shiftSavingInProgressSpinner = null;
+        if (staff.shiftSavingInProgress) {
+            shiftSavingInProgressSpinner = <Spinner />
+        }
 
         return (
             <div className="staff-list-item rota-staff-list-item">
@@ -39,11 +44,18 @@ export default class StaffListItem extends Component {
                         </div>
                     </div>
                     <div className="col-md-2">
-                        <div className="rota-staff-list-item__add-button">
+                        <div className="rota-staff-list-item__add-button" style={{float: "left"}}>
                             <AddStaffToShiftButton
                                 staffId={staff.id}
                                 addShift={this.props.addShift}
                                 />
+                        </div>
+                        <div style={{
+                            float: "left",
+                            marginTop: 40,
+                            marginLeft: 10
+                        }}>
+                            {shiftSavingInProgressSpinner}
                         </div>
                     </div>
                 </div>

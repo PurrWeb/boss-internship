@@ -1,11 +1,43 @@
 import * as ACTIONS from "./actions.js"
-export default function rotaShifts(state=[], action){
+import _ from "underscore"
 
+var initialState = {
+    items: [],
+    shiftsBeingSaved: []
+};
+export default function rotaShifts(state=initialState, action){
+    console.log("rotaShifts", {
+        items: rotaShiftItems(state.items, action),
+        shiftsBeingSavedByStaffId: shiftsBeingSavedByStaffId(state.shiftsBeingSavedByStaffId, action)
+    })
+    return {
+        items: rotaShiftItems(state.items, action),
+        shiftsBeingSavedByStaffId: shiftsBeingSavedByStaffId(state.shiftsBeingSavedByStaffId, action)
+    }
+}
+
+function shiftsBeingSavedByStaffId(state={}, action){
+    switch(action.type) {
+        case ACTIONS.ADD_ROTA_SHIFT_IN_PROGRESS:
+            var staffId = action.shift.staff_id;
+            if (state[staffId] === undefined) {
+                state[staffId] = [];
+            }
+            return Object.assign({}, state, {[staffId]: [...state[staffId], action.shift.id]});
+        case ACTIONS.ADD_ROTA_SHIFT_SUCCESS:
+            var staffId = action.shift.staff_id;
+            var index = state[staffId].indexOf(action.shift.id);
+            return Object.assign({}, state, {[staffId]: _(state[staffId]).removeAtIndex(index)});
+    }
+    return state;
+}
+
+function rotaShiftItems(state=[], action){
     switch (action.type) {
         case ACTIONS.REPLACE_ALL_SHIFTS:
             return action.shifts
-        case ACTIONS.ADD_ROTA_SHIFT:
-            return [...state, action.rota];
+        case ACTIONS.ADD_ROTA_SHIFT_SUCCESS:
+            return [...state, action.shift];
         case ACTIONS.UPDATE_ROTA_SHIFT:
             var rotaShiftIndex = _.findIndex(state, {id: action.rota.shift_id});
             var rotaShift = state[rotaShiftIndex];

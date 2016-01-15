@@ -8,16 +8,32 @@ if(window.location.pathname === '/rotas/empty_example') {
     initialShiftState = defaultRotaShifts;
 }
 
-export const ADD_ROTA_SHIFT = "ADD_ROTA_SHIFT";
-export function addRotaShift (options) {
+export const ADD_ROTA_SHIFT_IN_PROGRESS = "ADD_ROTA_SHIFT_IN_PROGRESS";
+export function addRotaShiftInProgress (shift) {
     return {
-        type: ADD_ROTA_SHIFT,
-        rota: {
-            starts_at: options.starts_at,
-            ends_at: options.ends_at,
-            staff_id: options.staff_id,
-            id: Math.floor(Math.random() * 100000000000)
-        }
+        type: ADD_ROTA_SHIFT_IN_PROGRESS,
+        shift: shift
+    }
+}
+
+export const ADD_ROTA_SHIFT_SUCCESS = "ADD_ROTA_SHIFT_SUCCESS";
+export function addRotaShiftSuccess (shift) {
+    return {
+        type: ADD_ROTA_SHIFT_SUCCESS,
+        shift: shift
+    }
+}
+
+export function addRotaShift (options) {
+    options = Object.assign({}, options, {
+        id: Math.floor(Math.random() * 100000000000)
+    })
+    return function(dispatch) {
+        dispatch(addRotaShiftInProgress(options));
+
+        setTimeout(function(){
+            dispatch(addRotaShiftSuccess(options))
+        }, 2000)
     }
 }
 
@@ -95,7 +111,6 @@ export function loadInitialClockInOutAppState() {
     return function(dispatch){
         setTimeout(function(){
             dispatch(replaceAllStaffMembers(userDataById));
-            dispatch(replaceAllShifts(initialShiftState));
         }, 3000)
     }
 }
