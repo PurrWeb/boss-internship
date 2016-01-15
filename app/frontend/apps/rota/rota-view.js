@@ -29,6 +29,11 @@ class RotaView extends Component {
         this.props.dispatch(actionCreators.loadInitialRotaAppState())
     }
     render() {
+        if (!this.props.rotaShifts || !this.props.staff) {
+            // Doing this because some components throw errors without this
+            // Could instead do this at the level of those components
+            return <div>Loading data...</div>;
+        }
         return <div className="container">
             <h1>
                 Rota: Friday 11th October 2015

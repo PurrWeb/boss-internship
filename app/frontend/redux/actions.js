@@ -1,11 +1,11 @@
 import defaultRotaShifts from "../data/default-rota-shifts.js"
 import userData from "~data/users.js"
 
-let initialShiftState;
+var initialShiftState;
 if(window.location.pathname === '/rotas/empty_example') {
-  initialShiftState = [];
+    initialShiftState = [];
 } else {
-  initialShiftState = defaultRotaShifts;
+    initialShiftState = defaultRotaShifts;
 }
 
 export const ADD_ROTA_SHIFT = "ADD_ROTA_SHIFT";
@@ -80,14 +80,23 @@ export function replaceAllStaffMembers(staffMembers) {
     }
 }
 
-export const LOAD_INITIAL_ROTA_APP_STATE = "LOAD_INITIAL_ROTA_APP_STATE";
 export function loadInitialRotaAppState() {
     var userDataById = _.indexBy(userData, "id");
     return function(dispatch){
         setTimeout(function(){
             dispatch(replaceAllStaffMembers(userDataById));
             dispatch(replaceAllShifts(initialShiftState));
-        }, 5000)
+        }, 3000)
+    }
+}
+
+export function loadInitialClockInOutAppState() {
+    var userDataById = _.indexBy(userData, "id");
+    return function(dispatch){
+        setTimeout(function(){
+            dispatch(replaceAllStaffMembers(userDataById));
+            dispatch(replaceAllShifts(initialShiftState));
+        }, 3000)
     }
 }
 
