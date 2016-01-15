@@ -1,4 +1,6 @@
 class VenuesController < ApplicationController
+  before_action :authorize
+
   def index
     venues = Venue.all
     render locals: { venues: venues }
@@ -22,6 +24,10 @@ class VenuesController < ApplicationController
   end
 
   private
+  def authorize
+    authorize! :manage, :venues
+  end
+
   def venue_params
     params.require(:venue).
       permit(:name).merge(
