@@ -22,12 +22,15 @@ function shiftsBeingSavedByStaffId(state={}, action){
             var staffId = action.shift.staff_id;
             if (state[staffId] === undefined) {
                 state[staffId] = [];
+            } else {
+                if (_(state[staffId]).contains(action.shift.id)) {
+                    throw new Error("An update for this shift is already in progress.");
+                }
             }
             return Object.assign({}, state, {[staffId]: [...state[staffId], action.shift.id]});
         case ACTIONS.ADD_ROTA_SHIFT_SUCCESS:
             var staffId = action.shift.staff_id;
-            var index = state[staffId].indexOf(action.shift.id);
-            return Object.assign({}, state, {[staffId]: _(state[staffId]).removeAtIndex(index)});
+            return Object.assign({}, state, {[staffId]: _(state[staffId]).without(action.shift.id)});
     }
     return state;
 }
