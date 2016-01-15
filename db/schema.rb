@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160113151403) do
+ActiveRecord::Schema.define(version: 20160115102936) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -174,6 +174,17 @@ ActiveRecord::Schema.define(version: 20160113151403) do
   add_index "users", ["staff_member_id"], name: "index_users_on_staff_member_id", using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
+  create_table "venue_users", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4, null: false
+    t.integer  "venue_id",   limit: 4, null: false
+    t.boolean  "enabled",              null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "venue_users", ["created_at"], name: "index_venue_users_on_created_at", using: :btree
+  add_index "venue_users", ["enabled"], name: "index_venue_users_on_enabled", using: :btree
+
   create_table "venues", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.datetime "created_at"
@@ -183,16 +194,5 @@ ActiveRecord::Schema.define(version: 20160113151403) do
 
   add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree
   add_index "venues", ["name"], name: "index_venues_on_name", using: :btree
-
-  create_table "venues_users", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4, null: false
-    t.integer  "venue_id",   limit: 4, null: false
-    t.boolean  "enabled",              null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "venues_users", ["created_at"], name: "index_venues_users_on_created_at", using: :btree
-  add_index "venues_users", ["enabled"], name: "index_venues_users_on_enabled", using: :btree
 
 end
