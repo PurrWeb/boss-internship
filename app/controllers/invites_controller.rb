@@ -1,4 +1,5 @@
 class InvitesController < ApplicationController
+  before_action :authorize, except: [:accept]
   skip_before_filter :authenticate_user!, only: [:accept]
 
   def index
@@ -50,6 +51,10 @@ class InvitesController < ApplicationController
   end
 
   private
+  def authorize
+    authorize! :manage, :admin
+  end
+
   def accept_new_action(invite)
     user = User.new
     render locals: { user: user, invite: invite }
@@ -70,13 +75,14 @@ class InvitesController < ApplicationController
       )
       result = result && invite.transition_to(:accepted)
 
-      raise ActiveRecord::Rollbar unless result
+      raise ActiveRecord::Rollback unless result
     end
 
     if result
       sign_in(:user, user)
       redirect_to root_path
     else
+      flash.now[:error] = "There was a problem accepting this invite"
       render action: 'accept', locals: { user: user, invite: invite }
     end
   end

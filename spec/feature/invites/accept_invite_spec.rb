@@ -22,6 +22,21 @@ RSpec.feature 'Accepting an invite' do
     expect(User.joins(:email_address).merge(EmailAddress.where(email: invite.email)).first).to be_present
   end
 
+  scenario 'Anonymous user clicks on accept invite link in email and fills out incorrectly' do
+    accept_invite_page.surf_to
+
+    accept_invite_page.ensure_sign_up_text_displayed
+    accept_invite_page.user_form.tap do |user_form|
+      user_form.fill_in_password(prospective_user.password)
+      user_form.submit
+    end
+
+    accept_invite_page.ensure_flash_error_message_displayed(
+      'There was a problem accepting this invite'
+    )
+    expect(invite.reload).to_not be_accepted
+  end
+
   context 'Invite has already been accepted' do
     let(:invite) { FactoryGirl.create(:invite, :admin, :accepted, inviter: admin_user) }
 

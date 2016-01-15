@@ -5,6 +5,7 @@ module PageObject
       super()
     end
     attr_reader :invite
+    include FlashHelpers
 
     def surf_to
       visit(url_helpers.accept_invite_path(invite.token))
