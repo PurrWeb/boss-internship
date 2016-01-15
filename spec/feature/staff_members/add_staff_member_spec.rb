@@ -1,7 +1,7 @@
 require 'feature/feature_spec_helper'
 
 RSpec.feature 'Adding a new staff member' do
-  let(:admin_user) { FactoryGirl.create(:user, :admin) }
+  let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:staff_type) { FactoryGirl.create(:staff_type) }
   let(:prospective_staff_member) { FactoryGirl.build(:staff_member, venue: nil, staff_type: staff_type) }
   let(:add_staff_member_page) { PageObject::AddStaffMemberPage.new }
@@ -9,7 +9,7 @@ RSpec.feature 'Adding a new staff member' do
 
   before do
     staff_type
-    login_as admin_user
+    login_as dev_user
   end
 
   scenario 'Successfully adding a new staff member to the system' do
