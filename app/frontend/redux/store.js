@@ -1,14 +1,15 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk"
 import _ from "underscore"
-import userData from "~data/users.js"
 import staffStatusMockData from "~data/staff-status-mock-data"
 import * as ACTIONS from "./actions.js"
 
-var userDataById = _.indexBy(userData, "id");
-
 function staff(state=[], action){
-    return userDataById;
+    switch(action.type) {
+        case ACTIONS.REPLACE_ALL_STAFF_MEMBERS:
+            return action.staffMembers
+    }
+    return state;
 }
 
 function staffStatuses(state=staffStatusMockData, action){
