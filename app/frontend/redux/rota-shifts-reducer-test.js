@@ -77,7 +77,41 @@ describe("RotaShiftsReducer", function(){
         }
 
         expect(RotaShiftsReducer(initialState, action)).toEqual(expectedResultState);
-    })
+    });
 
-    
+    it("Can update a shift", function(){
+        var initialState = {
+            items: [{
+                id: 123,
+                staff_id: 1000,
+                starts_at: new Date(2015, 0, 1, 9, 0, 0),
+                ends_at: new Date(2015, 0, 1, 14, 0, 0)
+            }],
+            shiftsBeingSavedByStaffId: {}
+        }
+
+        var newStartsAt = new Date(2015, 0, 1, 10, 0, 0);
+        var newEndsAt = new Date(2015, 0, 1, 16, 0, 0);
+        var action = {
+            type: "UPDATE_ROTA_SHIFT_SUCCESS",
+            shift: {
+                shift_id: 123,
+                starts_at: newStartsAt,
+                ends_at: newEndsAt
+            }
+        };
+        var expectedResultState = {
+            items: [{
+                id: 123,
+                staff_id: 1000,
+                starts_at: newStartsAt,
+                ends_at: newEndsAt
+            }],
+            shiftsBeingSavedByStaffId: {}
+        }
+
+        expect(RotaShiftsReducer(initialState, action)).toEqual(expectedResultState);
+    })    
 });
+
+

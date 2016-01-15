@@ -41,12 +41,12 @@ function rotaShiftItems(state=[], action){
             return action.shifts
         case ACTIONS.ADD_ROTA_SHIFT_SUCCESS:
             return [...state, action.shift];
-        case ACTIONS.UPDATE_ROTA_SHIFT:
-            var rotaShiftIndex = _.findIndex(state, {id: action.rota.shift_id});
+        case ACTIONS.UPDATE_ROTA_SHIFT_SUCCESS:
+            var rotaShiftIndex = _.findIndex(state, {id: action.shift.shift_id});
             var rotaShift = state[rotaShiftIndex];
             rotaShift = Object.assign({}, rotaShift, {
-                starts_at: action.rota.starts_at,
-                ends_at: action.rota.ends_at
+                starts_at: action.shift.starts_at,
+                ends_at: action.shift.ends_at
             });
             return [
                 ...state.slice(0, rotaShiftIndex),

@@ -45,15 +45,27 @@ export function replaceAllShifts (shifts) {
     }
 }
 
-export const UPDATE_ROTA_SHIFT = "UPDATE_ROTA_SHIFT";
 export function updateRotaShift (options) {
+    var shift = _.clone(options);
+    return function(dispatch) {
+        dispatch(updateRotaShiftInProgress(shift));
+        setTimeout(function(){
+            dispatch(updateRotaShiftSuccess(shift))
+        }, 3000)
+    }
+}
+export const UPDATE_ROTA_SHIFT_IN_PROGRESS = "UPDATE_ROTA_SHIFT_IN_PROGRESS";
+export function updateRotaShiftInProgress (shift) {
     return {
-        type: UPDATE_ROTA_SHIFT,
-        rota: {
-            starts_at: options.starts_at,
-            ends_at: options.ends_at,
-            shift_id: options.shift_id
-        }
+        type: UPDATE_ROTA_SHIFT_IN_PROGRESS,
+        shift: shift
+    }
+}
+export const UPDATE_ROTA_SHIFT_SUCCESS = "UPDATE_ROTA_SHIFT_SUCCESS";
+export function updateRotaShiftSuccess (shift) {
+    return {
+        type: UPDATE_ROTA_SHIFT_SUCCESS,
+        shift: shift
     }
 }
 
