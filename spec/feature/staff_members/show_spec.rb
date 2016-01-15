@@ -1,12 +1,12 @@
 require 'feature/feature_spec_helper'
 
 RSpec.feature 'Viewing a staff member' do
-  let(:admin_user) { FactoryGirl.create(:user, :admin) }
+  let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:staff_member) { FactoryGirl.create(:staff_member) }
   let(:show_page) { PageObject::StaffMemberShowPage.new(staff_member) }
 
   before do
-    login_as admin_user
+    login_as dev_user
   end
 
   scenario 'on the staff show page all the user details should be displayed' do

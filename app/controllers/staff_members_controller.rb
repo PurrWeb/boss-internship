@@ -1,5 +1,7 @@
 class StaffMembersController < ApplicationController
   def index
+    authorize! :manage, :staff_members
+
     filter = StaffMemberIndexFilter.new(params[:filter])
     staff_members = filter.query.all
 
@@ -11,17 +13,22 @@ class StaffMembersController < ApplicationController
 
   def show
     staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
     render locals: { staff_member: staff_member }
   end
 
   def new
+    authorize! :manage, :staff_members
+
     staff_member = StaffMember.new
     render locals: { staff_member: staff_member }
   end
 
   def create
-    staff_member = StaffMember.new(staff_member_params)
+    authorize! :manage, :staff_members
 
+    staff_member = StaffMember.new(staff_member_params)
     if staff_member.staff_member_venue.present? && staff_member.staff_member_venue.venue_id == nil
       staff_member.staff_member_venue.mark_for_destruction
     end
