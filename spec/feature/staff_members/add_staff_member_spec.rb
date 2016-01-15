@@ -12,7 +12,7 @@ RSpec.feature 'Adding a new staff member' do
     login_as admin_user
   end
 
-  scenario 'Successfully adding a new user to the system' do
+  scenario 'Successfully adding a new staff member to the system' do
     add_staff_member_page.surf_to
 
     add_staff_member_page.form.tap do |form|
