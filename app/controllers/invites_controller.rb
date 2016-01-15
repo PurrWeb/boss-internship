@@ -1,4 +1,5 @@
 class InvitesController < ApplicationController
+  before_action :authorize, except: [:accept]
   skip_before_filter :authenticate_user!, only: [:accept]
 
   def index
@@ -50,6 +51,10 @@ class InvitesController < ApplicationController
   end
 
   private
+  def authorize
+    authorize! :manage, :admin
+  end
+
   def accept_new_action(invite)
     user = User.new
     render locals: { user: user, invite: invite }
