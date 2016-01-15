@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
   ROLES = ['admin', 'manager', 'dev']
 
-  has_many :venues
+  has_many :venues, through: :venue_users
+  has_many :venue_users
 
   belongs_to :staff_member
 
