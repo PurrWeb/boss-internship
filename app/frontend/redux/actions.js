@@ -1,3 +1,11 @@
+import defaultRotaShifts from "../data/default-rota-shifts.js"
+let initialShiftState;
+if(window.location.pathname === '/rotas/empty_example') {
+  initialShiftState = [];
+} else {
+  initialShiftState = defaultRotaShifts;
+}
+
 export const ADD_ROTA_SHIFT = "ADD_ROTA_SHIFT";
 export function addRotaShift (options) {
     return {
@@ -8,6 +16,14 @@ export function addRotaShift (options) {
             staff_id: options.staff_id,
             id: Math.floor(Math.random() * 100000000000)
         }
+    }
+}
+
+export const REPLACE_ALL_SHIFTS = "REPLACE_ALL_SHIFTS";
+export function replaceAllShifts (shifts) {
+    return {
+        type: REPLACE_ALL_SHIFTS,
+        shifts: shifts
     }
 }
 
@@ -53,3 +69,13 @@ export function updateStaffStatus(staffId, status) {
         status
     }
 }
+
+export const LOAD_INITIAL_ROTA_APP_STATE = "LOAD_INITIAL_ROTA_APP_STATE";
+export function loadInitialRotaAppState() {
+    return function(dispatch){
+        setTimeout(function(){
+            dispatch(replaceAllShifts(initialShiftState));
+        }, 5000)
+    }
+}
+

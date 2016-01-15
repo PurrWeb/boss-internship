@@ -25,6 +25,9 @@ class RotaView extends Component {
             dateOfRota: this.props.dateOfRota
         }
     }
+    componentWillMount(){
+        this.props.dispatch(actionCreators.loadInitialRotaAppState())
+    }
     render() {
         return <div className="container">
             <h1>
@@ -49,6 +52,11 @@ function mapStateToProps(state) {
     props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
 
     return props;
+}
+
+
+function mapDispatchToProps(){
+    return {initialLoad}
 }
 
 export default connect(

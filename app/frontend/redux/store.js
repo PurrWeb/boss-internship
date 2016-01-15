@@ -1,9 +1,9 @@
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunk from "redux-thunk"
 import _ from "underscore"
 import userData from "~data/users.js"
 import staffStatusMockData from "~data/staff-status-mock-data"
 import * as ACTIONS from "./actions.js"
-import defaultRotaShifts from "../data/default-rota-shifts.js"
 
 var userDataById = _.indexBy(userData, "id");
 
@@ -17,15 +17,11 @@ function staffStatuses(state=staffStatusMockData, action){
     })
 }
 
-let initialState;
-if(window.location.pathname === '/rotas/empty_example') {
-  initialState = [];
-} else {
-  initialState = defaultRotaShifts;
-}
+function rotaShifts(state=[], action){
 
-function rotaShifts(state=initialState, action){
     switch (action.type) {
+        case ACTIONS.REPLACE_ALL_SHIFTS:
+            return action.shifts
         case ACTIONS.ADD_ROTA_SHIFT:
             return [...state, action.rota];
         case ACTIONS.UPDATE_ROTA_SHIFT:
@@ -50,6 +46,7 @@ function rotaShifts(state=initialState, action){
     return state;
 }
 
+
 function appIsInManagerMode(state=false, action){
     switch(action.type) {
         case ACTIONS.ENTER_MANAGER_MODE:
@@ -60,11 +57,13 @@ function appIsInManagerMode(state=false, action){
     return state;
 }
 
-var store = createStore(combineReducers({
+var rootReducer = combineReducers({
     staff,
     rotaShifts,
     staffStatuses,
     appIsInManagerMode
-}));
+});
+var createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+var store = createStoreWithMiddleware(rootReducer);
 
 export default store;
