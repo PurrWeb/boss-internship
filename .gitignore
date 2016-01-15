@@ -27,3 +27,8 @@
 /tmp
 
 .byebug_history
+
+
+# Sublime project files
+*.sublime-project
+*.sublime-workspace
