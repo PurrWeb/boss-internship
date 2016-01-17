@@ -13,7 +13,7 @@ RSpec.feature 'Editing a staff members personal detials' do
   describe 'editing name' do
     let(:new_name) { FactoryGirl.build(:name, first_name: 'Ian', surname: 'Malcom') }
 
-    specify 'new number should not match orginal' do
+    specify 'new name should not match orginal' do
       expect(edited_staff_member.name).
         to_not eq(new_name)
     end
