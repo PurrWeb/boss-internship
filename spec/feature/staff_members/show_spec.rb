@@ -5,6 +5,7 @@ RSpec.feature 'Viewing a staff member' do
   let(:staff_member) { FactoryGirl.create(:staff_member) }
   let(:show_page) { PageObject::StaffMemberShowPage.new(staff_member) }
   let(:edit_employment_details_page) { PageObject::StaffMemberEditEmploymentDetailsPage.new(staff_member) }
+  let(:edit_personal_details_page) { PageObject::StaffMemberEditPersonalDetailsPage.new(staff_member) }
   before do
     login_as dev_user
   end
@@ -24,6 +25,13 @@ RSpec.feature 'Viewing a staff member' do
     show_page.surf_to
     show_page.click_edit_employment_details_button
     edit_employment_details_page.assert_on_correct_page
+  end
+
+  scenario 'clicking the edit button in the personal details section should
+            take you to the edit personal details page' do
+    show_page.surf_to
+    show_page.click_edit_personal_details_button
+    edit_personal_details_page.assert_on_correct_page
   end
 
   scenario 'page should have message explaining that no staff member has no associated user' do

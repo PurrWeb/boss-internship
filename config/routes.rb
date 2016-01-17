@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     member do
       get :edit_employment_details
       post :update_employment_details
+      get :edit_personal_details
     end
   end
 

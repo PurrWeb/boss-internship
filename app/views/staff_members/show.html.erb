@@ -75,6 +75,13 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <span>Personal Details</span>
+      <span>
+        <%= link_to(
+              'Edit',
+              edit_personal_details_staff_member_path(staff_member),
+              class: ['btn', 'btn-primary', 'btn-xs', 'staff-member-edit-personal-details-button']
+            ) %>
+      </span>
     </div>
     <div class="panel-body">
       <dl>

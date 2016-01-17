@@ -49,6 +49,11 @@ module PageObject
       button.click
     end
 
+    page_action :click_edit_personal_details_button do
+      button = find('a.btn.staff-member-edit-personal-details-button')
+      button.click
+    end
+
     def assert_on_correct_page
       expect(find('main h1').text).to eq(staff_member.full_name)
     end
