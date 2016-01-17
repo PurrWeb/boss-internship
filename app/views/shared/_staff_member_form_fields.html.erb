@@ -3,7 +3,7 @@
         :venue_id,
         options_for_select(
           Venue.all.map { |venue| [venue.name.titlecase, venue.id] },
-          form.object.try(:venue).try(:id)
+          venue_fields.object.try(:venue_id)
         ),
         include_blank: true
       ) %>
