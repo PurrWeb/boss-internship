@@ -50,7 +50,7 @@ class StaffMembersController < ApplicationController
   def update_employment_details
     staff_member = StaffMember.find(params[:id])
 
-    if staff_member.update_attributes(update_employment_details_params)
+    if staff_member.update_attributes(update_employment_details_params(staff_member))
       flash[:success] = "Staff member updated successfully"
       redirect_to staff_member_path(staff_member)
     else
@@ -93,9 +93,16 @@ class StaffMembersController < ApplicationController
     )
   end
 
-  def update_employment_details_params
+  def update_employment_details_params(staff_member)
     params.require(:staff_member).
-      permit(:national_insurance_number)
+      permit(
+        :national_insurance_number,
+        staff_member_venue_attributes: [:venue_id]
+      ).deep_merge(
+        staff_member_venue_attributes: {
+          id: staff_member.staff_member_venue.id
+        }
+      )
   end
 
   def staff_type_from_params
