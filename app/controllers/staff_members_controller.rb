@@ -127,6 +127,7 @@ class StaffMembersController < ApplicationController
   def update_personal_details_params
     params.require(:staff_member).
       permit(
+        :gender,
         name_attributes: [
           :first_name,
           :surname

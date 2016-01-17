@@ -59,4 +59,40 @@ RSpec.feature 'Editing a staff members personal detials' do
       end
     end
   end
+
+  describe 'editing gender' do
+    let!(:new_gender) { 'male' }
+
+    specify 'new gender should not match orginal' do
+      expect(edited_staff_member.gender).
+        to_not eq(new_gender)
+    end
+
+    it 'takes you to the show page and shows a success message' do
+      edit_page.surf_to
+      edit_page.form.update_gender(new_gender)
+      show_page.ensure_flash_success_message_displayed('Staff member updated successfully')
+    end
+
+    it 'should update the staff members gender' do
+      edit_page.surf_to
+      edit_page.form.update_gender(new_gender)
+      edited_staff_member.reload
+      expect(edited_staff_member.gender).to eq(new_gender)
+    end
+
+    context 'form is invalid' do
+      let(:invalid_name) { FactoryGirl.build(:name, first_name: '') }
+
+      it 'should persist the edit in the form' do
+        edit_page.surf_to
+        edit_page.form.tap do |form|
+          form.fill_in_name(invalid_name)
+          form.select_gender(new_gender)
+          form.submit
+          form.ui_shows_gender(new_gender)
+        end
+      end
+    end
+  end
 end

@@ -10,6 +10,17 @@
     <%= form.fields_for(:name, (form.object.name || Name.new)) do |name_fields| %>
       <%= render partial: 'shared/name_fields', locals: { form: name_fields } %>
     <% end %>
+    <%= form.select(
+          :gender,
+          options_for_select(
+            StaffMember::GENDERS.map{ |gender| [gender.titleize, gender] },
+            form.object.gender.to_s
+          ),
+          include_blank: true,
+          label_class: 'required'
+        )
+    %>
+
     <%= form.submit %>
   <% end %>
 </div>
