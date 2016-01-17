@@ -92,4 +92,40 @@ RSpec.feature 'Editing a staff_members employment detials' do
       end
     end
   end
+
+  describe 'editing staff_type' do
+    let!(:new_staff_type) { FactoryGirl.create(:staff_type, name: 'newest staff_type') }
+
+    specify 'new number should not match orginal' do
+      expect(edited_staff_member.staff_type).
+        to_not eq(new_staff_type)
+    end
+
+    it 'takes you to the show page and shows a success message' do
+      edit_page.surf_to
+      edit_page.form.update_staff_type(new_staff_type)
+      show_page.ensure_flash_success_message_displayed('Staff member updated successfully')
+    end
+
+    it 'should update the staff members staff type' do
+      edit_page.surf_to
+      edit_page.form.update_staff_type(new_staff_type)
+      edited_staff_member.reload
+      expect(edited_staff_member.staff_type).to eq(new_staff_type)
+    end
+
+    context 'form is invalid' do
+      let(:invalid_ni_number) { 'INVAFSD_DSAD12213ASDADS' }
+
+      it 'should persist the edit in the form' do
+        edit_page.surf_to
+        edit_page.form.tap do |form|
+          form.select_national_insurance_number(invalid_ni_number)
+          form.select_staff_type(new_staff_type)
+          form.submit
+          form.ui_shows_staff_type(new_staff_type)
+        end
+      end
+    end
+  end
 end

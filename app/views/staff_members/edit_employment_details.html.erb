@@ -16,6 +16,19 @@
             ),
             include_blank: true
           ) %>
+    <%= form.select(
+          :staff_type,
+          options_for_select(
+            StaffType.all.map{ |type| [type.name.titleize, type.id] },
+            form.object.staff_type.try(:id)
+          ),
+          include_blank: true,
+          label_class: 'required',
+          html: {
+            name: :staff_type_id
+          }
+        )
+    %>
     <% end %>
     <%= form.text_field :national_insurance_number %>
     <%= form.submit %>

@@ -30,6 +30,21 @@ module PageObject
       ).to eq(venue.id.to_s)
     end
 
+    page_action :select_staff_type do |staff_type|
+      _select_staff_type(staff_type)
+    end
+
+    page_action :update_staff_type do |staff_type|
+      _select_staff_type(staff_type)
+      _submit_form
+    end
+
+    page_action :ui_shows_staff_type do |staff_type|
+      expect(
+        scope.find_field('Staff type').value
+      ).to eq(staff_type.id.to_s)
+    end
+
     page_action :submit do
       _submit_form
     end
@@ -45,6 +60,10 @@ module PageObject
 
     def _select_national_insurance_number(national_insurance_number)
       scope.fill_in('National insurance number', with: national_insurance_number)
+    end
+
+    def _select_staff_type(staff_type)
+      scope.select(staff_type.name.titlecase, from: 'Staff type')
     end
 
     def _submit_form
