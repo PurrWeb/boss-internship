@@ -46,7 +46,13 @@ class UsersController < ApplicationController
 
     staff_member = StaffMember.new(staff_member_params(user))
 
-    if staff_member.save
+    result = false
+    ActiveRecord::Base.transaction do
+      result = staff_member.save
+      result = result && user.update_attributes!(staff_member: staff_member)
+    end
+
+    if result
       flash[:success] = 'Staff member added successfully'
       redirect_to user_path(user)
     else
@@ -96,7 +102,6 @@ class UsersController < ApplicationController
       staff_member_venue_attributes: [:venue_id]
     ).merge(
       staff_type: staff_type_from_params,
-      user: user,
       name: user.name,
       email_address: user.email_address,
       creator: current_user
