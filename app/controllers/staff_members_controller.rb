@@ -128,6 +128,7 @@ class StaffMembersController < ApplicationController
     params.require(:staff_member).
       permit(
         :gender,
+        :date_of_birth,
         name_attributes: [
           :first_name,
           :surname

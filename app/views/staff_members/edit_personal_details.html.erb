@@ -20,7 +20,17 @@
           label_class: 'required'
         )
     %>
-
+    <div class="staff-member-date-of-birth-field">
+      <%= form.date_select(
+            :date_of_birth,
+            {
+              start_year: Time.now.year,
+              end_year: 1940,
+              include_blank: true,
+              with_css_classes: true
+            }
+          ) %>
+      </div>
     <%= form.submit %>
   <% end %>
 </div>

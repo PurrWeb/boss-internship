@@ -95,4 +95,40 @@ RSpec.feature 'Editing a staff members personal detials' do
       end
     end
   end
+
+  describe 'editing date_of_birth' do
+    let(:new_date_of_birth) { Date.new(1941, 2, 3) }
+
+    specify 'new date_of_birth should not match orginal' do
+      expect(edited_staff_member.date_of_birth).
+        to_not eq(new_date_of_birth)
+    end
+
+    it 'takes you to the show page and shows a success message' do
+      edit_page.surf_to
+      edit_page.form.update_date_of_birth(new_date_of_birth)
+      edited_staff_member.reload
+      show_page.ensure_flash_success_message_displayed('Staff member updated successfully')
+    end
+
+    it 'should update the staff members date_of_birth' do
+      edit_page.surf_to
+      edit_page.form.update_date_of_birth(new_date_of_birth)
+      edited_staff_member.reload
+      expect(edited_staff_member.date_of_birth).to eq(new_date_of_birth)
+    end
+
+    context 'form is invalid' do
+      let(:invalid_name) { FactoryGirl.build(:name, first_name: '') }
+
+      it 'should persist the edit in the form' do
+        edit_page.surf_to
+        edit_page.form.tap do |form|
+          form.fill_in_name(invalid_name)
+          form.fill_in_date_of_birth(new_date_of_birth)
+          form.ui_shows_date_of_birth(new_date_of_birth)
+        end
+      end
+    end
+  end
 end
