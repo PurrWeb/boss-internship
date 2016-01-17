@@ -11,7 +11,7 @@ RSpec.feature 'Editing a staff members personal detials' do
   end
 
   describe 'editing name' do
-    let(:new_name) { 'DM325435A' }
+    let(:new_name) { FactoryGirl.build(:name, first_name: 'Ian', surname: 'Malcom') }
 
     specify 'new number should not match orginal' do
       expect(edited_staff_member.name).
@@ -21,6 +21,7 @@ RSpec.feature 'Editing a staff members personal detials' do
     it 'takes you to the show page and shows a success message' do
       edit_page.surf_to
       edit_page.form.update_name(new_name)
+      edited_staff_member.reload
       show_page.ensure_flash_success_message_displayed('Staff member updated successfully')
     end
 
@@ -28,12 +29,13 @@ RSpec.feature 'Editing a staff members personal detials' do
       edit_page.surf_to
       edit_page.form.update_name(new_name)
       edited_staff_member.reload
-      expect(edited_staff_member.name).to eq(new_name)
+      expect(edited_staff_member.name.first_name).to eq(new_name.first_name)
+      expect(edited_staff_member.name.surname).to eq(new_name.surname)
     end
 
     context 'new name is invalid' do
       let!(:old_name) { edited_staff_member.name }
-      let(:new_name) { 'INVALIDNUMBER' }
+      let(:new_name) { FactoryGirl.build(:name, first_name: '', surname: 'smith') }
 
       it 'should return to the edit page with an error message' do
         edit_page.surf_to
@@ -46,7 +48,8 @@ RSpec.feature 'Editing a staff members personal detials' do
         edit_page.surf_to
         edit_page.form.update_name(new_name)
         edited_staff_member.reload
-        expect(edited_staff_member.name).to eq(old_name)
+        expect(edited_staff_member.name.first_name).to eq(old_name.first_name)
+        expect(edited_staff_member.name.surname).to eq(old_name.surname)
       end
 
       it 'should persist the edit in the form' do

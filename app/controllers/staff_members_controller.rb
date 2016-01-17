@@ -64,6 +64,18 @@ class StaffMembersController < ApplicationController
     render locals: { staff_member: staff_member }
   end
 
+  def update_personal_details
+    staff_member = StaffMember.find(params[:id])
+
+    if staff_member.update_attributes(update_personal_details_params)
+      flash[:success] = "Staff member updated successfully"
+      redirect_to staff_member_path(staff_member)
+    else
+      flash.now[:error] = "There was a problem updating this staff member"
+      render 'edit_personal_details', locals: { staff_member: staff_member }
+    end
+  end
+
   private
   def staff_member_params
     params.require(:staff_member).permit(
@@ -109,6 +121,16 @@ class StaffMembersController < ApplicationController
         staff_member_venue_attributes: {
           id: staff_member.staff_member_venue.id
         }
+      )
+  end
+
+  def update_personal_details_params
+    params.require(:staff_member).
+      permit(
+        name_attributes: [
+          :first_name,
+          :surname
+        ]
       )
   end
 
