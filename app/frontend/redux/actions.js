@@ -8,34 +8,45 @@ if(window.location.pathname === '/rotas/empty_example') {
     initialShiftState = defaultRotaShifts;
 }
 
-export const ADD_ROTA_SHIFT_IN_PROGRESS = "ADD_ROTA_SHIFT_IN_PROGRESS";
-export function addRotaShiftInProgress (shift) {
-    return {
-        type: ADD_ROTA_SHIFT_IN_PROGRESS,
-        shift: shift
+export const actionTypes = {};
+window.actionTypes = actionTypes
+function createApiRequestAction(requestName, makeRequest){
+    return function(options){
+        const SUCCESS_TYPE = requestName + "_SUCCESS";
+        const ERROR_TYPE = requestName + "_ERROR";
+        actionTypes[SUCCESS_TYPE] = SUCCESS_TYPE;
+        actionTypes[ERROR_TYPE] = ERROR_TYPE;
+
+        return function(dispatch) {
+            function success(options){
+                dispatch({
+                    type: SUCCESS_TYPE,
+                    ...options
+                })
+            }
+            function error(options){
+                dispatch({
+                    type: ERROR_TYPE,
+                    ...options
+                });
+            }
+            makeRequest(options, success, error)
+        }
+
     }
 }
 
-export const ADD_ROTA_SHIFT_SUCCESS = "ADD_ROTA_SHIFT_SUCCESS";
-export function addRotaShiftSuccess (shift) {
-    return {
-        type: ADD_ROTA_SHIFT_SUCCESS,
-        shift: shift
-    }
-}
-
-export function addRotaShift (options) {
-    options = Object.assign({}, options, {
-        id: Math.floor(Math.random() * 100000000000)
-    })
-    return function(dispatch) {
-        dispatch(addRotaShiftInProgress(options));
-
+export const addRotaShift = createApiRequestAction(
+    "ADD_SHIFT",
+    function(shift, success, error) {
+        shift = Object.assign({}, shift, {
+            id: Math.floor(Math.random() * 100000000000)
+        });
         setTimeout(function(){
-            dispatch(addRotaShiftSuccess(options))
-        }, 2000)
+            success({shift});
+        }, 2000);
     }
-}
+);
 
 export const REPLACE_ALL_SHIFTS = "REPLACE_ALL_SHIFTS";
 export function replaceAllShifts (shifts) {
@@ -126,4 +137,5 @@ export function loadInitialClockInOutAppState() {
         }, 3000)
     }
 }
+
 
