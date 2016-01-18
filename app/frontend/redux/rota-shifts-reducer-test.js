@@ -62,7 +62,24 @@ describe("RotaShiftsReducer", function(){
         }
 
         expect(RotaShiftsReducer(initialState, action)).toEqual(expectedResultState);
-    })    
+    })
+
+    it("Can delete a shift", function(){
+        var initialState = {
+            items: [{
+                id: 123
+            }]
+        };
+        var action = {
+            type: "DELETE_SHIFT_SUCCESS",
+            shift_id: 123
+        }
+        var expectedResultState = {
+            items: []
+        }
+
+        expect(RotaShiftsReducer(initialState, action)).toEqual(expectedResultState);
+    })
 });
 
 

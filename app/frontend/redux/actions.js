@@ -97,13 +97,15 @@ export const updateRotaShift = createApiRequestAction(
     }
 );
 
-export const DELETE_ROTA_SHIFT = "DELETE_ROTA_SHIFT";
-export function deleteRotaShift (shift_id) {
-    return {
-        type: DELETE_ROTA_SHIFT,
-        shift_id: shift_id
+
+export const deleteRotaShift = createApiRequestAction(
+    "DELETE_SHIFT",
+    function(options, success, error) {
+        setTimeout(function(){
+            success({...options});
+        }, 2000);
     }
-}
+);
 
 export const ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
 export function enterManagerMode () {

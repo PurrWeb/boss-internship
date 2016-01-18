@@ -8,15 +8,13 @@ var initialState = {
 };
 export default function rotaShifts(state=initialState, action){
     console.log("ACTION", action)
-    console.log("rotaShifts", {
-        items: rotaShiftItems(state.items, action)
-    })
     return {
         items: rotaShiftItems(state.items, action)
     }
 }
 
 function rotaShiftItems(state=[], action){
+    console.log("REDUCING", state, action)
     switch (action.type) {
         case ACTIONS.REPLACE_ALL_SHIFTS:
             return action.shifts;
@@ -34,7 +32,7 @@ function rotaShiftItems(state=[], action){
                 rotaShift,
                 ...state.slice(rotaShiftIndex + 1)
             ];
-        case ACTIONS.DELETE_ROTA_SHIFT:
+        case actionTypes.DELETE_SHIFT_SUCCESS:
             var rotaShiftIndex = _.findIndex(state, {id: action.shift_id});
             return [
                 ...state.slice(0, rotaShiftIndex),

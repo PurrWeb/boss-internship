@@ -35,7 +35,7 @@ export default class ShiftEditor extends Component {
         </a>
 
         var spinner = null;
-        if (this.props.shift.isBeingUpdated) {
+        if (this.props.shift.isBeingEdited) {
             spinner = <Spinner />
             updateButton = null;
         }
@@ -58,7 +58,12 @@ export default class ShiftEditor extends Component {
         
             <a
                 onClick={() => this.deleteShift()}
-                style={{opacity: this.props.shift.isBeingUpdated ? .5 : 1}}>
+                style={
+                    this.props.shift.isBeingUpdated ? {
+                        opacity: .2,
+                        pointerEvents: "none"
+                    } : {}
+                }>
                 Delete shift
             </a>
         </div>
@@ -71,7 +76,7 @@ export default class ShiftEditor extends Component {
         if (this.props.shift.isBeingUpdated) {
             return;
         }
-        this.context.boundActionCreators.deleteRotaShift(this.props.shift.id);
+        this.context.boundActionCreators.deleteRotaShift({shift_id: this.props.shift.id});
     }
     onShiftTimesChange(shiftTimes) {
         this.setState({newShiftTimes: shiftTimes})

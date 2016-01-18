@@ -56,9 +56,12 @@ function mapStateToProps(state) {
     });
 
     var shiftsBeingUpdated = props.apiRequestsInProgress.UPDATE_SHIFT;
+    var shiftsBeingDeleted = props.apiRequestsInProgress.DELETE_SHIFT;
     props.rotaShifts = _(props.rotaShifts.items).map(function(shift){
+        var isBeingEdited = _(shiftsBeingUpdated).some({shift_id: shift.id})
+            || _(shiftsBeingDeleted).some({shift_id: shift.id});
         return Object.assign({}, shift, {
-            isBeingUpdated: _(shiftsBeingUpdated).some({shift_id: shift.id})
+            isBeingEdited: isBeingEdited
         });
     });
     props.staffTypes = staffTypes;
