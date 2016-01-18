@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import ShiftTimeSelector from "~components/shift-time-selector"
+import Spinner from "~components/spinner"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
 
@@ -27,6 +28,18 @@ export default class ShiftEditor extends Component {
             updateButtonClasses.push("disabled");
         }
 
+        var updateButton = <a
+            className={updateButtonClasses.join(" ")}
+            onClick={() => this.updateShift()} style={{marginTop: "-4px"}}>
+            Update
+        </a>
+
+        var spinner = null;
+        if (this.props.shift.isBeingUpdated) {
+            spinner = <Spinner />
+            updateButton = null;
+        }
+
         return <div>
             <div className="row">
                 <div className="col-md-9">
@@ -38,13 +51,14 @@ export default class ShiftEditor extends Component {
                 </div>
                 <div className="col-md-3">
                     <br/>
-                    <a className={updateButtonClasses.join(" ")} onClick={() => this.updateShift()} style={{marginTop: "-4px"}}>
-                        Update
-                    </a>
+                    {updateButton}
+                    {spinner}
                 </div>
             </div>
         
-            <a onClick={() => this.deleteShift()}>
+            <a
+                onClick={() => this.deleteShift()}
+                style={{opacity: this.props.shift.isBeingUpdated ? .5 : 1}}>
                 Delete shift
             </a>
         </div>
@@ -54,6 +68,9 @@ export default class ShiftEditor extends Component {
         return utils.dateIsValid(starts_at) && utils.dateIsValid(ends_at);
     }
     deleteShift(){
+        if (this.props.shift.isBeingUpdated) {
+            return;
+        }
         this.context.boundActionCreators.deleteRotaShift(this.props.shift.id);
     }
     onShiftTimesChange(shiftTimes) {

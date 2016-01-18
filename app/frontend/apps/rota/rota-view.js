@@ -48,23 +48,23 @@ class RotaView extends Component {
 function mapStateToProps(state) {
     var props = _.clone(state);
 
+    var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
     props.staff = _(props.staff).mapValues(function(staff){
-        var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
         return Object.assign({}, staff, {
-            shiftSavingInProgress: _(shiftsBeingAdded).filter({staff_id: staff.id}).length > 0
+            shiftSavingInProgress: _(shiftsBeingAdded).some({staff_id: staff.id})
         })
     });
 
-    props.rotaShifts = props.rotaShifts.items
+    var shiftsBeingUpdated = props.apiRequestsInProgress.UPDATE_SHIFT;
+    props.rotaShifts = _(props.rotaShifts.items).map(function(shift){
+        return Object.assign({}, shift, {
+            isBeingUpdated: _(shiftsBeingUpdated).some({shift_id: shift.id})
+        });
+    });
     props.staffTypes = staffTypes;
     props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
 
     return props;
-}
-
-
-function mapDispatchToProps(){
-    return {initialLoad}
 }
 
 export default connect(
