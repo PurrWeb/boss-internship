@@ -7,6 +7,7 @@ var initialState = {
     shiftsBeingSaved: []
 };
 export default function rotaShifts(state=initialState, action){
+    console.log("ACTION", action)
     console.log("rotaShifts", {
         items: rotaShiftItems(state.items, action)
     })

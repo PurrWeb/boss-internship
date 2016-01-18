@@ -9,27 +9,58 @@ if(window.location.pathname === '/rotas/empty_example') {
 }
 
 export const actionTypes = {};
+
 window.actionTypes = actionTypes
-function createApiRequestAction(requestName, makeRequest){
+
+actionTypes.API_REQUEST_START = "API_REQUEST_START";
+actionTypes.API_REQUEST_END = "API_REQUEST_END"
+
+function createApiRequestAction(requestType, makeRequest){
+    const SUCCESS_TYPE = requestType + "_SUCCESS";
+    const ERROR_TYPE = requestType + "_ERROR";
+    actionTypes[SUCCESS_TYPE] = SUCCESS_TYPE;
+    actionTypes[ERROR_TYPE] = ERROR_TYPE;
+
     return function(options){
-        const SUCCESS_TYPE = requestName + "_SUCCESS";
-        const ERROR_TYPE = requestName + "_ERROR";
-        actionTypes[SUCCESS_TYPE] = SUCCESS_TYPE;
-        actionTypes[ERROR_TYPE] = ERROR_TYPE;
+        if (options.type || options.requestId || options.requestType) {
+            throw "The properties type, requestId and requestType can't be set";
+        }
+
+        var requestId = _.uniqueId();
 
         return function(dispatch) {
             function success(options){
                 dispatch({
                     type: SUCCESS_TYPE,
                     ...options
-                })
+                });
+                dispatchRequestEnd();
             }
             function error(options){
                 dispatch({
                     type: ERROR_TYPE,
                     ...options
                 });
+                dispatchRequestEnd();
             }
+            function dispatchRequestStart(){
+                dispatch({
+                    type: actionTypes.API_REQUEST_START,
+                    requestId: requestId,
+                    requestType: requestType,
+                    ...options
+                });
+            }
+            function dispatchRequestEnd(){
+                dispatch({
+                    requestType: requestType,
+                    type: actionTypes.API_REQUEST_END,
+                    requestId: requestId,
+                    ...options
+                });
+            }
+            
+            dispatchRequestStart();
             makeRequest(options, success, error)
         }
 

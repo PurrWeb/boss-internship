@@ -49,10 +49,9 @@ function mapStateToProps(state) {
     var props = _.clone(state);
 
     props.staff = _(props.staff).mapValues(function(staff){
-        // var listOfShiftsBeingSaved = props.rotaShifts.shiftsBeingSavedByStaffId[staff.id];
-        // var savingInProgress = listOfShiftsBeingSaved !== undefined && listOfShiftsBeingSaved.length > 0;
+        var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
         return Object.assign({}, staff, {
-            shiftSavingInProgress: true
+            shiftSavingInProgress: _(shiftsBeingAdded).filter({staff_id: staff.id}).length > 0
         })
     });
 
