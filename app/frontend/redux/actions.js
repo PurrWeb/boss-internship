@@ -87,29 +87,15 @@ export function replaceAllShifts (shifts) {
     }
 }
 
-export function updateRotaShift (options) {
-    var shift = _.clone(options);
-    return function(dispatch) {
-        dispatch(updateRotaShiftInProgress(shift));
+
+export const updateRotaShift = createApiRequestAction(
+    "UPDATE_SHIFT",
+    function(shift, success, error) {
         setTimeout(function(){
-            dispatch(updateRotaShiftSuccess(shift))
-        }, 3000)
+            success({shift});
+        }, 2000);
     }
-}
-export const UPDATE_ROTA_SHIFT_IN_PROGRESS = "UPDATE_ROTA_SHIFT_IN_PROGRESS";
-export function updateRotaShiftInProgress (shift) {
-    return {
-        type: UPDATE_ROTA_SHIFT_IN_PROGRESS,
-        shift: shift
-    }
-}
-export const UPDATE_ROTA_SHIFT_SUCCESS = "UPDATE_ROTA_SHIFT_SUCCESS";
-export function updateRotaShiftSuccess (shift) {
-    return {
-        type: UPDATE_ROTA_SHIFT_SUCCESS,
-        shift: shift
-    }
-}
+);
 
 export const DELETE_ROTA_SHIFT = "DELETE_ROTA_SHIFT";
 export function deleteRotaShift (shift_id) {

@@ -45,7 +45,7 @@ describe("RotaShiftsReducer", function(){
         var newStartsAt = new Date(2015, 0, 1, 10, 0, 0);
         var newEndsAt = new Date(2015, 0, 1, 16, 0, 0);
         var action = {
-            type: "UPDATE_ROTA_SHIFT_SUCCESS",
+            type: "UPDATE_SHIFT_SUCCESS",
             shift: {
                 shift_id: 123,
                 starts_at: newStartsAt,

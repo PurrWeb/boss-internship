@@ -22,7 +22,7 @@ function rotaShiftItems(state=[], action){
             return action.shifts;
         case actionTypes.ADD_SHIFT_SUCCESS:
             return [...state, action.shift];
-        case ACTIONS.UPDATE_ROTA_SHIFT_SUCCESS:
+        case actionTypes.UPDATE_SHIFT_SUCCESS:
             var rotaShiftIndex = _.findIndex(state, {id: action.shift.shift_id});
             var rotaShift = state[rotaShiftIndex];
             rotaShift = Object.assign({}, rotaShift, {
