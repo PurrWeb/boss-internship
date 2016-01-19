@@ -1,4 +1,3 @@
-import * as ACTIONS from "./actions.js"
 import {actionTypes } from "./actions"
 import _ from "underscore"
 
@@ -15,7 +14,7 @@ export default function rotaShifts(state=initialState, action){
 
 function rotaShiftItems(state=[], action){
     switch (action.type) {
-        case ACTIONS.REPLACE_ALL_SHIFTS:
+        case actionTypes.REPLACE_ALL_SHIFTS:
             return action.shifts;
         case actionTypes.ADD_SHIFT_SUCCESS:
             return [...state, action.shift];

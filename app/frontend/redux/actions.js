@@ -94,10 +94,10 @@ export const addRotaShift = createApiRequestAction(
     }
 );
 
-export const REPLACE_ALL_SHIFTS = "REPLACE_ALL_SHIFTS";
+actionTypes.REPLACE_ALL_SHIFTS = "REPLACE_ALL_SHIFTS";
 export function replaceAllShifts (shifts) {
     return {
-        type: REPLACE_ALL_SHIFTS,
+        type: actionTypes.REPLACE_ALL_SHIFTS,
         shifts: shifts
     }
 }
@@ -145,10 +145,10 @@ export function updateStaffStatus(staffId, status) {
     }
 }
 
-export const REPLACE_ALL_STAFF_MEMBERS = "UPDATE_STAFF_STATUS";
+actionTypes.REPLACE_ALL_STAFF_MEMBERS = "UPDATE_STAFF_STATUS";
 export function replaceAllStaffMembers(staffMembers) {
     return {
-        type: REPLACE_ALL_STAFF_MEMBERS,
+        type: actionTypes.REPLACE_ALL_STAFF_MEMBERS,
         staffMembers
     }
 }
