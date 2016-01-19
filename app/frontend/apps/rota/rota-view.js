@@ -67,6 +67,8 @@ function mapStateToProps(state) {
     props.staffTypes = staffTypes;
     props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
 
+    console.log("PROPS", props)
+
     return props;
 }
 

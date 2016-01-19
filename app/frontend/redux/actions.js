@@ -14,41 +14,44 @@ window.actionTypes = actionTypes
 
 actionTypes.API_REQUEST_START = "API_REQUEST_START";
 actionTypes.API_REQUEST_END = "API_REQUEST_END"
+actionTypes.SET_COMPONENT_ERROR = "SET_COMPONENT_ERROR";
 
 function createApiRequestAction(requestType, makeRequest){
     const SUCCESS_TYPE = requestType + "_SUCCESS";
-    const ERROR_TYPE = requestType + "_ERROR";
     actionTypes[SUCCESS_TYPE] = SUCCESS_TYPE;
-    actionTypes[ERROR_TYPE] = ERROR_TYPE;
 
-    return function(options){
-        if (options.type || options.requestId || options.requestType) {
+    return function(requestOptions){
+        if (requestOptions.type || requestOptions.requestId || requestOptions.requestType) {
             throw "The properties type, requestId and requestType can't be set";
         }
 
         var requestId = _.uniqueId();
 
         return function(dispatch) {
-            function success(options){
+            function success(responseOptions){
                 dispatch({
                     type: SUCCESS_TYPE,
-                    ...options
+                    ...responseOptions
                 });
                 dispatchRequestEnd();
+                dispatchSetComponentError(responseOptions);
             }
-            function error(options){
-                dispatch({
-                    type: ERROR_TYPE,
-                    ...options
-                });
+            function error(responseOptions){
                 dispatchRequestEnd();
+                dispatchSetComponentError(responseOptions);
+            }
+            function dispatchSetComponentError(responseOptions){
+                dispatch({
+                    type: actionTypes.SET_COMPONENT_ERROR,
+                    ...responseOptions
+                })
             }
             function dispatchRequestStart(){
                 dispatch({
                     type: actionTypes.API_REQUEST_START,
                     requestId: requestId,
                     requestType: requestType,
-                    ...options
+                    ...requestOptions
                 });
             }
             function dispatchRequestEnd(){
@@ -56,12 +59,12 @@ function createApiRequestAction(requestType, makeRequest){
                     requestType: requestType,
                     type: actionTypes.API_REQUEST_END,
                     requestId: requestId,
-                    ...options
+                    ...requestOptions
                 });
             }
             
             dispatchRequestStart();
-            makeRequest(options, success, error)
+            makeRequest(requestOptions, success, error)
         }
 
     }
@@ -69,12 +72,21 @@ function createApiRequestAction(requestType, makeRequest){
 
 export const addRotaShift = createApiRequestAction(
     "ADD_SHIFT",
-    function(shift, success, error) {
-        shift = Object.assign({}, shift, {
+    function(options, success, error) {
+        options = Object.assign({}, options, {
             id: Math.floor(Math.random() * 100000000000)
         });
         setTimeout(function(){
-            success({shift});
+            error({
+              ok: false,
+              status: 500,
+              errors: {
+                base: "too boring",
+                starts_at: ["must be a date", "can't be between foo and foo"]
+              },
+              requestComponent: options.requestComponent
+            });
+            // success({options});
         }, 2000);
     }
 );

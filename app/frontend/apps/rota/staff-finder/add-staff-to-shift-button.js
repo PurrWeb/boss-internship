@@ -6,6 +6,9 @@ export default class AddStaffToShiftButton extends Component {
         addShift: React.PropTypes.func,
         canAddShift: React.PropTypes.bool
     }
+    componentDidMount(){
+        this.componentId = _.uniqueId();
+    }
     render() {
         var className = "btn btn-default";
         if (!this.context.canAddShift) {
@@ -22,6 +25,6 @@ export default class AddStaffToShiftButton extends Component {
         if (!this.context.canAddShift) {
             return;
         }
-        this.context.addShift(this.props.staffId);
+        this.context.addShift(this.props.staffId, this.componentId);
     }
 }

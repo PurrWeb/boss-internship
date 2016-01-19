@@ -17,7 +17,7 @@ export default class AddShiftView extends Component {
         var canAddShift = utils.dateIsValid(this.state.shiftTimes.starts_at) &&
             utils.dateIsValid(this.state.shiftTimes.ends_at);
         return {
-            addShift: (staffId) => this.addShift(staffId),
+            addShift: (staffId, requestComponent) => this.addShift(staffId, requestComponent),
             canAddShift
         }
     }
@@ -54,11 +54,12 @@ export default class AddShiftView extends Component {
         var ends_at = new Date(new Date(props.dateOfRota).setHours(20));
         return {starts_at, ends_at};
     }
-    addShift(staffId){
+    addShift(staffId, requestComponent){
         this.context.boundActionCreators.addRotaShift({
             starts_at: this.state.shiftTimes.starts_at,
             ends_at: this.state.shiftTimes.ends_at,
-            staff_id: staffId
+            staff_id: staffId,
+            requestComponent: requestComponent
         })
     }
     onShiftTimesChange(shiftTimes){

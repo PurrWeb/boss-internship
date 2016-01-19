@@ -14,7 +14,6 @@ export default function rotaShifts(state=initialState, action){
 }
 
 function rotaShiftItems(state=[], action){
-    console.log("REDUCING", state, action)
     switch (action.type) {
         case ACTIONS.REPLACE_ALL_SHIFTS:
             return action.shifts;
