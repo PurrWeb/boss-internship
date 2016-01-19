@@ -1,6 +1,7 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk"
 import _ from "underscore"
+import {batch, batching} from "redux-batch-middleware"
 
 import staffStatuses from "./staff-statuses-reducer"
 import staff from "./staff-members-reducer"
@@ -17,7 +18,10 @@ var rootReducer = combineReducers({
     apiRequestsInProgress,
     componentErrors
 });
-var createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-var store = createStoreWithMiddleware(rootReducer);
+var createStoreWithMiddleware = compose(
+	applyMiddleware(thunk),
+	applyMiddleware(batch)
+)(createStore);
+var store = createStoreWithMiddleware(batching(rootReducer));
 
 export default store;

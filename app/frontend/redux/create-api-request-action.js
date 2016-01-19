@@ -16,42 +16,46 @@ export default function createApiRequestActionFactory(actionTypes) {
 
 	        return function(dispatch) {
 	            function success(responseOptions){
-	                dispatch({
-	                    type: SUCCESS_TYPE,
-	                    ...responseOptions
-	                });
-	                dispatchRequestEnd();
+	                dispatch([
+	                	{
+	                    	type: SUCCESS_TYPE,
+	                    	...responseOptions
+	                	},
+	                	requestEndAction()
+	                ]);
 	            }
 	            function error(responseOptions){
-	                dispatchRequestEnd();
-	                dispatchSetComponentError(responseOptions.errors);
+	            	dispatch([
+	            		requestEndAction(),
+	            		setComponentErrorAction(responseOptions.errors)
+	            	]);
 	            }
-	            function dispatchSetComponentError(errors){
-	                dispatch({
+	            function setComponentErrorAction(errors){
+	                return {
 	                    type: actionTypes.SET_COMPONENT_ERROR,
 	                    componentId: requestOptions.requestComponent,
 	                    errors: errors
-	                })
+	                };
 	            }
-	            function dispatchRequestStart(){
-	                dispatch({
+	            function requestStartAction(){
+	                return {
 	                    type: actionTypes.API_REQUEST_START,
 	                    requestId: requestId,
 	                    requestType: requestType,
 	                    ...requestOptions
-	                });
+	                };
 	            }
-	            function dispatchRequestEnd(){
-	                dispatch({
+	            function requestEndAction(){
+	                return {
 	                    requestType: requestType,
 	                    type: actionTypes.API_REQUEST_END,
 	                    requestId: requestId,
 	                    ...requestOptions
-	                });
+	                };
 	            }
 	            
-	            dispatchRequestStart();
-	            dispatchSetComponentError(undefined);
+	            dispatch(requestStartAction());
+	            dispatch(setComponentErrorAction(undefined));
 	            makeRequest(requestOptions, success, error)
 	        }
 
