@@ -15,14 +15,16 @@ class RotaView extends Component {
         staffTypes: React.PropTypes.object,
         boundActionCreators: React.PropTypes.object,
         rotaShifts: React.PropTypes.array,
-        dateOfRota: React.PropTypes.instanceOf(Date)
+        dateOfRota: React.PropTypes.instanceOf(Date),
+        componentErrors: React.PropTypes.object
     }
     getChildContext(){
         return {
             staffTypes: this.props.staffTypes,
             boundActionCreators: boundActionCreators,
             rotaShifts: this.props.rotaShifts,
-            dateOfRota: this.props.dateOfRota
+            dateOfRota: this.props.dateOfRota,
+            componentErrors: this.props.componentErrors
         }
     }
     componentWillMount(){
