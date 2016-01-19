@@ -3,11 +3,12 @@ import AddStaffToShiftButton from "./add-staff-to-shift-button"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
 import Spinner from "~components/spinner"
+import reactMixin from "react-mixin"
+import apiFormMixin from "~mixins/api-form-mixin"
 
 export default class StaffListItem extends Component {
     static contextTypes = {
-        addShift: React.PropTypes.func.isRequired,
-        componentErrors: React.PropTypes.object.isRequired
+        addShift: React.PropTypes.func.isRequired
     }
     render() {
         var staff = this.props.staff;
@@ -69,16 +70,8 @@ export default class StaffListItem extends Component {
             </div>
         );
     }
-    getComponentId() {
-        if (!this.componentId) {
-            this.componentId = Math.random();
-        }
-        return this.componentId;
-    }
-    getComponentErrors(){
-        return this.context.componentErrors[this.getComponentId()];
-    }
     addShift(){
         this.context.addShift(this.props.staff.id, this.getComponentId())
     }
 }
+reactMixin.onClass(StaffListItem, apiFormMixin);
