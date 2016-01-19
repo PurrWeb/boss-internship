@@ -34,16 +34,16 @@ function createApiRequestAction(requestType, makeRequest){
                     ...responseOptions
                 });
                 dispatchRequestEnd();
-                dispatchSetComponentError(responseOptions);
             }
             function error(responseOptions){
                 dispatchRequestEnd();
-                dispatchSetComponentError(responseOptions);
+                dispatchSetComponentError(responseOptions.errors);
             }
-            function dispatchSetComponentError(responseOptions){
+            function dispatchSetComponentError(errors){
                 dispatch({
                     type: actionTypes.SET_COMPONENT_ERROR,
-                    ...responseOptions
+                    requestComponent: requestOptions.requestComponent,
+                    errors: errors
                 })
             }
             function dispatchRequestStart(){
@@ -64,6 +64,7 @@ function createApiRequestAction(requestType, makeRequest){
             }
             
             dispatchRequestStart();
+            dispatchSetComponentError(undefined);
             makeRequest(requestOptions, success, error)
         }
 
@@ -88,7 +89,6 @@ export const addRotaShift = createApiRequestAction(
                     },
                     requestComponent: options.requestComponent
                 });
-
             }
         }, 2000);
     }
