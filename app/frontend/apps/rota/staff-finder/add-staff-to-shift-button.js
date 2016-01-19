@@ -3,9 +3,11 @@ import _ from "underscore"
 
 export default class AddStaffToShiftButton extends Component {
     static contextTypes = {
-        addShift: React.PropTypes.func,
-        canAddShift: React.PropTypes.bool,
-        componentErrors: React.PropTypes.object
+        canAddShift: React.PropTypes.bool.isRequired
+    }
+    static PropTypes = {
+        addShift: React.PropTypes.func.isRequired,
+        staffid: React.PropTypes.number.isRequired
     }
     componentDidMount(){
         this.componentId = _.uniqueId();
@@ -16,22 +18,16 @@ export default class AddStaffToShiftButton extends Component {
             className += " disabled";
         }
 
-        var errorMessages = this.context.componentErrors[this.componentId];
-        errorMessages = JSON.stringify(errorMessages);
-
-        return <div>
-            <a
+        return <a
                 className={className}
                 onClick={() => this.onClick()}>
                 Add shift
             </a>
-            {errorMessages}
-        </div>
     }
     onClick() {
         if (!this.context.canAddShift) {
             return;
         }
-        this.context.addShift(this.props.staffId, this.componentId);
+        this.props.addShift();
     }
 }

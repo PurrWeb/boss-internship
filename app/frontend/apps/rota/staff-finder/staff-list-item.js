@@ -5,12 +5,18 @@ import StaffTypeBadge from "~components/staff-type-badge"
 import Spinner from "~components/spinner"
 
 export default class StaffListItem extends Component {
+    static contextTypes = {
+        addShift: React.PropTypes.func.isRequired,
+        componentErrors: React.PropTypes.object.isRequired
+    }
     render() {
         var staff = this.props.staff;
         var shiftSavingInProgressSpinner = null;
         if (staff.shiftSavingInProgress) {
             shiftSavingInProgressSpinner = <Spinner />
         }
+
+        var errors = JSON.stringify(this.getComponentErrors());
 
         return (
             <div className="staff-list-item rota-staff-list-item">
@@ -47,9 +53,10 @@ export default class StaffListItem extends Component {
                         <div className="rota-staff-list-item__add-button" style={{float: "left"}}>
                             <AddStaffToShiftButton
                                 staffId={staff.id}
-                                addShift={this.props.addShift}
+                                addShift={() => this.addShift()}
                                 />
                         </div>
+                        {errors}
                         <div style={{
                             float: "left",
                             marginTop: 40,
@@ -61,5 +68,17 @@ export default class StaffListItem extends Component {
                 </div>
             </div>
         );
+    }
+    getComponentId() {
+        if (!this.componentId) {
+            this.componentId = Math.random();
+        }
+        return this.componentId;
+    }
+    getComponentErrors(){
+        return this.context.componentErrors[this.getComponentId()];
+    }
+    addShift(){
+        this.context.addShift(this.props.staff.id, this.getComponentId())
     }
 }

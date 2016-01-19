@@ -28,7 +28,7 @@ describe("componentErrorsReducer", function(){
                 something: "went wrong"
             }
         };
-        var expectedResultState = {}
+        var expectedResultState = {};
 
         expect(componentErrorsReducer(initialState, action)).toEqual(expectedResultState);
     });
