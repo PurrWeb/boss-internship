@@ -1,4 +1,8 @@
 export default function createApiRequestActionFactory(actionTypes) {
+	actionTypes.API_REQUEST_START = "API_REQUEST_START";
+	actionTypes.API_REQUEST_END = "API_REQUEST_END"
+	actionTypes.SET_COMPONENT_ERROR = "SET_COMPONENT_ERROR";
+	
 	return function createApiRequestAction(requestType, makeRequest){
 	    const SUCCESS_TYPE = requestType + "_SUCCESS";
 	    actionTypes[SUCCESS_TYPE] = SUCCESS_TYPE;

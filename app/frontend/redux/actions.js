@@ -5,19 +5,16 @@ import createApiRequestActionFactory from "./create-api-request-action"
 export const actionTypes = {};
 var createApiRequestAction = createApiRequestActionFactory(actionTypes)
 
-actionTypes.API_REQUEST_START = "API_REQUEST_START";
-actionTypes.API_REQUEST_END = "API_REQUEST_END"
-actionTypes.SET_COMPONENT_ERROR = "SET_COMPONENT_ERROR";
-
 export const addRotaShift = createApiRequestAction(
     "ADD_SHIFT",
     function(options, success, error) {
-        options = Object.assign({}, options, {
+        options.shift = Object.assign({}, options.shift, {
             id: Math.floor(Math.random() * 100000000000)
         });
         setTimeout(function(){
-            if (options.starts_at.valueOf() < options.ends_at.valueOf()) {
-                success({shift: options});
+            var shift = options.shift;
+            if (shift.starts_at.valueOf() < shift.ends_at.valueOf()) {
+                success({shift});
             } else {
                 error({
                     ok: false,
@@ -35,19 +32,22 @@ export const addRotaShift = createApiRequestAction(
 
 
 actionTypes.REPLACE_ALL_SHIFTS = "REPLACE_ALL_SHIFTS";
-export function replaceAllShifts (shifts) {
+export function replaceAllShifts (options) {
     return {
         type: actionTypes.REPLACE_ALL_SHIFTS,
-        shifts: shifts
+        shifts: options.shifts
     }
 }
 
-
 export const updateRotaShift = createApiRequestAction(
     "UPDATE_SHIFT",
-    function(shift, success, error) {
+    function(options, success, error) {
+        if (!options.shift === undefined) {
+            throw "Need to provide shift with starts_at, ends_at and shift_id properties.";
+        }
+
         setTimeout(function(){
-            success({shift});
+            success(options);
         }, 2000);
     }
 );
@@ -86,10 +86,10 @@ export function updateStaffStatus(staffId, status) {
 }
 
 actionTypes.REPLACE_ALL_STAFF_MEMBERS = "UPDATE_STAFF_STATUS";
-export function replaceAllStaffMembers(staffMembers) {
+export function replaceAllStaffMembers(options) {
     return {
         type: actionTypes.REPLACE_ALL_STAFF_MEMBERS,
-        staffMembers
+        staffMembers: options.staffMembers
     }
 }
 
@@ -105,8 +105,8 @@ export function loadInitialRotaAppState() {
     var userDataById = _.indexBy(userData, "id");
     return function(dispatch){
         setTimeout(function(){
-            dispatch(replaceAllStaffMembers(userDataById));
-            dispatch(replaceAllShifts(initialShiftState));
+            dispatch(replaceAllStaffMembers({staffMembers: userDataById}));
+            dispatch(replaceAllShifts({shifts: initialShiftState}));
         }, 3000)
     }
 }
@@ -115,7 +115,7 @@ export function loadInitialClockInOutAppState() {
     var userDataById = _.indexBy(userData, "id");
     return function(dispatch){
         setTimeout(function(){
-            dispatch(replaceAllStaffMembers(userDataById));
+            dispatch(replaceAllStaffMembers({staffMembers: userDataById}));
         }, 3000)
     }
 }

@@ -83,9 +83,11 @@ export default class ShiftEditor extends Component {
     }
     updateShift(){
         this.context.boundActionCreators.updateRotaShift({
-            starts_at: this.state.newShiftTimes.starts_at,
-            ends_at: this.state.newShiftTimes.ends_at,
-            shift_id: this.props.shift.id
+            shift: {
+                starts_at: this.state.newShiftTimes.starts_at,
+                ends_at: this.state.newShiftTimes.ends_at,
+                shift_id: this.props.shift.id
+            }
         });
     }
 }

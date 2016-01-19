@@ -6,7 +6,6 @@ import StaffListItem from "./staff-list-item"
 import {NoOpComponent} from "~lib/test-helpers"
 
 StaffListItem.__Rewire__('StaffTypeBadge', NoOpComponent);
-
 StaffListItem.__Rewire__('AddStaffToShiftButton', NoOpComponent);
 
 describe('StaffListItem', function() {

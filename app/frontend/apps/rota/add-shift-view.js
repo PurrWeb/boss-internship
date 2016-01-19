@@ -56,11 +56,13 @@ export default class AddShiftView extends Component {
     }
     addShift(staffId, requestComponent){
         this.context.boundActionCreators.addRotaShift({
-            starts_at: this.state.shiftTimes.starts_at,
-            ends_at: this.state.shiftTimes.ends_at,
-            staff_id: staffId,
+            shift: {
+                starts_at: this.state.shiftTimes.starts_at,
+                ends_at: this.state.shiftTimes.ends_at,
+                staff_id: staffId
+            },
             requestComponent: requestComponent
-        })
+        });
     }
     onShiftTimesChange(shiftTimes){
         this.setState({shiftTimes});
