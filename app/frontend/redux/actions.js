@@ -77,16 +77,19 @@ export const addRotaShift = createApiRequestAction(
             id: Math.floor(Math.random() * 100000000000)
         });
         setTimeout(function(){
-            error({
-              ok: false,
-              status: 500,
-              errors: {
-                base: "too boring",
-                starts_at: ["must be a date", "can't be between foo and foo"]
-              },
-              requestComponent: options.requestComponent
-            });
-            // success({options});
+            if (options.starts_at.valueOf() < options.ends_at.valueOf()) {
+                success({shift: options});
+            } else {
+                error({
+                    ok: false,
+                    status: 500,
+                    errors: {
+                        base: "start time must be before end time"
+                    },
+                    requestComponent: options.requestComponent
+                });
+
+            }
         }, 2000);
     }
 );
