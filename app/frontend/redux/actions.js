@@ -42,7 +42,7 @@ function createApiRequestAction(requestType, makeRequest){
             function dispatchSetComponentError(errors){
                 dispatch({
                     type: actionTypes.SET_COMPONENT_ERROR,
-                    requestComponent: requestOptions.requestComponent,
+                    componentId: requestOptions.requestComponent,
                     errors: errors
                 })
             }
