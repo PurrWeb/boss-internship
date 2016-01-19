@@ -56,8 +56,11 @@ export const updateRotaShift = createApiRequestAction(
 export const deleteRotaShift = createApiRequestAction(
     "DELETE_SHIFT",
     function(options, success, error) {
+        if (options.shift_id === undefined) {
+            throw "Need to specify shift_id that should be deleted"
+        }
         setTimeout(function(){
-            success({...options});
+            success(options);
         }, 2000);
     }
 );
