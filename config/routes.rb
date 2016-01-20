@@ -56,6 +56,7 @@ Rails.application.routes.draw do
       resources :staff_members, only: :show
       resources :staff_types,   only: :show
       resources :rota_shifts,   only: :show
+      resources :rotas,         only: :show
     end
   end
 

@@ -1,9 +1,20 @@
 FactoryGirl.define do
   factory :rota_shift do
+    transient do
+      date Time.now
+      rota nil
+    end
+
     association :creator, factory: :user
-    rota
     staff_member
-    starts_at { 2.hours.ago }
-    ends_at { 1.hour.ago }
+
+    after(:build) do |object, evaluator|
+      object.starts_at = evaluator.date.beginning_of_day + 5.hours
+      object.ends_at = evaluator.date.beginning_of_day + 7.hours
+      object.rota = evaluator.rota || FactoryGirl.build(
+        :rota,
+        date: evaluator.date
+      )
+    end
   end
 end
