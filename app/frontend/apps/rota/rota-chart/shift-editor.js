@@ -68,6 +68,9 @@ export default class ShiftEditor extends Component {
         return utils.dateIsValid(starts_at) && utils.dateIsValid(ends_at);
     }
     deleteShift(){
+        if (this.props.shift.isBeingEdited) {
+            return;
+        }
         this.context.boundActionCreators.deleteRotaShift({shift_id: this.props.shift.id});
     }
     onShiftTimesChange(shiftTimes) {

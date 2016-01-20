@@ -20,6 +20,9 @@ function rotaShiftItems(state=[], action){
             return [...state, action.shift];
         case actionTypes.UPDATE_SHIFT_SUCCESS:
             var rotaShiftIndex = _.findIndex(state, {id: action.shift.shift_id});
+            if (rotaShiftIndex === -1) {
+                throw "Trying to update a shift that doesn't exist.";
+            }
             var rotaShift = state[rotaShiftIndex];
             rotaShift = Object.assign({}, rotaShift, {
                 starts_at: action.shift.starts_at,
@@ -32,6 +35,9 @@ function rotaShiftItems(state=[], action){
             ];
         case actionTypes.DELETE_SHIFT_SUCCESS:
             var rotaShiftIndex = _.findIndex(state, {id: action.shift_id});
+            if (rotaShiftIndex === -1) {
+                throw "Trying to delete a shift that no longer exists.";
+            }
             return [
                 ...state.slice(0, rotaShiftIndex),
                 ...state.slice(rotaShiftIndex + 1)
