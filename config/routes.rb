@@ -53,6 +53,7 @@ Rails.application.routes.draw do
         end
       end
       resources :staff_members, only: :show
+      resources :staff_types,   only: :show
     end
   end
 
