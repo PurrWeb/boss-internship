@@ -3,6 +3,8 @@ import ShiftTimeSelector from "~components/shift-time-selector"
 import Spinner from "~components/spinner"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
+import reactMixin from "react-mixin"
+import apiFormMixin from "~mixins/api-form-mixin"
 
 export default class ShiftEditor extends Component {
     static contextTypes = {
@@ -61,6 +63,7 @@ export default class ShiftEditor extends Component {
                 className={this.props.shift.isBeingEdited ? "link-disabled" : ""}>
                 Delete shift
             </a>
+            <div>{JSON.stringify(this.getComponentErrors())}</div>
         </div>
     }
     areBothTimesValid(){
@@ -71,7 +74,10 @@ export default class ShiftEditor extends Component {
         if (this.props.shift.isBeingEdited) {
             return;
         }
-        this.context.boundActionCreators.deleteRotaShift({shift_id: this.props.shift.id});
+        this.context.boundActionCreators.deleteRotaShift({
+            shift_id: this.props.shift.id,
+            requestComponent: this.getComponentId()
+        });
     }
     onShiftTimesChange(shiftTimes) {
         this.setState({newShiftTimes: shiftTimes})
@@ -82,7 +88,10 @@ export default class ShiftEditor extends Component {
                 starts_at: this.state.newShiftTimes.starts_at,
                 ends_at: this.state.newShiftTimes.ends_at,
                 shift_id: this.props.shift.id
-            }
+            },
+            requestComponent: this.getComponentId()
         });
     }
 }
+
+reactMixin.onClass(ShiftEditor, apiFormMixin);

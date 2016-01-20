@@ -60,7 +60,16 @@ export const deleteRotaShift = createApiRequestAction(
             throw "Need to specify shift_id that should be deleted"
         }
         setTimeout(function(){
-            success(options);
+            if (Math.random() > .5) {
+                error({
+                    errors: {
+                        "base": "Shift couldn't be deleted. Try again."
+                    },
+                    requestComponent: options.requestComponent
+                })
+            } else {
+                success(options);
+            }
         }, 2000);
     }
 );
