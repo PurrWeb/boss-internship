@@ -1,9 +1,12 @@
 import defaultRotaShifts from "../data/default-rota-shifts.js"
 import userData from "~data/users.js"
-import createApiRequestActionFactory from "./create-api-request-action"
+import importedCreateApiRequestAction from "./create-api-request-action"
 
 export const actionTypes = {};
-var createApiRequestAction = createApiRequestActionFactory(actionTypes)
+const createApiRequestAction = function(requestType, makeRequest){
+    return importedCreateApiRequestAction(requestType, makeRequest, actionTypes);
+}
+
 
 export const addRotaShift = createApiRequestAction(
     "ADD_SHIFT",
