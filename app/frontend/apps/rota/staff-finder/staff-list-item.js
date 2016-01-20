@@ -13,7 +13,7 @@ export default class StaffListItem extends Component {
     render() {
         var staff = this.props.staff;
         var shiftSavingInProgressSpinner = null;
-        if (staff.shiftSavingInProgress) {
+        if (staff.addShiftIsInProgress) {
             shiftSavingInProgressSpinner = <Spinner />
         }
 
