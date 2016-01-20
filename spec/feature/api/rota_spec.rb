@@ -23,7 +23,11 @@ RSpec.describe 'Api access' do
         json = JSON.parse(response.body)
         expect(json).to eq({
           "id" => rota.id,
-          "venue_id" => rota.venue_id,
+          "url" => url_helpers.api_v1_rota_url(rota),
+          "venue" => {
+            "id" => rota.venue.id,
+            "url" => url_helpers.api_v1_venue_url(rota.venue)
+          },
           "date" => rota.date.iso8601,
           "status" => rota.status
         })

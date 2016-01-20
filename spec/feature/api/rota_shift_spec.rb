@@ -23,10 +23,17 @@ RSpec.describe 'Api access' do
         json = JSON.parse(response.body)
         expect(json).to eq({
           "id" => rota_shift.id,
-          "rota_id" => rota_shift.rota.id,
-          "starts_at" => rota_shift.starts_at.utc.iso8601,
-          "ends_at" => rota_shift.ends_at.utc.iso8601,
-          "staff_member_id" => rota_shift.staff_member.id
+          "url" => url_helpers.api_v1_rota_shift_url(rota_shift),
+          "rota" => {
+            "id" => rota_shift.rota.id,
+            "url" => url_helpers.api_v1_rota_url(rota_shift.rota)
+          },
+          "starts_at" => rota_shift.starts_at.iso8601,
+          "ends_at" => rota_shift.ends_at.iso8601,
+          "staff_member" => {
+            "id" => rota_shift.staff_member.id,
+            "url" => url_helpers.api_v1_staff_member_url(rota_shift.staff_member)
+          }
         })
       end
     end

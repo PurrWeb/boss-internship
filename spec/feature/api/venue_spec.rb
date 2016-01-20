@@ -25,8 +25,14 @@ RSpec.describe 'Api access' do
         json = JSON.parse(response.body)
         expect(json).to eq({
           "id" => venue.id,
+          "url" => url_helpers.api_v1_venue_url(venue),
           "name" => venue.name,
-          "staff_member_ids" => staff_members.map(&:id)
+          "staff_members" => staff_members.map do |staff_member|
+            {
+              "id" => staff_member.id,
+              "url" => url_helpers.api_v1_staff_member_url(staff_member)
+            }
+          end
         })
       end
     end

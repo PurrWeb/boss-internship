@@ -23,7 +23,8 @@ RSpec.describe 'Api access' do
         json = JSON.parse(response.body)
         expect(json).to eq({
           "id" => staff_type.id,
-          "name" => staff_type.name,
+          "url" => url_helpers.api_v1_staff_type_url(staff_type),
+          "name" => staff_type.name
         })
       end
     end
