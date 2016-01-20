@@ -13,7 +13,7 @@ export default class ToggleStaffClockedInButton extends Component {
                 return {
                     "clocked_in": "clocked_out",
                     "clocked_out": "clocked_in",
-                    "on_break": "clocked_out"
+                    "on_break": null
                 }[currentStatus];
             } } />;
     }
