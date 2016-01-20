@@ -7,6 +7,7 @@ import staffTypes from "../../data/staff-types.js"
 import _ from "underscore"
 import AddShiftView from "./add-shift-view"
 import store from "../../redux/store.js"
+import moment from "moment"
 
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
 
@@ -33,7 +34,7 @@ class RotaView extends Component {
     render() {
         return <div className="container">
             <h1>
-                Rota: Friday 11th October 2015
+                Rota for {this.props.venue}: {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>
             <br/>
             <ChartAndFilter
@@ -67,6 +68,7 @@ function mapStateToProps(state) {
         });
     });
     props.staffTypes = staffTypes;
+    props.venue = "The Rocket Bar";
     props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
 
     console.log("PROPS", props)
