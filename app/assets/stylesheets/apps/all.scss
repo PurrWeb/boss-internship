@@ -1,2 +1,7 @@
 @import "rota/rota-page";
-@import "clock-in-out/clock-in-out"
+@import "clock-in-out/clock-in-out";
+
+.link-disabled {
+	opacity: .2;
+	pointer-events: "none";
+}

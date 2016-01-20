@@ -58,12 +58,7 @@ export default class ShiftEditor extends Component {
         
             <a
                 onClick={() => this.deleteShift()}
-                style={
-                    this.props.shift.isBeingUpdated ? {
-                        opacity: .2,
-                        pointerEvents: "none"
-                    } : {}
-                }>
+                className={this.props.shift.isBeingEdited ? "link-disabled" : ""}>
                 Delete shift
             </a>
         </div>
@@ -73,9 +68,6 @@ export default class ShiftEditor extends Component {
         return utils.dateIsValid(starts_at) && utils.dateIsValid(ends_at);
     }
     deleteShift(){
-        if (this.props.shift.isBeingUpdated) {
-            return;
-        }
         this.context.boundActionCreators.deleteRotaShift({shift_id: this.props.shift.id});
     }
     onShiftTimesChange(shiftTimes) {
