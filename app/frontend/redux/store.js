@@ -11,8 +11,10 @@ function staff(state=[], action){
     return userDataById;
 }
 
-function staffStatuses(state={}, action){
-    return staffStatusMockData;
+function staffStatuses(state=staffStatusMockData, action){
+    return Object.assign({}, state, {
+        [action.staffId]: action.status
+    })
 }
 
 let initialState;
