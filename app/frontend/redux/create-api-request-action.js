@@ -1,3 +1,5 @@
+import _ from "underscore"
+
 export default function createApiRequestActionFactory(actionTypes) {
 	actionTypes.API_REQUEST_START = "API_REQUEST_START";
 	actionTypes.API_REQUEST_END = "API_REQUEST_END"
@@ -54,8 +56,10 @@ export default function createApiRequestActionFactory(actionTypes) {
 	                };
 	            }
 	            
-	            dispatch(requestStartAction());
-	            dispatch(setComponentErrorAction(undefined));
+	            dispatch([
+	            	requestStartAction(),
+	            	setComponentErrorAction(undefined)
+	            ]);
 	            makeRequest(requestOptions, success, error)
 	        }
 
