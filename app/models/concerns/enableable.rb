@@ -14,20 +14,4 @@ module Enableable
   def disabled?
     !enabled?
   end
-
-  def enable
-    update_attributes enabled: true
-  end
-
-  def disable
-    update_attributes enabled: false
-  end
-
-  def enable!
-    update_attributes! enabled: true
-  end
-
-  def disable!
-    update_attributes! enabled: false
-  end
 end
