@@ -16,8 +16,8 @@ const addTodo = createApiRequestAction(
     function(options, success, error) {
         loadData(function(response){
             success({
-				requestComponent: options.requestComponent,
-				...response
+                requestComponent: options.requestComponent,
+                ...response
             });
         }, 1000);
     },
@@ -33,12 +33,12 @@ addTodo({title: "Buy milk"});
    - success  Callback to call once the data has been loaded
    - error    Callback to to call if the data couldn't be loaded.
  * @param  {object} actionTypes - action types that are accessed in the reducers
- * @return {function} 	Asynchronous action creator.
+ * @return {function}   Asynchronous action creator.
  */
 export default function createApiRequestAction(requestType, makeRequest, actionTypes){
-	actionTypes.API_REQUEST_START = "API_REQUEST_START";
-	actionTypes.API_REQUEST_END = "API_REQUEST_END"
-	actionTypes.SET_COMPONENT_ERROR = "SET_COMPONENT_ERROR";
+    actionTypes.API_REQUEST_START = "API_REQUEST_START";
+    actionTypes.API_REQUEST_END = "API_REQUEST_END"
+    actionTypes.SET_COMPONENT_ERROR = "SET_COMPONENT_ERROR";
     const SUCCESS_TYPE = requestType + "_SUCCESS";
     actionTypes[SUCCESS_TYPE] = SUCCESS_TYPE;
 
@@ -52,18 +52,18 @@ export default function createApiRequestAction(requestType, makeRequest, actionT
         return function(dispatch) {
             function success(responseOptions){
                 dispatch([
-                	{
-                    	type: SUCCESS_TYPE,
-                    	...responseOptions
-                	},
-                	requestEndAction()
+                    {
+                        type: SUCCESS_TYPE,
+                        ...responseOptions
+                    },
+                    requestEndAction()
                 ]);
             }
             function error(responseOptions){
-            	dispatch([
-            		requestEndAction(),
-            		setComponentErrorAction(responseOptions.errors)
-            	]);
+                dispatch([
+                    requestEndAction(),
+                    setComponentErrorAction(responseOptions.errors)
+                ]);
             }
             function setComponentErrorAction(errors){
                 return {
@@ -90,8 +90,8 @@ export default function createApiRequestAction(requestType, makeRequest, actionT
             }
             
             dispatch([
-            	requestStartAction(),
-            	setComponentErrorAction(undefined)
+                requestStartAction(),
+                setComponentErrorAction(undefined)
             ]);
             makeRequest(requestOptions, success, error)
         }

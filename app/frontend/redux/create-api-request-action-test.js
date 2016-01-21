@@ -1,12 +1,11 @@
-import createApiRequestActionFactory from "./create-api-request-action";
+import createApiRequestAction from "./create-api-request-action";
 import expect from "expect"
-var actionTypes = {};
-var createApiRequestAction = createApiRequestActionFactory(actionTypes);
 
-function dispatchDoSth(makeRequest, actionCreatorOptions){
+function dispatchDoSomething(makeRequest, actionCreatorOptions){
 	console.log("dispatchDoSth")
 	var dispatch = expect.createSpy();
-	var actionCreator = createApiRequestAction("DO_STH", makeRequest);
+	var actionTypes = {};
+	var actionCreator = createApiRequestAction("DO_SOMETHING", makeRequest, actionTypes);
 	actionCreator(actionCreatorOptions)(dispatch);
 	console.log("dispatchDoSth end")
 	return dispatch;
@@ -15,12 +14,12 @@ function dispatchDoSth(makeRequest, actionCreatorOptions){
 describe("createApiRequestAction", function(){
 	it("Calls makeRequest with the requestOptions that were passed in", function(){
 		var makeRequest = expect.createSpy();
-		var dispatch = dispatchDoSth(makeRequest, {value: 99});
+		var dispatch = dispatchDoSomething(makeRequest, {value: 99});
 		expect(makeRequest.calls[0].arguments[0]).toEqual({value: 99});
 	});
 
 	it("Dispatches API_REQUEST_START and SET_COMPONENT_ERROR actions when I start a request", function(){
-		var dispatch = dispatchDoSth(function(){}, {})
+		var dispatch = dispatchDoSomething(function(){}, {})
 		expect(dispatch).toHaveBeenCalled();
 		var actionObjects = dispatch.calls[0].arguments[0];
 		expect(actionObjects[0].type).toEqual("API_REQUEST_START");
@@ -31,10 +30,10 @@ describe("createApiRequestAction", function(){
 		var makeRequest = function(options, success, error){
 			success();
 		};
-		var dispatch = dispatchDoSth(makeRequest, {});
+		var dispatch = dispatchDoSomething(makeRequest, {});
 
 		var actionObjects = dispatch.calls[1].arguments[0];
-		expect(actionObjects[0].type).toEqual("DO_STH_SUCCESS");
+		expect(actionObjects[0].type).toEqual("DO_SOMETHING_SUCCESS");
 		expect(actionObjects[1].type).toEqual("API_REQUEST_END");
 	});
 
@@ -42,7 +41,7 @@ describe("createApiRequestAction", function(){
 		var makeRequest = function(options, success, error){
 			error({message: "It went wrong"});
 		};
-		var dispatch = dispatchDoSth(makeRequest, {});
+		var dispatch = dispatchDoSomething(makeRequest, {});
 
 		var actionObjects = dispatch.calls[1].arguments[0];
 		expect(actionObjects[0].type).toEqual("API_REQUEST_END");
