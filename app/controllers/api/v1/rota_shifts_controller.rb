@@ -20,6 +20,12 @@ module Api
         end
       end
 
+      def destroy
+        shift = RotaShift.find(params[:id])
+        DisableRotaShift.new(requester: current_user, shift: shift).call
+        render json: {}
+      end
+
       private
       def rota_shift_params
         params.permit(

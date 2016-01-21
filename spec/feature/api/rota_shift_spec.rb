@@ -130,6 +130,26 @@ RSpec.describe 'Api access' do
     end
   end
 
+  describe "delete" do
+    let(:url) { url_helpers.api_v1_rota_shift_path(rota_shift) }
+    let(:response) { delete(url) }
+    let(:rota_shift) { FactoryGirl.create(:rota_shift) }
+
+    before do
+      rota_shift
+    end
+
+    specify 'it should succeed' do
+      expect(response.status).to eq(ok_status)
+    end
+
+    specify 'shift is disabled' do
+      response
+      rota_shift.reload
+      expect(rota_shift).to be_disabled
+    end
+  end
+
   private
   def app
     Rails.application
