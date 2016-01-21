@@ -19,7 +19,13 @@ var rootReducer = combineReducers({
     componentErrors
 });
 var createStoreWithMiddleware = compose(
+	// Redux thunk let's us dispatch asynchronous actions, for example
+	// actions that do an Ajax call before updating the state
+	// by dispatching another action
 	applyMiddleware(thunk),
+	// Batch middleware lets us dispatch multiple actions at once:
+	// dispatch([a,b]) instead of dispatch(a);dispatch(b);
+	// Store subscribers will only be notified once instead of twice.
 	applyMiddleware(batch)
 )(createStore);
 var store = createStoreWithMiddleware(batching(rootReducer));
