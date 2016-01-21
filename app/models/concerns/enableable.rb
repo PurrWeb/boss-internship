@@ -6,7 +6,7 @@ module Enableable
       where(enabled: true)
     end
 
-    def not_enabled
+    def disabled
       where(enabled: false)
     end
   end
