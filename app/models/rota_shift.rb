@@ -1,5 +1,8 @@
 class RotaShift < ActiveRecord::Base
+  include Enableable
+
   belongs_to :creator, class_name: "User"
+  belongs_to :disabled_by_user, class_name: "User"
   belongs_to :staff_member
   belongs_to :rota
 

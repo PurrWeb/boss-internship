@@ -110,16 +110,20 @@ ActiveRecord::Schema.define(version: 20160122165448) do
   add_index "rota_status_transitions", ["rota_id", "sort_key"], name: "index_rota_status_transitions_parent_sort", unique: true, using: :btree
 
   create_table "rota_shifts", force: :cascade do |t|
-    t.integer  "creator_id",      limit: 4
-    t.datetime "starts_at",                 null: false
-    t.datetime "ends_at",                   null: false
-    t.integer  "staff_member_id", limit: 4, null: false
-    t.integer  "rota_id",         limit: 4, null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "creator_id",          limit: 4
+    t.datetime "starts_at",                                    null: false
+    t.datetime "ends_at",                                      null: false
+    t.integer  "staff_member_id",     limit: 4,                null: false
+    t.integer  "rota_id",             limit: 4,                null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.boolean  "enabled",                       default: true, null: false
+    t.datetime "disabled_at"
+    t.integer  "disabled_by_user_id", limit: 4
   end
 
   add_index "rota_shifts", ["creator_id"], name: "index_rota_shifts_on_creator_id", using: :btree
+  add_index "rota_shifts", ["enabled"], name: "index_rota_shifts_on_enabled", using: :btree
   add_index "rota_shifts", ["ends_at"], name: "index_rota_shifts_on_ends_at", using: :btree
   add_index "rota_shifts", ["rota_id"], name: "index_rota_shifts_on_rota_id", using: :btree
   add_index "rota_shifts", ["staff_member_id"], name: "index_rota_shifts_on_staff_member_id", using: :btree
