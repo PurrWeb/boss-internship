@@ -3,21 +3,26 @@ import RotaDate from "~lib/rota-date.js"
 import ShiftTimeSelector from "~components/shift-time-selector"
 import StaffFinder from "./staff-finder/staff-finder"
 import utils from "~lib/utils"
+import _ from "underscore"
 
 
 export default class AddShiftView extends Component {
     static childContextTypes = {
         addShift: React.PropTypes.func,
-        canAddShift: React.PropTypes.bool
+        canAddShift: React.PropTypes.func
     }
     static contextTypes = {
         boundActionCreators: React.PropTypes.object
     }
     getChildContext(){
-        var canAddShift = utils.dateIsValid(this.state.shiftTimes.starts_at) &&
+        var canAddShift = (staff_id) => {
+            var datesAreValid = utils.dateIsValid(this.state.shiftTimes.starts_at) &&
             utils.dateIsValid(this.state.shiftTimes.ends_at);
+            var isAddingShift = _(this.props.staff).find({id: staff_id}).addShiftIsInProgress;
+            return datesAreValid && !isAddingShift; 
+        }
         return {
-            addShift: (staffId) => this.addShift(staffId),
+            addShift: (staffId, requestComponent) => this.addShift(staffId, requestComponent),
             canAddShift
         }
     }
@@ -54,12 +59,15 @@ export default class AddShiftView extends Component {
         var ends_at = new Date(new Date(props.dateOfRota).setHours(20));
         return {starts_at, ends_at};
     }
-    addShift(staffId){
+    addShift(staffId, requestComponent){
         this.context.boundActionCreators.addRotaShift({
-            starts_at: this.state.shiftTimes.starts_at,
-            ends_at: this.state.shiftTimes.ends_at,
-            staff_id: staffId
-        })
+            shift: {
+                starts_at: this.state.shiftTimes.starts_at,
+                ends_at: this.state.shiftTimes.ends_at,
+                staff_id: staffId
+            },
+            requestComponent: requestComponent
+        });
     }
     onShiftTimesChange(shiftTimes){
         this.setState({shiftTimes});

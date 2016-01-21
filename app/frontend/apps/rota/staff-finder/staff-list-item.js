@@ -2,10 +2,22 @@ import React, { Component } from "react"
 import AddStaffToShiftButton from "./add-staff-to-shift-button"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
+import Spinner from "~components/spinner"
+import reactMixin from "react-mixin"
+import apiFormMixin from "~mixins/api-form-mixin"
 
 export default class StaffListItem extends Component {
+    static contextTypes = {
+        addShift: React.PropTypes.func.isRequired
+    }
     render() {
         var staff = this.props.staff;
+        var shiftSavingInProgressSpinner = null;
+        if (staff.addShiftIsInProgress) {
+            shiftSavingInProgressSpinner = <Spinner />
+        }
+
+        var errors = JSON.stringify(this.getComponentErrors());
 
         return (
             <div className="staff-list-item rota-staff-list-item">
@@ -39,15 +51,27 @@ export default class StaffListItem extends Component {
                         </div>
                     </div>
                     <div className="col-md-2">
-                        <div className="rota-staff-list-item__add-button">
+                        <div className="rota-staff-list-item__add-button" style={{float: "left"}}>
                             <AddStaffToShiftButton
                                 staffId={staff.id}
-                                addShift={this.props.addShift}
+                                addShift={() => this.addShift()}
                                 />
+                        </div>
+                        {errors}
+                        <div style={{
+                            float: "left",
+                            marginTop: 40,
+                            marginLeft: 10
+                        }}>
+                            {shiftSavingInProgressSpinner}
                         </div>
                     </div>
                 </div>
             </div>
         );
     }
+    addShift(){
+        this.context.addShift(this.props.staff.id, this.getComponentId())
+    }
 }
+reactMixin.onClass(StaffListItem, apiFormMixin);

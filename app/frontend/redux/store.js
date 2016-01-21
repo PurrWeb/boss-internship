@@ -1,70 +1,33 @@
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import thunk from "redux-thunk"
 import _ from "underscore"
-import userData from "~data/users.js"
-import staffStatusMockData from "~data/staff-status-mock-data"
-import * as ACTIONS from "./actions.js"
-import defaultRotaShifts from "../data/default-rota-shifts.js"
+import {batch, batching} from "redux-batch-middleware"
 
-var userDataById = _.indexBy(userData, "id");
+import staffStatuses from "./staff-statuses-reducer"
+import staff from "./staff-members-reducer"
+import rotaShifts from "./rota-shifts-reducer"
+import appIsInManagerMode from "./app-is-in-manager-mode-reducer"
+import apiRequestsInProgress from "./api-requests-in-progress-reducer"
+import componentErrors from "./component-errors-reducer"
 
-function staff(state=[], action){
-    return userDataById;
-}
-
-function staffStatuses(state=staffStatusMockData, action){
-    return Object.assign({}, state, {
-        [action.staffId]: action.status
-    })
-}
-
-let initialState;
-if(window.location.pathname === '/rotas/empty_example') {
-  initialState = [];
-} else {
-  initialState = defaultRotaShifts;
-}
-
-function rotaShifts(state=initialState, action){
-    switch (action.type) {
-        case ACTIONS.ADD_ROTA_SHIFT:
-            return [...state, action.rota];
-        case ACTIONS.UPDATE_ROTA_SHIFT:
-            var rotaShiftIndex = _.findIndex(state, {id: action.rota.shift_id});
-            var rotaShift = state[rotaShiftIndex];
-            rotaShift = Object.assign({}, rotaShift, {
-                starts_at: action.rota.starts_at,
-                ends_at: action.rota.ends_at
-            });
-            return [
-                ...state.slice(0, rotaShiftIndex),
-                rotaShift,
-                ...state.slice(rotaShiftIndex + 1)
-            ];
-        case ACTIONS.DELETE_ROTA_SHIFT:
-            var rotaShiftIndex = _.findIndex(state, {id: action.shift_id});
-            return [
-                ...state.slice(0, rotaShiftIndex),
-                ...state.slice(rotaShiftIndex + 1)
-            ];
-    }
-    return state;
-}
-
-function appIsInManagerMode(state=false, action){
-    switch(action.type) {
-        case ACTIONS.ENTER_MANAGER_MODE:
-            return true;
-        case ACTIONS.LEAVE_MANAGER_MODE:
-            return false;
-    }
-    return state;
-}
-
-var store = createStore(combineReducers({
+var rootReducer = combineReducers({
     staff,
     rotaShifts,
     staffStatuses,
-    appIsInManagerMode
-}));
+    appIsInManagerMode,
+    apiRequestsInProgress,
+    componentErrors
+});
+var createStoreWithMiddleware = compose(
+	// Redux thunk let's us dispatch asynchronous actions, for example
+	// actions that do an Ajax call before updating the state
+	// by dispatching another action
+	applyMiddleware(thunk),
+	// Batch middleware lets us dispatch multiple actions at once:
+	// dispatch([a,b]) instead of dispatch(a);dispatch(b);
+	// Store subscribers will only be notified once instead of twice.
+	applyMiddleware(batch)
+)(createStore);
+var store = createStoreWithMiddleware(batching(rootReducer));
 
 export default store;

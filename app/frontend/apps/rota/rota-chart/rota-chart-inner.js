@@ -162,7 +162,7 @@ class RotaChart extends Component {
                 var staff = shift.staff;
                 var formattedStartTime = moment(shift.originalShiftObject.starts_at).format("HH:mm");
                 var formattedEndTime = moment(shift.originalShiftObject.ends_at).format("HH:mm");
-                return `${staff.id} ${staff.first_name} ${staff.surname} (${formattedStartTime} - ${formattedEndTime})`;
+                return `${staff.first_name} ${staff.surname} (${formattedStartTime} - ${formattedEndTime})`;
             })
             .attr("dx", 4)
             .attr("dy", 8)

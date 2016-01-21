@@ -5,5 +5,11 @@ _.mixin({
             obj[k] = mapper(v, k, input);
             return obj;
         }, {});
+    },
+    removeAtIndex: function(input, index) {
+        return [
+            ...input.slice(0, index),
+            ...input.slice(index + 1)
+        ]
     }
 });

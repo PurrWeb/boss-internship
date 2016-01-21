@@ -7,6 +7,7 @@ import staffTypes from "../../data/staff-types.js"
 import _ from "underscore"
 import AddShiftView from "./add-shift-view"
 import store from "../../redux/store.js"
+import moment from "moment"
 
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
 
@@ -15,20 +16,25 @@ class RotaView extends Component {
         staffTypes: React.PropTypes.object,
         boundActionCreators: React.PropTypes.object,
         rotaShifts: React.PropTypes.array,
-        dateOfRota: React.PropTypes.instanceOf(Date)
+        dateOfRota: React.PropTypes.instanceOf(Date),
+        componentErrors: React.PropTypes.object
     }
     getChildContext(){
         return {
             staffTypes: this.props.staffTypes,
             boundActionCreators: boundActionCreators,
             rotaShifts: this.props.rotaShifts,
-            dateOfRota: this.props.dateOfRota
+            dateOfRota: this.props.dateOfRota,
+            componentErrors: this.props.componentErrors
         }
+    }
+    componentWillMount(){
+        this.props.dispatch(actionCreators.loadInitialRotaAppState())
     }
     render() {
         return <div className="container">
             <h1>
-                Rota: Friday 11th October 2015
+                Rota for {this.props.venue}: {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>
             <br/>
             <ChartAndFilter
@@ -45,8 +51,27 @@ class RotaView extends Component {
 function mapStateToProps(state) {
     var props = _.clone(state);
 
+    var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
+    props.staff = _(props.staff).mapValues(function(staff){
+        return Object.assign({}, staff, {
+            addShiftIsInProgress: _(shiftsBeingAdded).some((request) => request.shift.staff_id === staff.id)
+        })
+    });
+
+    var shiftsBeingUpdated = props.apiRequestsInProgress.UPDATE_SHIFT;
+    var shiftsBeingDeleted = props.apiRequestsInProgress.DELETE_SHIFT;
+    props.rotaShifts = _(props.rotaShifts.items).map(function(shift){
+        var isBeingEdited = _(shiftsBeingUpdated).some((request) => request.shift.shift_id === shift.id)
+            || _(shiftsBeingDeleted).some({shift_id: shift.id});
+        return Object.assign({}, shift, {
+            isBeingEdited: isBeingEdited
+        });
+    });
     props.staffTypes = staffTypes;
+    props.venue = "The Rocket Bar";
     props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
+
+    console.log("PROPS", props)
 
     return props;
 }

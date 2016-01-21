@@ -1,7 +1,10 @@
 import React, { Component } from "react"
 import ShiftTimeSelector from "~components/shift-time-selector"
+import Spinner from "~components/spinner"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
+import reactMixin from "react-mixin"
+import apiFormMixin from "~mixins/api-form-mixin"
 
 export default class ShiftEditor extends Component {
     static contextTypes = {
@@ -27,6 +30,18 @@ export default class ShiftEditor extends Component {
             updateButtonClasses.push("disabled");
         }
 
+        var updateButton = <a
+            className={updateButtonClasses.join(" ")}
+            onClick={() => this.updateShift()} style={{marginTop: "-4px"}}>
+            Update
+        </a>
+
+        var spinner = null;
+        if (this.props.shift.isBeingEdited) {
+            spinner = <Spinner />
+            updateButton = null;
+        }
+
         return <div>
             <div className="row">
                 <div className="col-md-9">
@@ -38,15 +53,17 @@ export default class ShiftEditor extends Component {
                 </div>
                 <div className="col-md-3">
                     <br/>
-                    <a className={updateButtonClasses.join(" ")} onClick={() => this.updateShift()} style={{marginTop: "-4px"}}>
-                        Update
-                    </a>
+                    {updateButton}
+                    {spinner}
                 </div>
             </div>
         
-            <a onClick={() => this.deleteShift()}>
+            <a
+                onClick={() => this.deleteShift()}
+                className={this.props.shift.isBeingEdited ? "link-disabled" : ""}>
                 Delete shift
             </a>
+            <div>{JSON.stringify(this.getComponentErrors())}</div>
         </div>
     }
     areBothTimesValid(){
@@ -54,16 +71,27 @@ export default class ShiftEditor extends Component {
         return utils.dateIsValid(starts_at) && utils.dateIsValid(ends_at);
     }
     deleteShift(){
-        this.context.boundActionCreators.deleteRotaShift(this.props.shift.id);
+        if (this.props.shift.isBeingEdited) {
+            return;
+        }
+        this.context.boundActionCreators.deleteRotaShift({
+            shift_id: this.props.shift.id,
+            requestComponent: this.getComponentId()
+        });
     }
     onShiftTimesChange(shiftTimes) {
         this.setState({newShiftTimes: shiftTimes})
     }
     updateShift(){
         this.context.boundActionCreators.updateRotaShift({
-            starts_at: this.state.newShiftTimes.starts_at,
-            ends_at: this.state.newShiftTimes.ends_at,
-            shift_id: this.props.shift.id
+            shift: {
+                starts_at: this.state.newShiftTimes.starts_at,
+                ends_at: this.state.newShiftTimes.ends_at,
+                shift_id: this.props.shift.id
+            },
+            requestComponent: this.getComponentId()
         });
     }
 }
+
+reactMixin.onClass(ShiftEditor, apiFormMixin);

@@ -23,6 +23,9 @@ class ClockInOutView extends Component {
         staffStatusOptions: React.PropTypes.object,
         boundActionCreators: React.PropTypes.object
     }
+    componentWillMount(){
+        this.props.dispatch(actionCreators.loadInitialClockInOutAppState())
+    }
     getChildContext(){
         return {
             staffTypes: this.props.staffTypes,
