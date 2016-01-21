@@ -27,6 +27,7 @@
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-mixin": "^2.0.2",
+    "react-highcharts": "^6.0.0",
     "react-redux": "^4.0.0",
     "react-router": "1.0.0-rc3",
     "react-select": "^0.9.1",
