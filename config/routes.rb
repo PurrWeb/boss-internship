@@ -52,6 +52,7 @@ Rails.application.routes.draw do
           post :post
         end
       end
+      resources :venues, only: :show
       resources :staff_members, only: :show
       resources :staff_types,   only: :show
     end
