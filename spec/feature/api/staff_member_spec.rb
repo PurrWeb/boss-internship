@@ -1,0 +1,52 @@
+require 'rails_helper'
+
+RSpec.describe 'Api access' do
+  include Rack::Test::Methods
+  let(:staff_member) { FactoryGirl.create(:staff_member) }
+  let(:user) { FactoryGirl.create(:user) }
+
+  before do
+    login_as user
+  end
+
+  describe '#show' do
+    let(:url) { url_helpers.api_v1_staff_member_path(staff_member) }
+
+    describe 'response' do
+      let(:response) { get(url) }
+
+      specify 'should succeed' do
+        expect(response.status).to eq(ok_status)
+      end
+
+      specify 'should return a json representation of the staff member' do
+        json = JSON.parse(response.body)
+        expect(json).to eq({
+          "id" => staff_member.id,
+          "staff_type_id" =>  staff_member.staff_type.id,
+          "first_name" => staff_member.name.first_name,
+          "surname" => staff_member.name.surname,
+          "preferred_hours" => staff_member.hours_preference_note,
+          "preferred_days" => staff_member.day_perference_note
+        })
+      end
+    end
+  end
+
+  private
+  def app
+    Rails.application
+  end
+
+  def url_helpers
+    Rails.application.routes.url_helpers
+  end
+
+  def ok_status
+    200
+  end
+
+  def unauthorised_status
+    401
+  end
+end

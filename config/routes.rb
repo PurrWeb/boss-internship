@@ -44,7 +44,7 @@ Rails.application.routes.draw do
 
   resources :clock_in_clock_out, only: [:index]
 
-  namespace :api do
+  namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :test, only: [] do
         collection do
@@ -52,6 +52,7 @@ Rails.application.routes.draw do
           post :post
         end
       end
+      resources :staff_members, only: :show
     end
   end
 
