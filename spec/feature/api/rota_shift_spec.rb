@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'Api access' do
   include Rack::Test::Methods
+  include ActiveSupport::Testing::TimeHelpers
+
   let(:rota_shift) { FactoryGirl.create(:rota_shift) }
   let(:user) { FactoryGirl.create(:user) }
 
@@ -147,6 +149,73 @@ RSpec.describe 'Api access' do
       response
       rota_shift.reload
       expect(rota_shift).to be_disabled
+    end
+  end
+
+  describe "update" do
+    let(:url) { url_helpers.api_v1_rota_shift_path(rota_shift) }
+    let(:original_starts_at) { (Time.now.beginning_of_day + 5.hours).round.utc }
+    let(:original_ends_at) { (Time.now.beginning_of_day + 7.hours).round.utc }
+    let(:new_starts_at) { original_starts_at + 1.hour }
+    let(:new_ends_at) { original_ends_at + 1.hour }
+    let(:rota_shift) do
+      FactoryGirl.create(
+        :rota_shift,
+        starts_at: original_starts_at,
+        ends_at: original_ends_at
+      )
+    end
+    let(:params) do
+      {
+        starts_at: new_starts_at.iso8601,
+        ends_at: new_ends_at.iso8601
+      }
+    end
+    let(:response) { put(url, params) }
+
+    before do
+      rota_shift
+    end
+
+    specify 'it should succeed' do
+      expect(response.status).to eq(ok_status)
+    end
+
+    specify 'times should be updated' do
+      response
+      rota_shift.reload
+      expect(rota_shift.starts_at.utc).to eq(new_starts_at)
+      expect(rota_shift.ends_at.utc).to eq(new_ends_at)
+    end
+
+    context 'when parameters are invalid' do
+      let(:params) do
+        {
+          starts_at: new_starts_at.iso8601,
+          ends_at: nil
+        }
+      end
+
+      it 'should return unprocessable status' do
+        expect(response.status).to eq(unprocessable_entity_status)
+      end
+
+      it 'should return errors records' do
+        expect(JSON.parse(response.body)).to eq({
+          "errors" => {
+            "ends_at" => ["can't be blank"]
+          }
+        })
+      end
+
+      it 'should not update the RotaShift record' do
+        call_time = 2.hours.ago.round
+        travel_to(call_time) do
+          response
+        end
+        rota_shift.reload
+        expect(rota_shift.updated_at).to_not eq(call_time)
+      end
     end
   end
 

@@ -55,7 +55,7 @@ Rails.application.routes.draw do
       resources :venues, only: :show
       resources :staff_members, only: :show
       resources :staff_types,   only: :show
-      resources :rota_shifts,   only: [:show, :create, :destroy]
+      resources :rota_shifts,   only: [:show, :create, :destroy, :update]
       resources :rotas,         only: :show
     end
   end

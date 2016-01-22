@@ -20,6 +20,19 @@ module Api
         end
       end
 
+      def update
+        shift = RotaShift.find(params[:id])
+        if shift.update_attributes(rota_shift_update_params)
+          render 'show', locals: { rota_shift: shift }
+        else
+          render(
+            'error',
+            locals: { rota_shift: shift },
+            :status => :unprocessable_entity
+          )
+        end
+      end
+
       def destroy
         shift = RotaShift.find(params[:id])
         DisableRotaShift.new(requester: current_user, shift: shift).call
@@ -35,6 +48,13 @@ module Api
           rota: rota_from_params,
           staff_member: staff_member_from_params,
           creator: current_user
+        )
+      end
+
+      def rota_shift_update_params
+        params.permit(
+          :starts_at,
+          :ends_at
         )
       end
 
