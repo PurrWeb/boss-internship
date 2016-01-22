@@ -43,16 +43,21 @@ RSpec.describe 'Api access' do
 
   describe "create" do
     let(:response) { post(url, params) }
-    let(:url) { url_helpers.api_v1_rota_shifts_path }
+    let(:rota_date) { Time.now }
+    let(:venue) { FactoryGirl.create(:venue) }
+    let(:url) do
+      url_helpers.api_v1_venue_rota_rota_shifts_path(
+        rota_id: rota_date,
+        venue_id: venue.id
+      )
+    end
 
     context 'supplying valid parameters' do
-      let(:rota) { FactoryGirl.create(:rota) }
       let(:staff_member) { FactoryGirl.create(:staff_member) }
-      let(:starts_at) { (Time.now.beginning_of_day + 5.hours).utc }
-      let(:ends_at) { (Time.now.beginning_of_day + 7.hours).utc }
+      let(:starts_at) { (rota_date.beginning_of_day + 5.hours).utc }
+      let(:ends_at) { (rota_date.beginning_of_day + 7.hours).utc }
       let(:params) do
         {
-          rota_id: rota.id.to_s,
           staff_member_id: staff_member.id.to_s,
           starts_at: starts_at.iso8601,
           ends_at: ends_at.iso8601
@@ -82,12 +87,6 @@ RSpec.describe 'Api access' do
           json["staff_member"]
         ).to include(
           "id" => staff_member.id
-        )
-
-        expect(
-          json["rota"]
-        ).to include(
-          "id" => rota.id
         )
       end
 

@@ -9,7 +9,8 @@ module Api
       def create
         result = CreateRotaShift.new(
           creator: current_user,
-          rota: rota_from_params,
+          rota_date: rota_date_from_params,
+          venue: venue_from_params,
           rota_shift_params: rota_shift_params
         ).call
 
@@ -53,8 +54,12 @@ module Api
         )
       end
 
-      def rota_from_params
-        Rota.find_by(id: params[:rota_id])
+      def rota_date_from_params
+        params[:rota_id]
+      end
+
+      def venue_from_params
+        Venue.find_by(id: params[:venue_id])
       end
 
       def staff_member_from_params
