@@ -168,7 +168,8 @@ RSpec.describe 'Api access' do
     let(:params) do
       {
         starts_at: new_starts_at.iso8601,
-        ends_at: new_ends_at.iso8601
+        ends_at: new_ends_at.iso8601,
+        staff_member_id: rota_shift.staff_member.id
       }
     end
     let(:response) { put(url, params) }
@@ -192,7 +193,8 @@ RSpec.describe 'Api access' do
       let(:params) do
         {
           starts_at: new_starts_at.iso8601,
-          ends_at: nil
+          ends_at: nil,
+          staff_member_id: rota_shift.staff_member.id
         }
       end
 

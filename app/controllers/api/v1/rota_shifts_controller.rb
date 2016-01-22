@@ -7,14 +7,18 @@ module Api
       end
 
       def create
-        rota_shift = RotaShift.new(rota_shift_params)
+        result = CreateRotaShift.new(
+          creator: current_user,
+          rota: rota_from_params,
+          rota_shift_params: rota_shift_params
+        ).call
 
-        if rota_shift.save
-          render 'show', locals: { rota_shift: rota_shift }
+        if result.success?
+          render 'show', locals: { rota_shift: result.rota_shift }
         else
           render(
             'error',
-            locals: { rota_shift: rota_shift },
+            locals: { rota_shift: result.rota_shift },
             :status => :unprocessable_entity
           )
         end
@@ -22,7 +26,7 @@ module Api
 
       def update
         shift = RotaShift.find(params[:id])
-        if shift.update_attributes(rota_shift_update_params)
+        if shift.update_attributes(rota_shift_params)
           render 'show', locals: { rota_shift: shift }
         else
           render(
@@ -45,16 +49,7 @@ module Api
           :starts_at,
           :ends_at
         ).merge(
-          rota: rota_from_params,
-          staff_member: staff_member_from_params,
-          creator: current_user
-        )
-      end
-
-      def rota_shift_update_params
-        params.permit(
-          :starts_at,
-          :ends_at
+          staff_member: staff_member_from_params
         )
       end
 
