@@ -15,13 +15,15 @@ describe CreateRotaShift do
     let(:venue) { FactoryGirl.create(:venue) }
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:creator) { FactoryGirl.create(:user) }
+    let(:authorization_proc) { Proc.new{} }
 
     let(:service) do
       CreateRotaShift.new(
         creator: creator,
         rota_date: rota_date,
         venue: venue,
-        rota_shift_params: params
+        rota_shift_params: params,
+        authorization_proc: authorization_proc
       )
     end
 
@@ -117,6 +119,7 @@ describe CreateRotaShift do
     let(:rota_shift_creator) { FactoryGirl.create(:user) }
     let(:rota_creator) { FactoryGirl.create(:user) }
     let(:rota_create_time) { Time.now.round }
+    let(:authorization_proc) { Proc.new{} }
     let!(:rota) do
       travel_to rota_create_time do
         FactoryGirl.create(
@@ -133,7 +136,8 @@ describe CreateRotaShift do
         creator: rota_shift_creator,
         rota_date: rota_date,
         venue: venue,
-        rota_shift_params: params
+        rota_shift_params: params,
+        authorization_proc: authorization_proc
       )
     end
 

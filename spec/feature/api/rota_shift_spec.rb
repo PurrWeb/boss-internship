@@ -5,7 +5,8 @@ RSpec.describe 'Api access' do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:rota_shift) { FactoryGirl.create(:rota_shift) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:venue) { rota_shift.rota.venue }
+  let(:user) { FactoryGirl.create(:user, :admin) }
 
   before do
     login_as user

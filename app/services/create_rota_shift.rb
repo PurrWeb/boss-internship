@@ -5,10 +5,11 @@ class CreateRotaShift
     end
   end
 
-  def initialize(creator:, rota_date:, venue:, rota_shift_params:)
+  def initialize(creator:, rota_date:, venue:, rota_shift_params:, authorization_proc:)
     @creator = creator
     @rota = Rota.find_or_initialize_by(date: rota_date, venue: venue)
     @rota_shift_params = rota_shift_params
+    @authorization_proc = authorization_proc
   end
 
   def call
@@ -17,7 +18,7 @@ class CreateRotaShift
 
     ActiveRecord::Base.transaction do
       if !rota.persisted?
-        rota.update_attributes!(creator: creator)
+        rota.assign_attributes(creator: creator)
       end
 
       rota_shift = RotaShift.new(
@@ -26,6 +27,10 @@ class CreateRotaShift
           rota: rota
         )
       )
+
+      authorization_proc.call(rota_shift)
+
+      rota.save!
       result = rota_shift.save
 
       ActiveRecord::Rollback unless result
@@ -35,5 +40,5 @@ class CreateRotaShift
   end
 
   private
-  attr_reader :rota, :creator, :rota_shift_params
+  attr_reader :rota, :creator, :rota_shift_params, :authorization_proc
 end

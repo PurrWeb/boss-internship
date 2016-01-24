@@ -3,6 +3,8 @@ module Api
     class RotaShiftsController < APIController
       def show
         rota_shift = RotaShift.find(params.fetch(:id))
+        authorize! :manage, rota_shift.rota
+
         render locals: { rota_shift: rota_shift }
       end
 
@@ -11,7 +13,10 @@ module Api
           creator: current_user,
           rota_date: rota_date_from_params,
           venue: venue_from_params,
-          rota_shift_params: rota_shift_params
+          rota_shift_params: rota_shift_params,
+          authorization_proc: lambda do |rota_shift|
+            authorize! :manage, rota_shift.rota
+          end
         ).call
 
         if result.success?
@@ -27,6 +32,8 @@ module Api
 
       def update
         shift = RotaShift.find(params[:id])
+        authorize! :manage, shift.rota
+
         if shift.update_attributes(rota_shift_params)
           render 'show', locals: { rota_shift: shift }
         else
@@ -40,6 +47,8 @@ module Api
 
       def destroy
         shift = RotaShift.find(params[:id])
+        authorize! :manage, shift.rota
+
         DisableRotaShift.new(requester: current_user, shift: shift).call
         render json: {}
       end

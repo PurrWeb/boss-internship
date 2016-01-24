@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Staff member pages access' do
   include Rack::Test::Methods
 
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryGirl.create(:user, venues: [staff_member.venue]) }
   let(:staff_member) { FactoryGirl.create(:staff_member) }
 
   before do

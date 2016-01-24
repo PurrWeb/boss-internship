@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Api access' do
   include Rack::Test::Methods
   let(:rota) { FactoryGirl.create(:rota) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryGirl.create(:user, venues: [rota.venue]) }
 
   before do
     login_as user
