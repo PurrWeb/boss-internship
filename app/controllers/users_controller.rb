@@ -29,9 +29,8 @@ class UsersController < ApplicationController
   end
 
   def new_staff_member
-    authorize! :manage, StaffMember
-
     user = User.find(params[:id])
+    authorize! :manage, user
 
     staff_member = StaffMember.new(
       email_address: user.email_address,
@@ -42,9 +41,9 @@ class UsersController < ApplicationController
   end
 
   def create_staff_member
-    authorize! :manage, StaffMember
-
     user = User.find(params[:id])
+    authorize! :manage, user
+
     staff_member = StaffMember.new(staff_member_params(user))
 
     if staff_member.save
