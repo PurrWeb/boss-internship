@@ -26,6 +26,7 @@ gem 'react_webpack_rails'
 gem "statesman", '~> 1.3.1'
 gem "cancan"
 gem 'file_validators'
+gem 'jbuilder'
 
 group :development, :test do
   gem "byebug"

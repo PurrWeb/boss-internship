@@ -5,6 +5,20 @@ FactoryGirl.define do
     invite nil
     first true
 
+    transient do
+      venues nil
+    end
+
+    after(:create) do |user, evaluator|
+      if evaluator.venues.present?
+        ActiveRecord::Base.transaction do
+          evaluator.venues.each do |venue|
+            user.venue_users.create!(venue: venue)
+          end
+        end
+      end
+    end
+
     password "sdlksdsad"
     role 'manager'
 

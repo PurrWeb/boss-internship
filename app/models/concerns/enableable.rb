@@ -6,28 +6,12 @@ module Enableable
       where(enabled: true)
     end
 
-    def not_enabled
+    def disabled
       where(enabled: false)
     end
   end
 
   def disabled?
     !enabled?
-  end
-
-  def enable
-    update_attributes enabled: true
-  end
-
-  def disable
-    update_attributes enabled: false
-  end
-
-  def enable!
-    update_attributes! enabled: true
-  end
-
-  def disable!
-    update_attributes! enabled: false
   end
 end
