@@ -91,6 +91,6 @@ describe("getStaffTypeBreakdownByTime", function() {
                 bar_back: 0
             },
         };
-        expect(getStaffTypeBreakdownByTime([], staff, 60 * 12, staffTypes)).toEqual(expectedResult);
+        expect(getStaffTypeBreakdownByTime([], [], 60 * 12, staffTypes)).toEqual(expectedResult);
     });
 });
