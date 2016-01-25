@@ -1,5 +1,5 @@
 import expect from "expect"
-import { getStaffTypeBreakDownByTime, _getSamplingTimeOffsetsForDay } from "./rota-overview-data"
+import { getStaffTypeBreakdownByTime, _getSamplingTimeOffsetsForDay } from "./rota-overview-data"
 import RotaDate from "~lib/rota-date"
 import _ from "underscore"
 
@@ -12,7 +12,7 @@ describe("_getSamplingTimeOffsetsForDay", function(){
     })
 })
 
-describe("getStaffTypeBreakDownByTime", function() {
+describe("getStaffTypeBreakdownByTime", function() {
         var rotaDate = new RotaDate(new Date(2015,10, 1, 14, 0, 0));
 
         var shifts = [
@@ -73,6 +73,6 @@ describe("getStaffTypeBreakDownByTime", function() {
     var staffTypes = {kitchen: {}, bar_back: {}};
 
     it("Determines the staff count for each staff type at different times during the day", function(){
-        expect(getStaffTypeBreakDownByTime(shifts, staff, 60 * 6, staffTypes)).toEqual(expectedResult)
+        expect(getStaffTypeBreakdownByTime(shifts, staff, 60 * 6, staffTypes)).toEqual(expectedResult)
     })
 });

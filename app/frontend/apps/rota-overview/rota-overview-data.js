@@ -16,7 +16,7 @@ export function _getSamplingTimeOffsetsForDay(granularityInMinutes){
     return samplingTimes;
 }
 
-export function getStaffTypeBreakDownByTime(shifts, staff, granularityInMinutes, staffTypes){
+export function getStaffTypeBreakdownByTime(shifts, staff, granularityInMinutes, staffTypes){
     function getStaffTypeFromShift(shift) {
         return _(staff).find({id: shift.staff_id}).staff_type;
     }
@@ -28,15 +28,21 @@ export function getStaffTypeBreakDownByTime(shifts, staff, granularityInMinutes,
         return obj;
     }
 
-    var rotaDate = new RotaDate(shifts[0].starts_at)
+    
 
     var samplingTimeOffsets = _getSamplingTimeOffsetsForDay(granularityInMinutes)
-    var breakDown = {};
+    var breakdown = {};
 
     var initialBreakdownAtSamplingPoint = getInitialBreakdownAtSamplingPoint();
     samplingTimeOffsets.forEach(function(offset){
-        breakDown[offset] = _.clone(initialBreakdownAtSamplingPoint);
+        breakdown[offset] = _.clone(initialBreakdownAtSamplingPoint);
     })
+
+    if (shifts.length === 0) {
+        return breakdown;
+    }
+
+    var rotaDate = new RotaDate(shifts[0].starts_at)
 
     var samplingOffsetsAndDates = samplingTimeOffsets.map(function(offset){
         var startTimeClone = new Date(rotaDate.startTime);
@@ -50,25 +56,9 @@ export function getStaffTypeBreakDownByTime(shifts, staff, granularityInMinutes,
         var staffType = getStaffTypeFromShift(shift);
         samplingOffsetsAndDates.forEach(function(samplingPoint){
             var shiftCoversSamplingPoint = samplingPoint.date >= shift.starts_at && samplingPoint.date <= shift.ends_at;
-            console.log("---", shiftCoversSamplingPoint, samplingPoint, shift)
-            breakDown[samplingPoint.offset][staffType] += shiftCoversSamplingPoint ? 1 : 0;
+            breakdown[samplingPoint.offset][staffType] += shiftCoversSamplingPoint ? 1 : 0;
         })
     });
 
-    console.log("breakDown", JSON.stringify(breakDown, null, 4));
-    return breakDown;
-    //         for (start,end in intervals) {
-
-    //         }
-
-    //         arr[intervalId] = 0;
-
-    //         for shift(){
-    //             if (wotking)
-    //             for each interval(){
-    //                 ++arr[intervalId]
-    //             }
-    //         }
-    //     }
-
+    return breakdown;
 }

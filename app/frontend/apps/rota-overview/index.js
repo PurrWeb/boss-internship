@@ -1,21 +1,47 @@
 import React, { Component } from "react"
+import { getStaffTypeBreakdownByTime } from "./rota-overview-data"
+import _ from "underscore"
 const ReactHighCharts = require('react-highcharts/bundle/highcharts')
 
 export default class RotaOverviewView extends Component {
     render() {
-        var shifts = this.props.shifts;
+        var shifts = this.props.rotaShifts;
         var staff = this.props.staff;
+        var staffTypes = this.props.staffTypes;
 
 
+        var data = getStaffTypeBreakdownByTime(shifts, staff, 30 , staffTypes)
 
+        var series = [];
         var config = {
-          xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-          },
-          series: [{
-            data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
-          }]
+            chart: {
+                type: "area"
+            },
+            series: series,
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#666666'
+                    }
+                }
+            },
         };
+
+        for (var staffType in staffTypes) {
+            var staffTypeData = _(data).mapValues(function(item){
+                return item[staffType];
+            });
+
+            staffTypeData = _.values(staffTypeData);
+            series.push({
+                name: staffType,
+                data: staffTypeData
+            })
+        }
 
         return <div>
             <ReactHighCharts config={config} />
