@@ -4,19 +4,22 @@ import _ from "underscore"
 import RotaDate from "~lib/rota-date"
 const ReactHighCharts = require('react-highcharts/bundle/highcharts')
 
+const GRANULARITY = 30;
+const MILLISECONDS_PER_MINUTE = 60 * 1000;
+
 export default class RotaOverviewView extends Component {
     render() {
         var shifts = this.props.rotaShifts;
         var staff = this.props.staff;
         var staffTypes = this.props.staffTypes;
+        var rotaDate = new RotaDate(this.props.dateOfRota);
 
-        const GRANULARITY = 30;
         var data = getStaffTypeBreakdownByTime({
             shifts,
             staff,
             granularityInMinutes: GRANULARITY,
             staffTypes,
-            rotaDate: new RotaDate(this.props.dateOfRota)
+            rotaDate
         });
 
         var series = [];
@@ -27,25 +30,21 @@ export default class RotaOverviewView extends Component {
             title: {
                 text: "Rota Overview"
             },
-            yAxis: {
+            xAxis: {
+                type: "datetime",
                 title: {
-                    text: 'Time'
-                },
-                labels: {
-                    formatter: function () {
-                        return this.value;
-                    }
+                    text: "Time"
                 }
             },
             series: series,
             plotOptions: {
                 area: {
-                    stacking: 'normal',
-                    lineColor: '#666666',
+                    stacking: "normal",
+                    lineColor: "#666666",
                     lineWidth: 1,
                     marker: {
                         lineWidth: 1,
-                        lineColor: '#666666'
+                        lineColor: "#666666"
                     }
                 }
             },
@@ -57,9 +56,11 @@ export default class RotaOverviewView extends Component {
             });
 
             series.push({
-                name: staffType,
-                data: staffTypeData
-            })
+                name: staffTypes[staffType].title,
+                data: staffTypeData,
+                pointStart: rotaDate.startTime.valueOf(),
+                pointInterval: GRANULARITY * MILLISECONDS_PER_MINUTE
+            });
         }
 
         return <div>

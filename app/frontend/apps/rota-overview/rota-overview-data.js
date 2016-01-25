@@ -16,8 +16,6 @@ export function _getSamplingTimeOffsetsForDay(granularityInMinutes){
     return samplingTimes;
 }
 
-
-
 /**
 Processes a list of shifts and returns a list of shifts that are scheduled for each
 time during the day.
@@ -53,13 +51,15 @@ export function getStaffTypeBreakdownByTime(options){
         return _(staff).find({id: shift.staff_id}).staff_type;
     }
     function getInitialBreakdownAtSamplingPoint(offsetInMinutes){
-        var obj = {};
-        obj.shiftsByStaffType = {}
-        obj.timeOffset = offsetInMinutes;
-
         var startTimeClone = new Date(rotaDate.startTime);
         var newMinutes = rotaDate.startTime.getMinutes() + offsetInMinutes;
-        obj.date = new Date(startTimeClone.setMinutes(newMinutes));
+        var date = new Date(startTimeClone.setMinutes(newMinutes));
+
+        var obj = {
+            shiftsByStaffType: {},
+            timeOffset: offsetInMinutes,
+            date
+        };
 
         for (var staffType in staffTypes) {
             obj.shiftsByStaffType[staffType] = [];
