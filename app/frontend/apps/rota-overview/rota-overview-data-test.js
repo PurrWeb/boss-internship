@@ -13,8 +13,12 @@ describe("_getSamplingTimeOffsetsForDay", function(){
 })
 
 describe("getStaffTypeBreakdownByTime", function() {
-        var rotaDate = new RotaDate(new Date(2015,10, 1, 14, 0, 0));
+    var rotaDate = new RotaDate(new Date(2015,10, 1, 14, 0, 0));
 
+    var staffTypes = {kitchen: {}, bar_back: {}};
+    
+
+    it("Determines the staff count for each staff type at different times during the day", function(){
         var shifts = [
             {
                 staff_id: 1,
@@ -31,48 +35,62 @@ describe("getStaffTypeBreakdownByTime", function() {
                 starts_at: rotaDate.getDateFromShiftStartTime(14, 0),
                 ends_at: rotaDate.getDateFromShiftEndTime(8, 0)
             }
-    ];
-    var staff = [
-        {
-            id: 1,
-            staff_type: "bar_back"
-        },
-        {
-            id: 2,
-            staff_type: "bar_back"
-        },
+        ];
+        var staff = [
+            {
+                id: 1,
+                staff_type: "bar_back"
+            },
+            {
+                id: 2,
+                staff_type: "bar_back"
+            },
+            {
+                id: 3,
+                staff_type: "kitchen"
+            }
+        ];
+        var expectedResult = {
+            0: { // 8am
+                bar_back: 0,
+                kitchen: 0
+            },
+            [6 * 60]: { // 2pm
+                bar_back: 1,
+                kitchen: 1
+            },
+            [12 * 60]: { // 8pm
+                bar_back: 2,
+                kitchen: 1
+            },
+            [18 * 60]: { // 2am
+                bar_back: 1,
+                kitchen: 1
+            },
+            [24 * 60]: { // 8am
+                bar_back: 0,
+                kitchen: 1
+            }
+        };
 
-        {
-            id: 3,
-            staff_type: "kitchen"
-        }
-    ];
-    var expectedResult = {
-        0: { // 8am
-            bar_back: 0,
-            kitchen: 0
-        },
-        [6 * 60]: { // 2pm
-            bar_back: 1,
-            kitchen: 1
-        },
-        [12 * 60]: { // 8pm
-            bar_back: 2,
-            kitchen: 1
-        },
-        [18 * 60]: { // 2am
-            bar_back: 1,
-            kitchen: 1
-        },
-        [24 * 60]: { // 8am
-            bar_back: 0,
-            kitchen: 1
-        }
-    }
-
-    var staffTypes = {kitchen: {}, bar_back: {}};
-
-    it("Determines the staff count for each staff type at different times during the day", function(){
         expect(getStaffTypeBreakdownByTime(shifts, staff, 60 * 6, staffTypes)).toEqual(expectedResult)
-    })
+    });
+
+    it("Returns 0 for all staff types if no shifts are passed in", function(){
+        var expectedResult = {
+            0: {
+                kitchen: 0,
+                bar_back: 0
+            },
+            [12 * 60]: {
+                kitchen: 0,
+                bar_back: 0
+            },
+            [24 * 60]: {
+                kitchen: 0,
+                bar_back: 0
+            },
+        };
+        expect(getStaffTypeBreakdownByTime([], staff, 60 * 12, staffTypes)).toEqual(expectedResult);
+    });
 });

@@ -17,6 +17,7 @@ export function _getSamplingTimeOffsetsForDay(granularityInMinutes){
 }
 
 export function getStaffTypeBreakdownByTime(shifts, staff, granularityInMinutes, staffTypes){
+    console.profile()
     function getStaffTypeFromShift(shift) {
         return _(staff).find({id: shift.staff_id}).staff_type;
     }
@@ -59,6 +60,8 @@ export function getStaffTypeBreakdownByTime(shifts, staff, granularityInMinutes,
             breakdown[samplingPoint.offset][staffType] += shiftCoversSamplingPoint ? 1 : 0;
         })
     });
+
+    console.profileEnd()
 
     return breakdown;
 }
