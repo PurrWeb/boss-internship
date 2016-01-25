@@ -58,8 +58,9 @@ export default class RotaOverviewView extends Component {
             series.push({
                 name: staffTypes[staffType].title,
                 data: staffTypeData,
+                color: staffTypes[staffType].color,
                 pointStart: rotaDate.startTime.valueOf(),
-                pointInterval: GRANULARITY * MILLISECONDS_PER_MINUTE
+                pointInterval: GRANULARITY * MILLISECONDS_PER_MINUTE,
             });
         }
 
