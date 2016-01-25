@@ -19,16 +19,20 @@ describe("getStaffTypeBreakdownByTime", function() {
     
 
     it("Determines the staff count for each staff type at different times during the day", function(){
+        function getOffsetDate(offsetInMinutes){
+            var newMinutes = rotaDate.startTime.getMinutes() + offsetInMinutes;
+            return new Date(new Date(rotaDate.startTime).setMinutes(newMinutes));
+        }
         var shifts = [
             {
                 staff_id: 1,
-                starts_at: rotaDate.getDateFromShiftStartTime(10, 0),
+                starts_at: rotaDate.getDateFromShiftStartTime(8, 0),
                 ends_at: rotaDate.getDateFromShiftEndTime(22, 0)
             },
             {
                 staff_id: 2,
                 starts_at: rotaDate.getDateFromShiftStartTime(16, 0),
-                ends_at: rotaDate.getDateFromShiftEndTime(2, 0)
+                ends_at: rotaDate.getDateFromShiftEndTime(2, 30)
             },
             {
                 staff_id: 3,
@@ -50,47 +54,95 @@ describe("getStaffTypeBreakdownByTime", function() {
                 staff_type: "kitchen"
             }
         ];
-        var expectedResult = {
-            0: { // 8am
-                bar_back: 0,
-                kitchen: 0
+        var expectedResult = [
+            {
+                timeOffset: 0,
+                date: getOffsetDate(0),
+                shiftsByStaffType: {
+                    bar_back: [
+                        shifts[0]
+                    ],
+                    kitchen: []
+                }
             },
-            [6 * 60]: { // 2pm
-                bar_back: 1,
-                kitchen: 1
+            {
+                timeOffset: 6 * 60,
+                date: getOffsetDate(6 * 60),
+                shiftsByStaffType: {
+                    bar_back: [
+                        shifts[0]
+                    ],
+                    kitchen: [
+                        shifts[2]
+                    ]
+                }
             },
-            [12 * 60]: { // 8pm
-                bar_back: 2,
-                kitchen: 1
+            {
+                timeOffset: 12 * 60,
+                date: getOffsetDate(12 * 60),
+                shiftsByStaffType: {
+                    bar_back: [
+                        shifts[0],
+                        shifts[1]
+                    ],
+                    kitchen: [
+                        shifts[2]
+                    ]
+                }
             },
-            [18 * 60]: { // 2am
-                bar_back: 1,
-                kitchen: 1
+            {
+                timeOffset: 18 * 60, // 2am
+                date: getOffsetDate(18 * 60),
+                shiftsByStaffType: {
+                    bar_back: [
+                        shifts[1]
+                    ],
+                    kitchen: [
+                        shifts[2]
+                    ]
+                }
             },
-            [24 * 60]: { // 8am
-                bar_back: 0,
-                kitchen: 1
+            {
+                timeOffset: 24 * 60,
+                date: getOffsetDate(24 * 60),
+                shiftsByStaffType: {
+                    bar_back: [],
+                    kitchen: []
+                }
             }
-        };
+        ];
 
-        expect(getStaffTypeBreakdownByTime(shifts, staff, 60 * 6, staffTypes)).toEqual(expectedResult)
+        var result = getStaffTypeBreakdownByTime({
+            shifts,
+            staff,
+            granularityInMinutes: 60 * 6,
+            staffTypes,
+            rotaDate
+        });
+        console.log(JSON.stringify(result, null, 4))
+        // expect(result).toEqual(expectedResult)
+        result.forEach(function(r, i){
+            console.log(JSON.stringify(expectedResult[i], null, 4))
+            console.log(JSON.stringify(r, null, 4))
+            var e = expectedResult[i];
+            expect(r).toEqual(expectedResult[i])
+            
+        })
     });
 
-    it("Returns 0 for all staff types if no shifts are passed in", function(){
-        var expectedResult = {
-            0: {
-                kitchen: 0,
-                bar_back: 0
-            },
-            [12 * 60]: {
-                kitchen: 0,
-                bar_back: 0
-            },
-            [24 * 60]: {
-                kitchen: 0,
-                bar_back: 0
-            },
-        };
-        expect(getStaffTypeBreakdownByTime([], [], 60 * 12, staffTypes)).toEqual(expectedResult);
+    it("Returns no shifts for all staff types if no shifts are passed in", function(){
+        var result = getStaffTypeBreakdownByTime({
+            shifts: [],
+            staff: [],
+            granularityInMinutes: 60 * 12,
+            staffTypes,
+            rotaDate
+        });
+        result.forEach(function(item){
+            expect(item.shiftsByStaffType).toEqual({
+                kitchen: [],
+                bar_back: []
+            })
+        })
     });
 });

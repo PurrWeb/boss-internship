@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { getStaffTypeBreakdownByTime } from "./rota-overview-data"
 import _ from "underscore"
+import RotaDate from "~lib/rota-date"
 const ReactHighCharts = require('react-highcharts/bundle/highcharts')
 
 export default class RotaOverviewView extends Component {
@@ -9,13 +10,32 @@ export default class RotaOverviewView extends Component {
         var staff = this.props.staff;
         var staffTypes = this.props.staffTypes;
 
-
-        var data = getStaffTypeBreakdownByTime(shifts, staff, 30 , staffTypes)
+        const GRANULARITY = 30;
+        var data = getStaffTypeBreakdownByTime({
+            shifts,
+            staff,
+            granularityInMinutes: GRANULARITY,
+            staffTypes,
+            rotaDate: new RotaDate(this.props.dateOfRota)
+        });
 
         var series = [];
         var config = {
             chart: {
                 type: "area"
+            },
+            title: {
+                text: "Rota Overview"
+            },
+            yAxis: {
+                title: {
+                    text: 'Time'
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value;
+                    }
+                }
             },
             series: series,
             plotOptions: {
@@ -32,11 +52,10 @@ export default class RotaOverviewView extends Component {
         };
 
         for (var staffType in staffTypes) {
-            var staffTypeData = _(data).mapValues(function(item){
-                return item[staffType];
+            var staffTypeData = _(data).map(function(item){
+                return item.shiftsByStaffType[staffType].length;
             });
 
-            staffTypeData = _.values(staffTypeData);
             series.push({
                 name: staffType,
                 data: staffTypeData
