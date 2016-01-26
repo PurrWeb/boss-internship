@@ -2,7 +2,9 @@ import React, { Component } from "react"
 import { getStaffTypeBreakdownByTime } from "./rota-overview-data"
 import _ from "underscore"
 import RotaDate from "~lib/rota-date"
+import utils from "~lib/utils"
 const ReactHighCharts = require('react-highcharts/bundle/highcharts')
+
 
 const GRANULARITY = 30;
 const MILLISECONDS_PER_MINUTE = 60 * 1000;
@@ -17,9 +19,13 @@ export default class RotaOverviewView extends Component {
         onSelectionShiftsChange: React.PropTypes.func.isRequired
     }
     shouldComponentUpdate(nextProps, nextState){
-        return JSON.stringify(nextProps) !== JSON.stringify(this.props);
+        return !utils.deepEqualTreatingFunctionsAsStrings(
+            nextProps,
+            this.props
+        );
     }
     render() {
+        console.log("render")
         var self = this;
         var breakdown = this.getBreakdown();
         var config = this.getStaticConfig();
