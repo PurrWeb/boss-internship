@@ -13,7 +13,8 @@ export default class RotaOverviewView extends Component {
         staffTypes: React.PropTypes.object.isRequired,
         staff: React.PropTypes.array.isRequired,
         dateOfRota: React.PropTypes.instanceOf(Date),
-        onHoverShiftsChange: React.PropTypes.func.isRequired
+        onHoverShiftsChange: React.PropTypes.func.isRequired,
+        onSelectionShiftsChange: React.PropTypes.func.isRequired
     }
     shouldComponentUpdate(nextProps, nextState){
         console.log
@@ -66,12 +67,16 @@ export default class RotaOverviewView extends Component {
                     point: {
                         events: {
                             mouseOver: function(event){
-                                var staffType = _(staffTypes).find({title: this.series.name});
-                                var shifts = breakdown[this.index].shiftsByStaffType[staffType.id];
+                                var shifts = self.getShiftsFromSeries(breakdown, this.series, this.index);
                                 self.props.onHoverShiftsChange(shifts);
                             },
                             mouseOut: function(event){
                                 self.props.onHoverShiftsChange([]);
+                            },
+                            click: function(event){
+                                self.props.onHoverShiftsChange([]);
+                                var shifts = self.getShiftsFromSeries(breakdown, this.series, this.index);
+                                self.props.onSelectionShiftsChange(shifts);
                             }
                         }
                     }
@@ -96,5 +101,10 @@ export default class RotaOverviewView extends Component {
         return <div>
             <ReactHighCharts config={config} />
         </div>
+    }
+    getShiftsFromSeries(breakdown, series, index){
+        var staffType = _(this.props.staffTypes).find({title: series.name});
+        var shifts = breakdown[index].shiftsByStaffType[staffType.id];
+        return shifts;
     }
 }

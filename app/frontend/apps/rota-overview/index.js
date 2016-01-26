@@ -1,16 +1,28 @@
 import React, { Component } from "react"
 import ShiftList from "./shift-list"
 import RotaOverviewChart from "./rota-overview-chart"
+import ChartSelectionView from "~components/chart-selection-view"
 
 export default class RotaOverviewView extends Component {
     constructor(props){
         super(props);
         this.state = {
-            hoverShifts: []
+            hoverShifts: [],
+            selectionShifts: []
         }
     }
+    getStaffShiftList(shifts){
+        if (shifts.length === 0) {
+            return null;
+        }
+        return <ShiftList
+            shifts={shifts}
+            staff={this.props.staff} />
+    }
     render() {
-        console.log("hoverShifts", this.state.hoverShifts)
+        var previewShiftList = this.getStaffShiftList(this.state.hoverShifts),
+            selectionShiftList = this.getStaffShiftList(this.state.selectionShifts);
+
         return <div className="row">
             <div className="col-md-9">
                 <RotaOverviewChart
@@ -18,12 +30,13 @@ export default class RotaOverviewView extends Component {
                     shifts={this.props.rotaShifts}
                     dateOfRota={this.props.dateOfRota}
                     staffTypes={this.props.staffTypes}
-                    onHoverShiftsChange={(shifts) => this.setState({hoverShifts: shifts})} />
+                    onHoverShiftsChange={(shifts) => this.setState({hoverShifts: shifts})}
+                    onSelectionShiftsChange={(shifts) => this.setState({selectionShifts: shifts})} />
             </div>
             <div className="col-md-3">
-                <ShiftList
-                    shifts={this.state.hoverShifts}
-                    staff={this.props.staff} />
+                <ChartSelectionView
+                    previewComponent={previewShiftList}
+                    selectionComponent={selectionShiftList} />
             </div>
         </div>
     }
