@@ -8,11 +8,28 @@ const GRANULARITY = 30;
 const MILLISECONDS_PER_MINUTE = 60 * 1000;
 
 export default class RotaOverviewView extends Component {
+    static propTypes = {
+        shifts: React.PropTypes.array.isRequired,
+        staffTypes: React.PropTypes.object.isRequired,
+        staff: React.PropTypes.array.isRequired,
+        dateOfRota: React.PropTypes.instanceOf(Date),
+        onHoverShiftsChange: React.PropTypes.func.isRequired
+    }
+    shouldComponentUpdate(nextProps, nextState){
+        console.log
+        if (JSON.stringify(nextProps) !== JSON.stringify(this.props)) {
+            // debugger;
+        }
+        return JSON.stringify(nextProps) !== JSON.stringify(this.props);
+    }
     render() {
+        console.log("render")
+
+        var self = this;
         var { shifts, staffTypes, staff} = this.props;
         var rotaDate = new RotaDate(this.props.dateOfRota);
 
-        var data = getStaffTypeBreakdownByTime({
+        var breakdown = getStaffTypeBreakdownByTime({
             shifts,
             staff,
             granularityInMinutes: GRANULARITY,
@@ -44,12 +61,26 @@ export default class RotaOverviewView extends Component {
                     marker: {
                         enabled: false
                     }
+                },
+                series: {
+                    point: {
+                        events: {
+                            mouseOver: function(event){
+                                var staffType = _(staffTypes).find({title: this.series.name});
+                                var shifts = breakdown[this.index].shiftsByStaffType[staffType.id];
+                                self.props.onHoverShiftsChange(shifts);
+                            },
+                            mouseOut: function(event){
+                                self.props.onHoverShiftsChange([]);
+                            }
+                        }
+                    }
                 }
             },
         };
 
         for (var staffType in staffTypes) {
-            var staffTypeData = _(data).map(function(item){
+            var staffTypeData = _(breakdown).map(function(item){
                 return item.shiftsByStaffType[staffType].length;
             });
 
