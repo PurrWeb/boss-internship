@@ -5,6 +5,7 @@ import StaffDetailsAndShifts from "./rota-chart/staff-details-and-shifts"
 import StaffTypeDropdown from "~components/staff-type-dropdown"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
+import ChartSelectionView from "~components/chart-selection-view"
 
 const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 
@@ -40,7 +41,6 @@ export default class ChartAndFilter extends Component {
         var rotaShifts = this.getRotaShifts();
         var chartBoundaries = ChartAndFilter.calculateChartBoundaries(rotaShifts);
 
-
         return (
             <div className="row">
                 <div className="col-md-9">
@@ -66,16 +66,10 @@ export default class ChartAndFilter extends Component {
                         Showing {rotaShifts.length} out of {this.props.rotaShifts.length} shifts.
                     </div>
 
-                    <div
-                        className="chart-and-filter__shift-editor-container" >
-                        <div
-                            className="chart-and-filter__selected-shift-editor"
-                            style={{opacity: this.state.staffToPreview !== null ? "0": "1"}}>
-                            {staffDetails}
-                        </div>
-                        <div className="chart-and-filter__preview-shift-editor">
-                            {previewStaffDetails}
-                        </div>
+                    <div className="chart-and-filter__shift-editor-container">
+                        <ChartSelectionView
+                            selectionComponent={staffDetails}
+                            previewComponent={previewStaffDetails} />
                     </div>
                 </div>
             </div>
