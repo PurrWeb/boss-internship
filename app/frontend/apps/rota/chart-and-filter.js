@@ -18,18 +18,6 @@ export default class ChartAndFilter extends Component {
             staffToPreview: null
         };
     }
-    getStaffDetailsComponent(staffId){
-        if (!staffId) {
-            return null;
-        }
-        return <StaffDetailsAndShifts
-            staffId={staffId}
-            rotaShifts={this.props.rotaShifts}
-            // We specify a key so the component is re-initialized when
-            // the shift changes - so we don't keep the previous state.
-            key={this.state.staffToShow}
-            staff={this.props.staff} />
-    }
     render(){
         var staffDetails = this.getStaffDetailsComponent(this.state.staffToShow);
         var previewStaffDetails = this.getStaffDetailsComponent(this.state.staffToPreview);
@@ -70,6 +58,18 @@ export default class ChartAndFilter extends Component {
                 </div>
             </div>
         )
+    }
+    getStaffDetailsComponent(staffId){
+        if (!staffId) {
+            return null;
+        }
+        return <StaffDetailsAndShifts
+            staffId={staffId}
+            rotaShifts={this.props.rotaShifts}
+            // We specify a key so the component is re-initialized when
+            // the shift changes - so we don't keep the previous state.
+            key={this.state.staffToShow}
+            staff={this.props.staff} />
     }
     /**
      * Many venues ony operate at certain times, so we detect the times where there are
