@@ -17,74 +17,54 @@ export default class RotaOverviewView extends Component {
         onSelectionShiftsChange: React.PropTypes.func.isRequired
     }
     shouldComponentUpdate(nextProps, nextState){
-        console.log
-        if (JSON.stringify(nextProps) !== JSON.stringify(this.props)) {
-            // debugger;
-        }
         return JSON.stringify(nextProps) !== JSON.stringify(this.props);
     }
     render() {
-        console.log("render")
-
         var self = this;
+        var breakdown = this.getBreakdown();
+        var config = this.getStaticConfig();
+
+        config.plotOptions.series.point.events = {
+            mouseOver: function(event){
+                var shifts = self.getShiftsFromSeries(breakdown, this.series, this.index);
+                self.props.onHoverShiftsChange(shifts);
+            },
+            mouseOut: function(event){
+                self.props.onHoverShiftsChange([]);
+            },
+            click: function(event){
+                self.props.onHoverShiftsChange([]);
+                var shifts = self.getShiftsFromSeries(breakdown, this.series, this.index);
+                self.props.onSelectionShiftsChange(shifts);
+            }
+        };
+
+        config.series = this.getChartData(breakdown);
+
+        return <div>
+            <ReactHighCharts config={config} />
+        </div>
+    }
+    getBreakdown(){
         var { shifts, staffTypes, staff} = this.props;
         var rotaDate = new RotaDate(this.props.dateOfRota);
-
-        var breakdown = getStaffTypeBreakdownByTime({
+        return getStaffTypeBreakdownByTime({
             shifts,
             staff,
             granularityInMinutes: GRANULARITY,
             staffTypes,
             rotaDate
         });
-
+    }
+    getShiftsFromSeries(breakdown, series, index){
+        var staffType = _(this.props.staffTypes).find({title: series.name});
+        var shifts = breakdown[index].shiftsByStaffType[staffType.id];
+        return shifts;
+    }
+    getChartData(breakdown){
+        var rotaDate = new RotaDate(this.props.dateOfRota);
+        var staffTypes = this.props.staffTypes;
         var series = [];
-        var config = {
-            chart: {
-                type: "area"
-            },
-            title: {
-                text: "Rota Overview"
-            },
-            xAxis: {
-                type: "datetime",
-                title: {
-                    text: "Time"
-                }
-            },
-            series: series,
-            plotOptions: {
-                area: {
-                    stacking: "normal",
-                    // this makes it so you can click on the area instead of just on the individual data points.
-                    trackByArea: true,
-                    animation: false,
-                    lineColor: "#666666",
-                    lineWidth: 1,
-                    marker: {
-                        enabled: false
-                    }
-                },
-                series: {
-                    point: {
-                        events: {
-                            mouseOver: function(event){
-                                var shifts = self.getShiftsFromSeries(breakdown, this.series, this.index);
-                                self.props.onHoverShiftsChange(shifts);
-                            },
-                            mouseOut: function(event){
-                                self.props.onHoverShiftsChange([]);
-                            },
-                            click: function(event){
-                                self.props.onHoverShiftsChange([]);
-                                var shifts = self.getShiftsFromSeries(breakdown, this.series, this.index);
-                                self.props.onSelectionShiftsChange(shifts);
-                            }
-                        }
-                    }
-                }
-            },
-        };
 
         for (var staffType in staffTypes) {
             var staffTypeData = _(breakdown).map(function(item){
@@ -99,14 +79,38 @@ export default class RotaOverviewView extends Component {
                 pointInterval: GRANULARITY * MILLISECONDS_PER_MINUTE,
             });
         }
-
-        return <div>
-            <ReactHighCharts config={config} />
-        </div>
+        return series;
     }
-    getShiftsFromSeries(breakdown, series, index){
-        var staffType = _(this.props.staffTypes).find({title: series.name});
-        var shifts = breakdown[index].shiftsByStaffType[staffType.id];
-        return shifts;
+    getStaticConfig(){
+        return {
+            chart: {
+                type: "area"
+            },
+            title: {
+                text: "Rota Overview"
+            },
+            xAxis: {
+                type: "datetime",
+                title: {
+                    text: "Time"
+                }
+            },
+            plotOptions: {
+                area: {
+                    stacking: "normal",
+                    // this makes it so you can click on the area instead of just on the individual data points.
+                    trackByArea: true,
+                    animation: false,
+                    lineColor: "#666666",
+                    lineWidth: 1,
+                    marker: {
+                        enabled: false
+                    }
+                },
+                series: {
+                    point: {}
+                }
+            },
+        };
     }
 }
