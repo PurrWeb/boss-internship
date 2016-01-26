@@ -18,26 +18,22 @@ export default class ChartAndFilter extends Component {
             staffToPreview: null
         };
     }
+    getStaffDetailsComponent(staffId){
+        if (!staffId) {
+            return null;
+        }
+        return <StaffDetailsAndShifts
+            staffId={staffId}
+            rotaShifts={this.props.rotaShifts}
+            // We specify a key so the component is re-initialized when
+            // the shift changes - so we don't keep the previous state.
+            key={this.state.staffToShow}
+            staff={this.props.staff} />
+    }
     render(){
-        var staffId, staffDetails, previewStaffDetails;
-        if (this.state.staffToShow) {
-            staffId = this.state.staffToShow;
-            staffDetails = <StaffDetailsAndShifts
-                staffId={staffId}
-                rotaShifts={this.props.rotaShifts}
-                // We specify a key so the component is re-initialized when
-                // the shift changes - so we don't keep the previous state.
-                key={this.state.staffToShow}
-                staff={this.props.staff} />
-        }
-        if (this.state.staffToPreview) {
-            staffId = this.state.staffToPreview;
-            previewStaffDetails = <StaffDetailsAndShifts
-                staffId={staffId}
-                rotaShifts={this.props.rotaShifts}
-                staff={this.props.staff} />
-        }
-
+        var staffDetails = this.getStaffDetailsComponent(this.state.staffToShow);
+        var previewStaffDetails = this.getStaffDetailsComponent(this.state.staffToPreview);
+        
         var rotaShifts = this.getRotaShifts();
         var chartBoundaries = ChartAndFilter.calculateChartBoundaries(rotaShifts);
 
