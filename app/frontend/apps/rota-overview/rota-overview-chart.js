@@ -56,6 +56,8 @@ export default class RotaOverviewView extends Component {
             plotOptions: {
                 area: {
                     stacking: "normal",
+                    // this makes it so you can click on the area instead of just on the individual data points.
+                    trackByArea: true,
                     animation: false,
                     lineColor: "#666666",
                     lineWidth: 1,
