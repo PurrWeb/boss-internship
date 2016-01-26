@@ -12,27 +12,6 @@ export default class RotaOverviewView extends Component {
             selectionData: null
         }
     }
-    getStaffShiftList(data){
-        if (!data) {
-            return null;
-        }
-        var staffTypeTitle = this.props.staffTypes[data.staffType].title;
-        var noStaffRotaedMessage = null;
-
-        if (data.shifts.length === 0) {
-            noStaffRotaedMessage = <div>No {staffTypeTitle} staff rotaed.</div>;
-        }
-
-        return <div>
-            <h2 style={{fontSize: 16}}>
-                {staffTypeTitle} staff rotaed for {moment(data.date).format("HH:mm")}
-            </h2>
-            <ShiftList
-                shifts={data.shifts}
-                staff={this.props.staff} />
-            {noStaffRotaedMessage}
-        </div>
-    }
     render() {
         var previewShiftList = this.getStaffShiftList(this.state.hoverData),
             selectionShiftList = this.getStaffShiftList(this.state.selectionData);
@@ -52,6 +31,27 @@ export default class RotaOverviewView extends Component {
                     previewComponent={previewShiftList}
                     selectionComponent={selectionShiftList} />
             </div>
+        </div>
+    }
+    getStaffShiftList(data){
+        if (!data) {
+            return null;
+        }
+        var staffTypeTitle = this.props.staffTypes[data.staffType].title;
+        var noStaffRotaedMessage = null;
+
+        if (data.shifts.length === 0) {
+            noStaffRotaedMessage = <div>No {staffTypeTitle} staff rotaed.</div>;
+        }
+
+        return <div>
+            <h2 style={{fontSize: 16}}>
+                {staffTypeTitle} staff rotaed for {moment(data.date).format("HH:mm")}
+            </h2>
+            <ShiftList
+                shifts={data.shifts}
+                staff={this.props.staff} />
+            {noStaffRotaedMessage}
         </div>
     }
 }
