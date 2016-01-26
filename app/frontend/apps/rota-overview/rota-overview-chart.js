@@ -26,16 +26,16 @@ export default class RotaOverviewView extends Component {
 
         config.plotOptions.series.point.events = {
             mouseOver: function(event){
-                var shifts = self.getShiftsFromSeries(breakdown, this.series, this.index);
-                self.props.onHoverShiftsChange(shifts);
+                var data = self.getSelectionData(breakdown, this.series, this.index);
+                self.props.onHoverShiftsChange(data);
             },
             mouseOut: function(event){
-                self.props.onHoverShiftsChange([]);
+                self.props.onHoverShiftsChange(null);
             },
             click: function(event){
-                self.props.onHoverShiftsChange([]);
-                var shifts = self.getShiftsFromSeries(breakdown, this.series, this.index);
-                self.props.onSelectionShiftsChange(shifts);
+                self.props.onHoverShiftsChange(null);
+                var data = self.getSelectionData(breakdown, this.series, this.index);
+                self.props.onSelectionShiftsChange(data);
             }
         };
 
@@ -56,10 +56,14 @@ export default class RotaOverviewView extends Component {
             rotaDate
         });
     }
-    getShiftsFromSeries(breakdown, series, index){
+    getSelectionData(breakdown, series, index){
         var staffType = _(this.props.staffTypes).find({title: series.name});
         var shifts = breakdown[index].shiftsByStaffType[staffType.id];
-        return shifts;
+        return {
+            shifts,
+            staffType: staffType.id,
+            date: breakdown[index].date
+        };
     }
     getChartData(breakdown){
         var rotaDate = new RotaDate(this.props.dateOfRota);
