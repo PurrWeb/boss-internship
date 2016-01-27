@@ -25,7 +25,7 @@ class VenuesController < ApplicationController
 
   private
   def authorize
-    authorize! :manage, :venues
+    authorize! :manage, :admin
   end
 
   def venue_params

@@ -65,11 +65,9 @@
                   <%= link_to('Users', users_path) %>
                 </li>
 
-                <% if can?(:manage, :venues) %>
-                  <li class="nav-venues-section">
-                    <%= link_to('Venues', venues_path) %>
-                  </li>
-                <% end %>
+                <li class="nav-venues-section">
+                  <%= link_to('Venues', venues_path) %>
+                </li>
 
                 <% if can?(:manage, :staff_types) %>
                   <li class="nav-staff-types-section">
