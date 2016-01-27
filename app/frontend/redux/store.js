@@ -9,6 +9,9 @@ import rotaShifts from "./rota-shifts-reducer"
 import appIsInManagerMode from "./app-is-in-manager-mode-reducer"
 import apiRequestsInProgress from "./api-requests-in-progress-reducer"
 import componentErrors from "./component-errors-reducer"
+import venues from "./venues-reducer"
+import rotas from "./rotas-reducer"
+import pageOptions from "./page-options-reducer"
 
 var rootReducer = combineReducers({
     staff,
@@ -16,7 +19,10 @@ var rootReducer = combineReducers({
     staffStatuses,
     appIsInManagerMode,
     apiRequestsInProgress,
-    componentErrors
+    componentErrors,
+    venues,
+    rotas,
+    pageOptions
 });
 var createStoreWithMiddleware = compose(
 	// Redux thunk let's us dispatch asynchronous actions, for example

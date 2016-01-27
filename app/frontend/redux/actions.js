@@ -108,6 +108,30 @@ export function replaceAllStaffMembers(options) {
     }
 }
 
+actionTypes.REPLACE_ALL_VENUES = "REPLACE_ALL_VENUES";
+export function replaceAllVenues(options) {
+    return {
+        type: actionTypes.REPLACE_ALL_VENUES,
+        venues: options.venues
+    }
+}
+
+actionTypes.REPLACE_ALL_ROTAS = "REPLACE_ALL_ROTAS";
+export function replaceAllRotas(options) {
+    return {
+        type: actionTypes.REPLACE_ALL_ROTAS,
+        rotas: options.rotas
+    }
+}
+
+actionTypes.SET_PAGE_OPTIONS = "SET_PAGE_OPTIONS";
+export function setPageOptions(options) {
+    return {
+        type: actionTypes.SET_PAGE_OPTIONS,
+        pageOptions: options.pageOptions
+    }
+}
+
 var initialShiftState;
 if(window.location.pathname === '/rotas/empty_example') {
     initialShiftState = [];
@@ -116,13 +140,41 @@ if(window.location.pathname === '/rotas/empty_example') {
 }
 
 
-export function loadInitialRotaAppState() {
+export function getInitialRotaPageData(){
     var userDataById = _.indexBy(userData, "id");
+    return {
+        pageOptions: {
+            displayedRota: 999
+        },
+        staffMembers: userDataById,
+        rotaShifts: initialShiftState,
+        rotas: {
+            999: {
+                date: new Date(2015, 11, 11, 18, 0, 0),
+                id: 999,
+                venue: 88
+            }
+        },
+        venues: {
+            88: {
+                id: 88,
+                name: "The Rocket Bar"
+            }
+        }
+    }
+}
+
+export function loadInitialRotaAppState(data) {
     return function(dispatch){
-        setTimeout(function(){
-            dispatch(replaceAllStaffMembers({staffMembers: userDataById}));
-            dispatch(replaceAllShifts({shifts: initialShiftState}));
-        }, 3000)
+
+        dispatch([
+            replaceAllStaffMembers({staffMembers: data.staffMembers}),
+            replaceAllShifts({shifts: data.rotaShifts}),
+            replaceAllVenues({venues: data.venues}),
+            replaceAllRotas({rotas: data.rotas}),
+            setPageOptions({pageOptions: data.pageOptions})
+        ]);
+        
     }
 }
 
