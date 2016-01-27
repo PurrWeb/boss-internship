@@ -33,6 +33,7 @@ class UsersController < ApplicationController
     authorize! :manage, user
 
     staff_member = StaffMember.new(
+      starts_at: Time.now,
       email_address: user.email_address,
       name: user.name
     )
@@ -90,6 +91,7 @@ class UsersController < ApplicationController
       :avatar,
       :avatar_cache,
       :staff_type,
+      :starts_at,
       address_attributes: [
         :address_1,
         :address_2,

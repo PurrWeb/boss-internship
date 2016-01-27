@@ -128,4 +128,22 @@ RSpec.feature 'Editing a staff_members employment detials' do
       end
     end
   end
+
+  describe 'editing start date' do
+    let(:new_start_date) { edited_staff_member.starts_at - 3.months }
+
+    it 'takes you to the show page and shows a success message' do
+      edit_page.surf_to
+      edit_page.form.update_start_date(new_start_date)
+      edited_staff_member.reload
+      show_page.ensure_flash_success_message_displayed('Staff member updated successfully')
+    end
+
+    it 'should update the staff members start_date' do
+      edit_page.surf_to
+      edit_page.form.update_start_date(new_start_date)
+      edited_staff_member.reload
+      expect(edited_staff_member.starts_at).to eq(new_start_date)
+    end
+  end
 end

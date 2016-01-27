@@ -16,6 +16,7 @@ module PageObject
       address_form.fill_in_for(staff_member.address)
       scope.fill_in('Day Preference', with: staff_member.day_perference_note)
       scope.fill_in('Hours Preference', with: staff_member.hours_preference_note)
+      starts_at_field.fill_in_date(staff_member.starts_at)
     end
 
     page_action :upload_avatar_image do
@@ -28,6 +29,10 @@ module PageObject
 
     page_action :submit do
       click_button 'Submit'
+    end
+
+    def starts_at_field
+      @starts_at_field ||= DatePickerField.new(self, selector: '.staff-member-starts-at-field')
     end
 
     def date_of_birth_field

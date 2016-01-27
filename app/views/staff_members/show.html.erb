@@ -33,6 +33,9 @@
         <dt class="show-page-detail-heading">Job Type</dt>
         <dd class="show-page-detail" data-detail="staff-type"><%= staff_member.staff_type.name.titlecase %></dd>
 
+        <dt class="show-page-detail-heading">Start Date</dt>
+        <dd class="show-page-detail" data-detail="start-date"><%= staff_member.starts_at.to_s(:human_date) %></dd>
+
         <dt class="show-page-detail-heading">Hour Perference</dt>
         <dd class="show-page-detail" data-detail="hour-preference"><%= staff_member.hours_preference_note.present? ? staff_member.hours_preference_note : 'Not specified' %></dd>
 

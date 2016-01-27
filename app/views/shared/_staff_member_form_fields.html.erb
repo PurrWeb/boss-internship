@@ -8,6 +8,15 @@
         include_blank: true
       ) %>
 <% end %>
+<div class="staff-member-starts-at-field">
+  <%= form.date_select(
+        :starts_at,
+        start_year: Time.now.year + 2,
+        end_year: Time.now.year - 2,
+        include_blank: true,
+        with_css_classes: true
+      ) %>
+</div>
 <% if form.object.avatar? %>
   <%= image_tag(form.object.avatar_url, class: "avatar_preview", height: 120, width: 120) %>
 <% end %>

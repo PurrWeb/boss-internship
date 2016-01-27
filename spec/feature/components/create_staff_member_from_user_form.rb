@@ -11,11 +11,19 @@ module PageObject
       scope.fill_in('Pin code', with: staff_member.pin_code)
       scope.fill_in('Phone number', with: staff_member.phone_number)
       date_of_birth_field.fill_in_date(staff_member.date_of_birth)
-      address_form.fill_in_forfor(staff_member.address)
+      address_form.fill_in_for(staff_member.address)
+      starts_at_field.fill_in_date(staff_member.starts_at)
     end
 
     page_action :submit do
       click_button 'Submit'
+    end
+
+    def starts_at_field
+      @starts_at_field ||= DatePickerField.new(
+        self,
+        selector: '.staff-member-starts-at-field'
+      )
     end
 
     def date_of_birth_field

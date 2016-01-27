@@ -58,6 +58,13 @@ module PageObject
       )
     end
 
+    def start_date_field
+      @start_date_field ||= DatePickerField.new(
+        self,
+        selector: '.staff-member-starts-at-field'
+      )
+    end
+
     def name_form
       @name_form ||= NameForm.new(self)
     end

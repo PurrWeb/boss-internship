@@ -38,6 +38,7 @@ class StaffMember < ActiveRecord::Base
   validate  :valid_pin_code_format
   validates :staff_type, presence: true
   validates :creator, presence: true
+  validates :starts_at, presence: true
 
   before_validation :normalise_national_insurance_number
 

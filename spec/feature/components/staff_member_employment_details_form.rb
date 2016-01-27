@@ -45,6 +45,15 @@ module PageObject
       ).to eq(staff_type.id.to_s)
     end
 
+    page_action :update_start_date do |date|
+      _fill_in_start_date(date)
+      _submit_form
+    end
+
+    page_action :fill_in_start_date do |date|
+      _fill_in_start_date(date)
+    end
+
     page_action :submit do
       _submit_form
     end
@@ -54,6 +63,17 @@ module PageObject
     end
 
     private
+    def starts_at_field
+      @starts_at_field ||= DatePickerField.new(
+        self,
+        selector: '.staff-member-starts-at-field'
+      )
+    end
+
+    def _fill_in_start_date(date)
+      starts_at_field.fill_in_date(date)
+    end
+
     def _select_venue(venue)
       scope.select(venue.name.titlecase, from: 'Venue')
     end

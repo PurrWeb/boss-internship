@@ -30,6 +30,15 @@
         )
     %>
     <% end %>
+    <div class="staff-member-starts-at-field">
+      <%= form.date_select(
+            :starts_at,
+            start_year: Time.now.year + 2,
+            end_year: Time.now.year - 2,
+            include_blank: true,
+            with_css_classes: true
+          ) %>
+    </div>
     <%= form.text_area :day_perference_note, label: 'Day Preference', help: form.object.day_perference_help_text %>
     <%= form.text_area :hours_preference_note, label: 'Hours Preference', help: form.object.hours_preference_help_text %>
     <%= form.text_field :national_insurance_number %>

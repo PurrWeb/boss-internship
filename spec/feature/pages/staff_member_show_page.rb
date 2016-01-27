@@ -39,6 +39,7 @@ module PageObject
       expect(find(detail_section_selector_for(:postcode)).text).to eq(staff_member.address.postcode)
       expect(find(detail_section_selector_for(:day_preference)).text).to eq(staff_member.day_perference_note || 'Not specified')
       expect(find(detail_section_selector_for(:hour_preference)).text).to eq(staff_member.hours_preference_note || 'Not specified')
+      expect(find(detail_section_selector_for(:start_date)).text).to eq(staff_member.starts_at.to_s(:human_date))
     end
 
     page_action :ensure_avatar_image_displayed do |image_url:|

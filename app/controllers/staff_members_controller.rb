@@ -21,7 +21,7 @@ class StaffMembersController < ApplicationController
   def new
     authorize! :manage, :staff_members
 
-    staff_member = StaffMember.new
+    staff_member = StaffMember.new(starts_at: Time.now)
     render locals: { staff_member: staff_member }
   end
 
@@ -83,6 +83,7 @@ class StaffMembersController < ApplicationController
       :gender,
       :phone_number,
       :date_of_birth,
+      :starts_at,
       :national_insurance_number,
       :hours_preference_note,
       :day_perference_note,
@@ -117,6 +118,7 @@ class StaffMembersController < ApplicationController
         :staff_type,
         :hours_preference_note,
         :day_perference_note,
+        :starts_at,
         staff_member_venue_attributes: [:venue_id]
       ).deep_merge(
         staff_type: staff_type_from_params,
