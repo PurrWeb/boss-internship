@@ -1,12 +1,12 @@
 import React, { Component } from "react"
-import getStaffTypeBreakdownByTime from "./rota-overview-data"
+import getStaffTypeBreakdownByTime from "./get-staff-type-breakdown-by-time"
 import _ from "underscore"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
 const ReactHighCharts = require('react-highcharts/bundle/highcharts')
 
 
-const GRANULARITY = 30;
+const GRANULARITY = 15;
 const MILLISECONDS_PER_MINUTE = 60 * 1000;
 
 export default class RotaOverviewView extends Component {
@@ -25,7 +25,6 @@ export default class RotaOverviewView extends Component {
         );
     }
     render() {
-        console.log("render")
         var self = this;
         var breakdown = this.getBreakdown();
         var config = this.getStaticConfig();
