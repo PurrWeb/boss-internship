@@ -10,14 +10,19 @@ module PageObject
       scope.select(staff_member.staff_type.name.titleize, from: 'Staff type')
       scope.fill_in('Pin code', with: staff_member.pin_code)
       scope.fill_in('Phone number', with: staff_member.phone_number)
-      scope.select(staff_member.date_of_birth.year, from: 'staff_member_date_of_birth_1i')
-      scope.select(staff_member.date_of_birth.strftime("%B"), from: 'staff_member_date_of_birth_2i')
-      scope.select(staff_member.date_of_birth.day, from: 'staff_member_date_of_birth_3i')
-      address_form.fill_in_for(staff_member.address)
+      date_of_birth_field.fill_in_date(staff_member.date_of_birth)
+      address_form.fill_in_forfor(staff_member.address)
     end
 
     page_action :submit do
       click_button 'Submit'
+    end
+
+    def date_of_birth_field
+      @date_of_birth_field ||= DatePickerField.new(
+        self,
+        selector: '.staff-member-date-of-birth-field'
+      )
     end
 
     def address_form

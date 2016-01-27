@@ -41,8 +41,15 @@
 <%= form.number_field :pin_code %>
 <%= form.number_field :phone_number %>
 <%= form.text_field :national_insurance_number %>
-
-<%= form.date_select :date_of_birth, start_year: Time.now.year, end_year: 1940, include_blank: true %>
+<div class="staff-member-date-of-birth-field">
+  <%= form.date_select(
+        :date_of_birth,
+        start_year: Time.now.year,
+        end_year: 1940,
+        include_blank: true,
+        with_css_classes: true
+      ) %>
+</div>
 <%= form.fields_for(:address, (form.object.address || Address.new)) do |address_fields| %>
   <%= render partial: 'shared/address_fields', locals: { form: address_fields } %>
 <% end %>
