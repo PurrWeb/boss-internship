@@ -1,5 +1,3 @@
-import defaultRotaShifts from "../data/default-rota-shifts.js"
-import userData from "~data/users.js"
 import importedCreateApiRequestAction from "./create-api-request-action"
 
 export const actionTypes = {};
@@ -132,35 +130,26 @@ export function setPageOptions(options) {
     }
 }
 
-var initialShiftState;
-if(window.location.pathname === '/rotas/empty_example') {
-    initialShiftState = [];
-} else {
-    initialShiftState = defaultRotaShifts;
-}
-
-
 export function getInitialRotaPageData(){
-    var userDataById = _.indexBy(userData, "id");
+    let viewData = window.boss.rota;
+
+    let rotaData = viewData.rotas;
+    let staffTypeData = viewData.staff_types;
+    let rotaShiftData = viewData.rota_shifts;
+    let staffMemberData = viewData.staff_members;
+    let userData = viewData.users;
+    let venueData = viewData.venues;
+    let displayedRotaId = _.first(rotaData).id;
+
     return {
         pageOptions: {
-            displayedRota: 999
+            displayedRota: displayedRotaId
         },
-        staffMembers: userDataById,
-        rotaShifts: _.indexBy(initialShiftState, "id"),
-        rotas: {
-            999: {
-                date: new Date(2015, 11, 11, 18, 0, 0),
-                id: 999,
-                venue: 88
-            }
-        },
-        venues: {
-            88: {
-                id: 88,
-                name: "The Rocket Bar"
-            }
-        }
+        staffTypes: indexById(staffTypeData),
+        staffMembers: indexById(userData),
+        rotaShifts: indexById(rotaShiftData),
+        rotas: indexById(rotaData),
+        venues: indexById(venueData)
     }
 }
 
@@ -174,12 +163,12 @@ export function loadInitialRotaAppState(data) {
             replaceAllRotas({rotas: data.rotas}),
             setPageOptions({pageOptions: data.pageOptions})
         ]);
-        
+
     }
 }
 
 export function loadInitialClockInOutAppState() {
-    var userDataById = _.indexBy(userData, "id");
+    var userDataById = indexById(userData);
     return function(dispatch){
         setTimeout(function(){
             dispatch(replaceAllStaffMembers({staffMembers: userDataById}));
@@ -188,3 +177,6 @@ export function loadInitialClockInOutAppState() {
 }
 
 
+function indexById(data){
+  return _.indexBy(data, "id")
+}

@@ -28,6 +28,10 @@ class Rota < ActiveRecord::Base
     state_machine.current_state.to_sym == :published
   end
 
+  def self.url_date_format
+    '%d-%m-%Y'
+  end
+
   private
   # Needed for statesman
   def self.transition_class

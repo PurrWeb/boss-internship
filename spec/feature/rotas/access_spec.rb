@@ -3,29 +3,80 @@ require 'rails_helper'
 RSpec.describe 'Rota page access' do
   include Rack::Test::Methods
 
-  def app
-    Rails.application
+  before do
+    login_as user
   end
 
-  describe 'empty Rota demo page' do
-    let(:url) { url_helpers.empty_example_rotas_path }
+  describe 'non existing rota page' do
+    let(:venue) { FactoryGirl.create(:venue)}
+    let(:url) { url_helpers.venue_rota_path(id: Time.now.strftime(Rota.url_date_format), venue_id: venue.id) }
 
-    specify 'should be accessible for all users' do
-      [:manager, :admin, :dev].each do |role|
-        user = FactoryGirl.create(:user, role)
-        login_as user
+    context 'manager with rites to manage venue' do
+      let(:user) { FactoryGirl.create(:user, :admin, venues: [venue]) }
+
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
+      end
+    end
+
+    context 'manager without rites to manage venue' do
+      let(:user) { FactoryGirl.create(:user, :admin) }
+
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
+      end
+    end
+
+    context 'admin' do
+      let(:user) { FactoryGirl.create(:user, :admin) }
+
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
+      end
+    end
+
+    context 'dev' do
+      let(:user) { FactoryGirl.create(:user, :dev) }
+
+      specify 'should have access' do
         expect(get(url).status).to eq(ok_status)
       end
     end
   end
 
-  describe 'pre filled Rota demo page' do
-    let(:url) { url_helpers.prefilled_example_rotas_path }
+  describe 'existing Rota page' do
+    let(:rota) { FactoryGirl.create(:rota) }
+    let(:venue) { rota.venue }
+    let(:url) { url_helpers.venue_rota_path(id: rota.date.strftime(Rota.url_date_format), venue_id: rota.venue.id) }
 
-    specify 'should be accessible for all users' do
-      [:manager, :admin, :dev].each do |role|
-        user = FactoryGirl.create(:user, role)
-        login_as user
+    context 'manager with rites to manage venue' do
+      let(:user) { FactoryGirl.create(:user, :admin, venues: [venue]) }
+
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
+      end
+    end
+
+    context 'manager without rites to manage venue' do
+      let(:user) { FactoryGirl.create(:user, :admin) }
+
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
+      end
+    end
+
+    context 'admin' do
+      let(:user) { FactoryGirl.create(:user, :admin) }
+
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
+      end
+    end
+
+    context 'dev' do
+      let(:user) { FactoryGirl.create(:user, :dev) }
+
+      specify 'should have access' do
         expect(get(url).status).to eq(ok_status)
       end
     end
@@ -38,5 +89,9 @@ RSpec.describe 'Rota page access' do
 
   def ok_status
     200
+  end
+
+  def app
+    Rails.application
   end
 end
