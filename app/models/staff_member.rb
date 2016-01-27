@@ -78,4 +78,12 @@ class StaffMember < ActiveRecord::Base
   def email
     email_address.try(:email)
   end
+
+  def hours_preference_help_text
+    'Perferred number of hours to work per week displayed in the Rota (e.g. 40, 20+)'
+  end
+
+  def day_perference_help_text
+    'Peferrered days to work displayed in the rota (e.g. mornings and weekeneds)'
+  end
 end

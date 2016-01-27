@@ -16,6 +16,8 @@ module PageObject
       scope.select(staff_member.date_of_birth.strftime("%B"), from: 'staff_member_date_of_birth_2i')
       scope.select(staff_member.date_of_birth.day, from: 'staff_member_date_of_birth_3i')
       address_form.fill_in_for(staff_member.address)
+      scope.fill_in('Day Preference', with: staff_member.day_perference_note)
+      scope.fill_in('Hours Preference', with: staff_member.hours_preference_note)
     end
 
     page_action :upload_avatar_image do

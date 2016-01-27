@@ -115,6 +115,8 @@ class StaffMembersController < ApplicationController
       permit(
         :national_insurance_number,
         :staff_type,
+        :hours_preference_note,
+        :day_perference_note,
         staff_member_venue_attributes: [:venue_id]
       ).deep_merge(
         staff_type: staff_type_from_params,

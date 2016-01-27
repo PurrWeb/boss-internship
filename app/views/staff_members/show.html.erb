@@ -33,6 +33,12 @@
         <dt class="show-page-detail-heading">Job Type</dt>
         <dd class="show-page-detail" data-detail="staff-type"><%= staff_member.staff_type.name.titlecase %></dd>
 
+        <dt class="show-page-detail-heading">Hour Perference</dt>
+        <dd class="show-page-detail" data-detail="hour-preference"><%= staff_member.hours_preference_note.present? ? staff_member.hours_preference_note : 'Not specified' %></dd>
+
+        <dt class="show-page-detail-heading">Day Perference</dt>
+        <dd class="show-page-detail" data-detail="day-preference"><%= staff_member.day_perference_note.present? ? staff_member.day_perference_note : 'Not specified' %></dd>
+
         <dt class="show-page-detail-heading">National Insurance Number</dt>
         <dd class="show-page-detail" data-detail="national-insurance-number">
           <% if staff_member.national_insurance_number.present? %>

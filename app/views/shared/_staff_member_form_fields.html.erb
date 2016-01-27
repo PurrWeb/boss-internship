@@ -46,3 +46,5 @@
 <%= form.fields_for(:address, (form.object.address || Address.new)) do |address_fields| %>
   <%= render partial: 'shared/address_fields', locals: { form: address_fields } %>
 <% end %>
+<%= form.text_area :day_perference_note, label: 'Day Preference', help: form.object.day_perference_help_text %>
+<%= form.text_area :hours_preference_note, label: 'Hours Preference', help: form.object.hours_preference_help_text %>
