@@ -1,20 +1,6 @@
 import _ from "underscore"
 import RotaDate from "~lib/rota-date"
-
-const MINUTES_PER_DAY = 24 * 60;
-
-export function _getSamplingTimeOffsetsForDay(granularityInMinutes){
-    var samplingTimes = [];
-
-    var lastSamplingTimeInMinutes = 0;
-    while (lastSamplingTimeInMinutes <= MINUTES_PER_DAY) {
-        samplingTimes.push(lastSamplingTimeInMinutes);
-
-        lastSamplingTimeInMinutes += granularityInMinutes;
-    }
-
-    return samplingTimes;
-}
+import getSamplingTimeOffsetsForDay from "~lib/get-sampling-time-offsets-for-day"
 
 /**
 Processes a list of shifts and returns a list of shifts that are scheduled for each
@@ -67,7 +53,7 @@ export default function getStaffTypeBreakdownByTime(options){
         return obj;
     }
 
-    var samplingTimeOffsets = _getSamplingTimeOffsetsForDay(granularityInMinutes)
+    var samplingTimeOffsets = getSamplingTimeOffsetsForDay(granularityInMinutes)
     var breakdown = samplingTimeOffsets.map(function(offset){
         return getInitialBreakdownAtSamplingPoint(offset)
     });
