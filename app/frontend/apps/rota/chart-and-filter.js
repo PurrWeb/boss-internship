@@ -5,6 +5,7 @@ import StaffDetailsAndShifts from "./rota-chart/staff-details-and-shifts"
 import StaffTypeDropdown from "~components/staff-type-dropdown"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
+import ChartSelectionView from "~components/chart-selection-view"
 
 const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 
@@ -18,28 +19,11 @@ export default class ChartAndFilter extends Component {
         };
     }
     render(){
-        var staffId, staffDetails, previewStaffDetails;
-        if (this.state.staffToShow) {
-            staffId = this.state.staffToShow;
-            staffDetails = <StaffDetailsAndShifts
-                staffId={staffId}
-                rotaShifts={this.props.rotaShifts}
-                // We specify a key so the component is re-initialized when
-                // the shift changes - so we don't keep the previous state.
-                key={this.state.staffToShow}
-                staff={this.props.staff} />
-        }
-        if (this.state.staffToPreview) {
-            staffId = this.state.staffToPreview;
-            previewStaffDetails = <StaffDetailsAndShifts
-                staffId={staffId}
-                rotaShifts={this.props.rotaShifts}
-                staff={this.props.staff} />
-        }
-
+        var staffDetails = this.getStaffDetailsComponent(this.state.staffToShow);
+        var previewStaffDetails = this.getStaffDetailsComponent(this.state.staffToPreview);
+        
         var rotaShifts = this.getRotaShifts();
         var chartBoundaries = ChartAndFilter.calculateChartBoundaries(rotaShifts);
-
 
         return (
             <div className="row">
@@ -66,20 +50,26 @@ export default class ChartAndFilter extends Component {
                         Showing {rotaShifts.length} out of {this.props.rotaShifts.length} shifts.
                     </div>
 
-                    <div
-                        className="chart-and-filter__shift-editor-container" >
-                        <div
-                            className="chart-and-filter__selected-shift-editor"
-                            style={{opacity: this.state.staffToPreview !== null ? "0": "1"}}>
-                            {staffDetails}
-                        </div>
-                        <div className="chart-and-filter__preview-shift-editor">
-                            {previewStaffDetails}
-                        </div>
+                    <div className="chart-and-filter__shift-editor-container">
+                        <ChartSelectionView
+                            selectionComponent={staffDetails}
+                            previewComponent={previewStaffDetails} />
                     </div>
                 </div>
             </div>
         )
+    }
+    getStaffDetailsComponent(staffId){
+        if (!staffId) {
+            return null;
+        }
+        return <StaffDetailsAndShifts
+            staffId={staffId}
+            rotaShifts={this.props.rotaShifts}
+            // We specify a key so the component is re-initialized when
+            // the shift changes - so we don't keep the previous state.
+            key={this.state.staffToShow}
+            staff={this.props.staff} />
     }
     /**
      * Many venues ony operate at certain times, so we detect the times where there are

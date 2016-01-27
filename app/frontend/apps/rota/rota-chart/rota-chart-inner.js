@@ -3,6 +3,7 @@ import d3 from "d3"
 import RotaDate from "~lib/rota-date.js"
 import moment from "moment"
 import _ from 'underscore'
+import utils from "~lib/utils"
 
 const MAX_HEIGHT_PER_PERSON = 20;
 const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
@@ -15,7 +16,10 @@ class RotaChart extends Component {
         super(props);
     }
     shouldComponentUpdate(nextProps, nextState){
-        return JSON.stringify(this.props) !== JSON.stringify(nextProps);
+        return !utils.deepEqualTreatingFunctionsAsStrings(
+            nextProps,
+            this.props
+        );
     }
     render() {
         return (
