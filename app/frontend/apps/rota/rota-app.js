@@ -5,9 +5,13 @@ import RotaView from './rota-view.js'
 import * as actionCreators from "~redux/actions.js"
 
 export default class RotaApp extends Component {
-  render() {
-    return <Provider store={store}>
-      <RotaView />
-    </Provider>
-  }
+    componentWillMount(){
+        var initialPageData = actionCreators.getInitialRotaPageData();
+        store.dispatch(actionCreators.loadInitialRotaAppState(initialPageData));
+    }
+    render() {
+        return <Provider store={store}>
+            <RotaView />
+        </Provider>
+    }
 }

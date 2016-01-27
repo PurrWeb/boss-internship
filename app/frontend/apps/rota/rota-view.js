@@ -29,13 +29,11 @@ class RotaView extends Component {
             componentErrors: this.props.componentErrors
         }
     }
-    componentWillMount(){
-        this.props.dispatch(actionCreators.loadInitialRotaAppState())
-    }
     render() {
+
         return <div className="container">
             <h1>
-                Rota for {this.props.venue}: {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
+                Rota for {this.props.venue.name}: {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>
             <br/>
             <RotaOverviewView {...this.props} />
@@ -52,6 +50,8 @@ class RotaView extends Component {
 
 function mapStateToProps(state) {
     var props = _.clone(state);
+
+    props.shifts = _.values(props.shifts);
 
     var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
     props.staff = _(props.staff).mapValues(function(staff){
@@ -70,10 +70,9 @@ function mapStateToProps(state) {
         });
     });
     props.staffTypes = staffTypes;
-    props.venue = "The Rocket Bar";
-    props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
-
-    console.log("PROPS", props)
+    var rota = props.rotas[props.pageOptions.displayedRota];
+    props.venue = props.venues[rota.venue];
+    props.dateOfRota = rota.date;
 
     return props;
 }

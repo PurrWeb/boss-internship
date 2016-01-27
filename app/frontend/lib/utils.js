@@ -30,6 +30,11 @@ export default {
     dateIsValid(date) {
         return !isNaN(date.valueOf());
     },
+    immutablyDeleteObjectItem(object, key){
+        var ret = {...object};
+        delete ret[key];
+        return ret;
+    },
     /**
     This function can be used inside shouldComponentUpdate. If props contain
     functions passed in from the parent deepEqual would always say the props
