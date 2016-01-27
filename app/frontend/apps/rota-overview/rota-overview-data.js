@@ -44,7 +44,7 @@ The responsive consists of an array like this:
 @param  {object} rotaDate - rota date object for the day the shifts are on
 @return {array} - see above
 */
-export function getStaffTypeBreakdownByTime(options){
+export default function getStaffTypeBreakdownByTime(options){
     var {shifts, staff, granularityInMinutes, staffTypes, rotaDate} = options;
 
     function getStaffTypeFromShift(shift) {
