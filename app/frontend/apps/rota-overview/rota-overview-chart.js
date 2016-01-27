@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { getStaffTypeBreakdownByTime } from "./rota-overview-data"
+import getStaffTypeBreakdownByTime from "./rota-overview-data"
 import _ from "underscore"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
