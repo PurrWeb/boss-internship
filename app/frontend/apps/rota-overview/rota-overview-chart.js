@@ -13,7 +13,7 @@ export default class RotaOverviewView extends Component {
     static propTypes = {
         shifts: React.PropTypes.array.isRequired,
         staffTypes: React.PropTypes.object.isRequired,
-        staff: React.PropTypes.array.isRequired,
+        staff: React.PropTypes.object.isRequired,
         dateOfRota: React.PropTypes.instanceOf(Date),
         onHoverShiftsChange: React.PropTypes.func.isRequired,
         onSelectionShiftsChange: React.PropTypes.func.isRequired

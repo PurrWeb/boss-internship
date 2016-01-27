@@ -147,7 +147,7 @@ export function getInitialRotaPageData(){
             displayedRota: 999
         },
         staffMembers: userDataById,
-        rotaShifts: initialShiftState,
+        rotaShifts: _.indexBy(initialShiftState, "id"),
         rotas: {
             999: {
                 date: new Date(2015, 11, 11, 18, 0, 0),

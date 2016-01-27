@@ -59,6 +59,8 @@ function mapStateToProps(state) {
     var props = _.clone(state);
 
     try {
+        props.shifts = _.values(props.shifts);
+
         var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
         props.staff = _(props.staff).mapValues(function(staff){
             return Object.assign({}, staff, {
