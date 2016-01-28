@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Invite pages access' do
+RSpec.describe 'Rota page access' do
   include Rack::Test::Methods
 
   def app
