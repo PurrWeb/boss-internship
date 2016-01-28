@@ -96,19 +96,6 @@ ActiveRecord::Schema.define(version: 20160122165448) do
   add_index "names", ["first_name"], name: "index_names_on_first_name", using: :btree
   add_index "names", ["surname"], name: "index_names_on_surname", using: :btree
 
-  create_table "rota_status_transitions", force: :cascade do |t|
-    t.string   "to_state",    limit: 255,   null: false
-    t.text     "metadata",    limit: 65535
-    t.integer  "sort_key",    limit: 4,     null: false
-    t.integer  "rota_id",     limit: 4,     null: false
-    t.boolean  "most_recent"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  add_index "rota_status_transitions", ["rota_id", "most_recent"], name: "index_rota_status_transitions_parent_most_recent", unique: true, using: :btree
-  add_index "rota_status_transitions", ["rota_id", "sort_key"], name: "index_rota_status_transitions_parent_sort", unique: true, using: :btree
-
   create_table "rota_shifts", force: :cascade do |t|
     t.integer  "creator_id",          limit: 4
     t.datetime "starts_at",                                    null: false
@@ -128,6 +115,19 @@ ActiveRecord::Schema.define(version: 20160122165448) do
   add_index "rota_shifts", ["rota_id"], name: "index_rota_shifts_on_rota_id", using: :btree
   add_index "rota_shifts", ["staff_member_id"], name: "index_rota_shifts_on_staff_member_id", using: :btree
   add_index "rota_shifts", ["starts_at"], name: "index_rota_shifts_on_starts_at", using: :btree
+
+  create_table "rota_status_transitions", force: :cascade do |t|
+    t.string   "to_state",    limit: 255,   null: false
+    t.text     "metadata",    limit: 65535
+    t.integer  "sort_key",    limit: 4,     null: false
+    t.integer  "rota_id",     limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "rota_status_transitions", ["rota_id", "most_recent"], name: "index_rota_status_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "rota_status_transitions", ["rota_id", "sort_key"], name: "index_rota_status_transitions_parent_sort", unique: true, using: :btree
 
   create_table "rotas", force: :cascade do |t|
     t.date     "date",                 null: false
