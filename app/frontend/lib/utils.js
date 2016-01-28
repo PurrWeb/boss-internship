@@ -10,7 +10,7 @@ function replaceFunctionPropsWithStrings(obj){
     })
 }
 
-export default {
+var utils =  {
     stringEndsWith: function(string, suffix) {
         return string.slice(-suffix.length) == suffix;
     },
@@ -35,6 +35,11 @@ export default {
         delete ret[key];
         return ret;
     },
+    shiftTimeIsValid(shiftTime){
+        var dateIsValid = utils.dateIsValid(shiftTime);
+        var minutesAreMultipleOfFifteen = shiftTime.getMinutes() % 15 === 0;
+        return dateIsValid && minutesAreMultipleOfFifteen;
+    },
     /**
     This function can be used inside shouldComponentUpdate. If props contain
     functions passed in from the parent deepEqual would always say the props
@@ -48,3 +53,6 @@ export default {
         );
     }
 }
+
+
+export default utils;
