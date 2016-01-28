@@ -33,9 +33,11 @@ export default class FilterableStaffList extends Component {
             staffToShow = _.filter(staffToShow, function(staff){
                 var lowercaseFirstName = staff.first_name.toLowerCase();
                 var lowercaseSurname = staff.surname.toLowerCase();
+                var lowerCaseFullName = lowercaseFirstName + " " + lowercaseSurname;
 
                 var isMatch = utils.stringStartsWith(lowercaseFirstName, lowercaseFilterName)
-                    || utils.stringStartsWith(lowercaseSurname, lowercaseFilterName);
+                    || utils.stringStartsWith(lowercaseSurname, lowercaseFilterName)
+                    || utils.stringStartsWith(lowerCaseFullName, lowercaseFilterName);
 
                 return isMatch;
             });
