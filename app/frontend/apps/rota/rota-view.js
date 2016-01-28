@@ -3,7 +3,6 @@ import { connect, Provider } from "react-redux"
 import { bindActionCreators } from "redux";
 import * as actionCreators from "../../redux/actions.js"
 import ChartAndFilter from "./chart-and-filter.js"
-import staffTypes from "../../data/staff-types.js"
 import _ from "underscore"
 import AddShiftView from "./add-shift-view"
 import store from "../../redux/store.js"
@@ -69,9 +68,8 @@ function mapStateToProps(state) {
             isBeingEdited: isBeingEdited
         });
     });
-    props.staffTypes = staffTypes;
     var rota = props.rotas[props.pageOptions.displayedRota];
-    props.venue = props.venues[rota.venue];
+    props.venue = props.venues[rota.venue.id];
     props.dateOfRota = rota.date;
 
     return props;

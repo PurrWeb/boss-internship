@@ -1,5 +1,3 @@
-import defaultRotaShifts from "../data/default-rota-shifts.js"
-import userData from "~data/users.js"
 import importedCreateApiRequestAction from "./create-api-request-action"
 
 export const actionTypes = {};
@@ -124,6 +122,14 @@ export function replaceAllRotas(options) {
     }
 }
 
+actionTypes.REPLACE_ALL_STAFF_TYPES = "REPLACE_ALL_STAFF_TYPES";
+export function replaceAllStaffTypes(options) {
+    return {
+        type: actionTypes.REPLACE_ALL_STAFF_TYPES,
+        staffTypes: options.staffTypes
+    }
+}
+
 actionTypes.SET_PAGE_OPTIONS = "SET_PAGE_OPTIONS";
 export function setPageOptions(options) {
     return {
@@ -132,54 +138,53 @@ export function setPageOptions(options) {
     }
 }
 
-var initialShiftState;
-if(window.location.pathname === '/rotas/empty_example') {
-    initialShiftState = [];
-} else {
-    initialShiftState = defaultRotaShifts;
-}
-
-
 export function getInitialRotaPageData(){
-    var userDataById = _.indexBy(userData, "id");
+    let viewData = window.boss.rota;
+    viewData.rotas = viewData.rotas;
+    viewData.venues = viewData.venues;
+
+    viewData.rotas[0].id = "UNPERSISTED_ROTA";
+    viewData.rotas[0].date = new Date();
+    let rotaData = viewData.rotas;
+    let staffTypeData = viewData.staff_types;
+    let rotaShiftData = viewData.rota_shifts;
+    let staffMemberData = viewData.staff_members;
+    let venueData = viewData.venues;
+    let displayedRotaId = _.first(rotaData).id;
+
+    _(rotaShiftData).each((shift) => {
+        shift.starts_at = new Date(shift.starts_at);
+        shift.ends_at = new Date(shift.ends_at);
+    });
+    
     return {
         pageOptions: {
-            displayedRota: 999
+            displayedRota: displayedRotaId
         },
-        staffMembers: userDataById,
-        rotaShifts: _.indexBy(initialShiftState, "id"),
-        rotas: {
-            999: {
-                date: new Date(2015, 11, 11, 18, 0, 0),
-                id: 999,
-                venue: 88
-            }
-        },
-        venues: {
-            88: {
-                id: 88,
-                name: "The Rocket Bar"
-            }
-        }
+        staffTypes: indexById(staffTypeData),
+        staffMembers: indexById(staffMemberData),
+        rotaShifts: indexById(rotaShiftData),
+        rotas: indexById(rotaData),
+        venues: indexById(venueData)
     }
 }
 
 export function loadInitialRotaAppState(data) {
     return function(dispatch){
-
         dispatch([
             replaceAllStaffMembers({staffMembers: data.staffMembers}),
+            replaceAllStaffTypes({staffTypes: data.staffTypes}),
             replaceAllShifts({shifts: data.rotaShifts}),
             replaceAllVenues({venues: data.venues}),
             replaceAllRotas({rotas: data.rotas}),
             setPageOptions({pageOptions: data.pageOptions})
         ]);
-        
+
     }
 }
 
 export function loadInitialClockInOutAppState() {
-    var userDataById = _.indexBy(userData, "id");
+    var userDataById = indexById(userData);
     return function(dispatch){
         setTimeout(function(){
             dispatch(replaceAllStaffMembers({staffMembers: userDataById}));
@@ -188,3 +193,6 @@ export function loadInitialClockInOutAppState() {
 }
 
 
+function indexById(data){
+  return _.indexBy(data, "id")
+}

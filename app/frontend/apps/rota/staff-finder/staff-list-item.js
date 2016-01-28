@@ -30,7 +30,7 @@ export default class StaffListItem extends Component {
                             <h3 className="rota-staff-list-item__name">
                                 {staff.first_name} {staff.surname}
                             </h3>
-                            <StaffTypeBadge staffType={staff.staff_type} />
+                            <StaffTypeBadge staffType={staff.staff_type.id} />
                         </div>
                         <div className="row">
                             <div className="col-md-6">

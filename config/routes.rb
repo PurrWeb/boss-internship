@@ -33,13 +33,8 @@ Rails.application.routes.draw do
 
   resources :staff_types, only: [:index, :new, :create]
 
-  resources :venues, only: [:index, :new, :create]
-
-  resources :rotas, only: [] do
-    collection do
-      get :prefilled_example
-      get :empty_example
-    end
+  resources :venues, only: [:index, :new, :create] do
+    resources :rotas, only: [:show]
   end
 
   resources :clock_in_clock_out, only: [:index]

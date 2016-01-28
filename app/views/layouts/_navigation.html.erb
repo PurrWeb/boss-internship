@@ -23,18 +23,10 @@
           <% end %>
 
           <% if can?(:manage, :rotas) %>
-            <li class="nav-rota-section dropdown">
-              <a href="#" class="nav-section-header-link dropdown-toggle <%= "#{'active' if in_rotas_section? }" %>" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                Rota Demo <% if in_rotas_section? %><span class="sr-only">(current)</span><% end %><span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <%= link_to('Prefilled Example', prefilled_example_rotas_path) %>
-                </li>
-                <li>
-                  <%= link_to('Empty Example', empty_example_rotas_path) %>
-                </li>
-              </ul>
+            <li class="nav-rota-section">
+              <%= link_to(venue_rota_path(id: Time.now.utc.strftime(Rota.url_date_format), venue_id: 1), class: "nav-section-header-link #{'active' if in_rotas_section? }") do %>
+                Rota <% if in_rotas_section? %><span class="sr-only">(current)</span><% end %>
+              <% end %>
             </li>
           <% end %>
 
@@ -65,11 +57,9 @@
                   <%= link_to('Users', users_path) %>
                 </li>
 
-                <% if can?(:manage, :venues) %>
-                  <li class="nav-venues-section">
-                    <%= link_to('Venues', venues_path) %>
-                  </li>
-                <% end %>
+                <li class="nav-venues-section">
+                  <%= link_to('Venues', venues_path) %>
+                </li>
 
                 <% if can?(:manage, :staff_types) %>
                   <li class="nav-staff-types-section">

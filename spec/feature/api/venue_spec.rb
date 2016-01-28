@@ -4,7 +4,7 @@ RSpec.describe 'Api access' do
   include Rack::Test::Methods
   let(:venue) { FactoryGirl.create(:venue) }
   let(:staff_members) { FactoryGirl.create_list(:staff_member, 2) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryGirl.create(:user, venues: [venue]) }
 
   before do
     venue.update_attributes!(staff_members: staff_members)

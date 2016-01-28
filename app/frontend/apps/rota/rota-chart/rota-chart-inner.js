@@ -36,7 +36,7 @@ class RotaChart extends Component {
     }
     getStaffMembersOnRota(){
         var staffList = _.chain(this.props.rotaShifts)
-            .pluck("staff_id")
+            .map((shift) => shift.staff_member.id)
             .unique()
             .map((staff_id) => this.props.staff[staff_id])
             .value();
@@ -68,7 +68,7 @@ class RotaChart extends Component {
 
         var rotaShifts = this.props.rotaShifts.map(
             (rotaShift, i) => {
-                var staff = this.props.staff[rotaShift.staff_id];
+                var staff = this.props.staff[rotaShift.staff_member.id];
 
                 return {
                     startOffset: calculateOffsetInHours(rotaShift.starts_at),
@@ -145,7 +145,7 @@ class RotaChart extends Component {
                 return barWidthScale(hours);
             })
             .attr("style", function(shift){
-                return "fill:" + self.context.staffTypes[shift.staff.staff_type].color;
+                return "fill:" + self.context.staffTypes[shift.staff.staff_type.id].color;
             })
             .on("mouseenter", function(shift){
                 self.showStaffPreview(shift);

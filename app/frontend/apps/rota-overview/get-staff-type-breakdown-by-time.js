@@ -34,7 +34,7 @@ export default function getStaffTypeBreakdownByTime(options){
     var {shifts, staff, granularityInMinutes, staffTypes, rotaDate} = options;
 
     function getStaffTypeFromShift(shift) {
-        return _(staff).find({id: shift.staff_id}).staff_type;
+        return staff[shift.staff_member.id].staff_type.id;
     }
     function getInitialBreakdownAtSamplingPoint(offsetInMinutes){
         var startTimeClone = new Date(rotaDate.startTime);

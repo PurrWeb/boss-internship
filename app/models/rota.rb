@@ -1,6 +1,7 @@
 class Rota < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
 
+  has_many :rota_shifts, inverse_of: :rota
   has_many :rota_status_transitions, autosave: false
 
   belongs_to :creator, class_name: "User"
@@ -25,6 +26,10 @@ class Rota < ActiveRecord::Base
 
   def published?
     state_machine.current_state.to_sym == :published
+  end
+
+  def self.url_date_format
+    '%d-%m-%Y'
   end
 
   private

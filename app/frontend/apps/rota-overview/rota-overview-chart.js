@@ -62,7 +62,7 @@ export default class RotaOverviewView extends Component {
         });
     }
     getSelectionData(breakdown, series, index){
-        var staffType = _(this.props.staffTypes).find({title: series.name});
+        var staffType = _(this.props.staffTypes).find({name: series.name});
         var shifts = breakdown[index].shiftsByStaffType[staffType.id];
         return {
             shifts,
@@ -81,7 +81,7 @@ export default class RotaOverviewView extends Component {
             });
 
             series.push({
-                name: staffTypes[staffType].title,
+                name: staffTypes[staffType].name,
                 data: staffTypeData,
                 color: staffTypes[staffType].color,
                 pointStart: rotaDate.startTime.valueOf(),

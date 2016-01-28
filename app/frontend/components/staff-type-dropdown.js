@@ -14,7 +14,7 @@ export default class StaffTypeDropdown extends Component {
         var staffTypeOptions = _(this.context.staffTypes).mapValues(function(staffType){
             return {
                 value: staffType.id,
-                label: staffType.title,
+                label: staffType.name,
                 color: staffType.color
             }
         })

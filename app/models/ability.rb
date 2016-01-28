@@ -14,6 +14,10 @@ class Ability
 
     can :manage, :rotas
 
+    can :manage, Venue do |venue|
+      user.admin? || user.venues.include?(venue)
+    end
+
     can :manage, StaffMember do |staff_member|
       user.admin? || user.venues.include?(staff_member.venue)
     end
