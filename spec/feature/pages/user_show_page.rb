@@ -17,6 +17,11 @@ module PageObject
       button.click
     end
 
+    page_action :click_edit_access_details_button do
+      button = find('a.btn.user-edit-access-details-button')
+      button.click
+    end
+
     page_action :ensure_no_associated_staff_member_message_displayed do
       staff_member_detail_section = find(
         detail_section_selector_for(:staff_member)

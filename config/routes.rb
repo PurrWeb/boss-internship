@@ -14,6 +14,8 @@ Rails.application.routes.draw do
 
   resources :users, only: [:show, :index] do
     member do
+      get :edit_access_details
+      post :update_access_details
       get :edit_personal_details
       post :update_personal_details
       get :new_staff_member

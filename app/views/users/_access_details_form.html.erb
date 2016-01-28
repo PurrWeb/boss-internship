@@ -1,0 +1,32 @@
+<%= bootstrap_form_for(user, url: update_access_details_user_path(user), method: :post, html: { class: 'user-form' }) do |form| %>
+  <% if current_user.can_edit_roles.include?(form.object.role) %>
+    <%= form.select(
+          :role,
+          options_for_select(
+            current_user.can_edit_roles.map do |role|
+              [role.titleize, role]
+            end,
+            form.object.role
+          ),
+          include_blank: false) %>
+  <% else %>
+    <dl>
+      <dt class="edit-page-detail-heading">Role</dt>
+      <dd class="edit-page-detail" data-detail="role"><%= form.object.role.titleize %></dd>
+    </dl>
+  <% end %>
+  <%= form.select(
+        :venues,
+        options_for_select(
+          Venue.all.map{ |v| [v.name.titlecase, v.id] },
+          form.object.venues.map(&:id)
+        ),
+        {
+          include_blank: false
+        },
+        class: 'chosen-select',
+        id: 'user-venues-select',
+        multiple: true
+      ) %>
+  <%= form.submit('Update') %>
+<% end %>

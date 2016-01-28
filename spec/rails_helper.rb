@@ -5,6 +5,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'rack/test'
 # Add additional requires below this line. Rails is not loaded until this point!
+require_relative 'feature/support/chosen'
 require_relative 'support/test_image_helper'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

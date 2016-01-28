@@ -24,7 +24,16 @@
   </div>
 
   <div class="panel panel-default">
-    <div class="panel-heading">Access Details</div>
+    <div class="panel-heading">
+      <span>Access Details</span>
+      <span>
+        <%= link_to(
+              'Edit',
+              edit_access_details_user_path(user),
+              class: ['btn', 'btn-primary', 'btn-xs', 'user-edit-access-details-button']
+            ) %>
+      </span>
+    </div>
     <div class="panel-body">
       <dl>
         <dt class="show-page-detail-heading">Role</dt>
@@ -34,7 +43,7 @@
         <% if user.dev? || user.admin? %>
           <dd class="show-page-detail" data-detail="venues">All</dd>
         <% else %>
-          <dd class="show-page-detail" data-detail="venues"><%= user.venues.to_sentence %></dd>
+          <dd class="show-page-detail" data-detail="venues"><%= user.venues.map(&:name).join(', ') %></dd>
         <% end %>
       </dl>
     </div>

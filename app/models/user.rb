@@ -50,6 +50,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  def can_edit_roles
+    if dev?
+      ROLES
+    elsif admin?
+      ROLES - ['dev']
+    else
+      []
+    end
+  end
+
   def admin?
     role == 'admin'
   end
