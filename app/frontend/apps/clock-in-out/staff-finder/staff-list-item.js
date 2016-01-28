@@ -53,7 +53,7 @@ export default class ClockInOutStaffListItem extends Component {
                 </div>
                 <div className="col-md-2">
                     Staff Type<br/>
-                    <StaffTypeBadge staffType={staff.staff_type} />
+                    <StaffTypeBadge staffType={staff.staff_type.id} />
                 </div>
                 <div className="col-md-2">
                     Status <br/>

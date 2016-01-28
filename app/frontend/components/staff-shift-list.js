@@ -22,6 +22,9 @@ export default class StaffShiftList extends Component {
         );
     }
     getStaffShifts(){
-        return _(this.context.rotaShifts).filter({staff_id: this.props.staffId});
+        var self = this;
+        return _(this.context.rotaShifts).filter(function(shift){
+            return shift.staff_member.id === self.props.staffId
+        });
     }
 }

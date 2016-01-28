@@ -122,6 +122,14 @@ export function replaceAllRotas(options) {
     }
 }
 
+actionTypes.REPLACE_ALL_STAFF_TYPES = "REPLACE_ALL_STAFF_TYPES";
+export function replaceAllStaffTypes(options) {
+    return {
+        type: actionTypes.REPLACE_ALL_STAFF_TYPES,
+        staffTypes: options.staffTypes
+    }
+}
+
 actionTypes.SET_PAGE_OPTIONS = "SET_PAGE_OPTIONS";
 export function setPageOptions(options) {
     return {
@@ -132,21 +140,29 @@ export function setPageOptions(options) {
 
 export function getInitialRotaPageData(){
     let viewData = window.boss.rota;
+    viewData.rotas = viewData.rotas;
+    viewData.venues = viewData.venues;
 
+    viewData.rotas[0].id = "UNPERSISTED_ROTA";
+    viewData.rotas[0].date = new Date();
     let rotaData = viewData.rotas;
     let staffTypeData = viewData.staff_types;
     let rotaShiftData = viewData.rota_shifts;
     let staffMemberData = viewData.staff_members;
-    let userData = viewData.users;
     let venueData = viewData.venues;
     let displayedRotaId = _.first(rotaData).id;
 
+    _(rotaShiftData).each((shift) => {
+        shift.starts_at = new Date(shift.starts_at);
+        shift.ends_at = new Date(shift.ends_at);
+    });
+    
     return {
         pageOptions: {
             displayedRota: displayedRotaId
         },
         staffTypes: indexById(staffTypeData),
-        staffMembers: indexById(userData),
+        staffMembers: indexById(staffMemberData),
         rotaShifts: indexById(rotaShiftData),
         rotas: indexById(rotaData),
         venues: indexById(venueData)
@@ -155,9 +171,9 @@ export function getInitialRotaPageData(){
 
 export function loadInitialRotaAppState(data) {
     return function(dispatch){
-
         dispatch([
             replaceAllStaffMembers({staffMembers: data.staffMembers}),
+            replaceAllStaffTypes({staffTypes: data.staffTypes}),
             replaceAllShifts({shifts: data.rotaShifts}),
             replaceAllVenues({venues: data.venues}),
             replaceAllRotas({rotas: data.rotas}),

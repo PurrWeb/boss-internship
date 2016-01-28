@@ -19,7 +19,7 @@ export default class StaffDetailsAndShifts extends Component {
                 {staff.first_name} {staff.surname}
             </h2>
             <div className="staff-details-and-shifts__staff-type">
-                <StaffTypeBadge staffType={staff.staff_type} />
+                <StaffTypeBadge staffType={staff.staff_type.id} />
             </div>
             <br/>
 
