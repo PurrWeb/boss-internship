@@ -11,3 +11,7 @@
 * Generate the frontend bundle `./node_modules/.bin/webpack`
 * Run the rails server `bundle exec rails server`
 * Enjoy
+ 
+## To pull down data from production
+
+`bundle exec rake data:load_production_dump`
