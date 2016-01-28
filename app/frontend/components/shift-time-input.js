@@ -28,7 +28,7 @@ export default class ShiftTimeInput extends Component {
     }
     render(){
         var className = "";
-        if (!utils.dateIsValid(this.getDateFromProps())){
+        if (!this.isValid()){
             className += "shift-time-input--invalid";
         }
 
@@ -37,6 +37,11 @@ export default class ShiftTimeInput extends Component {
             value={  moment(this.getDateFromProps()).format("HH:mm")}
             className={className}
             onChange={(e) => this.updateTime(e.target.value)} />
+    }
+    isValid(){
+        var dateIsValid = utils.dateIsValid(this.getDateFromProps());
+        var minutesAreMultipleOfFifteen = this.getDateFromProps().getMinutes() % 15 === 0;
+        return dateIsValid && minutesAreMultipleOfFifteen;
     }
     getDateFromTime(timeString){
         var rotaDate = this.props.rotaDate;
