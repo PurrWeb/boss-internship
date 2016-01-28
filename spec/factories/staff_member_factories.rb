@@ -10,6 +10,7 @@ FactoryGirl.define do
     date_of_birth DateTime.new(2000, 1, 1)
     national_insurance_number 'GM-12-45-34-A'
     creator factory: :user
+    starts_at { 1.day.ago }
 
     address
     venue

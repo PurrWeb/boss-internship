@@ -38,6 +38,7 @@ class StaffMember < ActiveRecord::Base
   validate  :valid_pin_code_format
   validates :staff_type, presence: true
   validates :creator, presence: true
+  validates :starts_at, presence: true
 
   before_validation :normalise_national_insurance_number
 
@@ -77,5 +78,13 @@ class StaffMember < ActiveRecord::Base
 
   def email
     email_address.try(:email)
+  end
+
+  def hours_preference_help_text
+    'Perferred number of hours to work per week displayed in the Rota (e.g. 40, 20+)'
+  end
+
+  def day_perference_help_text
+    'Peferrered days to work displayed in the rota (e.g. mornings and weekeneds)'
   end
 end

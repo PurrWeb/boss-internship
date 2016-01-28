@@ -2,6 +2,8 @@ require 'feature/feature_spec_helper'
 
 RSpec.feature 'Creating a staff member from a user' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
+  let(:edited_user_name) { FactoryGirl.create(:name, first_name: 'Edited', surname: 'User' ) }
+  let!(:edited_user) { FactoryGirl.create(:user, :admin, name: edited_user_name) }
   let!(:venue) { FactoryGirl.create(:venue, creator: dev_user) }
   let!(:staff_type) { FactoryGirl.create(:staff_type, creator: dev_user) }
   let(:prospective_staff_member) do
@@ -11,8 +13,8 @@ RSpec.feature 'Creating a staff member from a user' do
       staff_type: staff_type
     )
   end
-  let(:create_staff_member_page) { PageObject::CreateStaffMemberFromUserPage.new(dev_user) }
-  let(:user_show_page) { PageObject::UserShowPage.new(dev_user) }
+  let(:create_staff_member_page) { PageObject::CreateStaffMemberFromUserPage.new(edited_user) }
+  let(:user_show_page) { PageObject::UserShowPage.new(edited_user) }
 
   before do
     login_as dev_user
@@ -27,15 +29,16 @@ RSpec.feature 'Creating a staff member from a user' do
 
     user_show_page.ensure_flash_success_message_displayed('Staff member added successfully')
 
-    dev_user.reload
+    edited_user.reload
     created_staff_member = StaffMember.
       joins(:email_address).
       merge(
-        EmailAddress.where(id: dev_user.email_address.id)
+        EmailAddress.where(id: edited_user.email_address.id)
       ).
       first
 
-    expect(created_staff_member.name).to eq(dev_user.name)
-    expect(created_staff_member).to eq(dev_user.staff_member)
+    expect(created_staff_member).to be_present
+    expect(created_staff_member.name).to eq(edited_user.name)
+    expect(created_staff_member).to eq(edited_user.staff_member)
   end
 end

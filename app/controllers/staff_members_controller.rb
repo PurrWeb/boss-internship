@@ -21,7 +21,7 @@ class StaffMembersController < ApplicationController
   def new
     authorize! :manage, :staff_members
 
-    staff_member = StaffMember.new
+    staff_member = StaffMember.new(starts_at: Time.now)
     render locals: { staff_member: staff_member }
   end
 
@@ -42,6 +42,40 @@ class StaffMembersController < ApplicationController
     end
   end
 
+  def edit_employment_details
+    staff_member = StaffMember.find(params[:id])
+    render locals: { staff_member: staff_member }
+  end
+
+  def update_employment_details
+    staff_member = StaffMember.find(params[:id])
+
+    if staff_member.update_attributes(update_employment_details_params(staff_member))
+      flash[:success] = "Staff member updated successfully"
+      redirect_to staff_member_path(staff_member)
+    else
+      flash.now[:error] = "There was a problem updating this staff member"
+      render 'edit_employment_details', locals: { staff_member: staff_member }
+    end
+  end
+
+  def edit_personal_details
+    staff_member = StaffMember.find(params[:id])
+    render locals: { staff_member: staff_member }
+  end
+
+  def update_personal_details
+    staff_member = StaffMember.find(params[:id])
+
+    if staff_member.update_attributes(update_personal_details_params)
+      flash[:success] = "Staff member updated successfully"
+      redirect_to staff_member_path(staff_member)
+    else
+      flash.now[:error] = "There was a problem updating this staff member"
+      render 'edit_personal_details', locals: { staff_member: staff_member }
+    end
+  end
+
   private
   def staff_member_params
     params.require(:staff_member).permit(
@@ -49,6 +83,7 @@ class StaffMembersController < ApplicationController
       :gender,
       :phone_number,
       :date_of_birth,
+      :starts_at,
       :national_insurance_number,
       :hours_preference_note,
       :day_perference_note,
@@ -74,6 +109,35 @@ class StaffMembersController < ApplicationController
       staff_type: staff_type_from_params,
       creator: current_user
     )
+  end
+
+  def update_employment_details_params(staff_member)
+    params.require(:staff_member).
+      permit(
+        :national_insurance_number,
+        :staff_type,
+        :hours_preference_note,
+        :day_perference_note,
+        :starts_at,
+        staff_member_venue_attributes: [:venue_id]
+      ).deep_merge(
+        staff_type: staff_type_from_params,
+        staff_member_venue_attributes: {
+          id: staff_member.staff_member_venue.id
+        }
+      )
+  end
+
+  def update_personal_details_params
+    params.require(:staff_member).
+      permit(
+        :gender,
+        :date_of_birth,
+        name_attributes: [
+          :first_name,
+          :surname
+        ]
+      )
   end
 
   def staff_type_from_params

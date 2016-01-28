@@ -5,6 +5,7 @@ module PageObject
       super()
     end
     attr_reader :staff_member
+    include FlashHelpers
 
     def surf_to
       visit(url_helpers.staff_member_path(staff_member))
@@ -36,11 +37,24 @@ module PageObject
       expect(find(detail_section_selector_for(:address_4)).text).to eq(staff_member.address.address_4)
       expect(find(detail_section_selector_for(:region)).text).to eq(staff_member.address.region)
       expect(find(detail_section_selector_for(:postcode)).text).to eq(staff_member.address.postcode)
+      expect(find(detail_section_selector_for(:day_preference)).text).to eq(staff_member.day_perference_note || 'Not specified')
+      expect(find(detail_section_selector_for(:hour_preference)).text).to eq(staff_member.hours_preference_note || 'Not specified')
+      expect(find(detail_section_selector_for(:start_date)).text).to eq(staff_member.starts_at.to_s(:human_date))
     end
 
     page_action :ensure_avatar_image_displayed do |image_url:|
       image = find('img.avatar-image')
       expect(image['src']).to eq(image_url)
+    end
+
+    page_action :click_edit_employment_details_button do
+      button = find('a.btn.staff-member-edit-employment-details-button')
+      button.click
+    end
+
+    page_action :click_edit_personal_details_button do
+      button = find('a.btn.staff-member-edit-personal-details-button')
+      button.click
     end
 
     def assert_on_correct_page

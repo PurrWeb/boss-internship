@@ -3,11 +3,20 @@
         :venue_id,
         options_for_select(
           Venue.all.map { |venue| [venue.name.titlecase, venue.id] },
-          form.object.try(:venue).try(:id)
+          venue_fields.object.try(:venue_id)
         ),
         include_blank: true
       ) %>
 <% end %>
+<div class="staff-member-starts-at-field">
+  <%= form.date_select(
+        :starts_at,
+        start_year: Time.now.year + 2,
+        end_year: Time.now.year - 2,
+        include_blank: true,
+        with_css_classes: true
+      ) %>
+</div>
 <% if form.object.avatar? %>
   <%= image_tag(form.object.avatar_url, class: "avatar_preview", height: 120, width: 120) %>
 <% end %>
@@ -41,8 +50,17 @@
 <%= form.number_field :pin_code %>
 <%= form.number_field :phone_number %>
 <%= form.text_field :national_insurance_number %>
-
-<%= form.date_select :date_of_birth, start_year: Time.now.year, end_year: 1940, include_blank: true %>
+<div class="staff-member-date-of-birth-field">
+  <%= form.date_select(
+        :date_of_birth,
+        start_year: Time.now.year,
+        end_year: 1940,
+        include_blank: true,
+        with_css_classes: true
+      ) %>
+</div>
 <%= form.fields_for(:address, (form.object.address || Address.new)) do |address_fields| %>
   <%= render partial: 'shared/address_fields', locals: { form: address_fields } %>
 <% end %>
+<%= form.text_area :day_perference_note, label: 'Day Preference', help: form.object.day_perference_help_text %>
+<%= form.text_area :hours_preference_note, label: 'Hours Preference', help: form.object.hours_preference_help_text %>
