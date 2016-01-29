@@ -162,42 +162,6 @@ export function setPageOptions(options) {
     }
 }
 
-export function getInitialRotaPageData(){
-    let viewData = window.boss.rota;
-    viewData.rotas = viewData.rotas;
-    viewData.venues = viewData.venues;
-
-    viewData.rotas[0].id = "UNPERSISTED_ROTA";
-
-    var date = viewData.rotas[0].date;
-    var [year, month, day] = date.split("-").map(parseFloat);
-    viewData.rotas[0].date = new Date(year, month - 1, day, 12, 0);
-
-
-    let rotaData = viewData.rotas;
-    let staffTypeData = viewData.staff_types;
-    let rotaShiftData = viewData.rota_shifts;
-    let staffMemberData = viewData.staff_members;
-    let venueData = viewData.venues;
-    let displayedRotaId = _.first(rotaData).id;
-
-    _(rotaShiftData).each((shift) => {
-        shift.starts_at = new Date(shift.starts_at);
-        shift.ends_at = new Date(shift.ends_at);
-    });
-    
-    return {
-        pageOptions: {
-            displayedRota: displayedRotaId
-        },
-        staffTypes: indexById(staffTypeData),
-        staffMembers: indexById(staffMemberData),
-        rotaShifts: indexById(rotaShiftData),
-        rotas: indexById(rotaData),
-        venues: indexById(venueData)
-    }
-}
-
 export function loadInitialRotaAppState(data) {
     return function(dispatch){
         dispatch([
