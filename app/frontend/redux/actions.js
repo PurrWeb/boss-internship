@@ -47,7 +47,7 @@ export const addRotaShift = createApiRequestAction(
         path: function(options, state) {
             var rotaId = state.pageOptions.displayedRota;
             var rota = state.rotas[rotaId];
-            return "venues/" + rota.venue.id + "/rota/" + moment(rota.date).format("DD-MM-YYYY") + "/rota_shifts"
+            return "venues/" + rota.venue.id + "/rotas/" + moment(rota.date).format("DD-MM-YYYY") + "/rota_shifts"
         },
         data: (options) => options.shift,
         getSuccessActionData: function(responseData) {
@@ -165,15 +165,36 @@ export function setPageOptions(options) {
     }
 }
 
-export function loadInitialRotaAppState(data) {
+export function loadInitialRotaAppState(viewData) {
+    let rotaData = viewData.rotas;
+    let staffTypeData = viewData.staff_types;
+    let rotaShiftData = viewData.rota_shifts;
+    let staffMemberData = viewData.staff_members;
+    let venueData = viewData.venues;
+
+    rotaData = rotaData.map(backendData.processRotaObject);
+    rotaShiftData = rotaShiftData.map(backendData.processShiftObject);
+    
     return function(dispatch){
         dispatch([
-            replaceAllStaffMembers({staffMembers: data.staffMembers}),
-            replaceAllStaffTypes({staffTypes: data.staffTypes}),
-            replaceAllShifts({shifts: data.rotaShifts}),
-            replaceAllVenues({venues: data.venues}),
-            replaceAllRotas({rotas: data.rotas}),
-            setPageOptions({pageOptions: data.pageOptions})
+            replaceAllStaffMembers({
+                staffMembers: indexById(staffMemberData),
+            }),
+            replaceAllStaffTypes({
+                staffTypes:indexById(staffTypeData),
+            }),
+            replaceAllShifts({
+                shifts: indexById(rotaShiftData)
+            }),
+            replaceAllVenues({
+                venues: indexById(venueData)
+            }),
+            replaceAllRotas({
+                rotas: indexById(rotaData)
+            }),
+            setPageOptions({pageOptions: {
+                displayedRota: _.first(rotaData).id
+            }})
         ]);
 
     }
@@ -190,5 +211,5 @@ export function loadInitialClockInOutAppState() {
 
 
 function indexById(data){
-  return _.indexBy(data, "id")
+    return _.indexBy(data, "id")
 }

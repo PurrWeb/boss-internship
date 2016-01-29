@@ -146,16 +146,16 @@ function renderTooltipHtml(data){
     function renderLine(staffType){
         var shifts = data.shiftsByStaffType[staffType];
         var staffTypeObject = data.staffTypes[staffType];
-        var isSelected = data.selectedStaffTypeTitle === staffTypeObject.title;
+        var isSelected = data.selectedStaffTypeTitle === staffTypeObject.name;
 
-        var line = shifts.length + " - " + staffTypeObject.title;
+        var line = shifts.length + " - " + staffTypeObject.name;
         if (isSelected) {
             line = "<b>" + line + "</b>";
         }
         return line;
     }
 
-    var selectedStaffType = _(data.staffTypes).find({title: data.selectedStaffTypeTitle}).id;
+    var selectedStaffType = _(data.staffTypes).find({name: data.selectedStaffTypeTitle}).id;
 
     var tooltipLines = [];
     tooltipLines.push(
@@ -163,7 +163,7 @@ function renderTooltipHtml(data){
     );
 
     _(data.shiftsByStaffType).each(function(shifts, staffType){
-        if (staffType === selectedStaffType) {
+        if (staffType == selectedStaffType) {
             return;
         }
         tooltipLines.push(

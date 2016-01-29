@@ -37,20 +37,27 @@ export default class WeekPicker extends React.Component {
             }
             return allDays
         }
+
+        function setStartEndDateBasedOnClickedDate(date) {
+            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 1);
+            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 7);
+        }
         
+        setStartEndDateBasedOnClickedDate(this.props.selectionStartDate)
+
         $(node).datepicker( {
             showOtherMonths: true,
             selectOtherMonths: true,
             firstDay: 1,
             onSelect: function(dateText, inst) { 
                 var date = $(this).datepicker('getDate');
-                startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 1);
-                endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 7);
+                setStartEndDateBasedOnClickedDate(date);
                 var dateFormat = inst.settings.dateFormat || $.datepicker._defaults.dateFormat;
                 $('#startDate').text($.datepicker.formatDate( dateFormat, startDate, inst.settings ));
                 $('#endDate').text($.datepicker.formatDate( dateFormat, endDate, inst.settings ));
                 
                 self.selectCurrentWeek();
+
 
                 self.props.onChange({
                     startDate,
@@ -78,8 +85,6 @@ export default class WeekPicker extends React.Component {
         });
 
         this.reactToProps(this.props);
-
-        $('.ui-datepicker-current-day').click();
     }
     selectCurrentWeek(){
         var self = this;
@@ -92,5 +97,8 @@ export default class WeekPicker extends React.Component {
         var {selectionStartDate} = props;
         var node = ReactDOM.findDOMNode(this);
         $(node).datepicker("setDate", selectionStartDate );
+    }
+    componentWillUnmount(){
+        React.unmountComponentAtNode(ReactDOM.findDOMNode(this));
     }
 }
