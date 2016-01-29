@@ -51,6 +51,9 @@ var utils =  {
             replaceFunctionPropsWithStrings(expected),
             replaceFunctionPropsWithStrings(actual)
         );
+    },
+    formatRotaUrlDate(date){
+        return moment(date).format("DD-MM-YYYY");
     }
 }
 
