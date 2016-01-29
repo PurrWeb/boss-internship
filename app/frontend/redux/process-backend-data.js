@@ -1,3 +1,5 @@
+import _ from "underscore"
+
 export function processRotaObject(rota){
     var newRota = {...rota};
 
@@ -8,7 +10,7 @@ export function processRotaObject(rota){
     // Before we've created the first shift for a rota the rota
     // isn't saved on the backend, so it doesn't have an ID
     if (rota.id === null) {
-        newRota.id = "UNPERSISTED_ROTA";
+        newRota.id = "UNPERSISTED_ROTA_" + _.uniqueId();
     }
 
     return newRota

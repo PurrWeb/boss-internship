@@ -20,7 +20,7 @@ export default class RotaOverviewView extends Component {
             <div className="col-md-9">
                 <RotaOverviewChart
                     staff={this.props.staff}
-                    shifts={this.props.rotaShifts}
+                    shifts={_.values(this.props.shifts)}
                     dateOfRota={this.props.dateOfRota}
                     staffTypes={this.props.staffTypes}
                     onHoverShiftsChange={(shifts) => this.setState({hoverData: shifts})}
