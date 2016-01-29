@@ -7,7 +7,7 @@ require("jquery-ui/datepicker");
 // Week picker based on http://stackoverflow.com/questions/1289633/how-to-use-jquery-ui-calendar-date-picker-for-week-rather-than-day
 export default class WeekPicker extends React.Component {
     render(){
-        return <div/>
+        return <div className="week-picker"/>
     }
     componentDidMount(){
         var self = this;
