@@ -1,5 +1,6 @@
 import importedCreateApiRequestAction from "./create-api-request-action"
 import _ from "underscore"
+import moment from "moment"
 
 export const actionTypes = {};
 const createApiRequestAction = function(requestType, makeRequest){
@@ -7,10 +8,10 @@ const createApiRequestAction = function(requestType, makeRequest){
 }
 
 function makeApiRequest(options){
-    return function(requestOptions, success, error) {
+    return function(requestOptions, success, error, store) {
         function resolveFunctionParameter(optionsKey){
             if (typeof options[optionsKey] === "function") {
-                options[optionsKey] = options[optionsKey](requestOptions);
+                options[optionsKey] = options[optionsKey](requestOptions, store.getState());
             }
         };
         requestOptions = _.clone(requestOptions);
@@ -41,7 +42,11 @@ export const addRotaShift = createApiRequestAction(
     "ADD_SHIFT",
     makeApiRequest({
         method: "POST",
-        path: (options) => "venues/" + 1 + "/rota/" + "28-01-2016/rota_shifts",
+        path: function(options, state) {
+            var rotaId = state.pageOptions.displayedRota;
+            var rota = state.rotas[rotaId];
+            return "venues/" + rota.venue.id + "/rota/" + moment(rota.date).format("DD-MM-YYYY") + "/rota_shifts"
+        },
         data: (options) => options.shift,
         getSuccessActionData: function(responseData) {
             return responseData;
@@ -62,15 +67,14 @@ export function replaceAllShifts (options) {
 export const updateRotaShift = createApiRequestAction(
     "UPDATE_SHIFT",
     makeApiRequest({
-        path: "rota_shifts/1",
+        path: (options) => {return "rota_shifts/" + options.shift.shift_id},
         method: "PATCH",
-        data: function(options){
-            alert("using staff_member_id 2 for now")
-            options.shift.staff_member_id = 2;
+        data: function(options, state){
+            options.shift.staff_member_id = state.rotaShifts.items[options.shift.shift_id].staff_member.id;
             return options.shift;
         },
-        getSuccessActionData(){
-            debugger;
+        getSuccessActionData(responseData){
+            return responseData;
         }
     })
 );
