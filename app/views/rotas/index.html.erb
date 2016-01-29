@@ -13,7 +13,7 @@
   <% rotas.each do |rota| %>
     rotas.push(<%= raw render partial: 'api/v1/shared/rota_overview.json', locals: { rota: rota, staff_types: staff_types } %>);
   <% end %>
-  venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: current_user.venues } %>;
+  venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: accessible_venues } %>;
 
   window.boss = window.boss || {};
   window.boss.rotas = rotas;

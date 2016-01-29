@@ -17,6 +17,7 @@ class RotasController < ApplicationController
       end
 
       render locals: {
+        accessible_venues: accessible_venues_for(current_user),
         venue: venue,
         start_date: start_date,
         end_date: end_date,
@@ -43,6 +44,14 @@ class RotasController < ApplicationController
   private
   def authorize
     authorize! :manage, :rotas
+  end
+
+  def accessible_venues_for(user)
+    if user.manager?
+      user.venues
+    else
+      Venue.all
+    end
   end
 
   def redirect_params
