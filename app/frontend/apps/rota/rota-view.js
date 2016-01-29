@@ -7,7 +7,6 @@ import _ from "underscore"
 import AddShiftView from "./add-shift-view"
 import store from "../../redux/store.js"
 import moment from "moment"
-import RotaOverviewView from "~apps/rota-overview";
 
 
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
@@ -36,7 +35,6 @@ class RotaView extends Component {
                 Rota for {this.props.venue.name}: {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>
             <br/>
-            <RotaOverviewView {...this.props} />
             <ChartAndFilter
                 rotaShifts={this.props.rotaShifts}
                 staff={this.props.staff} />
