@@ -18,6 +18,7 @@ export default class VenueDropdown extends Component {
         return <Select
             value={this.props.selectedVenue}
             options={venueOptions}
+            clearable={false}
             onChange={(value) => this.props.onChange(value)} />
     }
 }
