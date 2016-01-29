@@ -16,6 +16,9 @@ describe('StaffListItem', function() {
         first_name: "John",
         surname: "Doe",
         isManager: false,
+        staff_type: {
+            id: 1
+        },
         id: 10
     };
 
@@ -23,6 +26,9 @@ describe('StaffListItem', function() {
         first_name: "Emma",
         surname: "Jones",
         isManager: true,
+        staff_type: {
+            id: 1
+        },
         id: 11
     };
 
