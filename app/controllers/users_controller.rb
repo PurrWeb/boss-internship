@@ -12,6 +12,22 @@ class UsersController < ApplicationController
     render locals: { filter: filter, users: users }
   end
 
+  def edit_access_details
+    user = User.find(params[:id])
+    render locals: { user: user }
+  end
+
+  def update_access_details
+    user = User.find(params[:id])
+    if user.update_attributes(user_access_details_params)
+      flash[:success] = 'User updated successfully'
+      redirect_to user_path(user)
+    else
+      flash.now[:error] = 'There was an issue updating this user'
+      render 'edit_access_details', locals: { user: user }
+    end
+  end
+
   def edit_personal_details
     user = User.find(params[:id])
     render locals: { user: user }
@@ -19,7 +35,7 @@ class UsersController < ApplicationController
 
   def update_personal_details
     user = User.find(params[:id])
-    if user.update_attributes(user_params(user))
+    if user.update_attributes(user_personal_details_params(user))
       flash[:success] = 'User updated successfully'
       redirect_to user_path(user)
     else
@@ -67,7 +83,7 @@ class UsersController < ApplicationController
     authorize! :manage, :admin
   end
 
-  def user_params(user)
+  def user_personal_details_params(user)
     params.
       require(:user).
       permit(
@@ -77,6 +93,23 @@ class UsersController < ApplicationController
         name_attributes: { id: user.name.id },
         email_address_attributes: { id: user.email_address.id }
       )
+  end
+
+  def user_access_details_params
+    result = params.
+      require(:user).
+      permit(
+        :role,
+        :venues
+      )
+
+    if result.fetch(:role) == 'manager'
+      result = result.merge(
+        venues: venues_from_params
+      )
+    end
+
+    result
   end
 
   def staff_member_params(user)
@@ -112,5 +145,9 @@ class UsersController < ApplicationController
 
   def staff_type_from_params
     StaffType.find_by(id: params[:staff_member][:staff_type])
+  end
+
+  def venues_from_params
+    Array(params[:user][:venues]).reject(&:blank?).map{|id| Venue.find(id) }
   end
 end

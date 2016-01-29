@@ -24,14 +24,38 @@
   </div>
 
   <div class="panel panel-default">
+    <div class="panel-heading">
+      <span>Access Details</span>
+      <span>
+        <%= link_to(
+              'Edit',
+              edit_access_details_user_path(user),
+              class: ['btn', 'btn-primary', 'btn-xs', 'user-edit-access-details-button']
+            ) %>
+      </span>
+    </div>
+    <div class="panel-body">
+      <dl>
+        <dt class="show-page-detail-heading">Role</dt>
+        <dd class="show-page-detail" data-detail="role"><%= user.role.titleize %></dd>
+
+        <dt class="show-page-detail-heading">Venue Access</dt>
+        <% if user.dev? || user.admin? %>
+          <dd class="show-page-detail" data-detail="venues">All</dd>
+        <% else %>
+          <dd class="show-page-detail" data-detail="venues"><%= user.venues.map(&:name).join(', ') %></dd>
+        <% end %>
+      </dl>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
     <div class="panel-heading">Account Details</div>
     <div class="panel-body">
       <dl>
         <dt class="show-page-detail-heading">Status</dt>
         <dd class="show-page-detail" data-detail="status"><%= user.status %></dd>
 
-        <dt class="show-page-detail-heading">Role</dt>
-        <dd class="show-page-detail" data-detail="role"><%= user.role.titleize %></dd>
         <% if can? :manage, :staff_members %>
           <dt class="show-page-detail-heading">Staff Member</dt>
           <dd class="show-page-detail" data-detail="staff-member">
