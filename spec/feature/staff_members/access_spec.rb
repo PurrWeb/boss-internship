@@ -17,20 +17,16 @@ RSpec.describe 'Staff member pages access' do
     context 'manager' do
       let(:user) { FactoryGirl.create(:user, :manager) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
       end
     end
 
     context 'admin' do
       let(:user) { FactoryGirl.create(:user, :admin) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
       end
     end
 
@@ -47,13 +43,21 @@ RSpec.describe 'Staff member pages access' do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:url) { url_helpers.staff_member_path(staff_member) }
 
-    context 'manager' do
+    context 'manager without access to members venue' do
       let(:user) { FactoryGirl.create(:user, :manager) }
 
       specify 'should not have access' do
         expect {
           get(url)
         }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context 'manager with access to members venue' do
+      let(:user) { FactoryGirl.create(:user, :manager, venues: [staff_member.venue]) }
+
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
       end
     end
 
@@ -80,20 +84,16 @@ RSpec.describe 'Staff member pages access' do
     context 'manager' do
       let(:user) { FactoryGirl.create(:user, :manager) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
       end
     end
 
     context 'admin' do
       let(:user) { FactoryGirl.create(:user, :admin) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
       end
     end
 
@@ -117,20 +117,16 @@ RSpec.describe 'Staff member pages access' do
     context 'manager' do
       let(:user) { FactoryGirl.create(:user, :manager) }
 
-      specify 'should not have access' do
-        expect {
-          post(url, params)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should have access' do
+        expect(post(url, params).status).to eq(ok_status)
       end
     end
 
     context 'admin' do
       let(:user) { FactoryGirl.create(:user, :admin) }
 
-      specify 'should not have access' do
-        expect {
-          post(url, params)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should have access' do
+        expect(post(url, params).status).to eq(ok_status)
       end
     end
 

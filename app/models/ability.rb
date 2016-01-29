@@ -12,6 +12,8 @@ class Ability
       can :manage, :admin
     end
 
+    can :manage, :staff_members
+
     can :manage, :rotas
 
     can :manage, Venue do |venue|
