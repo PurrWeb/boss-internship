@@ -1,3 +1,22 @@
+<%= javascript_tag do %>
+  $(function(){
+    function updateVenueField(){
+      var role = $('.user-role-select-field').val();
+      if(role == 'manager'){
+        $('.venue-access-select-field-section').removeClass('hidden');
+        $('.venue-access-detail-section').addClass('hidden');
+      } else {
+        $('.venue-access-detail-section').removeClass('hidden');
+        $('.venue-access-select-field-section').addClass('hidden');
+      }
+    }
+
+    $('.user-role-select-field').change(updateVenueField)
+
+    updateVenueField();
+  });
+<% end %>
+
 <%= bootstrap_form_for(user, url: update_access_details_user_path(user), method: :post, html: { class: 'user-form' }) do |form| %>
   <% if current_user.can_edit_roles.include?(form.object.role) %>
     <%= form.select(
@@ -8,25 +27,37 @@
             end,
             form.object.role
           ),
-          include_blank: false) %>
+          {
+            include_blank: false
+          },
+          class: 'user-role-select-field'
+        ) %>
   <% else %>
     <dl>
       <dt class="edit-page-detail-heading">Role</dt>
       <dd class="edit-page-detail" data-detail="role"><%= form.object.role.titleize %></dd>
     </dl>
   <% end %>
-  <%= form.select(
-        :venues,
-        options_for_select(
-          Venue.all.map{ |v| [v.name.titlecase, v.id] },
-          form.object.venues.map(&:id)
-        ),
-        {
-          include_blank: false
-        },
-        class: 'chosen-select',
-        id: 'user-venues-select',
-        multiple: true
-      ) %>
+  <div class="hidden venue-access-detail-section">
+    <dl>
+      <dt class="edit-page-detail-heading">Venues</dt>
+      <dd class="edit-page-detail" data-detail="venues">All</dd>
+    </dl>
+  </div>
+  <div class="venue-access-select-field-section">
+    <%= form.select(
+          :venues,
+          options_for_select(
+            Venue.all.map{ |v| [v.name.titlecase, v.id] },
+            form.object.venues.map(&:id)
+          ),
+          {
+            include_blank: false
+          },
+          class: 'chosen-select',
+          id: 'user-venues-select',
+          multiple: true
+        ) %>
+  </div>
   <%= form.submit('Update') %>
 <% end %>
