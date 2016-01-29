@@ -8,6 +8,7 @@ const ReactHighCharts = require('react-highcharts/bundle/highcharts')
 
 const GRANULARITY = 15;
 const MILLISECONDS_PER_MINUTE = 60 * 1000;
+const MINUTES_PER_HOUR = 60;
 
 export default class RotaOverviewView extends Component {
     static propTypes = {
@@ -44,15 +45,32 @@ export default class RotaOverviewView extends Component {
             }
         };
 
+        config.tooltip = {
+            formatter: function() {
+                var selectedStaffTypeTitle = this.series.name;
+                var date = new Date(this.x);
+                var breakdownAtPoint = _(breakdown).find((point) => point.date.valueOf() === date.valueOf());
+
+                return renderTooltipHtml({
+                    shiftsByStaffType: breakdownAtPoint.shiftsByStaffType,
+                    selectedStaffTypeTitle,
+                    staffTypes: self.props.staffTypes
+                })
+            }
+        };
+
         config.series = this.getChartData(breakdown);
 
         return <div style={{height: 400}}>
             <ReactHighCharts config={config} />
         </div>
     }
+    getRotaDate(){
+        return new RotaDate(this.props.dateOfRota);
+    }
     getBreakdown(){
         var { shifts, staffTypes, staff} = this.props;
-        var rotaDate = new RotaDate(this.props.dateOfRota);
+        var rotaDate = this.getRotaDate();
         return getStaffTypeBreakdownByTime({
             shifts,
             staff,
@@ -122,4 +140,36 @@ export default class RotaOverviewView extends Component {
             },
         };
     }
+}
+
+function renderTooltipHtml(data){
+    function renderLine(staffType){
+        var shifts = data.shiftsByStaffType[staffType];
+        var staffTypeObject = data.staffTypes[staffType];
+        var isSelected = data.selectedStaffTypeTitle === staffTypeObject.title;
+
+        var line = shifts.length + " - " + staffTypeObject.title;
+        if (isSelected) {
+            line = "<b>" + line + "</b>";
+        }
+        return line;
+    }
+
+    var selectedStaffType = _(data.staffTypes).find({title: data.selectedStaffTypeTitle}).id;
+
+    var tooltipLines = [];
+    tooltipLines.push(
+        renderLine(selectedStaffType)
+    );
+
+    _(data.shiftsByStaffType).each(function(shifts, staffType){
+        if (staffType === selectedStaffType) {
+            return;
+        }
+        tooltipLines.push(
+            renderLine(staffType)
+        );
+    });
+
+    return tooltipLines.join("<br>");
 }
