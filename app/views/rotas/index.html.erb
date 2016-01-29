@@ -8,13 +8,16 @@
 
 <%= javascript_tag do %>
   var rotas = [];
+  var venues;
 
   <% rotas.each do |rota| %>
     rotas.push(<%= raw render partial: 'api/v1/shared/rota_overview.json', locals: { rota: rota, staff_types: staff_types } %>);
   <% end %>
+  venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: current_user.venues } %>;
 
   window.boss = window.boss || {};
   window.boss.rotas = rotas;
+  window.boss.venues = venues;
 <% end %>
 
 <%= react_component('RotaOverviewApp') %>
