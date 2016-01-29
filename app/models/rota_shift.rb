@@ -55,7 +55,7 @@ class RotaShift < ActiveRecord::Base
         staff_member: staff_member,
         starts_at: starts_at,
         ends_at:   ends_at
-      ).all
+      ).all.enabled
 
       if persisted?
         query = query.where('id != ?', id)
