@@ -13,7 +13,7 @@ It dispatches the following actions:
 const actionTypes = {}
 const addTodo = createApiRequestAction(
     "ADD_TODO",
-    function(options, success, error) {
+    function(options, success, error, store) {
         loadData(function(response){
             success({
                 requestComponent: options.requestComponent,
@@ -93,7 +93,7 @@ export default function createApiRequestAction(requestType, makeRequest, actionT
                 requestStartAction(),
                 setComponentErrorAction(undefined)
             ]);
-            makeRequest(requestOptions, success, error)
+            makeRequest(requestOptions, success, error, store);
         }
 
     }

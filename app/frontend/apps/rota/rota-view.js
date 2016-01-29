@@ -56,7 +56,7 @@ function mapStateToProps(state) {
     var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
     props.staff = _(props.staff).mapValues(function(staff){
         return Object.assign({}, staff, {
-            addShiftIsInProgress: _(shiftsBeingAdded).some((request) => request.shift.staff_id === staff.id)
+            addShiftIsInProgress: _(shiftsBeingAdded).some((request) => request.shift.staff_member_id === staff.id)
         })
     });
 

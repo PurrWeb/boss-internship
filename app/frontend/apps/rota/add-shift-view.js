@@ -67,7 +67,7 @@ export default class AddShiftView extends Component {
             shift: {
                 starts_at: this.state.shiftTimes.starts_at,
                 ends_at: this.state.shiftTimes.ends_at,
-                staff_id: staffId
+                staff_member_id: staffId
             },
             requestComponent: requestComponent
         });

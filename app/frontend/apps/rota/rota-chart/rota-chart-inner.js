@@ -155,7 +155,7 @@ class RotaChart extends Component {
             })
             .on("click", function(shift){
                 self.stopShowingStaffPreview();
-                self.props.updateStaffToShow(shift.originalShiftObject.staff_id)
+                self.props.updateStaffToShow(shift.originalShiftObject.staff_member.id)
             })
             .attr("height", heightPerPerson - 1);
         bar.append("text")
@@ -204,7 +204,7 @@ class RotaChart extends Component {
         return {xScale, barWidthScale};
     }
     showStaffPreview(shift) {
-        this.props.updateStaffToPreview(shift.originalShiftObject.staff_id);
+        this.props.updateStaffToPreview(shift.originalShiftObject.staff_member.id);
     }
     stopShowingStaffPreview(shift) {
         this.props.updateStaffToPreview(null);

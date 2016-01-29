@@ -46,7 +46,7 @@ export default class RotaOverviewView extends Component {
 
         config.series = this.getChartData(breakdown);
 
-        return <div>
+        return <div style={{height: 400}}>
             <ReactHighCharts config={config} />
         </div>
     }

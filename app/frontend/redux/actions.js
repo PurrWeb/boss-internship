@@ -1,33 +1,61 @@
 import importedCreateApiRequestAction from "./create-api-request-action"
+import _ from "underscore"
+import moment from "moment"
+import * as backendData from "~redux/process-backend-data"
 
 export const actionTypes = {};
 const createApiRequestAction = function(requestType, makeRequest){
     return importedCreateApiRequestAction(requestType, makeRequest, actionTypes);
 }
 
+function makeApiRequest(apiOptions){
+    return function(requestOptions, success, error, store) {
+        function resolveFunctionParameter(optionsKey){
+            if (typeof options[optionsKey] === "function") {
+                options[optionsKey] = options[optionsKey](requestOptions, store.getState());
+            }
+        };
+        var options = _.clone(apiOptions);
+        requestOptions = _.clone(requestOptions);
+        ["method", "path", "data"].map(resolveFunctionParameter);
+
+        if (options.validateOptions) {
+            options.validateOptions(requestOptions);
+        }
+
+        $.ajax({
+           url: "/api/v1/" + options.path,
+           method: options.method,
+           data: options.data
+        }).then(function(responseData){    
+            var actionData = apiOptions.getSuccessActionData(responseData, requestOptions);
+            actionData.requestComponent = requestOptions.requestComponent;
+            success(actionData);
+        }, function(response){
+            var responseData = JSON.parse(response.responseText);
+            responseData.requestComponent = requestOptions.requestComponent
+            
+            error(responseData);
+        });
+    }
+}
 
 export const addRotaShift = createApiRequestAction(
     "ADD_SHIFT",
-    function(options, success, error) {
-        options.shift = Object.assign({}, options.shift, {
-            id: Math.floor(Math.random() * 100000000000)
-        });
-        setTimeout(function(){
-            var shift = options.shift;
-            if (shift.starts_at.valueOf() < shift.ends_at.valueOf()) {
-                success({shift});
-            } else {
-                error({
-                    ok: false,
-                    status: 500,
-                    errors: {
-                        base: "start time must be before end time"
-                    },
-                    requestComponent: options.requestComponent
-                });
-            }
-        }, 2000);
-    }
+    makeApiRequest({
+        method: "POST",
+        path: function(options, state) {
+            var rotaId = state.pageOptions.displayedRota;
+            var rota = state.rotas[rotaId];
+            return "venues/" + rota.venue.id + "/rota/" + moment(rota.date).format("DD-MM-YYYY") + "/rota_shifts"
+        },
+        data: (options) => options.shift,
+        getSuccessActionData: function(responseData) {
+            responseData.starts_at = new Date(responseData.starts_at)
+            responseData.ends_at = new Date(responseData.ends_at)
+            return {shift: responseData};
+        }
+    })
 );
 
 
@@ -42,37 +70,36 @@ export function replaceAllShifts (options) {
 
 export const updateRotaShift = createApiRequestAction(
     "UPDATE_SHIFT",
-    function(options, success, error) {
-        if (!options.shift === undefined) {
-            throw "Need to provide shift with starts_at, ends_at and shift_id properties.";
+    makeApiRequest({
+        path: (options) => "rota_shifts/" + options.shift.shift_id,
+        method: "PATCH",
+        data: function(options, state){
+            options.shift.staff_member_id = state.rotaShifts.items[options.shift.shift_id].staff_member.id;
+            return options.shift;
+        },
+        getSuccessActionData(responseData){
+            responseData = backendData.processShiftObject(responseData);
+            return {shift: responseData};
         }
-
-        setTimeout(function(){
-            success(options);
-        }, 2000);
-    }
+    })
 );
+
 
 
 export const deleteRotaShift = createApiRequestAction(
     "DELETE_SHIFT",
-    function(options, success, error) {
-        if (options.shift_id === undefined) {
-            throw "Need to specify shift_id that should be deleted"
-        }
-        setTimeout(function(){
-            if (Math.random() > .5) {
-                error({
-                    errors: {
-                        "base": "Shift couldn't be deleted. Try again."
-                    },
-                    requestComponent: options.requestComponent
-                })
-            } else {
-                success(options);
+    makeApiRequest({
+        method: "DELETE",
+        validateOptions: function(options){
+            if (options.shift_id === undefined) {
+                throw "Need to specify shift_id that should be deleted"
             }
-        }, 2000);
-    }
+        },
+        path: (options) => "rota_shifts/" + options.shift_id,
+        getSuccessActionData: function(responseData, requestOptions) {
+            return {shift_id: requestOptions.shift_id}
+        }
+    })
 );
 
 export const ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
@@ -135,37 +162,6 @@ export function setPageOptions(options) {
     return {
         type: actionTypes.SET_PAGE_OPTIONS,
         pageOptions: options.pageOptions
-    }
-}
-
-export function getInitialRotaPageData(){
-    let viewData = window.boss.rota;
-    viewData.rotas = viewData.rotas;
-    viewData.venues = viewData.venues;
-
-    viewData.rotas[0].id = "UNPERSISTED_ROTA";
-    viewData.rotas[0].date = new Date();
-    let rotaData = viewData.rotas;
-    let staffTypeData = viewData.staff_types;
-    let rotaShiftData = viewData.rota_shifts;
-    let staffMemberData = viewData.staff_members;
-    let venueData = viewData.venues;
-    let displayedRotaId = _.first(rotaData).id;
-
-    _(rotaShiftData).each((shift) => {
-        shift.starts_at = new Date(shift.starts_at);
-        shift.ends_at = new Date(shift.ends_at);
-    });
-    
-    return {
-        pageOptions: {
-            displayedRota: displayedRotaId
-        },
-        staffTypes: indexById(staffTypeData),
-        staffMembers: indexById(staffMemberData),
-        rotaShifts: indexById(rotaShiftData),
-        rotas: indexById(rotaData),
-        venues: indexById(venueData)
     }
 }
 
