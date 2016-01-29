@@ -5,7 +5,7 @@ RSpec.feature 'Creating a staff member from a user' do
   let(:edited_user_name) { FactoryGirl.create(:name, first_name: 'Edited', surname: 'User' ) }
   let!(:edited_user) { FactoryGirl.create(:user, :admin, name: edited_user_name) }
   let!(:venue) { FactoryGirl.create(:venue, creator: dev_user) }
-  let!(:staff_type) { FactoryGirl.create(:staff_type, creator: dev_user) }
+  let!(:staff_type) { FactoryGirl.create(:staff_type) }
   let(:prospective_staff_member) do
     FactoryGirl.build(
       :staff_member,
