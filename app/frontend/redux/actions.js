@@ -24,9 +24,8 @@ function makeApiRequest(options){
            url: "/api/v1/" + options.path,
            method: options.method,
            data: options.data
-        }).then(function(response){
-            var responseData = JSON.parse(response.responseText);
-            var actionData = this.getSuccessActionData(responseData);
+        }).then(function(responseData){
+            var actionData = options.getSuccessActionData(responseData, requestOptions);
             actionData.requestComponent = requestOptions.requestComponent;
             success(actionData);
         }, function(response){
@@ -65,8 +64,10 @@ export const updateRotaShift = createApiRequestAction(
     makeApiRequest({
         path: "rota_shifts/1",
         method: "PATCH",
-        data: function(){
-            debugger;
+        data: function(options){
+            alert("using staff_member_id 2 for now")
+            options.shift.staff_member_id = 2;
+            return options.shift;
         },
         getSuccessActionData(){
             debugger;
@@ -86,8 +87,8 @@ export const deleteRotaShift = createApiRequestAction(
             }
         },
         path: (options) => "rota_shifts/" + options.shift_id,
-        getSuccessActionData: function(responseData) {
-            return {shift_id: responseData.shift_id}
+        getSuccessActionData: function(responseData, requestOptions) {
+            return {shift_id: requestOptions.shift_id}
         }
     })
 );
@@ -161,7 +162,12 @@ export function getInitialRotaPageData(){
     viewData.venues = viewData.venues;
 
     viewData.rotas[0].id = "UNPERSISTED_ROTA";
-    viewData.rotas[0].date = new Date();
+
+    var date = viewData.rotas[0].date;
+    var [year, month, day] = date.split("-").map(parseFloat);
+    viewData.rotas[0].date = new Date(year, month - 1, day, 12, 0);
+
+
     let rotaData = viewData.rotas;
     let staffTypeData = viewData.staff_types;
     let rotaShiftData = viewData.rota_shifts;
