@@ -1,33 +1,53 @@
 import importedCreateApiRequestAction from "./create-api-request-action"
+import _ from "underscore"
 
 export const actionTypes = {};
 const createApiRequestAction = function(requestType, makeRequest){
     return importedCreateApiRequestAction(requestType, makeRequest, actionTypes);
 }
 
+function makeApiRequest(options){
+    return function(requestOptions, success, error) {
+        function resolveFunctionParameter(optionsKey){
+            if (typeof options[optionsKey] === "function") {
+                options[optionsKey] = options[optionsKey](requestOptions);
+            }
+        };
+        requestOptions = _.clone(requestOptions);
+        ["method", "path", "data"].map(resolveFunctionParameter);
+
+        if (options.validateOptions) {
+            options.validateOptions(requestOptions);
+        }
+
+        $.ajax({
+           url: "/api/v1/" + options.path,
+           method: options.method,
+           data: options.data
+        }).then(function(response){
+            var responseData = JSON.parse(response.responseText);
+            var actionData = this.getSuccessActionData(responseData);
+            actionData.requestComponent = requestOptions.requestComponent;
+            success(actionData);
+        }, function(response){
+            var responseData = JSON.parse(response.responseText);
+            responseData.requestComponent = requestOptions.requestComponent
+            
+            error(responseData);
+        });
+    }
+}
 
 export const addRotaShift = createApiRequestAction(
     "ADD_SHIFT",
-    function(options, success, error) {
-        options.shift = Object.assign({}, options.shift, {
-            id: Math.floor(Math.random() * 100000000000)
-        });
-        setTimeout(function(){
-            var shift = options.shift;
-            if (shift.starts_at.valueOf() < shift.ends_at.valueOf()) {
-                success({shift});
-            } else {
-                error({
-                    ok: false,
-                    status: 500,
-                    errors: {
-                        base: "start time must be before end time"
-                    },
-                    requestComponent: options.requestComponent
-                });
-            }
-        }, 2000);
-    }
+    makeApiRequest({
+        method: "POST",
+        path: (options) => "venues/" + 1 + "/rota/" + "28-01-2016/rota_shifts",
+        data: (options) => options.shift,
+        getSuccessActionData: function(responseData) {
+            return responseData;
+        }
+    })
 );
 
 
@@ -42,37 +62,34 @@ export function replaceAllShifts (options) {
 
 export const updateRotaShift = createApiRequestAction(
     "UPDATE_SHIFT",
-    function(options, success, error) {
-        if (!options.shift === undefined) {
-            throw "Need to provide shift with starts_at, ends_at and shift_id properties.";
+    makeApiRequest({
+        path: "rota_shifts/1",
+        method: "PATCH",
+        data: function(){
+            debugger;
+        },
+        getSuccessActionData(){
+            debugger;
         }
-
-        setTimeout(function(){
-            success(options);
-        }, 2000);
-    }
+    })
 );
+
 
 
 export const deleteRotaShift = createApiRequestAction(
     "DELETE_SHIFT",
-    function(options, success, error) {
-        if (options.shift_id === undefined) {
-            throw "Need to specify shift_id that should be deleted"
-        }
-        setTimeout(function(){
-            if (Math.random() > .5) {
-                error({
-                    errors: {
-                        "base": "Shift couldn't be deleted. Try again."
-                    },
-                    requestComponent: options.requestComponent
-                })
-            } else {
-                success(options);
+    makeApiRequest({
+        method: "DELETE",
+        validateOptions: function(options){
+            if (options.shift_id === undefined) {
+                throw "Need to specify shift_id that should be deleted"
             }
-        }, 2000);
-    }
+        },
+        path: (options) => "rota_shifts/" + options.shift_id,
+        getSuccessActionData: function(responseData) {
+            return {shift_id: responseData.shift_id}
+        }
+    })
 );
 
 export const ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";

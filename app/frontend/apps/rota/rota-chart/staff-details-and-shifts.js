@@ -37,8 +37,8 @@ export default class StaffDetailsAndShifts extends Component {
         return this.props.staff[this.props.staffId];
     }
     getShifts(){
-        return _(this.props.rotaShifts).filter({
-            staff_id: this.props.staffId
-        });
+        return _(this.props.rotaShifts).filter(
+            shift => shift.staff_member.id === this.props.staffId
+        );
     }
 }
