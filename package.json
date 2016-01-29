@@ -23,6 +23,8 @@
     "d3": "^3.5.10",
     "deep-equal": "^1.0.1",
     "extract-text-webpack-plugin": "^0.8.2",
+    "jquery": "^2.2.0",
+    "jquery-ui": "^1.10.5",
     "moment": "^2.10.6",
     "node-sass": "^3.3.3",
     "react": "^0.14.0",

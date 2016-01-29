@@ -21,6 +21,7 @@
  @import "bootstrap/theme";
  @import "../../../node_modules/react-select/dist/react-select";
 
+
 label.required:after {
   content:" *";
 }

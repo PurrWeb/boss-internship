@@ -9,6 +9,7 @@ import store from "../../redux/store.js"
 import moment from "moment"
 import RotaOverviewView from "~apps/rota-overview";
 
+
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
 
 class RotaView extends Component {
