@@ -37,7 +37,7 @@ export default class RotaOverviewView extends Component {
         if (!data) {
             return null;
         }
-        var staffTypeTitle = this.props.staffTypes[data.staffType].title;
+        var staffTypeTitle = this.props.staffTypes[data.staffType].name;
         var noStaffRotaedMessage = null;
 
         if (data.shifts.length === 0) {
