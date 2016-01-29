@@ -27,7 +27,7 @@ function makeApiRequest(apiOptions){
            url: "/api/v1/" + options.path,
            method: options.method,
            data: options.data
-        }).then(function(responseData){
+        }).then(function(responseData){    
             var actionData = apiOptions.getSuccessActionData(responseData, requestOptions);
             actionData.requestComponent = requestOptions.requestComponent;
             success(actionData);
