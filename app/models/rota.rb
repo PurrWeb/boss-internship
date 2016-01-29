@@ -32,6 +32,14 @@ class Rota < ActiveRecord::Base
     '%d-%m-%Y'
   end
 
+  def start_time
+    date.beginning_of_day.utc + 8.hours
+  end
+
+  def end_time
+    (date + 1.day).beginning_of_day.utc + 8.hours
+  end
+
   private
   # Needed for statesman
   def self.transition_class

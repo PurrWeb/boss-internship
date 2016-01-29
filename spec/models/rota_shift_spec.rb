@@ -6,8 +6,8 @@ describe RotaShift do
       let(:user) { FactoryGirl.create(:user) }
       let(:rota) { FactoryGirl.create(:rota, creator: user) }
       let(:rota_date) { rota.date }
-      let(:starts_at) { rota_date.beginning_of_day + 5.hours }
-      let(:ends_at) { rota_date.beginning_of_day + 5.hours + 30.minutes }
+      let(:starts_at) { rota_date.beginning_of_day + 9.hours }
+      let(:ends_at) { rota_date.beginning_of_day + 9.hours + 30.minutes }
       let!(:shift) do
         FactoryGirl.create(
           :rota_shift,

@@ -38,8 +38,8 @@ describe CreateRotaShift do
     end
 
     context 'supplying valid parameters' do
-      let(:starts_at) { (rota_date.beginning_of_day + 3.hours).round }
-      let(:ends_at) { (rota_date.beginning_of_day + 5.hours).round }
+      let(:starts_at) { (rota_date.beginning_of_day + 9.hours).round }
+      let(:ends_at) { (rota_date.beginning_of_day + 11.hours).round }
 
       describe 'result' do
         let(:result) { service.call }
@@ -75,7 +75,7 @@ describe CreateRotaShift do
     end
 
     context 'supplying invalid parameters' do
-      let(:starts_at) { (Time.now.beginning_of_day + 3.hours).round }
+      let(:starts_at) { (Time.now.beginning_of_day + 9.hours).round }
       let(:ends_at) { nil }
 
       describe 'result' do
@@ -152,8 +152,8 @@ describe CreateRotaShift do
     end
 
     context 'supplying valid parameters' do
-      let(:starts_at) { (rota_date.beginning_of_day + 3.hours).round }
-      let(:ends_at) { (rota_date.beginning_of_day + 5.hours).round }
+      let(:starts_at) { (rota_date.beginning_of_day + 9.hours).round }
+      let(:ends_at) { (rota_date.beginning_of_day + 11.hours).round }
 
       describe 'result' do
         let(:result) { service.call }

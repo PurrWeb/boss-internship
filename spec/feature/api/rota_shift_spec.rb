@@ -55,8 +55,8 @@ RSpec.describe 'Api access' do
 
     context 'supplying valid parameters' do
       let(:staff_member) { FactoryGirl.create(:staff_member) }
-      let(:starts_at) { (rota_date.beginning_of_day + 5.hours).utc }
-      let(:ends_at) { (rota_date.beginning_of_day + 7.hours).utc }
+      let(:starts_at) { (rota_date.beginning_of_day + 10.hours).utc }
+      let(:ends_at) { (rota_date.beginning_of_day + 12.hours).utc }
       let(:params) do
         {
           staff_member_id: staff_member.id.to_s,
@@ -99,7 +99,7 @@ RSpec.describe 'Api access' do
     context 'supplying invalid parameters' do
       let(:rota) { FactoryGirl.create(:rota) }
       let(:staff_member) { FactoryGirl.create(:staff_member) }
-      let(:starts_at) { (Time.now.beginning_of_day + 5.hours).utc }
+      let(:starts_at) { (Time.now.beginning_of_day + 8.hours).utc }
       let(:invalid_ends_at) { nil }
       let(:params) do
         {
@@ -154,8 +154,8 @@ RSpec.describe 'Api access' do
 
   describe "update" do
     let(:url) { url_helpers.api_v1_rota_shift_path(rota_shift) }
-    let(:original_starts_at) { (Time.now.beginning_of_day + 5.hours).round.utc }
-    let(:original_ends_at) { (Time.now.beginning_of_day + 7.hours).round.utc }
+    let(:original_starts_at) { (Time.now.beginning_of_day + 9.hours).round.utc }
+    let(:original_ends_at) { (Time.now.beginning_of_day + 10.hours).round.utc }
     let(:new_starts_at) { original_starts_at + 1.hour }
     let(:new_ends_at) { original_ends_at + 1.hour }
     let(:rota_shift) do
