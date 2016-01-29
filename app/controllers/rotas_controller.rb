@@ -53,7 +53,6 @@ class RotasController < ApplicationController
     }
   end
 
-
   def start_date_from_params
     if params[:start_date].present?
       Date.strptime(params[:start_date], Rota.url_date_format)
@@ -86,13 +85,6 @@ class RotasController < ApplicationController
       current_user.venues.first
     else
       Venue.first
-    end
-  end
-
-  def assert_date_range_valid(start_date, end_date)
-    day_delta = ((start_date - end_date) / 1.day).abs
-    if (day_delta > 7)
-      raise "invalid date range supplied #{start_date} - #{end_date}"
     end
   end
 
