@@ -1,7 +1,7 @@
 class StaffType < ActiveRecord::Base
-  belongs_to :creator, class_name: "User"
+  ROLES = ['normal', 'security']
 
   validates :name, presence: true, uniqueness: true
-  validates :creator, presence: true
+  validates :role, presence: true, inclusion: { in: ROLES, message: 'is required' }
 end
 
