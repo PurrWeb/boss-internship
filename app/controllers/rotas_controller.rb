@@ -76,7 +76,7 @@ class RotasController < ApplicationController
   end
 
   def default_start_date
-    1.week.ago.strftime(Rota.url_date_format)
+    Time.now.beginning_of_week.strftime(Rota.url_date_format)
   end
 
   def end_date_from_params
@@ -86,7 +86,7 @@ class RotasController < ApplicationController
   end
 
   def default_end_date
-    Time.now.strftime(Rota.url_date_format)
+    Time.now.end_of_week.strftime(Rota.url_date_format)
   end
 
   def default_venue
