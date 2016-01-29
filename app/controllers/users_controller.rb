@@ -96,15 +96,20 @@ class UsersController < ApplicationController
   end
 
   def user_access_details_params
-    params.
+    result = params.
       require(:user).
       permit(
         :role,
         :venues
-      ).
-      merge(
+      )
+
+    if result.fetch(:role) == 'manager'
+      result = result.merge(
         venues: venues_from_params
       )
+    end
+
+    result
   end
 
   def staff_member_params(user)
