@@ -47,7 +47,7 @@ export const addRotaShift = createApiRequestAction(
         path: function(options, state) {
             var rotaId = state.pageOptions.displayedRota;
             var rota = state.rotas[rotaId];
-            return "venues/" + rota.venue.id + "/rota/" + moment(rota.date).format("DD-MM-YYYY") + "/rota_shifts"
+            return "venues/" + rota.venue.id + "/rotas/" + moment(rota.date).format("DD-MM-YYYY") + "/rota_shifts"
         },
         data: (options) => options.shift,
         getSuccessActionData: function(responseData) {
