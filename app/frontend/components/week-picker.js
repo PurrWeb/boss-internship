@@ -6,8 +6,14 @@ require("jquery-ui/datepicker");
 
 // Week picker based on http://stackoverflow.com/questions/1289633/how-to-use-jquery-ui-calendar-date-picker-for-week-rather-than-day
 export default class WeekPicker extends React.Component {
+    static propTypes = {
+        selectionStartDate: React.PropTypes.instanceOf(Date)
+    }
     render(){
         return <div className="week-picker"/>
+    }
+    componentWillReceiveProps(newProps) {
+        this.reactToProps(newProps);
     }
     componentDidMount(){
         var self = this;
@@ -16,12 +22,6 @@ export default class WeekPicker extends React.Component {
 
         var startDate;
         var endDate;
-    
-        var selectCurrentWeek = function() {
-            window.setTimeout(function () {
-                $(node).find('.ui-datepicker-current-day a').addClass('ui-state-active')
-            }, 1);
-        }
 
         function getAllDaysBetween(startDate, endDate){
             function getNextDay(date) {
@@ -50,12 +50,12 @@ export default class WeekPicker extends React.Component {
                 $('#startDate').text($.datepicker.formatDate( dateFormat, startDate, inst.settings ));
                 $('#endDate').text($.datepicker.formatDate( dateFormat, endDate, inst.settings ));
                 
-                selectCurrentWeek();
+                self.selectCurrentWeek();
 
                 self.props.onChange({
                     startDate,
                     endDate,
-                    allDays: getAllDaysBetween(startDate, endDate)
+                    allDates: getAllDaysBetween(startDate, endDate)
                 })
             },
             beforeShowDay: function(date) {
@@ -65,7 +65,7 @@ export default class WeekPicker extends React.Component {
                 return [true, cssClass];
             },
             onChangeMonthYear: function(year, month, inst) {
-                selectCurrentWeek();
+                self.selectCurrentWeek();
             }
         });
         
@@ -77,5 +77,20 @@ export default class WeekPicker extends React.Component {
             $(this).find('td a').removeClass('ui-state-hover');
         });
 
+        this.reactToProps(this.props);
+
+        $('.ui-datepicker-current-day').click();
+    }
+    selectCurrentWeek(){
+        var self = this;
+        window.setTimeout(function () {
+            var node = ReactDOM.findDOMNode(self);
+            $(node).find('.ui-datepicker-current-day a').addClass('ui-state-active')
+        }, 1);
+    }
+    reactToProps(props){
+        var {selectionStartDate} = props;
+        var node = ReactDOM.findDOMNode(this);
+        $(node).datepicker("setDate", selectionStartDate );
     }
 }

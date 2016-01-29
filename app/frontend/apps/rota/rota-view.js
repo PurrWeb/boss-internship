@@ -10,11 +10,6 @@ import moment from "moment"
 import RotaOverviewView from "~apps/rota-overview";
 
 
-// just for testing
-import WeekPicker from "~components/week-picker"
-
-
-
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
 
 class RotaView extends Component {
@@ -37,7 +32,6 @@ class RotaView extends Component {
     render() {
 
         return <div className="container">
-            <WeekPicker onChange={function(){ console.log(arguments) } }/>
             <h1>
                 Rota for {this.props.venue.name}: {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>
