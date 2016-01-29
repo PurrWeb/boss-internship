@@ -49,7 +49,9 @@ export const addRotaShift = createApiRequestAction(
         },
         data: (options) => options.shift,
         getSuccessActionData: function(responseData) {
-            return responseData;
+            responseData.starts_at = new Date(responseData.starts_at)
+            responseData.ends_at = new Date(responseData.ends_at)
+            return {shift: responseData};
         }
     })
 );
