@@ -82,7 +82,11 @@ class RotasController < ApplicationController
   end
 
   def default_venue
-    current_user.venues.first
+    if current_user.manager?
+      current_user.venues.first
+    else
+      Venue.first
+    end
   end
 
   def assert_date_range_valid(start_date, end_date)
