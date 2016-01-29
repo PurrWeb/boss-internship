@@ -46,6 +46,8 @@ Rails.application.routes.draw do
     resources :rotas, only: [:show]
   end
 
+  resources :rotas, only: [:index]
+
   resources :clock_in_clock_out, only: [:index]
 
   namespace :api, defaults: { format: 'json' } do

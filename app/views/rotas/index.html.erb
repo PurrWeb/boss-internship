@@ -1,0 +1,14 @@
+<div class="page-header">
+  <h1><%= venue.name %> Rotas <small><%= start_date.to_s(:human_date) %> - <%= end_date.to_s(:human_date) %></small></h1>
+</div>
+
+<%= javascript_tag do %>
+  var rotas = [];
+
+  <% rotas.each do |rota| %>
+    rotas.push(<%= raw render partial: 'api/v1/shared/rota_overview.json', locals: { rota: rota, staff_types: staff_types } %>);
+  <% end %>
+
+  window.boss = window.boss || {};
+  window.boss.rotas = rotas;
+<% end %>

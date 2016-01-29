@@ -18,6 +18,8 @@ class StaffMember < ActiveRecord::Base
 
   has_one :user, inverse_of: :staff_member
 
+  has_many :rota_shifts, inverse_of: :staff_member
+
   mount_uploader :avatar, AvatarUploader
   validates :avatar, {
     presence: true,
