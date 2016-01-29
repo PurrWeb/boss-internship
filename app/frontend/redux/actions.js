@@ -1,19 +1,21 @@
 import importedCreateApiRequestAction from "./create-api-request-action"
 import _ from "underscore"
 import moment from "moment"
+import * as backendData from "~redux/process-backend-data"
 
 export const actionTypes = {};
 const createApiRequestAction = function(requestType, makeRequest){
     return importedCreateApiRequestAction(requestType, makeRequest, actionTypes);
 }
 
-function makeApiRequest(options){
+function makeApiRequest(apiOptions){
     return function(requestOptions, success, error, store) {
         function resolveFunctionParameter(optionsKey){
             if (typeof options[optionsKey] === "function") {
                 options[optionsKey] = options[optionsKey](requestOptions, store.getState());
             }
         };
+        var options = _.clone(apiOptions);
         requestOptions = _.clone(requestOptions);
         ["method", "path", "data"].map(resolveFunctionParameter);
 
@@ -26,7 +28,7 @@ function makeApiRequest(options){
            method: options.method,
            data: options.data
         }).then(function(responseData){
-            var actionData = options.getSuccessActionData(responseData, requestOptions);
+            var actionData = apiOptions.getSuccessActionData(responseData, requestOptions);
             actionData.requestComponent = requestOptions.requestComponent;
             success(actionData);
         }, function(response){
@@ -69,14 +71,15 @@ export function replaceAllShifts (options) {
 export const updateRotaShift = createApiRequestAction(
     "UPDATE_SHIFT",
     makeApiRequest({
-        path: (options) => {return "rota_shifts/" + options.shift.shift_id},
+        path: (options) => "rota_shifts/" + options.shift.shift_id,
         method: "PATCH",
         data: function(options, state){
             options.shift.staff_member_id = state.rotaShifts.items[options.shift.shift_id].staff_member.id;
             return options.shift;
         },
         getSuccessActionData(responseData){
-            return responseData;
+            responseData = backendData.processShiftObject(responseData);
+            return {shift: responseData};
         }
     })
 );

@@ -20,7 +20,7 @@ function rotaShiftItems(state=[], action){
         case actionTypes.ADD_SHIFT_SUCCESS:
             return Object.assign({}, state, {[action.shift.id]: action.shift })
         case actionTypes.UPDATE_SHIFT_SUCCESS:
-            var shiftId = action.shift.shift_id;
+            var shiftId = action.shift.id;
             if (state[shiftId] === undefined) {
                 throw "Trying to update a shift that doesn't exist.";
             }
