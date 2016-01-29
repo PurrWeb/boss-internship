@@ -27,16 +27,6 @@ RSpec.describe 'Staff types pages access' do
     context 'admin' do
       let(:user) { FactoryGirl.create(:user, :admin) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
-      end
-    end
-
-    context 'dev' do
-      let(:user) { FactoryGirl.create(:user, :dev) }
-
       specify 'should have access' do
         expect(get(url).status).to eq(ok_status)
       end

@@ -8,7 +8,7 @@ class StaffTypesController < ApplicationController
 
   private
   def authorize
-    authorize! :manage, :staff_types
+    authorize! :manage, :admin
   end
 
   def staff_type_params
