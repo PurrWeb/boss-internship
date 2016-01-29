@@ -14,12 +14,6 @@ RSpec.feature 'Staff types index page' do
     staff_types_index_page.navigation.ensure_top_level_sections_highlighted(:staff_members)
   end
 
-  scenario 'clicking add new staff type button takes you to the add staff types page' do
-    staff_types_index_page.surf_to
-    staff_types_index_page.click_add_staff_type_button
-    add_staff_type_page.assert_on_correct_page
-  end
-
   context 'Staff Types Exist' do
     let!(:staff_types) { FactoryGirl.create_list(:staff_type, 3) }
 

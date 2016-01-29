@@ -38,7 +38,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :staff_types, only: [:index, :new, :create]
+  resources :staff_types, only: [:index]
 
   resources :venues, only: [:index, :new, :create] do
     resources :rotas, only: [:show]
