@@ -59,7 +59,10 @@ Rails.application.routes.draw do
         end
       end
       resources :venues, only: :show do
-        resources :rota, only: [] do
+        resources :rotas, only: [] do
+          member do
+            get :overview
+          end
           resources :rota_shifts,   only: [:create]
         end
       end

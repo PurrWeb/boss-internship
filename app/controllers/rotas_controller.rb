@@ -60,6 +60,13 @@ class RotasController < ApplicationController
     end
   end
 
+  def assert_date_range_valid(start_date, end_date)
+    day_delta = ((start_date - end_date) / 1.day).abs
+    if (day_delta > 7)
+      raise "invalid date range supplied #{start_date} - #{end_date}"
+    end
+  end
+
   def default_start_date
     1.week.ago.strftime(Rota.url_date_format)
   end
