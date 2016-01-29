@@ -22,7 +22,7 @@
             </li>
           <% end %>
 
-          <% if can?(:manage, :rotas) %>
+          <% if Venue.count > 0 && !(current_user.manager? && current_user.venues.count == 0) %>
             <li class="nav-rota-section">
               <%= link_to(rotas_path, class: "nav-section-header-link #{'active' if in_rotas_section? }") do %>
                 Rota <% if in_rotas_section? %><span class="sr-only">(current)</span><% end %>
