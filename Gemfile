@@ -28,6 +28,8 @@ gem "cancan"
 gem 'file_validators'
 gem 'jbuilder'
 gem 'chosen-rails'
+gem 'tiny-color-rails'
+gem 'pick-a-color-rails'
 
 group :development, :test do
   gem "byebug"
