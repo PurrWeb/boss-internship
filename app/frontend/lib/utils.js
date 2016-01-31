@@ -54,6 +54,9 @@ var utils =  {
     },
     formatRotaUrlDate(date){
         return moment(date).format("DD-MM-YYYY");
+    },
+    capitalizeFirstCharacter(str) {
+        return str[0].toUpperCase() + str.slice(1);
     }
 }
 

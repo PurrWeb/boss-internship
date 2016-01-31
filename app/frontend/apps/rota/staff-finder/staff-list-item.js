@@ -5,6 +5,7 @@ import StaffTypeBadge from "~components/staff-type-badge"
 import Spinner from "~components/spinner"
 import reactMixin from "react-mixin"
 import apiFormMixin from "~mixins/api-form-mixin"
+import ComponentErrors from "~components/component-errors"
 
 export default class StaffListItem extends Component {
     static contextTypes = {
@@ -17,7 +18,7 @@ export default class StaffListItem extends Component {
             shiftSavingInProgressSpinner = <Spinner />
         }
 
-        var errors = JSON.stringify(this.getComponentErrors());
+        var errors = this.getComponentErrors()
 
         return (
             <div className="staff-list-item rota-staff-list-item">
@@ -50,20 +51,24 @@ export default class StaffListItem extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-2">
-                        <div className="rota-staff-list-item__add-button" style={{float: "left"}}>
-                            <AddStaffToShiftButton
-                                staffId={staff.id}
-                                addShift={() => this.addShift()}
-                                />
+                    <div className="col-md-3">
+                        <div style={{overflow: "hidden"}}>
+                            <div className="rota-staff-list-item__add-button" style={{float: "left"}}>
+                                <AddStaffToShiftButton
+                                    staffId={staff.id}
+                                    addShift={() => this.addShift()}
+                                    />
+                            </div>
+                            <div style={{
+                                float: "left",
+                                marginTop: 40,
+                                marginLeft: 10
+                            }}>
+                                {shiftSavingInProgressSpinner}
+                            </div>
                         </div>
-                        {errors}
-                        <div style={{
-                            float: "left",
-                            marginTop: 40,
-                            marginLeft: 10
-                        }}>
-                            {shiftSavingInProgressSpinner}
+                        <div style={{marginTop: 10}}>
+                            <ComponentErrors errors={errors} />
                         </div>
                     </div>
                 </div>
