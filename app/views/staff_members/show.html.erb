@@ -65,19 +65,21 @@
       <dt class="show-page-detail-heading">Status</dt>
       <dd class="show-page-detail" data-detail="status"><%= staff_member.enabled? ? 'Active' : 'Disabled' %></dd>
 
-      <dt class="show-page-detail-heading">User</dt>
-      <dd class="show-page-detail" data-detail="user">
-        <% if staff_member.user.present? %>
-          <%= link_to(
-                'View',
-                user_path(staff_member.user),
-                class: ['view-user-button', 'btn', 'btn-success']
-              )
-          %>
-        <% else %>
-          <span>No assocaited user</span>
-        <% end %>
-      </dd>
+      <% if can? :manage, :admin %>
+        <dt class="show-page-detail-heading">User</dt>
+        <dd class="show-page-detail" data-detail="user">
+          <% if staff_member.user.present? %>
+            <%= link_to(
+                  'View',
+                  user_path(staff_member.user),
+                  class: ['view-user-button', 'btn', 'btn-success']
+                )
+            %>
+          <% else %>
+            <span>No assocaited user</span>
+          <% end %>
+        </dd>
+      <% end %>
     </div>
   </div>
 
