@@ -14,6 +14,9 @@ export default class StaffImageInput extends React.Component {
         return <div>
             {this.getImagePicker()}
             {this.getImageCropper()}
+            <h2> CroppedImage:</h2>
+            <img style={{width: 100}} src={this.state.croppedImage} />
+            <input type="text" name="avatar-data-url" value={this.state.croppedImage}/>
         </div>
     }
     getImagePicker(){
