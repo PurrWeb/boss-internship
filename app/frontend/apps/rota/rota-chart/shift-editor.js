@@ -75,7 +75,7 @@ export default class ShiftEditor extends Component {
     }
     areBothTimesValid(){
         var {starts_at, ends_at} = this.state.newShiftTimes;
-        return utils.dateIsValid(starts_at) && utils.dateIsValid(ends_at);
+        return utils.areShiftTimesValid(starts_at, ends_at);
     }
     deleteShift(){
         if (this.props.shift.isBeingEdited) {
