@@ -3,12 +3,20 @@ import DataUrlImagePicker from "./data-url-image-picker"
 import ImageCropper from "./image-cropper"
 
 export default class StaffImageInput extends React.Component {
+    static propTypes = {
+        existingImage: React.PropTypes.string
+    }
     constructor(props){
         super(props);
         this.state = {
             sourceImage: null,
             croppedImage: null
         };
+    }
+    componentDidMount(){
+        if (this.props.existingImage) {
+            this.setState({sourceImage: this.props.existingImage});
+        }   
     }
     render(){
         return <div>
