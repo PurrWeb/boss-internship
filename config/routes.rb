@@ -40,7 +40,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :staff_types, only: [:index]
+  resources :staff_types, only: [:index] do
+    collection do
+      post :update_colors
+    end
+  end
 
   resources :venues, only: [:index, :new, :create] do
     resources :rotas, only: [:show]

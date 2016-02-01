@@ -1,7 +1,44 @@
 <h1>Staff Types</h1>
 
-<ul class="staff-types-list list-unstyled">
-  <% staff_types.each do |staff_type|  %>
-    <li><%= staff_type.name %></li>
-  <% end %>
-</ul>
+<%= javascript_tag do %>
+  $(function(){
+    $('.staff-type-color-field').change(function(el){
+      field = $(this);
+      type = field.data("type");
+
+      badge = $('.staff-badge[data-type="' + type + '"]');
+      badge.attr('style', 'background-color: #' + field.val());
+    });
+  })
+<% end %>
+
+<%= form_tag update_colors_staff_types_path do %>
+  <table class="staff-types-list list-unstyled">
+    <thead>
+      <th>Name</th>
+      <th>Badge</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <% staff_types.each do |staff_type|  %>
+        <tr>
+          <td><%= staff_type.name.titlecase %></td>
+          <td>
+            <div class="staff-badge" data-type="<%= staff_type.name.parameterize %>" style="background-color: #<%= staff_type.ui_color %>">
+              <%= staff_type.name.titlecase %>
+            </div>
+          </td>
+          <td>
+            <div class="form-group">
+              <%= fields_for('staff_type[]', staff_type) do |staff_type_fields| %>
+                <%= staff_type_fields.hidden_field(:id) %>
+                <%= staff_type_fields.text_field(:ui_color, class: 'form-control pick-a-color staff-type-color-field', data: { type: staff_type.name.parameterize }) %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= submit_tag 'Update', class: "btn btn-default" %>
+<% end %>
