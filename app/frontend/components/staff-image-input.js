@@ -29,6 +29,9 @@ export default class StaffImageInput extends React.Component {
                 {this.getAvatarPreview()}
                 <br />
                 <input type="text" name="avatar-data-url" value={this.state.croppedImage}/>
+                <br/>
+                <br/>
+                {this.getResetButtton()}
             </div>
         </div>
     }
@@ -47,7 +50,20 @@ export default class StaffImageInput extends React.Component {
             sourceImage={this.state.sourceImage}
             onChange={(dataUrl) => this.setState({croppedImage: dataUrl})} />
     }
+    getResetButtton(){
+        if (!this.state.sourceImage) {
+            return null;
+        }
+        return <button 
+            className="btn btn-default"
+            onClick={() => this.setState({sourceImage: null, croppedImage: null})}>
+            Use a different image
+        </button>
+    }
     getAvatarPreview(){
+        if (!this.state.croppedImage) {
+            return null;
+        }
         return <div>
             Selected avatar:
             <img style={{
