@@ -16,15 +16,20 @@ export default class StaffImageInput extends React.Component {
     componentDidMount(){
         if (this.props.existingImage) {
             this.setState({sourceImage: this.props.existingImage});
-        }   
+        }
     }
     render(){
-        return <div>
-            {this.getImagePicker()}
-            {this.getImageCropper()}
-            <h2> CroppedImage:</h2>
-            <img style={{width: 100}} src={this.state.croppedImage} />
-            <input type="text" name="avatar-data-url" value={this.state.croppedImage}/>
+
+        return <div className="row" style={{maxWidth: 450, marginBottom: 10}}>
+            <div className="col-md-8">
+                {this.getImagePicker()}
+                {this.getImageCropper()}
+            </div>
+            <div className="col-md-4">
+                {this.getAvatarPreview()}
+                <br />
+                <input type="text" name="avatar-data-url" value={this.state.croppedImage}/>
+            </div>
         </div>
     }
     getImagePicker(){
@@ -41,5 +46,14 @@ export default class StaffImageInput extends React.Component {
         return <ImageCropper
             sourceImage={this.state.sourceImage}
             onChange={(dataUrl) => this.setState({croppedImage: dataUrl})} />
+    }
+    getAvatarPreview(){
+        return <div>
+            Selected avatar:
+            <img style={{
+                width: 150,
+                border: "2px solid black"
+            }} src={this.state.croppedImage} />
+        </div>
     }
 }

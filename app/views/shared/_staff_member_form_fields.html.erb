@@ -18,10 +18,12 @@
       ) %>
 </div>
 
-<%= react_component("StaffMemberFormAvatarImage") %>
+
 <% if form.object.avatar? %>
   <%= image_tag(form.object.avatar_url, class: "avatar_preview", height: 120, width: 120) %>
 <% end %>
+<%= form.label("Avatar") %>
+<%= react_component("StaffMemberFormAvatarImage") %>
 <%= form.file_field(:avatar) %>
 <%= form.hidden_field(:avatar_cache) %>
 <%= form.select(:gender, options_for_select(StaffMember::GENDERS.map{ |role| [role.titleize, role] }, form.object.gender), include_blank: true, label_class: 'required') %>

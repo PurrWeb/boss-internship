@@ -12,18 +12,18 @@ export default class ImageCropper extends React.Component {
         </div>
     }
     componentDidMount(){
-        var self = this;
-
-        new Cropper(this.img, {
+        var cropper = new Cropper(this.img, {
             aspectRatio: 1,
             zoomable: false,
             viewMode: 2,
             autoCropArea: 1,
             toggleDragModeOnDblClick: false,
-            cropend: function(){
-                var dataUrl = this.cropper.getCroppedCanvas().toDataURL();
-                self.props.onChange(dataUrl);
-            }
+            cropend: () => this.callOnChange(cropper),
+            built: () => this.callOnChange(cropper)
         });
+    }
+    callOnChange(cropper){
+        var dataUrl = cropper.getCroppedCanvas().toDataURL();
+        this.props.onChange(dataUrl);
     }
 }
