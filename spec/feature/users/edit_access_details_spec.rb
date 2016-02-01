@@ -56,7 +56,6 @@ RSpec.feature 'Editing a users access detials' do
       it 'takes you to the show page and show a success message' do
         edit_page.surf_to
         edit_page.form.update_venues(venues)
-        edited_user.reload
         show_page.ensure_flash_success_message_displayed('User updated successfully')
       end
     end
