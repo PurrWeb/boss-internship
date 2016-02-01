@@ -20,7 +20,7 @@ export default class StaffMemberFormAvatarImage extends React.Component {
             convertImageToDataUrl(
                 avatarPreview.prop("src"),
                 (dataUrl) => this.setState({existingImage: dataUrl}),
-                "image/png",
+                "image/jpeg",
             );
         } else {
             this.setState({"existingImage": null});
