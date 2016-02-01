@@ -17,12 +17,10 @@ export default class AddShiftView extends Component {
     getChildContext(){
         var canAddShift = (staff_id) => {
             var { starts_at, ends_at } = this.state.shiftTimes;
-            var datesAreValid = utils.shiftTimeIsValid(starts_at) &&
-                utils.shiftTimeIsValid(ends_at);
+            var datesAreValid = utils.areShiftTimesValid(starts_at, ends_at);
             var isAddingShift = this.props.staff[staff_id].addShiftIsInProgress;
-            var shiftEndsAfterItStarts = starts_at < ends_at;
 
-            return datesAreValid && !isAddingShift && shiftEndsAfterItStarts; 
+            return datesAreValid && !isAddingShift; 
         }
         return {
             addShift: (staffId, requestComponent) => this.addShift(staffId, requestComponent),

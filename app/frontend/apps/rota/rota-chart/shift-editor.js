@@ -5,6 +5,7 @@ import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
 import reactMixin from "react-mixin"
 import apiFormMixin from "~mixins/api-form-mixin"
+import ComponentErrors from "~components/component-errors"
 
 export default class ShiftEditor extends Component {
     static contextTypes = {
@@ -42,6 +43,12 @@ export default class ShiftEditor extends Component {
             updateButton = null;
         }
 
+        if (this.getComponentErrors()){
+            var componentErrors = <div style={{marginTop: 10}}>
+                 <ComponentErrors errors={this.getComponentErrors()} />
+            </div>
+        }
+
         return <div>
             <div className="row">
                 <div className="col-md-9">
@@ -57,18 +64,18 @@ export default class ShiftEditor extends Component {
                     {spinner}
                 </div>
             </div>
+            {componentErrors}
         
             <a
                 onClick={() => this.deleteShift()}
                 className={this.props.shift.isBeingEdited ? "link-disabled" : ""}>
                 Delete shift
             </a>
-            <div>{JSON.stringify(this.getComponentErrors())}</div>
         </div>
     }
     areBothTimesValid(){
         var {starts_at, ends_at} = this.state.newShiftTimes;
-        return utils.dateIsValid(starts_at) && utils.dateIsValid(ends_at);
+        return utils.areShiftTimesValid(starts_at, ends_at);
     }
     deleteShift(){
         if (this.props.shift.isBeingEdited) {

@@ -40,6 +40,13 @@ var utils =  {
         var minutesAreMultipleOfFifteen = shiftTime.getMinutes() % 15 === 0;
         return dateIsValid && minutesAreMultipleOfFifteen;
     },
+    areShiftTimesValid(starts_at, ends_at) {
+        var datesAreValid = utils.shiftTimeIsValid(starts_at) &&
+                utils.shiftTimeIsValid(ends_at);
+        var shiftEndsAfterItStarts = starts_at < ends_at;
+
+        return datesAreValid && shiftEndsAfterItStarts;
+    },
     /**
     This function can be used inside shouldComponentUpdate. If props contain
     functions passed in from the parent deepEqual would always say the props
@@ -54,6 +61,9 @@ var utils =  {
     },
     formatRotaUrlDate(date){
         return moment(date).format("DD-MM-YYYY");
+    },
+    capitalizeFirstCharacter(str) {
+        return str[0].toUpperCase() + str.slice(1);
     }
 }
 
