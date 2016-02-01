@@ -4,7 +4,7 @@ module PageObject
 
     page_action :update_venues do |venues|
       chosen_select(
-        venues.map{ |v| v.name.titleize },
+        *venues.map{ |v| v.name.titleize },
         from: 'user-venues-select'
       )
       submit_form

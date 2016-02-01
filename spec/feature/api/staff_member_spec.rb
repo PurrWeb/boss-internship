@@ -21,7 +21,7 @@ RSpec.describe 'Api access' do
 
       specify 'should return a json representation of the staff member' do
         json = JSON.parse(response.body)
-        expect(json).to eq({
+        expect(json).to include({
           "id" => staff_member.id,
           "url" => url_helpers.api_v1_staff_member_url(staff_member),
           "staff_type" => {
@@ -33,6 +33,8 @@ RSpec.describe 'Api access' do
           "preferred_hours" => staff_member.hours_preference_note,
           "preferred_days" => staff_member.day_perference_note
         })
+
+        expect(json["avatar_url"]).to match(/\/uploads\/staff_member\/avatar\/\d+\/avatar\.jpg/)
       end
     end
   end

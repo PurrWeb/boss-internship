@@ -1,6 +1,7 @@
 require 'feature/feature_spec_helper'
 
 RSpec.feature 'Navigation Bar' do
+  let!(:venue) { FactoryGirl.create(:venue) }
   let(:sign_in_page) { PageObject::SignInPage.new }
 
   context 'a not logged in user' do
@@ -50,7 +51,7 @@ RSpec.feature 'Navigation Bar' do
     end
 
     context 'a logged in manager' do
-      let(:user) { FactoryGirl.create(:user, :manager) }
+      let(:user) { FactoryGirl.create(:user, :manager, venues: [venue]) }
       let(:home_page) { PageObject::HomePage.new }
 
       scenario 'sees the rota section' do

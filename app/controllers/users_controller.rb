@@ -103,7 +103,7 @@ class UsersController < ApplicationController
         :venues
       )
 
-    if result.fetch(:role) == 'manager'
+    if result[:role] == 'manager'
       result = result.merge(
         venues: venues_from_params
       )
