@@ -24,7 +24,7 @@
  @import "../../../node_modules/react-select/dist/react-select";
 
 
-label.required:after {
+label:not(.force-not-required).required:after {
   content:" *";
 }
 

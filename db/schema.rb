@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160129154631) do
+ActiveRecord::Schema.define(version: 20160202112032) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -150,18 +150,18 @@ ActiveRecord::Schema.define(version: 20160129154631) do
   end
 
   create_table "staff_members", force: :cascade do |t|
-    t.integer  "address_id",                limit: 4,                    null: false
+    t.integer  "address_id",                limit: 4
     t.string   "gender",                    limit: 255,                  null: false
-    t.string   "phone_number",              limit: 255,                  null: false
+    t.string   "phone_number",              limit: 255
     t.boolean  "enabled",                                 default: true, null: false
-    t.datetime "date_of_birth",                                          null: false
+    t.datetime "date_of_birth"
     t.string   "national_insurance_number", limit: 255
     t.text     "hours_preference_note",     limit: 65535
     t.text     "day_perference_note",       limit: 65535
     t.datetime "created_at",                                             null: false
     t.datetime "updated_at",                                             null: false
     t.integer  "name_id",                   limit: 4,                    null: false
-    t.integer  "email_address_id",          limit: 4,                    null: false
+    t.integer  "email_address_id",          limit: 4
     t.string   "pin_code",                  limit: 255,                  null: false
     t.string   "avatar",                    limit: 255
     t.integer  "staff_type_id",             limit: 4,                    null: false
