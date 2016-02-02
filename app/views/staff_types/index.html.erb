@@ -1,17 +1,5 @@
 <h1>Staff Types</h1>
 
-<%= javascript_tag do %>
-  $(function(){
-    $('.staff-type-color-field').change(function(el){
-      field = $(this);
-      type = field.data("type");
-
-      badge = $('.staff-badge[data-type="' + type + '"]');
-      badge.attr('style', 'background-color: #' + field.val());
-    });
-  })
-<% end %>
-
 <%= form_tag update_colors_staff_types_path do %>
   <table class="staff-types-list list-unstyled">
     <thead>
