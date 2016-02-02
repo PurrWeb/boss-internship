@@ -20,7 +20,7 @@
 
 
 <%= form.label("Avatar") %>
-<input type="text" id="base64Image" />
+<input type="text" id="base64Image" name="staff_member[avatar_data_uri]" />
 <%= react_component("StaffMemberFormAvatarImage", dataUrlInputId:"base64Image") %>
 
 <%= form.select(:gender, options_for_select(StaffMember::GENDERS.map{ |role| [role.titleize, role] }, form.object.gender), include_blank: true, label_class: 'required') %>
