@@ -1,6 +1,7 @@
 import React from "react"
 import DataUrlImagePicker from "./data-url-image-picker"
 import ImageCropper from "./image-cropper"
+import AvatarPreview from "./avatar-preview"
 
 export default class StaffImageInput extends React.Component {
     static propTypes = {
@@ -70,10 +71,7 @@ export default class StaffImageInput extends React.Component {
         }
         return <div>
             Selected avatar:
-            <img style={{
-                width: 150,
-                border: "2px solid black"
-            }} src={this.state.croppedImage} />
+            <AvatarPreview src={this.state.croppedImage} />
         </div>
     }
 }

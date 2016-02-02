@@ -1,7 +1,7 @@
 import React from "react"
 import StaffImageInput from "~components/staff-image-input"
-import convertImageToDataUrl from "~lib/convert-image-to-data-url"
 import $ from "jquery"
+import AvatarPreview from "~components/avatar-preview"
 
 const NOT_YET_DETECTED = "NOT_YET_DETECTED";
 
@@ -9,29 +9,28 @@ export default class StaffMemberFormAvatarImage extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            existingImage: NOT_YET_DETECTED
+            selectedImage: null
         }
     }
     componentDidMount(){
         var avatarPreview = $(".avatar_preview");
-        var hasExistingAvatar = avatarPreview.length > 0;
-        if (hasExistingAvatar){
+        if (avatarPreview.length > 0){
+            this.setState({selectedImageUrl: avatarPreview.prop("src")});
             avatarPreview.hide();
-            convertImageToDataUrl(
-                avatarPreview.prop("src"),
-                (dataUrl) => this.setState({existingImage: dataUrl}),
-                "image/jpeg",
-            );
-        } else {
-            this.setState({"existingImage": null});
         }
     }
     render(){
-        if (this.state.existingImage === NOT_YET_DETECTED) {
-            return false;
+        if (this.state.selectedImageUrl) {
+            return <div>
+                <AvatarPreview src={this.state.selectedImageUrl} />
+            </div>
+        } else {
+            return <StaffImageInput
+                existingImage={this.state.existingImage}
+                onImageCropped={(dataUrl) => this.getDataUrlInput().val(dataUrl)} />
         }
-        return <StaffImageInput
-            existingImage={this.state.existingImage}
-            onImageCropped={(dataUrl) => $("#" + this.props.dataUrlInputId).val(dataUrl)} />
+    }
+    getDataUrlInput(){
+        return $("#" + this.props.dataUrlInputId);
     }
 }
