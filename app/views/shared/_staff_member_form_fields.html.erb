@@ -19,6 +19,9 @@
 </div>
 
 
+<% if form.object.avatar? %>
+  <%= image_tag(form.object.avatar_url, class: "avatar_preview", height: 120, width: 120) %>
+<% end %>
 <%= form.label("Avatar") %>
 <input type="text" id="base64Image" name="staff_member[avatar_data_uri]" />
 <%= react_component("StaffMemberFormAvatarImage", dataUrlInputId:"base64Image") %>
