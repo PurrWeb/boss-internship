@@ -89,9 +89,8 @@ class StaffMembersController < ApplicationController
       :starts_at,
       :national_insurance_number,
       :hours_preference_note,
+      :avatar_base64,
       :day_perference_note,
-      :avatar_data_uri,
-      :avatar_cache,
       :staff_type,
       :employment_status_a,
       :employment_status_b,
@@ -120,7 +119,8 @@ class StaffMembersController < ApplicationController
       email_address_attributes: :email
     } if email_params_present?
 
-    params.
+
+    result = params.
       require(:staff_member).
       permit(
         require_attributes
@@ -128,6 +128,12 @@ class StaffMembersController < ApplicationController
         staff_type: staff_type_from_params,
         creator: current_user
       )
+
+    if result[:avatar_base64].present?
+      result = result.merge(avatar_data_uri: result[:avatar_base64])
+    end
+
+    result
   end
 
   def email_params_present?

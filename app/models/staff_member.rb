@@ -26,6 +26,10 @@ class StaffMember < ActiveRecord::Base
     file_size: { less_than: 1.megabyte }
   }
 
+  # Transient attribute used to preserve image uploads
+  # during form resubmissions
+  attr_accessor :avatar_base64
+
   include Enableable
 
   validates :name, presence: true

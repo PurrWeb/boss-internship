@@ -55,7 +55,7 @@ export default class StaffImageInput extends React.Component {
         if (!this.state.sourceImage) {
             return null;
         }
-        return <button 
+        return <button
             className="btn btn-default"
             onClick={() => {
                 this.setCroppedImage(null);
