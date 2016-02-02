@@ -61,7 +61,7 @@
                   <%= link_to('Venues', venues_path) %>
                 </li>
 
-                <% if can?(:manage, :staff_types) %>
+                <% if can?(:manage, :admin) %>
                   <li class="nav-staff-types-section">
                     <%= link_to('Staff Types', staff_types_path) %>
                   </li>

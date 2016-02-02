@@ -16,8 +16,16 @@
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require chosen-jquery
+//= require tinycolor-min
+//= require pick-a-color.min
+//= require paloma
 //= require_tree .
 
 $(function(){
   $('.chosen-select').chosen();
+
+  $('.pick-a-color').pickAColor({
+    showSavedColors: false,
+    showHexInput: false
+  });
 });
