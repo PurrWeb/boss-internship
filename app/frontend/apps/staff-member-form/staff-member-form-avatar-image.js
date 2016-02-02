@@ -13,7 +13,7 @@ export default class StaffMemberFormAvatarImage extends React.Component {
         }
     }
     componentDidMount(){
-        var avatarPreview = $(".avatar_preview");
+        var avatarPreview = $(this.props.selectedImageSelector);
         if (avatarPreview.length > 0){
             this.setState({selectedImageUrl: avatarPreview.prop("src")});
             avatarPreview.hide();
@@ -31,6 +31,6 @@ export default class StaffMemberFormAvatarImage extends React.Component {
         }
     }
     getDataUrlInput(){
-        return $("#" + this.props.dataUrlInputId);
+        return $(this.props.dataUrlInputSelector);
     }
 }
