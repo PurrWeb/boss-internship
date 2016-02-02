@@ -24,8 +24,7 @@
 <% end %>
 <%= form.label("Avatar") %>
 <%= react_component("StaffMemberFormAvatarImage") %>
-<%= form.file_field(:avatar) %>
-<%= form.hidden_field(:avatar_cache) %>
+
 <%= form.select(:gender, options_for_select(StaffMember::GENDERS.map{ |role| [role.titleize, role] }, form.object.gender), include_blank: true, label_class: 'required') %>
 <% if edit_name %>
   <%= form.fields_for(:name, (form.object.name || Name.new)) do |name_fields| %>

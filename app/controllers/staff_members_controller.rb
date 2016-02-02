@@ -90,7 +90,7 @@ class StaffMembersController < ApplicationController
       :national_insurance_number,
       :hours_preference_note,
       :day_perference_note,
-      :avatar,
+      :avatar_data_uri,
       :avatar_cache,
       :staff_type,
       :employment_status_a,

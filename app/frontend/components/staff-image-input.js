@@ -28,7 +28,7 @@ export default class StaffImageInput extends React.Component {
             <div className="col-md-4">
                 {this.getAvatarPreview()}
                 <br />
-                <input type="text" name="avatar-data-url" value={this.state.croppedImage}/>
+                <input type="hidden" name="staff_member[avatar_data_uri]" value={this.state.croppedImage}/>
                 <br/>
                 <br/>
                 {this.getResetButtton()}
