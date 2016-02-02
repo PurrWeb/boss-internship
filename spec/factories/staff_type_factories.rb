@@ -5,5 +5,6 @@ FactoryGirl.define do
     end
 
     role 'normal'
+    ui_color 'AABBCC'
   end
 end

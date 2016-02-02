@@ -24,7 +24,8 @@ RSpec.describe 'Api access' do
         expect(json).to eq({
           "id" => staff_type.id,
           "url" => url_helpers.api_v1_staff_type_url(staff_type),
-          "name" => staff_type.name
+          "name" => staff_type.name,
+          "color" => "##{staff_type.ui_color}"
         })
       end
     end
