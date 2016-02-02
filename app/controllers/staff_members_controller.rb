@@ -79,6 +79,26 @@ class StaffMembersController < ApplicationController
     end
   end
 
+  def edit_avatar
+    staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
+    render locals: { staff_member: staff_member }
+  end
+
+  def update_avatar
+    staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
+    if staff_member.update_attributes(update_avatar_params)
+      flash[:success] = "Staff member updated successfully"
+      redirect_to staff_member_path(staff_member)
+    else
+      flash.now[:error] = "There was a problem updating this staff member"
+      render 'edit_avatar', locals: { staff_member: staff_member }
+    end
+  end
+
   private
   def staff_member_params
     require_attributes = [
@@ -142,6 +162,16 @@ class StaffMembersController < ApplicationController
 
   def address_params_present?
     Array(params["staff_member"]["address_attributes"].try(:values)).join("").present?
+  end
+
+  def update_avatar_params
+    result = params.require(:staff_member).permit(:avatar_base64)
+
+    if result[:avatar_base64].present?
+      result = result.merge(avatar_data_uri: result[:avatar_base64])
+    end
+
+    result
   end
 
   def update_employment_details_params(staff_member)
