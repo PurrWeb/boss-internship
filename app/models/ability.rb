@@ -28,6 +28,10 @@ class Ability
       user.admin? || user.venues.include?(rota.venue)
     end
 
+    can :manage, User do |target_user|
+      user.admin? || user == target_user
+    end
+
     #
     # The first argument to `can` is the action you are giving the user
     # permission to do.
