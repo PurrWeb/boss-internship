@@ -48,7 +48,11 @@ export default class StaffImageInput extends React.Component {
         }
         return <ImageCropper
             sourceImage={this.state.sourceImage}
-            onChange={(dataUrl) => this.setState({croppedImage: dataUrl})} />
+            onChange={(dataUrl) => this.setCroppedImage(dataUrl) } />
+    }
+    setCroppedImage(dataUrl){
+        this.setState({croppedImage: dataUrl})
+        this.props.onImageCropped(dataUrl);
     }
     getResetButtton(){
         if (!this.state.sourceImage) {
@@ -56,7 +60,10 @@ export default class StaffImageInput extends React.Component {
         }
         return <button 
             className="btn btn-default"
-            onClick={() => this.setState({sourceImage: null, croppedImage: null})}>
+            onClick={() => {
+                this.setCroppedImage(null);
+                this.setState({sourceImage: null});
+            }}>
             Use a different image
         </button>
     }

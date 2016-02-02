@@ -30,6 +30,8 @@ export default class StaffMemberFormAvatarImage extends React.Component {
         if (this.state.existingImage === NOT_YET_DETECTED) {
             return false;
         }
-        return <StaffImageInput existingImage={this.state.existingImage} />
+        return <StaffImageInput
+            existingImage={this.state.existingImage}
+            onImageCropped={(dataUrl) => $("#" + this.props.dataUrlInputId).val(dataUrl)} />
     }
 }
