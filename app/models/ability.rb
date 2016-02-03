@@ -29,7 +29,7 @@ class Ability
     end
 
     can :create_staff_member, User do |target_user|
-      user.has_all_venue_access? || user == target_user
+      user.admin? || user == target_user
     end
 
     #
