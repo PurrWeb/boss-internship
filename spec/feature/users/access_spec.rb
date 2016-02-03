@@ -138,7 +138,8 @@ RSpec.describe 'Staff member pages access' do
   end
 
   describe 'new staff member for user page' do
-    let(:url) { url_helpers.new_staff_member_user_path(user) }
+    let(:url) { url_helpers.new_staff_member_user_path(target_user) }
+    let(:target_user) { FactoryGirl.create(:user, :manager)}
 
     context 'manager' do
       let(:user) { FactoryGirl.create(:user, :manager) }
@@ -153,10 +154,8 @@ RSpec.describe 'Staff member pages access' do
     context 'admin' do
       let(:user) { FactoryGirl.create(:user, :admin) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
       end
     end
 
@@ -170,7 +169,8 @@ RSpec.describe 'Staff member pages access' do
   end
 
   describe 'create staff member for user action' do
-    let(:url) { url_helpers.create_staff_member_user_path(user) }
+    let(:url) { url_helpers.create_staff_member_user_path(target_user) }
+    let(:target_user) { FactoryGirl.create(:user, :manager)}
     let(:params) do
       { staff_member: { foo: 'bar' } }
     end
@@ -188,10 +188,8 @@ RSpec.describe 'Staff member pages access' do
     context 'admin' do
       let(:user) { FactoryGirl.create(:user, :admin) }
 
-      specify 'should not have access' do
-        expect {
-          post(url, params)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should have access' do
+        expect(post(url, params).status).to eq(ok_status)
       end
     end
 
