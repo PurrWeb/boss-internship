@@ -46,7 +46,7 @@ class UsersController < ApplicationController
 
   def new_staff_member
     user = User.find(params[:id])
-    authorize! :manage, user
+    authorize! :create_staff_member, user
 
     staff_member = StaffMember.new(
       starts_at: Time.now,
@@ -59,7 +59,7 @@ class UsersController < ApplicationController
 
   def create_staff_member
     user = User.find(params[:id])
-    authorize! :manage, user
+    authorize! :create_staff_member, user
 
     staff_member = StaffMember.new(staff_member_params(user))
 

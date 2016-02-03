@@ -28,7 +28,7 @@ class Ability
       user.admin? || user.venues.include?(rota.venue)
     end
 
-    can :manage, User do |target_user|
+    can :create_staff_member, User do |target_user|
       user.admin? || user == target_user
     end
 
