@@ -78,7 +78,7 @@ class StaffMembersController < ApplicationController
 
   private
   def staff_member_params
-    params.require(:staff_member).permit(
+    require_attributes = [
       :pin_code,
       :gender,
       :phone_number,
@@ -90,6 +90,14 @@ class StaffMembersController < ApplicationController
       :avatar,
       :avatar_cache,
       :staff_type,
+      name_attributes: [
+        :first_name,
+        :surname
+      ],
+      staff_member_venue_attributes: [:venue_id]
+    ]
+
+    require_attributes << {
       address_attributes: [
         :address_1,
         :address_2,
@@ -98,17 +106,29 @@ class StaffMembersController < ApplicationController
         :postcode,
         :country,
         :region
-      ],
-      email_address_attributes: :email,
-      name_attributes: [
-        :first_name,
-        :surname
-      ],
-      staff_member_venue_attributes: [:venue_id]
-    ).merge(
-      staff_type: staff_type_from_params,
-      creator: current_user
-    )
+      ]
+    } if address_params_present?
+
+    require_attributes << {
+      email_address_attributes: :email
+    } if email_params_present?
+
+    params.
+      require(:staff_member).
+      permit(
+        require_attributes
+      ).merge(
+        staff_type: staff_type_from_params,
+        creator: current_user
+      )
+  end
+
+  def email_params_present?
+    params["staff_member"]["email_address_attributes"].present?
+  end
+
+  def address_params_present?
+    Array(params["staff_member"]["address_attributes"].try(:values)).join("").present?
   end
 
   def update_employment_details_params(staff_member)

@@ -29,12 +29,8 @@ class StaffMember < ActiveRecord::Base
   include Enableable
 
   validates :name, presence: true
-  validates :email_address, presence: true
   validates :gender, inclusion: { in: GENDERS, message: 'is required' }
-  validates :phone_number, presence: true
   validates :enabled, presence: true
-  validates :date_of_birth, presence: true
-  validates :address, presence: true
   validate  :national_insurance_number_valid
   validates :pin_code, presence: true
   validate  :valid_pin_code_format

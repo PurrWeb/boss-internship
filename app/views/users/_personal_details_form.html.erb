@@ -3,7 +3,7 @@
     <%= render partial: 'shared/name_fields', locals: { form: name_fields} %>
   <% end %>
   <%= form.fields_for(:email_address, (form.object.email_address || EmailAddress.new)) do |email_address_fields| %>
-    <%= render partial: 'shared/email_address_fields', locals: { form: email_address_fields } %>
+    <%= render partial: 'shared/email_address_fields', locals: { form: email_address_fields, required: true } %>
   <% end %>
   <%= form.submit('Update') %>
 <% end %>

@@ -88,7 +88,11 @@
         <dd class="show-page-detail" data-detail="gender"><%= staff_member.gender.titlecase %></dd>
 
         <dt class="show-page-detail-heading">Date of Birth</dt>
-        <dd class="show-page-detail" data-detail="date-of-birth"><%= staff_member.date_of_birth.to_date.to_s %></dd>
+        <% if staff_member.date_of_birth.present? %>
+          <dd class="show-page-detail" data-detail="date-of-birth"><%= staff_member.date_of_birth.to_date.to_s %></dd>
+        <% else %>
+          <dd class"show-page-detail" data-detail="date-of-birth">Not supplied</dd>
+        <% end %>
         <%= link_to(
               'Edit',
               edit_personal_details_staff_member_path(staff_member),
@@ -99,27 +103,39 @@
       <div class="tab-pane container-fluid" id="contact-tab">
         <dl>
           <dt class="show-page-detail-heading">Email Address</dt>
-          <dd class="show-page-detail" data-detail="email"><%= staff_member.email %></dd>
+          <dd class="show-page-detail" data-detail="email"><%= staff_member.email || 'Not supplied' %></dd>
 
           <dt class="show-page-detail-heading">Phone number</dt>
-          <dd class="show-page-detail" data-detail="phone-number"><%= staff_member.phone_number %></dd>
+          <dd class="show-page-detail" data-detail="phone-number"><%= staff_member.phone_number.present? ? staff_member.phone_number : 'Not supplied' %></dd>
 
           <dt class="show-page-detail-heading">Address</dt>
-          <dd>
-            <div class="show-page-detail" data-detail="address-1"><%= staff_member.address.address_1 %></div>
-            <div class="show-page-detail" data-detail="address-2"><%= staff_member.address.address_2 %></div>
-            <div class="show-page-detail" data-detail="address-3"><%= staff_member.address.address_3 %></div>
-            <div class="show-page-detail" data-detail="address-4"><%= staff_member.address.address_4 %></div>
-          </dd>
-
-          <dt class="show-page-detail-heading">Region</dt>
-          <dd class="show-page-detail" data-detail="region"><%= staff_member.address.region %></dd>
-
-          <dt class="show-page-detail-heading">Country</dt>
-          <dd class="show-page-detail" data-detail="country"><%= staff_member.address.country %></dd>
-
-          <dt class="show-page-detail-heading">Postcode</dt>
-          <dd class="show-page-detail" data-detail="postcode"><%= staff_member.address.postcode %></dd>
+          <% if staff_member.address.present? %>
+            <dd>
+              <% if staff_member.address.address_1.present? %>
+                <dd class="show-page-detail" data-detail="address-1"><%= staff_member.address.address_1 %></dd>
+              <% end %>
+              <% if staff_member.address.address_2.present? %>
+                <dd class="show-page-detail" data-detail="address-2"><%= staff_member.address.address_2 %></dd>
+              <% end %>
+              <% if staff_member.address.address_3.present? %>
+                <dd class="show-page-detail" data-detail="address-3"><%= staff_member.address.address_3 %></dd>
+              <% end %>
+              <% if staff_member.address.address_4.present? %>
+                <dd class="show-page-detail" data-detail="address-4"><%= staff_member.address.address_4 %></dd>
+              <% end %>
+              <% if staff_member.address.region.present? %>
+                <dd  class="show-page-detail" data-detail="region"><%= staff_member.address.region %></dd>
+              <% end %>
+              <% if staff_member.address.country.present? %>
+                <dd  class="show-page-detail" data-detail="country"><%= staff_member.address.country %></dd>
+              <% end %>
+              <% if staff_member.address.postcode.present? %>
+                <dd  class="show-page-detail" data-detail="postcode"><%= staff_member.address.postcode %></dd>
+              <% end %>
+            </dd>
+          <% else %>
+            <dd>Not Supplied</dd>
+          <% end %>
         </dl>
       </div>
     </div>
