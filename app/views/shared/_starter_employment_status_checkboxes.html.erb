@@ -1,0 +1,20 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Starter Employment Status Statement</div>
+  <div class="panel-body">
+    <div>
+      <em>Tick all that apply</em>
+    </div>
+
+    <%= hidden_field_tag(:employment_status_a, "false") %>
+    <%= form.check_box(:employment_status_a, label: EmploymentStatusStatement.text_for_point(:a)) %>
+
+    <%= hidden_field_tag(:employment_status_b, "false") %>
+    <%= form.check_box(:employment_status_b, label: EmploymentStatusStatement.text_for_point(:b)) %>
+
+    <%= hidden_field_tag(:employment_status_c, "false") %>
+    <%= form.check_box(:employment_status_c, label: EmploymentStatusStatement.text_for_point(:c)) %>
+
+    <%= hidden_field_tag(:employment_status_d, "false") %>
+    <%= form.check_box(:employment_status_d, label: EmploymentStatusStatement.text_for_point(:d)) %>
+  </div>
+</div>

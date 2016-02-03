@@ -37,6 +37,10 @@ class StaffMember < ActiveRecord::Base
   validates :staff_type, presence: true
   validates :creator, presence: true
   validates :starts_at, presence: true
+  validates :employment_status_a, inclusion: { in: [true, false], message: 'is required' }
+  validates :employment_status_b, inclusion: { in: [true, false], message: 'is required' }
+  validates :employment_status_c, inclusion: { in: [true, false], message: 'is required' }
+  validates :employment_status_d, inclusion: { in: [true, false], message: 'is required' }
 
   before_validation :normalise_national_insurance_number
 

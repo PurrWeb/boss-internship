@@ -125,6 +125,10 @@ class UsersController < ApplicationController
       :avatar_cache,
       :staff_type,
       :starts_at,
+      :employment_status_a,
+      :employment_status_b,
+      :employment_status_c,
+      :employment_status_d,
       address_attributes: [
         :address_1,
         :address_2,
