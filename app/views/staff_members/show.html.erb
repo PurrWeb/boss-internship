@@ -47,6 +47,17 @@
             <%= "Not Supplied" %>
           <% end %>
         </dd>
+
+        <dt class="show-page-detail-heading">Starter employment status statements</dt>
+        <% employment_status_statement = EmploymentStatusStatement.new(staff_member) %>
+        <% if employment_status_statement.point_list.present? %>
+          <dd class="show-page-detail" data-detail="employment-status-statements">
+            <%= employment_status_statement.point_list.join(', ') %>
+          </dd>
+        <% else %>
+          <dd class="show-page-detail" data-detail="employment-status-statements">_</dd>
+        <% end %>
+
         <%= link_to(
               'Edit',
               edit_employment_details_staff_member_path(staff_member),

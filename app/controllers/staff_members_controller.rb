@@ -90,6 +90,10 @@ class StaffMembersController < ApplicationController
       :avatar,
       :avatar_cache,
       :staff_type,
+      :employment_status_a,
+      :employment_status_b,
+      :employment_status_c,
+      :employment_status_d,
       name_attributes: [
         :first_name,
         :surname
@@ -139,11 +143,15 @@ class StaffMembersController < ApplicationController
         :hours_preference_note,
         :day_perference_note,
         :starts_at,
+        :employment_status_a,
+        :employment_status_b,
+        :employment_status_c,
+        :employment_status_d,
         staff_member_venue_attributes: [:venue_id]
       ).deep_merge(
         staff_type: staff_type_from_params,
         staff_member_venue_attributes: {
-          id: staff_member.staff_member_venue.id
+          id: staff_member.staff_member_venue.try(:id)
         }
       )
   end

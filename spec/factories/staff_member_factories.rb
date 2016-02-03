@@ -12,6 +12,11 @@ FactoryGirl.define do
     creator factory: :user
     starts_at { 1.day.ago }
 
+    employment_status_a false
+    employment_status_b false
+    employment_status_c false
+    employment_status_d false
+
     address
     venue
     staff_type
