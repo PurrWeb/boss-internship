@@ -17,19 +17,19 @@ class Ability
     can :manage, :rotas
 
     can :manage, Venue do |venue|
-      user.admin? || user.venues.include?(venue)
+      user.has_all_venue_access? || user.venues.include?(venue)
     end
 
     can :manage, StaffMember do |staff_member|
-      user.admin? || user.venues.include?(staff_member.venue)
+      user.has_all_venue_access? || user.venues.include?(staff_member.venue)
     end
 
     can :manage, Rota do |rota|
-      user.admin? || user.venues.include?(rota.venue)
+      user.has_all_venue_access? || user.venues.include?(rota.venue)
     end
 
     can :create_staff_member, User do |target_user|
-      user.admin? || user == target_user
+      user.has_all_venue_access? || user == target_user
     end
 
     #

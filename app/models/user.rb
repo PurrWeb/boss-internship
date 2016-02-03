@@ -72,6 +72,10 @@ class User < ActiveRecord::Base
     role == 'manager'
   end
 
+  def has_all_venue_access?
+    dev? || admin?
+  end
+
   def status
     enabled? ? 'Active' : 'Disabled'
   end
