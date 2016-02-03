@@ -47,11 +47,7 @@ class RotasController < ApplicationController
   end
 
   def accessible_venues_for(user)
-    if user.manager?
-      user.venues
-    else
-      Venue.all
-    end
+    AccessibleVenuesQuery.new(user).all
   end
 
   def redirect_params
