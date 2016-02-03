@@ -143,7 +143,7 @@ class StaffMembersController < ApplicationController
       ).deep_merge(
         staff_type: staff_type_from_params,
         staff_member_venue_attributes: {
-          id: staff_member.staff_member_venue.id
+          id: staff_member.staff_member_venue.try(:id)
         }
       )
   end
