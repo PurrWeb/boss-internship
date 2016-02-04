@@ -5,8 +5,8 @@
     <%= image_tag(form.object.avatar_url, class: "avatar_preview", height: 120, width: 120) %>
   <% end %>
   <%= form.label("Avatar") %>
-  <input type="hidden" id="base64Image" name="staff_member[avatar_base64]" />
-  <%= react_component("StaffMemberFormAvatarImage", dataUrlInputSelector:"#base64Image", selectedImageSelector: ".avatar_preview", allowReplaceImage: true) %>
+  <%= form.hidden_field(:avatar_base64, id: 'staff_member_avatar_base64') %>
+  <%= react_component("StaffMemberFormAvatarImage", dataUrlInputSelector:"#staff_member_avatar_base64", selectedImageSelector: ".avatar_preview", allowReplaceImage: true) %>
 
   <button type="submit" class="btn btn-default">Submit</button>
 <% end %>
