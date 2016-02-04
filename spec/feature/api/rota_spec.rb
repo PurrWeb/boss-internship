@@ -109,6 +109,25 @@ RSpec.describe 'Api access' do
     end
   end
 
+  describe '#publish' do
+    let(:url) do
+      url_helpers.publish_api_v1_rotas_path(
+        venue_id: venue.id,
+        start_date: UIRotaDate.format(start_date),
+        end_date: UIRotaDate.format(end_date)
+      )
+    end
+    let(:response) { post(url) }
+
+    let(:venue) { FactoryGirl.create(:venue) }
+    let(:start_date) { Time.now.beginning_of_week.to_date }
+    let(:end_date) { Time.now.end_of_week.to_date }
+
+    specify 'should be a success' do
+      expect(response.status).to eq(200)
+    end
+  end
+
   private
   def app
     Rails.application

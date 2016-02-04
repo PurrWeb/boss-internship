@@ -11,5 +11,9 @@ FactoryGirl.define do
     trait :finished do
       to_state :finished
     end
+
+    trait :published do
+      to_state :published
+    end
   end
 end

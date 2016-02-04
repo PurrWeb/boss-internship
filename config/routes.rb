@@ -80,6 +80,9 @@ Rails.application.routes.draw do
           post :mark_in_progress
           post :mark_finished
         end
+        collection do
+          post :publish
+        end
       end
     end
   end

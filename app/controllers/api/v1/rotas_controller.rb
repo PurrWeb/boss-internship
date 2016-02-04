@@ -23,6 +23,27 @@ module Api
         }
       end
 
+      def publish
+        start_date = start_date_from_params
+        end_date = end_date_from_params
+        venue = venue_from_params
+
+        UIRotaDate.assert_date_range_valid(start_date, end_date)
+
+        rotas = (start_date..end_date).map do |date|
+          Rota.find_or_initialize_by(
+            date: date,
+            venue: venue
+          ).tap do |rota|
+            rota.creator ||= current_user
+          end
+        end
+
+        PublishRotas.new(rotas: rotas).call
+
+        render json: {}
+      end
+
       def mark_in_progress
         rota = Rota.find(params[:id])
         authorize! :manage, rota
@@ -60,7 +81,7 @@ module Api
 
       def end_date_from_params
         if params[:end_date].present?
-          UIRotaDate.parse(parse[:end_date])
+          UIRotaDate.parse(params[:end_date])
         end
       end
     end
