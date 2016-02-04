@@ -2,6 +2,7 @@ import importedCreateApiRequestAction from "./create-api-request-action"
 import _ from "underscore"
 import moment from "moment"
 import * as backendData from "~redux/process-backend-data"
+import {apiRoutes, API_ROOT} from "~lib/routes"
 
 export const actionTypes = {};
 const createApiRequestAction = function(requestType, makeRequest){
@@ -24,7 +25,7 @@ function makeApiRequest(apiOptions){
         }
 
         $.ajax({
-           url: "/api/v1/" + options.path,
+           url: API_ROOT + options.path,
            method: options.method,
            data: options.data
         }).then(function(responseData){    
@@ -43,11 +44,11 @@ function makeApiRequest(apiOptions){
 export const addRotaShift = createApiRequestAction(
     "ADD_SHIFT",
     makeApiRequest({
-        method: "POST",
+        method: apiRoutes.addShift.method,
         path: function(options, state) {
             var rotaId = state.pageOptions.displayedRota;
             var rota = state.rotas[rotaId];
-            return "venues/" + rota.venue.id + "/rotas/" + moment(rota.date).format("DD-MM-YYYY") + "/rota_shifts"
+            return apiRoutes.addShift.getPath(rota.venue.id, rota.date);
         },
         data: (options) => options.shift,
         getSuccessActionData: function(responseData) {
@@ -71,8 +72,8 @@ export function replaceAllShifts (options) {
 export const updateRotaShift = createApiRequestAction(
     "UPDATE_SHIFT",
     makeApiRequest({
-        path: (options) => "rota_shifts/" + options.shift.shift_id,
-        method: "PATCH",
+        path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shift.shift_id}),
+        method: apiRoutes.updateShift.method,
         data: function(options, state){
             options.shift.staff_member_id = state.rotaShifts.items[options.shift.shift_id].staff_member.id;
             return options.shift;
@@ -89,13 +90,13 @@ export const updateRotaShift = createApiRequestAction(
 export const deleteRotaShift = createApiRequestAction(
     "DELETE_SHIFT",
     makeApiRequest({
-        method: "DELETE",
+        method: apiRoutes.deleteShift.method,
         validateOptions: function(options){
             if (options.shift_id === undefined) {
                 throw "Need to specify shift_id that should be deleted"
             }
         },
-        path: (options) => "rota_shifts/" + options.shift_id,
+        path: (options) => apiRoutes.deleteShift.getPath({shiftId: options.shift_id}),
         getSuccessActionData: function(responseData, requestOptions) {
             return {shift_id: requestOptions.shift_id}
         }
