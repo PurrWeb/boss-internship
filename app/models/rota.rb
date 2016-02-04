@@ -12,6 +12,8 @@ class Rota < ActiveRecord::Base
   validates :venue, presence: true
   validates :status, presence: true
 
+  delegate :transition_to!, to: :state_machine
+
   def status
     state_machine.current_state
   end

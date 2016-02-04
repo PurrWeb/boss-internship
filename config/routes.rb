@@ -75,7 +75,11 @@ Rails.application.routes.draw do
       resources :staff_members, only: :show
       resources :staff_types,   only: :show
       resources :rota_shifts,   only: [:show, :destroy, :update]
-      resources :rotas,         only: :show
+      resources :rotas,         only: :show do
+        member do
+          post :mark_finished
+        end
+      end
     end
   end
 

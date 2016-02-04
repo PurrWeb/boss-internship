@@ -23,6 +23,14 @@ module Api
         }
       end
 
+      def mark_finished
+        rota = Rota.find(params[:id])
+        authorize! :manage, rota
+
+        rota.transition_to!(:finished)
+        render 'show', locals: { rota: rota }
+      end
+
       private
       def rota_date_from_params
         UIRotaDate.parse(params.fetch(:id))
