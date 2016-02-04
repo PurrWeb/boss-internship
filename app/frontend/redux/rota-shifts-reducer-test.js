@@ -26,7 +26,12 @@ describe("RotaShiftsReducer", function(){
             shift: {id: 123, staff_id: 1000}
         };
         var expectedResultState = {
-            items: [{id: 123, staff_id: 1000}],
+            items: {
+                123: {
+                    id: 123,
+                    staff_id: 1000
+                }
+            }
         }
 
         expect(RotaShiftsReducer(initialState, action)).toEqual(expectedResultState);
@@ -34,12 +39,14 @@ describe("RotaShiftsReducer", function(){
 
     it("Can update a shift", function(){
         var initialState = {
-            items: [{
-                id: 123,
-                staff_id: 1000,
-                starts_at: new Date(2015, 0, 1, 9, 0, 0),
-                ends_at: new Date(2015, 0, 1, 14, 0, 0)
-            }]
+            items: {
+                123: {
+                    id: 123,
+                    staff_id: 1000,
+                    starts_at: new Date(2015, 0, 1, 9, 0, 0),
+                    ends_at: new Date(2015, 0, 1, 14, 0, 0)
+                }
+            }
         }
 
         var newStartsAt = new Date(2015, 0, 1, 10, 0, 0);
@@ -53,12 +60,14 @@ describe("RotaShiftsReducer", function(){
             }
         };
         var expectedResultState = {
-            items: [{
-                id: 123,
-                staff_id: 1000,
-                starts_at: newStartsAt,
-                ends_at: newEndsAt
-            }]
+            items: {
+                123: {
+                    id: 123,
+                    staff_id: 1000,
+                    starts_at: newStartsAt,
+                    ends_at: newEndsAt
+                }
+            }
         }
 
         expect(RotaShiftsReducer(initialState, action)).toEqual(expectedResultState);
@@ -75,7 +84,7 @@ describe("RotaShiftsReducer", function(){
             shift_id: 123
         }
         var expectedResultState = {
-            items: []
+            items: {}
         }
 
         expect(RotaShiftsReducer(initialState, action)).toEqual(expectedResultState);
