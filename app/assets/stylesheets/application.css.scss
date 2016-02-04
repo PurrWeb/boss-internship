@@ -22,6 +22,7 @@
  @import "bootstrap";
  @import "bootstrap/theme";
  @import "../../../node_modules/react-select/dist/react-select";
+ @import "../../../node_modules/cropperjs/dist/cropper";
 
 
 label:not(.force-not-required).required:after {
@@ -36,4 +37,13 @@ label:not(.force-not-required).required:after {
 .avatar-image_medium {
   width: 150px;
   height: 150px;
+}
+
+.staff-member-page-staff-image {
+    position: relative;
+    a {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+    }
 }

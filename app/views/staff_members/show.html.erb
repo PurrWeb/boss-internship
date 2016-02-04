@@ -1,6 +1,9 @@
 <div class="media">
   <div class="media-left">
-    <img class="avatar-image avatar-image_medium" src="<%= staff_member.avatar.medium.url %>" />
+    <div class="staff-member-page-staff-image">
+      <img class="avatar-image avatar-image_medium" src="<%= staff_member.avatar.medium.url %>" />
+      <%= link_to('Edit', edit_avatar_staff_member_path(staff_member), class: "btn btn-primary btn-xs") %>
+    </div>
   </div>
   <div class="media-body">
     <h1 class="media-heading"><%= staff_member.full_name %></h1>

@@ -61,6 +61,8 @@ GEM
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
+    carrierwave-data-uri (0.0.2)
+      carrierwave
     chosen-rails (1.4.3)
       coffee-rails (>= 3.2)
       compass-rails (>= 2.0.4)
@@ -387,6 +389,7 @@ DEPENDENCIES
   cancan
   capybara
   carrierwave (~> 0.10)
+  carrierwave-data-uri
   chosen-rails
   clockwork
   database_cleaner

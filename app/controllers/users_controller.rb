@@ -113,7 +113,7 @@ class UsersController < ApplicationController
   end
 
   def staff_member_params(user)
-    params.require(:staff_member).permit(
+    result = params.require(:staff_member).permit(
       :pin_code,
       :gender,
       :phone_number,
@@ -121,8 +121,7 @@ class UsersController < ApplicationController
       :national_insurance_number,
       :hours_preference_note,
       :day_perference_note,
-      :avatar,
-      :avatar_cache,
+      :avatar_base64,
       :staff_type,
       :starts_at,
       :employment_status_a,
@@ -145,6 +144,12 @@ class UsersController < ApplicationController
       email_address: user.email_address,
       creator: current_user
     )
+
+    if result[:avatar_base64].present?
+      result = result.merge(avatar_data_uri: result[:avatar_base64])
+    end
+
+    result
   end
 
   def staff_type_from_params

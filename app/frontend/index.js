@@ -15,3 +15,6 @@ registerComponent("ClockInOutApp", ClockInOutApp)
 
 import RotaOverviewApp from "./apps/rota-overview/rota-overview-app"
 registerComponent("RotaOverviewApp", RotaOverviewApp)
+
+import StaffMemberFormAvatarImage from "./apps/staff-member-form/staff-member-form-avatar-image"
+registerComponent("StaffMemberFormAvatarImage", StaffMemberFormAvatarImage)
