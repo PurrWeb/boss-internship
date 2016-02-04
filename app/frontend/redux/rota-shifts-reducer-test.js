@@ -54,7 +54,7 @@ describe("RotaShiftsReducer", function(){
         var action = {
             type: "UPDATE_SHIFT_SUCCESS",
             shift: {
-                shift_id: 123,
+                id: 123,
                 starts_at: newStartsAt,
                 ends_at: newEndsAt
             }
@@ -75,9 +75,11 @@ describe("RotaShiftsReducer", function(){
 
     it("Can delete a shift", function(){
         var initialState = {
-            items: [{
-                id: 123
-            }]
+            items: {
+                123: {
+                    id: 123
+                }
+            }
         };
         var action = {
             type: "DELETE_SHIFT_SUCCESS",
