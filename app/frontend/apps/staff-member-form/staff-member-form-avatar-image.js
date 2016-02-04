@@ -5,7 +5,6 @@ import AvatarPreview from "~components/avatar-preview"
 
 export default class StaffMemberFormAvatarImage extends React.Component {
     static propTypes = {
-        allowReplaceImage: React.PropTypes.bool,
         dataUrlInputSelector: React.PropTypes.string.isRequired,
         selectedImageSelector: React.PropTypes.string.isRequired
     }
@@ -27,10 +26,7 @@ export default class StaffMemberFormAvatarImage extends React.Component {
     render(){
         var existingImage = this.getExistingImage();
 
-        var staffImageInput = null;
-        if (!existingImage || this.props.allowReplaceImage){
-            staffImageInput = this.getStaffImageInput();
-        }
+        var staffImageInput = this.getStaffImageInput();
 
         var hasExistingImageButNotPickedReplacement = existingImage !== null && this.state.pickedImage === null;
         var avatarPreview = null;
