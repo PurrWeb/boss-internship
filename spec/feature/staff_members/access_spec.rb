@@ -22,6 +22,14 @@ RSpec.describe 'Staff member pages access' do
       end
     end
 
+    context 'ops manager' do
+      let(:user) { FactoryGirl.create(:user, :ops_manager) }
+
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
+      end
+    end
+
     context 'admin' do
       let(:user) { FactoryGirl.create(:user, :admin) }
 
@@ -61,6 +69,14 @@ RSpec.describe 'Staff member pages access' do
       end
     end
 
+    context 'ops manager' do
+      let(:user) { FactoryGirl.create(:user, :ops_manager) }
+
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
+      end
+    end
+
     context 'admin' do
       let(:user) { FactoryGirl.create(:user, :admin) }
 
@@ -83,6 +99,14 @@ RSpec.describe 'Staff member pages access' do
 
     context 'manager' do
       let(:user) { FactoryGirl.create(:user, :manager) }
+
+      specify 'should have access' do
+        expect(get(url).status).to eq(ok_status)
+      end
+    end
+
+    context 'ops manager' do
+      let(:user) { FactoryGirl.create(:user, :ops_manager) }
 
       specify 'should have access' do
         expect(get(url).status).to eq(ok_status)
@@ -116,6 +140,14 @@ RSpec.describe 'Staff member pages access' do
 
     context 'manager' do
       let(:user) { FactoryGirl.create(:user, :manager) }
+
+      specify 'should have access' do
+        expect(post(url, params).status).to eq(ok_status)
+      end
+    end
+
+    context 'ops manager' do
+      let(:user) { FactoryGirl.create(:user, :ops_manager) }
 
       specify 'should have access' do
         expect(post(url, params).status).to eq(ok_status)

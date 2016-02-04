@@ -1,20 +1,32 @@
 class StaffMemberIndexFilter
-  def initialize(params)
+  def initialize(user:, params:)
     normalised_params = (params || {}).reverse_merge(default_params)
+    @user = user
     @staff_type = StaffType.find_by(id: normalised_params.fetch(:staff_type))
     @venue = Venue.find_by(id: normalised_params.fetch(:venue))
   end
 
   attr_reader :staff_type, :venue
 
+  def accessible_venues
+    @accessible_venues ||= AccessibleVenuesQuery.new(user).all
+  end
+
+  def accessible_staff_types
+    StaffType.all
+  end
+
   def query
     @query ||= StaffMemberIndexQuery.new(
       staff_type: staff_type,
-      venue: venue
+      venue: venue,
+      accessible_venues: accessible_venues
     )
   end
 
   private
+  attr_reader :user
+
   def default_params
     {
       staff_type: nil,

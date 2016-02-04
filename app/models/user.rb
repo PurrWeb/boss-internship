@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  ROLES = ['admin', 'manager', 'dev']
+  ROLES = ['admin', 'manager', 'dev', 'ops_manager']
 
   has_many :venues, through: :venue_users
   has_many :venue_users
@@ -70,6 +70,14 @@ class User < ActiveRecord::Base
 
   def manager?
     role == 'manager'
+  end
+
+  def ops_manager?
+    role == 'ops_manager'
+  end
+
+  def has_all_venue_access?
+    dev? || admin? || ops_manager?
   end
 
   def status

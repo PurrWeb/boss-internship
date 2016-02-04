@@ -2,7 +2,10 @@ class StaffMembersController < ApplicationController
   def index
     authorize! :manage, :staff_members
 
-    filter = StaffMemberIndexFilter.new(params[:filter])
+    filter = StaffMemberIndexFilter.new(
+      user: current_user,
+      params: params[:filter]
+    )
     staff_members = filter.query.all
 
     render locals: {
