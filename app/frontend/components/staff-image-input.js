@@ -9,33 +9,71 @@ const STAFF_IMAGE_MAX_WIDTH = 600;
 
 export default class StaffImageInput extends React.Component {
     static propTypes = {
-        existingImage: React.PropTypes.string
+        
     }
     constructor(props){
         super(props);
         this.state = {
             sourceImage: null,
-            croppedImage: null
+            croppedImage: null,
+            imageDimensions: null
         };
     }
-    componentDidMount(){
-        if (this.props.existingImage) {
-            this.setState({sourceImage: this.props.existingImage});
-        }
-    }
     render(){
-
         return <div className="row" style={{maxWidth: 600, marginBottom: 10}}>
             <div className="col-md-6">
                 {this.getImagePicker()}
                 {this.getImageCropper()}
             </div>
             <div className="col-md-6">
-                {this.getAvatarPreview()}
-                {this.getImageValidationMessage()}
-                {this.getResetButtton()}
+                {this.getCroppedImageUi()}
             </div>
         </div>
+    }
+    getCroppedImageUi(){
+        if (!this.state.croppedImage) {
+            return null;
+        }
+        return <div>
+            {this.getAvatarPreview()}
+            {this.getImageValidationMessage()}
+            {this.getResetButtton()}
+            &nbsp;
+            {this.getOkButton()}
+        </div>
+    }
+    getOkButton(){
+        var classes = ["btn btn-primary"];
+        if (!this.imageDimensionsAreValid(this.state.imageDimensions)){
+            classes.push("disabled");
+        }
+
+        return <a
+            className={classes.join(" ")}
+            onClick={() => this.confirmSelectedImage()}>
+            OK
+        </a>
+    }
+    confirmSelectedImage(){
+        var imageDimensions = this.state.imageDimensions;
+        var dataUrl = this.state.croppedImage;
+
+        if (this.imageDimensionsAreValid(imageDimensions)){
+            if (imageDimensions.width > STAFF_IMAGE_MAX_WIDTH) {
+                resizeImage(
+                    dataUrl,
+                    STAFF_IMAGE_MAX_WIDTH,
+                    STAFF_IMAGE_MAX_WIDTH,
+                    (resizedImageDataUrl) => this.props.onImageCropped(resizedImageDataUrl)
+                )
+                
+            } else {
+                this.props.onImageCropped(dataUrl);        
+            }
+            
+        } else {
+            throw "Selected image isn't valid."
+        }
     }
     getImagePicker(){
         if (this.state.sourceImage) {
@@ -45,10 +83,6 @@ export default class StaffImageInput extends React.Component {
             onChange={(dataUrl) => this.setState({sourceImage: dataUrl})} />
     }
     getImageValidationMessage(){
-        if (!this.state.imageDimensions || !this.state.croppedImage) {
-            return null
-        }
-
         var validation = this.validateImageDimensions(this.state.imageDimensions);
         if (validation.isValid) {
             return null;
@@ -74,22 +108,6 @@ export default class StaffImageInput extends React.Component {
             croppedImage: dataUrl,
             imageDimensions
         })
-        if (this.imageDimensionsAreValid(imageDimensions)){
-            if (imageDimensions.width > STAFF_IMAGE_MAX_WIDTH) {
-                resizeImage(
-                    dataUrl,
-                    STAFF_IMAGE_MAX_WIDTH,
-                    STAFF_IMAGE_MAX_WIDTH,
-                    (resizedImageDataUrl) => this.props.onImageCropped(resizedImageDataUrl)
-                )
-                
-            } else {
-                this.props.onImageCropped(dataUrl);        
-            }
-            
-        } else {
-            this.props.onImageCropped(null);
-        }
     }
     imageDimensionsAreValid(imageDimensions){
         if (imageDimensions === null) {
@@ -104,7 +122,7 @@ export default class StaffImageInput extends React.Component {
 
         var message = "";
         if (imageDimensions.width < STAFF_IMAGE_MIN_WIDTH) {
-            message = `The image (${squareDimensions(imageDimensions.width)}) is too small,
+            message = `The selected avatar (${squareDimensions(imageDimensions.width)}) is too small,
                 it needs to be at least ${squareDimensions(STAFF_IMAGE_MIN_WIDTH)}. Zoom
                 out or select a new image.`;
         }
@@ -118,22 +136,16 @@ export default class StaffImageInput extends React.Component {
         }
     }
     getResetButtton(){
-        if (!this.state.sourceImage) {
-            return null;
-        }
         return <button
             className="btn btn-default"
             onClick={() => {
                 this.setCroppedImage(null);
                 this.setState({sourceImage: null});
             }}>
-            Use a different image
+            Cancel
         </button>
     }
     getAvatarPreview(){
-        if (!this.state.croppedImage) {
-            return null;
-        }
         return <div>
             Selected avatar:<br/>
             <AvatarPreview src={this.state.croppedImage} />
