@@ -23,6 +23,14 @@ module Api
         }
       end
 
+      def mark_in_progress
+        rota = Rota.find(params[:id])
+        authorize! :manage, rota
+
+        rota.transition_to!(:in_progress)
+        render 'show', locals: { rota: rota }
+      end
+
       def mark_finished
         rota = Rota.find(params[:id])
         authorize! :manage, rota

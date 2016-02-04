@@ -77,6 +77,7 @@ Rails.application.routes.draw do
       resources :rota_shifts,   only: [:show, :destroy, :update]
       resources :rotas,         only: :show do
         member do
+          post :mark_in_progress
           post :mark_finished
         end
       end
