@@ -12,6 +12,7 @@ describe('StaffListItem', function() {
     var staff = {
         first_name: "John",
         surname: "Doe",
+        staff_type: {id: 3333}
     };
 
     it("shows the person's first and last name", function(){

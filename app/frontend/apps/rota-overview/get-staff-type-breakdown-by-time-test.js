@@ -44,6 +44,7 @@ describe("getStaffTypeBreakdownByTime", function() {
                 staff_type: {id: "kitchen"}
             }
         ];
+        staff = _(staff).indexBy("id");
         var expectedResult = [
             {
                 timeOffset: 0,
