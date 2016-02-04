@@ -3,8 +3,6 @@ import StaffImageInput from "~components/staff-image-input"
 import $ from "jquery"
 import AvatarPreview from "~components/avatar-preview"
 
-const NOT_YET_DETECTED = "NOT_YET_DETECTED";
-
 export default class StaffMemberFormAvatarImage extends React.Component {
     constructor(props){
         super(props);

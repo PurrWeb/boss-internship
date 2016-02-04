@@ -48,7 +48,12 @@ export default class ImageCropper extends React.Component {
         this.cropper.destroy();
     }
     callOnChange(cropper){
-        var dataUrl = cropper.getCroppedCanvas().toDataURL("image/jpeg");
-        this.props.onChange(dataUrl);
+        var croppedCanvas = cropper.getCroppedCanvas();
+        var dataUrl = croppedCanvas.toDataURL("image/jpeg");
+        var imageDimensions = {
+            width: croppedCanvas.width,
+            height: croppedCanvas.height
+        };
+        this.props.onChange(dataUrl, imageDimensions);
     }
 }
