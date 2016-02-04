@@ -28,10 +28,6 @@ class Rota < ActiveRecord::Base
     state_machine.current_state.to_sym == :published
   end
 
-  def self.url_date_format
-    '%d-%m-%Y'
-  end
-
   def start_time
     date.beginning_of_day.utc + 8.hours
   end

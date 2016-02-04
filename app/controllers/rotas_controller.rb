@@ -7,7 +7,7 @@ class RotasController < ApplicationController
       end_date = end_date_from_params
       venue = venue_from_params
 
-      assert_date_range_valid(start_date, end_date)
+      UIRotaDate.assert_date_range_valid(start_date, end_date)
 
       rotas = (start_date..end_date).map do |date|
         Rota.find_or_initialize_by(
@@ -60,7 +60,7 @@ class RotasController < ApplicationController
 
   def start_date_from_params
     if params[:start_date].present?
-      Date.strptime(params[:start_date], Rota.url_date_format)
+      UIRotaDate.params(params[:start_date])
     end
   end
 
@@ -72,17 +72,17 @@ class RotasController < ApplicationController
   end
 
   def default_start_date
-    Time.now.beginning_of_week.strftime(Rota.url_date_format)
+    UIRotaDate.format(Time.now.beginning_of_week)
   end
 
   def end_date_from_params
     if params[:end_date].present?
-      Date.strptime(params[:end_date], Rota.url_date_format)
+      UIRotaDate.params(params[:end_date])
     end
   end
 
   def default_end_date
-    Time.now.end_of_week.strftime(Rota.url_date_format)
+    UIRotaDate.format(Time.now.end_of_week)
   end
 
   def default_venue
@@ -94,7 +94,7 @@ class RotasController < ApplicationController
   end
 
   def rota_date_from_params
-    Time.strptime(params.fetch(:id), Rota.url_date_format)
+    UIRotaDate.parse(params.fetch(:id))
   end
 
   def venue_from_params

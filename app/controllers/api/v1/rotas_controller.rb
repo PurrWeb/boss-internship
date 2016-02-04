@@ -25,11 +25,27 @@ module Api
 
       private
       def rota_date_from_params
-        Time.strptime(params.fetch(:id), Rota.url_date_format)
+        UIRotaDate.parse(params.fetch(:id))
       end
 
       def venue_from_params
         Venue.find(params[:venue_id])
+      end
+
+      def start_date_from_params
+        if params[:start_date].present?
+          UIRotaDate.parse(params[:start_date])
+        end
+      end
+
+      def venue_from_params
+        Venue.find_by(id: params[:venue_id])
+      end
+
+      def end_date_from_params
+        if params[:end_date].present?
+          UIRotaDate.parse(parse[:end_date])
+        end
       end
     end
   end
