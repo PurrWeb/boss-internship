@@ -15,3 +15,7 @@
 ## To pull down data from production
 
 `bundle exec rake data:load_production_dump`
+
+## Running front-end tests
+
+Run `npm test`.
