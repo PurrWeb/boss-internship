@@ -1,16 +1,7 @@
 import expect from "expect"
-import getStaffTypeBreakdownByTime, { _getSamplingTimeOffsetsForDay } from "./rota-overview-data"
+import getStaffTypeBreakdownByTime from "./get-staff-type-breakdown-by-time"
 import RotaDate from "~lib/rota-date"
 import _ from "underscore"
-
-describe("_getSamplingTimeOffsetsForDay", function(){
-    it("determines the sampling times to use based on the sampling granularity", function(){
-        var expectedOffsetsInMinutes = [
-            0, 4, 8, 12, 16, 20, 24
-        ].map((x) => x * 60);
-        expect(_getSamplingTimeOffsetsForDay(4 * 60)).toEqual(expectedOffsetsInMinutes);
-    })
-})
 
 describe("getStaffTypeBreakdownByTime", function() {
     var rotaDate = new RotaDate(new Date(2015,10, 1, 14, 0, 0));
@@ -24,17 +15,17 @@ describe("getStaffTypeBreakdownByTime", function() {
         }
         var shifts = [
             {
-                staff_id: 1,
+                staff_member: {id: 1},
                 starts_at: rotaDate.getDateFromShiftStartTime(8, 0),
                 ends_at: rotaDate.getDateFromShiftEndTime(22, 0)
             },
             {
-                staff_id: 2,
+                staff_member: {id: 2},
                 starts_at: rotaDate.getDateFromShiftStartTime(16, 0),
                 ends_at: rotaDate.getDateFromShiftEndTime(2, 30)
             },
             {
-                staff_id: 3,
+                staff_member: {id: 3},
                 starts_at: rotaDate.getDateFromShiftStartTime(14, 0),
                 ends_at: rotaDate.getDateFromShiftEndTime(8, 0)
             }
@@ -42,17 +33,18 @@ describe("getStaffTypeBreakdownByTime", function() {
         var staff = [
             {
                 id: 1,
-                staff_type: "bar_back"
+                staff_type: {id: "bar_back"}
             },
             {
                 id: 2,
-                staff_type: "bar_back"
+                staff_type: {id: "bar_back"}
             },
             {
                 id: 3,
-                staff_type: "kitchen"
+                staff_type: {id: "kitchen"}
             }
         ];
+        staff = _(staff).indexBy("id");
         var expectedResult = [
             {
                 timeOffset: 0,

@@ -9,10 +9,10 @@ const createApiRequestAction = function(requestType, makeRequest){
 }
 
 function makeApiRequest(apiOptions){
-    return function(requestOptions, success, error, store) {
+    return function(requestOptions, success, error, getState) {
         function resolveFunctionParameter(optionsKey){
             if (typeof options[optionsKey] === "function") {
-                options[optionsKey] = options[optionsKey](requestOptions, store.getState());
+                options[optionsKey] = options[optionsKey](requestOptions, getState());
             }
         };
         var options = _.clone(apiOptions);
