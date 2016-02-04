@@ -9,7 +9,10 @@ const STAFF_IMAGE_MAX_WIDTH = 600;
 
 export default class StaffImageInput extends React.Component {
     static propTypes = {
-        
+        // called when user clicks OK button
+        onImageConfirmed: React.PropTypes.func.isRequired,
+        // called after user selected a file from the file picker
+        onPickedImageChanged: React.PropTypes.func.isRequired
     }
     constructor(props){
         super(props);
@@ -50,7 +53,11 @@ export default class StaffImageInput extends React.Component {
 
         return <a
             className={classes.join(" ")}
-            onClick={() => this.confirmSelectedImage()}>
+            onClick={() => {
+                    this.confirmSelectedImage()
+                    this.props.onPickedImageChanged(null);
+                }
+            }>
             OK
         </a>
     }
@@ -59,16 +66,17 @@ export default class StaffImageInput extends React.Component {
         var dataUrl = this.state.croppedImage;
 
         if (this.imageDimensionsAreValid(imageDimensions)){
+            this.reset();
             if (imageDimensions.width > STAFF_IMAGE_MAX_WIDTH) {
                 resizeImage(
                     dataUrl,
                     STAFF_IMAGE_MAX_WIDTH,
                     STAFF_IMAGE_MAX_WIDTH,
-                    (resizedImageDataUrl) => this.props.onImageCropped(resizedImageDataUrl)
+                    (resizedImageDataUrl) => this.props.onImageConfirmed(resizedImageDataUrl)
                 )
                 
             } else {
-                this.props.onImageCropped(dataUrl);        
+                this.props.onImageConfirmed(dataUrl);        
             }
             
         } else {
@@ -80,7 +88,12 @@ export default class StaffImageInput extends React.Component {
             return null;
         }
         return <DataUrlImagePicker
-            onChange={(dataUrl) => this.setState({sourceImage: dataUrl})} />
+            onChange={
+                (dataUrl) => {
+                    this.setState({sourceImage: dataUrl});
+                    this.props.onPickedImageChanged(dataUrl)
+                }
+            } />
     }
     getImageValidationMessage(){
         var validation = this.validateImageDimensions(this.state.imageDimensions);
@@ -139,11 +152,15 @@ export default class StaffImageInput extends React.Component {
         return <button
             className="btn btn-default"
             onClick={() => {
-                this.setCroppedImage(null);
-                this.setState({sourceImage: null});
+                this.reset()
             }}>
             Cancel
         </button>
+    }
+    reset(){
+        this.setCroppedImage(null);
+        this.setState({sourceImage: null});
+        this.props.onPickedImageChanged(null);
     }
     getAvatarPreview(){
         return <div>
