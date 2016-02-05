@@ -64,7 +64,7 @@ export default class RotaOverviewView extends Component {
         var datum = this.getChartData(breakdown);
 
         return <div className="rota-overview-chart">
-            <NVD3Chart options={{stacked: true}} id="barChart" type="multiBarChart" datum={datum} x="label" y="value"/>
+            <NVD3Chart options={{stacked: true}} id="barChart" type="multiBarChart" datum={datum} x="label" y="value" />
         </div>
     }
     getRotaDate(){
@@ -99,7 +99,7 @@ export default class RotaOverviewView extends Component {
             var values = _(breakdown).map(function(item){
                 return {
                     value: item.shiftsByStaffType[staffType].length,
-                    label: item.date.toString()
+                    label: moment(item.date).format("HH:mm")
                 }
             });
             series.push({
