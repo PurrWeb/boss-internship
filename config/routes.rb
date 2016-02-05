@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       post :update_personal_details
       get :edit_avatar
       post :update_avatar
+      post :create_holiday
     end
   end
 

@@ -24,7 +24,8 @@ class StaffMembersController < ApplicationController
 
     render locals: {
       staff_member: staff_member,
-      active_tab: active_tab_from_params
+      active_tab: active_tab_from_params,
+      holiday: Holiday.new
     }
   end
 
@@ -111,6 +112,21 @@ class StaffMembersController < ApplicationController
   end
   helper_method :tab_class
 
+  def create_holiday
+    staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
+    holiday = Holiday.new(staff_member: staff_member, creator: current_user)
+
+    if holiday.update_attributes(holiday_params)
+      flash[:success] = "Holiday added successfully"
+      redirect_to staff_member_path(staff_member, tab: 'holidays')
+    else
+      flash.now[:error] = "There was a problem creating this holiday"
+      render 'show', locals: { staff_member: staff_member, holiday: holiday }
+    end
+  end
+
   private
   def active_tab_from_params
     tab_from_params = params['tab']
@@ -125,6 +141,16 @@ class StaffMembersController < ApplicationController
       'contact-details',
       'holidays'
     ]
+  end
+
+  def holiday_params
+    params.
+      require(:holiday).
+      permit(
+        :start_date,
+        :end_date,
+        :holiday_type
+      )
   end
 
   def staff_member_params
