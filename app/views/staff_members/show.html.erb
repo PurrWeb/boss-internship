@@ -11,15 +11,25 @@
 </div
 
 <div class="container-fluid">
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a data-target="#employment-tab" data-toggle="tab">Employment Details</a></li>
-    <li role="presentation"><a data-target="#account-tab" data-toggle="tab">Account Details</a></li>
-    <li role="presentation"><a data-target="#personal-tab" data-toggle="tab">Personal Details</a></li>
-    <li role="presentation"><a data-target="#contact-tab" data-toggle="tab">Contact Details</a></li>
+  <ul class="nav nav-tabs staff-member-nav-tabs" role="tablist">
+    <li role="presentation" class="<%= tab_class('employment-details', active_tab) %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'employment-details') %>" data-target="#employment-tab">
+        Employment Details
+      </a>
+    </li>
+    <li role="presentation" class="<%= tab_class('account-details', active_tab) %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'account-details') %>" data-target="#account-tab">Account Details</a>
+    </li>
+    <li role="presentation" class="<%= "active" if active_tab == 'personal-details' %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'personal-details') %>" data-target="#personal-tab">Personal Details</a>
+    </li>
+    <li role="presentation" class="<%= tab_class('contact-details', active_tab) %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'contact-details') %>" data-target="#contact-tab">Contact Details</a>
+    </li>
   </ul>
 
   <div class="tab-content">
-    <div class="tab-pane container-fluid active" id="employment-tab">
+    <div class="tab-pane container-fluid <%= tab_class('employment-details', active_tab) %>" id="employment-tab">
       <dl>
         <dt class="show-page-detail-heading">Venue</dt>
         <dd class="show-page-detail" data-detail="venue">
@@ -69,7 +79,7 @@
       </dl>
     </div>
 
-    <div class="tab-pane container-fluid" id="account-tab">
+    <div class="tab-pane container-fluid <%= tab_class('account-details', active_tab) %>" id="account-tab">
       <dt class="show-page-detail-heading">Created</dt>
       <dd class="show-page-detail" data-detail="created-at"><%= staff_member.created_at.to_date.to_s %></dd>
 
@@ -93,7 +103,7 @@
       <% end %>
     </div>
 
-    <div class="tab-pane container-fluid" id="personal-tab">
+    <div class="tab-pane container-fluid <%= tab_class('personal-details', active_tab) %>" id="personal-tab">
       <dl>
         <dt class="show-page-detail-heading">Name</dt>
         <dd class="show-page-detail" data-detail="name"><%= staff_member.full_name %></dd>
@@ -114,7 +124,7 @@
             ) %>
       </div>
 
-      <div class="tab-pane container-fluid" id="contact-tab">
+      <div class="tab-pane container-fluid <%= tab_class('contact-details', active_tab) %>" id="contact-tab">
         <dl>
           <dt class="show-page-detail-heading">Email Address</dt>
           <dd class="show-page-detail" data-detail="email"><%= staff_member.email || 'Not supplied' %></dd>
