@@ -11,6 +11,18 @@ import ReactDOM from "react-dom"
 const GRANULARITY = 30;
 const MILLISECONDS_PER_MINUTE = 60 * 1000;
 const MINUTES_PER_HOUR = 60;
+const HOVER_INDICATOR_WIDTH = 10;
+
+function translate(x, y){
+    return "translate(" + x + "," + y + ")";
+}
+function convertTranslateToXY(translate){
+    var parts = translate.match(/translate\((.*),(.*)\)/);
+    return {
+        x: parseFloat(parts[1]),
+        y: parseFloat(parts[2])
+    }
+}
 
 export default class RotaOverviewChart extends Component {
     static propTypes = {
@@ -92,9 +104,12 @@ export default class RotaOverviewChart extends Component {
         if (hoverBar.empty()) {
             indicator.style("opacity", 0);
         } else {
+            var x = convertTranslateToXY(hoverBar.attr("transform")).x;
+            x += (hoverBar.attr("width") - HOVER_INDICATOR_WIDTH) / 2;
+            var y = hoverBar.attr("y");
+
             indicator.attr({
-                "transform": hoverBar.attr("transform"),
-                "y": hoverBar.attr("y")
+                "transform": translate(x, y),
             });
             indicator.style("opacity", 1);
         }
@@ -110,12 +125,14 @@ export default class RotaOverviewChart extends Component {
         if (indicator.empty()) {
             var g = svg.append("g");
             g.attr("transform", nvWrap.attr("transform"));
-            indicator = g.append("rect")
+            indicator = g.append("g");
+            indicator.classed("rota-overview-chart__hover-indicator", true);
+            indicator.append("circle")
                 .attr({
-                    width: 10,
-                    height: 10
+                    cx: HOVER_INDICATOR_WIDTH / 2,
+                    cy: 0,
+                    r: HOVER_INDICATOR_WIDTH / 2
                 })
-                .classed("rota-overview-chart__hover-indicator", true)
                 .style("fill", "orange");
         }
         return indicator
