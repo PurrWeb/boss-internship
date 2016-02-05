@@ -26,6 +26,9 @@
     <li role="presentation" class="<%= tab_class('contact-details', active_tab) %>">
       <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'contact-details') %>" data-target="#contact-tab">Contact Details</a>
     </li>
+    <li role="presentation" class="<%= tab_class('holidays', active_tab) %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'holidays') %>" data-target="#holidays-tab">Holidays</a>
+    </li>
   </ul>
 
   <div class="tab-content">
@@ -161,6 +164,14 @@
             <dd>Not Supplied</dd>
           <% end %>
         </dl>
+      </div>
+      <div class="tab-pane container-fluid <%= tab_class('holidays', active_tab) %>" id="holidays-tab">
+        <h2>Holidays</h2>
+        <% if staff_member.active_holidays.present? %>
+          <%= render partial: 'holidays_table', locals: { holidays: staff_member.active_holidays } %>
+        <% else %>
+          <div>No holidays</div>
+        <% end %>
       </div>
     </div>
   </div>

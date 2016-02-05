@@ -20,6 +20,8 @@ class StaffMember < ActiveRecord::Base
 
   has_many :rota_shifts, inverse_of: :staff_member
 
+  has_many :holidays, inverse_of: :staff_member
+
   mount_uploader :avatar, AvatarUploader
   validates :avatar, {
     presence: true,
@@ -50,6 +52,10 @@ class StaffMember < ActiveRecord::Base
 
   def self.for_venue(venue)
     joins(:venue).merge(Venue.where(id: venue.id))
+  end
+
+  def active_holidays
+    holidays.in_state(:enabled)
   end
 
   def valid_pin_code_format
