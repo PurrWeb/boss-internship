@@ -40,9 +40,7 @@ export default class RotaOverviewView extends Component {
                 self.props.onHoverShiftsChange(null);
             },
             click: function(event){
-                self.props.onHoverShiftsChange(null);
-                var data = self.getSelectionData(breakdown, this.series, this.index);
-                self.props.onSelectionShiftsChange(data);
+
             }
         };
 
@@ -65,8 +63,16 @@ export default class RotaOverviewView extends Component {
             }
         }
 
+        var renderEnd = function(chart){
+            chart.multibar.dispatch.on("elementClick", function(obj){
+                self.props.onHoverShiftsChange(null);
+                var data = self.getSelectionData(breakdown, obj.data.key, obj.index);
+                self.props.onSelectionShiftsChange(data);
+            })
+        }
+
         return <div className="rota-overview-chart">
-            <NVD3Chart options={options} id="barChart" type="multiBarChart" datum={datum} x="label" y="value" />
+            <NVD3Chart options={options} id="barChart" type="multiBarChart" datum={datum} x="label" y="value" renderEnd={renderEnd}/>
         </div>
     }
     getRotaDate(){
@@ -83,8 +89,8 @@ export default class RotaOverviewView extends Component {
             rotaDate
         });
     }
-    getSelectionData(breakdown, series, index){
-        var staffType = _(this.props.staffTypes).find({name: series.name});
+    getSelectionData(breakdown, seriesName, index){
+        var staffType = _(this.props.staffTypes).find({name: seriesName});
         var shifts = breakdown[index].shiftsByStaffType[staffType.id];
         return {
             shifts,
