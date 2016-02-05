@@ -29,24 +29,12 @@ export default class RotaOverviewView extends Component {
     render() {
         var self = this;
         var breakdown = this.getBreakdown();
-        var config = this.getStaticConfig();
-
-        config.plotOptions.series.point.events = {
-            mouseOver: function(event){
-                
-            },
-            mouseOut: function(event){
-                
-            },
-            click: function(event){
-
-            }
-        };
-
 
         var datum = this.getChartData(breakdown);
         var options = {
+            margin: {},
             stacked: true,
+            showControls: false,
             tooltip: {
                 contentGenerator: function(obj){
                     var selectedStaffTypeTitle = obj.data.key
@@ -78,7 +66,14 @@ export default class RotaOverviewView extends Component {
         }
 
         return <div className="rota-overview-chart">
-            <NVD3Chart options={options} id="barChart" type="multiBarChart" datum={datum} x="label" y="value" renderEnd={renderEnd}/>
+            <NVD3Chart
+                options={options}
+                type="multiBarChart"
+                datum={datum}
+                x="label"
+                y="value"
+                margin={{}}
+                renderEnd={renderEnd}/>
         </div>
     }
     getRotaDate(){
@@ -125,38 +120,6 @@ export default class RotaOverviewView extends Component {
             });
         }
         return series;
-    }
-    getStaticConfig(){
-        return {
-            chart: {
-                type: "area"
-            },
-            title: {
-                text: "Rota Overview"
-            },
-            xAxis: {
-                type: "datetime",
-                title: {
-                    text: "Time"
-                }
-            },
-            plotOptions: {
-                area: {
-                    stacking: "normal",
-                    // this makes it so you can click on the area instead of just on the individual data points.
-                    trackByArea: true,
-                    animation: false,
-                    lineColor: "#666666",
-                    lineWidth: 1,
-                    marker: {
-                        enabled: false
-                    }
-                },
-                series: {
-                    point: {}
-                }
-            },
-        };
     }
 }
 
