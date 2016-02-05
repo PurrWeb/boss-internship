@@ -5,6 +5,7 @@ import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
 import nvd3 from "nvd3"
 import NVD3Chart from "react-nvd3"
+import ReactDOM from "react-dom"
 
 
 const GRANULARITY = 30;
@@ -37,7 +38,11 @@ export default class RotaOverviewChart extends Component {
             showControls: false,
             tooltip: {
                 contentGenerator: function(obj){
-                    var selectedStaffTypeTitle = obj.data.key
+                    var data = obj.data;
+                    if (_.isArray(data)){
+                        data = data[0]; // NVD3 returns multiple staff types
+                    }
+                    var selectedStaffTypeTitle = data.key
                     var date = breakdown[obj.index].date;
                     var breakdownAtPoint = _(breakdown).find((point) => point.date.valueOf() === date.valueOf());
 
@@ -53,15 +58,18 @@ export default class RotaOverviewChart extends Component {
         var renderEnd = function(chart){
             chart.multibar.dispatch.on("elementClick", function(obj){
                 self.props.onHoverShiftsChange(null);
-                var data = self.getSelectionData(breakdown, obj.data.key, obj.index);
+                var data = self.getSelectionData(breakdown, obj);
                 self.props.onSelectionShiftsChange(data);
             });
             chart.multibar.dispatch.on("elementMouseover", function(obj){
-                var data = self.getSelectionData(breakdown, obj.data.key, obj.index);
+                var data = self.getSelectionData(breakdown, obj);
                 self.props.onHoverShiftsChange(data);
+
+                self.updateHoverIndicator();
             });
             chart.multibar.dispatch.on("elementMouseout", function(obj){
                 self.props.onHoverShiftsChange(null);
+                self.updateHoverIndicator();
             });
         }
 
@@ -75,6 +83,42 @@ export default class RotaOverviewChart extends Component {
                 margin={{}}
                 renderEnd={renderEnd}/>
         </div>
+    }
+    updateHoverIndicator(){
+        var indicator = this.getHoverIndicator();
+        var svg = this.getChartSvgElement();
+        var hoverBar = d3.select(svg).select(".nv-bar.hover");
+
+        if (hoverBar.empty()) {
+            indicator.style("opacity", 0);
+        } else {
+            indicator.attr({
+                "transform": hoverBar.attr("transform"),
+                "y": hoverBar.attr("y")
+            });
+            indicator.style("opacity", 1);
+        }
+    }
+    getChartSvgElement(){
+        return ReactDOM.findDOMNode(this).querySelector("svg");
+    }
+    getHoverIndicator(){
+        var svg = d3.select(this.getChartSvgElement());
+        var indicator = svg.select(".rota-overview-chart__hover-indicator");
+        var nvWrap = svg.select(".nv-wrap");
+
+        if (indicator.empty()) {
+            var g = svg.append("g");
+            g.attr("transform", nvWrap.attr("transform"));
+            indicator = g.append("rect")
+                .attr({
+                    width: 10,
+                    height: 10
+                })
+                .classed("rota-overview-chart__hover-indicator", true)
+                .style("fill", "orange");
+        }
+        return indicator
     }
     getRotaDate(){
         return new RotaDate(this.props.dateOfRota);
@@ -105,7 +149,14 @@ export default class RotaOverviewChart extends Component {
             return staff[shift.staff_member.id].staff_type.id;
         }
     }
-    getSelectionData(breakdown, seriesName, index){
+    getSelectionData(breakdown, obj){
+        var data = obj.data;
+        if (_.isArray(data)){
+            data = data[0]; // NVD3 sometimes returns more than one staff type...
+        }
+        var seriesName = data.key;
+        var index = obj.index;
+
         var staffType = _(this.props.staffTypes).find({name: seriesName});
         var shifts = breakdown[index].shiftsByStaffType[staffType.id];
         return {
