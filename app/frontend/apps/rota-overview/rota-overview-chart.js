@@ -11,7 +11,7 @@ const GRANULARITY = 30;
 const MILLISECONDS_PER_MINUTE = 60 * 1000;
 const MINUTES_PER_HOUR = 60;
 
-export default class RotaOverviewView extends Component {
+export default class RotaOverviewChart extends Component {
     static propTypes = {
         shifts: React.PropTypes.array.isRequired,
         staffTypes: React.PropTypes.object.isRequired,
