@@ -23,6 +23,11 @@
  @import "bootstrap/theme";
  @import "../../../node_modules/react-select/dist/react-select";
  @import "../../../node_modules/cropperjs/dist/cropper";
+ @import "../../../node_modules/nvd3/build/nv.d3";
+
+.rota-overview-chart svg {
+  height: 400px;
+}
 
 
 label:not(.force-not-required).required:after {

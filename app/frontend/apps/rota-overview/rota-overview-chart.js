@@ -3,10 +3,11 @@ import getStaffTypeBreakdownByTime from "./get-staff-type-breakdown-by-time"
 import _ from "underscore"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
-const ReactHighCharts = require('react-highcharts/bundle/highcharts')
+import nvd3 from "nvd3"
+import NVD3Chart from "react-nvd3"
 
 
-const GRANULARITY = 15;
+const GRANULARITY = 30;
 const MILLISECONDS_PER_MINUTE = 60 * 1000;
 const MINUTES_PER_HOUR = 60;
 
@@ -59,10 +60,11 @@ export default class RotaOverviewView extends Component {
             }
         };
 
-        config.series = this.getChartData(breakdown);
 
-        return <div style={{height: 400}}>
-            <ReactHighCharts config={config} />
+        var datum = this.getChartData(breakdown);
+
+        return <div className="rota-overview-chart">
+            <NVD3Chart options={{stacked: true}} id="barChart" type="multiBarChart" datum={datum} x="label" y="value"/>
         </div>
     }
     getRotaDate(){
@@ -94,13 +96,15 @@ export default class RotaOverviewView extends Component {
         var series = [];
 
         for (var staffType in staffTypes) {
-            var staffTypeData = _(breakdown).map(function(item){
-                return item.shiftsByStaffType[staffType].length;
+            var values = _(breakdown).map(function(item){
+                return {
+                    value: item.shiftsByStaffType[staffType].length,
+                    label: item.date.toString()
+                }
             });
-
             series.push({
-                name: staffTypes[staffType].name,
-                data: staffTypeData,
+                key: staffTypes[staffType].name,
+                values: values,
                 color: staffTypes[staffType].color,
                 pointStart: rotaDate.startTime.valueOf(),
                 pointInterval: GRANULARITY * MILLISECONDS_PER_MINUTE,
