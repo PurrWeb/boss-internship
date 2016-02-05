@@ -25,10 +25,7 @@
  @import "../../../node_modules/cropperjs/dist/cropper";
  @import "../../../node_modules/nvd3/build/nv.d3";
 
-.rota-overview-chart svg {
-  height: 400px;
-}
-
+ @import "apps/rota-overview/rota-overview-chart";
 
 label:not(.force-not-required).required:after {
   content:" *";
