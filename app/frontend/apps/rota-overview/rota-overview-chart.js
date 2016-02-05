@@ -33,11 +33,10 @@ export default class RotaOverviewView extends Component {
 
         config.plotOptions.series.point.events = {
             mouseOver: function(event){
-                var data = self.getSelectionData(breakdown, this.series, this.index);
-                self.props.onHoverShiftsChange(data);
+                
             },
             mouseOut: function(event){
-                self.props.onHoverShiftsChange(null);
+                
             },
             click: function(event){
 
@@ -68,7 +67,14 @@ export default class RotaOverviewView extends Component {
                 self.props.onHoverShiftsChange(null);
                 var data = self.getSelectionData(breakdown, obj.data.key, obj.index);
                 self.props.onSelectionShiftsChange(data);
-            })
+            });
+            chart.multibar.dispatch.on("elementMouseover", function(obj){
+                var data = self.getSelectionData(breakdown, obj.data.key, obj.index);
+                self.props.onHoverShiftsChange(data);
+            });
+            chart.multibar.dispatch.on("elementMouseout", function(obj){
+                self.props.onHoverShiftsChange(null);
+            });
         }
 
         return <div className="rota-overview-chart">
