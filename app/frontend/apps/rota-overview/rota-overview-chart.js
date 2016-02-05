@@ -46,25 +46,27 @@ export default class RotaOverviewView extends Component {
             }
         };
 
-        config.tooltip = {
-            formatter: function() {
-                var selectedStaffTypeTitle = this.series.name;
-                var date = new Date(this.x);
-                var breakdownAtPoint = _(breakdown).find((point) => point.date.valueOf() === date.valueOf());
-
-                return renderTooltipHtml({
-                    shiftsByStaffType: breakdownAtPoint.shiftsByStaffType,
-                    selectedStaffTypeTitle,
-                    staffTypes: self.props.staffTypes
-                })
-            }
-        };
-
 
         var datum = this.getChartData(breakdown);
+        var options = {
+            stacked: true,
+            tooltip: {
+                contentGenerator: function(obj){
+                    var selectedStaffTypeTitle = obj.data.key
+                    var date = breakdown[obj.index].date;
+                    var breakdownAtPoint = _(breakdown).find((point) => point.date.valueOf() === date.valueOf());
+
+                    return renderTooltipHtml({
+                        shiftsByStaffType: breakdownAtPoint.shiftsByStaffType,
+                        selectedStaffTypeTitle,
+                        staffTypes: self.props.staffTypes
+                    })
+                }
+            }
+        }
 
         return <div className="rota-overview-chart">
-            <NVD3Chart options={{stacked: true}} id="barChart" type="multiBarChart" datum={datum} x="label" y="value" />
+            <NVD3Chart options={options} id="barChart" type="multiBarChart" datum={datum} x="label" y="value" />
         </div>
     }
     getRotaDate(){
