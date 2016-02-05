@@ -2,8 +2,8 @@ import React, { Component } from "react"
 import RotaOverviewView from "./rota-overview-view"
 import * as backendData from "~redux/process-backend-data"
 import WeekPicker from "~components/week-picker"
-import utils from "~lib/utils"
 import VenueDropdown from "~components/venue-dropdown"
+import {appRoutes} from "~lib/routes"
 
 function indexById(data){
     return _.indexBy(data, "id")
@@ -19,7 +19,7 @@ export default class RotaOverviewApp extends Component {
             
             return <div key={ rota.id }>
                 <h2>
-                    <a href={"/venues/" + rota.venue.id + "/rotas/" + utils.formatRotaUrlDate(rota.date) }>
+                    <a href={appRoutes.rota({venueId: rota.venue.id, date: rota.date}) }>
                         {moment(rota.date).format("ddd D MMMM YYYY")}
                     </a>
                 </h2>
@@ -56,10 +56,6 @@ export default class RotaOverviewApp extends Component {
         </div>
     }
     goToOverviewPage(startDate, endDate, venueId){
-        location.href = [
-            "/rotas/?venue_id=" + venueId,
-            "&start_date=" + utils.formatRotaUrlDate(startDate),
-            "&end_date=" + utils.formatRotaUrlDate(endDate)
-        ].join("");
+        location.href = appRoutes.rotaOverview(venueId, startDate, endDate);
     }
 }
