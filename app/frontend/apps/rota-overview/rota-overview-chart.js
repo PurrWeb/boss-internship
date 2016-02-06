@@ -6,6 +6,7 @@ import utils from "~lib/utils"
 import nvd3 from "nvd3"
 import NVD3Chart from "react-nvd3"
 import ReactDOM from "react-dom"
+import d3 from "d3"
 
 
 const GRANULARITY = 30;
@@ -48,6 +49,9 @@ export default class RotaOverviewChart extends Component {
             margin: {},
             stacked: true,
             showControls: false,
+            yAxis: {
+                tickFormat: d3.format("d")
+            },
             tooltip: {
                 contentGenerator: function(obj){
                     var data = obj.data;
@@ -62,7 +66,7 @@ export default class RotaOverviewChart extends Component {
                         shiftsByStaffType: breakdownAtPoint.shiftsByStaffType,
                         selectedStaffTypeTitle,
                         staffTypes: self.props.staffTypes
-                    })
+                    });
                 }
             }
         }
