@@ -56,6 +56,10 @@ export default class RotaOverviewApp extends Component {
         </div>
     }
     goToOverviewPage(startDate, endDate, venueId){
-        location.href = appRoutes.rotaOverview(venueId, startDate, endDate);
+        location.href = appRoutes.rotaOverview({
+            venueId,
+            startDate,
+            endDate
+        });
     }
 }

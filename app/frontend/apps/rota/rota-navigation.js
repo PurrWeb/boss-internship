@@ -16,6 +16,9 @@ export default class RotaNavigation extends React.Component {
             <div>
                 {this.getRotaLink(dates.nextDate)} &gt; 
             </div>
+            <div>
+                {this.getRotaOverviewLink(dates.weekStartDate, dates.weekEndDate)}
+            </div>
         </div>
     }
     getDates(){
@@ -27,9 +30,14 @@ export default class RotaNavigation extends React.Component {
         var nextDate = new Date(this.props.dateOfRota);
         nextDate.setDate(dateOfRota.getDate() + 1);
 
+        var weekStartDate = moment(dateOfRota).startOf("isoweek").toDate();
+        var weekEndDate = moment(dateOfRota).endOf("isoweek").toDate();
+
         return {
             previousDate,
-            nextDate
+            nextDate,
+            weekStartDate,
+            weekEndDate
         }
     }
     getRotaLink(date){
@@ -39,6 +47,16 @@ export default class RotaNavigation extends React.Component {
         });
         return <a href={href}>
             {moment(date).format("DD MMM YYYY")}
+        </a>
+    }
+    getRotaOverviewLink(weekStartDate, weekEndDate) {
+        var href = appRoutes.rotaOverview({
+            venueId: this.props.venueId,
+            startDate: weekStartDate,
+            endDate: weekEndDate
+        });
+        return <a href={href}>
+            Weekly Rota Overview
         </a>
     }
 }
