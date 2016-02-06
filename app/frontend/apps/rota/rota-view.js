@@ -5,6 +5,7 @@ import * as actionCreators from "../../redux/actions.js"
 import ChartAndFilter from "./chart-and-filter.js"
 import _ from "underscore"
 import AddShiftView from "./add-shift-view"
+import RotaNavigation from "./rota-navigation"
 import store from "../../redux/store.js"
 import moment from "moment"
 
@@ -29,8 +30,8 @@ class RotaView extends Component {
         }
     }
     render() {
-
         return <div className="container">
+            <RotaNavigation dateOfRota={this.props.dateOfRota} />
             <h1>
                 Rota for {this.props.venue.name}: {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>
