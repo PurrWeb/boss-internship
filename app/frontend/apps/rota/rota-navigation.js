@@ -9,11 +9,11 @@ export default class RotaNavigation extends React.Component {
     }
     render(){
         var dates = this.getDates();
-        return <div>
-            <div>
+        return <div style={{textAlign: "center", overflow: "hidden"}}>
+            <div style={{float: "left"}}>
                 &lt; {this.getRotaLink(dates.previousDate)}
             </div>
-            <div>
+            <div style={{float: "right"}}>
                 {this.getRotaLink(dates.nextDate)} &gt; 
             </div>
             <div>
