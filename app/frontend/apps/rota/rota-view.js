@@ -31,7 +31,9 @@ class RotaView extends Component {
     }
     render() {
         return <div className="container">
-            <RotaNavigation dateOfRota={this.props.dateOfRota} />
+            <RotaNavigation
+                dateOfRota={this.props.dateOfRota}
+                venueId={this.props.venue.id} />
             <h1>
                 Rota for {this.props.venue.name}: {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>
