@@ -8,6 +8,7 @@ import NVD3Chart from "react-nvd3"
 import ReactDOM from "react-dom"
 import d3 from "d3"
 import renderTooltipHtml from "./render-tooltip-html"
+import moment from "moment"
 
 
 const GRANULARITY = 30;

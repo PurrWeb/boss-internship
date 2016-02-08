@@ -12,6 +12,7 @@ import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
 
 // Expose for debugging
+window.debug = window.debug || {};
 window.debug.store = store;
 window.debug.moment = moment;
 

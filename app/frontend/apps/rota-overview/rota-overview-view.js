@@ -3,6 +3,7 @@ import moment from "moment"
 import ShiftList from "./shift-list"
 import RotaOverviewChart from "./rota-overview-chart"
 import ChartSelectionView from "~components/chart-selection-view"
+import _ from "underscore"
 
 export default class RotaOverviewView extends Component {
     constructor(props){
