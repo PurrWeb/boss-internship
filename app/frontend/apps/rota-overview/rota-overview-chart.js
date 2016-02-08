@@ -143,8 +143,7 @@ export default class RotaOverviewChart extends Component {
         return new RotaDate(this.props.dateOfRota);
     }
     getBreakdown(){
-        var { shifts, staff} = this.props;
-        var staffTypes = this.getStaffTypesWithShifts();
+        var { shifts, staff, staffTypes} = this.props;
         var rotaDate = this.getRotaDate();
         return getStaffTypeBreakdownByTime({
             shifts,
@@ -153,20 +152,6 @@ export default class RotaOverviewChart extends Component {
             staffTypes,
             rotaDate
         });
-    }
-    getStaffTypesWithShifts(){
-        var {shifts, staff} = this.props;
-
-        var allStaffTypes = this.props.staffTypes;
-        var shiftStaffTypes = _(shifts).map(getStaffTypeFromShift);
-        var staffTypes = _(allStaffTypes).filter(function(staffType){
-            return _(shiftStaffTypes).contains(staffType.id);
-        });
-        return _(staffTypes).indexBy("id");
-
-        function getStaffTypeFromShift(shift) {
-            return staff[shift.staff_member.id].staff_type.id;
-        }
     }
     getSelectionData(breakdown, obj){
         var seriesName = obj.series[0].key
@@ -185,7 +170,7 @@ export default class RotaOverviewChart extends Component {
         var staffTypes = this.props.staffTypes;
         var series = [];
 
-        for (var staffType in this.getStaffTypesWithShifts()) {
+        for (var staffType in this.props.staffTypes) {
             var values = _(breakdown).map(function(item){
                 return {
                     value: item.shiftsByStaffType[staffType].length,

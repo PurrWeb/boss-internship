@@ -6,6 +6,7 @@ import VenueDropdown from "~components/venue-dropdown"
 import {appRoutes} from "~lib/routes"
 import moment from "moment"
 import _ from "underscore"
+import { selectStaffTypesWithShifts } from "~redux/selectors"
 
 function indexById(data){
     return _.indexBy(data, "id")
@@ -18,7 +19,13 @@ export default class RotaOverviewApp extends Component {
             var shifts = rotaDetails.rota_shifts.map(backendData.processShiftObject);
             var rota = backendData.processRotaObject(rotaDetails.rota);
             var staffTypes = rotaDetails.staff_types;
-            
+
+            var staffTypesWithShifts = selectStaffTypesWithShifts({
+                staffTypes: indexById(staffTypes),
+                rotaShifts: indexById(shifts),
+                staff: indexById(staff)
+            });
+
             return <div key={ rota.id }>
                 <h2>
                     <a href={appRoutes.rota({venueId: rota.venue.id, date: rota.date}) }>
@@ -29,7 +36,7 @@ export default class RotaOverviewApp extends Component {
                     staff={ indexById(staff) }
                     shifts={ indexById(shifts) }
                     dateOfRota={ rota.date }
-                    staffTypes={ indexById(staffTypes)} />
+                    staffTypesWithShifts={ indexById(staffTypesWithShifts)} />
             </div>
         });
 
