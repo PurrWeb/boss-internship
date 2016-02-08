@@ -12,8 +12,9 @@ import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
 
 // Expose for debugging
-window.store = store;
-window.moment = moment;
+window.debug = window.debug || {};
+window.debug.store = store;
+window.debug.moment = moment;
 
 class ClockInOutView extends Component {
     static childContextTypes = {

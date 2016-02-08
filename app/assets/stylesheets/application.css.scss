@@ -23,7 +23,9 @@
  @import "bootstrap/theme";
  @import "../../../node_modules/react-select/dist/react-select";
  @import "../../../node_modules/cropperjs/dist/cropper";
+ @import "../../../node_modules/nvd3/build/nv.d3";
 
+ @import "apps/rota-overview/rota-overview-chart";
 
 label:not(.force-not-required).required:after {
   content:" *";

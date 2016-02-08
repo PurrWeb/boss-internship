@@ -4,6 +4,8 @@ import * as backendData from "~redux/process-backend-data"
 import WeekPicker from "~components/week-picker"
 import VenueDropdown from "~components/venue-dropdown"
 import {appRoutes} from "~lib/routes"
+import moment from "moment"
+import _ from "underscore"
 
 function indexById(data){
     return _.indexBy(data, "id")

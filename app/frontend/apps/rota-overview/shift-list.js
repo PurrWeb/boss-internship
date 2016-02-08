@@ -10,7 +10,7 @@ export default class ShiftList extends React.Component {
     render (){
         var shiftElements = this.props.shifts.map((shift) => {
             var shiftStaff = this.props.staff[shift.staff_member.id];
-            return <div className="row">
+            return <div className="row" key={shift.id}>
                 <div className="col-md-5">
                     {moment(shift.starts_at).format("HH:mm")} - {moment(shift.ends_at).format("HH:mm")}
                 </div>
