@@ -3,9 +3,11 @@ import moment from "moment"
 
 export const appRoutes = {
     rota: function (options){
-        return "/venues/" + options.venueId + "/rotas/" + utils.formatRotaUrlDate(options.date);
+        var {venueId, date} = options;
+        return "/venues/" + venueId + "/rotas/" + utils.formatRotaUrlDate(date);
     },
-    rotaOverview: function(venueId, startDate, endDate){
+    rotaOverview: function(options){
+        var {venueId, startDate, endDate} = options;
         return [
             "/rotas/?venue_id=" + venueId,
             "&start_date=" + utils.formatRotaUrlDate(startDate),
