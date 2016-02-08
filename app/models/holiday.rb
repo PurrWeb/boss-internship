@@ -10,6 +10,7 @@ class Holiday < ActiveRecord::Base
   validates :start_date, presence: true
   validates :end_date, presence: true
   validates :creator, presence: true
+  validates :staff_member, presence: true
   validates :holiday_type, inclusion: { in: HOLIDAY_TYPES, message: 'is required' }
 
   def state_machine
