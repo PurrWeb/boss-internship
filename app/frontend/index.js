@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
 import _ from "underscore"
-window.React = React;
-window.ReactDOM = ReactDOM;
-window._ = _;
+window.debug = {}
+window.debug.React = React;
+window.debug.ReactDOM = ReactDOM;
+window.debug._ = _;
 
 import "./lib/load-underscore-mixins"
 

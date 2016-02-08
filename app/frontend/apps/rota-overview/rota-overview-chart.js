@@ -7,6 +7,7 @@ import nvd3 from "nvd3"
 import NVD3Chart from "react-nvd3"
 import ReactDOM from "react-dom"
 import d3 from "d3"
+import renderTooltipHtml from "./render-tooltip-html"
 
 
 const GRANULARITY = 30;
@@ -14,7 +15,7 @@ const MILLISECONDS_PER_MINUTE = 60 * 1000;
 const MINUTES_PER_HOUR = 60;
 const HOVER_INDICATOR_WIDTH = 10;
 
-function translate(x, y){
+function getTranslateTransform(x, y){
     return "translate(" + x + "," + y + ")";
 }
 function convertTranslateToXY(translate){
@@ -113,7 +114,7 @@ export default class RotaOverviewChart extends Component {
             var y = hoverBar.attr("y");
 
             indicator.attr({
-                "transform": translate(x, y),
+                "transform": getTranslateTransform(x, y),
             });
             indicator.style("opacity", 1);
         }
@@ -208,36 +209,4 @@ export default class RotaOverviewChart extends Component {
         }
         return series;
     }
-}
-
-function renderTooltipHtml(data){
-    function renderLine(staffType){
-        var shifts = data.shiftsByStaffType[staffType];
-        var staffTypeObject = data.staffTypes[staffType];
-        var isSelected = data.selectedStaffTypeTitle === staffTypeObject.name;
-
-        var line = shifts.length + " - " + staffTypeObject.name;
-        if (isSelected) {
-            line = "<b>" + line + "</b>";
-        }
-        return line;
-    }
-
-    var selectedStaffType = _(data.staffTypes).find({name: data.selectedStaffTypeTitle}).id;
-
-    var tooltipLines = [];
-    tooltipLines.push(
-        renderLine(selectedStaffType)
-    );
-
-    _(data.shiftsByStaffType).each(function(shifts, staffType){
-        if (staffType == selectedStaffType) {
-            return;
-        }
-        tooltipLines.push(
-            renderLine(staffType)
-        );
-    });
-
-    return tooltipLines.join("<br>");
 }
