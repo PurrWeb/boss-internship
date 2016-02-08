@@ -1,5 +1,8 @@
+import _ from "underscore"
+
 export function selectStaffTypesWithShifts(state){
     var {rotaShifts, staff} = state;
+    rotaShifts = _.values(rotaShifts.items);
 
     var allStaffTypes = state.staffTypes;
     var shiftStaffTypes = _(rotaShifts).map(getStaffTypeFromShift);
