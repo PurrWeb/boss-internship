@@ -44,7 +44,7 @@ export default class StaffTypeDropdown extends Component {
         if (value === ""){
             this.value = [];
         } else {
-            this.value = value.split(",");
+            this.value = value.split(",").map(parseFloat);
         }
         this.props.onChange(this.value);
     }

@@ -115,10 +115,11 @@ export default class ChartAndFilter extends Component {
     }
     getRotaShifts(){
         var self = this;
+        var staffTypeFilter = self.state.staffTypeFilter;
         return _(this.props.rotaShifts).filter(function(rotaShift){
-            var staff = self.props.staff[rotaShift.staff_id];
+            var staff = self.props.staff[rotaShift.staff_member.id];
             if (self.state.staffTypeFilter.length > 0){
-                 if (!_(self.state.staffTypeFilter).contains(staff.staff_type)) {
+                 if (!_(staffTypeFilter).contains(staff.staff_type.id)) {
                      return false;
                  }
             }
