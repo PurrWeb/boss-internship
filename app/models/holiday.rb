@@ -13,6 +13,10 @@ class Holiday < ActiveRecord::Base
   validates :staff_member, presence: true
   validates :holiday_type, inclusion: { in: HOLIDAY_TYPES, message: 'is required' }
 
+  validate do |holiday|
+    HolidayDateValidator.new(holiday).validate
+  end
+
   def state_machine
     @state_machine ||= HolidayStateMachine.new(
       self,

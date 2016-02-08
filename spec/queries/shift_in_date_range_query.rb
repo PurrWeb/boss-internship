@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ShiftInDateRangeQuery do
+describe ShiftInRangeQuery do
   let(:shift) do
     FactoryGirl.create(
       :rota_shift,
@@ -14,7 +14,7 @@ describe ShiftInDateRangeQuery do
   let(:starts_at) { (rota.date.beginning_of_day + 5.hours).utc }
   let(:ends_at) { (rota.date.beginning_of_day + 6.hours).utc }
   let(:query) do
-    ShiftInDateRangeQuery.new(
+    ShiftInRangeQuery.new(
       starts_at: query_starts_at,
       ends_at: query_ends_at,
       rota: query_rota,
