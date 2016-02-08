@@ -56,11 +56,7 @@ export default class RotaOverviewChart extends Component {
             },
             tooltip: {
                 contentGenerator: function(obj){
-                    var data = obj.data;
-                    if (_.isArray(data)){
-                        data = data[0]; // NVD3 returns multiple staff types
-                    }
-                    var selectedStaffTypeTitle = data.key
+                    var selectedStaffTypeTitle = obj.series[0].key;
                     var date = breakdown[obj.index].date;
                     var breakdownAtPoint = _(breakdown).find((point) => point.date.valueOf() === date.valueOf());
 
@@ -105,7 +101,7 @@ export default class RotaOverviewChart extends Component {
     updateHoverIndicator(){
         var indicator = this.getHoverIndicator();
         var svg = this.getChartSvgElement();
-        var hoverBar = d3.select(svg).select(".nv-bar.hover");
+        var hoverBar = d3.select(svg).selectAll(".nv-bar.hover");
 
         if (hoverBar.empty()) {
             indicator.style("opacity", 0);
@@ -173,11 +169,7 @@ export default class RotaOverviewChart extends Component {
         }
     }
     getSelectionData(breakdown, obj){
-        var data = obj.data;
-        if (_.isArray(data)){
-            data = data[0]; // NVD3 sometimes returns more than one staff type...
-        }
-        var seriesName = data.key;
+        var seriesName = obj.series[0].key
         var index = obj.index;
 
         var staffType = _(this.props.staffTypes).find({name: seriesName});
