@@ -2,6 +2,7 @@
   <thead>
     <th>Type</th>
     <th>Dates</th>
+    <th>Note</th>
     <th>Created By</th>
   </thead>
   <tbody>
@@ -9,6 +10,7 @@
       <tr>
         <td><%= holiday.holiday_type.titleize %></td>
         <td><%= holiday.start_date %> - <%= holiday.end_date %></td>
+        <td><%= holiday.note %></td>
         <td>
           <p>
             <% if can?(:manage, holiday.creator) %>
