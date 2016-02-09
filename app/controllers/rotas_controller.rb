@@ -38,7 +38,15 @@ class RotasController < ApplicationController
     )
     authorize!(:manage, rota)
 
-    render locals: { rota: rota, staff_types: StaffType.all }
+    holidays = Holiday.
+      in_state(:enabled).
+      where(staff_member: rota.venue.staff_members)
+
+    render locals: {
+      rota: rota,
+      holidays: holidays,
+      staff_types: StaffType.all
+    }
   end
 
   private

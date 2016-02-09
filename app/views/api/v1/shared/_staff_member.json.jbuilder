@@ -9,3 +9,7 @@ json.first_name staff_member.name.first_name
 json.surname staff_member.name.surname
 json.preferred_hours staff_member.hours_preference_note
 json.preferred_days staff_member.day_perference_note
+json.holidays staff_member.holidays.in_state(:enabled) do |holiday|
+  json.id holiday.id
+  json.url api_v1_holiday_url(holiday)
+end

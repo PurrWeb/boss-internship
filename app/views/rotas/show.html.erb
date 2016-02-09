@@ -14,6 +14,8 @@
   <% venue = rota.try(:venue) %>
   rotaData.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: Array(venue) } %>;
 
+  rotaData.holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: Array(holidays) } %>;
+
   window.boss = window.boss || {};
   window.boss.rota = rotaData;
 <% end %>

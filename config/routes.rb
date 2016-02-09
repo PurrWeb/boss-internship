@@ -78,6 +78,7 @@ Rails.application.routes.draw do
           resources :rota_shifts,   only: [:create]
         end
       end
+      resources :holidays, only: :show
       resources :staff_members, only: :show
       resources :staff_types,   only: :show
       resources :rota_shifts,   only: [:show, :destroy, :update]

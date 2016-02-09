@@ -25,6 +25,10 @@ class Holiday < ActiveRecord::Base
     )
   end
 
+  def current_state
+    state_machine.current_state
+  end
+
   private
   # Needed for statesman
   def self.transition_class
