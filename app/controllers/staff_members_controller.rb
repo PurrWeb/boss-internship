@@ -116,9 +116,12 @@ class StaffMembersController < ApplicationController
     staff_member = StaffMember.find(params[:id])
     authorize! :manage, staff_member
 
-    holiday = Holiday.new(staff_member: staff_member, creator: current_user)
+    result = CreateHoliday.new(
+      requester: current_user,
+      holiday_params:  holiday_params.merge(staff_member: staff_member)
+    ).call
 
-    if holiday.update_attributes(holiday_params)
+    if result.success?
       flash[:success] = "Holiday added successfully"
       redirect_to staff_member_path(staff_member, tab: 'holidays')
     else
@@ -127,7 +130,7 @@ class StaffMembersController < ApplicationController
       render 'show', locals: {
         staff_member: staff_member,
         active_tab: 'holidays',
-        holiday: holiday
+        holiday: result.holiday
       }
     end
   end
