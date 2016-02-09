@@ -13,6 +13,9 @@ export const appRoutes = {
             "&start_date=" + utils.formatRotaUrlDate(startDate),
             "&end_date=" + utils.formatRotaUrlDate(endDate)
         ].join("");
+    },
+    staffMemberHolidays: function(staffMemberId){
+      return "/staff_members/" + staffMemberId + "?tab=holidays";
     }
 }
 
