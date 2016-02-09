@@ -8,7 +8,7 @@ export default class RotaStatusToggleUi extends React.Component {
         status: React.PropTypes.string.isRequired,
         // next status, or null if status can't be changed
         nextStatus: React.PropTypes.string,
-        onClick: React.PropTypes.func.isRequired,
+        onNextStatusClick: React.PropTypes.func.isRequired,
         errorMessages: React.PropTypes.object
     }
     render(){

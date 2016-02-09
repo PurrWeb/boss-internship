@@ -10,7 +10,7 @@ describe("RotaStatusToggleUi", function(){
             <RotaStatusToggleUi
                 status={"in_progress"}
                 nextStatus={"finished"}
-                onClick={() => null} />
+                onNextStatusClick={() => null} />
         );
 
         var node = ReactDOM.findDOMNode(toggle);
@@ -22,7 +22,7 @@ describe("RotaStatusToggleUi", function(){
         var toggle = TestUtils.renderIntoDocument(
             <RotaStatusToggleUi
                 status={"in_progress"}
-                onClick={() => null} />
+                onNextStatusClick={() => null} />
         );
 
         var node = ReactDOM.findDOMNode(toggle);

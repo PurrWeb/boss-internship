@@ -15,7 +15,7 @@ export default class NextRotaStatusButton extends React.Component {
         if (!this.props.nextStatus) {
             return null;
         }
-        return <a className="btn btn-primary next-rota-status-button">
+        return <a className="btn btn-primary next-rota-status-button" onClick={this.props.onClick}>
             {this.getActionText()}
         </a>
     }
