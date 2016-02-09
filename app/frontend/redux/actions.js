@@ -150,6 +150,22 @@ export function replaceAllRotas(options) {
     }
 }
 
+export const updateRotaStatus = createApiRequestAction(
+    "UPDATE_ROTA_STATUS",
+    makeApiRequest({
+        method: apiRoutes.updateRotaStatus.method,
+        path: function(options){
+            return apiRoutes.updateRotaStatus.getPath(options);
+        },
+        getSuccessActionData: function(responseData){
+            return {
+                rotaId: responseData.id,
+                status: responseData.status
+            }
+        }
+    })
+);
+
 actionTypes.REPLACE_ALL_STAFF_TYPES = "REPLACE_ALL_STAFF_TYPES";
 export function replaceAllStaffTypes(options) {
     return {

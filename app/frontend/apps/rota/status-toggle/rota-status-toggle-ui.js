@@ -16,7 +16,7 @@ export default class RotaStatusToggleUi extends React.Component {
             <div className="rota-status-toggle__status">
                 {rotaStatusTitles[this.props.status]}
             </div>
-            <NextRotaStatusButton nextStatus={this.props.nextStatus} />
+            <NextRotaStatusButton nextStatus={this.props.nextStatus} onClick={this.props.onNextStatusClick} />
             <ComponentErrors errors={this.props.errorMessages} />
         </div>
     }

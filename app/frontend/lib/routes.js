@@ -34,6 +34,14 @@ const apiRoutes = {
             return "rota_shifts/" + options.shiftId;
         },
         method: "DELETE"
+    },
+    updateRotaStatus: {
+        getPath: function(options){
+            var {rotaId, status} = options;
+            return "rotas/" + rotaId + "/mark_" + status;
+
+        },
+        method: "POST"
     }
 }
 

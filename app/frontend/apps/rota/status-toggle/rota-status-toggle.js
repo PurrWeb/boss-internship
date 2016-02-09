@@ -9,13 +9,13 @@ class RotaStatusToggle extends React.Component {
     }
     render(){
         return <RotaStatusToggleUi
+            status={this.props.status}
             nextStatus={this.props.nextStatus}
             onNextStatusClick={() => this.onNextStatusClick()} />
     }
     onNextStatusClick(){
         this.props.updateToNextStatus({
-            venueId: this.props.rota.venue.id,
-            rotaDate: this.props.rota.date,
+            rotaId: this.props.rota.id,
             status: this.props.nextStatus
         })
     }
@@ -30,9 +30,7 @@ function getNextStatus(status){
 }
 
 function mapStateToProps(state){
-    console.log("state is", state)
     var rota = state.rotas[state.pageOptions.displayedRota];
-    console.log("rota is", rota)
     return {
         rota: rota,
         status: rota.status,
@@ -41,7 +39,6 @@ function mapStateToProps(state){
 }
 
 function mapDispatchToProps(dispatch, ownProps){
-    console.log("ownProps", ownProps)
     return {
         updateToNextStatus: function(options){
             dispatch(actionCreators.updateRotaStatus(options));
@@ -52,6 +49,6 @@ function mapDispatchToProps(dispatch, ownProps){
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
+    undefined,
     {withRef: true}
 )(RotaStatusToggle)
