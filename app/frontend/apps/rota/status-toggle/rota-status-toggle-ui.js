@@ -2,6 +2,7 @@ import React from "react"
 import NextRotaStatusButton from "./next-rota-status-button"
 import ComponentErrors from "~components/component-errors"
 import rotaStatusTitles from "~lib/rota-status-titles"
+import Spinner from "~components/spinner"
 
 export default class RotaStatusToggleUi extends React.Component {
     static propTypes = {
@@ -10,16 +11,28 @@ export default class RotaStatusToggleUi extends React.Component {
         nextStatus: React.PropTypes.string,
         onNextStatusClick: React.PropTypes.func.isRequired,
         errorMessages: React.PropTypes.object,
-        statusUpdateInProgess: React.PropTypes.bool
+        statusUpdateInProgress: React.PropTypes.bool
     }
     render(){
         return <div>
             <div className="rota-status-toggle__status">
                 {rotaStatusTitles[this.props.status]}
             </div>
-            <NextRotaStatusButton nextStatus={this.props.nextStatus} onClick={this.props.onNextStatusClick} />
+            {this.getNextStatusButton()}
+            {this.getUpdateInProgressSpinner()}
             <ComponentErrors errors={this.props.errorMessages} />
-            {this.props.statusUpdateInProgess ? "Updating now" : "nothing happening"}
         </div>
+    }
+    getNextStatusButton(){
+        if (this.props.statusUpdateInProgress) {
+            return null;
+        }
+        return <NextRotaStatusButton nextStatus={this.props.nextStatus} onClick={this.props.onNextStatusClick} />;
+    }
+    getUpdateInProgressSpinner(){
+        if (!this.props.statusUpdateInProgress) {
+            return null;
+        }
+        return <Spinner />
     }
 }

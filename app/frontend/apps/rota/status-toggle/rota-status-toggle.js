@@ -13,7 +13,7 @@ class RotaStatusToggle extends React.Component {
             status={this.props.status}
             nextStatus={this.props.nextStatus}
             onNextStatusClick={() => this.onNextStatusClick()}
-            statusUpdateInProgess={this.props.statusUpdateInProgess} />
+            statusUpdateInProgress={this.props.statusUpdateInProgess} />
     }
     onNextStatusClick(){
         this.props.updateToNextStatus({

@@ -19,10 +19,10 @@ describe("RotaStatusToggle", function(){
                     venue: {id: 88},
                     status: "in_progress"
                 }
-            }
+            },
+            apiRequestsInProgress: {}
         };
         var store = createStore(function(){
-            console.log("in reduceer", arguments)
             return state
         });
 

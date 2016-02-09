@@ -28,4 +28,18 @@ describe("RotaStatusToggleUi", function(){
         var node = ReactDOM.findDOMNode(toggle);
         expect(node.getElementsByClassName("next-rota-status-button").length).toBe(0);
     })
+
+    it("If an update is in progress it shows a spinner instead of a button", function(){
+        var toggle = TestUtils.renderIntoDocument(
+            <RotaStatusToggleUi
+                status={"finished"}
+                nextStatus={"in_progress"}
+                statusUpdateInProgress={true}
+                onNextStatusClick={() => null} />
+        );
+
+        var node = ReactDOM.findDOMNode(toggle);
+        expect(node.getElementsByClassName("next-rota-status-button").length).toBe(0);
+        expect(node.getElementsByClassName("spinner").length).toBe(1);
+    })
 });
