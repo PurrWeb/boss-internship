@@ -45,7 +45,7 @@ export default class FilterableStaffList extends Component {
 
         if (filter.staffTypes.length > 0) {
             staffToShow = _.filter(staffToShow, function(staff){
-                return _(filter.staffTypes).contains(staff.staff_type);
+                return _(filter.staffTypes).contains(staff.staff_type.id);
             });
         }
 

@@ -10,7 +10,7 @@ export default class StaffFilter extends Component {
     }
     constructor(props) {
         super(props);
-        this.ui = {};
+        this.state = StaffFilter.getDefaultSettings();
     }
     render() {
         return (
@@ -26,26 +26,27 @@ export default class StaffFilter extends Component {
                 <div className="row">
                     <div className="col-md-2">
                         <input
-                            ref={(input) => this.ui.name = input}
-                            onChange={() => this.handleChange()}/>
+                            onChange={(event) =>
+                                this.setState(
+                                    {name: event.target.value},
+                                    () => this.handleChange()
+                                )
+                            }/>
                     </div>
                     <div className="col-md-2">
                         <StaffTypeDropdown
-                            ref={(dropdown) => this.ui.staffTypes = dropdown}
-                            onChange={() => this.handleChange()} />
+                            onChange={(staffTypes) => 
+                                this.setState(
+                                    {staffTypes: staffTypes},
+                                    () => this.handleChange()
+                                )
+                            } />
                     </div>
                 </div>
             </div>
         )
     }
     handleChange() {
-        var staffTypes = this.ui.staffTypes.value;
-        
-        var filterOptions = {
-            name: this.ui.name.value,
-            staffTypes: staffTypes
-        };
-
-        this.props.onChange(filterOptions);
+        this.props.onChange(this.state);
     }
 }

@@ -1,17 +1,16 @@
 import React, { Component } from "react"
 import _ from "underscore"
+import { connect } from "react-redux"
 import Select from "react-select"
+import { selectStaffTypesWithShifts } from "~redux/selectors"
 
-export default class StaffTypeDropdown extends Component {
-    static contextTypes = {
-        staffTypes: React.PropTypes.object.isRequired
-    }
+class StaffTypeDropdown extends Component {
     constructor(props) {
         super(props);
         this.value = [];
     }
     render(){
-        var staffTypeOptions = _(this.context.staffTypes).mapValues(function(staffType){
+        var staffTypeOptions = _(this.props.staffTypes).mapValues(function(staffType){
             return {
                 value: staffType.id,
                 label: staffType.name,
@@ -44,8 +43,18 @@ export default class StaffTypeDropdown extends Component {
         if (value === ""){
             this.value = [];
         } else {
-            this.value = value.split(",");
+            this.value = value.split(",").map(parseFloat);
         }
         this.props.onChange(this.value);
     }
 }
+
+function mapStateToProps(state){
+    return {
+        staffTypes: selectStaffTypesWithShifts(state)
+    }
+}
+
+export default connect(
+    mapStateToProps
+)(StaffTypeDropdown)
