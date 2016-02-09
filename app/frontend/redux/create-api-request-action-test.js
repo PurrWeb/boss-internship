@@ -2,12 +2,10 @@ import createApiRequestAction from "./create-api-request-action";
 import expect from "expect"
 
 function dispatchDoSomething(makeRequest, actionCreatorOptions){
-	console.log("dispatchDoSth")
 	var dispatch = expect.createSpy();
 	var actionTypes = {};
 	var actionCreator = createApiRequestAction("DO_SOMETHING", makeRequest, actionTypes);
 	actionCreator(actionCreatorOptions)(dispatch);
-	console.log("dispatchDoSth end")
 	return dispatch;
 }
 
