@@ -16,6 +16,10 @@ class RotaShift < ActiveRecord::Base
   validate :times_in_fifteen_minute_increments
   validate :shift_does_not_overlap_existing_shift
 
+  validate do |rota_shift|
+    NotOnHolidayValidator.new(rota_shift).validate
+  end
+
   private
   # validation
   def times_in_correct_order
