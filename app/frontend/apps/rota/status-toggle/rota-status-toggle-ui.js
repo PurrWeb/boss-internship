@@ -15,11 +15,17 @@ export default class RotaStatusToggleUi extends React.Component {
     }
     render(){
         return <div>
-            <div className="rota-status-toggle__status">
-                {rotaStatusTitles[this.props.status]}
+            <div className="row" style={{maxWidth: 250}}>
+                <div className="col-md-6">
+                    <div className="rota-status-toggle__status">
+                        {rotaStatusTitles[this.props.status]}
+                    </div>
+                </div>
+                <div className="col-md-6">
+                    {this.getNextStatusButton()}
+                    {this.getUpdateInProgressSpinner()}
+                </div>
             </div>
-            {this.getNextStatusButton()}
-            {this.getUpdateInProgressSpinner()}
             <ComponentErrors errors={this.props.errorMessages} />
         </div>
     }
