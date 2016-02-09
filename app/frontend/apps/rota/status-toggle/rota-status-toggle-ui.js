@@ -9,7 +9,8 @@ export default class RotaStatusToggleUi extends React.Component {
         // next status, or null if status can't be changed
         nextStatus: React.PropTypes.string,
         onNextStatusClick: React.PropTypes.func.isRequired,
-        errorMessages: React.PropTypes.object
+        errorMessages: React.PropTypes.object,
+        statusUpdateInProgess: React.PropTypes.bool
     }
     render(){
         return <div>
@@ -18,6 +19,7 @@ export default class RotaStatusToggleUi extends React.Component {
             </div>
             <NextRotaStatusButton nextStatus={this.props.nextStatus} onClick={this.props.onNextStatusClick} />
             <ComponentErrors errors={this.props.errorMessages} />
+            {this.props.statusUpdateInProgess ? "Updating now" : "nothing happening"}
         </div>
     }
 }

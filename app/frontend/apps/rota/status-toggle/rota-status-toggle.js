@@ -2,6 +2,7 @@ import React from "react"
 import * as actionCreators from "~redux/actions"
 import RotaStatusToggleUi from "./rota-status-toggle-ui"
 import { connect } from "react-redux"
+import _ from "underscore"
 
 class RotaStatusToggle extends React.Component {
     static propTypes = {
@@ -11,7 +12,8 @@ class RotaStatusToggle extends React.Component {
         return <RotaStatusToggleUi
             status={this.props.status}
             nextStatus={this.props.nextStatus}
-            onNextStatusClick={() => this.onNextStatusClick()} />
+            onNextStatusClick={() => this.onNextStatusClick()}
+            statusUpdateInProgess={this.props.statusUpdateInProgess} />
     }
     onNextStatusClick(){
         this.props.updateToNextStatus({
@@ -34,7 +36,11 @@ function mapStateToProps(state){
     return {
         rota: rota,
         status: rota.status,
-        nextStatus: getNextStatus(rota.status)
+        nextStatus: getNextStatus(rota.status),
+        statusUpdateInProgess: _.some(
+            state.apiRequestsInProgress.UPDATE_ROTA_STATUS,
+            (request) => request.rotaId === rota.id
+        )
     }
 }
 
