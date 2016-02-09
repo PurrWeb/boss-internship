@@ -1,3 +1,9 @@
+<% if holiday.errors[:base].present? %>
+  <div class="alert alert-danger" role="alert">
+    <%= holiday.errors[:base].to_sentence %>
+  </div>
+<% end %>
+
 <%= bootstrap_form_for(holiday, url: create_holiday_staff_member_path(staff_member), html: { class: 'form-inline' }) do |form| %>
   <%= form.date_select(
         :start_date,
