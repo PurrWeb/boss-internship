@@ -123,7 +123,12 @@ class StaffMembersController < ApplicationController
       redirect_to staff_member_path(staff_member, tab: 'holidays')
     else
       flash.now[:error] = "There was a problem creating this holiday"
-      render 'show', locals: { staff_member: staff_member, holiday: holiday }
+
+      render 'show', locals: {
+        staff_member: staff_member,
+        active_tab: 'holidays',
+        holiday: holiday
+      }
     end
   end
 
