@@ -107,11 +107,6 @@ class StaffMembersController < ApplicationController
     end
   end
 
-  def tab_class(section, active_tab)
-    "active" if active_tab.to_s == section.to_s
-  end
-  helper_method :tab_class
-
   def create_holiday
     staff_member = StaffMember.find(params[:id])
     authorize! :manage, staff_member
