@@ -52,6 +52,14 @@ function makeApiRequest(apiOptions){
 function displayedRotaIsPublished(state){
     return state.rotas[state.pageOptions.displayedRota].status === "published";
 }
+function confirmIfRotaIsPublished(question){
+    return function(requestOptions, state){
+        if (!displayedRotaIsPublished(state)) {
+            return true;
+        }
+        return confirm(question);
+    }
+}
 
 export const addRotaShift = createApiRequestAction({
     requestType: "ADD_SHIFT",
@@ -69,12 +77,7 @@ export const addRotaShift = createApiRequestAction({
             return {shift: responseData};
         }
     }),
-    confirm: function(requestOptions, state){
-        if (!displayedRotaIsPublished(state)) {
-            return true;
-        }
-        return confirm("Adding a new shift will send an email notification to the staff member. Do you want to continue?");
-    }
+    confirm: confirmIfRotaIsPublished("Adding a shift to a published rota will send out email notifications. Do you want to continue?")
 });
 
 
@@ -100,7 +103,8 @@ export const updateRotaShift = createApiRequestAction({
             responseData = backendData.processShiftObject(responseData);
             return {shift: responseData};
         }
-    })
+    }),
+    confirm: confirmIfRotaIsPublished("Updating a shift on a published rota will send out email notifications. Do you want to continue?")
 });
 
 
@@ -118,7 +122,8 @@ export const deleteRotaShift = createApiRequestAction({
         getSuccessActionData: function(responseData, requestOptions) {
             return {shift_id: requestOptions.shift_id}
         }
-    })
+    }),
+    confirm: confirmIfRotaIsPublished("Deleting a shift on a published rota will send out email notifications. Do you want to continue?")
 });
 
 export const ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
