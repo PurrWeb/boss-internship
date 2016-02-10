@@ -3,6 +3,8 @@ class Holiday < ActiveRecord::Base
 
   include Statesman::Adapters::ActiveRecordQueries
 
+  belongs_to :parent, class_name: "Holiday", foreign_key: 'parent_holiday_id', inverse_of: :child
+  has_one :child, class_name: "Holiday", foreign_key: 'parent_holiday_id', inverse_of: :parent
   has_many :holiday_transitions, autosave: false
   belongs_to :staff_member
   belongs_to :creator, foreign_key: 'creator_user_id', class_name: 'User'
