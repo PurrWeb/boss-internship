@@ -7,8 +7,9 @@ class NotOnHolidayValidator
     rota_date = RotaShiftDate.to_rota_date(record.starts_at)
 
     conflicting_holidays = HolidayInRangeQuery.new(
+      relation: Holiday.in_state(:enabled),
       start_date: rota_date,
-      end_date: rota_date,
+      end_date: rota_date
     ).all
 
     if conflicting_holidays.present?

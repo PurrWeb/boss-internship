@@ -177,7 +177,7 @@
 
         <h2>Holidays</h2>
         <% if staff_member.active_holidays.present? %>
-          <%= render partial: 'shared/holidays_table', locals: { holidays: staff_member.active_holidays } %>
+          <%= render partial: 'shared/holidays_table', locals: { staff_member: staff_member, holidays: staff_member.active_holidays } %>
         <% else %>
           <div>No holidays</div>
         <% end %>

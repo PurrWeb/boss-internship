@@ -29,6 +29,15 @@ class Holiday < ActiveRecord::Base
     state_machine.current_state
   end
 
+
+  def enabled?
+    current_state == 'enabled'
+  end
+
+  def disable!(requester:)
+    state_machine.transition_to!(:disabled, requster_user_id: requester.id)
+  end
+
   private
   # Needed for statesman
   def self.transition_class

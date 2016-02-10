@@ -5,7 +5,7 @@ class HolidayDateValidator
   attr_reader :holiday
 
   def validate
-    return unless [:start_date, :end_date].all? do |method|
+    return unless holiday.enabled? && [:start_date, :end_date].all? do |method|
       holiday.public_send(method).present?
     end
 
@@ -15,8 +15,9 @@ class HolidayDateValidator
     end
 
     overlapping_holidays = HolidayInRangeQuery.new(
+      relation: Holiday.in_state(:enabled),
       start_date: holiday.start_date,
-      end_date: holiday.end_date,
+      end_date: holiday.end_date
     ).all
 
     overlapping_holidays_exclusive = ExclusiveOfQuery.new(

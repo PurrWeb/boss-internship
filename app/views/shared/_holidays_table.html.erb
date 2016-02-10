@@ -4,6 +4,7 @@
     <th>Dates</th>
     <th>Note</th>
     <th>Created By</th>
+    <th></th>
   </thead>
   <tbody>
     <% holidays.each do |holiday| %>
@@ -21,6 +22,18 @@
             <br />
             <%= holiday.created_at %>
           </p>
+        </td>
+        <td>
+          <%= link_to(
+                staff_member_holiday_path(
+                  staff_member_id: staff_member.id,
+                  id: holiday.id
+                ),
+                method: :delete,
+                class: 'btn btn-danger'
+              ) do %>
+            Delete <span class="glyphicon glyphicon-remove"></span>
+          <% end %>
         </td>
       </tr>
     <% end %>

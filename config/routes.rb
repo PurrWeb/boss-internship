@@ -32,7 +32,7 @@ Rails.application.routes.draw do
   end
 
   resources :staff_members, only: [:show, :index, :new, :create] do
-    resources :holidays, only: :create
+    resources :holidays, only: [:create, :destroy]
     member do
       get :edit_employment_details
       post :update_employment_details

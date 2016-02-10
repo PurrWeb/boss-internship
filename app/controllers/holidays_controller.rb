@@ -23,6 +23,22 @@ class HolidaysController < ApplicationController
     end
   end
 
+  def destroy
+    staff_member = StaffMember.find(params[:staff_member_id])
+    authorize! :manage, staff_member
+
+    holiday = staff_member.holidays.in_state(:enabled).where(id: params[:id]).first
+    raise ActiveRecord::RecordNotFound unless holiday.present?
+
+    DeleteHoliday.new(
+      requester: current_user,
+      holiday: holiday
+    ).call
+
+    flash[:success] = "Holiday deletedsuccessfully"
+    redirect_to staff_member_path(staff_member, tab: 'holidays')
+  end
+
   private
   def holiday_params
     params.
