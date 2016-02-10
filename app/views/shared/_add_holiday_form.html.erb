@@ -4,7 +4,7 @@
   </div>
 <% end %>
 
-<%= bootstrap_form_for(holiday, url: create_holiday_staff_member_path(staff_member)) do |form| %>
+<%= bootstrap_form_for(holiday, url: staff_member_holidays_path(staff_member_id: staff_member.id)) do |form| %>
   <div class="container-fluid">
     <div class="form-inline">
       <%= form.date_select(

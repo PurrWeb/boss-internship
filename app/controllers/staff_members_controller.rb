@@ -107,32 +107,6 @@ class StaffMembersController < ApplicationController
     end
   end
 
-  def create_holiday
-    staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
-
-    holiday = Holiday.new(
-      holiday_params.
-        merge(
-          creator: current_user,
-          staff_member: staff_member
-        )
-    )
-
-    if holiday.save
-      flash[:success] = "Holiday added successfully"
-      redirect_to staff_member_path(staff_member, tab: 'holidays')
-    else
-      flash.now[:error] = "There was a problem creating this holiday"
-
-      render 'show', locals: {
-        staff_member: staff_member,
-        active_tab: 'holidays',
-        holiday: holiday
-      }
-    end
-  end
-
   private
   def active_tab_from_params
     tab_from_params = params['tab']
@@ -147,17 +121,6 @@ class StaffMembersController < ApplicationController
       'contact-details',
       'holidays'
     ]
-  end
-
-  def holiday_params
-    params.
-      require(:holiday).
-      permit(
-        :start_date,
-        :end_date,
-        :holiday_type,
-        :note
-      )
   end
 
   def staff_member_params
