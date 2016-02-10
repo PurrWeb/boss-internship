@@ -1,39 +1,41 @@
 import React from "react"
-import NextRotaStatusButton from "./next-rota-status-button"
 import ComponentErrors from "~components/component-errors"
 import rotaStatusTitles from "~lib/rota-status-titles"
 import Spinner from "~components/spinner"
+import RotaStatusDropdown from "./rota-status-dropdown"
 
 export default class RotaStatusToggleUi extends React.Component {
     static propTypes = {
         status: React.PropTypes.string.isRequired,
-        // next status, or null if status can't be changed
-        nextStatus: React.PropTypes.string,
-        onNextStatusClick: React.PropTypes.func.isRequired,
+        onStatusSelected: React.PropTypes.func.isRequired,
         errorMessages: React.PropTypes.object,
         statusUpdateInProgress: React.PropTypes.bool
     }
     render(){
+        var statusIfPublished = null;
+        if (this.props.status === "published"){
+            statusIfPublished = rotaStatusTitles[this.props.status];
+        }
         return <div>
-            <div className="row" style={{maxWidth: 250}}>
-                <div className="col-md-6">
-                    <div className="rota-status-toggle__status">
-                        {rotaStatusTitles[this.props.status]}
-                    </div>
-                </div>
-                <div className="col-md-6">
-                    {this.getNextStatusButton()}
-                    {this.getUpdateInProgressSpinner()}
-                </div>
+            Rota Status: {statusIfPublished}
+            <div style={{maxWidth: 300}}>
+                {this.getDropdown()}
+                {this.getUpdateInProgressSpinner()}
             </div>
             <ComponentErrors errors={this.props.errorMessages} />
         </div>
     }
-    getNextStatusButton(){
+    getDropdown(){
         if (this.props.statusUpdateInProgress) {
             return null;
         }
-        return <NextRotaStatusButton nextStatus={this.props.nextStatus} onClick={this.props.onNextStatusClick} />;
+        if (this.props.status === "published") {
+            return null;
+        }
+        return <RotaStatusDropdown
+            statuses={["in_progress", "finished"]}
+            selectedStatus={this.props.status}
+            onChange={(status) => this.props.onStatusSelected(status)} />
     }
     getUpdateInProgressSpinner(){
         if (!this.props.statusUpdateInProgress) {

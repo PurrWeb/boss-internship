@@ -19,7 +19,7 @@ export const appRoutes = {
 const apiRoutes = {
     addShift: {
         getPath: function(venueId, date){
-            return "venues/" + venueId + "/rotas/" + moment(date).format("DD-MM-YYYY") + "/rota_shifts"
+            return "venues/" + venueId + "/rotas/" + utils.formatDateForApi(date) + "/rota_shifts"
         },
         method: "POST"
     },
@@ -42,9 +42,20 @@ const apiRoutes = {
 
         },
         method: "POST"
+    },
+    publishRotas: {
+        getPath: function(options){
+            var { venueId, startDate, endDate } = options;
+            return "rotas/publish?venue_id=" + venueId +
+                "&start_date=" + utils.formatDateForApi(startDate) +
+                "&end_date=" + utils.formatDateForApi(startDate)
+        },
+        method: "POST"
     }
 }
 
+window.debug = window.debug || {};
+window.debug.apiRoutes = apiRoutes;
 
 export {apiRoutes}
 export const API_ROOT = "/api/v1/"

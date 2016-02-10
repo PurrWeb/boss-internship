@@ -65,6 +65,9 @@ var utils =  {
     },
     capitalizeFirstCharacter(str) {
         return str[0].toUpperCase() + str.slice(1);
+    },
+    formatDateForApi(date){
+        return moment(date).format("DD-MM-YYYY");
     }
 }
 

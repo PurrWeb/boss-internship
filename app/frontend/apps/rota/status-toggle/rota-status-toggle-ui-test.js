@@ -5,41 +5,40 @@ import TestUtils from "react-addons-test-utils"
 import expect from "expect"
 
 describe("RotaStatusToggleUi", function(){
-    it("If the status is in_progress it shows the status and a button to change it to finished", function(){
+    it("If the status is in_progress it shows the a dropdown where the status can be changed", function(){
         var toggle = TestUtils.renderIntoDocument(
             <RotaStatusToggleUi
                 status={"in_progress"}
                 nextStatus={"finished"}
-                onNextStatusClick={() => null} />
+                onStatusSelected={() => null} />
         );
 
         var node = ReactDOM.findDOMNode(toggle);
-        expect(node.getElementsByClassName("rota-status-toggle__status")[0].innerHTML).toBe("In Progress")
-        expect(node.getElementsByClassName("next-rota-status-button")[0].innerHTML).toBe("Mark as Finished");
+        expect(node.getElementsByClassName("Select").length).toBe(1);
     })
 
-    it("Does not show a next status button if there is no `nextStatus`", function(){
+    it("Does not show a dropdown if the status is 'published'", function(){
         var toggle = TestUtils.renderIntoDocument(
             <RotaStatusToggleUi
-                status={"in_progress"}
-                onNextStatusClick={() => null} />
+                status={"published"}
+                onStatusSelected={() => null} />
         );
 
         var node = ReactDOM.findDOMNode(toggle);
-        expect(node.getElementsByClassName("next-rota-status-button").length).toBe(0);
+        expect(node.getElementsByClassName("Select").length).toBe(0);
     })
 
-    it("If an update is in progress it shows a spinner instead of a button", function(){
+    it("If an update is in progress it shows a spinner instead of the dropdown", function(){
         var toggle = TestUtils.renderIntoDocument(
             <RotaStatusToggleUi
                 status={"finished"}
                 nextStatus={"in_progress"}
                 statusUpdateInProgress={true}
-                onNextStatusClick={() => null} />
+                onStatusSelected={() => null} />
         );
 
         var node = ReactDOM.findDOMNode(toggle);
-        expect(node.getElementsByClassName("next-rota-status-button").length).toBe(0);
+        expect(node.getElementsByClassName("Select").length).toBe(0);
         expect(node.getElementsByClassName("spinner").length).toBe(1);
     })
 });

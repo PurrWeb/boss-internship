@@ -1,4 +1,5 @@
 export default {
     "in_progress": "In Progress",
-    "finished": "Finished"
+    "finished": "Finished",
+    "published": "Published"
 }
