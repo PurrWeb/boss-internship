@@ -14,12 +14,9 @@ class HolidayDateValidator
       return
     end
 
-    overlapping_holidays = InRangeQuery.new(
-      relation: Holiday.all,
-      start_value: holiday.start_date,
-      end_value: holiday.end_date,
-      start_column_name: 'start_date',
-      end_column_name: 'end_date'
+    overlapping_holidays = HolidayInRangeQuery.new(
+      start_date: holiday.start_date,
+      end_date: holiday.end_date,
     ).all
 
     overlapping_holidays_exclusive = ExclusiveOfQuery.new(

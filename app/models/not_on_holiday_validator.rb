@@ -6,12 +6,9 @@ class NotOnHolidayValidator
   def validate
     rota_date = RotaShiftDate.to_rota_date(record.starts_at)
 
-    conflicting_holidays = InRangeQuery.new(
-      relation: Holiday.all,
-      start_value: rota_date,
-      end_value: rota_date,
-      start_column_name: "start_date",
-      end_column_name: "end_date"
+    conflicting_holidays = HolidayInRangeQuery.new(
+      start_date: rota_date,
+      end_date: rota_date,
     ).all
 
     if conflicting_holidays.present?
