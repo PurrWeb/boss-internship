@@ -1,11 +1,19 @@
 import createApiRequestAction from "./create-api-request-action";
 import expect from "expect"
 
-function dispatchDoSomething(makeRequest, actionCreatorOptions){
+function dispatchDoSomething(makeRequest, actionOptions, confirm){
 	var dispatch = expect.createSpy();
 	var actionTypes = {};
-	var actionCreator = createApiRequestAction("DO_SOMETHING", makeRequest, actionTypes);
-	actionCreator(actionCreatorOptions)(dispatch);
+	var actionCreator = createApiRequestAction({
+		requestType: "DO_SOMETHING",
+		makeRequest,
+		actionTypes,
+		confirm
+	});
+	function getState() {
+		return {};
+	}
+	actionCreator(actionOptions)(dispatch, getState);
 	return dispatch;
 }
 
@@ -45,4 +53,12 @@ describe("createApiRequestAction", function(){
 		expect(actionObjects[0].type).toEqual("API_REQUEST_END");
 		expect(actionObjects[1].type).toEqual("SET_COMPONENT_ERROR");
 	});
+
+	it("Doesn't make an API request if `confirm` returns false", function(){
+		var makeRequest = expect.createSpy();
+		var confirm = () => false;
+		var dispatch = dispatchDoSomething(makeRequest, {}, confirm);
+
+		expect(makeRequest).toNotHaveBeenCalled();		
+	})
 });

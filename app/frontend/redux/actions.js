@@ -5,15 +5,23 @@ import * as backendData from "~redux/process-backend-data"
 import {apiRoutes, API_ROOT} from "~lib/routes"
 
 export const actionTypes = {};
-const createApiRequestAction = function(requestType, makeRequest){
-    return importedCreateApiRequestAction(requestType, makeRequest, actionTypes);
+const createApiRequestAction = function(options){
+    var options = _.clone(options);
+    options.actionTypes = actionTypes;
+    return importedCreateApiRequestAction(options);
 }
 
+/*
+apiOptions:
+- method
+- path
+- data
+*/
 function makeApiRequest(apiOptions){
-    return function(requestOptions, success, error, getState) {
+    return function(requestOptions, success, error, state) {
         function resolveFunctionParameter(optionsKey){
             if (typeof options[optionsKey] === "function") {
-                options[optionsKey] = options[optionsKey](requestOptions, getState());
+                options[optionsKey] = options[optionsKey](requestOptions, state);
             }
         };
         var options = _.clone(apiOptions);
@@ -41,9 +49,13 @@ function makeApiRequest(apiOptions){
     }
 }
 
-export const addRotaShift = createApiRequestAction(
-    "ADD_SHIFT",
-    makeApiRequest({
+function displayedRotaIsPublished(state){
+    return state.rotas[state.pageOptions.displayedRota].status === "published";
+}
+
+export const addRotaShift = createApiRequestAction({
+    requestType: "ADD_SHIFT",
+    makeRequest: makeApiRequest({
         method: apiRoutes.addShift.method,
         path: function(options, state) {
             var rotaId = state.pageOptions.displayedRota;
@@ -56,8 +68,14 @@ export const addRotaShift = createApiRequestAction(
             responseData.ends_at = new Date(responseData.ends_at)
             return {shift: responseData};
         }
-    })
-);
+    }),
+    confirm: function(requestOptions, state){
+        if (!displayedRotaIsPublished(state)) {
+            return true;
+        }
+        return confirm("Adding a new shift will send an email notification to the staff member. Do you want to continue?");
+    }
+});
 
 
 
@@ -69,9 +87,9 @@ export function replaceAllShifts (options) {
     }
 }
 
-export const updateRotaShift = createApiRequestAction(
-    "UPDATE_SHIFT",
-    makeApiRequest({
+export const updateRotaShift = createApiRequestAction({
+    requestType: "UPDATE_SHIFT",
+    makeRequest: makeApiRequest({
         path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shift.shift_id}),
         method: apiRoutes.updateShift.method,
         data: function(options, state){
@@ -83,13 +101,13 @@ export const updateRotaShift = createApiRequestAction(
             return {shift: responseData};
         }
     })
-);
+});
 
 
 
-export const deleteRotaShift = createApiRequestAction(
-    "DELETE_SHIFT",
-    makeApiRequest({
+export const deleteRotaShift = createApiRequestAction({
+    requestType: "DELETE_SHIFT",
+    makeRequest: makeApiRequest({
         method: apiRoutes.deleteShift.method,
         validateOptions: function(options){
             if (options.shift_id === undefined) {
@@ -101,7 +119,7 @@ export const deleteRotaShift = createApiRequestAction(
             return {shift_id: requestOptions.shift_id}
         }
     })
-);
+});
 
 export const ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
 export function enterManagerMode () {
@@ -150,9 +168,9 @@ export function replaceAllRotas(options) {
     }
 }
 
-export const updateRotaStatus = createApiRequestAction(
-    "UPDATE_ROTA_STATUS",
-    makeApiRequest({
+export const updateRotaStatus = createApiRequestAction({
+    requestType: "UPDATE_ROTA_STATUS",
+    makeRequest: makeApiRequest({
         method: apiRoutes.updateRotaStatus.method,
         path: function(options){
             return apiRoutes.updateRotaStatus.getPath(options);
@@ -164,7 +182,7 @@ export const updateRotaStatus = createApiRequestAction(
             }
         }
     })
-);
+});
 
 actionTypes.REPLACE_ALL_STAFF_TYPES = "REPLACE_ALL_STAFF_TYPES";
 export function replaceAllStaffTypes(options) {
