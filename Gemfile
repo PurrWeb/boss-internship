@@ -32,6 +32,7 @@ gem 'chosen-rails'
 gem 'tiny-color-rails'
 gem 'pick-a-color-rails'
 gem 'paloma'
+gem 'andand'
 
 group :development, :test do
   gem "byebug"
