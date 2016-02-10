@@ -5,5 +5,11 @@ FactoryGirl.define do
     staff_member
     association :creator, factory: :user
     holiday_type { 'paid_holiday' }
+
+    trait :disabled do
+      after(:create) do |holiday|
+        FactoryGirl.create(:holiday_transition, :disabled, holiday: holiday)
+      end
+    end
   end
 end

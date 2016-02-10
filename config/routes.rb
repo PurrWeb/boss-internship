@@ -31,6 +31,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :holidays, only: [:edit, :update]
+
   resources :staff_members, only: [:show, :index, :new, :create] do
     resources :holidays, only: [:create, :destroy]
     member do
