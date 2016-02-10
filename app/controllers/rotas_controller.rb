@@ -60,7 +60,7 @@ class RotasController < ApplicationController
 
   def start_date_from_params
     if params[:start_date].present?
-      UIRotaDate.params(params[:start_date])
+      UIRotaDate.parse(params[:start_date])
     end
   end
 
@@ -70,7 +70,7 @@ class RotasController < ApplicationController
 
   def end_date_from_params
     if params[:end_date].present?
-      UIRotaDate.params(params[:end_date])
+      UIRotaDate.parse(params[:end_date])
     end
   end
 
