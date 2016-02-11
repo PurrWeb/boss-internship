@@ -1,9 +1,11 @@
 import React from "react"
+import Spinner from "~components/spinner"
 
 export default class PublishRotaWeekButton extends React.Component {
     static propTypes = {
         onClick: React.PropTypes.func.isRequired,
-        hasBeenPublished: React.PropTypes.bool.isRequired
+        hasBeenPublished: React.PropTypes.bool.isRequired,
+        publishingInProgress: React.PropTypes.bool.isRequired
     }
     render(){
         if (this.props.hasBeenPublished) {
@@ -13,9 +15,13 @@ export default class PublishRotaWeekButton extends React.Component {
                 Changes to them will send out email notifications.
             </div>
         } else {
-            return <button className="btn btn-default" onClick={this.props.onClick}>
-                Publish this week's rotas
-            </button>
+            if (this.props.publishingInProgress) {
+                return <Spinner />
+            } else {
+                return <button className="btn btn-default" onClick={this.props.onClick}>
+                    Publish this week's rotas
+                </button>
+            }
         }
     }
 }

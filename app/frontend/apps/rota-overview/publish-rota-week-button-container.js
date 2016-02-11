@@ -1,5 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
+import _ from "underscore"
 import PublishRotaWeekButton from "./publish-rota-week-button"
 import { publishRotas } from "~redux/actions"
 
@@ -16,7 +17,14 @@ class PublishRotaWeekButtonContainer extends React.Component {
 
         return <PublishRotaWeekButton
             hasBeenPublished={hasBeenPublished}
+            publishingInProgress={this.props.publishingInProgress}
             onClick={() => this.props.publishRotaWeek()} />
+    }
+}
+
+function mapStateToProps(state){
+    return {
+        publishingInProgress: _.some(state.apiRequestsInProgress.PUBLISH_ROTAS)
     }
 }
 
@@ -32,4 +40,4 @@ function mapDispatchToProps(dispatch, ownProps){
     }
 }
 
-export default connect(undefined, mapDispatchToProps)(PublishRotaWeekButtonContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(PublishRotaWeekButtonContainer)
