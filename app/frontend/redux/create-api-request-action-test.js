@@ -54,6 +54,17 @@ describe("createApiRequestAction", function(){
 		expect(actionObjects[1].type).toEqual("SET_COMPONENT_ERROR");
 	});
 
+	it("Shows an alert box if a request fails without an errorHandlingComponent", function(){
+		expect.spyOn(window, "alert");
+
+		var makeRequest = function(options, success, error){
+			error({errors: {base: ["It went wrong"]}});
+		};
+		var dispatch = dispatchDoSomething(makeRequest, {});
+
+		expect(window.alert).toHaveBeenCalled();
+	})
+
 	it("Doesn't make an API request if `confirm` returns false", function(){
 		var makeRequest = expect.createSpy();
 		var confirm = () => false;
