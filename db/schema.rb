@@ -66,12 +66,12 @@ ActiveRecord::Schema.define(version: 20160210152549) do
   add_index "holiday_transitions", ["holiday_id", "sort_key"], name: "index_holiday_transitions_parent_sort", unique: true, using: :btree
 
   create_table "holidays", force: :cascade do |t|
-    t.date     "start_date",                    null: false
-    t.date     "end_date",                      null: false
-    t.string   "holiday_type",      limit: 255, null: false
-    t.integer  "creator_user_id",   limit: 4,   null: false
-    t.integer  "staff_member_id",   limit: 4,   null: false
-    t.text     "note",            limit: 65535
+    t.date     "start_date",                      null: false
+    t.date     "end_date",                        null: false
+    t.string   "holiday_type",      limit: 255,   null: false
+    t.integer  "creator_user_id",   limit: 4,     null: false
+    t.integer  "staff_member_id",   limit: 4,     null: false
+    t.text     "note",              limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "parent_holiday_id", limit: 4
