@@ -8,6 +8,10 @@ It dispatches the following actions:
 - SET_COMPONENT_ERROR to assign the API error message to a component
 - {requestType}_SUCCESS for the individual reducers to handle successful data updates.
 
+Use errorHandlingComponent to specify which component should receive the error. Use
+requestSourceComponent to keep track of the component that started the request (which
+can be useful for showing spinners etc).
+
 # Example
 
 const actionTypes = {}
@@ -16,7 +20,8 @@ const addTodo = createApiRequestAction(
     function(options, success, error, getState) {
         loadData(function(response){
             success({
-                requestComponent: options.requestComponent,
+                errorHandlingComponent: options.requestComponent,
+                requestSourceComponent: options.requestComponent,
                 ...response
             });
         }, 1000);
