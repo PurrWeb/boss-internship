@@ -34,17 +34,16 @@ class RotaOverviewPage extends Component {
                             this.goToOverviewPage(selection.startDate, selection.endDate, firstRota.venue.id)
                         } }/>
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-4">
+                    Venue: <br/>
                     <VenueDropdown
                         venues={window.boss.venues}
                         selectedVenue={firstRota.venue.id}
                         onChange={
                             (venueId) => this.goToOverviewPage(firstRota.date, lastRota.date, venueId)
                         } />
-                </div>
-                <div className="col-md-3">
-                </div>
-                <div className="col-md-3">
+                    <br/>
+
                     <PublishRotaWeekButtonContainer
                         rotas={rotas}
                         firstDate={firstRota.date}

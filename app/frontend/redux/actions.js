@@ -189,6 +189,22 @@ export const updateRotaStatus = createApiRequestAction({
     })
 });
 
+export const publishRotas = createApiRequestAction({
+    requestType: "PUBLISH_ROTAS",
+    makeRequest: makeApiRequest({
+        method: apiRoutes.publishRotas.method,
+        path: function(options){
+            return apiRoutes.publishRotas.getPath(options)
+        },
+        getSuccessActionData: function(responseDate, requestOptions){
+            return requestOptions;
+        }
+    }),
+    confirm: function(){
+        return confirm("Publishing a rota will send out email confirmations and can't be undone.\nDo you want to continue?")
+    }
+})
+
 actionTypes.REPLACE_ALL_STAFF_TYPES = "REPLACE_ALL_STAFF_TYPES";
 export function replaceAllStaffTypes(options) {
     return {
@@ -204,6 +220,7 @@ export function setPageOptions(options) {
         pageOptions: options.pageOptions
     }
 }
+
 
 export function loadInitialRotaAppState(viewData) {
     let rotaData = viewData.rotas;

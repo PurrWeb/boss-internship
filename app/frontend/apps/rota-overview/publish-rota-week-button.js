@@ -7,8 +7,10 @@ export default class PublishRotaWeekButton extends React.Component {
     }
     render(){
         if (this.props.hasBeenPublished) {
-            return <div>
-                "This week's rotas have been published. Changes to it will send out email notifications."
+            return <div className="alert alert-info">
+                This week's rotas have been published.
+                <br/>
+                Changes to them will send out email notifications.
             </div>
         } else {
             return <button className="btn btn-default" onClick={this.props.onClick}>

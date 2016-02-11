@@ -1,4 +1,5 @@
 import {actionTypes} from "./actions.js"
+import _ from "underscore"
 
 export default function rotasReducer(state={}, action){
     switch(action.type) {
@@ -11,6 +12,18 @@ export default function rotasReducer(state={}, action){
             rota.status = status;
             newState[rotaId] = rota;
             return newState;
+        case actionTypes.PUBLISH_ROTAS_SUCCESS:
+            return _(state).mapObject(function(rota){
+                if (rota.venue.id !== action.venueId) {
+                    return rota;
+                }
+                var isWithinUpdatedDateRange = rota.date >= action.startDate &&
+                    rota.date <= action.endDate;
+                if (!isWithinUpdatedDateRange) {
+                    return rota;
+                }
+                return Object.assign({}, rota, {status: "published"});
+            });
     }
     return state;
 }

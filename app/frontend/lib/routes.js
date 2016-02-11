@@ -48,7 +48,7 @@ const apiRoutes = {
             var { venueId, startDate, endDate } = options;
             return "rotas/publish?venue_id=" + venueId +
                 "&start_date=" + utils.formatDateForApi(startDate) +
-                "&end_date=" + utils.formatDateForApi(startDate)
+                "&end_date=" + utils.formatDateForApi(endDate)
         },
         method: "POST"
     }

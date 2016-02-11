@@ -1,9 +1,11 @@
 import React from "react"
+import { connect } from "react-redux"
 import PublishRotaWeekButton from "./publish-rota-week-button"
+import { publishRotas } from "~redux/actions"
 
 const ROTA_PUBLISHED_STATUS = "published"
 
-export default class PublishRotaWeekButtonContainer extends React.Component {
+class PublishRotaWeekButtonContainer extends React.Component {
     static propTypes = {
         rotas: React.PropTypes.array.isRequired,
         firstDate: React.PropTypes.instanceOf(Date).isRequired,
@@ -14,9 +16,20 @@ export default class PublishRotaWeekButtonContainer extends React.Component {
 
         return <PublishRotaWeekButton
             hasBeenPublished={hasBeenPublished}
-            onClick={() => this.onClick()} />
-    }
-    onClick(){
-        alert("todo")
+            onClick={() => this.props.publishRotaWeek()} />
     }
 }
+
+function mapDispatchToProps(dispatch, ownProps){
+    return {
+        publishRotaWeek: function(){
+            dispatch(publishRotas({
+                venueId: ownProps.rotas[0].venue.id,
+                startDate: ownProps.firstDate,
+                endDate: ownProps.lastDate
+            }))
+        }
+    }
+}
+
+export default connect(undefined, mapDispatchToProps)(PublishRotaWeekButtonContainer)
