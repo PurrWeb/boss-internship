@@ -1,5 +1,6 @@
 import importedCreateApiRequestAction from "./create-api-request-action"
 import _ from "underscore"
+import utils from "~lib/utils"
 import moment from "moment"
 import * as backendData from "~redux/process-backend-data"
 import {apiRoutes, API_ROOT} from "~lib/routes"
@@ -40,8 +41,19 @@ function makeApiRequest(apiOptions){
             var actionData = apiOptions.getSuccessActionData(responseData, requestOptions);
             actionData.requestComponent = requestOptions.requestComponent;
             success(actionData);
-        }, function(response){
-            var responseData = JSON.parse(response.responseText);
+        }, function(response, textStatus){
+            var { responseText } = response;
+            var responseData = null;
+            if (utils.stringIsJson(responseText)) {
+                responseData = JSON.parse(responseText);
+            } else {
+                responseData = {
+                    errors: {
+                        base: [textStatus + ' - ' + response.status, responseText]
+                    }
+                }
+            }
+
             responseData.requestComponent = requestOptions.requestComponent
             
             error(responseData);

@@ -64,10 +64,21 @@ var utils =  {
         return moment(date).format("DD-MM-YYYY");
     },
     capitalizeFirstCharacter(str) {
+        if (str.length === 0) {
+            return str;
+        }
         return str[0].toUpperCase() + str.slice(1);
     },
     formatDateForApi(date){
         return moment(date).format("DD-MM-YYYY");
+    },
+    stringIsJson(string){
+        try {
+            JSON.parse(string);
+            return true
+        } catch (err) {
+            return false;
+        }
     }
 }
 
