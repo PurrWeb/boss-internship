@@ -17,6 +17,6 @@ export default class PublishRotaWeekButtonContainer extends React.Component {
             onClick={() => this.onClick()} />
     }
     onClick(){
-        
+        alert("todo")
     }
 }

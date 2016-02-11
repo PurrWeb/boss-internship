@@ -249,6 +249,15 @@ export function loadInitialClockInOutAppState() {
     }
 }
 
+export function loadInitialRotaOverviewAppState(viewData){
+    return function(dispatch) {
+        var rotas = _.pluck(viewData, "rota");
+        rotas = rotas.map(backendData.processRotaObject);
+        rotas = indexById(rotas);
+        dispatch(replaceAllRotas({rotas: rotas}));
+    }
+}
+
 
 function indexById(data){
     return _.indexBy(data, "id")
