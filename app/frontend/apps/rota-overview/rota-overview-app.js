@@ -22,7 +22,8 @@ export default class RotaOverviewApp extends Component {
 
             var staffTypesWithShifts = selectStaffTypesWithShifts({
                 staffTypes: indexById(staffTypes),
-                rotaShifts: {items: indexById(shifts) },
+                // Items property to simulate how it works in the store
+                rotaShifts: {items: indexById(shifts)}, 
                 staff: indexById(staff)
             });
 
