@@ -1,25 +1,16 @@
 <div class="container-fluid">
   <div class="form-inline">
-    <%= form.date_select(
+    <%= form.text_field(
           :start_date,
-          {
-            start_year: Time.now.year,
-            end_year: 1940,
-            include_blank: true,
-            with_css_classes: true,
-            label_class: 'required'
-          }
+          value: form.object.start_date.andand.strftime(Rota.url_date_format),
+          class: 'date-picker'
         ) %>
-    <%= form.date_select(
+    <%= form.text_field(
           :end_date,
-          {
-            start_year: Time.now.year,
-            end_year: 1940,
-            include_blank: true,
-            with_css_classes: true,
-            label_class: 'required'
-          }
+          value: form.object.end_date.andand.strftime(Rota.url_date_format),
+          class: 'date-picker'
         ) %>
+
     <%= form.select(
           :holiday_type,
           options_for_select(

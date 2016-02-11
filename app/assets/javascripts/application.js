@@ -19,6 +19,7 @@
 //= require tinycolor-min
 //= require pick-a-color.min
 //= require paloma
+//= require bootstrap-datepicker
 //= require_tree .
 
 $(function(){
@@ -27,5 +28,9 @@ $(function(){
   $('.pick-a-color').pickAColor({
     showSavedColors: false,
     showHexInput: false
+  });
+
+  $('.date-picker').datepicker({
+    format: "dd-mm-yyyy"
   });
 });

@@ -84,20 +84,10 @@ class HolidaysController < ApplicationController
   end
 
   def start_date_from_params
-    parse_date_thing(params['holiday'], 'start_date')
+    Date.strptime(params['holiday']['start_date'], Rota.url_date_format)
   end
 
   def end_date_from_params
-    parse_date_thing(params['holiday'], 'end_date')
-  end
-
-  def parse_date_thing(hash ,field_name)
-    year = hash["#{field_name}(1i)"]
-    month = hash["#{field_name}(2i)"]
-    day = hash["#{field_name}(3i)"]
-
-    if year.present? && month.present? && day.present?
-      Date.new(Integer(year), Integer(month), Integer(day)).to_date
-    end
+    Date.strptime(params['holiday']['end_date'], Rota.url_date_format)
   end
 end
