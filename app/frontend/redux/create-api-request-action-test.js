@@ -43,11 +43,11 @@ describe("createApiRequestAction", function(){
 		expect(actionObjects[1].type).toEqual("API_REQUEST_END");
 	});
 
-	it("Dispatches API_REQUEST_END and SET_COMPONENT_ERROR when a request fails", function(){
+	it("Dispatches API_REQUEST_END and SET_COMPONENT_ERROR when a request fails and an errorHandlingComponent is available", function(){
 		var makeRequest = function(options, success, error){
-			error({message: "It went wrong"});
+			error({errors: {base: ["It went wrong"]}});
 		};
-		var dispatch = dispatchDoSomething(makeRequest, {});
+		var dispatch = dispatchDoSomething(makeRequest, {errorHandlingComponent: 66});
 
 		var actionObjects = dispatch.calls[1].arguments[0];
 		expect(actionObjects[0].type).toEqual("API_REQUEST_END");
