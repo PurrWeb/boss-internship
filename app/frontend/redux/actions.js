@@ -39,7 +39,7 @@ function makeApiRequest(apiOptions){
            data: options.data
         }).then(function(responseData){    
             var actionData = apiOptions.getSuccessActionData(responseData, requestOptions);
-            actionData.requestComponent = requestOptions.requestComponent;
+            copyComponentInformationFromRequestOptions(actionData, requestOptions);
             success(actionData);
         }, function(response, textStatus){
             var { responseText } = response;
@@ -54,10 +54,16 @@ function makeApiRequest(apiOptions){
                 }
             }
 
-            responseData.requestComponent = requestOptions.requestComponent
+            copyComponentInformationFromRequestOptions(responseData, requestOptions);
             
             error(responseData);
         });
+    }
+    // Takes data about the request source component that was part of the request and 
+    // copies it over to the target.
+    function copyComponentInformationFromRequestOptions(target, requestOptions){
+        target.errorHandlingComponent = requestOptions.errorHandlingComponent;
+        target.requestSourceComponent = requestOptions.requestSourceComponent;
     }
 }
 

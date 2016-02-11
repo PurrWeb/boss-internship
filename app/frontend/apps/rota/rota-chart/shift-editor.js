@@ -83,7 +83,7 @@ export default class ShiftEditor extends Component {
         }
         this.context.boundActionCreators.deleteRotaShift({
             shift_id: this.props.shift.id,
-            requestComponent: this.getComponentId()
+            errorHandlingComponent: this.getComponentId()
         });
     }
     onShiftTimesChange(shiftTimes) {
@@ -96,7 +96,7 @@ export default class ShiftEditor extends Component {
                 ends_at: this.state.newShiftTimes.ends_at,
                 shift_id: this.props.shift.id
             },
-            requestComponent: this.getComponentId()
+            errorHandlingComponent: this.getComponentId()
         });
     }
 }

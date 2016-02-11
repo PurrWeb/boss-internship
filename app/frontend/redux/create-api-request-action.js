@@ -64,15 +64,18 @@ export default function createApiRequestAction(actionOptions){
                 ]);
             }
             function error(responseOptions){
-                dispatch([
-                    requestEndAction(),
-                    setComponentErrorAction(responseOptions.errors)
-                ]);
+                var actions = [requestEndAction()];
+                if (requestOptions.errorHandlingComponent) {
+                    actions.push(setComponentErrorAction(responseOptions.errors));
+                } else {
+                    alert(responseOptions.errors.base.join("\n"));
+                }
+                dispatch(actions);
             }
             function setComponentErrorAction(errors){
                 return {
                     type: actionTypes.SET_COMPONENT_ERROR,
-                    componentId: requestOptions.requestComponent,
+                    componentId: requestOptions.errorHandlingComponent,
                     errors: errors
                 };
             }

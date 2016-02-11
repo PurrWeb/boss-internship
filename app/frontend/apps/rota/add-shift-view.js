@@ -67,7 +67,7 @@ export default class AddShiftView extends Component {
                 ends_at: this.state.shiftTimes.ends_at,
                 staff_member_id: staffId
             },
-            requestComponent: requestComponent
+            errorHandlingComponent: requestComponent
         });
     }
     onShiftTimesChange(shiftTimes){
