@@ -31,7 +31,6 @@ class Holiday < ActiveRecord::Base
     state_machine.current_state
   end
 
-
   def enabled?
     current_state == 'enabled'
   end
