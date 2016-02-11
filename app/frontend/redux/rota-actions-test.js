@@ -1,5 +1,5 @@
 import expect from "expect"
-import {addRotaShift, updateRotaShift, deleteRotaShift} from "./actions"
+import {addRotaShift, updateRotaShift, deleteRotaShift, publishRotas} from "./actions"
 
 describe("Rota Actions", function(){
     beforeEach(function(){
@@ -29,4 +29,11 @@ describe("Rota Actions", function(){
         deleteRotaShift({})(dispatch, getState);
         expect(window.confirm.calls.length).toBe(3);
     });
+
+    it("Shows a confirmatin dialog before publishing a week's shifts", function(){
+        var dispatch = function(){};
+        var getState = function(){};
+        publishRotas({})(dispatch, getState);
+        expect(window.confirm).toHaveBeenCalled();
+    })
 });
