@@ -6,6 +6,7 @@ import VenueDropdown from "~components/venue-dropdown"
 import {appRoutes} from "~lib/routes"
 import moment from "moment"
 import _ from "underscore"
+import rotaStatusTitles from "~lib/rota-status-titles"
 import { selectStaffTypesWithShifts } from "~redux/selectors"
 
 function indexById(data){
@@ -32,6 +33,9 @@ export default class RotaOverviewApp extends Component {
                     <a href={appRoutes.rota({venueId: rota.venue.id, date: rota.date}) }>
                         {moment(rota.date).format("ddd D MMMM YYYY")}
                     </a>
+                    <span className="boss-badge" style={{verticalAlign: "middle", marginLeft: 10}}>
+                        {rotaStatusTitles[rota.status]}
+                    </span>
                 </h2>
                 <RotaOverviewView
                     staff={ indexById(staff) }

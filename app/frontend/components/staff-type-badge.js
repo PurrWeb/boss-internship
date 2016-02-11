@@ -13,7 +13,7 @@ export default class StaffTypeBadge extends Component {
         var staffTypeStyle = {
             backgroundColor: staffType.color
         };
-        return <div className="staff-badge" style={staffTypeStyle}>
+        return <div className="boss-badge staff-badge" style={staffTypeStyle}>
             {staffType.name}
         </div>
     }
