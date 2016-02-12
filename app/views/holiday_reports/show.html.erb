@@ -1,0 +1,19 @@
+<div id="holiday-report-show-page" data-date="<%= date.strftime(Rota.url_date_format) %>">
+  <h1>Holiday Reports</h1>
+</div>
+
+<%= javascript_tag do %>
+  var holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: holidays } %>;
+
+  var staffMembers = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
+
+  var venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: venues } %>;
+
+  var staffTypes = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
+
+  window.boss = window.boss || {};
+  window.boss.holidays = holidays;
+  window.boss.staffMembers = staffMembers;
+  window.boss.venues = venues;
+  window.boss.staffTypes = staffTypes;
+<% end %>

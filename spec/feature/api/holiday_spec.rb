@@ -22,23 +22,27 @@ RSpec.describe 'Holiday api end points' do
 
       specify 'should return a json representation of the holiday' do
         json = JSON.parse(response.body)
-        expect(json).to eq({
-          "id" => holiday.id,
-          "url" => url_helpers.api_v1_holiday_url(holiday),
-          "start_date" => holiday.start_date.iso8601,
-          "end_date" => holiday.end_date.iso8601,
-          "holiday_type" => holiday.holiday_type,
-          "status" => holiday.current_state,
-          "staff_member" => {
-            "id" => holiday.staff_member.id,
-            "url" => url_helpers.api_v1_staff_member_url(holiday.staff_member)
-          }
-        })
+        expect(json).to eq(json_holiday(holiday))
       end
     end
   end
 
   private
+  def json_holiday(holiday)
+    {
+      "id" => holiday.id,
+      "url" => url_helpers.api_v1_holiday_url(holiday),
+      "start_date" => holiday.start_date.iso8601,
+      "end_date" => holiday.end_date.iso8601,
+      "holiday_type" => holiday.holiday_type,
+      "status" => holiday.current_state,
+      "staff_member" => {
+        "id" => holiday.staff_member.id,
+        "url" => url_helpers.api_v1_staff_member_url(holiday.staff_member)
+      }
+    }
+  end
+
   def app
     Rails.application
   end
