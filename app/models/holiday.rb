@@ -39,6 +39,10 @@ class Holiday < ActiveRecord::Base
     state_machine.transition_to!(:disabled, requster_user_id: requester.id)
   end
 
+  def editable?
+    end_date > Time.now.to_date
+  end
+
   private
   # Needed for statesman
   def self.transition_class

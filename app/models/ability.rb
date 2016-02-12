@@ -12,12 +12,16 @@ class Ability
 
     can :manage, :rotas
 
+    can :manage, Holiday do |holiday|
+      holiday.editable? && can_manage_staff_member?(user, holiday.staff_member)
+    end
+
     can :manage, Venue do |venue|
       user.has_all_venue_access? || user.venues.include?(venue)
     end
 
     can :manage, StaffMember do |staff_member|
-      user.has_all_venue_access? || user.venues.include?(staff_member.venue)
+      can_manage_staff_member?(user, staff_member)
     end
 
     can :manage, Rota do |rota|
@@ -46,5 +50,9 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+  end
+
+  def can_manage_staff_member?(user, staff_member)
+    user.has_all_venue_access? || user.venues.include?(staff_member.venue)
   end
 end
