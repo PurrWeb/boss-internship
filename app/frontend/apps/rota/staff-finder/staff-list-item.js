@@ -44,7 +44,16 @@ export default class StaffListItem extends Component {
                                     staffId={staff.id} />
                             </div>
                             <div className="col-md-3">
-                                Holidays <a href={appRoutes.staffMemberHolidays(staff.id)}>Edit</a>
+                                <h4 className="rota-staff-list-item__h4" style={{
+                                    display: "inline-block",
+                                }}>
+                                    Holidays
+                                </h4>
+                                <a
+                                    href={appRoutes.staffMemberHolidays(staff.id)}
+                                    style={{marginLeft: 5, display: "inline-block"}}>
+                                    Edit
+                                </a>
                                 <StaffHolidaysList staffId={staff.id} />
                             </div>
                             <div className="col-md-3">

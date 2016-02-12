@@ -7,6 +7,7 @@ import {ContextProvider, NoOpComponent} from "~lib/test-helpers"
 
 StaffListItem.__Rewire__('StaffTypeBadge', NoOpComponent);
 StaffListItem.__Rewire__('AddStaffToShiftButton', NoOpComponent);
+StaffListItem.__Rewire__('StaffHolidaysList', NoOpComponent);
 
 describe('StaffListItem', function() {
     var staff = {

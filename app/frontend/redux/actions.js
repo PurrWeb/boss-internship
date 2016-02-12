@@ -168,6 +168,15 @@ export const publishRotas = createApiRequestAction({
     }
 })
 
+
+actionTypes.REPLACE_ALL_HOLIDAYS = "REPLACE_ALL_HOLIDAYS";
+function replaceAllHolidays(options){
+    return {
+        type: actionTypes.REPLACE_ALL_HOLIDAYS,
+        holidays: options.holidays
+    }
+}
+
 actionTypes.REPLACE_ALL_STAFF_TYPES = "REPLACE_ALL_STAFF_TYPES";
 export function replaceAllStaffTypes(options) {
     return {
@@ -191,9 +200,11 @@ export function loadInitialRotaAppState(viewData) {
     let rotaShiftData = viewData.rota_shifts;
     let staffMemberData = viewData.staff_members;
     let venueData = viewData.venues;
+    let holidays = viewData.holidays;
 
     rotaData = rotaData.map(backendData.processRotaObject);
     rotaShiftData = rotaShiftData.map(backendData.processShiftObject);
+    holidays = holidays.map(backendData.processHolidayObject)
     
     return function(dispatch){
         dispatch([
@@ -211,6 +222,9 @@ export function loadInitialRotaAppState(viewData) {
             }),
             replaceAllRotas({
                 rotas: indexById(rotaData)
+            }),
+            replaceAllHolidays({
+                holidays: indexById(holidays)
             }),
             setPageOptions({pageOptions: {
                 displayedRota: _.first(rotaData).id
