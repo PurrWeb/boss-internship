@@ -62,8 +62,8 @@ describe HolidayDateValidator do
 
     context 'validating the existing holiday' do
       let(:validator) { HolidayDateValidator.new(existing_holiday) }
-      let(:existing_holiday_start_date) { 2.days.ago.to_date }
-      let(:existing_holiday_end_date) { 2.days.from_now.to_date }
+      let(:existing_holiday_start_date) { Time.now.to_date.monday }
+      let(:existing_holiday_end_date) { existing_holiday_start_date + 2.days }
 
       specify 'no error should be added' do
         validator.validate
@@ -72,8 +72,8 @@ describe HolidayDateValidator do
     end
 
     context 'end of holiday overlaps with existing' do
-      let(:existing_holiday_start_date) { 2.days.ago.to_date }
-      let(:existing_holiday_end_date) { 2.days.from_now.to_date }
+      let(:existing_holiday_start_date) { Time.now.to_date.monday + 1.day }
+      let(:existing_holiday_end_date) { existing_holiday_start_date + 3.days }
       let(:start_date) { existing_holiday_start_date - 1.days }
       let(:end_date) { existing_holiday_start_date + 1.day }
 
@@ -91,10 +91,10 @@ describe HolidayDateValidator do
     end
 
     context 'start of holiday overlaps with existing' do
-      let(:existing_holiday_start_date) { 2.days.ago.to_date }
-      let(:existing_holiday_end_date) { 2.days.from_now.to_date }
-      let(:start_date) { existing_holiday_end_date - 1.days }
-      let(:end_date) { existing_holiday_end_date + 1.day }
+      let(:existing_holiday_start_date) { Time.now.to_date.monday + 1.day }
+      let(:existing_holiday_end_date) { Time.now.to_date.monday + 3.days }
+      let(:start_date) { Time.now.to_date.monday }
+      let(:end_date) { Time.now.to_date.monday + 2.days }
 
       specify 'an error message should be added on base' do
         validator.validate
@@ -110,8 +110,8 @@ describe HolidayDateValidator do
     end
 
     context 'existing holiday dates encloses new dates' do
-      let(:existing_holiday_start_date) { 2.days.ago.to_date }
-      let(:existing_holiday_end_date) { 2.days.from_now.to_date }
+      let(:existing_holiday_start_date) { Time.now.to_date.monday }
+      let(:existing_holiday_end_date) { existing_holiday_start_date + 6.days }
       let(:start_date) { existing_holiday_start_date + 1.days }
       let(:end_date) { existing_holiday_end_date - 1.day }
 
@@ -130,13 +130,20 @@ describe HolidayDateValidator do
   end
 
   context 'overlapping shift exist' do
-    let(:start_date) { Time.now.to_date - 2.days }
-    let(:end_date) { start_date + 4.days }
-    let(:shift_starts_at) { Time.now.beginning_of_day + 10.hours }
+    let(:start_date) { Time.now.to_date.monday + 2.days }
+    let(:end_date) { start_date + 1.day }
+    let(:shift_starts_at) { start_date.beginning_of_day + 10.hours }
     let(:shift_ends_at) { shift_starts_at + 2.hours }
+    let(:rota) do
+      FactoryGirl.create(
+        :rota,
+        date: start_date
+      )
+    end
     let!(:shift) do
       FactoryGirl.create(
         :rota_shift,
+        rota: rota,
         staff_member: holiday.staff_member,
         starts_at: shift_starts_at,
         ends_at: shift_ends_at
@@ -156,6 +163,29 @@ describe HolidayDateValidator do
     end
   end
 
+  context 'holiday is not conatined within one week' do
+    let(:start_date) do
+      # Saturday
+      Date.parse('17/01/2015')
+    end
+    let(:end_date) do
+      # the next Wednesday
+      Date.parse('21/01/2015')
+    end
+
+    specify 'an error message should be added on base' do
+      validator.validate
+      expect(
+        holiday.errors['base']
+      ).to eq([mulitple_week_error_message])
+    end
+
+    specify 'only an error should be added for base' do
+      validator.validate
+      expect(holiday.errors.keys).to eq([:base])
+    end
+  end
+
   private
   def overlapping_shift_error_message
     'Staff member is assigned shifts on one of these days'
@@ -163,5 +193,9 @@ describe HolidayDateValidator do
 
   def overlapping_holiday_error_message
     "Holiday conflicts with an existing holiday"
+  end
+
+  def mulitple_week_error_message
+    "Holiday must be within a single week"
   end
 end

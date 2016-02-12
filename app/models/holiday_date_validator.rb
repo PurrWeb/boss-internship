@@ -38,5 +38,9 @@ class HolidayDateValidator
     if conflicting_shifts.present?
       holiday.errors.add(:base, 'Staff member is assigned shifts on one of these days')
     end
+
+    if RotaWeek.new(holiday.start_date).start_date != RotaWeek.new(holiday.end_date).start_date
+      holiday.errors.add(:base, "Holiday must be within a single week")
+    end
   end
 end
