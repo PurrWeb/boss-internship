@@ -38,9 +38,17 @@ class RotasController < ApplicationController
     )
     authorize!(:manage, rota)
 
+    week = RotaWeek.new(rota.date)
+
     holidays = Holiday.
       in_state(:enabled).
       where(staff_member: rota.venue.staff_members)
+
+    holidays = HolidayInRangeQuery.new(
+      relation: holidays,
+      start_date: week.start_date,
+      end_date: week.end_date
+    ).all
 
     render locals: {
       rota: rota,
