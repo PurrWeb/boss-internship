@@ -6,6 +6,8 @@ import Spinner from "~components/spinner"
 import reactMixin from "react-mixin"
 import apiFormMixin from "~mixins/api-form-mixin"
 import ComponentErrors from "~components/component-errors"
+import StaffHolidaysList from "~components/staff-holidays-list"
+import { appRoutes } from "~lib/routes"
 
 export default class StaffListItem extends Component {
     static contextTypes = {
@@ -41,7 +43,11 @@ export default class StaffListItem extends Component {
                                 <StaffShiftList
                                     staffId={staff.id} />
                             </div>
-                            <div className="col-md-6">
+                            <div className="col-md-3">
+                                Holidays <a href={appRoutes.staffMemberHolidays(staff.id)}>Edit</a>
+                                <StaffHolidaysList staffId={staff.id} />
+                            </div>
+                            <div className="col-md-3">
                                 <h4 className="rota-staff-list-item__h4">
                                     Preferences
                                 </h4>
