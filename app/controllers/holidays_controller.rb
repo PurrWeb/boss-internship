@@ -25,7 +25,6 @@ class HolidaysController < ApplicationController
 
   def edit
     holiday = Holiday.find(params[:id])
-    staff_member = holiday.staff_member
     authorize! :manage, holiday
 
     render locals: { holiday: holiday }
