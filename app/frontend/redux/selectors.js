@@ -15,3 +15,11 @@ export function selectStaffTypesWithShifts(state){
         return staff[shift.staff_member.id].staff_type.id;
     }
 }
+
+export function selectStaffMemberHolidays(state, staffId){
+    var staffMember = state.staff[staffId];
+    var staffMemberHolidayIds = _.pluck(state.staff[staffId].holidays, "id");
+    return staffMemberHolidayIds.map(function(id){
+        return state.holidays[id];
+    });
+}

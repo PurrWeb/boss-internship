@@ -2,6 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import _ from "underscore"
 import StaffHolidaysList from "./staff-holidays-list"
+import { selectStaffMemberHolidays } from "~redux/selectors"
 
 class StaffHolidaysListContainer extends React.Component {
     static propTypes = {
@@ -13,13 +14,8 @@ class StaffHolidaysListContainer extends React.Component {
 }
 
 function mapStateToProps(state, ownProps){
-    var staffMember = state.staff[ownProps.staffId];
-    var staffMemberHolidayIds = _.pluck(state.staff[ownProps.staffId].holidays, "id");
-    var staffMemberHolidays = staffMemberHolidayIds.map(function(id){
-        return state.holidays[id];
-    });
     return {
-        holidays: staffMemberHolidays
+        holidays: selectStaffMemberHolidays(state, ownProps.staffId)
     };
 }
 
