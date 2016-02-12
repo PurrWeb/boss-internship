@@ -4,11 +4,7 @@ class Ability
   def initialize(user)
     # Define abilities for the passed in user here. For example:
     #
-    if user.dev?
-      can :manage, :all
-    end
-
-    if user.admin?
+    if user.has_admin_access?
       can :manage, :admin
     end
 
@@ -29,7 +25,7 @@ class Ability
     end
 
     can :create_staff_member, User do |target_user|
-      user.admin? || user == target_user
+      user.has_admin_access? || user == target_user
     end
 
     #

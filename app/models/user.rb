@@ -80,6 +80,10 @@ class User < ActiveRecord::Base
     dev? || admin? || ops_manager?
   end
 
+  def has_admin_access?
+    dev? || admin?
+  end
+
   def status
     enabled? ? 'Active' : 'Disabled'
   end
