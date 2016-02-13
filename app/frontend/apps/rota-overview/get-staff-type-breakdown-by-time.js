@@ -69,7 +69,8 @@ export default function getStaffTypeBreakdownByTime(options){
             var endsAfterSamplingPoint = samplingPoint.date < shift.ends_at;
             var shiftCoversSamplingPoint =  startsBeforeOrAtSamplingPoint && endsAfterSamplingPoint;
             if (shiftCoversSamplingPoint) {
-                samplingPoint.shiftsByStaffType[staffType].push(shift);
+              samplingPoint.shiftsByStaffType[staffType] = samplingPoint.shiftsByStaffType[staffType] || [];
+              samplingPoint.shiftsByStaffType[staffType].push(shift);
             }
         });
     });
