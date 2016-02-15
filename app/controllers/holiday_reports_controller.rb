@@ -1,8 +1,15 @@
 class HolidayReportsController < ApplicationController
-  def show
-    date = Date.strptime(params[:id], Rota.url_date_format)
+  def index
+    authorize!(:manage, :admin)
+    venue = Venue.find_by(id: params[:venue])
+    if params[:date]
+      date = Date.strptime(params[:date], Rota.url_date_format)
+    else
+      redirect_to holiday_reports_path(date: Time.now.to_date.strftime(Rota.url_date_format), venue: venue)
+      return
+    end
 
-    holidays_reports_data = HolidayReportsDataQuery.new(date)
+    holidays_reports_data = HolidayReportsDataQuery.new(date: date, venue: venue)
 
     render locals: {
       date: date,

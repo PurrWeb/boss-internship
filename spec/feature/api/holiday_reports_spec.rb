@@ -10,12 +10,20 @@ RSpec.describe 'Holiday api end points' do
   end
 
   describe '#show' do
-    let(:url) { url_helpers.api_v1_holiday_report_path(start_date.strftime(Rota.url_date_format)) }
+    let(:venue) { staff_member.venue }
+    let(:staff_member) { FactoryGirl.create(:staff_member) }
+    let(:url) do
+      url_helpers.api_v1_holiday_reports_path(
+        date: start_date.strftime(Rota.url_date_format),
+        venue: venue.id
+      )
+    end
     let(:start_date) { Time.now.to_date.monday }
     let(:end_date) { Time.now.to_date.monday + 2.days }
     let!(:holiday) do
       FactoryGirl.create(
         :holiday,
+        staff_member: staff_member,
         start_date: start_date,
         end_date: end_date
       )

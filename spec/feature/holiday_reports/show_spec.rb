@@ -3,9 +3,11 @@ require 'feature/feature_spec_helper'
 RSpec.describe 'Holiday Reports page' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:date) { Time.now.to_date }
+  let(:venue) { FactoryGirl.create(:venue) }
   let(:show_page) do
     PageObject::HolidayReportsShowPage.new(
-      date.strftime(Rota.url_date_format)
+      date: date.strftime(Rota.url_date_format),
+      venue: venue
     )
   end
 

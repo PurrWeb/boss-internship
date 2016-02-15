@@ -68,7 +68,7 @@
                 <% end %>
 
                 <li class="nav-holiday-reports-section">
-                  <%= link_to('Holiday Reports', holiday_report_path(Time.now.to_date.monday.strftime(Rota.url_date_format))) %>
+                  <%= link_to('Holiday Reports', holiday_reports_path(date: Time.now.to_date.monday.strftime(Rota.url_date_format))) %>
                 </li>
               </ul>
             </li>
