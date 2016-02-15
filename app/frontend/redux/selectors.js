@@ -19,7 +19,13 @@ export function selectStaffTypesWithShifts(state){
 export function selectStaffMemberHolidays(state, staffId){
     var staffMember = state.staff[staffId];
     var staffMemberHolidayIds = _.pluck(state.staff[staffId].holidays, "id");
-    return staffMemberHolidayIds.map(function(id){
+    var allHolidays = staffMemberHolidayIds.map(function(id){
         return state.holidays[id];
     });
+    // We only have this week's holidays in the state, so filter out
+    // any holidays we don't have in the state.
+    var availableHolidays = _(allHolidays).filter(function(holiday){
+        return holiday !== undefined;
+    })
+    return availableHolidays;
 }
