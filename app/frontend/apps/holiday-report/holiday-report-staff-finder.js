@@ -1,12 +1,12 @@
 import { connect } from "react-redux"
 import React from "react"
 import StaffFinder from "~components/staff-finder"
-import StaffListItem from "./staff-list-item"
+import StaffListItemContainer from "./staff-list-item-container"
 
 class HolidayReportStaffFinder extends React.Component {
     render(){
         return <StaffFinder
-            staffItemComponent={StaffListItem}
+            staffItemComponent={StaffListItemContainer}
             staff={this.props.staffMembers} />
     }
 }

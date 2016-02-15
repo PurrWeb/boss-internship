@@ -1,12 +1,14 @@
 import React from "react"
-import { connect } from "react-redux"
 import StaffTypeBadge from "~components/staff-type-badge"
 
-class StaffListItem extends React.Component {
+export default class StaffListItem extends React.Component {
+    static propTypes = {
+        staff: React.PropTypes.object.isRequired,
+        staffType: React.PropTypes.object.isRequired
+    }
     render(){
         var staff = this.props.staff;
-        var staffTypeId = staff.staff_type.id;
-        var staffType = this.props.staffTypes[staffTypeId];
+        var staffType = this.props.staffType;
         return <div className="staff-list-item">
             <div className="row">
                 <div className="col-md-1">
@@ -18,15 +20,16 @@ class StaffListItem extends React.Component {
                     </h3>
                     <StaffTypeBadge staffTypeObject={staffType} />
                 </div>
+                <div className="col-md-4">
+                    <h4>Paid holiday</h4>
+                </div>
+                <div className="col-md-4">
+                    <h4>Paid holiday</h4>
+                </div>
+                <div className="col-md-4">
+                    <h4>Paid holiday</h4>
+                </div>
             </div>
         </div>
     }
 }
-
-function mapStateToProps(state){
-    return {
-        staffTypes: state.staffTypes
-    }
-}
-
-export default connect(mapStateToProps)(StaffListItem)
