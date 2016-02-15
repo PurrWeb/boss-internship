@@ -29,3 +29,15 @@ export function selectStaffMemberHolidays(state, staffId){
     })
     return availableHolidays;
 }
+
+export function selectStaffMemberIsOnHolidayOnDate(state, staffId, date){
+    var staffMemberHolidays = selectStaffMemberHolidays(state, staffId);
+    var isOnHoliday = false;
+    staffMemberHolidays.forEach(function(holiday){
+        if (holiday.start_date <= date && holiday.end_date >= date){
+            isOnHoliday = true;
+        }
+    });
+
+    return isOnHoliday;
+}

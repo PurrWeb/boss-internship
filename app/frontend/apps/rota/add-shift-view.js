@@ -1,12 +1,14 @@
 import React, { Component } from "react"
 import RotaDate from "~lib/rota-date.js"
+import {connect } from "react-redux"
 import ShiftTimeSelector from "~components/shift-time-selector"
 import StaffFinder from "./staff-finder/staff-finder"
 import utils from "~lib/utils"
 import _ from "underscore"
+import { selectStaffMemberIsOnHolidayOnDate } from "~redux/selectors"
 
 
-export default class AddShiftView extends Component {
+class AddShiftView extends Component {
     static childContextTypes = {
         addShift: React.PropTypes.func,
         canAddShift: React.PropTypes.func
@@ -19,8 +21,9 @@ export default class AddShiftView extends Component {
             var { starts_at, ends_at } = this.state.shiftTimes;
             var datesAreValid = utils.areShiftTimesValid(starts_at, ends_at);
             var isAddingShift = this.props.staff[staff_id].addShiftIsInProgress;
+            var isOnHoliday = this.props.staffMemberIsOnHoliday[staff_id];
 
-            return datesAreValid && !isAddingShift; 
+            return datesAreValid && !isAddingShift && !isOnHoliday; 
         }
         return {
             addShift: (staffId, requestComponent) => this.addShift(staffId, requestComponent),
@@ -74,3 +77,13 @@ export default class AddShiftView extends Component {
         this.setState({shiftTimes});
     }
 }
+
+function mapStateToProps(state, ownProps){
+    return {
+        staffMemberIsOnHoliday: _.mapObject(ownProps.staff, function(staff, staffId){
+            return selectStaffMemberIsOnHolidayOnDate(state, staffId, ownProps.dateOfRota)
+        })
+    }
+}
+
+export default connect(mapStateToProps)(AddShiftView)
