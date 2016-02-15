@@ -6,7 +6,7 @@ import HolidayReportView from './holiday-report-view'
 import * as actionCreators from "~redux/actions.js"
 
 export default class HolidayReportApp extends Component {
-    componentDidMount(){
+    componentWillMount(){
         this.store = createStore(function(){
             var data = window.boss;
             return {

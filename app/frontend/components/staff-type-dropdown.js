@@ -51,7 +51,7 @@ class StaffTypeDropdown extends Component {
 
 function mapStateToProps(state){
     return {
-        staffTypes: selectStaffTypesWithShifts(state)
+        staffTypes: state.staffTypes
     }
 }
 

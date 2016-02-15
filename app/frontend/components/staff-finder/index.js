@@ -5,7 +5,7 @@ import _ from "underscore"
 
 export default class StaffFinder extends Component {
     static propTypes = {
-        staffItemComponent: React.PropTypes.object.isRequired,
+        staffItemComponent: React.PropTypes.func.isRequired,
         staff: React.PropTypes.object.isRequired,
     }
     constructor(props) {
