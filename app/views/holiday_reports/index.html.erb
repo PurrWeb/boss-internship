@@ -1,5 +1,7 @@
-<div id="holiday-report-show-page" data-date="<%= date.strftime(Rota.url_date_format) %>">
+<div id="holiday-report-show-page" class="container" data-date="<%= date.strftime(Rota.url_date_format) %>">
   <h1>Holiday Reports</h1>
+
+  <%= react_component("HolidayReportApp") %>
 </div>
 
 <%= javascript_tag do %>
@@ -17,5 +19,3 @@
   window.boss.venues = venues;
   window.boss.staffTypes = staffTypes;
 <% end %>
-
-<%= react_component("HolidayReportApp") %>

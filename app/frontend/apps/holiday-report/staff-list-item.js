@@ -1,5 +1,6 @@
 import React from "react"
 import StaffTypeBadge from "~components/staff-type-badge"
+import StaffHolidaysList from "~components/staff-holidays-list/staff-holidays-list"
 
 export default class StaffListItem extends React.Component {
     static propTypes = {
@@ -16,21 +17,21 @@ export default class StaffListItem extends React.Component {
                 <div className="col-md-1">
                     <img src={staff.avatar_url} className="staff-list-item__avatar" />
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-3">
                     <h3>
                         {staff.first_name} {staff.surname}
                     </h3>
                     <StaffTypeBadge staffTypeObject={staffType} />
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-3">
                     <h4>Paid Holiday</h4>
-                    {JSON.stringify(this.props.paidHolidays)}
+                    <StaffHolidaysList holidays={this.props.paidHolidays} />
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-3">
                     <h4>Unpaid Holiday</h4>
-                    {JSON.stringify(this.props.unpaidHolidays)}
+                    <StaffHolidaysList holidays={this.props.unpaidHolidays} />
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-2">
                     <h4>Paid Holiday days: {this.props.paidHolidays.length}</h4>
                 </div>
             </div>
