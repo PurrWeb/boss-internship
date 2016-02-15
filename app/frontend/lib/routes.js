@@ -14,6 +14,14 @@ export const appRoutes = {
             "&end_date=" + utils.formatRotaUrlDate(endDate)
         ].join("");
     },
+    holidayReportsIndex: function(options) {
+      var { date, venueId } = option;
+      return [
+        'holiday_reports?',
+        'date=' + utils.formatRotaUrlDate(date),
+        '&venue=' + venueId
+      ].join('');
+    }
     staffMemberHolidays: function(staffMemberId){
       return "/staff_members/" + staffMemberId + "?tab=holidays";
     }
