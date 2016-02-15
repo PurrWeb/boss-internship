@@ -11,7 +11,8 @@ import { appRoutes } from "~lib/routes"
 
 export default class StaffListItem extends Component {
     static contextTypes = {
-        addShift: React.PropTypes.func.isRequired
+        addShift: React.PropTypes.func.isRequired,
+        staffTypes: React.PropTypes.object.isRequired
     }
     render() {
         var staff = this.props.staff;
@@ -21,6 +22,8 @@ export default class StaffListItem extends Component {
         }
 
         var errors = this.getComponentErrors()
+
+        var staffTypeObject = this.context.staffTypes[staff.staff_type.id];
 
         return (
             <div className="staff-list-item rota-staff-list-item">
@@ -33,7 +36,7 @@ export default class StaffListItem extends Component {
                             <h3 className="rota-staff-list-item__name">
                                 {staff.first_name} {staff.surname}
                             </h3>
-                            <StaffTypeBadge staffType={staff.staff_type.id} />
+                            <StaffTypeBadge staffTypeObject={staffTypeObject} />
                         </div>
                         <div className="row">
                             <div className="col-md-6">
