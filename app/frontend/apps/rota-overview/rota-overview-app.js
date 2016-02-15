@@ -22,7 +22,7 @@ export default class RotaOverviewApp extends Component {
 
             var staffTypesWithShifts = selectStaffTypesWithShifts({
                 staffTypes: indexById(staffTypes),
-                rotaShifts: indexById(shifts),
+                rotaShifts: {items: indexById(shifts) },
                 staff: indexById(staff)
             });
 
