@@ -18,21 +18,23 @@ export default class StaffListItem extends React.Component {
                     <img src={staff.avatar_url} className="staff-list-item__avatar" />
                 </div>
                 <div className="col-md-3">
-                    <h3>
+                    <h3 className="holiday-report-staff-list-item__name">
                         {staff.first_name} {staff.surname}
                     </h3>
                     <StaffTypeBadge staffTypeObject={staffType} />
                 </div>
-                <div className="col-md-3">
+
+                <div className="col-md-2">
                     <h4>Paid Holiday</h4>
                     <StaffHolidaysList holidays={this.props.paidHolidays} />
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-2">
                     <h4>Unpaid Holiday</h4>
                     <StaffHolidaysList holidays={this.props.unpaidHolidays} />
                 </div>
-                <div className="col-md-2">
-                    <h4>Paid Holiday days: {this.props.paidHolidays.length}</h4>
+                <div className="col-md-3">
+                    <h4>Paid Holiday days</h4>
+                    {this.props.paidHolidays.length}
                 </div>
             </div>
         </div>
