@@ -20,3 +20,6 @@ registerComponent("RotaOverviewApp", RotaOverviewApp)
 
 import StaffMemberFormAvatarImage from "./apps/staff-member-form/staff-member-form-avatar-image"
 registerComponent("StaffMemberFormAvatarImage", StaffMemberFormAvatarImage)
+
+import HolidayReportView from "./apps/holiday-report/holiday-report-app"
+registerComponent("HolidayReportApp", HolidayReportView);
