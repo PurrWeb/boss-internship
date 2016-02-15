@@ -4,7 +4,9 @@ import StaffTypeBadge from "~components/staff-type-badge"
 export default class StaffListItem extends React.Component {
     static propTypes = {
         staff: React.PropTypes.object.isRequired,
-        staffType: React.PropTypes.object.isRequired
+        staffType: React.PropTypes.object.isRequired,
+        paidHolidays: React.PropTypes.array.isRequired,
+        unpaidHolidays: React.PropTypes.array.isRequired
     }
     render(){
         var staff = this.props.staff;
@@ -21,13 +23,15 @@ export default class StaffListItem extends React.Component {
                     <StaffTypeBadge staffTypeObject={staffType} />
                 </div>
                 <div className="col-md-4">
-                    <h4>Paid holiday</h4>
+                    <h4>Paid Holiday</h4>
+                    {JSON.stringify(this.props.paidHolidays)}
                 </div>
                 <div className="col-md-4">
-                    <h4>Paid holiday</h4>
+                    <h4>Unpaid Holiday</h4>
+                    {JSON.stringify(this.props.unpaidHolidays)}
                 </div>
                 <div className="col-md-4">
-                    <h4>Paid holiday</h4>
+                    <h4>Paid Holiday days: {this.props.paidHolidays.length}</h4>
                 </div>
             </div>
         </div>

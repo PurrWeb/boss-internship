@@ -30,6 +30,19 @@ export function selectStaffMemberHolidays(state, staffId){
     return availableHolidays;
 }
 
+export function selectStaffMemberUnpaidHolidays(state, staffId){
+    return _.filter(selectStaffMemberHolidays(state, staffId), {
+        holiday_type: "unpaid_holiday"
+    })
+}
+
+export function selectStaffMemberPaidHolidays(state, staffId){
+    return _.filter(selectStaffMemberHolidays(state, staffId), {
+        holiday_type: "paid_holiday"
+    })
+}
+
+
 export function selectStaffMemberIsOnHolidayOnDate(state, staffId, date){
     var staffMemberHolidays = selectStaffMemberHolidays(state, staffId);
     var isOnHoliday = false;

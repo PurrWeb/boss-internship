@@ -11,7 +11,7 @@ export default class HolidayReportApp extends Component {
             var data = window.boss;
             return {
                 staffTypes: utils.indexById(data.staffTypes),
-                staffMembers: utils.indexById(data.staffMembers),
+                staff: utils.indexById(data.staffMembers),
                 holidays: utils.indexById(data.holidays)
             }
         });
