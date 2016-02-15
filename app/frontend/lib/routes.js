@@ -21,7 +21,7 @@ export const appRoutes = {
         'date=' + utils.formatRotaUrlDate(date),
         '&venue=' + venueId
       ].join('');
-    }
+    },
     staffMemberHolidays: function(staffMemberId){
       return "/staff_members/" + staffMemberId + "?tab=holidays";
     }
