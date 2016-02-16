@@ -1,8 +1,6 @@
 import React, { Component } from "react"
 import RotaOverviewView from "./rota-overview-view"
 import * as backendData from "~redux/process-backend-data"
-import WeekPicker from "~components/week-picker"
-import VenueDropdown from "~components/venue-dropdown"
 import {appRoutes} from "~lib/routes"
 import {connect} from "react-redux"
 import moment from "moment"
@@ -10,6 +8,7 @@ import _ from "underscore"
 import rotaStatusTitles from "~lib/rota-status-titles"
 import { selectStaffTypesWithShifts } from "~redux/selectors"
 import PublishRotaWeekButtonContainer from "./publish-rota-week-button-container"
+import WeekAndVenueSelector from "~components/week-and-venue-selector"
 
 function indexById(data){
     return _.indexBy(data, "id")
@@ -27,27 +26,18 @@ class RotaOverviewPage extends Component {
         var lastRota = _.last(rotas);
         return <div className="container">
             <div className="row">
-                <div className="col-md-3">
-                    <WeekPicker
-                        selectionStartDate={firstRota.date}
-                        onChange={(selection) => {
-                            this.goToOverviewPage(selection.startDate, selection.endDate, firstRota.venue.id)
-                        } }/>
-                </div>
-                <div className="col-md-4">
-                    Venue: <br/>
-                    <VenueDropdown
-                        venues={window.boss.venues}
-                        selectedVenue={firstRota.venue.id}
-                        onChange={
-                            (venueId) => this.goToOverviewPage(firstRota.date, lastRota.date, venueId)
-                        } />
-                    <br/>
-
-                    <PublishRotaWeekButtonContainer
-                        rotas={rotas}
-                        firstDate={firstRota.date}
-                        lastDate={lastRota.date} />
+                <div className="col-md-12">
+                    <WeekAndVenueSelector
+                        venueId={firstRota.venue.id}
+                        weekStartDate={firstRota.date}
+                        venues={indexById(window.boss.venues)}
+                        onChange={this.goToOverviewPage.bind(this)}>
+                        <br/>
+                        <PublishRotaWeekButtonContainer
+                            rotas={rotas}
+                            firstDate={firstRota.date}
+                            lastDate={lastRota.date} />
+                    </WeekAndVenueSelector>
                 </div>
             </div>
             <br/>
