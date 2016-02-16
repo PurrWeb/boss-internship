@@ -17,7 +17,7 @@ export default class StaffDetailsAndShifts extends Component {
                 key={shift.id}
                 staff={this.props.staff} />
         );
-        var staffTypeId = this.staff.staff_type.id;
+        var staffTypeId = staff.staff_type.id;
         var staffType = this.context.staffTypes[staffTypeId];
         return <div>
             <h2 className="staff-details-and-shifts__h2">
