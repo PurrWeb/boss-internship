@@ -45,10 +45,12 @@ const apiRoutes = {
     },
     publishRotas: {
         getPath: function(options){
-            var { venueId, startDate, endDate } = options;
-            return "rotas/publish?venue_id=" + venueId +
-                "&start_date=" + utils.formatDateForApi(startDate) +
-                "&end_date=" + utils.formatDateForApi(endDate)
+            var { venueId, date } = options;
+            return [
+                "/venues/" + venueId,
+                "/rotas/publish/?",
+                "date=" + utils.formatDateForApi(date)
+            ].join("")
         },
         method: "POST"
     }

@@ -69,6 +69,9 @@ Rails.application.routes.draw do
           member do
             get :overview
           end
+          collection do
+            post :publish
+          end
           resources :rota_shifts,   only: [:create]
         end
       end
@@ -79,9 +82,6 @@ Rails.application.routes.draw do
         member do
           post :mark_in_progress
           post :mark_finished
-        end
-        collection do
-          post :publish
         end
       end
     end

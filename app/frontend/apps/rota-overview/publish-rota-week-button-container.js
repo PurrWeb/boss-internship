@@ -33,8 +33,7 @@ function mapDispatchToProps(dispatch, ownProps){
         publishRotaWeek: function(){
             dispatch(publishRotas({
                 venueId: ownProps.rotas[0].venue.id,
-                startDate: ownProps.firstDate,
-                endDate: ownProps.lastDate
+                date: ownProps.firstDate
             }))
         }
     }

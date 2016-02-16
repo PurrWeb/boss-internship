@@ -24,13 +24,14 @@ module Api
       end
 
       def publish
-        start_date = start_date_from_params
-        end_date = end_date_from_params
+        date = date_from_query_params
         venue = venue_from_params
 
-        UIRotaDate.assert_date_range_valid(start_date, end_date)
+        authorize! :manage, venue
 
-        rotas = (start_date..end_date).map do |date|
+        week = RotaWeek.new(date)
+
+        rotas = (week.start_date..week.end_date).map do |date|
           Rota.find_or_initialize_by(
             date: date,
             venue: venue
@@ -69,20 +70,8 @@ module Api
         Venue.find(params[:venue_id])
       end
 
-      def start_date_from_params
-        if params[:start_date].present?
-          UIRotaDate.parse(params[:start_date])
-        end
-      end
-
-      def venue_from_params
-        Venue.find_by(id: params[:venue_id])
-      end
-
-      def end_date_from_params
-        if params[:end_date].present?
-          UIRotaDate.parse(params[:end_date])
-        end
+      def date_from_query_params
+        UIRotaDate.parse(params.fetch(:date))
       end
     end
   end

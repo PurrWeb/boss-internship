@@ -111,15 +111,14 @@ RSpec.describe 'Api access' do
 
   describe '#publish' do
     let(:url) do
-      url_helpers.publish_api_v1_rotas_path(
+      url_helpers.publish_api_v1_venue_rotas_path(
         venue_id: venue.id,
-        start_date: UIRotaDate.format(start_date),
-        end_date: UIRotaDate.format(end_date)
+        date: UIRotaDate.format(start_date)
       )
     end
     let(:response) { post(url) }
-
     let(:venue) { FactoryGirl.create(:venue) }
+    let(:user) { FactoryGirl.create(:user, :admin)}
     let(:start_date) { Time.now.beginning_of_week.to_date }
     let(:end_date) { Time.now.end_of_week.to_date }
 
