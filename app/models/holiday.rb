@@ -35,12 +35,21 @@ class Holiday < ActiveRecord::Base
     current_state == 'enabled'
   end
 
+  def paid?
+    holiday_type == 'paid_holiday'
+  end
+
   def disable!(requester:)
     state_machine.transition_to!(:disabled, requster_user_id: requester.id)
   end
 
   def editable?
     end_date > Time.now.to_date
+  end
+
+  def days
+    day_delta = (end_date - start_date).to_i
+    day_delta + 1
   end
 
   private

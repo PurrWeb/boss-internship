@@ -20,14 +20,7 @@ export default class HolidayReportView extends React.Component {
                 venueId={this.props.pageOptions.venueId}
             />
             <hr/>
-            <a className="btn btn-default"
-                style={{float: "right"}}
-                href={appRoutes.holidayReportsCsv({
-                date: this.props.pageOptions.weekStartDate,
-                venueId: this.props.pageOptions.venueId
-            })}>
-                Download as CSV
-            </a>
+            { csvDownloadButton(this.props) }
             <h2 style={{fontSize: 20}}>Find Staff</h2>
             <HolidayReportStaffFinder />
         </div>
@@ -37,8 +30,24 @@ export default class HolidayReportView extends React.Component {
 function mapStateToProps(state){
     return {
         venues: state.venues,
-        pageOptions: state.pageOptions
+        pageOptions: state.pageOptions,
+        holidays: state.holidays
     }
+}
+
+function csvDownloadButton(props){
+  let holidayCount = Object.keys(props.holidays).length;
+
+  if (props.pageOptions.venueId && props.pageOptions.weekStartDate && (holidayCount > 0)) {
+    return <a className="btn btn-default"
+        style={{float: "right"}}
+        href={appRoutes.holidayReportsCsv({
+          date: props.pageOptions.weekStartDate,
+          venueId: props.pageOptions.venueId
+        })}>
+        Download as CSV
+    </a>;
+  }
 }
 
 export default connect(mapStateToProps)(HolidayReportView)

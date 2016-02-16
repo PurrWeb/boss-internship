@@ -26,7 +26,11 @@ export const appRoutes = {
       return "/staff_members/" + staffMemberId + "?tab=holidays";
     },
     holidayReportsCsv: function({date, venueId}){
-        return "TODO"
+        return [
+          "/holiday_reports.csv?" +
+          'date=' + utils.formatRotaUrlDate(date),
+          '&venue=' + venueId
+        ].join("")
     }
 }
 

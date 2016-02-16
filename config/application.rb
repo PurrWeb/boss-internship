@@ -21,6 +21,8 @@ module Boss
     # config.i18n.default_locale = :de
 
     config.autoload_paths += Dir["#{config.root}/app/services/**/"]
+    config.autoload_paths += Dir["#{config.root}/app/reports/**/"]
+
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
