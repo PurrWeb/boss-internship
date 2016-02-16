@@ -31,9 +31,9 @@ module Api
 
         week = RotaWeek.new(date)
 
-        rotas = (week.start_date..week.end_date).map do |date|
+        rotas = (week.start_date..week.end_date).map do |rota_date|
           Rota.find_or_initialize_by(
-            date: date,
+            date: rota_date,
             venue: venue
           ).tap do |rota|
             rota.creator ||= current_user
@@ -46,18 +46,36 @@ module Api
       end
 
       def mark_in_progress
-        rota = Rota.find(params[:id])
+        rota = Rota.find_or_initialize_by(
+          date: rota_date_from_params,
+          venue: venue_from_params
+        )
         authorize! :manage, rota
 
-        rota.transition_to!(:in_progress)
+        ActiveRecord::Base.transaction do
+          if !rota.persisted?
+            rota.update_attributes!(creator: current_user)
+          end
+          rota.transition_to!(:in_progress)
+        end
+
         render 'show', locals: { rota: rota }
       end
 
       def mark_finished
-        rota = Rota.find(params[:id])
+        rota = Rota.find_or_initialize_by(
+          date: rota_date_from_params,
+          venue: venue_from_params
+        )
         authorize! :manage, rota
 
-        rota.transition_to!(:finished)
+        ActiveRecord::Base.transaction do
+          if !rota.persisted?
+            rota.update_attributes!(creator: current_user)
+          end
+          rota.transition_to!(:finished)
+        end
+
         render 'show', locals: { rota: rota }
       end
 

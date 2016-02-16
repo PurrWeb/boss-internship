@@ -12,7 +12,8 @@ describe("rotasReducer", function(){
 
         var action = {
             type: "UPDATE_ROTA_STATUS_SUCCESS",
-            rotaId: 8,
+            venueId: 8,
+            date: "02-02-2014",
             status: "finished"
         }
 

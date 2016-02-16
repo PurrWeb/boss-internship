@@ -68,6 +68,8 @@ Rails.application.routes.draw do
         resources :rotas, only: [] do
           member do
             get :overview
+            post :mark_in_progress
+            post :mark_finished
           end
           collection do
             post :publish
@@ -78,12 +80,7 @@ Rails.application.routes.draw do
       resources :staff_members, only: :show
       resources :staff_types,   only: :show
       resources :rota_shifts,   only: [:show, :destroy, :update]
-      resources :rotas,         only: :show do
-        member do
-          post :mark_in_progress
-          post :mark_finished
-        end
-      end
+      resources :rotas,         only: :show
     end
   end
 

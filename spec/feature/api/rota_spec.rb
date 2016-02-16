@@ -36,7 +36,7 @@ RSpec.describe 'Api access' do
   end
 
   describe '#mark_finished' do
-    let(:url) { url_helpers.mark_finished_api_v1_rota_path(rota) }
+    let(:url) { url_helpers.mark_finished_api_v1_venue_rota_path(id: UIRotaDate.format(rota.date), venue_id: rota.venue.id) }
     let(:response) { post(url) }
 
     describe 'response' do
@@ -71,7 +71,9 @@ RSpec.describe 'Api access' do
   end
 
   describe '#mark_in_progress' do
-    let(:url) { url_helpers.mark_in_progress_api_v1_rota_path(rota) }
+    let(:url) do
+      url_helpers.mark_in_progress_api_v1_venue_rota_path(id: UIRotaDate.format(rota.date), venue_id: rota.venue.id)
+    end
     let(:response) { post(url) }
 
     context 'rota finished' do

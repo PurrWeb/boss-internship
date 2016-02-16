@@ -37,9 +37,8 @@ const apiRoutes = {
     },
     updateRotaStatus: {
         getPath: function(options){
-            var {rotaId, status} = options;
-            return "rotas/" + rotaId + "/mark_" + status;
-
+            var {venueId, date, status} = options;
+            return "venues/" + venueId + "/rotas/" + utils.formatDateForApi(date) + "/mark_" + status;
         },
         method: "POST"
     },

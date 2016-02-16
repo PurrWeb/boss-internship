@@ -17,7 +17,8 @@ class RotaStatusToggle extends React.Component {
     }
     setStatus(status){
         this.props.updateStatus({
-            rotaId: this.props.rota.id,
+            venueId: this.props.rota.venue.id,
+            date: this.props.rota.date,
             status: status
         })
     }
