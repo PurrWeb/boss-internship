@@ -19,6 +19,15 @@ export default class HolidayReportView extends React.Component {
                 venues={this.props.venues}
                 venueId={this.props.pageOptions.venueId}
             />
+            <hr/>
+            <a className="btn btn-default"
+                style={{float: "right"}}
+                href={appRoutes.holidayReportsCsv({
+                date: this.props.pageOptions.weekStartDate,
+                venueId: this.props.pageOptions.venueId
+            })}>
+                Download as CSV
+            </a>
             <h2 style={{fontSize: 20}}>Find Staff</h2>
             <HolidayReportStaffFinder />
         </div>

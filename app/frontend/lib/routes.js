@@ -24,6 +24,9 @@ export const appRoutes = {
     },
     staffMemberHolidays: function(staffMemberId){
       return "/staff_members/" + staffMemberId + "?tab=holidays";
+    },
+    holidayReportsCsv: function({date, venueId}){
+        return "TODO"
     }
 }
 
