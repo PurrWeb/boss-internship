@@ -9,10 +9,12 @@ class HolidayReportsController < ApplicationController
       return
     end
 
-    holidays_reports_data = HolidayReportsDataQuery.new(date: date, venue: venue)
+    week = RotaWeek.new(date)
+
+    holidays_reports_data = HolidayReportsDataQuery.new(week: week, venue: venue)
 
     render locals: {
-      date: date,
+      week: week,
       holidays: holidays_reports_data.holidays,
       staff_members: holidays_reports_data.staff_members,
       venues: Venue.all,

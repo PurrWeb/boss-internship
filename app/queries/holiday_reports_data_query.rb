@@ -1,6 +1,6 @@
 class HolidayReportsDataQuery
-  def initialize(date:, venue:)
-    @date = date
+  def initialize(week:, venue:)
+    @week = week
     @venue = venue
   end
 
@@ -30,9 +30,5 @@ class HolidayReportsDataQuery
       merge(Holiday.in_state(:enabled))
   end
 
-  def week
-    @week ||= RotaWeek.new(date)
-  end
-
-  attr_reader :date, :venue
+  attr_reader :week, :venue
 end

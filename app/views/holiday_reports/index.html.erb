@@ -1,4 +1,4 @@
-<div id="holiday-report-show-page" class="container" data-date="<%= date.strftime(Rota.url_date_format) %>">
+<div id="holiday-report-show-page" class="container" data-start-date="<%= week.start_date.strftime(Rota.url_date_format) %>" data-end-date="<%= week.end_date.strftime(Rota.url_date_format) %>">
   <h1>Holiday Reports</h1>
 
   <%= react_component("HolidayReportApp") %>
@@ -19,7 +19,8 @@
   window.boss.venues = venues;
   window.boss.staffTypes = staffTypes;
   window.boss.pageOptions = {
-    venueId: <%= venue.id %>,
-    weekStartDate: location.href.match(/\?date\=([^\&]*)/)[1].split("-").reverse().join("-")
+    venueId: <%= venue.try(:id) || 'null' %>,
+    weekStartDate: "<%= week.start_date.iso8601 %>",
+    weekEndDate: "<%= week.end_date.iso8601 %>"
   }
 <% end %>
