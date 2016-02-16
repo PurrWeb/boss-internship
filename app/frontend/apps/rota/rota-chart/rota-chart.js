@@ -34,13 +34,13 @@ export default class RotaChart extends Component {
 
         if (staffToPreview !== null) {
             d3.selectAll(".rota-chart__shift").classed("rota-chart__previewed-staff", function(bar){
-                return bar.originalShiftObject.staff_id === staffToPreview;
+                return bar.originalShiftObject.staff_member.id === staffToPreview;
             });
         }
 
         if (staffToShow !== null) {
             d3.selectAll(".rota-chart__shift").classed("rota-chart__selected-staff", function(bar){
-                return bar.originalShiftObject.staff_id === staffToShow;
+                return bar.originalShiftObject.staff_member.id === staffToShow;
             });
         }
 
