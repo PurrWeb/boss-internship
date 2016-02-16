@@ -83,10 +83,14 @@ class HolidaysController < ApplicationController
   end
 
   def start_date_from_params
-    Date.strptime(params['holiday']['start_date'], Rota.url_date_format)
+    if params['holiday']['start_date'].present?
+      Date.strptime(params['holiday']['start_date'], Rota.url_date_format)
+    end
   end
 
   def end_date_from_params
-    Date.strptime(params['holiday']['end_date'], Rota.url_date_format)
+    if params['holiday']['end_date'].present?
+      Date.strptime(params['holiday']['end_date'], Rota.url_date_format)
+    end
   end
 end
