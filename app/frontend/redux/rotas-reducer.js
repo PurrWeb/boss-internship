@@ -1,4 +1,5 @@
 import {actionTypes} from "./actions.js"
+import utils from "~lib/utils"
 import _ from "underscore"
 
 export default function rotasReducer(state={}, action){
@@ -17,8 +18,10 @@ export default function rotasReducer(state={}, action){
                 if (rota.venue.id !== action.venueId) {
                     return rota;
                 }
-                var isWithinUpdatedDateRange = rota.date >= action.startDate &&
-                    rota.date <= action.endDate;
+                var weekStartDate = utils.getWeekStartDate(action.date);
+                var weekEndDate = utils.getWeekEndDate(action.date);
+                var isWithinUpdatedDateRange = rota.date >= weekStartDate &&
+                    rota.date <= weekEndDate;
                 if (!isWithinUpdatedDateRange) {
                     return rota;
                 }

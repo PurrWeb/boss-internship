@@ -79,6 +79,12 @@ var utils =  {
         } catch (err) {
             return false;
         }
+    },
+    getWeekStartDate(date){
+        return moment(date).startOf("isoweek").toDate();
+    },
+    getWeekEndDate(date){
+        return moment(date).endOf("isoweek").toDate();
     }
 }
 

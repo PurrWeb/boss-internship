@@ -1,5 +1,6 @@
 import React from "react"
 import moment from "moment"
+import utils from "~lib/utils"
 import {appRoutes} from "~lib/routes"
 
 export default class RotaNavigation extends React.Component {
@@ -30,8 +31,8 @@ export default class RotaNavigation extends React.Component {
         var nextDate = new Date(this.props.dateOfRota);
         nextDate.setDate(dateOfRota.getDate() + 1);
 
-        var weekStartDate = moment(dateOfRota).startOf("isoweek").toDate();
-        var weekEndDate = moment(dateOfRota).endOf("isoweek").toDate();
+        var weekStartDate = utils.getWeekStartDate(dateOfRota);
+        var weekEndDate = utils.getWeekEndDate(dateOfRota);
 
         return {
             previousDate,
