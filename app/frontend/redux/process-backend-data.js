@@ -1,15 +1,11 @@
 import _ from "underscore"
-
-function parseDate(dateString){
-    var [year, month, day] = dateString.split("-").map(parseFloat);
-    return new Date(year, month - 1, day, 12, 0);
-}
+import utils from "~lib/utils"
 
 export function processRotaObject(rota){
     var newRota = {...rota};
 
     var date = rota.date;
-    newRota.date = parseDate(date);
+    newRota.date = utils.parseBackendDateNotTime(date);
 
     // Before we've created the first shift for a rota the rota
     // isn't saved on the backend, so it doesn't have an ID
@@ -29,7 +25,7 @@ export function processShiftObject(shift){
 
 export function processHolidayObject(holiday){
     return Object.assign({}, holiday, {
-        start_date: parseDate(holiday.start_date),
-        end_date: parseDate(holiday.end_date)
+        start_date: utils.parseBackendDateNotTime(holiday.start_date),
+        end_date: utils.parseBackendDateNotTime(holiday.end_date)
     })
 }

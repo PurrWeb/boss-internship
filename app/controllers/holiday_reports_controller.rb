@@ -16,7 +16,8 @@ class HolidayReportsController < ApplicationController
       holidays: holidays_reports_data.holidays,
       staff_members: holidays_reports_data.staff_members,
       venues: Venue.all,
-      staff_types: StaffType.all
+      staff_types: StaffType.all,
+      venue: venue
     }
   end
 end

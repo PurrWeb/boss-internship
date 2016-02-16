@@ -12,7 +12,9 @@ export default class HolidayReportApp extends Component {
             return {
                 staffTypes: utils.indexById(data.staffTypes),
                 staff: utils.indexById(data.staffMembers),
-                holidays: utils.indexById(data.holidays)
+                holidays: utils.indexById(data.holidays),
+                venues: utils.indexById(data.venues),
+                pageOptions: window.boss.pageOptions
             }
         });
     }

@@ -18,4 +18,8 @@
   window.boss.staffMembers = staffMembers;
   window.boss.venues = venues;
   window.boss.staffTypes = staffTypes;
+  window.boss.pageOptions = {
+    venueId: <%= venue.id %>,
+    weekStartDate: location.href.match(/\?date\=([^\&]*)/)[1].split("-").reverse().join("-")
+  }
 <% end %>
