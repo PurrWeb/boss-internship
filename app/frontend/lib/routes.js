@@ -15,7 +15,7 @@ export const appRoutes = {
         ].join("");
     },
     holidayReportsIndex: function(options) {
-      var { date, venueId } = option;
+      var { date, venueId } = options;
       return [
         'holiday_reports?',
         'date=' + utils.formatRotaUrlDate(date),
