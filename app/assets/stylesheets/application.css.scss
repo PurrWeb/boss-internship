@@ -22,6 +22,8 @@
  @import "bootstrap-sprockets";
  @import "bootstrap";
  @import "bootstrap/theme";
+ @import "jquery-ui/jquery-ui";
+ @import "jquery-ui/jquery.ui.datepicker";
  @import "../../../node_modules/react-select/dist/react-select";
  @import "../../../node_modules/cropperjs/dist/cropper";
  @import "../../../node_modules/nvd3/build/nv.d3";
