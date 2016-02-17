@@ -1,4 +1,5 @@
 import React from "react"
+import _ from "underscore"
 import StaffTypeBadge from "~components/staff-type-badge"
 import StaffHolidaysList from "~components/staff-holidays-list/staff-holidays-list"
 
@@ -34,9 +35,13 @@ export default class StaffListItem extends React.Component {
                 </div>
                 <div className="col-md-3">
                     <h4>Paid Holiday days</h4>
-                    {this.props.paidHolidays.length}
+                    {holidayDaysCount(this.props.paidHolidays)}
                 </div>
             </div>
         </div>
     }
+}
+
+function holidayDaysCount(holidays) {
+  return _.reduce(holidays, (count, holiday) => count + holiday.days, 0);
 }
