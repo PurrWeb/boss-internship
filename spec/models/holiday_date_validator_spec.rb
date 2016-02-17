@@ -40,7 +40,7 @@ describe HolidayDateValidator do
       validator.validate
       expect(
         holiday.errors['base']
-      ).to eq(['Start date must be after end date'])
+      ).to eq(['Start date cannot be after end date'])
     end
 
     specify 'only an error should be added for base' do
