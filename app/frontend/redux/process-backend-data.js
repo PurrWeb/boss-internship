@@ -5,7 +5,7 @@ export function processRotaObject(rota){
     var newRota = {...rota};
 
     var date = rota.date;
-    newRota.date = utils.parseBackendDateNotTime(date);
+    newRota.date = new Date(date);
 
     // Before we've created the first shift for a rota the rota
     // isn't saved on the backend, so it doesn't have an ID
@@ -25,7 +25,7 @@ export function processShiftObject(shift){
 
 export function processHolidayObject(holiday){
     return Object.assign({}, holiday, {
-        start_date: utils.parseBackendDateNotTime(holiday.start_date),
-        end_date: utils.parseBackendDateNotTime(holiday.end_date)
+        start_date: new Date(holiday.start_date),
+        end_date: new Date(holiday.end_date)
     })
 }

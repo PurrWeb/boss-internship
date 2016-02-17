@@ -88,10 +88,6 @@ var utils =  {
     },
     indexById(array){
         return _.indexBy(array, "id");
-    },
-    parseBackendDateNotTime(dateString){
-        var [year, month, day] = dateString.split("-").map(parseFloat);
-        return new Date(year, month - 1, day, 12, 0);
     }
 }
 

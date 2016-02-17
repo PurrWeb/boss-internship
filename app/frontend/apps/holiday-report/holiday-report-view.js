@@ -8,8 +8,8 @@ import WeekAndVenueSelector from "~components/week-and-venue-selector"
 export default class HolidayReportView extends React.Component {
     render(){
         return <div>
-            <WeekAndVenueSelector 
-                weekStartDate={utils.parseBackendDateNotTime(this.props.pageOptions.weekStartDate)}
+            <WeekAndVenueSelector
+                weekStartDate={new Date(this.props.pageOptions.weekStartDate)}
                 onChange={({startDate, endDate, venueId}) =>
                         location.href = appRoutes.holidayReportsIndex({
                             date: startDate,
