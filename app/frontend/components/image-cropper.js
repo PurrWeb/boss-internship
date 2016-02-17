@@ -1,5 +1,6 @@
 import React from "react"
 import Cropper from "cropperjs"
+import _ from "underscore"
 
 export default class ImageCropper extends React.Component {
     static propTypes = {
