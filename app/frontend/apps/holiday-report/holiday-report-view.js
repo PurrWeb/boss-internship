@@ -38,7 +38,7 @@ function mapStateToProps(state){
 function csvDownloadButton(props){
   let holidayCount = Object.keys(props.holidays).length;
 
-  if (props.pageOptions.venueId && props.pageOptions.weekStartDate && (holidayCount > 0)) {
+  if (props.pageOptions.weekStartDate && (holidayCount > 0)) {
     return <a className="btn btn-default"
         style={{float: "right"}}
         href={appRoutes.holidayReportsCsv({

@@ -5,13 +5,15 @@ class HolidayReportsDataQuery
   end
 
   def holidays
-    return Holiday.none unless venue
-
     @holidays ||= begin
       relation = Holiday.
-        in_state(:enabled).
-        joins(:staff_member).
-        merge(StaffMember.for_venue(venue))
+        in_state(:enabled)
+
+      if venue.present?
+        relation = relation.
+          joins(:staff_member).
+          merge(StaffMember.for_venue(venue))
+      end
 
       HolidayInRangeQuery.new(
         relation: relation,
@@ -22,12 +24,16 @@ class HolidayReportsDataQuery
   end
 
   def staff_members
-    return StaffMember.none unless venue
+    @staff_members ||= begin
+      result = StaffMember.
+        joins(:holidays).
+        merge(Holiday.in_state(:enabled))
 
-    @staff_members ||= StaffMember.
-      for_venue(venue).
-      joins(:holidays).
-      merge(Holiday.in_state(:enabled))
+      if venue.present?
+        result = result.for_venue(venue)
+      end
+      result
+    end
   end
 
   attr_reader :week, :venue

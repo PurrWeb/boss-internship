@@ -12,13 +12,14 @@ export default class VenueDropdown extends Component {
                 label: venue.name
             };
         })
-        
+
 
 
         return <Select
             value={this.props.selectedVenue}
             options={venueOptions}
-            clearable={false}
+            placeholder="All Venues"
+            clearable={true}
             onChange={(value) => this.props.onChange(value)} />
     }
 }
