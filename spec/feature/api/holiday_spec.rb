@@ -36,6 +36,7 @@ RSpec.describe 'Holiday api end points' do
       "end_date" => holiday.end_date.iso8601,
       "holiday_type" => holiday.holiday_type,
       "status" => holiday.current_state,
+      "days" => holiday.days,
       "staff_member" => {
         "id" => holiday.staff_member.id,
         "url" => url_helpers.api_v1_staff_member_url(holiday.staff_member)
