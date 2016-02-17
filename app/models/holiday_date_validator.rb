@@ -14,8 +14,12 @@ class HolidayDateValidator
       return
     end
 
+    staff_member_holidays = Holiday.
+      in_state(:enabled).
+      where(staff_member: holiday.staff_member)
+
     overlapping_holidays = HolidayInRangeQuery.new(
-      relation: Holiday.in_state(:enabled),
+      relation: staff_member_holidays,
       start_date: holiday.start_date,
       end_date: holiday.end_date
     ).all
