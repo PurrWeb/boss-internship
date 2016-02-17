@@ -10,7 +10,7 @@ class HolidayDateValidator
     end
 
     if holiday.start_date > holiday.end_date
-      holiday.errors.add(:base, 'Start date must be after end date')
+      holiday.errors.add(:base, 'Start date cannot be after end date')
       return
     end
 
