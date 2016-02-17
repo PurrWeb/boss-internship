@@ -154,7 +154,7 @@ export default class RotaOverviewChart extends Component {
         });
     }
     getSelectionData(breakdown, obj){
-        var seriesName = obj.series[0].key
+        var seriesName = obj.data.key;
         var index = obj.index;
 
         var staffType = _(this.props.staffTypes).find({name: seriesName});
