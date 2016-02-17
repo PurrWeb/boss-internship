@@ -7,12 +7,11 @@ module PageObject
     end
 
     def surf_to
-      visit(url_helpers.holiday_reports_path(date: date, venue: venue))
+      visit(url_helpers.holiday_reports_path(date: date.strftime(Rota.url_date_format), venue: venue.id))
     end
 
     def assert_on_correct_page
-      expect(page).
-        to have_selector("#holiday-report-show-page[data-date='#{date}'][data-venue'#{venue.id}']")
+      expect(page).to have_selector("#holiday-report-show-page")
     end
 
     attr_reader :date, :venue

@@ -6,7 +6,7 @@ RSpec.describe 'Holiday Reports page' do
   let(:venue) { FactoryGirl.create(:venue) }
   let(:show_page) do
     PageObject::HolidayReportsShowPage.new(
-      date: date.strftime(Rota.url_date_format),
+      date: date,
       venue: venue
     )
   end
