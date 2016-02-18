@@ -64,7 +64,7 @@ module Api
       end
 
       def rota_date_from_params
-        Time.strptime(params[:rota_id], Rota.url_date_format).to_date
+        UIRotaDate.parse(params[:rota_id])
       end
 
       def venue_from_params

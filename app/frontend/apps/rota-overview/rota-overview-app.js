@@ -1,74 +1,20 @@
-import React, { Component } from "react"
-import RotaOverviewView from "./rota-overview-view"
-import * as backendData from "~redux/process-backend-data"
-import WeekPicker from "~components/week-picker"
-import VenueDropdown from "~components/venue-dropdown"
-import {appRoutes} from "~lib/routes"
-import moment from "moment"
-import _ from "underscore"
-import { selectStaffTypesWithShifts } from "~redux/selectors"
+import React from "react"
+import { Provider} from "react-redux"
+import store from "~redux/store.js"
+import RotaOverviewPage from "./rota-overview-page.js"
+import * as actionCreators from "~redux/actions.js"
 
-function indexById(data){
-    return _.indexBy(data, "id")
-}
-
-export default class RotaOverviewApp extends Component {
-    render() {
-        var overviewViews = window.boss.rotas.map(function(rotaDetails){
-            var staff = rotaDetails.staff_members;
-            var shifts = rotaDetails.rota_shifts.map(backendData.processShiftObject);
-            var rota = backendData.processRotaObject(rotaDetails.rota);
-            var staffTypes = rotaDetails.staff_types;
-
-            var staffTypesWithShifts = selectStaffTypesWithShifts({
-                staffTypes: indexById(staffTypes),
-                rotaShifts: {items: indexById(shifts) },
-                staff: indexById(staff)
-            });
-
-            return <div key={ rota.id }>
-                <h2>
-                    <a href={appRoutes.rota({venueId: rota.venue.id, date: rota.date}) }>
-                        {moment(rota.date).format("ddd D MMMM YYYY")}
-                    </a>
-                </h2>
-                <RotaOverviewView
-                    staff={ indexById(staff) }
-                    shifts={ indexById(shifts) }
-                    dateOfRota={ rota.date }
-                    staffTypesWithShifts={ indexById(staffTypesWithShifts)} />
-            </div>
-        });
-
-        var firstRota = backendData.processRotaObject(window.boss.rotas[0].rota);
-        var lastRota = backendData.processRotaObject(_.last(window.boss.rotas).rota);
-        return <div className="container">
-            <div className="row">
-                <div className="col-md-3">
-                    <WeekPicker
-                        selectionStartDate={firstRota.date}
-                        onChange={(selection) => {
-                            this.goToOverviewPage(selection.startDate, selection.endDate, firstRota.venue.id)
-                        } }/>
-                </div>
-                <div className="col-md-3">
-                    <VenueDropdown
-                        venues={window.boss.venues}
-                        selectedVenue={firstRota.venue.id}
-                        onChange={
-                            (venueId) => this.goToOverviewPage(firstRota.date, lastRota.date, venueId)
-                        } />
-                </div>
-            </div>
-            <br/>
-            {overviewViews}
-        </div>
+export default class RotaApp extends React.Component {
+    componentWillMount(){
+        let viewData = window.boss.rotas;
+        store.dispatch(actionCreators.loadInitialRotaOverviewAppState(viewData));
     }
-    goToOverviewPage(startDate, endDate, venueId){
-        location.href = appRoutes.rotaOverview({
-            venueId,
-            startDate,
-            endDate
-        });
+    render() {
+        return <Provider store={store}>
+            <RotaOverviewPage rotaDetailsObjects={this.getRotaDetailsObjects()} />
+        </Provider>
+    }
+    getRotaDetailsObjects(){
+        return window.boss.rotas;
     }
 }

@@ -8,6 +8,10 @@ It dispatches the following actions:
 - SET_COMPONENT_ERROR to assign the API error message to a component
 - {requestType}_SUCCESS for the individual reducers to handle successful data updates.
 
+Use errorHandlingComponent to specify which component should receive the error. Use
+requestSourceComponent to keep track of the component that started the request (which
+can be useful for showing spinners etc).
+
 # Example
 
 const actionTypes = {}
@@ -16,7 +20,8 @@ const addTodo = createApiRequestAction(
     function(options, success, error, getState) {
         loadData(function(response){
             success({
-                requestComponent: options.requestComponent,
+                errorHandlingComponent: options.requestComponent,
+                requestSourceComponent: options.requestComponent,
                 ...response
             });
         }, 1000);
@@ -32,10 +37,14 @@ addTodo({title: "Buy milk"});
    - options  Options passed into the action creator.
    - success  Callback to call once the data has been loaded
    - error    Callback to to call if the data couldn't be loaded.
- * @param  {object} actionTypes - action types that are accessed in the reducers
+   - state    Current store state
+ * @param  {object} confirm - is called before the API call and cancels it if it doesn't return true
+ * @param  {object} actionTypes - action types will be added to this object so they can be used in reducers
  * @return {function}   Asynchronous action creator.
  */
-export default function createApiRequestAction(requestType, makeRequest, actionTypes){
+export default function createApiRequestAction(actionOptions){
+    var { requestType, makeRequest, actionTypes } = actionOptions;
+
     actionTypes.API_REQUEST_START = "API_REQUEST_START";
     actionTypes.API_REQUEST_END = "API_REQUEST_END"
     actionTypes.SET_COMPONENT_ERROR = "SET_COMPONENT_ERROR";
@@ -60,15 +69,18 @@ export default function createApiRequestAction(requestType, makeRequest, actionT
                 ]);
             }
             function error(responseOptions){
-                dispatch([
-                    requestEndAction(),
-                    setComponentErrorAction(responseOptions.errors)
-                ]);
+                var actions = [requestEndAction()];
+                if (requestOptions.errorHandlingComponent) {
+                    actions.push(setComponentErrorAction(responseOptions.errors));
+                } else {
+                    alert(responseOptions.errors.base.join("\n"));
+                }
+                dispatch(actions);
             }
             function setComponentErrorAction(errors){
                 return {
                     type: actionTypes.SET_COMPONENT_ERROR,
-                    componentId: requestOptions.requestComponent,
+                    componentId: requestOptions.errorHandlingComponent,
                     errors: errors
                 };
             }
@@ -89,11 +101,18 @@ export default function createApiRequestAction(requestType, makeRequest, actionT
                 };
             }
             
+            if (actionOptions.confirm) {
+                var confirmed = actionOptions.confirm(requestOptions, getState());
+                if (!confirmed) {
+                    return; // Don't go ahead with request
+                }
+            }
+
             dispatch([
                 requestStartAction(),
                 setComponentErrorAction(undefined)
             ]);
-            makeRequest(requestOptions, success, error, getState);
+            makeRequest(requestOptions, success, error, getState());
         }
 
     }

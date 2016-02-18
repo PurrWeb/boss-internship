@@ -19,7 +19,7 @@ export const appRoutes = {
 const apiRoutes = {
     addShift: {
         getPath: function(venueId, date){
-            return "venues/" + venueId + "/rotas/" + moment(date).format("DD-MM-YYYY") + "/rota_shifts"
+            return "venues/" + venueId + "/rotas/" + utils.formatDateForApi(date) + "/rota_shifts"
         },
         method: "POST"
     },
@@ -34,9 +34,29 @@ const apiRoutes = {
             return "rota_shifts/" + options.shiftId;
         },
         method: "DELETE"
+    },
+    updateRotaStatus: {
+        getPath: function(options){
+            var {venueId, date, status} = options;
+            return "venues/" + venueId + "/rotas/" + utils.formatDateForApi(date) + "/mark_" + status;
+        },
+        method: "POST"
+    },
+    publishRotas: {
+        getPath: function(options){
+            var { venueId, date } = options;
+            return [
+                "/venues/" + venueId,
+                "/rotas/publish/?",
+                "date=" + utils.formatDateForApi(date)
+            ].join("")
+        },
+        method: "POST"
     }
 }
 
+window.debug = window.debug || {};
+window.debug.apiRoutes = apiRoutes;
 
 export {apiRoutes}
 export const API_ROOT = "/api/v1/"

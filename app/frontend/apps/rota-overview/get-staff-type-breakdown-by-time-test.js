@@ -112,8 +112,6 @@ describe("getStaffTypeBreakdownByTime", function() {
         });
 
         result.forEach(function(r, i){
-            console.log(JSON.stringify(expectedResult[i], null, 4))
-            console.log(JSON.stringify(r, null, 4))
             var e = expectedResult[i];
             expect(r).toEqual(expectedResult[i])
             

@@ -5,6 +5,6 @@ class RotaStatusStateMachine
   state :finished
   state :published
 
-  transition from: :in_progress, to: [:finished]
-  transition from: :finished, to: [:published]
+  transition from: :in_progress, to: [:finished, :published]
+  transition from: :finished, to: [:published, :in_progress]
 end

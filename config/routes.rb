@@ -68,6 +68,11 @@ Rails.application.routes.draw do
         resources :rotas, only: [] do
           member do
             get :overview
+            post :mark_in_progress
+            post :mark_finished
+          end
+          collection do
+            post :publish
           end
           resources :rota_shifts,   only: [:create]
         end

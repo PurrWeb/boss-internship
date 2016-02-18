@@ -12,6 +12,8 @@ class Rota < ActiveRecord::Base
   validates :venue, presence: true
   validates :status, presence: true
 
+  delegate :transition_to!, to: :state_machine
+
   def status
     state_machine.current_state
   end
@@ -26,10 +28,6 @@ class Rota < ActiveRecord::Base
 
   def published?
     state_machine.current_state.to_sym == :published
-  end
-
-  def self.url_date_format
-    '%d-%m-%Y'
   end
 
   def start_time
