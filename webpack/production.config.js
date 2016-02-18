@@ -3,9 +3,9 @@ var webpack = require('webpack');
 
 config.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
+      mangle: false,
+      compress: false,
+      sourceMap: false
     })
 );
 
