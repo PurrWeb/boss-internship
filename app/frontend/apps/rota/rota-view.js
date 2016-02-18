@@ -43,6 +43,7 @@ class RotaView extends Component {
             <br/>
             <ChartAndFilter
                 rotaShifts={this.props.rotaShifts}
+                staffTypes={this.props.staffTypes}
                 staff={this.props.staff} />
             <hr />
             <AddShiftView 

@@ -7,13 +7,15 @@ class HolidayReportStaffFinder extends React.Component {
     render(){
         return <StaffFinder
             staffItemComponent={StaffListItemContainer}
+            staffTypes={this.props.staffTypes}
             staff={this.props.staff} />
     }
 }
 
 function mapStateToProps(state){
     return {
-        staff: state.staff
+        staff: state.staff,
+        staffTypes: state.staffTypes
     }
 }
 

@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import StaffTypeDropdown from "../staff-type-dropdown.js"
 
 export default class StaffFilter extends Component {
+    static propTypes = {
+        onChange: React.PropTypes.func.isRequired,
+        staffTypes: React.PropTypes.object.isRequired
+    }
     static getDefaultSettings() {
         return {
             name: "",
@@ -35,6 +39,7 @@ export default class StaffFilter extends Component {
                     </div>
                     <div className="col-md-2">
                         <StaffTypeDropdown
+                            staffTypes={this.props.staffTypes}
                             onChange={(staffTypes) => 
                                 this.setState(
                                     {staffTypes: staffTypes},

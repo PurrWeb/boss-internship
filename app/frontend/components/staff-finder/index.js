@@ -7,6 +7,7 @@ export default class StaffFinder extends Component {
     static propTypes = {
         staffItemComponent: React.PropTypes.func.isRequired,
         staff: React.PropTypes.object.isRequired,
+        staffTypes: React.PropTypes.object.isRequired
     }
     constructor(props) {
         super(props);
@@ -17,6 +18,7 @@ export default class StaffFinder extends Component {
     render() {
         return <div>
             <StaffFilter
+                staffTypes={this.props.staffTypes}
                 onChange={(arg) => this.onFilterChange(arg)} />
 
             <FilterableStaffList
