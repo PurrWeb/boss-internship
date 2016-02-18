@@ -6,6 +6,7 @@ import StaffTypeDropdown from "~components/staff-type-dropdown"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
 import ChartSelectionView from "~components/chart-selection-view"
+import { selectStaffTypesWithShifts } from "~redux/selectors"
 
 const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 
@@ -42,7 +43,7 @@ export default class ChartAndFilter extends Component {
                 <div className="col-md-3">
                     Filter chart
                     <StaffTypeDropdown
-                        staffTypes={this.props.staffTypes}
+                        staffTypes={this.getStaffTypesWithShifts()}
                         onChange={
                             (value) => this.setState({"staffTypeFilter": value})
                         } />
@@ -59,6 +60,14 @@ export default class ChartAndFilter extends Component {
                 </div>
             </div>
         )
+    }
+    getStaffTypesWithShifts(){
+        window.selectStaffTypesWithShifts = selectStaffTypesWithShifts
+        return selectStaffTypesWithShifts({
+            rotaShifts: {items: this.props.rotaShifts },
+            staffTypes: this.props.staffTypes,
+            staff: this.props.staff
+        });
     }
     getStaffDetailsComponent(staffId){
         if (!staffId) {
