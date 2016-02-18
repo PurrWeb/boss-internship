@@ -59,7 +59,7 @@ export const updateRotaShift = createApiRequestAction({
         path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shift.shift_id}),
         method: apiRoutes.updateShift.method,
         data: function(options, state){
-            options.shift.staff_member_id = state.rotaShifts.items[options.shift.shift_id].staff_member.id;
+            options.shift.staff_member_id = state.rotaShifts[options.shift.shift_id].staff_member.id;
             return options.shift;
         },
         getSuccessActionData(responseData){

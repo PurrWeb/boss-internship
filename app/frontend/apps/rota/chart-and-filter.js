@@ -64,7 +64,7 @@ export default class ChartAndFilter extends Component {
     getStaffTypesWithShifts(){
         window.selectStaffTypesWithShifts = selectStaffTypesWithShifts
         return selectStaffTypesWithShifts({
-            rotaShifts: {items: this.props.rotaShifts },
+            rotaShifts: this.props.rotaShifts,
             staffTypes: this.props.staffTypes,
             staff: this.props.staff
         });

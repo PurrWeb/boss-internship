@@ -58,7 +58,7 @@ class RotaOverviewPage extends Component {
             var staffTypesWithShifts = selectStaffTypesWithShifts({
                 staffTypes: indexById(staffTypes),
                 // Items property to simulate how it works in the store
-                rotaShifts: {items: indexById(shifts)}, 
+                rotaShifts: indexById(shifts),
                 staff: indexById(staff)
             });
 

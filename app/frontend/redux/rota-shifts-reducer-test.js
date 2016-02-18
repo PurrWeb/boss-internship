@@ -3,34 +3,32 @@ import RotaShiftsReducer from "./rota-shifts-reducer"
 
 describe("RotaShiftsReducer", function(){
     it("Can replace all shifts at once", function(){
-        var initialState = {
-            items: []
-        };
+        var initialState = {};
         var action = {
             type: "REPLACE_ALL_SHIFTS",
-            shifts: [{hello: "world"}, {hi: "earth"}]
+            shifts: {
+                1: {hello: "world"},
+                2: {hi: "earth"}
+            }
         };
         var expectedResultState = {
-            items: [{hello: "world"}, {hi: "earth"}]
+            1: {hello: "world"},
+            2: {hi: "earth"}
         }
 
         expect(RotaShiftsReducer(initialState, action)).toEqual(expectedResultState);
     });
 
     it("Can add a shift that has been saved successfully", function(){
-        var initialState = {
-            items: []
-        }
+        var initialState = {}
         var action = {
             type: "ADD_SHIFT_SUCCESS",
             shift: {id: 123, staff_id: 1000}
         };
         var expectedResultState = {
-            items: {
-                123: {
-                    id: 123,
-                    staff_id: 1000
-                }
+            123: {
+                id: 123,
+                staff_id: 1000
             }
         }
 
@@ -39,13 +37,11 @@ describe("RotaShiftsReducer", function(){
 
     it("Can update a shift", function(){
         var initialState = {
-            items: {
-                123: {
-                    id: 123,
-                    staff_id: 1000,
-                    starts_at: new Date(2015, 0, 1, 9, 0, 0),
-                    ends_at: new Date(2015, 0, 1, 14, 0, 0)
-                }
+            123: {
+                id: 123,
+                staff_id: 1000,
+                starts_at: new Date(2015, 0, 1, 9, 0, 0),
+                ends_at: new Date(2015, 0, 1, 14, 0, 0)
             }
         }
 
@@ -60,13 +56,11 @@ describe("RotaShiftsReducer", function(){
             }
         };
         var expectedResultState = {
-            items: {
-                123: {
-                    id: 123,
-                    staff_id: 1000,
-                    starts_at: newStartsAt,
-                    ends_at: newEndsAt
-                }
+            123: {
+                id: 123,
+                staff_id: 1000,
+                starts_at: newStartsAt,
+                ends_at: newEndsAt
             }
         }
 
@@ -75,19 +69,15 @@ describe("RotaShiftsReducer", function(){
 
     it("Can delete a shift", function(){
         var initialState = {
-            items: {
-                123: {
-                    id: 123
-                }
+            123: {
+                id: 123
             }
         };
         var action = {
             type: "DELETE_SHIFT_SUCCESS",
             shift_id: 123
         }
-        var expectedResultState = {
-            items: {}
-        }
+        var expectedResultState = {}
 
         expect(RotaShiftsReducer(initialState, action)).toEqual(expectedResultState);
     })
