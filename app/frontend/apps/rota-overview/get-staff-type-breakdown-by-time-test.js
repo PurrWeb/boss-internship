@@ -4,7 +4,7 @@ import RotaDate from "~lib/rota-date"
 import _ from "underscore"
 
 describe("getStaffTypeBreakdownByTime", function() {
-    var rotaDate = new RotaDate(new Date(2015,10, 1, 14, 0, 0));
+    var rotaDate = new RotaDate({dateOfRota: new Date(2015,10, 1, 0, 0, 0)});
 
     var staffTypes = {kitchen: {}, bar_back: {}};
     

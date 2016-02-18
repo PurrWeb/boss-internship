@@ -46,7 +46,7 @@ class AddShiftView extends Component {
                     <div className="col-md-3">
                         <ShiftTimeSelector
                             defaultShiftTimes={this.getDefaultShiftTimes(this.props)}
-                            rotaDate={new RotaDate(this.props.dateOfRota)}
+                            rotaDate={new RotaDate({dateOfRota: this.props.dateOfRota})}
                             onChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)}
                             dateOfRota={this.props.dateOfRota} />
                     </div>

@@ -52,8 +52,7 @@ class RotaChart extends Component {
             // Any date will do since there's no data anyway
             exampleDateFromTheDay = new Date();
         }
-        var rotaBaseDate = new Date(exampleDateFromTheDay);
-        var rotaDate = new RotaDate(rotaBaseDate);
+        var rotaDate = new RotaDate({shiftStartsAt: exampleDateFromTheDay});
         return rotaDate;
     }
     generateRotaShiftList(staffList){
