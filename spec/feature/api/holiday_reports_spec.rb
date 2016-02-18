@@ -14,7 +14,7 @@ RSpec.describe 'Holiday api end points' do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:url) do
       url_helpers.api_v1_holiday_reports_path(
-        date: start_date.strftime(Rota.url_date_format),
+        date: UIRotaDate.format(start_date),
         venue: venue.id
       )
     end

@@ -3,9 +3,9 @@ class HolidayReportsController < ApplicationController
     authorize!(:manage, :admin)
     venue = Venue.find_by(id: params[:venue])
     if params[:date]
-      date = Date.strptime(params[:date], Rota.url_date_format)
+      date = UIRotaDate.parse(params[:date])
     else
-      redirect_to holiday_reports_path(date: Time.now.to_date.strftime(Rota.url_date_format), venue: venue)
+      redirect_to holiday_reports_path(date: UIRotaDate.format(Time.now.to_date), venue: venue)
       return
     end
 

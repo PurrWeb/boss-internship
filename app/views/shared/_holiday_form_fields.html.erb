@@ -2,12 +2,12 @@
   <div class="form-inline">
     <%= form.text_field(
           :start_date,
-          value: form.object.start_date.andand.strftime(Rota.url_date_format),
+          value: form.object.start_date && UIRotaDate.format(form.object.start_date),
           class: 'date-picker'
         ) %>
     <%= form.text_field(
           :end_date,
-          value: form.object.end_date.andand.strftime(Rota.url_date_format),
+          value: form.object.end_date && UIRotaDate.format(form.object.end_date),
           class: 'date-picker'
         ) %>
 

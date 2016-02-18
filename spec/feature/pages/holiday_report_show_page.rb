@@ -7,7 +7,7 @@ module PageObject
     end
 
     def surf_to
-      visit(url_helpers.holiday_reports_path(date: date.strftime(Rota.url_date_format), venue: venue.id))
+      visit(url_helpers.holiday_reports_path(date: UIRotaDate.format(date), venue: venue.id))
     end
 
     def assert_on_correct_page

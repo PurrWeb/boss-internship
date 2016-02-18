@@ -2,7 +2,7 @@ module Api
   module V1
     class HolidayReportsController < APIController
       def index
-        date = Date.strptime(params[:date], Rota.url_date_format)
+        date = UIRotaDate.parse(params[:date])
         venue = Venue.find(params[:venue])
 
         authorize!(:manage, :admin)
