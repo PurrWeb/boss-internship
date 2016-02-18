@@ -85,9 +85,9 @@ export default class ChartAndFilter extends Component {
         if (_.isEmpty(rotaShifts)) {
             startOffset = 0;
             endOffset = 24;
-            rotaDate = new RotaDate(new Date());
+            rotaDate = new RotaDate({dateOfRota: Date()});
         } else {
-            rotaDate = new RotaDate(rotaShifts[0].starts_at);
+            rotaDate = new RotaDate({shiftStartsAt: rotaShifts[0].starts_at});
 
             // Adjust offset range everytime we find a shift that's not contained inside it
             rotaShifts.forEach(function(rotaShift){

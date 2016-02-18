@@ -1,0 +1,47 @@
+<table class="table">
+  <thead>
+    <th>Type</th>
+    <th>Dates</th>
+    <th>Note</th>
+    <th>Created By</th>
+    <th></th>
+  </thead>
+  <tbody>
+    <% holidays.each do |holiday| %>
+      <tr>
+        <td><%= holiday.holiday_type.titleize %></td>
+        <td><%= holiday.start_date %> - <%= holiday.end_date %></td>
+        <td><%= holiday.note %></td>
+        <td>
+          <p>
+            <% if can?(:manage, holiday.creator) %>
+              <%= link_to(holiday.creator.full_name, user_path(holiday.creator)) %>
+            <% else %>
+              <%= holiday.creator.full_name %>
+            <% end %>
+            <br />
+            <%= holiday.created_at %>
+          </p>
+        </td>
+        <td>
+          <% if holiday.editable? %>
+            <%= link_to('Edit', edit_holiday_path(holiday), class: 'btn btn-success') %>
+          <% end %>
+
+          <% if holiday.editable? %>
+            <%= link_to(
+                  staff_member_holiday_path(
+                    staff_member_id: staff_member.id,
+                    id: holiday.id
+                  ),
+                  method: :delete,
+                  class: 'btn btn-danger'
+                ) do %>
+              Delete <span class="glyphicon glyphicon-remove"></span>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

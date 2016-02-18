@@ -13,6 +13,24 @@ export const appRoutes = {
             "&start_date=" + utils.formatRotaUrlDate(startDate),
             "&end_date=" + utils.formatRotaUrlDate(endDate)
         ].join("");
+    },
+    holidayReportsIndex: function(options) {
+      var { date, venueId } = options;
+      return [
+        'holiday_reports?',
+        'date=' + utils.formatRotaUrlDate(date),
+        '&venue=' + venueId
+      ].join('');
+    },
+    staffMemberHolidays: function(staffMemberId){
+      return "/staff_members/" + staffMemberId + "?tab=holidays";
+    },
+    holidayReportsCsv: function({date, venueId}){
+        return [
+          "/holiday_reports.csv?" +
+          'date=' + utils.formatRotaUrlDate(date),
+          '&venue=' + venueId
+        ].join("")
     }
 }
 

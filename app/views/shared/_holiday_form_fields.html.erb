@@ -1,0 +1,30 @@
+<div class="container-fluid">
+  <div class="form-inline">
+    <%= form.text_field(
+          :start_date,
+          value: form.object.start_date && UIRotaDate.format(form.object.start_date),
+          class: 'date-picker'
+        ) %>
+    <%= form.text_field(
+          :end_date,
+          value: form.object.end_date && UIRotaDate.format(form.object.end_date),
+          class: 'date-picker'
+        ) %>
+
+    <%= form.select(
+          :holiday_type,
+          options_for_select(
+            Holiday::HOLIDAY_TYPES.map do |h|
+              [h.titleize, h]
+            end,
+            form.object.holiday_type
+          ),
+          include_blank: true,
+          label_class: 'required'
+        ) %>
+  </div>
+
+  <div class="col-md-6">
+    <%= form.text_area :note %>
+  </div>
+</div>

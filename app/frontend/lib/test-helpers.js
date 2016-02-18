@@ -1,4 +1,6 @@
 import React, { Component } from "react"
+import TestUtils from "react-addons-test-utils"
+import ReactDOM from "react-dom"
 
 export class ContextProvider extends Component {
     render(){
@@ -26,4 +28,16 @@ export class NoOpComponent extends Component{
     render(){
         return null;
     }
+}
+
+/**
+Example usage:
+var  node = simpleRender(<HelloWorldMessage />).node;
+expect(node.textContent).toContain("Hello World");
+*/
+export function simpleRender(createdElement){
+    var component = TestUtils.renderIntoDocument(createdElement);
+    var node = ReactDOM.findDOMNode(component);
+
+    return {component, node};
 }

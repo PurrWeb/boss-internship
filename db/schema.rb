@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160203003648) do
+ActiveRecord::Schema.define(version: 20160210152549) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -51,6 +51,36 @@ ActiveRecord::Schema.define(version: 20160203003648) do
   end
 
   add_index "email_addresses", ["email"], name: "index_email_addresses_on_email", using: :btree
+
+  create_table "holiday_transitions", force: :cascade do |t|
+    t.string   "to_state",    limit: 255,   null: false
+    t.text     "metadata",    limit: 65535
+    t.integer  "sort_key",    limit: 4,     null: false
+    t.integer  "holiday_id",  limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "holiday_transitions", ["holiday_id", "most_recent"], name: "index_holiday_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "holiday_transitions", ["holiday_id", "sort_key"], name: "index_holiday_transitions_parent_sort", unique: true, using: :btree
+
+  create_table "holidays", force: :cascade do |t|
+    t.date     "start_date",                      null: false
+    t.date     "end_date",                        null: false
+    t.string   "holiday_type",      limit: 255,   null: false
+    t.integer  "creator_user_id",   limit: 4,     null: false
+    t.integer  "staff_member_id",   limit: 4,     null: false
+    t.text     "note",              limit: 65535
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "parent_holiday_id", limit: 4
+  end
+
+  add_index "holidays", ["end_date"], name: "index_holidays_on_end_date", using: :btree
+  add_index "holidays", ["holiday_type"], name: "index_holidays_on_holiday_type", using: :btree
+  add_index "holidays", ["staff_member_id"], name: "index_holidays_on_staff_member_id", using: :btree
+  add_index "holidays", ["start_date"], name: "index_holidays_on_start_date", using: :btree
 
   create_table "invite_transitions", force: :cascade do |t|
     t.string   "to_state",    limit: 255,   null: false

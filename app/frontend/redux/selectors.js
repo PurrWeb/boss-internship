@@ -15,3 +15,42 @@ export function selectStaffTypesWithShifts(state){
         return staff[shift.staff_member.id].staff_type.id;
     }
 }
+
+export function selectStaffMemberHolidays(state, staffId){
+    var staffMember = state.staff[staffId];
+    var staffMemberHolidayIds = _.pluck(state.staff[staffId].holidays, "id");
+    var allHolidays = staffMemberHolidayIds.map(function(id){
+        return state.holidays[id];
+    });
+    // We only have this week's holidays in the state, so filter out
+    // any holidays we don't have in the state.
+    var availableHolidays = _(allHolidays).filter(function(holiday){
+        return holiday !== undefined;
+    })
+    return availableHolidays;
+}
+
+export function selectStaffMemberUnpaidHolidays(state, staffId){
+    return _.filter(selectStaffMemberHolidays(state, staffId), {
+        holiday_type: "unpaid_holiday"
+    })
+}
+
+export function selectStaffMemberPaidHolidays(state, staffId){
+    return _.filter(selectStaffMemberHolidays(state, staffId), {
+        holiday_type: "paid_holiday"
+    })
+}
+
+
+export function selectStaffMemberIsOnHolidayOnDate(state, staffId, date){
+    var staffMemberHolidays = selectStaffMemberHolidays(state, staffId);
+    var isOnHoliday = false;
+    staffMemberHolidays.forEach(function(holiday){
+        if (holiday.start_date <= date && holiday.end_date >= date){
+            isOnHoliday = true;
+        }
+    });
+
+    return isOnHoliday;
+}

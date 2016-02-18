@@ -140,7 +140,7 @@ export default class RotaOverviewChart extends Component {
         return indicator
     }
     getRotaDate(){
-        return new RotaDate(this.props.dateOfRota);
+        return new RotaDate({dateOfRota: this.props.dateOfRota});
     }
     getBreakdown(){
         var { shifts, staff, staffTypes} = this.props;
@@ -166,7 +166,7 @@ export default class RotaOverviewChart extends Component {
         };
     }
     getChartData(breakdown){
-        var rotaDate = new RotaDate(this.props.dateOfRota);
+        var rotaDate = this.getRotaDate();
         var staffTypes = this.props.staffTypes;
         var series = [];
 

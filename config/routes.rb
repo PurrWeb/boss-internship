@@ -31,7 +31,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :holidays, only: [:edit, :update]
+
+  resources :holiday_reports, only: :index
+
   resources :staff_members, only: [:show, :index, :new, :create] do
+    resources :holidays, only: [:create, :destroy]
     member do
       get :edit_employment_details
       post :update_employment_details
@@ -77,6 +82,8 @@ Rails.application.routes.draw do
           resources :rota_shifts,   only: [:create]
         end
       end
+      resources :holidays, only: :show
+      resources :holiday_reports, only: :index
       resources :staff_members, only: :show
       resources :staff_types,   only: :show
       resources :rota_shifts,   only: [:show, :destroy, :update]

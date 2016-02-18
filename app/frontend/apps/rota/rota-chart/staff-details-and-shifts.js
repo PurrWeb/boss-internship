@@ -4,6 +4,9 @@ import StaffTypeBadge from "~components/staff-type-badge"
 import _ from "underscore"
 
 export default class StaffDetailsAndShifts extends Component {
+    static contextTypes = {
+        staffTypes: React.PropTypes.object.isRequired
+    }
     render(){
         var staff = this.getStaff();
         var shifts = this.getShifts();
@@ -14,12 +17,15 @@ export default class StaffDetailsAndShifts extends Component {
                 key={shift.id}
                 staff={this.props.staff} />
         );
+        var staffTypeId = staff.staff_type.id;
+        var staffType = this.context.staffTypes[staffTypeId];
         return <div>
             <h2 className="staff-details-and-shifts__h2">
                 {staff.first_name} {staff.surname}
             </h2>
             <div className="staff-details-and-shifts__staff-type">
-                <StaffTypeBadge staffType={staff.staff_type.id} />
+                <StaffTypeBadge
+                    staffTypeObject={staffType} />
             </div>
             <br/>
 

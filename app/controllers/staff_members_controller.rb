@@ -18,7 +18,15 @@ class StaffMembersController < ApplicationController
     staff_member = StaffMember.find(params[:id])
     authorize! :manage, staff_member
 
-    render locals: { staff_member: staff_member }
+    if !active_tab_from_params.present?
+      return redirect_to staff_member_path(staff_member, tab: 'employment-details')
+    end
+
+    render locals: {
+      staff_member: staff_member,
+      active_tab: active_tab_from_params,
+      holiday: Holiday.new
+    }
   end
 
   def new
@@ -55,7 +63,7 @@ class StaffMembersController < ApplicationController
 
     if staff_member.update_attributes(update_employment_details_params(staff_member))
       flash[:success] = "Staff member updated successfully"
-      redirect_to staff_member_path(staff_member)
+      redirect_to staff_member_path(staff_member, tab: 'employment-details')
     else
       flash.now[:error] = "There was a problem updating this staff member"
       render 'edit_employment_details', locals: { staff_member: staff_member }
@@ -72,7 +80,7 @@ class StaffMembersController < ApplicationController
 
     if staff_member.update_attributes(update_personal_details_params)
       flash[:success] = "Staff member updated successfully"
-      redirect_to staff_member_path(staff_member)
+      redirect_to staff_member_path(staff_member, tab: 'personal-details')
     else
       flash.now[:error] = "There was a problem updating this staff member"
       render 'edit_personal_details', locals: { staff_member: staff_member }
@@ -100,6 +108,21 @@ class StaffMembersController < ApplicationController
   end
 
   private
+  def active_tab_from_params
+    tab_from_params = params['tab']
+    tab_from_params if show_page_tabs.include?(tab_from_params)
+  end
+
+  def show_page_tabs
+    [
+      'employment-details',
+      'account-details',
+      'personal-details',
+      'contact-details',
+      'holidays'
+    ]
+  end
+
   def staff_member_params
     require_attributes = [
       :pin_code,

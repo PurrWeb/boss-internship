@@ -5,10 +5,25 @@ const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
  */
 class RotaDate {
     /**
-     * @param  {Date} baseDate
-     * (8am is always the current day, so don't create a RotaDate based on an ends_at value that might be 8am the next day.)
+     * @param  {Date} [shiftStartsAt] - Create a RotaDate based on the starts_at value of a shift.
+     * @param  {Date} [dateOfRota] - Create a RotaDate based on the date value of a rota (based on the date at midnight).
      */
-    constructor(baseDate) {
+    constructor({shiftStartsAt, dateOfRota}) {
+        if (shiftStartsAt) {
+            this.initUsingBaseDate(shiftStartsAt);
+        }
+        else if (dateOfRota) {
+            var baseDate = new Date(dateOfRota);
+            baseDate.setHours(12); // make sure baseDate time is actually on the rota day
+            this.initUsingBaseDate(baseDate);
+        } else {
+            throw "RotaDate needs shiftStartsAt or dateOfRota option."
+        }
+    } 
+    // baseDate has to be on the actual rota day between 8am and 7:59am.
+    // You can't pass in  a `shift.ends_at` value because 8am would count as the next day.
+    // A `rota.date` value also can't be pased in directly because it's midnight on the previous rota day.
+    initUsingBaseDate(baseDate){
         this.startTime = new Date(baseDate);
         if (baseDate.getHours() < 8) {
             this.startTime.setDate(baseDate.getDate() - 1);

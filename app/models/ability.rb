@@ -4,11 +4,7 @@ class Ability
   def initialize(user)
     # Define abilities for the passed in user here. For example:
     #
-    if user.dev?
-      can :manage, :all
-    end
-
-    if user.admin?
+    if user.has_admin_access?
       can :manage, :admin
     end
 
@@ -16,12 +12,16 @@ class Ability
 
     can :manage, :rotas
 
+    can :manage, Holiday do |holiday|
+      holiday.editable? && can_manage_staff_member?(user, holiday.staff_member)
+    end
+
     can :manage, Venue do |venue|
       user.has_all_venue_access? || user.venues.include?(venue)
     end
 
     can :manage, StaffMember do |staff_member|
-      user.has_all_venue_access? || user.venues.include?(staff_member.venue)
+      can_manage_staff_member?(user, staff_member)
     end
 
     can :manage, Rota do |rota|
@@ -29,7 +29,7 @@ class Ability
     end
 
     can :create_staff_member, User do |target_user|
-      user.admin? || user == target_user
+      user.has_admin_access? || user == target_user
     end
 
     #
@@ -50,5 +50,9 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+  end
+
+  def can_manage_staff_member?(user, staff_member)
+    user.has_all_venue_access? || user.venues.include?(staff_member.venue)
   end
 end

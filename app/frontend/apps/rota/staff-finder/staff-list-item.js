@@ -6,10 +6,13 @@ import Spinner from "~components/spinner"
 import reactMixin from "react-mixin"
 import apiFormMixin from "~mixins/api-form-mixin"
 import ComponentErrors from "~components/component-errors"
+import StaffHolidaysList from "~components/staff-holidays-list"
+import { appRoutes } from "~lib/routes"
 
 export default class StaffListItem extends Component {
     static contextTypes = {
-        addShift: React.PropTypes.func.isRequired
+        addShift: React.PropTypes.func.isRequired,
+        staffTypes: React.PropTypes.object.isRequired
     }
     render() {
         var staff = this.props.staff;
@@ -19,6 +22,8 @@ export default class StaffListItem extends Component {
         }
 
         var errors = this.getComponentErrors()
+
+        var staffTypeObject = this.context.staffTypes[staff.staff_type.id];
 
         return (
             <div className="staff-list-item rota-staff-list-item">
@@ -31,7 +36,7 @@ export default class StaffListItem extends Component {
                             <h3 className="rota-staff-list-item__name">
                                 {staff.first_name} {staff.surname}
                             </h3>
-                            <StaffTypeBadge staffType={staff.staff_type.id} />
+                            <StaffTypeBadge staffTypeObject={staffTypeObject} />
                         </div>
                         <div className="row">
                             <div className="col-md-6">
@@ -41,7 +46,20 @@ export default class StaffListItem extends Component {
                                 <StaffShiftList
                                     staffId={staff.id} />
                             </div>
-                            <div className="col-md-6">
+                            <div className="col-md-3">
+                                <h4 className="rota-staff-list-item__h4" style={{
+                                    display: "inline-block",
+                                }}>
+                                    Holidays
+                                </h4>
+                                <a
+                                    href={appRoutes.staffMemberHolidays(staff.id)}
+                                    style={{marginLeft: 5, display: "inline-block"}}>
+                                    Edit
+                                </a>
+                                <StaffHolidaysList staffId={staff.id} />
+                            </div>
+                            <div className="col-md-3">
                                 <h4 className="rota-staff-list-item__h4">
                                     Preferences
                                 </h4>

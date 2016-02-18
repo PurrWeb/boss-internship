@@ -1,9 +1,11 @@
 import expect from "expect"
 import RotaDate from "./rota-date"
 
-describe("utils", function() {
-    var date = new RotaDate(new Date(2015, 5, 12, 18, 0, 0));
-    var dateAt6Am = new RotaDate(new Date(2015, 5, 4, 6, 0, 0));
+describe("RotaDate", function() {
+    var date = new RotaDate({
+        shiftStartsAt: new Date(2015, 5, 12, 18, 0, 0)
+    });
+    var dateAt6Am = new RotaDate({shiftStartsAt: new Date(2015, 5, 4, 6, 0, 0)});
 
     it("Calculates the boundaries of the rota date", function() {
         expect(date.startTime).toEqual(new Date(2015, 5, 12, 8, 0));

@@ -2,18 +2,17 @@ import React, { Component } from "react"
 
 export default class StaffTypeBadge extends Component {
     static propTypes = {
-        staffType: React.PropTypes.number.isRequired
-    }
-    static contextTypes = {
-        staffTypes: React.PropTypes.object.isRequired
+        staffTypeObject: React.PropTypes.object.isRequired
     }
     render(){
-        var staffType = this.context.staffTypes[this.props.staffType];
+        var staffType = this.props.staffTypeObject;
 
         var staffTypeStyle = {
             backgroundColor: staffType.color
         };
-        return <div className="boss-badge staff-badge" style={staffTypeStyle}>
+        return <div
+            className="boss-badge staff-badge"
+            style={staffTypeStyle} >
             {staffType.name}
         </div>
     }

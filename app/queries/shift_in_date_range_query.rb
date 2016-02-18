@@ -1,19 +1,20 @@
 class ShiftInDateRangeQuery
-  def initialize(rota:, staff_member:, starts_at:, ends_at:)
-    @rota = rota
+  def initialize(staff_member:, start_date:, end_date:)
     @staff_member = staff_member
-    @starts_at = starts_at
-    @ends_at = ends_at
+    @start_date = start_date
+    @end_date = end_date
   end
 
   def all
-    query = RotaShift.all
-    query = query.where('(? <= `ends_at`) AND (? >= `starts_at`)', starts_at, ends_at)
-    query = query.where(staff_member: staff_member)
-    query = query.where(rota: rota)
-    query
+    query = RotaShift.enabled.where(staff_member: staff_member)
+
+    InRangeQuery.new(
+      relation: query,
+      start_value: RotaShiftDate.new(start_date).start_time,
+      end_value: RotaShiftDate.new(end_date).end_time
+    ).all
   end
 
   private
-  attr_reader :staff_member, :starts_at, :ends_at, :rota
+  attr_reader :start_date, :end_date, :staff_member
 end
