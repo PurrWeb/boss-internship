@@ -39,8 +39,13 @@ export default class WeekPicker extends React.Component {
         }
 
         function setStartEndDateBasedOnClickedDate(date) {
-            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 1);
-            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 7);
+            var weekDay = date.getDay();
+            if (weekDay === 0) {
+                weekDay = 7;
+            }
+            weekDay-=1;
+            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - weekDay);
+            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - weekDay + 6);
         }
         
         setStartEndDateBasedOnClickedDate(this.props.selectionStartDate)
@@ -57,7 +62,6 @@ export default class WeekPicker extends React.Component {
                 $('#endDate').text($.datepicker.formatDate( dateFormat, endDate, inst.settings ));
                 
                 self.selectCurrentWeek();
-
 
                 self.props.onChange({
                     startDate,
