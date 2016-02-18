@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe NotOnHolidayValidator do
   let(:validator) { NotOnHolidayValidator.new(shift) }
-  let(:shift_date) { Date.new(2001, 2, 3) }
+  let(:shift_date) { Time.now.beginning_of_week + 1.day }
   let!(:holiday) do
     FactoryGirl.create(
       :holiday,
