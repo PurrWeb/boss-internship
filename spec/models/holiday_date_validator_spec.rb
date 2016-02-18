@@ -166,11 +166,11 @@ describe HolidayDateValidator do
   context 'holiday is not conatined within one week' do
     let(:start_date) do
       # Saturday
-      Date.parse('17/01/2015')
+      Time.now.beginning_of_week.to_date + 6.days
     end
     let(:end_date) do
       # the next Wednesday
-      Date.parse('21/01/2015')
+      start_date + 4.days
     end
 
     specify 'an error message should be added on base' do

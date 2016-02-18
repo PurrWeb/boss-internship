@@ -14,6 +14,12 @@ class HolidayDateValidator
       return
     end
 
+    current_week = RotaWeek.new(Time.now)
+    if holiday.start_date < current_week.start_date
+      holiday.errors.add(:base, 'Cannot create holidays for weeks that have already passed')
+      return
+    end
+
     staff_member_holidays = Holiday.
       in_state(:enabled).
       where(staff_member: holiday.staff_member)
