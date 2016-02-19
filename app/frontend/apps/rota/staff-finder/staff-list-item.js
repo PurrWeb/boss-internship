@@ -3,25 +3,31 @@ import AddStaffToShiftButton from "./add-staff-to-shift-button"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
 import Spinner from "~components/spinner"
-import reactMixin from "react-mixin"
-import apiFormMixin from "~mixins/api-form-mixin"
 import ComponentErrors from "~components/component-errors"
 import StaffHolidaysList from "~components/staff-holidays-list"
 import { appRoutes } from "~lib/routes"
+import { connect } from "react-redux"
+import { selectAddShiftIsInProgress } from "~redux/selectors"
+import _ from "underscore"
 
-export default class StaffListItem extends Component {
+class StaffListItem extends Component {
     static contextTypes = {
         addShift: React.PropTypes.func.isRequired,
-        staffTypes: React.PropTypes.object.isRequired
+        staffTypes: React.PropTypes.object.isRequired,
+        componentErrors: React.PropTypes.object.isRequired
+    }
+    componentWillMount(){
+        this.componentId = _.uniqueId();
     }
     render() {
+        console.log("render staff list item")
         var staff = this.props.staff;
         var shiftSavingInProgressSpinner = null;
-        if (staff.addShiftIsInProgress) {
+        if (this.props.addShiftIsInProgress) {
             shiftSavingInProgressSpinner = <Spinner />
         }
 
-        var errors = this.getComponentErrors()
+        var errors = this.context.componentErrors[this.componentId];
 
         var staffTypeObject = this.context.staffTypes[staff.staff_type.id];
 
@@ -94,7 +100,19 @@ export default class StaffListItem extends Component {
         );
     }
     addShift(){
-        this.context.addShift(this.props.staff.id, this.getComponentId())
+        this.context.addShift(this.props.staff.id, this.componentId)
     }
 }
-reactMixin.onClass(StaffListItem, apiFormMixin);
+
+function mapStateToProps(state, ownProps){
+    return {
+        addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.id)
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    null,
+    null,
+    {pure: false}
+)(StaffListItem);

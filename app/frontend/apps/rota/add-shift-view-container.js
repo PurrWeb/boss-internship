@@ -1,10 +1,9 @@
 import React, { Component } from "react"
 import {connect } from "react-redux"
 import validation from "~lib/validation"
-import utils from "~lib/utils"
 import _ from "underscore"
 import AddShiftView from "./add-shift-view/add-shift-view"
-import { selectStaffMemberIsOnHolidayOnDate } from "~redux/selectors"
+import { selectStaffMemberIsOnHolidayOnDate, selectAddShiftIsInProgress } from "~redux/selectors"
 import * as actionCreators from "~redux/actions"
 
 
@@ -17,7 +16,7 @@ class AddShiftViewContainer extends Component {
         var canAddShift = (staff_id) => {
             var { starts_at, ends_at } = this.state.shiftTimes;
             var datesAreValid = validation.areShiftTimesValid(starts_at, ends_at);
-            var isAddingShift = this.props.staff[staff_id].addShiftIsInProgress;
+            var isAddingShift = this.props.addShiftIsInProgress[staff_id];
             var isOnHoliday = this.props.staffMemberIsOnHoliday[staff_id];
 
             return datesAreValid && !isAddingShift && !isOnHoliday; 
@@ -68,7 +67,15 @@ function mapStateToProps(state, ownProps){
         staffMemberIsOnHoliday: _.mapObject(ownProps.staff, function(staff, staffId){
             return selectStaffMemberIsOnHolidayOnDate(state, staffId, ownProps.dateOfRota)
         }),
-        staffTypes: state.staffTypes
+        staffTypes: state.staffTypes,
+        staff: state.staff,
+        dateOfRota: ownProps.dateOfRota,
+        addShiftIsInProgress: _(state.staff).mapObject(
+            (staffMember) => {
+                console.log("addShiftIsInProgress", staffMember.id, selectAddShiftIsInProgress(state, staffMember.id))
+                selectAddShiftIsInProgress(state, staffMember.id)
+            }
+        )
     }
 }
 
@@ -80,4 +87,4 @@ function mapDispatchToProps(dispatch){
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddShiftViewContainer)
+export default connect(mapStateToProps, mapDispatchToProps, null, {pure: false})(AddShiftViewContainer)

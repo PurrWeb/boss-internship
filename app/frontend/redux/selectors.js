@@ -86,3 +86,11 @@ export function selectForecastByRotaId(state, rotaId){
         return isSameVenue && isSameDate;
     })
 }
+
+export function selectAddShiftIsInProgress(state, staffId){
+    var shiftsBeingAdded = state.apiRequestsInProgress.ADD_SHIFT;
+    return _(shiftsBeingAdded).some(
+        (request) => request.shift.staff_member_id === staffId
+    );
+}
+

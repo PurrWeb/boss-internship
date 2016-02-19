@@ -47,8 +47,7 @@ class RotaView extends Component {
                 staff={this.props.staff} />
             <hr />
             <AddShiftViewContainer 
-                dateOfRota={this.props.dateOfRota}
-                staff={this.props.staff} />
+                dateOfRota={this.props.dateOfRota} />
         </div>
     }
 }
@@ -59,11 +58,6 @@ function mapStateToProps(state) {
     props.shifts = _.values(props.shifts);
 
     var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
-    props.staff = _(props.staff).mapValues(function(staff){
-        return Object.assign({}, staff, {
-            addShiftIsInProgress: _(shiftsBeingAdded).some((request) => request.shift.staff_member_id === staff.id)
-        })
-    });
 
     var shiftsBeingUpdated = props.apiRequestsInProgress.UPDATE_SHIFT;
     var shiftsBeingDeleted = props.apiRequestsInProgress.DELETE_SHIFT;
@@ -82,5 +76,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    null, null, {pure: false}
 )(RotaView);

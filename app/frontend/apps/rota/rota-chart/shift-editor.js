@@ -3,14 +3,18 @@ import ShiftTimeSelector from "~components/shift-time-selector"
 import Spinner from "~components/spinner"
 import RotaDate from "~lib/rota-date"
 import validation from "~lib/validation"
-import reactMixin from "react-mixin"
-import apiFormMixin from "~mixins/api-form-mixin"
+import utils from "~lib/utils"
+import { connect } from "react-redux"
+import _ from "underscore"
 import ComponentErrors from "~components/component-errors"
 
-export default class ShiftEditor extends Component {
+class ShiftEditor extends Component {
     static contextTypes = {
         boundActionCreators: React.PropTypes.object,
         dateOfRota: React.PropTypes.instanceOf(Date)
+    }
+    componentWillMount(){
+        this.componentId = _.uniqueId();
     }
     constructor(props){
         super(props);
@@ -43,9 +47,9 @@ export default class ShiftEditor extends Component {
             updateButton = null;
         }
 
-        if (this.getComponentErrors()){
+        if (this.props.componentErrors[this.componentId]){
             var componentErrors = <div style={{marginTop: 10}}>
-                 <ComponentErrors errors={this.getComponentErrors()} />
+                 <ComponentErrors errors={this.props.componentErrors[this.componentId]} />
             </div>
         }
 
@@ -83,7 +87,7 @@ export default class ShiftEditor extends Component {
         }
         this.context.boundActionCreators.deleteRotaShift({
             shift_id: this.props.shift.id,
-            errorHandlingComponent: this.getComponentId()
+            errorHandlingComponent: this.componentId
         });
     }
     onShiftTimesChange(shiftTimes) {
@@ -96,9 +100,15 @@ export default class ShiftEditor extends Component {
                 ends_at: this.state.newShiftTimes.ends_at,
                 shift_id: this.props.shift.id
             },
-            errorHandlingComponent: this.getComponentId()
+            errorHandlingComponent: this.componentId
         });
     }
 }
 
-reactMixin.onClass(ShiftEditor, apiFormMixin);
+function mapStateToProps(state){
+    return {
+        componentErrors: state.componentErrors
+    }
+}
+
+export default connect(mapStateToProps)(ShiftEditor);
