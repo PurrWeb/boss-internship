@@ -26,6 +26,14 @@
             </li>
           <% end %>
 
+          <% if can?(:manage, :security_rota) %>
+            <li class="nav-security-rota-section">
+              <%= link_to(security_rotas_path, class: "nav-section-header-link #{'active' if in_rotas_section? }") do %>
+                Security Rota
+              <% end %>
+            </li>
+          <% end %>
+
           <% if can?(:manage, :clock_in_clock_out) %>
             <li class="nav-clock-in-clock-out-section">
               <%= link_to('Clock In/Out Demo', clock_in_clock_out_index_path, class: "nav-section-header-link") %>

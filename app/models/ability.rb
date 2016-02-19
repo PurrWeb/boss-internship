@@ -6,6 +6,7 @@ class Ability
     #
     if user.has_admin_access?
       can :manage, :admin
+      can :manage, :security_rota
     end
 
     can :manage, :staff_members
