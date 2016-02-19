@@ -1,1 +1,50 @@
 <h1>Security Rota for <%= date %></h1>
+
+
+<script>
+
+  rotaData = {};
+
+
+
+
+  rotaData.rotas = [{"id":6,"url":"http://localhost:3000/api/v1/rotas/6","venue":{"id":1,"url":"http://localhost:3000/api/v1/venues/1"},"date":"2016-02-15","status":"published"}];
+
+  rotaData.staff_types = [{"id":1,"url":"http://localhost:3000/api/v1/staff_types/1","name":"Bar Back","color":"#ff0000"},{"id":2,"url":"http://localhost:3000/api/v1/staff_types/2","name":"Chef","color":"#ff6600"},{"id":3,"url":"http://localhost:3000/api/v1/staff_types/3","name":"KP","color":"#008000"},{"id":4,"url":"http://localhost:3000/api/v1/staff_types/4","name":"Bartender","color":"#0000cc"},{"id":5,"url":"http://localhost:3000/api/v1/staff_types/5","name":"Floor Staff","color":"#000000"},{"id":6,"url":"http://localhost:3000/api/v1/staff_types/6","name":"Waitress","color":"#000000"},{"id":7,"url":"http://localhost:3000/api/v1/staff_types/7","name":"Bar Supervisor","color":"#000000"},{"id":8,"url":"http://localhost:3000/api/v1/staff_types/8","name":"Manager","color":"#000000"},{"id":9,"url":"http://localhost:3000/api/v1/staff_types/9","name":"GM","color":"#000000"},{"id":10,"url":"http://localhost:3000/api/v1/staff_types/10","name":"HQ","color":"#000000"},{"id":11,"url":"http://localhost:3000/api/v1/staff_types/11","name":"Security","color":"#000000"},{"id":12,"url":"http://localhost:3000/api/v1/staff_types/12","name":"PR","color":"#000000"}];
+
+  rotaData.rota_shifts = [{"id":7,"url":"http://localhost:3000/api/v1/rota_shifts/7","rota":{"id":6,"url":"http://localhost:3000/api/v1/rotas/6"},"starts_at":"2016-02-15T18:00:00Z","ends_at":"2016-02-15T20:00:00Z","staff_member":{"id":1,"url":"http://localhost:3000/api/v1/staff_members/1"}},{"id":15,"url":"http://localhost:3000/api/v1/rota_shifts/15","rota":{"id":6,"url":"http://localhost:3000/api/v1/rotas/6"},"starts_at":"2016-02-15T18:00:00Z","ends_at":"2016-02-15T20:00:00Z","staff_member":{"id":2,"url":"http://localhost:3000/api/v1/staff_members/2"}},{"id":16,"url":"http://localhost:3000/api/v1/rota_shifts/16","rota":{"id":6,"url":"http://localhost:3000/api/v1/rotas/6"},"starts_at":"2016-02-15T18:00:00Z","ends_at":"2016-02-15T20:00:00Z","staff_member":{"id":3,"url":"http://localhost:3000/api/v1/staff_members/3"}}];
+
+  rotaData.staff_members = [{"id":1,"url":"http://localhost:3000/api/v1/staff_members/1","avatar_url":"/uploads/staff_member/avatar/1/avatar.jpg","staff_type":{"id":4,"url":"http://localhost:3000/api/v1/staff_types/4"},"first_name":"Staff","surname":"staffson","preferred_hours":"20","preferred_days":"sunday","holidays":[],"venue":{"id":1,"url":"http://localhost:3000/api/v1/venues/1"}},{"id":2,"url":"http://localhost:3000/api/v1/staff_members/2","avatar_url":"/uploads/staff_member/avatar/2/avatar.jpg","staff_type":{"id":3,"url":"http://localhost:3000/api/v1/staff_types/3"},"first_name":"John","surname":"Doe","preferred_hours":"","preferred_days":"","holidays":[],"venue":{"id":1,"url":"http://localhost:3000/api/v1/venues/1"}},{"id":3,"url":"http://localhost:3000/api/v1/staff_members/3","avatar_url":"/uploads/staff_member/avatar/3/avatar.jpg","staff_type":{"id":2,"url":"http://localhost:3000/api/v1/staff_types/2"},"first_name":"Sally","surname":"Jones","preferred_hours":"","preferred_days":"","holidays":[],"venue":{"id":1,"url":"http://localhost:3000/api/v1/venues/1"}}];
+
+  rotaData.venues = [{"id":1,"url":"http://localhost:3000/api/v1/venues/1","name":"McCooley's","staff_members":[{"id":1,"url":"http://localhost:3000/api/v1/staff_members/1"},{"id":2,"url":"http://localhost:3000/api/v1/staff_members/2"},{"id":3,"url":"http://localhost:3000/api/v1/staff_members/3"}]}];
+
+  rotaData.holidays = [];
+
+  window.boss = window.boss || {};
+  window.boss.rota = rotaData;
+
+var sohoData = (function(){
+      var rotaData = {};
+
+  rotaData.rotas = [{"id":15,"url":"http://localhost:3000/api/v1/rotas/15","venue":{"id":2,"url":"http://localhost:3000/api/v1/venues/2"},"date":"2016-02-15","status":"in_progress"}];
+
+  rotaData.staff_types = [{"id":1,"url":"http://localhost:3000/api/v1/staff_types/1","name":"Bar Back","color":"#ff0000"},{"id":2,"url":"http://localhost:3000/api/v1/staff_types/2","name":"Chef","color":"#ff6600"},{"id":3,"url":"http://localhost:3000/api/v1/staff_types/3","name":"KP","color":"#008000"},{"id":4,"url":"http://localhost:3000/api/v1/staff_types/4","name":"Bartender","color":"#0000cc"},{"id":5,"url":"http://localhost:3000/api/v1/staff_types/5","name":"Floor Staff","color":"#000000"},{"id":6,"url":"http://localhost:3000/api/v1/staff_types/6","name":"Waitress","color":"#000000"},{"id":7,"url":"http://localhost:3000/api/v1/staff_types/7","name":"Bar Supervisor","color":"#000000"},{"id":8,"url":"http://localhost:3000/api/v1/staff_types/8","name":"Manager","color":"#000000"},{"id":9,"url":"http://localhost:3000/api/v1/staff_types/9","name":"GM","color":"#000000"},{"id":10,"url":"http://localhost:3000/api/v1/staff_types/10","name":"HQ","color":"#000000"},{"id":11,"url":"http://localhost:3000/api/v1/staff_types/11","name":"Security","color":"#000000"},{"id":12,"url":"http://localhost:3000/api/v1/staff_types/12","name":"PR","color":"#000000"}];
+
+  rotaData.rota_shifts = [{"id":14,"url":"http://localhost:3000/api/v1/rota_shifts/14","rota":{"id":15,"url":"http://localhost:3000/api/v1/rotas/15"},"starts_at":"2016-02-15T18:00:00Z","ends_at":"2016-02-15T20:00:00Z","staff_member":{"id":4,"url":"http://localhost:3000/api/v1/staff_members/4"}}];
+
+  rotaData.staff_members = [{"id":4,"url":"http://localhost:3000/api/v1/staff_members/4","avatar_url":"/uploads/staff_member/avatar/4/avatar.jpg","staff_type":{"id":2,"url":"http://localhost:3000/api/v1/staff_types/2"},"first_name":"John","surname":"OtherVenue","preferred_hours":"","preferred_days":"","holidays":[],"venue":{"id":2,"url":"http://localhost:3000/api/v1/venues/2"}}];
+
+  rotaData.venues = [{"id":2,"url":"http://localhost:3000/api/v1/venues/2","name":"Soho","staff_members":[{"id":4,"url":"http://localhost:3000/api/v1/staff_members/4"}]}];
+
+  rotaData.holidays = [];
+  return rotaData;
+})();
+
+  rotaData.staff_members = rotaData.staff_members.concat(sohoData.staff_members);
+  rotaData.rota_shifts = rotaData.rota_shifts.concat(sohoData.rota_shifts);
+
+  rotaData.venues = rotaData.venues.concat(sohoData.venues);
+
+  </script>
+
+<%= react_component("StaffTypeRotaApp") %>
