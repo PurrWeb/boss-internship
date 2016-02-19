@@ -47,6 +47,7 @@ module Clockwork
     Rollbar.error(e)
   end
 
+  every(20.minutes, "ShiftUpdateNotificationJob", at: "**:00")
   every(1.hour, "BackupDatabaseJob",      at: "**:00")
   every(1.day,  "CleanBackupsJob",        at: "23:00")
 end
