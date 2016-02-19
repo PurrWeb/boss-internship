@@ -1,20 +1,17 @@
 import React, { Component } from "react"
-import RotaDate from "~lib/rota-date.js"
 import {connect } from "react-redux"
-import ShiftTimeSelector from "~components/shift-time-selector"
-import StaffFinder from "./staff-finder/staff-finder"
 import validation from "~lib/validation"
+import utils from "~lib/utils"
 import _ from "underscore"
+import AddShiftView from "./add-shift-view/add-shift-view"
 import { selectStaffMemberIsOnHolidayOnDate } from "~redux/selectors"
+import * as actionCreators from "~redux/actions"
 
 
-class AddShiftView extends Component {
+class AddShiftViewContainer extends Component {
     static childContextTypes = {
         addShift: React.PropTypes.func,
         canAddShift: React.PropTypes.func
-    }
-    static contextTypes = {
-        boundActionCreators: React.PropTypes.object
     }
     getChildContext(){
         var canAddShift = (staff_id) => {
@@ -31,7 +28,7 @@ class AddShiftView extends Component {
         }
     }
     constructor(props){
-        super(props)
+        super(props);
 
         var state = {
             shiftTimes: this.getDefaultShiftTimes(props)
@@ -39,24 +36,12 @@ class AddShiftView extends Component {
         this.state = state;
     }
     render() {
-        return (
-            <div className="well well-lg">
-                <h2 style={{ marginTop: 0 }}>New shift hours</h2>
-                <div className="row">
-                    <div className="col-md-3">
-                        <ShiftTimeSelector
-                            defaultShiftTimes={this.getDefaultShiftTimes(this.props)}
-                            rotaDate={new RotaDate({dateOfRota: this.props.dateOfRota})}
-                            onChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)}
-                            dateOfRota={this.props.dateOfRota} />
-                    </div>
-                </div>
-                <br/>
-                <StaffFinder
-                    staff={this.props.staff}
-                    staffTypes={this.props.staffTypes} />
-            </div>
-        );
+        return <AddShiftView
+            shiftTimes={this.state.shiftTimes}
+            dateOfRota={this.props.dateOfRota}
+            onShiftTimesChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)}
+            staff={this.props.staff} 
+            staffTypes={this.props.staffTypes} />
     }
     getDefaultShiftTimes(props) {
         var starts_at = new Date(new Date(props.dateOfRota).setHours(18));
@@ -64,7 +49,7 @@ class AddShiftView extends Component {
         return {starts_at, ends_at};
     }
     addShift(staffId, requestComponent){
-        this.context.boundActionCreators.addRotaShift({
+        this.props.addRotaShift({
             shift: {
                 starts_at: this.state.shiftTimes.starts_at,
                 ends_at: this.state.shiftTimes.ends_at,
@@ -87,4 +72,12 @@ function mapStateToProps(state, ownProps){
     }
 }
 
-export default connect(mapStateToProps)(AddShiftView)
+function mapDispatchToProps(dispatch){
+    return {
+        addRotaShift: function(options){
+            dispatch(actionCreators.addRotaShift(options));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddShiftViewContainer)

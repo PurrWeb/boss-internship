@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import * as actionCreators from "../../redux/actions.js"
 import ChartAndFilter from "./chart-and-filter.js"
 import _ from "underscore"
-import AddShiftView from "./add-shift-view"
+import AddShiftViewContainer from "./add-shift-view-container"
 import RotaNavigation from "./rota-navigation"
 import store from "../../redux/store.js"
 import moment from "moment"
@@ -46,7 +46,7 @@ class RotaView extends Component {
                 staffTypes={this.props.staffTypes}
                 staff={this.props.staff} />
             <hr />
-            <AddShiftView 
+            <AddShiftViewContainer 
                 dateOfRota={this.props.dateOfRota}
                 staff={this.props.staff} />
         </div>
