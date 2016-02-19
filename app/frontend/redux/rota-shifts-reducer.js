@@ -2,18 +2,7 @@ import {actionTypes } from "./actions"
 import _ from "underscore"
 import utils from "~lib/utils"
 
-var initialState = {
-    items: [],
-    shiftsBeingSaved: []
-};
-export default function rotaShifts(state=initialState, action){
-    console.log("ACTION", action)
-    return {
-        items: rotaShiftItems(state.items, action)
-    }
-}
-
-function rotaShiftItems(state=[], action){
+export default function rotaShift(state=[], action){
     switch (action.type) {
         case actionTypes.REPLACE_ALL_SHIFTS:
             return action.shifts;

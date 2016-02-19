@@ -2,7 +2,7 @@ import _ from "underscore"
 
 export function selectStaffTypesWithShifts(state){
     var {rotaShifts, staff} = state;
-    rotaShifts = _.values(rotaShifts.items);
+    rotaShifts = _.values(rotaShifts);
 
     var allStaffTypes = state.staffTypes;
     var shiftStaffTypes = _(rotaShifts).map(getStaffTypeFromShift);
@@ -14,6 +14,16 @@ export function selectStaffTypesWithShifts(state){
     function getStaffTypeFromShift(shift) {
         return staff[shift.staff_member.id].staff_type.id;
     }
+}
+
+// not sure if this is technically a Redux selector, but I'll put it here for now
+export function selectStaffTypesWithStaffMembers(staffTypes, staffMembers) {
+    return _(staffMembers).chain()
+        .pluck("staff_type")
+        .pluck("id")
+        .unique()
+        .map((staffTypeId) => staffTypes[staffTypeId])
+        .value()
 }
 
 export function selectStaffMemberHolidays(state, staffId){

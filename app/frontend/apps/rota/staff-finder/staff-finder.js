@@ -4,6 +4,10 @@ import StaffListItem from "./staff-list-item"
 import StaffFinder from "~components/staff-finder"
 
 export default class RotaStaffFinder extends Component {
+    static propTypes = {
+        staff: React.PropTypes.object.isRequired,
+        staffTypes: React.PropTypes.object.isRequired
+    }
     render() {
         return <div>
             <div className="staff-finder__header">
@@ -11,6 +15,7 @@ export default class RotaStaffFinder extends Component {
                     Find Staff
                 </h3>
                 <StaffFinder
+                    staffTypes={this.props.staffTypes}
                     staffItemComponent={StaffListItem}
                     staff={this.props.staff} />
             </div>

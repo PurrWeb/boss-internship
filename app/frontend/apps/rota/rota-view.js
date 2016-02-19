@@ -43,6 +43,7 @@ class RotaView extends Component {
             <br/>
             <ChartAndFilter
                 rotaShifts={this.props.rotaShifts}
+                staffTypes={this.props.staffTypes}
                 staff={this.props.staff} />
             <hr />
             <AddShiftView 
@@ -66,7 +67,7 @@ function mapStateToProps(state) {
 
     var shiftsBeingUpdated = props.apiRequestsInProgress.UPDATE_SHIFT;
     var shiftsBeingDeleted = props.apiRequestsInProgress.DELETE_SHIFT;
-    props.rotaShifts = _(props.rotaShifts.items).map(function(shift){
+    props.rotaShifts = _(props.rotaShifts).map(function(shift){
         var isBeingEdited = _(shiftsBeingUpdated).some((request) => request.shift.shift_id === shift.id)
             || _(shiftsBeingDeleted).some({shift_id: shift.id});
         return Object.assign({}, shift, {

@@ -54,7 +54,8 @@ class AddShiftView extends Component {
                 <br/>
                 <hr/>
                 <StaffFinder
-                    staff={this.props.staff} />
+                    staff={this.props.staff}
+                    staffTypes={this.props.staffTypes} />
             </div>
         );
     }
@@ -82,7 +83,8 @@ function mapStateToProps(state, ownProps){
     return {
         staffMemberIsOnHoliday: _.mapObject(ownProps.staff, function(staff, staffId){
             return selectStaffMemberIsOnHolidayOnDate(state, staffId, ownProps.dateOfRota)
-        })
+        }),
+        staffTypes: state.staffTypes
     }
 }
 

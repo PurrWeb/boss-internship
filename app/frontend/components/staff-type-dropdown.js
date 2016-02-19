@@ -4,7 +4,10 @@ import { connect } from "react-redux"
 import Select from "react-select"
 import { selectStaffTypesWithShifts } from "~redux/selectors"
 
-class StaffTypeDropdown extends Component {
+export default class StaffTypeDropdown extends Component {
+    static propTypes = {
+        staffTypes: React.PropTypes.object.isRequired
+    }
     constructor(props) {
         super(props);
         this.value = [];
@@ -48,13 +51,3 @@ class StaffTypeDropdown extends Component {
         this.props.onChange(this.value);
     }
 }
-
-function mapStateToProps(state){
-    return {
-        staffTypes: state.staffTypes
-    }
-}
-
-export default connect(
-    mapStateToProps
-)(StaffTypeDropdown)
