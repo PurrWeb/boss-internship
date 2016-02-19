@@ -1,0 +1,30 @@
+<p>Your rotaed shifts have been changed.</p>
+
+<p>Your current rotaed shifts are the following:</p>
+
+<% shifts_by_week.each do |week, shifts| %>
+<div>
+  <h3><%= week.start_date.to_s(:human_date) %> - <%= week.end_date.to_s(:human_date) %></h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Venue</th>
+        <th>Date</th>
+        <th>Starts At</th>
+        <th>Ends At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% shifts.each do |shift| %>
+        <tr>
+          <td><%= shift.venue.name %></td>
+          <td><%= shift.date.to_s(:human_date) %></td>
+          <td><%= shift.starts_at.to_s(:human_time_no_date) %></td>
+          <td><%= shift.ends_at.to_s(:human_time_no_date) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% end %>
