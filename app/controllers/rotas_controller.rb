@@ -68,8 +68,8 @@ class RotasController < ApplicationController
 
   def redirect_params
     {
-      start_date: start_date_from_params || default_start_date,
-      end_date: end_date_from_params || default_end_date,
+      start_date: UIRotaDate.format(start_date_from_params || default_start_date),
+      end_date: UIRotaDate.format(end_date_from_params || default_end_date),
       venue_id: venue_from_params || default_venue.andand.id
     }
   end
@@ -81,7 +81,7 @@ class RotasController < ApplicationController
   end
 
   def default_start_date
-    UIRotaDate.format(Time.now.beginning_of_week)
+    Time.now.beginning_of_week
   end
 
   def end_date_from_params
@@ -91,7 +91,7 @@ class RotasController < ApplicationController
   end
 
   def default_end_date
-    UIRotaDate.format(Time.now.end_of_week)
+    Time.now.end_of_week
   end
 
   def default_venue
