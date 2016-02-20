@@ -70,7 +70,7 @@ class RotasController < ApplicationController
     {
       start_date: start_date_from_params || default_start_date,
       end_date: end_date_from_params || default_end_date,
-      venue_id: venue_from_params || default_venue.id
+      venue_id: venue_from_params || default_venue.andand.id
     }
   end
 
