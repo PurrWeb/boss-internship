@@ -2,7 +2,15 @@ require 'rails_helper'
 
 RSpec.describe 'Edit Holiday service'  do
   let(:requester) { FactoryGirl.create(:user) }
-  let(:holiday) { FactoryGirl.create(:holiday) }
+  let(:start_date) { Time.now.beginning_of_week.to_date }
+  let(:end_date) { start_date + 2.days }
+  let(:holiday) do
+    FactoryGirl.create(
+      :holiday,
+      start_date: start_date,
+      end_date: end_date
+    )
+  end
   let(:staff_member) { holiday.staff_member }
   let(:holiday_params) do
     {
@@ -83,8 +91,8 @@ RSpec.describe 'Edit Holiday service'  do
   context 'holiday params have changed' do
     let(:holiday_params) do
       {
-        start_date: holiday.start_date - 1.day,
-        end_date: holiday.end_date,
+        start_date: holiday.start_date + 1.day,
+        end_date: holiday.end_date + 1.day,
         holiday_type: holiday.holiday_type,
         note: holiday.note
       }
