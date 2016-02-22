@@ -12,9 +12,7 @@ import _ from "underscore"
 
 class StaffListItem extends Component {
     static contextTypes = {
-        addShift: React.PropTypes.func.isRequired,
-        staffTypes: React.PropTypes.object.isRequired,
-        componentErrors: React.PropTypes.object.isRequired
+        addShift: React.PropTypes.func.isRequired
     }
     componentWillMount(){
         this.componentId = _.uniqueId();
@@ -27,9 +25,9 @@ class StaffListItem extends Component {
             shiftSavingInProgressSpinner = <Spinner />
         }
 
-        var errors = this.context.componentErrors[this.componentId];
+        var errors = this.props.componentErrors[this.componentId];
 
-        var staffTypeObject = this.context.staffTypes[staff.staff_type.id];
+        var staffTypeObject = this.props.staffTypes[staff.staff_type.id];
 
         return (
             <div className="staff-list-item rota-staff-list-item">
@@ -106,7 +104,9 @@ class StaffListItem extends Component {
 
 function mapStateToProps(state, ownProps){
     return {
-        addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.id)
+        addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.id),
+        staffTypes: state.staffTypes,
+        componentErrors: state.componentErrors
     }
 }
 
