@@ -1,14 +1,24 @@
 import React from "react"
 import { connect } from "react-redux"
 import StaffFinder from "~components/staff-finder"
+import StaffListItem from "~components/rota-staff-list-item"
 
-class StaffListItem extends React.Component {
-    render(){
-        return <div>{JSON.stringify(this.props.staff)}</div>
-    }
-}
 
 class StaffTypeRotaStaffFinder extends React.Component {
+    static childContextTypes = {
+        canAddShift: React.PropTypes.func.isRequired,
+        addShift: React.PropTypes.func.isRequired
+    }
+    getChildContext(){
+        return {
+            canAddShift: function(){
+                return true;
+            },
+            addShift: function(){
+                alert("not implemented")
+            }
+        }
+    }
     render(){
         return <div>
             <StaffFinder
