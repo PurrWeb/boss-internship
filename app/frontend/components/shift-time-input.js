@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import RotaDate from "../lib/rota-date.js"
 import moment from "moment"
-import utils from "../lib/utils"
+import validation from "../lib/validation"
 
 var SHIFT_TIME_TYPES = {
     START: 2,
@@ -39,7 +39,7 @@ export default class ShiftTimeInput extends Component {
             onChange={(e) => this.updateTime(e.target.value)} />
     }
     isValid(){
-        return utils.shiftTimeIsValid(this.getDateFromProps());
+        return validation.shiftTimeIsValid(this.getDateFromProps());
     }
     getDateFromTime(timeString){
         var rotaDate = this.props.rotaDate;

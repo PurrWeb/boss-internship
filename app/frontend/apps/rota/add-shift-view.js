@@ -3,7 +3,7 @@ import RotaDate from "~lib/rota-date.js"
 import {connect } from "react-redux"
 import ShiftTimeSelector from "~components/shift-time-selector"
 import StaffFinder from "./staff-finder/staff-finder"
-import utils from "~lib/utils"
+import validation from "~lib/validation"
 import _ from "underscore"
 import { selectStaffMemberIsOnHolidayOnDate } from "~redux/selectors"
 
@@ -19,7 +19,7 @@ class AddShiftView extends Component {
     getChildContext(){
         var canAddShift = (staff_id) => {
             var { starts_at, ends_at } = this.state.shiftTimes;
-            var datesAreValid = utils.areShiftTimesValid(starts_at, ends_at);
+            var datesAreValid = validation.areShiftTimesValid(starts_at, ends_at);
             var isAddingShift = this.props.staff[staff_id].addShiftIsInProgress;
             var isOnHoliday = this.props.staffMemberIsOnHoliday[staff_id];
 

@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import ShiftTimeSelector from "~components/shift-time-selector"
 import Spinner from "~components/spinner"
 import RotaDate from "~lib/rota-date"
-import utils from "~lib/utils"
+import validation from "~lib/validation"
 import reactMixin from "react-mixin"
 import apiFormMixin from "~mixins/api-form-mixin"
 import ComponentErrors from "~components/component-errors"
@@ -75,7 +75,7 @@ export default class ShiftEditor extends Component {
     }
     areBothTimesValid(){
         var {starts_at, ends_at} = this.state.newShiftTimes;
-        return utils.areShiftTimesValid(starts_at, ends_at);
+        return validation.areShiftTimesValid(starts_at, ends_at);
     }
     deleteShift(){
         if (this.props.shift.isBeingEdited) {

@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import ShiftTimeInput from "./shift-time-input.js"
-import utils from "~lib/utils"
+import validation from "~lib/validation"
 import ErrorMessage from "~components/error-message.js"
 
 export default class ShiftTimeSelector extends Component {
@@ -41,22 +41,10 @@ export default class ShiftTimeSelector extends Component {
         </div>
     }
     getErrorMessages(){
-        var errorMessages = [];
-        var dates = [
-            {
-                title: "Start Time",
-                value: this.state.starts_at
-            }, {
-                title: "End Time",
-                value: this.state.ends_at
-            }
-        ];
-        dates.forEach(function(date){
-            var validationResult = utils.validateShiftTime(date.value);
-            if (!validationResult.isValid) {
-                errorMessages.push(date.title + ": " + validationResult.message)
-            }
-        })
+        var errorMessages = validation.validateShiftTimes({
+            starts_at: this.state.starts_at,
+            ends_at: this.state.ends_at
+        }).messages;
 
         if (errorMessages.length === 0){
             return null;
