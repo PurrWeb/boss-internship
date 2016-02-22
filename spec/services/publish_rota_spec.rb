@@ -1,6 +1,14 @@
 require 'rails_helper'
 
 describe PublishRotas do
+  include ActiveSupport::Testing::TimeHelpers
+
+  around(:each) do |example|
+    travel_to Time.now do
+      example.run
+    end
+  end
+
   let(:service) { PublishRotas.new(rotas: rotas) }
   let(:rotas) { [rota] }
 
@@ -21,6 +29,27 @@ describe PublishRotas do
       }.to_not change{
         rota.updated_at
       }
+    end
+
+    context 'with shifts' do
+      let(:staff_member) { FactoryGirl.create(:staff_member) }
+      let!(:rota_shift) do
+        FactoryGirl.create(
+          :rota_shift,
+          rota: rota,
+          staff_member: staff_member,
+          starts_at: RotaShiftDate.new(rota.date).start_time,
+          ends_at: RotaShiftDate.new(rota.date).start_time + 2.hours
+        )
+      end
+
+      specify 'Should update the rotas status' do
+        expect{
+          service.call
+        }.to change{
+          staff_member.reload.shift_change_occured_at
+        }.from(nil).to(Time.now)
+      end
     end
   end
 

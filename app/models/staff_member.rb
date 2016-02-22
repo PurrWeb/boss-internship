@@ -92,6 +92,18 @@ class StaffMember < ActiveRecord::Base
     email_address.try(:email)
   end
 
+  def mark_requiring_notification!(time: Time.now)
+    update_attributes!(shift_change_occured_at: time)
+  end
+
+  def mark_notified!
+    update_attributes!(shift_change_occured_at: nil)
+  end
+
+  def requires_notification?
+    shift_change_occured_at.present?
+  end
+
   def hours_preference_help_text
     'Perferred number of hours to work per week displayed in the Rota (e.g. 40, 20+)'
   end

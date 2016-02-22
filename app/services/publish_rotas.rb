@@ -12,6 +12,11 @@ class PublishRotas
 
         if !rota.published?
           rota.transition_to!(:published)
+
+          StaffMember.
+            joins(:rota_shifts).
+            merge(rota.rota_shifts).
+            find_each(&:mark_requiring_notification!)
         end
       end
     end
