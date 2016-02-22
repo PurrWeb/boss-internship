@@ -38,7 +38,7 @@ var utils =  {
     },
     shiftTimeIsValid(shiftTime){
         var dateIsValid = utils.dateIsValid(shiftTime);
-        var minutesAreMultipleOfFifteen = shiftTime.getMinutes() % 15 === 0;
+        var minutesAreMultipleOfFifteen = shiftTime.getMinutes() % 30 === 0;
         return dateIsValid && minutesAreMultipleOfFifteen;
     },
     areShiftTimesValid(starts_at, ends_at) {
