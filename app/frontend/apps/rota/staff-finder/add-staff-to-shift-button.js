@@ -2,19 +2,17 @@ import React, { Component } from "react"
 import _ from "underscore"
 
 export default class AddStaffToShiftButton extends Component {
-    static contextTypes = {
-        canAddShift: React.PropTypes.func.isRequired
-    }
     static PropTypes = {
         addShift: React.PropTypes.func.isRequired,
-        staffId: React.PropTypes.number.isRequired
+        staffId: React.PropTypes.number.isRequired,
+        canAddShift: React.PropTypes.bool.isRequired
     }
     componentDidMount(){
         this.componentId = _.uniqueId();
     }
     render() {
         var className = "btn btn-default";
-        if (!this.canAddShift()) {
+        if (!this.props.canAddShift) {
             className += " disabled";
         }
 
@@ -24,11 +22,8 @@ export default class AddStaffToShiftButton extends Component {
                 Add shift
             </a>
     }
-    canAddShift(){
-        return this.context.canAddShift(this.props.staffId)
-    }
     onClick() {
-        if (!this.canAddShift()) {
+        if (!this.props.canAddShift) {
             return;
         }
         this.props.addShift();

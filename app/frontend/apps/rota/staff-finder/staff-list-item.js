@@ -12,7 +12,8 @@ import _ from "underscore"
 
 class StaffListItem extends Component {
     static contextTypes = {
-        addShift: React.PropTypes.func.isRequired
+        addShift: React.PropTypes.func.isRequired,
+        canAddShift: React.PropTypes.func.isRequired
     }
     componentWillMount(){
         this.componentId = _.uniqueId();
@@ -78,6 +79,7 @@ class StaffListItem extends Component {
                             <div className="rota-staff-list-item__add-button" style={{float: "left"}}>
                                 <AddStaffToShiftButton
                                     staffId={staff.id}
+                                    canAddShift={this.context.canAddShift(staff.id)}
                                     addShift={() => this.addShift()}
                                     />
                             </div>
