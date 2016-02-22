@@ -1,5 +1,6 @@
 import React from "react"
 import utils from "~lib/utils"
+import ErrorMessage from "./error-message"
 
 export default class ComponentErrors extends React.Component {
     static propTypes = {
@@ -23,9 +24,9 @@ export default class ComponentErrors extends React.Component {
             </ul>
         }
 
-        return <div className="alert alert-danger">
+        return <ErrorMessage>
             {errorComponents}
-        </div>
+        </ErrorMessage>
     }
     getErrorMessages(){
         var {errors} = this.props;

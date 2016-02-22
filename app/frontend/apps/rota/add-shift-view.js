@@ -52,7 +52,6 @@ class AddShiftView extends Component {
                     </div>
                 </div>
                 <br/>
-                <hr/>
                 <StaffFinder
                     staff={this.props.staff}
                     staffTypes={this.props.staffTypes} />

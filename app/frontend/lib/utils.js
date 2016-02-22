@@ -40,16 +40,16 @@ var utils =  {
         var dateIsValid = utils.dateIsValid(shiftTime);
         var minutesAreMultipleOfThirty = shiftTime.getMinutes() % 30 === 0;
 
-        var errorMessage = "";
+        var message = "";
         if (!dateIsValid) {
-            errorMessage = "Please enter a valid date.";
+            message = "Please enter a valid date.";
         } else if (!minutesAreMultipleOfThirty) {
-            errorMessage = "Shift times need to be given in intervals of 30 minutes.";
+            message = "Shift times need to be given in intervals of 30 minutes.";
         }
 
         return {
             isValid: dateIsValid && minutesAreMultipleOfThirty,
-            errorMessage: errorMessage
+            message
         }
     },
     shiftTimeIsValid(shiftTime){
