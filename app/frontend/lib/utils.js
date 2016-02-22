@@ -36,10 +36,24 @@ var utils =  {
         delete ret[key];
         return ret;
     },
-    shiftTimeIsValid(shiftTime){
+    validateShiftTime(shiftTime){
         var dateIsValid = utils.dateIsValid(shiftTime);
-        var minutesAreMultipleOfFifteen = shiftTime.getMinutes() % 30 === 0;
-        return dateIsValid && minutesAreMultipleOfFifteen;
+        var minutesAreMultipleOfThirty = shiftTime.getMinutes() % 30 === 0;
+
+        var errorMessage = "";
+        if (!dateIsValid) {
+            errorMessage = "Please enter a valid date.";
+        } else if (!minutesAreMultipleOfThirty) {
+            errorMessage = "Shift times need to be given in intervals of 30 minutes.";
+        }
+
+        return {
+            isValid: dateIsValid && minutesAreMultipleOfThirty,
+            errorMessage: errorMessage
+        }
+    },
+    shiftTimeIsValid(shiftTime){
+        return utils.validateShiftTime(shiftTime).isValid;
     },
     areShiftTimesValid(starts_at, ends_at) {
         var datesAreValid = utils.shiftTimeIsValid(starts_at) &&
