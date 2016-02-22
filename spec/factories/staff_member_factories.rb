@@ -21,5 +21,9 @@ FactoryGirl.define do
     venue
     staff_type
     avatar { Rack::Test::UploadedFile.new(TestImageHelper.arnie_face_path) }
+
+    trait :requiring_notification do
+      shift_change_occured_at 1.hour.ago
+    end
   end
 end

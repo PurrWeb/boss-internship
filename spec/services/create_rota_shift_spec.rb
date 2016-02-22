@@ -149,6 +149,10 @@ describe CreateRotaShift do
       specify 'no shifts exist' do
         expect(RotaShift.count).to eq(0)
       end
+
+      specify 'staff member does not require notification' do
+        expect(staff_member.requires_notification?).to eq(false)
+      end
     end
 
     context 'supplying valid parameters' do
@@ -181,6 +185,32 @@ describe CreateRotaShift do
           expect(rota.creator).to eq(rota_creator)
           expect(rota.date).to eq(rota_date)
         end
+
+        specify 'staff member does not require notification' do
+          service.call
+          expect(staff_member.reload.requires_notification?).to eq(false)
+        end
+      end
+    end
+
+    context 'rota is published' do
+      let(:starts_at) { (rota_date.beginning_of_day + 9.hours).round }
+      let(:ends_at) { (rota_date.beginning_of_day + 11.hours).round }
+      let!(:rota) do
+        travel_to rota_create_time do
+          FactoryGirl.create(
+            :rota,
+            :published,
+            date: rota_date,
+            venue: venue,
+            creator: rota_creator
+          )
+        end
+      end
+
+      specify 'staff member is marked as requiring notification' do
+        service.call
+        expect(staff_member.reload.requires_notification?).to eq(true)
       end
     end
   end

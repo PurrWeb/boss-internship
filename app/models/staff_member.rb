@@ -36,7 +36,7 @@ class StaffMember < ActiveRecord::Base
 
   validates :name, presence: true
   validates :gender, inclusion: { in: GENDERS, message: 'is required' }
-  validates :enabled, presence: true
+  validates :enabled, :inclusion => {:in => [true, false], message: 'is required' }
   validate  :national_insurance_number_valid
   validates :pin_code, presence: true
   validate  :valid_pin_code_format
@@ -90,6 +90,18 @@ class StaffMember < ActiveRecord::Base
 
   def email
     email_address.try(:email)
+  end
+
+  def mark_requiring_notification!(time: Time.now)
+    update_attributes!(shift_change_occured_at: time)
+  end
+
+  def mark_notified!
+    update_attributes!(shift_change_occured_at: nil)
+  end
+
+  def requires_notification?
+    shift_change_occured_at.present?
   end
 
   def hours_preference_help_text

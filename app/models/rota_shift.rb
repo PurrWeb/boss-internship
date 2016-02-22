@@ -20,6 +20,18 @@ class RotaShift < ActiveRecord::Base
     NotOnHolidayValidator.new(rota_shift).validate
   end
 
+  def date
+    rota.andand.date
+  end
+
+  def venue
+    rota.andand.venue
+  end
+
+  def rota_published?
+    rota.andand.published?
+  end
+
   private
   # validation
   def times_in_correct_order

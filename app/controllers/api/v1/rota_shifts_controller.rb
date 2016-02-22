@@ -34,12 +34,14 @@ module Api
         shift = RotaShift.find(params[:id])
         authorize! :manage, shift.rota
 
-        if shift.update_attributes(rota_shift_params)
-          render 'show', locals: { rota_shift: shift }
+        result = EditRotaShift.new(rota_shift: shift, rota_shift_params: rota_shift_params).call
+
+        if result.success?
+          render 'show', locals: { rota_shift: result.rota_shift }
         else
           render(
             'error',
-            locals: { rota_shift: shift },
+            locals: { rota_shift: result.rota_shift },
             :status => :unprocessable_entity
           )
         end
@@ -54,6 +56,13 @@ module Api
       end
 
       private
+      def edit_rota_shift_params
+        params.permit(
+          :starts_at,
+          :ends_at
+        )
+      end
+
       def rota_shift_params
         params.permit(
           :starts_at,
