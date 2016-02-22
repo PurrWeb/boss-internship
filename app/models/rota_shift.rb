@@ -28,6 +28,10 @@ class RotaShift < ActiveRecord::Base
     rota.andand.venue
   end
 
+  def rota_published?
+    rota.andand.published?
+  end
+
   private
   # validation
   def times_in_correct_order

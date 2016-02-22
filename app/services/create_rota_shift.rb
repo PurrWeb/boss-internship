@@ -33,6 +33,10 @@ class CreateRotaShift
       rota.save!
       result = rota_shift.save
 
+      if result && rota_shift.rota_published?
+        rota_shift.staff_member.mark_requiring_notification!
+      end
+
       ActiveRecord::Rollback unless result
     end
 
