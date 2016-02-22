@@ -20,7 +20,7 @@ class RotaOverviewPage extends Component {
     }
     render() {
         var overviewViews = this.getOverviewViews();
-
+        
         var rotas = _.values(this.props.storeRotas);
         var firstRota = rotas[0];
         var lastRota = _.last(rotas);
@@ -79,7 +79,7 @@ class RotaOverviewPage extends Component {
             </div>
         });
     }
-    goToOverviewPage(startDate, endDate, venueId){
+    goToOverviewPage({startDate, endDate, venueId}){
         location.href = appRoutes.rotaOverview({
             venueId,
             startDate,
