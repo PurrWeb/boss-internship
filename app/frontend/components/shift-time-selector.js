@@ -22,16 +22,16 @@ export default class ShiftTimeSelector extends Component {
                     <ShiftTimeInput
                         startsAt={this.state.starts_at}
                         rotaDate={this.props.rotaDate}
-                        onChange={(newValue, dateIsValid) => {
-                            this.onChange("starts_at", newValue, dateIsValid);
+                        onChange={(newValue) => {
+                            this.onChange("starts_at", newValue);
                         } } />
                 </div>
                 <div className="col-md-6">
                     <ShiftTimeInput
                         endsAt={this.state.ends_at}
                         rotaDate={this.props.rotaDate}
-                        onChange={(newValue, dateIsValid) => {
-                            this.onChange("ends_at", newValue, dateIsValid);
+                        onChange={(newValue) => {
+                            this.onChange("ends_at", newValue);
                         } } />
                 </div>
             </div>
@@ -40,7 +40,7 @@ export default class ShiftTimeSelector extends Component {
     /**
      * @param  {string} startOrEnd - "starts_at" or "ends_at"
      */
-    onChange(startOrEnd, newValue, dateIsValid){
+    onChange(startOrEnd, newValue){
         this.setState({[startOrEnd]: newValue});
 
         var info = {
