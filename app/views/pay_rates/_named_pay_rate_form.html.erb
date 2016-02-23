@@ -1,0 +1,13 @@
+<%= bootstrap_form_for(pay_rate) do |form| %>
+  <%= form.text_field(:name) %>
+  <%= form.text_field(:description) %>
+  <%= form.text_field(
+        :hourly_rate,
+        prepend: '£',
+        value: form.object.pounds_per_hour,
+        help: "#{ form.object.errors[:cents_per_hour].to_sentence }",
+        wrapper_class: "#{ 'has-error' if form.object.errors[:cents_per_hour].present? }"
+      ) %>
+
+  <%= form.submit %>
+<% end %>

@@ -62,6 +62,10 @@
                 <li class="nav-holiday-reports-section">
                   <%= link_to('Holiday Reports', holiday_reports_path(date: UIRotaDate.format(Time.now.to_date.monday))) %>
                 </li>
+
+                <li class="nav-pay-rates-section">
+                  <%= link_to('Pay rates', pay_rates_path) %>
+                </li>
               </ul>
             </li>
           <% end %>

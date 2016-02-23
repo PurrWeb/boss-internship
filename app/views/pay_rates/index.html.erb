@@ -1,0 +1,26 @@
+<h1>Pay Rates</h1>
+
+<%= link_to('Add Rate', new_pay_rate_path, class: ['btn', 'btn-primary']) %>
+
+<% if pay_rates.present? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Rate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% pay_rates.each do |pay_rate| %>
+        <tr>
+          <td><%= pay_rate.name %></td>
+          <td><%= pay_rate.description %></td>
+          <td><%= number_to_currency(pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No named pay rates exist</p>
+<% end %>

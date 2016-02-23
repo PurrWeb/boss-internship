@@ -59,6 +59,8 @@ Rails.application.routes.draw do
 
   resources :rotas, only: [:index]
 
+  resources :pay_rates, only: [:index, :new, :create]
+
   resources :clock_in_clock_out, only: [:index]
 
   namespace :api, defaults: { format: 'json' } do
