@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160219112055) do
+ActiveRecord::Schema.define(version: 20160223093017) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -125,6 +125,15 @@ ActiveRecord::Schema.define(version: 20160219112055) do
 
   add_index "names", ["first_name"], name: "index_names_on_first_name", using: :btree
   add_index "names", ["surname"], name: "index_names_on_surname", using: :btree
+
+  create_table "pay_rates", force: :cascade do |t|
+    t.string  "pay_rate_type",  limit: 255, null: false
+    t.string  "name",           limit: 255
+    t.string  "description",    limit: 255
+    t.integer "cents_per_hour", limit: 4,   null: false
+  end
+
+  add_index "pay_rates", ["pay_rate_type"], name: "index_pay_rates_on_pay_rate_type", using: :btree
 
   create_table "rota_shifts", force: :cascade do |t|
     t.integer  "creator_id",          limit: 4
