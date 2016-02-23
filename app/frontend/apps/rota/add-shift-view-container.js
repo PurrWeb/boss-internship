@@ -12,19 +12,11 @@ class AddShiftViewContainer extends Component {
         addShift: React.PropTypes.func,
         canAddShift: React.PropTypes.func
     }
-    getChildContext(){
-        var canAddShift = (staff_id) => {
-            var { starts_at, ends_at } = this.state.shiftTimes;
-            var datesAreValid = validation.areShiftTimesValid(starts_at, ends_at);
-            var isAddingShift = this.props.addShiftIsInProgress[staff_id];
-            var isOnHoliday = this.props.staffMemberIsOnHoliday[staff_id];
-
-            return datesAreValid && !isAddingShift && !isOnHoliday; 
-        }
+    getChildContext(){ 
         return {
             addShift: (staffId, requestComponent) => this.addShift(staffId, requestComponent),
-            canAddShift
-        }
+            canAddShift: (staffId) => this.canAddShift(staffId)
+        };
     }
     constructor(props){
         super(props);
@@ -60,6 +52,15 @@ class AddShiftViewContainer extends Component {
     onShiftTimesChange(shiftTimes){
         this.setState({shiftTimes});
     }
+    canAddShift(staffId) {
+        var { starts_at, ends_at } = this.state.shiftTimes;
+        var datesAreValid = validation.areShiftTimesValid(starts_at, ends_at);
+        var isAddingShift = this.props.addShiftIsInProgress[staffId];
+        var isOnHoliday = this.props.staffMemberIsOnHoliday[staffId];
+
+        return datesAreValid && !isAddingShift && !isOnHoliday;
+    }
+
 }
 
 function mapStateToProps(state, ownProps){
