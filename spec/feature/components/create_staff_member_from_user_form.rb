@@ -1,7 +1,7 @@
 module PageObject
   class CreateStaffMemberFromUserForm < Component
     page_action :fill_in_for do |staff_member|
-      scope.attach_file("staff_member[avatar]", TestImageHelper.arnie_face_path)
+      _upload_avatar_image
       if staff_member.venue.present?
         scope.select(staff_member.venue.name, from: 'Venue')
       end
@@ -39,6 +39,19 @@ module PageObject
 
     def scope
       find('.create-staff-member-from-user-form')
+    end
+
+    def _upload_avatar_image
+      hidden_avatar_field.set(
+        "data:image/jpg;base64," +
+        Base64.encode64(
+          File.open(TestImageHelper.arnie_face_path){ |io| io.read }
+        )
+      )
+    end
+
+    def hidden_avatar_field
+      scope.find("input[name=\"staff_member[avatar_base64]\"]", visible: false)
     end
   end
 end
