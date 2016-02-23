@@ -13,6 +13,9 @@ module PageObject
       date_of_birth_field.fill_in_date(staff_member.date_of_birth)
       address_form.fill_in_for(staff_member.address)
       starts_at_field.fill_in_date(staff_member.starts_at)
+      if staff_member.pay_rate.present?
+        scope.select(PayRateControlRate.new(staff_member.pay_rate).name, from: 'Pay rate')
+      end
     end
 
     page_action :submit do

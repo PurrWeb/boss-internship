@@ -12,6 +12,8 @@ FactoryGirl.define do
     creator factory: :user
     starts_at { 1.day.ago }
 
+    pay_rate
+
     employment_status_a false
     employment_status_b false
     employment_status_c false

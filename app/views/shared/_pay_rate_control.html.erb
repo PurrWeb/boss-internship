@@ -1,0 +1,17 @@
+<%= form.select(
+      :pay_rate,
+      options_for_select(
+        PayRate.named.map do |pay_rate|
+          control_rate = PayRateControlRate.new(pay_rate)
+          [control_rate.name, control_rate.id]
+        end,
+        form.object.pay_rate_id
+      ),
+      {
+        include_blank: true,
+        label_class: "required",
+      },
+      {
+        name: "#{form.object_name}[pay_rate_id]"
+      }
+    ) %>

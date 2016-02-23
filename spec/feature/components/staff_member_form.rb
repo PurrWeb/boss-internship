@@ -19,6 +19,9 @@ module PageObject
       scope.fill_in('Day Preference', with: staff_member.day_perference_note)
       scope.fill_in('Hours Preference', with: staff_member.hours_preference_note)
       starts_at_field.fill_in_date(staff_member.starts_at)
+      if staff_member.pay_rate.present?
+        scope.select(PayRateControlRate.new(staff_member.pay_rate).name, from: 'Pay rate')
+      end
     end
 
     page_action :upload_avatar_image do

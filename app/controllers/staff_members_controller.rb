@@ -139,6 +139,7 @@ class StaffMembersController < ApplicationController
       :employment_status_b,
       :employment_status_c,
       :employment_status_d,
+      :pay_rate_id,
       name_attributes: [
         :first_name,
         :surname
@@ -209,6 +210,7 @@ class StaffMembersController < ApplicationController
         :employment_status_b,
         :employment_status_c,
         :employment_status_d,
+        :pay_rate_id,
         staff_member_venue_attributes: [:venue_id]
       ).deep_merge(
         staff_type: staff_type_from_params,

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223093017) do
+ActiveRecord::Schema.define(version: 20160223093154) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -211,6 +211,7 @@ ActiveRecord::Schema.define(version: 20160223093017) do
     t.boolean  "employment_status_c",                                    null: false
     t.boolean  "employment_status_d",                                    null: false
     t.datetime "shift_change_occured_at"
+    t.integer  "pay_rate_id",               limit: 4,                    null: false
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree

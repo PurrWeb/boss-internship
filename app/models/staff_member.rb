@@ -22,6 +22,8 @@ class StaffMember < ActiveRecord::Base
 
   has_many :holidays, inverse_of: :staff_member
 
+  belongs_to :pay_rate
+
   mount_uploader :avatar, AvatarUploader
   validates :avatar, {
     presence: true,
@@ -43,6 +45,8 @@ class StaffMember < ActiveRecord::Base
   validates :staff_type, presence: true
   validates :creator, presence: true
   validates :starts_at, presence: true
+  validates :pay_rate, presence: true
+
   validates :employment_status_a, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_b, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_c, inclusion: { in: [true, false], message: 'is required' }
