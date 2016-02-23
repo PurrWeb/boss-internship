@@ -1,25 +1,35 @@
 import React, { Component } from "react"
 import Select from "react-select"
+import _ from "underscore"
+import getArrayOfIdsFromReactSelectValue from "~lib/get-array-of-ids-from-react-select-value";
 
 export default class VenueDropdown extends Component {
     static propTypes = {
-        venues: React.PropTypes.array.isRequired
+        selectedVenue: React.PropTypes.array.isRequired,
+        venues: React.PropTypes.array.isRequired,
+        onChange: React.PropTypes.func.isRequired,
+        multi: React.PropTypes.bool
     }
     render(){
-        var venueOptions = this.props.venues.map(function(venue){
+        var venueOptions = _.values(this.props.venues).map(function(venue){
             return {
                 value: venue.id,
                 label: venue.name
             };
         })
 
-
+        var multi = this.props.multi !== undefined ? this.props.multi : false;
 
         return <Select
             value={this.props.selectedVenue}
             options={venueOptions}
             placeholder="All Venues"
             clearable={true}
-            onChange={(value) => this.props.onChange(value)} />
+            multi={multi}
+            onChange={(value) => {
+                this.props.onChange(
+                    getArrayOfIdsFromReactSelectValue(value)
+                )
+            }} />
     }
 }

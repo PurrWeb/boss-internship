@@ -23,8 +23,13 @@ class StaffTypeRotaStaffFinder extends React.Component {
         return <div>
             <StaffFinder
                 staff={this.props.staff}
+                venues={this.props.venues}
                 staffTypes={this.props.staffTypes}
                 staffItemComponent={StaffListItem}
+                filters={{
+                    search: true,
+                    venue: true
+                }}
                 />
         </div>
     }
@@ -33,7 +38,8 @@ class StaffTypeRotaStaffFinder extends React.Component {
 function mapStateToProps(state){
     return {
         staff: state.staff,
-        staffTypes: state.staffTypes
+        staffTypes: state.staffTypes,
+        venues: state.venues
     }
 }
 

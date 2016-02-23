@@ -25,7 +25,7 @@ export default class WeekAndVenueSelector extends React.Component {
             </div>
             <div className="col-md-6">
                 <VenueDropdown
-                    venues={_.values(this.props.venues)}
+                    venues={this.props.venues}
                     selectedVenue={this.props.venueId}
                     onChange={
                         (venueId) => this.props.onChange({

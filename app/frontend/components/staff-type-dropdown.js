@@ -3,6 +3,7 @@ import _ from "underscore"
 import { connect } from "react-redux"
 import Select from "react-select"
 import { selectStaffTypesWithShifts } from "~redux/selectors"
+import getArrayOfIdsFromReactSelectValue from "~lib/get-array-of-ids-from-react-select-value";
 
 export default class StaffTypeDropdown extends Component {
     static propTypes = {
@@ -43,11 +44,7 @@ export default class StaffTypeDropdown extends Component {
         </div>
     }
     onChange(value){
-        if (value === ""){
-            this.value = [];
-        } else {
-            this.value = value.split(",").map(parseFloat);
-        }
+        this.value = getArrayOfIdsFromReactSelectValue(value);
         this.props.onChange(this.value);
     }
 }
