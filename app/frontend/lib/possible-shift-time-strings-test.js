@@ -9,8 +9,8 @@ describe("possibleShiftStartTimeStrings", function(){
     })
     it("Ends with '07:30' and '08:00", function(){
         var last2 = _.last(possibleShiftStartTimeStrings, 2);
-        expect(last2[0]).toBe("07:30");
-        expect(last2[1]).toBe("08:00");
+        expect(last2[0]).toBe("07:00");
+        expect(last2[1]).toBe("07:30");
     })
 });
 

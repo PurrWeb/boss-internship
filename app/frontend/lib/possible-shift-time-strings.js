@@ -10,10 +10,9 @@ var possibleShiftStartTimeStrings = minutesOffsets.map(function(offset){
     time.setMinutes(time.getMinutes() + offset);
     return moment(time).format("HH:mm");
 });
-
-// First end time is 8:30, last end time 8:00
 var possibleShiftEndTimeStrings = _.clone(possibleShiftStartTimeStrings);
-var startOfDay = possibleShiftEndTimeStrings.shift(possibleShiftEndTimeStrings);
-possibleShiftEndTimeStrings.push(startOfDay)
+
+possibleShiftStartTimeStrings.pop(); // remove 8am at the end
+possibleShiftEndTimeStrings.shift(); // remove 8am at the start
 
 export default {possibleShiftStartTimeStrings, possibleShiftEndTimeStrings};
