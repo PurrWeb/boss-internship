@@ -36,18 +36,6 @@ var utils =  {
         delete ret[key];
         return ret;
     },
-    shiftTimeIsValid(shiftTime){
-        var dateIsValid = utils.dateIsValid(shiftTime);
-        var minutesAreMultipleOfFifteen = shiftTime.getMinutes() % 15 === 0;
-        return dateIsValid && minutesAreMultipleOfFifteen;
-    },
-    areShiftTimesValid(starts_at, ends_at) {
-        var datesAreValid = utils.shiftTimeIsValid(starts_at) &&
-                utils.shiftTimeIsValid(ends_at);
-        var shiftEndsAfterItStarts = starts_at < ends_at;
-
-        return datesAreValid && shiftEndsAfterItStarts;
-    },
     /**
     This function can be used inside shouldComponentUpdate. If props contain
     functions passed in from the parent deepEqual would always say the props

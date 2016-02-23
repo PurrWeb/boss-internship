@@ -1,7 +1,9 @@
 import React, { Component } from "react"
-import RotaDate from "../lib/rota-date.js"
+import Select from "react-select"
+import RotaDate from "~lib/rota-date.js"
 import moment from "moment"
-import utils from "../lib/utils"
+import validation from "~lib/validation"
+import { possibleShiftStartTimeStrings, possibleShiftEndTimeStrings } from "~lib/possible-shift-time-strings"
 
 var SHIFT_TIME_TYPES = {
     START: 2,
@@ -27,19 +29,27 @@ export default class ShiftTimeInput extends Component {
         }
     }
     render(){
-        var className = "";
-        if (!this.isValid()){
-            className += "shift-time-input--invalid";
-        }
+        var options = this.getPossibleShiftTimes().map(function(timeString){
+            return {
+                value: timeString,
+                label: timeString
+            }
+        });
 
-        return <input
-            type="time"
-            value={  moment(this.getDateFromProps()).format("HH:mm")}
-            className={className}
-            onChange={(e) => this.updateTime(e.target.value)} />
+        return <div className="shift-time-input">
+            <Select
+                value={moment(this.getDateFromProps()).format("HH:mm")}
+                options={options}
+                clearable={false}
+                onChange={(value) => this.updateTime(value)} />
+            </div>
     }
-    isValid(){
-        return utils.shiftTimeIsValid(this.getDateFromProps());
+    getPossibleShiftTimes(){
+        if (this.getShiftTimeType() === SHIFT_TIME_TYPES.START) {
+            return possibleShiftStartTimeStrings;
+        } else {
+            return possibleShiftEndTimeStrings;
+        }
     }
     getDateFromTime(timeString){
         var rotaDate = this.props.rotaDate;
@@ -51,6 +61,6 @@ export default class ShiftTimeInput extends Component {
     }
     updateTime(newValue){
         var newDate = this.getDateFromTime(newValue);
-        this.props.onChange(newDate, utils.dateIsValid(newDate));
+        this.props.onChange(newDate);
     }
 }

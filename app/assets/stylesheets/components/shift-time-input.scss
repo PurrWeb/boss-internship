@@ -1,3 +1,7 @@
-.shift-time-input--invalid {
-    color: red;
+.shift-time-input .Select-option {
+    padding: 2px 10px;
+}
+.shift-time-input .Select-menu,
+.shift-time-input .Select-menu-outer {
+    max-height: 300px;
 }
