@@ -10,11 +10,6 @@ RSpec.feature 'Creating a venue' do
     login_as(dev_user)
   end
 
-  scenario 'the admin section should be highlighted in the navigaiton' do
-    add_venue_page.surf_to
-    add_venue_page.navigation.ensure_top_level_sections_highlighted(:admin)
-  end
-
   scenario 'successfully adding a new venue to the system' do
     add_venue_page.surf_to
     add_venue_page.fill_and_submit_form_for(prospective_venue)

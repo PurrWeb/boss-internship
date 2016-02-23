@@ -9,11 +9,6 @@ RSpec.feature 'Staff types index page' do
     login_as(dev_user)
   end
 
-  scenario 'the staff members section should be highlighted in the navigaiton' do
-    staff_types_index_page.surf_to
-    staff_types_index_page.navigation.ensure_top_level_sections_highlighted(:staff_members)
-  end
-
   context 'Staff Types Exist' do
     let!(:staff_types) { FactoryGirl.create_list(:staff_type, 3) }
 

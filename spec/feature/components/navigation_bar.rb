@@ -12,12 +12,6 @@ module PageObject
       end
     end
 
-    page_action :ensure_top_level_sections_highlighted do |*sections|
-      Array(sections).each do |section|
-        ensure_section_highlighted(section)
-      end
-    end
-
     page_action :ensure_user_section_not_displayed do
       expect(scope).not_to have_selector(user_section_selector)
     end
@@ -43,10 +37,6 @@ module PageObject
     end
 
     private
-    def ensure_section_highlighted(section)
-      expect(scope.find(section_selector(section)).find('a.nav-section-header-link')['class'].split(' ')).to include('active')
-    end
-
     def section_displayed?(section)
       scope.has_selector?(section_selector(section))
     end
