@@ -43,6 +43,7 @@ export default class ChartAndFilter extends Component {
                 <div className="col-md-3">
                     Filter chart
                     <StaffTypeDropdown
+                        selectedStaffTypes={this.state.staffTypeFilter}
                         staffTypes={this.getStaffTypesWithShifts()}
                         onChange={
                             (value) => this.setState({"staffTypeFilter": value})

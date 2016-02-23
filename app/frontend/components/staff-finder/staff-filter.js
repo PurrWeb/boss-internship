@@ -74,6 +74,7 @@ export default class StaffFilter extends Component {
     }
     getStaffTypeFilter(){
         var component = <StaffTypeDropdown
+            selectedStaffTypes={this.props.filterSettings.staffTypes}
             staffTypes={this.props.staffTypes}
             onChange={(staffTypes) => 
                 this.handleChange("staffTypes", staffTypes)
@@ -85,7 +86,7 @@ export default class StaffFilter extends Component {
     }
     getVenueFilter(){
         var component = <VenueDropdown
-            selectedVenue={this.props.filterSettings.venues}
+            selectedVenues={this.props.filterSettings.venues}
             venues={this.props.venues}
             multi={true}
             onChange={(venues) => 

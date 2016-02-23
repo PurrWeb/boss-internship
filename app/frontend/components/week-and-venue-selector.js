@@ -26,7 +26,7 @@ export default class WeekAndVenueSelector extends React.Component {
             <div className="col-md-6">
                 <VenueDropdown
                     venues={this.props.venues}
-                    selectedVenue={this.props.venueId}
+                    selectedVenues={[this.props.venueId]}
                     onChange={
                         (venueId) => this.props.onChange({
                             startDate: this.props.weekStartDate,

@@ -21,7 +21,7 @@ export default class VenueDropdown extends Component {
         var multi = this.props.multi !== undefined ? this.props.multi : false;
 
         return <Select
-            value={this.props.selectedVenue}
+            value={this.props.selectedVenues}
             options={venueOptions}
             placeholder="All Venues"
             clearable={true}
