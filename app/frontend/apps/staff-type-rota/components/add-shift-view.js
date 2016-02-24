@@ -21,6 +21,7 @@ export default class AddShiftView extends React.Component {
                         venues={this.props.venues}
                         selectedVenues={[this.props.selectedVenueId]}
                         multi={false}
+                        clearable={false}
                         onChange={(venues) => this.props.onVenueChange(venues[0])} />
 
                 </div>

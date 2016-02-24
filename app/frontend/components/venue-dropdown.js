@@ -5,10 +5,11 @@ import getArrayOfIdsFromReactSelectValue from "~lib/get-array-of-ids-from-react-
 
 export default class VenueDropdown extends Component {
     static propTypes = {
-        selectedVenue: React.PropTypes.array.isRequired,
+        selectedVenues: React.PropTypes.array.isRequired,
         venues: React.PropTypes.array.isRequired,
         onChange: React.PropTypes.func.isRequired,
-        multi: React.PropTypes.bool
+        multi: React.PropTypes.bool,
+        clearable: React.PropTypes.bool
     }
     render(){
         var venueOptions = _.values(this.props.venues).map(function(venue){
@@ -24,7 +25,7 @@ export default class VenueDropdown extends Component {
             value={this.props.selectedVenues}
             options={venueOptions}
             placeholder="All Venues"
-            clearable={true}
+            clearable={this.props.clearable !== undefined ? this.props.clearable : true}
             multi={multi}
             onChange={(value) => {
                 this.props.onChange(

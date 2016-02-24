@@ -8,9 +8,14 @@ export default class WeekAndVenueSelector extends React.Component {
         venueId: React.PropTypes.number.isRequired,
         weekStartDate: React.PropTypes.instanceOf(Date).isRequired,
         onChange: React.PropTypes.func.isRequired,
-        venues: React.PropTypes.object.isRequired
+        venues: React.PropTypes.object.isRequired,
+        canSelectAllVenues: React.PropTypes.bool.isRequired
     }
     render(){
+        var selectedVenues = "";
+        if (this.props.venueId) {
+            selectedVenues = [this.props.venueId];
+        }
         return <div className="row">
             <div className="col-md-6">
                 <WeekPicker
@@ -26,7 +31,8 @@ export default class WeekAndVenueSelector extends React.Component {
             <div className="col-md-6">
                 <VenueDropdown
                     venues={this.props.venues}
-                    selectedVenues={[this.props.venueId]}
+                    selectedVenues={selectedVenues}
+                    clearable={this.props.canSelectAllVenues ? true : false}
                     onChange={
                         (venueId) => this.props.onChange({
                             startDate: this.props.weekStartDate,
