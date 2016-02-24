@@ -1,10 +1,9 @@
 import React from "react"
 import { connect } from "react-redux"
-import StaffFinder from "~components/staff-finder"
-import StaffListItem from "~components/rota-staff-list-item"
+import StaffTypeRotaStaffFinder from "../components/staff-type-rota-staff-finder"
 
 
-class StaffTypeRotaStaffFinder extends React.Component {
+class AddShiftView extends React.Component {
     static childContextTypes = {
         canAddShift: React.PropTypes.func.isRequired,
         addShift: React.PropTypes.func.isRequired
@@ -21,15 +20,10 @@ class StaffTypeRotaStaffFinder extends React.Component {
     }
     render(){
         return <div>
-            <StaffFinder
+            <StaffTypeRotaStaffFinder
                 staff={this.props.staff}
                 venues={this.props.venues}
-                staffTypes={this.props.staffTypes}
-                staffItemComponent={StaffListItem}
-                filters={{
-                    search: true
-                }}
-                />
+                staffTypes={this.props.staffTypes} />
         </div>
     }
 }
@@ -42,4 +36,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps)(StaffTypeRotaStaffFinder)
+export default connect(mapStateToProps)(AddShiftView)

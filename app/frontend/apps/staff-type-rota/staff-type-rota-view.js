@@ -1,10 +1,10 @@
 import React from "react"
-import StaffFinder from "./staff-finder"
+import AddShiftView from "./containers/add-shift-view"
 
 export default class StaffTypeRotaView extends React.Component {
     render(){
         return <div>
-            <StaffFinder />
+            <AddShiftView />
         </div>
     }
 }
