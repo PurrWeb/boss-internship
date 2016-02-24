@@ -6,6 +6,7 @@ import makeApiRequest from "./make-api-request"
 import {apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 import RotaDate from "~lib/rota-date"
+import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 
 export const actionTypes = {};
 const createApiRequestAction = function(options){
@@ -14,16 +15,20 @@ const createApiRequestAction = function(options){
     return importedCreateApiRequestAction(options);
 }
 
-function displayedRotaIsPublished(state){
-    return state.rotas[state.pageOptions.displayedRota].status === "published";
-}
 function confirmIfRotaIsPublished(question){
     return function(requestOptions, state){
-        if (!displayedRotaIsPublished(state)) {
+        var date = new RotaDate({shiftStartsAt: requestOptions.shift.starts_at}).getDateOfRota();
+        var rota = getRotaFromDateAndVenue(state.rotas, date, requestOptions.venueId)
+        if (rota.status !== "published") {
             return true;
         }
         return confirm(question);
     }
+}
+
+function getRotaDateFromShiftStartsAt(startAt){
+    var rotaDate = new RotaDate({shiftStartsAt: startAt});
+    return rotaDate.getDateOfRota();
 }
 
 export const addRotaShift = createApiRequestAction({
@@ -31,8 +36,7 @@ export const addRotaShift = createApiRequestAction({
     makeRequest: makeApiRequest({
         method: apiRoutes.addShift.method,
         path: function({venueId, shift}, state) {
-            var rotaDate = new RotaDate({shiftStartsAt: shift.starts_at});
-            var date = rotaDate.getDateOfRota();
+            var date = getRotaDateFromShiftStartsAt(shift.starts_at);
             return apiRoutes.addShift.getPath(venueId, date);
         },
         data: (options) => options.shift,
