@@ -53,12 +53,11 @@ class AddShiftView extends React.Component {
 }
 
 function mapStateToProps(state){
-    alert("fix new date()")
     return {
         staff: state.staff,
         staffTypes: state.staffTypes,
         venues: state.venues,
-        dateOfRota: new Date()
+        dateOfRota: state.rotas[state.pageOptions.displayedRota].date
     }
 }
 
