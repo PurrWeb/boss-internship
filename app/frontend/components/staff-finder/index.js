@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import StaffFilter from "~components/staff-finder/staff-filter"
 import FilterableStaffList from "~components/staff-finder/filterable-staff-list"
-import { selectStaffTypesWithStaffMembers } from "~redux/selectors"
+import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
 import _ from "underscore"
 
 export default class StaffFinder extends Component {
@@ -32,7 +32,7 @@ export default class StaffFinder extends Component {
         </div>
     }
     getStaffTypesWithStaffMembers(){
-        return selectStaffTypesWithStaffMembers(this.props.staffTypes, this.props.staff);
+        return getStaffTypesWithStaffMembers(this.props.staffTypes, this.props.staff);
     }
     onFilterChange(filterSettings) {
         this.setState({staffFilterSettings: filterSettings});

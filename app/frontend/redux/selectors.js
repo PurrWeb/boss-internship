@@ -17,16 +17,6 @@ export function selectStaffTypesWithShifts(state){
     }
 }
 
-// not sure if this is technically a Redux selector, but I'll put it here for now
-export function selectStaffTypesWithStaffMembers(staffTypes, staffMembers) {
-    return _(staffMembers).chain()
-        .pluck("staff_type")
-        .pluck("id")
-        .unique()
-        .map((staffTypeId) => staffTypes[staffTypeId])
-        .value()
-}
-
 export function selectStaffMemberHolidays(state, staffId){
     var staffMember = state.staff[staffId];
     var staffMemberHolidayIds = _.pluck(state.staff[staffId].holidays, "id");
@@ -93,4 +83,3 @@ export function selectAddShiftIsInProgress(state, staffId){
         (request) => request.shift.staff_member_id === staffId
     );
 }
-
