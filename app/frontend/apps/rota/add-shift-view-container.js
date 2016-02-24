@@ -73,7 +73,6 @@ function mapStateToProps(state, ownProps){
         dateOfRota: ownProps.dateOfRota,
         addShiftIsInProgress: _(state.staff).mapObject(
             (staffMember) => {
-                console.log("addShiftIsInProgress", staffMember.id, selectAddShiftIsInProgress(state, staffMember.id))
                 selectAddShiftIsInProgress(state, staffMember.id)
             }
         )

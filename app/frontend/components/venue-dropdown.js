@@ -6,7 +6,7 @@ import getArrayOfIdsFromReactSelectValue from "~lib/get-array-of-ids-from-react-
 export default class VenueDropdown extends Component {
     static propTypes = {
         selectedVenues: React.PropTypes.array.isRequired,
-        venues: React.PropTypes.array.isRequired,
+        venues: React.PropTypes.object.isRequired,
         onChange: React.PropTypes.func.isRequired,
         multi: React.PropTypes.bool,
         clearable: React.PropTypes.bool

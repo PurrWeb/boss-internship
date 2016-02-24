@@ -3,8 +3,8 @@ import moment from "moment"
 import _ from 'underscore'
 
 export default class StaffShiftList extends Component {
-    static contextTypes = {
-        rotaShifts: React.PropTypes.array.isRequired
+    static propTypes = {
+        rotaShifts: React.PropTypes.object.isRequired
     }
     render() {
         var staffId = this.props.staffId;
@@ -23,7 +23,7 @@ export default class StaffShiftList extends Component {
     }
     getStaffShifts(){
         var self = this;
-        return _(this.context.rotaShifts).filter(function(shift){
+        return _(this.props.rotaShifts).filter(function(shift){
             return shift.staff_member.id === self.props.staffId
         });
     }

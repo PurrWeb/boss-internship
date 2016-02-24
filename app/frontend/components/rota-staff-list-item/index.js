@@ -19,7 +19,6 @@ class StaffListItem extends Component {
         this.componentId = _.uniqueId();
     }
     render() {
-        console.log("render staff list item")
         var staff = this.props.staff;
         var shiftSavingInProgressSpinner = null;
         if (this.props.addShiftIsInProgress) {
@@ -49,6 +48,7 @@ class StaffListItem extends Component {
                                     Shifts
                                 </h4>
                                 <StaffShiftList
+                                    rotaShifts={this.props.rotaShifts}
                                     staffId={staff.id} />
                             </div>
                             <div className="col-md-3">
@@ -108,7 +108,8 @@ function mapStateToProps(state, ownProps){
     return {
         addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.id),
         staffTypes: state.staffTypes,
-        componentErrors: state.componentErrors
+        componentErrors: state.componentErrors,
+        rotaShifts: state.rotaShifts
     }
 }
 

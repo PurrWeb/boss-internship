@@ -11,7 +11,7 @@ export default class StaffFilter extends Component {
             staffType: React.PropTypes.bool,
             venue: React.PropTypes.bool
         }).isRequired,
-        filterSettings: React.PropTypes.isRequired,
+        filterSettings: React.PropTypes.object.isRequired,
         staffTypes: React.PropTypes.object,
         venues: React.PropTypes.object
     }
@@ -25,12 +25,11 @@ export default class StaffFilter extends Component {
     render() {
         var filters = this.getFilters();
         var titles = _(filters).pluck("title");
-        var components = _(filters).pluck("component");
 
         var titleColumns = titles.map((title) => this.getFilterTitle(title));
-        var componentColumns = components.map(function(component){
-            return <div className="col-md-2">
-                {component}
+        var componentColumns = filters.map(function(filter){
+            return <div className="col-md-2" key={filter.title}>
+                {filter.component}
             </div>
         });
 
@@ -98,7 +97,7 @@ export default class StaffFilter extends Component {
         }
     }
     getFilterTitle(titleString){
-        return <div className="col-md-2">
+        return <div className="col-md-2" key={titleString}>
             {titleString}
         </div>
     }

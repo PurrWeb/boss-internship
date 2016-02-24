@@ -6,5 +6,6 @@ export default function getStaffTypesWithStaffMembers(staffTypes, staffMembers) 
         .pluck("id")
         .unique()
         .map((staffTypeId) => staffTypes[staffTypeId])
+        .indexBy("id")
         .value()
 }
