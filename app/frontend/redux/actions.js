@@ -5,6 +5,7 @@ import * as backendData from "~redux/process-backend-data"
 import makeApiRequest from "./make-api-request"
 import {apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
+import RotaDate from "~lib/rota-date"
 
 export const actionTypes = {};
 const createApiRequestAction = function(options){
@@ -29,10 +30,10 @@ export const addRotaShift = createApiRequestAction({
     requestType: "ADD_SHIFT",
     makeRequest: makeApiRequest({
         method: apiRoutes.addShift.method,
-        path: function(options, state) {
-            var rotaId = state.pageOptions.displayedRota;
-            var rota = state.rotas[rotaId];
-            return apiRoutes.addShift.getPath(rota.venue.id, rota.date);
+        path: function({venueId, shift}, state) {
+            var rotaDate = new RotaDate({shiftStartsAt: shift.starts_at});
+            var date = rotaDate.getDateOfRota();
+            return apiRoutes.addShift.getPath(venueId, date);
         },
         data: (options) => options.shift,
         getSuccessActionData: function(responseData) {

@@ -46,7 +46,8 @@ class AddShiftViewContainer extends Component {
                 ends_at: this.state.shiftTimes.ends_at,
                 staff_member_id: staffId
             },
-            errorHandlingComponent: requestComponent
+            errorHandlingComponent: requestComponent,
+            venueId: this.props.pageVenueId
         });
     }
     onShiftTimesChange(shiftTimes){
@@ -64,6 +65,8 @@ class AddShiftViewContainer extends Component {
 }
 
 function mapStateToProps(state, ownProps){
+    var rotaId = state.pageOptions.displayedRota;
+    var rota = state.rotas[rotaId];
     return {
         staffMemberIsOnHoliday: _.mapObject(ownProps.staff, function(staff, staffId){
             return selectStaffMemberIsOnHolidayOnDate(state, staffId, ownProps.dateOfRota)
@@ -75,7 +78,8 @@ function mapStateToProps(state, ownProps){
             (staffMember) => {
                 selectAddShiftIsInProgress(state, staffMember.id)
             }
-        )
+        ),
+        pageVenueId: rota.venue.id
     }
 }
 
