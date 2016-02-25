@@ -34,6 +34,7 @@ gem 'pick-a-color-rails'
 gem 'paloma'
 gem 'andand'
 gem 'bootstrap-datepicker-rails'
+gem 'money'
 
 group :development, :test do
   gem "byebug"
