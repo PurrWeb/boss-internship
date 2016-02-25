@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import _ from "underscore"
-import RotaChart from "./rota-chart/rota-chart"
+import RotaChart from "~components/rota-chart"
 import StaffDetailsAndShifts from "./rota-chart/staff-details-and-shifts"
 import StaffTypeDropdown from "~components/staff-type-dropdown"
 import RotaDate from "~lib/rota-date"
@@ -63,7 +63,6 @@ export default class ChartAndFilter extends Component {
         )
     }
     getStaffTypesWithShifts(){
-        window.selectStaffTypesWithShifts = selectStaffTypesWithShifts
         return selectStaffTypesWithShifts({
             rotaShifts: this.props.rotaShifts,
             staffTypes: this.props.staffTypes,

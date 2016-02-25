@@ -1,5 +1,5 @@
 import React from "react"
-import RotaChart from "~apps/rota/rota-chart/rota-chart"
+import RotaChart from "~components/rota-chart"
 import _ from "underscore"
 
 export default class ChartAndFilter extends React.Component {
