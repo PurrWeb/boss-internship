@@ -70,6 +70,7 @@ export default class ChartAndFilter extends Component {
         }
         return <StaffDetailsAndShifts
             staffId={staffId}
+            staffTypes={this.props.staffTypes}
             rotaShifts={this.props.rotaShifts}
             // We specify a key so the component is re-initialized when
             // the shift changes - so we don't keep the previous state.

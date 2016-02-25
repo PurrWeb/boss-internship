@@ -4,8 +4,11 @@ import StaffTypeBadge from "~components/staff-type-badge"
 import _ from "underscore"
 
 export default class StaffDetailsAndShifts extends Component {
-    static contextTypes = {
-        staffTypes: React.PropTypes.object.isRequired
+    static propTypes = {
+        staffTypes: React.PropTypes.object.isRequired,
+        staffId: React.PropTypes.number.isRequired,
+        staff: React.PropTypes.object.isRequired,
+        rotaShifts: React.PropTypes.object.isRequired
     }
     render(){
         var staff = this.getStaff();
@@ -18,7 +21,7 @@ export default class StaffDetailsAndShifts extends Component {
                 staff={this.props.staff} />
         );
         var staffTypeId = staff.staff_type.id;
-        var staffType = this.context.staffTypes[staffTypeId];
+        var staffType = this.props.staffTypes[staffTypeId];
         return <div>
             <h2 className="staff-details-and-shifts__h2">
                 {staff.first_name} {staff.surname}
