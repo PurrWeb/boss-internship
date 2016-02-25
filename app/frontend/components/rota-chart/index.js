@@ -1,6 +1,7 @@
 import RotaChartInner from "./rota-chart-inner"
 import React, { Component } from "react"
 import ReactDOM from "react-dom"
+import calculateChartBoundaries from "./calculate-chart-boundaries"
 
 /**
 This is a wrapper around the D3 rota chart that handles small state changes
@@ -13,10 +14,12 @@ export default class RotaChart extends Component {
         super(props);
     }
     render(){
+        var chartBoundaries = calculateChartBoundaries(this.props.rotaShifts);
+
         return <RotaChartInner
             rotaShifts={this.props.rotaShifts}
-            startTime={this.props.startTime}
-            endTime={this.props.endTime}
+            startTime={chartBoundaries.start}
+            endTime={chartBoundaries.end}
             staff={this.props.staff}
             updateStaffToPreview={this.props.updateStaffToPreview}
             updateStaffToShow={this.props.updateStaffToShow} />

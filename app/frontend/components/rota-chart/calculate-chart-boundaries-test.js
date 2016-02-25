@@ -1,14 +1,12 @@
-import React from "react";
-import TestUtils from "react-addons-test-utils"
 import expect from "expect"
-import ChartAndFilter from "./chart-and-filter"
+import calculateChartBoundaries from "./calculate-chart-boundaries"
 
-describe('ChartAndFilter', function() {
+describe('calculateChartBoundaries', function() {
     function makeDate(hours, minutes){
         return new Date(2015, 10, 10, hours, minutes)
     }
     function expectBoundaries(shifts, start, end){
-        var boundaries = ChartAndFilter.calculateChartBoundaries(shifts);
+        var boundaries = calculateChartBoundaries(shifts);
         expect(boundaries.start).toBe(start);
         expect(boundaries.end).toBe(end);
     }

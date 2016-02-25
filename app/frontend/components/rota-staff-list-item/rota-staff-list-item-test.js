@@ -9,6 +9,7 @@ import {createStore} from "redux"
 StaffListItem.__Rewire__('StaffTypeBadge', NoOpComponent);
 StaffListItem.__Rewire__('AddStaffToShiftButton', NoOpComponent);
 StaffListItem.__Rewire__('StaffHolidaysList', NoOpComponent);
+StaffListItem.__Rewire__('StaffShiftList', NoOpComponent);
 
 describe('StaffListItem', function() {
     var staff = {
@@ -18,10 +19,13 @@ describe('StaffListItem', function() {
     };
 
     var context = {
-        store: createStore(() => {
-            componentErrors: {},
-            staffTypes: {
-                3333: {}
+        store: createStore(() => function(){
+            return {
+                componentErrors: {},
+                staffTypes: {
+                    3333: {}
+                },
+                rotaShifts: {}
             }
         })
     };
