@@ -5,13 +5,13 @@ import RotaDate from "~lib/rota-date"
 import validation from "~lib/validation"
 import utils from "~lib/utils"
 import { connect } from "react-redux"
+import { deleteRotaShift, updateRotaShift } from "~redux/actions"
 import _ from "underscore"
 import ComponentErrors from "~components/component-errors"
 
 class ShiftEditor extends Component {
-    static contextTypes = {
-        boundActionCreators: React.PropTypes.object,
-        dateOfRota: React.PropTypes.instanceOf(Date)
+    static propTypes = {
+        shift: React.PropTypes.object.isRequired
     }
     componentWillMount(){
         this.componentId = _.uniqueId();
@@ -83,7 +83,7 @@ class ShiftEditor extends Component {
         if (this.props.shift.isBeingEdited) {
             return;
         }
-        this.context.boundActionCreators.deleteRotaShift({
+        this.props.deleteRotaShift({
             shift: this.props.shift,
             venueId: this.props.venueId,
             errorHandlingComponent: this.componentId,
@@ -93,7 +93,7 @@ class ShiftEditor extends Component {
         this.setState({newShiftTimes: shiftTimes})
     }
     updateShift(){
-        this.context.boundActionCreators.updateRotaShift({
+        this.props.updateRotaShift({
             venueId: this.props.venueId,
             shift: {
                 starts_at: this.state.newShiftTimes.starts_at,
@@ -114,4 +114,11 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps)(ShiftEditor);
+function mapDispatchToProps(dispatch){
+    return {
+        updateRotaShift: (options) => dispatch(updateRotaShift(options)),
+        deleteRotaShift: (options) => dispatch(deleteRotaShift(options))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShiftEditor);

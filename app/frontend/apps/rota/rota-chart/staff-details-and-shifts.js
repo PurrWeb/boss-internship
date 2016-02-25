@@ -16,9 +16,7 @@ export default class StaffDetailsAndShifts extends Component {
         var shiftEls = shifts.map(
             (shift) => <ShiftEditor
                 shift={shift}
-                rotaShifts={this.props.rotaShifts}
-                key={shift.id}
-                staff={this.props.staff} />
+                key={shift.id} />
         );
         var staffTypeId = staff.staff_type.id;
         var staffType = this.props.staffTypes[staffTypeId];
