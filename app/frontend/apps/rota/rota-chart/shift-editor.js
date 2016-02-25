@@ -86,8 +86,9 @@ class ShiftEditor extends Component {
             return;
         }
         this.context.boundActionCreators.deleteRotaShift({
-            shift_id: this.props.shift.id,
-            errorHandlingComponent: this.componentId
+            shift: this.props.shift,
+            venueId: this.props.venueId,
+            errorHandlingComponent: this.componentId,
         });
     }
     onShiftTimesChange(shiftTimes) {
@@ -95,6 +96,7 @@ class ShiftEditor extends Component {
     }
     updateShift(){
         this.context.boundActionCreators.updateRotaShift({
+            venueId: this.props.venueId,
             shift: {
                 starts_at: this.state.newShiftTimes.starts_at,
                 ends_at: this.state.newShiftTimes.ends_at,
@@ -106,8 +108,11 @@ class ShiftEditor extends Component {
 }
 
 function mapStateToProps(state){
+    var rotaId = state.pageOptions.displayedRota;
+    var rota = state.rotas[rotaId];
     return {
-        componentErrors: state.componentErrors
+        componentErrors: state.componentErrors,
+        venueId: rota.venue.id
     }
 }
 

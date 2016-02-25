@@ -5,9 +5,6 @@ var initialState = {};
 export default function apiRequestsInProgress(state=initialState, action){
     if (action.type === actionTypes.API_REQUEST_START || action.type === actionTypes.API_REQUEST_END) {
         var newValue = requestTypeReducer(state[action.requestType], action);
-        console.log("New api", Object.assign({}, state, {
-            [action.requestType]: newValue
-        }))
         return Object.assign({}, state, {
             [action.requestType]: newValue
         });

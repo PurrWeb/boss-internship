@@ -17,8 +17,9 @@ const createApiRequestAction = function(options){
 
 function confirmIfRotaIsPublished(question){
     return function(requestOptions, state){
-        var date = new RotaDate({shiftStartsAt: requestOptions.shift.starts_at}).getDateOfRota();
-        var rota = getRotaFromDateAndVenue(state.rotas, date, requestOptions.venueId)
+        var venueId = oFetch(requestOptions, "venueId");
+        var date = new RotaDate({shiftStartsAt: oFetch(requestOptions, "shift.starts_at")}).getDateOfRota();
+        var rota = getRotaFromDateAndVenue(state.rotas, date, venueId)
         if (rota.status !== "published") {
             return true;
         }
@@ -84,7 +85,7 @@ export const deleteRotaShift = createApiRequestAction({
         method: apiRoutes.deleteShift.method,
         path: (options) => apiRoutes.deleteShift.getPath({shiftId: oFetch(options, "shift_id")}),
         getSuccessActionData: function(responseData, requestOptions) {
-            return {shift_id: requestOptions.shift_id}
+            return {shift_id: requestOptions.shift.id}
         }
     }),
     confirm: confirmIfRotaIsPublished("Deleting a shift on a published rota will send out email notifications. Do you want to continue?")
