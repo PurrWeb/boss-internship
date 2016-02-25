@@ -48,8 +48,9 @@ class StaffListItem extends Component {
                                     Shifts
                                 </h4>
                                 <StaffShiftList
-                                    rotaShifts={this.props.rotaShifts}
-                                    staffId={staff.id} />
+                                    shifts={this.getStaffShifts(staff.id)}
+                                    venues={this.props.venues}
+                                    rotas={this.props.rotas} />
                             </div>
                             <div className="col-md-3">
                                 <h4 className="rota-staff-list-item__h4" style={{
@@ -102,6 +103,11 @@ class StaffListItem extends Component {
     addShift(){
         this.context.addShift(this.props.staff.id, this.componentId)
     }
+    getStaffShifts(staffId){
+        return _(this.props.rotaShifts).filter(function(shift){
+            return shift.staff_member.id === staffId
+        });
+    }
 }
 
 function mapStateToProps(state, ownProps){
@@ -109,7 +115,9 @@ function mapStateToProps(state, ownProps){
         addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.id),
         staffTypes: state.staffTypes,
         componentErrors: state.componentErrors,
-        rotaShifts: state.rotaShifts
+        rotaShifts: state.rotaShifts,
+        venues: state.venues,
+        rotas: state.rotas
     }
 }
 
