@@ -1,7 +1,6 @@
 import React from "react"
 import ShiftTimeSelector from "~components/shift-time-selector"
 import RotaStaffFinder from "../staff-finder/staff-finder"
-import RotaDate from "~lib/rota-date.js"
 
 export default class AddShiftView extends React.Component {
     static propTypes = {
@@ -19,9 +18,7 @@ export default class AddShiftView extends React.Component {
                     <div className="col-md-3">
                         <ShiftTimeSelector
                             defaultShiftTimes={this.props.shiftTimes}
-                            rotaDate={new RotaDate({dateOfRota: this.props.dateOfRota})}
-                            onChange={this.props.onShiftTimesChange}
-                            dateOfRota={this.props.dateOfRota} />
+                            onChange={this.props.onShiftTimesChange} />
                     </div>
                 </div>
                 <br/>

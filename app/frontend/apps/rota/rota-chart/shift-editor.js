@@ -58,9 +58,7 @@ class ShiftEditor extends Component {
                 <div className="col-md-9">
                     <ShiftTimeSelector
                         defaultShiftTimes={this.props.shift}
-                        rotaDate={new RotaDate({dateOfRota: this.context.dateOfRota})}
-                        onChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)}
-                        dateOfRota={this.context.dateOfRota} />
+                        onChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)} />
                 </div>
                 <div className="col-md-3">
                     <br/>
