@@ -3,6 +3,7 @@ import RotaChart from "~components/rota-chart"
 import _ from "underscore"
 import ChartSelectionView from "~components/chart-selection-view"
 import StaffDetailsAndShifts from "~components/staff-details-and-shifts"
+import VenueDropdown from "~components/venue-dropdown"
 
 export default class ChartAndFilter extends React.Component {
     static propTypes = {
@@ -11,8 +12,12 @@ export default class ChartAndFilter extends React.Component {
         staffTypes: React.PropTypes.object.isRequired,
         updateStaffToPreview: React.PropTypes.func.isRequired,
         updateStaffToShow: React.PropTypes.func.isRequired,
+        onVenueFilterChange: React.PropTypes.func.isRequired,
+        venues: React.PropTypes.object.isRequired,
+        selectedVenueIds: React.PropTypes.array.isRequired,
         staffToPreview: React.PropTypes.number,
-        staffToShow: React.PropTypes.number
+        staffToShow: React.PropTypes.number,
+        rotas: React.PropTypes.object
     }
     render(){
         var staffDetails = this.getStaffDetailsComponent(this.props.staffToShow);
@@ -21,7 +26,7 @@ export default class ChartAndFilter extends React.Component {
         return <div className="row">
             <div className="col-md-9">
                 <RotaChart
-                    rotaShifts={_.values(this.props.rotaShifts)}
+                    rotaShifts={this.getRotaShiftsToDisplay()}
                     staff={this.props.staffMembers}
                     updateStaffToPreview={this.props.updateStaffToPreview}
                     updateStaffToShow={this.props.updateStaffToShow}
@@ -30,11 +35,31 @@ export default class ChartAndFilter extends React.Component {
                     staffTypes={this.props.staffTypes} />
             </div>
             <div className="col-md-3">
+                <VenueDropdown 
+                    venues={this.props.venues}
+                    multi={true}
+                    selectedVenues={this.props.selectedVenueIds}
+                    onChange={this.props.onVenueFilterChange} />
                 <ChartSelectionView
                     selectionComponent={staffDetails}
                     previewComponent={previewStaffDetails} />
             </div>
         </div>
+    }
+    getRotaShiftsToDisplay(){
+        var self = this;
+        return _(this.props.rotaShifts).filter(function(shift){
+            if (self.props.selectedVenueIds.length > 0){
+                var rota = self.props.rotas[shift.rota.id];
+                var venueId = rota.venue.id;
+                var venueIdIsSelecteed = _(self.props.selectedVenueIds).contains(venueId);
+                if (!venueIdIsSelecteed) {
+                    return false;
+                }
+            }
+
+            return true;
+        })
     }
     getStaffDetailsComponent(staffId){
         if (!staffId) {
