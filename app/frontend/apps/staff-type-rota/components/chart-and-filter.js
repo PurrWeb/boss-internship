@@ -32,7 +32,8 @@ export default class ChartAndFilter extends React.Component {
                     updateStaffToShow={this.props.updateStaffToShow}
                     staffToPreview={this.props.staffToPreview}
                     staffToShow={this.props.staffToShow}
-                    staffTypes={this.props.staffTypes} />
+                    staffTypes={this.props.staffTypes}
+                    getShiftColor={(shift) => this.getShiftColor(shift)} />
             </div>
             <div className="col-md-3">
                 <VenueDropdown 
@@ -50,8 +51,7 @@ export default class ChartAndFilter extends React.Component {
         var self = this;
         return _(this.props.rotaShifts).filter(function(shift){
             if (self.props.selectedVenueIds.length > 0){
-                var rota = self.props.rotas[shift.rota.id];
-                var venueId = rota.venue.id;
+                var venueId = getVenueFromShift(shift).id;
                 var venueIdIsSelecteed = _(self.props.selectedVenueIds).contains(venueId);
                 if (!venueIdIsSelecteed) {
                     return false;
@@ -60,6 +60,16 @@ export default class ChartAndFilter extends React.Component {
 
             return true;
         })
+    }
+    getVenueFromShift(shift){
+        var rota = this.props.rotas[shift.rota.id];
+        return rota.venue;
+    }
+    getShiftColor(shift){
+        var venue = this.getVenueFromShift(shift);
+        var venueIds = _.pluck(_.values(this.props.venues), "id");
+        var index = venueIds.indexOf(venue.id);
+        return ["red", "green", "blue", "orange"][index];
     }
     getStaffDetailsComponent(staffId){
         if (!staffId) {

@@ -34,6 +34,7 @@ export default class ChartAndFilter extends Component {
                         staffToPreview={this.state.staffToPreview}
                         staffToShow={this.state.staffToShow}
                         staffTypes={this.props.staffTypes}
+                        getShiftColor={(shift) => this.getShiftColor(shift)}
                         />
                 </div>
                 <div className="col-md-3">
@@ -57,6 +58,12 @@ export default class ChartAndFilter extends Component {
                 </div>
             </div>
         )
+    }
+    getShiftColor(shift){
+        var staffMember = this.props.staff[shift.staff_member.id];
+        return this.props.staffTypes[staffMember.staff_type.id].color;
+
+         this.props.staffTypes[shift.staff.staff_type.id].color
     }
     getStaffTypesWithShifts(){
         return selectStaffTypesWithShifts({
