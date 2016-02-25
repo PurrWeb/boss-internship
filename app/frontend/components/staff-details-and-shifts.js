@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import ShiftEditor from "./shift-editor"
+import ShiftEditor from "./containers/shift-editor"
 import StaffTypeBadge from "~components/staff-type-badge"
 import _ from "underscore"
 

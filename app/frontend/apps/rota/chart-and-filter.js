@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import _ from "underscore"
 import RotaChart from "~components/rota-chart"
-import StaffDetailsAndShifts from "./rota-chart/staff-details-and-shifts"
+import StaffDetailsAndShifts from "~components/staff-details-and-shifts"
 import StaffTypeDropdown from "~components/staff-type-dropdown"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
@@ -74,7 +74,7 @@ export default class ChartAndFilter extends Component {
             rotaShifts={this.props.rotaShifts}
             // We specify a key so the component is re-initialized when
             // the shift changes - so we don't keep the previous state.
-            key={this.state.staffToShow}
+            key={staffId}
             staff={this.props.staff} />
     }
     getRotaShifts(){
