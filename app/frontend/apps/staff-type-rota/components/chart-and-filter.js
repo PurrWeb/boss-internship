@@ -9,8 +9,8 @@ export default class ChartAndFilter extends React.Component {
         staffTypes: React.PropTypes.object.isRequired,
         updateStaffToPreview: React.PropTypes.func.isRequired,
         updateStaffToShow: React.PropTypes.func.isRequired,
-        staffToPreview: React.PropTypes.object,
-        staffToShow: React.PropTypes.object
+        staffToPreview: React.PropTypes.number,
+        staffToShow: React.PropTypes.number
     }
     static childContextTypes = {
         staffTypes: React.PropTypes.object
@@ -20,13 +20,10 @@ export default class ChartAndFilter extends React.Component {
             staffTypes: this.props.staffTypes
         }
     }
-
     render(){
         return <div>
             <RotaChart
                 rotaShifts={_.values(this.props.rotaShifts)}
-                startTime={8}
-                endTime={8}
                 staff={this.props.staffMembers}
                 updateStaffToPreview={this.props.updateStaffToPreview}
                 updateStaffToShow={this.props.updateStaffToShow}
