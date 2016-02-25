@@ -21,6 +21,7 @@ export default class RotaChart extends Component {
             startTime={chartBoundaries.start}
             endTime={chartBoundaries.end}
             staff={this.props.staff}
+            staffTypes={this.props.staffTypes}
             updateStaffToPreview={this.props.updateStaffToPreview}
             updateStaffToShow={this.props.updateStaffToShow} />
     }

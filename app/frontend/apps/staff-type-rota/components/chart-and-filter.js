@@ -14,15 +14,6 @@ export default class ChartAndFilter extends React.Component {
         staffToPreview: React.PropTypes.number,
         staffToShow: React.PropTypes.number
     }
-    static childContextTypes = {
-        staffTypes: React.PropTypes.object
-    }
-    getChildContext(){
-        return {
-            staffTypes: this.props.staffTypes
-        }
-    }
-
     render(){
         var staffDetails = this.getStaffDetailsComponent(this.props.staffToShow);
         var previewStaffDetails = this.getStaffDetailsComponent(this.props.staffToPreview);
@@ -35,7 +26,8 @@ export default class ChartAndFilter extends React.Component {
                     updateStaffToPreview={this.props.updateStaffToPreview}
                     updateStaffToShow={this.props.updateStaffToShow}
                     staffToPreview={this.props.staffToPreview}
-                    staffToShow={this.props.staffToShow} />
+                    staffToShow={this.props.staffToShow}
+                    staffTypes={this.props.staffTypes} />
             </div>
             <div className="col-md-3">
                 <ChartSelectionView

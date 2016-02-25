@@ -33,6 +33,7 @@ export default class ChartAndFilter extends Component {
                         updateStaffToShow={(staffId) => this.setState({staffToShow: staffId})}
                         staffToPreview={this.state.staffToPreview}
                         staffToShow={this.state.staffToShow}
+                        staffTypes={this.props.staffTypes}
                         />
                 </div>
                 <div className="col-md-3">

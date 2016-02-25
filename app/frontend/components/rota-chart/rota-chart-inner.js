@@ -9,9 +9,6 @@ const MAX_HEIGHT_PER_PERSON = 20;
 const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 
 class RotaChart extends Component {
-    static contextTypes = {
-        staffTypes: React.PropTypes.object
-    }
     constructor(props){
         super(props);
     }
@@ -144,7 +141,7 @@ class RotaChart extends Component {
                 return barWidthScale(hours);
             })
             .attr("style", function(shift){
-                return "fill:" + self.context.staffTypes[shift.staff.staff_type.id].color;
+                return "fill:" + self.props.staffTypes[shift.staff.staff_type.id].color;
             })
             .on("mouseenter", function(shift){
                 self.showStaffPreview(shift);
