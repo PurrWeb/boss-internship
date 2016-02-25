@@ -72,6 +72,11 @@ Rails.application.routes.draw do
         end
       end
       resources :venues, only: :show do
+        resources :rota_forecasts, only: [:show] do
+          member do
+            post :update
+          end
+        end
         resources :rotas, only: [] do
           member do
             get :overview
