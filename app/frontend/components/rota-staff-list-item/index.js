@@ -104,9 +104,10 @@ class StaffListItem extends Component {
         this.context.addShift(this.props.staff.id, this.componentId)
     }
     getStaffShifts(staffId){
-        return _(this.props.rotaShifts).filter(function(shift){
+        var ret =  _(this.props.rotaShifts).filter(function(shift){
             return shift.staff_member.id === staffId
         });
+        return ret
     }
 }
 

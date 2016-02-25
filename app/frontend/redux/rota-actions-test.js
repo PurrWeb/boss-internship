@@ -12,21 +12,26 @@ describe("Rota Actions", function(){
 
     it("Shows a confirmation dialog before adding a shift to a published rota", function(){
         var storeState = {
-            pageOptions: {
-                displayedRota: 99
-            },
             rotas: {
                 99: {
-                    status:"published"
+                    status:"published",
+                    date: new Date(2016,1,15),
+                    venue: {id: 10}
                 }
             }
         };
+        var data = {
+            shift: {
+                starts_at: new Date(2016,1,15,16,0,0)
+            },
+            venueId: 10
+        }
 
         var dispatch = function(){};
         var getState = function(){return storeState}
-        addRotaShift({})(dispatch, getState);
-        updateRotaShift({})(dispatch, getState);
-        deleteRotaShift({})(dispatch, getState);
+        addRotaShift(data)(dispatch, getState);
+        updateRotaShift(data)(dispatch, getState);
+        deleteRotaShift(data)(dispatch, getState);
         expect(window.confirm.calls.length).toBe(3);
     });
 

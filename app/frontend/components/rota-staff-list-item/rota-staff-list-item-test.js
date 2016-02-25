@@ -16,16 +16,19 @@ describe('StaffListItem', function() {
         first_name: "John",
         surname: "Doe",
         staff_type: {id: 3333},
+        id: 33
     };
 
     var context = {
-        store: createStore(() => function(){
+        canAddShift: () => true,
+        store: createStore(function(){
             return {
                 componentErrors: {},
                 staffTypes: {
                     3333: {}
                 },
-                rotaShifts: {}
+                rotaShifts: {},
+                apiRequestsInProgress: {}
             }
         })
     };
