@@ -24,7 +24,7 @@ RSpec.describe RotaStaffCost do
         expect(RotaStaffCost.new(
           staff_members: staff_members,
           rota: rota
-        ).total).to eq(0)
+        ).total).to eq(Money.new(0))
       end
     end
 
@@ -50,10 +50,14 @@ RSpec.describe RotaStaffCost do
       end
 
       it 'should calcualte the total cost' do
-        expect(RotaStaffCost.new(
-          staff_members: staff_members,
-          rota: rota
-        ).total).to eq(staff_member.pay_rate.pounds_per_hour * 1.5)
+        expect(
+          RotaStaffCost.new(
+            staff_members: staff_members,
+            rota: rota
+          ).total
+        ).to eq(
+          Money.from_amount(staff_member.pay_rate.pounds_per_hour * 1.5)
+        )
       end
     end
   end
