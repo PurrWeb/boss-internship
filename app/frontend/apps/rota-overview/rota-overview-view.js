@@ -4,6 +4,7 @@ import ShiftList from "./shift-list"
 import RotaOverviewChart from "./rota-overview-chart"
 import ChartSelectionView from "~components/chart-selection-view"
 import _ from "underscore"
+import RotaForecast from "./containers/rota-forecast"
 
 export default class RotaOverviewView extends Component {
     constructor(props){
@@ -28,6 +29,7 @@ export default class RotaOverviewView extends Component {
                     onSelectionShiftsChange={(shifts) => this.setState({selectionData: shifts})} />
             </div>
             <div className="col-md-3">
+                <RotaForecast rotaId={this.props.rota.id} />
                 <ChartSelectionView
                     previewComponent={previewShiftList}
                     selectionComponent={selectionShiftList} />

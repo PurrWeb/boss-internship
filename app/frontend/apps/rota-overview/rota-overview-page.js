@@ -74,6 +74,7 @@ class RotaOverviewPage extends Component {
                 <RotaOverviewView
                     staff={ indexById(staff) }
                     shifts={ indexById(shifts) }
+                    rota={rota}
                     dateOfRota={ rota.date }
                     staffTypesWithShifts={ indexById(staffTypesWithShifts)} />
             </div>
