@@ -136,6 +136,14 @@ export function replaceAllRotas(options) {
     }
 }
 
+actionTypes.REPLACE_ALL_ROTA_FORECASTS = "REPLACE_ALL_ROTA_FORECASTS";
+export function replaceAllRotaForecasts({rotaForecasts}) {
+    return {
+        type: actionTypes.REPLACE_ALL_ROTA_FORECASTS,
+        rotaForecasts
+    }
+}
+
 export const updateRotaStatus = createApiRequestAction({
     requestType: "UPDATE_ROTA_STATUS",
     makeRequest: makeApiRequest({
@@ -245,10 +253,25 @@ export function loadInitialClockInOutAppState() {
 
 export function loadInitialRotaOverviewAppState(viewData){
     return function(dispatch) {
-        var rotas = _.pluck(viewData, "rota");
-        rotas = rotas.map(backendData.processRotaObject);
-        rotas = indexById(rotas);
-        dispatch(replaceAllRotas({rotas: rotas}));
+        var unprocessedRotasArray = _.pluck(viewData.rotas, "rota");
+        var rotasArray = rotas = unprocessedRotasArray.map(backendData.processRotaObject);
+        var rotas = indexById(rotas);
+
+        var forecasts = viewData.rotas.map(function(rotaContainerObject, i){
+            var forecast = rotaContainerObject.forecast;
+            if (forecast.rota.id === null){
+                forecast.rota.id = rotasArray[i].id;
+            }
+
+            return forecast;
+        });
+
+        forecasts = indexById(forecasts);
+        
+        dispatch([
+            replaceAllRotas({rotas: rotas}),
+            replaceAllRotaForecasts({rotaForecasts: forecasts})
+        ]);
     }
 }
 

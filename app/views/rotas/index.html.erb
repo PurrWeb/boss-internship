@@ -14,6 +14,30 @@
   window.boss = window.boss || {};
   window.boss.rotas = rotas;
   window.boss.venues = venues;
+
+
+
+  window.boss.rotas.forEach(function(rota){
+    rota.forecast =  {
+      "id": Math.floor(Math.random() * 10000000),
+      "url": "",
+      "rota": {
+        "id": null,
+        "url": null
+      },
+      "forecasted_take": 100000.00,
+      "total": 20000.00,
+      "total_percentage": 20.0,
+      "staff_total": 10000.00,
+      "staff_total_percentage": 10.0,
+      "pr_total": 5000.00,
+      "pr_total_percentage": 5.0,
+      "security_total": 2500.00,
+      "security_total_percentage": 2.5,
+      "kitchen_total": 2500.00,
+      "kitchen_total_percentage": 2.5
+    }
+  })
 <% end %>
 
 <%= react_component('RotaOverviewApp') %>

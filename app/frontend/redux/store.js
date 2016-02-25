@@ -14,6 +14,7 @@ import rotas from "./rotas-reducer"
 import pageOptions from "./page-options-reducer"
 import staffTypes from "./staff-types-reducer"
 import holidays from "./holidays-reducer"
+import rotaForecasts from "./rota-forecasts-reducer"
 
 var rootReducer = combineReducers({
     staff,
@@ -26,10 +27,11 @@ var rootReducer = combineReducers({
     rotas,
     pageOptions,
     staffTypes,
-    holidays
+    holidays,
+    rotaForecasts
 });
 var createStoreWithMiddleware = compose(
-	// Redux thunk let's us dispatch asynchronous actions, for example
+	// Redux thunk lets us dispatch asynchronous actions, for example
 	// actions that do an Ajax call before updating the state
 	// by dispatching another action
 	applyMiddleware(thunk),
