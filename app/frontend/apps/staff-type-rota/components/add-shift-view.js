@@ -26,6 +26,7 @@ export default class AddShiftView extends React.Component {
 
                 </div>
             </div>
+            <hr/>
             <StaffTypeRotaStaffFinder
                 staff={this.props.staff}
                 venues={this.props.venues}

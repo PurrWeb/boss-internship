@@ -2,6 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import AddShiftViewUi from "../components/add-shift-view"
 import _ from "underscore"
+import { addRotaShift } from "~redux/actions"
 
 class AddShiftView extends React.Component {
     static childContextTypes = {
@@ -13,9 +14,7 @@ class AddShiftView extends React.Component {
             canAddShift: function(){
                 return true;
             },
-            addShift: function(){
-                alert("not implemented")
-            }
+            addShift: (staffId, requestComponent) => this.addShift(staffId, requestComponent)
         }
     }
     constructor(props){
@@ -27,7 +26,6 @@ class AddShiftView extends React.Component {
     }
     render(){
         return <div>
-            {JSON.stringify(this.state)}
             <AddShiftViewUi
                 shiftTimes={this.state.shiftTimes}
                 staff={this.props.staff}
@@ -50,6 +48,17 @@ class AddShiftView extends React.Component {
     onVenueChange(venueId){
         this.setState({venueId})
     }
+    addShift(staffId, requestComponent){
+        this.props.addRotaShift({
+            shift: {
+                starts_at: this.state.shiftTimes.starts_at,
+                ends_at: this.state.shiftTimes.ends_at,
+                staff_member_id: staffId
+            },
+            errorHandlingComponent: requestComponent,
+            venueId: this.state.venueId
+        });
+    }
 }
 
 function mapStateToProps(state){
@@ -61,4 +70,10 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps)(AddShiftView)
+function mapDispatchToProps(dispatch){
+    return {
+        addRotaShift: (options) => dispatch(addRotaShift(options))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddShiftView)
