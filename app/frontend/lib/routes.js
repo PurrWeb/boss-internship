@@ -70,6 +70,12 @@ const apiRoutes = {
             ].join("")
         },
         method: "POST"
+    },
+    updateRotaForecast: {
+        getPath: function({venueId, dateOfRota}){
+            return "venues/" + venueId + "/rota_forecasts/" + utils.formatDateForApi(dateOfRota);
+        },
+        method: "POST"
     }
 }
 

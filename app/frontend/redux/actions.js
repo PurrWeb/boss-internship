@@ -87,35 +87,14 @@ export const deleteRotaShift = createApiRequestAction({
 
 export const updateRotaForecast = createApiRequestAction({
     requestType: "UPDATE_ROTA_FORECAST",
-    makeRequest: function({forecastedTake, dateOfRota, venueId, rotaIdJustForTestingRemoveLater}, success, error){
-        setTimeout(function(){
-            if (Math.random() > .5){
-                error({errors: {base: ["Something went wrong"]}})
-                return;
-            }
-            success({
-                rotaForecast: {
-                    "id": Math.floor(Math.random() * 10000000),
-                    "url": "",
-                    "rota": {
-                        "id": rotaIdJustForTestingRemoveLater,
-                        "url": null
-                    },
-                    "forecasted_take": 2345.00,
-                    "total": 42534.00,
-                    "total_percentage": 20.0,
-                    "staff_total": Math.random() * 500000,
-                    "staff_total_percentage": 10.0,
-                    "pr_total": 2345.00,
-                    "pr_total_percentage": 5.0,
-                    "security_total": 2500.00,
-                    "security_total_percentage": 2.5,
-                    "kitchen_total": 2345411.00,
-                    "kitchen_total_percentage": 2.5
-                }
-            });
-        }, 1000)
-    }
+    makeRequest: makeApiRequest({
+        method: apiRoutes.updateRotaForecast.method,
+        path: ({dateOfRota, venueId}) => apiRoutes.updateRotaForecast.getPath({dateOfRota, venueId}),
+        data: ({forecastedTake}) => {return {forecasted_take: forecastedTake} },
+        getSuccessActionData: function(){
+            debugger;
+        }
+    })
 });
 
 export const fetchWeeklyRotaForecast = createApiRequestAction({
