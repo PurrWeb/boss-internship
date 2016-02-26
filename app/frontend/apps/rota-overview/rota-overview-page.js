@@ -39,6 +39,9 @@ class RotaOverviewPage extends Component {
                             lastDate={lastRota.date} />
                     </WeekAndVenueSelector>
                 </div>
+                <div className="col-md-3">
+                    
+                </div>
             </div>
             <br/>
             {overviewViews}
