@@ -14,6 +14,13 @@ export const appRoutes = {
             "&end_date=" + utils.formatRotaUrlDate(endDate)
         ].join("");
     },
+    securityRotaOverview: function(options){
+      var { date } = options;
+      return [
+        "/security_rotas/" + utils.formatRotaUrlDate(date),
+        "/overview"
+      ].join("")
+    },
     holidayReportsIndex: function(options) {
       var { date, venueId } = options;
       return [

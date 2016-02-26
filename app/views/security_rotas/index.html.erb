@@ -1,1 +1,21 @@
-<h1>Security Rota <%= start_date %> to <%= end_date %></h1>
+<script type="text/javascript">
+  $(function(){
+    var securityRotaOverviews = [];
+
+    <% (week.start_date..week.end_date).each do |date| %>
+      securityRotaOverviews.push(<%= raw(
+        render(
+          partial: 'api/v1/shared/security_rota_overview.json',
+          locals: {
+            rotas: Rota.where(date: date)
+          }
+        )
+      ) %>);
+    <% end %>
+
+    window.boss = window.boss || {};
+    window.boss.securityRotaOverviews = securityRotaOverviews;
+  });
+</script>
+
+<h1>Security Rota <%= week.start_date %> to <%= week.end_date %></h1>

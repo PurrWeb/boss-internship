@@ -6,7 +6,7 @@ class SecurityRotasController < ApplicationController
     week = RotaWeek.new(date || Time.now)
 
     if date && (date == week.start_date)
-      render locals: { start_date: week.start_date, end_date: week.end_date }
+      render locals: { week: week }
     else
       redirect_to(security_rotas_path(date: UIRotaDate.format(week.start_date)))
     end
@@ -16,7 +16,22 @@ class SecurityRotasController < ApplicationController
     date = date_from_params(param_name: :id)
     raise ActiveRecord::RecordNotFound unless date.present?
 
-    render locals: { date: date }
+    rotas = Rota.where(date: date)
+    venues = Venue.all
+    staff_types = StaffType.where(role: 'security')
+    staff_members = StaffMember.joins(:staff_type).merge(staff_types)
+    rota_shifts = RotaShift.joins(:rota).merge(rotas)
+    holidays = Holiday.joins(:staff_member).merge(staff_members)
+
+    render locals: {
+      date: date,
+      rotas: rotas,
+      venues: venues,
+      staff_types: staff_types,
+      staff_members: staff_members,
+      rota_shifts: rota_shifts,
+      holidays: holidays
+    }
   end
 
   private

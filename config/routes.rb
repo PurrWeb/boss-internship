@@ -100,6 +100,11 @@ Rails.application.routes.draw do
       resources :staff_types,   only: :show
       resources :rota_shifts,   only: [:show, :destroy, :update]
       resources :rotas,         only: :show
+      resources :security_rotas, only: [] do
+        member do
+          get :overview
+        end
+      end
     end
   end
 
