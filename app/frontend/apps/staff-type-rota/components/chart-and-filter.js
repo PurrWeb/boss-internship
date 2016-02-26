@@ -51,7 +51,7 @@ export default class ChartAndFilter extends React.Component {
         var self = this;
         return _(this.props.rotaShifts).filter(function(shift){
             if (self.props.selectedVenueIds.length > 0){
-                var venueId = getVenueFromShift(shift).id;
+                var venueId = self.getVenueFromShift(shift).id;
                 var venueIdIsSelecteed = _(self.props.selectedVenueIds).contains(venueId);
                 if (!venueIdIsSelecteed) {
                     return false;
