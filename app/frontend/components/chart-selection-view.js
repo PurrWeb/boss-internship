@@ -9,19 +9,38 @@ import React from "react"
 export default class ChartSelectionView extends React.Component {
     static propTypes = {
         previewComponent: React.PropTypes.object,
-        selectionComponent: React.PropTypes.object
+        selectionComponent: React.PropTypes.object,
+        selectionIsClearable: React.PropTypes.bool,
+        clearSelection: React.PropTypes.func
     }
     render(){
-        var hasPreviewComponent = this.props.previewComponent !== null && this.props.previewComponent !== undefined;
         return <div style={{position: "relative"}}>
             <div
                 className="chart-selection-view__selected-shift-editor"
-                style={{opacity: hasPreviewComponent ? "0": "1"}}>
+                style={{opacity: this.hasPreviewComponent() ? "0": "1"}}>
                 {this.props.selectionComponent}
             </div>
             <div className="chart-selection-view__preview-shift-editor">
                 {this.props.previewComponent}
             </div>
+            {this.getClearSelectionButton()}
         </div>
+    }
+    hasPreviewComponent(){
+        return this.props.previewComponent !== null && this.props.previewComponent !== undefined;
+    }
+    hasSelectionComponent(){
+        return this.props.selectionComponent !== null && this.props.selectionComponent !== undefined;
+    }
+    getClearSelectionButton(){
+        if (!this.hasSelectionComponent()){
+            return null;
+        }
+        if (!this.props.selectionIsClearable) {
+            return null;
+        }
+        return <div
+            onClick={this.props.clearSelection}
+            className={"glyphicon glyphicon-remove chart-selection-view__clear-button"} />
     }
 }

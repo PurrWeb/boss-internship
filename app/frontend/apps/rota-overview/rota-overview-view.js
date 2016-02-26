@@ -15,7 +15,7 @@ export default class RotaOverviewView extends Component {
         }
     }
     render() {
-        var previewShiftList = this.getStaffShiftList(this.state.hoverData),
+        var previewShiftList = null, // we don't want a preview here because we want to show the forecast
             selectionShiftList = this.getStaffShiftList(this.state.selectionData);
 
         return <div className="row">
@@ -29,13 +29,21 @@ export default class RotaOverviewView extends Component {
                     onSelectionShiftsChange={(shifts) => this.setState({selectionData: shifts})} />
             </div>
             <div className="col-md-3">
-                <RotaForecast
-                    rotaId={this.props.rota.id}
-                    canEditForecastedTake={true} />
+                {this.getRotaForecast()}
                 <ChartSelectionView
                     previewComponent={previewShiftList}
-                    selectionComponent={selectionShiftList} />
+                    selectionComponent={selectionShiftList}
+                    selectionIsClearable={true}
+                    clearSelection={() => this.setState({selectionData: null})} />
             </div>
+        </div>
+    }
+    getRotaForecast(){
+        var display = this.state.selectionData === null ? "block" : "none";
+        return <div style={{display: display}}>
+            <RotaForecast
+                rotaId={this.props.rota.id}
+                canEditForecastedTake={true} />
         </div>
     }
     getStaffShiftList(data){
