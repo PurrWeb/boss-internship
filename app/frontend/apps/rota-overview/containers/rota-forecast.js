@@ -2,6 +2,7 @@ import React from "react"
 import _ from "underscore"
 import { connect } from "react-redux"
 import RotaForecastUi from "../components/rota-forecast"
+import { updateRotaForecast } from "~redux/actions"
 
 class RotaForecast extends React.Component {
     static propTypes = {
@@ -23,7 +24,9 @@ class RotaForecast extends React.Component {
             onUpdateForecastClick={() => this.onUpdateForecastClick()} />
     }
     onUpdateForecastClick(){
-        alert("todo")
+        this.props.updateRotaForecast({
+            forecastedTake: this.state.forecastedTake
+        })
     }
 }
 
@@ -33,8 +36,36 @@ function mapStateToProps(state, ownProps){
     });
 
     return {
-        rotaForecast: forecast
+        rotaForecast: forecast,
+        rota: state.rotas[forecast.rota.id]
     }
 }
 
-export default connect(mapStateToProps)(RotaForecast)
+function mapDispatchToProps(dispatch, ownProps){
+    return {
+        updateRotaForecastWithAllDetails: function({forecastedTake, venueId, dateofRota}){
+            dispatch(updateRotaForecast({forecastedTake, venueId, dateofRota}));
+        }
+    }
+}
+
+function mergeProps(stateProps, dispatchProps, ownProps){
+    var extraProps = {
+        updateRotaForecast: function({forecastedTake}){
+            dispatchProps.updateRotaForecastWithAllDetails({
+                forecastedTake,
+                venueId: stateProps.rota.venueId,
+                dateOfRota: stateProps.rota.date,
+                rotaIdJustForTestingRemoveLater: stateProps.rota.id
+            });
+        }
+    };
+    return Object.assign({}, ownProps, stateProps, dispatchProps, extraProps);
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+    mergeProps
+)(RotaForecast)
+

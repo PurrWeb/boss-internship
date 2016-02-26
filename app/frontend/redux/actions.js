@@ -89,6 +89,35 @@ export const deleteRotaShift = createApiRequestAction({
     confirm: confirmIfRotaIsPublished("Deleting a shift on a published rota will send out email notifications. Do you want to continue?")
 });
 
+export const updateRotaForecast = createApiRequestAction({
+    requestType: "UPDATE_ROTA_FORECAST",
+    makeRequest: function({forecastedTake, dateOfRota, venueId, rotaIdJustForTestingRemoveLater}, success, error){
+        setTimeout(function(){
+            success({
+                rotaForecast: {
+                    "id": Math.floor(Math.random() * 10000000),
+                    "url": "",
+                    "rota": {
+                        "id": rotaIdJustForTestingRemoveLater,
+                        "url": null
+                    },
+                    "forecasted_take": 100000.00,
+                    "total": 20000.00,
+                    "total_percentage": 20.0,
+                    "staff_total": 10000.00,
+                    "staff_total_percentage": 10.0,
+                    "pr_total": 5000.00,
+                    "pr_total_percentage": 5.0,
+                    "security_total": 2500.00,
+                    "security_total_percentage": 2.5,
+                    "kitchen_total": 2500.00,
+                    "kitchen_total_percentage": 2.5
+                }
+            });
+        }, 1000)
+    }
+});
+
 export const ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
 export function enterManagerMode () {
     return {

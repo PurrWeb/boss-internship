@@ -24,7 +24,10 @@ export default class RotaForecast extends React.Component {
         </div>
     }
     getForecastHeaderRow(){
-        var forecastedTakeComponent = this.props.forecastedTake;
+        var forecastedTakeComponent = <div>
+            &pound;
+            {utils.formatMoney(this.props.forecastedTake)}
+        </div>;
         var updateForecastButton = null
 
         if (this.props.canEditForecastedTake){
@@ -44,7 +47,7 @@ export default class RotaForecast extends React.Component {
             </a>
         }
 
-        return <div className="row" style={{paddingBottom: 10}}>
+        return <div className="row rota-forecast__header-row">
             <div className="col-md-4">
                 Forecast
             </div>
