@@ -18,4 +18,17 @@ describe("weeklyForecastReducer", function(){
 
         expect(weeklyForecastReducer(initalState, action)).toEqual(expectedResultState);
     });
+    it("Resets the weekly rota forecast when an individual forecast has been updated", function(){
+        var initalState = {
+            "some": "value"
+        }
+
+        var action = {
+            type: "UPDATE_ROTA_FORECAST_SUCCESS"
+        }
+
+        var expectedResultState = null;
+
+        expect(weeklyForecastReducer(initalState, action)).toBe(null);
+    })
 });

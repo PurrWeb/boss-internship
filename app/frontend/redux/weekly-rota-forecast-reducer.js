@@ -8,7 +8,7 @@ export default function rotaForecastsReducer(state=null, action){
         case actionTypes.FETCH_WEEKLY_ROTA_FORECAST_SUCCESS:
             return oFetch(action, "weeklyRotaForecast");
         case actionTypes.UPDATE_ROTA_FORECAST_SUCCESS:
-            alert("handle this")
+            return null;
     }
     return state;
 }
