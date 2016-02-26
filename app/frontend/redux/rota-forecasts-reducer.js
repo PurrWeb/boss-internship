@@ -14,10 +14,12 @@ export default function rotaForecastsReducer(state={}, action){
                 return datesAreEqual && venuesAreEqual;
             });
 
-            var newState = Object.assign({}, state, {[newForecast.id]: newForecast});
+
+            var newState = Object.assign({}, state);
             if (existingRotaForecast){
                 delete newState[existingRotaForecast.id];
             }
+            newState[newForecast.id] = newForecast;
             return newState;
     }
     return state;
