@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  $(function(){
+  (function(){
     rotaData = {};
 
     rotaData.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas } %>;
@@ -16,7 +16,7 @@
 
     window.boss = window.boss || {};
     window.boss.rota = rotaData;
-  });
+  })()
 </script>
 
 <div class="container">
