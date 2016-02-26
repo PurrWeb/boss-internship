@@ -4,6 +4,7 @@ import moment from "moment"
 import * as backendData from "~redux/process-backend-data"
 import makeApiRequest from "./make-api-request"
 import {apiRoutes} from "~lib/routes"
+import oFetch from "o-fetch"
 
 export const actionTypes = {};
 const createApiRequestAction = function(options){
@@ -76,12 +77,7 @@ export const deleteRotaShift = createApiRequestAction({
     requestType: "DELETE_SHIFT",
     makeRequest: makeApiRequest({
         method: apiRoutes.deleteShift.method,
-        validateOptions: function(options){
-            if (options.shift_id === undefined) {
-                throw "Need to specify shift_id that should be deleted"
-            }
-        },
-        path: (options) => apiRoutes.deleteShift.getPath({shiftId: options.shift_id}),
+        path: (options) => apiRoutes.deleteShift.getPath({shiftId: oFetch(options, "shift_id")}),
         getSuccessActionData: function(responseData, requestOptions) {
             return {shift_id: requestOptions.shift_id}
         }
