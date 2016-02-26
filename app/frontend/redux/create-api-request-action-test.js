@@ -24,15 +24,16 @@ describe("createApiRequestAction", function(){
 		expect(makeRequest.calls[0].arguments[0]).toEqual({value: 99});
 	});
 
-	it("Dispatches API_REQUEST_START and SET_COMPONENT_ERROR actions when I start a request", function(){
+	it("Dispatches API_REQUEST_START, DO_SOMETHING_REQUEST_START and SET_COMPONENT_ERROR actions when I start a request", function(){
 		var dispatch = dispatchDoSomething(function(){}, {})
 		expect(dispatch).toHaveBeenCalled();
 		var actionObjects = dispatch.calls[0].arguments[0];
 		expect(actionObjects[0].type).toEqual("API_REQUEST_START");
-		expect(actionObjects[1].type).toEqual("SET_COMPONENT_ERROR");
+		expect(actionObjects[1].type).toEqual("DO_SOMETHING_REQUEST_START");
+		expect(actionObjects[2].type).toEqual("SET_COMPONENT_ERROR");
 	});
 	
-	it("Dispatches API_REQUEST_END and DO_STH_SUCCESS when a request succeeds", function(){
+	it("Dispatches API_REQUEST_END and DO_SOMETHING_SUCCESS when a request succeeds", function(){
 		var makeRequest = function(options, success, error){
 			success();
 		};

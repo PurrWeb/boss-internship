@@ -12,7 +12,11 @@ describe("WeeklyRotaForecast", function(){
     it("Triggers an action to fetch the forecast if it isn't in the store", function(){
         var store = createStore(function(){
             return {
-                weeklyRotaForecast: null,
+                weeklyRotaForecast: {
+                    needsUpdating: false, //
+                    forecast: null,
+                },
+                componentErrors: {},
                 apiRequestsInProgress: {}
             }
         });
