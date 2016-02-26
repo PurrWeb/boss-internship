@@ -114,6 +114,31 @@ export const updateRotaForecast = createApiRequestAction({
     }
 });
 
+export const fetchWeeklyRotaForecast = createApiRequestAction({
+    requestType: "FETCH_WEEKLY_ROTA_FORECAST",
+    makeRequest: function({startOfWeek}, success, error) {
+        setTimeout(function(){
+            success({
+                weeklyRotaForecast: {
+                    "id": Math.floor(Math.random() * 10000000),
+                    "url": "",
+                    "forecasted_take": Math.random() * 100000,
+                    "total": 42534.00,
+                    "total_percentage": 20.0,
+                    "staff_total": Math.random() * 500000,
+                    "staff_total_percentage": 10.0,
+                    "pr_total": 2345.00,
+                    "pr_total_percentage": 5.0,
+                    "security_total": 2500.00,
+                    "security_total_percentage": 2.5,
+                    "kitchen_total": 2345411.00,
+                    "kitchen_total_percentage": 2.5
+                }
+            })
+        }, 5000)
+    }
+})
+
 export const ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
 export function enterManagerMode () {
     return {

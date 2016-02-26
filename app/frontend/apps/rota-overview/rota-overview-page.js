@@ -5,6 +5,7 @@ import {appRoutes} from "~lib/routes"
 import {connect} from "react-redux"
 import moment from "moment"
 import _ from "underscore"
+import utils from "~lib/utils"
 import rotaStatusTitles from "~lib/rota-status-titles"
 import { selectStaffTypesWithShifts } from "~redux/selectors"
 import PublishRotaWeekButtonContainer from "./publish-rota-week-button-container"
@@ -45,7 +46,8 @@ class RotaOverviewPage extends Component {
                 </div>
                 <div className="col-md-3">
                     <h2 style={{fontSize: 20, marginTop: 0}}>Weekly Forecast</h2>
-                    <WeeklyRotaForecast /> 
+                    <WeeklyRotaForecast
+                        startOfWeek={utils.getWeekStartDate(firstRota.date)} /> 
                 </div>
             </div>
             <br/>
