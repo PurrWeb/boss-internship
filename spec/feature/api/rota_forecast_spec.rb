@@ -112,7 +112,7 @@ RSpec.describe 'Api access' do
         specify 'it should return the latest forecast created' do
           json = JSON.parse(response.body)
 
-          expect(json["forecasted_take"]).to eq(forecasted_takes.first.to_s)
+          expect(json["forecasted_take"]).to eq(Float(forecasted_takes.first.to_s))
         end
       end
     end
@@ -241,16 +241,16 @@ RSpec.describe 'Api access' do
           id: UIRotaDate.format(forecast.rota.date)
         ),
       "date" => forecast.date.iso8601,
-      "forecasted_take" => forecast.forecasted_take.to_s,
-      "total" => forecast.total.to_s,
+      "forecasted_take" => Float(forecast.forecasted_take.to_s),
+      "total" => Float(forecast.total.to_s),
       "total_percentage" => forecast.total_percentage,
-      "staff_total" => forecast.staff_total.to_s,
+      "staff_total" => Float(forecast.staff_total.to_s),
       "staff_total_percentage" => forecast.staff_total_percentage,
-      "pr_total" => forecast.pr_total.to_s,
+      "pr_total" => Float(forecast.pr_total.to_s),
       "pr_total_percentage" => forecast.pr_total_percentage,
-      "security_total" => forecast.security_total.to_s,
+      "security_total" => Float(forecast.security_total.to_s),
       "security_total_percentage" => forecast.security_total_percentage,
-      "kitchen_total" => forecast.kitchen_total.to_s,
+      "kitchen_total" => Float(forecast.kitchen_total.to_s),
       "kitchen_total_percentage" => forecast.kitchen_total_percentage
     }
   end
