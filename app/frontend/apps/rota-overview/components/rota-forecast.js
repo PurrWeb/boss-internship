@@ -1,4 +1,5 @@
 import React from "react"
+import utils from "~lib/utils"
 
 export default class RotaForecast extends React.Component {
     static propTypes = {
@@ -15,9 +16,11 @@ export default class RotaForecast extends React.Component {
             (row) => this.getDataRowComponent(row)
         );
 
-        return <div>
+        return <div className="rota-forecast">
             {this.getForecastHeaderRow()}
-            {dataRowComponents}
+            <div>
+                {dataRowComponents}
+            </div>
         </div>
     }
     getForecastHeaderRow(){
@@ -35,20 +38,20 @@ export default class RotaForecast extends React.Component {
             </div>
 
             updateForecastButton = <a
-                className="btn btn-default"
+                className="btn btn-default btn-sm"
                 onClick={this.props.onUpdateForecastClick} >
                 Update
             </a>
         }
 
-        return <div className="row">
+        return <div className="row" style={{paddingBottom: 10}}>
             <div className="col-md-4">
                 Forecast
             </div>
             <div className="col-md-5" style={{textAlign: "right"}}>
                 {forecastedTakeComponent}
             </div>
-            <div className="col-md-3">
+            <div className="col-md-3" style={{textAlign: "right"}}>
                 {updateForecastButton}
             </div>
         </div>
@@ -59,7 +62,7 @@ export default class RotaForecast extends React.Component {
                 {row.title}
             </div>
             <div className="col-md-5" style={{textAlign: "right"}}>
-                &pound;{row.total.toFixed(2)}
+                &pound;{utils.formatMoney(row.total)}
             </div>
             <div className="col-md-3" style={{textAlign: "right"}}>
                 {row.percentage}%

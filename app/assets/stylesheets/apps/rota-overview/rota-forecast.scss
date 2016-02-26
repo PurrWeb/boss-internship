@@ -1,0 +1,10 @@
+.rota-forecast .row {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.rota-forecast .row:last-child {
+    border-top: 2px solid black;
+}
+.rota-forecast .row:nth-child(even) {
+    background: #fafafa;
+}
