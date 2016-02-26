@@ -3,6 +3,10 @@ json.url api_v1_venue_rota_forecast_url(
   venue_id: rota_forecast.venue.id,
   id: UIRotaDate.format(rota_forecast.date)
 )
+json.venue do
+  json.id rota_forecast.venue.id
+  json.url api_v1_venue_url(rota_forecast.venue)
+end
 json.date rota_forecast.date.iso8601
 json.forecasted_take rota_forecast.forecasted_take.to_s
 json.total rota_forecast.total.to_s

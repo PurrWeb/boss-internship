@@ -229,7 +229,7 @@ RSpec.describe 'Api access' do
   end
 
   def forecast_keys
-    ["id", "url", "date", "forecasted_take", "total", "total_percentage", "staff_total", "staff_total_percentage", "pr_total", "pr_total_percentage", "kitchen_total" , "kitchen_total_percentage", "security_total", "security_total_percentage"]
+    ["id", "url", "venue", "date", "forecasted_take", "total", "total_percentage", "staff_total", "staff_total_percentage", "pr_total", "pr_total_percentage", "kitchen_total" , "kitchen_total_percentage", "security_total", "security_total_percentage"]
   end
 
   def expected_values_for(forecast)
