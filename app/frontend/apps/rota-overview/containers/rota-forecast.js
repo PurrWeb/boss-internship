@@ -43,8 +43,8 @@ function mapStateToProps(state, ownProps){
 
 function mapDispatchToProps(dispatch, ownProps){
     return {
-        updateRotaForecastWithAllDetails: function({forecastedTake, venueId, dateofRota}){
-            dispatch(updateRotaForecast({forecastedTake, venueId, dateofRota}));
+        updateRotaForecastWithAllDetails: function(options){
+            dispatch(updateRotaForecast(options));
         }
     }
 }
