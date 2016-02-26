@@ -36,19 +36,19 @@ class WeeklyRotaForecast extends React.Component {
         if (this.props.isFetchingWeeklyRotaForecast) {
             return <Spinner />
         }
-        if (!this.props.weeklyRotaForecast) {
+        if (!this.props.weeklyRotaForecast.forecast) {
             return null;
         }
         return <RotaForecastUi
-            rotaForecast={this.props.weeklyRotaForecast}
-            forecastedTake={utils.formatMoney(this.props.weeklyRotaForecast.forecasted_take)}
+            rotaForecast={this.props.weeklyRotaForecast.forecast}
+            forecastedTake={utils.formatMoney(this.props.weeklyRotaForecast.forecast.forecasted_take)}
             canEditForecastedTake={false} />
     }
     getComponentErrors(props){
         return props.componentErrors[this.componentId];
     }
     fetchForecastIfRequired(props){
-        if (props.weeklyRotaForecast !== null){
+        if (props.weeklyRotaForecast.forecast !== null && !props.weeklyRotaForecast.needsUpdate){
             return; // no need to fetch the forecast
         }
         if (props.isFetchingWeeklyRotaForecast){
@@ -58,6 +58,7 @@ class WeeklyRotaForecast extends React.Component {
             return; // we already tried fetching and it failed... don't try again to avoid infinite attempts
         }
         
+        console.log("will fetch")
         props.fetchForecast(this.componentId);
     }
 }

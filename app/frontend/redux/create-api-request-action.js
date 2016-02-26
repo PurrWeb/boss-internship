@@ -49,7 +49,9 @@ export default function createApiRequestAction(actionOptions){
     actionTypes.API_REQUEST_END = "API_REQUEST_END"
     actionTypes.SET_COMPONENT_ERROR = "SET_COMPONENT_ERROR";
     const SUCCESS_TYPE = requestType + "_SUCCESS";
+    const START_TYPE = requestType + "_REQUEST_START";
     actionTypes[SUCCESS_TYPE] = SUCCESS_TYPE;
+    actionTypes[START_TYPE] = START_TYPE;
 
     return function(requestOptions){
         if (requestOptions.type || requestOptions.requestId || requestOptions.requestType) {
@@ -84,13 +86,19 @@ export default function createApiRequestAction(actionOptions){
                     errors: errors
                 };
             }
-            function requestStartAction(){
+            function apiRequestStartAction(){
                 return {
                     type: actionTypes.API_REQUEST_START,
                     requestId: requestId,
                     requestType: requestType,
                     ...requestOptions
                 };
+            }
+            function requestTypeRequestStartAction(){
+                return {
+                    type: START_TYPE,
+                    ...requestOptions
+                }
             }
             function requestEndAction(){
                 return {
@@ -109,7 +117,8 @@ export default function createApiRequestAction(actionOptions){
             }
 
             dispatch([
-                requestStartAction(),
+                apiRequestStartAction(),
+                requestTypeRequestStartAction(),
                 setComponentErrorAction(undefined)
             ]);
             makeRequest(requestOptions, success, error, getState());
