@@ -19,12 +19,6 @@ export default class RotaForecast extends React.Component {
         </div>
     }
     getForecastBody(){
-        if (this.props.isUpdatingForecast){
-            return <div style={{marginTop: 10}}>
-                <Spinner />
-            </div>
-        }
-
         var dataRows = getDataRows(this.props.rotaForecast);
         var dataRowComponents = dataRows.map(
             (row) => this.getDataRowComponent(row)
@@ -56,6 +50,10 @@ export default class RotaForecast extends React.Component {
                 onClick={this.props.onUpdateForecastClick} >
                 Update
             </a>
+
+            if (this.props.isUpdatingForecast){
+                updateForecastButton = <Spinner />
+            }
         }
 
         return <div className="rota-forecast__header-row row">
