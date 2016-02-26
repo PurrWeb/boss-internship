@@ -19,3 +19,7 @@
 ## Running front-end tests
 
 Run `npm test`.
+
+### Debugging front-end tests
+
+Change the `singleRun` property in "karma.conf.js" to false. Then run `npm test` and click the Debug button in the new Chrome window.

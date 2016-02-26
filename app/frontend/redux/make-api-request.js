@@ -7,7 +7,7 @@ import oFetch from "o-fetch"
 apiOptions:
 - method (required) - string or function that returns a string
 - path (required) - string or function that returns a string
-- data (required) - string or function that returns a string
+- data (optional) - object or function that returns an object
 - getSuccessActionData
 */
 export default function makeApiRequest(apiOptions){
@@ -21,10 +21,10 @@ export default function makeApiRequest(apiOptions){
 
         requestOptions = _.clone(requestOptions);
 
-        var [method, path, data] = oFetch(apiOptions, "method", "path", "data")
+        var [method, path, data] = oFetch(apiOptions, "method", "path")
         method = resolveFunctionParameter(method);
         path = resolveFunctionParameter(path);
-        data = resolveFunctionParameter(data);
+        data = resolveFunctionParameter(apiOptions.data);
 
         $.ajax({
            url: API_ROOT + path,
