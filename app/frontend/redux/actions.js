@@ -135,7 +135,7 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
                     "kitchen_total_percentage": 2.5
                 }
             })
-        }, 5000)
+        }, 2000)
     }
 })
 

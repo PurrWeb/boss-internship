@@ -4,6 +4,8 @@ import utils from "~lib/utils"
 import { connect } from "react-redux"
 import RotaForecastUi from "../components/rota-forecast"
 import { fetchWeeklyRotaForecast } from "~redux/actions"
+import { selectFetchWeeklyRotaIsInProgress } from "~redux/selectors"
+import Spinner from "~components/spinner"
 
 class WeeklyRotaForecast extends React.Component {
     static propTypes = {
@@ -16,6 +18,9 @@ class WeeklyRotaForecast extends React.Component {
         this.fetchForecastIfRequired(props);
     }
     render(){
+        if (this.props.isFetchingWeeklyRotaForecast) {
+            return <Spinner />
+        }
         if (!this.props.weeklyRotaForecast) {
             return null;
         }
@@ -40,7 +45,7 @@ class WeeklyRotaForecast extends React.Component {
 function mapStateToProps(state, ownProps){
     return {
         weeklyRotaForecast: state.weeklyRotaForecast,
-        isFetchingWeeklyRotaForecast: false
+        isFetchingWeeklyRotaForecast: selectFetchWeeklyRotaIsInProgress(state)
     }
 }
 

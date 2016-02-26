@@ -64,3 +64,7 @@ export function selectStaffMemberIsOnHolidayOnDate(state, staffId, date){
 
     return isOnHoliday;
 }
+
+export function selectFetchWeeklyRotaIsInProgress(state){
+    return !_.isEmpty(state.apiRequestsInProgress.FETCH_WEEKLY_ROTA_FORECAST);
+}
