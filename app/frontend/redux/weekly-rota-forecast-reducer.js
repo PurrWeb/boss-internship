@@ -1,4 +1,5 @@
 import {actionTypes} from "./actions.js"
+import oFetch from "o-fetch"
 
 export default function rotaForecastsReducer(state=null, action){
     switch(action.type) {

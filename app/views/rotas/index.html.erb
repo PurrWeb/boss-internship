@@ -38,6 +38,26 @@
       "kitchen_total_percentage": 2.5
     }
   })
+
+  window.boss.weeklyRotaForecast = {
+    "id": Math.floor(Math.random() * 10000000),
+    "url": "",
+    "rota": {
+      "id": null,
+      "url": null
+    },
+    "forecasted_take": 900000.00,
+    "total": 80000.00,
+    "total_percentage": 20.0,
+    "staff_total": 70000.00,
+    "staff_total_percentage": 10.0,
+    "pr_total": 11000.00,
+    "pr_total_percentage": 5.0,
+    "security_total": 2500.00,
+    "security_total_percentage": 2.5,
+    "kitchen_total": 2500.00,
+    "kitchen_total_percentage": 2.5
+  }
 <% end %>
 
 <%= react_component('RotaOverviewApp') %>

@@ -169,6 +169,14 @@ export function replaceAllRotaForecasts({rotaForecasts}) {
     }
 }
 
+actionTypes.REPLACE_WEEKLY_ROTA_FORECAST = "REPLACE_WEEKLY_ROTA_FORECAST";
+export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
+    return {
+        type: actionTypes.REPLACE_WEEKLY_ROTA_FORECAST,
+        weeklyRotaForecast
+    }
+}
+
 export const updateRotaStatus = createApiRequestAction({
     requestType: "UPDATE_ROTA_STATUS",
     makeRequest: makeApiRequest({
@@ -295,7 +303,8 @@ export function loadInitialRotaOverviewAppState(viewData){
         
         dispatch([
             replaceAllRotas({rotas: rotas}),
-            replaceAllRotaForecasts({rotaForecasts: forecasts})
+            replaceAllRotaForecasts({rotaForecasts: forecasts}),
+            replaceWeeklyRotaForecast({weeklyRotaForecast: viewData.weeklyRotaForecast})
         ]);
     }
 }
