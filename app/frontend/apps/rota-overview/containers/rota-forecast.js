@@ -1,5 +1,6 @@
 import React from "react"
 import _ from "underscore"
+import utils from "~lib/utils"
 import { connect } from "react-redux"
 import RotaForecastUi from "../components/rota-forecast"
 import { updateRotaForecast } from "~redux/actions"
@@ -12,7 +13,7 @@ class RotaForecast extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            forecastedTake: props.rotaForecast.forecasted_take
+            forecastedTake: utils.formatMoney(props.rotaForecast.forecasted_take)
         }
     }
     render(){
@@ -25,7 +26,7 @@ class RotaForecast extends React.Component {
     }
     onUpdateForecastClick(){
         this.props.updateRotaForecast({
-            forecastedTake: this.state.forecastedTake
+            forecastedTake: utils.parseMoney(this.state.forecastedTake)
         })
     }
 }

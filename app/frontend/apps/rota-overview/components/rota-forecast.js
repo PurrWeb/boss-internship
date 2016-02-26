@@ -26,7 +26,7 @@ export default class RotaForecast extends React.Component {
     getForecastHeaderRow(){
         var forecastedTakeComponent = <div>
             &pound;
-            {utils.formatMoney(this.props.forecastedTake)}
+            {this.props.forecastedTake}
         </div>;
         var updateForecastButton = null
 
@@ -35,7 +35,7 @@ export default class RotaForecast extends React.Component {
                 &pound;&nbsp;
                 <input
                     value={this.props.forecastedTake}
-                    style={{width: "80%", textAlign: "right"}}
+                    style={{width: "85%", textAlign: "right"}}
                     onChange={(event) => this.props.onForecastedTakeChanged(event.target.value)}
                     type="text" />
             </div>
