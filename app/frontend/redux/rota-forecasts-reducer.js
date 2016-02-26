@@ -1,4 +1,5 @@
 import _ from "underscore"
+import utils from "~lib/utils"
 import {actionTypes} from "./actions.js"
 
 export default function rotaForecastsReducer(state={}, action){
@@ -8,7 +9,9 @@ export default function rotaForecastsReducer(state={}, action){
         case actionTypes.UPDATE_ROTA_FORECAST_SUCCESS:
             var newForecast = action.rotaForecast;
             var existingRotaForecast = _.find(state, function(rotaForecast){
-                return rotaForecast.rota.id === newForecast.rota.id
+                var datesAreEqual = utils.datesAreEqual(rotaForecast.date, newForecast.date);
+                var venuesAreEqual = rotaForecast.venueId === newForecast.venueId;
+                return datesAreEqual && venuesAreEqual;
             });
 
             var newState = Object.assign({}, state, {[newForecast.id]: newForecast});

@@ -78,3 +78,11 @@ export function selectUpdateRotaForecastInProgress(state, {venueId, dateOfRota})
     }))
 }
 
+export function selectForecastByRotaId(state, rotaId){
+    var rota = state.rotas[rotaId];
+    return _(state.rotaForecasts).find(function(forecast){
+        var isSameDate = utils.datesAreEqual(rota.date, forecast.date);
+        var isSameVenue = rota.venue.id === forecast.venueId;
+        return isSameVenue && isSameDate;
+    })
+}

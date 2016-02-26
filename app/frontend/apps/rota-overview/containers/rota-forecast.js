@@ -4,7 +4,7 @@ import utils from "~lib/utils"
 import { connect } from "react-redux"
 import RotaForecastUi from "../components/rota-forecast"
 import { updateRotaForecast } from "~redux/actions"
-import { selectUpdateRotaForecastInProgress } from "~redux/selectors"
+import { selectUpdateRotaForecastInProgress, selectForecastByRotaId } from "~redux/selectors"
 
 class RotaForecast extends React.Component {
     static propTypes = {
@@ -37,9 +37,7 @@ class RotaForecast extends React.Component {
 }
 
 function mapStateToProps(state, ownProps){
-    var forecast = _(state.rotaForecasts).find(function(forecast){
-        return forecast.rota.id === ownProps.rotaId
-    });
+    var forecast = selectForecastByRotaId(state, ownProps.rotaId);
     var rota = state.rotas[ownProps.rotaId];
     return {
         rotaForecast: forecast,
@@ -67,7 +65,6 @@ function mergeProps(stateProps, dispatchProps, ownProps){
                 forecastedTake,
                 venueId: stateProps.rota.venue.id,
                 dateOfRota: stateProps.rota.date,
-                rotaIdJustForTestingRemoveLater: stateProps.rota.id,
                 errorHandlingComponent: componentId
             });
         }

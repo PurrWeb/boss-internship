@@ -39,6 +39,7 @@ class WeeklyRotaForecast extends React.Component {
         if (!this.props.weeklyRotaForecast.forecast) {
             return null;
         }
+
         return <RotaForecastUi
             rotaForecast={this.props.weeklyRotaForecast.forecast}
             forecastedTake={utils.formatMoney(this.props.weeklyRotaForecast.forecast.forecasted_take)}
