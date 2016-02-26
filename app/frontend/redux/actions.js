@@ -93,7 +93,7 @@ export const updateRotaForecast = createApiRequestAction({
         data: ({forecastedTake}) => {return {forecasted_take: forecastedTake} },
         getSuccessActionData: function(responseData){
             return {
-                rotaForecast: Object.assign({}, responseData, {venueId: 1})
+                rotaForecast: responseData
             }
         }
     })
@@ -302,12 +302,8 @@ export function loadInitialRotaOverviewAppState(viewData){
         var rotasArray = rotas = unprocessedRotasArray.map(backendData.processRotaObject);
         var rotas = indexById(rotas);
 
-        var forecasts = viewData.rotas.map(function(rotaContainerObject, i){
-            var forecast = rotaContainerObject.forecast;
 
-            return forecast;
-        });
-
+        var forecasts = viewData.rotaForecasts.map(backendData.processRotaForecastObject);
         forecasts = indexById(forecasts);
         
         dispatch([

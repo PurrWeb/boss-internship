@@ -82,7 +82,7 @@ export function selectForecastByRotaId(state, rotaId){
     var rota = state.rotas[rotaId];
     return _(state.rotaForecasts).find(function(forecast){
         var isSameDate = utils.datesAreEqual(rota.date, forecast.date);
-        var isSameVenue = rota.venue.id === forecast.venueId;
+        var isSameVenue = rota.venue.id === forecast.venue.id;
         return isSameVenue && isSameDate;
     })
 }
