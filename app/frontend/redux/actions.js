@@ -122,6 +122,8 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
     requestType: "FETCH_WEEKLY_ROTA_FORECAST",
     makeRequest: function({startOfWeek}, success, error) {
         setTimeout(function(){
+            // error({errors: {base: ["Something went wrong"]}})
+            // return;
             success({
                 weeklyRotaForecast: {
                     "id": Math.floor(Math.random() * 10000000),
