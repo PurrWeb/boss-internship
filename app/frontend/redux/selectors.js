@@ -1,4 +1,5 @@
 import _ from "underscore"
+import utils from "~lib/utils"
 
 export function selectStaffTypesWithShifts(state){
     var {rotaShifts, staff} = state;
@@ -52,7 +53,6 @@ export function selectStaffMemberPaidHolidays(state, staffId){
     })
 }
 
-
 export function selectStaffMemberIsOnHolidayOnDate(state, staffId, date){
     var staffMemberHolidays = selectStaffMemberHolidays(state, staffId);
     var isOnHoliday = false;
@@ -68,3 +68,13 @@ export function selectStaffMemberIsOnHolidayOnDate(state, staffId, date){
 export function selectFetchWeeklyRotaIsInProgress(state){
     return !_.isEmpty(state.apiRequestsInProgress.FETCH_WEEKLY_ROTA_FORECAST);
 }
+
+export function selectUpdateRotaForecastInProgress(state, {venueId, dateOfRota}){
+    var updatesInProgress = state.apiRequestsInProgress.UPDATE_ROTA_FORECAST;
+    return !_.isEmpty(_(updatesInProgress).filter(function(update){
+        var isSameDate = utils.datesAreEqual(update.dateOfRota, dateOfRota);
+        var isSameVenue = venueId === update.venueId;
+        return isSameVenue && isSameDate;
+    }))
+}
+

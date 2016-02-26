@@ -1,5 +1,6 @@
 import React from "react"
 import utils from "~lib/utils"
+import Spinner from "~components/spinner"
 
 export default class RotaForecast extends React.Component {
     static propTypes = {
@@ -7,21 +8,30 @@ export default class RotaForecast extends React.Component {
         forecastedTake: React.PropTypes.string.isRequired,
         canEditForecastedTake: React.PropTypes.bool,
         onForecastedTakeChanged: React.PropTypes.func,
-        onUpdateForecastClick: React.PropTypes.func
+        onUpdateForecastClick: React.PropTypes.func,
+        isUpdatingForecast: React.PropTypes.bool
     }
     render(){  
-        var rotaForecast = this.props.rotaForecast;
+        return <div className="rota-forecast">
+            {this.getForecastHeaderRow()}
+            {this.getForecastBody()}
+        </div>
+    }
+    getForecastBody(){
+        if (this.props.isUpdatingForecast){
+            return <div style={{marginTop: 10}}>
+                <Spinner />
+            </div>
+        }
 
-        var dataRowComponents = getDataRows(rotaForecast).map(
+        var dataRows = getDataRows(this.props.rotaForecast);
+        var dataRowComponents = dataRows.map(
             (row) => this.getDataRowComponent(row)
         );
 
-        return <div className="rota-forecast">
-            {this.getForecastHeaderRow()}
-            <div>
-                {dataRowComponents}
-            </div>
-        </div>
+        return <div>
+            {dataRowComponents}
+        </div>;
     }
     getForecastHeaderRow(){
         var forecastedTakeComponent = <div>

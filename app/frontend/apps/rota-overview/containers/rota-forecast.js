@@ -4,6 +4,7 @@ import utils from "~lib/utils"
 import { connect } from "react-redux"
 import RotaForecastUi from "../components/rota-forecast"
 import { updateRotaForecast } from "~redux/actions"
+import { selectUpdateRotaForecastInProgress } from "~redux/selectors"
 
 class RotaForecast extends React.Component {
     static propTypes = {
@@ -22,7 +23,8 @@ class RotaForecast extends React.Component {
             forecastedTake={this.state.forecastedTake}
             canEditForecastedTake={this.props.canEditForecastedTake}
             onForecastedTakeChanged={(forecastedTake) => this.setState({forecastedTake})}
-            onUpdateForecastClick={() => this.onUpdateForecastClick()} />
+            onUpdateForecastClick={() => this.onUpdateForecastClick()}
+            isUpdatingForecast={this.props.isUpdatingForecast} />
     }
     onUpdateForecastClick(){
         this.props.updateRotaForecast({
@@ -35,10 +37,14 @@ function mapStateToProps(state, ownProps){
     var forecast = _(state.rotaForecasts).find(function(forecast){
         return forecast.rota.id === ownProps.rotaId
     });
-
+    var rota = state.rotas[ownProps.rotaId];
     return {
         rotaForecast: forecast,
-        rota: state.rotas[forecast.rota.id]
+        rota,
+        isUpdatingForecast: selectUpdateRotaForecastInProgress(state, {
+            venueId: rota.venue.id,
+            dateOfRota: rota.date
+        })
     }
 }
 
@@ -55,7 +61,7 @@ function mergeProps(stateProps, dispatchProps, ownProps){
         updateRotaForecast: function({forecastedTake}){
             dispatchProps.updateRotaForecastWithAllDetails({
                 forecastedTake,
-                venueId: stateProps.rota.venueId,
+                venueId: stateProps.rota.venue.id,
                 dateOfRota: stateProps.rota.date,
                 rotaIdJustForTestingRemoveLater: stateProps.rota.id
             });
