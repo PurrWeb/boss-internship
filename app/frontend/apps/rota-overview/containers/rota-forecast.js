@@ -13,6 +13,7 @@ class RotaForecast extends React.Component {
     }
     constructor(props){
         super(props);
+        this.componentId = _.uniqueId();
         this.state = {
             forecastedTake: utils.formatMoney(props.rotaForecast.forecasted_take)
         }
@@ -24,11 +25,13 @@ class RotaForecast extends React.Component {
             canEditForecastedTake={this.props.canEditForecastedTake}
             onForecastedTakeChanged={(forecastedTake) => this.setState({forecastedTake})}
             onUpdateForecastClick={() => this.onUpdateForecastClick()}
-            isUpdatingForecast={this.props.isUpdatingForecast} />
+            isUpdatingForecast={this.props.isUpdatingForecast}
+            errors={this.props.componentErrors[this.componentId]} />
     }
     onUpdateForecastClick(){
         this.props.updateRotaForecast({
-            forecastedTake: utils.parseMoney(this.state.forecastedTake)
+            forecastedTake: utils.parseMoney(this.state.forecastedTake),
+            componentId: this.componentId
         })
     }
 }
@@ -41,6 +44,7 @@ function mapStateToProps(state, ownProps){
     return {
         rotaForecast: forecast,
         rota,
+        componentErrors: state.componentErrors,
         isUpdatingForecast: selectUpdateRotaForecastInProgress(state, {
             venueId: rota.venue.id,
             dateOfRota: rota.date
@@ -58,12 +62,13 @@ function mapDispatchToProps(dispatch, ownProps){
 
 function mergeProps(stateProps, dispatchProps, ownProps){
     var extraProps = {
-        updateRotaForecast: function({forecastedTake}){
+        updateRotaForecast: function({forecastedTake, componentId}){
             dispatchProps.updateRotaForecastWithAllDetails({
                 forecastedTake,
                 venueId: stateProps.rota.venue.id,
                 dateOfRota: stateProps.rota.date,
-                rotaIdJustForTestingRemoveLater: stateProps.rota.id
+                rotaIdJustForTestingRemoveLater: stateProps.rota.id,
+                errorHandlingComponent: componentId
             });
         }
     };

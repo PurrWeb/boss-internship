@@ -1,6 +1,7 @@
 import React from "react"
 import utils from "~lib/utils"
 import Spinner from "~components/spinner"
+import ComponentErrors from "~components/component-errors"
 
 export default class RotaForecast extends React.Component {
     static propTypes = {
@@ -29,7 +30,7 @@ export default class RotaForecast extends React.Component {
             (row) => this.getDataRowComponent(row)
         );
 
-        return <div>
+        return <div className="rota-forecast__body">
             {dataRowComponents}
         </div>;
     }
@@ -57,16 +58,30 @@ export default class RotaForecast extends React.Component {
             </a>
         }
 
-        return <div className="row rota-forecast__header-row">
-            <div className="col-md-4">
-                Forecast
+        return <div className="rota-forecast__header-row row">
+            <div className="col-md-12">
+                <div className="row">
+                    <div className="col-md-4">
+                        Forecast
+                    </div>
+                    <div className="col-md-5" style={{textAlign: "right"}}>
+                        {forecastedTakeComponent}
+                    </div>
+                    <div className="col-md-3" style={{textAlign: "right"}}>
+                        {updateForecastButton}
+                    </div>
+                </div>
             </div>
-            <div className="col-md-5" style={{textAlign: "right"}}>
-                {forecastedTakeComponent}
-            </div>
-            <div className="col-md-3" style={{textAlign: "right"}}>
-                {updateForecastButton}
-            </div>
+            {this.getErrorComponent()}
+
+        </div>
+    }
+    getErrorComponent(){
+        if (!this.props.errors){
+            return null;
+        }
+        return <div className="col-md-12" style={{marginBottom: -10, marginTop: 10}}>
+            <ComponentErrors errors={this.props.errors} />
         </div>
     }
     getDataRowComponent(row){

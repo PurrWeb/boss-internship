@@ -89,6 +89,10 @@ export const updateRotaForecast = createApiRequestAction({
     requestType: "UPDATE_ROTA_FORECAST",
     makeRequest: function({forecastedTake, dateOfRota, venueId, rotaIdJustForTestingRemoveLater}, success, error){
         setTimeout(function(){
+            if (Math.random() > .5){
+                error({errors: {base: ["Something went wrong"]}})
+                return;
+            }
             success({
                 rotaForecast: {
                     "id": Math.floor(Math.random() * 10000000),
