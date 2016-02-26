@@ -9,6 +9,7 @@ import rotaStatusTitles from "~lib/rota-status-titles"
 import { selectStaffTypesWithShifts } from "~redux/selectors"
 import PublishRotaWeekButtonContainer from "./publish-rota-week-button-container"
 import WeekAndVenueSelector from "~components/week-and-venue-selector"
+import WeeklyRotaForecast from "./containers/weekly-rota-forecast"
 
 function indexById(data){
     return _.indexBy(data, "id")
@@ -40,7 +41,11 @@ class RotaOverviewPage extends Component {
                     </WeekAndVenueSelector>
                 </div>
                 <div className="col-md-3">
-                    
+
+                </div>
+                <div className="col-md-3">
+                    <h2 style={{fontSize: 20, marginTop: 0}}>Weekly Forecast</h2>
+                    <WeeklyRotaForecast /> 
                 </div>
             </div>
             <br/>
