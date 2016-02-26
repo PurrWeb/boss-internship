@@ -2,7 +2,11 @@ import React from "react"
 
 export default class RotaForecast extends React.Component {
     static propTypes = {
-        rotaForecast: React.PropTypes.object.isRequired
+        rotaForecast: React.PropTypes.object.isRequired,
+        forecastedTake: React.PropTypes.string.isRequired,
+        canEditForecastedTake: React.PropTypes.bool,
+        onForecastedTakeChanged: React.PropTypes.func,
+        onUpdateForecastClick: React.PropTypes.func
     }
     render(){  
         var rotaForecast = this.props.rotaForecast;
@@ -12,7 +16,41 @@ export default class RotaForecast extends React.Component {
         );
 
         return <div>
+            {this.getForecastHeaderRow()}
             {dataRowComponents}
+        </div>
+    }
+    getForecastHeaderRow(){
+        var forecastedTakeComponent = this.props.forecastedTake;
+        var updateForecastButton = null
+
+        if (this.props.canEditForecastedTake){
+            forecastedTakeComponent = <div>
+                &pound;&nbsp;
+                <input
+                    value={this.props.forecastedTake}
+                    style={{width: "80%", textAlign: "right"}}
+                    onChange={(event) => this.props.onForecastedTakeChanged(event.target.value)}
+                    type="text" />
+            </div>
+
+            updateForecastButton = <a
+                className="btn btn-default"
+                onClick={this.props.onUpdateForecastClick} >
+                Update
+            </a>
+        }
+
+        return <div className="row">
+            <div className="col-md-4">
+                Forecast
+            </div>
+            <div className="col-md-5" style={{textAlign: "right"}}>
+                {forecastedTakeComponent}
+            </div>
+            <div className="col-md-3">
+                {updateForecastButton}
+            </div>
         </div>
     }
     getDataRowComponent(row){

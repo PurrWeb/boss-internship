@@ -29,7 +29,9 @@ export default class RotaOverviewView extends Component {
                     onSelectionShiftsChange={(shifts) => this.setState({selectionData: shifts})} />
             </div>
             <div className="col-md-3">
-                <RotaForecast rotaId={this.props.rota.id} />
+                <RotaForecast
+                    rotaId={this.props.rota.id}
+                    canEditForecastedTake={true} />
                 <ChartSelectionView
                     previewComponent={previewShiftList}
                     selectionComponent={selectionShiftList} />

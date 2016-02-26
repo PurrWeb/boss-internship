@@ -5,10 +5,25 @@ import RotaForecastUi from "../components/rota-forecast"
 
 class RotaForecast extends React.Component {
     static propTypes = {
-        rotaId: React.PropTypes.any.isRequired
+        rotaId: React.PropTypes.any.isRequired,
+        canEditForecastedTake: React.PropTypes.bool
+    }
+    constructor(props){
+        super(props);
+        this.state = {
+            forecastedTake: props.rotaForecast.forecasted_take
+        }
     }
     render(){
-        return <RotaForecastUi rotaForecast={this.props.rotaForecast} />
+        return <RotaForecastUi
+            rotaForecast={this.props.rotaForecast}
+            forecastedTake={this.state.forecastedTake}
+            canEditForecastedTake={this.props.canEditForecastedTake}
+            onForecastedTakeChanged={(forecastedTake) => this.setState({forecastedTake})}
+            onUpdateForecastClick={() => this.onUpdateForecastClick()} />
+    }
+    onUpdateForecastClick(){
+        alert("todo")
     }
 }
 
