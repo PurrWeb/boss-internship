@@ -12,7 +12,7 @@ export default class WeekAndVenueSelector extends React.Component {
     }
     render(){
         return <div className="row">
-            <div className="col-md-3">
+            <div className="col-md-6">
                 <WeekPicker
                     selectionStartDate={this.props.weekStartDate}
                     onChange={(selection) => {
@@ -23,7 +23,7 @@ export default class WeekAndVenueSelector extends React.Component {
                         });
                     } }/>
             </div>
-            <div className="col-md-3">
+            <div className="col-md-6">
                 <VenueDropdown
                     venues={_.values(this.props.venues)}
                     selectedVenue={this.props.venueId}

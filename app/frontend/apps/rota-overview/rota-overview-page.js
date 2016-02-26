@@ -26,7 +26,7 @@ class RotaOverviewPage extends Component {
         var lastRota = _.last(rotas);
         return <div className="container">
             <div className="row">
-                <div className="col-md-12">
+                <div className="col-md-6">
                     <WeekAndVenueSelector
                         venueId={firstRota.venue.id}
                         weekStartDate={firstRota.date}
