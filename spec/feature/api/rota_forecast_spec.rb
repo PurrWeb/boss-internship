@@ -209,6 +209,21 @@ RSpec.describe 'Api access' do
         end
       end
     end
+
+    describe '#weekly_show' do
+      let(:url) do
+        url_helpers.
+          weekly_api_v1_venue_rota_forecast_path(
+            venue_id: venue.id,
+            id: UIRotaDate.format(date)
+          )
+      end
+      let(:response) { get(url) }
+
+      specify do
+        expect(response.status).to eq(ok_status)
+      end
+    end
   end
 
   private

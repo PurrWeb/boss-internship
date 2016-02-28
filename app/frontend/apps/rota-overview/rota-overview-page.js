@@ -47,7 +47,8 @@ class RotaOverviewPage extends Component {
                 <div className="col-md-3">
                     <h2 style={{fontSize: 20, marginTop: 0}}>Weekly Forecast</h2>
                     <WeeklyRotaForecast
-                        startOfWeek={utils.getWeekStartDate(firstRota.date)} /> 
+                        venueId={firstRota.venue.id}
+                        startOfWeek={utils.getWeekStartDate(firstRota.date)} />
                 </div>
             </div>
             <br/>

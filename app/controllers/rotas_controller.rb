@@ -29,6 +29,11 @@ class RotasController < ApplicationController
         forecast
       end
 
+      weekly_rota_forecast = GenerateWeeklyRotaForecast.new(
+        week: RotaWeek.new(start_date),
+        venue: venue
+      ).call
+
       render locals: {
         accessible_venues: accessible_venues_for(current_user),
         venue: venue,
@@ -36,7 +41,8 @@ class RotasController < ApplicationController
         end_date: end_date,
         rotas: rotas,
         staff_types: StaffType.all,
-        rota_forecasts: rota_forecasts
+        rota_forecasts: rota_forecasts,
+        weekly_rota_forecast: weekly_rota_forecast
       }
     else
       redirect_to(rotas_path(redirect_params))

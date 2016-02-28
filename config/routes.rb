@@ -74,6 +74,7 @@ Rails.application.routes.draw do
       resources :venues, only: :show do
         resources :rota_forecasts, only: [:show] do
           member do
+            get  :weekly
             post :update
           end
         end

@@ -47,6 +47,19 @@ module Api
         end
       end
 
+      def weekly
+        date = rota_date_from_params
+        week = RotaWeek.new(date)
+        venue = venue_from_params
+
+        weekly_forecast = GenerateWeeklyRotaForecast.new(
+          week: week,
+          venue: venue
+        ).call
+
+        render locals: { weekly_forecast: weekly_forecast }
+      end
+
       private
       def venue_from_params
         Venue.find(params.fetch(:venue_id))

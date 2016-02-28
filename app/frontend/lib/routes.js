@@ -71,6 +71,16 @@ const apiRoutes = {
         },
         method: "POST"
     },
+    weeklyRotaForecast: {
+        getPath: function({venueId, startOfWeek}){
+            return [
+              "venues/" + venueId,
+               "/rota_forecasts/" + utils.formatDateForApi(startOfWeek),
+               '/weekly'
+            ].join("");
+        },
+        method: "GET"
+    },
     updateRotaForecast: {
         getPath: function({venueId, dateOfRota}){
             return "venues/" + venueId + "/rota_forecasts/" + utils.formatDateForApi(dateOfRota);
