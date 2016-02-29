@@ -17,7 +17,7 @@ class RotasController < ApplicationController
       end
 
       rota_forecasts = rotas.map do |rota|
-        forecast = RotaForecast.where(rota: rota).first
+        forecast = RotaForecast.where(rota: rota).last
 
         if !forecast.present?
           forecast = GenerateRotaForecast.new(

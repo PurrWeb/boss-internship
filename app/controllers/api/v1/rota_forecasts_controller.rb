@@ -8,7 +8,7 @@ module Api
         )
         authorize! :manage, rota
 
-        rota_forecast = RotaForecast.where(rota: rota).first
+        rota_forecast = RotaForecast.where(rota: rota).last
         rota_forecast ||= GenerateRotaForecast.new(
           forecasted_take: Money.new(0),
           rota: rota
@@ -25,7 +25,7 @@ module Api
         authorize! :manage, rota
 
         forecasted_take = forecasted_take_from_params
-        curret_forecast = RotaForecast.where(rota: rota).first
+        curret_forecast = RotaForecast.where(rota: rota).last
         if curret_forecast && curret_forecast.forecasted_take == forecasted_take
           render "show", locals: { rota_forecast: curret_forecast }
         else
