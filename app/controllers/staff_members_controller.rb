@@ -144,13 +144,14 @@ class StaffMembersController < ApplicationController
       :employment_status_b,
       :employment_status_c,
       :employment_status_d,
-      :pay_rate_id,
       name_attributes: [
         :first_name,
         :surname
       ],
       staff_member_venue_attributes: [:venue_id]
     ]
+
+    require_attributes << :pay_rate_id if pay_rate_from_params.andand.editable_by?(current_user)
 
     require_attributes << {
       address_attributes: [
@@ -204,8 +205,7 @@ class StaffMembersController < ApplicationController
   end
 
   def update_employment_details_params(staff_member)
-    params.require(:staff_member).
-      permit(
+    allowed_params = [
         :national_insurance_number,
         :staff_type,
         :hours_preference_note,
@@ -215,8 +215,16 @@ class StaffMembersController < ApplicationController
         :employment_status_b,
         :employment_status_c,
         :employment_status_d,
-        :pay_rate_id,
-        staff_member_venue_attributes: [:venue_id]
+        :pay_rate_id
+    ]
+
+    allowed_params << :pay_rate_id if pay_rate_from_params.andand.editable_by?(current_user)
+
+    allowed_params << { staff_member_venue_attributes: [:venue_id] }
+
+    params.require(:staff_member).
+      permit(
+        *allowed_params
       ).deep_merge(
         staff_type: staff_type_from_params,
         staff_member_venue_attributes: {
@@ -235,6 +243,10 @@ class StaffMembersController < ApplicationController
           :surname
         ]
       )
+  end
+
+  def pay_rate_from_params
+    PayRate.find_by(id: params[:staff_member][:pay_rate_id])
   end
 
   def staff_type_from_params

@@ -10,7 +10,7 @@ module PageObject
     end
 
     def form
-      @form ||= CreateStaffMemberFromUserForm.new(self)
+      @form ||= CreateStaffMemberFromUserForm.new(user: user, parent: self)
     end
 
     def assert_on_correct_page

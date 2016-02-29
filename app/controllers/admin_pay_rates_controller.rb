@@ -1,15 +1,5 @@
-class PayRatesController < ApplicationController
+class AdminPayRatesController < ApplicationController
   before_action :authorize_admin
-
-  def index
-    pay_rates = PayRate.named
-    admin_pay_rates = PayRate.admin
-
-    render locals: {
-      pay_rates: pay_rates,
-      admin_pay_rates: admin_pay_rates
-    }
-  end
 
   def new
     pay_rate = PayRate.new
@@ -21,7 +11,7 @@ class PayRatesController < ApplicationController
 
     if pay_rate.save
       flash[:success] = "Pay Rate added successfully"
-      redirect_to action: :index
+      redirect_to pay_rates_path
     else
       flash.now[:error] = "There was a problem creating this pay rate"
       render 'new', locals: { pay_rate: pay_rate }
@@ -40,7 +30,7 @@ class PayRatesController < ApplicationController
         :name,
         :description
       ).merge(
-        pay_rate_type: 'named',
+        pay_rate_type: 'admin',
         cents_per_hour: cents_per_hour_from_params
       )
   end

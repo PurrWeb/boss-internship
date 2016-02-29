@@ -12,7 +12,7 @@ RSpec.feature 'Adding a new staff member' do
       pay_rate: pay_rate
     )
   end
-  let(:add_staff_member_page) { PageObject::AddStaffMemberPage.new }
+  let(:add_staff_member_page) { PageObject::AddStaffMemberPage.new(user: dev_user) }
   let(:staff_members_index_page) { PageObject::StaffMembersIndexPage.new }
 
   before do

@@ -3,7 +3,7 @@ require 'feature/feature_spec_helper'
 RSpec.feature 'Staff members section index page' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:staff_members_index_page) { PageObject::StaffMembersIndexPage.new }
-  let(:add_staff_member_page) { PageObject::AddStaffMemberPage.new }
+  let(:add_staff_member_page) { PageObject::AddStaffMemberPage.new(user: dev_user) }
 
   before do
     login_as(dev_user)

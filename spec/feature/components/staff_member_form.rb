@@ -2,6 +2,11 @@ require 'base64'
 
 module PageObject
   class StaffMemberForm < Component
+    def initialize(user:, parent:)
+      @user = user
+      super(parent)
+    end
+
     page_action :fill_in_for do |staff_member|
       upload_avatar_image
       if staff_member.venue.present?
@@ -19,8 +24,8 @@ module PageObject
       scope.fill_in('Day Preference', with: staff_member.day_perference_note)
       scope.fill_in('Hours Preference', with: staff_member.hours_preference_note)
       starts_at_field.fill_in_date(staff_member.starts_at)
-      if staff_member.pay_rate.present?
-        scope.select(PayRateControlRate.new(staff_member.pay_rate).name, from: 'Pay rate')
+      if staff_member.pay_rate.present? && staff_member.pay_rate.editable_by?(user)
+        scope.select(PayRateControlRate.new(pay_rate: staff_member.pay_rate, user: user).name, from: 'Pay rate')
       end
     end
 
@@ -41,7 +46,7 @@ module PageObject
     end
 
     private
-    attr_reader :hidden_avatar_field_selector
+    attr_reader :hidden_avatar_field_selector, :user
 
     def starts_at_field
       @starts_at_field ||= DatePickerField.new(self, selector: '.staff-member-starts-at-field')

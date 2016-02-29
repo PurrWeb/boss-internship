@@ -61,6 +61,8 @@ Rails.application.routes.draw do
 
   resources :pay_rates, only: [:index, :new, :create]
 
+  resources :admin_pay_rates, only: [:new, :create]
+
   resources :clock_in_clock_out, only: [:index]
 
   namespace :api, defaults: { format: 'json' } do
