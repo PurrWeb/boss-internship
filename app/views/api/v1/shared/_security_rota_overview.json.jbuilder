@@ -2,6 +2,8 @@ staff_types = StaffType.where(role: 'security')
 staff_members = StaffMember.joins(:staff_type).merge(staff_types)
 rota_shifts = RotaShift.enabled.joins(:rota).merge(rotas).joins(:staff_member).merge(staff_members)
 
+json.date date.iso8601
+
 json.rotas do
   json.partial! partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas }
 end
