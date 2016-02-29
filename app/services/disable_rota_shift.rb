@@ -16,6 +16,7 @@ class DisableRotaShift
 
       if shift.rota_published?
         shift.staff_member.mark_requiring_notification!
+        UpdateRotaForecast.new(rota: shift.rota).call
       end
     end
   end

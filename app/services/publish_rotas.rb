@@ -17,6 +17,8 @@ class PublishRotas
             joins(:rota_shifts).
             merge(rota.rota_shifts).
             find_each(&:mark_requiring_notification!)
+
+          UpdateRotaForecast.new(rota: rota).call
         end
       end
     end

@@ -35,6 +35,7 @@ class CreateRotaShift
 
       if result && rota_shift.rota_published?
         rota_shift.staff_member.mark_requiring_notification!
+        UpdateRotaForecast.new(rota: rota).call
       end
 
       ActiveRecord::Rollback unless result

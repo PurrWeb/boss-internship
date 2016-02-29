@@ -61,12 +61,17 @@ class StaffMembersController < ApplicationController
   def update_employment_details
     staff_member = StaffMember.find(params[:id])
 
-    if staff_member.update_attributes(update_employment_details_params(staff_member))
+    result = UpdateStaffMemberEmploymentDetails.new(
+      staff_member: staff_member,
+      params: update_employment_details_params(staff_member)
+    ).call
+
+    if result.success?
       flash[:success] = "Staff member updated successfully"
-      redirect_to staff_member_path(staff_member, tab: 'employment-details')
+      redirect_to staff_member_path(result.staff_member, tab: 'employment-details')
     else
       flash.now[:error] = "There was a problem updating this staff member"
-      render 'edit_employment_details', locals: { staff_member: staff_member }
+      render 'edit_employment_details', locals: { staff_member: result.staff_member }
     end
   end
 
