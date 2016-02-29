@@ -28,7 +28,7 @@
 
           <% if can?(:manage, :security_rota) %>
             <li class="nav-security-rota-section">
-              <%= link_to(security_rotas_path, class: "nav-section-header-link #{'active' if in_rotas_section? }") do %>
+              <%= link_to(security_rotas_path, class: "nav-section-header-link") do %>
                 Security Rota
               <% end %>
             </li>
