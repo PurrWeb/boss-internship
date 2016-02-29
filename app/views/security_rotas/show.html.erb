@@ -14,8 +14,15 @@
 
     rotaData.holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: holidays } %>
 
+
     window.boss = window.boss || {};
     window.boss.rota = rotaData;
+
+    window.boss.pageOptions = {
+      staffTypeRotaOptions: {
+        staffTypeSlug: "security"
+      }
+    }
   })()
 </script>
 

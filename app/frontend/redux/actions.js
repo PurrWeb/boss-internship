@@ -239,17 +239,36 @@ export function setPageOptions(options) {
 }
 
 
+
 export function loadInitialRotaAppState(viewData) {
-    let rotaData = viewData.rotas;
-    let staffTypeData = viewData.staff_types;
-    let rotaShiftData = viewData.rota_shifts;
-    let staffMemberData = viewData.staff_members;
-    let venueData = viewData.venues;
-    let holidays = viewData.holidays;
+    return genericLoadInitialRotaAppState(viewData, "venue")
+}
+
+export function loadInitalStaffTypeRotaAppState(viewData){
+    return genericLoadInitialRotaAppState(viewData, "staffType")
+}
+
+function genericLoadInitialRotaAppState(viewData, rotaType){
+    let rotaData = viewData.rota.rotas;
+    let staffTypeData = viewData.rota.staff_types;
+    let rotaShiftData = viewData.rota.rota_shifts;
+    let staffMemberData = viewData.rota.staff_members;
+    let venueData = viewData.rota.venues;
+    let holidays = viewData.rota.holidays;
 
     rotaData = rotaData.map(backendData.processRotaObject);
     rotaShiftData = rotaShiftData.map(backendData.processShiftObject);
     holidays = holidays.map(backendData.processHolidayObject)
+
+    var pageOptions = {};
+    if (rotaType === "venue"){
+        pageOptions = {
+            displayedRota: _.first(rotaData).id
+        }
+    } 
+    if (rotaType === "staffType"){
+        pageOptions = viewData.pageOptions;
+    }
     
     return function(dispatch){
         dispatch([
@@ -271,11 +290,8 @@ export function loadInitialRotaAppState(viewData) {
             replaceAllHolidays({
                 holidays: indexById(holidays)
             }),
-            setPageOptions({pageOptions: {
-                displayedRota: _.first(rotaData).id
-            }})
+            setPageOptions({pageOptions})
         ]);
-
     }
 }
 

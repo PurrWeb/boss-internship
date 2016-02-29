@@ -66,7 +66,7 @@ function mapStateToProps(state){
         staff: state.staff,
         staffTypes: state.staffTypes,
         venues: state.venues,
-        dateOfRota: state.rotas[state.pageOptions.displayedRota].date
+        dateOfRota: _.values(state.rotas)[0].date
     }
 }
 

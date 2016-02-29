@@ -6,8 +6,8 @@ import * as actionCreators from "~redux/actions.js"
 
 export default class StaffTypeRotaApp extends Component {
     componentWillMount(){
-        let viewData = window.boss.rota;
-        store.dispatch(actionCreators.loadInitialRotaAppState(viewData));
+        let viewData = window.boss;
+        store.dispatch(actionCreators.loadInitalStaffTypeRotaAppState(viewData));
     }
     render() {
         return <Provider store={store}>

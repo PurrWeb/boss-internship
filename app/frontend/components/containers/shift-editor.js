@@ -105,8 +105,8 @@ class ShiftEditor extends Component {
     }
 }
 
-function mapStateToProps(state){
-    var rotaId = state.pageOptions.displayedRota;
+function mapStateToProps(state, ownProps){
+    var rotaId = ownProps.shift.rota.id;
     var rota = state.rotas[rotaId];
     return {
         componentErrors: state.componentErrors,
