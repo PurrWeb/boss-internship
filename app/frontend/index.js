@@ -26,3 +26,6 @@ registerComponent("StaffMemberFormAvatarImage", StaffMemberFormAvatarImage)
 
 import HolidayReportView from "./apps/holiday-report/holiday-report-app"
 registerComponent("HolidayReportApp", HolidayReportView);
+
+import StaffTypeRotaOverviewApp from "./apps/staff-type-rota-overview"
+registerComponent("StaffTypeRotaOverviewApp", StaffTypeRotaOverviewApp);

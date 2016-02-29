@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  $(function(){
+  (function(){
     var securityRotaOverviews = [];
 
     <% (week.start_date..week.end_date).each do |date| %>
@@ -15,7 +15,10 @@
 
     window.boss = window.boss || {};
     window.boss.securityRotaOverviews = securityRotaOverviews;
-  });
+  })();
 </script>
 
-<h1>Security Rota <%= week.start_date %> to <%= week.end_date %></h1>
+<div class="container">
+  <h1>Security Rota <%= week.start_date %> to <%= week.end_date %></h1>
+  <%= react_component("StaffTypeRotaOverviewApp") %>
+</div>
