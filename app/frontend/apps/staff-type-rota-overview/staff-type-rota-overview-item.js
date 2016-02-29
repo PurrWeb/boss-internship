@@ -5,7 +5,7 @@ import { appRoutes } from "~lib/routes"
 
 export default class StaffTypeRotaOverviewItem extends Component {
     static propTypes = {
-        rota: React.PropTypes.object.isRequired,
+        dateOfRota: React.PropTypes.instanceOf(Date).isRequired,
         rotaShifts: React.PropTypes.array.isRequired,
         staff: React.PropTypes.object.isRequired,
         staffTypes: React.PropTypes.object.isRequired,
@@ -13,10 +13,10 @@ export default class StaffTypeRotaOverviewItem extends Component {
     }
     render() {
         var staffTypeSlug = this.props.staffTypeRotaOptions.staffTypeSlug;
-        var dateOfRota = this.props.rota.date;
+        var dateOfRota = this.props.dateOfRota;
         return <div>
             <a href={appRoutes.staffTypeRota({staffTypeSlug, dateOfRota})}>
-                <h2>{moment(this.props.rota.date).format("ddd D MMMM YYYY")}</h2>
+                <h2>{moment(dateOfRota).format("ddd D MMMM YYYY")}</h2>
             </a>
             <div className="row">
                 <div className="col-md-9">
