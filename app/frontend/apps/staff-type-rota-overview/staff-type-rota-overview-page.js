@@ -11,9 +11,10 @@ export default class StaffTypeRotaOverviewPage extends Component {
         return <div>
             {this.props.rotaDetailsObjects.map(function(rotaDetails){
                 var rota = backendData.processRotaObject(rotaDetails.rotas[0]);
+                var shifts = rotaDetails.rota_shifts.map(backendData.processShiftObject);
                 return <StaffTypeRotaOverviewItem
                     rota={rota}
-                    rotaShifts={rotaDetails.rota_shifts}
+                    rotaShifts={shifts}
                     staff={utils.indexById(rotaDetails.staff_members)}
                     staffTypes={utils.indexById(rotaDetails.staff_types)}
                     staffTypeRotaOptions={window.boss.pageOptions.staffTypeRota}
