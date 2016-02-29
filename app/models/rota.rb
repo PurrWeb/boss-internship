@@ -34,6 +34,10 @@ class Rota < ActiveRecord::Base
     state_machine.current_state.to_sym == :published
   end
 
+  def forecastable?
+    date >= RotaWeek.new(date).start_date
+  end
+
   def start_time
     date.beginning_of_day.utc + 8.hours
   end
