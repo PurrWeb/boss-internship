@@ -1,6 +1,5 @@
 import React from "react"
-import moment from "moment"
-import utils from "~lib/utils"
+import GenericRotaNavigation from "~components/rota-navigation"
 import {appRoutes} from "~lib/routes"
 
 export default class RotaNavigation extends React.Component {
@@ -9,55 +8,22 @@ export default class RotaNavigation extends React.Component {
         venueId: React.PropTypes.number.isRequired
     }
     render(){
-        var dates = this.getDates();
-        return <div style={{textAlign: "center", overflow: "hidden"}}>
-            <div style={{float: "left"}}>
-                &lt; {this.getRotaLink(dates.previousDate)}
-            </div>
-            <div style={{float: "right"}}>
-                {this.getRotaLink(dates.nextDate)} &gt; 
-            </div>
-            <div>
-                {this.getRotaOverviewLink(dates.weekStartDate, dates.weekEndDate)}
-            </div>
-        </div>
-    }
-    getDates(){
-        var { dateOfRota } = this.props;
-
-        var previousDate = new Date(dateOfRota);
-        previousDate.setDate(dateOfRota.getDate() - 1);
-
-        var nextDate = new Date(this.props.dateOfRota);
-        nextDate.setDate(dateOfRota.getDate() + 1);
-
-        var weekStartDate = utils.getWeekStartDate(dateOfRota);
-        var weekEndDate = utils.getWeekEndDate(dateOfRota);
-
-        return {
-            previousDate,
-            nextDate,
-            weekStartDate,
-            weekEndDate
-        }
+        return <GenericRotaNavigation
+            dateOfRota={this.props.dateOfRota}
+            getRotaLink={(date) => this.getRotaLink(date)}
+            getRotaOverviewLink={(weekStartDate, weekEndDate) => this.getRotaOverviewLink({weekStartDate, weekEndDate})} />
     }
     getRotaLink(date){
-        var href = appRoutes.rota({
+        return appRoutes.rota({
             venueId: this.props.venueId,
             date
         });
-        return <a href={href}>
-            {moment(date).format("DD MMM YYYY")}
-        </a>
     }
-    getRotaOverviewLink(weekStartDate, weekEndDate) {
-        var href = appRoutes.rotaOverview({
+    getRotaOverviewLink({weekStartDate, weekEndDate}) {
+        return appRoutes.rotaOverview({
             venueId: this.props.venueId,
             startDate: weekStartDate,
             endDate: weekEndDate
         });
-        return <a href={href}>
-            Weekly Rota Overview
-        </a>
     }
 }
