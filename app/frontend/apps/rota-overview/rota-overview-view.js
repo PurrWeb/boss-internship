@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import moment from "moment"
 import ShiftList from "./shift-list"
-import RotaOverviewChart from "./rota-overview-chart"
+import RotaOverviewChart from "~components/rota-overview-chart"
 import ChartSelectionView from "~components/chart-selection-view"
 import _ from "underscore"
 import RotaForecast from "./containers/rota-forecast"

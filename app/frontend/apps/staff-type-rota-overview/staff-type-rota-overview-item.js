@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import moment from "moment"
-import RotaOverviewChart from "../rota-overview/rota-overview-chart"
+import RotaOverviewChart from "~components/rota-overview-chart"
 import { appRoutes } from "~lib/routes"
 
 export default class StaffTypeRotaOverviewItem extends Component {
