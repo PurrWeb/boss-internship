@@ -37,17 +37,13 @@ export default class RotaChart extends Component {
 
         var {staffToPreview, staffToShow} = this.props;
 
-        if (staffToPreview !== null) {
-            d3.selectAll(".rota-chart__shift").classed("rota-chart__previewed-staff", function(bar){
-                return bar.originalShiftObject.staff_member.id === staffToPreview;
-            });
-        }
+        d3.selectAll(".rota-chart__shift").classed("rota-chart__previewed-staff", function(bar){
+            return bar.originalShiftObject.staff_member.id === staffToPreview;
+        });
 
-        if (staffToShow !== null) {
-            d3.selectAll(".rota-chart__shift").classed("rota-chart__selected-staff", function(bar){
-                return bar.originalShiftObject.staff_member.id === staffToShow;
-            });
-        }
+        d3.selectAll(".rota-chart__shift").classed("rota-chart__selected-staff", function(bar){
+            return bar.originalShiftObject.staff_member.id === staffToShow;
+        });
 
     }
 }
