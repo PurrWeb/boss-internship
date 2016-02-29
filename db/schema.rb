@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160219112055) do
+ActiveRecord::Schema.define(version: 20160225130724) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -126,6 +126,27 @@ ActiveRecord::Schema.define(version: 20160219112055) do
   add_index "names", ["first_name"], name: "index_names_on_first_name", using: :btree
   add_index "names", ["surname"], name: "index_names_on_surname", using: :btree
 
+  create_table "pay_rates", force: :cascade do |t|
+    t.string  "pay_rate_type",  limit: 255, null: false
+    t.string  "name",           limit: 255
+    t.string  "description",    limit: 255
+    t.integer "cents_per_hour", limit: 4,   null: false
+  end
+
+  add_index "pay_rates", ["pay_rate_type"], name: "index_pay_rates_on_pay_rate_type", using: :btree
+
+  create_table "rota_forecasts", force: :cascade do |t|
+    t.integer "rota_id",               limit: 4
+    t.integer "forecasted_take_cents", limit: 4
+    t.integer "total_cents",           limit: 4
+    t.integer "staff_total_cents",     limit: 4
+    t.integer "pr_total_cents",        limit: 4
+    t.integer "kitchen_total_cents",   limit: 4
+    t.integer "security_total_cents",  limit: 4
+  end
+
+  add_index "rota_forecasts", ["rota_id"], name: "index_rota_forecasts_on_rota_id", using: :btree
+
   create_table "rota_shifts", force: :cascade do |t|
     t.integer  "creator_id",          limit: 4
     t.datetime "starts_at",                                    null: false
@@ -202,6 +223,7 @@ ActiveRecord::Schema.define(version: 20160219112055) do
     t.boolean  "employment_status_c",                                    null: false
     t.boolean  "employment_status_d",                                    null: false
     t.datetime "shift_change_occured_at"
+    t.integer  "pay_rate_id",               limit: 4,                    null: false
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree

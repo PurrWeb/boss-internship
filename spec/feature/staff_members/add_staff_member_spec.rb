@@ -3,11 +3,20 @@ require 'feature/feature_spec_helper'
 RSpec.feature 'Adding a new staff member' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:staff_type) { FactoryGirl.create(:staff_type) }
-  let(:prospective_staff_member) { FactoryGirl.build(:staff_member, venue: nil, staff_type: staff_type) }
+  let(:pay_rate) { FactoryGirl.create(:pay_rate) }
+  let(:prospective_staff_member) do
+    FactoryGirl.build(
+      :staff_member,
+      venue: nil,
+      staff_type: staff_type,
+      pay_rate: pay_rate
+    )
+  end
   let(:add_staff_member_page) { PageObject::AddStaffMemberPage.new }
   let(:staff_members_index_page) { PageObject::StaffMembersIndexPage.new }
 
   before do
+    pay_rate
     staff_type
     login_as dev_user
   end
@@ -37,7 +46,14 @@ RSpec.feature 'Adding a new staff member' do
 
   context 'when venues exist' do
     let(:venue) { FactoryGirl.create(:venue) }
-    let(:prospective_staff_member) { FactoryGirl.build(:staff_member, venue: venue, staff_type: staff_type) }
+    let(:prospective_staff_member) do
+      FactoryGirl.build(
+        :staff_member,
+        pay_rate: pay_rate,
+        venue: venue,
+        staff_type: staff_type
+      )
+    end
 
     before do
       venue

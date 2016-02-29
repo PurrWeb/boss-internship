@@ -1,0 +1,14 @@
+.rota-forecast .row {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.rota-forecast .rota-forecast__body .row:last-child {
+    border-top: 2px solid black;
+}
+.rota-forecast .row:nth-child(even) {
+    background: #fafafa;
+}
+.rota-forecast .rota-forecast__header-row {
+    padding-bottom: 10px;
+    border-bottom: 2px solid black;
+}

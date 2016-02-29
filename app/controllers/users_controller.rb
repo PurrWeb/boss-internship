@@ -128,6 +128,7 @@ class UsersController < ApplicationController
       :employment_status_b,
       :employment_status_c,
       :employment_status_d,
+      :pay_rate_id,
       address_attributes: [
         :address_1,
         :address_2,

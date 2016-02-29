@@ -14,6 +14,10 @@ class Rota < ActiveRecord::Base
 
   delegate :transition_to!, to: :state_machine
 
+  def self.published
+    in_state(:published)
+  end
+
   def status
     state_machine.current_state
   end

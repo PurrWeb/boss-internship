@@ -32,6 +32,12 @@ class RotaShift < ActiveRecord::Base
     rota.andand.published?
   end
 
+  def total_hours
+    if ends_at.present? && starts_at.present? && ends_at > starts_at
+      (ends_at - starts_at).seconds / 60 / 60
+    end
+  end
+
   private
   # validation
   def times_in_correct_order

@@ -10,12 +10,6 @@ RSpec.feature 'Users Section Index page' do
     login_as(dev_user)
   end
 
-  scenario 'the users section should be highlighted in the navigaiton' do
-    users_index_page.surf_to
-    users_index_page.navigation.ensure_top_level_sections_highlighted(:admin)
-  end
-
-
   scenario 'clicking add new user button takes you to the add users page' do
     users_index_page.surf_to
     users_index_page.click_manage_invites_button

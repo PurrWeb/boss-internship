@@ -59,6 +59,8 @@ Rails.application.routes.draw do
 
   resources :rotas, only: [:index]
 
+  resources :pay_rates, only: [:index, :new, :create]
+
   resources :clock_in_clock_out, only: [:index]
 
   namespace :api, defaults: { format: 'json' } do
@@ -70,6 +72,12 @@ Rails.application.routes.draw do
         end
       end
       resources :venues, only: :show do
+        resources :rota_forecasts, only: [:show] do
+          member do
+            get  :weekly
+            post :update
+          end
+        end
         resources :rotas, only: [] do
           member do
             get :overview

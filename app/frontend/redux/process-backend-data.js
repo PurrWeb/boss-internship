@@ -29,3 +29,15 @@ export function processHolidayObject(holiday){
         end_date: new Date(holiday.end_date)
     })
 }
+
+export function processRotaForecastObject(rotaForecast){
+    var processedForecast = {...rotaForecast};
+
+    processedForecast.date = new Date(processedForecast.date)
+
+    if (processedForecast.id === null) {
+        processedForecast.id = "UNPERSISTED_FORECAST_" + _.uniqueId();
+    }
+
+    return processedForecast;
+}

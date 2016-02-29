@@ -1,0 +1,12 @@
+json.date weekly_forecast.week.start_date.iso8601
+json.forecasted_take Float(weekly_forecast.forecasted_take.to_s)
+json.total Float(weekly_forecast.total.to_s)
+json.total_percentage weekly_forecast.total_percentage
+json.staff_total Float(weekly_forecast.staff_total.to_s)
+json.staff_total_percentage weekly_forecast.staff_total_percentage
+json.pr_total Float(weekly_forecast.pr_total.to_s)
+json.pr_total_percentage weekly_forecast.pr_total_percentage
+json.kitchen_total Float(weekly_forecast.kitchen_total.to_s)
+json.kitchen_total_percentage weekly_forecast.kitchen_total_percentage
+json.security_total Float(weekly_forecast.security_total.to_s)
+json.security_total_percentage weekly_forecast.security_total_percentage

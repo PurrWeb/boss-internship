@@ -4,6 +4,7 @@ import moment from "moment"
 import * as backendData from "~redux/process-backend-data"
 import makeApiRequest from "./make-api-request"
 import {apiRoutes} from "~lib/routes"
+import oFetch from "o-fetch"
 
 export const actionTypes = {};
 const createApiRequestAction = function(options){
@@ -76,17 +77,39 @@ export const deleteRotaShift = createApiRequestAction({
     requestType: "DELETE_SHIFT",
     makeRequest: makeApiRequest({
         method: apiRoutes.deleteShift.method,
-        validateOptions: function(options){
-            if (options.shift_id === undefined) {
-                throw "Need to specify shift_id that should be deleted"
-            }
-        },
-        path: (options) => apiRoutes.deleteShift.getPath({shiftId: options.shift_id}),
+        path: (options) => apiRoutes.deleteShift.getPath({shiftId: oFetch(options, "shift_id")}),
         getSuccessActionData: function(responseData, requestOptions) {
             return {shift_id: requestOptions.shift_id}
         }
     }),
     confirm: confirmIfRotaIsPublished("Deleting a shift on a published rota will send out email notifications. Do you want to continue?")
+});
+
+export const updateRotaForecast = createApiRequestAction({
+    requestType: "UPDATE_ROTA_FORECAST",
+    makeRequest: makeApiRequest({
+        method: apiRoutes.updateRotaForecast.method,
+        path: ({dateOfRota, venueId}) => apiRoutes.updateRotaForecast.getPath({dateOfRota, venueId}),
+        data: ({forecastedTake}) => {return {forecasted_take: forecastedTake} },
+        getSuccessActionData: function(responseData){
+            return {
+                rotaForecast: responseData
+            }
+        }
+    })
+});
+
+export const fetchWeeklyRotaForecast = createApiRequestAction({
+    requestType: "FETCH_WEEKLY_ROTA_FORECAST",
+    makeRequest: makeApiRequest({
+        method: apiRoutes.weeklyRotaForecast.method,
+        path: ({venueId, startOfWeek}) => apiRoutes.weeklyRotaForecast.getPath({venueId, startOfWeek}),
+        getSuccessActionData: function(responseData){
+            return {
+              weeklyRotaForecast: responseData
+            };
+        }
+    })
 });
 
 export const ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
@@ -133,6 +156,22 @@ export function replaceAllRotas(options) {
     return {
         type: actionTypes.REPLACE_ALL_ROTAS,
         rotas: options.rotas
+    }
+}
+
+actionTypes.REPLACE_ALL_ROTA_FORECASTS = "REPLACE_ALL_ROTA_FORECASTS";
+export function replaceAllRotaForecasts({rotaForecasts}) {
+    return {
+        type: actionTypes.REPLACE_ALL_ROTA_FORECASTS,
+        rotaForecasts
+    }
+}
+
+actionTypes.REPLACE_WEEKLY_ROTA_FORECAST = "REPLACE_WEEKLY_ROTA_FORECAST";
+export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
+    return {
+        type: actionTypes.REPLACE_WEEKLY_ROTA_FORECAST,
+        weeklyRotaForecast
     }
 }
 
@@ -245,10 +284,19 @@ export function loadInitialClockInOutAppState() {
 
 export function loadInitialRotaOverviewAppState(viewData){
     return function(dispatch) {
-        var rotas = _.pluck(viewData, "rota");
-        rotas = rotas.map(backendData.processRotaObject);
-        rotas = indexById(rotas);
-        dispatch(replaceAllRotas({rotas: rotas}));
+        var unprocessedRotasArray = _.pluck(viewData.rotas, "rota");
+        var rotasArray = rotas = unprocessedRotasArray.map(backendData.processRotaObject);
+        var rotas = indexById(rotas);
+
+
+        var forecasts = viewData.rotaForecasts.map(backendData.processRotaForecastObject);
+        forecasts = indexById(forecasts);
+        
+        dispatch([
+            replaceAllRotas({rotas: rotas}),
+            replaceAllRotaForecasts({rotaForecasts: forecasts}),
+            replaceWeeklyRotaForecast({weeklyRotaForecast: viewData.weeklyRotaForecast})
+        ]);
     }
 }
 

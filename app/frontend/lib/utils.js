@@ -76,6 +76,17 @@ var utils =  {
     },
     indexById(array){
         return _.indexBy(array, "id");
+    },
+    // http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+    formatMoney(x) {
+        // add thousand separators and show 2 decimal digits
+        return x.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    parseMoney(x){
+        return parseFloat(x.replace(/,/g,""))
+    },
+    datesAreEqual(date1, date2){
+        return moment(date1).format("DD-MM-YYYY") === moment(date2).format("DD-MM-YYYY");
     }
 }
 

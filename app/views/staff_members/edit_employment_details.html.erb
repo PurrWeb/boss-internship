@@ -39,6 +39,7 @@
             with_css_classes: true
           ) %>
     </div>
+    <%= render partial: 'shared/pay_rate_control', locals: { form: form } %>
     <%= form.text_area :day_perference_note, label: 'Day Preference', help: form.object.day_perference_help_text %>
     <%= form.text_area :hours_preference_note, label: 'Hours Preference', help: form.object.hours_preference_help_text %>
     <%= form.text_field :national_insurance_number %>

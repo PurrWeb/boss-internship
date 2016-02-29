@@ -1,7 +1,9 @@
+require 'base64'
+
 module PageObject
   class StaffMemberForm < Component
     page_action :fill_in_for do |staff_member|
-      scope.attach_file("staff_member[avatar]", TestImageHelper.arnie_face_path)
+      upload_avatar_image
       if staff_member.venue.present?
         scope.select(staff_member.venue.name, from: 'Venue')
       end
@@ -17,10 +19,13 @@ module PageObject
       scope.fill_in('Day Preference', with: staff_member.day_perference_note)
       scope.fill_in('Hours Preference', with: staff_member.hours_preference_note)
       starts_at_field.fill_in_date(staff_member.starts_at)
+      if staff_member.pay_rate.present?
+        scope.select(PayRateControlRate.new(staff_member.pay_rate).name, from: 'Pay rate')
+      end
     end
 
     page_action :upload_avatar_image do
-      scope.attach_file("staff_member[avatar]", TestImageHelper.arnie_face_path)
+      _upload_avatar_image
     end
 
     page_action :ensure_photo_displayed do
@@ -30,6 +35,13 @@ module PageObject
     page_action :submit do
       click_button 'Submit'
     end
+
+    def scope
+      page.find('.staff-member-form')
+    end
+
+    private
+    attr_reader :hidden_avatar_field_selector
 
     def starts_at_field
       @starts_at_field ||= DatePickerField.new(self, selector: '.staff-member-starts-at-field')
@@ -47,8 +59,19 @@ module PageObject
       @address_form ||= AddressForm.new(self)
     end
 
-    def scope
-      page.find('.staff-member-form')
+    def _upload_avatar_image
+      hidden_avatar_field.set(base64_encoded_avatar_image)
+    end
+
+    def base64_encoded_avatar_image
+      "data:image/jpg;base64," +
+      Base64.encode64(
+        File.open(TestImageHelper.arnie_face_path){ |io| io.read }
+      )
+    end
+
+    def hidden_avatar_field
+      scope.find("input[name=\"staff_member[avatar_base64]\"]", visible: false)
     end
   end
 end

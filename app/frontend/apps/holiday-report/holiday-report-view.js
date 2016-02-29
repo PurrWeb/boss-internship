@@ -8,17 +8,20 @@ import WeekAndVenueSelector from "~components/week-and-venue-selector"
 export default class HolidayReportView extends React.Component {
     render(){
         return <div>
-            <WeekAndVenueSelector
-                weekStartDate={new Date(this.props.pageOptions.weekStartDate)}
-                onChange={({startDate, endDate, venueId}) =>
-                        location.href = appRoutes.holidayReportsIndex({
-                            date: startDate,
-                            venueId
-                        })
-                }
-                venues={this.props.venues}
-                venueId={this.props.pageOptions.venueId}
-            />
+            <div className="row">
+                <div className="col-md-6">
+                    <WeekAndVenueSelector
+                        weekStartDate={new Date(this.props.pageOptions.weekStartDate)}
+                        onChange={({startDate, endDate, venueId}) =>
+                            location.href = appRoutes.holidayReportsIndex({
+                                date: startDate,
+                                venueId
+                            })
+                        }
+                        venues={this.props.venues}
+                        venueId={this.props.pageOptions.venueId} />
+                </div>
+            </div>
             <hr/>
             { csvDownloadButton(this.props) }
             <h2 style={{fontSize: 20}}>Find Staff</h2>

@@ -1,32 +1,35 @@
 import _ from "underscore"
 import utils from "~lib/utils"
 import {API_ROOT} from "~lib/routes"
+import oFetch from "o-fetch"
 
 /*
 apiOptions:
-- method
-- path
-- data
+- method (required) - string or function that returns a string
+- path (required) - string or function that returns a string
+- data (optional) - object or function that returns an object
+- getSuccessActionData
 */
 export default function makeApiRequest(apiOptions){
     return function(requestOptions, success, error, state) {
-        function resolveFunctionParameter(optionsKey){
-            if (typeof options[optionsKey] === "function") {
-                options[optionsKey] = options[optionsKey](requestOptions, state);
+        function resolveFunctionParameter(parameterValue){
+            if (typeof parameterValue === "function") {
+                return parameterValue(requestOptions, state);
             }
+            return parameterValue
         };
-        var options = _.clone(apiOptions);
-        requestOptions = _.clone(requestOptions);
-        ["method", "path", "data"].map(resolveFunctionParameter);
 
-        if (options.validateOptions) {
-            options.validateOptions(requestOptions);
-        }
+        requestOptions = _.clone(requestOptions);
+
+        var [method, path, data] = oFetch(apiOptions, "method", "path")
+        method = resolveFunctionParameter(method);
+        path = resolveFunctionParameter(path);
+        data = resolveFunctionParameter(apiOptions.data);
 
         $.ajax({
-           url: API_ROOT + options.path,
-           method: options.method,
-           data: options.data
+           url: API_ROOT + path,
+           method: method,
+           data: data
         }).then(function(responseData){    
             var actionData = apiOptions.getSuccessActionData(responseData, requestOptions);
             copyComponentInformationFromRequestOptions(actionData, requestOptions);

@@ -5,10 +5,12 @@ import {appRoutes} from "~lib/routes"
 import {connect} from "react-redux"
 import moment from "moment"
 import _ from "underscore"
+import utils from "~lib/utils"
 import rotaStatusTitles from "~lib/rota-status-titles"
 import { selectStaffTypesWithShifts } from "~redux/selectors"
 import PublishRotaWeekButtonContainer from "./publish-rota-week-button-container"
 import WeekAndVenueSelector from "~components/week-and-venue-selector"
+import WeeklyRotaForecast from "./containers/weekly-rota-forecast"
 
 function indexById(data){
     return _.indexBy(data, "id")
@@ -26,7 +28,7 @@ class RotaOverviewPage extends Component {
         var lastRota = _.last(rotas);
         return <div className="container">
             <div className="row">
-                <div className="col-md-12">
+                <div className="col-md-6">
                     <WeekAndVenueSelector
                         venueId={firstRota.venue.id}
                         weekStartDate={firstRota.date}
@@ -38,6 +40,15 @@ class RotaOverviewPage extends Component {
                             firstDate={firstRota.date}
                             lastDate={lastRota.date} />
                     </WeekAndVenueSelector>
+                </div>
+                <div className="col-md-3">
+
+                </div>
+                <div className="col-md-3">
+                    <h2 style={{fontSize: 20, marginTop: 0}}>Weekly Forecast</h2>
+                    <WeeklyRotaForecast
+                        venueId={firstRota.venue.id}
+                        startOfWeek={utils.getWeekStartDate(firstRota.date)} />
                 </div>
             </div>
             <br/>
@@ -74,6 +85,7 @@ class RotaOverviewPage extends Component {
                 <RotaOverviewView
                     staff={ indexById(staff) }
                     shifts={ indexById(shifts) }
+                    rota={rota}
                     dateOfRota={ rota.date }
                     staffTypesWithShifts={ indexById(staffTypesWithShifts)} />
             </div>

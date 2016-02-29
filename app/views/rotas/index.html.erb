@@ -10,10 +10,14 @@
     rotas.push(<%= raw render partial: 'api/v1/shared/rota_overview.json', locals: { rota: rota, staff_types: staff_types } %>);
   <% end %>
   venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: accessible_venues } %>;
+  rotaForecasts = <%= raw render partial: 'api/v1/shared/rota_forecasts.json', locals: { rota_forecasts: rota_forecasts } %>;
 
   window.boss = window.boss || {};
   window.boss.rotas = rotas;
   window.boss.venues = venues;
+  window.boss.rotaForecasts = rotaForecasts;
+
+  window.boss.weeklyRotaForecast = <%= raw render partial: 'api/v1/shared/weekly_rota_forecast.json', locals: { weekly_forecast: weekly_rota_forecast } %>;
 <% end %>
 
 <%= react_component('RotaOverviewApp') %>

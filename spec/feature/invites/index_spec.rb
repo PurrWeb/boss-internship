@@ -10,11 +10,6 @@ RSpec.feature 'Invites index page' do
     login_as dev_user
   end
 
-  scenario 'the users section should be highlighted in the navigaiton' do
-    invites_index_page.surf_to
-    invites_index_page.navigation.ensure_top_level_sections_highlighted(:admin)
-  end
-
   scenario 'clicking invite new user should take you to the invite new user page' do
     invites_index_page.surf_to
     invites_index_page.click_invite_new_user_button

@@ -16,17 +16,13 @@
         <ul class="nav navbar-nav">
           <% if can?(:manage, :staff_members) %>
             <li class="nav-staff-members-section">
-              <%= link_to(staff_members_path, class: "nav-section-header-link #{'active' if in_staff_members_section? }") do %>
-                Staff Members <% if in_staff_members_section? %><span class="sr-only">(current)</span><% end %>
-              <% end %>
+              <%= link_to('Staff Members', staff_members_path, class: "nav-section-header-link") %>
             </li>
           <% end %>
 
           <% if Venue.count > 0 && !(current_user.manager? && current_user.venues.count == 0) %>
             <li class="nav-rota-section">
-              <%= link_to(rotas_path, class: "nav-section-header-link #{'active' if in_rotas_section? }") do %>
-                Rota <% if in_rotas_section? %><span class="sr-only">(current)</span><% end %>
-              <% end %>
+              <%= link_to('Rota', rotas_path, class: "nav-section-header-link") %>
             </li>
           <% end %>
 
@@ -40,12 +36,8 @@
         <ul class="nav navbar-nav navbar-right">
           <% if can?(:manage, :admin) %>
             <li class="dropdown nav-admin-section">
-              <a href="#" class="nav-section-header-link dropdown-toggle <%= "#{'active' if in_admin_section?}" %>" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                Admin
-                <% if in_admin_section? %>
-                  <span class="sr-only">(current)</span>
-                <% end %>
-                <span class="caret"></span>
+              <a href="#" class="nav-section-header-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                Admin <span class="caret"></span>
               </a>
 
               <ul class="dropdown-menu">
@@ -69,6 +61,10 @@
 
                 <li class="nav-holiday-reports-section">
                   <%= link_to('Holiday Reports', holiday_reports_path(date: UIRotaDate.format(Time.now.to_date.monday))) %>
+                </li>
+
+                <li class="nav-pay-rates-section">
+                  <%= link_to('Pay rates', pay_rates_path) %>
                 </li>
               </ul>
             </li>
