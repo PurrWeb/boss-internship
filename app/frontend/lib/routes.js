@@ -38,6 +38,9 @@ export const appRoutes = {
           'date=' + utils.formatRotaUrlDate(date),
           '&venue=' + venueId
         ].join("")
+    },
+    staffTypeRota({staffTypeSlug, dateOfRota}){
+        return "/" + staffTypeSlug + "_rotas/" + utils.formatRotaUrlDate(dateOfRota);
     }
 }
 

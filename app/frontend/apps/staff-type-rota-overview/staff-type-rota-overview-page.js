@@ -16,6 +16,7 @@ export default class StaffTypeRotaOverviewPage extends Component {
                     rotaShifts={rotaDetails.rota_shifts}
                     staff={utils.indexById(rotaDetails.staff_members)}
                     staffTypes={utils.indexById(rotaDetails.staff_types)}
+                    staffTypeRotaOptions={window.boss.pageOptions.staffTypeRota}
                     key={rota.id} />
             })}
         </div>       
