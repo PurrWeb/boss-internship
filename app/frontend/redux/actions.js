@@ -19,7 +19,11 @@ function confirmIfRotaIsPublished(question){
     return function(requestOptions, getState){
         var venueId = oFetch(requestOptions, "venueId");
         var date = new RotaDate({shiftStartsAt: oFetch(requestOptions, "shift.starts_at")}).getDateOfRota();
-        var rota = getRotaFromDateAndVenue(getState().rotas, date, venueId)
+        var rota = getRotaFromDateAndVenue({
+            rotas: getState().rotas,
+            dateOfRota: date,
+            venueId
+        });
         if (rota.status !== "published") {
             return true;
         }
@@ -46,7 +50,11 @@ export const addRotaShift = createApiRequestAction({
             responseData.ends_at = new Date(responseData.ends_at)
 
             var rotaDate = new RotaDate({shiftStartsAt: responseData.starts_at});
-            var rota = getRotaFromDateAndVenue(getState().rotas, rotaDate.getDateOfRota(), requestOptions.venueId);
+            var rota = getRotaFromDateAndVenue({
+                rotas: getState().rotas,
+                dateOfRota: rotaDate.getDateOfRota(), 
+                venueId: requestOptions.venueId
+            });
 
             responseData.rota.clientId = rota.clientId;
 
@@ -257,7 +265,12 @@ export function loadInitialRotaAppState(viewData) {
 
 export function loadInitalStaffTypeRotaAppState(viewData){
     viewData.rota.rotas = _.map(viewData.rota.venues, function(venue){
-        return getRotaFromDateAndVenue(viewData.rota.rotas, new Date(viewData.rota.date), venue.id, true);
+        return getRotaFromDateAndVenue({
+            rotas: viewData.rota.rotas,
+            dateOfRota: new Date(viewData.rota.date),
+            venueId: venue.id,
+            generateIfNotFound: true
+        });
     });
     var pageOptions = {
         staffTypeSlug: viewData.staffTypeSlug,

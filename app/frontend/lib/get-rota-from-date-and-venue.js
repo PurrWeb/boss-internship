@@ -14,7 +14,7 @@ function generateDefaultRota({dateOfRota, venueId}){
     }
 }
 
-export default function getRotaFromDateAndVenue(rotas, dateOfRota, venueId, generateIfNotFound){
+export default function getRotaFromDateAndVenue({rotas, dateOfRota, venueId, generateIfNotFound}){
     var rota = _.find(rotas, function(rota){
         return rota.venue.id === venueId && datesAreEqual(rota.date, dateOfRota)
     });

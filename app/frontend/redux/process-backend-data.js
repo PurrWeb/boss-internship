@@ -3,7 +3,7 @@ import utils from "~lib/utils"
 
 function rotaClientId(serverId){
     if (serverId === null) {
-        return "UNPERSISTED_ROTA_" + _.uniqueId();
+        return "ROTA_UNPERSISTED_ON_LOAD_" + _.uniqueId();
     } else {
         return "ROTA_" + serverId;
     }

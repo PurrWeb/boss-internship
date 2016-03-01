@@ -32,7 +32,7 @@ export default function rotasReducer(state={}, action){
             var rotaClientId = action.shift.rota.clientId;
             var rotaServerId = action.shift.rota.id;
             return _(state).mapObject(function(rota){
-                if (rota.clientid !== rotaClientId){
+                if (rota.clientId !== rotaClientId){
                     return rota;
                 }
                 return Object.assign({}, rota, {id: rotaServerId});

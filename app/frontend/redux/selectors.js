@@ -86,9 +86,9 @@ export function selectAddShiftIsInProgress(state, staffId){
 }
 
 export function selectRotaOnVenueRotaPage(state){
-    return getRotaFromDateAndVenue(
-        state.rotas,
-        state.pageOptions.dateOfRota,
-        state.pageOptions.venueId
-    );
+    return getRotaFromDateAndVenue({
+        rotas: state.rotas,
+        dateOfRota: state.pageOptions.dateOfRota,
+        venueId: state.pageOptions.venueId
+    });
 }
