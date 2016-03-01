@@ -1,9 +1,6 @@
 import _ from "underscore"
 import moment from "moment"
-
-function datesAreEqual(date1, date2){
-    return moment(date1).format("DD-MM-YYYY") === moment(date2).format("DD-MM-YYYY");
-}
+import utils from "./utils"
 
 function generateDefaultRota({dateOfRota, venueId}){
     return {
@@ -16,7 +13,7 @@ function generateDefaultRota({dateOfRota, venueId}){
 
 export default function getRotaFromDateAndVenue({rotas, dateOfRota, venueId, generateIfNotFound}){
     var rota = _.find(rotas, function(rota){
-        return rota.venue.id === venueId && datesAreEqual(rota.date, dateOfRota)
+        return rota.venue.id === venueId && utils.datesAreEqual(rota.date, dateOfRota)
     });
     if (rota === undefined){
         if (generateIfNotFound){
