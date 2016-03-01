@@ -11,7 +11,7 @@ export default class RotaNavigation extends React.Component {
         return <GenericRotaNavigation
             dateOfRota={this.props.dateOfRota}
             getRotaLink={(date) => this.getRotaLink(date)}
-            getRotaOverviewLink={(weekStartDate, weekEndDate) => this.getRotaOverviewLink({weekStartDate, weekEndDate})} />
+            getRotaOverviewLink={({weekStartDate, weekEndDate}) => this.getRotaOverviewLink({weekStartDate, weekEndDate})} />
     }
     getRotaLink(date){
         return appRoutes.rota({
