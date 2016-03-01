@@ -3,7 +3,7 @@ module Api
     class StaffMembersController < APIController
       def show
         staff_member = StaffMember.find(params.fetch(:id))
-        authorize! :manage, staff_member
+        authorize! :view, staff_member
 
         render locals: { staff_member: staff_member }
       end

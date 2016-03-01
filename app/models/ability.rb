@@ -24,6 +24,10 @@ class Ability
       can_manage_venue?(user, venue)
     end
 
+    can :view, StaffMember do |staff_member|
+      staff_member.security? || can_manage_venue?(user, staff_member.venue)
+    end
+
     can :manage, StaffMember do |staff_member|
       can_manage_staff_member?(user, staff_member)
     end
@@ -65,7 +69,11 @@ class Ability
   end
 
   def can_manage_staff_member?(user, staff_member)
-    can_manage_venue?(user, staff_member.venue)
+    if staff_member.security?
+      user.has_admin_access? || user.security_manager?
+    else
+      can_manage_venue?(user, staff_member.venue)
+    end
   end
 
   def can_manage_venue?(user, venue)
