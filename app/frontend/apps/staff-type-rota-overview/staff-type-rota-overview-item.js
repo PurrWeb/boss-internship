@@ -19,13 +19,14 @@ export default class StaffTypeRotaOverviewItem extends Component {
             </a>    
             <div className="row">
                 <div className="col-md-9">
-                    <RotaOverviewChart
+                    TODO
+                    {/* <RotaOverviewChart
                         staff={this.props.staff}
                         shifts={this.props.rotaShifts}
                         dateOfRota={dateOfRota}
                         staffTypes={this.props.staffTypes}
                         onHoverShiftsChange={() => null}
-                        onSelectionShiftsChange={() => null} />
+                        onSelectionShiftsChange={() => null} /> */ }
                 </div>
                 <div className="col-md-3">
                     
