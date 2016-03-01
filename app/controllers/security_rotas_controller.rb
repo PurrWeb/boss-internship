@@ -19,9 +19,9 @@ class SecurityRotasController < ApplicationController
     rotas = Rota.where(date: date)
     venues = Venue.all
     staff_types = StaffType.where(role: 'security')
-    staff_members = StaffMember.joins(:staff_type).merge(staff_types)
-    rota_shifts = RotaShift.joins(:rota).merge(rotas).joins(:staff_member).merge(staff_members)
-    holidays = Holiday.joins(:staff_member).merge(staff_members)
+    staff_members = StaffMember.enabled.joins(:staff_type).merge(staff_types)
+    rota_shifts = RotaShift.enabled.joins(:rota).merge(rotas).joins(:staff_member).merge(staff_members)
+    holidays = Holiday.in_state(:enabled).joins(:staff_member).merge(staff_members)
 
     render locals: {
       date: date,
