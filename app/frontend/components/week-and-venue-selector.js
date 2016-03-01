@@ -5,14 +5,14 @@ import _ from "underscore"
 
 export default class WeekAndVenueSelector extends React.Component {
     static propTypes = {
-        venueId: React.PropTypes.number.isRequired,
+        venueId: React.PropTypes.number,
         weekStartDate: React.PropTypes.instanceOf(Date).isRequired,
         onChange: React.PropTypes.func.isRequired,
         venues: React.PropTypes.object.isRequired,
-        canSelectAllVenues: React.PropTypes.bool.isRequired
+        canSelectAllVenues: React.PropTypes.bool
     }
     render(){
-        var selectedVenues = "";
+        var selectedVenues = [];
         if (this.props.venueId) {
             selectedVenues = [this.props.venueId];
         }
