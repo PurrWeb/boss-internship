@@ -89,7 +89,7 @@ export const deleteRotaShift = createApiRequestAction({
     requestType: "DELETE_SHIFT",
     makeRequest: makeApiRequest({
         method: apiRoutes.deleteShift.method,
-        path: (options) => apiRoutes.deleteShift.getPath({shiftId: oFetch(options, "shift_id")}),
+        path: (options) => apiRoutes.deleteShift.getPath({shiftId: oFetch(options, "shift.id")}),
         getSuccessActionData: function(responseData, requestOptions) {
             return {shift_id: requestOptions.shift.id}
         }
