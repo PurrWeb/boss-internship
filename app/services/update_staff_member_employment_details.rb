@@ -15,6 +15,9 @@ class UpdateStaffMemberEmploymentDetails
 
     ActiveRecord::Base.transaction do
       staff_member.assign_attributes(params)
+      if staff_member.staff_member_venue.present? && staff_member.staff_member_venue.venue_id == nil
+        staff_member.staff_member_venue.mark_for_destruction
+      end
       pay_rate_changed = staff_member.pay_rate_id_changed?
 
       result = staff_member.save
