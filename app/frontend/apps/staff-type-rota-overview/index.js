@@ -5,9 +5,14 @@ import * as actionCreators from "~redux/actions.js"
 
 export default class StaffTypeRotaOverviewApp extends React.Component {
     render() {
-        return <StaffTypeRotaOverviewPage rotaDetailsObjects={this.getRotaDetailsObjects()} />
+        return <StaffTypeRotaOverviewPage
+            rotaDetailsObjects={this.getRotaDetailsObjects()}
+            staffTypeRotaOptions={this.getStaffTypeRotaOptions()} />
     }
     getRotaDetailsObjects(){
         return window.boss.securityRotaOverviews;
+    }
+    getStaffTypeRotaOptions(){
+        return window.boss.pageOptions.staffTypeRota;
     }
 }

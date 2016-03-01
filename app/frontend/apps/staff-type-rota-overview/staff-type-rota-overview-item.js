@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import moment from "moment"
 import RotaOverviewChart from "~components/rota-overview-chart"
 import { appRoutes } from "~lib/routes"
-import WeekPicker from "~components/week-picker"
 
 export default class StaffTypeRotaOverviewItem extends Component {
     static propTypes = {
@@ -19,14 +18,6 @@ export default class StaffTypeRotaOverviewItem extends Component {
             <a href={appRoutes.staffTypeRota({staffTypeSlug, dateOfRota})}>
                 <h2>{moment(dateOfRota).format("ddd D MMMM YYYY")}</h2>
             </a>    
-            <WeekPicker
-                selectionStartDate={dateOfRota}
-                onChange={({startDate}) =>
-                    location.href = appRoutes.staffTypeRotaOverview({
-                        staffTypeSlug,
-                        weekStartDate: startDate
-                    })
-                }/>
             <div className="row">
                 <div className="col-md-9">
                     <RotaOverviewChart
