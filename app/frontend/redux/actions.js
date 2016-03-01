@@ -263,11 +263,14 @@ function genericLoadInitialRotaAppState(viewData, rotaType){
     var pageOptions = {};
     if (rotaType === "venue"){
         pageOptions = {
-            displayedRota: _.first(rotaData).id
+            displayedRota: _.first(rotaData).id,
+            staffTypeSlug: viewData.staffTypeSlug
         }
     } 
     if (rotaType === "staffType"){
-        pageOptions = viewData.pageOptions;
+        pageOptions = {
+            staffTypeSlug: viewData.staffTypeSlug
+        }
     }
     
     return function(dispatch){

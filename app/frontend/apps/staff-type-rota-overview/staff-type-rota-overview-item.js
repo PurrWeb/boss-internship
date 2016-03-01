@@ -9,13 +9,12 @@ export default class StaffTypeRotaOverviewItem extends Component {
         rotaShifts: React.PropTypes.array.isRequired,
         staff: React.PropTypes.object.isRequired,
         staffTypes: React.PropTypes.object.isRequired,
-        staffTypeRotaOptions: React.PropTypes.object.isRequired
+        staffTypeSlug: React.PropTypes.string.isRequired
     }
     render() {
-        var staffTypeSlug = this.props.staffTypeRotaOptions.staffTypeSlug;
         var dateOfRota = this.props.dateOfRota;
         return <div>
-            <a href={appRoutes.staffTypeRota({staffTypeSlug, dateOfRota})}>
+            <a href={appRoutes.staffTypeRota({staffTypeSlug: this.props.staffTypeSlug, dateOfRota})}>
                 <h2>{moment(dateOfRota).format("ddd D MMMM YYYY")}</h2>
             </a>    
             <div className="row">

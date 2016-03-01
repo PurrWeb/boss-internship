@@ -7,12 +7,12 @@ export default class StaffTypeRotaOverviewApp extends React.Component {
     render() {
         return <StaffTypeRotaOverviewPage
             rotaDetailsObjects={this.getRotaDetailsObjects()}
-            staffTypeRotaOptions={this.getStaffTypeRotaOptions()} />
+            staffTypeSlug={this.getStaffTypeSlug()} />
     }
     getRotaDetailsObjects(){
         return window.boss.securityRotaOverviews;
     }
-    getStaffTypeRotaOptions(){
-        return window.boss.pageOptions.staffTypeRota;
+    getStaffTypeSlug(){
+        return window.boss.staffTypeSlug;
     }
 }

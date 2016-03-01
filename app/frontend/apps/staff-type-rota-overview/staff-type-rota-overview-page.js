@@ -8,10 +8,10 @@ import { appRoutes } from "~lib/routes"
 export default class StaffTypeRotaOverviewPage extends Component {
     static propTypes = {
         rotaDetailsObjects: React.PropTypes.array.isRequired,
-        staffTypeRotaOptions: React.PropTypes.object.isRequired
+        staffTypeSlug: React.PropTypes.string.isRequired
     }
     render() {
-        var staffTypeSlug = this.props.staffTypeRotaOptions.staffTypeSlug;
+        var staffTypeSlug = this.props.staffTypeSlug;
         var self = this;
         return <div>
             <WeekPicker
@@ -30,7 +30,7 @@ export default class StaffTypeRotaOverviewPage extends Component {
                         rotaShifts={shifts}
                         staff={utils.indexById(rotaDetails.staff_members)}
                         staffTypes={utils.indexById(rotaDetails.staff_types)}
-                        staffTypeRotaOptions={self.props.staffTypeRotaOptions}
+                        staffTypeSlug={self.props.staffTypeSlug}
                         key={rotaDetails.date.toString()} />
                     </div>
             })}
