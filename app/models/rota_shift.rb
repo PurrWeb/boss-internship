@@ -63,8 +63,8 @@ class RotaShift < ActiveRecord::Base
       time = public_send(field)
       if time.present?
         minute = Integer(time.strftime('%M'))
-        if ![0, 15, 30 ,45].include?(minute)
-          errors.add(field, 'must be 15 minute intervals')
+        if ![0, 30].include?(minute)
+          errors.add(field, 'must be 30 minute intervals')
         end
       end
     end
