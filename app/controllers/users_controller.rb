@@ -113,7 +113,7 @@ class UsersController < ApplicationController
   end
 
   def staff_member_params(user)
-    result = params.require(:staff_member).permit(
+    permit_attributes = [
       :pin_code,
       :gender,
       :phone_number,
@@ -127,8 +127,12 @@ class UsersController < ApplicationController
       :employment_status_a,
       :employment_status_b,
       :employment_status_c,
-      :employment_status_d,
-      :pay_rate_id,
+      :employment_status_d
+    ]
+
+    permit_attributes << :pay_rate_id if pay_rate_from_params.andand.editable_by?(current_user)
+
+    permit_attributes << {
       address_attributes: [
         :address_1,
         :address_2,
@@ -139,6 +143,10 @@ class UsersController < ApplicationController
         :region
       ],
       staff_member_venue_attributes: [:venue_id]
+    }
+
+    result = params.require(:staff_member).permit(
+      permit_attributes
     ).merge(
       staff_type: staff_type_from_params,
       name: user.name,
@@ -151,6 +159,10 @@ class UsersController < ApplicationController
     end
 
     result
+  end
+
+  def pay_rate_from_params
+    PayRate.find_by(id: params[:staff_member][:pay_rate_id])
   end
 
   def staff_type_from_params

@@ -1,5 +1,10 @@
 module PageObject
   class AddStaffMemberPage < Page
+    def initialize(user:)
+      @user = user
+      super()
+    end
+
     def surf_to
       visit(url_helpers.new_staff_member_path)
     end
@@ -9,7 +14,7 @@ module PageObject
     end
 
     def form
-      @form ||= StaffMemberForm.new(self)
+      @form ||= StaffMemberForm.new(user: user, parent: self)
     end
 
     def assert_on_correct_page
@@ -19,7 +24,6 @@ module PageObject
       )
     end
 
-    private
     def page_heading
       page.find('main h1')
     end
@@ -27,5 +31,8 @@ module PageObject
     def expected_page_heading_text
       'Add Staff Member'
     end
+
+    private
+    attr_reader :user
   end
 end

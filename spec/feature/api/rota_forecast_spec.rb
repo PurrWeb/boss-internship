@@ -174,7 +174,7 @@ RSpec.describe 'Api access' do
         end
 
         before do
-          travel_to(1.day.ago) do
+          travel_to(date - 1.day) do
             rota_forecast
           end
         end

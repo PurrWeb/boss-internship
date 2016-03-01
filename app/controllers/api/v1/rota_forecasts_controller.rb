@@ -24,26 +24,37 @@ module Api
         )
         authorize! :manage, rota
 
-        forecasted_take = forecasted_take_from_params
-        curret_forecast = RotaForecast.where(rota: rota).last
-        if curret_forecast && curret_forecast.forecasted_take == forecasted_take
-          render "show", locals: { rota_forecast: curret_forecast }
+        if rota.date < RotaWeek.new(Time.now).start_date
+          render(
+            json: {
+              errors: {
+                base: ['Forecasts in the past cannot be updated']
+              }
+            },
+            status: :forbidden
+          )
         else
-          rota_forecast = nil
-          ActiveRecord::Base.transaction do
-            if !rota.persisted?
-              rota.update_attributes(creator: current_user)
+          forecasted_take = forecasted_take_from_params
+          curret_forecast = RotaForecast.where(rota: rota).last
+          if curret_forecast && curret_forecast.forecasted_take == forecasted_take
+            render "show", locals: { rota_forecast: curret_forecast }
+          else
+            rota_forecast = nil
+            ActiveRecord::Base.transaction do
+              if !rota.persisted?
+                rota.update_attributes(creator: current_user)
+              end
+
+             rota_forecast = GenerateRotaForecast.new(
+                forecasted_take: forecasted_take,
+                rota: rota
+              ).call
+
+              rota_forecast.save!
             end
 
-           rota_forecast = GenerateRotaForecast.new(
-              forecasted_take: forecasted_take,
-              rota: rota
-            ).call
-
-            rota_forecast.save!
+            render "show", locals: { rota_forecast: rota_forecast }
           end
-
-          render "show", locals: { rota_forecast: rota_forecast }
         end
       end
 

@@ -1,5 +1,11 @@
 module PageObject
   class CreateStaffMemberFromUserForm < Component
+    def initialize(user:, parent:)
+      @user = user
+      super(parent)
+    end
+    attr_reader :user
+
     page_action :fill_in_for do |staff_member|
       _upload_avatar_image
       if staff_member.venue.present?
@@ -14,7 +20,13 @@ module PageObject
       address_form.fill_in_for(staff_member.address)
       starts_at_field.fill_in_date(staff_member.starts_at)
       if staff_member.pay_rate.present?
-        scope.select(PayRateControlRate.new(staff_member.pay_rate).name, from: 'Pay rate')
+        scope.select(
+          PayRateControlRate.new(
+            pay_rate: staff_member.pay_rate,
+            user: user
+          ).name,
+          from: 'Pay rate'
+        )
       end
     end
 

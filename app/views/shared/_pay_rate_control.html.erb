@@ -1,17 +1,32 @@
-<%= form.select(
-      :pay_rate,
-      options_for_select(
-        PayRate.named.map do |pay_rate|
-          control_rate = PayRateControlRate.new(pay_rate)
-          [control_rate.name, control_rate.id]
-        end,
-        form.object.pay_rate_id
-      ),
-      {
-        include_blank: true,
-        label_class: "required",
-      },
-      {
-        name: "#{form.object_name}[pay_rate_id]"
-      }
-    ) %>
+<% current_pay_rate = form.object.pay_rate %>
+<% show_static_control = current_pay_rate.present? && !current_pay_rate.editable_by?(current_user) %>
+
+<% if show_static_control %>
+  <%= form.static_control label: "Pay Rate", help: 'This is an admin payrate get in touch with an admin to change it' do %>
+     <%= PayRateControlRate.new(
+          pay_rate: form.object.pay_rate,
+          user: current_user
+        ).name %>
+  <% end %>
+<% else %>
+  <%= form.select(
+        :pay_rate,
+        options_for_select(
+          PayRate.options_for(current_user).map do |pay_rate|
+            control_rate = PayRateControlRate.new(
+              pay_rate: pay_rate,
+              user: current_user
+            )
+            [control_rate.name, control_rate.id]
+          end,
+          form.object.pay_rate_id
+        ),
+        {
+          include_blank: true,
+          label_class: "required",
+        },
+        {
+          name: "#{form.object_name}[pay_rate_id]"
+        }
+      ) %>
+<% end %>

@@ -1,5 +1,7 @@
 <h1>Pay Rates</h1>
 
+<p>These pay rates will be visible and selectable by all managers</p>
+
 <%= link_to('Add Rate', new_pay_rate_path, class: ['btn', 'btn-primary']) %>
 
 <% if pay_rates.present? %>
@@ -22,5 +24,34 @@
     </tbody>
   </table>
 <% else %>
-  <p>No named pay rates exist</p>
+  <p>No normal pay rates exist</p>
+<% end %>
+
+<h2>Admin Pay rates</h2>
+
+<p>These will only be visible and selectable to users with admin access</p>
+
+<%= link_to('Add Admin Rate', new_admin_pay_rate_path, class: ['btn', 'btn-primary']) %>
+
+<% if admin_pay_rates.present? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Rate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% admin_pay_rates.each do |admin_pay_rate| %>
+        <tr>
+          <td><%= admin_pay_rate.name %></td>
+          <td><%= admin_pay_rate.description %></td>
+          <td><%= number_to_currency(admin_pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No admin pay rates exist</p>
 <% end %>
