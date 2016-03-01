@@ -1,17 +1,21 @@
 import _ from "underscore"
 import utils from "~lib/utils"
 
+function rotaClientId(serverId){
+    if (serverId === null) {
+        return "UNPERSISTED_ROTA_" + _.uniqueId();
+    } else {
+        return "ROTA_" + serverId;
+    }
+}
+
 export function processRotaObject(rota){
     var newRota = {...rota};
 
     var date = rota.date;
     newRota.date = new Date(date);
 
-    if (rota.id === null) {
-        newRota.clientId = "UNPERSISTED_ROTA_" + _.uniqueId();
-    } else {
-        newRota.clientId = "ROTA_" + rota.id;
-    }
+    newRota.clientId = rotaClientId(rota.id);
 
     return newRota
 }
@@ -19,7 +23,8 @@ export function processRotaObject(rota){
 export function processShiftObject(shift){
     return Object.assign({}, shift, {
         starts_at: new Date(shift.starts_at),
-        ends_at: new Date(shift.ends_at)
+        ends_at: new Date(shift.ends_at),
+        rota: Object.assign({}, shift.rota, {clientId: rotaClientId(shift.rota.id)})
     });
 }
 

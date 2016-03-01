@@ -9,16 +9,21 @@ function generateDefaultRota({dateOfRota, venueId}){
     return {
         date: new Date(dateOfRota),
         venue: {id: venueId},
-        status: "in_progress"
+        status: "in_progress",
+        id: null
     }
 }
 
-export default function getRotaFromDateAndVenue(rotasAsArray, dateOfRota, venueId){
-    var rota = _.find(rotasAsArray, function(rota){
+export default function getRotaFromDateAndVenue(rotas, dateOfRota, venueId, generateIfNotFound){
+    var rota = _.find(rotas, function(rota){
         return rota.venue.id === venueId && datesAreEqual(rota.date, dateOfRota)
     });
     if (rota === undefined){
-        return generateDefaultRota({dateOfRota, venueId});
+        if (generateIfNotFound){
+            return generateDefaultRota({dateOfRota, venueId})
+        } else {
+            throw "Rota not found";
+        }
     }
     return rota;
 }

@@ -22,7 +22,7 @@ export default class StaffShiftList extends Component {
     }
     render() {
         var shifts = this.props.shifts.map((shift, i) =>{
-            var rota = this.props.rotas[shift.rota.id];
+            var rota = this.props.rotas[shift.rota.clientId];
             var venue = this.props.venues[rota.venue.id];
             return <StaffShiftListItem
                 key={i}

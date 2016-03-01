@@ -41,9 +41,15 @@ export const addRotaShift = createApiRequestAction({
             return apiRoutes.addShift.getPath(venueId, date);
         },
         data: (options) => options.shift,
-        getSuccessActionData: function(responseData) {
+        getSuccessActionData: function(responseData, requestOptions, state) {
             responseData.starts_at = new Date(responseData.starts_at)
             responseData.ends_at = new Date(responseData.ends_at)
+
+            var rotaDate = new RotaDate({shiftStartsAt: responseData.starts_at});
+            var rota = getRotaFromDateAndVenue(state.rotas, rotaDate.getDateOfRota(), requestOptions.venueId);
+
+            responseData.rota.clientId = rota.clientId;
+
             return {shift: responseData};
         }
     }),
@@ -204,7 +210,7 @@ export const publishRotas = createApiRequestAction({
         path: function(options){
             return apiRoutes.publishRotas.getPath(options)
         },
-        getSuccessActionData: function(responseDate, requestOptions){
+        getSuccessActionData: function(responseData, requestOptions){
             return requestOptions;
         }
     }),
@@ -250,9 +256,12 @@ export function loadInitialRotaAppState(viewData) {
 }
 
 export function loadInitalStaffTypeRotaAppState(viewData){
+    viewData.rota.rotas = _.map(viewData.rota.venues, function(venue){
+        return getRotaFromDateAndVenue(viewData.rota.rotas, new Date(viewData.rota.date), venue.id, true);
+    });
     var pageOptions = {
         staffTypeSlug: viewData.staffTypeSlug,
-        dateOfRota: new Date(viewData.date)
+        dateOfRota: new Date(viewData.rota.date)
     }
     return genericLoadInitialRotaAppState(viewData, pageOptions);
 }
@@ -284,7 +293,7 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
                 venues: indexById(venueData)
             }),
             replaceAllRotas({
-                rotas: indexById(rotaData)
+                rotas: indexByClientId(rotaData)
             }),
             replaceAllHolidays({
                 holidays: indexById(holidays)
@@ -324,4 +333,8 @@ export function loadInitialRotaOverviewAppState(viewData){
 
 function indexById(data){
     return _.indexBy(data, "id")
+}
+
+function indexByClientId(data){
+    return _.indexBy(data, "clientId")
 }

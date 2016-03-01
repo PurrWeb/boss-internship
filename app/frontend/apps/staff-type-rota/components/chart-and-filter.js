@@ -60,14 +60,10 @@ export default class ChartAndFilter extends React.Component {
             }
 
             return true;
-        })
+        });
     }
     getVenueFromShift(shift){
-        var rotaDate = new RotaDate({shiftStartsAt: shift.starts_at});
-        var rota = getRotaFromDateAndVenue({
-            dateOfRota: rotaDate.getDateOfRota(),
-            venueId: shift.venue.id
-        });
+        var rota = this.props.rotas[shift.rota.clientId];
 
         return rota.venue;
     }

@@ -106,8 +106,8 @@ class ShiftEditor extends Component {
 }
 
 function mapStateToProps(state, ownProps){
-    var rotaId = ownProps.shift.rota.id;
-    var rota = state.rotas[rotaId];
+    var rotaClientId = ownProps.shift.rota.clientId;
+    var rota = state.rotas[rotaClientId];
     return {
         componentErrors: state.componentErrors,
         venueId: rota.venue.id

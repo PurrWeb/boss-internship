@@ -27,6 +27,16 @@ export default function rotasReducer(state={}, action){
                 }
                 return Object.assign({}, rota, {status: "published"});
             });
+        case actionTypes.ADD_SHIFT_SUCCESS:
+            // may now have the correct backend rota ID
+            var rotaClientId = action.shift.rota.clientId;
+            var rotaServerId = action.shift.rota.id;
+            return _(state).mapObject(function(rota){
+                if (rota.clientid !== rotaClientId){
+                    return rota;
+                }
+                return Object.assign({}, rota, {id: rotaServerId});
+            });
     }
     return state;
 }

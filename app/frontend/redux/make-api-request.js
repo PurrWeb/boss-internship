@@ -31,7 +31,7 @@ export default function makeApiRequest(apiOptions){
            method: method,
            data: data
         }).then(function(responseData){    
-            var actionData = apiOptions.getSuccessActionData(responseData, requestOptions);
+            var actionData = apiOptions.getSuccessActionData(responseData, requestOptions, state);
             copyComponentInformationFromRequestOptions(actionData, requestOptions);
             success(actionData);
         }, function(response, textStatus){
