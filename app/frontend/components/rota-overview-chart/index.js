@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import getStaffTypeBreakdownByTime from "./get-staff-type-breakdown-by-time"
 import _ from "underscore"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
@@ -7,11 +6,8 @@ import nvd3 from "nvd3"
 import NVD3Chart from "react-nvd3"
 import ReactDOM from "react-dom"
 import d3 from "d3"
-import renderTooltipHtml from "./render-tooltip-html"
 import moment from "moment"
 
-
-const GRANULARITY = 30;
 const MILLISECONDS_PER_MINUTE = 60 * 1000;
 const MINUTES_PER_HOUR = 60;
 const HOVER_INDICATOR_WIDTH = 10;
@@ -34,7 +30,10 @@ export default class RotaOverviewChart extends Component {
         staff: React.PropTypes.object.isRequired,
         dateOfRota: React.PropTypes.instanceOf(Date),
         onHoverShiftsChange: React.PropTypes.func.isRequired,
-        onSelectionShiftsChange: React.PropTypes.func.isRequired
+        onSelectionShiftsChange: React.PropTypes.func.isRequired,
+        tooltipGenerator: React.PropTypes.func.isRequired,
+        getBreakdown: React.PropTypes.func.isRequired,
+        granularity: React.PropTypes.number.isRequired
     }
     shouldComponentUpdate(nextProps, nextState){
         return !utils.deepEqualTreatingFunctionsAsStrings(
@@ -44,7 +43,7 @@ export default class RotaOverviewChart extends Component {
     }
     render() {
         var self = this;
-        var breakdown = this.getBreakdown();
+        var breakdown = this.props.getBreakdown();
 
         var datum = this.getChartData(breakdown);
         var options = {
@@ -55,17 +54,7 @@ export default class RotaOverviewChart extends Component {
                 tickFormat: d3.format("d")
             },
             tooltip: {
-                contentGenerator: function(obj){
-                    var selectedStaffTypeTitle = obj.series[0].key;
-                    var date = breakdown[obj.index].date;
-                    var breakdownAtPoint = _(breakdown).find((point) => point.date.valueOf() === date.valueOf());
-
-                    return renderTooltipHtml({
-                        shiftsByStaffType: breakdownAtPoint.shiftsByStaffType,
-                        selectedStaffTypeTitle,
-                        staffTypes: self.props.staffTypes
-                    });
-                }
+                contentGenerator: (obj) => this.props.tooltipGenerator(obj, breakdown)
             }
         }
 
@@ -142,17 +131,6 @@ export default class RotaOverviewChart extends Component {
     getRotaDate(){
         return new RotaDate({dateOfRota: this.props.dateOfRota});
     }
-    getBreakdown(){
-        var { shifts, staff, staffTypes} = this.props;
-        var rotaDate = this.getRotaDate();
-        return getStaffTypeBreakdownByTime({
-            shifts,
-            staff,
-            granularityInMinutes: GRANULARITY,
-            staffTypes,
-            rotaDate
-        });
-    }
     getSelectionData(breakdown, obj){
         var seriesName = obj.data.key;
         var index = obj.index;
@@ -182,7 +160,7 @@ export default class RotaOverviewChart extends Component {
                 values: values,
                 color: staffTypes[staffType].color,
                 pointStart: rotaDate.startTime.valueOf(),
-                pointInterval: GRANULARITY * MILLISECONDS_PER_MINUTE,
+                pointInterval: this.props.granularity * MILLISECONDS_PER_MINUTE,
             });
         }
         return series;
