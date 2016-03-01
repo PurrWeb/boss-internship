@@ -28,7 +28,7 @@ module Api
           render(
             json: {
               errors: {
-                base: 'Past forecasts in the past cannot be updated'
+                base: ['Forecasts in the past cannot be updated']
               }
             },
             status: :forbidden
