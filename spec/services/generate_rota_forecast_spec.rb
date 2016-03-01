@@ -138,12 +138,11 @@ RSpec.describe GenerateRotaForecast do
 
     context 'a member of security staff exists with a shift on the rota' do
       let(:pay_rate) { FactoryGirl.create(:pay_rate, cents_per_hour: 1500) }
-      let(:security_staff_type) { FactoryGirl.create(:security_staff_type) }
       let!(:staff_member) do
         FactoryGirl.create(
           :staff_member,
+          :security,
           pay_rate: pay_rate,
-          staff_type: security_staff_type
         )
       end
       let!(:rota_shift) do

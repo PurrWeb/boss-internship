@@ -14,7 +14,11 @@
               Venue.all.map { |venue| [venue.name.titlecase, venue.id] },
               venue_fields.object.try(:venue_id)
             ),
-            include_blank: true
+            {
+              help: "#{ form.object.errors[:venue].to_sentence }",
+              include_blank: true,
+            },
+            wrapper_class: "#{ 'has-error' if form.object.errors[:venue].present? }",
           ) %>
     <%= form.select(
           :staff_type,

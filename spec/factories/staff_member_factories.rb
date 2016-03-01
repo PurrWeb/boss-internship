@@ -27,5 +27,10 @@ FactoryGirl.define do
     trait :requiring_notification do
       shift_change_occured_at 1.hour.ago
     end
+
+    trait :security do
+      association :staff_type, factory: :security_staff_type
+      venue nil
+    end
   end
 end
