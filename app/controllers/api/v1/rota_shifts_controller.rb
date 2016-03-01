@@ -32,7 +32,7 @@ module Api
 
       def update
         shift = RotaShift.find(params[:id])
-        authorize! :manage, shift.rota
+        authorize! :manage, shift
 
         result = EditRotaShift.new(rota_shift: shift, rota_shift_params: rota_shift_params).call
 
@@ -49,7 +49,7 @@ module Api
 
       def destroy
         shift = RotaShift.find(params[:id])
-        authorize! :manage, shift.rota
+        authorize! :manage, shift
 
         DisableRotaShift.new(requester: current_user, shift: shift).call
         render json: {}

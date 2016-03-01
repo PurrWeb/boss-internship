@@ -38,6 +38,10 @@ class RotaShift < ActiveRecord::Base
     end
   end
 
+  def security?
+    staff_member.security?
+  end
+
   private
   # validation
   def times_in_correct_order

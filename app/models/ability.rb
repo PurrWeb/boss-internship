@@ -21,7 +21,7 @@ class Ability
     end
 
     can :manage, Venue do |venue|
-      user.has_all_venue_access? || user.venues.include?(venue)
+      can_manage_venue?(user, venue)
     end
 
     can :manage, StaffMember do |staff_member|
@@ -29,7 +29,15 @@ class Ability
     end
 
     can :manage, Rota do |rota|
-      user.has_all_venue_access? || user.venues.include?(rota.venue)
+      can_manage_venue?(user, rota.venue)
+    end
+
+    can :manage, RotaShift do |rota_shift|
+      if rota_shift.security?
+        user.has_admin_access? || user.security_manager?
+      else
+        can_manage_venue?(user, rota_shift.venue)
+      end
     end
 
     can :create_staff_member, User do |target_user|
@@ -57,6 +65,10 @@ class Ability
   end
 
   def can_manage_staff_member?(user, staff_member)
-    user.has_all_venue_access? || user.venues.include?(staff_member.venue)
+    can_manage_venue?(user, staff_member.venue)
+  end
+
+  def can_manage_venue?(user, venue)
+      user.has_all_venue_access? || user.venues.include?(venue)
   end
 end

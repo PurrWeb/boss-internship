@@ -4,6 +4,10 @@ class StaffType < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   validates :role, presence: true, inclusion: { in: ROLES, message: 'is required' }
 
+  def security?
+    name == 'Security'
+  end
+
   def self.pr
     where(name: 'Pr')
   end

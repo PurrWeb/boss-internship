@@ -58,6 +58,10 @@ class StaffMember < ActiveRecord::Base
     joins(:venue).merge(Venue.where(id: venue.id))
   end
 
+  def security?
+    staff_type.security?
+  end
+
   def active_holidays
     holidays.in_state(:enabled)
   end
