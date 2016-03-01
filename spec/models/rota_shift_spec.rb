@@ -19,8 +19,8 @@ describe RotaShift do
       end
 
       context 'when new shift does not overlap' do
-        let(:new_starts_at) { ends_at + 15.minutes }
-        let(:new_ends_at) { ends_at + 45.minutes }
+        let(:new_starts_at) { ends_at + 30.minutes }
+        let(:new_ends_at) { ends_at + 1.hour }
         let(:new_shift) do
           RotaShift.new(
             rota: rota,
