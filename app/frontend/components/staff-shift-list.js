@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import moment from "moment"
+import _ from "underscore"
 
 class StaffShiftListItem extends Component {
     render(){
@@ -21,7 +22,7 @@ export default class StaffShiftList extends Component {
         rotas: React.PropTypes.object.isRequired
     }
     render() {
-        var shifts = this.props.shifts.map((shift, i) =>{
+        var shifts = _.values(this.props.shifts).map((shift, i) =>{
             var rota = this.props.rotas[shift.rota.clientId];
             var venue = this.props.venues[rota.venue.id];
             return <StaffShiftListItem

@@ -10,7 +10,7 @@ import { connect } from "react-redux"
 import { selectAddShiftIsInProgress } from "~redux/selectors"
 import _ from "underscore"
 
-class StaffListItem extends Component {
+class RotaStaffListItem extends Component {
     static contextTypes = {
         addShift: React.PropTypes.func.isRequired,
         canAddShift: React.PropTypes.func.isRequired
@@ -48,7 +48,7 @@ class StaffListItem extends Component {
                                     Shifts
                                 </h4>
                                 <StaffShiftList
-                                    shifts={this.getStaffShifts(staff.id)}
+                                    shifts={_.indexBy(this.getStaffShifts(staff.id), "id")}
                                     venues={this.props.venues}
                                     rotas={this.props.rotas} />
                             </div>
@@ -127,4 +127,4 @@ export default connect(
     null,
     null,
     {pure: false}
-)(StaffListItem);
+)(RotaStaffListItem);
