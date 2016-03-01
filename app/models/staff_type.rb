@@ -5,7 +5,7 @@ class StaffType < ActiveRecord::Base
   validates :role, presence: true, inclusion: { in: ROLES, message: 'is required' }
 
   def security?
-    name == 'Security'
+    role == 'security'
   end
 
   def self.pr
@@ -25,11 +25,11 @@ class StaffType < ActiveRecord::Base
   end
 
   def self.security
-    where(name: 'Security')
+    where(role: 'security')
   end
 
   def self.not_security
-    where.not(name: 'Security')
+    where.not(role: 'security')
   end
 end
 
