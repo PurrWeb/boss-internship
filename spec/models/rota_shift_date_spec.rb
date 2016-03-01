@@ -75,4 +75,16 @@ describe 'Rota shift date' do
       end
     end
   end
+
+  describe '#contains_time?' do
+    let(:now) { Time.now }
+    let(:date) { RotaShiftDate.new(now) }
+
+    specify do
+      expect(date.contains_time?(date.start_time)).to eq(true)
+      expect(date.contains_time?(date.start_time - 1.second)).to eq(false)
+      expect(date.contains_time?(date.end_time)).to eq(true)
+      expect(date.contains_time?(date.end_time + 1.second)).to eq(false)
+    end
+  end
 end
