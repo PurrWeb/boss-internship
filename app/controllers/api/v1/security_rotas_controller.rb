@@ -1,6 +1,8 @@
 module Api
   module V1
     class SecurityRotasController < APIController
+      before_action :authorize
+
       def overview
         date = date_from_params
         week = RotaWeek.new(date)
@@ -13,6 +15,10 @@ module Api
       end
 
       private
+      def authorize
+        authorize! :manage, :security_rota
+      end
+
       def date_from_params
         UIRotaDate.parse(params.fetch(:id))
       end

@@ -6,12 +6,15 @@ class Ability
     #
     if user.has_admin_access?
       can :manage, :admin
-      can :manage, :security_rota
     end
 
     can :manage, :staff_members
 
     can :manage, :rotas
+
+    can :manage, :security_rota do
+      user.has_admin_access? || user.security_manager?
+    end
 
     can :manage, Holiday do |holiday|
       holiday.editable? && can_manage_staff_member?(user, holiday.staff_member)
