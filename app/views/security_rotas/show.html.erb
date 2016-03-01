@@ -1,6 +1,6 @@
 <script type="text/javascript">
   (function(){
-    rotaData = {};
+    var rotaData = {};
 
     rotaData.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas } %>;
 
@@ -14,9 +14,9 @@
 
     rotaData.holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: holidays } %>
 
-
     window.boss = window.boss || {};
     window.boss.rota = rotaData;
+    window.boss.date = "2016-03-14";
 
     window.boss.staffTypeSlug = "security";
   })()

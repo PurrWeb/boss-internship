@@ -7,10 +7,10 @@ export function processRotaObject(rota){
     var date = rota.date;
     newRota.date = new Date(date);
 
-    // Before we've created the first shift for a rota the rota
-    // isn't saved on the backend, so it doesn't have an ID
     if (rota.id === null) {
-        newRota.id = "UNPERSISTED_ROTA_" + _.uniqueId();
+        newRota.clientId = "UNPERSISTED_ROTA_" + _.uniqueId();
+    } else {
+        newRota.clientId = "ROTA_" + rota.id;
     }
 
     return newRota

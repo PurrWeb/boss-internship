@@ -4,6 +4,7 @@ import _ from "underscore"
 import ChartSelectionView from "~components/chart-selection-view"
 import StaffDetailsAndShifts from "~components/staff-details-and-shifts"
 import VenueDropdown from "~components/venue-dropdown"
+import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 
 export default class ChartAndFilter extends React.Component {
     static propTypes = {
@@ -62,7 +63,12 @@ export default class ChartAndFilter extends React.Component {
         })
     }
     getVenueFromShift(shift){
-        var rota = this.props.rotas[shift.rota.id];
+        var rotaDate = new RotaDate({shiftStartsAt: shift.starts_at});
+        var rota = getRotaFromDateAndVenue({
+            dateOfRota: rotaDate.getDateOfRota(),
+            venueId: shift.venue.id
+        });
+
         return rota.venue;
     }
     getShiftColor(shift){

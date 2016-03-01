@@ -20,10 +20,9 @@ class RotaNavigation extends React.Component {
 }
 
 function mapStateToProps(state){
-    var dateOfRota = _.values(state.rotas)[0].date;
     return {
-        dateOfRota,
-        staffTypeSlug: state.pageOptions.staffTypeRotaOptions.staffTypeSlug
+        dateOfRota: state.pageOptions.dateOfRota,
+        staffTypeSlug: state.pageOptions.staffTypeSlug
     }
 }
 

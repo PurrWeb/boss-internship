@@ -9,6 +9,7 @@ import RotaNavigation from "./rota-navigation"
 import store from "../../redux/store.js"
 import moment from "moment"
 import RotaStatusToggle from "./status-toggle/rota-status-toggle"
+import { selectRotaOnVenueRotaPage } from "~redux/selectors"
 
 
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
@@ -68,7 +69,7 @@ function mapStateToProps(state) {
             isBeingEdited: isBeingEdited
         });
     });
-    var rota = props.rotas[props.pageOptions.displayedRota];
+    var rota = selectRotaOnVenueRotaPage(props);
     props.venue = props.venues[rota.venue.id];
     props.dateOfRota = rota.date;
 

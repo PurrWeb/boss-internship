@@ -3,7 +3,7 @@ import {connect } from "react-redux"
 import validation from "~lib/validation"
 import _ from "underscore"
 import AddShiftView from "./add-shift-view/add-shift-view"
-import { selectStaffMemberIsOnHolidayOnDate, selectAddShiftIsInProgress } from "~redux/selectors"
+import { selectStaffMemberIsOnHolidayOnDate, selectAddShiftIsInProgress, selectRotaOnVenueRotaPage } from "~redux/selectors"
 import * as actionCreators from "~redux/actions"
 
 
@@ -20,7 +20,7 @@ class AddShiftViewContainer extends Component {
     }
     constructor(props){
         super(props);
-
+        
         var state = {
             shiftTimes: this.getDefaultShiftTimes(props)
         };
@@ -65,8 +65,7 @@ class AddShiftViewContainer extends Component {
 }
 
 function mapStateToProps(state, ownProps){
-    var rotaId = state.pageOptions.displayedRota;
-    var rota = state.rotas[rotaId];
+    var rota = selectRotaOnVenueRotaPage(state);
     return {
         staffMemberIsOnHoliday: _.mapObject(ownProps.staff, function(staff, staffId){
             return selectStaffMemberIsOnHolidayOnDate(state, staffId, ownProps.dateOfRota)

@@ -1,5 +1,6 @@
 import _ from "underscore"
 import utils from "~lib/utils"
+import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 
 export function selectStaffTypesWithShifts(state){
     var {rotaShifts, staff} = state;
@@ -81,5 +82,13 @@ export function selectAddShiftIsInProgress(state, staffId){
     var shiftsBeingAdded = state.apiRequestsInProgress.ADD_SHIFT;
     return _(shiftsBeingAdded).some(
         (request) => request.shift.staff_member_id === staffId
+    );
+}
+
+export function selectRotaOnVenueRotaPage(state){
+    return getRotaFromDateAndVenue(
+        state.rotas,
+        state.pageOptions.dateOfRota,
+        state.pageOptions.venueId
     );
 }
