@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import moment from "moment"
 import ShiftList from "./shift-list"
-import RotaOverviewChart from "~components/rota-overview-chart"
+import VenueRotaOverviewChart from "./venue-rota-overview-chart"
 import ChartSelectionView from "~components/chart-selection-view"
 import _ from "underscore"
 import RotaForecast from "./containers/rota-forecast"
@@ -20,9 +20,9 @@ export default class RotaOverviewView extends Component {
 
         return <div className="row">
             <div className="col-md-9">
-                <RotaOverviewChart
+                <VenueRotaOverviewChart
                     staff={this.props.staff}
-                    shifts={_.values(this.props.shifts)}
+                    shifts={this.props.shifts}
                     dateOfRota={this.props.dateOfRota}
                     staffTypes={this.props.staffTypesWithShifts}
                     onHoverShiftsChange={(shifts) => this.setState({hoverData: shifts})}
