@@ -11,10 +11,10 @@ apiOptions:
 - getSuccessActionData
 */
 export default function makeApiRequest(apiOptions){
-    return function(requestOptions, success, error, state) {
+    return function(requestOptions, success, error, getState) {
         function resolveFunctionParameter(parameterValue){
             if (typeof parameterValue === "function") {
-                return parameterValue(requestOptions, state);
+                return parameterValue(requestOptions, getState);
             }
             return parameterValue
         };
@@ -31,7 +31,7 @@ export default function makeApiRequest(apiOptions){
            method: method,
            data: data
         }).then(function(responseData){    
-            var actionData = apiOptions.getSuccessActionData(responseData, requestOptions, state);
+            var actionData = apiOptions.getSuccessActionData(responseData, requestOptions, getState);
             copyComponentInformationFromRequestOptions(actionData, requestOptions);
             success(actionData);
         }, function(response, textStatus){

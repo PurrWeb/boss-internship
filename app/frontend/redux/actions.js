@@ -16,10 +16,10 @@ const createApiRequestAction = function(options){
 }
 
 function confirmIfRotaIsPublished(question){
-    return function(requestOptions, state){
+    return function(requestOptions, getState){
         var venueId = oFetch(requestOptions, "venueId");
         var date = new RotaDate({shiftStartsAt: oFetch(requestOptions, "shift.starts_at")}).getDateOfRota();
-        var rota = getRotaFromDateAndVenue(state.rotas, date, venueId)
+        var rota = getRotaFromDateAndVenue(getState().rotas, date, venueId)
         if (rota.status !== "published") {
             return true;
         }
@@ -36,17 +36,17 @@ export const addRotaShift = createApiRequestAction({
     requestType: "ADD_SHIFT",
     makeRequest: makeApiRequest({
         method: apiRoutes.addShift.method,
-        path: function({venueId, shift}, state) {
+        path: function({venueId, shift}, getState) {
             var date = getRotaDateFromShiftStartsAt(shift.starts_at);
             return apiRoutes.addShift.getPath(venueId, date);
         },
         data: (options) => options.shift,
-        getSuccessActionData: function(responseData, requestOptions, state) {
+        getSuccessActionData: function(responseData, requestOptions, getState) {
             responseData.starts_at = new Date(responseData.starts_at)
             responseData.ends_at = new Date(responseData.ends_at)
 
             var rotaDate = new RotaDate({shiftStartsAt: responseData.starts_at});
-            var rota = getRotaFromDateAndVenue(state.rotas, rotaDate.getDateOfRota(), requestOptions.venueId);
+            var rota = getRotaFromDateAndVenue(getState().rotas, rotaDate.getDateOfRota(), requestOptions.venueId);
 
             responseData.rota.clientId = rota.clientId;
 
@@ -71,8 +71,8 @@ export const updateRotaShift = createApiRequestAction({
     makeRequest: makeApiRequest({
         path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shift.shift_id}),
         method: apiRoutes.updateShift.method,
-        data: function(options, state){
-            options.shift.staff_member_id = state.rotaShifts[options.shift.shift_id].staff_member.id;
+        data: function(options, getState){
+            options.shift.staff_member_id = getState().rotaShifts[options.shift.shift_id].staff_member.id;
             return options.shift;
         },
         getSuccessActionData(responseData){
