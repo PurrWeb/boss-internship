@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import _ from "underscore"
 import RotaOverviewChart from "~components/rota-overview-chart"
 import renderTooltipHtml from "./render-tooltip-html"
-import getStaffTypeBreakdownByTime from "~lib/get-staff-type-breakdown-by-time"
+import getGroupedShiftBreakdownByTime from "~lib/get-grouped-shift-breakdown-by-time"
 import RotaDate from "~lib/rota-date"
 
 const GRANULARITY = 30;
@@ -31,13 +31,22 @@ export default class VenueRotaOverviewChart extends Component {
     }
     getBreakdown(){
         var { shifts, staff, staffTypes} = this.props;
+
+        function getStaffTypeFromShift(shift) {
+            return staff[shift.staff_member.id].staff_type.id;
+        }
+
         var rotaDate = this.getRotaDate();
-        return getStaffTypeBreakdownByTime({
+        return getGroupedShiftBreakdownByTime({
             shifts: _.values(shifts),
             staff,
             granularityInMinutes: GRANULARITY,
             staffTypes,
-            rotaDate
+            rotaDate,
+            groupsById: staffTypes,
+            getGroupFromShift: function(shift){
+                return staff[shift.staff_member.id].staff_type;    
+            }
         });
     }
     generateTooltip(obj, breakdown){

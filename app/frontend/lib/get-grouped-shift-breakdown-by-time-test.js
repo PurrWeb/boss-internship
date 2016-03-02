@@ -1,9 +1,9 @@
 import expect from "expect"
-import getStaffTypeBreakdownByTime from "./get-staff-type-breakdown-by-time"
+import getStaffTypeBreakdownByTime from "./get-grouped-shift-breakdown-by-time"
 import RotaDate from "~lib/rota-date"
 import _ from "underscore"
 
-describe("getStaffTypeBreakdownByTime", function() {
+describe("getGroupedShiftBreakdownByTime", function() {
     var rotaDate = new RotaDate({dateOfRota: new Date(2015,10, 1, 0, 0, 0)});
 
     var staffTypes = {kitchen: {}, bar_back: {}};

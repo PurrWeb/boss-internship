@@ -26,16 +26,13 @@ The responsive consists of an array like this:
 @param  {array} shifts - list of rota shifts for the day
 @param  {array} staff - staff that the shifts belong to
 @param  {number} granularityInMinutes - see above
-@param  {object} staffTypes - staff types object mapping keys to title etc
+@param  {object} groupsById - groups (e.g. stafftypes) with an id, name etc.
 @param  {object} rotaDate - rota date object for the day the shifts are on
 @return {array} - see above
 */
-export default function getStaffTypeBreakdownByTime(options){
-    var {shifts, staff, granularityInMinutes, staffTypes, rotaDate} = options;
+export default function getGroupedShiftBreakdownByTime(options){
+    var {shifts, staff, granularityInMinutes, groupsById, rotaDate, getGroupFromShift} = options;
 
-    function getStaffTypeFromShift(shift) {
-        return staff[shift.staff_member.id].staff_type.id;
-    }
     function getInitialBreakdownAtSamplingPoint(offsetInMinutes){
         var startTimeClone = new Date(rotaDate.startTime);
         var newMinutes = rotaDate.startTime.getMinutes() + offsetInMinutes;
@@ -47,8 +44,8 @@ export default function getStaffTypeBreakdownByTime(options){
             date
         };
 
-        for (var staffType in staffTypes) {
-            obj.shiftsByGroup[staffType] = [];
+        for (var groupId in groupsById) {
+            obj.shiftsByGroup[groupId] = [];
         }
         return obj;
     }
@@ -63,13 +60,14 @@ export default function getStaffTypeBreakdownByTime(options){
     }
 
     shifts.forEach(function(shift, i){
-        var staffType = getStaffTypeFromShift(shift);
+        var groupId = getGroupFromShift(shift).id;
+        
         breakdown.forEach(function(samplingPoint){
             var startsBeforeOrAtSamplingPoint = samplingPoint.date >= shift.starts_at;
             var endsAfterSamplingPoint = samplingPoint.date < shift.ends_at;
             var shiftCoversSamplingPoint =  startsBeforeOrAtSamplingPoint && endsAfterSamplingPoint;
             if (shiftCoversSamplingPoint) {
-              samplingPoint.shiftsByGroup[staffType].push(shift);
+              samplingPoint.shiftsByGroup[groupId].push(shift);
             }
         });
     });
