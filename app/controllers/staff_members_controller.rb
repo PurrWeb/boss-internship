@@ -139,7 +139,6 @@ class StaffMembersController < ApplicationController
       :hours_preference_note,
       :avatar_base64,
       :day_perference_note,
-      :staff_type,
       :employment_status_a,
       :employment_status_b,
       :employment_status_c,
@@ -150,6 +149,8 @@ class StaffMembersController < ApplicationController
       ],
       staff_member_venue_attributes: [:venue_id]
     ]
+
+    require_attributes << :staff_type if !current_user.security_manager?
 
     require_attributes << :pay_rate_id if pay_rate_from_params.andand.editable_by?(current_user)
 
@@ -175,13 +176,15 @@ class StaffMembersController < ApplicationController
       permit(
         require_attributes
       ).merge(
-        staff_type: staff_type_from_params,
         creator: current_user
       )
 
     if result[:avatar_base64].present?
       result = result.merge(avatar_data_uri: result[:avatar_base64])
     end
+
+    staff_type = current_user.security_manager? ? StaffType.security.first : staff_type_from_params
+    result = result.merge(staff_type: staff_type)
 
     result
   end
@@ -207,7 +210,6 @@ class StaffMembersController < ApplicationController
   def update_employment_details_params(staff_member)
     allowed_params = [
         :national_insurance_number,
-        :staff_type,
         :hours_preference_note,
         :day_perference_note,
         :starts_at,
@@ -218,19 +220,24 @@ class StaffMembersController < ApplicationController
         :pay_rate_id
     ]
 
+    allowed_params << :staff_type if !current_user.security_manager?
+
     allowed_params << :pay_rate_id if pay_rate_from_params.andand.editable_by?(current_user)
 
     allowed_params << { staff_member_venue_attributes: [:venue_id] }
 
-    params.require(:staff_member).
+    result = params.require(:staff_member).
       permit(
         *allowed_params
       ).deep_merge(
-        staff_type: staff_type_from_params,
         staff_member_venue_attributes: {
           id: staff_member.staff_member_venue.try(:id)
         }
       )
+
+    result = result.merge(staff_type: staff_type_from_params) if !current_user.security_manager?
+
+    result
   end
 
   def update_personal_details_params
