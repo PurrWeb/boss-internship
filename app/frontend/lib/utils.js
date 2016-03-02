@@ -77,6 +77,9 @@ var utils =  {
     indexById(array){
         return _.indexBy(array, "id");
     },
+    indexByClientId(array){
+        return _.indexBy(array, "clientId");
+    },
     // http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
     formatMoney(x) {
         // add thousand separators and show 2 decimal digits
