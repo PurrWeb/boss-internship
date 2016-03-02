@@ -80,7 +80,11 @@ class RotaDate {
         var msSinceStartOfDay =  date.valueOf() - this.startTime.valueOf();
         return msSinceStartOfDay / MILLISECONDS_PER_HOUR;
     }
-
+    getDateOfRota(){
+        var dateOfRota = new Date(this.startTime);
+        dateOfRota.setHours(0);
+        return dateOfRota;
+    }
 }
 
 export default RotaDate;

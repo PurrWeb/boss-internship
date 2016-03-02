@@ -4,11 +4,12 @@ import { bindActionCreators } from "redux";
 import * as actionCreators from "../../redux/actions.js"
 import ChartAndFilter from "./chart-and-filter.js"
 import _ from "underscore"
-import AddShiftView from "./add-shift-view"
+import AddShiftViewContainer from "./add-shift-view-container"
 import RotaNavigation from "./rota-navigation"
 import store from "../../redux/store.js"
 import moment from "moment"
 import RotaStatusToggle from "./status-toggle/rota-status-toggle"
+import { selectRotaOnVenueRotaPage } from "~redux/selectors"
 
 
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
@@ -46,9 +47,8 @@ class RotaView extends Component {
                 staffTypes={this.props.staffTypes}
                 staff={this.props.staff} />
             <hr />
-            <AddShiftView 
-                dateOfRota={this.props.dateOfRota}
-                staff={this.props.staff} />
+            <AddShiftViewContainer 
+                dateOfRota={this.props.dateOfRota} />
         </div>
     }
 }
@@ -59,11 +59,6 @@ function mapStateToProps(state) {
     props.shifts = _.values(props.shifts);
 
     var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
-    props.staff = _(props.staff).mapValues(function(staff){
-        return Object.assign({}, staff, {
-            addShiftIsInProgress: _(shiftsBeingAdded).some((request) => request.shift.staff_member_id === staff.id)
-        })
-    });
 
     var shiftsBeingUpdated = props.apiRequestsInProgress.UPDATE_SHIFT;
     var shiftsBeingDeleted = props.apiRequestsInProgress.DELETE_SHIFT;
@@ -74,7 +69,7 @@ function mapStateToProps(state) {
             isBeingEdited: isBeingEdited
         });
     });
-    var rota = props.rotas[props.pageOptions.displayedRota];
+    var rota = selectRotaOnVenueRotaPage(props);
     props.venue = props.venues[rota.venue.id];
     props.dateOfRota = rota.date;
 
@@ -82,5 +77,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    null, null, {pure: false}
 )(RotaView);

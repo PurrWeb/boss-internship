@@ -3,6 +3,7 @@ import * as actionCreators from "~redux/actions"
 import RotaStatusToggleUi from "./rota-status-toggle-ui"
 import { connect } from "react-redux"
 import _ from "underscore"
+import { selectRotaOnVenueRotaPage } from "~redux/selectors"
 
 class RotaStatusToggle extends React.Component {
     static propTypes = {
@@ -25,7 +26,7 @@ class RotaStatusToggle extends React.Component {
 }
 
 function mapStateToProps(state){
-    var rota = state.rotas[state.pageOptions.displayedRota];
+    var rota = selectRotaOnVenueRotaPage(state);
     return {
         rota: rota,
         status: rota.status,

@@ -1,30 +1,39 @@
 import React, { Component } from "react"
 import moment from "moment"
-import _ from 'underscore'
+import _ from "underscore"
+
+class StaffShiftListItem extends Component {
+    render(){
+        var {shift} = this.props;
+        return <div className="staff-shift-list__shift">
+            {moment(shift.starts_at).format("H:mm")}
+            &nbsp;to&nbsp;
+            {moment(shift.ends_at).format("H:mm")}
+            &nbsp;
+            ({this.props.venueName})
+        </div>
+    }
+}
 
 export default class StaffShiftList extends Component {
-    static contextTypes = {
-        rotaShifts: React.PropTypes.array.isRequired
+    static propTypes = {
+        shifts: React.PropTypes.object.isRequired,
+        venues: React.PropTypes.object.isRequired,
+        rotas: React.PropTypes.object.isRequired
     }
     render() {
-        var staffId = this.props.staffId;
-        var shifts = this.getStaffShifts().map(function(shift, i){
-            return <div className="staff-shift-list__shift" key={i}>
-                {moment(shift.starts_at).format("dd D MMM YYYY H:mm")}
-                &nbsp;to&nbsp;
-                {moment(shift.ends_at).format("H:mm")}
-            </div>
+        var shifts = _.values(this.props.shifts).map((shift, i) =>{
+            var rota = this.props.rotas[shift.rota.clientId];
+            var venue = this.props.venues[rota.venue.id];
+            return <StaffShiftListItem
+                key={i}
+                shift={shift}
+                venueName={venue.name} />
         })
         return (
             <div className="staff-shift-list">
                 {shifts}
             </div>
         );
-    }
-    getStaffShifts(){
-        var self = this;
-        return _(this.context.rotaShifts).filter(function(shift){
-            return shift.staff_member.id === self.props.staffId
-        });
     }
 }

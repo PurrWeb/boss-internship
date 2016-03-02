@@ -145,10 +145,16 @@ class UsersController < ApplicationController
       staff_member_venue_attributes: [:venue_id]
     }
 
+    staff_type = staff_type_from_params
+    if staff_type.andand.security?
+      permit_attributes << :sia_badge_number
+      permit_attributes << :sia_badge_expiry_date
+    end
+
     result = params.require(:staff_member).permit(
       permit_attributes
     ).merge(
-      staff_type: staff_type_from_params,
+      staff_type: staff_type,
       name: user.name,
       email_address: user.email_address,
       creator: current_user

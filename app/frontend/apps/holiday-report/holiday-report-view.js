@@ -8,6 +8,7 @@ import WeekAndVenueSelector from "~components/week-and-venue-selector"
 export default class HolidayReportView extends React.Component {
     render(){
         return <div>
+
             <div className="row">
                 <div className="col-md-6">
                     <WeekAndVenueSelector
@@ -19,6 +20,7 @@ export default class HolidayReportView extends React.Component {
                             })
                         }
                         venues={this.props.venues}
+                        canSelectAllVenues={true}
                         venueId={this.props.pageOptions.venueId} />
                 </div>
             </div>

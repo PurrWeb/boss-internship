@@ -1,0 +1,29 @@
+<script type="text/javascript">
+  (function(){
+    var rotaData = {};
+
+    rotaData.date = "<%= date.iso8601 %>";
+
+    rotaData.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas } %>;
+
+    rotaData.staff_types = <%=  raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
+
+    rotaData.rota_shifts = <%= raw render partial: 'api/v1/shared/rota_shifts.json', locals: { rota_shifts: rota_shifts } %>;
+
+    rotaData.staff_members = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members  } %>
+
+    rotaData.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: venues } %>
+
+    rotaData.holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: holidays } %>
+
+    window.boss = window.boss || {};
+    window.boss.rota = rotaData;
+
+    window.boss.staffTypeSlug = "security";
+  })()
+</script>
+
+<div class="container">
+  <h1>Security Rota for <%= date %></h1>
+  <%= react_component("StaffTypeRotaApp") %>
+</div>

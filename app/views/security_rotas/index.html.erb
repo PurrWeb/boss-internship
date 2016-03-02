@@ -1,0 +1,26 @@
+<script type="text/javascript">
+  (function(){
+    var securityRotaOverviews = [];
+
+    <% (week.start_date..week.end_date).each do |date| %>
+      securityRotaOverviews.push(<%= raw(
+        render(
+          partial: 'api/v1/shared/security_rota_overview.json',
+          locals: {
+            date: date,
+            rotas: Rota.where(date: date)
+          }
+        )
+      ) %>);
+    <% end %>
+
+    window.boss = window.boss || {};
+    window.boss.staffTypeSlug = "security";
+    window.boss.securityRotaOverviews = securityRotaOverviews;
+  })();
+</script>
+
+<div class="container">
+  <h1>Security Rota <%= week.start_date %> to <%= week.end_date %></h1>
+  <%= react_component("StaffTypeRotaOverviewApp") %>
+</div>

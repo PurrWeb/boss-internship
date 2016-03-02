@@ -1,5 +1,6 @@
 import _ from "underscore"
 import utils from "~lib/utils"
+import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 
 export function selectStaffTypesWithShifts(state){
     var {rotaShifts, staff} = state;
@@ -15,16 +16,6 @@ export function selectStaffTypesWithShifts(state){
     function getStaffTypeFromShift(shift) {
         return staff[shift.staff_member.id].staff_type.id;
     }
-}
-
-// not sure if this is technically a Redux selector, but I'll put it here for now
-export function selectStaffTypesWithStaffMembers(staffTypes, staffMembers) {
-    return _(staffMembers).chain()
-        .pluck("staff_type")
-        .pluck("id")
-        .unique()
-        .map((staffTypeId) => staffTypes[staffTypeId])
-        .value()
 }
 
 export function selectStaffMemberHolidays(state, staffId){
@@ -85,4 +76,19 @@ export function selectForecastByRotaId(state, rotaId){
         var isSameVenue = rota.venue.id === forecast.venue.id;
         return isSameVenue && isSameDate;
     })
+}
+
+export function selectAddShiftIsInProgress(state, staffId){
+    var shiftsBeingAdded = state.apiRequestsInProgress.ADD_SHIFT;
+    return _(shiftsBeingAdded).some(
+        (request) => request.shift.staff_member_id === staffId
+    );
+}
+
+export function selectRotaOnVenueRotaPage(state){
+    return getRotaFromDateAndVenue({
+        rotas: state.rotas,
+        dateOfRota: state.pageOptions.dateOfRota,
+        venueId: state.pageOptions.venueId
+    });
 }

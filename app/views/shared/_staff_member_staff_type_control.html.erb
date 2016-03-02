@@ -1,0 +1,19 @@
+<% if user.security_manager? %>
+  <%= form.static_control :staff_type, label: 'Staff Type', label_class: 'force-not-required' do %>
+    Security
+  <% end %>
+<% else %>
+  <%= form.select(
+        :staff_type,
+        options_for_select(
+          StaffType.all.map{ |type| [type.name.titleize, type.id] },
+          form.object.staff_type.try(:id)
+        ),
+        include_blank: true,
+        label_class: 'required',
+        html: {
+          name: :staff_type_id
+        }
+      )
+  %>
+<% end %>

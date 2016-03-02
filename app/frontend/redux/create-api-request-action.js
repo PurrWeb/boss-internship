@@ -37,7 +37,7 @@ addTodo({title: "Buy milk"});
    - options  Options passed into the action creator.
    - success  Callback to call once the data has been loaded
    - error    Callback to to call if the data couldn't be loaded.
-   - state    Current store state
+   - getState    Function to get current store state
  * @param  {object} confirm - is called before the API call and cancels it if it doesn't return true
  * @param  {object} actionTypes - action types will be added to this object so they can be used in reducers
  * @return {function}   Asynchronous action creator.
@@ -110,7 +110,7 @@ export default function createApiRequestAction(actionOptions){
             }
             
             if (actionOptions.confirm) {
-                var confirmed = actionOptions.confirm(requestOptions, getState());
+                var confirmed = actionOptions.confirm(requestOptions, getState);
                 if (!confirmed) {
                     return; // Don't go ahead with request
                 }
@@ -121,7 +121,7 @@ export default function createApiRequestAction(actionOptions){
                 requestTypeRequestStartAction(),
                 setComponentErrorAction(undefined)
             ]);
-            makeRequest(requestOptions, success, error, getState());
+            makeRequest(requestOptions, success, error, getState);
         }
 
     }

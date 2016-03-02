@@ -5,12 +5,17 @@ import _ from "underscore"
 
 export default class WeekAndVenueSelector extends React.Component {
     static propTypes = {
-        venueId: React.PropTypes.number.isRequired,
+        venueId: React.PropTypes.number,
         weekStartDate: React.PropTypes.instanceOf(Date).isRequired,
         onChange: React.PropTypes.func.isRequired,
-        venues: React.PropTypes.object.isRequired
+        venues: React.PropTypes.object.isRequired,
+        canSelectAllVenues: React.PropTypes.bool
     }
     render(){
+        var selectedVenues = [];
+        if (this.props.venueId) {
+            selectedVenues = [this.props.venueId];
+        }
         return <div className="row">
             <div className="col-md-6">
                 <WeekPicker
@@ -25,8 +30,9 @@ export default class WeekAndVenueSelector extends React.Component {
             </div>
             <div className="col-md-6">
                 <VenueDropdown
-                    venues={_.values(this.props.venues)}
-                    selectedVenue={this.props.venueId}
+                    venues={this.props.venues}
+                    selectedVenues={selectedVenues}
+                    clearable={this.props.canSelectAllVenues ? true : false}
                     onChange={
                         (venueId) => this.props.onChange({
                             startDate: this.props.weekStartDate,

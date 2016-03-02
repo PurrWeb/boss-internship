@@ -6,6 +6,10 @@ import StaffListItemContainer from "./staff-list-item-container"
 class HolidayReportStaffFinder extends React.Component {
     render(){
         return <StaffFinder
+            filters={{
+                search: true,
+                staffType: true
+            }}
             staffItemComponent={StaffListItemContainer}
             staffTypes={this.props.staffTypes}
             staff={this.props.staff} />

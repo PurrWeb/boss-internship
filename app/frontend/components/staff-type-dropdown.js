@@ -3,14 +3,11 @@ import _ from "underscore"
 import { connect } from "react-redux"
 import Select from "react-select"
 import { selectStaffTypesWithShifts } from "~redux/selectors"
+import getArrayOfIdsFromReactSelectValue from "~lib/get-array-of-ids-from-react-select-value";
 
 export default class StaffTypeDropdown extends Component {
     static propTypes = {
         staffTypes: React.PropTypes.object.isRequired
-    }
-    constructor(props) {
-        super(props);
-        this.value = [];
     }
     render(){
         var staffTypeOptions = _(this.props.staffTypes).mapValues(function(staffType){
@@ -25,7 +22,7 @@ export default class StaffTypeDropdown extends Component {
         return (
             <div className="staff-type-dropdown">
                 <Select
-                    value={this.value.join(",")}
+                    value={this.props.selectedStaffTypes.join(",")}
                     options={staffTypeOptions}
                     multi={true}
                     optionRenderer={(option) => this.renderOption(option, "option")}
@@ -43,11 +40,7 @@ export default class StaffTypeDropdown extends Component {
         </div>
     }
     onChange(value){
-        if (value === ""){
-            this.value = [];
-        } else {
-            this.value = value.split(",").map(parseFloat);
-        }
-        this.props.onChange(this.value);
+        var value = getArrayOfIdsFromReactSelectValue(value);
+        this.props.onChange(value);
     }
 }

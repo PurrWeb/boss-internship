@@ -14,18 +14,27 @@ module PageObject
 
       expect(detail_text(listing, :name)).to eq(staff_member.full_name)
 
-      expect(detail_text(listing, :venue)).to eq(staff_member.venue.name)
+      venue_text = staff_member.venue ? staff_member.venue.name : 'N / A'
+      expect(detail_text(listing, :venue)).to eq(venue_text)
 
       expect(detail_text(listing, :staff_type)).to eq(staff_member.staff_type.name.titlecase)
     end
 
+    page_action :ensure_record_not_displayed_for do |staff_member|
+      expect(scope).to_not have_selector(:css, staff_member_entry_selector(staff_member))
+    end
+
     def scope
-      page.find('table[data-role="staff_members-index-table"]')
+      page.find('table[data-role="staff-members-index-table"]')
     end
 
     private
     def index_listing_for(staff_member)
-      find(:css, ".staff-members-index-listing[data-staff-member-id=\"#{staff_member.id}\"]")
+      scope.find(:css, staff_member_entry_selector(staff_member))
+    end
+
+    def staff_member_entry_selector(staff_member)
+      ".staff-members-index-listing[data-staff-member-id=\"#{staff_member.id}\"]"
     end
 
     def detail_text(listing, column)

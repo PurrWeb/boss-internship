@@ -2,10 +2,12 @@
 
 <%= link_to('Add Staff Member', new_staff_member_path, class: ['btn', 'btn-primary']) %>
 
-<%= render partial: 'index_filter', locals: { filter: filter, staff_members: staff_members } %>
+<% if !current_user.security_manager? %>
+  <%= render partial: 'index_filter', locals: { filter: filter, staff_members: staff_members } %>
+<% end %>
 
 <% if staff_members.present? %>
-  <table class="table">
+  <table class="table" data-role="staff-members-index-table">
     <tr>
       <th>Name</th>
       <th>Type</th>

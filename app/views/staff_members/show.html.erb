@@ -77,6 +77,15 @@
           <dd class="show-page-detail" data-detail="employment-status-statements">_</dd>
         <% end %>
 
+        <% if staff_member.security? %>
+          <dt class="show-page-detail-heading">SIA Badge Number</dt>
+          <dd class="show-page-detail" data-detail="sia-badge-number"><%= staff_member.sia_badge_number %></dd>
+
+          <dt class="show-page-detail-heading">SIA Badge Expiry Date</dt>
+          <dd class="show-page-detail" data-detail="sia-badge-expiry-date"><%= staff_member.sia_badge_expiry_date.to_s(:human_date) %></dd>
+        <% end %>
+
+
         <%= link_to(
               'Edit',
               edit_employment_details_staff_member_path(staff_member),

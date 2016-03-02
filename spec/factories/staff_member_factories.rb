@@ -27,5 +27,12 @@ FactoryGirl.define do
     trait :requiring_notification do
       shift_change_occured_at 1.hour.ago
     end
+
+    trait :security do
+      sia_badge_expiry_date 2.months.from_now
+      sia_badge_number '23123131'
+      association :staff_type, factory: :security_staff_type
+      venue nil
+    end
   end
 end

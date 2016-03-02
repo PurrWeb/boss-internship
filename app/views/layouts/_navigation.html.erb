@@ -20,9 +20,19 @@
             </li>
           <% end %>
 
-          <% if Venue.count > 0 && !(current_user.manager? && current_user.venues.count == 0) %>
-            <li class="nav-rota-section">
-              <%= link_to('Rota', rotas_path, class: "nav-section-header-link") %>
+          <% if can?(:manage, :rotas) %>
+            <% if Venue.count > 0 && !(current_user.manager? && current_user.venues.count == 0) %>
+              <li class="nav-rota-section">
+                <%= link_to('Rota', rotas_path, class: "nav-section-header-link") %>
+              </li>
+            <% end %>
+          <% end %>
+
+          <% if can?(:manage, :security_rota) %>
+            <li class="nav-security-rota-section">
+              <%= link_to(security_rotas_path, class: "nav-section-header-link") do %>
+                Security Rota
+              <% end %>
             </li>
           <% end %>
 

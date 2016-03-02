@@ -6,7 +6,7 @@ import * as actionCreators from "~redux/actions.js"
 
 export default class RotaApp extends Component {
     componentWillMount(){
-        let viewData = window.boss.rota;
+        let viewData = window.boss;
         store.dispatch(actionCreators.loadInitialRotaAppState(viewData));
     }
     render() {

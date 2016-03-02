@@ -17,11 +17,15 @@ class StaffMemberIndexFilter
   end
 
   def query
-    @query ||= StaffMemberIndexQuery.new(
-      staff_type: staff_type,
-      venue: venue,
-      accessible_venues: accessible_venues
-    )
+    if user.security_manager?
+      @query ||= SecurityManagerStaffMemberIndexQuery.new.all
+    else
+      @query ||= StaffMemberIndexFilterQuery.new(
+        staff_type: staff_type,
+        venue: venue,
+        accessible_venues: accessible_venues
+      )
+    end
   end
 
   private

@@ -28,7 +28,7 @@
  @import "../../../node_modules/cropperjs/dist/cropper";
  @import "../../../node_modules/nvd3/build/nv.d3";
 
- @import "apps/rota-overview/rota-overview-chart";
+ @import "components/rota-overview-chart";
 
 label:not(.force-not-required).required:after {
   content:" *";

@@ -28,8 +28,8 @@ export default class FilterableStaffList extends Component {
         var staffToShow = _.values(this.props.staff);
         var filter = this.props.filterSettings;
 
-        if (filter.name !== "") {
-            var lowercaseFilterName = filter.name.toLowerCase();
+        if (filter.search !== "") {
+            var lowercaseFilterName = filter.search.toLowerCase();
             staffToShow = _.filter(staffToShow, function(staff){
                 var lowercaseFirstName = staff.first_name.toLowerCase();
                 var lowercaseSurname = staff.surname.toLowerCase();
@@ -46,6 +46,12 @@ export default class FilterableStaffList extends Component {
         if (filter.staffTypes.length > 0) {
             staffToShow = _.filter(staffToShow, function(staff){
                 return _(filter.staffTypes).contains(staff.staff_type.id);
+            });
+        }
+
+        if (filter.venues.length > 0){
+            staffToShow = _.filter(staffToShow, function(staff){
+                return _(filter.venues).contains(staff.venue.id)
             });
         }
 

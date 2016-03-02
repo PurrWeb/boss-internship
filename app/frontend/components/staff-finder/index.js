@@ -1,14 +1,14 @@
 import React, { Component } from "react"
 import StaffFilter from "~components/staff-finder/staff-filter"
 import FilterableStaffList from "~components/staff-finder/filterable-staff-list"
-import { selectStaffTypesWithStaffMembers } from "~redux/selectors"
+import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
 import _ from "underscore"
 
 export default class StaffFinder extends Component {
     static propTypes = {
         staffItemComponent: React.PropTypes.func.isRequired,
         staff: React.PropTypes.object.isRequired,
-        staffTypes: React.PropTypes.object.isRequired
+        staffTypes: React.PropTypes.object
     }
     constructor(props) {
         super(props);
@@ -20,7 +20,10 @@ export default class StaffFinder extends Component {
         return <div>
             <StaffFilter
                 staffTypes={this.getStaffTypesWithStaffMembers()}
-                onChange={(arg) => this.onFilterChange(arg)} />
+                venues={this.props.venues}
+                filters={this.props.filters}
+                onChange={(arg) => this.onFilterChange(arg)}
+                filterSettings={this.state.staffFilterSettings} />
 
             <FilterableStaffList
                 staff={this.props.staff}
@@ -29,7 +32,7 @@ export default class StaffFinder extends Component {
         </div>
     }
     getStaffTypesWithStaffMembers(){
-        return selectStaffTypesWithStaffMembers(this.props.staffTypes, this.props.staff);
+        return getStaffTypesWithStaffMembers(this.props.staffTypes, this.props.staff);
     }
     onFilterChange(filterSettings) {
         this.setState({staffFilterSettings: filterSettings});

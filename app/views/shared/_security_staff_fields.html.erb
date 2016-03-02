@@ -1,0 +1,12 @@
+<% show_security_staff_fields = form.object.security? || user.security_manager? %>
+<div class="security-staff-fields <%= 'hide' unless show_security_staff_fields %>">
+<%= form.text_field :sia_badge_number, label_class: 'required' %>
+<%= form.date_select(
+      :sia_badge_expiry_date,
+      start_year: Time.now.year - 10,
+      end_year: Time.now.year + 30,
+      include_blank: true,
+      with_css_classes: true,
+      label_class: 'required'
+    ) %>
+</div>

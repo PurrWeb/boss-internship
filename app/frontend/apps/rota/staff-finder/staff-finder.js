@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import _ from "underscore"
-import StaffListItem from "./staff-list-item"
+import StaffListItem from "~components/rota-staff-list-item"
 import StaffFinder from "~components/staff-finder"
 
 export default class RotaStaffFinder extends Component {
@@ -15,6 +15,10 @@ export default class RotaStaffFinder extends Component {
                     Find Staff
                 </h3>
                 <StaffFinder
+                    filters={{
+                        search: true,
+                        staffType: true
+                    }}
                     staffTypes={this.props.staffTypes}
                     staffItemComponent={StaffListItem}
                     staff={this.props.staff} />

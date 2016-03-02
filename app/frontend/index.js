@@ -12,6 +12,9 @@ import "./lib/load-underscore-mixins"
 import RotaApp from "./apps/rota/rota-app"
 registerComponent("RotaApp", RotaApp)
 
+import StaffTypeRotaApp from "./apps/staff-type-rota/staff-type-rota-app"
+registerComponent("StaffTypeRotaApp", StaffTypeRotaApp);
+
 import ClockInOutApp from "./apps/clock-in-out/clock-in-out-app"
 registerComponent("ClockInOutApp", ClockInOutApp)
 
@@ -23,3 +26,6 @@ registerComponent("StaffMemberFormAvatarImage", StaffMemberFormAvatarImage)
 
 import HolidayReportView from "./apps/holiday-report/holiday-report-app"
 registerComponent("HolidayReportApp", HolidayReportView);
+
+import StaffTypeRotaOverviewApp from "./apps/staff-type-rota-overview"
+registerComponent("StaffTypeRotaOverviewApp", StaffTypeRotaOverviewApp);

@@ -63,6 +63,8 @@ Rails.application.routes.draw do
 
   resources :admin_pay_rates, only: [:new, :create]
 
+  resources :security_rotas, only: [:index, :show]
+
   resources :clock_in_clock_out, only: [:index]
 
   namespace :api, defaults: { format: 'json' } do
@@ -98,6 +100,11 @@ Rails.application.routes.draw do
       resources :staff_types,   only: :show
       resources :rota_shifts,   only: [:show, :destroy, :update]
       resources :rotas,         only: :show
+      resources :security_rotas, only: [] do
+        member do
+          get :overview
+        end
+      end
     end
   end
 
