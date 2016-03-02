@@ -49,7 +49,7 @@ describe("getGroupedShiftBreakdownByTime", function() {
             {
                 timeOffset: 0,
                 date: getOffsetDate(0),
-                shiftsByStaffType: {
+                shiftsByGroup: {
                     bar_back: [
                         shifts[0]
                     ],
@@ -59,7 +59,7 @@ describe("getGroupedShiftBreakdownByTime", function() {
             {
                 timeOffset: 6 * 60,
                 date: getOffsetDate(6 * 60),
-                shiftsByStaffType: {
+                shiftsByGroup: {
                     bar_back: [
                         shifts[0]
                     ],
@@ -71,7 +71,7 @@ describe("getGroupedShiftBreakdownByTime", function() {
             {
                 timeOffset: 12 * 60,
                 date: getOffsetDate(12 * 60),
-                shiftsByStaffType: {
+                shiftsByGroup: {
                     bar_back: [
                         shifts[0],
                         shifts[1]
@@ -84,7 +84,7 @@ describe("getGroupedShiftBreakdownByTime", function() {
             {
                 timeOffset: 18 * 60, // 2am
                 date: getOffsetDate(18 * 60),
-                shiftsByStaffType: {
+                shiftsByGroup: {
                     bar_back: [
                         shifts[1]
                     ],
@@ -96,7 +96,7 @@ describe("getGroupedShiftBreakdownByTime", function() {
             {
                 timeOffset: 24 * 60,
                 date: getOffsetDate(24 * 60),
-                shiftsByStaffType: {
+                shiftsByGroup: {
                     bar_back: [],
                     kitchen: []
                 }
@@ -107,7 +107,10 @@ describe("getGroupedShiftBreakdownByTime", function() {
             shifts,
             staff,
             granularityInMinutes: 60 * 6,
-            staffTypes,
+            groupsById: staffTypes,
+            getGroupFromShift: function(shift){
+                return staff[shift.staff_member.id].staff_type;       
+            },
             rotaDate
         });
 
@@ -123,11 +126,11 @@ describe("getGroupedShiftBreakdownByTime", function() {
             shifts: [],
             staff: [],
             granularityInMinutes: 60 * 12,
-            staffTypes,
+            groupsById: staffTypes,
             rotaDate
         });
         result.forEach(function(item){
-            expect(item.shiftsByStaffType).toEqual({
+            expect(item.shiftsByGroup).toEqual({
                 kitchen: [],
                 bar_back: []
             })
