@@ -1,4 +1,4 @@
-class StaffMemberIndexQuery
+class StaffMemberIndexFilterQuery
   def initialize( staff_type:, venue:, accessible_venues:, relation: StaffMember.unscoped)
     @staff_type = staff_type
     @relation = relation

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe StaffMemberIndexQuery do
+describe StaffMemberIndexFilterQuery do
   let(:relation) { double("relation") }
   let(:relation_filtered_by_staff_type) do
     double("relation filtered by staff type")
@@ -21,7 +21,7 @@ describe StaffMemberIndexQuery do
   let(:accessible_venues) { double("accessible venues") }
   let(:accessible_venue_ids) { double "accessible venue ids" }
   let(:query) do
-    StaffMemberIndexQuery.new(
+    StaffMemberIndexFilterQuery.new(
       staff_type: staff_type,
       venue: venue,
       relation: relation,

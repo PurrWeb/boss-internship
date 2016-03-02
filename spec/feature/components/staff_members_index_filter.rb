@@ -24,9 +24,17 @@ module PageObject
       expect(records_returned_section.text).to eq(count.to_s)
     end
 
+    def ensure_not_visible
+      expect(page).to_not have_selector(filter_selector)
+    end
+
     private
+    def filter_selector
+      '.staff-members-index-filter'
+    end
+
     def scope
-      page.find('.staff-members-index-filter')
+      page.find(filter_selector)
     end
 
     def submit_form

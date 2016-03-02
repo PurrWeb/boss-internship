@@ -10,7 +10,9 @@ class Ability
 
     can :manage, :staff_members
 
-    can :manage, :rotas
+    can :manage, :rotas do
+      !user.security_manager?
+    end
 
     can :manage, :security_rota do
       user.has_admin_access? || user.security_manager?
