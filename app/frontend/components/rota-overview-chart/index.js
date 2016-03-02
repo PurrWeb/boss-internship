@@ -26,7 +26,7 @@ function convertTranslateToXY(translate){
 export default class RotaOverviewChart extends Component {
     static propTypes = {
         shifts: React.PropTypes.array.isRequired,
-        staffTypes: React.PropTypes.object.isRequired,
+        groups: React.PropTypes.array.isRequired,
         staff: React.PropTypes.object.isRequired,
         dateOfRota: React.PropTypes.instanceOf(Date),
         onHoverShiftsChange: React.PropTypes.func.isRequired,
@@ -135,34 +135,38 @@ export default class RotaOverviewChart extends Component {
         var seriesName = obj.data.key;
         var index = obj.index;
 
-        var staffType = _(this.props.staffTypes).find({name: seriesName});
-        var shifts = breakdown[index].shiftsByStaffType[staffType.id];
+        var group = this.getGroupsByName()[seriesName];
+        var shifts = breakdown[index].shiftsByGroup[group.id];
         return {
             shifts,
-            staffType: staffType.id,
+            groupId: group.id,
             date: breakdown[index].date
         };
     }
+    getGroupsByName(){
+        return _(this.props.groups).indexBy("name");
+    }
     getChartData(breakdown){
         var rotaDate = this.getRotaDate();
-        var staffTypes = this.props.staffTypes;
+        var groups = this.props.groups;
         var series = [];
+        var granularity = this.props.granularity;
 
-        for (var staffType in this.props.staffTypes) {
+        groups.forEach(function(group){
             var values = _(breakdown).map(function(item){
                 return {
-                    value: item.shiftsByStaffType[staffType].length,
+                    value: item.shiftsByGroup[group.id].length,
                     label: moment(item.date).format("HH:mm")
                 }
             });
             series.push({
-                key: staffTypes[staffType].name,
+                key: group.name,
                 values: values,
-                color: staffTypes[staffType].color,
+                color: group.color,
                 pointStart: rotaDate.startTime.valueOf(),
-                pointInterval: this.props.granularity * MILLISECONDS_PER_MINUTE,
+                pointInterval: granularity * MILLISECONDS_PER_MINUTE
             });
-        }
+        });
         return series;
     }
 }

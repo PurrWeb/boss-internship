@@ -26,7 +26,8 @@ export default class VenueRotaOverviewChart extends Component {
                     onSelectionShiftsChange={this.props.onSelectionShiftsChange}
                     getBreakdown={this.getBreakdown.bind(this)}
                     tooltipGenerator={this.generateTooltip.bind(this)}
-                    granularity={GRANULARITY} />
+                    granularity={GRANULARITY}
+                    groups={_.values(this.props.staffTypes)} />
     }
     getBreakdown(){
         var { shifts, staff, staffTypes} = this.props;
@@ -45,7 +46,7 @@ export default class VenueRotaOverviewChart extends Component {
         var breakdownAtPoint = _(breakdown).find((point) => point.date.valueOf() === date.valueOf());
 
         return renderTooltipHtml({
-            shiftsByStaffType: breakdownAtPoint.shiftsByStaffType,
+            shiftsByStaffType: breakdownAtPoint.shiftsByGroup,
             selectedStaffTypeTitle,
             staffTypes: this.props.staffTypes
         });

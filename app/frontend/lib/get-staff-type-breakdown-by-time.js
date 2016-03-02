@@ -17,7 +17,7 @@ The responsive consists of an array like this:
 [{
     timeOffset: 60, // number of minutes since the start of the rota date at 8am
     date: Date(9am),
-    shiftsByStaffType: {
+    shiftsByGroup: {
         bar_back: [shift1, shift2],
         kitchen: [shift3]
     }
@@ -42,13 +42,13 @@ export default function getStaffTypeBreakdownByTime(options){
         var date = new Date(startTimeClone.setMinutes(newMinutes));
 
         var obj = {
-            shiftsByStaffType: {},
+            shiftsByGroup: {},
             timeOffset: offsetInMinutes,
             date
         };
 
         for (var staffType in staffTypes) {
-            obj.shiftsByStaffType[staffType] = [];
+            obj.shiftsByGroup[staffType] = [];
         }
         return obj;
     }
@@ -69,8 +69,7 @@ export default function getStaffTypeBreakdownByTime(options){
             var endsAfterSamplingPoint = samplingPoint.date < shift.ends_at;
             var shiftCoversSamplingPoint =  startsBeforeOrAtSamplingPoint && endsAfterSamplingPoint;
             if (shiftCoversSamplingPoint) {
-              samplingPoint.shiftsByStaffType[staffType] = samplingPoint.shiftsByStaffType[staffType] || [];
-              samplingPoint.shiftsByStaffType[staffType].push(shift);
+              samplingPoint.shiftsByGroup[staffType].push(shift);
             }
         });
     });

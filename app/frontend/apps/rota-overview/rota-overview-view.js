@@ -25,8 +25,8 @@ export default class RotaOverviewView extends Component {
                     shifts={this.props.shifts}
                     dateOfRota={this.props.dateOfRota}
                     staffTypes={this.props.staffTypesWithShifts}
-                    onHoverShiftsChange={(shifts) => this.setState({hoverData: shifts})}
-                    onSelectionShiftsChange={(shifts) => this.setState({selectionData: shifts})} />
+                    onHoverShiftsChange={(data) => this.setState({hoverData: data})}
+                    onSelectionShiftsChange={(data) => this.setState({selectionData: data})} />
             </div>
             <div className="col-md-3">
                 {this.getRotaForecast()}
@@ -50,7 +50,7 @@ export default class RotaOverviewView extends Component {
         if (!data) {
             return null;
         }
-        var staffTypeTitle = this.props.staffTypesWithShifts[data.staffType].name;
+        var staffTypeTitle = this.props.staffTypesWithShifts[data.groupId].name;
         var noStaffRotaedMessage = null;
 
         if (data.shifts.length === 0) {
