@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160225130724) do
+ActiveRecord::Schema.define(version: 20160302121840) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -224,12 +224,15 @@ ActiveRecord::Schema.define(version: 20160225130724) do
     t.boolean  "employment_status_d",                                    null: false
     t.datetime "shift_change_occured_at"
     t.integer  "pay_rate_id",               limit: 4,                    null: false
+    t.string   "sia_badge_number",          limit: 255
+    t.date     "sia_badge_expiry_date"
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
   add_index "staff_members", ["enabled"], name: "index_staff_members_on_enabled", using: :btree
   add_index "staff_members", ["phone_number"], name: "index_staff_members_on_phone_number", using: :btree
   add_index "staff_members", ["shift_change_occured_at"], name: "index_staff_members_on_shift_change_occured_at", using: :btree
+  add_index "staff_members", ["sia_badge_expiry_date"], name: "index_staff_members_on_sia_badge_expiry_date", using: :btree
   add_index "staff_members", ["staff_type_id"], name: "index_staff_members_on_staff_type_id", using: :btree
 
   create_table "staff_types", force: :cascade do |t|

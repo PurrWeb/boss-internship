@@ -18,6 +18,14 @@
           }
         ) %>
 
+    <%= render(
+          partial: 'shared/security_staff_fields',
+          locals: {
+            form: form,
+            user: current_user
+          }
+        ) %>
+
     <div class="staff-member-starts-at-field">
       <%= form.date_select(
             :starts_at,

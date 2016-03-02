@@ -170,6 +170,12 @@ class StaffMembersController < ApplicationController
       email_address_attributes: :email
     } if email_params_present?
 
+    staff_type = current_user.security_manager? ? StaffType.security.first : staff_type_from_params
+
+    if staff_type.andand.security?
+      require_attributes << :sia_badge_number
+      require_attributes << :sia_badge_expiry_date
+    end
 
     result = params.
       require(:staff_member).
@@ -183,7 +189,6 @@ class StaffMembersController < ApplicationController
       result = result.merge(avatar_data_uri: result[:avatar_base64])
     end
 
-    staff_type = current_user.security_manager? ? StaffType.security.first : staff_type_from_params
     result = result.merge(staff_type: staff_type)
 
     result
@@ -226,6 +231,13 @@ class StaffMembersController < ApplicationController
 
     allowed_params << { staff_member_venue_attributes: [:venue_id] }
 
+    staff_type = current_user.security_manager? ? StaffType.security.first : staff_type_from_params
+
+    if staff_type.andand.security?
+      allowed_params << :sia_badge_number
+      allowed_params << :sia_badge_expiry_date
+    end
+
     result = params.require(:staff_member).
       permit(
         *allowed_params
@@ -235,7 +247,7 @@ class StaffMembersController < ApplicationController
         }
       )
 
-    result = result.merge(staff_type: staff_type_from_params) if !current_user.security_manager?
+    result = result.merge(staff_type: staff_type) if !current_user.security_manager?
 
     result
   end

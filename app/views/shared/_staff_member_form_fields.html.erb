@@ -39,6 +39,16 @@
       }
     ) %>
 
+
+<%= render(
+      partial: 'shared/security_staff_fields',
+      locals: {
+        form: form,
+        user: current_user
+      }
+    ) %>
+
+
 <%= form.number_field :pin_code %>
 <%= form.number_field :phone_number %>
 <%= form.text_field :national_insurance_number %>

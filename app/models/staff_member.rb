@@ -5,7 +5,7 @@ class StaffMember < ActiveRecord::Base
   belongs_to :staff_type
   has_one :staff_member_venue, inverse_of: :staff_member
   has_one :venue, through: :staff_member_venue
-  accepts_nested_attributes_for :staff_member_venue
+  accepts_nested_attributes_for :staff_member_venue, reject_if: :all_blank
 
   belongs_to :address, inverse_of: :staff_member
   accepts_nested_attributes_for :address, allow_destroy: false
@@ -62,7 +62,7 @@ class StaffMember < ActiveRecord::Base
   end
 
   def security?
-    staff_type.security?
+    staff_type.andand.security?
   end
 
   def active_holidays
