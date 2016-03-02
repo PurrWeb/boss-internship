@@ -18,7 +18,14 @@ function convertTranslateToXY(translate){
     }
 }
 
-export default class RotaOverviewChart extends Component {
+export default class RotaOverviewChartInner extends Component {
+    static propTypes = {
+        chartData: React.PropTypes.array.isRequired,
+        onElementClick: React.PropTypes.func.isRequired,
+        onElementMouseover: React.PropTypes.func.isRequired,
+        onElementMouseout: React.PropTypes.func.isRequired,
+        tooltipGenerator: React.PropTypes.func.isRequired
+    }
     render() {
         var self = this;
 
