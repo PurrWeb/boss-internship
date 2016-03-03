@@ -3,6 +3,7 @@ import _ from "underscore"
 import RotaOverviewChart from "~components/rota-overview-chart"
 import getGroupedShiftBreakdownByTime from "~lib/get-grouped-shift-breakdown-by-time"
 import RotaDate from "~lib/rota-date"
+import getVenueColor from "~lib/get-venue-color"
 
 const GRANULARITY = 30;
 
@@ -25,9 +26,9 @@ export default class StaffTypeRotaOverviewChart extends Component {
                     onSelectionShiftsChange={this.props.onSelectionShiftsChange}
                     getBreakdown={this.getBreakdown.bind(this)}
                     granularity={GRANULARITY}
-                    groups={_.values(_.mapValues(this.props.venues, function(venue){
+                    groups={_.values(_.mapValues(this.props.venues, function(venue, i){
                         return Object.assign({}, venue, {
-                            color: ["red", "green", "blue"][Math.floor(Math.random() * 3)]
+                            color: getVenueColor(i)
                         })
                     }))} />
     }

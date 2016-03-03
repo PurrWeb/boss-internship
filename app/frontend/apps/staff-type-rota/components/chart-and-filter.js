@@ -5,6 +5,7 @@ import ChartSelectionView from "~components/chart-selection-view"
 import StaffDetailsAndShifts from "~components/staff-details-and-shifts"
 import VenueDropdown from "~components/venue-dropdown"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
+import getVenueColor from "~lib/get-venue-color"
 
 export default class ChartAndFilter extends React.Component {
     static propTypes = {
@@ -71,7 +72,7 @@ export default class ChartAndFilter extends React.Component {
         var venue = this.getVenueFromShift(shift);
         var venueIds = _.pluck(_.values(this.props.venues), "id");
         var index = venueIds.indexOf(venue.id);
-        return ["red", "green", "blue", "orange"][index];
+        return getVenueColor(index);
     }
     getStaffDetailsComponent(staffId){
         if (!staffId) {
