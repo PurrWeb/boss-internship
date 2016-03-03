@@ -60,15 +60,6 @@ function mapStateToProps(state) {
 
     var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
 
-    var shiftsBeingUpdated = props.apiRequestsInProgress.UPDATE_SHIFT;
-    var shiftsBeingDeleted = props.apiRequestsInProgress.DELETE_SHIFT;
-    props.rotaShifts = _(props.rotaShifts).map(function(shift){
-        var isBeingEdited = _(shiftsBeingUpdated).some((request) => request.shift.shift_id === shift.id)
-            || _(shiftsBeingDeleted).some({shift_id: shift.id});
-        return Object.assign({}, shift, {
-            isBeingEdited: isBeingEdited
-        });
-    });
     var rota = selectRotaOnVenueRotaPage(props);
     props.venue = props.venues[rota.venue.id];
     props.dateOfRota = rota.date;

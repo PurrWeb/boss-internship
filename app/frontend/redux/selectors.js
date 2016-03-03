@@ -115,7 +115,7 @@ export function selectRotaOnVenueRotaPage(state){
     });
 }
 
-export function canEditStaffType(state, {staffTypeId}){
+export function canEditStaffTypeShifts(state, {staffTypeId}){
     var staffTypeObject = state.staffTypes[staffTypeId];
     var disabledNames = state.pageOptions.disableEditingShiftsByStaffTypeName;
     if (!disabledNames) {
@@ -128,4 +128,12 @@ export function canEditStaffType(state, {staffTypeId}){
     return true;
 }
 
+export function selectShiftIsBeingEdited(state, {shiftId}){
+    var shiftsBeingUpdated = state.apiRequestsInProgress.UPDATE_SHIFT;
+    var shiftsBeingDeleted = state.apiRequestsInProgress.DELETE_SHIFT;
 
+    var isBeingUpdated = _(shiftsBeingUpdated).some((request) => request.shift.shift_id === shiftId);
+    var isBeingDeleted = _(shiftsBeingDeleted).some((request) => request.shift.id === shiftId);
+
+    return isBeingUpdated || isBeingDeleted;
+}
