@@ -18,6 +18,28 @@ export function selectStaffTypesWithShifts(state){
     }
 }
 
+export function selectVenuesWithShifts(state){
+    var {venues, rotas, rotaShifts} = state;
+
+    var venueIdsWithShifts = _(rotaShifts).chain()
+        .map(getVenueIdFromShift)
+        .unique()
+        .value();
+
+    var allVenues = _.values(venues);
+    var venuesWithShifts = _.filter(allVenues, function(venue){
+        return _(venueIdsWithShifts).contains(venue.id);
+    });
+
+    return utils.indexById(venuesWithShifts);
+
+    function getVenueIdFromShift(shift){
+        var rotaId = shift.rota.clientId;
+        var rota = rotas[rotaId];
+        return rota.venue.id;
+    }
+}
+
 export function selectStaffMemberHolidays(state, staffId){
     var staffMember = state.staff[staffId];
     var staffMemberHolidayIds = _.pluck(state.staff[staffId].holidays, "id");
@@ -92,3 +114,4 @@ export function selectRotaOnVenueRotaPage(state){
         venueId: state.pageOptions.venueId
     });
 }
+
