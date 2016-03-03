@@ -115,9 +115,9 @@ export function selectRotaOnVenueRotaPage(state){
     });
 }
 
-export function canEditStaffTypeShifts(state, {staffTypeId}){
-    var staffTypeObject = state.staffTypes[staffTypeId];
-    var disabledNames = state.pageOptions.disableEditingShiftsByStaffTypeName;
+export function canEditStaffTypeShifts({staffTypes, pageOptions}, {staffTypeId}){
+    var staffTypeObject = staffTypes[staffTypeId];
+    var disabledNames = pageOptions.disableEditingShiftsByStaffTypeName;
     if (!disabledNames) {
         return true;
     } 
