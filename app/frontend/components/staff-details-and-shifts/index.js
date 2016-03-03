@@ -1,63 +1,7 @@
 import React, { Component } from "react"
-import ShiftEditor from "./containers/shift-editor"
-import StaffTypeBadge from "~components/staff-type-badge"
+import EditableShiftList from "./editable-shift-list"
 import _ from "underscore"
-import getVenueFromShift from "~lib/get-venue-from-shift"
-import getVenueColor from "~lib/get-venue-color"
-
-class ShiftItem extends Component {
-    render(){
-        var venueInfo = null;
-        if (this.props.venueObject) {
-            venueInfo = <div
-                className="boss-badge"
-                style={{
-                    backgroundColor: this.props.venueColor,
-                    display: "inline-block",
-                    marginLeft: -2,
-                    marginBottom: 2
-                }}>
-                {this.props.venueObject.name}
-            </div>
-        }
-        return <div>
-            {venueInfo}
-            <ShiftEditor
-                shift={this.props.shift} />
-        </div>
-    }
-}
-
-class EditableShiftList extends Component {
-    render(){
-        var { venuesById, rotasById, showShiftVenue, shifts } = this.props;
-
-        var shiftEls = shifts.map(function(shift){
-            var venue = null;
-            var venueColor = null;
-            if (showShiftVenue){
-                venue = getVenueFromShift({
-                    venuesById,
-                    rotasById,
-                    shift: shift
-                });
-                var venueIds = _.pluck(_.values(venuesById), "id");
-                var index = venueIds.indexOf(venue.id);
-                venueColor = getVenueColor(index);
-            }
-
-            return <ShiftItem 
-                venueObject={venue}
-                venueColor={venueColor}
-                shift={shift}
-                key={shift.id} />
-        });
-
-        return <div>
-            {shiftEls}
-        </div>
-    }
-}
+import StaffTypeBadge from "~components/staff-type-badge"
 
 export default class StaffDetailsAndShifts extends Component {
     static propTypes = {
