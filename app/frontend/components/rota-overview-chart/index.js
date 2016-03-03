@@ -46,16 +46,18 @@ export default class RotaOverviewChart extends Component {
             }}
             tooltipGenerator={
                 function(obj) {
+                    var groupsById = utils.indexById(self.props.groups);
                     var selectedGroupTitle = obj.series[0].key;
                     var date = breakdown[obj.index].date;
                     var breakdownAtPoint = _(breakdown).find(
                         (point) => point.date.valueOf() === date.valueOf()
                     );
+                    var selectedGroupId = _(groupsById).find({name: selectedGroupTitle}).id;
 
                     var html = renderTooltipHtml({
-                        shiftsByGroup: breakdownAtPoint.shiftsByGroup,
-                        selectedGroupTitle,
-                        groupsById: utils.indexById(self.props.groups)
+                        shiftsByGroupId: breakdownAtPoint.shiftsByGroup,
+                        selectedGroupId,
+                        groupsById
                     });
                     return html;
                 }

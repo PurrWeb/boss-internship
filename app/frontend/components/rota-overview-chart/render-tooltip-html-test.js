@@ -20,9 +20,9 @@ describe("rotaOverview - renderTooltipHtml", function(){
         var selectedStaffTypeTitle = "Kitchen";
 
         var html = renderTooltipHtml({
-            shiftsByStaffType,
-            staffTypes,
-            selectedStaffTypeTitle
+            shiftsByGroupId: shiftsByStaffType,
+            groupsById: staffTypes,
+            selectedGroupId: "kitchen"
         })
 
         expect(html).toBe("<b>1 - Kitchen</b><br>2 - Bar back");
