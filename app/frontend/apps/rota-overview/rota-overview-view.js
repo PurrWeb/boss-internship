@@ -1,10 +1,9 @@
 import React, { Component } from "react"
-import moment from "moment"
-import ShiftList from "./shift-list"
 import VenueRotaOverviewChart from "./venue-rota-overview-chart"
 import ChartSelectionView from "~components/chart-selection-view"
 import _ from "underscore"
 import RotaForecast from "./containers/rota-forecast"
+import SelectionDataView from "~components/rota-overview-chart/selection-data-view"
 
 export default class RotaOverviewView extends Component {
     constructor(props){
@@ -16,7 +15,7 @@ export default class RotaOverviewView extends Component {
     }
     render() {
         var previewShiftList = null, // we don't want a preview here because we want to show the forecast
-            selectionShiftList = this.getStaffShiftList(this.state.selectionData);
+            selectionShiftList = this.getSelectionDataView(this.state.selectionData);
 
         return <div className="row">
             <div className="col-md-9">
@@ -46,25 +45,13 @@ export default class RotaOverviewView extends Component {
                 canEditForecastedTake={true} />
         </div>
     }
-    getStaffShiftList(data){
-        if (!data) {
-            return null;
+    getSelectionDataView(data){
+        if (!data){
+            return data;
         }
-        var staffTypeTitle = this.props.staffTypesWithShifts[data.groupId].name;
-        var noStaffRotaedMessage = null;
-
-        if (data.shifts.length === 0) {
-            noStaffRotaedMessage = <div>No {staffTypeTitle} staff rotaed.</div>;
-        }
-
-        return <div>
-            <h2 style={{fontSize: 16}}>
-                {staffTypeTitle} staff rotaed for {moment(data.date).format("HH:mm")}
-            </h2>
-            <ShiftList
-                shifts={data.shifts}
+        return <SelectionDataView
+                groupsById={this.props.staffTypesWithShifts}
+                data={data}
                 staff={this.props.staff} />
-            {noStaffRotaedMessage}
-        </div>
     }
 }

@@ -14,6 +14,13 @@ export default class StaffTypeRotaOverviewItem extends Component {
         venues: React.PropTypes.object.isRequired,
         rotas: React.PropTypes.object.isRequired
     }
+    constructor(props){
+        super(props);
+        this.state = {
+            hoverData: null,
+            selectionData: null
+        }
+    }
     render() {
         var dateOfRota = this.props.dateOfRota;
         return <div>
@@ -29,11 +36,12 @@ export default class StaffTypeRotaOverviewItem extends Component {
                         venues={this.props.venues}
                         rotas={this.props.rotas}
                         dateOfRota={dateOfRota}
-                        onHoverShiftsChange={() => null}
-                        onSelectionShiftsChange={() => null} />
+                        onHoverShiftsChange={(hoverData) => this.setState({hoverData})}
+                        onSelectionShiftsChange={(selectionData) => this.setState({selectionData})}
+                         />
                 </div>
                 <div className="col-md-3">
-                    
+                    {JSON.stringify(this.state.hoverData)}
                 </div>
             </div>
         </div>   

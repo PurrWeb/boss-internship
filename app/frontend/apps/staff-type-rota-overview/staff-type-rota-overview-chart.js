@@ -24,7 +24,6 @@ export default class StaffTypeRotaOverviewChart extends Component {
                     onHoverShiftsChange={this.props.onHoverShiftsChange}
                     onSelectionShiftsChange={this.props.onSelectionShiftsChange}
                     getBreakdown={this.getBreakdown.bind(this)}
-                    tooltipGenerator={this.generateTooltip.bind(this)}
                     granularity={GRANULARITY}
                     groups={_.values(_.mapValues(this.props.venues, function(venue){
                         return Object.assign({}, venue, {
@@ -55,18 +54,6 @@ export default class StaffTypeRotaOverviewChart extends Component {
         });
 
         return breakdown;
-    }
-    generateTooltip(obj, breakdown){
-        var selectedStaffTypeTitle = obj.series[0].key;
-        var date = breakdown[obj.index].date;
-        var breakdownAtPoint = _(breakdown).find((point) => point.date.valueOf() === date.valueOf());
-
-        return "TODO"
-        return renderTooltipHtml({
-            shiftsByStaffType: breakdownAtPoint.shiftsByGroup,
-            selectedStaffTypeTitle,
-            staffTypes: this.props.staffTypes
-        });
     }
     getRotaDate(){
         return new RotaDate({dateOfRota: this.props.dateOfRota});
