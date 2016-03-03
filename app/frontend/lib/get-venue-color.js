@@ -4,7 +4,6 @@ function color(hue){
 
 const colors = [
     color(150),
-    color(120),
     color(0),
     color(210),
     color(190),

@@ -2,6 +2,9 @@ import React from "react"
 import moment from "moment"
 import ShiftList from "./shift-list"
 
+/**
+Shows shifts selected in overview for a specific group.
+*/
 export default class SelectionDateView extends React.Component {
     static propTypes = {
         data: React.PropTypes.object.isRequired,

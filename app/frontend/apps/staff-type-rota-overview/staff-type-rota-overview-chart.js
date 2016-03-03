@@ -18,6 +18,13 @@ export default class StaffTypeRotaOverviewChart extends Component {
         rotas: React.PropTypes.object.isRequired
     }
     render() {
+        var venuesArray = _.values(this.props.venues);
+        var groups = _.map(venuesArray, function(venue, i){
+            return Object.assign({}, venue, {
+                color: getVenueColor(i)
+            })
+        });
+
         return <RotaOverviewChart
                     staff={this.props.staff}
                     shifts={_.values(this.props.shifts)}
@@ -26,11 +33,7 @@ export default class StaffTypeRotaOverviewChart extends Component {
                     onSelectionShiftsChange={this.props.onSelectionShiftsChange}
                     getBreakdown={this.getBreakdown.bind(this)}
                     granularity={GRANULARITY}
-                    groups={_.values(_.mapValues(this.props.venues, function(venue, i){
-                        return Object.assign({}, venue, {
-                            color: getVenueColor(i)
-                        })
-                    }))} />
+                    groups={groups} />
     }
     getBreakdown(){
         var { shifts, staff, staffTypes, venues, rotas} = this.props;

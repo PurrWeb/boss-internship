@@ -12,7 +12,11 @@ const MINUTES_PER_HOUR = 60;
 export default class RotaOverviewChart extends Component {
     static propTypes = {
         shifts: React.PropTypes.array.isRequired,
-        groups: React.PropTypes.array.isRequired,
+        groups: React.PropTypes.arrayOf(React.PropTypes.shape({
+            id: React.PropTypes.any.isRequired,
+            color: React.PropTypes.string.isRequired,
+            name: React.PropTypes.string.isRequired
+        })),
         staff: React.PropTypes.object.isRequired,
         dateOfRota: React.PropTypes.instanceOf(Date),
         onHoverShiftsChange: React.PropTypes.func.isRequired,

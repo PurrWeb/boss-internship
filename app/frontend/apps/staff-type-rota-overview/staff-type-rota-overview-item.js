@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import moment from "moment"
 import RotaOverviewChart from "~components/rota-overview-chart"
+import utils from "~lib/utils"
 import { appRoutes } from "~lib/routes"
 import StaffTypeRotaOverviewChart from "./staff-type-rota-overview-chart"
 import SelectionDataView from "~components/rota-overview-chart/selection-data-view"
@@ -38,7 +39,7 @@ export default class StaffTypeRotaOverviewItem extends Component {
                 <div className="col-md-9">
                     <StaffTypeRotaOverviewChart
                         staff={this.props.staff}
-                        shifts={this.props.rotaShifts}
+                        shifts={utils.indexById(this.props.rotaShifts)}
                         staffTypes={this.props.staffTypes}
                         venues={this.props.venues}
                         rotas={this.props.rotas}
