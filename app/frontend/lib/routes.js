@@ -6,6 +6,12 @@ export const appRoutes = {
         var {venueId, date} = options;
         return "/venues/" + venueId + "/rotas/" + utils.formatRotaUrlDate(date);
     },
+    rotaPdfDownload: function({venueId, date}){
+      return [
+        '/venues/' + venueId,
+        '/rotas/' + utils.formatRotaUrlDate(date) + '.pdf'
+      ].join("")
+    },
     rotaOverview: function(options){
         var {venueId, startDate, endDate} = options;
         return [

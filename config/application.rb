@@ -22,6 +22,7 @@ module Boss
 
     config.autoload_paths += Dir["#{config.root}/app/services/**/"]
     config.autoload_paths += Dir["#{config.root}/app/reports/**/"]
+    config.autoload_paths += Dir["#{config.root}/app/models/test_data/**/"]
 
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
 

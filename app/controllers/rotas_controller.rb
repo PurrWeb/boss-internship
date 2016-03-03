@@ -58,6 +58,19 @@ class RotasController < ApplicationController
     )
     authorize!(:manage, rota)
 
+    respond_to do |format|
+      format.html do
+        render_rota_show(rota)
+      end
+
+      format.pdf do
+        render_rota_pdf(rota)
+      end
+    end
+  end
+
+  private
+  def render_rota_show(rota)
     week = RotaWeek.new(rota.date)
 
     holidays = Holiday.
@@ -77,7 +90,15 @@ class RotasController < ApplicationController
     }
   end
 
-  private
+  def render_rota_pdf(rota)
+    pdf = RotaPDF.new(RotaPDFTableData.new(rota))
+    #TODO: Extract File Timestamp Format to somewhere
+    timestamp = rota.date.strftime('%d-%b-%Y-%H-%M')
+    filename  = "#{rota.venue.name.to_param}-rota-#{timestamp}.pdf"
+    headers['Content-Disposition'] = "attachment; filename=#{filename}"
+    render text: pdf.render, content_type: 'application/pdf'
+  end
+
   def authorize
     authorize! :manage, :rotas
   end
