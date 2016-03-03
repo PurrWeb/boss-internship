@@ -6,6 +6,7 @@ import StaffDetailsAndShifts from "~components/staff-details-and-shifts"
 import VenueDropdown from "~components/venue-dropdown"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import getVenueColor from "~lib/get-venue-color"
+import getVenueFromShift from "~lib/get-venue-from-shift"
 
 export default class ChartAndFilter extends React.Component {
     static propTypes = {
@@ -63,13 +64,12 @@ export default class ChartAndFilter extends React.Component {
             return true;
         });
     }
-    getVenueFromShift(shift){
-        var rota = this.props.rotas[shift.rota.clientId];
-
-        return rota.venue;
-    }
     getShiftColor(shift){
-        var venue = this.getVenueFromShift(shift);
+        var venue = getVenueFromShift({
+            shift,
+            rotasById: this.props.rotas,
+            venuesById: this.props.venues
+        });
         var venueIds = _.pluck(_.values(this.props.venues), "id");
         var index = venueIds.indexOf(venue.id);
         return getVenueColor(index);
@@ -82,6 +82,9 @@ export default class ChartAndFilter extends React.Component {
             staffId={staffId}
             staffTypes={this.props.staffTypes}
             rotaShifts={this.props.rotaShifts}
+            venuesById={this.props.venues}
+            rotasById={this.props.rotas}
+            showShiftVenue={true}
             // We specify a key so the component is re-initialized when
             // the shift changes - so we don't keep the previous state.
             key={staffId}

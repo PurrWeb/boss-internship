@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import moment from "moment"
 import _ from "underscore"
+import getVenueFromShift from "~lib/get-venue-from-shift"
 
 class StaffShiftListItem extends Component {
     render(){
@@ -23,8 +24,11 @@ export default class StaffShiftList extends Component {
     }
     render() {
         var shifts = _.values(this.props.shifts).map((shift, i) =>{
-            var rota = this.props.rotas[shift.rota.clientId];
-            var venue = this.props.venues[rota.venue.id];
+            var venue = getVenueFromShift({
+                shift,
+                venuesById: this.props.venues,
+                rotasById: this.props.rotas
+            });
             return <StaffShiftListItem
                 key={i}
                 shift={shift}
