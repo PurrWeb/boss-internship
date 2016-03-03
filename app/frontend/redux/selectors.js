@@ -115,3 +115,17 @@ export function selectRotaOnVenueRotaPage(state){
     });
 }
 
+export function canEditStaffType(state, {staffTypeId}){
+    var staffTypeObject = state.staffTypes[staffTypeId];
+    var disabledNames = state.pageOptions.disableEditingShiftsByStaffTypeName;
+    if (!disabledNames) {
+        return true;
+    } 
+
+    if (disabledNames[staffTypeObject.name]){
+        return false;
+    }
+    return true;
+}
+
+

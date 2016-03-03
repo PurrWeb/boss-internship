@@ -8,6 +8,8 @@ import { connect } from "react-redux"
 import { deleteRotaShift, updateRotaShift } from "~redux/actions"
 import _ from "underscore"
 import ComponentErrors from "~components/component-errors"
+import getStaffTypeFromShift from "~lib/get-staff-type-from-shift"
+import { canEditStaffType } from "~redux/selectors"
 
 class ShiftEditor extends Component {
     static propTypes = {
@@ -35,11 +37,14 @@ class ShiftEditor extends Component {
             updateButtonClasses.push("disabled");
         }
 
-        var updateButton = <a
-            className={updateButtonClasses.join(" ")}
-            onClick={() => this.updateShift()} style={{marginTop: "-4px"}}>
-            Update
-        </a>
+        var updateButton = null;
+        if (this.props.canEditShift){
+            updateButton = <a
+                className={updateButtonClasses.join(" ")}
+                onClick={() => this.updateShift()} style={{marginTop: "-4px"}}>
+                Update
+            </a>
+        }
 
         var spinner = null;
         if (this.props.shift.isBeingEdited) {
@@ -68,12 +73,18 @@ class ShiftEditor extends Component {
             </div>
             {componentErrors}
         
-            <a
-                onClick={() => this.deleteShift()}
-                className={this.props.shift.isBeingEdited ? "link-disabled" : ""}>
-                Delete shift
-            </a>
+            {this.getDeleteButton()}
         </div>
+    }
+    getDeleteButton(){
+        if (!this.props.canEditShift) {
+            return null;
+        }
+        return <a
+            onClick={() => this.deleteShift()}
+            className={this.props.shift.isBeingEdited ? "link-disabled" : ""}>
+            Delete shift
+        </a>
     }
     areBothTimesValid(){
         var {starts_at, ends_at} = this.state.newShiftTimes;
@@ -108,9 +119,15 @@ class ShiftEditor extends Component {
 function mapStateToProps(state, ownProps){
     var rotaClientId = ownProps.shift.rota.clientId;
     var rota = state.rotas[rotaClientId];
+    var staffType = getStaffTypeFromShift({
+        shift: ownProps.shift,
+        staffMembersById: state.staff,
+        staffTypesById: state.staffTypes
+    });
     return {
         componentErrors: state.componentErrors,
-        venueId: rota.venue.id
+        venueId: rota.venue.id,
+        canEditShift: canEditStaffType(state, {staffTypeId: staffType.id})
     }
 }
 
