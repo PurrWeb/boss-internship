@@ -1,33 +1,33 @@
 import _ from "underscore"
 
 export default function renderTooltipHtml(data){
-    const { shiftsByStaffType, staffTypes, selectedStaffTypeTitle } = data;
+    const { shiftsByGroup, groupsById, selectedGroupTitle } = data;
 
-    function renderLine(staffType){
-        var shifts = shiftsByStaffType[staffType];
-        var staffTypeObject = staffTypes[staffType];
-        var isSelected = selectedStaffTypeTitle === staffTypeObject.name;
+    function renderLine(groupId){
+        var shifts = shiftsByGroup[groupId];
+        var groupObject = groupsById[groupId];
+        var isSelected = selectedGroupTitle === groupObject.name;
 
-        var line = shifts.length + " - " + staffTypeObject.name;
+        var line = shifts.length + " - " + groupObject.name;
         if (isSelected) {
             line = "<b>" + line + "</b>";
         }
         return line;
     }
 
-    var selectedStaffType = _(staffTypes).find({name: selectedStaffTypeTitle}).id;
+    var selectedGroup = _(groupsById).find({name: selectedGroupTitle}).id;
 
     var tooltipLines = [];
     tooltipLines.push(
-        renderLine(selectedStaffType)
+        renderLine(selectedGroup)
     );
 
-    _(shiftsByStaffType).each(function(shifts, staffType){
-        if (staffType == selectedStaffType) {
+    _(shiftsByGroup).each(function(shifts, group){
+        if (group == selectedGroup) {
             return;
         }
         tooltipLines.push(
-            renderLine(staffType)
+            renderLine(group)
         );
     });
 
