@@ -16,6 +16,33 @@ class SecurityRotasController < ApplicationController
     date = date_from_params(param_name: :id)
     raise ActiveRecord::RecordNotFound unless date.present?
 
+    respond_to do |format|
+      format.html do
+        render_security_rota_show(date: date)
+      end
+
+      format.pdf do
+        render_security_rota_pdf(date: date)
+      end
+    end
+  end
+
+  private
+  def authorize
+    authorize! :manage, :security_rota
+  end
+
+  def accessible_venues_for(user)
+    AccessibleVenuesQuery.new(user).all
+  end
+
+  def date_from_params(param_name: :date)
+    if params[param_name.to_sym].present?
+      UIRotaDate.parse(params[param_name.to_sym])
+    end
+  end
+
+  def render_security_rota_show(date:)
     venues = Venue.all
     staff_types = StaffType.where(role: 'security')
     staff_members = StaffMember.enabled.joins(:staff_type).merge(staff_types)
@@ -49,18 +76,12 @@ class SecurityRotasController < ApplicationController
     }
   end
 
-  private
-  def authorize
-    authorize! :manage, :security_rota
-  end
-
-  def accessible_venues_for(user)
-    AccessibleVenuesQuery.new(user).all
-  end
-
-  def date_from_params(param_name: :date)
-    if params[param_name.to_sym].present?
-      UIRotaDate.parse(params[param_name.to_sym])
-    end
+  def render_security_rota_pdf(date:)
+    pdf = RotaPDF.new(SecurityRotaPDFTableData.new(date))
+    #TODO: Extract File Timestamp Format to somewhere
+    timestamp = date.strftime('%d-%b-%Y')
+    filename  = "security-rota-#{timestamp}.pdf"
+    headers['Content-Disposition'] = "attachment; filename=#{filename}"
+    render text: pdf.render, content_type: 'application/pdf'
   end
 end

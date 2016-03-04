@@ -53,7 +53,7 @@ export const addRotaShift = createApiRequestAction({
             var rotaDate = new RotaDate({shiftStartsAt: responseData.starts_at});
             var rota = getRotaFromDateAndVenue({
                 rotas: getState().rotas,
-                dateOfRota: rotaDate.getDateOfRota(), 
+                dateOfRota: rotaDate.getDateOfRota(),
                 venueId: requestOptions.venueId
             });
 
@@ -288,7 +288,8 @@ export function loadInitalStaffTypeRotaAppState(viewData){
 
     var pageOptions = {
         staffTypeSlug: viewData.staffTypeSlug,
-        dateOfRota: new Date(viewData.rota.date)
+        dateOfRota: new Date(viewData.rota.date),
+        pdfDownloadUrl: viewData.pdfDownloadUrl
     }
     return genericLoadInitialRotaAppState(viewData, pageOptions);
 }

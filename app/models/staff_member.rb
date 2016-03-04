@@ -64,6 +64,10 @@ class StaffMember < ActiveRecord::Base
     joins(:venue).merge(Venue.where(id: venue.id))
   end
 
+  def self.security
+    joins(:staff_type).merge(StaffType.security)
+  end
+
   def security?
     staff_type.andand.security?
   end
