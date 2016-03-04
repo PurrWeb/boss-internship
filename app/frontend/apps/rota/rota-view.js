@@ -10,6 +10,7 @@ import store from "../../redux/store.js"
 import moment from "moment"
 import RotaStatusToggle from "./status-toggle/rota-status-toggle"
 import { selectRotaOnVenueRotaPage } from "~redux/selectors"
+import {appRoutes} from "~lib/routes"
 
 
 const boundActionCreators = bindActionCreators(actionCreators, store.dispatch.bind(store));
@@ -37,7 +38,17 @@ class RotaView extends Component {
                 dateOfRota={this.props.dateOfRota}
                 venueId={this.props.venue.id} />
             <br/>
-            <RotaStatusToggle />
+            <div className="row">
+              <div className="col-md-2">
+                <a href={appRoutes.rotaPdfDownload({venueId: this.props.venue.id, date: this.props.dateOfRota })} className="btn btn-success">
+                  <span className="glyphicon glyphicon-download"></span> Download PDF
+                </a>
+              </div>
+
+              <div className="col-md-4">
+                <RotaStatusToggle />
+              </div>
+            </div>
             <h1>
                 Rota for {this.props.venue.name}: {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>

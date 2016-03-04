@@ -35,6 +35,8 @@ gem 'paloma'
 gem 'andand'
 gem 'bootstrap-datepicker-rails'
 gem 'money'
+gem 'prawn'
+gem 'prawn-table'
 
 group :development, :test do
   gem "byebug"

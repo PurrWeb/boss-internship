@@ -31,6 +31,35 @@ class RotaWeek
     start_date <=> other.start_date
   end
 
+  def each(&block)
+    (start_date..end_date).each(&block)
+  end
+
+  def each_with_day(&block)
+    each do |date|
+      day = case date
+      when start_date
+        :monday
+      when start_date + 1.days
+        :tuesday
+      when start_date + 2.days
+        :wednesday
+      when start_date + 3.days
+        :thursday
+      when start_date + 4.days
+        :friday
+      when start_date + 5.days
+        :saturday
+      when start_date + 6.days
+        :sunday
+      else
+        raise 'unexpected date encountered'
+      end
+
+      block.call(date, day)
+    end
+  end
+
   private
   attr_reader :supplied_date, :day_index
 end
