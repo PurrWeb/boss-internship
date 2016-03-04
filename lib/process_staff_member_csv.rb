@@ -63,6 +63,7 @@ class ProcessStaffMemberCSV
     result["Last Name"] = last_name
     result["Region"] = "Merseyside"
     result["Country"] = "UK"
+    result["Pay Rate"] = 'Age 21-25'
     result
   end
 
@@ -102,7 +103,8 @@ class ProcessStaffMemberCSV
       'Address 4',
       'Region',
       'Country',
-      'Postcode'
+      'Postcode',
+      'Pay Rate'
     ]
   end
 

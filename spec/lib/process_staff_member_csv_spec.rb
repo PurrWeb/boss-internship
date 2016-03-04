@@ -40,9 +40,9 @@ describe ProcessStaffMemberCSV do
   let(:output_csv) { double('output csv') }
   let(:expected_output) do
     [
-      ["First Name", "Last Name", "Job Title", "Start Date", "NI Number", "Sex", "Date of Birth", "Address 1", "Address 2", "Address 3", "Address 4", "Region", "Country", "Postcode"],
-      ["Jacob", "Farby", "Bar Staff", "22/05/2014", "JM678965D", "Male", "05/04/1994", "The Blue Chapliaincy", "", "Mulberry Pears", "Liverpool", "Merseyside", "UK", "7AD 6YT"],
-      ["John", "Cockren Barnett", "Manager", "22/10/2022", "JM234987D", "Female", "04/01/1998", "A street", "", "", "Liverpool", "Merseyside", "UK", "5L 23B"]
+      ["First Name", "Last Name", "Job Title", "Start Date", "NI Number", "Sex", "Date of Birth", "Address 1", "Address 2", "Address 3", "Address 4", "Region", "Country", "Postcode", "Pay Rate"],
+      ["Jacob", "Farby", "Bar Staff", "22/05/2014", "JM678965D", "Male", "05/04/1994", "The Blue Chapliaincy", "", "Mulberry Pears", "Liverpool", "Merseyside", "UK", "7AD 6YT", "Age 21-25"],
+      ["John", "Cockren Barnett", "Manager", "22/10/2022", "JM234987D", "Female", "04/01/1998", "A street", "", "", "Liverpool", "Merseyside", "UK", "5L 23B", "Age 21-25"]
     ]
   end
 

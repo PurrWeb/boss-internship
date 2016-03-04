@@ -37,6 +37,9 @@ class ImportStaffMemberFromCSV
           raise ActiveRecord::RecordNotFound, "Couldn't find StaffType with name: #{staff_type_name}"
         end
 
+        pay_rate_name = values.fetch(pay_rate_column)
+        pay_rate = PayRate.find_by!(name: pay_rate_name)
+
         staff_member = StaffMember.new(
           creator: requester,
           name: name,
@@ -47,6 +50,7 @@ class ImportStaffMemberFromCSV
           starts_at: Date.strptime(values.fetch(starts_at_column), date_format),
           date_of_birth: Date.strptime(values.fetch(date_of_birth_column), date_format),
           national_insurance_number: values.fetch(national_insurance_number_column),
+          pay_rate: pay_rate,
           employment_status_a: true,
           employment_status_b: false,
           employment_status_c: false,
@@ -108,7 +112,8 @@ class ImportStaffMemberFromCSV
       address_4_column,
       region_column,
       country_column,
-      postcode_column
+      postcode_column,
+      pay_rate_column
     ]
   end
 
@@ -166,5 +171,9 @@ class ImportStaffMemberFromCSV
 
   def postcode_column
     'Postcode'
+  end
+
+  def pay_rate_column
+    'Pay Rate'
   end
 end
