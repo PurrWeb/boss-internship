@@ -39,9 +39,10 @@ export default class RotaOverviewView extends Component {
     }
     getRotaForecast(){
         var display = this.state.selectionData === null ? "block" : "none";
+        
         return <div style={{display: display}}>
             <RotaForecast
-                rotaId={this.props.rota.id}
+                rotaClientId={this.props.rota.clientId}
                 canEditForecastedTake={true} />
         </div>
     }

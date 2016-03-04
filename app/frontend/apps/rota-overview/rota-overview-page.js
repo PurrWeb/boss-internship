@@ -59,11 +59,15 @@ class RotaOverviewPage extends Component {
         var self = this;
         // Use store rotas, because otherwise some rotas won't have an ID/ won't
         // have the same IDs as the store rotas
-        return _.values(this.props.storeRotas).map(function(rota, i){
-            var rotaDetails = self.props.rotaDetailsObjects[i];
+        return _.values(this.props.storeRotas).map(function(storeRota){
+            var rotaDetails = _.find(self.props.rotaDetailsObjects, function(obj){
+                var venuesAreEqual = obj.rota.venue.id === storeRota.venue.id;
+                var datesAreEqual = utils.datesAreEqual(new Date(obj.rota.date), storeRota.date);
+                return venuesAreEqual && datesAreEqual;
+            });
+
             var staff = rotaDetails.staff_members;
             var shifts = rotaDetails.rota_shifts.map(backendData.processShiftObject);
-            var storeRota = self.props.storeRotas[rotaDetails.rota.id];
             var staffTypes = rotaDetails.staff_types;
 
             var staffTypesWithShifts = selectStaffTypesWithShifts({
@@ -72,20 +76,20 @@ class RotaOverviewPage extends Component {
                 staff: indexById(staff)
             });
 
-            return <div key={ rota.id }>
+            return <div key={ storeRota.clientId }>
                 <h2>
-                    <a href={appRoutes.rota({venueId: rota.venue.id, date: rota.date}) }>
-                        {moment(rota.date).format("ddd D MMMM YYYY")}
+                    <a href={appRoutes.rota({venueId: storeRota.venue.id, date: storeRota.date}) }>
+                        {moment(storeRota.date).format("ddd D MMMM YYYY")}
                     </a>
                     <span className="boss-badge" style={{verticalAlign: "middle", marginLeft: 10}}>
-                        {rotaStatusTitles[self.props.storeRotas[rota.id].status]}
+                        {rotaStatusTitles[storeRota.status]}
                     </span>
                 </h2>
                 <RotaOverviewView
                     staff={ indexById(staff) }
                     shifts={ indexById(shifts) }
-                    rota={rota}
-                    dateOfRota={ rota.date }
+                    rota={storeRota}
+                    dateOfRota={ storeRota.date }
                     staffTypesWithShifts={ indexById(staffTypesWithShifts)} />
             </div>
         });

@@ -8,7 +8,7 @@ import { selectUpdateRotaForecastInProgress, selectForecastByRotaId } from "~red
 
 class RotaForecast extends React.Component {
     static propTypes = {
-        rotaId: React.PropTypes.any.isRequired,
+        rotaClientId: React.PropTypes.any.isRequired,
         canEditForecastedTake: React.PropTypes.bool
     }
     constructor(props){
@@ -37,8 +37,8 @@ class RotaForecast extends React.Component {
 }
 
 function mapStateToProps(state, ownProps){
-    var forecast = selectForecastByRotaId(state, ownProps.rotaId);
-    var rota = state.rotas[ownProps.rotaId];
+    var forecast = selectForecastByRotaId(state, ownProps.rotaClientId);
+    var rota = state.rotas[ownProps.rotaClientId];
     return {
         rotaForecast: forecast,
         rota,
