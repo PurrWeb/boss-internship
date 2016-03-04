@@ -87,13 +87,15 @@ class ImportStaffMemberFromCSV
   end
 
   def normalise_staff_type_name(staff_type_name)
-    case staff_type_name
+    case staff_type_name.titlecase.strip
     when 'Bar Staff'
       'Bartender'
     when 'Kitchen Porter'
       'KP'
+    when 'Kitchen Staff'
+      'KP'
     else
-      staff_type_name
+      staff_type_name.titlecase.strip
     end
   end
 
