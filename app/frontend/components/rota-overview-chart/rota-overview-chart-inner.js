@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import _ from "underscore"
-import nvd3 from "nvd3"
 import NVD3Chart from "react-nvd3"
 import ReactDOM from "react-dom"
 import d3 from "d3"
