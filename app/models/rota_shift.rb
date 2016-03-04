@@ -78,7 +78,6 @@ class RotaShift < ActiveRecord::Base
   def shift_does_not_overlap_existing_shift
     if starts_at.present? && ends_at.present? && staff_member.present? && rota.present?
       query = ShiftInRangeQuery.new(
-        rota: rota,
         staff_member: staff_member,
         starts_at: starts_at,
         ends_at: ends_at

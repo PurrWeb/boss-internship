@@ -17,7 +17,6 @@ describe ShiftInRangeQuery do
     ShiftInRangeQuery.new(
       starts_at: query_starts_at,
       ends_at: query_ends_at,
-      rota: query_rota,
       staff_member: query_staff_member
     )
   end
@@ -99,8 +98,8 @@ describe ShiftInRangeQuery do
   context 'when supplied rota member does not match existing shift' do
     let(:query_rota) { FactoryGirl.create(:rota) }
 
-    specify 'shift should not be returned' do
-      expect(query.all).to eq([])
+    specify 'shift should still be returned' do
+      expect(query.all).to eq([shift])
     end
   end
 end

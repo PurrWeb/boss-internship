@@ -1,6 +1,5 @@
 class ShiftInRangeQuery
-  def initialize(rota:, staff_member:, starts_at:, ends_at:)
-    @rota = rota
+  def initialize(staff_member:, starts_at:, ends_at:)
     @staff_member = staff_member
     @starts_at = starts_at
     @ends_at = ends_at
@@ -13,10 +12,9 @@ class ShiftInRangeQuery
       end_value: ends_at
     ).all
     query = query.where(staff_member: staff_member)
-    query = query.where(rota: rota)
     query
   end
 
   private
-  attr_reader :staff_member, :starts_at, :ends_at, :rota
+  attr_reader :staff_member, :starts_at, :ends_at
 end
