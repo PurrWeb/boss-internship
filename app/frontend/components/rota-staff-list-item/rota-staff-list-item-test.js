@@ -5,7 +5,7 @@ import expect from "expect"
 import StaffListItem from "./index"
 import {ContextProvider, NoOpComponent, simpleRender} from "~lib/test-helpers"
 import {createStore} from "redux"
-import AddStaffToShiftButton from "./add-staff-to-shift-button"
+import AddShiftButton from "./add-shift-button"
 
 StaffListItem.__Rewire__('StaffTypeBadge', NoOpComponent);
 StaffListItem.__Rewire__('StaffHolidaysList', NoOpComponent);
@@ -50,7 +50,7 @@ describe('StaffListItem', function() {
             storeState
         });
 
-        return findChild(AddStaffToShiftButton).props.canAddShift;
+        return findChild(AddShiftButton).props.canAddShift;
     }
 
     it("shows the person's first and last name", function(){
@@ -111,6 +111,7 @@ describe('StaffListItem', function() {
 
     it("Disables the add button if the new shift times are invalid", function(){
         var itemContext = {...context};
+        // end time is before start time
         itemContext.newShiftTimes= {
             starts_at: new Date(2016,0,1,16,0),
             ends_at: new Date(2016,0,1,10,0),

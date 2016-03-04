@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import AddStaffToShiftButton from "./add-staff-to-shift-button"
+import AddShiftButton from "./add-shift-button"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
 import Spinner from "~components/spinner"
@@ -81,7 +81,7 @@ class RotaStaffListItem extends Component {
                     <div className="col-md-3">
                         <div style={{overflow: "hidden"}}>
                             <div className="rota-staff-list-item__add-button" style={{float: "left"}}>
-                                <AddStaffToShiftButton
+                                <AddShiftButton
                                     staffId={staff.id}
                                     canAddShift={this.canAddShift()}
                                     addShift={() => this.addShift()}
