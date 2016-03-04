@@ -33,7 +33,9 @@ describe('StaffListItem', function() {
         },
         componentErrors: {},
         staffTypes: {
-            3333: {}
+            3333: {
+                name: "Kitchen"
+            }
         },
         rotaShifts: {},
         apiRequestsInProgress: {},
@@ -66,7 +68,6 @@ describe('StaffListItem', function() {
     });
 
     it("Disables the add button if the staff member is on holiday", function(){
-        var itemContext = {...context};
         var itemStoreState = {...storeState}
         var itemStaff = {...staff}
         itemStaff.holidays = [{id: 1}]
@@ -82,7 +83,7 @@ describe('StaffListItem', function() {
             }
         }
 
-        expect(canAddShift(itemContext, itemStoreState, itemStaff)).toBe(false);
+        expect(canAddShift(context, itemStoreState, itemStaff)).toBe(false);
     });
 
     it("Disables the add button if a shift is alrady being added", function(){
@@ -97,6 +98,16 @@ describe('StaffListItem', function() {
         expect(canAddShift(context, state, staff)).toBe(false);
     });
 
-    
+    it("Disables the add button if staff member's staff type can't be edited on this page", function(){
+        var state = {...storeState};
+        state.pageOptions = {
+            disableEditingShiftsByStaffTypeName: {
+                "Kitchen": true
+            }
+        };
+
+
+        expect(context, state, staff);
+    })
 
 });
