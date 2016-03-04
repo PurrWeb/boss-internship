@@ -50,6 +50,13 @@ export default class ChartAndFilter extends React.Component {
             </div>
         </div>
     }
+    getVenueFromShift(shift){
+        return getVenueFromShift({
+            shift,
+            venuesById: this.props.venues,
+            rotasById: this.props.rotas
+        })
+    }
     getRotaShiftsToDisplay(){
         var self = this;
         return _(this.props.rotaShifts).filter(function(shift){
