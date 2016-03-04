@@ -80,7 +80,7 @@ class StaffMember < ActiveRecord::Base
   end
 
   def national_insurance_number_regex
-    /^[A-Z]{2}[0-9]{6}(A|B|C|D)$/
+    /^[A-Z]{2}[0-9]{6}(A|B|C|D|F)$/
   end
 
   def normalise_national_insurance_number
