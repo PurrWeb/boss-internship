@@ -27,17 +27,15 @@ export default class StaffTypeRotaOverviewPage extends Component {
                 var shifts = rotaDetails.rota_shifts.map(backendData.processShiftObject);
                 var rotas = rotaDetails.rotas.map(backendData.processRotaObject)
 
-                return <div>
-                    <StaffTypeRotaOverviewItem
-                        dateOfRota={new Date(rotaDetails.date)}
-                        rotaShifts={shifts}
-                        venues={utils.indexById(rotaDetails.venues)}
-                        rotas={utils.indexByClientId(rotas)}
-                        staff={utils.indexById(rotaDetails.staff_members)}
-                        staffTypes={utils.indexById(rotaDetails.staff_types)}
-                        staffTypeSlug={self.props.staffTypeSlug}
-                        key={rotaDetails.date.toString()} />
-                    </div>
+                return <StaffTypeRotaOverviewItem
+                            dateOfRota={new Date(rotaDetails.date)}
+                            rotaShifts={shifts}
+                            venues={utils.indexById(rotaDetails.venues)}
+                            rotas={utils.indexByClientId(rotas)}
+                            staff={utils.indexById(rotaDetails.staff_members)}
+                            staffTypes={utils.indexById(rotaDetails.staff_types)}
+                            staffTypeSlug={self.props.staffTypeSlug}
+                            key={rotaDetails.date.toString()} />
             })}
         </div>       
     }

@@ -3,6 +3,8 @@ import _ from "underscore"
 import RotaOverviewChart from "~components/rota-overview-chart"
 import getGroupedShiftBreakdownByTime from "~lib/get-grouped-shift-breakdown-by-time"
 import RotaDate from "~lib/rota-date"
+import getVenueColor from "~lib/get-venue-color"
+import getVenueFromShift from "~lib/get-venue-from-shift"
 
 const GRANULARITY = 30;
 
@@ -17,6 +19,13 @@ export default class StaffTypeRotaOverviewChart extends Component {
         rotas: React.PropTypes.object.isRequired
     }
     render() {
+        var venuesArray = _.values(this.props.venues);
+        var groups = _.map(venuesArray, function(venue, i){
+            return Object.assign({}, venue, {
+                color: getVenueColor(i)
+            })
+        });
+
         return <RotaOverviewChart
                     staff={this.props.staff}
                     shifts={_.values(this.props.shifts)}
@@ -24,13 +33,8 @@ export default class StaffTypeRotaOverviewChart extends Component {
                     onHoverShiftsChange={this.props.onHoverShiftsChange}
                     onSelectionShiftsChange={this.props.onSelectionShiftsChange}
                     getBreakdown={this.getBreakdown.bind(this)}
-                    tooltipGenerator={this.generateTooltip.bind(this)}
                     granularity={GRANULARITY}
-                    groups={_.values(_.mapValues(this.props.venues, function(venue){
-                        return Object.assign({}, venue, {
-                            color: ["red", "green", "blue"][Math.floor(Math.random() * 3)]
-                        })
-                    }))} />
+                    groups={groups} />
     }
     getBreakdown(){
         var { shifts, staff, staffTypes, venues, rotas} = this.props;
@@ -49,24 +53,15 @@ export default class StaffTypeRotaOverviewChart extends Component {
                 return venue;
             }),
             getGroupFromShift: function(shift){
-                var rota = rotas[shift.rota.clientId];
-                return venues[rota.venue.id];
+                return getVenueFromShift({
+                    rotasById: rotas,
+                    venuesById: venues,
+                    shift
+                })
             }
         });
 
         return breakdown;
-    }
-    generateTooltip(obj, breakdown){
-        var selectedStaffTypeTitle = obj.series[0].key;
-        var date = breakdown[obj.index].date;
-        var breakdownAtPoint = _(breakdown).find((point) => point.date.valueOf() === date.valueOf());
-
-        return "TODO"
-        return renderTooltipHtml({
-            shiftsByStaffType: breakdownAtPoint.shiftsByGroup,
-            selectedStaffTypeTitle,
-            staffTypes: this.props.staffTypes
-        });
     }
     getRotaDate(){
         return new RotaDate({dateOfRota: this.props.dateOfRota});

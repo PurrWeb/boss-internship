@@ -18,6 +18,28 @@ export function selectStaffTypesWithShifts(state){
     }
 }
 
+export function selectVenuesWithShifts(state){
+    var {venues, rotas, rotaShifts} = state;
+
+    var venueIdsWithShifts = _(rotaShifts).chain()
+        .map(getVenueIdFromShift)
+        .unique()
+        .value();
+
+    var allVenues = _.values(venues);
+    var venuesWithShifts = _.filter(allVenues, function(venue){
+        return _(venueIdsWithShifts).contains(venue.id);
+    });
+
+    return utils.indexById(venuesWithShifts);
+
+    function getVenueIdFromShift(shift){
+        var rotaId = shift.rota.clientId;
+        var rota = rotas[rotaId];
+        return rota.venue.id;
+    }
+}
+
 export function selectStaffMemberHolidays(state, staffId){
     var staffMember = state.staff[staffId];
     var staffMemberHolidayIds = _.pluck(state.staff[staffId].holidays, "id");
@@ -91,4 +113,27 @@ export function selectRotaOnVenueRotaPage(state){
         dateOfRota: state.pageOptions.dateOfRota,
         venueId: state.pageOptions.venueId
     });
+}
+
+export function canEditStaffTypeShifts({staffTypes, pageOptions}, {staffTypeId}){
+    var staffTypeObject = staffTypes[staffTypeId];
+    var disabledNames = pageOptions.disableEditingShiftsByStaffTypeName;
+    if (!disabledNames) {
+        return true;
+    } 
+
+    if (disabledNames[staffTypeObject.name]){
+        return false;
+    }
+    return true;
+}
+
+export function selectShiftIsBeingEdited(state, {shiftId}){
+    var shiftsBeingUpdated = state.apiRequestsInProgress.UPDATE_SHIFT;
+    var shiftsBeingDeleted = state.apiRequestsInProgress.DELETE_SHIFT;
+
+    var isBeingUpdated = _(shiftsBeingUpdated).some((request) => request.shift.shift_id === shiftId);
+    var isBeingDeleted = _(shiftsBeingDeleted).some((request) => request.shift.id === shiftId);
+
+    return isBeingUpdated || isBeingDeleted;
 }

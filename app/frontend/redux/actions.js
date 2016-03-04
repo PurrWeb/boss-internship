@@ -258,7 +258,10 @@ export function loadInitialRotaAppState(viewData) {
     var pageOptions = {
         venueId: viewData.rota.rotas[0].venue.id,
         dateOfRota: new Date(viewData.rota.rotas[0].date),
-        staffTypeSlug: viewData.staffTypeSlug
+        staffTypeSlug: viewData.staffTypeSlug,
+        disableEditingShiftsByStaffTypeName: {
+            "Security": true
+        }
     };
     return genericLoadInitialRotaAppState(viewData, pageOptions);
 }

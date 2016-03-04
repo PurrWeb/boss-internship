@@ -20,15 +20,23 @@ describe('StaffListItem', function() {
     };
 
     var context = {
-        canAddShift: () => true,
+        newShiftTimes: {
+            starts_at: new Date(),
+            ends_at: new Date()
+        },
+        newShiftVenueId: 1,
         store: createStore(function(){
             return {
+                staff: {
+                    33: staff
+                },
                 componentErrors: {},
                 staffTypes: {
                     3333: {}
                 },
                 rotaShifts: {},
-                apiRequestsInProgress: {}
+                apiRequestsInProgress: {},
+                pageOptions: {}
             }
         })
     };

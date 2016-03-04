@@ -8,7 +8,7 @@
   <% rota_shifts = rota.rota_shifts.enabled %>
   rotaData.rota_shifts = <%= raw render partial: 'api/v1/shared/rota_shifts.json', locals: { rota_shifts: rota_shifts } %>;
 
-  <% staff_members = rota.venue.staff_members.enabled %>
+  <% staff_members = RotaStaffMemberQuery.new(rota).all %>
   rotaData.staff_members = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
 
   <% venue = rota.try(:venue) %>

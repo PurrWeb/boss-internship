@@ -1,23 +1,23 @@
 import React, { Component } from "react"
-import ShiftEditor from "./containers/shift-editor"
-import StaffTypeBadge from "~components/staff-type-badge"
+import EditableShiftList from "./editable-shift-list"
 import _ from "underscore"
+import StaffTypeBadge from "~components/staff-type-badge"
 
 export default class StaffDetailsAndShifts extends Component {
     static propTypes = {
         staffTypes: React.PropTypes.object.isRequired,
         staffId: React.PropTypes.number.isRequired,
         staff: React.PropTypes.object.isRequired,
-        rotaShifts: React.PropTypes.object.isRequired
+        rotaShifts: React.PropTypes.object.isRequired,
+        showShiftVenue: React.PropTypes.bool,
+        rotasById: React.PropTypes.object.isRequired,
+        venuesById: React.PropTypes.object
     }
     render(){
         var staff = this.getStaff();
         var shifts = this.getShifts();
-        var shiftEls = shifts.map(
-            (shift) => <ShiftEditor
-                shift={shift}
-                key={shift.id} />
-        );
+        var { venuesById, rotasById, showShiftVenue } = this.props;
+
         var staffTypeId = staff.staff_type.id;
         var staffType = this.props.staffTypes[staffTypeId];
         return <div>
@@ -30,7 +30,11 @@ export default class StaffDetailsAndShifts extends Component {
             </div>
             <br/>
 
-            {shiftEls}
+            <EditableShiftList
+                shifts={shifts}
+                venuesById={venuesById}
+                rotasById={rotasById}
+                showShiftVenue={showShiftVenue} />
 
             <br/>
             <u>Preferences</u>

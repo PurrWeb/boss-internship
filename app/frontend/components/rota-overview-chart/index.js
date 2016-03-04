@@ -3,6 +3,7 @@ import _ from "underscore"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
 import moment from "moment"
+import renderTooltipHtml from "./render-tooltip-html"
 import RotaOverviewChartInner from "./rota-overview-chart-inner"
 
 const MILLISECONDS_PER_MINUTE = 60 * 1000;
@@ -11,12 +12,15 @@ const MINUTES_PER_HOUR = 60;
 export default class RotaOverviewChart extends Component {
     static propTypes = {
         shifts: React.PropTypes.array.isRequired,
-        groups: React.PropTypes.array.isRequired,
+        groups: React.PropTypes.arrayOf(React.PropTypes.shape({
+            id: React.PropTypes.any.isRequired,
+            color: React.PropTypes.string.isRequired,
+            name: React.PropTypes.string.isRequired
+        })),
         staff: React.PropTypes.object.isRequired,
         dateOfRota: React.PropTypes.instanceOf(Date),
         onHoverShiftsChange: React.PropTypes.func.isRequired,
         onSelectionShiftsChange: React.PropTypes.func.isRequired,
-        tooltipGenerator: React.PropTypes.func.isRequired,
         getBreakdown: React.PropTypes.func.isRequired,
         granularity: React.PropTypes.number.isRequired
     }
@@ -45,7 +49,22 @@ export default class RotaOverviewChart extends Component {
                 self.props.onHoverShiftsChange(null);
             }}
             tooltipGenerator={
-                (obj) => this.props.tooltipGenerator(obj, breakdown)
+                function(obj) {
+                    var groupsById = utils.indexById(self.props.groups);
+                    var selectedGroupTitle = obj.series[0].key;
+                    var date = breakdown[obj.index].date;
+                    var breakdownAtPoint = _(breakdown).find(
+                        (point) => point.date.valueOf() === date.valueOf()
+                    );
+                    var selectedGroupId = _(groupsById).find({name: selectedGroupTitle}).id;
+
+                    var html = renderTooltipHtml({
+                        shiftsByGroupId: breakdownAtPoint.shiftsByGroup,
+                        selectedGroupId,
+                        groupsById
+                    });
+                    return html;
+                }
             } />
     }
     getRotaDate(){

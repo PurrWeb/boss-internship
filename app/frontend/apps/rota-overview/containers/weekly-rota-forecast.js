@@ -59,7 +59,6 @@ class WeeklyRotaForecast extends React.Component {
             return; // we already tried fetching and it failed... don't try again to avoid infinite attempts
         }
         
-        console.log("will fetch")
         props.fetchForecast(this.componentId);
     }
 }

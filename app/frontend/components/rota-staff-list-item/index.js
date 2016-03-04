@@ -7,13 +7,16 @@ import ComponentErrors from "~components/component-errors"
 import StaffHolidaysList from "~components/staff-holidays-list"
 import { appRoutes } from "~lib/routes"
 import { connect } from "react-redux"
-import { selectAddShiftIsInProgress } from "~redux/selectors"
+import { selectAddShiftIsInProgress, canEditStaffTypeShifts, selectStaffMemberIsOnHolidayOnDate } from "~redux/selectors"
 import _ from "underscore"
+import validation from "~lib/validation"
+import RotaDate from "~lib/rota-date"
+import * as actionCreators from "~redux/actions"
 
 class RotaStaffListItem extends Component {
     static contextTypes = {
-        addShift: React.PropTypes.func.isRequired,
-        canAddShift: React.PropTypes.func.isRequired
+        newShiftTimes: React.PropTypes.object.isRequired,
+        newShiftVenueId: React.PropTypes.any.isRequired
     }
     componentWillMount(){
         this.componentId = _.uniqueId();
@@ -80,7 +83,7 @@ class RotaStaffListItem extends Component {
                             <div className="rota-staff-list-item__add-button" style={{float: "left"}}>
                                 <AddStaffToShiftButton
                                     staffId={staff.id}
-                                    canAddShift={this.context.canAddShift(staff.id)}
+                                    canAddShift={this.canAddShift()}
                                     addShift={() => this.addShift()}
                                     />
                             </div>
@@ -101,13 +104,38 @@ class RotaStaffListItem extends Component {
         );
     }
     addShift(){
-        this.context.addShift(this.props.staff.id, this.componentId)
+        var {starts_at, ends_at} = this.context.newShiftTimes;
+        this.props.addRotaShift({
+            shift: {
+                starts_at,
+                ends_at,
+                staff_member_id: this.props.staff.id
+            },
+            errorHandlingComponent: this.componentId,
+            venueId: this.context.newShiftVenueId
+        });
+    }
+    canAddShift(){
+        var { starts_at, ends_at } = this.context.newShiftTimes;
+        var datesAreValid = validation.areShiftTimesValid(starts_at, ends_at);
+        if (!datesAreValid) {
+            return;
+        }
+
+        var isAddingShift = this.props.addShiftIsInProgress;
+
+        var dateOfRota = new RotaDate({shiftStartsAt: starts_at}).getDateOfRota();
+        var isOnHoliday = selectStaffMemberIsOnHolidayOnDate(this.props._state, this.props.staff.id, dateOfRota);
+
+        var canEditStaffTypeShifts = this.props.canEditStaffTypeShifts;
+
+        return datesAreValid && !isAddingShift && !isOnHoliday && canEditStaffTypeShifts;
     }
     getStaffShifts(staffId){
         var ret =  _(this.props.rotaShifts).filter(function(shift){
             return shift.staff_member.id === staffId
         });
-        return ret
+        return ret;
     }
 }
 
@@ -118,13 +146,28 @@ function mapStateToProps(state, ownProps){
         componentErrors: state.componentErrors,
         rotaShifts: state.rotaShifts,
         venues: state.venues,
-        rotas: state.rotas
+        canEditStaffTypeShifts: canEditStaffTypeShifts(state, {
+            staffTypeId: ownProps.staff.staff_type.id
+        }),
+        rotas: state.rotas,
+        // This isn't clean and causes unncessary re-renders. The problem is that we don't
+        // have access to the rota date via ownProps, because it comes via context (implicitly
+        // through starts_at)
+        _state: state
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return {
+        addRotaShift: function(options){
+            dispatch(actionCreators.addRotaShift(options));
+        }
     }
 }
 
 export default connect(
     mapStateToProps,
-    null,
+    mapDispatchToProps,
     null,
     {pure: false}
 )(RotaStaffListItem);

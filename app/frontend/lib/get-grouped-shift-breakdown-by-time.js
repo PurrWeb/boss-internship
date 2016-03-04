@@ -18,7 +18,7 @@ The responsive consists of an array like this:
     timeOffset: 60, // number of minutes since the start of the rota date at 8am
     date: Date(9am),
     shiftsByGroup: {
-        bar_back: [shift1, shift2],
+        bar_back: [shift1, shift2], // "bar_back" is an id from groupsById
         kitchen: [shift3]
     }
 }, ...]
