@@ -1,6 +1,7 @@
 import importedCreateApiRequestAction from "./create-api-request-action"
 import _ from "underscore"
 import moment from "moment"
+import utils from "~lib/utils"
 import * as backendData from "~redux/process-backend-data"
 import makeApiRequest from "./make-api-request"
 import {apiRoutes} from "~lib/routes"
@@ -332,7 +333,7 @@ export function loadInitialRotaOverviewAppState(viewData){
     return function(dispatch) {
         var unprocessedRotasArray = _.pluck(viewData.rotas, "rota");
         var rotasArray = rotas = unprocessedRotasArray.map(backendData.processRotaObject);
-        var rotas = indexById(rotas);
+        var rotas = utils.indexByClientId(rotas);
 
 
         var forecasts = viewData.rotaForecasts.map(backendData.processRotaForecastObject);
