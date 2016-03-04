@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import _ from "underscore"
 
-export default class AddStaffToShiftButton extends Component {
+export default class AddShiftButton extends Component {
     static PropTypes = {
         addShift: React.PropTypes.func.isRequired,
         staffId: React.PropTypes.number.isRequired,

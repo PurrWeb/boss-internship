@@ -3,11 +3,11 @@ import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
 import expect from "expect"
 import StaffListItem from "./index"
-import {ContextProvider, NoOpComponent} from "~lib/test-helpers"
+import {ContextProvider, NoOpComponent, simpleRender} from "~lib/test-helpers"
 import {createStore} from "redux"
+import AddShiftButton from "./add-shift-button"
 
 StaffListItem.__Rewire__('StaffTypeBadge', NoOpComponent);
-StaffListItem.__Rewire__('AddStaffToShiftButton', NoOpComponent);
 StaffListItem.__Rewire__('StaffHolidaysList', NoOpComponent);
 StaffListItem.__Rewire__('StaffShiftList', NoOpComponent);
 
@@ -21,36 +21,102 @@ describe('StaffListItem', function() {
 
     var context = {
         newShiftTimes: {
-            starts_at: new Date(),
-            ends_at: new Date()
+            starts_at: new Date(2016,0,1,10,0),
+            ends_at: new Date(2016,0,1,16,0),
         },
-        newShiftVenueId: 1,
-        store: createStore(function(){
-            return {
-                staff: {
-                    33: staff
-                },
-                componentErrors: {},
-                staffTypes: {
-                    3333: {}
-                },
-                rotaShifts: {},
-                apiRequestsInProgress: {},
-                pageOptions: {}
-            }
-        })
+        newShiftVenueId: 1
     };
 
+    var storeState = {
+        staff: {
+            33: staff
+        },
+        componentErrors: {},
+        staffTypes: {
+            3333: {
+                name: "Kitchen"
+            }
+        },
+        rotaShifts: {},
+        apiRequestsInProgress: {},
+        pageOptions: {}
+    }
+
+    function canAddShift(context, storeState, staffMember){
+        var { findChild } = simpleRender(
+                <StaffListItem staff={staffMember} />
+        ,{
+            context,
+            storeState
+        });
+
+        return findChild(AddShiftButton).props.canAddShift;
+    }
+
     it("shows the person's first and last name", function(){
-        var item = TestUtils.renderIntoDocument(
-            <ContextProvider context={context}>
-                <StaffListItem staff={staff} />
-            </ContextProvider>
+        var {node} = simpleRender(
+            <StaffListItem staff={staff} />,
+            { storeState, context }
         );
 
-        var itemNode = ReactDOM.findDOMNode(item);
-
-        expect(itemNode.textContent).toContain("John");
-        expect(itemNode.textContent).toContain("Doe");
+        expect(node.textContent).toContain("John");
+        expect(node.textContent).toContain("Doe");
     });
+
+    it("Enables the add button unless there's a reason not to", function(){
+        expect(canAddShift(context, storeState, staff)).toBe(true);
+    });
+
+    it("Disables the add button if the staff member is on holiday", function(){
+        var itemStoreState = {...storeState}
+        var itemStaff = {...staff}
+        itemStaff.holidays = [{id: 1}]
+        itemStoreState.staff = {
+            33: itemStaff
+        }
+        itemStoreState.holidays = {
+            1: {
+                start_date: new Date(2016,0,1),
+                end_date: new Date(2016,0,1),
+                id: 1,
+                staff_member: {id: 33}
+            }
+        }
+
+        expect(canAddShift(context, itemStoreState, itemStaff)).toBe(false);
+    });
+
+    it("Disables the add button if a shift is alrady being added", function(){
+        var state = {...storeState};
+        state.apiRequestsInProgress.ADD_SHIFT = [{
+            shift: {
+                staff_member_id: 33
+            },
+            venueId: 1
+        }]
+
+        expect(canAddShift(context, state, staff)).toBe(false);
+    });
+
+    it("Disables the add button if the staff member's staff type can't be edited on this page", function(){
+        var state = {...storeState};
+        state.pageOptions = {
+            disableEditingShiftsByStaffTypeName: {
+                "Kitchen": true
+            }
+        };
+
+        expect(canAddShift(context, state, staff)).toBe(false);
+    })
+
+    it("Disables the add button if the new shift times are invalid", function(){
+        var itemContext = {...context};
+        // end time is before start time
+        itemContext.newShiftTimes= {
+            starts_at: new Date(2016,0,1,16,0),
+            ends_at: new Date(2016,0,1,10,0),
+        };
+        expect(canAddShift(itemContext, storeState, staff)).toBe(false)
+    })
+
 });
