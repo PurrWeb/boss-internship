@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302121840) do
+ActiveRecord::Schema.define(version: 20160304174308) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -201,31 +201,32 @@ ActiveRecord::Schema.define(version: 20160302121840) do
   end
 
   create_table "staff_members", force: :cascade do |t|
-    t.integer  "address_id",                limit: 4
-    t.string   "gender",                    limit: 255,                  null: false
-    t.string   "phone_number",              limit: 255
-    t.boolean  "enabled",                                 default: true, null: false
+    t.integer  "address_id",                            limit: 4
+    t.string   "gender",                                limit: 255,                   null: false
+    t.string   "phone_number",                          limit: 255
+    t.boolean  "enabled",                                             default: true,  null: false
     t.datetime "date_of_birth"
-    t.string   "national_insurance_number", limit: 255
-    t.text     "hours_preference_note",     limit: 65535
-    t.text     "day_perference_note",       limit: 65535
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
-    t.integer  "name_id",                   limit: 4,                    null: false
-    t.integer  "email_address_id",          limit: 4
-    t.string   "pin_code",                  limit: 255,                  null: false
-    t.string   "avatar",                    limit: 255
-    t.integer  "staff_type_id",             limit: 4,                    null: false
-    t.integer  "creator_id",                limit: 4
-    t.date     "starts_at",                                              null: false
-    t.boolean  "employment_status_a",                                    null: false
-    t.boolean  "employment_status_b",                                    null: false
-    t.boolean  "employment_status_c",                                    null: false
-    t.boolean  "employment_status_d",                                    null: false
+    t.string   "national_insurance_number",             limit: 255
+    t.text     "hours_preference_note",                 limit: 65535
+    t.text     "day_perference_note",                   limit: 65535
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
+    t.integer  "name_id",                               limit: 4,                     null: false
+    t.integer  "email_address_id",                      limit: 4
+    t.string   "pin_code",                              limit: 255,                   null: false
+    t.string   "avatar",                                limit: 255
+    t.integer  "staff_type_id",                         limit: 4,                     null: false
+    t.integer  "creator_id",                            limit: 4
+    t.date     "starts_at",                                                           null: false
+    t.boolean  "employment_status_a",                                                 null: false
+    t.boolean  "employment_status_b",                                                 null: false
+    t.boolean  "employment_status_c",                                                 null: false
+    t.boolean  "employment_status_d",                                                 null: false
     t.datetime "shift_change_occured_at"
-    t.integer  "pay_rate_id",               limit: 4,                    null: false
-    t.string   "sia_badge_number",          limit: 255
+    t.integer  "pay_rate_id",                           limit: 4,                     null: false
+    t.string   "sia_badge_number",                      limit: 255
     t.date     "sia_badge_expiry_date"
+    t.boolean  "employment_status_statement_completed",               default: false, null: false
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
