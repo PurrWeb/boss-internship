@@ -98,7 +98,7 @@ describe('StaffListItem', function() {
         expect(canAddShift(context, state, staff)).toBe(false);
     });
 
-    it("Disables the add button if staff member's staff type can't be edited on this page", function(){
+    it("Disables the add button if the staff member's staff type can't be edited on this page", function(){
         var state = {...storeState};
         state.pageOptions = {
             disableEditingShiftsByStaffTypeName: {
@@ -106,8 +106,16 @@ describe('StaffListItem', function() {
             }
         };
 
+        expect(canAddShift(context, state, staff)).toBe(false);
+    })
 
-        expect(context, state, staff);
+    it("Disables the add button if the new shift times are invalid", function(){
+        var itemContext = {...context};
+        itemContext.newShiftTimes= {
+            starts_at: new Date(2016,0,1,16,0),
+            ends_at: new Date(2016,0,1,10,0),
+        };
+        expect(canAddShift(itemContext, storeState, staff)).toBe(false)
     })
 
 });
