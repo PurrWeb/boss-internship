@@ -40,6 +40,17 @@ describe('StaffListItem', function() {
         pageOptions: {}
     }
 
+    function canAddShift(context, storeState, staffMember){
+        var { findChild } = simpleRender(
+                <StaffListItem staff={staffMember} />
+        ,{
+            context,
+            storeState
+        });
+
+        return findChild(AddStaffToShiftButton).props.canAddShift;
+    }
+
     it("shows the person's first and last name", function(){
         var {node} = simpleRender(
             <StaffListItem staff={staff} />,
@@ -48,6 +59,10 @@ describe('StaffListItem', function() {
 
         expect(node.textContent).toContain("John");
         expect(node.textContent).toContain("Doe");
+    });
+
+    it("Enables the add button unless there's a reason not to", function(){
+        expect(canAddShift(context, storeState, staff)).toBe(true);
     });
 
     it("Disables the add button if the staff member is on holiday", function(){
@@ -67,17 +82,21 @@ describe('StaffListItem', function() {
             }
         }
 
-        var { findChild } = simpleRender(
-                <StaffListItem staff={itemStaff} />
-        ,{
-            context: itemContext,
-            storeState: itemStoreState
-        });
-
-        var canAddShift = findChild(AddStaffToShiftButton).props.canAddShift;
-        
-        expect(canAddShift).toBe(false);
+        expect(canAddShift(itemContext, itemStoreState, itemStaff)).toBe(false);
     });
 
+    it("Disables the add button if a shift is alrady being added", function(){
+        var state = {...storeState};
+        state.apiRequestsInProgress.ADD_SHIFT = [{
+            shift: {
+                staff_member_id: 33
+            },
+            venueId: 1
+        }]
+
+        expect(canAddShift(context, state, staff)).toBe(false);
+    });
+
+    
 
 });

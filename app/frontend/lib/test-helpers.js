@@ -35,6 +35,13 @@ export class NoOpComponent extends Component{
 Example usage:
 var  node = simpleRender(<HelloWorldMessage />).node;
 expect(node.textContent).toContain("Hello World");
+
+You can also pass in a store state and a context through the options object.
+
+Returns an object with:
+- component => The React component
+- node => The DOM node
+- findChild(componentType) => function to find a child component
 */
 export function simpleRender(createdElement, options){
     var context, storeState;
