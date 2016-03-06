@@ -71,11 +71,9 @@ class Ability
   end
 
   def can_manage_staff_member?(user, staff_member)
-    if staff_member.security?
-      user.has_admin_access? || user.security_manager?
-    else
+    staff_member.security? ||
+      staff_member.venue.nil? ||
       can_manage_venue?(user, staff_member.venue)
-    end
   end
 
   def can_manage_venue?(user, venue)
