@@ -1,7 +1,6 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-
 module.exports = {
   entry: {
     main: ['./app/frontend/index.js']
@@ -37,7 +36,6 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('../stylesheets/frontend_bundle.css', {
       allChunks: true
-    }),
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en\-gb/)
+    })
   ]
 };
