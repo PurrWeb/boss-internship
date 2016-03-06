@@ -14,24 +14,23 @@ RSpec.describe 'Staff member pages access' do
   describe 'show page' do
     let(:user) { FactoryGirl.create(:user) }
     let(:url) { url_helpers.user_path(user) }
+    let(:response) { get(url) }
 
     context 'manager' do
       let(:user) { FactoryGirl.create(:user, :manager) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should be redirected to the home page' do
+        expect(response.status).to eq(redirect_status)
+        expect(response.location).to eq(url_helpers.root_url)
       end
     end
 
     context 'ops manager' do
       let(:user) { FactoryGirl.create(:user, :ops_manager) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should be redirected to the home page' do
+        expect(response.status).to eq(redirect_status)
+        expect(response.location).to eq(url_helpers.root_url)
       end
     end
 
@@ -54,24 +53,23 @@ RSpec.describe 'Staff member pages access' do
 
   describe 'index page' do
     let(:url) { url_helpers.users_path }
+    let(:response) { get(url) }
 
     context 'manager' do
       let(:user) { FactoryGirl.create(:user, :manager) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should be redirected to the home page' do
+        expect(response.status).to eq(redirect_status)
+        expect(response.location).to eq(url_helpers.root_url)
       end
     end
 
     context 'ops manager' do
       let(:user) { FactoryGirl.create(:user, :ops_manager) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should be redirected to the home page' do
+        expect(response.status).to eq(redirect_status)
+        expect(response.location).to eq(url_helpers.root_url)
       end
     end
 
@@ -95,24 +93,23 @@ RSpec.describe 'Staff member pages access' do
   describe 'edit personal details page' do
     let(:user) { FactoryGirl.create(:user) }
     let(:url) { url_helpers.edit_personal_details_user_path(user) }
+    let(:response) { get(url) }
 
     context 'manager' do
       let(:user) { FactoryGirl.create(:user, :manager) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should be redirected to the home page' do
+        expect(response.status).to eq(redirect_status)
+        expect(response.location).to eq(url_helpers.root_url)
       end
     end
 
     context 'manager' do
       let(:user) { FactoryGirl.create(:user, :ops_manager) }
 
-      specify 'should not have access' do
-        expect {
-          get(url)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should be redirected to the home page' do
+        expect(response.status).to eq(redirect_status)
+        expect(response.location).to eq(url_helpers.root_url)
       end
     end
 
@@ -139,24 +136,23 @@ RSpec.describe 'Staff member pages access' do
     let(:params) do
       { user: { name: 'name' } }
     end
+    let(:response) { post(url, params) }
 
     context 'manager' do
       let(:user) { FactoryGirl.create(:user, :manager) }
 
-      specify 'should not have access' do
-        expect {
-          post(url, params)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should be redirected to the home page' do
+        expect(response.status).to eq(redirect_status)
+        expect(response.location).to eq(url_helpers.root_url)
       end
     end
 
     context 'ops manager' do
       let(:user) { FactoryGirl.create(:user, :ops_manager) }
 
-      specify 'should not have access' do
-        expect {
-          post(url, params)
-        }.to raise_error(CanCan::AccessDenied)
+      specify 'should be redirected to the home page' do
+        expect(response.status).to eq(redirect_status)
+        expect(response.location).to eq(url_helpers.root_url)
       end
     end
 

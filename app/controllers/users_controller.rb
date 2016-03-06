@@ -80,7 +80,9 @@ class UsersController < ApplicationController
 
   private
   def authorize_admin
-    authorize! :manage, :admin
+    if !can?(:manage, :admin)
+      redirect_to root_path
+    end
   end
 
   def user_personal_details_params(user)
