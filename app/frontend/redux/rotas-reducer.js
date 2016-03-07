@@ -9,9 +9,9 @@ export default function rotasReducer(state={}, action){
         case actionTypes.UPDATE_ROTA_STATUS_SUCCESS:
             var {rotaId, status} = action;
             var newState = {...state};
-            var rota = {...newState[rotaId]};
+            var rota = _.find(newState, {id: rotaId})
             rota.status = status;
-            newState[rotaId] = rota;
+            newState[rota.clientId] = rota;
             return newState;
         case actionTypes.PUBLISH_ROTAS_SUCCESS:
             return _(state).mapObject(function(rota){
