@@ -20,7 +20,7 @@
 //= require pick-a-color.min
 //= require paloma
 //= require bootstrap-datepicker
-//= require_tree .
+//= require_tree ./page_controllers
 
 $(function(){
   $('.chosen-select').chosen();
