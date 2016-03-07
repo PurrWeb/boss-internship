@@ -1,8 +1,9 @@
 class ImportStaffMemberFromCSV
-  def initialize(requester:, input_csv:, avatar_path:)
+  def initialize(requester:, input_csv:, avatar_path:, logger: Rails.logger)
     @requester = requester
     @input_csv = input_csv
     @avatar_path = avatar_path
+    @logger = logger
   end
 
   def call
@@ -11,7 +12,7 @@ class ImportStaffMemberFromCSV
       input_csv.each do |line|
         next if line.header_row?
         processed += 1
-        puts "processing record: #{processed}"
+        logger.info "processing record: #{processed}"
 
         values = line.to_hash
 
@@ -64,7 +65,7 @@ class ImportStaffMemberFromCSV
   end
 
   private
-  attr_reader :requester, :input_csv, :avatar_path
+  attr_reader :requester, :input_csv, :avatar_path, :logger
 
   def attach_avatar_image(staff_member)
     File.open(avatar_path) do |f|
