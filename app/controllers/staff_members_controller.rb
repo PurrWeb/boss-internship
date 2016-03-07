@@ -55,11 +55,14 @@ class StaffMembersController < ApplicationController
 
   def edit_employment_details
     staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
     render locals: { staff_member: staff_member }
   end
 
   def update_employment_details
     staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
 
     result = UpdateStaffMemberEmploymentDetails.new(
       staff_member: staff_member,
@@ -77,11 +80,14 @@ class StaffMembersController < ApplicationController
 
   def edit_personal_details
     staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
     render locals: { staff_member: staff_member }
   end
 
   def update_personal_details
     staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
 
     if staff_member.update_attributes(update_personal_details_params)
       flash[:success] = "Staff member updated successfully"
