@@ -19,7 +19,7 @@ class RotaView extends Component {
     static childContextTypes = {
         staffTypes: React.PropTypes.object,
         boundActionCreators: React.PropTypes.object,
-        rotaShifts: React.PropTypes.array,
+        rotaShifts: React.PropTypes.object,
         dateOfRota: React.PropTypes.instanceOf(Date),
         componentErrors: React.PropTypes.object
     }
