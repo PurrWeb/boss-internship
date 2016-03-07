@@ -1,8 +1,21 @@
+function getEnvironment(){
+    var href = location.href;
+    if (/http:\/\/localhost/.test(href)){
+        return "development";
+    }
+    if (/https?:\/\/staging\-boss\.jsmbars\.co\.uk/.test(href)){
+        retrun "staging";
+    }
+    if (/https?:\/\/boss\.jsmbars\.co\.uk/.test(href)){
+        return "production"
+    }
+}
+
 var _rollbarConfig = {
-    accessToken: "POST_CLIENT_ITEM_ACCESS_TOKEN",
+    accessToken: "9fb943a96f044c60ab8888cbfaa62925",
     captureUncaught: true,
     payload: {
-        environment: "production"
+        environment: getEnvironment();
     }
 };
 // Rollbar Snippet
