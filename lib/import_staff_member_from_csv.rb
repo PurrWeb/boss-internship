@@ -38,6 +38,9 @@ class ImportStaffMemberFromCSV
           raise ActiveRecord::RecordNotFound, "Couldn't find StaffType with name: #{staff_type_name}"
         end
 
+        venue_name = values.fetch(venue_column)
+        venue = Venue.find_by!(name: venue_name)
+
         pay_rate_name = values.fetch(pay_rate_column)
         pay_rate = PayRate.find_by!(name: pay_rate_name)
 
@@ -58,6 +61,7 @@ class ImportStaffMemberFromCSV
           employment_status_d: false
         )
         attach_avatar_image(staff_member)
+        attach_venue(staff_member, venue)
 
         staff_member.save!
       end
@@ -66,6 +70,11 @@ class ImportStaffMemberFromCSV
 
   private
   attr_reader :requester, :input_csv, :avatar_path, :logger
+
+  def attach_venue(staff_member, venue)
+    staff_member_venue = staff_member.build_staff_member_venue(venue: venue)
+    staff_member.staff_member_venue = staff_member_venue
+  end
 
   def attach_avatar_image(staff_member)
     File.open(avatar_path) do |f|
@@ -178,5 +187,9 @@ class ImportStaffMemberFromCSV
 
   def pay_rate_column
     'Pay Rate'
+  end
+
+  def venue_column
+    'Venue'
   end
 end

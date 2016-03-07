@@ -4,10 +4,11 @@ RSpec.feature 'Adding a new staff member' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:staff_type) { FactoryGirl.create(:staff_type) }
   let(:pay_rate) { FactoryGirl.create(:pay_rate) }
+  let(:venue) { FactoryGirl.create(:venue) }
   let(:prospective_staff_member) do
     FactoryGirl.build(
       :staff_member,
-      venue: nil,
+      venue: venue,
       staff_type: staff_type,
       pay_rate: pay_rate
     )
@@ -18,6 +19,7 @@ RSpec.feature 'Adding a new staff member' do
   before do
     pay_rate
     staff_type
+    venue
     login_as dev_user
   end
 
