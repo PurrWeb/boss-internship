@@ -25,6 +25,7 @@ module Boss
     config.autoload_paths += Dir["#{config.root}/app/models/test_data/**/"]
 
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
+    config.assets.precompile += %w( rollbar.js )
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true

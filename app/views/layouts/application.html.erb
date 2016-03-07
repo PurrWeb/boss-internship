@@ -5,6 +5,7 @@
     <title><%= content_for?(:title) ? yield(:title) : "Boss" %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Boss" %>">
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'rollbar', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
   </head>
