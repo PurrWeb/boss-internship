@@ -9,7 +9,8 @@ class ShiftInRangeQuery
     query = InRangeQuery.new(
       relation: RotaShift.all,
       start_value: starts_at,
-      end_value: ends_at
+      end_value: ends_at,
+      include_boundaries: false
     ).all
     query = query.where(staff_member: staff_member)
     query
