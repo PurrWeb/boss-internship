@@ -14,8 +14,9 @@ class RotaShift < ActiveRecord::Base
   validate :times_in_correct_order
   validate :times_within_rota_boundary
   validate :times_in_fifteen_minute_increments
-  validate :shift_does_not_overlap_existing_shift
-
+  validate do |rota_shift|
+    ShiftTimeOverlapValidator.new(rota_shift).validate
+  end
   validate do |rota_shift|
     NotOnHolidayValidator.new(rota_shift).validate
   end
@@ -70,28 +71,6 @@ class RotaShift < ActiveRecord::Base
         if ![0, 30].include?(minute)
           errors.add(field, 'must be 30 minute intervals')
         end
-      end
-    end
-  end
-
-  # validation
-  def shift_does_not_overlap_existing_shift
-    if starts_at.present? && ends_at.present? && staff_member.present? && rota.present?
-      query = ShiftInRangeQuery.new(
-        staff_member: staff_member,
-        starts_at: starts_at,
-        ends_at: ends_at
-      ).all.enabled
-
-      if persisted?
-        query = ExclusiveOfQuery.new(
-          relation: query,
-          excluded: self
-        ).all
-      end
-
-      if query.count > 0
-        errors.add(:base, 'shift overlaps existing shift')
       end
     end
   end
