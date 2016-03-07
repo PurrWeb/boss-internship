@@ -9,6 +9,8 @@ window.debug._ = _;
 window.React = React // expose globally because react rails relies on it
 import "./lib/load-underscore-mixins"
 
+import "babel-core/polyfill"
+
 import RotaApp from "./apps/rota/rota-app"
 registerComponent("RotaApp", RotaApp)
 
