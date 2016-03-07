@@ -42,6 +42,8 @@ Rails.application.routes.draw do
       post :update_employment_details
       get :edit_personal_details
       post :update_personal_details
+      get :edit_contact_details
+      post :update_contact_details
       get :edit_avatar
       post :update_avatar
     end

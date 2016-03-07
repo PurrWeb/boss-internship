@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
           :lockable, :authentication_keys => [:devise_email]
 
   validates :role, inclusion: { in: ROLES, message: 'is required' }
-  validates :enabled, presence: true
+  validates :enabled, :inclusion => {:in => [true, false], message: 'is required' }
   validates :name, presence: true
   validates :email_address, presence: true
   validates :invite, presence: true, unless: :first?
