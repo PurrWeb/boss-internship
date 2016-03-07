@@ -55,11 +55,14 @@ class StaffMembersController < ApplicationController
 
   def edit_employment_details
     staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
     render locals: { staff_member: staff_member }
   end
 
   def update_employment_details
     staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
 
     result = UpdateStaffMemberEmploymentDetails.new(
       staff_member: staff_member,
@@ -77,11 +80,14 @@ class StaffMembersController < ApplicationController
 
   def edit_personal_details
     staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
     render locals: { staff_member: staff_member }
   end
 
   def update_personal_details
     staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
 
     if staff_member.update_attributes(update_personal_details_params)
       flash[:success] = "Staff member updated successfully"
@@ -89,6 +95,33 @@ class StaffMembersController < ApplicationController
     else
       flash.now[:error] = "There was a problem updating this staff member"
       render 'edit_personal_details', locals: { staff_member: staff_member }
+    end
+  end
+
+  def edit_contact_details
+    staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
+    render locals: { staff_member: staff_member }
+  end
+
+  def update_contact_details
+    staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
+    result = UpdateStaffMemberContactDetails.new(
+      staff_member: staff_member,
+      email: update_contact_details_params.fetch("email_address_attributes").fetch("email"),
+      phone_number: update_contact_details_params.fetch("phone_number"),
+      address: Address.new(update_contact_details_params.fetch("address_attributes"))
+    ).call
+
+    if result.success?
+      flash[:success] = "Staff member updated successfully"
+      redirect_to staff_member_path(result.staff_member, tab: 'contact-details')
+    else
+      flash.now[:error] = "There was a problem updating this staff member"
+      render 'edit_contact_details', locals: { staff_member: result.staff_member }
     end
   end
 
@@ -261,6 +294,23 @@ class StaffMembersController < ApplicationController
           :first_name,
           :surname
         ]
+      )
+  end
+
+  def update_contact_details_params
+    params.require(:staff_member).
+      permit(
+        :phone_number,
+        address_attributes: [
+          :address_1,
+          :address_2,
+          :address_3,
+          :address_4,
+          :postcode,
+          :country,
+          :region
+        ],
+        email_address_attributes: :email
       )
   end
 
