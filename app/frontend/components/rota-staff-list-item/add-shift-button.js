@@ -7,9 +7,6 @@ export default class AddShiftButton extends Component {
         staffId: React.PropTypes.number.isRequired,
         canAddShift: React.PropTypes.bool.isRequired
     }
-    componentDidMount(){
-        this.componentId = _.uniqueId();
-    }
     render() {
         var className = "btn btn-default";
         if (!this.props.canAddShift) {
