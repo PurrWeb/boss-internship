@@ -46,7 +46,7 @@ var validation = {
         }
     },
     areShiftTimesValid(starts_at, ends_at) {
-        return validation.validateShiftTimes({starts_at, ends_at});
+        return validation.validateShiftTimes({starts_at, ends_at}).isValid;
     }
 }
 
