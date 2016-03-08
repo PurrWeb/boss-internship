@@ -106,10 +106,7 @@ class RotasController < ApplicationController
       )
 
     rotas = Rota.
-      where(id: rota.id).
-      merge(
-        shift_rotas
-      ).uniq
+      where(id: [rota.id] + shift_rotas.pluck(:id)).uniq
 
     venues = Venue.where('`venues`.id = ?', rota.venue.id).merge(shift_venues).uniq
     render locals: {
