@@ -46,6 +46,9 @@ class StaffMember < ActiveRecord::Base
   validates :creator, presence: true
   validates :starts_at, presence: true
   validates :pay_rate, presence: true
+  validate do |staff_member|
+    StaffMemberVenueValidator.new(staff_member).validate
+  end
   validate  do |staff_member|
     SecurityStaffMemberValidator.new(staff_member).validate
   end
