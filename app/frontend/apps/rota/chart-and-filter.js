@@ -6,7 +6,7 @@ import StaffTypeDropdown from "~components/staff-type-dropdown"
 import RotaDate from "~lib/rota-date"
 import utils from "~lib/utils"
 import ChartSelectionView from "~components/chart-selection-view"
-import { selectStaffTypesWithShifts, selectShiftsWithRotaClientId, selectRotaOnVenueRotaPage } from "~redux/selectors"
+import { selectStaffTypesWithShifts, selectShiftsWithRotaClientIds, selectRotaOnVenueRotaPage } from "~redux/selectors"
 import { connect } from "react-redux"
 
 export class ChartAndFilter extends Component {
@@ -105,7 +105,7 @@ export class ChartAndFilter extends Component {
 function mapStateToProps(state){
     var rota = selectRotaOnVenueRotaPage(state);
     return {
-        rotaShifts: selectShiftsWithRotaClientId(state, rota.clientId),
+        rotaShifts: selectShiftsWithRotaClientIds(state, [rota.clientId]),
         staffTypes: state.staffTypes,
         staff: state.staff
     }

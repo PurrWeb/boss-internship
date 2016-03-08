@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import ChartAndFilterUi from "../components/chart-and-filter"
-import { selectVenuesWithShifts }  from "~redux/selectors"
+import { selectVenuesWithShifts, selectRotaShiftsOnDayOnStaffTypeRotaPage  }  from "~redux/selectors"
 
 class ChartAndFilter extends React.Component {
     constructor(props){
@@ -31,7 +31,7 @@ class ChartAndFilter extends React.Component {
 function mapStateToProps(state){
     return {
         staffMembers: state.staff,
-        rotaShifts: state.rotaShifts,
+        rotaShifts: selectRotaShiftsOnDayOnStaffTypeRotaPage(state),
         staffTypes: state.staffTypes,
         venues: selectVenuesWithShifts(state),
         rotas: state.rotas
