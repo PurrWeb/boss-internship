@@ -137,3 +137,9 @@ export function selectShiftIsBeingEdited(state, {shiftId}){
 
     return isBeingUpdated || isBeingDeleted;
 }
+
+export function selectShiftsWithRotaClientId(state, clientId){
+    return _.filter(state.rotaShifts, function(shift){
+        return shift.rota.clientId === clientId;
+    })
+}

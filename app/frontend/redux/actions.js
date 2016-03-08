@@ -257,8 +257,8 @@ export function setPageOptions(options) {
 
 export function loadInitialRotaAppState(viewData) {
     var pageOptions = {
-        venueId: viewData.rota.rotas[0].venue.id,
-        dateOfRota: new Date(viewData.rota.rotas[0].date),
+        venueId: viewData.rotaVenueId,
+        dateOfRota: new Date(viewData.rotaDate),
         staffTypeSlug: viewData.staffTypeSlug,
         disableEditingShiftsByStaffTypeName: {
             "Security": true
