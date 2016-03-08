@@ -7,7 +7,7 @@ class StaffShiftListItem extends Component {
     render(){
         var {shift} = this.props;
         return <div className="staff-shift-list__shift">
-            {moment(shift.starts_at).format("H:mm")}
+            {moment(shift.starts_at).format("DD MMM H:mm")}
             &nbsp;to&nbsp;
             {moment(shift.ends_at).format("H:mm")}
             &nbsp;
