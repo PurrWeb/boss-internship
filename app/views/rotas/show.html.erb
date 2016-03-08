@@ -1,7 +1,7 @@
 <%= javascript_tag do %>
   rotaData = {};
 
-  rotaData.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: Array(rota) }  %>;
+  rotaData.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: Array(rotas) }  %>;
 
   rotaData.staff_types = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
 
