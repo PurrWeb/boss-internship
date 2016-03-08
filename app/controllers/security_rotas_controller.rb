@@ -16,12 +16,27 @@ class SecurityRotasController < ApplicationController
     date = date_from_params(param_name: :id)
     raise ActiveRecord::RecordNotFound unless date.present?
 
-    rotas = Rota.where(date: date)
     venues = Venue.all
     staff_types = StaffType.where(role: 'security')
     staff_members = StaffMember.enabled.joins(:staff_type).merge(staff_types)
-    rota_shifts = RotaShift.enabled.joins(:rota).merge(rotas).joins(:staff_member).merge(staff_members)
     holidays = Holiday.in_state(:enabled).joins(:staff_member).merge(staff_members)
+
+    week = RotaWeek.new(date)
+    week_start_time = RotaShiftDate.new(week.start_date).start_time
+    week_end_time = RotaShiftDate.new(week.end_date).end_time
+    rota_shifts = RotaShift.
+      enabled.
+      joins(:staff_member).
+      merge(staff_members).
+      where(starts_at: week_start_time..week_end_time)
+
+    date_rotas = Rota.where(date: date)
+
+    shift_rotas = Rota.
+      joins('INNER JOIN `rota_shifts` ON `rotas`.`id` = `rota_shifts`.`rota_id`').
+      where('`rota_shifts`.`id` IN (?)', rota_shifts.pluck(:id))
+
+    rotas = Rota.where(id: date_rotas.pluck(:id) + shift_rotas.pluck(:id)).uniq
 
     render locals: {
       date: date,
