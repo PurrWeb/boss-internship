@@ -5,7 +5,6 @@ import RotaStaffFinder from "../staff-finder/staff-finder"
 export default class AddShiftView extends React.Component {
     static propTypes = {
         shiftTimes: React.PropTypes.object.isRequired,
-        rotaDate: React.PropTypes.instanceOf(Date).isRequired,
         onShiftTimesChange: React.PropTypes.func.isRequired,
         staff: React.PropTypes.object.isRequired,
         staffTypes: React.PropTypes.object.isRequired
