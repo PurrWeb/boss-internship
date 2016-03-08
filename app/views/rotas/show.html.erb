@@ -17,7 +17,7 @@
   window.boss.rota = rotaData;
 
   window.boss.rotaVenueId = <%= current_rota.venue.id %>;
-  window.boss.rotaDate = <%= current_rota.date.iso8601 %>;
+  window.boss.rotaDate = "<%= current_rota.date.iso8601 %>";
 <% end %>
 
 <%= react_component('RotaApp') %>
