@@ -23,7 +23,9 @@ export default class StaffShiftList extends Component {
         rotas: React.PropTypes.object.isRequired
     }
     render() {
-        var shifts = _.values(this.props.shifts).map((shift, i) =>{
+        var shifts = _.values(this.props.shifts);
+        shifts = _.sortBy(shifts, "starts_at");
+        var shiftElements = shifts.map((shift, i) =>{
             var venue = getVenueFromShift({
                 shift,
                 venuesById: this.props.venues,
@@ -36,7 +38,7 @@ export default class StaffShiftList extends Component {
         })
         return (
             <div className="staff-shift-list">
-                {shifts}
+                {shiftElements}
             </div>
         );
     }
