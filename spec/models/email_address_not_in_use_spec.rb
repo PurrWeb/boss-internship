@@ -33,8 +33,12 @@ describe EmailAddressNotInUse do
     end
   end
 
-  context 'staff memer is associated' do
+  context 'staff member is associated' do
     let(:staff_member) { FactoryGirl.create(:staff_member, email_address: email_address) }
+
+    before do
+      staff_member
+    end
 
     specify 'email is not returned' do
       expect(query.find(email)).to eq(nil)
