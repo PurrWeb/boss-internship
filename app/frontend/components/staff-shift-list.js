@@ -7,7 +7,7 @@ class StaffShiftListItem extends Component {
     render(){
         var {shift} = this.props;
         return <div className="staff-shift-list__shift">
-            {moment(shift.starts_at).format("H:mm")}
+            {moment(shift.starts_at).format("DD MMM H:mm")}
             &nbsp;to&nbsp;
             {moment(shift.ends_at).format("H:mm")}
             &nbsp;
@@ -23,7 +23,9 @@ export default class StaffShiftList extends Component {
         rotas: React.PropTypes.object.isRequired
     }
     render() {
-        var shifts = _.values(this.props.shifts).map((shift, i) =>{
+        var shifts = _.values(this.props.shifts);
+        shifts = _.sortBy(shifts, "starts_at");
+        var shiftElements = shifts.map((shift, i) =>{
             var venue = getVenueFromShift({
                 shift,
                 venuesById: this.props.venues,
@@ -36,7 +38,7 @@ export default class StaffShiftList extends Component {
         })
         return (
             <div className="staff-shift-list">
-                {shifts}
+                {shiftElements}
             </div>
         );
     }

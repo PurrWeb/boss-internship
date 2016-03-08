@@ -53,10 +53,7 @@ class RotaView extends Component {
                 Rota for {this.props.venue.name}: {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
             </h1>
             <br/>
-            <ChartAndFilter
-                rotaShifts={this.props.rotaShifts}
-                staffTypes={this.props.staffTypes}
-                staff={this.props.staff} />
+            <ChartAndFilter />
             <hr />
             <AddShiftViewContainer 
                 dateOfRota={this.props.dateOfRota} />

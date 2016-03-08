@@ -137,3 +137,25 @@ export function selectShiftIsBeingEdited(state, {shiftId}){
 
     return isBeingUpdated || isBeingDeleted;
 }
+
+export function selectShiftsWithRotaClientIds(state, clientIds){
+    return _.filter(state.rotaShifts, function(shift){
+        return _(clientIds).contains(shift.rota.clientId);
+    })
+}
+
+export function selectRotasOnDate(state, date){
+    return _.filter(state.rotas, function(rota){
+        return utils.datesAreEqual(rota.date, date);
+    })
+}
+
+export function selectRotaShiftsOnDayOnStaffTypeRotaPage(state){
+    var rotasOnDate = selectRotasOnDate(state, state.pageOptions.dateOfRota);
+    var clientIds = rotasOnDate.map(function(rota){
+        return rota.clientId;
+    });
+    var rotaShifts = selectShiftsWithRotaClientIds(state, clientIds);
+    return rotaShifts;
+}
+

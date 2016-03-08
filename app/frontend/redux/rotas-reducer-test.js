@@ -4,8 +4,9 @@ import expect from "expect"
 describe("rotasReducer", function(){
     it("Can update the status of a rota", function(){
         var initalState = {
-            8: {
+            "r8": {
                 id: 8,
+                clientId: "r8",
                 status: "in_progress"
             }
         }
@@ -17,8 +18,9 @@ describe("rotasReducer", function(){
         }
 
         var expectedResultState = {
-            8: {
+            "r8": {
                 id: 8,
+                clientId: "r8",
                 status: "finished"
             }
         }
