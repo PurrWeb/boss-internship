@@ -73,9 +73,11 @@ class RotasController < ApplicationController
   def render_rota_show(rota)
     week = RotaWeek.new(rota.date)
 
+    staff_members = RotaStaffMemberQuery.new(rota).all
+
     holidays = Holiday.
       in_state(:enabled).
-      where(staff_member: rota.venue.staff_members)
+      where(staff_member: staff_members)
 
     holidays = HolidayInRangeQuery.new(
       relation: holidays,
@@ -83,9 +85,33 @@ class RotasController < ApplicationController
       end_date: week.end_date
     ).all
 
+    week_start_time = RotaShiftDate.new(week.start_date).start_time
+    week_end_time = RotaShiftDate.new(week.end_date).end_time
+    rota_shifts = RotaShift.
+      enabled.
+      joins(:staff_member).
+      merge(staff_members).
+      where(starts_at: week_start_time..week_end_time)
+
+    shift_rotas = Rota.
+      joins(:rota_shifts).
+      merge(
+        rota_shifts
+      )
+
+    shift_venues = Venue.
+      joins(:rotas).
+      merge(
+        Rota.where(id: shift_rotas.pluck(:id))
+      )
+
+    venues = Venue.where('`venues`.id = ?', rota.venue.id).merge(shift_venues).uniq
     render locals: {
       rota: rota,
+      rota_shifts: rota_shifts,
+      staff_members: staff_members,
       holidays: holidays,
+      venues: venues,
       staff_types: StaffType.all
     }
   end

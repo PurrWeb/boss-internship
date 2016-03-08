@@ -5,14 +5,11 @@
 
   rotaData.staff_types = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
 
-  <% rota_shifts = rota.rota_shifts.enabled %>
   rotaData.rota_shifts = <%= raw render partial: 'api/v1/shared/rota_shifts.json', locals: { rota_shifts: rota_shifts } %>;
 
-  <% staff_members = RotaStaffMemberQuery.new(rota).all %>
   rotaData.staff_members = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
 
-  <% venue = rota.try(:venue) %>
-  rotaData.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: Array(venue) } %>;
+  rotaData.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: Array(venues) } %>;
 
   rotaData.holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: Array(holidays) } %>;
 
