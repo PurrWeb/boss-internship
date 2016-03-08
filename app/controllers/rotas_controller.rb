@@ -113,6 +113,7 @@ class RotasController < ApplicationController
 
     venues = Venue.where('`venues`.id = ?', rota.venue.id).merge(shift_venues).uniq
     render locals: {
+      current_rota: rota,
       rotas: rotas,
       rota_shifts: rota_shifts,
       staff_members: staff_members,
