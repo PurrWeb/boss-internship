@@ -1,8 +1,11 @@
+import oFetch from "o-fetch"
+
 export default function({
     venuesById,
     rotasById,
     shift
 }){
-    var rota = rotasById[shift.rota.clientId];
-    return venuesById[rota.venue.id];
+    var rotaClientId = oFetch(shift, "rota.clientId");
+    var rota = oFetch(rotasById, rotaClientId);
+    return oFetch(venuesById, rota.venue.id);
 }
