@@ -2,8 +2,6 @@ import React, { Component } from "react"
 import { connect, Provider } from "react-redux"
 import _ from "underscore"
 import store from "~redux/store"
-import staffTypes from "~data/staff-types"
-import staffStatusOptions from "~data/staff-status-options"
 import moment from "moment"
 import * as actionCreators from "~redux/actions.js"
 import { bindActionCreators } from "redux";
@@ -67,10 +65,10 @@ function mapStateToProps(state) {
         return staff;
     });
 
-    props.staffTypes = staffTypes;
+    props.staffTypes = {};
     props.venue = "The Rocket Bar";
     props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
-    props.staffStatusOptions = staffStatusOptions;
+    props.staffStatusOptions = {};
 
     return props;
 }
