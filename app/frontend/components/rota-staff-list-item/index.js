@@ -119,7 +119,7 @@ class RotaStaffListItem extends Component {
         var { starts_at, ends_at } = this.context.newShiftTimes;
         var datesAreValid = validation.areShiftTimesValid(starts_at, ends_at);
         if (!datesAreValid) {
-            return;
+            return false;
         }
 
         var isAddingShift = this.props.addShiftIsInProgress;
