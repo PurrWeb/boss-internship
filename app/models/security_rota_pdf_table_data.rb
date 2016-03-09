@@ -1,4 +1,4 @@
-class RotaPDFTableData
+class SecurityRotaPDFTableData
   Row = Struct.new(
     :name,
     :monday,
@@ -10,9 +10,8 @@ class RotaPDFTableData
     :sunday
   )
 
-  def initialize(rota)
-    @rota = rota
-    @week = RotaWeek.new(rota.date)
+  def initialize(date)
+    @week = RotaWeek.new(date)
   end
 
   def header_row
@@ -36,17 +35,14 @@ class RotaPDFTableData
   def data_rows
     rows = []
 
-    staff_members.each do |staff_member|
+    staff_member_with_shifts_in_week.each do |staff_member|
       week_data = {}
       week.each_with_day do |date, day|
-        shifts = shifts_lookup.perform(
-          staff_member: staff_member,
-          date: date
-        )
+        staff_member_shifts = shifts_on_day_for_staff_member(staff_member: staff_member, date: date)
 
-        if shifts.present?
-          times = shifts.sort_by(&:starts_at).map do |shift|
-            "#{shift.starts_at.to_s(:human_time_no_date)} - #{shift.ends_at.to_s(:human_time_no_date)}"
+        if staff_member_shifts.present?
+          times = staff_member_shifts.sort_by(&:starts_at).map do |shift|
+            "(#{shift.venue.name}) #{shift.starts_at.to_s(:human_time_no_date)} - #{shift.ends_at.to_s(:human_time_no_date)}"
           end
 
           week_data[day] = times.join(",\n")
@@ -71,17 +67,36 @@ class RotaPDFTableData
   end
 
   private
-  attr_reader :rota, :week
+  attr_reader :week
 
-  def staff_members
-    StaffMember.joins(:rota_shifts).merge(shifts).uniq
+  def security_staff_members
+    StaffMember.enabled.security
   end
 
-  def shifts_lookup
-    @shifts_lookup ||= ShiftLookup.new(shifts)
+  def staff_member_with_shifts_in_week
+    security_staff_members.
+      joins(:rota_shifts).
+      merge(
+        shifts_in_week(week)
+      ).uniq
   end
 
-  def shifts
-    RotaShift.enabled.where(rota: rota)
+  def shifts_in_week(week)
+    RotaShift.
+      enabled.
+      joins(:rota).
+      merge(
+        Rota.where(date: week.start_date..week.end_date)
+      )
+  end
+
+  def shifts_on_day_for_staff_member(staff_member:, date:)
+    RotaShift.
+      enabled.
+      joins(:rota).
+      merge(
+        Rota.where(date: date)
+      ).
+      where(staff_member: staff_member)
   end
 end

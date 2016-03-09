@@ -124,8 +124,8 @@ class RotasController < ApplicationController
   def render_rota_pdf(rota)
     pdf = RotaPDF.new(RotaPDFTableData.new(rota))
     #TODO: Extract File Timestamp Format to somewhere
-    timestamp = rota.date.strftime('%d-%b-%Y-%H-%M')
-    filename  = "#{rota.venue.name.to_param}-rota-#{timestamp}.pdf"
+    timestamp = rota.date.strftime('%d-%b-%Y')
+    filename  = "#{rota.venue.name.parameterize}-rota-#{timestamp}.pdf"
     headers['Content-Disposition'] = "attachment; filename=#{filename}"
     render text: pdf.render, content_type: 'application/pdf'
   end
