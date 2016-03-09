@@ -41,11 +41,11 @@ class SecurityRotaPDFTableData
         staff_member_shifts = shifts_on_day_for_staff_member(staff_member: staff_member, date: date)
 
         if staff_member_shifts.present?
-          times = staff_member_shifts.sort(&:starts_at).map do |shift|
+          times = staff_member_shifts.sort_by(&:starts_at).map do |shift|
             "(#{shift.venue.name}) #{shift.starts_at.to_s(:human_time_no_date)} - #{shift.ends_at.to_s(:human_time_no_date)}"
           end
 
-          week_data[day] = times.join(',\n')
+          week_data[day] = times.join(",\n")
         else
           week_data[day] = ''
         end
