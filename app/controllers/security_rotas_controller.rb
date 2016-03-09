@@ -45,7 +45,7 @@ class SecurityRotasController < ApplicationController
   def render_security_rota_show(date:)
     venues = Venue.all
     staff_types = StaffType.where(role: 'security')
-    staff_members = StaffMember.enabled.joins(:staff_type).merge(staff_types)
+    staff_members = StaffMember.enabled.joins(:staff_type).merge(staff_types).uniq
     holidays = Holiday.in_state(:enabled).joins(:staff_member).merge(staff_members)
 
     week = RotaWeek.new(date)

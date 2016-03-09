@@ -78,7 +78,7 @@ class SecurityRotaPDFTableData
       joins(:rota_shifts).
       merge(
         shifts_in_week(week)
-      )
+      ).uniq
   end
 
   def shifts_in_week(week)
