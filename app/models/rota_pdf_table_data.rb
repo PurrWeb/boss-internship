@@ -49,7 +49,7 @@ class RotaPDFTableData
             "#{shift.starts_at.to_s(:human_time_no_date)} - #{shift.ends_at.to_s(:human_time_no_date)}"
           end
 
-          week_data[day] = times.join(',\n')
+          week_data[day] = times.join(",\n")
         else
           week_data[day] = ''
         end
