@@ -63,6 +63,7 @@ export default class StaffFilter extends Component {
     getSearchFilter(){
         var component = <input
             value={this.props.filterSettings.search}
+            data-test-marker-staff-text-search
             onChange={(event) =>
                 this.handleChange("search", event.target.value)
             }/>
