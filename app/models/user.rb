@@ -39,7 +39,12 @@ class User < ActiveRecord::Base
   end
 
   def email
-    email_address.try(:email)
+    email_address.try(:email) || @email
+  end
+
+  #Needed for devise controllers
+  def email=(value)
+    @email = value
   end
 
   def can_create_roles

@@ -5,9 +5,17 @@ class Users::PasswordsController < Devise::PasswordsController
   # end
 
   # POST /resource/password
-  # def create
-  #   super
-  # end
+  def create
+    email = params.fetch("user").fetch("email")
+    user = User.enabled.with_email(email).first
+    if user.present?
+      super
+    else
+      # Fake success
+      flash[:notice] = 'You will receive an email with instructions on how to reset your password in a few minutes.'
+      redirect_to new_user_session_path
+    end
+  end
 
   # GET /resource/password/edit?reset_password_token=abcdef
   def edit
