@@ -78,5 +78,13 @@ export function simpleRender(createdElement, options){
         );
     }
 
-    return {component, node, findChild};
+    var $ = function(selector){
+        return node.querySelector(selector);
+    }
+
+    var $$ = function(selector){
+        return node.querySelectorAll(selector);
+    }
+
+    return {component, node, findChild, $, $$};
 }

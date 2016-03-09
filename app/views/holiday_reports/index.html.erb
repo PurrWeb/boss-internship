@@ -18,7 +18,8 @@
   window.boss.staffMembers = staffMembers;
   window.boss.venues = venues;
   window.boss.staffTypes = staffTypes;
-  window.boss.pageOptions = {
+
+  window.boss.pageData = {
     venueId: <%= venue.try(:id) || 'null' %>,
     weekStartDate: "<%= week.start_date.iso8601 %>",
     weekEndDate: "<%= week.end_date.iso8601 %>"
