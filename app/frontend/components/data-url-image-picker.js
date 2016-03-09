@@ -51,7 +51,7 @@ export default class DataUrlImagePicker extends React.Component {
     }
     validateFile(file){
         var validationMessage = null;
-        var fileExtension = _.last(file.name.split("."));
+        var fileExtension = _.last(file.name.split(".")).toLowerCase();
 
         if (!_(VALID_IMAGE_FILE_EXTENSIONS).contains(fileExtension)) {
             validationMessage = `File extension "${fileExtension}"
