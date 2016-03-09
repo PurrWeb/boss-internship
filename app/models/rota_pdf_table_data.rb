@@ -45,7 +45,7 @@ class RotaPDFTableData
         )
 
         if shifts.present?
-          times = shifts.sort(&:starts_at).map do |shift|
+          times = shifts.sort_by(&:starts_at).map do |shift|
             "#{shift.starts_at.to_s(:human_time_no_date)} - #{shift.ends_at.to_s(:human_time_no_date)}"
           end
 
