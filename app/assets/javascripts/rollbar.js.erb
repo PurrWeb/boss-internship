@@ -2,7 +2,7 @@ function getEnvironment(){
     return "<%= Rails.env %>";
 }
 
-if ((getEnvironment() !== "production") || (getEnvironment() !== "staging")) {
+if ((getEnvironment() === "production") || (getEnvironment() === "staging")) {
     var _rollbarConfig = {
         accessToken: "9fb943a96f044c60ab8888cbfaa62925",
         captureUncaught: true,
