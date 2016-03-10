@@ -8,9 +8,6 @@ export default class StaffTypeRotaView extends React.Component {
     render(){
         return <div>
             <RotaNavigation />
-            <a href={this.props.pdfDownloadUrl} className="btn btn-success">
-                  <span className="glyphicon glyphicon-download"></span> Download PDF
-                </a>
             <ChartAndFilter />
             <AddShiftView />
         </div>

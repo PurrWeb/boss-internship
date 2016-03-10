@@ -6,10 +6,18 @@ export const appRoutes = {
         var {venueId, date} = options;
         return "/venues/" + venueId + "/rotas/" + utils.formatRotaUrlDate(date);
     },
-    rotaPdfDownload: function({venueId, date}){
+    rotaPdfDownload: function({venueId, startDate, endDate}){
       return [
-        '/venues/' + venueId,
-        '/rotas/' + utils.formatRotaUrlDate(date) + '.pdf'
+        '/rotas.pdf?',
+        'start_date=' + utils.formatRotaUrlDate(startDate),
+        '&end_date=' + utils.formatRotaUrlDate(endDate),
+        '&venue_id=' + venueId
+      ].join("")
+    },
+    securityRotaPdfDownload: function({date}){
+      return [
+        '/security_rotas.pdf?',
+        'date=' + utils.formatRotaUrlDate(date)
       ].join("")
     },
     rotaOverview: function(options){

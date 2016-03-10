@@ -10,8 +10,8 @@ class SecurityRotaPDFTableData
     :sunday
   )
 
-  def initialize(date)
-    @week = RotaWeek.new(date)
+  def initialize(week)
+    @week = week
   end
 
   def header_row

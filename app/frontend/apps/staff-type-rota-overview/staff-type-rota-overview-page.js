@@ -15,14 +15,21 @@ export default class StaffTypeRotaOverviewPage extends Component {
         var self = this;
 
         return <div>
-            <WeekPicker
-                selectionStartDate={new Date(this.props.rotaDetailsObjects[0].date)}
-                onChange={({startDate}) =>
-                    location.href = appRoutes.staffTypeRotaOverview({
-                        staffTypeSlug,
-                        weekStartDate: startDate
-                    })
-                }/>
+          <div className="row">
+            <div className="col-md-3">
+              <WeekPicker
+                  selectionStartDate={new Date(this.props.rotaDetailsObjects[0].date)}
+                  onChange={({startDate}) =>
+                      location.href = appRoutes.staffTypeRotaOverview({
+                          staffTypeSlug,
+                          weekStartDate: startDate
+                      })
+                  }/>
+              </div>
+              <a href={ appRoutes.securityRotaPdfDownload({ date: new Date(this.props.rotaDetailsObjects[0].date) }) } className="btn btn-success">
+                <span className="glyphicon glyphicon-download"></span> Download PDF
+              </a>
+            </div>
             {this.props.rotaDetailsObjects.map(function(rotaDetails){
                 var shifts = rotaDetails.rota_shifts.map(backendData.processShiftObject);
                 var rotas = rotaDetails.rotas.map(backendData.processRotaObject)
@@ -37,6 +44,6 @@ export default class StaffTypeRotaOverviewPage extends Component {
                             staffTypeSlug={self.props.staffTypeSlug}
                             key={rotaDetails.date.toString()} />
             })}
-        </div>       
+        </div>
     }
 }

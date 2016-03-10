@@ -18,6 +18,9 @@
   window.boss.rotaForecasts = rotaForecasts;
 
   window.boss.weeklyRotaForecast = <%= raw render partial: 'api/v1/shared/weekly_rota_forecast.json', locals: { weekly_forecast: weekly_rota_forecast } %>;
+
+  window.boss.startDate = "<%= start_date.iso8601 %>";
+  window.boss.endDate = "<%= end_date.iso8601 %>";
 <% end %>
 
 <%= react_component('RotaOverviewApp') %>
