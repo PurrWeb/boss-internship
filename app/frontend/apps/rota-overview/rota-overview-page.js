@@ -39,10 +39,15 @@ class RotaOverviewPage extends Component {
                             rotas={rotas}
                             firstDate={firstRota.date}
                             lastDate={lastRota.date} />
+
                     </WeekAndVenueSelector>
                 </div>
                 <div className="col-md-3">
-
+                  <div className="col-md-2">
+                    <a href={appRoutes.rotaPdfDownload({venueId: firstRota.venue.id, startDate: this.props.startDate, endDate: this.props.endDate })} className="btn btn-success">
+                      <span className="glyphicon glyphicon-download"></span> Download PDF
+                    </a>
+                  </div>
                 </div>
                 <div className="col-md-3">
                     <h2 style={{fontSize: 20, marginTop: 0}}>Weekly Forecast</h2>
@@ -105,7 +110,9 @@ class RotaOverviewPage extends Component {
 
 function mapStateToProps(state){
     return {
-        storeRotas: state.rotas
+        storeRotas: state.rotas,
+        endDate: boss.endDate,
+        startDate: boss.startDate
     };
 }
 

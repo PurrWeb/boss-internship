@@ -7,43 +7,16 @@ class RotasController < ApplicationController
       end_date = end_date_from_params
       venue = venue_from_params
 
-      UIRotaDate.assert_date_range_valid(start_date, end_date)
-
-      rotas = (start_date..end_date).map do |date|
-        Rota.find_or_initialize_by(
-          date: date,
-          venue: venue
-        )
-      end
-
-      rota_forecasts = rotas.map do |rota|
-        forecast = RotaForecast.where(rota: rota).last
-
-        if !forecast.present?
-          forecast = GenerateRotaForecast.new(
-            forecasted_take: Money.new(0),
-            rota: rota
-          ).call
+      respond_to do |format|
+        format.html do
+          render_rota_index(start_date, end_date, venue)
         end
 
-        forecast
+        format.pdf do
+          week = RotaWeek.new(start_date)
+          render_rota_pdf(week: week, venue: venue)
+        end
       end
-
-      weekly_rota_forecast = GenerateWeeklyRotaForecast.new(
-        week: RotaWeek.new(start_date),
-        venue: venue
-      ).call
-
-      render locals: {
-        accessible_venues: accessible_venues_for(current_user),
-        venue: venue,
-        start_date: start_date,
-        end_date: end_date,
-        rotas: rotas,
-        staff_types: StaffType.all,
-        rota_forecasts: rota_forecasts,
-        weekly_rota_forecast: weekly_rota_forecast
-      }
     else
       redirect_to(rotas_path(redirect_params))
     end
@@ -58,19 +31,6 @@ class RotasController < ApplicationController
     )
     authorize!(:manage, rota)
 
-    respond_to do |format|
-      format.html do
-        render_rota_show(rota)
-      end
-
-      format.pdf do
-        render_rota_pdf(rota)
-      end
-    end
-  end
-
-  private
-  def render_rota_show(rota)
     week = RotaWeek.new(rota.date)
 
     staff_members = RotaStaffMemberQuery.new(rota).all
@@ -121,11 +81,53 @@ class RotasController < ApplicationController
     }
   end
 
-  def render_rota_pdf(rota)
-    pdf = RotaPDF.new(RotaPDFTableData.new(rota))
+  private
+  def render_rota_index(start_date, end_date, venue)
+    UIRotaDate.assert_date_range_valid(start_date, end_date)
+
+    rotas = (start_date..end_date).map do |date|
+      Rota.find_or_initialize_by(
+        date: date,
+        venue: venue
+      )
+    end
+
+    rota_forecasts = rotas.map do |rota|
+      forecast = RotaForecast.where(rota: rota).last
+
+      if !forecast.present?
+        forecast = GenerateRotaForecast.new(
+          forecasted_take: Money.new(0),
+          rota: rota
+        ).call
+      end
+
+      forecast
+    end
+
+    weekly_rota_forecast = GenerateWeeklyRotaForecast.new(
+      week: RotaWeek.new(start_date),
+      venue: venue
+    ).call
+
+    render locals: {
+      accessible_venues: accessible_venues_for(current_user),
+      venue: venue,
+      start_date: start_date,
+      end_date: end_date,
+      rotas: rotas,
+      staff_types: StaffType.all,
+      rota_forecasts: rota_forecasts,
+      weekly_rota_forecast: weekly_rota_forecast
+    }
+  end
+
+  def render_rota_pdf(week:, venue:)
+    pdf = RotaPDF.new(RotaPDFTableData.new(week: week, venue: venue))
     #TODO: Extract File Timestamp Format to somewhere
-    timestamp = rota.date.strftime('%d-%b-%Y')
-    filename  = "#{rota.venue.name.parameterize}-rota-#{timestamp}.pdf"
+    timestamp_start = week.start_date.strftime('%d-%b-%Y')
+    timestamp_end = week.end_date.strftime('%d-%b-%Y')
+    filename  = "#{venue.name.parameterize}_rota_#{timestamp_start}_#{timestamp_end}.pdf"
     headers['Content-Disposition'] = "attachment; filename=#{filename}"
     render text: pdf.render, content_type: 'application/pdf'
   end

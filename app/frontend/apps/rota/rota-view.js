@@ -39,12 +39,6 @@ class RotaView extends Component {
                 venueId={this.props.venue.id} />
             <br/>
             <div className="row">
-              <div className="col-md-2">
-                <a href={appRoutes.rotaPdfDownload({venueId: this.props.venue.id, date: this.props.dateOfRota })} className="btn btn-success">
-                  <span className="glyphicon glyphicon-download"></span> Download PDF
-                </a>
-              </div>
-
               <div className="col-md-4">
                 <RotaStatusToggle />
               </div>

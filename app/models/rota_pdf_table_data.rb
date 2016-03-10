@@ -10,9 +10,9 @@ class RotaPDFTableData
     :sunday
   )
 
-  def initialize(rota)
-    @rota = rota
-    @week = RotaWeek.new(rota.date)
+  def initialize(week:, venue:)
+    @venue = venue
+    @week = week
   end
 
   def header_row
@@ -71,7 +71,11 @@ class RotaPDFTableData
   end
 
   private
-  attr_reader :rota, :week
+  attr_reader :venue, :week
+
+  def rotas
+    Rota.where(date: week.start_date..week.end_date)
+  end
 
   def staff_members
     StaffMember.joins(:rota_shifts).merge(shifts).uniq
@@ -82,6 +86,9 @@ class RotaPDFTableData
   end
 
   def shifts
-    RotaShift.enabled.where(rota: rota)
+    RotaShift.
+      enabled.
+      joins(:rota).
+      merge(rotas)
   end
 end
