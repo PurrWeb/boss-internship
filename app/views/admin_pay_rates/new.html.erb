@@ -3,7 +3,8 @@
 <%= render(
       partial: 'shared/named_pay_rate_form',
       locals: {
+        pay_rate_type: 'Admin',
         pay_rate: pay_rate,
-        path: admin_pay_rates_path
+        path: create_admin_pay_rates_path
       }
     ) %>

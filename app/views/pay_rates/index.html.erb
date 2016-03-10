@@ -9,16 +9,21 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Description</th>
         <th>Rate</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <% pay_rates.each do |pay_rate| %>
         <tr>
           <td><%= pay_rate.name %></td>
-          <td><%= pay_rate.description %></td>
           <td><%= number_to_currency(pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
+          <td>
+            <%= link_to('Edit', edit_pay_rate_path(pay_rate), class: 'btn btn-success') %>
+            <% if pay_rate.deletable? %>
+              <%= link_to('Delete', pay_rate_path(pay_rate), method: 'DELETE', class: 'btn btn-danger') %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>
@@ -38,16 +43,21 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Description</th>
         <th>Rate</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <% admin_pay_rates.each do |admin_pay_rate| %>
         <tr>
           <td><%= admin_pay_rate.name %></td>
-          <td><%= admin_pay_rate.description %></td>
           <td><%= number_to_currency(admin_pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
+          <td>
+            <%= link_to('Edit', edit_pay_rate_path(admin_pay_rate), class: 'btn btn-success') %>
+            <% if admin_pay_rate.deletable? %>
+              <%= link_to('Delete', pay_rate_path(admin_pay_rate), method: 'DELETE', class: 'btn btn-danger') %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

@@ -2,8 +2,8 @@ class PayRatesController < ApplicationController
   before_action :authorize_admin
 
   def index
-    pay_rates = PayRate.named
-    admin_pay_rates = PayRate.admin
+    pay_rates = PayRate.named.enabled
+    admin_pay_rates = PayRate.admin.enabled
 
     render locals: {
       pay_rates: pay_rates,
@@ -17,7 +17,13 @@ class PayRatesController < ApplicationController
   end
 
   def create
-    pay_rate = PayRate.new(pay_rate_params)
+    pay_rate = PayRate.new(
+      pay_rate_type: 'named',
+      name: pay_rate_params.fetch(:name),
+      cents_per_hour: hourly_rate_to_cents_per_hour(
+        pay_rate_params.fetch(:hourly_rate)
+      )
+    )
 
     if pay_rate.save
       flash[:success] = "Pay Rate added successfully"
@@ -25,6 +31,62 @@ class PayRatesController < ApplicationController
     else
       flash.now[:error] = "There was a problem creating this pay rate"
       render 'new', locals: { pay_rate: pay_rate }
+    end
+  end
+
+  def create_admin
+    pay_rate = PayRate.new(
+      pay_rate_type: 'admin',
+      name: pay_rate_params.fetch(:name),
+      cents_per_hour: hourly_rate_to_cents_per_hour(
+        pay_rate_params.fetch(:hourly_rate)
+      )
+    )
+
+    if pay_rate.save
+      flash[:success] = "Pay Rate added successfully"
+      redirect_to action: :index
+    else
+      flash.now[:error] = "There was a problem creating this pay rate"
+      render 'new', locals: { pay_rate: pay_rate }
+    end
+  end
+
+  def edit
+    pay_rate = PayRate.enabled.where(id: params[:id]).take!
+    render locals: { pay_rate: pay_rate }
+  end
+
+  def update
+    pay_rate = PayRate.enabled.where(id: params[:id]).take!
+
+    result = UpdatePayRate.new(
+      pay_rate: pay_rate,
+      name: pay_rate_params.fetch(:name),
+      cents_per_hour: hourly_rate_to_cents_per_hour(
+        pay_rate_params.fetch(:hourly_rate)
+      )
+    ).call
+
+    if result.success?
+      flash[:success] = "Pay Rate updated successfully"
+      redirect_to action: :index
+    else
+      flash.now[:error] = "There was a problem updating this pay rate"
+      render 'edit', locals: { pay_rate: result.pay_rate }
+    end
+  end
+
+  def destroy
+    pay_rate = PayRate.enabled.where(id: params[:id]).take!
+
+    if pay_rate.staff_members.enabled.count > 0
+      flash[:success] = "Pay rates cannot be deleted while associated with active staff members"
+      redirect_to action: :index
+    else
+      pay_rate.disable!
+      flash[:success] = "Pay Rate deleted successfully"
+      redirect_to action: :index
     end
   end
 
@@ -38,18 +100,11 @@ class PayRatesController < ApplicationController
       require(:pay_rate).
       permit(
         :name,
-        :description
-      ).merge(
-        pay_rate_type: 'named',
-        cents_per_hour: cents_per_hour_from_params
+        :hourly_rate
       )
   end
 
-  def cents_per_hour_from_params
-    if params['pay_rate']['hourly_rate'].present?
-      (Float(params['pay_rate']['hourly_rate']) * 100).round
-    else
-      0
-    end
+  def hourly_rate_to_cents_per_hour(hourly_rate)
+    (Float(hourly_rate) * 100).round
   end
 end

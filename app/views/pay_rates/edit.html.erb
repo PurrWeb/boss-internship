@@ -1,10 +1,10 @@
-<h1>Add Pay Rate</h1>
+<h1>Edit Pay Rate</h1>
 
 <%= render(
       partial: 'shared/named_pay_rate_form',
       locals: {
-        pay_rate_type: 'Normal',
+        pay_rate_type: pay_rate.pay_rate_type,
         pay_rate: pay_rate,
-        path: pay_rates_path
+        path: pay_rate_path(pay_rate)
       }
     ) %>

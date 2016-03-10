@@ -1,6 +1,9 @@
 class PayRate < ActiveRecord::Base
   TYPES = ['named', 'admin']
 
+  include Enableable
+
+  has_many :staff_members, inverse_of: :pay_rate
   validates :pay_rate_type, inclusion: { in: TYPES, message: 'is invalid' }
   validates :cents_per_hour, numericality: { greater_than: 0 }
 
@@ -14,10 +17,18 @@ class PayRate < ActiveRecord::Base
 
   def self.options_for(user)
     if user.has_admin_access?
-      pay_rate_options = PayRate.all
+      pay_rate_options = PayRate.enabled
     else
-      pay_rate_options = PayRate.named.all
+      pay_rate_options = PayRate.enabled.named
     end
+  end
+
+  def deletable?
+    staff_members.enabled.count == 0
+  end
+
+  def disable!
+    update_attributes!(enabled: false)
   end
 
   def admin?
