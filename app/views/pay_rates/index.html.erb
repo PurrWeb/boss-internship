@@ -10,6 +10,7 @@
       <tr>
         <th>Name</th>
         <th>Rate</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -17,6 +18,9 @@
         <tr>
           <td><%= pay_rate.name %></td>
           <td><%= number_to_currency(pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
+          <td>
+            <%= link_to('Edit', edit_pay_rate_path(pay_rate), class: 'btn btn-success') %>
+          </td>
         </tr>
       <% end %>
     </tbody>
@@ -37,6 +41,7 @@
       <tr>
         <th>Name</th>
         <th>Rate</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -44,6 +49,9 @@
         <tr>
           <td><%= admin_pay_rate.name %></td>
           <td><%= number_to_currency(admin_pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
+          <td>
+            <%= link_to('Edit', edit_pay_rate_path(admin_pay_rate), class: 'btn btn-success') %>
+          </td>
         </tr>
       <% end %>
     </tbody>

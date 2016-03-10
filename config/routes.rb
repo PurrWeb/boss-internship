@@ -61,7 +61,11 @@ Rails.application.routes.draw do
 
   resources :rotas, only: [:index]
 
-  resources :pay_rates, only: [:index, :new, :create]
+  resources :pay_rates, only: [:index, :new, :create, :edit, :update] do
+    collection do
+      post :create_admin
+    end
+  end
 
   resources :admin_pay_rates, only: [:new, :create]
 
