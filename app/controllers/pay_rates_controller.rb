@@ -2,8 +2,8 @@ class PayRatesController < ApplicationController
   before_action :authorize_admin
 
   def index
-    pay_rates = PayRate.named
-    admin_pay_rates = PayRate.admin
+    pay_rates = PayRate.named.enabled
+    admin_pay_rates = PayRate.admin.enabled
 
     render locals: {
       pay_rates: pay_rates,
@@ -53,12 +53,12 @@ class PayRatesController < ApplicationController
   end
 
   def edit
-    pay_rate = PayRate.find(params[:id])
+    pay_rate = PayRate.enabled.where(id: params[:id]).take!
     render locals: { pay_rate: pay_rate }
   end
 
   def update
-    pay_rate = PayRate.find(params[:id])
+    pay_rate = PayRate.enabled.where(id: params[:id]).take!
 
     result = UpdatePayRate.new(
       pay_rate: pay_rate,
@@ -74,6 +74,19 @@ class PayRatesController < ApplicationController
     else
       flash.now[:error] = "There was a problem updating this pay rate"
       render 'edit', locals: { pay_rate: result.pay_rate }
+    end
+  end
+
+  def destroy
+    pay_rate = PayRate.enabled.where(id: params[:id]).take!
+
+    if pay_rate.staff_members.enabled.count > 0
+      flash[:success] = "Pay rates cannot be deleted while associated with active staff members"
+      redirect_to action: :index
+    else
+      pay_rate.disable!
+      flash[:success] = "Pay Rate deleted successfully"
+      redirect_to action: :index
     end
   end
 

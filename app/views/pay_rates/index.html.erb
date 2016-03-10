@@ -20,6 +20,9 @@
           <td><%= number_to_currency(pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
           <td>
             <%= link_to('Edit', edit_pay_rate_path(pay_rate), class: 'btn btn-success') %>
+            <% if pay_rate.deletable? %>
+              <%= link_to('Delete', pay_rate_path(pay_rate), method: 'DELETE', class: 'btn btn-danger') %>
+            <% end %>
           </td>
         </tr>
       <% end %>
@@ -51,6 +54,9 @@
           <td><%= number_to_currency(admin_pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
           <td>
             <%= link_to('Edit', edit_pay_rate_path(admin_pay_rate), class: 'btn btn-success') %>
+            <% if admin_pay_rate.deletable? %>
+              <%= link_to('Delete', pay_rate_path(admin_pay_rate), method: 'DELETE', class: 'btn btn-danger') %>
+            <% end %>
           </td>
         </tr>
       <% end %>
