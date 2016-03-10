@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160304174308) do
+ActiveRecord::Schema.define(version: 20160310163249) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -129,7 +129,6 @@ ActiveRecord::Schema.define(version: 20160304174308) do
   create_table "pay_rates", force: :cascade do |t|
     t.string  "pay_rate_type",  limit: 255, null: false
     t.string  "name",           limit: 255
-    t.string  "description",    limit: 255
     t.integer "cents_per_hour", limit: 4,   null: false
   end
 

@@ -9,7 +9,6 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Description</th>
         <th>Rate</th>
       </tr>
     </thead>
@@ -17,7 +16,6 @@
       <% pay_rates.each do |pay_rate| %>
         <tr>
           <td><%= pay_rate.name %></td>
-          <td><%= pay_rate.description %></td>
           <td><%= number_to_currency(pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
         </tr>
       <% end %>
@@ -38,7 +36,6 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Description</th>
         <th>Rate</th>
       </tr>
     </thead>
@@ -46,7 +43,6 @@
       <% admin_pay_rates.each do |admin_pay_rate| %>
         <tr>
           <td><%= admin_pay_rate.name %></td>
-          <td><%= admin_pay_rate.description %></td>
           <td><%= number_to_currency(admin_pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
         </tr>
       <% end %>
