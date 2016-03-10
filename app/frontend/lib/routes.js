@@ -14,6 +14,12 @@ export const appRoutes = {
         '&venue_id=' + venueId
       ].join("")
     },
+    securityRotaPdfDownload: function({date}){
+      return [
+        '/security_rotas.pdf?',
+        'date=' + utils.formatRotaUrlDate(date)
+      ].join("")
+    },
     rotaOverview: function(options){
         var {venueId, startDate, endDate} = options;
         return [
