@@ -5,15 +5,16 @@ class CreateStaffMember
     end
   end
 
-  def initialize(params:)
+  def initialize(params:, nested: false)
     @params = params
+    @nested = nested
   end
 
-  def class
+  def call
     result = false
     staff_member = StaffMember.new
 
-    ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction(requires_new: nested) do
       staff_member.assign_attributes(params)
       if staff_member.staff_member_venue.present? && staff_member.staff_member_venue.venue_id == nil
         staff_member.staff_member_venue.mark_for_destruction
@@ -26,5 +27,5 @@ class CreateStaffMember
   end
 
   private
-  attr_reader :params
+  attr_reader :params, :nested
 end

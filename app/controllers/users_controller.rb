@@ -61,20 +61,17 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     authorize! :create_staff_member, user
 
-    staff_member = StaffMember.new(staff_member_params(user))
+    result = CreateStaffMemberFromUser.new(
+      user: user,
+      params: staff_member_params(user)
+    ).call
 
-    result = false
-    ActiveRecord::Base.transaction do
-      result = staff_member.save
-      result = result && user.update_attributes!(staff_member: staff_member)
-    end
-
-    if result
+    if result.success?
       flash[:success] = 'Staff member added successfully'
-      redirect_to user_path(user)
+      redirect_to user_path(result.user)
     else
       flash.now[:error] = "There was a problem creating this staff member"
-      render 'new_staff_member', locals: { staff_member: staff_member, user: user }
+      render 'new_staff_member', locals: { staff_member: result.staff_member, user: result.user }
     end
   end
 
