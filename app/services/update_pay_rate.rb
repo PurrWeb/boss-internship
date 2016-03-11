@@ -37,7 +37,7 @@ class UpdatePayRate
   def update_related_forecasts(pay_rate)
     pay_rate_staff_members = StaffMember.where(pay_rate: pay_rate)
 
-    rotas = CurrentAndFutureRotasQuery.new(relation: Rota.published).all.
+    rotas = CurrentAndFutureRotasQuery.new(relation: Rota.with_forecasts).all.
       joins(:rota_shifts).
       merge(
         RotaShift.

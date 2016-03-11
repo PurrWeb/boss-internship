@@ -14,10 +14,8 @@ class DisableRotaShift
         disabled_at: Time.now
       )
 
-      if shift.rota_published?
-        shift.staff_member.mark_requiring_notification!
-        UpdateRotaForecast.new(rota: shift.rota).call
-      end
+      shift.staff_member.mark_requiring_notification! if shift.rota_published?
+      UpdateRotaForecast.new(rota: shift.rota).call if shift.part_of_forecast?
     end
   end
 

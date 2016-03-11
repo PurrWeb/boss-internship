@@ -29,6 +29,10 @@ class RotaShift < ActiveRecord::Base
     rota.andand.venue
   end
 
+  def part_of_forecast?
+    rota.andand.has_forecasts?
+  end
+
   def rota_published?
     rota.andand.published?
   end

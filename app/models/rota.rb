@@ -1,6 +1,7 @@
 class Rota < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
 
+  has_many :rota_forecasts, inverse_of: :rota
   has_many :rota_shifts, inverse_of: :rota
   has_many :rota_status_transitions, autosave: false
 
@@ -18,6 +19,10 @@ class Rota < ActiveRecord::Base
     in_state(:published)
   end
 
+  def self.with_forecasts
+    joins(:rota_forecasts).uniq
+  end
+
   def status
     state_machine.current_state
   end
@@ -32,6 +37,10 @@ class Rota < ActiveRecord::Base
 
   def published?
     state_machine.current_state.to_sym == :published
+  end
+
+  def has_forecasts?
+    rota_forecasts.count > 0
   end
 
   def forecastable?
