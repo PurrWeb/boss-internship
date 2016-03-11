@@ -22,15 +22,15 @@ class SecurityRotaPDFTableData
     end
 
     Row.new(
-      'Name',
-      week_data.fetch(:monday),
-      week_data.fetch(:tuesday),
-      week_data.fetch(:wednesday),
-      week_data.fetch(:thursday),
-      week_data.fetch(:friday),
-      week_data.fetch(:saturday),
-      week_data.fetch(:sunday),
-      'Total Hours'
+      '<b>Name</b>',
+      "<b>#{ week_data.fetch(:monday)    }</b>",
+      "<b>#{ week_data.fetch(:tuesday)   }</b>",
+      "<b>#{ week_data.fetch(:wednesday) }</b>",
+      "<b>#{ week_data.fetch(:thursday)  }</b>",
+      "<b>#{ week_data.fetch(:friday)    }</b>",
+      "<b>#{ week_data.fetch(:saturday)  }</b>",
+      "<b>#{ week_data.fetch(:sunday)    }</b>",
+      '<b>Total Hours</b>'
     )
   end
 

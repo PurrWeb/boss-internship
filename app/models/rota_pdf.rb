@@ -16,10 +16,17 @@ class RotaPDF
           0 => 140
         },
         cell_style: {
-          size: 16
+          size: 16,
+          inline_format: true
         }
       ) do
-        row(0).font_style = :bold
+        # Ensure blank rows don't collapse
+        (0..row_length).each do |index|
+          cells = row(index)
+          if cells.all? {|cell| cell.content.blank? }
+            cells.style { |cell| cell.height = 24 }
+          end
+        end
       end
     end.render
   end
