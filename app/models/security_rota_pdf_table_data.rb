@@ -7,7 +7,8 @@ class SecurityRotaPDFTableData
     :thursday,
     :friday,
     :saturday,
-    :sunday
+    :sunday,
+    :total_hours
   )
 
   def initialize(week)
@@ -21,14 +22,15 @@ class SecurityRotaPDFTableData
     end
 
     Row.new(
-      'Name',
-      week_data.fetch(:monday),
-      week_data.fetch(:tuesday),
-      week_data.fetch(:wednesday),
-      week_data.fetch(:thursday),
-      week_data.fetch(:friday),
-      week_data.fetch(:saturday),
-      week_data.fetch(:sunday)
+      '<b>Name</b>',
+      "<b>#{ week_data.fetch(:monday)    }</b>",
+      "<b>#{ week_data.fetch(:tuesday)   }</b>",
+      "<b>#{ week_data.fetch(:wednesday) }</b>",
+      "<b>#{ week_data.fetch(:thursday)  }</b>",
+      "<b>#{ week_data.fetch(:friday)    }</b>",
+      "<b>#{ week_data.fetch(:saturday)  }</b>",
+      "<b>#{ week_data.fetch(:sunday)    }</b>",
+      '<b>Total Hours</b>'
     )
   end
 
@@ -36,7 +38,10 @@ class SecurityRotaPDFTableData
     rows = []
 
     staff_member_with_shifts_in_week.each do |staff_member|
-      week_data = {}
+      week_data = {
+        total_hours: 0
+      }
+
       week.each_with_day do |date, day|
         staff_member_shifts = shifts_on_day_for_staff_member(staff_member: staff_member, date: date)
 
@@ -46,6 +51,9 @@ class SecurityRotaPDFTableData
           end
 
           week_data[day] = times.join(",\n")
+          week_data[:total_hours] += staff_member_shifts.inject(0) do |sum, shift|
+            sum + shift.total_hours
+          end
         else
           week_data[day] = ''
         end
@@ -59,7 +67,8 @@ class SecurityRotaPDFTableData
         week_data.fetch(:thursday),
         week_data.fetch(:friday),
         week_data.fetch(:saturday),
-        week_data.fetch(:sunday)
+        week_data.fetch(:sunday),
+        week_data.fetch(:total_hours)
       )
     end
 

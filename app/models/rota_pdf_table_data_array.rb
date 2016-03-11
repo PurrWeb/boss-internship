@@ -15,7 +15,8 @@ class RotaPDFTableDataArray
       header_row.thursday,
       header_row.friday,
       header_row.saturday,
-      header_row.sunday
+      header_row.sunday,
+      header_row.total_hours
     ]
 
     data.data_rows.each do |row|
@@ -27,7 +28,8 @@ class RotaPDFTableDataArray
         row.thursday,
         row.friday,
         row.saturday,
-        row.sunday
+        row.sunday,
+        row.total_hours
       ]
     end
 
