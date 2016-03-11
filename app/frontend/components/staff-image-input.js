@@ -40,12 +40,18 @@ export default class StaffImageInput extends React.Component {
             return null;
         }
         return <div>
+            {this.getRotateButton()}
             {this.getAvatarPreview()}
             {this.getImageValidationMessage()}
-            {this.getResetButtton()}
-            &nbsp;
-            {this.getOkButton()}
+            <div style={{marginTop: 4}}>
+                {this.getResetButtton()}
+                &nbsp;
+                {this.getOkButton()}
+            </div>
         </div>
+    }
+    getRotateButton(){
+        return <a className="btn btn-default" onClick={() => this.rotateImage()}>Rotate</a>
     }
     getOkButton(){
         var classes = ["btn btn-primary"];
@@ -109,6 +115,11 @@ export default class StaffImageInput extends React.Component {
         this.setState({sourceImage: dataUrl});
         this.props.onPickedImageChanged(dataUrl)
     }
+    rotateImage(){
+        if (this.state.rotateFunction) {
+            this.state.rotateFunction();
+        }
+    }
     getImageValidationMessage(){
         var validation = this.validateImageDimensions(this.state.imageDimensions);
         if (validation.isValid) {
@@ -124,6 +135,7 @@ export default class StaffImageInput extends React.Component {
         }
         return <ImageCropper
                 sourceImage={this.state.sourceImage}
+                rotateFunctionReceiver={(rotateFunction) => this.setState({rotateFunction})}
                 onChange={(dataUrl, imageDimensions) => this.setCroppedImage(dataUrl, imageDimensions) } />
     }
     setCroppedImage(dataUrl, imageDimensions){

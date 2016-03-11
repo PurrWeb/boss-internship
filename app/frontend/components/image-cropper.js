@@ -5,7 +5,8 @@ import _ from "underscore"
 export default class ImageCropper extends React.Component {
     static propTypes = {
         sourceImage: React.PropTypes.string.isRequired,
-        onChange: React.PropTypes.func.isRequired
+        onChange: React.PropTypes.func.isRequired,
+        rotateFunctionReceiver: React.PropTypes.func.isRequired
     }
     shouldComponentUpdate(nextProps){
         return this.props.sourceImage !== nextProps.sourceImage;
@@ -42,7 +43,16 @@ export default class ImageCropper extends React.Component {
             toggleDragModeOnDblClick: false,
             cropend: callOnChange,
             built: callOnChange,
-            zoom: callOnChange
+            zoom: callOnChange,
+            rotate: callOnChange
+        });
+
+        // The clean way to do this would be to pass the rotation in as a prop. But
+        // right now all the state is inside the cropper tool, not in our React code,
+        // so it's difficult to re-render the cropper with the new rotation value.
+        this.props.rotateFunctionReceiver(() => {
+            this.cropper.rotate(90);
+            callOnChange();
         });
     }
     componentWillUnmount() {
