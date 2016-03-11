@@ -7,7 +7,8 @@ class RotaPDFTableData
     :thursday,
     :friday,
     :saturday,
-    :sunday
+    :sunday,
+    :total_hours
   )
 
   def initialize(week:, venue:)
@@ -29,7 +30,8 @@ class RotaPDFTableData
       week_data.fetch(:thursday),
       week_data.fetch(:friday),
       week_data.fetch(:saturday),
-      week_data.fetch(:sunday)
+      week_data.fetch(:sunday),
+      'Total Hours'
     )
   end
 
@@ -37,7 +39,10 @@ class RotaPDFTableData
     rows = []
 
     staff_members.each do |staff_member|
-      week_data = {}
+      week_data = {
+        total_hours: 0
+      }
+
       week.each_with_day do |date, day|
         shifts = shifts_lookup.perform(
           staff_member: staff_member,
@@ -50,6 +55,7 @@ class RotaPDFTableData
           end
 
           week_data[day] = times.join(",\n")
+          week_data[:total_hours] += shifts.inject(0) { |sum, shift| sum + shift.total_hours }
         else
           week_data[day] = ''
         end
@@ -63,7 +69,8 @@ class RotaPDFTableData
         week_data.fetch(:thursday),
         week_data.fetch(:friday),
         week_data.fetch(:saturday),
-        week_data.fetch(:sunday)
+        week_data.fetch(:sunday),
+        week_data.fetch(:total_hours)
       )
     end
 
