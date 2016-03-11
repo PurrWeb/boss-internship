@@ -58,7 +58,7 @@ describe('StaffListItem', function() {
 
     it("Still shows a staff member after searching for 'Sally'", function(){
         var { $, $$ } = simpleRender(<HolidayReportApp viewData={viewData} />);
-        debugger
+        
         TestUtils.Simulate.change(
             $("[data-test-marker-staff-text-search]"),
             {target: {value: "Sally"}}
