@@ -39,17 +39,14 @@ class StaffMembersController < ApplicationController
   def create
     authorize! :manage, :staff_members
 
-    staff_member = StaffMember.new(staff_member_params)
-    if staff_member.staff_member_venue.present? && staff_member.staff_member_venue.venue_id == nil
-      staff_member.staff_member_venue.mark_for_destruction
-    end
+    result = CreateStaffMember.new(params: staff_member_params).call
 
-    if staff_member.save
+    if result.success?
       flash[:success] = "Staff member added successfully"
       redirect_to action: :index
     else
       flash.now[:error] = "There was a problem creating this staff member"
-      render 'new', locals: { staff_member: staff_member }
+      render 'new', locals: { staff_member: result.staff_member }
     end
   end
 
