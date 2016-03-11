@@ -5,7 +5,8 @@ class CreateStaffMember
     end
   end
 
-  def initialize(params:, nested: false)
+  def initialize(now: Time.now, params:, nested: false)
+    @now = now
     @params = params
     @nested = nested
   end
@@ -20,6 +21,14 @@ class CreateStaffMember
         staff_member.staff_member_venue.mark_for_destruction
       end
 
+      # notified_of_sia_expiry_at is set to now if we don't want to send
+      # an update
+      if staff_member.security? && staff_member.sia_badge_expiry_date.present?
+        if staff_member.sia_badge_expiry_date < now
+          staff_member.notified_of_sia_expiry_at = now
+        end
+      end
+
       result = staff_member.save
     end
 
@@ -27,5 +36,5 @@ class CreateStaffMember
   end
 
   private
-  attr_reader :params, :nested
+  attr_reader :now, :params, :nested
 end

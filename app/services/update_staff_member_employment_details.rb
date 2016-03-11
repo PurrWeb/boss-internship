@@ -5,7 +5,8 @@ class UpdateStaffMemberEmploymentDetails
     end
   end
 
-  def initialize(staff_member:, params:)
+  def initialize(now: Time.now, staff_member:, params:)
+    @now = now
     @staff_member = staff_member
     @params = params
   end
@@ -15,10 +16,21 @@ class UpdateStaffMemberEmploymentDetails
 
     ActiveRecord::Base.transaction do
       staff_member.assign_attributes(params)
+      pay_rate_changed = staff_member.pay_rate_id_changed?
+
       if staff_member.staff_member_venue.present? && staff_member.staff_member_venue.venue_id == nil
         staff_member.staff_member_venue.mark_for_destruction
       end
-      pay_rate_changed = staff_member.pay_rate_id_changed?
+
+      if staff_member.security? && staff_member.sia_badge_expiry_date_changed?
+        if staff_member.sia_badge_expiry_date < now
+          # Notification will not be sent
+          staff_member.notified_of_sia_expiry_at = now
+        else
+          # Send notification when in expiry period
+          staff_member.notified_of_sia_expiry_at = nil
+        end
+      end
 
       result = staff_member.save
 
@@ -39,5 +51,5 @@ class UpdateStaffMemberEmploymentDetails
   end
 
   private
-  attr_reader :staff_member, :params
+  attr_reader :now, :staff_member, :params
 end
