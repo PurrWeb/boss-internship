@@ -2,10 +2,12 @@ import React from "react"
 import DataUrlImagePicker from "./data-url-image-picker"
 import ImageCropper from "./image-cropper"
 import AvatarPreview from "./avatar-preview"
-import resizeImage from "~lib/resize-image"
+import resizeImage from "~lib/images/resize-image"
+import limitImageDimensions from "~lib/images/limit-image-dimensions"
 
 const STAFF_IMAGE_MIN_WIDTH = 250;
 const STAFF_IMAGE_MAX_WIDTH = 600;
+const MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING = 600;
 
 export default class StaffImageInput extends React.Component {
     static propTypes = {
@@ -90,10 +92,22 @@ export default class StaffImageInput extends React.Component {
         return <DataUrlImagePicker
             onChange={
                 (dataUrl) => {
-                    this.setState({sourceImage: dataUrl});
-                    this.props.onPickedImageChanged(dataUrl)
+                    // iOS has a bug where the image gets squashed in the canvas,
+                    // if it uses too much memory
+                    limitImageDimensions(
+                        dataUrl,
+                        MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
+                        MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
+                        (dataUrl) => {
+                            this.onImagePicked(dataUrl);
+                        }
+                    );
                 }
             } />
+    }
+    onImagePicked(dataUrl){
+        this.setState({sourceImage: dataUrl});
+        this.props.onPickedImageChanged(dataUrl)
     }
     getImageValidationMessage(){
         var validation = this.validateImageDimensions(this.state.imageDimensions);
