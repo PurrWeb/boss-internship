@@ -2,10 +2,12 @@ import React from "react"
 import DataUrlImagePicker from "./data-url-image-picker"
 import ImageCropper from "./image-cropper"
 import AvatarPreview from "./avatar-preview"
-import resizeImage from "~lib/resize-image"
+import resizeImage from "~lib/images/resize-image"
+import limitImageDimensions from "~lib/images/limit-image-dimensions"
 
 const STAFF_IMAGE_MIN_WIDTH = 250;
 const STAFF_IMAGE_MAX_WIDTH = 600;
+const MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING = 700;
 
 export default class StaffImageInput extends React.Component {
     static propTypes = {
@@ -38,12 +40,18 @@ export default class StaffImageInput extends React.Component {
             return null;
         }
         return <div>
+            {this.getRotateButton()}
             {this.getAvatarPreview()}
             {this.getImageValidationMessage()}
-            {this.getResetButtton()}
-            &nbsp;
-            {this.getOkButton()}
+            <div style={{marginTop: 4}}>
+                {this.getResetButtton()}
+                &nbsp;
+                {this.getOkButton()}
+            </div>
         </div>
+    }
+    getRotateButton(){
+        return <a className="btn btn-default" onClick={() => this.rotateImage()}>Rotate</a>
     }
     getOkButton(){
         var classes = ["btn btn-primary"];
@@ -90,10 +98,27 @@ export default class StaffImageInput extends React.Component {
         return <DataUrlImagePicker
             onChange={
                 (dataUrl) => {
-                    this.setState({sourceImage: dataUrl});
-                    this.props.onPickedImageChanged(dataUrl)
+                    // iOS has a bug where the image gets squashed in the canvas,
+                    // if it uses too much memory
+                    limitImageDimensions(
+                        dataUrl,
+                        MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
+                        MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
+                        (dataUrl) => {
+                            this.onImagePicked(dataUrl);
+                        }
+                    );
                 }
             } />
+    }
+    onImagePicked(dataUrl){
+        this.setState({sourceImage: dataUrl});
+        this.props.onPickedImageChanged(dataUrl)
+    }
+    rotateImage(){
+        if (this.state.rotateFunction) {
+            this.state.rotateFunction();
+        }
     }
     getImageValidationMessage(){
         var validation = this.validateImageDimensions(this.state.imageDimensions);
@@ -110,6 +135,7 @@ export default class StaffImageInput extends React.Component {
         }
         return <ImageCropper
                 sourceImage={this.state.sourceImage}
+                rotateFunctionReceiver={(rotateFunction) => this.setState({rotateFunction})}
                 onChange={(dataUrl, imageDimensions) => this.setCroppedImage(dataUrl, imageDimensions) } />
     }
     setCroppedImage(dataUrl, imageDimensions){
