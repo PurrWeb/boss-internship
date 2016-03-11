@@ -29,7 +29,7 @@ export default class StaffListItem extends React.Component {
                     <h4>Paid Holiday</h4>
                     <StaffHolidaysList holidays={this.props.paidHolidays} />
                 </div>
-                <div className="col-md-2">
+                <div className="col-md-2" data-test-marker-unpaid-holidays>
                     <h4>Unpaid Holiday</h4>
                     <StaffHolidaysList holidays={this.props.unpaidHolidays} />
                 </div>
