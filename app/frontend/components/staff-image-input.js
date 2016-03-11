@@ -7,7 +7,7 @@ import limitImageDimensions from "~lib/images/limit-image-dimensions"
 
 const STAFF_IMAGE_MIN_WIDTH = 250;
 const STAFF_IMAGE_MAX_WIDTH = 600;
-const MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING = 600;
+const MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING = 700;
 
 export default class StaffImageInput extends React.Component {
     static propTypes = {
