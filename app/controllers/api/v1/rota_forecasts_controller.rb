@@ -24,7 +24,7 @@ module Api
         )
         authorize! :manage, rota
 
-        if rota.date < RotaWeek.new(Time.now).start_date
+        if !rota.forecastable?
           render(
             json: {
               errors: {

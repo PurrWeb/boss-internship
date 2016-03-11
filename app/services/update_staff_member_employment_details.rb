@@ -23,7 +23,7 @@ class UpdateStaffMemberEmploymentDetails
       result = staff_member.save
 
       if result && pay_rate_changed
-        rotas = CurrentAndFutureRotasQuery.new(relation: Rota.published).all.
+        rotas = CurrentAndFutureRotasQuery.new(relation: Rota.with_forecasts).all.
           joins(:rota_shifts).
           merge(
             RotaShift.where(staff_member: staff_member)

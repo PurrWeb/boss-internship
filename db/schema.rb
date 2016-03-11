@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160310195416) do
+ActiveRecord::Schema.define(version: 20160311094545) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -136,13 +136,15 @@ ActiveRecord::Schema.define(version: 20160310195416) do
   add_index "pay_rates", ["pay_rate_type"], name: "index_pay_rates_on_pay_rate_type", using: :btree
 
   create_table "rota_forecasts", force: :cascade do |t|
-    t.integer "rota_id",               limit: 4
-    t.integer "forecasted_take_cents", limit: 4
-    t.integer "total_cents",           limit: 4
-    t.integer "staff_total_cents",     limit: 4
-    t.integer "pr_total_cents",        limit: 4
-    t.integer "kitchen_total_cents",   limit: 4
-    t.integer "security_total_cents",  limit: 4
+    t.integer  "rota_id",               limit: 4
+    t.integer  "forecasted_take_cents", limit: 4
+    t.integer  "total_cents",           limit: 4
+    t.integer  "staff_total_cents",     limit: 4
+    t.integer  "pr_total_cents",        limit: 4
+    t.integer  "kitchen_total_cents",   limit: 4
+    t.integer  "security_total_cents",  limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "rota_forecasts", ["rota_id"], name: "index_rota_forecasts_on_rota_id", using: :btree
