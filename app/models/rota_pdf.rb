@@ -12,9 +12,6 @@ class RotaPDF
       pdf.table(
         RotaPDFTableDataArray.new(data: table_data).to_a,
         header: true,
-        column_widths: {
-          0 => 140
-        },
         cell_style: {
           size: 16,
           inline_format: true
@@ -24,7 +21,10 @@ class RotaPDF
         (0..row_length).each do |index|
           cells = row(index)
           if cells.all? {|cell| cell.content.blank? }
-            cells.style { |cell| cell.height = 24 }
+            cells.style do |cell|
+              cell.height = 24
+              cell.width = [cell.width, 150].max
+            end
           end
         end
       end
