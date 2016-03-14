@@ -215,7 +215,8 @@ class StaffMembersController < ApplicationController
       permit(
         require_attributes
       ).merge(
-        creator: current_user
+        creator: current_user,
+        employment_status_statement_completed: true
       )
 
     if result[:avatar_base64].present?
@@ -275,6 +276,7 @@ class StaffMembersController < ApplicationController
       permit(
         *allowed_params
       ).deep_merge(
+        employment_status_statement_completed: true,
         staff_member_venue_attributes: {
           id: staff_member.staff_member_venue.try(:id)
         }

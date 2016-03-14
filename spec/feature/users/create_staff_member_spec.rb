@@ -42,5 +42,8 @@ RSpec.feature 'Creating a staff member from a user' do
     expect(created_staff_member).to be_present
     expect(created_staff_member.name).to eq(edited_user.name)
     expect(created_staff_member).to eq(edited_user.staff_member)
+    expect(
+      created_staff_member.employment_status_statement_completed
+    ).to eq(true)
   end
 end

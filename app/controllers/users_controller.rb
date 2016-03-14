@@ -156,6 +156,7 @@ class UsersController < ApplicationController
     result = params.require(:staff_member).permit(
       permit_attributes
     ).merge(
+      employment_status_statement_completed: true,
       staff_type: staff_type,
       name: user.name,
       email_address: user.email_address,

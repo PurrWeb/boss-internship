@@ -34,6 +34,7 @@ RSpec.feature 'Adding a new staff member' do
     staff_members_index_page.ensure_flash_success_message_displayed('Staff member added successfully')
     staff_member = StaffMember.joins(:email_address).merge(EmailAddress.where(email: prospective_staff_member.email_address.email)).first
     staff_members_index_page.ensure_record_displayed_for(staff_member)
+    expect(staff_member.employment_status_statement_completed).to eq(true)
   end
 
   scenario 'An uploaded avatar should persists when there is a validation error' do
