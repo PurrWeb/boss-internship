@@ -2,12 +2,17 @@ import React, { Component } from "react"
 import moment from "moment"
 import _ from "underscore"
 import getVenueFromShift from "~lib/get-venue-from-shift"
+import RotaDate from "~lib/rota-date"
 
 class StaffShiftListItem extends Component {
     render(){
         var {shift} = this.props;
+        var rotaDate = new RotaDate({shiftStartsAt: shift.starts_at});
+        var dateOfRota = rotaDate.getDateOfRota();
         return <div className="staff-shift-list__shift">
-            {moment(shift.starts_at).format("DD MMM H:mm")}
+            {moment(dateOfRota).format("DD MMM")}
+            &nbsp;
+            {moment(shift.starts_at).format("H:mm")}
             &nbsp;to&nbsp;
             {moment(shift.ends_at).format("H:mm")}
             &nbsp;

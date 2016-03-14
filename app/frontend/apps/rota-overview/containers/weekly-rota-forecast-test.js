@@ -4,11 +4,15 @@ import WeeklyRotaForecast from "./weekly-rota-forecast"
 import { simpleRender } from "~lib/test-helpers"
 import React from "react"
 
-WeeklyRotaForecast.__Rewire__('fetchWeeklyRotaForecast', function(){
-    return {fetchWeeklyRotaForecast: "was called"};
-});
-
 describe("WeeklyRotaForecast", function(){
+    beforeEach(function(){
+        WeeklyRotaForecast.__Rewire__('fetchWeeklyRotaForecast', function(){
+            return {fetchWeeklyRotaForecast: "was called"};
+        });
+    })
+    afterEach(function(){
+        WeeklyRotaForecast.__ResetDependency__('fetchWeeklyRotaForecast');
+    })
     it("Triggers an action to fetch the forecast if it isn't in the store", function(){
         var store = createStore(function(){
             return {

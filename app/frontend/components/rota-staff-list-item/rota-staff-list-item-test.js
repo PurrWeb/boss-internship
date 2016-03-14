@@ -7,11 +7,17 @@ import {ContextProvider, NoOpComponent, simpleRender} from "~lib/test-helpers"
 import {createStore} from "redux"
 import AddShiftButton from "./add-shift-button"
 
-StaffListItem.__Rewire__('StaffTypeBadge', NoOpComponent);
-StaffListItem.__Rewire__('StaffHolidaysList', NoOpComponent);
-StaffListItem.__Rewire__('StaffShiftList', NoOpComponent);
-
 describe('StaffListItem', function() {
+    beforeEach(function(){
+        StaffListItem.__Rewire__('StaffTypeBadge', NoOpComponent);
+        StaffListItem.__Rewire__('StaffHolidaysList', NoOpComponent);
+        StaffListItem.__Rewire__('StaffShiftList', NoOpComponent);
+    });
+    afterEach(function(){
+        StaffListItem.__ResetDependency__('StaffTypeBadge', NoOpComponent);
+        StaffListItem.__ResetDependency__('StaffHolidaysList', NoOpComponent);
+        StaffListItem.__ResetDependency__('StaffShiftList', NoOpComponent);
+    })
     var staff = {
         first_name: "John",
         surname: "Doe",
