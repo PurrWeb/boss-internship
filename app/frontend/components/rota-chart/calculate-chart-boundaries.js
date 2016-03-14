@@ -10,6 +10,10 @@ const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
  * @return {object} Object with "start" and "end" values that can be passed into the rota chart.
  */
 export default function calculateChartBoundaries(rotaShifts){
+    if (!_.isArray(rotaShifts)) {
+        throw "calculateChartBoundaries needs array"
+    }
+
     // Values indicating how many hours we're into the day
     var startOffset = 23; // means 7am based on an 8am start
     var endOffset = 1; // means 9am based on an 8am start
