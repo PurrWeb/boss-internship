@@ -5,13 +5,13 @@ import StaffTypeBadge from "~components/staff-type-badge"
 import Spinner from "~components/spinner"
 import ComponentErrors from "~components/component-errors"
 import StaffHolidaysList from "~components/staff-holidays-list"
-import { appRoutes } from "~lib/routes"
 import { connect } from "react-redux"
 import { selectAddShiftIsInProgress, canEditStaffTypeShifts, selectStaffMemberIsOnHolidayOnDate } from "~redux/selectors"
 import _ from "underscore"
 import validation from "~lib/validation"
 import RotaDate from "~lib/rota-date"
 import * as actionCreators from "~redux/actions"
+import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
 
 class RotaStaffListItem extends Component {
     static contextTypes = {
@@ -61,11 +61,11 @@ class RotaStaffListItem extends Component {
                                 }}>
                                     Holidays
                                 </h4>
-                                <a
-                                    href={appRoutes.staffMemberHolidays(staff.id)}
-                                    style={{marginLeft: 5, display: "inline-block"}}>
-                                    Edit
-                                </a>
+                                <span style={{marginLeft: 5, display: "inline-block"}}>
+                                    <StaffMemberHolidaysLink staffMemberId={staff.id} >
+                                        Edit
+                                    </StaffMemberHolidaysLink>
+                                </span>
                                 <StaffHolidaysList staffId={staff.id} />
                             </div>
                             <div className="col-md-3">

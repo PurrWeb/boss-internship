@@ -2,6 +2,7 @@ import React from "react"
 import _ from "underscore"
 import StaffTypeBadge from "~components/staff-type-badge"
 import StaffHolidaysList from "~components/staff-holidays-list/staff-holidays-list"
+import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
 
 export default class StaffListItem extends React.Component {
     static propTypes = {
@@ -18,11 +19,16 @@ export default class StaffListItem extends React.Component {
                 <div className="col-md-1">
                     <img src={staff.avatar_url} className="staff-list-item__avatar" />
                 </div>
-                <div className="col-md-3">
-                    <h3 className="holiday-report-staff-list-item__name">
-                        {staff.first_name} {staff.surname}
-                    </h3>
-                    <StaffTypeBadge staffTypeObject={staffType} />
+                <div className="col-md-4">
+                    <div style={{overflow: "hidden"}}>
+                        <h3 className="holiday-report-staff-list-item__name">
+                            {staff.first_name} {staff.surname}
+                        </h3>
+                        <StaffTypeBadge staffTypeObject={staffType} />
+                    </div>                    
+                    <StaffMemberHolidaysLink staffMemberId={staff.id}>
+                        View all holidays
+                    </StaffMemberHolidaysLink>
                 </div>
 
                 <div className="col-md-2">
@@ -33,7 +39,7 @@ export default class StaffListItem extends React.Component {
                     <h4>Unpaid Holiday</h4>
                     <StaffHolidaysList holidays={this.props.unpaidHolidays} />
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-2">
                     <h4>Paid Holiday days</h4>
                     {holidayDaysCount(this.props.paidHolidays)}
                 </div>
