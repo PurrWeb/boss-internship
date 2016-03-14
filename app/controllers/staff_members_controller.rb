@@ -176,6 +176,7 @@ class StaffMembersController < ApplicationController
       :employment_status_b,
       :employment_status_c,
       :employment_status_d,
+      :employment_status_p45_supplied,
       name_attributes: [
         :first_name,
         :surname
@@ -256,6 +257,7 @@ class StaffMembersController < ApplicationController
         :employment_status_b,
         :employment_status_c,
         :employment_status_d,
+        :employment_status_p45_supplied,
         :pay_rate_id
     ]
 

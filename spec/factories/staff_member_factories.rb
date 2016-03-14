@@ -18,6 +18,7 @@ FactoryGirl.define do
     employment_status_b false
     employment_status_c false
     employment_status_d false
+    employment_status_p45_supplied true
 
     address
     venue
