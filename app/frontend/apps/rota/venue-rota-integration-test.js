@@ -2,7 +2,11 @@ import React from "react"
 import expect from "expect"
 import { simpleRender } from "~lib/test-helpers"
 import RotaApp from "./rota-app"
+import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
+
+import StaffDetailsAndShifts from "~components/staff-details-and-shifts"
+import ChartAndFilter from "./chart-and-filter"
 
 import "~lib/load-underscore-mixins"
 
@@ -113,10 +117,15 @@ describe('StaffListItem', function() {
     });
 
     it("Allows a shift to be edited if it's clicked in the rota chart", function(){
+        var {findChild, $$, component} = simpleRender(<RotaApp viewData={viewData} />);
 
+        var chartAndFilter = findChild(ChartAndFilter.WrappedComponent);
+        // We can't simulate a click on a D3 element, so use setState instead
+        chartAndFilter.setState({staffToShow: JOHN_KITCHEN_ID});
+
+        var detailsComponent = findChild(StaffDetailsAndShifts);
+        var node = ReactDOM.findDOMNode(detailsComponent);
+        
+        expect(node.textContent).toContain("12:0016:00");
     });
-
-    it("Allows rhe rota to be marked as finished", function(){
-
-    })
 });
