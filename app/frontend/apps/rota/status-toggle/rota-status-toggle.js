@@ -4,6 +4,7 @@ import RotaStatusToggleUi from "./rota-status-toggle-ui"
 import { connect } from "react-redux"
 import _ from "underscore"
 import { selectRotaOnVenueRotaPage } from "~redux/selectors"
+import oFetch from "o-fetch"
 
 class RotaStatusToggle extends React.Component {
     static propTypes = {
@@ -29,7 +30,7 @@ function mapStateToProps(state){
     var rota = selectRotaOnVenueRotaPage(state);
     return {
         rota: rota,
-        status: rota.status,
+        status: oFetch(rota, "status"),
         statusUpdateInProgess: _.some(
             state.apiRequestsInProgress.UPDATE_ROTA_STATUS,
             (request) => request.rotaId === rota.id
