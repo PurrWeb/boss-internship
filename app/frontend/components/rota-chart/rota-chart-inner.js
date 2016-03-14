@@ -21,15 +21,15 @@ class RotaChartInner extends Component {
     render() {
         return (
             <div>
-                <svg id="rota-chart"></svg>
+                <svg id="rota-chart" ref={(el) => this.el = el}></svg>
             </div>
         );
     }
     componentDidMount() {
-        this.initGraph(document.getElementById("rota-chart"));
+        this.initGraph(this.el);
     }
     componentDidUpdate(prevProps, prevState){
-        this.initGraph(document.getElementById("rota-chart"));
+        this.initGraph(this.el);
     }
     getStaffMembersOnRota(){
         var staffList = _.chain(this.props.rotaShifts)

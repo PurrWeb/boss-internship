@@ -14,7 +14,9 @@ function replaceNbsp(string){
 
 describe('StaffListItem', function() {
     const JOHN_KITCHEN_ID = 50;
-    const SALLY_SECURITY = 55;
+    const SALLY_SECURITY_ID = 55;
+    const JOHN_KITCHEN_INDEX = 0;
+    const SALLY_SECURITY_INDEX = 1;
     const ROTA_ID = 766;
     var viewData = {
         rota: {
@@ -38,7 +40,7 @@ describe('StaffListItem', function() {
             }, {
                 first_name: "Sally",
                 surname: "Jones",
-                id: SALLY_SECURITY,
+                id: SALLY_SECURITY_ID,
                 holidays: [],
                 staff_type: {id: 5}
             }],
@@ -67,7 +69,7 @@ describe('StaffListItem', function() {
                 rota: {id: 4}
             },{
                 id: 3,
-                staff_member: {id: SALLY_SECURITY},
+                staff_member: {id: SALLY_SECURITY_ID},
                 starts_at: "2016-03-11T02:00:00Z",
                 ends_at: "2016-03-11T04:00:00Z",
                 rota: {id: ROTA_ID}
@@ -78,6 +80,8 @@ describe('StaffListItem', function() {
         rotaDate: "2016-03-10"
     };
 
+
+
     it("Shows two staff members in the staff finder", function(){
         var {$, $$} = simpleRender(<RotaApp viewData={viewData} />);
 
@@ -87,20 +91,25 @@ describe('StaffListItem', function() {
     it("Shows this week's shifts for each staff member in the staff finder", function(){
         var {$, $$} = simpleRender(<RotaApp viewData={viewData} />);
 
-        var content = replaceNbsp($$(".staff-list-item")[0].textContent);
+        var content = replaceNbsp($$(".staff-list-item")[JOHN_KITCHEN_INDEX].textContent);
         expect(content).toContain("10 Mar 12:00 to 16:00"); 
         expect(content).toContain("13 Mar 10:00 to 11:00"); 
 
-        content = replaceNbsp($$(".staff-list-item")[1].textContent);
+        content = replaceNbsp($$(".staff-list-item")[SALLY_SECURITY_INDEX].textContent);
         expect(content).toContain("10 Mar 2:00 to 4:00");
     });
 
     it("Shows todays shifts in the rota chart", function(){
-        
+        var {$, $$} = simpleRender(<RotaApp viewData={viewData} />);        
+
+        expect($$("#rota-chart .rota-chart__shift").length).toBe(2);
     });
 
     it("Does not allow adding security shifts", function(){
+        var {$, $$} = simpleRender(<RotaApp viewData={viewData} />);
 
+        var classes = $$(".staff-list-item")[SALLY_SECURITY_INDEX].querySelector(".btn").className;
+        expect(classes).toContain("disabled");
     });
 
     it("Allows a shift to be edited if it's clicked in the rota chart", function(){
