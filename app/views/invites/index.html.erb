@@ -10,6 +10,8 @@
       <th>Email</th>
       <th>Role</th>
       <th>Status</th>
+      <th>Inviter</th>
+      <th>Invited At</th>
       <th></th>
     <tr>
     <% invites.each do |invite| %>
@@ -23,6 +25,12 @@
         <td data-role="status">
           <%= invite.current_state.titleize %>
         </td>
+        <td data-role="inviter">
+          <%= invite.inviter.full_name %>
+        </td>
+        <td data-role="invited-at">
+          <%= invite.created_at.to_s(:human_date) %>
+        </td>
         <td data-role="revoke-button">
           <% if invite.can_transition_to?(:revoked) %>
             <%= button_to 'Revoke', revoke_invite_path(invite), class: 'btn btn-danger' %>
@@ -31,4 +39,5 @@
       </tr>
     <% end %>
   </table>
+  <%= render partial: 'shared/pagination_control', locals: { relation: invites } %>
 <% end %>
