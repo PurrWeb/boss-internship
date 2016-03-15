@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
 import { Provider} from "react-redux"
-import { createBossStore } from '~redux/store.js'
+import AppComponent from "../app-component"
 import StaffTypeRotaView from './staff-type-rota-view.js'
 import * as actionCreators from "~redux/actions.js"
 
-export default class StaffTypeRotaApp extends Component {
-    constructor(props){
-        super(props);
-        this.store = createBossStore();
-    }
+export default class StaffTypeRotaApp extends AppComponent {
     componentWillMount(){
-        let viewData = window.boss;
+        let viewData = this.getViewData();
         this.store.dispatch(actionCreators.loadInitalStaffTypeRotaAppState(viewData));
     }
     render() {
