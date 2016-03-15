@@ -37,6 +37,7 @@ gem 'bootstrap-datepicker-rails'
 gem 'money'
 gem 'prawn'
 gem 'prawn-table'
+gem 'will_paginate-bootstrap'
 
 group :development, :test do
   gem "byebug"
