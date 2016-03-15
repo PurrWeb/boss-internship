@@ -57,7 +57,7 @@ export default class ShiftTimeSelector extends Component {
         return <div style={{marginTop: 10}}>
             <ErrorMessage>
                 {errorMessages.map(
-                    (message) => <div>{message}</div>
+                    (message) => <div key={message}>{message}</div>
                 )}
             </ErrorMessage>
         </div>
