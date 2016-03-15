@@ -11,6 +11,7 @@ class InvitesIndexQuery
       result = relation
       result = result.in_state(status) if status.present?
       result = result.where(role: role) if role.present?
+      result = result.order(:created_at)
       result
     end
   end

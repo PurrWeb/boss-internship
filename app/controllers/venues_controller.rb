@@ -2,7 +2,10 @@ class VenuesController < ApplicationController
   before_action :authorize
 
   def index
-    venues = Venue.all
+    venues = Venue.all.
+      order(:name).
+      paginate(page: params[:page], per_page: 25)
+
     render locals: { venues: venues }
   end
 

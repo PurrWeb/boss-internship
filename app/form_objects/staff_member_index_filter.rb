@@ -18,13 +18,23 @@ class StaffMemberIndexFilter
 
   def query
     if user.security_manager?
-      @query ||= SecurityManagerStaffMemberIndexQuery.new.all
+      @query ||= begin
+        result = SecurityManagerStaffMemberIndexQuery.new.all
+        result.
+          joins(:name).
+          order('`names`.first_name, `names`.surname')
+      end
     else
-      @query ||= StaffMemberIndexFilterQuery.new(
-        staff_type: staff_type,
-        venue: venue,
-        accessible_venues: accessible_venues
-      )
+      @query ||= begin
+        result = StaffMemberIndexFilterQuery.new(
+          staff_type: staff_type,
+          venue: venue,
+          accessible_venues: accessible_venues
+        ).all
+        result.
+          joins(:name).
+          order('`names`.first_name, `names`.surname')
+      end
     end
   end
 
