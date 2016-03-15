@@ -6,7 +6,7 @@ class StaffMembersController < ApplicationController
       user: current_user,
       params: params[:filter]
     )
-    staff_members = filter.query.all
+    staff_members = filter.query.all.paginate(page: params[:page], per_page: 20)
 
     render locals: {
       staff_members: staff_members,
