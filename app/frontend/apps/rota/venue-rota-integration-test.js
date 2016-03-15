@@ -16,7 +16,7 @@ function replaceNbsp(string){
     return string.replace(regex, " ");
 }
 
-describe('StaffListItem', function() {
+describe('Venue Rota Integration Test', function() {
     const JOHN_KITCHEN_ID = 50;
     const SALLY_SECURITY_ID = 55;
     const JOHN_KITCHEN_INDEX = 0;

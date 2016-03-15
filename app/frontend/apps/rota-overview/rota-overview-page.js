@@ -26,13 +26,20 @@ class RotaOverviewPage extends Component {
         var rotas = _.values(this.props.storeRotas);
         var firstRota = rotas[0];
         var lastRota = _.last(rotas);
+
+        var pdfHref = appRoutes.rotaPdfDownload({
+            venueId: firstRota.venue.id,
+            startDate: this.props.startDate,
+            endDate: this.props.endDate
+        });
+        
         return <div className="container">
             <div className="row">
                 <div className="col-md-6">
                     <WeekAndVenueSelector
                         venueId={firstRota.venue.id}
                         weekStartDate={firstRota.date}
-                        venues={indexById(window.boss.venues)}
+                        venues={indexById(this.props.venues)}
                         onChange={this.goToOverviewPage.bind(this)}>
                         <br/>
                         <PublishRotaWeekButtonContainer
@@ -44,7 +51,7 @@ class RotaOverviewPage extends Component {
                 </div>
                 <div className="col-md-3">
                   <div className="col-md-2">
-                    <a href={appRoutes.rotaPdfDownload({venueId: firstRota.venue.id, startDate: this.props.startDate, endDate: this.props.endDate })} className="btn btn-success">
+                    <a href={pdfHref} className="btn btn-success">
                       <span className="glyphicon glyphicon-download"></span> Download PDF
                     </a>
                   </div>
@@ -111,8 +118,9 @@ class RotaOverviewPage extends Component {
 function mapStateToProps(state){
     return {
         storeRotas: state.rotas,
-        endDate: boss.endDate,
-        startDate: boss.startDate
+        endDate: state.pageOptions.endDate,
+        startDate: state.pageOptions.startDate,
+        venues: state.venues
     };
 }
 
