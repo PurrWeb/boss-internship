@@ -8,7 +8,9 @@ class UsersController < ApplicationController
 
   def index
     filter = UsersIndexFilter.new(params[:filter])
-    users = filter.query.all
+    users = filter.query.all.
+      paginate(page: params[:page], per_page: 25)
+
     render locals: { filter: filter, users: users }
   end
 

@@ -9,6 +9,9 @@ class UsersIndexQuery
     @all ||= begin
       result = relation
       result = result.where(role: role) if role.present?
+      result = result.
+        joins(:name).
+        order('`names`.first_name, `names`.surname')
       result
     end
   end
