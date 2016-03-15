@@ -176,6 +176,7 @@ class StaffMembersController < ApplicationController
       :employment_status_b,
       :employment_status_c,
       :employment_status_d,
+      :employment_status_p45_supplied,
       name_attributes: [
         :first_name,
         :surname
@@ -215,7 +216,8 @@ class StaffMembersController < ApplicationController
       permit(
         require_attributes
       ).merge(
-        creator: current_user
+        creator: current_user,
+        employment_status_statement_completed: true
       )
 
     if result[:avatar_base64].present?
@@ -255,6 +257,7 @@ class StaffMembersController < ApplicationController
         :employment_status_b,
         :employment_status_c,
         :employment_status_d,
+        :employment_status_p45_supplied,
         :pay_rate_id
     ]
 
@@ -275,6 +278,7 @@ class StaffMembersController < ApplicationController
       permit(
         *allowed_params
       ).deep_merge(
+        employment_status_statement_completed: true,
         staff_member_venue_attributes: {
           id: staff_member.staff_member_venue.try(:id)
         }

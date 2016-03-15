@@ -4,6 +4,8 @@
     <div>
       <em>Tick all that apply</em>
     </div>
+    <%= hidden_field_tag(:employment_status_p45_supplied, "false") %>
+    <%= form.check_box(:employment_status_p45_supplied, label: EmploymentStatusStatement.text_for_point(:p45_supplied)) %>
 
     <%= hidden_field_tag(:employment_status_a, "false") %>
     <%= form.check_box(:employment_status_a, label: EmploymentStatusStatement.text_for_point(:a)) %>

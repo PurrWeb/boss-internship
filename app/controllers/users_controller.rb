@@ -129,7 +129,8 @@ class UsersController < ApplicationController
       :employment_status_a,
       :employment_status_b,
       :employment_status_c,
-      :employment_status_d
+      :employment_status_d,
+      :employment_status_p45_supplied
     ]
 
     permit_attributes << :pay_rate_id if pay_rate_from_params.andand.editable_by?(current_user)
@@ -156,6 +157,7 @@ class UsersController < ApplicationController
     result = params.require(:staff_member).permit(
       permit_attributes
     ).merge(
+      employment_status_statement_completed: true,
       staff_type: staff_type,
       name: user.name,
       email_address: user.email_address,

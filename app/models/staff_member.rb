@@ -57,6 +57,7 @@ class StaffMember < ActiveRecord::Base
   validates :employment_status_b, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_c, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_d, inclusion: { in: [true, false], message: 'is required' }
+  validates :employment_status_p45_supplied, inclusion: { in: [true, false], message: 'is required' }
 
   before_validation :normalise_national_insurance_number
 

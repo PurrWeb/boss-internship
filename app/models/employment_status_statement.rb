@@ -4,7 +4,7 @@ class EmploymentStatusStatement
   end
 
   def point_list
-    [:a, :b, :c, :d].map do |point|
+    [:a, :b, :c, :d, :p45_supplied].map do |point|
       if staff_member.public_send("employment_status_#{point.to_s}")
         point.to_s.titlecase
       else
@@ -14,7 +14,7 @@ class EmploymentStatusStatement
   end
 
   def self.text_for_point(point)
-    raise "Unsupported point #{point}" unless [:a, :b, :c, :d].include?(point)
+    raise "Unsupported point #{point}" unless [:a, :b, :c, :d, :p45_supplied].include?(point)
     public_send("statement_#{point.to_s}_text")
   end
 
@@ -35,5 +35,9 @@ class EmploymentStatusStatement
 
   def self.statement_d_text
     "I left a course of higher education before the 6th of April & received my first student loan instalment on or after the 1st of September 1998 & I have not fully repaid my student loan."
+  end
+
+  def self.statement_p45_supplied_text
+    'I have supplied my P45 from my previous employer'
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160311094545) do
+ActiveRecord::Schema.define(version: 20160314124723) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(version: 20160311094545) do
     t.string   "sia_badge_number",                      limit: 255
     t.date     "sia_badge_expiry_date"
     t.boolean  "employment_status_statement_completed",               default: false, null: false
+    t.boolean  "employment_status_p45_supplied",                                      null: false
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree

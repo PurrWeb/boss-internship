@@ -55,10 +55,11 @@ class ImportStaffMemberFromCSV
           date_of_birth: Date.strptime(values.fetch(date_of_birth_column), date_format),
           national_insurance_number: values.fetch(national_insurance_number_column),
           pay_rate: pay_rate,
-          employment_status_a: true,
+          employment_status_a: false,
           employment_status_b: false,
           employment_status_c: false,
-          employment_status_d: false
+          employment_status_d: false,
+          employment_status_p45_supplied: false
         )
         attach_avatar_image(staff_member)
         attach_venue(staff_member, venue)
