@@ -45,8 +45,12 @@ describe EmailAddressNotInUse do
     end
 
     context 'staff member is disabled' do
-      before do
-        staff_member.update_attributes!(enabled: false)
+      let(:staff_member) do
+        FactoryGirl.create(
+          :staff_member,
+          :disabled,
+          email_address: email_address
+        )
       end
 
       specify 'email is returned' do

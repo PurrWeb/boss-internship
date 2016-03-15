@@ -40,7 +40,6 @@ class StaffMember < ActiveRecord::Base
 
   validates :name, presence: true
   validates :gender, inclusion: { in: GENDERS, message: 'is required' }
-  validates :enabled, :inclusion => {:in => [true, false], message: 'is required' }
   validate  :national_insurance_number_valid
   validates :pin_code, presence: true
   validate  :valid_pin_code_format
@@ -61,6 +60,8 @@ class StaffMember < ActiveRecord::Base
   validates :employment_status_d, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_p45_supplied, inclusion: { in: [true, false], message: 'is required' }
 
+  validates :would_rehire, inclusion: { in: [true, false], message: 'is required' }
+
   before_validation :normalise_national_insurance_number
 
   def self.for_venue(venue)
@@ -77,6 +78,10 @@ class StaffMember < ActiveRecord::Base
 
   def self.disabled
     in_state(:disabled)
+  end
+
+  def enabled?
+    state_machine.current_state == 'enabled'
   end
 
   def security?

@@ -21,7 +21,7 @@ describe StaffMemberWithShiftNotificationsQuery do
       let(:staff_member) do
         FactoryGirl.create(
           :staff_member,
-          enabled: false,
+          :disabled,
           shift_change_occured_at: shift_change_occured_at
         )
       end

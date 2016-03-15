@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160315171413) do
+ActiveRecord::Schema.define(version: 20160315171715) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -219,7 +219,6 @@ ActiveRecord::Schema.define(version: 20160315171413) do
     t.integer  "address_id",                            limit: 4
     t.string   "gender",                                limit: 255,                   null: false
     t.string   "phone_number",                          limit: 255
-    t.boolean  "enabled",                                             default: true,  null: false
     t.datetime "date_of_birth"
     t.string   "national_insurance_number",             limit: 255
     t.text     "hours_preference_note",                 limit: 65535
@@ -247,7 +246,6 @@ ActiveRecord::Schema.define(version: 20160315171413) do
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
-  add_index "staff_members", ["enabled"], name: "index_staff_members_on_enabled", using: :btree
   add_index "staff_members", ["notified_of_sia_expiry_at"], name: "index_staff_members_on_notified_of_sia_expiry_at", using: :btree
   add_index "staff_members", ["phone_number"], name: "index_staff_members_on_phone_number", using: :btree
   add_index "staff_members", ["shift_change_occured_at"], name: "index_staff_members_on_shift_change_occured_at", using: :btree
