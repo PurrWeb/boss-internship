@@ -1,0 +1,7 @@
+This is an automated reminder that <%= staff_member_name %>'s SIA badge is due to expire on <%= sia_expiry_date.to_s(:human_date) %>.
+
+<% if staff_member_email.present? %>
+ A reminder email has also been sent to the staff member in question
+<% else %>
+  No reminder email has been send to the staff member in question as we do not have an email address for them in the system.
+<% end %>

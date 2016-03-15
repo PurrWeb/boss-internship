@@ -230,10 +230,12 @@ ActiveRecord::Schema.define(version: 20160314124723) do
     t.date     "sia_badge_expiry_date"
     t.boolean  "employment_status_statement_completed",               default: false, null: false
     t.boolean  "employment_status_p45_supplied",                                      null: false
+    t.datetime "notified_of_sia_expiry_at"
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
   add_index "staff_members", ["enabled"], name: "index_staff_members_on_enabled", using: :btree
+  add_index "staff_members", ["notified_of_sia_expiry_at"], name: "index_staff_members_on_notified_of_sia_expiry_at", using: :btree
   add_index "staff_members", ["phone_number"], name: "index_staff_members_on_phone_number", using: :btree
   add_index "staff_members", ["shift_change_occured_at"], name: "index_staff_members_on_shift_change_occured_at", using: :btree
   add_index "staff_members", ["sia_badge_expiry_date"], name: "index_staff_members_on_sia_badge_expiry_date", using: :btree

@@ -30,9 +30,16 @@ FactoryGirl.define do
     end
 
     trait :security do
+      after(:build) do |object|
+        security_staff_type = StaffType.security.first
+        if !security_staff_type.present?
+          security_staff_type = FactoryGirl.create(:security_staff_type)
+        end
+        object.staff_type = security_staff_type
+      end
+
       sia_badge_expiry_date 2.months.from_now
       sia_badge_number '23123131'
-      association :staff_type, factory: :security_staff_type
       venue nil
     end
   end
