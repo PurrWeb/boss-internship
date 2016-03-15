@@ -5,12 +5,15 @@ class UpcomingPublishedShiftQuery
   end
 
   def all
-    RotaShift.
+    relation = RotaShift.
       enabled.
-      where('starts_at > ?', now).
       where(staff_member: staff_member).
       joins(:rota).
-      merge(Rota.in_state(:published))
+      merge(
+        Rota.in_state(:published)
+      )
+
+    UpcomingQuery.new(relation: relation).all
   end
 
   private

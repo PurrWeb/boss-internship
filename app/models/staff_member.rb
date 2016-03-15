@@ -84,6 +84,10 @@ class StaffMember < ActiveRecord::Base
     state_machine.current_state == 'enabled'
   end
 
+  def disabled?
+    state_machine.current_state == 'disabled'
+  end
+
   def security?
     staff_type.andand.security?
   end
@@ -96,6 +100,10 @@ class StaffMember < ActiveRecord::Base
     if pin_code.present?
       errors.add(:pin_code, 'must be numerical') unless pin_code.match(pin_code_regex)
     end
+  end
+
+  def disable_reason
+    disabled? && state_machine.last_transition.metadata.fetch("disable_reason")
   end
 
   def pin_code_regex

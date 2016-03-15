@@ -35,6 +35,10 @@ class Holiday < ActiveRecord::Base
     current_state == 'enabled'
   end
 
+  def disabled?
+    current_state == 'disabled'
+  end
+
   def paid?
     holiday_type == 'paid_holiday'
   end

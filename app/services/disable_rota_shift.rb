@@ -1,7 +1,8 @@
 class DisableRotaShift
-  def initialize(requester:, shift:)
+  def initialize(requester:, shift:, notify_staff_member: true)
     @requester = requester
     @shift = shift
+    @notify_staff_member = notify_staff_member
   end
 
   def call
@@ -14,11 +15,13 @@ class DisableRotaShift
         disabled_at: Time.now
       )
 
-      shift.staff_member.mark_requiring_notification! if shift.rota_published?
+      if notify_staff_member && shift.rota_published?
+        shift.staff_member.mark_requiring_notification!
+      end
       UpdateRotaForecast.new(rota: shift.rota).call if shift.part_of_forecast?
     end
   end
 
   private
-  attr_reader :requester, :shift
+  attr_reader :requester, :shift, :notify_staff_member
 end
