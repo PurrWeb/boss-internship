@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160314124723) do
+ActiveRecord::Schema.define(version: 20160315154535) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -193,6 +193,19 @@ ActiveRecord::Schema.define(version: 20160314124723) do
   add_index "rotas", ["creator_id"], name: "index_rotas_on_creator_id", using: :btree
   add_index "rotas", ["date", "venue_id"], name: "index_rotas_on_date_and_venue_id", unique: true, using: :btree
   add_index "rotas", ["venue_id"], name: "index_rotas_on_venue_id", using: :btree
+
+  create_table "staff_member_transitions", force: :cascade do |t|
+    t.string   "to_state",        limit: 255,   null: false
+    t.text     "metadata",        limit: 65535
+    t.integer  "sort_key",        limit: 4,     null: false
+    t.integer  "staff_member_id", limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "staff_member_transitions", ["staff_member_id", "most_recent"], name: "index_staff_member_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "staff_member_transitions", ["staff_member_id", "sort_key"], name: "index_staff_member_transitions_parent_sort", unique: true, using: :btree
 
   create_table "staff_member_venues", force: :cascade do |t|
     t.integer  "staff_member_id", limit: 4, null: false

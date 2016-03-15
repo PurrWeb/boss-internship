@@ -1,6 +1,8 @@
 class StaffMember < ActiveRecord::Base
   GENDERS = ['male', 'female']
 
+  include Statesman::Adapters::ActiveRecordQueries
+
   belongs_to :creator, class_name: 'User'
   belongs_to :staff_type
   has_one :staff_member_venue, inverse_of: :staff_member
@@ -22,6 +24,8 @@ class StaffMember < ActiveRecord::Base
 
   has_many :holidays, inverse_of: :staff_member
 
+  has_many :staff_member_transitions, autosave: false
+
   belongs_to :pay_rate
 
   mount_uploader :avatar, AvatarUploader
@@ -33,8 +37,6 @@ class StaffMember < ActiveRecord::Base
   # Transient attribute used to preserve image uploads
   # during form resubmissions
   attr_accessor :avatar_base64
-
-  include Enableable
 
   validates :name, presence: true
   validates :gender, inclusion: { in: GENDERS, message: 'is required' }
@@ -67,6 +69,14 @@ class StaffMember < ActiveRecord::Base
 
   def self.security
     joins(:staff_type).merge(StaffType.security)
+  end
+
+  def self.enabled
+    in_state(:enabled)
+  end
+
+  def self.disabled
+    in_state(:disabled)
   end
 
   def security?
@@ -129,5 +139,23 @@ class StaffMember < ActiveRecord::Base
 
   def day_perference_help_text
     'Peferrered days to work displayed in the rota (e.g. mornings and weekeneds)'
+  end
+
+  def state_machine
+    @state_machine ||= StaffMemberStateMachine.new(
+      self,
+      transition_class: StaffMemberTransition,
+      association_name: :staff_member_transitions
+    )
+  end
+
+  private
+  # Needed for statesman
+  def self.transition_class
+    StaffMemberTransition
+  end
+
+  def self.initial_state
+    StaffMemberStateMachine.initial_state
   end
 end
