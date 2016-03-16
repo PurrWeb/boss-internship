@@ -66,7 +66,7 @@ class RotasController < ApplicationController
       )
 
     rotas = Rota.
-      where(id: [rota.id] + shift_rotas.pluck(:id)).uniq
+      where(id: ([rota.id] + shift_rotas.pluck(:id)).compact).uniq
 
     venues = Venue.where(id: [rota.venue.id] + shift_venues.pluck(:id)).uniq
 
