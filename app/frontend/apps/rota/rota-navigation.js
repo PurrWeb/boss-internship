@@ -5,7 +5,7 @@ import {appRoutes} from "~lib/routes"
 export default class RotaNavigation extends React.Component {
     static PropTypes = {
         dateOfRota: React.PropTypes.instanceOf(Date).isRequired,
-        venueId: React.PropTypes.number.isRequired
+        venueServerId: React.PropTypes.number.isRequired
     }
     render(){
         return <GenericRotaNavigation
@@ -15,13 +15,13 @@ export default class RotaNavigation extends React.Component {
     }
     getRotaLink(date){
         return appRoutes.rota({
-            venueId: this.props.venueId,
+            venueId: this.props.venueServerId,
             date
         });
     }
     getRotaOverviewLink({weekStartDate, weekEndDate}) {
         return appRoutes.rotaOverview({
-            venueId: this.props.venueId,
+            venueId: this.props.venueServerId,
             startDate: weekStartDate,
             endDate: weekEndDate
         });

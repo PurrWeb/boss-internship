@@ -34,7 +34,7 @@ class RotaView extends Component {
         return <div className="container">
             <RotaNavigation
                 dateOfRota={this.props.dateOfRota}
-                venueId={this.props.venue.id} />
+                venueServerId={this.props.venue.serverId} />
             <br/>
             <div className="row">
               <div className="col-md-4">
@@ -61,7 +61,7 @@ function mapStateToProps(state) {
     var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
 
     var rota = selectRotaOnVenueRotaPage(props);
-    props.venue = props.venues[rota.venue.id];
+    props.venue = rota.venue.get(props.venues);
     props.dateOfRota = rota.date;
 
     return props;

@@ -6,29 +6,14 @@ import utils from "~lib/utils"
 
 //////////////////
 
-function getClientId(serverId, objectTypeName) {
-    return generateClientId(serverId, objectTypeName).id;
-}   
-
-function generateClientId(serverId, objectTypeName){
-    if (serverId === null) {
-        return {
-            id: objectTypeName + "_UNPERSISTED_ON_LOAD_" + _.uniqueId(),
-            unpersisted: true
-        }
-    } else {
-        return {
-            id: objectTypeName + "_" + serverId,
-            unpersisted: false
-        }
-    }
+function getClientId(serverId){
+    return "CLIENT_ID_" + serverId;
 }
 
-function setObjectIds(obj){
+function setObjectIds(obj, objectTypeName){
     obj.serverId = obj.id;
     delete obj.id;
-    var clientId = getClientId(serverId, objectTypeName);
-    obj.clientId = clientId.id;
+    obj.clientId = getClientId(obj.serverId);
 
     return obj;
 }
@@ -38,27 +23,23 @@ function valueIsLink(value){
 }
 
 function makeLinkResolverFunction(link, key, objectTypeName){
-    return function(linkObjectsArray){
-        if (!_.isArray(linkObjectsArray)){
-            throw new Error("linkResolver was passed something other than an array");
-        }
-        var clientId = generateClientId(link.id, objectTypeName);
-        if (clientId.unpersisted) {
-            throw new Error("Can't resolve a link to an unpersisted object");
-        }
-        var resolvedLink = _.find(linkObjectsArray, {clientId: clinetId.id});
+    return function(linkObjectsByClientId){
+        var resolvedLink = linkObjectsByClientId[link.clientId];
         if (resolvedLink === undefined) {
-            throw new Error("Couldn't resolve " + key + " with clientId " + clientId.id);
+            throw new Error("Couldn't resolve " + key + " with clientId " + link.clientId);
         }
         return resolvedLink;
     }
 }
 
-function processObjectLinks(obj){
+function processObjectLinks(obj, objectTypeName){
     for (var key in obj){
         var value = obj[key];
         if (valueIsLink(value)) {
+            value.clientId = getClientId(value.id);
+            delete value.id;
             value.get = makeLinkResolverFunction(value, key, objectTypeName);
+            value.getParentForDebugging = () => obj;
         }
     }
 }
@@ -66,8 +47,8 @@ function processObjectLinks(obj){
 function processBackendObject(backendObj, objectTypeName){
     var obj = {...backendObj};
 
-    setObjectIds();
-    processObjectLinks();
+    setObjectIds(obj, objectTypeName);
+    processObjectLinks(obj, objectTypeName);
     
     return obj;
 }
@@ -75,21 +56,27 @@ function processBackendObject(backendObj, objectTypeName){
 ////////////////////////
 
 export function processRotaObject(rota){
-    var newRota = {...rota};
+    var newRota = processBackendObject(rota, "ROTA");
 
     var date = rota.date;
     newRota.date = new Date(date);
 
-    newRota.clientId = getClientId(rota.id, "ROTA");
-
     return newRota
+}
+
+export function processVenueObject(venue){
+    return processBackendObject(venue);
 }
 
 export function processShiftObject(shift){
     return Object.assign({}, shift, {
         starts_at: new Date(shift.starts_at),
         ends_at: new Date(shift.ends_at),
-        rota: Object.assign({}, shift.rota, {clientId: getClientId(shift.rota.id, "ROTA")})
+        rota: Object.assign(
+            {},
+            shift.rota,
+            {clientId: getClientId(shift.rota.id)}
+        )
     });
 }
 
@@ -111,3 +98,5 @@ export function processRotaForecastObject(rotaForecast){
 
     return processedForecast;
 }
+
+export { getClientId }

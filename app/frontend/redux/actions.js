@@ -257,7 +257,7 @@ export function setPageOptions(options) {
 
 export function loadInitialRotaAppState(viewData) {
     var pageOptions = {
-        venueId: viewData.rotaVenueId,
+        venueId: backendData.getClientId(viewData.rotaVenueId),
         dateOfRota: new Date(viewData.rotaDate),
         staffTypeSlug: viewData.staffTypeSlug,
         disableEditingShiftsByStaffTypeName: {
@@ -317,6 +317,7 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
     rotaData = rotaData.map(backendData.processRotaObject);
     rotaShiftData = rotaShiftData.map(backendData.processShiftObject);
     holidays = holidays.map(backendData.processHolidayObject)
+    venueData = venueData.map(backendData.processVenueObject)
     
     return function(dispatch){
         dispatch([
@@ -330,7 +331,7 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
                 shifts: indexById(rotaShiftData)
             }),
             replaceAllVenues({
-                venues: indexById(venueData)
+                venues: indexByClientId(venueData)
             }),
             replaceAllRotas({
                 rotas: indexByClientId(rotaData)
