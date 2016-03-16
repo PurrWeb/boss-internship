@@ -5,7 +5,6 @@ export default function({
     rotasById,
     shift
 }){
-    var rotaClientId = oFetch(shift, "rota.clientId");
-    var rota = oFetch(rotasById, rotaClientId);
+    var rota = shift.rota.get(rotasById);
     return rota.venue.get(venuesById);
 }

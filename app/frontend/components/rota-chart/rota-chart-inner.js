@@ -64,7 +64,7 @@ class RotaChartInner extends Component {
 
         var rotaShifts = this.props.rotaShifts.map(
             (rotaShift, i) => {
-                var staff = this.props.staff[rotaShift.staff_member.id];
+                var staff = rotaShift.staff_member.get(this.props.staff);
 
                 return {
                     startOffset: calculateOffsetInHours(rotaShift.starts_at),

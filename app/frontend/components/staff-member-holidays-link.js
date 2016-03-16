@@ -3,10 +3,10 @@ import { appRoutes } from "~lib/routes"
 
 export default class StaffMemberHolidaysLink extends React.Component {
     static propTypes = {
-        staffMemberId: React.PropTypes.any.isRequired
+        staffMemberServerId: React.PropTypes.any.isRequired
     }
     render(){
-        return <a href={appRoutes.staffMemberHolidays(this.props.staffMemberId)}>
+        return <a href={appRoutes.staffMemberHolidays(this.props.staffMemberServerId)}>
             {this.props.children}
         </a>
     }

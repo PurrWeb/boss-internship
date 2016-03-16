@@ -7,6 +7,9 @@ import utils from "~lib/utils"
 //////////////////
 
 function getClientId(serverId){
+    if (serverId === undefined){
+        throw new Error("Server ID cannot be undefined");
+    }
     return "CLIENT_ID_" + serverId;
 }
 
@@ -37,6 +40,7 @@ function processObjectLinks(obj, objectTypeName){
         var value = obj[key];
         if (valueIsLink(value)) {
             value.clientId = getClientId(value.id);
+            value.serverId = value.id;
             delete value.id;
             value.get = makeLinkResolverFunction(value, key, objectTypeName);
             value.getParentForDebugging = () => obj;
@@ -68,15 +72,21 @@ export function processVenueObject(venue){
     return processBackendObject(venue);
 }
 
+export function processStaffMemberObject(staffMember){
+    return processBackendObject(staffMember);
+}
+
+export function processStaffTypeObject(staffMember){
+    return processBackendObject(staffMember);
+}
+
 export function processShiftObject(shift){
+    if(shift.clientId){debugger;}
+    shift = processBackendObject(shift);
+
     return Object.assign({}, shift, {
         starts_at: new Date(shift.starts_at),
-        ends_at: new Date(shift.ends_at),
-        rota: Object.assign(
-            {},
-            shift.rota,
-            {clientId: getClientId(shift.rota.id)}
-        )
+        ends_at: new Date(shift.ends_at)
     });
 }
 

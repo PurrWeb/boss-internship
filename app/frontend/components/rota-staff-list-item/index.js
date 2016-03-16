@@ -16,7 +16,7 @@ import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
 class RotaStaffListItem extends Component {
     static contextTypes = {
         newShiftTimes: React.PropTypes.object.isRequired,
-        newShiftVenueId: React.PropTypes.any.isRequired
+        newShiftVenueServerId: React.PropTypes.any.isRequired
     }
     componentWillMount(){
         this.componentId = _.uniqueId();
@@ -30,7 +30,7 @@ class RotaStaffListItem extends Component {
 
         var errors = this.props.componentErrors[this.componentId];
 
-        var staffTypeObject = this.props.staffTypes[staff.staff_type.id];
+        var staffTypeObject = staff.staff_type.get(this.props.staffTypes);
 
         return (
             <div className="staff-list-item rota-staff-list-item">
@@ -62,11 +62,11 @@ class RotaStaffListItem extends Component {
                                     Holidays
                                 </h4>
                                 <span style={{marginLeft: 5, display: "inline-block"}}>
-                                    <StaffMemberHolidaysLink staffMemberId={staff.id} >
+                                    <StaffMemberHolidaysLink staffMemberServerId={staff.serverId} >
                                         Edit
                                     </StaffMemberHolidaysLink>
                                 </span>
-                                <StaffHolidaysList staffId={staff.id} />
+                                <StaffHolidaysList staffMemberClientId={staff.clientId} />
                             </div>
                             <div className="col-md-3">
                                 <h4 className="rota-staff-list-item__h4">
@@ -112,7 +112,7 @@ class RotaStaffListItem extends Component {
                 staff_member_id: this.props.staff.id
             },
             errorHandlingComponent: this.componentId,
-            venueId: this.context.newShiftVenueId
+            venueId: this.context.newShiftVenueServerId
         });
     }
     canAddShift(){
@@ -125,7 +125,7 @@ class RotaStaffListItem extends Component {
         var isAddingShift = this.props.addShiftIsInProgress;
 
         var dateOfRota = new RotaDate({shiftStartsAt: starts_at}).getDateOfRota();
-        var isOnHoliday = selectStaffMemberIsOnHolidayOnDate(this.props._state, this.props.staff.id, dateOfRota);
+        var isOnHoliday = selectStaffMemberIsOnHolidayOnDate(this.props._state, this.props.staff.clientId, dateOfRota);
 
         var canEditStaffTypeShifts = this.props.canEditStaffTypeShifts;
 
@@ -147,7 +147,7 @@ function mapStateToProps(state, ownProps){
         rotaShifts: state.rotaShifts,
         venues: state.venues,
         canEditStaffTypeShifts: canEditStaffTypeShifts(state, {
-            staffTypeId: ownProps.staff.staff_type.id
+            staffTypeId: ownProps.staff.staff_type.clientId
         }),
         rotas: state.rotas,
         // This isn't clean and causes unncessary re-renders. The problem is that we don't

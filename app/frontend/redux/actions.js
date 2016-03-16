@@ -318,17 +318,19 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
     rotaShiftData = rotaShiftData.map(backendData.processShiftObject);
     holidays = holidays.map(backendData.processHolidayObject)
     venueData = venueData.map(backendData.processVenueObject)
+    staffMemberData = staffMemberData.map(backendData.processStaffMemberObject)
+    staffTypeData = staffTypeData.map(backendData.processStaffTypeObject)
     
     return function(dispatch){
         dispatch([
             replaceAllStaffMembers({
-                staffMembers: indexById(staffMemberData),
+                staffMembers: indexByClientId(staffMemberData),
             }),
             replaceAllStaffTypes({
-                staffTypes:indexById(staffTypeData),
+                staffTypes: indexByClientId(staffTypeData),
             }),
             replaceAllShifts({
-                shifts: indexById(rotaShiftData)
+                shifts: indexByClientId(rotaShiftData)
             }),
             replaceAllVenues({
                 venues: indexByClientId(venueData)

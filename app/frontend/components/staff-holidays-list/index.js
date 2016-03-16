@@ -6,7 +6,7 @@ import { selectStaffMemberHolidays } from "~redux/selectors"
 
 class StaffHolidaysListContainer extends React.Component {
     static propTypes = {
-        staffId: React.PropTypes.number.isRequired
+        staffMemberClientId: React.PropTypes.string.isRequired
     }
     render(){
         return <StaffHolidaysList holidays={this.props.holidays} />
@@ -15,7 +15,7 @@ class StaffHolidaysListContainer extends React.Component {
 
 function mapStateToProps(state, ownProps){
     return {
-        holidays: selectStaffMemberHolidays(state, ownProps.staffId)
+        holidays: selectStaffMemberHolidays(state, ownProps.staffMemberClientId)
     };
 }
 

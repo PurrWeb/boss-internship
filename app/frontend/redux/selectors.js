@@ -7,14 +7,14 @@ export function selectStaffTypesWithShifts(state){
     rotaShifts = _.values(rotaShifts);
 
     var allStaffTypes = state.staffTypes;
-    var shiftStaffTypes = _(rotaShifts).map(getStaffTypeFromShift);
+    var shiftStaffTypes = _(rotaShifts).map(getStaffTypeIdFromShift);
     var staffTypes = _(allStaffTypes).filter(function(staffType){
-        return _(shiftStaffTypes).contains(staffType.id);
+        return _(shiftStaffTypes).contains(staffType.clientId);
     });
-    return _(staffTypes).indexBy("id");
+    return utils.indexByClientId(staffTypes);
 
-    function getStaffTypeFromShift(shift) {
-        return staff[shift.staff_member.id].staff_type.id;
+    function getStaffTypeIdFromShift(shift) {
+        return shift.staff_member.get(staff).staff_type.clientId;
     }
 }
 

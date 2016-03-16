@@ -61,8 +61,9 @@ export class ChartAndFilter extends Component {
         )
     }
     getShiftColor(shift){
-        var staffMember = this.props.staff[shift.staff_member.id];
-        return this.props.staffTypes[staffMember.staff_type.id].color;
+        var staffMember = shift.staff_member.get(this.props.staff);
+        var staffType = staffMember.staff_type.get(this.props.staffTypes);
+        return staffType.color;
 
          this.props.staffTypes[shift.staff.staff_type.id].color
     }

@@ -14,7 +14,7 @@ export default class FilterableStaffList extends Component {
         var staffListItems = staffToShow.map(
             (staff, i) =>
                 <this.props.staffItemComponent
-                    key={staff.id}
+                    key={staff.clientId}
                     staff={staff} />
         );
 
