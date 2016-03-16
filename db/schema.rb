@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160316120223) do
+ActiveRecord::Schema.define(version: 20160316232009) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -290,6 +290,7 @@ ActiveRecord::Schema.define(version: 20160316120223) do
     t.integer  "invite_id",              limit: 4
     t.boolean  "first"
     t.integer  "staff_member_id",        limit: 4
+    t.boolean  "would_rehire",                       default: true, null: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
@@ -299,6 +300,7 @@ ActiveRecord::Schema.define(version: 20160316120223) do
   add_index "users", ["role"], name: "index_users_on_role", using: :btree
   add_index "users", ["staff_member_id"], name: "index_users_on_staff_member_id", using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+  add_index "users", ["would_rehire"], name: "index_users_on_would_rehire", using: :btree
 
   create_table "venue_users", force: :cascade do |t|
     t.integer  "user_id",    limit: 4, null: false
