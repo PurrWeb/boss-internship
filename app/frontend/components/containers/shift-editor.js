@@ -147,7 +147,7 @@ function mapStateToProps(state, ownProps){
     return {
         componentErrors: state.componentErrors,
         venueId: rota.venue.id,
-        canEditShift: canEditStaffTypeShifts(state, {staffTypeId: staffType.id}),
+        canEditShift: canEditStaffTypeShifts(state, {staffTypeClientId: staffType.clientId}),
         shiftIsBeingEdited: selectShiftIsBeingEdited(state, {shiftId: ownProps.shift.id})
     }
 }

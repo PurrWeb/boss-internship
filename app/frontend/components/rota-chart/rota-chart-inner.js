@@ -33,7 +33,7 @@ class RotaChartInner extends Component {
     }
     getStaffMembersOnRota(){
         var staffList = _.chain(this.props.rotaShifts)
-            .map((shift) => shift.staff_member.id)
+            .map((shift) => shift.staff_member.clientId)
             .unique()
             .map((staff_id) => this.props.staff[staff_id])
             .value();
@@ -60,17 +60,16 @@ class RotaChartInner extends Component {
             return offsetInHours;
         }
 
-        var staffIdsInOrder = _(staffList).pluck("id");
+        var staffClientIdsInOrder = _(staffList).pluck("clientId");
 
         var rotaShifts = this.props.rotaShifts.map(
             (rotaShift, i) => {
                 var staff = rotaShift.staff_member.get(this.props.staff);
-
                 return {
                     startOffset: calculateOffsetInHours(rotaShift.starts_at),
                     endOffset: calculateOffsetInHours(rotaShift.ends_at),
                     staff: staff,
-                    staffIndex: _(staffIdsInOrder).indexOf(staff.id),
+                    staffIndex: _(staffClientIdsInOrder).indexOf(staff.clientId),
                     originalShiftObject: rotaShift
                 };
             }
@@ -151,7 +150,7 @@ class RotaChartInner extends Component {
             })
             .on("click", function(shift){
                 self.stopShowingStaffPreview();
-                self.props.updateStaffToShow(shift.originalShiftObject.staff_member.id)
+                self.props.updateStaffToShow(shift.originalShiftObject.staff_member.clientId)
             })
             .attr("height", heightPerPerson - 1);
         bar.append("text")
@@ -200,7 +199,7 @@ class RotaChartInner extends Component {
         return {xScale, barWidthScale};
     }
     showStaffPreview(shift) {
-        this.props.updateStaffToPreview(shift.originalShiftObject.staff_member.id);
+        this.props.updateStaffToPreview(shift.originalShiftObject.staff_member.clientId);
     }
     stopShowingStaffPreview(shift) {
         this.props.updateStaffToPreview(null);

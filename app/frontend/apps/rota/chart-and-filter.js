@@ -79,7 +79,7 @@ export class ChartAndFilter extends Component {
             return null;
         }
         return <StaffDetailsAndShifts
-            staffId={staffId}
+            staffMemberClientId={staffId}
             staffTypes={this.props.staffTypes}
             rotaShifts={this.props.rotaShifts}
             rotasById={this.props.rotasById}
@@ -101,7 +101,7 @@ export class ChartAndFilter extends Component {
 
             return true;
         });
-        return utils.indexById(shiftArray);
+        return utils.indexByClientId(shiftArray);
     }
 }
 

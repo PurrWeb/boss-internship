@@ -147,7 +147,7 @@ function mapStateToProps(state, ownProps){
         rotaShifts: state.rotaShifts,
         venues: state.venues,
         canEditStaffTypeShifts: canEditStaffTypeShifts(state, {
-            staffTypeId: ownProps.staff.staff_type.clientId
+            staffTypeClientId: ownProps.staff.staff_type.clientId
         }),
         rotas: state.rotas,
         // This isn't clean and causes unncessary re-renders. The problem is that we don't

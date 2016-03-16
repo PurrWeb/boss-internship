@@ -16,7 +16,6 @@ export default class RotaChart extends Component {
     }
     render(){
         var chartBoundaries = calculateChartBoundaries(_.values(this.props.rotaShifts));
-
         return <RotaChartInner
             rotaShifts={_.values(this.props.rotaShifts)}
             startTime={chartBoundaries.start}
@@ -39,11 +38,11 @@ export default class RotaChart extends Component {
         var {staffToPreview, staffToShow} = this.props;
 
         d3.selectAll(".rota-chart__shift").classed("rota-chart__previewed-staff", function(bar){
-            return bar.originalShiftObject.staff_member.id === staffToPreview;
+            return bar.originalShiftObject.staff_member.clientId === staffToPreview;
         });
 
         d3.selectAll(".rota-chart__shift").classed("rota-chart__selected-staff", function(bar){
-            return bar.originalShiftObject.staff_member.id === staffToShow;
+            return bar.originalShiftObject.staff_member.clientId === staffToShow;
         });
 
     }
