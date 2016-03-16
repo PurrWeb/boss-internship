@@ -264,6 +264,19 @@ ActiveRecord::Schema.define(version: 20160316232009) do
 
   add_index "staff_types", ["name"], name: "index_staff_types_on_name", unique: true, using: :btree
 
+  create_table "user_transitions", force: :cascade do |t|
+    t.string   "to_state",    limit: 255,   null: false
+    t.text     "metadata",    limit: 65535
+    t.integer  "sort_key",    limit: 4,     null: false
+    t.integer  "user_id",     limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "user_transitions", ["user_id", "most_recent"], name: "index_user_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "user_transitions", ["user_id", "sort_key"], name: "index_user_transitions_parent_sort", unique: true, using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "encrypted_password",     limit: 255, default: "",   null: false
     t.string   "reset_password_token",   limit: 255

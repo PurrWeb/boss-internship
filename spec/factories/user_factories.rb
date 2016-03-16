@@ -24,6 +24,16 @@ FactoryGirl.define do
 
     confirmed_at { 2.weeks.ago }
 
+    trait :disabled do
+      after(:create) do |user|
+        FactoryGirl.create(
+          :user_transition,
+          :disabled,
+          user: user
+        )
+      end
+    end
+
     # same as default but included allow explicit coding
     trait :manager do
       role "manager"

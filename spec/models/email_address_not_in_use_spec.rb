@@ -23,9 +23,7 @@ describe EmailAddressNotInUse do
     end
 
     context 'user is disabled' do
-      before do
-        user.update_attributes!(enabled: false)
-      end
+      let(:user) { FactoryGirl.create(:user, :disabled, email_address: email_address) }
 
       specify 'email is returned' do
         expect(query.find(email)).to eq(email_address)

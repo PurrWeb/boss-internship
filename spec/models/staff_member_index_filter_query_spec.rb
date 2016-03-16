@@ -14,6 +14,9 @@ describe StaffMemberIndexFilterQuery do
   let(:relation_filtered_by_accessible_venues) do
     double("relation filtered by accessible venues")
   end
+  let(:relation_filtered_by_enabled) do
+    double("relation filtered by enabled")
+  end
   let(:venue_id) { double("venue id") }
   let(:venue) { double("venue", id: venue_id) }
   let(:staff_type) { double("staff type") }
@@ -33,7 +36,8 @@ describe StaffMemberIndexFilterQuery do
     before do
       allow(Venue).to receive(:where).and_return(venue_scope)
       allow(accessible_venues).to receive(:pluck).and_return(accessible_venue_ids)
-      allow(relation).to receive(:where).and_return(relation_filtered_by_staff_type)
+      allow(relation).to receive(:enabled).and_return(relation_filtered_by_enabled)
+      allow(relation_filtered_by_enabled).to receive(:where).and_return(relation_filtered_by_staff_type)
       allow(relation_filtered_by_staff_type).to(
         receive(:joins).and_return(relation_joined_by_venue)
       )
@@ -42,8 +46,13 @@ describe StaffMemberIndexFilterQuery do
       )
     end
 
+    it 'should filter by enabled' do
+      expect(relation).to receive(:enabled).and_return(relation_filtered_by_enabled)
+      query.all
+    end
+
     it 'should filter by staff type' do
-      expect(relation).to receive(:where).with(staff_type: staff_type)
+      expect(relation_filtered_by_enabled).to receive(:where).with(staff_type: staff_type)
       query.all
     end
 
@@ -56,7 +65,6 @@ describe StaffMemberIndexFilterQuery do
     it 'should return filtered venue' do
       expect(query.all).to eq(relation_filtered_by_venue)
     end
-
   end
 
   context 'when no venue is present' do
@@ -64,7 +72,8 @@ describe StaffMemberIndexFilterQuery do
       allow(venue).to receive(:present?).and_return(false)
       allow(Venue).to receive(:where).and_return(venue_scope)
       allow(accessible_venues).to receive(:pluck).and_return(accessible_venue_ids)
-      allow(relation).to receive(:where).and_return(relation_filtered_by_staff_type)
+      allow(relation).to receive(:enabled).and_return(relation_filtered_by_enabled)
+      allow(relation_filtered_by_enabled).to receive(:where).and_return(relation_filtered_by_staff_type)
       allow(relation_filtered_by_staff_type).to(
         receive(:joins).and_return(relation_joined_by_venue)
       )
@@ -73,8 +82,13 @@ describe StaffMemberIndexFilterQuery do
       )
     end
 
+    it 'should filter by enabled' do
+      expect(relation).to receive(:enabled).and_return(relation_filtered_by_enabled)
+      query.all
+    end
+
     it 'should filter by staff type' do
-      expect(relation).to receive(:where).with(staff_type: staff_type)
+      expect(relation_filtered_by_enabled).to receive(:where).with(staff_type: staff_type)
       query.all
     end
 
@@ -94,7 +108,8 @@ describe StaffMemberIndexFilterQuery do
       allow(staff_type).to receive(:present?).and_return(false)
       allow(Venue).to receive(:where).and_return(venue_scope)
       allow(accessible_venues).to receive(:pluck).and_return(accessible_venue_ids)
-      allow(relation).to(
+      allow(relation).to receive(:enabled).and_return(relation_filtered_by_enabled)
+      allow(relation_filtered_by_enabled).to(
         receive(:joins).and_return(relation_joined_by_venue)
       )
       allow(relation_joined_by_venue).to(
@@ -103,7 +118,12 @@ describe StaffMemberIndexFilterQuery do
     end
 
     it 'should filter supplied relation by specified venue' do
-      expect(relation).to receive(:joins).with(:venue)
+      expect(relation).to receive(:enabled).and_return(relation_filtered_by_enabled)
+      query.all
+    end
+
+    it 'should filter supplied relation by specified venue' do
+      expect(relation_filtered_by_enabled).to receive(:joins).with(:venue)
       expect(relation_joined_by_venue).to receive(:merge).with(venue_scope)
       query.all
     end

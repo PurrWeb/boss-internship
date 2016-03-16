@@ -1,14 +1,22 @@
 class DeleteStaffMember
-  def initialize(requester: ,staff_member:, would_rehire:, disable_reason: nil, now: Time.now)
+  def initialize(
+    requester:,
+    staff_member:,
+    would_rehire:,
+    disable_reason: nil,
+    nested: false,
+    now: Time.now
+  )
     @requester = requester
     @staff_member = staff_member
     @now = now
     @would_rehire = would_rehire
     @disable_reason = disable_reason
+    @nested = nested
   end
 
   def call
-    ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction(requires_new: nested) do
       disable_staff_member
       disable_upcoming_shifts
       disable_upcoming_holidays
@@ -16,7 +24,7 @@ class DeleteStaffMember
   end
 
   private
-  attr_reader :staff_member, :requester, :would_rehire, :disable_reason, :now
+  attr_reader :staff_member, :requester, :would_rehire, :disable_reason, :now, :nested
 
   def disable_staff_member
     staff_member.
