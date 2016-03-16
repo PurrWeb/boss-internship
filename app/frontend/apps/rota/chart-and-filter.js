@@ -81,6 +81,7 @@ export class ChartAndFilter extends Component {
             staffId={staffId}
             staffTypes={this.props.staffTypes}
             rotaShifts={this.props.rotaShifts}
+            rotasById={this.props.rotasById}
             // We specify a key so the component is re-initialized when
             // the shift changes - so we don't keep the previous state.
             key={staffId}
@@ -89,7 +90,7 @@ export class ChartAndFilter extends Component {
     getRotaShifts(){
         var self = this;
         var staffTypeFilter = self.state.staffTypeFilter;
-        return _(this.props.rotaShifts).filter(function(rotaShift){
+        var shiftArray = _(this.props.rotaShifts).filter(function(rotaShift){
             var staff = self.props.staff[rotaShift.staff_member.id];
             if (self.state.staffTypeFilter.length > 0){
                  if (!_(staffTypeFilter).contains(staff.staff_type.id)) {
@@ -99,6 +100,7 @@ export class ChartAndFilter extends Component {
 
             return true;
         });
+        return utils.indexById(shiftArray);
     }
 }
 
@@ -107,7 +109,8 @@ function mapStateToProps(state){
     return {
         rotaShifts: selectShiftsWithRotaClientIds(state, [rota.clientId]),
         staffTypes: state.staffTypes,
-        staff: state.staff
+        staff: state.staff,
+        rotasById: state.rotas
     }
 }
 

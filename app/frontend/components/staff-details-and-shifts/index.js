@@ -8,7 +8,7 @@ export default class StaffDetailsAndShifts extends Component {
         staffTypes: React.PropTypes.object.isRequired,
         staffId: React.PropTypes.number.isRequired,
         staff: React.PropTypes.object.isRequired,
-        rotaShifts: React.PropTypes.object.isRequired,
+        rotaShifts: React.PropTypes.array.isRequired,
         showShiftVenue: React.PropTypes.bool,
         rotasById: React.PropTypes.object.isRequired,
         venuesById: React.PropTypes.object

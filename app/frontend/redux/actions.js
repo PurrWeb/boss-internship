@@ -345,7 +345,7 @@ export function loadInitialRotaOverviewAppState(viewData){
         var unprocessedRotasArray = _.pluck(viewData.rotas, "rota");
         var rotasArray = rotas = unprocessedRotasArray.map(backendData.processRotaObject);
         var rotas = utils.indexByClientId(rotas);
-
+        var venues = utils.indexById(viewData.venues);
 
         var forecasts = viewData.rotaForecasts.map(backendData.processRotaForecastObject);
         forecasts = indexById(forecasts);
@@ -353,7 +353,12 @@ export function loadInitialRotaOverviewAppState(viewData){
         dispatch([
             replaceAllRotas({rotas: rotas}),
             replaceAllRotaForecasts({rotaForecasts: forecasts}),
-            replaceWeeklyRotaForecast({weeklyRotaForecast: viewData.weeklyRotaForecast})
+            replaceWeeklyRotaForecast({weeklyRotaForecast: viewData.weeklyRotaForecast}),
+            setPageOptions({pageOptions: {
+                startDate: new Date(viewData.startDate),
+                endDate: new Date(viewData.endDate)
+            }}),
+            replaceAllVenues({venues})
         ]);
     }
 }

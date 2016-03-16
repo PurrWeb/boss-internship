@@ -6,7 +6,7 @@ import TestUtils from "react-addons-test-utils"
 
 import "~lib/load-underscore-mixins"
 
-describe('StaffListItem', function() {
+describe('Holiday Report Integration Test', function() {
     var viewData = {
         staffTypes: [{
             name: "Kitchen",

@@ -8,10 +8,10 @@ import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import getVenueColor from "~lib/get-venue-color"
 import getVenueFromShift from "~lib/get-venue-from-shift"
 
-export default class ChartAndFilter extends React.Component {
+export default class ChartAndFilterUi extends React.Component {
     static propTypes = {
         staffMembers: React.PropTypes.object.isRequired,
-        rotaShifts: React.PropTypes.object.isRequired,
+        rotaShifts: React.PropTypes.array.isRequired,
         staffTypes: React.PropTypes.object.isRequired,
         updateStaffToPreview: React.PropTypes.func.isRequired,
         updateStaffToShow: React.PropTypes.func.isRequired,

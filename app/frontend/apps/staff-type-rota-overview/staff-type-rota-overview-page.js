@@ -32,7 +32,7 @@ export default class StaffTypeRotaOverviewPage extends Component {
             </div>
             {this.props.rotaDetailsObjects.map(function(rotaDetails){
                 var shifts = rotaDetails.rota_shifts.map(backendData.processShiftObject);
-                var rotas = rotaDetails.rotas.map(backendData.processRotaObject)
+                var rotas = rotaDetails.rotas.map(backendData.processRotaObject);
 
                 return <StaffTypeRotaOverviewItem
                             dateOfRota={new Date(rotaDetails.date)}

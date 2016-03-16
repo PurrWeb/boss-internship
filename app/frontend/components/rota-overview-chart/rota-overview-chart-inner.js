@@ -1,9 +1,11 @@
 import React, { Component } from "react"
 import _ from "underscore"
+import d3 from "d3"
+window.d3 = d3; // nvd3 relies on global D3
 import nvd3 from "nvd3"
 import NVD3Chart from "react-nvd3"
 import ReactDOM from "react-dom"
-import d3 from "d3"
+
 
 const HOVER_INDICATOR_WIDTH = 10;
 

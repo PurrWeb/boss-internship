@@ -1,21 +1,18 @@
 import React from "react"
+import AppComponent from "../app-component";
 import { Provider} from "react-redux"
-import store from "~redux/store.js"
 import RotaOverviewPage from "./rota-overview-page.js"
 import * as actionCreators from "~redux/actions.js"
 
-
-export default class RotaApp extends React.Component {
+export default class RotaApp extends AppComponent {
     componentWillMount(){
-        let viewData = window.boss;
-        store.dispatch(actionCreators.loadInitialRotaOverviewAppState(viewData));
+        let viewData = this.getViewData();
+        this.store.dispatch(actionCreators.loadInitialRotaOverviewAppState(viewData));
     }
     render() {
-        return <Provider store={store}>
-            <RotaOverviewPage rotaDetailsObjects={this.getRotaDetailsObjects()} />
+        return <Provider store={this.store}>
+            <RotaOverviewPage
+                rotaDetailsObjects={this.getViewData().rotas} />
         </Provider>
-    }
-    getRotaDetailsObjects(){
-        return window.boss.rotas;
     }
 }

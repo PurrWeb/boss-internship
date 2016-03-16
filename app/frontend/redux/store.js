@@ -42,6 +42,9 @@ var createStoreWithMiddleware = compose(
 	// Store subscribers will only be notified once instead of twice.
 	applyMiddleware(batch)
 )(createStore);
-var store = createStoreWithMiddleware(batching(rootReducer));
 
-export default store;
+export function createBossStore(){
+    var store = createStoreWithMiddleware(batching(rootReducer));
+    window.debug.store = store;
+    return store;
+}

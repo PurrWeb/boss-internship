@@ -1,17 +1,19 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 import { Provider} from "react-redux"
-import store from '~redux/store.js'
-import RotaView from './rota-view.js'
+import RotaView from "./rota-view.js"
 import * as actionCreators from "~redux/actions.js"
+import { bindActionCreators } from "redux";
+import AppComponent from "../app-component"
 
-export default class RotaApp extends Component {
+export default class RotaApp extends AppComponent {
     componentWillMount(){
-        let viewData = window.boss;
-        store.dispatch(actionCreators.loadInitialRotaAppState(viewData));
+        var viewData = this.getViewData();
+        this.boundActionCreators = bindActionCreators(actionCreators, this.store.dispatch.bind(this.store));
+        this.store.dispatch(actionCreators.loadInitialRotaAppState(viewData));
     }
     render() {
-        return <Provider store={store}>
-            <RotaView />
+        return <Provider store={this.store}>
+            <RotaView boundActionCreators={this.boundActionCreators} />
         </Provider>
     }
 }
