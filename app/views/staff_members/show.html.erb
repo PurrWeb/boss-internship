@@ -2,11 +2,20 @@
   <div class="media-left">
     <div class="staff-member-page-staff-image">
       <img class="avatar-image avatar-image_medium" src="<%= staff_member.avatar.medium.url %>" />
-      <%= link_to('Edit', edit_avatar_staff_member_path(staff_member), class: "btn btn-primary btn-xs") %>
+      <% if staff_member.enabled? %>
+        <%= link_to('Edit', edit_avatar_staff_member_path(staff_member), class: "btn btn-primary btn-xs") %>
+      <% end %>
     </div>
   </div>
   <div class="media-body">
-    <h1 class="media-heading"><%= staff_member.full_name %></h1>
+    <h1 class="media-heading"><%= staff_member.full_name %><%= " (Disabled)" if staff_member.disabled? %></h1>
+  </div>
+  <div class="media-right">
+    <% if staff_member.enabled? %>
+      <%= link_to(disable_staff_member_path(staff_member), class: 'btn btn-danger') do %>
+        <span class="glyphicon glyphicon-fire"></span> Disable Staff Member
+      <% end %>
+    <% end %>
   </div>
 </div
 
@@ -86,11 +95,13 @@
         <% end %>
 
 
-        <%= link_to(
-              'Edit',
-              edit_employment_details_staff_member_path(staff_member),
-              class: ['btn', 'btn-primary', 'staff-member-edit-employment-details-button']
-            ) %>
+        <% if staff_member.enabled? %>
+          <%= link_to(
+                'Edit',
+                edit_employment_details_staff_member_path(staff_member),
+                class: ['btn', 'btn-primary', 'staff-member-edit-employment-details-button']
+              ) %>
+        <% end %>
       </dl>
     </div>
 
@@ -132,11 +143,13 @@
         <% else %>
           <dd class"show-page-detail" data-detail="date-of-birth">Not supplied</dd>
         <% end %>
-        <%= link_to(
-              'Edit',
-              edit_personal_details_staff_member_path(staff_member),
-              class: ['btn', 'btn-primary', 'staff-member-edit-personal-details-button']
-            ) %>
+        <% if staff_member.enabled? %>
+          <%= link_to(
+                'Edit',
+                edit_personal_details_staff_member_path(staff_member),
+                class: ['btn', 'btn-primary', 'staff-member-edit-personal-details-button']
+              ) %>
+        <% end %>
       </div>
 
       <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('contact-details', active_tab) %>" id="contact-tab">
@@ -175,22 +188,26 @@
           <% else %>
             <dd>Not Supplied</dd>
           <% end %>
-          <%= link_to(
-                'Edit',
-                edit_contact_details_staff_member_path(staff_member),
-                class: ['btn', 'btn-primary', 'staff-member-edit-contact-details-button']
-              ) %>
+          <% if staff_member.enabled? %>
+            <%= link_to(
+                  'Edit',
+                  edit_contact_details_staff_member_path(staff_member),
+                  class: ['btn', 'btn-primary', 'staff-member-edit-contact-details-button']
+                ) %>
+          <% end %>
         </dl>
       </div>
       <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('holidays', active_tab) %>" id="holidays-tab">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <span>Add holiday</span>
+        <% if staff_member.enabled? %>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <span>Add holiday</span>
+            </div>
+            <div class="panel-body">
+              <%= render partial: 'shared/add_holiday_form', locals: { holiday: holiday, staff_member: staff_member } %>
+            </div>
           </div>
-          <div class="panel-body">
-            <%= render partial: 'shared/add_holiday_form', locals: { holiday: holiday, staff_member: staff_member } %>
-          </div>
-        </div>
+        <% end %>
 
         <h2>Holidays</h2>
         <% if staff_member.active_holidays.present? %>

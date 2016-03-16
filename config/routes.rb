@@ -35,9 +35,10 @@ Rails.application.routes.draw do
 
   resources :holiday_reports, only: :index
 
-  resources :staff_members, only: [:show, :index, :new, :create] do
+  resources :staff_members, only: [:show, :index, :new, :create, :destroy] do
     resources :holidays, only: [:create, :destroy]
     member do
+      get :disable
       get :edit_employment_details
       post :update_employment_details
       get :edit_personal_details

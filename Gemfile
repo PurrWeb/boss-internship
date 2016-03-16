@@ -38,6 +38,8 @@ gem 'money'
 gem 'prawn'
 gem 'prawn-table'
 gem 'will_paginate-bootstrap'
+gem 'reform'
+gem 'reform-rails'
 
 group :development, :test do
   gem "byebug"

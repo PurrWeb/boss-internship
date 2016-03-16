@@ -8,7 +8,7 @@ class StaffMemberIndexFilterQuery
 
   def all
     @all ||= begin
-      result = relation
+      result = relation.enabled
 
       if staff_type.present?
         result = result.where(staff_type: staff_type)

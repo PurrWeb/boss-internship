@@ -142,6 +142,46 @@ class StaffMembersController < ApplicationController
     end
   end
 
+  def disable
+    staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
+    form = DisableStaffMemberForm.new(OpenStruct.new)
+    render locals: {
+      staff_member: staff_member,
+      form: form
+    }
+  end
+
+  def destroy
+    staff_member = StaffMember.find(params[:id])
+    authorize! :manage, staff_member
+
+    form = DisableStaffMemberForm.new(OpenStruct.new)
+    result = form.validate(params["disable_staff_member"])
+
+    if result
+      disable_reason = form.disable_reason
+      would_rehire = !ActiveRecord::Type::Boolean.new.type_cast_from_user(form.never_rehire)
+
+      DeleteStaffMember.new(
+        requester: current_user,
+        staff_member: staff_member,
+        would_rehire: would_rehire,
+        disable_reason: disable_reason
+      ).call
+
+      flash[:success] = "Staff member disabled successfully"
+      redirect_to staff_members_path
+    else
+      flash.now[:error] = "There was a problem disabling this staff member"
+      render 'disable', locals: {
+        staff_member: staff_member,
+        form: form
+      }
+    end
+  end
+
   private
   def active_tab_from_params
     tab_from_params = params['tab']
