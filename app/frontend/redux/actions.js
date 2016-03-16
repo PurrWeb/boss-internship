@@ -264,6 +264,18 @@ export function loadInitialRotaAppState(viewData) {
             "Security": true
         }
     };
+
+    var dayRota = getRotaFromDateAndVenue({
+        rotas: [],
+        dateOfRota: new Date(viewData.rotaDate),
+        venueId: viewData.rotaVenueId,
+        generateIfNotFound: true
+    });
+    var hasRotaInBackendData = dayRota.id !== null;
+    if (!hasRotaInBackendData) {
+        viewData.rota.rotas.push(dayRota);
+    }
+
     return genericLoadInitialRotaAppState(viewData, pageOptions);
 }
 
