@@ -64,8 +64,6 @@ export class ChartAndFilter extends Component {
         var staffMember = shift.staff_member.get(this.props.staff);
         var staffType = staffMember.staff_type.get(this.props.staffTypes);
         return staffType.color;
-
-         this.props.staffTypes[shift.staff.staff_type.id].color
     }
     getStaffTypesWithShifts(){
         return selectStaffTypesWithShifts({
@@ -74,27 +72,27 @@ export class ChartAndFilter extends Component {
             staff: this.props.staff
         });
     }
-    getStaffDetailsComponent(staffId){
-        if (!staffId) {
+    getStaffDetailsComponent(staffMemberClientId){
+        if (!staffMemberClientId) {
             return null;
         }
         return <StaffDetailsAndShifts
-            staffMemberClientId={staffId}
+            staffMemberClientId={staffMemberClientId}
             staffTypes={this.props.staffTypes}
             rotaShifts={this.props.rotaShifts}
             rotasById={this.props.rotasById}
             // We specify a key so the component is re-initialized when
             // the shift changes - so we don't keep the previous state.
-            key={staffId}
+            key={staffMemberClientId}
             staff={this.props.staff} />
     }
     getRotaShifts(){
         var self = this;
         var staffTypeFilter = self.state.staffTypeFilter;
         var shiftArray = _(this.props.rotaShifts).filter(function(rotaShift){
-            var staff = self.props.staff[rotaShift.staff_member.id];
+            var staff = rotaShift.staff_member.get(self.props.staff);
             if (self.state.staffTypeFilter.length > 0){
-                 if (!_(staffTypeFilter).contains(staff.staff_type.id)) {
+                 if (!_(staffTypeFilter).contains(staff.staff_type.clientId)) {
                      return false;
                  }
             }
