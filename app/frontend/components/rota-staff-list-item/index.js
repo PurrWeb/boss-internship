@@ -8,6 +8,7 @@ import StaffHolidaysList from "~components/staff-holidays-list"
 import { connect } from "react-redux"
 import { selectAddShiftIsInProgress, canEditStaffTypeShifts, selectStaffMemberIsOnHolidayOnDate } from "~redux/selectors"
 import _ from "underscore"
+import utils from "~lib/utils"
 import validation from "~lib/validation"
 import RotaDate from "~lib/rota-date"
 import * as actionCreators from "~redux/actions"
@@ -52,7 +53,7 @@ class RotaStaffListItem extends Component {
                                     Shifts
                                 </h4>
                                 <StaffShiftList
-                                    shifts={_.indexBy(this.getStaffShifts(staff.clientId), "id")}
+                                    shifts={utils.indexByClientId(this.getStaffShifts(staff.clientId))}
                                     venues={this.props.venues}
                                     rotas={this.props.rotas} />
                             </div>

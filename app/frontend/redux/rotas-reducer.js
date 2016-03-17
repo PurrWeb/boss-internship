@@ -30,12 +30,12 @@ export default function rotasReducer(state={}, action){
         case actionTypes.ADD_SHIFT_SUCCESS:
             // may now have the correct backend rota ID
             var rotaClientId = action.shift.rota.clientId;
-            var rotaServerId = action.shift.rota.id;
+            var rotaServerId = action.shift.rota.serverId;
             return _(state).mapObject(function(rota){
                 if (rota.clientId !== rotaClientId){
                     return rota;
                 }
-                return Object.assign({}, rota, {id: rotaServerId});
+                return Object.assign({}, rota, {serverId: rotaServerId});
             });
     }
     return state;

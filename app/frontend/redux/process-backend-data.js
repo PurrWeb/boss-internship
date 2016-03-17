@@ -25,7 +25,7 @@ function valueIsLink(value){
     if (value === null){
         return false;
     }
-    return value.id !== undefined && value.url !== undefined
+    return value.id !== undefined;
 }
 
 function makeLinkResolverFunction(link, key){
@@ -63,6 +63,10 @@ function processBackendObject(backendObj){
 ////////////////////////
 
 export function processRotaObject(rota){
+    if (rota.id === null){
+        rota = {...rota};
+        rota.id = "UNPERSISTED_ROTA_" + _.uniqueId();
+    }
     var newRota = processBackendObject(rota);
 
     var date = rota.date;
