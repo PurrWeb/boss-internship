@@ -29,6 +29,8 @@ class User < ActiveRecord::Base
   validates :email_address, presence: true
   validates :invite, presence: true, unless: :first?
 
+  delegate :current_state, to: :state_machine
+
   delegate \
     :full_name,
     :first_name,

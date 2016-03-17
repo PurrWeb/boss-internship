@@ -10,6 +10,14 @@
             html: { method: :get, class: 'form-inline' }
           ) do |form| %>
         <%= form.select(
+              :status,
+              options_for_select(
+                filter.select_statuses.map { |status| [status.titlecase, status] },
+                filter.status
+              ),
+              prompt: 'Any'
+            ) %>
+        <%= form.select(
               :role,
               options_for_select(
                 User::ROLES.map{ |role| [role.titlecase, role] },
