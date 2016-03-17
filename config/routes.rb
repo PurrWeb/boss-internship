@@ -12,8 +12,9 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
-  resources :users, only: [:show, :index] do
+  resources :users, only: [:show, :index, :destroy] do
     member do
+      get :disable
       get :edit_access_details
       post :update_access_details
       get :edit_personal_details

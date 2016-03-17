@@ -77,6 +77,45 @@ class UsersController < ApplicationController
     end
   end
 
+  def disable
+    user = User.find(params[:id])
+    authorize!(:disable, user)
+
+    form = DisableStaffMemberForm.new(OpenStruct.new)
+    render locals: {
+      user: user,
+      form: form
+    }
+  end
+
+  def destroy
+    user = User.find(params[:id])
+    authorize!(:disable, user)
+
+    form = DisableStaffMemberForm.new(OpenStruct.new)
+    result = form.validate(params["disable_staff_member"])
+    if result
+      disable_reason = form.disable_reason
+      would_rehire = !ActiveRecord::Type::Boolean.new.type_cast_from_user(form.never_rehire)
+
+      DeleteUser.new(
+        requester: current_user,
+        user: user,
+        would_rehire: would_rehire,
+        disable_reason: disable_reason
+      ).call
+
+      flash[:success] = "User disabled successfully"
+      redirect_to users_path
+    else
+      flash.now[:error] = "There was a problem disabling this user"
+      render 'disable', locals: {
+        user: user,
+        form: form
+      }
+    end
+  end
+
   private
   def authorize_admin
     if !can?(:manage, :admin)

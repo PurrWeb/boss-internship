@@ -7,7 +7,7 @@ class UsersIndexQuery
 
   def all
     @all ||= begin
-      result = relation
+      result = relation.enabled
       result = result.where(role: role) if role.present?
       result = result.
         joins(:name).

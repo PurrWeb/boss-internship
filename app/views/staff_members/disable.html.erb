@@ -1,12 +1,3 @@
 <h1>Disable Staff Member</h1>
 
-<%= bootstrap_form_for(
-      form,
-      method: :delete,
-      url: staff_member_path(staff_member)
-    ) do |form| %>
-    <%= form.check_box :never_rehire, label: 'Do not rehire this person (Give reason below)' %>
-    <%= form.text_area :disable_reason, label: 'Reason for disabling' %>
-
-    <%= form.submit('Disable Staff Member') %>
-<% end %>
+<%= render partial: 'shared/disable_staff_member_form', locals: { url: staff_member_path(staff_member), form: form } %>

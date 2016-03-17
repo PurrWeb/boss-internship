@@ -50,6 +50,10 @@ class Ability
       user.has_admin_access? || user == target_user
     end
 
+    can :disable, User do |target_user|
+      target_user.enabled? && user != target_user
+    end
+
     #
     # The first argument to `can` is the action you are giving the user
     # permission to do.
