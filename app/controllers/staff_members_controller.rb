@@ -60,6 +60,7 @@ class StaffMembersController < ApplicationController
   def update_employment_details
     staff_member = StaffMember.find(params[:id])
     authorize! :manage, staff_member
+    assert_update_permitted(staff_member)
 
     result = UpdateStaffMemberEmploymentDetails.new(
       staff_member: staff_member,
@@ -85,6 +86,7 @@ class StaffMembersController < ApplicationController
   def update_personal_details
     staff_member = StaffMember.find(params[:id])
     authorize! :manage, staff_member
+    assert_update_permitted(staff_member)
 
     if staff_member.update_attributes(update_personal_details_params)
       flash[:success] = "Staff member updated successfully"
@@ -105,6 +107,7 @@ class StaffMembersController < ApplicationController
   def update_contact_details
     staff_member = StaffMember.find(params[:id])
     authorize! :manage, staff_member
+    assert_update_permitted(staff_member)
 
     result = UpdateStaffMemberContactDetails.new(
       staff_member: staff_member,
@@ -132,6 +135,7 @@ class StaffMembersController < ApplicationController
   def update_avatar
     staff_member = StaffMember.find(params[:id])
     authorize! :manage, staff_member
+    assert_update_permitted(staff_member)
 
     if staff_member.update_attributes(update_avatar_params)
       flash[:success] = "Staff member updated successfully"
@@ -183,6 +187,10 @@ class StaffMembersController < ApplicationController
   end
 
   private
+  def assert_update_permitted(staff_member)
+    raise 'Attempt to update disabled staff_member' if staff_member.disabled?
+  end
+
   def active_tab_from_params
     tab_from_params = params['tab']
     tab_from_params if show_page_tabs.include?(tab_from_params)

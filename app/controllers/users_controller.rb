@@ -21,6 +21,8 @@ class UsersController < ApplicationController
 
   def update_access_details
     user = User.find(params[:id])
+    assert_update_permitted(user)
+
     if user.update_attributes(user_access_details_params)
       flash[:success] = 'User updated successfully'
       redirect_to user_path(user)
@@ -37,6 +39,8 @@ class UsersController < ApplicationController
 
   def update_personal_details
     user = User.find(params[:id])
+    assert_update_permitted(user)
+
     if user.update_attributes(user_personal_details_params(user))
       flash[:success] = 'User updated successfully'
       redirect_to user_path(user)
@@ -117,6 +121,10 @@ class UsersController < ApplicationController
   end
 
   private
+  def assert_update_permitted(user)
+    raise 'Attempt to update disabled user' if user.disabled?
+  end
+
   def authorize_admin
     if !can?(:manage, :admin)
       redirect_to root_path
