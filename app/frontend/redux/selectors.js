@@ -1,6 +1,7 @@
 import _ from "underscore"
 import utils from "~lib/utils"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
+import oFetch from "o-fetch"
 
 export function selectStaffTypesWithShifts(state){
     var {rotaShifts, staff} = state;
@@ -128,11 +129,13 @@ export function canEditStaffTypeShifts({staffTypes, pageOptions}, {staffTypeClie
     return true;
 }
 
-export function selectShiftIsBeingEdited(state, {shiftId}){
+export function selectShiftIsBeingEdited(state, options){
+    var shiftServerId = oFetch(options, "shiftServerId");
+
     var shiftsBeingUpdated = state.apiRequestsInProgress.UPDATE_SHIFT;
     var shiftsBeingDeleted = state.apiRequestsInProgress.DELETE_SHIFT;
 
-    var isBeingUpdated = _(shiftsBeingUpdated).some((request) => request.shift.shift_id === shiftId);
+    var isBeingUpdated = _(shiftsBeingUpdated).some((request) => request.shiftServerId === shiftServerId);
     var isBeingDeleted = _(shiftsBeingDeleted).some((request) => request.shift.id === shiftId);
 
     return isBeingUpdated || isBeingDeleted;

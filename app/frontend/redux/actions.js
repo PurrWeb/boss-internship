@@ -16,20 +16,16 @@ const createApiRequestAction = function(options){
     return importedCreateApiRequestAction(options);
 }
 
-function confirmIfRotaIsPublished(question){
-    return function(requestOptions, getState){
-        var venueId = oFetch(requestOptions, "venueId");
-        var date = new RotaDate({shiftStartsAt: oFetch(requestOptions, "shift.starts_at")}).getDateOfRota();
-        var rota = getRotaFromDateAndVenue({
-            rotas: getState().rotas,
-            dateOfRota: date,
-            venueId
-        });
-        if (rota.status !== "published") {
-            return true;
-        }
-        return confirm(question);
+function confirmIfRotaIsPublished(options){
+    var rota = getRotaFromDateAndVenue({
+        rotas: oFetch(options, "rotasByClientId"),
+        dateOfRota: oFetch(options, "dateOfRota"),
+        venueId: oFetch(options, "venueClientId")
+    });
+    if (rota.status !== "published") {
+        return true;
     }
+    return confirm(question);
 }
 
 function getRotaDateFromShiftStartsAt(startAt){
@@ -62,7 +58,10 @@ export const addRotaShift = createApiRequestAction({
             return {shift: responseData};
         }
     }),
-    confirm: confirmIfRotaIsPublished("Adding a shift to a published rota will send out email notifications. Do you want to continue?")
+    confirm: function(){
+        adsf
+        confirmIfRotaIsPublished("Adding a shift to a published rota will send out email notifications. Do you want to continue?")
+    }
 });
 
 
@@ -78,18 +77,33 @@ export function replaceAllShifts (options) {
 export const updateRotaShift = createApiRequestAction({
     requestType: "UPDATE_SHIFT",
     makeRequest: makeApiRequest({
-        path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shift.shift_id}),
+        path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shiftServerId}),
         method: apiRoutes.updateShift.method,
         data: function(options, getState){
-            options.shift.staff_member_id = getState().rotaShifts[options.shift.shift_id].staff_member.id;
-            return options.shift;
+            var staffMemberId = getState().rotaShifts[options.shiftClientId].staff_member.serverId;
+            var shift = {
+                shift_id: options.shiftServerId,
+                starts_at: options.starts_at,
+                ends_at: options.ends_at,
+                staff_member_id: staffMemberId
+            }
+            return shift;
         },
         getSuccessActionData(responseData){
             responseData = backendData.processShiftObject(responseData);
             return {shift: responseData};
         }
     }),
-    confirm: confirmIfRotaIsPublished("Updating a shift on a published rota will send out email notifications. Do you want to continue?")
+    confirm: function(requestOptions, getState){
+        var venueServerId = oFetch(requestOptions, "venueServerId");
+        var dateOfRota = new RotaDate({shiftStartsAt: oFetch(requestOptions, "starts_at")}).getDateOfRota();
+        return confirmIfRotaIsPublished({
+            venueClientId: backendData.getClientId(venueServerId),
+            dateOfRota,
+            rotasByClientId: getState().rotas,
+            question: "Updating a shift on a published rota will send out email notifications. Do you want to continue?"
+        })
+    }
 });
 
 
@@ -103,7 +117,14 @@ export const deleteRotaShift = createApiRequestAction({
             return {shift_id: requestOptions.shift.id}
         }
     }),
-    confirm: confirmIfRotaIsPublished("Deleting a shift on a published rota will send out email notifications. Do you want to continue?")
+    confirm: function(){
+        afdsfdsf
+
+
+
+
+        confirmIfRotaIsPublished("Deleting a shift on a published rota will send out email notifications. Do you want to continue?")
+    }
 });
 
 export const updateRotaForecast = createApiRequestAction({
