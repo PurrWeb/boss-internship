@@ -1,3 +1,11 @@
 <h1>Disable User</h1>
 
+<% if user.staff_member.present? %>
+  <div class="staff-member-disable-warning">
+    <p class="text-warning">
+      Warning! This user has an associated staff member. Disabling will also disable the staff member.
+    </p>
+  </div>
+<% end %>
+
 <%= render partial: 'shared/disable_staff_member_form', locals: { url: user_path(user), form: form } %>

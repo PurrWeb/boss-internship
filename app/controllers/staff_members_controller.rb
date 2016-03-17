@@ -168,12 +168,21 @@ class StaffMembersController < ApplicationController
       disable_reason = form.disable_reason
       would_rehire = !ActiveRecord::Type::Boolean.new.type_cast_from_user(form.never_rehire)
 
-      DeleteStaffMember.new(
-        requester: current_user,
-        staff_member: staff_member,
-        would_rehire: would_rehire,
-        disable_reason: disable_reason
-      ).call
+      if staff_member.user.present?
+        DeleteUser.new(
+          requester: current_user,
+          user: staff_member.user,
+          would_rehire: would_rehire,
+          disable_reason: disable_reason
+        ).call
+      else
+        DeleteStaffMember.new(
+          requester: current_user,
+          staff_member: staff_member,
+          would_rehire: would_rehire,
+          disable_reason: disable_reason
+        ).call
+      end
 
       flash[:success] = "Staff member disabled successfully"
       redirect_to staff_members_path
