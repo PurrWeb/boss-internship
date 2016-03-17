@@ -64,6 +64,8 @@ class StaffMember < ActiveRecord::Base
 
   before_validation :normalise_national_insurance_number
 
+  delegate :current_state, to: :state_machine
+
   def self.for_venue(venue)
     joins(:venue).merge(Venue.where(id: venue.id))
   end
