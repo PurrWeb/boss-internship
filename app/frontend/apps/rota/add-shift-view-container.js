@@ -8,12 +8,14 @@ import { selectRotaOnVenueRotaPage } from "~redux/selectors"
 class AddShiftViewContainer extends Component {
     static childContextTypes = {
         newShiftTimes: React.PropTypes.object,
-        newShiftVenueServerId: React.PropTypes.any
+        newShiftVenueServerId: React.PropTypes.any,
+        newShiftVenueClientId: React.PropTypes.any
     }
     getChildContext(){
         return {
             newShiftTimes: this.state.shiftTimes,
-            newShiftVenueServerId: this.props.rota.venue.serverId
+            newShiftVenueServerId: this.props.rota.venue.serverId,
+            newShiftVenueClientId: this.props.rota.venue.clientId
         };
     }
     constructor(props){

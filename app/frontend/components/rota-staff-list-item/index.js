@@ -16,7 +16,8 @@ import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
 class RotaStaffListItem extends Component {
     static contextTypes = {
         newShiftTimes: React.PropTypes.object.isRequired,
-        newShiftVenueServerId: React.PropTypes.any.isRequired
+        newShiftVenueServerId: React.PropTypes.any.isRequired,
+        newShiftVenueClientId: React.PropTypes.any.isRequired
     }
     componentWillMount(){
         this.componentId = _.uniqueId();
@@ -106,13 +107,12 @@ class RotaStaffListItem extends Component {
     addShift(){
         var {starts_at, ends_at} = this.context.newShiftTimes;
         this.props.addRotaShift({
-            shift: {
-                starts_at,
-                ends_at,
-                staff_member_id: this.props.staff.id
-            },
+            starts_at,
+            ends_at,
+            staffMemberServerId: this.props.staff.serverId,
             errorHandlingComponent: this.componentId,
-            venueId: this.context.newShiftVenueServerId
+            venueServerId: this.context.newShiftVenueServerId,
+            venueClientId: this.context.newShiftVenueClientId
         });
     }
     canAddShift(){
@@ -141,7 +141,7 @@ class RotaStaffListItem extends Component {
 
 function mapStateToProps(state, ownProps){
     return {
-        addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.id),
+        addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.serverId),
         staffTypes: state.staffTypes,
         componentErrors: state.componentErrors,
         rotaShifts: state.rotaShifts,

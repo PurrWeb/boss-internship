@@ -37,30 +37,45 @@ export const addRotaShift = createApiRequestAction({
     requestType: "ADD_SHIFT",
     makeRequest: makeApiRequest({
         method: apiRoutes.addShift.method,
-        path: function({venueId, shift}, getState) {
-            var date = getRotaDateFromShiftStartsAt(shift.starts_at);
-            return apiRoutes.addShift.getPath(venueId, date);
+        path: function({venueServerId, starts_at}, getState) {
+            var date = getRotaDateFromShiftStartsAt(starts_at);
+            return apiRoutes.addShift.getPath(venueServerId, date);
         },
-        data: (options) => options.shift,
+        data: function(options){
+            var [starts_at, ends_at, staff_member_id] = oFetch(options,
+                "starts_at", "ends_at", "staffMemberServerId");
+            return {
+                starts_at,
+                ends_at,
+                staff_member_id
+            }
+        },
         getSuccessActionData: function(responseData, requestOptions, getState) {
-            responseData.starts_at = new Date(responseData.starts_at)
-            responseData.ends_at = new Date(responseData.ends_at)
+            responseData = backendData.processShiftObject(responseData);
 
+            // processShiftObject will set rota.clientId based on the rota's server id
+            // However, if the rota object was created on the client before it had
+            // a server id, we want to use the original clientId
             var rotaDate = new RotaDate({shiftStartsAt: responseData.starts_at});
             var rota = getRotaFromDateAndVenue({
                 rotas: getState().rotas,
                 dateOfRota: rotaDate.getDateOfRota(),
-                venueId: requestOptions.venueId
+                venueId: requestOptions.venueClientId
             });
-
             responseData.rota.clientId = rota.clientId;
 
             return {shift: responseData};
         }
     }),
-    confirm: function(){
-        adsf
-        confirmIfRotaIsPublished("Adding a shift to a published rota will send out email notifications. Do you want to continue?")
+    confirm: function(requestOptions, getState){
+        var venueServerId = oFetch(requestOptions, "venueServerId");
+        var dateOfRota = new RotaDate({shiftStartsAt: oFetch(requestOptions, "starts_at")}).getDateOfRota();
+        return confirmIfRotaIsPublished({
+            venueClientId: backendData.getClientId(venueServerId),
+            dateOfRota,
+            rotasByClientId: getState().rotas,
+            question: "Adding a shift to a published rota will send out email notifications. Do you want to continue?"
+        })
     }
 });
 

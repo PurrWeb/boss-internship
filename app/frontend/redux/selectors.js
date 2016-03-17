@@ -101,10 +101,10 @@ export function selectForecastByRotaId(state, rotaId){
     })
 }
 
-export function selectAddShiftIsInProgress(state, staffId){
+export function selectAddShiftIsInProgress(state, staffMemberServerId){
     var shiftsBeingAdded = state.apiRequestsInProgress.ADD_SHIFT;
     return _(shiftsBeingAdded).some(
-        (request) => request.shift.staff_member_id === staffId
+        (request) => request.staffMemberServerId === staffMemberServerId
     );
 }
 
@@ -136,7 +136,7 @@ export function selectShiftIsBeingEdited(state, options){
     var shiftsBeingDeleted = state.apiRequestsInProgress.DELETE_SHIFT;
 
     var isBeingUpdated = _(shiftsBeingUpdated).some((request) => request.shiftServerId === shiftServerId);
-    var isBeingDeleted = _(shiftsBeingDeleted).some((request) => request.shift.serverId === shiftServerId);
+    var isBeingDeleted = _(shiftsBeingDeleted).some((request) => request.shiftServerId === shiftServerId);
 
     return isBeingUpdated || isBeingDeleted;
 }
