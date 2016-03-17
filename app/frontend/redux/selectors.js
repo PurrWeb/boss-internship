@@ -136,7 +136,7 @@ export function selectShiftIsBeingEdited(state, options){
     var shiftsBeingDeleted = state.apiRequestsInProgress.DELETE_SHIFT;
 
     var isBeingUpdated = _(shiftsBeingUpdated).some((request) => request.shiftServerId === shiftServerId);
-    var isBeingDeleted = _(shiftsBeingDeleted).some((request) => request.shift.id === shiftId);
+    var isBeingDeleted = _(shiftsBeingDeleted).some((request) => request.shift.serverId === shiftServerId);
 
     return isBeingUpdated || isBeingDeleted;
 }

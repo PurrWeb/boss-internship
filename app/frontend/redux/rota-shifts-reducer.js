@@ -20,10 +20,10 @@ export default function rotaShift(state=[], action){
             });
             return Object.assign({}, state, {[shiftClientId]: rotaShift});
         case actionTypes.DELETE_SHIFT_SUCCESS:
-            if (state[action.shift_id] === undefined) {
+            if (state[action.shiftClientId] === undefined) {
                 throw "Trying to delete a shift that no longer exists.";
             }
-            return utils.immutablyDeleteObjectItem(state, action.shift_id);
+            return utils.immutablyDeleteObjectItem(state, action.shiftClientId);
     }
     return state;
 }

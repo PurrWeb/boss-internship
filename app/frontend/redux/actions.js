@@ -112,18 +112,20 @@ export const deleteRotaShift = createApiRequestAction({
     requestType: "DELETE_SHIFT",
     makeRequest: makeApiRequest({
         method: apiRoutes.deleteShift.method,
-        path: (options) => apiRoutes.deleteShift.getPath({shiftId: oFetch(options, "shift.id")}),
+        path: (options) => apiRoutes.deleteShift.getPath({shiftId: oFetch(options, "shift.serverId")}),
         getSuccessActionData: function(responseData, requestOptions) {
-            return {shift_id: requestOptions.shift.id}
+            return {shiftClientId: requestOptions.shift.clientId}
         }
     }),
-    confirm: function(){
-        afdsfdsf
-
-
-
-
-        confirmIfRotaIsPublished("Deleting a shift on a published rota will send out email notifications. Do you want to continue?")
+    confirm: function(requestOptions, getState){
+        var venueServerId = oFetch(requestOptions, "venueServerId");
+        var dateOfRota = new RotaDate({shiftStartsAt: oFetch(requestOptions, "shift.starts_at")}).getDateOfRota();
+        return confirmIfRotaIsPublished({
+            venueClientId: backendData.getClientId(venueServerId),
+            dateOfRota,
+            rotasByClientId: getState().rotas,
+            question: "Deleting a shift on a published rota will send out email notifications. Do you want to continue?"
+        })
     }
 });
 
