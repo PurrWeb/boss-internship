@@ -14,6 +14,24 @@ class StaffMembersController < ApplicationController
     }
   end
 
+  def flagged
+    authorize! :manage, :staff_members
+
+    filter = StaffMemberIndexFilter.new(
+      user: current_user,
+      params: Hash(params[:filter]).merge(status: nil)
+    )
+
+    staff_members = filter.
+      query(relation: StaffMember.flagged).all.
+      paginate(page: params[:page], per_page: 20)
+
+    render locals: {
+      staff_members: staff_members,
+      filter: filter
+    }
+  end
+
   def show
     staff_member = StaffMember.find(params[:id])
     authorize! :manage, staff_member

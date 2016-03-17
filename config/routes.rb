@@ -38,6 +38,9 @@ Rails.application.routes.draw do
 
   resources :staff_members, only: [:show, :index, :new, :create, :destroy] do
     resources :holidays, only: [:create, :destroy]
+    collection do
+      get :flagged
+    end
     member do
       get :disable
       get :edit_employment_details

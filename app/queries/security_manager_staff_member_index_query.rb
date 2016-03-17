@@ -1,12 +1,13 @@
 class SecurityManagerStaffMemberIndexQuery
-  def initialize(status:, name_text:, email_text:)
+  def initialize(relation: StaffMember.all, status:, name_text:, email_text:)
+    @relation = relation
     @name_text = name_text
     @email_text = email_text
     @status = status
   end
 
   def all
-    result = StaffMember.
+    result = relation.
       joins(:staff_type).
       merge(StaffType.security)
 
@@ -30,7 +31,7 @@ class SecurityManagerStaffMemberIndexQuery
   end
 
   private
-  attr_reader :status, :name_text, :email_text
+  attr_reader :relation, :status, :name_text, :email_text
 
   def filter_by_status(relation_to_filter)
     case status

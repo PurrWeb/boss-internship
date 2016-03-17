@@ -19,10 +19,11 @@ class StaffMemberIndexFilter
     StaffType.all
   end
 
-  def query
+  def query(relation: StaffMember.unscoped)
     if user.security_manager?
       @query ||= begin
         result = SecurityManagerStaffMemberIndexQuery.new(
+          relation: relation,
           name_text: name_text,
           email_text: email_text,
           status: status
@@ -35,6 +36,7 @@ class StaffMemberIndexFilter
     else
       @query ||= begin
         result = StaffMemberIndexFilterQuery.new(
+          relation: relation,
           name_text: name_text,
           email_text: email_text,
           status: status,

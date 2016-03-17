@@ -83,12 +83,28 @@ class StaffMember < ActiveRecord::Base
     in_state(:disabled)
   end
 
+  def self.flagged
+    disabled.where(would_rehire: false)
+  end
+
+  def disabled_by_user
+    if disabled?
+      User.find(state_machine.last_transition.metadata.fetch("requster_user_id"))
+    end
+  end
+
   def enabled?
     state_machine.current_state == 'enabled'
   end
 
   def disabled?
     state_machine.current_state == 'disabled'
+  end
+
+  def disabled_at
+    if disabled?
+      state_machine.last_transition.created_at
+    end
   end
 
   def security?
