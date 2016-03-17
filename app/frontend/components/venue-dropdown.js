@@ -14,7 +14,7 @@ export default class VenueDropdown extends Component {
     render(){
         var venueOptions = _.values(this.props.venues).map(function(venue){
             return {
-                value: venue.id,
+                value: venue.clientId,
                 label: venue.name
             };
         })

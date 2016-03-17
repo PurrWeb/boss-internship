@@ -13,7 +13,7 @@ export default class RotaOverviewChart extends Component {
     static propTypes = {
         shifts: React.PropTypes.array.isRequired,
         groups: React.PropTypes.arrayOf(React.PropTypes.shape({
-            id: React.PropTypes.any.isRequired,
+            clientId: React.PropTypes.any.isRequired,
             color: React.PropTypes.string.isRequired,
             name: React.PropTypes.string.isRequired
         })),
@@ -50,13 +50,13 @@ export default class RotaOverviewChart extends Component {
             }}
             tooltipGenerator={
                 function(obj) {
-                    var groupsById = utils.indexById(self.props.groups);
+                    var groupsById = utils.indexByClientId(self.props.groups);
                     var selectedGroupTitle = obj.series[0].key;
                     var date = breakdown[obj.index].date;
                     var breakdownAtPoint = _(breakdown).find(
                         (point) => point.date.valueOf() === date.valueOf()
                     );
-                    var selectedGroupId = _(groupsById).find({name: selectedGroupTitle}).id;
+                    var selectedGroupId = _(groupsById).find({name: selectedGroupTitle}).clientId;
 
                     var html = renderTooltipHtml({
                         shiftsByGroupId: breakdownAtPoint.shiftsByGroup,
@@ -75,10 +75,10 @@ export default class RotaOverviewChart extends Component {
         var index = obj.index;
 
         var group = this.getGroupsByName()[seriesName];
-        var shifts = breakdown[index].shiftsByGroup[group.id];
+        var shifts = breakdown[index].shiftsByGroup[group.clientId];
         return {
             shifts,
-            groupId: group.id,
+            groupId: group.clientId,
             date: breakdown[index].date
         };
     }
@@ -94,7 +94,7 @@ export default class RotaOverviewChart extends Component {
         groups.forEach(function(group){
             var values = _(breakdown).map(function(item){
                 return {
-                    value: item.shiftsByGroup[group.id].length,
+                    value: item.shiftsByGroup[group.clientId].length,
                     label: moment(item.date).format("HH:mm")
                 }
             });

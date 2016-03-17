@@ -1,27 +1,30 @@
 import utils from "~lib/utils"
 import moment from "moment"
+import oFetch from "o-fetch"
 
 export const appRoutes = {
     rota: function (options){
-        var {venueId, date} = options;
+        var [venueId, date] = oFetch(options, "venueId", "date");
         return "/venues/" + venueId + "/rotas/" + utils.formatRotaUrlDate(date);
     },
-    rotaPdfDownload: function({venueId, startDate, endDate}){
-      return [
-        '/rotas.pdf?',
-        'start_date=' + utils.formatRotaUrlDate(startDate),
-        '&end_date=' + utils.formatRotaUrlDate(endDate),
-        '&venue_id=' + venueId
-      ].join("")
+    rotaPdfDownload: function(options){
+        var [venueId, startDate, endDate] = oFetch(options, "venueId", "startDate", "endDate");
+        return [
+            '/rotas.pdf?',
+            'start_date=' + utils.formatRotaUrlDate(startDate),
+            '&end_date=' + utils.formatRotaUrlDate(endDate),
+            '&venue_id=' + venueId
+        ].join("")
     },
-    securityRotaPdfDownload: function({date}){
-      return [
-        '/security_rotas.pdf?',
-        'date=' + utils.formatRotaUrlDate(date)
-      ].join("")
+    securityRotaPdfDownload: function(options){
+        var date = oFetch(options, "date");
+        return [
+            '/security_rotas.pdf?',
+            'date=' + utils.formatRotaUrlDate(date)
+        ].join("");
     },
     rotaOverview: function(options){
-        var {venueId, startDate, endDate} = options;
+        var [venueId, startDate, endDate] = oFetch(options, "venueId", "startDate", "endDate");
         return [
             "/rotas/?venue_id=" + venueId,
             "&start_date=" + utils.formatRotaUrlDate(startDate),
@@ -29,7 +32,7 @@ export const appRoutes = {
         ].join("");
     },
     holidayReportsIndex: function(options) {
-      var { date, venueId } = options;
+      var [ date, venueId ] = oFetch(options, "date", "venueId");
       return [
         'holiday_reports?',
         'date=' + utils.formatRotaUrlDate(date),
@@ -37,19 +40,25 @@ export const appRoutes = {
       ].join('');
     },
     staffMemberHolidays: function(staffMemberId){
-      return "/staff_members/" + staffMemberId + "?tab=holidays";
+        if (staffMemberId === undefined) {
+            throw new Error("No staff member id supplied to appRoutes.staffMemberHolidays")
+        }
+        return "/staff_members/" + staffMemberId + "?tab=holidays";
     },
-    holidayReportsCsv: function({date, venueId}){
+    holidayReportsCsv: function(options){
+        var [date, venueId] = oFetch(options, "date", "venueId");
         return [
           "/holiday_reports.csv?" +
           'date=' + utils.formatRotaUrlDate(date),
           '&venue=' + venueId
         ].join("")
     },
-    staffTypeRota: function({staffTypeSlug, dateOfRota}){
+    staffTypeRota: function(options){
+        var [staffTypeSlug, dateOfRota] = oFetch(options, "staffTypeSlug", "dateOfRota");
         return "/" + staffTypeSlug + "_rotas/" + utils.formatRotaUrlDate(dateOfRota);
     },
-    staffTypeRotaOverview: function({staffTypeSlug, weekStartDate}){
+    staffTypeRotaOverview: function(options){
+        var [staffTypeSlug, weekStartDate] = oFetch(options, "staffTypeSlug", "weekStartDate");
         return "/" + staffTypeSlug + "_rotas/?date=" + utils.formatRotaUrlDate(weekStartDate);
     }
 }

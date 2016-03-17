@@ -31,7 +31,7 @@ export default class VenueRotaOverviewChart extends Component {
         var { shifts, staff, staffTypes} = this.props;
 
         function getStaffTypeFromShift(shift) {
-            return staff[shift.staff_member.id].staff_type.id;
+            return shift.staff_member.get(staff).staff_type.clientId;
         }
 
         var rotaDate = this.getRotaDate();
@@ -43,7 +43,7 @@ export default class VenueRotaOverviewChart extends Component {
             rotaDate,
             groupsById: staffTypes,
             getGroupFromShift: function(shift){
-                return staff[shift.staff_member.id].staff_type;    
+                return shift.staff_member.get(staff).staff_type;    
             }
         });
     }

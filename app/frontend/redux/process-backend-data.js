@@ -13,7 +13,7 @@ function getClientId(serverId){
     return "CLIENT_ID_" + serverId;
 }
 
-function setObjectIds(obj, objectTypeName){
+function setObjectIds(obj){
     obj.serverId = obj.id;
     delete obj.id;
     obj.clientId = getClientId(obj.serverId);
@@ -22,10 +22,13 @@ function setObjectIds(obj, objectTypeName){
 }
 
 function valueIsLink(value){
+    if (value === null){
+        return false;
+    }
     return value.id !== undefined && value.url !== undefined
 }
 
-function makeLinkResolverFunction(link, key, objectTypeName){
+function makeLinkResolverFunction(link, key){
     return function(linkObjectsByClientId){
         var resolvedLink = linkObjectsByClientId[link.clientId];
         if (resolvedLink === undefined) {
@@ -35,24 +38,24 @@ function makeLinkResolverFunction(link, key, objectTypeName){
     }
 }
 
-function processObjectLinks(obj, objectTypeName){
+function processObjectLinks(obj){
     for (var key in obj){
         var value = obj[key];
         if (valueIsLink(value)) {
             value.clientId = getClientId(value.id);
             value.serverId = value.id;
             delete value.id;
-            value.get = makeLinkResolverFunction(value, key, objectTypeName);
+            value.get = makeLinkResolverFunction(value, key);
             value.getParentForDebugging = () => obj;
         }
     }
 }
 
-function processBackendObject(backendObj, objectTypeName){
+function processBackendObject(backendObj){
     var obj = {...backendObj};
 
-    setObjectIds(obj, objectTypeName);
-    processObjectLinks(obj, objectTypeName);
+    setObjectIds(obj);
+    processObjectLinks(obj);
     
     return obj;
 }
@@ -60,7 +63,7 @@ function processBackendObject(backendObj, objectTypeName){
 ////////////////////////
 
 export function processRotaObject(rota){
-    var newRota = processBackendObject(rota, "ROTA");
+    var newRota = processBackendObject(rota);
 
     var date = rota.date;
     newRota.date = new Date(date);
@@ -98,12 +101,15 @@ export function processHolidayObject(holiday){
 }
 
 export function processRotaForecastObject(rotaForecast){
-    var processedForecast = {...rotaForecast};
+    if (rotaForecast.id === undefined){
+        // This is a weekly rota that doesn't have a backend ID
+        // because it's generated from the daily rotas
+        rotaForecast.id = null;
+    }
+    var processedForecast = processBackendObject(rotaForecast);
 
-    processedForecast.date = new Date(processedForecast.date)
-
-    if (processedForecast.id === null) {
-        processedForecast.id = "UNPERSISTED_FORECAST_" + _.uniqueId();
+    if (processedForecast.serverId === null) {
+        processedForecast.clientId = "UNPERSISTED_FORECAST_" + _.uniqueId();
     }
 
     return processedForecast;

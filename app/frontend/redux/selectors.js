@@ -92,13 +92,19 @@ export function selectUpdateRotaForecastInProgress(state, {venueId, dateOfRota})
     }))
 }
 
-export function selectForecastByRotaId(state, rotaId){
-    var rota = state.rotas[rotaId];
-    return _(state.rotaForecasts).find(function(forecast){
+export function selectForecastByRotaId(state, rotaClientId){
+    var rota = oFetch(state.rotas, rotaClientId);
+    var forecast = _(state.rotaForecasts).find(function(forecast){
         var isSameDate = utils.datesAreEqual(rota.date, forecast.date);
-        var isSameVenue = rota.venue.id === forecast.venue.id;
+        var isSameVenue = rota.venue.clientId === forecast.venue.clientId;
         return isSameVenue && isSameDate;
     })
+
+    if (forecast === undefined){
+        throw new Error("Couldn't find rota forecast for rotaClientId " + rotaClientId);
+    }
+
+    return forecast;
 }
 
 export function selectAddShiftIsInProgress(state, staffMemberServerId){

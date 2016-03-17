@@ -28,7 +28,7 @@ class RotaOverviewPage extends Component {
         var lastRota = _.last(rotas);
 
         var pdfHref = appRoutes.rotaPdfDownload({
-            venueId: firstRota.venue.id,
+            venueId: firstRota.venue.serverId,
             startDate: this.props.startDate,
             endDate: this.props.endDate
         });
@@ -37,9 +37,9 @@ class RotaOverviewPage extends Component {
             <div className="row">
                 <div className="col-md-6">
                     <WeekAndVenueSelector
-                        venueId={firstRota.venue.id}
+                        venueClientId={firstRota.venue.clientId}
                         weekStartDate={firstRota.date}
-                        venues={indexById(this.props.venues)}
+                        venues={utils.indexByClientId(this.props.venues)}
                         onChange={this.goToOverviewPage.bind(this)}>
                         <br/>
                         <PublishRotaWeekButtonContainer
@@ -59,7 +59,7 @@ class RotaOverviewPage extends Component {
                 <div className="col-md-3">
                     <h2 style={{fontSize: 20, marginTop: 0}}>Weekly Forecast</h2>
                     <WeeklyRotaForecast
-                        venueId={firstRota.venue.id}
+                        venueId={firstRota.venue.clientId}
                         startOfWeek={utils.getWeekStartDate(firstRota.date)} />
                 </div>
             </div>
@@ -73,24 +73,24 @@ class RotaOverviewPage extends Component {
         // have the same IDs as the store rotas
         return _.values(this.props.storeRotas).map(function(storeRota){
             var rotaDetails = _.find(self.props.rotaDetailsObjects, function(obj){
-                var venuesAreEqual = obj.rota.venue.id === storeRota.venue.id;
+                var venuesAreEqual = obj.rota.venue.clientId === storeRota.venue.clientId;
                 var datesAreEqual = utils.datesAreEqual(new Date(obj.rota.date), storeRota.date);
                 return venuesAreEqual && datesAreEqual;
             });
 
-            var staff = rotaDetails.staff_members;
+            var staff = rotaDetails.staff_members.map(backendData.processStaffMemberObject);
             var shifts = rotaDetails.rota_shifts.map(backendData.processShiftObject);
-            var staffTypes = rotaDetails.staff_types;
+            var staffTypes = rotaDetails.staff_types.map(backendData.processStaffTypeObject);
 
             var staffTypesWithShifts = selectStaffTypesWithShifts({
-                staffTypes: indexById(staffTypes),
-                rotaShifts: indexById(shifts),
-                staff: indexById(staff)
+                staffTypes: utils.indexByClientId(staffTypes),
+                rotaShifts: utils.indexByClientId(shifts),
+                staff: utils.indexByClientId(staff)
             });
 
             return <div key={ storeRota.clientId }>
                 <h2>
-                    <a href={appRoutes.rota({venueId: storeRota.venue.id, date: storeRota.date}) }>
+                    <a href={appRoutes.rota({venueId: storeRota.venue.serverId, date: storeRota.date}) }>
                         {moment(storeRota.date).format("ddd D MMMM YYYY")}
                     </a>
                     <span className="boss-badge" style={{verticalAlign: "middle", marginLeft: 10}}>
@@ -98,17 +98,17 @@ class RotaOverviewPage extends Component {
                     </span>
                 </h2>
                 <RotaOverviewView
-                    staff={ indexById(staff) }
-                    shifts={ indexById(shifts) }
+                    staff={ utils.indexByClientId(staff) }
+                    shifts={ utils.indexByClientId(shifts) }
                     rota={storeRota}
                     dateOfRota={ storeRota.date }
-                    staffTypesWithShifts={ indexById(staffTypesWithShifts)} />
+                    staffTypesWithShifts={ utils.indexByClientId(staffTypesWithShifts)} />
             </div>
         });
     }
-    goToOverviewPage({startDate, endDate, venueId}){
+    goToOverviewPage({startDate, endDate, venueClientId}){
         location.href = appRoutes.rotaOverview({
-            venueId,
+            venueId: this.props.venues[venueClientId].serverId,
             startDate,
             endDate
         });

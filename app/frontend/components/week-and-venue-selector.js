@@ -5,7 +5,7 @@ import _ from "underscore"
 
 export default class WeekAndVenueSelector extends React.Component {
     static propTypes = {
-        venueId: React.PropTypes.number,
+        venueClientId: React.PropTypes.string,
         weekStartDate: React.PropTypes.instanceOf(Date).isRequired,
         onChange: React.PropTypes.func.isRequired,
         venues: React.PropTypes.object.isRequired,
@@ -13,8 +13,8 @@ export default class WeekAndVenueSelector extends React.Component {
     }
     render(){
         var selectedVenues = [];
-        if (this.props.venueId) {
-            selectedVenues = [this.props.venueId];
+        if (this.props.venueClientId) {
+            selectedVenues = [this.props.venueClientId];
         }
         return <div className="row">
             <div className="col-md-6">
@@ -24,7 +24,7 @@ export default class WeekAndVenueSelector extends React.Component {
                         this.props.onChange({
                             startDate: selection.startDate,
                             endDate: selection.endDate,
-                            venueId: this.props.venueId
+                            venueClientId: this.props.venueClientId
                         });
                     } }/>
             </div>
@@ -34,10 +34,10 @@ export default class WeekAndVenueSelector extends React.Component {
                     selectedVenues={selectedVenues}
                     clearable={this.props.canSelectAllVenues ? true : false}
                     onChange={
-                        (venueId) => this.props.onChange({
+                        (venueClientId) => this.props.onChange({
                             startDate: this.props.weekStartDate,
                             endDate: this.getWeekEndDate(this.props.weekStartDate),
-                            venueId: venueId
+                            venueClientId: venueClientId
                         })
                     } />
                 {this.props.children}
