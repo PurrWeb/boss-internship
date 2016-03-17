@@ -2,12 +2,14 @@ class StaffMemberIndexFilter
   def initialize(user:, params:)
     normalised_params = (params || {}).reverse_merge(default_params)
     @user = user
+    @name_text = normalised_params.fetch(:name_text)
+    @email_text = normalised_params.fetch(:email_text)
     @status = normalised_params.fetch(:status)
     @staff_type = StaffType.find_by(id: normalised_params.fetch(:staff_type))
     @venue = Venue.find_by(id: normalised_params.fetch(:venue))
   end
 
-  attr_reader :staff_type, :venue, :status
+  attr_reader :staff_type, :venue, :status, :name_text, :email_text
 
   def accessible_venues
     @accessible_venues ||= AccessibleVenuesQuery.new(user).all
@@ -21,6 +23,8 @@ class StaffMemberIndexFilter
     if user.security_manager?
       @query ||= begin
         result = SecurityManagerStaffMemberIndexQuery.new(
+          name_text: name_text,
+          email_text: email_text,
           status: status
         ).all
 
@@ -31,6 +35,8 @@ class StaffMemberIndexFilter
     else
       @query ||= begin
         result = StaffMemberIndexFilterQuery.new(
+          name_text: name_text,
+          email_text: email_text,
           status: status,
           staff_type: staff_type,
           venue: venue,
@@ -52,6 +58,8 @@ class StaffMemberIndexFilter
 
   def default_params
     {
+      name_text: '',
+      email_text: '',
       status: 'enabled',
       staff_type: nil,
       venue: nil

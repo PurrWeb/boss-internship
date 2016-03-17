@@ -54,6 +54,7 @@ class StaffMember < ActiveRecord::Base
     SecurityStaffMemberValidator.new(staff_member).validate
   end
 
+
   validates :employment_status_a, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_b, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_c, inclusion: { in: [true, false], message: 'is required' }

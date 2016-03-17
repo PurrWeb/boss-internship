@@ -1,5 +1,15 @@
 class StaffMemberIndexFilterQuery
-  def initialize(status:, staff_type:, venue:, accessible_venues:, relation: StaffMember.unscoped)
+  def initialize(
+    name_text:,
+    email_text:,
+    status:,
+    staff_type:,
+    venue:,
+    accessible_venues:,
+    relation: StaffMember.unscoped
+  )
+    @email_text = email_text
+    @name_text = name_text
     @staff_type = staff_type
     @relation = relation
     @venue = venue
@@ -14,6 +24,22 @@ class StaffMemberIndexFilterQuery
         result = result.where(staff_type: staff_type)
       end
 
+      if name_text.present?
+        result = result.
+          joins(:name).
+          where(
+            "(`names`.first_name LIKE ?) OR (`names`.surname LIKE ?)",
+            "%#{name_text}%",
+            "%#{name_text}%"
+          )
+      end
+
+      if email_text.present?
+        result = result.
+          joins(:email_address).
+          where("LOWER(`email_addresses`.email) = LOWER(?)", email_text)
+      end
+
       if venue.present?
         result = result.joins(:venue).merge(venue_relation)
       else
@@ -25,7 +51,7 @@ class StaffMemberIndexFilterQuery
   end
 
   private
-  attr_reader :staff_type, :relation, :venue, :accessible_venues, :status
+  attr_reader :staff_type, :relation, :venue, :accessible_venues, :status, :name_text, :email_text
 
   def venue_relation
     Venue.where('(`venues`.`id` = ?) AND (`venues`.`id` IN (?))', venue.id, accessible_venues.pluck(:id))

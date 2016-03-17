@@ -10,6 +10,8 @@
               url: staff_members_path,
               html: { method: :get, class: 'form-inline' }
             ) do |form| %>
+          <%= form.text_field(:name_text, label: 'Name', value: filter.name_text) %>
+          <%= form.text_field(:email_text, label: 'Email', value: filter.email_text) %>
           <%= form.select(
                 :status,
                 options_for_select(
