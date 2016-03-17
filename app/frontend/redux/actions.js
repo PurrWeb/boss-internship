@@ -166,7 +166,7 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
     makeRequest: makeApiRequest({
         method: apiRoutes.weeklyRotaForecast.method,
         path: (options) => {
-            var [serverVenueId, startOfWeek] = oFetch(options, "serverVenueId", "startOfWeek");
+            var [serverVenueId, startOfWeek] = oFetch(options, "serverVenueId", "startOfWeek")
             return apiRoutes.weeklyRotaForecast.getPath({venueId: serverVenueId, startOfWeek})
         },
         getSuccessActionData: function(responseData){
@@ -245,11 +245,21 @@ export const updateRotaStatus = createApiRequestAction({
     makeRequest: makeApiRequest({
         method: apiRoutes.updateRotaStatus.method,
         path: function(options){
+            if (!options.venueClientId){
+                throw new Error("need venueClientId");
+            }
             return apiRoutes.updateRotaStatus.getPath(options);
         },
-        getSuccessActionData: function(responseData){
+        getSuccessActionData: function(responseData, requestOptions, getState){
+            var state = getState();
+            var rota = getRotaFromDateAndVenue({
+                rotas: state.rotas,
+                dateOfRota: requestOptions.date,
+                venueId: requestOptions.venueClientId
+            });
+            
             return {
-                rotaId: responseData.id,
+                rotaClientId: rota.clientId,
                 status: responseData.status
             }
         }
@@ -308,18 +318,6 @@ export function loadInitialRotaAppState(viewData) {
             "Security": true
         }
     };
-
-    var dayRota = getRotaFromDateAndVenue({
-        rotas: [],
-        dateOfRota: new Date(viewData.rotaDate),
-        venueId: viewData.rotaVenueId,
-        generateIfNotFound: true
-    });
-    var hasRotaInBackendData = dayRota.id !== null;
-    if (!hasRotaInBackendData) {
-        viewData.rota.rotas.push(dayRota);
-    }
-
     return genericLoadInitialRotaAppState(viewData, pageOptions);
 }
 

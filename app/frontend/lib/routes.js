@@ -84,8 +84,8 @@ const apiRoutes = {
     },
     updateRotaStatus: {
         getPath: function(options){
-            var {venueId, date, status} = options;
-            return "venues/" + venueId + "/rotas/" + utils.formatDateForApi(date) + "/mark_" + status;
+            var [venueServerId, date, status] = oFetch(options, "venueServerId", "date", "status");
+            return "venues/" + venueServerId + "/rotas/" + utils.formatDateForApi(date) + "/mark_" + status;
         },
         method: "POST"
     },
