@@ -83,11 +83,11 @@ export function selectFetchWeeklyRotaIsInProgress(state){
     return !_.isEmpty(state.apiRequestsInProgress.FETCH_WEEKLY_ROTA_FORECAST);
 }
 
-export function selectUpdateRotaForecastInProgress(state, {venueId, dateOfRota}){
+export function selectUpdateRotaForecastInProgress(state, {serverVenueId, dateOfRota}){
     var updatesInProgress = state.apiRequestsInProgress.UPDATE_ROTA_FORECAST;
     return !_.isEmpty(_(updatesInProgress).filter(function(update){
         var isSameDate = utils.datesAreEqual(update.dateOfRota, dateOfRota);
-        var isSameVenue = venueId === update.venueId;
+        var isSameVenue = serverVenueId === update.serverVenueId;
         return isSameVenue && isSameDate;
     }))
 }

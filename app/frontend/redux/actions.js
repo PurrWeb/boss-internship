@@ -148,7 +148,10 @@ export const updateRotaForecast = createApiRequestAction({
     requestType: "UPDATE_ROTA_FORECAST",
     makeRequest: makeApiRequest({
         method: apiRoutes.updateRotaForecast.method,
-        path: ({dateOfRota, venueId}) => apiRoutes.updateRotaForecast.getPath({dateOfRota, venueId}),
+        path: (options) => {
+            var [dateOfRota, serverVenueId] = oFetch(options, "dateOfRota", "serverVenueId");
+            return apiRoutes.updateRotaForecast.getPath({dateOfRota, venueId: serverVenueId})
+        },
         data: ({forecastedTake}) => {return {forecasted_take: forecastedTake} },
         getSuccessActionData: function(responseData){
             return {
@@ -162,7 +165,10 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
     requestType: "FETCH_WEEKLY_ROTA_FORECAST",
     makeRequest: makeApiRequest({
         method: apiRoutes.weeklyRotaForecast.method,
-        path: ({venueId, startOfWeek}) => apiRoutes.weeklyRotaForecast.getPath({venueId, startOfWeek}),
+        path: (options) => {
+            var [serverVenueId, startOfWeek] = oFetch(options, "serverVenueId", "startOfWeek");
+            return apiRoutes.weeklyRotaForecast.getPath({venueId: serverVenueId, startOfWeek})
+        },
         getSuccessActionData: function(responseData){
             return {
               weeklyRotaForecast: responseData
