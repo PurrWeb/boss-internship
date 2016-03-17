@@ -52,7 +52,7 @@ class RotaStaffListItem extends Component {
                                     Shifts
                                 </h4>
                                 <StaffShiftList
-                                    shifts={_.indexBy(this.getStaffShifts(staff.id), "id")}
+                                    shifts={_.indexBy(this.getStaffShifts(staff.clientId), "id")}
                                     venues={this.props.venues}
                                     rotas={this.props.rotas} />
                             </div>
@@ -83,7 +83,6 @@ class RotaStaffListItem extends Component {
                         <div style={{overflow: "hidden"}}>
                             <div className="rota-staff-list-item__add-button" style={{float: "left"}}>
                                 <AddShiftButton
-                                    staffId={staff.id}
                                     canAddShift={this.canAddShift()}
                                     addShift={() => this.addShift()}
                                     />
@@ -131,9 +130,9 @@ class RotaStaffListItem extends Component {
 
         return datesAreValid && !isAddingShift && !isOnHoliday && canEditStaffTypeShifts;
     }
-    getStaffShifts(staffId){
+    getStaffShifts(staffMemberClientId){
         var ret =  _(this.props.rotaShifts).filter(function(shift){
-            return shift.staff_member.id === staffId
+            return shift.staff_member.clientId === staffMemberClientId
         });
         return ret;
     }
