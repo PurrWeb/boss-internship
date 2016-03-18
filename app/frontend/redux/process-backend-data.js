@@ -119,4 +119,15 @@ export function processRotaForecastObject(rotaForecast){
     return processedForecast;
 }
 
+export function processStaffTypeRotaOverviewObject(obj){
+    return {
+        date: new Date(obj.date),
+        rota_shifts: obj.rota_shifts.map(processShiftObject),
+        rotas: obj.rotas.map(processRotaObject),
+        staff_members: obj.staff_members.map(processStaffMemberObject),
+        staff_types: obj.staff_types.map(processStaffTypeObject),
+        venues: obj.venues.map(processVenueObject)
+    }
+}
+
 export { getClientId }
