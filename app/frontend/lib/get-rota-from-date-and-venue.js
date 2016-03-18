@@ -1,7 +1,6 @@
 import _ from "underscore"
 import moment from "moment"
 import utils from "./utils"
-import { processRotaObject } from "~redux/process-backend-data"
 
 function generateDefaultRota({dateOfRota, venueId}){
     var backendData = {
