@@ -18,8 +18,8 @@ export default class ChartAndFilterUi extends React.Component {
         onVenueFilterChange: React.PropTypes.func.isRequired,
         venues: React.PropTypes.object.isRequired,
         selectedVenueIds: React.PropTypes.array.isRequired,
-        staffToPreview: React.PropTypes.number,
-        staffToShow: React.PropTypes.number,
+        staffToPreview: React.PropTypes.string,
+        staffToShow: React.PropTypes.string,
         rotas: React.PropTypes.object
     }
     render(){
@@ -86,7 +86,7 @@ export default class ChartAndFilterUi extends React.Component {
             return null;
         }
         return <StaffDetailsAndShifts
-            staffId={staffId}
+            staffMemberClientId={staffId}
             staffTypes={this.props.staffTypes}
             rotaShifts={this.props.rotaShifts}
             venuesById={this.props.venues}

@@ -323,20 +323,22 @@ export function loadInitialRotaAppState(viewData) {
 
 export function loadInitalStaffTypeRotaAppState(viewData){
     viewData = {...viewData};
-    viewData.rotas = viewData.rota.rotas.slice();
+    viewData.rota = {...viewData.rota};
+    var rotaOverview = viewData.rota;
+    rotaOverview.rotas = viewData.rota.rotas.slice();
 
     // make sure we have a rota for each venue
-    _.each(viewData.rota.venues, function(venue){
+    _.each(rotaOverview.venues, function(venue){
         var rota = getRotaFromDateAndVenue({
             rotas: viewData.rota.rotas,
-            dateOfRota: new Date(viewData.date),
-            venueId: venue.id,
+            dateOfRota: new Date(rotaOverview.date),
+            venueId: venue.id, // this simulates backendData, so use id instead of clientid/serverid
             generateIfNotFound: true
         });
 
         if (rota.id === null){
             // This rota didn't wasn't found and had to be generated
-            viewData.rotas.push(rota);
+            rotaOverview.rotas.push(rota);
         }
     });
 

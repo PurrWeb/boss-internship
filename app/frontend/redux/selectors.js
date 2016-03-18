@@ -29,15 +29,15 @@ export function selectVenuesWithShifts(state){
 
     var allVenues = _.values(venues);
     var venuesWithShifts = _.filter(allVenues, function(venue){
-        return _(venueIdsWithShifts).contains(venue.id);
+        return _(venueIdsWithShifts).contains(venue.clientId);
     });
 
-    return utils.indexById(venuesWithShifts);
+    return utils.indexByClientId(venuesWithShifts);
 
     function getVenueIdFromShift(shift){
         var rotaId = shift.rota.clientId;
         var rota = rotas[rotaId];
-        return rota.venue.id;
+        return rota.venue.clientId;
     }
 }
 

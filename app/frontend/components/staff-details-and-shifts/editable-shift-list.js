@@ -17,8 +17,8 @@ export default class EditableShiftList extends Component {
                     rotasById,
                     shift: shift
                 });
-                var venueIds = _.pluck(_.values(venuesById), "id");
-                var index = venueIds.indexOf(venue.id);
+                var venueIds = _.pluck(_.values(venuesById), "clientId");
+                var index = venueIds.indexOf(venue.clientId);
                 venueColor = getVenueColor(index);
             }
 
@@ -26,7 +26,7 @@ export default class EditableShiftList extends Component {
                 venueObject={venue}
                 venueColor={venueColor}
                 shift={shift}
-                key={shift.id} />
+                key={shift.clientId} />
         });
 
         return <div>

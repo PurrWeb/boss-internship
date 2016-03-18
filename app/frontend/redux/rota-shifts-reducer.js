@@ -7,7 +7,7 @@ export default function rotaShift(state=[], action){
         case actionTypes.REPLACE_ALL_SHIFTS:
             return action.shifts;
         case actionTypes.ADD_SHIFT_SUCCESS:
-            return Object.assign({}, state, {[action.shift.id]: action.shift })
+            return Object.assign({}, state, {[action.shift.clientId]: action.shift })
         case actionTypes.UPDATE_SHIFT_SUCCESS:
             var shiftClientId = action.shift.clientId;
             if (state[shiftClientId] === undefined) {

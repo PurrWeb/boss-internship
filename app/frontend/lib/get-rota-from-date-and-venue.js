@@ -1,14 +1,16 @@
 import _ from "underscore"
 import moment from "moment"
 import utils from "./utils"
+import { processRotaObject } from "~redux/process-backend-data"
 
 function generateDefaultRota({dateOfRota, venueId}){
-    return {
+    var backendData = {
         date: new Date(dateOfRota),
         venue: {id: venueId},
         status: "in_progress",
         id: null
     }
+    return backendData;
 }
 
 export default function getRotaFromDateAndVenue({rotas, dateOfRota, venueId, generateIfNotFound}){
