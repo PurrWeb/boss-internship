@@ -58,7 +58,9 @@ class Ability
       end
 
       can :disable, User do |target_user|
-        target_user.enabled? && user != target_user
+        user.has_admin_access? &&
+          target_user.enabled? &&
+          user != target_user
       end
     end
 
