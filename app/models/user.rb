@@ -116,6 +116,12 @@ class User < ActiveRecord::Base
     enabled?
   end
 
+  def disabled_by_user
+    if disabled?
+      User.find(state_machine.last_transition.metadata.fetch("requster_user_id"))
+    end
+  end
+
   def inactive_message
     'This account is disabled'
   end
