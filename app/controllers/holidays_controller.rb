@@ -1,7 +1,7 @@
 class HolidaysController < ApplicationController
   def create
     staff_member = StaffMember.find(params[:staff_member_id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
 
     holiday = Holiday.new(
       holiday_params.

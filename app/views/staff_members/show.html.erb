@@ -26,7 +26,7 @@
     <% end %>
   </div>
   <div class="media-right">
-    <% if staff_member.enabled? %>
+    <% if can?(:disable, staff_member) %>
       <%= link_to(disable_staff_member_path(staff_member), class: 'btn btn-danger') do %>
         <span class="glyphicon glyphicon-fire"></span> Disable Staff Member
       <% end %>

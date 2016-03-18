@@ -34,7 +34,7 @@ class StaffMembersController < ApplicationController
 
   def show
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
 
     if !active_tab_from_params.present?
       return redirect_to staff_member_path(staff_member, tab: 'employment-details')
@@ -70,14 +70,14 @@ class StaffMembersController < ApplicationController
 
   def edit_employment_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
 
     render locals: { staff_member: staff_member }
   end
 
   def update_employment_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
     assert_update_permitted(staff_member)
 
     result = UpdateStaffMemberEmploymentDetails.new(
@@ -96,14 +96,14 @@ class StaffMembersController < ApplicationController
 
   def edit_personal_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
 
     render locals: { staff_member: staff_member }
   end
 
   def update_personal_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
     assert_update_permitted(staff_member)
 
     if staff_member.update_attributes(update_personal_details_params)
@@ -117,14 +117,14 @@ class StaffMembersController < ApplicationController
 
   def edit_contact_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
 
     render locals: { staff_member: staff_member }
   end
 
   def update_contact_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
     assert_update_permitted(staff_member)
 
     result = UpdateStaffMemberContactDetails.new(
@@ -145,14 +145,14 @@ class StaffMembersController < ApplicationController
 
   def edit_avatar
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
 
     render locals: { staff_member: staff_member }
   end
 
   def update_avatar
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
     assert_update_permitted(staff_member)
 
     if staff_member.update_attributes(update_avatar_params)
@@ -166,7 +166,7 @@ class StaffMembersController < ApplicationController
 
   def disable
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :disable, staff_member
 
     form = DisableStaffMemberForm.new(OpenStruct.new)
     render locals: {
@@ -177,7 +177,7 @@ class StaffMembersController < ApplicationController
 
   def destroy
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :disable, staff_member
 
     form = DisableStaffMemberForm.new(OpenStruct.new)
     result = form.validate(params["disable_staff_member"])

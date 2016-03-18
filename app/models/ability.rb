@@ -20,7 +20,7 @@ class Ability
       end
 
       can :manage, Holiday do |holiday|
-        holiday.editable? && can_manage_staff_member?(user, holiday.staff_member)
+        holiday.editable? && can_edit_staff_member?(user, holiday.staff_member)
       end
 
       can :manage, Venue do |venue|
@@ -31,8 +31,14 @@ class Ability
         staff_member.security? || can_manage_venue?(user, staff_member.venue)
       end
 
-      can :manage, StaffMember do |staff_member|
-        can_manage_staff_member?(user, staff_member)
+      can :disable, StaffMember do |staff_member|
+        staff_member.enabled? &&
+          user.staff_member != staff_member &&
+          can_edit_staff_member?(user, staff_member)
+      end
+
+      can :edit, StaffMember do |staff_member|
+        can_edit_staff_member?(user, staff_member)
       end
 
       can :manage, Rota do |rota|
@@ -76,7 +82,7 @@ class Ability
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
   end
 
-  def can_manage_staff_member?(user, staff_member)
+  def can_edit_staff_member?(user, staff_member)
     staff_member.security? ||
       staff_member.venue.nil? ||
       can_manage_venue?(user, staff_member.venue)
