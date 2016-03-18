@@ -23,11 +23,11 @@ import "babel-core/polyfill"
 // import ClockInOutApp from "./apps/clock-in-out/clock-in-out-app"
 // registerComponent("ClockInOutApp", ClockInOutApp)
 
-// import RotaOverviewApp from "./apps/rota-overview/rota-overview-app"
-// registerComponent("RotaOverviewApp", RotaOverviewApp)
+import RotaOverviewApp from "./apps/rota-overview/rota-overview-app"
+registerComponent("RotaOverviewApp", RotaOverviewApp)
 
-// import StaffMemberFormAvatarImage from "./apps/staff-member-form/staff-member-form-avatar-image"
-// registerComponent("StaffMemberFormAvatarImage", StaffMemberFormAvatarImage)
+import StaffMemberFormAvatarImage from "./apps/staff-member-form/staff-member-form-avatar-image"
+registerComponent("StaffMemberFormAvatarImage", StaffMemberFormAvatarImage)
 
 import HolidayReportView from "./apps/holiday-report/holiday-report-app"
 registerComponent("HolidayReportApp", HolidayReportView);

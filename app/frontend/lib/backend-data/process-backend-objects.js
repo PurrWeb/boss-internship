@@ -1,3 +1,4 @@
+import _ from "underscore"
 import { processBackendObject } from "./process-backend-object-lib.js"
 
 export function processRotaObject(rota){
@@ -67,3 +68,13 @@ export function processStaffTypeRotaOverviewObject(obj){
         venues: obj.venues.map(processVenueObject)
     }
 }
+
+export function processVenueRotaOverviewObject(obj){
+    return {
+        rota: processRotaObject(obj.rota),
+        rota_shifts: obj.rota_shifts.map(processShiftObject),
+        staff_members: obj.staff_members.map(processStaffMemberObject),
+        staff_types: obj.staff_types.map(processStaffTypeObject)
+    }
+}
+

@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import RotaOverviewView from "./rota-overview-view"
-import * as backendData from "~redux/process-backend-data"
 import {appRoutes} from "~lib/routes"
 import {connect} from "react-redux"
 import moment from "moment"
@@ -74,14 +73,10 @@ class RotaOverviewPage extends Component {
                 return venuesAreEqual && datesAreEqual;
             });
 
-            var staff = rotaDetails.staff_members.map(backendData.processStaffMemberObject);
-            var shifts = rotaDetails.rota_shifts.map(backendData.processShiftObject);
-            var staffTypes = rotaDetails.staff_types.map(backendData.processStaffTypeObject);
-
             var staffTypesWithShifts = selectStaffTypesWithShifts({
-                staffTypes: utils.indexByClientId(staffTypes),
-                rotaShifts: utils.indexByClientId(shifts),
-                staff: utils.indexByClientId(staff)
+                staffTypes: utils.indexByClientId(rotaDetails.staff_types),
+                rotaShifts: utils.indexByClientId(rotaDetails.rota_shifts),
+                staff: utils.indexByClientId(rotaDetails.staff_members)
             });
 
             return <div key={ storeRota.clientId }>
@@ -94,8 +89,8 @@ class RotaOverviewPage extends Component {
                     </span>
                 </h2>
                 <RotaOverviewView
-                    staff={ utils.indexByClientId(staff) }
-                    shifts={ utils.indexByClientId(shifts) }
+                    staff={ utils.indexByClientId(rotaDetails.staff_members) }
+                    shifts={ utils.indexByClientId(rotaDetails.rota_shifts) }
                     rota={storeRota}
                     dateOfRota={ storeRota.date }
                     staffTypesWithShifts={ utils.indexByClientId(staffTypesWithShifts)} />
