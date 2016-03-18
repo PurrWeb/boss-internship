@@ -62,6 +62,12 @@ class Ability
           target_user.enabled? &&
           user != target_user
       end
+
+      can :enable, User do |target_user|
+        user.has_admin_access? &&
+          target_user.disabled? &&
+          user != target_user
+      end
     end
 
     #

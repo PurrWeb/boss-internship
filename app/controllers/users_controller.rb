@@ -81,6 +81,19 @@ class UsersController < ApplicationController
     end
   end
 
+  def undestroy
+    user = User.find(params[:id])
+    authorize!(:enable, user)
+
+    ReviveUser.new(
+      requester: current_user,
+      user: user
+    ).call
+
+    flash[:success] = "User enabled successfully"
+    redirect_to user_path(user)
+  end
+
   def disable
     user = User.find(params[:id])
     authorize!(:disable, user)

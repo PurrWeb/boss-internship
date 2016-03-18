@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :users, only: [:show, :index, :destroy] do
     member do
       get :disable
+      post :undestroy
       get :edit_access_details
       post :update_access_details
       get :edit_personal_details
