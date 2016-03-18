@@ -310,6 +310,17 @@ export function setPageOptions(options) {
 
 
 export function loadInitialRotaAppState(viewData) {
+    var dayRota = getRotaFromDateAndVenue({
+        rotas: [],
+        dateOfRota: new Date(viewData.rotaDate),
+        venueId: viewData.rotaVenueId,
+        generateIfNotFound: true
+    });
+    var hasRotaInBackendData = dayRota.id !== null;
+    if (!hasRotaInBackendData) {
+        viewData.rota.rotas.push(dayRota);
+    }
+    
     var pageOptions = {
         venueId: backendData.getClientId(viewData.rotaVenueId),
         dateOfRota: new Date(viewData.rotaDate),
