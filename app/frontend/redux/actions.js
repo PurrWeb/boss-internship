@@ -320,7 +320,7 @@ export function loadInitialRotaAppState(viewData) {
     if (!hasRotaInBackendData) {
         viewData.rota.rotas.push(dayRota);
     }
-    
+
     var pageOptions = {
         venueId: backendData.getClientId(viewData.rotaVenueId),
         dateOfRota: new Date(viewData.rotaDate),
@@ -394,7 +394,7 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
                 rotas: indexByClientId(rotaData)
             }),
             replaceAllHolidays({
-                holidays: indexById(holidays)
+                holidays: indexByClientId(holidays)
             }),
             setPageOptions({pageOptions})
         ]);
