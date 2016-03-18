@@ -84,11 +84,6 @@ RSpec.feature 'Staff members index page filtering' do
   context 'user is security manager' do
     let(:user) { FactoryGirl.create(:user, :security_manager) }
 
-    scenario 'filter should not be visible on the index page' do
-      staff_members_index_page.surf_to
-      staff_members_index_page.filter.ensure_not_visible
-    end
-
     context 'when staff exist'do
       let(:bar_staff_type) { FactoryGirl.create(:staff_type, name: 'Bar Staff') }
       let(:bar_staff_members) { FactoryGirl.create_list(:staff_member, 2, staff_type: bar_staff_type) }
