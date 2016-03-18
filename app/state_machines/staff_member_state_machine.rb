@@ -5,9 +5,10 @@ class StaffMemberStateMachine
   state :disabled
 
   transition from: :enabled, to: [:disabled]
+  transition from: :disabled, to: [:enabled]
 
   guard_transition do |staff_member, _, metadata|
-    raise 'requester_user_id required' unless metadata[:requster_user_id].present?
+    raise 'requster_user_id required' unless metadata[:requster_user_id].present?
     true
   end
 
