@@ -32,12 +32,17 @@ export const appRoutes = {
         ].join("");
     },
     holidayReportsIndex: function(options) {
-      var [ date, venueId ] = oFetch(options, "date", "venueId");
-      return [
-        'holiday_reports?',
-        'date=' + utils.formatRotaUrlDate(date),
-        '&venue=' + venueId
-      ].join('');
+        var date = oFetch(options, "date");
+        var venueId = options.venueId; // venueId is optional
+
+        var parts = [
+            "holiday_reports?",
+            "date=" + utils.formatRotaUrlDate(date)
+        ];
+        if (venueId !== undefined && venueId !== null) {
+            parts.push("&venue=" + venueId);
+        }
+        return parts.join("");
     },
     staffMemberHolidays: function(staffMemberId){
         if (staffMemberId === undefined) {
@@ -46,12 +51,16 @@ export const appRoutes = {
         return "/staff_members/" + staffMemberId + "?tab=holidays";
     },
     holidayReportsCsv: function(options){
-        var [date, venueId] = oFetch(options, "date", "venueId");
-        return [
+        var date = oFetch(options, "date");
+        var venueId = options.venueId; //optional
+        var parts = [
           "/holiday_reports.csv?" +
-          'date=' + utils.formatRotaUrlDate(date),
-          '&venue=' + venueId
-        ].join("")
+          'date=' + utils.formatRotaUrlDate(date)
+        ];
+        if (venueId !== null && venueId !== undefined){
+            parts.push('&venue=' + venueId);
+        }
+        return parts.join("")
     },
     staffTypeRota: function(options){
         var [staffTypeSlug, dateOfRota] = oFetch(options, "staffTypeSlug", "dateOfRota");

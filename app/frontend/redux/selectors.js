@@ -43,9 +43,9 @@ export function selectVenuesWithShifts(state){
 
 export function selectStaffMemberHolidays(state, staffId){
     var staffMember = state.staff[staffId];
-    var staffMemberHolidayIds = _.pluck(state.staff[staffId].holidays, "id");
-    var allHolidays = staffMemberHolidayIds.map(function(id){
-        return state.holidays[id];
+    var staffMemberHolidayClientIds = _.pluck(state.staff[staffId].holidays, "clientId");
+    var allHolidays = staffMemberHolidayClientIds.map(function(clientId){
+        return state.holidays[clientId];
     });
     // We only have this week's holidays in the state, so filter out
     // any holidays we don't have in the state.

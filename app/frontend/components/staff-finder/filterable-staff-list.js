@@ -45,13 +45,13 @@ export default class FilterableStaffList extends Component {
 
         if (filter.staffTypes.length > 0) {
             staffToShow = _.filter(staffToShow, function(staff){
-                return _(filter.staffTypes).contains(staff.staff_type.id);
+                return _(filter.staffTypes).contains(staff.staff_type.clientId);
             });
         }
 
         if (filter.venues.length > 0){
             staffToShow = _.filter(staffToShow, function(staff){
-                return _(filter.venues).contains(staff.venue.id)
+                return _(filter.venues).contains(staff.venue.clientId)
             });
         }
 

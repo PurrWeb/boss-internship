@@ -38,20 +38,45 @@ function makeLinkResolverFunction(link, key){
     }
 }
 
+function processLinkObject({link, parent, key}){
+    link.clientId = getClientId(link.id);
+    link.serverId = link.id;
+    delete link.id;
+    link.get = makeLinkResolverFunction(link, key);
+    link.getParentForDebugging = () => obj;
+}
+
 function processObjectLinks(obj){
     for (var key in obj){
         var value = obj[key];
+        if (_.isArray(value)) {
+            // if the array items are links process them
+            if (value.length > 0) {
+                if (valueIsLink(value[0])) {
+                    value.forEach((link,i) => {
+                        processLinkObject({
+                            link,
+                            parent: obj,
+                            key: key + "." + i
+                        })
+                    });
+                }
+            }
+        }
         if (valueIsLink(value)) {
-            value.clientId = getClientId(value.id);
-            value.serverId = value.id;
-            delete value.id;
-            value.get = makeLinkResolverFunction(value, key);
-            value.getParentForDebugging = () => obj;
+            processLinkObject({
+                link: value,
+                parent: obj,
+                key
+            });
         }
     }
 }
 
 function processBackendObject(backendObj){
+    if (backendObj.clientId !== undefined){
+        throw "Backend object has already been processed.";
+    }
     var obj = {...backendObj};
 
     setObjectIds(obj);
@@ -88,7 +113,6 @@ export function processStaffTypeObject(staffMember){
 }
 
 export function processShiftObject(shift){
-    if(shift.clientId){debugger;}
     shift = processBackendObject(shift);
 
     return Object.assign({}, shift, {
@@ -98,6 +122,7 @@ export function processShiftObject(shift){
 }
 
 export function processHolidayObject(holiday){
+    holiday = processBackendObject(holiday);
     return Object.assign({}, holiday, {
         start_date: new Date(holiday.start_date),
         end_date: new Date(holiday.end_date)
@@ -130,4 +155,29 @@ export function processStaffTypeRotaOverviewObject(obj){
     }
 }
 
+export function processHolidayAppViewState(viewState){
+    var pageData = {...viewState.pageData};
+    var venueServerId = pageData.venueId;
+    delete pageData.venueId;
+    pageData.venueServerId = venueServerId;
+    if (venueServerId === null){
+        // no venue filter
+        pageData.venueClientId = null;
+    } else {
+        pageData.venueClientId = getClientId(pageData.venueServerId);
+    }
+    
+    return {
+        staffTypes: viewState.staffTypes.map(processStaffTypeObject),
+        staffMembers: viewState.staffMembers.map(processStaffMemberObject),
+        holidays: viewState.holidays.map(processHolidayObject),
+        venues: viewState.venues.map(processVenueObject),
+        pageData
+    }
+}
+
 export { getClientId }
+
+
+
+
