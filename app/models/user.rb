@@ -112,6 +112,14 @@ class User < ActiveRecord::Base
     dev? || admin?
   end
 
+  def active_for_authentication?
+    enabled?
+  end
+
+  def inactive_message
+    'This account is disabled'
+  end
+
   def status
     enabled? ? 'Active' : 'Disabled'
   end

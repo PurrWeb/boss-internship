@@ -4,54 +4,56 @@ class Ability
   def initialize(user)
     # Define abilities for the passed in user here. For example:
     #
-    if user.has_admin_access?
-      can :manage, :admin
-    end
-
-    can :manage, :staff_members
-
-    can :manage, :rotas do
-      !user.security_manager?
-    end
-
-    can :manage, :security_rota do
-      user.has_admin_access? || user.security_manager?
-    end
-
-    can :manage, Holiday do |holiday|
-      holiday.editable? && can_manage_staff_member?(user, holiday.staff_member)
-    end
-
-    can :manage, Venue do |venue|
-      can_manage_venue?(user, venue)
-    end
-
-    can :view, StaffMember do |staff_member|
-      staff_member.security? || can_manage_venue?(user, staff_member.venue)
-    end
-
-    can :manage, StaffMember do |staff_member|
-      can_manage_staff_member?(user, staff_member)
-    end
-
-    can :manage, Rota do |rota|
-      can_manage_venue?(user, rota.venue)
-    end
-
-    can :manage, RotaShift do |rota_shift|
-      if rota_shift.security?
-        user.has_admin_access? || user.security_manager?
-      else
-        can_manage_venue?(user, rota_shift.venue)
+    if user.enabled?
+      if user.has_admin_access?
+        can :manage, :admin
       end
-    end
 
-    can :create_staff_member, User do |target_user|
-      user.has_admin_access? || user == target_user
-    end
+      can :manage, :staff_members
 
-    can :disable, User do |target_user|
-      target_user.enabled? && user != target_user
+      can :manage, :rotas do
+        !user.security_manager?
+      end
+
+      can :manage, :security_rota do
+        user.has_admin_access? || user.security_manager?
+      end
+
+      can :manage, Holiday do |holiday|
+        holiday.editable? && can_manage_staff_member?(user, holiday.staff_member)
+      end
+
+      can :manage, Venue do |venue|
+        can_manage_venue?(user, venue)
+      end
+
+      can :view, StaffMember do |staff_member|
+        staff_member.security? || can_manage_venue?(user, staff_member.venue)
+      end
+
+      can :manage, StaffMember do |staff_member|
+        can_manage_staff_member?(user, staff_member)
+      end
+
+      can :manage, Rota do |rota|
+        can_manage_venue?(user, rota.venue)
+      end
+
+      can :manage, RotaShift do |rota_shift|
+        if rota_shift.security?
+          user.has_admin_access? || user.security_manager?
+        else
+          can_manage_venue?(user, rota_shift.venue)
+        end
+      end
+
+      can :create_staff_member, User do |target_user|
+        user.has_admin_access? || user == target_user
+      end
+
+      can :disable, User do |target_user|
+        target_user.enabled? && user != target_user
+      end
     end
 
     #
