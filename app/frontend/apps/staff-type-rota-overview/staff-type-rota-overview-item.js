@@ -39,7 +39,7 @@ export default class StaffTypeRotaOverviewItem extends Component {
                 <div className="col-md-9">
                     <StaffTypeRotaOverviewChart
                         staff={this.props.staff}
-                        shifts={utils.indexById(this.props.rotaShifts)}
+                        shifts={utils.indexByClientId(this.props.rotaShifts)}
                         staffTypes={this.props.staffTypes}
                         venues={this.props.venues}
                         rotas={this.props.rotas}

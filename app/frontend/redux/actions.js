@@ -402,12 +402,13 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
 }
 
 export function loadInitialClockInOutAppState() {
-    var userDataById = indexById(userData);
-    return function(dispatch){
-        setTimeout(function(){
-            dispatch(replaceAllStaffMembers({staffMembers: userDataById}));
-        }, 3000)
-    }
+    throw "not maintained"
+    // var userDataById = indexById(userData);
+    // return function(dispatch){
+    //     setTimeout(function(){
+    //         dispatch(replaceAllStaffMembers({staffMembers: userDataById}));
+    //     }, 3000)
+    // }
 }
 
 export function loadInitialRotaOverviewAppState(viewData){
@@ -436,10 +437,6 @@ export function loadInitialRotaOverviewAppState(viewData){
     }
 }
 
-
-function indexById(data){
-    return _.indexBy(data, "id")
-}
 
 function indexByClientId(data){
     return _.indexBy(data, "clientId")

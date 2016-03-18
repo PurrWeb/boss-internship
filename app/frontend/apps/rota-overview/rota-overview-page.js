@@ -12,10 +12,6 @@ import PublishRotaWeekButtonContainer from "./publish-rota-week-button-container
 import WeekAndVenueSelector from "~components/week-and-venue-selector"
 import WeeklyRotaForecast from "./containers/weekly-rota-forecast"
 
-function indexById(data){
-    return _.indexBy(data, "id")
-}
-
 class RotaOverviewPage extends Component {
     static propTypes = {
         rotaDetailsObjects: React.PropTypes.array.isRequired
