@@ -7,19 +7,22 @@ import { addRotaShift } from "~redux/actions"
 class AddShiftView extends React.Component {
     static childContextTypes = {
         newShiftTimes: React.PropTypes.object,
-        newShiftVenueId: React.PropTypes.any
+        newShiftVenueServerId: React.PropTypes.any,
+        newShiftVenueClientId: React.PropTypes.any
     }
-    getChildContext(){ 
+    getChildContext(){
+        var venue = this.props.venues[this.state.venueClientId];
         return {
             newShiftTimes: this.state.shiftTimes,
-            newShiftVenueId: this.state.venueId
+            newShiftVenueServerId: venue.serverId,
+            newShiftVenueClientId: venue.clientId
         };
     }
     constructor(props){
         super(props);
         this.state = {
             shiftTimes: this.getDefaultShiftTimes(props),
-            venueId: _.values(props.venues)[0].id
+            venueClientId: _.values(props.venues)[0].clientId
         }
     }
     render(){
@@ -30,7 +33,7 @@ class AddShiftView extends React.Component {
                 dateOfRota={this.props.dateOfRota}
                 venues={this.props.venues}
                 staffTypes={this.props.staffTypes}
-                selectedVenueId={this.state.venueId}
+                selectedVenueId={this.state.venueClientId}
                 onVenueChange={(venue) => this.onVenueChange(venue)}
                 onShiftTimesChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)} />
         </div>
@@ -43,8 +46,8 @@ class AddShiftView extends React.Component {
     onShiftTimesChange(shiftTimes){
         this.setState({shiftTimes});
     }
-    onVenueChange(venueId){
-        this.setState({venueId})
+    onVenueChange(venueClientId){
+        this.setState({venueClientId})
     }
 }
 
