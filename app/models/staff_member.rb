@@ -93,6 +93,10 @@ class StaffMember < ActiveRecord::Base
     end
   end
 
+  def flagged?
+    disabled? && would_rehire == false
+  end
+
   def enabled?
     state_machine.current_state == 'enabled'
   end

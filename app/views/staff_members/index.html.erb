@@ -2,7 +2,7 @@
 
 <%= link_to('Add Staff Member', new_staff_member_path, class: ['btn', 'btn-primary']) %>
 <%= link_to(flagged_staff_members_path, class: 'btn btn-danger') do %>
-  <span class="glyphicon glyphicon-warning-sign"></span> View Flagged Staff Members
+  <span class="glyphicon glyphicon-warning-sign"></span> Flagged Staff Members
 <% end %>
 
 <%= render partial: 'index_filter', locals: { filter: filter, staff_members: staff_members } %>
@@ -19,7 +19,7 @@
       <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
         <td data-role="name"><%= link_to(staff_member.full_name, staff_member_path(staff_member)) %></td>
         <td>
-          <%= staff_member.current_state.titlecase %>
+          <%= UIStaffMemberStatus.new(staff_member).to_s %>
         </td>
         <td data-role="staff-type">
           <%= link_to(staff_member.staff_type.name.titlecase, staff_member_path(staff_member)) %>

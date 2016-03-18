@@ -8,7 +8,22 @@
     </div>
   </div>
   <div class="media-body">
-    <h1 class="media-heading"><%= staff_member.full_name %><%= " (Disabled)" if staff_member.disabled? %></h1>
+    <h1 class="media-heading">
+      <% if staff_member.flagged? %>
+        <%= staff_member.full_name %>
+        <span class="text-danger">
+          <span class="glyphicon glyphicon-warning-sign"></span> Flagged
+        </span>
+      <% elsif staff_member.disabled? %>
+        <%= staff_member.full_name %> (Disabled)
+      <% else %>
+        <%= staff_member.full_name %>
+      <% end %>
+    </h1>
+    <% if staff_member.disabled? %>
+      <p class="h4">Disabled by: <%= staff_member.disabled_by_user.full_name %> on <%= staff_member.disabled_at.to_s(:human_date) %></p>
+      <p class="h4">Reason for disabling: <%= staff_member.disable_reason %></p>
+    <% end %>
   </div>
   <div class="media-right">
     <% if staff_member.enabled? %>
