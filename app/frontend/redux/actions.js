@@ -8,6 +8,7 @@ import {apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 import RotaDate from "~lib/rota-date"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
+import { processVenueRotaAppViewData } from "~lib/backend-data/process-app-view-data"
 
 export const actionTypes = {};
 const createApiRequestAction = function(options){
@@ -68,10 +69,10 @@ export const addRotaShift = createApiRequestAction({
         }
     }),
     confirm: function(requestOptions, getState){
-        var venueServerId = oFetch(requestOptions, "venueServerId");
+        var venueClientId = oFetch(requestOptions, "venueClientId");
         var dateOfRota = new RotaDate({shiftStartsAt: oFetch(requestOptions, "starts_at")}).getDateOfRota();
         return confirmIfRotaIsPublished({
-            venueClientId: backendData.getClientId(venueServerId),
+            venueClientId,
             dateOfRota,
             rotasByClientId: getState().rotas,
             question: "Adding a shift to a published rota will send out email notifications. Do you want to continue?"
@@ -110,10 +111,10 @@ export const updateRotaShift = createApiRequestAction({
         }
     }),
     confirm: function(requestOptions, getState){
-        var venueServerId = oFetch(requestOptions, "venueServerId");
+        var venueClientId = oFetch(requestOptions, "venueClientId");
         var dateOfRota = new RotaDate({shiftStartsAt: oFetch(requestOptions, "starts_at")}).getDateOfRota();
         return confirmIfRotaIsPublished({
-            venueClientId: backendData.getClientId(venueServerId),
+            venueClientId,
             dateOfRota,
             rotasByClientId: getState().rotas,
             question: "Updating a shift on a published rota will send out email notifications. Do you want to continue?"
@@ -133,10 +134,10 @@ export const deleteRotaShift = createApiRequestAction({
         }
     }),
     confirm: function(requestOptions, getState){
-        var venueServerId = oFetch(requestOptions, "venueServerId");
+        var venueClientId = oFetch(requestOptions, "venueClientId");
         var dateOfRota = new RotaDate({shiftStartsAt: oFetch(requestOptions, "shift.starts_at")}).getDateOfRota();
         return confirmIfRotaIsPublished({
-            venueClientId: backendData.getClientId(venueServerId),
+            venueClientId,
             dateOfRota,
             rotasByClientId: getState().rotas,
             question: "Deleting a shift on a published rota will send out email notifications. Do you want to continue?"
@@ -322,7 +323,7 @@ export function loadInitialRotaAppState(viewData) {
     }
 
     var pageOptions = {
-        venueId: backendData.getClientId(viewData.rotaVenueId),
+        venue: {id: viewData.rotaVenueId },
         dateOfRota: new Date(viewData.rotaDate),
         staffTypeSlug: viewData.staffTypeSlug,
         disableEditingShiftsByStaffTypeName: {
@@ -362,20 +363,17 @@ export function loadInitalStaffTypeRotaAppState(viewData){
 }
 
 function genericLoadInitialRotaAppState(viewData, pageOptions){
+    viewData.pageOptions = pageOptions;
+    viewData = processVenueRotaAppViewData(viewData);
+    
     let rotaData = viewData.rota.rotas;
     let staffTypeData = viewData.rota.staff_types;
     let rotaShiftData = viewData.rota.rota_shifts;
     let staffMemberData = viewData.rota.staff_members;
     let venueData = viewData.rota.venues;
     let holidays = viewData.rota.holidays;
+    pageOptions = viewData.pageOptions;
 
-    rotaData = rotaData.map(backendData.processRotaObject);
-    rotaShiftData = rotaShiftData.map(backendData.processShiftObject);
-    holidays = holidays.map(backendData.processHolidayObject)
-    venueData = venueData.map(backendData.processVenueObject)
-    staffMemberData = staffMemberData.map(backendData.processStaffMemberObject)
-    staffTypeData = staffTypeData.map(backendData.processStaffTypeObject)
-    
     return function(dispatch){
         dispatch([
             replaceAllStaffMembers({

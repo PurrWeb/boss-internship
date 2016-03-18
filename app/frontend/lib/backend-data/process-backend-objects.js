@@ -1,5 +1,5 @@
 import _ from "underscore"
-import { processBackendObject } from "./process-backend-object-lib.js"
+import { processBackendObject, processObjectLinks } from "./process-backend-object.js"
 
 export function processRotaObject(rota){
     if (rota.id === null){
@@ -20,6 +20,14 @@ export function processVenueObject(venue){
 
 export function processStaffMemberObject(staffMember){
     return processBackendObject(staffMember);
+}
+
+export function processPageOptionsObject(pageOptions){
+    // page options doesn't have an id, but we want to resolve IDs
+    // in any links it contains
+    pageOptions = {...pageOptions};
+    processObjectLinks(pageOptions); 
+    return pageOptions;
 }
 
 export function processStaffTypeObject(staffMember){

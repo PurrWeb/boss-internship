@@ -118,7 +118,7 @@ export function selectRotaOnVenueRotaPage(state){
     return getRotaFromDateAndVenue({
         rotas: state.rotas,
         dateOfRota: state.pageOptions.dateOfRota,
-        venueId: state.pageOptions.venueId
+        venueId: state.pageOptions.venue.clientId
     });
 }
 

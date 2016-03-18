@@ -16,7 +16,7 @@ function setObjectIds(obj){
 }
 
 function valueIsLink(value){
-    if (value === null){
+    if (value === null || value === undefined){
         return false;
     }
     return value.id !== undefined;
@@ -78,3 +78,5 @@ export function processBackendObject(backendObj){
     
     return obj;
 }
+
+export {processObjectLinks}

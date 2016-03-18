@@ -14,8 +14,8 @@ import "./lib/load-underscore-mixins"
 
 import "babel-core/polyfill"
 
-// import RotaApp from "./apps/rota/rota-app"
-// registerComponent("RotaApp", RotaApp)
+import RotaApp from "./apps/rota/rota-app"
+registerComponent("RotaApp", RotaApp)
 
 // import StaffTypeRotaApp from "./apps/staff-type-rota/staff-type-rota-app"
 // registerComponent("StaffTypeRotaApp", StaffTypeRotaApp);

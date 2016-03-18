@@ -115,7 +115,7 @@ class ShiftEditor extends Component {
         }
         this.props.deleteRotaShift({
             shift: this.props.shift,
-            venueServerId: this.props.venueServerId,
+            venueClientId: this.props.venueClientId,
             errorHandlingComponent: this.componentId,
         });
     }
@@ -123,7 +123,7 @@ class ShiftEditor extends Component {
         var { newShiftTimes } = this.state;
         var { shift } = this.props;
         this.props.updateRotaShift({
-            venueServerId: this.props.venueServerId,
+            venueClientId: this.props.venueClientId,
             starts_at: newShiftTimes.starts_at,
             ends_at: newShiftTimes.ends_at,
             shiftServerId: shift.serverId,
@@ -147,7 +147,7 @@ function mapStateToProps(state, ownProps){
     });
     return {
         componentErrors: state.componentErrors,
-        venueServerId: rota.venue.serverId,
+        venueClientId: rota.venue.clientId,
         canEditShift: canEditStaffTypeShifts(state, {staffTypeClientId: staffType.clientId}),
         shiftIsBeingEdited: selectShiftIsBeingEdited(state, {shiftServerId: ownProps.shift.serverId})
     }

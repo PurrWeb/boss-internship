@@ -2,7 +2,10 @@ import {
     processHolidayObject,
     processVenueObject,
     processStaffMemberObject,
-    processStaffTypeObject
+    processStaffTypeObject,
+    processPageOptionsObject,
+    processRotaObject,
+    processShiftObject
 } from "./process-backend-objects"
 
 export function processHolidayAppViewState(viewState){
@@ -23,5 +26,19 @@ export function processHolidayAppViewState(viewState){
         holidays: viewState.holidays.map(processHolidayObject),
         venues: viewState.venues.map(processVenueObject),
         pageData
+    }
+}
+
+export function processVenueRotaAppViewData(viewData){
+    return {
+        pageOptions: processPageOptionsObject(viewData.pageOptions),
+        rota: {
+            rotas: viewData.rota.rotas.map(processRotaObject),
+            rota_shifts: viewData.rota.rota_shifts.map(processShiftObject),
+            holidays: viewData.rota.holidays.map(processHolidayObject),
+            venues: viewData.rota.venues.map(processVenueObject),
+            staff_members: viewData.rota.staff_members.map(processStaffMemberObject),
+            staff_types: viewData.rota.staff_types.map(processStaffTypeObject)
+        }
     }
 }
