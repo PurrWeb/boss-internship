@@ -5,11 +5,12 @@ import {
     processStaffTypeObject,
     processPageOptionsObject,
     processRotaObject,
-    processShiftObject
+    processShiftObject,
+    processStaffTypeRotaOverviewObject
 } from "./process-backend-objects"
 
-export function processHolidayAppViewState(viewState){
-    var pageData = {...viewState.pageData};
+export function processHolidayAppViewData(viewData){
+    var pageData = {...viewData.pageData};
     var venueServerId = pageData.venueId;
     delete pageData.venueId;
     pageData.venueServerId = venueServerId;
@@ -21,10 +22,10 @@ export function processHolidayAppViewState(viewState){
     }
     
     return {
-        staffTypes: viewState.staffTypes.map(processStaffTypeObject),
-        staffMembers: viewState.staffMembers.map(processStaffMemberObject),
-        holidays: viewState.holidays.map(processHolidayObject),
-        venues: viewState.venues.map(processVenueObject),
+        staffTypes: viewData.staffTypes.map(processStaffTypeObject),
+        staffMembers: viewData.staffMembers.map(processStaffMemberObject),
+        holidays: viewData.holidays.map(processHolidayObject),
+        venues: viewData.venues.map(processVenueObject),
         pageData
     }
 }
@@ -40,5 +41,12 @@ export function processVenueRotaAppViewData(viewData){
             staff_members: viewData.rota.staff_members.map(processStaffMemberObject),
             staff_types: viewData.rota.staff_types.map(processStaffTypeObject)
         }
+    }
+}
+
+export function processStaffTypeRotaOverviewAppViewData(viewData){
+    return {
+        rotaDetailsObjects: viewData.securityRotaOverviews.map(processStaffTypeRotaOverviewObject),
+        staffTypeSlug: viewData.staffTypeSlug
     }
 }

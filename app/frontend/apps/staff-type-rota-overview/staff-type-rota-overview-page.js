@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import StaffTypeRotaOverviewItem from "./staff-type-rota-overview-item"
-import * as backendData from "~redux/process-backend-data"
 import utils from "~lib/utils"
 import WeekPicker from "~components/week-picker"
 import { appRoutes } from "~lib/routes"
