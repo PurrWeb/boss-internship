@@ -15,7 +15,11 @@ class ReviveStaffMember
     result = false
 
     ActiveRecord::Base.transaction do
-      result = staff_member.update_attributes(staff_member_params)
+      staff_member.assign_attributes(staff_member_params)
+      if staff_member.staff_member_venue.present? && staff_member.staff_member_venue.venue_id == nil
+        staff_member.staff_member_venue.mark_for_destruction
+      end
+      result = staff_member.save
 
       if result
         staff_member.

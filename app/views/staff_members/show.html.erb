@@ -31,6 +31,11 @@
         <span class="glyphicon glyphicon-fire"></span> Disable Staff Member
       <% end %>
     <% end %>
+    <% if can?(:enable, staff_member) %>
+      <%= link_to(enable_staff_member_path(staff_member), class: 'btn btn-danger') do %>
+        <span class="glyphicon glyphicon-heart"></span> Enable Staff Member
+      <% end %>
+    <% end %>
   </div>
 </div
 

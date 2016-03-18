@@ -44,6 +44,8 @@ Rails.application.routes.draw do
     end
     member do
       get :disable
+      get :enable
+      patch :undestroy
       get :edit_employment_details
       post :update_employment_details
       get :edit_personal_details

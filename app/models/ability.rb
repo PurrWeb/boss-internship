@@ -31,6 +31,11 @@ class Ability
         staff_member.security? || can_manage_venue?(user, staff_member.venue)
       end
 
+      can :enable, StaffMember do |staff_member|
+        staff_member.disabled? &&
+          can_edit_staff_member?(user, staff_member)
+      end
+
       can :disable, StaffMember do |staff_member|
         staff_member.enabled? &&
           user.staff_member != staff_member &&

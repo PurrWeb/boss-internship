@@ -164,6 +164,34 @@ class StaffMembersController < ApplicationController
     end
   end
 
+  def enable
+    staff_member = StaffMember.find(params[:id])
+    authorize! :enable, staff_member
+
+    render locals: {
+      staff_member: staff_member
+    }
+  end
+
+  def undestroy
+    staff_member = StaffMember.find(params[:id])
+    authorize! :enable, staff_member
+
+    result = ReviveStaffMember.new(
+      requester: current_user,
+      staff_member: staff_member,
+      staff_member_params: enable_params(staff_member)
+    ).call
+
+    if result.success?
+      flash[:success] = "Staff Member enabled successfully"
+      redirect_to staff_member_path(staff_member)
+    else
+      flash.now[:error] = "There was a problem enabling creating this staff member"
+      render 'enable', locals: { staff_member: result.staff_member }
+    end
+  end
+
   def disable
     staff_member = StaffMember.find(params[:id])
     authorize! :disable, staff_member
@@ -222,6 +250,15 @@ class StaffMembersController < ApplicationController
       'contact-details',
       'holidays'
     ]
+  end
+
+  def enable_params(staff_member)
+    staff_member_params.
+      deep_merge(
+        staff_member_venue_attributes: {
+          id: staff_member.staff_member_venue.try(:id)
+        }
+      )
   end
 
   def staff_member_params
