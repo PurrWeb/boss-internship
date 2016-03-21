@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160316232009) do
+ActiveRecord::Schema.define(version: 20160321164537) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -96,17 +96,18 @@ ActiveRecord::Schema.define(version: 20160316232009) do
   add_index "invite_transitions", ["invite_id", "sort_key"], name: "index_invite_transitions_parent_sort", unique: true, using: :btree
 
   create_table "invites", force: :cascade do |t|
-    t.string   "role",        limit: 255, null: false
-    t.integer  "inviter_id",  limit: 4,   null: false
+    t.string   "role",        limit: 255,   null: false
+    t.integer  "inviter_id",  limit: 4,     null: false
     t.integer  "user_id",     limit: 4
-    t.string   "token",       limit: 255, null: false
-    t.string   "email",       limit: 255, null: false
+    t.string   "token",       limit: 255,   null: false
+    t.string   "email",       limit: 255,   null: false
     t.integer  "revoker_id",  limit: 4
     t.datetime "revoked_at"
     t.datetime "sent_at"
     t.datetime "accepted_at"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.text     "venue_ids",   limit: 65535
   end
 
   add_index "invites", ["accepted_at"], name: "index_invites_on_accepted_at", using: :btree
