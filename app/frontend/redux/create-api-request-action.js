@@ -55,7 +55,7 @@ export default function createApiRequestAction(actionOptions){
 
     return function(requestOptions){
         if (requestOptions.type || requestOptions.requestId || requestOptions.requestType) {
-            throw "The properties type, requestId and requestType can't be set";
+            throw new Error("The properties type, requestId and requestType can't be set");
         }
 
         var requestId = _.uniqueId();

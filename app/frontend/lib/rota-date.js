@@ -17,7 +17,7 @@ class RotaDate {
             baseDate.setHours(12); // make sure baseDate time is actually on the rota day
             this.initUsingBaseDate(baseDate);
         } else {
-            throw "RotaDate needs shiftStartsAt or dateOfRota option."
+            throw new Error("RotaDate needs shiftStartsAt or dateOfRota option.");
         }
     } 
     // baseDate has to be on the actual rota day between 8am and 7:59am.

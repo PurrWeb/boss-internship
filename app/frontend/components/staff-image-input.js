@@ -88,7 +88,7 @@ export default class StaffImageInput extends React.Component {
             }
             
         } else {
-            throw "Selected image isn't valid."
+            throw new Error("Selected image isn't valid.");
         }
     }
     getImagePicker(){

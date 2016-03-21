@@ -11,7 +11,7 @@ export default function rotaShift(state=[], action){
         case actionTypes.UPDATE_SHIFT_SUCCESS:
             var shiftClientId = action.shift.clientId;
             if (state[shiftClientId] === undefined) {
-                throw "Trying to update a shift that doesn't exist.";
+                throw new Error("Trying to update a shift that doesn't exist.");
             }
             var rotaShift = state[shiftClientId];
             rotaShift = Object.assign({}, rotaShift, {
@@ -21,7 +21,7 @@ export default function rotaShift(state=[], action){
             return Object.assign({}, state, {[shiftClientId]: rotaShift});
         case actionTypes.DELETE_SHIFT_SUCCESS:
             if (state[action.shiftClientId] === undefined) {
-                throw "Trying to delete a shift that no longer exists.";
+                throw new Error("Trying to delete a shift that no longer exists.");
             }
             return utils.immutablyDeleteObjectItem(state, action.shiftClientId);
     }

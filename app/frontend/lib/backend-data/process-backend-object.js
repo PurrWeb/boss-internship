@@ -69,7 +69,7 @@ function processObjectLinks(obj){
 
 export function processBackendObject(backendObj){
     if (backendObj.clientId !== undefined){
-        throw "Backend object has already been processed.";
+        throw new Error("Backend object has already been processed.");
     }
     var obj = {...backendObj};
 
