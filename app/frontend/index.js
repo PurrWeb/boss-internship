@@ -17,8 +17,8 @@ import "babel-core/polyfill"
 import RotaApp from "./apps/rota/rota-app"
 registerComponent("RotaApp", RotaApp)
 
-// import StaffTypeRotaApp from "./apps/staff-type-rota/staff-type-rota-app"
-// registerComponent("StaffTypeRotaApp", StaffTypeRotaApp);
+import StaffTypeRotaApp from "./apps/staff-type-rota/staff-type-rota-app"
+registerComponent("StaffTypeRotaApp", StaffTypeRotaApp);
 
 import ClockInOutApp from "./apps/clock-in-out/clock-in-out-app"
 registerComponent("ClockInOutApp", ClockInOutApp)

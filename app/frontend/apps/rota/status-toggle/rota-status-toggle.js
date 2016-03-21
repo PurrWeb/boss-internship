@@ -34,7 +34,7 @@ function mapStateToProps(state){
         status: oFetch(rota, "status"),
         statusUpdateInProgess: _.some(
             state.apiRequestsInProgress.UPDATE_ROTA_STATUS,
-            (request) => request.rotaId === rota.id
+            (request) => request.venueServerId === rota.venue.get(state.venues).serverId
         )
     }
 }

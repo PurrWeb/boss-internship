@@ -6,7 +6,7 @@ export default function renderTooltipHtml(data){
     function renderLine(groupId){
         var shifts = shiftsByGroupId[groupId];
         var groupObject = groupsById[groupId];
-        var isSelected = selectedGroupId === groupObject.id;
+        var isSelected = selectedGroupId === groupObject.clientId;
 
         var line = shifts.length + " - " + groupObject.name;
         if (isSelected) {
