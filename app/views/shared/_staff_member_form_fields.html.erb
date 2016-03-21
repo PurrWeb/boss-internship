@@ -10,13 +10,7 @@
       ) %>
 </div>
 
-
-<% if form.object.avatar? %>
-  <%= image_tag(form.object.avatar_url, class: "avatar_preview", height: 120, width: 120) %>
-<% end %>
-<%= form.label("Avatar") %>
-<%= form.hidden_field(:avatar_base64, id: 'staff_member_avatar_base64', value: form.object.avatar_base64) %>
-<%= react_component("StaffMemberFormAvatarImage", dataUrlInputSelector:"#staff_member_avatar_base64", selectedImageSelector: ".avatar_preview") %>
+<%= render partial: 'shared/avatar_picker_control', locals: { form: form } %>
 
 <%= form.select(:gender, options_for_select(StaffMember::GENDERS.map{ |role| [role.titleize, role] }, form.object.gender), include_blank: true, label_class: 'required') %>
 <% if edit_name %>
