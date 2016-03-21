@@ -5,7 +5,8 @@ export default class ToggleStaffOnBreakButton extends Component {
     render(){
         return <div>
         <ToggleStaffStatusButton
-            staffId={this.props.staffId}
+            staffObject={this.props.staffObject}
+            staffStatusData={this.props.staffStatusData}
             statusLabels={{
                 "clocked_in": "End break",
                 "on_break": "On Break", 

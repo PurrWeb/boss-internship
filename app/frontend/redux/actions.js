@@ -8,7 +8,7 @@ import {apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 import RotaDate from "~lib/rota-date"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
-import { processVenueRotaAppViewData } from "~lib/backend-data/process-app-view-data"
+import { processVenueRotaAppViewData, processClockInOutAppViewData } from "~lib/backend-data/process-app-view-data"
 
 export const actionTypes = {};
 const createApiRequestAction = function(options){
@@ -303,6 +303,22 @@ export function replaceAllStaffTypes(options) {
     }
 }
 
+actionTypes.REPLACE_ALL_STAFF_STATUSES = "REPLACE_ALL_STAFF_STATUSES";
+export function replaceAllStaffStatuses(options) {
+    return {
+        type: actionTypes.REPLACE_ALL_STAFF_STATUSES,
+        staffStatuses: options.staffStatuses
+    }
+}
+
+actionTypes.REPLACE_ALL_STAFF_STATUS_DATA = "REPLACE_ALL_STAFF_STATUS_DATA";
+export function replaceAllStaffStatusData(options) {
+    return {
+        type: actionTypes.REPLACE_ALL_STAFF_STATUS_DATA,
+        staffStatusData: options.staffStatusData
+    }
+}
+
 actionTypes.SET_PAGE_OPTIONS = "SET_PAGE_OPTIONS";
 export function setPageOptions(options) {
     return {
@@ -402,14 +418,21 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
     }
 }
 
-export function loadInitialClockInOutAppState() {
-    throw "not maintained"
-    // var userDataById = indexById(userData);
-    // return function(dispatch){
-    //     setTimeout(function(){
-    //         dispatch(replaceAllStaffMembers({staffMembers: userDataById}));
-    //     }, 3000)
-    // }
+export function loadInitialClockInOutAppState(viewData) {
+    viewData = processClockInOutAppViewData(viewData);
+    return function(dispatch){
+        dispatch([
+            replaceAllStaffMembers({
+                staffMembers: indexByClientId(viewData.staff_members)
+            }),
+            replaceAllStaffTypes({
+                staffTypes: indexByClientId(viewData.staff_types)
+            }),
+            replaceAllStaffStatuses({
+                staffStatuses: indexByClientId(viewData.staff_statuses)
+            })
+        ]);
+    }
 }
 
 export function loadInitialRotaOverviewAppState(viewData){

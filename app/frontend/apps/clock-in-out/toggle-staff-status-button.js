@@ -5,16 +5,13 @@ export default class ToggleStaffStatusButton extends Component {
         statusLabels: React.PropTypes.object.isRequired,
         // If `getStatusAfterClicking` returns null the button is not shown
         getStatusAfterClicking: React.PropTypes.func.isRequired,
-        staffId: React.PropTypes.number.isRequired
-    }
-    static contextTypes = {
+        staff: React.PropTypes.object.isRequired,
         staffStatuses: React.PropTypes.object.isRequired,
-        boundActionCreators: React.PropTypes.object.isRequired,
-        staffStatusOptions: React.PropTypes.object.isRequired
+        staffStatusData: React.PropTypes.object.isRequired
     }
     render(){
         var staffStatus = this.getStaffStatus();
-        var nextStatusId = this.props.getStatusAfterClicking(this.getStaffStatus());
+        var nextStatusId = this.props.getStatusAfterClicking(staffStatus);
 
         if (nextStatusId === null) {
             return null;
@@ -23,7 +20,7 @@ export default class ToggleStaffStatusButton extends Component {
         var label = this.props.statusLabels[nextStatusId]
 
         var style = {
-            backgroundColor: this.context.staffStatusOptions[nextStatusId].color
+            backgroundColor: this.props.staffStatuses[nextStatusId].color
         };
 
         return <a className="btn btn-status-toggle" style={style} onClick={() => this.onClick()}>
@@ -31,8 +28,8 @@ export default class ToggleStaffStatusButton extends Component {
         </a>
     }
     getStaffStatus(){
-        var staffId = this.props.staffId;
-        return this.context.staffStatuses[staffId];
+        var staffClientId = this.props.staffObject.clientId;
+        return this.props.staffStatusData[staffClientId];
     }
     onClick(){
         this.context.boundActionCreators.updateStaffStatus(

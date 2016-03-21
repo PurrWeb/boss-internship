@@ -1,11 +1,12 @@
 import React, {Component} from "react"
+import { connect } from "react-redux"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
 import StaffStatusBadge from "~components/staff-status-badge"
 import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
 
-export default class ClockInOutStaffListItem extends Component {
+class ClockInOutStaffListItem extends Component {
     static contextTypes = {
         staffStatuses: React.PropTypes.object.isRequired,
         boundActionCreators: React.PropTypes.object.isRequired
@@ -24,12 +25,18 @@ export default class ClockInOutStaffListItem extends Component {
                         staffId={staff.id} />
                 </div>
                 <div className="col-md-1">
-                    <ToggleStaffClockedInButton
-                        staffId={staff.id} />
+                    {/* <ToggleStaffClockedInButton
+                        staffStatusData={this.props.staffStatusData}
+                        staffObject={staff} /> */ }
+                        ]]]]]]]
                 </div>
                 <div className="col-md-1 show-in-manager-mode">
-                    <ToggleStaffOnBreakButton
-                        staffId={staff.id} />
+                    {/* <ToggleStaffOnBreakButton
+                        staffStatusData={this.props.staffStatusData}
+                        staffObject={staff} /> */ }
+
+
+                        ]]]]]]]
                 </div>
             </div>;
         } else {
@@ -53,11 +60,12 @@ export default class ClockInOutStaffListItem extends Component {
                 </div>
                 <div className="col-md-2">
                     Staff Type<br/>
-                    <StaffTypeBadge staffType={staff.staff_type.id} />
+                    <StaffTypeBadge staffTypeObject={staff.staff_type.get(this.props.staffTypes)} />
                 </div>
                 <div className="col-md-2">
                     Status <br/>
-                    <StaffStatusBadge status={staffStatus} />
+                    ]]]]]]]]]]]]]
+                    {/*<StaffStatusBadge status={staffStatus} /> */}
                 </div>
                 {nonManagerColumns}
                 {managerColumns}
@@ -68,3 +76,13 @@ export default class ClockInOutStaffListItem extends Component {
         this.context.boundActionCreators.enterManagerMode();
     }
 }
+
+function mapStateToProps(state){
+    return {
+        staffTypes: state.staffTypes,
+        staffStatuses: state.staffStatuses,
+        staffStatusData: state.staffStatusData
+    }
+}
+
+export default connect(mapStateToProps)(ClockInOutStaffListItem);

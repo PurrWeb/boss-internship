@@ -1,27 +1,27 @@
 import React, { Component } from "react"
-import StaffFilter from "~components/staff-finder/staff-filter"
+import { connect } from "react-redux"
+import StaffFinder from "~components/staff-finder"
 import StaffListItem from "./staff-list-item"
-import FilterableStaffList from "~components/staff-finder/filterable-staff-list"
 
-export default class StaffFinder extends Component {
-    static propTypes = {
-        staff: React.PropTypes.object.isRequired
-    }
-    constructor(props) {
-        super(props);
-        this.state = {
-            staffFilterSettings: StaffFilter.getDefaultSettings(),
-        };
-    }
+class ClockInOutStaffFinder extends Component {
     render() {
-        return <div>
-            <StaffFilter
-                onChange={(staffFilterSettings) => this.setState({staffFilterSettings})} />
-            <FilterableStaffList
-                staff={this.props.staff}
-                staffItemComponent={StaffListItem}
-                filterSettings={this.state.staffFilterSettings} />
-        </div>
+        return <StaffFinder
+            filters={{
+                search: true,
+                staffType: true
+            }}
+            staffItemComponent={StaffListItem}
+            staffTypes={this.props.staffTypes}
+            staff={this.props.staff} />
 
     }
 }
+
+function mapStateToProps(state){
+    return {
+        staff: state.staff,
+        staffTypes: state.staffTypes
+    }
+}
+
+export default connect(mapStateToProps)(ClockInOutStaffFinder)

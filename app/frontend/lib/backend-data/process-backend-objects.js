@@ -22,6 +22,10 @@ export function processStaffMemberObject(staffMember){
     return processBackendObject(staffMember);
 }
 
+export function processStaffStatusObject(staffStatus){
+    return processBackendObject(staffStatus);
+}
+
 export function processPageOptionsObject(pageOptions){
     // page options doesn't have an id, but we want to resolve IDs
     // in any links it contains
