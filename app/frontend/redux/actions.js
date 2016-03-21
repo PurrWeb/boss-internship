@@ -156,7 +156,7 @@ export const updateRotaForecast = createApiRequestAction({
         data: ({forecastedTake}) => {return {forecasted_take: forecastedTake} },
         getSuccessActionData: function(responseData){
             return {
-                rotaForecast: responseData
+                rotaForecast: backendData.processRotaForecastObject(responseData)
             }
         }
     })

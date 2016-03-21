@@ -10,16 +10,15 @@ export default function rotaForecastsReducer(state={}, action){
             var newForecast = action.rotaForecast;
             var existingRotaForecast = _.find(state, function(rotaForecast){
                 var datesAreEqual = utils.datesAreEqual(rotaForecast.date, newForecast.date);
-                var venuesAreEqual = rotaForecast.venueId === newForecast.venueId;
+                var venuesAreEqual = rotaForecast.venue.clientId === newForecast.venue.clientId;
                 return datesAreEqual && venuesAreEqual;
             });
 
-
             var newState = Object.assign({}, state);
             if (existingRotaForecast){
-                delete newState[existingRotaForecast.id];
+                delete newState[existingRotaForecast.clientId];
             }
-            newState[newForecast.id] = newForecast;
+            newState[newForecast.clientId] = newForecast;
             return newState;
     }
     return state;
