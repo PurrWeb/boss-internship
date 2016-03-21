@@ -22,6 +22,7 @@ export default class DataUrlImagePicker extends React.Component {
     render(){
         return <div>
             <input type="file"
+                className="form-control"
                 onChange={() => this.onFileSelected()}
                 ref={(ref) => this.fileInput = ref} />
             {this.getValidationMessageElement()}
