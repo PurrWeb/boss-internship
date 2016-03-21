@@ -21,6 +21,8 @@ class UsersController < ApplicationController
 
   def update_access_details
     user = User.find(params[:id])
+    assert_update_permitted(user)
+
     if user.update_attributes(user_access_details_params)
       flash[:success] = 'User updated successfully'
       redirect_to user_path(user)
@@ -37,6 +39,8 @@ class UsersController < ApplicationController
 
   def update_personal_details
     user = User.find(params[:id])
+    assert_update_permitted(user)
+
     if user.update_attributes(user_personal_details_params(user))
       flash[:success] = 'User updated successfully'
       redirect_to user_path(user)
@@ -77,7 +81,63 @@ class UsersController < ApplicationController
     end
   end
 
+  def undestroy
+    user = User.find(params[:id])
+    authorize!(:enable, user)
+
+    ReviveUser.new(
+      requester: current_user,
+      user: user
+    ).call
+
+    flash[:success] = "User enabled successfully"
+    redirect_to user_path(user)
+  end
+
+  def disable
+    user = User.find(params[:id])
+    authorize!(:disable, user)
+
+    form = DisableStaffMemberForm.new(OpenStruct.new)
+    render locals: {
+      user: user,
+      form: form
+    }
+  end
+
+  def destroy
+    user = User.find(params[:id])
+    authorize!(:disable, user)
+
+    form = DisableStaffMemberForm.new(OpenStruct.new)
+    result = form.validate(params["disable_staff_member"])
+    if result
+      disable_reason = form.disable_reason
+      would_rehire = !ActiveRecord::Type::Boolean.new.type_cast_from_user(form.never_rehire)
+
+      DeleteUser.new(
+        requester: current_user,
+        user: user,
+        would_rehire: would_rehire,
+        disable_reason: disable_reason
+      ).call
+
+      flash[:success] = "User disabled successfully"
+      redirect_to users_path
+    else
+      flash.now[:error] = "There was a problem disabling this user"
+      render 'disable', locals: {
+        user: user,
+        form: form
+      }
+    end
+  end
+
   private
+  def assert_update_permitted(user)
+    raise 'Attempt to update disabled user' if user.disabled?
+  end
+
   def authorize_admin
     if !can?(:manage, :admin)
       redirect_to root_path

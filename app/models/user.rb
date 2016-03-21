@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
   ROLES = ['admin', 'manager', 'dev', 'ops_manager', 'security_manager']
 
+  include Statesman::Adapters::ActiveRecordQueries
+
   has_many :venues, through: :venue_users
   has_many :venue_users
 
@@ -12,9 +14,9 @@ class User < ActiveRecord::Base
   belongs_to :email_address, inverse_of: :users
   accepts_nested_attributes_for :email_address, allow_destroy: false
 
-  belongs_to :invite
+  has_many :user_transitions, autosave: false
 
-  include Enableable
+  belongs_to :invite
 
   # Include default devise modules. Others available are:
   # :registerable, :timeoutable, :validatable, and :omniauthable
@@ -23,16 +25,25 @@ class User < ActiveRecord::Base
           :lockable, :authentication_keys => [:devise_email]
 
   validates :role, inclusion: { in: ROLES, message: 'is required' }
-  validates :enabled, :inclusion => {:in => [true, false], message: 'is required' }
   validates :name, presence: true
   validates :email_address, presence: true
   validates :invite, presence: true, unless: :first?
+
+  delegate :current_state, to: :state_machine
 
   delegate \
     :full_name,
     :first_name,
     :surname,
     to: :name
+
+  def self.enabled
+    in_state(:enabled)
+  end
+
+  def self.disabled
+    in_state(:disabled)
+  end
 
   def self.with_email(email)
     joins(:email_address).merge(EmailAddress.where(email: email))
@@ -65,6 +76,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def enabled?
+    state_machine.current_state == 'enabled'
+  end
+
+  def disabled?
+    state_machine.current_state == 'disabled'
+  end
+
   def admin?
     role == 'admin'
   end
@@ -93,6 +112,20 @@ class User < ActiveRecord::Base
     dev? || admin?
   end
 
+  def active_for_authentication?
+    enabled?
+  end
+
+  def disabled_by_user
+    if disabled?
+      User.find(state_machine.last_transition.metadata.fetch("requster_user_id"))
+    end
+  end
+
+  def inactive_message
+    'This account is disabled'
+  end
+
   def status
     enabled? ? 'Active' : 'Disabled'
   end
@@ -100,6 +133,27 @@ class User < ActiveRecord::Base
   # Required to stop devise complaining about not using a proper email field
   def email_changed?
     false
+  end
+
+  def state_machine
+    @state_machine ||= UserStateMachine.new(
+      self,
+      transition_class: UserTransition,
+      association_name: :user_transitions
+    )
+  end
+
+  def disable_reason
+    disabled? && state_machine.last_transition.metadata.fetch("disable_reason")
+  end
+
+  # Needed for statesman
+  def self.transition_class
+    UserTransition
+  end
+
+  def self.initial_state
+    UserStateMachine.initial_state
   end
 
   # Required for devise to work with non-standard email setup

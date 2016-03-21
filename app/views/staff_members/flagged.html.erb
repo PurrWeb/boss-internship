@@ -1,0 +1,31 @@
+<h1>Flagged Staff Members</h1>
+
+<%= render partial: 'flagged_staff_member_filter', locals: { filter: filter, staff_members: staff_members } %>
+
+<% if staff_members.present? %>
+  <ul class="list-unstyled">
+    <% staff_members.each do |staff_member| %>
+      <li>
+        <div class="panel panel-default">
+          <div class="media">
+            <div class="media-left">
+              <img class="media-object" src="<%= staff_member.avatar.small.url %>" />
+            </div>
+            <div class="media-body">
+              <h4 class="media-heading">
+                <%= staff_member.full_name %>
+                <%= link_to('View', staff_member_path(staff_member), class: 'btn btn-success') %>
+              </h4>
+              <p>Email Address: <%= staff_member.email || 'Not supplied' %></p>
+              <p>Staff Type: <%= staff_member.staff_type.name.titlecase %></p>
+              <p>Disabled by: <%= staff_member.disabled_by_user.full_name %> on <%= staff_member.disabled_at.to_s(:human_date) %></p>
+              <p>Reason for disabling: <%= staff_member.disable_reason %></p>
+            </div>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  <ul>
+  <%= render partial: 'shared/pagination_control', locals: { relation: staff_members } %>
+<% end %>
+

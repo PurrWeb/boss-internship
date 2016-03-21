@@ -1,16 +1,34 @@
-<h1><%= user.full_name %></h1>
+<div class="media">
+  <div class="media-body">
+    <h1 class="media-heading"><%= user.full_name %><%= " (Disabled)" if user.disabled? %></h1>
+  </div>
+  <div class="media-right">
+    <% if can?(:disable, user) %>
+      <%= link_to(disable_user_path(user), class: 'btn btn-danger') do %>
+        <span class="glyphicon glyphicon-fire"></span> Disable User
+      <% end %>
+    <% end %>
+    <% if can?(:enable, user) %>
+      <%= link_to(undestroy_user_path(user), method: :post, class: 'btn btn-danger') do %>
+        <span class="glyphicon glyphicon-heart"></span> Enable User
+      <% end %>
+    <% end %>
+  </div>
+</div>
 
 <div class="container-fluid">
   <div class="panel panel-default">
     <div class="panel-heading">
       <span>Personal Details</span>
-      <span>
-        <%= link_to(
-              'Edit',
-              edit_personal_details_user_path(user),
-              class: ['btn', 'btn-primary', 'btn-xs', 'user-edit-personal-details-button']
-            ) %>
-      </span>
+      <% if user.enabled? %>
+        <span>
+          <%= link_to(
+                'Edit',
+                edit_personal_details_user_path(user),
+                class: ['btn', 'btn-primary', 'btn-xs', 'user-edit-personal-details-button']
+              ) %>
+        </span>
+      <% end %>
     </div>
     <div class="panel-body">
     <dl>
@@ -26,13 +44,15 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <span>Access Details</span>
-      <span>
-        <%= link_to(
-              'Edit',
-              edit_access_details_user_path(user),
-              class: ['btn', 'btn-primary', 'btn-xs', 'user-edit-access-details-button']
-            ) %>
-      </span>
+      <% if user.enabled? %>
+        <span>
+          <%= link_to(
+                'Edit',
+                edit_access_details_user_path(user),
+                class: ['btn', 'btn-primary', 'btn-xs', 'user-edit-access-details-button']
+              ) %>
+        </span>
+      <% end %>
     </div>
     <div class="panel-body">
       <dl>
@@ -70,13 +90,15 @@
               <div class="no-assocaited-staff-member-message">
                 No assocaited staff member
               </div>
-              <div>
-                <%= link_to(
-                      'Create',
-                      new_staff_member_user_path(user),
-                      class: ['create-staff-member-button', 'btn', 'btn-primary']
-                    ) %>
-              </div>
+              <% if user.enabled? %>
+                <div>
+                  <%= link_to(
+                        'Create',
+                        new_staff_member_user_path(user),
+                        class: ['create-staff-member-button', 'btn', 'btn-primary']
+                      ) %>
+                </div>
+              <% end %>
             <% end %>
           </dd>
         <% end %>

@@ -1,6 +1,8 @@
 class StaffMember < ActiveRecord::Base
   GENDERS = ['male', 'female']
 
+  include Statesman::Adapters::ActiveRecordQueries
+
   belongs_to :creator, class_name: 'User'
   belongs_to :staff_type
   has_one :staff_member_venue, inverse_of: :staff_member
@@ -22,6 +24,8 @@ class StaffMember < ActiveRecord::Base
 
   has_many :holidays, inverse_of: :staff_member
 
+  has_many :staff_member_transitions, autosave: false
+
   belongs_to :pay_rate
 
   mount_uploader :avatar, AvatarUploader
@@ -34,11 +38,8 @@ class StaffMember < ActiveRecord::Base
   # during form resubmissions
   attr_accessor :avatar_base64
 
-  include Enableable
-
   validates :name, presence: true
   validates :gender, inclusion: { in: GENDERS, message: 'is required' }
-  validates :enabled, :inclusion => {:in => [true, false], message: 'is required' }
   validate  :national_insurance_number_valid
   validates :pin_code, presence: true
   validate  :valid_pin_code_format
@@ -53,13 +54,18 @@ class StaffMember < ActiveRecord::Base
     SecurityStaffMemberValidator.new(staff_member).validate
   end
 
+
   validates :employment_status_a, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_b, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_c, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_d, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_p45_supplied, inclusion: { in: [true, false], message: 'is required' }
 
+  validates :would_rehire, inclusion: { in: [true, false], message: 'is required' }
+
   before_validation :normalise_national_insurance_number
+
+  delegate :current_state, to: :state_machine
 
   def self.for_venue(venue)
     joins(:venue).merge(Venue.where(id: venue.id))
@@ -67,6 +73,42 @@ class StaffMember < ActiveRecord::Base
 
   def self.security
     joins(:staff_type).merge(StaffType.security)
+  end
+
+  def self.enabled
+    in_state(:enabled)
+  end
+
+  def self.disabled
+    in_state(:disabled)
+  end
+
+  def self.flagged
+    disabled.where(would_rehire: false)
+  end
+
+  def disabled_by_user
+    if disabled?
+      User.find(state_machine.last_transition.metadata.fetch("requster_user_id"))
+    end
+  end
+
+  def flagged?
+    disabled? && would_rehire == false
+  end
+
+  def enabled?
+    state_machine.current_state == 'enabled'
+  end
+
+  def disabled?
+    state_machine.current_state == 'disabled'
+  end
+
+  def disabled_at
+    if disabled?
+      state_machine.last_transition.created_at
+    end
   end
 
   def security?
@@ -81,6 +123,10 @@ class StaffMember < ActiveRecord::Base
     if pin_code.present?
       errors.add(:pin_code, 'must be numerical') unless pin_code.match(pin_code_regex)
     end
+  end
+
+  def disable_reason
+    disabled? && state_machine.last_transition.metadata.fetch("disable_reason")
   end
 
   def pin_code_regex
@@ -129,5 +175,23 @@ class StaffMember < ActiveRecord::Base
 
   def day_perference_help_text
     'Peferrered days to work displayed in the rota (e.g. mornings and weekeneds)'
+  end
+
+  def state_machine
+    @state_machine ||= StaffMemberStateMachine.new(
+      self,
+      transition_class: StaffMemberTransition,
+      association_name: :staff_member_transitions
+    )
+  end
+
+  private
+  # Needed for statesman
+  def self.transition_class
+    StaffMemberTransition
+  end
+
+  def self.initial_state
+    StaffMemberStateMachine.initial_state
   end
 end

@@ -1,0 +1,13 @@
+<h1>Enable <%= staff_member.full_name %></h1>
+
+<%= bootstrap_form_for(staff_member, url: undestroy_staff_member_path(staff_member), html: { multipart: true, class: 'staff-member-form' }) do |form| %>
+  <%= render(
+        partial: 'shared/staff_member_form_fields',
+        locals: {
+          form: form,
+          edit_name: true,
+          edit_email: true
+        }
+      ) %>
+  <button type="submit" class="btn btn-default">Submit</button>
+<% end %>

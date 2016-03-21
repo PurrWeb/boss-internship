@@ -10,26 +10,38 @@
               url: staff_members_path,
               html: { method: :get, class: 'form-inline' }
             ) do |form| %>
+          <%= form.text_field(:name_text, label: 'Name', value: filter.name_text) %>
+          <%= form.text_field(:email_text, label: 'Email', value: filter.email_text) %>
           <%= form.select(
-                :venue,
+                :status,
                 options_for_select(
-                  filter.accessible_venues.map do |venue|
-                    [venue.name.titlecase, venue.id]
-                  end,
-                  filter.venue.try(:id)
+                  filter.select_statuses.map { |status| [status.titlecase, status] },
+                  filter.status
                 ),
                 prompt: 'Any'
               ) %>
-          <%= form.select(
-                :staff_type,
-                options_for_select(
-                  filter.accessible_staff_types.map do |type|
-                    [type.name.titlecase, type.id]
-                  end,
-                  filter.staff_type.try(:id)
-                ),
-                prompt: 'Any'
-              ) %>
+          <% if !current_user.security_manager? %>
+            <%= form.select(
+                  :venue,
+                  options_for_select(
+                    filter.accessible_venues.map do |venue|
+                      [venue.name.titlecase, venue.id]
+                    end,
+                    filter.venue.try(:id)
+                  ),
+                  prompt: 'Any'
+                ) %>
+            <%= form.select(
+                  :staff_type,
+                  options_for_select(
+                    filter.accessible_staff_types.map do |type|
+                      [type.name.titlecase, type.id]
+                    end,
+                    filter.staff_type.try(:id)
+                  ),
+                  prompt: 'Any'
+                ) %>
+          <% end %>
           <%= form.submit('Update') %>
         <% end %>
       </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160314124723) do
+ActiveRecord::Schema.define(version: 20160316232009) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -194,6 +194,19 @@ ActiveRecord::Schema.define(version: 20160314124723) do
   add_index "rotas", ["date", "venue_id"], name: "index_rotas_on_date_and_venue_id", unique: true, using: :btree
   add_index "rotas", ["venue_id"], name: "index_rotas_on_venue_id", using: :btree
 
+  create_table "staff_member_transitions", force: :cascade do |t|
+    t.string   "to_state",        limit: 255,   null: false
+    t.text     "metadata",        limit: 65535
+    t.integer  "sort_key",        limit: 4,     null: false
+    t.integer  "staff_member_id", limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "staff_member_transitions", ["staff_member_id", "most_recent"], name: "index_staff_member_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "staff_member_transitions", ["staff_member_id", "sort_key"], name: "index_staff_member_transitions_parent_sort", unique: true, using: :btree
+
   create_table "staff_member_venues", force: :cascade do |t|
     t.integer  "staff_member_id", limit: 4, null: false
     t.integer  "venue_id",        limit: 4, null: false
@@ -206,7 +219,6 @@ ActiveRecord::Schema.define(version: 20160314124723) do
     t.integer  "address_id",                            limit: 4
     t.string   "gender",                                limit: 255,                   null: false
     t.string   "phone_number",                          limit: 255
-    t.boolean  "enabled",                                             default: true,  null: false
     t.datetime "date_of_birth"
     t.string   "national_insurance_number",             limit: 255
     t.text     "hours_preference_note",                 limit: 65535
@@ -231,15 +243,16 @@ ActiveRecord::Schema.define(version: 20160314124723) do
     t.boolean  "employment_status_statement_completed",               default: false, null: false
     t.boolean  "employment_status_p45_supplied",                                      null: false
     t.datetime "notified_of_sia_expiry_at"
+    t.boolean  "would_rehire",                                        default: true,  null: false
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
-  add_index "staff_members", ["enabled"], name: "index_staff_members_on_enabled", using: :btree
   add_index "staff_members", ["notified_of_sia_expiry_at"], name: "index_staff_members_on_notified_of_sia_expiry_at", using: :btree
   add_index "staff_members", ["phone_number"], name: "index_staff_members_on_phone_number", using: :btree
   add_index "staff_members", ["shift_change_occured_at"], name: "index_staff_members_on_shift_change_occured_at", using: :btree
   add_index "staff_members", ["sia_badge_expiry_date"], name: "index_staff_members_on_sia_badge_expiry_date", using: :btree
   add_index "staff_members", ["staff_type_id"], name: "index_staff_members_on_staff_type_id", using: :btree
+  add_index "staff_members", ["would_rehire"], name: "index_staff_members_on_would_rehire", using: :btree
 
   create_table "staff_types", force: :cascade do |t|
     t.string   "name",       limit: 255, null: false
@@ -250,6 +263,19 @@ ActiveRecord::Schema.define(version: 20160314124723) do
   end
 
   add_index "staff_types", ["name"], name: "index_staff_types_on_name", unique: true, using: :btree
+
+  create_table "user_transitions", force: :cascade do |t|
+    t.string   "to_state",    limit: 255,   null: false
+    t.text     "metadata",    limit: 65535
+    t.integer  "sort_key",    limit: 4,     null: false
+    t.integer  "user_id",     limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "user_transitions", ["user_id", "most_recent"], name: "index_user_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "user_transitions", ["user_id", "sort_key"], name: "index_user_transitions_parent_sort", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "encrypted_password",     limit: 255, default: "",   null: false
@@ -277,6 +303,7 @@ ActiveRecord::Schema.define(version: 20160314124723) do
     t.integer  "invite_id",              limit: 4
     t.boolean  "first"
     t.integer  "staff_member_id",        limit: 4
+    t.boolean  "would_rehire",                       default: true, null: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
@@ -286,6 +313,7 @@ ActiveRecord::Schema.define(version: 20160314124723) do
   add_index "users", ["role"], name: "index_users_on_role", using: :btree
   add_index "users", ["staff_member_id"], name: "index_users_on_staff_member_id", using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+  add_index "users", ["would_rehire"], name: "index_users_on_would_rehire", using: :btree
 
   create_table "venue_users", force: :cascade do |t|
     t.integer  "user_id",    limit: 4, null: false

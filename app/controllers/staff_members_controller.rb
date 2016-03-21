@@ -14,9 +14,27 @@ class StaffMembersController < ApplicationController
     }
   end
 
+  def flagged
+    authorize! :manage, :staff_members
+
+    filter = StaffMemberIndexFilter.new(
+      user: current_user,
+      params: Hash(params[:filter]).merge(status: nil)
+    )
+
+    staff_members = filter.
+      query(relation: StaffMember.flagged).all.
+      paginate(page: params[:page], per_page: 20)
+
+    render locals: {
+      staff_members: staff_members,
+      filter: filter
+    }
+  end
+
   def show
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
 
     if !active_tab_from_params.present?
       return redirect_to staff_member_path(staff_member, tab: 'employment-details')
@@ -52,14 +70,15 @@ class StaffMembersController < ApplicationController
 
   def edit_employment_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
 
     render locals: { staff_member: staff_member }
   end
 
   def update_employment_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
+    assert_update_permitted(staff_member)
 
     result = UpdateStaffMemberEmploymentDetails.new(
       staff_member: staff_member,
@@ -77,14 +96,15 @@ class StaffMembersController < ApplicationController
 
   def edit_personal_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
 
     render locals: { staff_member: staff_member }
   end
 
   def update_personal_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
+    assert_update_permitted(staff_member)
 
     if staff_member.update_attributes(update_personal_details_params)
       flash[:success] = "Staff member updated successfully"
@@ -97,14 +117,15 @@ class StaffMembersController < ApplicationController
 
   def edit_contact_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
 
     render locals: { staff_member: staff_member }
   end
 
   def update_contact_details
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
+    assert_update_permitted(staff_member)
 
     result = UpdateStaffMemberContactDetails.new(
       staff_member: staff_member,
@@ -124,14 +145,15 @@ class StaffMembersController < ApplicationController
 
   def edit_avatar
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
 
     render locals: { staff_member: staff_member }
   end
 
   def update_avatar
     staff_member = StaffMember.find(params[:id])
-    authorize! :manage, staff_member
+    authorize! :edit, staff_member
+    assert_update_permitted(staff_member)
 
     if staff_member.update_attributes(update_avatar_params)
       flash[:success] = "Staff member updated successfully"
@@ -142,7 +164,79 @@ class StaffMembersController < ApplicationController
     end
   end
 
+  def enable
+    staff_member = StaffMember.find(params[:id])
+    authorize! :enable, staff_member
+
+    render locals: {
+      staff_member: staff_member
+    }
+  end
+
+  def undestroy
+    staff_member = StaffMember.find(params[:id])
+    authorize! :enable, staff_member
+
+    result = ReviveStaffMember.new(
+      requester: current_user,
+      staff_member: staff_member,
+      staff_member_params: enable_params(staff_member)
+    ).call
+
+    if result.success?
+      flash[:success] = "Staff Member enabled successfully"
+      redirect_to staff_member_path(staff_member)
+    else
+      flash.now[:error] = "There was a problem enabling creating this staff member"
+      render 'enable', locals: { staff_member: result.staff_member }
+    end
+  end
+
+  def disable
+    staff_member = StaffMember.find(params[:id])
+    authorize! :disable, staff_member
+
+    form = DisableStaffMemberForm.new(OpenStruct.new)
+    render locals: {
+      staff_member: staff_member,
+      form: form
+    }
+  end
+
+  def destroy
+    staff_member = StaffMember.find(params[:id])
+    authorize! :disable, staff_member
+
+    form = DisableStaffMemberForm.new(OpenStruct.new)
+    result = form.validate(params["disable_staff_member"])
+
+    if result
+      disable_reason = form.disable_reason
+      would_rehire = !ActiveRecord::Type::Boolean.new.type_cast_from_user(form.never_rehire)
+
+      DeleteStaffMember.new(
+        requester: current_user,
+        staff_member: staff_member,
+        would_rehire: would_rehire,
+        disable_reason: disable_reason
+      ).call
+
+      flash[:success] = "Staff member disabled successfully"
+      redirect_to staff_members_path
+    else
+      flash.now[:error] = "There was a problem disabling this staff member"
+      render 'disable', locals: {
+        staff_member: staff_member,
+        form: form
+      }
+    end
+  end
+
   private
+  def assert_update_permitted(staff_member)
+    raise 'Attempt to update disabled staff_member' if staff_member.disabled?
+  end
+
   def active_tab_from_params
     tab_from_params = params['tab']
     tab_from_params if show_page_tabs.include?(tab_from_params)
@@ -156,6 +250,15 @@ class StaffMembersController < ApplicationController
       'contact-details',
       'holidays'
     ]
+  end
+
+  def enable_params(staff_member)
+    staff_member_params.
+      deep_merge(
+        staff_member_venue_attributes: {
+          id: staff_member.staff_member_venue.try(:id)
+        }
+      )
   end
 
   def staff_member_params

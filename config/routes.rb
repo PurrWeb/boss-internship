@@ -12,8 +12,10 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
-  resources :users, only: [:show, :index] do
+  resources :users, only: [:show, :index, :destroy] do
     member do
+      get :disable
+      post :undestroy
       get :edit_access_details
       post :update_access_details
       get :edit_personal_details
@@ -35,9 +37,15 @@ Rails.application.routes.draw do
 
   resources :holiday_reports, only: :index
 
-  resources :staff_members, only: [:show, :index, :new, :create] do
+  resources :staff_members, only: [:show, :index, :new, :create, :destroy] do
     resources :holidays, only: [:create, :destroy]
+    collection do
+      get :flagged
+    end
     member do
+      get :disable
+      get :enable
+      patch :undestroy
       get :edit_employment_details
       post :update_employment_details
       get :edit_personal_details

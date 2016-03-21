@@ -25,6 +25,16 @@ FactoryGirl.define do
     staff_type
     avatar { Rack::Test::UploadedFile.new(TestImageHelper.arnie_face_path) }
 
+    trait :disabled do
+      after(:create) do |staff_member|
+        FactoryGirl.create(
+          :staff_member_transition,
+          :disabled,
+          staff_member: staff_member
+        )
+      end
+    end
+
     trait :requiring_notification do
       shift_change_occured_at 1.hour.ago
     end
