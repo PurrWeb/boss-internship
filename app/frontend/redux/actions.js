@@ -26,7 +26,7 @@ function confirmIfRotaIsPublished(options){
     if (rota.status !== "published") {
         return true;
     }
-    return confirm(question);
+    return confirm(options.question);
 }
 
 function getRotaDateFromShiftStartsAt(startAt){
@@ -272,7 +272,10 @@ export const publishRotas = createApiRequestAction({
     makeRequest: makeApiRequest({
         method: apiRoutes.publishRotas.method,
         path: function(options){
-            return apiRoutes.publishRotas.getPath(options)
+            return apiRoutes.publishRotas.getPath({
+                venueId: options.venueServerId,
+                date: options.date
+            })
         },
         getSuccessActionData: function(responseData, requestOptions){
             return requestOptions;

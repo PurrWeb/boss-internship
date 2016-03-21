@@ -37,7 +37,7 @@ export default class WeekAndVenueSelector extends React.Component {
                         (venueClientId) => this.props.onChange({
                             startDate: this.props.weekStartDate,
                             endDate: this.getWeekEndDate(this.props.weekStartDate),
-                            venueClientId: venueClientId
+                            venueClientId: this.props.venueClientId
                         })
                     } />
                 {this.props.children}

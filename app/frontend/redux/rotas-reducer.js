@@ -15,7 +15,7 @@ export default function rotasReducer(state={}, action){
             return newState;
         case actionTypes.PUBLISH_ROTAS_SUCCESS:
             return _(state).mapObject(function(rota){
-                if (rota.venue.id !== action.venueId) {
+                if (rota.venue.serverId !== action.venueServerId) {
                     return rota;
                 }
                 var weekStartDate = utils.getWeekStartDate(action.date);
