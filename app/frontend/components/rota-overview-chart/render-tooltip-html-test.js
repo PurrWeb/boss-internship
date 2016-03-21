@@ -10,12 +10,12 @@ describe("rotaOverview - renderTooltipHtml", function(){
         }
 
         var staffTypes = _([{
-            id: "bar_back",
+            clientId: "bar_back",
             name: "Bar back"
         },{
-            id: "kitchen",
+            clientId: "kitchen",
             name: "Kitchen"
-        }]).indexBy("id");
+        }]).indexBy("clientId");
 
         var selectedStaffTypeTitle = "Kitchen";
 

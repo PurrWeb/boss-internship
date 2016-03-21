@@ -1,13 +1,14 @@
 import {actionTypes} from "./actions.js"
 import utils from "~lib/utils"
 import _ from "underscore"
+import oFetch from "o-fetch"
 
 export default function rotasReducer(state={}, action){
     switch(action.type) {
         case actionTypes.REPLACE_ALL_ROTAS:
             return action.rotas
         case actionTypes.UPDATE_ROTA_STATUS_SUCCESS:
-            var {rotaClientId, status} = action;
+            var [rotaClientId, status] = oFetch(action, "rotaClientId", "status");
             var newState = {...state};
             var rota = _.find(newState, {clientId: rotaClientId})
             rota.status = status;

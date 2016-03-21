@@ -5,7 +5,6 @@ describe("rotasReducer", function(){
     it("Can update the status of a rota", function(){
         var initalState = {
             "r8": {
-                id: 8,
                 clientId: "r8",
                 status: "in_progress"
             }
@@ -13,13 +12,12 @@ describe("rotasReducer", function(){
 
         var action = {
             type: "UPDATE_ROTA_STATUS_SUCCESS",
-            rotaId: 8,
+            rotaClientId: "r8",
             status: "finished"
         }
 
         var expectedResultState = {
             "r8": {
-                id: 8,
                 clientId: "r8",
                 status: "finished"
             }

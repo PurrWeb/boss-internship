@@ -4,6 +4,7 @@ import { simpleRender } from "~lib/test-helpers"
 import RotaApp from "./rota-app"
 import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
+import { getClientId } from "~lib/backend-data/process-backend-object"
 
 import StaffDetailsAndShifts from "~components/staff-details-and-shifts"
 import ChartAndFilter from "./chart-and-filter"
@@ -121,7 +122,7 @@ describe('Venue Rota Integration Test', function() {
 
         var chartAndFilter = findChild(ChartAndFilter.WrappedComponent);
         // We can't simulate a click on a D3 element, so use setState instead
-        chartAndFilter.setState({staffToShow: JOHN_KITCHEN_ID});
+        chartAndFilter.setState({staffToShow: getClientId(JOHN_KITCHEN_ID)});
 
         var detailsComponent = findChild(StaffDetailsAndShifts);
         var node = ReactDOM.findDOMNode(detailsComponent);
