@@ -38,7 +38,15 @@ export default class DataUrlImagePicker extends React.Component {
         </div>
     }
     onFileSelected(){
-        var file = this.fileInput.files[0];
+        var files = this.fileInput.files;
+        if (files.length === 0) {
+            // apparently it is sometimes possible to select 0 files.
+            // In that case reset the validation message and do nothing else.
+            this.setState({validationMessage: null});
+            return;
+        }
+
+        var file = files[0];
         if (!this.validateFile(file)){
             return;
         }
