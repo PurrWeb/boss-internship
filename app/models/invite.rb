@@ -1,6 +1,8 @@
 class Invite < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
 
+  serialize :venue_ids, Array
+
   has_many :invite_transitions, autosave: false
 
   belongs_to :inviter, class_name: "User"
@@ -26,6 +28,14 @@ class Invite < ActiveRecord::Base
   validate :user_doesnt_already_exist, on: :create
 
   delegate :can_transition_to?, :transition_to, :transition_to!, :current_state, to: :state_machine
+
+  validate :venues_ids_venues_exist, on: :create
+
+  def venues_ids_venues_exist
+    venue_ids.each do |id|
+      Venue.find(id)
+    end
+  end
 
   def revoke!
     transition_to!(:revoked)

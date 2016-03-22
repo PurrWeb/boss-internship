@@ -9,6 +9,7 @@
     <tr>
       <th>Email</th>
       <th>Role</th>
+      <th>Venues</th>
       <th>Status</th>
       <th>Inviter</th>
       <th>Invited At</th>
@@ -21,6 +22,14 @@
         </td>
         <td data-role="role">
           <%= invite.role.titleize %>
+        </td>
+        <td data-role="venues">
+          <% if invite.role == 'manager' %>
+            <% venues = invite.venue_ids.map { |id| Venue.find_by(id: id) }.compact %>
+            <%= venues.map(&:name).to_sentence %>
+          <% else %>
+            All
+          <% end %>
         </td>
         <td data-role="status">
           <%= invite.current_state.titleize %>

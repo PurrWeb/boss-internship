@@ -3,12 +3,25 @@ require 'feature/feature_spec_helper'
 RSpec.feature 'Inviting a new user' do
   let(:admin_email) { FactoryGirl.create(:email_address, email: 'admin.email@foo.com') }
   let(:new_email) { FactoryGirl.build(:email_address, email: 'new.email@foo.com') }
-  let(:admin_user) { FactoryGirl.create(:user, :admin, email_address: admin_email) }
-  let(:prospective_user) { FactoryGirl.build(:user, email_address: new_email) }
+  let(:admin_user) do
+    FactoryGirl.create(:user, :admin, email_address: admin_email)
+  end
+  let(:venues) do
+    Array.new(2) { FactoryGirl.create(:venue) }
+  end
+  let(:prospective_user) do
+    FactoryGirl.build(
+      :user,
+      email_address: new_email
+    ).tap do |user|
+      user.venues = venues
+    end
+  end
   let(:invite_new_user_page) { PageObject::InviteNewUserPage.new }
   let(:invites_index_page) { PageObject::InvitesIndexPage.new }
 
   before do
+    venues
     login_as admin_user
   end
 
@@ -22,6 +35,7 @@ RSpec.feature 'Inviting a new user' do
 
     invites_index_page.ensure_flash_success_message_displayed('Invite created successfully')
     invite = Invite.find_by!(email: prospective_user.email)
+    expect(invite.venue_ids).to eq(venues.map(&:id))
     invites_index_page.invites_table.ensure_details_displayed_for(invite)
 
     invite_email = ActionMailer::Base.deliveries.last

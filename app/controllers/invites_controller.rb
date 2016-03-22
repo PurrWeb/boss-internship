@@ -67,7 +67,9 @@ class InvitesController < ApplicationController
 
     result = true
     ActiveRecord::Base.transaction do
+      venues = invite.venue_ids.map { |id| Venue.find_by(id: id) }.compact
       email_address = EmailAddress.new(email: invite.email)
+
       result = user.update_attributes(
         user_params.merge(
           email_address: email_address,
@@ -75,7 +77,13 @@ class InvitesController < ApplicationController
           invite: invite
         )
       )
-      result = result && invite.transition_to(:accepted)
+      if result
+        venues.each do |venue|
+          user.venue_users.create!(venue: venue)
+        end
+
+        invite.transition_to!(:accepted)
+      end
 
       raise ActiveRecord::Rollback unless result
     end
@@ -90,9 +98,19 @@ class InvitesController < ApplicationController
   end
 
   def invite_params
+    params[:invite][:venue_ids] = Array(params[:invite][:venue_ids]).map do |id|
+      if id.present?
+        Integer(id)
+      end
+    end.compact
+
     permitted_params = [:email]
 
-    if current_user.can_create_roles.include?(params[:invite][:role])
+    if role_from_params == 'manager'
+      permitted_params << { venue_ids: [] }
+    end
+
+    if current_user.can_create_roles.include?(role_from_params)
       permitted_params << :role
     end
 
@@ -104,5 +122,10 @@ class InvitesController < ApplicationController
       :password,
       name_attributes: [:first_name, :surname]
     )
+  end
+
+
+  def role_from_params
+    params[:invite][:role]
   end
 end

@@ -23,7 +23,7 @@
 //= require_tree ./page_controllers
 
 $(function(){
-  $('.chosen-select').chosen();
+  $('.chosen-select').chosen({width: '100%'});
 
   $('.pick-a-color').pickAColor({
     showSavedColors: false,

@@ -2,7 +2,10 @@ require 'feature/feature_spec_helper'
 
 RSpec.feature 'Accepting an invite' do
   let(:admin_user) { FactoryGirl.create(:user, :admin) }
-  let(:invite) { FactoryGirl.create(:invite, :admin, inviter: admin_user) }
+  let(:invite) { FactoryGirl.create(:invite, :admin, inviter: admin_user, venue_ids: venues.map(&:id)) }
+  let(:venues) do
+    Array.new(2) { FactoryGirl.create(:venue) }
+  end
   let(:prospective_user) { FactoryGirl.build(:user) }
   let(:accept_invite_page) { PageObject::AcceptInvitePage.new(invite) }
   let(:sign_in_page) { PageObject::SignInPage.new }
@@ -19,7 +22,9 @@ RSpec.feature 'Accepting an invite' do
 
     home_page.ensure_welcome_text_displayed_for(prospective_user)
     expect(invite.reload).to be_accepted
-    expect(User.joins(:email_address).merge(EmailAddress.where(email: invite.email)).first).to be_present
+    user = User.joins(:email_address).merge(EmailAddress.where(email: invite.email)).first
+    expect(user).to be_present
+    expect(user.venues).to eq(venues)
   end
 
   scenario 'Anonymous user clicks on accept invite link in email and fills out incorrectly' do
