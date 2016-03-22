@@ -192,14 +192,19 @@ export function leaveManagerMode () {
     }
 }
 
-export const UPDATE_STAFF_STATUS = "UPDATE_STAFF_STATUS";
-export function updateStaffStatus(staffMemberObject, statusValue) {
-    return {
-        type: UPDATE_STAFF_STATUS,
-        staffMemberObject,
-        statusValue
+export const updateStaffStatus = createApiRequestAction({
+    requestType: "UPDATE_STAFF_STATUS",
+    makeRequest: function(requestOptions, success, error){
+        var [staffMemberObject, statusValue] = oFetch(requestOptions, "staffMemberObject", "statusValue");
+        setTimeout(function(){
+            success({
+                staffMemberObject,
+                statusValue
+            })
+        }, 2000)
     }
-}
+});
+
 
 actionTypes.REPLACE_ALL_STAFF_MEMBERS = "REPLACE_ALL_STAFF_MEMBERS";
 export function replaceAllStaffMembers(options) {

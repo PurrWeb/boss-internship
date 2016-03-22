@@ -34,7 +34,7 @@ export default class ToggleStaffStatusButton extends Component {
     }
     onClick(){
         this.props.updateStaffStatus({
-            staffObject: this.props.staffObject,
+            staffMemberObject: this.props.staffObject,
             statusValue: this.props.getStatusAfterClicking(this.getStaffStatus())
         });
     }
