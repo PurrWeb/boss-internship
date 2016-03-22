@@ -6,6 +6,7 @@ import StaffListItem from "./index"
 import {ContextProvider, NoOpComponent, simpleRender} from "~lib/test-helpers"
 import {createStore} from "redux"
 import AddShiftButton from "./add-shift-button"
+import { processStaffMemberObject, processStaffTypeObject } from "~lib/backend-data/process-backend-objects"
 
 describe('StaffListItem', function() {
     beforeEach(function(){
@@ -18,12 +19,19 @@ describe('StaffListItem', function() {
         StaffListItem.__ResetDependency__('StaffHolidaysList', NoOpComponent);
         StaffListItem.__ResetDependency__('StaffShiftList', NoOpComponent);
     })
-    var staff = {
+    var staffMember = {
         first_name: "John",
         surname: "Doe",
         staff_type: {id: 3333},
         id: 33
     };
+    staffMember = processStaffMemberObject(staffMember);
+
+    var staffTypes = [{
+        id: 3333.
+        name: "Kitchen"
+    }];
+    staffTypes = staffTypes.map(processStaffTypeObject);
 
     var context = {
         newShiftTimes: {
@@ -34,15 +42,9 @@ describe('StaffListItem', function() {
     };
 
     var storeState = {
-        staff: {
-            33: staff
-        },
+        staff: utils.indexByClientId([staffMember])
         componentErrors: {},
-        staffTypes: {
-            3333: {
-                name: "Kitchen"
-            }
-        },
+        staffTypes: utils.indexByClientId(staffTypes),
         rotaShifts: {},
         apiRequestsInProgress: {},
         pageOptions: {}
@@ -70,12 +72,12 @@ describe('StaffListItem', function() {
     });
 
     it("Enables the add button unless there's a reason not to", function(){
-        expect(canAddShift(context, storeState, staff)).toBe(true);
+        expect(canAddShift(context, storeState, staffMember)).toBe(true);
     });
 
     it("Disables the add button if the staff member is on holiday", function(){
         var itemStoreState = {...storeState}
-        var itemStaff = {...staff}
+        var itemStaff = {...staffMember}
         itemStaff.holidays = [{id: 1}]
         itemStoreState.staff = {
             33: itemStaff
@@ -112,7 +114,7 @@ describe('StaffListItem', function() {
             }
         };
 
-        expect(canAddShift(context, state, staff)).toBe(false);
+        expect(canAddShift(context, state, staffMember)).toBe(false);
     })
 
     it("Disables the add button if the new shift times are invalid", function(){
@@ -122,7 +124,7 @@ describe('StaffListItem', function() {
             starts_at: new Date(2016,0,1,16,0),
             ends_at: new Date(2016,0,1,10,0),
         };
-        expect(canAddShift(itemContext, storeState, staff)).toBe(false)
+        expect(canAddShift(itemContext, storeState, staffMember)).toBe(false)
     })
 
 });

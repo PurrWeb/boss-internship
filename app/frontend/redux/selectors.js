@@ -1,20 +1,21 @@
 import _ from "underscore"
 import utils from "~lib/utils"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
+import oFetch from "o-fetch"
 
 export function selectStaffTypesWithShifts(state){
     var {rotaShifts, staff} = state;
     rotaShifts = _.values(rotaShifts);
 
     var allStaffTypes = state.staffTypes;
-    var shiftStaffTypes = _(rotaShifts).map(getStaffTypeFromShift);
+    var shiftStaffTypes = _(rotaShifts).map(getStaffTypeIdFromShift);
     var staffTypes = _(allStaffTypes).filter(function(staffType){
-        return _(shiftStaffTypes).contains(staffType.id);
+        return _(shiftStaffTypes).contains(staffType.clientId);
     });
-    return _(staffTypes).indexBy("id");
+    return utils.indexByClientId(staffTypes);
 
-    function getStaffTypeFromShift(shift) {
-        return staff[shift.staff_member.id].staff_type.id;
+    function getStaffTypeIdFromShift(shift) {
+        return shift.staff_member.get(staff).staff_type.clientId;
     }
 }
 
@@ -28,23 +29,23 @@ export function selectVenuesWithShifts(state){
 
     var allVenues = _.values(venues);
     var venuesWithShifts = _.filter(allVenues, function(venue){
-        return _(venueIdsWithShifts).contains(venue.id);
+        return _(venueIdsWithShifts).contains(venue.clientId);
     });
 
-    return utils.indexById(venuesWithShifts);
+    return utils.indexByClientId(venuesWithShifts);
 
     function getVenueIdFromShift(shift){
         var rotaId = shift.rota.clientId;
         var rota = rotas[rotaId];
-        return rota.venue.id;
+        return rota.venue.clientId;
     }
 }
 
 export function selectStaffMemberHolidays(state, staffId){
     var staffMember = state.staff[staffId];
-    var staffMemberHolidayIds = _.pluck(state.staff[staffId].holidays, "id");
-    var allHolidays = staffMemberHolidayIds.map(function(id){
-        return state.holidays[id];
+    var staffMemberHolidayClientIds = _.pluck(state.staff[staffId].holidays, "clientId");
+    var allHolidays = staffMemberHolidayClientIds.map(function(clientId){
+        return state.holidays[clientId];
     });
     // We only have this week's holidays in the state, so filter out
     // any holidays we don't have in the state.
@@ -82,28 +83,34 @@ export function selectFetchWeeklyRotaIsInProgress(state){
     return !_.isEmpty(state.apiRequestsInProgress.FETCH_WEEKLY_ROTA_FORECAST);
 }
 
-export function selectUpdateRotaForecastInProgress(state, {venueId, dateOfRota}){
+export function selectUpdateRotaForecastInProgress(state, {serverVenueId, dateOfRota}){
     var updatesInProgress = state.apiRequestsInProgress.UPDATE_ROTA_FORECAST;
     return !_.isEmpty(_(updatesInProgress).filter(function(update){
         var isSameDate = utils.datesAreEqual(update.dateOfRota, dateOfRota);
-        var isSameVenue = venueId === update.venueId;
+        var isSameVenue = serverVenueId === update.serverVenueId;
         return isSameVenue && isSameDate;
     }))
 }
 
-export function selectForecastByRotaId(state, rotaId){
-    var rota = state.rotas[rotaId];
-    return _(state.rotaForecasts).find(function(forecast){
+export function selectForecastByRotaId(state, rotaClientId){
+    var rota = oFetch(state.rotas, rotaClientId);
+    var forecast = _(state.rotaForecasts).find(function(forecast){
         var isSameDate = utils.datesAreEqual(rota.date, forecast.date);
-        var isSameVenue = rota.venue.id === forecast.venue.id;
+        var isSameVenue = rota.venue.clientId === forecast.venue.clientId;
         return isSameVenue && isSameDate;
     })
+
+    if (forecast === undefined){
+        throw new Error("Couldn't find rota forecast for rotaClientId " + rotaClientId);
+    }
+
+    return forecast;
 }
 
-export function selectAddShiftIsInProgress(state, staffId){
+export function selectAddShiftIsInProgress(state, staffMemberServerId){
     var shiftsBeingAdded = state.apiRequestsInProgress.ADD_SHIFT;
     return _(shiftsBeingAdded).some(
-        (request) => request.shift.staff_member_id === staffId
+        (request) => request.staffMemberServerId === staffMemberServerId
     );
 }
 
@@ -111,12 +118,12 @@ export function selectRotaOnVenueRotaPage(state){
     return getRotaFromDateAndVenue({
         rotas: state.rotas,
         dateOfRota: state.pageOptions.dateOfRota,
-        venueId: state.pageOptions.venueId
+        venueId: state.pageOptions.venue.clientId
     });
 }
 
-export function canEditStaffTypeShifts({staffTypes, pageOptions}, {staffTypeId}){
-    var staffTypeObject = staffTypes[staffTypeId];
+export function canEditStaffTypeShifts({staffTypes, pageOptions}, {staffTypeClientId}){
+    var staffTypeObject = staffTypes[staffTypeClientId];
     var disabledNames = pageOptions.disableEditingShiftsByStaffTypeName;
     if (!disabledNames) {
         return true;
@@ -128,12 +135,14 @@ export function canEditStaffTypeShifts({staffTypes, pageOptions}, {staffTypeId})
     return true;
 }
 
-export function selectShiftIsBeingEdited(state, {shiftId}){
+export function selectShiftIsBeingEdited(state, options){
+    var shiftServerId = oFetch(options, "shiftServerId");
+
     var shiftsBeingUpdated = state.apiRequestsInProgress.UPDATE_SHIFT;
     var shiftsBeingDeleted = state.apiRequestsInProgress.DELETE_SHIFT;
 
-    var isBeingUpdated = _(shiftsBeingUpdated).some((request) => request.shift.shift_id === shiftId);
-    var isBeingDeleted = _(shiftsBeingDeleted).some((request) => request.shift.id === shiftId);
+    var isBeingUpdated = _(shiftsBeingUpdated).some((request) => request.shiftServerId === shiftServerId);
+    var isBeingDeleted = _(shiftsBeingDeleted).some((request) => request.shift.serverId === shiftServerId);
 
     return isBeingUpdated || isBeingDeleted;
 }

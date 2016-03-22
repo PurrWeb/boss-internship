@@ -13,15 +13,21 @@ export default class HolidayReportView extends React.Component {
                 <div className="col-md-6">
                     <WeekAndVenueSelector
                         weekStartDate={new Date(this.props.pageOptions.weekStartDate)}
-                        onChange={({startDate, endDate, venueId}) =>
-                            location.href = appRoutes.holidayReportsIndex({
-                                date: startDate,
-                                venueId
-                            })
+                        onChange={({startDate, endDate, venueClientId}) => {
+                                var venue = this.props.venues[venueClientId];
+                                var venueId;
+                                if (venue !== undefined){
+                                    venueId = venue.serverId;
+                                }
+                                location.href = appRoutes.holidayReportsIndex({
+                                    date: startDate,
+                                    venueId: venueId
+                                })
+                            }
                         }
                         venues={this.props.venues}
                         canSelectAllVenues={true}
-                        venueId={this.props.pageOptions.venueId} />
+                        venueClientId={this.props.pageOptions.venueClientId} />
                 </div>
             </div>
             <hr/>
@@ -48,7 +54,7 @@ function csvDownloadButton(props){
         style={{float: "right"}}
         href={appRoutes.holidayReportsCsv({
           date: props.pageOptions.weekStartDate,
-          venueId: props.pageOptions.venueId
+          venueId: props.pageOptions.venueServerId
         })}>
         Download as CSV
     </a>;

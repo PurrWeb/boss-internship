@@ -11,7 +11,7 @@ const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
  */
 export default function calculateChartBoundaries(rotaShifts){
     if (!_.isArray(rotaShifts)) {
-        throw "calculateChartBoundaries needs array"
+        throw new Error("calculateChartBoundaries needs array");
     }
 
     // Values indicating how many hours we're into the day

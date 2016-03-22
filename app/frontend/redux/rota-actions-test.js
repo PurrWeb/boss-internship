@@ -16,7 +16,7 @@ describe("Rota Actions", function(){
                 99: {
                     status:"published",
                     date: new Date(2016,1,15),
-                    venue: {id: 10}
+                    venue: {clientId: 10}
                 }
             }
         };
@@ -24,18 +24,18 @@ describe("Rota Actions", function(){
             shift: {
                 starts_at: new Date(2016,1,15,16,0,0)
             },
-            venueId: 10
+            venueClientId: 10
         }
 
         var dispatch = function(){};
         var getState = function(){return storeState}
-        addRotaShift(data)(dispatch, getState);
-        updateRotaShift(data)(dispatch, getState);
+        addRotaShift(Object.assign({}, data,{starts_at: data.shift.starts_at}))(dispatch, getState);
+        updateRotaShift(Object.assign({}, data,{starts_at: data.shift.starts_at}))(dispatch, getState);
         deleteRotaShift(data)(dispatch, getState);
         expect(window.confirm.calls.length).toBe(3);
     });
 
-    it("Shows a confirmatin dialog before publishing a week's shifts", function(){
+    it("Shows a confirmation dialog before publishing a week's shifts", function(){
         var dispatch = function(){};
         var getState = function(){};
         publishRotas({})(dispatch, getState);

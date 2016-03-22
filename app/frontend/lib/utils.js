@@ -74,9 +74,6 @@ var utils =  {
     getWeekEndDate(date){
         return moment(date).endOf("isoweek").toDate();
     },
-    indexById(array){
-        return _.indexBy(array, "id");
-    },
     indexByClientId(array){
         return _.indexBy(array, "clientId");
     },

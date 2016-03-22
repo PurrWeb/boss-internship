@@ -19,7 +19,8 @@ class RotaStatusToggle extends React.Component {
     }
     setStatus(status){
         this.props.updateStatus({
-            venueId: this.props.rota.venue.id,
+            venueServerId: this.props.rota.venue.serverId,
+            venueClientId: this.props.rota.venue.clientId,
             date: this.props.rota.date,
             status: status
         })
@@ -33,7 +34,7 @@ function mapStateToProps(state){
         status: oFetch(rota, "status"),
         statusUpdateInProgess: _.some(
             state.apiRequestsInProgress.UPDATE_ROTA_STATUS,
-            (request) => request.rotaId === rota.id
+            (request) => request.venueServerId === rota.venue.get(state.venues).serverId
         )
     }
 }

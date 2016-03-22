@@ -10,8 +10,8 @@ class StaffListItemContainer extends React.Component {
     }
     render(){
         var staff = this.props.staff;
-        var staffTypeId = staff.staff_type.id;
-        var staffType = this.props.staffTypes[staffTypeId];
+        var staffTypeClientId = staff.staff_type.clientId;
+        var staffType = this.props.staffTypes[staffTypeClientId];
         return <StaffListItem
             staff={staff}
             staffType={staffType}
@@ -21,7 +21,7 @@ class StaffListItemContainer extends React.Component {
 }
 
 function mapStateToProps(state, ownProps){
-    var staffId = ownProps.staff.id;
+    var staffId = ownProps.staff.clientId;
     return {
         staffTypes: state.staffTypes,
         paidHolidays: selectStaffMemberPaidHolidays(state, staffId),

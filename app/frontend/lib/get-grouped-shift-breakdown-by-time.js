@@ -60,7 +60,7 @@ export default function getGroupedShiftBreakdownByTime(options){
     }
 
     shifts.forEach(function(shift, i){
-        var groupId = getGroupFromShift(shift).id;
+        var groupId = getGroupFromShift(shift).clientId;
         
         breakdown.forEach(function(samplingPoint){
             var startsBeforeOrAtSamplingPoint = samplingPoint.date >= shift.starts_at;

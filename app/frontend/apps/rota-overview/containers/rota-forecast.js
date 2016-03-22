@@ -44,7 +44,7 @@ function mapStateToProps(state, ownProps){
         rota,
         componentErrors: state.componentErrors,
         isUpdatingForecast: selectUpdateRotaForecastInProgress(state, {
-            venueId: rota.venue.id,
+            serverVenueId: rota.venue.serverId,
             dateOfRota: rota.date
         })
     }
@@ -63,7 +63,7 @@ function mergeProps(stateProps, dispatchProps, ownProps){
         updateRotaForecast: function({forecastedTake, componentId}){
             dispatchProps.updateRotaForecastWithAllDetails({
                 forecastedTake,
-                venueId: stateProps.rota.venue.id,
+                serverVenueId: stateProps.rota.venue.serverId,
                 dateOfRota: stateProps.rota.date,
                 errorHandlingComponent: componentId
             });

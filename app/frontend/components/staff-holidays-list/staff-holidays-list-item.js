@@ -12,7 +12,7 @@ export default class StaffHolidaysListItem extends React.Component {
         if (isSingleDayHoliday) {
             return <div>{this.formatHolidayDate(holiday.start_date)}</div>
         } else {
-            return <div key={holiday.id}>
+            return <div key={holiday.clientId}>
                 {this.formatHolidayDate(holiday.start_date) + " - " + this.formatHolidayDate(holiday.end_date)}
             </div>
         }

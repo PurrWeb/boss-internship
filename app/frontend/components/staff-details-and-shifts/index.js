@@ -2,11 +2,12 @@ import React, { Component } from "react"
 import EditableShiftList from "./editable-shift-list"
 import _ from "underscore"
 import StaffTypeBadge from "~components/staff-type-badge"
+import oFetch from "o-fetch"
 
 export default class StaffDetailsAndShifts extends Component {
     static propTypes = {
         staffTypes: React.PropTypes.object.isRequired,
-        staffId: React.PropTypes.number.isRequired,
+        staffMemberClientId: React.PropTypes.number.isRequired,
         staff: React.PropTypes.object.isRequired,
         rotaShifts: React.PropTypes.array.isRequired,
         showShiftVenue: React.PropTypes.bool,
@@ -18,8 +19,7 @@ export default class StaffDetailsAndShifts extends Component {
         var shifts = this.getShifts();
         var { venuesById, rotasById, showShiftVenue } = this.props;
 
-        var staffTypeId = staff.staff_type.id;
-        var staffType = this.props.staffTypes[staffTypeId];
+        var staffType = staff.staff_type.get(this.props.staffTypes);
         return <div>
             <h2 className="staff-details-and-shifts__h2">
                 {staff.first_name} {staff.surname}
@@ -45,11 +45,11 @@ export default class StaffDetailsAndShifts extends Component {
         </div>
     }
     getStaff(){
-        return this.props.staff[this.props.staffId];
+        return oFetch(this.props.staff, this.props.staffMemberClientId);
     }
     getShifts(){
         return _(this.props.rotaShifts).filter(
-            shift => shift.staff_member.id === this.props.staffId
+            shift => shift.staff_member.clientId === this.props.staffMemberClientId
         );
     }
 }

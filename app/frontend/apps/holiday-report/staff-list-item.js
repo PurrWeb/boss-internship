@@ -26,7 +26,7 @@ export default class StaffListItem extends React.Component {
                         </h3>
                         <StaffTypeBadge staffTypeObject={staffType} />
                     </div>                    
-                    <StaffMemberHolidaysLink staffMemberId={staff.id}>
+                    <StaffMemberHolidaysLink staffMemberServerId={staff.serverId}>
                         View all holidays
                     </StaffMemberHolidaysLink>
                 </div>

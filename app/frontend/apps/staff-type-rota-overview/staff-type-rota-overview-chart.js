@@ -39,10 +39,6 @@ export default class StaffTypeRotaOverviewChart extends Component {
     getBreakdown(){
         var { shifts, staff, staffTypes, venues, rotas} = this.props;
 
-        function getStaffTypeFromShift(shift) {
-            return staff[shift.staff_member.id].staff_type.id;
-        }
-
         var rotaDate = this.getRotaDate();
         var breakdown = getGroupedShiftBreakdownByTime({
             shifts: _.values(shifts),

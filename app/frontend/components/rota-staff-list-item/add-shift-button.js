@@ -4,7 +4,6 @@ import _ from "underscore"
 export default class AddShiftButton extends Component {
     static PropTypes = {
         addShift: React.PropTypes.func.isRequired,
-        staffId: React.PropTypes.number.isRequired,
         canAddShift: React.PropTypes.bool.isRequired
     }
     render() {

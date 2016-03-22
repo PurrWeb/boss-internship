@@ -12,7 +12,7 @@ export default class StaffTypeDropdown extends Component {
     render(){
         var staffTypeOptions = _(this.props.staffTypes).mapValues(function(staffType){
             return {
-                value: staffType.id,
+                value: staffType.clientId,
                 label: staffType.name,
                 color: staffType.color
             }

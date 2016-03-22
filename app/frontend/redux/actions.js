@@ -2,12 +2,13 @@ import importedCreateApiRequestAction from "./create-api-request-action"
 import _ from "underscore"
 import moment from "moment"
 import utils from "~lib/utils"
-import * as backendData from "~redux/process-backend-data"
+import * as backendData from "~lib/backend-data/process-backend-objects"
 import makeApiRequest from "./make-api-request"
 import {apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 import RotaDate from "~lib/rota-date"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
+import { processVenueRotaAppViewData } from "~lib/backend-data/process-app-view-data"
 
 export const actionTypes = {};
 const createApiRequestAction = function(options){
@@ -16,20 +17,16 @@ const createApiRequestAction = function(options){
     return importedCreateApiRequestAction(options);
 }
 
-function confirmIfRotaIsPublished(question){
-    return function(requestOptions, getState){
-        var venueId = oFetch(requestOptions, "venueId");
-        var date = new RotaDate({shiftStartsAt: oFetch(requestOptions, "shift.starts_at")}).getDateOfRota();
-        var rota = getRotaFromDateAndVenue({
-            rotas: getState().rotas,
-            dateOfRota: date,
-            venueId
-        });
-        if (rota.status !== "published") {
-            return true;
-        }
-        return confirm(question);
+function confirmIfRotaIsPublished(options){
+    var rota = getRotaFromDateAndVenue({
+        rotas: oFetch(options, "rotasByClientId"),
+        dateOfRota: oFetch(options, "dateOfRota"),
+        venueId: oFetch(options, "venueClientId")
+    });
+    if (rota.status !== "published") {
+        return true;
     }
+    return confirm(options.question);
 }
 
 function getRotaDateFromShiftStartsAt(startAt){
@@ -41,28 +38,46 @@ export const addRotaShift = createApiRequestAction({
     requestType: "ADD_SHIFT",
     makeRequest: makeApiRequest({
         method: apiRoutes.addShift.method,
-        path: function({venueId, shift}, getState) {
-            var date = getRotaDateFromShiftStartsAt(shift.starts_at);
-            return apiRoutes.addShift.getPath(venueId, date);
+        path: function({venueServerId, starts_at}, getState) {
+            var date = getRotaDateFromShiftStartsAt(starts_at);
+            return apiRoutes.addShift.getPath(venueServerId, date);
         },
-        data: (options) => options.shift,
+        data: function(options){
+            var [starts_at, ends_at, staff_member_id] = oFetch(options,
+                "starts_at", "ends_at", "staffMemberServerId");
+            return {
+                starts_at,
+                ends_at,
+                staff_member_id
+            }
+        },
         getSuccessActionData: function(responseData, requestOptions, getState) {
-            responseData.starts_at = new Date(responseData.starts_at)
-            responseData.ends_at = new Date(responseData.ends_at)
+            responseData = backendData.processShiftObject(responseData);
 
+            // processShiftObject will set rota.clientId based on the rota's server id
+            // However, if the rota object was created on the client before it had
+            // a server id, we want to use the original clientId
             var rotaDate = new RotaDate({shiftStartsAt: responseData.starts_at});
             var rota = getRotaFromDateAndVenue({
                 rotas: getState().rotas,
                 dateOfRota: rotaDate.getDateOfRota(),
-                venueId: requestOptions.venueId
+                venueId: requestOptions.venueClientId
             });
-
             responseData.rota.clientId = rota.clientId;
 
             return {shift: responseData};
         }
     }),
-    confirm: confirmIfRotaIsPublished("Adding a shift to a published rota will send out email notifications. Do you want to continue?")
+    confirm: function(requestOptions, getState){
+        var venueClientId = oFetch(requestOptions, "venueClientId");
+        var dateOfRota = new RotaDate({shiftStartsAt: oFetch(requestOptions, "starts_at")}).getDateOfRota();
+        return confirmIfRotaIsPublished({
+            venueClientId,
+            dateOfRota,
+            rotasByClientId: getState().rotas,
+            question: "Adding a shift to a published rota will send out email notifications. Do you want to continue?"
+        })
+    }
 });
 
 
@@ -78,18 +93,33 @@ export function replaceAllShifts (options) {
 export const updateRotaShift = createApiRequestAction({
     requestType: "UPDATE_SHIFT",
     makeRequest: makeApiRequest({
-        path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shift.shift_id}),
+        path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shiftServerId}),
         method: apiRoutes.updateShift.method,
         data: function(options, getState){
-            options.shift.staff_member_id = getState().rotaShifts[options.shift.shift_id].staff_member.id;
-            return options.shift;
+            var staffMemberId = getState().rotaShifts[options.shiftClientId].staff_member.serverId;
+            var shift = {
+                shift_id: options.shiftServerId,
+                starts_at: options.starts_at,
+                ends_at: options.ends_at,
+                staff_member_id: staffMemberId
+            }
+            return shift;
         },
         getSuccessActionData(responseData){
             responseData = backendData.processShiftObject(responseData);
             return {shift: responseData};
         }
     }),
-    confirm: confirmIfRotaIsPublished("Updating a shift on a published rota will send out email notifications. Do you want to continue?")
+    confirm: function(requestOptions, getState){
+        var venueClientId = oFetch(requestOptions, "venueClientId");
+        var dateOfRota = new RotaDate({shiftStartsAt: oFetch(requestOptions, "starts_at")}).getDateOfRota();
+        return confirmIfRotaIsPublished({
+            venueClientId,
+            dateOfRota,
+            rotasByClientId: getState().rotas,
+            question: "Updating a shift on a published rota will send out email notifications. Do you want to continue?"
+        })
+    }
 });
 
 
@@ -98,23 +128,35 @@ export const deleteRotaShift = createApiRequestAction({
     requestType: "DELETE_SHIFT",
     makeRequest: makeApiRequest({
         method: apiRoutes.deleteShift.method,
-        path: (options) => apiRoutes.deleteShift.getPath({shiftId: oFetch(options, "shift.id")}),
+        path: (options) => apiRoutes.deleteShift.getPath({shiftId: oFetch(options, "shift.serverId")}),
         getSuccessActionData: function(responseData, requestOptions) {
-            return {shift_id: requestOptions.shift.id}
+            return {shiftClientId: requestOptions.shift.clientId}
         }
     }),
-    confirm: confirmIfRotaIsPublished("Deleting a shift on a published rota will send out email notifications. Do you want to continue?")
+    confirm: function(requestOptions, getState){
+        var venueClientId = oFetch(requestOptions, "venueClientId");
+        var dateOfRota = new RotaDate({shiftStartsAt: oFetch(requestOptions, "shift.starts_at")}).getDateOfRota();
+        return confirmIfRotaIsPublished({
+            venueClientId,
+            dateOfRota,
+            rotasByClientId: getState().rotas,
+            question: "Deleting a shift on a published rota will send out email notifications. Do you want to continue?"
+        })
+    }
 });
 
 export const updateRotaForecast = createApiRequestAction({
     requestType: "UPDATE_ROTA_FORECAST",
     makeRequest: makeApiRequest({
         method: apiRoutes.updateRotaForecast.method,
-        path: ({dateOfRota, venueId}) => apiRoutes.updateRotaForecast.getPath({dateOfRota, venueId}),
+        path: (options) => {
+            var [dateOfRota, serverVenueId] = oFetch(options, "dateOfRota", "serverVenueId");
+            return apiRoutes.updateRotaForecast.getPath({dateOfRota, venueId: serverVenueId})
+        },
         data: ({forecastedTake}) => {return {forecasted_take: forecastedTake} },
         getSuccessActionData: function(responseData){
             return {
-                rotaForecast: responseData
+                rotaForecast: backendData.processRotaForecastObject(responseData)
             }
         }
     })
@@ -124,7 +166,10 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
     requestType: "FETCH_WEEKLY_ROTA_FORECAST",
     makeRequest: makeApiRequest({
         method: apiRoutes.weeklyRotaForecast.method,
-        path: ({venueId, startOfWeek}) => apiRoutes.weeklyRotaForecast.getPath({venueId, startOfWeek}),
+        path: (options) => {
+            var [serverVenueId, startOfWeek] = oFetch(options, "serverVenueId", "startOfWeek")
+            return apiRoutes.weeklyRotaForecast.getPath({venueId: serverVenueId, startOfWeek})
+        },
         getSuccessActionData: function(responseData){
             return {
               weeklyRotaForecast: responseData
@@ -201,11 +246,21 @@ export const updateRotaStatus = createApiRequestAction({
     makeRequest: makeApiRequest({
         method: apiRoutes.updateRotaStatus.method,
         path: function(options){
+            if (!options.venueClientId){
+                throw new Error("need venueClientId");
+            }
             return apiRoutes.updateRotaStatus.getPath(options);
         },
-        getSuccessActionData: function(responseData){
+        getSuccessActionData: function(responseData, requestOptions, getState){
+            var state = getState();
+            var rota = getRotaFromDateAndVenue({
+                rotas: state.rotas,
+                dateOfRota: requestOptions.date,
+                venueId: requestOptions.venueClientId
+            });
+            
             return {
-                rotaId: responseData.id,
+                rotaClientId: rota.clientId,
                 status: responseData.status
             }
         }
@@ -217,7 +272,10 @@ export const publishRotas = createApiRequestAction({
     makeRequest: makeApiRequest({
         method: apiRoutes.publishRotas.method,
         path: function(options){
-            return apiRoutes.publishRotas.getPath(options)
+            return apiRoutes.publishRotas.getPath({
+                venueId: options.venueServerId,
+                date: options.date
+            })
         },
         getSuccessActionData: function(responseData, requestOptions){
             return requestOptions;
@@ -256,15 +314,6 @@ export function setPageOptions(options) {
 
 
 export function loadInitialRotaAppState(viewData) {
-    var pageOptions = {
-        venueId: viewData.rotaVenueId,
-        dateOfRota: new Date(viewData.rotaDate),
-        staffTypeSlug: viewData.staffTypeSlug,
-        disableEditingShiftsByStaffTypeName: {
-            "Security": true
-        }
-    };
-
     var dayRota = getRotaFromDateAndVenue({
         rotas: [],
         dateOfRota: new Date(viewData.rotaDate),
@@ -276,25 +325,35 @@ export function loadInitialRotaAppState(viewData) {
         viewData.rota.rotas.push(dayRota);
     }
 
+    var pageOptions = {
+        venue: {id: viewData.rotaVenueId },
+        dateOfRota: new Date(viewData.rotaDate),
+        staffTypeSlug: viewData.staffTypeSlug,
+        disableEditingShiftsByStaffTypeName: {
+            "Security": true
+        }
+    };
     return genericLoadInitialRotaAppState(viewData, pageOptions);
 }
 
 export function loadInitalStaffTypeRotaAppState(viewData){
     viewData = {...viewData};
-    viewData.rotas = viewData.rota.rotas.slice();
+    viewData.rota = {...viewData.rota};
+    var rotaOverview = viewData.rota;
+    rotaOverview.rotas = viewData.rota.rotas.slice();
 
     // make sure we have a rota for each venue
-    _.each(viewData.rota.venues, function(venue){
+    _.each(rotaOverview.venues, function(venue){
         var rota = getRotaFromDateAndVenue({
             rotas: viewData.rota.rotas,
-            dateOfRota: new Date(viewData.date),
-            venueId: venue.id,
+            dateOfRota: new Date(rotaOverview.date),
+            venueId: venue.id, // this simulates backendData, so use id instead of clientid/serverid
             generateIfNotFound: true
         });
 
         if (rota.id === null){
             // This rota didn't wasn't found and had to be generated
-            viewData.rotas.push(rota);
+            rotaOverview.rotas.push(rota);
         }
     });
 
@@ -307,36 +366,36 @@ export function loadInitalStaffTypeRotaAppState(viewData){
 }
 
 function genericLoadInitialRotaAppState(viewData, pageOptions){
+    viewData.pageOptions = pageOptions;
+    viewData = processVenueRotaAppViewData(viewData);
+    
     let rotaData = viewData.rota.rotas;
     let staffTypeData = viewData.rota.staff_types;
     let rotaShiftData = viewData.rota.rota_shifts;
     let staffMemberData = viewData.rota.staff_members;
     let venueData = viewData.rota.venues;
     let holidays = viewData.rota.holidays;
+    pageOptions = viewData.pageOptions;
 
-    rotaData = rotaData.map(backendData.processRotaObject);
-    rotaShiftData = rotaShiftData.map(backendData.processShiftObject);
-    holidays = holidays.map(backendData.processHolidayObject)
-    
     return function(dispatch){
         dispatch([
             replaceAllStaffMembers({
-                staffMembers: indexById(staffMemberData),
+                staffMembers: indexByClientId(staffMemberData),
             }),
             replaceAllStaffTypes({
-                staffTypes:indexById(staffTypeData),
+                staffTypes: indexByClientId(staffTypeData),
             }),
             replaceAllShifts({
-                shifts: indexById(rotaShiftData)
+                shifts: indexByClientId(rotaShiftData)
             }),
             replaceAllVenues({
-                venues: indexById(venueData)
+                venues: indexByClientId(venueData)
             }),
             replaceAllRotas({
                 rotas: indexByClientId(rotaData)
             }),
             replaceAllHolidays({
-                holidays: indexById(holidays)
+                holidays: indexByClientId(holidays)
             }),
             setPageOptions({pageOptions})
         ]);
@@ -344,28 +403,32 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
 }
 
 export function loadInitialClockInOutAppState() {
-    var userDataById = indexById(userData);
-    return function(dispatch){
-        setTimeout(function(){
-            dispatch(replaceAllStaffMembers({staffMembers: userDataById}));
-        }, 3000)
-    }
+    throw "not maintained"
+    // var userDataById = indexById(userData);
+    // return function(dispatch){
+    //     setTimeout(function(){
+    //         dispatch(replaceAllStaffMembers({staffMembers: userDataById}));
+    //     }, 3000)
+    // }
 }
 
 export function loadInitialRotaOverviewAppState(viewData){
     return function(dispatch) {
         var unprocessedRotasArray = _.pluck(viewData.rotas, "rota");
-        var rotasArray = rotas = unprocessedRotasArray.map(backendData.processRotaObject);
-        var rotas = utils.indexByClientId(rotas);
-        var venues = utils.indexById(viewData.venues);
+        var rotasArray  = unprocessedRotasArray.map(backendData.processRotaObject);
+        var venuesArray = viewData.venues.map(backendData.processVenueObject);
+        var rotas = utils.indexByClientId(rotasArray);
+        var venues = utils.indexByClientId(venuesArray);
 
         var forecasts = viewData.rotaForecasts.map(backendData.processRotaForecastObject);
-        forecasts = indexById(forecasts);
-        
+        forecasts = utils.indexByClientId(forecasts);
+
+        var weeklyRotaForecast = backendData.processRotaForecastObject(viewData.weeklyRotaForecast);
+
         dispatch([
             replaceAllRotas({rotas: rotas}),
             replaceAllRotaForecasts({rotaForecasts: forecasts}),
-            replaceWeeklyRotaForecast({weeklyRotaForecast: viewData.weeklyRotaForecast}),
+            replaceWeeklyRotaForecast({weeklyRotaForecast}),
             setPageOptions({pageOptions: {
                 startDate: new Date(viewData.startDate),
                 endDate: new Date(viewData.endDate)
@@ -375,10 +438,6 @@ export function loadInitialRotaOverviewAppState(viewData){
     }
 }
 
-
-function indexById(data){
-    return _.indexBy(data, "id")
-}
 
 function indexByClientId(data){
     return _.indexBy(data, "clientId")

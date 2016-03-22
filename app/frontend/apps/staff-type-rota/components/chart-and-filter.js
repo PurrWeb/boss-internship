@@ -18,8 +18,8 @@ export default class ChartAndFilterUi extends React.Component {
         onVenueFilterChange: React.PropTypes.func.isRequired,
         venues: React.PropTypes.object.isRequired,
         selectedVenueIds: React.PropTypes.array.isRequired,
-        staffToPreview: React.PropTypes.number,
-        staffToShow: React.PropTypes.number,
+        staffToPreview: React.PropTypes.string,
+        staffToShow: React.PropTypes.string,
         rotas: React.PropTypes.object
     }
     render(){
@@ -61,9 +61,9 @@ export default class ChartAndFilterUi extends React.Component {
         var self = this;
         return _(this.props.rotaShifts).filter(function(shift){
             if (self.props.selectedVenueIds.length > 0){
-                var venueId = self.getVenueFromShift(shift).id;
-                var venueIdIsSelecteed = _(self.props.selectedVenueIds).contains(venueId);
-                if (!venueIdIsSelecteed) {
+                var venueClientId = self.getVenueFromShift(shift).clientId;
+                var venueIsSelected = _(self.props.selectedVenueIds).contains(venueClientId);
+                if (!venueIsSelected) {
                     return false;
                 }
             }
@@ -77,8 +77,8 @@ export default class ChartAndFilterUi extends React.Component {
             rotasById: this.props.rotas,
             venuesById: this.props.venues
         });
-        var venueIds = _.pluck(_.values(this.props.venues), "id");
-        var index = venueIds.indexOf(venue.id);
+        var venueIds = _.pluck(_.values(this.props.venues), "clientId");
+        var index = venueIds.indexOf(venue.clientId);
         return getVenueColor(index);
     }
     getStaffDetailsComponent(staffId){
@@ -86,7 +86,7 @@ export default class ChartAndFilterUi extends React.Component {
             return null;
         }
         return <StaffDetailsAndShifts
-            staffId={staffId}
+            staffMemberClientId={staffId}
             staffTypes={this.props.staffTypes}
             rotaShifts={this.props.rotaShifts}
             venuesById={this.props.venues}

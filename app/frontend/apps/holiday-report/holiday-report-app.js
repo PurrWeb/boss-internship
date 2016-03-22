@@ -5,10 +5,12 @@ import utils from "~lib/utils"
 import HolidayReportView from './holiday-report-view'
 import * as actionCreators from "~redux/actions.js"
 import oFetch from "o-fetch"
+import { processHolidayAppViewData } from "~lib/backend-data/process-app-view-data"
 
 export default class HolidayReportApp extends Component {
     componentWillMount(){
         var data = this.getViewData();
+        data = processHolidayAppViewData(data);
 
         var staffTypes = oFetch(data, "staffTypes");
         var staffMembers = oFetch(data, "staffMembers");
@@ -18,10 +20,10 @@ export default class HolidayReportApp extends Component {
 
         this.store = createStore(function(){
             return {
-                staffTypes: utils.indexById(staffTypes),
-                staff: utils.indexById(staffMembers),
-                holidays: utils.indexById(holidays),
-                venues: utils.indexById(venues),
+                staffTypes: utils.indexByClientId(staffTypes),
+                staff: utils.indexByClientId(staffMembers),
+                holidays: utils.indexByClientId(holidays),
+                venues: utils.indexByClientId(venues),
                 pageOptions: pageData
             }
         });

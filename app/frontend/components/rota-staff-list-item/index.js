@@ -8,6 +8,7 @@ import StaffHolidaysList from "~components/staff-holidays-list"
 import { connect } from "react-redux"
 import { selectAddShiftIsInProgress, canEditStaffTypeShifts, selectStaffMemberIsOnHolidayOnDate } from "~redux/selectors"
 import _ from "underscore"
+import utils from "~lib/utils"
 import validation from "~lib/validation"
 import RotaDate from "~lib/rota-date"
 import * as actionCreators from "~redux/actions"
@@ -16,7 +17,8 @@ import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
 class RotaStaffListItem extends Component {
     static contextTypes = {
         newShiftTimes: React.PropTypes.object.isRequired,
-        newShiftVenueId: React.PropTypes.any.isRequired
+        newShiftVenueServerId: React.PropTypes.any.isRequired,
+        newShiftVenueClientId: React.PropTypes.any.isRequired
     }
     componentWillMount(){
         this.componentId = _.uniqueId();
@@ -30,7 +32,7 @@ class RotaStaffListItem extends Component {
 
         var errors = this.props.componentErrors[this.componentId];
 
-        var staffTypeObject = this.props.staffTypes[staff.staff_type.id];
+        var staffTypeObject = staff.staff_type.get(this.props.staffTypes);
 
         return (
             <div className="staff-list-item rota-staff-list-item">
@@ -51,7 +53,7 @@ class RotaStaffListItem extends Component {
                                     Shifts
                                 </h4>
                                 <StaffShiftList
-                                    shifts={_.indexBy(this.getStaffShifts(staff.id), "id")}
+                                    shifts={utils.indexByClientId(this.getStaffShifts(staff.clientId))}
                                     venues={this.props.venues}
                                     rotas={this.props.rotas} />
                             </div>
@@ -62,11 +64,11 @@ class RotaStaffListItem extends Component {
                                     Holidays
                                 </h4>
                                 <span style={{marginLeft: 5, display: "inline-block"}}>
-                                    <StaffMemberHolidaysLink staffMemberId={staff.id} >
+                                    <StaffMemberHolidaysLink staffMemberServerId={staff.serverId} >
                                         Edit
                                     </StaffMemberHolidaysLink>
                                 </span>
-                                <StaffHolidaysList staffId={staff.id} />
+                                <StaffHolidaysList staffMemberClientId={staff.clientId} />
                             </div>
                             <div className="col-md-3">
                                 <h4 className="rota-staff-list-item__h4">
@@ -82,7 +84,6 @@ class RotaStaffListItem extends Component {
                         <div style={{overflow: "hidden"}}>
                             <div className="rota-staff-list-item__add-button" style={{float: "left"}}>
                                 <AddShiftButton
-                                    staffId={staff.id}
                                     canAddShift={this.canAddShift()}
                                     addShift={() => this.addShift()}
                                     />
@@ -106,13 +107,12 @@ class RotaStaffListItem extends Component {
     addShift(){
         var {starts_at, ends_at} = this.context.newShiftTimes;
         this.props.addRotaShift({
-            shift: {
-                starts_at,
-                ends_at,
-                staff_member_id: this.props.staff.id
-            },
+            starts_at,
+            ends_at,
+            staffMemberServerId: this.props.staff.serverId,
             errorHandlingComponent: this.componentId,
-            venueId: this.context.newShiftVenueId
+            venueServerId: this.context.newShiftVenueServerId,
+            venueClientId: this.context.newShiftVenueClientId
         });
     }
     canAddShift(){
@@ -125,15 +125,15 @@ class RotaStaffListItem extends Component {
         var isAddingShift = this.props.addShiftIsInProgress;
 
         var dateOfRota = new RotaDate({shiftStartsAt: starts_at}).getDateOfRota();
-        var isOnHoliday = selectStaffMemberIsOnHolidayOnDate(this.props._state, this.props.staff.id, dateOfRota);
+        var isOnHoliday = selectStaffMemberIsOnHolidayOnDate(this.props._state, this.props.staff.clientId, dateOfRota);
 
         var canEditStaffTypeShifts = this.props.canEditStaffTypeShifts;
 
         return datesAreValid && !isAddingShift && !isOnHoliday && canEditStaffTypeShifts;
     }
-    getStaffShifts(staffId){
+    getStaffShifts(staffMemberClientId){
         var ret =  _(this.props.rotaShifts).filter(function(shift){
-            return shift.staff_member.id === staffId
+            return shift.staff_member.clientId === staffMemberClientId
         });
         return ret;
     }
@@ -141,13 +141,13 @@ class RotaStaffListItem extends Component {
 
 function mapStateToProps(state, ownProps){
     return {
-        addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.id),
+        addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.serverId),
         staffTypes: state.staffTypes,
         componentErrors: state.componentErrors,
         rotaShifts: state.rotaShifts,
         venues: state.venues,
         canEditStaffTypeShifts: canEditStaffTypeShifts(state, {
-            staffTypeId: ownProps.staff.staff_type.id
+            staffTypeClientId: ownProps.staff.staff_type.clientId
         }),
         rotas: state.rotas,
         // This isn't clean and causes unncessary re-renders. The problem is that we don't

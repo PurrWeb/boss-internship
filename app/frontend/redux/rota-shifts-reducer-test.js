@@ -23,11 +23,11 @@ describe("RotaShiftsReducer", function(){
         var initialState = {}
         var action = {
             type: "ADD_SHIFT_SUCCESS",
-            shift: {id: 123, staff_id: 1000}
+            shift: {clientId: 123, staff_id: 1000}
         };
         var expectedResultState = {
             123: {
-                id: 123,
+                clientId: 123,
                 staff_id: 1000
             }
         }
@@ -38,7 +38,7 @@ describe("RotaShiftsReducer", function(){
     it("Can update a shift", function(){
         var initialState = {
             123: {
-                id: 123,
+                clientId: 123,
                 staff_id: 1000,
                 starts_at: new Date(2015, 0, 1, 9, 0, 0),
                 ends_at: new Date(2015, 0, 1, 14, 0, 0)
@@ -50,14 +50,14 @@ describe("RotaShiftsReducer", function(){
         var action = {
             type: "UPDATE_SHIFT_SUCCESS",
             shift: {
-                id: 123,
+                clientId: 123,
                 starts_at: newStartsAt,
                 ends_at: newEndsAt
             }
         };
         var expectedResultState = {
             123: {
-                id: 123,
+                clientId: 123,
                 staff_id: 1000,
                 starts_at: newStartsAt,
                 ends_at: newEndsAt
@@ -70,12 +70,12 @@ describe("RotaShiftsReducer", function(){
     it("Can delete a shift", function(){
         var initialState = {
             123: {
-                id: 123
+                clientId: 123
             }
         };
         var action = {
             type: "DELETE_SHIFT_SUCCESS",
-            shift_id: 123
+            shiftClientId: 123
         }
         var expectedResultState = {}
 

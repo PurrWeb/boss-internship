@@ -5,26 +5,26 @@ describe("forecastsReducer", function(){
     it("Can add a new forecast and deletes the existing one if there's already one for that rota (date+venueId)", function(){
         var initalState = {
             5: {
-                id: 5,
+                clientId: 5,
                 date: new Date(2016, 2, 1),
-                venueId: 20
+                venue: {clientId: 20}
             }
         }
 
         var action = {
             type: "UPDATE_ROTA_FORECAST_SUCCESS",
             rotaForecast: {
-                id: 14,
+                clientId: 14,
                 date: new Date(2016, 2, 1),
-                venueId: 20
+                venue: {clientId: 20}
             }
         }
 
         var expectedResultState = {
             14: {
-                id: 14,
+                clientId: 14,
                 date: new Date(2016, 2, 1),
-                venueId: 20
+                venue: {clientId: 20}
             }
         }
 
@@ -34,26 +34,26 @@ describe("forecastsReducer", function(){
     it("Can add a new forecast that has the same ID as the previous one", function(){
         var initalState = {
             5: {
-                id: 5,
+                clientId: 5,
                 date: new Date(2016, 2, 1),
-                venueId: 20
+                venue: {clientId: 20}
             }
         }
 
         var action = {
             type: "UPDATE_ROTA_FORECAST_SUCCESS",
             rotaForecast: {
-                id: 5,
+                clientId: 5,
                 date: new Date(2016, 2, 1),
-                venueId: 20
+                venue: {clientId: 20}
             }
         }
 
         var expectedResultState = {
             5: {
-                id: 5,
+                clientId: 5,
                 date: new Date(2016, 2, 1),
-                venueId: 20
+                venue: {clientId: 20}
             }
         }
 

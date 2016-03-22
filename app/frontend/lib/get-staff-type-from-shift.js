@@ -1,5 +1,4 @@
 export default function getStaffTypeFromShift({shift, staffTypesById, staffMembersById}){
-    var staffMemberObject = staffMembersById[shift.staff_member.id];
-    var staffTypeId = staffMemberObject.staff_type.id;
-    return staffTypesById[staffTypeId];
+    var staffMemberObject = shift.staff_member.get(staffMembersById);
+    return staffMemberObject.staff_type.get(staffTypesById);
 }
