@@ -32,6 +32,8 @@ class UpdateStaffMemberEmploymentDetails
         end
       end
 
+      staff_member_updates_email = StaffMemberUpdatesEmail.new(staff_member)
+
       result = staff_member.save
 
       if result && pay_rate_changed
@@ -44,6 +46,10 @@ class UpdateStaffMemberEmploymentDetails
         rotas.each do |rota|
           UpdateRotaForecast.new(rota: rota).call
         end
+      end
+
+      if result && staff_member_updates_email.send?
+        StaffMemberUpdatesMailer.staff_member_updated(staff_member_updates_email.data).deliver_later
       end
     end
 

@@ -1,4 +1,4 @@
-class StaffMemberDetailsPDF
+class NewStaffMemberDetailsPDF
   include ActionView::Helpers::NumberHelper
 
   def initialize(staff_member)

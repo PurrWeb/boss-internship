@@ -13,7 +13,11 @@ class StaffMember < ActiveRecord::Base
   accepts_nested_attributes_for :address, allow_destroy: false
 
   belongs_to :name
-  accepts_nested_attributes_for :name, allow_destroy: false
+  accepts_nested_attributes_for(
+    :name,
+    allow_destroy: false,
+    update_only: true
+  )
 
   belongs_to :email_address, inverse_of: :staff_members
   accepts_nested_attributes_for :email_address, allow_destroy: false
@@ -113,6 +117,34 @@ class StaffMember < ActiveRecord::Base
 
   def security?
     staff_type.andand.security?
+  end
+
+  def name_changed?
+    name_id_changed? ||
+      name.first_name_changed? ||
+      name.surname_changed?
+  end
+
+  def email_changed?
+    email_address.email_changed?
+  end
+
+  def staff_type_changed?
+    staff_type_id_changed?
+  end
+
+  def pay_rate_changed?
+    pay_rate_id_changed?
+  end
+
+  def address_changed?
+    address.address_1_changed? ||
+      address.address_2_changed? ||
+      address.address_3_changed? ||
+      address.address_4_changed? ||
+      address.region_changed?    ||
+      address.country_changed?   ||
+      address.postcode_changed?
   end
 
   def active_holidays

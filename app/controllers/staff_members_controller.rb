@@ -106,12 +106,17 @@ class StaffMembersController < ApplicationController
     authorize! :edit, staff_member
     assert_update_permitted(staff_member)
 
-    if staff_member.update_attributes(update_personal_details_params)
+    result = UpdateStaffMemberPersonalDetails.new(
+      staff_member: staff_member,
+      params: update_personal_details_params
+    ).call
+
+    if result.success?
       flash[:success] = "Staff member updated successfully"
-      redirect_to staff_member_path(staff_member, tab: 'personal-details')
+      redirect_to staff_member_path(result.staff_member, tab: 'personal-details')
     else
       flash.now[:error] = "There was a problem updating this staff member"
-      render 'edit_personal_details', locals: { staff_member: staff_member }
+      render 'edit_personal_details', locals: { staff_member: result.staff_member }
     end
   end
 
