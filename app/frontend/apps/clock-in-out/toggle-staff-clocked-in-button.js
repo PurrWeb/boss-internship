@@ -5,7 +5,7 @@ export default class ToggleStaffClockedInButton extends Component {
     render(){
         return <ToggleStaffStatusButton
             staffObject={this.props.staffObject}
-            staffStatusData={this.props.staffStatusData}
+            staffStatuses={this.props.staffStatuses}
             statusLabels={{
                 "clocked_in": "Clock In",
                 "clocked_out": "Clock Out"

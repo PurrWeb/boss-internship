@@ -1,30 +1,13 @@
 import React, {Component} from "react"
 import { connect } from "react-redux"
 import oFetch from "o-fetch"
-import _ from "underscore"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
 import StaffStatusBadge from "~components/staff-status-badge"
 import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
 import { selectShiftsByStaffMemberClientId } from "~redux/selectors"
-
-var staffStatusOptions = [{
-        value: "clocked_in",
-        title: "Clocked In",
-        color: "green"
-    }, {
-        value: "on_break",
-        title: "On break",
-        color: "orange"
-    }, {
-        value: "clocked_out",
-        title: "Clocked out",
-        color: "gray"
-    }
-];
-
-var staffStatusOptionsByValue = _.indexBy(staffStatusOptions, "value")
+import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 
 class ClockInOutStaffListItem extends Component {
     render(){
@@ -45,10 +28,9 @@ class ClockInOutStaffListItem extends Component {
                         venues={this.props.venues} />
                 </div>
                 <div className="col-md-1">
-                    {/* <ToggleStaffClockedInButton
-                        staffStatusData={this.props.staffStatusData}
-                        staffObject={staff} /> */ }
-                        ]]]]]]]
+                    <ToggleStaffClockedInButton
+                        staffStatuses={this.props.staffStatuses}
+                        staffObject={staffObject} />
                 </div>
                 <div className="col-md-1 show-in-manager-mode">
                     {/* <ToggleStaffOnBreakButton
