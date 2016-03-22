@@ -30,6 +30,10 @@ class CreateStaffMember
       end
 
       result = staff_member.save
+
+      if result
+        StaffMemberUpdatesMailer.new_staff_member(staff_member).deliver_later
+      end
     end
 
     Result.new(result, staff_member)
