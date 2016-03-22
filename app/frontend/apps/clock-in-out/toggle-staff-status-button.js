@@ -6,8 +6,9 @@ export default class ToggleStaffStatusButton extends Component {
         statusLabels: React.PropTypes.object.isRequired,
         // If `getStatusAfterClicking` returns null the button is not shown
         getStatusAfterClicking: React.PropTypes.func.isRequired,
-        staff: React.PropTypes.object.isRequired,
-        staffStatuses: React.PropTypes.object.isRequired
+        staffObject: React.PropTypes.object.isRequired,
+        staffStatuses: React.PropTypes.object.isRequired,
+        updateStaffStatus: React.PropTypes.func.isRequired
     }
     render(){
         var staffStatus = this.getStaffStatus();
@@ -17,7 +18,7 @@ export default class ToggleStaffStatusButton extends Component {
             return null;
         }
 
-        var label = this.props.statusLabels[nextStatusId]
+        var label = this.props.statusLabels[nextStatusId];
 
         var style = {
             backgroundColor: staffStatusOptionsByValue[nextStatusId].color
@@ -32,9 +33,9 @@ export default class ToggleStaffStatusButton extends Component {
         return this.props.staffStatuses[staffClientId].status;
     }
     onClick(){
-        this.context.boundActionCreators.updateStaffStatus(
-            this.props.staffId,
-            this.props.getStatusAfterClicking(this.getStaffStatus())
-        );
+        this.props.updateStaffStatus({
+            staffObject: this.props.staffObject,
+            statusValue: this.props.getStatusAfterClicking(this.getStaffStatus())
+        });
     }
 }

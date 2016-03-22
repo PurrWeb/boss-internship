@@ -193,15 +193,15 @@ export function leaveManagerMode () {
 }
 
 export const UPDATE_STAFF_STATUS = "UPDATE_STAFF_STATUS";
-export function updateStaffStatus(staffId, status) {
+export function updateStaffStatus(staffMemberObject, statusValue) {
     return {
         type: UPDATE_STAFF_STATUS,
-        staffId,
-        status
+        staffMemberObject,
+        statusValue
     }
 }
 
-actionTypes.REPLACE_ALL_STAFF_MEMBERS = "UPDATE_STAFF_STATUS";
+actionTypes.REPLACE_ALL_STAFF_MEMBERS = "REPLACE_ALL_STAFF_MEMBERS";
 export function replaceAllStaffMembers(options) {
     return {
         type: actionTypes.REPLACE_ALL_STAFF_MEMBERS,

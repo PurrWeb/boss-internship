@@ -1,6 +1,7 @@
 import React, {Component} from "react"
 import { connect } from "react-redux"
 import oFetch from "o-fetch"
+import utils from "~lib/utils"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
 import StaffStatusBadge from "~components/staff-status-badge"
@@ -8,6 +9,7 @@ import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
 import { selectShiftsByStaffMemberClientId } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
+import * as actions from "~redux/actions"
 
 class ClockInOutStaffListItem extends Component {
     render(){
@@ -23,14 +25,15 @@ class ClockInOutStaffListItem extends Component {
                 <div className="col-md-3">
                     Rotaed Shifts
                     <StaffShiftList
-                        shifts={this.props.staffMemberShifts}
+                        shifts={utils.indexByClientId(this.props.staffMemberShifts)}
                         rotas={this.props.rotas}
                         venues={this.props.venues} />
                 </div>
                 <div className="col-md-1">
                     <ToggleStaffClockedInButton
                         staffStatuses={this.props.staffStatuses}
-                        staffObject={staffObject} />
+                        staffObject={staffObject}
+                        updateStaffStatus={this.props.updateStaffStatus} />
                 </div>
                 <div className="col-md-1 show-in-manager-mode">
                     {/* <ToggleStaffOnBreakButton
@@ -88,4 +91,12 @@ function mapStateToProps(state, ownProps){
     }
 }
 
-export default connect(mapStateToProps)(ClockInOutStaffListItem);
+function mapDispatchToProps(dispatch){
+    return {
+        updateStaffStatus: function(options){
+            dispatch(actions.updateStaffStatus(options))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClockInOutStaffListItem);

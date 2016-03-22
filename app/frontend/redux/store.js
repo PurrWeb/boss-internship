@@ -40,7 +40,10 @@ var createStoreWithMiddleware = compose(
 	// Batch middleware lets us dispatch multiple actions at once:
 	// dispatch([a,b]) instead of dispatch(a);dispatch(b);
 	// Store subscribers will only be notified once instead of twice.
-	applyMiddleware(batch)
+	applyMiddleware(batch),
+    // If available, connect to Redux DevTools
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+
 )(createStore);
 
 export function createBossStore(){
