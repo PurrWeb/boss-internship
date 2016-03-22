@@ -430,6 +430,11 @@ export function loadInitialClockInOutAppState(viewData) {
             }),
             replaceAllStaffStatuses({
                 staffStatuses: indexByClientId(viewData.staff_statuses)
+            }),
+            replaceAllStaffStatusData({
+                staffStatusData: _.indexBy(viewData.staff_status_data, function(data){
+                    return data.staff_member.clientId;
+                })
             })
         ]);
     }

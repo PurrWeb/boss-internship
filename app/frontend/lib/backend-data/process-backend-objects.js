@@ -26,6 +26,13 @@ export function processStaffStatusObject(staffStatus){
     return processBackendObject(staffStatus);
 }
 
+export function processStaffStatusDataObject(staffStatusData){
+    // This data is generated each time the page is viewd,
+    // so it doesn't have an ID
+    staffStatusData.id = "STAFF_STATUS_DATA_" + _.uniqueId();
+    return processBackendObject(staffStatusData);
+}
+
 export function processPageOptionsObject(pageOptions){
     // page options doesn't have an id, but we want to resolve IDs
     // in any links it contains
@@ -89,4 +96,3 @@ export function processVenueRotaOverviewObject(obj){
         staff_types: obj.staff_types.map(processStaffTypeObject)
     }
 }
-
