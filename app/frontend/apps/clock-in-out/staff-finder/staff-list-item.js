@@ -1,6 +1,7 @@
 import React, {Component} from "react"
 import { connect } from "react-redux"
 import oFetch from "o-fetch"
+import _ from "underscore"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
 import StaffStatusBadge from "~components/staff-status-badge"
@@ -8,11 +9,28 @@ import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
 import { selectShiftsByStaffMemberClientId } from "~redux/selectors"
 
+var staffStatusOptions = [{
+        value: "clocked_in",
+        title: "Clocked In",
+        color: "green"
+    }, {
+        value: "on_break",
+        title: "On break",
+        color: "orange"
+    }, {
+        value: "clocked_out",
+        title: "Clocked out",
+        color: "gray"
+    }
+];
+
+var staffStatusOptionsByValue = _.indexBy(staffStatusOptions, "value")
+
 class ClockInOutStaffListItem extends Component {
     render(){
         var staffObject = this.props.staff;
-        var staffStatusData = oFetch(this.props.staffStatusData, staffObject.clientId);
-        var staffStatus = staffStatusData.status.get(this.props.staffStatuses);
+        var staffStatusValue = this.props.staffStatuses[staffObject.clientId].status;
+        var staffStatus = oFetch(staffStatusOptionsByValue, staffStatusValue);
 
         var nonManagerColumns = null;
         var managerColumns = null;
@@ -82,7 +100,6 @@ function mapStateToProps(state, ownProps){
     return {
         staffTypes: state.staffTypes,
         staffStatuses: state.staffStatuses,
-        staffStatusData: state.staffStatusData,
         staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
         rotas: state.rotas,
         venues: state.venues

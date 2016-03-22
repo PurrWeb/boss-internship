@@ -311,13 +311,6 @@ export function replaceAllStaffStatuses(options) {
     }
 }
 
-actionTypes.REPLACE_ALL_STAFF_STATUS_DATA = "REPLACE_ALL_STAFF_STATUS_DATA";
-export function replaceAllStaffStatusData(options) {
-    return {
-        type: actionTypes.REPLACE_ALL_STAFF_STATUS_DATA,
-        staffStatusData: options.staffStatusData
-    }
-}
 
 actionTypes.SET_PAGE_OPTIONS = "SET_PAGE_OPTIONS";
 export function setPageOptions(options) {
@@ -420,6 +413,7 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
 
 export function loadInitialClockInOutAppState(viewData) {
     viewData = processClockInOutAppViewData(viewData);
+    
     return function(dispatch){
         dispatch([
             replaceAllStaffMembers({
@@ -429,15 +423,12 @@ export function loadInitialClockInOutAppState(viewData) {
                 staffTypes: indexByClientId(viewData.staff_types)
             }),
             replaceAllStaffStatuses({
-                staffStatuses: indexByClientId(viewData.staff_statuses)
+                staffStatuses: _.indexBy(viewData.staff_statuses, function(data){
+                    return data.staff_member.clientId;
+                })
             }),
             replaceAllShifts({
                 shifts: indexByClientId(viewData.rota_shifts)
-            }),
-            replaceAllStaffStatusData({
-                staffStatusData: _.indexBy(viewData.staff_status_data, function(data){
-                    return data.staff_member.clientId;
-                })
             }),
             replaceAllRotas({
                 rotas: indexByClientId(viewData.rotas)

@@ -16,13 +16,11 @@ import staffTypes from "./staff-types-reducer"
 import holidays from "./holidays-reducer"
 import rotaForecasts from "./rota-forecasts-reducer"
 import weeklyRotaForecast from "./weekly-rota-forecast-reducer"
-import staffStatusData from "./staff-status-data-reducer"
 
 var rootReducer = combineReducers({
     staff,
     rotaShifts,
     staffStatuses,
-    staffStatusData,
     appIsInManagerMode,
     apiRequestsInProgress,
     componentErrors,

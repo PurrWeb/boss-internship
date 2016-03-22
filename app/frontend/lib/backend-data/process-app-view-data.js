@@ -7,8 +7,7 @@ import {
     processRotaObject,
     processShiftObject,
     processStaffTypeRotaOverviewObject,
-    processStaffStatusObject,
-    processStaffStatusDataObject
+    processStaffStatusObject
 } from "./process-backend-objects"
 
 export function processHolidayAppViewData(viewData){
@@ -58,7 +57,6 @@ export function processClockInOutAppViewData(viewData){
         staff_members: viewData.staff_members.map(processStaffMemberObject),
         staff_types: viewData.staff_types.map(processStaffTypeObject),
         staff_statuses: viewData.staff_statuses.map(processStaffStatusObject),
-        staff_status_data: viewData.staff_status_data.map(processStaffStatusDataObject),
         rota_shifts: viewData.rota_shifts.map(processShiftObject),
         rotas: viewData.rotas.map(processRotaObject),
         venues: viewData.venues.map(processVenueObject)
