@@ -431,10 +431,19 @@ export function loadInitialClockInOutAppState(viewData) {
             replaceAllStaffStatuses({
                 staffStatuses: indexByClientId(viewData.staff_statuses)
             }),
+            replaceAllShifts({
+                shifts: indexByClientId(viewData.rota_shifts)
+            }),
             replaceAllStaffStatusData({
                 staffStatusData: _.indexBy(viewData.staff_status_data, function(data){
                     return data.staff_member.clientId;
                 })
+            }),
+            replaceAllRotas({
+                rotas: indexByClientId(viewData.rotas)
+            }),
+            replaceAllVenues({
+                venues: indexByClientId(viewData.venues)
             })
         ]);
     }

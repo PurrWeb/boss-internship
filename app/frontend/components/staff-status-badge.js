@@ -7,7 +7,8 @@ export default class StaffStatusBadge extends Component {
     render(){
         var option = this.props.staffStatusObject;
         var style = {
-            backgroundColor: option.color
+            backgroundColor: option.color,
+            display: "inline-block"
         };
         return <div className="boss-badge" style={style}>
             {option.title}

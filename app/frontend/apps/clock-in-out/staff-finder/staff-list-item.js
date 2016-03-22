@@ -6,6 +6,7 @@ import StaffTypeBadge from "~components/staff-type-badge"
 import StaffStatusBadge from "~components/staff-status-badge"
 import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
+import { selectShiftsByStaffMemberClientId } from "~redux/selectors"
 
 class ClockInOutStaffListItem extends Component {
     render(){
@@ -20,7 +21,10 @@ class ClockInOutStaffListItem extends Component {
                 nonManagerColumns = <div>
                 <div className="col-md-3">
                     Rotaed Shifts
-                    TODO: STAFF SHIFT LIST
+                    <StaffShiftList
+                        shifts={this.props.staffMemberShifts}
+                        rotas={this.props.rotas}
+                        venues={this.props.venues} />
                 </div>
                 <div className="col-md-1">
                     {/* <ToggleStaffClockedInButton
@@ -74,11 +78,14 @@ class ClockInOutStaffListItem extends Component {
     }
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state, ownProps){
     return {
         staffTypes: state.staffTypes,
         staffStatuses: state.staffStatuses,
-        staffStatusData: state.staffStatusData
+        staffStatusData: state.staffStatusData,
+        staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
+        rotas: state.rotas,
+        venues: state.venues
     }
 }
 
