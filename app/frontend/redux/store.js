@@ -6,7 +6,7 @@ import {batch, batching} from "redux-batch-middleware"
 import staffStatuses from "./staff-statuses-reducer"
 import staff from "./staff-members-reducer"
 import rotaShifts from "./rota-shifts-reducer"
-import appIsInManagerMode from "./app-is-in-manager-mode-reducer"
+import clockInOutAppIsInManagerMode from "./clock-in-out-app-is-in-manager-mode-reducer"
 import apiRequestsInProgress from "./api-requests-in-progress-reducer"
 import componentErrors from "./component-errors-reducer"
 import venues from "./venues-reducer"
@@ -21,7 +21,7 @@ var rootReducer = combineReducers({
     staff,
     rotaShifts,
     staffStatuses,
-    appIsInManagerMode,
+    clockInOutAppIsInManagerMode,
     apiRequestsInProgress,
     componentErrors,
     venues,

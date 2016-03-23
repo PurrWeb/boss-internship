@@ -5,6 +5,7 @@ import store from "~redux/store"
 import moment from "moment"
 import { bindActionCreators } from "redux";
 import ClockInOutStaffFinder from "./staff-finder/staff-finder"
+import * as actions from "~redux/actions"
 
 class ClockInOutView extends Component {
     static childContextTypes = {
@@ -23,7 +24,7 @@ class ClockInOutView extends Component {
     }
     render() {
         var classes = ["container"];
-        if (this.props.appIsInManagerMode) {
+        if (this.props.clockInOutAppIsInManagerMode) {
             classes.push("managerMode");
         }
 
@@ -31,7 +32,7 @@ class ClockInOutView extends Component {
             <a
                 className="btn btn-default show-in-manager-mode"
                 style={{float: "right"}}
-                onClick={() => boundActionCreators.leaveManagerMode()}>
+                onClick={() => this.props.leaveManagerMode()}>
                 Leave Manager Mode
             </a>
             <h1>
@@ -47,6 +48,7 @@ class ClockInOutView extends Component {
 function mapStateToProps(state) {
     var props = _.clone(state);
 
+    props.clockInOutAppIsInManagerMode = state.clockInOutAppIsInManagerMode;
     props.staffTypes = {};
     props.venue = "The Rocket Bar";
     props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
@@ -55,6 +57,15 @@ function mapStateToProps(state) {
     return props;
 }
 
+function mapDispatchToProps(dispatch){
+    return {
+        leaveManagerMode: function(){
+            dispatch(actions.leaveManagerMode());
+        }
+    }
+}
+
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(ClockInOutView);
