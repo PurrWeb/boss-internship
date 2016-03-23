@@ -1,13 +1,16 @@
 import React, { Component } from "react"
 import { Provider} from "react-redux"
-import store from "../../redux/store"
-import ClockInOutView from "./clock-in-out-view"
-import * as actionCreators from "../../redux/actions"
+import ClockInOutView from "./clock-in-out-view.js"
+import * as actionCreators from "~redux/actions.js"
+import AppComponent from "../app-component"
 
-export default class CheckInOutApp extends Component {
-  render() {
-    return <Provider store={store}>
-      <ClockInOutView />
-    </Provider>
-  }
+export default class RotaApp extends AppComponent {
+    componentWillMount(){
+        this.store.dispatch(actionCreators.loadInitialClockInOutAppState(this.getViewData()))
+    }
+    render() {
+        return <Provider store={this.store}>
+            <ClockInOutView />
+        </Provider>
+    }
 }

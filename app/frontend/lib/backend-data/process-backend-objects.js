@@ -19,7 +19,18 @@ export function processVenueObject(venue){
 }
 
 export function processStaffMemberObject(staffMember){
-    return processBackendObject(staffMember);
+    staffMember = processBackendObject(staffMember);
+    staffMember.isManager = function({staffTypes}){
+        var staffTypeObject = staffMember.staff_type.get(staffTypes);
+        return staffTypeObject.name === "Manager";
+    }
+    return staffMember;
+}
+
+export function processStaffStatusObject(staffStatus){
+    var staffStatus = {...staffStatus};
+    processObjectLinks(staffStatus);
+    return staffStatus;
 }
 
 export function processPageOptionsObject(pageOptions){
@@ -85,4 +96,3 @@ export function processVenueRotaOverviewObject(obj){
         staff_types: obj.staff_types.map(processStaffTypeObject)
     }
 }
-

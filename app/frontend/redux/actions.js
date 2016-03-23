@@ -8,7 +8,7 @@ import {apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 import RotaDate from "~lib/rota-date"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
-import { processVenueRotaAppViewData } from "~lib/backend-data/process-app-view-data"
+import { processVenueRotaAppViewData, processClockInOutAppViewData } from "~lib/backend-data/process-app-view-data"
 
 export const actionTypes = {};
 const createApiRequestAction = function(options){
@@ -178,30 +178,35 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
     })
 });
 
-export const ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
+actionTypes.ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
 export function enterManagerMode () {
     return {
-        type: ENTER_MANAGER_MODE
+        type: actionTypes.ENTER_MANAGER_MODE
     }
 }
 
-export const LEAVE_MANAGER_MODE = "LEAVE_MANAGER_MODE";
+actionTypes.LEAVE_MANAGER_MODE = "LEAVE_MANAGER_MODE";
 export function leaveManagerMode () {
     return {
-        type: LEAVE_MANAGER_MODE
+        type: actionTypes.LEAVE_MANAGER_MODE
     }
 }
 
-export const UPDATE_STAFF_STATUS = "UPDATE_STAFF_STATUS";
-export function updateStaffStatus(staffId, status) {
-    return {
-        type: UPDATE_STAFF_STATUS,
-        staffId,
-        status
+export const updateStaffStatus = createApiRequestAction({
+    requestType: "UPDATE_STAFF_STATUS",
+    makeRequest: function(requestOptions, success, error){
+        var [staffMemberObject, statusValue] = oFetch(requestOptions, "staffMemberObject", "statusValue");
+        setTimeout(function(){
+            success({
+                staffMemberObject,
+                statusValue
+            })
+        }, 500)
     }
-}
+});
 
-actionTypes.REPLACE_ALL_STAFF_MEMBERS = "UPDATE_STAFF_STATUS";
+
+actionTypes.REPLACE_ALL_STAFF_MEMBERS = "REPLACE_ALL_STAFF_MEMBERS";
 export function replaceAllStaffMembers(options) {
     return {
         type: actionTypes.REPLACE_ALL_STAFF_MEMBERS,
@@ -303,6 +308,15 @@ export function replaceAllStaffTypes(options) {
     }
 }
 
+actionTypes.REPLACE_ALL_STAFF_STATUSES = "REPLACE_ALL_STAFF_STATUSES";
+export function replaceAllStaffStatuses(options) {
+    return {
+        type: actionTypes.REPLACE_ALL_STAFF_STATUSES,
+        staffStatuses: options.staffStatuses
+    }
+}
+
+
 actionTypes.SET_PAGE_OPTIONS = "SET_PAGE_OPTIONS";
 export function setPageOptions(options) {
     return {
@@ -402,14 +416,36 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
     }
 }
 
-export function loadInitialClockInOutAppState() {
-    throw "not maintained"
-    // var userDataById = indexById(userData);
-    // return function(dispatch){
-    //     setTimeout(function(){
-    //         dispatch(replaceAllStaffMembers({staffMembers: userDataById}));
-    //     }, 3000)
-    // }
+export function loadInitialClockInOutAppState(viewData) {
+    viewData = processClockInOutAppViewData(viewData);
+    
+    return function(dispatch){
+        dispatch([
+            replaceAllStaffMembers({
+                staffMembers: indexByClientId(viewData.staff_members)
+            }),
+            replaceAllStaffTypes({
+                staffTypes: indexByClientId(viewData.staff_types)
+            }),
+            replaceAllStaffStatuses({
+                staffStatuses: _.indexBy(viewData.staff_statuses, function(data){
+                    return data.staff_member.clientId;
+                })
+            }),
+            replaceAllShifts({
+                shifts: indexByClientId(viewData.rota_shifts)
+            }),
+            replaceAllRotas({
+                rotas: indexByClientId(viewData.rotas)
+            }),
+            replaceAllVenues({
+                venues: indexByClientId(viewData.venues)
+            }),
+            setPageOptions({
+                pageOptions: viewData.pageOptions
+            })
+        ]);
+    }
 }
 
 export function loadInitialRotaOverviewAppState(viewData){

@@ -6,7 +6,7 @@ import {batch, batching} from "redux-batch-middleware"
 import staffStatuses from "./staff-statuses-reducer"
 import staff from "./staff-members-reducer"
 import rotaShifts from "./rota-shifts-reducer"
-import appIsInManagerMode from "./app-is-in-manager-mode-reducer"
+import clockInOutAppIsInManagerMode from "./clock-in-out-app-is-in-manager-mode-reducer"
 import apiRequestsInProgress from "./api-requests-in-progress-reducer"
 import componentErrors from "./component-errors-reducer"
 import venues from "./venues-reducer"
@@ -21,7 +21,7 @@ var rootReducer = combineReducers({
     staff,
     rotaShifts,
     staffStatuses,
-    appIsInManagerMode,
+    clockInOutAppIsInManagerMode,
     apiRequestsInProgress,
     componentErrors,
     venues,
@@ -40,7 +40,10 @@ var createStoreWithMiddleware = compose(
 	// Batch middleware lets us dispatch multiple actions at once:
 	// dispatch([a,b]) instead of dispatch(a);dispatch(b);
 	// Store subscribers will only be notified once instead of twice.
-	applyMiddleware(batch)
+	applyMiddleware(batch),
+    // If available, connect to Redux DevTools
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+
 )(createStore);
 
 export function createBossStore(){

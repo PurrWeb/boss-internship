@@ -6,7 +6,7 @@ import Spinner from "~components/spinner"
 import ComponentErrors from "~components/component-errors"
 import StaffHolidaysList from "~components/staff-holidays-list"
 import { connect } from "react-redux"
-import { selectAddShiftIsInProgress, canEditStaffTypeShifts, selectStaffMemberIsOnHolidayOnDate } from "~redux/selectors"
+import { selectAddShiftIsInProgress, selectShiftsByStaffMemberClientId, canEditStaffTypeShifts, selectStaffMemberIsOnHolidayOnDate } from "~redux/selectors"
 import _ from "underscore"
 import utils from "~lib/utils"
 import validation from "~lib/validation"
@@ -53,7 +53,7 @@ class RotaStaffListItem extends Component {
                                     Shifts
                                 </h4>
                                 <StaffShiftList
-                                    shifts={utils.indexByClientId(this.getStaffShifts(staff.clientId))}
+                                    shifts={utils.indexByClientId(this.props.staffMemberShifts)}
                                     venues={this.props.venues}
                                     rotas={this.props.rotas} />
                             </div>
@@ -131,12 +131,6 @@ class RotaStaffListItem extends Component {
 
         return datesAreValid && !isAddingShift && !isOnHoliday && canEditStaffTypeShifts;
     }
-    getStaffShifts(staffMemberClientId){
-        var ret =  _(this.props.rotaShifts).filter(function(shift){
-            return shift.staff_member.clientId === staffMemberClientId
-        });
-        return ret;
-    }
 }
 
 function mapStateToProps(state, ownProps){
@@ -144,7 +138,7 @@ function mapStateToProps(state, ownProps){
         addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.serverId),
         staffTypes: state.staffTypes,
         componentErrors: state.componentErrors,
-        rotaShifts: state.rotaShifts,
+        staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
         venues: state.venues,
         canEditStaffTypeShifts: canEditStaffTypeShifts(state, {
             staffTypeClientId: ownProps.staff.staff_type.clientId

@@ -1,35 +1,45 @@
 import React, {Component} from "react"
+import { connect } from "react-redux"
+import oFetch from "o-fetch"
+import utils from "~lib/utils"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
 import StaffStatusBadge from "~components/staff-status-badge"
 import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
+import { selectShiftsByStaffMemberClientId } from "~redux/selectors"
+import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
+import * as actions from "~redux/actions"
 
-export default class ClockInOutStaffListItem extends Component {
-    static contextTypes = {
-        staffStatuses: React.PropTypes.object.isRequired,
-        boundActionCreators: React.PropTypes.object.isRequired
-    }
+class ClockInOutStaffListItem extends Component {
     render(){
-        var staff = this.props.staff;
-        var staffStatus = this.context.staffStatuses[staff.id];
+        var staffObject = this.props.staff;
+        var staffStatusValue = this.props.staffStatuses[staffObject.clientId].status;
+        var staffStatus = oFetch(staffStatusOptionsByValue, staffStatusValue);
+
         var nonManagerColumns = null;
         var managerColumns = null;
 
-        if (!staff.isManager) {
+        if (!this.isManager()) {
                 nonManagerColumns = <div>
                 <div className="col-md-3">
                     Rotaed Shifts
-                     <StaffShiftList
-                        staffId={staff.id} />
+                    <StaffShiftList
+                        shifts={utils.indexByClientId(this.props.staffMemberShifts)}
+                        rotas={this.props.rotas}
+                        venues={this.props.venues} />
                 </div>
                 <div className="col-md-1">
                     <ToggleStaffClockedInButton
-                        staffId={staff.id} />
+                        staffStatuses={this.props.staffStatuses}
+                        staffObject={staffObject}
+                        updateStaffStatus={this.props.updateStaffStatus} />
                 </div>
                 <div className="col-md-1 show-in-manager-mode">
                     <ToggleStaffOnBreakButton
-                        staffId={staff.id} />
+                        staffStatuses={this.props.staffStatuses}
+                        staffObject={staffObject}
+                        updateStaffStatus={this.props.updateStaffStatus} />
                 </div>
             </div>;
         } else {
@@ -43,28 +53,54 @@ export default class ClockInOutStaffListItem extends Component {
         return <div className="staff-list-item">
             <div className="row">
                 <div className="col-md-1">
-                    <img src={staff.avatar_url} className="staff-list-item__avatar" />
+                    <img src={staffObject.avatar_url} className="staff-list-item__avatar" />
                 </div>
                 <div className="col-md-2">
-                    {staff.first_name} {staff.surname}
+                    {staffObject.first_name} {staffObject.surname}
                     <a className="btn btn-default show-in-manager-mode">
                         Change Pin
                     </a>
                 </div>
                 <div className="col-md-2">
                     Staff Type<br/>
-                    <StaffTypeBadge staffType={staff.staff_type.id} />
+                    <StaffTypeBadge staffTypeObject={staffObject.staff_type.get(this.props.staffTypes)} />
                 </div>
                 <div className="col-md-2">
                     Status <br/>
-                    <StaffStatusBadge status={staffStatus} />
+                    <StaffStatusBadge staffStatusObject={staffStatus} />
                 </div>
                 {nonManagerColumns}
                 {managerColumns}
             </div>
         </div>
     }
+    isManager(){
+        return this.props.staff.isManager({staffTypes: this.props.staffTypes});
+    }
     enterManagerMode(){
-        this.context.boundActionCreators.enterManagerMode();
+        this.props.enterManagerMode();
     }
 }
+
+function mapStateToProps(state, ownProps){
+    return {
+        staffTypes: state.staffTypes,
+        staffStatuses: state.staffStatuses,
+        staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
+        rotas: state.rotas,
+        venues: state.venues
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return {
+        updateStaffStatus: function(options){
+            dispatch(actions.updateStaffStatus(options))
+        },
+        enterManagerMode: function(){
+            dispatch(actions.enterManagerMode());
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClockInOutStaffListItem);

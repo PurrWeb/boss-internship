@@ -1,43 +1,41 @@
 import React, {Component} from "react"
+import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 
 export default class ToggleStaffStatusButton extends Component {
     static propTypes = {
         statusLabels: React.PropTypes.object.isRequired,
         // If `getStatusAfterClicking` returns null the button is not shown
         getStatusAfterClicking: React.PropTypes.func.isRequired,
-        staffId: React.PropTypes.number.isRequired
-    }
-    static contextTypes = {
+        staffObject: React.PropTypes.object.isRequired,
         staffStatuses: React.PropTypes.object.isRequired,
-        boundActionCreators: React.PropTypes.object.isRequired,
-        staffStatusOptions: React.PropTypes.object.isRequired
+        updateStaffStatus: React.PropTypes.func.isRequired,
+        icon: React.PropTypes.string.isRequired
     }
     render(){
         var staffStatus = this.getStaffStatus();
-        var nextStatusId = this.props.getStatusAfterClicking(this.getStaffStatus());
+        var nextStatusId = this.props.getStatusAfterClicking(staffStatus);
 
         if (nextStatusId === null) {
             return null;
         }
 
-        var label = this.props.statusLabels[nextStatusId]
+        var label = this.props.statusLabels[nextStatusId];
 
-        var style = {
-            backgroundColor: this.context.staffStatusOptions[nextStatusId].color
-        };
-
-        return <a className="btn btn-status-toggle" style={style} onClick={() => this.onClick()}>
+        return <a className="btn btn-default btn-sm" onClick={() => this.onClick()}>
+            <span
+                className={["glyphicon", "glyphicon-" + this.props.icon].join(" ")}
+                style={{display: "inline-block", marginRight: 3}} />
             {label}
         </a>
     }
     getStaffStatus(){
-        var staffId = this.props.staffId;
-        return this.context.staffStatuses[staffId];
+        var staffClientId = this.props.staffObject.clientId;
+        return this.props.staffStatuses[staffClientId].status;
     }
     onClick(){
-        this.context.boundActionCreators.updateStaffStatus(
-            this.props.staffId,
-            this.props.getStatusAfterClicking(this.getStaffStatus())
-        );
+        this.props.updateStaffStatus({
+            staffMemberObject: this.props.staffObject,
+            statusValue: this.props.getStatusAfterClicking(this.getStaffStatus())
+        });
     }
 }

@@ -1,12 +1,12 @@
 .show-in-manager-mode {
-    display: none;
+    display: none !important;
     .managerMode & {
-        display: block;
+        display: block !important;
     }
 }
 .hide-in-manager-mode--inline-block {
-    display: inline-block;
+    display: inline-block !important;
     .managerMode & {
-        display: none;
+        display: none !important;
     }
 }

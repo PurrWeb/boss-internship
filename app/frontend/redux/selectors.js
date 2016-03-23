@@ -168,3 +168,16 @@ export function selectRotaShiftsOnDayOnStaffTypeRotaPage(state){
     return rotaShifts;
 }
 
+export function selectShiftsByStaffMemberClientId(state, staffMemberClientId){
+    return _(state.rotaShifts).filter(function(shift){
+        return shift.staff_member.clientId === staffMemberClientId
+    });
+}
+
+export function selectRotaOnClockInOutPage(state){
+    return getRotaFromDateAndVenue({
+        rotas: state.rotas,
+        dateOfRota: state.pageOptions.dateOfRota,
+        venueId: state.pageOptions.venue.clientId
+    });
+}

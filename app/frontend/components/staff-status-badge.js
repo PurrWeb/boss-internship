@@ -2,17 +2,15 @@ import React, { Component } from "react"
 
 export default class StaffStatusBadge extends Component {
     static propTypes = {
-        status: React.PropTypes.string.isRequired
-    }
-    static contextTypes = {
-        staffStatusOptions: React.PropTypes.object.isRequired
+        staffStatusObject: React.PropTypes.object.isRequired
     }
     render(){
-        var option = this.context.staffStatusOptions[this.props.status];
+        var option = this.props.staffStatusObject;
         var style = {
-            backgroundColor: option.color
+            backgroundColor: option.color,
+            display: "inline-block"
         };
-        return <div className="staff-badge" style={style}>
+        return <div className="boss-badge" style={style}>
             {option.title}
         </div>
     }
