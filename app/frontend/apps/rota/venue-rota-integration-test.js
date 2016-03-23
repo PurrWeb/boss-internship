@@ -129,4 +129,14 @@ describe('Venue Rota Integration Test', function() {
         
         expect(node.textContent).toContain("12:0016:00");
     });
+
+    it("Can render the rota view even if the rota doesn't exist in the backend yet", function(){
+        var customViewData = {...viewData};
+        customViewData.rota = {...customViewData.rota};
+        customViewData.rota.rota_shifts = [];
+        customViewData.rota.rotas = [];
+
+        var {node} = simpleRender(<RotaApp viewData={customViewData} />);
+        expect(node.textContent).toContain("Rota for The Bar: Thu 10 March 2016")
+    });
 });
