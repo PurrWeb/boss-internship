@@ -15,6 +15,10 @@ class Ability
         !user.security_manager?
       end
 
+      can :manage, :clock_in_clock_out do
+        user.has_admin_access?
+      end
+
       can :manage, :security_rota do
         user.has_admin_access? || user.security_manager?
       end
