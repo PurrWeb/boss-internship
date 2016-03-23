@@ -29,7 +29,13 @@ class UpdateStaffMemberContactDetails
       staff_member.address = address
     end
 
+    staff_member_updates_email = StaffMemberUpdatesEmail.new(staff_member)
+
     result = staff_member.save
+
+    if result && staff_member_updates_email.send?
+      StaffMemberUpdatesMailer.staff_member_updated(staff_member_updates_email.data).deliver_later
+    end
 
     Result.new(result, staff_member)
   end

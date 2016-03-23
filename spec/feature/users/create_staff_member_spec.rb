@@ -1,6 +1,8 @@
 require 'feature/feature_spec_helper'
 
 RSpec.feature 'Creating a staff member from a user' do
+  include ActiveJob::TestHelper
+
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:edited_user_name) { FactoryGirl.create(:name, first_name: 'Edited', surname: 'User' ) }
   let!(:edited_user) { FactoryGirl.create(:user, :admin, name: edited_user_name) }
@@ -23,10 +25,12 @@ RSpec.feature 'Creating a staff member from a user' do
   end
 
   scenario 'Successfully creating a user for a staff member' do
-    create_staff_member_page.surf_to
-    create_staff_member_page.form.tap do |form|
-      form.fill_in_for(prospective_staff_member)
-      form.submit
+    perform_enqueued_jobs do
+      create_staff_member_page.surf_to
+      create_staff_member_page.form.tap do |form|
+        form.fill_in_for(prospective_staff_member)
+        form.submit
+      end
     end
 
     user_show_page.ensure_flash_success_message_displayed('Staff member added successfully')
@@ -45,5 +49,9 @@ RSpec.feature 'Creating a staff member from a user' do
     expect(
       created_staff_member.employment_status_statement_completed
     ).to eq(true)
+
+    # Send new staff member update email
+    expect(ActionMailer::Base.deliveries.count).to eq(1)
+    expect(ActionMailer::Base.deliveries.first.subject).to eq("New Staff Member Added - #{created_staff_member.full_name}")
   end
 end
