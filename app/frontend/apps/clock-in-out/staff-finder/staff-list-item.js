@@ -78,7 +78,7 @@ class ClockInOutStaffListItem extends Component {
         return this.props.staff.isManager({staffTypes: this.props.staffTypes});
     }
     enterManagerMode(){
-        this.context.boundActionCreators.enterManagerMode();
+        this.props.enterManagerMode();
     }
 }
 
@@ -96,6 +96,9 @@ function mapDispatchToProps(dispatch){
     return {
         updateStaffStatus: function(options){
             dispatch(actions.updateStaffStatus(options))
+        },
+        enterManagerMode: function(){
+            dispatch(actions.enterManagerMode());
         }
     }
 }

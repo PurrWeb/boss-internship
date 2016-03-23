@@ -178,17 +178,17 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
     })
 });
 
-export const ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
+actionTypes.ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
 export function enterManagerMode () {
     return {
-        type: ENTER_MANAGER_MODE
+        type: actionTypes.ENTER_MANAGER_MODE
     }
 }
 
-export const LEAVE_MANAGER_MODE = "LEAVE_MANAGER_MODE";
+actionTypes.LEAVE_MANAGER_MODE = "LEAVE_MANAGER_MODE";
 export function leaveManagerMode () {
     return {
-        type: LEAVE_MANAGER_MODE
+        type: actionTypes.LEAVE_MANAGER_MODE
     }
 }
 
@@ -201,7 +201,7 @@ export const updateStaffStatus = createApiRequestAction({
                 staffMemberObject,
                 statusValue
             })
-        }, 2000)
+        }, 500)
     }
 });
 
