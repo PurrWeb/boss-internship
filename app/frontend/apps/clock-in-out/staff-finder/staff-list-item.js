@@ -20,7 +20,7 @@ class ClockInOutStaffListItem extends Component {
         var nonManagerColumns = null;
         var managerColumns = null;
 
-        if (!staffObject.isManager) {
+        if (!this.isManager()) {
                 nonManagerColumns = <div>
                 <div className="col-md-3">
                     Rotaed Shifts
@@ -36,12 +36,10 @@ class ClockInOutStaffListItem extends Component {
                         updateStaffStatus={this.props.updateStaffStatus} />
                 </div>
                 <div className="col-md-1 show-in-manager-mode">
-                    {/* <ToggleStaffOnBreakButton
-                        staffStatusData={this.props.staffStatusData}
-                        staffObject={staff} /> */ }
-
-
-                        ]]]]]]]
+                    <ToggleStaffOnBreakButton
+                        staffStatuses={this.props.staffStatuses}
+                        staffObject={staffObject}
+                        updateStaffStatus={this.props.updateStaffStatus} />
                 </div>
             </div>;
         } else {
@@ -75,6 +73,9 @@ class ClockInOutStaffListItem extends Component {
                 {managerColumns}
             </div>
         </div>
+    }
+    isManager(){
+        return this.props.staff.isManager({staffTypes: this.props.staffTypes});
     }
     enterManagerMode(){
         this.context.boundActionCreators.enterManagerMode();

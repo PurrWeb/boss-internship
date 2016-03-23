@@ -19,7 +19,12 @@ export function processVenueObject(venue){
 }
 
 export function processStaffMemberObject(staffMember){
-    return processBackendObject(staffMember);
+    staffMember = processBackendObject(staffMember);
+    staffMember.isManager = function({staffTypes}){
+        var staffTypeObject = staffMember.staff_type.get(staffTypes);
+        return staffTypeObject.name === "Manager";
+    }
+    return staffMember;
 }
 
 export function processStaffStatusObject(staffStatus){
