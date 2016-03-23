@@ -15,16 +15,13 @@ import {appRoutes} from "~lib/routes"
 class RotaView extends Component {
     static childContextTypes = {
         staffTypes: React.PropTypes.object,
-        boundActionCreators: React.PropTypes.object,
         rotaShifts: React.PropTypes.object,
         dateOfRota: React.PropTypes.instanceOf(Date),
         componentErrors: React.PropTypes.object,
-        boundActionCreators: React.PropTypes.object
     }
     getChildContext(){
         return {
             staffTypes: this.props.staffTypes,
-            boundActionCreators: this.props.boundActionCreators,
             rotaShifts: this.props.rotaShifts,
             dateOfRota: this.props.dateOfRota,
             componentErrors: this.props.componentErrors
