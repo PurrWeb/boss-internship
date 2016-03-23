@@ -8,7 +8,8 @@ export default class ToggleStaffStatusButton extends Component {
         getStatusAfterClicking: React.PropTypes.func.isRequired,
         staffObject: React.PropTypes.object.isRequired,
         staffStatuses: React.PropTypes.object.isRequired,
-        updateStaffStatus: React.PropTypes.func.isRequired
+        updateStaffStatus: React.PropTypes.func.isRequired,
+        icon: React.PropTypes.string.isRequired
     }
     render(){
         var staffStatus = this.getStaffStatus();
@@ -20,11 +21,10 @@ export default class ToggleStaffStatusButton extends Component {
 
         var label = this.props.statusLabels[nextStatusId];
 
-        var style = {
-            backgroundColor: staffStatusOptionsByValue[nextStatusId].color
-        };
-
-        return <a className="btn btn-status-toggle" style={style} onClick={() => this.onClick()}>
+        return <a className="btn btn-default btn-sm" onClick={() => this.onClick()}>
+            <span
+                className={["glyphicon", "glyphicon-" + this.props.icon].join(" ")}
+                style={{display: "inline-block", marginRight: 3}} />
             {label}
         </a>
     }
