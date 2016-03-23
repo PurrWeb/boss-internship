@@ -440,6 +440,9 @@ export function loadInitialClockInOutAppState(viewData) {
             }),
             replaceAllVenues({
                 venues: indexByClientId(viewData.venues)
+            }),
+            setPageOptions({
+                pageOptions: viewData.pageOptions
             })
         ]);
     }

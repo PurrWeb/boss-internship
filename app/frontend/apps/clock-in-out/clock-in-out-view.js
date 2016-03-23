@@ -3,25 +3,11 @@ import { connect, Provider } from "react-redux"
 import _ from "underscore"
 import store from "~redux/store"
 import moment from "moment"
-import { bindActionCreators } from "redux";
 import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 import * as actions from "~redux/actions"
+import { selectRotaOnClockInOutPage } from "~redux/selectors"
 
 class ClockInOutView extends Component {
-    static childContextTypes = {
-        staffTypes: React.PropTypes.object,
-        rotaShifts: React.PropTypes.array,
-        staffStatuses: React.PropTypes.object,
-        staffStatusOptions: React.PropTypes.object
-    }
-    getChildContext(){
-        return {
-            staffTypes: this.props.staffTypes,
-            rotaShifts: this.props.rotaShifts,
-            staffStatuses: this.props.staffStatuses,
-            staffStatusOptions: this.props.staffStatusOptions
-        }
-    }
     render() {
         var classes = ["container"];
         if (this.props.clockInOutAppIsInManagerMode) {
@@ -36,25 +22,20 @@ class ClockInOutView extends Component {
                 Leave Manager Mode
             </a>
             <h1>
-                {this.props.venue} - {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
+                {this.props.venue.name} - {moment(this.props.rota.date).format("ddd D MMMM YYYY")}
             </h1>
-            <ClockInOutStaffFinder
-                staff={this.props.staff}
-                />
+            <ClockInOutStaffFinder />
         </div>
     }
 }
 
 function mapStateToProps(state) {
-    var props = _.clone(state);
-
-    props.clockInOutAppIsInManagerMode = state.clockInOutAppIsInManagerMode;
-    props.staffTypes = {};
-    props.venue = "The Rocket Bar";
-    props.dateOfRota = new Date(2015, 11, 11, 18, 0, 0);
-    props.staffStatusOptions = {};
-
-    return props;
+    var rota = selectRotaOnClockInOutPage(state);
+    return {
+        clockInOutAppIsInManagerMode: state.clockInOutAppIsInManagerMode,
+        rota,
+        venue: rota.venue.get(state.venues)
+    }
 }
 
 function mapDispatchToProps(dispatch){

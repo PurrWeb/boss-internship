@@ -173,3 +173,11 @@ export function selectShiftsByStaffMemberClientId(state, staffMemberClientId){
         return shift.staff_member.clientId === staffMemberClientId
     });
 }
+
+export function selectRotaOnClockInOutPage(state){
+    return getRotaFromDateAndVenue({
+        rotas: state.rotas,
+        dateOfRota: state.pageOptions.dateOfRota,
+        venueId: state.pageOptions.venue.clientId
+    });
+}
