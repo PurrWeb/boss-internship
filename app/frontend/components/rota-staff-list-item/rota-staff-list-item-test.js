@@ -2,11 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
 import expect from "expect"
+import utils from "~lib/utils"
 import StaffListItem from "./index"
 import {ContextProvider, NoOpComponent, simpleRender} from "~lib/test-helpers"
 import {createStore} from "redux"
 import AddShiftButton from "./add-shift-button"
-import { processStaffMemberObject, processStaffTypeObject } from "~lib/backend-data/process-backend-objects"
+import { processStaffMemberObject, processStaffTypeObject, processHolidayObject } from "~lib/backend-data/process-backend-objects"
 
 describe('StaffListItem', function() {
     beforeEach(function(){
@@ -28,7 +29,7 @@ describe('StaffListItem', function() {
     staffMember = processStaffMemberObject(staffMember);
 
     var staffTypes = [{
-        id: 3333.
+        id: 3333,
         name: "Kitchen"
     }];
     staffTypes = staffTypes.map(processStaffTypeObject);
@@ -42,7 +43,7 @@ describe('StaffListItem', function() {
     };
 
     var storeState = {
-        staff: utils.indexByClientId([staffMember])
+        staff: utils.indexByClientId([staffMember]),
         componentErrors: {},
         staffTypes: utils.indexByClientId(staffTypes),
         rotaShifts: {},
@@ -63,7 +64,7 @@ describe('StaffListItem', function() {
 
     it("shows the person's first and last name", function(){
         var {node} = simpleRender(
-            <StaffListItem staff={staff} />,
+            <StaffListItem staff={staffMember} />,
             { storeState, context }
         );
 
@@ -78,18 +79,19 @@ describe('StaffListItem', function() {
     it("Disables the add button if the staff member is on holiday", function(){
         var itemStoreState = {...storeState}
         var itemStaff = {...staffMember}
-        itemStaff.holidays = [{id: 1}]
-        itemStoreState.staff = {
-            33: itemStaff
-        }
-        itemStoreState.holidays = {
+        itemStaff.holidays = [{clientId: getClientId(1)}]
+        itemStoreState.staff = utils.indexByClientId([itemStaff]);
+
+        var holiday = {
             1: {
                 start_date: new Date(2016,0,1),
                 end_date: new Date(2016,0,1),
-                id: 1,
+                id: 1
                 staff_member: {id: 33}
             }
-        }
+        };
+        holiday = processHolidayObject(holiday);
+        itemStoreState.holidays = utils.indexByClientId([holiday]);
 
         expect(canAddShift(context, itemStoreState, itemStaff)).toBe(false);
     });
