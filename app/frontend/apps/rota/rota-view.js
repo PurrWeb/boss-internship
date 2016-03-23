@@ -13,27 +13,10 @@ import {appRoutes} from "~lib/routes"
 
 
 class RotaView extends Component {
-    static childContextTypes = {
-        staffTypes: React.PropTypes.object,
-        boundActionCreators: React.PropTypes.object,
-        rotaShifts: React.PropTypes.object,
-        dateOfRota: React.PropTypes.instanceOf(Date),
-        componentErrors: React.PropTypes.object,
-        boundActionCreators: React.PropTypes.object
-    }
-    getChildContext(){
-        return {
-            staffTypes: this.props.staffTypes,
-            boundActionCreators: this.props.boundActionCreators,
-            rotaShifts: this.props.rotaShifts,
-            dateOfRota: this.props.dateOfRota,
-            componentErrors: this.props.componentErrors
-        }
-    }
     render() {
         return <div className="container">
             <RotaNavigation
-                dateOfRota={this.props.dateOfRota}
+                dateOfRota={this.props.rota.date}
                 venueServerId={this.props.venue.serverId} />
             <br/>
             <div className="row">
@@ -42,29 +25,24 @@ class RotaView extends Component {
               </div>
             </div>
             <h1>
-                Rota for {this.props.venue.name}: {moment(this.props.dateOfRota).format("ddd D MMMM YYYY")}
+                Rota for {this.props.venue.name}: {moment(this.props.rota.date).format("ddd D MMMM YYYY")}
             </h1>
             <br/>
             <ChartAndFilter />
             <hr />
             <AddShiftViewContainer 
-                dateOfRota={this.props.dateOfRota} />
+                dateOfRota={this.props.rota.date} />
         </div>
     }
 }
 
 function mapStateToProps(state) {
-    var props = _.clone(state);
+    var rota = selectRotaOnVenueRotaPage(state);
 
-    props.shifts = _.values(props.shifts);
-
-    var shiftsBeingAdded = props.apiRequestsInProgress.ADD_SHIFT;
-
-    var rota = selectRotaOnVenueRotaPage(props);
-    props.venue = rota.venue.get(props.venues);
-    props.dateOfRota = rota.date;
-
-    return props;
+    return {
+        venue: rota.venue.get(state.venues),
+        rota: rota
+    }
 }
 
 export default connect(
