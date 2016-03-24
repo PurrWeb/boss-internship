@@ -12,7 +12,7 @@ module PageObject
     page_action :ensure_details_displayed_for do |user|
       listing = index_listing_for(user)
 
-      expect(detail_text(listing, :name)).to eq(user.full_name)
+      expect(detail_text(listing, :name)).to eq(user.full_name.titlecase)
 
       expect(detail_text(listing, :email)).to eq(user.email)
 

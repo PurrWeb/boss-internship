@@ -15,9 +15,9 @@
         <td>
           <p>
             <% if can?(:manage, holiday.creator) %>
-              <%= link_to(holiday.creator.full_name, user_path(holiday.creator)) %>
+              <%= link_to(holiday.creator.full_name.titlecase, user_path(holiday.creator)) %>
             <% else %>
-              <%= holiday.creator.full_name %>
+              <%= holiday.creator.full_name.titlecase %>
             <% end %>
             <br />
             <%= holiday.created_at %>

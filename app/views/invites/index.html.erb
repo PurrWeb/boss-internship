@@ -35,7 +35,7 @@
           <%= invite.current_state.titleize %>
         </td>
         <td data-role="inviter">
-          <%= invite.inviter.full_name %>
+          <%= invite.inviter.full_name.titlecase %>
         </td>
         <td data-role="invited-at">
           <%= invite.created_at.to_s(:human_date) %>

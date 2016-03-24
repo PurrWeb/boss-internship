@@ -7,7 +7,7 @@ class StaffMemberUpdatesMailer < ApplicationMailer
 
     mail(
       to: staff_updates_email,
-      subject: "New Staff Member Added - #{staff_member.full_name}"
+      subject: "New Staff Member Added - #{staff_member.full_name.titlecase}"
     ) do |format|
       format.html do
         render locals: { staff_member: staff_member }

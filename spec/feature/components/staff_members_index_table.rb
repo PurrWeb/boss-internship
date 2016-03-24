@@ -12,7 +12,7 @@ module PageObject
     page_action :ensure_details_displayed_for do |staff_member|
       listing = index_listing_for(staff_member)
 
-      expect(detail_text(listing, :name)).to eq(staff_member.full_name)
+      expect(detail_text(listing, :name)).to eq(staff_member.full_name.titlecase)
 
       venue_text = staff_member.venue ? staff_member.venue.name : 'N / A'
       expect(detail_text(listing, :venue)).to eq(venue_text)

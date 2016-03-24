@@ -1,6 +1,6 @@
 <div class="media">
   <div class="media-body">
-    <h1 class="media-heading"><%= user.full_name %><%= " (Disabled)" if user.disabled? %></h1>
+    <h1 class="media-heading"><%= user.full_name.titlecase %><%= " (Disabled)" if user.disabled? %></h1>
   </div>
   <div class="media-right">
     <% if can?(:disable, user) %>
@@ -33,7 +33,7 @@
     <div class="panel-body">
     <dl>
       <dt class="show-page-detail-heading">Name</dt>
-      <dd class="show-page-detail" data-detail="name"><%= user.full_name %></dd>
+      <dd class="show-page-detail" data-detail="name"><%= user.full_name.titlecase %></dd>
 
       <dt class="show-page-detail-heading">Email Address</dt>
       <dd class="show-page-detail" data-detail="email"><%= user.email %></dd>

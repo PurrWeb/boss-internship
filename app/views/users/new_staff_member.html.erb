@@ -4,7 +4,7 @@
   <%= bootstrap_form_for(staff_member, url: create_staff_member_user_path(user), html: { multipart: true, class: 'create-staff-member-from-user-form' }) do |form| %>
     <div class="form-group">
       <label>Name</label>
-      <div><%= user.full_name %></div>
+      <div><%= user.full_name.titlecase %></div>
     </div>
     <div class="form-group">
       <label>Email Address</label>

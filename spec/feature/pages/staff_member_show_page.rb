@@ -23,7 +23,7 @@ module PageObject
 
     page_action :ensure_details_displayed_for do |staff_member|
       expect(find(detail_section_selector_for(:venue)).text).to eq(staff_member.venue.name)
-      expect(find(detail_section_selector_for(:name)).text).to eq(staff_member.full_name)
+      expect(find(detail_section_selector_for(:name)).text).to eq(staff_member.full_name.titlecase)
       expect(find(detail_section_selector_for(:status)).text).to eq(staff_member_status_message(staff_member))
       expect(find(detail_section_selector_for(:gender)).text).to eq(staff_member.gender.titlecase)
       expect(find(detail_section_selector_for(:email)).text).to eq(staff_member.email)
@@ -58,12 +58,12 @@ module PageObject
     end
 
     def assert_on_correct_page
-      expect(find('main h1').text).to eq(staff_member.full_name)
+      expect(find('main h1').text).to eq(staff_member.full_name.titlecase)
     end
 
     private
     def ensure_name_displayed_for(staff_member)
-      expect(find(detail_section_selector_for(:name)).text).to eq(staff_member.full_name)
+      expect(find(detail_section_selector_for(:name)).text).to eq(staff_member.full_name.titlecase)
     end
 
     def detail_section_selector_for(detail)

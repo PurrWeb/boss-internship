@@ -26,7 +26,7 @@ class HolidayReportCSV
         csv << [
           venue.name,
           venue.id,
-          staff_member.full_name,
+          staff_member.full_name.titlecase,
           staff_member.id,
           paid_holiday_days,
           unpaid_holiday_days

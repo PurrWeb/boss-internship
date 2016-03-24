@@ -14,7 +14,7 @@ class NewStaffMemberDetailsPDF
 
   def data
     result = []
-    result << ['Name', staff_member.full_name]
+    result << ['Name', staff_member.full_name.titlecase]
     result << ['Date of Birth', staff_member.date_of_birth.to_s(:human_date)]
     result << ['Gender', staff_member.gender.titlecase]
 

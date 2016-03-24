@@ -52,6 +52,6 @@ RSpec.feature 'Creating a staff member from a user' do
 
     # Send new staff member update email
     expect(ActionMailer::Base.deliveries.count).to eq(1)
-    expect(ActionMailer::Base.deliveries.first.subject).to eq("New Staff Member Added - #{created_staff_member.full_name}")
+    expect(ActionMailer::Base.deliveries.first.subject).to eq("New Staff Member Added - #{created_staff_member.full_name.titlecase}")
   end
 end

@@ -30,11 +30,11 @@ RSpec.feature 'Editing a users personal detials' do
       edit_page.surf_to
       edit_page.form.update_name(new_name)
       edited_user.reload
-      expect(edited_user.full_name).to eq(new_name.full_name)
+      expect(edited_user.full_name).to eq(new_name.full_name.titlecase)
     end
 
     context 'new name is invalid' do
-      let!(:old_name) { edited_user.full_name }
+      let!(:old_name) { edited_user.full_name.titlecase }
 
       let(:new_name) do
         FactoryGirl.build(
@@ -55,7 +55,7 @@ RSpec.feature 'Editing a users personal detials' do
         edit_page.surf_to
         edit_page.form.update_name(new_name)
         edited_user.reload
-        expect(edited_user.full_name).to eq(old_name)
+        expect(edited_user.full_name.titlecase).to eq(old_name)
       end
 
       it 'should persist the edit in the form' do
