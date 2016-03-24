@@ -63,7 +63,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :venues, only: [:index, :new, :create] do
+  resources :venues, only: [:index, :new, :create, :edit, :update] do
     resources :rotas, only: [:show]
   end
 

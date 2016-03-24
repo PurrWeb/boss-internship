@@ -15,7 +15,7 @@ class VenuesController < ApplicationController
   end
 
   def create
-    venue = Venue.new(venue_params)
+    venue = Venue.new(create_params)
 
     if venue.save
       flash[:success] = "Venue added successfully"
@@ -26,15 +26,37 @@ class VenuesController < ApplicationController
     end
   end
 
+  def edit
+    venue = Venue.find(params[:id])
+    render locals: { venue: venue }
+  end
+
+  def update
+    venue = Venue.find(params[:id])
+
+    if venue.update_attributes(update_params)
+      flash[:success] = "Venue updated successfully"
+      redirect_to action: :index
+    else
+      flash.now[:error] = "There was a problem updating this venue"
+      render 'new', locals: { venue: venue }
+    end
+  end
+
   private
   def authorize
     authorize! :manage, :admin
   end
 
-  def venue_params
+  def create_params
     params.require(:venue).
       permit(:name).merge(
         creator: current_user
       )
+  end
+
+  def update_params
+    params.require(:venue).
+      permit(:name)
   end
 end

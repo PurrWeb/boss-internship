@@ -1,0 +1,7 @@
+<h1>Edit <%= venue.name.titlecase %></h1>
+
+<%= bootstrap_form_for(venue, html: { class: 'venue-form' }) do |form| %>
+  <%= form.text_field(:name) %>
+
+  <%= form.submit('Update') %>
+<% end %>
