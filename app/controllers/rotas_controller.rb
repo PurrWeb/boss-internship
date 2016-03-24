@@ -144,7 +144,7 @@ class RotasController < ApplicationController
     {
       start_date: UIRotaDate.format(start_date_from_params || default_start_date),
       end_date: UIRotaDate.format(end_date_from_params || default_end_date),
-      venue_id: venue_from_params || default_venue.andand.id
+      venue_id: venue_from_params || current_user.default_venue.andand.id
     }
   end
 
@@ -166,14 +166,6 @@ class RotasController < ApplicationController
 
   def default_end_date
     Time.now.end_of_week
-  end
-
-  def default_venue
-    if current_user.manager?
-      current_user.venues.first
-    else
-      Venue.first
-    end
   end
 
   def rota_date_from_params

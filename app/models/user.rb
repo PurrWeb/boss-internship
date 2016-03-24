@@ -147,6 +147,14 @@ class User < ActiveRecord::Base
     disabled? && state_machine.last_transition.metadata.fetch("disable_reason")
   end
 
+  def default_venue
+    if manager?
+      venues.first
+    else
+      Venue.first
+    end
+  end
+
   # Needed for statesman
   def self.transition_class
     UserTransition
