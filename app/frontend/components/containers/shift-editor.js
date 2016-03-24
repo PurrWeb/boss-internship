@@ -21,6 +21,7 @@ class ShiftEditorUi extends Component {
             <div className="row">
                 <div className="col-md-9">
                     <ShiftTimeSelector
+                        rotaDate={this.props.rotaDate}
                         defaultShiftTimes={this.props.shift}
                         onChange={this.props.onShiftTimesChange} />
                 </div>
@@ -98,9 +99,11 @@ class ShiftEditor extends Component {
             }
         }
     }
-    render(){
+    render(){ 
+        var updatedShift = Object.assign({}, this.props.shift, this.state.newShiftTimes)
         return <ShiftEditorUi
-            shift={this.props.shift}
+            shift={updatedShift}
+            rotaDate={this.getRotaDate()}
             errors={this.props.componentErrors[this.componentId]}
             canEditShift={this.props.canEditShift}
             updateShift={() => this.updateShift()}
@@ -135,11 +138,13 @@ class ShiftEditor extends Component {
         var {starts_at, ends_at} = this.state.newShiftTimes;
         return validation.areShiftTimesValid(starts_at, ends_at);
     }
+    getRotaDate(){
+        return new RotaDate({dateOfRota: this.props.dateOfRota})
+    }
 }
 
 function mapStateToProps(state, ownProps){
-    var rotaClientId = ownProps.shift.rota.clientId;
-    var rota = state.rotas[rotaClientId];
+    var rota = ownProps.shift.rota.get(state.rotas)
     var staffType = getStaffTypeFromShift({
         shift: ownProps.shift,
         staffMembersById: state.staff,
@@ -149,7 +154,8 @@ function mapStateToProps(state, ownProps){
         componentErrors: state.componentErrors,
         venueClientId: rota.venue.clientId,
         canEditShift: canEditStaffTypeShifts(state, {staffTypeClientId: staffType.clientId}),
-        shiftIsBeingEdited: selectShiftIsBeingEdited(state, {shiftServerId: ownProps.shift.serverId})
+        shiftIsBeingEdited: selectShiftIsBeingEdited(state, {shiftServerId: ownProps.shift.serverId}),
+        dateOfRota: rota.date
     }
 }
 
