@@ -34,10 +34,10 @@ export default class WeekAndVenueSelector extends React.Component {
                     selectedVenues={selectedVenues}
                     clearable={this.props.canSelectAllVenues ? true : false}
                     onChange={
-                        (venueClientId) => this.props.onChange({
+                        (venueClientIds) => this.props.onChange({
                             startDate: this.props.weekStartDate,
                             endDate: this.getWeekEndDate(this.props.weekStartDate),
-                            venueClientId: this.props.venueClientId
+                            venueClientId: venueClientIds.length > 0 ? venueClientIds[0] : venueClientIds
                         })
                     } />
                 {this.props.children}
