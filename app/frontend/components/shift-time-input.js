@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import Select from "react-select"
 import RotaDate from "~lib/rota-date.js"
 import moment from "moment"
+import utils from "~lib/utils"
 import validation from "~lib/validation"
 import { possibleShiftStartTimeStrings, possibleShiftEndTimeStrings } from "~lib/possible-shift-time-strings"
 
@@ -36,9 +37,17 @@ export default class ShiftTimeInput extends Component {
             }
         });
 
+        var date = this.getDateFromProps();
+        var dateValue;
+        if (utils.dateIsValid(date)) {
+            dateValue = moment(date).format("HH:mm");
+        } else {
+            dateValue = "";
+        }
+
         return <div className="shift-time-input">
             <Select
-                value={moment(this.getDateFromProps()).format("HH:mm")}
+                value={dateValue}
                 options={options}
                 clearable={false}
                 onChange={(value) => this.updateTime(value)} />

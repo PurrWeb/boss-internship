@@ -3,6 +3,7 @@ import {connect } from "react-redux"
 import _ from "underscore"
 import AddShiftView from "./add-shift-view/add-shift-view"
 import { selectRotaOnVenueRotaPage } from "~redux/selectors"
+import RotaDate from "~lib/rota-date"
 
 
 class AddShiftViewContainer extends Component {
@@ -29,9 +30,9 @@ class AddShiftViewContainer extends Component {
     render() {
         return <AddShiftView
             shiftTimes={this.state.shiftTimes}
-            dateOfRota={this.props.dateOfRota}
             onShiftTimesChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)}
             staff={this.props.staff} 
+            rotaDate={this.getRotaDate()}
             staffTypes={this.props.staffTypes} />
     }
     getDefaultShiftTimes(props) {
@@ -41,6 +42,9 @@ class AddShiftViewContainer extends Component {
     }
     onShiftTimesChange(shiftTimes){
         this.setState({shiftTimes});
+    }
+    getRotaDate(){
+        return new RotaDate({dateOfRota: this.props.dateOfRota})
     }
 }
 

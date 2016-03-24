@@ -7,7 +7,8 @@ export default class AddShiftView extends React.Component {
         shiftTimes: React.PropTypes.object.isRequired,
         onShiftTimesChange: React.PropTypes.func.isRequired,
         staff: React.PropTypes.object.isRequired,
-        staffTypes: React.PropTypes.object.isRequired
+        staffTypes: React.PropTypes.object.isRequired,
+        rotaDate: React.PropTypes.object.isRequired
     }
     render(){
         return (
@@ -16,6 +17,7 @@ export default class AddShiftView extends React.Component {
                 <div className="row">
                     <div className="col-md-3">
                         <ShiftTimeSelector
+                            rotaDate={this.props.rotaDate}
                             defaultShiftTimes={this.props.shiftTimes}
                             onChange={this.props.onShiftTimesChange} />
                     </div>

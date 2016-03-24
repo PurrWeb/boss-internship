@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import ShiftTimeInput from "./shift-time-input.js"
 import validation from "~lib/validation"
 import ErrorMessage from "~components/error-message.js"
-import RotaDate from "~lib/rota-date"
 
 export default class ShiftTimeSelector extends Component {
     constructor(props){
@@ -24,7 +23,7 @@ export default class ShiftTimeSelector extends Component {
                 <div className="col-md-6">
                     <ShiftTimeInput
                         startsAt={this.state.starts_at}
-                        rotaDate={this.getRotaDate()}
+                        rotaDate={this.props.rotaDate}
                         onChange={(newValue) => {
                             this.onChange("starts_at", newValue);
                         } } />
@@ -32,7 +31,7 @@ export default class ShiftTimeSelector extends Component {
                 <div className="col-md-6">
                     <ShiftTimeInput
                         endsAt={this.state.ends_at}
-                        rotaDate={this.getRotaDate()}
+                        rotaDate={this.props.rotaDate}
                         onChange={(newValue) => {
                             this.onChange("ends_at", newValue);
                         } } />
@@ -40,9 +39,6 @@ export default class ShiftTimeSelector extends Component {
             </div>
             {this.getErrorMessages()}
         </div>
-    }
-    getRotaDate(){
-        return new RotaDate({shiftStartsAt: this.props.defaultShiftTimes.starts_at});
     }
     getErrorMessages(){
         var errorMessages = validation.validateShiftTimes({
@@ -66,14 +62,14 @@ export default class ShiftTimeSelector extends Component {
      * @param  {string} startOrEnd - "starts_at" or "ends_at"
      */
     onChange(startOrEnd, newValue){
-        this.setState({[startOrEnd]: newValue});
+        this.setState({[startOrEnd]: newValue}, () => {
+            var info = {
+                starts_at: this.state.starts_at,
+                ends_at: this.state.ends_at
+            };
+            info[startOrEnd] = newValue;
 
-        var info = {
-            starts_at: this.state.starts_at,
-            ends_at: this.state.ends_at
-        };
-        info[startOrEnd] = newValue;
-
-        this.props.onChange(info);
+            this.props.onChange(info);
+        });
     }
 }
