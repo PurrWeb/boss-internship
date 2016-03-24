@@ -8,7 +8,7 @@ export default class ToggleStaffStatusButton extends Component {
         getStatusAfterClicking: React.PropTypes.func.isRequired,
         staffObject: React.PropTypes.object.isRequired,
         staffStatuses: React.PropTypes.object.isRequired,
-        updateStaffStatus: React.PropTypes.func.isRequired,
+        updateStaffStatusWithConfirmation: React.PropTypes.func.isRequired,
         icon: React.PropTypes.string.isRequired
     }
     render(){
@@ -33,7 +33,7 @@ export default class ToggleStaffStatusButton extends Component {
         return this.props.staffStatuses[staffClientId].status;
     }
     onClick(){
-        this.props.updateStaffStatus({
+        this.props.updateStaffStatusWithConfirmation({
             staffMemberObject: this.props.staffObject,
             statusValue: this.props.getStatusAfterClicking(this.getStaffStatus())
         });

@@ -33,13 +33,13 @@ class ClockInOutStaffListItem extends Component {
                     <ToggleStaffClockedInButton
                         staffStatuses={this.props.staffStatuses}
                         staffObject={staffObject}
-                        updateStaffStatus={this.props.updateStaffStatus} />
+                        updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
                 </div>
                 <div className="col-md-1 show-in-manager-mode">
                     <ToggleStaffOnBreakButton
                         staffStatuses={this.props.staffStatuses}
                         staffObject={staffObject}
-                        updateStaffStatus={this.props.updateStaffStatus} />
+                        updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
                 </div>
             </div>;
         } else {
@@ -94,8 +94,8 @@ function mapStateToProps(state, ownProps){
 
 function mapDispatchToProps(dispatch){
     return {
-        updateStaffStatus: function(options){
-            dispatch(actions.updateStaffStatus(options))
+        updateStaffStatusWithConfirmation: function(options){
+            dispatch(actions.updateStaffStatusWithConfirmation(options))
         },
         enterManagerMode: function(){
             dispatch(actions.enterManagerMode());

@@ -1,4 +1,4 @@
-import importedCreateApiRequestAction from "./create-api-request-action"
+import importedCreateApiRequestAction, { registeredApiRequestActionCreators} from "./create-api-request-action"
 import _ from "underscore"
 import moment from "moment"
 import utils from "~lib/utils"
@@ -9,8 +9,13 @@ import oFetch from "o-fetch"
 import RotaDate from "~lib/rota-date"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import { processVenueRotaAppViewData, processClockInOutAppViewData } from "~lib/backend-data/process-app-view-data"
+import { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal } from "./actions/confirmation-modal"
+
 
 export const actionTypes = {};
+
+window.registeredApiRequestActionCreators = registeredApiRequestActionCreators;
+
 const createApiRequestAction = function(options){
     var options = _.clone(options);
     options.actionTypes = actionTypes;
@@ -33,6 +38,12 @@ function getRotaDateFromShiftStartsAt(startAt){
     var rotaDate = new RotaDate({shiftStartsAt: startAt});
     return rotaDate.getDateOfRota();
 }
+
+actionTypes[showConfirmationModal.actionType] = showConfirmationModal.actionType;
+actionTypes[cancelConfirmationModal.actionType] = cancelConfirmationModal.actionType;
+actionTypes[completeConfirmationModal.actionType] = completeConfirmationModal.actionType;
+
+export { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal};
 
 export const addRotaShift = createApiRequestAction({
     requestType: "ADD_SHIFT",
@@ -190,6 +201,18 @@ export function leaveManagerMode () {
     return {
         type: actionTypes.LEAVE_MANAGER_MODE
     }
+}
+
+export function updateStaffStatusWithConfirmation(options){
+    return showConfirmationModal({
+        modalOptions: {
+
+        },
+        confirmationAction: {
+            apiRequestType: "UPDATE_STAFF_STATUS",
+            options: options
+        }
+    })
 }
 
 export const updateStaffStatus = createApiRequestAction({

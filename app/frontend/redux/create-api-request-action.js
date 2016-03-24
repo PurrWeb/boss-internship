@@ -1,5 +1,7 @@
 import _ from "underscore"
 
+var registeredApiRequestActionCreators = {};
+
 /**
 The createApiRequestAction creates a an actionCreator that can be used to update
 the state of API requests in the store.
@@ -53,76 +55,84 @@ export default function createApiRequestAction(actionOptions){
     actionTypes[SUCCESS_TYPE] = SUCCESS_TYPE;
     actionTypes[START_TYPE] = START_TYPE;
 
-    return function(requestOptions){
-        if (requestOptions.type || requestOptions.requestId || requestOptions.requestType) {
-            throw new Error("The properties type, requestId and requestType can't be set");
-        }
+    var actionCreator = generateActionCreator();
+    registeredApiRequestActionCreators[requestType] = actionCreator;
+    return actionCreator;
 
-        var requestId = _.uniqueId();
+    function generateActionCreator(){
+        return function(requestOptions){
+            if (requestOptions.type || requestOptions.requestId || requestOptions.requestType) {
+                throw new Error("The properties type, requestId and requestType can't be set");
+            }
 
-        return function(dispatch, getState) {
-            function success(responseOptions){
+            var requestId = _.uniqueId();
+
+            return function(dispatch, getState) {
+                function success(responseOptions){
+                    dispatch([
+                        {
+                            type: SUCCESS_TYPE,
+                            ...responseOptions
+                        },
+                        requestEndAction()
+                    ]);
+                }
+                function error(responseOptions){
+                    var actions = [requestEndAction()];
+                    if (requestOptions.errorHandlingComponent) {
+                        actions.push(setComponentErrorAction(responseOptions.errors));
+                    } else {
+                        alert(responseOptions.errors.base.join("\n"));
+                    }
+                    dispatch(actions);
+                }
+                function setComponentErrorAction(errors){
+                    return {
+                        type: actionTypes.SET_COMPONENT_ERROR,
+                        componentId: requestOptions.errorHandlingComponent,
+                        errors: errors
+                    };
+                }
+                function apiRequestStartAction(){
+                    return {
+                        type: actionTypes.API_REQUEST_START,
+                        requestId: requestId,
+                        requestType: requestType,
+                        ...requestOptions
+                    };
+                }
+                function requestTypeRequestStartAction(){
+                    return {
+                        type: START_TYPE,
+                        ...requestOptions
+                    }
+                }
+                function requestEndAction(){
+                    return {
+                        requestType: requestType,
+                        type: actionTypes.API_REQUEST_END,
+                        requestId: requestId,
+                        ...requestOptions
+                    };
+                }
+                
+                if (actionOptions.confirm) {
+                    var confirmed = actionOptions.confirm(requestOptions, getState);
+                    if (!confirmed) {
+                        return; // Don't go ahead with request
+                    }
+                }
+
                 dispatch([
-                    {
-                        type: SUCCESS_TYPE,
-                        ...responseOptions
-                    },
-                    requestEndAction()
+                    apiRequestStartAction(),
+                    requestTypeRequestStartAction(),
+                    setComponentErrorAction(undefined)
                 ]);
-            }
-            function error(responseOptions){
-                var actions = [requestEndAction()];
-                if (requestOptions.errorHandlingComponent) {
-                    actions.push(setComponentErrorAction(responseOptions.errors));
-                } else {
-                    alert(responseOptions.errors.base.join("\n"));
-                }
-                dispatch(actions);
-            }
-            function setComponentErrorAction(errors){
-                return {
-                    type: actionTypes.SET_COMPONENT_ERROR,
-                    componentId: requestOptions.errorHandlingComponent,
-                    errors: errors
-                };
-            }
-            function apiRequestStartAction(){
-                return {
-                    type: actionTypes.API_REQUEST_START,
-                    requestId: requestId,
-                    requestType: requestType,
-                    ...requestOptions
-                };
-            }
-            function requestTypeRequestStartAction(){
-                return {
-                    type: START_TYPE,
-                    ...requestOptions
-                }
-            }
-            function requestEndAction(){
-                return {
-                    requestType: requestType,
-                    type: actionTypes.API_REQUEST_END,
-                    requestId: requestId,
-                    ...requestOptions
-                };
-            }
-            
-            if (actionOptions.confirm) {
-                var confirmed = actionOptions.confirm(requestOptions, getState);
-                if (!confirmed) {
-                    return; // Don't go ahead with request
-                }
+                makeRequest(requestOptions, success, error, getState);
             }
 
-            dispatch([
-                apiRequestStartAction(),
-                requestTypeRequestStartAction(),
-                setComponentErrorAction(undefined)
-            ]);
-            makeRequest(requestOptions, success, error, getState);
         }
-
     }
 }
+
+export { registeredApiRequestActionCreators }
