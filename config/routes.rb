@@ -12,6 +12,12 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
+  resources :change_orders, only: [:index] do
+    collection do
+      put :update
+    end
+  end
+
   resources :users, only: [:show, :index, :destroy] do
     member do
       get :disable

@@ -36,6 +36,12 @@
             </li>
           <% end %>
 
+          <% if can?(:manage, :change_orders) %>
+            <li class="nav-change-orders-section">
+              <%= link_to('Change Orders', change_orders_path, class: 'nav-section-header-link') %>
+            </li>
+          <% end %>
+
           <% if can?(:manage, :clock_in_clock_out) %>
             <li class="nav-clock-in-clock-out-section">
               <%= link_to('Clock In/Out Demo', clock_in_clock_out_index_path, class: "nav-section-header-link") %>

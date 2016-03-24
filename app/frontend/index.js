@@ -34,3 +34,6 @@ registerComponent("HolidayReportApp", HolidayReportView);
 
 import StaffTypeRotaOverviewApp from "./apps/staff-type-rota-overview"
 registerComponent("StaffTypeRotaOverviewApp", StaffTypeRotaOverviewApp);
+
+import ChangeOrderIndexApp from "./apps/change-order/change-order-index-app"
+registerComponent("ChangeOrderIndexApp", ChangeOrderIndexApp);
