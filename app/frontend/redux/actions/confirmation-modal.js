@@ -15,9 +15,11 @@ function showConfirmationModal(options){
 showConfirmationModal.actionType = "SHOW_CONFIRMATION_MODAL"
 
 function cancelConfirmationModal(){
-
+    return {
+        type: cancelConfirmationModal.actionType
+    }
 }
-cancelConfirmationModal.actionType = "CANCEL_CONFIRMATION_TYPE"
+cancelConfirmationModal.actionType = "CANCEL_CONFIRMATION_MODAL"
 
 function completeConfirmationModal(confirmationData){
     return function(dispatch, getState){
