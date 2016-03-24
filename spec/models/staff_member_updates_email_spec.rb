@@ -39,7 +39,7 @@ describe StaffMemberUpdatesEmail do
 
   specify do
     expect(subject.data).to include({
-      staff_member_name: staff_member.full_name,
+      staff_member_name: staff_member.full_name.titlecase,
       staff_member_id: staff_member.id
     })
     expect(subject.send?).to eq(false)

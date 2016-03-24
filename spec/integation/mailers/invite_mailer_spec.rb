@@ -20,8 +20,8 @@ RSpec.describe InviteMailer do
     end
 
     it 'should say who invited you' do
-      expect(mail.html_part.body.decoded).to include("#{admin_user.full_name} invited you to the boss system.")
-      expect(mail.text_part.body.decoded).to include("#{admin_user.full_name} invited you to the boss system.")
+      expect(mail.html_part.body.decoded).to include("#{admin_user.full_name.titlecase} invited you to the boss system.")
+      expect(mail.text_part.body.decoded).to include("#{admin_user.full_name.titlecase} invited you to the boss system.")
     end
 
     it 'should contain a link to accept the invite containing its token' do

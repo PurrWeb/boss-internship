@@ -17,7 +17,7 @@
     <tr>
     <% staff_members.each do |staff_member| %>
       <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
-        <td data-role="name"><%= link_to(staff_member.full_name, staff_member_path(staff_member)) %></td>
+        <td data-role="name"><%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member)) %></td>
         <td>
           <%= UIStaffMemberStatus.new(staff_member).to_s %>
         </td>

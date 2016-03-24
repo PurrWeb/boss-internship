@@ -4,7 +4,7 @@ class StaffMemberUpdatesEmail
   def initialize(staff_member)
     @changed_attribute_data = {}
     @staff_member_id = staff_member.id
-    @staff_member_name = staff_member.full_name
+    @staff_member_name = staff_member.full_name.titlecase
     populate_changed_attribute_data(staff_member)
   end
   include ActionView::Helpers::NumberHelper
@@ -28,7 +28,7 @@ class StaffMemberUpdatesEmail
 
   def populate_changed_attribute_data(staff_member)
     if staff_member.name_changed?
-      changed_attribute_data[:name] = staff_member.full_name
+      changed_attribute_data[:name] = staff_member.full_name.titlecase
     end
     if staff_member.email_changed?
       changed_attribute_data[:email] = staff_member.email

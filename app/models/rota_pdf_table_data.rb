@@ -67,7 +67,7 @@ class RotaPDFTableData
         end
 
         rows << Row.new(
-          staff_member.full_name,
+          staff_member.full_name.titlecase,
           week_data.fetch(:monday),
           week_data.fetch(:tuesday),
           week_data.fetch(:wednesday),

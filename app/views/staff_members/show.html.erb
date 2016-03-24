@@ -10,18 +10,18 @@
   <div class="media-body">
     <h1 class="media-heading">
       <% if staff_member.flagged? %>
-        <%= staff_member.full_name %>
+        <%= staff_member.full_name.titlecase %>
         <span class="text-danger">
           <span class="glyphicon glyphicon-warning-sign"></span> Flagged
         </span>
       <% elsif staff_member.disabled? %>
-        <%= staff_member.full_name %> (Disabled)
+        <%= staff_member.full_name.titlecase %> (Disabled)
       <% else %>
-        <%= staff_member.full_name %>
+        <%= staff_member.full_name.titlecase %>
       <% end %>
     </h1>
     <% if staff_member.disabled? %>
-      <p class="h4">Disabled by: <%= staff_member.disabled_by_user.full_name %> on <%= staff_member.disabled_at.to_s(:human_date) %></p>
+      <p class="h4">Disabled by: <%= staff_member.disabled_by_user.full_name.titlecase %> on <%= staff_member.disabled_at.to_s(:human_date) %></p>
       <p class="h4">Reason for disabling: <%= staff_member.disable_reason %></p>
     <% end %>
   </div>
@@ -152,7 +152,7 @@
     <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('personal-details', active_tab) %>" id="personal-tab">
       <dl>
         <dt class="show-page-detail-heading">Name</dt>
-        <dd class="show-page-detail" data-detail="name"><%= staff_member.full_name %></dd>
+        <dd class="show-page-detail" data-detail="name"><%= staff_member.full_name.titlecase %></dd>
 
         <dt class="show-page-detail-heading">Gender</dt>
         <dd class="show-page-detail" data-detail="gender"><%= staff_member.gender.titlecase %></dd>
