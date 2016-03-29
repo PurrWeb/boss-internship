@@ -126,7 +126,7 @@ class StaffMember < ActiveRecord::Base
   end
 
   def email_changed?
-    email_address.email_changed?
+    email_address.andand.email_changed?
   end
 
   def staff_type_changed?
