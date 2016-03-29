@@ -29,7 +29,9 @@ function completeConfirmationModal(confirmationData){
 
         var confirmationActionInfo = getState().confirmationModal.confirmationAction;
         var actionCreator = registeredApiRequestActionCreators[confirmationActionInfo.apiRequestType];
-        var confirmedAction = actionCreator(confirmationActionInfo.options);
+        var actionCreatorOptions = {...confirmationActionInfo.options};
+        actionCreatorOptions.confirmationData = confirmationData;
+        var confirmedAction = actionCreator(actionCreatorOptions);
 
         // Don't dispatch as an array because redux batch middleware doesn't seem to be
         // able to dispatch redux thunk actions

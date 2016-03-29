@@ -218,12 +218,20 @@ export function updateStaffStatusWithConfirmation(options){
 export const updateStaffStatus = createApiRequestAction({
     requestType: "UPDATE_STAFF_STATUS",
     makeRequest: function(requestOptions, success, error){
-        var [staffMemberObject, statusValue] = oFetch(requestOptions, "staffMemberObject", "statusValue");
+        var [staffMemberObject, statusValue, confirmationData] = oFetch(requestOptions, "staffMemberObject", "statusValue", "confirmationData");
         setTimeout(function(){
-            success({
-                staffMemberObject,
-                statusValue
-            })
+            if (confirmationData.pin === "1234") {
+                success({
+                    staffMemberObject,
+                    statusValue
+                })
+            } else {
+                error({
+                    errors: {
+                        base: ["PIN needs to be 1234"]
+                    }
+                })
+            }
         }, 500)
     }
 });
