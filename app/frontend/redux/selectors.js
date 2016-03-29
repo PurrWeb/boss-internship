@@ -181,3 +181,7 @@ export function selectRotaOnClockInOutPage(state){
         venueId: state.pageOptions.venue.clientId
     });
 }
+
+export function selectClockInOutAppIsInManagerMode(state){
+    return state.clockInOutAppManagerModeToken !== null;
+}

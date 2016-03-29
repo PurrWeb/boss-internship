@@ -192,7 +192,8 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
 actionTypes.ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
 export function enterManagerMode () {
     return {
-        type: actionTypes.ENTER_MANAGER_MODE
+        type: actionTypes.ENTER_MANAGER_MODE,
+        token: "hf83hfhr8f"
     }
 }
 

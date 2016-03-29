@@ -1,10 +1,10 @@
 import { actionTypes } from "./actions.js"
-export default function clockInOutAppIsInManagerMode(state=false, action){
+export default function clockInOutAppManagerModeToken(state=null, action){
     switch(action.type) {
         case actionTypes.ENTER_MANAGER_MODE:
-            return true;
+            return action.token;
         case actionTypes.LEAVE_MANAGER_MODE:
-            return false;
+            return null;
     }
     return state;
 }
