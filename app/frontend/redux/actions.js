@@ -10,7 +10,7 @@ import RotaDate from "~lib/rota-date"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import { processVenueRotaAppViewData, processClockInOutAppViewData } from "~lib/backend-data/process-app-view-data"
 import { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal } from "./actions/confirmation-modal"
-
+import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
 
 export const actionTypes = {};
 
@@ -224,30 +224,43 @@ export function leaveManagerMode () {
 }
 
 export function updateStaffStatusWithConfirmation(requestOptions){
-    var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
-    var {first_name, surname} = staffMemberObject;
-    return showConfirmationModal({
-        modalOptions: {
-            title: `Enter PIN for ${first_name} ${surname}`,
-            confirmationType: "PIN"
-        },
-        confirmationAction: {
-            apiRequestType: "UPDATE_STAFF_STATUS",
-            requestOptions
+
+    return function(dispatch, getState){
+        var state = getState();
+        if (selectClockInOutAppIsInManagerMode(state)) {
+            requestOptions = {
+                ...requestOptions,
+                managerToken: state.clockInOutAppManagerModeToken
+            }
+            dispatch(updateStaffStatus(requestOptions))
+        } else {
+            var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
+            var {first_name, surname} = staffMemberObject;
+            dispatch(showConfirmationModal({
+                modalOptions: {
+                    title: `Enter PIN for ${first_name} ${surname}`,
+                    confirmationType: "PIN"
+                },
+                confirmationAction: {
+                    apiRequestType: "UPDATE_STAFF_STATUS",
+                    requestOptions
+                }
+            }));        
         }
-    })
+    }
 }
 
 export const updateStaffStatus = createApiRequestAction({
     requestType: "UPDATE_STAFF_STATUS",
     makeRequest: function(requestOptions, success, error){
-        var [staffMemberObject, statusValue, confirmationData] = oFetch(requestOptions, "staffMemberObject", "statusValue", "confirmationData");
-        setTimeout(function(){
-            if (confirmationData.pin === "1234") {
-                success({
-                    staffMemberObject,
-                    statusValue
-                })
+        var wasConfirmed = false;
+        var [staffMemberObject, statusValue] = oFetch(requestOptions, "staffMemberObject", "statusValue");
+        if (requestOptions.managerToken !== undefined){
+            wasConfirmed = true;
+        } else  {
+            var pin = oFetch(requestOptions, "confirmationData.pin");
+            if (pin === "1234") {
+                wasConfirmed = true;
             } else {
                 error({
                     errors: {
@@ -255,7 +268,16 @@ export const updateStaffStatus = createApiRequestAction({
                     }
                 })
             }
-        }, 500)
+        }
+
+        if (wasConfirmed) {
+            setTimeout(function(){
+                success({
+                    staffMemberObject,
+                    statusValue
+                })
+            }, 500);
+        }
     }
 });
 
