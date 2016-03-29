@@ -9,14 +9,27 @@ class StaffShiftListItem extends Component {
         var {shift} = this.props;
         var rotaDate = new RotaDate({shiftStartsAt: shift.starts_at});
         var dateOfRota = rotaDate.getDateOfRota();
+
+        var date = "";
+        if (this.props.showDate) {
+            date = <span>
+                {moment(dateOfRota).format("DD MMM")}
+                &nbsp;
+            </span>
+        }
+        var venue = "";
+        if (this.props.showVenue) {
+            venue = <span>
+                &nbsp;
+                ({this.props.venueName})
+            </span>
+        }
         return <div className="staff-shift-list__shift">
-            {moment(dateOfRota).format("DD MMM")}
-            &nbsp;
+            {date}
             {moment(shift.starts_at).format("H:mm")}
             &nbsp;to&nbsp;
             {moment(shift.ends_at).format("H:mm")}
-            &nbsp;
-            ({this.props.venueName})
+            {venue}
         </div>
     }
 }
@@ -25,7 +38,9 @@ export default class StaffShiftList extends Component {
     static propTypes = {
         shifts: React.PropTypes.object.isRequired,
         venues: React.PropTypes.object.isRequired,
-        rotas: React.PropTypes.object.isRequired
+        rotas: React.PropTypes.object.isRequired,
+        showDate: React.PropTypes.bool,
+        showVenue: React.PropTypes.bool
     }
     render() {
         var shifts = _.values(this.props.shifts);
@@ -39,6 +54,8 @@ export default class StaffShiftList extends Component {
             return <StaffShiftListItem
                 key={i}
                 shift={shift}
+                showVenue={this.props.showVenue}
+                showDate={this.props.showDate}
                 venueName={venue.name} />
         })
         return (

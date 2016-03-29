@@ -55,7 +55,9 @@ class RotaStaffListItem extends Component {
                                 <StaffShiftList
                                     shifts={utils.indexByClientId(this.props.staffMemberShifts)}
                                     venues={this.props.venues}
-                                    rotas={this.props.rotas} />
+                                    rotas={this.props.rotas}
+                                    showDate={true}
+                                    showVenue={true} />
                             </div>
                             <div className="col-md-3">
                                 <h4 className="rota-staff-list-item__h4" style={{
