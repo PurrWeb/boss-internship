@@ -57,10 +57,15 @@ export default class StaffShiftList extends Component {
                 showVenue={this.props.showVenue}
                 showDate={this.props.showDate}
                 venueName={venue.name} />
-        })
+        });
+        var noShiftsMessage = null;
+        if (shifts.length === 0) {
+            noShiftsMessage = <div style={{paddingLeft: 15}}>None</div>
+        }
         return (
             <div className="staff-shift-list">
                 {shiftElements}
+                {noShiftsMessage}
             </div>
         );
     }

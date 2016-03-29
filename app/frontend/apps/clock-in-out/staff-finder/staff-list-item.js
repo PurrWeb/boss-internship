@@ -18,8 +18,7 @@ import * as actions from "~redux/actions"
 import Spinner from "~components/spinner"
 
 var columnNameStyle = {
-    fontSize: 10,
-    color: "#999"
+    textDecoration: "underline"
 }
 
 class ClockInOutStaffListItem extends Component {
@@ -62,7 +61,7 @@ class ClockInOutStaffListItem extends Component {
                     </div>
                     <StaffTypeBadge
                         staffTypeObject={staffTypeObject} />
-                    <div>
+                    <div style={{marginTop: 4}}>
                         {this.getChangePinButton()}
                     </div>
                 </div>
