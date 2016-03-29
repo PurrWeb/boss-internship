@@ -194,3 +194,7 @@ export function selectIsUpdatingStaffMemberStatus(state, {staffMemberServerId}) 
     return requestsForStaffMember.length > 0;
 }
 
+export function selectEnterManagerModeIsInProgress(state){
+    var requests = state.apiRequestsInProgress.ENTER_MANAGER_MODE;
+    return requests !== undefined && requests.length > 0;
+}

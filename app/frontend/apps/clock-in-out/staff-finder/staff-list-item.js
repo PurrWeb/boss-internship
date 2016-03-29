@@ -7,7 +7,11 @@ import StaffTypeBadge from "~components/staff-type-badge"
 import StaffStatusBadge from "~components/staff-status-badge"
 import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
-import { selectShiftsByStaffMemberClientId, selectIsUpdatingStaffMemberStatus } from "~redux/selectors"
+import { 
+    selectShiftsByStaffMemberClientId,
+    selectIsUpdatingStaffMemberStatus,
+    selectEnterManagerModeIsInProgress
+} from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import * as actions from "~redux/actions"
 import Spinner from "~components/spinner"
@@ -35,11 +39,7 @@ class ClockInOutStaffListItem extends Component {
                 </div>
             </div>;
         } else {
-            managerColumns = <a
-                onClick={() => this.enterManagerMode()}
-                className="btn btn-default btn-sm hide-in-manager-mode--inline-block">
-                Enter Manager Mode
-            </a>
+            managerColumns = this.getManagerModeButton();
         }
 
         return <div className="staff-list-item">
@@ -98,6 +98,16 @@ class ClockInOutStaffListItem extends Component {
     enterManagerMode(){
         this.props.enterManagerMode();
     }
+    getManagerModeButton(){
+        if (this.props.enterManagerModeIsInProgress){
+            return <Spinner />;
+        }
+        return <a
+            onClick={() => this.enterManagerMode()}
+            className="btn btn-default btn-sm hide-in-manager-mode--inline-block">
+            Enter Manager Mode
+        </a>
+    }
 }
 
 function mapStateToProps(state, ownProps){
@@ -109,7 +119,8 @@ function mapStateToProps(state, ownProps){
         venues: state.venues,
         updateStatusIsInProgress: selectIsUpdatingStaffMemberStatus(state, {
             staffMemberServerId: ownProps.staff.serverId
-        })
+        }),
+        enterManagerModeIsInProgress: selectEnterManagerModeIsInProgress(state)
     }
 }
 
