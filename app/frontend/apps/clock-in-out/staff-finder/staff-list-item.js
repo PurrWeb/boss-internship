@@ -7,9 +7,10 @@ import StaffTypeBadge from "~components/staff-type-badge"
 import StaffStatusBadge from "~components/staff-status-badge"
 import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
-import { selectShiftsByStaffMemberClientId } from "~redux/selectors"
+import { selectShiftsByStaffMemberClientId, selectIsUpdatingStaffMemberStatus } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import * as actions from "~redux/actions"
+import Spinner from "~components/spinner"
 
 class ClockInOutStaffListItem extends Component {
     render(){
@@ -29,23 +30,14 @@ class ClockInOutStaffListItem extends Component {
                         rotas={this.props.rotas}
                         venues={this.props.venues} />
                 </div>
-                <div className="col-md-1">
-                    <ToggleStaffClockedInButton
-                        staffStatuses={this.props.staffStatuses}
-                        staffObject={staffObject}
-                        updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
-                </div>
-                <div className="col-md-1 show-in-manager-mode">
-                    <ToggleStaffOnBreakButton
-                        staffStatuses={this.props.staffStatuses}
-                        staffObject={staffObject}
-                        updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
+                <div className="col-md-2">
+                    {this.getStaffMemberStatusToggleButtons()}
                 </div>
             </div>;
         } else {
             managerColumns = <a
                 onClick={() => this.enterManagerMode()}
-                className="btn btn-default hide-in-manager-mode--inline-block">
+                className="btn btn-default btn-sm hide-in-manager-mode--inline-block">
                 Enter Manager Mode
             </a>
         }
@@ -79,6 +71,27 @@ class ClockInOutStaffListItem extends Component {
             </div>
         </div>
     }
+    getStaffMemberStatusToggleButtons(){
+        if (this.props.updateStatusIsInProgress) {
+            return <Spinner />
+        }
+
+        var staffObject = this.props.staff;
+        return <div className="row">
+            <div className="col-md-6">
+                <ToggleStaffClockedInButton
+                    staffStatuses={this.props.staffStatuses}
+                    staffObject={staffObject}
+                    updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
+            </div>
+            <div className="col-md-6 show-in-manager-mode">
+                <ToggleStaffOnBreakButton
+                    staffStatuses={this.props.staffStatuses}
+                    staffObject={staffObject}
+                    updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
+            </div>
+        </div>
+    }
     isManager(){
         return this.props.staff.isManager({staffTypes: this.props.staffTypes});
     }
@@ -93,7 +106,10 @@ function mapStateToProps(state, ownProps){
         staffStatuses: state.staffStatuses,
         staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
         rotas: state.rotas,
-        venues: state.venues
+        venues: state.venues,
+        updateStatusIsInProgress: selectIsUpdatingStaffMemberStatus(state, {
+            staffMemberServerId: ownProps.staff.serverId
+        })
     }
 }
 

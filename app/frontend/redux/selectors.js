@@ -185,3 +185,12 @@ export function selectRotaOnClockInOutPage(state){
 export function selectClockInOutAppIsInManagerMode(state){
     return state.clockInOutAppManagerModeToken !== null;
 }
+
+export function selectIsUpdatingStaffMemberStatus(state, {staffMemberServerId}) {
+    var allRequests = state.apiRequestsInProgress.UPDATE_STAFF_STATUS;
+    var requestsForStaffMember = _.filter(allRequests, function(request){
+        return request.staffMemberObject.serverId === staffMemberServerId;
+    });
+    return requestsForStaffMember.length > 0;
+}
+
