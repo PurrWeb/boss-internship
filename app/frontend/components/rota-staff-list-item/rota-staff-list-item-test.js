@@ -7,6 +7,7 @@ import StaffListItem from "./index"
 import {ContextProvider, NoOpComponent, simpleRender} from "~lib/test-helpers"
 import {createStore} from "redux"
 import AddShiftButton from "./add-shift-button"
+import { getClientId } from "~lib/backend-data/process-backend-object"
 import { processStaffMemberObject, processStaffTypeObject, processHolidayObject } from "~lib/backend-data/process-backend-objects"
 
 describe('StaffListItem', function() {
@@ -83,12 +84,10 @@ describe('StaffListItem', function() {
         itemStoreState.staff = utils.indexByClientId([itemStaff]);
 
         var holiday = {
-            1: {
-                start_date: new Date(2016,0,1),
-                end_date: new Date(2016,0,1),
-                id: 1
-                staff_member: {id: 33}
-            }
+            start_date: new Date(2016,0,1),
+            end_date: new Date(2016,0,1),
+            id: 1,
+            staff_member: {id: 33}
         };
         holiday = processHolidayObject(holiday);
         itemStoreState.holidays = utils.indexByClientId([holiday]);
@@ -99,13 +98,10 @@ describe('StaffListItem', function() {
     it("Disables the add button if a shift is alrady being added", function(){
         var state = {...storeState};
         state.apiRequestsInProgress.ADD_SHIFT = [{
-            shift: {
-                staff_member_id: 33
-            },
-            venueId: 1
+            staffMemberServerId: 33
         }]
 
-        expect(canAddShift(context, state, staff)).toBe(false);
+        expect(canAddShift(context, state, staffMember)).toBe(false);
     });
 
     it("Disables the add button if the staff member's staff type can't be edited on this page", function(){
