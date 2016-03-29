@@ -189,13 +189,29 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
     })
 });
 
-actionTypes.ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
-export function enterManagerMode () {
-    return {
-        type: actionTypes.ENTER_MANAGER_MODE,
-        token: "hf83hfhr8f"
-    }
+export function enterManagerModeWithConfirmation(options){
+    return showConfirmationModal({
+        modalOptions: {},
+        confirmationAction: {
+            apiRequestType: "ENTER_MANAGER_MODE",
+            options: {}
+        }
+    })
 }
+
+export const enterManagerMode = createApiRequestAction({
+    requestType: "ENTER_MANAGER_MODE",
+    makeRequest: function(requestOptions, success, error){
+        var pin = oFetch(requestOptions, "confirmationData.pin");
+        setTimeout(function(){
+            if (pin === "9999") {
+                success({token: "asdfsds"})
+            } else {
+                error({errors:{base: ["oh no"]}})
+            }
+        }, 1000)
+    }
+});
 
 actionTypes.LEAVE_MANAGER_MODE = "LEAVE_MANAGER_MODE";
 export function leaveManagerMode () {

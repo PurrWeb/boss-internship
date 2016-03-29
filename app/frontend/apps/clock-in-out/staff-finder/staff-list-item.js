@@ -98,7 +98,7 @@ function mapDispatchToProps(dispatch){
             dispatch(actions.updateStaffStatusWithConfirmation(options))
         },
         enterManagerMode: function(){
-            dispatch(actions.enterManagerMode());
+            dispatch(actions.enterManagerModeWithConfirmation());
         }
     }
 }
