@@ -191,10 +191,13 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
 
 export function enterManagerModeWithConfirmation(options){
     return showConfirmationModal({
-        modalOptions: {},
+        modalOptions: {
+            title: "Enter manager password",
+            confirmationType: "PIN"
+        },
         confirmationAction: {
             apiRequestType: "ENTER_MANAGER_MODE",
-            options: {}
+            requestOptions: {}
         }
     })
 }
@@ -207,7 +210,7 @@ export const enterManagerMode = createApiRequestAction({
             if (pin === "9999") {
                 success({token: "asdfsds"})
             } else {
-                error({errors:{base: ["oh no"]}})
+                error({errors:{base: ["Password needs to be 9999"]}})
             }
         }, 1000)
     }
@@ -220,14 +223,17 @@ export function leaveManagerMode () {
     }
 }
 
-export function updateStaffStatusWithConfirmation(options){
+export function updateStaffStatusWithConfirmation(requestOptions){
+    var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
+    var {first_name, surname} = staffMemberObject;
     return showConfirmationModal({
         modalOptions: {
-
+            title: `Enter PIN for ${first_name} ${surname}`,
+            confirmationType: "PIN"
         },
         confirmationAction: {
             apiRequestType: "UPDATE_STAFF_STATUS",
-            options: options
+            requestOptions
         }
     })
 }
