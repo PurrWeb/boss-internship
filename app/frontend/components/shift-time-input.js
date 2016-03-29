@@ -12,6 +12,14 @@ var SHIFT_TIME_TYPES = {
 }
 
 export default class ShiftTimeInput extends Component {
+    static propTypes = {
+        rotaDate: React.PropTypes.object.isRequired,
+        onChange: React.PropTypes.func.isRequired,
+        // either one of these two: 
+        startsAt: React.PropTypes.object,
+        endsAt: React.PropTypes.object
+
+    }
     getShiftTimeType(){
         if (this.props.startsAt !== undefined){
             return SHIFT_TIME_TYPES.START;
