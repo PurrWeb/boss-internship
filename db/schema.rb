@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160324132938) do
+ActiveRecord::Schema.define(version: 20160329081253) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(version: 20160324132938) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "change_order_notifications", force: :cascade do |t|
+    t.integer  "venue_id",   limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "change_order_notifications", ["venue_id"], name: "index_change_order_notifications_on_venue_id", using: :btree
 
   create_table "change_orders", force: :cascade do |t|
     t.date     "date",                         null: false

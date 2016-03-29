@@ -7,6 +7,7 @@ require 'rack/test'
 # Add additional requires below this line. Rails is not loaded until this point!
 require_relative 'feature/support/chosen'
 require_relative 'support/test_image_helper'
+require 'sidekiq/testing'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -38,6 +39,10 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
+
+  config.before :each do
+    Sidekiq::Testing.inline!
+  end
 
   config.before(:each) { ActionMailer::Base.deliveries.clear }
 

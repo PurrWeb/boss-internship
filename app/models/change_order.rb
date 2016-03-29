@@ -24,7 +24,8 @@ class ChangeOrder < ActiveRecord::Base
   end
 
   def submission_deadline
-    ChangeOrderSubmissionDeadline.new(date: date)
+    week = RotaWeek.new(date)
+    ChangeOrderSubmissionDeadline.new(week: week)
   end
 
   def submission_deadline_past?(now: Time.now)

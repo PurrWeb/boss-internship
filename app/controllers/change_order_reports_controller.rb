@@ -5,7 +5,7 @@ class ChangeOrderReportsController < ApplicationController
     if date_from_params.present? || date_from_params_valid?
       date = date_from_params
       week = RotaWeek.new(date)
-      deadline = ChangeOrderSubmissionDeadline.new(date: date_from_params)
+      deadline = ChangeOrderSubmissionDeadline.new(week: week)
 
       venues_without_change_orders = VenueWithoutChangeOrderQuery.new(
         date: date

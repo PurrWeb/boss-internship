@@ -48,6 +48,7 @@ module Clockwork
   end
 
   every(20.minutes, "ShiftUpdateNotificationJob", at: "**:00")
+  every(30.minutes, "ChangeOrderReminderJob",     at: "**:00")
   every(1.hour, "BackupDatabaseJob",      at: "**:00")
   every(1.day,  "CleanBackupsJob",        at: "23:00")
   every(1.day, "SiaBadgeExpiryNotificationJob", at: "9:00")

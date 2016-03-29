@@ -49,6 +49,15 @@ class User < ActiveRecord::Base
     joins(:email_address).merge(EmailAddress.where(email: email))
   end
 
+  def self.with_all_venue_access
+    where(
+      "role = ? OR role = ? OR role = ?",
+      'dev',
+      'admin',
+      'ops_manager'
+    )
+  end
+
   def email
     email_address.try(:email) || @email
   end
