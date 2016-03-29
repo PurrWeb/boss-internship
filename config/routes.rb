@@ -87,6 +87,8 @@ Rails.application.routes.draw do
 
   resources :clock_in_clock_out, only: [:index]
 
+  resources :change_order_reports, only: [:index]
+
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :test, only: [] do

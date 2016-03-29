@@ -37,3 +37,6 @@ registerComponent("StaffTypeRotaOverviewApp", StaffTypeRotaOverviewApp);
 
 import ChangeOrderIndexApp from "./apps/change-order/change-order-index-app"
 registerComponent("ChangeOrderIndexApp", ChangeOrderIndexApp);
+
+import ChangeOrderReportsIndexApp from "./apps/change-order-reports/change-order-reports-index-app"
+registerComponent("ChangeOrderReportsIndexApp", ChangeOrderReportsIndexApp);

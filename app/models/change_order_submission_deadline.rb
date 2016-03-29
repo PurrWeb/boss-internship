@@ -9,6 +9,10 @@ class ChangeOrderSubmissionDeadline
       beginning_of_day + 8.hours
   end
 
+  def past?(now: Time.now)
+    now > time
+  end
+
   private
   attr_reader :date
 end

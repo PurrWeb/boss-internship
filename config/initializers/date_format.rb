@@ -5,3 +5,4 @@ Time::DATE_FORMATS[:human_date] = lambda {|time| time.strftime("#{time.day.ordin
 Time::DATE_FORMATS[:human_time_no_date] = "%H:%M"
 
 Time::DATE_FORMATS[:human] = lambda { |time| time.strftime("%H:%M #{time.day.ordinalize} %B %Y") }
+Time::DATE_FORMATS[:human_with_day] = lambda {|time| time.strftime("%H:%M %A #{time.day.ordinalize} %B %Y") }

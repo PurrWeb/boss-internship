@@ -41,6 +41,10 @@ export const appRoutes = {
         '&venue_id=' + venueId
       ].join('');
     },
+    changeOrderReportsIndex: function(options){
+      let date = oFetch(options, "date");
+      return 'change_order_reports?date=' + utils.formatRotaUrlDate(date);
+    },
     holidayReportsIndex: function(options) {
         var date = oFetch(options, "date");
         var venueId = options.venueId; // venueId is optional
