@@ -223,6 +223,31 @@ export function leaveManagerMode () {
     }
 }
 
+export function updateStaffMemberPinWithEntryModal(requestOptions){
+    var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
+    var staffMemberName = staffMemberObject.first_name + staffMemberObject.surname;
+    return showConfirmationModal({
+        modalOptions: {
+            title: "Enter a new PIN for " + staffMemberName,
+            confirmationType: "PIN"
+        },
+        confirmationAction: {
+            apiRequestType: "UPDATE_STAFF_MEMBER_PIN",
+            requestOptions: {}
+        }
+    });
+}
+
+export const updateStaffMemberPin = createApiRequestAction({
+    requestType: "UPDATE_STAFF_MEMBER_PIN",
+    makeRequest: function(requestOptions, success, error){
+        setTimeout(function(){
+            success({});
+            alert("PIN changed to " + requestOptions.confirmationData.pin)
+        }, 1000)
+    }
+})
+
 export function updateStaffStatusWithConfirmation(requestOptions){
 
     return function(dispatch, getState){
@@ -280,7 +305,6 @@ export const updateStaffStatus = createApiRequestAction({
         }
     }
 });
-
 
 actionTypes.REPLACE_ALL_STAFF_MEMBERS = "REPLACE_ALL_STAFF_MEMBERS";
 export function replaceAllStaffMembers(options) {

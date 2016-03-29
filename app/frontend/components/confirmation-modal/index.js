@@ -43,11 +43,19 @@ class ConfirmationModal extends React.Component {
         }
     }
     complete(){
+        // Not sure why, but if you hit enter twice quickly it
+        // completes twice before hiding the modal
+        if (!this.props.isVisible) {
+            return;
+        }
         this.props.completeConfirmationModal({
             pin: this.refs.pinInput.value
         });
     }
     cancel(){
+        if (!this.props.isVisible) {
+            return;
+        }
         this.props.cancelConfirmationModal();
     }
 }

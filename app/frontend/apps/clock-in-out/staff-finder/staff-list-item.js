@@ -57,9 +57,14 @@ class ClockInOutStaffListItem extends Component {
                 </div>
                 <div className="col-md-2">
                     {staffObject.first_name} {staffObject.surname}
-                    <a className="btn btn-default show-in-manager-mode">
-                        Change Pin
-                    </a>
+                    <div>
+                        <a className="btn btn-default btn-sm show-in-manager-mode--inline-block"
+                            onClick={() => this.props.updateStaffMemberPin({
+                                staffMemberObject: staffObject
+                            })}>
+                            Change Pin
+                        </a>
+                    </div>
                 </div>
                 <div className="col-md-2">
                     Staff Type<br/>
@@ -99,6 +104,9 @@ function mapDispatchToProps(dispatch){
         },
         enterManagerMode: function(){
             dispatch(actions.enterManagerModeWithConfirmation());
+        },
+        updateStaffMemberPin: function(options){
+            dispatch(actions.updateStaffMemberPinWithEntryModal(options))
         }
     }
 }
