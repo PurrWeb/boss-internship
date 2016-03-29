@@ -3,7 +3,7 @@
 <%= react_component('ChangeOrderIndexApp') %>
 
 <% if current_change_order.submission_deadline_past? %>
-  <p>Submitted at: <%= current_change_order.submission_deadline.to_s(:human) %></p>
+  <p>Submitted at: <%= current_change_order.submission_deadline.time.to_s(:human) %></p>
 
   <ul class="list-unstyled">
     <li>Five Pound Notes: <%= current_change_order.five_pound_notes %></li>
@@ -14,7 +14,7 @@
     <li>Five Pence Coins: <%= current_change_order.five_pence_coins %></li>
   <ul>
 <% else %>
-  <p>Submission Deadline: <%= current_change_order.submission_deadline.to_s(:human) %></p>
+  <p>Submission Deadline: <%= current_change_order.submission_deadline.time.to_s(:human) %></p>
 
   <%= render partial: 'form', locals: { change_order: current_change_order } %>
 <% end %>

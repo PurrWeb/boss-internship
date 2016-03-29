@@ -24,13 +24,11 @@ class ChangeOrder < ActiveRecord::Base
   end
 
   def submission_deadline
-    RotaWeek.new(date + 1.week).
-      start_date.
-      beginning_of_day + 8.hours
+    ChangeOrderSubmissionDeadline.new(date: date)
   end
 
   def submission_deadline_past?(now: Time.now)
-    now > submission_deadline
+    now > submission_deadline.time
   end
 
   def editable?
