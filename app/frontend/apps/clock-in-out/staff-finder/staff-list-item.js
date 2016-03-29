@@ -17,6 +17,11 @@ import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import * as actions from "~redux/actions"
 import Spinner from "~components/spinner"
 
+var columnNameStyle = {
+    fontSize: 10,
+    color: "#999"
+}
+
 class ClockInOutStaffListItem extends Component {
     render(){
         var staffObject = this.props.staff;
@@ -29,7 +34,9 @@ class ClockInOutStaffListItem extends Component {
         if (!this.isManager()) {
                 nonManagerColumns = <div>
                 <div className="col-md-3">
-                    Rotaed Shifts
+                    <span style={columnNameStyle}>
+                        Rotaed Shifts
+                    </span>
                     <StaffShiftList
                         shifts={utils.indexByClientId(this.props.staffMemberShifts)}
                         rotas={this.props.rotas}
@@ -53,11 +60,13 @@ class ClockInOutStaffListItem extends Component {
                     {this.getChangePinButton()}
                 </div>
                 <div className="col-md-2">
-                    Staff Type<br/>
+                    <span style={columnNameStyle}>Staff Type</span>
+                    <br/>
                     <StaffTypeBadge staffTypeObject={staffObject.staff_type.get(this.props.staffTypes)} />
                 </div>
                 <div className="col-md-2">
-                    Status <br/>
+                    <span style={columnNameStyle}>Status</span>
+                    <br/>
                     <StaffStatusBadge staffStatusObject={staffStatus} />
                 </div>
                 {nonManagerColumns}
