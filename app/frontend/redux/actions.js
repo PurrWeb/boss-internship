@@ -233,7 +233,7 @@ export function updateStaffMemberPinWithEntryModal(requestOptions){
         },
         confirmationAction: {
             apiRequestType: "UPDATE_STAFF_MEMBER_PIN",
-            requestOptions: {}
+            requestOptions: requestOptions
         }
     });
 }

@@ -10,7 +10,8 @@ import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
 import { 
     selectShiftsByStaffMemberClientId,
     selectIsUpdatingStaffMemberStatus,
-    selectEnterManagerModeIsInProgress
+    selectEnterManagerModeIsInProgress,
+    selectIsUpdatingStaffMemberPin
 } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import * as actions from "~redux/actions"
@@ -49,14 +50,7 @@ class ClockInOutStaffListItem extends Component {
                 </div>
                 <div className="col-md-2">
                     {staffObject.first_name} {staffObject.surname}
-                    <div>
-                        <a className="btn btn-default btn-sm show-in-manager-mode--inline-block"
-                            onClick={() => this.props.updateStaffMemberPin({
-                                staffMemberObject: staffObject
-                            })}>
-                            Change Pin
-                        </a>
-                    </div>
+                    {this.getChangePinButton()}
                 </div>
                 <div className="col-md-2">
                     Staff Type<br/>
@@ -92,6 +86,23 @@ class ClockInOutStaffListItem extends Component {
             </div>
         </div>
     }
+    getChangePinButton(){
+        var staffObject = this.props.staff;
+        if (this.props.updateStaffMemberPinInProgress) {
+            return <div>
+                <Spinner />
+            </div>
+        }
+
+        return <div>
+            <a className="btn btn-default btn-sm show-in-manager-mode--inline-block"
+                onClick={() => this.props.updateStaffMemberPin({
+                    staffMemberObject: staffObject
+                })}>
+                Change Pin
+            </a>
+        </div>
+    }
     isManager(){
         return this.props.staff.isManager({staffTypes: this.props.staffTypes});
     }
@@ -120,7 +131,10 @@ function mapStateToProps(state, ownProps){
         updateStatusIsInProgress: selectIsUpdatingStaffMemberStatus(state, {
             staffMemberServerId: ownProps.staff.serverId
         }),
-        enterManagerModeIsInProgress: selectEnterManagerModeIsInProgress(state)
+        enterManagerModeIsInProgress: selectEnterManagerModeIsInProgress(state),
+        updateStaffMemberPinInProgress: selectIsUpdatingStaffMemberPin(state, {
+            staffMemberServerId: ownProps.staff.serverId
+        })
     }
 }
 

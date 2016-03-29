@@ -198,3 +198,11 @@ export function selectEnterManagerModeIsInProgress(state){
     var requests = state.apiRequestsInProgress.ENTER_MANAGER_MODE;
     return requests !== undefined && requests.length > 0;
 }
+
+export function selectIsUpdatingStaffMemberPin(state, {staffMemberServerId}) {
+    var allRequests = state.apiRequestsInProgress.UPDATE_STAFF_MEMBER_PIN;
+    var requestsForStaffMember = _.filter(allRequests, function(request){
+        return request.staffMemberObject.serverId === staffMemberServerId;
+    });
+    return requestsForStaffMember.length > 0;
+}
