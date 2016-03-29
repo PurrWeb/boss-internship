@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 import AddShiftViewUi from "../components/add-shift-view"
 import _ from "underscore"
 import { addRotaShift } from "~redux/actions"
+import RotaDate from "~lib/rota-date"
 
 class AddShiftView extends React.Component {
     static childContextTypes = {
@@ -30,7 +31,7 @@ class AddShiftView extends React.Component {
             <AddShiftViewUi
                 shiftTimes={this.state.shiftTimes}
                 staff={this.props.staff}
-                dateOfRota={this.props.dateOfRota}
+                rotaDate={this.props.rotaDate}
                 venues={this.props.venues}
                 staffTypes={this.props.staffTypes}
                 selectedVenueId={this.state.venueClientId}
@@ -52,11 +53,13 @@ class AddShiftView extends React.Component {
 }
 
 function mapStateToProps(state){
+    var dateOfRota = state.pageOptions.dateOfRota;
     return {
         staff: state.staff,
         staffTypes: state.staffTypes,
         venues: state.venues,
-        dateOfRota: state.pageOptions.dateOfRota
+        dateOfRota,
+        rotaDate: new RotaDate({dateOfRota: dateOfRota})
     }
 }
 

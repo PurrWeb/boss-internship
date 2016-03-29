@@ -10,7 +10,8 @@ export default class AddShiftView extends React.Component {
                 <div className="col-md-6">
                     <ShiftTimeSelector
                         defaultShiftTimes={this.props.shiftTimes}
-                        onChange={this.props.onShiftTimesChange} />
+                        onChange={this.props.onShiftTimesChange}
+                        rotaDate={this.props.rotaDate} />
                 </div>
                 <div className="col-md-3">
                     Venue<br/>
