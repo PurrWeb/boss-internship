@@ -1,4 +1,5 @@
 class RotaShift < ActiveRecord::Base
+  SHIFT_TYPES = ['normal', 'standby']
   include Enableable
 
   belongs_to :creator, class_name: "User"
@@ -6,6 +7,7 @@ class RotaShift < ActiveRecord::Base
   belongs_to :staff_member
   belongs_to :rota
 
+  validates :shift_type, inclusion: { in: SHIFT_TYPES, message: 'is required' }
   validates :creator, presence: true
   validates :staff_member, presence: true
   validates :rota, presence: true

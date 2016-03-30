@@ -68,7 +68,8 @@ module Api
           :starts_at,
           :ends_at
         ).merge(
-          staff_member: staff_member_from_params
+          staff_member: staff_member_from_params,
+          shift_type: 'normal'
         )
       end
 

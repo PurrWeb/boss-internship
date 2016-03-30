@@ -7,6 +7,7 @@ FactoryGirl.define do
       rota nil
     end
 
+    shift_type 'normal'
     association :creator, factory: :user
     staff_member
 
