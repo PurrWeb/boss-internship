@@ -67,3 +67,7 @@ label:not(.force-not-required).required:after {
   color: inherit;
   text-decoration: inherit;
 }
+
+.dt-horizontal__wrap-headings dt {
+  white-space: normal;
+}
