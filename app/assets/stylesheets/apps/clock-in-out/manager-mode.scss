@@ -4,6 +4,12 @@
         display: block !important;
     }
 }
+.show-in-manager-mode--inline-block {
+    display: none !important;
+    .managerMode & {
+        display: inline-block !important;
+    }
+}
 .hide-in-manager-mode--inline-block {
     display: inline-block !important;
     .managerMode & {

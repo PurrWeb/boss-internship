@@ -6,7 +6,7 @@ import {batch, batching} from "redux-batch-middleware"
 import staffStatuses from "./staff-statuses-reducer"
 import staff from "./staff-members-reducer"
 import rotaShifts from "./rota-shifts-reducer"
-import clockInOutAppIsInManagerMode from "./clock-in-out-app-is-in-manager-mode-reducer"
+import clockInOutAppManagerModeToken from "./clock-in-out-app-manager-mode-token"
 import apiRequestsInProgress from "./api-requests-in-progress-reducer"
 import componentErrors from "./component-errors-reducer"
 import venues from "./venues-reducer"
@@ -16,12 +16,13 @@ import staffTypes from "./staff-types-reducer"
 import holidays from "./holidays-reducer"
 import rotaForecasts from "./rota-forecasts-reducer"
 import weeklyRotaForecast from "./weekly-rota-forecast-reducer"
+import confirmationModal from "./confirmation-modal-reducer"
 
 var rootReducer = combineReducers({
     staff,
     rotaShifts,
     staffStatuses,
-    clockInOutAppIsInManagerMode,
+    clockInOutAppManagerModeToken,
     apiRequestsInProgress,
     componentErrors,
     venues,
@@ -30,7 +31,8 @@ var rootReducer = combineReducers({
     staffTypes,
     holidays,
     rotaForecasts,
-    weeklyRotaForecast
+    weeklyRotaForecast,
+    confirmationModal
 });
 var createStoreWithMiddleware = compose(
 	// Redux thunk lets us dispatch asynchronous actions, for example

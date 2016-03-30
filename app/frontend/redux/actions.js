@@ -1,4 +1,4 @@
-import importedCreateApiRequestAction from "./create-api-request-action"
+import importedCreateApiRequestAction, { registeredApiRequestActionCreators} from "./create-api-request-action"
 import _ from "underscore"
 import moment from "moment"
 import utils from "~lib/utils"
@@ -9,8 +9,13 @@ import oFetch from "o-fetch"
 import RotaDate from "~lib/rota-date"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import { processVenueRotaAppViewData, processClockInOutAppViewData } from "~lib/backend-data/process-app-view-data"
+import { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal } from "./actions/confirmation-modal"
+import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
 
 export const actionTypes = {};
+
+window.registeredApiRequestActionCreators = registeredApiRequestActionCreators;
+
 const createApiRequestAction = function(options){
     var options = _.clone(options);
     options.actionTypes = actionTypes;
@@ -33,6 +38,12 @@ function getRotaDateFromShiftStartsAt(startAt){
     var rotaDate = new RotaDate({shiftStartsAt: startAt});
     return rotaDate.getDateOfRota();
 }
+
+actionTypes[showConfirmationModal.actionType] = showConfirmationModal.actionType;
+actionTypes[cancelConfirmationModal.actionType] = cancelConfirmationModal.actionType;
+actionTypes[completeConfirmationModal.actionType] = completeConfirmationModal.actionType;
+
+export { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal};
 
 export const addRotaShift = createApiRequestAction({
     requestType: "ADD_SHIFT",
@@ -178,12 +189,32 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
     })
 });
 
-actionTypes.ENTER_MANAGER_MODE = "ENTER_MANAGER_MODE";
-export function enterManagerMode () {
-    return {
-        type: actionTypes.ENTER_MANAGER_MODE
-    }
+export function enterManagerModeWithConfirmation(options){
+    return showConfirmationModal({
+        modalOptions: {
+            title: "Enter manager password",
+            confirmationType: "PIN"
+        },
+        confirmationAction: {
+            apiRequestType: "ENTER_MANAGER_MODE",
+            requestOptions: {}
+        }
+    })
 }
+
+export const enterManagerMode = createApiRequestAction({
+    requestType: "ENTER_MANAGER_MODE",
+    makeRequest: function(requestOptions, success, error){
+        var pin = oFetch(requestOptions, "confirmationData.pin");
+        setTimeout(function(){
+            if (pin === "9999") {
+                success({token: "asdfsds"})
+            } else {
+                error({errors:{base: ["Password needs to be 9999"]}})
+            }
+        }, 1000)
+    }
+});
 
 actionTypes.LEAVE_MANAGER_MODE = "LEAVE_MANAGER_MODE";
 export function leaveManagerMode () {
@@ -192,19 +223,88 @@ export function leaveManagerMode () {
     }
 }
 
+export function updateStaffMemberPinWithEntryModal(requestOptions){
+    var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
+    var staffMemberName = staffMemberObject.first_name + staffMemberObject.surname;
+    return showConfirmationModal({
+        modalOptions: {
+            title: "Enter a new PIN for " + staffMemberName,
+            confirmationType: "PIN"
+        },
+        confirmationAction: {
+            apiRequestType: "UPDATE_STAFF_MEMBER_PIN",
+            requestOptions: requestOptions
+        }
+    });
+}
+
+export const updateStaffMemberPin = createApiRequestAction({
+    requestType: "UPDATE_STAFF_MEMBER_PIN",
+    makeRequest: function(requestOptions, success, error){
+        setTimeout(function(){
+            success({});
+            alert("PIN changed to " + requestOptions.confirmationData.pin)
+        }, 1000)
+    }
+})
+
+export function updateStaffStatusWithConfirmation(requestOptions){
+
+    return function(dispatch, getState){
+        var state = getState();
+        if (selectClockInOutAppIsInManagerMode(state)) {
+            requestOptions = {
+                ...requestOptions,
+                managerToken: state.clockInOutAppManagerModeToken
+            }
+            dispatch(updateStaffStatus(requestOptions))
+        } else {
+            var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
+            var {first_name, surname} = staffMemberObject;
+            dispatch(showConfirmationModal({
+                modalOptions: {
+                    title: `Enter PIN for ${first_name} ${surname}`,
+                    confirmationType: "PIN"
+                },
+                confirmationAction: {
+                    apiRequestType: "UPDATE_STAFF_STATUS",
+                    requestOptions
+                }
+            }));        
+        }
+    }
+}
+
 export const updateStaffStatus = createApiRequestAction({
     requestType: "UPDATE_STAFF_STATUS",
     makeRequest: function(requestOptions, success, error){
+        var wasConfirmed = false;
         var [staffMemberObject, statusValue] = oFetch(requestOptions, "staffMemberObject", "statusValue");
-        setTimeout(function(){
-            success({
-                staffMemberObject,
-                statusValue
-            })
-        }, 500)
+        if (requestOptions.managerToken !== undefined){
+            wasConfirmed = true;
+        } else  {
+            var pin = oFetch(requestOptions, "confirmationData.pin");
+            if (pin === "1234") {
+                wasConfirmed = true;
+            } else {
+                error({
+                    errors: {
+                        base: ["PIN needs to be 1234"]
+                    }
+                })
+            }
+        }
+
+        if (wasConfirmed) {
+            setTimeout(function(){
+                success({
+                    staffMemberObject,
+                    statusValue
+                })
+            }, 500);
+        }
     }
 });
-
 
 actionTypes.REPLACE_ALL_STAFF_MEMBERS = "REPLACE_ALL_STAFF_MEMBERS";
 export function replaceAllStaffMembers(options) {

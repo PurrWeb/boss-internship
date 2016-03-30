@@ -5,7 +5,8 @@ import store from "~redux/store"
 import moment from "moment"
 import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 import * as actions from "~redux/actions"
-import { selectRotaOnClockInOutPage } from "~redux/selectors"
+import { selectRotaOnClockInOutPage, selectClockInOutAppIsInManagerMode } from "~redux/selectors"
+import ConfirmationModal from "~components/confirmation-modal"
 
 class ClockInOutView extends Component {
     render() {
@@ -15,6 +16,7 @@ class ClockInOutView extends Component {
         }
 
         return <div className={classes.join(" ")}>
+            <ConfirmationModal />
             <a
                 className="btn btn-default show-in-manager-mode"
                 style={{float: "right"}}
@@ -32,7 +34,7 @@ class ClockInOutView extends Component {
 function mapStateToProps(state) {
     var rota = selectRotaOnClockInOutPage(state);
     return {
-        clockInOutAppIsInManagerMode: state.clockInOutAppIsInManagerMode,
+        clockInOutAppIsInManagerMode: selectClockInOutAppIsInManagerMode(state),
         rota,
         venue: rota.venue.get(state.venues)
     }
