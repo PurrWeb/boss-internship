@@ -265,8 +265,8 @@ ActiveRecord::Schema.define(version: 20160329081253) do
     t.string   "sia_badge_number",                      limit: 255
     t.date     "sia_badge_expiry_date"
     t.boolean  "employment_status_statement_completed",               default: false, null: false
-    t.datetime "notified_of_sia_expiry_at"
     t.boolean  "employment_status_p45_supplied",                                      null: false
+    t.datetime "notified_of_sia_expiry_at"
     t.boolean  "would_rehire",                                        default: true,  null: false
   end
 
