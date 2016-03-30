@@ -14,7 +14,11 @@ class VenueWithoutChangeOrderQuery
       end_column_name: 'date'
     ).all
 
-    Venue.where("id NOT IN (?)", change_orders.pluck(:venue_id))
+    if change_orders.count > 0
+      Venue.where("id NOT IN (?)", change_orders.pluck(:venue_id))
+    else
+      Venue.all
+    end
   end
 
   private
