@@ -175,15 +175,16 @@ ActiveRecord::Schema.define(version: 20160331104547) do
 
   create_table "rota_shifts", force: :cascade do |t|
     t.integer  "creator_id",          limit: 4
-    t.datetime "starts_at",                                    null: false
-    t.datetime "ends_at",                                      null: false
-    t.integer  "staff_member_id",     limit: 4,                null: false
-    t.integer  "rota_id",             limit: 4,                null: false
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
-    t.boolean  "enabled",                       default: true, null: false
+    t.datetime "starts_at",                                      null: false
+    t.datetime "ends_at",                                        null: false
+    t.integer  "staff_member_id",     limit: 4,                  null: false
+    t.integer  "rota_id",             limit: 4,                  null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.boolean  "enabled",                         default: true, null: false
     t.datetime "disabled_at"
     t.integer  "disabled_by_user_id", limit: 4
+    t.string   "shift_type",          limit: 255,                null: false
   end
 
   add_index "rota_shifts", ["creator_id"], name: "index_rota_shifts_on_creator_id", using: :btree
