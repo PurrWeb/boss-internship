@@ -38,7 +38,9 @@ class RotaChartInner extends Component {
             .map((staff_id) => this.props.staff[staff_id])
             .value();
 
-        staffList = _(staffList).sortBy("staff_type")
+        staffList = _(staffList).sortBy(function(staffMember){
+            return staffMember.staff_type.clientId;
+        });
         return staffList;
     }
     getRotaDate(){
