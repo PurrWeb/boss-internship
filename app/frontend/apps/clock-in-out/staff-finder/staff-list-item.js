@@ -41,7 +41,7 @@ class ClockInOutStaffListItem extends Component {
                         rotas={this.props.rotas}
                         venues={this.props.venues} />
                 </div>;
-            statusToggleButtons = <div className="col-md-2">
+            statusToggleButtons = <div className="col-md-2" style={{paddingTop: 5}}>
                 {this.getStaffMemberStatusToggleButtons()}
             </div>
         } else {
@@ -50,7 +50,7 @@ class ClockInOutStaffListItem extends Component {
             </div>
         }
 
-        return <div className="staff-list-item">
+        return <div className="staff-list-item staff-list-item--clock-in-out">
             <div className="row">
                 <div className="col-md-1">
                     <img src={staffObject.avatar_url} className="staff-list-item__avatar" />
