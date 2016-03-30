@@ -54,6 +54,10 @@ export default class FilterableStaffList extends Component {
                 return _(filter.venues).contains(staff.venue.clientId)
             });
         }
+    
+        staffToShow = _(staffToShow).sortBy(function(staffMember){
+            return staffMember.first_name + " " + staffMember.surname
+        })
 
         return staffToShow;
     }
