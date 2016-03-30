@@ -31,6 +31,20 @@ export const appRoutes = {
             "&end_date=" + utils.formatRotaUrlDate(endDate)
         ].join("");
     },
+    changeOrdersIndex: function(options){
+      let date = oFetch(options, "date");
+      let venueId = oFetch(options, "venueId");
+
+      return [
+        'change_orders?',
+        'date=' + utils.formatRotaUrlDate(date),
+        '&venue_id=' + venueId
+      ].join('');
+    },
+    changeOrderReportsIndex: function(options){
+      let date = oFetch(options, "date");
+      return 'change_order_reports?date=' + utils.formatRotaUrlDate(date);
+    },
     holidayReportsIndex: function(options) {
         var date = oFetch(options, "date");
         var venueId = options.venueId; // venueId is optional

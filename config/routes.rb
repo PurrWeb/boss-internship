@@ -12,6 +12,12 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
+  resources :change_orders, only: [:index] do
+    collection do
+      put :update
+    end
+  end
+
   resources :users, only: [:show, :index, :destroy] do
     member do
       get :disable
@@ -80,6 +86,8 @@ Rails.application.routes.draw do
   resources :security_rotas, only: [:index, :show]
 
   resources :clock_in_clock_out, only: [:index]
+
+  resources :change_order_reports, only: [:index]
 
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do

@@ -1,0 +1,35 @@
+<h1>Change orders</h1>
+
+<%= react_component('ChangeOrderIndexApp') %>
+
+<% if current_change_order.submission_deadline_past? %>
+  <p>Submitted at: <%= current_change_order.submission_deadline.time.to_s(:human) %></p>
+
+  <ul class="list-unstyled">
+    <li>Five Pound Notes: <%= current_change_order.five_pound_notes %></li>
+    <li>One Pound Coins: <%= current_change_order.one_pound_coins %></li>
+    <li>Fifty Pence Coins: <%= current_change_order.fifty_pence_coins %></li>
+    <li>Twenty Pence Coins: <%= current_change_order.twenty_pence_coins %></li>
+    <li>Ten Pence Coins: <%= current_change_order.ten_pence_coins %></li>
+    <li>Five Pence Coins: <%= current_change_order.five_pence_coins %></li>
+  <ul>
+<% else %>
+  <p>Submission Deadline: <%= current_change_order.submission_deadline.time.to_s(:human) %></p>
+
+  <%= render partial: 'form', locals: { change_order: current_change_order } %>
+<% end %>
+
+
+<%= javascript_tag do %>
+  var venues;
+
+  venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: accessible_venues } %>;
+
+  window.boss = window.boss || {};
+  window.boss.venues = venues;
+
+  window.boss.pageData = {
+    venueId: <%= current_venue.try(:id) || 'null' %>,
+    date: new Date("<%= date.iso8601 %>")
+  }
+<% end %>

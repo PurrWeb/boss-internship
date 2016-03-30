@@ -11,6 +11,10 @@ class Ability
 
       can :manage, :staff_members
 
+      can :manage, :change_orders do
+        !user.security_manager?
+      end
+
       can :manage, :rotas do
         !user.security_manager?
       end
@@ -76,6 +80,10 @@ class Ability
         user.has_admin_access? &&
           target_user.disabled? &&
           user != target_user
+      end
+
+      can :manage, ChangeOrder do |change_order|
+        can_manage_venue?(user, change_order.venue)
       end
     end
 

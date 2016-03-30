@@ -1,0 +1,59 @@
+<h1>Change Order Reports</h1>
+
+<div class="visible-print">
+  <p><b>Change orders for <%= week.start_date.to_s(:human_date) %> to <%= week.end_date.to_s(:human_date) %></b></p>
+</div>
+<div class="hidden-print">
+  <%= react_component('ChangeOrderReportsIndexApp') %>
+</div>
+
+<% if deadline.past? %>
+  <p>Submitted at: <%= deadline.time.to_s(:human_with_day) %></p>
+<% else %>
+  <p>Submission Deadline: <%= deadline.time.to_s(:human_with_day) %></p>
+<% end %>
+
+<% if venues_without_change_orders.count > 0 %>
+  <h2 class="h3">Venues without change orders</h2>
+  <p>
+    <%= venues_without_change_orders.map(&:name).to_sentence %>
+  </p>
+<% end %>
+
+<% if change_orders.count > 0 %>
+  <h2 class="h3">Change orders</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Venue</th>
+        <th>Five Pound Notes</th>
+        <th>One Pound Coins</th>
+        <th>Fifty Pence Coins</th>
+        <th>Twenty Pence Coins</th>
+        <th>Ten Pence Coins</th>
+        <th>Five Pence Coins</th>
+      <tr>
+    </thead>
+    <tbody>
+      <% change_orders.each do |change_order| %>
+        <tr>
+          <td><%= change_order.venue.name %></td>
+          <td><%= change_order.five_pound_notes %></td>
+          <td><%= change_order.one_pound_coins %></td>
+          <td><%= change_order.fifty_pence_coins %></td>
+          <td><%= change_order.twenty_pence_coins %></td>
+          <td><%= change_order.ten_pence_coins %></td>
+          <td><%= change_order.five_pence_coins %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= javascript_tag do %>
+  window.boss = window.boss || {};
+  window.boss.pageData = {
+    date: new Date("<%= week.start_date.iso8601 %>")
+  };
+<% end %>

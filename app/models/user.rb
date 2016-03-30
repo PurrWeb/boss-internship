@@ -49,6 +49,15 @@ class User < ActiveRecord::Base
     joins(:email_address).merge(EmailAddress.where(email: email))
   end
 
+  def self.with_all_venue_access
+    where(
+      "role = ? OR role = ? OR role = ?",
+      'dev',
+      'admin',
+      'ops_manager'
+    )
+  end
+
   def email
     email_address.try(:email) || @email
   end
@@ -145,6 +154,14 @@ class User < ActiveRecord::Base
 
   def disable_reason
     disabled? && state_machine.last_transition.metadata.fetch("disable_reason")
+  end
+
+  def default_venue
+    if manager?
+      venues.first
+    else
+      Venue.first
+    end
   end
 
   # Needed for statesman

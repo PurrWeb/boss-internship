@@ -1,0 +1,17 @@
+<%= bootstrap_form_for(
+      change_order,
+      url: change_orders_path(
+        date: UIRotaDate.format(change_order.date),
+        venue_id: change_order.venue.id
+      ),
+      method: 'put'
+    )  do |form| %>
+  <%= form.number_field(:five_pound_notes) %>
+  <%= form.number_field(:one_pound_coins) %>
+  <%= form.number_field(:fifty_pence_coins) %>
+  <%= form.number_field(:twenty_pence_coins) %>
+  <%= form.number_field(:ten_pence_coins) %>
+  <%= form.number_field(:five_pence_coins) %>
+
+  <%= form.submit('Update') %>
+<% end %>
