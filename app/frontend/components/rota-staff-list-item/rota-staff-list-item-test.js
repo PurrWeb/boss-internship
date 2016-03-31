@@ -10,7 +10,7 @@ import AddShiftButton from "./add-shift-button"
 import { getClientId } from "~lib/backend-data/process-backend-object"
 import { processStaffMemberObject, processStaffTypeObject, processHolidayObject } from "~lib/backend-data/process-backend-objects"
 
-describe('StaffListItem', function() {
+describe('Rota StaffListItem', function() {
     beforeEach(function(){
         StaffListItem.__Rewire__('StaffTypeBadge', NoOpComponent);
         StaffListItem.__Rewire__('StaffHolidaysList', NoOpComponent);
@@ -36,11 +36,13 @@ describe('StaffListItem', function() {
     staffTypes = staffTypes.map(processStaffTypeObject);
 
     var context = {
-        newShiftTimes: {
-            starts_at: new Date(2016,0,1,10,0),
-            ends_at: new Date(2016,0,1,16,0),
-        },
-        newShiftVenueId: 1
+        newShiftSettings: {
+            startsAt: new Date(2016,0,1,10,0),
+            endsAt: new Date(2016,0,1,16,0),
+            shiftType: "normal",
+            venueServerId: 5,
+            venueClientId: 5
+        }
     };
 
     var storeState = {
@@ -118,10 +120,10 @@ describe('StaffListItem', function() {
     it("Disables the add button if the new shift times are invalid", function(){
         var itemContext = {...context};
         // end time is before start time
-        itemContext.newShiftTimes= {
-            starts_at: new Date(2016,0,1,16,0),
-            ends_at: new Date(2016,0,1,10,0),
-        };
+        itemContext.newShiftSettings = Object.assign({}, itemContext.newShiftSettings, {
+            startsAt: new Date(2016,0,1,16,0),
+            endsAt: new Date(2016,0,1,10,0)
+        });
         expect(canAddShift(itemContext, storeState, staffMember)).toBe(false)
     })
 
