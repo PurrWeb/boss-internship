@@ -77,6 +77,41 @@ ActiveRecord::Schema.define(version: 20160412145916) do
 
   add_index "email_addresses", ["email"], name: "index_email_addresses_on_email", using: :btree
 
+  create_table "fruit_orders", force: :cascade do |t|
+    t.integer  "venue_id",           limit: 4, null: false
+    t.integer  "limes",              limit: 4, null: false
+    t.integer  "lemons",             limit: 4, null: false
+    t.integer  "rasberries",         limit: 4, null: false
+    t.integer  "blueberries",        limit: 4, null: false
+    t.integer  "blackberries",       limit: 4, null: false
+    t.integer  "green_apples",       limit: 4, null: false
+    t.integer  "oranges",            limit: 4, null: false
+    t.integer  "passion_fruits",     limit: 4, null: false
+    t.integer  "lychees",            limit: 4, null: false
+    t.integer  "cucumbers",          limit: 4, null: false
+    t.integer  "kumkwats",           limit: 4, null: false
+    t.integer  "dragon_fruits",      limit: 4, null: false
+    t.integer  "watermelon",         limit: 4, null: false
+    t.integer  "pink_grapefruit",    limit: 4, null: false
+    t.integer  "plums",              limit: 4, null: false
+    t.integer  "deskinned_coconuts", limit: 4, null: false
+    t.integer  "fresh_mint",         limit: 4, null: false
+    t.integer  "fresh_basil",        limit: 4, null: false
+    t.integer  "fresh_lavender",     limit: 4, null: false
+    t.integer  "rosemary",           limit: 4, null: false
+    t.integer  "thyme",              limit: 4, null: false
+    t.integer  "red_roses",          limit: 4, null: false
+    t.integer  "kaffir_lime_leaves", limit: 4, null: false
+    t.integer  "fresh_ginger",       limit: 4, null: false
+    t.integer  "bananas",            limit: 4, null: false
+    t.integer  "maraschino_cherry",  limit: 4, null: false
+    t.integer  "cream",              limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "fruit_orders", ["venue_id"], name: "index_fruit_orders_on_venue_id", using: :btree
+
   create_table "holiday_transitions", force: :cascade do |t|
     t.string   "to_state",    limit: 255,   null: false
     t.text     "metadata",    limit: 65535
