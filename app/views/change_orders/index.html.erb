@@ -1,6 +1,23 @@
-<h1>Change orders</h1>
+<h1>Current Change Order</h1>
 
-<%= react_component('ChangeOrderIndexApp') %>
+<%= bootstrap_form_for(
+      :change_order,
+      url: change_orders_path,
+      id: 'current-change-order-form',
+      method: 'get'
+    )  do |form| %>
+  <%= form.select(
+        :venue_id,
+        options_for_select(
+          accessible_venues.map do |venue|
+            [venue.name, venue.id]
+          end,
+          current_venue.id
+        ),
+        {},
+        id: 'current-change-order-venue-select'
+      ) %>
+<% end %>
 
 <% if current_change_order.submission_deadline_past? %>
   <p>Submitted at: <%= current_change_order.submission_deadline.time.to_s(:human) %></p>
@@ -17,19 +34,4 @@
   <p>Submission Deadline: <%= current_change_order.submission_deadline.time.to_s(:human) %></p>
 
   <%= render partial: 'form', locals: { change_order: current_change_order } %>
-<% end %>
-
-
-<%= javascript_tag do %>
-  var venues;
-
-  venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: accessible_venues } %>;
-
-  window.boss = window.boss || {};
-  window.boss.venues = venues;
-
-  window.boss.pageData = {
-    venueId: <%= current_venue.try(:id) || 'null' %>,
-    date: new Date("<%= date.iso8601 %>")
-  }
 <% end %>
