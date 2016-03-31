@@ -29,6 +29,21 @@ class ChangeOrdersController < ApplicationController
     end
   end
 
+  def previous
+    raise ActiveRecord::RecordNotFound unless venue_from_params.present?
+
+    change_orders = ChangeOrder.
+      where(venue: venue_from_params).
+      where('submission_deadline < ?', Time.now).
+      order(:submission_deadline).
+      paginate(page: params[:page], per_page: 15)
+
+    render locals: {
+      venue: venue_from_params,
+      change_orders: change_orders
+    }
+  end
+
   def update
     if venue_from_params.present?
       current_venue = venue_from_params

@@ -1,5 +1,12 @@
 <h1>Current Change Order</h1>
 
+<%= link_to(
+      'View past change orders',
+      previous_change_orders_path(
+        venue_id: current_venue.id
+      )
+    ) %>
+
 <%= bootstrap_form_for(
       :change_order,
       url: change_orders_path,

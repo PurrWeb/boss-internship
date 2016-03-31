@@ -23,6 +23,22 @@ class ChangeOrder < ActiveRecord::Base
     )
   end
 
+  def self.current
+    now = Time.now.to_date
+    this_week = RotaWeek.new(now)
+    last_week = RotaWeek.new(now - 1.week)
+
+    last_deadline = ChangeOrderSubmissionDeadline.new(
+      week: last_week
+    ).time
+
+    this_deadline = ChangeOrderSubmissionDeadline.new(
+      week: this_week
+    ).time
+
+    where("submission_deadline >=  ? AND submission_deadline <= ?", last_deadline, this_deadline)
+  end
+
   def submission_deadline_past?(now: Time.now)
     now > submission_deadline
   end
