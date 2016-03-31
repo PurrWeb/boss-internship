@@ -50,7 +50,10 @@ export function processShiftObject(shift){
 
     return Object.assign({}, shift, {
         starts_at: new Date(shift.starts_at),
-        ends_at: new Date(shift.ends_at)
+        ends_at: new Date(shift.ends_at),
+        isStandby: function(){
+            return shift.shift_type === "standby";
+        }
     });
 }
 

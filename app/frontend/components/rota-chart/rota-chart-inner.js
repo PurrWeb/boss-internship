@@ -71,6 +71,7 @@ class RotaChartInner extends Component {
                     startOffset: calculateOffsetInHours(rotaShift.starts_at),
                     endOffset: calculateOffsetInHours(rotaShift.ends_at),
                     staff: staff,
+                    isStandby: rotaShift.isStandby(),
                     staffIndex: _(staffClientIdsInOrder).indexOf(staff.clientId),
                     originalShiftObject: rotaShift
                 };
@@ -163,7 +164,8 @@ class RotaChartInner extends Component {
                 var staff = shift.staff;
                 var formattedStartTime = moment(shift.originalShiftObject.starts_at).format("HH:mm");
                 var formattedEndTime = moment(shift.originalShiftObject.ends_at).format("HH:mm");
-                return `${staff.first_name} ${staff.surname} (${formattedStartTime} - ${formattedEndTime})`;
+                var standby = shift.isStandby ? "(SB) " : "";
+                return `${standby} ${staff.first_name} ${staff.surname} (${formattedStartTime} - ${formattedEndTime})`;
             })
             .attr("dx", 4)
             .attr("dy", 8)

@@ -30,8 +30,7 @@ export default class AddShiftView extends React.Component {
                         </div>
                         <ShiftTypeSelector
                             shiftType={this.props.shiftType}
-                            onShiftTypeChange={this.props.onShiftTypeChange}
-                            />
+                            onShiftTypeChange={this.props.onShiftTypeChange} />
                     </div>
                 </div>
                 <br/>
