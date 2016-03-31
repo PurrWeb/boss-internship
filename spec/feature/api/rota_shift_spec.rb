@@ -62,7 +62,8 @@ RSpec.describe 'Api access' do
         {
           staff_member_id: staff_member.id.to_s,
           starts_at: starts_at.iso8601,
-          ends_at: ends_at.iso8601
+          ends_at: ends_at.iso8601,
+          shift_type: 'normal'
         }
       end
 
@@ -107,7 +108,8 @@ RSpec.describe 'Api access' do
           rota_id: rota.id.to_s,
           staff_member_id: staff_member.id.to_s,
           starts_at: starts_at.iso8601,
-          ends_at: invalid_ends_at
+          ends_at: invalid_ends_at,
+          shift_type: 'normal'
         }
       end
 
