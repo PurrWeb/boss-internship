@@ -108,18 +108,20 @@ export const updateRotaShift = createApiRequestAction({
         path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shiftServerId}),
         method: apiRoutes.updateShift.method,
         data: function(options, getState){
+            var shiftType = oFetch(options, "shiftType");
             var staffMemberId = getState().rotaShifts[options.shiftClientId].staff_member.serverId;
             var shift = {
                 shift_id: options.shiftServerId,
                 starts_at: options.starts_at,
                 ends_at: options.ends_at,
-                staff_member_id: staffMemberId
+                staff_member_id: staffMemberId,
+                shift_type: shiftType
             }
             return shift;
         },
         getSuccessActionData(responseData){
-            responseData = backendData.processShiftObject(responseData);
-            return {shift: responseData};
+            var shift = backendData.processShiftObject(responseData);
+            return {shift};
         }
     }),
     confirm: function(requestOptions, getState){
