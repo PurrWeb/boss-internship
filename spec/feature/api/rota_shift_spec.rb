@@ -31,6 +31,7 @@ RSpec.describe 'Api access' do
             "id" => rota_shift.rota.id,
             "url" => url_helpers.api_v1_rota_url(rota_shift.rota)
           },
+          "shift_type" => "normal",
           "starts_at" => rota_shift.starts_at.utc.iso8601,
           "ends_at" => rota_shift.ends_at.utc.iso8601,
           "staff_member" => {
