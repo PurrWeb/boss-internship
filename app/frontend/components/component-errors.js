@@ -19,7 +19,7 @@ export default class ComponentErrors extends React.Component {
         } 
         if (errorMessages.length > 1) {
             let messageComponents = errorMessages.map((message) => <li>{message}</li>);
-            errorComponents = <ul>
+            errorComponents = <ul style={{paddingLeft: 20}}>
                 {messageComponents}
             </ul>
         }
