@@ -13,7 +13,9 @@ export default class StaffHolidaysList extends React.Component {
     }
     getHolidayComponents(){
         return this.props.holidays.map((holiday) => {
-            return <StaffHolidaysListItem holiday={holiday} key={holiday.id} />
+            return <StaffHolidaysListItem
+                holiday={holiday}
+                key={holiday.clientId} />
         });
     }
     getNoHolidaysMessage(){

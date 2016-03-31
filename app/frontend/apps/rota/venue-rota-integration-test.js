@@ -65,19 +65,22 @@ describe('Venue Rota Integration Test', function() {
                 staff_member: {id: JOHN_KITCHEN_ID},
                 starts_at: "2016-03-10T12:00:00Z",
                 ends_at: "2016-03-10T16:00:00Z",
-                rota: {id: ROTA_ID}
+                rota: {id: ROTA_ID},
+                shift_type: "normal"
             },{
                 id: 2,
                 staff_member: {id: JOHN_KITCHEN_ID},
                 starts_at: "2016-03-13T10:00:00Z",
                 ends_at: "2016-03-13T11:00:00Z",
-                rota: {id: 4}
+                rota: {id: 4},
+                shift_type: "normal"
             },{
                 id: 3,
                 staff_member: {id: SALLY_SECURITY_ID},
                 starts_at: "2016-03-11T02:00:00Z",
                 ends_at: "2016-03-11T04:00:00Z",
-                rota: {id: ROTA_ID}
+                rota: {id: ROTA_ID},
+                shift_type: "standby"
             }],
             holidays: []
         },
