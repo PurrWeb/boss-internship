@@ -54,12 +54,13 @@ export const addRotaShift = createApiRequestAction({
             return apiRoutes.addShift.getPath(venueServerId, date);
         },
         data: function(options){
-            var [starts_at, ends_at, staff_member_id] = oFetch(options,
-                "starts_at", "ends_at", "staffMemberServerId");
+            var [starts_at, ends_at, staff_member_id, shift_type] = oFetch(options,
+                "starts_at", "ends_at", "staffMemberServerId", "shift_type");
             return {
                 starts_at,
                 ends_at,
-                staff_member_id
+                staff_member_id,
+                shift_type
             }
         },
         getSuccessActionData: function(responseData, requestOptions, getState) {

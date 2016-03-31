@@ -16,9 +16,13 @@ import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
 
 class RotaStaffListItem extends Component {
     static contextTypes = {
-        newShiftTimes: React.PropTypes.object.isRequired,
-        newShiftVenueServerId: React.PropTypes.any.isRequired,
-        newShiftVenueClientId: React.PropTypes.any.isRequired
+        newShiftSettings: React.PropTypes.shape({
+            venueServerId: React.PropTypes.any.isRequired,
+            venueClientId: React.PropTypes.any.isRequired,
+            startsAt: React.PropTypes.instanceOf(Date).isRequired,
+            endsAt: React.PropTypes.instanceOf(Date).isRequired,
+            shiftType: React.PropTypes.string.isRequired
+        }).isRequired
     }
     componentWillMount(){
         this.componentId = _.uniqueId();
@@ -107,18 +111,21 @@ class RotaStaffListItem extends Component {
         );
     }
     addShift(){
-        var {starts_at, ends_at} = this.context.newShiftTimes;
+        var newShiftSettings = this.context.newShiftSettings;
         this.props.addRotaShift({
-            starts_at,
-            ends_at,
+            starts_at: newShiftSettings.startsAt,
+            ends_at: newShiftSettings.endsAt,
+            shift_type: newShiftSettings.shiftType,
+            venueServerId: newShiftSettings.venueServerId,
+            venueClientId: newShiftSettings.venueClientId,
             staffMemberServerId: this.props.staff.serverId,
-            errorHandlingComponent: this.componentId,
-            venueServerId: this.context.newShiftVenueServerId,
-            venueClientId: this.context.newShiftVenueClientId
+            errorHandlingComponent: this.componentId
         });
     }
     canAddShift(){
-        var { starts_at, ends_at } = this.context.newShiftTimes;
+        var starts_at = this.context.newShiftSettings.startsAt;
+        var ends_at = this.context.newShiftSettings.endsAt;
+
         var datesAreValid = validation.areShiftTimesValid(starts_at, ends_at);
         if (!datesAreValid) {
             return false;

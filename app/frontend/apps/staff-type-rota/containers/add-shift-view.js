@@ -2,7 +2,6 @@ import React from "react"
 import { connect } from "react-redux"
 import AddShiftViewUi from "../components/add-shift-view"
 import _ from "underscore"
-import { addRotaShift } from "~redux/actions"
 import RotaDate from "~lib/rota-date"
 
 class AddShiftView extends React.Component {
