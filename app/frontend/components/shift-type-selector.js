@@ -3,7 +3,7 @@ import React from "react"
 export default class ShiftTypeSelector extends React.Component {
     static propTypes = {
         shiftType: React.PropTypes.string.isRequired,
-        onShiftTypeChange: React.PropTypes.func.isRequired
+        onChange: React.PropTypes.func.isRequired
     }
     render(){
         var isStandby = this.props.shiftType === "standby";
@@ -13,7 +13,7 @@ export default class ShiftTypeSelector extends React.Component {
                 checked={isStandby}
                 onChange={(e) => {
                     var shiftType = e.target.checked ? "standby" : "normal";
-                    this.props.onShiftTypeChange(shiftType);
+                    this.props.onChange(shiftType);
                 }} /> Standby
         </label>
     }
