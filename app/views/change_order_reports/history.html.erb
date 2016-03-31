@@ -1,0 +1,21 @@
+<div>
+  <div class="pull-right">
+    <%= link_to('Back to Overview', change_order_reports_path, class: 'btn btn-success') %>
+  </div>
+
+  <h1>Change Order History</h1>
+
+  <% if pagination_relation.to_a.count > 0 %>
+    <ul>
+      <% pagination_relation.
+          map(&:submission_deadline).
+          map(&:to_date).
+          each do |deadline_date| %>
+        <li><%= link_to(deadline_date.to_s(:human_date), change_order_report_path(UIRotaDate.format(deadline_date))) %></li>
+      <% end %>
+    </ul>
+    <%= render partial: 'shared/pagination_control', locals: { relation: pagination_relation } %>
+  <% else %>
+    <p>No previously submitted change orders exist</p>
+  <% end %>
+</div>

@@ -1,22 +1,25 @@
 class ChangeOrdersController < ApplicationController
   def index
-    if date_from_params.present? || date_from_params_valid?
+    if venue_from_params.present?
       current_venue = venue_from_params
-      date = date_from_params
+      week = RotaWeek.new(Time.now)
+      submission_deadline = ChangeOrderSubmissionDeadline.new(
+        week: week
+      ).time
+
       accessible_venues = AccessibleVenuesQuery.new(current_user).all
 
       current_change_order = ChangeOrder.find_by(
-        date: date,
+        submission_deadline: submission_deadline,
         venue: current_venue
       ) || ChangeOrder.build_default(
-        date: date,
+        submission_deadline: submission_deadline,
         venue: current_venue
       )
 
       authorize! :manage, current_change_order
 
       render locals: {
-        date: date,
         current_venue: current_venue,
         current_change_order: current_change_order,
         accessible_venues: accessible_venues
@@ -26,26 +29,45 @@ class ChangeOrdersController < ApplicationController
     end
   end
 
+  def previous
+    raise ActiveRecord::RecordNotFound unless venue_from_params.present?
+
+    change_orders = ChangeOrder.
+      where(venue: venue_from_params).
+      where('submission_deadline < ?', Time.now).
+      order(:submission_deadline).
+      paginate(page: params[:page], per_page: 15)
+
+    render locals: {
+      venue: venue_from_params,
+      change_orders: change_orders
+    }
+  end
+
   def update
-    if date_from_params.present? && date_from_params_valid?
+    if venue_from_params.present?
       current_venue = venue_from_params
-      date = date_from_params
+      week = RotaWeek.new(Time.now)
+      submission_deadline = ChangeOrderSubmissionDeadline.new(
+        week: week
+      ).time
 
       current_change_order = ChangeOrder.find_by(
-        date: date,
+        submission_deadline: submission_deadline,
         venue: current_venue
       ) || ChangeOrder.build_default(
-        date: date,
+        submission_deadline: submission_deadline,
         venue: current_venue
       )
 
       authorize! :manage, current_change_order
 
       if !current_change_order.submission_deadline_past? &&
-          current_change_order.update_attributes(update_params)
+          current_change_order.update_attributes(
+            update_params.merge(submission_deadline: submission_deadline)
+          )
         flash[:success] = "Update successful"
         redirect_to change_orders_path(
-          date: UIRotaDate.format(date),
           venue_id: current_venue.id
         )
       else
@@ -57,7 +79,6 @@ class ChangeOrdersController < ApplicationController
 
         flash.now[:error] = "There was a problem updating this change order"
         render 'index', locals: {
-          date: date,
           current_venue: current_venue,
           current_change_order: current_change_order,
           accessible_venues: accessible_venues
@@ -70,11 +91,9 @@ class ChangeOrdersController < ApplicationController
 
   private
   def index_redirect_params
-    week = RotaWeek.new(date_from_params || Time.now)
     venue = venue_from_params || current_user.default_venue
 
     {
-      date: UIRotaDate.format(week.start_date),
       venue_id: venue.andand.id
     }
   end

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   resources :change_orders, only: [:index] do
     collection do
+      get :previous
       put :update
     end
   end
@@ -87,7 +88,11 @@ Rails.application.routes.draw do
 
   resources :clock_in_clock_out, only: [:index]
 
-  resources :change_order_reports, only: [:index]
+  resources :change_order_reports, only: [:index, :show] do
+    collection do
+      get :history
+    end
+  end
 
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do

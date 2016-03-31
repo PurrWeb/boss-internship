@@ -1,7 +1,7 @@
 class ChangeOrder < ActiveRecord::Base
   belongs_to :venue
 
-  validates :date, presence: true
+  validates :submission_deadline, presence: true
   validates :venue, presence: true
   validates :five_pound_notes, presence: true
   validates :one_pound_coins, presence: true
@@ -10,10 +10,10 @@ class ChangeOrder < ActiveRecord::Base
   validates :ten_pence_coins, presence: true
   validates :five_pence_coins, presence: true
 
-  def self.build_default(venue:, date:)
+  def self.build_default(venue:, submission_deadline:)
     new(
       venue: venue,
-      date: date,
+      submission_deadline: submission_deadline,
       five_pound_notes:   0,
       one_pound_coins:    0,
       fifty_pence_coins:  0,
@@ -23,13 +23,24 @@ class ChangeOrder < ActiveRecord::Base
     )
   end
 
-  def submission_deadline
-    week = RotaWeek.new(date)
-    ChangeOrderSubmissionDeadline.new(week: week)
+  def self.current
+    now = Time.now.to_date
+    this_week = RotaWeek.new(now)
+    last_week = RotaWeek.new(now - 1.week)
+
+    last_deadline = ChangeOrderSubmissionDeadline.new(
+      week: last_week
+    ).time
+
+    this_deadline = ChangeOrderSubmissionDeadline.new(
+      week: this_week
+    ).time
+
+    where("submission_deadline >=  ? AND submission_deadline <= ?", last_deadline, this_deadline)
   end
 
   def submission_deadline_past?(now: Time.now)
-    now > submission_deadline.time
+    now > submission_deadline
   end
 
   def editable?

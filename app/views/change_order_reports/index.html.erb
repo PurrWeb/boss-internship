@@ -1,59 +1,73 @@
-<h1>Change Order Reports</h1>
+<h1>Change Order Report</h1>
 
-<div class="visible-print">
-  <p><b>Change orders for <%= week.start_date.to_s(:human_date) %> to <%= week.end_date.to_s(:human_date) %></b></p>
+<div>
+  <div class="pull-left">
+    <%= link_to(
+          'View',
+          change_order_report_path(
+            UIRotaDate.format(current_submission_deadline.to_date)
+          ),
+          class: 'btn btn-success'
+        ) %>
+  </div>
+  <h2 class="h3">Change Order in Progress</h2>
 </div>
-<div class="hidden-print">
-  <%= react_component('ChangeOrderReportsIndexApp') %>
-</div>
 
-<% if deadline.past? %>
-  <p>Submitted at: <%= deadline.time.to_s(:human_with_day) %></p>
-<% else %>
-  <p>Submission Deadline: <%= deadline.time.to_s(:human_with_day) %></p>
-<% end %>
+<p>
+  <b>Submission Deadline:</b> <%= current_submission_deadline.to_s(:human_with_day) %></p>
 
-<% if venues_without_change_orders.count > 0 %>
-  <h2 class="h3">Venues without change orders</h2>
+<% if venues_without_current_change_order.count > 0 %>
   <p>
-    <%= venues_without_change_orders.map(&:name).to_sentence %>
+    <b>Venues without submitted change orders:</b> <%= venues_without_current_change_order.map(&:name).to_sentence %>
   </p>
 <% end %>
 
-<% if change_orders.count > 0 %>
-  <h2 class="h3">Change orders</h2>
+<div>
+  <% if previous_submission_change_orders.count > 0 %>
+    <div class="pull-left">
+      <%= link_to(
+            'View',
+            change_order_report_path(
+              UIRotaDate.format(previous_submission_deadline.to_date)
+            ),
+            class: 'btn btn-success'
+          ) %>
+    </div>
+  <% end %>
+  <h2 class="h3"> Last submitted Order</h2>
+</div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Venue</th>
-        <th>Five Pound Notes</th>
-        <th>One Pound Coins</th>
-        <th>Fifty Pence Coins</th>
-        <th>Twenty Pence Coins</th>
-        <th>Ten Pence Coins</th>
-        <th>Five Pence Coins</th>
-      <tr>
-    </thead>
-    <tbody>
-      <% change_orders.each do |change_order| %>
+<% if previous_submission_change_orders.count > 0 %>
+  <p><b>Submitted at:</b> <%= previous_submission_deadline.to_s(:human_with_day) %></p>
+
+    <table class="table">
+      <thead>
         <tr>
-          <td><%= change_order.venue.name %></td>
-          <td><%= change_order.five_pound_notes %></td>
-          <td><%= change_order.one_pound_coins %></td>
-          <td><%= change_order.fifty_pence_coins %></td>
-          <td><%= change_order.twenty_pence_coins %></td>
-          <td><%= change_order.ten_pence_coins %></td>
-          <td><%= change_order.five_pence_coins %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+          <th>Venue</th>
+          <th>Five Pound Notes</th>
+          <th>One Pound Coins</th>
+          <th>Fifty Pence Coins</th>
+          <th>Twenty Pence Coins</th>
+          <th>Ten Pence Coins</th>
+          <th>Five Pence Coins</th>
+        <tr>
+      </thead>
+      <tbody>
+        <% previous_submission_change_orders.each do |change_order| %>
+          <tr>
+            <td><%= change_order.venue.name %></td>
+            <td><%= change_order.five_pound_notes %></td>
+            <td><%= change_order.one_pound_coins %></td>
+            <td><%= change_order.fifty_pence_coins %></td>
+            <td><%= change_order.twenty_pence_coins %></td>
+            <td><%= change_order.ten_pence_coins %></td>
+            <td><%= change_order.five_pence_coins %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+<% else %>
+  <p>No previous submissions submitted</p>
 <% end %>
 
-<%= javascript_tag do %>
-  window.boss = window.boss || {};
-  window.boss.pageData = {
-    date: new Date("<%= week.start_date.iso8601 %>")
-  };
-<% end %>
+<%= link_to('View Full History', history_change_order_reports_path, class: 'btn btn-success') %>

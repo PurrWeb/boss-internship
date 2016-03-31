@@ -1,0 +1,55 @@
+<div>
+  <h1>Change Order Report</h1>
+  <div class="pull-right">
+    <%= link_to(
+          'Back to Overview',
+          change_order_reports_path,
+          class: 'btn btn-success'
+        ) %>
+  </div>
+</div>
+
+<% if submission_deadline.past? %>
+
+  <p>Submitted at: <%= submission_deadline.to_s(:human_with_day) %></p>
+<% else %>
+  <p>Submission Deadline: <%= submission_deadline.to_s(:human_with_day) %></p>
+<% end %>
+
+<% if venues_without_change_orders.count > 0 %>
+  <h2 class="h3">Venues without submissions</h2>
+  <p>
+    <%= venues_without_change_orders.map(&:name).to_sentence %>
+  </p>
+<% end %>
+
+<% if change_orders.count > 0 %>
+  <h2 class="h3">Change orders</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Venue</th>
+        <th>Five Pound Notes</th>
+        <th>One Pound Coins</th>
+        <th>Fifty Pence Coins</th>
+        <th>Twenty Pence Coins</th>
+        <th>Ten Pence Coins</th>
+        <th>Five Pence Coins</th>
+      <tr>
+    </thead>
+    <tbody>
+      <% change_orders.each do |change_order| %>
+        <tr>
+          <td><%= change_order.venue.name %></td>
+          <td><%= change_order.five_pound_notes %></td>
+          <td><%= change_order.one_pound_coins %></td>
+          <td><%= change_order.fifty_pence_coins %></td>
+          <td><%= change_order.twenty_pence_coins %></td>
+          <td><%= change_order.ten_pence_coins %></td>
+          <td><%= change_order.five_pence_coins %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

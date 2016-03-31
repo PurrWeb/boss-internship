@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :change_order do
-    date { RotaWeek.new(Time.now).start_date }
+    submission_deadline { Time.now + 1.week }
     venue
     five_pound_notes 0
     one_pound_coins 0

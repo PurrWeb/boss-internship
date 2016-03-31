@@ -1,7 +1,6 @@
 <%= bootstrap_form_for(
       change_order,
       url: change_orders_path(
-        date: UIRotaDate.format(change_order.date),
         venue_id: change_order.venue.id
       ),
       method: 'put'

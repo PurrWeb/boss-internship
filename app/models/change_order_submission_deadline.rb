@@ -3,6 +3,11 @@ class ChangeOrderSubmissionDeadline
     @week = week
   end
 
+  def self.from_deadline_date(dealine_date)
+    week = RotaWeek.new(dealine_date - 1.day)
+    new(week: week)
+  end
+
   def time
     RotaWeek.new(week.start_date + 1.week).
       start_date.
