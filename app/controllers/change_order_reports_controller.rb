@@ -2,7 +2,7 @@ class ChangeOrderReportsController < ApplicationController
   before_action :authorize_admin
 
   def index
-    if date_from_params.present? || date_from_params_valid?
+    if date_from_params.present? && date_from_params_valid?
       date = date_from_params
       week = RotaWeek.new(date)
       deadline = ChangeOrderSubmissionDeadline.new(week: week)

@@ -1,6 +1,6 @@
 class ChangeOrdersController < ApplicationController
   def index
-    if date_from_params.present? || date_from_params_valid?
+    if venue_from_params.present? && date_from_params.present? && date_from_params_valid?
       current_venue = venue_from_params
       date = date_from_params
       accessible_venues = AccessibleVenuesQuery.new(current_user).all
@@ -27,7 +27,7 @@ class ChangeOrdersController < ApplicationController
   end
 
   def update
-    if date_from_params.present? && date_from_params_valid?
+    if venue_from_params.present? && date_from_params.present? && date_from_params_valid?
       current_venue = venue_from_params
       date = date_from_params
 
