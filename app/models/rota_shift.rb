@@ -49,6 +49,10 @@ class RotaShift < ActiveRecord::Base
     staff_member.security?
   end
 
+  def standby?
+    shift_type == 'standby'
+  end
+
   private
   # validation
   def times_in_correct_order
