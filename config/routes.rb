@@ -104,6 +104,17 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :fruit_order_reports, only: [:index, :show] do
+    member do
+      put :accept
+      put :complete
+    end
+
+    collection do
+      get :history
+    end
+  end
+
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :test, only: [] do

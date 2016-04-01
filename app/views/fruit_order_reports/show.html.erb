@@ -1,0 +1,98 @@
+<div>
+  <h1>Fruit Order Report</h1>
+  <div class="pull-right">
+    <%= link_to(
+          'Back to Overview',
+          fruit_order_reports_path,
+          class: 'btn btn-success'
+        ) %>
+  </div>
+</div>
+
+<% if submission_deadline.past? %>
+  <p>Submitted at: <%= submission_deadline.to_s(:human_with_day) %></p>
+<% else %>
+  <p>Submission Deadline: <%= submission_deadline.to_s(:human_with_day) %></p>
+<% end %>
+
+<% if venues_without_fruit_orders.count > 0 %>
+  <h2 class="h3">Venues without submissions</h2>
+  <p>
+    <%= venues_without_fruit_orders.map(&:name).to_sentence %>
+  </p>
+<% end %>
+
+<% if fruit_orders.count > 0 %>
+  <h2 class="h3">Fruit orders</h2>
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Venue</th>
+          <th><%= FruitOrder.message_for(:limes) %></th>
+          <th><%= FruitOrder.message_for(:lemons) %></th>
+          <th><%= FruitOrder.message_for(:rasberries) %></th>
+          <th><%= FruitOrder.message_for(:blueberries) %></th>
+          <th><%= FruitOrder.message_for(:blackberries) %></th>
+          <th><%= FruitOrder.message_for(:green_apples) %></th>
+          <th><%= FruitOrder.message_for(:oranges) %></th>
+          <th><%= FruitOrder.message_for(:passion_fruits) %></th>
+          <th><%= FruitOrder.message_for(:lychees) %></th>
+          <th><%= FruitOrder.message_for(:cucumbers) %></th>
+          <th><%= FruitOrder.message_for(:kumkwats) %></th>
+          <th><%= FruitOrder.message_for(:dragon_fruits) %></th>
+          <th><%= FruitOrder.message_for(:watermelon) %></th>
+          <th><%= FruitOrder.message_for(:pink_grapefruit) %></th>
+          <th><%= FruitOrder.message_for(:plums) %></th>
+          <th><%= FruitOrder.message_for(:deskinned_coconuts) %></th>
+          <th><%= FruitOrder.message_for(:fresh_mint) %></th>
+          <th><%= FruitOrder.message_for(:fresh_basil) %></th>
+          <th><%= FruitOrder.message_for(:fresh_lavender) %></th>
+          <th><%= FruitOrder.message_for(:rosemary) %></th>
+          <th><%= FruitOrder.message_for(:thyme) %></th>
+          <th><%= FruitOrder.message_for(:red_roses) %></th>
+          <th><%= FruitOrder.message_for(:kaffir_lime_leaves) %></th>
+          <th><%= FruitOrder.message_for(:fresh_ginger) %></th>
+          <th><%= FruitOrder.message_for(:bananas) %></th>
+          <th><%= FruitOrder.message_for(:maraschino_cherry) %></th>
+          <th><%= FruitOrder.message_for(:cream) %></th>
+        <tr>
+      </thead>
+      <tbody>
+        <% fruit_orders.each do |fruit_order| %>
+          <tr>
+            <td><%= fruit_order.venue.name %></td>
+            <td><%= fruit_order.limes %></td>
+            <td><%= fruit_order.lemons %></td>
+            <td><%= fruit_order.rasberries %></td>
+            <td><%= fruit_order.blueberries %></td>
+            <td><%= fruit_order.blackberries %></td>
+            <td><%= fruit_order.green_apples %></td>
+            <td><%= fruit_order.oranges %></td>
+            <td><%= fruit_order.passion_fruits %></td>
+            <td><%= fruit_order.lychees %></td>
+            <td><%= fruit_order.cucumbers %></td>
+            <td><%= fruit_order.kumkwats %></td>
+            <td><%= fruit_order.dragon_fruits %></td>
+            <td><%= fruit_order.watermelon %></td>
+            <td><%= fruit_order.pink_grapefruit %></td>
+            <td><%= fruit_order.plums %></td>
+            <td><%= fruit_order.deskinned_coconuts %></td>
+            <td><%= fruit_order.fresh_mint %></td>
+            <td><%= fruit_order.fresh_basil %></td>
+            <td><%= fruit_order.fresh_lavender %></td>
+            <td><%= fruit_order.rosemary %></td>
+            <td><%= fruit_order.thyme %></td>
+            <td><%= fruit_order.red_roses %></td>
+            <td><%= fruit_order.kaffir_lime_leaves %></td>
+            <td><%= fruit_order.fresh_ginger %></td>
+            <td><%= fruit_order.bananas %></td>
+            <td><%= fruit_order.maraschino_cherry %></td>
+            <td><%= fruit_order.cream %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

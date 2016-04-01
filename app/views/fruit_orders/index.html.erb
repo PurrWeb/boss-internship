@@ -46,7 +46,7 @@
   <p>No fruit order is currently pending for this venue</p>
 <% end %>
 
-<%= render partial: 'form', locals: {
+<%= render partial: 'shared/fruit_order_form', locals: {
       fruit_order: current_fruit_order,
       url: update_current_fruit_orders_path(
         venue_id: current_fruit_order.venue.id

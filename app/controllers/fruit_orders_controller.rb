@@ -29,6 +29,28 @@ class FruitOrdersController < ApplicationController
     render locals: { fruit_order: fruit_order }
   end
 
+  def edit
+    fruit_order = FruitOrder.find(params[:id])
+
+    render locals: { fruit_order: fruit_order }
+  end
+
+  def update
+    fruit_order = FruitOrder.find(params[:id])
+    authorize! :update, fruit_order
+
+    if fruit_order.update_attributes(update_params)
+      flash[:success] = "Update successful"
+      redirect_to fruit_order_path(fruit_order)
+    else
+      flash.now[:error] = "There was a problem updating this fruit order"
+      render 'index', locals: {
+        fruit_order: fruit_order
+      }
+    end
+  end
+
+
   def submitted
     raise ActiveRecord::RecordNotFound unless venue_from_params.present?
 

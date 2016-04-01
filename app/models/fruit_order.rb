@@ -165,6 +165,12 @@ class FruitOrder < ActiveRecord::Base
   end
 
   private
+  def accepted_transition
+    fruit_order_transitions.
+    where(to_state: 'accepted').
+    last
+  end
+
   # Needed for statesman
   def self.transition_class
     FruitOrderTransition
