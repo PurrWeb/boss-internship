@@ -34,7 +34,6 @@ class StaffMember < ActiveRecord::Base
 
   mount_uploader :avatar, AvatarUploader
   validates :avatar, {
-    presence: true,
     file_size: { less_than: 1.megabyte }
   }
 
