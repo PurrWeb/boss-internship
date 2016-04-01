@@ -1,3 +1,5 @@
+@import "../../mixins";
+
 .staff-list-item {
     margin-top: 10px;
 }
@@ -8,4 +10,16 @@
     margin-top: 0px;
     padding: 5px;
     border-bottom: 1px solid #eee;
+}
+.staff-list-item--clock-in-out__name {
+    font-size: 20px;
+    font-weight: bold;
+    @include breakpoint(sm) {
+        display: inline-block;
+    }
+}
+.staff-list-item--clock-in-out__status {
+    @include breakpoint(sm) {
+        clear: both;
+    }
 }

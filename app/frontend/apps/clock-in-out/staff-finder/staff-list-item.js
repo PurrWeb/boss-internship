@@ -32,7 +32,7 @@ class ClockInOutStaffListItem extends Component {
         var statusToggleButtons = null;
 
         if (!this.isManager()) {
-            rotaedShiftsColumn = <div className="col-md-3">
+            rotaedShiftsColumn = <div className="col-md-3 col-sm-9">
                     <span style={columnNameStyle}>
                         Rotaed Shifts
                     </span>
@@ -41,22 +41,22 @@ class ClockInOutStaffListItem extends Component {
                         rotas={this.props.rotas}
                         venues={this.props.venues} />
                 </div>;
-            statusToggleButtons = <div className="col-md-2" style={{paddingTop: 5}}>
+            statusToggleButtons = <div className="col-md-2 col-sm-3" style={{paddingTop: 5}}>
                 {this.getStaffMemberStatusToggleButtons()}
             </div>
         } else {
-            rotaedShiftsColumn = <div className="col-md-3">
+            rotaedShiftsColumn = <div className="col-md-3 col-sm-9">
                 {this.getManagerModeButton()}
             </div>
         }
 
         return <div className="staff-list-item staff-list-item--clock-in-out">
             <div className="row">
-                <div className="col-md-1">
+                <div className="col-md-1 col-sm-2">
                     <img src={staffObject.avatar_url} className="staff-list-item__avatar" />
                 </div>
-                <div className="col-md-3">
-                    <div style={{fontSize: 20, fontWeight: "bold"}}>
+                <div className="col-md-3 col-sm-8">
+                    <div className="staff-list-item--clock-in-out__name">
                         {staffObject.first_name} {staffObject.surname}
                     </div>
                     <StaffTypeBadge
@@ -66,7 +66,7 @@ class ClockInOutStaffListItem extends Component {
                     </div>
                 </div>
                 {rotaedShiftsColumn}
-                <div className="col-md-2">
+                <div className="col-md-2 col-sm-2 staff-list-item--clock-in-out__status">
                     <StaffStatusBadge staffStatusObject={staffStatus} />
                 </div>
                 {statusToggleButtons}
