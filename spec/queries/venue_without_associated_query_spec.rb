@@ -1,10 +1,12 @@
 require 'rails_helper'
 
-describe VenueWithoutChangeOrderQuery do
+describe VenueWithoutAssociatedQuery do
   let(:date) do
     RotaWeek.new(Time.now).start_date
   end
-  let(:query) { VenueWithoutChangeOrderQuery.new(change_orders: change_orders) }
+  let(:query) do
+    VenueWithoutAssociatedQuery.new(associated_relation: change_orders)
+  end
 
   context 'venue not related to change orders' do
     let(:change_orders) { ChangeOrder.none }
