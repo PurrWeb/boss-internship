@@ -9,6 +9,7 @@ Shifts for week <%= week.start_date.to_s(:human_date) %> - <%= week.end_date.to_
 <% shifts.each do |shift| %>
 Venue:<%= shift.venue.name %>
 Date: <%= shift.date.to_s(:human_date) %>
+Shift Type: <%= shift.shift_type.titlecase %>
 Starts at: <%= shift.starts_at.to_s(:human_time_no_date) %>
 Ends at: <%= shift.ends_at.to_s(:human_time_no_date) %>
 <% end %>

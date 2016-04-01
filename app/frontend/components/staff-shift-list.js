@@ -24,12 +24,17 @@ class StaffShiftListItem extends Component {
                 ({this.props.venueName})
             </span>
         }
+        var isStandby = null;
+        if (shift.isStandby()) {
+            isStandby = " - Standby";
+        }
         return <div className="staff-shift-list__shift">
             {date}
             {moment(shift.starts_at).format("H:mm")}
             &nbsp;to&nbsp;
             {moment(shift.ends_at).format("H:mm")}
             {venue}
+            {isStandby}
         </div>
     }
 }

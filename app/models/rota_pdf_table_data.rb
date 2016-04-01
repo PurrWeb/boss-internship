@@ -56,7 +56,8 @@ class RotaPDFTableData
 
           if shifts.present?
             times = shifts.sort_by(&:starts_at).map do |shift|
-              "#{shift.starts_at.to_s(:human_time_no_date)} - #{shift.ends_at.to_s(:human_time_no_date)}"
+              standby_signifier = shift.standby? ? " (SB)" : ""
+              "#{shift.starts_at.to_s(:human_time_no_date)} - #{shift.ends_at.to_s(:human_time_no_date)}#{ standby_signifier }"
             end
 
             week_data[day] = times.join(",\n")

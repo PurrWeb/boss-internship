@@ -12,6 +12,7 @@
         <tr>
           <th>Venue</th>
           <th>Date</th>
+          <th>Shift Type</th>
           <th>Starts At</th>
           <th>Ends At</th>
         </tr>
@@ -21,6 +22,7 @@
           <tr>
             <td><%= shift.venue.name %></td>
             <td><%= shift.date.to_s(:human_date) %></td>
+            <td><%= shift.shift_type.titlecase %></td>
             <td><%= shift.starts_at.to_s(:human_time_no_date) %></td>
             <td><%= shift.ends_at.to_s(:human_time_no_date) %></td>
           </tr>

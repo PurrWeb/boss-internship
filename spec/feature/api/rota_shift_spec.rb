@@ -31,6 +31,7 @@ RSpec.describe 'Api access' do
             "id" => rota_shift.rota.id,
             "url" => url_helpers.api_v1_rota_url(rota_shift.rota)
           },
+          "shift_type" => "normal",
           "starts_at" => rota_shift.starts_at.utc.iso8601,
           "ends_at" => rota_shift.ends_at.utc.iso8601,
           "staff_member" => {
@@ -61,7 +62,8 @@ RSpec.describe 'Api access' do
         {
           staff_member_id: staff_member.id.to_s,
           starts_at: starts_at.iso8601,
-          ends_at: ends_at.iso8601
+          ends_at: ends_at.iso8601,
+          shift_type: 'normal'
         }
       end
 
@@ -106,7 +108,8 @@ RSpec.describe 'Api access' do
           rota_id: rota.id.to_s,
           staff_member_id: staff_member.id.to_s,
           starts_at: starts_at.iso8601,
-          ends_at: invalid_ends_at
+          ends_at: invalid_ends_at,
+          shift_type: 'normal'
         }
       end
 

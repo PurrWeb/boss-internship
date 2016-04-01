@@ -8,7 +8,8 @@ describe CreateRotaShift do
       {
         starts_at: starts_at,
         ends_at: ends_at,
-        staff_member: staff_member
+        staff_member: staff_member,
+        shift_type: 'normal'
       }
     end
     let(:rota_date) { Time.now.to_date }
@@ -110,7 +111,8 @@ describe CreateRotaShift do
       {
         starts_at: starts_at,
         ends_at: ends_at,
-        staff_member: staff_member
+        staff_member: staff_member,
+        shift_type: 'normal'
       }
     end
     let(:rota_date) { 2.days.ago.to_date }

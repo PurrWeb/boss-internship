@@ -10,6 +10,7 @@ import _ from "underscore"
 import ComponentErrors from "~components/component-errors"
 import getStaffTypeFromShift from "~lib/get-staff-type-from-shift"
 import { canEditStaffTypeShifts, selectShiftIsBeingEdited } from "~redux/selectors"
+import ShiftTypeSelector from "~components/shift-type-selector"
 
 class ShiftEditorUi extends Component {
     render(){
@@ -33,7 +34,16 @@ class ShiftEditorUi extends Component {
             </div>
             {this.getComponentErrors()}
         
-            {this.getDeleteButton()}
+            <div className="row">
+                <div className="col-md-9">
+                    <ShiftTypeSelector
+                        shiftType={this.props.shiftType}
+                        onChange={this.props.onShiftTypeChange}/>
+                </div>
+                <div className="col-md-3">
+                    {this.getDeleteButton()}
+                </div>
+            </div>
         </div>
     }
     getUpdateButton(){
@@ -64,7 +74,7 @@ class ShiftEditorUi extends Component {
         return <a
             onClick={this.props.deleteShift}
             className={this.props.shiftIsBeingEdited ? "link-disabled" : ""}>
-            Delete shift
+            Delete
         </a>
     }
     getComponentErrors(){
@@ -92,11 +102,12 @@ class ShiftEditor extends Component {
     }
     constructor(props){
         super(props);
-        var {starts_at, ends_at} = props.shift;
+        var {starts_at, ends_at, shift_type} = props.shift;
         this.state = {
             newShiftTimes: {
                 starts_at, ends_at
-            }
+            },
+            shiftType: shift_type
         }
     }
     render(){ 
@@ -110,7 +121,9 @@ class ShiftEditor extends Component {
             deleteShift={() => this.deleteShift()}
             areBothTimesValid={this.areBothTimesValid()}
             shiftIsBeingEdited={this.props.shiftIsBeingEdited}
-            onShiftTimesChange={(newShiftTimes) => this.setState({newShiftTimes})} />
+            onShiftTimesChange={(newShiftTimes) => this.setState({newShiftTimes})}
+            shiftType={this.state.shiftType}
+            onShiftTypeChange={(shiftType) => this.setState({shiftType})} />
     }
     deleteShift(){
         if (this.props.shiftIsBeingEdited) {
@@ -131,7 +144,8 @@ class ShiftEditor extends Component {
             ends_at: newShiftTimes.ends_at,
             shiftServerId: shift.serverId,
             shiftClientId: shift.clientId,
-            errorHandlingComponent: this.componentId
+            errorHandlingComponent: this.componentId,
+            shiftType: this.state.shiftType
         });
     }
     areBothTimesValid(){

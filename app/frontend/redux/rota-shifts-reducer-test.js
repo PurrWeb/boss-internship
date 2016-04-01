@@ -41,7 +41,8 @@ describe("RotaShiftsReducer", function(){
                 clientId: 123,
                 staff_id: 1000,
                 starts_at: new Date(2015, 0, 1, 9, 0, 0),
-                ends_at: new Date(2015, 0, 1, 14, 0, 0)
+                ends_at: new Date(2015, 0, 1, 14, 0, 0),
+                shift_type: "standby"
             }
         }
 
@@ -52,7 +53,8 @@ describe("RotaShiftsReducer", function(){
             shift: {
                 clientId: 123,
                 starts_at: newStartsAt,
-                ends_at: newEndsAt
+                ends_at: newEndsAt,
+                shift_type: "normal"
             }
         };
         var expectedResultState = {
@@ -60,7 +62,8 @@ describe("RotaShiftsReducer", function(){
                 clientId: 123,
                 staff_id: 1000,
                 starts_at: newStartsAt,
-                ends_at: newEndsAt
+                ends_at: newEndsAt,
+                shift_type: "normal"
             }
         }
 

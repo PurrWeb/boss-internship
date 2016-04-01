@@ -59,14 +59,16 @@ module Api
       def edit_rota_shift_params
         params.permit(
           :starts_at,
-          :ends_at
+          :ends_at,
+          :shift_type
         )
       end
 
       def rota_shift_params
         params.permit(
           :starts_at,
-          :ends_at
+          :ends_at,
+          :shift_type
         ).merge(
           staff_member: staff_member_from_params
         )

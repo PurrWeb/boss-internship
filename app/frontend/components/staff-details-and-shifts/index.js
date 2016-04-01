@@ -7,7 +7,7 @@ import oFetch from "o-fetch"
 export default class StaffDetailsAndShifts extends Component {
     static propTypes = {
         staffTypes: React.PropTypes.object.isRequired,
-        staffMemberClientId: React.PropTypes.number.isRequired,
+        staffMemberClientId: React.PropTypes.string.isRequired,
         staff: React.PropTypes.object.isRequired,
         rotaShifts: React.PropTypes.array.isRequired,
         showShiftVenue: React.PropTypes.bool,

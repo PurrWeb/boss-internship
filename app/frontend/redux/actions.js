@@ -54,12 +54,13 @@ export const addRotaShift = createApiRequestAction({
             return apiRoutes.addShift.getPath(venueServerId, date);
         },
         data: function(options){
-            var [starts_at, ends_at, staff_member_id] = oFetch(options,
-                "starts_at", "ends_at", "staffMemberServerId");
+            var [starts_at, ends_at, staff_member_id, shift_type] = oFetch(options,
+                "starts_at", "ends_at", "staffMemberServerId", "shift_type");
             return {
                 starts_at,
                 ends_at,
-                staff_member_id
+                staff_member_id,
+                shift_type
             }
         },
         getSuccessActionData: function(responseData, requestOptions, getState) {
@@ -107,18 +108,20 @@ export const updateRotaShift = createApiRequestAction({
         path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shiftServerId}),
         method: apiRoutes.updateShift.method,
         data: function(options, getState){
+            var shiftType = oFetch(options, "shiftType");
             var staffMemberId = getState().rotaShifts[options.shiftClientId].staff_member.serverId;
             var shift = {
                 shift_id: options.shiftServerId,
                 starts_at: options.starts_at,
                 ends_at: options.ends_at,
-                staff_member_id: staffMemberId
+                staff_member_id: staffMemberId,
+                shift_type: shiftType
             }
             return shift;
         },
         getSuccessActionData(responseData){
-            responseData = backendData.processShiftObject(responseData);
-            return {shift: responseData};
+            var shift = backendData.processShiftObject(responseData);
+            return {shift};
         }
     }),
     confirm: function(requestOptions, getState){

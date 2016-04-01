@@ -8,22 +8,26 @@ import RotaDate from "~lib/rota-date"
 
 class AddShiftViewContainer extends Component {
     static childContextTypes = {
-        newShiftTimes: React.PropTypes.object,
-        newShiftVenueServerId: React.PropTypes.any,
-        newShiftVenueClientId: React.PropTypes.any
+        newShiftSettings: React.PropTypes.object
     }
     getChildContext(){
+        var venue = this.props.rota.venue;
         return {
-            newShiftTimes: this.state.shiftTimes,
-            newShiftVenueServerId: this.props.rota.venue.serverId,
-            newShiftVenueClientId: this.props.rota.venue.clientId
+            newShiftSettings: {
+                startsAt: this.state.shiftTimes.starts_at,
+                endsAt: this.state.shiftTimes.ends_at,
+                venueServerId: venue.serverId,
+                venueClientId: venue.clientId,
+                shiftType: this.state.shiftType
+            }
         };
     }
     constructor(props){
         super(props);
         
         var state = {
-            shiftTimes: this.getDefaultShiftTimes(props)
+            shiftTimes: this.getDefaultShiftTimes(props),
+            shiftType: "normal"
         };
         this.state = state;
     }
@@ -33,7 +37,9 @@ class AddShiftViewContainer extends Component {
             onShiftTimesChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)}
             staff={this.props.staff} 
             rotaDate={this.getRotaDate()}
-            staffTypes={this.props.staffTypes} />
+            staffTypes={this.props.staffTypes}
+            shiftType={this.state.shiftType}
+            onShiftTypeChange={(shiftType) => this.setState({shiftType})} />
     }
     getDefaultShiftTimes(props) {
         var starts_at = new Date(new Date(props.dateOfRota).setHours(18));
