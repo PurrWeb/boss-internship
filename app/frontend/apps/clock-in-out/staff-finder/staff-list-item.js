@@ -31,24 +31,19 @@ class ClockInOutStaffListItem extends Component {
         var rotaedShiftsColumn = null;
         var statusToggleButtons = null;
 
-        if (!this.isManager()) {
-            rotaedShiftsColumn = <div className="col-md-3 col-sm-9">
-                    <span style={columnNameStyle}>
-                        Rotaed Shifts
-                    </span>
-                    <StaffShiftList
-                        shifts={utils.indexByClientId(this.props.staffMemberShifts)}
-                        rotas={this.props.rotas}
-                        venues={this.props.venues} />
-                </div>;
-            statusToggleButtons = <div className="col-md-2 col-sm-3" style={{paddingTop: 5}}>
-                {this.getStaffMemberStatusToggleButtons()}
-            </div>
-        } else {
-            rotaedShiftsColumn = <div className="col-md-3 col-sm-10">
-                {this.getManagerModeButton()}
-            </div>
-        }
+        rotaedShiftsColumn = <div className="col-md-3 col-sm-9">
+            <span style={columnNameStyle}>
+                Rotaed Shifts
+            </span>
+            <StaffShiftList
+                shifts={utils.indexByClientId(this.props.staffMemberShifts)}
+                rotas={this.props.rotas}
+                venues={this.props.venues} />
+        </div>;
+
+        statusToggleButtons = <div className="col-md-2 col-sm-9" style={{paddingTop: 5}}>
+            {this.getStaffMemberStatusToggleButtons()}
+        </div>
 
         return <div className="staff-list-item staff-list-item--clock-in-out">
             <div className="row">
@@ -63,6 +58,7 @@ class ClockInOutStaffListItem extends Component {
                         staffTypeObject={staffTypeObject} />
                     <div className="staff-list-item--clock-in-out__manager-buttons">
                         {this.getChangePinButton()}
+                        {this.getManagerModeButton()}
                     </div>
                 </div>
                 {rotaedShiftsColumn}
@@ -80,13 +76,13 @@ class ClockInOutStaffListItem extends Component {
 
         var staffObject = this.props.staff;
         return <div className="row">
-            <div className="col-md-6 col-sm-6">
+            <div className="col-md-6 col-sm-2">
                 <ToggleStaffClockedInButton
                     staffStatuses={this.props.staffStatuses}
                     staffObject={staffObject}
                     updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
             </div>
-            <div className="col-md-6 col-sm-6 show-in-manager-mode">
+            <div className="col-md-6 col-sm-2 show-in-manager-mode">
                 <ToggleStaffOnBreakButton
                     staffStatuses={this.props.staffStatuses}
                     staffObject={staffObject}
@@ -114,6 +110,9 @@ class ClockInOutStaffListItem extends Component {
         this.props.enterManagerMode();
     }
     getManagerModeButton(){
+        if (!this.isManager()) {
+            return null;
+        }
         if (this.props.enterManagerModeIsInProgress){
             return <Spinner />;
         }
