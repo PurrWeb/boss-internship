@@ -23,3 +23,8 @@
         clear: both;
     }
 }
+.staff-list-item--clock-in-out__manager-buttons {
+    @include breakpoint(sm){
+        float: right;
+    }
+}
