@@ -31,42 +31,38 @@ class ClockInOutStaffListItem extends Component {
         var rotaedShiftsColumn = null;
         var statusToggleButtons = null;
 
-        if (!this.isManager()) {
-            rotaedShiftsColumn = <div className="col-md-3">
-                    <span style={columnNameStyle}>
-                        Rotaed Shifts
-                    </span>
-                    <StaffShiftList
-                        shifts={utils.indexByClientId(this.props.staffMemberShifts)}
-                        rotas={this.props.rotas}
-                        venues={this.props.venues} />
-                </div>;
-            statusToggleButtons = <div className="col-md-2" style={{paddingTop: 5}}>
-                {this.getStaffMemberStatusToggleButtons()}
-            </div>
-        } else {
-            rotaedShiftsColumn = <div className="col-md-3">
-                {this.getManagerModeButton()}
-            </div>
-        }
+        rotaedShiftsColumn = <div className="col-md-3 col-xs-9">
+            <span style={columnNameStyle}>
+                Rotaed Shifts
+            </span>
+            <StaffShiftList
+                shifts={utils.indexByClientId(this.props.staffMemberShifts)}
+                rotas={this.props.rotas}
+                venues={this.props.venues} />
+        </div>;
+
+        statusToggleButtons = <div className="col-md-2 col-xs-9" style={{paddingTop: 5}}>
+            {this.getStaffMemberStatusToggleButtons()}
+        </div>
 
         return <div className="staff-list-item staff-list-item--clock-in-out">
             <div className="row">
-                <div className="col-md-1">
+                <div className="col-md-1 col-xs-2">
                     <img src={staffObject.avatar_url} className="staff-list-item__avatar" />
                 </div>
-                <div className="col-md-3">
-                    <div style={{fontSize: 20, fontWeight: "bold"}}>
+                <div className="col-md-3 col-xs-10">
+                    <div className="staff-list-item--clock-in-out__name">
                         {staffObject.first_name} {staffObject.surname}
                     </div>
                     <StaffTypeBadge
                         staffTypeObject={staffTypeObject} />
-                    <div style={{marginTop: 4}}>
+                    <div className="staff-list-item--clock-in-out__manager-buttons">
                         {this.getChangePinButton()}
+                        {this.getManagerModeButton()}
                     </div>
                 </div>
                 {rotaedShiftsColumn}
-                <div className="col-md-2">
+                <div className="col-md-2 col-xs-2 staff-list-item--clock-in-out__status">
                     <StaffStatusBadge staffStatusObject={staffStatus} />
                 </div>
                 {statusToggleButtons}
@@ -80,13 +76,13 @@ class ClockInOutStaffListItem extends Component {
 
         var staffObject = this.props.staff;
         return <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-6 col-xs-2">
                 <ToggleStaffClockedInButton
                     staffStatuses={this.props.staffStatuses}
                     staffObject={staffObject}
                     updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
             </div>
-            <div className="col-md-6 show-in-manager-mode">
+            <div className="col-md-6 col-xs-2 show-in-manager-mode">
                 <ToggleStaffOnBreakButton
                     staffStatuses={this.props.staffStatuses}
                     staffObject={staffObject}
@@ -114,6 +110,9 @@ class ClockInOutStaffListItem extends Component {
         this.props.enterManagerMode();
     }
     getManagerModeButton(){
+        if (!this.isManager()) {
+            return null;
+        }
         if (this.props.enterManagerModeIsInProgress){
             return <Spinner />;
         }

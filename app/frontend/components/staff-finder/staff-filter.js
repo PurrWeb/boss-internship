@@ -28,7 +28,7 @@ export default class StaffFilter extends Component {
 
         var titleColumns = titles.map((title) => this.getFilterTitle(title));
         var componentColumns = filters.map(function(filter){
-            return <div className="col-md-2" key={filter.title}>
+            return <div className="col-md-2 col-xs-3" key={filter.title}>
                 {filter.component}
             </div>
         });
@@ -98,7 +98,7 @@ export default class StaffFilter extends Component {
         }
     }
     getFilterTitle(titleString){
-        return <div className="col-md-2" key={titleString}>
+        return <div className="col-md-2 col-xs-3" key={titleString}>
             {titleString}
         </div>
     }
