@@ -2,6 +2,7 @@ import React from "react"
 import StaffImageInput from "~components/staff-image-input"
 import $ from "jquery"
 import AvatarPreview from "~components/avatar-preview"
+import { ModalContainer, ModalDialog} from "react-modal-dialog"
 
 export default class StaffMemberFormAvatarImage extends React.Component {
     static propTypes = {
@@ -13,7 +14,9 @@ export default class StaffMemberFormAvatarImage extends React.Component {
         this.state = {
             preselectedImage: null,
             confirmedImage: null,
-            pickedImage: null
+            pickedImage: null,
+            showModal: false,
+            previousShowModalValue: false
         }
     }
     componentWillMount(){
@@ -26,32 +29,73 @@ export default class StaffMemberFormAvatarImage extends React.Component {
     render(){
         var existingImage = this.getExistingImage();
 
-        var staffImageInput = this.getStaffImageInput();
-
-        var hasExistingImageButNotPickedReplacement = existingImage !== null && this.state.pickedImage === null;
+        var hasExistingImage = existingImage !== null;
         var avatarPreview = null;
-        if (hasExistingImageButNotPickedReplacement) {
+        if (hasExistingImage) {
             avatarPreview = <AvatarPreview src={existingImage} />
+        }
+
+        var selectImageButton = null;
+        if (!this.state.showModal) {
+            var selectImageButtonText = hasExistingImage ? "Use a different image" : "Select image";
+            selectImageButton = <a
+                className="btn btn-default"
+                onClick={() => this.setState({showModal: true})}>
+                {selectImageButtonText}
+            </a>
         }
 
         return <div>
             {avatarPreview}
-            {staffImageInput}
+            {hasExistingImage ? <br/> : null}
+            {selectImageButton}
+            {this.getModal()}
         </div>
+    }
+    getModal(){
+        if (!this.state.showModal){
+            return null;
+        }
+
+        var closeModal = () => {
+            this.setState({
+                showModal: false,
+                pickedImage: null
+            })
+        };
+        var staffImageInput = this.getStaffImageInput();
+        return <ModalContainer onClick={closeModal}>
+            <ModalDialog onClose={closeModal}>
+                {staffImageInput}
+            </ModalDialog>
+        </ModalContainer>
     }
     getStaffImageInput(){
         return <StaffImageInput
+                shouldOpenFilePicker={() => this.shouldOpenFilePicker()}
                 onImageConfirmed={
                     (dataUrl) => {
                         this.getDataUrlInput().val(dataUrl);
-                        this.setState({confirmedImage: dataUrl})
+                        this.setState({
+                            confirmedImage: dataUrl,
+                            showModal: false
+                        })
                     }
                 }
                 onPickedImageChanged={
-                    (dataUrl) => this.setState({
-                        pickedImage: dataUrl
-                    })
+                    (dataUrl) => {
+                        this.setState({
+                            pickedImage: dataUrl
+                        })
+                    }
                 }/>
+    }
+    shouldOpenFilePicker(){
+        var showModalChanged = this.state.previousShowModalValue !== this.state.showModal;
+        if (showModalChanged) {
+            this.setState({previousShowModalValue: this.state.showModal})
+        }
+        return showModalChanged && this.state.showModal;
     }
     getExistingImage(){
         if (this.state.confirmedImage){

@@ -1,5 +1,7 @@
 import React from "react"
 import _ from "underscore"
+import ReactDOM from "react-dom"
+import $ from "jquery"
 
 const VALID_IMAGE_FILE_EXTENSIONS = ["jpeg", "jpg", "png"];
 
@@ -11,7 +13,8 @@ function getSupportedFormatsString(formats){
 
 export default class DataUrlImagePicker extends React.Component {
     static propTypes = {
-        onChange: React.PropTypes.func.isRequired
+        onChange: React.PropTypes.func.isRequired,
+        shouldOpenFilePicker: React.PropTypes.func
     }
     constructor(props){
         super(props);
@@ -24,7 +27,13 @@ export default class DataUrlImagePicker extends React.Component {
             <input type="file"
                 className="form-control"
                 onChange={() => this.onFileSelected()}
-                ref={(ref) => this.fileInput = ref} />
+                ref={(ref) => {
+                    this.fileInput = ref;
+                    if (this.props.shouldOpenFilePicker !== undefined 
+                        &&  this.props.shouldOpenFilePicker()) {
+                        $(ref).trigger("click");
+                    }
+                }} />
             {this.getValidationMessageElement()}
         </div>
     }
