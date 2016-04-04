@@ -13,7 +13,7 @@ json.holidays staff_member.holidays.in_state(:enabled) do |holiday|
   json.id holiday.id
   json.url api_v1_holiday_url(holiday)
 end
-json.venue do
-  json.id staff_member.venue && staff_member.venue.id
-  json.url staff_member.venue && api_v1_venue_url(staff_member.venue)
+json.venues staff_member.venues do |venue|
+  json.id venue.id
+  json.url api_v1_venue_url(venue)
 end

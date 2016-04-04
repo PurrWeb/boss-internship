@@ -36,7 +36,9 @@ class Ability
       end
 
       can :view, StaffMember do |staff_member|
-        staff_member.security? || can_manage_venue?(user, staff_member.venue)
+        staff_member.security? || staff_member.venues.any? do |venue|
+          can_manage_venue?(user, venue)
+        end
       end
 
       can :enable, StaffMember do |staff_member|
@@ -109,8 +111,10 @@ class Ability
 
   def can_edit_staff_member?(user, staff_member)
     staff_member.security? ||
-      staff_member.venue.nil? ||
-      can_manage_venue?(user, staff_member.venue)
+      staff_member.venues.length == 0 ||
+      staff_member.venues.any? do |venue|
+        can_manage_venue?(user, venue)
+      end
   end
 
   def can_manage_venue?(user, venue)

@@ -359,4 +359,5 @@ ActiveRecord::Schema.define(version: 20160405092631) do
 
   add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree
   add_index "venues", ["name"], name: "index_venues_on_name", using: :btree
+
 end

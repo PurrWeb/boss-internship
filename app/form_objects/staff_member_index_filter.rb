@@ -1,4 +1,4 @@
-class StaffMemberIndexFilter
+class StaffMemberIndexFilter < Reform::Form
   def initialize(user:, params:)
     normalised_params = (params || {}).reverse_merge(default_params)
     @user = user
@@ -7,9 +7,16 @@ class StaffMemberIndexFilter
     @status = normalised_params.fetch(:status)
     @staff_type = StaffType.find_by(id: normalised_params.fetch(:staff_type))
     @venue = Venue.find_by(id: normalised_params.fetch(:venue))
+    super(OpenStruct.new)
   end
 
   attr_reader :staff_type, :venue, :status, :name_text, :email_text
+
+  property :venue
+  property :staff_type
+  property :status
+  property :name_text
+  property :email_text
 
   def accessible_venues
     @accessible_venues ||= AccessibleVenuesQuery.new(user).all
@@ -53,6 +60,11 @@ class StaffMemberIndexFilter
 
   def select_statuses
     ['enabled', 'disabled']
+  end
+
+  # Needed to back bootstrap form
+  def self.validators_on(args)
+    []
   end
 
   private

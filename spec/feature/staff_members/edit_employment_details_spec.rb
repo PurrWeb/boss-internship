@@ -61,21 +61,21 @@ RSpec.feature 'Editing a staff_members employment detials' do
     let!(:new_venue) { FactoryGirl.create(:venue, name: 'newest venue') }
 
     specify 'new number should not match orginal' do
-      expect(edited_staff_member.venue).
-        to_not eq(new_venue)
+      expect(edited_staff_member.venues).
+        to_not eq([new_venue])
     end
 
     it 'takes you to the show page and shows a success message' do
       edit_page.surf_to
-      edit_page.form.update_venue(new_venue)
+      edit_page.form.update_venues([new_venue])
       show_page.ensure_flash_success_message_displayed('Staff member updated successfully')
     end
 
     it 'should update the staff members venue' do
       edit_page.surf_to
-      edit_page.form.update_venue(new_venue)
+      edit_page.form.update_venues([new_venue])
       edited_staff_member.reload
-      expect(edited_staff_member.venue).to eq(new_venue)
+      expect(edited_staff_member.venues.to_a).to eq([new_venue])
     end
 
     context 'form is invalid' do
@@ -85,9 +85,9 @@ RSpec.feature 'Editing a staff_members employment detials' do
         edit_page.surf_to
         edit_page.form.tap do |form|
           form.select_national_insurance_number(invalid_ni_number)
-          form.select_venue(new_venue)
+          form.select_venues([new_venue])
           form.submit
-          form.ui_shows_venue(new_venue)
+          form.ui_shows_venues([new_venue])
         end
       end
     end

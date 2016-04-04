@@ -10,7 +10,7 @@ RSpec.describe 'Holiday api end points' do
   end
 
   describe '#show' do
-    let(:venue) { staff_member.venue }
+    let(:venue) { staff_member.venues.first }
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:url) do
       url_helpers.api_v1_holiday_reports_path(
@@ -76,10 +76,13 @@ RSpec.describe 'Holiday api end points' do
       "surname" => staff_member.name.surname,
       "preferred_hours"=> staff_member.hours_preference_note,
       "preferred_days"=> staff_member.day_perference_note,
-      "venue" => {
-        "id" => staff_member.venue.id,
-        "url" => url_helpers.api_v1_venue_url(staff_member.venue)
-      },
+      "venues" =>
+      [
+        {
+          "id" => venue.id,
+          "url" => url_helpers.api_v1_venue_url(venue)
+        }
+      ],
       "holidays"=> staff_member.holidays.map do |holiday|
         {
           "id" => holiday.id,

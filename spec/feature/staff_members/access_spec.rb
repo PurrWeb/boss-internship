@@ -49,6 +49,7 @@ RSpec.describe 'Staff member pages access' do
 
   describe 'show page' do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
+    let(:venue) { staff_member.venues.first }
     let(:url) { url_helpers.staff_member_path(staff_member, tab: 'employment-details') }
 
     context 'manager without access to members venue' do
@@ -62,7 +63,7 @@ RSpec.describe 'Staff member pages access' do
     end
 
     context 'manager with access to members venue' do
-      let(:user) { FactoryGirl.create(:user, :manager, venues: [staff_member.venue]) }
+      let(:user) { FactoryGirl.create(:user, :manager, venues: [venue]) }
 
       specify 'should have access' do
         expect(get(url).status).to eq(ok_status)

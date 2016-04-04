@@ -4,7 +4,7 @@ class StaffMembersController < ApplicationController
 
     filter = StaffMemberIndexFilter.new(
       user: current_user,
-      params: params[:filter]
+      params: params[:staff_member_index_filter]
     )
     staff_members = filter.query.all.paginate(page: params[:page], per_page: 20)
 
@@ -19,7 +19,7 @@ class StaffMembersController < ApplicationController
 
     filter = StaffMemberIndexFilter.new(
       user: current_user,
-      params: Hash(params[:filter]).merge(status: nil)
+      params: Hash(params[:staff_member_index_filter]).merge(status: nil)
     )
 
     staff_members = filter.
@@ -321,6 +321,7 @@ class StaffMembersController < ApplicationController
       permit(
         require_attributes
       ).merge(
+        venues: venues_from_params,
         creator: current_user,
         employment_status_statement_completed: true
       )
@@ -370,8 +371,6 @@ class StaffMembersController < ApplicationController
 
     allowed_params << :pay_rate_id if pay_rate_from_params.andand.editable_by?(current_user)
 
-    allowed_params << { staff_member_venue_attributes: [:venue_id] }
-
     staff_type = current_user.security_manager? ? StaffType.security.first : staff_type_from_params
 
     if staff_type.andand.security?
@@ -384,9 +383,7 @@ class StaffMembersController < ApplicationController
         *allowed_params
       ).deep_merge(
         employment_status_statement_completed: true,
-        staff_member_venue_attributes: {
-          id: staff_member.staff_member_venue.try(:id)
-        }
+        venues: venues_from_params
       )
 
     result = result.merge(staff_type: staff_type) if !current_user.security_manager?
@@ -429,5 +426,11 @@ class StaffMembersController < ApplicationController
 
   def staff_type_from_params
     StaffType.find_by(id: params[:staff_member][:staff_type])
+  end
+
+  def venues_from_params
+    Array(params[:staff_member][:venues]).reject(&:blank?).map do |id|
+      Venue.find(id)
+    end
   end
 end

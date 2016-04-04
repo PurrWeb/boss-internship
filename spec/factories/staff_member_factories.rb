@@ -20,8 +20,15 @@ FactoryGirl.define do
     employment_status_d false
     employment_status_p45_supplied true
 
+    after(:build) do |staff_member, proxy|
+      if proxy.venues.present?
+        staff_member.venues = proxy.venues
+      else
+        staff_member.venues = [ FactoryGirl.build(:venue) ]
+      end
+    end
+
     address
-    venue
     staff_type
     avatar { Rack::Test::UploadedFile.new(TestImageHelper.arnie_face_path) }
 
@@ -46,11 +53,11 @@ FactoryGirl.define do
           security_staff_type = FactoryGirl.create(:security_staff_type)
         end
         object.staff_type = security_staff_type
+        object.venues = []
       end
 
       sia_badge_expiry_date 2.months.from_now
       sia_badge_number '23123131'
-      venue nil
     end
   end
 end

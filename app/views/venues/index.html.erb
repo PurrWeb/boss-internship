@@ -13,7 +13,7 @@
       <tr class="venues-index-listing" data-venue-id="<%= venue.id %>">
         <td data-role="name"><%= venue.name %></td>
         <td data-role="staff-count">
-          <%= link_to(venue.staff_members.count, staff_members_path(filter: { venue: venue.id })) %>
+          <%= link_to(venue.staff_members.count, staff_members_path(staff_member_index_filter: { venue: venue.id })) %>
         </td>
         <td>
           <%= link_to('Edit', edit_venue_path(venue), class: 'btn btn-success') %>

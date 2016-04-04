@@ -18,10 +18,6 @@ class UpdateStaffMemberEmploymentDetails
       staff_member.assign_attributes(params)
       pay_rate_changed = staff_member.pay_rate_id_changed?
 
-      if staff_member.staff_member_venue.present? && staff_member.staff_member_venue.venue_id == nil
-        staff_member.staff_member_venue.mark_for_destruction
-      end
-
       if staff_member.security? && staff_member.sia_badge_expiry_date_changed?
         if staff_member.sia_badge_expiry_date < now
           # Notification will not be sent

@@ -5,9 +5,8 @@ class StaffMember < ActiveRecord::Base
 
   belongs_to :creator, class_name: 'User'
   belongs_to :staff_type
-  has_one :staff_member_venue, inverse_of: :staff_member
-  has_one :venue, through: :staff_member_venue
-  accepts_nested_attributes_for :staff_member_venue, reject_if: :all_blank
+  has_many :staff_member_venue, inverse_of: :staff_member
+  has_many :venues, through: :staff_member_venue
 
   belongs_to :address, inverse_of: :staff_member
   accepts_nested_attributes_for :address, allow_destroy: false
@@ -71,7 +70,7 @@ class StaffMember < ActiveRecord::Base
   delegate :current_state, to: :state_machine
 
   def self.for_venue(venue)
-    joins(:venue).merge(Venue.where(id: venue.id))
+    joins(:venues).merge(Venue.where(id: venue.id))
   end
 
   def self.security

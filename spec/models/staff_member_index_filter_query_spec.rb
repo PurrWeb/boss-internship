@@ -112,7 +112,7 @@ describe StaffMemberIndexFilterQuery do
       allow(venue).to receive(:present?).and_return(true)
       allow(relation).to(
         receive(:joins).
-          with(:venue).
+          with(:venues).
           and_return(relation_joined_by_venue)
       )
       allow(relation_joined_by_venue).to(

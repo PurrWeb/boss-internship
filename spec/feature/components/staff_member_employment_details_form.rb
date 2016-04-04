@@ -1,5 +1,7 @@
 module PageObject
   class StaffMemberEmploymentDetailsForm < Component
+    include Chosen::Rspec::FeatureHelpers
+
     page_action :select_national_insurance_number do |national_insurance_number|
       _select_national_insurance_number(national_insurance_number)
     end
@@ -15,19 +17,19 @@ module PageObject
       ).to eq(national_insurance_number)
     end
 
-    page_action :select_venue do |venue|
-      _select_venue(venue)
+    page_action :select_venues do |venues|
+      _select_venues(venues)
     end
 
-    page_action :update_venue do |venue|
-      _select_venue(venue)
+    page_action :update_venues do |venues|
+      _select_venues(venues)
       _submit_form
     end
 
-    page_action :ui_shows_venue do |venue|
+    page_action :ui_shows_venues do |venues|
       expect(
-        scope.find_field('Venue').value
-      ).to eq(venue.id.to_s)
+        scope.find(venue_select_selector).value
+      ).to eq(venues.map(&:id).map(&:to_s))
     end
 
     page_action :select_staff_type do |staff_type|
@@ -74,8 +76,27 @@ module PageObject
       starts_at_field.fill_in_date(date)
     end
 
-    def _select_venue(venue)
-      scope.select(venue.name.titlecase, from: 'Venue')
+    def venue_select_id
+      'staff-member-venues-select'
+    end
+
+    def venue_select_selector
+      "##{venue_select_id}"
+    end
+
+    def _select_venues(venues)
+      select = find(venue_select_selector)
+      currently_selected = select.value.map{ |value| Venue.find(value).name.titleize }
+
+      chosen_unselect(
+        *currently_selected,
+        from: venue_select_id
+      )
+
+      chosen_select(
+        *venues.map{ |v| v.name.titleize },
+        from: venue_select_id
+      )
     end
 
     def _select_national_insurance_number(national_insurance_number)
