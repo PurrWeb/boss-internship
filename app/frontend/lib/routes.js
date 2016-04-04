@@ -58,6 +58,12 @@ export const appRoutes = {
         }
         return parts.join("");
     },
+    staffMember: function(staffMemberId){
+        if (staffMemberId === undefined) {
+            throw new Error("No staff member id supplied to appRoutes.staffMember")
+        }
+        return "/staff_members/" + staffMemberId;
+    },
     staffMemberHolidays: function(staffMemberId){
         if (staffMemberId === undefined) {
             throw new Error("No staff member id supplied to appRoutes.staffMemberHolidays")
