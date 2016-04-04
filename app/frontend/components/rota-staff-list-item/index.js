@@ -9,6 +9,7 @@ import { connect } from "react-redux"
 import { selectAddShiftIsInProgress, selectShiftsByStaffMemberClientId, canEditStaffTypeShifts, selectStaffMemberIsOnHolidayOnDate } from "~redux/selectors"
 import _ from "underscore"
 import utils from "~lib/utils"
+import { appRoutes } from "~lib/routes"
 import validation from "~lib/validation"
 import RotaDate from "~lib/rota-date"
 import * as actionCreators from "~redux/actions"
@@ -47,7 +48,12 @@ class RotaStaffListItem extends Component {
                     <div className="col-md-8">
                         <div className="rota-staff-list-item__header">
                             <h3 className="rota-staff-list-item__name">
+                              <a
+                                href={appRoutes.staffMember(staff.serverId)}
+                                className="link-unstyled"
+                              >
                                 {staff.first_name} {staff.surname}
+                              </a>
                             </h3>
                             <StaffTypeBadge staffTypeObject={staffTypeObject} />
                         </div>

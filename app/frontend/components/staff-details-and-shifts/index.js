@@ -3,6 +3,7 @@ import EditableShiftList from "./editable-shift-list"
 import _ from "underscore"
 import StaffTypeBadge from "~components/staff-type-badge"
 import oFetch from "o-fetch"
+import { appRoutes } from "~lib/routes"
 
 export default class StaffDetailsAndShifts extends Component {
     static propTypes = {
@@ -22,7 +23,12 @@ export default class StaffDetailsAndShifts extends Component {
         var staffType = staff.staff_type.get(this.props.staffTypes);
         return <div>
             <h2 className="staff-details-and-shifts__h2">
+              <a
+                href={appRoutes.staffMember(staff.serverId)}
+                className="link-unstyled"
+              >
                 {staff.first_name} {staff.surname}
+              </a>
             </h2>
             <div className="staff-details-and-shifts__staff-type">
                 <StaffTypeBadge
