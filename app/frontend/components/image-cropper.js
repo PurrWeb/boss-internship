@@ -40,6 +40,8 @@ export default class ImageCropper extends React.Component {
             zoomable: true,
             viewMode: 2,
             autoCropArea: 1,
+            minCropBoxWidth: 25,
+            minCropBoxHeight: 25,
             toggleDragModeOnDblClick: false,
             cropend: callOnChange,
             built: callOnChange,
