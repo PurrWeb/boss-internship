@@ -14,7 +14,11 @@ export default class StaffImageInput extends React.Component {
         // called when user clicks OK button
         onImageConfirmed: React.PropTypes.func.isRequired,
         // called after user selected a file from the file picker
-        onPickedImageChanged: React.PropTypes.func.isRequired
+        onPickedImageChanged: React.PropTypes.func.isRequired,
+        // Checked every time the file input reference is obtained,
+        // if the function returns true a click event is simulated
+        // on the file input.
+        shouldOpenFilePicker: React.PropTypes.func
     }
     constructor(props){
         super(props);
@@ -25,7 +29,11 @@ export default class StaffImageInput extends React.Component {
         };
     }
     render(){
-        return <div className="row" style={{maxWidth: 600, marginBottom: 10}}>
+        return <div className="row" style={{
+                width: 600,
+                maxWidth: "80vw",
+                marginBottom: 10}
+            }>
             <div className="col-md-6">
                 {this.getImagePicker()}
                 {this.getImageCropper()}
@@ -96,6 +104,7 @@ export default class StaffImageInput extends React.Component {
             return null;
         }
         return <DataUrlImagePicker
+            shouldOpenFilePicker={this.props.shouldOpenFilePicker}
             onChange={
                 (dataUrl) => {
                     // iOS has a bug where the image gets squashed in the canvas,
