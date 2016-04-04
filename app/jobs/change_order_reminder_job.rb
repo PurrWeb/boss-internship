@@ -8,7 +8,8 @@ class ChangeOrderReminderJob < RecurringJob
     if last_week_deadline.in_notification_period?(now)
       date = week.start_date
 
-      venues_without_change_order = VenueWithoutChangeOrderQuery.new(date: date).all
+      change_orders = ChangeOrder.where(submission_deadline: last_week_deadline)
+      venues_without_change_order = VenueWithoutChangeOrderQuery.new(change_orders: change_orders).all
       venues_requiring_notification = VenueWithoutChangeOrderNotificationQuery.new(
         relation: venues_without_change_order,
         date: date
