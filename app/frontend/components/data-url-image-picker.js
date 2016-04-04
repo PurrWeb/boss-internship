@@ -29,13 +29,21 @@ export default class DataUrlImagePicker extends React.Component {
                 onChange={() => this.onFileSelected()}
                 ref={(ref) => {
                     this.fileInput = ref;
-                    if (this.props.shouldOpenFilePicker !== undefined 
-                        &&  this.props.shouldOpenFilePicker()) {
-                        $(ref).trigger("click");
-                    }
                 }} />
             {this.getValidationMessageElement()}
         </div>
+    }
+    componentDidMount(){
+        this.onComponentUpdate();
+    }
+    componentDidUpdate(){
+        this.onComponentUpdate();
+    }
+    onComponentUpdate(){
+        if (this.props.shouldOpenFilePicker !== undefined &&    
+            this.props.shouldOpenFilePicker()) {
+            $(this.fileInput).trigger("click")
+        }
     }
     getValidationMessageElement(){
         var message = this.state.validationMessage;

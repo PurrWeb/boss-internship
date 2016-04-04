@@ -27,6 +27,11 @@ export default class StaffMemberFormAvatarImage extends React.Component {
         }
     }
     render(){
+        if (this.showModalChanged()) {
+            this.setState({previousShowModalValue: this.state.showModal})
+        }
+        
+        
         var existingImage = this.getExistingImage();
 
         var hasExistingImage = existingImage !== null;
@@ -91,11 +96,11 @@ export default class StaffMemberFormAvatarImage extends React.Component {
                     }
                 }/>
     }
+    showModalChanged(){
+        return this.state.previousShowModalValue !== this.state.showModal;
+    }
     shouldOpenFilePicker(){
-        var showModalChanged = this.state.previousShowModalValue !== this.state.showModal;
-        if (showModalChanged) {
-            this.setState({previousShowModalValue: this.state.showModal})
-        }
+        var showModalChanged = this.showModalChanged();
         return showModalChanged && this.state.showModal;
     }
     getExistingImage(){
