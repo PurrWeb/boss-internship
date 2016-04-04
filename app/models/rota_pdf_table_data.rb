@@ -88,7 +88,7 @@ class RotaPDFTableData
   attr_reader :venue, :week
 
   def rotas
-    Rota.where(date: week.start_date..week.end_date)
+    Rota.where(date: week.start_date..week.end_date, venue: venue)
   end
 
   def staff_members
