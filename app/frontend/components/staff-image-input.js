@@ -29,7 +29,11 @@ export default class StaffImageInput extends React.Component {
         };
     }
     render(){
-        return <div className="row" style={{maxWidth: 600, marginBottom: 10}}>
+        return <div className="row" style={{
+                width: 600,
+                maxWidth: "80vw",
+                marginBottom: 10}
+            }>
             <div className="col-md-6">
                 {this.getImagePicker()}
                 {this.getImageCropper()}
