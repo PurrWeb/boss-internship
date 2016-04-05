@@ -7,7 +7,7 @@ import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 import * as actions from "~redux/actions"
 import { selectRotaOnClockInOutPage, selectClockInOutAppIsInManagerMode } from "~redux/selectors"
 import ConfirmationModal from "~components/confirmation-modal"
-import LargeStaffTypeSelector from "./large-staff-type-selector"
+import LargeStaffTypeSelector from "./components/large-staff-type-selector"
 
 class ClockInOutView extends Component {
     constructor(props){
@@ -26,7 +26,8 @@ class ClockInOutView extends Component {
         if (this.state.selectedStaffType !== null) {
             content = <div>
                 {this.getHeader()}
-                <ClockInOutStaffFinder />
+                <ClockInOutStaffFinder
+                    selectedStaffType={this.state.selectedStaffType} />
             </div>
         } else {
             content = <LargeStaffTypeSelector

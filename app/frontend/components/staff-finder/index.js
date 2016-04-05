@@ -8,7 +8,8 @@ export default class StaffFinder extends Component {
     static propTypes = {
         staffItemComponent: React.PropTypes.func.isRequired,
         staff: React.PropTypes.object.isRequired,
-        staffTypes: React.PropTypes.object
+        staffTypes: React.PropTypes.object,
+        filterOverrides: React.PropTypes.object
     }
     constructor(props) {
         super(props);
@@ -23,18 +24,37 @@ export default class StaffFinder extends Component {
                 venues={this.props.venues}
                 filters={this.props.filters}
                 onChange={(arg) => this.onFilterChange(arg)}
-                filterSettings={this.state.staffFilterSettings} />
+                filterSettings={this.getFilterSettings()} />
 
             <FilterableStaffList
                 staff={this.props.staff}
                 staffItemComponent={this.props.staffItemComponent}
-                filterSettings={this.state.staffFilterSettings} />
+                filterSettings={this.getFilterSettings()} />
         </div>
+    }
+    getFilterSettings(){
+        return this.processFilterOverrides(this.props, this.state.staffFilterSettings)
     }
     getStaffTypesWithStaffMembers(){
         return getStaffTypesWithStaffMembers(this.props.staffTypes, this.props.staff);
     }
     onFilterChange(filterSettings) {
-        this.setState({staffFilterSettings: filterSettings});
+        this.setState({
+            staffFilterSettings: filterSettings
+        });
+    }
+    processFilterOverrides(props, filterSettings){
+        var filterOverrides = props.filterOverrides;
+        if (!filterOverrides) {
+            return filterSettings;
+        }
+
+        filterSettings = {...filterSettings};
+
+        if (filterOverrides.staffTypeClientIds !== undefined) {
+            filterSettings.staffTypes = filterOverrides.staffTypeClientIds;
+        }
+
+        return filterSettings;
     }
 }

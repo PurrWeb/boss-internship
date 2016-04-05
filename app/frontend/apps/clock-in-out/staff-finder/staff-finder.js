@@ -5,6 +5,8 @@ import StaffListItem from "./staff-list-item"
 
 class ClockInOutStaffFinder extends Component {
     render() {
+        var staffTypeClientIds = [this.props.selectedStaffType.clientId];
+
         return <StaffFinder
             filters={{
                 search: true,
@@ -12,7 +14,10 @@ class ClockInOutStaffFinder extends Component {
             }}
             staffItemComponent={StaffListItem}
             staffTypes={this.props.staffTypes}
-            staff={this.props.staff} />
+            staff={this.props.staff}
+            filterOverrides={{
+                staffTypeClientIds
+            }} />
 
     }
 }
