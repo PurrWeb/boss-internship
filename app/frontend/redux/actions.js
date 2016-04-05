@@ -288,7 +288,7 @@ export function updateStaffStatusWithConfirmation(requestOptions){
 
 export const updateStaffStatus = createApiRequestAction({
     requestType: "UPDATE_STAFF_STATUS",
-    makeRequest: function(requestOptions, success, error){
+    makeRequest: function(requestOptions, success, error, getState){
         var wasConfirmed = false;
         var [staffMemberObject, statusValue] = oFetch(requestOptions, "staffMemberObject", "statusValue");
         if (requestOptions.managerToken !== undefined){
@@ -310,7 +310,8 @@ export const updateStaffStatus = createApiRequestAction({
             setTimeout(function(){
                 success({
                     staffMemberObject,
-                    statusValue
+                    statusValue,
+                    userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
                 })
             }, 500);
         }

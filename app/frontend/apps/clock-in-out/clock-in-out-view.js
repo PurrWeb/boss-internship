@@ -13,7 +13,7 @@ import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-membe
 class ClockInOutView extends Component {
     render() {
         var classes = ["container"];
-        if (this.props.clockInOutAppIsInManagerMode) {
+        if (this.props.userIsManagerOrSupervisor) {
             classes.push("managerMode");
         }
 
@@ -22,7 +22,8 @@ class ClockInOutView extends Component {
             content = <div>
                 {this.getHeader()}
                 <ClockInOutStaffFinder
-                    selectedStaffTypeClientId={this.props.selectedStaffTypeClientId} />
+                    selectedStaffTypeClientId={this.props.selectedStaffTypeClientId}
+                    userIsManagerOrSupervisor={this.props.userIsManagerOrSupervisor} />
             </div>
         } else {
             content = <LargeStaffTypeSelector
@@ -53,7 +54,7 @@ class ClockInOutView extends Component {
 function mapStateToProps(state) {
     var rota = selectRotaOnClockInOutPage(state);
     return {
-        clockInOutAppIsInManagerMode: selectClockInOutAppIsInManagerMode(state),
+        userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(state),
         rota,
         venue: rota.venue.get(state.venues),
         staffTypes: getStaffTypesWithStaffMembers(state.staffTypes, state.staff),
