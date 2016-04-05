@@ -11,12 +11,6 @@ import LargeStaffTypeSelector from "./components/large-staff-type-selector"
 import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
 
 class ClockInOutView extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            selectedStaffType: null
-        }
-    }
     render() {
         var classes = ["container"];
         if (this.props.clockInOutAppIsInManagerMode) {
@@ -24,16 +18,16 @@ class ClockInOutView extends Component {
         }
 
         var content = null;
-        if (this.state.selectedStaffType !== null) {
+        if (this.props.selectedStaffTypeClientId !== null) {
             content = <div>
                 {this.getHeader()}
                 <ClockInOutStaffFinder
-                    selectedStaffType={this.state.selectedStaffType} />
+                    selectedStaffTypeClientId={this.props.selectedStaffTypeClientId} />
             </div>
         } else {
             content = <LargeStaffTypeSelector
                 staffTypes={this.props.staffTypes}
-                onSelect={({staffType}) => this.setState({selectedStaffType: staffType})} />
+                onSelect={({staffType}) => this.props.selectStaffType(staffType.clientId)} />
         }
 
         return <div className={classes.join(" ")}>
@@ -62,7 +56,8 @@ function mapStateToProps(state) {
         clockInOutAppIsInManagerMode: selectClockInOutAppIsInManagerMode(state),
         rota,
         venue: rota.venue.get(state.venues),
-        staffTypes: getStaffTypesWithStaffMembers(state.staffTypes, state.staff)
+        staffTypes: getStaffTypesWithStaffMembers(state.staffTypes, state.staff),
+        selectedStaffTypeClientId: state.clockInOutAppSelectedStaffType
     }
 }
 
@@ -70,6 +65,11 @@ function mapDispatchToProps(dispatch){
     return {
         leaveManagerMode: function(){
             dispatch(actions.leaveManagerMode());
+        },
+        selectStaffType: function(selectedStaffTypeClientId){
+            dispatch(actions.clockInOutAppSelectStaffType({
+                selectedStaffTypeClientId
+            }))
         }
     }
 }

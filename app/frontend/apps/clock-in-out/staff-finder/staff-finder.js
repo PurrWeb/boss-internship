@@ -5,7 +5,7 @@ import StaffListItem from "./staff-list-item"
 
 class ClockInOutStaffFinder extends Component {
     render() {
-        var staffTypeClientIds = [this.props.selectedStaffType.clientId];
+        var staffTypeClientIds = [this.props.selectedStaffTypeClientId];
 
         return <StaffFinder
             filters={{

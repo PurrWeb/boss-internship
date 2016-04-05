@@ -7,6 +7,7 @@ import staffStatuses from "./staff-statuses-reducer"
 import staff from "./staff-members-reducer"
 import rotaShifts from "./rota-shifts-reducer"
 import clockInOutAppManagerModeToken from "./clock-in-out-app-manager-mode-token"
+import clockInOutAppSelectedStaffType from "./clock-in-out-app-selected-staff-type-reducer"
 import apiRequestsInProgress from "./api-requests-in-progress-reducer"
 import componentErrors from "./component-errors-reducer"
 import venues from "./venues-reducer"
@@ -23,6 +24,7 @@ var rootReducer = combineReducers({
     rotaShifts,
     staffStatuses,
     clockInOutAppManagerModeToken,
+    clockInOutAppSelectedStaffType,
     apiRequestsInProgress,
     componentErrors,
     venues,

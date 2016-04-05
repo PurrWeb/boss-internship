@@ -102,6 +102,14 @@ export function replaceAllShifts (options) {
     }
 }
 
+actionTypes.CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE = "CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE";
+export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
+    return {
+        type: actionTypes.CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE,
+        selectedStaffTypeClientId
+    }
+}
+
 export const updateRotaShift = createApiRequestAction({
     requestType: "UPDATE_SHIFT",
     makeRequest: makeApiRequest({
