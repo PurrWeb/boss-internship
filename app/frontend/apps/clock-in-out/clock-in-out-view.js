@@ -37,13 +37,26 @@ class ClockInOutView extends Component {
         </div>
     }
     getHeader(){
-        return <div>
-            <a
+        var returnToStaffTypeSelectorButton = null;
+        var leaveManagerModeButton = null;
+        if (!this.props.userIsManagerOrSupervisor) {
+            returnToStaffTypeSelectorButton = <a
+                    className="btn btn-default"
+                    style={{float: "right"}} 
+                    onClick={()=> this.props.selectStaffType(null)}>
+                    Select a different staff type
+                </a>
+        } else {
+            leaveManagerModeButton = <a
                 className="btn btn-default show-in-manager-mode"
                 style={{float: "right"}}
                 onClick={() => this.props.leaveManagerMode()}>
                 Leave Manager Mode
             </a>
+        }
+        return <div>
+            {leaveManagerModeButton}
+            {returnToStaffTypeSelectorButton}
             <h1>
                 {this.props.venue.name} - {moment(this.props.rota.date).format("ddd D MMMM YYYY")}
             </h1>
