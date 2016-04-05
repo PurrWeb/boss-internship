@@ -1,3 +1,13 @@
 .large-staff-type-selector__button {
     color: white;
+    float: left;
+    width: calc(25% - 10px);
+    margin-right: 10px;
+    margin-bottom: 10px;
+    height: 120px;
+    font-size: 24px;
+    line-height: 120px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
 }
