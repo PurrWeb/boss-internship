@@ -206,3 +206,10 @@ export function selectIsUpdatingStaffMemberPin(state, {staffMemberServerId}) {
     });
     return requestsForStaffMember.length > 0;
 }
+
+export function selectClockInOutAppUserPermissions(state){
+    var isManagerOrSupervisor = selectClockInOutAppIsInManagerMode(state);
+    return {
+        canToggleOnBreak: isManagerOrSupervisor
+    }
+}

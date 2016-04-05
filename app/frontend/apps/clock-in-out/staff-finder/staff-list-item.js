@@ -11,7 +11,8 @@ import {
     selectShiftsByStaffMemberClientId,
     selectIsUpdatingStaffMemberStatus,
     selectEnterManagerModeIsInProgress,
-    selectIsUpdatingStaffMemberPin
+    selectIsUpdatingStaffMemberPin,
+    selectClockInOutAppUserPermissions
 } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import * as actions from "~redux/actions"
@@ -75,6 +76,15 @@ class ClockInOutStaffListItem extends Component {
         }
 
         var staffObject = this.props.staff;
+        var toggleOnBreakButton = null;
+        if (this.props.userPermissions.canToggleOnBreak){
+            toggleOnBreakButton = <div className="col-md-6 col-xs-2">
+                <ToggleStaffOnBreakButton
+                    staffStatuses={this.props.staffStatuses}
+                    staffObject={staffObject}
+                    updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
+            </div>;
+        }
         return <div className="row">
             <div className="col-md-6 col-xs-2">
                 <ToggleStaffClockedInButton
@@ -82,12 +92,7 @@ class ClockInOutStaffListItem extends Component {
                     staffObject={staffObject}
                     updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
             </div>
-            <div className="col-md-6 col-xs-2 show-in-manager-mode">
-                <ToggleStaffOnBreakButton
-                    staffStatuses={this.props.staffStatuses}
-                    staffObject={staffObject}
-                    updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
-            </div>
+            {toggleOnBreakButton}
         </div>
     }
     getChangePinButton(){
@@ -137,7 +142,8 @@ function mapStateToProps(state, ownProps){
         enterManagerModeIsInProgress: selectEnterManagerModeIsInProgress(state),
         updateStaffMemberPinInProgress: selectIsUpdatingStaffMemberPin(state, {
             staffMemberServerId: ownProps.staff.serverId
-        })
+        }),
+        userPermissions: selectClockInOutAppUserPermissions(state)
     }
 }
 
