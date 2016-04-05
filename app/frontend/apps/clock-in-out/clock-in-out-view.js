@@ -8,6 +8,7 @@ import * as actions from "~redux/actions"
 import { selectRotaOnClockInOutPage, selectClockInOutAppIsInManagerMode } from "~redux/selectors"
 import ConfirmationModal from "~components/confirmation-modal"
 import LargeStaffTypeSelector from "./components/large-staff-type-selector"
+import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
 
 class ClockInOutView extends Component {
     constructor(props){
@@ -61,7 +62,7 @@ function mapStateToProps(state) {
         clockInOutAppIsInManagerMode: selectClockInOutAppIsInManagerMode(state),
         rota,
         venue: rota.venue.get(state.venues),
-        staffTypes: state.staffTypes
+        staffTypes: getStaffTypesWithStaffMembers(state.staffTypes, state.staff)
     }
 }
 
