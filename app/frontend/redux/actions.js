@@ -102,6 +102,14 @@ export function replaceAllShifts (options) {
     }
 }
 
+actionTypes.CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE = "CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE";
+export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
+    return {
+        type: actionTypes.CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE,
+        selectedStaffTypeClientId
+    }
+}
+
 export const updateRotaShift = createApiRequestAction({
     requestType: "UPDATE_SHIFT",
     makeRequest: makeApiRequest({
@@ -192,26 +200,42 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
     })
 });
 
-export function enterManagerModeWithConfirmation(options){
+export function enterUserModeWithConfirmation(options){
     return showConfirmationModal({
         modalOptions: {
             title: "Enter manager password",
             confirmationType: "PIN"
         },
         confirmationAction: {
-            apiRequestType: "ENTER_MANAGER_MODE",
-            requestOptions: {}
+            apiRequestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
+            requestOptions: options
         }
     })
 }
 
-export const enterManagerMode = createApiRequestAction({
-    requestType: "ENTER_MANAGER_MODE",
+export const clockInOutAppEnterUserMode = createApiRequestAction({
+    requestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
     makeRequest: function(requestOptions, success, error){
-        var pin = oFetch(requestOptions, "confirmationData.pin");
+        var userMode = oFetch(requestOptions, "userMode");
+        var pin;
+
+        if (userMode !== "user"){
+            pin = oFetch(requestOptions, "confirmationData.pin");
+        }
+        
         setTimeout(function(){
+            if (userMode === "user") {
+                success({
+                    mode: "user",
+                    token: null
+                })
+                return;
+            }
             if (pin === "9999") {
-                success({token: "asdfsds"})
+                success({
+                    mode: userMode,
+                    token: "asdfsds"
+                })
             } else {
                 error({errors:{base: ["Password needs to be 9999"]}})
             }
@@ -258,7 +282,7 @@ export function updateStaffStatusWithConfirmation(requestOptions){
         if (selectClockInOutAppIsInManagerMode(state)) {
             requestOptions = {
                 ...requestOptions,
-                managerToken: state.clockInOutAppManagerModeToken
+                authToken: state.clockInOutAppUserMode.token
             }
             dispatch(updateStaffStatus(requestOptions))
         } else {
@@ -280,10 +304,10 @@ export function updateStaffStatusWithConfirmation(requestOptions){
 
 export const updateStaffStatus = createApiRequestAction({
     requestType: "UPDATE_STAFF_STATUS",
-    makeRequest: function(requestOptions, success, error){
+    makeRequest: function(requestOptions, success, error, getState){
         var wasConfirmed = false;
         var [staffMemberObject, statusValue] = oFetch(requestOptions, "staffMemberObject", "statusValue");
-        if (requestOptions.managerToken !== undefined){
+        if (requestOptions.authToken !== undefined){
             wasConfirmed = true;
         } else  {
             var pin = oFetch(requestOptions, "confirmationData.pin");
@@ -302,7 +326,8 @@ export const updateStaffStatus = createApiRequestAction({
             setTimeout(function(){
                 success({
                     staffMemberObject,
-                    statusValue
+                    statusValue,
+                    userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
                 })
             }, 500);
         }

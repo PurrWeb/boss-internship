@@ -183,7 +183,8 @@ export function selectRotaOnClockInOutPage(state){
 }
 
 export function selectClockInOutAppIsInManagerMode(state){
-    return state.clockInOutAppManagerModeToken !== null;
+    var userMode = state.clockInOutAppUserMode.mode;
+    return userMode === "manager" || userMode === "supervisor";
 }
 
 export function selectIsUpdatingStaffMemberStatus(state, {staffMemberServerId}) {
@@ -205,4 +206,24 @@ export function selectIsUpdatingStaffMemberPin(state, {staffMemberServerId}) {
         return request.staffMemberObject.serverId === staffMemberServerId;
     });
     return requestsForStaffMember.length > 0;
+}
+
+export function selectClockInOutAppUserPermissions(state){
+    var userMode = state.clockInOutAppUserMode.mode;
+    if (userMode === "manager") {
+        return {
+            toggleOnBreak: true,
+            changePin: true
+        }
+    }
+    if (userMode === "supervisor") {
+        return {
+            toggleOnBreak: true,
+            changePin: false
+        }
+    }
+    return {
+        toggleOnBreak: false,
+        changePin: false
+    }
 }

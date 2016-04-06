@@ -5,14 +5,26 @@ import StaffListItem from "./staff-list-item"
 
 class ClockInOutStaffFinder extends Component {
     render() {
+        var staffTypeClientIds = [this.props.selectedStaffTypeClientId];
+        var filterOverrides = {
+            staffTypeClientIds
+        };
+        var showStaffTypeFilter = false;
+
+        if (this.props.userIsManagerOrSupervisor){
+            filterOverrides = {};
+            showStaffTypeFilter = true;
+        }
+
         return <StaffFinder
             filters={{
                 search: true,
-                staffType: true
+                staffType: showStaffTypeFilter
             }}
             staffItemComponent={StaffListItem}
             staffTypes={this.props.staffTypes}
-            staff={this.props.staff} />
+            staff={this.props.staff}
+            filterOverrides={filterOverrides} />
 
     }
 }
