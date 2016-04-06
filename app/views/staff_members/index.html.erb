@@ -26,9 +26,9 @@
         </td>
         <td data-role="venues">
           <% if staff_member.venues.count > 0%>
-            <%= staff_member.venues.map(&:name).to_sentence %>
+            <%= link_to(staff_member.venues.map(&:name).to_sentence, staff_member_path(staff_member)) %>
           <% else %>
-            N / A
+            <%= link_to('N / A', staff_member_path(staff_member)) %>
           <% end %>
         </td>
       </tr>
