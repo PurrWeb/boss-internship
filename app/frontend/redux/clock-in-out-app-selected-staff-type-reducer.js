@@ -11,8 +11,14 @@ export default function clockInOutAppSelectedStaffType(clientId=null, action){
             } else {
                 return null;
             }
-        case actionTypes.LEAVE_MANAGER_MODE:
-            return null;
+        case actionTypes.CLOCK_IN_OUT_APP_ENTER_USER_MODE_SUCCESS:
+            if (oFetch(action, "mode") === "user"){
+                // left manager mode
+                return null
+            }
+            else {
+                return clientId;
+            }
     }
     return clientId;
 }

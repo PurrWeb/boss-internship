@@ -77,7 +77,7 @@ class ClockInOutStaffListItem extends Component {
 
         var staffObject = this.props.staff;
         var toggleOnBreakButton = null;
-        if (this.props.userPermissions.canToggleOnBreak){
+        if (this.props.userPermissions.toggleOnBreak){
             toggleOnBreakButton = <div className="col-md-6 col-xs-2">
                 <ToggleStaffOnBreakButton
                     staffStatuses={this.props.staffStatuses}

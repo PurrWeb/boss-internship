@@ -212,18 +212,18 @@ export function selectClockInOutAppUserPermissions(state){
     var userMode = state.clockInOutAppUserMode.mode;
     if (userMode === "manager") {
         return {
-            canToggleOnBreak: true,
-            canChangePin: true
+            toggleOnBreak: true,
+            changePin: true
         }
     }
     if (userMode === "supervisor") {
         return {
-            canToggleOnBreak: true,
-            canChangePin: false
+            toggleOnBreak: true,
+            changePin: false
         }
     }
     return {
-        canToggleOnBreak: false,
-        canChangePin: false
+        toggleOnBreak: false,
+        changePin: false
     }
 }
