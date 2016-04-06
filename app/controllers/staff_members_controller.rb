@@ -34,17 +34,23 @@ class StaffMembersController < ApplicationController
 
   def show
     staff_member = StaffMember.find(params[:id])
-    authorize! :edit, staff_member
+    if can? :edit, staff_member
+      if !active_tab_from_params.present?
+        return redirect_to staff_member_path(staff_member, tab: 'employment-details')
+      end
 
-    if !active_tab_from_params.present?
-      return redirect_to staff_member_path(staff_member, tab: 'employment-details')
+      render locals: {
+        staff_member: staff_member,
+        active_tab: active_tab_from_params,
+        holiday: Holiday.new
+      }
+    else
+      flash.now[:alert] = "You're not authorized to view all of this staff member's details. Contact an admin for further assistance."
+
+      render 'reduced_show', locals: {
+        staff_member: staff_member
+      }
     end
-
-    render locals: {
-      staff_member: staff_member,
-      active_tab: active_tab_from_params,
-      holiday: Holiday.new
-    }
   end
 
   def new

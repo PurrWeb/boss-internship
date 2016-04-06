@@ -1,0 +1,17 @@
+<div class="media">
+  <div class="media-left">
+    <a href="#">
+      <img class="avatar-image avatar-image_medium" src="<%= staff_member.avatar.medium.url %>" />
+    </a>
+  </div>
+  <div class="media-body">
+    <h1 class="media-heading"><%= staff_member.full_name.titlecase %></h1>
+  </div>
+</div>
+
+<dl>
+  <dt>Staff Type:</dt><dd><%= staff_member.staff_type.name %></dd>
+  <dt>Venues:</dt><dd><%= staff_member.venues.map(&:name).to_sentence %></dd>
+</dl>
+
+<%= link_to('Return to index', staff_members_path) %>
