@@ -9,6 +9,7 @@ import {
     processStaffTypeRotaOverviewObject,
     processStaffStatusObject
 } from "./process-backend-objects"
+import { getClientId } from "./process-backend-object"
 
 export function processHolidayAppViewData(viewData){
     var pageData = {...viewData.pageData};
