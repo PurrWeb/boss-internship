@@ -1,7 +1,7 @@
 module PageObject
   class StaffMembersIndexTable < Component
     def self.columns
-      [:name, :venue, :staff_type]
+      [:name, :venues, :staff_type]
     end
 
     page_action :click_on_detail do |column, staff_member:|
@@ -14,8 +14,8 @@ module PageObject
 
       expect(detail_text(listing, :name)).to eq(staff_member.full_name.titlecase)
 
-      venue_text = staff_member.venue ? staff_member.venue.name : 'N / A'
-      expect(detail_text(listing, :venue)).to eq(venue_text)
+      venue_text = staff_member.venues.length > 0 ? staff_member.venues.map(&:name).to_sentence : 'N / A'
+      expect(detail_text(listing, :venues)).to eq(venue_text)
 
       expect(detail_text(listing, :staff_type)).to eq(staff_member.staff_type.name.titlecase)
     end
@@ -51,10 +51,9 @@ module PageObject
     def column_data
       {
         name:  { detail_selector: 'td[data-role="name"]'  },
-        venue:  { detail_selector: 'td[data-role="venue"]'  },
+        venues:  { detail_selector: 'td[data-role="venues"]'  },
         staff_type:  { detail_selector: 'td[data-role="staff-type"]'  }
       }
     end
-
   end
 end

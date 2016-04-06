@@ -17,9 +17,6 @@ class CreateStaffMember
 
     ActiveRecord::Base.transaction(requires_new: nested) do
       staff_member.assign_attributes(params)
-      if staff_member.staff_member_venue.present? && staff_member.staff_member_venue.venue_id == nil
-        staff_member.staff_member_venue.mark_for_destruction
-      end
 
       # notified_of_sia_expiry_at is set to now if we don't want to send
       # an update
@@ -40,5 +37,5 @@ class CreateStaffMember
   end
 
   private
-  attr_reader :now, :params, :nested
+  attr_reader :now, :nested, :params
 end

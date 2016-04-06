@@ -63,10 +63,10 @@
   <div class="tab-content">
     <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('employment-details', active_tab) %>" id="employment-tab">
       <dl>
-        <dt class="show-page-detail-heading">Venue</dt>
-        <dd class="show-page-detail" data-detail="venue">
-          <% if staff_member.venue.present? %>
-            <%= staff_member.venue.name %>
+        <dt class="show-page-detail-heading">Venues</dt>
+        <dd class="show-page-detail" data-detail="venues">
+          <% if staff_member.venues.count > 0 %>
+            <%= staff_member.venues.map(&:name).to_sentence %>
           <% else %>
             N / A
           <% end %>

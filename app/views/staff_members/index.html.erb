@@ -13,7 +13,7 @@
       <th>Name</th>
       <th>Status</th>
       <th>Type</th>
-      <th>Venue</th>
+      <th>Venues</th>
     <tr>
     <% staff_members.each do |staff_member| %>
       <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
@@ -24,7 +24,13 @@
         <td data-role="staff-type">
           <%= link_to(staff_member.staff_type.name.titlecase, staff_member_path(staff_member)) %>
         </td>
-        <td data-role="venue"><%= link_to("#{staff_member.venue.try(:name) || 'N / A'}", staff_member_path(staff_member)) %></td>
+        <td data-role="venues">
+          <% if staff_member.venues.count > 0%>
+            <%= staff_member.venues.map(&:name).to_sentence %>
+          <% else %>
+            N / A
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </table>

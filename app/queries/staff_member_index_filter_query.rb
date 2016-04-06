@@ -41,12 +41,12 @@ class StaffMemberIndexFilterQuery
       end
 
       if venue.present?
-        result = result.joins(:venue).merge(venue_relation)
+        result = result.joins(:venues).merge(venue_relation)
       else
         result = result.joins('LEFT JOIN `staff_member_venues` ON `staff_member_venues`.`staff_member_id` = `staff_members`.`id`').where('(`staff_member_venues`.`staff_member_id` IS NULL) OR (`staff_member_venues`.`venue_id` IN (?))', accessible_venues.pluck(:id))
       end
 
-      result
+      result.uniq
     end
   end
 

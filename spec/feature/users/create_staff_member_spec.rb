@@ -12,7 +12,7 @@ RSpec.feature 'Creating a staff member from a user' do
   let(:prospective_staff_member) do
     FactoryGirl.build(
       :staff_member,
-      venue: venue,
+      venues: [venue],
       pay_rate: pay_rate,
       staff_type: staff_type
     )

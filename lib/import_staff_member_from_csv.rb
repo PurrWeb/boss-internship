@@ -62,8 +62,8 @@ class ImportStaffMemberFromCSV
           employment_status_p45_supplied: false
         )
         attach_avatar_image(staff_member)
-        attach_venue(staff_member, venue)
 
+        staff_member.venues << venue
         staff_member.save!
       end
     end
@@ -71,11 +71,6 @@ class ImportStaffMemberFromCSV
 
   private
   attr_reader :requester, :input_csv, :avatar_path, :logger
-
-  def attach_venue(staff_member, venue)
-    staff_member_venue = staff_member.build_staff_member_venue(venue: venue)
-    staff_member.staff_member_venue = staff_member_venue
-  end
 
   def attach_avatar_image(staff_member)
     File.open(avatar_path) do |f|
