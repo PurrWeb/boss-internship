@@ -221,7 +221,7 @@ class UsersController < ApplicationController
       name: user.name,
       email_address: user.email_address,
       creator: current_user,
-      venues: venues_from_params
+      venues: staff_member_venues_from_params
     )
 
     if result[:avatar_base64].present?
@@ -240,6 +240,10 @@ class UsersController < ApplicationController
   end
 
   def venues_from_params
+    Array(params[:user][:venues]).reject(&:blank?).map{|id| Venue.find(id) }
+  end
+
+  def staff_member_venues_from_params
     Array(params[:staff_member][:venues]).reject(&:blank?).map{|id| Venue.find(id) }
   end
 end
