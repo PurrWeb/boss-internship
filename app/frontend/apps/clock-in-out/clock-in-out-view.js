@@ -78,7 +78,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
     return {
         leaveManagerMode: function(){
-            dispatch(actions.leaveManagerMode());
+            dispatch(actions.clockInOutAppEnterUserMode({
+                userMode: "user"
+            }))
         },
         selectStaffType: function(selectedStaffTypeClientId){
             dispatch(actions.clockInOutAppSelectStaffType({

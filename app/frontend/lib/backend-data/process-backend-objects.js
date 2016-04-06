@@ -24,6 +24,10 @@ export function processStaffMemberObject(staffMember){
         var staffTypeObject = staffMember.staff_type.get(staffTypes);
         return staffTypeObject.name === "Manager";
     }
+    staffMember.isSupervisor = function({staffTypes}){
+        var staffTypeObject = staffMember.staff_type.get(staffTypes);
+        return staffTypeObject.name === "Bar Supervisor";
+    }
     return staffMember;
 }
 

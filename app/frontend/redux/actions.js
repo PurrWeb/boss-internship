@@ -200,26 +200,42 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
     })
 });
 
-export function enterManagerModeWithConfirmation(options){
+export function enterUserModeWithConfirmation(options){
     return showConfirmationModal({
         modalOptions: {
             title: "Enter manager password",
             confirmationType: "PIN"
         },
         confirmationAction: {
-            apiRequestType: "ENTER_MANAGER_MODE",
-            requestOptions: {}
+            apiRequestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
+            requestOptions: options
         }
     })
 }
 
-export const enterManagerMode = createApiRequestAction({
-    requestType: "ENTER_MANAGER_MODE",
+export const clockInOutAppEnterUserMode = createApiRequestAction({
+    requestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
     makeRequest: function(requestOptions, success, error){
-        var pin = oFetch(requestOptions, "confirmationData.pin");
+        var userMode = oFetch(requestOptions, "userMode");
+        var pin;
+
+        if (userMode !== "user"){
+            pin = oFetch(requestOptions, "confirmationData.pin");
+        }
+        
         setTimeout(function(){
+            if (userMode === "user") {
+                success({
+                    mode: "user",
+                    token: null
+                })
+                return;
+            }
             if (pin === "9999") {
-                success({token: "asdfsds"})
+                success({
+                    mode: userMode,
+                    token: "asdfsds"
+                })
             } else {
                 error({errors:{base: ["Password needs to be 9999"]}})
             }

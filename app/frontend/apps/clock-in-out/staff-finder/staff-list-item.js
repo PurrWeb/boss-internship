@@ -97,6 +97,11 @@ class ClockInOutStaffListItem extends Component {
     }
     getChangePinButton(){
         var staffObject = this.props.staff;
+        console.log("can change pin", this.props.userPermissions)
+        if (!this.props.userPermissions.changePin) {
+            return null;
+        }
+
         if (this.props.updateStaffMemberPinInProgress) {
             return <Spinner />
         }
@@ -111,20 +116,35 @@ class ClockInOutStaffListItem extends Component {
     isManager(){
         return this.props.staff.isManager({staffTypes: this.props.staffTypes});
     }
+    isSupervisor(){
+        return this.props.staff.isSupervisor({staffTypes: this.props.staffTypes});
+    }
     enterManagerMode(){
         this.props.enterManagerMode();
     }
     getManagerModeButton(){
-        if (!this.isManager()) {
+        if (!this.isManager() && !this.isSupervisor()) {
             return null;
         }
         if (this.props.enterManagerModeIsInProgress){
             return <Spinner />;
         }
+        var buttonText = null;
+        var modeType = null;
+        if (this.isManager()){
+            buttonText = "Enter Manager Mode";
+            modeType = "manager"
+        } else if (this.isSupervisor()) {
+            buttonText = "Enter Supervisor Mode";
+            modeType = "supervisor"
+        } else {
+            throw new Error("Shouldn't be possible")
+        }
+
         return <a
-            onClick={() => this.enterManagerMode()}
+            onClick={() => this.props.enterUserMode(modeType)}
             className="btn btn-default btn-sm hide-in-manager-mode--inline-block">
-            Enter Manager Mode
+            {buttonText}
         </a>
     }
 }
@@ -152,8 +172,8 @@ function mapDispatchToProps(dispatch){
         updateStaffStatusWithConfirmation: function(options){
             dispatch(actions.updateStaffStatusWithConfirmation(options))
         },
-        enterManagerMode: function(){
-            dispatch(actions.enterManagerModeWithConfirmation());
+        enterUserMode: function(userMode){
+            dispatch(actions.enterUserModeWithConfirmation({userMode}));
         },
         updateStaffMemberPin: function(options){
             dispatch(actions.updateStaffMemberPinWithEntryModal(options))
