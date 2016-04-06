@@ -24,6 +24,7 @@ describe StaffMemberIndexFilterQuery do
   let(:accessible_venues) { double("accessible venues") }
   let(:accessible_venue_ids) { double "accessible venue ids" }
   let(:venue_join_relation) { double "venue join relation" }
+  let(:filtered_venue_join_relation) { double "filtered venue join relation" }
   let(:result) { double 'result' }
   let(:query) do
     StaffMemberIndexFilterQuery.new(
@@ -44,8 +45,9 @@ describe StaffMemberIndexFilterQuery do
     allow(staff_type).to receive(:present?).and_return(false)
     allow(venue).to receive(:present?).and_return(false)
     allow(relation).to receive(:joins).with('LEFT JOIN `staff_member_venues` ON `staff_member_venues`.`staff_member_id` = `staff_members`.`id`').and_return(venue_join_relation)
-    allow(venue_join_relation).to receive(:where).with('(`staff_member_venues`.`staff_member_id` IS NULL) OR (`staff_member_venues`.`venue_id` IN (?))', accessible_venue_ids).and_return(result)
+    allow(venue_join_relation).to receive(:where).with('(`staff_member_venues`.`staff_member_id` IS NULL) OR (`staff_member_venues`.`venue_id` IN (?))', accessible_venue_ids).and_return(filtered_venue_join_relation)
     allow(accessible_venues).to receive(:pluck).with(:id).and_return(accessible_venue_ids)
+    allow(filtered_venue_join_relation).to receive(:uniq).and_return(result)
   end
 
   specify do
@@ -118,6 +120,10 @@ describe StaffMemberIndexFilterQuery do
       allow(relation_joined_by_venue).to(
         receive(:merge).
           with(venue_relation).
+          and_return(venue_join_relation)
+      )
+      allow(venue_join_relation).to(
+        receive(:uniq).
           and_return(result)
       )
       allow(Venue).to(
@@ -135,6 +141,10 @@ describe StaffMemberIndexFilterQuery do
       expect(relation_joined_by_venue).to(
         receive(:merge).
           with(venue_relation).
+          and_return(venue_join_relation)
+      )
+      expect(venue_join_relation).to(
+        receive(:uniq).
           and_return(result)
       )
       expect(Venue).to(
