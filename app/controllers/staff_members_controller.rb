@@ -198,7 +198,7 @@ class StaffMembersController < ApplicationController
       flash[:success] = "Staff Member enabled successfully"
       redirect_to staff_member_path(staff_member)
     else
-      flash.now[:error] = "There was a problem enabling creating this staff member"
+      flash.now[:error] = "There was a problem enabling this staff member"
       render 'enable', locals: { staff_member: result.staff_member }
     end
   end
