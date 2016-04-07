@@ -264,12 +264,7 @@ class StaffMembersController < ApplicationController
   end
 
   def enable_params(staff_member)
-    staff_member_params.
-      deep_merge(
-        staff_member_venue_attributes: {
-          id: staff_member.staff_member_venue.try(:id)
-        }
-      )
+    staff_member_params
   end
 
   def staff_member_params
@@ -291,8 +286,7 @@ class StaffMembersController < ApplicationController
       name_attributes: [
         :first_name,
         :surname
-      ],
-      staff_member_venue_attributes: [:venue_id]
+      ]
     ]
 
     require_attributes << :staff_type if !current_user.security_manager?
