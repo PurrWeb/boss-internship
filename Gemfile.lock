@@ -134,6 +134,8 @@ GEM
       mime-types (>= 1.0)
     fission (0.5.0)
       CFPropertyList (~> 2.2)
+    fitter-happier (0.0.5)
+      actionpack
     fog (1.36.0)
       fog-aliyun (>= 0.1.0)
       fog-atmos
@@ -434,6 +436,7 @@ DEPENDENCIES
   factory_girl_rails
   figaro
   file_validators
+  fitter-happier
   fog
   jbuilder
   jquery-rails
