@@ -7,6 +7,7 @@ import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
 export default class StaffListItem extends React.Component {
     static propTypes = {
         staff: React.PropTypes.object.isRequired,
+        venues: React.PropTypes.array.isRequired,
         staffType: React.PropTypes.object.isRequired,
         paidHolidays: React.PropTypes.array.isRequired,
         unpaidHolidays: React.PropTypes.array.isRequired
@@ -25,7 +26,8 @@ export default class StaffListItem extends React.Component {
                             {staff.first_name} {staff.surname}
                         </h3>
                         <StaffTypeBadge staffTypeObject={staffType} />
-                    </div>                    
+                    </div>
+                    <p>Venues: {this.props.venues.map(venue => venue.name).join(', ')}</p>
                     <StaffMemberHolidaysLink staffMemberServerId={staff.serverId}>
                         View all holidays
                     </StaffMemberHolidaysLink>

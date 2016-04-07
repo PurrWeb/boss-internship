@@ -19,7 +19,7 @@ export default class HolidayReportView extends React.Component {
                                 if (venue !== undefined){
                                     venueId = venue.serverId;
                                 }
-                                location.href = appRoutes.holidayReportsIndex({
+                                location.href = appRoutes.holidays({
                                     date: startDate,
                                     venueId: venueId
                                 })
@@ -49,10 +49,14 @@ function mapStateToProps(state){
 function csvDownloadButton(props){
   let holidayCount = Object.keys(props.holidays).length;
 
-  if (props.pageOptions.weekStartDate && (holidayCount > 0)) {
+  if (
+      props.pageOptions.displayCsvLink &&
+      props.pageOptions.weekStartDate  &&
+      (holidayCount > 0)
+    ) {
     return <a className="btn btn-default"
         style={{float: "right"}}
-        href={appRoutes.holidayReportsCsv({
+        href={appRoutes.holidaysCsv({
           date: props.pageOptions.weekStartDate,
           venueId: props.pageOptions.venueServerId
         })}>

@@ -9,7 +9,7 @@
 
   var staffMembers = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
 
-  var venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: venues } %>;
+  var venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: accessible_venues } %>;
 
   var staffTypes = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
 
@@ -20,8 +20,9 @@
   window.boss.staffTypes = staffTypes;
 
   window.boss.pageData = {
-    venueId: <%= venue.try(:id) || 'null' %>,
+    venueId: <%= filter_venue.try(:id) || 'null' %>,
     weekStartDate: "<%= week.start_date.iso8601 %>",
-    weekEndDate: "<%= week.end_date.iso8601 %>"
+    weekEndDate: "<%= week.end_date.iso8601 %>",
+    displayCsvLink: <%= can?(:view, :holidays_csv).to_s %>
   }
 <% end %>

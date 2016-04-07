@@ -45,12 +45,12 @@ export const appRoutes = {
       let date = oFetch(options, "date");
       return 'change_order_reports?date=' + utils.formatRotaUrlDate(date);
     },
-    holidayReportsIndex: function(options) {
+    holidays: function(options) {
         var date = oFetch(options, "date");
         var venueId = options.venueId; // venueId is optional
 
         var parts = [
-            "holiday_reports?",
+            "holidays?",
             "date=" + utils.formatRotaUrlDate(date)
         ];
         if (venueId !== undefined && venueId !== null) {
@@ -70,11 +70,11 @@ export const appRoutes = {
         }
         return "/staff_members/" + staffMemberId + "?tab=holidays";
     },
-    holidayReportsCsv: function(options){
+    holidaysCsv: function(options){
         var date = oFetch(options, "date");
         var venueId = options.venueId; //optional
         var parts = [
-          "/holiday_reports.csv?" +
+          "/holidays.csv?" +
           'date=' + utils.formatRotaUrlDate(date)
         ];
         if (venueId !== null && venueId !== undefined){
