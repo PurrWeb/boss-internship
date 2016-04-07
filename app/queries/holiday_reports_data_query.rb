@@ -24,16 +24,9 @@ class HolidayReportsDataQuery
   end
 
   def staff_members
-    @staff_members ||= begin
-      result = StaffMember.
-        joins(:holidays).
-        merge(Holiday.in_state(:enabled))
-
-      if venue.present?
-        result = result.for_venue(venue)
-      end
-      result
-    end
+    StaffMember.
+      joins(:holidays).
+      merge(holidays)
   end
 
   attr_reader :week, :venue
