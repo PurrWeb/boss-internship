@@ -40,6 +40,7 @@ gem 'prawn-table'
 gem 'will_paginate-bootstrap'
 gem 'reform'
 gem 'reform-rails'
+gem 'newrelic_rpm'
 
 group :development, :test do
   gem "byebug"
