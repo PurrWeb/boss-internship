@@ -11,6 +11,7 @@ import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import { processVenueRotaAppViewData, processClockInOutAppViewData } from "~lib/backend-data/process-app-view-data"
 import { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal } from "./actions/confirmation-modal"
 import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
+import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 
 export const actionTypes = {};
 
@@ -334,8 +335,13 @@ export const updateStaffStatus = createApiRequestAction({
     },
     additionalSuccessActionCreator: function(successActionData, requestOptions){
         var {first_name, surname} = successActionData.staffMemberObject;
+        var name = first_name + " " + surname;
+        var {statusValue} = successActionData;
+        var statusOption = staffStatusOptionsByValue[statusValue];
+
+        var message = `${name} has been ${statusOption.confirmationTitle}.`
         return showUserActionConfirmationMessage({
-            message: `Status of ${first_name} ${surname} has been changed to ${successActionData.statusValue}`
+            message
         })
     }
 });
