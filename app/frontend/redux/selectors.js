@@ -187,6 +187,14 @@ export function selectClockInOutAppIsInManagerMode(state){
     return userMode === "manager" || userMode === "supervisor";
 }
 
+export function selectClockInOutAppUserIsManager(state){
+    return state.clockInOutAppUserMode.mode === "manager";
+}
+
+export function selectClockInOutAppUserIsSupervisor(state){
+    return state.clockInOutAppUserMode.mode === "supervisor";
+}
+
 export function selectIsUpdatingStaffMemberStatus(state, {staffMemberServerId}) {
     var allRequests = state.apiRequestsInProgress.UPDATE_STAFF_STATUS;
     var requestsForStaffMember = _.filter(allRequests, function(request){

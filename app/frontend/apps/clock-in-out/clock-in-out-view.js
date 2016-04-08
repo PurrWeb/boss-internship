@@ -5,7 +5,11 @@ import store from "~redux/store"
 import moment from "moment"
 import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 import * as actions from "~redux/actions"
-import { selectRotaOnClockInOutPage, selectClockInOutAppIsInManagerMode } from "~redux/selectors"
+import {
+    selectRotaOnClockInOutPage,
+    selectClockInOutAppUserIsSupervisor,
+    selectClockInOutAppUserIsManager
+} from "~redux/selectors"
 import ConfirmationModal from "~components/confirmation-modal"
 import LargeStaffTypeSelector from "./components/large-staff-type-selector"
 import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
@@ -49,11 +53,17 @@ class ClockInOutView extends Component {
                     Select a different staff type
                 </a>
         } else {
+            var leaveManagerModeButtonText;
+            if (this.props.userIsManager){
+                leaveManagerModeButtonText = "Leave Manager Mode";
+            } else if (this.props.userIsSupervisor) {
+                leaveManagerModeButtonText = "Leave Supervisor Mode"
+            }
             leaveManagerModeButton = <a
                 className="btn btn-default show-in-manager-mode"
                 style={{float: "right"}}
                 onClick={() => this.props.leaveManagerMode()}>
-                Leave Manager Mode
+                {leaveManagerModeButtonText}
             </a>
         }
         return <div>
@@ -68,8 +78,12 @@ class ClockInOutView extends Component {
 
 function mapStateToProps(state) {
     var rota = selectRotaOnClockInOutPage(state);
+    var userIsSupervisor = selectClockInOutAppUserIsSupervisor(state);
+    var userIsManager = selectClockInOutAppUserIsManager(state);
     return {
-        userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(state),
+        userIsManagerOrSupervisor: userIsSupervisor || userIsManager,
+        userIsManager,
+        userIsSupervisor,
         rota,
         venue: rota.venue.get(state.venues),
         staffTypes: getStaffTypesWithStaffMembers(state.staffTypes, state.staff),
