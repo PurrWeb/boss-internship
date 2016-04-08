@@ -208,6 +208,14 @@ export function selectEnterManagerModeIsInProgress(state){
     return requests !== undefined && requests.length > 0;
 }
 
+export function selectLeaveManagerModeIsInProgress(state){
+    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_ENTER_USER_MODE;
+    if (!requests || requests.length === 0) {
+        return false;
+    }
+    return oFetch(requests[0], "userMode") === "user";
+}
+
 export function selectIsUpdatingStaffMemberPin(state, {staffMemberServerId}) {
     var allRequests = state.apiRequestsInProgress.UPDATE_STAFF_MEMBER_PIN;
     var requestsForStaffMember = _.filter(allRequests, function(request){
