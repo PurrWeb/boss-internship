@@ -1,14 +1,19 @@
 import createApiRequestAction from "./create-api-request-action";
 import expect from "expect"
 
-function dispatchDoSomething(makeRequest, actionOptions, confirm){
+function dispatchDoSomething(makeRequest, actionOptions, options){
+	if (options=== undefined){
+		options = {};
+	}
+	var {confirm, additionalSuccessActionCreator} = options;
 	var dispatch = expect.createSpy();
 	var actionTypes = {};
 	var actionCreator = createApiRequestAction({
 		requestType: "DO_SOMETHING",
 		makeRequest,
 		actionTypes,
-		confirm
+		confirm,
+		additionalSuccessActionCreator
 	});
 	function getState() {
 		return {};
@@ -69,8 +74,23 @@ describe("createApiRequestAction", function(){
 	it("Doesn't make an API request if `confirm` returns false", function(){
 		var makeRequest = expect.createSpy();
 		var confirm = () => false;
-		var dispatch = dispatchDoSomething(makeRequest, {}, confirm);
+		var dispatch = dispatchDoSomething(makeRequest, {}, {confirm});
 
 		expect(makeRequest).toNotHaveBeenCalled();		
+	});
+
+	it("Can dispatch another action in addition to the default success action", function(){
+		var makeRequest = function(options, success, error){
+			success();
+		};
+		var dispatch = dispatchDoSomething(makeRequest, {}, {
+			additionalSuccessActionCreator: function(){
+				return {
+					type: "DO_ANOTHER_THING"
+				}
+			}
+		});
+
+		expect(dispatch.calls[2].arguments[0].type).toEqual("DO_ANOTHER_THING");
 	})
 });

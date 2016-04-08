@@ -9,6 +9,7 @@ import { selectRotaOnClockInOutPage, selectClockInOutAppIsInManagerMode } from "
 import ConfirmationModal from "~components/confirmation-modal"
 import LargeStaffTypeSelector from "./components/large-staff-type-selector"
 import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
+import UserActionConfirmationMessages from "~components/user-action-confirmation-messages"
 
 class ClockInOutView extends Component {
     render() {
@@ -33,6 +34,7 @@ class ClockInOutView extends Component {
 
         return <div className={classes.join(" ")}>
             <ConfirmationModal />
+            <UserActionConfirmationMessages />
             {content}
         </div>
     }

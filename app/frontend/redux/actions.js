@@ -11,6 +11,7 @@ import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import { processVenueRotaAppViewData, processClockInOutAppViewData } from "~lib/backend-data/process-app-view-data"
 import { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal } from "./actions/confirmation-modal"
 import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
+import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 
 export const actionTypes = {};
 
@@ -331,8 +332,49 @@ export const updateStaffStatus = createApiRequestAction({
                 })
             }, 500);
         }
+    },
+    additionalSuccessActionCreator: function(successActionData, requestOptions){
+        return function(dispatch, getState){
+            var userIsManagerOrSupervisor = selectClockInOutAppIsInManagerMode(getState());
+            if (userIsManagerOrSupervisor) {
+                // They aren't sent back to the staff type selector, so 
+                // they can see the change in the normal UI
+                return;
+            }
+
+            var {first_name, surname} = successActionData.staffMemberObject;
+            var name = first_name + " " + surname;
+            var {statusValue} = successActionData;
+            var statusOption = staffStatusOptionsByValue[statusValue];
+
+            var message = `${name} has been ${statusOption.confirmationTitle}.`
+            dispatch(showUserActionConfirmationMessage({
+                message
+            }));
+        }
     }
 });
+
+actionTypes.SHOW_USER_ACTION_CONFIRMATION_MESSAGE = "SHOW_USER_ACTION_CONFIRMATION_MESSAGE";
+export function showUserActionConfirmationMessage({message}) {
+    return function(dispatch) {
+        dispatch({
+            type: actionTypes.SHOW_USER_ACTION_CONFIRMATION_MESSAGE,
+            message: message
+        })
+        setTimeout(function(){
+            dispatch(hideUserActionConfirmationMessage({message}));
+        }, 2000)
+    }
+}
+
+actionTypes.HIDE_USER_ACTION_CONFIRMATION_MESSAGE = "HIDE_USER_ACTION_CONFIRMATION_MESSAGE";
+export function hideUserActionConfirmationMessage({message}){
+    return {
+        type: actionTypes.HIDE_USER_ACTION_CONFIRMATION_MESSAGE,
+        message
+    }
+}
 
 actionTypes.REPLACE_ALL_STAFF_MEMBERS = "REPLACE_ALL_STAFF_MEMBERS";
 export function replaceAllStaffMembers(options) {

@@ -97,7 +97,6 @@ class ClockInOutStaffListItem extends Component {
     }
     getChangePinButton(){
         var staffObject = this.props.staff;
-        console.log("can change pin", this.props.userPermissions)
         if (!this.props.userPermissions.changePin) {
             return null;
         }
