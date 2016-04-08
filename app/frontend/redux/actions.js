@@ -331,8 +331,21 @@ export const updateStaffStatus = createApiRequestAction({
                 })
             }, 500);
         }
+    },
+    additionalSuccessActionCreator: function(responseData, requestOptions){
+        return showUserActionConfirmationMessage({
+            message: "User status was updated"
+        })
     }
 });
+
+actionTypes.SHOW_USER_ACTION_CONFIRMATION_MESSAGE = "SHOW_USER_ACTION_CONFIRMATION_MESSAGE";
+export function showUserActionConfirmationMessage({message}) {
+    return {
+        type: actionTypes.SHOW_USER_ACTION_CONFIRMATION_MESSAGE,
+        message: message
+    }
+}
 
 actionTypes.REPLACE_ALL_STAFF_MEMBERS = "REPLACE_ALL_STAFF_MEMBERS";
 export function replaceAllStaffMembers(options) {

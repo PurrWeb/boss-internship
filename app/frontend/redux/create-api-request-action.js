@@ -71,14 +71,17 @@ export default function createApiRequestAction(actionOptions){
             var requestId = _.uniqueId();
 
             return function(dispatch, getState) {
-                function success(responseOptions){
+                function success(successActionData){
                     dispatch([
                         {
                             type: SUCCESS_TYPE,
-                            ...responseOptions
+                            ...successActionData
                         },
                         requestEndAction()
                     ]);
+                    if (actionOptions.additionalSuccessActionCreator) {
+                        dispatch(actionOptions.additionalSuccessActionCreator(successActionData, requestOptions));
+                    }
                 }
                 function error(responseOptions){
                     var actions = [requestEndAction()];
