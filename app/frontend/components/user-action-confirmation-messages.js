@@ -3,8 +3,8 @@ import { connect } from "react-redux"
 
 class UserActionConfirmationMessages extends React.Component {
     render(){
-        var messageElements = this.props.messages.map((message) => {
-            return <div>
+        var messageElements = this.props.messages.map((message, i) => {
+            return <div key={i}>
                 {message}
             </div>
         })

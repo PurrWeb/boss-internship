@@ -342,9 +342,22 @@ export const updateStaffStatus = createApiRequestAction({
 
 actionTypes.SHOW_USER_ACTION_CONFIRMATION_MESSAGE = "SHOW_USER_ACTION_CONFIRMATION_MESSAGE";
 export function showUserActionConfirmationMessage({message}) {
+    return function(dispatch) {
+        dispatch({
+            type: actionTypes.SHOW_USER_ACTION_CONFIRMATION_MESSAGE,
+            message: message
+        })
+        setTimeout(function(){
+            dispatch(hideUserActionConfirmationMessage({message}));
+        }, 2000)
+    }
+}
+
+actionTypes.HIDE_USER_ACTION_CONFIRMATION_MESSAGE = "HIDE_USER_ACTION_CONFIRMATION_MESSAGE";
+export function hideUserActionConfirmationMessage({message}){
     return {
-        type: actionTypes.SHOW_USER_ACTION_CONFIRMATION_MESSAGE,
-        message: message
+        type: actionTypes.HIDE_USER_ACTION_CONFIRMATION_MESSAGE,
+        message
     }
 }
 
