@@ -141,7 +141,7 @@ class ClockInOutStaffListItem extends Component {
         }
 
         return <a
-            onClick={() => this.props.enterUserMode(modeType)}
+            onClick={() => this.props.enterUserMode(modeType, this.props.staff)}
             className="btn btn-default btn-sm hide-in-manager-mode--inline-block">
             {buttonText}
         </a>
@@ -158,7 +158,7 @@ function mapStateToProps(state, ownProps){
         updateStatusIsInProgress: selectIsUpdatingStaffMemberStatus(state, {
             staffMemberServerId: ownProps.staff.serverId
         }),
-        enterManagerModeIsInProgress: selectEnterManagerModeIsInProgress(state),
+        enterManagerModeIsInProgress: selectEnterManagerModeIsInProgress(state, {staffMemberServerId: ownProps.staff.serverId}),
         updateStaffMemberPinInProgress: selectIsUpdatingStaffMemberPin(state, {
             staffMemberServerId: ownProps.staff.serverId
         }),
@@ -171,8 +171,8 @@ function mapDispatchToProps(dispatch){
         updateStaffStatusWithConfirmation: function(options){
             dispatch(actions.updateStaffStatusWithConfirmation(options))
         },
-        enterUserMode: function(userMode){
-            dispatch(actions.enterUserModeWithConfirmation({userMode}));
+        enterUserMode: function(userMode, staffMemberObject){
+            dispatch(actions.enterUserModeWithConfirmation({userMode, staffMemberObject}));
         },
         updateStaffMemberPin: function(options){
             dispatch(actions.updateStaffMemberPinWithEntryModal(options))

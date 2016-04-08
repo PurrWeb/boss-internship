@@ -203,9 +203,17 @@ export function selectIsUpdatingStaffMemberStatus(state, {staffMemberServerId}) 
     return requestsForStaffMember.length > 0;
 }
 
-export function selectEnterManagerModeIsInProgress(state){
-    var requests = state.apiRequestsInProgress.ENTER_MANAGER_MODE;
-    return requests !== undefined && requests.length > 0;
+export function selectEnterManagerModeIsInProgress(state, {staffMemberServerId}){
+    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_ENTER_USER_MODE;
+    if (!requests || requests.length === 0) {
+        return false;
+    }
+    if (requests[0].staffMemberObject === undefined) {
+        return false; // no staff member specified, probably leaving manager mode
+    }
+    var staffMemberMatches = oFetch(requests[0], "staffMemberObject.serverId") === staffMemberServerId;
+    var isEnteringManagerMode = oFetch(requests[0], "userMode") !== "user";
+    return isEnteringManagerMode && staffMemberMatches;
 }
 
 export function selectLeaveManagerModeIsInProgress(state){
