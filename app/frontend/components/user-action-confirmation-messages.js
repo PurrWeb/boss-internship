@@ -8,7 +8,6 @@ class UserActionConfirmationMessages extends React.Component {
                 {message}
             </div>
         })
-        console.log("mE",messageElements)
         return <div>
             {messageElements}
         </div>

@@ -332,9 +332,10 @@ export const updateStaffStatus = createApiRequestAction({
             }, 500);
         }
     },
-    additionalSuccessActionCreator: function(responseData, requestOptions){
+    additionalSuccessActionCreator: function(successActionData, requestOptions){
+        var {first_name, surname} = successActionData.staffMemberObject;
         return showUserActionConfirmationMessage({
-            message: "User status was updated"
+            message: `Status of ${first_name} ${surname} has been changed to ${successActionData.statusValue}`
         })
     }
 });
