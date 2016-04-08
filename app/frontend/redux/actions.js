@@ -334,15 +334,24 @@ export const updateStaffStatus = createApiRequestAction({
         }
     },
     additionalSuccessActionCreator: function(successActionData, requestOptions){
-        var {first_name, surname} = successActionData.staffMemberObject;
-        var name = first_name + " " + surname;
-        var {statusValue} = successActionData;
-        var statusOption = staffStatusOptionsByValue[statusValue];
+        return function(dispatch, getState){
+            var userIsManagerOrSupervisor = selectClockInOutAppIsInManagerMode(getState());
+            if (userIsManagerOrSupervisor) {
+                // They aren't sent back to the staff type selector, so 
+                // they can see the change in the normal UI
+                return;
+            }
 
-        var message = `${name} has been ${statusOption.confirmationTitle}.`
-        return showUserActionConfirmationMessage({
-            message
-        })
+            var {first_name, surname} = successActionData.staffMemberObject;
+            var name = first_name + " " + surname;
+            var {statusValue} = successActionData;
+            var statusOption = staffStatusOptionsByValue[statusValue];
+
+            var message = `${name} has been ${statusOption.confirmationTitle}.`
+            dispatch(showUserActionConfirmationMessage({
+                message
+            }));
+        }
     }
 });
 
