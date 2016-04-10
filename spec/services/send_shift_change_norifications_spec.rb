@@ -15,7 +15,7 @@ describe SendShiftChangeNotifications do
 
   context 'after the call' do
     before do
-      allow(ShiftChangeNotificationMailer).to receive(:notify_of_shift_change_mail).with({ staff_member: staff_member }).and_return(mail)
+      allow(ShiftChangeNotificationMailer).to receive(:notify_of_shift_change_mail).with({ staff_member_id: staff_member.id }).and_return(mail)
       allow(mail).to receive(:deliver_now)
     end
 
@@ -25,7 +25,7 @@ describe SendShiftChangeNotifications do
     end
 
     it 'should send an update email' do
-      expect(ShiftChangeNotificationMailer).to receive(:notify_of_shift_change_mail).with({ staff_member: staff_member }).and_return(mail)
+      expect(ShiftChangeNotificationMailer).to receive(:notify_of_shift_change_mail).with({ staff_member_id: staff_member.id }).and_return(mail)
       expect(mail).to receive(:deliver_now)
       service.call
     end
