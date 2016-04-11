@@ -40,9 +40,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :holidays, only: [:edit, :update]
-
-  resources :holiday_reports, only: :index
+  resources :holidays, only: [:index, :edit, :update]
 
   resources :staff_members, only: [:show, :index, :new, :create, :destroy] do
     resources :holidays, only: [:create, :destroy]

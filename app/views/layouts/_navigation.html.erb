@@ -28,6 +28,12 @@
             <% end %>
           <% end %>
 
+          <% if can?(:view, :holidays) %>
+            <li class="nav-holiday-reports-section">
+              <%= link_to('Holidays', holidays_path(date: UIRotaDate.format(Time.now.to_date.monday))) %>
+            </li>
+          <% end %>
+
           <% if can?(:manage, :security_rota) %>
             <li class="nav-security-rota-section">
               <%= link_to(security_rotas_path, class: "nav-section-header-link") do %>
@@ -74,10 +80,6 @@
                     <%= link_to('Staff Types', staff_types_path) %>
                   </li>
                 <% end %>
-
-                <li class="nav-holiday-reports-section">
-                  <%= link_to('Holiday Reports', holiday_reports_path(date: UIRotaDate.format(Time.now.to_date.monday))) %>
-                </li>
 
                 <li class="nav-pay-rates-section">
                   <%= link_to('Pay rates', pay_rates_path) %>

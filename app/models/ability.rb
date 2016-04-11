@@ -27,6 +27,14 @@ class Ability
         user.has_admin_access? || user.security_manager?
       end
 
+      can :view, :holidays do
+        !user.security_manager?
+      end
+
+      can :view, :holidays_csv do
+        user.has_admin_access?
+      end
+
       can :manage, Holiday do |holiday|
         holiday.editable? && can_edit_staff_member?(user, holiday.staff_member)
       end

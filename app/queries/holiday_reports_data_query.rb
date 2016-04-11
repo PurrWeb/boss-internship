@@ -1,7 +1,7 @@
 class HolidayReportsDataQuery
-  def initialize(week:, venue:)
+  def initialize(week:, venues:)
     @week = week
-    @venue = venue
+    @venues = venues
   end
 
   def holidays
@@ -9,10 +9,14 @@ class HolidayReportsDataQuery
       relation = Holiday.
         in_state(:enabled)
 
-      if venue.present?
+      if venues.present?
         relation = relation.
           joins(:staff_member).
-          merge(StaffMember.for_venue(venue))
+          merge(
+            StaffMember.
+              joins(:venues).
+              merge(venues)
+          )
       end
 
       HolidayInRangeQuery.new(
@@ -29,5 +33,5 @@ class HolidayReportsDataQuery
       merge(holidays)
   end
 
-  attr_reader :week, :venue
+  attr_reader :week, :venues
 end

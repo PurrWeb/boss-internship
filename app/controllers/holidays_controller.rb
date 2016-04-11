@@ -1,4 +1,54 @@
 class HolidaysController < ApplicationController
+  def index
+    authorize!(:view, :holidays)
+
+    query_venues = nil
+    filter_venue = Venue.find_by(id: params[:venue])
+    accessible_venues = AccessibleVenuesQuery.new(current_user).all
+
+    if filter_venue
+      authorize!(:manage, filter_venue)
+      query_venues = Venue.where(id: filter_venue.id)
+    else
+      query_venues = accessible_venues
+    end
+
+    if params[:date]
+      date = UIRotaDate.parse(params[:date])
+    else
+      redirect_to holidays_path(date: UIRotaDate.format(Time.now.to_date), venue: venue)
+      return
+    end
+
+    week = RotaWeek.new(date)
+
+    holidays_reports_data = HolidayReportsDataQuery.new(week: week, venues: query_venues)
+
+    respond_to do |format|
+      format.html do
+        render locals: {
+          week: week,
+          holidays: holidays_reports_data.holidays,
+          staff_members: holidays_reports_data.staff_members,
+          accessible_venues: accessible_venues,
+          staff_types: StaffType.all,
+          filter_venue: filter_venue
+        }
+      end
+
+      format.csv do
+        authorize!(:view, :holidays_csv)
+
+        csv = HolidayReportCSV.new(holidays_reports_data.holidays)
+        #TODO: Extract File Timestamp Format to somewhere
+        timestamp = week.start_date.strftime('%d-%b-%Y-%H-%M')
+        filename  = "holiday-report-#{timestamp}.csv"
+        headers['Content-Disposition'] = "attachment; filename=#{filename}"
+        render text: csv.to_s, content_type: 'text/csv'
+      end
+    end
+  end
+
   def create
     staff_member = StaffMember.find(params[:staff_member_id])
     authorize! :edit, staff_member
