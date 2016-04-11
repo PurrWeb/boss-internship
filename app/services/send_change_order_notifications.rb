@@ -1,24 +1,18 @@
 class SendChangeOrderNotifications
-  def initialize(date:, venue:)
-    @date = date
+  def initialize(venue:)
     @venue = venue
   end
 
   def call
-    week = RotaWeek.new(date)
-    deadline = ChangeOrderSubmissionDeadline.new(week: week).time
     managers = UsersManagingVenueQuery.new(venue: venue).all
 
     managers.each do |manager|
       ChangeOrderNotificationMailer.
         change_order_reminder(
           user_id: manager.id,
-          venue_name: venue.name,
-          deadline: deadline.to_s
+          venue_name: venue.name
         ).deliver_now
     end
-
-    ChangeOrderNotification.create!(venue: venue)
   end
 
   private

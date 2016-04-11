@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :change_order do
-    submission_deadline { Time.now + 1.week }
     venue
     five_pound_notes 0
     one_pound_coins 0

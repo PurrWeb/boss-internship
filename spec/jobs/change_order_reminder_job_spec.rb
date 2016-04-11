@@ -6,7 +6,6 @@ describe ChangeOrderReminderJob do
 
   let(:now) { Time.now }
   let(:week) { RotaWeek.new(now) }
-  let(:deadline) { ChangeOrderSubmissionDeadline.new(week: week) }
   let(:job) { ChangeOrderReminderJob.new }
   let(:venue) { FactoryGirl.create(:venue) }
   let(:user) do
@@ -16,22 +15,9 @@ describe ChangeOrderReminderJob do
     )
   end
 
-  around(:each) do |example|
-    deadline
-    travel_to deadline.time - 1.hour do
-      example.run
-    end
-  end
-
   before do
     venue
     user
-  end
-
-  specify do
-    expect(ChangeOrderNotification.count).to eq(0)
-    job.perform
-    expect(ChangeOrderNotification.count).to eq(1)
   end
 
   specify do

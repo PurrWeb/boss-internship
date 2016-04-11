@@ -1,0 +1,46 @@
+<div>
+  <% if can?(:destroy, change_order) %>
+    <div class="pull-right">
+      <%= link_to(
+            change_order_path(change_order),
+            class: 'btn btn-danger',
+            method: :delete
+          ) do %>
+          <span class="glyphicon glyphicon-fire"></span> Delete Change Order
+        <% end %>
+    </div>
+  <% end %>
+
+  <h1>Change Order </h1>
+</div>
+
+<ul class="list-unstyled">
+  <li><b>Venue: <%= change_order.venue.name %></b></li>
+  <li>Created at <%= change_order.created_at.to_s(:human) %></li>
+  <li><b>Status: <%= change_order.current_state.titlecase %></b></li>
+  <% if change_order.accepted? %>
+    <li>Accepted at <%= change_order.accepted_at.to_s(:human) %> by <%= change_order.accepted_user.full_name %></li>
+  <% end %>
+  <% if change_order.done? %>
+    <li>Marked Done at <%= change_order.done_at.to_s(:human) %> by <%= change_order.done_user.full_name %></li>
+  <% end %>
+
+  <table class="table">
+    <thead>
+      <th>Five Pound Notes</th>
+      <th>One Pound Coins</th>
+      <th>Fifty Pence Coins</th>
+      <th>Twenty Pence Coins</th>
+      <th>Ten Pence Coins</th>
+      <th>Five Pence Coins</th>
+    </thead>
+    <tbody>
+      <td><%= change_order.five_pound_notes %></td>
+      <td><%= change_order.one_pound_coins %></td>
+      <td><%= change_order.fifty_pence_coins %></td>
+      <td><%= change_order.twenty_pence_coins %></td>
+      <td><%= change_order.ten_pence_coins %></td>
+      <td><%= change_order.five_pence_coins %></td>
+    </tbody>
+  </table>
+</ul>
