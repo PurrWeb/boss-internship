@@ -1,5 +1,5 @@
 module PageObject
-  class HolidayReportsShowPage < Page
+  class HolidaysShowPage < Page
     FORMATS = [:html, :csv]
 
     def initialize(date:, venue:, format: :html)
@@ -19,7 +19,7 @@ module PageObject
         params[:format] = :csv
       end
 
-      visit(url_helpers.holiday_reports_path(params))
+      visit(url_helpers.holidays_path(params))
     end
 
     page_action :download_csv do

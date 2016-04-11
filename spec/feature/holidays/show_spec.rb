@@ -1,17 +1,17 @@
 require 'feature/feature_spec_helper'
 
-RSpec.describe 'Holiday Reports page' do
+RSpec.describe 'Holidays page' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
   let(:date) { Time.now.to_date }
   let(:venue) { FactoryGirl.create(:venue) }
   let(:show_page) do
-    PageObject::HolidayReportsShowPage.new(
+    PageObject::HolidaysShowPage.new(
       date: date,
       venue: venue
     )
   end
   let(:csv_show_page) do
-    PageObject::HolidayReportsShowPage.new(
+    PageObject::HolidaysShowPage.new(
       date: date,
       venue: venue,
       format: :csv
