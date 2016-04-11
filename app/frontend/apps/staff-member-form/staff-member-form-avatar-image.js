@@ -19,6 +19,11 @@ export default class StaffMemberFormAvatarImage extends React.Component {
             previousShowModalValue: false
         }
     }
+    componentDidUpdate(){
+        if (this.showModalChanged()) {
+            this.setState({previousShowModalValue: this.state.showModal})
+        }
+    }
     componentWillMount(){
         var avatarPreview = $(this.props.selectedImageSelector);
         if (avatarPreview.length > 0){
@@ -27,11 +32,6 @@ export default class StaffMemberFormAvatarImage extends React.Component {
         }
     }
     render(){
-        if (this.showModalChanged()) {
-            this.setState({previousShowModalValue: this.state.showModal})
-        }
-        
-        
         var existingImage = this.getExistingImage();
 
         var hasExistingImage = existingImage !== null;
