@@ -5,11 +5,42 @@ import store from "~redux/store"
 import moment from "moment"
 import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 import * as actions from "~redux/actions"
-import { selectRotaOnClockInOutPage, selectClockInOutAppIsInManagerMode } from "~redux/selectors"
+import {
+    selectRotaOnClockInOutPage,
+    selectClockInOutAppUserIsSupervisor,
+    selectClockInOutAppUserIsManager,
+    selectLeaveManagerModeIsInProgress
+} from "~redux/selectors"
 import ConfirmationModal from "~components/confirmation-modal"
+import Spinner from "~components/spinner"
 import LargeStaffTypeSelector from "./components/large-staff-type-selector"
 import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
 import UserActionConfirmationMessages from "~components/user-action-confirmation-messages"
+
+class LeaveManagerModeButton extends Component {
+    static propTypes = {
+        userIsManager: React.PropTypes.bool.isRequired,
+        userIsSupervisor: React.PropTypes.bool.isRequired,
+        leaveManagerModeInProgress: React.PropTypes.bool.isRequired
+    }
+    render(){
+        if (this.props.leaveManagerModeInProgress) {
+            return <Spinner />
+        }
+
+        var leaveManagerModeButtonText;
+        if (this.props.userIsManager){
+            leaveManagerModeButtonText = "Leave Manager Mode";
+        } else if (this.props.userIsSupervisor) {
+            leaveManagerModeButtonText = "Leave Supervisor Mode"
+        }
+        return <a
+            className="btn btn-default show-in-manager-mode"
+            onClick={() => this.props.leaveManagerMode()}>
+            {leaveManagerModeButtonText}
+        </a>
+    }
+}
 
 class ClockInOutView extends Component {
     render() {
@@ -49,12 +80,13 @@ class ClockInOutView extends Component {
                     Select a different staff type
                 </a>
         } else {
-            leaveManagerModeButton = <a
-                className="btn btn-default show-in-manager-mode"
-                style={{float: "right"}}
-                onClick={() => this.props.leaveManagerMode()}>
-                Leave Manager Mode
-            </a>
+            leaveManagerModeButton = <div style={{float: "right"}}>
+                <LeaveManagerModeButton
+                    userIsManager={this.props.userIsManager}
+                    userIsSupervisor={this.props.userIsSupervisor}
+                    leaveManagerModeInProgress={this.props.leaveManagerModeInProgress}
+                    leaveManagerMode={this.props.leaveManagerMode} />
+                </div>
         }
         return <div>
             {leaveManagerModeButton}
@@ -68,9 +100,14 @@ class ClockInOutView extends Component {
 
 function mapStateToProps(state) {
     var rota = selectRotaOnClockInOutPage(state);
+    var userIsSupervisor = selectClockInOutAppUserIsSupervisor(state);
+    var userIsManager = selectClockInOutAppUserIsManager(state);
     return {
-        userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(state),
+        userIsManagerOrSupervisor: userIsSupervisor || userIsManager,
+        userIsManager,
+        userIsSupervisor,
         rota,
+        leaveManagerModeInProgress: selectLeaveManagerModeIsInProgress(state),
         venue: rota.venue.get(state.venues),
         staffTypes: getStaffTypesWithStaffMembers(state.staffTypes, state.staff),
         selectedStaffTypeClientId: state.clockInOutAppSelectedStaffType
