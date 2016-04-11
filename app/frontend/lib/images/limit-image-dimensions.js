@@ -9,6 +9,7 @@ export default function limitImageDimensions(dataUrl, maxWidth, maxHeight, callb
     getImageDimensions(dataUrl, function(dimensions){
         if (dimensions.width <= maxWidth && dimensions.height <= maxHeight) {
             callback(dataUrl);
+            return;
         }
 
         var newDimensions;
