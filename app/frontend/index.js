@@ -34,3 +34,6 @@ registerComponent("HolidayReportApp", HolidayReportView);
 
 import StaffTypeRotaOverviewApp from "./apps/staff-type-rota-overview"
 registerComponent("StaffTypeRotaOverviewApp", StaffTypeRotaOverviewApp);
+
+import HoursConfirmationApp from "./apps/hours-confirmation"
+registerComponent("HoursConfirmationApp", HoursConfirmationApp)
