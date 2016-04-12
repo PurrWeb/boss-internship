@@ -55,6 +55,10 @@ export default class StaffFinder extends Component {
             filterSettings.staffTypes = filterOverrides.staffTypeClientIds;
         }
 
+        if (filterOverrides.venueClientIds !== undefined) {
+            filterSettings.venues = filterOverrides.venueClientIds
+        }
+
         return filterSettings;
     }
 }
