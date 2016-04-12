@@ -35,10 +35,7 @@ export default class AddShiftView extends React.Component {
             <StaffTypeRotaStaffFinder
                 staff={this.props.staff}
                 venues={this.props.venues}
-                staffTypes={this.props.staffTypes}
-                filterOverrides={{
-                    venueClientIds: [this.props.selectedVenueId]
-                }} />
+                staffTypes={this.props.staffTypes} />
         </div>
     }
 }
