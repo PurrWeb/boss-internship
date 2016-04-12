@@ -12,10 +12,10 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
-  resources :change_orders, only: [:index] do
+  resources :change_orders, only: [:index, :show, :edit, :update, :destroy] do
     collection do
-      get :previous
-      put :update
+      get :submitted
+      put :update_current
     end
   end
 
@@ -87,6 +87,11 @@ Rails.application.routes.draw do
   resources :clock_in_clock_out, only: [:index]
 
   resources :change_order_reports, only: [:index, :show] do
+    member do
+      put :accept
+      put :complete
+    end
+
     collection do
       get :history
     end

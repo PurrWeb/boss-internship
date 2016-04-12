@@ -1,0 +1,21 @@
+<div>
+  <% if can?(:destroy, change_order) %>
+    <div class="pull-right">
+      <%= link_to(
+            change_order_path(change_order),
+            class: 'btn btn-danger',
+            method: :delete
+          ) do %>
+          <span class="glyphicon glyphicon-fire"></span> Delete ChangeOrder
+        <% end %>
+    </div>
+  <% end %>
+
+  <h1>Edit Change Order</h1>
+</div>
+
+<%= render(partial: 'shared/change_order_form', locals: {
+      change_order: change_order,
+      url: change_order_path(change_order),
+      action_text: 'Update'
+    }) %>

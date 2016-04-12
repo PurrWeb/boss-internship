@@ -2,25 +2,42 @@ class ChangeOrderReportsController < ApplicationController
   before_action :authorize_admin
 
   def index
-    date = Time.now.to_date
-    week = RotaWeek.new(date)
+    pending_change_orders = ChangeOrder.current
+    accepted_change_orders = ChangeOrder.accepted
 
-    current_submission_deadline = ChangeOrderSubmissionDeadline.new(week: week).time
-    previous_submission_deadline = ChangeOrder.order(:submission_deadline).pluck(:submission_deadline).uniq[1]
-
-    venues_without_current_change_order = VenueWithoutChangeOrderQuery.new(
-      change_orders: ChangeOrder.current
+    venues_without_pending_change_order = VenueWithoutChangeOrderQuery.new(
+      change_orders: pending_change_orders
     ).all
 
-    previous_submission_change_orders = ChangeOrder.where(submission_deadline: previous_submission_deadline)
-
     render locals: {
-      week: week,
-      current_submission_deadline: current_submission_deadline,
-      venues_without_current_change_order: venues_without_current_change_order,
-      previous_submission_deadline: previous_submission_deadline,
-      previous_submission_change_orders: previous_submission_change_orders
+      venues_without_pending_change_order: venues_without_pending_change_order,
+      pending_change_orders: pending_change_orders,
+      accepted_change_orders: accepted_change_orders
     }
+  end
+
+  def accept
+    change_order = ChangeOrder.find(params[:id])
+
+    change_order.state_machine.transition_to!(
+      :accepted,
+      requster_user_id: current_user.id
+    )
+
+    flash[:success] = "Change order accepted successfully"
+    redirect_to(change_order_reports_path)
+  end
+
+  def complete
+    change_order = ChangeOrder.find(params[:id])
+
+    change_order.state_machine.transition_to!(
+      :done,
+      requster_user_id: current_user.id
+    )
+
+    flash[:success] = "Change order completed successfully"
+    redirect_to(change_order_reports_path)
   end
 
   def show
@@ -41,14 +58,23 @@ class ChangeOrderReportsController < ApplicationController
     }
   end
 
-  def history
-    pagination_relation = ChangeOrder.
-      where('submission_deadline < ?', Time.now).
-      order('submission_deadline DESC').
-      group('submission_deadline').
-      paginate(page: params[:page], per_page: 2)
+  def edit
+    change_order = ChangeOrder.find(params[:id])
 
-    render locals: { pagination_relation: pagination_relation }
+    render locals: { change_order: change_order }
+  end
+
+  def history
+    change_orders = ChangeOrder.
+      done.
+      includes(:change_order_transitions).
+      order('change_order_transitions.updated_at DESC').
+      paginate(
+        page: params[:page],
+        per_page: 15
+      )
+
+    render locals: { change_orders: change_orders }
   end
 
   private

@@ -1,8 +1,22 @@
-<h1>Current Change Order</h1>
+<div>
+  <% if can?(:destroy, current_change_order) %>
+    <div class="pull-right">
+      <%= link_to(
+            change_order_path(current_change_order),
+            class: 'btn btn-danger',
+            method: :delete
+          ) do %>
+          <span class="glyphicon glyphicon-fire"></span> Delete Current Order
+        <% end %>
+    </div>
+  <% end %>
+
+  <h1>Current Change Order</h1>
+</div>
 
 <%= link_to(
-      'View past change orders',
-      previous_change_orders_path(
+      'View submitted change orders',
+      submitted_change_orders_path(
         venue_id: current_venue.id
       )
     ) %>
@@ -26,19 +40,16 @@
       ) %>
 <% end %>
 
-<% if current_change_order.submission_deadline_past? %>
-  <p>Submitted at: <%= current_change_order.submission_deadline.time.to_s(:human) %></p>
-
-  <ul class="list-unstyled">
-    <li>Five Pound Notes: <%= current_change_order.five_pound_notes %></li>
-    <li>One Pound Coins: <%= current_change_order.one_pound_coins %></li>
-    <li>Fifty Pence Coins: <%= current_change_order.fifty_pence_coins %></li>
-    <li>Twenty Pence Coins: <%= current_change_order.twenty_pence_coins %></li>
-    <li>Ten Pence Coins: <%= current_change_order.ten_pence_coins %></li>
-    <li>Five Pence Coins: <%= current_change_order.five_pence_coins %></li>
-  <ul>
+<% if current_change_order.persisted? %>
+  <p>Last Updated at: <%= current_change_order.updated_at.to_s(:human) %></p>
 <% else %>
-  <p>Submission Deadline: <%= current_change_order.submission_deadline.time.to_s(:human) %></p>
-
-  <%= render partial: 'form', locals: { change_order: current_change_order } %>
+  <p>No change order is currently pending for this venue</p>
 <% end %>
+
+<%= render partial: 'shared/change_order_form', locals: {
+      change_order: current_change_order,
+      url: update_current_change_orders_path(
+        venue_id: current_change_order.venue.id
+      ),
+      action_text: current_change_order.persisted? ? 'Update' : 'Create'
+    } %>

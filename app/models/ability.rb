@@ -92,8 +92,14 @@ class Ability
           user != target_user
       end
 
-      can :manage, ChangeOrder do |change_order|
-        can_manage_venue?(user, change_order.venue)
+      can :update, ChangeOrder do |change_order|
+        can_update_change_order?(user, change_order)
+      end
+
+      can :destroy, ChangeOrder do |change_order|
+        change_order.persisted? &&
+          !(change_order.done? || change_order.deleted?) &&
+          can_update_change_order?(user, change_order)
       end
     end
 
@@ -115,6 +121,14 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+  end
+
+  def can_update_change_order?(user, change_order)
+    if change_order.in_progress?
+      can_manage_venue?(user, change_order.venue)
+    else
+      user.has_admin_access?
+    end
   end
 
   def can_edit_staff_member?(user, staff_member)

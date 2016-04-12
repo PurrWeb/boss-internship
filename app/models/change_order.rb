@@ -1,7 +1,8 @@
 class ChangeOrder < ActiveRecord::Base
+  include Statesman::Adapters::ActiveRecordQueries
+
   belongs_to :venue
 
-  validates :submission_deadline, presence: true
   validates :venue, presence: true
   validates :five_pound_notes, presence: true
   validates :one_pound_coins, presence: true
@@ -10,10 +11,11 @@ class ChangeOrder < ActiveRecord::Base
   validates :ten_pence_coins, presence: true
   validates :five_pence_coins, presence: true
 
-  def self.build_default(venue:, submission_deadline:)
+  has_many :change_order_transitions, autosave: false
+
+  def self.build_default(venue:)
     new(
       venue: venue,
-      submission_deadline: submission_deadline,
       five_pound_notes:   0,
       one_pound_coins:    0,
       fifty_pence_coins:  0,
@@ -23,27 +25,83 @@ class ChangeOrder < ActiveRecord::Base
     )
   end
 
+  def self.enabled
+    not_in_state(:deleted)
+  end
+
   def self.current
-    now = Time.now.to_date
-    this_week = RotaWeek.new(now)
-    last_week = RotaWeek.new(now - 1.week)
-
-    last_deadline = ChangeOrderSubmissionDeadline.new(
-      week: last_week
-    ).time
-
-    this_deadline = ChangeOrderSubmissionDeadline.new(
-      week: this_week
-    ).time
-
-    where("submission_deadline >=  ? AND submission_deadline <= ?", last_deadline, this_deadline)
+    in_state(:in_progress)
   end
 
-  def submission_deadline_past?(now: Time.now)
-    now > submission_deadline
+  def self.accepted
+    in_state(:accepted)
   end
 
-  def editable?
-    submission_deadline_past?
+  def self.done
+    in_state(:done)
+  end
+
+  def self.for_venue(venue:)
+    where(venue: venue)
+  end
+
+  def state_machine
+    @state_machine ||= ChangeOrderStateMachine.new(
+      self,
+      transition_class: ChangeOrderTransition,
+      association_name: :change_order_transitions
+    )
+  end
+
+  def current_state
+    state_machine.current_state
+  end
+
+  def deleted?
+    current_state == 'deleted'
+  end
+
+  def in_progress?
+    current_state == "in_progress"
+  end
+
+  def accepted?
+    ["accepted", "done"].include?(current_state)
+  end
+
+  def accepted_at
+    accepted_transition.created_at
+  end
+
+  def accepted_user
+    accepted? && User.find(accepted_transition.metadata.fetch("requster_user_id"))
+  end
+
+  def done?
+    current_state == "done"
+  end
+
+  def done_at
+    done? && change_order_transitions.last.created_at
+  end
+
+  def done_user
+    done? && User.find(change_order_transitions.last.metadata.fetch("requster_user_id"))
+  end
+
+  private
+  def accepted_transition
+    change_order_transitions.
+    where(to_state: 'accepted').
+    last
+  end
+
+  # Needed for statesman
+  def self.transition_class
+    ChangeOrderTransition
+  end
+
+  def self.initial_state
+    ChangeOrderStateMachine.initial_state
   end
 end

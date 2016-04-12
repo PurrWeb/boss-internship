@@ -1,8 +1,6 @@
 <%= bootstrap_form_for(
       change_order,
-      url: change_orders_path(
-        venue_id: change_order.venue.id
-      ),
+      url: url,
       method: 'put'
     )  do |form| %>
   <%= form.number_field(:five_pound_notes) %>
@@ -12,5 +10,5 @@
   <%= form.number_field(:ten_pence_coins) %>
   <%= form.number_field(:five_pence_coins) %>
 
-  <%= form.submit('Update') %>
+  <%= form.submit(action_text) %>
 <% end %>

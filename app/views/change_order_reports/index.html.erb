@@ -1,73 +1,81 @@
 <h1>Change Order Report</h1>
 
-<div>
-  <div class="pull-left">
-    <%= link_to(
-          'View',
-          change_order_report_path(
-            UIRotaDate.format(current_submission_deadline.to_date)
-          ),
-          class: 'btn btn-success'
-        ) %>
-  </div>
-  <h2 class="h3">Change Order in Progress</h2>
-</div>
-
-<p>
-  <b>Submission Deadline:</b> <%= current_submission_deadline.to_s(:human_with_day) %></p>
-
-<% if venues_without_current_change_order.count > 0 %>
+<% if venues_without_pending_change_order.count > 0 %>
   <p>
-    <b>Venues without submitted change orders:</b> <%= venues_without_current_change_order.map(&:name).to_sentence %>
+    <b>Venues without current change order submissions:</b> <%= venues_without_pending_change_order.map(&:name).to_sentence %>
   </p>
 <% end %>
 
-<div>
-  <% if previous_submission_change_orders.count > 0 %>
-    <div class="pull-left">
-      <%= link_to(
-            'View',
-            change_order_report_path(
-              UIRotaDate.format(previous_submission_deadline.to_date)
-            ),
-            class: 'btn btn-success'
-          ) %>
-    </div>
-  <% end %>
-  <h2 class="h3"> Last submitted Order</h2>
-</div>
-
-<% if previous_submission_change_orders.count > 0 %>
-  <p><b>Submitted at:</b> <%= previous_submission_deadline.to_s(:human_with_day) %></p>
-
-    <table class="table">
-      <thead>
+<h2>Pending Orders</h2>
+<% if pending_change_orders.count > 0 %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Venue</th>
+        <th>Five Pound Notes</th>
+        <th>One Pound Coins</th>
+        <th>Fifty Pence Coins</th>
+        <th>Twenty Pence Coins</th>
+        <th>Ten Pence Coins</th>
+        <th>Five Pence Coins</th>
+        <th></th>
+      <tr>
+    </thead>
+    <tbody>
+      <% pending_change_orders.each do |change_order| %>
         <tr>
-          <th>Venue</th>
-          <th>Five Pound Notes</th>
-          <th>One Pound Coins</th>
-          <th>Fifty Pence Coins</th>
-          <th>Twenty Pence Coins</th>
-          <th>Ten Pence Coins</th>
-          <th>Five Pence Coins</th>
-        <tr>
-      </thead>
-      <tbody>
-        <% previous_submission_change_orders.each do |change_order| %>
-          <tr>
-            <td><%= change_order.venue.name %></td>
-            <td><%= change_order.five_pound_notes %></td>
-            <td><%= change_order.one_pound_coins %></td>
-            <td><%= change_order.fifty_pence_coins %></td>
-            <td><%= change_order.twenty_pence_coins %></td>
-            <td><%= change_order.ten_pence_coins %></td>
-            <td><%= change_order.five_pence_coins %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+          <td><%= change_order.venue.name %></td>
+          <td><%= change_order.five_pound_notes %></td>
+          <td><%= change_order.one_pound_coins %></td>
+          <td><%= change_order.fifty_pence_coins %></td>
+          <td><%= change_order.twenty_pence_coins %></td>
+          <td><%= change_order.ten_pence_coins %></td>
+          <td><%= change_order.five_pence_coins %></td>
+          <td>
+            <%= link_to('Edit', change_orders_path(venue_id: change_order.venue.id), class: 'btn btn-primary') %>
+            <%= link_to('Accept', accept_change_order_report_path(change_order), class: 'btn btn-success', method: :put) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% else %>
-  <p>No previous submissions submitted</p>
+  <p>No pending change orders</p>
 <% end %>
 
-<%= link_to('View Full History', history_change_order_reports_path, class: 'btn btn-success') %>
+<% if accepted_change_orders.count > 0 %>
+  <h2>Accepted Orders</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Venue</th>
+        <th>Five Pound Notes</th>
+        <th>One Pound Coins</th>
+        <th>Fifty Pence Coins</th>
+        <th>Twenty Pence Coins</th>
+        <th>Ten Pence Coins</th>
+        <th>Five Pence Coins</th>
+        <th></th>
+      <tr>
+    </thead>
+    <tbody>
+      <% accepted_change_orders.each do |change_order| %>
+        <tr>
+          <td><%= change_order.venue.name %></td>
+          <td><%= change_order.five_pound_notes %></td>
+          <td><%= change_order.one_pound_coins %></td>
+          <td><%= change_order.fifty_pence_coins %></td>
+          <td><%= change_order.twenty_pence_coins %></td>
+          <td><%= change_order.ten_pence_coins %></td>
+          <td><%= change_order.five_pence_coins %></td>
+          <td>
+            <%= link_to('Edit', edit_change_order_path(change_order), class: 'btn btn-primary') %>
+            <%= link_to('Mark Done', complete_change_order_report_path(change_order), class: 'btn btn-success', method: :put) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= link_to('Completed Orders', history_change_order_reports_path, class: 'btn btn-success') %>
