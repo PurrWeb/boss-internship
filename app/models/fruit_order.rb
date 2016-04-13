@@ -32,6 +32,11 @@ class FruitOrder < ActiveRecord::Base
   validates :bananas, presence: true
   validates :maraschino_cherry, presence: true
   validates :cream, presence: true
+  validates :sharon_fruits, presence: true
+  validates :figs, presence: true
+  validates :blood_oranges, presence: true
+  validates :pomegranates, presence: true
+  validates :pineapples, presence: true
 
   has_many :fruit_order_transitions, autosave: false
 
@@ -64,7 +69,12 @@ class FruitOrder < ActiveRecord::Base
       fresh_ginger: 0,
       bananas: 0,
       maraschino_cherry: 0,
-      cream: 0
+      cream: 0,
+      sharon_fruits: 0,
+      figs: 0,
+      blood_oranges: 0,
+      pomegranates: 0,
+      pineapples: 0
     )
   end
 
@@ -124,7 +134,12 @@ class FruitOrder < ActiveRecord::Base
       fresh_ginger: 'Fresh Ginger (Each)',
       bananas: 'Banana (Each)',
       maraschino_cherry: 'Maraschino Cherry (Tub)',
-      cream: 'Cream (1 Ltr Carton)'
+      cream: 'Cream (1 Ltr Carton)',
+      sharon_fruits: 'Sharon Fruits (Box)',
+      figs: 'Figs (Punnet)',
+      blood_oranges: 'Blood Oranges (Each)',
+      pomegranates: 'Pomegranates (Each)',
+      pineapples: 'Pineapples (Each)'
     }.fetch(property)
   end
 

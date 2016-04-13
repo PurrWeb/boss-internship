@@ -154,7 +154,12 @@ class FruitOrdersController < ApplicationController
         :fresh_ginger,
         :bananas,
         :maraschino_cherry,
-        :cream
+        :cream,
+        :sharon_fruits,
+        :figs,
+        :blood_oranges,
+        :pomegranates,
+        :pineapples
       ])
   end
 end

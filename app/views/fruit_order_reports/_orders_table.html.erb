@@ -168,6 +168,36 @@
     <% end %>
   </tr>
   <tr>
+    <th><%= FruitOrder.message_for(:sharon_fruits) %></th>
+    <% fruit_orders.each do |fruit_order| %>
+      <td><%= fruit_order.sharon_fruits %></td>
+    <% end %>
+  </tr>
+  <tr>
+    <th><%= FruitOrder.message_for(:figs) %></th>
+    <% fruit_orders.each do |fruit_order| %>
+      <td><%= fruit_order.figs %></td>
+    <% end %>
+  </tr>
+  <tr>
+    <th><%= FruitOrder.message_for(:blood_oranges) %></th>
+    <% fruit_orders.each do |fruit_order| %>
+      <td><%= fruit_order.blood_oranges %></td>
+    <% end %>
+  </tr>
+  <tr>
+    <th><%= FruitOrder.message_for(:pomegranates) %></th>
+    <% fruit_orders.each do |fruit_order| %>
+      <td><%= fruit_order.pomegranates %></td>
+    <% end %>
+  </tr>
+  <tr>
+    <th><%= FruitOrder.message_for(:pineapples) %></th>
+    <% fruit_orders.each do |fruit_order| %>
+      <td><%= fruit_order.pineapples %></td>
+    <% end %>
+  </tr>
+  <tr>
     <th></th>
     <% fruit_orders.each do |fruit_order| %>
       <td>

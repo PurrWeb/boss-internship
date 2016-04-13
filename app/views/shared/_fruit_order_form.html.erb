@@ -138,6 +138,31 @@
     label: FruitOrder.message_for(:cream),
     label_class: 'force-not-required'
   ) %>
+  <%= form.number_field(
+    :sharon_fruits,
+    label: FruitOrder.message_for(:sharon_fruits),
+    label_class: 'force-not-required'
+  ) %>
+  <%= form.number_field(
+    :figs,
+    label: FruitOrder.message_for(:figs),
+    label_class: 'force-not-required'
+  ) %>
+  <%= form.number_field(
+    :blood_oranges,
+    label: FruitOrder.message_for(:blood_oranges),
+    label_class: 'force-not-required'
+  ) %>
+  <%= form.number_field(
+    :pomegranates,
+    label: FruitOrder.message_for(:pomegranates),
+    label_class: 'force-not-required'
+  ) %>
+  <%= form.number_field(
+    :pineapples,
+    label: FruitOrder.message_for(:pineapples),
+    label_class: 'force-not-required'
+  ) %>
 
   <%= form.submit(action_text) %>
 <% end %>
