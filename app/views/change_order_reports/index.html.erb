@@ -8,74 +8,21 @@
 
 <h2>Pending Orders</h2>
 <% if pending_change_orders.count > 0 %>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Venue</th>
-        <th>Five Pound Notes</th>
-        <th>One Pound Coins</th>
-        <th>Fifty Pence Coins</th>
-        <th>Twenty Pence Coins</th>
-        <th>Ten Pence Coins</th>
-        <th>Five Pence Coins</th>
-        <th></th>
-      <tr>
-    </thead>
-    <tbody>
-      <% pending_change_orders.each do |change_order| %>
-        <tr>
-          <td><%= change_order.venue.name %></td>
-          <td><%= change_order.five_pound_notes %></td>
-          <td><%= change_order.one_pound_coins %></td>
-          <td><%= change_order.fifty_pence_coins %></td>
-          <td><%= change_order.twenty_pence_coins %></td>
-          <td><%= change_order.ten_pence_coins %></td>
-          <td><%= change_order.five_pence_coins %></td>
-          <td>
-            <%= link_to('Edit', change_orders_path(venue_id: change_order.venue.id), class: 'btn btn-primary') %>
-            <%= link_to('Accept', accept_change_order_report_path(change_order), class: 'btn btn-success', method: :put) %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <%= render partial: 'shared/change_orders_table', locals: {
+        change_orders: pending_change_orders,
+        action_partial: 'shared/pending_change_order_actions'
+      } %>
 <% else %>
   <p>No pending change orders</p>
 <% end %>
 
 <% if accepted_change_orders.count > 0 %>
   <h2>Accepted Orders</h2>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Venue</th>
-        <th>Five Pound Notes</th>
-        <th>One Pound Coins</th>
-        <th>Fifty Pence Coins</th>
-        <th>Twenty Pence Coins</th>
-        <th>Ten Pence Coins</th>
-        <th>Five Pence Coins</th>
-        <th></th>
-      <tr>
-    </thead>
-    <tbody>
-      <% accepted_change_orders.each do |change_order| %>
-        <tr>
-          <td><%= change_order.venue.name %></td>
-          <td><%= change_order.five_pound_notes %></td>
-          <td><%= change_order.one_pound_coins %></td>
-          <td><%= change_order.fifty_pence_coins %></td>
-          <td><%= change_order.twenty_pence_coins %></td>
-          <td><%= change_order.ten_pence_coins %></td>
-          <td><%= change_order.five_pence_coins %></td>
-          <td>
-            <%= link_to('Edit', edit_change_order_path(change_order), class: 'btn btn-primary') %>
-            <%= link_to('Mark Done', complete_change_order_report_path(change_order), class: 'btn btn-success', method: :put) %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+
+  <%= render partial: 'shared/change_orders_table', locals: {
+        change_orders: accepted_change_orders,
+        action_partial: 'shared/accepted_change_order_actions'
+      } %>
 <% end %>
 
 <%= link_to('Completed Orders', history_change_order_reports_path, class: 'btn btn-success') %>
