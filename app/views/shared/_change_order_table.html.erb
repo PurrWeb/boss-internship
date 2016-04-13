@@ -1,18 +1,34 @@
 <table class="table">
   <thead>
+    <th></th>
     <th>Five Pound Notes</th>
     <th>One Pound Coins</th>
     <th>Fifty Pence Coins</th>
     <th>Twenty Pence Coins</th>
     <th>Ten Pence Coins</th>
     <th>Five Pence Coins</th>
+    <th>Total</th>
   </thead>
   <tbody>
-    <td><%= change_order.five_pound_notes %></td>
-    <td><%= change_order.one_pound_coins %></td>
-    <td><%= change_order.fifty_pence_coins %></td>
-    <td><%= change_order.twenty_pence_coins %></td>
-    <td><%= change_order.ten_pence_coins %></td>
-    <td><%= change_order.five_pence_coins %></td>
+    <tr>
+      <th>Count</th>
+      <td><%= change_order.five_pound_notes %></td>
+      <td><%= change_order.one_pound_coins %></td>
+      <td><%= change_order.fifty_pence_coins %></td>
+      <td><%= change_order.twenty_pence_coins %></td>
+      <td><%= change_order.ten_pence_coins %></td>
+      <td><%= change_order.five_pence_coins %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Total</th>
+      <td><%= number_to_currency(change_order.five_pound_total, unit: '£', precision: 2) %></td>
+      <td><%= number_to_currency(change_order.one_pound_total, unit: '£', precision: 2) %></td>
+      <td><%= number_to_currency(change_order.fifty_pence_total, unit: '£', precision: 2) %></td>
+      <td><%= number_to_currency(change_order.twenty_pence_total, unit: '£', precision: 2) %></td>
+      <td><%= number_to_currency(change_order.ten_pence_total, unit: '£', precision: 2) %></td>
+      <td><%= number_to_currency(change_order.five_pence_total, unit: '£', precision: 2) %></td>
+      <td><%= number_to_currency(change_order.total, unit: '£', precision: 2) %></td>
+    </tr>
   </tbody>
 </table>
