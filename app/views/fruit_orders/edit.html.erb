@@ -1,0 +1,21 @@
+<div>
+  <% if can?(:destroy, fruit_order) %>
+    <div class="pull-right">
+      <%= link_to(
+            fruit_order_path(fruit_order),
+            class: 'btn btn-danger',
+            method: :delete
+          ) do %>
+          <span class="glyphicon glyphicon-fire"></span> Delete Fruit Order
+        <% end %>
+    </div>
+  <% end %>
+
+  <h1>Edit Fruit Order</h1>
+</div>
+
+<%= render(partial: 'shared/fruit_order_form', locals: {
+      fruit_order: fruit_order,
+      url: fruit_order_path(fruit_order),
+      action_text: 'Update'
+    }) %>

@@ -1,0 +1,34 @@
+<div>
+  <div class="pull-right">
+    <%= link_to(
+          'View current order',
+          fruit_orders_path(venue_id: venue.id),
+          class: 'btn btn-success'
+        ) %>
+  </div>
+
+  <h1>Previously submitted Fruit Orders for <%= venue.name %></h1>
+</div>
+
+<% if fruit_orders.count > 0 %>
+  <ul class="list-unstyled">
+    <% fruit_orders.each do |fruit_order| %>
+      <li>
+        <p><b>Status: <%= fruit_order.current_state.titlecase %></b></p>
+        <% if fruit_order.accepted? %>
+          <p>
+            <b>Accepted at <%= fruit_order.accepted_at.to_s(:human) %> by <%= fruit_order.accepted_user.full_name %></b>
+          </p>
+        <% end %>
+        <% if fruit_order.done? %>
+          <p><b>Marked Done at <%= fruit_order.done_at.to_s(:human) %> by <%= fruit_order.done_user.full_name %></b></p>
+        <% end %>
+        <%= link_to('View', fruit_order_path(fruit_order), class: 'btn btn-success') %>
+      </li>
+    <% end %>
+  </ul>
+
+  <%= render partial: 'shared/pagination_control', locals: { relation: fruit_orders } %>
+<% else %>
+  <p>No previously submitted fruit orders exist</p>
+<% end %>

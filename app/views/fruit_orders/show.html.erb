@@ -1,0 +1,32 @@
+<div>
+  <% if can?(:destroy, fruit_order) %>
+    <div class="pull-right">
+      <%= link_to(
+            fruit_order_path(fruit_order),
+            class: 'btn btn-danger',
+            method: :delete
+          ) do %>
+          <span class="glyphicon glyphicon-fire"></span> Delete Fruit Order
+        <% end %>
+    </div>
+  <% end %>
+
+  <h1>Fruit Order</h1>
+</div>
+
+<ul class="list-unstyled">
+  <li><b>Venue: <%= fruit_order.venue.name %></b></li>
+  <li>Created at <%= fruit_order.created_at.to_s(:human) %></li>
+  <li><b>Status: <%= fruit_order.current_state.titlecase %></b></li>
+  <% if fruit_order.accepted? %>
+    <li>Accepted at <%= fruit_order.accepted_at.to_s(:human) %> by <%= fruit_order.accepted_user.full_name %></li>
+  <% end %>
+  <% if fruit_order.done? %>
+    <li>Marked Done at <%= fruit_order.done_at.to_s(:human) %> by <%= fruit_order.done_user.full_name %></li>
+  <% end %>
+
+  <li>
+    <%= render partial: 'shared/fruit_order_table', locals: { fruit_order: fruit_order } %>
+  </li>
+</ul>
+

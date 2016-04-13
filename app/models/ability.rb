@@ -15,6 +15,10 @@ class Ability
         !user.security_manager?
       end
 
+      can :manage, :fruit_orders do
+        !user.security_manager?
+      end
+
       can :manage, :rotas do
         !user.security_manager?
       end
@@ -101,6 +105,16 @@ class Ability
           !(change_order.done? || change_order.deleted?) &&
           can_update_change_order?(user, change_order)
       end
+
+      can :update, FruitOrder do |fruit_order|
+        can_update_fruit_order?(user, fruit_order)
+      end
+
+      can :destroy, FruitOrder do |fruit_order|
+        fruit_order.persisted? &&
+          !(fruit_order.done? || fruit_order.deleted?) &&
+          can_update_fruit_order?(user, fruit_order)
+      end
     end
 
     #
@@ -126,6 +140,14 @@ class Ability
   def can_update_change_order?(user, change_order)
     if change_order.in_progress?
       can_manage_venue?(user, change_order.venue)
+    else
+      user.has_admin_access?
+    end
+  end
+
+  def can_update_fruit_order?(user, fruit_order)
+    if fruit_order.in_progress?
+      can_manage_venue?(user, fruit_order.venue)
     else
       user.has_admin_access?
     end

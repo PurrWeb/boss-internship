@@ -48,6 +48,12 @@
             </li>
           <% end %>
 
+          <% if can?(:manage, :fruit_orders) %>
+            <li class="nav-fruit-orders-section">
+              <%= link_to('Fruit Orders', fruit_orders_path, class: 'nav-section-header-link') %>
+            </li>
+          <% end %>
+
           <% if can?(:manage, :clock_in_clock_out) %>
             <li class="nav-clock-in-clock-out-section">
               <%= link_to('Clock In/Out Demo', clock_in_clock_out_index_path, class: "nav-section-header-link") %>
@@ -87,6 +93,10 @@
 
                 <li class="nav-admin-change-orders-section">
                   <%= link_to('Change Order Reports', change_order_reports_path) %>
+                </li>
+
+                <li class="nav-admin-fruit-orders-section">
+                  <%= link_to('Fruit Order Reports', fruit_order_reports_path) %>
                 </li>
               </ul>
             </li>

@@ -1,0 +1,55 @@
+<div>
+  <% if can?(:destroy, current_fruit_order) %>
+    <div class="pull-right">
+      <%= link_to(
+            fruit_order_path(current_fruit_order),
+            class: 'btn btn-danger',
+            method: :delete
+          ) do %>
+          <span class="glyphicon glyphicon-fire"></span> Delete Current Order
+        <% end %>
+    </div>
+  <% end %>
+
+  <h1>Current Fruit Order</h1>
+</div>
+
+<%= link_to(
+      'View past fruit orders',
+      submitted_fruit_orders_path(
+        venue_id: current_venue.id
+      )
+    ) %>
+
+<%= bootstrap_form_for(
+      :fruit_order,
+      url: fruit_orders_path,
+      id: 'current-fruit-order-form',
+      method: 'get'
+    )  do |form| %>
+  <%= form.select(
+        :venue_id,
+        options_for_select(
+          accessible_venues.map do |venue|
+            [venue.name, venue.id]
+          end,
+          current_venue.id
+        ),
+        {},
+        id: 'current-fruit-order-venue-select'
+      ) %>
+<% end %>
+
+<% if current_fruit_order.persisted? %>
+  <p>Last Updated at: <%= current_fruit_order.updated_at.to_s(:human) %></p>
+<% else %>
+  <p>No fruit order is currently pending for this venue</p>
+<% end %>
+
+<%= render partial: 'shared/fruit_order_form', locals: {
+      fruit_order: current_fruit_order,
+      url: update_current_fruit_orders_path(
+        venue_id: current_fruit_order.venue.id
+      ),
+      action_text: current_fruit_order.persisted? ? 'Update' : 'Create'
+    } %>

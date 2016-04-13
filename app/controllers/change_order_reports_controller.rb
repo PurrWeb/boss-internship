@@ -5,8 +5,8 @@ class ChangeOrderReportsController < ApplicationController
     pending_change_orders = ChangeOrder.current
     accepted_change_orders = ChangeOrder.accepted
 
-    venues_without_pending_change_order = VenueWithoutChangeOrderQuery.new(
-      change_orders: pending_change_orders
+    venues_without_pending_change_order = VenueWithoutAssociatedQuery.new(
+      associated_relation: pending_change_orders
     ).all
 
     render locals: {
@@ -47,8 +47,8 @@ class ChangeOrderReportsController < ApplicationController
     change_orders = ChangeOrder.
       where('? = DATE(submission_deadline)', deadline_date)
 
-    venues_without_change_orders = VenueWithoutChangeOrderQuery.new(
-      change_orders: change_orders
+    venues_without_change_orders = VenueWithoutAssociatedQuery.new(
+      associated_relation: change_orders
     ).all
 
     render locals: {

@@ -19,6 +19,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :fruit_orders, only: [:index, :show, :edit, :update, :destroy] do
+    collection do
+      get :submitted
+      put :update_current
+    end
+  end
+
   resources :users, only: [:show, :index, :destroy] do
     member do
       get :disable
@@ -87,6 +94,17 @@ Rails.application.routes.draw do
   resources :clock_in_clock_out, only: [:index]
 
   resources :change_order_reports, only: [:index, :show] do
+    member do
+      put :accept
+      put :complete
+    end
+
+    collection do
+      get :history
+    end
+  end
+
+  resources :fruit_order_reports, only: [:index, :show] do
     member do
       put :accept
       put :complete

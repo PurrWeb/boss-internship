@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160412145916) do
+ActiveRecord::Schema.define(version: 20160413171224) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -76,6 +76,59 @@ ActiveRecord::Schema.define(version: 20160412145916) do
   end
 
   add_index "email_addresses", ["email"], name: "index_email_addresses_on_email", using: :btree
+
+  create_table "fruit_order_transitions", force: :cascade do |t|
+    t.string   "to_state",       limit: 255,   null: false
+    t.text     "metadata",       limit: 65535
+    t.integer  "sort_key",       limit: 4,     null: false
+    t.integer  "fruit_order_id", limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "fruit_order_transitions", ["fruit_order_id", "most_recent"], name: "index_fruit_order_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "fruit_order_transitions", ["fruit_order_id", "sort_key"], name: "index_fruit_order_transitions_parent_sort", unique: true, using: :btree
+
+  create_table "fruit_orders", force: :cascade do |t|
+    t.integer  "venue_id",           limit: 4, null: false
+    t.integer  "limes",              limit: 4, null: false
+    t.integer  "lemons",             limit: 4, null: false
+    t.integer  "rasberries",         limit: 4, null: false
+    t.integer  "blueberries",        limit: 4, null: false
+    t.integer  "blackberries",       limit: 4, null: false
+    t.integer  "green_apples",       limit: 4, null: false
+    t.integer  "oranges",            limit: 4, null: false
+    t.integer  "passion_fruits",     limit: 4, null: false
+    t.integer  "lychees",            limit: 4, null: false
+    t.integer  "cucumbers",          limit: 4, null: false
+    t.integer  "kumkwats",           limit: 4, null: false
+    t.integer  "dragon_fruits",      limit: 4, null: false
+    t.integer  "watermelon",         limit: 4, null: false
+    t.integer  "pink_grapefruit",    limit: 4, null: false
+    t.integer  "plums",              limit: 4, null: false
+    t.integer  "deskinned_coconuts", limit: 4, null: false
+    t.integer  "fresh_mint",         limit: 4, null: false
+    t.integer  "fresh_basil",        limit: 4, null: false
+    t.integer  "fresh_lavender",     limit: 4, null: false
+    t.integer  "rosemary",           limit: 4, null: false
+    t.integer  "thyme",              limit: 4, null: false
+    t.integer  "red_roses",          limit: 4, null: false
+    t.integer  "kaffir_lime_leaves", limit: 4, null: false
+    t.integer  "fresh_ginger",       limit: 4, null: false
+    t.integer  "bananas",            limit: 4, null: false
+    t.integer  "maraschino_cherry",  limit: 4, null: false
+    t.integer  "cream",              limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "sharon_fruits",      limit: 4, null: false
+    t.integer  "figs",               limit: 4, null: false
+    t.integer  "blood_oranges",      limit: 4, null: false
+    t.integer  "pomegranates",       limit: 4, null: false
+    t.integer  "pineapples",         limit: 4, null: false
+  end
+
+  add_index "fruit_orders", ["venue_id"], name: "index_fruit_orders_on_venue_id", using: :btree
 
   create_table "holiday_transitions", force: :cascade do |t|
     t.string   "to_state",    limit: 255,   null: false
