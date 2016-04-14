@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160413171224) do
+ActiveRecord::Schema.define(version: 20160414101519) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "address_1",  limit: 255
@@ -406,10 +406,11 @@ ActiveRecord::Schema.define(version: 20160413171224) do
   add_index "venue_users", ["enabled"], name: "index_venue_users_on_enabled", using: :btree
 
   create_table "venues", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.string   "name",               limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "creator_id", limit: 4
+    t.integer  "creator_id",         limit: 4
+    t.text     "fruit_order_fields", limit: 65535
   end
 
   add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree

@@ -3,5 +3,20 @@
 <%= bootstrap_form_for(venue, html: { class: 'venue-form' }) do |form| %>
   <%= form.text_field(:name) %>
 
+  <%= form.select(
+        :fruit_order_fields,
+        options_for_select(
+          FruitOrder::FIELDS.map do |field|
+            [field.to_s.humanize, field]
+          end,
+          form.object.fruit_order_fields
+        ),
+        {
+          include_blank: true
+        },
+        class: 'chosen-select',
+        multiple: true
+      ) %>
+
   <%= form.submit('Update') %>
 <% end %>

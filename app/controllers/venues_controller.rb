@@ -39,7 +39,7 @@ class VenuesController < ApplicationController
       redirect_to action: :index
     else
       flash.now[:error] = "There was a problem updating this venue"
-      render 'new', locals: { venue: venue }
+      render 'edit', locals: { venue: venue }
     end
   end
 
@@ -50,13 +50,24 @@ class VenuesController < ApplicationController
 
   def create_params
     params.require(:venue).
-      permit(:name).merge(
-        creator: current_user
+      permit(
+        :name
+      ).merge(
+        creator: current_user,
+        fruit_order_fields: fruit_order_fields_from_params
       )
   end
 
   def update_params
     params.require(:venue).
-      permit(:name)
+      permit(
+        :name
+      ).merge(
+        fruit_order_fields: fruit_order_fields_from_params
+      )
+  end
+
+  def fruit_order_fields_from_params
+    Array(params["venue"]["fruit_order_fields"]).reject(&:blank?).map(&:to_sym)
   end
 end

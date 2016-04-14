@@ -1,81 +1,57 @@
 class FruitOrder < ActiveRecord::Base
+  FIELDS = [
+    :limes,
+    :lemons,
+    :rasberries,
+    :blueberries,
+    :blackberries,
+    :green_apples,
+    :oranges,
+    :passion_fruits,
+    :lychees,
+    :cucumbers,
+    :kumkwats,
+    :dragon_fruits,
+    :watermelon,
+    :pink_grapefruit,
+    :plums,
+    :deskinned_coconuts,
+    :fresh_mint,
+    :fresh_basil,
+    :fresh_lavender,
+    :rosemary,
+    :thyme,
+    :red_roses,
+    :kaffir_lime_leaves,
+    :fresh_ginger,
+    :bananas,
+    :maraschino_cherry,
+    :cream,
+    :sharon_fruits,
+    :figs,
+    :blood_oranges,
+    :pomegranates,
+    :pineapples
+  ]
+
   include Statesman::Adapters::ActiveRecordQueries
 
   belongs_to :venue
 
   validates :venue, presence: true
 
-  validates :limes, presence: true
-  validates :lemons, presence: true
-  validates :rasberries, presence: true
-  validates :blueberries, presence: true
-  validates :blackberries, presence: true
-  validates :green_apples, presence: true
-  validates :oranges, presence: true
-  validates :passion_fruits, presence: true
-  validates :lychees, presence: true
-  validates :cucumbers, presence: true
-  validates :kumkwats, presence: true
-  validates :dragon_fruits, presence: true
-  validates :watermelon, presence: true
-  validates :pink_grapefruit, presence: true
-  validates :plums, presence: true
-  validates :deskinned_coconuts, presence: true
-  validates :fresh_mint, presence: true
-  validates :fresh_basil, presence: true
-  validates :fresh_lavender, presence: true
-  validates :rosemary, presence: true
-  validates :thyme, presence: true
-  validates :red_roses, presence: true
-  validates :kaffir_lime_leaves, presence: true
-  validates :fresh_ginger, presence: true
-  validates :bananas, presence: true
-  validates :maraschino_cherry, presence: true
-  validates :cream, presence: true
-  validates :sharon_fruits, presence: true
-  validates :figs, presence: true
-  validates :blood_oranges, presence: true
-  validates :pomegranates, presence: true
-  validates :pineapples, presence: true
-
+  FIELDS.each do |field|
+    validates field, presence: true
+  end
   has_many :fruit_order_transitions, autosave: false
 
   def self.build_default(venue:)
-    new(
-      venue: venue,
-      limes: 0,
-      lemons: 0,
-      rasberries: 0,
-      blueberries: 0,
-      blackberries: 0,
-      green_apples: 0,
-      oranges: 0,
-      passion_fruits: 0,
-      lychees: 0,
-      cucumbers: 0,
-      kumkwats: 0,
-      dragon_fruits: 0,
-      watermelon: 0,
-      pink_grapefruit: 0,
-      plums: 0,
-      deskinned_coconuts: 0,
-      fresh_mint: 0,
-      fresh_basil: 0,
-      fresh_lavender: 0,
-      rosemary: 0,
-      thyme: 0,
-      red_roses: 0,
-      kaffir_lime_leaves: 0,
-      fresh_ginger: 0,
-      bananas: 0,
-      maraschino_cherry: 0,
-      cream: 0,
-      sharon_fruits: 0,
-      figs: 0,
-      blood_oranges: 0,
-      pomegranates: 0,
-      pineapples: 0
-    )
+    field_values = {}
+    FIELDS.each do |field|
+      field_values[field] = 0
+    end
+
+    new(field_values.merge(venue: venue))
   end
 
   def self.current
