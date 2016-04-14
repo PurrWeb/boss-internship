@@ -36,19 +36,20 @@
         <th>Twenty Pence Coins</th>
         <th>Ten Pence Coins</th>
         <th>Five Pence Coins</th>
+        <th>Total</th>
       <tr>
     </thead>
     <tbody>
       <% change_orders.each do |change_order| %>
         <tr>
-          <td><%= change_order.venue.name %></td>
-          <td><%= change_order.five_pound_notes %></td>
-          <td><%= change_order.one_pound_coins %></td>
-          <td><%= change_order.fifty_pence_coins %></td>
-          <td><%= change_order.twenty_pence_coins %></td>
-          <td><%= change_order.ten_pence_coins %></td>
-          <td><%= change_order.five_pence_coins %></td>
-        </tr>
+          <td><%= number_to_currency(change_order.five_pound_notes, unit: '£', precision: 2) %></td>
+          <td><%= number_to_currency(change_order.one_pound_coins, unit: '£', precision: 2) %></td>
+          <td><%= number_to_currency(change_order.fifty_pence_coins, unit: '£', precision: 2) %></td>
+          <td><%= number_to_currency(change_order.twenty_pence_coins, unit: '£', precision: 2) %></td>
+          <td><%= number_to_currency(change_order.ten_pence_coins, unit: '£', precision: 2) %></td>
+          <td><%= number_to_currency(change_order.five_pence_coins, unit: '£', precision: 2) %></td>
+          <td><%= number_to_currency(change_order.total, unit: '£', precision: 2) %></td>
+            </tr>
       <% end %>
     </tbody>
   </table>
