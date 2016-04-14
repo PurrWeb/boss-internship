@@ -19,6 +19,14 @@ class Holiday < ActiveRecord::Base
     HolidayDateValidator.new(holiday).validate
   end
 
+  def self.paid
+    where(holiday_type: 'paid_holiday')
+  end
+
+  def self.unpaid
+    where(holiday_type: 'unpaid_holiday')
+  end
+
   def state_machine
     @state_machine ||= HolidayStateMachine.new(
       self,
