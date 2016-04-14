@@ -54,6 +54,20 @@ class FruitOrder < ActiveRecord::Base
     new(field_values.merge(venue: venue))
   end
 
+  def form_fruit_order_fields
+    if venue.fruit_order_fields.count == 0
+      FruitOrder::FIELDS
+    else
+      (venue.fruit_order_fields + set_fields).uniq
+    end
+  end
+
+  def set_fields
+    FruitOrder::FIELDS.select do |field|
+      public_send(field) > 0
+    end
+  end
+
   def self.current
     in_state(:in_progress)
   end
