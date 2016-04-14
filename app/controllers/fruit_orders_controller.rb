@@ -127,39 +127,6 @@ class FruitOrdersController < ApplicationController
 
   def update_params
     params.require(:fruit_order).
-      permit([
-        :limes,
-        :lemons,
-        :rasberries,
-        :blueberries,
-        :blackberries,
-        :green_apples,
-        :oranges,
-        :passion_fruits,
-        :lychees,
-        :cucumbers,
-        :kumkwats,
-        :dragon_fruits,
-        :watermelon,
-        :pink_grapefruit,
-        :plums,
-        :deskinned_coconuts,
-        :fresh_mint,
-        :fresh_basil,
-        :fresh_lavender,
-        :rosemary,
-        :thyme,
-        :red_roses,
-        :kaffir_lime_leaves,
-        :fresh_ginger,
-        :bananas,
-        :maraschino_cherry,
-        :cream,
-        :sharon_fruits,
-        :figs,
-        :blood_oranges,
-        :pomegranates,
-        :pineapples
-      ])
+      permit(FruitOrder::FIELDS)
   end
 end
