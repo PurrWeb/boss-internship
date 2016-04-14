@@ -89,37 +89,13 @@ class ChangeOrder < ActiveRecord::Base
     done? && User.find(change_order_transitions.last.metadata.fetch("requster_user_id"))
   end
 
-  def five_pound_total
-    five_pound_notes * 5
-  end
-
-  def one_pound_total
-    one_pound_coins
-  end
-
-  def fifty_pence_total
-    five_pence_coins * 0.5
-  end
-
-  def twenty_pence_total
-    twenty_pence_coins * 0.2
-  end
-
-  def ten_pence_total
-    ten_pence_coins * 0.1
-  end
-
-  def five_pence_total
-    five_pence_coins * 0.05
-  end
-
   def total
-    five_pound_total +
-      one_pound_total +
-      fifty_pence_total +
-      twenty_pence_total +
-      ten_pence_total +
-      five_pence_total
+    five_pound_notes +
+      one_pound_coins +
+      fifty_pence_coins +
+      twenty_pence_coins +
+      ten_pence_coins +
+      five_pence_coins
   end
 
   private
