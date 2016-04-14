@@ -104,7 +104,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :fruit_order_reports, only: [:index, :show] do
+  resources :fruit_order_reports, only: [:index] do
     member do
       put :accept
       put :complete
