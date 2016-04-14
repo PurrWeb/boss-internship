@@ -233,6 +233,13 @@
     <td><%= fruit_orders.to_a.sum(&:pineapples) %></td>
   </tr>
   <tr>
+    <th><%= FruitOrder.message_for(:strawberries) %></th>
+    <% fruit_orders.each do |fruit_order| %>
+      <td><%= fruit_order.strawberries %></td>
+    <% end %>
+    <td><%= fruit_orders.to_a.sum(&:strawberries) %></td>
+  </tr>
+  <tr>
     <th></th>
     <% fruit_orders.each do |fruit_order| %>
       <td>
