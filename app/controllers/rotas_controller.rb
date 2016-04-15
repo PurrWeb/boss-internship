@@ -155,7 +155,7 @@ class RotasController < ApplicationController
   end
 
   def default_start_date
-    Time.now.beginning_of_week
+    Time.zone.now.beginning_of_week
   end
 
   def end_date_from_params
@@ -165,7 +165,7 @@ class RotasController < ApplicationController
   end
 
   def default_end_date
-    Time.now.end_of_week
+    Time.zone.now.end_of_week
   end
 
   def rota_date_from_params

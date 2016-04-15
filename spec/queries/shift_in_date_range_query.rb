@@ -9,7 +9,7 @@ describe ShiftInRangeQuery do
       ends_at: ends_at
     )
   end
-  let(:rota) { FactoryGirl.create(:rota, date: Time.now) }
+  let(:rota) { FactoryGirl.create(:rota, date: Time.zone.now) }
   let(:staff_member) { shift.staff_member }
   let(:starts_at) { (rota.date.beginning_of_day + 5.hours).utc }
   let(:ends_at) { (rota.date.beginning_of_day + 6.hours).utc }

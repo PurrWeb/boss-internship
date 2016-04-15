@@ -55,7 +55,7 @@ class UsersController < ApplicationController
     authorize! :create_staff_member, user
 
     staff_member = StaffMember.new(
-      starts_at: Time.now,
+      starts_at: Time.zone.now,
       email_address: user.email_address,
       name: user.name
     )

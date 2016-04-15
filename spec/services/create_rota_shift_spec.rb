@@ -12,7 +12,7 @@ describe CreateRotaShift do
         shift_type: 'normal'
       }
     end
-    let(:rota_date) { Time.now.to_date }
+    let(:rota_date) { Time.zone.now.to_date }
     let(:venue) { FactoryGirl.create(:venue) }
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:creator) { FactoryGirl.create(:user) }
@@ -76,7 +76,7 @@ describe CreateRotaShift do
     end
 
     context 'supplying invalid parameters' do
-      let(:starts_at) { (Time.now.beginning_of_day + 9.hours).round }
+      let(:starts_at) { (Time.zone.now.beginning_of_day + 9.hours).round }
       let(:ends_at) { nil }
 
       describe 'result' do
@@ -120,7 +120,7 @@ describe CreateRotaShift do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:rota_shift_creator) { FactoryGirl.create(:user) }
     let(:rota_creator) { FactoryGirl.create(:user) }
-    let(:rota_create_time) { Time.now.round }
+    let(:rota_create_time) { Time.zone.now.round }
     let(:authorization_proc) { Proc.new{} }
     let!(:rota) do
       travel_to rota_create_time do

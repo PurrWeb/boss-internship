@@ -3,7 +3,7 @@ FactoryGirl.define do
     transient do
       starts_at nil
       ends_at nil
-      date Time.now
+      date Time.zone.now
       rota nil
     end
 

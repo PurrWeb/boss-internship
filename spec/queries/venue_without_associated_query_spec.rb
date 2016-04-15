@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe VenueWithoutAssociatedQuery do
   let(:date) do
-    RotaWeek.new(Time.now).start_date
+    RotaWeek.new(Time.zone.now).start_date
   end
   let(:query) do
     VenueWithoutAssociatedQuery.new(associated_relation: change_orders)

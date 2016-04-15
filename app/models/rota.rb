@@ -44,7 +44,7 @@ class Rota < ActiveRecord::Base
   end
 
   def forecastable?
-    date >= RotaWeek.new(Time.now).start_date
+    date >= RotaWeek.new(Time.zone.now).start_date
   end
 
   def start_time

@@ -45,7 +45,7 @@ RSpec.describe 'Api access' do
 
   describe "create" do
     let(:response) { post(url, params) }
-    let(:rota_date) { Time.now }
+    let(:rota_date) { Time.zone.now }
     let(:venue) { FactoryGirl.create(:venue) }
     let(:url) do
       url_helpers.api_v1_venue_rota_rota_shifts_path(
@@ -101,7 +101,7 @@ RSpec.describe 'Api access' do
     context 'supplying invalid parameters' do
       let(:rota) { FactoryGirl.create(:rota) }
       let(:staff_member) { FactoryGirl.create(:staff_member) }
-      let(:starts_at) { (Time.now.beginning_of_day + 8.hours).utc }
+      let(:starts_at) { (Time.zone.now.beginning_of_day + 8.hours).utc }
       let(:invalid_ends_at) { nil }
       let(:params) do
         {
@@ -157,8 +157,8 @@ RSpec.describe 'Api access' do
 
   describe "update" do
     let(:url) { url_helpers.api_v1_rota_shift_path(rota_shift) }
-    let(:original_starts_at) { (Time.now.beginning_of_day + 9.hours).round.utc }
-    let(:original_ends_at) { (Time.now.beginning_of_day + 10.hours).round.utc }
+    let(:original_starts_at) { (Time.zone.now.beginning_of_day + 9.hours).round.utc }
+    let(:original_ends_at) { (Time.zone.now.beginning_of_day + 10.hours).round.utc }
     let(:new_starts_at) { original_starts_at + 1.hour }
     let(:new_ends_at) { original_ends_at + 1.hour }
     let(:rota_shift) do

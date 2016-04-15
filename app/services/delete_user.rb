@@ -4,7 +4,7 @@ class DeleteUser
     user:,
     would_rehire:,
     disable_reason: nil,
-    now: Time.now
+    now: Time.zone.now
   )
     @requester = requester
     @user = user

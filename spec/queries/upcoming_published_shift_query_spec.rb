@@ -4,7 +4,7 @@ RSpec.describe UpcomingPublishedShiftQuery do
   include ActiveSupport::Testing::TimeHelpers
 
   # 12:00am
-  let(:now) { Time.now.beginning_of_day + 12.hours }
+  let(:now) { Time.zone.now.beginning_of_day + 12.hours }
   around(:each) do |example|
     travel_to now do
       example.run

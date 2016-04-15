@@ -1,5 +1,5 @@
 class ShiftChangeNotificationMailer < ApplicationMailer
-  def notify_of_shift_change_mail(staff_member_id:, now: Time.now)
+  def notify_of_shift_change_mail(staff_member_id:, now: Time.zone.now)
     staff_member = StaffMember.find(staff_member_id)
 
     upcoming_shifts = UpcomingPublishedShiftQuery.new(staff_member: staff_member).all

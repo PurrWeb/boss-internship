@@ -2,7 +2,7 @@ require 'feature/feature_spec_helper'
 
 RSpec.describe 'Holidays page' do
   let(:dev_user) { FactoryGirl.create(:user, :dev) }
-  let(:date) { Time.now.to_date }
+  let(:date) { Time.zone.now.to_date }
   let(:venue) { FactoryGirl.create(:venue) }
   let(:show_page) do
     PageObject::HolidaysShowPage.new(

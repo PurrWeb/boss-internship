@@ -1,5 +1,5 @@
 class UpcomingPublishedShiftQuery
-  def initialize(staff_member:, now: Time.now)
+  def initialize(staff_member:, now: Time.zone.now)
     @staff_member = staff_member
     @now = now
   end

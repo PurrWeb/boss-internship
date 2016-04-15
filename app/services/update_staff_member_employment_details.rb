@@ -5,7 +5,7 @@ class UpdateStaffMemberEmploymentDetails
     end
   end
 
-  def initialize(now: Time.now, staff_member:, params:)
+  def initialize(now: Time.zone.now, staff_member:, params:)
     @now = now
     @staff_member = staff_member
     @params = params
@@ -45,7 +45,7 @@ class UpdateStaffMemberEmploymentDetails
       end
 
       if result && staff_member_updates_email.send?
-        StaffMemberUpdatesMailer.staff_member_updated(staff_member_updates_email.data).deliver_later
+        StaffMemberUpdatesMailer.staff_member_updated(staff_member_updates_email.data).deliver_now
       end
     end
 

@@ -1,5 +1,5 @@
 class StaffMembersWithExpiringSiaBadgeQuery
-  def initialize(now: Time.now, relation: StaffMember.all)
+  def initialize(now: Time.zone.now, relation: StaffMember.all)
     @now = now
     @relation = relation
   end

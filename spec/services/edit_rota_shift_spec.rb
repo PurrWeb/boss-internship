@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe do
-  let(:week) { RotaWeek.new(Time.now) }
+  let(:week) { RotaWeek.new(Time.zone.now) }
   let(:service) do
     EditRotaShift.new(
       rota_shift: rota_shift,

@@ -29,8 +29,8 @@
     <div class="staff-member-starts-at-field">
       <%= form.date_select(
             :starts_at,
-            start_year: Time.now.year + 2,
-            end_year: Time.now.year - 2,
+            start_year: Time.zone.now.year + 2,
+            end_year: Time.zone.now.year - 2,
             include_blank: true,
             with_css_classes: true
           ) %>

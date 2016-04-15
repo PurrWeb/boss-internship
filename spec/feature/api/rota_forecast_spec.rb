@@ -4,7 +4,7 @@ RSpec.describe 'Api access' do
   include Rack::Test::Methods
   include ActiveSupport::Testing::TimeHelpers
 
-  let(:date) { RotaWeek.new(Time.now).start_date }
+  let(:date) { RotaWeek.new(Time.zone.now).start_date }
   let(:venue) { FactoryGirl.create(:venue) }
   let(:rota) do
     FactoryGirl.create(
@@ -71,8 +71,8 @@ RSpec.describe 'Api access' do
       context 'when mutliple forecasts exist' do
         let(:forecast_times) do
           [
-            Time.now.beginning_of_day + 3.hours,
-            Time.now.beginning_of_day + 2.hours
+            Time.zone.now.beginning_of_day + 3.hours,
+            Time.zone.now.beginning_of_day + 2.hours
           ]
         end
 

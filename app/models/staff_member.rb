@@ -187,7 +187,7 @@ class StaffMember < ActiveRecord::Base
     email_address.try(:email)
   end
 
-  def mark_requiring_notification!(time: Time.now)
+  def mark_requiring_notification!(time: Time.zone.now)
     update_attributes!(shift_change_occured_at: time)
   end
 

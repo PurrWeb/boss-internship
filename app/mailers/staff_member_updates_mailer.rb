@@ -19,7 +19,7 @@ class StaffMemberUpdatesMailer < ApplicationMailer
     staff_member_name = data.fetch(:staff_member_name)
     staff_member_id = data.fetch(:staff_member_id)
 
-    time_stamp = Time.now.strftime('%d_%m_%Y_%H_%M')
+    time_stamp = Time.zone.now.strftime('%d_%m_%Y_%H_%M')
     attachments["staff_member_#{staff_member_id}_#{time_stamp}.pdf"] = {
       mime_type: 'application/pdf',
       content: StaffMemberUpdateDetailsPDF.new(

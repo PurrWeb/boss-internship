@@ -4,7 +4,7 @@ describe PublishRotas do
   include ActiveSupport::Testing::TimeHelpers
 
   around(:each) do |example|
-    travel_to Time.now do
+    travel_to Time.zone.now do
       example.run
     end
   end
@@ -48,7 +48,7 @@ describe PublishRotas do
           service.call
         }.to change{
           staff_member.reload.shift_change_occured_at
-        }.from(nil).to(Time.now)
+        }.from(nil).to(Time.zone.now)
       end
     end
   end

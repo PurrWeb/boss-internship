@@ -121,8 +121,8 @@ RSpec.describe 'Api access' do
     let(:response) { post(url) }
     let(:venue) { FactoryGirl.create(:venue) }
     let(:user) { FactoryGirl.create(:user, :admin)}
-    let(:start_date) { Time.now.beginning_of_week.to_date }
-    let(:end_date) { Time.now.end_of_week.to_date }
+    let(:start_date) { Time.zone.now.beginning_of_week.to_date }
+    let(:end_date) { Time.zone.now.end_of_week.to_date }
 
     specify 'should be a success' do
       expect(response.status).to eq(200)
