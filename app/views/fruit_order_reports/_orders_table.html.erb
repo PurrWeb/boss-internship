@@ -7,7 +7,7 @@
     <% end %>
     <th style="text-align: center; max-width: <%= max_col_width %>px;">Total</th>
   </tr>
-  <% FruitOrder::FIELDS.each do |field| %>
+  <% show_fields.each do |field| %>
     <tr>
       <th><%= FruitOrder.message_for(field) %></th>
       <% fruit_orders.each do |fruit_order| %>

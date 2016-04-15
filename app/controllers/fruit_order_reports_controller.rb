@@ -3,7 +3,10 @@ class FruitOrderReportsController < ApplicationController
 
   def index
     pending_fruit_orders = FruitOrder.current
+    pending_show_fields = FruitOrderShowFields.new(pending_fruit_orders)
+
     accepted_fruit_orders = FruitOrder.accepted
+    accepted_show_fields = FruitOrderShowFields.new(accepted_fruit_orders)
 
     venues_without_pending_fruit_order = VenueWithoutAssociatedQuery.new(
       associated_relation: pending_fruit_orders
@@ -12,7 +15,9 @@ class FruitOrderReportsController < ApplicationController
     render locals: {
       venues_without_pending_fruit_order: venues_without_pending_fruit_order,
       pending_fruit_orders: pending_fruit_orders,
-      accepted_fruit_orders: accepted_fruit_orders
+      pending_show_fields: pending_show_fields,
+      accepted_fruit_orders: accepted_fruit_orders,
+      accepted_show_fields: accepted_show_fields
     }
   end
 

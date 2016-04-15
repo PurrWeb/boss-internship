@@ -8,14 +8,22 @@
 
 <h2>Pending Orders</h2>
 <% if pending_fruit_orders.count > 0 %>
-  <%= render partial: 'orders_table', locals: { fruit_orders: pending_fruit_orders , action_partial: 'pending_order_actions' } %>
+  <%= render partial: 'orders_table', locals: {
+        fruit_orders: pending_fruit_orders,
+        show_fields: pending_show_fields,
+        action_partial: 'pending_order_actions'
+      } %>
 <% else %>
   <p>No fruit orders currently pending</p>
 <% end %>
 
 <% if accepted_fruit_orders.count > 0 %>
   <h2>Accepted Orders</h2>
-  <%= render partial: 'orders_table', locals: { fruit_orders: accepted_fruit_orders , action_partial: 'accepted_order_actions' } %>
+  <%= render partial: 'orders_table', locals: {
+        fruit_orders: accepted_fruit_orders,
+        show_fields: accepted_show_fields,
+        action_partial: 'accepted_order_actions'
+      } %>
 <% end %>
 
 <%= link_to('View Full History', history_fruit_order_reports_path, class: 'btn btn-success') %>
