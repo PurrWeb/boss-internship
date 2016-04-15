@@ -23,18 +23,4 @@ class ShiftChangeNotificationMailer < ApplicationMailer
       end
     end
   end
-
-  def test_now
-    mail(
-      to: 'william@jsmbars.co.uk',
-      subject: 'Timezone Test: Deliver now job'
-    )
-  end
-
-  def test_later
-    mail(
-      to: 'william@jsmbars.co.uk',
-      subject: 'Timezone Test: Deliver later job'
-    )
-  end
 end
