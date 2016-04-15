@@ -59,7 +59,7 @@ RSpec.describe 'DeleteStaffMember service'  do
     end
 
     context 'staff member has shifts in the future' do
-      let(:rota_shift_date) { RotaShiftDate.new(Time.now + 2.weeks) }
+      let(:rota_shift_date) { RotaShiftDate.new(Time.zone.now + 2.weeks) }
       let(:rota) do
         FactoryGirl.create(
           :rota,
@@ -117,7 +117,7 @@ RSpec.describe 'DeleteStaffMember service'  do
     end
 
     context 'staff member has future holidays' do
-      let(:week) { RotaWeek.new(Time.now) }
+      let(:week) { RotaWeek.new(Time.zone.now) }
       let(:holiday) do
         travel_to 1.week.ago do
           FactoryGirl.create(

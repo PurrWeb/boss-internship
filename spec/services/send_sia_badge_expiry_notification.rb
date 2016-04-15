@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe SendSiaBadgeExpiryNotifications do
-  let(:call_time) { Time.now.round }
+  let(:call_time) { Time.zone.now.round }
   let(:service) { SendSiaBadgeExpiryNotifications.new(now: call_time) }
   let(:user) { FactoryGirl.create(:user, :dev, staff_member: nil) }
   let(:security_staff_members) do

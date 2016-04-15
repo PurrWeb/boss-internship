@@ -5,7 +5,7 @@ class CreateStaffMember
     end
   end
 
-  def initialize(now: Time.now, params:, nested: false)
+  def initialize(now: Time.zone.now, params:, nested: false)
     @now = now
     @params = params
     @nested = nested

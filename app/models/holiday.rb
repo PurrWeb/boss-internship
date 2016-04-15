@@ -56,7 +56,7 @@ class Holiday < ActiveRecord::Base
   end
 
   def editable?
-    staff_member.enabled? && (end_date > Time.now.to_date)
+    staff_member.enabled? && (end_date > Time.zone.now.to_date)
   end
 
   def days

@@ -5,7 +5,7 @@ class UpdateStaffMemberEmploymentDetails
     end
   end
 
-  def initialize(now: Time.now, staff_member:, params:)
+  def initialize(now: Time.zone.now, staff_member:, params:)
     @now = now
     @staff_member = staff_member
     @params = params

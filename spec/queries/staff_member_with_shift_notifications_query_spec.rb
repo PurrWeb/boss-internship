@@ -10,7 +10,7 @@ describe StaffMemberWithShiftNotificationsQuery do
   end
 
   context 'staff member has had a shift change more than 30 minutes ago' do
-    let(:shift_change_occured_at) { Time.now - 40.minutes }
+    let(:shift_change_occured_at) { Time.zone.now - 40.minutes }
 
     specify 'they should be present in results' do
       expect(query.all.count).to eq(1)
@@ -33,7 +33,7 @@ describe StaffMemberWithShiftNotificationsQuery do
   end
 
   context 'staff member has has a shift change less than 30 minutes ago' do
-    let(:shift_change_occured_at) { Time.now - 20.minutes }
+    let(:shift_change_occured_at) { Time.zone.now - 20.minutes }
 
     specify 'they shoud not be present in results' do
       expect(query.all.count).to eq(0)

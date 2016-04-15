@@ -14,7 +14,7 @@ describe HolidayDateValidator do
 
   context 'start_date not present' do
     let(:start_date) { nil }
-    let(:end_date) { Time.now }
+    let(:end_date) { Time.zone.now }
 
     specify 'no errors should be added' do
       validator.validate
@@ -23,7 +23,7 @@ describe HolidayDateValidator do
   end
 
   context 'start_date not present' do
-    let(:start_date) { Time.now }
+    let(:start_date) { Time.zone.now }
     let(:end_date) { nil }
 
     specify 'no errors should be added' do
@@ -34,7 +34,7 @@ describe HolidayDateValidator do
 
   context 'start_date is after end date' do
     let(:start_date) { 2.days.from_now }
-    let(:end_date) { Time.now }
+    let(:end_date) { Time.zone.now }
 
     specify 'an error message should be added on base' do
       validator.validate
@@ -62,7 +62,7 @@ describe HolidayDateValidator do
 
     context 'validating the existing holiday' do
       let(:validator) { HolidayDateValidator.new(existing_holiday) }
-      let(:existing_holiday_start_date) { Time.now.to_date.monday }
+      let(:existing_holiday_start_date) { Time.zone.now.to_date.monday }
       let(:existing_holiday_end_date) { existing_holiday_start_date + 2.days }
 
       specify 'no error should be added' do
@@ -72,7 +72,7 @@ describe HolidayDateValidator do
     end
 
     context 'end of holiday overlaps with existing' do
-      let(:existing_holiday_start_date) { Time.now.to_date.monday + 1.day }
+      let(:existing_holiday_start_date) { Time.zone.now.to_date.monday + 1.day }
       let(:existing_holiday_end_date) { existing_holiday_start_date + 3.days }
       let(:start_date) { existing_holiday_start_date - 1.days }
       let(:end_date) { existing_holiday_start_date + 1.day }
@@ -91,10 +91,10 @@ describe HolidayDateValidator do
     end
 
     context 'start of holiday overlaps with existing' do
-      let(:existing_holiday_start_date) { Time.now.to_date.monday + 1.day }
-      let(:existing_holiday_end_date) { Time.now.to_date.monday + 3.days }
-      let(:start_date) { Time.now.to_date.monday }
-      let(:end_date) { Time.now.to_date.monday + 2.days }
+      let(:existing_holiday_start_date) { Time.zone.now.to_date.monday + 1.day }
+      let(:existing_holiday_end_date) { Time.zone.now.to_date.monday + 3.days }
+      let(:start_date) { Time.zone.now.to_date.monday }
+      let(:end_date) { Time.zone.now.to_date.monday + 2.days }
 
       specify 'an error message should be added on base' do
         validator.validate
@@ -110,7 +110,7 @@ describe HolidayDateValidator do
     end
 
     context 'existing holiday dates encloses new dates' do
-      let(:existing_holiday_start_date) { Time.now.to_date.monday }
+      let(:existing_holiday_start_date) { Time.zone.now.to_date.monday }
       let(:existing_holiday_end_date) { existing_holiday_start_date + 6.days }
       let(:start_date) { existing_holiday_start_date + 1.days }
       let(:end_date) { existing_holiday_end_date - 1.day }
@@ -130,7 +130,7 @@ describe HolidayDateValidator do
   end
 
   context 'overlapping shift exist' do
-    let(:start_date) { Time.now.to_date.monday + 2.days }
+    let(:start_date) { Time.zone.now.to_date.monday + 2.days }
     let(:end_date) { start_date + 1.day }
     let(:shift_starts_at) { start_date.beginning_of_day + 10.hours }
     let(:shift_ends_at) { shift_starts_at + 2.hours }
@@ -166,7 +166,7 @@ describe HolidayDateValidator do
   context 'holiday is not conatined within one week' do
     let(:start_date) do
       # Saturday
-      Time.now.beginning_of_week.to_date + 6.days
+      Time.zone.now.beginning_of_week.to_date + 6.days
     end
     let(:end_date) do
       # the next Wednesday

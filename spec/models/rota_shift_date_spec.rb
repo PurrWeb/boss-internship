@@ -6,7 +6,7 @@ describe 'Rota shift date' do
     let(:calendar_date) { time.to_date }
 
     context 'time is before 8am' do
-      let(:time) { Time.now.beginning_of_day + 4.hours }
+      let(:time) { Time.zone.now.beginning_of_day + 4.hours }
 
       specify 'result is day before calendar date' do
         expect(call).to eq(calendar_date - 1.day)
@@ -14,7 +14,7 @@ describe 'Rota shift date' do
     end
 
     context 'time is after 8am' do
-      let(:time) { Time.now.beginning_of_day + 12.hours }
+      let(:time) { Time.zone.now.beginning_of_day + 12.hours }
 
       specify 'result is calendar date' do
         expect(call).to eq(calendar_date)
@@ -27,7 +27,7 @@ describe 'Rota shift date' do
     let(:calendar_date) { time.to_date }
 
     context 'time is before 8am' do
-      let(:time) { Time.now.beginning_of_day + 4.hours }
+      let(:time) { Time.zone.now.beginning_of_day + 4.hours }
       let(:expected_start_time) do
         (calendar_date - 1.day).beginning_of_day + 8.hours
       end
@@ -38,7 +38,7 @@ describe 'Rota shift date' do
     end
 
     context 'time is after 8am' do
-      let(:time) { Time.now.beginning_of_day + 12.hours }
+      let(:time) { Time.zone.now.beginning_of_day + 12.hours }
       let(:expected_start_time) do
         calendar_date.beginning_of_day + 8.hours
       end
@@ -54,7 +54,7 @@ describe 'Rota shift date' do
     let(:calendar_date) { time.to_date }
 
     context 'time is before 8am' do
-      let(:time) { Time.now.beginning_of_day + 4.hours }
+      let(:time) { Time.zone.now.beginning_of_day + 4.hours }
       let(:expected_end_time) do
         calendar_date.beginning_of_day + 8.hours
       end
@@ -65,7 +65,7 @@ describe 'Rota shift date' do
     end
 
     context 'time is after 8am' do
-      let(:time) { Time.now.beginning_of_day + 12.hours }
+      let(:time) { Time.zone.now.beginning_of_day + 12.hours }
       let(:expected_end_time) do
         (calendar_date + 1.day).beginning_of_day + 8.hours
       end
@@ -77,7 +77,7 @@ describe 'Rota shift date' do
   end
 
   describe '#contains_time?' do
-    let(:now) { Time.now }
+    let(:now) { Time.zone.now }
     let(:date) { RotaShiftDate.new(now) }
 
     specify do

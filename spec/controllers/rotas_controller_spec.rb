@@ -10,8 +10,8 @@ RSpec.describe RotasController do
     describe 'accessing with no params set' do
       context 'user has no venue associated' do
         let(:user) { FactoryGirl.create(:user, :manager, venues: []) }
-        let(:expected_start_date) { Time.now.beginning_of_week.to_date }
-        let(:expected_end_date) { Time.now.beginning_of_week.to_date + 6.days }
+        let(:expected_start_date) { Time.zone.now.beginning_of_week.to_date }
+        let(:expected_end_date) { Time.zone.now.beginning_of_week.to_date + 6.days }
 
         it 'should redirect to index with current week dates set' do
           get :index
@@ -26,8 +26,8 @@ RSpec.describe RotasController do
       context 'user has no venue assciated' do
         let(:venue) { FactoryGirl.create(:venue) }
         let(:user) { FactoryGirl.create(:user, :manager, venues: [venue]) }
-        let(:expected_start_date) { Time.now.beginning_of_week.to_date }
-        let(:expected_end_date) { Time.now.beginning_of_week.to_date + 6.days }
+        let(:expected_start_date) { Time.zone.now.beginning_of_week.to_date }
+        let(:expected_end_date) { Time.zone.now.beginning_of_week.to_date + 6.days }
 
         it 'should redirect to index for users first venue with current week dates set' do
           get :index
@@ -43,7 +43,7 @@ RSpec.describe RotasController do
 
     context 'supplying dates but no venue' do
       let(:user) { FactoryGirl.create(:user, :manager, venues: [venue]) }
-      let(:start_date) { Time.now.beginning_of_week.to_date + 7.days }
+      let(:start_date) { Time.zone.now.beginning_of_week.to_date + 7.days }
       let(:end_date) { start_date + 6.days }
       let(:venue) { FactoryGirl.create(:venue) }
 
@@ -65,7 +65,7 @@ RSpec.describe RotasController do
 
     context 'supplying valid dates and venue' do
       let(:user) { FactoryGirl.create(:user, :manager, venues: [venue]) }
-      let(:start_date) { Time.now.beginning_of_week.to_date + 7.days }
+      let(:start_date) { Time.zone.now.beginning_of_week.to_date + 7.days }
       let(:end_date) { start_date + 6.days }
       let(:venue) { FactoryGirl.create(:venue) }
 

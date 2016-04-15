@@ -7,7 +7,7 @@ describe DisableRotaShift do
   let(:staff_member) { FactoryGirl.create(:staff_member)}
   let(:user) { FactoryGirl.create(:user) }
   let(:service) { DisableRotaShift.new(requester: user, shift: shift) }
-  let(:call_time) { Time.now.round }
+  let(:call_time) { Time.zone.now.round }
 
   context 'before call' do
     specify 'staff member should not require notification' do

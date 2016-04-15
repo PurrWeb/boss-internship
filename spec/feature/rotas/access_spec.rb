@@ -9,7 +9,7 @@ RSpec.describe 'Rota page access' do
 
   describe 'non existing rota page' do
     let(:venue) { FactoryGirl.create(:venue)}
-    let(:url) { url_helpers.venue_rota_path(id: UIRotaDate.format(Time.now), venue_id: venue.id) }
+    let(:url) { url_helpers.venue_rota_path(id: UIRotaDate.format(Time.zone.now), venue_id: venue.id) }
 
     context 'manager with rites to manage venue' do
       let(:user) { FactoryGirl.create(:user, :admin, venues: [venue]) }

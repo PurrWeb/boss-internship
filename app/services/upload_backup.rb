@@ -15,7 +15,7 @@ module Services
         cmd << "|"
         cmd << "gzip -9"
 
-        path = "#{dir}/#{name}-#{Time.now.strftime("%Y.%m.%d-%H.%M.%S")}.sql.gz"
+        path = "#{dir}/#{name}-#{Time.zone.now.strftime("%Y.%m.%d-%H.%M.%S")}.sql.gz"
 
         out = `#{cmd.join(" ")} 2>&1 >#{path}`
         unless $?.success?

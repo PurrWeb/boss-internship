@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :rota do
     association :creator, factory: :user
-    date { Time.now.to_date }
+    date { Time.zone.now.to_date }
     venue
 
     trait :in_progress do

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe StaffMembersWithExpiringSiaBadgeQuery do
-  let!(:call_time) { Time.now }
+  let!(:call_time) { Time.zone.now }
   let(:query) { StaffMembersWithExpiringSiaBadgeQuery.new(now: call_time) }
   let!(:security_staff_member) do
     FactoryGirl.create(

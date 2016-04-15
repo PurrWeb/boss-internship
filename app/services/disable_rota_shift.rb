@@ -12,7 +12,7 @@ class DisableRotaShift
       shift.update_attributes!(
         enabled: false,
         disabled_by_user: requester,
-        disabled_at: Time.now
+        disabled_at: Time.zone.now
       )
 
       if notify_staff_member && shift.rota_published?

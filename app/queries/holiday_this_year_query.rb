@@ -1,5 +1,5 @@
 class HolidayThisYearQuery
-  def initialize(relation: Holiday.all, now: Time.now)
+  def initialize(relation: Holiday.all, now: Time.zone.now)
     @relation = relation
     @today = now.to_date
   end

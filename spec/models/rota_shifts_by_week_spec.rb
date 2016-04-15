@@ -16,7 +16,7 @@ RSpec.describe RotaShiftsByWeek do
   end
 
   context 'shifts in same week' do
-    let(:week) { RotaWeek.new(Time.now) }
+    let(:week) { RotaWeek.new(Time.zone.now) }
     let(:shifts) do
       Array.new(2) do
         FactoryGirl.build(
@@ -37,7 +37,7 @@ RSpec.describe RotaShiftsByWeek do
   end
 
   context 'shifts in different weeks' do
-    let(:weeks) { [RotaWeek.new(Time.now), RotaWeek.new(Time.now + 1.week)] }
+    let(:weeks) { [RotaWeek.new(Time.zone.now), RotaWeek.new(Time.zone.now + 1.week)] }
     let(:shifts) do
       weeks.map do |week|
         FactoryGirl.build(

@@ -4,7 +4,7 @@ RSpec.describe 'Shift notification Emails' do
   include ActiveSupport::Testing::TimeHelpers
 
   context 'when staff member is marked as requiring notification' do
-    let(:this_week) { RotaWeek.new(Time.now) }
+    let(:this_week) { RotaWeek.new(Time.zone.now) }
     let(:next_week) { RotaWeek.new(this_week.start_date + 1.week) }
     let(:now) { this_week.start_date }
     around(:each) do |example|
@@ -34,7 +34,7 @@ RSpec.describe 'Shift notification Emails' do
 
     context 'when more than 30 minutes have passed' do
       specify 'running the ShiftUpdateNotificationJob should send the staff member an update email' do
-        travel_to(Time.now + 31.minutes) do
+        travel_to(Time.zone.now + 31.minutes) do
           ShiftUpdateNotificationJob.new.perform
           expect(ActionMailer::Base.deliveries).to_not be_empty
         end

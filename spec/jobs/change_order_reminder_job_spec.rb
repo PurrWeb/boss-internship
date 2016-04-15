@@ -4,7 +4,7 @@ describe ChangeOrderReminderJob do
   include ActiveSupport::Testing::TimeHelpers
   include ActiveJob::TestHelper
 
-  let(:now) { Time.now }
+  let(:now) { Time.zone.now }
   let(:week) { RotaWeek.new(now) }
   let(:job) { ChangeOrderReminderJob.new }
   let(:venue) { FactoryGirl.create(:venue) }

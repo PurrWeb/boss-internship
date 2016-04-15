@@ -1,5 +1,5 @@
 class SendSiaBadgeExpiryNotifications
-  def initialize(now: Time.now)
+  def initialize(now: Time.zone.now)
     @now = now
   end
 

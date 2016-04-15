@@ -56,7 +56,7 @@ class StaffMembersController < ApplicationController
   def new
     authorize! :manage, :staff_members
 
-    staff_member = StaffMember.new(starts_at: Time.now)
+    staff_member = StaffMember.new(starts_at: Time.zone.now)
     render locals: { staff_member: staff_member }
   end
 

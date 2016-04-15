@@ -5,7 +5,7 @@ class DeleteStaffMember
     would_rehire:,
     disable_reason: nil,
     nested: false,
-    now: Time.now
+    now: Time.zone.now
   )
     @requester = requester
     @staff_member = staff_member
