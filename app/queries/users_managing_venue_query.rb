@@ -4,10 +4,14 @@ class UsersManagingVenueQuery
   end
 
   def all
-    all_venues_users = User.enabled.with_all_venue_access
+    all_venues_users = User.
+      enabled.
+      with_all_venue_access
 
-    specific_venue_users = User.enabled.
-      joins(:venues).uniq
+    specific_venue_users = User.
+      enabled.
+      joins(:venue_users).
+      where('venue_users.venue_id = ?', venue.id)
 
     User.where(
       'id IN (?) OR id IN (?)',
