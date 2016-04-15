@@ -29,7 +29,7 @@ class CreateStaffMember
       result = staff_member.save
 
       if result
-        StaffMemberUpdatesMailer.new_staff_member(staff_member).deliver_later
+        StaffMemberUpdatesMailer.new_staff_member(staff_member).deliver_now
       end
     end
 
