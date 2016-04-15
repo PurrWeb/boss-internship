@@ -107,10 +107,10 @@ Rails.application.routes.draw do
   resources :fruit_order_reports, only: [:index] do
     member do
       put :accept
-      put :complete
     end
 
     collection do
+      put :complete
       get :history
     end
   end
