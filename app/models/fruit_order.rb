@@ -32,7 +32,8 @@ class FruitOrder < ActiveRecord::Base
     :blood_oranges,
     :pomegranates,
     :pineapples,
-    :strawberries
+    :strawberries,
+    :cranberries
   ]
 
   include Statesman::Adapters::ActiveRecordQueries
@@ -131,7 +132,8 @@ class FruitOrder < ActiveRecord::Base
       blood_oranges: 'Blood Oranges (Each)',
       pomegranates: 'Pomegranates (Each)',
       pineapples: 'Pineapples (Each)',
-      strawberries: 'Strawberries (Punnet)'
+      strawberries: 'Strawberries (Punnet)',
+      cranberries: 'Cranberries (Punnet)'
     }.fetch(property)
   end
 
