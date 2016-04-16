@@ -4,9 +4,11 @@ class SendShiftChangeNotifications
   end
 
   def call
-    ShiftChangeNotificationMailer.
-      notify_of_shift_change_mail(staff_member_id: staff_member.id).
-      deliver_now
+    if staff_member.email.present?
+      ShiftChangeNotificationMailer.
+        notify_of_shift_change_mail(staff_member_id: staff_member.id).
+        deliver_now
+    end
 
     staff_member.mark_notified!
   end
