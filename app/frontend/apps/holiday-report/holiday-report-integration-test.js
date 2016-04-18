@@ -7,6 +7,7 @@ import TestUtils from "react-addons-test-utils"
 import "~lib/load-underscore-mixins"
 
 describe('Holiday Report Integration Test', function() {
+    var THE_BAR_ID = 3;
     var viewData = {
         staffTypes: [{
             name: "Kitchen",
@@ -14,14 +15,15 @@ describe('Holiday Report Integration Test', function() {
         }],
         venues: [{
             name: "The Bar",
-            id: 3
+            id: THE_BAR_ID
         }], 
         staffMembers: [{
             first_name: "John",
             surname: "Smith",
             id: 50,
             holidays: [{id: 9}],
-            staff_type: {id: 4}
+            staff_type: {id: 4},
+            venues: [{id: THE_BAR_ID}]
         }],
         holidays: [{
             id: 9,
