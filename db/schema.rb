@@ -40,6 +40,27 @@ ActiveRecord::Schema.define(version: 20160418143307) do
     t.datetime "updated_at"
   end
 
+  create_table "api_key_transitions", force: :cascade do |t|
+    t.string   "to_state",    limit: 255,   null: false
+    t.text     "metadata",    limit: 65535
+    t.integer  "sort_key",    limit: 4,     null: false
+    t.integer  "api_key_id",  limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "api_key_transitions", ["api_key_id", "most_recent"], name: "index_api_key_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "api_key_transitions", ["api_key_id", "sort_key"], name: "index_api_key_transitions_parent_sort", unique: true, using: :btree
+
+  create_table "api_keys", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4,   null: false
+    t.string   "key",        limit: 255, null: false
+    t.integer  "venue_id",   limit: 4,   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "backups", force: :cascade do |t|
     t.integer  "size",       limit: 4,   default: 0, null: false
     t.string   "dump",       limit: 255
