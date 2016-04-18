@@ -87,6 +87,17 @@ var utils =  {
     },
     datesAreEqual(date1, date2){
         return moment(date1).format("DD-MM-YYYY") === moment(date2).format("DD-MM-YYYY");
+    },
+    sum(array){
+        var count = 0;
+        for(var i=0, n=array.length; i < n; i++) { 
+            count += array[i]; 
+        }
+        return count;
+    },
+    round(number, decimals){
+        var factor = Math.pow(10, decimals);
+        return Math.round(number * factor) / factor;
     }
 }
 

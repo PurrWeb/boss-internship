@@ -15,3 +15,9 @@ describe("utils.dateIsValid", function() {
         expect(utils.dateIsValid(new Date("a"))).toBe(false);
     });
 });
+
+describe("utils.round", function(){
+    it("Rounds 1.456 with two decimals as 1.46", function(){
+        expect(utils.round(1.456, 2)).toEqual(1.46);
+    })
+})
