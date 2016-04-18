@@ -14,6 +14,7 @@ import validation from "~lib/validation"
 import RotaDate from "~lib/rota-date"
 import * as actionCreators from "~redux/actions"
 import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
+import ShiftList from "~models/shift-list"
 
 class RotaStaffListItem extends Component {
     static contextTypes = {
@@ -59,8 +60,11 @@ class RotaStaffListItem extends Component {
                         </div>
                         <div className="row">
                             <div className="col-md-6">
-                                <h4 className="rota-staff-list-item__h4">
-                                    Shifts
+                                <h4 className="rota-staff-list-item__h4" style={{textDecoration: "none"}}>
+                                    <u>Shifts</u>
+                                    <span>
+                                        &nbsp;({this.props.totalWeeklyHours}h)
+                                    </span>
                                 </h4>
                                 <StaffShiftList
                                     shifts={utils.indexByClientId(this.props.staffMemberShifts)}
@@ -149,11 +153,14 @@ class RotaStaffListItem extends Component {
 }
 
 function mapStateToProps(state, ownProps){
+    var staffMemberShifts = selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId);
+    var totalWeeklyHours = ShiftList.getTotalShiftHours(staffMemberShifts);
+    totalWeeklyHours = utils.round(totalWeeklyHours, 1);
     return {
         addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.serverId),
         staffTypes: state.staffTypes,
         componentErrors: state.componentErrors,
-        staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
+        staffMemberShifts,
         venues: state.venues,
         canEditStaffTypeShifts: canEditStaffTypeShifts(state, {
             staffTypeClientId: ownProps.staff.staff_type.clientId
@@ -162,7 +169,8 @@ function mapStateToProps(state, ownProps){
         // This isn't clean and causes unncessary re-renders. The problem is that we don't
         // have access to the rota date via ownProps, because it comes via context (implicitly
         // through starts_at)
-        _state: state
+        _state: state,
+        totalWeeklyHours
     }
 }
 
