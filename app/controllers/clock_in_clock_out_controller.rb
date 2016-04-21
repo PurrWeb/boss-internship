@@ -10,6 +10,14 @@ class ClockInClockOutController < ApplicationController
 
     staff_members = venue.staff_members.enabled
 
+    clock_in_statuses = staff_members.map do |staff_member|
+      ClockInStatus.new(
+        staff_member: staff_member,
+        venue: venue,
+        date: rota_date
+      )
+    end
+
     rota = Rota.find_or_initialize_by(venue: venue, date: rota_date)
 
     rota_shifts = rota.rota_shifts.enabled
@@ -20,6 +28,7 @@ class ClockInClockOutController < ApplicationController
       api_key: api_key,
       rota_date: rota_date,
       staff_members: staff_members,
+      clock_in_statuses: clock_in_statuses,
       staff_types: staff_types,
       rota_shifts: rota_shifts,
       rota: rota,

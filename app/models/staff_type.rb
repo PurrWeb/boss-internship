@@ -8,6 +8,14 @@ class StaffType < ActiveRecord::Base
     role == 'security'
   end
 
+  def bar_supervisor?
+    name == 'Bar Supervisor'
+  end
+
+  def manager?
+    name == 'manager'
+  end
+
   def self.pr
     where(name: 'Pr')
   end

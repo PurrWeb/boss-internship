@@ -44,6 +44,14 @@ class AccessToken < ActiveRecord::Base
     )
   end
 
+  def web?
+    token_type == 'web'
+  end
+
+  def api?
+    token_type == 'api'
+  end
+
   private
   # Needed for statesman
   def self.transition_class

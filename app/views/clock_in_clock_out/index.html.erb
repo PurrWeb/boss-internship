@@ -1,5 +1,6 @@
 <script>
   var staffMembers = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
+  var clockInStatuses = <%= raw render partial: 'api/v1/shared/clock_in_statuses.json', locals: { clock_in_statuses: clock_in_statuses } %>;
   var staffTypes = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
   var rotaShifts = <%= raw render partial: 'api/v1/shared/rota_shifts.json', locals: { rota_shifts: rota_shifts } %>;
   var venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: Array(venue) } %>;
@@ -7,6 +8,7 @@
 
   window.boss = {};
   window.boss.staffMembers = staffMembers;
+  window.boss.clockInStatuses = clockInStatuses
   window.boss.staffTypes = staffTypes;
   window.boss.rotaShifts = rotaShifts;
   window.boss.venues = venues;

@@ -160,6 +160,14 @@ Rails.application.routes.draw do
           get :overview
         end
       end
+      resources :clocking, only: [] do
+        collection do
+          post :clock_in
+          post :clock_out
+          post :start_break
+          post :end_break
+        end
+      end
     end
   end
 

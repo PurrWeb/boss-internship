@@ -17,7 +17,7 @@ class APIController < ApplicationController
     render(
       json: { errors: "Not authenticated" },
       status: :unauthorized
-    ) unless @_access_token && @_access_token.token_type == 'api'
+    ) unless @_access_token && @_access_token.api?
   end
 
   def staff_member_from_token
@@ -32,6 +32,14 @@ class APIController < ApplicationController
     render(
       json: { errors: "Not authenticated" },
       status: :unauthorized
-    ) unless @_access_token && @_access_token.token_type == 'web'
+    ) unless @_access_token && @_access_token.web?
+  end
+
+  def current_ability
+    if @_access_token && @_access_token.web?
+      @current_ability ||= Ability.new(@_access_token.user)
+    elsif @_access_token && @_access_token.api?
+      @current_ability ||= ApiAbility.new(@_access_token.staff_member)
+    end
   end
 end

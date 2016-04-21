@@ -117,6 +117,14 @@ class StaffMember < ActiveRecord::Base
     staff_type.andand.security?
   end
 
+  def bar_supervisor?
+    staff_type.andand.bar_supervisor?
+  end
+
+  def manager?
+    staff_type.andand.manager?
+  end
+
   def name_changed?
     name_id_changed? ||
       name.first_name_changed? ||

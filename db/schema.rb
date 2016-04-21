@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160418143307) do
+ActiveRecord::Schema.define(version: 20160422142007) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -92,6 +92,27 @@ ActiveRecord::Schema.define(version: 20160418143307) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "clock_in_intervals", force: :cascade do |t|
+    t.string   "interval_type",           limit: 255, null: false
+    t.integer  "start_clocking_event_id", limit: 4,   null: false
+    t.integer  "end_clocking_event_id",   limit: 4,   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clocking_events", force: :cascade do |t|
+    t.string   "event_type",      limit: 255, null: false
+    t.integer  "venue_id",        limit: 4,   null: false
+    t.integer  "staff_member_id", limit: 4,   null: false
+    t.integer  "creator_id",      limit: 4,   null: false
+    t.string   "creator_type",    limit: 255, null: false
+    t.datetime "at",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "clocking_events", ["at"], name: "index_clocking_events_on_at", using: :btree
 
   create_table "cron_jobs", force: :cascade do |t|
     t.string   "method",      limit: 255, null: false
