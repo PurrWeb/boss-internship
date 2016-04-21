@@ -4,11 +4,15 @@ import RotaDate from "~lib/rota-date"
 import makeRotaHoursXAxis from "~lib/make-rota-hours-x-axis"
 
 var innerWidth = 500;
+var innerHeight = 100;
+var padding = 40;
 var barHeight = 40;
+var outerWidth = innerWidth + padding * 2;
+var outerHeight = innerHeight + padding * 2;
 
 class HoursChartUi extends React.Component {
     render(){
-        return <div>
+        return <div className="hours-chart">
             <svg ref={(el) => this.el = el} />
         </div>
     }
@@ -18,14 +22,23 @@ class HoursChartUi extends React.Component {
     renderChart() {
 
         var chart = d3.select(this.el);
-        chart.attr("width", innerWidth)
+        chart.attr("width", outerWidth)
+        chart.attr("height", outerHeight)
 
         var xScale = d3.scale.linear()
             .domain([0, 24])
             .range([0, innerWidth]);
-        var xAxis = makeRotaHoursXAxis(xScale)
 
+        this.renderXAxis({chart, xScale})
         this.renderIntervals({chart, xScale})
+    }
+    renderXAxis({chart, xScale}){
+        var xAxis = makeRotaHoursXAxis(xScale);
+         chart
+            .append("g")
+            .attr("transform", "translate(" + padding + "," + (innerHeight + padding) + ")")
+            .attr("class", "axis")
+            .call(xAxis);
     }
     renderIntervals({chart, xScale}){
         chart.append("g")
@@ -39,8 +52,8 @@ class HoursChartUi extends React.Component {
             })
             .attr("height", barHeight)
             .attr("transform", function(interval, i){
-                var x = xScale(interval.startOffsetInHours)
-                return "translate(" + x + ",0)"
+                var x = xScale(interval.startOffsetInHours) + padding
+                return "translate(" + x + "," + padding + ")"
             })
             .attr("class", function(interval){
                 var classes = ["hours-chart__interval"];

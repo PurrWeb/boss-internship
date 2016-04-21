@@ -1,3 +1,11 @@
+.hours-chart .domain {
+    display: none;
+}
+
+.hours-chart .axis .tick line {
+    stroke: #ddd;
+}
+
 .hours-chart__interval {
     
 }
