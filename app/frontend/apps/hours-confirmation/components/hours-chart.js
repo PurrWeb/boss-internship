@@ -1,6 +1,10 @@
 import React from "react"
 import d3 from "d3"
 import RotaDate from "~lib/rota-date"
+import makeRotaHoursXAxis from "~lib/make-rota-hours-x-axis"
+
+var innerWidth = 500;
+var barHeight = 40;
 
 class HoursChartUi extends React.Component {
     render(){
@@ -12,10 +16,42 @@ class HoursChartUi extends React.Component {
         this.renderChart();
     }
     renderChart() {
+
         var chart = d3.select(this.el);
+        chart.attr("width", innerWidth)
 
-        debugger;
+        var xScale = d3.scale.linear()
+            .domain([0, 24])
+            .range([0, innerWidth]);
+        var xAxis = makeRotaHoursXAxis(xScale)
 
+        this.renderIntervals({chart, xScale})
+    }
+    renderIntervals({chart, xScale}){
+        chart.append("g")
+            .selectAll("g")
+            .data(this.props.clockedIntervals)
+            .enter()
+            .append("rect")
+            .attr("width", function(interval, i){
+                var intervalLengthInHours = interval.endOffsetInHours - interval.startOffsetInHours;
+                return xScale(intervalLengthInHours);
+            })
+            .attr("height", barHeight)
+            .attr("transform", function(interval, i){
+                var x = xScale(interval.startOffsetInHours)
+                return "translate(" + x + ",0)"
+            })
+            .attr("class", function(interval){
+                var classes = ["hours-chart__interval"];
+                if (interval.type === "hours") {
+                    classes.push("hours-chart__interval--hours");
+                }
+                if (interval.type === "break") {
+                    classes.push("hours-chart__interval--break");
+                }
+                return classes.join(" ");
+            })
     }
 }
 
@@ -36,7 +72,8 @@ export default class HoursChart extends React.Component {
             var endTime = interval.endEvent.get(clockedEvents).time;
             return {
                 startOffsetInHours: getStartOffsetInHours(startTime),
-                endOffsetInHours: getEndOffsetInHours(endTime)
+                endOffsetInHours: getEndOffsetInHours(endTime),
+                type: interval.type
             }
         });
 
