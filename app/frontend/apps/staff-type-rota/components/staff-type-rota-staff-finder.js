@@ -12,7 +12,8 @@ export default class StaffTypeRotaStaffFinder extends React.Component {
                 staffTypes={this.props.staffTypes}
                 staffItemComponent={StaffListItem}
                 filters={{
-                    search: true
+                    search: true,
+                    venue: true
                 }}
                 />
         </div>
