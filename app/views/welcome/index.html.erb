@@ -1,3 +1,60 @@
 <h1>Welcome <%= current_user.first_name %>!</h1>
 
+<script>
+var events = [{
+    id: 11,
+    type: "clock_in",
+    time: new Date(2016, 10, 1, 9, 0)
+}, {
+    id: 22,
+    type: "start_break",
+    time: new Date(2016, 10, 1, 10, 30)
+}, {
+    id: 33,
+    type: "end_break",
+    time: new Date(2016, 10, 1, 11, 30)
+}, {
+    id: 44,
+    type: "clock_out",
+    time: new Date(2016, 10, 1, 18, 00)
+}, {
+    id: 55,
+    type: "clock_in",
+    time: new Date(2016, 10, 2, 1, 00)
+}, {
+    id: 66,
+    type: "clock_out",
+    time: new Date(2016, 10, 2, 2, 30)
+}, {
+    id: 77,
+    type: "clock_in",
+    time: new Date(2016, 10, 2, 4, 30)
+}];
+
+var intervals = [{
+    id: 1,
+    startEvent: {id: 11},
+    endEvent: {id: 22},
+    type: "hours",
+}, {
+    id: 2,
+    startEvent: {id: 22},
+    endEvent: {id: 33},
+    type: "break"
+}, {
+    id: 3,
+    startEvent: {id: 33}, 
+    endEvent: {id: 44},
+    type: "hours"
+}, {
+    id: 4,
+    startEvent: {id: 55},
+    endEvent: {id: 66},
+    type: "hours"
+}];
+
+var hoursApprovals = [];
+
+</script>
+
 <%= react_component('HoursConfirmationApp') %>
