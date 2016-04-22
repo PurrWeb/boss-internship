@@ -1,5 +1,7 @@
 .hours-chart .domain {
-    display: none;
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
 }
 
 .hours-chart .axis .tick line {
@@ -16,4 +18,9 @@
 
 .hours-chart__interval--break {
     fill: orange
+}
+
+.hours-chart__interval--incomplete {
+    fill: green;
+    opacity: .25;
 }

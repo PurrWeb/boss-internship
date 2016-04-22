@@ -29,7 +29,7 @@ function makeLinkResolverFunction(link, key){
         if (_.isArray(linkObjects)) {
             resolvedLink = _.find(linkObjects, {clientId: link.clientId})
         } else {
-            resolvedLink = linkObjectsByClientId[link.clientId];
+            resolvedLink = linkObjects[link.clientId];
         }
         if (resolvedLink === undefined) {
             throw new Error("Couldn't resolve " + key + " with clientId " + link.clientId);
