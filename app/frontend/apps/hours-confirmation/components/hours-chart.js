@@ -22,20 +22,68 @@ class HoursChartUi extends React.Component {
     componentDidMount(){
         this.renderChart();
     }
+    componentDidUpdate(){
+        this.renderChart();
+    }
     renderChart() {
+        var self = this;
+        this.el.innerHTML = "";
 
         var chart = d3.select(this.el);
-        chart.attr("width", outerWidth)
-        chart.attr("height", outerHeight)
+        chart.attr("width", outerWidth);
+        chart.attr("height", outerHeight);
 
         var xScale = d3.scale.linear()
             .domain([0, 24])
             .range([0, innerWidth]);
 
+
+        chart.on("mousemove", function(){
+            var cursorX = d3.mouse(this)[0];
+            var cursorPosition = self.getChartXFromCursorX({cursorX, xScale });
+            self.props.onMouseMove(cursorPosition);
+        });
+        chart.on("mouseout", function(){
+            self.props.onMouseMove(null);
+        })
+
         this.renderXAxis({chart, xScale})
         this.renderClockedIntervals({chart, xScale})
         this.renderRotaedIntervals({chart, xScale})
         this.renderLaneLabels({chart})
+        this.renderSelection({chart, xScale})
+    }
+    renderSelection({chart, xScale}){
+        var cursorPosition = this.props.selection.cursorPosition;
+
+        if (cursorPosition !== null) {
+            var x = xScale(cursorPosition) + padding;
+            chart
+                .append("line")
+                .attr("y1", 0)
+                .attr("y2", 100)
+                .attr("x1", x)
+                .attr("stroke", "red")
+                .attr("stroke-width", 5)
+                .attr("x2", x)
+        }
+    }
+    getChartXFromCursorX({cursorX, xScale}){
+        cursorX -= padding;
+        var cursorPosition = xScale.invert(cursorX);
+        if (cursorPosition > 25) {
+            cursorPosition = null;
+        }
+        else if (cursorPosition > 24) {
+            cursorPosition = 24;
+        }
+        else if (cursorPosition < -1) {
+            cursorPosition = null;
+        }
+        else if (cursorPosition < 0) {
+            cursorPosition = 0;
+        }
+        return cursorPosition;
     }
     renderLaneLabels({chart}){
         var group = chart
@@ -136,10 +184,18 @@ export default class HoursChart extends React.Component {
         clockedIntervals: React.PropTypes.array.isRequired,
         rotaedShifts: React.PropTypes.array.isRequired
     }
+    constructor(props){
+        super(props);
+        this.state = {
+            selectionCursorPosition: null
+        }
+    }
     render(){
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
-            rotaedIntervals={this.getRotaedChartIntervals()} />
+            rotaedIntervals={this.getRotaedChartIntervals()}
+            selection={{cursorPosition: this.state.selectionCursorPosition}}
+            onMouseMove={(selectionCursorPosition) => this.setState({selectionCursorPosition})} />
     }
     getRotaedChartIntervals(){
         return this.props.rotaedShifts.map(function(shift){
