@@ -66,7 +66,7 @@ class HoursChartUi extends React.Component {
             })
         rotaedMarkers
             .append("text")
-            .attr("transform", "translate(3, 14)")
+            .attr("transform", "translate(3, 16)")
             .text(function(interval){
                 return interval.label;
             })
