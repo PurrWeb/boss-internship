@@ -36,6 +36,7 @@ export default class RotaOverviewChart extends Component {
 
         return <RotaOverviewChartInner
             chartData={this.getChartData(breakdown)}
+            rotaDate={this.getRotaDate()}
             onElementClick={function(obj){
                 self.props.onHoverShiftsChange(null);
                 var data = self.getSelectionData(breakdown, obj);
@@ -95,7 +96,7 @@ export default class RotaOverviewChart extends Component {
             var values = _(breakdown).map(function(item){
                 return {
                     value: item.shiftsByGroup[group.clientId].length,
-                    label: moment(item.date).format("HH:mm")
+                    label: item.date.valueOf()
                 }
             });
             series.push({
