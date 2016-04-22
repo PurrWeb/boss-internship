@@ -2,6 +2,8 @@ class HolidaysController < ApplicationController
   def index
     authorize!(:view, :holidays)
 
+    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
+
     query_venues = nil
     filter_venue = Venue.find_by(id: params[:venue])
     accessible_venues = AccessibleVenuesQuery.new(current_user).all
@@ -32,7 +34,8 @@ class HolidaysController < ApplicationController
           staff_members: holidays_reports_data.staff_members,
           accessible_venues: accessible_venues,
           staff_types: StaffType.all,
-          filter_venue: filter_venue
+          filter_venue: filter_venue,
+          access_token: access_token
         }
       end
 

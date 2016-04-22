@@ -26,10 +26,22 @@ export default function makeApiRequest(apiOptions){
         path = resolveFunctionParameter(path);
         data = resolveFunctionParameter(apiOptions.data);
 
+
+        var accessToken;
+        if (apiOptions.accessToken !== undefined){
+            accessToken = apiOptions.accessToken;
+        } else {
+            accessToken = window.boss.access_token;
+        }
+        var headers = {
+            Authorization: 'Token token="' + accessToken + '"'
+        }
+
         $.ajax({
            url: API_ROOT + path,
            method: method,
-           data: data
+           data: data,
+           headers
         }).then(function(responseData){    
             var actionData = apiOptions.getSuccessActionData(responseData, requestOptions, getState);
             copyComponentInformationFromRequestOptions(actionData, requestOptions);

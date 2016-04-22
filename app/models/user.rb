@@ -58,6 +58,14 @@ class User < ActiveRecord::Base
     )
   end
 
+  def expire_web_tokens!
+    current_web_access_tokens.update_all(expires_at: Time.current)
+  end
+
+  def current_access_token
+    current_web_access_tokens.first
+  end
+
   def email
     email_address.try(:email) || @email
   end
@@ -214,5 +222,10 @@ class User < ActiveRecord::Base
   # Required for devise to work without email field
   def email_required?
     false
+  end
+
+  private
+  def current_web_access_tokens
+    AccessToken.where(token_type: 'web', user: self, expires_at: nil)
   end
 end

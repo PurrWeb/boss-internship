@@ -2,13 +2,23 @@ require 'rails_helper'
 
 RSpec.describe 'Api access' do
   include Rack::Test::Methods
+  include HeaderHelpers
+
   let(:venue) { FactoryGirl.create(:venue) }
   let(:staff_members) { FactoryGirl.create_list(:staff_member, 2) }
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
+  let(:access_token) do
+    AccessToken.create!(
+      token_type: 'web',
+      expires_at: 30.minutes.from_now,
+      creator: user,
+      user: user
+    )
+  end
 
   before do
     venue.update_attributes!(staff_members: staff_members)
-    login_as user
+    set_token_header(access_token)
   end
 
   describe '#show' do

@@ -1,6 +1,6 @@
 module Api
   module V1
-    class VenuesController < APIController
+    class VenuesController < WebAPIController
       def show
         venue = Venue.find(params.fetch(:id))
         authorize!(:manage, venue)

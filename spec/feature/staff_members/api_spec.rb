@@ -2,12 +2,21 @@ require 'rails_helper'
 
 RSpec.describe 'Staff member pages access' do
   include Rack::Test::Methods
+  include HeaderHelpers
 
   let(:user) { FactoryGirl.create(:user, venues: [staff_member.venues.first]) }
+  let(:access_token) do
+    AccessToken.create!(
+      token_type: 'web',
+      expires_at: 30.minutes.from_now,
+      creator: user,
+      user: user
+    )
+  end
   let(:staff_member) { FactoryGirl.create(:staff_member) }
 
   before do
-    login_as user
+    set_token_header(access_token)
   end
 
   specify do

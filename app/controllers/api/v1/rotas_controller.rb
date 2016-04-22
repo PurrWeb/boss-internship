@@ -1,6 +1,6 @@
 module Api
   module V1
-    class RotasController < APIController
+    class RotasController < WebAPIController
       def show
         rota = Rota.find(params.fetch(:id))
         authorize! :manage, rota

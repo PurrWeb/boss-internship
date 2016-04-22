@@ -148,6 +148,11 @@ Rails.application.routes.draw do
       resources :staff_types,   only: :show
       resources :rota_shifts,   only: [:show, :destroy, :update]
       resources :rotas,         only: :show
+      resources :sessions, only: [:create] do
+        collection do
+          post :api_key
+        end
+      end
       resources :security_rotas, only: [] do
         member do
           get :overview
