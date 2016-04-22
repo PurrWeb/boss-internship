@@ -43,8 +43,13 @@ class HoursChartUi extends React.Component {
             var cursorPosition = self.getChartXFromCursorX({cursorX, xScale });
             self.props.onMouseMove(cursorPosition);
         });
+        chart.on("mousedown", function(){
+            var cursorX = d3.mouse(this)[0];
+            var cursorPosition = self.getChartXFromCursorX({cursorX, xScale });
+            self.props.onMouseDown(cursorPosition); 
+        })
         chart.on("mouseout", function(){
-            self.props.onMouseMove(null);
+            // self.props.onMouseMove(null);
         })
 
         this.renderXAxis({chart, xScale})
@@ -55,18 +60,46 @@ class HoursChartUi extends React.Component {
     }
     renderSelection({chart, xScale}){
         var cursorPosition = this.props.selection.cursorPosition;
+        var startPosition = this.props.selection.startPosition;
+
+        if (startPosition !== null) {
+            drawLine(startPosition);
+        }
 
         if (cursorPosition !== null) {
-            var x = xScale(cursorPosition) + padding;
+            drawLine(cursorPosition);
+        }
+
+        if (startPosition !== null && cursorPosition !== null) {
+            var areaStart = startPosition;
+            var areaEnd = cursorPosition;
+            if (areaEnd < areaStart) {
+                var tmp = areaStart;
+                areaStart = areaEnd
+                areaEnd = tmp;
+            }
+            this.colorArea({chart, xScale, startPosition: areaStart, endPosition: areaEnd});
+        }
+
+        function drawLine(position){
+            var x = xScale(position) + padding;
             chart
                 .append("line")
                 .attr("y1", 0)
-                .attr("y2", 100)
+                .attr("y2", innerHeight + padding)
                 .attr("x1", x)
                 .attr("stroke", "red")
                 .attr("stroke-width", 5)
                 .attr("x2", x)
         }
+    }
+    colorArea({chart, xScale, startPosition, endPosition}){
+        chart
+            .append("rect")
+            .attr("width", xScale(endPosition - startPosition))
+            .attr("height", innerHeight + padding)
+            .attr("opacity", .3)
+            .attr("transform", "translate(" + (xScale(startPosition) + padding) + ", " + 0 + ")");
     }
     getChartXFromCursorX({cursorX, xScale}){
         cursorX -= padding;
@@ -83,6 +116,7 @@ class HoursChartUi extends React.Component {
         else if (cursorPosition < 0) {
             cursorPosition = 0;
         }
+        console.log("got ", cursorPosition, "from ", cursorX)
         return cursorPosition;
     }
     renderLaneLabels({chart}){
@@ -187,15 +221,29 @@ export default class HoursChart extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            selectionCursorPosition: null
+            selectionCursorPosition: null,
+            selectionStartPosition: null
         }
     }
     render(){
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
             rotaedIntervals={this.getRotaedChartIntervals()}
-            selection={{cursorPosition: this.state.selectionCursorPosition}}
-            onMouseMove={(selectionCursorPosition) => this.setState({selectionCursorPosition})} />
+            selection={{
+                cursorPosition: this.state.selectionCursorPosition,
+                startPosition: this.state.selectionStartPosition
+            }}
+            onMouseMove={(selectionCursorPosition) => this.setState({selectionCursorPosition})}
+            onMouseDown={(cursorPosition) => this.onMouseDown(cursorPosition)} />
+    }
+    onMouseDown(cursorPosition){
+        console.log("onMouseDown")
+        if (this.state.selectionStartPosition === null) {
+            this.setState({selectionStartPosition: cursorPosition});
+        } else {
+            console.log("selected interval", this.state.selectionStartPosition, this.state.selectionCursorPosition)
+            this.setState({selectionStartPosition: null});
+        }
     }
     getRotaedChartIntervals(){
         return this.props.rotaedShifts.map(function(shift){
