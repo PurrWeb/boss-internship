@@ -1,3 +1,12 @@
 .rota-overview-chart svg {
     height: 400px;
+
+    .nv-x.nv-axis .tick:nth-child(even) {
+        line {
+            opacity: .45 !important;
+        }
+        text {
+            opacity: 0 !important;
+        }
+    }
 }

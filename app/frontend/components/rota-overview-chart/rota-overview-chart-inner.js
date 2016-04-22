@@ -9,6 +9,8 @@ import ReactDOM from "react-dom"
 
 const HOVER_INDICATOR_WIDTH = 10;
 
+const MILLISECONDS_PER_HOURS = 60 * 60 * 1000;
+
 function getTranslateTransform(x, y){
     return "translate(" + x + "," + y + ")";
 }
@@ -80,9 +82,11 @@ export default class RotaOverviewChartInner extends Component {
         var tickValues = [];
         var startTime = this.props.rotaDate.startTime;
         for (var i=0; i< 25; i++) {
-            var date = new Date(startTime.valueOf() + i * 60 * 60 * 1000)
+            var date = new Date(startTime.valueOf() + i * MILLISECONDS_PER_HOURS)
             tickValues.push(date.valueOf())
+            tickValues.push(date.valueOf() + MILLISECONDS_PER_HOURS * .5)
         }
+        tickValues.pop(); // remove the last one at 8:30 that's duplicated
         return tickValues;
     }
     updateHoverIndicator(){
