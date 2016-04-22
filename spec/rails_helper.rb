@@ -7,6 +7,7 @@ require 'rack/test'
 # Add additional requires below this line. Rails is not loaded until this point!
 require_relative 'feature/support/chosen'
 require_relative 'support/test_image_helper'
+require_relative 'feature/support/header_helpers'
 require 'sidekiq/testing'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

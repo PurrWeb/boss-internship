@@ -16,6 +16,7 @@
   window.boss.rotas = rotas;
   window.boss.venues = venues;
   window.boss.rotaForecasts = rotaForecasts;
+  window.boss.access_token = "<%= access_token.token %>";
 
   window.boss.weeklyRotaForecast = <%= raw render partial: 'api/v1/shared/weekly_rota_forecast.json', locals: { weekly_forecast: weekly_rota_forecast } %>;
 

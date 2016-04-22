@@ -1,6 +1,6 @@
 module Api
   module V1
-    class SecurityRotasController < APIController
+    class SecurityRotasController < WebAPIController
       before_action :authorize
 
       def overview

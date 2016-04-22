@@ -12,9 +12,10 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   # DELETE /resource/sign_out
-  # def destroy
-  #   super
-  # end
+  def destroy
+    current_user.expire_web_tokens!
+    super
+  end
 
   # protected
 

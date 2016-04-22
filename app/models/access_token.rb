@@ -14,6 +14,15 @@ class AccessToken < ActiveRecord::Base
 
   before_validation :generate_access_token
 
+  def self.create_web!(user:)
+    create!(
+      token_type: 'web',
+      expires_at: nil,
+      creator: user,
+      user: user
+    )
+  end
+
   def ensure_user_or_staff_member_set
     unless user.present? ^ staff_member.present?
       errors.base(add: 'one user or staff member must be set')

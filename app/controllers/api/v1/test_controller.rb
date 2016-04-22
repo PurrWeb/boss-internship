@@ -1,6 +1,6 @@
 module Api
   module V1
-    class TestController < APIController
+    class TestController < WebAPIController
       def get
         render json: {}
       end

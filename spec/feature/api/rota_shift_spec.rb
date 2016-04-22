@@ -3,13 +3,22 @@ require 'rails_helper'
 RSpec.describe 'Api access' do
   include Rack::Test::Methods
   include ActiveSupport::Testing::TimeHelpers
+  include HeaderHelpers
 
   let(:rota_shift) { FactoryGirl.create(:rota_shift) }
   let(:venue) { rota_shift.rota.venue }
   let(:user) { FactoryGirl.create(:user, :admin) }
+  let(:access_token) do
+    AccessToken.create!(
+      token_type: 'web',
+      expires_at: 30.minutes.from_now,
+      creator: user,
+      user: user
+    )
+  end
 
   before do
-    login_as user
+    set_token_header(access_token)
   end
 
   describe '#show' do

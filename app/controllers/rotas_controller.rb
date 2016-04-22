@@ -70,7 +70,10 @@ class RotasController < ApplicationController
 
     venues = Venue.where(id: [rota.venue.id] + shift_venues.pluck(:id)).uniq
 
+    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
+
     render locals: {
+      access_token: access_token,
       current_rota: rota,
       rotas: rotas,
       rota_shifts: rota_shifts,
@@ -110,7 +113,10 @@ class RotasController < ApplicationController
       venue: venue
     ).call
 
+    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
+
     render locals: {
+      access_token: access_token,
       accessible_venues: accessible_venues_for(current_user),
       venue: venue,
       start_date: start_date,

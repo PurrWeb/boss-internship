@@ -1,6 +1,6 @@
 module Api
   module V1
-    class HolidaysController < APIController
+    class HolidaysController < WebAPIController
       def show
         holiday = Holiday.find(params[:id])
 

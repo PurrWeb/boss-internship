@@ -20,7 +20,8 @@ describe("makeApiRequest", function(){
 
         var apiRequestMaker = makeApiRequest({
             method: "GET",
-            path: "example/test"
+            path: "example/test",
+            accessToken: "token"
         })
         var error = expect.createSpy();
         var success = function(){}

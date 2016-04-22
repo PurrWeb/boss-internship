@@ -1,6 +1,6 @@
 module Api
   module V1
-    class RotaShiftsController < APIController
+    class RotaShiftsController < WebAPIController
       def show
         rota_shift = RotaShift.find(params.fetch(:id))
         authorize! :manage, rota_shift.rota

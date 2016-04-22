@@ -1,6 +1,6 @@
 module Api
   module V1
-    class StaffMembersController < APIController
+    class StaffMembersController < WebAPIController
       def show
         staff_member = StaffMember.find(params.fetch(:id))
         authorize! :view, staff_member

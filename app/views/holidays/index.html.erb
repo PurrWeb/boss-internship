@@ -18,6 +18,7 @@
   window.boss.staffMembers = staffMembers;
   window.boss.venues = venues;
   window.boss.staffTypes = staffTypes;
+  window.boss.access_token = "<%= access_token.token %>";
 
   window.boss.pageData = {
     venueId: <%= filter_venue.try(:id) || 'null' %>,

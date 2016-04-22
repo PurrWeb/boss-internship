@@ -1,6 +1,6 @@
 module Api
   module V1
-    class RotaForecastsController < APIController
+    class RotaForecastsController < WebAPIController
       def show
         rota = Rota.find_or_initialize_by(
           date: rota_date_from_params,
