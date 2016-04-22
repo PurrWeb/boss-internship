@@ -44,7 +44,8 @@ export default class RotaOverviewChartInner extends Component {
                 tickValues: this.getTickValues(),
                 tickFormat: function(xValue){
                     return new Date(xValue).getHours()
-                }
+                },
+                axisLabel: "Time"
             },
             tooltip: {
                 contentGenerator: this.props.tooltipGenerator
