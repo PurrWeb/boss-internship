@@ -17,10 +17,21 @@ class APIController < ApplicationController
     render(
       json: { errors: "Not authenticated" },
       status: :unauthorized
-    ) unless staff_member_from_token.present?
+    ) unless @_access_token && @_access_token.token_type == 'api'
   end
 
   def staff_member_from_token
     @_access_token.staff_member
+  end
+
+  def current_user
+    @_access_token.user
+  end
+
+  def web_token_authenticate!
+    render(
+      json: { errors: "Not authenticated" },
+      status: :unauthorized
+    ) unless @_access_token && @_access_token.token_type == 'web'
   end
 end

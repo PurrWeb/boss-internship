@@ -1,6 +1,8 @@
 module Api
   module V1
-    class RotaForecastsController < WebAPIController
+    class RotaForecastsController < APIController
+      before_filter :web_token_authenticate!
+
       def show
         rota = Rota.find_or_initialize_by(
           date: rota_date_from_params,
