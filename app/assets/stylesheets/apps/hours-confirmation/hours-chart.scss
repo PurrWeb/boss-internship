@@ -1,26 +1,30 @@
+.hours-chart * {
+    shape-rendering: crispEdges;
+}
+
 .hours-chart .domain {
     fill: none;
     stroke: black;
-    shape-rendering: crispEdges;
 }
 
 .hours-chart .axis .tick line {
     stroke: #ddd;
 }
 
-.hours-chart__interval {
-    
+.hours-chart__rotaed-interval rect {
+    stroke: black;
+    fill: white;
 }
 
-.hours-chart__interval--hours {
+.hours-chart__clocked-interval--hours {
     fill: green;
 }
 
-.hours-chart__interval--break {
+.hours-chart__clocked-interval--break {
     fill: orange
 }
 
-.hours-chart__interval--incomplete {
+.hours-chart__clocked-interval--incomplete {
     fill: green;
     opacity: .25;
 }

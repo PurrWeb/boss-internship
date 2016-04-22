@@ -3,10 +3,11 @@ import d3 from "d3"
 import RotaDate from "~lib/rota-date"
 import makeRotaHoursXAxis from "~lib/make-rota-hours-x-axis"
 import _ from "underscore"
+import moment from "moment"
 
 var innerWidth = 500;
-var innerHeight = 100;
-var padding = 40;
+var innerHeight = 60;
+var padding = 20;
 var barHeight = 40;
 var outerWidth = innerWidth + padding * 2;
 var outerHeight = innerHeight + padding * 2;
@@ -31,7 +32,8 @@ class HoursChartUi extends React.Component {
             .range([0, innerWidth]);
 
         this.renderXAxis({chart, xScale})
-        this.renderIntervals({chart, xScale})
+        this.renderClockedIntervals({chart, xScale})
+        this.renderRotaedIntervals({chart, xScale})
     }
     renderXAxis({chart, xScale}){
         var xAxis = makeRotaHoursXAxis(xScale);
@@ -41,7 +43,35 @@ class HoursChartUi extends React.Component {
             .attr("class", "axis")
             .call(xAxis);
     }
-    renderIntervals({chart, xScale}){
+    renderRotaedIntervals({chart, xScale}){
+        var rotaedMarkers = chart
+            .append("g")
+            .selectAll("g")
+            .data(this.props.rotaedIntervals)
+            .enter()
+            .append("g")
+            .attr("transform", function(interval){
+                var x = xScale(interval.startOffsetInHours) + padding;
+                return "translate(" + x + ", " + 15 + ")";
+            })
+
+        rotaedMarkers.classed("hours-chart__rotaed-interval", true);
+
+        rotaedMarkers
+            .append("rect")
+            .attr("height", 20)
+            .attr("width", function(interval){
+                var shiftDuration = interval.endOffsetInHours - interval.startOffsetInHours;
+                return xScale(shiftDuration);
+            })
+        rotaedMarkers
+            .append("text")
+            .attr("transform", "translate(3, 14)")
+            .text(function(interval){
+                return interval.label;
+            })
+    }
+    renderClockedIntervals({chart, xScale}){
         chart.append("g")
             .selectAll("g")
             .data(this.props.clockedIntervals)
@@ -54,18 +84,18 @@ class HoursChartUi extends React.Component {
             .attr("height", barHeight)
             .attr("transform", function(interval, i){
                 var x = xScale(interval.startOffsetInHours) + padding
-                return "translate(" + x + "," + padding + ")"
+                return "translate(" + x + "," + (innerHeight - barHeight / 2) + ")"
             })
             .attr("class", function(interval){
-                var classes = ["hours-chart__interval"];
+                var classes = ["hours-chart__clocked-interval"];
                 if (interval.type === "hours") {
-                    classes.push("hours-chart__interval--hours");
+                    classes.push("hours-chart__clocked-interval--hours");
                 }
                 if (interval.type === "break") {
-                    classes.push("hours-chart__interval--break");
+                    classes.push("hours-chart__clocked-interval--break");
                 }
                 if (interval.type === "incomplete") {
-                    classes.push("hours-chart__interval--incomplete");
+                    classes.push("hours-chart__clocked-interval--incomplete");
                 }
                 return classes.join(" ");
             })
@@ -90,11 +120,25 @@ function getOffsetInHours(rotaDate, date){
 export default class HoursChart extends React.Component {
     static propTypes = {
         clockedEvents: React.PropTypes.array.isRequired,
-        clockedIntervals: React.PropTypes.array.isRequired
+        clockedIntervals: React.PropTypes.array.isRequired,
+        rotaedShifts: React.PropTypes.array.isRequired
     }
     render(){
         return <HoursChartUi
-            clockedIntervals={this.getChartIntervals()} />
+            clockedIntervals={this.getClockedChartIntervals()}
+            rotaedIntervals={this.getRotaedChartIntervals()} />
+    }
+    getRotaedChartIntervals(){
+        return this.props.rotaedShifts.map(function(shift){
+            var label = moment(shift.starts_at).format("HH:mm") + " - " +
+                moment(shift.ends_at).format("HH:mm");
+
+            return {
+                startOffsetInHours: getStartOffsetInHours(shift.starts_at),
+                endOffsetInHours: getEndOffsetInHours(shift.ends_at),
+                label
+            }
+        });
     }
     getEventsThatDontBelongToAnInterval(){
         var { clockedEvents, clockedIntervals } = this.props;
@@ -124,7 +168,7 @@ export default class HoursChart extends React.Component {
             return null;
         }
     }
-    getChartIntervals(){
+    getClockedChartIntervals(){
         var {clockedIntervals, clockedEvents} = this.props;
 
         var completedIntervals = clockedIntervals.map((interval) => {

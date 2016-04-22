@@ -7,10 +7,12 @@ export default class HoursConfirmationApp extends React.Component {
     render(){
         var events = window.events.map(processBackendObject);
         var intervals = window.intervals.map(processBackendObject);
+        var shifts = window.rotaedShifts;
         return <div>
             <HoursChart
                 clockedEvents={events}
-                clockedIntervals={intervals} />
+                clockedIntervals={intervals}
+                rotaedShifts={shifts} />
         </div>
     }
 }
