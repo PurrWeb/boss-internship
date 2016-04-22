@@ -17,6 +17,8 @@ class HoursChartUi extends React.Component {
     render(){
         return <div className="hours-chart">
             <svg ref={(el) => this.el = el} />
+            todo: - only re-render selection, not everything
+            - on mouseout remove selection
         </div>
     }
     componentDidMount(){
@@ -47,6 +49,11 @@ class HoursChartUi extends React.Component {
             var cursorX = d3.mouse(this)[0];
             var cursorPosition = self.getChartXFromCursorX({cursorX, xScale });
             self.props.onMouseDown(cursorPosition); 
+        })
+        chart.on("mouseup", function(){
+            var cursorX = d3.mouse(this)[0];
+            var cursorPosition = self.getChartXFromCursorX({cursorX, xScale });
+            self.props.onMouseUp(cursorPosition); 
         })
         chart.on("mouseout", function(){
             // self.props.onMouseMove(null);
@@ -233,17 +240,19 @@ export default class HoursChart extends React.Component {
                 cursorPosition: this.state.selectionCursorPosition,
                 startPosition: this.state.selectionStartPosition
             }}
-            onMouseMove={(selectionCursorPosition) => this.setState({selectionCursorPosition})}
-            onMouseDown={(cursorPosition) => this.onMouseDown(cursorPosition)} />
+            onMouseMove={(cursorPosition) => this.onMouseMove(cursorPosition)}
+            onMouseDown={(cursorPosition) => this.onMouseDown(cursorPosition)}
+            onMouseUp={(cursorPosition) => this.onMouseUp(cursorPosition)} />
+    }
+    onMouseMove(cursorPosition){
+        this.setState({selectionCursorPosition: cursorPosition})
     }
     onMouseDown(cursorPosition){
-        console.log("onMouseDown")
-        if (this.state.selectionStartPosition === null) {
-            this.setState({selectionStartPosition: cursorPosition});
-        } else {
-            console.log("selected interval", this.state.selectionStartPosition, this.state.selectionCursorPosition)
-            this.setState({selectionStartPosition: null});
-        }
+        this.setState({selectionStartPosition: cursorPosition});
+    }
+    onMouseUp(cursorPosition){
+        console.log("todo: create proposed hours assignment", this.state.selectionStartPosition, cursorPosition)
+        this.setState({selectionStartPosition: null})
     }
     getRotaedChartIntervals(){
         return this.props.rotaedShifts.map(function(shift){
