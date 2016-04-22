@@ -1,4 +1,4 @@
-<h1>Welcome <%= current_user.first_name %>!</h1>
+
 
 <script>
 var events = [{
@@ -65,4 +65,8 @@ var hoursApprovals = [];
 
 </script>
 
-<%= react_component('HoursConfirmationApp') %>
+<div class="container">
+    <h1>Welcome <%= current_user.first_name %>!</h1>
+    
+    <%= react_component('HoursConfirmationApp') %>
+</div>
