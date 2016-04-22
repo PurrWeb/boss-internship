@@ -26,7 +26,8 @@ export default class RotaOverviewChartInner extends Component {
         onElementClick: React.PropTypes.func.isRequired,
         onElementMouseover: React.PropTypes.func.isRequired,
         onElementMouseout: React.PropTypes.func.isRequired,
-        tooltipGenerator: React.PropTypes.func.isRequired
+        tooltipGenerator: React.PropTypes.func.isRequired,
+        rotaDate: React.PropTypes.func.isRequired
     }
     render() {
         var self = this;
@@ -39,9 +40,16 @@ export default class RotaOverviewChartInner extends Component {
             yAxis: {
                 tickFormat: d3.format("d")
             },
+            xAxis: {
+                tickValues: this.getTickValues(),
+                tickFormat: function(xValue){
+                    return new Date(xValue).getHours()
+                }
+            },
             tooltip: {
                 contentGenerator: this.props.tooltipGenerator
-            }
+            },
+            reduceXTicks: false
         }
 
         var renderEnd = function(chart){
@@ -66,6 +74,15 @@ export default class RotaOverviewChartInner extends Component {
                 margin={{}}
                 renderEnd={renderEnd}/>
         </div>
+    }
+    getTickValues(){
+        var tickValues = [];
+        var startTime = this.props.rotaDate.startTime;
+        for (var i=0; i< 25; i++) {
+            var date = new Date(startTime.valueOf() + i * 60 * 60 * 1000)
+            tickValues.push(date.valueOf())
+        }
+        return tickValues;
     }
     updateHoverIndicator(){
         var indicator = this.getHoverIndicator();
