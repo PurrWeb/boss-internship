@@ -62,8 +62,21 @@ class HoursChartUi extends React.Component {
         this.renderXAxis({chart, xScale})
         this.renderClockedIntervals({chart, xScale})
         this.renderRotaedIntervals({chart, xScale})
+        this.renderHoursAssignmentIntervals({chart, xScale})
         this.renderLaneLabels({chart})
         this.renderSelection({chart, xScale})
+    }
+    renderHoursAssignmentIntervals({chart, xScale}){
+        var intervals = this.props.hoursAssignmentIntervals;
+
+        intervals.forEach((interval) => {
+            this.colorArea({
+                chart,
+                xScale,
+                startPosition: interval.startOffsetInHours,
+                endPosition: interval.endOffsetInHours
+            });
+        })
     }
     renderSelection({chart, xScale}){
         var cursorPosition = this.props.selection.cursorPosition;
@@ -205,25 +218,14 @@ class HoursChartUi extends React.Component {
 }
 
 
-
-function getStartOffsetInHours(date){
-    var rotaDate = new RotaDate({shiftStartsAt: date})
-    return getOffsetInHours(rotaDate, date);
-}
-function getEndOffsetInHours(date){
-    var rotaDate = new RotaDate({shiftEndsAt: date})
-    return getOffsetInHours(rotaDate, date);
-}
-function getOffsetInHours(rotaDate, date){
-    return rotaDate.getHoursSinceStartOfDay(date);
-}
-
-
 export default class HoursChart extends React.Component {
     static propTypes = {
         clockedEvents: React.PropTypes.array.isRequired,
         clockedIntervals: React.PropTypes.array.isRequired,
-        rotaedShifts: React.PropTypes.array.isRequired
+        rotaedShifts: React.PropTypes.array.isRequired,
+        onHoursAssignmentProposed: React.PropTypes.func.isRequired,
+        proposedHoursAssignment: React.PropTypes.object,
+        rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired
     }
     constructor(props){
         super(props);
@@ -233,9 +235,11 @@ export default class HoursChart extends React.Component {
         }
     }
     render(){
+        console.log("proposedHoursAssignment", this.props.proposedHoursAssignment)
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
             rotaedIntervals={this.getRotaedChartIntervals()}
+            hoursAssignmentIntervals={this.getHoursAssignmentIntervals()}
             selection={{
                 cursorPosition: this.state.selectionCursorPosition,
                 startPosition: this.state.selectionStartPosition
@@ -251,20 +255,45 @@ export default class HoursChart extends React.Component {
         this.setState({selectionStartPosition: cursorPosition});
     }
     onMouseUp(cursorPosition){
-        console.log("todo: create proposed hours assignment", this.state.selectionStartPosition, cursorPosition)
+        this.props.onHoursAssignmentProposed({
+            starts_at: this.getDateFromHoursOffset(this.state.selectionStartPosition),
+            ends_at: this.getDateFromHoursOffset(cursorPosition)
+        })
         this.setState({selectionStartPosition: null})
     }
+    getHoursAssignmentIntervals(){
+        var intervals = [];
+
+        var proposedHoursAssignment = this.props.proposedHoursAssignment;
+        if (proposedHoursAssignment !== null) {
+            intervals.push({
+                startOffsetInHours: this.getHoursSinceStartOfDay(proposedHoursAssignment.starts_at),
+                endOffsetInHours: this.getHoursSinceStartOfDay(proposedHoursAssignment.ends_at)
+            })
+        }
+
+        return intervals
+    }
+    getDateFromHoursOffset(hoursOffset){
+        var date = new Date(this.props.rotaDate.startTime);
+        date.setMinutes(date.getMinutes() + hoursOffset * 60);
+        return date;
+    }
     getRotaedChartIntervals(){
+        var self = this;
         return this.props.rotaedShifts.map(function(shift){
             var label = moment(shift.starts_at).format("HH:mm") + " - " +
                 moment(shift.ends_at).format("HH:mm");
 
             return {
-                startOffsetInHours: getStartOffsetInHours(shift.starts_at),
-                endOffsetInHours: getEndOffsetInHours(shift.ends_at),
+                startOffsetInHours: self.getHoursSinceStartOfDay(shift.starts_at),
+                endOffsetInHours: self.getHoursSinceStartOfDay(shift.ends_at),
                 label
             }
         });
+    }
+    getHoursSinceStartOfDay(date){
+        return this.props.rotaDate.getHoursSinceStartOfDay(date);
     }
     getEventsThatDontBelongToAnInterval(){
         var { clockedEvents, clockedIntervals } = this.props;
@@ -286,7 +315,7 @@ export default class HoursChart extends React.Component {
         eventsWithoutAnInterval = _(eventsWithoutAnInterval).filter({type: "clock_in"});
         if (eventsWithoutAnInterval.length > 0) {
             return {
-                startOffsetInHours: getStartOffsetInHours(eventsWithoutAnInterval[0].time),
+                startOffsetInHours: this.getHoursSinceStartOfDay(eventsWithoutAnInterval[0].time),
                 endOffsetInHours: 24,
                 type: "incomplete"
             }
@@ -301,8 +330,8 @@ export default class HoursChart extends React.Component {
             var startTime = interval.startEvent.get(clockedEvents).time;
             var endTime = interval.endEvent.get(clockedEvents).time;
             return {
-                startOffsetInHours: getStartOffsetInHours(startTime),
-                endOffsetInHours: getEndOffsetInHours(endTime),
+                startOffsetInHours: this.getHoursSinceStartOfDay(startTime),
+                endOffsetInHours: this.getHoursSinceStartOfDay(endTime),
                 type: interval.type
             }
         });
