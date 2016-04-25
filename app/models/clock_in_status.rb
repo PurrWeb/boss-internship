@@ -7,6 +7,8 @@ class ClockInStatus
     @date = date
   end
 
+  attr_reader :staff_member
+
   def current_state
     case last_event.andand.event_type
     when 'clock_in'
@@ -60,7 +62,7 @@ class ClockInStatus
   end
 
   private
-  attr_reader :staff_member, :venue, :date
+  attr_reader :venue, :date
 
   def interval_event?
     last_event.clock_in? || last_event.start_break?
