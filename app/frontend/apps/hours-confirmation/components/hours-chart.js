@@ -19,6 +19,7 @@ class HoursChartUi extends React.Component {
             <svg ref={(el) => this.el = el} />
             todo: - only re-render selection, not everything
             - on mouseout remove selection
+            - allow updating hours assignment intervals
         </div>
     }
     componentDidMount(){
@@ -60,9 +61,9 @@ class HoursChartUi extends React.Component {
         })
 
         this.renderXAxis({chart, xScale})
+        this.renderHoursAssignmentIntervals({chart, xScale})
         this.renderClockedIntervals({chart, xScale})
         this.renderRotaedIntervals({chart, xScale})
-        this.renderHoursAssignmentIntervals({chart, xScale})
         this.renderLaneLabels({chart})
         this.renderSelection({chart, xScale})
     }
@@ -70,11 +71,17 @@ class HoursChartUi extends React.Component {
         var intervals = this.props.hoursAssignmentIntervals;
 
         intervals.forEach((interval) => {
+            var opacity = {
+                proposed: .3,
+                confirmed: .5
+            }[interval.type]
             this.colorArea({
                 chart,
                 xScale,
                 startPosition: interval.startOffsetInHours,
-                endPosition: interval.endOffsetInHours
+                endPosition: interval.endOffsetInHours,
+                color: "#3891FF", 
+                opacity
             });
         })
     }
@@ -98,7 +105,14 @@ class HoursChartUi extends React.Component {
                 areaStart = areaEnd
                 areaEnd = tmp;
             }
-            this.colorArea({chart, xScale, startPosition: areaStart, endPosition: areaEnd});
+            this.colorArea({
+                chart,
+                xScale,
+                startPosition: areaStart,
+                endPosition: areaEnd,
+                color: "#3891FF",
+                opacity: .3
+            });
         }
 
         function drawLine(position){
@@ -108,23 +122,25 @@ class HoursChartUi extends React.Component {
                 .attr("y1", 0)
                 .attr("y2", innerHeight + padding)
                 .attr("x1", x)
-                .attr("stroke", "red")
+                .attr("stroke", "blue")
                 .attr("stroke-width", 5)
                 .attr("x2", x)
         }
     }
-    colorArea({chart, xScale, startPosition, endPosition}){
+    colorArea({chart, xScale, startPosition, endPosition, color, opacity}){
         chart
             .append("rect")
             .attr("width", xScale(endPosition - startPosition))
             .attr("height", innerHeight + padding)
-            .attr("opacity", .3)
+            .attr("opacity", opacity)
+            .attr("fill", color)
             .attr("transform", "translate(" + (xScale(startPosition) + padding) + ", " + 0 + ")");
     }
     getChartXFromCursorX({cursorX, xScale}){
         cursorX -= padding;
         var cursorPosition = xScale.invert(cursorX);
-        if (cursorPosition > 25) {
+        // allow the user to over-select slightly, so it's easy to select up to the edges
+        if (cursorPosition > 26) {
             cursorPosition = null;
         }
         else if (cursorPosition > 24) {
@@ -225,7 +241,8 @@ export default class HoursChart extends React.Component {
         rotaedShifts: React.PropTypes.array.isRequired,
         onHoursAssignmentProposed: React.PropTypes.func.isRequired,
         proposedHoursAssignment: React.PropTypes.object,
-        rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired
+        rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired,
+        hoursAssignments: React.PropTypes.array.isRequired
     }
     constructor(props){
         super(props);
@@ -264,11 +281,20 @@ export default class HoursChart extends React.Component {
     getHoursAssignmentIntervals(){
         var intervals = [];
 
+        this.props.hoursAssignments.forEach((hoursAssignment) => {
+            intervals.push({
+                startOffsetInHours: this.getHoursSinceStartOfDay(hoursAssignment.starts_at),
+                endOffsetInHours: this.getHoursSinceStartOfDay(hoursAssignment.ends_at),
+                type: "confirmed"
+            })
+        });
+
         var proposedHoursAssignment = this.props.proposedHoursAssignment;
         if (proposedHoursAssignment !== null) {
             intervals.push({
                 startOffsetInHours: this.getHoursSinceStartOfDay(proposedHoursAssignment.starts_at),
-                endOffsetInHours: this.getHoursSinceStartOfDay(proposedHoursAssignment.ends_at)
+                endOffsetInHours: this.getHoursSinceStartOfDay(proposedHoursAssignment.ends_at),
+                type: "proposed"
             })
         }
 
