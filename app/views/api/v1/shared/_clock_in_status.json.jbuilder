@@ -1,0 +1,2 @@
+json.staff_member_id clock_in_status.staff_member.id
+json.status clock_in_status.current_state
