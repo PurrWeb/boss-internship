@@ -13,7 +13,7 @@ class StaffType < ActiveRecord::Base
   end
 
   def manager?
-    name == 'manager'
+    name == 'Manager'
   end
 
   def self.pr

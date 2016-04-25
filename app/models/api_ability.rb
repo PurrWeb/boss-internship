@@ -9,5 +9,9 @@ class ApiAbility
         staff_member.bar_supervisor? ||
         staff_member == other_staff_member
     end
+
+    can :change_pin, StaffMember do |other_staff_member|
+      staff_member.manager?
+    end
   end
 end
