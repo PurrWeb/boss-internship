@@ -25,7 +25,10 @@ export default class HoursConfirmationApp extends React.Component {
                 hoursAssignments={window.hoursAssignments}
                 proposedHoursAssignment={this.state.proposedHoursAssignment}
                 rotaDate={new RotaDate({shiftStartsAt: new Date(2016, 10, 1, 8, 0),})}
-                onHoursAssignmentProposed={(proposedHoursAssignment) => this.setState({proposedHoursAssignment})} />
+                onHoursAssignmentProposed={(proposedHoursAssignment) => {
+                    console.log("proposed hours assigmment at ", proposedHoursAssignment)
+                    this.setState({proposedHoursAssignment})
+                }} />
 
             {this.getProposedHoursAssignmentUi()}
         </div>
