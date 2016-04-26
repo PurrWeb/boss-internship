@@ -13,5 +13,10 @@ class ApiAbility
     can :change_pin, StaffMember do |other_staff_member|
       staff_member.manager?
     end
+
+    can :add_note, StaffMember do |other_staff_member|
+      staff_member.manager? ||
+        staff_member.bar_supervisor?
+    end
   end
 end

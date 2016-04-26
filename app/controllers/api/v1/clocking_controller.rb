@@ -23,11 +23,31 @@ module Api
         render nothing: true, status: :ok
       end
 
+      def add_note
+        staff_member = staff_member_from_params
+        venue = venue_from_params
+        date = date_from_params
+        note = params.fetch(:note)
+
+        authorize! :add_note, staff_member
+
+        ClockInNote.create!(
+          creator: staff_member_from_token,
+          staff_member: staff_member,
+          venue: venue,
+          date: date,
+          note: note,
+          enabled: true
+        )
+
+        render nothing: true, status: :ok
+      end
+
       private
       def transition_state(to_state:)
-        staff_member = StaffMember.find(params[:staff_member_id])
-        venue = Venue.find(params.fetch(:venue_id))
-        date = UIRotaDate.parse(params.fetch(:date))
+        staff_member = staff_member_from_params
+        venue = venue_from_params
+        date = date_from_params
         at = Time.zone.parse(params.fetch(:at))
 
         authorize!(:perform_clocking_action, staff_member)
@@ -43,6 +63,18 @@ module Api
           at: at,
           requester: staff_member_from_token,
         )
+      end
+
+      def venue_from_params
+        @venue_from_params ||= Venue.find(params.fetch(:venue_id))
+      end
+
+      def staff_member_from_params
+        @staff_member_from_params ||= StaffMember.find(params[:staff_member_id])
+      end
+
+      def date_from_params
+        @date ||= UIRotaDate.parse(params.fetch(:date))
       end
     end
   end

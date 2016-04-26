@@ -170,6 +170,7 @@ Rails.application.routes.draw do
           post :clock_out
           post :start_break
           post :end_break
+          post :add_note
         end
       end
     end

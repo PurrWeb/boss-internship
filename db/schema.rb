@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160422142007) do
+ActiveRecord::Schema.define(version: 20160426110251) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -97,6 +97,18 @@ ActiveRecord::Schema.define(version: 20160422142007) do
     t.string   "interval_type",           limit: 255, null: false
     t.integer  "start_clocking_event_id", limit: 4,   null: false
     t.integer  "end_clocking_event_id",   limit: 4,   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clock_in_notes", force: :cascade do |t|
+    t.integer  "creator_id",      limit: 4,                  null: false
+    t.string   "creator_type",    limit: 255,                null: false
+    t.string   "note",            limit: 255,                null: false
+    t.integer  "venue_id",        limit: 4,                  null: false
+    t.integer  "staff_member_id", limit: 4,                  null: false
+    t.date     "date",                                       null: false
+    t.boolean  "enabled",                     default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

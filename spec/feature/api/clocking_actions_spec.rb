@@ -5,10 +5,14 @@ RSpec.describe 'Clocking actions' do
   include HeaderHelpers
 
   let(:venue) { FactoryGirl.create(:venue) }
-  let(:staff_member) { FactoryGirl.create(:staff_member, venues: [venue])}
+  let(:staff_member) do
+    FactoryGirl.create(:staff_member, staff_type: manager_staff_type)
+  end
+  let(:manager_staff_type) { FactoryGirl.create(:manager_staff_type) }
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
   let(:day_start) { RotaShiftDate.new(Time.current).start_time }
   let(:date) { RotaShiftDate.to_rota_date(day_start) }
+  let(:target_staff_member) { FactoryGirl.create(:staff_member) }
   let(:access_token) do
     AccessToken.create!(
       token_type: 'api',
@@ -26,7 +30,7 @@ RSpec.describe 'Clocking actions' do
     let(:url) { url_helpers.clock_in_api_v1_clocking_index_path }
     let(:params) do
       {
-        staff_member_id: staff_member.id,
+        staff_member_id: target_staff_member.id,
         date: UIRotaDate.format(date),
         at: (day_start + 4.hours).iso8601,
         venue_id: venue.id
@@ -56,7 +60,7 @@ RSpec.describe 'Clocking actions' do
     context 'when previous events exist' do
       let(:params) do
         {
-          staff_member_id: staff_member.id,
+          staff_member_id: target_staff_member.id,
           date: UIRotaDate.format(date),
           at: (day_start + 5.hours).iso8601,
           venue_id: venue.id
@@ -66,7 +70,7 @@ RSpec.describe 'Clocking actions' do
       before do
         ClockingEvent.create!(
           venue: venue,
-          staff_member: staff_member,
+          staff_member: target_staff_member,
           at: day_start + 1.hour,
           creator: staff_member,
           event_type: 'clock_in'
@@ -87,7 +91,7 @@ RSpec.describe 'Clocking actions' do
     context 'when last event is a clock_in' do
       let(:params) do
         {
-          staff_member_id: staff_member.id,
+          staff_member_id: target_staff_member.id,
           date: UIRotaDate.format(date),
           at: (day_start + 5.hours).iso8601,
           venue_id: venue.id
@@ -97,7 +101,7 @@ RSpec.describe 'Clocking actions' do
       before do
         ClockingEvent.create!(
           venue: venue,
-          staff_member: staff_member,
+          staff_member: target_staff_member,
           at: day_start + 1.hour,
           creator: staff_member,
           event_type: 'clock_in'
@@ -135,7 +139,7 @@ RSpec.describe 'Clocking actions' do
     context 'when last event is a clock_in' do
       let(:params) do
         {
-          staff_member_id: staff_member.id,
+          staff_member_id: target_staff_member.id,
           date: UIRotaDate.format(date),
           at: (day_start + 5.hours).iso8601,
           venue_id: venue.id
@@ -145,7 +149,7 @@ RSpec.describe 'Clocking actions' do
       before do
         ClockingEvent.create!(
           venue: venue,
-          staff_member: staff_member,
+          staff_member: target_staff_member,
           at: day_start + 1.hour,
           creator: staff_member,
           event_type: 'clock_in'
@@ -181,7 +185,7 @@ RSpec.describe 'Clocking actions' do
     context 'when last event is a clock_in' do
       let(:params) do
         {
-          staff_member_id: staff_member.id,
+          staff_member_id: target_staff_member.id,
           date: UIRotaDate.format(date),
           at: (day_start + 5.hours).iso8601,
           venue_id: venue.id
@@ -191,14 +195,14 @@ RSpec.describe 'Clocking actions' do
       before do
         ClockingEvent.create!(
           venue: venue,
-          staff_member: staff_member,
+          staff_member: target_staff_member,
           at: day_start + 1.hour,
           creator: staff_member,
           event_type: 'clock_in'
         )
         ClockingEvent.create!(
           venue: venue,
-          staff_member: staff_member,
+          staff_member: target_staff_member,
           at: day_start + 1.hour + 30.minutes,
           creator: staff_member,
           event_type: 'start_break'
@@ -231,6 +235,38 @@ RSpec.describe 'Clocking actions' do
         expect(ClockInInterval.count).to eq(1)
         expect(ClockInInterval.last.interval_type).to eq('break')
       end
+    end
+  end
+
+  describe '#add_note' do
+    let(:url) { url_helpers.add_note_api_v1_clocking_index_path }
+    let(:params) do
+      {
+        creator: user,
+        staff_member_id: target_staff_member.id,
+        venue_id: venue.id,
+        date: UIRotaDate.format(date),
+        note: note
+      }
+    end
+    let(:note) { 'this is the note' }
+
+    context 'before call' do
+      specify 'no clock outs should exist' do
+        expect(ClockInNote.count).to eq(0)
+      end
+    end
+
+    specify 'should create a note' do
+      post(url, params)
+      created_note = ClockInNote.find_by(
+        staff_member: target_staff_member,
+        creator: staff_member,
+        venue: venue,
+        date: date
+      )
+      expect(created_note).to be_present
+      expect(created_note.note).to eq(note)
     end
   end
 
