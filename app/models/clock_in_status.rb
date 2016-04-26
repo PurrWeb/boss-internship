@@ -1,5 +1,5 @@
 class ClockInStatus
-  STATES = [:none, :clocked_in, :clocked_out, :on_break]
+  STATES = [:clocked_in, :clocked_out, :on_break]
 
   def initialize(staff_member:, venue:, date:)
     @staff_member = staff_member
@@ -20,7 +20,7 @@ class ClockInStatus
     when 'end_break'
       :clocked_out
     when nil
-      :none
+      :clocked_out
     else
       raise "Usupported event type encountered :#{last_event.event_type}"
     end
@@ -105,9 +105,6 @@ class ClockInStatus
 
   def allowed_event_transations
     {
-      none: [
-        { state: :clocked_in, transition_event: 'clock_in' }
-      ],
       clocked_in: [
         { state: :clocked_out, transition_event: 'clock_out' },
         { state: :on_break, transition_event: 'start_break' }
