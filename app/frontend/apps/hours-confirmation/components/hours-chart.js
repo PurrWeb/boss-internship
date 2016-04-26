@@ -18,8 +18,6 @@ class HoursChartUi extends React.Component {
     render(){
         return <div className="hours-chart">
             <svg ref={(el) => this.el = el} />
-            todo: - only re-render selection, not everything
-            - on mouseout remove selection
             - allow updating hours assignment intervals
         </div>
     }
@@ -27,7 +25,7 @@ class HoursChartUi extends React.Component {
         this.renderChart();
     }
     componentWillReceiveProps(newProps){
-        if (this.chartDataHasChanged(this.props, newProps)) {
+        if (!utils.deepEqualTreatingFunctionsAsStrings(this.props, newProps)) {
             this.needsFullRerender = true;
         }
     }
@@ -35,18 +33,7 @@ class HoursChartUi extends React.Component {
         if (this.needsFullRerender) {
             this.renderChart();
             this.needsFullRerender = false;
-        } else {
-            this.updateSelection({
-                chart: d3.select(this.el),
-                xScale: this.getXScale()
-            });
         }
-    }
-    chartDataHasChanged(propsA, propsB) {
-        // says whether chart data has changed or just selection details
-        propsA = _(propsA).omit("selection");
-        propsB = _(propsB).omit("selection");
-        return !utils.deepEqualTreatingFunctionsAsStrings(propsA, propsB);
     }
     renderChart() {
         var self = this;
@@ -58,33 +45,11 @@ class HoursChartUi extends React.Component {
 
         var xScale = this.getXScale()
 
-        chart.on("mousemove", function(){
-            var cursorX = d3.mouse(this)[0];
-            var cursorPosition = self.getChartXFromCursorX({cursorX, xScale });
-            self.props.onMouseMove(cursorPosition);
-        });
-        chart.on("mousedown", function(){
-            var cursorX = d3.mouse(this)[0];
-            var cursorPosition = self.getChartXFromCursorX({cursorX, xScale });
-            self.props.onMouseDown(cursorPosition); 
-        })
-        chart.on("mouseup", function(){
-            var cursorX = d3.mouse(this)[0];
-            var cursorPosition = self.getChartXFromCursorX({cursorX, xScale });
-            self.props.onMouseUp(cursorPosition); 
-        })
-        chart.on("mouseleave", function(){
-            console.log("mouseleave")
-            self.props.onMouseMove(null);
-        })
-
         this.renderXAxis({chart, xScale})
-        this.renderSelectionArea({chart, xScale})
         this.renderHoursAssignmentIntervals({chart, xScale})
         this.renderClockedIntervals({chart, xScale})
         this.renderRotaedIntervals({chart, xScale})
         this.renderLaneLabels({chart})
-        this.renderSelectionMarkers({chart, xScale})
     }
     getXScale(){
         return d3.scale.linear()
@@ -109,84 +74,6 @@ class HoursChartUi extends React.Component {
             });
         })
     }
-    renderSelectionMarkers({chart, xScale}) {
-        var group = chart
-            .append("g")
-            .attr("class", "hours-chart__selection-markers");
-        this.updateSelectionMarkers({chart, xScale})
-    }
-    updateSelection({chart, xScale}) {
-        this.updateSelectionMarkers({chart, xScale});
-        this.updateSelectionArea({chart, xScale})
-    }
-    updateSelectionMarkers({chart, xScale}){
-        var { cursorPosition, startPosition } = this.props.selection;
-
-        var linePositions = [];
-
-        if (startPosition !== null) {
-            linePositions.push(startPosition);
-        }
-
-        if (cursorPosition !== null) {
-            linePositions.push(cursorPosition);
-        }
-
-        var group = chart.selectAll(".hours-chart__selection-markers");
-        var lines = group
-            .selectAll("line")
-            .data(linePositions)
-
-        lines
-            .enter()
-            .append("line")
-
-
-        lines.exit().remove();
-
-        lines
-            .attr("y1", 0)
-            .attr("y2", innerHeight + padding)
-            .attr("x1", function(position){
-                return xScale(position) + padding;
-            })
-            .attr("stroke", "blue")
-            .attr("stroke-width", 5)
-            .attr("x2", function(position){
-                return xScale(position) + padding;
-            });
-    }
-    renderSelectionArea({chart, xScale}){
-        var group = chart
-            .append("g")
-            .attr("class", "hours-chart__selection-area");
-        this.updateSelectionArea({chart, xScale})
-    }
-    updateSelectionArea({chart, xScale}){
-        var { cursorPosition, startPosition } = this.props.selection;
-
-        var group = chart.selectAll(".hours-chart__selection-area");
-        group.selectAll("rect").remove();
-
-        if (startPosition !== null && cursorPosition !== null) {
-            var areaStart = startPosition;
-            var areaEnd = cursorPosition;
-            if (areaEnd < areaStart) {
-                var tmp = areaStart;
-                areaStart = areaEnd
-                areaEnd = tmp;
-            }
-
-            this.colorArea({
-                chart: group,
-                xScale,
-                startPosition: areaStart,
-                endPosition: areaEnd,
-                color: "#3891FF",
-                opacity: .3
-            });
-        }
-    }
     colorArea({chart, xScale, startPosition, endPosition, color, opacity}){
         chart
             .append("rect")
@@ -195,24 +82,6 @@ class HoursChartUi extends React.Component {
             .attr("opacity", opacity)
             .attr("fill", color)
             .attr("transform", "translate(" + (xScale(startPosition) + padding) + ", " + 0 + ")");
-    }
-    getChartXFromCursorX({cursorX, xScale}){
-        cursorX -= padding;
-        var cursorPosition = xScale.invert(cursorX);
-        // allow the user to over-select slightly, so it's easy to select up to the edges
-        if (cursorPosition > 26) {
-            cursorPosition = null;
-        }
-        else if (cursorPosition > 24) {
-            cursorPosition = 24;
-        }
-        else if (cursorPosition < -1) {
-            cursorPosition = null;
-        }
-        else if (cursorPosition < 0) {
-            cursorPosition = 0;
-        }
-        return cursorPosition;
     }
     renderLaneLabels({chart}){
         var group = chart
@@ -298,44 +167,14 @@ export default class HoursChart extends React.Component {
         clockedEvents: React.PropTypes.array.isRequired,
         clockedIntervals: React.PropTypes.array.isRequired,
         rotaedShifts: React.PropTypes.array.isRequired,
-        onHoursAssignmentProposed: React.PropTypes.func.isRequired,
-        proposedHoursAssignment: React.PropTypes.object,
         rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired,
         hoursAssignments: React.PropTypes.array.isRequired
-    }
-    constructor(props){
-        super(props);
-        this.state = {
-            selectionCursorPosition: null,
-            selectionStartPosition: null
-        }
     }
     render(){
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
             rotaedIntervals={this.getRotaedChartIntervals()}
-            hoursAssignmentIntervals={this.getHoursAssignmentIntervals()}
-            selection={{
-                cursorPosition: this.state.selectionCursorPosition,
-                startPosition: this.state.selectionStartPosition
-            }}
-            onMouseMove={(cursorPosition) => this.onMouseMove(cursorPosition)}
-            onMouseDown={(cursorPosition) => this.onMouseDown(cursorPosition)}
-            onMouseUp={(cursorPosition) => this.onMouseUp(cursorPosition)} />
-    }
-    onMouseMove(cursorPosition){
-        console.log(cursorPosition)
-        this.setState({selectionCursorPosition: cursorPosition})
-    }
-    onMouseDown(cursorPosition){
-        this.setState({selectionStartPosition: cursorPosition});
-    }
-    onMouseUp(cursorPosition){
-        this.props.onHoursAssignmentProposed({
-            starts_at: this.getDateFromHoursOffset(this.state.selectionStartPosition),
-            ends_at: this.getDateFromHoursOffset(cursorPosition)
-        })
-        this.setState({selectionStartPosition: null})
+            hoursAssignmentIntervals={this.getHoursAssignmentIntervals()} />
     }
     getHoursAssignmentIntervals(){
         var intervals = [];
@@ -347,15 +186,6 @@ export default class HoursChart extends React.Component {
                 type: "confirmed"
             })
         });
-
-        var proposedHoursAssignment = this.props.proposedHoursAssignment;
-        if (proposedHoursAssignment !== null) {
-            intervals.push({
-                startOffsetInHours: this.getHoursSinceStartOfDay(proposedHoursAssignment.starts_at),
-                endOffsetInHours: this.getHoursSinceStartOfDay(proposedHoursAssignment.ends_at),
-                type: "proposed"
-            })
-        }
 
         return intervals
     }
