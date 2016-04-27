@@ -54,10 +54,36 @@ class ClockInStatus
         event_type: event_type_for_transition(from: current_state, to: state)
       )
 
-      create_interval!(
-        last_event: saved_last_event,
-        new_event: new_event
-      )
+      current_recorded_clock_in_period = CurrentRecordedClockInPeriodQuery.
+        new(
+          venue: venue,
+          staff_member: staff_member
+        ).
+        first
+
+      if !current_recorded_clock_in_period.present?
+        current_recorded_clock_in_period = ClockInPeriod.new(
+          period_type: 'recorded',
+          creator: requester,
+          venue: venue,
+          date: date,
+          staff_member: staff_member,
+          starts_at: at,
+          clock_in_period_reason: nil
+        )
+      elsif new_event.clock_out?
+        current_recorded_clock_in_period.update_attributes!(ends_at: at)
+      elsif new_event.end_break?
+        new_break = ClockInBreak.create!(
+          clock_in_period: current_recorded_clock_in_period,
+          starts_at: saved_last_event.at,
+          ends_at: at
+        )
+        current_recorded_clock_in_period.clock_in_breaks << new_break
+      end
+      current_recorded_clock_in_period.clocking_events << new_event
+
+      current_recorded_clock_in_period.save!
     end
   end
 
@@ -66,22 +92,6 @@ class ClockInStatus
 
   def interval_event?
     last_event.clock_in? || last_event.start_break?
-  end
-
-  def create_interval!(last_event:, new_event:)
-    if last_event.andand.clock_in?
-      ClockInInterval.create!(
-        interval_type: 'clock_in',
-        start_clocking_event: last_event,
-        end_clocking_event: new_event
-      )
-    elsif last_event.andand.start_break?
-      ClockInInterval.create!(
-        interval_type: 'break',
-        start_clocking_event: last_event,
-        end_clocking_event: new_event
-      )
-    end
   end
 
   def last_event

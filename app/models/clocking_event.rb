@@ -18,4 +18,12 @@ class ClockingEvent < ActiveRecord::Base
   def start_break?
     event_type == 'start_break'
   end
+
+  def end_break?
+    event_type == 'end_break'
+  end
+
+  def clock_out?
+    event_type == 'clock_out'
+  end
 end

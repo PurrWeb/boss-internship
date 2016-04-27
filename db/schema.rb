@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160427165651) do
+ActiveRecord::Schema.define(version: 20160429083348) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -94,10 +94,10 @@ ActiveRecord::Schema.define(version: 20160427165651) do
     t.datetime "updated_at"
   end
 
-  create_table "clock_in_intervals", force: :cascade do |t|
-    t.string   "interval_type",           limit: 255, null: false
-    t.integer  "start_clocking_event_id", limit: 4,   null: false
-    t.integer  "end_clocking_event_id",   limit: 4,   null: false
+  create_table "clock_in_breaks", force: :cascade do |t|
+    t.integer  "clock_in_period_id", limit: 4, null: false
+    t.datetime "starts_at",                    null: false
+    t.datetime "ends_at",                      null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -110,6 +110,33 @@ ActiveRecord::Schema.define(version: 20160427165651) do
     t.integer  "staff_member_id", limit: 4,                  null: false
     t.date     "date",                                       null: false
     t.boolean  "enabled",                     default: true, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clock_in_period_events", force: :cascade do |t|
+    t.integer  "clocking_event_id",  limit: 4, null: false
+    t.integer  "clock_in_period_id", limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clock_in_period_reasons", force: :cascade do |t|
+    t.string   "text",       limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clock_in_periods", force: :cascade do |t|
+    t.string   "period_type",               limit: 255, null: false
+    t.date     "date",                                  null: false
+    t.integer  "staff_member_id",           limit: 4,   null: false
+    t.integer  "venue_id",                  limit: 4,   null: false
+    t.integer  "creator_id",                limit: 4,   null: false
+    t.integer  "clock_in_period_reason_id", limit: 4
+    t.string   "reason_note",               limit: 255
+    t.datetime "starts_at",                             null: false
+    t.datetime "ends_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
