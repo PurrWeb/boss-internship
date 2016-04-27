@@ -32,7 +32,15 @@ export default function makeApiRequest(apiOptions){
                 makeRequest(requestOptions.accessToken);
             } else {
                 makeRequestForAccessToken({
-                    ...apiOptions.getAccessTokenRequestData(requestOptions)
+                    requestData: {
+                        ...apiOptions.getAccessTokenRequestData(requestOptions)
+                    },
+                    success: function(data){
+                        makeRequest(data.access_token)
+                    },
+                    error: function(){
+                        debugger
+                    }
                 });
             }
         }
@@ -86,7 +94,7 @@ export default function makeApiRequest(apiOptions){
     }
 }
 
-function makeRequestForAccessToken(requestData, success, error){
+function makeRequestForAccessToken({requestData, success, error}){
     $.ajax({
         method: "post",
         url: API_ROOT + "sessions",
@@ -95,10 +103,6 @@ function makeRequestForAccessToken(requestData, success, error){
             staff_member_id: requestData.staffMemberServerId,
             staff_member_pin: requestData.pin
         }
-    }).then(function(){
-        debugger;
-    },function(){
-        debugger;
-    })
+    }).then(success, error)
 }
 
