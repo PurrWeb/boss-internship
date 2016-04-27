@@ -4,6 +4,7 @@ class AccessToken < ActiveRecord::Base
   belongs_to :user
   belongs_to :staff_member
 
+  belongs_to :api_key
   belongs_to :creator, polymorphic: true
   has_many   :access_token_transitions, autosave: false
 
@@ -11,6 +12,7 @@ class AccessToken < ActiveRecord::Base
   validates :token_type, inclusion: { in: TYPES, message: 'is required' }
   validates :creator, presence: true
   validate  :ensure_user_or_staff_member_set
+  validates  :api_key, presence: true, if: :api?
 
   before_validation :generate_access_token
 

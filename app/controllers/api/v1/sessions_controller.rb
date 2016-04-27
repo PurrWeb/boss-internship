@@ -25,7 +25,8 @@ module Api
             token_type: 'api',
             expires_at: 30.minutes.from_now,
             creator: api_key,
-            staff_member: staff_member
+            api_key: api_key,
+            staff_member: staff_member,
           )
 
           render 'create', locals: { access_token: access_token }

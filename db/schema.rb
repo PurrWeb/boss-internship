@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160426110251) do
+ActiveRecord::Schema.define(version: 20160427165651) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20160426110251) do
     t.string   "creator_type",    limit: 255, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "api_key_id",      limit: 4
   end
 
   add_index "access_tokens", ["expires_at"], name: "index_access_tokens_on_expires_at", using: :btree

@@ -28,6 +28,10 @@ class APIController < ApplicationController
     @_access_token.user
   end
 
+  def venue_from_api_key
+    @_access_token.andand.api_key.andand.venue
+  end
+
   def web_token_authenticate!
     render(
       json: { errors: "Not authenticated" },

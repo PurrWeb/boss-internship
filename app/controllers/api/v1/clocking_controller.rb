@@ -25,7 +25,7 @@ module Api
 
       def add_note
         staff_member = staff_member_from_params
-        venue = venue_from_params
+        venue = venue_from_api_key
         date = date_from_params
         note = params.fetch(:note)
 
@@ -46,9 +46,9 @@ module Api
       private
       def transition_state(to_state:)
         staff_member = staff_member_from_params
-        venue = venue_from_params
+        venue = venue_from_api_key
         date = date_from_params
-        at = Time.zone.parse(params.fetch(:at))
+        at = Time.current
 
         authorize!(:perform_clocking_action, staff_member)
 
@@ -63,10 +63,6 @@ module Api
           at: at,
           requester: staff_member_from_token,
         )
-      end
-
-      def venue_from_params
-        @venue_from_params ||= Venue.find(params.fetch(:venue_id))
       end
 
       def staff_member_from_params

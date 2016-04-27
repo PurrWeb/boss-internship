@@ -6,6 +6,12 @@ RSpec.describe 'Api access' do
 
   let(:staff_member) { FactoryGirl.create(:staff_member) }
   let(:venue) { staff_member.venues.first }
+  let(:api_key) do
+    ApiKey.create!(
+      venue: venue,
+      user: user
+    )
+  end
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
   let(:access_token) do
     AccessToken.create!(
@@ -72,7 +78,8 @@ RSpec.describe 'Api access' do
       AccessToken.create(
         token_type: 'api',
         expires_at: 30.minutes.from_now,
-        creator: user,
+        creator: api_key,
+        api_key: api_key,
         staff_member: user_staff_member
       )
     end

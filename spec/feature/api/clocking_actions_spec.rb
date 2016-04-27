@@ -5,6 +5,9 @@ RSpec.describe 'Clocking actions' do
   include HeaderHelpers
 
   let(:venue) { FactoryGirl.create(:venue) }
+  let(:api_key) do
+    ApiKey.create!(venue: venue, user: user)
+  end
   let(:staff_member) do
     FactoryGirl.create(:staff_member, staff_type: manager_staff_type)
   end
@@ -18,6 +21,7 @@ RSpec.describe 'Clocking actions' do
       token_type: 'api',
       expires_at: 30.minutes.from_now,
       creator: user,
+      api_key: api_key,
       staff_member: staff_member
     )
   end
@@ -31,9 +35,7 @@ RSpec.describe 'Clocking actions' do
     let(:params) do
       {
         staff_member_id: target_staff_member.id,
-        date: UIRotaDate.format(date),
-        at: (day_start + 4.hours).iso8601,
-        venue_id: venue.id
+        date: UIRotaDate.format(date)
       }
     end
 
@@ -61,9 +63,7 @@ RSpec.describe 'Clocking actions' do
       let(:params) do
         {
           staff_member_id: target_staff_member.id,
-          date: UIRotaDate.format(date),
-          at: (day_start + 5.hours).iso8601,
-          venue_id: venue.id
+          date: UIRotaDate.format(date)
         }
       end
 
@@ -92,9 +92,7 @@ RSpec.describe 'Clocking actions' do
       let(:params) do
         {
           staff_member_id: target_staff_member.id,
-          date: UIRotaDate.format(date),
-          at: (day_start + 5.hours).iso8601,
-          venue_id: venue.id
+          date: UIRotaDate.format(date)
         }
       end
 
@@ -140,9 +138,7 @@ RSpec.describe 'Clocking actions' do
       let(:params) do
         {
           staff_member_id: target_staff_member.id,
-          date: UIRotaDate.format(date),
-          at: (day_start + 5.hours).iso8601,
-          venue_id: venue.id
+          date: UIRotaDate.format(date)
         }
       end
 
@@ -186,9 +182,7 @@ RSpec.describe 'Clocking actions' do
       let(:params) do
         {
           staff_member_id: target_staff_member.id,
-          date: UIRotaDate.format(date),
-          at: (day_start + 5.hours).iso8601,
-          venue_id: venue.id
+          date: UIRotaDate.format(date)
         }
       end
 
@@ -244,7 +238,6 @@ RSpec.describe 'Clocking actions' do
       {
         creator: user,
         staff_member_id: target_staff_member.id,
-        venue_id: venue.id,
         date: UIRotaDate.format(date),
         note: note
       }
