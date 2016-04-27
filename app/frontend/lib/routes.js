@@ -144,6 +144,13 @@ const apiRoutes = {
             return "venues/" + venueId + "/rota_forecasts/" + utils.formatDateForApi(dateOfRota);
         },
         method: "POST"
+    },
+    updateStaffClockingStatus: {
+        getPath: function({currentStatus, newStatus}){
+            console.log("todo: determine what action is required")
+            return "/clocking/" + "clock_in"
+        },
+        method: "POST"
     }
 }
 

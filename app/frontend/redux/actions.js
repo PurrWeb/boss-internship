@@ -277,8 +277,7 @@ export const updateStaffMemberPin = createApiRequestAction({
 })
 
 export function updateStaffStatusWithConfirmation(requestOptions){
-
-    return function(dispatch, getState){
+    return function(dispatch, getState){``
         var state = getState();
         if (selectClockInOutAppIsInManagerMode(state)) {
             requestOptions = {
@@ -305,8 +304,45 @@ export function updateStaffStatusWithConfirmation(requestOptions){
 
 export const updateStaffStatus = createApiRequestAction({
     requestType: "UPDATE_STAFF_STATUS",
-    makeRequest: function(requestOptions, success, error, getState){
+    makeRequest: makeApiRequest({
+        method: apiRoutes.updateStaffClockingStatus.method,
+        path: (requestOptions) => {
+            var [staffMemberObject, statusValue, venueServerId] = oFetch(requestOptions, "staffMemberObject", "statusValue", "venueServerId");
+            return apiRoutes.updateStaffClockingStatus.getPath({});
+        },
+        data: (requestOptions) => {
+            var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
+            var statusValue = oFetch(requestOptions, "statusValue");
+            var venueServerId = oFetch(requestOptions, "venueServerId");
+            var date = oFetch(requestOptions, "date");
+            var at = oFetch(requestOptions, "at");
+            return {
+                staff_member_id: staffMemberObject.serverId,
+                venue_id: venueServerId,
+                date,
+                at
+            }
+        }
+    }),
+
+    /*
+            method: apiRoutes.updateRotaForecast.method,
+        path: (options) => {
+            var [dateOfRota, serverVenueId] = oFetch(options, "dateOfRota", "serverVenueId");
+            return apiRoutes.updateRotaForecast.getPath({dateOfRota, venueId: serverVenueId})
+        },
+        data: ({forecastedTake}) => {return {forecasted_take: forecastedTake} },
+        getSuccessActionData: function(responseData){
+            return {
+                rotaForecast: backendData.processRotaForecastObject(responseData)
+            }
+        }
+        */
+
+    /*function(requestOptions, success, error, getState){
         var wasConfirmed = false;
+
+
         var [staffMemberObject, statusValue] = oFetch(requestOptions, "staffMemberObject", "statusValue");
         if (requestOptions.authToken !== undefined){
             wasConfirmed = true;
@@ -332,7 +368,7 @@ export const updateStaffStatus = createApiRequestAction({
                 })
             }, 500);
         }
-    },
+    },*/
     additionalSuccessActionCreator: function(successActionData, requestOptions){
         return function(dispatch, getState){
             var userIsManagerOrSupervisor = selectClockInOutAppIsInManagerMode(getState());

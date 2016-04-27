@@ -82,7 +82,7 @@ class ClockInOutStaffListItem extends Component {
                 <ToggleStaffOnBreakButton
                     staffStatuses={this.props.staffStatuses}
                     staffObject={staffObject}
-                    updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
+                    updateStaffStatusWithConfirmation={(options) => this.updateStaffStatus(options)} />
             </div>;
         }
         return <div className="row">
@@ -90,10 +90,21 @@ class ClockInOutStaffListItem extends Component {
                 <ToggleStaffClockedInButton
                     staffStatuses={this.props.staffStatuses}
                     staffObject={staffObject}
-                    updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation} />
+                    updateStaffStatusWithConfirmation={(options) => this.updateStaffStatus(options)} />
             </div>
             {toggleOnBreakButton}
         </div>
+    }
+    updateStaffStatus({statusValue, staffMemberObject}){
+        var currentStatus = this.props.staffStatuses[staffMemberObject.clientId].status;
+        this.props.updateStaffStatusWithConfirmation({
+            statusValue,
+            staffMemberObject,
+            currentStatus,
+            at: new Date(),
+            venueServerId: this.props.pageOptions.venue.serverId,
+            date: this.props.pageOptions.dateOfRota
+        })
     }
     getChangePinButton(){
         var staffObject = this.props.staff;
@@ -162,7 +173,8 @@ function mapStateToProps(state, ownProps){
         updateStaffMemberPinInProgress: selectIsUpdatingStaffMemberPin(state, {
             staffMemberServerId: ownProps.staff.serverId
         }),
-        userPermissions: selectClockInOutAppUserPermissions(state)
+        userPermissions: selectClockInOutAppUserPermissions(state),
+        pageOptions: state.pageOptions
     }
 }
 
