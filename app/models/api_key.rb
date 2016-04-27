@@ -31,11 +31,14 @@ class ApiKey < ActiveRecord::Base
     end
   end
 
+  def self.active
+    in_state(:active)
+  end
+
   def self.current_for(venue:)
-    ApiKey.
-      in_state(:active).
-      where(venue: venue).
-      first
+    active
+    where(venue: venue).
+    first
   end
 
   def state_machine

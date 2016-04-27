@@ -33,7 +33,7 @@ RSpec.describe 'Access token end points' do
         end
       end
 
-      context 'api key is supplied' do
+      context 'valid api key is supplied' do
         let(:venue) { FactoryGirl.create(:venue) }
         let(:user) { FactoryGirl.create(:user, venues: [venue]) }
         let(:existing_key) { ApiKey.create!(venue: venue, user: user) }
@@ -80,9 +80,36 @@ RSpec.describe 'Access token end points' do
 
         context 'supplying invalid api key' do
           let(:api_key) { 'sdadas' }
+          specify 'should fail' do
+            expect(post(url).status).to eq(unprocessable_entity_status)
+          end
+
+          specify 'should return error' do
+            json = JSON.parse(post(url).body)
+            expect(json).to eq({
+              "errors" => {
+                "base" => ["API key invalid or inactive"]
+              }
+            })
+          end
+        end
+
+        context 'supplying expired api key' do
+          before do
+            existing_key.state_machine.transition_to!(:deleted, requster_user_id: user.id)
+          end
 
           specify 'should fail' do
             expect(post(url).status).to eq(unprocessable_entity_status)
+          end
+
+          specify 'should return error' do
+            json = JSON.parse(post(url).body)
+            expect(json).to eq({
+              "errors" => {
+                "base" => ["API key invalid or inactive"]
+              }
+            })
           end
         end
 
@@ -96,6 +123,15 @@ RSpec.describe 'Access token end points' do
           specify 'should fail' do
             expect(post(url).status).to eq(unprocessable_entity_status)
           end
+
+          specify 'should return error' do
+            json = JSON.parse(post(url).body)
+            expect(json).to eq({
+              "errors" => {
+                "base" => ["staff member invalid or inactive"]
+              }
+            })
+          end
         end
 
         context 'supplying invalid pin' do
@@ -107,6 +143,15 @@ RSpec.describe 'Access token end points' do
 
           specify 'should fail' do
             expect(post(url).status).to eq(unprocessable_entity_status)
+          end
+
+          specify 'should return error' do
+            json = JSON.parse(post(url).body)
+            expect(json).to eq({
+              "errors" => {
+                "base" => ["wrong pin"]
+              }
+            })
           end
         end
       end
