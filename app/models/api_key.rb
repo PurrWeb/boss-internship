@@ -36,9 +36,9 @@ class ApiKey < ActiveRecord::Base
   end
 
   def self.current_for(venue:)
-    active
-    where(venue: venue).
-    first
+    active.
+      where(venue: venue).
+      first
   end
 
   def state_machine
