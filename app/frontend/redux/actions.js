@@ -306,6 +306,12 @@ export const updateStaffStatus = createApiRequestAction({
     requestType: "UPDATE_STAFF_STATUS",
     makeRequest: makeApiRequest({
         method: apiRoutes.updateStaffClockingStatus.method,
+        getAccessTokenRequestData(requestOptions) {
+            return {
+                pin: requestOptions.confirmationData.pin,
+                staffMemberServerId: requestOptions.staffMemberObject.serverId
+            }
+        },
         path: (requestOptions) => {
             var [staffMemberObject, statusValue, venueServerId] = oFetch(requestOptions, "staffMemberObject", "statusValue", "venueServerId");
             return apiRoutes.updateStaffClockingStatus.getPath({});

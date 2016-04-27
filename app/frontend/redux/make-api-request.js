@@ -26,43 +26,57 @@ export default function makeApiRequest(apiOptions){
         path = resolveFunctionParameter(path);
         data = resolveFunctionParameter(apiOptions.data);
 
-
-        var accessToken;
-        if (apiOptions.accessToken !== undefined){
-            accessToken = apiOptions.accessToken;
-        } else {
-            accessToken = window.boss.access_token;
-        }
-        var headers = {
-            Authorization: 'Token token="' + accessToken + '"'
-        }
-
-        $.ajax({
-           url: API_ROOT + path,
-           method: method,
-           data: data,
-           headers
-        }).then(function(responseData){    
-            var actionData = apiOptions.getSuccessActionData(responseData, requestOptions, getState);
-            copyComponentInformationFromRequestOptions(actionData, requestOptions);
-            success(actionData);
-        }, function(response, textStatus){
-            var { responseText } = response;
-            var responseData = null;
-            if (utils.stringIsJson(responseText)) {
-                responseData = JSON.parse(responseText);
+        var requestRequiresSpecialAccessToken = apiOptions.getAccessTokenRequestData !== undefined;
+        if (requestRequiresSpecialAccessToken) {
+            if (requestOptions.accessToken !== undefined) {
+                makeRequest(requestOptions.accessToken);
             } else {
-                responseData = {
-                    errors: {
-                        base: [textStatus + ' - ' + response.status, responseText]
-                    }
-                }
+                makeRequestForAccessToken({
+                    ...apiOptions.getAccessTokenRequestData(requestOptions)
+                });
+            }
+        }
+        else {
+            makeRequest(window.boss.access_token)
+            if (apiOptions.accessToken !== undefined){
+                accessToken = apiOptions.accessToken;
+            } else {
+                
+            }
+        }
+
+        function makeRequest(accessToken){
+            var headers = {
+                Authorization: 'Token token="' + accessToken + '"'
             }
 
-            copyComponentInformationFromRequestOptions(responseData, requestOptions);
-            
-            error(responseData);
-        });
+            $.ajax({
+               url: API_ROOT + path,
+               method: method,
+               data: data,
+               headers
+            }).then(function(responseData){    
+                var actionData = apiOptions.getSuccessActionData(responseData, requestOptions, getState);
+                copyComponentInformationFromRequestOptions(actionData, requestOptions);
+                success(actionData);
+            }, function(response, textStatus){
+                var { responseText } = response;
+                var responseData = null;
+                if (utils.stringIsJson(responseText)) {
+                    responseData = JSON.parse(responseText);
+                } else {
+                    responseData = {
+                        errors: {
+                            base: [textStatus + ' - ' + response.status, responseText]
+                        }
+                    }
+                }
+
+                copyComponentInformationFromRequestOptions(responseData, requestOptions);
+                
+                error(responseData);
+            });
+        }
     }
     // Takes data about the request source component that was part of the request and 
     // copies it over to the target.
@@ -71,3 +85,20 @@ export default function makeApiRequest(apiOptions){
         target.requestSourceComponent = requestOptions.requestSourceComponent;
     }
 }
+
+function makeRequestForAccessToken(requestData, success, error){
+    $.ajax({
+        method: "post",
+        url: API_ROOT + "sessions",
+        data: {
+            api_key: "F7AC8662738C9823E7410D1B5E720E4B",
+            staff_member_id: requestData.staffMemberServerId,
+            staff_member_pin: requestData.pin
+        }
+    }).then(function(){
+        debugger;
+    },function(){
+        debugger;
+    })
+}
+
