@@ -1,19 +1,10 @@
 import React from "react"
-import HoursChart from "./components/hours-chart"
-import RotaDate from "~lib/rota-date"
-
-import { processBackendObject } from "~lib/backend-data/process-backend-object"
-
-window.hoursAssignments = [];
+import StaffDay from "./containers/staff-day"
 
 export default class HoursConfirmationApp extends React.Component {
-    constructor(props){
-        super(props);
-    }
     render(){
-        var events = window.events.map(processBackendObject);
-        var intervals = window.intervals.map(processBackendObject);
-        var shifts = window.rotaedShifts;
+        return <StaffDay />;
+
         return <div>
             <HoursChart
                 clockedEvents={events}

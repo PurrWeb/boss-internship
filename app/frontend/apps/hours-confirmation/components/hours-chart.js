@@ -210,38 +210,10 @@ export default class HoursChart extends React.Component {
     getHoursSinceStartOfDay(date){
         return this.props.rotaDate.getHoursSinceStartOfDay(date);
     }
-    getEventsThatDontBelongToAnInterval(){
-        var { clockedEvents, clockedIntervals } = this.props;
-        var events = clockedEvents.slice();
-        var intervalEventClientIds = [];
-        clockedIntervals.forEach(function(interval){
-            intervalEventClientIds.push(interval.startEvent.clientId);
-            intervalEventClientIds.push(interval.endEvent.clientId);
-        });
-
-        var eventsWithoutAnInterval = _.reject(events, function(event){
-            return _.contains(intervalEventClientIds, event.clientId)
-        });
-
-        return eventsWithoutAnInterval;
-    }
-    getIncompleteInterval(){
-        var eventsWithoutAnInterval = this.getEventsThatDontBelongToAnInterval();
-        eventsWithoutAnInterval = _(eventsWithoutAnInterval).filter({type: "clock_in"});
-        if (eventsWithoutAnInterval.length > 0) {
-            return {
-                startOffsetInHours: this.getHoursSinceStartOfDay(eventsWithoutAnInterval[0].time),
-                endOffsetInHours: 24,
-                type: "incomplete"
-            }
-        } else {
-            return null;
-        }
-    }
     getClockedChartIntervals(){
         var {clockedIntervals, clockedEvents} = this.props;
 
-        var completedIntervals = clockedIntervals.map((interval) => {
+        var intervals = clockedIntervals.map((interval) => {
             var startTime = interval.startEvent.get(clockedEvents).time;
             var endTime = interval.endEvent.get(clockedEvents).time;
             return {
@@ -250,13 +222,6 @@ export default class HoursChart extends React.Component {
                 type: interval.type
             }
         });
-
-        var intervals = completedIntervals.slice();
-
-        var incompleteInterval = this.getIncompleteInterval();
-        if (incompleteInterval !== null) {
-            intervals.push(incompleteInterval);
-        }
 
         return intervals;
     }
