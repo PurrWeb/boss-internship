@@ -178,7 +178,7 @@ RSpec.describe 'Clocking actions' do
   describe '#end_break' do
     let(:url) { url_helpers.end_break_api_v1_clocking_index_path }
 
-    context 'when last event is a clock_in' do
+    context 'when last event is a start_break' do
       let(:params) do
         {
           staff_member_id: target_staff_member.id,

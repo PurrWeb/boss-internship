@@ -113,8 +113,7 @@ class ClockInStatus
         { state: :clocked_in, transition_event: 'clock_in' }
       ],
       on_break: [
-        { state: :clocked_in, transition_event: 'clock_in' },
-        { state: :clocked_out, transition_event: 'end_break' }
+        { state: :clocked_in, transition_event: 'end_break' }
       ]
     }
   end

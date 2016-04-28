@@ -19,7 +19,7 @@ module Api
       end
 
       def end_break
-        transition_state(to_state: :clocked_out)
+        transition_state(to_state: :clocked_in)
         render nothing: true, status: :ok
       end
 
