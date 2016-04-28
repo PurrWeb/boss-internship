@@ -16,10 +16,18 @@ import LargeStaffTypeSelector from "./components/large-staff-type-selector"
 import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
 import UserActionConfirmationMessages from "~components/user-action-confirmation-messages"
 import Header from "./components/header"
+import KeyDialog from "./containers/key-dialog"
 
 
 class ClockInOutView extends Component {
     render() {
+        if (_.values(this.props.staffMembers).length === 0) {
+            return <KeyDialog />
+        } else {
+            return this.getClockInOutUI();
+        }
+    }
+    getClockInOutUI(){
         var classes = ["container"];
         if (this.props.userIsManagerOrSupervisor) {
             classes.push("managerMode");
@@ -65,6 +73,7 @@ function mapStateToProps(state) {
         userIsManager,
         userIsSupervisor,
         rota,
+        staffMembers: state.staff,
         leaveManagerModeInProgress: selectLeaveManagerModeIsInProgress(state),
         venue: rota.venue.get(state.venues),
         staffTypes: getStaffTypesWithStaffMembers(state.staffTypes, state.staff),
@@ -85,7 +94,7 @@ function mapDispatchToProps(dispatch){
             }))
         },
         setApiKey: function(apiKey){
-            
+
         }
     }
 }

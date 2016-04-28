@@ -1,5 +1,5 @@
 import React from "react"
-import { connect } from "redux"
+import { connect } from "react-redux"
 
 class KeyDialog extends React.Component {
     render(){
@@ -15,4 +15,4 @@ function mapDispatchToProps(dispatch){
     return {}
 }
 
-export default function connect(mapDispatchToProps, mapStateToProps);
+export default connect(mapDispatchToProps, mapStateToProps)(KeyDialog)
