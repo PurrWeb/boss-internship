@@ -38,7 +38,7 @@ class StaffMemberIndexFilter < Reform::Form
 
         result.
           joins(:name).
-          order('`names`.first_name, `names`.surname')
+          order("LOWER(CONCAT(`names`.first_name, `names`.surname))")
       end
     else
       @query ||= begin
@@ -53,7 +53,7 @@ class StaffMemberIndexFilter < Reform::Form
         ).all
         result.
           joins(:name).
-          order('`names`.first_name, `names`.surname')
+          order('LOWER(CONCAT(`names`.first_name, `names`.surname))')
       end
     end
   end

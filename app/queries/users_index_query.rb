@@ -29,7 +29,7 @@ class UsersIndexQuery
       result = result.where(role: role) if role.present?
       result = result.
         joins(:name).
-        order('`names`.first_name, `names`.surname')
+        order('LOWER(CONCAT(`names`.first_name, `names`.surname))')
       result
     end
   end
