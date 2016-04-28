@@ -54,6 +54,7 @@ var createStoreWithMiddleware = compose(
 
 export function createBossStore(){
     var store = createStoreWithMiddleware(batching(rootReducer));
+    window.debug = window.debug || {};
     window.debug.store = store;
     return store;
 }

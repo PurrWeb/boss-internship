@@ -17,7 +17,6 @@ describe("makeApiRequest", function(){
         });
         expect.spyOn($, "ajax").andReturn(promise)
 
-
         var apiRequestMaker = makeApiRequest({
             method: "GET",
             path: "example/test",
@@ -30,7 +29,7 @@ describe("makeApiRequest", function(){
             requestSourceComponent: 88
         }, success, error)
         expect($.ajax).toHaveBeenCalled();
-        
+
         reject({
             responseText: "It failed.",
             status: 500
@@ -46,7 +45,43 @@ describe("makeApiRequest", function(){
             expect(errorObject.errorHandlingComponent).toBe(77);
             expect(errorObject.requestSourceComponent).toBe(88);
 
-            done(); 
+            done();
+        })
+    })
+
+    it("Fetches a session token if the access token resolves to data for an auth request", function(done){
+        var success = expect.createSpy();
+
+        var apiRequestMaker = makeApiRequest({
+            method: "GET",
+            path: "test",
+            accessToken: function(){
+                return {
+                    pin: 20,
+                    staffMemberServerId: 99
+                }
+            },
+            getSuccessActionData(){
+                return {}
+            }
+        });
+
+        var resolve = null;
+        var promise = new Promise(function(resolveArg, rejectArg) {
+            resolve = resolveArg;
+        });
+        expect.spyOn($, "ajax").andReturn(promise)
+
+        apiRequestMaker({}, success, function(){});
+        resolve({access_token: "hello"})
+
+        _.defer(function(){
+            resolve({})
+            _.defer(function(){
+                expect($.ajax.calls.length).toBe(2);
+                expect(success).toHaveBeenCalled();
+                done();
+            })
         })
     })
 });
