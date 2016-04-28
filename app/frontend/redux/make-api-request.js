@@ -27,7 +27,10 @@ export default function makeApiRequest(apiOptions){
         method = resolveFunctionParameter(method);
         path = resolveFunctionParameter(path);
         var data = resolveFunctionParameter(apiOptions.data);
-        var accessToken = resolveFunctionParameter(apiOptions.accessToken)
+        var accessToken = requestOptions.accessToken;
+        if (!accessToken) {
+            accessToken = resolveFunctionParameter(apiOptions.accessToken)
+        }
 
         if (typeof accessToken === "undefined") {
             makeRequest(window.boss.access_token);

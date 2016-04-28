@@ -275,7 +275,7 @@ export function updateStaffStatusWithConfirmation(requestOptions){
         if (selectClockInOutAppIsInManagerMode(state)) {
             requestOptions = {
                 ...requestOptions,
-                authToken: state.clockInOutAppUserMode.token
+                accessToken: state.clockInOutAppUserMode.token
             }
             dispatch(updateStaffStatus(requestOptions))
         } else {
@@ -312,17 +312,21 @@ export const updateStaffStatus = createApiRequestAction({
                 newStatus: statusValue
             });
         },
-        data: (requestOptions) => {
+        data: (requestOptions, getState) => {
             var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
             var statusValue = oFetch(requestOptions, "statusValue");
             var venueServerId = oFetch(requestOptions, "venueServerId");
             var date = oFetch(requestOptions, "date");
             var at = oFetch(requestOptions, "at");
+
+            var accessToken = requestOptions.accessToken;
+
             return {
                 staff_member_id: staffMemberObject.serverId,
                 venue_id: venueServerId,
                 date,
-                at
+                at,
+                accessToken
             }
         },
         getSuccessActionData(responseData, requestOptions, getState){
