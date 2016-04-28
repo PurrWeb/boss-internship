@@ -6,6 +6,14 @@ class Address < ActiveRecord::Base
   validates :country, presence: true
   validates  :postcode, presence: true
 
+  auto_strip_attributes :address_1, convert_non_breaking_spaces: true, squish: true
+  auto_strip_attributes :address_2, convert_non_breaking_spaces: true, squish: true
+  auto_strip_attributes :address_3, convert_non_breaking_spaces: true, squish: true
+  auto_strip_attributes :address_4, convert_non_breaking_spaces: true, squish: true
+  auto_strip_attributes :region, convert_non_breaking_spaces: true, squish: true
+  auto_strip_attributes :country, convert_non_breaking_spaces: true, squish: true
+  auto_strip_attributes :postcode, convert_non_breaking_spaces: true, squish: true
+
   def ==(other)
     address_1 == other.address_1 &&
       address_2 == other.address_2 &&
