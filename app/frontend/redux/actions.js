@@ -384,6 +384,14 @@ export const updateStaffStatus = createApiRequestAction({
     }
 });
 
+actionTypes.SET_CLOCK_IN_OUT_APP_API_KEY = "SET_CLOCK_IN_OUT_APP_API_KEY";
+export function setClockInOutAppApiKey({apiKey}){
+    return {
+        type: actionTypes.SET_CLOCK_IN_OUT_APP_API_KEY,
+        apiKey
+    }
+}
+
 actionTypes.SHOW_USER_ACTION_CONFIRMATION_MESSAGE = "SHOW_USER_ACTION_CONFIRMATION_MESSAGE";
 export function showUserActionConfirmationMessage({message}) {
     return function(dispatch) {
