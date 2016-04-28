@@ -214,26 +214,47 @@ export function enterUserModeWithConfirmation(options){
     })
 }
 
+function makeApiRequestIfNecessary({tryWithoutRequest, makeRequest}){
+    return function(requestOptions, success, error, getState){
+        var actionData = tryWithoutRequest(requestOptions);
+        if (actionData){
+            success(actionData);
+        } else {
+            return makeRequest.apply(this, arguments);
+        }
+    }
+}
+
 export const clockInOutAppEnterUserMode = createApiRequestAction({
     requestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
-    makeRequest: makeApiRequest({
-        method: apiRoutes.getSessionToken.method,
-        path: apiRoutes.getSessionToken.getPath(),
-        data: function(requestOptions){
-            var staff_member_id = oFetch(requestOptions, "staffMemberObject.serverId");
-            var staff_member_pin = oFetch(requestOptions, "confirmationData.pin");
-            return {
-                api_key: "F7AC8662738C9823E7410D1B5E720E4B",
-                staff_member_id,
-                staff_member_pin
+    makeRequest: makeApiRequestIfNecessary({
+        tryWithoutRequest: function(requestOptions){
+            if (requestOptions.userMode === "user") {
+                return {
+                    token: null,
+                    mode: "user"
+                }
             }
         },
-        getSuccessActionData(responseData, requestOptions){
-            return {
-                mode: requestOptions.userMode,
-                token: responseData.access_token
+        makeRequest: makeApiRequest({
+            method: apiRoutes.getSessionToken.method,
+            path: apiRoutes.getSessionToken.getPath(),
+            data: function(requestOptions){
+                var staff_member_id = oFetch(requestOptions, "staffMemberObject.serverId");
+                var staff_member_pin = oFetch(requestOptions, "confirmationData.pin");
+                return {
+                    api_key: "F7AC8662738C9823E7410D1B5E720E4B",
+                    staff_member_id,
+                    staff_member_pin
+                }
+            },
+            getSuccessActionData(responseData, requestOptions){
+                return {
+                    mode: requestOptions.userMode,
+                    token: responseData.access_token
+                }
             }
-        }
+        })
     })
 });
 
