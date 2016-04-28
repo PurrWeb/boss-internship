@@ -216,32 +216,25 @@ export function enterUserModeWithConfirmation(options){
 
 export const clockInOutAppEnterUserMode = createApiRequestAction({
     requestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
-    makeRequest: function(requestOptions, success, error){
-        var userMode = oFetch(requestOptions, "userMode");
-        var pin;
-
-        if (userMode !== "user"){
-            pin = oFetch(requestOptions, "confirmationData.pin");
+    makeRequest: makeApiRequest({
+        method: apiRoutes.getSessionToken.method,
+        path: apiRoutes.getSessionToken.getPath(),
+        data: function(requestOptions){
+            var staff_member_id = oFetch(requestOptions, "staffMemberObject.serverId");
+            var staff_member_pin = oFetch(requestOptions, "confirmationData.pin");
+            return {
+                api_key: "F7AC8662738C9823E7410D1B5E720E4B",
+                staff_member_id,
+                staff_member_pin
+            }
+        },
+        getSuccessActionData(responseData, requestOptions){
+            return {
+                mode: requestOptions.userMode,
+                token: responseData.access_token
+            }
         }
-
-        setTimeout(function(){
-            if (userMode === "user") {
-                success({
-                    mode: "user",
-                    token: null
-                })
-                return;
-            }
-            if (pin === "9999") {
-                success({
-                    mode: userMode,
-                    token: "asdfsds"
-                })
-            } else {
-                error({errors:{base: ["Password needs to be 9999"]}})
-            }
-        }, 1000)
-    }
+    })
 });
 
 actionTypes.LEAVE_MANAGER_MODE = "LEAVE_MANAGER_MODE";
