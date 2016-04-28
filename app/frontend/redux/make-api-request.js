@@ -21,36 +21,32 @@ export default function makeApiRequest(apiOptions){
 
         requestOptions = _.clone(requestOptions);
 
-        var [method, path, data] = oFetch(apiOptions, "method", "path")
+        var [method, path] = oFetch(apiOptions, "method", "path");
         method = resolveFunctionParameter(method);
         path = resolveFunctionParameter(path);
-        data = resolveFunctionParameter(apiOptions.data);
+        var data = resolveFunctionParameter(apiOptions.data);
+        var accessToken = resolveFunctionParameter(apiOptions.accessToken)
 
-        var requestRequiresSpecialAccessToken = apiOptions.getAccessTokenRequestData !== undefined;
-        if (requestRequiresSpecialAccessToken) {
-            if (requestOptions.accessToken !== undefined) {
-                makeRequest(requestOptions.accessToken);
-            } else {
-                makeRequestForAccessToken({
-                    requestData: {
-                        ...apiOptions.getAccessTokenRequestData(requestOptions)
-                    },
-                    success: function(data){
-                        makeRequest(data.access_token)
-                    },
-                    error: function(){
-                        debugger
-                    }
-                });
-            }
-        }
-        else {
-            makeRequest(window.boss.access_token)
-            if (apiOptions.accessToken !== undefined){
-                accessToken = apiOptions.accessToken;
-            } else {
-                
-            }
+        if (typeof accessToken === "undefined") {
+            makeRequest(window.boss.access_token);
+        } else if (typeof accessToken === "string") {
+            makeRequest(accessToken)
+        } else if (maybeAccessToken.pin && maybeAccessToken.staffMemberServerId) {
+            makeRequestForAccessToken({
+                requestData: {
+                    apiKey: "F7AC8662738C9823E7410D1B5E720E4B",
+                    pin: maybeAccessToken.pin,
+                    staffMemberServerId: maybeAccessToken.staffMemberServerId
+                },
+                success: function(data){
+                    makeRequest(data.access_token)
+                },
+                error: function(){
+                    debugger
+                }
+            });
+        } else {
+            throw Error("Invalid");
         }
 
         function makeRequest(accessToken){
@@ -99,7 +95,7 @@ function makeRequestForAccessToken({requestData, success, error}){
         method: "post",
         url: API_ROOT + "sessions",
         data: {
-            api_key: "F7AC8662738C9823E7410D1B5E720E4B",
+            api_key: requestData.apiKey,
             staff_member_id: requestData.staffMemberServerId,
             staff_member_pin: requestData.pin
         }
