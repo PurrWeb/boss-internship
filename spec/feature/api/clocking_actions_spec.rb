@@ -35,7 +35,7 @@ RSpec.describe 'Clocking actions' do
     let(:params) do
       {
         staff_member_id: target_staff_member.id,
-        date: UIRotaDate.format(date)
+        date: date.iso8601
       }
     end
 
@@ -63,7 +63,7 @@ RSpec.describe 'Clocking actions' do
       let(:params) do
         {
           staff_member_id: target_staff_member.id,
-          date: UIRotaDate.format(date)
+          date: date.iso8601
         }
       end
 
@@ -92,7 +92,7 @@ RSpec.describe 'Clocking actions' do
       let(:params) do
         {
           staff_member_id: target_staff_member.id,
-          date: UIRotaDate.format(date)
+          date: date.iso8601
         }
       end
 
@@ -138,7 +138,7 @@ RSpec.describe 'Clocking actions' do
       let(:params) do
         {
           staff_member_id: target_staff_member.id,
-          date: UIRotaDate.format(date)
+          date: date.iso8601
         }
       end
 
@@ -182,7 +182,7 @@ RSpec.describe 'Clocking actions' do
       let(:params) do
         {
           staff_member_id: target_staff_member.id,
-          date: UIRotaDate.format(date)
+          date: date.iso8601
         }
       end
 
@@ -238,7 +238,7 @@ RSpec.describe 'Clocking actions' do
       {
         creator: user,
         staff_member_id: target_staff_member.id,
-        date: UIRotaDate.format(date),
+        date: date.iso8601,
         note: note
       }
     end
@@ -256,7 +256,7 @@ RSpec.describe 'Clocking actions' do
         staff_member: target_staff_member,
         creator: staff_member,
         venue: venue,
-        date: date
+        date: date.iso8601
       )
       expect(created_note).to be_present
       expect(created_note.note).to eq(note)

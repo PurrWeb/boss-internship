@@ -70,7 +70,7 @@ module Api
       end
 
       def date_from_params
-        @date ||= UIRotaDate.parse(params.fetch(:date))
+        @date ||= Date.parse(params.fetch(:date))
       end
     end
   end
