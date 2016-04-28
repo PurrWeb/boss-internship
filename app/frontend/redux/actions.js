@@ -306,15 +306,18 @@ export const updateStaffStatus = createApiRequestAction({
     requestType: "UPDATE_STAFF_STATUS",
     makeRequest: makeApiRequest({
         method: apiRoutes.updateStaffClockingStatus.method,
-        getAccessTokenRequestData(requestOptions) {
+        accessToken(requestOptions) {
             return {
                 pin: requestOptions.confirmationData.pin,
                 staffMemberServerId: requestOptions.staffMemberObject.serverId
             }
         },
         path: (requestOptions) => {
-            var [staffMemberObject, statusValue, venueServerId] = oFetch(requestOptions, "staffMemberObject", "statusValue", "venueServerId");
-            return apiRoutes.updateStaffClockingStatus.getPath({});
+            var [staffMemberObject, statusValue, venueServerId, currentStatus] = oFetch(requestOptions, "staffMemberObject", "statusValue", "venueServerId", "currentStatus");
+            return apiRoutes.updateStaffClockingStatus.getPath({
+                currentStatus,
+                newStatus: statusValue
+            });
         },
         data: (requestOptions) => {
             var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
@@ -327,6 +330,14 @@ export const updateStaffStatus = createApiRequestAction({
                 venue_id: venueServerId,
                 date,
                 at
+            }
+        },
+        getSuccessActionData(responseData, requestOptions, getState){
+            var {staffMemberObject, statusValue} = requestOptions;
+            return {
+                staffMemberObject,
+                statusValue,
+                userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
             }
         }
     }),

@@ -147,8 +147,20 @@ const apiRoutes = {
     },
     updateStaffClockingStatus: {
         getPath: function({currentStatus, newStatus}){
-            console.log("todo: determine what action is required")
-            return "clocking/" + "clock_in"
+            var actionsByCurrentAndNewStatus = {
+                "clocked_out": {
+                    "clocked_in": "clock_in"
+                },
+                "clocked_in": {
+                    "clocked_out": "clock_out",
+                    "on_break": "start_break"
+                },
+                "on_break": {
+                    "clocked_in": "end_break",
+                    "clocked_out": "clock_out"
+                }
+            }
+            return "clocking/" + actionsByCurrentAndNewStatus[currentStatus][newStatus];
         },
         method: "POST"
     }

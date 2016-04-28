@@ -31,12 +31,12 @@ export default function makeApiRequest(apiOptions){
             makeRequest(window.boss.access_token);
         } else if (typeof accessToken === "string") {
             makeRequest(accessToken)
-        } else if (maybeAccessToken.pin && maybeAccessToken.staffMemberServerId) {
+        } else if (accessToken.pin && accessToken.staffMemberServerId) {
             makeRequestForAccessToken({
                 requestData: {
                     apiKey: "F7AC8662738C9823E7410D1B5E720E4B",
-                    pin: maybeAccessToken.pin,
-                    staffMemberServerId: maybeAccessToken.staffMemberServerId
+                    pin: accessToken.pin,
+                    staffMemberServerId: accessToken.staffMemberServerId
                 },
                 success: function(data){
                     makeRequest(data.access_token)
@@ -59,7 +59,10 @@ export default function makeApiRequest(apiOptions){
                method: method,
                data: data,
                headers
-            }).then(function(responseData){    
+            }).then(function(responseData){
+                if (responseData == ""){
+                    responseData = {}
+                }
                 var actionData = apiOptions.getSuccessActionData(responseData, requestOptions, getState);
                 copyComponentInformationFromRequestOptions(actionData, requestOptions);
                 success(actionData);
