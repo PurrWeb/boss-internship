@@ -223,7 +223,7 @@ export const clockInOutAppEnterUserMode = createApiRequestAction({
         if (userMode !== "user"){
             pin = oFetch(requestOptions, "confirmationData.pin");
         }
-        
+
         setTimeout(function(){
             if (userMode === "user") {
                 success({
@@ -297,7 +297,7 @@ export function updateStaffStatusWithConfirmation(requestOptions){
                     apiRequestType: "UPDATE_STAFF_STATUS",
                     requestOptions
                 }
-            }));        
+            }));
         }
     }
 }
@@ -341,56 +341,11 @@ export const updateStaffStatus = createApiRequestAction({
             }
         }
     }),
-
-    /*
-            method: apiRoutes.updateRotaForecast.method,
-        path: (options) => {
-            var [dateOfRota, serverVenueId] = oFetch(options, "dateOfRota", "serverVenueId");
-            return apiRoutes.updateRotaForecast.getPath({dateOfRota, venueId: serverVenueId})
-        },
-        data: ({forecastedTake}) => {return {forecasted_take: forecastedTake} },
-        getSuccessActionData: function(responseData){
-            return {
-                rotaForecast: backendData.processRotaForecastObject(responseData)
-            }
-        }
-        */
-
-    /*function(requestOptions, success, error, getState){
-        var wasConfirmed = false;
-
-
-        var [staffMemberObject, statusValue] = oFetch(requestOptions, "staffMemberObject", "statusValue");
-        if (requestOptions.authToken !== undefined){
-            wasConfirmed = true;
-        } else  {
-            var pin = oFetch(requestOptions, "confirmationData.pin");
-            if (pin === "1234") {
-                wasConfirmed = true;
-            } else {
-                error({
-                    errors: {
-                        base: ["PIN needs to be 1234"]
-                    }
-                })
-            }
-        }
-
-        if (wasConfirmed) {
-            setTimeout(function(){
-                success({
-                    staffMemberObject,
-                    statusValue,
-                    userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
-                })
-            }, 500);
-        }
-    },*/
     additionalSuccessActionCreator: function(successActionData, requestOptions){
         return function(dispatch, getState){
             var userIsManagerOrSupervisor = selectClockInOutAppIsInManagerMode(getState());
             if (userIsManagerOrSupervisor) {
-                // They aren't sent back to the staff type selector, so 
+                // They aren't sent back to the staff type selector, so
                 // they can see the change in the normal UI
                 return;
             }
@@ -486,7 +441,7 @@ export const updateRotaStatus = createApiRequestAction({
                 dateOfRota: requestOptions.date,
                 venueId: requestOptions.venueClientId
             });
-            
+
             return {
                 rotaClientId: rota.clientId,
                 status: responseData.status
@@ -605,7 +560,7 @@ export function loadInitalStaffTypeRotaAppState(viewData){
 function genericLoadInitialRotaAppState(viewData, pageOptions){
     viewData.pageOptions = pageOptions;
     viewData = processVenueRotaAppViewData(viewData);
-    
+
     let rotaData = viewData.rota.rotas;
     let staffTypeData = viewData.rota.staff_types;
     let rotaShiftData = viewData.rota.rota_shifts;
@@ -641,7 +596,7 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
 
 export function loadInitialClockInOutAppState(viewData) {
     viewData = processClockInOutAppViewData(viewData);
-    
+
     return function(dispatch){
         dispatch([
             replaceAllStaffMembers({

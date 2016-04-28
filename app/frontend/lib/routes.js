@@ -163,11 +163,14 @@ const apiRoutes = {
             return "clocking/" + actionsByCurrentAndNewStatus[currentStatus][newStatus];
         },
         method: "POST"
+    },
+    getSessionToken: {
+        getPath(){
+            return "sessions"
+        },
+        method: "POST"
     }
 }
-
-window.debug = window.debug || {};
-window.debug.apiRoutes = apiRoutes;
 
 export {apiRoutes}
 export const API_ROOT = "/api/v1/"
