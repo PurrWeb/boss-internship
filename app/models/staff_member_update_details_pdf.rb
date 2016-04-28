@@ -35,6 +35,7 @@ class StaffMemberUpdateDetailsPDF
       region:    'Region',
       country:   'Country',
       postcode:  'Postcode',
+      phone_number: 'Phone number',
       staff_type: 'Staff Type',
       start_date: 'Start Date',
       date_of_birth: 'Date of Birth',
