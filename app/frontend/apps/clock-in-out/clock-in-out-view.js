@@ -92,9 +92,6 @@ function mapDispatchToProps(dispatch){
             dispatch(actions.clockInOutAppSelectStaffType({
                 selectedStaffTypeClientId
             }))
-        },
-        setApiKey: function(apiKey){
-
         }
     }
 }
