@@ -13,6 +13,9 @@ import { showConfirmationModal, cancelConfirmationModal, completeConfirmationMod
 import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 
+import {setApiKey } from "./make-api-request"
+setApiKey("F7AC8662738C9823E7410D1B5E720E4B")
+
 export const actionTypes = {};
 
 window.registeredApiRequestActionCreators = registeredApiRequestActionCreators;
@@ -239,11 +242,11 @@ export const clockInOutAppEnterUserMode = createApiRequestAction({
         makeRequest: makeApiRequest({
             method: apiRoutes.getSessionToken.method,
             path: apiRoutes.getSessionToken.getPath(),
+            needsApiKey: true,
             data: function(requestOptions){
                 var staff_member_id = oFetch(requestOptions, "staffMemberObject.serverId");
                 var staff_member_pin = oFetch(requestOptions, "confirmationData.pin");
                 return {
-                    api_key: "F7AC8662738C9823E7410D1B5E720E4B",
                     staff_member_id,
                     staff_member_pin
                 }

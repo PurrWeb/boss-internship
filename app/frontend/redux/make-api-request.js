@@ -3,11 +3,17 @@ import utils from "~lib/utils"
 import {API_ROOT, apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 
+var apiKey = null;
+export function setApiKey(apiKeyArg){
+    apiKey = apiKeyArg;
+}
+
 /*
 apiOptions:
 - method (required) - string or function that returns a string
 - path (required) - string or function that returns a string
 - data (optional) - object or function that returns an object
+- needsApiKey (optional) - indicates whether the api key should be added to the request data
 - accessToken (optional) - string or function that returns either a token string
   or an object with a pin and staffMemberServerId
 - getSuccessActionData
@@ -27,6 +33,10 @@ export default function makeApiRequest(apiOptions){
         method = resolveFunctionParameter(method);
         path = resolveFunctionParameter(path);
         var data = resolveFunctionParameter(apiOptions.data);
+        if (apiOptions.needsApiKey){
+            data.api_key = apiKey;
+        }
+
         var accessToken = requestOptions.accessToken;
         if (!accessToken) {
             accessToken = resolveFunctionParameter(apiOptions.accessToken)
@@ -39,7 +49,7 @@ export default function makeApiRequest(apiOptions){
         } else if (accessToken.pin && accessToken.staffMemberServerId) {
             makeRequestForAccessToken({
                 requestData: {
-                    apiKey: "F7AC8662738C9823E7410D1B5E720E4B",
+                    apiKey: apiKey,
                     pin: accessToken.pin,
                     staffMemberServerId: accessToken.staffMemberServerId
                 },
