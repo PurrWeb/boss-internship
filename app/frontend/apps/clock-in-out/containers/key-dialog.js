@@ -4,7 +4,14 @@ import { setClockInOutAppApiKey, clockInOutAppLoadAppData } from "~redux/actions
 
 class KeyDialog extends React.Component {
     render(){
-        return <button onClick={() => this.props.setApiKey("F7AC8662738C9823E7410D1B5E720E4B")}>btn</button>
+        return <div>
+            <label>Enter key</label><br/>
+            <input type="text" ref={(input) => this.apiKeyInput = input}></input>
+            <br/><br/>
+            <button className="btn btn-default" onClick={() => this.props.onApiKeySelected(this.apiKeyInput.value)}>
+                Load Clock In/Out page
+            </button>
+        </div>
     }
 }
 
@@ -14,7 +21,7 @@ function mapStateToProps(){
 
 function mapDispatchToProps(dispatch){
     return {
-        setApiKey: function(apiKey){
+        onApiKeySelected: function(apiKey){
             dispatch(setClockInOutAppApiKey({apiKey}));
             dispatch(clockInOutAppLoadAppData())
         }

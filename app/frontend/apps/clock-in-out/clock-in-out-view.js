@@ -1,7 +1,6 @@
 import React, { Component } from "react"
-import { connect, Provider } from "react-redux"
+import { connect } from "react-redux"
 import _ from "underscore"
-import store from "~redux/store"
 import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 import * as actions from "~redux/actions"
 import {
@@ -11,7 +10,6 @@ import {
     selectLeaveManagerModeIsInProgress
 } from "~redux/selectors"
 import ConfirmationModal from "~components/confirmation-modal"
-import Spinner from "~components/spinner"
 import LargeStaffTypeSelector from "./components/large-staff-type-selector"
 import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
 import UserActionConfirmationMessages from "~components/user-action-confirmation-messages"
