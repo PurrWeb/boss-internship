@@ -307,12 +307,26 @@ export function updateStaffMemberPinWithEntryModal(requestOptions){
 
 export const updateStaffMemberPin = createApiRequestAction({
     requestType: "UPDATE_STAFF_MEMBER_PIN",
-    makeRequest: function(requestOptions, success, error){
-        setTimeout(function(){
-            success({});
-            alert("PIN changed to " + requestOptions.confirmationData.pin)
-        }, 1000)
-    }
+    makeRequest: makeApiRequestMaker({
+        method: apiRoutes.changeStaffMemberPin.method,
+        path(requestOptions) {
+            var staffMemberServerId = oFetch(requestOptions, "staffMemberObject.serverId");
+            return apiRoutes.changeStaffMemberPin.getPath({
+                staffMemberServerId
+            });
+        },
+        accessToken: function(requestOptions, getState){
+            return getState().clockInOutAppUserMode.token
+        },
+        data: function(requestOptions, getState) {
+            return {
+                pin_code: requestOptions.confirmationData.pin
+            }
+        },
+        getSuccessActionData(){
+            return {};
+        }
+    })
 })
 
 export function updateStaffStatusWithConfirmation(requestOptions){

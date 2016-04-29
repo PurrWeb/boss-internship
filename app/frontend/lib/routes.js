@@ -169,6 +169,12 @@ const apiRoutes = {
             return "sessions"
         },
         method: "POST"
+    },
+    changeStaffMemberPin: {
+        getPath({staffMemberServerId}){
+            return "staff_members/" + staffMemberServerId + "/change_pin"
+        },
+        method: "POST"
     }
 }
 
