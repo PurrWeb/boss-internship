@@ -268,6 +268,37 @@ export function leaveManagerMode () {
     }
 }
 
+export const clockInOutAppLoadAppData = createApiRequestAction({
+    requestType: "CLOCK_IN_OUT_APP_LOAD_APP_DATA",
+    makeRequest: function(requestOptions, success, error){
+        setTimeout(function(){
+            var staff_members = window.staffMembers;
+            var staff_statuses = window.clockInStatuses
+            var staff_types = window.staffTypes;
+            var rota_shifts = window.rotaShifts;
+            var venues = window.venues;
+            var rotas = window.rotas;
+            var pageData = window.pageData;
+
+            success({
+                staff_members,
+                staff_statuses,
+                staff_types,
+                rota_shifts,
+                venues,
+                rotas,
+                pageData
+            })
+        }, 2000)
+    },
+    getSuccessActionData(){
+        return {};
+    },
+    additionalSuccessActionCreator: function(responseData){
+        return loadInitialClockInOutAppState(responseData);
+    }
+})
+
 export function updateStaffMemberPinWithEntryModal(requestOptions){
     var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
     var staffMemberName = staffMemberObject.first_name + staffMemberObject.surname;

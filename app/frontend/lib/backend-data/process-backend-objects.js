@@ -33,6 +33,8 @@ export function processStaffMemberObject(staffMember){
 
 export function processStaffStatusObject(staffStatus){
     var staffStatus = {...staffStatus};
+    staffStatus.staff_member = {id: staffStatus.staff_member_id};
+    delete staffStatus.staff_member_id
     processObjectLinks(staffStatus);
     return staffStatus;
 }
@@ -41,7 +43,7 @@ export function processPageOptionsObject(pageOptions){
     // page options doesn't have an id, but we want to resolve IDs
     // in any links it contains
     pageOptions = {...pageOptions};
-    processObjectLinks(pageOptions); 
+    processObjectLinks(pageOptions);
     return pageOptions;
 }
 

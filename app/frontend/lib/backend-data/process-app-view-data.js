@@ -22,7 +22,7 @@ export function processHolidayAppViewData(viewData){
     } else {
         pageData.venueClientId = getClientId(pageData.venueServerId);
     }
-    
+
     return {
         staffTypes: viewData.staffTypes.map(processStaffTypeObject),
         staffMembers: viewData.staffMembers.map(processStaffMemberObject),

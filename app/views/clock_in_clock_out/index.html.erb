@@ -6,24 +6,11 @@
   var venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: Array(venue) } %>;
   var rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: Array(rota) }  %>;
 
-  clockInStatuses.forEach(function(status){
-    status.staff_member = {id: status.staff_member_id}
-  })
-
-  window.boss = {};
-  window.boss.staff_members = staffMembers;
-  window.boss.staff_statuses = clockInStatuses
-  window.boss.staff_types = staffTypes;
-  window.boss.rota_shifts = rotaShifts;
-  window.boss.venues = venues;
-  window.boss.rotas = rotas;
-
-  window.boss.staff_members = [];
-
-  window.boss.pageData = {
-    rotaDate: "<%= rota_date.iso8601 %>",
-    rotaVenueId: <%= venue.id %>
+  var pageData = {
+      rotaDate: "<%= rota_date.iso8601 %>",
+      rotaVenueId: <%= venue.id %>
   }
+
 </script>
 
 <%= react_component('ClockInOutApp') %>

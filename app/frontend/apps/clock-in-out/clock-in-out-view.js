@@ -21,7 +21,7 @@ import KeyDialog from "./containers/key-dialog"
 
 class ClockInOutView extends Component {
     render() {
-        if (_.values(this.props.staffMembers).length === 0) {
+        if (!this.props.hasLoadedAppData) {
             return <KeyDialog />
         } else {
             return this.getClockInOutUI();
@@ -65,10 +65,14 @@ class ClockInOutView extends Component {
 }
 
 function mapStateToProps(state) {
+    if (_.values(state.staff).length === 0) {
+        return {hadLoadedAppData: false};
+    }
     var rota = selectRotaOnClockInOutPage(state);
     var userIsSupervisor = selectClockInOutAppUserIsSupervisor(state);
     var userIsManager = selectClockInOutAppUserIsManager(state);
     return {
+        hasLoadedAppData: true,
         userIsManagerOrSupervisor: userIsSupervisor || userIsManager,
         userIsManager,
         userIsSupervisor,
