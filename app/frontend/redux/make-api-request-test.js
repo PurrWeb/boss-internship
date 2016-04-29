@@ -1,11 +1,11 @@
 import expect from "expect"
-import makeApiRequest from "./make-api-request"
+import makeApiRequestMaker from "./make-api-request"
 import _ from "underscore"
 import $ from "jquery"
 window.$ = $; // expose globally because makeApiRequest is using the global version, because
 // it has been supplied with the CSRF token by jQuery-Rails
 
-describe("makeApiRequest", function(){
+describe("makeApiRequestMaker", function(){
     afterEach(function(){
         expect.restoreSpies();
     })
@@ -17,7 +17,7 @@ describe("makeApiRequest", function(){
         });
         expect.spyOn($, "ajax").andReturn(promise)
 
-        var apiRequestMaker = makeApiRequest({
+        var apiRequestMaker = makeApiRequestMaker({
             method: "GET",
             path: "example/test",
             accessToken: "token"
@@ -52,7 +52,7 @@ describe("makeApiRequest", function(){
     it("Fetches a session token if the access token resolves to data for an auth request", function(done){
         var success = expect.createSpy();
 
-        var apiRequestMaker = makeApiRequest({
+        var apiRequestMaker = makeApiRequestMaker({
             method: "GET",
             path: "test",
             accessToken: function(){
@@ -72,7 +72,11 @@ describe("makeApiRequest", function(){
         });
         expect.spyOn($, "ajax").andReturn(promise)
 
-        apiRequestMaker({}, success, function(){});
+        apiRequestMaker({}, success, function(){}, function getState(){
+            return {
+                apiKey: "adsfsd"
+            }
+        });
         resolve({access_token: "hello"})
 
         _.defer(function(){

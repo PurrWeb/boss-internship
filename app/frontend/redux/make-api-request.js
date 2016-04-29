@@ -9,7 +9,7 @@ apiOptions:
 - path (required) - string or function that returns a string
 - data (optional) - object or function that returns an object
 - needsApiKey (optional) - indicates whether the api key should be added to the request data
-- doesntNeedAccessToken (optional) - make the API request without attempting to get an access token
+- doesntNeedAccessToken (optional) - make the API request without attempting to find an access to
 - accessToken (optional) - string or function that returns either a token string
   or an object with a pin and staffMemberServerId
 - getSuccessActionData
@@ -72,7 +72,7 @@ export default function makeApiRequestMaker(apiOptions){
         };
 
         function getApiKey(){
-            return getState().clockInOutAppApiKey;
+            return getState().apiKey;
         }
 
         function makeRequest(accessToken){

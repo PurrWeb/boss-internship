@@ -406,10 +406,10 @@ export const updateStaffStatus = createApiRequestAction({
     }
 });
 
-actionTypes.SET_CLOCK_IN_OUT_APP_API_KEY = "SET_CLOCK_IN_OUT_APP_API_KEY";
-export function setClockInOutAppApiKey({apiKey}){
+actionTypes.SET_API_KEY = "SET_API_KEY";
+export function setApiKey({apiKey}){
     return {
-        type: actionTypes.SET_CLOCK_IN_OUT_APP_API_KEY,
+        type: actionTypes.SET_API_KEY,
         apiKey
     }
 }

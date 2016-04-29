@@ -1,6 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
-import { setClockInOutAppApiKey, clockInOutAppLoadAppData } from "~redux/actions"
+import { setApiKey, clockInOutAppLoadAppData } from "~redux/actions"
 
 class KeyDialog extends React.Component {
     render(){
@@ -22,7 +22,7 @@ function mapStateToProps(){
 function mapDispatchToProps(dispatch){
     return {
         onApiKeySelected: function(apiKey){
-            dispatch(setClockInOutAppApiKey({apiKey}));
+            dispatch(setApiKey({apiKey}));
             dispatch(clockInOutAppLoadAppData())
         }
     }

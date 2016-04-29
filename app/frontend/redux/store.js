@@ -19,7 +19,7 @@ import rotaForecasts from "./rota-forecasts-reducer"
 import weeklyRotaForecast from "./weekly-rota-forecast-reducer"
 import confirmationModal from "./confirmation-modal-reducer"
 import userActionConfirmationMessages from "./user-action-confirmation-messages-reducer"
-import clockInOutAppApiKey from "./clock-in-out-app-api-key"
+import apiKey from "./api-key"
 
 var rootReducer = combineReducers({
     staff,
@@ -38,7 +38,7 @@ var rootReducer = combineReducers({
     weeklyRotaForecast,
     confirmationModal,
     userActionConfirmationMessages,
-    clockInOutAppApiKey
+    apiKey
 });
 var createStoreWithMiddleware = compose(
 	// Redux thunk lets us dispatch asynchronous actions, for example
