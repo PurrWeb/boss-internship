@@ -24,6 +24,7 @@
     }
 }
 .staff-list-item--clock-in-out__manager-buttons {
+    float: right;
     @include breakpoint(sm){
         float: right;
     }
