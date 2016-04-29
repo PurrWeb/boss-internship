@@ -35,7 +35,7 @@ describe('Venue Rota Integration Test', function() {
             venues: [{
                 name: "The Bar",
                 id: 3
-            }], 
+            }],
             staff_members: [{
                 first_name: "John",
                 surname: "Smith",
@@ -100,15 +100,15 @@ describe('Venue Rota Integration Test', function() {
         var {$, $$} = simpleRender(<RotaApp viewData={viewData} />);
 
         var content = replaceNbsp($$(".staff-list-item")[JOHN_KITCHEN_INDEX].textContent);
-        expect(content).toContain("10 Mar 12:00 to 16:00"); 
-        expect(content).toContain("13 Mar 10:00 to 11:00"); 
+        expect(content).toContain("10 Mar 12:00 to 16:00");
+        expect(content).toContain("13 Mar 10:00 to 11:00");
 
         content = replaceNbsp($$(".staff-list-item")[SALLY_SECURITY_INDEX].textContent);
         expect(content).toContain("10 Mar 2:00 to 4:00");
     });
 
     it("Shows todays shifts in the rota chart", function(){
-        var {$, $$} = simpleRender(<RotaApp viewData={viewData} />);        
+        var {$, $$} = simpleRender(<RotaApp viewData={viewData} />);
 
         expect($$("#rota-chart .rota-chart__shift").length).toBe(2);
     });
@@ -129,7 +129,7 @@ describe('Venue Rota Integration Test', function() {
 
         var detailsComponent = findChild(StaffDetailsAndShifts);
         var node = ReactDOM.findDOMNode(detailsComponent);
-        
+
         expect(node.textContent).toContain("12:0016:00");
     });
 
@@ -139,7 +139,7 @@ describe('Venue Rota Integration Test', function() {
         customViewData.rota.rota_shifts = [];
         customViewData.rota.rotas = [];
 
-        var {node} = simpleRender(<RotaApp viewData={customViewData} />);
-        expect(node.textContent).toContain("Rota for The Bar: Thu 10 March 2016")
+        var { getNode } = simpleRender(<RotaApp viewData={customViewData} />);
+        expect(getNode().textContent).toContain("Rota for The Bar: Thu 10 March 2016")
     });
 });

@@ -25,6 +25,11 @@ module.exports = function (config) {
       },
       devtool: 'inline-source-map',
     },
+    client: {
+      mocha: {
+        timeout: 5000
+      }
+    },
     webpackServer: {
       noInfo: true
     }

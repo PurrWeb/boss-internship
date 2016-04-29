@@ -66,13 +66,13 @@ describe('Rota StaffListItem', function() {
     }
 
     it("shows the person's first and last name", function(){
-        var {node} = simpleRender(
+        var {getNode} = simpleRender(
             <StaffListItem staff={staffMember} />,
             { storeState, context }
         );
 
-        expect(node.textContent).toContain("John");
-        expect(node.textContent).toContain("Doe");
+        expect(getNode().textContent).toContain("John");
+        expect(getNode().textContent).toContain("Doe");
     });
 
     it("Enables the add button unless there's a reason not to", function(){

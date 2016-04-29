@@ -9,7 +9,7 @@ describe("StaffHolidaysListItem", function(){
             start_date: new Date(2015, 10, 5),
             end_date: new Date(2015, 10, 10)
         }
-        var node = simpleRender(<StaffHolidaysListItem holiday={holiday} />).node;
+        var node = simpleRender(<StaffHolidaysListItem holiday={holiday} />).getNode();
 
         expect(node.textContent).toBe("5 Nov - 10 Nov");
     });
@@ -19,7 +19,7 @@ describe("StaffHolidaysListItem", function(){
             start_date: new Date(2015, 10, 2),
             end_date: new Date(2015, 10, 2)
         }
-        var node = simpleRender(<StaffHolidaysListItem holiday={holiday} />).node;
+        var node = simpleRender(<StaffHolidaysListItem holiday={holiday} />).getNode();
 
         expect(node.textContent).toBe("2 Nov");
     });

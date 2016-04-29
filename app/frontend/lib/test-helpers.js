@@ -69,7 +69,9 @@ export function simpleRender(createdElement, options){
         contextProviderComponent,
         contextProviderComponent.props.children.type
     );
-    var node = ReactDOM.findDOMNode(component);
+    function getNode() {
+        return ReactDOM.findDOMNode(component);
+    }
 
     var findChild = function(childComponentType){
         return TestUtils.findRenderedComponentWithType(
@@ -79,12 +81,12 @@ export function simpleRender(createdElement, options){
     }
 
     var $ = function(selector){
-        return node.querySelector(selector);
+        return getNode().querySelector(selector);
     }
 
     var $$ = function(selector){
-        return node.querySelectorAll(selector);
+        return getNode().querySelectorAll(selector);
     }
 
-    return {component, node, findChild, $, $$};
+    return {component, getNode, findChild, $, $$};
 }
