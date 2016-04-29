@@ -127,7 +127,7 @@ export function canEditStaffTypeShifts({staffTypes, pageOptions}, {staffTypeClie
     var disabledNames = pageOptions.disableEditingShiftsByStaffTypeName;
     if (!disabledNames) {
         return true;
-    } 
+    }
 
     if (disabledNames[staffTypeObject.name]){
         return false;
@@ -250,4 +250,9 @@ export function selectClockInOutAppUserPermissions(state){
         toggleOnBreak: false,
         changePin: false
     }
+}
+
+export function selectClockInOutLoadAppDataIsInProgress(state){
+    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_LOAD_APP_DATA;
+    return requests !== undefined && requests.length > 0;
 }
