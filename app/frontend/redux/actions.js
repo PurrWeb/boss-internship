@@ -3,7 +3,7 @@ import _ from "underscore"
 import moment from "moment"
 import utils from "~lib/utils"
 import * as backendData from "~lib/backend-data/process-backend-objects"
-import makeApiRequest from "./make-api-request"
+import makeApiRequestMaker from "./make-api-request"
 import {apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 import RotaDate from "~lib/rota-date"
@@ -12,9 +12,6 @@ import { processVenueRotaAppViewData, processClockInOutAppViewData } from "~lib/
 import { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal } from "./actions/confirmation-modal"
 import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
-
-import {setApiKey } from "./make-api-request"
-setApiKey("F7AC8662738C9823E7410D1B5E720E4B")
 
 export const actionTypes = {};
 
@@ -51,7 +48,7 @@ export { showConfirmationModal, cancelConfirmationModal, completeConfirmationMod
 
 export const addRotaShift = createApiRequestAction({
     requestType: "ADD_SHIFT",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.addShift.method,
         path: function({venueServerId, starts_at}, getState) {
             var date = getRotaDateFromShiftStartsAt(starts_at);
@@ -116,7 +113,7 @@ export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
 
 export const updateRotaShift = createApiRequestAction({
     requestType: "UPDATE_SHIFT",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shiftServerId}),
         method: apiRoutes.updateShift.method,
         data: function(options, getState){
@@ -152,7 +149,7 @@ export const updateRotaShift = createApiRequestAction({
 
 export const deleteRotaShift = createApiRequestAction({
     requestType: "DELETE_SHIFT",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.deleteShift.method,
         path: (options) => apiRoutes.deleteShift.getPath({shiftId: oFetch(options, "shift.serverId")}),
         getSuccessActionData: function(responseData, requestOptions) {
@@ -173,7 +170,7 @@ export const deleteRotaShift = createApiRequestAction({
 
 export const updateRotaForecast = createApiRequestAction({
     requestType: "UPDATE_ROTA_FORECAST",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.updateRotaForecast.method,
         path: (options) => {
             var [dateOfRota, serverVenueId] = oFetch(options, "dateOfRota", "serverVenueId");
@@ -190,7 +187,7 @@ export const updateRotaForecast = createApiRequestAction({
 
 export const fetchWeeklyRotaForecast = createApiRequestAction({
     requestType: "FETCH_WEEKLY_ROTA_FORECAST",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.weeklyRotaForecast.method,
         path: (options) => {
             var [serverVenueId, startOfWeek] = oFetch(options, "serverVenueId", "startOfWeek")
@@ -217,7 +214,7 @@ export function enterUserModeWithConfirmation(options){
     })
 }
 
-function makeApiRequestIfNecessary({tryWithoutRequest, makeRequest}){
+function makeApiRequestMakerIfNecessary({tryWithoutRequest, makeRequest}){
     return function(requestOptions, success, error, getState){
         var actionData = tryWithoutRequest(requestOptions);
         if (actionData){
@@ -230,7 +227,7 @@ function makeApiRequestIfNecessary({tryWithoutRequest, makeRequest}){
 
 export const clockInOutAppEnterUserMode = createApiRequestAction({
     requestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
-    makeRequest: makeApiRequestIfNecessary({
+    makeRequest: makeApiRequestMakerIfNecessary({
         tryWithoutRequest: function(requestOptions){
             if (requestOptions.userMode === "user") {
                 return {
@@ -239,7 +236,8 @@ export const clockInOutAppEnterUserMode = createApiRequestAction({
                 }
             }
         },
-        makeRequest: makeApiRequest({
+        makeRequest: makeApiRequestMaker({
+            doesntNeedAccessToken: true,
             method: apiRoutes.getSessionToken.method,
             path: apiRoutes.getSessionToken.getPath(),
             needsApiKey: true,
@@ -260,13 +258,6 @@ export const clockInOutAppEnterUserMode = createApiRequestAction({
         })
     })
 });
-
-actionTypes.LEAVE_MANAGER_MODE = "LEAVE_MANAGER_MODE";
-export function leaveManagerMode () {
-    return {
-        type: actionTypes.LEAVE_MANAGER_MODE
-    }
-}
 
 export const clockInOutAppLoadAppData = createApiRequestAction({
     requestType: "CLOCK_IN_OUT_APP_LOAD_APP_DATA",
@@ -352,7 +343,7 @@ export function updateStaffStatusWithConfirmation(requestOptions){
 
 export const updateStaffStatus = createApiRequestAction({
     requestType: "UPDATE_STAFF_STATUS",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.updateStaffClockingStatus.method,
         accessToken(requestOptions) {
             return {
@@ -486,7 +477,7 @@ export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
 
 export const updateRotaStatus = createApiRequestAction({
     requestType: "UPDATE_ROTA_STATUS",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.updateRotaStatus.method,
         path: function(options){
             if (!options.venueClientId){
@@ -512,7 +503,7 @@ export const updateRotaStatus = createApiRequestAction({
 
 export const publishRotas = createApiRequestAction({
     requestType: "PUBLISH_ROTAS",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.publishRotas.method,
         path: function(options){
             return apiRoutes.publishRotas.getPath({

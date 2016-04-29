@@ -3,30 +3,19 @@ import utils from "~lib/utils"
 import {API_ROOT, apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 
-var apiKey = null;
-export function setApiKey(apiKeyArg){
-    apiKey = apiKeyArg;
-}
-
 /*
 apiOptions:
 - method (required) - string or function that returns a string
 - path (required) - string or function that returns a string
 - data (optional) - object or function that returns an object
 - needsApiKey (optional) - indicates whether the api key should be added to the request data
+- doesntNeedAccessToken (optional) - make the API request without attempting to get an access token
 - accessToken (optional) - string or function that returns either a token string
   or an object with a pin and staffMemberServerId
 - getSuccessActionData
 */
-export default function makeApiRequest(apiOptions){
+export default function makeApiRequestMaker(apiOptions){
     return function(requestOptions, success, error, getState) {
-        function resolveFunctionParameter(parameterValue){
-            if (typeof parameterValue === "function") {
-                return parameterValue(requestOptions, getState);
-            }
-            return parameterValue
-        };
-
         requestOptions = _.clone(requestOptions);
 
         var [method, path] = oFetch(apiOptions, "method", "path");
@@ -34,34 +23,56 @@ export default function makeApiRequest(apiOptions){
         path = resolveFunctionParameter(path);
         var data = resolveFunctionParameter(apiOptions.data);
         if (apiOptions.needsApiKey){
-            data.api_key = apiKey;
+            data.api_key = getApiKey();
         }
 
-        var accessToken = requestOptions.accessToken;
-        if (!accessToken) {
-            accessToken = resolveFunctionParameter(apiOptions.accessToken)
-        }
-
-        if (typeof accessToken === "undefined") {
-            makeRequest(window.boss.access_token);
-        } else if (typeof accessToken === "string") {
+        getAccessToken(function(accessToken){
             makeRequest(accessToken)
-        } else if (accessToken.pin && accessToken.staffMemberServerId) {
-            makeRequestForAccessToken({
-                requestData: {
-                    apiKey: apiKey,
-                    pin: accessToken.pin,
-                    staffMemberServerId: accessToken.staffMemberServerId
-                },
-                success: function(data){
-                    makeRequest(data.access_token)
-                },
-                error: function(response, textStatus){
-                    failApiRequest(response, textStatus)
-                }
-            });
-        } else {
-            throw Error("Invalid");
+        })
+
+        function getAccessToken(callback){
+            if (apiOptions.doesntNeedAccessToken){
+                callback(null);
+                return;
+            }
+
+            var accessToken = requestOptions.accessToken;
+            if (!accessToken) {
+                accessToken = resolveFunctionParameter(apiOptions.accessToken)
+            }
+
+            if (typeof accessToken === "undefined") {
+                callback(window.boss.access_token);
+            } else if (typeof accessToken === "string") {
+                makeRequest(accessToken)
+            } else if (accessToken.pin && accessToken.staffMemberServerId) {
+                makeRequestForAccessToken({
+                    requestData: {
+                        apiKey: getApiKey(),
+                        pin: accessToken.pin,
+                        staffMemberServerId: accessToken.staffMemberServerId
+                    },
+                    success: function(data){
+                        callback(data.access_token)
+                    },
+                    error: function(response, textStatus){
+                        failApiRequest(response, textStatus)
+                    }
+                });
+            } else {
+                throw Error("Invalid");
+            }
+        }
+
+        function resolveFunctionParameter(parameterValue){
+            if (typeof parameterValue === "function") {
+                return parameterValue(requestOptions, getState);
+            }
+            return parameterValue
+        };
+
+        function getApiKey(){
+            return getState().clockInOutAppApiKey;
         }
 
         function makeRequest(accessToken){
