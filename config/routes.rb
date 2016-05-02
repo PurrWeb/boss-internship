@@ -119,6 +119,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
+      resources :clock_in_clock_out, only: [:index]
       resources :test, only: [] do
         collection do
           get :get
