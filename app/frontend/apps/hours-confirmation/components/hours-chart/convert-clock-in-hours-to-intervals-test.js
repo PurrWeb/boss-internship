@@ -15,7 +15,7 @@ describe("convertClockInHoursToIntervals", function(){
     it("Creates no interval if there are no breaks and the staff member hasn't clocked out", function(){
         var clockInHours = {
             starts_at: new Date(2016, 10, 1, 9, 0),
-            ends_at: new Date(2016, 10, 1, 18, 0),
+            ends_at: null,
             breaks: []
         }
         var intervals = convertClockInHoursToIntervals(clockInHours);
@@ -61,6 +61,3 @@ describe("convertClockInHoursToIntervals", function(){
         expect(intervals.length).toBe(3)
     });
 })
-
-
-
