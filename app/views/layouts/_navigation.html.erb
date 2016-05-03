@@ -56,7 +56,7 @@
 
           <% if can?(:manage, :clock_in_clock_out) && ApiKey.current_for(venue: current_user.default_venue).present? %>
             <li class="nav-clock-in-clock-out-section">
-              <%= link_to('Clock In/Out', clock_in_clock_out_index_path(venue_id: current_user.default_venue.id), class: "nav-section-header-link") %>
+              <%= link_to('Clock In/Out', clock_in_clock_out_index_path, class: "nav-section-header-link") %>
             </li>
           <% end %>
         </ul>
