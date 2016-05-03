@@ -7,6 +7,7 @@ export default class StaffDay extends React.Component {
             staff day component
             <HoursChart
                 rotaDate={this.props.rotaDate}
+                rotaedShifts={this.props.rotaedShifts}
                 proposedAcceptedClockIns={this.props.proposedAcceptedClockIns}
                 clockedClockIns={this.props.clockedClockIns}/>
         </div>

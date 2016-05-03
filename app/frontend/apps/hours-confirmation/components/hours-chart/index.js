@@ -49,7 +49,7 @@ class HoursChartUi extends React.Component {
         this.renderXAxis({chart, xScale})
         this.renderProposedAcceptedIntervals({chart, xScale})
         this.renderClockedIntervals({chart, xScale})
-        // this.renderRotaedIntervals({chart, xScale})
+        this.renderRotaedIntervals({chart, xScale})
         this.renderLaneLabels({chart})
     }
     getXScale(){
@@ -67,8 +67,9 @@ class HoursChartUi extends React.Component {
     }
     renderIntervals({chart, xScale, intervals, lane}){
         var y = {
-            "proposedAccepted": 50,
-            "clocked": 10
+            "proposedAccepted": 60,
+            "clocked": 30,
+            "rotaed": 10
         }[lane]
         chart.append("g")
             .selectAll("g")
@@ -127,32 +128,12 @@ class HoursChartUi extends React.Component {
             .call(xAxis);
     }
     renderRotaedIntervals({chart, xScale}){
-        var rotaedMarkers = chart
-            .append("g")
-            .selectAll("g")
-            .data(this.props.rotaedIntervals)
-            .enter()
-            .append("g")
-            .attr("transform", function(interval){
-                var x = xScale(interval.startOffsetInHours) + padding;
-                return "translate(" + x + ", " + 15 + ")";
-            })
-
-        rotaedMarkers.classed("hours-chart__rotaed-interval", true);
-
-        rotaedMarkers
-            .append("rect")
-            .attr("height", 20)
-            .attr("width", function(interval){
-                var shiftDuration = interval.endOffsetInHours - interval.startOffsetInHours;
-                return xScale(shiftDuration);
-            })
-        rotaedMarkers
-            .append("text")
-            .attr("transform", "translate(3, 15)")
-            .text(function(interval){
-                return interval.label;
-            })
+        this.renderIntervals({
+            chart,
+            xScale,
+            intervals: this.props.rotaedIntervals,
+            lane: "rotaed"
+        })
     }
     renderClockedIntervals({chart, xScale}){
         this.renderIntervals({
@@ -177,7 +158,7 @@ export default class HoursChart extends React.Component {
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
             proposedAcceptedIntervals={this.getProposedAcceptedIntervals()}
-            // rotaedIntervals={this.getRotaedChartIntervals()}
+            rotaedIntervals={this.getRotaedChartIntervals()}
             // hoursAssignmentIntervals={this.getHoursAssignmentIntervals()}
             />
     }

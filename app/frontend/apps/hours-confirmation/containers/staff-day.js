@@ -51,6 +51,12 @@ export default class StaffDay extends React.Component {
                     ]
                 }
             ],
+            rotaedShifts: [
+                {
+                    starts_at: new Date(2016, 10, 1, 10,0),
+                    ends_at: new Date(2016, 10, 1, 16, 0)
+                }
+            ],
             dateOfRota: new Date(2016,10,1,0,0)
         }
 
@@ -61,6 +67,7 @@ export default class StaffDay extends React.Component {
                 dateOfRota: props.dateOfRota
             })}
             clockedClockIns={props.clockedClockIns}
+            rotaedShifts={props.rotaedShifts}
             proposedAcceptedClockIns={proposedClockIns}
         />
     }
