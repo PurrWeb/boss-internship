@@ -9,10 +9,6 @@ import { processBackendObject } from "~lib/backend-data/process-backend-object"
 
 window.hoursAssignments = [];
 
-var events = window.events.map(processBackendObject);
-var intervals = window.intervals.map(processBackendObject);
-var shifts = window.rotaedShifts;
-
 export default class StaffDay extends React.Component {
     constructor(props){
         super(props);
@@ -35,7 +31,7 @@ export default class StaffDay extends React.Component {
                 }
             ]
         }
-        // prop data: 
+        // prop data:
         // notes
         // clocked clockins
         // predefinedReasons
@@ -54,9 +50,14 @@ export default class StaffDay extends React.Component {
                         }
                     ]
                 }
-            ]
+            ],
+            dateOfRota: new Date(2016,10,1,0,0)
         }
-        return <StaffDayUi />
+        return <StaffDayUi
+            rotaDate={new RotaDate({
+                dateOfRota: props.dateOfRota
+            })}
+            clockedClockIns={props.clockedClockIns}
+        />
     }
 }
-

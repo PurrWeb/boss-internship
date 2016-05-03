@@ -5,6 +5,7 @@ import makeRotaHoursXAxis from "~lib/make-rota-hours-x-axis"
 import _ from "underscore"
 import moment from "moment"
 import utils from "~lib/utils"
+import convertClockInHoursToIntervals from "./convert-clock-in-hours-to-intervals"
 
 var innerWidth = 600;
 var innerHeight = 60;
@@ -46,9 +47,9 @@ class HoursChartUi extends React.Component {
         var xScale = this.getXScale()
 
         this.renderXAxis({chart, xScale})
-        this.renderHoursAssignmentIntervals({chart, xScale})
+        // this.renderHoursAssignmentIntervals({chart, xScale})
         this.renderClockedIntervals({chart, xScale})
-        this.renderRotaedIntervals({chart, xScale})
+        // this.renderRotaedIntervals({chart, xScale})
         this.renderLaneLabels({chart})
     }
     getXScale(){
@@ -69,7 +70,7 @@ class HoursChartUi extends React.Component {
                 xScale,
                 startPosition: interval.startOffsetInHours,
                 endPosition: interval.endOffsetInHours,
-                color: "#3891FF", 
+                color: "#3891FF",
                 opacity
             });
         })
@@ -173,8 +174,9 @@ export default class HoursChart extends React.Component {
     render(){
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
-            rotaedIntervals={this.getRotaedChartIntervals()}
-            hoursAssignmentIntervals={this.getHoursAssignmentIntervals()} />
+            // rotaedIntervals={this.getRotaedChartIntervals()}
+            // hoursAssignmentIntervals={this.getHoursAssignmentIntervals()}
+            />
     }
     getHoursAssignmentIntervals(){
         var intervals = [];
@@ -211,11 +213,15 @@ export default class HoursChart extends React.Component {
         return this.props.rotaDate.getHoursSinceStartOfDay(date);
     }
     getClockedChartIntervals(){
-        var {clockedIntervals, clockedEvents} = this.props;
+        var clockedIntervals = []
+        this.props.clockedClockIns.forEach(function(clockIn){
+            clockedIntervals = clockedIntervals.concat(convertClockInHoursToIntervals(clockIn))
+        })
+
 
         var intervals = clockedIntervals.map((interval) => {
-            var startTime = interval.startEvent.get(clockedEvents).time;
-            var endTime = interval.endEvent.get(clockedEvents).time;
+            var startTime = interval.starts_at;
+            var endTime = interval.ends_at;
             return {
                 startOffsetInHours: this.getHoursSinceStartOfDay(startTime),
                 endOffsetInHours: this.getHoursSinceStartOfDay(endTime),

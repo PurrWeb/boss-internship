@@ -18,6 +18,7 @@ export default function(clockInHours){
                 ends_at: breakItem.ends_at,
                 type: "break"
             })
+            lastTime = breakItem.ends_at
         }
     })
 
