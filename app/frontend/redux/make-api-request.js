@@ -11,7 +11,7 @@ apiOptions:
 - needsApiKey (optional) - indicates whether the api key should be added to the request data
 - doesntNeedAccessToken (optional) - make the API request without attempting to find an access to
 - accessToken (optional) - string or function that returns either a token string
-  or an object with a pin and staffMemberServerId
+  or an object with a pin and staffMemberServerId, or an object with an api_key
 - getSuccessActionData
 */
 export default function makeApiRequestMaker(apiOptions){
@@ -45,7 +45,9 @@ export default function makeApiRequestMaker(apiOptions){
                 callback(window.boss.access_token);
             } else if (typeof accessToken === "string") {
                 makeRequest(accessToken)
-            } else if (accessToken.pin && accessToken.staffMemberServerId) {
+            } else if (accessToken.pin && accessToken.staffMemberServerId
+            ||
+            accessToken.api_key) {
                 makeRequestForAccessToken({
                     requestData: {
                         apiKey: getApiKey(),

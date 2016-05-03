@@ -15,7 +15,7 @@ describe("Clock In/Out Page Integration Test", function(){
         "first_name":"Dermot",
         "surname":"O'Boyle"
     }];
-    window.clockInStatuses = [{
+    window.clock_in_statuses = [{
         "staff_member":{"id":2},
         "status":"clocked_out"
     }];

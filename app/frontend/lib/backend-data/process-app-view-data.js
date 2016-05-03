@@ -55,13 +55,13 @@ export function processStaffTypeRotaOverviewAppViewData(viewData){
 
 export function processClockInOutAppViewData(viewData){
     var pageOptions = {
-        dateOfRota: viewData.pageData.rotaDate,
-        venue: {id: viewData.pageData.rotaVenueId}
+        dateOfRota: viewData.page_data.rota_date,
+        venue: {id: viewData.page_data.rota_venue_id}
     }
     return {
         staff_members: viewData.staff_members.map(processStaffMemberObject),
         staff_types: viewData.staff_types.map(processStaffTypeObject),
-        staff_statuses: viewData.staff_statuses.map(processStaffStatusObject),
+        staff_statuses: viewData.clock_in_statuses.map(processStaffStatusObject),
         rota_shifts: viewData.rota_shifts.map(processShiftObject),
         rotas: viewData.rotas.map(processRotaObject),
         venues: viewData.venues.map(processVenueObject),

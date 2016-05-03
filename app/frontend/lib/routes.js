@@ -175,6 +175,12 @@ const apiRoutes = {
             return "staff_members/" + staffMemberServerId + "/change_pin"
         },
         method: "POST"
+    },
+    getClockInOutAppData: {
+        getPath(){
+            return "clock_in_clock_out"
+        },
+        method: "GET"
     }
 }
 
