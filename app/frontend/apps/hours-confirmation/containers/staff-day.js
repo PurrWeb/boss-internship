@@ -16,12 +16,12 @@ export default class StaffDay extends React.Component {
             proposedInfo: [
                 {
                     clockInHours: {
-                        starts_at: new Date(2016, 10, 1, 9, 0),
+                        starts_at: new Date(2016, 10, 1, 10, 0),
                         ends_at: new Date(2016, 10, 1, 18, 0),
                         breaks: [
                             {
-                                starts_at: new Date(2016, 10, 1, 10, 30),
-                                ends_at: new Date(2016, 10, 1, 11, 30)
+                                starts_at: new Date(2016, 10, 1, 11, 30),
+                                ends_at: new Date(2016, 10, 1, 12, 30)
                             }
                         ]
                     },
@@ -53,11 +53,15 @@ export default class StaffDay extends React.Component {
             ],
             dateOfRota: new Date(2016,10,1,0,0)
         }
+
+        var proposedClockIns = _.pluck(this.state.proposedInfo, "clockInHours");
+
         return <StaffDayUi
             rotaDate={new RotaDate({
                 dateOfRota: props.dateOfRota
             })}
             clockedClockIns={props.clockedClockIns}
+            proposedAcceptedClockIns={proposedClockIns}
         />
     }
 }

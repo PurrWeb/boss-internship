@@ -11,7 +11,7 @@ var innerWidth = 600;
 var innerHeight = 60;
 var padding = 20;
 var paddingRight = 200;
-var barHeight = 40;
+var barHeight = 30;
 var outerWidth = innerWidth + padding + paddingRight;
 var outerHeight = innerHeight + padding * 2;
 
@@ -47,7 +47,7 @@ class HoursChartUi extends React.Component {
         var xScale = this.getXScale()
 
         this.renderXAxis({chart, xScale})
-        // this.renderHoursAssignmentIntervals({chart, xScale})
+        this.renderProposedAcceptedIntervals({chart, xScale})
         this.renderClockedIntervals({chart, xScale})
         // this.renderRotaedIntervals({chart, xScale})
         this.renderLaneLabels({chart})
@@ -57,23 +57,46 @@ class HoursChartUi extends React.Component {
             .domain([0, 24])
             .range([0, innerWidth]);
     }
-    renderHoursAssignmentIntervals({chart, xScale}){
-        var intervals = this.props.hoursAssignmentIntervals;
-
-        intervals.forEach((interval) => {
-            var opacity = {
-                proposed: .3,
-                confirmed: .5
-            }[interval.type]
-            this.colorArea({
-                chart,
-                xScale,
-                startPosition: interval.startOffsetInHours,
-                endPosition: interval.endOffsetInHours,
-                color: "#3891FF",
-                opacity
-            });
+    renderProposedAcceptedIntervals({chart, xScale}){
+        this.renderIntervals({
+            chart,
+            xScale,
+            intervals: this.props.proposedAcceptedIntervals,
+            lane: "proposedAccepted"
         })
+    }
+    renderIntervals({chart, xScale, intervals, lane}){
+        var y = {
+            "proposedAccepted": 50,
+            "clocked": 10
+        }[lane]
+        chart.append("g")
+            .selectAll("g")
+            .data(intervals)
+            .enter()
+            .append("rect")
+            .attr("width", function(interval, i){
+                var intervalLengthInHours = interval.endOffsetInHours - interval.startOffsetInHours;
+                return xScale(intervalLengthInHours);
+            })
+            .attr("height", barHeight)
+            .attr("transform", function(interval, i){
+                var x = xScale(interval.startOffsetInHours) + padding
+                return "translate(" + x + "," + y + ")"
+            })
+            .attr("class", function(interval){
+                var classes = ["hours-chart__clocked-interval"];
+                if (interval.type === "hours") {
+                    classes.push("hours-chart__clocked-interval--hours");
+                }
+                if (interval.type === "break") {
+                    classes.push("hours-chart__clocked-interval--break");
+                }
+                if (interval.type === "incomplete") {
+                    classes.push("hours-chart__clocked-interval--incomplete");
+                }
+                return classes.join(" ");
+            })
     }
     colorArea({chart, xScale, startPosition, endPosition, color, opacity}){
         chart
@@ -132,33 +155,12 @@ class HoursChartUi extends React.Component {
             })
     }
     renderClockedIntervals({chart, xScale}){
-        chart.append("g")
-            .selectAll("g")
-            .data(this.props.clockedIntervals)
-            .enter()
-            .append("rect")
-            .attr("width", function(interval, i){
-                var intervalLengthInHours = interval.endOffsetInHours - interval.startOffsetInHours;
-                return xScale(intervalLengthInHours);
-            })
-            .attr("height", barHeight)
-            .attr("transform", function(interval, i){
-                var x = xScale(interval.startOffsetInHours) + padding
-                return "translate(" + x + "," + (innerHeight - barHeight / 2) + ")"
-            })
-            .attr("class", function(interval){
-                var classes = ["hours-chart__clocked-interval"];
-                if (interval.type === "hours") {
-                    classes.push("hours-chart__clocked-interval--hours");
-                }
-                if (interval.type === "break") {
-                    classes.push("hours-chart__clocked-interval--break");
-                }
-                if (interval.type === "incomplete") {
-                    classes.push("hours-chart__clocked-interval--incomplete");
-                }
-                return classes.join(" ");
-            })
+        this.renderIntervals({
+            chart,
+            xScale,
+            intervals: this.props.clockedIntervals,
+            lane: "clocked"
+        })
     }
 }
 
@@ -174,22 +176,13 @@ export default class HoursChart extends React.Component {
     render(){
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
+            proposedAcceptedIntervals={this.getProposedAcceptedIntervals()}
             // rotaedIntervals={this.getRotaedChartIntervals()}
             // hoursAssignmentIntervals={this.getHoursAssignmentIntervals()}
             />
     }
-    getHoursAssignmentIntervals(){
-        var intervals = [];
-
-        this.props.hoursAssignments.forEach((hoursAssignment) => {
-            intervals.push({
-                startOffsetInHours: this.getHoursSinceStartOfDay(hoursAssignment.starts_at),
-                endOffsetInHours: this.getHoursSinceStartOfDay(hoursAssignment.ends_at),
-                type: "confirmed"
-            })
-        });
-
-        return intervals
+    getProposedAcceptedIntervals(){
+        return this.getIntervalsFromClockInList(this.props.proposedAcceptedClockIns)
     }
     getDateFromHoursOffset(hoursOffset){
         var date = new Date(this.props.rotaDate.startTime);
@@ -212,12 +205,11 @@ export default class HoursChart extends React.Component {
     getHoursSinceStartOfDay(date){
         return this.props.rotaDate.getHoursSinceStartOfDay(date);
     }
-    getClockedChartIntervals(){
+    getIntervalsFromClockInList(clockInList){
         var clockedIntervals = []
-        this.props.clockedClockIns.forEach(function(clockIn){
+        clockInList.forEach(function(clockIn){
             clockedIntervals = clockedIntervals.concat(convertClockInHoursToIntervals(clockIn))
         })
-
 
         var intervals = clockedIntervals.map((interval) => {
             var startTime = interval.starts_at;
@@ -230,5 +222,8 @@ export default class HoursChart extends React.Component {
         });
 
         return intervals;
+    }
+    getClockedChartIntervals(){
+        return this.getIntervalsFromClockInList(this.props.clockedClockIns)
     }
 }
