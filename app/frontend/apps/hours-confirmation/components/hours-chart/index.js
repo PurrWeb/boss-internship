@@ -71,20 +71,23 @@ class HoursChartUi extends React.Component {
             "clocked": 30,
             "rotaed": 10
         }[lane]
-        chart.append("g")
+        var intervalGroup = chart
+            .append("g")
             .selectAll("g")
             .data(intervals)
             .enter()
-            .append("rect")
+            .append("g")
+            .attr("transform", function(interval, i){
+                var x = xScale(interval.startOffsetInHours) + padding
+                return "translate(" + x + "," + y + ")"
+            })
+
+        intervalGroup.append("rect")
             .attr("width", function(interval, i){
                 var intervalLengthInHours = interval.endOffsetInHours - interval.startOffsetInHours;
                 return xScale(intervalLengthInHours);
             })
             .attr("height", barHeight)
-            .attr("transform", function(interval, i){
-                var x = xScale(interval.startOffsetInHours) + padding
-                return "translate(" + x + "," + y + ")"
-            })
             .attr("class", function(interval){
                 var classes = ["hours-chart__clocked-interval"];
                 if (interval.type === "hours") {
@@ -97,6 +100,14 @@ class HoursChartUi extends React.Component {
                     classes.push("hours-chart__clocked-interval--incomplete");
                 }
                 return classes.join(" ");
+            })
+
+        intervalGroup
+            .append("text")
+            .attr("transform", "translate(3, 15)")
+            .attr("fill", "white")
+            .text(function(interval){
+                return interval.label;
             })
     }
     colorArea({chart, xScale, startPosition, endPosition, color, opacity}){
