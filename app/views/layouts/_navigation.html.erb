@@ -54,9 +54,9 @@
             </li>
           <% end %>
 
-          <% if can?(:manage, :clock_in_clock_out) %>
+          <% if can?(:manage, :clock_in_clock_out) && ApiKey.current_for(venue: current_user.default_venue).present? %>
             <li class="nav-clock-in-clock-out-section">
-              <%= link_to('Clock In/Out Demo', clock_in_clock_out_index_path, class: "nav-section-header-link") %>
+              <%= link_to('Clock In/Out', clock_in_clock_out_index_path, class: "nav-section-header-link") %>
             </li>
           <% end %>
         </ul>
@@ -97,6 +97,10 @@
 
                 <li class="nav-admin-fruit-orders-section">
                   <%= link_to('Fruit Order Reports', fruit_order_reports_path) %>
+                </li>
+
+                <li class="nav-admin-api-keys-section">
+                  <%= link_to('API Keys', api_keys_path) %>
                 </li>
               </ul>
             </li>

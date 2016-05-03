@@ -24,7 +24,7 @@ class ConfirmationModal extends React.Component {
             return <ModalContainer onClick={() => this.cancel()}>
                 <ModalDialog onClose={() => this.cancel()}>
                     {this.props.modalOptions.title}
-                    <div className="row">
+                    <div className="row" data-test-marker-pin-modal>
                         <form onSubmit={(e) => {e.preventDefault(); this.complete()}}>
                             <div className="col-md-9">
                                 <input type="text" ref="pinInput"/>
@@ -35,7 +35,7 @@ class ConfirmationModal extends React.Component {
                                 </button>
                             </div>
                         </form>
-                    </div>                
+                    </div>
                 </ModalDialog>
             </ModalContainer>;
         } else {

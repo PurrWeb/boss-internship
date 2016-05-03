@@ -3,7 +3,7 @@ var webpack = require('webpack');
 module.exports = function (config) {
   config.set({
     browsers: ['Chrome'],
-    singleRun: true,
+    singleRun: false,
     frameworks: ['mocha', 'sinon'],
     files: ['webpack/tests.config.js'],
     preprocessors: {
@@ -24,6 +24,11 @@ module.exports = function (config) {
         extensions: ["", ".js", ".jsx", ".js.jsx"]
       },
       devtool: 'inline-source-map',
+    },
+    client: {
+      mocha: {
+        timeout: 5000
+      }
     },
     webpackServer: {
       noInfo: true

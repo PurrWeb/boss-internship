@@ -21,7 +21,9 @@ export default class ToggleStaffStatusButton extends Component {
 
         var label = this.props.statusLabels[nextStatusId];
 
-        return <a className="btn btn-default btn-sm" onClick={() => this.onClick()}>
+        return <a className="btn btn-default btn-sm"
+            onClick={() => this.onClick()}
+            data-test-marker-toggle-staff-status>
             <span
                 className={["glyphicon", "glyphicon-" + this.props.icon].join(" ")}
                 style={{display: "inline-block", marginRight: 3}} />

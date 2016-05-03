@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160418143307) do
+ActiveRecord::Schema.define(version: 20160429083348) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20160418143307) do
     t.string   "creator_type",    limit: 255, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "api_key_id",      limit: 4
   end
 
   add_index "access_tokens", ["expires_at"], name: "index_access_tokens_on_expires_at", using: :btree
@@ -36,6 +37,27 @@ ActiveRecord::Schema.define(version: 20160418143307) do
     t.string   "region",     limit: 255
     t.string   "country",    limit: 255
     t.string   "postcode",   limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "api_key_transitions", force: :cascade do |t|
+    t.string   "to_state",    limit: 255,   null: false
+    t.text     "metadata",    limit: 65535
+    t.integer  "sort_key",    limit: 4,     null: false
+    t.integer  "api_key_id",  limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "api_key_transitions", ["api_key_id", "most_recent"], name: "index_api_key_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "api_key_transitions", ["api_key_id", "sort_key"], name: "index_api_key_transitions_parent_sort", unique: true, using: :btree
+
+  create_table "api_keys", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4,   null: false
+    t.string   "key",        limit: 255, null: false
+    t.integer  "venue_id",   limit: 4,   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -71,6 +93,66 @@ ActiveRecord::Schema.define(version: 20160418143307) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "clock_in_breaks", force: :cascade do |t|
+    t.integer  "clock_in_period_id", limit: 4, null: false
+    t.datetime "starts_at",                    null: false
+    t.datetime "ends_at",                      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clock_in_notes", force: :cascade do |t|
+    t.integer  "creator_id",      limit: 4,                  null: false
+    t.string   "creator_type",    limit: 255,                null: false
+    t.string   "note",            limit: 255,                null: false
+    t.integer  "venue_id",        limit: 4,                  null: false
+    t.integer  "staff_member_id", limit: 4,                  null: false
+    t.date     "date",                                       null: false
+    t.boolean  "enabled",                     default: true, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clock_in_period_events", force: :cascade do |t|
+    t.integer  "clocking_event_id",  limit: 4, null: false
+    t.integer  "clock_in_period_id", limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clock_in_period_reasons", force: :cascade do |t|
+    t.string   "text",       limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clock_in_periods", force: :cascade do |t|
+    t.string   "period_type",               limit: 255, null: false
+    t.date     "date",                                  null: false
+    t.integer  "staff_member_id",           limit: 4,   null: false
+    t.integer  "venue_id",                  limit: 4,   null: false
+    t.integer  "creator_id",                limit: 4,   null: false
+    t.integer  "clock_in_period_reason_id", limit: 4
+    t.string   "reason_note",               limit: 255
+    t.datetime "starts_at",                             null: false
+    t.datetime "ends_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clocking_events", force: :cascade do |t|
+    t.string   "event_type",      limit: 255, null: false
+    t.integer  "venue_id",        limit: 4,   null: false
+    t.integer  "staff_member_id", limit: 4,   null: false
+    t.integer  "creator_id",      limit: 4,   null: false
+    t.string   "creator_type",    limit: 255, null: false
+    t.datetime "at",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "clocking_events", ["at"], name: "index_clocking_events_on_at", using: :btree
 
   create_table "cron_jobs", force: :cascade do |t|
     t.string   "method",      limit: 255, null: false

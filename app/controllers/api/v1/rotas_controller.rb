@@ -1,6 +1,8 @@
 module Api
   module V1
-    class RotasController < WebAPIController
+    class RotasController < APIController
+      before_filter :web_token_authenticate!
+
       def show
         rota = Rota.find(params.fetch(:id))
         authorize! :manage, rota

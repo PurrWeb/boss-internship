@@ -115,8 +115,11 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :api_keys, only: [:index, :create, :destroy]
+
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
+      resources :clock_in_clock_out, only: [:index]
       resources :test, only: [] do
         collection do
           get :get
@@ -144,18 +147,27 @@ Rails.application.routes.draw do
       end
       resources :holidays, only: :show
       resources :holiday_reports, only: :index
-      resources :staff_members, only: :show
+      resources :staff_members, only: :show do
+        member do
+          post :change_pin
+        end
+      end
       resources :staff_types,   only: :show
       resources :rota_shifts,   only: [:show, :destroy, :update]
       resources :rotas,         only: :show
-      resources :sessions, only: [:create] do
-        collection do
-          post :api_key
-        end
-      end
+      resources :sessions, only: [:create]
       resources :security_rotas, only: [] do
         member do
           get :overview
+        end
+      end
+      resources :clocking, only: [] do
+        collection do
+          post :clock_in
+          post :clock_out
+          post :start_break
+          post :end_break
+          post :add_note
         end
       end
     end

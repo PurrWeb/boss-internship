@@ -19,5 +19,9 @@ FactoryGirl.define do
       name 'security'
       role 'security'
     end
+
+    factory :manager_staff_type do
+      name 'Manager'
+    end
   end
 end

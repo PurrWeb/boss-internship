@@ -1,11 +1,11 @@
 import expect from "expect"
-import makeApiRequest from "./make-api-request"
+import makeApiRequestMaker from "./make-api-request"
 import _ from "underscore"
 import $ from "jquery"
 window.$ = $; // expose globally because makeApiRequest is using the global version, because
 // it has been supplied with the CSRF token by jQuery-Rails
 
-describe("makeApiRequest", function(){
+describe("makeApiRequestMaker", function(){
     afterEach(function(){
         expect.restoreSpies();
     })
@@ -17,8 +17,7 @@ describe("makeApiRequest", function(){
         });
         expect.spyOn($, "ajax").andReturn(promise)
 
-
-        var apiRequestMaker = makeApiRequest({
+        var apiRequestMaker = makeApiRequestMaker({
             method: "GET",
             path: "example/test",
             accessToken: "token"
@@ -30,7 +29,7 @@ describe("makeApiRequest", function(){
             requestSourceComponent: 88
         }, success, error)
         expect($.ajax).toHaveBeenCalled();
-        
+
         reject({
             responseText: "It failed.",
             status: 500
@@ -46,7 +45,47 @@ describe("makeApiRequest", function(){
             expect(errorObject.errorHandlingComponent).toBe(77);
             expect(errorObject.requestSourceComponent).toBe(88);
 
-            done(); 
+            done();
+        })
+    })
+
+    it("Fetches a session token if the access token resolves to data for an auth request", function(done){
+        var success = expect.createSpy();
+
+        var apiRequestMaker = makeApiRequestMaker({
+            method: "GET",
+            path: "test",
+            accessToken: function(){
+                return {
+                    pin: 20,
+                    staffMemberServerId: 99
+                }
+            },
+            getSuccessActionData(){
+                return {}
+            }
+        });
+
+        var resolve = null;
+        var promise = new Promise(function(resolveArg, rejectArg) {
+            resolve = resolveArg;
+        });
+        expect.spyOn($, "ajax").andReturn(promise)
+
+        apiRequestMaker({}, success, function(){}, function getState(){
+            return {
+                apiKey: "adsfsd"
+            }
+        });
+        resolve({access_token: "hello"})
+
+        _.defer(function(){
+            resolve({})
+            _.defer(function(){
+                expect($.ajax.calls.length).toBe(2);
+                expect(success).toHaveBeenCalled();
+                done();
+            })
         })
     })
 });

@@ -5,9 +5,6 @@ import * as actionCreators from "~redux/actions.js"
 import AppComponent from "../app-component"
 
 export default class RotaApp extends AppComponent {
-    componentWillMount(){
-        this.store.dispatch(actionCreators.loadInitialClockInOutAppState(this.getViewData()))
-    }
     render() {
         return <Provider store={this.store}>
             <ClockInOutView />

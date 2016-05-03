@@ -1,6 +1,8 @@
 module Api
   module V1
-    class TestController < WebAPIController
+    class TestController < APIController
+      before_filter :web_token_authenticate!
+
       def get
         render json: {}
       end

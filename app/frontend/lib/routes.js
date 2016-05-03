@@ -144,11 +144,45 @@ const apiRoutes = {
             return "venues/" + venueId + "/rota_forecasts/" + utils.formatDateForApi(dateOfRota);
         },
         method: "POST"
+    },
+    updateStaffClockingStatus: {
+        getPath: function({currentStatus, newStatus}){
+            var actionsByCurrentAndNewStatus = {
+                "clocked_out": {
+                    "clocked_in": "clock_in"
+                },
+                "clocked_in": {
+                    "clocked_out": "clock_out",
+                    "on_break": "start_break"
+                },
+                "on_break": {
+                    "clocked_in": "end_break",
+                    "clocked_out": "clock_out"
+                }
+            }
+            return "clocking/" + actionsByCurrentAndNewStatus[currentStatus][newStatus];
+        },
+        method: "POST"
+    },
+    getSessionToken: {
+        getPath(){
+            return "sessions"
+        },
+        method: "POST"
+    },
+    changeStaffMemberPin: {
+        getPath({staffMemberServerId}){
+            return "staff_members/" + staffMemberServerId + "/change_pin"
+        },
+        method: "POST"
+    },
+    getClockInOutAppData: {
+        getPath(){
+            return "clock_in_clock_out"
+        },
+        method: "GET"
     }
 }
-
-window.debug = window.debug || {};
-window.debug.apiRoutes = apiRoutes;
 
 export {apiRoutes}
 export const API_ROOT = "/api/v1/"

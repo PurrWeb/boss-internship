@@ -3,7 +3,7 @@ import _ from "underscore"
 import moment from "moment"
 import utils from "~lib/utils"
 import * as backendData from "~lib/backend-data/process-backend-objects"
-import makeApiRequest from "./make-api-request"
+import makeApiRequestMaker from "./make-api-request"
 import {apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 import RotaDate from "~lib/rota-date"
@@ -48,7 +48,7 @@ export { showConfirmationModal, cancelConfirmationModal, completeConfirmationMod
 
 export const addRotaShift = createApiRequestAction({
     requestType: "ADD_SHIFT",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.addShift.method,
         path: function({venueServerId, starts_at}, getState) {
             var date = getRotaDateFromShiftStartsAt(starts_at);
@@ -113,7 +113,7 @@ export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
 
 export const updateRotaShift = createApiRequestAction({
     requestType: "UPDATE_SHIFT",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shiftServerId}),
         method: apiRoutes.updateShift.method,
         data: function(options, getState){
@@ -149,7 +149,7 @@ export const updateRotaShift = createApiRequestAction({
 
 export const deleteRotaShift = createApiRequestAction({
     requestType: "DELETE_SHIFT",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.deleteShift.method,
         path: (options) => apiRoutes.deleteShift.getPath({shiftId: oFetch(options, "shift.serverId")}),
         getSuccessActionData: function(responseData, requestOptions) {
@@ -170,7 +170,7 @@ export const deleteRotaShift = createApiRequestAction({
 
 export const updateRotaForecast = createApiRequestAction({
     requestType: "UPDATE_ROTA_FORECAST",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.updateRotaForecast.method,
         path: (options) => {
             var [dateOfRota, serverVenueId] = oFetch(options, "dateOfRota", "serverVenueId");
@@ -187,7 +187,7 @@ export const updateRotaForecast = createApiRequestAction({
 
 export const fetchWeeklyRotaForecast = createApiRequestAction({
     requestType: "FETCH_WEEKLY_ROTA_FORECAST",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.weeklyRotaForecast.method,
         path: (options) => {
             var [serverVenueId, startOfWeek] = oFetch(options, "serverVenueId", "startOfWeek")
@@ -214,42 +214,73 @@ export function enterUserModeWithConfirmation(options){
     })
 }
 
-export const clockInOutAppEnterUserMode = createApiRequestAction({
-    requestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
-    makeRequest: function(requestOptions, success, error){
-        var userMode = oFetch(requestOptions, "userMode");
-        var pin;
-
-        if (userMode !== "user"){
-            pin = oFetch(requestOptions, "confirmationData.pin");
+function makeApiRequestMakerIfNecessary({tryWithoutRequest, makeRequest}){
+    return function(requestOptions, success, error, getState){
+        var actionData = tryWithoutRequest(requestOptions);
+        if (actionData){
+            success(actionData);
+        } else {
+            return makeRequest.apply(this, arguments);
         }
-        
-        setTimeout(function(){
-            if (userMode === "user") {
-                success({
-                    mode: "user",
-                    token: null
-                })
-                return;
-            }
-            if (pin === "9999") {
-                success({
-                    mode: userMode,
-                    token: "asdfsds"
-                })
-            } else {
-                error({errors:{base: ["Password needs to be 9999"]}})
-            }
-        }, 1000)
-    }
-});
-
-actionTypes.LEAVE_MANAGER_MODE = "LEAVE_MANAGER_MODE";
-export function leaveManagerMode () {
-    return {
-        type: actionTypes.LEAVE_MANAGER_MODE
     }
 }
+
+export const clockInOutAppEnterUserMode = createApiRequestAction({
+    requestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
+    makeRequest: makeApiRequestMakerIfNecessary({
+        tryWithoutRequest: function(requestOptions){
+            if (requestOptions.userMode === "user") {
+                return {
+                    token: null,
+                    mode: "user"
+                }
+            }
+        },
+        makeRequest: makeApiRequestMaker({
+            doesntNeedAccessToken: true,
+            method: apiRoutes.getSessionToken.method,
+            path: apiRoutes.getSessionToken.getPath(),
+            needsApiKey: true,
+            data: function(requestOptions){
+                var staff_member_id = oFetch(requestOptions, "staffMemberObject.serverId");
+                var staff_member_pin = oFetch(requestOptions, "confirmationData.pin");
+                return {
+                    staff_member_id,
+                    staff_member_pin
+                }
+            },
+            getSuccessActionData(responseData, requestOptions){
+                return {
+                    mode: requestOptions.userMode,
+                    token: responseData.access_token
+                }
+            }
+        })
+    })
+});
+
+export const clockInOutAppLoadAppData = createApiRequestAction({
+    requestType: "CLOCK_IN_OUT_APP_LOAD_APP_DATA",
+    makeRequest: makeApiRequestMaker({
+        method: apiRoutes.getClockInOutAppData.method,
+        path: apiRoutes.getClockInOutAppData.getPath(),
+        doesntNeedAccessToken: true,
+        data: function(requestOptions, getState){
+            return {
+                api_key: getState().apiKey
+            }
+        },
+        getSuccessActionData(responseData){
+            return responseData
+        }
+    }),
+    getSuccessActionData(){
+        return {};
+    },
+    additionalSuccessActionCreator: function(responseData){
+        return loadInitialClockInOutAppState(responseData);
+    }
+})
 
 export function updateStaffMemberPinWithEntryModal(requestOptions){
     var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
@@ -268,22 +299,35 @@ export function updateStaffMemberPinWithEntryModal(requestOptions){
 
 export const updateStaffMemberPin = createApiRequestAction({
     requestType: "UPDATE_STAFF_MEMBER_PIN",
-    makeRequest: function(requestOptions, success, error){
-        setTimeout(function(){
-            success({});
-            alert("PIN changed to " + requestOptions.confirmationData.pin)
-        }, 1000)
-    }
+    makeRequest: makeApiRequestMaker({
+        method: apiRoutes.changeStaffMemberPin.method,
+        path(requestOptions) {
+            var staffMemberServerId = oFetch(requestOptions, "staffMemberObject.serverId");
+            return apiRoutes.changeStaffMemberPin.getPath({
+                staffMemberServerId
+            });
+        },
+        accessToken: function(requestOptions, getState){
+            return getState().clockInOutAppUserMode.token
+        },
+        data: function(requestOptions, getState) {
+            return {
+                pin_code: requestOptions.confirmationData.pin
+            }
+        },
+        getSuccessActionData(){
+            return {};
+        }
+    })
 })
 
 export function updateStaffStatusWithConfirmation(requestOptions){
-
-    return function(dispatch, getState){
+    return function(dispatch, getState){``
         var state = getState();
         if (selectClockInOutAppIsInManagerMode(state)) {
             requestOptions = {
                 ...requestOptions,
-                authToken: state.clockInOutAppUserMode.token
+                accessToken: state.clockInOutAppUserMode.token
             }
             dispatch(updateStaffStatus(requestOptions))
         } else {
@@ -298,46 +342,59 @@ export function updateStaffStatusWithConfirmation(requestOptions){
                     apiRequestType: "UPDATE_STAFF_STATUS",
                     requestOptions
                 }
-            }));        
+            }));
         }
     }
 }
 
 export const updateStaffStatus = createApiRequestAction({
     requestType: "UPDATE_STAFF_STATUS",
-    makeRequest: function(requestOptions, success, error, getState){
-        var wasConfirmed = false;
-        var [staffMemberObject, statusValue] = oFetch(requestOptions, "staffMemberObject", "statusValue");
-        if (requestOptions.authToken !== undefined){
-            wasConfirmed = true;
-        } else  {
-            var pin = oFetch(requestOptions, "confirmationData.pin");
-            if (pin === "1234") {
-                wasConfirmed = true;
-            } else {
-                error({
-                    errors: {
-                        base: ["PIN needs to be 1234"]
-                    }
-                })
+    makeRequest: makeApiRequestMaker({
+        method: apiRoutes.updateStaffClockingStatus.method,
+        accessToken(requestOptions) {
+            return {
+                pin: requestOptions.confirmationData.pin,
+                staffMemberServerId: requestOptions.staffMemberObject.serverId
+            }
+        },
+        path: (requestOptions) => {
+            var [staffMemberObject, statusValue, venueServerId, currentStatus] = oFetch(requestOptions, "staffMemberObject", "statusValue", "venueServerId", "currentStatus");
+            return apiRoutes.updateStaffClockingStatus.getPath({
+                currentStatus,
+                newStatus: statusValue
+            });
+        },
+        data: (requestOptions, getState) => {
+            var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
+            var statusValue = oFetch(requestOptions, "statusValue");
+            var venueServerId = oFetch(requestOptions, "venueServerId");
+            var date = oFetch(requestOptions, "date");
+            var at = oFetch(requestOptions, "at");
+
+            var accessToken = requestOptions.accessToken;
+
+            return {
+                staff_member_id: staffMemberObject.serverId,
+                venue_id: venueServerId,
+                date,
+                at,
+                accessToken
+            }
+        },
+        getSuccessActionData(responseData, requestOptions, getState){
+            var {staffMemberObject, statusValue} = requestOptions;
+            return {
+                staffMemberObject,
+                statusValue,
+                userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
             }
         }
-
-        if (wasConfirmed) {
-            setTimeout(function(){
-                success({
-                    staffMemberObject,
-                    statusValue,
-                    userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
-                })
-            }, 500);
-        }
-    },
+    }),
     additionalSuccessActionCreator: function(successActionData, requestOptions){
         return function(dispatch, getState){
             var userIsManagerOrSupervisor = selectClockInOutAppIsInManagerMode(getState());
             if (userIsManagerOrSupervisor) {
-                // They aren't sent back to the staff type selector, so 
+                // They aren't sent back to the staff type selector, so
                 // they can see the change in the normal UI
                 return;
             }
@@ -354,6 +411,14 @@ export const updateStaffStatus = createApiRequestAction({
         }
     }
 });
+
+actionTypes.SET_API_KEY = "SET_API_KEY";
+export function setApiKey({apiKey}){
+    return {
+        type: actionTypes.SET_API_KEY,
+        apiKey
+    }
+}
 
 actionTypes.SHOW_USER_ACTION_CONFIRMATION_MESSAGE = "SHOW_USER_ACTION_CONFIRMATION_MESSAGE";
 export function showUserActionConfirmationMessage({message}) {
@@ -418,7 +483,7 @@ export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
 
 export const updateRotaStatus = createApiRequestAction({
     requestType: "UPDATE_ROTA_STATUS",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.updateRotaStatus.method,
         path: function(options){
             if (!options.venueClientId){
@@ -433,7 +498,7 @@ export const updateRotaStatus = createApiRequestAction({
                 dateOfRota: requestOptions.date,
                 venueId: requestOptions.venueClientId
             });
-            
+
             return {
                 rotaClientId: rota.clientId,
                 status: responseData.status
@@ -444,7 +509,7 @@ export const updateRotaStatus = createApiRequestAction({
 
 export const publishRotas = createApiRequestAction({
     requestType: "PUBLISH_ROTAS",
-    makeRequest: makeApiRequest({
+    makeRequest: makeApiRequestMaker({
         method: apiRoutes.publishRotas.method,
         path: function(options){
             return apiRoutes.publishRotas.getPath({
@@ -552,7 +617,7 @@ export function loadInitalStaffTypeRotaAppState(viewData){
 function genericLoadInitialRotaAppState(viewData, pageOptions){
     viewData.pageOptions = pageOptions;
     viewData = processVenueRotaAppViewData(viewData);
-    
+
     let rotaData = viewData.rota.rotas;
     let staffTypeData = viewData.rota.staff_types;
     let rotaShiftData = viewData.rota.rota_shifts;
@@ -588,7 +653,7 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
 
 export function loadInitialClockInOutAppState(viewData) {
     viewData = processClockInOutAppViewData(viewData);
-    
+
     return function(dispatch){
         dispatch([
             replaceAllStaffMembers({

@@ -1,0 +1,30 @@
+<h1>API Keys</h1>
+
+<table class="table">
+  <thead>
+    <th>Venue</th>
+    <th>Key</th>
+    <th></th>
+  </thead>
+  <tbody>
+    <% venue_keys.each do |venue, key| %>
+      <tr>
+        <td><%= venue.name %></td>
+        <td>
+          <% if key.present? %>
+            <%= key.key.upcase %>
+          <% else %>
+            N / A
+          <% end %>
+        </td>
+        <td>
+          <% if key.present? %>
+            <%= link_to('Revoke', api_key_path(key), class: 'btn btn-danger', method: 'DELETE') %>
+          <% else %>
+            <%= link_to('Generate', api_keys_path(venue_id: venue.id), class: 'btn btn-primary', method: 'POST') %>
+          <% end %>
+        </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -41,7 +41,7 @@ export function processPageOptionsObject(pageOptions){
     // page options doesn't have an id, but we want to resolve IDs
     // in any links it contains
     pageOptions = {...pageOptions};
-    processObjectLinks(pageOptions); 
+    processObjectLinks(pageOptions);
     return pageOptions;
 }
 
