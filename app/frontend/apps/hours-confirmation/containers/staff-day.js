@@ -69,7 +69,6 @@ export default class StaffDay extends React.Component {
             rotaedShifts={props.rotaedShifts}
             acceptedHours={this.state.proposedInfo}
             onAcceptedHoursChanged={(acceptedHours) =>{
-                debugger;
                 this.setState({proposedInfo: acceptedHours})
             }}
         />

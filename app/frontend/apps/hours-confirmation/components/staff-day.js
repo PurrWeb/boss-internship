@@ -36,6 +36,44 @@ export default class StaffDay extends React.Component {
     }
 }
 
+
+class BreakListItem extends React.Component {
+    render(){
+        var breakItem = this.props.breakItem
+        return <div>
+            <ShiftTimeSelector
+                defaultShiftTimes={{
+                    starts_at: breakItem.starts_at,
+                    ends_at: breakItem.ends_at
+                }}
+                rotaDate={this.props.rotaDate}
+                onChange={(times) =>{
+                    this.props.onChange(times)
+                }}
+            />
+        </div>
+    }
+}
+
+class BreakList extends React.Component {
+    render(){
+        return <div>
+            {this.props.breaks.map((breakItem) => {
+                return <BreakListItem
+                    onChange={(newBreakItem) => {
+                        var breaks = utils.replaceArrayElement(
+                            this.props.breaks,
+                            breakItem,
+                            newBreakItem)
+                        this.props.onChange(breaks)
+                    }}
+                    rotaDate={this.props.rotaDate}
+                    breakItem={breakItem} />
+            })}
+        </div>
+    }
+}
+
 class AcceptedHoursListItem extends React.Component {
     render(){
         var clockIn = this.props.acceptedHours.clockInHours
@@ -55,7 +93,13 @@ class AcceptedHoursListItem extends React.Component {
                         />
                 </div>
                 <div className="col-md-4">
-                    breaks
+                    <BreakList
+                        onChange={(breaks) => this.triggerChange({
+                            breaks
+                        })}
+                        rotaDate={this.props.rotaDate}
+                        breaks={clockIn.breaks}
+                        />
                 </div>
                 <div className="col-md-4">
                     reason
