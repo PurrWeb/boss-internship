@@ -78,7 +78,6 @@ export default class HoursChartUi extends React.Component {
             })
             .attr("class", function(interval){
                 var classes = [];
-                console.log(interval.type)
                 if (interval.type == "rotaed") {
                     classes.push("hours-chart__rotaed-interval")
                 }

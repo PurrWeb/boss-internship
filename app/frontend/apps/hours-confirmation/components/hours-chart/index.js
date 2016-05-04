@@ -7,18 +7,16 @@ import HoursChartUi from "./hours-chart-content"
 
 export default class HoursChart extends React.Component {
     static propTypes = {
-        clockedEvents: React.PropTypes.array.isRequired,
-        clockedIntervals: React.PropTypes.array.isRequired,
+        clockedClockIns: React.PropTypes.array.isRequired,
         rotaedShifts: React.PropTypes.array.isRequired,
+        proposedAcceptedClockIns: React.PropTypes.array.isRequired,
         rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired,
-        hoursAssignments: React.PropTypes.array.isRequired
     }
     render(){
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
             proposedAcceptedIntervals={this.getProposedAcceptedIntervals()}
             rotaedIntervals={this.getRotaedChartIntervals()}
-            // hoursAssignmentIntervals={this.getHoursAssignmentIntervals()}
             />
     }
     getProposedAcceptedIntervals(){
