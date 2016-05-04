@@ -7,10 +7,17 @@ import ShiftTimeSelector from "~components/shift-time-selector"
 export default class StaffDay extends React.Component {
     render(){
         var proposedClockIns = _.pluck(this.props.acceptedHours, "clockInHours");
+        var {staffMember} = this.props;
 
         return <div className="row">
             <div className="col-md-2">
-                name/picture
+                <img
+                    src={staffMember.avatar_url}
+                    style={{width: "90%", marginBottom: 4}}
+                />
+                <div>
+                    {staffMember.first_name} {staffMember.surname}
+                </div>
             </div>
             <div className="col-md-10">
                 <div className="row">

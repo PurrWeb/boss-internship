@@ -71,7 +71,25 @@ export default class StaffDay extends React.Component {
                     id: "912",
                     title: "Other"
                 }
-            ]
+            ],
+            staffMember: {
+                "id": 160,
+                "url": "https://boss.jsmbars.co.uk/api/v1/staff_members/160",
+                "avatar_url": "https://jsmbars-assets-boss-production.s3.amazonaws.com/uploads/staff_member/avatar/160/avatar.jpg",
+                "staff_type": {
+                    "id": 8,
+                    "url": "https://boss.jsmbars.co.uk/api/v1/staff_types/8"
+                },
+                "first_name": "Shane",
+                "surname": "McEnhill",
+                "preferred_hours": "48",
+                "preferred_days": "Full time",
+                "holidays": [],
+                "venues": [{
+                    "id": 1,
+                    "url": "https://boss.jsmbars.co.uk/api/v1/venues/1"
+                }]
+            }
         }
 
 
@@ -85,6 +103,7 @@ export default class StaffDay extends React.Component {
             onAcceptedHoursChanged={(acceptedHours) =>{
                 this.setState({proposedInfo: acceptedHours})
             }}
+            staffMember={props.staffMember}
             predefinedReasons={props.predefinedReasons}
         />
     }
