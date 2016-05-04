@@ -60,7 +60,6 @@ export default class StaffDay extends React.Component {
             dateOfRota: new Date(2016,10,1,0,0)
         }
 
-        var proposedClockIns = _.pluck(this.state.proposedInfo, "clockInHours");
 
         return <StaffDayUi
             rotaDate={new RotaDate({
@@ -68,7 +67,10 @@ export default class StaffDay extends React.Component {
             })}
             clockedClockIns={props.clockedClockIns}
             rotaedShifts={props.rotaedShifts}
-            proposedAcceptedClockIns={proposedClockIns}
+            acceptedHours={this.state.proposedInfo}
+            onAcceptedHoursChanged={(acceptedHours) =>{
+                this.setState({proposedInfo: acceptedHours})
+            }}
         />
     }
 }
