@@ -1,6 +1,8 @@
 import React from "react"
 import HoursChart from "./hours-chart"
 import _ from "underscore"
+import utils from "~lib/utils"
+import ShiftTimeSelector from "~components/shift-time-selector"
 
 export default class StaffDay extends React.Component {
     render(){
@@ -26,6 +28,7 @@ export default class StaffDay extends React.Component {
                     </div>
                 </div>
                 <AcceptedHoursList
+                    rotaDate={this.props.rotaDate}
                     acceptedHours={this.props.acceptedHours}
                     onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
             </div>
@@ -35,10 +38,21 @@ export default class StaffDay extends React.Component {
 
 class AcceptedHoursListItem extends React.Component {
     render(){
+        var clockIn = this.props.acceptedHours.clockInHours
         return <div className="row">
             <div className="col-md-9">
                 <div className="col-md-3">
-                    from/to
+                    <ShiftTimeSelector
+                        defaultShiftTimes={{
+                            starts_at: clockIn.starts_at,
+                            ends_at: clockIn.ends_at
+                        }}
+                        rotaDate={this.props.rotaDate}
+                        onChange={(times) => this.triggerChange({
+                            starts_at: times.starts_at,
+                            ends_at: times.ends_at
+                        })}
+                        />
                 </div>
                 <div className="col-md-3">
                     breaks
@@ -52,6 +66,13 @@ class AcceptedHoursListItem extends React.Component {
             </div>
         </div>
     }
+    triggerChange(dataToUpdate){
+        var acceptedHours = _.clone(this.props.acceptedHours);
+        var clockIn = acceptedHours.clockInHours;
+        clockIn = _.extend({}, clockIn, dataToUpdate);
+        acceptedHours.clockInHours = clockIn;
+        this.props.onChange(acceptedHours)
+    }
 }
 
 class AcceptedHoursList extends React.Component {
@@ -59,7 +80,14 @@ class AcceptedHoursList extends React.Component {
         return <div>
             {this.props.acceptedHours.map(
                 (acceptedHours) =>
-                    <AcceptedHoursListItem acceptedHours={acceptedHours} />
+                    <AcceptedHoursListItem
+                        onChange={(newAcceptedHours) => {
+                            var newValue = _.clone(this.props.acceptedHours);
+                            newValue = utils.replaceArrayElement(newValue, acceptedHours, newAcceptedHours)
+                            this.props.onChange(newValue)
+                        }}
+                        rotaDate={this.props.rotaDate}
+                        acceptedHours={acceptedHours} />
             )}
         </div>
     }
