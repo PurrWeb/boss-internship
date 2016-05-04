@@ -19,7 +19,6 @@ class HoursChartUi extends React.Component {
     render(){
         return <div className="hours-chart">
             <svg ref={(el) => this.el = el} />
-            - allow updating hours assignment intervals
         </div>
     }
     componentDidMount(){
@@ -115,15 +114,6 @@ class HoursChartUi extends React.Component {
             .text(function(interval){
                 return interval.label;
             })
-    }
-    colorArea({chart, xScale, startPosition, endPosition, color, opacity}){
-        chart
-            .append("rect")
-            .attr("width", xScale(endPosition - startPosition))
-            .attr("height", innerHeight + padding)
-            .attr("opacity", opacity)
-            .attr("fill", color)
-            .attr("transform", "translate(" + (xScale(startPosition) + padding) + ", " + 0 + ")");
     }
     renderLaneLabels({chart}){
         var group = chart
