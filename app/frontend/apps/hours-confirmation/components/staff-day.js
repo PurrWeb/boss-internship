@@ -99,7 +99,10 @@ class ReasonSelector extends React.Component {
         var showTextArea = selectedReason.title === "Other";
 
         return <div>
-            <select value={reasonId}>
+            <select value={reasonId}
+                onChange={(e) => this.triggerChange({
+                    reason_id: e.target.value
+                })}>
                 {predefinedReasons.map((reason) =>
                     <option value={reason.id}>
                         {reason.title}
@@ -107,9 +110,20 @@ class ReasonSelector extends React.Component {
                 )}
             </select>
             <textarea
+                onChange={(e) => this.triggerChange({
+                    reason_text: e.target.value
+                })}
                 style={{display: showTextArea ? "block" : "none"}}
                 value={reasonText} />
         </div>
+    }
+    triggerChange(dataToUpdate){
+        var newData = {
+            reason_id: this.props.reasonId,
+            reason_text: this.props.reasonText
+        }
+        _.extend(newData, dataToUpdate);
+        this.props.onChange(newData)
     }
 }
 
@@ -128,8 +142,10 @@ class AcceptedHoursListItem extends React.Component {
                         }}
                         rotaDate={this.props.rotaDate}
                         onChange={(times) => this.triggerChange({
-                            starts_at: times.starts_at,
-                            ends_at: times.ends_at
+                            clockInHours:{
+                                starts_at: times.starts_at,
+                                ends_at: times.ends_at
+                            }
                         })}
                         />
                 </div>
@@ -137,8 +153,9 @@ class AcceptedHoursListItem extends React.Component {
                     <u>Breaks</u>
                     <br/>
                     <BreakList
-                        onChange={(breaks) => this.triggerChange({
-                            breaks
+                        onChange={(breaks) => this.triggerChange({clockInHours: {
+                                breaks
+                            }
                         })}
                         rotaDate={this.props.rotaDate}
                         breaks={clockIn.breaks}
@@ -150,6 +167,7 @@ class AcceptedHoursListItem extends React.Component {
                         predefinedReasons={this.props.predefinedReasons}
                         reasonId={acceptedHours.reason_id}
                         reasonText={acceptedHours.reason_text}
+                        onChange={(newData) => this.triggerChange(newData)}
                     />
                 </div>
             </div>
@@ -161,8 +179,13 @@ class AcceptedHoursListItem extends React.Component {
     triggerChange(dataToUpdate){
         var acceptedHours = _.clone(this.props.acceptedHours);
         var clockIn = acceptedHours.clockInHours;
-        clockIn = _.extend({}, clockIn, dataToUpdate);
-        acceptedHours.clockInHours = clockIn;
+        if (dataToUpdate.clockInHours) {
+            clockIn = _.extend({}, clockIn, dataToUpdate.clockInHours);
+            acceptedHours.clockInHours = clockIn;
+        } else {
+            _.extend(acceptedHours, dataToUpdate)
+        }
+
         this.props.onChange(acceptedHours)
     }
 }

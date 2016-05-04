@@ -25,7 +25,7 @@ export default class StaffDay extends React.Component {
                             }
                         ]
                     },
-                    reason_id: 912,
+                    reason_id: "912",
                     reason_text: "something happened",
                     acceptanceStatus: "in_progress"
                 }
@@ -60,15 +60,15 @@ export default class StaffDay extends React.Component {
             dateOfRota: new Date(2016,10,1,0,0),
             predefinedReasons: [
                 {
-                    id: 55,
+                    id: "55",
                     title: "Came in late"
                 },
                 {
-                    id: 599,
+                    id: "599",
                     title: "Came in early"
                 },
                 {
-                    id: 912,
+                    id: "912",
                     title: "Other"
                 }
             ]
