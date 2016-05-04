@@ -99,7 +99,9 @@ class ReasonSelector extends React.Component {
         var showTextArea = selectedReason.title === "Other";
 
         return <div>
-            <select value={reasonId}
+            <select
+                style={{marginBottom: 4}}
+                value={reasonId}
                 onChange={(e) => this.triggerChange({
                     reason_id: e.target.value
                 })}>
