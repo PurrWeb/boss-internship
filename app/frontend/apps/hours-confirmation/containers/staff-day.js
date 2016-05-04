@@ -89,7 +89,12 @@ export default class StaffDay extends React.Component {
                     "id": 1,
                     "url": "https://boss.jsmbars.co.uk/api/v1/venues/1"
                 }]
-            }
+            },
+            notes: [{
+                text: "came in late",
+            },{
+                text: "extra work from 8pm to midnight",
+            }]
         }
 
 
@@ -105,6 +110,7 @@ export default class StaffDay extends React.Component {
             }}
             staffMember={props.staffMember}
             predefinedReasons={props.predefinedReasons}
+            notes={props.notes}
         />
     }
 }

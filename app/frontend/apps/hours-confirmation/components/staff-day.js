@@ -31,7 +31,7 @@ export default class StaffDay extends React.Component {
                             (todo: stats)
                     </div>
                     <div className="col-md-3">
-                        notes
+                        <StaffDayNotes notes={this.props.notes} />
                     </div>
                 </div>
                 <AcceptedHoursList
@@ -44,6 +44,18 @@ export default class StaffDay extends React.Component {
     }
 }
 
+class StaffDayNotes extends React.Component {
+    render(){
+        return <div>
+            <u>Notes</u>
+            <ul style={{paddingLeft: 20}}>
+                {this.props.notes.map((note) =>
+                    <li>{note.text}</li>
+                )}
+            </ul>
+        </div>
+    }
+}
 
 class BreakListItem extends React.Component {
     render(){
@@ -154,11 +166,7 @@ class AcceptedHoursListItem extends React.Component {
     render(){
         var acceptedHours = this.props.acceptedHours;
         var clockIn = this.props.acceptedHours.clockInHours
-        return <div className="row" style={{
-                border: "1px solid #ddd",
-                padding: 5,
-                marginBottom: 5
-            }}>
+        return <div className="row">
             <div className="col-md-9">
                 <div className="col-md-4">
                     <u>From/To</u>
@@ -222,15 +230,21 @@ class AcceptedHoursList extends React.Component {
         return <div>
             {this.props.acceptedHours.map(
                 (acceptedHours) =>
-                    <AcceptedHoursListItem
-                        onChange={(newAcceptedHours) => {
-                            var newValue = _.clone(this.props.acceptedHours);
-                            newValue = utils.replaceArrayElement(newValue, acceptedHours, newAcceptedHours)
-                            this.props.onChange(newValue)
-                        }}
-                        rotaDate={this.props.rotaDate}
-                        predefinedReasons={this.props.predefinedReasons}
-                        acceptedHours={acceptedHours} />
+                    <div style={{
+                            border: "1px solid #ddd",
+                            padding: 5,
+                            marginBottom: 5
+                        }}>
+                        <AcceptedHoursListItem
+                            onChange={(newAcceptedHours) => {
+                                var newValue = _.clone(this.props.acceptedHours);
+                                newValue = utils.replaceArrayElement(newValue, acceptedHours, newAcceptedHours)
+                                this.props.onChange(newValue)
+                            }}
+                            rotaDate={this.props.rotaDate}
+                            predefinedReasons={this.props.predefinedReasons}
+                            acceptedHours={acceptedHours} />
+                    </div>
             )}
             <a className="btn btn-default" onClick={() => this.addHours()}>
                 Add Shift
