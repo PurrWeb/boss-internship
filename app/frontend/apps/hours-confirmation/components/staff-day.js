@@ -205,6 +205,24 @@ class AcceptedHoursList extends React.Component {
                         predefinedReasons={this.props.predefinedReasons}
                         acceptedHours={acceptedHours} />
             )}
+            <a className="btn btn-default" onClick={() => this.addHours()}>
+                +
+            </a>
         </div>
+    }
+    addHours(){
+        var {acceptedHours, rotaDate} = this.props;
+        acceptedHours = _.clone(acceptedHours)
+        acceptedHours.push({
+            clockInHours: {
+                starts_at: rotaDate.getDateFromShiftStartTime(16, 0),
+                ends_at: rotaDate.getDateFromShiftStartTime(18, 0),
+                breaks: []
+            },
+            reason_id: "599",
+            reason_text: "",
+            acceptanceStatus: "in_progress"
+        })
+        this.props.onChange(acceptedHours);
     }
 }
