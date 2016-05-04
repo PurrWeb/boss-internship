@@ -70,7 +70,23 @@ class BreakList extends React.Component {
                     rotaDate={this.props.rotaDate}
                     breakItem={breakItem} />
             })}
+            <div>
+                <a
+                    className="btn btn-default btn-sm"
+                    onClick={() => this.addBreak()}>
+                    +
+                </a>
+            </div>
         </div>
+    }
+    addBreak(){
+        var {rotaDate} = this.props;
+        var newBreaks = _.clone(this.props.breaks);
+        newBreaks.push({
+            starts_at: rotaDate.getDateFromShiftStartTime(8, 0),
+            ends_at: rotaDate.getDateFromShiftEndTime(9, 0)
+        })
+        this.props.onChange(newBreaks);
     }
 }
 
@@ -80,6 +96,7 @@ class AcceptedHoursListItem extends React.Component {
         return <div className="row">
             <div className="col-md-9">
                 <div className="col-md-4">
+                    <u>From/To</u>
                     <ShiftTimeSelector
                         defaultShiftTimes={{
                             starts_at: clockIn.starts_at,
@@ -93,6 +110,8 @@ class AcceptedHoursListItem extends React.Component {
                         />
                 </div>
                 <div className="col-md-4">
+                    <u>Breaks</u>
+                    <br/>
                     <BreakList
                         onChange={(breaks) => this.triggerChange({
                             breaks
@@ -102,7 +121,7 @@ class AcceptedHoursListItem extends React.Component {
                         />
                 </div>
                 <div className="col-md-4">
-                    reason
+                    <u>Reason</u>
                 </div>
             </div>
             <div className="col-md-3">
