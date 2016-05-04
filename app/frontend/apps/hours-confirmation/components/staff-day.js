@@ -9,7 +9,7 @@ export default class StaffDay extends React.Component {
         var proposedClockIns = _.pluck(this.props.acceptedHours, "clockInHours");
         var {staffMember} = this.props;
 
-        return <div className="row">
+        return <div className="row" style={{marginBottom: 50, padding: 10, border: "1px solid #ddd"}}>
             <div className="col-md-2">
                 <img
                     src={staffMember.avatar_url}
@@ -140,7 +140,11 @@ class AcceptedHoursListItem extends React.Component {
     render(){
         var acceptedHours = this.props.acceptedHours;
         var clockIn = this.props.acceptedHours.clockInHours
-        return <div className="row">
+        return <div className="row" style={{
+                border: "1px solid #ddd",
+                padding: 5,
+                marginBottom: 5
+            }}>
             <div className="col-md-9">
                 <div className="col-md-4">
                     <u>From/To</u>

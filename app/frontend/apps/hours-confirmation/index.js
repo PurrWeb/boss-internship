@@ -7,6 +7,8 @@ export default class HoursConfirmationApp extends React.Component {
             <StaffDay />
             <StaffDay />
             <StaffDay />
+            <StaffDay />
+            <StaffDay />
         </div>
     }
 }
