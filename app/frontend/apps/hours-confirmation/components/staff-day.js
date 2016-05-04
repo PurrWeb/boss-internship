@@ -28,6 +28,7 @@ export default class StaffDay extends React.Component {
                     </div>
                 </div>
                 <AcceptedHoursList
+                    predefinedReasons={this.props.predefinedReasons}
                     rotaDate={this.props.rotaDate}
                     acceptedHours={this.props.acceptedHours}
                     onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
@@ -90,8 +91,31 @@ class BreakList extends React.Component {
     }
 }
 
+class ReasonSelector extends React.Component {
+    render(){
+        var {reasonId, reasonText, predefinedReasons} = this.props;
+        var selectedReason = _(predefinedReasons).find({id: reasonId});
+
+        var showTextArea = selectedReason.title === "Other";
+
+        return <div>
+            <select value={reasonId}>
+                {predefinedReasons.map((reason) =>
+                    <option value={reason.id}>
+                        {reason.title}
+                    </option>
+                )}
+            </select>
+            <textarea
+                style={{display: showTextArea ? "block" : "none"}}
+                value={reasonText} />
+        </div>
+    }
+}
+
 class AcceptedHoursListItem extends React.Component {
     render(){
+        var acceptedHours = this.props.acceptedHours;
         var clockIn = this.props.acceptedHours.clockInHours
         return <div className="row">
             <div className="col-md-9">
@@ -122,6 +146,11 @@ class AcceptedHoursListItem extends React.Component {
                 </div>
                 <div className="col-md-4">
                     <u>Reason</u>
+                    <ReasonSelector
+                        predefinedReasons={this.props.predefinedReasons}
+                        reasonId={acceptedHours.reason_id}
+                        reasonText={acceptedHours.reason_text}
+                    />
                 </div>
             </div>
             <div className="col-md-3">
@@ -150,6 +179,7 @@ class AcceptedHoursList extends React.Component {
                             this.props.onChange(newValue)
                         }}
                         rotaDate={this.props.rotaDate}
+                        predefinedReasons={this.props.predefinedReasons}
                         acceptedHours={acceptedHours} />
             )}
         </div>
