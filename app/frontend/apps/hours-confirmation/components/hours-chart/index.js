@@ -81,6 +81,14 @@ class HoursChartUi extends React.Component {
                 var x = xScale(interval.startOffsetInHours) + padding
                 return "translate(" + x + "," + y + ")"
             })
+            .attr("class", function(interval){
+                var classes = [];
+                console.log(interval.type)
+                if (interval.type == "rotaed") {
+                    classes.push("hours-chart__rotaed-interval")
+                }
+                return classes.join(" ")
+            })
 
         intervalGroup.append("rect")
             .attr("width", function(interval, i){
@@ -90,22 +98,20 @@ class HoursChartUi extends React.Component {
             .attr("height", barHeight)
             .attr("class", function(interval){
                 var classes = ["hours-chart__clocked-interval"];
+
                 if (interval.type === "hours") {
                     classes.push("hours-chart__clocked-interval--hours");
                 }
                 if (interval.type === "break") {
                     classes.push("hours-chart__clocked-interval--break");
                 }
-                if (interval.type === "incomplete") {
-                    classes.push("hours-chart__clocked-interval--incomplete");
-                }
-                return classes.join(" ");
+
+                return classes.join(" ")
             })
 
         intervalGroup
             .append("text")
-            .attr("transform", "translate(3, 15)")
-            .attr("fill", "white")
+            .attr("transform", "translate(3, 18)")
             .text(function(interval){
                 return interval.label;
             })
@@ -193,7 +199,8 @@ export default class HoursChart extends React.Component {
             return {
                 startOffsetInHours: self.getHoursSinceStartOfDay(shift.starts_at),
                 endOffsetInHours: self.getHoursSinceStartOfDay(shift.ends_at),
-                label
+                label,
+                type: "rotaed"
             }
         });
     }
