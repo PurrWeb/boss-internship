@@ -8,10 +8,10 @@ import utils from "~lib/utils"
 import convertClockInHoursToIntervals from "./convert-clock-in-hours-to-intervals"
 
 var innerWidth = 600;
-var innerHeight = 60;
+var innerHeight = 80;
 var padding = 20;
 var paddingRight = 200;
-var barHeight = 30;
+var barHeight = 25;
 var outerWidth = innerWidth + padding + paddingRight;
 var outerHeight = innerHeight + padding * 2;
 
@@ -67,8 +67,8 @@ class HoursChartUi extends React.Component {
     }
     renderIntervals({chart, xScale, intervals, lane}){
         var y = {
-            "proposedAccepted": 60,
-            "clocked": 30,
+            "proposedAccepted": 70,
+            "clocked": 40,
             "rotaed": 10
         }[lane]
         var intervalGroup = chart
@@ -125,10 +125,13 @@ class HoursChartUi extends React.Component {
             .attr("transform", "translate(" + (innerWidth + padding + 10) + ",0)")
         group.append("text")
             .text("Rotaed Shifts")
-            .attr("transform", "translate(0, 28)")
+            .attr("transform", "translate(0, 25)")
         group.append("text")
             .text("Clocked Hours")
-            .attr("transform", "translate(0, 65)")
+            .attr("transform", "translate(0, 55)")
+        group.append("text")
+            .text("Proposed/Accepted Hours")
+            .attr("transform", "translate(0, 85)")
     }
     renderXAxis({chart, xScale}){
         var xAxis = makeRotaHoursXAxis(xScale);
