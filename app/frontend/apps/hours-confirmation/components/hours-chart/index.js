@@ -24,7 +24,8 @@ export default class HoursChart extends React.Component {
     getEventsList(){
         return this.props.events.map((event) => {
             return {
-                timeOffset: this.getHoursSinceStartOfDay(event.time)
+                timeOffset: this.getHoursSinceStartOfDay(event.time),
+                type: event.type
             }
         })
     }

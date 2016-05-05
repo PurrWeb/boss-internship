@@ -60,19 +60,66 @@ export default class HoursChartUi extends React.Component {
             .data(this.props.events)
             .enter()
             .append("g")
+            .attr("transform", function(event){
+                var x  = xScale(event.timeOffset) + padding;
+                return "translate(" + x + ",40)";
+            })
 
         lineContainers
             .append("line")
+            .attr("x1", 0)
+            .attr("x2", 0)
+            .attr("stroke", function(event){
+                return {
+                    "clock_in": "black",
+                    "clock_out": "black",
+                    "start_break": "red",
+                    "end_break": "red"
+                }[event.type]
+            })
+            .attr("stroke-width", function(event){
+                return 3
+            })
+            .attr("y1", -2)
+            .attr("y2", 2 + barHeight)
+
+        var clockInOutContainers = lineContainers
+            .filter(function(event){
+                return event.type === "clock_in" || event.type === "clock_out"
+            })
+
+        clockInOutContainers
+            .append("line")
+            .attr("y1", -2)
+            .attr("y2", -2)
+            .classed("hours-confirmation-chart__clock-in-out-markers", true)
+
+        clockInOutContainers
+            .append("line")
+            .attr("y1", 25)
+            .attr("y2", 25)
+            .classed("hours-confirmation-chart__clock-in-out-markers", true)
+
+        var clockInOutMarkers = lineContainers
+            .selectAll(".hours-confirmation-chart__clock-in-out-markers")
+
+        clockInOutMarkers
             .attr("x1", function(event){
-                return xScale(event.timeOffset) + padding
+                return {
+                    "clock_in": -1.5,
+                    "clock_out": -6
+                }[event.type]
             })
             .attr("x2", function(event){
-                return xScale(event.timeOffset) + padding
+                return {
+                    "clock_in": 8,
+                    "clock_out": 2
+                }[event.type]
             })
             .attr("stroke", "black")
-            .attr("stroke-width", "3")
-            .attr("y1", 38)
-            .attr("y2", 42 + barHeight)
+            .attr("stroke-width", 3)
+
+
 
 
     }
