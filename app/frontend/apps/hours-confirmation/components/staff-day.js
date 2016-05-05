@@ -294,7 +294,7 @@ class AcceptedHoursList extends React.Component {
             },
             reason_id: "599",
             reason_text: "",
-            acceptanceStatus: "in_progress"
+            accepted_state: "in_progress"
         })
         this.props.onChange(acceptedHours);
     }
