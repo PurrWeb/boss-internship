@@ -209,9 +209,39 @@ class AcceptedHoursListItem extends React.Component {
                 </div>
             </div>
             <div className="col-md-3">
-                Accept/Save
+                {this.getAcceptUi()}
             </div>
         </div>
+    }
+    getAcceptUi(){
+        var acceptedState = this.props.acceptedHours.accepted_state;
+        if (acceptedState === "in_progress") {
+            return <a
+                onClick={() => this.triggerChange({accepted_state: "accepted"})}
+                className="btn btn-success" style={{marginTop: 4}}>
+                Accept
+            </a>
+        } else if (acceptedState === "accepted") {
+            return <div>
+                <div style={{
+                    fontSize: 20,
+                    color: "green",
+                    fontWeight: "bold",
+                    fontSize: 20,
+                    marginBottom: 4
+                }}>
+                    ACCEPTED
+                </div>
+                <a
+                    onClick={() => this.triggerChange({accepted_state: "in_progress"})}>
+                    Unaccept
+                </a>
+                <br/>
+                TODO: make left side read-only
+            </div>
+        } else {
+            throw Error("Unhandled state")
+        }
     }
     triggerChange(dataToUpdate){
         var acceptedHours = _.clone(this.props.acceptedHours);

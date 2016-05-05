@@ -27,7 +27,7 @@ export default class StaffDay extends React.Component {
                     },
                     reason_id: "912",
                     reason_text: "something happened",
-                    acceptanceStatus: "in_progress"
+                    accepted_state: "in_progress"
                 }
             ]
         }
