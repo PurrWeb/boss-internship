@@ -38,7 +38,31 @@ export default class StaffDay extends React.Component {
     }
     render(){
         var props = {
-            events: window.events.map(processBackendObject),
+            events: [{
+                id: 11,
+                type: "clock_in",
+                time: new Date(2016, 10, 1, 9, 0)
+            }, {
+                id: 22,
+                type: "start_break",
+                time: new Date(2016, 10, 1, 10, 30)
+            }, {
+                id: 33,
+                type: "end_break",
+                time: new Date(2016, 10, 1, 11, 30)
+            }, {
+                id: 44,
+                type: "clock_out",
+                time: new Date(2016, 10, 1, 18, 0)
+            }, {
+                id: 55,
+                type: "clock_in",
+                time: new Date(2016, 10, 2, 1, 0)
+            }, {
+                id: 66,
+                type: "start_break",
+                time: new Date(2016, 10, 2, 2, 30)
+            }],
             clockedClockIns: [
                 {
                     starts_at: new Date(2016, 10, 1, 9, 0),
@@ -47,6 +71,16 @@ export default class StaffDay extends React.Component {
                         {
                             starts_at: new Date(2016, 10, 1, 10, 30),
                             ends_at: new Date(2016, 10, 1, 11, 30)
+                        }
+                    ]
+                },
+                {
+                    starts_at: new Date(2016, 10, 2, 1, 0),
+                    ends_at: null,
+                    breaks: [
+                        {
+                            starts_at: new Date(2016, 10, 2, 2, 30),
+                            ends_at: null
                         }
                     ]
                 }
@@ -108,6 +142,7 @@ export default class StaffDay extends React.Component {
             onAcceptedHoursChanged={(acceptedHours) =>{
                 this.setState({proposedInfo: acceptedHours})
             }}
+            events={props.events}
             staffMember={props.staffMember}
             predefinedReasons={props.predefinedReasons}
             notes={props.notes}

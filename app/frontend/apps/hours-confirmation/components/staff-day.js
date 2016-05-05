@@ -27,8 +27,10 @@ export default class StaffDay extends React.Component {
                             rotaedShifts={this.props.rotaedShifts}
                             acceptedHours={this.props.acceptedHours}
                             proposedAcceptedClockIns={proposedClockIns}
-                            clockedClockIns={this.props.clockedClockIns}/>
-                            (todo: stats)
+                            clockedClockIns={this.props.clockedClockIns}
+                            events={this.props.events}
+                        />
+                        (todo: stats)
                     </div>
                     <div className="col-md-3">
                         <StaffDayNotes notes={this.props.notes} />

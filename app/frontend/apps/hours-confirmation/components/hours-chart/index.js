@@ -11,13 +11,22 @@ export default class HoursChart extends React.Component {
         rotaedShifts: React.PropTypes.array.isRequired,
         proposedAcceptedClockIns: React.PropTypes.array.isRequired,
         rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired,
+        events: React.PropTypes.array.isRequired
     }
     render(){
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
             proposedAcceptedIntervals={this.getProposedAcceptedIntervals()}
             rotaedIntervals={this.getRotaedChartIntervals()}
+            events={this.getEventsList()}
             />
+    }
+    getEventsList(){
+        return this.props.events.map((event) => {
+            return {
+                timeOffset: this.getHoursSinceStartOfDay(event.time)
+            }
+        })
     }
     getProposedAcceptedIntervals(){
         return this.getIntervalsFromClockInList(this.props.proposedAcceptedClockIns)

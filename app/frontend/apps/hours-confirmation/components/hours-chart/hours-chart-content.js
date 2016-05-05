@@ -46,11 +46,35 @@ export default class HoursChartUi extends React.Component {
         this.renderClockedIntervals({chart, xScale})
         this.renderRotaedIntervals({chart, xScale})
         this.renderLaneLabels({chart})
+        this.renderEvents({chart, xScale})
     }
     getXScale(){
         return d3.scale.linear()
             .domain([0, 24])
             .range([0, innerWidth]);
+    }
+    renderEvents({chart, xScale}){
+        var group = chart.append("g")
+        var lineContainers = group
+            .selectAll("g")
+            .data(this.props.events)
+            .enter()
+            .append("g")
+
+        lineContainers
+            .append("line")
+            .attr("x1", function(event){
+                return xScale(event.timeOffset) + padding
+            })
+            .attr("x2", function(event){
+                return xScale(event.timeOffset) + padding
+            })
+            .attr("stroke", "black")
+            .attr("stroke-width", "3")
+            .attr("y1", 38)
+            .attr("y2", 42 + barHeight)
+
+
     }
     renderProposedAcceptedIntervals({chart, xScale}){
         this.renderIntervals({
