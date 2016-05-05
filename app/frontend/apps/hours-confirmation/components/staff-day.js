@@ -3,44 +3,58 @@ import HoursChart from "./hours-chart"
 import _ from "underscore"
 import utils from "~lib/utils"
 import ShiftTimeSelector from "~components/shift-time-selector"
+import moment from "moment"
 
 export default class StaffDay extends React.Component {
     render(){
         var proposedClockIns = _.pluck(this.props.acceptedHours, "clockInHours");
         var {staffMember} = this.props;
 
-        return <div className="row" style={{marginBottom: 50, padding: 10, border: "1px solid #ddd"}}>
-            <div className="col-md-2">
-                <img
-                    src={staffMember.avatar_url}
-                    style={{width: "90%", marginBottom: 4}}
-                />
-                <div>
+        return <div style={{marginBottom: 50, padding: 10, border: "1px solid #ddd"}}>
+            <h2 style={{
+                    fontSize: 20,
+                    margin: 0,
+                    marginBottom: 10,
+                    borderBottom: "1px solid #eee",
+                    paddingBottom: 5
+                }}>
+                <div style={{display: "inline-block"}}>
                     {staffMember.first_name} {staffMember.surname}
                 </div>
-            </div>
-            <div className="col-md-10">
-                <div className="row">
-                    <div className="col-md-9">
-                        <HoursChart
-                            rotaDate={this.props.rotaDate}
-                            rotaedShifts={this.props.rotaedShifts}
-                            acceptedHours={this.props.acceptedHours}
-                            proposedAcceptedClockIns={proposedClockIns}
-                            clockedClockIns={this.props.clockedClockIns}
-                            events={this.props.events}
-                        />
-                        (todo: stats)
-                    </div>
-                    <div className="col-md-3">
-                        <StaffDayNotes notes={this.props.notes} />
-                    </div>
+                <div style={{float: "right"}}>
+                    {moment(this.props.rotaDate.startTime).format("DD MMM YYYY")}
                 </div>
-                <AcceptedHoursList
-                    predefinedReasons={this.props.predefinedReasons}
-                    rotaDate={this.props.rotaDate}
-                    acceptedHours={this.props.acceptedHours}
-                    onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
+            </h2>
+            <div className="row">
+                <div className="col-md-2">
+                    <img
+                        src={staffMember.avatar_url}
+                        style={{width: "90%", marginBottom: 4}}
+                    />
+                </div>
+                <div className="col-md-10">
+                    <div className="row">
+                        <div className="col-md-9">
+                            <HoursChart
+                                rotaDate={this.props.rotaDate}
+                                rotaedShifts={this.props.rotaedShifts}
+                                acceptedHours={this.props.acceptedHours}
+                                proposedAcceptedClockIns={proposedClockIns}
+                                clockedClockIns={this.props.clockedClockIns}
+                                events={this.props.events}
+                            />
+                            (todo: stats)
+                        </div>
+                        <div className="col-md-3">
+                            <StaffDayNotes notes={this.props.notes} />
+                        </div>
+                    </div>
+                    <AcceptedHoursList
+                        predefinedReasons={this.props.predefinedReasons}
+                        rotaDate={this.props.rotaDate}
+                        acceptedHours={this.props.acceptedHours}
+                        onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
+                </div>
             </div>
         </div>
     }
