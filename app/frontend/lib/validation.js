@@ -58,9 +58,11 @@ var validation = {
             messages.push("Break must end before shift end")
         }
 
+        var endsBeforeStartTime = breakItem.ends_at <= breakItem.starts_at;
+
         return {
             messages,
-            isValid: messages.length === 0
+            isValid: messages.length === 0 && !endsBeforeStartTime
         }
     },
     validateBreaksDontOverlap({breaks}) {

@@ -15,6 +15,10 @@ export default class StaffDay extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps){
+        console.log("isvlalid", Validation.validateHoursAcceptances(nextProps.acceptedHours).isValid)
+        if (!Validation.validateHoursAcceptances(nextProps.acceptedHours).isValid) {
+            return; // don't try to display invalid data on the chart
+        }
         this.setState({
             chartData: this.getChartDataFromProps(nextProps)
         })
@@ -88,7 +92,6 @@ export default class StaffDay extends React.Component {
                                 <StaffDayNotes notes={this.props.notes} />
                             </div>
                         </div>
-                        {Validation.validateHoursAcceptances(this.props.acceptedHours).isValid ? "valid" : "invalid"}
                         <AcceptedHoursList
                             predefinedReasons={this.props.predefinedReasons}
                             rotaDate={this.props.rotaDate}
