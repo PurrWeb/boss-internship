@@ -329,6 +329,10 @@ class AcceptedHoursList extends React.Component {
             </button>
         }
 
+        var intervalsOverlap = Validation.validateHoursAssignmentsDontOverlap({
+            hoursAssignments: this.props.acceptedHours
+        })
+
         return <div>
             {this.props.acceptedHours.map(
                 (acceptedHours) =>
@@ -348,6 +352,7 @@ class AcceptedHoursList extends React.Component {
                             acceptedHours={acceptedHours} />
                     </div>
             )}
+            <ValidationResult result={intervalsOverlap} />
             {markAsDoneButton}
             <a className="btn btn-default" onClick={() => this.addHours()}>
                 Add Shift

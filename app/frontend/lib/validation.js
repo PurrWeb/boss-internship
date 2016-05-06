@@ -64,19 +64,7 @@ var validation = {
         }
     },
     validateBreakList({breaks}) {
-        var breaksOverlap = false;
-
-        breaks.forEach(function(breakOuter){
-            breaks.forEach(function(breakInner){
-                if (breakInner !== breakOuter) {
-                    if (
-                        breakOuter.starts_at <= breakInner.ends_at &&
-                        breakOuter.starts_at >= breakInner.starts_at ) {
-                            breaksOverlap = true;
-                        }
-                    }
-            });
-        });
+        var breaksOverlap = doIntervalsOverlapOrTouchEachOther(breaks);
 
         var messages = [];
         if (breaksOverlap){
@@ -87,8 +75,38 @@ var validation = {
             isValid: messages.length === 0,
             messages
         }
+    },
+    validateHoursAssignmentsDontOverlap({hoursAssignments}){
+        var doOverlap = doIntervalsOverlapOrTouchEachOther(
+            _.pluck(hoursAssignments, "clockInHours")
+        )
 
+        var messages = [];
+        if (doOverlap){
+            messages.push("Shift times can't overlap")
+        }
+
+        return {
+            isValid: messages.length === 0,
+            messages
+        }
     }
+}
+
+function doIntervalsOverlapOrTouchEachOther(intervals){
+    var intervalsOverlap = false;
+    intervals.forEach(function(intervalsOuter){
+        intervals.forEach(function(intervalsInner){
+            if (intervalsInner !== intervalsOuter) {
+                if (
+                    intervalsOuter.starts_at <= intervalsInner.ends_at &&
+                    intervalsOuter.starts_at >= intervalsInner.starts_at ) {
+                        intervalsOverlap = true;
+                    }
+                }
+        });
+    });
+    return intervalsOverlap
 }
 
 export default validation;
