@@ -29,7 +29,8 @@ export default class StaffDay extends React.Component {
                     reason_text: "something happened",
                     accepted_state: "in_progress"
                 }
-            ]
+            ],
+            markedAsDone: false
         }
         // prop data:
         // notes
@@ -131,6 +132,9 @@ export default class StaffDay extends React.Component {
             }]
         }
 
+        if (this.state.markedAsDone) {
+            return null;
+        }
 
         return <StaffDayUi
             rotaDate={new RotaDate({
@@ -142,6 +146,7 @@ export default class StaffDay extends React.Component {
             onAcceptedHoursChanged={(acceptedHours) =>{
                 this.setState({proposedInfo: acceptedHours})
             }}
+            markDayAsDone={() => this.setState({markedAsDone: true})}
             events={props.events}
             staffMember={props.staffMember}
             predefinedReasons={props.predefinedReasons}

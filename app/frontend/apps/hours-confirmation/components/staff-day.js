@@ -53,6 +53,7 @@ export default class StaffDay extends React.Component {
                         predefinedReasons={this.props.predefinedReasons}
                         rotaDate={this.props.rotaDate}
                         acceptedHours={this.props.acceptedHours}
+                        markDayAsDone={this.props.markDayAsDone}
                         onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
                 </div>
             </div>
@@ -273,6 +274,16 @@ class AcceptedHoursListItem extends React.Component {
 
 class AcceptedHoursList extends React.Component {
     render(){
+        var markAsDoneButton = null;
+        if (this.areAllShiftsAccepted()) {
+            markAsDoneButton = <button
+                onClick={this.props.markDayAsDone}
+                style={{float: "right"}}
+                className="btn btn-success">
+                Done
+            </button>
+        }
+
         return <div>
             {this.props.acceptedHours.map(
                 (acceptedHours) =>
@@ -292,10 +303,18 @@ class AcceptedHoursList extends React.Component {
                             acceptedHours={acceptedHours} />
                     </div>
             )}
+            {markAsDoneButton}
             <a className="btn btn-default" onClick={() => this.addHours()}>
                 Add Shift
             </a>
+
         </div>
+    }
+    areAllShiftsAccepted(){
+        var unacceptedShifts = _(this.props.acceptedHours).filter({
+            accepted_state: "in_progress"
+        })
+        return unacceptedShifts.length === 0;
     }
     addHours(){
         var {acceptedHours, rotaDate} = this.props;
