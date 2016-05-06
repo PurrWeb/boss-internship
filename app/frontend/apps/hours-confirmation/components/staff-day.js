@@ -10,51 +10,67 @@ export default class StaffDay extends React.Component {
         var proposedClockIns = _.pluck(this.props.acceptedHours, "clockInHours");
         var {staffMember} = this.props;
 
-        return <div style={{marginBottom: 50, padding: 10, border: "1px solid #ddd"}}>
-            <h2 style={{
-                    fontSize: 20,
-                    margin: 0,
-                    marginBottom: 10,
-                    borderBottom: "1px solid #eee",
-                    paddingBottom: 5
-                }}>
-                <div style={{display: "inline-block"}}>
-                    {staffMember.first_name} {staffMember.surname}
-                </div>
-                <div style={{float: "right"}}>
-                    {moment(this.props.rotaDate.startTime).format("DD MMM YYYY")}
-                </div>
-            </h2>
-            <div className="row">
-                <div className="col-md-2">
-                    <img
-                        src={staffMember.avatar_url}
-                        style={{width: "90%", marginBottom: 4}}
-                    />
-                </div>
-                <div className="col-md-10">
-                    <div className="row">
-                        <div className="col-md-9">
-                            <HoursChart
-                                rotaDate={this.props.rotaDate}
-                                rotaedShifts={this.props.rotaedShifts}
-                                acceptedHours={this.props.acceptedHours}
-                                proposedAcceptedClockIns={proposedClockIns}
-                                clockedClockIns={this.props.clockedClockIns}
-                                events={this.props.events}
-                            />
-                            (todo: stats)
-                        </div>
-                        <div className="col-md-3">
-                            <StaffDayNotes notes={this.props.notes} />
-                        </div>
+        var style = {
+            transition: ".2s all",
+            maxHeight: 1000
+        };
+
+        if (this.props.markedAsDone){
+            style.maxHeight = 0;
+            style.overflow = "hidden";
+        }
+
+        return <div style={style}>
+            <div style={{
+                marginBottom: 50,
+                padding: 10,
+                border: "1px solid #ddd"
+            }}>
+                <h2 style={{
+                        fontSize: 20,
+                        margin: 0,
+                        marginBottom: 10,
+                        borderBottom: "1px solid #eee",
+                        paddingBottom: 5
+                    }}>
+                    <div style={{display: "inline-block"}}>
+                        {staffMember.first_name} {staffMember.surname}
                     </div>
-                    <AcceptedHoursList
-                        predefinedReasons={this.props.predefinedReasons}
-                        rotaDate={this.props.rotaDate}
-                        acceptedHours={this.props.acceptedHours}
-                        markDayAsDone={this.props.markDayAsDone}
-                        onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
+                    <div style={{float: "right"}}>
+                        {moment(this.props.rotaDate.startTime).format("DD MMM YYYY")}
+                    </div>
+                </h2>
+                <div className="row">
+                    <div className="col-md-2">
+                        <img
+                            src={staffMember.avatar_url}
+                            style={{width: "90%", marginBottom: 4}}
+                        />
+                    </div>
+                    <div className="col-md-10">
+                        <div className="row">
+                            <div className="col-md-9">
+                                <HoursChart
+                                    rotaDate={this.props.rotaDate}
+                                    rotaedShifts={this.props.rotaedShifts}
+                                    acceptedHours={this.props.acceptedHours}
+                                    proposedAcceptedClockIns={proposedClockIns}
+                                    clockedClockIns={this.props.clockedClockIns}
+                                    events={this.props.events}
+                                />
+                                (todo: stats)
+                            </div>
+                            <div className="col-md-3">
+                                <StaffDayNotes notes={this.props.notes} />
+                            </div>
+                        </div>
+                        <AcceptedHoursList
+                            predefinedReasons={this.props.predefinedReasons}
+                            rotaDate={this.props.rotaDate}
+                            acceptedHours={this.props.acceptedHours}
+                            markDayAsDone={this.props.markDayAsDone}
+                            onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
+                    </div>
                 </div>
             </div>
         </div>

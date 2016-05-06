@@ -132,11 +132,8 @@ export default class StaffDay extends React.Component {
             }]
         }
 
-        if (this.state.markedAsDone) {
-            return null;
-        }
-
         return <StaffDayUi
+            markedAsDone={this.state.markedAsDone}
             rotaDate={new RotaDate({
                 dateOfRota: props.dateOfRota
             })}
