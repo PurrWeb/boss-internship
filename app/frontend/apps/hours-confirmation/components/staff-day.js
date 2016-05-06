@@ -302,11 +302,17 @@ class AcceptedHoursListItem extends React.Component {
     getAcceptUi(){
         var acceptedState = this.props.acceptedHours.accepted_state;
         if (acceptedState === "in_progress") {
-            return <a
-                onClick={() => this.triggerChange({accepted_state: "accepted"})}
-                className="btn btn-success" style={{marginTop: 4}}>
-                Accept
-            </a>
+            return <div>
+                <a
+                    onClick={() => this.triggerChange({accepted_state: "accepted"})}
+                    className="btn btn-success" style={{marginTop: 4}}>
+                    Accept
+                </a>
+                <br/><br/>
+                <a onClick={this.props.deleteHoursAcceptance}>
+                    Delete
+                </a>
+            </div>
         } else if (acceptedState === "accepted") {
             return <div>
                 <div style={{
@@ -372,6 +378,12 @@ class AcceptedHoursList extends React.Component {
                                 var newValue = _.clone(this.props.acceptedHours);
                                 newValue = utils.replaceArrayElement(newValue, acceptedHours, newAcceptedHours)
                                 this.props.onChange(newValue)
+                            }}
+                            deleteHoursAcceptance={() => {
+                                var newValue = _(this.props.acceptedHours).reject(function(hoursAcceptanceArg){
+                                    return hoursAcceptanceArg === acceptedHours
+                                })
+                                this.props.onChange(newValue);
                             }}
                             rotaDate={this.props.rotaDate}
                             predefinedReasons={this.props.predefinedReasons}
