@@ -66,6 +66,7 @@ export default class StaffDay extends React.Component {
                                 <StaffDayNotes notes={this.props.notes} />
                             </div>
                         </div>
+                        {Validation.validateHoursAcceptances(this.props.acceptedHours).isValid ? "valid" : "invalid"}
                         <AcceptedHoursList
                             predefinedReasons={this.props.predefinedReasons}
                             rotaDate={this.props.rotaDate}
@@ -142,7 +143,7 @@ class BreakListItem extends React.Component {
 
 class BreakList extends React.Component {
     render(){
-        var validationResult = Validation.validateBreakList({breaks: this.props.breaks})
+        var validationResult = Validation.validateBreaksDontOverlap({breaks: this.props.breaks})
 
         return <div>
             {this.props.breaks.map((breakItem) => {

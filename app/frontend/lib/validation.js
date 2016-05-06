@@ -63,7 +63,7 @@ var validation = {
             isValid: messages.length === 0
         }
     },
-    validateBreakList({breaks}) {
+    validateBreaksDontOverlap({breaks}) {
         var breaksOverlap = doIntervalsOverlapOrTouchEachOther(breaks);
 
         var messages = [];
@@ -89,6 +89,48 @@ var validation = {
         return {
             isValid: messages.length === 0,
             messages
+        }
+    },
+    validateHoursAcceptance(hoursAcceptance){
+        var isValid = true;
+        var breaks = hoursAcceptance.clockInHours.breaks
+        var breaksValidationResult = validation.validateBreaksDontOverlap({breaks});
+
+        if (!breaksValidationResult.isValid) {
+            isValid = false;
+        }
+
+        breaks.forEach((breakItem) => {
+            var breakValidation = validation.validateBreak({
+                breakItem,
+                acceptedHoursClockInHours: hoursAcceptance.clockInHours
+            })
+            if (!breakValidation.isValid) {
+                isValid = false;
+            }
+        })
+
+        return {
+            messages: [],
+            isValid
+        }
+    },
+    validateHoursAcceptances(hoursAcceptances) {
+        var isValid = true;
+
+        if (!validation.validateHoursAssignmentsDontOverlap({hoursAssignments: hoursAcceptances}).isValid) {
+            isValid = false;
+        }
+
+        hoursAcceptances.forEach(function(hoursAcceptance){
+            if (!validation.validateHoursAcceptance(hoursAcceptance).isValid) {
+                isValid = false;
+            }
+        })
+
+        return {
+            isValid,
+            messages: []
         }
     }
 }
