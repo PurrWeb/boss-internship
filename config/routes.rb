@@ -117,6 +117,12 @@ Rails.application.routes.draw do
 
   resources :api_keys, only: [:index, :create, :destroy]
 
+  resources :hours_confirmation, only: [] do
+    collection do
+      get :current
+    end
+  end
+
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :clock_in_clock_out, only: [:index]

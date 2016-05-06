@@ -162,6 +162,6 @@ class Ability
   end
 
   def can_manage_venue?(user, venue)
-      user.has_all_venue_access? || user.venues.include?(venue)
+    user.has_all_venue_access? || user.venues.include?(venue)
   end
 end

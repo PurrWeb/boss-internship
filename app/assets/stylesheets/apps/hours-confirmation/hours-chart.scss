@@ -1,0 +1,37 @@
+.hours-chart {
+    -webkit-user-select: none;
+}
+
+.hours-chart * {
+    shape-rendering: crispEdges;
+}
+
+.hours-chart .domain {
+    fill: none;
+    stroke: black;
+}
+
+.hours-chart .axis .tick line {
+    stroke: #ddd;
+}
+
+.hours-chart__rotaed-interval rect {
+    stroke: none;
+    fill: blue;
+}
+.hours-chart__rotaed-interval text {
+    stroke: none;
+    fill: white
+}
+
+.hours-chart__clocked-interval--hours {
+    fill: green;
+}
+
+.hours-chart__clocked-interval--break {
+    fill: orange
+}
+
+.hours-chart__clocked-interval--incomplete {
+    fill: lime;
+}

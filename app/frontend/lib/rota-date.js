@@ -8,9 +8,18 @@ class RotaDate {
      * @param  {Date} [shiftStartsAt] - Create a RotaDate based on the starts_at value of a shift.
      * @param  {Date} [dateOfRota] - Create a RotaDate based on the date value of a rota (based on the date at midnight).
      */
-    constructor({shiftStartsAt, dateOfRota}) {
+    constructor({shiftStartsAt, shiftEndsAt, dateOfRota}) {
         if (shiftStartsAt) {
             this.initUsingBaseDate(shiftStartsAt);
+        } else if (shiftEndsAt) {
+            var endTimeIs8am = shiftEndsAt.getHours() === 8 &&
+                shiftEndsAt.getMinutes() === 0 &&
+                shiftEndsAt.getSeconds() === 0;
+            shiftStartsAt = shiftEndsAt
+            if (endTimeIs8am){
+                shiftStartsAt.setDate(shiftStartsAt.getDate() - 1);
+            }
+            this.initUsingBaseDate(shiftStartsAt)
         }
         else if (dateOfRota) {
             var baseDate = new Date(dateOfRota);
@@ -20,7 +29,7 @@ class RotaDate {
             throw new Error("RotaDate needs shiftStartsAt or dateOfRota option.");
         }
     } 
-    // baseDate has to be on the actual rota day between 8am and 7:59am.
+    // shiftStartsAt has to be on the actual rota day between 8am and 7:59am.
     // You can't pass in  a `shift.ends_at` value because 8am would count as the next day.
     // A `rota.date` value also can't be pased in directly because it's midnight on the previous rota day.
     initUsingBaseDate(baseDate){

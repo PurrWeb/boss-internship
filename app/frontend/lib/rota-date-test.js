@@ -12,6 +12,11 @@ describe("RotaDate", function() {
         expect(date.endTime).toEqual(new Date(2015, 5, 13, 8, 0));
     });
 
+    it("Can create a rota date from a shiftEndsAt value", function(){
+        var rotaDate = new RotaDate({shiftEndsAt: new Date(2015, 6, 2, 8, 0, 0)})
+        expect(rotaDate.startTime).toEqual(new Date(2015, 6, 1, 8, 0, 0));
+    })
+
     it("Knows that 6am is part of the previous day", function(){
         expect(dateAt6Am.startTime).toEqual(new Date(2015, 5, 3, 8, 0));
     });

@@ -23,8 +23,14 @@ function valueIsLink(value){
 }
 
 function makeLinkResolverFunction(link, key){
-    return function(linkObjectsByClientId){
-        var resolvedLink = linkObjectsByClientId[link.clientId];
+    // link objects can either be indexed by client id or just be an array
+    return function(linkObjects){
+        var resolvedLink;
+        if (_.isArray(linkObjects)) {
+            resolvedLink = _.find(linkObjects, {clientId: link.clientId})
+        } else {
+            resolvedLink = linkObjects[link.clientId];
+        }
         if (resolvedLink === undefined) {
             throw new Error("Couldn't resolve " + key + " with clientId " + link.clientId);
         }

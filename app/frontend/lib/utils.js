@@ -88,10 +88,21 @@ var utils =  {
     datesAreEqual(date1, date2){
         return moment(date1).format("DD-MM-YYYY") === moment(date2).format("DD-MM-YYYY");
     },
+    replaceArrayElement(array, currentElement, newElement){
+        array = _.clone(array);
+        for (var i=0; i<array.length; i++) {
+            var value = array[i];
+            if (value === currentElement) {
+                array[i] = newElement;
+                return array;
+            }
+        }
+        throw Error("Element not found in array")
+    },
     sum(array){
         var count = 0;
-        for(var i=0, n=array.length; i < n; i++) { 
-            count += array[i]; 
+        for(var i=0, n=array.length; i < n; i++) {
+            count += array[i];
         }
         return count;
     },
