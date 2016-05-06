@@ -47,6 +47,21 @@ var validation = {
     },
     areShiftTimesValid(starts_at, ends_at) {
         return validation.validateShiftTimes({starts_at, ends_at}).isValid;
+    },
+    validateBreak({breakItem, acceptedHoursClockInHours}) {
+        var messages = [];
+
+        if (breakItem.starts_at <= acceptedHoursClockInHours.starts_at) {
+            messages.push("Break can only start after shift begins")
+        }
+        if (breakItem.ends_at >= acceptedHoursClockInHours.ends_at) {
+            messages.push("Break must end before shift end")
+        }
+
+        return {
+            messages,
+            isValid: messages.length === 0
+        }
     }
 }
 

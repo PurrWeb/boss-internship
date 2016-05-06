@@ -4,6 +4,7 @@ import _ from "underscore"
 import utils from "~lib/utils"
 import ShiftTimeSelector from "~components/shift-time-selector"
 import moment from "moment"
+import Validation from "~lib/validation"
 
 export default class StaffDay extends React.Component {
     render(){
@@ -93,6 +94,19 @@ class StaffDayNotes extends React.Component {
 class BreakListItem extends React.Component {
     render(){
         var breakItem = this.props.breakItem
+        var {acceptedHoursClockInHours} = this.props;
+
+        var errors = null;
+        var validationResult = Validation.validateBreak({
+            breakItem,
+            acceptedHoursClockInHours
+        })
+        if (!validationResult.isValid) {
+            errors = <div className="alert alert-danger">
+                {validationResult.messages.map(message=> <div>{message}</div>)}
+            </div>
+        }
+
         return <div className="row" style={{marginBottom: 10}}>
             <div className="col-md-10">
                 <ShiftTimeSelector
@@ -105,6 +119,7 @@ class BreakListItem extends React.Component {
                         this.props.onChange(times)
                     }}
                 />
+                {errors}
             </div>
             <div className="col-md-2">
                 <br/>
@@ -128,6 +143,7 @@ class BreakList extends React.Component {
                             newBreakItem)
                         this.props.onChange(breaks)
                     }}
+                    acceptedHoursClockInHours={this.props.acceptedHours.clockInHours}
                     onDeleteItem={() => {
                         var newBreaks = _(this.props.breaks).reject(
                             (breakItemArg) => breakItemArg === breakItem
@@ -227,6 +243,7 @@ class AcceptedHoursListItem extends React.Component {
                         })}
                         rotaDate={this.props.rotaDate}
                         breaks={clockIn.breaks}
+                        acceptedHours={acceptedHours}
                         />
                 </div>
                 <div className="col-md-3">
