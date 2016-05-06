@@ -8,6 +8,28 @@ import Validation from "~lib/validation"
 import ErrorMessage from "~components/error-message"
 
 export default class StaffDay extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            chartData: this.getChartDataFromProps(props)
+        }
+    }
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            chartData: this.getChartDataFromProps(nextProps)
+        })
+    }
+    getChartDataFromProps(props){
+        var proposedClockIns = _.pluck(props.acceptedHours, "clockInHours");
+        return {
+            rotaDate: props.rotaDate,
+            rotaedShifts: props.rotaedShifts,
+            acceptedHours: props.acceptedHours,
+            proposedAcceptedClockIns: proposedClockIns,
+            clockedClockIns: props.clockedClockIns,
+            events: props.events
+        }
+    }
     render(){
         var proposedClockIns = _.pluck(this.props.acceptedHours, "clockInHours");
         var {staffMember} = this.props;
@@ -53,12 +75,12 @@ export default class StaffDay extends React.Component {
                         <div className="row">
                             <div className="col-md-9">
                                 <HoursChart
-                                    rotaDate={this.props.rotaDate}
-                                    rotaedShifts={this.props.rotaedShifts}
-                                    acceptedHours={this.props.acceptedHours}
-                                    proposedAcceptedClockIns={proposedClockIns}
-                                    clockedClockIns={this.props.clockedClockIns}
-                                    events={this.props.events}
+                                    rotaDate={this.state.chartData.rotaDate}
+                                    rotaedShifts={this.state.chartData.rotaedShifts}
+                                    acceptedHours={this.state.chartData.acceptedHours}
+                                    proposedAcceptedClockIns={this.state.chartData.proposedAcceptedClockIns}
+                                    clockedClockIns={this.state.chartData.clockedClockIns}
+                                    events={this.state.chartData.events}
                                 />
                                 (todo: stats)
                             </div>
