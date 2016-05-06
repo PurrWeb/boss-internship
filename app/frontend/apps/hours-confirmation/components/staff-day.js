@@ -5,6 +5,7 @@ import utils from "~lib/utils"
 import ShiftTimeSelector from "~components/shift-time-selector"
 import moment from "moment"
 import Validation from "~lib/validation"
+import ErrorMessage from "~components/error-message"
 
 export default class StaffDay extends React.Component {
     render(){
@@ -78,6 +79,19 @@ export default class StaffDay extends React.Component {
     }
 }
 
+class ValidationResult extends React.Component {
+    render(){
+        if (this.props.result.isValid) {
+            return null;
+        }
+        return <ErrorMessage>
+            {this.props.result.messages.map(
+                msg => <div>{msg}</div>
+            )}
+        </ErrorMessage>
+    }
+}
+
 class StaffDayNotes extends React.Component {
     render(){
         return <div>
@@ -101,11 +115,6 @@ class BreakListItem extends React.Component {
             breakItem,
             acceptedHoursClockInHours
         })
-        if (!validationResult.isValid) {
-            errors = <div className="alert alert-danger">
-                {validationResult.messages.map(message=> <div>{message}</div>)}
-            </div>
-        }
 
         return <div className="row" style={{marginBottom: 10}}>
             <div className="col-md-10">
@@ -115,11 +124,11 @@ class BreakListItem extends React.Component {
                         ends_at: breakItem.ends_at
                     }}
                     rotaDate={this.props.rotaDate}
-                    onChange={(times) =>{
+                    onChange={(times) => {
                         this.props.onChange(times)
                     }}
                 />
-                {errors}
+                <ValidationResult result={validationResult} />
             </div>
             <div className="col-md-2">
                 <br/>
@@ -133,6 +142,8 @@ class BreakListItem extends React.Component {
 
 class BreakList extends React.Component {
     render(){
+        var validationResult = Validation.validateBreakList({breaks: this.props.breaks})
+
         return <div>
             {this.props.breaks.map((breakItem) => {
                 return <BreakListItem
@@ -160,6 +171,7 @@ class BreakList extends React.Component {
                     Add Break
                 </a>
             </div>
+            <ValidationResult result={validationResult} />
         </div>
     }
     addBreak(){

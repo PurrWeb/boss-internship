@@ -62,6 +62,32 @@ var validation = {
             messages,
             isValid: messages.length === 0
         }
+    },
+    validateBreakList({breaks}) {
+        var breaksOverlap = false;
+
+        breaks.forEach(function(breakOuter){
+            breaks.forEach(function(breakInner){
+                if (breakInner !== breakOuter) {
+                    if (
+                        breakOuter.starts_at <= breakInner.ends_at &&
+                        breakOuter.starts_at >= breakInner.starts_at ) {
+                            breaksOverlap = true;
+                        }
+                    }
+            });
+        });
+
+        var messages = [];
+        if (breaksOverlap){
+            messages = ["Breaks can't overlap"]
+        }
+
+        return {
+            isValid: messages.length === 0,
+            messages
+        }
+
     }
 }
 
