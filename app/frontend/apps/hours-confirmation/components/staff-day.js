@@ -65,6 +65,7 @@ export default class StaffDay extends React.Component {
                     staffMember={this.props.staffMember}
                     clockedClockInPeriods={this.state.chartData.clockedClockIns}
                     acceptedClockInPeriods={acceptedClockInPeriods}
+                    rotaedShifts={this.props.rotaedShifts}
                 />
                 <div className="row">
                     <div className="col-md-2">
@@ -104,10 +105,18 @@ export default class StaffDay extends React.Component {
 
 class StaffDayHeader extends React.Component {
     render(){
-        var { staffMember, rotaDate, clockedClockInPeriods, acceptedClockInPeriods } = this.props;
+        var { staffMember, rotaDate, clockedClockInPeriods, acceptedClockInPeriods, rotaedShifts } = this.props;
+        var rotaedClockInPeriods = rotaedShifts.map(function(shift){
+            return {
+                starts_at: shift.starts_at,
+                ends_at: shift.ends_at,
+                breaks: []
+            }
+        })
 
         var clockedStats = getClockInPeriodStats(clockedClockInPeriods);
         var acceptedStats = getClockInPeriodStats(acceptedClockInPeriods);
+        var rotaedStats = getClockInPeriodStats(rotaedClockInPeriods)
 
         return <h2 style={{
                 fontSize: 20,
@@ -126,7 +135,7 @@ class StaffDayHeader extends React.Component {
                 color: "#999",
                 fontSize: 16
             }}>
-                {clockedStats.hours}h clocked, {acceptedStats.hours}h accepted
+                {rotaedStats.hours}h rotaed, {clockedStats.hours}h clocked, {acceptedStats.hours}h accepted
             </div>
             <div style={{float: "right"}}>
                 {moment(rotaDate.startTime).format("DD MMM YYYY")}
