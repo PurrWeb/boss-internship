@@ -28,7 +28,7 @@ class RotaDate {
         } else {
             throw new Error("RotaDate needs shiftStartsAt or dateOfRota option.");
         }
-    } 
+    }
     // shiftStartsAt has to be on the actual rota day between 8am and 7:59am.
     // You can't pass in  a `shift.ends_at` value because 8am would count as the next day.
     // A `rota.date` value also can't be pased in directly because it's midnight on the previous rota day.
@@ -93,6 +93,14 @@ class RotaDate {
         var dateOfRota = new Date(this.startTime);
         dateOfRota.setHours(0);
         return dateOfRota;
+    }
+    getDateNHoursAfterStartTime(hours, minutes){
+        var date = new Date(this.startTime);
+        date.setHours(date.getHours() + hours);
+        if (minutes !== undefined) {
+            date.setMinutes(date.getMinutes() + minutes);
+        }
+        return date;
     }
 }
 

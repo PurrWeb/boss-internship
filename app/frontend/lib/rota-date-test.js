@@ -41,4 +41,9 @@ describe("RotaDate", function() {
         expect(date.getDateFromShiftEndTimeString("16:00")).toEqual(new Date(2015, 5, 12, 16, 0));
         expect(date.getDateFromShiftStartTimeString("8:00")).toEqual(new Date(2015, 5, 12, 8, 0));
     });
+
+    it("getDateNHoursAfterStartTime can generate a date by adding time to the start time", function(){
+        expect(date.getDateNHoursAfterStartTime(10)).toEqual(new Date(2015, 5, 12, 18, 0))
+        expect(date.getDateNHoursAfterStartTime(10, 15)).toEqual(new Date(2015, 5, 12, 18, 15))
+    })
 });

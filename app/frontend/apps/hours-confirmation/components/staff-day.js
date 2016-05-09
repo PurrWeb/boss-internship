@@ -268,11 +268,20 @@ class BreakList extends React.Component {
         </div>
     }
     addBreak(){
+        var clockInHours = this.props.acceptedHours.clockInHours;
+
         var {rotaDate} = this.props;
         var newBreaks = _.clone(this.props.breaks);
+
+        var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(clockInHours.starts_at);
+        var breakHoursOffset = shiftStartOffset + 1;
+        if (breakHoursOffset > 23){
+            breakHoursOffset = 23;
+        }
+
         newBreaks.push({
-            starts_at: rotaDate.getDateFromShiftStartTime(8, 0),
-            ends_at: rotaDate.getDateFromShiftEndTime(9, 0)
+            starts_at: rotaDate.getDateNHoursAfterStartTime(breakHoursOffset, 0),
+            ends_at: rotaDate.getDateNHoursAfterStartTime(breakHoursOffset, 15)
         })
         this.props.onChange(newBreaks);
     }
@@ -507,8 +516,8 @@ class AcceptedHoursList extends React.Component {
         acceptedHours = _.clone(acceptedHours)
         acceptedHours.push({
             clockInHours: {
-                starts_at: rotaDate.getDateFromShiftStartTime(16, 0),
-                ends_at: rotaDate.getDateFromShiftStartTime(18, 0),
+                starts_at: rotaDate.getDateFromShiftStartTime(9, 0),
+                ends_at: rotaDate.getDateFromShiftStartTime(10, 0),
                 breaks: []
             },
             reason_id: "599",
