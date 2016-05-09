@@ -321,6 +321,8 @@ class AcceptedHoursListItem extends React.Component {
         var acceptedHours = this.props.acceptedHours;
         var clockIn = this.props.acceptedHours.clockInHours;
         var readonly = this.isAccepted();
+
+
         return <div className="row">
             <div className="col-md-9">
                 <div className="col-md-4">
@@ -373,13 +375,23 @@ class AcceptedHoursListItem extends React.Component {
     isAccepted(){
         return this.props.acceptedHours.accepted_state !== "in_progress";
     }
+    isValid(){
+        return Validation.validateHoursAcceptance(this.props.acceptedHours).isValid;
+    }
     getAcceptUi(){
         var stats = getClockInPeriodStats(this.props.acceptedHours.clockInHours);
         if (!this.isAccepted()) {
+            var classes = ["btn"]
+            if (this.isValid()) {
+                classes.push("btn-success")
+            } else {
+                classes.push("btn-default")
+                classes.push("disabled")
+            }
             return <div>
                 <a
                     onClick={() => this.triggerChange({accepted_state: "accepted"})}
-                    className="btn btn-success" style={{marginTop: 4}}>
+                    className={classes.join(" ")} style={{marginTop: 4}}>
                     Accept {stats.hours}h
                 </a>
                 <br/><br/>
