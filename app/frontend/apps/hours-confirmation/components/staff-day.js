@@ -511,13 +511,40 @@ class AcceptedHoursList extends React.Component {
         })
         return unacceptedShifts.length === 0;
     }
+    getNewHoursDefaultTimes(){
+        var {acceptedHours, rotaDate} = this.props;
+
+        if (acceptedHours.length === 0) {
+            return {
+                starts_at: rotaDate.getDateFromShiftStartTime(9, 0),
+                ends_at: rotaDate.getDateFromShiftStartTime(10, 0),
+            }
+        }
+
+        var lastExitingHours = _.last(acceptedHours);
+        var previousShiftHoursOffset = rotaDate.getHoursSinceStartOfDay(lastExitingHours.clockInHours.ends_at);
+
+        var newHoursStartOffset = previousShiftHoursOffset + 1;
+        var newHoursEndOffset = newHoursStartOffset + 1;
+
+        newHoursStartOffset = utils.containNumberWithinRange(newHoursStartOffset, [0, 23]);
+        newHoursEndOffset = utils.containNumberWithinRange(newHoursEndOffset, [0, 23]);
+
+        return {
+            starts_at: rotaDate.getDateNHoursAfterStartTime(newHoursStartOffset),
+            ends_at: rotaDate.getDateNHoursAfterStartTime(newHoursEndOffset)
+        }
+    }
     addHours(){
         var {acceptedHours, rotaDate} = this.props;
         acceptedHours = _.clone(acceptedHours)
+
+        var defaultTimes = this.getNewHoursDefaultTimes();
+
         acceptedHours.push({
             clockInHours: {
-                starts_at: rotaDate.getDateFromShiftStartTime(9, 0),
-                ends_at: rotaDate.getDateFromShiftStartTime(10, 0),
+                starts_at: defaultTimes.starts_at,
+                ends_at: defaultTimes.ends_at,
                 breaks: []
             },
             reason_id: "599",
