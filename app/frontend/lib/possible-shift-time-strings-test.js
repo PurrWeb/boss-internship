@@ -1,8 +1,9 @@
-import { possibleShiftStartTimeStrings, possibleShiftEndTimeStrings } from "./possible-shift-time-strings"
+import { getPossibleShiftStartTimeStrings, getPossibleShiftEndTimeStrings } from "./possible-shift-time-strings"
 import expect from "expect"
 import _ from "underscore"
 
 describe("possibleShiftStartTimeStrings", function(){
+    var possibleShiftStartTimeStrings = getPossibleShiftStartTimeStrings(30);
     it("Starts with '8:00' and '8:30", function(){
         expect(possibleShiftStartTimeStrings[0]).toBe("08:00");
         expect(possibleShiftStartTimeStrings[1]).toBe("08:30");
@@ -15,6 +16,7 @@ describe("possibleShiftStartTimeStrings", function(){
 });
 
 describe("possibleShiftEndTimeStrings", function(){
+    var possibleShiftEndTimeStrings = getPossibleShiftEndTimeStrings(30);
     it("Starts with 8:30", function(){
         expect(possibleShiftEndTimeStrings[0]).toBe("08:30");
     })
