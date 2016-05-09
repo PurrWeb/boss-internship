@@ -183,8 +183,7 @@ class BreakListItem extends React.Component {
 
         var style = {};
         if (!this.isValid()) {
-            style.background = "#FDD7D7";
-            style.paddingBottom = 10;
+            style.color ="red"
         }
 
         return <div className="row" style={{marginBottom: 10}}>
@@ -232,7 +231,8 @@ class BreakList extends React.Component {
         if (!this.props.readonly) {
             addBreakButton = <a
                 className="btn btn-default btn-sm"
-                onClick={() => this.addBreak()}>
+                onClick={() => this.addBreak()}
+                style={{display: "inline-block", marginBottom: 4}}>
                 Add Break
             </a>
         }
