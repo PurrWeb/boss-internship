@@ -347,7 +347,6 @@ class AcceptedHoursListItem extends React.Component {
         } else if (acceptedState === "accepted") {
             return <div>
                 <div style={{
-                    fontSize: 20,
                     color: "green",
                     fontWeight: "bold",
                     fontSize: 20,
