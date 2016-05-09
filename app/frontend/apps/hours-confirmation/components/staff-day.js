@@ -172,14 +172,7 @@ class StaffDayNotes extends React.Component {
 
 class BreakListItem extends React.Component {
     render(){
-        var breakItem = this.props.breakItem
-        var {acceptedHoursClockInHours} = this.props;
-
-        var errors = null;
-        var validationResult = Validation.validateBreak({
-            breakItem,
-            acceptedHoursClockInHours
-        })
+        var breakItem = this.props.breakItem;
 
         var deleteBreakButton;
         if (!this.props.readonly) {
@@ -188,20 +181,27 @@ class BreakListItem extends React.Component {
             </a>
         }
 
+        var style = {};
+        if (!this.isValid()) {
+            style.background = "#FDD7D7";
+            style.paddingBottom = 10;
+        }
+
         return <div className="row" style={{marginBottom: 10}}>
-            <div className="col-md-10">
+            <div className="col-md-10"
+                style={style}>
                 <ShiftTimeSelector
                     defaultShiftTimes={{
                         starts_at: breakItem.starts_at,
                         ends_at: breakItem.ends_at
                     }}
+                    showErrorMessages={false}
                     rotaDate={this.props.rotaDate}
                     onChange={(times) => {
                         this.props.onChange(times)
                     }}
                     readonly={this.props.readonly}
                 />
-                <ValidationResult result={validationResult} />
             </div>
             <div className="col-md-2">
                 <br/>
@@ -209,11 +209,24 @@ class BreakListItem extends React.Component {
             </div>
         </div>
     }
+    isValid(){
+        var {acceptedHoursClockInHours, breakItem} = this.props;
+
+        var validationResult = Validation.validateBreak({
+            breakItem,
+            acceptedHoursClockInHours
+        })
+
+        return validationResult.isValid;
+    }
 }
 
 class BreakList extends React.Component {
     render(){
-        var validationResult = Validation.validateBreaksDontOverlap({breaks: this.props.breaks})
+        var validationResult = Validation.validateBreaks({
+            breaks: this.props.breaks,
+            acceptedHoursClockInHours: this.props.acceptedHours.clockInHours
+        })
 
         var addBreakButton;
         if (!this.props.readonly) {

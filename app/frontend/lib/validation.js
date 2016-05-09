@@ -59,13 +59,36 @@ var validation = {
         }
 
         var endsBeforeStartTime = breakItem.ends_at <= breakItem.starts_at;
+        if (endsBeforeStartTime) {
+            messages.push("Break end time can't be after start time")
+        }
 
         return {
             messages,
-            isValid: messages.length === 0 && !endsBeforeStartTime
+            isValid: messages.length === 0
         }
     },
-    validateBreaksDontOverlap({breaks}) {
+    validateBreaks({breaks, acceptedHoursClockInHours}){
+        var messages = [];
+        breaks.forEach(function(breakItem){
+            var res = validation.validateBreak({
+                breakItem,
+                acceptedHoursClockInHours
+            })
+            messages = messages.concat(res.messages)
+        });
+
+        if (messages.length === 0) {
+            var overlapResult = this.validateBreaksDontOverlap(breaks);
+            messages = messages.concat(overlapResult.messages);
+        }
+
+        return {
+            messages,
+            isValid: messages.length === 0
+        }
+    },
+    validateBreaksDontOverlap(breaks) {
         var breaksOverlap = doIntervalsOverlapOrTouchEachOther(breaks);
 
         var messages = [];
@@ -96,7 +119,10 @@ var validation = {
     validateHoursAcceptance(hoursAcceptance){
         var isValid = true;
         var breaks = hoursAcceptance.clockInHours.breaks
-        var breaksValidationResult = validation.validateBreaksDontOverlap({breaks});
+        var breaksValidationResult = validation.validateBreaks({
+            breaks,
+            acceptedHoursClockInHours: hoursAcceptance.clockInHours
+        });
 
         if (!breaksValidationResult.isValid) {
             isValid = false;

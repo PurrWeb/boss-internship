@@ -25,6 +25,7 @@ export default class ShiftTimeSelector extends Component {
                         startsAt={this.state.starts_at}
                         rotaDate={this.props.rotaDate}
                         readonly={this.props.readonly}
+                        showErrorMessages={this.props.showErrorMessages}
                         onChange={(newValue) => {
                             this.onChange("starts_at", newValue);
                         } } />
@@ -34,6 +35,7 @@ export default class ShiftTimeSelector extends Component {
                         endsAt={this.state.ends_at}
                         readonly={this.props.readonly}
                         rotaDate={this.props.rotaDate}
+                        showErrorMessages={this.props.showErrorMessages}
                         onChange={(newValue) => {
                             this.onChange("ends_at", newValue);
                         } } />
@@ -43,6 +45,10 @@ export default class ShiftTimeSelector extends Component {
         </div>
     }
     getErrorMessages(){
+        if (this.props.showErrorMessages === false) {
+            return null;
+        }
+
         var errorMessages = validation.validateShiftTimes({
             starts_at: this.state.starts_at,
             ends_at: this.state.ends_at
