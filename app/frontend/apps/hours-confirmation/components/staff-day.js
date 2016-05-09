@@ -6,6 +6,7 @@ import ShiftTimeSelector from "~components/shift-time-selector"
 import moment from "moment"
 import Validation from "~lib/validation"
 import ErrorMessage from "~components/error-message"
+import getClockInPeriodStats from "~lib/get-clock-in-period-stats"
 
 export default class StaffDay extends React.Component {
     constructor(props){
@@ -15,7 +16,6 @@ export default class StaffDay extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps){
-        console.log("isvlalid", Validation.validateHoursAcceptances(nextProps.acceptedHours).isValid)
         if (!Validation.validateHoursAcceptances(nextProps.acceptedHours).isValid) {
             return; // don't try to display invalid data on the chart
         }
@@ -54,20 +54,11 @@ export default class StaffDay extends React.Component {
                 padding: 10,
                 border: "1px solid #ddd"
             }}>
-                <h2 style={{
-                        fontSize: 20,
-                        margin: 0,
-                        marginBottom: 10,
-                        borderBottom: "1px solid #eee",
-                        paddingBottom: 5
-                    }}>
-                    <div style={{display: "inline-block"}}>
-                        {staffMember.first_name} {staffMember.surname}
-                    </div>
-                    <div style={{float: "right"}}>
-                        {moment(this.props.rotaDate.startTime).format("DD MMM YYYY")}
-                    </div>
-                </h2>
+                <StaffDayHeader
+                    rotaDate={this.props.rotaDate}
+                    staffMember={this.props.staffMember}
+                    clockedClockInPeriods={this.state.chartData.clockedClockIns}
+                />
                 <div className="row">
                     <div className="col-md-2">
                         <img
@@ -86,7 +77,6 @@ export default class StaffDay extends React.Component {
                                     clockedClockIns={this.state.chartData.clockedClockIns}
                                     events={this.state.chartData.events}
                                 />
-                                (todo: stats)
                             </div>
                             <div className="col-md-3">
                                 <StaffDayNotes notes={this.props.notes} />
@@ -102,6 +92,38 @@ export default class StaffDay extends React.Component {
                 </div>
             </div>
         </div>
+    }
+}
+
+class StaffDayHeader extends React.Component {
+    render(){
+        var { staffMember, rotaDate, clockedClockInPeriods } = this.props;
+
+        var clockedStats = getClockInPeriodStats(clockedClockInPeriods)
+
+        return <h2 style={{
+                fontSize: 20,
+                margin: 0,
+                marginBottom: 10,
+                borderBottom: "1px solid #eee",
+                paddingBottom: 5
+            }}>
+            <div style={{display: "inline-block"}}>
+                {staffMember.first_name} {staffMember.surname}
+            </div>
+            <div style={{
+                display: "inline-block",
+                fontWeight: "normal",
+                marginLeft: 4,
+                color: "#999",
+                fontSize: 16
+            }}>
+                {clockedStats.hours}h clocked
+            </div>
+            <div style={{float: "right"}}>
+                {moment(rotaDate.startTime).format("DD MMM YYYY")}
+            </div>
+        </h2>
     }
 }
 
