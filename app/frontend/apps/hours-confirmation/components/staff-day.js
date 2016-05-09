@@ -48,6 +48,12 @@ export default class StaffDay extends React.Component {
             style.overflow = "hidden";
         }
 
+        var acceptedClockInPeriods = _(this.props.acceptedHours)
+            .chain()
+            .filter({accepted_state: "accepted"})
+            .pluck("clockInHours")
+            .value();
+
         return <div style={style}>
             <div style={{
                 marginBottom: 50,
@@ -58,6 +64,7 @@ export default class StaffDay extends React.Component {
                     rotaDate={this.props.rotaDate}
                     staffMember={this.props.staffMember}
                     clockedClockInPeriods={this.state.chartData.clockedClockIns}
+                    acceptedClockInPeriods={acceptedClockInPeriods}
                 />
                 <div className="row">
                     <div className="col-md-2">
@@ -97,9 +104,10 @@ export default class StaffDay extends React.Component {
 
 class StaffDayHeader extends React.Component {
     render(){
-        var { staffMember, rotaDate, clockedClockInPeriods } = this.props;
+        var { staffMember, rotaDate, clockedClockInPeriods, acceptedClockInPeriods } = this.props;
 
-        var clockedStats = getClockInPeriodStats(clockedClockInPeriods)
+        var clockedStats = getClockInPeriodStats(clockedClockInPeriods);
+        var acceptedStats = getClockInPeriodStats(acceptedClockInPeriods);
 
         return <h2 style={{
                 fontSize: 20,
@@ -118,7 +126,7 @@ class StaffDayHeader extends React.Component {
                 color: "#999",
                 fontSize: 16
             }}>
-                {clockedStats.hours}h clocked
+                {clockedStats.hours}h clocked, {acceptedStats.hours}h accepted
             </div>
             <div style={{float: "right"}}>
                 {moment(rotaDate.startTime).format("DD MMM YYYY")}
