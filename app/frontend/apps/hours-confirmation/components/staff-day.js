@@ -269,8 +269,13 @@ class ReasonSelector extends React.Component {
 
         var showTextArea = selectedReason.title === "Other";
 
-        return <div>
-            <select
+        var dropdown, dropdownSelectionString;
+        if (this.props.readonly) {
+            dropdownSelectionString = <div>
+                {selectedReason.title}
+            </div>
+        } else {
+            dropdown = <select
                 style={{marginBottom: 4}}
                 value={reasonId}
                 onChange={(e) => this.triggerChange({
@@ -282,10 +287,21 @@ class ReasonSelector extends React.Component {
                     </option>
                 )}
             </select>
+        }
+
+        return <div>
+            {dropdown}
+            {dropdownSelectionString}
             <textarea
-                onChange={(e) => this.triggerChange({
-                    reason_text: e.target.value
-                })}
+                onChange={(e) => {
+                    if (this.props.readonly) {
+                        return;
+                    }
+                    this.triggerChange({
+                        reason_text: e.target.value
+                    })
+                }}
+                readonly={this.props.readonly}
                 style={{display: showTextArea ? "block" : "none"}}
                 value={reasonText} />
         </div>
@@ -341,6 +357,7 @@ class AcceptedHoursListItem extends React.Component {
                 <div className="col-md-3">
                     <u>Reason</u>
                     <ReasonSelector
+                        readonly={readonly}
                         predefinedReasons={this.props.predefinedReasons}
                         reasonId={acceptedHours.reason_id}
                         reasonText={acceptedHours.reason_text}
@@ -384,8 +401,6 @@ class AcceptedHoursListItem extends React.Component {
                     onClick={() => this.triggerChange({accepted_state: "in_progress"})}>
                     Unaccept
                 </a>
-                <br/>
-                TODO: make left side read-only
             </div>
         }
     }
