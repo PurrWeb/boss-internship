@@ -217,7 +217,7 @@ class BreakList extends React.Component {
 
         var addBreakButton;
         if (!this.props.readonly) {
-            <a
+            addBreakButton = <a
                 className="btn btn-default btn-sm"
                 onClick={() => this.addBreak()}>
                 Add Break
