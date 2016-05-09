@@ -8,6 +8,8 @@ import Validation from "~lib/validation"
 import ErrorMessage from "~components/error-message"
 import getClockInPeriodStats from "~lib/get-clock-in-period-stats"
 
+const TIME_GRANULARITY_IN_MINUTES = 15;
+
 export default class StaffDay extends React.Component {
     constructor(props){
         super(props)
@@ -199,6 +201,7 @@ class BreakListItem extends React.Component {
                     onChange={(times) => {
                         this.props.onChange(times)
                     }}
+                    granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
                     readonly={this.props.readonly}
                 />
             </div>
@@ -353,6 +356,7 @@ class AcceptedHoursListItem extends React.Component {
                                 ends_at: times.ends_at
                             }
                         })}
+                        granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
                         />
                 </div>
                 <div className="col-md-5">

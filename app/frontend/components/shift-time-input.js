@@ -4,7 +4,7 @@ import RotaDate from "~lib/rota-date.js"
 import moment from "moment"
 import utils from "~lib/utils"
 import validation from "~lib/validation"
-import { possibleShiftStartTimeStrings, possibleShiftEndTimeStrings } from "~lib/possible-shift-time-strings"
+import { getPossibleShiftStartTimeStrings, getPossibleShiftEndTimeStrings } from "~lib/possible-shift-time-strings"
 
 var SHIFT_TIME_TYPES = {
     START: 2,
@@ -18,7 +18,8 @@ export default class ShiftTimeInput extends Component {
         // either one of these two:
         startsAt: React.PropTypes.object,
         endsAt: React.PropTypes.object,
-        readonly: React.PropTypes.bool
+        readonly: React.PropTypes.bool,
+        granularityInMinutes: React.PropTypes.number // defaults to 30
     }
     getShiftTimeType(){
         if (this.props.startsAt !== undefined){
@@ -71,10 +72,14 @@ export default class ShiftTimeInput extends Component {
         </div>
     }
     getPossibleShiftTimes(){
+        var granularityInMinutes = 30;
+        if (this.props.granularityInMinutes) {
+            granularityInMinutes = this.props.granularityInMinutes
+        }
         if (this.getShiftTimeType() === SHIFT_TIME_TYPES.START) {
-            return possibleShiftStartTimeStrings;
+            return getPossibleShiftStartTimeStrings(granularityInMinutes);
         } else {
-            return possibleShiftEndTimeStrings;
+            return getPossibleShiftEndTimeStrings(granularityInMinutes)
         }
     }
     getDateFromTime(timeString){

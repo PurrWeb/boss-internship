@@ -26,6 +26,7 @@ export default class ShiftTimeSelector extends Component {
                         rotaDate={this.props.rotaDate}
                         readonly={this.props.readonly}
                         showErrorMessages={this.props.showErrorMessages}
+                        granularityInMinutes={this.props.granularityInMinutes}
                         onChange={(newValue) => {
                             this.onChange("starts_at", newValue);
                         } } />
@@ -36,6 +37,7 @@ export default class ShiftTimeSelector extends Component {
                         readonly={this.props.readonly}
                         rotaDate={this.props.rotaDate}
                         showErrorMessages={this.props.showErrorMessages}
+                        granularityInMinutes={this.props.granularityInMinutes}
                         onChange={(newValue) => {
                             this.onChange("ends_at", newValue);
                         } } />
