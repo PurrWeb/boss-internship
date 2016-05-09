@@ -331,12 +331,13 @@ class AcceptedHoursListItem extends React.Component {
     }
     getAcceptUi(){
         var acceptedState = this.props.acceptedHours.accepted_state;
+        var stats = getClockInPeriodStats(this.props.acceptedHours.clockInHours);
         if (acceptedState === "in_progress") {
             return <div>
                 <a
                     onClick={() => this.triggerChange({accepted_state: "accepted"})}
                     className="btn btn-success" style={{marginTop: 4}}>
-                    Accept
+                    Accept {stats.hours}h
                 </a>
                 <br/><br/>
                 <a onClick={this.props.deleteHoursAcceptance}>
@@ -352,7 +353,7 @@ class AcceptedHoursListItem extends React.Component {
                     fontSize: 20,
                     marginBottom: 4
                 }}>
-                    ACCEPTED
+                    {stats.hours}h ACCEPTED
                 </div>
                 <a
                     onClick={() => this.triggerChange({accepted_state: "in_progress"})}>

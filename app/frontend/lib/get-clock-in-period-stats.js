@@ -1,4 +1,5 @@
 import utils from "~lib/utils"
+import _ from "underscore"
 
 const MS_PER_HOUR = 1000 * 60 * 60;
 
@@ -30,6 +31,10 @@ function getSingleClockInPeriodStats(clockInPeriod){
 }
 
 export default function getClockInPeriodStats(clockInPeriods){
+    if (!_.isArray(clockInPeriods)) {
+        clockInPeriods = [clockInPeriods]
+    }
+
     var total = {
         hours: 0,
         breaks: 0
