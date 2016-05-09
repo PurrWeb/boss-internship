@@ -15,10 +15,10 @@ export default class ShiftTimeInput extends Component {
     static propTypes = {
         rotaDate: React.PropTypes.object.isRequired,
         onChange: React.PropTypes.func.isRequired,
-        // either one of these two: 
+        // either one of these two:
         startsAt: React.PropTypes.object,
-        endsAt: React.PropTypes.object
-
+        endsAt: React.PropTypes.object,
+        readonly: React.PropTypes.bool
     }
     getShiftTimeType(){
         if (this.props.startsAt !== undefined){
@@ -53,13 +53,22 @@ export default class ShiftTimeInput extends Component {
             dateValue = "";
         }
 
-        return <div className="shift-time-input">
-            <Select
+        var select, readonlyString;
+        if (this.props.readonly) {
+            readonlyString = dateValue;
+        } else {
+            select = <Select
                 value={dateValue}
                 options={options}
                 clearable={false}
-                onChange={(value) => this.updateTime(value)} />
-            </div>
+                onChange={(value) => this.updateTime(value)}
+            />
+        }
+
+        return <div className="shift-time-input">
+            {select}
+            {readonlyString}
+        </div>
     }
     getPossibleShiftTimes(){
         if (this.getShiftTimeType() === SHIFT_TIME_TYPES.START) {

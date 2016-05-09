@@ -181,6 +181,13 @@ class BreakListItem extends React.Component {
             acceptedHoursClockInHours
         })
 
+        var deleteBreakButton;
+        if (!this.props.readonly) {
+            deleteBreakButton = <a className="btn btn-default" onClick={this.props.onDeleteItem}>
+                x
+            </a>
+        }
+
         return <div className="row" style={{marginBottom: 10}}>
             <div className="col-md-10">
                 <ShiftTimeSelector
@@ -192,14 +199,13 @@ class BreakListItem extends React.Component {
                     onChange={(times) => {
                         this.props.onChange(times)
                     }}
+                    readonly={this.props.readonly}
                 />
                 <ValidationResult result={validationResult} />
             </div>
             <div className="col-md-2">
                 <br/>
-                <a className="btn btn-default" onClick={this.props.onDeleteItem}>
-                    x
-                </a>
+                {deleteBreakButton}
             </div>
         </div>
     }
@@ -208,6 +214,15 @@ class BreakListItem extends React.Component {
 class BreakList extends React.Component {
     render(){
         var validationResult = Validation.validateBreaksDontOverlap({breaks: this.props.breaks})
+
+        var addBreakButton;
+        if (!this.props.readonly) {
+            <a
+                className="btn btn-default btn-sm"
+                onClick={() => this.addBreak()}>
+                Add Break
+            </a>
+        }
 
         return <div>
             {this.props.breaks.map((breakItem) => {
@@ -219,6 +234,7 @@ class BreakList extends React.Component {
                             newBreakItem)
                         this.props.onChange(breaks)
                     }}
+                    readonly={this.props.readonly}
                     acceptedHoursClockInHours={this.props.acceptedHours.clockInHours}
                     onDeleteItem={() => {
                         var newBreaks = _(this.props.breaks).reject(
@@ -230,11 +246,7 @@ class BreakList extends React.Component {
                     breakItem={breakItem} />
             })}
             <div>
-                <a
-                    className="btn btn-default btn-sm"
-                    onClick={() => this.addBreak()}>
-                    Add Break
-                </a>
+                {addBreakButton}
             </div>
             <ValidationResult result={validationResult} />
         </div>
@@ -291,7 +303,8 @@ class ReasonSelector extends React.Component {
 class AcceptedHoursListItem extends React.Component {
     render(){
         var acceptedHours = this.props.acceptedHours;
-        var clockIn = this.props.acceptedHours.clockInHours
+        var clockIn = this.props.acceptedHours.clockInHours;
+        var readonly = this.isAccepted();
         return <div className="row">
             <div className="col-md-9">
                 <div className="col-md-4">
@@ -301,6 +314,7 @@ class AcceptedHoursListItem extends React.Component {
                             starts_at: clockIn.starts_at,
                             ends_at: clockIn.ends_at
                         }}
+                        readonly={readonly}
                         rotaDate={this.props.rotaDate}
                         onChange={(times) => this.triggerChange({
                             clockInHours:{
@@ -318,6 +332,7 @@ class AcceptedHoursListItem extends React.Component {
                                 breaks
                             }
                         })}
+                        readonly={readonly}
                         rotaDate={this.props.rotaDate}
                         breaks={clockIn.breaks}
                         acceptedHours={acceptedHours}
@@ -338,10 +353,12 @@ class AcceptedHoursListItem extends React.Component {
             </div>
         </div>
     }
+    isAccepted(){
+        return this.props.acceptedHours.accepted_state !== "in_progress";
+    }
     getAcceptUi(){
-        var acceptedState = this.props.acceptedHours.accepted_state;
         var stats = getClockInPeriodStats(this.props.acceptedHours.clockInHours);
-        if (acceptedState === "in_progress") {
+        if (!this.isAccepted()) {
             return <div>
                 <a
                     onClick={() => this.triggerChange({accepted_state: "accepted"})}
@@ -353,7 +370,7 @@ class AcceptedHoursListItem extends React.Component {
                     Delete
                 </a>
             </div>
-        } else if (acceptedState === "accepted") {
+        } else {
             return <div>
                 <div style={{
                     color: "green",
@@ -370,8 +387,6 @@ class AcceptedHoursListItem extends React.Component {
                 <br/>
                 TODO: make left side read-only
             </div>
-        } else {
-            throw Error("Unhandled state")
         }
     }
     triggerChange(dataToUpdate){

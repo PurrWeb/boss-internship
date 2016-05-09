@@ -24,6 +24,7 @@ export default class ShiftTimeSelector extends Component {
                     <ShiftTimeInput
                         startsAt={this.state.starts_at}
                         rotaDate={this.props.rotaDate}
+                        readonly={this.props.readonly}
                         onChange={(newValue) => {
                             this.onChange("starts_at", newValue);
                         } } />
@@ -31,6 +32,7 @@ export default class ShiftTimeSelector extends Component {
                 <div className="col-md-6">
                     <ShiftTimeInput
                         endsAt={this.state.ends_at}
+                        readonly={this.props.readonly}
                         rotaDate={this.props.rotaDate}
                         onChange={(newValue) => {
                             this.onChange("ends_at", newValue);
