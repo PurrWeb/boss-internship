@@ -134,12 +134,12 @@ export default class HoursChartUi extends React.Component {
             chart: chartContent,
             xScale,
             intervals: this.props.proposedAcceptedIntervals,
-            lane: "proposedAccepted"
+            lane: "amended"
         })
     }
     renderIntervals({chart, xScale, intervals, lane}){
         var y = {
-            "proposedAccepted": 70,
+            "amended": 70,
             "clocked": 40,
             "rotaed": 10
         }[lane]
@@ -168,17 +168,25 @@ export default class HoursChartUi extends React.Component {
             })
             .attr("height", barHeight)
             .attr("class", function(interval){
-                var classes = ["hours-chart__clocked-interval"];
+                var classes = ["hours-chart__interval"];
+
+                var laneType = {
+                    clocked: "clocked",
+                    amended: "amended"
+                }[lane]
 
                 if (interval.type === "hours") {
-                    classes.push("hours-chart__clocked-interval--hours");
+                    classes.push("hours-chart__" + laneType + "-interval--hours");
                 }
                 if (interval.type === "break") {
-                    classes.push("hours-chart__clocked-interval--break");
+                    classes.push("hours-chart__" + laneType + "-interval--break");
                 }
 
                 return classes.join(" ")
             })
+
+        intervalGroup.append("rect")
+            .attr("width", "")
 
         intervalGroup
             .append("text")
