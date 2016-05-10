@@ -162,7 +162,7 @@ class ValidationResult extends React.Component {
 class StaffDayNotes extends React.Component {
     render(){
         return <div>
-            <u>Notes</u>
+            <div className="staff-day__sub-heading">Notes</div>
             <ul style={{paddingLeft: 20}}>
                 {this.props.notes.map((note) =>
                     <li>{note.text}</li>
@@ -351,7 +351,7 @@ class AcceptedHoursListItem extends React.Component {
         return <div className="row">
             <div className="col-md-9">
                 <div className="col-md-4">
-                    <u>From/To</u>
+                    <div className="staff-day__sub-heading">From/To</div>
                     <ShiftTimeSelector
                         defaultShiftTimes={{
                             starts_at: clockIn.starts_at,
@@ -369,8 +369,7 @@ class AcceptedHoursListItem extends React.Component {
                         />
                 </div>
                 <div className="col-md-5">
-                    <u>Breaks</u>
-                    <br/>
+                    <div className="staff-day__sub-heading">Breaks</div>
                     <BreakList
                         onChange={(breaks) => this.triggerChange({clockInHours: {
                                 breaks
@@ -383,7 +382,7 @@ class AcceptedHoursListItem extends React.Component {
                         />
                 </div>
                 <div className="col-md-3">
-                    <u>Reason</u>
+                    <div className="staff-day__sub-heading">Reason</div>
                     <ReasonSelector
                         readonly={readonly}
                         predefinedReasons={this.props.predefinedReasons}
