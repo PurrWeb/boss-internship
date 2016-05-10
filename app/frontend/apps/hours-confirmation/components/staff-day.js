@@ -78,7 +78,7 @@ export default class StaffDay extends React.Component {
                     </div>
                     <div className="col-md-10">
                         <div className="row">
-                            <div className="col-md-9">
+                            <div className="col-md-8">
                                 <HoursChart
                                     rotaDate={this.state.chartData.rotaDate}
                                     rotaedShifts={this.state.chartData.rotaedShifts}
@@ -88,7 +88,7 @@ export default class StaffDay extends React.Component {
                                     events={this.state.chartData.events}
                                 />
                             </div>
-                            <div className="col-md-3">
+                            <div className="col-md-4">
                                 <StaffDayNotes notes={this.props.notes} />
                             </div>
                         </div>

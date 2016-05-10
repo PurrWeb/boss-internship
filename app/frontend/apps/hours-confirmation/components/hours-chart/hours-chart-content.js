@@ -3,10 +3,11 @@ import d3 from "d3"
 import utils from "~lib/utils"
 import makeRotaHoursXAxis from "~lib/make-rota-hours-x-axis"
 
-var innerWidth = 500;
+var innerWidth = 525;
 var innerHeight = 80;
 var padding = 20;
 var paddingRight = 200;
+var labelSpacing = 50;
 var barHeight = 25;
 var outerWidth = innerWidth + padding + paddingRight;
 var outerHeight = innerHeight + padding * 2;
@@ -41,20 +42,25 @@ export default class HoursChartUi extends React.Component {
 
         var xScale = this.getXScale()
 
-        this.renderXAxis({chart, xScale})
-        this.renderProposedAcceptedIntervals({chart, xScale})
-        this.renderClockedIntervals({chart, xScale})
-        this.renderRotaedIntervals({chart, xScale})
+        var chartContent = chart
+            .append("g")
+            .attr("transform", "translate(" + labelSpacing + ", 0)")
+
+
+        this.renderXAxis({chartContent, xScale})
+        this.renderProposedAcceptedIntervals({chartContent, xScale})
+        this.renderClockedIntervals({chartContent, xScale})
+        this.renderRotaedIntervals({chartContent, xScale})
         this.renderLaneLabels({chart})
-        this.renderEvents({chart, xScale})
+        this.renderEvents({chartContent, xScale})
     }
     getXScale(){
         return d3.scale.linear()
             .domain([0, 24])
             .range([0, innerWidth]);
     }
-    renderEvents({chart, xScale}){
-        var group = chart.append("g")
+    renderEvents({chartContent, xScale}){
+        var group = chartContent.append("g")
         var lineContainers = group
             .selectAll("g")
             .data(this.props.events)
@@ -123,9 +129,9 @@ export default class HoursChartUi extends React.Component {
 
 
     }
-    renderProposedAcceptedIntervals({chart, xScale}){
+    renderProposedAcceptedIntervals({chartContent, xScale}){
         this.renderIntervals({
-            chart,
+            chart: chartContent,
             xScale,
             intervals: this.props.proposedAcceptedIntervals,
             lane: "proposedAccepted"
@@ -184,7 +190,7 @@ export default class HoursChartUi extends React.Component {
     renderLaneLabels({chart}){
         var group = chart
             .append("g")
-            .attr("transform", "translate(" + (innerWidth + padding + 10) + ",0)")
+            .attr("transform", "translate(" + (padding + labelSpacing - 10) + ",0)")
         group.append("text")
             .text("Rotaed")
             .attr("transform", "translate(0, 25)")
@@ -194,26 +200,28 @@ export default class HoursChartUi extends React.Component {
         group.append("text")
             .text("Amended")
             .attr("transform", "translate(0, 85)")
+        group.selectAll("text")
+            .attr("text-anchor", "end")
     }
-    renderXAxis({chart, xScale}){
+    renderXAxis({chartContent, xScale}){
         var xAxis = makeRotaHoursXAxis(xScale);
-         chart
+         chartContent
             .append("g")
             .attr("transform", "translate(" + padding + "," + (innerHeight + padding) + ")")
             .attr("class", "axis")
             .call(xAxis);
     }
-    renderRotaedIntervals({chart, xScale}){
+    renderRotaedIntervals({chartContent, xScale}){
         this.renderIntervals({
-            chart,
+            chart: chartContent,
             xScale,
             intervals: this.props.rotaedIntervals,
             lane: "rotaed"
         })
     }
-    renderClockedIntervals({chart, xScale}){
+    renderClockedIntervals({chartContent, xScale}){
         this.renderIntervals({
-            chart,
+            chart: chartContent,
             xScale,
             intervals: this.props.clockedIntervals,
             lane: "clocked"
