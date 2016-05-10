@@ -125,12 +125,23 @@ export default class StaffDay extends React.Component {
                     "url": "https://boss.jsmbars.co.uk/api/v1/venues/1"
                 }]
             },
+            staff_types: [{
+                "id":8,
+                "url":"http://localhost:3000/api/v1/staff_types/1",
+                "name":"Bar Back",
+                "color":"#fd4949"
+            }],
             notes: [{
                 text: "came in late",
             },{
                 text: "extra work from 8pm to midnight",
             }]
         }
+
+        var staffTypes = props.staff_types;
+        staffTypes = staffTypes.map(processBackendObject)
+
+        var staffMember = processBackendObject(props.staffMember)
 
         return <StaffDayUi
             markedAsDone={this.state.markedAsDone}
@@ -145,9 +156,10 @@ export default class StaffDay extends React.Component {
             }}
             markDayAsDone={() => this.setState({markedAsDone: true})}
             events={props.events}
-            staffMember={props.staffMember}
+            staffMember={staffMember}
             predefinedReasons={props.predefinedReasons}
             notes={props.notes}
+            staffTypes={staffTypes}
         />
     }
 }

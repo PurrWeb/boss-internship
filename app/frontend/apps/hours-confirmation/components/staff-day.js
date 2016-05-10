@@ -7,6 +7,7 @@ import moment from "moment"
 import Validation from "~lib/validation"
 import ErrorMessage from "~components/error-message"
 import getClockInPeriodStats from "~lib/get-clock-in-period-stats"
+import StaffTypeBadge from "~components/staff-type-badge"
 
 const TIME_GRANULARITY_IN_MINUTES = 15;
 
@@ -56,6 +57,8 @@ export default class StaffDay extends React.Component {
             .pluck("clockInHours")
             .value();
 
+        var staffType = staffMember.staff_type.get(this.props.staffTypes);
+
         return <div style={style}>
             <div style={{
                 marginBottom: 50,
@@ -75,6 +78,7 @@ export default class StaffDay extends React.Component {
                             src={staffMember.avatar_url}
                             style={{width: "90%", marginBottom: 4}}
                         />
+                        <StaffTypeBadge staffTypeObject={staffType} />
                     </div>
                     <div className="col-md-10">
                         <div className="row">
