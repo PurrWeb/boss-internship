@@ -178,7 +178,10 @@ class BreakListItem extends React.Component {
 
         var deleteBreakButton;
         if (!this.props.readonly) {
-            deleteBreakButton = <a className="btn btn-default" onClick={this.props.onDeleteItem}>
+            deleteBreakButton = <a
+                className="btn btn-default"
+                style={{marginLeft: -10}}
+                onClick={this.props.onDeleteItem}>
                 x
             </a>
         }
@@ -349,7 +352,7 @@ class AcceptedHoursListItem extends React.Component {
 
 
         return <div className="row">
-            <div className="col-md-9">
+            <div className="col-md-10">
                 <div className="col-md-4">
                     <div className="staff-day__sub-heading">From/To</div>
                     <ShiftTimeSelector
@@ -369,17 +372,19 @@ class AcceptedHoursListItem extends React.Component {
                         />
                 </div>
                 <div className="col-md-5">
-                    <div className="staff-day__sub-heading">Breaks</div>
-                    <BreakList
-                        onChange={(breaks) => this.triggerChange({clockInHours: {
-                                breaks
-                            }
-                        })}
-                        readonly={readonly}
-                        rotaDate={this.props.rotaDate}
-                        breaks={clockIn.breaks}
-                        acceptedHours={acceptedHours}
+                    <div style={{paddingRight: 30, paddingLeft: 30}}>
+                        <div className="staff-day__sub-heading">Breaks</div>
+                        <BreakList
+                            onChange={(breaks) => this.triggerChange({clockInHours: {
+                                    breaks
+                                }
+                            })}
+                            readonly={readonly}
+                            rotaDate={this.props.rotaDate}
+                            breaks={clockIn.breaks}
+                            acceptedHours={acceptedHours}
                         />
+                    </div>
                 </div>
                 <div className="col-md-3">
                     <div className="staff-day__sub-heading">Reason</div>
@@ -392,7 +397,7 @@ class AcceptedHoursListItem extends React.Component {
                     />
                 </div>
             </div>
-            <div className="col-md-3">
+            <div className="col-md-2">
                 {this.getAcceptUi()}
             </div>
         </div>
