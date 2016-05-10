@@ -89,7 +89,7 @@ var validation = {
         }
     },
     validateBreaksDontOverlap(breaks) {
-        var breaksOverlap = doIntervalsOverlapOrTouchEachOther(breaks);
+        var breaksOverlap = doIntervalsOverlap(breaks);
 
         var messages = [];
         if (breaksOverlap){
@@ -102,7 +102,7 @@ var validation = {
         }
     },
     validateHoursAssignmentsDontOverlap({hoursAssignments}){
-        var doOverlap = doIntervalsOverlapOrTouchEachOther(
+        var doOverlap = doIntervalsOverlap(
             _.pluck(hoursAssignments, "clockInHours")
         )
 
@@ -163,13 +163,13 @@ var validation = {
     }
 }
 
-function doIntervalsOverlapOrTouchEachOther(intervals){
+function doIntervalsOverlap(intervals){
     var intervalsOverlap = false;
     intervals.forEach(function(intervalsOuter){
         intervals.forEach(function(intervalsInner){
             if (intervalsInner !== intervalsOuter) {
                 if (
-                    intervalsOuter.starts_at <= intervalsInner.ends_at &&
+                    intervalsOuter.starts_at < intervalsInner.ends_at &&
                     intervalsOuter.starts_at >= intervalsInner.starts_at ) {
                         intervalsOverlap = true;
                     }
