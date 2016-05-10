@@ -186,13 +186,13 @@ export default class HoursChartUi extends React.Component {
             .append("g")
             .attr("transform", "translate(" + (innerWidth + padding + 10) + ",0)")
         group.append("text")
-            .text("Rotaed Shifts")
+            .text("Rotaed")
             .attr("transform", "translate(0, 25)")
         group.append("text")
-            .text("Clocked Hours")
+            .text("Clocked")
             .attr("transform", "translate(0, 55)")
         group.append("text")
-            .text("Proposed/Accepted Hours")
+            .text("Amended")
             .attr("transform", "translate(0, 85)")
     }
     renderXAxis({chart, xScale}){
