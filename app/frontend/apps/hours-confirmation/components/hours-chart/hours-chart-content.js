@@ -170,16 +170,11 @@ export default class HoursChartUi extends React.Component {
             .attr("class", function(interval){
                 var classes = ["hours-chart__interval"];
 
-                var laneType = {
-                    clocked: "clocked",
-                    amended: "amended"
-                }[lane]
-
                 if (interval.type === "hours") {
-                    classes.push("hours-chart__" + laneType + "-interval--hours");
+                    classes.push("hours-chart__" + lane + "-interval--hours");
                 }
                 if (interval.type === "break") {
-                    classes.push("hours-chart__" + laneType + "-interval--break");
+                    classes.push("hours-chart__" + lane + "-interval--break");
                 }
 
                 return classes.join(" ")
