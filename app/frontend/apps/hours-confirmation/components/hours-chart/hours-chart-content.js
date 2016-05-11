@@ -22,7 +22,11 @@ export default class HoursChartUi extends React.Component {
         this.renderChart();
     }
     componentWillReceiveProps(newProps){
-        if (!utils.deepEqualTreatingFunctionsAsStrings(this.props, newProps)) {
+        var currentPropsExceptInteractionState = {...this.props};
+        delete currentPropsExceptInteractionState.interactionState;
+        var newPropsExceptInteractionState = {...newProps};
+        delete newPropsExceptInteractionState.interactionState;
+        if (!utils.deepEqualTreatingFunctionsAsStrings(currentPropsExceptInteractionState, newPropsExceptInteractionState)) {
             this.needsFullRerender = true;
         }
     }
@@ -30,6 +34,9 @@ export default class HoursChartUi extends React.Component {
         if (this.needsFullRerender) {
             this.renderChart();
             this.needsFullRerender = false;
+        }
+        else {
+            this.updateChartInteractions();
         }
     }
     renderChart() {
@@ -161,7 +168,7 @@ export default class HoursChartUi extends React.Component {
                 return classes.join(" ")
             })
 
-        intervalGroup.append("rect")
+        var rectangle = intervalGroup.append("rect")
             .attr("width", function(interval, i){
                 var intervalLengthInHours = interval.endOffsetInHours - interval.startOffsetInHours;
                 return xScale(intervalLengthInHours);
@@ -180,8 +187,15 @@ export default class HoursChartUi extends React.Component {
                 return classes.join(" ")
             })
 
-        intervalGroup.append("rect")
-            .attr("width", "")
+        if (lane === "clocked") {
+            rectangle
+                .on("mouseenter", (interval) => {
+                    this.props.onHoveredIntervalChange(interval)
+                })
+                .on("mouseout", (interval) => {
+                    this.props.onHoveredIntervalChange(null)
+                })
+        }
 
         intervalGroup
             .append("text")
@@ -189,6 +203,43 @@ export default class HoursChartUi extends React.Component {
             .text(function(interval){
                 return interval.label;
             })
+    }
+    updateChartInteractions(){
+        this.renderToolTip();
+    }
+    renderToolTip(){
+        var xScale = this.getXScale()
+        var chart = d3.select(this.el);
+        var hoveredInterval = this.props.interactionState.hoveredInterval;
+        const tooltipWidth = 90;
+
+        if (hoveredInterval) {
+            var intervalWidth = xScale(hoveredInterval.endOffsetInHours) - xScale(hoveredInterval.startOffsetInHours)
+            var x = xScale(hoveredInterval.startOffsetInHours) + intervalWidth / 2 +
+                padding + labelSpacing - tooltipWidth / 2;
+
+            var g = chart.append("g")
+                .attr("transform", "translate(" + x + ", 4)")
+                .attr("class", "hours-chart__tooltip")
+
+            g.append("rect")
+                .attr("width", tooltipWidth)
+                .attr("height", 30)
+
+            var arrow = g.append("polygon")
+                .attr("points", "0,0 5,5 10,0")
+                .attr("fill", "black")
+                .attr("transform", "translate(" + (tooltipWidth/2 - 10/2) + ", 30)")
+
+            g.append("text")
+                .text(hoveredInterval.tooltipLabel)
+                .attr("fill", "white")
+                .attr("transform", "translate(4, 20)")
+
+        } else {
+            chart.selectAll(".hours-chart__tooltip")
+                .remove();
+        }
     }
     renderLaneLabels({chart}){
         var group = chart

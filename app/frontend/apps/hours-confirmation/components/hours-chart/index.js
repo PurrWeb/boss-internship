@@ -13,12 +13,24 @@ export default class HoursChart extends React.Component {
         rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired,
         events: React.PropTypes.array.isRequired
     }
+    constructor(props){
+        super(props)
+        this.state = {
+            interactionState: {
+                hoveredInterval: null
+            }
+        }
+    }
     render(){
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
             proposedAcceptedIntervals={this.getProposedAcceptedIntervals()}
             rotaedIntervals={this.getRotaedChartIntervals()}
             events={this.getEventsList()}
+            interactionState={this.state.interactionState}
+            onHoveredIntervalChange={(hoveredInterval) =>
+                this.setInteractionState({hoveredInterval})
+            }
             />
     }
     getEventsList(){
@@ -27,6 +39,11 @@ export default class HoursChart extends React.Component {
                 timeOffset: this.getHoursSinceStartOfDay(event.time),
                 type: event.type
             }
+        })
+    }
+    setInteractionState(interactionState){
+        this.setState({
+            interactionState: Object.assign({}, this.state.interactionState, interactionState)
         })
     }
     getProposedAcceptedIntervals(){
@@ -63,10 +80,12 @@ export default class HoursChart extends React.Component {
         var intervals = clockedIntervals.map((interval) => {
             var startTime = interval.starts_at;
             var endTime = interval.ends_at;
+            var tooltipLabel = moment(startTime).format("HH:mm") + " - " + moment(endTime).format("HH:mm");
             return {
                 startOffsetInHours: this.getHoursSinceStartOfDay(startTime),
                 endOffsetInHours: this.getHoursSinceStartOfDay(endTime),
-                type: interval.type
+                type: interval.type,
+                tooltipLabel
             }
         });
 
