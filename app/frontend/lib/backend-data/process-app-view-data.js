@@ -68,3 +68,9 @@ export function processClockInOutAppViewData(viewData){
         pageOptions: processPageOptionsObject(pageOptions)
     }
 }
+
+export function processHoursConfirmationAppViewData(viewData){
+    return {
+        venues: viewData.venues.map(processVenueObject)
+    }
+}

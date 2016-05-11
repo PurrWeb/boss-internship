@@ -8,7 +8,7 @@ import {apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 import RotaDate from "~lib/rota-date"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
-import { processVenueRotaAppViewData, processClockInOutAppViewData } from "~lib/backend-data/process-app-view-data"
+import { processVenueRotaAppViewData, processClockInOutAppViewData, processHoursConfirmationAppViewData } from "~lib/backend-data/process-app-view-data"
 import { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal } from "./actions/confirmation-modal"
 import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
@@ -648,6 +648,16 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
             }),
             setPageOptions({pageOptions})
         ]);
+    }
+}
+
+export function loadInitialHoursConfirmationAppState(viewData){
+    viewData = processHoursConfirmationAppViewData(viewData);
+
+    return function(dispatch){
+        dispatch([
+            replaceAllVenues({venues: indexByClientId(viewData.venues)})
+        ])
     }
 }
 
