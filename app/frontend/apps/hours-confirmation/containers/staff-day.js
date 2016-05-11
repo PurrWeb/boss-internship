@@ -1,6 +1,6 @@
 import React from "react"
 import StaffDayUi from "../components/staff-day"
-
+import { connect } from "react-redux"
 
 import HoursChart from "../components/hours-chart"
 import RotaDate from "~lib/rota-date"
@@ -9,7 +9,7 @@ import { processBackendObject } from "~lib/backend-data/process-backend-object"
 
 window.hoursAssignments = [];
 
-export default class StaffDay extends React.Component {
+class StaffDay extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -38,110 +38,12 @@ export default class StaffDay extends React.Component {
         // predefinedReasons
     }
     render(){
-        var props = {
-            events: [{
-                id: 11,
-                type: "clock_in",
-                time: new Date(2016, 10, 1, 9, 0)
-            }, {
-                id: 22,
-                type: "start_break",
-                time: new Date(2016, 10, 1, 10, 30)
-            }, {
-                id: 33,
-                type: "end_break",
-                time: new Date(2016, 10, 1, 11, 30)
-            }, {
-                id: 44,
-                type: "clock_out",
-                time: new Date(2016, 10, 1, 18, 0)
-            }, {
-                id: 55,
-                type: "clock_in",
-                time: new Date(2016, 10, 2, 1, 0)
-            }, {
-                id: 66,
-                type: "start_break",
-                time: new Date(2016, 10, 2, 2, 30)
-            }],
-            clockedClockIns: [
-                {
-                    starts_at: new Date(2016, 10, 1, 9, 0),
-                    ends_at: new Date(2016, 10, 1, 18, 0),
-                    breaks: [
-                        {
-                            starts_at: new Date(2016, 10, 1, 10, 30),
-                            ends_at: new Date(2016, 10, 1, 11, 30)
-                        }
-                    ]
-                },
-                {
-                    starts_at: new Date(2016, 10, 2, 1, 0),
-                    ends_at: null,
-                    breaks: [
-                        {
-                            starts_at: new Date(2016, 10, 2, 2, 30),
-                            ends_at: null
-                        }
-                    ]
-                }
-            ],
-            rotaedShifts: [
-                {
-                    starts_at: new Date(2016, 10, 1, 10,0),
-                    ends_at: new Date(2016, 10, 1, 16, 0)
-                }
-            ],
-            dateOfRota: new Date(2016,10,1,0,0),
-            predefinedReasons: [
-                {
-                    id: "55",
-                    title: "Came in late"
-                },
-                {
-                    id: "599",
-                    title: "Came in early"
-                },
-                {
-                    id: "912",
-                    title: "Other"
-                }
-            ],
-            staffMember: {
-                "id": 160,
-                "url": "https://boss.jsmbars.co.uk/api/v1/staff_members/160",
-                "avatar_url": "https://jsmbars-assets-boss-production.s3.amazonaws.com/uploads/staff_member/avatar/160/avatar.jpg",
-                "staff_type": {
-                    "id": 8,
-                    "url": "https://boss.jsmbars.co.uk/api/v1/staff_types/8"
-                },
-                "first_name": "Shane",
-                "surname": "McEnhill",
-                "preferred_hours": "48",
-                "preferred_days": "Full time",
-                "holidays": [],
-                "venues": [{
-                    "id": 1,
-                    "url": "https://boss.jsmbars.co.uk/api/v1/venues/1"
-                }]
-            },
-            staff_types: [{
-                "id":8,
-                "url":"http://localhost:3000/api/v1/staff_types/1",
-                "name":"Bar Back",
-                "color":"#fd4949"
-            }],
-            notes: [{
-                text: "came in late",
-            },{
-                text: "extra work from 8pm to midnight",
-            }]
-        }
+        var props = this.props;
 
         var staffTypes = props.staff_types;
         staffTypes = staffTypes.map(processBackendObject)
 
-        var staffMember = processBackendObject(props.staffMember)
+        var staffMember = props.staffMember;
 
         return <StaffDayUi
             markedAsDone={this.state.markedAsDone}
@@ -163,3 +65,94 @@ export default class StaffDay extends React.Component {
         />
     }
 }
+
+var hardCodedProps = {
+    events: [{
+        id: 11,
+        type: "clock_in",
+        time: new Date(2016, 10, 1, 9, 0)
+    }, {
+        id: 22,
+        type: "start_break",
+        time: new Date(2016, 10, 1, 10, 30)
+    }, {
+        id: 33,
+        type: "end_break",
+        time: new Date(2016, 10, 1, 11, 30)
+    }, {
+        id: 44,
+        type: "clock_out",
+        time: new Date(2016, 10, 1, 18, 0)
+    }, {
+        id: 55,
+        type: "clock_in",
+        time: new Date(2016, 10, 2, 1, 0)
+    }, {
+        id: 66,
+        type: "start_break",
+        time: new Date(2016, 10, 2, 2, 30)
+    }],
+    clockedClockIns: [
+        {
+            starts_at: new Date(2016, 10, 1, 9, 0),
+            ends_at: new Date(2016, 10, 1, 18, 0),
+            breaks: [
+                {
+                    starts_at: new Date(2016, 10, 1, 10, 30),
+                    ends_at: new Date(2016, 10, 1, 11, 30)
+                }
+            ]
+        },
+        {
+            starts_at: new Date(2016, 10, 2, 1, 0),
+            ends_at: null,
+            breaks: [
+                {
+                    starts_at: new Date(2016, 10, 2, 2, 30),
+                    ends_at: null
+                }
+            ]
+        }
+    ],
+    rotaedShifts: [
+        {
+            starts_at: new Date(2016, 10, 1, 10,0),
+            ends_at: new Date(2016, 10, 1, 16, 0)
+        }
+    ],
+    dateOfRota: new Date(2016,10,1,0,0),
+    predefinedReasons: [
+        {
+            id: "55",
+            title: "Came in late"
+        },
+        {
+            id: "599",
+            title: "Came in early"
+        },
+        {
+            id: "912",
+            title: "Other"
+        }
+    ],
+    staff_types: [{
+        "id":8,
+        "url":"http://localhost:3000/api/v1/staff_types/1",
+        "name":"Bar Back",
+        "color":"#fd4949"
+    }],
+    notes: [{
+        text: "came in late",
+    },{
+        text: "extra work from 8pm to midnight",
+    }]
+}
+
+function mapStateToProps(state, ownProps){
+    var props = {
+        staffMember: ownProps.clockInDay.staff_member.get(state.staff)
+    }
+    return Object.assign(props, hardCodedProps);
+}
+
+export default connect(mapStateToProps)(StaffDay)

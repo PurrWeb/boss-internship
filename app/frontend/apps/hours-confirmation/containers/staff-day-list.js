@@ -7,7 +7,8 @@ class StaffDayList extends React.Component {
     render(){
         return <div>
             {_.values(this.props.clockInDays).map(clockInDay =>
-                <StaffDay />
+                <StaffDay
+                    clockInDay={clockInDay} />
             )}
         </div>
     }

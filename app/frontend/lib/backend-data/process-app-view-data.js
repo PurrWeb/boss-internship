@@ -77,6 +77,7 @@ export function processHoursConfirmationAppViewData(viewData){
     return {
         venues: viewData.venues.map(processVenueObject),
         pageOptions: processPageOptionsObject(pageOptions),
-        clockInDays: viewData.clock_in_days.map(processClockInDayObject)
+        clockInDays: viewData.clock_in_days.map(processClockInDayObject),
+        staffMembers: viewData.staff_members.map(processStaffMemberObject)
     }
 }
