@@ -48,7 +48,7 @@ class StaffDay extends React.Component {
         return <StaffDayUi
             markedAsDone={this.state.markedAsDone}
             rotaDate={new RotaDate({
-                dateOfRota: props.dateOfRota
+                dateOfRota: props.clockInDay.date
             })}
             clockedClockIns={props.clockedClockIns}
             rotaedShifts={props.rotaedShifts}
@@ -120,7 +120,6 @@ var hardCodedProps = {
             ends_at: new Date(2016, 10, 1, 16, 0)
         }
     ],
-    dateOfRota: new Date(2016,10,1,0,0),
     predefinedReasons: [
         {
             id: "55",
