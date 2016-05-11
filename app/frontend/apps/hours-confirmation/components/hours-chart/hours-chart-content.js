@@ -43,7 +43,7 @@ export default class HoursChartUi extends React.Component {
         var self = this;
         this.el.innerHTML = "";
 
-        var chart = d3.select(this.el);
+        var chart = this.getChart()
         chart.attr("width", outerWidth);
         chart.attr("height", outerHeight);
 
@@ -65,6 +65,9 @@ export default class HoursChartUi extends React.Component {
         return d3.scale.linear()
             .domain([0, 24])
             .range([0, innerWidth]);
+    }
+    getChart(){
+        return  d3.select(this.el);
     }
     renderEvents({chartContent, xScale}){
         var group = chartContent.append("g")
@@ -205,11 +208,23 @@ export default class HoursChartUi extends React.Component {
             })
     }
     updateChartInteractions(){
+        this.highlightHoveredInterval()
         this.renderToolTip();
+    }
+    highlightHoveredInterval(){
+        var chart = this.getChart()
+        var hoveredInterval = this.props.interactionState.hoveredInterval;
+
+        chart.selectAll(".hours-chart__interval")
+            .attr("opacity", 1)
+            .filter(function(interval){
+                return interval == hoveredInterval
+            })
+            .attr("opacity", .8)
     }
     renderToolTip(){
         var xScale = this.getXScale()
-        var chart = d3.select(this.el);
+        var chart = this.getChart()
         var hoveredInterval = this.props.interactionState.hoveredInterval;
         const tooltipWidth = 90;
 
@@ -235,7 +250,6 @@ export default class HoursChartUi extends React.Component {
                 .text(hoveredInterval.tooltipLabel)
                 .attr("fill", "white")
                 .attr("transform", "translate(4, 20)")
-
         } else {
             chart.selectAll(".hours-chart__tooltip")
                 .remove();
