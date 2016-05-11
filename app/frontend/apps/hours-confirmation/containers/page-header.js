@@ -8,6 +8,7 @@ class PageHeader extends React.Component {
         return <VenueDropdown
             selectedVenues={[this.props.pageOptions.venue.clientId]}
             venues={this.props.venues}
+            clearable={false}
             onChange={(venueIds) => {
                 var venue = this.props.venues[venueIds[0]]
                 location.href = appRoutes.hoursConfirmationCurrentPage({

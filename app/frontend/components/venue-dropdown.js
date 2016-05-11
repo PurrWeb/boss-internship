@@ -9,7 +9,7 @@ export default class VenueDropdown extends Component {
         venues: React.PropTypes.object.isRequired,
         onChange: React.PropTypes.func.isRequired,
         multi: React.PropTypes.bool,
-        clearable: React.PropTypes.bool
+        clearable: React.PropTypes.bool // defaults to true
     }
     render(){
         var venueOptions = _.values(this.props.venues).map(function(venue){
