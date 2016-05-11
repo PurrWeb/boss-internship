@@ -89,6 +89,10 @@ export const appRoutes = {
     staffTypeRotaOverview: function(options){
         var [staffTypeSlug, weekStartDate] = oFetch(options, "staffTypeSlug", "weekStartDate");
         return "/" + staffTypeSlug + "_rotas/?date=" + utils.formatRotaUrlDate(weekStartDate);
+    },
+    hoursConfirmationCurrentPage: function(options){
+        var venueId = oFetch(options, "venueId");
+        return "/hours_confirmation/current?venue_id=" + venueId;
     }
 }
 

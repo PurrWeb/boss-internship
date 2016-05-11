@@ -5,8 +5,8 @@ import PageHeader from "./containers/page-header"
 export default class HoursConfirmationView extends React.Component {
     render(){
         return <div>
-            <PageHeader />
-
+            <PageHeader/>
+            <br/>
             <StaffDay />
             <StaffDay />
             <StaffDay />

@@ -1,10 +1,20 @@
 import React from "react"
 import { connect } from "react-redux"
+import VenueDropdown from "~components/venue-dropdown"
+import { appRoutes } from "~lib/routes"
 
 class PageHeader extends React.Component {
     render(){
-        console.log("rendering page header with", this.props)
-        return <div> todo: put venue picker here</div>
+        return <VenueDropdown
+            selectedVenues={[]}
+            venues={this.props.venues}
+            onChange={(venueIds) => {
+                var venue = this.props.venues[venueIds[0]]
+                location.href = appRoutes.hoursConfirmationCurrentPage({
+                    venueId: venue.serverId
+                })
+            }}
+        />
     }
 }
 
