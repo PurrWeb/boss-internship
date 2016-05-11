@@ -1,13 +1,7 @@
 import React from "react"
 import StaffDayUi from "../components/staff-day"
 import { connect } from "react-redux"
-
-import HoursChart from "../components/hours-chart"
 import RotaDate from "~lib/rota-date"
-
-import { processBackendObject } from "~lib/backend-data/process-backend-object"
-
-window.hoursAssignments = [];
 
 class StaffDay extends React.Component {
     constructor(props){
@@ -40,9 +34,6 @@ class StaffDay extends React.Component {
     render(){
         var props = this.props;
 
-        var staffTypes = props.staff_types;
-        staffTypes = staffTypes.map(processBackendObject)
-
         var staffMember = props.staffMember;
 
         return <StaffDayUi
@@ -61,7 +52,7 @@ class StaffDay extends React.Component {
             staffMember={staffMember}
             predefinedReasons={props.predefinedReasons}
             notes={props.notes}
-            staffTypes={staffTypes}
+            staffType={this.props.staffType}
         />
     }
 }
@@ -134,12 +125,6 @@ var hardCodedProps = {
             title: "Other"
         }
     ],
-    staff_types: [{
-        "id":8,
-        "url":"http://localhost:3000/api/v1/staff_types/1",
-        "name":"Bar Back",
-        "color":"#fd4949"
-    }],
     notes: [{
         text: "came in late",
     },{
@@ -148,8 +133,10 @@ var hardCodedProps = {
 }
 
 function mapStateToProps(state, ownProps){
+    var staffMember = ownProps.clockInDay.staff_member.get(state.staff);
     var props = {
-        staffMember: ownProps.clockInDay.staff_member.get(state.staff)
+        staffMember,
+        staffType: staffMember.staff_type.get(state.staffTypes)
     }
     return Object.assign(props, hardCodedProps);
 }

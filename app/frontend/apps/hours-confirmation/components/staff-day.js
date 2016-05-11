@@ -57,7 +57,7 @@ export default class StaffDay extends React.Component {
             .pluck("clockInHours")
             .value();
 
-        var staffType = staffMember.staff_type.get(this.props.staffTypes);
+        var staffType = this.props.staffType;
 
         return <div style={style}>
             <div style={{
