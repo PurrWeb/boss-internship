@@ -656,7 +656,8 @@ export function loadInitialHoursConfirmationAppState(viewData){
 
     return function(dispatch){
         dispatch([
-            replaceAllVenues({venues: indexByClientId(viewData.venues)})
+            replaceAllVenues({venues: indexByClientId(viewData.venues)}),
+            setPageOptions({pageOptions: viewData.pageOptions})
         ])
     }
 }

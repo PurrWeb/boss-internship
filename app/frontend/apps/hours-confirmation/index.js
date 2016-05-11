@@ -5,7 +5,7 @@ import { Provider } from "react-redux"
 import {loadInitialHoursConfirmationAppState} from "~redux/actions"
 
 export default class HoursConfirmationApp extends AppComponent {
-    componentDidMount(){
+    componentWillMount(){
         var viewData = this.getViewData();
         this.store.dispatch(loadInitialHoursConfirmationAppState(viewData))
     }

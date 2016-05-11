@@ -6,7 +6,7 @@ import { appRoutes } from "~lib/routes"
 class PageHeader extends React.Component {
     render(){
         return <VenueDropdown
-            selectedVenues={[]}
+            selectedVenues={[this.props.pageOptions.venue.clientId]}
             venues={this.props.venues}
             onChange={(venueIds) => {
                 var venue = this.props.venues[venueIds[0]]
@@ -20,7 +20,8 @@ class PageHeader extends React.Component {
 
 function mapStateToProps(state){
     return {
-        venues: state.venues
+        venues: state.venues,
+        pageOptions: state.pageOptions
     }
 }
 
