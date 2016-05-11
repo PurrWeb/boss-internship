@@ -560,6 +560,14 @@ export function setPageOptions(options) {
     }
 }
 
+actionTypes.REPLACE_ALL_CLOCK_IN_DAYS = "REPLACE_ALL_CLOCK_IN_DAYS"
+export function replaceAllClockInDays(options){
+    return {
+        type: actionTypes.REPLACE_ALL_CLOCK_IN_DAYS,
+        clockInDays: oFetch(options, "clockInDays")
+    }
+}
+
 
 
 export function loadInitialRotaAppState(viewData) {
@@ -657,6 +665,7 @@ export function loadInitialHoursConfirmationAppState(viewData){
     return function(dispatch){
         dispatch([
             replaceAllVenues({venues: indexByClientId(viewData.venues)}),
+            replaceAllClockInDays({clockInDays: indexByClientId(viewData.clockInDays)}),
             setPageOptions({pageOptions: viewData.pageOptions})
         ])
     }

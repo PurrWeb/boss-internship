@@ -1,5 +1,5 @@
 import React from "react"
-import StaffDay from "./containers/staff-day"
+import StaffDayList from "./containers/staff-day-list"
 import PageHeader from "./containers/page-header"
 
 export default class HoursConfirmationView extends React.Component {
@@ -7,11 +7,7 @@ export default class HoursConfirmationView extends React.Component {
         return <div>
             <PageHeader/>
             <br/>
-            <StaffDay />
-            <StaffDay />
-            <StaffDay />
-            <StaffDay />
-            <StaffDay />
+            <StaffDayList />
         </div>
     }
 }

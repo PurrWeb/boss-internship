@@ -7,7 +7,8 @@ import {
     processRotaObject,
     processShiftObject,
     processStaffTypeRotaOverviewObject,
-    processStaffStatusObject
+    processStaffStatusObject,
+    processClockInDayObject
 } from "./process-backend-objects"
 import { getClientId } from "./process-backend-object"
 
@@ -75,6 +76,7 @@ export function processHoursConfirmationAppViewData(viewData){
     }
     return {
         venues: viewData.venues.map(processVenueObject),
-        pageOptions: processPageOptionsObject(pageOptions)
+        pageOptions: processPageOptionsObject(pageOptions),
+        clockInDays: viewData.clock_in_days.map(processClockInDayObject)
     }
 }

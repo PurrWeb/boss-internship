@@ -84,6 +84,12 @@ export function processRotaForecastObject(rotaForecast){
     return processedForecast;
 }
 
+export function processClockInDayObject(clockInDay){
+    clockInDay = processBackendObject(clockInDay)
+    clockInDay.date = new Date(clockInDay.date)
+    return clockInDay
+}
+
 export function processStaffTypeRotaOverviewObject(obj){
     return {
         date: new Date(obj.date),
