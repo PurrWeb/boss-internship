@@ -707,30 +707,33 @@ export function loadInitialClockInOutAppState(viewData) {
 
 export function loadInitialRotaOverviewAppState(viewData){
     return function(dispatch) {
-        var unprocessedRotasArray = _.pluck(viewData.rotas, "rota");
-        var rotasArray  = unprocessedRotasArray.map(backendData.processRotaObject);
+        var rotasArray  = _.pluck(viewData.rotas, "rota").map(backendData.processRotaObject);
         var venuesArray = viewData.venues.map(backendData.processVenueObject);
-        var rotas = utils.indexByClientId(rotasArray);
-        var venues = utils.indexByClientId(venuesArray);
-
         var forecasts = viewData.rotaForecasts.map(backendData.processRotaForecastObject);
-        forecasts = utils.indexByClientId(forecasts);
-
         var weeklyRotaForecast = backendData.processRotaForecastObject(viewData.weeklyRotaForecast);
 
-        dispatch([
-            replaceAllRotas({rotas: rotas}),
-            replaceAllRotaForecasts({rotaForecasts: forecasts}),
-            replaceWeeklyRotaForecast({weeklyRotaForecast}),
-            setPageOptions({pageOptions: {
+        dispatch(getInititalLoadActions({
+            rotas: rotasArray,
+            venues: venuesArray,
+            forecasts,
+            weeklyRotaForecast,
+            pageData: {
                 startDate: new Date(viewData.startDate),
                 endDate: new Date(viewData.endDate)
-            }}),
-            replaceAllVenues({venues})
-        ]);
+            }
+        }));
     }
 }
 
+function getInititalLoadActions(initialLoadData){
+    return [
+        replaceAllRotas({rotas: utils.indexByClientId(initialLoadData.rotas)}),
+        replaceAllRotaForecasts({rotaForecasts: utils.indexByClientId(initialLoadData.forecasts)}),
+        replaceWeeklyRotaForecast({weeklyRotaForecast: initialLoadData.weeklyRotaForecast}),
+        setPageOptions({pageOptions: initialLoadData.pageData}),
+        replaceAllVenues({venues: utils.indexByClientId(initialLoadData.venues)})
+    ]
+}
 
 function indexByClientId(data){
     return _.indexBy(data, "clientId")
