@@ -5,7 +5,8 @@ import utils from "~lib/utils"
 import HolidayReportView from './holiday-report-view'
 import * as actionCreators from "~redux/actions.js"
 import oFetch from "o-fetch"
-import { processHolidayAppViewData } from "~lib/backend-data/process-app-view-data"
+import { processHolidayAppViewData } from "~lib/backend-data/process-backend-objects"
+
 
 export default class HolidayReportApp extends Component {
     componentWillMount(){
