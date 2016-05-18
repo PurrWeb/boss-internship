@@ -659,20 +659,6 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
     }
 }
 
-export function loadInitialHoursConfirmationAppState(viewData){
-    viewData = processHoursConfirmationAppViewData(viewData);
-
-    return function(dispatch){
-        dispatch([
-            replaceAllVenues({venues: indexByClientId(viewData.venues)}),
-            replaceAllClockInDays({clockInDays: indexByClientId(viewData.clockInDays)}),
-            setPageOptions({pageOptions: viewData.pageOptions}),
-            replaceAllStaffMembers({staffMembers: viewData.staffMembers}),
-            replaceAllStaffTypes({staffTypes: viewData.staffTypes})
-        ])
-    }
-}
-
 export function loadInitialClockInOutAppState(viewData) {
     viewData = processClockInOutAppViewData(viewData);
 
@@ -707,17 +693,12 @@ export function loadInitialClockInOutAppState(viewData) {
 
 export function loadInitialRotaOverviewAppState(viewData){
     return function(dispatch) {
-        var rotasArray  = _.pluck(viewData.rotas, "rota").map(backendData.processRotaObject);
-        var venuesArray = viewData.venues.map(backendData.processVenueObject);
-        var forecasts = viewData.rotaForecasts.map(backendData.processRotaForecastObject);
-        var weeklyRotaForecast = backendData.processRotaForecastObject(viewData.weeklyRotaForecast);
-
         dispatch(getInititalLoadActions({
-            rotas: rotasArray,
-            venues: venuesArray,
-            forecasts,
-            weeklyRotaForecast,
-            pageData: {
+            rotas: _.pluck(viewData.rotas, "rota"),
+            venues: viewData.venues,
+            rotaForecasts: viewData.rotaForecasts,
+            weeklyRotaForecast: viewData.weeklyRotaForecast,
+            pageOptions: {
                 startDate: new Date(viewData.startDate),
                 endDate: new Date(viewData.endDate)
             }
@@ -725,14 +706,79 @@ export function loadInitialRotaOverviewAppState(viewData){
     }
 }
 
+export function loadInitialHoursConfirmationAppState(viewData){
+    return function(dispatch){
+        dispatch(getInititalLoadActions({
+            venues: viewData.venues,
+            pageOptions: {
+                venue: {id: viewData.page_data.venue_id}
+            },
+            clockInDays: viewData.clock_in_days,
+            staffMembers: viewData.staff_members,
+            staffTypes: viewData.staff_types
+        }))
+    }
+}
+
 function getInititalLoadActions(initialLoadData){
-    return [
-        replaceAllRotas({rotas: utils.indexByClientId(initialLoadData.rotas)}),
-        replaceAllRotaForecasts({rotaForecasts: utils.indexByClientId(initialLoadData.forecasts)}),
-        replaceWeeklyRotaForecast({weeklyRotaForecast: initialLoadData.weeklyRotaForecast}),
-        setPageOptions({pageOptions: initialLoadData.pageData}),
-        replaceAllVenues({venues: utils.indexByClientId(initialLoadData.venues)})
-    ]
+    var possibleObjects = {
+        "rotas": {
+            replaceAction: replaceAllRotas,
+            processFunction: backendData.processRotaObject
+        },
+        "rotaForecasts": {
+            replaceAction: replaceAllRotaForecasts,
+            processFunction: backendData.processRotaForecastObject
+        },
+        "weeklyRotaForecast": {
+            replaceAction: replaceWeeklyRotaForecast,
+            processFunction: backendData.processRotaForecastObject
+        },
+        "pageOptions": {
+            replaceAction: setPageOptions,
+            processFunction: backendData.processPageOptionsObject
+        },
+        "venues": {
+            replaceAction: replaceAllVenues,
+            processFunction: backendData.processVenueObject
+        },
+        "clockInDays": {
+            replaceAction: replaceAllClockInDays,
+            processFunction: backendData.processClockInDayObject
+        },
+        "staffMembers": {
+            replaceAction: replaceAllStaffMembers,
+            processFunction: backendData.processStaffMemberObject
+        },
+        "staffTypes": {
+            replaceAction: replaceAllStaffTypes,
+            processFunction: backendData.processStaffTypeObject
+        }
+    }
+
+    var actions = [];
+    for (var objectName in possibleObjects) {
+        var objectDetails = possibleObjects[objectName]
+        let value = initialLoadData[objectName];
+        if (value !== undefined) {
+            let processedValue;
+            if (_.isArray(value)){
+                processedValue = value.map(objectDetails.processFunction);
+            } else {
+                processedValue = objectDetails.processFunction(value)
+            }
+
+            if (_.isArray(processedValue)) {
+                processedValue = utils.indexByClientId(processedValue)
+            }
+
+            actions.push(objectDetails.replaceAction({
+                [objectName]: processedValue
+            }))
+        }
+    }
+
+    return actions;
 }
 
 function indexByClientId(data){
