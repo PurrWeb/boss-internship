@@ -623,39 +623,16 @@ export function loadInitalStaffTypeRotaAppState(viewData){
 }
 
 function genericLoadInitialRotaAppState(viewData, pageOptions){
-    viewData.pageOptions = pageOptions;
-    viewData = processVenueRotaAppViewData(viewData);
-
-    let rotaData = viewData.rota.rotas;
-    let staffTypeData = viewData.rota.staff_types;
-    let rotaShiftData = viewData.rota.rota_shifts;
-    let staffMemberData = viewData.rota.staff_members;
-    let venueData = viewData.rota.venues;
-    let holidays = viewData.rota.holidays;
-    pageOptions = viewData.pageOptions;
-
     return function(dispatch){
-        dispatch([
-            replaceAllStaffMembers({
-                staffMembers: indexByClientId(staffMemberData),
-            }),
-            replaceAllStaffTypes({
-                staffTypes: indexByClientId(staffTypeData),
-            }),
-            replaceAllShifts({
-                shifts: indexByClientId(rotaShiftData)
-            }),
-            replaceAllVenues({
-                venues: indexByClientId(venueData)
-            }),
-            replaceAllRotas({
-                rotas: indexByClientId(rotaData)
-            }),
-            replaceAllHolidays({
-                holidays: indexByClientId(holidays)
-            }),
-            setPageOptions({pageOptions})
-        ]);
+        dispatch(getInititalLoadActions({
+            pageOptions,
+            rotas: viewData.rota.rotas,
+            staffTypes: viewData.rota.staff_types,
+            shifts: viewData.rota.rota_shifts,
+            staffMembers: viewData.rota.staff_members,
+            venues: viewData.rota.venues,
+            holidays: viewData.rota.holidays
+        }))
     }
 }
 
