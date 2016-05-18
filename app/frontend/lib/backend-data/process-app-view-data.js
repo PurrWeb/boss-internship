@@ -32,10 +32,3 @@ export function processHolidayAppViewData(viewData){
         pageData
     }
 }
-
-export function processStaffTypeRotaOverviewAppViewData(viewData){
-    return {
-        rotaDetailsObjects: viewData.securityRotaOverviews.map(processStaffTypeRotaOverviewObject),
-        staffTypeSlug: viewData.staffTypeSlug
-    }
-}
