@@ -660,34 +660,21 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
 }
 
 export function loadInitialClockInOutAppState(viewData) {
-    viewData = processClockInOutAppViewData(viewData);
+    var pageOptions = {
+        dateOfRota: viewData.page_data.rota_date,
+        venue: {id: viewData.page_data.rota_venue_id}
+    };
 
     return function(dispatch){
-        dispatch([
-            replaceAllStaffMembers({
-                staffMembers: indexByClientId(viewData.staff_members)
-            }),
-            replaceAllStaffTypes({
-                staffTypes: indexByClientId(viewData.staff_types)
-            }),
-            replaceAllStaffStatuses({
-                staffStatuses: _.indexBy(viewData.staff_statuses, function(data){
-                    return data.staff_member.clientId;
-                })
-            }),
-            replaceAllShifts({
-                shifts: indexByClientId(viewData.rota_shifts)
-            }),
-            replaceAllRotas({
-                rotas: indexByClientId(viewData.rotas)
-            }),
-            replaceAllVenues({
-                venues: indexByClientId(viewData.venues)
-            }),
-            setPageOptions({
-                pageOptions: viewData.pageOptions
-            })
-        ]);
+        dispatch(getInititalLoadActions({
+            staffMembers: viewData.staff_members,
+            staffTypes: viewData.staff_types,
+            staffStatuses: viewData.clock_in_statuses,
+            shifts: viewData.rota_shifts,
+            rotas: viewData.rotas,
+            venues: viewData.venues,
+            pageOptions
+        }));
     }
 }
 
@@ -753,6 +740,17 @@ function getInititalLoadActions(initialLoadData){
         "staffTypes": {
             replaceAction: replaceAllStaffTypes,
             processFunction: backendData.processStaffTypeObject
+        },
+        "shifts": {
+            replaceAction: replaceAllShifts,
+            processFunction: backendData.processShiftObject
+        },
+        "staffStatuses": {
+            replaceAction: replaceAllStaffStatuses,
+            processFunction: backendData.processStaffStatusObject,
+            indexBy: function(status){
+                return status.staff_member.clientId;
+            }
         }
     }
 
@@ -769,7 +767,11 @@ function getInititalLoadActions(initialLoadData){
             }
 
             if (_.isArray(processedValue)) {
-                processedValue = utils.indexByClientId(processedValue)
+                if (objectDetails.indexBy) {
+                    processedValue = _.indexBy(processedValue, objectDetails.indexBy)
+                } else {
+                    processedValue = utils.indexByClientId(processedValue)
+                }
             }
 
             actions.push(objectDetails.replaceAction({
