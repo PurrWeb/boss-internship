@@ -1,11 +1,15 @@
-export default function confirmationModal(state=null, action){
-    switch(action.type) {
-        case "SHOW_CONFIRMATION_MODAL":
-            return action.payload;
-        case "CANCEL_CONFIRMATION_MODAL":
-            return null;
-        case "COMPLETE_CONFIRMATION_MODAL":
-            return null;
+import makeReducer from "./make-reducer"
+
+export default makeReducer({
+    SHOW_CONFIRMATION_MODAL: function(state, action){
+        return action.payload;
+    },
+    CANCEL_CONFIRMATION_MODAL: function(state, action){
+        return null
+    },
+    COMPLETE_CONFIRMATION_MODAL: function(state, action){
+        return null;
     }
-    return state;
-}
+}, {
+    initialState: null
+})

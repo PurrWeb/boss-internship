@@ -1,13 +1,15 @@
 import oFetch from "o-fetch"
+import makeReducer from "./make-reducer"
 
-export default function userActionConfirmationMessages(messages=[], action){
-    switch(action.type){
-        case "SHOW_USER_ACTION_CONFIRMATION_MESSAGE":
-            return [...messages, oFetch(action, "message")];
-        case "HIDE_USER_ACTION_CONFIRMATION_MESSAGE":
-            return messages.filter(function(message){
-                return message !== oFetch(action, "message");
-            })
+export default makeReducer({
+    SHOW_USER_ACTION_CONFIRMATION_MESSAGE: function(messages, action){
+        return [...messages, oFetch(action, "message")];
+    },
+    HIDE_USER_ACTION_CONFIRMATION_MESSAGE: function(messages, action){
+        return messages.filter(function(message){
+            return message !== oFetch(action, "message");
+        })
     }
-    return messages;
-}
+}, {
+    initialState: []
+})

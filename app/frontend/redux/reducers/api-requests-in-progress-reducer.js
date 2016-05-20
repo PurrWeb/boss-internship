@@ -1,25 +1,26 @@
 import _ from "underscore"
+import makeReducer from "./make-reducer"
 
 var initialState = {};
-export default function apiRequestsInProgress(state=initialState, action){
-    if (action.type === "API_REQUEST_START" || action.type === "API_REQUEST_END") {
-        var newValue = requestTypeReducer(state[action.requestType], action);
-        return Object.assign({}, state, {
-            [action.requestType]: newValue
-        });
-    }
-    return state;
+export default makeReducer({
+    API_REQUEST_START: handleAction,
+    API_REQUEST_END: handleAction
+})
+
+function handleAction(state, action) {
+    var newValue = requestTypeReducer(state[action.requestType], action);
+    return Object.assign({}, state, {
+        [action.requestType]: newValue
+    });
 }
 
-function requestTypeReducer(state = [], action){
-    switch (action.type) {
-        case "API_REQUEST_START":
-            var value =  _.clone(action);
-            delete value["type"];
-            return [...state, value];
-        case "API_REQUEST_END":
-            return  _.reject(state, {requestId: action.requestId});
-
+var requestTypeReducer = makeReducer({
+    API_REQUEST_START: function(state, action){
+        var value =  _.clone(action);
+        delete value["type"];
+        return [...state, value];
+    },
+    API_REQUEST_END: function(state, action){
+        return  _.reject(state, {requestId: action.requestId});
     }
-    return state;
-}
+})

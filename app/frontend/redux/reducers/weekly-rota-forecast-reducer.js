@@ -1,4 +1,5 @@
 import oFetch from "o-fetch"
+import makeReducer from "./make-reducer"
 
 var initialState = {
     needsUpdate: false,
@@ -12,26 +13,26 @@ export default function weeklyRotaForecastReducer(state=initialState, action){
     }
 }
 
-function forecast(state, action){
-    switch(action.type) {
-        case "REPLACE_WEEKLY_ROTA_FORECAST":
-            return oFetch(action, "weeklyRotaForecast");
-        case "FETCH_WEEKLY_ROTA_FORECAST_SUCCESS":
-            return oFetch(action, "weeklyRotaForecast");
-        case "UPDATE_ROTA_FORECAST_SUCCESS":
-            return null;
+var forecast =  makeReducer({
+    REPLACE_WEEKLY_ROTA_FORECAST: function(state, action){
+        return oFetch(action, "weeklyRotaForecast");
+    },
+    FETCH_WEEKLY_ROTA_FORECAST_SUCCESS: function(state, action){
+        return oFetch(action, "weeklyRotaForecast");
+    },
+    UPDATE_ROTA_FORECAST_SUCCESS: function(state, action){
+        return null;
     }
-    return state;
-}
+})
 
-function needsUpdate(state, action){
-    switch(action.type) {
-        case "REPLACE_WEEKLY_ROTA_FORECAST":
-            return false;
-        case "FETCH_WEEKLY_ROTA_FORECAST_REQUEST_START":
-            return false;
-        case "UPDATE_ROTA_FORECAST_SUCCESS":
-            return true;
+var needsUpdate = makeReducer({
+    REPLACE_WEEKLY_ROTA_FORECAST: function(){
+        return false;
+    },
+    FETCH_WEEKLY_ROTA_FORECAST_REQUEST_START: function(){
+        return false;
+    },
+    UPDATE_ROTA_FORECAST_SUCCESS: function(){
+        return true;
     }
-    return state;
-}
+});
