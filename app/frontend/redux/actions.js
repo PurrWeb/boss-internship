@@ -14,7 +14,11 @@ import { addRotaShift, updateRotaShift, deleteRotaShift } from "./actions/shifts
 import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
 import { clockInOutAppEnterUserMode, updateStaffStatus, enterUserModeWithConfirmation, clockInOutAppSelectStaffType } from "./actions/clocking-actions"
 import { showUserActionConfirmationMessage, hideUserActionConfirmationMessage} from "./actions/user-action-confirmation-messages"
-
+import {
+    replaceWeeklyRotaForecast,
+    updateRotaForecast,
+    fetchWeeklyRotaForecast
+} from "./actions/rota-forecasts"
 
 export { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal};
 export { addRotaShift, updateRotaShift, deleteRotaShift }
@@ -22,43 +26,11 @@ export { clockInOutAppEnterUserMode, updateStaffStatus, clockInOutAppSelectStaff
 export { showUserActionConfirmationMessage, hideUserActionConfirmationMessage}
 
 
-
-export const updateRotaForecast = createApiRequestAction({
-    requestType: "UPDATE_ROTA_FORECAST",
-    makeRequest: makeApiRequestMaker({
-        method: apiRoutes.updateRotaForecast.method,
-        path: (options) => {
-            var [dateOfRota, serverVenueId] = oFetch(options, "dateOfRota", "serverVenueId");
-            return apiRoutes.updateRotaForecast.getPath({dateOfRota, venueId: serverVenueId})
-        },
-        data: ({forecastedTake}) => {return {forecasted_take: forecastedTake} },
-        getSuccessActionData: function(responseData){
-            return {
-                rotaForecast: backendData.processRotaForecastObject(responseData)
-            }
-        }
-    })
-});
-
-export const fetchWeeklyRotaForecast = createApiRequestAction({
-    requestType: "FETCH_WEEKLY_ROTA_FORECAST",
-    makeRequest: makeApiRequestMaker({
-        method: apiRoutes.weeklyRotaForecast.method,
-        path: (options) => {
-            var [serverVenueId, startOfWeek] = oFetch(options, "serverVenueId", "startOfWeek")
-            return apiRoutes.weeklyRotaForecast.getPath({venueId: serverVenueId, startOfWeek})
-        },
-        getSuccessActionData: function(responseData){
-            return {
-              weeklyRotaForecast: responseData
-            };
-        }
-    })
-});
-
-
-
-
+export {
+    replaceWeeklyRotaForecast,
+    updateRotaForecast,
+    fetchWeeklyRotaForecast
+}
 
 
 export const clockInOutAppLoadAppData = createApiRequestAction({
@@ -157,12 +129,7 @@ export function setApiKey({apiKey}){
     }
 }
 
-export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
-    return {
-        type: "REPLACE_WEEKLY_ROTA_FORECAST",
-        weeklyRotaForecast
-    }
-}
+
 
 export const updateRotaStatus = createApiRequestAction({
     requestType: "UPDATE_ROTA_STATUS",
