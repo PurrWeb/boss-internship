@@ -12,21 +12,15 @@ import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal } from "./actions/confirmation-modal"
 import { addRotaShift, updateRotaShift, deleteRotaShift } from "./actions/shifts"
 import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
-import { clockInOutAppEnterUserMode, updateStaffStatus } from "./actions/clocking-actions"
-import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
-
+import { clockInOutAppEnterUserMode, updateStaffStatus, enterUserModeWithConfirmation, clockInOutAppSelectStaffType } from "./actions/clocking-actions"
+import { showUserActionConfirmationMessage, hideUserActionConfirmationMessage} from "./actions/user-action-confirmation-messages"
 
 
 export { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal};
 export { addRotaShift, updateRotaShift, deleteRotaShift }
-export { clockInOutAppEnterUserMode, updateStaffStatus }
+export { clockInOutAppEnterUserMode, updateStaffStatus, clockInOutAppSelectStaffType, enterUserModeWithConfirmation }
+export { showUserActionConfirmationMessage, hideUserActionConfirmationMessage}
 
-export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
-    return {
-        type: "CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE",
-        selectedStaffTypeClientId
-    }
-}
 
 
 export const updateRotaForecast = createApiRequestAction({
@@ -160,25 +154,6 @@ export function setApiKey({apiKey}){
     return {
         type: "SET_API_KEY",
         apiKey
-    }
-}
-
-export function showUserActionConfirmationMessage({message}) {
-    return function(dispatch) {
-        dispatch({
-            type: "SHOW_USER_ACTION_CONFIRMATION_MESSAGE",
-            message: message
-        })
-        setTimeout(function(){
-            dispatch(hideUserActionConfirmationMessage({message}));
-        }, 2000)
-    }
-}
-
-export function hideUserActionConfirmationMessage({message}){
-    return {
-        type: "HIDE_USER_ACTION_CONFIRMATION_MESSAGE",
-        message
     }
 }
 

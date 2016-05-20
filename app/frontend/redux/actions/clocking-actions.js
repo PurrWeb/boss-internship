@@ -3,6 +3,9 @@ import {apiRoutes} from "~lib/routes"
 import makeApiRequestMaker from "../make-api-request"
 import oFetch from "o-fetch"
 import {selectClockInOutAppIsInManagerMode} from "../selectors"
+import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
+import {showUserActionConfirmationMessage} from "./user-action-confirmation-messages"
+import {showConfirmationModal} from "./confirmation-modal"
 
 function makeApiRequestMakerIfNecessary({tryWithoutRequest, makeRequest}){
     return function(requestOptions, success, error, getState){
@@ -28,6 +31,14 @@ export function enterUserModeWithConfirmation(options){
         }
     })
 }
+
+export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
+    return {
+        type: "CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE",
+        selectedStaffTypeClientId
+    }
+}
+
 
 export const clockInOutAppEnterUserMode = createApiRequestAction({
     requestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
