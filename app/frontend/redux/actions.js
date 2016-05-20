@@ -12,20 +12,18 @@ import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal } from "./actions/confirmation-modal"
 import { addRotaShift, updateRotaShift, deleteRotaShift } from "./actions/shifts"
 import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
+import { clockInOutAppEnterUserMode, updateStaffStatus } from "./actions/clocking-actions"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 
-function getRotaDateFromShiftStartsAt(startAt){
-    var rotaDate = new RotaDate({shiftStartsAt: startAt});
-    return rotaDate.getDateOfRota();
-}
 
 
 export { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal};
 export { addRotaShift, updateRotaShift, deleteRotaShift }
+export { clockInOutAppEnterUserMode, updateStaffStatus }
 
 export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
     return {
-        type: actionTypes.CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE,
+        type: "CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE",
         selectedStaffTypeClientId
     }
 }
@@ -64,63 +62,10 @@ export const fetchWeeklyRotaForecast = createApiRequestAction({
     })
 });
 
-export function enterUserModeWithConfirmation(options){
-    return showConfirmationModal({
-        modalOptions: {
-            title: "Enter manager password",
-            confirmationType: "PIN"
-        },
-        confirmationAction: {
-            apiRequestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
-            requestOptions: options
-        }
-    })
-}
 
-function makeApiRequestMakerIfNecessary({tryWithoutRequest, makeRequest}){
-    return function(requestOptions, success, error, getState){
-        var actionData = tryWithoutRequest(requestOptions);
-        if (actionData){
-            success(actionData);
-        } else {
-            return makeRequest.apply(this, arguments);
-        }
-    }
-}
 
-export const clockInOutAppEnterUserMode = createApiRequestAction({
-    requestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
-    makeRequest: makeApiRequestMakerIfNecessary({
-        tryWithoutRequest: function(requestOptions){
-            if (requestOptions.userMode === "user") {
-                return {
-                    token: null,
-                    mode: "user"
-                }
-            }
-        },
-        makeRequest: makeApiRequestMaker({
-            doesntNeedAccessToken: true,
-            method: apiRoutes.getSessionToken.method,
-            path: apiRoutes.getSessionToken.getPath(),
-            needsApiKey: true,
-            data: function(requestOptions){
-                var staff_member_id = oFetch(requestOptions, "staffMemberObject.serverId");
-                var staff_member_pin = oFetch(requestOptions, "confirmationData.pin");
-                return {
-                    staff_member_id,
-                    staff_member_pin
-                }
-            },
-            getSuccessActionData(responseData, requestOptions){
-                return {
-                    mode: requestOptions.userMode,
-                    token: responseData.access_token
-                }
-            }
-        })
-    })
-});
+
+
 
 export const clockInOutAppLoadAppData = createApiRequestAction({
     requestType: "CLOCK_IN_OUT_APP_LOAD_APP_DATA",
@@ -210,74 +155,10 @@ export function updateStaffStatusWithConfirmation(requestOptions){
     }
 }
 
-export const updateStaffStatus = createApiRequestAction({
-    requestType: "UPDATE_STAFF_STATUS",
-    makeRequest: makeApiRequestMaker({
-        method: apiRoutes.updateStaffClockingStatus.method,
-        accessToken(requestOptions) {
-            return {
-                pin: requestOptions.confirmationData.pin,
-                staffMemberServerId: requestOptions.staffMemberObject.serverId
-            }
-        },
-        path: (requestOptions) => {
-            var [staffMemberObject, statusValue, venueServerId, currentStatus] = oFetch(requestOptions, "staffMemberObject", "statusValue", "venueServerId", "currentStatus");
-            return apiRoutes.updateStaffClockingStatus.getPath({
-                currentStatus,
-                newStatus: statusValue
-            });
-        },
-        data: (requestOptions, getState) => {
-            var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
-            var statusValue = oFetch(requestOptions, "statusValue");
-            var venueServerId = oFetch(requestOptions, "venueServerId");
-            var date = oFetch(requestOptions, "date");
-            var at = oFetch(requestOptions, "at");
-
-            var accessToken = requestOptions.accessToken;
-
-            return {
-                staff_member_id: staffMemberObject.serverId,
-                venue_id: venueServerId,
-                date,
-                at,
-                accessToken
-            }
-        },
-        getSuccessActionData(responseData, requestOptions, getState){
-            var {staffMemberObject, statusValue} = requestOptions;
-            return {
-                staffMemberObject,
-                statusValue,
-                userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
-            }
-        }
-    }),
-    additionalSuccessActionCreator: function(successActionData, requestOptions){
-        return function(dispatch, getState){
-            var userIsManagerOrSupervisor = selectClockInOutAppIsInManagerMode(getState());
-            if (userIsManagerOrSupervisor) {
-                // They aren't sent back to the staff type selector, so
-                // they can see the change in the normal UI
-                return;
-            }
-
-            var {first_name, surname} = successActionData.staffMemberObject;
-            var name = first_name + " " + surname;
-            var {statusValue} = successActionData;
-            var statusOption = staffStatusOptionsByValue[statusValue];
-
-            var message = `${name} has been ${statusOption.confirmationTitle}.`
-            dispatch(showUserActionConfirmationMessage({
-                message
-            }));
-        }
-    }
-});
 
 export function setApiKey({apiKey}){
     return {
-        type: actionTypes.SET_API_KEY,
+        type: "SET_API_KEY",
         apiKey
     }
 }
@@ -285,7 +166,7 @@ export function setApiKey({apiKey}){
 export function showUserActionConfirmationMessage({message}) {
     return function(dispatch) {
         dispatch({
-            type: actionTypes.SHOW_USER_ACTION_CONFIRMATION_MESSAGE,
+            type: "SHOW_USER_ACTION_CONFIRMATION_MESSAGE",
             message: message
         })
         setTimeout(function(){
@@ -296,14 +177,14 @@ export function showUserActionConfirmationMessage({message}) {
 
 export function hideUserActionConfirmationMessage({message}){
     return {
-        type: actionTypes.HIDE_USER_ACTION_CONFIRMATION_MESSAGE,
+        type: "HIDE_USER_ACTION_CONFIRMATION_MESSAGE",
         message
     }
 }
 
 export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
     return {
-        type: actionTypes.REPLACE_WEEKLY_ROTA_FORECAST,
+        type: "REPLACE_WEEKLY_ROTA_FORECAST",
         weeklyRotaForecast
     }
 }

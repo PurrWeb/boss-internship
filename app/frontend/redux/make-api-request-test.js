@@ -67,9 +67,7 @@ describe("makeApiRequestMaker", function(){
         });
 
         var resolve = null;
-        var promise = new Promise(function(resolveArg, rejectArg) {
-            resolve = resolveArg;
-        });
+        var promise = Promise.resolve({access_token: "hello"})
         expect.spyOn($, "ajax").andReturn(promise)
 
         apiRequestMaker({}, success, function(){}, function getState(){
@@ -77,15 +75,11 @@ describe("makeApiRequestMaker", function(){
                 apiKey: "adsfsd"
             }
         });
-        resolve({access_token: "hello"})
 
         _.defer(function(){
-            resolve({})
-            _.defer(function(){
-                expect($.ajax.calls.length).toBe(2);
-                expect(success).toHaveBeenCalled();
-                done();
-            })
+            expect($.ajax.calls.length).toBe(2);
+            expect(success).toHaveBeenCalled();
+            done();
         })
     })
 });
