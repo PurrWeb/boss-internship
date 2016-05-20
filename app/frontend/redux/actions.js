@@ -431,22 +431,6 @@ export function hideUserActionConfirmationMessage({message}){
     }
 }
 
-actionTypes.REPLACE_ALL_ROTAS = "REPLACE_ALL_ROTAS";
-export function replaceAllRotas(options) {
-    return {
-        type: actionTypes.REPLACE_ALL_ROTAS,
-        rotas: options.rotas
-    }
-}
-
-actionTypes.REPLACE_ALL_ROTA_FORECASTS = "REPLACE_ALL_ROTA_FORECASTS";
-export function replaceAllRotaForecasts({rotaForecasts}) {
-    return {
-        type: actionTypes.REPLACE_ALL_ROTA_FORECASTS,
-        rotaForecasts
-    }
-}
-
 actionTypes.REPLACE_WEEKLY_ROTA_FORECAST = "REPLACE_WEEKLY_ROTA_FORECAST";
 export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
     return {
@@ -518,27 +502,11 @@ export function genericReplaceAllItems(data){
     }
 }
 
-actionTypes.REPLACE_ALL_STAFF_STATUSES = "REPLACE_ALL_STAFF_STATUSES";
-export function replaceAllStaffStatuses(options) {
-    return {
-        type: actionTypes.REPLACE_ALL_STAFF_STATUSES,
-        staffStatuses: options.staffStatuses
-    }
-}
-
 actionTypes.SET_PAGE_OPTIONS = "SET_PAGE_OPTIONS";
 export function setPageOptions(options) {
     return {
         type: actionTypes.SET_PAGE_OPTIONS,
         pageOptions: options.pageOptions
-    }
-}
-
-actionTypes.REPLACE_ALL_CLOCK_IN_DAYS = "REPLACE_ALL_CLOCK_IN_DAYS"
-export function replaceAllClockInDays(options){
-    return {
-        type: actionTypes.REPLACE_ALL_CLOCK_IN_DAYS,
-        clockInDays: oFetch(options, "clockInDays")
     }
 }
 
@@ -661,11 +629,11 @@ export function loadInitialHoursConfirmationAppState(viewData){
 function getInititalLoadActions(initialLoadData){
     var possibleObjects = {
         "rotas": {
-            replaceAction: replaceAllRotas,
+            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processRotaObject
         },
         "rotaForecasts": {
-            replaceAction: replaceAllRotaForecasts,
+            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processRotaForecastObject
         },
         "weeklyRotaForecast": {
@@ -681,7 +649,7 @@ function getInititalLoadActions(initialLoadData){
             processFunction: backendData.processVenueObject
         },
         "clockInDays": {
-            replaceAction: replaceAllClockInDays,
+            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processClockInDayObject
         },
         "staffMembers": {
@@ -697,7 +665,7 @@ function getInititalLoadActions(initialLoadData){
             processFunction: backendData.processShiftObject
         },
         "staffStatuses": {
-            replaceAction: replaceAllStaffStatuses,
+            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processStaffStatusObject,
             indexBy: function(status){
                 return status.staff_member.clientId;

@@ -1,9 +1,5 @@
-import {actionTypes} from "./actions.js"
+import makeReducer, {makeHandlerForGenericReplaceAction} from "./make-reducer"
 
-export default function clockInDays(state=null, action){
-    switch(action.type) {
-        case actionTypes.REPLACE_ALL_CLOCK_IN_DAYS:
-            return action.clockInDays
-    }
-    return state;
-}
+export default makeReducer({
+    GENERIC_REPLACE_ALL_ITEMS: makeHandlerForGenericReplaceAction("clockInDays")
+})
