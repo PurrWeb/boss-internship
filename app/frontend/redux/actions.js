@@ -534,11 +534,18 @@ function replaceAllHolidays(options){
     }
 }
 
-actionTypes.REPLACE_ALL_STAFF_TYPES = "REPLACE_ALL_STAFF_TYPES";
-export function replaceAllStaffTypes(options) {
+actionTypes.GENERIC_REPLACE_ALL_ITEMS = "GENERIC_REPLACE_ALL_ITEMS"
+export function genericReplaceAllItems(data){
+    var keys = _.keys(data);
+    if (keys.length !== 1) {
+        throw Error("Invalid data for genericReplaceAllItems, only one set of values allowed")
+    }
+
+    var collectionName = keys[0];
+    var items = data[collectionName]
     return {
-        type: actionTypes.REPLACE_ALL_STAFF_TYPES,
-        staffTypes: options.staffTypes
+        type: actionTypes.GENERIC_REPLACE_ALL_ITEMS,
+        [collectionName]: items
     }
 }
 
@@ -549,7 +556,6 @@ export function replaceAllStaffStatuses(options) {
         staffStatuses: options.staffStatuses
     }
 }
-
 
 actionTypes.SET_PAGE_OPTIONS = "SET_PAGE_OPTIONS";
 export function setPageOptions(options) {
@@ -714,7 +720,7 @@ function getInititalLoadActions(initialLoadData){
             processFunction: backendData.processStaffMemberObject
         },
         "staffTypes": {
-            replaceAction: replaceAllStaffTypes,
+            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processStaffTypeObject
         },
         "shifts": {
