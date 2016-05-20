@@ -431,22 +431,6 @@ export function hideUserActionConfirmationMessage({message}){
     }
 }
 
-actionTypes.REPLACE_ALL_STAFF_MEMBERS = "REPLACE_ALL_STAFF_MEMBERS";
-export function replaceAllStaffMembers(options) {
-    return {
-        type: actionTypes.REPLACE_ALL_STAFF_MEMBERS,
-        staffMembers: options.staffMembers
-    }
-}
-
-actionTypes.REPLACE_ALL_VENUES = "REPLACE_ALL_VENUES";
-export function replaceAllVenues(options) {
-    return {
-        type: actionTypes.REPLACE_ALL_VENUES,
-        venues: options.venues
-    }
-}
-
 actionTypes.REPLACE_ALL_ROTAS = "REPLACE_ALL_ROTAS";
 export function replaceAllRotas(options) {
     return {
@@ -515,15 +499,6 @@ export const publishRotas = createApiRequestAction({
         return confirm("Publishing a rota will send out email confirmations and can't be undone.\nDo you want to continue?")
     }
 })
-
-
-actionTypes.REPLACE_ALL_HOLIDAYS = "REPLACE_ALL_HOLIDAYS";
-function replaceAllHolidays(options){
-    return {
-        type: actionTypes.REPLACE_ALL_HOLIDAYS,
-        holidays: options.holidays
-    }
-}
 
 // Since we have lots of data it's cumbersome to create a new actionCreators for each
 // data type. So I removed the individual actionCreators and we're now
@@ -702,7 +677,7 @@ function getInititalLoadActions(initialLoadData){
             processFunction: backendData.processPageOptionsObject
         },
         "venues": {
-            replaceAction: replaceAllVenues,
+            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processVenueObject
         },
         "clockInDays": {
@@ -710,7 +685,7 @@ function getInititalLoadActions(initialLoadData){
             processFunction: backendData.processClockInDayObject
         },
         "staffMembers": {
-            replaceAction: replaceAllStaffMembers,
+            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processStaffMemberObject
         },
         "staffTypes": {
@@ -727,6 +702,10 @@ function getInititalLoadActions(initialLoadData){
             indexBy: function(status){
                 return status.staff_member.clientId;
             }
+        },
+        "holidays": {
+            replaceAction: genericReplaceAllItems,
+            processFunction: backendData.processHolidayObject
         }
     }
 

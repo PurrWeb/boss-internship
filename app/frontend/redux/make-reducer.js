@@ -2,7 +2,7 @@ import _ from "underscore"
 
 export default function makeReducer(actionHandlers, options){
     var defaultOptions = {
-        initialState: []
+        initialState: {}
     }
     var usedOptions = _.extend({}, defaultOptions, options);
 

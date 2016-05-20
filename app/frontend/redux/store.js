@@ -2,19 +2,17 @@ import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk"
 import _ from "underscore"
 import {batch, batching} from "redux-batch-middleware"
+import makeReducer, {makeHandlerForGenericReplaceAction} from "./make-reducer"
+
 
 import staffStatuses from "./staff-statuses-reducer"
-import staff from "./staff-members-reducer"
 import rotaShifts from "./rota-shifts-reducer"
 import clockInOutAppUserMode from "./clock-in-out-app-user-mode"
 import clockInOutAppSelectedStaffType from "./clock-in-out-app-selected-staff-type-reducer"
 import apiRequestsInProgress from "./api-requests-in-progress-reducer"
 import componentErrors from "./component-errors-reducer"
-import venues from "./venues-reducer"
 import rotas from "./rotas-reducer"
 import pageOptions from "./page-options-reducer"
-import staffTypes from "./staff-types-reducer"
-import holidays from "./holidays-reducer"
 import rotaForecasts from "./rota-forecasts-reducer"
 import weeklyRotaForecast from "./weekly-rota-forecast-reducer"
 import confirmationModal from "./confirmation-modal-reducer"
@@ -22,19 +20,26 @@ import userActionConfirmationMessages from "./user-action-confirmation-messages-
 import clockInDays from "./clock-in-days-reducer"
 import apiKey from "./api-key"
 
+function makeDefaultReducer(propertyName){
+    // simple reducer for data that isn't updated after initial load
+    return makeReducer({
+        GENERIC_REPLACE_ALL_ITEMS: makeHandlerForGenericReplaceAction(propertyName)
+    })
+}
+
 var rootReducer = combineReducers({
-    staff,
+    staff: makeDefaultReducer("staffMembers"),
     rotaShifts,
     staffStatuses,
     clockInOutAppUserMode,
     clockInOutAppSelectedStaffType,
     apiRequestsInProgress,
     componentErrors,
-    venues,
+    venues: makeDefaultReducer("venues"),
     rotas,
     pageOptions,
-    staffTypes,
-    holidays,
+    staffTypes: makeDefaultReducer("staffTypes"),
+    holidays: makeDefaultReducer("holidays"),
     rotaForecasts,
     weeklyRotaForecast,
     confirmationModal,
