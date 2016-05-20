@@ -40,7 +40,7 @@ describe('Venue Rota Integration Test', function() {
                 first_name: "John",
                 surname: "Smith",
                 id: JOHN_KITCHEN_ID,
-                holidays: [],
+                holidays: [{id: 10}],
                 staff_type: {id: 4}
             }, {
                 first_name: "Sally",
@@ -82,7 +82,14 @@ describe('Venue Rota Integration Test', function() {
                 rota: {id: ROTA_ID},
                 shift_type: "standby"
             }],
-            holidays: []
+            holidays: [{
+                days: 2,
+                holiday_type: "paid_holiday",
+                id: 10,
+                staff_member: {id: JOHN_KITCHEN_ID},
+                start_date: "2016-03-12",
+                ends_date: "2016-03-13",
+            }]
         },
         rotaVenueId: 3,
         rotaDate: "2016-03-10"
@@ -142,4 +149,10 @@ describe('Venue Rota Integration Test', function() {
         var { getNode } = simpleRender(<RotaApp viewData={customViewData} />);
         expect(getNode().textContent).toContain("Rota for The Bar: Thu 10 March 2016")
     });
+
+    it("Shows holidays for staff members", function(){
+        var {$$} = simpleRender(<RotaApp viewData={viewData} />);
+
+        expect($$("[data-test-marker-holiday-item]").length).toBe(1);
+    })
 });

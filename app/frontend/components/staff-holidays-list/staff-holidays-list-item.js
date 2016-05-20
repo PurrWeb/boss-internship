@@ -10,9 +10,9 @@ export default class StaffHolidaysListItem extends React.Component {
         var isSingleDayHoliday = holiday.start_date.valueOf() === holiday.end_date.valueOf();
 
         if (isSingleDayHoliday) {
-            return <div>{this.formatHolidayDate(holiday.start_date)}</div>
+            return <div data-test-marker-holiday-item>{this.formatHolidayDate(holiday.start_date)}</div>
         } else {
-            return <div>
+            return <div data-test-marker-holiday-item>
                 {this.formatHolidayDate(holiday.start_date) + " - " + this.formatHolidayDate(holiday.end_date)}
             </div>
         }
