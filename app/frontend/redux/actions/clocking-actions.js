@@ -140,3 +140,30 @@ export const updateStaffStatus = createApiRequestAction({
         }
     }
 });
+
+
+export function updateStaffStatusWithConfirmation(requestOptions){
+    return function(dispatch, getState){``
+        var state = getState();
+        if (selectClockInOutAppIsInManagerMode(state)) {
+            requestOptions = {
+                ...requestOptions,
+                accessToken: state.clockInOutAppUserMode.token
+            }
+            dispatch(updateStaffStatus(requestOptions))
+        } else {
+            var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
+            var {first_name, surname} = staffMemberObject;
+            dispatch(showConfirmationModal({
+                modalOptions: {
+                    title: `Enter PIN for ${first_name} ${surname}`,
+                    confirmationType: "PIN"
+                },
+                confirmationAction: {
+                    apiRequestType: "UPDATE_STAFF_STATUS",
+                    requestOptions
+                }
+            }));
+        }
+    }
+}

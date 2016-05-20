@@ -9,27 +9,72 @@ import {apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 import RotaDate from "~lib/rota-date"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
-import { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal } from "./actions/confirmation-modal"
-import { addRotaShift, updateRotaShift, deleteRotaShift } from "./actions/shifts"
 import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
-import { clockInOutAppEnterUserMode, updateStaffStatus, enterUserModeWithConfirmation, clockInOutAppSelectStaffType } from "./actions/clocking-actions"
-import { showUserActionConfirmationMessage, hideUserActionConfirmationMessage} from "./actions/user-action-confirmation-messages"
+
+import {
+    clockInOutAppEnterUserMode,
+    updateStaffStatus,
+    enterUserModeWithConfirmation,
+    clockInOutAppSelectStaffType,
+    updateStaffStatusWithConfirmation
+} from "./actions/clocking-actions"
+export {
+    clockInOutAppEnterUserMode,
+    updateStaffStatus,
+    clockInOutAppSelectStaffType,
+    enterUserModeWithConfirmation,
+    updateStaffStatusWithConfirmation
+}
+
+import {
+    updateRotaStatus,
+    publishRotas
+} from "./actions/rotas"
+export {
+    updateRotaStatus,
+    publishRotas
+}
+
+import {
+    showUserActionConfirmationMessage,
+    hideUserActionConfirmationMessage
+} from "./actions/user-action-confirmation-messages"
+export {
+    showUserActionConfirmationMessage,
+    hideUserActionConfirmationMessage
+}
+
 import {
     replaceWeeklyRotaForecast,
     updateRotaForecast,
     fetchWeeklyRotaForecast
 } from "./actions/rota-forecasts"
-
-export { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal};
-export { addRotaShift, updateRotaShift, deleteRotaShift }
-export { clockInOutAppEnterUserMode, updateStaffStatus, clockInOutAppSelectStaffType, enterUserModeWithConfirmation }
-export { showUserActionConfirmationMessage, hideUserActionConfirmationMessage}
-
-
 export {
     replaceWeeklyRotaForecast,
     updateRotaForecast,
     fetchWeeklyRotaForecast
+}
+
+import {
+    showConfirmationModal,
+    cancelConfirmationModal,
+    completeConfirmationModal
+} from "./actions/confirmation-modal"
+export {
+    showConfirmationModal,
+    cancelConfirmationModal,
+    completeConfirmationModal
+};
+
+import {
+    addRotaShift,
+    updateRotaShift,
+    deleteRotaShift
+} from "./actions/shifts"
+export {
+    addRotaShift,
+    updateRotaShift,
+    deleteRotaShift
 }
 
 
@@ -95,31 +140,6 @@ export const updateStaffMemberPin = createApiRequestAction({
     })
 })
 
-export function updateStaffStatusWithConfirmation(requestOptions){
-    return function(dispatch, getState){``
-        var state = getState();
-        if (selectClockInOutAppIsInManagerMode(state)) {
-            requestOptions = {
-                ...requestOptions,
-                accessToken: state.clockInOutAppUserMode.token
-            }
-            dispatch(updateStaffStatus(requestOptions))
-        } else {
-            var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
-            var {first_name, surname} = staffMemberObject;
-            dispatch(showConfirmationModal({
-                modalOptions: {
-                    title: `Enter PIN for ${first_name} ${surname}`,
-                    confirmationType: "PIN"
-                },
-                confirmationAction: {
-                    apiRequestType: "UPDATE_STAFF_STATUS",
-                    requestOptions
-                }
-            }));
-        }
-    }
-}
 
 
 export function setApiKey({apiKey}){
@@ -131,50 +151,6 @@ export function setApiKey({apiKey}){
 
 
 
-export const updateRotaStatus = createApiRequestAction({
-    requestType: "UPDATE_ROTA_STATUS",
-    makeRequest: makeApiRequestMaker({
-        method: apiRoutes.updateRotaStatus.method,
-        path: function(options){
-            if (!options.venueClientId){
-                throw new Error("need venueClientId");
-            }
-            return apiRoutes.updateRotaStatus.getPath(options);
-        },
-        getSuccessActionData: function(responseData, requestOptions, getState){
-            var state = getState();
-            var rota = getRotaFromDateAndVenue({
-                rotas: state.rotas,
-                dateOfRota: requestOptions.date,
-                venueId: requestOptions.venueClientId
-            });
-
-            return {
-                rotaClientId: rota.clientId,
-                status: responseData.status
-            }
-        }
-    })
-});
-
-export const publishRotas = createApiRequestAction({
-    requestType: "PUBLISH_ROTAS",
-    makeRequest: makeApiRequestMaker({
-        method: apiRoutes.publishRotas.method,
-        path: function(options){
-            return apiRoutes.publishRotas.getPath({
-                venueId: options.venueServerId,
-                date: options.date
-            })
-        },
-        getSuccessActionData: function(responseData, requestOptions){
-            return requestOptions;
-        }
-    }),
-    confirm: function(){
-        return confirm("Publishing a rota will send out email confirmations and can't be undone.\nDo you want to continue?")
-    }
-})
 
 // Since we have lots of data it's cumbersome to create a new actionCreators for each
 // data type. So I removed the individual actionCreators and we're now
