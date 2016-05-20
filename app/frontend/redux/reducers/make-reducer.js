@@ -1,4 +1,5 @@
 import _ from "underscore"
+import actionTypes from "../actions/action-types"
 
 export default function makeReducer(actionHandlers, options){
     var defaultOptions = {
@@ -6,9 +7,24 @@ export default function makeReducer(actionHandlers, options){
     }
     var usedOptions = _.extend({}, defaultOptions, options);
 
+    for (var actionHandlerAction in actionHandlers){
+        if (!actionTypes[actionHandlerAction]) {
+            throw Error("Trying to handle non-existent action " + actionHandlerAction)
+        }
+    }
+
     return function(state, action){
-        if (state === undefined) {
+        if (state === undefined){
             state = usedOptions.initialState;
+        }
+        if (action.type.indexOf("@@") !== -1){
+            // Internal Redux actions that should be ignored
+            // without throwin an exception
+            return state;
+        }
+
+        if (!actionTypes[action.type]) {
+            throw Error("Action with type " + action.type + " doesn't exist");
         }
 
         var actionHandler = actionHandlers[action.type];

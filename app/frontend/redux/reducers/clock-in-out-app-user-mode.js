@@ -1,4 +1,3 @@
-import { actionTypes } from "./actions.js"
 import oFetch from "o-fetch"
 
 export default function clockInOutAppUserMode(state={
@@ -6,7 +5,7 @@ export default function clockInOutAppUserMode(state={
     token: null
 }, action){
     switch(action.type) {
-        case actionTypes.CLOCK_IN_OUT_APP_ENTER_USER_MODE_SUCCESS:
+        case "CLOCK_IN_OUT_APP_ENTER_USER_MODE_SUCCESS":
             return {
                 token: oFetch(action, "token"),
                 mode: oFetch(action, "mode")

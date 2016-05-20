@@ -1,5 +1,6 @@
 import importedCreateApiRequestAction, { registeredApiRequestActionCreators} from "./create-api-request-action"
 import _ from "underscore"
+import actionTypes from "./actions/action-types"
 import moment from "moment"
 import utils from "~lib/utils"
 import * as backendData from "~lib/backend-data/process-backend-objects"
@@ -11,8 +12,6 @@ import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal } from "./actions/confirmation-modal"
 import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
-
-export const actionTypes = {};
 
 window.registeredApiRequestActionCreators = registeredApiRequestActionCreators;
 
@@ -39,9 +38,6 @@ function getRotaDateFromShiftStartsAt(startAt){
     return rotaDate.getDateOfRota();
 }
 
-actionTypes[showConfirmationModal.actionType] = showConfirmationModal.actionType;
-actionTypes[cancelConfirmationModal.actionType] = cancelConfirmationModal.actionType;
-actionTypes[completeConfirmationModal.actionType] = completeConfirmationModal.actionType;
 
 export { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal};
 
@@ -93,7 +89,6 @@ export const addRotaShift = createApiRequestAction({
 });
 
 
-actionTypes.CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE = "CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE";
 export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
     return {
         type: actionTypes.CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE,
@@ -402,7 +397,6 @@ export const updateStaffStatus = createApiRequestAction({
     }
 });
 
-actionTypes.SET_API_KEY = "SET_API_KEY";
 export function setApiKey({apiKey}){
     return {
         type: actionTypes.SET_API_KEY,
@@ -410,7 +404,6 @@ export function setApiKey({apiKey}){
     }
 }
 
-actionTypes.SHOW_USER_ACTION_CONFIRMATION_MESSAGE = "SHOW_USER_ACTION_CONFIRMATION_MESSAGE";
 export function showUserActionConfirmationMessage({message}) {
     return function(dispatch) {
         dispatch({
@@ -423,7 +416,6 @@ export function showUserActionConfirmationMessage({message}) {
     }
 }
 
-actionTypes.HIDE_USER_ACTION_CONFIRMATION_MESSAGE = "HIDE_USER_ACTION_CONFIRMATION_MESSAGE";
 export function hideUserActionConfirmationMessage({message}){
     return {
         type: actionTypes.HIDE_USER_ACTION_CONFIRMATION_MESSAGE,
@@ -431,7 +423,6 @@ export function hideUserActionConfirmationMessage({message}){
     }
 }
 
-actionTypes.REPLACE_WEEKLY_ROTA_FORECAST = "REPLACE_WEEKLY_ROTA_FORECAST";
 export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
     return {
         type: actionTypes.REPLACE_WEEKLY_ROTA_FORECAST,
@@ -487,7 +478,6 @@ export const publishRotas = createApiRequestAction({
 // Since we have lots of data it's cumbersome to create a new actionCreators for each
 // data type. So I removed the individual actionCreators and we're now
 // only using a generic one.
-actionTypes.GENERIC_REPLACE_ALL_ITEMS = "GENERIC_REPLACE_ALL_ITEMS"
 export function genericReplaceAllItems(data){
     var keys = _.keys(data);
     if (keys.length !== 1) {
@@ -502,7 +492,6 @@ export function genericReplaceAllItems(data){
     }
 }
 
-actionTypes.SET_PAGE_OPTIONS = "SET_PAGE_OPTIONS";
 export function setPageOptions(options) {
     return {
         type: actionTypes.SET_PAGE_OPTIONS,

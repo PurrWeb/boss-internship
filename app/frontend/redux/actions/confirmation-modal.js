@@ -1,30 +1,29 @@
 import oFetch from "o-fetch"
+import actionTypes from "./action-types"
 import { registeredApiRequestActionCreators } from "~redux/create-api-request-action"
 
 function showConfirmationModal(options){
     var [modalOptions, confirmationAction] = oFetch(options,
             "modalOptions", "confirmationAction");
     return {
-        type: showConfirmationModal.actionType,
+        type: actionTypes.SHOW_CONFIRMATION_MODAL,
         payload: {
             modalOptions,
             confirmationAction
         }
     }
 }
-showConfirmationModal.actionType = "SHOW_CONFIRMATION_MODAL"
 
 function cancelConfirmationModal(){
     return {
-        type: cancelConfirmationModal.actionType
+        type: actionTyes.CANCEL_CONFIRMATION_MODAL
     }
 }
-cancelConfirmationModal.actionType = "CANCEL_CONFIRMATION_MODAL"
 
 function completeConfirmationModal(confirmationData){
     return function(dispatch, getState){
         var completeModalAction = {
-            type: completeConfirmationModal.actionType
+            type: actionTypes.COMPLETE_CONFIRMATION_MODAL
         }
 
         var confirmationActionInfo = getState().confirmationModal.confirmationAction;
@@ -39,6 +38,5 @@ function completeConfirmationModal(confirmationData){
         dispatch(completeModalAction);
     }
 }
-completeConfirmationModal.actionType = "COMPLETE_CONFIRMATION_MODAL"
 
 export { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal }

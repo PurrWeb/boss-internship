@@ -1,4 +1,3 @@
-import { actionTypes } from "./actions.js"
 import makeReducer, {makeHandlerForGenericReplaceAction} from "./make-reducer"
 
 export default makeReducer({

@@ -1,7 +1,5 @@
-import { actionTypes } from "./actions"
-
 export default function componentErrors(state={}, action){
-	if (action.type !== actionTypes.SET_COMPONENT_ERROR) {
+	if (action.type !== "SET_COMPONENT_ERROR") {
 		return state;
 	}
 	if (action.componentId === undefined) {

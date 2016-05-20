@@ -1,4 +1,3 @@
-import {actionTypes} from "./actions.js"
 import utils from "~lib/utils"
 import _ from "underscore"
 import oFetch from "o-fetch"

@@ -1,4 +1,5 @@
 import _ from "underscore"
+import actionTypes, {registerActionType} from "./actions/action-types"
 
 var registeredApiRequestActionCreators = {};
 
@@ -45,15 +46,12 @@ addTodo({title: "Buy milk"});
  * @return {function}   Asynchronous action creator.
  */
 export default function createApiRequestAction(actionOptions){
-    var { requestType, makeRequest, actionTypes } = actionOptions;
+    var { requestType, makeRequest } = actionOptions;
 
-    actionTypes.API_REQUEST_START = "API_REQUEST_START";
-    actionTypes.API_REQUEST_END = "API_REQUEST_END"
-    actionTypes.SET_COMPONENT_ERROR = "SET_COMPONENT_ERROR";
     const SUCCESS_TYPE = requestType + "_SUCCESS";
     const START_TYPE = requestType + "_REQUEST_START";
-    actionTypes[SUCCESS_TYPE] = SUCCESS_TYPE;
-    actionTypes[START_TYPE] = START_TYPE;
+    registerActionType(SUCCESS_TYPE);
+    registerActionType(START_TYPE);
 
     var actionCreator = generateActionCreator();
     registeredApiRequestActionCreators[requestType] = actionCreator;
@@ -121,7 +119,7 @@ export default function createApiRequestAction(actionOptions){
                         ...requestOptions
                     };
                 }
-                
+
                 if (actionOptions.confirm) {
                     var confirmed = actionOptions.confirm(requestOptions, getState);
                     if (!confirmed) {
