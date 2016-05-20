@@ -93,15 +93,6 @@ export const addRotaShift = createApiRequestAction({
 });
 
 
-
-actionTypes.REPLACE_ALL_SHIFTS = "REPLACE_ALL_SHIFTS";
-export function replaceAllShifts (options) {
-    return {
-        type: actionTypes.REPLACE_ALL_SHIFTS,
-        shifts: options.shifts
-    }
-}
-
 actionTypes.CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE = "CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE";
 export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
     return {
@@ -534,6 +525,9 @@ function replaceAllHolidays(options){
     }
 }
 
+// Since we have lots of data it's cumbersome to create a new actionCreators for each
+// data type. So I removed the individual actionCreators and we're now
+// only using a generic one.
 actionTypes.GENERIC_REPLACE_ALL_ITEMS = "GENERIC_REPLACE_ALL_ITEMS"
 export function genericReplaceAllItems(data){
     var keys = _.keys(data);
@@ -724,7 +718,7 @@ function getInititalLoadActions(initialLoadData){
             processFunction: backendData.processStaffTypeObject
         },
         "shifts": {
-            replaceAction: replaceAllShifts,
+            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processShiftObject
         },
         "staffStatuses": {

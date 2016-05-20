@@ -5,7 +5,7 @@ describe("RotaShiftsReducer", function(){
     it("Can replace all shifts at once", function(){
         var initialState = {};
         var action = {
-            type: "REPLACE_ALL_SHIFTS",
+            type: "GENERIC_REPLACE_ALL_ITEMS",
             shifts: {
                 1: {hello: "world"},
                 2: {hi: "earth"}
@@ -85,5 +85,3 @@ describe("RotaShiftsReducer", function(){
         expect(RotaShiftsReducer(initialState, action)).toEqual(expectedResultState);
     })
 });
-
-
