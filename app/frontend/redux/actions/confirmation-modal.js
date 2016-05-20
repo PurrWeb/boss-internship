@@ -6,7 +6,7 @@ function showConfirmationModal(options){
     var [modalOptions, confirmationAction] = oFetch(options,
             "modalOptions", "confirmationAction");
     return {
-        type: actionTypes.SHOW_CONFIRMATION_MODAL,
+        type: "SHOW_CONFIRMATION_MODAL",
         payload: {
             modalOptions,
             confirmationAction
@@ -16,14 +16,14 @@ function showConfirmationModal(options){
 
 function cancelConfirmationModal(){
     return {
-        type: actionTyes.CANCEL_CONFIRMATION_MODAL
+        type: "CANCEL_CONFIRMATION_MODAL"
     }
 }
 
 function completeConfirmationModal(confirmationData){
     return function(dispatch, getState){
         var completeModalAction = {
-            type: actionTypes.COMPLETE_CONFIRMATION_MODAL
+            type: "COMPLETE_CONFIRMATION_MODAL"
         }
 
         var confirmationActionInfo = getState().confirmationModal.confirmationAction;
