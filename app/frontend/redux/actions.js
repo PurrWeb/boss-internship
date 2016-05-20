@@ -13,8 +13,6 @@ import { showConfirmationModal, cancelConfirmationModal, completeConfirmationMod
 import { selectClockInOutAppIsInManagerMode } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 
-window.registeredApiRequestActionCreators = registeredApiRequestActionCreators;
-
 const createApiRequestAction = function(options){
     var options = _.clone(options);
     options.actionTypes = actionTypes;
