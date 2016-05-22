@@ -6,6 +6,9 @@ import {selectClockInOutAppIsInManagerMode} from "../selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import {showUserActionConfirmationMessage} from "./user-action-confirmation-messages"
 import {showConfirmationModal} from "./confirmation-modal"
+import {
+    loadInitialClockInOutAppState
+} from "./app-data"
 
 function makeApiRequestMakerIfNecessary({tryWithoutRequest, makeRequest}){
     return function(requestOptions, success, error, getState){
@@ -167,3 +170,27 @@ export function updateStaffStatusWithConfirmation(requestOptions){
         }
     }
 }
+
+
+export const clockInOutAppFetchAppData = createApiRequestAction({
+    requestType: "CLOCK_IN_OUT_APP_FETCH_DATA",
+    makeRequest: makeApiRequestMaker({
+        method: apiRoutes.getClockInOutAppData.method,
+        path: apiRoutes.getClockInOutAppData.getPath(),
+        doesntNeedAccessToken: true,
+        data: function(requestOptions, getState){
+            return {
+                api_key: getState().apiKey
+            }
+        },
+        getSuccessActionData(responseData){
+            return responseData
+        }
+    }),
+    getSuccessActionData(){
+        return {};
+    },
+    additionalSuccessActionCreator: function(responseData){
+        return loadInitialClockInOutAppState(responseData);
+    }
+})

@@ -1,6 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
-import { setApiKey, clockInOutAppLoadAppData } from "~redux/actions"
+import { setApiKey, clockInOutAppFetchAppData } from "~redux/actions"
 import { selectClockInOutLoadAppDataIsInProgress } from "~redux/selectors"
 import Spinner from "~components/spinner"
 
@@ -40,7 +40,7 @@ function mapDispatchToProps(dispatch){
     return {
         onApiKeySelected: function(apiKey){
             dispatch(setApiKey({apiKey}));
-            dispatch(clockInOutAppLoadAppData())
+            dispatch(clockInOutAppFetchAppData())
         }
     }
 }

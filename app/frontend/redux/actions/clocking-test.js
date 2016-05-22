@@ -1,6 +1,6 @@
 import expect from "expect"
 import Promise from "bluebird"
-import { updateStaffStatus } from "./clocking-actions"
+import { updateStaffStatus } from "./clocking"
 import _ from "underscore"
 
 describe("RotaActions", function(){

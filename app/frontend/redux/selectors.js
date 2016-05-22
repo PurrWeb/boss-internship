@@ -253,6 +253,6 @@ export function selectClockInOutAppUserPermissions(state){
 }
 
 export function selectClockInOutLoadAppDataIsInProgress(state){
-    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_LOAD_APP_DATA;
+    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_FETCH_APP_DATA;
     return requests !== undefined && requests.length > 0;
 }
