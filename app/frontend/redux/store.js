@@ -45,7 +45,12 @@ var rootReducer = combineReducers({
     confirmationModal,
     userActionConfirmationMessages,
     apiKey,
-    clockInDays
+    clockInDays,
+    clockInPeriods: makeDefaultReducer("clockInPeriods"),
+    clockInEvents: makeDefaultReducer("clockInEvents"),
+    clockInNotes: makeDefaultReducer("clockInNotes"),
+    clockInReasons: makeDefaultReducer("clockInReasons"),
+    clockInBreaks: makeDefaultReducer("clockInBreaks")
 });
 var createStoreWithMiddleware = compose(
 	// Redux thunk lets us dispatch asynchronous actions, for example

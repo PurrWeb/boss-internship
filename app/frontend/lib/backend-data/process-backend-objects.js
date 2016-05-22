@@ -49,6 +49,26 @@ export function processStaffTypeObject(staffMember){
     return processBackendObject(staffMember);
 }
 
+export function processClockInPeriodObject(clockInPeriod){
+    return processBackendObject(clockInPeriod);
+}
+
+export function processClockInEvent(clockInEvent){
+    return processBackendObject(clockInEvent);
+}
+
+export function processClockInNote(clockInNote){
+    return processBackendObject(clockInNote);
+}
+
+export function processClockInReason(clockInReason){
+    return processBackendObject(clockInReason);
+}
+
+export function processClockInBreak(clockInBreak){
+    return processBackendObject(clockInBreak);
+}
+
 export function processShiftObject(shift){
     shift = processBackendObject(shift);
 

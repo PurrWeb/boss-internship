@@ -112,19 +112,12 @@ export function loadInitialRotaOverviewAppState(viewData){
 
 export function loadInitialHoursConfirmationAppState(viewData){
     return function(dispatch){
-        dispatch(getInititalLoadActions({
-            venues: viewData.venues,
-            pageOptions: {
-                venue: {id: viewData.page_data.venue_id}
-            },
-            clockInDays: viewData.clock_in_days,
-            staffMembers: viewData.staff_members,
-            staffTypes: viewData.staff_types
-        }))
+        dispatch(getInititalLoadActions(viewData));
     }
 }
 
 function getInititalLoadActions(initialLoadData){
+    initialLoadData = {...initialLoadData}
     var possibleObjects = {
         "rotas": {
             replaceAction: genericReplaceAllItems,
@@ -172,6 +165,26 @@ function getInititalLoadActions(initialLoadData){
         "holidays": {
             replaceAction: genericReplaceAllItems,
             processFunction: backendData.processHolidayObject
+        },
+        "clockInPeriods": {
+            replaceAction: genericReplaceAllItems,
+            processFunction: backendData.processClockInPeriodObject
+        },
+        "clockInEvents": {
+            replaceAction: genericReplaceAllItems,
+            processFunction: backendData.processClockInEvent
+        },
+        "clockInNotes": {
+            replaceAction: genericReplaceAllItems,
+            processFunction: backendData.processClockInNote
+        },
+        "clockInReasons": {
+            replaceAction: genericReplaceAllItems,
+            processFunction: backendData.processClockInReason
+        },
+        "clockInBreaks": {
+            replaceAction: genericReplaceAllItems,
+            processFunction: backendData.processClockInBreak
         }
     }
 
@@ -199,6 +212,12 @@ function getInititalLoadActions(initialLoadData){
                 [objectName]: processedValue
             }))
         }
+        delete initialLoadData[objectName];
+    }
+
+    var unprocessedDataKeys = _.keys(initialLoadData);
+    if (unprocessedDataKeys.length > 0){
+        throw Error("Unprocessed data keys: " + unprocessedDataKeys);
     }
 
     return actions;
