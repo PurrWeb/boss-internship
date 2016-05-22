@@ -284,7 +284,7 @@ export function selectClockInDayDetails(state, clockInDay){
         return clockInEvent.clock_in_day.clientId === clockInDay.clientId
     })
 
-    var clockInNotes = _(state.clockInEvents).filter(function(clockInNote){
+    var clockInNotes = _(state.clockInNotes).filter(function(clockInNote){
         return clockInNote.clock_in_day.clientId === clockInDay.clientId;
     })
 
