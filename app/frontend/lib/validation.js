@@ -48,13 +48,13 @@ var validation = {
     areShiftTimesValid(starts_at, ends_at) {
         return validation.validateShiftTimes({starts_at, ends_at}).isValid;
     },
-    validateBreak({breakItem, amendedClockInPeriod}) {
+    validateBreak({breakItem, clockInPeriod}) {
         var messages = [];
 
-        if (breakItem.starts_at <= amendedClockInPeriod.starts_at) {
+        if (breakItem.starts_at <= clockInPeriod.starts_at) {
             messages.push("Break can only start after shift begins")
         }
-        if (breakItem.ends_at >= amendedClockInPeriod.ends_at) {
+        if (breakItem.ends_at >= clockInPeriod.ends_at) {
             messages.push("Break must end before shift end")
         }
 
@@ -68,12 +68,12 @@ var validation = {
             isValid: messages.length === 0
         }
     },
-    validateBreaks({breaks, amendedClockInPeriod}){
+    validateBreaks({breaks, clockInPeriod}){
         var messages = [];
         breaks.forEach(function(breakItem){
             var res = validation.validateBreak({
                 breakItem,
-                amendedClockInPeriod
+                clockInPeriod
             })
             messages = messages.concat(res.messages)
         });
@@ -116,12 +116,12 @@ var validation = {
             messages
         }
     },
-    validateHoursAcceptance(hoursAcceptance){
+    validateClockInPeriod({clockInPeriod, clockInBreaks}){
         var isValid = true;
-        var breaks = hoursAcceptance.clockInHours.breaks
+        var breaks = clockInPeriod.breaks.map(b => b.get(clockInBreaks))
         var breaksValidationResult = validation.validateBreaks({
             breaks,
-            acceptedHoursClockInHours: hoursAcceptance.clockInHours
+            clockInPeriod: clockInPeriod
         });
 
         if (!breaksValidationResult.isValid) {
@@ -131,7 +131,7 @@ var validation = {
         breaks.forEach((breakItem) => {
             var breakValidation = validation.validateBreak({
                 breakItem,
-                acceptedHoursClockInHours: hoursAcceptance.clockInHours
+                clockInPeriod: clockInPeriod
             })
             if (!breakValidation.isValid) {
                 isValid = false;

@@ -15,7 +15,7 @@ export default class StaffDay extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            chartData: this.getChartDataFromProps(props)
+            lastValidData: this.getLastValidDataFromProps(props)
         }
     }
     componentWillReceiveProps(nextProps){
@@ -23,10 +23,10 @@ export default class StaffDay extends React.Component {
             return; // don't try to display invalid data on the chart
         }
         this.setState({
-            chartData: this.getChartDataFromProps(nextProps)
+            lastValidData: this.getLastValidDataFromProps(nextProps)
         })
     }
-    getChartDataFromProps(props){
+    getLastValidDataFromProps(props){
         return {
             rotaDate: props.rotaDate,
             rotaedShifts: props.rotaedShifts,
@@ -61,13 +61,14 @@ export default class StaffDay extends React.Component {
                 padding: 10,
                 border: "1px solid #ddd"
             }}>
-                {/* }<StaffDayHeader
+                <StaffDayHeader
                     rotaDate={this.props.rotaDate}
                     staffMember={this.props.staffMember}
-                    clockedClockInPeriods={this.state.chartData.clockedClockIns}
+                    clockedClockInPeriods={this.state.lastValidData.clockedClockInPeriods}
                     acceptedClockInPeriods={acceptedClockInPeriods}
                     rotaedShifts={this.props.rotaedShifts}
-                /> */}
+                    clockInBreaks={this.props.clockInBreaks}
+                />
                 <div className="row">
                     <div className="col-md-2">
                         <img
@@ -80,12 +81,12 @@ export default class StaffDay extends React.Component {
                         <div className="row">
                             <div className="col-md-8">
                                 <HoursChart
-                                    rotaDate={this.state.chartData.rotaDate}
-                                    rotaedShifts={this.state.chartData.rotaedShifts}
-                                    amendedClockInPeriods={this.state.chartData.amendedClockInPeriods}
-                                    clockedClockInPeriods={this.state.chartData.clockedClockInPeriods}
-                                    clockInEvents={this.state.chartData.clockInEvents}
-                                    clockInBreaks={this.state.chartData.clockInBreaks}
+                                    rotaDate={this.state.lastValidData.rotaDate}
+                                    rotaedShifts={this.state.lastValidData.rotaedShifts}
+                                    amendedClockInPeriods={this.state.lastValidData.amendedClockInPeriods}
+                                    clockedClockInPeriods={this.state.lastValidData.clockedClockInPeriods}
+                                    clockInEvents={this.state.lastValidData.clockInEvents}
+                                    clockInBreaks={this.state.lastValidData.clockInBreaks}
                                 />
                             </div>
                             <div className="col-md-4">
@@ -117,9 +118,19 @@ class StaffDayHeader extends React.Component {
             }
         })
 
-        var clockedStats = getClockInPeriodStats(clockedClockInPeriods);
-        var acceptedStats = getClockInPeriodStats(acceptedClockInPeriods);
-        var rotaedStats = getClockInPeriodStats(rotaedClockInPeriods)
+        var clockInBreaks = this.props.clockInBreaks;
+        var clockedStats = getClockInPeriodStats({
+            clockInPeriods: clockedClockInPeriods,
+            clockInBreaks
+        });
+        var acceptedStats = getClockInPeriodStats({
+            clockInPeriods: acceptedClockInPeriods,
+            clockInBreaks
+        });
+        var rotaedStats = getClockInPeriodStats({
+            clockInPeriods: rotaedClockInPeriods,
+            clockInBreaks
+        })
 
         return <h2 style={{
                 fontSize: 20,
@@ -220,7 +231,7 @@ class BreakListItem extends React.Component {
 
         var validationResult = Validation.validateBreak({
             breakItem,
-            amendedClockInPeriod
+            clockInPeriod: amendedClockInPeriod
         })
 
         return validationResult.isValid;
@@ -234,7 +245,7 @@ class BreakList extends React.Component {
         })
         var validationResult = Validation.validateBreaks({
             breaks: breaks,
-            amendedClockInPeriod: this.props.amendedClockInPeriod
+            clockInPeriod: this.props.amendedClockInPeriod
         })
 
         var addBreakButton;
@@ -309,11 +320,11 @@ class ReasonSelector extends React.Component {
         } else {
             dropdown = <select
                 style={{marginBottom: 4}}
-                value={reasonId}
+                value={reasonClientId}
                 onChange={(e) => this.triggerChange({
                     reason_id: e.target.value
                 })}>
-                {clockInReasons.map((reason) =>
+                {_.values(clockInReasons).map((reason) =>
                     <option value={reason.clientId}>
                         {reason.title}
                     </option>
@@ -406,13 +417,19 @@ class AcceptedHoursListItem extends React.Component {
         </div>
     }
     isAccepted(){
-        return this.props.amendedClockInPeriod.state !== "in_progress";
+        return this.props.amendedClockInPeriod.status !== "in_progress";
     }
     isValid(){
-        return Validation.validateHoursAcceptance(this.props.acceptedHours).isValid;
+        return Validation.validateClockInPeriod({
+            clockInPeriod: this.props.amendedClockInPeriod,
+            clockInBreaks: this.props.clockInBreaks
+        }).isValid;
     }
     getAcceptUi(){
-        var stats = getClockInPeriodStats(this.props.amendedClockInPeriod);
+        var stats = getClockInPeriodStats({
+            clockInPeriods: [this.props.amendedClockInPeriod],
+            clockInBreaks: this.props.clockInBreaks
+        });
         if (!this.isAccepted()) {
             var classes = ["btn"]
             if (this.isValid()) {
