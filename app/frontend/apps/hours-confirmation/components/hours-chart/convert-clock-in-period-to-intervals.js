@@ -1,9 +1,12 @@
 import _ from "underscore"
 
-export default function(clockInHours){
-    var breaksOrderedByStartTime = _.sortBy(clockInHours.breaks, "starts_at")
+export default function(clockInPeriod, clockInBreaks){
+    var breaks = clockInPeriod.breaks.map(function(breakLink){
+        return breakLink.get(clockInBreaks)
+    })
+    var breaksOrderedByStartTime = _.sortBy(breaks, "starts_at")
 
-    var lastTime = clockInHours.starts_at;
+    var lastTime = clockInPeriod.starts_at;
     var intervals = [];
 
     breaksOrderedByStartTime.forEach(function(breakItem){
@@ -22,10 +25,10 @@ export default function(clockInHours){
         }
     })
 
-    if (clockInHours.ends_at) {
+    if (clockInPeriod.ends_at) {
         intervals.push({
             starts_at: lastTime,
-            ends_at: clockInHours.ends_at,
+            ends_at: clockInPeriod.ends_at,
             type: "hours"
         })
     }

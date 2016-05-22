@@ -33,7 +33,8 @@ export default class StaffDay extends React.Component {
             rotaedShifts: props.rotaedShifts,
             acceptedHours: props.acceptedHours,
             proposedAcceptedClockIns: proposedClockIns,
-            clockedClockIns: props.clockedClockIns,
+            clockedClockInPeriods: props.clockedClockInPeriods,
+            clockInBreaks: props.clockInBreaks,
             events: props.events
         }
     }
@@ -65,13 +66,13 @@ export default class StaffDay extends React.Component {
                 padding: 10,
                 border: "1px solid #ddd"
             }}>
-                <StaffDayHeader
+                {/* }<StaffDayHeader
                     rotaDate={this.props.rotaDate}
                     staffMember={this.props.staffMember}
                     clockedClockInPeriods={this.state.chartData.clockedClockIns}
                     acceptedClockInPeriods={acceptedClockInPeriods}
                     rotaedShifts={this.props.rotaedShifts}
-                />
+                /> */}
                 <div className="row">
                     <div className="col-md-2">
                         <img
@@ -88,8 +89,9 @@ export default class StaffDay extends React.Component {
                                     rotaedShifts={this.state.chartData.rotaedShifts}
                                     acceptedHours={this.state.chartData.acceptedHours}
                                     proposedAcceptedClockIns={this.state.chartData.proposedAcceptedClockIns}
-                                    clockedClockIns={this.state.chartData.clockedClockIns}
+                                    clockedClockInPeriods={this.state.chartData.clockedClockInPeriods}
                                     events={this.state.chartData.events}
+                                    clockInBreaks={this.state.chartData.clockInBreaks}
                                 />
                             </div>
                             <div className="col-md-4">

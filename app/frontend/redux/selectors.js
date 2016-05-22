@@ -256,3 +256,27 @@ export function selectClockInOutLoadAppDataIsInProgress(state){
     var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_FETCH_DATA;
     return requests !== undefined && requests.length > 0;
 }
+
+export function selectClockInDayDetails(state, clockInDay){
+    var staffMember = clockInDay.staff_member.get(state.staff);
+    var clockInPeriods = _(state.clockInPeriods).filter(function(clockInPeriod){
+        return clockInPeriod.clock_in_day.clientId === clockInDay.clientId;
+    })
+    var clockInPeriodClientIds = _(clockInPeriods).pluck("clientId")
+    var clockInBreaks = _(clockInPeriods)
+        .chain()
+        .pluck("breaks")
+        .flatten()
+        .map((breakLink) => breakLink.get(state.clockInBreaks))
+        .value()
+    return {
+        clockedClockInPeriods: _.filter(clockInPeriods, {
+            period_type: "clocked"
+        }),
+        amendedClockInPeriods: _.filter(clockInPeriods, {
+            period_type: "amended"
+        }),
+        staffMember,
+        clockInBreaks
+    }
+}

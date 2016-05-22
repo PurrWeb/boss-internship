@@ -2,6 +2,7 @@ import React from "react"
 import StaffDayUi from "../components/staff-day"
 import { connect } from "react-redux"
 import RotaDate from "~lib/rota-date"
+import { selectClockInDayDetails } from "~redux/selectors"
 
 class StaffDay extends React.Component {
     constructor(props){
@@ -13,32 +14,41 @@ class StaffDay extends React.Component {
     }
     render(){
         var props = this.props;
-        return <div>just do store logic for now</div>
         return <StaffDayUi
             markedAsDone={this.state.markedAsDone}
             rotaDate={new RotaDate({
                 dateOfRota: props.clockInDay.date
             })}
-            clockedClockIns={props.clockedClockIns}
-            rotaedShifts={props.rotaedShifts}
-            acceptedHours={this.state.proposedInfo}
-            onAcceptedHoursChanged={(acceptedHours) =>{
-                this.setState({proposedInfo: acceptedHours})
-            }}
+            clockedClockInPeriods={props.clockedClockInPeriods}
+            // rotaedShifts={props.rotaedShifts}
+            // acceptedHours={this.state.proposedInfo}
+            // onAcceptedHoursChanged={(acceptedHours) =>{
+            //     this.setState({proposedInfo: acceptedHours})
+            // }}
             markDayAsDone={() => this.setState({markedAsDone: true})}
-            events={props.events}
+            // events={props.events}
             staffMember={this.props.staffMember}
-            predefinedReasons={props.predefinedReasons}
+            clockInReasons={props.clockInReasons}
             notes={props.notes}
             staffType={this.props.staffType}
+            clockInBreaks={this.props.clockInBreaks}
         />
     }
 }
 
 function mapStateToProps(state, ownProps){
-    var staffMember = ownProps.clockInDay.staff_member.get(state.staff);
+    var {
+        staffMember,
+        clockedClockInPeriods,
+        amendedClockInPeriods,
+        clockInBreaks
+    } =  selectClockInDayDetails(state, ownProps.clockInDay)
     var props = {
         staffMember,
+        clockedClockInPeriods,
+        amendedClockInPeriods,
+        clockInBreaks,
+        clockInReasons: state.clockInReasons,
         staffType: staffMember.staff_type.get(state.staffTypes)
     }
     return props;

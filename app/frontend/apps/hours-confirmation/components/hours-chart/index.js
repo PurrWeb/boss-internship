@@ -2,7 +2,7 @@ import React from "react"
 import RotaDate from "~lib/rota-date"
 import _ from "underscore"
 import moment from "moment"
-import convertClockInHoursToIntervals from "./convert-clock-in-hours-to-intervals"
+import convertClockInPeriodToIntervals from "./convert-clock-in-period-to-intervals"
 import HoursChartUi from "./hours-chart-content"
 
 export default class HoursChart extends React.Component {
@@ -47,7 +47,7 @@ export default class HoursChart extends React.Component {
         })
     }
     getProposedAcceptedIntervals(){
-        return this.getIntervalsFromClockInList(this.props.proposedAcceptedClockIns)
+        return this.getIntervalsFromClockInPeriodList(this.props.proposedAcceptedClockIns)
     }
     getDateFromHoursOffset(hoursOffset){
         var date = new Date(this.props.rotaDate.startTime);
@@ -71,10 +71,10 @@ export default class HoursChart extends React.Component {
     getHoursSinceStartOfDay(date){
         return this.props.rotaDate.getHoursSinceStartOfDay(date);
     }
-    getIntervalsFromClockInList(clockInList){
+    getIntervalsFromClockInPeriodList(clockInList){
         var clockedIntervals = []
-        clockInList.forEach(function(clockIn){
-            clockedIntervals = clockedIntervals.concat(convertClockInHoursToIntervals(clockIn))
+        clockInList.forEach((clockIn) => {
+            clockedIntervals = clockedIntervals.concat(convertClockInPeriodToIntervals(clockIn, this.props.clockInBreaks))
         })
 
         var intervals = clockedIntervals.map((interval) => {
@@ -92,6 +92,6 @@ export default class HoursChart extends React.Component {
         return intervals;
     }
     getClockedChartIntervals(){
-        return this.getIntervalsFromClockInList(this.props.clockedClockIns)
+        return this.getIntervalsFromClockInPeriodList(this.props.clockedClockInPeriods)
     }
 }
