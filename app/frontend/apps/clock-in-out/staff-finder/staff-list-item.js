@@ -7,7 +7,7 @@ import StaffTypeBadge from "~components/staff-type-badge"
 import StaffStatusBadge from "~components/staff-status-badge"
 import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
-import { 
+import {
     selectShiftsByStaffMemberClientId,
     selectIsUpdatingStaffMemberStatus,
     selectEnterManagerModeIsInProgress,
@@ -153,6 +153,7 @@ class ClockInOutStaffListItem extends Component {
 
         return <a
             onClick={() => this.props.enterUserMode(modeType, this.props.staff)}
+            data-test-marker-enter-manager-mode
             className="btn btn-default btn-sm hide-in-manager-mode--inline-block">
             {buttonText}
         </a>

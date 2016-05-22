@@ -1,6 +1,7 @@
 import * as backendData from "~lib/backend-data/process-backend-objects"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import utils from "~lib/utils"
+import _ from "underscore"
 import {
     replaceWeeklyRotaForecast
 } from "./rota-forecasts"

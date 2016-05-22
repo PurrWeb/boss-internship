@@ -6,6 +6,7 @@ import {selectClockInOutAppIsInManagerMode} from "../selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import {showUserActionConfirmationMessage} from "./user-action-confirmation-messages"
 import {showConfirmationModal} from "./confirmation-modal"
+import _ from "underscore"
 import {
     loadInitialClockInOutAppState
 } from "./app-data"

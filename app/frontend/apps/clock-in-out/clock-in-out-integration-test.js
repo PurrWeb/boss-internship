@@ -22,7 +22,7 @@ describe("Clock In/Out Page Integration Test", function(){
         }],
         staff_types: [{
             "id":7,
-            "name":"Bar Supervisor",
+            "name":"Manager",
             "color":"#bb4dff"
         }],
         rota_shifts: [],
@@ -72,11 +72,33 @@ describe("Clock In/Out Page Integration Test", function(){
         expect($$(".staff-list-item--clock-in-out").length).toBeGreaterThan(0);
     })
 
-    it("Shows a modal for pin entry after clicking on a staff member's clockin button", function(){
+    function closePinModal(onClosed){
+        var closeButton = getPinModal().parentElement.querySelector(".closeButton--jss-0-1")
+        ReactTestUtils.Simulate.click(closeButton)
+        _.delay(function(){
+            debugger;
+            expect(getPinModal()).toBe(undefined)
+            onClosed();
+        }, 1000)
+    }
+
+    function getPinModal(){
+        return document.querySelectorAll("[data-test-marker-pin-modal]")[0];
+    }
+
+    it("Shows a modal for pin entry after clicking on a staff member's clockin button", function(done){
         ReactTestUtils.Simulate.click($$("[data-test-marker-toggle-staff-status]")[0])
         // I think the PIN modal module actually injects a new body-level element,
         // so it's not inside my component
-        expect(document.querySelectorAll("[data-test-marker-pin-modal]").length).toBeGreaterThan(0);
+        expect(getPinModal()).toNotBe(undefined)
+        closePinModal(done)
     });
+
+    it("Shows a modal after clicking on 'Enter Manager Mode'", function(){
+        ReactTestUtils.Simulate.click($$("[data-test-marker-enter-manager-mode]")[0]);
+        expect(getPinModal()).toNotBe(undefined)
+    })
+
+
 
 });
