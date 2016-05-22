@@ -25,4 +25,35 @@ describe("rotasReducer", function(){
 
         expect(rotasReducer(initalState, action)).toEqual(expectedResultState);
     });
+
+
+
+    it("Can publish all shifts in a week", function(){
+        var initialState = {
+            123:  {
+                clientId: 123,
+                date: new Date(2015,6,6),
+                status: "in_progress",
+                venue: {serverId: 1}
+            }
+        }
+
+        var action = {
+            type: "PUBLISH_ROTAS_SUCCESS",
+            date: new Date(2015,6,6),
+            venueServerId: 1
+        }
+
+        var expectedResultState = {
+            123: {
+                clientId: 123,
+                date: new Date(2015,6,6),
+                status: "published",
+                venue: {serverId: 1}
+            }
+        }
+
+        expect(rotasReducer(initialState, action)[123]).toEqual(expectedResultState[123])
+    })
+
 });

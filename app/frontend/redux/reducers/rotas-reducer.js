@@ -14,17 +14,19 @@ export default makeReducer({
         return newState;
     },
     PUBLISH_ROTAS_SUCCESS: function(state, action){
-        if (rota.venue.serverId !== action.venueServerId) {
-            return rota;
-        }
-        var weekStartDate = utils.getWeekStartDate(action.date);
-        var weekEndDate = utils.getWeekEndDate(action.date);
-        var isWithinUpdatedDateRange = rota.date >= weekStartDate &&
-            rota.date <= weekEndDate;
-        if (!isWithinUpdatedDateRange) {
-            return rota;
-        }
-        return Object.assign({}, rota, {status: "published"});
+        return _(state).mapObject(function(rota){
+            if (rota.venue.serverId !== action.venueServerId) {
+                return rota;
+            }
+            var weekStartDate = utils.getWeekStartDate(action.date);
+            var weekEndDate = utils.getWeekEndDate(action.date);
+            var isWithinUpdatedDateRange = rota.date >= weekStartDate &&
+                rota.date <= weekEndDate;
+            if (!isWithinUpdatedDateRange) {
+                return rota;
+            }
+            return Object.assign({}, rota, {status: "published"});
+        });
     },
     ADD_SHIFT_SUCCESS: function(state, action){
         // may now have the correct backend rota ID
