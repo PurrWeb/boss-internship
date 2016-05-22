@@ -1,5 +1,5 @@
 import _ from "underscore"
-import { processBackendObject, processObjectLinks } from "./process-backend-object.js"
+import { processBackendObject, processObjectLinks, getClientId } from "./process-backend-object.js"
 
 export function processRotaObject(rota){
     if (rota.id === null){
