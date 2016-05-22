@@ -94,3 +94,7 @@ import {
     updateStaffMemberPinWithEntryModal,
     updateStaffMemberPin
 } from "./actions/staff-members"
+export {
+    updateStaffMemberPinWithEntryModal,
+    updateStaffMemberPin
+}

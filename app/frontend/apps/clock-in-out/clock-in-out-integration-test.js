@@ -134,7 +134,17 @@ describe("Clock In/Out Page Integration Test", function(){
             expect($$("[data-test-marker-change-pin-button]").length).toBeGreaterThan(0)
 
             done();
-        }, 10)
+        }, 10);
+    })
+
+    it("Shows a modal after clicking on 'Change PIN'", function(done){
+        var changePinButton = $$("[data-test-marker-change-pin-button]")[0];
+        ReactTestUtils.Simulate.click(changePinButton);
+
+        _.defer(function(){
+            expect(getPinModal()).toNotBe(undefined);
+            closePinModal(done)
+        })
     })
 
 });
