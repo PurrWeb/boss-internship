@@ -1,8 +1,8 @@
 import React from "react"
 import AppComponent from "../app-component";
 import { Provider} from "react-redux"
-import RotaOverviewPage from "./rota-overview-page.js"
-import * as actionCreators from "~redux/actions.js"
+import RotaOverviewPage from "./rota-overview-page"
+import * as actionCreators from "~redux/actions"
 import { processVenueRotaOverviewObject } from "~lib/backend-data/process-backend-objects"
 
 export default class RotaApp extends AppComponent {

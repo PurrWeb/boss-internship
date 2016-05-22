@@ -1,11 +1,11 @@
 import React, { Component } from "react"
 import { connect, Provider } from "react-redux"
-import * as actionCreators from "../../redux/actions.js"
-import ChartAndFilter from "./chart-and-filter.js"
+import * as actionCreators from "~redux/actions"
+import ChartAndFilter from "./chart-and-filter"
 import _ from "underscore"
 import AddShiftViewContainer from "./add-shift-view-container"
 import RotaNavigation from "./rota-navigation"
-import store from "../../redux/store.js"
+import store from "~redux/store"
 import moment from "moment"
 import RotaStatusToggle from "./status-toggle/rota-status-toggle"
 import { selectRotaOnVenueRotaPage } from "~redux/selectors"
@@ -30,7 +30,7 @@ class RotaView extends Component {
             <br/>
             <ChartAndFilter />
             <hr />
-            <AddShiftViewContainer 
+            <AddShiftViewContainer
                 dateOfRota={this.props.rota.date} />
         </div>
     }

@@ -5,7 +5,7 @@ import {
     clockInOutAppSelectStaffType,
     updateStaffStatusWithConfirmation,
     clockInOutAppFetchAppData
-} from "./actions/clocking"
+} from "./clocking"
 export {
     clockInOutAppEnterUserMode,
     updateStaffStatus,
@@ -18,7 +18,7 @@ export {
 import {
     updateRotaStatus,
     publishRotas
-} from "./actions/rotas"
+} from "./rotas"
 export {
     updateRotaStatus,
     publishRotas
@@ -27,7 +27,7 @@ export {
 import {
     showUserActionConfirmationMessage,
     hideUserActionConfirmationMessage
-} from "./actions/user-action-confirmation-messages"
+} from "./user-action-confirmation-messages"
 export {
     showUserActionConfirmationMessage,
     hideUserActionConfirmationMessage
@@ -37,7 +37,7 @@ import {
     replaceWeeklyRotaForecast,
     updateRotaForecast,
     fetchWeeklyRotaForecast
-} from "./actions/rota-forecasts"
+} from "./rota-forecasts"
 export {
     replaceWeeklyRotaForecast,
     updateRotaForecast,
@@ -48,7 +48,7 @@ import {
     showConfirmationModal,
     cancelConfirmationModal,
     completeConfirmationModal
-} from "./actions/confirmation-modal"
+} from "./confirmation-modal"
 export {
     showConfirmationModal,
     cancelConfirmationModal,
@@ -59,7 +59,7 @@ import {
     addRotaShift,
     updateRotaShift,
     deleteRotaShift
-} from "./actions/shifts"
+} from "./shifts"
 export {
     addRotaShift,
     updateRotaShift,
@@ -70,7 +70,7 @@ import {
     setApiKey,
     genericReplaceAllItems,
     setPageOptions
-} from "./actions/misc"
+} from "./misc"
 export {
     setApiKey,
     genericReplaceAllItems,
@@ -82,7 +82,7 @@ import {
     loadInitalStaffTypeRotaAppState,
     loadInitialRotaOverviewAppState,
     loadInitialHoursConfirmationAppState
-} from "./actions/app-data"
+} from "./app-data"
 export {
     loadInitialRotaAppState,
     loadInitalStaffTypeRotaAppState,
@@ -93,7 +93,7 @@ export {
 import {
     updateStaffMemberPinWithEntryModal,
     updateStaffMemberPin
-} from "./actions/staff-members"
+} from "./staff-members"
 export {
     updateStaffMemberPinWithEntryModal,
     updateStaffMemberPin

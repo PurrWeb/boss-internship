@@ -1,7 +1,7 @@
 import React from "react"
 import AppComponent from "../app-component"
-import StaffTypeRotaOverviewPage from "./staff-type-rota-overview-page.js"
-import * as actionCreators from "~redux/actions.js"
+import StaffTypeRotaOverviewPage from "./staff-type-rota-overview-page"
+import * as actionCreators from "~redux/actions"
 import { processStaffTypeRotaOverviewObject } from "~lib/backend-data/process-backend-objects";
 
 export default class StaffTypeRotaOverviewApp extends AppComponent {
