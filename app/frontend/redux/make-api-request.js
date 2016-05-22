@@ -45,9 +45,9 @@ export default function makeApiRequestMaker(apiOptions){
                 callback(window.boss.access_token);
             } else if (typeof accessToken === "string") {
                 makeRequest(accessToken)
-            } else if (accessToken.pin && accessToken.staffMemberServerId
+            } else if (accessToken.pin !== undefined && accessToken.staffMemberServerId !== undefined
             ||
-            accessToken.api_key) {
+            accessToken.api_key !== undefined) {
                 makeRequestForAccessToken({
                     requestData: {
                         apiKey: getApiKey(),
