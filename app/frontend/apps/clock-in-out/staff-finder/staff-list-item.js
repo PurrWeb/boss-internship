@@ -116,7 +116,9 @@ class ClockInOutStaffListItem extends Component {
             return <Spinner />
         }
 
-        return <a className="btn btn-default btn-sm show-in-manager-mode--inline-block"
+        return <a
+                className="btn btn-default btn-sm show-in-manager-mode--inline-block"
+                data-test-marker-change-pin-button
                 onClick={() => this.props.updateStaffMemberPin({
                     staffMemberObject: staffObject
                 })}>

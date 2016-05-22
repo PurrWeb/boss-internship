@@ -1,5 +1,6 @@
 import React from "react"
 import expect from "expect"
+import Promise from "bluebird"
 import ClockInOutApp from "./clock-in-out-app"
 import { simpleRender } from "~lib/test-helpers"
 import ReactTestUtils from "react-addons-test-utils"
@@ -72,14 +73,28 @@ describe("Clock In/Out Page Integration Test", function(){
         expect($$(".staff-list-item--clock-in-out").length).toBeGreaterThan(0);
     })
 
+    function accelerateTimeouts(fn){
+        // modal has a 500ms closing animation - couldn't find a config option
+        // to disable that
+        var originalSetTimeout = setTimeout;
+        window.setTimeout =  function(callback, time){
+            return originalSetTimeout(callback, time / 100);
+        }
+        fn();
+        window.setTimeout = originalSetTimeout;
+    }
+
     function closePinModal(onClosed){
         var closeButton = getPinModal().parentElement.querySelector(".closeButton--jss-0-1")
-        ReactTestUtils.Simulate.click(closeButton)
+
+        accelerateTimeouts(function(){
+            ReactTestUtils.Simulate.click(closeButton)
+        })
+
         _.delay(function(){
-            debugger;
             expect(getPinModal()).toBe(undefined)
             onClosed();
-        }, 1000)
+        }, 10)
     }
 
     function getPinModal(){
@@ -99,6 +114,27 @@ describe("Clock In/Out Page Integration Test", function(){
         expect(getPinModal()).toNotBe(undefined)
     })
 
+    it("Logs the manager in after entering a PIN and shows change PIN buttons for users", function(done){
+        var promise = Promise.resolve({access_token: "", expires_at: new Date(2050,10,10)})
 
+        var pinInput = getPinModal().querySelector("input[type='text']");
+
+        pinInput.value = "1234"
+        ReactTestUtils.Simulate.change(pinInput);
+
+        expect.spyOn($, "ajax").andReturn(promise);
+        var form = getPinModal().querySelector("form")
+
+        accelerateTimeouts(function(){
+            ReactTestUtils.Simulate.submit(form)
+        });
+
+        _.delay(function(){
+            expect(getPinModal()).toBe(undefined)
+            expect($$("[data-test-marker-change-pin-button]").length).toBeGreaterThan(0)
+
+            done();
+        }, 10)
+    })
 
 });

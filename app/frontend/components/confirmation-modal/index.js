@@ -19,6 +19,9 @@ class ConfirmationModal extends React.Component {
             return null;
         }
 
+        // For now just use an if statement here.
+        // I'm not sure how exactly this modal will develop, if
+        // at all.
         if (this.props.confirmationType === "PIN") {
 
             return <ModalContainer onClick={() => this.cancel()}>
