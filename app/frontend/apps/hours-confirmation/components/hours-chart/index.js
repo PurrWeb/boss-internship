@@ -7,11 +7,11 @@ import HoursChartUi from "./hours-chart-content"
 
 export default class HoursChart extends React.Component {
     static propTypes = {
-        clockedClockIns: React.PropTypes.array.isRequired,
+        clockedClockInPeriods: React.PropTypes.array.isRequired,
         rotaedShifts: React.PropTypes.array.isRequired,
-        proposedAcceptedClockIns: React.PropTypes.array.isRequired,
+        amendedClockInPeriods: React.PropTypes.array.isRequired,
         rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired,
-        events: React.PropTypes.array.isRequired
+        clockInDayEvents: React.PropTypes.array.isRequired
     }
     constructor(props){
         super(props)
@@ -24,7 +24,7 @@ export default class HoursChart extends React.Component {
     render(){
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
-            proposedAcceptedIntervals={this.getProposedAcceptedIntervals()}
+            amendedIntervals={this.getAmendedChartIntervals()}
             rotaedIntervals={this.getRotaedChartIntervals()}
             events={this.getEventsList()}
             interactionState={this.state.interactionState}
@@ -34,7 +34,7 @@ export default class HoursChart extends React.Component {
             />
     }
     getEventsList(){
-        return this.props.events.map((event) => {
+        return this.props.clockInEvents.map((event) => {
             return {
                 timeOffset: this.getHoursSinceStartOfDay(event.time),
                 type: event.type
@@ -46,8 +46,8 @@ export default class HoursChart extends React.Component {
             interactionState: Object.assign({}, this.state.interactionState, interactionState)
         })
     }
-    getProposedAcceptedIntervals(){
-        return this.getIntervalsFromClockInPeriodList(this.props.proposedAcceptedClockIns)
+    getAmendedChartIntervals(){
+        return this.getIntervalsFromClockInPeriodList(this.props.amendedClockInPeriods)
     }
     getDateFromHoursOffset(hoursOffset){
         var date = new Date(this.props.rotaDate.startTime);

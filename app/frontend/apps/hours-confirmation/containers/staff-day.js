@@ -8,7 +8,7 @@ class StaffDay extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            amendedClockIns: [],
+            amendedClockInPeriods: props.amendedClockInPeriods,
             markedAsDone: false
         }
     }
@@ -20,16 +20,17 @@ class StaffDay extends React.Component {
                 dateOfRota: props.clockInDay.date
             })}
             clockedClockInPeriods={props.clockedClockInPeriods}
-            // rotaedShifts={props.rotaedShifts}
-            // acceptedHours={this.state.proposedInfo}
+            rotaedShifts={props.rotaedShifts}
+            amendedClockInPeriods={this.state.amendedClockInPeriods}
+
             // onAcceptedHoursChanged={(acceptedHours) =>{
             //     this.setState({proposedInfo: acceptedHours})
             // }}
             markDayAsDone={() => this.setState({markedAsDone: true})}
-            // events={props.events}
+            clockInEvents={props.clockInEvents}
             staffMember={this.props.staffMember}
             clockInReasons={props.clockInReasons}
-            notes={props.notes}
+            clockInNotes={props.clockInNotes}
             staffType={this.props.staffType}
             clockInBreaks={this.props.clockInBreaks}
         />
@@ -37,19 +38,13 @@ class StaffDay extends React.Component {
 }
 
 function mapStateToProps(state, ownProps){
-    var {
-        staffMember,
-        clockedClockInPeriods,
-        amendedClockInPeriods,
-        clockInBreaks
-    } =  selectClockInDayDetails(state, ownProps.clockInDay)
+    var details = selectClockInDayDetails(state, ownProps.clockInDay)
+    var staffMember = details.staffMember;
     var props = {
-        staffMember,
-        clockedClockInPeriods,
-        amendedClockInPeriods,
-        clockInBreaks,
+        ...details,
         clockInReasons: state.clockInReasons,
-        staffType: staffMember.staff_type.get(state.staffTypes)
+        staffType: staffMember.staff_type.get(state.staffTypes),
+        clockInReasons: state.clockInReasons
     }
     return props;
 }

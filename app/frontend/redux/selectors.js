@@ -269,6 +269,25 @@ export function selectClockInDayDetails(state, clockInDay){
         .flatten()
         .map((breakLink) => breakLink.get(state.clockInBreaks))
         .value()
+
+    var rota = getRotaFromDateAndVenue({
+        dateOfRota: clockInDay.date,
+        venueId: clockInDay.venue.clientId,
+        rotas: state.rotas
+    })
+
+    var rotaedShifts = _(state.rotaShifts).filter(function(shift){
+        return shift.rota.clientId === rota.clientId && shift.staff_member.clientId === staffMember.clientId
+    })
+
+    var clockInEvents = _(state.clockInEvents).filter(function(clockInEvent){
+        return clockInEvent.clock_in_day.clientId === clockInDay.clientId
+    })
+
+    var clockInNotes = _(state.clockInEvents).filter(function(clockInNote){
+        return clockInNote.clock_in_day.clientId === clockInDay.clientId;
+    })
+
     return {
         clockedClockInPeriods: _.filter(clockInPeriods, {
             period_type: "clocked"
@@ -276,7 +295,10 @@ export function selectClockInDayDetails(state, clockInDay){
         amendedClockInPeriods: _.filter(clockInPeriods, {
             period_type: "amended"
         }),
+        clockInEvents,
         staffMember,
-        clockInBreaks
+        clockInBreaks,
+        rotaedShifts,
+        clockInNotes
     }
 }

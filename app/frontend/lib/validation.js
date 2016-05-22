@@ -48,13 +48,13 @@ var validation = {
     areShiftTimesValid(starts_at, ends_at) {
         return validation.validateShiftTimes({starts_at, ends_at}).isValid;
     },
-    validateBreak({breakItem, acceptedHoursClockInHours}) {
+    validateBreak({breakItem, amendedClockInPeriod}) {
         var messages = [];
 
-        if (breakItem.starts_at <= acceptedHoursClockInHours.starts_at) {
+        if (breakItem.starts_at <= amendedClockInPeriod.starts_at) {
             messages.push("Break can only start after shift begins")
         }
-        if (breakItem.ends_at >= acceptedHoursClockInHours.ends_at) {
+        if (breakItem.ends_at >= amendedClockInPeriod.ends_at) {
             messages.push("Break must end before shift end")
         }
 
@@ -68,12 +68,12 @@ var validation = {
             isValid: messages.length === 0
         }
     },
-    validateBreaks({breaks, acceptedHoursClockInHours}){
+    validateBreaks({breaks, amendedClockInPeriod}){
         var messages = [];
         breaks.forEach(function(breakItem){
             var res = validation.validateBreak({
                 breakItem,
-                acceptedHoursClockInHours
+                amendedClockInPeriod
             })
             messages = messages.concat(res.messages)
         });
