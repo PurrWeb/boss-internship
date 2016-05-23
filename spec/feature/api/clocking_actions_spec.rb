@@ -48,6 +48,10 @@ RSpec.describe 'Clocking actions' do
       specify 'no clock in period should exist' do
         expect(ClockInPeriod.count).to eq(0)
       end
+
+      specify 'no clock in day should exist' do
+        expect(ClockInDay.count).to eq(0)
+      end
     end
 
     specify 'should work' do
@@ -60,6 +64,16 @@ RSpec.describe 'Clocking actions' do
       expect(ClockingEvent.count).to eq(1)
     end
 
+    specify 'should create clocking period' do
+      post(url, params)
+      expect(ClockInPeriod.count).to eq(1)
+    end
+
+    specify 'clock in day should be created' do
+      post(url, params)
+      expect(ClockInDay.count).to eq(1)
+    end
+
     context 'when previous events exist' do
       let(:params) do
         {
@@ -69,12 +83,19 @@ RSpec.describe 'Clocking actions' do
       end
 
       before do
-        ClockingEvent.create!(
-          venue: venue,
+        starts_at = day_start + 1.hour
+
+        clock_in_day = ClockInDay.create!(
           staff_member: target_staff_member,
-          at: day_start + 1.hour,
+          date: date,
+          venue: venue,
+          creator: user
+        )
+
+        create_initial_clock_in(
+          clock_in_day: clock_in_day,
           creator: staff_member,
-          event_type: 'clock_in'
+          at: starts_at
         )
       end
 
@@ -98,18 +119,33 @@ RSpec.describe 'Clocking actions' do
       end
 
       before do
-        ClockingEvent.create!(
-          venue: venue,
+        starts_at = day_start + 1.hour
+
+        clock_in_day = ClockInDay.create!(
           staff_member: target_staff_member,
-          at: day_start + 1.hour,
+          venue: venue,
+          date: date,
+          creator: staff_member
+        )
+
+        create_initial_clock_in(
+          clock_in_day: clock_in_day,
           creator: staff_member,
-          event_type: 'clock_in'
+          at: starts_at
         )
       end
 
       context 'before call' do
         specify 'no clock outs should exist' do
           expect(ClockingEvent.count).to eq(1)
+        end
+
+        specify '1 clock in period should exist' do
+          expect(ClockInPeriod.count).to eq(1)
+        end
+
+        specify '1 clock in day should exist' do
+          expect(ClockInDay.count).to eq(1)
         end
       end
 
@@ -124,19 +160,17 @@ RSpec.describe 'Clocking actions' do
         expect(ClockingEvent.last.event_type).to eq('clock_out')
       end
 
-      specify 'should create period' do
+      specify 'should associate event with create period' do
         call_time = day_start + 2.hours
         travel_to call_time do
           post(url, params)
         end
         expect(ClockInPeriod.count).to eq(1)
         period = ClockInPeriod.last
-        expect(period.clocking_events.to_a).to eq([ClockingEvent.last])
-        expect(period.venue).to eq(venue)
-        expect(period.date).to eq(date)
-        expect(period.staff_member).to eq(target_staff_member)
-        expect(period.starts_at).to eq(call_time)
-        expect(period.clock_in_period_reason).to eq(nil)
+        clock_out_event = ClockingEvent.last
+        expect(period.clocking_events.count).to eq(2)
+        expect(period.clocking_events.last).to eq(clock_out_event)
+        expect(period.ends_at).to eq(clock_out_event.at)
       end
     end
   end
@@ -162,13 +196,19 @@ RSpec.describe 'Clocking actions' do
       end
 
       before do
-        ClockInPeriod.create!(
-          venue: venue,
-          creator: staff_member,
+        starts_at = day_start + 1.hour
+
+        clock_in_day = ClockInDay.create!(
           staff_member: target_staff_member,
+          venue: venue,
           date: date,
-          starts_at: day_start + 1.hour,
-          clocking_events: [clock_in_event]
+          creator: staff_member
+        )
+
+        create_initial_clock_in(
+          clock_in_day: clock_in_day,
+          creator: staff_member,
+          at: starts_at
         )
       end
 
@@ -225,27 +265,28 @@ RSpec.describe 'Clocking actions' do
       end
 
       before do
-        clock_in_event = ClockingEvent.create!(
-          venue: venue,
+        starts_at = day_start + 1.hour
+
+        clock_in_day = ClockInDay.create!(
           staff_member: target_staff_member,
-          at: day_start + 1.hour,
-          creator: staff_member,
-          event_type: 'clock_in'
-        )
-        start_break_event = ClockingEvent.create!(
           venue: venue,
-          staff_member: target_staff_member,
-          at: start_break_time,
-          creator: staff_member,
-          event_type: 'start_break'
-        )
-        ClockInPeriod.create!(
-          venue: venue,
-          creator: staff_member,
-          staff_member: target_staff_member,
           date: date,
-          starts_at: day_start + 1.hour,
-          clocking_events: [clock_in_event, start_break_event]
+          creator: staff_member
+        )
+
+        create_initial_clock_in(
+          clock_in_day: clock_in_day,
+          creator: staff_member,
+          at: starts_at
+        )
+
+        last_clock_in_period = clock_in_day.clock_in_periods.last
+
+        add_event_to_period(
+          clock_in_period: last_clock_in_period,
+          event_type: 'start_break',
+          at: start_break_time,
+          creator: staff_member
         )
       end
 
@@ -344,6 +385,36 @@ RSpec.describe 'Clocking actions' do
   end
 
   private
+  def create_initial_clock_in(clock_in_day:, at:, creator:)
+    clock_in_period = ClockInPeriod.create!(
+      clock_in_day: clock_in_day,
+      starts_at: at,
+      creator: creator
+    )
+
+    event = ClockingEvent.create!(
+      venue: clock_in_day.venue,
+      staff_member: clock_in_day.staff_member,
+      at: at,
+      creator: creator,
+      event_type: 'clock_in'
+    )
+
+    clock_in_period.clocking_events << event
+  end
+
+  def add_event_to_period(clock_in_period:, event_type:, creator:, at:)
+    event = ClockingEvent.create!(
+      venue: clock_in_period.venue,
+      staff_member: clock_in_period.staff_member,
+      at: at,
+      creator: creator,
+      event_type: event_type
+    )
+
+    clock_in_period.clocking_events << event
+  end
+
   def app
     Rails.application
   end

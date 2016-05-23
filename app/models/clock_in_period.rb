@@ -9,4 +9,6 @@ class ClockInPeriod < ActiveRecord::Base
   validates :clock_in_day, presence: true
   validates :creator, presence: true
   validates :starts_at, presence: true
+
+  delegate :venue, :staff_member, :date, to: :clock_in_day
 end

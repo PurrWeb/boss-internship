@@ -1,32 +1,16 @@
 class ClockInStatus
   STATES = [:clocked_in, :clocked_out, :on_break]
 
-  def initialize(staff_member:, venue:, date:)
-    @staff_member = staff_member
-    @venue = venue
-    @date = date
+  def initialize(clock_in_day:)
+    @clock_in_day = clock_in_day
+    @date = clock_in_day.date
+    @venue = clock_in_day.venue
+    @staff_member = clock_in_day.staff_member
   end
 
-  attr_reader :staff_member
+  def transition_to!(state:, at:, requester:, nested: false)
+    current_state = clock_in_day.current_clock_in_state
 
-  def current_state
-    case last_event.andand.event_type
-    when 'clock_in'
-      :clocked_in
-    when 'clock_out'
-      :clocked_out
-    when 'start_break'
-      :on_break
-    when 'end_break'
-      :clocked_out
-    when nil
-      :clocked_out
-    else
-      raise "Usupported event type encountered :#{last_event.event_type}"
-    end
-  end
-
-  def transition_to!(state:, at:, requester:)
     raise "unsupported state encountered: #{state}" unless STATES.include?(state)
 
     transition_legal = allowed_event_transations.fetch(current_state).any? do |transition_data|
@@ -43,7 +27,7 @@ class ClockInStatus
       raise 'supplied at time before previous event'
     end
 
-    ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction(requires_new: nested) do
       saved_last_event = last_event
 
       new_event = ClockingEvent.create!(
@@ -56,17 +40,14 @@ class ClockInStatus
 
       current_recorded_clock_in_period = CurrentRecordedClockInPeriodQuery.
         new(
-          venue: venue,
-          staff_member: staff_member
+          clock_in_day: clock_in_day
         ).
         first
 
       if !current_recorded_clock_in_period.present?
         current_recorded_clock_in_period = ClockInPeriod.new(
           creator: requester,
-          venue: venue,
-          date: date,
-          staff_member: staff_member,
+          clock_in_day: clock_in_day,
           starts_at: at,
           clock_in_period_reason: nil
         )
@@ -87,11 +68,7 @@ class ClockInStatus
   end
 
   private
-  attr_reader :venue, :date
-
-  def interval_event?
-    last_event.clock_in? || last_event.start_break?
-  end
+  attr_reader :clock_in_day, :date, :venue, :staff_member
 
   def last_event
     events.last

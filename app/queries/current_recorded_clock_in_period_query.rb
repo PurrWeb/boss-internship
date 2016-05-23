@@ -1,19 +1,17 @@
 class CurrentRecordedClockInPeriodQuery
-  def initialize(venue:, staff_member:)
-    @venue = venue
-    @staff_member = staff_member
+  def initialize(clock_in_day:)
+    @clock_in_day = clock_in_day
   end
 
   def first
     ClockInPeriod.
       where(
-        venue: venue,
-        staff_member: staff_member,
+        clock_in_day: clock_in_day,
         ends_at: nil
       ).
       first
   end
 
   private
-  attr_reader :staff_member, :venue
+  attr_reader :clock_in_day
 end

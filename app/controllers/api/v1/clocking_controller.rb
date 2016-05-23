@@ -52,17 +52,30 @@ module Api
 
         authorize!(:perform_clocking_action, staff_member)
 
-        status = ClockInStatus.new(
-          date: date,
-          venue: venue,
-          staff_member: staff_member
-        )
+        ActiveRecord::Base.transaction do
+          clock_in_day = ClockInDay.find_or_initialize_by(
+            venue: venue,
+            date: date,
+            staff_member: staff_member
+          )
 
-        status.transition_to!(
-          state: to_state,
-          at: at,
-          requester: staff_member_from_token,
-        )
+          if clock_in_day.new_record?
+            clock_in_day.update_attributes!(
+              creator: staff_member_from_token
+            )
+          end
+
+          status = ClockInStatus.new(
+            clock_in_day: clock_in_day
+          )
+
+          status.transition_to!(
+            state: to_state,
+            at: at,
+            requester: staff_member_from_token,
+            nested: true
+          )
+        end
       end
 
       def staff_member_from_params
