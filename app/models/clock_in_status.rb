@@ -63,7 +63,6 @@ class ClockInStatus
 
       if !current_recorded_clock_in_period.present?
         current_recorded_clock_in_period = ClockInPeriod.new(
-          period_type: 'recorded',
           creator: requester,
           venue: venue,
           date: date,

@@ -131,7 +131,6 @@ RSpec.describe 'Clocking actions' do
         end
         expect(ClockInPeriod.count).to eq(1)
         period = ClockInPeriod.last
-        expect(period.period_type).to eq('recorded')
         expect(period.clocking_events.to_a).to eq([ClockingEvent.last])
         expect(period.venue).to eq(venue)
         expect(period.date).to eq(date)
@@ -164,7 +163,6 @@ RSpec.describe 'Clocking actions' do
 
       before do
         ClockInPeriod.create!(
-          period_type: 'recorded',
           venue: venue,
           creator: staff_member,
           staff_member: target_staff_member,
@@ -242,7 +240,6 @@ RSpec.describe 'Clocking actions' do
           event_type: 'start_break'
         )
         ClockInPeriod.create!(
-          period_type: 'recorded',
           venue: venue,
           creator: staff_member,
           staff_member: target_staff_member,

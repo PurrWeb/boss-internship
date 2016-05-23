@@ -138,7 +138,6 @@ ActiveRecord::Schema.define(version: 20160601214451) do
   end
 
   create_table "clock_in_periods", force: :cascade do |t|
-    t.string   "period_type",               limit: 255, null: false
     t.date     "date",                                  null: false
     t.integer  "staff_member_id",           limit: 4,   null: false
     t.integer  "venue_id",                  limit: 4,   null: false

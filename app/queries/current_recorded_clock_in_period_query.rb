@@ -7,7 +7,6 @@ class CurrentRecordedClockInPeriodQuery
   def first
     ClockInPeriod.
       where(
-        period_type: 'recorded',
         venue: venue,
         staff_member: staff_member,
         ends_at: nil
