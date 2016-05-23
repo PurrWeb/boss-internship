@@ -138,9 +138,6 @@ ActiveRecord::Schema.define(version: 20160601214451) do
   end
 
   create_table "clock_in_periods", force: :cascade do |t|
-    t.date     "date",                                  null: false
-    t.integer  "staff_member_id",           limit: 4,   null: false
-    t.integer  "venue_id",                  limit: 4,   null: false
     t.integer  "creator_id",                limit: 4,   null: false
     t.integer  "clock_in_period_reason_id", limit: 4
     t.string   "reason_note",               limit: 255
@@ -149,6 +146,7 @@ ActiveRecord::Schema.define(version: 20160601214451) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "creator_type",              limit: 255, null: false
+    t.integer  "clock_in_day_id",           limit: 4,   null: false
   end
 
   create_table "clocking_events", force: :cascade do |t|
