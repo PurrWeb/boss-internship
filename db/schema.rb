@@ -149,6 +149,7 @@ ActiveRecord::Schema.define(version: 20160601214451) do
     t.datetime "ends_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "creator_type",              limit: 255, null: false
   end
 
   create_table "clocking_events", force: :cascade do |t|
