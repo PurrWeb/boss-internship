@@ -31,14 +31,27 @@ module Api
 
         authorize! :add_note, staff_member
 
-        ClockInNote.create!(
-          creator: staff_member_from_token,
-          staff_member: staff_member,
-          venue: venue,
-          date: date,
-          note: note,
-          enabled: true
-        )
+
+        ActiveRecord::Base.transaction do
+          clock_in_day = ClockInDay.find_or_initialize_by(
+            venue: venue,
+            date: date,
+            staff_member: staff_member
+          )
+
+          if clock_in_day.new_record?
+            clock_in_day.update_attributes!(
+              creator: staff_member_from_token
+            )
+          end
+
+          ClockInNote.create!(
+            creator: staff_member_from_token,
+            clock_in_day: clock_in_day,
+            note: note,
+            enabled: true
+          )
+        end
 
         render nothing: true, status: :ok
       end

@@ -369,15 +369,26 @@ RSpec.describe 'Clocking actions' do
       specify 'no clock outs should exist' do
         expect(ClockInNote.count).to eq(0)
       end
+
+      specify 'no clock in day exists' do
+        expect(ClockInDay.count).to eq(0)
+      end
     end
 
-    specify 'should create a note' do
+    specify 'should create a clock in day' do
       post(url, params)
+      expect(ClockInDay.count).to eq(1)
+      day = ClockInDay.last
+      expect(day.date).to eq(date)
+      expect(day.staff_member).to eq(target_staff_member)
+      expect(day.venue).to eq(venue)
+    end
+
+    specify 'should create a note and associate with day' do
+      post(url, params)
+      clock_in_day = ClockInDay.last
       created_note = ClockInNote.find_by(
-        staff_member: target_staff_member,
-        creator: staff_member,
-        venue: venue,
-        date: date.iso8601
+        clock_in_day: clock_in_day
       )
       expect(created_note).to be_present
       expect(created_note.note).to eq(note)
