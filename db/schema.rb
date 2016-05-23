@@ -102,6 +102,16 @@ ActiveRecord::Schema.define(version: 20160601214451) do
     t.datetime "updated_at"
   end
 
+  create_table "clock_in_days", force: :cascade do |t|
+    t.date     "date",                        null: false
+    t.integer  "staff_member_id", limit: 4,   null: false
+    t.integer  "venue_id",        limit: 4,   null: false
+    t.integer  "creator_id",      limit: 4,   null: false
+    t.string   "creator_type",    limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "clock_in_notes", force: :cascade do |t|
     t.integer  "creator_id",      limit: 4,                  null: false
     t.string   "creator_type",    limit: 255,                null: false
