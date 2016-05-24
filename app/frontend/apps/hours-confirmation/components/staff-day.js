@@ -120,7 +120,7 @@ class ClockOutButton extends React.Component {
         return <button
             className="btn btn-warning"
             onClick={this.props.clockOut}
-            style={{marginTop: 4}}>
+            style={{marginTop: 4, marginLeft: 4}}>
             Clock Out
         </button>
     }
