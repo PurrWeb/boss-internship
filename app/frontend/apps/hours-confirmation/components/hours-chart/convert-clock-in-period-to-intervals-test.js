@@ -1,14 +1,14 @@
 import expect from "expect"
-import convertClockInHoursToIntervals from "./convert-clock-in-hours-to-intervals"
+import convertClockInHoursToIntervals from "./convert-clock-in-period-to-intervals"
 
-describe("convertClockInHoursToIntervals", function(){
+describe("convertClockInPeriodsToIntevals", function(){
     it("Creates just one interval if there are no breaks but the staff member has clocked out", function(){
         var clockInHours = {
             starts_at: new Date(2016, 10, 1, 9, 0),
             ends_at: new Date(2016, 10, 1, 18, 0),
             breaks: []
         }
-        var intervals = convertClockInHoursToIntervals(clockInHours);
+        var intervals = convertClockInHoursToIntervals(clockInHours, []);
         expect(intervals.length).toBe(1)
     })
 
@@ -18,7 +18,7 @@ describe("convertClockInHoursToIntervals", function(){
             ends_at: null,
             breaks: []
         }
-        var intervals = convertClockInHoursToIntervals(clockInHours);
+        var intervals = convertClockInHoursToIntervals(clockInHours, []);
         expect(intervals.length).toBe(0)
     });
 
@@ -27,11 +27,15 @@ describe("convertClockInHoursToIntervals", function(){
             starts_at: new Date(2016, 10, 1, 9, 0),
             ends_at: null,
             breaks: [{
-                starts_at: new Date(2016, 10, 1, 10),
-                ends_at: null
+                get: () => {
+                    return {
+                        starts_at: new Date(2016, 10, 1, 10),
+                        ends_at: null
+                    }
+                }
             }]
         }
-        var intervals = convertClockInHoursToIntervals(clockInHours);
+        var intervals = convertClockInHoursToIntervals(clockInHours, []);
         expect(intervals.length).toBe(1)
     });
 
@@ -40,11 +44,15 @@ describe("convertClockInHoursToIntervals", function(){
             starts_at: new Date(2016, 10, 1, 9, 0),
             ends_at: null,
             breaks: [{
-                starts_at: new Date(2016, 10, 1, 10),
-                ends_at: new Date(2016, 10, 1, 11)
+                get: () =>  {
+                    return {
+                        starts_at: new Date(2016, 10, 1, 10),
+                        ends_at: new Date(2016, 10, 1, 11)
+                    }
+                }
             }],
         }
-        var intervals = convertClockInHoursToIntervals(clockInHours);
+        var intervals = convertClockInHoursToIntervals(clockInHours, []);
         expect(intervals.length).toBe(2)
     });
 
@@ -53,11 +61,15 @@ describe("convertClockInHoursToIntervals", function(){
             starts_at: new Date(2016, 10, 1, 9, 0),
             ends_at: new Date(2016, 10, 1, 12, 0),
             breaks: [{
-                starts_at: new Date(2016, 10, 1, 10),
-                ends_at: new Date(2016, 10, 1, 11)
+                get: () => {
+                    return {
+                        starts_at: new Date(2016, 10, 1, 10),
+                        ends_at: new Date(2016, 10, 1, 11)
+                    }
+                }
             }],
         }
-        var intervals = convertClockInHoursToIntervals(clockInHours);
+        var intervals = convertClockInHoursToIntervals(clockInHours, []);
         expect(intervals.length).toBe(3)
     });
 })
