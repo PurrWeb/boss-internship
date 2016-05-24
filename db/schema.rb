@@ -143,8 +143,8 @@ ActiveRecord::Schema.define(version: 20160601214451) do
     t.datetime "ends_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "creator_type",              limit: 255, null: false
     t.integer  "clock_in_day_id",           limit: 4,   null: false
+    t.string   "creator_type",              limit: 255, null: false
   end
 
   create_table "clocking_events", force: :cascade do |t|
@@ -264,6 +264,47 @@ ActiveRecord::Schema.define(version: 20160601214451) do
   add_index "holidays", ["holiday_type"], name: "index_holidays_on_holiday_type", using: :btree
   add_index "holidays", ["staff_member_id"], name: "index_holidays_on_staff_member_id", using: :btree
   add_index "holidays", ["start_date"], name: "index_holidays_on_start_date", using: :btree
+
+  create_table "hours_acceptance_breaks", force: :cascade do |t|
+    t.integer  "hours_acceptance_period_id", limit: 4, null: false
+    t.datetime "starts_at",                            null: false
+    t.datetime "ends_at",                              null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "hours_acceptance_period_transitions", force: :cascade do |t|
+    t.string   "to_state",                   limit: 255,   null: false
+    t.text     "metadata",                   limit: 65535
+    t.integer  "sort_key",                   limit: 4,     null: false
+    t.integer  "hours_acceptance_period_id", limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "hours_acceptance_period_transitions", ["hours_acceptance_period_id", "most_recent"], name: "index_hours_acceptance_period_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "hours_acceptance_period_transitions", ["hours_acceptance_period_id", "sort_key"], name: "index_hours_acceptance_period_transitions_parent_sort", unique: true, using: :btree
+
+  create_table "hours_acceptance_periods", force: :cascade do |t|
+    t.integer  "creator_id",                 limit: 4,   null: false
+    t.string   "creator_type",               limit: 255, null: false
+    t.integer  "hours_acceptance_reason_id", limit: 4
+    t.string   "reason_note",                limit: 255
+    t.datetime "starts_at",                              null: false
+    t.datetime "ends_at",                                null: false
+    t.integer  "clock_in_day_id",            limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "hours_acceptance_reasons", force: :cascade do |t|
+    t.string   "text",       limit: 255, null: false
+    t.integer  "rank",       limit: 4,   null: false
+    t.boolean  "enabled",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "invite_transitions", force: :cascade do |t|
     t.string   "to_state",    limit: 255,   null: false

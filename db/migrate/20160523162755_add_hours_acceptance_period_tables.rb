@@ -1,0 +1,48 @@
+class AddHoursAcceptancePeriodTables < ActiveRecord::Migration
+  def change
+    create_table :hours_acceptance_periods do |t|
+      t.integer  :creator_id, null: false
+      t.string   :creator_type, null: false
+      t.integer  :hours_acceptance_reason_id
+      t.string   :reason_note
+      t.datetime :starts_at, null: false
+      t.datetime :ends_at, null: false
+      t.integer  :clock_in_day_id
+      t.timestamps
+    end
+
+    create_table :hours_acceptance_breaks do |t|
+      t.integer  :hours_acceptance_period_id, limit: 4, null: false
+      t.datetime :starts_at,                    null: false
+      t.datetime :ends_at,                      null: false
+      t.timestamps
+    end
+
+    create_table :hours_acceptance_reasons do |t|
+      t.string   :text,       limit: 255, null: false
+      t.integer  :rank,       limit: 4,   null: false
+      t.boolean  :enabled,                null: false
+      t.timestamps
+    end
+
+    create_table :hours_acceptance_period_transitions do |t|
+      t.string :to_state, null: false
+      t.text :metadata
+      t.integer :sort_key, null: false
+      t.integer :hours_acceptance_period_id, null: false
+      t.boolean :most_recent
+      t.timestamps
+    end
+
+    add_index(:hours_acceptance_period_transitions,
+              [:hours_acceptance_period_id, :sort_key],
+              unique: true,
+              name: "index_hours_acceptance_period_transitions_parent_sort")
+
+    add_index(:hours_acceptance_period_transitions,
+              [:hours_acceptance_period_id, :most_recent],
+              unique: true,
+
+              name: "index_hours_acceptance_period_transitions_parent_most_recent")
+  end
+end
