@@ -25,7 +25,7 @@ var columnNameStyle = {
 class ClockInOutStaffListItem extends Component {
     render(){
         var staffObject = this.props.staff;
-        var staffStatusValue = this.props.staffStatuses[staffObject.clientId].status;
+        var staffStatusValue = this.props.clockInStatuses[staffObject.clientId].status;
         var staffStatus = oFetch(staffStatusOptionsByValue, staffStatusValue);
         var staffTypeObject = staffObject.staff_type.get(this.props.staffTypes);
 
@@ -80,7 +80,7 @@ class ClockInOutStaffListItem extends Component {
         if (this.props.userPermissions.toggleOnBreak){
             toggleOnBreakButton = <div className="col-md-6 col-xs-2">
                 <ToggleStaffOnBreakButton
-                    staffStatuses={this.props.staffStatuses}
+                    clockInStatuses={this.props.clockInStatuses}
                     staffObject={staffObject}
                     updateStaffStatusWithConfirmation={(options) => this.updateStaffStatus(options)} />
             </div>;
@@ -88,7 +88,7 @@ class ClockInOutStaffListItem extends Component {
         return <div className="row">
             <div className="col-md-6 col-xs-2">
                 <ToggleStaffClockedInButton
-                    staffStatuses={this.props.staffStatuses}
+                    clockInStatuses={this.props.clockInStatuses}
                     staffObject={staffObject}
                     updateStaffStatusWithConfirmation={(options) => this.updateStaffStatus(options)} />
             </div>
@@ -96,7 +96,7 @@ class ClockInOutStaffListItem extends Component {
         </div>
     }
     updateStaffStatus({statusValue, staffMemberObject}){
-        var currentStatus = this.props.staffStatuses[staffMemberObject.clientId].status;
+        var currentStatus = this.props.clockInStatuses[staffMemberObject.clientId].status;
         this.props.updateStaffStatusWithConfirmation({
             statusValue,
             staffMemberObject,
@@ -165,7 +165,7 @@ class ClockInOutStaffListItem extends Component {
 function mapStateToProps(state, ownProps){
     return {
         staffTypes: state.staffTypes,
-        staffStatuses: state.staffStatuses,
+        clockInStatuses: state.clockInStatuses,
         staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
         rotas: state.rotas,
         venues: state.venues,

@@ -27,7 +27,7 @@ class StaffDay extends React.Component {
 function mapStateToProps(state, ownProps){
     var details = selectClockInDayDetails(state, ownProps.clockInDay)
     var staffMember = details.staffMember;
-    var clockInStatus = state.staffStatuses[staffMember.clientId].status
+    var clockInStatus = state.clockInStatuses[staffMember.clientId].status
     var props = {
         ...details,
         staffMemberClockInStatus: clockInStatus,

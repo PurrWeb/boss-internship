@@ -86,7 +86,7 @@ export function loadInitialClockInOutAppState(viewData) {
         dispatch(getInititalLoadActions({
             staffMembers: viewData.staff_members,
             staffTypes: viewData.staff_types,
-            staffStatuses: viewData.clock_in_statuses,
+            clockInStatuses: viewData.clock_in_statuses,
             shifts: viewData.rota_shifts,
             rotas: viewData.rotas,
             venues: viewData.venues,
@@ -155,9 +155,9 @@ function getInititalLoadActions(initialLoadData){
             replaceAction: genericReplaceAllItems,
             processFunction: backendData.processShiftObject
         },
-        "staffStatuses": {
+        "clockInStatuses": {
             replaceAction: genericReplaceAllItems,
-            processFunction: backendData.processStaffStatusObject,
+            processFunction: backendData.processClockInStatusObject,
             indexBy: function(status){
                 return status.staff_member.clientId;
             }

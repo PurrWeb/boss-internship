@@ -31,10 +31,10 @@ export function processStaffMemberObject(staffMember){
     return staffMember;
 }
 
-export function processStaffStatusObject(staffStatus){
-    var staffStatus = {...staffStatus};
-    processObjectLinks(staffStatus);
-    return staffStatus;
+export function processClockInStatusObject(clockInStatus){
+    clockInStatus = {...clockInStatus};
+    processObjectLinks(clockInStatus);
+    return clockInStatus;
 }
 
 export function processPageOptionsObject(pageOptions){

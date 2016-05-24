@@ -5,7 +5,7 @@ import {batch, batching} from "redux-batch-middleware"
 import makeReducer, {makeHandlerForGenericReplaceAction} from "./reducers/make-reducer"
 
 
-import staffStatuses from "./reducers/staff-statuses-reducer"
+import clockInStatuses from "./reducers/clock-in-statuses"
 import rotaShifts from "./reducers/rota-shifts-reducer"
 import clockInOutAppUserMode from "./reducers/clock-in-out-app-user-mode"
 import clockInOutAppSelectedStaffType from "./reducers/clock-in-out-app-selected-staff-type-reducer"
@@ -30,7 +30,7 @@ function makeDefaultReducer(propertyName){
 var rootReducer = combineReducers({
     staff: makeDefaultReducer("staffMembers"),
     rotaShifts,
-    staffStatuses,
+    clockInStatuses,
     clockInOutAppUserMode,
     clockInOutAppSelectedStaffType,
     apiRequestsInProgress,
