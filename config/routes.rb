@@ -176,6 +176,7 @@ Rails.application.routes.draw do
           post :add_note
         end
       end
+      resources :hours_acceptance_periods, only: [:create, :update, :destroy]
     end
   end
 

@@ -266,11 +266,14 @@ ActiveRecord::Schema.define(version: 20160601214451) do
   add_index "holidays", ["start_date"], name: "index_holidays_on_start_date", using: :btree
 
   create_table "hours_acceptance_breaks", force: :cascade do |t|
-    t.integer  "hours_acceptance_period_id", limit: 4, null: false
-    t.datetime "starts_at",                            null: false
-    t.datetime "ends_at",                              null: false
+    t.integer  "hours_acceptance_period_id", limit: 4,   null: false
+    t.datetime "starts_at",                              null: false
+    t.datetime "ends_at",                                null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "disabled_at"
+    t.integer  "disabled_by_id",             limit: 4
+    t.string   "disabled_by_type",           limit: 255
   end
 
   create_table "hours_acceptance_periods", force: :cascade do |t|
@@ -550,5 +553,16 @@ ActiveRecord::Schema.define(version: 20160601214451) do
 
   add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree
   add_index "venues", ["name"], name: "index_venues_on_name", using: :btree
+
+  create_table "versions", force: :cascade do |t|
+    t.string   "item_type",  limit: 255,        null: false
+    t.integer  "item_id",    limit: 4,          null: false
+    t.string   "event",      limit: 255,        null: false
+    t.string   "whodunnit",  limit: 255
+    t.text     "object",     limit: 4294967295
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
 end

@@ -1,5 +1,7 @@
 class APIController < ApplicationController
   skip_before_filter :authenticate_user!
+  skip_before_filter :set_paper_trail_whodunnit
+
   before_filter :parse_access_token
 
   def parse_access_token
@@ -21,7 +23,7 @@ class APIController < ApplicationController
   end
 
   def staff_member_from_token
-    @_access_token.staff_member
+    @_access_token.staff_member || @_access_token.user.staff_member
   end
 
   def current_user
@@ -37,6 +39,8 @@ class APIController < ApplicationController
       json: { errors: "Not authenticated" },
       status: :unauthorized
     ) unless @_access_token && @_access_token.web?
+
+    set_paper_trail_whodunnit
   end
 
   def current_ability
