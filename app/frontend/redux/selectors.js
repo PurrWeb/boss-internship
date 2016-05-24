@@ -257,18 +257,28 @@ export function selectClockInOutLoadAppDataIsInProgress(state){
     return requests !== undefined && requests.length > 0;
 }
 
+function getBreaksFromHoursPeriods(hoursPeriods, clockInBreaks){
+    return _(hoursPeriods)
+        .chain()
+        .pluck("breaks")
+        .flatten()
+        .map((breakLink) => breakLink.get(clockInBreaks))
+        .value()
+}
+
 export function selectClockInDayDetails(state, clockInDay){
     var staffMember = clockInDay.staff_member.get(state.staff);
     var clockInPeriods = _(state.clockInPeriods).filter(function(clockInPeriod){
         return clockInPeriod.clock_in_day.clientId === clockInDay.clientId;
+    });
+    var hoursAcceptancePeriods = _(state.hoursAcceptancePeriods).filter(function(hoursAcceptancePeriod){
+        return hoursAcceptancePeriod.clock_in_day.clientId === clockInDay.clientId;
     })
     var clockInPeriodClientIds = _(clockInPeriods).pluck("clientId")
-    var clockInBreaks = _(clockInPeriods)
-        .chain()
-        .pluck("breaks")
-        .flatten()
-        .map((breakLink) => breakLink.get(state.clockInBreaks))
-        .value()
+    var clockInBreaks = _.flatten([
+        getBreaksFromHoursPeriods(clockInPeriods, state.clockInBreaks),
+        getBreaksFromHoursPeriods(hoursAcceptancePeriods, state.clockInBreaks)
+    ]);
 
     var rota = getRotaFromDateAndVenue({
         dateOfRota: clockInDay.date,
@@ -289,12 +299,8 @@ export function selectClockInDayDetails(state, clockInDay){
     })
 
     return {
-        clockedClockInPeriods: _.filter(clockInPeriods, {
-            period_type: "clocked"
-        }),
-        amendedClockInPeriods: _.filter(clockInPeriods, {
-            period_type: "amended"
-        }),
+        clockedClockInPeriods: clockInPeriods,
+        amendedClockInPeriods: hoursAcceptancePeriods,
         clockInEvents,
         staffMember,
         clockInBreaks,

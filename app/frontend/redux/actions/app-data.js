@@ -182,6 +182,10 @@ function getInititalLoadActions(initialLoadData){
             replaceAction: genericReplaceAllItems,
             processFunction: backendData.processClockInReason
         },
+        "hoursAcceptancePeriods": {
+            replaceAction: genericReplaceAllItems,
+            processFunction: backendData.processHoursAcceptancePeriod
+        },
         "clockInBreaks": {
             replaceAction: genericReplaceAllItems,
             processFunction: backendData.processClockInBreak

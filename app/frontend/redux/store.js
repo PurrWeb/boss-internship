@@ -47,6 +47,7 @@ var rootReducer = combineReducers({
     apiKey,
     clockInDays,
     clockInPeriods: makeDefaultReducer("clockInPeriods"),
+    hoursAcceptancePeriods: makeDefaultReducer("hoursAcceptancePeriods"),
     clockInEvents: makeDefaultReducer("clockInEvents"),
     clockInNotes: makeDefaultReducer("clockInNotes"),
     clockInReasons: makeDefaultReducer("clockInReasons"),
