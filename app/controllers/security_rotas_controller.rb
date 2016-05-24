@@ -8,7 +8,7 @@ class SecurityRotasController < ApplicationController
     if date && (date == week.start_date)
       respond_to do |format|
         format.html do
-          access_token = current_user.current_access_token || AccessToken.create_web!(current_user)
+          access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user) || @_access_token.user.staff_member
 
           render locals: {
             access_token: access_token,
@@ -51,7 +51,7 @@ class SecurityRotasController < ApplicationController
 
     rotas = Rota.where(id: date_rotas.pluck(:id) + shift_rotas.pluck(:id)).uniq
 
-    access_token = current_user.current_access_token || AccessToken.create_web!(current_user)
+    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
 
     render locals: {
       access_token: access_token,
