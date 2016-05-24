@@ -300,7 +300,7 @@ export function selectClockInDayDetails(state, clockInDay){
 
     return {
         clockedClockInPeriods: clockInPeriods,
-        amendedClockInPeriods: hoursAcceptancePeriods,
+        hoursAcceptancePeriods: hoursAcceptancePeriods,
         clockInEvents,
         staffMember,
         clockInBreaks,

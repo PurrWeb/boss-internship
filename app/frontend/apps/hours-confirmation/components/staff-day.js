@@ -6,7 +6,7 @@ import ShiftTimeSelector from "~components/shift-time-selector"
 import moment from "moment"
 import Validation from "~lib/validation"
 import ErrorMessage from "~components/error-message"
-import getClockInPeriodStats from "~lib/get-clock-in-period-stats"
+import getHoursPeriodStats from "~lib/get-hours-period-stats"
 import StaffTypeBadge from "~components/staff-type-badge"
 
 const TIME_GRANULARITY_IN_MINUTES = 15;
@@ -30,14 +30,14 @@ export default class StaffDay extends React.Component {
         return {
             rotaDate: props.rotaDate,
             rotaedShifts: props.rotaedShifts,
-            amendedClockInPeriods: props.amendedClockInPeriods,
+            hoursAcceptancePeriods: props.hoursAcceptancePeriods,
             clockedClockInPeriods: props.clockedClockInPeriods,
             clockInBreaks: props.clockInBreaks,
             clockInEvents: props.clockInEvents
         }
     }
     render(){
-        var amendedClockInPeriods = this.props.amendedClockInPeriods
+        var amendedClockInPeriods = this.props.hoursAcceptancePeriods
         var {staffMember} = this.props;
 
         var style = {
@@ -50,7 +50,7 @@ export default class StaffDay extends React.Component {
             style.overflow = "hidden";
         }
 
-        var acceptedClockInPeriods = _(this.props.amendedClockInPeriods)
+        var acceptedClockInPeriods = _(this.props.hoursAcceptancePeriods)
             .filter({status: "accepted"})
 
         var staffType = this.props.staffType;
@@ -87,7 +87,7 @@ export default class StaffDay extends React.Component {
                                 <HoursChart
                                     rotaDate={this.state.lastValidData.rotaDate}
                                     rotaedShifts={this.state.lastValidData.rotaedShifts}
-                                    amendedClockInPeriods={this.state.lastValidData.amendedClockInPeriods}
+                                    hoursAcceptancePeriods={this.state.lastValidData.hoursAcceptancePeriods}
                                     clockedClockInPeriods={this.state.lastValidData.clockedClockInPeriods}
                                     clockInEvents={this.state.lastValidData.clockInEvents}
                                     clockInBreaks={this.state.lastValidData.clockInBreaks}
@@ -100,7 +100,7 @@ export default class StaffDay extends React.Component {
                         <AcceptedHoursList
                             clockInReasons={this.props.clockInReasons}
                             rotaDate={this.props.rotaDate}
-                            amendedClockInPeriods={this.props.amendedClockInPeriods}
+                            hoursAcceptancePeriods={this.props.hoursAcceptancePeriods}
                             markDayAsDone={this.props.markDayAsDone}
                             clockInBreaks={this.props.clockInBreaks}
                             onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
@@ -138,16 +138,16 @@ class StaffDayHeader extends React.Component {
         })
 
         var clockInBreaks = this.props.clockInBreaks;
-        var clockedStats = getClockInPeriodStats({
-            clockInPeriods: clockedClockInPeriods,
+        var clockedStats = getHoursPeriodStats({
+            hoursPeriods: clockedClockInPeriods,
             clockInBreaks
         });
-        var acceptedStats = getClockInPeriodStats({
-            clockInPeriods: acceptedClockInPeriods,
+        var acceptedStats = getHoursPeriodStats({
+            hoursPeriods: acceptedClockInPeriods,
             clockInBreaks
         });
-        var rotaedStats = getClockInPeriodStats({
-            clockInPeriods: rotaedClockInPeriods,
+        var rotaedStats = getHoursPeriodStats({
+            hoursPeriods: rotaedClockInPeriods,
             clockInBreaks
         })
 
@@ -246,11 +246,11 @@ class BreakListItem extends React.Component {
         </div>
     }
     isValid(){
-        var {amendedClockInPeriod, breakItem} = this.props;
+        var {hoursAcceptancePeriod, breakItem} = this.props;
 
         var validationResult = Validation.validateBreak({
             breakItem,
-            clockInPeriod: amendedClockInPeriod
+            clockInPeriod: hoursAcceptancePeriod
         })
 
         return validationResult.isValid;
@@ -259,12 +259,12 @@ class BreakListItem extends React.Component {
 
 class BreakList extends React.Component {
     render(){
-        var breaks = this.props.amendedClockInPeriod.breaks.map((breakItem) => {
+        var breaks = this.props.hoursAcceptancePeriod.breaks.map((breakItem) => {
             return breakItem.get(this.props.clockInBreaks)
         })
         var validationResult = Validation.validateBreaks({
             breaks: breaks,
-            clockInPeriod: this.props.amendedClockInPeriod
+            clockInPeriod: this.props.hoursAcceptancePeriod
         })
 
         var addBreakButton;
@@ -288,7 +288,7 @@ class BreakList extends React.Component {
                         this.props.onChange(breaks)
                     }}
                     readonly={this.props.readonly}
-                    amendedClockInPeriod={this.props.amendedClockInPeriod}
+                    hoursAcceptancePeriod={this.props.hoursAcceptancePeriod}
                     onDeleteItem={() => {
                         var newBreaks = _(this.props.breaks).reject(
                             (breakItemArg) => breakItemArg === breakItem
@@ -380,7 +380,7 @@ class ReasonSelector extends React.Component {
 
 class AcceptedHoursListItem extends React.Component {
     render(){
-        var amendedClockInPeriod = this.props.amendedClockInPeriod
+        var hoursAcceptancePeriod = this.props.hoursAcceptancePeriod
         var readonly = this.isAccepted();
 
 
@@ -390,8 +390,8 @@ class AcceptedHoursListItem extends React.Component {
                     <div className="staff-day__sub-heading">From/To</div>
                     <ShiftTimeSelector
                         defaultShiftTimes={{
-                            starts_at: amendedClockInPeriod.starts_at,
-                            ends_at: amendedClockInPeriod.ends_at
+                            starts_at: hoursAcceptancePeriod.starts_at,
+                            ends_at: hoursAcceptancePeriod.ends_at
                         }}
                         readonly={readonly}
                         rotaDate={this.props.rotaDate}
@@ -415,7 +415,7 @@ class AcceptedHoursListItem extends React.Component {
                             readonly={readonly}
                             clockInBreaks={this.props.clockInBreaks}
                             rotaDate={this.props.rotaDate}
-                            amendedClockInPeriod={amendedClockInPeriod}
+                            hoursAcceptancePeriod={hoursAcceptancePeriod}
                         />
                     </div>
                 </div>
@@ -424,8 +424,8 @@ class AcceptedHoursListItem extends React.Component {
                     <ReasonSelector
                         readonly={readonly}
                         clockInReasons={this.props.clockInReasons}
-                        reasonClientId={amendedClockInPeriod.reason.clientId}
-                        reasonText={amendedClockInPeriod.reason_text}
+                        reasonClientId={hoursAcceptancePeriod.reason.clientId}
+                        reasonText={hoursAcceptancePeriod.reason_note}
                         onChange={(newData) => this.triggerChange(newData)}
                     />
                 </div>
@@ -436,17 +436,17 @@ class AcceptedHoursListItem extends React.Component {
         </div>
     }
     isAccepted(){
-        return this.props.amendedClockInPeriod.status !== "in_progress";
+        return this.props.hoursAcceptancePeriod.status !== "in_progress";
     }
     isValid(){
         return Validation.validateClockInPeriod({
-            clockInPeriod: this.props.amendedClockInPeriod,
+            clockInPeriod: this.props.hoursAcceptancePeriod,
             clockInBreaks: this.props.clockInBreaks
         }).isValid;
     }
     getAcceptUi(){
-        var stats = getClockInPeriodStats({
-            clockInPeriods: [this.props.amendedClockInPeriod],
+        var stats = getHoursPeriodStats({
+            hoursPeriods: [this.props.hoursAcceptancePeriod],
             clockInBreaks: this.props.clockInBreaks
         });
         if (!this.isAccepted()) {
@@ -512,12 +512,12 @@ class AcceptedHoursList extends React.Component {
         }
 
         var intervalsOverlap = Validation.validateHoursAssignmentsDontOverlap({
-            hoursAssignments: this.props.amendedClockInPeriods
+            hoursAssignments: this.props.hoursAcceptancePeriods
         })
 
         return <div>
-            {this.props.amendedClockInPeriods.map(
-                (amendedClockInPeriod) =>
+            {this.props.hoursAcceptancePeriods.map(
+                (hoursAcceptancePeriod) =>
                     <div style={{
                             border: "1px solid #ddd",
                             padding: 5,
@@ -538,7 +538,7 @@ class AcceptedHoursList extends React.Component {
                             clockInBreaks={this.props.clockInBreaks}
                             rotaDate={this.props.rotaDate}
                             clockInReasons={this.props.clockInReasons}
-                            amendedClockInPeriod={amendedClockInPeriod} />
+                            hoursAcceptancePeriod={hoursAcceptancePeriod} />
                     </div>
             )}
             <ValidationResult result={intervalsOverlap} />

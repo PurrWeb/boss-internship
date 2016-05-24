@@ -55,7 +55,7 @@ export default class HoursChartUi extends React.Component {
 
 
         this.renderXAxis({chartContent, xScale})
-        this.renderAmendedIntervals({chartContent, xScale})
+        this.renderHoursAcceptanceIntervals({chartContent, xScale})
         this.renderClockedIntervals({chartContent, xScale})
         this.renderRotaedIntervals({chartContent, xScale})
         this.renderLaneLabels({chart})
@@ -139,11 +139,11 @@ export default class HoursChartUi extends React.Component {
 
 
     }
-    renderAmendedIntervals({chartContent, xScale}){
+    renderHoursAcceptanceIntervals({chartContent, xScale}){
         this.renderIntervals({
             chart: chartContent,
             xScale,
-            intervals: this.props.amendedIntervals,
+            intervals: this.props.hoursAcceptanceIntervals,
             lane: "amended"
         })
     }

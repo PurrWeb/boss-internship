@@ -8,18 +8,21 @@ class StaffDay extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            amendedClockInPeriods: props.amendedClockInPeriods,
+            hoursAcceptancePeriods: props.hoursAcceptancePeriods,
             markedAsDone: false
         }
     }
     render(){
+        var stateHoursAcceptancePeriods = this.state.hoursAcceptancePeriods;
+        var uiProps = {...this.props}
+        uiProps.hoursAcceptancePeriods = stateHoursAcceptancePeriods;
         return <StaffDayUi
             markedAsDone={this.state.markedAsDone}
             // onAcceptedHoursChanged={(acceptedHours) =>{
             //     this.setState({proposedInfo: acceptedHours})
             // }}
             markDayAsDone={() => this.setState({markedAsDone: true})}
-            {...this.props}
+            {...uiProps}
         />
     }
 }

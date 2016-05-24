@@ -9,7 +9,7 @@ export default class HoursChart extends React.Component {
     static propTypes = {
         clockedClockInPeriods: React.PropTypes.array.isRequired,
         rotaedShifts: React.PropTypes.array.isRequired,
-        amendedClockInPeriods: React.PropTypes.array.isRequired,
+        hoursAcceptancePeriods: React.PropTypes.array.isRequired,
         rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired,
         clockInDayEvents: React.PropTypes.array.isRequired
     }
@@ -24,7 +24,7 @@ export default class HoursChart extends React.Component {
     render(){
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
-            amendedIntervals={this.getAmendedChartIntervals()}
+            hoursAcceptanceIntervals={this.getHoursAcceptanceIntervals()}
             rotaedIntervals={this.getRotaedChartIntervals()}
             events={this.getEventsList()}
             interactionState={this.state.interactionState}
@@ -46,8 +46,8 @@ export default class HoursChart extends React.Component {
             interactionState: Object.assign({}, this.state.interactionState, interactionState)
         })
     }
-    getAmendedChartIntervals(){
-        return this.getIntervalsFromClockInPeriodList(this.props.amendedClockInPeriods)
+    getHoursAcceptanceIntervals(){
+        return this.getIntervalsFromClockInPeriodList(this.props.hoursAcceptancePeriods)
     }
     getDateFromHoursOffset(hoursOffset){
         var date = new Date(this.props.rotaDate.startTime);

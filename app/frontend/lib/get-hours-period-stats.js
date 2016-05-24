@@ -8,18 +8,18 @@ function convertMsToHours(ms){
     return utils.round(hours, 2);
 }
 
-function getSingleClockInPeriodStats({clockInPeriod, clockInBreaks}){
-    if (clockInPeriod.ends_at === null){
+function getSingleHoursPeriodStats({hoursPeriod, clockInBreaks}){
+    if (hoursPeriod.ends_at === null){
         return {
             hours: 0,
             breaks: 0
         }
     }
 
-    var msTotalLength = clockInPeriod.ends_at - clockInPeriod.starts_at;
+    var msTotalLength = hoursPeriod.ends_at - hoursPeriod.starts_at;
     var msBreakLength = 0;
 
-    var breakObjects = clockInPeriod.breaks.map(b => b.get(clockInBreaks))
+    var breakObjects = hoursPeriod.breaks.map(b => b.get(clockInBreaks))
     breakObjects.forEach(function(breakItem){
         msBreakLength += breakItem.ends_at - breakItem.starts_at;
     });
@@ -32,9 +32,9 @@ function getSingleClockInPeriodStats({clockInPeriod, clockInBreaks}){
     }
 }
 
-export default function getClockInPeriodStats({clockInPeriods, clockInBreaks}){
-    if (!_.isArray(clockInPeriods)) {
-        clockInPeriods = [clockInPeriods]
+export default function getHoursPeriodStats({hoursPeriods, clockInBreaks}){
+    if (!_.isArray(hoursPeriods)) {
+        hoursPeriods = [hoursPeriods]
     }
 
     var total = {
@@ -42,8 +42,8 @@ export default function getClockInPeriodStats({clockInPeriods, clockInBreaks}){
         breaks: 0
     }
 
-    clockInPeriods.forEach(function(clockInPeriod){
-        var singleStats = getSingleClockInPeriodStats({clockInPeriod, clockInBreaks});
+    hoursPeriods.forEach(function(hoursPeriod){
+        var singleStats = getSingleHoursPeriodStats({hoursPeriod, clockInBreaks});
         total.hours += singleStats.hours;
         total.breaks += singleStats.breaks;
     });
