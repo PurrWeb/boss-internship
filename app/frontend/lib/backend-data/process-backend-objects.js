@@ -50,11 +50,19 @@ export function processStaffTypeObject(staffMember){
 }
 
 export function processClockInPeriodObject(clockInPeriod){
-    return processBackendObject(clockInPeriod);
+    clockInPeriod = processBackendObject(clockInPeriod);
+    clockInPeriod.starts_at = new Date(clockInPeriod.starts_at)
+    // clock in periods can be incomplete
+    if (clockInPeriod.ends_at !== null) {
+        clockInPeriod.ends_at = new Date(clockInPeriod.ends_at)
+    }
+    return clockInPeriod;
 }
 
 export function processClockInEvent(clockInEvent){
-    return processBackendObject(clockInEvent);
+    clockInEvent = processBackendObject(clockInEvent);
+    clockInEvent.time = new Date(clockInEvent.time);
+    return clockInEvent
 }
 
 export function processClockInNote(clockInNote){
@@ -66,7 +74,10 @@ export function processClockInReason(clockInReason){
 }
 
 export function processClockInBreak(clockInBreak){
-    return processBackendObject(clockInBreak);
+    clockInBreak = processBackendObject(clockInBreak);
+    clockInBreak.starts_at = new Date(clockInBreak.starts_at);
+    clockInBreak.ends_at = new Date(clockInBreak.ends_at);
+    return clockInBreak;
 }
 
 export function processShiftObject(shift){

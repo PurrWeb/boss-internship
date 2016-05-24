@@ -25,8 +25,8 @@
     window.boss.clockInPeriods = [
         {
             id: 2333,
-            starts_at: new Date(2016, 10, 1, 9, 0),
-            ends_at: new Date(2016, 10, 1, 18, 0),
+            starts_at: new Date(2016, 10, 1, 9, 0).toString(),
+            ends_at: new Date(2016, 10, 1, 18, 0).toString(),
             breaks: [
                 {id: 22}
             ],
@@ -38,7 +38,7 @@
         },
         {
             id: 12222,
-            starts_at: new Date(2016, 10, 2, 1, 0),
+            starts_at: new Date(2016, 10, 2, 1, 0).toString(),
             ends_at: null,
             breaks: [
                 {id: 33}
@@ -51,8 +51,8 @@
         },
         {
             id: 11,
-            starts_at: new Date(2016, 10, 1, 9, 30),
-            ends_at: new Date(2016, 10, 1, 18, 0),
+            starts_at: new Date(2016, 10, 1, 9, 30).toString(),
+            ends_at: new Date(2016, 10, 1, 18, 0).toString(),
             breaks: [
                 {id: 24}
             ],
@@ -67,32 +67,32 @@
         {
             id: 11,
             type: "clock_in",
-            time: new Date(2016, 10, 1, 9, 0),
+            time: new Date(2016, 10, 1, 9, 0).toString(),
             clock_in_day: {id: 22}
         }, {
             id: 22,
             type: "start_break",
-            time: new Date(2016, 10, 1, 10, 30),
+            time: new Date(2016, 10, 1, 10, 30).toString(),
             clock_in_day: {id: 22}
         }, {
             id: 33,
             type: "end_break",
-            time: new Date(2016, 10, 1, 11, 30),
+            time: new Date(2016, 10, 1, 11, 30).toString(),
             clock_in_day: {id: 22}
         }, {
             id: 44,
             type: "clock_out",
-            time: new Date(2016, 10, 1, 18, 0),
+            time: new Date(2016, 10, 1, 18, 0).toString(),
             clock_in_day: {id: 22}
         }, {
             id: 55,
             type: "clock_in",
-            time: new Date(2016, 10, 2, 1, 0),
+            time: new Date(2016, 10, 2, 1, 0).toString(),
             clock_in_day: {id: 22}
         }, {
             id: 66,
             type: "start_break",
-            time: new Date(2016, 10, 2, 2, 30),
+            time: new Date(2016, 10, 2, 2, 30).toString(),
             clock_in_day: {id: 22}
         }
     ]
@@ -124,8 +124,8 @@
     window.boss.shifts = [
         {
             id: 1122,
-            starts_at: new Date(2016, 10, 1, 10,0),
-            ends_at: new Date(2016, 10, 1, 16, 0),
+            starts_at: new Date(2016, 10, 1, 10,0).toString(),
+            ends_at: new Date(2016, 10, 1, 16, 0).toString(),
             staff_member: {id: 160},
             rota: {id: 16}
         }
@@ -141,19 +141,19 @@
         {
             id:22,
             clock_in_day: {id: 22},
-            starts_at: new Date(2016, 10, 1, 10, 30),
-            ends_at: new Date(2016, 10, 1, 11, 30)
+            starts_at: new Date(2016, 10, 1, 10, 30).toString(),
+            ends_at: new Date(2016, 10, 1, 11, 30).toString()
         },
         {
             id:24,
             clock_in_day: {id: 22},
-            starts_at: new Date(2016, 10, 1, 10, 15),
-            ends_at: new Date(2016, 10, 1, 11, 45)
+            starts_at: new Date(2016, 10, 1, 10, 15).toString(),
+            ends_at: new Date(2016, 10, 1, 11, 45).toString()
         },
         {
             id: 33,
             clock_in_day: {id: 22},
-            starts_at: new Date(2016, 10, 2, 2, 30),
+            starts_at: new Date(2016, 10, 2, 2, 30).toString(),
             ends_at: null
         }
     ];
