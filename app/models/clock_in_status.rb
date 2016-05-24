@@ -53,6 +53,10 @@ class ClockInStatus
         )
       elsif new_event.clock_out?
         current_recorded_clock_in_period.update_attributes!(ends_at: at)
+        create_hours_confirmation_from_clock_in_period(
+          clock_in_period: current_recorded_clock_in_period,
+          creator: requester
+        )
       elsif new_event.end_break?
         new_break = ClockInBreak.create!(
           clock_in_period: current_recorded_clock_in_period,
@@ -69,6 +73,27 @@ class ClockInStatus
 
   private
   attr_reader :clock_in_day, :date, :venue, :staff_member
+
+ def create_hours_confirmation_from_clock_in_period(clock_in_period:, creator:)
+   clock_in_day = clock_in_period.clock_in_day
+
+   hours_acceptance_period = HoursAcceptancePeriod.create!(
+     starts_at: clock_in_period.starts_at,
+     ends_at: clock_in_period.ends_at,
+     clock_in_day: clock_in_day,
+     creator: creator
+   )
+
+   clock_in_period.clock_in_breaks.each do |_break|
+     hours_acceptance_break = HoursAcceptanceBreak.create!(
+       hours_acceptance_period: hours_acceptance_period,
+       starts_at: _break.starts_at,
+       ends_at: _break.ends_at
+     )
+
+     hours_acceptance_period.hours_acceptance_breaks << hours_acceptance_break
+   end
+ end
 
   def last_event
     events.last
