@@ -13,26 +13,13 @@ class StaffDay extends React.Component {
         }
     }
     render(){
-        var props = this.props;
         return <StaffDayUi
             markedAsDone={this.state.markedAsDone}
-            rotaDate={new RotaDate({
-                dateOfRota: props.clockInDay.date
-            })}
-            clockedClockInPeriods={props.clockedClockInPeriods}
-            rotaedShifts={props.rotaedShifts}
-            amendedClockInPeriods={this.state.amendedClockInPeriods}
-
             // onAcceptedHoursChanged={(acceptedHours) =>{
             //     this.setState({proposedInfo: acceptedHours})
             // }}
             markDayAsDone={() => this.setState({markedAsDone: true})}
-            clockInEvents={props.clockInEvents}
-            staffMember={this.props.staffMember}
-            clockInReasons={props.clockInReasons}
-            clockInNotes={props.clockInNotes}
-            staffType={this.props.staffType}
-            clockInBreaks={this.props.clockInBreaks}
+            {...this.props}
         />
     }
 }
@@ -40,11 +27,16 @@ class StaffDay extends React.Component {
 function mapStateToProps(state, ownProps){
     var details = selectClockInDayDetails(state, ownProps.clockInDay)
     var staffMember = details.staffMember;
+    var clockInStatus = state.staffStatuses[staffMember.clientId].status
     var props = {
         ...details,
+        staffMemberClockInStatus: clockInStatus,
         clockInReasons: state.clockInReasons,
         staffType: staffMember.staff_type.get(state.staffTypes),
-        clockInReasons: state.clockInReasons
+        clockInReasons: state.clockInReasons,
+        rotaDate: new RotaDate({
+            dateOfRota: ownProps.clockInDay.date
+        })
     }
     return props;
 }
