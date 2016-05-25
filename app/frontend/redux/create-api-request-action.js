@@ -1,5 +1,5 @@
 import _ from "underscore"
-import actionTypes, {registerActionType} from "./actions/action-types"
+import {actionTypes, registerActionType} from "./actions"
 
 var registeredApiRequestActionCreators = {};
 

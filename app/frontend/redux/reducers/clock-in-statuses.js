@@ -1,6 +1,5 @@
 import makeReducer, {makeHandlerForGenericReplaceAction} from "./make-reducer"
-import {registerActionType} from "../actions/action-types"
-import {registerDefaultAction} from "../actions";
+import {registerActionType} from "../actions";
 
 export default makeReducer({
     REPLACE_ALL_CLOCK_IN_STATUSES: makeHandlerForGenericReplaceAction("clockInStatuses"),

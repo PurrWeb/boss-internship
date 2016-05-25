@@ -1,5 +1,4 @@
 import oFetch from "o-fetch"
-import actionTypes from "./action-types"
 import { registeredApiRequestActionCreators } from "~redux/create-api-request-action"
 
 function showConfirmationModal(options){

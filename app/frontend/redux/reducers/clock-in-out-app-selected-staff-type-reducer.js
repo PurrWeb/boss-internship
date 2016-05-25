@@ -1,4 +1,3 @@
-import actionTypes from "../actions/action-types"
 import oFetch from "o-fetch"
 
 export default function clockInOutAppSelectedStaffType(clientId=null, action){

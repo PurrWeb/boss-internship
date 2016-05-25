@@ -1,6 +1,5 @@
 import _ from "underscore"
-import actionTypes, {registerActionType} from "../actions/action-types"
-import {registerActionCreator} from "../actions"
+import {registerActionCreator, registerActionType, actionTypes} from "../actions"
 import oFetch from "o-fetch"
 import utils from "~lib/utils"
 
