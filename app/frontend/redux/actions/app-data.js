@@ -9,6 +9,7 @@ import {
     setPageOptions,
     genericReplaceAllItems
 } from "./misc"
+import actionCreators from "./index"
 
 export function loadInitialRotaAppState(viewData) {
     var dayRota = getRotaFromDateAndVenue({
@@ -120,11 +121,9 @@ function getInititalLoadActions(initialLoadData){
     initialLoadData = {...initialLoadData}
     var possibleObjects = {
         "rotas": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processRotaObject
         },
         "rotaForecasts": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processRotaForecastObject
         },
         "weeklyRotaForecast": {
@@ -136,58 +135,45 @@ function getInititalLoadActions(initialLoadData){
             processFunction: backendData.processPageOptionsObject
         },
         "venues": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processVenueObject
         },
         "clockInDays": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processClockInDayObject
         },
         "staffMembers": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processStaffMemberObject
         },
         "staffTypes": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processStaffTypeObject
         },
         "shifts": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processShiftObject
         },
         "clockInStatuses": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processClockInStatusObject,
             indexBy: function(status){
                 return status.staff_member.clientId;
             }
         },
         "holidays": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processHolidayObject
         },
         "clockInPeriods": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processClockInPeriodObject
         },
         "clockInEvents": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processClockInEvent
         },
         "clockInNotes": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processClockInNote
         },
         "clockInReasons": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processClockInReason
         },
         "hoursAcceptancePeriods": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processHoursAcceptancePeriod
         },
         "clockInBreaks": {
-            replaceAction: genericReplaceAllItems,
             processFunction: backendData.processClockInBreak
         }
     }
@@ -212,7 +198,11 @@ function getInititalLoadActions(initialLoadData){
                 }
             }
 
-            actions.push(objectDetails.replaceAction({
+            var replaceAction = objectDetails.replaceAction;
+            if (replaceAction === undefined) {
+                replaceAction = actionCreators["replaceAll" + utils.capitalize(objectName)]
+            }
+            actions.push(replaceAction({
                 [objectName]: processedValue
             }))
         }

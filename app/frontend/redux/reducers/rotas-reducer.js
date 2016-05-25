@@ -4,7 +4,7 @@ import oFetch from "o-fetch"
 import makeReducer, {makeHandlerForGenericReplaceAction} from "./make-reducer"
 
 export default makeReducer({
-    GENERIC_REPLACE_ALL_ITEMS: makeHandlerForGenericReplaceAction("rotas"),
+    REPLACE_ALL_ROTAS: makeHandlerForGenericReplaceAction("rotas"),
     UPDATE_ROTA_STATUS_SUCCESS: function(state, action) {
         var [rotaClientId, status] = oFetch(action, "rotaClientId", "status");
         var newState = {...state};

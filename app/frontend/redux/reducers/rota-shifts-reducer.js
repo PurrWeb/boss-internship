@@ -3,7 +3,7 @@ import utils from "~lib/utils"
 import makeReducer, {makeHandlerForGenericReplaceAction} from "./make-reducer"
 
 export default makeReducer({
-    GENERIC_REPLACE_ALL_ITEMS: makeHandlerForGenericReplaceAction("shifts"),
+    REPLACE_ALL_SHIFTS: makeHandlerForGenericReplaceAction("shifts"),
     ADD_SHIFT_SUCCESS: function(state, action){
         return Object.assign({}, state, {[action.shift.clientId]: action.shift })
     },

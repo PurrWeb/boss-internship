@@ -1,6 +1,6 @@
 import _ from "underscore"
 import actionTypes, {registerActionType} from "../actions/action-types"
-import {createActionCreator} from "../actions"
+import {registerActionCreator} from "../actions"
 import oFetch from "o-fetch"
 import utils from "~lib/utils"
 
@@ -39,24 +39,43 @@ export default function makeReducer(actionHandlers, options){
     }
 }
 
-export function makeHandlerForGenericReplaceAction(propertyName) {
+export function makeHandlerForGenericReplaceAction(collectionName) {
+    var multiItemActionNamePostfix = utils.makeAllCapsSnakeCase(collectionName)
+    var replaceAllActionType = "REPLACE_ALL_" + multiItemActionNamePostfix;
+    registerActionType(replaceAllActionType);
+    registerActionCreator("replaceAll" + utils.capitalize(collectionName), function(data){
+        var keys = _.keys(data);
+        if (keys.length !== 1) {
+            throw Error("Invalid data for genericReplaceAllItems, only one set of values allowed")
+        }
+
+        var collectionName = keys[0];
+        var items = data[collectionName]
+        return {
+            type: replaceAllActionType,
+            [collectionName]: items
+        }
+    })
+
     return function(state, action){
-        if (propertyName in action) {
-            return action[propertyName];
+        if (collectionName in action) {
+            return action[collectionName];
         } else {
             return state;
         }
     }
 }
 
-export function makeDefaultReducer(propertyName){
+export function makeDefaultReducer(collectionName){
     // simple reducer for data that isn't updated after initial load
-    var singleItemName = utils.getStringExceptLastCharacter(propertyName)
-    var actionNamePostfix = utils.makeAllCapsSnakeCase(singleItemName)
+    var singleItemName = utils.getStringExceptLastCharacter(collectionName)
+    var singleItemAactionNamePostfix = utils.makeAllCapsSnakeCase(singleItemName)
+    var multiItemActionNamePostfix = utils.makeAllCapsSnakeCase(collectionName)
 
-    var updateActionType = "UPDATE_" + actionNamePostfix;
+    var replaceAllActionType = "REPLACE_ALL_" + multiItemActionNamePostfix;
+    var updateActionType = "UPDATE_" + singleItemAactionNamePostfix;
     registerActionType(updateActionType)
-    createActionCreator("update" + utils.capitalize(singleItemName), function(options){
+    registerActionCreator("update" + utils.capitalize(singleItemName), function(options){
         return {
             type: updateActionType,
             [singleItemName]: oFetch(options, singleItemName)
@@ -64,7 +83,7 @@ export function makeDefaultReducer(propertyName){
     });
 
     return makeReducer({
-        GENERIC_REPLACE_ALL_ITEMS: makeHandlerForGenericReplaceAction(propertyName),
+        [replaceAllActionType]: makeHandlerForGenericReplaceAction(collectionName),
         [updateActionType]: function(state, action){
             if (action[singleItemName] === undefined) {
                 return state;

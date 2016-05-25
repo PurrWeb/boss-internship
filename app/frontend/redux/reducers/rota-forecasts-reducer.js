@@ -3,7 +3,7 @@ import utils from "~lib/utils"
 import makeReducer, {makeHandlerForGenericReplaceAction} from "./make-reducer"
 
 export default makeReducer({
-    GENERIC_REPLACE_ALL_ITEMS: makeHandlerForGenericReplaceAction("rotaForecasts"),
+    REPLACE_ALL_ROTA_FORECASTS: makeHandlerForGenericReplaceAction("rotaForecasts"),
     UPDATE_ROTA_FORECAST_SUCCESS: function(state, action){
         var newForecast = action.rotaForecast;
         var existingRotaForecast = _.find(state, function(rotaForecast){

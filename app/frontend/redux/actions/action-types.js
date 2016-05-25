@@ -20,8 +20,6 @@ var typeStrings = [
     "REPLACE_WEEKLY_ROTA_FORECAST",
     "SET_PAGE_OPTIONS",
 
-    "GENERIC_REPLACE_ALL_ITEMS",
-
     "API_REQUEST_START",
     "API_REQUEST_END",
     "SET_COMPONENT_ERROR"
@@ -38,3 +36,6 @@ export default types;
 export function registerActionType(typeString){
     types[typeString] = typeString;
 }
+
+window.debug = window.debug || {};
+window.debug.actionTypes = types;

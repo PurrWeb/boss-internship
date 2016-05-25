@@ -68,12 +68,10 @@ export {
 
 import {
     setApiKey,
-    genericReplaceAllItems,
     setPageOptions
 } from "./misc"
 export {
     setApiKey,
-    genericReplaceAllItems,
     setPageOptions
 }
 
@@ -108,11 +106,14 @@ export {
 
 var actionCreators = {};
 
-export function createActionCreator(name, fn){
+export function registerActionCreator(name, fn){
     if (actionCreators[name] !== undefined) {
         throw Error("Action creator " + name + " already existss")
     }
     actionCreators[name] = fn;
 }
+
+window.debug = window.debug || {};
+window.debug.actionCreators = actionCreators
 
 export default actionCreators;
