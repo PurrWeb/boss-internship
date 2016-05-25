@@ -21,7 +21,6 @@ var typeStrings = [
     "SET_PAGE_OPTIONS",
 
     "GENERIC_REPLACE_ALL_ITEMS",
-    "GENERIC_UPDATE_ITEM",
 
     "API_REQUEST_START",
     "API_REQUEST_END",

@@ -3,7 +3,7 @@ import StaffDayUi from "../components/staff-day"
 import { connect } from "react-redux"
 import RotaDate from "~lib/rota-date"
 import { selectClockInDayDetails } from "~redux/selectors"
-import * as actions from "~redux/actions"
+import actionCreators from "~redux/actions"
 import { bindActionCreators } from "redux"
 
 class StaffDay extends React.Component {
@@ -46,7 +46,7 @@ function mapStateToProps(state, ownProps){
 function mapDispatchToProps(dispatch){
     return {
         boundActions: {
-            updateClockInBreak: bindActionCreators(actions.updateClockInBreak, dispatch)
+            updateClockInBreak: bindActionCreators(actionCreators.updateClockInBreak, dispatch)
         }
     }
 }

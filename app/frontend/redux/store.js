@@ -44,7 +44,7 @@ var rootReducer = combineReducers({
     clockInEvents: makeDefaultReducer("clockInEvents"),
     clockInNotes: makeDefaultReducer("clockInNotes"),
     clockInReasons: makeDefaultReducer("clockInReasons"),
-    clockInBreaks: makeDefaultReducer("clockInBreaks", "CLOCK_IN_BREAK")
+    clockInBreaks: makeDefaultReducer("clockInBreaks")
 });
 var createStoreWithMiddleware = compose(
 	// Redux thunk lets us dispatch asynchronous actions, for example

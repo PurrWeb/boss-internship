@@ -105,3 +105,14 @@ import {
 export {
     updateClockInBreak
 }
+
+var actionCreators = {};
+
+export function createActionCreator(name, fn){
+    if (actionCreators[name] !== undefined) {
+        throw Error("Action creator " + name + " already existss")
+    }
+    actionCreators[name] = fn;
+}
+
+export default actionCreators;

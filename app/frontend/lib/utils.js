@@ -112,6 +112,14 @@ var utils =  {
     },
     getStringExceptLastCharacter(str){
         return str.slice(0, str.length - 1);
+    },
+    capitalize(str){
+        return str[0].toUpperCase() + str.slice(1)
+    },
+    makeAllCapsSnakeCase(str){
+        var parts = str.match(/([A-Z]?[a-z]*)/g)
+        parts = parts.filter(part => part !== "");
+        return parts.join("_").toUpperCase();
     }
 }
 
