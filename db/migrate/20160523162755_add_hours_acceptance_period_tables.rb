@@ -8,6 +8,7 @@ class AddHoursAcceptancePeriodTables < ActiveRecord::Migration
       t.datetime :starts_at, null: false
       t.datetime :ends_at, null: false
       t.integer  :clock_in_day_id
+      t.string   :status, null: false, default: 'pending'
       t.timestamps
     end
 
@@ -24,25 +25,5 @@ class AddHoursAcceptancePeriodTables < ActiveRecord::Migration
       t.boolean  :enabled,                null: false
       t.timestamps
     end
-
-    create_table :hours_acceptance_period_transitions do |t|
-      t.string :to_state, null: false
-      t.text :metadata
-      t.integer :sort_key, null: false
-      t.integer :hours_acceptance_period_id, null: false
-      t.boolean :most_recent
-      t.timestamps
-    end
-
-    add_index(:hours_acceptance_period_transitions,
-              [:hours_acceptance_period_id, :sort_key],
-              unique: true,
-              name: "index_hours_acceptance_period_transitions_parent_sort")
-
-    add_index(:hours_acceptance_period_transitions,
-              [:hours_acceptance_period_id, :most_recent],
-              unique: true,
-
-              name: "index_hours_acceptance_period_transitions_parent_most_recent")
   end
 end

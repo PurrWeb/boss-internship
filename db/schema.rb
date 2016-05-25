@@ -273,27 +273,15 @@ ActiveRecord::Schema.define(version: 20160601214451) do
     t.datetime "updated_at"
   end
 
-  create_table "hours_acceptance_period_transitions", force: :cascade do |t|
-    t.string   "to_state",                   limit: 255,   null: false
-    t.text     "metadata",                   limit: 65535
-    t.integer  "sort_key",                   limit: 4,     null: false
-    t.integer  "hours_acceptance_period_id", limit: 4,     null: false
-    t.boolean  "most_recent"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "hours_acceptance_period_transitions", ["hours_acceptance_period_id", "most_recent"], name: "index_hours_acceptance_period_transitions_parent_most_recent", unique: true, using: :btree
-  add_index "hours_acceptance_period_transitions", ["hours_acceptance_period_id", "sort_key"], name: "index_hours_acceptance_period_transitions_parent_sort", unique: true, using: :btree
-
   create_table "hours_acceptance_periods", force: :cascade do |t|
-    t.integer  "creator_id",                 limit: 4,   null: false
-    t.string   "creator_type",               limit: 255, null: false
+    t.integer  "creator_id",                 limit: 4,                       null: false
+    t.string   "creator_type",               limit: 255,                     null: false
     t.integer  "hours_acceptance_reason_id", limit: 4
     t.string   "reason_note",                limit: 255
-    t.datetime "starts_at",                              null: false
-    t.datetime "ends_at",                                null: false
+    t.datetime "starts_at",                                                  null: false
+    t.datetime "ends_at",                                                    null: false
     t.integer  "clock_in_day_id",            limit: 4
+    t.string   "status",                     limit: 255, default: "pending", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
