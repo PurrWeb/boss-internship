@@ -1,3 +1,6 @@
+import { registerActionType } from "./index"
+
+registerActionType("SHOW_USER_ACTION_CONFIRMATION_MESSAGE")
 export function showUserActionConfirmationMessage({message}) {
     return function(dispatch) {
         dispatch({
@@ -10,6 +13,7 @@ export function showUserActionConfirmationMessage({message}) {
     }
 }
 
+registerActionType("HIDE_USER_ACTION_CONFIRMATION_MESSAGE")
 export function hideUserActionConfirmationMessage({message}){
     return {
         type: "HIDE_USER_ACTION_CONFIRMATION_MESSAGE",

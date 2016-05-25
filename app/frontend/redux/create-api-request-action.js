@@ -3,6 +3,10 @@ import {actionTypes, registerActionType} from "./actions"
 
 var registeredApiRequestActionCreators = {};
 
+registerActionType("API_REQUEST_START")
+registerActionType("API_REQUEST_END")
+registerActionType("SET_COMPONENT_ERROR")
+
 /**
 The createApiRequestAction creates a an actionCreator that can be used to update
 the state of API requests in the store.

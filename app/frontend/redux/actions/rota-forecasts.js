@@ -3,7 +3,9 @@ import makeApiRequestMaker from "../make-api-request"
 import {apiRoutes} from "~lib/routes"
 import * as backendData from "~lib/backend-data/process-backend-objects"
 import oFetch from "o-fetch"
+import { registerActionType } from "./index"
 
+registerActionType("REPLACE_WEEKLY_ROTA_FORECAST")
 export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
     return {
         type: "REPLACE_WEEKLY_ROTA_FORECAST",
