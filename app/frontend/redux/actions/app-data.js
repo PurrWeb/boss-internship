@@ -131,7 +131,7 @@ function getInititalLoadActions(initialLoadData){
             processFunction: backendData.processRotaForecastObject
         },
         "pageOptions": {
-            replaceAction: setPageOptions,
+            replaceAction: actionCreators.setPageOptions,
             processFunction: backendData.processPageOptionsObject
         },
         "venues": {

@@ -1,3 +1,46 @@
+var actionCreators;
+
+export function registerActionCreator(name, fn){
+    if (!actionCreators) {
+        actionCreators = {};
+    }
+    if (actionCreators[name] !== undefined) {
+        throw Error("Action creator " + name + " already existss")
+    }
+    actionCreators[name] = fn;
+}
+
+
+export default actionCreators;
+
+
+/*
+Action types work differently from the standard redux way.
+
+This is mostly to avoid having to create generic action types.
+By doing it this way we can generate actions and action types dynamically.
+
+We retain the ability to check that we don't use the wrong
+action string by checking it exists in makeReducer.
+
+See window.debug.actionTypes to see all possible actions.
+*/
+
+export {actionTypes}
+
+var actionTypes;
+export function registerActionType(typeString){
+    if (!actionTypes) {
+        actionTypes = {};
+    }
+    actionTypes[typeString] = typeString;
+}
+
+window.debug = window.debug || {};
+window.debug.actionCreators = actionCreators
+window.debug.actionTypes = actionTypes;
+
+
 import {
     clockInOutAppEnterUserMode,
     updateStaffStatus,
@@ -67,15 +110,6 @@ export {
 }
 
 import {
-    setApiKey,
-    setPageOptions
-} from "./misc"
-export {
-    setApiKey,
-    setPageOptions
-}
-
-import {
     loadInitialRotaAppState,
     loadInitalStaffTypeRotaAppState,
     loadInitialRotaOverviewAppState,
@@ -103,42 +137,3 @@ import {
 export {
     updateClockInBreak
 }
-
-var actionCreators = {};
-
-export function registerActionCreator(name, fn){
-    if (actionCreators[name] !== undefined) {
-        throw Error("Action creator " + name + " already existss")
-    }
-    actionCreators[name] = fn;
-}
-
-
-export default actionCreators;
-
-
-/*
-Action types work differently from the standard redux way.
-
-This is mostly to avoid having to create generic action types.
-By doing it this way we can generate actions and action types dynamically.
-
-We retain the ability to check that we don't use the wrong
-action string by checking it exists in makeReducer.
-
-See window.debug.actionTypes to see all possible actions.
-*/
-
-export {actionTypes}
-
-var actionTypes;
-export function registerActionType(typeString){
-    if (!actionTypes) {
-        actionTypes = {};
-    }
-    actionTypes[typeString] = typeString;
-}
-
-window.debug = window.debug || {};
-window.debug.actionCreators = actionCreators
-window.debug.actionTypes = actionTypes;
