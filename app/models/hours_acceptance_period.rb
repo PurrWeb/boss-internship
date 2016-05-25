@@ -7,5 +7,5 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   validates :clock_in_day, presence: true
   validates :creator, presence: true
-  validates :state, inclusion: { in: STATES, message: 'is required' }
+  validates :status, inclusion: { in: STATES, message: 'is required' }
 end
