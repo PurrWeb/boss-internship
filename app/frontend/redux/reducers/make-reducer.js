@@ -1,5 +1,6 @@
 import _ from "underscore"
 import actionTypes from "../actions/action-types"
+import oFetch from "o-fetch"
 
 export default function makeReducer(actionHandlers, options){
     var defaultOptions = {
@@ -44,4 +45,26 @@ export function makeHandlerForGenericReplaceAction(propertyName) {
             return state;
         }
     }
+}
+
+function makeDefaultReducer(propertyName, actionNamePostfix){
+    // simple reducer for data that isn't updated after initial load
+    var singleItemName = utils.getStringExceptLastCharacter(propertyName)
+    return makeReducer({
+        GENERIC_REPLACE_ALL_ITEMS: makeHandlerForGenericReplaceAction(propertyName),
+        GENERIC_UPDATE_ITEM: function(state, action){
+            if (action[singleItemName] === undefined) {
+                return state;
+            }
+            var newItemData = oFetch(action, singleItemName);
+            var item = state[newItemData.clientId]
+            var newItem = _.clone(item);
+            for (var key in newItemData){
+                newItem[key] = newItemData[key];
+            }
+            var newState = {...state}
+            newState[item.clientId] = newItem;
+            return newState
+        }
+    })
 }

@@ -19,7 +19,7 @@ export default class StaffDay extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps){
-        if (!Validation.validateHoursAcceptances(nextProps.acceptedHours).isValid) {
+        if (!Validation.validateHoursPeriods(nextProps.hoursAcceptancePeriods).isValid) {
             return; // don't try to display invalid data on the chart
         }
         this.setState({
@@ -103,6 +103,7 @@ export default class StaffDay extends React.Component {
                             hoursAcceptancePeriods={this.props.hoursAcceptancePeriods}
                             markDayAsDone={this.props.markDayAsDone}
                             clockInBreaks={this.props.clockInBreaks}
+                            boundActions={this.props.boundActions}
                             onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
                     </div>
                 </div>
@@ -233,7 +234,13 @@ class BreakListItem extends React.Component {
                     showErrorMessages={false}
                     rotaDate={this.props.rotaDate}
                     onChange={(times) => {
-                        this.props.onChange(times)
+                        var clockInBreak = {
+                            ...times,
+                            clientId: breakItem.clientId
+                        };
+                        this.props.boundActions.updateClockInBreak({
+                            clockInBreak
+                        })
                     }}
                     granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
                     readonly={this.props.readonly}
@@ -280,21 +287,9 @@ class BreakList extends React.Component {
         return <div>
             {breaks.map((breakItem) => {
                 return <BreakListItem
-                    onChange={(newBreakItem) => {
-                        var breaks = utils.replaceArrayElement(
-                            this.props.breaks,
-                            breakItem,
-                            newBreakItem)
-                        this.props.onChange(breaks)
-                    }}
+                    boundActions={this.props.boundActions}
                     readonly={this.props.readonly}
                     hoursAcceptancePeriod={this.props.hoursAcceptancePeriod}
-                    onDeleteItem={() => {
-                        var newBreaks = _(this.props.breaks).reject(
-                            (breakItemArg) => breakItemArg === breakItem
-                        )
-                        this.props.onChange(newBreaks)
-                    }}
                     rotaDate={this.props.rotaDate}
                     breakItem={breakItem} />
             })}
@@ -408,10 +403,7 @@ class AcceptedHoursListItem extends React.Component {
                     <div style={{paddingRight: 30, paddingLeft: 30}}>
                         <div className="staff-day__sub-heading">Breaks</div>
                         <BreakList
-                            onChange={(breaks) => this.triggerChange({clockInHours: {
-                                    breaks
-                                }
-                            })}
+                            boundActions={this.props.boundActions}
                             readonly={readonly}
                             clockInBreaks={this.props.clockInBreaks}
                             rotaDate={this.props.rotaDate}
@@ -524,11 +516,7 @@ class AcceptedHoursList extends React.Component {
                             marginBottom: 5
                         }}>
                         <AcceptedHoursListItem
-                            onChange={(newAcceptedHours) => {
-                                var newValue = _.clone(this.props.acceptedHours);
-                                newValue = utils.replaceArrayElement(newValue, acceptedHours, newAcceptedHours)
-                                this.props.onChange(newValue)
-                            }}
+                            boundActions={this.props.boundActions}
                             deleteHoursAcceptance={() => {
                                 var newValue = _(this.props.acceptedHours).reject(function(hoursAcceptanceArg){
                                     return hoursAcceptanceArg === acceptedHours

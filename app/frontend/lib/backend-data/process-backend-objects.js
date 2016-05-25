@@ -85,7 +85,10 @@ export function processClockInReason(clockInReason){
 export function processClockInBreak(clockInBreak){
     clockInBreak = processBackendObject(clockInBreak);
     clockInBreak.starts_at = new Date(clockInBreak.starts_at);
-    clockInBreak.ends_at = new Date(clockInBreak.ends_at);
+    if (clockInBreak.ends_at !== null) {
+        // can be null if break is still in progress
+        clockInBreak.ends_at = new Date(clockInBreak.ends_at);
+    }
     return clockInBreak;
 }
 

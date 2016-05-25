@@ -2,8 +2,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk"
 import _ from "underscore"
 import {batch, batching} from "redux-batch-middleware"
-import makeReducer, {makeHandlerForGenericReplaceAction} from "./reducers/make-reducer"
-
+import utils from "~lib/utils"
 
 import clockInStatuses from "./reducers/clock-in-statuses"
 import rotaShifts from "./reducers/rota-shifts-reducer"
@@ -19,13 +18,7 @@ import confirmationModal from "./reducers/confirmation-modal-reducer"
 import userActionConfirmationMessages from "./reducers/user-action-confirmation-messages-reducer"
 import clockInDays from "./reducers/clock-in-days-reducer"
 import apiKey from "./reducers/api-key"
-
-function makeDefaultReducer(propertyName){
-    // simple reducer for data that isn't updated after initial load
-    return makeReducer({
-        GENERIC_REPLACE_ALL_ITEMS: makeHandlerForGenericReplaceAction(propertyName)
-    })
-}
+import {makeDefaultReducer} from "./reducers/make-reducer"
 
 var rootReducer = combineReducers({
     staff: makeDefaultReducer("staffMembers"),
@@ -51,7 +44,7 @@ var rootReducer = combineReducers({
     clockInEvents: makeDefaultReducer("clockInEvents"),
     clockInNotes: makeDefaultReducer("clockInNotes"),
     clockInReasons: makeDefaultReducer("clockInReasons"),
-    clockInBreaks: makeDefaultReducer("clockInBreaks")
+    clockInBreaks: makeDefaultReducer("clockInBreaks", "CLOCK_IN_BREAK")
 });
 var createStoreWithMiddleware = compose(
 	// Redux thunk lets us dispatch asynchronous actions, for example

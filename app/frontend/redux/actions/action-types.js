@@ -8,7 +8,7 @@ We retain the ability to check that we don't use the wrong
 action string by checking it exists in makeReducer.
 */
 
-var typeStrings = [    
+var typeStrings = [
     "SHOW_CONFIRMATION_MODAL",
     "CANCEL_CONFIRMATION_MODAL",
     "COMPLETE_CONFIRMATION_MODAL",
@@ -18,8 +18,10 @@ var typeStrings = [
     "SHOW_USER_ACTION_CONFIRMATION_MESSAGE",
     "HIDE_USER_ACTION_CONFIRMATION_MESSAGE",
     "REPLACE_WEEKLY_ROTA_FORECAST",
-    "GENERIC_REPLACE_ALL_ITEMS",
     "SET_PAGE_OPTIONS",
+
+    "GENERIC_REPLACE_ALL_ITEMS",
+    "GENERIC_UPDATE_ITEM",
 
     "API_REQUEST_START",
     "API_REQUEST_END",

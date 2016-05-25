@@ -3,26 +3,25 @@ import StaffDayUi from "../components/staff-day"
 import { connect } from "react-redux"
 import RotaDate from "~lib/rota-date"
 import { selectClockInDayDetails } from "~redux/selectors"
+import * as actions from "~redux/actions"
+import { bindActionCreators } from "redux"
 
 class StaffDay extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            hoursAcceptancePeriods: props.hoursAcceptancePeriods,
             markedAsDone: false
         }
     }
     render(){
-        var stateHoursAcceptancePeriods = this.state.hoursAcceptancePeriods;
-        var uiProps = {...this.props}
-        uiProps.hoursAcceptancePeriods = stateHoursAcceptancePeriods;
         return <StaffDayUi
             markedAsDone={this.state.markedAsDone}
             // onAcceptedHoursChanged={(acceptedHours) =>{
             //     this.setState({proposedInfo: acceptedHours})
             // }}
             markDayAsDone={() => this.setState({markedAsDone: true})}
-            {...uiProps}
+            boundActions={this.props.boundActions}
+            {...this.props}
         />
     }
 }
@@ -44,4 +43,12 @@ function mapStateToProps(state, ownProps){
     return props;
 }
 
-export default connect(mapStateToProps)(StaffDay)
+function mapDispatchToProps(dispatch){
+    return {
+        boundActions: {
+            updateClockInBreak: bindActionCreators(actions.updateClockInBreak, dispatch)
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StaffDay)

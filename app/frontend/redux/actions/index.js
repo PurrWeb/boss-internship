@@ -98,3 +98,10 @@ export {
     updateStaffMemberPinWithEntryModal,
     updateStaffMemberPin
 }
+
+import {
+    updateClockInBreak
+} from "./clock-in-breaks"
+export {
+    updateClockInBreak
+}

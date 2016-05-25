@@ -143,10 +143,15 @@ var validation = {
             isValid
         }
     },
-    validateHoursAcceptances(hoursAcceptances) {
+    validateHoursPeriods(hoursPeriods) {
+        console.warn("validateHoursPeriods not implemented")
+        return true;
+        // hoursPeriods are either hoursAcceptancePeriods or clockInPeriods
         var isValid = true;
 
-        if (!validation.validateHoursAssignmentsDontOverlap({hoursAssignments: hoursAcceptances}).isValid) {
+        if (!validation.validateHoursAssignmentsDontOverlap({
+            hoursAssignments: hoursAcceptances}).isValid
+        ) {
             isValid = false;
         }
 
