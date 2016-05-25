@@ -107,8 +107,8 @@ describe ClockInDay do
             clock_in_period.clocking_events << break_end_event
           end
 
-          specify 'it should be clocked out' do
-            expect(clock_in_day.current_clock_in_state).to eq(:clocked_out)
+          specify 'it should be clocked in' do
+            expect(clock_in_day.current_clock_in_state).to eq(:clocked_in)
           end
         end
       end
