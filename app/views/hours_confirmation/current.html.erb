@@ -27,18 +27,18 @@
             id: 2333,
             starts_at: new Date(2016, 10, 1, 9, 0).toString(),
             ends_at: new Date(2016, 10, 1, 18, 0).toString(),
-            breaks: [
-                {id: 22}
-            ],
+            // breaks: [
+            //     {id: 22}
+            // ],
             clock_in_day: {id: 22}
         },
         {
             id: 12222,
             starts_at: new Date(2016, 10, 2, 1, 0).toString(),
             ends_at: null,
-            breaks: [
-                {id: 33}
-            ],
+            // breaks: [
+            //     {id: 33}
+            // ],
             clock_in_day: {id: 22}
         }
     ];
@@ -46,9 +46,9 @@
         id: 11,
         starts_at: new Date(2016, 10, 1, 9, 30).toString(),
         ends_at: new Date(2016, 10, 1, 18, 0).toString(),
-        breaks: [
-            {id: 24}
-        ],
+        // breaks: [
+        //     {id: 24}
+        // ],
         reason_note: "custom note entered here",
         reason: {id: 912},
         clock_in_day: {id: 22},
@@ -134,20 +134,25 @@
             clock_in_day: {id: 22},
             starts_at: new Date(2016, 10, 1, 10, 30).toString(),
             ends_at: new Date(2016, 10, 1, 11, 30).toString(),
-        },
-        {
-            id:24,
-            clock_in_day: {id: 22},
-            starts_at: new Date(2016, 10, 1, 10, 15).toString(),
-            ends_at: new Date(2016, 10, 1, 11, 45).toString()
+            clock_in_period: {id: 2333}
         },
         {
             id: 33,
             clock_in_day: {id: 22},
             starts_at: new Date(2016, 10, 2, 2, 30).toString(),
-            ends_at: null
+            ends_at: null,
+            clock_in_period: {id: 12222}
         }
     ];
+    window.boss.hoursAcceptanceBreaks = [
+        {
+            id:24,
+            clock_in_day: {id: 22},
+            starts_at: new Date(2016, 10, 1, 10, 15).toString(),
+            ends_at: new Date(2016, 10, 1, 11, 45).toString(),
+            hours_acceptance_period: {id: 11}
+        }
+    ]
     window.boss.staffMembers = [
         {
             "id": 160,

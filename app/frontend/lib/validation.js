@@ -116,9 +116,9 @@ var validation = {
             messages
         }
     },
-    validateHoursPeriod({hoursPeriod, clockInBreaks}){
+    validateHoursPeriod({hoursPeriod}){
         var isValid = true;
-        var breaks = hoursPeriod.breaks.map(b => b.get(clockInBreaks))
+        var breaks = hoursPeriod.breaks;
         var breaksValidationResult = validation.validateBreaks({
             breaks,
             hoursPeriod

@@ -87,6 +87,7 @@ export function makeDefaultReducer(collectionName, additionalHandlers){
     var replaceAllActionType = "REPLACE_ALL_" + multiItemActionNamePostfix;
     var updateActionType = "UPDATE_" + singleItemAactionNamePostfix;
     var addActionType = "ADD_" + singleItemAactionNamePostfix;
+    var deleteActionType = "DELETE_" + singleItemAactionNamePostfix;
 
     registerActionType(updateActionType)
     registerActionCreator("update" + utils.capitalize(singleItemName), function(options){
@@ -109,6 +110,18 @@ export function makeDefaultReducer(collectionName, additionalHandlers){
             [singleItemName]: item
         }
     })
+
+    registerActionType(deleteActionType)
+    registerActionCreator("delete" + utils.capitalize(singleItemName), function(options){
+        var item = getItemFromActionOptions(options);
+        if (item.clientId === undefined) {
+            throw Error("Needs client Id of object that should be deleted")
+        }
+        return {
+            type: deleteActionType,
+            [singleItemName]: {clientId: item.clientId}
+        }
+    });
 
     function getItemFromActionOptions(options){
         var item = options[singleItemName];
@@ -138,6 +151,12 @@ export function makeDefaultReducer(collectionName, additionalHandlers){
             var item = oFetch(action, singleItemName)
             return Object.assign({}, state, {
                 [item.clientId]: item
+            })
+        },
+        [deleteActionType]: function(state, action){
+            var itemToDelete = oFetch(action, singleItemName);
+            return _(state).reject(function(item){
+                return itemToDelete.clientId === item.clientId;
             })
         },
         ...additionalHandlers

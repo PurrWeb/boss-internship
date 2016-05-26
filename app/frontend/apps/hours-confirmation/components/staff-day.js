@@ -143,16 +143,13 @@ class StaffDayHeader extends React.Component {
 
         var clockInBreaks = this.props.clockInBreaks;
         var clockedStats = getHoursPeriodStats({
-            hoursPeriods: clockedClockInPeriods,
-            clockInBreaks
+            denormalizedHoursPeriods: clockedClockInPeriods
         });
         var acceptedStats = getHoursPeriodStats({
-            hoursPeriods: acceptedClockInPeriods,
-            clockInBreaks
+            denormalizedHoursPeriods: acceptedClockInPeriods
         });
         var rotaedStats = getHoursPeriodStats({
-            hoursPeriods: rotaedClockInPeriods,
-            clockInBreaks
+            denormalizedHoursPeriods: rotaedClockInPeriods
         })
 
         return <h2 style={{
@@ -216,7 +213,11 @@ class BreakListItem extends React.Component {
             deleteBreakButton = <a
                 className="btn btn-default"
                 style={{marginLeft: -10}}
-                onClick={this.props.onDeleteItem}>
+                onClick={() => {
+                    this.props.boundActions.deleteHoursAcceptanceBreak({
+                        clientId: breakItem.clientId
+                    })
+                }}>
                 x
             </a>
         }
@@ -269,9 +270,7 @@ class BreakListItem extends React.Component {
 
 class BreakList extends React.Component {
     render(){
-        var breaks = this.props.hoursAcceptancePeriod.breaks.map((breakItem) => {
-            return breakItem.get(this.props.clockInBreaks)
-        })
+        var breaks = this.props.hoursAcceptancePeriod.breaks;
         var validationResult = Validation.validateBreaks({
             breaks: breaks,
             hoursPeriod: this.props.hoursAcceptancePeriod
@@ -321,7 +320,7 @@ class BreakList extends React.Component {
             hours_acceptance_period: {id: hoursAcceptancePeriod.serverId}
         }
 
-        this.props.boundActions.addClockInBreak(newBreak)
+        this.props.boundActions.addHoursAcceptanceBreak(newBreak)
     }
 }
 
@@ -452,8 +451,7 @@ class AcceptedHoursListItem extends React.Component {
     }
     getAcceptUi(){
         var stats = getHoursPeriodStats({
-            hoursPeriods: [this.props.hoursAcceptancePeriod],
-            clockInBreaks: this.props.clockInBreaks
+            denormalizedHoursPeriods: [this.props.hoursAcceptancePeriod]
         });
         if (!this.isAccepted()) {
             var classes = ["btn"]

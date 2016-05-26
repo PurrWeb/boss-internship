@@ -89,6 +89,15 @@ export function processClockInBreakObject(clockInBreak){
     return clockInBreak;
 }
 
+export function processHoursAcceptanceBreakObject(hoursAcceptanceBreak){
+    hoursAcceptanceBreak = processBackendObject(hoursAcceptanceBreak);
+    hoursAcceptanceBreak.starts_at = new Date(hoursAcceptanceBreak.starts_at);
+    hoursAcceptanceBreak.ends_at = new Date(hoursAcceptanceBreak.ends_at)
+
+    return hoursAcceptanceBreak;
+}
+
+
 export function processShiftObject(shift){
     shift = processBackendObject(shift);
 

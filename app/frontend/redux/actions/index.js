@@ -31,7 +31,7 @@ export function registerActionCreator(name, fn){
         actionCreators = {};
     }
     if (actionCreators[name] !== undefined) {
-        throw Error("Action creator " + name + " already existss")
+        throw Error("Action creator " + name + " already exists")
     }
     actionCreators[name] = fn;
 }

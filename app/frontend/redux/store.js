@@ -44,6 +44,7 @@ var rootReducer = combineReducers({
     clockInDays,
     clockInPeriods: makeDefaultReducer("clockInPeriods"),
     clockInBreaks: makeDefaultReducer("clockInBreaks"),
+    hoursAcceptanceBreaks: makeDefaultReducer("hoursAcceptanceBreaks"),
     hoursAcceptancePeriods: hoursAcceptancePeriods,
     clockInEvents: makeDefaultReducer("clockInEvents"),
     clockInNotes: makeDefaultReducer("clockInNotes"),

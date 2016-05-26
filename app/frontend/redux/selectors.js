@@ -257,13 +257,18 @@ export function selectClockInOutLoadAppDataIsInProgress(state){
     return requests !== undefined && requests.length > 0;
 }
 
-function getBreaksFromHoursPeriods(hoursPeriods, clockInBreaks){
-    return _(hoursPeriods)
-        .chain()
-        .pluck("breaks")
-        .flatten()
-        .map((breakLink) => breakLink.get(clockInBreaks))
-        .value()
+function addBreaksToClockInPeriod(clockInPeriod, clockInBreaks){
+    var breaks = _(clockInBreaks).filter(function(clockInBreak){
+        return clockInBreak.clock_in_period.clientId === clockInPeriod.clientId
+    })
+    return Object.assign({}, clockInPeriod, { breaks })
+}
+
+function addBreaksToHoursAcceptancePeriod(hoursAcceptancePeriod, hoursAcceptanceBreaks){
+    var breaks = _(hoursAcceptanceBreaks).filter(function(hoursAcceptanceBreak){
+        return hoursAcceptanceBreak.hours_acceptance_period.clientId === hoursAcceptancePeriod.clientId
+    })
+    return Object.assign({}, hoursAcceptancePeriod, { breaks })
 }
 
 export function selectClockInDayDetails(state, clockInDay){
@@ -274,11 +279,13 @@ export function selectClockInDayDetails(state, clockInDay){
     var hoursAcceptancePeriods = _(state.hoursAcceptancePeriods).filter(function(hoursAcceptancePeriod){
         return hoursAcceptancePeriod.clock_in_day.clientId === clockInDay.clientId;
     })
-    var clockInPeriodClientIds = _(clockInPeriods).pluck("clientId")
-    var clockInBreaks = _.flatten([
-        getBreaksFromHoursPeriods(clockInPeriods, state.clockInBreaks),
-        getBreaksFromHoursPeriods(hoursAcceptancePeriods, state.clockInBreaks)
-    ]);
+
+    clockInPeriods = clockInPeriods.map(function(clockInPeriod){
+        return addBreaksToClockInPeriod(clockInPeriod, state.clockInBreaks)
+    })
+    hoursAcceptancePeriods = hoursAcceptancePeriods.map(function(hoursAcceptancePeriod){
+        return addBreaksToHoursAcceptancePeriod(hoursAcceptancePeriod, state.hoursAcceptanceBreaks)
+    })
 
     var rota = getRotaFromDateAndVenue({
         dateOfRota: clockInDay.date,
@@ -303,7 +310,6 @@ export function selectClockInDayDetails(state, clockInDay){
         hoursAcceptancePeriods: hoursAcceptancePeriods,
         clockInEvents,
         staffMember,
-        clockInBreaks,
         rotaedShifts,
         clockInNotes
     }
