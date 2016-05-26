@@ -2,6 +2,7 @@ import _ from "underscore"
 import {registerActionCreator, registerActionType, actionTypes} from "../actions"
 import oFetch from "o-fetch"
 import utils from "~lib/utils"
+import * as backendData from "~lib/backend-data/process-backend-objects"
 
 export default function makeReducer(actionHandlers, options){
     var defaultOptions = {
@@ -65,35 +66,56 @@ export function makeHandlerForGenericReplaceAction(collectionName) {
     }
 }
 
-export function makeDefaultReducer(collectionName){
-    // simple reducer for data that isn't updated after initial load
+export function makeDefaultReducer(collectionName, additionalHandlers){
+    if (additionalHandlers === undefined) {
+        additionalHandlers = {};
+    }
+
     var singleItemName = utils.getStringExceptLastCharacter(collectionName)
     var singleItemAactionNamePostfix = utils.makeAllCapsSnakeCase(singleItemName)
     var multiItemActionNamePostfix = utils.makeAllCapsSnakeCase(collectionName)
 
     var replaceAllActionType = "REPLACE_ALL_" + multiItemActionNamePostfix;
     var updateActionType = "UPDATE_" + singleItemAactionNamePostfix;
+    var addActionType = "ADD_" + singleItemAactionNamePostfix;
+
     registerActionType(updateActionType)
     registerActionCreator("update" + utils.capitalize(singleItemName), function(options){
-        var item = options.singleItemName;
-        if (!item) {
-            item = options;
-        }
-        if (!item) {
-            throw Error("No item passed into update action for reducer " + collectionName)
-        }
+        var item = getItemFromActionOptions(options)
         return {
             type: updateActionType,
             [singleItemName]: item
         }
     });
 
+    registerActionType(addActionType)
+    registerActionCreator("add" + utils.capitalize(singleItemName), function(options){
+        var item = getItemFromActionOptions(options);
+        if (!backendData.objectHasBeenProcessed(item)){
+            var processFunction = backendData["process" + utils.capitalize(singleItemName) + "Object"]
+            item = processFunction(item)
+        }
+        return {
+            type: addActionType,
+            [singleItemName]: item
+        }
+    })
+
+    function getItemFromActionOptions(options){
+        var item = options[singleItemName];
+        if (!item) {
+            item = options;
+        }
+        if (!item) {
+            throw Error("No item passed into update action for reducer " + collectionName)
+        }
+        return item;
+    }
+
+
     return makeReducer({
         [replaceAllActionType]: makeHandlerForGenericReplaceAction(collectionName),
         [updateActionType]: function(state, action){
-            if (action[singleItemName] === undefined) {
-                return state;
-            }
             var newItemData = oFetch(action, singleItemName);
             var item = state[newItemData.clientId]
             var newItem = _.clone(item);
@@ -103,6 +125,13 @@ export function makeDefaultReducer(collectionName){
             var newState = {...state}
             newState[item.clientId] = newItem;
             return newState
-        }
+        },
+        [addActionType]: function(state, action){
+            var item = oFetch(action, singleItemName)
+            return Object.assign({}, state, {
+                [item.clientId]: item
+            })
+        },
+        ...additionalHandlers
     })
 }

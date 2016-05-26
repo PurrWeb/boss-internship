@@ -42,11 +42,24 @@ var rootReducer = combineReducers({
     apiKey,
     clockInDays,
     clockInPeriods: makeDefaultReducer("clockInPeriods"),
-    hoursAcceptancePeriods: makeDefaultReducer("hoursAcceptancePeriods"),
+    clockInBreaks: makeDefaultReducer("clockInBreaks"),
+    hoursAcceptancePeriods: makeDefaultReducer("hoursAcceptancePeriods", {
+        ADD_CLOCK_IN_BREAK: function(state, action){
+            return _(state).map(function(hoursAcceptancePeriod){
+                if (hoursAcceptancePeriod.clientId === action.clockInBreak.hours_acceptance_period.clientId) {
+                    var breaks = _.clone(hoursAcceptancePeriod.breaks)
+                    breaks.push(action.clockInBreak.getLink())
+                    return Object.assign({}, hoursAcceptancePeriod, {
+                        breaks
+                    })
+                };
+                return hoursAcceptancePeriod
+            })
+        }
+    }),
     clockInEvents: makeDefaultReducer("clockInEvents"),
     clockInNotes: makeDefaultReducer("clockInNotes"),
-    clockInReasons: makeDefaultReducer("clockInReasons"),
-    clockInBreaks: makeDefaultReducer("clockInBreaks")
+    clockInReasons: makeDefaultReducer("clockInReasons")
 });
 var createStoreWithMiddleware = compose(
 	// Redux thunk lets us dispatch asynchronous actions, for example

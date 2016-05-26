@@ -73,16 +73,37 @@ function processObjectLinks(obj){
     }
 }
 
+function addGetLink(obj){
+    obj.getLink = function(){
+        var link = {
+            clientId: obj.clientId,
+            serverId: obj.serverId
+        }
+        link.get = makeLinkResolverFunction(link, "(item obtained with getLink)")
+        return link;
+    }
+}
+
 export function processBackendObject(backendObj){
-    if (backendObj.clientId !== undefined){
+    if (objectHasBeenProcessed(backendObj)){
         throw new Error("Backend object has already been processed.");
     }
+
     var obj = {...backendObj};
 
+    if (obj.id === null){
+        obj.id = "UNPERSISTED_OBJECT_" + _.uniqueId();
+    }
+
     setObjectIds(obj);
+    addGetLink(obj);
     processObjectLinks(obj);
-    
+
     return obj;
 }
 
 export {processObjectLinks}
+
+export function objectHasBeenProcessed(backendObj){
+    return backendObj.clientId !== undefined
+}

@@ -303,22 +303,25 @@ class BreakList extends React.Component {
         </div>
     }
     addBreak(){
-        var clockInHours = this.props.acceptedHours.clockInHours;
-
+        var hoursAcceptancePeriod = this.props.hoursAcceptancePeriod
         var {rotaDate} = this.props;
         var newBreaks = _.clone(this.props.breaks);
 
-        var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(clockInHours.starts_at);
+        var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(hoursAcceptancePeriod.starts_at);
         var breakHoursOffset = shiftStartOffset + 1;
         if (breakHoursOffset > 23){
             breakHoursOffset = 23;
         }
 
-        newBreaks.push({
+        var newBreak = {
             starts_at: rotaDate.getDateNHoursAfterStartTime(breakHoursOffset, 0),
-            ends_at: rotaDate.getDateNHoursAfterStartTime(breakHoursOffset, 15)
-        })
-        this.props.onChange(newBreaks);
+            ends_at: rotaDate.getDateNHoursAfterStartTime(breakHoursOffset, 15),
+            id: null,
+            clock_in_day: {id: hoursAcceptancePeriod.clock_in_day.serverId},
+            hours_acceptance_period: {id: hoursAcceptancePeriod.serverId}
+        }
+
+        this.props.boundActions.addClockInBreak(newBreak)
     }
 }
 

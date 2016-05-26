@@ -1,11 +1,7 @@
 import _ from "underscore"
-import { processBackendObject, processObjectLinks, getClientId } from "./process-backend-object.js"
+import { objectHasBeenProcessed, processBackendObject, processObjectLinks, getClientId } from "./process-backend-object.js"
 
 export function processRotaObject(rota){
-    if (rota.id === null){
-        rota = {...rota};
-        rota.id = "UNPERSISTED_ROTA_" + _.uniqueId();
-    }
     var newRota = processBackendObject(rota);
 
     var date = rota.date;
@@ -82,13 +78,14 @@ export function processClockInReason(clockInReason){
     return processBackendObject(clockInReason);
 }
 
-export function processClockInBreak(clockInBreak){
+export function processClockInBreakObject(clockInBreak){
     clockInBreak = processBackendObject(clockInBreak);
     clockInBreak.starts_at = new Date(clockInBreak.starts_at);
     if (clockInBreak.ends_at !== null) {
         // can be null if break is still in progress
         clockInBreak.ends_at = new Date(clockInBreak.ends_at);
     }
+
     return clockInBreak;
 }
 
@@ -173,3 +170,5 @@ export function processHolidayAppViewData(viewData){
         pageData
     }
 }
+
+export {objectHasBeenProcessed}

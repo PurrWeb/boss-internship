@@ -174,7 +174,7 @@ function getInititalLoadActions(initialLoadData){
             processFunction: backendData.processHoursAcceptancePeriod
         },
         "clockInBreaks": {
-            processFunction: backendData.processClockInBreak
+            processFunction: backendData.processClockInBreakObject
         }
     }
 
