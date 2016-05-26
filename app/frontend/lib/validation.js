@@ -5,28 +5,28 @@ function prefixValidationMessages(messages, prefix) {
 }
 
 var validation = {
-    validateShiftTime(shiftTime){
+    validateShiftTime(shiftTime, granularityInMinutes = 30){
         var dateIsValid = utils.dateIsValid(shiftTime);
-        var minutesAreMultipleOfThirty = shiftTime.getMinutes() % 30 === 0;
+        var minutesAreMultipleOfGranularity = shiftTime.getMinutes() % granularityInMinutes === 0;
 
         var messages = [];
         if (!dateIsValid) {
             messages.push("Please enter a valid date.");
-        } else if (!minutesAreMultipleOfThirty) {
-            messages.push("Shift times need to be given in intervals of 30 minutes.");
+        } else if (!minutesAreMultipleOfGranularity) {
+            messages.push("Shift times need to be given in intervals of " + granularityInMinutes + " minutes.");
         }
 
         return {
-            isValid: dateIsValid && minutesAreMultipleOfThirty,
+            isValid: dateIsValid && minutesAreMultipleOfGranularity,
             messages
         }
     },
     shiftTimeIsValid(shiftTime){
         return validation.validateShiftTime(shiftTime).isValid;
     },
-    validateShiftTimes({starts_at, ends_at}){
-        var startTimeValidation = validation.validateShiftTime(starts_at);
-        var endTimeValidation = validation.validateShiftTime(ends_at);
+    validateShiftTimes({starts_at, ends_at, granularityInMinutes}){
+        var startTimeValidation = validation.validateShiftTime(starts_at, granularityInMinutes);
+        var endTimeValidation = validation.validateShiftTime(ends_at, granularityInMinutes);
 
         var timesAreValid = startTimeValidation.isValid && endTimeValidation.isValid;
         var shiftEndsAfterItStarts = starts_at < ends_at;
@@ -48,13 +48,13 @@ var validation = {
     areShiftTimesValid(starts_at, ends_at) {
         return validation.validateShiftTimes({starts_at, ends_at}).isValid;
     },
-    validateBreak({breakItem, clockInPeriod}) {
+    validateBreak({breakItem, hoursPeriod}) {
         var messages = [];
 
-        if (breakItem.starts_at <= clockInPeriod.starts_at) {
+        if (breakItem.starts_at <= hoursPeriod.starts_at) {
             messages.push("Break can only start after shift begins")
         }
-        if (breakItem.ends_at >= clockInPeriod.ends_at) {
+        if (breakItem.ends_at >= hoursPeriod.ends_at) {
             messages.push("Break must end before shift end")
         }
 
@@ -68,12 +68,12 @@ var validation = {
             isValid: messages.length === 0
         }
     },
-    validateBreaks({breaks, clockInPeriod}){
+    validateBreaks({breaks, hoursPeriod}){
         var messages = [];
         breaks.forEach(function(breakItem){
             var res = validation.validateBreak({
                 breakItem,
-                clockInPeriod
+                hoursPeriod
             })
             messages = messages.concat(res.messages)
         });
@@ -101,9 +101,9 @@ var validation = {
             messages
         }
     },
-    validateHoursAssignmentsDontOverlap({hoursAssignments}){
+    validateHoursPeriodsDontOverlap({hoursPeriods}){
         var doOverlap = doIntervalsOverlap(
-            _.pluck(hoursAssignments, "clockInHours")
+            _.pluck(hoursPeriods, "clockInHours")
         )
 
         var messages = [];
@@ -116,12 +116,12 @@ var validation = {
             messages
         }
     },
-    validateClockInPeriod({clockInPeriod, clockInBreaks}){
+    validateHoursPeriod({hoursPeriod, clockInBreaks}){
         var isValid = true;
-        var breaks = clockInPeriod.breaks.map(b => b.get(clockInBreaks))
+        var breaks = hoursPeriod.breaks.map(b => b.get(clockInBreaks))
         var breaksValidationResult = validation.validateBreaks({
             breaks,
-            clockInPeriod: clockInPeriod
+            hoursPeriod
         });
 
         if (!breaksValidationResult.isValid) {
@@ -131,7 +131,7 @@ var validation = {
         breaks.forEach((breakItem) => {
             var breakValidation = validation.validateBreak({
                 breakItem,
-                clockInPeriod: clockInPeriod
+                hoursPeriod
             })
             if (!breakValidation.isValid) {
                 isValid = false;
@@ -143,20 +143,17 @@ var validation = {
             isValid
         }
     },
-    validateHoursPeriods(hoursPeriods) {
-        console.warn("validateHoursPeriods not implemented")
-        return true;
+    validateHoursPeriods({hoursPeriods, clockInBreaks}) {
         // hoursPeriods are either hoursAcceptancePeriods or clockInPeriods
         var isValid = true;
 
-        if (!validation.validateHoursAssignmentsDontOverlap({
-            hoursAssignments: hoursAcceptances}).isValid
+        if (!validation.validateHoursPeriodsDontOverlap({hoursPeriods}).isValid
         ) {
             isValid = false;
         }
 
-        hoursAcceptances.forEach(function(hoursAcceptance){
-            if (!validation.validateHoursAcceptance(hoursAcceptance).isValid) {
+        hoursPeriods.forEach(function(hoursPeriod){
+            if (!validation.validateHoursPeriod({hoursPeriod, clockInBreaks}).isValid) {
                 isValid = false;
             }
         })

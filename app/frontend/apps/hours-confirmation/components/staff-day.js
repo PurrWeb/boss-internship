@@ -19,7 +19,10 @@ export default class StaffDay extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps){
-        if (!Validation.validateHoursPeriods(nextProps.hoursAcceptancePeriods).isValid) {
+        if (!Validation.validateHoursPeriods({
+            hoursPeriods: nextProps.hoursAcceptancePeriods,
+            clockInBreaks: nextProps.clockInBreaks
+        }).isValid) {
             return; // don't try to display invalid data on the chart
         }
         this.setState({
@@ -257,7 +260,7 @@ class BreakListItem extends React.Component {
 
         var validationResult = Validation.validateBreak({
             breakItem,
-            clockInPeriod: hoursAcceptancePeriod
+            hoursPeriod: hoursAcceptancePeriod
         })
 
         return validationResult.isValid;
@@ -271,7 +274,7 @@ class BreakList extends React.Component {
         })
         var validationResult = Validation.validateBreaks({
             breaks: breaks,
-            clockInPeriod: this.props.hoursAcceptancePeriod
+            hoursPeriod: this.props.hoursAcceptancePeriod
         })
 
         var addBreakButton;
@@ -433,8 +436,8 @@ class AcceptedHoursListItem extends React.Component {
         return this.props.hoursAcceptancePeriod.status !== "in_progress";
     }
     isValid(){
-        return Validation.validateClockInPeriod({
-            clockInPeriod: this.props.hoursAcceptancePeriod,
+        return Validation.validateHoursPeriod({
+            hoursPeriod: this.props.hoursAcceptancePeriod,
             clockInBreaks: this.props.clockInBreaks
         }).isValid;
     }
@@ -493,8 +496,8 @@ class AcceptedHoursList extends React.Component {
             </button>
         }
 
-        var intervalsOverlap = Validation.validateHoursAssignmentsDontOverlap({
-            hoursAssignments: this.props.hoursAcceptancePeriods
+        var intervalsOverlap = Validation.validateHoursPeriodsDontOverlap({
+            hoursPeriods: this.props.hoursAcceptancePeriods
         })
 
         return <div>

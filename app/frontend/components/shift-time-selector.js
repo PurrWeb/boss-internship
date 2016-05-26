@@ -51,9 +51,15 @@ export default class ShiftTimeSelector extends Component {
             return null;
         }
 
+        var granularityInMinutes =  this.props.granularityInMinutes;
+        if (!granularityInMinutes) {
+            granularityInMinutes = 30;
+        }
+
         var errorMessages = validation.validateShiftTimes({
             starts_at: this.state.starts_at,
-            ends_at: this.state.ends_at
+            ends_at: this.state.ends_at,
+            granularityInMinutes
         }).messages;
 
         if (errorMessages.length === 0){
