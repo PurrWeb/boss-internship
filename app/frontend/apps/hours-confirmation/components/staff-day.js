@@ -238,13 +238,11 @@ class BreakListItem extends React.Component {
                     showErrorMessages={false}
                     rotaDate={this.props.rotaDate}
                     onChange={(times) => {
-                        var clockInBreak = {
+                        var newBreak = {
                             ...times,
                             clientId: breakItem.clientId
                         };
-                        this.props.boundActions.updateClockInBreak({
-                            clockInBreak
-                        })
+                        this.props.boundActions.updateHoursAcceptanceBreak(newBreak)
                     }}
                     granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
                     readonly={this.props.readonly}
