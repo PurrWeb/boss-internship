@@ -9,7 +9,7 @@ import ErrorMessage from "~components/error-message"
 import getHoursPeriodStats from "~lib/get-hours-period-stats"
 import StaffTypeBadge from "~components/staff-type-badge"
 
-const TIME_GRANULARITY_IN_MINUTES = 15;
+const TIME_GRANULARITY_IN_MINUTES = 1;
 
 export default class StaffDay extends React.Component {
     constructor(props){
