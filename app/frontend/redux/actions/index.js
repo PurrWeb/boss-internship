@@ -7,6 +7,14 @@ import * as appDataActions from "./app-data"
 import * as staffMemberActions from "./staff-members"
 import * as clockingActions from "./clocking"
 
+
+function registerActionsObject(actionsObject){
+    for (var key in actionsObject) {
+        var fn = actionsObject[key];
+        registerActionCreator(key, fn);
+    }
+}
+
 registerActionsObject(clockingActions)
 registerActionsObject(rotaActions)
 registerActionsObject(confirmationMessageActions)
@@ -57,15 +65,3 @@ export function registerActionType(typeString){
 window.debug = window.debug || {};
 window.debug.actionCreators = actionCreators
 window.debug.actionTypes = actionTypes;
-
-
-
-
-
-
-function registerActionsObject(actionsObject){
-    for (var key in actionsObject) {
-        var fn = actionsObject[key];
-        registerActionCreator(key, fn);
-    }
-}

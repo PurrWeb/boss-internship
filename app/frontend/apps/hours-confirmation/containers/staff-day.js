@@ -45,9 +45,7 @@ function mapStateToProps(state, ownProps){
 
 function mapDispatchToProps(dispatch){
     return {
-        boundActions: {
-            updateClockInBreak: bindActionCreators(actionCreators.updateClockInBreak, dispatch)
-        }
+        boundActions: bindActionCreators(actionCreators, dispatch)
     }
 }
 

@@ -390,12 +390,14 @@ class AcceptedHoursListItem extends React.Component {
                         }}
                         readonly={readonly}
                         rotaDate={this.props.rotaDate}
-                        onChange={(times) => this.triggerChange({
-                            clockInHours:{
-                                starts_at: times.starts_at,
-                                ends_at: times.ends_at
-                            }
-                        })}
+                        onChange={(times) => {
+                            this.props.boundActions.updateHoursAcceptancePeriod({
+                                hoursAcceptancePeriod: {
+                                    ...times,
+                                    clientId: hoursAcceptancePeriod.clientId
+                                }
+                            })
+                        }}
                         granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
                         />
                 </div>
@@ -476,18 +478,6 @@ class AcceptedHoursListItem extends React.Component {
                 </a>
             </div>
         }
-    }
-    triggerChange(dataToUpdate){
-        var acceptedHours = _.clone(this.props.acceptedHours);
-        var clockIn = acceptedHours.clockInHours;
-        if (dataToUpdate.clockInHours) {
-            clockIn = _.extend({}, clockIn, dataToUpdate.clockInHours);
-            acceptedHours.clockInHours = clockIn;
-        } else {
-            _.extend(acceptedHours, dataToUpdate)
-        }
-
-        this.props.onChange(acceptedHours)
     }
 }
 
