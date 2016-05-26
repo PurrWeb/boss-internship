@@ -4,16 +4,16 @@ import oFetch from "o-fetch"
 import utils from "~lib/utils"
 import * as backendData from "~lib/backend-data/process-backend-objects"
 
+var handledActionTypes = [];
+
 export default function makeReducer(actionHandlers, options){
     var defaultOptions = {
         initialState: {}
     }
     var usedOptions = _.extend({}, defaultOptions, options);
 
-    for (var actionHandlerAction in actionHandlers){
-        if (!actionTypes[actionHandlerAction]) {
-            throw Error("Trying to handle non-existent action " + actionHandlerAction)
-        }
+    for (var actionHandlerActionType in actionHandlers){
+        handledActionTypes.push(actionHandlerActionType);
     }
 
     return function(state, action){
@@ -37,6 +37,15 @@ export default function makeReducer(actionHandlers, options){
 
         return state;
     }
+}
+
+export function validateReducers(){
+    handledActionTypes.forEach(function(actionType){
+        if (!actionTypes[actionType]) {
+            throw Error("Trying to handle non-existent action " + actionType)
+        }
+    })
+
 }
 
 export function makeHandlerForGenericReplaceAction(collectionName) {
@@ -111,7 +120,6 @@ export function makeDefaultReducer(collectionName, additionalHandlers){
         }
         return item;
     }
-
 
     return makeReducer({
         [replaceAllActionType]: makeHandlerForGenericReplaceAction(collectionName),

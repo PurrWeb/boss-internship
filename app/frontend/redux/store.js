@@ -13,6 +13,7 @@ import clockInOutAppSelectedStaffType from "./reducers/clock-in-out-app-selected
 import apiRequestsInProgress from "./reducers/api-requests-in-progress-reducer"
 import componentErrors from "./reducers/component-errors-reducer"
 import rotas from "./reducers/rotas-reducer"
+import hoursAcceptancePeriods from "./reducers/hours-acceptance-periods"
 import pageOptions from "./reducers/page-options-reducer"
 import rotaForecasts from "./reducers/rota-forecasts-reducer"
 import weeklyRotaForecast from "./reducers/weekly-rota-forecast-reducer"
@@ -20,7 +21,7 @@ import confirmationModal from "./reducers/confirmation-modal-reducer"
 import userActionConfirmationMessages from "./reducers/user-action-confirmation-messages-reducer"
 import clockInDays from "./reducers/clock-in-days-reducer"
 import apiKey from "./reducers/api-key"
-import {makeDefaultReducer} from "./reducers/make-reducer"
+import {makeDefaultReducer, validateReducers} from "./reducers/make-reducer"
 
 var rootReducer = combineReducers({
     staff: makeDefaultReducer("staffMembers"),
@@ -43,24 +44,13 @@ var rootReducer = combineReducers({
     clockInDays,
     clockInPeriods: makeDefaultReducer("clockInPeriods"),
     clockInBreaks: makeDefaultReducer("clockInBreaks"),
-    hoursAcceptancePeriods: makeDefaultReducer("hoursAcceptancePeriods", {
-        ADD_CLOCK_IN_BREAK: function(state, action){
-            return _(state).map(function(hoursAcceptancePeriod){
-                if (hoursAcceptancePeriod.clientId === action.clockInBreak.hours_acceptance_period.clientId) {
-                    var breaks = _.clone(hoursAcceptancePeriod.breaks)
-                    breaks.push(action.clockInBreak.getLink())
-                    return Object.assign({}, hoursAcceptancePeriod, {
-                        breaks
-                    })
-                };
-                return hoursAcceptancePeriod
-            })
-        }
-    }),
+    hoursAcceptancePeriods: hoursAcceptancePeriods,
     clockInEvents: makeDefaultReducer("clockInEvents"),
     clockInNotes: makeDefaultReducer("clockInNotes"),
     clockInReasons: makeDefaultReducer("clockInReasons")
 });
+
+validateReducers();
 var createStoreWithMiddleware = compose(
 	// Redux thunk lets us dispatch asynchronous actions, for example
 	// actions that do an Ajax call before updating the state
