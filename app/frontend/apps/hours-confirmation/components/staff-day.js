@@ -467,7 +467,9 @@ class AcceptedHoursListItem extends React.Component {
                     Accept {stats.hours}h
                 </a>
                 <br/><br/>
-                <a onClick={this.props.deleteHoursAcceptance}>
+                <a onClick={() => {
+                    this.props.boundActions.deleteHoursAcceptancePeriod(this.props.hoursAcceptancePeriod)
+                }}>
                     Delete
                 </a>
             </div>
@@ -516,12 +518,6 @@ class AcceptedHoursList extends React.Component {
                         }}>
                         <AcceptedHoursListItem
                             boundActions={this.props.boundActions}
-                            deleteHoursAcceptance={() => {
-                                var newValue = _(this.props.acceptedHours).reject(function(hoursAcceptanceArg){
-                                    return hoursAcceptanceArg === acceptedHours
-                                })
-                                this.props.onChange(newValue);
-                            }}
                             clockInBreaks={this.props.clockInBreaks}
                             rotaDate={this.props.rotaDate}
                             clockInReasons={this.props.clockInReasons}

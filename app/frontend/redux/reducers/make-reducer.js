@@ -75,29 +75,9 @@ export function makeHandlerForGenericReplaceAction(collectionName) {
     }
 }
 
-export function makeDefaultReducer(collectionName, additionalHandlers){
-    if (additionalHandlers === undefined) {
-        additionalHandlers = {};
-    }
-
-    var singleItemName = utils.getStringExceptLastCharacter(collectionName)
-    var singleItemAactionNamePostfix = utils.makeAllCapsSnakeCase(singleItemName)
-    var multiItemActionNamePostfix = utils.makeAllCapsSnakeCase(collectionName)
-
-    var replaceAllActionType = "REPLACE_ALL_" + multiItemActionNamePostfix;
-    var updateActionType = "UPDATE_" + singleItemAactionNamePostfix;
-    var addActionType = "ADD_" + singleItemAactionNamePostfix;
-    var deleteActionType = "DELETE_" + singleItemAactionNamePostfix;
-
-    registerActionType(updateActionType)
-    registerActionCreator("update" + utils.capitalize(singleItemName), function(options){
-        var item = getItemFromActionOptions(options)
-        return {
-            type: updateActionType,
-            [singleItemName]: item
-        }
-    });
-
+export function makeHandlerForGenericAddAction(singleItemName){
+    var singleItemActionNamePostfix = utils.makeAllCapsSnakeCase(singleItemName)
+    var addActionType = "ADD_" + singleItemActionNamePostfix;
     registerActionType(addActionType)
     registerActionCreator("add" + utils.capitalize(singleItemName), function(options){
         var item = getItemFromActionOptions(options);
@@ -111,9 +91,53 @@ export function makeDefaultReducer(collectionName, additionalHandlers){
         }
     })
 
+    return function(state, action){
+        var item = oFetch(action, singleItemName)
+        return Object.assign({}, state, {
+            [item.clientId]: item
+        })
+    }
+}
+
+function getItemFromActionOptions(options, singleItemName){
+    var item = options[singleItemName];
+    if (!item) {
+        item = options;
+    }
+    if (!item) {
+        throw Error("No item passed into update action for item " + singleItemName)
+    }
+    return item;
+}
+
+
+
+export function makeDefaultReducer(collectionName, additionalHandlers){
+    if (additionalHandlers === undefined) {
+        additionalHandlers = {};
+    }
+
+    var singleItemName = utils.getStringExceptLastCharacter(collectionName)
+    var singleItemActionNamePostfix = utils.makeAllCapsSnakeCase(singleItemName)
+    var multiItemActionNamePostfix = utils.makeAllCapsSnakeCase(collectionName)
+
+    var replaceAllActionType = "REPLACE_ALL_" + multiItemActionNamePostfix;
+    var updateActionType = "UPDATE_" + singleItemActionNamePostfix;
+    var addActionType = "ADD_" + singleItemActionNamePostfix;
+    var deleteActionType = "DELETE_" + singleItemActionNamePostfix;
+
+    registerActionType(updateActionType)
+    registerActionCreator("update" + utils.capitalize(singleItemName), function(options){
+        var item = getItemFromActionOptions(options, singleItemName)
+        return {
+            type: updateActionType,
+            [singleItemName]: item
+        }
+    });
+
     registerActionType(deleteActionType)
     registerActionCreator("delete" + utils.capitalize(singleItemName), function(options){
-        var item = getItemFromActionOptions(options);
+        var item = getItemFromActionOptions(options, singleItemName);
         if (item.clientId === undefined) {
             throw Error("Needs client Id of object that should be deleted")
         }
@@ -122,17 +146,6 @@ export function makeDefaultReducer(collectionName, additionalHandlers){
             [singleItemName]: {clientId: item.clientId}
         }
     });
-
-    function getItemFromActionOptions(options){
-        var item = options[singleItemName];
-        if (!item) {
-            item = options;
-        }
-        if (!item) {
-            throw Error("No item passed into update action for reducer " + collectionName)
-        }
-        return item;
-    }
 
     return makeReducer({
         [replaceAllActionType]: makeHandlerForGenericReplaceAction(collectionName),
@@ -147,12 +160,7 @@ export function makeDefaultReducer(collectionName, additionalHandlers){
             newState[item.clientId] = newItem;
             return newState
         },
-        [addActionType]: function(state, action){
-            var item = oFetch(action, singleItemName)
-            return Object.assign({}, state, {
-                [item.clientId]: item
-            })
-        },
+        [addActionType]: makeHandlerForGenericAddAction(singleItemName),
         [deleteActionType]: function(state, action){
             var itemToDelete = oFetch(action, singleItemName);
             return _(state).reject(function(item){
