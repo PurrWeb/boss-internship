@@ -339,7 +339,7 @@ class ReasonSelector extends React.Component {
                 style={{marginBottom: 4}}
                 value={reasonClientId}
                 onChange={(e) => this.triggerChange({
-                    reason_id: e.target.value
+                    reasonClientId: e.target.value
                 })}>
                 {_.values(clockInReasons).map((reason) =>
                     <option value={reason.clientId}>
@@ -358,7 +358,7 @@ class ReasonSelector extends React.Component {
                         return;
                     }
                     this.triggerChange({
-                        reason_text: e.target.value
+                        reasonText: e.target.value
                     })
                 }}
                 readonly={this.props.readonly}
@@ -368,10 +368,12 @@ class ReasonSelector extends React.Component {
     }
     triggerChange(dataToUpdate){
         var newData = {
-            reason_id: this.props.reasonId,
-            reason_text: this.props.reasonText
+            reasonClientId: this.props.reasonClientId,
+            reasonText: this.props.reasonText
         }
         _.extend(newData, dataToUpdate);
+        newData.reason = this.props.clockInReasons[newData.reasonClientId]
+
         this.props.onChange(newData)
     }
 }
@@ -395,10 +397,8 @@ class AcceptedHoursListItem extends React.Component {
                         rotaDate={this.props.rotaDate}
                         onChange={(times) => {
                             this.props.boundActions.updateHoursAcceptancePeriod({
-                                hoursAcceptancePeriod: {
-                                    ...times,
-                                    clientId: hoursAcceptancePeriod.clientId
-                                }
+                                ...times,
+                                clientId: hoursAcceptancePeriod.clientId
                             })
                         }}
                         granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
@@ -423,7 +423,13 @@ class AcceptedHoursListItem extends React.Component {
                         clockInReasons={this.props.clockInReasons}
                         reasonClientId={hoursAcceptancePeriod.reason.clientId}
                         reasonText={hoursAcceptancePeriod.reason_note}
-                        onChange={(newData) => this.triggerChange(newData)}
+                        onChange={({reasonText, reason}) => {
+                            this.props.boundActions.updateHoursAcceptancePeriod({
+                                clientId: hoursAcceptancePeriod.clientId,
+                                reason_note: reasonText,
+                                reason: reason
+                            })
+                        }}
                     />
                 </div>
             </div>

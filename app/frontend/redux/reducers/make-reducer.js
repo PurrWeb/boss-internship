@@ -75,9 +75,16 @@ export function makeDefaultReducer(collectionName){
     var updateActionType = "UPDATE_" + singleItemAactionNamePostfix;
     registerActionType(updateActionType)
     registerActionCreator("update" + utils.capitalize(singleItemName), function(options){
+        var item = options.singleItemName;
+        if (!item) {
+            item = options;
+        }
+        if (!item) {
+            throw Error("No item passed into update action for reducer " + collectionName)
+        }
         return {
             type: updateActionType,
-            [singleItemName]: oFetch(options, singleItemName)
+            [singleItemName]: item
         }
     });
 
