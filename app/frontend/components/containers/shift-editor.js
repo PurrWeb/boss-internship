@@ -5,7 +5,7 @@ import RotaDate from "~lib/rota-date"
 import validation from "~lib/validation"
 import utils from "~lib/utils"
 import { connect } from "react-redux"
-import { deleteRotaShift, updateRotaShift } from "~redux/actions"
+import actionCreators from "~redux/actions"
 import _ from "underscore"
 import ComponentErrors from "~components/component-errors"
 import getStaffTypeFromShift from "~lib/get-staff-type-from-shift"
@@ -33,7 +33,7 @@ class ShiftEditorUi extends Component {
                 </div>
             </div>
             {this.getComponentErrors()}
-        
+
             <div className="row">
                 <div className="col-md-9">
                     <ShiftTypeSelector
@@ -110,7 +110,7 @@ class ShiftEditor extends Component {
             shiftType: shift_type
         }
     }
-    render(){ 
+    render(){
         var updatedShift = Object.assign({}, this.props.shift, this.state.newShiftTimes)
         return <ShiftEditorUi
             shift={updatedShift}
@@ -175,8 +175,8 @@ function mapStateToProps(state, ownProps){
 
 function mapDispatchToProps(dispatch){
     return {
-        updateRotaShift: (options) => dispatch(updateRotaShift(options)),
-        deleteRotaShift: (options) => dispatch(deleteRotaShift(options))
+        updateRotaShift: (options) => dispatch(actionCreators.updateRotaShift(options)),
+        deleteRotaShift: (options) => dispatch(actionCreators.deleteRotaShift(options))
     }
 }
 

@@ -12,7 +12,7 @@ import utils from "~lib/utils"
 import { appRoutes } from "~lib/routes"
 import validation from "~lib/validation"
 import RotaDate from "~lib/rota-date"
-import * as actionCreators from "~redux/actions"
+import actionCreators from "~redux/actions"
 import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
 import ShiftList from "~models/shift-list"
 

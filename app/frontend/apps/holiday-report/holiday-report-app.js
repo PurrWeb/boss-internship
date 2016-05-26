@@ -3,7 +3,7 @@ import { Provider } from "react-redux"
 import {createStore } from "redux"
 import utils from "~lib/utils"
 import HolidayReportView from './holiday-report-view'
-import * as actionCreators from "~redux/actions"
+import actionCreators from "~redux/actions"
 import oFetch from "o-fetch"
 import { processHolidayAppViewData } from "~lib/backend-data/process-backend-objects"
 

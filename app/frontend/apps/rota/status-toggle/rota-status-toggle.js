@@ -1,5 +1,5 @@
 import React from "react"
-import * as actionCreators from "~redux/actions"
+import actionCreators from "~redux/actions"
 import RotaStatusToggleUi from "./rota-status-toggle-ui"
 import { connect } from "react-redux"
 import _ from "underscore"

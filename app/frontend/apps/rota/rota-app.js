@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { Provider} from "react-redux"
 import RotaView from "./rota-view.js"
-import * as actionCreators from "~redux/actions"
+import actionCreators from "~redux/actions"
 import { bindActionCreators } from "redux";
 import AppComponent from "../app-component"
 

@@ -1,7 +1,7 @@
 import React from "react"
 import { Provider} from "react-redux"
 import { createBossStore } from "~redux/store"
-import * as actionCreators from "~redux/actions"
+import actionCreators from "~redux/actions"
 
 export default class RotaApp extends React.Component {
     constructor(props){

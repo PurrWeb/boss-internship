@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Provider} from "react-redux"
 import AppComponent from "../app-component"
 import StaffTypeRotaView from './staff-type-rota-view'
-import * as actionCreators from "~redux/actions"
+import actionCreators from "~redux/actions"
 
 export default class StaffTypeRotaApp extends AppComponent {
     componentWillMount(){

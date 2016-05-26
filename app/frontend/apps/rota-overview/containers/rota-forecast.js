@@ -3,7 +3,7 @@ import _ from "underscore"
 import utils from "~lib/utils"
 import { connect } from "react-redux"
 import RotaForecastUi from "../components/rota-forecast"
-import { updateRotaForecast } from "~redux/actions"
+import actionCreators from "~redux/actions"
 import { selectUpdateRotaForecastInProgress, selectForecastByRotaId } from "~redux/selectors"
 
 class RotaForecast extends React.Component {
@@ -53,7 +53,7 @@ function mapStateToProps(state, ownProps){
 function mapDispatchToProps(dispatch, ownProps){
     return {
         updateRotaForecastWithAllDetails: function(options){
-            dispatch(updateRotaForecast(options));
+            dispatch(actionCreators.updateRotaForecast(options));
         }
     }
 }
@@ -77,4 +77,3 @@ export default connect(
     mapDispatchToProps,
     mergeProps
 )(RotaForecast)
-

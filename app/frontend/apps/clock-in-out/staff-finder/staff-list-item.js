@@ -15,7 +15,7 @@ import {
     selectClockInOutAppUserPermissions
 } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
-import * as actions from "~redux/actions"
+import actions from "~redux/actions"
 import Spinner from "~components/spinner"
 
 var columnNameStyle = {

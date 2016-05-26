@@ -1,6 +1,7 @@
 import createApiRequestAction from "../create-api-request-action"
 import {apiRoutes} from "~lib/routes"
 import makeApiRequestMaker from "../make-api-request"
+import { registerActionType } from "./index"
 import oFetch from "o-fetch"
 import {selectClockInOutAppIsInManagerMode} from "../selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
@@ -36,6 +37,7 @@ export function enterUserModeWithConfirmation(options){
     })
 }
 
+registerActionType("CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE")
 export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
     return {
         type: "CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE",

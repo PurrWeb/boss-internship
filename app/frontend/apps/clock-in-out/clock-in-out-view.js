@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import _ from "underscore"
 import ClockInOutStaffFinder from "./staff-finder/staff-finder"
-import * as actions from "~redux/actions"
+import actions from "~redux/actions"
 import {
     selectRotaOnClockInOutPage,
     selectClockInOutAppUserIsSupervisor,

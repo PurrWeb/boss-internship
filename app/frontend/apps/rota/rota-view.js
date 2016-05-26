@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { connect, Provider } from "react-redux"
-import * as actionCreators from "~redux/actions"
+import actionCreators from "~redux/actions"
 import ChartAndFilter from "./chart-and-filter"
 import _ from "underscore"
 import AddShiftViewContainer from "./add-shift-view-container"

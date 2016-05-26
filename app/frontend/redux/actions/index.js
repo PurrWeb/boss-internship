@@ -1,3 +1,21 @@
+import * as rotaActions from "./rotas"
+import * as confirmationMessageActions from "./user-action-confirmation-messages"
+import * as rotaForecastActions from "./rota-forecasts"
+import * as confirmationModalActions from "./confirmation-modal"
+import * as shiftActions from "./shifts"
+import * as appDataActions from "./app-data"
+import * as staffMemberActions from "./staff-members"
+import * as clockingActions from "./clocking"
+
+registerActionsObject(clockingActions)
+registerActionsObject(rotaActions)
+registerActionsObject(confirmationMessageActions)
+registerActionsObject(rotaForecastActions)
+registerActionsObject(confirmationModalActions);
+registerActionsObject(shiftActions)
+registerActionsObject(appDataActions)
+registerActionsObject(staffMemberActions)
+
 var actionCreators;
 
 export function registerActionCreator(name, fn){
@@ -41,99 +59,13 @@ window.debug.actionCreators = actionCreators
 window.debug.actionTypes = actionTypes;
 
 
-import {
-    clockInOutAppEnterUserMode,
-    updateStaffStatus,
-    enterUserModeWithConfirmation,
-    clockInOutAppSelectStaffType,
-    updateStaffStatusWithConfirmation,
-    clockInOutAppFetchAppData
-} from "./clocking"
-export {
-    clockInOutAppEnterUserMode,
-    updateStaffStatus,
-    clockInOutAppSelectStaffType,
-    enterUserModeWithConfirmation,
-    updateStaffStatusWithConfirmation,
-    clockInOutAppFetchAppData
-}
 
-import {
-    updateRotaStatus,
-    publishRotas
-} from "./rotas"
-export {
-    updateRotaStatus,
-    publishRotas
-}
 
-import {
-    showUserActionConfirmationMessage,
-    hideUserActionConfirmationMessage
-} from "./user-action-confirmation-messages"
-export {
-    showUserActionConfirmationMessage,
-    hideUserActionConfirmationMessage
-}
 
-import {
-    replaceWeeklyRotaForecast,
-    updateRotaForecast,
-    fetchWeeklyRotaForecast
-} from "./rota-forecasts"
-export {
-    replaceWeeklyRotaForecast,
-    updateRotaForecast,
-    fetchWeeklyRotaForecast
-}
 
-import {
-    showConfirmationModal,
-    cancelConfirmationModal,
-    completeConfirmationModal
-} from "./confirmation-modal"
-export {
-    showConfirmationModal,
-    cancelConfirmationModal,
-    completeConfirmationModal
-};
-
-import {
-    addRotaShift,
-    updateRotaShift,
-    deleteRotaShift
-} from "./shifts"
-export {
-    addRotaShift,
-    updateRotaShift,
-    deleteRotaShift
-}
-
-import {
-    loadInitialRotaAppState,
-    loadInitalStaffTypeRotaAppState,
-    loadInitialRotaOverviewAppState,
-    loadInitialHoursConfirmationAppState
-} from "./app-data"
-export {
-    loadInitialRotaAppState,
-    loadInitalStaffTypeRotaAppState,
-    loadInitialRotaOverviewAppState,
-    loadInitialHoursConfirmationAppState
-}
-
-import {
-    updateStaffMemberPinWithEntryModal,
-    updateStaffMemberPin
-} from "./staff-members"
-export {
-    updateStaffMemberPinWithEntryModal,
-    updateStaffMemberPin
-}
-
-import {
-    updateClockInBreak
-} from "./clock-in-breaks"
-export {
-    updateClockInBreak
+function registerActionsObject(actionsObject){
+    for (var key in actionsObject) {
+        var fn = actionsObject[key];
+        registerActionCreator(key, fn);
+    }
 }
