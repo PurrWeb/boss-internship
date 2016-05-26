@@ -468,7 +468,9 @@ class AcceptedHoursListItem extends React.Component {
                 </a>
                 <br/><br/>
                 <a onClick={() => {
-                    this.props.boundActions.deleteHoursAcceptancePeriod(this.props.hoursAcceptancePeriod)
+                    this.props.boundActions.deleteHoursAcceptancePeriod({
+                        hoursAcceptancePeriod: this.props.hoursAcceptancePeriod
+                    })
                 }}>
                     Delete
                 </a>

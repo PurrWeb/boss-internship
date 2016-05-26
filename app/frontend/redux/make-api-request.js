@@ -136,3 +136,14 @@ function makeRequestForAccessToken({requestData, success, error}){
         }
     }).then(success, error)
 }
+
+export function makeApiRequestMakerIfNecessary({tryWithoutRequest, makeRequest}){
+    return function(requestOptions, success, error, getState){
+        var actionData = tryWithoutRequest(requestOptions);
+        if (actionData){
+            success(actionData);
+        } else {
+            return makeRequest.apply(this, arguments);
+        }
+    }
+}

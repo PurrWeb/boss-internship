@@ -6,6 +6,7 @@ import * as shiftActions from "./shifts"
 import * as appDataActions from "./app-data"
 import * as staffMemberActions from "./staff-members"
 import * as clockingActions from "./clocking"
+import * as hoursAcceptancePeriodActions from "./hours-acceptance-periods"
 
 
 function registerActionsObject(actionsObject){
@@ -23,6 +24,7 @@ registerActionsObject(confirmationModalActions);
 registerActionsObject(shiftActions)
 registerActionsObject(appDataActions)
 registerActionsObject(staffMemberActions)
+registerActionsObject(hoursAcceptancePeriodActions)
 
 var actionCreators;
 

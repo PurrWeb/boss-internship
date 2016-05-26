@@ -1,6 +1,6 @@
 import createApiRequestAction from "../create-api-request-action"
 import {apiRoutes} from "~lib/routes"
-import makeApiRequestMaker from "../make-api-request"
+import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-request"
 import { registerActionType } from "./index"
 import oFetch from "o-fetch"
 import {selectClockInOutAppIsInManagerMode} from "../selectors"
@@ -11,18 +11,6 @@ import _ from "underscore"
 import {
     loadInitialClockInOutAppState
 } from "./app-data"
-
-function makeApiRequestMakerIfNecessary({tryWithoutRequest, makeRequest}){
-    return function(requestOptions, success, error, getState){
-        var actionData = tryWithoutRequest(requestOptions);
-        if (actionData){
-            success(actionData);
-        } else {
-            return makeRequest.apply(this, arguments);
-        }
-    }
-}
-
 
 export function enterUserModeWithConfirmation(options){
     return showConfirmationModal({
