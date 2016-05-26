@@ -55,7 +55,7 @@ export function processClockInPeriodObject(clockInPeriod){
     return clockInPeriod;
 }
 
-export function processHoursAcceptancePeriod(processHoursAcceptancePeriod){
+export function processHoursAcceptancePeriodObject(processHoursAcceptancePeriod){
     processHoursAcceptancePeriod = processBackendObject(processHoursAcceptancePeriod);
     processHoursAcceptancePeriod.starts_at = new Date(processHoursAcceptancePeriod.starts_at)
     processHoursAcceptancePeriod.ends_at = new Date(processHoursAcceptancePeriod.ends_at)

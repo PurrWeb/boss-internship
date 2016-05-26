@@ -103,6 +103,7 @@ export default class StaffDay extends React.Component {
                         <AcceptedHoursList
                             clockInReasons={this.props.clockInReasons}
                             rotaDate={this.props.rotaDate}
+                            clockInDay={this.props.clockInDay}
                             hoursAcceptancePeriods={this.props.hoursAcceptancePeriods}
                             markDayAsDone={this.props.markDayAsDone}
                             clockInBreaks={this.props.clockInBreaks}
@@ -542,17 +543,17 @@ class AcceptedHoursList extends React.Component {
         return unacceptedShifts.length === 0;
     }
     getNewHoursDefaultTimes(){
-        var {acceptedHours, rotaDate} = this.props;
+        var {hoursAcceptancePeriods, rotaDate} = this.props;
 
-        if (acceptedHours.length === 0) {
+        if (hoursAcceptancePeriods.length === 0) {
             return {
                 starts_at: rotaDate.getDateFromShiftStartTime(9, 0),
                 ends_at: rotaDate.getDateFromShiftStartTime(10, 0),
             }
         }
 
-        var lastExitingHours = _.last(acceptedHours);
-        var previousShiftHoursOffset = rotaDate.getHoursSinceStartOfDay(lastExitingHours.clockInHours.ends_at);
+        var lastExitingHours = _.last(hoursAcceptancePeriods);
+        var previousShiftHoursOffset = rotaDate.getHoursSinceStartOfDay(lastExitingHours.ends_at);
 
         var newHoursStartOffset = previousShiftHoursOffset + 1;
         var newHoursEndOffset = newHoursStartOffset + 1;
@@ -571,16 +572,15 @@ class AcceptedHoursList extends React.Component {
 
         var defaultTimes = this.getNewHoursDefaultTimes();
 
-        acceptedHours.push({
-            clockInHours: {
-                starts_at: defaultTimes.starts_at,
-                ends_at: defaultTimes.ends_at,
-                breaks: []
-            },
-            reason_id: "599",
-            reason_text: "",
-            accepted_state: "in_progress"
-        })
-        this.props.onChange(acceptedHours);
+        var newHoursPeriod = {
+            ...defaultTimes,
+            id: null,
+            clock_in_day: {id: this.props.clockInDay.serverId},
+            reason: {id: 912},
+            reason_note: "",
+            status: "in_progress"
+        }
+
+        this.props.boundActions.addHoursAcceptancePeriod(newHoursPeriod)
     }
 }
