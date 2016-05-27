@@ -1,5 +1,5 @@
 import expect from "expect"
-import makeReducer, {makeHandlerForGenericReplaceAction} from "./make-reducer"
+import makeDataHandler from "./make-data-handler"
 
 describe("makeReducer", function(){
     beforeEach(function(){

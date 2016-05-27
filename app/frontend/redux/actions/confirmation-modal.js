@@ -2,8 +2,9 @@ import oFetch from "o-fetch"
 import { registeredApiRequestActionCreators } from "~redux/create-api-request-action"
 import { registerActionType } from "./index"
 
-registerActionType("SHOW_CONFIRMATION_MODAL")
-function showConfirmationModal(options){
+var actionTypes = []
+actionTypes.push("SHOW_CONFIRMATION_MODAL")
+export function showConfirmationModal(options){
     var [modalOptions, confirmationAction] = oFetch(options,
             "modalOptions", "confirmationAction");
     return {
@@ -15,15 +16,15 @@ function showConfirmationModal(options){
     }
 }
 
-registerActionType("CANCEL_CONFIRMATION_MODAL")
-function cancelConfirmationModal(){
+actionTypes.push("CANCEL_CONFIRMATION_MODAL")
+export function cancelConfirmationModal(){
     return {
         type: "CANCEL_CONFIRMATION_MODAL"
     }
 }
 
-registerActionType("COMPLETE_CONFIRMATION_MODAL")
-function completeConfirmationModal(confirmationData){
+actionTypes.push("COMPLETE_CONFIRMATION_MODAL")
+export function completeConfirmationModal(confirmationData){
     return function(dispatch, getState){
         var completeModalAction = {
             type: "COMPLETE_CONFIRMATION_MODAL"
@@ -42,4 +43,4 @@ function completeConfirmationModal(confirmationData){
     }
 }
 
-export { showConfirmationModal, cancelConfirmationModal, completeConfirmationModal }
+export { actionTypes }

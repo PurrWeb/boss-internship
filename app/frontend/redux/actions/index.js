@@ -1,3 +1,5 @@
+import utils from "~lib/utils"
+import {apiRequestActionTypes} from "../create-api-request-action"
 import * as rotaActions from "./rotas"
 import * as confirmationMessageActions from "./user-action-confirmation-messages"
 import * as rotaForecastActions from "./rota-forecasts"
@@ -7,13 +9,30 @@ import * as appDataActions from "./app-data"
 import * as staffMemberActions from "./staff-members"
 import * as clockingActions from "./clocking"
 import * as hoursAcceptancePeriodActions from "./hours-acceptance-periods"
+import * as miscActions from "./misc"
 
 
 function registerActionsObject(actionsObject){
     for (var key in actionsObject) {
-        var fn = actionsObject[key];
-        registerActionCreator(key, fn);
+        if (utils.stringStartsWith(key, "__") || key === "default") {
+            continue
+        }
+        if (key === "actionTypes") {
+            var actionTypes = actionsObject[key];
+            registerActionTypes(actionTypes)
+        } else {
+            var fn = actionsObject[key];
+            registerActionCreator(key, fn);
+        }
     }
+}
+
+registerActionTypes(apiRequestActionTypes)
+
+function registerActionTypes(actionTypes){
+    actionTypes.forEach(function(actionType){
+        registerActionType(actionType)
+    })
 }
 
 registerActionsObject(clockingActions)
@@ -25,6 +44,7 @@ registerActionsObject(shiftActions)
 registerActionsObject(appDataActions)
 registerActionsObject(staffMemberActions)
 registerActionsObject(hoursAcceptancePeriodActions)
+registerActionsObject(miscActions)
 
 var actionCreators;
 

@@ -1,11 +1,10 @@
 import _ from "underscore"
-import {registerActionType} from "./actions"
 
 var registeredApiRequestActionCreators = {};
-
-registerActionType("API_REQUEST_START")
-registerActionType("API_REQUEST_END")
-registerActionType("SET_COMPONENT_ERROR")
+var apiRequestActionTypes = [];
+apiRequestActionTypes.push("API_REQUEST_START")
+apiRequestActionTypes.push("API_REQUEST_END")
+apiRequestActionTypes.push("SET_COMPONENT_ERROR")
 
 /**
 The createApiRequestAction creates a an actionCreator that can be used to update
@@ -52,8 +51,8 @@ export default function createApiRequestAction(actionOptions){
 
     const successType = requestType + "_SUCCESS";
     const startType = requestType + "_REQUEST_START";
-    registerActionType(successType);
-    registerActionType(startType);
+    apiRequestActionTypes.push(successType);
+    apiRequestActionTypes.push(startType);
 
     var actionCreator = generateActionCreator();
     registeredApiRequestActionCreators[requestType] = actionCreator;
@@ -142,3 +141,4 @@ export default function createApiRequestAction(actionOptions){
 }
 
 export { registeredApiRequestActionCreators }
+export {apiRequestActionTypes}

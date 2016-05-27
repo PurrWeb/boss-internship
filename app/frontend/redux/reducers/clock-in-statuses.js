@@ -1,5 +1,4 @@
 import makeDataHandler from "./make-data-handler"
-import {registerActionType} from "../actions";
 
 export default makeDataHandler("clockInStatuses",{
     REPLACE_ALL_CLOCK_IN_STATUSES: {

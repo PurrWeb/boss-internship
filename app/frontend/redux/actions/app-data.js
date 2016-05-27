@@ -6,8 +6,7 @@ import {
     replaceWeeklyRotaForecast
 } from "./rota-forecasts"
 import {
-    setPageOptions,
-    genericReplaceAllItems
+    setPageOptions
 } from "./misc"
 import actionCreators from "./index"
 

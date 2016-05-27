@@ -1,7 +1,6 @@
 import createApiRequestAction from "../create-api-request-action"
 import {apiRoutes} from "~lib/routes"
 import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-request"
-import { registerActionType } from "./index"
 import oFetch from "o-fetch"
 import {selectClockInOutAppIsInManagerMode} from "../selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
@@ -11,6 +10,8 @@ import _ from "underscore"
 import {
     loadInitialClockInOutAppState
 } from "./app-data"
+
+var actionTypes = [];
 
 export function enterUserModeWithConfirmation(options){
     return showConfirmationModal({
@@ -25,7 +26,7 @@ export function enterUserModeWithConfirmation(options){
     })
 }
 
-registerActionType("CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE")
+actionTypes.push("CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE")
 export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
     return {
         type: "CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE",
@@ -185,3 +186,5 @@ export const clockInOutAppFetchAppData = createApiRequestAction({
         return loadInitialClockInOutAppState(responseData);
     }
 })
+
+export {actionTypes}
