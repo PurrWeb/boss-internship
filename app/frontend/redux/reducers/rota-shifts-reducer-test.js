@@ -1,6 +1,8 @@
 import expect from "expect"
 import RotaShiftsReducer from "./rota-shifts-reducer"
 
+RotaShiftsReducer = RotaShiftsReducer.reducer
+
 describe("RotaShiftsReducer", function(){
     it("Can replace all shifts at once", function(){
         var initialState = {};

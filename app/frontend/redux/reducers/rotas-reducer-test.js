@@ -1,6 +1,8 @@
 import rotasReducer from "./rotas-reducer"
 import expect from "expect"
 
+rotasReducer = rotasReducer.reducer
+
 describe("rotasReducer", function(){
     it("Can update the status of a rota", function(){
         var initalState = {

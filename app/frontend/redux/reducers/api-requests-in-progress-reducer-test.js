@@ -1,6 +1,8 @@
 import expect from "expect"
 import apiRequestsInProgressReducer from "./api-requests-in-progress-reducer"
 
+apiRequestsInProgressReducer = apiRequestsInProgressReducer.reducer
+
 describe("apiRequestsInProgressReducer", function(){
     it("Can keep track of an API request being started", function(){
         var initialState = {};

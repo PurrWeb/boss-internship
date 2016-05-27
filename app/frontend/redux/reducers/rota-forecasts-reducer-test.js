@@ -1,6 +1,8 @@
 import forecastsReducer from "./rota-forecasts-reducer"
 import expect from "expect"
 
+forecastsReducer = forecastsReducer.reducer
+
 describe("forecastsReducer", function(){
     it("Can add a new forecast and deletes the existing one if there's already one for that rota (date+venueId)", function(){
         var initalState = {

@@ -1,6 +1,8 @@
 import expect from "expect"
 import componentErrorsReducer from "./component-errors-reducer"
 
+componentErrorsReducer = componentErrorsReducer.reducer
+
 describe("componentErrorsReducer", function(){
     it("Set the error value of a component", function(){
         var initialState = {};
@@ -33,5 +35,3 @@ describe("componentErrorsReducer", function(){
         expect(componentErrorsReducer(initialState, action)).toEqual(expectedResultState);
     });
 });
-
-

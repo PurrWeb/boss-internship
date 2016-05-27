@@ -1,6 +1,8 @@
 import weeklyForecastReducer from "./weekly-rota-forecast-reducer"
 import expect from "expect"
 
+weeklyForecastReducer = weeklyForecastReducer.reducer
+
 describe("weeklyForecastReducer", function(){
     it("Can update the weekly rota", function(){
         var initalState = {
