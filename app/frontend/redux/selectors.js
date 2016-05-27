@@ -85,11 +85,11 @@ export function selectFetchWeeklyRotaIsInProgress(state){
 
 export function selectUpdateRotaForecastInProgress(state, {serverVenueId, dateOfRota}){
     var updatesInProgress = state.apiRequestsInProgress.UPDATE_ROTA_FORECAST;
-    return !_.isEmpty(_(updatesInProgress).filter(function(update){
+    return requestIsInProgressWithRequestData(updatesInProgress, function(update){
         var isSameDate = utils.datesAreEqual(update.dateOfRota, dateOfRota);
         var isSameVenue = serverVenueId === update.serverVenueId;
         return isSameVenue && isSameDate;
-    }))
+    })
 }
 
 export function selectForecastByRotaId(state, rotaClientId){
@@ -323,24 +323,22 @@ export function selectEditHoursAcceptancePeriodIsInProgress(state, hoursAcceptan
         selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod)
 }
 
-function selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
-    var requests = state.apiRequestsInProgress.ACCEPT_HOURS_ACCEPTANCE_PERIOD;
-
+function requestIsInProgressWithRequestData(requests, matchFunction) {
     if (!requests || requests.length === 0) {
         return false;
     }
-    return _.any(requests, function(requestData){
-        return requestData.hoursAcceptancePeriod.clientId == hoursAcceptancePeriod.clientId;
+
+    return _.any(requests, matchFunction);
+}
+
+function selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
+    return requestIsInProgressWithRequestData(state.apiRequestsInProgress.ACCEPT_HOURS_ACCEPTANCE_PERIOD, function(requestOptions){
+        return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
     });
 }
 
 function selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
-    var requests = state.apiRequestsInProgress.UNACCEPT_HOURS_ACCEPTANCE_PERIOD;
-    if (!requests || requests.length === 0) {
-        return false;
-    }
-
-    return _.any(requests, function(requestData){
-        return requestData.hoursAcceptancePeriod.clientId == hoursAcceptancePeriod.clientId;
+    return requestIsInProgressWithRequestData(state.apiRequestsInProgress.UNACCEPT_HOURS_ACCEPTANCE_PERIOD, function(requestOptions){
+        return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
     });
 }
