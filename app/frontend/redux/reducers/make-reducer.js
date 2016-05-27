@@ -39,20 +39,50 @@ export default function makeReducer(actionHandlers, options){
     }
 }
 
+function getDefaultActionNames(collectionName){
+    var singleItemName = utils.getStringExceptLastCharacter(collectionName)
+    var singleItemActionNamePostfix = utils.makeAllCapsSnakeCase(singleItemName)
+    var multiItemActionNamePostfix = utils.makeAllCapsSnakeCase(collectionName)
+
+    var replaceAllActionType = "REPLACE_ALL_" + multiItemActionNamePostfix;
+    var updateActionType = "UPDATE_" + singleItemActionNamePostfix;
+    var addActionType = "ADD_" + singleItemActionNamePostfix;
+    var deleteActionType = "DELETE_" + singleItemActionNamePostfix;
+
+    var deleteActionName = "delete" + utils.capitalize(singleItemName);
+    var replaceAllActionName = "replaceAll" + utils.capitalize(collectionName);
+    var addActionName = "add" + utils.capitalize(singleItemName);
+    var updateActionName = "update" + utils.capitalize(singleItemName);
+
+    var processFunctionName = "process" + utils.capitalize(singleItemName) + "Object";
+
+    return {
+        singleItemName,
+        replaceAllActionType,
+        replaceAllActionName,
+        updateActionType,
+        updateActionName,
+        addActionType,
+        addActionName,
+        deleteActionType,
+        deleteActionName,
+        processFunctionName
+    }
+}
+
 export function validateReducers(){
     handledActionTypes.forEach(function(actionType){
         if (!actionTypes[actionType]) {
             throw Error("Trying to handle non-existent action " + actionType)
         }
     })
-
 }
 
 export function makeHandlerForGenericReplaceAction(collectionName) {
-    var multiItemActionNamePostfix = utils.makeAllCapsSnakeCase(collectionName)
-    var replaceAllActionType = "REPLACE_ALL_" + multiItemActionNamePostfix;
-    registerActionType(replaceAllActionType);
-    registerActionCreator("replaceAll" + utils.capitalize(collectionName), function(data){
+    var actionNames = getDefaultActionNames(collectionName)
+
+    registerActionType(actionNames.replaceAllActionType);
+    registerActionCreator(actionNames.replaceAllActionName, function(data){
         var keys = _.keys(data);
         if (keys.length !== 1) {
             throw Error("Invalid data for genericReplaceAllItems, only one set of values allowed")
@@ -61,7 +91,7 @@ export function makeHandlerForGenericReplaceAction(collectionName) {
         var collectionName = keys[0];
         var items = data[collectionName]
         return {
-            type: replaceAllActionType,
+            type:actionNames.replaceAllActionType,
             [collectionName]: items
         }
     })
@@ -75,24 +105,24 @@ export function makeHandlerForGenericReplaceAction(collectionName) {
     }
 }
 
-export function makeHandlerForGenericAddAction(singleItemName){
-    var singleItemActionNamePostfix = utils.makeAllCapsSnakeCase(singleItemName)
-    var addActionType = "ADD_" + singleItemActionNamePostfix;
-    registerActionType(addActionType)
-    registerActionCreator("add" + utils.capitalize(singleItemName), function(options){
-        var item = getItemFromActionOptions(options);
+export function makeHandlerForGenericAddAction(collectionName){
+    var actionNames = getDefaultActionNames(collectionName)
+
+    registerActionType(actionNames.addActionType)
+    registerActionCreator(actionNames.addActionName, function(options){
+        var item = getItemFromActionOptions(options, actionNames.singleItemName);
         if (!backendData.objectHasBeenProcessed(item)){
-            var processFunction = backendData["process" + utils.capitalize(singleItemName) + "Object"]
+            var processFunction = backendData[actionNames.processFunctionName]
             item = processFunction(item)
         }
         return {
-            type: addActionType,
-            [singleItemName]: item
+            type: actionNames.addActionType,
+            [actionNames.singleItemName]: item
         }
     })
 
     return function(state, action){
-        var item = oFetch(action, singleItemName)
+        var item = oFetch(action, actionNames.singleItemName)
         return Object.assign({}, state, {
             [item.clientId]: item
         })
@@ -110,20 +140,19 @@ function getItemFromActionOptions(options, singleItemName){
     return item;
 }
 
-export function makeHandlerForGenericUpdateAction(singleItemName){
-    var singleItemActionNamePostfix = utils.makeAllCapsSnakeCase(singleItemName)
-    var updateActionType = "UPDATE_" + singleItemActionNamePostfix;
-    registerActionType(updateActionType)
-    registerActionCreator("update" + utils.capitalize(singleItemName), function(options){
+export function makeHandlerForGenericUpdateAction(collectionName){
+    var actionNames = getDefaultActionNames(collectionName)
+    registerActionType(actionNames.updateActionType)
+    registerActionCreator(actionNames.updateActionName, function(options){
         var item = getItemFromActionOptions(options, singleItemName)
         return {
             type: updateActionType,
-            [singleItemName]: item
+            [actionNames.singleItemName]: item
         }
     });
 
     return function(state, action){
-        var newItemData = oFetch(action, singleItemName);
+        var newItemData = oFetch(action, actionNames.singleItemName);
         var item = state[newItemData.clientId]
         var newItem = _.clone(item);
         for (var key in newItemData){
@@ -135,42 +164,42 @@ export function makeHandlerForGenericUpdateAction(singleItemName){
     }
 }
 
+export function makeHandlerForGenericDeleteAction(collectionName){
+    var actionNames = getDefaultActionNames(collectionName)
+
+    registerActionType(actionNames.deleteActionType)
+    registerActionCreator(actionNames.deleteActionName, function(options){
+        var item = getItemFromActionOptions(options, actionNames.singleItemName);
+        if (item.clientId === undefined) {
+            throw Error("Needs client Id of object that should be deleted")
+        }
+        return {
+            type: actionNames.deleteActionType,
+            [actionNames.singleItemName]: {clientId: item.clientId}
+        }
+    });
+
+    return function(state, action){
+        var itemToDelete = oFetch(action, actionNames.singleItemName);
+        return _(state).reject(function(item){
+            return itemToDelete.clientId === item.clientId;
+        })
+    }
+
+}
+
 export function makeDefaultReducer(collectionName, additionalHandlers){
     if (additionalHandlers === undefined) {
         additionalHandlers = {};
     }
 
-    var singleItemName = utils.getStringExceptLastCharacter(collectionName)
-    var singleItemActionNamePostfix = utils.makeAllCapsSnakeCase(singleItemName)
-    var multiItemActionNamePostfix = utils.makeAllCapsSnakeCase(collectionName)
-
-    var replaceAllActionType = "REPLACE_ALL_" + multiItemActionNamePostfix;
-    var updateActionType = "UPDATE_" + singleItemActionNamePostfix;
-    var addActionType = "ADD_" + singleItemActionNamePostfix;
-    var deleteActionType = "DELETE_" + singleItemActionNamePostfix;
-
-    registerActionType(deleteActionType)
-    registerActionCreator("delete" + utils.capitalize(singleItemName), function(options){
-        var item = getItemFromActionOptions(options, singleItemName);
-        if (item.clientId === undefined) {
-            throw Error("Needs client Id of object that should be deleted")
-        }
-        return {
-            type: deleteActionType,
-            [singleItemName]: {clientId: item.clientId}
-        }
-    });
+    var actionNames = getDefaultActionNames(collectionName)
 
     return makeReducer({
-        [replaceAllActionType]: makeHandlerForGenericReplaceAction(collectionName),
-        [updateActionType]: makeHandlerForGenericUpdateAction(singleItemName),
-        [addActionType]: makeHandlerForGenericAddAction(singleItemName),
-        [deleteActionType]: function(state, action){
-            var itemToDelete = oFetch(action, singleItemName);
-            return _(state).reject(function(item){
-                return itemToDelete.clientId === item.clientId;
-            })
-        },
+        [actionNames.replaceAllActionType]: makeHandlerForGenericReplaceAction(collectionName),
+        [actionNames.updateActionType]: makeHandlerForGenericUpdateAction(collectionName),
+        [actionNames.addActionType]: makeHandlerForGenericAddAction(collectionName),
+        [actionNames.deleteActionType]: makeHandlerForGenericDeleteAction(collectionName),
         ...additionalHandlers
     })
 }
