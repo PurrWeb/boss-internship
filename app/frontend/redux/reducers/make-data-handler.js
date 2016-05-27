@@ -1,5 +1,4 @@
 import _ from "underscore"
-import {registerActionCreator, registerActionType, actionTypes} from "../actions"
 import oFetch from "o-fetch"
 import utils from "~lib/utils"
 import * as backendData from "~lib/backend-data/process-backend-objects"
@@ -28,35 +27,48 @@ export default function makeDataHandler(collectionName, actionHandlers, options)
         });
     }
 
+    var actionTypes = [];
+    var actionCreators = {}
+
     for (var actionHandlerActionType in actionHandlers) {
         var handler = actionHandlers[actionHandlerActionType];
         var isDefaultHandlerObject = typeof handler === "object";
         if (isDefaultHandlerObject) {
             let defaultHandler = getDefaultActionHandler(collectionName, handler)
-            actionHandlers[actionHandlerActionType] = defaultHandler
+            if (defaultHandler.actionCreatorName){
+                actionCreators[defaultHandler.actionCreatorName] = defaultHandler.actionCreator
+            }
+
+            if (defaultHandler.actionType) {
+                actionTypes.push(defaultHandler.actionType)
+            }
+            actionHandlers[actionHandlerActionType] = defaultHandler.handlerFunction
         }
     }
 
-    return function(state, action){
-        if (state === undefined){
-            state = usedOptions.initialState;
-        }
-        if (action.type.indexOf("@@") !== -1){
-            // Internal Redux actions that should be ignored
-            // without throwin an exception
+
+
+    return {
+        reducer: function(state, action){
+            if (state === undefined){
+                state = usedOptions.initialState;
+            }
+            console.log("handling action", action.type)
+            if (action.type.indexOf("@@") !== -1){
+                // Internal Redux actions that should be ignored
+                // without throwin an exception
+                return state;
+            }
+
+            var actionHandler = actionHandlers[action.type];
+            if (actionHandler) {
+                return actionHandler(state, action);
+            }
+
             return state;
-        }
-
-        if (!actionTypes[action.type]) {
-            throw Error("Action with type " + action.type + " doesn't exist");
-        }
-
-        var actionHandler = actionHandlers[action.type];
-        if (actionHandler) {
-            return actionHandler(state, action);
-        }
-
-        return state;
+        },
+        actionTypes,
+        actionCreators
     }
 }
 
@@ -72,10 +84,14 @@ function getDefaultActionHandler(collectionName, genericHandlerInfo){
         actionNames: getDefaultActionNames(collectionName)
     }
 
+    var ret = {}
+
     if (genericHandlerInfo.generateActionCreator) {
-        genericActions[genericHandlerInfo.action].makeDefaultActionCreator(infoForGenerator);
+        ret = genericActions[genericHandlerInfo.action].makeDefaultActionCreator(infoForGenerator);
     }
-    return genericActions[genericHandlerInfo.action].makeHandlerFunction(infoForGenerator);
+    ret.actionType = genericActions[genericHandlerInfo.action].getActionType(infoForGenerator)
+    ret.handlerFunction = genericActions[genericHandlerInfo.action].makeHandlerFunction(infoForGenerator);
+    return ret;
 }
 
 export function validateReducers(){
@@ -88,21 +104,26 @@ export function validateReducers(){
 
 var genericActions = {
     "replaceAll": {
+        getActionType: function({actionNames}){
+            return actionNames.replaceAllActionType;
+        },
         makeDefaultActionCreator({actionNames, collectionName}){
-            registerActionType(actionNames.replaceAllActionType);
-            registerActionCreator(actionNames.replaceAllActionName, function(data){
-                var keys = _.keys(data);
-                if (keys.length !== 1) {
-                    throw Error("Invalid data for genericReplaceAllItems, only one set of values allowed")
-                }
+            return {
+                actionCreatorName: actionNames.replaceAllActionName,
+                actionCreator: function(data){
+                    var keys = _.keys(data);
+                    if (keys.length !== 1) {
+                        throw Error("Invalid data for genericReplaceAllItems, only one set of values allowed")
+                    }
 
-                var collectionName = keys[0];
-                var items = data[collectionName]
-                return {
-                    type:actionNames.replaceAllActionType,
-                    [collectionName]: items
+                    var collectionName = keys[0];
+                    var items = data[collectionName]
+                    return {
+                        type:actionNames.replaceAllActionType,
+                        [collectionName]: items
+                    }
                 }
-            })
+            }
         },
         makeHandlerFunction({collectionName}){
             return function(state, action){
@@ -111,19 +132,24 @@ var genericActions = {
         }
     },
     "add": {
+        getActionType: function({actionNames}){
+            return actionNames.addActionType;
+        },
         makeDefaultActionCreator({actionNames, collectionName}){
-            registerActionType(actionNames.addActionType)
-            registerActionCreator(actionNames.addActionName, function(options){
+            return {
+                actionCreatorName: actionNames.addActionName,
+                actionCreator: function(options){
                 var item = getItemFromActionOptions(options, actionNames.singleItemName);
-                if (!backendData.objectHasBeenProcessed(item)){
-                    var processFunction = backendData[actionNames.processFunctionName]
-                    item = processFunction(item)
+                    if (!backendData.objectHasBeenProcessed(item)){
+                        var processFunction = backendData[actionNames.processFunctionName]
+                        item = processFunction(item)
+                    }
+                    return {
+                        type: actionNames.addActionType,
+                        [actionNames.singleItemName]: item
+                    }
                 }
-                return {
-                    type: actionNames.addActionType,
-                    [actionNames.singleItemName]: item
-                }
-            })
+            }
         },
         makeHandlerFunction({actionNames, collectionName}){
             return function(state, action){
@@ -135,18 +161,23 @@ var genericActions = {
         }
     },
     "delete": {
+        getActionType: function({actionNames}){
+            return actionNames.deleteActionType;
+        },
         makeDefaultActionCreator({actionNames, collectionName}){
-            registerActionType(actionNames.deleteActionType)
-            registerActionCreator(actionNames.deleteActionName, function(options){
-                var item = getItemFromActionOptions(options, actionNames.singleItemName);
-                if (item.clientId === undefined) {
-                    throw Error("Needs client Id of object that should be deleted")
+            return {
+                actionCreatorName: actionNames.deleteActionName,
+                actionCreator: function(options){
+                    var item = getItemFromActionOptions(options, actionNames.singleItemName);
+                    if (item.clientId === undefined) {
+                        throw Error("Needs client Id of object that should be deleted")
+                    }
+                    return {
+                        type: actionNames.deleteActionType,
+                        [actionNames.singleItemName]: {clientId: item.clientId}
+                    }
                 }
-                return {
-                    type: actionNames.deleteActionType,
-                    [actionNames.singleItemName]: {clientId: item.clientId}
-                }
-            });
+            }
         },
         makeHandlerFunction({actionNames, collectionName}){
             return function(state, action){
@@ -158,15 +189,20 @@ var genericActions = {
         }
     },
     "update": {
+        getActionType: function({actionNames}){
+            return actionNames.updateActionType;
+        },
         makeDefaultActionCreator({actionNames, collectionName}){
-            registerActionType(actionNames.updateActionType)
-            registerActionCreator(actionNames.updateActionName, function(options){
-                var item = getItemFromActionOptions(options, actionNames.singleItemName)
-                return {
-                    type: actionNames.updateActionType,
-                    [actionNames.singleItemName]: item
+            return {
+                actionCreatorName: actionNames.updateActionName,
+                actionCreator: function(options){
+                    var item = getItemFromActionOptions(options, actionNames.singleItemName)
+                    return {
+                        type: actionNames.updateActionType,
+                        [actionNames.singleItemName]: item
+                    }
                 }
-            });
+            }
         },
         makeHandlerFunction({actionNames, collectionName}){
             return function(state, action){

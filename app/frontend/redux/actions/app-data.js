@@ -8,7 +8,7 @@ import {
 import {
     setPageOptions
 } from "./misc"
-import actionCreators from "./index"
+import {databaseFactory} from "./index"
 
 export function loadInitialRotaAppState(viewData) {
     var dayRota = getRotaFromDateAndVenue({
@@ -118,6 +118,7 @@ export function loadInitialHoursConfirmationAppState(viewData){
 
 function getInititalLoadActions(initialLoadData){
     initialLoadData = {...initialLoadData}
+    var actionCreators = databaseFactory.getActionCreators()
     var possibleObjects = {
         "rotas": {
             processFunction: backendData.processRotaObject

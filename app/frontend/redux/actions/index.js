@@ -10,7 +10,9 @@ import * as staffMemberActions from "./staff-members"
 import * as clockingActions from "./clocking"
 import * as hoursAcceptancePeriodActions from "./hours-acceptance-periods"
 import * as miscActions from "./misc"
+import DatabaseFactory from "../database-factory"
 
+var databaseFactory = new DatabaseFactory();
 
 function registerActionsObject(actionsObject){
     for (var key in actionsObject) {
@@ -19,21 +21,16 @@ function registerActionsObject(actionsObject){
         }
         if (key === "actionTypes") {
             var actionTypes = actionsObject[key];
-            registerActionTypes(actionTypes)
+            databaseFactory.registerActionTypes(actionTypes)
         } else {
             var fn = actionsObject[key];
-            registerActionCreator(key, fn);
+            databaseFactory.registerActionCreator(key, fn);
         }
     }
 }
 
-registerActionTypes(apiRequestActionTypes)
+databaseFactory.registerActionTypes(apiRequestActionTypes)
 
-function registerActionTypes(actionTypes){
-    actionTypes.forEach(function(actionType){
-        registerActionType(actionType)
-    })
-}
 
 registerActionsObject(clockingActions)
 registerActionsObject(rotaActions)
@@ -46,44 +43,35 @@ registerActionsObject(staffMemberActions)
 registerActionsObject(hoursAcceptancePeriodActions)
 registerActionsObject(miscActions)
 
+import dataHandlersOrReducerFunctions from "../data-handler-registration"
+
+for (var name in dataHandlersOrReducerFunctions) {
+    var value = dataHandlersOrReducerFunctions[name];
+    var isReducerFunction = typeof value === "function"
+    if (isReducerFunction) {
+        databaseFactory.registerReducer(name, value);
+    } else {
+        databaseFactory.registerReducer(name, value.reducer);
+        databaseFactory.registerActionTypes(value.actionTypes)
+        databaseFactory.registerActionCreators(value.actionCreators)
+    }
+}
+
 var actionCreators;
 
 export function registerActionCreator(name, fn){
     if (!actionCreators) {
         actionCreators = {};
     }
-    if (actionCreators[name] !== undefined) {
-        throw Error("Action creator " + name + " already exists")
-    }
+
     actionCreators[name] = fn;
 }
 
 
-export default actionCreators;
-
-
-/*
-Action types work differently from the standard redux way.
-
-This is mostly to avoid having to create generic action types.
-By doing it this way we can generate actions and action types dynamically.
-
-We retain the ability to check that we don't use the wrong
-action string by checking it exists in makeReducer.
-
-See window.debug.actionTypes to see all possible actions.
-*/
-
-export {actionTypes}
-
-var actionTypes;
-export function registerActionType(typeString){
-    if (!actionTypes) {
-        actionTypes = {};
-    }
-    actionTypes[typeString] = typeString;
-}
+export default databaseFactory.actionCreators;
 
 window.debug = window.debug || {};
-window.debug.actionCreators = actionCreators
-window.debug.actionTypes = actionTypes;
+window.debug.actionCreators = databaseFactory.getActionCreators()
+window.debug.actionTypes = databaseFactory.getActionTypes();
+
+export {databaseFactory}

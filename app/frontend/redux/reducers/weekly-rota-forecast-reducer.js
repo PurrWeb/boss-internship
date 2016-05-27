@@ -23,7 +23,7 @@ var forecast =  makeDataHandler("weeklyRotaForecast", {
     UPDATE_ROTA_FORECAST_SUCCESS: function(state, action){
         return null;
     }
-})
+}).reducer
 
 var needsUpdate = makeDataHandler("weeklyRotaForecastNeedsUpdate", {
     REPLACE_WEEKLY_ROTA_FORECAST: function(){
@@ -35,4 +35,4 @@ var needsUpdate = makeDataHandler("weeklyRotaForecastNeedsUpdate", {
     UPDATE_ROTA_FORECAST_SUCCESS: function(){
         return true;
     }
-});
+}).reducer;
