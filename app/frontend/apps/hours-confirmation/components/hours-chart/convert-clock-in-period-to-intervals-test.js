@@ -44,12 +44,8 @@ describe("convertClockInPeriodsToIntevals", function(){
             starts_at: new Date(2016, 10, 1, 9, 0),
             ends_at: null,
             breaks: [{
-                get: () =>  {
-                    return {
-                        starts_at: new Date(2016, 10, 1, 10),
-                        ends_at: new Date(2016, 10, 1, 11)
-                    }
-                }
+                starts_at: new Date(2016, 10, 1, 10),
+                ends_at: new Date(2016, 10, 1, 11)
             }],
         }
         var intervals = convertClockInHoursToIntervals(clockInHours, []);
@@ -61,12 +57,8 @@ describe("convertClockInPeriodsToIntevals", function(){
             starts_at: new Date(2016, 10, 1, 9, 0),
             ends_at: new Date(2016, 10, 1, 12, 0),
             breaks: [{
-                get: () => {
-                    return {
-                        starts_at: new Date(2016, 10, 1, 10),
-                        ends_at: new Date(2016, 10, 1, 11)
-                    }
-                }
+                starts_at: new Date(2016, 10, 1, 10),
+                ends_at: new Date(2016, 10, 1, 11)
             }],
         }
         var intervals = convertClockInHoursToIntervals(clockInHours, []);
