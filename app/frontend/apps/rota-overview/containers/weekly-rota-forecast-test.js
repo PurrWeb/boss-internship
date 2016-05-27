@@ -6,12 +6,18 @@ import React from "react"
 
 describe("WeeklyRotaForecast", function(){
     beforeEach(function(){
-        WeeklyRotaForecast.__Rewire__('fetchWeeklyRotaForecast', function(){
-            return {fetchWeeklyRotaForecast: "was called"};
+        WeeklyRotaForecast.__Rewire__('getActionCreators', function(){
+            return {
+                fetchWeeklyRotaForecast: function(){
+                    return {
+                        fetchWeeklyRotaForecast: "was called"
+                    }
+                }
+            };
         });
     })
     afterEach(function(){
-        WeeklyRotaForecast.__ResetDependency__('fetchWeeklyRotaForecast');
+        WeeklyRotaForecast.__ResetDependency__('getActionCreators');
     })
     it("Triggers an action to fetch the forecast if it isn't in the store", function(){
         var store = createStore(function(){

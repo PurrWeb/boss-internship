@@ -3,7 +3,7 @@ import _ from "underscore"
 import utils from "~lib/utils"
 import { connect } from "react-redux"
 import RotaForecastUi from "../components/rota-forecast"
-import actionCreators from "~redux/actions"
+import {getActionCreators} from "~redux/actions/database"
 import { selectFetchWeeklyRotaIsInProgress } from "~redux/selectors"
 import Spinner from "~components/spinner"
 import ComponentErrors from "~components/component-errors"
@@ -74,7 +74,7 @@ function mapStateToProps(state, ownProps){
 function mapDispatchToProps(dispatch, ownProps){
     return {
         fetchForecast: function(componentId){
-            dispatch(actionCreators.fetchWeeklyRotaForecast({
+            dispatch(getActionCreators().fetchWeeklyRotaForecast({
                 serverVenueId: ownProps.serverVenueId,
                 startOfWeek: ownProps.startOfWeek,
                 errorHandlingComponent: componentId
