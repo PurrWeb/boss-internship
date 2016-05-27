@@ -33,6 +33,25 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
     requestType: "ACCEPT_HOURS_ACCEPTANCE_PERIOD",
     makeRequest: function(requestOptions, success, error){
         setTimeout(function(){
+            var hoursAcceptancePeriod = oFetch(requestOptions, "hoursAcceptancePeriod")
+            var {starts_at, ends_at, breaks, reason, reason_note} = hoursAcceptancePeriod
+
+            var requestData = {
+                hours_acceptance_period_id: hoursAcceptancePeriod.serverId,
+                starts_at,
+                ends_at,
+                breaks: breaks.map((b) => {
+                    return {
+                        starts_at: b.starts_at,
+                        ends_at: b.ends_at
+                    }
+                }),
+                reason_id: reason.serverId,
+                reason_note: reason_note
+            }
+
+            console.log(requestData)
+
             var responseData = {
                 hours_acceptance_period: {
                     id: 1155,
@@ -51,6 +70,7 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
                     hours_acceptance_period: {id: 1155}
                 }]
             }
+            console.log(responseData)
 
             success({
                 newHoursAcceptancePeriod: backendData.processHoursAcceptancePeriodObject(responseData.hours_acceptance_period),
