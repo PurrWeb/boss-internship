@@ -320,7 +320,8 @@ export function selectClockInDayDetails(state, clockInDay){
 
 export function selectEditHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod){
     return selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) ||
-        selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod)
+        selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) ||
+        selectDeleteHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod)
 }
 
 function requestIsInProgressWithRequestData(requests, matchFunction) {
@@ -339,6 +340,12 @@ function selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePer
 
 function selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
     return requestIsInProgressWithRequestData(state.apiRequestsInProgress.UNACCEPT_HOURS_ACCEPTANCE_PERIOD, function(requestOptions){
+        return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
+    });
+}
+
+function selectDeleteHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
+    return requestIsInProgressWithRequestData(state.apiRequestsInProgress.DELETE_HOURS_ACCEPTANCE_PERIOD, function(requestOptions){
         return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
     });
 }
