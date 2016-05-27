@@ -18,5 +18,9 @@ export default makeDataHandler("hoursAcceptancePeriods", {
     ACCEPT_HOURS_ACCEPTANCE_PERIOD_SUCCESS: {
         action: "update",
         generateActionCreator: false
+    },
+    UNACCEPT_HOURS_ACCEPTANCE_PERIOD_SUCCESS: {
+        action: "update",
+        generateActionCreator: false
     }
 })

@@ -41,3 +41,17 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
         }, 2000)
     }
 })
+
+export const unacceptHoursAcceptancePeriod = createApiRequestAction({
+    requestType: "UNACCEPT_HOURS_ACCEPTANCE_PERIOD",
+    makeRequest: function(requestOptions, success, error){
+        setTimeout(function(){
+            success({
+                hoursAcceptancePeriod: {
+                    clientId: requestOptions.hoursAcceptancePeriod.clientId,
+                    status: "in_progress"
+                }
+            })
+        }, 2000)
+    }
+})
