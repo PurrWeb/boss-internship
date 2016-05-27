@@ -462,7 +462,9 @@ class AcceptedHoursListItem extends React.Component {
             }
             return <div>
                 <a
-                    onClick={() => this.triggerChange({accepted_state: "accepted"})}
+                    onClick={() => this.props.boundActions.acceptHoursAcceptancePeriod({
+                        hoursAcceptancePeriod: this.props.hoursAcceptancePeriod
+                    })}
                     className={classes.join(" ")} style={{marginTop: 4}}>
                     Accept {stats.hours}h
                 </a>

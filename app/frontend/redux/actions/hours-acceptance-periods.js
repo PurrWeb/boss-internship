@@ -27,3 +27,16 @@ export const deleteHoursAcceptancePeriod = createApiRequestAction({
         }
     })
 });
+
+export const acceptHoursAcceptancePeriod = createApiRequestAction({
+    requestType: "ACCEPT_HOURS_ACCEPTANCE_PERIOD",
+    makeRequest: function(requestOptions, success, error){
+        setTimeout(function(){
+            success({
+                hoursAcceptancePeriod: {
+                    clientId: requestOptions.hoursAcceptancePeriod.clientId
+                }
+            })
+        }, 2000)
+    }
+})
