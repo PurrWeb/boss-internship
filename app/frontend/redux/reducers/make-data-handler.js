@@ -1,6 +1,7 @@
 import _ from "underscore"
 import oFetch from "o-fetch"
 import utils from "~lib/utils"
+import makeReducer from "./make-reducer"
 import * as backendData from "~lib/backend-data/process-backend-objects"
 
 var handledActionTypes = [];
@@ -12,11 +13,6 @@ export default function makeDataHandler(collectionName, actionHandlers, options)
     if (typeof collectionName !== "string") {
         throw Error("No or invalid collection name provided to makeDataHandler for " + collectionName)
     }
-
-    var defaultOptions = {
-        initialState: {}
-    }
-    var usedOptions = _.extend({}, defaultOptions, options);
 
     // We keep track of all action types that are used so we can
     // later validate that all those actions actually exist
@@ -46,31 +42,8 @@ export default function makeDataHandler(collectionName, actionHandlers, options)
         }
     }
 
-
-
     return {
-        reducer: function(state, action){
-            if (state === undefined){
-                state = usedOptions.initialState;
-            }
-            if (action.type.indexOf("@@") !== -1){
-                // Internal Redux actions that should be ignored
-                // without throwin an exception
-                return state;
-            }
-
-            var actionHandler = actionHandlers[action.type];
-            if (actionHandler) {
-                return actionHandler(state, action);
-            }
-
-            var catchAllActionHandler = actionHandlers["*"];
-            if (catchAllActionHandler){
-                return catchAllActionHandler(state, action);
-            }
-
-            return state;
-        },
+        reducer: makeReducer(actionHandlers, options),
         actionTypes,
         actionCreators
     }

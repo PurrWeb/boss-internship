@@ -1,5 +1,6 @@
 import _ from "underscore"
 import makeDataHandler from "./make-data-handler"
+import makeReducer from "./make-reducer"
 
 export default makeDataHandler("apiRequestInProgess", {
     API_REQUEST_START: handleAction,
@@ -13,7 +14,7 @@ function handleAction(state, action) {
     });
 }
 
-var requestTypeReducer = makeDataHandler("apiRequestsInProgressByRequestType", {
+var requestTypeReducer = makeReducer({
     API_REQUEST_START: function(state, action){
         var value =  _.clone(action);
         delete value["type"];
@@ -22,4 +23,4 @@ var requestTypeReducer = makeDataHandler("apiRequestsInProgressByRequestType", {
     API_REQUEST_END: function(state, action){
         return  _.reject(state, {requestId: action.requestId});
     }
-}).reducer
+})
