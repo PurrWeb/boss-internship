@@ -50,8 +50,6 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
                 reason_note: reason_note
             }
 
-            console.log(requestData)
-
             var responseData = {
                 hours_acceptance_period: {
                     id: 1155,
@@ -70,7 +68,6 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
                     hours_acceptance_period: {id: 1155}
                 }]
             }
-            console.log(responseData)
 
             success({
                 newHoursAcceptancePeriod: backendData.processHoursAcceptancePeriodObject(responseData.hours_acceptance_period),
