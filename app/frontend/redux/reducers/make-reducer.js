@@ -110,7 +110,30 @@ function getItemFromActionOptions(options, singleItemName){
     return item;
 }
 
+export function makeHandlerForGenericUpdateAction(singleItemName){
+    var singleItemActionNamePostfix = utils.makeAllCapsSnakeCase(singleItemName)
+    var updateActionType = "UPDATE_" + singleItemActionNamePostfix;
+    registerActionType(updateActionType)
+    registerActionCreator("update" + utils.capitalize(singleItemName), function(options){
+        var item = getItemFromActionOptions(options, singleItemName)
+        return {
+            type: updateActionType,
+            [singleItemName]: item
+        }
+    });
 
+    return function(state, action){
+        var newItemData = oFetch(action, singleItemName);
+        var item = state[newItemData.clientId]
+        var newItem = _.clone(item);
+        for (var key in newItemData){
+            newItem[key] = newItemData[key];
+        }
+        var newState = {...state}
+        newState[item.clientId] = newItem;
+        return newState
+    }
+}
 
 export function makeDefaultReducer(collectionName, additionalHandlers){
     if (additionalHandlers === undefined) {
@@ -126,15 +149,6 @@ export function makeDefaultReducer(collectionName, additionalHandlers){
     var addActionType = "ADD_" + singleItemActionNamePostfix;
     var deleteActionType = "DELETE_" + singleItemActionNamePostfix;
 
-    registerActionType(updateActionType)
-    registerActionCreator("update" + utils.capitalize(singleItemName), function(options){
-        var item = getItemFromActionOptions(options, singleItemName)
-        return {
-            type: updateActionType,
-            [singleItemName]: item
-        }
-    });
-
     registerActionType(deleteActionType)
     registerActionCreator("delete" + utils.capitalize(singleItemName), function(options){
         var item = getItemFromActionOptions(options, singleItemName);
@@ -149,17 +163,7 @@ export function makeDefaultReducer(collectionName, additionalHandlers){
 
     return makeReducer({
         [replaceAllActionType]: makeHandlerForGenericReplaceAction(collectionName),
-        [updateActionType]: function(state, action){
-            var newItemData = oFetch(action, singleItemName);
-            var item = state[newItemData.clientId]
-            var newItem = _.clone(item);
-            for (var key in newItemData){
-                newItem[key] = newItemData[key];
-            }
-            var newState = {...state}
-            newState[item.clientId] = newItem;
-            return newState
-        },
+        [updateActionType]: makeHandlerForGenericUpdateAction(singleItemName),
         [addActionType]: makeHandlerForGenericAddAction(singleItemName),
         [deleteActionType]: function(state, action){
             var itemToDelete = oFetch(action, singleItemName);
