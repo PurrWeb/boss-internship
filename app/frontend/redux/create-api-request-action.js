@@ -1,5 +1,5 @@
 import _ from "underscore"
-import {actionTypes, registerActionType} from "./actions"
+import {registerActionType} from "./actions"
 
 var registeredApiRequestActionCreators = {};
 
@@ -21,7 +21,7 @@ can be useful for showing spinners etc).
 
 # Example
 
-const actionTypes = {}
+
 const addTodo = createApiRequestAction(
     "ADD_TODO",
     function(options, success, error, getState) {
@@ -32,8 +32,7 @@ const addTodo = createApiRequestAction(
                 ...response
             });
         }, 1000);
-    },
-    actionTypes
+    }
 );
 
 addTodo({title: "Buy milk"});
@@ -46,16 +45,15 @@ addTodo({title: "Buy milk"});
    - error    Callback to to call if the data couldn't be loaded.
    - getState    Function to get current store state
  * @param  {object} confirm - is called before the API call and cancels it if it doesn't return true
- * @param  {object} actionTypes - action types will be added to this object so they can be used in reducers
  * @return {function}   Asynchronous action creator.
  */
 export default function createApiRequestAction(actionOptions){
     var { requestType, makeRequest } = actionOptions;
 
-    const SUCCESS_TYPE = requestType + "_SUCCESS";
-    const START_TYPE = requestType + "_REQUEST_START";
-    registerActionType(SUCCESS_TYPE);
-    registerActionType(START_TYPE);
+    const successType = requestType + "_SUCCESS";
+    const startType = requestType + "_REQUEST_START";
+    registerActionType(successType);
+    registerActionType(startType);
 
     var actionCreator = generateActionCreator();
     registeredApiRequestActionCreators[requestType] = actionCreator;
@@ -76,7 +74,7 @@ export default function createApiRequestAction(actionOptions){
                 function success(successActionData){
                     dispatch([
                         {
-                            type: SUCCESS_TYPE,
+                            type: successType,
                             ...successActionData
                         },
                         requestEndAction()
@@ -96,14 +94,14 @@ export default function createApiRequestAction(actionOptions){
                 }
                 function setComponentErrorAction(errors){
                     return {
-                        type: actionTypes.SET_COMPONENT_ERROR,
+                        type: "SET_COMPONENT_ERROR",
                         componentId: requestOptions.errorHandlingComponent,
                         errors: errors
                     };
                 }
                 function apiRequestStartAction(){
                     return {
-                        type: actionTypes.API_REQUEST_START,
+                        type: "API_REQUEST_START",
                         requestId: requestId,
                         requestType: requestType,
                         ...requestOptions
@@ -111,14 +109,14 @@ export default function createApiRequestAction(actionOptions){
                 }
                 function requestTypeRequestStartAction(){
                     return {
-                        type: START_TYPE,
+                        type: startType,
                         ...requestOptions
                     }
                 }
                 function requestEndAction(){
                     return {
                         requestType: requestType,
-                        type: actionTypes.API_REQUEST_END,
+                        type: "API_REQUEST_END",
                         requestId: requestId,
                         ...requestOptions
                     };
