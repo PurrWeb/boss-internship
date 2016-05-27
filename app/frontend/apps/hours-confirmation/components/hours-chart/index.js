@@ -11,7 +11,7 @@ export default class HoursChart extends React.Component {
         rotaedShifts: React.PropTypes.array.isRequired,
         hoursAcceptancePeriods: React.PropTypes.array.isRequired,
         rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired,
-        clockInDayEvents: React.PropTypes.array.isRequired
+        clockInEvents: React.PropTypes.array.isRequired
     }
     constructor(props){
         super(props)

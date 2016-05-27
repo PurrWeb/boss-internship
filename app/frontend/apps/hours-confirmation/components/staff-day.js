@@ -199,7 +199,7 @@ class StaffDayNotes extends React.Component {
             <div className="staff-day__sub-heading">Notes</div>
             <ul style={{paddingLeft: 20}}>
                 {this.props.notes.map((note) =>
-                    <li>{note.text}</li>
+                    <li key={note.clientId}>{note.text}</li>
                 )}
             </ul>
         </div>
@@ -289,6 +289,7 @@ class BreakList extends React.Component {
         return <div>
             {breaks.map((breakItem) => {
                 return <BreakListItem
+                    key={breakItem.clientId}
                     boundActions={this.props.boundActions}
                     readonly={this.props.readonly}
                     hoursAcceptancePeriod={this.props.hoursAcceptancePeriod}
@@ -344,7 +345,7 @@ class ReasonSelector extends React.Component {
                     reasonClientId: e.target.value
                 })}>
                 {_.values(clockInReasons).map((reason) =>
-                    <option value={reason.clientId}>
+                    <option value={reason.clientId} key={reason.clientId}>
                         {reason.title}
                     </option>
                 )}
@@ -363,7 +364,7 @@ class ReasonSelector extends React.Component {
                         reasonNote: e.target.value
                     })
                 }}
-                readonly={this.props.readonly}
+                readOnly={this.props.readonly}
                 style={{display: showTextArea ? "block" : "none"}}
                 value={reasonNote} />
         </div>
@@ -524,7 +525,8 @@ class HoursAcceptancePeriodList extends React.Component {
         return <div>
             {this.props.hoursAcceptancePeriods.map(
                 (hoursAcceptancePeriod) =>
-                    <div style={{
+                    <div key={hoursAcceptancePeriod.clientId}
+                        style={{
                             border: "1px solid #ddd",
                             padding: 5,
                             marginBottom: 5
