@@ -13,6 +13,10 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   validates :creator, presence: true
   validates :status, inclusion: { in: STATES, message: 'is required' }
 
+  def self.pending
+    where(status: 'pending')
+  end
+
   def venue
     clock_in_day.venue
   end

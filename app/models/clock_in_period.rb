@@ -11,4 +11,8 @@ class ClockInPeriod < ActiveRecord::Base
   validates :starts_at, presence: true
 
   delegate :venue, :staff_member, :date, to: :clock_in_day
+
+  def self.incomplete
+    where(ends_at: nil)
+  end
 end

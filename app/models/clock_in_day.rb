@@ -3,6 +3,7 @@ class ClockInDay < ActiveRecord::Base
   belongs_to :staff_member
   belongs_to :creator, polymorphic: true
   has_many :clock_in_periods
+  has_many :hours_acceptance_periods
 
   validates :date, presence: true
   validates :staff_member, presence: true
