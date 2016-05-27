@@ -8,7 +8,14 @@ import {
 import {
     setPageOptions
 } from "./misc"
-import {databaseFactory} from "./database"
+
+var getActionCreators = function(){
+    throw Error("getActionCreators called before setGetActionCreators was called")
+}
+
+export function setGetActionCreators(fn){
+    getActionCreators = fn;
+}
 
 export function loadInitialRotaAppState(viewData) {
     var dayRota = getRotaFromDateAndVenue({
@@ -118,7 +125,7 @@ export function loadInitialHoursConfirmationAppState(viewData){
 
 function getInititalLoadActions(initialLoadData){
     initialLoadData = {...initialLoadData}
-    var actionCreators = databaseFactory.getActionCreators()
+    var actionCreators = getActionCreators();
     var possibleObjects = {
         "rotas": {
             processFunction: backendData.processRotaObject

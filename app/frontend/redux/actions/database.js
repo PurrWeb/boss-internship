@@ -17,7 +17,15 @@ var databaseFactory = new DatabaseFactory();
 function registerActionsObject(actionsObject){
     for (var key in actionsObject) {
         if (utils.stringStartsWith(key, "__") || key === "default") {
+            // Rewire adds some extra properties (tests only)
             continue
+        }
+        if (key === "setGetActionCreators") {
+            // app data actionCreators need access to other actionCreators
+            actionsObject.setGetActionCreators(function(){
+                return databaseFactory.getActionCreators();
+            })
+            continue;
         }
         if (key === "actionTypes") {
             var actionTypes = actionsObject[key];
@@ -68,6 +76,9 @@ export function registerActionCreator(name, fn){
     actionCreators[name] = fn;
 }
 
+export function getActionCreators(){
+    return databaseFactory.getActionCreators();
+}
 
 export default databaseFactory
 
