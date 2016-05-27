@@ -144,9 +144,9 @@ export function makeHandlerForGenericUpdateAction(collectionName){
     var actionNames = getDefaultActionNames(collectionName)
     registerActionType(actionNames.updateActionType)
     registerActionCreator(actionNames.updateActionName, function(options){
-        var item = getItemFromActionOptions(options, singleItemName)
+        var item = getItemFromActionOptions(options, actionNames.singleItemName)
         return {
-            type: updateActionType,
+            type: actionNames.updateActionType,
             [actionNames.singleItemName]: item
         }
     });
@@ -164,20 +164,25 @@ export function makeHandlerForGenericUpdateAction(collectionName){
     }
 }
 
-export function makeHandlerForGenericDeleteAction(collectionName){
+export function makeHandlerForGenericDeleteAction(collectionName, options){
+    if (options === undefined){
+        options = {}
+    }
     var actionNames = getDefaultActionNames(collectionName)
 
-    registerActionType(actionNames.deleteActionType)
-    registerActionCreator(actionNames.deleteActionName, function(options){
-        var item = getItemFromActionOptions(options, actionNames.singleItemName);
-        if (item.clientId === undefined) {
-            throw Error("Needs client Id of object that should be deleted")
-        }
-        return {
-            type: actionNames.deleteActionType,
-            [actionNames.singleItemName]: {clientId: item.clientId}
-        }
-    });
+    if (options.createDefaultActionCreator !== false){
+        registerActionType(actionNames.deleteActionType)
+        registerActionCreator(actionNames.deleteActionName, function(options){
+            var item = getItemFromActionOptions(options, actionNames.singleItemName);
+            if (item.clientId === undefined) {
+                throw Error("Needs client Id of object that should be deleted")
+            }
+            return {
+                type: actionNames.deleteActionType,
+                [actionNames.singleItemName]: {clientId: item.clientId}
+            }
+        });
+    }
 
     return function(state, action){
         var itemToDelete = oFetch(action, actionNames.singleItemName);
