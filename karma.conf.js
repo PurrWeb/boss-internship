@@ -23,6 +23,7 @@ module.exports = function (config) {
       resolve: {
         extensions: ["", ".js", ".jsx", ".js.jsx"]
       },
+      devtool: 'inline-source-map',
     },
     client: {
       mocha: {

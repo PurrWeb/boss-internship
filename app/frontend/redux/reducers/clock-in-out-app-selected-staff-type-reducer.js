@@ -21,4 +21,6 @@ export default makeDataHandler("clockInOutAppSelectedStaffType", {
             return clientId;
         }
     }
+}, {
+    initialState: null
 });

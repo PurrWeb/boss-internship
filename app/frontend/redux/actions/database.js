@@ -47,14 +47,15 @@ import dataHandlersOrReducerFunctions from "../data-handler-registration"
 
 for (var name in dataHandlersOrReducerFunctions) {
     var value = dataHandlersOrReducerFunctions[name];
-    var isReducerFunction = typeof value === "function"
-    if (isReducerFunction) {
-        databaseFactory.registerReducer(name, value);
-    } else {
-        databaseFactory.registerReducer(name, value.reducer);
-        databaseFactory.registerActionTypes(value.actionTypes)
-        databaseFactory.registerActionCreators(value.actionCreators)
-    }
+
+        window.ddd = dataHandlersOrReducerFunctions
+        window.name = name;
+        window.vvv =value
+
+    databaseFactory.registerReducer(name, value.reducer);
+    databaseFactory.registerActionTypes(value.actionTypes)
+    databaseFactory.registerActionCreators(value.actionCreators)
+
 }
 
 var actionCreators;

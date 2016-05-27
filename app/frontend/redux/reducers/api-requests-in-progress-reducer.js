@@ -1,11 +1,10 @@
 import _ from "underscore"
 import makeDataHandler from "./make-data-handler"
 
-var initialState = {};
 export default makeDataHandler("apiRequestInProgess", {
     API_REQUEST_START: handleAction,
     API_REQUEST_END: handleAction
-}).reducer
+})
 
 function handleAction(state, action) {
     var newValue = requestTypeReducer(state[action.requestType], action);

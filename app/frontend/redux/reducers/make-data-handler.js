@@ -64,6 +64,11 @@ export default function makeDataHandler(collectionName, actionHandlers, options)
                 return actionHandler(state, action);
             }
 
+            var catchAllActionHandler = actionHandlers["*"];
+            if (catchAllActionHandler){
+                return catchAllActionHandler(state, action);
+            }
+
             return state;
         },
         actionTypes,

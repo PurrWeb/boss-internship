@@ -6,12 +6,14 @@ var initialState = {
     forecast: null
 }
 
-export default function weeklyRotaForecastReducer(state=initialState, action){
-    return {
-        needsUpdate: needsUpdate(state.needsUpdate, action),
-        forecast: forecast(state.forecast, action)
+export default makeDataHandler("weeklyRotaForecast",{
+    "*": function(state=initialState, action){
+        return {
+            needsUpdate: needsUpdate(state.needsUpdate, action),
+            forecast: forecast(state.forecast, action)
+        }
     }
-}
+})
 
 var forecast =  makeDataHandler("weeklyRotaForecast", {
     REPLACE_WEEKLY_ROTA_FORECAST: function(state, action){
