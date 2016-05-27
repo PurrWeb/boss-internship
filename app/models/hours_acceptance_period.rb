@@ -17,6 +17,10 @@ class HoursAcceptancePeriod < ActiveRecord::Base
     where(status: 'pending')
   end
 
+  def self.enabled
+    where('status != ?', 'deleted')
+  end
+
   def venue
     clock_in_day.venue
   end
