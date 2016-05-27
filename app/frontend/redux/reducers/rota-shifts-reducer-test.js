@@ -7,7 +7,7 @@ describe("RotaShiftsReducer", function(){
     it("Can replace all shifts at once", function(){
         var initialState = {};
         var action = {
-            type: "GENERIC_REPLACE_ALL_ITEMS",
+            type: "REPLACE_ALL_SHIFTS",
             shifts: {
                 1: {hello: "world"},
                 2: {hi: "earth"}
