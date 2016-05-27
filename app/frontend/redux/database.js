@@ -40,7 +40,6 @@ function registerActionsObject(actionsObject){
 
 databaseFactory.registerActionTypes(apiRequestActionTypes)
 
-
 registerActionsObject(clockingActions)
 registerActionsObject(rotaActions)
 registerActionsObject(confirmationMessageActions)
@@ -52,29 +51,11 @@ registerActionsObject(staffMemberActions)
 registerActionsObject(hoursAcceptancePeriodActions)
 registerActionsObject(miscActions)
 
-
-
 for (var name in dataHandlersOrReducerFunctions) {
     var value = dataHandlersOrReducerFunctions[name];
-
-        window.ddd = dataHandlersOrReducerFunctions
-        window.name = name;
-        window.vvv =value
-
     databaseFactory.registerReducer(name, value.reducer);
     databaseFactory.registerActionTypes(value.actionTypes)
     databaseFactory.registerActionCreators(value.actionCreators)
-
-}
-
-var actionCreators;
-
-export function registerActionCreator(name, fn){
-    if (!actionCreators) {
-        actionCreators = {};
-    }
-
-    actionCreators[name] = fn;
 }
 
 export function getActionCreators(){
