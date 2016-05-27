@@ -22,7 +22,10 @@ export default function makeDataHandler(collectionName, actionHandlers, options)
     // We keep track of all action types that are used so we can
     // later validate that all those actions actually exist
     for (var actionHandlerActionType in actionHandlers){
-        handledActionTypes.push(actionHandlerActionType);
+        handledActionTypes.push({
+            type: actionHandlerActionType,
+            collectionName
+        });
     }
 
     for (var actionHandlerActionType in actionHandlers) {
@@ -76,9 +79,9 @@ function getDefaultActionHandler(collectionName, genericHandlerInfo){
 }
 
 export function validateReducers(){
-    handledActionTypes.forEach(function(actionType){
-        if (!actionTypes[actionType]) {
-            throw Error("Trying to handle non-existent action " + actionType)
+    handledActionTypes.forEach(function(actionHandler){
+        if (!actionTypes[actionHandler.type]) {
+            throw Error("Trying to handle non-existent action " + actionHandler.type + " in " + actionHandler.collectionName)
         }
     })
 }

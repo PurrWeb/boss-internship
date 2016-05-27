@@ -15,14 +15,8 @@ export default makeDataHandler("hoursAcceptancePeriods", {
     UPDATE_HOURS_ACCEPTANCE_PERIOD: {
         action: "update"
     },
-    ACCEPT_HOURS_ACCEPTANCE_PERIOD_SUCCESS: function(state, action) {
-        return _.map(state, function(hoursAcceptancePeriod){
-            if (hoursAcceptancePeriod.clientId !== action.hoursAcceptancePeriod.clientId) {
-                return hoursAcceptancePeriod
-            }
-            return Object.assign({}, hoursAcceptancePeriod, {
-                status: "accepted"
-            })
-        })
+    ACCEPT_HOURS_ACCEPTANCE_PERIOD_SUCCESS: {
+        action: "update",
+        generateActionCreator: false
     }
 })
