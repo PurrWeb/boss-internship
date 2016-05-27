@@ -19,8 +19,14 @@ export const deleteHoursAcceptancePeriod = createApiRequestAction({
                 }
             }
         },
-        makeRequest: function(){
-            alert("need to make backend request")
+        makeRequest: function(requestOptions, success, error){
+            setTimeout(function(){
+                success({
+                    hoursAcceptancePeriod: {
+                        clientId: requestOptions.hoursAcceptancePeriod.clientId
+                    }
+                })
+            }, 2000)
         }
     })
 });
