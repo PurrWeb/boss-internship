@@ -16,34 +16,34 @@ import userActionConfirmationMessages from "./reducers/user-action-confirmation-
 import hoursAcceptanceBreaks from "./reducers/hours-acceptance-breaks"
 import clockInDays from "./reducers/clock-in-days-reducer"
 import apiKey from "./reducers/api-key"
-import {makeDefaultDataHandler, validateReducers} from "./reducers/make-data-handler"
+import {makeDefaultDataHandler} from "./reducers/make-data-handler"
 
-var dataHandlersOrReducerFunctions = {
-    staff: makeDefaultDataHandler("staffMembers"),
+var dataHandlers = [
+    makeDefaultDataHandler("staffMembers"),
     rotaShifts,
     clockInStatuses,
     clockInOutAppUserMode,
     clockInOutAppSelectedStaffType,
     apiRequestsInProgress,
     componentErrors,
-    venues: makeDefaultDataHandler("venues"),
+    makeDefaultDataHandler("venues"),
     rotas,
     pageOptions,
-    staffTypes: makeDefaultDataHandler("staffTypes"),
-    holidays: makeDefaultDataHandler("holidays"),
+    makeDefaultDataHandler("staffTypes"),
+    makeDefaultDataHandler("holidays"),
     rotaForecasts,
     weeklyRotaForecast,
     confirmationModal,
     userActionConfirmationMessages,
     apiKey,
     clockInDays,
-    clockInPeriods: makeDefaultDataHandler("clockInPeriods"),
-    clockInBreaks: makeDefaultDataHandler("clockInBreaks"),
+    makeDefaultDataHandler("clockInPeriods"),
+    makeDefaultDataHandler("clockInBreaks"),
     hoursAcceptanceBreaks,
     hoursAcceptancePeriods,
-    clockInEvents: makeDefaultDataHandler("clockInEvents"),
-    clockInNotes: makeDefaultDataHandler("clockInNotes"),
-    clockInReasons: makeDefaultDataHandler("clockInReasons")
-}
+    makeDefaultDataHandler("clockInEvents"),
+    makeDefaultDataHandler("clockInNotes"),
+    makeDefaultDataHandler("clockInReasons")
+]
 
-export default dataHandlersOrReducerFunctions
+export default dataHandlers

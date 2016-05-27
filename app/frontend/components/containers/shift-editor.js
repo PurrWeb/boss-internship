@@ -161,7 +161,7 @@ function mapStateToProps(state, ownProps){
     var rota = ownProps.shift.rota.get(state.rotas)
     var staffType = getStaffTypeFromShift({
         shift: ownProps.shift,
-        staffMembersById: state.staff,
+        staffMembersById: state.staffMembers,
         staffTypesById: state.staffTypes
     });
     return {

@@ -30,7 +30,7 @@ class ChartAndFilterContainer extends React.Component {
 
 function mapStateToProps(state){
     return {
-        staffMembers: state.staff,
+        staffMembers: state.staffMembers,
         rotaShifts: selectRotaShiftsOnDayOnStaffTypeRotaPage(state),
         staffTypes: state.staffTypes,
         venues: selectVenuesWithShifts(state),

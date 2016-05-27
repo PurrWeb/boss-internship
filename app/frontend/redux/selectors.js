@@ -42,8 +42,8 @@ export function selectVenuesWithShifts(state){
 }
 
 export function selectStaffMemberHolidays(state, staffId){
-    var staffMember = state.staff[staffId];
-    var staffMemberHolidayClientIds = _.pluck(state.staff[staffId].holidays, "clientId");
+    var staffMember = state.staffMembers[staffId];
+    var staffMemberHolidayClientIds = _.pluck(staffMember.holidays, "clientId");
     var allHolidays = staffMemberHolidayClientIds.map(function(clientId){
         return state.holidays[clientId];
     });
@@ -272,7 +272,7 @@ function addBreaksToHoursAcceptancePeriod(hoursAcceptancePeriod, hoursAcceptance
 }
 
 export function selectClockInDayDetails(state, clockInDay){
-    var staffMember = clockInDay.staff_member.get(state.staff);
+    var staffMember = clockInDay.staff_member.get(state.staffMembers);
     var clockInPeriods = _(state.clockInPeriods).filter(function(clockInPeriod){
         return clockInPeriod.clock_in_day.clientId === clockInDay.clientId;
     });

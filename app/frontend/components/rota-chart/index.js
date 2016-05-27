@@ -23,7 +23,7 @@ export default class RotaChart extends Component {
             staff={this.props.staff}
             staffTypes={this.props.staffTypes}
             updateStaffToPreview={this.props.updateStaffToPreview}
-            updateStaffToShow={this.props.updateStaffToShow} 
+            updateStaffToShow={this.props.updateStaffToShow}
             getShiftColor={this.props.getShiftColor} />
     }
     componentDidMount() {

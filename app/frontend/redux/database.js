@@ -1,6 +1,6 @@
 import utils from "~lib/utils"
 import {apiRequestActionTypes} from "./create-api-request-action"
-import dataHandlersOrReducerFunctions from "./data-handler-registration"
+import dataHandlers from "./data-handlers"
 import * as rotaActions from "./actions/rotas"
 import * as confirmationMessageActions from "./actions/user-action-confirmation-messages"
 import * as rotaForecastActions from "./actions/rota-forecasts"
@@ -51,12 +51,9 @@ registerActionsObject(staffMemberActions)
 registerActionsObject(hoursAcceptancePeriodActions)
 registerActionsObject(miscActions)
 
-for (var name in dataHandlersOrReducerFunctions) {
-    var value = dataHandlersOrReducerFunctions[name];
-    databaseFactory.registerReducer(name, value.reducer);
-    databaseFactory.registerActionTypes(value.actionTypes)
-    databaseFactory.registerActionCreators(value.actionCreators)
-}
+dataHandlers.forEach(function(dataHandler){
+    databaseFactory.registerDataHandler(dataHandler)
+})
 
 export function getActionCreators(){
     return databaseFactory.getActionCreators();

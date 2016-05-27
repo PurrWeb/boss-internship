@@ -28,6 +28,11 @@ export default class DatabaseFactory {
         }
         this.reducers[name] = reducerFunction;
     }
+    registerDataHandler(dataHandler){
+        this.registerReducer(dataHandler.collectionName, dataHandler.reducer);
+        this.registerActionTypes(dataHandler.actionTypes)
+        this.registerActionCreators(dataHandler.actionCreators)
+    }
     validate(){
 
     }

@@ -75,7 +75,7 @@ function genericLoadInitialRotaAppState(viewData, pageOptions){
             pageOptions,
             rotas: viewData.rota.rotas,
             staffTypes: viewData.rota.staff_types,
-            shifts: viewData.rota.rota_shifts,
+            rotaShifts: viewData.rota.rota_shifts,
             staffMembers: viewData.rota.staff_members,
             venues: viewData.rota.venues,
             holidays: viewData.rota.holidays
@@ -89,12 +89,13 @@ export function loadInitialClockInOutAppState(viewData) {
         venue: {id: viewData.page_data.rota_venue_id}
     };
 
+
     return function(dispatch){
         dispatch(getInititalLoadActions({
             staffMembers: viewData.staff_members,
             staffTypes: viewData.staff_types,
             clockInStatuses: viewData.clock_in_statuses,
-            shifts: viewData.rota_shifts,
+            rotaShifts: viewData.rota_shifts,
             rotas: viewData.rotas,
             venues: viewData.venues,
             pageOptions
@@ -153,8 +154,8 @@ function getInititalLoadActions(initialLoadData){
         "staffTypes": {
             processFunction: backendData.processStaffTypeObject
         },
-        "shifts": {
-            processFunction: backendData.processShiftObject
+        "rotaShifts": {
+            processFunction: backendData.processRotaShiftObject
         },
         "clockInStatuses": {
             processFunction: backendData.processClockInStatusObject,

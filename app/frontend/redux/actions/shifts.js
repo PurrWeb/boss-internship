@@ -42,9 +42,9 @@ export const addRotaShift = createApiRequestAction({
             }
         },
         getSuccessActionData: function(responseData, requestOptions, getState) {
-            responseData = backendData.processShiftObject(responseData);
+            responseData = backendData.processRotaShiftObject(responseData);
 
-            // processShiftObject will set rota.clientId based on the rota's server id
+            // processRotaShiftObject will set rota.clientId based on the rota's server id
             // However, if the rota object was created on the client before it had
             // a server id, we want to use the original clientId
             var rotaDate = new RotaDate({shiftStartsAt: responseData.starts_at});
@@ -88,7 +88,7 @@ export const updateRotaShift = createApiRequestAction({
             return shift;
         },
         getSuccessActionData(responseData){
-            var shift = backendData.processShiftObject(responseData);
+            var shift = backendData.processRotaShiftObject(responseData);
             return {shift};
         }
     }),

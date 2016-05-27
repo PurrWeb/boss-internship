@@ -88,7 +88,7 @@ describe('Venue Rota Integration Test', function() {
                 id: 10,
                 staff_member: {id: JOHN_KITCHEN_ID},
                 start_date: "2016-03-12",
-                ends_date: "2016-03-13",
+                end_date: "2016-03-13",
             }]
         },
         rotaVenueId: 3,

@@ -63,7 +63,7 @@ class ClockInOutView extends Component {
 }
 
 function mapStateToProps(state) {
-    if (_.values(state.staff).length === 0) {
+    if (_.values(state.staffMembers).length === 0) {
         return {hadLoadedAppData: false};
     }
     var rota = selectRotaOnClockInOutPage(state);
@@ -75,10 +75,10 @@ function mapStateToProps(state) {
         userIsManager,
         userIsSupervisor,
         rota,
-        staffMembers: state.staff,
+        staffMembers: state.staffMembers,
         leaveManagerModeInProgress: selectLeaveManagerModeIsInProgress(state),
         venue: rota.venue.get(state.venues),
-        staffTypes: getStaffTypesWithStaffMembers(state.staffTypes, state.staff),
+        staffTypes: getStaffTypesWithStaffMembers(state.staffTypes, state.staffMembers),
         selectedStaffTypeClientId: state.clockInOutAppSelectedStaffType
     }
 }

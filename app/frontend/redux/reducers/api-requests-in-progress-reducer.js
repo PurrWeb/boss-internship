@@ -2,7 +2,7 @@ import _ from "underscore"
 import makeDataHandler from "./make-data-handler"
 import makeReducer from "./make-reducer"
 
-export default makeDataHandler("apiRequestInProgess", {
+export default makeDataHandler("apiRequestsInProgress", {
     API_REQUEST_START: handleAction,
     API_REQUEST_END: handleAction
 })

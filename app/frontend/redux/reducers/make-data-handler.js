@@ -43,6 +43,7 @@ export default function makeDataHandler(collectionName, actionHandlers, options)
     }
 
     return {
+        collectionName,
         reducer: makeReducer(actionHandlers, options),
         actionTypes,
         actionCreators
@@ -69,14 +70,6 @@ function getDefaultActionHandler(collectionName, genericHandlerInfo){
     ret.actionType = genericActions[genericHandlerInfo.action].getActionType(infoForGenerator)
     ret.handlerFunction = genericActions[genericHandlerInfo.action].makeHandlerFunction(infoForGenerator);
     return ret;
-}
-
-export function validateReducers(){
-    handledActionTypes.forEach(function(actionHandler){
-        if (!actionTypes[actionHandler.type]) {
-            throw Error("Trying to handle non-existent action " + actionHandler.type + " in " + actionHandler.collectionName)
-        }
-    })
 }
 
 var genericActions = {

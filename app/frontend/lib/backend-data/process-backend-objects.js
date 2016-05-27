@@ -98,7 +98,7 @@ export function processHoursAcceptanceBreakObject(hoursAcceptanceBreak){
 }
 
 
-export function processShiftObject(shift){
+export function processRotaShiftObject(shift){
     shift = processBackendObject(shift);
 
     return Object.assign({}, shift, {
@@ -142,7 +142,7 @@ export function processClockInDayObject(clockInDay){
 export function processStaffTypeRotaOverviewObject(obj){
     return {
         date: new Date(obj.date),
-        rota_shifts: obj.rota_shifts.map(processShiftObject),
+        rota_shifts: obj.rota_shifts.map(processRotaShiftObject),
         rotas: obj.rotas.map(processRotaObject),
         staff_members: obj.staff_members.map(processStaffMemberObject),
         staff_types: obj.staff_types.map(processStaffTypeObject),
@@ -153,7 +153,7 @@ export function processStaffTypeRotaOverviewObject(obj){
 export function processVenueRotaOverviewObject(obj){
     return {
         rota: processRotaObject(obj.rota),
-        rota_shifts: obj.rota_shifts.map(processShiftObject),
+        rota_shifts: obj.rota_shifts.map(processRotaShiftObject),
         staff_members: obj.staff_members.map(processStaffMemberObject),
         staff_types: obj.staff_types.map(processStaffTypeObject)
     }

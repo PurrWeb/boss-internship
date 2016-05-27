@@ -2,8 +2,8 @@ import _ from "underscore"
 import utils from "~lib/utils"
 import makeDataHandler from "./make-data-handler"
 
-export default makeDataHandler("shifts", {
-    REPLACE_ALL_SHIFTS: {
+export default makeDataHandler("rotaShifts", {
+    REPLACE_ALL_ROTA_SHIFTS: {
         action: "replaceAll"
     },
     ADD_SHIFT_SUCCESS: function(state, action){

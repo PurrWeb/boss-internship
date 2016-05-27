@@ -22,7 +22,7 @@ export default class HolidayReportApp extends Component {
         this.store = createStore(function(){
             return {
                 staffTypes: utils.indexByClientId(staffTypes),
-                staff: utils.indexByClientId(staffMembers),
+                staffMembers: utils.indexByClientId(staffMembers),
                 holidays: utils.indexByClientId(holidays),
                 venues: utils.indexByClientId(venues),
                 pageOptions: pageData

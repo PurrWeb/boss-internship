@@ -25,13 +25,12 @@ class ClockInOutStaffFinder extends Component {
             staffTypes={this.props.staffTypes}
             staff={this.props.staff}
             filterOverrides={filterOverrides} />
-
     }
 }
 
 function mapStateToProps(state){
     return {
-        staff: state.staff,
+        staff: state.staffMembers,
         staffTypes: state.staffTypes
     }
 }
