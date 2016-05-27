@@ -59,7 +59,10 @@ class DeleteStaffMember
   end
 
   def disable_upcoming_holidays
-    staff_member_holidays = Holiday.where(staff_member: staff_member)
+    staff_member_holidays = Holiday.
+      in_state(:enabled).
+      where(staff_member: staff_member)
+
     upcoming_holidays = UpcomingQuery.new(
       now: now.to_date,
       start_column_name: 'start_date',
