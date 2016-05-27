@@ -286,6 +286,9 @@ export function selectClockInDayDetails(state, clockInDay){
     hoursAcceptancePeriods = hoursAcceptancePeriods.map(function(hoursAcceptancePeriod){
         return addBreaksToHoursAcceptancePeriod(hoursAcceptancePeriod, state.hoursAcceptanceBreaks)
     })
+    hoursAcceptancePeriods.forEach(function(hoursAcceptancePeriod){
+        hoursAcceptancePeriod.updateIsInProgress = selectEditHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod)
+    })
 
     var rota = getRotaFromDateAndVenue({
         dateOfRota: clockInDay.date,
@@ -313,4 +316,31 @@ export function selectClockInDayDetails(state, clockInDay){
         rotaedShifts,
         clockInNotes
     }
+}
+
+export function selectEditHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod){
+    return selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) ||
+        selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod)
+}
+
+function selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
+    var requests = state.apiRequestsInProgress.ACCEPT_HOURS_ACCEPTANCE_PERIOD;
+
+    if (!requests || requests.length === 0) {
+        return false;
+    }
+    return _.any(requests, function(requestData){
+        return requestData.hoursAcceptancePeriod.clientId == hoursAcceptancePeriod.clientId;
+    });
+}
+
+function selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
+    var requests = state.apiRequestsInProgress.UNACCEPT_HOURS_ACCEPTANCE_PERIOD;
+    if (!requests || requests.length === 0) {
+        return false;
+    }
+
+    return _.any(requests, function(requestData){
+        return requestData.hoursAcceptancePeriod.clientId == hoursAcceptancePeriod.clientId;
+    });
 }

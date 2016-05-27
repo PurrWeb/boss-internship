@@ -8,6 +8,7 @@ import Validation from "~lib/validation"
 import ErrorMessage from "~components/error-message"
 import getHoursPeriodStats from "~lib/get-hours-period-stats"
 import StaffTypeBadge from "~components/staff-type-badge"
+import Spinner from "~components/spinner"
 
 const TIME_GRANULARITY_IN_MINUTES = 1;
 
@@ -449,8 +450,13 @@ class HoursAcceptancePeriodListItem extends React.Component {
         }).isValid;
     }
     getAcceptUi(){
+        var hoursAcceptancePeriod = this.props.hoursAcceptancePeriod
+        if (hoursAcceptancePeriod.updateIsInProgress) {
+            return <Spinner />
+        }
+
         var stats = getHoursPeriodStats({
-            denormalizedHoursPeriods: [this.props.hoursAcceptancePeriod]
+            denormalizedHoursPeriods: [hoursAcceptancePeriod]
         });
         if (!this.isAccepted()) {
             var classes = ["btn"]
@@ -460,10 +466,11 @@ class HoursAcceptancePeriodListItem extends React.Component {
                 classes.push("btn-default")
                 classes.push("disabled")
             }
+
             return <div>
                 <a
                     onClick={() => this.props.boundActions.acceptHoursAcceptancePeriod({
-                        hoursAcceptancePeriod: this.props.hoursAcceptancePeriod
+                        hoursAcceptancePeriod
                     })}
                     className={classes.join(" ")} style={{marginTop: 4}}>
                     Accept {stats.hours}h
@@ -471,7 +478,7 @@ class HoursAcceptancePeriodListItem extends React.Component {
                 <br/><br/>
                 <a onClick={() => {
                     this.props.boundActions.deleteHoursAcceptancePeriod({
-                        hoursAcceptancePeriod: this.props.hoursAcceptancePeriod
+                        hoursAcceptancePeriod
                     })
                 }}>
                     Delete
