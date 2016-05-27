@@ -1,6 +1,6 @@
-import makeReducer from "./make-reducer"
+import makeDataHandler from "./make-data-handler"
 
-export default makeReducer({
+export default makeDataHandler("apiKey", {
     SET_API_KEY: function(state, action){
         return action.apiKey;
     }

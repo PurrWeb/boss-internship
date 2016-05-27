@@ -1,9 +1,11 @@
 import _ from "underscore"
 import utils from "~lib/utils"
-import makeReducer, {makeHandlerForGenericReplaceAction} from "./make-reducer"
+import makeDataHandler from "./make-data-handler"
 
-export default makeReducer({
-    REPLACE_ALL_SHIFTS: makeHandlerForGenericReplaceAction("shifts"),
+export default makeDataHandler("shifts", {
+    REPLACE_ALL_SHIFTS: {
+        action: "replaceAll"
+    },
     ADD_SHIFT_SUCCESS: function(state, action){
         return Object.assign({}, state, {[action.shift.clientId]: action.shift })
     },

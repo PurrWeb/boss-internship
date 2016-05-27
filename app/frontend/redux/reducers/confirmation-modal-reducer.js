@@ -1,6 +1,6 @@
-import makeReducer from "./make-reducer"
+import makeDataHandler from "./make-data-handler"
 
-export default makeReducer({
+export default makeDataHandler("confirmationModal", {
     SHOW_CONFIRMATION_MODAL: function(state, action){
         return action.payload;
     },

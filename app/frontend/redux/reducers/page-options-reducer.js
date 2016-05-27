@@ -1,6 +1,6 @@
-import makeReducer from "./make-reducer"
+import makeDataHandler from "./make-data-handler"
 
-export default makeReducer({
+export default makeDataHandler("pageOptions", {
         SET_PAGE_OPTIONS: function(state, action){
             return action.pageOptions
         }

@@ -1,8 +1,8 @@
 import _ from "underscore"
-import makeReducer from "./make-reducer"
+import makeDataHandler from "./make-data-handler"
 
 var initialState = {};
-export default makeReducer({
+export default makeDataHandler("apiRequestInProgess", {
     API_REQUEST_START: handleAction,
     API_REQUEST_END: handleAction
 })
@@ -14,7 +14,7 @@ function handleAction(state, action) {
     });
 }
 
-var requestTypeReducer = makeReducer({
+var requestTypeReducer = makeDataHandler("apiRequestsInProgressByRequestType", {
     API_REQUEST_START: function(state, action){
         var value =  _.clone(action);
         delete value["type"];

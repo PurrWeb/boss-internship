@@ -1,5 +1,5 @@
 import oFetch from "o-fetch"
-import makeReducer from "./make-reducer"
+import makeDataHandler from "./make-data-handler"
 
 var initialState = {
     needsUpdate: false,
@@ -13,7 +13,7 @@ export default function weeklyRotaForecastReducer(state=initialState, action){
     }
 }
 
-var forecast =  makeReducer({
+var forecast =  makeDataHandler("weeklyRotaForecast", {
     REPLACE_WEEKLY_ROTA_FORECAST: function(state, action){
         return oFetch(action, "weeklyRotaForecast");
     },
@@ -25,7 +25,7 @@ var forecast =  makeReducer({
     }
 })
 
-var needsUpdate = makeReducer({
+var needsUpdate = makeDataHandler("weeklyRotaForecastNeedsUpdate", {
     REPLACE_WEEKLY_ROTA_FORECAST: function(){
         return false;
     },

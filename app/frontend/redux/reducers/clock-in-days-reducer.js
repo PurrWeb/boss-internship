@@ -1,5 +1,7 @@
-import makeReducer, {makeHandlerForGenericReplaceAction} from "./make-reducer"
+import makeDataHandler from "./make-data-handler"
 
-export default makeReducer({
-    "REPLACE_ALL_CLOCK_IN_DAYS": makeHandlerForGenericReplaceAction("clockInDays")
+export default makeDataHandler("clockInDays", {
+    "REPLACE_ALL_CLOCK_IN_DAYS": {
+        action: "replaceAll"
+    }
 })

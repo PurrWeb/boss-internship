@@ -1,10 +1,12 @@
 import utils from "~lib/utils"
 import _ from "underscore"
 import oFetch from "o-fetch"
-import makeReducer, {makeHandlerForGenericReplaceAction} from "./make-reducer"
+import makeDataHandler from "./make-data-handler"
 
-export default makeReducer({
-    REPLACE_ALL_ROTAS: makeHandlerForGenericReplaceAction("rotas"),
+export default makeDataHandler("rotas", {
+    REPLACE_ALL_ROTAS: {
+        action: "replaceAll"
+    },
     UPDATE_ROTA_STATUS_SUCCESS: function(state, action) {
         var [rotaClientId, status] = oFetch(action, "rotaClientId", "status");
         var newState = {...state};

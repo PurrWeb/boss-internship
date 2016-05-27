@@ -1,6 +1,6 @@
-import makeReducer from "./make-reducer"
+import makeDataHandler from "./make-data-handler"
 
-export default makeReducer({
+export default makeDataHandler("componentErrors", {
 	SET_COMPONENT_ERROR: function(state, action) {
 		if (action.componentId === undefined) {
 			return state;
