@@ -15,9 +15,13 @@ export default makeDataHandler("hoursAcceptancePeriods", {
     UPDATE_HOURS_ACCEPTANCE_PERIOD: {
         action: "update"
     },
-    ACCEPT_HOURS_ACCEPTANCE_PERIOD_SUCCESS: {
-        action: "update",
-        generateActionCreator: false
+    ACCEPT_HOURS_ACCEPTANCE_PERIOD_SUCCESS: function(state, action){
+        state = _(state).omit(function(hoursAcceptancePeriod){
+            return hoursAcceptancePeriod.clientId == action.oldHoursAcceptancePeriod.clientId;
+        });
+        var {newHoursAcceptancePeriod} = action;
+        state[newHoursAcceptancePeriod.clientId] = newHoursAcceptancePeriod;
+        return state;
     },
     UNACCEPT_HOURS_ACCEPTANCE_PERIOD_SUCCESS: {
         action: "update",

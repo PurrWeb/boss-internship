@@ -19,6 +19,7 @@ import rotaForecasts from "./reducers/rota-forecasts-reducer"
 import weeklyRotaForecast from "./reducers/weekly-rota-forecast-reducer"
 import confirmationModal from "./reducers/confirmation-modal-reducer"
 import userActionConfirmationMessages from "./reducers/user-action-confirmation-messages-reducer"
+import hoursAcceptanceBreaks from "./reducers/hours-acceptance-breaks"
 import clockInDays from "./reducers/clock-in-days-reducer"
 import apiKey from "./reducers/api-key"
 import {makeDefaultDataHandler, validateReducers} from "./reducers/make-data-handler"
@@ -44,8 +45,8 @@ var rootReducer = combineReducers({
     clockInDays,
     clockInPeriods: makeDefaultDataHandler("clockInPeriods"),
     clockInBreaks: makeDefaultDataHandler("clockInBreaks"),
-    hoursAcceptanceBreaks: makeDefaultDataHandler("hoursAcceptanceBreaks"),
-    hoursAcceptancePeriods: hoursAcceptancePeriods,
+    hoursAcceptanceBreaks,
+    hoursAcceptancePeriods,
     clockInEvents: makeDefaultDataHandler("clockInEvents"),
     clockInNotes: makeDefaultDataHandler("clockInNotes"),
     clockInReasons: makeDefaultDataHandler("clockInReasons")
