@@ -1,3 +1,3 @@
-import database from "./database"
+import {getActionCreators} from "../database"
 
-export default database.getActionCreators();
+export default getActionCreators();

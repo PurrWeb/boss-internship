@@ -4,9 +4,9 @@ import _ from "underscore"
 import {batch, batching} from "redux-batch-middleware"
 import utils from "~lib/utils"
 
-import {databaseFactory} from "~redux/actions/database"
+import {getRootReducer} from "~redux/database"
 
-var rootReducer = databaseFactory.getRootReducer();
+var rootReducer = getRootReducer();
 
 var createStoreWithMiddleware = compose(
 	// Redux thunk lets us dispatch asynchronous actions, for example

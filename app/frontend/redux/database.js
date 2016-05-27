@@ -1,16 +1,17 @@
 import utils from "~lib/utils"
-import {apiRequestActionTypes} from "../create-api-request-action"
-import * as rotaActions from "./rotas"
-import * as confirmationMessageActions from "./user-action-confirmation-messages"
-import * as rotaForecastActions from "./rota-forecasts"
-import * as confirmationModalActions from "./confirmation-modal"
-import * as shiftActions from "./shifts"
-import * as appDataActions from "./app-data"
-import * as staffMemberActions from "./staff-members"
-import * as clockingActions from "./clocking"
-import * as hoursAcceptancePeriodActions from "./hours-acceptance-periods"
-import * as miscActions from "./misc"
-import DatabaseFactory from "../database-factory"
+import {apiRequestActionTypes} from "./create-api-request-action"
+import dataHandlersOrReducerFunctions from "./data-handler-registration"
+import * as rotaActions from "./actions/rotas"
+import * as confirmationMessageActions from "./actions/user-action-confirmation-messages"
+import * as rotaForecastActions from "./actions/rota-forecasts"
+import * as confirmationModalActions from "./actions/confirmation-modal"
+import * as shiftActions from "./actions/shifts"
+import * as appDataActions from "./actions/app-data"
+import * as staffMemberActions from "./actions/staff-members"
+import * as clockingActions from "./actions/clocking"
+import * as hoursAcceptancePeriodActions from "./actions/hours-acceptance-periods"
+import * as miscActions from "./actions/misc"
+import DatabaseFactory from "./database-factory"
 
 var databaseFactory = new DatabaseFactory();
 
@@ -51,7 +52,7 @@ registerActionsObject(staffMemberActions)
 registerActionsObject(hoursAcceptancePeriodActions)
 registerActionsObject(miscActions)
 
-import dataHandlersOrReducerFunctions from "../data-handler-registration"
+
 
 for (var name in dataHandlersOrReducerFunctions) {
     var value = dataHandlersOrReducerFunctions[name];
@@ -80,10 +81,10 @@ export function getActionCreators(){
     return databaseFactory.getActionCreators();
 }
 
-export default databaseFactory
+export function getRootReducer(){
+    return databaseFactory.getRootReducer()
+}
 
 window.debug = window.debug || {};
 window.debug.actionCreators = databaseFactory.getActionCreators()
 window.debug.actionTypes = databaseFactory.getActionTypes();
-
-export {databaseFactory}
