@@ -151,7 +151,7 @@ var genericActions = {
         makeHandlerFunction({actionNames, collectionName}){
             return function(state, action){
                 var itemToDelete = oFetch(action, actionNames.singleItemName);
-                return _(state).reject(function(item){
+                return _(state).omit(function(item){
                     return itemToDelete.clientId === item.clientId;
                 })
             }

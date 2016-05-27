@@ -100,7 +100,7 @@ export default class StaffDay extends React.Component {
                                 <StaffDayNotes notes={this.props.clockInNotes} />
                             </div>
                         </div>
-                        <AcceptedHoursList
+                        <HoursAcceptancePeriodList
                             clockInReasons={this.props.clockInReasons}
                             rotaDate={this.props.rotaDate}
                             clockInDay={this.props.clockInDay}
@@ -325,7 +325,7 @@ class BreakList extends React.Component {
 
 class ReasonSelector extends React.Component {
     render(){
-        var {reasonClientId, reasonText, clockInReasons} = this.props;
+        var {reasonClientId, reasonNote, clockInReasons} = this.props;
         var selectedReason = _(clockInReasons).find({clientId: reasonClientId});
 
         var showTextArea = selectedReason.title === "Other";
@@ -359,18 +359,18 @@ class ReasonSelector extends React.Component {
                         return;
                     }
                     this.triggerChange({
-                        reasonText: e.target.value
+                        reasonNote: e.target.value
                     })
                 }}
                 readonly={this.props.readonly}
                 style={{display: showTextArea ? "block" : "none"}}
-                value={reasonText} />
+                value={reasonNote} />
         </div>
     }
     triggerChange(dataToUpdate){
         var newData = {
             reasonClientId: this.props.reasonClientId,
-            reasonText: this.props.reasonText
+            reasonNote: this.props.reasonNote
         }
         _.extend(newData, dataToUpdate);
         newData.reason = this.props.clockInReasons[newData.reasonClientId]
@@ -379,7 +379,7 @@ class ReasonSelector extends React.Component {
     }
 }
 
-class AcceptedHoursListItem extends React.Component {
+class HoursAcceptancePeriodListItem extends React.Component {
     render(){
         var hoursAcceptancePeriod = this.props.hoursAcceptancePeriod
         var readonly = this.isAccepted();
@@ -423,11 +423,11 @@ class AcceptedHoursListItem extends React.Component {
                         readonly={readonly}
                         clockInReasons={this.props.clockInReasons}
                         reasonClientId={hoursAcceptancePeriod.reason.clientId}
-                        reasonText={hoursAcceptancePeriod.reason_note}
-                        onChange={({reasonText, reason}) => {
+                        reasonNote={hoursAcceptancePeriod.reason_note}
+                        onChange={({reasonNote, reason}) => {
                             this.props.boundActions.updateHoursAcceptancePeriod({
                                 clientId: hoursAcceptancePeriod.clientId,
-                                reason_note: reasonText,
+                                reason_note: reasonNote,
                                 reason: reason
                             })
                         }}
@@ -498,7 +498,7 @@ class AcceptedHoursListItem extends React.Component {
     }
 }
 
-class AcceptedHoursList extends React.Component {
+class HoursAcceptancePeriodList extends React.Component {
     render(){
         var markAsDoneButton = null;
         if (this.areAllShiftsAccepted()) {
@@ -522,7 +522,7 @@ class AcceptedHoursList extends React.Component {
                             padding: 5,
                             marginBottom: 5
                         }}>
-                        <AcceptedHoursListItem
+                        <HoursAcceptancePeriodListItem
                             boundActions={this.props.boundActions}
                             clockInBreaks={this.props.clockInBreaks}
                             rotaDate={this.props.rotaDate}
