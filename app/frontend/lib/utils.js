@@ -18,6 +18,9 @@ var utils =  {
     stringStartsWith: function(string, prefix) {
         return string.slice(0, prefix.length) == prefix;
     },
+    stringContains: function(string, maybeContainedString){
+        return string.indexOf(maybeContainedString) !== -1
+    },
     containNumberWithinRange(number, range){
         var [min, max] = range;
         if (number < min) {

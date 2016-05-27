@@ -1,10 +1,7 @@
 import createApiRequestAction from "../create-api-request-action"
 import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-request"
 import oFetch from "o-fetch"
-
-function objectHasBeenSavedToBackend(obj){
-    return !isNaN(parseInt(obj.serverId, 10))
-}
+import {objectHasBeenSavedToBackend} from "~lib/backend-data/process-backend-object"
 
 export const deleteHoursAcceptancePeriod = createApiRequestAction({
     requestType: "DELETE_HOURS_ACCEPTANCE_PERIOD",

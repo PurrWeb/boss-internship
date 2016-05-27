@@ -1,4 +1,7 @@
 import _ from "underscore"
+import utils from "~lib/utils"
+
+const unpersistedObjectPrefix =  "UNPERSISTED_OBJECT_"
 
 export function getClientId(serverId){
     if (serverId === undefined){
@@ -92,7 +95,7 @@ export function processBackendObject(backendObj){
     var obj = {...backendObj};
 
     if (obj.id === null){
-        obj.id = "UNPERSISTED_OBJECT_" + _.uniqueId();
+        obj.id = unpersistedObjectPrefix + _.uniqueId();
     }
 
     setObjectIds(obj);
@@ -106,4 +109,8 @@ export {processObjectLinks}
 
 export function objectHasBeenProcessed(backendObj){
     return backendObj.clientId !== undefined
+}
+
+export function objectHasBeenSavedToBackend(obj){
+    return !utils.stringContains(obj.serverId.toString(), unpersistedObjectPrefix)
 }
