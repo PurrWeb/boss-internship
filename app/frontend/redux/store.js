@@ -4,7 +4,7 @@ import _ from "underscore"
 import {batch, batching} from "redux-batch-middleware"
 import utils from "~lib/utils"
 
-import {databaseFactory} from "~redux/actions"
+import {databaseFactory} from "~redux/actions/database"
 
 var rootReducer = databaseFactory.getRootReducer();
 

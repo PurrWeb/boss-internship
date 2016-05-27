@@ -8,7 +8,7 @@ import {
 import {
     setPageOptions
 } from "./misc"
-import {databaseFactory} from "./index"
+import {databaseFactory} from "./database"
 
 export function loadInitialRotaAppState(viewData) {
     var dayRota = getRotaFromDateAndVenue({

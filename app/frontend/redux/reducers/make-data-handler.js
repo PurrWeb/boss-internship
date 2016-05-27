@@ -53,7 +53,6 @@ export default function makeDataHandler(collectionName, actionHandlers, options)
             if (state === undefined){
                 state = usedOptions.initialState;
             }
-            console.log("handling action", action.type)
             if (action.type.indexOf("@@") !== -1){
                 // Internal Redux actions that should be ignored
                 // without throwin an exception
