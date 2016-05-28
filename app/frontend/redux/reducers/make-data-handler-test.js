@@ -16,4 +16,25 @@ describe("makeDataHandler", function(){
 
         expect(newState).toBe(15)
     })
+
+    it("Can create default action types and action creators and handled them", function(){
+        var dataHandler = makeDataHandler("users", {
+            ADD_USER: {
+                action: "add"
+            }
+        })
+
+        expect(dataHandler.actionTypes).toEqual(["ADD_USER"]);
+        expect(dataHandler.actionCreators.addUser).toNotBe(undefined);
+
+        var action = {
+            type: "ADD_USER",
+            user: {
+                clientId: 55,
+                name: "John"
+            }
+        }
+        var newState = dataHandler.reducer({}, action)
+        expect(newState[55].name).toBe("John")
+    })
 })

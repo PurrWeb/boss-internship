@@ -6,9 +6,6 @@ import * as backendData from "~lib/backend-data/process-backend-objects"
 
 var handledActionTypes = [];
 
-// makeDataHandler is generating a reducer, but default actions can also
-// create new actions
-
 export default function makeDataHandler(collectionName, actionHandlers, reducerOptions){
     if (typeof collectionName !== "string") {
         throw Error("No or invalid collection name provided to makeDataHandler for " + collectionName)
