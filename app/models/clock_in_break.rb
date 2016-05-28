@@ -4,4 +4,6 @@ class ClockInBreak < ActiveRecord::Base
   validates :clock_in_period, presence: true
   validates :starts_at, presence: true
   validates :ends_at, presence: true
+
+  include BreakTimeValidations
 end
