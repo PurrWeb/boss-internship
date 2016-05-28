@@ -9,18 +9,9 @@ var handledActionTypes = [];
 // makeDataHandler is generating a reducer, but default actions can also
 // create new actions
 
-export default function makeDataHandler(collectionName, actionHandlers, options){
+export default function makeDataHandler(collectionName, actionHandlers, reducerOptions){
     if (typeof collectionName !== "string") {
         throw Error("No or invalid collection name provided to makeDataHandler for " + collectionName)
-    }
-
-    // We keep track of all action types that are used so we can
-    // later validate that all those actions actually exist
-    for (var actionHandlerActionType in actionHandlers){
-        handledActionTypes.push({
-            type: actionHandlerActionType,
-            collectionName
-        });
     }
 
     var actionTypes = [];
@@ -44,9 +35,11 @@ export default function makeDataHandler(collectionName, actionHandlers, options)
 
     return {
         collectionName,
-        reducer: makeReducer(actionHandlers, options),
+        reducer: makeReducer(actionHandlers, reducerOptions),
         actionTypes,
-        actionCreators
+        actionCreators,
+        // return handled types to allow validation later on
+        handledActionTypes: _.keys(actionHandlers)
     }
 }
 

@@ -1,5 +1,5 @@
 import expect from "expect"
-import makeDataHandler, {validateReducers} from "./make-data-handler"
+import makeDataHandler from "./make-data-handler"
 
 describe("makeDataHandler", function(){
     it("Creates a reducer that handles the correct action", function(){
