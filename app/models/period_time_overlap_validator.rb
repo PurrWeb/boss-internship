@@ -19,7 +19,8 @@ class PeriodTimeOverlapValidator
       query = InRangeQuery.new(
         relation: relation,
         start_value: starts_at,
-        end_value: ends_at
+        end_value: ends_at,
+        include_boundaries: false
       ).all
 
       if period.persisted?
