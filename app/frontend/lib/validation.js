@@ -101,7 +101,7 @@ var validation = {
             messages
         }
     },
-    validateHoursPeriodsDontOverlap({hoursPeriods}){
+    validateHoursPeriodsDontOverlap(hoursPeriods){
         var doOverlap = doIntervalsOverlap(hoursPeriods)
 
         var messages = [];
@@ -114,7 +114,7 @@ var validation = {
             messages
         }
     },
-    validateHoursPeriod({hoursPeriod}){
+    validateHoursPeriod(hoursPeriod){
         var isValid = true;
         var breaks = hoursPeriod.breaks;
         var breaksValidationResult = validation.validateBreaks({
@@ -136,22 +136,26 @@ var validation = {
             }
         })
 
+        if(hoursPeriod.starts_at > hoursPeriod.ends_at) {
+            isValid = false;
+        }
+
         return {
             messages: [],
             isValid
         }
     },
-    validateHoursPeriods({hoursPeriods, clockInBreaks}) {
+    validateHoursPeriods(hoursPeriods) {
         // hoursPeriods are either hoursAcceptancePeriods or clockInPeriods
         var isValid = true;
 
-        if (!validation.validateHoursPeriodsDontOverlap({hoursPeriods}).isValid
+        if (!validation.validateHoursPeriodsDontOverlap(hoursPeriods).isValid
         ) {
             isValid = false;
         }
 
         hoursPeriods.forEach(function(hoursPeriod){
-            if (!validation.validateHoursPeriod({hoursPeriod, clockInBreaks}).isValid) {
+            if (!validation.validateHoursPeriod(hoursPeriod).isValid) {
                 isValid = false;
             }
         })

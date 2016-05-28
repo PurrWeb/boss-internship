@@ -20,10 +20,7 @@ export default class StaffDay extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps){
-        if (!Validation.validateHoursPeriods({
-            hoursPeriods: nextProps.hoursAcceptancePeriods,
-            clockInBreaks: nextProps.clockInBreaks
-        }).isValid) {
+        if (!Validation.validateHoursPeriods(nextProps.hoursAcceptancePeriods).isValid) {
             return; // don't try to display invalid data on the chart
         }
         this.setState({
@@ -445,10 +442,7 @@ class HoursAcceptancePeriodListItem extends React.Component {
         return this.props.hoursAcceptancePeriod.status !== "in_progress";
     }
     isValid(){
-        return Validation.validateHoursPeriod({
-            hoursPeriod: this.props.hoursAcceptancePeriod,
-            clockInBreaks: this.props.clockInBreaks
-        }).isValid;
+        return Validation.validateHoursPeriod(this.props.hoursAcceptancePeriod).isValid;
     }
     getAcceptUi(){
         var hoursAcceptancePeriod = this.props.hoursAcceptancePeriod
@@ -518,9 +512,7 @@ class HoursAcceptancePeriodList extends React.Component {
             </button>
         }
 
-        var intervalsOverlap = Validation.validateHoursPeriodsDontOverlap({
-            hoursPeriods: this.props.hoursAcceptancePeriods
-        })
+        var intervalsOverlap = Validation.validateHoursPeriodsDontOverlap(this.props.hoursAcceptancePeriods)
 
         return <div>
             {this.props.hoursAcceptancePeriods.map(

@@ -59,3 +59,47 @@ describe("Validation.validateBreaksDontOverlap", function(){
         shouldBreaksOverlap(breaks, true);
     })
 })
+
+describe("Validation.validateHoursPeriod", function(){
+    it("Marks a valid hours period as valid", function(){
+        var hoursPeriod = {
+            starts_at: new Date(2016,0,1,18),
+            ends_at: new Date(2016,0,1,20),
+            breaks: [{
+                starts_at: new Date(2016,0,1,19),
+                ends_at: new Date(2016,0,1,19,30),
+            }]
+        }
+
+        var validationResult = Validation.validateHoursPeriod(hoursPeriod)
+        expect(validationResult.isValid).toBe(true)
+    });
+
+    it("Validates that the hours periods ends after the start time", function(){
+        var hoursPeriod = {
+            starts_at: new Date(2016,0,1,18),
+            ends_at: new Date(2016,0,1,17),
+            breaks: []
+        }
+
+        var validationResult = Validation.validateHoursPeriod(hoursPeriod)
+        expect(validationResult.isValid).toBe(false)
+    });
+})
+
+describe("Validation.validateHoursPeriods", function(){
+    it("Marks the hours periods as invalid if they overlap", function(){
+        var hoursPeriods = [{
+            starts_at: new Date(2016,0,1,15),
+            ends_at: new Date(2016,0,1,18),
+            breaks: []
+        },
+        {
+            starts_at: new Date(2016,0,1,16),
+            ends_at: new Date(2016,0,1,20),
+            breaks: []
+        }]
+        
+        expect(Validation.validateHoursPeriods(hoursPeriods).isValid).toBe(false)
+    })
+})
