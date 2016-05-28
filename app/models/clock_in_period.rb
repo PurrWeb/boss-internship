@@ -6,6 +6,7 @@ class ClockInPeriod < ActiveRecord::Base
   has_many :clocking_events, through: :clock_in_period_events
   has_many :clock_in_breaks
 
+  validates_associated :clock_in_breaks
   validates :clock_in_day, presence: true
   validates :creator, presence: true
   validates :starts_at, presence: true

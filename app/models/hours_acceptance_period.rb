@@ -7,6 +7,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   belongs_to :creator, polymorphic: true
   has_many :hours_acceptance_breaks
 
+  validates_associated :hours_acceptance_breaks
   validates :starts_at, presence: true
   validates :ends_at, presence: true
   validates :clock_in_day, presence: true
