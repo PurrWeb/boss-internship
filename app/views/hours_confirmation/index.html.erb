@@ -1,0 +1,34 @@
+<h1>Hours Confirmations for <%= venue.name %> <%= date %></h1>
+
+<div class="container">
+</div>
+
+<script>
+  window.boss = {};
+
+  window.boss.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: venues } %>;
+  window.boss.clockInDays = <%= raw render partial: 'api/v1/shared/clock_in_days.json', locals: { clock_in_days: clock_in_days } %>;
+
+  window.boss.clockInPeriods = <%= raw render partial: 'api/v1/shared/clock_in_periods.json', locals: { clock_in_periods: clock_in_periods } %>;
+
+  window.boss.hoursAcceptancePeriods = <%= raw render partial: 'api/v1/shared/hours_acceptance_periods.json', locals: { hours_acceptance_periods: hours_acceptance_periods } %>;
+
+  window.boss.clockInEvents = <%= raw render partial: 'api/v1/shared/clocking_events.json', locals: { clocking_events: clocking_events } %>;
+
+  window.boss.rota_shifts = <%= raw render partial: 'api/v1/shared/rota_shifts.json', locals: { rota_shifts: rota_shifts } %>;
+
+  window.boss.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas } %>;
+
+  window.boss.clockInBreaks = <%= raw render partial: 'api/v1/shared/clock_in_breaks.json', locals: { clock_in_breaks: clock_in_breaks } %>;
+
+  window.boss.hoursAcceptanceBreaks = <%= raw render partial: 'api/v1/shared/hours_acceptance_breaks.json', locals: { hours_acceptance_breaks: hours_acceptance_breaks } %>;
+
+  window.boss.staffMembers = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
+
+  window.boss.staffTypes = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
+
+  window.boss.pageOptions = {
+    venue: { id: <%= venue.id %> },
+    date: "<%= date.iso8601 %>";
+  }
+</script>

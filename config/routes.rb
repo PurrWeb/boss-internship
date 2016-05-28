@@ -117,7 +117,7 @@ Rails.application.routes.draw do
 
   resources :api_keys, only: [:index, :create, :destroy]
 
-  resources :hours_confirmation, only: [] do
+  resources :hours_confirmation, only: [:index] do
     collection do
       get :current
     end
