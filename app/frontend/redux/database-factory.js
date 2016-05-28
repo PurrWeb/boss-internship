@@ -36,7 +36,7 @@ export default class DatabaseFactory {
         this.registerActionTypes(dataHandler.actionTypes)
         this.registerActionCreators(dataHandler.actionCreators)
     }
-    validateReducers(){
+    _validateReducers(){
         var catchAllActionType = "*";
 
         for (var collectionName in this._handledActionTypesByReducer){
@@ -45,24 +45,24 @@ export default class DatabaseFactory {
                 var typeWasRegistered = _(this._actionTypes).contains(actionType);
                 var typeIsCatchAll = actionType === "*"
                 if (!typeWasRegistered && !typeIsCatchAll){
-                    throw Error(`Trying to handled non-existent action type ${actionType} in reducer ${collectionName}`)
+                    throw Error(`Trying to handle non-existent action type ${actionType} in reducer ${collectionName}`)
                 }
             })
         }
     }
-    validate(){
-        this.validateReducers();
+    _validate(){
+        this._validateReducers();
     }
     getActionTypes(){
-        this.validate()
+        this._validate()
         return this._actionTypes
     }
     getActionCreators(){
-        this.validate();
+        this._validate();
         return this._actionCreators
     }
     getRootReducer(){
-        this.validate();
+        this._validate();
         return combineReducers(this._reducers)
     }
 }
