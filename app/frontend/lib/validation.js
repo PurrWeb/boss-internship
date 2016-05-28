@@ -102,9 +102,7 @@ var validation = {
         }
     },
     validateHoursPeriodsDontOverlap({hoursPeriods}){
-        var doOverlap = doIntervalsOverlap(
-            _.pluck(hoursPeriods, "clockInHours")
-        )
+        var doOverlap = doIntervalsOverlap(hoursPeriods)
 
         var messages = [];
         if (doOverlap){
