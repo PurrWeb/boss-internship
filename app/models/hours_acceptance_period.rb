@@ -12,6 +12,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   validates :clock_in_day, presence: true
   validates :creator, presence: true
   validates :status, inclusion: { in: STATES, message: 'is required' }
+  include PeriodTimeValidations
 
   def self.pending
     where(status: 'pending')
@@ -27,5 +28,13 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   def deleted?
     status == 'deleted'
+  end
+
+  def staff_member
+    clock_in_day.andand.staff_member
+  end
+
+  def date
+    clock_in_day.andand.date
   end
 end
