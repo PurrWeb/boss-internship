@@ -26,5 +26,12 @@ export default makeDataHandler("hoursAcceptancePeriods", {
     UNACCEPT_HOURS_ACCEPTANCE_PERIOD_SUCCESS: {
         action: "update",
         generateActionCreator: false
+    },
+    FORCE_STAFF_MEMBER_CLOCK_OUT_SUCCESS: {
+        action: "add",
+        generateActionCreator: false,
+        shouldIgnoreAction: function(action){
+            return action.hoursAcceptancePeriod === null;
+        }
     }
 })

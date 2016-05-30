@@ -26,7 +26,14 @@ export default function makeDataHandler(collectionName, actionHandlers, reducerO
             if (defaultHandler.actionType) {
                 actionTypes.push(defaultHandler.actionType)
             }
-            actionHandlers[actionHandlerActionType] = defaultHandler.handlerFunction
+            actionHandlers[actionHandlerActionType] = function(state, action){
+                if (handler.shouldIgnoreAction) {
+                    if (handler.shouldIgnoreAction(action)){
+                        return state;
+                    }
+                }
+                return defaultHandler.handlerFunction.apply(this, arguments)
+            }
         }
     }
 

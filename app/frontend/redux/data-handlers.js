@@ -18,7 +18,7 @@ import clockInDays from "./data-handlers/clock-in-days-reducer"
 import apiKey from "./data-handlers/api-key"
 import clockInBreaks from "./data-handlers/clock-in-breaks"
 import clockInPeriods from "./data-handlers/clock-in-periods"
-import {makeDefaultDataHandler} from "./reducers/make-data-handler"
+import {makeDefaultDataHandler} from "./data-handlers/make-data-handler"
 
 var dataHandlers = [
     makeDefaultDataHandler("staffMembers"),

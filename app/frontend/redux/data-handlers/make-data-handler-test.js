@@ -121,4 +121,28 @@ describe("makeDataHandler", function(){
 
         expect(dataHandler.reducer(initialState, action)).toEqual(expectedState)
     })
+
+    it("Doesn't attempt to handle an action if the bailIf method returns true", function(){
+        var dataHandler = makeDataHandler("users", {
+            ADD_USER: {
+                action: "add",
+                shouldIgnoreAction: function(action){
+                    return action.user === null;
+                }
+            }
+        })
+
+        var action = {
+            type: "ADD_USER",
+            user: null
+        }
+
+        var newState;
+
+        expect(function(){
+            newState = dataHandler.reducer({}, action);
+        }).toNotThrow();
+
+        expect(newState).toEqual({})
+    })
 })
