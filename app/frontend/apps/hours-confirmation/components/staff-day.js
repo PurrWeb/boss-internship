@@ -333,24 +333,38 @@ class BreakList extends React.Component {
 
 class ReasonSelector extends React.Component {
     render(){
-        var {reasonClientId, reasonNote, clockInReasons} = this.props;
-        var selectedReason = _(clockInReasons).find({clientId: reasonClientId});
+        var {reason, reasonNote, clockInReasons} = this.props;
+        var reasonIsSelected = reason !== null;
 
-        var showTextArea = selectedReason.title === "Other";
+        var showTextArea = reasonIsSelected && reason.title === "Other";
+        var noneSelectedId = "none-selected";
+
+        var reasonsPlusNoneOption = _.values(_.clone(clockInReasons));
+        reasonsPlusNoneOption.push({
+            clientId: noneSelectedId,
+            title: "None"
+        })
 
         var dropdown, dropdownSelectionString;
         if (this.props.readonly) {
             dropdownSelectionString = <div>
-                {selectedReason.title}
+                {reason.title}
             </div>
         } else {
             dropdown = <select
                 style={{marginBottom: 4}}
-                value={reasonClientId}
-                onChange={(e) => this.triggerChange({
-                    reasonClientId: e.target.value
-                })}>
-                {_.values(clockInReasons).map((reason) =>
+                value={reasonIsSelected ? reason.clientId : noneSelectedId}
+                onChange={(e) => {
+                    var reason;
+                    var selectedValue = e.target.value;
+                    if (selectedValue === noneSelectedId) {
+                        reason = null;
+                    } else {
+                        reason = clockInReasons[selectedValue]
+                    }
+                    this.triggerChange({reason});
+                }}>
+                {_.values(reasonsPlusNoneOption).map((reason) =>
                     <option value={reason.clientId} key={reason.clientId}>
                         {reason.title}
                     </option>
@@ -377,11 +391,10 @@ class ReasonSelector extends React.Component {
     }
     triggerChange(dataToUpdate){
         var newData = {
-            reasonClientId: this.props.reasonClientId,
+            reason: this.props.reason,
             reasonNote: this.props.reasonNote
         }
         _.extend(newData, dataToUpdate);
-        newData.reason = this.props.clockInReasons[newData.reasonClientId]
 
         this.props.onChange(newData)
     }
@@ -430,7 +443,7 @@ class HoursAcceptancePeriodListItem extends React.Component {
                     <ReasonSelector
                         readonly={readonly}
                         clockInReasons={this.props.clockInReasons}
-                        reasonClientId={hoursAcceptancePeriod.reason.clientId}
+                        reason={hoursAcceptancePeriod.reason}
                         reasonNote={hoursAcceptancePeriod.reason_note}
                         onChange={({reasonNote, reason}) => {
                             this.props.boundActions.updateHoursAcceptancePeriod({
