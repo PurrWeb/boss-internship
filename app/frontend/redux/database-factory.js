@@ -1,6 +1,13 @@
 import { combineReducers } from "redux"
 import _ from "underscore"
 
+/*
+    Collects action types, action creators and reducers and then
+    exports them.
+
+    When exporting it also validates that all handled action types
+    actually exist.
+*/
 export default class DatabaseFactory {
     constructor(){
         this._actionTypes = [];

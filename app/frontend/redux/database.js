@@ -1,3 +1,9 @@
+/*
+    This file creates all reduers, action types and action creators
+    that are required for the app and exports them.
+*/
+
+
 import utils from "~lib/utils"
 import {apiRequestActionTypes} from "./create-api-request-action"
 import dataHandlers from "./data-handlers"

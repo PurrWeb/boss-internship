@@ -6,8 +6,6 @@ import utils from "~lib/utils"
 
 import {getRootReducer} from "~redux/database"
 
-var rootReducer = getRootReducer();
-
 var createStoreWithMiddleware = compose(
 	// Redux thunk lets us dispatch asynchronous actions, for example
 	// actions that do an Ajax call before updating the state
@@ -19,10 +17,11 @@ var createStoreWithMiddleware = compose(
 	applyMiddleware(batch),
     // If available, connect to Redux DevTools
     window.devToolsExtension ? window.devToolsExtension() : f => f
-
 )(createStore);
 
 export function createBossStore(){
+	var rootReducer = getRootReducer();
+
     var store = createStoreWithMiddleware(batching(rootReducer));
     window.debug = window.debug || {};
     window.debug.store = store;
