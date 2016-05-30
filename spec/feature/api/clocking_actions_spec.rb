@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'feature/support/clocking_action_helper'
 
 RSpec.describe 'Clocking actions' do
   include Rack::Test::Methods
@@ -101,7 +102,7 @@ RSpec.describe 'Clocking actions' do
           creator: user
         )
 
-        create_initial_clock_in(
+        ClockingActionHelper.create_initial_clock_in(
           clock_in_day: clock_in_day,
           creator: staff_member,
           at: starts_at
@@ -136,7 +137,7 @@ RSpec.describe 'Clocking actions' do
           creator: staff_member
         )
 
-        create_initial_clock_in(
+        ClockingActionHelper.create_initial_clock_in(
           clock_in_day: clock_in_day,
           creator: staff_member,
           at: starts_at
@@ -218,7 +219,7 @@ RSpec.describe 'Clocking actions' do
           creator: staff_member
         )
 
-        create_initial_clock_in(
+        ClockingActionHelper.create_initial_clock_in(
           clock_in_day: clock_in_day,
           creator: staff_member,
           at: shift_start
@@ -226,14 +227,14 @@ RSpec.describe 'Clocking actions' do
 
         clock_in_period = ClockInPeriod.last
 
-        add_event_to_period(
+        ClockingActionHelper.add_event_to_period(
           clock_in_period: clock_in_period,
           event_type: 'start_break',
           creator: staff_member,
           at: break_start
         )
 
-        add_event_to_period(
+        ClockingActionHelper.add_event_to_period(
           clock_in_period: clock_in_period,
           event_type: 'end_break',
           creator: staff_member,
@@ -311,7 +312,7 @@ RSpec.describe 'Clocking actions' do
           creator: staff_member
         )
 
-        create_initial_clock_in(
+        ClockingActionHelper.create_initial_clock_in(
           clock_in_day: clock_in_day,
           creator: staff_member,
           at: starts_at
@@ -384,7 +385,7 @@ RSpec.describe 'Clocking actions' do
           creator: staff_member
         )
 
-        create_initial_clock_in(
+        ClockingActionHelper.create_initial_clock_in(
           clock_in_day: clock_in_day,
           creator: staff_member,
           at: starts_at
@@ -392,7 +393,7 @@ RSpec.describe 'Clocking actions' do
 
         last_clock_in_period = clock_in_day.clock_in_periods.last
 
-        add_event_to_period(
+        ClockingActionHelper.add_event_to_period(
           clock_in_period: last_clock_in_period,
           event_type: 'start_break',
           at: start_break_time,
@@ -511,36 +512,6 @@ RSpec.describe 'Clocking actions' do
   end
 
   private
-  def create_initial_clock_in(clock_in_day:, at:, creator:)
-    clock_in_period = ClockInPeriod.create!(
-      clock_in_day: clock_in_day,
-      starts_at: at,
-      creator: creator
-    )
-
-    event = ClockingEvent.create!(
-      venue: clock_in_day.venue,
-      staff_member: clock_in_day.staff_member,
-      at: at,
-      creator: creator,
-      event_type: 'clock_in'
-    )
-
-    clock_in_period.clocking_events << event
-  end
-
-  def add_event_to_period(clock_in_period:, event_type:, creator:, at:)
-    event = ClockingEvent.create!(
-      venue: clock_in_period.venue,
-      staff_member: clock_in_period.staff_member,
-      at: at,
-      creator: creator,
-      event_type: event_type
-    )
-
-    clock_in_period.clocking_events << event
-  end
-
   def app
     Rails.application
   end

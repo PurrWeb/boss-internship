@@ -1,8 +1,10 @@
 require 'rails_helper'
+require 'feature/support/clocking_action_helper'
 
 RSpec.describe 'Hours acceptance endpoints' do
   include Rack::Test::Methods
   include HeaderHelpers
+  include ActiveSupport::Testing::TimeHelpers
 
   let(:venue) { FactoryGirl.create(:venue) }
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
@@ -377,6 +379,64 @@ RSpec.describe 'Hours acceptance endpoints' do
     specify 'period is deleted' do
       delete(url, params)
       expect(hours_acceptance_period.reload).to be_deleted
+    end
+  end
+
+  describe '#clock_out' do
+    let(:url) { url_helpers.clock_out_api_v1_hours_acceptance_periods_path }
+    let(:params) do
+      {
+        staff_member_id: staff_member.id,
+        date: date,
+        venue_id: venue.id
+      }
+    end
+    let(:clock_in_day) do
+      ClockInDay.create!(
+        staff_member: staff_member,
+        venue: venue,
+        date: date,
+        creator: user
+      )
+    end
+
+    before do
+      clock_in_day
+      ClockingActionHelper.create_initial_clock_in(
+        clock_in_day: clock_in_day,
+        creator: user,
+        at: start_of_day
+      )
+    end
+
+    specify 'should be success' do
+      result = post(url, params)
+      expect(result.status).to eq(ok_status)
+    end
+
+    specify 'should set event to call time' do
+      call_time = start_of_day + 1.hour
+      travel_to call_time do
+        post(url, params)
+      end
+
+      event = ClockingEvent.last
+      expect(event.event_type).to eq('clock_out')
+      expect(event.at).to eq(call_time)
+    end
+
+    specify 'return clock in day json' do
+      response = nil
+
+      call_time = start_of_day + 1.hour
+      travel_to call_time do
+       response = post(url, params)
+      end
+
+      json = JSON.parse(response.body)
+      ["clock_in_day", "clock_in_notes", "clock_in_periods", "clock_in_breaks", "hours_acceptance_periods", "hours_acceptance_breaks"].each do |key|
+        expect(json.keys).to include(key)
+      end
     end
   end
 

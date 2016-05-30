@@ -102,6 +102,40 @@ module Api
         render json: {}, status: :ok
       end
 
+      def clock_out
+        staff_member = staff_member_from_params
+
+        authorize!(:perform_clocking_action, staff_member)
+
+        date = date_from_params
+        venue = venue_from_params
+
+        at = Time.current
+        if !RotaShiftDate.new(date).contains_time?(at)
+          at = RotaShiftDate.new(date).end_time
+        end
+
+        clock_in_day = ClockInDay.find_by!(
+          venue: venue,
+          date: date,
+          staff_member: staff_member
+        )
+
+        status = ClockInStatus.new(
+          clock_in_day: clock_in_day
+        )
+
+        status.transition_to!(
+          state: :clocked_out,
+          at: at,
+          requester: current_user
+        )
+
+        render locals: {
+          clock_in_day: clock_in_day
+        }
+      end
+
       private
       def hours_acceptance_period_from_params
         HoursAcceptancePeriod.find(params.fetch(:id))

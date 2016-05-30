@@ -119,6 +119,10 @@ class Ability
           !(fruit_order.done? || fruit_order.deleted?) &&
           can_update_fruit_order?(user, fruit_order)
       end
+
+      can :perform_clocking_action, StaffMember do |staff_member|
+        can_edit_staff_member?(user, staff_member)
+      end
     end
 
     #
