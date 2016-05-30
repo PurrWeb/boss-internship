@@ -14,36 +14,33 @@ It dispatches the following actions:
 - SET_COMPONENT_ERROR to assign the API error message to a component
 - {requestType}_SUCCESS for the individual reducers to handle successful data updates.
 
-Use errorHandlingComponent to specify which component should receive the error. Use
-requestSourceComponent to keep track of the component that started the request (which
-can be useful for showing spinners etc).
+Use errorHandlingComponent in the action creator options to specify which component
+should receive the error. Use requestSourceComponent to keep track of the
+component that started the request (which can be useful for showing spinners etc).
 
 # Example
 
-
-const addTodo = createApiRequestAction(
-    "ADD_TODO",
-    function(options, success, error, getState) {
+const addTodo = createApiRequestAction({
+    requesType: "ADD_TODO",
+    makeRequest: function(options, success, error, getState) {
         loadData(function(response){
-            success({
-                errorHandlingComponent: options.requestComponent,
-                requestSourceComponent: options.requestComponent,
-                ...response
-            });
-        }, 1000);
+            success(response);
+        })
     }
-);
+});
 
 addTodo({title: "Buy milk"});
 
  * @param  {string} requestType [description]
  * @param  {function} makeRequest - Function that is called to fetch the data.
-   Takes three parameters:
+   makeRequest is passed four parameters parameters:
    - options  Options passed into the action creator.
    - success  Callback to call once the data has been loaded
    - error    Callback to to call if the data couldn't be loaded.
    - getState    Function to get current store state
- * @param  {object} confirm - is called before the API call and cancels it if it doesn't return true
+ * @param  {function} confirm - is called before the API call and cancels it if it doesn't return true
+ * @param {function} additionalSuccessActionCreator - can be used to dispatch other
+    actions in addition to the _SUCCESS action
  * @return {function}   Asynchronous action creator.
  */
 export default function createApiRequestAction(actionOptions){
