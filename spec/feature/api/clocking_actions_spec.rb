@@ -17,10 +17,11 @@ RSpec.describe 'Clocking actions' do
   let(:day_start) { RotaShiftDate.new(Time.current).start_time }
   let(:date) { RotaShiftDate.to_rota_date(day_start) }
   let(:target_staff_member) { FactoryGirl.create(:staff_member) }
+  let(:token_expires_at) { 30.minutes.from_now }
   let(:access_token) do
     AccessToken.create!(
       token_type: 'api',
-      expires_at: 30.minutes.from_now,
+      expires_at: token_expires_at,
       creator: user,
       api_key: api_key,
       staff_member: staff_member
@@ -201,14 +202,15 @@ RSpec.describe 'Clocking actions' do
     context 'when clock in period has breaks' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id,
-          date: date.iso8601
+          staff_member_id: target_staff_member.id
         }
       end
 
       let(:shift_start) { day_start + 1.hour }
       let(:break_start) { shift_start + 2.hours }
       let(:break_end) { shift_start + 3.hours }
+      let(:call_time) { break_end + 1.hour }
+      let(:token_expires_at) { call_time + 30.minutes }
 
       before do
         clock_in_day = ClockInDay.create!(
@@ -258,12 +260,17 @@ RSpec.describe 'Clocking actions' do
       end
 
       specify 'should work' do
-        response = post(url, params)
+        response = nil
+        travel_to call_time do
+          response = post(url, params)
+        end
         expect(response.status).to eq(ok_status)
       end
 
       specify 'hours acceptance period should be created with a matching break' do
-        post(url, params)
+        travel_to call_time do
+          post(url, params)
+        end
         expect(HoursAcceptancePeriod.count).to eq(1)
         clock_in_period = ClockInPeriod.last
         hours_acceptance_period = HoursAcceptancePeriod.last
@@ -292,8 +299,7 @@ RSpec.describe 'Clocking actions' do
     context 'when last event is a clock_in' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id,
-          date: date.iso8601
+          staff_member_id: target_staff_member.id
         }
       end
 
@@ -366,8 +372,7 @@ RSpec.describe 'Clocking actions' do
     context 'when last event is a start_break' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id,
-          date: date.iso8601
+          staff_member_id: target_staff_member.id
         }
       end
 
