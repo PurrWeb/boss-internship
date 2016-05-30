@@ -1,5 +1,5 @@
 import createApiRequestAction from "../create-api-request-action"
-import makeApiRequestMaker from "../make-api-request"
+import makeApiRequestMaker from "../make-api-request-maker"
 import {apiRoutes} from "~lib/routes"
 import * as backendData from "~lib/backend-data/process-backend-objects"
 import oFetch from "o-fetch"

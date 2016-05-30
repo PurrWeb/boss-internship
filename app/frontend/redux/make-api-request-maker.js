@@ -4,6 +4,9 @@ import {API_ROOT, apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 
 /*
+Returns a function that when called makes an API request. It then calls either
+its `success` or `error` parameter. You can use the generated function as the
+makeRequest parameter for createApiRequestAction.
 apiOptions:
 - method (required) - string or function that returns a string
 - path (required) - string or function that returns a string

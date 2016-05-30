@@ -1,5 +1,5 @@
 import expect from "expect"
-import makeApiRequestMaker from "./make-api-request"
+import makeApiRequestMaker from "./make-api-request-maker"
 import _ from "underscore"
 import $ from "jquery"
 window.$ = $; // expose globally because makeApiRequest is using the global version, because

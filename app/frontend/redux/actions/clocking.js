@@ -1,6 +1,6 @@
 import createApiRequestAction from "../create-api-request-action"
 import {apiRoutes} from "~lib/routes"
-import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-request"
+import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-request-maker"
 import oFetch from "o-fetch"
 import {selectClockInOutAppIsInManagerMode} from "../selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"

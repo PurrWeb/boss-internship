@@ -1,5 +1,5 @@
 import createApiRequestAction from "../create-api-request-action"
-import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-request"
+import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-request-maker"
 import oFetch from "o-fetch"
 import * as backendData from "~lib/backend-data/process-backend-objects"
 import {objectHasBeenSavedToBackend} from "~lib/backend-data/process-backend-object"

@@ -1,4 +1,4 @@
-import makeApiRequestMaker from "../make-api-request"
+import makeApiRequestMaker from "../make-api-request-maker"
 import createApiRequestAction from "../create-api-request-action"
 import oFetch from "o-fetch"
 import { showConfirmationModal } from "./confirmation-modal"

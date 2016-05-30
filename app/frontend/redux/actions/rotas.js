@@ -1,6 +1,6 @@
 import createApiRequestAction from "../create-api-request-action"
 import {apiRoutes} from "~lib/routes"
-import makeApiRequestMaker from "../make-api-request"
+import makeApiRequestMaker from "../make-api-request-maker"
 import oFetch from "o-fetch"
 
 export const updateRotaStatus = createApiRequestAction({
