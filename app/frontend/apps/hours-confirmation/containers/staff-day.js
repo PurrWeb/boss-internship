@@ -16,9 +16,6 @@ class StaffDay extends React.Component {
     render(){
         return <StaffDayUi
             markedAsDone={this.state.markedAsDone}
-            // onAcceptedHoursChanged={(acceptedHours) =>{
-            //     this.setState({proposedInfo: acceptedHours})
-            // }}
             markDayAsDone={() => this.setState({markedAsDone: true})}
             boundActions={this.props.boundActions}
             {...this.props}
@@ -29,10 +26,8 @@ class StaffDay extends React.Component {
 function mapStateToProps(state, ownProps){
     var details = selectClockInDayDetails(state, ownProps.clockInDay)
     var staffMember = details.staffMember;
-    var clockInStatus = state.clockInStatuses[staffMember.clientId].status
     var props = {
         ...details,
-        staffMemberClockInStatus: clockInStatus,
         clockInReasons: state.clockInReasons,
         staffType: staffMember.staff_type.get(state.staffTypes),
         clockInReasons: state.clockInReasons,

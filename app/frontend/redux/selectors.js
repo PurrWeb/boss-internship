@@ -273,6 +273,9 @@ function addBreaksToHoursAcceptancePeriod(hoursAcceptancePeriod, hoursAcceptance
 
 export function selectClockInDayDetails(state, clockInDay){
     var staffMember = clockInDay.staff_member.get(state.staffMembers);
+    staffMember.forceClockoutIsInProgress = selectIsForceClockingOutStaffMember(state, staffMember.clientId)
+    staffMember.clockInStatus = state.clockInStatuses[staffMember.clientId].status
+
     var clockInPeriods = _(state.clockInPeriods).filter(function(clockInPeriod){
         return clockInPeriod.clock_in_day.clientId === clockInDay.clientId;
     });
@@ -333,19 +336,33 @@ function requestIsInProgressWithRequestData(requests, matchFunction) {
 }
 
 function selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
-    return requestIsInProgressWithRequestData(state.apiRequestsInProgress.ACCEPT_HOURS_ACCEPTANCE_PERIOD, function(requestOptions){
+    return requestIsInProgressWithRequestData(
+        state.apiRequestsInProgress.ACCEPT_HOURS_ACCEPTANCE_PERIOD,
+    function(requestOptions){
         return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
     });
 }
 
 function selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
-    return requestIsInProgressWithRequestData(state.apiRequestsInProgress.UNACCEPT_HOURS_ACCEPTANCE_PERIOD, function(requestOptions){
+    return requestIsInProgressWithRequestData(
+        state.apiRequestsInProgress.UNACCEPT_HOURS_ACCEPTANCE_PERIOD,
+    function(requestOptions){
         return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
     });
 }
 
 function selectDeleteHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
-    return requestIsInProgressWithRequestData(state.apiRequestsInProgress.DELETE_HOURS_ACCEPTANCE_PERIOD, function(requestOptions){
+    return requestIsInProgressWithRequestData(
+        state.apiRequestsInProgress.DELETE_HOURS_ACCEPTANCE_PERIOD,
+    function(requestOptions){
         return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
     });
+}
+
+export function selectIsForceClockingOutStaffMember(state, staffMemberClientId){
+    return requestIsInProgressWithRequestData(
+        state.apiRequestsInProgress.FORCE_STAFF_MEMBER_CLOCK_OUT,
+    function(requestOptions){
+        return requestOptions.staffMember.clientId == staffMemberClientId
+    })
 }

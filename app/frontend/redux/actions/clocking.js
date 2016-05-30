@@ -187,4 +187,13 @@ export const clockInOutAppFetchAppData = createApiRequestAction({
     }
 })
 
+export const forceStaffMemberClockOut = createApiRequestAction({
+    requestType: "FORCE_STAFF_MEMBER_CLOCK_OUT",
+    makeRequest: function(requestOptions, success, error){
+        setTimeout(function(){
+            success({})
+        }, 1000)
+    }
+})
+
 export {actionTypes}
