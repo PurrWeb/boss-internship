@@ -4,8 +4,37 @@ import utils from "~lib/utils"
 import makeReducer from "./make-reducer"
 import * as backendData from "~lib/backend-data/process-backend-objects"
 
-var handledActionTypes = [];
+class DataHandler{
+    constructor(options){
+        this.collectionName = options.collectionName;
+        this.reducer = options.reducer;
+        this.actionTypes = options.actionTypes;
+        this.actionCreators = options.actionCreators;
+        this.handledActionTypes = options.handledActionTypes;
+    }
+}
 
+/**
+Generates a data handler object that combines the actionCreators and reducer for
+a particular data type.
+
+Parameters:
+* collectionName
+Plural name of the object type, e.g. "users" or "clockInperiods"
+This is used to create action names and types, e.g. replaceALlUsers or ADD_USER
+* actionHandlers
+An object that is converted to a reducer. The keys are action types and the values
+are either functions or objects that are converted into reducer functions.
+Objects are used for default handlers:
+ADD_USERS: {action: "add"}
+In addition to adding a handler to the reducer this will also generate
+an action creator.
+Reducer function receive the state and action, but also a set of common
+handler functions like `add` or `update`.
+* reducerOptions
+An object with any of these keys:
+- initialState (initial state of the reducer, e.g. [] or null, defaults to {})
+*/
 export default function makeDataHandler(collectionName, actionHandlers, reducerOptions){
     if (typeof collectionName !== "string") {
         throw Error("No or invalid collection name provided to makeDataHandler for " + collectionName)
@@ -42,14 +71,14 @@ export default function makeDataHandler(collectionName, actionHandlers, reducerO
         }
     }
 
-    return {
+    return new DataHandler({
         collectionName,
         reducer: makeReducer(actionHandlers, reducerOptions),
         actionTypes,
         actionCreators,
         // return handled types to allow validation later on
         handledActionTypes: _.keys(actionHandlers)
-    }
+    })
 }
 
 var handlerHelpers = {
@@ -97,6 +126,8 @@ function getDefaultActionHandler(collectionName, genericHandlerInfo, handledActi
 
             var actionTypeMatchesDefaultType = ret.actionType === handledActionType
             if (!actionTypeMatchesDefaultType && !explicitlySetGenerateActionCreator) {
+                // Having the extra action creator could be confusing since it's
+                // not actually used and the handler has custom functionality
                 console.warn("Are you sure you want to create a", ret.actionCreatorName,
                 "action? (This is part of the default handler for " + handledActionType + ")",
                 "Explicitly pass in generateActionCreator: true/false to fix this warning")
