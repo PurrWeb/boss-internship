@@ -170,7 +170,7 @@ function getInititalLoadActions(initialLoadData){
             processFunction: backendData.processClockInPeriodObject
         },
         "clockInEvents": {
-            processFunction: backendData.processClockInEvent
+            processFunction: backendData.processClockInEventObject
         },
         "clockInNotes": {
             processFunction: backendData.processClockInNote

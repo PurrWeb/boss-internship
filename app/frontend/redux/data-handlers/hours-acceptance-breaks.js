@@ -18,15 +18,8 @@ export default makeDataHandler("hoursAcceptanceBreaks", {
 
         return state;
     },
-    FORCE_STAFF_MEMBER_CLOCK_OUT_SUCCESS: function(state, action, handlerHelpers){
-        action.hoursAcceptanceBreaks.forEach(function(breakItem){
-            var itemExists = state[breakItem.clientId];
-            if (itemExists) {
-                state = handlerHelpers.update(state, breakItem)
-            } else {
-                state = handlerHelpers.add(state, breakItem)
-            }
-        })
-        return state;
+    FORCE_STAFF_MEMBER_CLOCK_OUT_SUCCESS: {
+        action: "addOrUpdate",
+        generateActionCreator: false
     }
 })

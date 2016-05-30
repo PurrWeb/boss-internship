@@ -259,7 +259,8 @@ export const forceStaffMemberClockOut = createApiRequestAction({
                 clockInPeriod: backendData.processClockInPeriodObject(responseData.clock_in_period),
                 clockInBreaks: responseData.clock_in_breaks.map(backendData.processClockInBreakObject),
                 hoursAcceptancePeriod: backendData.processHoursAcceptancePeriodObject(responseData.hours_acceptance_period),
-                hoursAcceptanceBreaks: responseData.hours_acceptance_breaks.map(backendData.processHoursAcceptanceBreakObject)
+                hoursAcceptanceBreaks: responseData.hours_acceptance_breaks.map(backendData.processHoursAcceptanceBreakObject),
+                clockInEvents: responseData.clock_in_events.map(backendData.processClockInEventObject)
             };
 
             success(successData)

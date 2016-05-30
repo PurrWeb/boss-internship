@@ -86,20 +86,24 @@ function getDefaultActionHandler(collectionName, genericHandlerInfo, handledActi
 
     var ret = {}
 
-    ret.actionType = genericActions[genericHandlerInfo.action].getActionType(infoForGenerator)
-    if (genericHandlerInfo.generateActionCreator) {
-        var actionCreatorInfo = genericActions[genericHandlerInfo.action].makeDefaultActionCreator(infoForGenerator);
-        ret.actionCreatorName = actionCreatorInfo.actionCreatorName
-        ret.actionCreator = actionCreatorInfo.actionCreator
+    var genericActionGenerator = genericActions[genericHandlerInfo.action]
+    var canGenerateActionHandler = genericActionGenerator.getActionType && genericActionGenerator.makeDefaultActionCreator
+    if (canGenerateActionHandler) {
+        ret.actionType = genericActionGenerator.getActionType(infoForGenerator)
+        if (genericHandlerInfo.generateActionCreator) {
+            var actionCreatorInfo = genericActionGenerator.makeDefaultActionCreator(infoForGenerator);
+            ret.actionCreatorName = actionCreatorInfo.actionCreatorName
+            ret.actionCreator = actionCreatorInfo.actionCreator
 
-        var actionTypeMatchesDefaultType = ret.actionType === handledActionType
-        if (!actionTypeMatchesDefaultType && !explicitlySetGenerateActionCreator) {
-            console.warn("Are you sure you want to create a", ret.actionCreatorName,
-            "action? (This is part of the default handler for " + handledActionType + ")",
-            "Explicitly pass in generateActionCreator: true/false to fix this warning")
+            var actionTypeMatchesDefaultType = ret.actionType === handledActionType
+            if (!actionTypeMatchesDefaultType && !explicitlySetGenerateActionCreator) {
+                console.warn("Are you sure you want to create a", ret.actionCreatorName,
+                "action? (This is part of the default handler for " + handledActionType + ")",
+                "Explicitly pass in generateActionCreator: true/false to fix this warning")
+            }
         }
     }
-    ret.handlerFunction = genericActions[genericHandlerInfo.action].makeHandlerFunction(infoForGenerator);
+    ret.handlerFunction = genericActionGenerator.makeHandlerFunction(infoForGenerator);
     return ret;
 }
 
@@ -184,6 +188,21 @@ var genericActions = {
                 return _(state).omit(function(item){
                     return itemToDelete.clientId === item.clientId;
                 })
+            }
+        }
+    },
+    "addOrUpdate": {
+        makeHandlerFunction: function({actionNames, collectionName}){
+            return function(state, action, handlerHelpers){
+                action[collectionName].forEach(function(item){
+                    var itemExists = state[item.clientId];
+                    if (itemExists) {
+                        state = handlerHelpers.update(state, item)
+                    } else {
+                        state = handlerHelpers.add(state, item)
+                    }
+                })
+                return state;
             }
         }
     },
