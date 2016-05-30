@@ -39,7 +39,8 @@ class BreakTimeOverlapValidator
   def prerequisites_persent?
     _break.starts_at.present? &&
       _break.ends_at.present? &&
-      period.present?
+      period.present? &&
+      !_break.disabled?
   end
 
   def starts_at
