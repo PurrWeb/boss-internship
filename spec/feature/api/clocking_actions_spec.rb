@@ -285,15 +285,6 @@ RSpec.describe 'Clocking actions' do
 
   describe '#start_break' do
     let(:url) { url_helpers.start_break_api_v1_clocking_index_path }
-    let(:clock_in_event) do
-      ClockInEvent.create!(
-        venue: venue,
-        staff_member: target_staff_member,
-        at: day_start + 1.hour,
-        creator: staff_member,
-        event_type: 'clock_in'
-      )
-    end
 
     context 'when last event is a clock_in' do
       let(:params) do

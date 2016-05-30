@@ -30,14 +30,7 @@ class ClockInStatus
     ActiveRecord::Base.transaction(requires_new: nested) do
       saved_last_event = last_event
 
-      new_event = ClockInEvent.create!(
-        venue: venue,
-        staff_member: staff_member,
-        at: at,
-        creator: requester,
-        event_type: event_type_for_transition(from: current_state, to: state)
-      )
-
+      event_type = event_type_for_transition(from: current_state, to: state)
       current_recorded_clock_in_period = CurrentRecordedClockInPeriodQuery.
         new(
           clock_in_day: clock_in_day
@@ -51,13 +44,13 @@ class ClockInStatus
           starts_at: at,
           clock_in_period_reason: nil
         )
-      elsif new_event.clock_out?
+      elsif event_type == 'clock_out'
         current_recorded_clock_in_period.update_attributes!(ends_at: at)
         create_hours_confirmation_from_clock_in_period(
           clock_in_period: current_recorded_clock_in_period,
           creator: requester
         )
-      elsif new_event.end_break?
+      elsif event_type == 'end_break'
         new_break = ClockInBreak.create!(
           clock_in_period: current_recorded_clock_in_period,
           starts_at: saved_last_event.at,
@@ -65,9 +58,15 @@ class ClockInStatus
         )
         current_recorded_clock_in_period.clock_in_breaks << new_break
       end
-      current_recorded_clock_in_period.clock_in_events << new_event
 
       current_recorded_clock_in_period.save!
+
+      ClockInEvent.create!(
+        clock_in_period: current_recorded_clock_in_period,
+        at: at,
+        creator: requester,
+        event_type: event_type
+      )
     end
   end
 
@@ -100,18 +99,16 @@ class ClockInStatus
   end
 
   def events
-    staff_member_events = ClockInEvent.where(
-      venue: venue,
-      staff_member: staff_member
-    )
-
-    InRangeQuery.new(
-      relation: staff_member_events,
-      start_value: RotaShiftDate.new(date).start_time,
-      end_value: RotaShiftDate.new(date).end_time,
-      start_column_name: 'at',
-      end_column_name: 'at'
-    ).all.order(:at)
+    ClockInEvent.
+      joins(:clock_in_period).
+      merge(
+        ClockInPeriod.
+        joins(:clock_in_day).
+        merge(
+          ClockInDay.where(id: clock_in_day.id)
+        )
+      ).
+      order(:at)
   end
 
   def allowed_event_transations

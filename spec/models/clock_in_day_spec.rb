@@ -36,15 +36,14 @@ describe ClockInDay do
       let(:clock_in_event) do
         ClockInEvent.create!(
           event_type: 'clock_in',
-          staff_member: staff_member,
+          clock_in_period: clock_in_period,
           creator: creator,
-          venue: venue,
           at: start_time
         )
       end
 
       before do
-        clock_in_period.clock_in_events << clock_in_event
+        clock_in_event
       end
 
       specify 'it should be clocked in' do
@@ -55,15 +54,14 @@ describe ClockInDay do
         let(:clock_out_event) do
           ClockInEvent.create!(
             event_type: 'clock_out',
-            staff_member: staff_member,
+            clock_in_period: clock_in_period,
             creator: creator,
-            venue: venue,
             at: start_time + 1.hour
           )
         end
 
         before do
-          clock_in_period.clock_in_events << clock_out_event
+          clock_out_event
         end
 
         specify 'it should be clocked out' do
@@ -75,25 +73,23 @@ describe ClockInDay do
         let(:break_start_event) do
           ClockInEvent.create!(
             event_type: 'start_break',
-            staff_member: staff_member,
+            clock_in_period: clock_in_period,
             creator: creator,
-            venue: venue,
             at: start_time + 1.hour
           )
         end
         let(:break_end_event) do
           ClockInEvent.create!(
             event_type: 'end_break',
-            staff_member: staff_member,
+            clock_in_period: clock_in_period,
             creator: creator,
-            venue: venue,
             at: start_time + 2.hour
           )
         end
 
         context 'last event is a break start' do
           before do
-            clock_in_period.clock_in_events << break_start_event
+            break_start_event
           end
 
           specify 'it should be clocked out' do
@@ -103,8 +99,8 @@ describe ClockInDay do
 
         context 'last event is a break start' do
           before do
-            clock_in_period.clock_in_events << break_start_event
-            clock_in_period.clock_in_events << break_end_event
+            break_start_event
+            break_end_event
           end
 
           specify 'it should be clocked in' do

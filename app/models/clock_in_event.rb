@@ -1,15 +1,11 @@
 class ClockInEvent < ActiveRecord::Base
   TYPES = ['clock_in', 'clock_out', 'start_break', 'end_break']
 
-  belongs_to :venue
-  belongs_to :staff_member
   belongs_to :creator, polymorphic: true
-  has_one :clock_in_period, through: :clock_in_period_event
-  has_one :clock_in_period_event
+  belongs_to :clock_in_period
 
+  validates :clock_in_period, presence: true
   validates :event_type, inclusion: { in: TYPES, message: 'is required' }
-  validates :venue, presence: true
-  validates :staff_member, presence: true
   validates :creator, presence: true
   validates :at, presence: true
 

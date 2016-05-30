@@ -113,14 +113,13 @@ ActiveRecord::Schema.define(version: 20160601214451) do
   end
 
   create_table "clock_in_events", force: :cascade do |t|
-    t.string   "event_type",      limit: 255, null: false
-    t.integer  "venue_id",        limit: 4,   null: false
-    t.integer  "staff_member_id", limit: 4,   null: false
-    t.integer  "creator_id",      limit: 4,   null: false
-    t.string   "creator_type",    limit: 255, null: false
-    t.datetime "at",                          null: false
+    t.string   "event_type",         limit: 255, null: false
+    t.integer  "creator_id",         limit: 4,   null: false
+    t.string   "creator_type",       limit: 255, null: false
+    t.datetime "at",                             null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "clock_in_period_id", limit: 4,   null: false
   end
 
   add_index "clock_in_events", ["at"], name: "index_clock_in_events_on_at", using: :btree
@@ -133,13 +132,6 @@ ActiveRecord::Schema.define(version: 20160601214451) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "clock_in_day_id", limit: 4,                  null: false
-  end
-
-  create_table "clock_in_period_events", force: :cascade do |t|
-    t.integer  "clock_in_event_id",  limit: 4, null: false
-    t.integer  "clock_in_period_id", limit: 4, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "clock_in_period_reasons", force: :cascade do |t|
