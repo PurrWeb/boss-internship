@@ -40,7 +40,7 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
                 hours_acceptance_period_id: hoursAcceptancePeriod.serverId,
                 starts_at,
                 ends_at,
-                breaks: breaks.map((b) => {
+                hours_acceptance_breaks: breaks.map((b) => {
                     return {
                         starts_at: b.starts_at,
                         ends_at: b.ends_at
