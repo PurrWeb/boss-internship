@@ -7,6 +7,7 @@ import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import {showUserActionConfirmationMessage} from "./user-action-confirmation-messages"
 import {showConfirmationModal} from "./confirmation-modal"
 import _ from "underscore"
+import * as backendData from "~lib/backend-data/process-backend-objects"
 import {
     loadInitialClockInOutAppState
 } from "./app-data"
@@ -252,10 +253,13 @@ export const forceStaffMemberClockOut = createApiRequestAction({
                 ]
             }
 
-            success({
+            var successData = {
                 staffMember: requestOptions.staffMember,
-                ...responseData
-            })
+                clockInPeriod: backendData.processClockInPeriodObject(responseData.clock_in_period)
+            };
+
+
+            success(successData)
         }, 1000)
     }
 })
