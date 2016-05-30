@@ -51,10 +51,10 @@ var validation = {
     validateBreak({breakItem, hoursPeriod}) {
         var messages = [];
 
-        if (breakItem.starts_at <= hoursPeriod.starts_at) {
+        if (breakItem.starts_at < hoursPeriod.starts_at) {
             messages.push("Break can only start after shift begins")
         }
-        if (breakItem.ends_at >= hoursPeriod.ends_at) {
+        if (breakItem.ends_at > hoursPeriod.ends_at) {
             messages.push("Break must end before shift end")
         }
 

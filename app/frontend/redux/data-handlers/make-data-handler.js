@@ -32,7 +32,12 @@ export default function makeDataHandler(collectionName, actionHandlers, reducerO
                         return state;
                     }
                 }
-                return defaultHandler.handlerFunction.apply(this, arguments)
+                return defaultHandler.handlerFunction.apply(this, [state, action, handlerHelpers])
+            }
+        } else {
+            let handler = actionHandlers[actionHandlerActionType]
+            actionHandlers[actionHandlerActionType] = function(state, action){
+                return handler.apply(this, [state, action, handlerHelpers])
             }
         }
     }
@@ -47,6 +52,25 @@ export default function makeDataHandler(collectionName, actionHandlers, reducerO
     }
 }
 
+var handlerHelpers = {
+    update: function(state, updatedItemData){
+        state = {...state}
+
+        var item = state[updatedItemData.clientId]
+        var newItem = _.clone(item);
+        for (var key in updatedItemData){
+            newItem[key] = updatedItemData[key];
+        }
+
+        state[item.clientId] = newItem;
+        return state
+    },
+    add: function(state, item){
+        return Object.assign({}, state, {
+            [item.clientId]: item
+        })
+    }
+}
 
 function getDefaultActionHandler(collectionName, genericHandlerInfo, handledActionType){
     var explicitlySetGenerateActionCreator = genericHandlerInfo.generateActionCreator !== undefined;
@@ -64,16 +88,16 @@ function getDefaultActionHandler(collectionName, genericHandlerInfo, handledActi
 
     ret.actionType = genericActions[genericHandlerInfo.action].getActionType(infoForGenerator)
     if (genericHandlerInfo.generateActionCreator) {
-        var actionTypeMatchesDefaultType = ret.actionType === handledActionType
-        if (!actionTypeMatchesDefaultType && !explicitlySetGenerateActionCreator) {
-            console.warn("Are you sure you want to create a", ret.actionType,
-            "action? (This is part of the default handler for " + handledActionType + ")",
-            "Explicitly pass in generateActionCreator: true/false to fix this warning")
-        }
-
         var actionCreatorInfo = genericActions[genericHandlerInfo.action].makeDefaultActionCreator(infoForGenerator);
         ret.actionCreatorName = actionCreatorInfo.actionCreatorName
         ret.actionCreator = actionCreatorInfo.actionCreator
+
+        var actionTypeMatchesDefaultType = ret.actionType === handledActionType
+        if (!actionTypeMatchesDefaultType && !explicitlySetGenerateActionCreator) {
+            console.warn("Are you sure you want to create a", ret.actionCreatorName,
+            "action? (This is part of the default handler for " + handledActionType + ")",
+            "Explicitly pass in generateActionCreator: true/false to fix this warning")
+        }
     }
     ret.handlerFunction = genericActions[genericHandlerInfo.action].makeHandlerFunction(infoForGenerator);
     return ret;
@@ -129,11 +153,9 @@ var genericActions = {
             }
         },
         makeHandlerFunction({actionNames, collectionName}){
-            return function(state, action){
+            return function(state, action, handlerHelpers){
                 var item = oFetch(action, actionNames.singleItemName)
-                return Object.assign({}, state, {
-                    [item.clientId]: item
-                })
+                return handlerHelpers.add(state, item)
             }
         }
     },
@@ -182,7 +204,7 @@ var genericActions = {
             }
         },
         makeHandlerFunction({actionNames, collectionName}){
-            return function(state, action){
+            return function(state, action, handlerHelpers){
                 var newItemsData;
                 if (action[actionNames.singleItemName]) {
                     newItemsData = [action[actionNames.singleItemName]]
@@ -192,18 +214,11 @@ var genericActions = {
                     throw Error("Data for update action not found")
                 }
 
-                var newState = {...state}
                 newItemsData.forEach(function(newItemData){
-                    var item = state[newItemData.clientId]
-                    var newItem = _.clone(item);
-                    for (var key in newItemData){
-                        newItem[key] = newItemData[key];
-                    }
-
-                    newState[item.clientId] = newItem;
+                    state = handlerHelpers.update(state, newItemData)
                 })
 
-                return newState
+                return state
             }
         }
     },

@@ -79,6 +79,7 @@ describe("makeDataHandler", function(){
     it("Can generate a default update action creator that can handle multiple object to be updated", function(){
         var dataHandler = makeDataHandler("users", {
             UPDATE_USERS: {
+                generateActionCreator: false,
                 action: "update"
             }
         })
