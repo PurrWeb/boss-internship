@@ -5,13 +5,27 @@ export default makeDataHandler("clockInStatuses",{
         action: "replaceAll"
     },
     UPDATE_STAFF_STATUS_SUCCESS: function(state, action){
-        var clientId = action.staffMemberObject.clientId;
-        var newStatusObject = state[clientId];
-        newStatusObject = Object.assign({}, newStatusObject, {
-            status: action.statusValue
-        })
-        return Object.assign({}, state, {
-            [clientId]: newStatusObject
-        });
+        return updateStaffMemberStatus(
+            state,
+            action.staffMemberObject.clientId,
+            action.statusValue
+        );
+    },
+    FORCE_STAFF_MEMBER_CLOCK_OUT_SUCCESS: function(state, action){
+        return updateStaffMemberStatus(
+            state,
+            action.staffMember.clientId,
+            action.status
+        )
     }
 })
+
+function updateStaffMemberStatus(state, staffMemberClientId, newStatus){
+    var newStatusObject = state[staffMemberClientId];
+    newStatusObject = Object.assign({}, newStatusObject, {
+        status: newStatus
+    })
+    return Object.assign({}, state, {
+        [staffMemberClientId]: newStatusObject
+    });
+}
