@@ -8,6 +8,14 @@ class ClockInEvent < ActiveRecord::Base
   validates :event_type, inclusion: { in: TYPES, message: 'is required' }
   validates :creator, presence: true
   validates :at, presence: true
+  validate :time_on_correct_day
+
+  #validation
+  def time_on_correct_day
+    if clock_in_period.present? && !RotaShiftDate.new(clock_in_period.date).contains_time?(at)
+      errors.add(:at, 'not on correct day')
+    end
+  end
 
   def clock_in?
     event_type == 'clock_in'
