@@ -70,11 +70,11 @@ export function processClockInEventObject(clockInEvent){
     return clockInEvent
 }
 
-export function processClockInNote(clockInNote){
+export function processClockInNoteObject(clockInNote){
     return processBackendObject(clockInNote);
 }
 
-export function processClockInReason(clockInReason){
+export function processClockInReasonObject(clockInReason){
     return processBackendObject(clockInReason);
 }
 

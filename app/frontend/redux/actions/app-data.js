@@ -127,13 +127,7 @@ export function loadInitialHoursConfirmationAppState(viewData){
 function getInititalLoadActions(initialLoadData){
     initialLoadData = {...initialLoadData}
     var actionCreators = getActionCreators();
-    var possibleObjects = {
-        "rotas": {
-            processFunction: backendData.processRotaObject
-        },
-        "rotaForecasts": {
-            processFunction: backendData.processRotaForecastObject
-        },
+    var speciallyHandledObjects = {
         "weeklyRotaForecast": {
             replaceAction: replaceWeeklyRotaForecast,
             processFunction: backendData.processRotaForecastObject
@@ -142,87 +136,58 @@ function getInititalLoadActions(initialLoadData){
             replaceAction: actionCreators.setPageOptions,
             processFunction: backendData.processPageOptionsObject
         },
-        "venues": {
-            processFunction: backendData.processVenueObject
-        },
-        "clockInDays": {
-            processFunction: backendData.processClockInDayObject
-        },
-        "staffMembers": {
-            processFunction: backendData.processStaffMemberObject
-        },
-        "staffTypes": {
-            processFunction: backendData.processStaffTypeObject
-        },
-        "rotaShifts": {
-            processFunction: backendData.processRotaShiftObject
-        },
         "clockInStatuses": {
             processFunction: backendData.processClockInStatusObject,
             indexBy: function(status){
                 return status.staff_member.clientId;
             }
-        },
-        "holidays": {
-            processFunction: backendData.processHolidayObject
-        },
-        "clockInPeriods": {
-            processFunction: backendData.processClockInPeriodObject
-        },
-        "clockInEvents": {
-            processFunction: backendData.processClockInEventObject
-        },
-        "clockInNotes": {
-            processFunction: backendData.processClockInNote
-        },
-        "clockInReasons": {
-            processFunction: backendData.processClockInReason
-        },
-        "hoursAcceptancePeriods": {
-            processFunction: backendData.processHoursAcceptancePeriodObject
-        },
-        "clockInBreaks": {
-            processFunction: backendData.processClockInBreakObject
-        },
-        "hoursAcceptanceBreaks": {
-            processFunction: backendData.processHoursAcceptanceBreakObject
         }
     }
 
     var actions = [];
-    for (var objectName in possibleObjects) {
-        var objectDetails = possibleObjects[objectName]
+
+
+    for (var objectName in initialLoadData) {
         let value = initialLoadData[objectName];
-        if (value !== undefined) {
-            let processedValue;
-            if (_.isArray(value)){
-                processedValue = value.map(objectDetails.processFunction);
-            } else {
-                processedValue = objectDetails.processFunction(value)
-            }
 
-            if (_.isArray(processedValue)) {
-                if (objectDetails.indexBy) {
-                    processedValue = _.indexBy(processedValue, objectDetails.indexBy)
-                } else {
-                    processedValue = utils.indexByClientId(processedValue)
-                }
-            }
-
-            var replaceAction = objectDetails.replaceAction;
-            if (replaceAction === undefined) {
-                replaceAction = actionCreators["replaceAll" + utils.capitalize(objectName)]
-            }
-            actions.push(replaceAction({
-                [objectName]: processedValue
-            }))
+        var objectDetails = speciallyHandledObjects[objectName]
+        if (!objectDetails) {
+            objectDetails = {};
         }
-        delete initialLoadData[objectName];
-    }
 
-    var unprocessedDataKeys = _.keys(initialLoadData);
-    if (unprocessedDataKeys.length > 0){
-        throw Error("Unprocessed data keys: " + unprocessedDataKeys);
+        var processFunction = objectDetails.processFunction;
+        if (!processFunction) {
+            var defaultProcessFunctionName = "process" +
+                utils.getStringExceptLastCharacter(utils.capitalize(objectName)) + "Object"
+            processFunction = backendData[defaultProcessFunctionName]
+            if (!processFunction) {
+                throw Error(`No processing function found for object
+                    ${objectName} (looked for function named ${defaultProcessFunctionName})`);
+            }
+        }
+
+        let processedValue;
+        if (_.isArray(value)){
+            processedValue = value.map(processFunction);
+        } else {
+            processedValue = processFunction(value)
+        }
+
+        if (_.isArray(processedValue)) {
+            if (objectDetails.indexBy) {
+                processedValue = _.indexBy(processedValue, objectDetails.indexBy)
+            } else {
+                processedValue = utils.indexByClientId(processedValue)
+            }
+        }
+
+        var replaceAction = objectDetails.replaceAction;
+        if (replaceAction === undefined) {
+            replaceAction = actionCreators["replaceAll" + utils.capitalize(objectName)]
+        }
+        actions.push(replaceAction({
+            [objectName]: processedValue
+        }))
     }
 
     return actions;
