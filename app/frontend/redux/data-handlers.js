@@ -16,6 +16,7 @@ import userActionConfirmationMessages from "./data-handlers/user-action-confirma
 import hoursAcceptanceBreaks from "./data-handlers/hours-acceptance-breaks"
 import clockInDays from "./data-handlers/clock-in-days-reducer"
 import apiKey from "./data-handlers/api-key"
+import clockInBreaks from "./data-handlers/clock-in-breaks"
 import clockInPeriods from "./data-handlers/clock-in-periods"
 import {makeDefaultDataHandler} from "./reducers/make-data-handler"
 
@@ -39,7 +40,7 @@ var dataHandlers = [
     apiKey,
     clockInDays,
     clockInPeriods,
-    makeDefaultDataHandler("clockInBreaks"),
+    clockInBreaks,
     hoursAcceptanceBreaks,
     hoursAcceptancePeriods,
     makeDefaultDataHandler("clockInEvents"),

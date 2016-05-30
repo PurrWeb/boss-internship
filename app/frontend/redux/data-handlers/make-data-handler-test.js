@@ -37,4 +37,88 @@ describe("makeDataHandler", function(){
         var newState = dataHandler.reducer({}, action)
         expect(newState[55].name).toBe("John")
     })
+
+    it("Can generate a default update handler", function(){
+        var dataHandler = makeDataHandler("users", {
+            UPDATE_USER: {
+                action: "update"
+            }
+        })
+
+        var initialState = {
+            33: {
+                clientId: 33,
+                name: "Sam"
+            },
+            18: {
+                clientId: 18
+            }
+        }
+
+        var action = {
+            type: "UPDATE_USER",
+            user: {
+                clientId: 33,
+                name: "Sam Jones"
+            }
+        }
+
+        var expectedState = {
+            33: {
+                clientId: 33,
+                name: "Sam Jones"
+            },
+            18: {
+                clientId: 18
+            }
+        }
+
+        expect(dataHandler.reducer(initialState, action)).toEqual(expectedState)
+    })
+
+    it("Can generate a default update action creator that can handle multiple object to be updated", function(){
+        var dataHandler = makeDataHandler("users", {
+            UPDATE_USERS: {
+                action: "update"
+            }
+        })
+
+        var initialState = {
+            33: {
+                clientId: 33,
+                name: "Sam"
+            },
+            18: {
+                clientId: 18,
+                name: "Sally"
+            }
+        }
+
+        var action = {
+            type: "UPDATE_USERS",
+            users: [
+                {
+                    clientId: 33,
+                    name: "Sam Jones"
+                },
+                {
+                    clientId: 18,
+                    name: "Sally Smith"
+                }
+            ]
+        }
+
+        var expectedState = {
+            33: {
+                clientId: 33,
+                name: "Sam Jones"
+            },
+            18: {
+                clientId: 18,
+                name: "Sally Smith"
+            }
+        }
+
+        expect(dataHandler.reducer(initialState, action)).toEqual(expectedState)
+    })
 })

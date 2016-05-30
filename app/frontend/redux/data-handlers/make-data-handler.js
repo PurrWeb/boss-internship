@@ -166,14 +166,26 @@ var genericActions = {
         },
         makeHandlerFunction({actionNames, collectionName}){
             return function(state, action){
-                var newItemData = oFetch(action, actionNames.singleItemName);
-                var item = state[newItemData.clientId]
-                var newItem = _.clone(item);
-                for (var key in newItemData){
-                    newItem[key] = newItemData[key];
+                var newItemsData;
+                if (action[actionNames.singleItemName]) {
+                    newItemsData = [action[actionNames.singleItemName]]
+                } else if (action[actionNames.collectionName]) {
+                    newItemsData = action[actionNames.collectionName];
+                } else {
+                    throw Error("Data for update action not found")
                 }
+
                 var newState = {...state}
-                newState[item.clientId] = newItem;
+                newItemsData.forEach(function(newItemData){
+                    var item = state[newItemData.clientId]
+                    var newItem = _.clone(item);
+                    for (var key in newItemData){
+                        newItem[key] = newItemData[key];
+                    }
+
+                    newState[item.clientId] = newItem;
+                })
+
                 return newState
             }
         }
@@ -244,6 +256,7 @@ function getDefaultActionNames(collectionName){
         addActionName,
         deleteActionType,
         deleteActionName,
-        processFunctionName
+        processFunctionName,
+        collectionName
     }
 }
