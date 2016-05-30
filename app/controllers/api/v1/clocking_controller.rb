@@ -60,8 +60,8 @@ module Api
       def transition_state(to_state:)
         staff_member = staff_member_from_params
         venue = venue_from_api_key
-        date = date_from_params
         at = Time.current
+        date = RotaShiftDate.to_rota_date(at)
 
         authorize!(:perform_clocking_action, staff_member)
 

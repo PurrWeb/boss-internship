@@ -36,8 +36,7 @@ RSpec.describe 'Clocking actions' do
     let(:url) { url_helpers.clock_in_api_v1_clocking_index_path }
     let(:params) do
       {
-        staff_member_id: target_staff_member.id,
-        date: date.iso8601
+        staff_member_id: target_staff_member.id
       }
     end
 
@@ -123,8 +122,7 @@ RSpec.describe 'Clocking actions' do
     context 'when last event is a clock_in' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id,
-          date: date.iso8601
+          staff_member_id: target_staff_member.id
         }
       end
 
