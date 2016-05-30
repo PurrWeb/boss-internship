@@ -27,6 +27,10 @@ class HoursAcceptancePeriod < ActiveRecord::Base
     clock_in_day.venue
   end
 
+  def enabled?
+    !deleted?
+  end
+
   def deleted?
     status == 'deleted'
   end

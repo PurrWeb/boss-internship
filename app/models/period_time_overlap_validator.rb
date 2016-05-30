@@ -43,7 +43,8 @@ class PeriodTimeOverlapValidator
     starts_at.present? &&
     ends_at.present? &&
     staff_member.present? &&
-    clock_in_day.present?
+    clock_in_day.present? &&
+    period.enabled?
   end
 
   def starts_at

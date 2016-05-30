@@ -21,4 +21,8 @@ class ClockInPeriod < ActiveRecord::Base
   def staff_member
     clock_in_day.andand.staff_member
   end
+
+  def enabled?
+    true
+  end
 end
