@@ -30,7 +30,7 @@ class ClockInStatus
     ActiveRecord::Base.transaction(requires_new: nested) do
       saved_last_event = last_event
 
-      new_event = ClockingEvent.create!(
+      new_event = ClockInEvent.create!(
         venue: venue,
         staff_member: staff_member,
         at: at,
@@ -65,7 +65,7 @@ class ClockInStatus
         )
         current_recorded_clock_in_period.clock_in_breaks << new_break
       end
-      current_recorded_clock_in_period.clocking_events << new_event
+      current_recorded_clock_in_period.clock_in_events << new_event
 
       current_recorded_clock_in_period.save!
     end
@@ -100,7 +100,7 @@ class ClockInStatus
   end
 
   def events
-    staff_member_events = ClockingEvent.where(
+    staff_member_events = ClockInEvent.where(
       venue: venue,
       staff_member: staff_member
     )

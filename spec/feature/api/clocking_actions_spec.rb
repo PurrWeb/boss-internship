@@ -43,7 +43,7 @@ RSpec.describe 'Clocking actions' do
 
     context 'before call' do
       specify 'no clock ins should exist' do
-        expect(ClockingEvent.count).to eq(0)
+        expect(ClockInEvent.count).to eq(0)
       end
 
       specify 'no clock in period should exist' do
@@ -66,7 +66,7 @@ RSpec.describe 'Clocking actions' do
 
     specify 'should create event' do
       post(url, params)
-      expect(ClockingEvent.count).to eq(1)
+      expect(ClockInEvent.count).to eq(1)
     end
 
     specify 'should create clocking period' do
@@ -146,7 +146,7 @@ RSpec.describe 'Clocking actions' do
 
       context 'before call' do
         specify 'no clock outs should exist' do
-          expect(ClockingEvent.count).to eq(1)
+          expect(ClockInEvent.count).to eq(1)
         end
 
         specify '1 clock in period should exist' do
@@ -169,8 +169,8 @@ RSpec.describe 'Clocking actions' do
 
       specify 'should create event' do
         post(url, params)
-        expect(ClockingEvent.count).to eq(2)
-        expect(ClockingEvent.last.event_type).to eq('clock_out')
+        expect(ClockInEvent.count).to eq(2)
+        expect(ClockInEvent.last.event_type).to eq('clock_out')
       end
 
       specify 'should associate event with create period' do
@@ -180,9 +180,9 @@ RSpec.describe 'Clocking actions' do
         end
         expect(ClockInPeriod.count).to eq(1)
         period = ClockInPeriod.last
-        clock_out_event = ClockingEvent.last
-        expect(period.clocking_events.count).to eq(2)
-        expect(period.clocking_events.last).to eq(clock_out_event)
+        clock_out_event = ClockInEvent.last
+        expect(period.clock_in_events.count).to eq(2)
+        expect(period.clock_in_events.last).to eq(clock_out_event)
         expect(period.ends_at).to eq(clock_out_event.at)
       end
 
@@ -286,7 +286,7 @@ RSpec.describe 'Clocking actions' do
   describe '#start_break' do
     let(:url) { url_helpers.start_break_api_v1_clocking_index_path }
     let(:clock_in_event) do
-      ClockingEvent.create!(
+      ClockInEvent.create!(
         venue: venue,
         staff_member: target_staff_member,
         at: day_start + 1.hour,
@@ -321,7 +321,7 @@ RSpec.describe 'Clocking actions' do
 
       context 'before call' do
         specify 'no clock outs should exist' do
-          expect(ClockingEvent.count).to eq(1)
+          expect(ClockInEvent.count).to eq(1)
         end
 
         specify 'one clocking period should exist' do
@@ -336,8 +336,8 @@ RSpec.describe 'Clocking actions' do
 
       specify 'should create event' do
         post(url, params)
-        expect(ClockingEvent.count).to eq(2)
-        expect(ClockingEvent.last.event_type).to eq('start_break')
+        expect(ClockInEvent.count).to eq(2)
+        expect(ClockInEvent.last.event_type).to eq('start_break')
       end
 
       specify 'should not create extra period' do
@@ -349,12 +349,12 @@ RSpec.describe 'Clocking actions' do
         post(url, params)
         period = ClockInPeriod.last
         expect(
-          period.clocking_events.count
+          period.clock_in_events.count
         ).to eq(2)
 
         expect(
-          period.clocking_events.last
-        ).to eq(ClockingEvent.last)
+          period.clock_in_events.last
+        ).to eq(ClockInEvent.last)
       end
 
       specify 'no hours acceptance period should be created' do
@@ -403,7 +403,7 @@ RSpec.describe 'Clocking actions' do
 
       context 'before call' do
         specify '2 events should exist' do
-          expect(ClockingEvent.count).to eq(2)
+          expect(ClockInEvent.count).to eq(2)
         end
 
         specify 'clock in period should exist' do
@@ -427,14 +427,14 @@ RSpec.describe 'Clocking actions' do
 
       specify 'should create event' do
         post(url, params)
-        expect(ClockingEvent.count).to eq(3)
-        expect(ClockingEvent.last.event_type).to eq('end_break')
+        expect(ClockInEvent.count).to eq(3)
+        expect(ClockInEvent.last.event_type).to eq('end_break')
       end
 
       specify 'should add event to period' do
         post(url, params)
         period = ClockInPeriod.last
-        expect(period.clocking_events.last).to eq(ClockingEvent.last)
+        expect(period.clock_in_events.last).to eq(ClockInEvent.last)
       end
 
       specify 'should create break' do

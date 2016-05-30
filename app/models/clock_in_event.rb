@@ -1,4 +1,4 @@
-class ClockingEvent < ActiveRecord::Base
+class ClockInEvent < ActiveRecord::Base
   TYPES = ['clock_in', 'clock_out', 'start_break', 'end_break']
 
   belongs_to :venue

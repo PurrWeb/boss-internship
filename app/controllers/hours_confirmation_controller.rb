@@ -23,7 +23,7 @@ class HoursConfirmationController < ApplicationController
 
       clock_in_period_reasons = ClockInPeriodReason.all
 
-      clocking_events = ClockingEvent.
+      clock_in_events = ClockInEvent.
         joins(:clock_in_period).
         merge(clock_in_periods)
 
@@ -62,7 +62,7 @@ class HoursConfirmationController < ApplicationController
         clock_in_period_reasons: clock_in_period_reasons,
         clock_in_periods: clock_in_periods,
         clock_in_breaks:  clock_in_breaks,
-        clocking_events: clocking_events,
+        clock_in_events: clock_in_events,
         rotas: Array(rota),
         rota_shifts: rota_shifts,
         venues: venues,
@@ -96,7 +96,7 @@ class HoursConfirmationController < ApplicationController
 
       clock_in_period_reasons = ClockInPeriodReason.all
 
-      clocking_events = ClockingEvent.
+      clock_in_events = ClockInEvent.
         joins(:clock_in_period).
         merge(clock_in_periods)
 
@@ -135,7 +135,7 @@ class HoursConfirmationController < ApplicationController
         clock_in_period_reasons: clock_in_period_reasons,
         clock_in_periods: clock_in_periods,
         clock_in_breaks:  clock_in_breaks,
-        clocking_events: clocking_events,
+        clock_in_events: clock_in_events,
         rotas: Array(rota),
         rota_shifts: rota_shifts,
         venues: venues,

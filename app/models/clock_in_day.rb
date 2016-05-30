@@ -30,6 +30,6 @@ class ClockInDay < ActiveRecord::Base
 
   private
   def last_clock_in_event
-    clock_in_periods.last.andand.clocking_events.andand.last
+    clock_in_periods.last.andand.clock_in_events.andand.last
   end
 end

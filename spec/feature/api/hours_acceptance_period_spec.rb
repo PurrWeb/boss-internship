@@ -420,7 +420,7 @@ RSpec.describe 'Hours acceptance endpoints' do
         post(url, params)
       end
 
-      event = ClockingEvent.last
+      event = ClockInEvent.last
       expect(event.event_type).to eq('clock_out')
       expect(event.at).to eq(call_time)
     end
