@@ -133,6 +133,8 @@ describe("Clock In/Out Page Integration Test", function(){
             expect(getPinModal()).toBe(undefined)
             expect($$("[data-test-marker-change-pin-button]").length).toBeGreaterThan(0)
 
+            $.ajax.restore()
+
             done();
         }, 10);
     })
