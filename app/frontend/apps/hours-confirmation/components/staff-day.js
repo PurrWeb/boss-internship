@@ -549,8 +549,8 @@ class HoursAcceptancePeriodList extends React.Component {
         </div>
     }
     areAllShiftsAccepted(){
-        var unacceptedShifts = _(this.props.acceptedHours).filter({
-            accepted_state: "in_progress"
+        var unacceptedShifts = _(this.props.hoursAcceptancePeriods).filter({
+            status: "in_progress"
         })
         return unacceptedShifts.length === 0;
     }
