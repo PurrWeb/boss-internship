@@ -18,7 +18,7 @@ export default function makeDataHandler(collectionName, actionHandlers, reducerO
         var handler = actionHandlers[actionHandlerActionType];
         var isDefaultHandlerObject = typeof handler === "object";
         if (isDefaultHandlerObject) {
-            let defaultHandler = getDefaultActionHandler(collectionName, handler)
+            let defaultHandler = getDefaultActionHandler(collectionName, handler, actionHandlerActionType)
             if (defaultHandler.actionCreatorName){
                 actionCreators[defaultHandler.actionCreatorName] = defaultHandler.actionCreator
             }
@@ -41,7 +41,8 @@ export default function makeDataHandler(collectionName, actionHandlers, reducerO
 }
 
 
-function getDefaultActionHandler(collectionName, genericHandlerInfo){
+function getDefaultActionHandler(collectionName, genericHandlerInfo, handledActionType){
+    var explicitlySetGenerateActionCreator = genericHandlerInfo.generateActionCreator !== undefined;
     var defaults = {
         generateActionCreator: true,
     }
@@ -54,10 +55,19 @@ function getDefaultActionHandler(collectionName, genericHandlerInfo){
 
     var ret = {}
 
-    if (genericHandlerInfo.generateActionCreator) {
-        ret = genericActions[genericHandlerInfo.action].makeDefaultActionCreator(infoForGenerator);
-    }
     ret.actionType = genericActions[genericHandlerInfo.action].getActionType(infoForGenerator)
+    if (genericHandlerInfo.generateActionCreator) {
+        var actionTypeMatchesDefaultType = ret.actionType === handledActionType
+        if (!actionTypeMatchesDefaultType && !explicitlySetGenerateActionCreator) {
+            console.warn("Are you sure you want to create a", ret.actionType,
+            "action? (This is part of the default handler for " + handledActionType + ")",
+            "Explicitly pass in generateActionCreator: true/false to fix this warning")
+        }
+
+        var actionCreatorInfo = genericActions[genericHandlerInfo.action].makeDefaultActionCreator(infoForGenerator);
+        ret.actionCreatorName = actionCreatorInfo.actionCreatorName
+        ret.actionCreator = actionCreatorInfo.actionCreator
+    }
     ret.handlerFunction = genericActions[genericHandlerInfo.action].makeHandlerFunction(infoForGenerator);
     return ret;
 }
