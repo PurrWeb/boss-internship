@@ -35,7 +35,8 @@ module Api
             status: params.fetch(:status)
           )
 
-          new_breaks_from_params.each do |_break|
+          breaks = new_breaks_from_params
+          breaks.each do |_break|
             result = _break.update_attributes(
               hours_acceptance_period: hours_acceptance_period
             )
@@ -43,6 +44,8 @@ module Api
           end
 
           result = hours_acceptance_period.save
+
+          raise ActiveRecord::Rollback unless result
         end
 
         if result
@@ -50,7 +53,10 @@ module Api
         else
           render(
             'errors',
-            locals: { hours_acceptance_period: hours_acceptance_period },
+            locals: {
+              hours_acceptance_period: hours_acceptance_period,
+              hours_acceptance_breaks: breaks
+            },
             status: :unprocessable_entity
           )
         end
@@ -75,7 +81,10 @@ module Api
         else
           render(
             'errors',
-            locals: { hours_acceptance_period: result.hours_acceptance_period },
+            locals: {
+              hours_acceptance_period: result.hours_acceptance_period,
+              hours_acceptance_breaks: result.hours_acceptance_breaks
+            },
             status: :unprocessable_entity
           )
         end

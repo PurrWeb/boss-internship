@@ -218,76 +218,129 @@ RSpec.describe 'Hours acceptance endpoints' do
         break2
       end
 
-      let(:update_break_id) { break1.id }
-      let(:update_break_start) { break2_start - 10.minutes }
-      let(:update_break_end) { break2_end + 10.minutes }
+      context 'updating one break' do
+        let(:update_break_id) { break1.id }
+        let(:update_break_start) { break2_start - 10.minutes }
+        let(:update_break_end) { break2_end + 10.minutes }
 
-      let(:new_break_start) { break1_start + 10.minutes }
-      let(:new_break_end) { break1_end + 10.minutes }
+        let(:new_break_start) { break1_start + 10.minutes }
+        let(:new_break_end) { break1_end + 10.minutes }
 
-      let(:params) do
-        {
-          starts_at: new_start_of_shift,
-          ends_at: new_end_of_shift,
-          status: new_status,
-          breaks: [
-            {
-              id: update_break_id,
-              starts_at: update_break_start,
-              ends_at: update_break_end
-            },
-            {
-              starts_at: new_break_start,
-              ends_at: new_break_end
-            }
-          ]
-        }
-      end
+        let(:params) do
+          {
+            starts_at: new_start_of_shift,
+            ends_at: new_end_of_shift,
+            status: new_status,
+            breaks: [
+              {
+                id: update_break_id,
+                starts_at: update_break_start,
+                ends_at: update_break_end
+              },
+              {
+                starts_at: new_break_start,
+                ends_at: new_break_end
+              }
+            ]
+          }
+        end
 
-      context 'before call' do
-        specify 'period has 2 breaks' do
+        context 'before call' do
+          specify 'period has 2 breaks' do
+            expect(
+              hours_acceptance_period.hours_acceptance_breaks.enabled.count
+            ).to eq(2)
+          end
+        end
+
+        specify 'should work' do
+          result = patch(url, params)
+          expect(result.status).to eq(ok_status)
+        end
+
+        specify 'should disable break2' do
+          patch(url, params)
           expect(
-            hours_acceptance_period.hours_acceptance_breaks.enabled.count
-          ).to eq(2)
+            break2.reload
+          ).to be_disabled
+        end
+
+        specify 'should update break1' do
+          expect(break1.versions.count).to eq(1)
+
+          patch(url, params)
+          break1.reload
+          expect(
+            hours_acceptance_period.hours_acceptance_breaks.enabled
+          ).to include(break1)
+          expect(break1.versions.count).to eq(2)
+          expect(break1.starts_at).to eq(update_break_start)
+          expect(break1.ends_at).to eq(update_break_end)
+        end
+
+        specify 'should create new break' do
+          patch(url, params)
+          new_break = hours_acceptance_period.
+            hours_acceptance_breaks.
+            enabled.
+            where('id NOT IN (?)', [break1.id, break2.id]).
+          first
+
+          expect(new_break).to be_present
+          expect(new_break.starts_at).to eq(new_break_start)
+          expect(new_break.ends_at).to eq(new_break_end)
         end
       end
 
-      specify 'should work' do
-        result = patch(url, params)
-        expect(result.status).to eq(ok_status)
-      end
+      context 'attempting to add overlapping break' do
+        let(:params) do
+          {
+            starts_at: new_start_of_shift,
+            ends_at: new_end_of_shift,
+            status: new_status,
+            breaks: [
+              {
+                id: break1.id,
+                starts_at: break1.starts_at,
+                ends_at: break1.ends_at
+              },
+              {
+                id: break2.id,
+                starts_at: break2.starts_at,
+                ends_at: break2.ends_at
+              },
+              {
+                starts_at: break1.starts_at,
+                ends_at: break1.ends_at
+              }
+            ]
+          }
+        end
 
-      specify 'should disable break2' do
-        patch(url, params)
-        expect(
-          break2.reload
-        ).to be_disabled
-      end
+        specify 'should return unprocessable_entity_status' do
+          result = patch(url, params)
+          expect(result.status).to eq(unprocessable_entity_status)
+        end
 
-      specify 'should update break1' do
-        expect(break1.versions.count).to eq(1)
+        specify 'should return errors for the object in question' do
+          response = patch(url, params)
+          json = JSON.parse(response.body)
 
-        patch(url, params)
-        break1.reload
-        expect(
-          hours_acceptance_period.hours_acceptance_breaks.enabled
-        ).to include(break1)
-        expect(break1.versions.count).to eq(2)
-        expect(break1.starts_at).to eq(update_break_start)
-        expect(break1.ends_at).to eq(update_break_end)
-      end
-
-      specify 'should create new break' do
-        patch(url, params)
-        new_break = hours_acceptance_period.
-          hours_acceptance_breaks.
-          enabled.
-          where('id NOT IN (?)', [break1.id, break2.id]).
-        first
-
-        expect(new_break).to be_present
-        expect(new_break.starts_at).to eq(new_break_start)
-        expect(new_break.ends_at).to eq(new_break_end)
+          expect(json).to eq(
+            {
+              "errors"=> {
+                "hours_acceptance_breaks"=> [
+                  { "id" => break1.id },
+                  { "id" => break2.id },
+                  {
+                    "id" => nil,
+                    "base" => ["break overlaps existing break"]
+                  }
+                ]
+              }
+            }
+          )
+        end
       end
     end
   end

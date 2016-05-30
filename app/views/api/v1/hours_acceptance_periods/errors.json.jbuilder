@@ -5,7 +5,7 @@ json.errors do
   end
 
   json.hours_acceptance_breaks do
-    json.array! hours_acceptance_period.hours_acceptance_breaks do |hours_acceptance_break|
+    json.array! hours_acceptance_breaks do |hours_acceptance_break|
       json.id hours_acceptance_break.id
       hours_acceptance_break.errors.messages.each do |key, messages|
         json.set!(key, messages)
