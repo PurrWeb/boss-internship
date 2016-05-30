@@ -253,12 +253,17 @@ export const forceStaffMemberClockOut = createApiRequestAction({
                 ]
             }
 
+            var hoursAcceptancePeriod = responseData.hours_acceptance_period;
+            if (hoursAcceptancePeriod !== null) {
+                hoursAcceptancePeriod = backendData.processHoursAcceptancePeriodObject(hoursAcceptancePeriod);
+            }
+
             var successData = {
                 staffMember: requestOptions.staffMember,
                 status: responseData.status,
                 clockInPeriod: backendData.processClockInPeriodObject(responseData.clock_in_period),
                 clockInBreaks: responseData.clock_in_breaks.map(backendData.processClockInBreakObject),
-                hoursAcceptancePeriod: backendData.processHoursAcceptancePeriodObject(responseData.hours_acceptance_period),
+                hoursAcceptancePeriod,
                 hoursAcceptanceBreaks: responseData.hours_acceptance_breaks.map(backendData.processHoursAcceptanceBreakObject),
                 clockInEvents: responseData.clock_in_events.map(backendData.processClockInEventObject)
             };
