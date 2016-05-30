@@ -49,7 +49,7 @@ module Api
           render locals: { hours_acceptance_period: hours_acceptance_period }
         else
           render(
-            'error',
+            'errors',
             locals: { hours_acceptance_period: hours_acceptance_period },
             status: :unprocessable_entity
           )
@@ -74,7 +74,7 @@ module Api
           render locals: { hours_acceptance_period: result.hours_acceptance_period }
         else
           render(
-            'error',
+            'errors',
             locals: { hours_acceptance_period: result.hours_acceptance_period },
             status: :unprocessable_entity
           )
