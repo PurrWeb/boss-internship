@@ -56,6 +56,10 @@ class HoursConfirmationController < ApplicationController
         ClockInStatus.new(clock_in_day: clock_in_day)
       end
 
+      clock_in_notes = ClockInNote.
+        joins(:clock_in_day).
+        merge(clock_in_days)
+
       render locals: {
         access_token: access_token,
         staff_members: staff_members,
@@ -65,6 +69,7 @@ class HoursConfirmationController < ApplicationController
         hours_acceptance_periods: hours_acceptance_periods,
         hours_acceptance_breaks: hours_acceptance_breaks,
         hours_acceptance_reasons: hours_acceptance_reasons,
+        clock_in_notes: clock_in_notes,
         clock_in_periods: clock_in_periods,
         clock_in_breaks:  clock_in_breaks,
         clock_in_events: clock_in_events,
@@ -134,6 +139,10 @@ class HoursConfirmationController < ApplicationController
         ClockInStatus.new(clock_in_day: clock_in_day)
       end
 
+      clock_in_notes = ClockInNote.
+        joins(:clock_in_day).
+        merge(clock_in_days)
+
       render locals: {
         access_token: access_token,
         staff_members: staff_members,
@@ -143,6 +152,7 @@ class HoursConfirmationController < ApplicationController
         hours_acceptance_periods: hours_acceptance_periods,
         hours_acceptance_breaks: hours_acceptance_breaks,
         hours_acceptance_reasons: hours_acceptance_reasons,
+        clock_in_notes: clock_in_notes,
         clock_in_periods: clock_in_periods,
         clock_in_breaks:  clock_in_breaks,
         clock_in_events: clock_in_events,

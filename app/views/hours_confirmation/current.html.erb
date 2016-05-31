@@ -30,7 +30,7 @@
 
   window.boss.staffTypes = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
 
-  window.boss.clockInNotes = [];
+  window.boss.clockInNotes = <%= raw render partial: 'api/v1/shared/clock_in_notes.json', locals: { clock_in_notes: clock_in_notes } %>;
 
   window.boss.pageOptions = {
     venue: { id: <%= venue.id %> }
