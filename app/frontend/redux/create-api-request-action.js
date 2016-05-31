@@ -84,7 +84,11 @@ export default function createApiRequestAction(actionOptions){
                     if (requestOptions.errorHandlingComponent) {
                         actions.push(setComponentErrorAction(responseOptions.errors));
                     } else {
-                        alert(responseOptions.errors.base.join("\n"));
+                        if (responseOptions.errors.base){
+                            alert(responseOptions.errors.base.join("\n"));
+                        } else {
+                            alert(JSON.stringify(responseOptions.errors));
+                        }
                     }
                     dispatch(actions);
                 }

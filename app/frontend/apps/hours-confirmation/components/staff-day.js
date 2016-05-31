@@ -462,7 +462,7 @@ class HoursAcceptancePeriodListItem extends React.Component {
         </div>
     }
     isAccepted(){
-        return this.props.hoursAcceptancePeriod.status !== "in_progress";
+        return this.props.hoursAcceptancePeriod.status !== "pending";
     }
     isValid(){
         return Validation.validateHoursPeriod(this.props.hoursAcceptancePeriod).isValid;
@@ -564,7 +564,7 @@ class HoursAcceptancePeriodList extends React.Component {
     }
     areAllShiftsAccepted(){
         var unacceptedShifts = _(this.props.hoursAcceptancePeriods).filter({
-            status: "in_progress"
+            status: "pending"
         })
         return unacceptedShifts.length === 0;
     }
@@ -604,7 +604,7 @@ class HoursAcceptancePeriodList extends React.Component {
             clock_in_day: {id: this.props.clockInDay.serverId},
             hours_acceptance_reason: null,
             reason_note: "",
-            status: "in_progress"
+            status: "pending"
         }
 
         this.props.boundActions.addHoursAcceptancePeriod(newHoursPeriod)

@@ -191,6 +191,18 @@ const apiRoutes = {
             return "hours_acceptance_periods/clock_out"
         },
         method: "POST"
+    },
+    createHoursAccceptancePeriod: {
+        getPath(options){
+            return "hours_acceptance_periods"
+        },
+        method: "POST"
+    },
+    updateHoursAcceptancePeriod: {
+        getPath(options){
+            return "hours_acceptance_periods/" + oFetch(options, "hoursAcceptancePeriodServerId")
+        },
+        method: "PUT"
     }
 }
 
