@@ -52,11 +52,16 @@ class HoursConfirmationController < ApplicationController
         joins(:staff_member).
         merge(staff_members)
 
+      clock_in_statuses = clock_in_days.map do |clock_in_day|
+        ClockInStatus.new(clock_in_day: clock_in_day)
+      end
+
       render locals: {
         access_token: access_token,
         staff_members: staff_members,
         staff_types: staff_types,
         clock_in_days: clock_in_days,
+        clock_in_statuses: clock_in_statuses,
         hours_acceptance_periods: hours_acceptance_periods,
         hours_acceptance_breaks: hours_acceptance_breaks,
         clock_in_period_reasons: clock_in_period_reasons,
@@ -125,11 +130,16 @@ class HoursConfirmationController < ApplicationController
         joins(:staff_member).
         merge(staff_members)
 
+      clock_in_statuses = clock_in_days.map do |clock_in_day|
+        ClockInStatus.new(clock_in_day: clock_in_day)
+      end
+
       render locals: {
         access_token: access_token,
         staff_members: staff_members,
         staff_types: staff_types,
         clock_in_days: clock_in_days,
+        clock_in_statuses: clock_in_statuses,
         hours_acceptance_periods: hours_acceptance_periods,
         hours_acceptance_breaks: hours_acceptance_breaks,
         clock_in_period_reasons: clock_in_period_reasons,
