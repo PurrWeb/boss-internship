@@ -14,7 +14,8 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   validates :clock_in_day, presence: true
   validates :creator, presence: true
   validates :status, inclusion: { in: STATES, message: 'is required' }
-  validates :hours_acceptance_reason, presence: true
+  validates :hours_acceptance_reason, presence: true, if: :accepted?
+
   include PeriodTimeValidations
 
   def self.pending
@@ -31,6 +32,10 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   def enabled?
     !deleted?
+  end
+
+  def accepted?
+    status == 'accepted'
   end
 
   def deleted?
