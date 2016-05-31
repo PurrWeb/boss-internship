@@ -5,6 +5,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   belongs_to :clock_in_day
   belongs_to :creator, polymorphic: true
+  belongs_to :hours_acceptance_reason
   has_many :hours_acceptance_breaks
 
   validates_associated :hours_acceptance_breaks
@@ -13,6 +14,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   validates :clock_in_day, presence: true
   validates :creator, presence: true
   validates :status, inclusion: { in: STATES, message: 'is required' }
+  validates :hours_acceptance_reason, presence: true
   include PeriodTimeValidations
 
   def self.pending

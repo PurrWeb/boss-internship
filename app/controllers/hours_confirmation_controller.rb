@@ -21,7 +21,7 @@ class HoursConfirmationController < ApplicationController
         joins(:clock_in_period).
         merge(clock_in_periods)
 
-      clock_in_period_reasons = ClockInPeriodReason.all
+      hours_acceptance_reasons = HoursAcceptanceReason.all
 
       clock_in_events = ClockInEvent.
         joins(:clock_in_period).
@@ -64,7 +64,7 @@ class HoursConfirmationController < ApplicationController
         clock_in_statuses: clock_in_statuses,
         hours_acceptance_periods: hours_acceptance_periods,
         hours_acceptance_breaks: hours_acceptance_breaks,
-        clock_in_period_reasons: clock_in_period_reasons,
+        hours_acceptance_reasons: hours_acceptance_reasons,
         clock_in_periods: clock_in_periods,
         clock_in_breaks:  clock_in_breaks,
         clock_in_events: clock_in_events,
@@ -99,7 +99,7 @@ class HoursConfirmationController < ApplicationController
         joins(:clock_in_period).
         merge(clock_in_periods)
 
-      clock_in_period_reasons = ClockInPeriodReason.all
+      hours_acceptance_reasons = HoursAcceptanceReason.all
 
       clock_in_events = ClockInEvent.
         joins(:clock_in_period).
@@ -142,7 +142,7 @@ class HoursConfirmationController < ApplicationController
         clock_in_statuses: clock_in_statuses,
         hours_acceptance_periods: hours_acceptance_periods,
         hours_acceptance_breaks: hours_acceptance_breaks,
-        clock_in_period_reasons: clock_in_period_reasons,
+        hours_acceptance_reasons: hours_acceptance_reasons,
         clock_in_periods: clock_in_periods,
         clock_in_breaks:  clock_in_breaks,
         clock_in_events: clock_in_events,
