@@ -141,8 +141,13 @@ module Api
           requester: current_user
         )
 
-        render locals: {
+        hours_acceptance_period = HoursAcceptancePeriod.where(
           clock_in_day: clock_in_day
+        ).last
+
+        render locals: {
+          clock_in_day: clock_in_day,
+          hours_acceptance_period: hours_acceptance_period
         }
       end
 
