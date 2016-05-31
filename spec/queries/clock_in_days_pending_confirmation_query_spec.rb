@@ -6,6 +6,13 @@ describe ClockInDaysPendingConfirmationQuery do
   let(:venue) { FactoryGirl.create(:venue) }
   let(:staff_member) { FactoryGirl.create(:staff_member) }
   let(:query) { ClockInDaysPendingConfirmationQuery.new(venue: venue) }
+  let(:hours_acceptance_reason) do
+    HoursAcceptanceReason.create!(
+      text: 'nothing',
+      rank: 0,
+      enabled: true
+    )
+  end
   let(:clock_in_day) do
     ClockInDay.create!(
       staff_member: staff_member,
@@ -24,6 +31,7 @@ describe ClockInDaysPendingConfirmationQuery do
     before do
       HoursAcceptancePeriod.create!(
         clock_in_day: clock_in_day,
+        hours_acceptance_reason: hours_acceptance_reason,
         starts_at: start_of_day,
         ends_at: start_of_day + 1.hour,
         status: 'accepted',
@@ -39,6 +47,7 @@ describe ClockInDaysPendingConfirmationQuery do
       before do
         HoursAcceptancePeriod.create!(
           clock_in_day: clock_in_day,
+          hours_acceptance_reason: hours_acceptance_reason,
           starts_at: start_of_day + 1.hour,
           ends_at: start_of_day + 2.hour,
           status: 'pending',
