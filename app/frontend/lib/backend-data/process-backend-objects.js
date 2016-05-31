@@ -74,7 +74,7 @@ export function processClockInNoteObject(clockInNote){
     return processBackendObject(clockInNote);
 }
 
-export function processClockInReasonObject(clockInReason){
+export function processHoursAcceptanceReasonObject(clockInReason){
     return processBackendObject(clockInReason);
 }
 

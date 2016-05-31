@@ -67,7 +67,7 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
                         ends_at: b.ends_at
                     }
                 }),
-                hours_acceptance_reason_id: null,
+                hours_acceptance_reason_id: hoursAcceptancePeriod.hours_acceptance_reason.serverId,
                 reason_note: reason_note
             }
         },

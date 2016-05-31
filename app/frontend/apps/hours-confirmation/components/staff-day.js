@@ -103,7 +103,7 @@ export default class StaffDay extends React.Component {
                             </div>
                         </div>
                         <HoursAcceptancePeriodList
-                            clockInReasons={this.props.clockInReasons}
+                            hoursAcceptanceReasons={this.props.hoursAcceptanceReasons}
                             rotaDate={this.props.rotaDate}
                             clockInDay={this.props.clockInDay}
                             hoursAcceptancePeriods={this.props.hoursAcceptancePeriods}
@@ -334,22 +334,15 @@ class BreakList extends React.Component {
 
 class ReasonSelector extends React.Component {
     render(){
-        var {reason, reasonNote, clockInReasons} = this.props;
+        var {reason, reasonNote, reasons} = this.props;
         var reasonIsSelected = reason !== null;
 
         var showTextArea = reasonIsSelected && reason.title === "Other";
-        var noneSelectedId = "none-selected";
-
-        var reasonsPlusNoneOption = _.values(_.clone(clockInReasons));
-        reasonsPlusNoneOption.push({
-            clientId: noneSelectedId,
-            title: "None"
-        })
 
         var dropdown, dropdownSelectionString;
         if (this.props.readonly) {
             dropdownSelectionString = <div>
-                {reasonIsSelected ? reason.title : "None"}
+                {reason.title}
             </div>
         } else {
             dropdown = <select
@@ -358,16 +351,13 @@ class ReasonSelector extends React.Component {
                 onChange={(e) => {
                     var reason;
                     var selectedValue = e.target.value;
-                    if (selectedValue === noneSelectedId) {
-                        reason = null;
-                    } else {
-                        reason = clockInReasons[selectedValue]
-                    }
-                    this.triggerChange({reason});
+                    this.triggerChange({
+                        reason: reasons[selectedValue]
+                    });
                 }}>
-                {_.values(reasonsPlusNoneOption).map((reason) =>
+                {_.values(reasons).map((reason) =>
                     <option value={reason.clientId} key={reason.clientId}>
-                        {reason.title}
+                        {reason.text}
                     </option>
                 )}
             </select>
@@ -443,14 +433,14 @@ class HoursAcceptancePeriodListItem extends React.Component {
                     <div className="staff-day__sub-heading">Reason</div>
                     <ReasonSelector
                         readonly={readonly}
-                        clockInReasons={this.props.clockInReasons}
+                        reasons={this.props.hoursAcceptanceReasons}
                         reason={hoursAcceptancePeriod.hours_acceptance_reason}
                         reasonNote={hoursAcceptancePeriod.reason_note}
                         onChange={({reasonNote, reason}) => {
                             this.props.boundActions.updateHoursAcceptancePeriod({
                                 clientId: hoursAcceptancePeriod.clientId,
                                 reason_note: reasonNote,
-                                reason: reason
+                                hours_acceptance_reason: reason
                             })
                         }}
                     />
@@ -550,7 +540,7 @@ class HoursAcceptancePeriodList extends React.Component {
                             boundActions={this.props.boundActions}
                             clockInBreaks={this.props.clockInBreaks}
                             rotaDate={this.props.rotaDate}
-                            clockInReasons={this.props.clockInReasons}
+                            hoursAcceptanceReasons={this.props.hoursAcceptanceReasons}
                             hoursAcceptancePeriod={hoursAcceptancePeriod} />
                     </div>
             )}

@@ -30,7 +30,7 @@ function mapStateToProps(state, ownProps){
         ...details,
         clockInReasons: state.clockInReasons,
         staffType: staffMember.staff_type.get(state.staffTypes),
-        clockInReasons: state.clockInReasons,
+        hoursAcceptanceReasons: state.hoursAcceptanceReasons,
         rotaDate: new RotaDate({
             dateOfRota: ownProps.clockInDay.date
         })
