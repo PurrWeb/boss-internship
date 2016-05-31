@@ -38,4 +38,14 @@ describe("DatabaseFactory", function(){
             dbFactory.getRootReducer();
         }).toThrow("Trying to handle non-existent action type deleteUser in reducer users")
     })
+
+    it("Throws an exception when an unknown action type is dispatched", function(){
+        var dbFactory = new DatabaseFactory();
+        var rootReducer = dbFactory.getRootReducer();
+
+        var action = {type: "DOESNT_EXIST"}
+        expect(function(){
+            rootReducer({}, action);
+        }).toThrow("Dispatched non-existent action type DOESNT_EXIST")
+    })
 })

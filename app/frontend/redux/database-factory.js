@@ -1,5 +1,6 @@
 import { combineReducers } from "redux"
 import _ from "underscore"
+import utils from "~lib/utils"
 
 /*
     Collects action types, action creators and reducers and then
@@ -68,8 +69,22 @@ export default class DatabaseFactory {
         this._validate();
         return this._actionCreators
     }
+    _hasActionType(actionType){
+        var actionIsInternalReduxAction = utils.stringContains(actionType, "@@")
+        if (actionIsInternalReduxAction){
+            return true;
+        }
+        return _(this._actionTypes).contains(actionType)
+    }
     getRootReducer(){
+        var self = this;
         this._validate();
-        return combineReducers(this._reducers)
+        var rootReducer = combineReducers(this._reducers)
+        return function(state, action){
+            if (!self._hasActionType(action.type)){
+                throw Error("Dispatched non-existent action type " + action.type)
+            }
+            return rootReducer(state, action)
+        }
     }
 }
