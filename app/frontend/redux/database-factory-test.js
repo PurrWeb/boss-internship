@@ -19,7 +19,7 @@ describe("DatabaseFactory", function(){
         }).toThrow("Reducer users already exists")
     })
 
-    it("Prevents adding two action creators with the samen name", function(){
+    it("Prevents adding two action creators with the same name", function(){
         var dbFactory = new DatabaseFactory();
 
         dbFactory.registerActionCreator("addUser", function(){})
