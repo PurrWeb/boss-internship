@@ -44,8 +44,7 @@ class ClockInStatus
         current_recorded_clock_in_period = ClockInPeriod.new(
           creator: requester,
           clock_in_day: clock_in_day,
-          starts_at: at,
-          clock_in_period_reason: nil
+          starts_at: at
         )
       elsif event_type == 'clock_out'
         current_recorded_clock_in_period.update_attributes!(ends_at: at)
