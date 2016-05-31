@@ -32,7 +32,9 @@ module Api
             creator: requester,
             starts_at: params.fetch(:start_time),
             ends_at: params.fetch(:end_time),
-            status: params.fetch(:status)
+            status: params.fetch(:status),
+            hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
+            reason_note: params[:reason_note]
           )
 
           breaks = new_breaks_from_params
@@ -73,6 +75,8 @@ module Api
           ends_at: params.fetch(:ends_at),
           breaks_data: params[:breaks] || [],
           status: params.fetch(:status),
+          hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
+          reason_note: params[:reason_note],
           requester: current_user
         ).call
 
