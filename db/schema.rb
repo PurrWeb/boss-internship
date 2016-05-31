@@ -134,22 +134,14 @@ ActiveRecord::Schema.define(version: 20160601214451) do
     t.integer  "clock_in_day_id", limit: 4,                  null: false
   end
 
-  create_table "clock_in_period_reasons", force: :cascade do |t|
-    t.string   "text",       limit: 255, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "clock_in_periods", force: :cascade do |t|
-    t.integer  "creator_id",                limit: 4,   null: false
-    t.integer  "clock_in_period_reason_id", limit: 4
-    t.string   "reason_note",               limit: 255
-    t.datetime "starts_at",                             null: false
+    t.integer  "creator_id",      limit: 4,   null: false
+    t.datetime "starts_at",                   null: false
     t.datetime "ends_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "clock_in_day_id",           limit: 4,   null: false
-    t.string   "creator_type",              limit: 255, null: false
+    t.integer  "clock_in_day_id", limit: 4,   null: false
+    t.string   "creator_type",    limit: 255, null: false
   end
 
   create_table "cron_jobs", force: :cascade do |t|
