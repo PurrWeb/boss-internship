@@ -348,7 +348,7 @@ class ReasonSelector extends React.Component {
         var dropdown, dropdownSelectionString;
         if (this.props.readonly) {
             dropdownSelectionString = <div>
-                {reason.title}
+                {reasonIsSelected ? reason.title : "None"}
             </div>
         } else {
             dropdown = <select
