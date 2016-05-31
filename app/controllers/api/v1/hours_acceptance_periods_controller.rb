@@ -146,8 +146,13 @@ module Api
           clock_in_day: clock_in_day
         ).last
 
+        clock_in_period = ClockInPeriod.where(
+          clock_in_day: clock_in_day
+        ).last
+
         render locals: {
           clock_in_day: clock_in_day,
+          clock_in_period: clock_in_period,
           hours_acceptance_period: hours_acceptance_period
         }
       end

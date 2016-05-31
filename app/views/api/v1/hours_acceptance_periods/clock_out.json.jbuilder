@@ -1,4 +1,11 @@
 json.status clock_in_day.current_clock_in_state
+json.clock_in_period do
+  json.partial! 'api/v1/shared/clock_in_period.json', locals: { clock_in_period: clock_in_period }
+end
+clock_in_breaks = clock_in_period.clock_in_breaks
+json.clock_in_breaks clock_in_breaks do |clock_in_break|
+  json.partial! 'api/v1/shared/clock_in_break.json', locals: { clock_in_break: clock_in_break }
+end
 json.hours_acceptance_period do
   json.partial! 'api/v1/shared/hours_acceptance_period.json', locals: { hours_acceptance_period: hours_acceptance_period }
 end

@@ -441,7 +441,7 @@ RSpec.describe 'Hours acceptance endpoints' do
       end
 
       json = JSON.parse(response.body)
-      ["clock_in_day", "clock_in_notes", "clock_in_periods", "clock_in_breaks", "hours_acceptance_periods", "hours_acceptance_breaks"].each do |key|
+      ["clock_in_period", "clock_in_breaks", "hours_acceptance_period", "hours_acceptance_breaks"].each do |key|
         expect(json.keys).to include(key)
       end
     end
