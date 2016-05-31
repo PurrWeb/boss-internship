@@ -443,7 +443,7 @@ class HoursAcceptancePeriodListItem extends React.Component {
                     <ReasonSelector
                         readonly={readonly}
                         clockInReasons={this.props.clockInReasons}
-                        reason={hoursAcceptancePeriod.reason}
+                        reason={hoursAcceptancePeriod.hours_acceptance_reason}
                         reasonNote={hoursAcceptancePeriod.reason_note}
                         onChange={({reasonNote, reason}) => {
                             this.props.boundActions.updateHoursAcceptancePeriod({
@@ -601,7 +601,7 @@ class HoursAcceptancePeriodList extends React.Component {
             ...defaultTimes,
             id: null,
             clock_in_day: {id: this.props.clockInDay.serverId},
-            reason: {id: 912},
+            hours_acceptance_reason: null,
             reason_note: "",
             status: "in_progress"
         }

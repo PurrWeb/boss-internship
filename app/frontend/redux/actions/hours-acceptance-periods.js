@@ -34,7 +34,7 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
     makeRequest: function(requestOptions, success, error){
         setTimeout(function(){
             var hoursAcceptancePeriod = oFetch(requestOptions, "hoursAcceptancePeriod")
-            var {starts_at, ends_at, breaks, reason, reason_note} = hoursAcceptancePeriod
+            var {starts_at, ends_at, breaks, hours_acceptance_reason, reason_note} = hoursAcceptancePeriod
 
             var requestData = {
                 hours_acceptance_period_id: hoursAcceptancePeriod.serverId,
@@ -46,7 +46,7 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
                         ends_at: b.ends_at
                     }
                 }),
-                reason_id: reason === null ? null : reason.serverId,
+                reason_id: hours_acceptance_reason === null ? null : hours_acceptance_reason.serverId,
                 reason_note: reason_note
             }
 
@@ -56,7 +56,7 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
                     starts_at: new Date(2016, 10, 1, 9, 45).toString(),
                     ends_at: new Date(2016, 10, 1, 20, 0).toString(),
                     reason_note: "note returned from fake backend response",
-                    reason: {id: 912},
+                    hours_acceptance_reason: {id: 912},
                     clock_in_day: {id: 22},
                     status: "accepted",
                 },
