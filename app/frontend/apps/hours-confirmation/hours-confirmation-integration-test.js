@@ -49,7 +49,7 @@ describe('Hours Confirmation Integration Test', function() {
             starts_at: new Date(2016, 10, 1, 9, 30).toString(),
             ends_at: new Date(2016, 10, 1, 18, 0).toString(),
             reason_note: "custom note entered here",
-            reason: {id: 912},
+            hours_acceptance_reason: {id: 912},
             clock_in_day: {id: 22},
             status: "in_progress",
         }],
@@ -58,41 +58,42 @@ describe('Hours Confirmation Integration Test', function() {
                 id: 11,
                 type: "clock_in",
                 time: new Date(2016, 10, 1, 9, 0).toString(),
-                clock_in_day: {id: 22}
+                clock_in_period: {id: 2333}
             }, {
                 id: 22,
                 type: "start_break",
                 time: new Date(2016, 10, 1, 10, 30).toString(),
-                clock_in_day: {id: 22}
+                clock_in_period: {id: 2333}
             }, {
                 id: 33,
                 type: "end_break",
                 time: new Date(2016, 10, 1, 11, 30).toString(),
-                clock_in_day: {id: 22}
+                clock_in_period: {id: 2333}
             }, {
                 id: 44,
                 type: "clock_out",
                 time: new Date(2016, 10, 1, 18, 0).toString(),
-                clock_in_day: {id: 22}
+                clock_in_period: {id: 2333}
             }, {
                 id: 55,
                 type: "clock_in",
                 time: new Date(2016, 10, 2, 1, 0).toString(),
-                clock_in_day: {id: 22}
+                clock_in_period: {id: 12222}
             }, {
                 id: 66,
                 type: "start_break",
                 time: new Date(2016, 10, 2, 2, 30).toString(),
-                clock_in_day: {id: 22}
-            }],
-        clockInReasons: [
+                clock_in_period: {id: 12222}
+            }
+        ],
+        hoursAcceptanceReasons: [
             {
                 id: "599",
-                title: "Came in early"
+                text: "Came in early"
             },
             {
                 id: "912",
-                title: "Other"
+                text: "Other"
             }
         ],
         rotaShifts: [
