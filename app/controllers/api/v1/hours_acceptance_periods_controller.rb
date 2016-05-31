@@ -51,7 +51,10 @@ module Api
         end
 
         if result
-          render locals: { hours_acceptance_period: hours_acceptance_period }
+          render locals: {
+            hours_acceptance_period: hours_acceptance_period,
+            hours_acceptance_breaks: breaks
+          }
         else
           render(
             'errors',
@@ -81,7 +84,10 @@ module Api
         ).call
 
         if result.success?
-          render locals: { hours_acceptance_period: result.hours_acceptance_period }
+          render locals: {
+            hours_acceptance_period: result.hours_acceptance_period,
+            hours_acceptance_breaks: result.hours_acceptance_breaks
+          }
         else
           render(
             'errors',
