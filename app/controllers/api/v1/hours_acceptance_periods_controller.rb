@@ -15,6 +15,7 @@ module Api
 
         hours_acceptance_period = nil
         result = false
+        breaks = nil
 
         ActiveRecord::Base.transaction do
           clock_in_day = ClockInDay.find_or_initialize_by(
