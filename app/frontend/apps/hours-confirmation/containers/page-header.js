@@ -5,17 +5,21 @@ import { appRoutes } from "~lib/routes"
 
 class PageHeader extends React.Component {
     render(){
-        return <VenueDropdown
-            selectedVenues={[this.props.pageOptions.venue.clientId]}
-            venues={this.props.venues}
-            clearable={false}
-            onChange={(venueIds) => {
-                var venue = this.props.venues[venueIds[0]]
-                location.href = appRoutes.hoursConfirmationCurrentPage({
-                    venueId: venue.serverId
-                })
-            }}
-        />
+        return <div className="row">
+            <div className="col-md-3">
+                <VenueDropdown
+                    selectedVenues={[this.props.pageOptions.venue.clientId]}
+                    venues={this.props.venues}
+                    clearable={false}
+                    onChange={(venueIds) => {
+                        var venue = this.props.venues[venueIds[0]]
+                        location.href = appRoutes.hoursConfirmationCurrentPage({
+                            venueId: venue.serverId
+                        })
+                    }}
+                />
+            </div>
+        </div>
     }
 }
 
