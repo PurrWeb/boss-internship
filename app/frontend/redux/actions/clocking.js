@@ -2,6 +2,7 @@ import createApiRequestAction from "../create-api-request-action"
 import {apiRoutes} from "~lib/routes"
 import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-request-maker"
 import oFetch from "o-fetch"
+import utils from "~lib/utils"
 import {selectClockInOutAppIsInManagerMode} from "../selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import {showUserActionConfirmationMessage} from "./user-action-confirmation-messages"
@@ -188,9 +189,41 @@ export const clockInOutAppFetchAppData = createApiRequestAction({
     }
 })
 
+
+
 export const forceStaffMemberClockOut = createApiRequestAction({
     requestType: "FORCE_STAFF_MEMBER_CLOCK_OUT",
-    makeRequest: function(requestOptions, success, error){
+    makeRequest: makeApiRequestMaker({
+        method: apiRoutes.forceClockOut.method,
+        path: apiRoutes.forceClockOut.getPath(),
+        data: function(requestOptions){
+            return {
+                staff_member_id: oFetch(requestOptions, "staffMember.serverId"),
+                venue_id: oFetch(requestOptions, "clockInDay.venue.serverId"),
+                date: utils.formatDateForApi(oFetch(requestOptions, "clockInDay.date"))
+            }
+        },
+        getSuccessActionData: function(responseData){
+            var hoursAcceptancePeriod = responseData.hours_acceptance_period;
+            if (hoursAcceptancePeriod !== null) {
+                hoursAcceptancePeriod = backendData.processHoursAcceptancePeriodObject(hoursAcceptancePeriod);
+            }
+
+            var successData = {
+                staffMember: requestOptions.staffMember,
+                status: responseData.status,
+                clockInPeriod: backendData.processClockInPeriodObject(responseData.clock_in_period),
+                clockInBreaks: responseData.clock_in_breaks.map(backendData.processClockInBreakObject),
+                hoursAcceptancePeriod,
+                hoursAcceptanceBreaks: responseData.hours_acceptance_breaks.map(backendData.processHoursAcceptanceBreakObject),
+                clockInEvents: responseData.clock_in_events.map(backendData.processClockInEventObject)
+            };
+
+            return successData;
+        }
+    })
+
+    /*function(requestOptions, success, error){
         setTimeout(function(){
             var responseData = {
                 status: "clocked_out",
@@ -253,24 +286,9 @@ export const forceStaffMemberClockOut = createApiRequestAction({
                 ]
             }
 
-            var hoursAcceptancePeriod = responseData.hours_acceptance_period;
-            if (hoursAcceptancePeriod !== null) {
-                hoursAcceptancePeriod = backendData.processHoursAcceptancePeriodObject(hoursAcceptancePeriod);
-            }
 
-            var successData = {
-                staffMember: requestOptions.staffMember,
-                status: responseData.status,
-                clockInPeriod: backendData.processClockInPeriodObject(responseData.clock_in_period),
-                clockInBreaks: responseData.clock_in_breaks.map(backendData.processClockInBreakObject),
-                hoursAcceptancePeriod,
-                hoursAcceptanceBreaks: responseData.hours_acceptance_breaks.map(backendData.processHoursAcceptanceBreakObject),
-                clockInEvents: responseData.clock_in_events.map(backendData.processClockInEventObject)
-            };
-
-            success(successData)
         }, 1000)
-    }
+    }*/
 })
 
 export {actionTypes}

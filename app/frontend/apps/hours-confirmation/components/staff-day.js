@@ -81,7 +81,8 @@ export default class StaffDay extends React.Component {
                         <ClockOutButton
                             staffMember={this.props.staffMember}
                             clockOut={() => this.props.boundActions.forceStaffMemberClockOut({
-                                staffMember: this.props.staffMember
+                                staffMember: this.props.staffMember,
+                                clockInDay: this.props.clockInDay
                             })}
                         />
                     </div>

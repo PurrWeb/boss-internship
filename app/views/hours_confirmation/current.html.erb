@@ -7,6 +7,8 @@
 <script>
   window.boss = {};
 
+  window.boss.access_token = "8824633f758e133ffef1061d08eb804f";
+
   window.boss.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: venues } %>;
   window.boss.clockInDays = <%= raw render partial: 'api/v1/shared/clock_in_days.json', locals: { clock_in_days: clock_in_days } %>;
 

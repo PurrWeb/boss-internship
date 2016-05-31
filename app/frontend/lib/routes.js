@@ -185,6 +185,12 @@ const apiRoutes = {
             return "clock_in_clock_out"
         },
         method: "GET"
+    },
+    forceClockOut: {
+        getPath(){
+            return "hours_acceptance_periods/clock_out"
+        },
+        method: "POST"
     }
 }
 

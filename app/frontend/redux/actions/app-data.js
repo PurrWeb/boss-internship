@@ -148,6 +148,10 @@ function getInititalLoadActions(initialLoadData){
 
 
     for (var objectName in initialLoadData) {
+        if (objectName === "access_token") {
+            // Is used a global rather than being put in the store
+            continue;
+        }
         let value = initialLoadData[objectName];
 
         var objectDetails = speciallyHandledObjects[objectName]
