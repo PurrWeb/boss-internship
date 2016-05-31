@@ -7,10 +7,13 @@ class ClockInStatus
     @venue = clock_in_day.venue
     @staff_member = clock_in_day.staff_member
   end
+  attr_reader :clock_in_day, :date, :venue, :staff_member
+
+  def current_state
+    clock_in_day.current_clock_in_state
+  end
 
   def transition_to!(state:, at:, requester:, nested: false)
-    current_state = clock_in_day.current_clock_in_state
-
     raise "unsupported state encountered: #{state}" unless STATES.include?(state)
 
     transition_legal = allowed_event_transations.fetch(current_state).any? do |transition_data|
@@ -71,8 +74,6 @@ class ClockInStatus
   end
 
   private
-  attr_reader :clock_in_day, :date, :venue, :staff_member
-
  def create_hours_confirmation_from_clock_in_period(clock_in_period:, creator:)
    clock_in_day = clock_in_period.clock_in_day
 
