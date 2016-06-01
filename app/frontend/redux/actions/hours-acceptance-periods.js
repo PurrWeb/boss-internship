@@ -56,6 +56,11 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
             var hoursAcceptancePeriod = oFetch(requestOptions, "hoursAcceptancePeriod")
             var {starts_at, ends_at, breaks, hours_acceptance_reason, reason_note} = hoursAcceptancePeriod
 
+            var hours_acceptance_period_id = undefined;
+            if (objectHasBeenSavedToBackend(hoursAcceptancePeriod)) {
+                hours_acceptance_period_id = hoursAcceptancePeriod.serverId
+            }
+
             return {
                 status: "accepted",
                 hours_acceptance_period_id: hoursAcceptancePeriod.serverId,
