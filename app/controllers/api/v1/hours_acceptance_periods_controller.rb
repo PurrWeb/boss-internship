@@ -31,8 +31,8 @@ module Api
           hours_acceptance_period = HoursAcceptancePeriod.new(
             clock_in_day: clock_in_day,
             creator: requester,
-            starts_at: params.fetch(:start_time),
-            ends_at: params.fetch(:end_time),
+            starts_at: params.fetch(:starts_at),
+            ends_at: params.fetch(:ends_at),
             status: params.fetch(:status),
             hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
             reason_note: params[:reason_note]
