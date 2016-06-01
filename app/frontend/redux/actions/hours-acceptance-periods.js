@@ -19,15 +19,24 @@ export const deleteHoursAcceptancePeriod = createApiRequestAction({
                 }
             }
         },
-        makeRequest: function(requestOptions, success, error){
-            setTimeout(function(){
-                success({
+        makeRequest: makeApiRequestMaker({
+            method: apiRoutes.deleteHoursAcceptancePeriod.method,
+            path: function(requestOptions){
+                return apiRoutes.deleteHoursAcceptancePeriod.getPath({
+                    hoursAcceptancePeriodServerId: requestOptions.hoursAcceptancePeriod.serverId
+                })
+            },
+            data: function(){
+                return {}
+            },
+            getSuccessActionData: function(responseData, requestOptions){
+                return {
                     hoursAcceptancePeriod: {
                         clientId: requestOptions.hoursAcceptancePeriod.clientId
                     }
-                })
-            }, 2000)
-        }
+                }
+            }
+        })
     })
 });
 

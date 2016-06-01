@@ -203,6 +203,12 @@ const apiRoutes = {
             return "hours_acceptance_periods/" + oFetch(options, "hoursAcceptancePeriodServerId")
         },
         method: "PUT"
+    },
+    deleteHoursAcceptancePeriod: {
+        getPath(options){
+            return "hours_acceptance_periods/" + oFetch(options, "hoursAcceptancePeriodServerId")
+        },
+        method: "DELETE"
     }
 }
 
