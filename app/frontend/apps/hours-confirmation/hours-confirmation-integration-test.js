@@ -191,4 +191,82 @@ describe('Hours Confirmation Integration Test', function() {
 
         $.ajax.restore();
     });
+
+    it("Shows a clockout button if the staff member is still clocked in and allows them to be clocked out", function(done){
+        var clockoutResponseData = {
+            status: "clocked_out",
+            clock_in_period: {
+                id: 12222,
+                starts_at: new Date(2016, 10, 2, 1, 0).toString(),
+                ends_at: new Date(2016, 10, 2, 4, 0).toString(),
+                clock_in_day: {id: 22}
+            },
+            clock_in_breaks: [
+                {
+                    id: 33,
+                    starts_at: new Date(2016, 10, 2, 2, 30).toString(),
+                    ends_at:  new Date(2016, 10, 2, 4, 0).toString(),
+                    clock_in_period: {id: 12222}
+                }
+            ],
+            clock_in_events: [
+                {
+                    id: 55,
+                    type: "clock_in",
+                    time: new Date(2016, 10, 2, 1, 0).toString(),
+                    clock_in_period: {id: 12222}
+                }, {
+                    id: 66,
+                    type: "start_break",
+                    time: new Date(2016, 10, 2, 2, 30).toString(),
+                    clock_in_period: {id: 12222}
+                }, {
+                    id: 125,
+                    type: "end_break",
+                    time: new Date(2016, 10, 2, 4, 0).toString(),
+                    clock_in_period: {id: 12222}
+                }, {
+                    id: 126,
+                    type: "clock_out",
+                    time: new Date(2016, 10, 2, 4, 0).toString(),
+                    clock_in_period: {id: 12222}
+                }
+            ],
+            hours_acceptance_period: {
+                id: 1112,
+                starts_at: new Date(2016, 10, 2, 1, 0).toString(),
+                ends_at: new Date(2016, 10, 2, 4, 0).toString(),
+                reason_note: "",
+                hours_acceptance_reason: {id: 912},
+                clock_in_day: {id: 22},
+                status: "pending"
+            },
+            hours_acceptance_breaks: [
+                {
+                    staffMember: {id: 160},
+                    id: 2453,
+                    clock_in_day: {id: 22},
+                    starts_at: new Date(2016, 10, 2, 2, 30).toString(),
+                    ends_at: new Date(2016, 10, 2, 4, 0).toString(),
+                    hours_acceptance_period: {id: 1112}
+                }
+            ]
+        }
+
+        var {$$} = simpleRender(<HoursConfirmationApp viewData={viewData} />);
+        var forceClockoutButton = $$("[data-test-marker-force-clock-out]")[0];
+        expect(forceClockoutButton).toNotBe(undefined)
+
+        expect.spyOn($, "ajax").andReturn(Promise.resolve(clockoutResponseData))
+
+        TestUtils.Simulate.click(forceClockoutButton)
+
+        _.delay(function(){
+            expect($.ajax.calls.length).toBe(1);
+            expect($$("[data-test-marker-force-clock-out]").length).toBe(0);
+            expect($$("[data-test-marker-hours-acceptance-period-item]").length).toBe(2);
+            $.ajax.restore();
+            done()
+        }, 500)
+    });
 });

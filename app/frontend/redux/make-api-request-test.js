@@ -79,6 +79,7 @@ describe("makeApiRequestMaker", function(){
         _.defer(function(){
             expect($.ajax.calls.length).toBe(2);
             expect(success).toHaveBeenCalled();
+            $.ajax.restore()
             done();
         })
     })

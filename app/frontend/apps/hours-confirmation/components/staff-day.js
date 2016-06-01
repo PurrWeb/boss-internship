@@ -131,6 +131,7 @@ class ClockOutButton extends React.Component {
             return null;
         }
         return <button
+            data-test-marker-force-clock-out
             className="btn btn-warning"
             onClick={this.props.clockOut}
             style={{marginTop: 4, marginLeft: 4}}>
