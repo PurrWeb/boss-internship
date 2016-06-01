@@ -77,7 +77,7 @@ module Api
           hours_acceptance_period: hours_acceptance_period,
           starts_at: params.fetch(:starts_at),
           ends_at: params.fetch(:ends_at),
-          breaks_data: params[:breaks] || [],
+          breaks_data: params[:hours_acceptance_breaks] || [],
           status: params.fetch(:status),
           hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
           reason_note: params[:reason_note],
@@ -175,7 +175,7 @@ module Api
       end
 
       def new_breaks_from_params
-        params.fetch(:breaks).map do |break_data|
+        params.fetch(:hours_acceptance_breaks).map do |break_data|
           initialize_break(break_data)
         end
       end

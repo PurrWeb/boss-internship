@@ -43,7 +43,7 @@ RSpec.describe 'Hours acceptance endpoints' do
         staff_member_id: staff_member.id,
         starts_at: start_of_shift,
         ends_at: end_of_shift,
-        breaks: [
+        hours_acceptance_breaks: [
           {
             starts_at: break1_start,
             ends_at: break1_end
@@ -237,7 +237,7 @@ RSpec.describe 'Hours acceptance endpoints' do
             ends_at: new_end_of_shift,
             status: new_status,
             hours_acceptance_reason_id: hours_acceptance_reason.id,
-            breaks: [
+            hours_acceptance_breaks: [
               {
                 id: update_break_id,
                 starts_at: update_break_start,
@@ -305,7 +305,7 @@ RSpec.describe 'Hours acceptance endpoints' do
             ends_at: new_end_of_shift,
             status: new_status,
             hours_acceptance_reason_id: hours_acceptance_reason.id,
-            breaks: [
+            hours_acceptance_breaks: [
               {
                 id: break1.id,
                 starts_at: break1.starts_at,
