@@ -17,18 +17,33 @@ module PageObject
       ).to eq(national_insurance_number)
     end
 
-    page_action :select_venues do |venues|
-      _select_venues(venues)
+    page_action :select_master_venue do |venue|
+      _select_master_venue(venue)
     end
 
-    page_action :update_venues do |venues|
-      _select_venues(venues)
+    page_action :update_master_venue do |venue|
+      _select_master_venue(venue)
       _submit_form
     end
 
-    page_action :ui_shows_venues do |venues|
+    page_action :select_work_venues do |venues|
+      _select_work_venues(venues)
+    end
+
+    page_action :update_work_venues do |venues|
+      _select_work_venues(venues)
+      _submit_form
+    end
+
+    page_action :ui_shows_master_venue do |venue|
       expect(
-        scope.find(venue_select_selector).value
+        scope.find(master_venue_select_selector).value
+      ).to eq(venue.id.to_s)
+    end
+
+    page_action :ui_shows_work_venues do |venues|
+      expect(
+        scope.find(work_venues_select_selector).value
       ).to eq(venues.map(&:id).map(&:to_s))
     end
 
@@ -76,26 +91,43 @@ module PageObject
       starts_at_field.fill_in_date(date)
     end
 
-    def venue_select_id
-      'staff-member-venues-select'
+    def work_venues_select_id
+      'staff-member-work-venues-select'
     end
 
-    def venue_select_selector
-      "##{venue_select_id}"
+    def work_venues_select_selector
+      "##{work_venues_select_id}"
     end
 
-    def _select_venues(venues)
-      select = find(venue_select_selector)
+    def master_venue_select_id
+      'staff-member-master-venue-select'
+    end
+
+    def master_venue_select_selector
+      "##{master_venue_select_id}"
+    end
+
+    def _select_master_venue(venue)
+      chosen_select(
+        venue.name.titleize,
+        from: master_venue_select_id
+      )
+    end
+
+    def _select_work_venues(venues)
+      select = find(work_venues_select_selector)
       currently_selected = select.value.map{ |value| Venue.find(value).name.titleize }
 
-      chosen_unselect(
-        *currently_selected,
-        from: venue_select_id
-      )
+      if currently_selected.present?
+        chosen_unselect(
+          *currently_selected,
+          from: work_venues_select_id
+        )
+      end
 
       chosen_select(
         *venues.map{ |v| v.name.titleize },
-        from: venue_select_id
+        from: work_venues_select_id
       )
     end
 

@@ -321,7 +321,8 @@ class StaffMembersController < ApplicationController
       permit(
         require_attributes
       ).merge(
-        venues: venues_from_params,
+        master_venue: master_venue_from_params,
+        work_venues: work_venues_from_params,
         creator: current_user,
         employment_status_statement_completed: true
       )
@@ -383,7 +384,8 @@ class StaffMembersController < ApplicationController
         *allowed_params
       ).deep_merge(
         employment_status_statement_completed: true,
-        venues: venues_from_params
+        master_venue: master_venue_from_params,
+        work_venues: work_venues_from_params
       )
 
     result = result.merge(staff_type: staff_type) if !current_user.security_manager?
@@ -428,9 +430,13 @@ class StaffMembersController < ApplicationController
     StaffType.find_by(id: params[:staff_member][:staff_type])
   end
 
-  def venues_from_params
-    Array(params[:staff_member][:venues]).reject(&:blank?).map do |id|
+  def work_venues_from_params
+    Array(params[:staff_member][:work_venues]).reject(&:blank?).map do |id|
       Venue.find(id)
     end
+  end
+
+  def master_venue_from_params
+    Venue.find_by(id: params[:staff_member][:master_venue])
   end
 end

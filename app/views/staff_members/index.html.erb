@@ -25,8 +25,9 @@
           <%= link_to(staff_member.staff_type.name.titlecase, staff_member_path(staff_member)) %>
         </td>
         <td data-role="venues">
-          <% if staff_member.venues.count > 0%>
-            <%= link_to(staff_member.venues.map(&:name).to_sentence, staff_member_path(staff_member)) %>
+          <% venues = (Array(staff_member.master_venue) + staff_member.work_venues.to_a).compact %>
+          <% if venues.length > 0 %>
+            <%= link_to(venues.map(&:name).to_sentence, staff_member_path(staff_member)) %>
           <% else %>
             <%= link_to('N / A', staff_member_path(staff_member)) %>
           <% end %>

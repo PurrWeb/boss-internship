@@ -11,6 +11,7 @@ FactoryGirl.define do
     national_insurance_number 'GM-12-45-34-A'
     creator factory: :user
     starts_at { 1.day.ago }
+    association :master_venue, factory: :venue
 
     pay_rate
 
@@ -19,14 +20,6 @@ FactoryGirl.define do
     employment_status_c false
     employment_status_d false
     employment_status_p45_supplied true
-
-    after(:build) do |staff_member, proxy|
-      if proxy.venues.present?
-        staff_member.venues = proxy.venues
-      else
-        staff_member.venues = [ FactoryGirl.build(:venue) ]
-      end
-    end
 
     address
     staff_type
@@ -53,11 +46,11 @@ FactoryGirl.define do
           security_staff_type = FactoryGirl.create(:security_staff_type)
         end
         object.staff_type = security_staff_type
-        object.venues = []
       end
 
       sia_badge_expiry_date 2.months.from_now
       sia_badge_number '23123131'
+      master_venue nil
     end
   end
 end

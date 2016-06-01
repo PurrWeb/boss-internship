@@ -13,14 +13,39 @@ describe StaffMember do
 
   describe 'scopes' do
     describe 'StaffMember#for_venue' do
-      let(:venue_1) { FactoryGirl.create(:venue) }
-      let(:venue_1_staff_member) { FactoryGirl.create(:staff_member, venues: [venue_1]) }
-      let(:venue_2) { FactoryGirl.create(:venue) }
-      let(:venue_2_staff_member) { FactoryGirl.create(:staff_member, venues: [venue_2]) }
+      context 'with matching master venues' do
+        let(:venue_1) { FactoryGirl.create(:venue) }
+        let(:venue_1_staff_member) { FactoryGirl.create(:staff_member, master_venue: venue_1) }
+        let(:venue_2) { FactoryGirl.create(:venue) }
+        let(:venue_2_staff_member) { FactoryGirl.create(:staff_member, master_venue: venue_2) }
 
-      it 'returns staff members assigned to the venue' do
-        expect(StaffMember.for_venue(venue_1)).to eq([venue_1_staff_member])
-        expect(StaffMember.for_venue(venue_2)).to eq([venue_2_staff_member])
+        before do
+          venue_1_staff_member
+          venue_2_staff_member
+        end
+
+        it 'returns staff members assigned to the venue' do
+          expect(StaffMember.for_venue(venue_1)).to eq([venue_1_staff_member])
+          expect(StaffMember.for_venue(venue_2)).to eq([venue_2_staff_member])
+        end
+      end
+
+      context 'with matching work venues' do
+        let(:master_venue) { FactoryGirl.create(:venue) }
+        let(:venue_1) { FactoryGirl.create(:venue) }
+        let(:venue_1_staff_member) { FactoryGirl.create(:staff_member, master_venue: master_venue) }
+        let(:venue_2) { FactoryGirl.create(:venue) }
+        let(:venue_2_staff_member) { FactoryGirl.create(:staff_member, master_venue: master_venue) }
+
+        before do
+          venue_1_staff_member.work_venues << venue_1
+          venue_2_staff_member.work_venues << venue_2
+        end
+
+        it 'returns staff members assigned to the venue' do
+          expect(StaffMember.for_venue(venue_1)).to eq([venue_1_staff_member])
+          expect(StaffMember.for_venue(venue_2)).to eq([venue_2_staff_member])
+        end
       end
     end
   end

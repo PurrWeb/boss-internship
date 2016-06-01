@@ -9,7 +9,7 @@ RSpec.describe RotaStaffCost do
         pay_rate: pay_rate
       )
     end
-    let(:venue) { staff_member.venues.first }
+    let(:venue) { staff_member.master_venue }
     let(:week) { RotaWeek.new(Time.zone.now + 1.week) }
     let(:rota) do
       FactoryGirl.create(

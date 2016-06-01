@@ -8,7 +8,7 @@ RSpec.feature 'Adding a new staff member' do
   let(:prospective_staff_member) do
     FactoryGirl.build(
       :staff_member,
-      venues: [venue],
+      master_venue: venue,
       staff_type: staff_type,
       pay_rate: pay_rate
     )
@@ -54,7 +54,7 @@ RSpec.feature 'Adding a new staff member' do
       FactoryGirl.build(
         :staff_member,
         pay_rate: pay_rate,
-        venues: [venue],
+        master_venue: venue,
         staff_type: staff_type
       )
     end
@@ -73,7 +73,7 @@ RSpec.feature 'Adding a new staff member' do
 
       staff_members_index_page.ensure_flash_success_message_displayed('Staff member added successfully')
       staff_member = StaffMember.joins(:email_address).merge(EmailAddress.where(email: prospective_staff_member.email_address.email)).first
-      expect(staff_member.venues.map(&:id)).to eq([venue.id])
+      expect(staff_member.master_venue.id).to eq(venue.id)
     end
   end
 end

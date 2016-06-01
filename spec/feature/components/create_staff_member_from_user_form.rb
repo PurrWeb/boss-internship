@@ -8,9 +8,10 @@ module PageObject
 
     page_action :fill_in_for do |staff_member|
       _upload_avatar_image
-      if staff_member.venues.length > 0
-        staff_member.venues.each do |venue|
-          scope.select(venue.name, from: 'staff-member-venues-select')
+      scope.select(staff_member.master_venue.name, from: 'staff-member-master-venue-select')
+      if staff_member.work_venues.length > 0
+        staff_member.work_venues.each do |venue|
+          scope.select(venue.name, from: 'staff-member-work-venues-select')
         end
       end
       scope.select(staff_member.gender.titleize, from: 'Gender')

@@ -13,7 +13,8 @@ json.holidays staff_member.holidays.in_state(:enabled) do |holiday|
   json.id holiday.id
   json.url api_v1_holiday_url(holiday)
 end
-json.venues staff_member.venues do |venue|
+venues = StaffMemberWorkableVenuesQuery.new(staff_member: staff_member).all
+json.venues venues do |venue|
   json.id venue.id
   json.url api_v1_venue_url(venue)
 end

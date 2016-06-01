@@ -14,8 +14,9 @@ module PageObject
 
       expect(detail_text(listing, :name)).to eq(staff_member.full_name.titlecase)
 
-      venue_text = staff_member.venues.length > 0 ? staff_member.venues.map(&:name).to_sentence : 'N / A'
-      expect(detail_text(listing, :venues)).to eq(venue_text)
+      venues = (Array(staff_member.master_venue) + staff_member.work_venues.to_a).compact
+      venues_text = venues.length > 0 ? venues.map(&:name).to_sentence : 'N / A'
+      expect(detail_text(listing, :venues)).to eq(venues_text)
 
       expect(detail_text(listing, :staff_type)).to eq(staff_member.staff_type.name.titlecase)
     end
