@@ -269,4 +269,17 @@ describe('Hours Confirmation Integration Test', function() {
             done()
         }, 500)
     });
+
+    it("Allows the user to add a new hours acceptance period", function(done){
+        var {$$} = simpleRender(<HoursConfirmationApp viewData={viewData} />);
+        var addHAPButton = $$("[data-test-marker-add-hours-acceptance-period]")[0]
+        expect(addHAPButton).toNotBe(undefined);
+
+        TestUtils.Simulate.click(addHAPButton)
+
+        _.defer(function(){
+            expect($$("[data-test-marker-hours-acceptance-period-item]").length).toBe(2);
+            done();
+        })
+    })
 });

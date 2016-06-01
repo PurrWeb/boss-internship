@@ -547,7 +547,10 @@ class HoursAcceptancePeriodList extends React.Component {
             )}
             <ValidationResult result={intervalsOverlap} />
             {markAsDoneButton}
-            <a className="btn btn-default" onClick={() => this.addHours()}>
+            <a
+                className="btn btn-default"
+                data-test-marker-add-hours-acceptance-period
+                onClick={() => this.addHours()}>
                 Add Shift
             </a>
 
