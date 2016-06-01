@@ -261,13 +261,13 @@ describe('Hours Confirmation Integration Test', function() {
 
         TestUtils.Simulate.click(forceClockoutButton)
 
-        _.delay(function(){
+        _.defer(function(){
             expect($.ajax.calls.length).toBe(1);
             expect($$("[data-test-marker-force-clock-out]").length).toBe(0);
             expect($$("[data-test-marker-hours-acceptance-period-item]").length).toBe(2);
             $.ajax.restore();
             done()
-        }, 500)
+        })
     });
 
     it("Allows the user to add a new hours acceptance period", function(done){
@@ -299,11 +299,11 @@ describe('Hours Confirmation Integration Test', function() {
 
         TestUtils.Simulate.click(acceptHAPButton)
 
-        _.delay(function(){
+        _.defer(function(){
             var hapHtml = $$("[data-test-marker-hours-acceptance-period-item]")[0].innerHTML;
             expect(hapHtml.toLowerCase()).toContain("accepted")
             $.ajax.restore();
             done()
-        }, 500)
+        })
     })
 });
