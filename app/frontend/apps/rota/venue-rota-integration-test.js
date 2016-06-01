@@ -5,6 +5,8 @@ import RotaApp from "./rota-app"
 import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
 import { getClientId } from "~lib/backend-data/process-backend-object"
+import RotaStatusDropdown from "~apps/rota/status-toggle/rota-status-dropdown"
+import Promise from "bluebird"
 
 import StaffDetailsAndShifts from "~components/staff-details-and-shifts"
 import ChartAndFilter from "./chart-and-filter"
@@ -119,6 +121,21 @@ describe('Venue Rota Integration Test', function() {
 
         expect($$("#rota-chart .rota-chart__shift").length).toBe(2);
     });
+
+    it("Lets the user mark the current rota as finished", function(){
+        var {findChild} = simpleRender(<RotaApp viewData={viewData} />);
+
+        expect.spyOn($, "ajax").andReturn(Promise.resolve({
+            status: "finished"
+        }))
+
+        var statusDropdown = findChild(RotaStatusDropdown);
+        statusDropdown.props.onChange("finished")
+
+        expect($.ajax.calls.length).toBe(1)
+
+        $.ajax.restore();
+    })
 
     it("Does not allow adding security shifts", function(){
         var {$, $$} = simpleRender(<RotaApp viewData={viewData} />);
