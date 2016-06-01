@@ -88,8 +88,9 @@ export default function makeApiRequestMaker(apiOptions){
             $.ajax({
                url: API_ROOT + path,
                method: method,
-               data: data,
-               headers
+               data: JSON.stringify(data),
+               headers,
+               contentType: "application/json"
             }).then(function(responseData){
                 if (responseData == ""){
                     responseData = {}
