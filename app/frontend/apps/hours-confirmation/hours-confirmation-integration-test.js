@@ -4,6 +4,8 @@ import { simpleRender } from "~lib/test-helpers"
 import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
 import HoursConfirmationApp from "./index"
+import Promise from "bluebird"
+import _ from "underscore"
 
 import "~lib/load-underscore-mixins"
 
@@ -51,7 +53,7 @@ describe('Hours Confirmation Integration Test', function() {
             reason_note: "custom note entered here",
             hours_acceptance_reason: {id: 912},
             clock_in_day: {id: 22},
-            status: "in_progress",
+            status: "pending",
         }],
         clockInEvents: [
             {
@@ -171,5 +173,22 @@ describe('Hours Confirmation Integration Test', function() {
 
     it("Renders without throwing an exception", function(){
         simpleRender(<HoursConfirmationApp viewData={viewData} />);
+    });
+
+    it("Can delete an hours acceptance period", function(done){
+        var {$$} = simpleRender(<HoursConfirmationApp viewData={viewData} />);
+        expect($$("[data-test-marker-hours-acceptance-period-item]").length).toBe(1)
+
+        var deleteButton = $$("[data-test-marker-delete-hours-acceptance-period]")[0]
+        expect.spyOn($, "ajax").andReturn(Promise.resolve({}))
+
+        TestUtils.Simulate.click(deleteButton)
+
+        _.defer(function(){
+            expect($$("[data-test-marker-hours-acceptance-period-item]").length).toBe(0)
+            done();
+        })
+
+        $.ajax.restore();
     });
 });

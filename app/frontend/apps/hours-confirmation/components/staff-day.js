@@ -396,8 +396,7 @@ class HoursAcceptancePeriodListItem extends React.Component {
         var hoursAcceptancePeriod = this.props.hoursAcceptancePeriod
         var readonly = this.isAccepted();
 
-
-        return <div className="row">
+        return <div className="row" data-test-marker-hours-acceptance-period-item>
             <div className="col-md-10">
                 <div className="col-md-4">
                     <div className="staff-day__sub-heading">From/To</div>
@@ -484,7 +483,8 @@ class HoursAcceptancePeriodListItem extends React.Component {
                     Accept {stats.hours}h
                 </a>
                 <br/><br/>
-                <a onClick={() => {
+                <a data-test-marker-delete-hours-acceptance-period
+                onClick={() => {
                     this.props.boundActions.deleteHoursAcceptancePeriod({
                         hoursAcceptancePeriod
                     })
