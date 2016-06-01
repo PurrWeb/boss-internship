@@ -477,6 +477,7 @@ class HoursAcceptancePeriodListItem extends React.Component {
 
             return <div>
                 <a
+                    data-test-marker-accept-hours-acceptance-period
                     onClick={() => this.props.boundActions.acceptHoursAcceptancePeriod({
                         hoursAcceptancePeriod
                     })}

@@ -282,4 +282,28 @@ describe('Hours Confirmation Integration Test', function() {
             done();
         })
     })
+
+    it("Lets the user accept an hours acceptance period", function(done){
+        var acceptHAPResponse = {
+            hours_acceptance_breaks: [],
+            hours_acceptance_period: _.extend({}, viewData.hoursAcceptancePeriods[0], {
+                status: "accepted"
+            })
+        };
+
+        var {$$} = simpleRender(<HoursConfirmationApp viewData={viewData} />);
+        var acceptHAPButton = $$("[data-test-marker-accept-hours-acceptance-period]")[0]
+        expect(acceptHAPButton).toNotBe(undefined)
+
+        expect.spyOn($, "ajax").andReturn(Promise.resolve(acceptHAPResponse))
+
+        TestUtils.Simulate.click(acceptHAPButton)
+
+        _.delay(function(){
+            var hapHtml = $$("[data-test-marker-hours-acceptance-period-item]")[0].innerHTML;
+            expect(hapHtml.toLowerCase()).toContain("accepted")
+            $.ajax.restore();
+            done()
+        }, 500)
+    })
 });
