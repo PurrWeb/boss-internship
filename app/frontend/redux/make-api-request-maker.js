@@ -85,12 +85,20 @@ export default function makeApiRequestMaker(apiOptions){
                 Authorization: 'Token token="' + accessToken + '"'
             }
 
+            var contentType;
+            if (method === "GET") {
+                contentType = "application/x-www-form-urlencoded"
+            } else {
+                data = JSON.stringify(data)
+                contentType = "application/json"
+            }
+
             $.ajax({
                url: API_ROOT + path,
                method: method,
-               data: JSON.stringify(data),
+               data,
                headers,
-               contentType: "application/json"
+               contentType
             }).then(function(responseData){
                 if (responseData == ""){
                     responseData = {}
