@@ -41,8 +41,8 @@ RSpec.describe 'Hours acceptance endpoints' do
         venue_id: venue.id,
         date: date,
         staff_member_id: staff_member.id,
-        start_time: start_of_shift,
-        end_time: end_of_shift,
+        starts_at: start_of_shift,
+        ends_at: end_of_shift,
         breaks: [
           {
             starts_at: break1_start,
