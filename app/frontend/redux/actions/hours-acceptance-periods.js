@@ -71,7 +71,7 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
                 reason_note: reason_note
             }
         },
-        getSuccessActionData: function(responseData){
+        getSuccessActionData: function(responseData, requestOptions){
             return {
                 newHoursAcceptancePeriod: backendData.processHoursAcceptancePeriodObject(responseData.hours_acceptance_period),
                 oldHoursAcceptancePeriod: {clientId: requestOptions.hoursAcceptancePeriod.clientId},

@@ -203,7 +203,7 @@ export const forceStaffMemberClockOut = createApiRequestAction({
                 date: utils.formatDateForApi(oFetch(requestOptions, "clockInDay.date"))
             }
         },
-        getSuccessActionData: function(responseData){
+        getSuccessActionData: function(responseData, requestOptions){
             var hoursAcceptancePeriod = responseData.hours_acceptance_period;
             if (hoursAcceptancePeriod !== null) {
                 hoursAcceptancePeriod = backendData.processHoursAcceptancePeriodObject(hoursAcceptancePeriod);
@@ -216,7 +216,7 @@ export const forceStaffMemberClockOut = createApiRequestAction({
                 clockInBreaks: responseData.clock_in_breaks.map(backendData.processClockInBreakObject),
                 hoursAcceptancePeriod,
                 hoursAcceptanceBreaks: responseData.hours_acceptance_breaks.map(backendData.processHoursAcceptanceBreakObject),
-                clockInEvents: responseData.clock_in_events.map(backendData.processClockInEventObject)
+                clockInEvents: [] //responseData.clock_in_events.map(backendData.processClockInEventObject)
             };
 
             return successData;
