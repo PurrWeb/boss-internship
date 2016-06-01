@@ -55,71 +55,16 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
         },
         data: function(requestOptions, getState){
             var hoursAcceptancePeriod = oFetch(requestOptions, "hoursAcceptancePeriod")
-            var {starts_at, ends_at, breaks, hours_acceptance_reason, reason_note} = hoursAcceptancePeriod
             var clockInDay = hoursAcceptancePeriod.clock_in_day.get(getState().clockInDays);
 
-            var periodIdentificationData;
-            if (objectHasBeenSavedToBackend(hoursAcceptancePeriod)) {
-                periodIdentificationData = {
-                    hours_acceptance_period_id: hoursAcceptancePeriod.serverId
-                }
-            } else {
-                periodIdentificationData = {
-                    venue_id: clockInDay.venue.serverId,
-                    date: utils.formatDateForApi(clockInDay.date),
-                    staff_member_id: clockInDay.staff_member.serverId
-                }
-            }
-
-            return {
-                status: "accepted",
-                ...periodIdentificationData,
-                starts_at,
-                ends_at,
-                hours_acceptance_breaks: breaks.map((b) => {
-                    return {
-                        starts_at: b.starts_at,
-                        ends_at: b.ends_at
-                    }
-                }),
-                hours_acceptance_reason_id: hoursAcceptancePeriod.hours_acceptance_reason.serverId,
-                reason_note: reason_note
-            }
+            var apiData = getHoursAcceptancePeriodAPIData(hoursAcceptancePeriod, clockInDay);
+            apiData.status = "accepted"
+            return apiData
         },
         getSuccessActionData: function(responseData, requestOptions){
-            return {
-                newHoursAcceptancePeriod: backendData.processHoursAcceptancePeriodObject(responseData.hours_acceptance_period),
-                oldHoursAcceptancePeriod: {clientId: requestOptions.hoursAcceptancePeriod.clientId},
-                newHoursAcceptanceBreaks: responseData.hours_acceptance_breaks.map(backendData.processHoursAcceptanceBreakObject)
-            }
+            return getHoursAcceptancePeriodUpdateSuccessActionData(responseData, requestOptions)
         }
-    }),
-
-
-
-
-
-            // var responseData = {
-            //     hours_acceptance_period: {
-            //         id: 1155,
-            //         starts_at: new Date(2016, 10, 1, 9, 45).toString(),
-            //         ends_at: new Date(2016, 10, 1, 20, 0).toString(),
-            //         reason_note: "note returned from fake backend response",
-            //         hours_acceptance_reason: {id: 912},
-            //         clock_in_day: {id: 22},
-            //         status: "accepted",
-            //     },
-            //     hours_acceptance_breaks: [{
-            //         id:2233,
-            //         clock_in_day: {id: 22},
-            //         starts_at: new Date(2016, 10, 1, 10, 15).toString(),
-            //         ends_at: new Date(2016, 10, 1, 14, 45).toString(),
-            //         hours_acceptance_period: {id: 1155}
-            //     }]
-            // }
-
-
-
+    })
 })
 
 export const unacceptHoursAcceptancePeriod = createApiRequestAction({
@@ -131,21 +76,55 @@ export const unacceptHoursAcceptancePeriod = createApiRequestAction({
                 hoursAcceptancePeriodServerId: requestOptions.hoursAcceptancePeriod.serverId
             })
         },
-        data: function(requestOptions){
-            return {
-                status: "pending"
-            }
+        data: function(requestOptions, getState){
+            var hoursAcceptancePeriod = oFetch(requestOptions, "hoursAcceptancePeriod")
+            var clockInDay = hoursAcceptancePeriod.clock_in_day.get(getState().clockInDays);
+            var apiData = getHoursAcceptancePeriodAPIData(hoursAcceptancePeriod, clockInDay)
+            apiData.status = "pending";
+            return apiData;
+        },
+        getSuccessActionData: function(responseData, requestOptions){
+            return getHoursAcceptancePeriodUpdateSuccessActionData(responseData, requestOptions)
         }
     })
-    //
-    // function(requestOptions, success, error){
-    //     setTimeout(function(){
-    //         success({
-    //             hoursAcceptancePeriod: {
-    //                 clientId: requestOptions.hoursAcceptancePeriod.clientId,
-    //                 status: "in_progress"
-    //             }
-    //         })
-    //     }, 2000)
-    // }
 })
+
+function getHoursAcceptancePeriodAPIData(hoursAcceptancePeriod, clockInDay){
+    var {starts_at, ends_at, breaks, hours_acceptance_reason, reason_note} = hoursAcceptancePeriod
+
+    var periodIdentificationData;
+    if (objectHasBeenSavedToBackend(hoursAcceptancePeriod)) {
+        periodIdentificationData = {
+            hours_acceptance_period_id: hoursAcceptancePeriod.serverId
+        }
+    } else {
+        periodIdentificationData = {
+            venue_id: clockInDay.venue.serverId,
+            date: utils.formatDateForApi(clockInDay.date),
+            staff_member_id: clockInDay.staff_member.serverId
+        }
+    }
+
+    return {
+        status: "accepted",
+        ...periodIdentificationData,
+        starts_at,
+        ends_at,
+        hours_acceptance_breaks: breaks.map((b) => {
+            return {
+                starts_at: b.starts_at,
+                ends_at: b.ends_at
+            }
+        }),
+        hours_acceptance_reason_id: hoursAcceptancePeriod.hours_acceptance_reason.serverId,
+        reason_note: reason_note
+    }
+}
+
+function getHoursAcceptancePeriodUpdateSuccessActionData(responseData, requestOptions){
+    return {
+        newHoursAcceptancePeriod: backendData.processHoursAcceptancePeriodObject(responseData.hours_acceptance_period),
+        oldHoursAcceptancePeriod: {clientId: requestOptions.hoursAcceptancePeriod.clientId},
+        newHoursAcceptanceBreaks: responseData.hours_acceptance_breaks.map(backendData.processHoursAcceptanceBreakObject)
+    }
+}
