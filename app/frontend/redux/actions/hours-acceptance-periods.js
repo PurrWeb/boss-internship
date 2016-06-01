@@ -2,6 +2,7 @@ import createApiRequestAction from "../create-api-request-action"
 import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-request-maker"
 import oFetch from "o-fetch"
 import { apiRoutes } from "~lib/routes"
+import utils from "~lib/utils"
 import * as backendData from "~lib/backend-data/process-backend-objects"
 import {objectHasBeenSavedToBackend} from "~lib/backend-data/process-backend-object"
 
@@ -52,18 +53,27 @@ export const acceptHoursAcceptancePeriod = createApiRequestAction({
                 return apiRoutes.createHoursAccceptancePeriod.getPath()
             }
         },
-        data: function(requestOptions){
+        data: function(requestOptions, getState){
             var hoursAcceptancePeriod = oFetch(requestOptions, "hoursAcceptancePeriod")
             var {starts_at, ends_at, breaks, hours_acceptance_reason, reason_note} = hoursAcceptancePeriod
+            var clockInDay = hoursAcceptancePeriod.clock_in_day.get(getState().clockInDays);
 
-            var hours_acceptance_period_id = undefined;
+            var periodIdentificationData;
             if (objectHasBeenSavedToBackend(hoursAcceptancePeriod)) {
-                hours_acceptance_period_id = hoursAcceptancePeriod.serverId
+                periodIdentificationData = {
+                    hours_acceptance_period_id: hoursAcceptancePeriod.serverId
+                }
+            } else {
+                periodIdentificationData = {
+                    venue_id: clockInDay.venue.serverId,
+                    date: utils.formatDateForApi(clockInDay.date),
+                    staff_member_id: clockInDay.staff_member.serverId
+                }
             }
 
             return {
                 status: "accepted",
-                hours_acceptance_period_id: hoursAcceptancePeriod.serverId,
+                ...periodIdentificationData,
                 starts_at,
                 ends_at,
                 hours_acceptance_breaks: breaks.map((b) => {
