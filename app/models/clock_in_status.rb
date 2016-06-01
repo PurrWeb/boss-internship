@@ -47,18 +47,25 @@ class ClockInStatus
           starts_at: at
         )
       elsif event_type == 'clock_out'
+        if saved_last_event.event_type == 'start_break'
+          add_break_to_period(
+            clock_in_period: current_recorded_clock_in_period,
+            last_event: saved_last_event,
+            at: at
+          )
+        end
+
         current_recorded_clock_in_period.update_attributes!(ends_at: at)
         create_hours_confirmation_from_clock_in_period(
           clock_in_period: current_recorded_clock_in_period,
           creator: requester
         )
       elsif event_type == 'end_break'
-        new_break = ClockInBreak.create!(
+        add_break_to_period(
           clock_in_period: current_recorded_clock_in_period,
-          starts_at: saved_last_event.at,
-          ends_at: at
+          last_event: saved_last_event,
+          at: at
         )
-        current_recorded_clock_in_period.clock_in_breaks << new_break
       end
 
       current_recorded_clock_in_period.save!
@@ -94,6 +101,15 @@ class ClockInStatus
    end
  end
 
+ def add_break_to_period(clock_in_period:, at:, last_event:)
+    new_break = ClockInBreak.create!(
+      clock_in_period: clock_in_period,
+      starts_at: last_event.at,
+      ends_at: at
+    )
+    clock_in_period.clock_in_breaks << new_break
+ end
+
   def last_event
     events.last
   end
@@ -115,13 +131,14 @@ class ClockInStatus
     {
       clocked_in: [
         { state: :clocked_out, transition_event: 'clock_out' },
-        { state: :on_break, transition_event: 'start_break' }
+        { state: :on_break,    transition_event: 'start_break' }
       ],
       clocked_out: [
         { state: :clocked_in, transition_event: 'clock_in' }
       ],
       on_break: [
-        { state: :clocked_in, transition_event: 'end_break' }
+        { state: :clocked_in,  transition_event: 'end_break' },
+        { state: :clocked_out, transition_event: 'clock_out' }
       ]
     }
   end
