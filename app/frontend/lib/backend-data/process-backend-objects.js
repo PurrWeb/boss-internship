@@ -38,6 +38,11 @@ export function processPageOptionsObject(pageOptions){
     // in any links it contains
     pageOptions = {...pageOptions};
     processObjectLinks(pageOptions);
+
+    if (pageOptions.dateOfRota){
+        pageOptions.dateOfRota =  new Date(pageOptions.dateOfRota)
+    }
+
     return pageOptions;
 }
 

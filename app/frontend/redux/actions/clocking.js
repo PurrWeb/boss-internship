@@ -7,6 +7,7 @@ import {selectClockInOutAppIsInManagerMode} from "../selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import {showUserActionConfirmationMessage} from "./user-action-confirmation-messages"
 import {showConfirmationModal} from "./confirmation-modal"
+import { selectClockInDay} from "~redux/selectors"
 import _ from "underscore"
 import * as backendData from "~lib/backend-data/process-backend-objects"
 import {
@@ -109,9 +110,17 @@ export const updateStaffStatus = createApiRequestAction({
         },
         getSuccessActionData(responseData, requestOptions, getState){
             var {staffMemberObject, statusValue} = requestOptions;
+            var clockInDay = selectClockInDay(getState(), {
+                staffMemberClientId: staffMemberObject.clientId,
+                date: getState().pageOptions.dateOfRota
+            })
             return {
-                staffMemberObject,
+                clockInDay: {
+                    clientId: clockInDay.clientId,
+                    status: statusValue
+                },
                 statusValue,
+                staffMemberObject,
                 userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
             }
         }

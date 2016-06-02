@@ -12,7 +12,8 @@ import {
     selectIsUpdatingStaffMemberStatus,
     selectEnterManagerModeIsInProgress,
     selectIsUpdatingStaffMemberPin,
-    selectClockInOutAppUserPermissions
+    selectClockInOutAppUserPermissions,
+    selectClockInDay
 } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import actions from "~redux/actions"
@@ -25,7 +26,7 @@ var columnNameStyle = {
 class ClockInOutStaffListItem extends Component {
     render(){
         var staffObject = this.props.staff;
-        var staffStatusValue = this.props.clockInStatuses[staffObject.clientId].status;
+        var staffStatusValue = this.props.clockInDay.status
         var staffStatus = oFetch(staffStatusOptionsByValue, staffStatusValue);
         var staffTypeObject = staffObject.staff_type.get(this.props.staffTypes);
 
@@ -80,7 +81,7 @@ class ClockInOutStaffListItem extends Component {
         if (this.props.userPermissions.toggleOnBreak){
             toggleOnBreakButton = <div className="col-md-6 col-xs-2">
                 <ToggleStaffOnBreakButton
-                    clockInStatuses={this.props.clockInStatuses}
+                    clockInDay={this.props.clockInDay}
                     staffObject={staffObject}
                     updateStaffStatusWithConfirmation={(options) => this.updateStaffStatus(options)} />
             </div>;
@@ -88,7 +89,7 @@ class ClockInOutStaffListItem extends Component {
         return <div className="row">
             <div className="col-md-6 col-xs-2">
                 <ToggleStaffClockedInButton
-                    clockInStatuses={this.props.clockInStatuses}
+                    clockInDay={this.props.clockInDay}
                     staffObject={staffObject}
                     updateStaffStatusWithConfirmation={(options) => this.updateStaffStatus(options)} />
             </div>
@@ -96,7 +97,7 @@ class ClockInOutStaffListItem extends Component {
         </div>
     }
     updateStaffStatus({statusValue, staffMemberObject}){
-        var currentStatus = this.props.clockInStatuses[staffMemberObject.clientId].status;
+        var currentStatus = this.props.clockInDay.status;
         this.props.updateStaffStatusWithConfirmation({
             statusValue,
             staffMemberObject,
@@ -165,7 +166,10 @@ class ClockInOutStaffListItem extends Component {
 function mapStateToProps(state, ownProps){
     return {
         staffTypes: state.staffTypes,
-        clockInStatuses: state.clockInStatuses,
+        clockInDay: selectClockInDay(state, {
+            staffMemberClientId: ownProps.staff.clientId,
+            date: state.pageOptions.dateOfRota
+        }),
         staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
         rotas: state.rotas,
         venues: state.venues,

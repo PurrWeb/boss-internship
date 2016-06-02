@@ -1,18 +1,18 @@
 import React, {Component} from "react"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 
-export default class ToggleStaffStatusButton extends Component {
+export default class ToggleClockInDayStatusButton extends Component {
     static propTypes = {
         statusLabels: React.PropTypes.object.isRequired,
         // If `getStatusAfterClicking` returns null the button is not shown
         getStatusAfterClicking: React.PropTypes.func.isRequired,
         staffObject: React.PropTypes.object.isRequired,
-        clockInStatuses: React.PropTypes.object.isRequired,
+        clockInDay: React.PropTypes.object.isRequired,
         updateStaffStatusWithConfirmation: React.PropTypes.func.isRequired,
         icon: React.PropTypes.string.isRequired
     }
     render(){
-        var staffStatus = this.getStaffStatus();
+        var staffStatus = this.props.clockInDay.status
         var nextStatusId = this.props.getStatusAfterClicking(staffStatus);
 
         if (nextStatusId === null) {
@@ -30,14 +30,10 @@ export default class ToggleStaffStatusButton extends Component {
             {label}
         </a>
     }
-    getStaffStatus(){
-        var staffClientId = this.props.staffObject.clientId;
-        return this.props.clockInStatuses[staffClientId].status;
-    }
     onClick(){
         this.props.updateStaffStatusWithConfirmation({
             staffMemberObject: this.props.staffObject,
-            statusValue: this.props.getStatusAfterClicking(this.getStaffStatus())
+            statusValue: this.props.getStatusAfterClicking(this.props.clockInDay.status)
         });
     }
 }

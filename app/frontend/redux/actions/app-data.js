@@ -89,12 +89,11 @@ export function loadInitialClockInOutAppState(viewData) {
         venue: {id: viewData.page_data.rota_venue_id}
     };
 
-
     return function(dispatch){
         dispatch(getInititalLoadActions({
             staffMembers: viewData.staff_members,
             staffTypes: viewData.staff_types,
-            clockInStatuses: viewData.clock_in_statuses,
+            clockInDays: viewData.clock_in_days,
             rotaShifts: viewData.rota_shifts,
             rotas: viewData.rotas,
             venues: viewData.venues,
@@ -135,17 +134,10 @@ function getInititalLoadActions(initialLoadData){
         "pageOptions": {
             replaceAction: actionCreators.setPageOptions,
             processFunction: backendData.processPageOptionsObject
-        },
-        "clockInStatuses": {
-            processFunction: backendData.processClockInStatusObject,
-            indexBy: function(status){
-                return status.staff_member.clientId;
-            }
         }
     }
 
     var actions = [];
-
 
     for (var objectName in initialLoadData) {
         if (objectName === "access_token") {
