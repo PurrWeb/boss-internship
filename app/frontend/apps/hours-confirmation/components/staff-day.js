@@ -9,6 +9,8 @@ import ErrorMessage from "~components/error-message"
 import getHoursPeriodStats from "~lib/get-hours-period-stats"
 import StaffTypeBadge from "~components/staff-type-badge"
 import Spinner from "~components/spinner"
+import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
+import StaffStatusBadge from "~components/staff-status-badge"
 import ComponentErrors from "~components/component-errors"
 
 const TIME_GRANULARITY_IN_MINUTES = 1;
@@ -58,6 +60,8 @@ export default class StaffDay extends React.Component {
 
         var staffType = this.props.staffType;
 
+        var staffStatus = staffStatusOptionsByValue[this.props.clockInDay.status]
+
         return <div style={style}>
             <div style={{
                 marginBottom: 50,
@@ -79,6 +83,7 @@ export default class StaffDay extends React.Component {
                             style={{width: "90%", marginBottom: 4}}
                         />
                         <StaffTypeBadge staffTypeObject={staffType} />
+                        <StaffStatusBadge staffStatusObject={staffStatus} />
                         <br/>
                         <ClockOutButton
                             clockInDay={this.props.clockInDay}
