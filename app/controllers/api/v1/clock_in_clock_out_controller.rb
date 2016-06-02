@@ -12,14 +12,12 @@ module Api
 
         staff_members = StaffMember.for_venue(venue).enabled
 
-        clock_in_statuses = staff_members.map do |staff_member|
-          clock_in_day = ClockInDay.find_or_initialize_by(
+        clock_in_days = staff_members.map do |staff_member|
+          ClockInDay.find_or_initialize_by(
             staff_member: staff_member,
             venue: venue,
             date: rota_date
           )
-
-          ClockInStatus.new(clock_in_day: clock_in_day)
         end
 
         rota = Rota.find_or_initialize_by(venue: venue, date: rota_date)
@@ -32,7 +30,7 @@ module Api
           api_key: api_key,
           rota_date: rota_date,
           staff_members: staff_members,
-          clock_in_statuses: clock_in_statuses,
+          clock_in_days: clock_in_days,
           staff_types: staff_types,
           rota_shifts: rota_shifts,
           rotas: [rota],

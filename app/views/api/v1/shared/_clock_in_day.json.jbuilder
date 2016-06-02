@@ -15,3 +15,4 @@ end
 json.hours_acceptance_periods clock_in_day.hours_acceptance_periods do |hours_acceptance_period|
   json.id hours_acceptance_period.id
 end
+json.status clock_in_day.current_clock_in_state
