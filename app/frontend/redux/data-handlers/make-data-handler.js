@@ -85,7 +85,8 @@ var handlerHelpers = {
     update: function(state, updatedItemData){
         state = {...state}
 
-        var item = state[updatedItemData.clientId]
+        var item = oFetch(state, "updatedItemData.clientId");
+
         var newItem = _.clone(item);
         for (var key in updatedItemData){
             newItem[key] = updatedItemData[key];
