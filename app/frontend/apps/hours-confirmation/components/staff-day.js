@@ -81,7 +81,7 @@ export default class StaffDay extends React.Component {
                         <StaffTypeBadge staffTypeObject={staffType} />
                         <br/>
                         <ClockOutButton
-                            staffMember={this.props.staffMember}
+                            clockInDay={this.props.clockInDay}
                             clockOut={() => this.props.boundActions.forceStaffMemberClockOut({
                                 staffMember: this.props.staffMember,
                                 clockInDay: this.props.clockInDay,
@@ -125,9 +125,8 @@ export default class StaffDay extends React.Component {
 
 class ClockOutButton extends React.Component {
     render(){
-        var staffMember = this.props.staffMember;
-        var status = staffMember.clockInStatus;
-        if (staffMember.forceClockoutIsInProgress){
+        var status = this.props.clockInDay.status;
+        if (this.props.clockInDay.forceClockoutIsInProgress){
             return <div style={{marginTop: 2}}>
                 <Spinner/>
             </div>

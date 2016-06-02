@@ -273,8 +273,8 @@ function addBreaksToHoursAcceptancePeriod(hoursAcceptancePeriod, hoursAcceptance
 
 export function selectClockInDayDetails(state, clockInDay){
     var staffMember = clockInDay.staff_member.get(state.staffMembers);
-    staffMember.forceClockoutIsInProgress = selectIsForceClockingOutStaffMember(state, staffMember.clientId)
-    staffMember.clockInStatus = state.clockInStatuses[staffMember.clientId].status
+    var clockInDay = {...clockInDay}
+    clockInDay.forceClockoutIsInProgress = selectIsForceClockingOutClockInDay(state, staffMember.clientId)
 
     var clockInPeriods = _(state.clockInPeriods).filter(function(clockInPeriod){
         return clockInPeriod.clock_in_day.clientId === clockInDay.clientId;
@@ -322,7 +322,8 @@ export function selectClockInDayDetails(state, clockInDay){
         clockInEvents,
         staffMember,
         rotaedShifts,
-        clockInNotes
+        clockInNotes,
+        clockInDay
     }
 }
 
@@ -364,7 +365,7 @@ function selectDeleteHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePer
     });
 }
 
-export function selectIsForceClockingOutStaffMember(state, staffMemberClientId){
+export function selectIsForceClockingOutClockInDay(state, staffMemberClientId){
     return requestIsInProgressWithRequestData(
         state.apiRequestsInProgress.FORCE_STAFF_MEMBER_CLOCK_OUT,
     function(requestOptions){
