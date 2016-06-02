@@ -33,7 +33,8 @@ function mapStateToProps(state, ownProps){
         hoursAcceptanceReasons: state.hoursAcceptanceReasons,
         rotaDate: new RotaDate({
             dateOfRota: ownProps.clockInDay.date
-        })
+        }),
+        componentErrors: state.componentErrors
     }
     return props;
 }

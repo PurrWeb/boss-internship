@@ -9,6 +9,7 @@ import ErrorMessage from "~components/error-message"
 import getHoursPeriodStats from "~lib/get-hours-period-stats"
 import StaffTypeBadge from "~components/staff-type-badge"
 import Spinner from "~components/spinner"
+import ComponentErrors from "~components/component-errors"
 
 const TIME_GRANULARITY_IN_MINUTES = 1;
 
@@ -110,6 +111,7 @@ export default class StaffDay extends React.Component {
                             markDayAsDone={this.props.markDayAsDone}
                             clockInBreaks={this.props.clockInBreaks}
                             boundActions={this.props.boundActions}
+                            componentErrors={this.props.componentErrors}
                             onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
                     </div>
                 </div>
@@ -393,62 +395,69 @@ class ReasonSelector extends React.Component {
 }
 
 class HoursAcceptancePeriodListItem extends React.Component {
+    constructor(props){
+        super(props);
+        this.componentId = _.uniqueId();
+    }
     render(){
         var hoursAcceptancePeriod = this.props.hoursAcceptancePeriod
         var readonly = this.isAccepted();
 
-        return <div className="row" data-test-marker-hours-acceptance-period-item>
-            <div className="col-md-10">
-                <div className="col-md-4">
-                    <div className="staff-day__sub-heading">From/To</div>
-                    <ShiftTimeSelector
-                        defaultShiftTimes={{
-                            starts_at: hoursAcceptancePeriod.starts_at,
-                            ends_at: hoursAcceptancePeriod.ends_at
-                        }}
-                        readonly={readonly}
-                        rotaDate={this.props.rotaDate}
-                        onChange={(times) => {
-                            this.props.boundActions.updateHoursAcceptancePeriod({
-                                ...times,
-                                clientId: hoursAcceptancePeriod.clientId
-                            })
-                        }}
-                        granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
-                        />
-                </div>
-                <div className="col-md-5">
-                    <div style={{paddingRight: 30, paddingLeft: 30}}>
-                        <div className="staff-day__sub-heading">Breaks</div>
-                        <BreakList
-                            boundActions={this.props.boundActions}
+        return <div data-test-marker-hours-acceptance-period-item>
+            <div className="row" >
+                <div className="col-md-10">
+                    <div className="col-md-4">
+                        <div className="staff-day__sub-heading">From/To</div>
+                        <ShiftTimeSelector
+                            defaultShiftTimes={{
+                                starts_at: hoursAcceptancePeriod.starts_at,
+                                ends_at: hoursAcceptancePeriod.ends_at
+                            }}
                             readonly={readonly}
-                            clockInBreaks={this.props.clockInBreaks}
                             rotaDate={this.props.rotaDate}
-                            hoursAcceptancePeriod={hoursAcceptancePeriod}
+                            onChange={(times) => {
+                                this.props.boundActions.updateHoursAcceptancePeriod({
+                                    ...times,
+                                    clientId: hoursAcceptancePeriod.clientId
+                                })
+                            }}
+                            granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
+                            />
+                    </div>
+                    <div className="col-md-5">
+                        <div style={{paddingRight: 30, paddingLeft: 30}}>
+                            <div className="staff-day__sub-heading">Breaks</div>
+                            <BreakList
+                                boundActions={this.props.boundActions}
+                                readonly={readonly}
+                                clockInBreaks={this.props.clockInBreaks}
+                                rotaDate={this.props.rotaDate}
+                                hoursAcceptancePeriod={hoursAcceptancePeriod}
+                            />
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="staff-day__sub-heading">Reason</div>
+                        <ReasonSelector
+                            readonly={readonly}
+                            reasons={this.props.hoursAcceptanceReasons}
+                            reason={hoursAcceptancePeriod.hours_acceptance_reason}
+                            reasonNote={hoursAcceptancePeriod.reason_note}
+                            onChange={({reasonNote, reason}) => {
+                                this.props.boundActions.updateHoursAcceptancePeriod({
+                                    clientId: hoursAcceptancePeriod.clientId,
+                                    reason_note: reasonNote,
+                                    hours_acceptance_reason: reason
+                                })
+                            }}
                         />
                     </div>
                 </div>
-                <div className="col-md-3">
-                    <div className="staff-day__sub-heading">Reason</div>
-                    <ReasonSelector
-                        readonly={readonly}
-                        reasons={this.props.hoursAcceptanceReasons}
-                        reason={hoursAcceptancePeriod.hours_acceptance_reason}
-                        reasonNote={hoursAcceptancePeriod.reason_note}
-                        onChange={({reasonNote, reason}) => {
-                            this.props.boundActions.updateHoursAcceptancePeriod({
-                                clientId: hoursAcceptancePeriod.clientId,
-                                reason_note: reasonNote,
-                                hours_acceptance_reason: reason
-                            })
-                        }}
-                    />
+                <div className="col-md-2">
+                    {this.getAcceptUi()}
                 </div>
             </div>
-            <div className="col-md-2">
-                {this.getAcceptUi()}
-            </div>
+            {this.getErrorsComponent()}
         </div>
     }
     isAccepted(){
@@ -457,8 +466,13 @@ class HoursAcceptancePeriodListItem extends React.Component {
     isValid(){
         return Validation.validateHoursPeriod(this.props.hoursAcceptancePeriod).isValid;
     }
+    getErrorsComponent(){
+        var componentErrors = this.props.componentErrors[this.componentId];
+        return <ComponentErrors errors={componentErrors} />
+    }
     getAcceptUi(){
         var hoursAcceptancePeriod = this.props.hoursAcceptancePeriod
+
         if (hoursAcceptancePeriod.updateIsInProgress) {
             return <Spinner />
         }
@@ -479,7 +493,8 @@ class HoursAcceptancePeriodListItem extends React.Component {
                 <a
                     data-test-marker-accept-hours-acceptance-period
                     onClick={() => this.props.boundActions.acceptHoursAcceptancePeriod({
-                        hoursAcceptancePeriod
+                        hoursAcceptancePeriod,
+                        errorHandlingComponent: this.componentId
                     })}
                     className={classes.join(" ")} style={{marginTop: 4}}>
                     Accept {stats.hours}h
@@ -488,7 +503,8 @@ class HoursAcceptancePeriodListItem extends React.Component {
                 <a data-test-marker-delete-hours-acceptance-period
                 onClick={() => {
                     this.props.boundActions.deleteHoursAcceptancePeriod({
-                        hoursAcceptancePeriod
+                        hoursAcceptancePeriod,
+                        errorHandlingComponent: this.componentId
                     })
                 }}>
                     Delete
@@ -506,7 +522,8 @@ class HoursAcceptancePeriodListItem extends React.Component {
                 </div>
                 <a
                     onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
-                        hoursAcceptancePeriod: this.props.hoursAcceptancePeriod
+                        hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
+                        errorHandlingComponent: this.componentId
                     })}>
                     Unaccept
                 </a>
@@ -541,6 +558,7 @@ class HoursAcceptancePeriodList extends React.Component {
                         <HoursAcceptancePeriodListItem
                             boundActions={this.props.boundActions}
                             clockInBreaks={this.props.clockInBreaks}
+                            componentErrors={this.props.componentErrors}
                             rotaDate={this.props.rotaDate}
                             hoursAcceptanceReasons={this.props.hoursAcceptanceReasons}
                             hoursAcceptancePeriod={hoursAcceptancePeriod} />

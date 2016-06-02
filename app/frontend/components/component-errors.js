@@ -50,6 +50,17 @@ export default class ComponentErrors extends React.Component {
 
         var fieldErrorMessages = [];
         errors[fieldName].forEach(function(message, i){
+            if (typeof message !== "string") {
+                if (_.isArray(message.base)) {
+                    message = message.base.join(", ")
+                } else {
+                    try {
+                        message = JSON.stringify(message)
+                    } catch (e) {
+                        message = "(Invalid error)"
+                    }
+                }
+            }
             message = utils.capitalizeFirstCharacter(message);
             if (fieldName !== "base") {
                 message = utils.capitalizeFirstCharacter(fieldName) + ": " + message;
