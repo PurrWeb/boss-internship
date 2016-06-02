@@ -1,4 +1,3 @@
-import clockInStatuses from "./data-handlers/clock-in-statuses"
 import rotaShifts from "./data-handlers/rota-shifts-reducer"
 import clockInOutAppUserMode from "./data-handlers/clock-in-out-app-user-mode"
 import clockInOutAppSelectedStaffType from "./data-handlers/clock-in-out-app-selected-staff-type-reducer"
@@ -22,7 +21,6 @@ import {makeDefaultDataHandler} from "./data-handlers/make-data-handler"
 var dataHandlers = [
     makeDefaultDataHandler("staffMembers"),
     rotaShifts,
-    clockInStatuses,
     clockInOutAppUserMode,
     clockInOutAppSelectedStaffType,
     apiRequestsInProgress,
