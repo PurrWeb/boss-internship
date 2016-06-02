@@ -175,7 +175,7 @@ module Api
       end
 
       def new_breaks_from_params
-        params.fetch(:hours_acceptance_breaks).map do |break_data|
+        Array(params[:hours_acceptance_breaks]).map do |break_data|
           initialize_break(break_data)
         end
       end
