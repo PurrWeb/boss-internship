@@ -16,6 +16,7 @@ const TIME_GRANULARITY_IN_MINUTES = 1;
 export default class StaffDay extends React.Component {
     constructor(props){
         super(props)
+        this.clockOutErrorId = _.uniqueId();
         this.state = {
             lastValidData: this.getLastValidDataFromProps(props)
         }
@@ -83,9 +84,11 @@ export default class StaffDay extends React.Component {
                             staffMember={this.props.staffMember}
                             clockOut={() => this.props.boundActions.forceStaffMemberClockOut({
                                 staffMember: this.props.staffMember,
-                                clockInDay: this.props.clockInDay
+                                clockInDay: this.props.clockInDay,
+                                errorHandlingComponent: this.clockOutErrorId
                             })}
                         />
+                        <ComponentErrors errorHandlingId={this.clockOutErrorId} />
                     </div>
                     <div className="col-md-10">
                         <div className="row">

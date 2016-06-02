@@ -1,8 +1,9 @@
 import React from "react"
 import utils from "~lib/utils"
 import ErrorMessage from "./error-message"
+import {connect} from "react-redux"
 
-export default class ComponentErrors extends React.Component {
+class ComponentErrors extends React.Component {
     static propTypes = {
         errors: React.PropTypes.object
     }
@@ -70,3 +71,14 @@ export default class ComponentErrors extends React.Component {
         return fieldErrorMessages;
     }
 }
+
+function mapStateToProps(state, ownProps){
+    if (ownProps.errorHandlingId) {
+        return {
+            errors: state.componentErrors[ownProps.errorHandlingId]
+        }
+    }
+    return {}
+}
+
+export default connect(mapStateToProps)(ComponentErrors)
