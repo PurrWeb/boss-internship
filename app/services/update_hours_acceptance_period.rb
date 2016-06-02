@@ -29,15 +29,16 @@ class UpdateHoursAcceptancePeriod
         status: status
       )
 
+      existing_breaks = hours_acceptance_period.hours_acceptance_breaks.enabled
+      delete_breaks = existing_breaks
+      if update_breaks_ids.count > 0
+        delete_breaks = existing_breaks.where.not('id NOT IN (?)', update_breaks_ids)
+      end
 
-      hours_acceptance_period.hours_acceptance_breaks.
-        enabled.
-        where('id NOT IN (?)', update_breaks_ids).find_each do |_break|
-          break_disabled =  _break.disable(requester: requester)
-
-          breaks << _break
-          result = result && break_disabled
-        end
+      delete_breaks.find_each do |_break|
+        break_disabled =  _break.disable(requester: requester)
+        result = result && break_disabled
+      end
 
       update_break_data.each do |break_data|
         _break = hours_acceptance_period.
