@@ -5,7 +5,7 @@ export default makeDataHandler("clockInBreaks", {
         action: "replaceAll"
     },
     FORCE_STAFF_MEMBER_CLOCK_OUT_SUCCESS: {
-        action: "update",
+        action: "addOrUpdate",
         generateActionCreator: false
     }
 })

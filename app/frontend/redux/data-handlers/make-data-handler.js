@@ -85,7 +85,7 @@ var handlerHelpers = {
     update: function(state, updatedItemData){
         state = {...state}
 
-        var item = oFetch(state, "updatedItemData.clientId");
+        var item = oFetch(state, updatedItemData.clientId);
 
         var newItem = _.clone(item);
         for (var key in updatedItemData){
@@ -226,7 +226,11 @@ var genericActions = {
     "addOrUpdate": {
         makeHandlerFunction: function({actionNames, collectionName}){
             return function(state, action, handlerHelpers){
-                action[collectionName].forEach(function(item){
+                var items = action[collectionName];
+                if (!items) {
+                    items = [oFetch(action, actionNames.singleItemName)];
+                }
+                items.forEach(function(item){
                     var itemExists = state[item.clientId];
                     if (itemExists) {
                         state = handlerHelpers.update(state, item)

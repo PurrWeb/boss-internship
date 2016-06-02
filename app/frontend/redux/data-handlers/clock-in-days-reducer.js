@@ -8,6 +8,6 @@ export default makeDataHandler("clockInDays", {
         action: "update"
     },
     UPDATE_STAFF_STATUS_SUCCESS: {
-        action: "update"
+        action: "addOrUpdate"
     }
 })
