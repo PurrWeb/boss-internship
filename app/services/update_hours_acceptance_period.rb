@@ -32,7 +32,7 @@ class UpdateHoursAcceptancePeriod
       existing_breaks = hours_acceptance_period.hours_acceptance_breaks.enabled
       delete_breaks = existing_breaks
       if update_breaks_ids.count > 0
-        delete_breaks = existing_breaks.where.not('id NOT IN (?)', update_breaks_ids)
+        delete_breaks = existing_breaks.where('id NOT IN (?)', update_breaks_ids)
       end
 
       delete_breaks.find_each do |_break|
