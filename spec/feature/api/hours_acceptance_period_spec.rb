@@ -22,8 +22,16 @@ RSpec.describe 'Hours acceptance endpoints' do
       user: user
     )
   end
+  let(:none_reason) do
+    HoursAcceptanceReason.create!(
+      text: 'None',
+      enabled: true,
+      rank: 0
+    )
+  end
 
   before do
+    none_reason
     set_token_header(access_token)
   end
 
