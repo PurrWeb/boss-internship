@@ -25,7 +25,7 @@ describe("DatabaseFactory", function(){
         dbFactory.registerActionCreator("addUser", function(){})
         expect(function(){
             dbFactory.registerActionCreator("addUser", function(){})
-        }).toThrow("Action creator addUser already exists");
+        }).toThrow("Action creator addUser already exists. Maybe it's created by makeDefaultDataHandler?");
     })
 
     it("Prevents getting the root reducer if a reducer is handling a non-existent action type", function(){

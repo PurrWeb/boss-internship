@@ -59,6 +59,7 @@ class ClockInOutStaffListItem extends Component {
                     <StaffTypeBadge
                         staffTypeObject={staffTypeObject} />
                     <div className="staff-list-item--clock-in-out__manager-buttons">
+                        {this.getAddNoteButton()}
                         {this.getChangePinButton()}
                         {this.getManagerModeButton()}
                     </div>
@@ -95,6 +96,19 @@ class ClockInOutStaffListItem extends Component {
             </div>
             {toggleOnBreakButton}
         </div>
+    }
+    getAddNoteButton(){
+        if (!this.props.userPermissions.addNote) {
+            return null;
+        }
+        return <button
+            className="btn btn-default btn-sm"
+            style={{marginRight: 2}}
+            onClick={() => this.props.addNote(
+                this.props.staff
+            )}>
+            Add Note
+        </button>
     }
     updateStaffStatus({statusValue, staffMemberObject}){
         var currentStatus = this.props.clockInDay.status;
@@ -195,6 +209,16 @@ function mapDispatchToProps(dispatch){
         },
         updateStaffMemberPin: function(options){
             dispatch(actions.updateStaffMemberPinWithEntryModal(options))
+        },
+        addNote: function(staffMemberObject){
+            var note = prompt("Add staff note for " + staffMemberObject.first_name +
+                " " + staffMemberObject.surname)
+            if (typeof note === "string" && note !== "") {
+                dispatch(actions.addClockInNote({
+                    text: note,
+                    staffMemberObject
+                }))
+            }
         }
     }
 }

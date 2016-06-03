@@ -16,6 +16,7 @@ import apiKey from "./data-handlers/api-key"
 import clockInBreaks from "./data-handlers/clock-in-breaks"
 import clockInPeriods from "./data-handlers/clock-in-periods"
 import clockInEvents from "./data-handlers/clock-in-events"
+import clockInNotes from "./data-handlers/clock-in-notes"
 import {makeDefaultDataHandler} from "./data-handlers/make-data-handler"
 
 var dataHandlers = [
@@ -41,7 +42,7 @@ var dataHandlers = [
     hoursAcceptanceBreaks,
     hoursAcceptancePeriods,
     clockInEvents,
-    makeDefaultDataHandler("clockInNotes"),
+    clockInNotes,
     makeDefaultDataHandler("hoursAcceptanceReasons")
 ]
 

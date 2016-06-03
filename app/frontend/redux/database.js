@@ -17,9 +17,29 @@ import * as staffMemberActions from "./actions/staff-members"
 import * as clockingActions from "./actions/clocking"
 import * as hoursAcceptancePeriodActions from "./actions/hours-acceptance-periods"
 import * as miscActions from "./actions/misc"
+import * as clockInNoteActions from "./actions/clock-in-notes"
 import DatabaseFactory from "./database-factory"
 
 var databaseFactory = new DatabaseFactory();
+
+databaseFactory.registerActionTypes(apiRequestActionTypes)
+
+registerActionsObject(clockingActions)
+registerActionsObject(rotaActions)
+registerActionsObject(confirmationMessageActions)
+registerActionsObject(rotaForecastActions)
+registerActionsObject(confirmationModalActions);
+registerActionsObject(shiftActions)
+registerActionsObject(appDataActions)
+registerActionsObject(staffMemberActions)
+registerActionsObject(hoursAcceptancePeriodActions)
+registerActionsObject(miscActions)
+registerActionsObject(clockInNoteActions)
+
+dataHandlers.forEach(function(dataHandler){
+    databaseFactory.registerDataHandler(dataHandler)
+})
+
 
 function registerActionsObject(actionsObject){
     for (var key in actionsObject) {
@@ -43,23 +63,6 @@ function registerActionsObject(actionsObject){
         }
     }
 }
-
-databaseFactory.registerActionTypes(apiRequestActionTypes)
-
-registerActionsObject(clockingActions)
-registerActionsObject(rotaActions)
-registerActionsObject(confirmationMessageActions)
-registerActionsObject(rotaForecastActions)
-registerActionsObject(confirmationModalActions);
-registerActionsObject(shiftActions)
-registerActionsObject(appDataActions)
-registerActionsObject(staffMemberActions)
-registerActionsObject(hoursAcceptancePeriodActions)
-registerActionsObject(miscActions)
-
-dataHandlers.forEach(function(dataHandler){
-    databaseFactory.registerDataHandler(dataHandler)
-})
 
 export function getActionCreators(){
     return databaseFactory.getActionCreators();

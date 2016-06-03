@@ -209,6 +209,12 @@ const apiRoutes = {
             return "hours_acceptance_periods/" + oFetch(options, "hoursAcceptancePeriodServerId")
         },
         method: "DELETE"
+    },
+    addClockInNote: {
+        getPath(){
+            return "clocking/add_note"
+        },
+        method: "POST"
     }
 }
 

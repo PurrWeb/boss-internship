@@ -237,18 +237,21 @@ export function selectClockInOutAppUserPermissions(state){
     if (userMode === "manager") {
         return {
             toggleOnBreak: true,
-            changePin: true
+            changePin: true,
+            addNote: true
         }
     }
     if (userMode === "supervisor") {
         return {
             toggleOnBreak: true,
-            changePin: false
+            changePin: false,
+            addNote: true
         }
     }
     return {
         toggleOnBreak: false,
-        changePin: false
+        changePin: false,
+        addNote: false
     }
 }
 

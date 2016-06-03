@@ -117,6 +117,10 @@ function getDefaultActionHandler(collectionName, genericHandlerInfo, handledActi
     var ret = {}
 
     var genericActionGenerator = genericActions[genericHandlerInfo.action]
+    if (genericActionGenerator === undefined) {
+        throw Error("No generic handler exists for '" + genericHandlerInfo.action + "' actions")
+    }
+
     var canGenerateActionHandler = genericActionGenerator.getActionType && genericActionGenerator.makeDefaultActionCreator
     if (canGenerateActionHandler) {
         ret.actionType = genericActionGenerator.getActionType(infoForGenerator)

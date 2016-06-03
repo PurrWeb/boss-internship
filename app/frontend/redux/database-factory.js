@@ -23,7 +23,7 @@ export default class DatabaseFactory {
     }
     registerActionCreator(name, actionCreatorFunction) {
         if (this._actionCreators[name] !== undefined) {
-            throw Error("Action creator " + name + " already exists")
+            throw Error("Action creator " + name + " already exists. Maybe it's created by makeDefaultDataHandler?")
         }
         this._actionCreators[name] = actionCreatorFunction;
     }
