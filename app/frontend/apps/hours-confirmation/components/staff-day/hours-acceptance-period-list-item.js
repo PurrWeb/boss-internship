@@ -6,6 +6,7 @@ import getHoursPeriodStats from "~lib/get-hours-period-stats"
 import ComponentErrors from "~components/component-errors"
 import Validation from "~lib/validation"
 import Spinner from "~components/spinner"
+import _ from "underscore"
 
 
 const TIME_GRANULARITY_IN_MINUTES = 1;
