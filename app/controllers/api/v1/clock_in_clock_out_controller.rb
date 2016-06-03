@@ -24,6 +24,10 @@ module Api
 
         rota_shifts = rota.rota_shifts.enabled
 
+        clock_in_notes = ClockInNote.
+          joins(:clock_in_day).
+          merge(clock_in_days)
+
         staff_types = StaffType.all
 
         render locals: {
@@ -31,6 +35,7 @@ module Api
           rota_date: rota_date,
           staff_members: staff_members,
           clock_in_days: clock_in_days,
+          clock_in_notes: clock_in_notes,
           staff_types: staff_types,
           rota_shifts: rota_shifts,
           rotas: [rota],

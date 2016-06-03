@@ -31,6 +31,7 @@ module Api
 
         authorize! :add_note, staff_member
 
+        clock_in_note = nil
 
         ActiveRecord::Base.transaction do
           clock_in_day = ClockInDay.find_or_initialize_by(
@@ -45,7 +46,7 @@ module Api
             )
           end
 
-          ClockInNote.create!(
+          clock_in_note = ClockInNote.create!(
             creator: staff_member_from_token,
             clock_in_day: clock_in_day,
             note: note,
@@ -53,7 +54,7 @@ module Api
           )
         end
 
-        render nothing: true, status: :ok
+        render locals: { clock_in_note: clock_in_note }
       end
 
       private

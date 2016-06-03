@@ -8,6 +8,11 @@ json.clock_in_days do
     json.partial! 'api/v1/shared/clock_in_day.json', locals: { clock_in_day: clock_in_day }
   end
 end
+json.clock_in_notes do
+  json.array! clock_in_notes do |clock_in_note|
+    json.partial! 'api/v1/shared/clock_in_note.json', locals: { clock_in_note: clock_in_note }
+  end
+end
 json.staff_types do
   json.array! staff_types do |staff_type|
     json.partial! 'api/v1/shared/staff_type.json', locals: { staff_type: staff_type }
