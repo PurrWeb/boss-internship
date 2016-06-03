@@ -25,6 +25,7 @@ RSpec.describe 'Clock in clock out endpoint' do
     expect(json.keys).to eq([
       "staff_members",
       "clock_in_days",
+      "clock_in_notes",
       "staff_types",
       "rota_shifts",
       "venues",
