@@ -8,11 +8,11 @@ json.status hours_acceptance_period.status
 json.hours_acceptance_breaks hours_acceptance_period.hours_acceptance_breaks.enabled do |hours_acceptance_break|
   json.id hours_acceptance_break.id
 end
-if hours_acceptance_period.hours_acceptance_reason.present?
-  json.hours_acceptance_reason do
+json.hours_acceptance_reason do
+  if hours_acceptance_period.hours_acceptance_reason.present?
     json.id hours_acceptance_period.hours_acceptance_reason.id
+  else
+    json.id HoursAcceptanceReason.none.id
   end
-else
-  json.hours_acceptance_reason nil
 end
 json.reason_note hours_acceptance_period.reason_note
