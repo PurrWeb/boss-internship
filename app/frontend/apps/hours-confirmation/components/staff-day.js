@@ -472,7 +472,8 @@ class HoursAcceptancePeriodListItem extends React.Component {
         return this.props.hoursAcceptancePeriod.status !== "pending";
     }
     isValid(){
-        return Validation.validateHoursPeriod(this.props.hoursAcceptancePeriod).isValid;
+        return Validation.validateHoursPeriod(this.props.hoursAcceptancePeriod).isValid
+            && !this.props.overlapsOtherIntervals;
     }
     getErrorsComponent(){
         var componentErrors = this.props.componentErrors[this.componentId];
@@ -576,7 +577,8 @@ class HoursAcceptancePeriodList extends React.Component {
                             componentErrors={this.props.componentErrors}
                             rotaDate={this.props.rotaDate}
                             hoursAcceptanceReasons={this.props.hoursAcceptanceReasons}
-                            hoursAcceptancePeriod={hoursAcceptancePeriod} />
+                            hoursAcceptancePeriod={hoursAcceptancePeriod}
+                            overlapsOtherIntervals={!intervalsOverlap.isValid} />
                     </div>
             )}
             <ValidationResult result={intervalsOverlap} />
