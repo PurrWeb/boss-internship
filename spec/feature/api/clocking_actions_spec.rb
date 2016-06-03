@@ -210,15 +210,16 @@ RSpec.describe 'Clocking actions' do
       let(:break_end) { shift_start + 3.hours }
       let(:call_time) { break_end + 1.hour }
       let(:token_expires_at) { call_time + 30.minutes }
-
-      before do
-        clock_in_day = ClockInDay.create!(
+      let(:clock_in_day) do
+        ClockInDay.create!(
           staff_member: target_staff_member,
           venue: venue,
           date: date,
           creator: staff_member
         )
+      end
 
+      before do
         ClockingActionHelper.create_initial_clock_in(
           clock_in_day: clock_in_day,
           creator: staff_member,
@@ -278,7 +279,38 @@ RSpec.describe 'Clocking actions' do
         hours_acceptance_break = hours_acceptance_period.hours_acceptance_breaks.last
         expect(hours_acceptance_break.starts_at).to eq(break_start)
         expect(hours_acceptance_break.ends_at).to eq(break_end)
+      end
 
+      context 'when created acceptance will clash with existing' do
+        before do
+          HoursAcceptancePeriod.create!(
+            starts_at: shift_start,
+            ends_at: call_time,
+            clock_in_day: clock_in_day,
+            creator: user
+          )
+        end
+
+        context 'before call' do
+          specify do
+            expect(HoursAcceptancePeriod.count).to eq(1)
+          end
+        end
+
+        specify 'should work' do
+          response = nil
+          travel_to call_time do
+            response = post(url, params)
+          end
+          expect(response.status).to eq(ok_status)
+        end
+
+        specify 'should not create conflicting hours acceptance period' do
+          travel_to call_time do
+            post(url, params)
+          end
+          expect(HoursAcceptancePeriod.count).to eq(1)
+        end
       end
     end
   end

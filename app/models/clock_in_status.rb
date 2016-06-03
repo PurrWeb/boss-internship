@@ -56,10 +56,20 @@ class ClockInStatus
         end
 
         current_recorded_clock_in_period.update_attributes!(ends_at: at)
-        create_hours_confirmation_from_clock_in_period(
-          clock_in_period: current_recorded_clock_in_period,
-          creator: requester
+
+        overlap_query = OverlappingHoursAcceptancePeriodQuery.new(
+          clock_in_day: clock_in_day,
+          starts_at: current_recorded_clock_in_period.starts_at,
+          ends_at: current_recorded_clock_in_period.ends_at
         )
+        new_period_will_conflict_with_existing = overlap_query.count > 0
+
+        if !new_period_will_conflict_with_existing
+          create_hours_confirmation_from_clock_in_period(
+            clock_in_period: current_recorded_clock_in_period,
+            creator: requester
+          )
+        end
       elsif event_type == 'end_break'
         add_break_to_period(
           clock_in_period: current_recorded_clock_in_period,
