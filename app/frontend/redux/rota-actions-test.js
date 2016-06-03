@@ -8,7 +8,7 @@ describe("Rota Actions", function(){
 
     afterEach(function(){
         expect.restoreSpies();
-    });    
+    });
 
     it("Shows a confirmation dialog before adding a shift to a published rota", function(){
         var storeState = {

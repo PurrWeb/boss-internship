@@ -17,9 +17,12 @@ describe("Clock In/Out Page Integration Test", function(){
             "first_name":"Dermot",
             "surname":"O'Boyle"
         }],
-        clock_in_statuses: [{
-            "staff_member":{"id":2},
-            "status":"clocked_out"
+        clock_in_days: [{
+            id: 22,
+            date: "2016-04-29",
+            staff_member: {id: 2},
+            venue: {id: 1},
+            status: "clocked_out"
         }],
         staff_types: [{
             "id":7,

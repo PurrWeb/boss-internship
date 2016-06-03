@@ -5,7 +5,8 @@ export default makeDataHandler("clockInDays", {
         action: "replaceAll"
     },
     FORCE_STAFF_MEMBER_CLOCK_OUT_SUCCESS: {
-        action: "update"
+        action: "update",
+        generateActionCreator: false
     },
     UPDATE_STAFF_STATUS_SUCCESS: {
         action: "addOrUpdate"

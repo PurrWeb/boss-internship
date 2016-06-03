@@ -23,12 +23,7 @@ describe('Hours Confirmation Integration Test', function() {
                 id: 22,
                 date: "2016-11-01",
                 staff_member: {id: 160},
-                venue: {id: 1}
-            }
-        ],
-        clockInStatuses: [
-            {
-                staff_member: {id: 160},
+                venue: {id: 1},
                 status: "on_break"
             }
         ],

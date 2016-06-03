@@ -3,12 +3,21 @@ import Promise from "bluebird"
 import { updateStaffStatus } from "./clocking"
 import _ from "underscore"
 
-describe("RotaActions", function(){
+describe("Clocking Actions", function(){
     it("Can make a request to update the status of a staff member", function(done){
         var dispatch = expect.createSpy();
         var getState = function(){ return {
             clockInOutAppUserMode: {
                 mode: "user"
+            },
+            pageOptions: {
+                dateOfRota: new Date("2016-04-01")
+            },
+            clockInDays: {
+                44: {
+                    staff_member: {clientId: 10},
+                    date: "2016-04-01"
+                }
             }
         } }
 
@@ -17,7 +26,7 @@ describe("RotaActions", function(){
         expect.spyOn($, "ajax").andReturn(promise)
 
         updateStaffStatus({
-            staffMemberObject: {},
+            staffMemberObject: {clientId: 10},
             statusValue: "clocked_in",
             venueServerId: 3,
             date: new Date(),
