@@ -8,7 +8,6 @@ import Validation from "~lib/validation"
 import Spinner from "~components/spinner"
 import _ from "underscore"
 
-
 const TIME_GRANULARITY_IN_MINUTES = 1;
 
 export default class HoursAcceptancePeriodListItem extends React.Component {
@@ -20,26 +19,34 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
         var hoursAcceptancePeriod = this.props.hoursAcceptancePeriod
         var readonly = this.isAccepted();
 
+        var periodTimeSelectorStyles = {};
+        if (!this.periodTimesAreValid()) {
+            periodTimeSelectorStyles.color = "red"
+        }
+
         return <div data-test-marker-hours-acceptance-period-item>
             <div className="row" >
                 <div className="col-md-10">
                     <div className="col-md-4">
                         <div className="staff-day__sub-heading">From/To</div>
-                        <ShiftTimeSelector
-                            defaultShiftTimes={{
-                                starts_at: hoursAcceptancePeriod.starts_at,
-                                ends_at: hoursAcceptancePeriod.ends_at
-                            }}
-                            readonly={readonly}
-                            rotaDate={this.props.rotaDate}
-                            onChange={(times) => {
-                                this.props.boundActions.updateHoursAcceptancePeriod({
-                                    ...times,
-                                    clientId: hoursAcceptancePeriod.clientId
-                                })
-                            }}
-                            granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
-                            />
+                        <div style={periodTimeSelectorStyles}>
+                            <ShiftTimeSelector
+                                showErrorMessages={false}
+                                defaultShiftTimes={{
+                                    starts_at: hoursAcceptancePeriod.starts_at,
+                                    ends_at: hoursAcceptancePeriod.ends_at
+                                }}
+                                readonly={readonly}
+                                rotaDate={this.props.rotaDate}
+                                onChange={(times) => {
+                                    this.props.boundActions.updateHoursAcceptancePeriod({
+                                        ...times,
+                                        clientId: hoursAcceptancePeriod.clientId
+                                    })
+                                }}
+                                granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
+                                />
+                        </div>
                     </div>
                     <div className="col-md-5">
                         <div style={{paddingRight: 30, paddingLeft: 30}}>
@@ -78,6 +85,13 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
             {this.getErrorsComponent()}
         </div>
     }
+    periodTimesAreValid(){
+        return Validation.validateShiftTimes({
+            starts_at: this.props.hoursAcceptancePeriod.starts_at,
+            ends_at: this.props.hoursAcceptancePeriod.ends_at,
+            granularityInMinutes: TIME_GRANULARITY_IN_MINUTES
+        }).isValid
+    }
     isAccepted(){
         return this.props.hoursAcceptancePeriod.status !== "pending";
     }
@@ -101,12 +115,8 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
         });
         if (!this.isAccepted()) {
             var classes = ["btn"]
-            if (this.isValid()) {
-                classes.push("btn-success")
-            } else {
-                classes.push("btn-default")
-                classes.push("disabled")
-            }
+
+            classes.push("btn-success")
 
             return <div>
                 <a

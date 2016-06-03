@@ -47,7 +47,6 @@ export default class HoursAcceptancePeriodList extends React.Component {
                             overlapsOtherIntervals={!intervalsOverlap.isValid} />
                     </div>
             )}
-            <ValidationResult result={intervalsOverlap} />
             {markAsDoneButton}
             <a
                 className="btn btn-default"
