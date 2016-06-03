@@ -274,11 +274,12 @@ ActiveRecord::Schema.define(version: 20160601214451) do
   end
 
   create_table "hours_acceptance_reasons", force: :cascade do |t|
-    t.string   "text",       limit: 255, null: false
-    t.integer  "rank",       limit: 4,   null: false
-    t.boolean  "enabled",                null: false
+    t.string   "text",          limit: 255,                 null: false
+    t.integer  "rank",          limit: 4,                   null: false
+    t.boolean  "enabled",                                   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "note_required",             default: false, null: false
   end
 
   create_table "invite_transitions", force: :cascade do |t|
