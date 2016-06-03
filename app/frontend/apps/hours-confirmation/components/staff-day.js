@@ -12,6 +12,7 @@ import Spinner from "~components/spinner"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import StaffStatusBadge from "~components/staff-status-badge"
 import ComponentErrors from "~components/component-errors"
+import { objectHasBeenSavedToBackend } from "~lib/backend-data/process-backend-object"
 
 const TIME_GRANULARITY_IN_MINUTES = 1;
 
@@ -551,10 +552,17 @@ class HoursAcceptancePeriodList extends React.Component {
             </button>
         }
 
+        var orderedHAPs = _.sortBy(this.props.hoursAcceptancePeriods, function(period){
+            if (!objectHasBeenSavedToBackend(period)){
+                return Number.POSITIVE_INFINITY
+            }
+            return period.starts_at.valueOf();
+        })
+
         var intervalsOverlap = Validation.validateHoursPeriodsDontOverlap(this.props.hoursAcceptancePeriods)
 
         return <div>
-            {this.props.hoursAcceptancePeriods.map(
+            {orderedHAPs.map(
                 (hoursAcceptancePeriod) =>
                     <div key={hoursAcceptancePeriod.clientId}
                         style={{
