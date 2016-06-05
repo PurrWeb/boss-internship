@@ -1,6 +1,7 @@
 import createApiRequestAction from "../create-api-request-action"
 import makeApiRequestMaker from "../make-api-request-maker"
 import {apiRoutes} from "~lib/routes"
+import * as backendData from "~lib/backend-data/process-backend-objects"
 import utils from "~lib/utils"
 import oFetch from "o-fetch"
 
@@ -21,7 +22,9 @@ export const addClockInNote = createApiRequestAction({
             }
         },
         getSuccessActionData(responseData, requestOptions){
-            alert("TODO: store and display on page")
+            return {
+                clockInNote: backendData.processClockInNoteObject(responseData)
+            }
         }
     })
 })

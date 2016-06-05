@@ -18,6 +18,7 @@ import {
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import actions from "~redux/actions"
 import Spinner from "~components/spinner"
+import ClockInNotesList from "~components/clock-in-notes-list"
 
 var columnNameStyle = {
     textDecoration: "underline"
@@ -62,6 +63,8 @@ class ClockInOutStaffListItem extends Component {
                         {this.getAddNoteButton()}
                         {this.getChangePinButton()}
                         {this.getManagerModeButton()}
+                        <div>Notes: </div>
+                        <ClockInNotesList notes={this.props.clockInNotes} />
                     </div>
                 </div>
                 {rotaedShiftsColumn}
@@ -178,12 +181,13 @@ class ClockInOutStaffListItem extends Component {
 }
 
 function mapStateToProps(state, ownProps){
+    var clockInDay = selectClockInDay(state, {
+        staffMemberClientId: ownProps.staff.clientId,
+        date: state.pageOptions.dateOfRota
+    })
     return {
         staffTypes: state.staffTypes,
-        clockInDay: selectClockInDay(state, {
-            staffMemberClientId: ownProps.staff.clientId,
-            date: state.pageOptions.dateOfRota
-        }),
+        clockInDay,
         staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
         rotas: state.rotas,
         venues: state.venues,
@@ -195,7 +199,10 @@ function mapStateToProps(state, ownProps){
             staffMemberServerId: ownProps.staff.serverId
         }),
         userPermissions: selectClockInOutAppUserPermissions(state),
-        pageOptions: state.pageOptions
+        pageOptions: state.pageOptions,
+        clockInNotes: _.filter(state.clockInNotes, function(note){
+            return note.clock_in_day.clientId === clockInDay.clientId
+        })
     }
 }
 

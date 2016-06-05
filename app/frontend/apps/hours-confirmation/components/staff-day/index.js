@@ -10,7 +10,7 @@ import Validation from "~lib/validation"
 import HoursChart from "../hours-chart"
 import ClockOutButton from "./clock-out-button"
 import StaffDayHeader from "./staff-day-header"
-import StaffDayNotes from "./staff-day-notes"
+import ClockInNotesList from "~components/clock-in-notes-list"
 import HoursAcceptancePeriodList from "./hours-acceptance-period-list"
 
 export default class StaffDay extends React.Component {
@@ -106,7 +106,8 @@ export default class StaffDay extends React.Component {
                                 />
                             </div>
                             <div className="col-md-4">
-                                <StaffDayNotes notes={this.props.clockInNotes} />
+                                <div className="staff-day__sub-heading">Notes</div>
+                                <ClockInNotesList notes={this.props.clockInNotes} />
                             </div>
                         </div>
                         <HoursAcceptancePeriodList
