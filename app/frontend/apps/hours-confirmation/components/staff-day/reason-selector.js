@@ -5,6 +5,10 @@ export default class ReasonSelector extends React.Component {
         var {reason, reasonNote, reasons} = this.props;
 
         var showTextArea = reason.note_required
+        var sortedReason = _.chain(reasons)
+            .values()
+            .sortBy("rank")
+            .value();
 
         var dropdown, dropdownSelectionString;
         if (this.props.readonly) {
@@ -22,7 +26,7 @@ export default class ReasonSelector extends React.Component {
                         reason: reasons[selectedValue]
                     });
                 }}>
-                {_.values(reasons).map((reason) =>
+                {sortedReason.map((reason) =>
                     <option value={reason.clientId} key={reason.clientId}>
                         {reason.text}
                     </option>
