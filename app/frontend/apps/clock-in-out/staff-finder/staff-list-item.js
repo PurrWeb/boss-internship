@@ -63,11 +63,13 @@ class ClockInOutStaffListItem extends Component {
                         {this.getAddNoteButton()}
                         {this.getChangePinButton()}
                         {this.getManagerModeButton()}
-                        <div>Notes: </div>
-                        <ClockInNotesList notes={this.props.clockInNotes} />
+
                     </div>
                 </div>
                 {rotaedShiftsColumn}
+                <div className="col-xs-3">
+                    {this.getClockInNotesList()}
+                </div>
                 <div className="col-md-2 col-xs-2 staff-list-item--clock-in-out__status">
                     <StaffStatusBadge staffStatusObject={staffStatus} />
                 </div>
@@ -98,6 +100,15 @@ class ClockInOutStaffListItem extends Component {
                     updateStaffStatusWithConfirmation={(options) => this.updateStaffStatus(options)} />
             </div>
             {toggleOnBreakButton}
+        </div>
+    }
+    getClockInNotesList(){
+        if (!this.props.userPermissions.addNote) {
+            return null;
+        }
+        return <div>
+            <div style={{textDecoration: "underline"}}>Notes: </div>
+            <ClockInNotesList notes={this.props.clockInNotes} />
         </div>
     }
     getAddNoteButton(){
