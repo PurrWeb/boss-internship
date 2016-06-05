@@ -3,9 +3,8 @@ import React from "react"
 export default class ReasonSelector extends React.Component {
     render(){
         var {reason, reasonNote, reasons} = this.props;
-        var reasonIsSelected = reason !== null;
 
-        var showTextArea = reasonIsSelected && reason.title === "Other";
+        var showTextArea = reason.note_required
 
         var dropdown, dropdownSelectionString;
         if (this.props.readonly) {
@@ -15,7 +14,7 @@ export default class ReasonSelector extends React.Component {
         } else {
             dropdown = <select
                 style={{marginBottom: 4}}
-                value={reasonIsSelected ? reason.clientId : noneSelectedId}
+                value={reason.clientId}
                 onChange={(e) => {
                     var reason;
                     var selectedValue = e.target.value;

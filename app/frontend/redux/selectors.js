@@ -295,9 +295,8 @@ export function selectClockInDayDetails(state, clockInDay){
     hoursAcceptancePeriods.forEach(function(hoursAcceptancePeriod){
         hoursAcceptancePeriod.updateIsInProgress = selectEditHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod)
         var hasReason = hoursAcceptancePeriod.hours_acceptance_reason !== null;
-        hoursAcceptancePeriod.hours_acceptance_reason = hasReason ?
+        hoursAcceptancePeriod.hours_acceptance_reason =
             state.hoursAcceptanceReasons[hoursAcceptancePeriod.hours_acceptance_reason.clientId]
-            : _.values(state.hoursAcceptanceReasons)[0]
     })
 
     var rota = getRotaFromDateAndVenue({
