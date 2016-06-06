@@ -82,7 +82,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                     {this.getAcceptUi()}
                 </div>
             </div>
-            {this.getErrorsComponent()}
+            <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
         </div>
     }
     periodTimesAreValid(){
@@ -98,10 +98,6 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
     isValid(){
         return Validation.validateHoursPeriod(this.props.hoursAcceptancePeriod).isValid
             && !this.props.overlapsOtherIntervals;
-    }
-    getErrorsComponent(){
-        var componentErrors = this.props.componentErrors[this.componentId];
-        return <ComponentErrors errors={componentErrors} />
     }
     getAcceptUi(){
         var hoursAcceptancePeriod = this.props.hoursAcceptancePeriod

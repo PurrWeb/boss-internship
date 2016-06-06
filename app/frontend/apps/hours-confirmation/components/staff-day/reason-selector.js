@@ -58,6 +58,10 @@ export default class ReasonSelector extends React.Component {
         }
         _.extend(newData, dataToUpdate);
 
+        if (!newData.reason.note_required) {
+            newData.reasonNote = "";
+        }
+
         this.props.onChange(newData)
     }
 }

@@ -25,9 +25,15 @@ class ComponentErrors extends React.Component {
             </ul>
         }
 
-        return <ErrorMessage>
-            {errorComponents}
-        </ErrorMessage>
+        var extraStyle = this.props.extraStyle;
+        if (!extraStyle) {
+            extraStyle = {}
+        }
+        return <div style={extraStyle}>
+            <ErrorMessage>
+                {errorComponents}
+            </ErrorMessage>
+        </div>
     }
     getErrorMessages(){
         var {errors} = this.props;
