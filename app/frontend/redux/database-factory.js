@@ -15,6 +15,14 @@ export default class DatabaseFactory {
         this._actionCreators = {};
         this._reducers = {}
         this._handledActionTypesByReducer = {};
+
+        this._initResetStoreAction();
+    }
+    _initResetStoreAction(){
+        this.registerActionCreator("resetStore", function(){
+            return {type: "RESET_STORE"}
+        })
+        this.registerActionTypes(["RESET_STORE"])
     }
     registerActionTypes(actionTypes){
         actionTypes.forEach((actionType) =>
@@ -83,6 +91,9 @@ export default class DatabaseFactory {
         return function(state, action){
             if (!self._hasActionType(action.type)){
                 throw Error("Dispatched non-existent action type " + action.type)
+            }
+            if (action.type === "RESET_STORE") {
+                return undefined;
             }
             return rootReducer(state, action)
         }

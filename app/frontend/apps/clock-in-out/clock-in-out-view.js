@@ -43,6 +43,7 @@ class ClockInOutView extends Component {
                     leaveManagerMode={this.props.leaveManagerMode}
                     venue={this.props.venue}
                     rota={this.props.rota}
+                    refetchAllData={() => this.props.refreshAllData(this.props.apiKey)}
                 />
                 <ClockInOutStaffFinder
                     selectedStaffTypeClientId={this.props.selectedStaffTypeClientId}
@@ -75,6 +76,7 @@ function mapStateToProps(state) {
         userIsManager,
         userIsSupervisor,
         rota,
+        apiKey: state.apiKey,
         staffMembers: state.staffMembers,
         leaveManagerModeInProgress: selectLeaveManagerModeIsInProgress(state),
         venue: rota.venue.get(state.venues),
@@ -94,6 +96,11 @@ function mapDispatchToProps(dispatch){
             dispatch(actions.clockInOutAppSelectStaffType({
                 selectedStaffTypeClientId
             }))
+        },
+        refreshAllData: function(apiKey){
+            dispatch(actions.resetStore());
+            dispatch(actions.setApiKey({apiKey}))
+            dispatch(actions.clockInOutAppFetchAppData())
         }
     }
 }

@@ -10,21 +10,28 @@ export default class Header extends React.Component {
         userIsSupervisor: React.PropTypes.bool.isRequired,
         leaveManagerModeInProgress: React.PropTypes.bool.isRequired,
         leaveManagerMode: React.PropTypes.func.isRequired,
+        refetchAllData: React.PropTypes.func.isRequired,
         venue: React.PropTypes.object.isRequired,
         rota: React.PropTypes.object.isRequired
     }
     render(){
         var returnToStaffTypeSelectorButton = null;
-        var leaveManagerModeButton = null;
+        var managerButtons = null;
+        var refetchDataButton = null;
         if (!this.props.userIsManagerOrSupervisor) {
             returnToStaffTypeSelectorButton = <a
                     className="btn btn-default"
-                    style={{float: "right"}}
                     onClick={this.props.returnToStaffTypeSelector}>
                     Select a different staff type
                 </a>
         } else {
-            leaveManagerModeButton = <div style={{float: "right"}}>
+            managerButtons = <div>
+                <button
+                    className="btn btn-default"
+                    style={{marginRight: 2}}
+                    onClick={this.props.refetchAllData}>
+                    Reload All Data
+                </button>
                 <LeaveManagerModeButton
                     userIsManager={this.props.userIsManager}
                     userIsSupervisor={this.props.userIsSupervisor}
@@ -33,9 +40,11 @@ export default class Header extends React.Component {
                 </div>
         }
         return <div>
-            {leaveManagerModeButton}
-            {returnToStaffTypeSelectorButton}
-            <h1>
+            <div style={{float: "right"}}>
+                {managerButtons}
+                {returnToStaffTypeSelectorButton}
+            </div>
+            <h1 style={{fontSize: 26}}>
                 {this.props.venue.name} - {moment(this.props.rota.date).format("ddd D MMMM YYYY")}
             </h1>
         </div>
