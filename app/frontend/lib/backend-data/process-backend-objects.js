@@ -39,6 +39,9 @@ export function processPageOptionsObject(pageOptions){
     pageOptions = {...pageOptions};
     processObjectLinks(pageOptions);
 
+    if (pageOptions.date){
+        pageOptions.date = new Date(pageOptions.date)
+    }
     if (pageOptions.dateOfRota){
         pageOptions.dateOfRota =  new Date(pageOptions.dateOfRota)
     }

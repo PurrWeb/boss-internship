@@ -93,6 +93,11 @@ export const appRoutes = {
     hoursConfirmationCurrentPage: function(options){
         var venueId = oFetch(options, "venueId");
         return "/hours_confirmation/current?venue_id=" + venueId;
+    },
+    hoursConfirmationDayPage: function(options){
+        var [date, venueId] = oFetch(options, "date", "venueId");
+        return "/hours_confirmation?date=" + utils.formatRotaUrlDate(date)
+            + "&venue_id=" + venueId
     }
 }
 
