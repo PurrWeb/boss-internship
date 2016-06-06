@@ -8,16 +8,7 @@ import _ from "underscore"
 
 export default class HoursAcceptancePeriodList extends React.Component {
     render(){
-        var markAsDoneButton = null;
-
-        if (this.areAllShiftsAccepted()) {
-            markAsDoneButton = <button
-                onClick={this.props.markDayAsDone}
-                style={{float: "right"}}
-                className="btn btn-success">
-                Done
-            </button>
-        }
+        var markAsDoneButton = this.getMarkAsDoneButton();
 
         var orderedHAPs = _.sortBy(this.props.hoursAcceptancePeriods, function(period){
             if (!objectHasBeenSavedToBackend(period)){
@@ -56,6 +47,18 @@ export default class HoursAcceptancePeriodList extends React.Component {
             </a>
 
         </div>
+    }
+    getMarkAsDoneButton(){
+        var hasClockedOut = this.props.clockInDay.status === "clocked_out";
+        if (this.areAllShiftsAccepted() && hasClockedOut) {
+            return <button
+                onClick={this.props.markDayAsDone}
+                style={{float: "right"}}
+                className="btn btn-success">
+                Done
+            </button>
+        }
+        return null;
     }
     areAllShiftsAccepted(){
         var unacceptedShifts = _(this.props.hoursAcceptancePeriods).filter({
