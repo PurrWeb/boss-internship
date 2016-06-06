@@ -375,6 +375,14 @@ export function selectIsForceClockingOutClockInDay(state, staffMemberClientId){
     })
 }
 
+export function selectAddClockInNoteIsInProgress(state, clockInDayClientId){
+    return requestIsInProgressWithRequestData(
+        state.apiRequestsInProgress.ADD_CLOCK_IN_NOTE,
+    function(requestOptions){
+        return requestOptions.clockInDay.clientId === clockInDayClientId
+    })
+}
+
 export function selectClockInDay(state, {staffMemberClientId, date}) {
     var clockInDay = _.find(state.clockInDays, function(clockInDay){
         return clockInDay.staff_member.clientId === staffMemberClientId &&

@@ -115,11 +115,15 @@ class ClockInOutStaffListItem extends Component {
         if (!this.props.userPermissions.addNote) {
             return null;
         }
+        if (this.props.addClockInNoteIsInProgress){
+            return <Spinner />
+        }
         return <button
             className="btn btn-default btn-sm"
             style={{marginRight: 2}}
             onClick={() => this.props.addNote(
-                this.props.staff
+                this.props.staff,
+                this.props.clockInDay
             )}>
             Add Note
         </button>
@@ -213,7 +217,8 @@ function mapStateToProps(state, ownProps){
         pageOptions: state.pageOptions,
         clockInNotes: _.filter(state.clockInNotes, function(note){
             return note.clock_in_day.clientId === clockInDay.clientId
-        })
+        }),
+        addClockInNoteIsInProgress: selectAddClockInNoteIsInProgress(state, clockInDay.clientId)
     }
 }
 
@@ -228,13 +233,14 @@ function mapDispatchToProps(dispatch){
         updateStaffMemberPin: function(options){
             dispatch(actions.updateStaffMemberPinWithEntryModal(options))
         },
-        addNote: function(staffMemberObject){
+        addNote: function(staffMemberObject, clockInDay){
             var note = prompt("Add staff note for " + staffMemberObject.first_name +
                 " " + staffMemberObject.surname)
             if (typeof note === "string" && note !== "") {
                 dispatch(actions.addClockInNote({
                     text: note,
-                    staffMemberObject
+                    staffMemberObject,
+                    clockInDay
                 }))
             }
         }
