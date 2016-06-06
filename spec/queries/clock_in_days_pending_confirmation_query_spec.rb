@@ -3,9 +3,10 @@ require 'rails_helper'
 describe ClockInDaysPendingConfirmationQuery do
   let(:date) { Time.current.to_date }
   let(:user) { FactoryGirl.create(:user) }
-  let(:venue) { FactoryGirl.create(:venue) }
+  let(:query_venue) { FactoryGirl.create(:venue) }
+  let(:clock_in_day_venue) { query_venue }
   let(:staff_member) { FactoryGirl.create(:staff_member) }
-  let(:query) { ClockInDaysPendingConfirmationQuery.new(venue: venue) }
+  let(:query) { ClockInDaysPendingConfirmationQuery.new(venue: query_venue) }
   let(:hours_acceptance_reason) do
     HoursAcceptanceReason.create!(
       text: 'nothing',
@@ -16,7 +17,7 @@ describe ClockInDaysPendingConfirmationQuery do
   let(:clock_in_day) do
     ClockInDay.create!(
       staff_member: staff_member,
-      venue: venue,
+      venue: clock_in_day_venue,
       date: date,
       creator: user
     )
@@ -58,6 +59,14 @@ describe ClockInDaysPendingConfirmationQuery do
       it 'is returned' do
         expect(query.all).to eq([clock_in_day])
       end
+
+      context 'clock in day is for different venue' do
+        let(:clock_in_day_venue) { FactoryGirl.create(:venue) }
+
+        it 'should not be returned' do
+          expect(query.all).to eq([])
+        end
+      end
     end
   end
 
@@ -87,6 +96,14 @@ describe ClockInDaysPendingConfirmationQuery do
 
       it 'is returned' do
         expect(query.all).to eq([clock_in_day])
+      end
+
+      context 'clock in day is for different venue' do
+        let(:clock_in_day_venue) { FactoryGirl.create(:venue) }
+
+        it 'should not be returned' do
+          expect(query.all).to eq([])
+        end
       end
     end
   end

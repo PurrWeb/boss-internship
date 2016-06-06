@@ -5,10 +5,12 @@ class ClockInDaysPendingConfirmationQuery
 
   def all
     days_with_pending_hour_acceptances = ClockInDay.
+      where(venue: venue).
       joins(:hours_acceptance_periods).
       merge(HoursAcceptancePeriod.pending)
 
     days_with_incomplete_clock_in_periods = ClockInDay.
+      where(venue: venue).
       joins(:clock_in_periods).
       merge(ClockInPeriod.incomplete)
 
