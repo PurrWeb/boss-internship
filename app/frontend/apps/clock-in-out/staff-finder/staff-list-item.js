@@ -13,7 +13,8 @@ import {
     selectEnterManagerModeIsInProgress,
     selectIsUpdatingStaffMemberPin,
     selectClockInOutAppUserPermissions,
-    selectClockInDay
+    selectClockInDay,
+    selectAddClockInNoteIsInProgress
 } from "~redux/selectors"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import actions from "~redux/actions"
