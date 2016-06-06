@@ -1,6 +1,12 @@
 <div class="container">
-    <h1>Hours Confirmations for <%= venue.name %> <%= date %></h1>
-    <%= react_component('HoursConfirmationApp') %>
+  <div>
+    <h1 style="display: inline">Hours Confirmations for <%= venue.name %> <%= date %></h1>
+    <div class="pull-right">
+      <% date = RotaShiftDate.to_rota_date(Time.current) %>
+      <%= link_to('View current',  current_hours_confirmation_index_path(venue_id: venue.id), class: "btn btn-success") %>
+    </div>
+  </div>
+  <%= react_component('HoursConfirmationApp') %>
 </div>
 
 <script>

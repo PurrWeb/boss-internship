@@ -1,5 +1,11 @@
 <div class="container">
-  <h1>Hours Requiring Confirmation</h1>
+  <div>
+    <h1 style="display: inline">Hours Requiring Confirmation</h1>
+    <div class="pull-right">
+      <% date = RotaShiftDate.to_rota_date(Time.current) %>
+      <%= link_to('View by date',  hours_confirmation_index_path(venue_id: venue.id, date:UIRotaDate.format(date)), class: "btn btn-success") %>
+    </div>
+  </div>
   <%= react_component('HoursConfirmationApp') %>
 </div>
 
