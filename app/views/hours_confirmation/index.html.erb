@@ -1,6 +1,6 @@
-<h1>Hours Confirmations for <%= venue.name %> <%= date %></h1>
-
 <div class="container">
+    <h1>Hours Confirmations for <%= venue.name %> <%= date %></h1>
+    <%= react_component('HoursConfirmationApp') %>
 </div>
 
 <script>
@@ -17,7 +17,7 @@
 
   window.boss.clockInEvents = <%= raw render partial: 'api/v1/shared/clock_in_events.json', locals: { clock_in_events: clock_in_events } %>;
 
-  window.boss.rota_shifts = <%= raw render partial: 'api/v1/shared/rota_shifts.json', locals: { rota_shifts: rota_shifts } %>;
+  window.boss.rotaShifts = <%= raw render partial: 'api/v1/shared/rota_shifts.json', locals: { rota_shifts: rota_shifts } %>;
 
   window.boss.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas } %>;
 
@@ -35,6 +35,6 @@
 
   window.boss.pageOptions = {
     venue: { id: <%= venue.id %> },
-    date: "<%= date.iso8601 %>";
+    date: "<%= date.iso8601 %>"
   }
 </script>
