@@ -4,6 +4,8 @@ class HoursConfirmationController < ApplicationController
       venue = venue_from_params
       date = date_from_params
 
+      authorize! :manage, venue
+
       clock_in_days = ClockInDay.where(
         venue: venue,
         date: date
@@ -82,6 +84,8 @@ class HoursConfirmationController < ApplicationController
   def current
     if venue_from_params.present?
       venue = venue_from_params
+
+      authorize! :manage, venue
 
       clock_in_days = ClockInDaysPendingConfirmationQuery.new(
         venue: venue
