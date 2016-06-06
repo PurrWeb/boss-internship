@@ -3,7 +3,6 @@ import _ from "underscore"
 import ErrorMessage from "~components/error-message"
 import StaffTypeBadge from "~components/staff-type-badge"
 import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
-import StaffStatusBadge from "~components/staff-status-badge"
 import ComponentErrors from "~components/component-errors"
 
 import Validation from "~lib/validation"
@@ -81,8 +80,9 @@ export default class StaffDay extends React.Component {
                             style={{width: "90%", marginBottom: 4}}
                         />
                         <StaffTypeBadge staffTypeObject={staffType} />
-                        <StaffStatusBadge staffStatusObject={staffStatus} />
-                        <br/>
+                        <div style={{marginTop: 4}}>
+                            Status: {staffStatus.title}
+                        </div>
                         <ClockOutButton
                             clockInDay={this.props.clockInDay}
                             clockOut={() => this.props.boundActions.forceStaffMemberClockOut({
