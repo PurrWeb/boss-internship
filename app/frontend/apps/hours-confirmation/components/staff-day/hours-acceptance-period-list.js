@@ -9,7 +9,7 @@ import _ from "underscore"
 export default class HoursAcceptancePeriodList extends React.Component {
     render(){
         var markAsDoneButton = null;
-        if (window.yes ) debugger
+
         if (this.areAllShiftsAccepted()) {
             markAsDoneButton = <button
                 onClick={this.props.markDayAsDone}
