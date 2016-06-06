@@ -41,12 +41,22 @@ class HoursConfirmationController < ApplicationController
 
       access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
 
-      venues = [venue]
+      venues = if current_user.has_all_venue_access?
+        Venue.all
+      else
+        user.venues
+      end
 
       rota = Rota.where(
         venue: venue,
         date: date
       )
+
+      rotas = Rota.
+        where(date: clock_in_days.pluck(:date).uniq).
+        joins(:venue).
+        merge(venues)
+
 
       rota_shifts = RotaShift.
         joins(:rota).
@@ -70,7 +80,7 @@ class HoursConfirmationController < ApplicationController
         clock_in_periods: clock_in_periods,
         clock_in_breaks:  clock_in_breaks,
         clock_in_events: clock_in_events,
-        rotas: Array(rota),
+        rotas: rotas,
         rota_shifts: rota_shifts,
         venues: venues,
         venue: venue,
@@ -121,12 +131,21 @@ class HoursConfirmationController < ApplicationController
 
       access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
 
-      venues = [venue]
+      venues = if current_user.has_all_venue_access?
+        Venue.all
+      else
+        user.venues
+      end
 
       rota = Rota.where(
         venue: venue,
         date: clock_in_days.pluck(:date).uniq
       )
+
+      rotas = Rota.
+        where(date: clock_in_days.pluck(:date).uniq).
+        joins(:venue).
+        merge(venues)
 
       rota_shifts = RotaShift.
         joins(:rota).
@@ -150,7 +169,7 @@ class HoursConfirmationController < ApplicationController
         clock_in_periods: clock_in_periods,
         clock_in_breaks:  clock_in_breaks,
         clock_in_events: clock_in_events,
-        rotas: Array(rota),
+        rotas: rotas,
         rota_shifts: rota_shifts,
         venues: venues,
         venue: venue
