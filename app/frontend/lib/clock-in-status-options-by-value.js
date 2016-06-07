@@ -1,6 +1,6 @@
 import _ from "underscore"
 
-var staffStatusOptions = [{
+var clockInStatusOptions = [{
         value: "clocked_in",
         title: "Clocked In",
         color: "green",
@@ -18,6 +18,4 @@ var staffStatusOptions = [{
     }
 ];
 
-var staffStatusOptionsByValue = _.indexBy(staffStatusOptions, "value");
-
-export default staffStatusOptionsByValue
+export default _.indexBy(clockInStatusOptions, "value");

@@ -1,11 +1,12 @@
 import React, { Component } from "react"
+import clockInStatusOptionsByValue from "~lib/clock-in-status-options-by-value"
 
-export default class StaffStatusBadge extends Component {
+export default class ClockInStatusBadge extends Component {
     static propTypes = {
-        staffStatusObject: React.PropTypes.object.isRequired
+        clockInStatusValue: React.PropTypes.string.isRequired
     }
     render(){
-        var option = this.props.staffStatusObject;
+        var option = clockInStatusOptionsByValue[this.props.clockInStatusValue]
         var style = {
             backgroundColor: option.color,
             display: "inline-block"

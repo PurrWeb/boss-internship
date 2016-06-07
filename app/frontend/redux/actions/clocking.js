@@ -4,7 +4,7 @@ import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-r
 import oFetch from "o-fetch"
 import utils from "~lib/utils"
 import {selectClockInOutAppIsInManagerMode} from "../selectors"
-import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
+import clockInStatusOptionsByValue from "~lib/clock-in-status-options-by-value"
 import {showUserActionConfirmationMessage} from "./user-action-confirmation-messages"
 import {showConfirmationModal} from "./confirmation-modal"
 import { selectClockInDay} from "~redux/selectors"
@@ -137,7 +137,7 @@ export const updateStaffStatus = createApiRequestAction({
             var {first_name, surname} = successActionData.staffMemberObject;
             var name = first_name + " " + surname;
             var {statusValue} = successActionData;
-            var statusOption = staffStatusOptionsByValue[statusValue];
+            var statusOption = clockInStatusOptionsByValue[statusValue];
 
             var message = `${name} has been ${statusOption.confirmationTitle}.`
             dispatch(showUserActionConfirmationMessage({

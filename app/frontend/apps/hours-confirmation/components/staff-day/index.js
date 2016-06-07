@@ -2,7 +2,6 @@ import React from "react"
 import _ from "underscore"
 import ErrorMessage from "~components/error-message"
 import StaffTypeBadge from "~components/staff-type-badge"
-import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import ComponentErrors from "~components/component-errors"
 
 import Validation from "~lib/validation"
@@ -56,8 +55,6 @@ export default class StaffDay extends React.Component {
             .filter({status: "accepted"})
 
         var staffType = this.props.staffType;
-
-        var staffStatus = staffStatusOptionsByValue[this.props.clockInDay.status]
 
         return <div style={style}>
             <div style={{

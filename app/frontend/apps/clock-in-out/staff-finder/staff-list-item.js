@@ -4,7 +4,7 @@ import oFetch from "o-fetch"
 import utils from "~lib/utils"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
-import StaffStatusBadge from "~components/staff-status-badge"
+import ClockInStatusBadge from "~components/clock-in-status-badge"
 import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
 import {
@@ -16,7 +16,6 @@ import {
     selectClockInDay,
     selectAddClockInNoteIsInProgress
 } from "~redux/selectors"
-import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 import actions from "~redux/actions"
 import Spinner from "~components/spinner"
 import ClockInNotesList from "~components/clock-in-notes-list"
@@ -28,8 +27,7 @@ var columnNameStyle = {
 class ClockInOutStaffListItem extends Component {
     render(){
         var staffObject = this.props.staff;
-        var staffStatusValue = this.props.clockInDay.status
-        var staffStatus = oFetch(staffStatusOptionsByValue, staffStatusValue);
+        var clockInStatusValue = this.props.clockInDay.status
         var staffTypeObject = staffObject.staff_type.get(this.props.staffTypes);
 
         var rotaedShiftsColumn = null;
@@ -72,7 +70,7 @@ class ClockInOutStaffListItem extends Component {
                     {this.getClockInNotesList()}
                 </div>
                 <div className="col-md-2 col-xs-2 staff-list-item--clock-in-out__status">
-                    <StaffStatusBadge staffStatusObject={staffStatus} />
+                    <ClockInStatusBadge clockInStatusValue={clockInStatusValue} />
                 </div>
                 {statusToggleButtons}
             </div>

@@ -1,5 +1,4 @@
 import React, {Component} from "react"
-import staffStatusOptionsByValue from "~lib/staff-status-options-by-value"
 
 export default class ToggleClockInDayStatusButton extends Component {
     static propTypes = {
