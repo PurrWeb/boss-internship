@@ -42,7 +42,8 @@ class StaffMemberUpdateDetailsPDF
       sia_badge_number: 'SIA Badge Number',
       sia_badge_expiry_date: 'SIA Badge Expiry Date',
       national_insurance_number: 'National Insurance Number',
-      employment_status_statement: 'Employment Status Statement'
+      employment_status_statement: 'Employment Status Statement',
+      master_venue: 'Venue'
     }.fetch(key)
   end
 end

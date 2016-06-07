@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 describe StaffMemberUpdatesEmail do
-  subject { StaffMemberUpdatesEmail.new(staff_member) }
+  subject { StaffMemberUpdatesEmail.new(staff_member: staff_member, old_master_venue: old_master_venue) }
+  let(:old_master_venue) { FactoryGirl.create(:venue) }
   let(:old_address_values) do
     {
       address_1: 'old_address_1',
@@ -28,6 +29,7 @@ describe StaffMemberUpdatesEmail do
   let(:staff_member) do
     FactoryGirl.create(
       :staff_member,
+      master_venue: old_master_venue,
       employment_status_p45_supplied: false,
       employment_status_a: false,
       employment_status_b: false,
@@ -289,6 +291,19 @@ describe StaffMemberUpdatesEmail do
       expect(
         subject.data.fetch(:changed_attribute_data)
       ).to include(sia_badge_expiry_date: new_value.to_s(:human_date))
+    end
+  end
+
+  context "changing master venue" do
+    let(:new_master_venue) { FactoryGirl.create(:venue, name: 'New master venue') }
+    before do
+      staff_member.master_venue = new_master_venue
+    end
+
+    specify do
+      expect(
+        subject.data.fetch(:changed_attribute_data)
+      ).to include(master_venue: new_master_venue.name)
     end
   end
 end

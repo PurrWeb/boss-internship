@@ -29,7 +29,7 @@ class UpdateStaffMemberContactDetails
       staff_member.address = address
     end
 
-    staff_member_updates_email = StaffMemberUpdatesEmail.new(staff_member)
+    staff_member_updates_email = StaffMemberUpdatesEmail.new(old_master_venue: staff_member.master_venue, staff_member: staff_member)
 
     result = staff_member.save
 
