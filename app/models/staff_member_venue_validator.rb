@@ -9,6 +9,10 @@ class StaffMemberVenueValidator
         staff_member.errors.add(:master_venue, 'must be blank') if staff_member.master_venue.present?
       else
         staff_member.errors.add(:master_venue, 'cannot be blank') if !staff_member.master_venue.present?
+
+        if staff_member.work_venues.include?(staff_member.master_venue)
+          staff_member.errors.add(:work_venues, 'cannot contain main venue')
+        end
       end
     end
   end
