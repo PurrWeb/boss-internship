@@ -8,7 +8,7 @@ RSpec.describe 'Hours acceptance endpoints' do
 
   let(:venue) { FactoryGirl.create(:venue) }
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
-  let(:staff_member) { FactoryGirl.create(:staff_member, venues: [venue]) }
+  let(:staff_member) { FactoryGirl.create(:staff_member, master_venue: venue) }
   let(:date) { Time.current.to_date }
   let(:start_of_day) { RotaShiftDate.new(date).start_time }
   let(:api_key) do
