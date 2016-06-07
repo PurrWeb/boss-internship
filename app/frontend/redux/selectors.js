@@ -1,3 +1,13 @@
+/*
+I'm sorry.
+
+This file needs to be cleaned up and potentially split into different files.
+
+As a general rule there should be selectors for different data types. Those should
+return denormalized data, so we don't have to fetch that data later.
+
+There is also overlapping functionality in some ~lib/* files.
+*/
 import _ from "underscore"
 import utils from "~lib/utils"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
