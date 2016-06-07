@@ -88,7 +88,7 @@ export default class StaffDay extends React.Component {
                             clockOut={() => this.props.boundActions.forceStaffMemberClockOut({
                                 staffMember: this.props.staffMember,
                                 clockInDay: this.props.clockInDay,
-                                errorHandlingComponent: this.clockOutErrorId
+                                errorHandlingId: this.clockOutErrorId
                             })}
                         />
                         <ComponentErrors errorHandlingId={this.clockOutErrorId} />

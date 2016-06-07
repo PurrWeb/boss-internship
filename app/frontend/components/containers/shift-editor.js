@@ -132,7 +132,7 @@ class ShiftEditor extends Component {
         this.props.deleteRotaShift({
             shift: this.props.shift,
             venueClientId: this.props.venueClientId,
-            errorHandlingComponent: this.componentId,
+            errorHandlingId: this.componentId,
         });
     }
     updateShift(){
@@ -144,7 +144,7 @@ class ShiftEditor extends Component {
             ends_at: newShiftTimes.ends_at,
             shiftServerId: shift.serverId,
             shiftClientId: shift.clientId,
-            errorHandlingComponent: this.componentId,
+            errorHandlingId: this.componentId,
             shiftType: this.state.shiftType
         });
     }

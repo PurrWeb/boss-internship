@@ -119,7 +119,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                     data-test-marker-accept-hours-acceptance-period
                     onClick={() => this.props.boundActions.acceptHoursAcceptancePeriod({
                         hoursAcceptancePeriod,
-                        errorHandlingComponent: this.componentId
+                        errorHandlingId: this.componentId
                     })}
                     className={classes.join(" ")} style={{marginTop: 4}}>
                     Accept {stats.hours}h
@@ -129,7 +129,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                 onClick={() => {
                     this.props.boundActions.deleteHoursAcceptancePeriod({
                         hoursAcceptancePeriod,
-                        errorHandlingComponent: this.componentId
+                        errorHandlingId: this.componentId
                     })
                 }}>
                     Delete
@@ -148,7 +148,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                 <a
                     onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
                         hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
-                        errorHandlingComponent: this.componentId
+                        errorHandlingId: this.componentId
                     })}>
                     Unaccept
                 </a>

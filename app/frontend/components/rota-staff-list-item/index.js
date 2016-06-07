@@ -36,8 +36,6 @@ class RotaStaffListItem extends Component {
             shiftSavingInProgressSpinner = <Spinner />
         }
 
-        var errors = this.props.componentErrors[this.componentId];
-
         var staffTypeObject = staff.staff_type.get(this.props.staffTypes);
 
         return (
@@ -113,7 +111,7 @@ class RotaStaffListItem extends Component {
                             </div>
                         </div>
                         <div style={{marginTop: 10}}>
-                            <ComponentErrors errors={errors} />
+                            <ComponentErrors errorHandlingId={this.componentId} />
                         </div>
                     </div>
                 </div>
@@ -129,7 +127,7 @@ class RotaStaffListItem extends Component {
             venueServerId: newShiftSettings.venueServerId,
             venueClientId: newShiftSettings.venueClientId,
             staffMemberServerId: this.props.staff.serverId,
-            errorHandlingComponent: this.componentId
+            errorHandlingId: this.componentId
         });
     }
     canAddShift(){
@@ -159,7 +157,6 @@ function mapStateToProps(state, ownProps){
     return {
         addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.serverId),
         staffTypes: state.staffTypes,
-        componentErrors: state.componentErrors,
         staffMemberShifts,
         venues: state.venues,
         canEditStaffTypeShifts: canEditStaffTypeShifts(state, {

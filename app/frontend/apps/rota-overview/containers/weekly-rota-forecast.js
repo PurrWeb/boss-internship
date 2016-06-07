@@ -77,7 +77,7 @@ function mapDispatchToProps(dispatch, ownProps){
             dispatch(actionCreators.fetchWeeklyRotaForecast({
                 serverVenueId: ownProps.serverVenueId,
                 startOfWeek: ownProps.startOfWeek,
-                errorHandlingComponent: componentId
+                errorHandlingId: componentId
             }));
         }
     }

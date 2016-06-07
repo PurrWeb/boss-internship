@@ -77,12 +77,10 @@ export default class RotaForecast extends React.Component {
         </div>
     }
     getErrorComponent(){
-        if (!this.props.errors){
-            return null;
-        }
-        return <div className="col-md-12" style={{marginBottom: -10, marginTop: 10}}>
-            <ComponentErrors errors={this.props.errors} />
-        </div>
+        return <ComponentErrors
+                errorHandlingId={this.props.errorHandlingId}
+                extraStyle={{marginBottom: -10, marginTop: 10}} />
+
     }
     getDataRowComponent(row){
         return <div className="row" key={row.title}>

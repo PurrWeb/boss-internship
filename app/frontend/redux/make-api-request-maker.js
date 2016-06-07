@@ -132,7 +132,7 @@ export default function makeApiRequestMaker(apiOptions){
     // Takes data about the request source component that was part of the request and
     // copies it over to the target.
     function copyComponentInformationFromRequestOptions(target, requestOptions){
-        target.errorHandlingComponent = requestOptions.errorHandlingComponent;
+        target.errorHandlingId = requestOptions.errorHandlingId;
         target.requestSourceComponent = requestOptions.requestSourceComponent;
     }
 }

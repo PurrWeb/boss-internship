@@ -49,18 +49,18 @@ describe("createApiRequestAction", function(){
 		expect(actionObjects[1].type).toEqual("API_REQUEST_END");
 	});
 
-	it("Dispatches API_REQUEST_END and SET_COMPONENT_ERROR when a request fails and an errorHandlingComponent is available", function(){
+	it("Dispatches API_REQUEST_END and SET_COMPONENT_ERROR when a request fails and an errorHandlingId is available", function(){
 		var makeRequest = function(options, success, error){
 			error({errors: {base: ["It went wrong"]}});
 		};
-		var dispatch = dispatchDoSomething(makeRequest, {errorHandlingComponent: 66});
+		var dispatch = dispatchDoSomething(makeRequest, {errorHandlingId: 66});
 
 		var actionObjects = dispatch.calls[1].arguments[0];
 		expect(actionObjects[0].type).toEqual("API_REQUEST_END");
 		expect(actionObjects[1].type).toEqual("SET_COMPONENT_ERROR");
 	});
 
-	it("Shows an alert box if a request fails without an errorHandlingComponent", function(){
+	it("Shows an alert box if a request fails without an errorHandlingId", function(){
 		expect.spyOn(window, "alert");
 
 		var makeRequest = function(options, success, error){

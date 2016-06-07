@@ -25,7 +25,7 @@ describe("makeApiRequestMaker", function(){
         var error = expect.createSpy();
         var success = function(){}
         apiRequestMaker({
-            errorHandlingComponent: 77,
+            errorHandlingId: 77,
             requestSourceComponent: 88
         }, success, error)
         expect($.ajax).toHaveBeenCalled();
@@ -42,7 +42,7 @@ describe("makeApiRequestMaker", function(){
             // undefined because jQuery's promises are slightly different and accept multiple arguments
             expect(errorObject.errors.base[0]).toBe("undefined - 500");
             expect(errorObject.errors.base[1]).toBe("It failed.");
-            expect(errorObject.errorHandlingComponent).toBe(77);
+            expect(errorObject.errorHandlingId).toBe(77);
             expect(errorObject.requestSourceComponent).toBe(88);
 
             done();

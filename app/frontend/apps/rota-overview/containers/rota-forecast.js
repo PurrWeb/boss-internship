@@ -26,7 +26,8 @@ class RotaForecast extends React.Component {
             onForecastedTakeChanged={(forecastedTake) => this.setState({forecastedTake})}
             onUpdateForecastClick={() => this.onUpdateForecastClick()}
             isUpdatingForecast={this.props.isUpdatingForecast}
-            errors={this.props.componentErrors[this.componentId]} />
+            errorHandlingId={this.componentId}
+        />
     }
     onUpdateForecastClick(){
         this.props.updateRotaForecast({
@@ -42,7 +43,6 @@ function mapStateToProps(state, ownProps){
     return {
         rotaForecast: forecast,
         rota,
-        componentErrors: state.componentErrors,
         isUpdatingForecast: selectUpdateRotaForecastInProgress(state, {
             serverVenueId: rota.venue.serverId,
             dateOfRota: rota.date
@@ -65,7 +65,7 @@ function mergeProps(stateProps, dispatchProps, ownProps){
                 forecastedTake,
                 serverVenueId: stateProps.rota.venue.serverId,
                 dateOfRota: stateProps.rota.date,
-                errorHandlingComponent: componentId
+                errorHandlingId: componentId
             });
         }
     };
