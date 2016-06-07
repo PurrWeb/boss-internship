@@ -126,21 +126,14 @@ module Api
           at = RotaShiftDate.new(date).end_time
         end
 
-        clock_in_day = ClockInDay.find_by!(
+        clock_in_day = ChangeClockInStatus.new(
           venue: venue,
           date: date,
-          staff_member: staff_member
-        )
-
-        status = ClockInStatus.new(
-          clock_in_day: clock_in_day
-        )
-
-        status.transition_to!(
+          staff_member: staff_member,
           state: :clocked_out,
           at: at,
           requester: current_user
-        )
+        ).call!
 
         hours_acceptance_period = HoursAcceptancePeriod.where(
           clock_in_day: clock_in_day

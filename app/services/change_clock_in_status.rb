@@ -1,39 +1,50 @@
-class ClockInStatus
+class ChangeClockInStatus
   STATES = [:clocked_in, :clocked_out, :on_break]
 
-  def initialize(clock_in_day:)
-    @clock_in_day = clock_in_day
-    @date = clock_in_day.date
-    @venue = clock_in_day.venue
-    @staff_member = clock_in_day.staff_member
+  def initialize(date:, venue:, staff_member:, requester:, state:, at:, nested: false)
+    @date = date
+    @venue = venue
+    @staff_member = staff_member
+    @requester = requester
+    @state = state
+    @at = at
+    @nested = nested
   end
-  attr_reader :clock_in_day, :date, :venue, :staff_member
+  attr_reader :date, :venue, :staff_member, :requester, :state, :at, :nested
 
-  def current_state
-    clock_in_day.current_clock_in_state
-  end
+  def call!
+    clock_in_day = ClockInDay.find_or_initialize_by(
+      venue: venue,
+      date: date,
+      staff_member: staff_member
+    )
 
-  def transition_to!(state:, at:, requester:, nested: false)
     raise "unsupported state encountered: #{state}" unless STATES.include?(state)
 
-    transition_legal = allowed_event_transations.fetch(current_state).any? do |transition_data|
+    transition_legal = allowed_event_transations.fetch(clock_in_day.current_clock_in_state).any? do |transition_data|
       transition_data.fetch(:state) == state
     end
 
     if !transition_legal
-      raise "illegal attempt to transistion from #{current_state} to #{state}"
+      raise "illegal attempt to transistion from #{clock_in_day.current_clock_in_state} to #{state}"
     end
     if !RotaShiftDate.new(date).contains_time?(at)
       raise "at time on wrong day. at: #{at}, date: #{date}"
     end
-    if last_event && (at < last_event.at)
+    if last_event(clock_in_day) && (at < last_event(clock_in_day).at)
       raise 'supplied at time before previous event'
     end
 
     ActiveRecord::Base.transaction(requires_new: nested) do
-      saved_last_event = last_event
+      if clock_in_day.new_record?
+        clock_in_day.update_attributes!(
+          creator: requester
+        )
+      end
 
-      event_type = event_type_for_transition(from: current_state, to: state)
+      saved_last_event = last_event(clock_in_day)
+
+      event_type = event_type_for_transition(from: clock_in_day.current_clock_in_state, to: state)
       current_recorded_clock_in_period = CurrentRecordedClockInPeriodQuery.
         new(
           clock_in_day: clock_in_day
@@ -87,6 +98,8 @@ class ClockInStatus
         event_type: event_type
       )
     end
+
+    clock_in_day
   end
 
   private
@@ -120,11 +133,11 @@ class ClockInStatus
     clock_in_period.clock_in_breaks << new_break
  end
 
-  def last_event
-    events.last
+  def last_event(clock_in_day)
+    events(clock_in_day).last
   end
 
-  def events
+  def events(clock_in_day)
     ClockInEvent.
       joins(:clock_in_period).
       merge(
