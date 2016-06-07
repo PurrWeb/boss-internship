@@ -8,8 +8,8 @@ describe StaffMemberIndexFilterQuery do
   let(:relation_filtered_by_venue) do
     double("relation filtered by venue")
   end
-  let(:relation_joined_by_venue) do
-    double("relation joined by venues")
+  let(:relation_joined_by_work_venue) do
+    double("relation joined by work venues")
   end
   let(:relation_filtered_by_accessible_venues) do
     double("relation filtered by accessible venues")
@@ -113,48 +113,25 @@ describe StaffMemberIndexFilterQuery do
     before do
       allow(venue).to receive(:present?).and_return(true)
       allow(relation).to(
-        receive(:joins).
-          with(:venues).
-          and_return(relation_joined_by_venue)
-      )
-      allow(relation_joined_by_venue).to(
-        receive(:merge).
-          with(venue_relation).
+        receive(:for_venue).
+          with(venue).
           and_return(venue_join_relation)
       )
       allow(venue_join_relation).to(
         receive(:uniq).
           and_return(result)
       )
-      allow(Venue).to(
-        receive(:where).
-        with(
-          '(`venues`.`id` = ?) AND (`venues`.`id` IN (?))',
-          venue_id,
-          accessible_venue_ids
-        ).
-        and_return(venue_relation)
-      )
     end
 
     specify 'should filter by venue' do
-      expect(relation_joined_by_venue).to(
-        receive(:merge).
-          with(venue_relation).
+      expect(relation).to(
+        receive(:for_venue).
+          with(venue).
           and_return(venue_join_relation)
       )
       expect(venue_join_relation).to(
         receive(:uniq).
           and_return(result)
-      )
-      expect(Venue).to(
-        receive(:where).
-        with(
-          '(`venues`.`id` = ?) AND (`venues`.`id` IN (?))',
-          venue_id,
-          accessible_venue_ids
-        ).
-        and_return(venue_relation)
       )
       query.all
     end

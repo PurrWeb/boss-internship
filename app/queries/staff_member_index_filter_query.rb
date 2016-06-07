@@ -41,7 +41,7 @@ class StaffMemberIndexFilterQuery
       end
 
       if venue.present?
-        result = result.joins(:venues).merge(venue_relation)
+        result = result.for_venue(venue)
       else
         result = result.joins('LEFT JOIN `staff_member_venues` ON `staff_member_venues`.`staff_member_id` = `staff_members`.`id`').where('(`staff_member_venues`.`staff_member_id` IS NULL) OR (`staff_member_venues`.`venue_id` IN (?))', accessible_venues.pluck(:id))
       end
@@ -52,10 +52,6 @@ class StaffMemberIndexFilterQuery
 
   private
   attr_reader :staff_type, :relation, :venue, :accessible_venues, :status, :name_text, :email_text
-
-  def venue_relation
-    Venue.where('(`venues`.`id` = ?) AND (`venues`.`id` IN (?))', venue.id, accessible_venues.pluck(:id))
-  end
 
   def filter_by_status(relation_to_filter)
     case status

@@ -9,8 +9,11 @@ module PageObject
 
     page_action :fill_in_for do |staff_member|
       _upload_avatar_image
-      if staff_member.venues.length > 0
-        staff_member.venues.map do |venue|
+      if staff_member.master_venue.present?
+        scope.select(staff_member.master_venue.name, from: 'staff-member-master-venue-select')
+      end
+      if staff_member.work_venues.length > 0
+        staff_member.work_venues.map do |venue|
           scope.select(venue.name, from: 'staff-member-venues-select')
         end
       end

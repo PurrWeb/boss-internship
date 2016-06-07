@@ -11,21 +11,21 @@ class HolidayReportCSV
       csv << [
         'Staff Member Name',
         'Staff Member ID',
-        'Venues',
+        'Venue',
         'Paid Holiday Days',
         'Unpaid Holiday Days'
       ]
 
       staff_members_holidays.each do |id, data|
         staff_member = data.fetch(:staff_member)
-        venue_names = staff_member.venues.map(&:name).to_sentence
+        venue_name = staff_member.master_venue.name
         paid_holiday_days = data.fetch(:paid_holiday_days)
         unpaid_holiday_days = data.fetch(:unpaid_holiday_days)
 
         csv << [
           staff_member.full_name.titlecase,
           staff_member.id,
-          venue_names,
+          venue_name,
           paid_holiday_days,
           unpaid_holiday_days
         ]

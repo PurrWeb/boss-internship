@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160429083348) do
+ActiveRecord::Schema.define(version: 20160601214451) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -422,6 +422,7 @@ ActiveRecord::Schema.define(version: 20160429083348) do
     t.boolean  "employment_status_p45_supplied",                                      null: false
     t.datetime "notified_of_sia_expiry_at"
     t.boolean  "would_rehire",                                        default: true,  null: false
+    t.integer  "master_venue_id",                       limit: 4
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree

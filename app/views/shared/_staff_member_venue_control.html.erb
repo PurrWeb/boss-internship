@@ -1,15 +1,28 @@
 <% if !user.security_manager? %>
   <%= form.select(
-        :venues,
+        :master_venue,
         options_for_select(
           Venue.all.map { |venue| [venue.name.titleize, venue.id] },
-          form.object.venues.map{ |venue| venue.id }
+          form.object.master_venue.andand.id
         ),
         {
-          label: 'Venues'
+          label: 'Main Venue'
+        },
+        id: 'staff-member-master-venue-select',
+        class: 'chosen-select'
+      ) %>
+
+  <%= form.select(
+        :work_venues,
+        options_for_select(
+          Venue.all.map { |venue| [venue.name.titleize, venue.id] },
+          form.object.work_venues.map{ |venue| venue.id }
+        ),
+        {
+          label: 'Other Venues'
         },
         multiple: true,
-        id: 'staff-member-venues-select',
+        id: 'staff-member-work-venues-select',
         class: 'chosen-select'
       ) %>
 <% end %>

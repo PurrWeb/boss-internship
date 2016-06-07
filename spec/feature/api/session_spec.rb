@@ -51,7 +51,7 @@ RSpec.describe 'Access token end points' do
         end
 
         let(:staff_member) do
-          FactoryGirl.create(:staff_member, venues: [venue])
+          FactoryGirl.create(:staff_member, master_venue: venue)
         end
         let(:staff_member_id) { staff_member.id }
         let(:staff_member_pin) { staff_member.pin_code }

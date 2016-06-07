@@ -49,10 +49,10 @@ RSpec.feature 'Staff members index page filtering' do
     let!(:venue_1) { FactoryGirl.create('venue') }
     let!(:venue_2) { FactoryGirl.create('venue') }
     let!(:venue_1_staff) do
-      FactoryGirl.create_list(:staff_member, 2, venues: [venue_1])
+      FactoryGirl.create_list(:staff_member, 2, master_venue: venue_1)
     end
     let!(:venue_2_staff) do
-      FactoryGirl.create_list(:staff_member, 3, venues: [venue_2])
+      FactoryGirl.create_list(:staff_member, 3, master_venue: venue_2)
     end
     let(:total_staff_member_count) { venue_1_staff.count + venue_2_staff.count }
 

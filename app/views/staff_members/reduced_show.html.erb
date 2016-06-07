@@ -11,7 +11,12 @@
 
 <dl>
   <dt>Staff Type:</dt><dd><%= staff_member.staff_type.name %></dd>
-  <dt>Venues:</dt><dd><%= staff_member.venues.map(&:name).to_sentence %></dd>
+  <dt>Main Venue:</dt><dd><%= staff_member.master_venue.name %></dd>
+  <% if staff_member.work_venues.count > 0 %>
+    <dt>Extra Venues</dt><dd><%= staff_member.work_venues.map(&:name).to_sentence %></dd>
+  <% else %>
+    <dt>Extra Venues</dt><dd>None</dd>
+  <% end %>
 </dl>
 
 <%= link_to('Return to index', staff_members_path) %>

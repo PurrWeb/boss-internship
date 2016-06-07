@@ -48,7 +48,7 @@ class Ability
       end
 
       can :view, StaffMember do |staff_member|
-        staff_member.security? || staff_member.venues.any? do |venue|
+        staff_member.security? || StaffMemberWorkableVenuesQuery.new(staff_member: staff_member).all.any? do |venue|
           can_manage_venue?(user, venue)
         end
       end
@@ -154,9 +154,11 @@ class Ability
   end
 
   def can_edit_staff_member?(user, staff_member)
+    workable_venues = StaffMemberWorkableVenuesQuery.new(staff_member: staff_member).all
+
     staff_member.security? ||
-      staff_member.venues.length == 0 ||
-      staff_member.venues.any? do |venue|
+      workable_venues.length == 0 ||
+      workable_venues.any? do |venue|
         can_manage_venue?(user, venue)
       end
   end

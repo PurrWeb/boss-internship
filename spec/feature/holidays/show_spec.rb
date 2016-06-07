@@ -20,7 +20,7 @@ RSpec.describe 'Holidays page' do
   let(:staff_member) do
     FactoryGirl.create(
       :staff_member,
-      venues: [venue]
+      master_venue: venue
     )
   end
   let(:holiday) do

@@ -14,8 +14,7 @@ class HolidayReportsDataQuery
           joins(:staff_member).
           merge(
             StaffMember.
-              joins(:venues).
-              merge(venues)
+              where(master_venue: venues)
           )
       end
 

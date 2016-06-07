@@ -22,7 +22,11 @@ module PageObject
     end
 
     page_action :ensure_details_displayed_for do |staff_member|
-      expect(find(detail_section_selector_for(:venues)).text).to eq(staff_member.venues.map(&:name).to_sentence)
+      expect(find(detail_section_selector_for(:master_venue)).text).to eq(staff_member.master_venue.name)
+
+      work_venues_text = staff_member.work_venues.present? ? staff_member.work_venues.map(&:name).to_sentence : 'N / A'
+      expect(find(detail_section_selector_for(:work_venues)).text).to eq(work_venues_text)
+
       expect(find(detail_section_selector_for(:name)).text).to eq(staff_member.full_name.titlecase)
       expect(find(detail_section_selector_for(:status)).text).to eq(staff_member_status_message(staff_member))
       expect(find(detail_section_selector_for(:gender)).text).to eq(staff_member.gender.titlecase)

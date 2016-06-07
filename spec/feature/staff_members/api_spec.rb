@@ -4,7 +4,7 @@ RSpec.describe 'Staff member pages access' do
   include Rack::Test::Methods
   include HeaderHelpers
 
-  let(:user) { FactoryGirl.create(:user, venues: [staff_member.venues.first]) }
+  let(:user) { FactoryGirl.create(:user, venues: [staff_member.master_venue]) }
   let(:access_token) do
     AccessToken.create!(
       token_type: 'web',

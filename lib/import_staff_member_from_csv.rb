@@ -63,7 +63,7 @@ class ImportStaffMemberFromCSV
         )
         attach_avatar_image(staff_member)
 
-        staff_member.venues << venue
+        staff_member.master_venue = venue
         staff_member.save!
       end
     end

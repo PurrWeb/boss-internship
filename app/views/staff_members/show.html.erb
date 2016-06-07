@@ -63,10 +63,18 @@
   <div class="tab-content">
     <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('employment-details', active_tab) %>" id="employment-tab">
       <dl>
-        <dt class="show-page-detail-heading">Venues</dt>
-        <dd class="show-page-detail" data-detail="venues">
-          <% if staff_member.venues.count > 0 %>
-            <%= staff_member.venues.map(&:name).to_sentence %>
+        <dt class="show-page-detail-heading">Main Venue<dt>
+        <dd class="show-page-detail" data-detail="master-venue">
+          <% if staff_member.master_venue.present? %>
+            <%= staff_member.master_venue.name %>
+          <% else %>
+            N / A
+          <% end %>
+        </dd>
+        <dt class="show-page-detail-heading">Other Venues</dt>
+        <dd class="show-page-detail" data-detail="work-venues">
+          <% if staff_member.work_venues.count > 0 %>
+            <%= staff_member.work_venues.map(&:name).to_sentence %>
           <% else %>
             N / A
           <% end %>

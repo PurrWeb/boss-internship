@@ -5,7 +5,17 @@ RSpec.describe 'Api access' do
   include HeaderHelpers
 
   let(:staff_member) { FactoryGirl.create(:staff_member) }
-  let(:venue) { staff_member.venues.first }
+  let(:venue) { staff_member.master_venue }
+
+  def security_staff_with_venue?(staff_member)
+    staff_member.staff_type.security? &&
+      staff_member.venues.length > 0
+  end
+
+  def non_security_staff_without_venue?(staff_member)
+    !staff_member.staff_type.security? &&
+      staff_member.venues.length == 0
+  end
   let(:api_key) do
     ApiKey.create!(
       venue: venue,

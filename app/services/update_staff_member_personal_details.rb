@@ -15,7 +15,7 @@ class UpdateStaffMemberPersonalDetails
 
     ActiveRecord::Base.transaction do
       staff_member.assign_attributes(params)
-      staff_member_updates_email = StaffMemberUpdatesEmail.new(staff_member)
+      staff_member_updates_email = StaffMemberUpdatesEmail.new(staff_member: staff_member, old_master_venue: staff_member.master_venue)
       result = staff_member.save
 
       if result && staff_member_updates_email.send?

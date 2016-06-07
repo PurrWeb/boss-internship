@@ -29,7 +29,9 @@
                     end,
                     filter.venue.try(:id)
                   ),
-                  prompt: 'Any'
+                  {
+                    :include_blank => 'Any'
+                  }
                 ) %>
             <%= form.select(
                   :staff_type,
@@ -39,7 +41,9 @@
                     end,
                     filter.staff_type.try(:id)
                   ),
-                  prompt: 'Any'
+                  {
+                    :include_blank => 'Any'
+                  }
                 ) %>
           <% end %>
           <%= form.submit('Update') %>
