@@ -5,7 +5,7 @@
 
 
 import utils from "~lib/utils"
-import {apiRequestActionTypes} from "./create-api-request-action"
+import {apiRequestActionTypes} from "./create-api-request-action-creator"
 import dataHandlers from "./data-handlers"
 import * as rotaActions from "./actions/rotas"
 import * as confirmationMessageActions from "./actions/user-action-confirmation-messages"

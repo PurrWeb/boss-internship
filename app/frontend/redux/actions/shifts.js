@@ -1,5 +1,5 @@
 import RotaDate from "~lib/rota-date"
-import createApiRequestAction from "../create-api-request-action"
+import createApiRequestActionCreator from "../create-api-request-action-creator"
 import makeApiRequestMaker from "../make-api-request-maker"
 import oFetch from "o-fetch"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
@@ -23,7 +23,7 @@ function getRotaDateFromShiftStartsAt(startAt){
     return rotaDate.getDateOfRota();
 }
 
-export const addRotaShift = createApiRequestAction({
+export const addRotaShift = createApiRequestActionCreator({
     requestType: "ADD_SHIFT",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.addShift.method,
@@ -70,7 +70,7 @@ export const addRotaShift = createApiRequestAction({
     }
 });
 
-export const updateRotaShift = createApiRequestAction({
+export const updateRotaShift = createApiRequestActionCreator({
     requestType: "UPDATE_SHIFT",
     makeRequest: makeApiRequestMaker({
         path: (options) => apiRoutes.updateShift.getPath({shiftId: options.shiftServerId}),
@@ -104,7 +104,7 @@ export const updateRotaShift = createApiRequestAction({
     }
 });
 
-export const deleteRotaShift = createApiRequestAction({
+export const deleteRotaShift = createApiRequestActionCreator({
     requestType: "DELETE_SHIFT",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.deleteShift.method,

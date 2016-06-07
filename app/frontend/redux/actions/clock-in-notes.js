@@ -1,11 +1,11 @@
-import createApiRequestAction from "../create-api-request-action"
+import createApiRequestActionCreator from "../create-api-request-action-creator"
 import makeApiRequestMaker from "../make-api-request-maker"
 import {apiRoutes} from "~lib/routes"
 import * as backendData from "~lib/backend-data/process-backend-objects"
 import utils from "~lib/utils"
 import oFetch from "o-fetch"
 
-export const addClockInNote = createApiRequestAction({
+export const addClockInNote = createApiRequestActionCreator({
     requestType: "ADD_CLOCK_IN_NOTE",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.addClockInNote.method,

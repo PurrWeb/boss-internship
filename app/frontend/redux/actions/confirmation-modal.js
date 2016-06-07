@@ -1,5 +1,5 @@
 import oFetch from "o-fetch"
-import { registeredApiRequestActionCreators } from "~redux/create-api-request-action"
+import { registeredApiRequestActionCreators } from "~redux/create-api-request-action-creator"
 import { registerActionType } from "./index"
 
 var actionTypes = []

@@ -1,4 +1,4 @@
-import createApiRequestAction from "./create-api-request-action";
+import createApiRequestActionCreator from "./create-api-request-action-creator";
 import expect from "expect"
 
 function dispatchDoSomething(makeRequest, actionOptions, options){
@@ -8,7 +8,7 @@ function dispatchDoSomething(makeRequest, actionOptions, options){
 	var {confirm, additionalSuccessActionCreator} = options;
 	var dispatch = expect.createSpy();
 	var actionTypes = {};
-	var actionCreator = createApiRequestAction({
+	var actionCreator = createApiRequestActionCreator({
 		requestType: "DO_SOMETHING",
 		makeRequest,
 		actionTypes,
@@ -22,7 +22,7 @@ function dispatchDoSomething(makeRequest, actionOptions, options){
 	return dispatch;
 }
 
-describe("createApiRequestAction", function(){
+describe("createApiRequestActionCreator", function(){
 	it("Calls makeRequest with the requestOptions that were passed in", function(){
 		var makeRequest = expect.createSpy();
 		var dispatch = dispatchDoSomething(makeRequest, {value: 99});
@@ -37,7 +37,7 @@ describe("createApiRequestAction", function(){
 		expect(actionObjects[1].type).toEqual("DO_SOMETHING_REQUEST_START");
 		expect(actionObjects[2].type).toEqual("SET_COMPONENT_ERROR");
 	});
-	
+
 	it("Dispatches API_REQUEST_END and DO_SOMETHING_SUCCESS when a request succeeds", function(){
 		var makeRequest = function(options, success, error){
 			success();
@@ -76,7 +76,7 @@ describe("createApiRequestAction", function(){
 		var confirm = () => false;
 		var dispatch = dispatchDoSomething(makeRequest, {}, {confirm});
 
-		expect(makeRequest).toNotHaveBeenCalled();		
+		expect(makeRequest).toNotHaveBeenCalled();
 	});
 
 	it("Can dispatch another action in addition to the default success action", function(){

@@ -7,7 +7,7 @@ apiRequestActionTypes.push("API_REQUEST_END")
 apiRequestActionTypes.push("SET_COMPONENT_ERROR")
 
 /**
-The createApiRequestAction creates a an actionCreator that can be used to update
+The createApiRequestActionCreator creates a an actionCreator that can be used to update
 the state of API requests in the store.
 It dispatches the following actions:
 - API_REQUEST_START and API_REQUEST_END to store API requests that are in progress
@@ -20,7 +20,7 @@ component that started the request (which can be useful for showing spinners etc
 
 # Example
 
-const addTodo = createApiRequestAction({
+const addTodo = createApiRequestActionCreator({
     requesType: "ADD_TODO",
     makeRequest: function(options, success, error, getState) {
         loadData(function(response){
@@ -43,7 +43,7 @@ addTodo({title: "Buy milk"});
     actions in addition to the _SUCCESS action
  * @return {function}   Asynchronous action creator.
  */
-export default function createApiRequestAction(actionOptions){
+export default function createApiRequestActionCreator(actionOptions){
     var { requestType, makeRequest } = actionOptions;
 
     const successType = requestType + "_SUCCESS";

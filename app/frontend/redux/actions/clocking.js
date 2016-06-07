@@ -1,4 +1,4 @@
-import createApiRequestAction from "../create-api-request-action"
+import createApiRequestActionCreator from "../create-api-request-action-creator"
 import {apiRoutes} from "~lib/routes"
 import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-request-maker"
 import oFetch from "o-fetch"
@@ -38,7 +38,7 @@ export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
 }
 
 
-export const clockInOutAppEnterUserMode = createApiRequestAction({
+export const clockInOutAppEnterUserMode = createApiRequestActionCreator({
     requestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
     makeRequest: makeApiRequestMakerIfNecessary({
         tryWithoutRequest: function(requestOptions){
@@ -73,7 +73,7 @@ export const clockInOutAppEnterUserMode = createApiRequestAction({
 });
 
 
-export const updateClockInStatus = createApiRequestAction({
+export const updateClockInStatus = createApiRequestActionCreator({
     requestType: "UPDATE_STAFF_STATUS",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.updateStaffClockingStatus.method,
@@ -175,7 +175,7 @@ export function updateClockInStatusWithConfirmation(requestOptions){
 }
 
 
-export const clockInOutAppFetchAppData = createApiRequestAction({
+export const clockInOutAppFetchAppData = createApiRequestActionCreator({
     requestType: "CLOCK_IN_OUT_APP_FETCH_DATA",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.getClockInOutAppData.method,
@@ -200,7 +200,7 @@ export const clockInOutAppFetchAppData = createApiRequestAction({
 
 
 
-export const forceStaffMemberClockOut = createApiRequestAction({
+export const forceStaffMemberClockOut = createApiRequestActionCreator({
     requestType: "FORCE_STAFF_MEMBER_CLOCK_OUT",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.forceClockOut.method,

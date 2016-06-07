@@ -1,5 +1,5 @@
 import makeApiRequestMaker from "../make-api-request-maker"
-import createApiRequestAction from "../create-api-request-action"
+import createApiRequestActionCreator from "../create-api-request-action-creator"
 import oFetch from "o-fetch"
 import { showConfirmationModal } from "./confirmation-modal"
 import {apiRoutes} from "~lib/routes"
@@ -19,7 +19,7 @@ export function updateStaffMemberPinWithEntryModal(requestOptions){
     });
 }
 
-export const updateStaffMemberPin = createApiRequestAction({
+export const updateStaffMemberPin = createApiRequestActionCreator({
     requestType: "UPDATE_STAFF_MEMBER_PIN",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.changeStaffMemberPin.method,

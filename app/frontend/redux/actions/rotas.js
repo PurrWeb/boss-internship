@@ -1,10 +1,10 @@
-import createApiRequestAction from "../create-api-request-action"
+import createApiRequestActionCreator from "../create-api-request-action-creator"
 import {apiRoutes} from "~lib/routes"
 import makeApiRequestMaker from "../make-api-request-maker"
 import oFetch from "o-fetch"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 
-export const updateRotaStatus = createApiRequestAction({
+export const updateRotaStatus = createApiRequestActionCreator({
     requestType: "UPDATE_ROTA_STATUS",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.updateRotaStatus.method,
@@ -30,7 +30,7 @@ export const updateRotaStatus = createApiRequestAction({
     })
 });
 
-export const publishRotas = createApiRequestAction({
+export const publishRotas = createApiRequestActionCreator({
     requestType: "PUBLISH_ROTAS",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.publishRotas.method,

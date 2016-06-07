@@ -1,4 +1,4 @@
-import createApiRequestAction from "../create-api-request-action"
+import createApiRequestActionCreator from "../create-api-request-action-creator"
 import makeApiRequestMaker from "../make-api-request-maker"
 import {apiRoutes} from "~lib/routes"
 import * as backendData from "~lib/backend-data/process-backend-objects"
@@ -12,7 +12,7 @@ export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
     }
 }
 
-export const updateRotaForecast = createApiRequestAction({
+export const updateRotaForecast = createApiRequestActionCreator({
     requestType: "UPDATE_ROTA_FORECAST",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.updateRotaForecast.method,
@@ -29,7 +29,7 @@ export const updateRotaForecast = createApiRequestAction({
     })
 });
 
-export const fetchWeeklyRotaForecast = createApiRequestAction({
+export const fetchWeeklyRotaForecast = createApiRequestActionCreator({
     requestType: "FETCH_WEEKLY_ROTA_FORECAST",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.weeklyRotaForecast.method,
