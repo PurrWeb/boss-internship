@@ -6,7 +6,7 @@ export default class ToggleStaffClockedInButton extends Component {
         return <ToggleClockInDayStatusButton
             staffObject={this.props.staffObject}
             clockInDay={this.props.clockInDay}
-            updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation}
+            updateClockInStatusWithConfirmation={this.props.updateClockInStatusWithConfirmation}
             icon={"time"}
             statusLabels={{
                 "clocked_in": "Clock In",

@@ -73,7 +73,7 @@ export const clockInOutAppEnterUserMode = createApiRequestAction({
 });
 
 
-export const updateStaffStatus = createApiRequestAction({
+export const updateClockInStatus = createApiRequestAction({
     requestType: "UPDATE_STAFF_STATUS",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.updateStaffClockingStatus.method,
@@ -148,7 +148,7 @@ export const updateStaffStatus = createApiRequestAction({
 });
 
 
-export function updateStaffStatusWithConfirmation(requestOptions){
+export function updateClockInStatusWithConfirmation(requestOptions){
     return function(dispatch, getState){``
         var state = getState();
         if (selectClockInOutAppIsInManagerMode(state)) {
@@ -156,7 +156,7 @@ export function updateStaffStatusWithConfirmation(requestOptions){
                 ...requestOptions,
                 accessToken: state.clockInOutAppUserMode.token
             }
-            dispatch(updateStaffStatus(requestOptions))
+            dispatch(updateClockInStatus(requestOptions))
         } else {
             var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
             var {first_name, surname} = staffMemberObject;

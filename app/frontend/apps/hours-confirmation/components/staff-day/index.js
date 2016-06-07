@@ -3,6 +3,7 @@ import _ from "underscore"
 import ErrorMessage from "~components/error-message"
 import StaffTypeBadge from "~components/staff-type-badge"
 import ComponentErrors from "~components/component-errors"
+import clockInStatusOptionsByValue from "~lib/clock-in-status-options-by-value"
 
 import Validation from "~lib/validation"
 import HoursChart from "../hours-chart"
@@ -51,6 +52,8 @@ export default class StaffDay extends React.Component {
             style.overflow = "hidden";
         }
 
+        var clockInStatus = clockInStatusOptionsByValue[this.props.clockInDay.status]
+
         var acceptedClockInPeriods = _(this.props.hoursAcceptancePeriods)
             .filter({status: "accepted"})
 
@@ -78,7 +81,7 @@ export default class StaffDay extends React.Component {
                         />
                         <StaffTypeBadge staffTypeObject={staffType} />
                         <div style={{marginTop: 4}}>
-                            Status: {staffStatus.title}
+                            Status: {clockInStatus.title}
                         </div>
                         <ClockOutButton
                             clockInDay={this.props.clockInDay}

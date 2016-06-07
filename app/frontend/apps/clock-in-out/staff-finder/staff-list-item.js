@@ -88,7 +88,7 @@ class ClockInOutStaffListItem extends Component {
                 <ToggleStaffOnBreakButton
                     clockInDay={this.props.clockInDay}
                     staffObject={staffObject}
-                    updateStaffStatusWithConfirmation={(options) => this.updateStaffStatus(options)} />
+                    updateClockInStatusWithConfirmation={(options) => this.updateClockInStatus(options)} />
             </div>;
         }
         return <div className="row">
@@ -96,7 +96,7 @@ class ClockInOutStaffListItem extends Component {
                 <ToggleStaffClockedInButton
                     clockInDay={this.props.clockInDay}
                     staffObject={staffObject}
-                    updateStaffStatusWithConfirmation={(options) => this.updateStaffStatus(options)} />
+                    updateClockInStatusWithConfirmation={(options) => this.updateClockInStatus(options)} />
             </div>
             {toggleOnBreakButton}
         </div>
@@ -127,9 +127,9 @@ class ClockInOutStaffListItem extends Component {
             Add Note
         </button>
     }
-    updateStaffStatus({statusValue, staffMemberObject}){
+    updateClockInStatus({statusValue, staffMemberObject}){
         var currentStatus = this.props.clockInDay.status;
-        this.props.updateStaffStatusWithConfirmation({
+        this.props.updateClockInStatusWithConfirmation({
             statusValue,
             staffMemberObject,
             currentStatus,
@@ -223,8 +223,8 @@ function mapStateToProps(state, ownProps){
 
 function mapDispatchToProps(dispatch){
     return {
-        updateStaffStatusWithConfirmation: function(options){
-            dispatch(actions.updateStaffStatusWithConfirmation(options))
+        updateClockInStatusWithConfirmation: function(options){
+            dispatch(actions.updateClockInStatusWithConfirmation(options))
         },
         enterUserMode: function(userMode, staffMemberObject){
             dispatch(actions.enterUserModeWithConfirmation({userMode, staffMemberObject}));

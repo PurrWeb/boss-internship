@@ -1,6 +1,6 @@
 import expect from "expect"
 import Promise from "bluebird"
-import { updateStaffStatus } from "./clocking"
+import { updateClockInStatus } from "./clocking"
 import _ from "underscore"
 
 describe("Clocking Actions", function(){
@@ -25,7 +25,7 @@ describe("Clocking Actions", function(){
 
         expect.spyOn($, "ajax").andReturn(promise)
 
-        updateStaffStatus({
+        updateClockInStatus({
             staffMemberObject: {clientId: 10},
             statusValue: "clocked_in",
             venueServerId: 3,

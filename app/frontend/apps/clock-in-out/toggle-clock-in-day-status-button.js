@@ -7,12 +7,12 @@ export default class ToggleClockInDayStatusButton extends Component {
         getStatusAfterClicking: React.PropTypes.func.isRequired,
         staffObject: React.PropTypes.object.isRequired,
         clockInDay: React.PropTypes.object.isRequired,
-        updateStaffStatusWithConfirmation: React.PropTypes.func.isRequired,
+        updateClockInStatusWithConfirmation: React.PropTypes.func.isRequired,
         icon: React.PropTypes.string.isRequired
     }
     render(){
-        var staffStatus = this.props.clockInDay.status
-        var nextStatusId = this.props.getStatusAfterClicking(staffStatus);
+        var clockInStatus = this.props.clockInDay.status
+        var nextStatusId = this.props.getStatusAfterClicking(clockInStatus);
 
         if (nextStatusId === null) {
             return null;
@@ -30,7 +30,7 @@ export default class ToggleClockInDayStatusButton extends Component {
         </a>
     }
     onClick(){
-        this.props.updateStaffStatusWithConfirmation({
+        this.props.updateClockInStatusWithConfirmation({
             staffMemberObject: this.props.staffObject,
             statusValue: this.props.getStatusAfterClicking(this.props.clockInDay.status)
         });
