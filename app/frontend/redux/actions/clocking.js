@@ -110,22 +110,18 @@ export const updateClockInStatus = createApiRequestActionCreator({
         },
         getSuccessActionData(responseData, requestOptions, getState){
             var {staffMemberObject, statusValue} = requestOptions;
-            var clockInDay = selectClockInDay(getState(), {
+            var existingClockInDay = selectClockInDay(getState(), {
                 staffMemberClientId: staffMemberObject.clientId,
                 date: getState().pageOptions.dateOfRota
             })
+            var newClockInDay = backendData.processClockInDayObject(responseData.clock_in_day)
+            newClockInDay.clientId = existingClockInDay.clientId;
             return {
-                clockInDay: {
-                    clientId: clockInDay.clientId,
-                    status: statusValue
-                },
+                clockInDay: newClockInDay,
                 statusValue,
                 staffMemberObject,
                 userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
             }
-        },
-        getFailActionData(responseData, requestOptions, getState){
-            debugger
         }
     }),
     additionalSuccessActionCreator: function(successActionData, requestOptions){
