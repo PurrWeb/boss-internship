@@ -47,10 +47,10 @@ export default function createApiRequestActionCreator(actionOptions){
     var { requestType, makeRequest } = actionOptions;
 
     const successType = requestType + "_SUCCESS";
-    const failType = requestType + "_FAIL"
+    const failureType = requestType + "_FAILURE"
     const startType = requestType + "_REQUEST_START";
     apiRequestActionTypes.push(successType);
-    apiRequestActionTypes.push(failType);
+    apiRequestActionTypes.push(failureType);
     apiRequestActionTypes.push(startType);
 
     var actionCreator = generateActionCreator();
@@ -84,7 +84,7 @@ export default function createApiRequestActionCreator(actionOptions){
                 function error(responseOptions){
                     var actions = [requestEndAction()];
                     actions.push({
-                        type: failType,
+                        type: failureType,
                         ...responseOptions,
                         requestOptions
                     })

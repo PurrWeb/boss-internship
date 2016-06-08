@@ -72,6 +72,16 @@ export const clockInOutAppEnterUserMode = createApiRequestActionCreator({
     })
 });
 
+function getNewClockInDayFromUpdateStatusResponse(responseData, requestOptions, getState){
+    var {staffMemberObject, statusValue} = requestOptions;
+    var existingClockInDay = selectClockInDay(getState(), {
+        staffMemberClientId: staffMemberObject.clientId,
+        date: getState().pageOptions.dateOfRota
+    })
+    var newClockInDay = backendData.processClockInDayObject(responseData.clock_in_day)
+    newClockInDay.clientId = existingClockInDay.clientId;
+    return newClockInDay
+}
 
 export const updateClockInStatus = createApiRequestActionCreator({
     requestType: "UPDATE_CLOCK_IN_STATUS",
@@ -110,18 +120,18 @@ export const updateClockInStatus = createApiRequestActionCreator({
         },
         getSuccessActionData(responseData, requestOptions, getState){
             var {staffMemberObject, statusValue} = requestOptions;
-            var existingClockInDay = selectClockInDay(getState(), {
-                staffMemberClientId: staffMemberObject.clientId,
-                date: getState().pageOptions.dateOfRota
-            })
-            var newClockInDay = backendData.processClockInDayObject(responseData.clock_in_day)
-            newClockInDay.clientId = existingClockInDay.clientId;
+            var newClockInDay = getNewClockInDayFromUpdateStatusResponse(responseData, requestOptions, getState)
             return {
                 clockInDay: newClockInDay,
                 statusValue,
                 staffMemberObject,
                 userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
             }
+        },
+        getFailureActionData(responseData, requestOptions, getState){
+            return {
+                clockInDay: getNewClockInDayFromUpdateStatusResponse(responseData, requestOptions, getState)
+            };
         }
     }),
     additionalSuccessActionCreator: function(successActionData, requestOptions){

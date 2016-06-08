@@ -11,9 +11,7 @@ export default makeDataHandler("clockInDays", {
     UPDATE_CLOCK_IN_STATUS_SUCCESS: {
         action: "addOrUpdate"
     },
-    UPDATE_CLOCK_IN_STATUS_FAIL: function(state, action){
-        // DONT PROCESS DATE HERE! reducer shouldn't have to do that!!!
-        console.log("UPDATE_CLOCK_IN_STATUS_FAIL", arguments)
-        return;
+    UPDATE_CLOCK_IN_STATUS_FAILURE: {
+        action: "addOrUpdate"
     }
 })
