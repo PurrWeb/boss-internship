@@ -15,7 +15,7 @@
         <td data-role="name"><%= venue.name %></td>
 
         <td data-role="staff-count">
-          <%= link_to(StaffMember.for_venue(venue).count, staff_members_path(staff_member_index_filter: { venue: venue.id })) %>
+          <%= link_to(StaffMember.for_venue(venue).enabled.count, staff_members_path(staff_member_index_filter: { venue: venue.id })) %>
         </td>
         <td><%= venue.fruit_order_fields.map(&:to_s).map(&:humanize).to_sentence %></td>
         <td>

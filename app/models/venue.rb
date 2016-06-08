@@ -3,7 +3,8 @@ class Venue < ActiveRecord::Base
   has_many :rotas, inverse_of: :venue
   has_many :users
   has_many :staff_member_venues
-  has_many :staff_members, through: :staff_member_venues
+  has_many :master_staff_members, class_name: 'StaffMember', inverse_of: :master_venue, foreign_key: :master_venue_id
+  has_many :other_staff_members, through: :staff_member_venues, source: :staff_member
   serialize :fruit_order_fields, Array
 
   validates :name, presence: true, uniqueness: true
