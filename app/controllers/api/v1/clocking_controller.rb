@@ -7,7 +7,7 @@ module Api
         result = transition_state(to_state: :clocked_in)
 
         if result.success?
-          render nothing: true, status: :ok
+          render locals: { clock_in_day: result.clock_in_day }
         else
           render 'errors', status: :unprocessable_entity, locals: { errors: result.errors, clock_in_day: result.clock_in_day }
         end
@@ -17,7 +17,7 @@ module Api
         result = transition_state(to_state: :clocked_out)
 
         if result.success?
-          render nothing: true, status: :ok
+          render locals: { clock_in_day: result.clock_in_day }
         else
           render 'errors', status: :unprocessable_entity, locals: { errors: result.errors, clock_in_day: result.clock_in_day }
         end
@@ -27,7 +27,7 @@ module Api
         result = transition_state(to_state: :on_break)
 
         if result.success?
-          render nothing: true, status: :ok
+          render locals: { clock_in_day: result.clock_in_day }
         else
           render 'errors', status: :unprocessable_entity, locals: { errors: result.errors, clock_in_day: result.clock_in_day }
         end
@@ -37,7 +37,7 @@ module Api
         result = transition_state(to_state: :clocked_in)
 
         if result.success?
-          render nothing: true, status: :ok
+          render locals: { clock_in_day: result.clock_in_day }
         else
           render 'errors', status: :unprocessable_entity, locals: { errors: result.errors, clock_in_day: result.clock_in_day }
         end
