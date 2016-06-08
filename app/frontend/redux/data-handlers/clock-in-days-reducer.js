@@ -12,6 +12,11 @@ export default makeDataHandler("clockInDays", {
         action: "addOrUpdate"
     },
     UPDATE_CLOCK_IN_STATUS_FAILURE: {
-        action: "addOrUpdate"
+        action: "addOrUpdate",
+        shouldIgnoreAction: function(action){
+            if (!action.clockInDay) {
+                return true;
+            }
+        }
     }
 })
