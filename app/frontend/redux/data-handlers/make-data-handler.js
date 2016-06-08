@@ -29,6 +29,9 @@ Objects are used for default handlers:
 ADD_USERS: {action: "add"}
 In addition to adding a handler to the reducer this will also generate
 an action creator.
+Additional object properties other than `action`:
+- shouldIgnoreAction - function that returns true if the action shouldn't be handled
+- debug - pause when the reducer function runs
 Reducer function receive the state and action, but also a set of common
 handler functions like `add` or `update`.
 * reducerOptions
@@ -43,9 +46,9 @@ export default function makeDataHandler(collectionName, actionHandlers, reducerO
     var actionTypes = [];
     var actionCreators = {}
 
-    for (var actionHandlerActionType in actionHandlers) {
-        var handler = actionHandlers[actionHandlerActionType];
-        var isDefaultHandlerObject = typeof handler === "object";
+    for (let actionHandlerActionType in actionHandlers) {
+        let handler = actionHandlers[actionHandlerActionType];
+        let isDefaultHandlerObject = typeof handler === "object";
         if (isDefaultHandlerObject) {
             let defaultHandler = getDefaultActionHandler(collectionName, handler, actionHandlerActionType)
             if (defaultHandler.actionCreatorName){
@@ -61,6 +64,7 @@ export default function makeDataHandler(collectionName, actionHandlers, reducerO
                         return state;
                     }
                 }
+                if(handler.debug) {debugger;}
                 return defaultHandler.handlerFunction.apply(this, [state, action, handlerHelpers])
             }
         } else {
