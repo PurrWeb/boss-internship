@@ -74,7 +74,7 @@ export const clockInOutAppEnterUserMode = createApiRequestActionCreator({
 
 
 export const updateClockInStatus = createApiRequestActionCreator({
-    requestType: "UPDATE_STAFF_STATUS",
+    requestType: "UPDATE_CLOCK_IN_STATUS",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.updateStaffClockingStatus.method,
         accessToken(requestOptions) {
@@ -123,6 +123,9 @@ export const updateClockInStatus = createApiRequestActionCreator({
                 staffMemberObject,
                 userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
             }
+        },
+        getFailActionData(responseData, requestOptions, getState){
+            debugger
         }
     }),
     additionalSuccessActionCreator: function(successActionData, requestOptions){
@@ -166,7 +169,7 @@ export function updateClockInStatusWithConfirmation(requestOptions){
                     confirmationType: "PIN"
                 },
                 confirmationAction: {
-                    apiRequestType: "UPDATE_STAFF_STATUS",
+                    apiRequestType: "UPDATE_CLOCK_IN_STATUS",
                     requestOptions
                 }
             }));

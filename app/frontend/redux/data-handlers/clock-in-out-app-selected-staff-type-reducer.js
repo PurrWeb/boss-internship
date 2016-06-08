@@ -5,7 +5,7 @@ export default makeDataHandler("clockInOutAppSelectedStaffType", {
     CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE: function(clientId, action){
         return oFetch(action, "selectedStaffTypeClientId");
     },
-    UPDATE_STAFF_STATUS_SUCCESS: function(clientId, action){
+    UPDATE_CLOCK_IN_STATUS_SUCCESS: function(clientId, action){
         if (oFetch(action, "userIsManagerOrSupervisor")) {
             return clientId;
         } else {

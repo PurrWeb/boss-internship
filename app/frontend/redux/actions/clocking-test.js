@@ -39,7 +39,7 @@ describe("Clocking Actions", function(){
 
         _.defer(function(){
             var actions = dispatch.calls[1].arguments[0];
-            expect(actions[0].type).toBe("UPDATE_STAFF_STATUS_SUCCESS");
+            expect(actions[0].type).toBe("UPDATE_CLOCK_IN_STATUS_SUCCESS");
 
             var additionalActionCreator = dispatch.calls[2].arguments[0];
             additionalActionCreator(dispatch, getState)
