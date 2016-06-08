@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160603165525) do
+ActiveRecord::Schema.define(version: 20160608115206) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -328,10 +328,11 @@ ActiveRecord::Schema.define(version: 20160603165525) do
   add_index "names", ["surname"], name: "index_names_on_surname", using: :btree
 
   create_table "pay_rates", force: :cascade do |t|
-    t.string  "pay_rate_type",  limit: 255,                null: false
-    t.string  "name",           limit: 255
-    t.integer "cents_per_hour", limit: 4,                  null: false
-    t.boolean "enabled",                    default: true, null: false
+    t.string  "pay_rate_type",    limit: 255,                null: false
+    t.string  "name",             limit: 255
+    t.integer "cents",            limit: 4,                  null: false
+    t.boolean "enabled",                      default: true, null: false
+    t.string  "calculation_type", limit: 255,                null: false
   end
 
   add_index "pay_rates", ["pay_rate_type"], name: "index_pay_rates_on_pay_rate_type", using: :btree

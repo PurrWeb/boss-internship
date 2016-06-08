@@ -20,8 +20,9 @@ class PayRatesController < ApplicationController
     pay_rate = PayRate.new(
       pay_rate_type: 'named',
       name: pay_rate_params.fetch(:name),
-      cents_per_hour: hourly_rate_to_cents_per_hour(
-        pay_rate_params.fetch(:hourly_rate)
+      calculation_type: pay_rate_params.fetch(:calculation_type),
+      cents: rate_to_cents(
+        pay_rate_params.fetch(:rate)
       )
     )
 
@@ -38,8 +39,9 @@ class PayRatesController < ApplicationController
     pay_rate = PayRate.new(
       pay_rate_type: 'admin',
       name: pay_rate_params.fetch(:name),
-      cents_per_hour: hourly_rate_to_cents_per_hour(
-        pay_rate_params.fetch(:hourly_rate)
+      calculation_type: pay_rate_params.fetch(:calculation_type),
+      cents: rate_to_cents(
+        pay_rate_params.fetch(:rate)
       )
     )
 
@@ -63,8 +65,9 @@ class PayRatesController < ApplicationController
     result = UpdatePayRate.new(
       pay_rate: pay_rate,
       name: pay_rate_params.fetch(:name),
-      cents_per_hour: hourly_rate_to_cents_per_hour(
-        pay_rate_params.fetch(:hourly_rate)
+      calculation_type: pay_rate_params.fetch(:calculation_type),
+      cents: rate_to_cents(
+        pay_rate_params.fetch(:rate)
       )
     ).call
 
@@ -100,11 +103,12 @@ class PayRatesController < ApplicationController
       require(:pay_rate).
       permit(
         :name,
-        :hourly_rate
+        :calculation_type,
+        :rate
       )
   end
 
-  def hourly_rate_to_cents_per_hour(hourly_rate)
-    (Float(hourly_rate) * 100).round
+  def rate_to_cents(rate)
+    (Float(rate) * 100).round
   end
 end

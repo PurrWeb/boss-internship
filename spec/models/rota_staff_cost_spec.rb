@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe RotaStaffCost do
   describe '#total' do
-    let(:pay_rate) { FactoryGirl.create(:pay_rate, cents_per_hour: 1500) }
+    let(:pay_rate) { FactoryGirl.create(:pay_rate, cents: 1500) }
     let!(:staff_member) do
       FactoryGirl.create(
         :staff_member,
@@ -57,8 +57,62 @@ RSpec.describe RotaStaffCost do
             rota: rota
           ).total
         ).to eq(
-          Money.from_amount(staff_member.pay_rate.pounds_per_hour * 1.5)
+          Money.from_amount(staff_member.pay_rate.rate_in_pounds * 1.5)
         )
+      end
+
+      context 'when staff member has weekly salary' do
+        let(:pay_rate) { FactoryGirl.create(:pay_rate, :weekly, cents: 20000) }
+
+        context 'all staff members hours for the week are part of rota' do
+          it 'should pay the full weekly rate' do
+            expect(
+              RotaStaffCost.new(
+                staff_members: staff_members,
+                rota: rota
+              ).total
+            ).to eq(
+              Money.from_amount(staff_member.pay_rate.rate_in_pounds)
+            )
+          end
+        end
+
+        context 'staff members has hours for the week in a different rota' do
+          before do
+            other_date = week.start_date + 1.day
+            other_start_time = RotaShiftDate.new(other_date).start_time
+            other_rota = FactoryGirl.create(
+              :rota,
+              date: other_date,
+              venue: venue
+            )
+            FactoryGirl.create(
+              :rota_shift,
+              rota: other_rota,
+              staff_member: staff_member,
+              starts_at: other_start_time + 4.hour,
+              ends_at: other_start_time + 5.hour
+            )
+            FactoryGirl.create(
+              :rota_shift,
+              rota: other_rota,
+              staff_member: staff_member,
+              starts_at: other_start_time + 7.hour,
+              ends_at: other_start_time + 7.hour + 30.minutes
+            )
+          end
+
+          it 'should pay the full weekly rate' do
+            expect(
+              RotaStaffCost.new(
+                staff_members: staff_members,
+                rota: rota
+              ).total
+            ).to eq(
+              Money.from_amount(staff_member.pay_rate.rate_in_pounds * 0.5)
+            )
+          end
+        end
       end
     end
   end

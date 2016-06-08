@@ -1,8 +1,9 @@
 module PageObject
   class PayRateForm < Component
     page_action :fill_in_for do |pay_rate|
-      fill_in('Name', with: pay_rate.name)
-      fill_in('Hourly rate', with: pay_rate.pounds_per_hour)
+      scope.fill_in('Name', with: pay_rate.name)
+      scope.select(PayRate.calculation_type_display_name(pay_rate.calculation_type), from: 'Calculation type')
+      scope.fill_in('Rate', with: pay_rate.rate_in_pounds)
     end
 
     page_action :submit do
@@ -10,7 +11,7 @@ module PageObject
     end
 
     def scope
-      page.find('.pay_rate-form')
+      page.find('.pay-rate-form')
     end
   end
 end

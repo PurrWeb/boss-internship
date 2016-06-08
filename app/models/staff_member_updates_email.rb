@@ -41,9 +41,7 @@ class StaffMemberUpdatesEmail
       changed_attribute_data[:staff_type] = staff_member.staff_type.name
     end
     if staff_member.pay_rate_changed?
-      pay_rate_name = staff_member.pay_rate.name
-      pay_rate_amount = number_to_currency(staff_member.pay_rate.pounds_per_hour, unit: '£', precision: 2)
-      changed_attribute_data[:pay_rate] = "#{pay_rate_name} #{pay_rate_amount}/h"
+      changed_attribute_data[:pay_rate] = staff_member.pay_rate.text_description
     end
     if staff_member.date_of_birth_changed?
       changed_attribute_data[:date_of_birth] = staff_member.date_of_birth.andand.to_s(:human_date) || 'Not Specified'

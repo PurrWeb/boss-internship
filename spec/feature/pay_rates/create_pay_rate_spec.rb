@@ -24,7 +24,7 @@ RSpec.feature 'Creating a pay_rate' do
     let(:prospective_pay_rate) do
       FactoryGirl.build(
         :pay_rate,
-        cents_per_hour: -1
+        cents: -1
       )
     end
 

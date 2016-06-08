@@ -31,11 +31,11 @@ class AdminPayRatesController < ApplicationController
         :description
       ).merge(
         pay_rate_type: 'admin',
-        cents_per_hour: cents_per_hour_from_params
+        cents: cents_from_params
       )
   end
 
-  def cents_per_hour_from_params
+  def cents_from_params
     if params['pay_rate']['hourly_rate'].present?
       (Float(params['pay_rate']['hourly_rate']) * 100).round
     else
