@@ -110,9 +110,8 @@ RSpec.describe 'Clocking actions' do
       end
 
       specify 'creation should fail' do
-        expect{
-          post(url, params)
-        }.to raise_error('illegal attempt to transistion from clocked_in to clocked_in')
+        response = post(url, params)
+        expect(response.status).to eq(unprocessable_entity_status)
       end
     end
   end

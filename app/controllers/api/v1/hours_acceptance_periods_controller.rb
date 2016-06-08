@@ -126,28 +126,34 @@ module Api
           at = RotaShiftDate.new(date).end_time
         end
 
-        clock_in_day = ChangeClockInStatus.new(
+        result = ChangeClockInStatus.new(
           venue: venue,
           date: date,
           staff_member: staff_member,
           state: :clocked_out,
           at: at,
           requester: current_user
-        ).call!
+        ).call
 
-        hours_acceptance_period = HoursAcceptancePeriod.where(
-          clock_in_day: clock_in_day
-        ).last
+        if result.success?
+          clock_in_day = result.clock_in_day
 
-        clock_in_period = ClockInPeriod.where(
-          clock_in_day: clock_in_day
-        ).last
+          hours_acceptance_period = HoursAcceptancePeriod.where(
+            clock_in_day: clock_in_day
+          ).last
 
-        render locals: {
-          clock_in_day: clock_in_day,
-          clock_in_period: clock_in_period,
-          hours_acceptance_period: hours_acceptance_period
-        }
+          clock_in_period = ClockInPeriod.where(
+            clock_in_day: clock_in_day
+          ).last
+
+          render locals: {
+            clock_in_day: clock_in_day,
+            clock_in_period: clock_in_period,
+            hours_acceptance_period: hours_acceptance_period
+          }
+        else
+          render json: result.errors, status: 500
+        end
       end
 
       private

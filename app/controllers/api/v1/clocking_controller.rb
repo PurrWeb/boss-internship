@@ -4,23 +4,43 @@ module Api
       before_filter :api_token_athenticate!
 
       def clock_in
-        transition_state(to_state: :clocked_in)
-        render nothing: true, status: :ok
+        result = transition_state(to_state: :clocked_in)
+
+        if result.success?
+          render nothing: true, status: :ok
+        else
+          render 'errors', status: :unprocessable_entity, locals: { errors: result.errors, clock_in_day: result.clock_in_day }
+        end
       end
 
       def clock_out
-        transition_state(to_state: :clocked_out)
-        render nothing: true, status: :ok
+        result = transition_state(to_state: :clocked_out)
+
+        if result.success?
+          render nothing: true, status: :ok
+        else
+          render 'errors', status: :unprocessable_entity, locals: { errors: result.errors, clock_in_day: result.clock_in_day }
+        end
       end
 
       def start_break
-        transition_state(to_state: :on_break)
-        render nothing: true, status: :ok
+        result = transition_state(to_state: :on_break)
+
+        if result.success?
+          render nothing: true, status: :ok
+        else
+          render 'errors', status: :unprocessable_entity, locals: { errors: result.errors, clock_in_day: result.clock_in_day }
+        end
       end
 
       def end_break
-        transition_state(to_state: :clocked_in)
-        render nothing: true, status: :ok
+        result = transition_state(to_state: :clocked_in)
+
+        if result.success?
+          render nothing: true, status: :ok
+        else
+          render 'errors', status: :unprocessable_entity, locals: { errors: result.errors, clock_in_day: result.clock_in_day }
+        end
       end
 
       def add_note
@@ -66,14 +86,16 @@ module Api
 
         authorize!(:perform_clocking_action, staff_member)
 
-        ChangeClockInStatus.new(
+        result = ChangeClockInStatus.new(
           date: date,
           venue: venue,
           staff_member: staff_member,
           state: to_state,
           at: at,
           requester: staff_member_from_token
-        ).call!
+        ).call
+
+        result
       end
 
       def staff_member_from_params
