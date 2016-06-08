@@ -13,7 +13,8 @@ module PageObject
       listing = index_listing_for(venue)
 
       expect(detail_text(listing, :name)).to eq(venue.name)
-      expect(detail_text(listing, :staff_count)).to eq(venue.staff_members.count.to_s)
+      staff_member_count = venue.master_staff_members.enabled.count + venue.other_staff_members.count
+      expect(detail_text(listing, :staff_count)).to eq(staff_member_count.to_s)
     end
 
     def scope

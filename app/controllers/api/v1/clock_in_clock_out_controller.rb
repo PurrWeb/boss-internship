@@ -10,7 +10,7 @@ module Api
         venue = api_key.venue
         rota_date = RotaShiftDate.to_rota_date(Time.current)
 
-        staff_members = venue.staff_members.enabled
+        staff_members = StaffMember.for_venue(venue).enabled
 
         clock_in_statuses = staff_members.map do |staff_member|
           ClockInStatus.new(

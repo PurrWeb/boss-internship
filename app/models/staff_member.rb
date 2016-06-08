@@ -8,7 +8,7 @@ class StaffMember < ActiveRecord::Base
 
   has_many :staff_member_venues, inverse_of: :staff_member
   has_many :work_venues, through: :staff_member_venues, source: :venue
-  belongs_to :master_venue, class_name: 'Venue'
+  belongs_to :master_venue, class_name: 'Venue', inverse_of: :master_staff_members
 
   belongs_to :address, inverse_of: :staff_member
   accepts_nested_attributes_for :address, allow_destroy: false

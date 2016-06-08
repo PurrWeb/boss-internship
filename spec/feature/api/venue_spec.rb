@@ -17,7 +17,9 @@ RSpec.describe 'Api access' do
   end
 
   before do
-    venue.update_attributes!(staff_members: staff_members)
+    staff_members.each do |staff_member|
+      staff_member.update_attributes!(master_venue: venue)
+    end
     set_token_header(access_token)
   end
 
