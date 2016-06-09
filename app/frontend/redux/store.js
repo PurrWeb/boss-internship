@@ -1,45 +1,11 @@
-import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk"
 import _ from "underscore"
 import {batch, batching} from "redux-batch-middleware"
+import utils from "~lib/utils"
 
-import staffStatuses from "./staff-statuses-reducer"
-import staff from "./staff-members-reducer"
-import rotaShifts from "./rota-shifts-reducer"
-import clockInOutAppUserMode from "./clock-in-out-app-user-mode"
-import clockInOutAppSelectedStaffType from "./clock-in-out-app-selected-staff-type-reducer"
-import apiRequestsInProgress from "./api-requests-in-progress-reducer"
-import componentErrors from "./component-errors-reducer"
-import venues from "./venues-reducer"
-import rotas from "./rotas-reducer"
-import pageOptions from "./page-options-reducer"
-import staffTypes from "./staff-types-reducer"
-import holidays from "./holidays-reducer"
-import rotaForecasts from "./rota-forecasts-reducer"
-import weeklyRotaForecast from "./weekly-rota-forecast-reducer"
-import confirmationModal from "./confirmation-modal-reducer"
-import userActionConfirmationMessages from "./user-action-confirmation-messages-reducer"
-import apiKey from "./api-key"
+import {getRootReducer} from "~redux/database"
 
-var rootReducer = combineReducers({
-    staff,
-    rotaShifts,
-    staffStatuses,
-    clockInOutAppUserMode,
-    clockInOutAppSelectedStaffType,
-    apiRequestsInProgress,
-    componentErrors,
-    venues,
-    rotas,
-    pageOptions,
-    staffTypes,
-    holidays,
-    rotaForecasts,
-    weeklyRotaForecast,
-    confirmationModal,
-    userActionConfirmationMessages,
-    apiKey
-});
 var createStoreWithMiddleware = compose(
 	// Redux thunk lets us dispatch asynchronous actions, for example
 	// actions that do an Ajax call before updating the state
@@ -51,12 +17,14 @@ var createStoreWithMiddleware = compose(
 	applyMiddleware(batch),
     // If available, connect to Redux DevTools
     window.devToolsExtension ? window.devToolsExtension() : f => f
-
 )(createStore);
 
 export function createBossStore(){
+	var rootReducer = getRootReducer();
+
     var store = createStoreWithMiddleware(batching(rootReducer));
     window.debug = window.debug || {};
     window.debug.store = store;
+	window.rootReducer = rootReducer
     return store;
 }

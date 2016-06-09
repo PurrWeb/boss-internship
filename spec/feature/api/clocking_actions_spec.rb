@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'feature/support/clocking_action_helper'
 
 RSpec.describe 'Clocking actions' do
   include Rack::Test::Methods
@@ -17,10 +18,11 @@ RSpec.describe 'Clocking actions' do
   let(:day_start) { RotaShiftDate.new(Time.current).start_time }
   let(:date) { RotaShiftDate.to_rota_date(day_start) }
   let(:target_staff_member) { FactoryGirl.create(:staff_member) }
+  let(:token_expires_at) { 30.minutes.from_now }
   let(:access_token) do
     AccessToken.create!(
       token_type: 'api',
-      expires_at: 30.minutes.from_now,
+      expires_at: token_expires_at,
       creator: user,
       api_key: api_key,
       staff_member: staff_member
@@ -35,18 +37,25 @@ RSpec.describe 'Clocking actions' do
     let(:url) { url_helpers.clock_in_api_v1_clocking_index_path }
     let(:params) do
       {
-        staff_member_id: target_staff_member.id,
-        date: date.iso8601
+        staff_member_id: target_staff_member.id
       }
     end
 
     context 'before call' do
       specify 'no clock ins should exist' do
-        expect(ClockingEvent.count).to eq(0)
+        expect(ClockInEvent.count).to eq(0)
       end
 
       specify 'no clock in period should exist' do
         expect(ClockInPeriod.count).to eq(0)
+      end
+
+      specify 'no clock in day should exist' do
+        expect(ClockInDay.count).to eq(0)
+      end
+
+      specify 'no hours acceptance period should exist' do
+        expect(HoursAcceptancePeriod.count).to eq(0)
       end
     end
 
@@ -57,7 +66,22 @@ RSpec.describe 'Clocking actions' do
 
     specify 'should create event' do
       post(url, params)
-      expect(ClockingEvent.count).to eq(1)
+      expect(ClockInEvent.count).to eq(1)
+    end
+
+    specify 'should create clocking period' do
+      post(url, params)
+      expect(ClockInPeriod.count).to eq(1)
+    end
+
+    specify 'clock in day should be created' do
+      post(url, params)
+      expect(ClockInDay.count).to eq(1)
+    end
+
+    specify 'no hours acceptance period should be created' do
+      post(url, params)
+      expect(HoursAcceptancePeriod.count).to eq(0)
     end
 
     context 'when previous events exist' do
@@ -69,12 +93,19 @@ RSpec.describe 'Clocking actions' do
       end
 
       before do
-        ClockingEvent.create!(
-          venue: venue,
+        starts_at = day_start + 1.hour
+
+        clock_in_day = ClockInDay.create!(
           staff_member: target_staff_member,
-          at: day_start + 1.hour,
+          date: date,
+          venue: venue,
+          creator: user
+        )
+
+        ClockingActionHelper.create_initial_clock_in(
+          clock_in_day: clock_in_day,
           creator: staff_member,
-          event_type: 'clock_in'
+          at: starts_at
         )
       end
 
@@ -92,24 +123,42 @@ RSpec.describe 'Clocking actions' do
     context 'when last event is a clock_in' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id,
-          date: date.iso8601
+          staff_member_id: target_staff_member.id
         }
       end
 
       before do
-        ClockingEvent.create!(
-          venue: venue,
+        starts_at = day_start + 1.hour
+
+        clock_in_day = ClockInDay.create!(
           staff_member: target_staff_member,
-          at: day_start + 1.hour,
+          venue: venue,
+          date: date,
+          creator: staff_member
+        )
+
+        ClockingActionHelper.create_initial_clock_in(
+          clock_in_day: clock_in_day,
           creator: staff_member,
-          event_type: 'clock_in'
+          at: starts_at
         )
       end
 
       context 'before call' do
         specify 'no clock outs should exist' do
-          expect(ClockingEvent.count).to eq(1)
+          expect(ClockInEvent.count).to eq(1)
+        end
+
+        specify '1 clock in period should exist' do
+          expect(ClockInPeriod.count).to eq(1)
+        end
+
+        specify '1 clock in day should exist' do
+          expect(ClockInDay.count).to eq(1)
+        end
+
+        specify 'no hours acceptance period should exist' do
+          expect(HoursAcceptancePeriod.count).to eq(0)
         end
       end
 
@@ -120,63 +169,182 @@ RSpec.describe 'Clocking actions' do
 
       specify 'should create event' do
         post(url, params)
-        expect(ClockingEvent.count).to eq(2)
-        expect(ClockingEvent.last.event_type).to eq('clock_out')
+        expect(ClockInEvent.count).to eq(2)
+        expect(ClockInEvent.last.event_type).to eq('clock_out')
       end
 
-      specify 'should create period' do
+      specify 'should associate event with create period' do
         call_time = day_start + 2.hours
         travel_to call_time do
           post(url, params)
         end
         expect(ClockInPeriod.count).to eq(1)
         period = ClockInPeriod.last
-        expect(period.period_type).to eq('recorded')
-        expect(period.clocking_events.to_a).to eq([ClockingEvent.last])
-        expect(period.venue).to eq(venue)
-        expect(period.date).to eq(date)
-        expect(period.staff_member).to eq(target_staff_member)
-        expect(period.starts_at).to eq(call_time)
-        expect(period.clock_in_period_reason).to eq(nil)
+        clock_out_event = ClockInEvent.last
+        expect(period.clock_in_events.count).to eq(2)
+        expect(period.clock_in_events.last).to eq(clock_out_event)
+        expect(period.ends_at).to eq(clock_out_event.at)
+      end
+
+      specify 'a matching hours acceptance period should be created' do
+        post(url, params)
+        expect(HoursAcceptancePeriod.count).to eq(1)
+        clock_in_period = ClockInPeriod.last
+        hours_acceptance_period = HoursAcceptancePeriod.last
+
+        expect(hours_acceptance_period.clock_in_day).to eq(clock_in_period.clock_in_day)
+        expect(hours_acceptance_period.starts_at).to eq(clock_in_period.starts_at)
+        expect(hours_acceptance_period.ends_at).to eq(clock_in_period.ends_at)
+      end
+    end
+
+    context 'when clock in period has breaks' do
+      let(:params) do
+        {
+          staff_member_id: target_staff_member.id
+        }
+      end
+
+      let(:shift_start) { day_start + 1.hour }
+      let(:break_start) { shift_start + 2.hours }
+      let(:break_end) { shift_start + 3.hours }
+      let(:call_time) { break_end + 1.hour }
+      let(:token_expires_at) { call_time + 30.minutes }
+      let(:clock_in_day) do
+        ClockInDay.create!(
+          staff_member: target_staff_member,
+          venue: venue,
+          date: date,
+          creator: staff_member
+        )
+      end
+
+      before do
+        ClockingActionHelper.create_initial_clock_in(
+          clock_in_day: clock_in_day,
+          creator: staff_member,
+          at: shift_start
+        )
+
+        clock_in_period = ClockInPeriod.last
+
+        ClockingActionHelper.add_event_to_period(
+          clock_in_period: clock_in_period,
+          event_type: 'start_break',
+          creator: staff_member,
+          at: break_start
+        )
+
+        ClockingActionHelper.add_event_to_period(
+          clock_in_period: clock_in_period,
+          event_type: 'end_break',
+          creator: staff_member,
+          at: break_end
+        )
+
+        ClockInBreak.create!(
+          starts_at: break_start,
+          ends_at: break_end,
+          clock_in_period: clock_in_period
+        )
+      end
+
+      context 'before call' do
+        specify 'no hours acceptance period should exist' do
+          expect(HoursAcceptancePeriod.count).to eq(0)
+        end
+
+        specify 'no hours acceptance breaks should exist' do
+          expect(HoursAcceptanceBreak.count).to eq(0)
+        end
+      end
+
+      specify 'should work' do
+        response = nil
+        travel_to call_time do
+          response = post(url, params)
+        end
+        expect(response.status).to eq(ok_status)
+      end
+
+      specify 'hours acceptance period should be created with a matching break' do
+        travel_to call_time do
+          post(url, params)
+        end
+        expect(HoursAcceptancePeriod.count).to eq(1)
+        clock_in_period = ClockInPeriod.last
+        hours_acceptance_period = HoursAcceptancePeriod.last
+
+        expect(hours_acceptance_period.hours_acceptance_breaks.count).to eq(1)
+        hours_acceptance_break = hours_acceptance_period.hours_acceptance_breaks.last
+        expect(hours_acceptance_break.starts_at).to eq(break_start)
+        expect(hours_acceptance_break.ends_at).to eq(break_end)
+      end
+
+      context 'when created acceptance will clash with existing' do
+        before do
+          HoursAcceptancePeriod.create!(
+            starts_at: shift_start,
+            ends_at: call_time,
+            clock_in_day: clock_in_day,
+            creator: user
+          )
+        end
+
+        context 'before call' do
+          specify do
+            expect(HoursAcceptancePeriod.count).to eq(1)
+          end
+        end
+
+        specify 'should work' do
+          response = nil
+          travel_to call_time do
+            response = post(url, params)
+          end
+          expect(response.status).to eq(ok_status)
+        end
+
+        specify 'should not create conflicting hours acceptance period' do
+          travel_to call_time do
+            post(url, params)
+          end
+          expect(HoursAcceptancePeriod.count).to eq(1)
+        end
       end
     end
   end
 
   describe '#start_break' do
     let(:url) { url_helpers.start_break_api_v1_clocking_index_path }
-    let(:clock_in_event) do
-      ClockingEvent.create!(
-        venue: venue,
-        staff_member: target_staff_member,
-        at: day_start + 1.hour,
-        creator: staff_member,
-        event_type: 'clock_in'
-      )
-    end
 
     context 'when last event is a clock_in' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id,
-          date: date.iso8601
+          staff_member_id: target_staff_member.id
         }
       end
 
       before do
-        ClockInPeriod.create!(
-          period_type: 'recorded',
-          venue: venue,
-          creator: staff_member,
+        starts_at = day_start + 1.hour
+
+        clock_in_day = ClockInDay.create!(
           staff_member: target_staff_member,
+          venue: venue,
           date: date,
-          starts_at: day_start + 1.hour,
-          clocking_events: [clock_in_event]
+          creator: staff_member
+        )
+
+        ClockingActionHelper.create_initial_clock_in(
+          clock_in_day: clock_in_day,
+          creator: staff_member,
+          at: starts_at
         )
       end
 
       context 'before call' do
         specify 'no clock outs should exist' do
-          expect(ClockingEvent.count).to eq(1)
+          expect(ClockInEvent.count).to eq(1)
         end
 
         specify 'one clocking period should exist' do
@@ -191,8 +359,8 @@ RSpec.describe 'Clocking actions' do
 
       specify 'should create event' do
         post(url, params)
-        expect(ClockingEvent.count).to eq(2)
-        expect(ClockingEvent.last.event_type).to eq('start_break')
+        expect(ClockInEvent.count).to eq(2)
+        expect(ClockInEvent.last.event_type).to eq('start_break')
       end
 
       specify 'should not create extra period' do
@@ -204,12 +372,17 @@ RSpec.describe 'Clocking actions' do
         post(url, params)
         period = ClockInPeriod.last
         expect(
-          period.clocking_events.count
+          period.clock_in_events.count
         ).to eq(2)
 
         expect(
-          period.clocking_events.last
-        ).to eq(ClockingEvent.last)
+          period.clock_in_events.last
+        ).to eq(ClockInEvent.last)
+      end
+
+      specify 'no hours acceptance period should be created' do
+        post(url, params)
+        expect(HoursAcceptancePeriod.count).to eq(0)
       end
     end
   end
@@ -221,40 +394,39 @@ RSpec.describe 'Clocking actions' do
     context 'when last event is a start_break' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id,
-          date: date.iso8601
+          staff_member_id: target_staff_member.id
         }
       end
 
       before do
-        clock_in_event = ClockingEvent.create!(
-          venue: venue,
+        starts_at = day_start + 1.hour
+
+        clock_in_day = ClockInDay.create!(
           staff_member: target_staff_member,
-          at: day_start + 1.hour,
-          creator: staff_member,
-          event_type: 'clock_in'
-        )
-        start_break_event = ClockingEvent.create!(
           venue: venue,
-          staff_member: target_staff_member,
-          at: start_break_time,
-          creator: staff_member,
-          event_type: 'start_break'
-        )
-        ClockInPeriod.create!(
-          period_type: 'recorded',
-          venue: venue,
-          creator: staff_member,
-          staff_member: target_staff_member,
           date: date,
-          starts_at: day_start + 1.hour,
-          clocking_events: [clock_in_event, start_break_event]
+          creator: staff_member
+        )
+
+        ClockingActionHelper.create_initial_clock_in(
+          clock_in_day: clock_in_day,
+          creator: staff_member,
+          at: starts_at
+        )
+
+        last_clock_in_period = clock_in_day.clock_in_periods.last
+
+        ClockingActionHelper.add_event_to_period(
+          clock_in_period: last_clock_in_period,
+          event_type: 'start_break',
+          at: start_break_time,
+          creator: staff_member
         )
       end
 
       context 'before call' do
         specify '2 events should exist' do
-          expect(ClockingEvent.count).to eq(2)
+          expect(ClockInEvent.count).to eq(2)
         end
 
         specify 'clock in period should exist' do
@@ -278,14 +450,14 @@ RSpec.describe 'Clocking actions' do
 
       specify 'should create event' do
         post(url, params)
-        expect(ClockingEvent.count).to eq(3)
-        expect(ClockingEvent.last.event_type).to eq('end_break')
+        expect(ClockInEvent.count).to eq(3)
+        expect(ClockInEvent.last.event_type).to eq('end_break')
       end
 
       specify 'should add event to period' do
         post(url, params)
         period = ClockInPeriod.last
-        expect(period.clocking_events.last).to eq(ClockingEvent.last)
+        expect(period.clock_in_events.last).to eq(ClockInEvent.last)
       end
 
       specify 'should create break' do
@@ -312,6 +484,11 @@ RSpec.describe 'Clocking actions' do
         expect(_break.starts_at).to eq(start_break_time)
         expect(_break.ends_at).to eq(end_break_time)
       end
+
+      specify 'no hours acceptance period should be created' do
+        post(url, params)
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
     end
   end
 
@@ -331,15 +508,26 @@ RSpec.describe 'Clocking actions' do
       specify 'no clock outs should exist' do
         expect(ClockInNote.count).to eq(0)
       end
+
+      specify 'no clock in day exists' do
+        expect(ClockInDay.count).to eq(0)
+      end
     end
 
-    specify 'should create a note' do
+    specify 'should create a clock in day' do
       post(url, params)
+      expect(ClockInDay.count).to eq(1)
+      day = ClockInDay.last
+      expect(day.date).to eq(date)
+      expect(day.staff_member).to eq(target_staff_member)
+      expect(day.venue).to eq(venue)
+    end
+
+    specify 'should create a note and associate with day' do
+      post(url, params)
+      clock_in_day = ClockInDay.last
       created_note = ClockInNote.find_by(
-        staff_member: target_staff_member,
-        creator: staff_member,
-        venue: venue,
-        date: date.iso8601
+        clock_in_day: clock_in_day
       )
       expect(created_note).to be_present
       expect(created_note.note).to eq(note)

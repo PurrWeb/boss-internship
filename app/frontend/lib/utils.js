@@ -18,6 +18,9 @@ var utils =  {
     stringStartsWith: function(string, prefix) {
         return string.slice(0, prefix.length) == prefix;
     },
+    stringContains: function(string, maybeContainedString){
+        return string.indexOf(maybeContainedString) !== -1
+    },
     containNumberWithinRange(number, range){
         var [min, max] = range;
         if (number < min) {
@@ -109,6 +112,17 @@ var utils =  {
     round(number, decimals){
         var factor = Math.pow(10, decimals);
         return Math.round(number * factor) / factor;
+    },
+    getStringExceptLastCharacter(str){
+        return str.slice(0, str.length - 1);
+    },
+    capitalize(str){
+        return str[0].toUpperCase() + str.slice(1)
+    },
+    makeAllCapsSnakeCase(str){
+        var parts = str.match(/([A-Z]?[a-z]*)/g)
+        parts = parts.filter(part => part !== "");
+        return parts.join("_").toUpperCase();
     }
 }
 

@@ -18,7 +18,7 @@ class HolidayReportStaffFinder extends React.Component {
 
 function mapStateToProps(state){
     return {
-        staff: state.staff,
+        staff: state.staffMembers,
         staffTypes: state.staffTypes
     }
 }

@@ -89,6 +89,15 @@ export const appRoutes = {
     staffTypeRotaOverview: function(options){
         var [staffTypeSlug, weekStartDate] = oFetch(options, "staffTypeSlug", "weekStartDate");
         return "/" + staffTypeSlug + "_rotas/?date=" + utils.formatRotaUrlDate(weekStartDate);
+    },
+    hoursConfirmationCurrentPage: function(options){
+        var venueId = oFetch(options, "venueId");
+        return "/hours_confirmation/current?venue_id=" + venueId;
+    },
+    hoursConfirmationDayPage: function(options){
+        var [date, venueId] = oFetch(options, "date", "venueId");
+        return "/hours_confirmation?date=" + utils.formatRotaUrlDate(date)
+            + "&venue_id=" + venueId
     }
 }
 
@@ -181,6 +190,36 @@ const apiRoutes = {
             return "clock_in_clock_out"
         },
         method: "GET"
+    },
+    forceClockOut: {
+        getPath(){
+            return "hours_acceptance_periods/clock_out"
+        },
+        method: "POST"
+    },
+    createHoursAccceptancePeriod: {
+        getPath(options){
+            return "hours_acceptance_periods"
+        },
+        method: "POST"
+    },
+    updateHoursAcceptancePeriod: {
+        getPath(options){
+            return "hours_acceptance_periods/" + oFetch(options, "hoursAcceptancePeriodServerId")
+        },
+        method: "PUT"
+    },
+    deleteHoursAcceptancePeriod: {
+        getPath(options){
+            return "hours_acceptance_periods/" + oFetch(options, "hoursAcceptancePeriodServerId")
+        },
+        method: "DELETE"
+    },
+    addClockInNote: {
+        getPath(){
+            return "clocking/add_note"
+        },
+        method: "POST"
     }
 }
 

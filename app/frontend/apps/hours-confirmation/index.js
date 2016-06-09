@@ -1,14 +1,17 @@
 import React from "react"
-import StaffDay from "./containers/staff-day"
+import AppComponent from "../app-component"
+import HoursConfirmationView from "./hours-confirmation-view"
+import { Provider } from "react-redux"
+import actionCreators from "~redux/actions"
 
-export default class HoursConfirmationApp extends React.Component {
+export default class HoursConfirmationApp extends AppComponent {
+    componentWillMount(){
+        var viewData = this.getViewData();
+        this.store.dispatch(actionCreators.loadInitialHoursConfirmationAppState(viewData))
+    }
     render(){
-        return <div>
-            <StaffDay />
-            <StaffDay />
-            <StaffDay />
-            <StaffDay />
-            <StaffDay />
-        </div>
+        return <Provider store={this.store}>
+            <HoursConfirmationView />
+        </Provider>
     }
 }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160601214451) do
+ActiveRecord::Schema.define(version: 20160603165525) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -102,57 +102,47 @@ ActiveRecord::Schema.define(version: 20160601214451) do
     t.datetime "updated_at"
   end
 
+  create_table "clock_in_days", force: :cascade do |t|
+    t.date     "date",                        null: false
+    t.integer  "staff_member_id", limit: 4,   null: false
+    t.integer  "venue_id",        limit: 4,   null: false
+    t.integer  "creator_id",      limit: 4,   null: false
+    t.string   "creator_type",    limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "clock_in_events", force: :cascade do |t|
+    t.string   "event_type",         limit: 255, null: false
+    t.integer  "creator_id",         limit: 4,   null: false
+    t.string   "creator_type",       limit: 255, null: false
+    t.datetime "at",                             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "clock_in_period_id", limit: 4,   null: false
+  end
+
+  add_index "clock_in_events", ["at"], name: "index_clock_in_events_on_at", using: :btree
+
   create_table "clock_in_notes", force: :cascade do |t|
     t.integer  "creator_id",      limit: 4,                  null: false
     t.string   "creator_type",    limit: 255,                null: false
     t.string   "note",            limit: 255,                null: false
-    t.integer  "venue_id",        limit: 4,                  null: false
-    t.integer  "staff_member_id", limit: 4,                  null: false
-    t.date     "date",                                       null: false
     t.boolean  "enabled",                     default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "clock_in_period_events", force: :cascade do |t|
-    t.integer  "clocking_event_id",  limit: 4, null: false
-    t.integer  "clock_in_period_id", limit: 4, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "clock_in_period_reasons", force: :cascade do |t|
-    t.string   "text",       limit: 255, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "clock_in_day_id", limit: 4,                  null: false
   end
 
   create_table "clock_in_periods", force: :cascade do |t|
-    t.string   "period_type",               limit: 255, null: false
-    t.date     "date",                                  null: false
-    t.integer  "staff_member_id",           limit: 4,   null: false
-    t.integer  "venue_id",                  limit: 4,   null: false
-    t.integer  "creator_id",                limit: 4,   null: false
-    t.integer  "clock_in_period_reason_id", limit: 4
-    t.string   "reason_note",               limit: 255
-    t.datetime "starts_at",                             null: false
+    t.integer  "creator_id",      limit: 4,   null: false
+    t.datetime "starts_at",                   null: false
     t.datetime "ends_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "clocking_events", force: :cascade do |t|
-    t.string   "event_type",      limit: 255, null: false
-    t.integer  "venue_id",        limit: 4,   null: false
-    t.integer  "staff_member_id", limit: 4,   null: false
-    t.integer  "creator_id",      limit: 4,   null: false
+    t.integer  "clock_in_day_id", limit: 4,   null: false
     t.string   "creator_type",    limit: 255, null: false
-    t.datetime "at",                          null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
-
-  add_index "clocking_events", ["at"], name: "index_clocking_events_on_at", using: :btree
 
   create_table "cron_jobs", force: :cascade do |t|
     t.string   "method",      limit: 255, null: false
@@ -258,6 +248,39 @@ ActiveRecord::Schema.define(version: 20160601214451) do
   add_index "holidays", ["holiday_type"], name: "index_holidays_on_holiday_type", using: :btree
   add_index "holidays", ["staff_member_id"], name: "index_holidays_on_staff_member_id", using: :btree
   add_index "holidays", ["start_date"], name: "index_holidays_on_start_date", using: :btree
+
+  create_table "hours_acceptance_breaks", force: :cascade do |t|
+    t.integer  "hours_acceptance_period_id", limit: 4,   null: false
+    t.datetime "starts_at",                              null: false
+    t.datetime "ends_at",                                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "disabled_at"
+    t.integer  "disabled_by_id",             limit: 4
+    t.string   "disabled_by_type",           limit: 255
+  end
+
+  create_table "hours_acceptance_periods", force: :cascade do |t|
+    t.integer  "creator_id",                 limit: 4,                       null: false
+    t.string   "creator_type",               limit: 255,                     null: false
+    t.integer  "hours_acceptance_reason_id", limit: 4
+    t.string   "reason_note",                limit: 255
+    t.datetime "starts_at",                                                  null: false
+    t.datetime "ends_at",                                                    null: false
+    t.integer  "clock_in_day_id",            limit: 4
+    t.string   "status",                     limit: 255, default: "pending", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "hours_acceptance_reasons", force: :cascade do |t|
+    t.string   "text",          limit: 255,                 null: false
+    t.integer  "rank",          limit: 4,                   null: false
+    t.boolean  "enabled",                                   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "note_required",             default: false, null: false
+  end
 
   create_table "invite_transitions", force: :cascade do |t|
     t.string   "to_state",    limit: 255,   null: false
@@ -515,5 +538,16 @@ ActiveRecord::Schema.define(version: 20160601214451) do
 
   add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree
   add_index "venues", ["name"], name: "index_venues_on_name", using: :btree
+
+  create_table "versions", force: :cascade do |t|
+    t.string   "item_type",  limit: 255,        null: false
+    t.integer  "item_id",    limit: 4,          null: false
+    t.string   "event",      limit: 255,        null: false
+    t.string   "whodunnit",  limit: 255
+    t.text     "object",     limit: 4294967295
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
 end

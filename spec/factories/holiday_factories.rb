@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :holiday do
-    start_date { 1.day.from_now.to_date }
-    end_date { 2.days.from_now.to_date }
+    start_date { RotaWeek.new(Time.current.to_date).start_date }
+    end_date { RotaWeek.new(Time.current.to_date).start_date + 2.days }
     staff_member
     association :creator, factory: :user
     holiday_type { 'paid_holiday' }

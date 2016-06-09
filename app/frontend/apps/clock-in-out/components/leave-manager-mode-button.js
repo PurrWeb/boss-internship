@@ -18,7 +18,7 @@ export default class LeaveManagerModeButton extends React.Component {
             leaveManagerModeButtonText = "Leave Supervisor Mode"
         }
         return <a
-            className="btn btn-default show-in-manager-mode"
+            className="btn btn-default show-in-manager-mode__inline-block"
             onClick={() => this.props.leaveManagerMode()}>
             {leaveManagerModeButtonText}
         </a>

@@ -117,7 +117,7 @@ Rails.application.routes.draw do
 
   resources :api_keys, only: [:index, :create, :destroy]
 
-  resources :hours_confirmation, only: [] do
+  resources :hours_confirmation, only: [:index] do
     collection do
       get :current
     end
@@ -174,6 +174,11 @@ Rails.application.routes.draw do
           post :start_break
           post :end_break
           post :add_note
+        end
+      end
+      resources :hours_acceptance_periods, only: [:create, :update, :destroy] do
+        collection do
+          post :clock_out
         end
       end
     end

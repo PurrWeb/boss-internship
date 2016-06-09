@@ -1,5 +1,5 @@
 import expect from "expect"
-import makeApiRequestMaker from "./make-api-request"
+import makeApiRequestMaker from "./make-api-request-maker"
 import _ from "underscore"
 import $ from "jquery"
 window.$ = $; // expose globally because makeApiRequest is using the global version, because
@@ -25,7 +25,7 @@ describe("makeApiRequestMaker", function(){
         var error = expect.createSpy();
         var success = function(){}
         apiRequestMaker({
-            errorHandlingComponent: 77,
+            errorHandlingId: 77,
             requestSourceComponent: 88
         }, success, error)
         expect($.ajax).toHaveBeenCalled();
@@ -42,7 +42,7 @@ describe("makeApiRequestMaker", function(){
             // undefined because jQuery's promises are slightly different and accept multiple arguments
             expect(errorObject.errors.base[0]).toBe("undefined - 500");
             expect(errorObject.errors.base[1]).toBe("It failed.");
-            expect(errorObject.errorHandlingComponent).toBe(77);
+            expect(errorObject.errorHandlingId).toBe(77);
             expect(errorObject.requestSourceComponent).toBe(88);
 
             done();
@@ -67,9 +67,7 @@ describe("makeApiRequestMaker", function(){
         });
 
         var resolve = null;
-        var promise = new Promise(function(resolveArg, rejectArg) {
-            resolve = resolveArg;
-        });
+        var promise = Promise.resolve({access_token: "hello"})
         expect.spyOn($, "ajax").andReturn(promise)
 
         apiRequestMaker({}, success, function(){}, function getState(){
@@ -77,15 +75,12 @@ describe("makeApiRequestMaker", function(){
                 apiKey: "adsfsd"
             }
         });
-        resolve({access_token: "hello"})
 
         _.defer(function(){
-            resolve({})
-            _.defer(function(){
-                expect($.ajax.calls.length).toBe(2);
-                expect(success).toHaveBeenCalled();
-                done();
-            })
+            expect($.ajax.calls.length).toBe(2);
+            expect(success).toHaveBeenCalled();
+            $.ajax.restore()
+            done();
         })
     })
 });

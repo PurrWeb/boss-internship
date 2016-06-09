@@ -1,17 +1,26 @@
 class ClockInPeriod < ActiveRecord::Base
-  TYPES = ['recorded', 'created']
-  belongs_to :staff_member
-  belongs_to :venue
-  belongs_to :clock_in_period_reason
-  belongs_to :creator, class_name: 'StaffMember'
-  has_many :clock_in_period_events
-  has_many :clocking_events, through: :clock_in_period_events
+  belongs_to :clock_in_day
+  belongs_to :creator, polymorphic: true
+  has_many :clock_in_events
   has_many :clock_in_breaks
 
-  validates :period_type, inclusion: { in: TYPES, message: 'is required' }
-  validates :date, presence: true
-  validates :staff_member, presence: true
-  validates :venue, presence: true
+  validates_associated :clock_in_breaks
+  validates :clock_in_day, presence: true
   validates :creator, presence: true
   validates :starts_at, presence: true
+  include PeriodTimeValidations
+
+  delegate :venue, :date, to: :clock_in_day
+
+  def self.incomplete
+    where(ends_at: nil)
+  end
+
+  def staff_member
+    clock_in_day.andand.staff_member
+  end
+
+  def enabled?
+    true
+  end
 end

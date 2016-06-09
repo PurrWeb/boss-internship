@@ -12,7 +12,7 @@ import utils from "~lib/utils"
 import { appRoutes } from "~lib/routes"
 import validation from "~lib/validation"
 import RotaDate from "~lib/rota-date"
-import * as actionCreators from "~redux/actions"
+import actionCreators from "~redux/actions"
 import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
 import ShiftList from "~models/shift-list"
 
@@ -35,8 +35,6 @@ class RotaStaffListItem extends Component {
         if (this.props.addShiftIsInProgress) {
             shiftSavingInProgressSpinner = <Spinner />
         }
-
-        var errors = this.props.componentErrors[this.componentId];
 
         var staffTypeObject = staff.staff_type.get(this.props.staffTypes);
 
@@ -113,7 +111,7 @@ class RotaStaffListItem extends Component {
                             </div>
                         </div>
                         <div style={{marginTop: 10}}>
-                            <ComponentErrors errors={errors} />
+                            <ComponentErrors errorHandlingId={this.componentId} />
                         </div>
                     </div>
                 </div>
@@ -129,7 +127,7 @@ class RotaStaffListItem extends Component {
             venueServerId: newShiftSettings.venueServerId,
             venueClientId: newShiftSettings.venueClientId,
             staffMemberServerId: this.props.staff.serverId,
-            errorHandlingComponent: this.componentId
+            errorHandlingId: this.componentId
         });
     }
     canAddShift(){
@@ -159,7 +157,6 @@ function mapStateToProps(state, ownProps){
     return {
         addShiftIsInProgress: selectAddShiftIsInProgress(state, ownProps.staff.serverId),
         staffTypes: state.staffTypes,
-        componentErrors: state.componentErrors,
         staffMemberShifts,
         venues: state.venues,
         canEditStaffTypeShifts: canEditStaffTypeShifts(state, {

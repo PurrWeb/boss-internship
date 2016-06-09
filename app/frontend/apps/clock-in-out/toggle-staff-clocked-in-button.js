@@ -1,12 +1,12 @@
 import React, {Component} from "react"
-import ToggleStaffStatusButton from "./toggle-staff-status-button"
+import ToggleClockInDayStatusButton from "./toggle-clock-in-day-status-button"
 
 export default class ToggleStaffClockedInButton extends Component {
     render(){
-        return <ToggleStaffStatusButton
+        return <ToggleClockInDayStatusButton
             staffObject={this.props.staffObject}
-            staffStatuses={this.props.staffStatuses}
-            updateStaffStatusWithConfirmation={this.props.updateStaffStatusWithConfirmation}
+            clockInDay={this.props.clockInDay}
+            updateClockInStatusWithConfirmation={this.props.updateClockInStatusWithConfirmation}
             icon={"time"}
             statusLabels={{
                 "clocked_in": "Clock In",

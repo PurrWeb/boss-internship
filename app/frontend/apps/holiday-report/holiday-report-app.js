@@ -3,9 +3,10 @@ import { Provider } from "react-redux"
 import {createStore } from "redux"
 import utils from "~lib/utils"
 import HolidayReportView from './holiday-report-view'
-import * as actionCreators from "~redux/actions.js"
+import actionCreators from "~redux/actions"
 import oFetch from "o-fetch"
-import { processHolidayAppViewData } from "~lib/backend-data/process-app-view-data"
+import { processHolidayAppViewData } from "~lib/backend-data/process-backend-objects"
+
 
 export default class HolidayReportApp extends Component {
     componentWillMount(){
@@ -21,7 +22,7 @@ export default class HolidayReportApp extends Component {
         this.store = createStore(function(){
             return {
                 staffTypes: utils.indexByClientId(staffTypes),
-                staff: utils.indexByClientId(staffMembers),
+                staffMembers: utils.indexByClientId(staffMembers),
                 holidays: utils.indexByClientId(holidays),
                 venues: utils.indexByClientId(venues),
                 pageOptions: pageData

@@ -3,7 +3,7 @@ import _ from "underscore"
 import utils from "~lib/utils"
 import { connect } from "react-redux"
 import RotaForecastUi from "../components/rota-forecast"
-import { updateRotaForecast } from "~redux/actions"
+import actionCreators from "~redux/actions"
 import { selectUpdateRotaForecastInProgress, selectForecastByRotaId } from "~redux/selectors"
 
 class RotaForecast extends React.Component {
@@ -26,7 +26,8 @@ class RotaForecast extends React.Component {
             onForecastedTakeChanged={(forecastedTake) => this.setState({forecastedTake})}
             onUpdateForecastClick={() => this.onUpdateForecastClick()}
             isUpdatingForecast={this.props.isUpdatingForecast}
-            errors={this.props.componentErrors[this.componentId]} />
+            errorHandlingId={this.componentId}
+        />
     }
     onUpdateForecastClick(){
         this.props.updateRotaForecast({
@@ -42,7 +43,6 @@ function mapStateToProps(state, ownProps){
     return {
         rotaForecast: forecast,
         rota,
-        componentErrors: state.componentErrors,
         isUpdatingForecast: selectUpdateRotaForecastInProgress(state, {
             serverVenueId: rota.venue.serverId,
             dateOfRota: rota.date
@@ -53,7 +53,7 @@ function mapStateToProps(state, ownProps){
 function mapDispatchToProps(dispatch, ownProps){
     return {
         updateRotaForecastWithAllDetails: function(options){
-            dispatch(updateRotaForecast(options));
+            dispatch(actionCreators.updateRotaForecast(options));
         }
     }
 }
@@ -65,7 +65,7 @@ function mergeProps(stateProps, dispatchProps, ownProps){
                 forecastedTake,
                 serverVenueId: stateProps.rota.venue.serverId,
                 dateOfRota: stateProps.rota.date,
-                errorHandlingComponent: componentId
+                errorHandlingId: componentId
             });
         }
     };
@@ -77,4 +77,3 @@ export default connect(
     mapDispatchToProps,
     mergeProps
 )(RotaForecast)
-

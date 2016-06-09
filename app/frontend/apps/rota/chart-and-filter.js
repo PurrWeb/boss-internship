@@ -21,7 +21,7 @@ export class ChartAndFilter extends Component {
     render(){
         var staffDetails = this.getStaffDetailsComponent(this.state.staffToShow);
         var previewStaffDetails = this.getStaffDetailsComponent(this.state.staffToPreview);
-        
+
         var rotaShifts = this.getRotaShifts();
 
         return (
@@ -108,7 +108,7 @@ function mapStateToProps(state){
     return {
         rotaShifts: selectShiftsWithRotaClientIds(state, [rota.clientId]),
         staffTypes: state.staffTypes,
-        staff: state.staff,
+        staff: state.staffMembers,
         rotasById: state.rotas
     }
 }

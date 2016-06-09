@@ -2,13 +2,16 @@ import React from "react"
 import expect from "expect"
 import { simpleRender, NoOpComponent } from "~lib/test-helpers"
 import RotaOverviewApp from "./rota-overview-app"
+import _ from "underscore"
 import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
+import Promise from "bluebird"
 
 import RotaOverviewChart from "~components/rota-overview-chart"
 
 import "~lib/load-underscore-mixins"
 
+window.boss = {access_token: "tokennnn"}
 
 describe('Venue Rota Overview Integration Test', function() {
     beforeEach(function(){
@@ -56,7 +59,7 @@ describe('Venue Rota Overview Integration Test', function() {
             "venue": { "id": 3 },
             "date": "2016-03-10",
             "forecasted_take": 4500.0,
-            "total": 340.6, 
+            "total": 340.6,
             "total_percentage": 7,
             "staff_total": 246.8,
             "staff_total_percentage": 5,
@@ -72,7 +75,7 @@ describe('Venue Rota Overview Integration Test', function() {
             "venue": { "id": 3 },
             "date": "2016-03-10",
             "forecasted_take": 4500.0,
-            "total": 340.6, 
+            "total": 340.6,
             "total_percentage": 7,
             "staff_total": 246.8,
             "staff_total_percentage": 5,
@@ -91,4 +94,69 @@ describe('Venue Rota Overview Integration Test', function() {
     it("Renders without throwing an exception", function(){
         simpleRender(<RotaOverviewApp viewData={viewData} />);
     });
+
+    it("Updates a daily rota forecast is updated the weekly forecast is refetched", function(done){
+        var dailyForecastUpdateResponse = {
+            "id": 13,
+            "venue": { "id": 3 },
+            "date": "2016-03-10",
+            "forecasted_take": 45000.0,
+            "total": 340.6,
+            "total_percentage": .7,
+            "staff_total": 246.8,
+            "staff_total_percentage": .5,
+            "pr_total": 0.0,
+            "pr_total_percentage": 0.0,
+            "kitchen_total": 93.8,
+            "kitchen_total_percentage": .2,
+            "security_total": 0.0,
+            "security_total_percentage": 0.0
+        }
+
+        var weeklyForecastUpdateResponse = {
+            "id": 13,
+            "venue": { "id": 3 },
+            "date": "2016-03-10",
+            "forecasted_take": 45000.0,
+            "total": 340.6,
+            "total_percentage": 7,
+            "staff_total": 246.8,
+            "staff_total_percentage": 5,
+            "pr_total": 0.0,
+            "pr_total_percentage": 0.0,
+            "kitchen_total": 93.8,
+            "kitchen_total_percentage": 2,
+            "security_total": 0.0,
+            "security_total_percentage": 0.0
+        }
+
+        var {$$} = simpleRender(<RotaOverviewApp viewData={viewData} />);
+        var forecastedTakeInput = $$("[data-test-marker-forecasted-take]")[0]
+        forecastedTakeInput.value = 45000
+        TestUtils.Simulate.change(forecastedTakeInput)
+
+        var timesAjaxCalled = 0;
+        expect.spyOn($, "ajax").andCall(function(){
+            timesAjaxCalled++;
+            if (timesAjaxCalled === 1) {
+                return Promise.resolve(dailyForecastUpdateResponse)
+            } else if (timesAjaxCalled === 2) {
+                return Promise.resolve(weeklyForecastUpdateResponse)
+            } else {
+                throw Error("More ajax requests made than expected")
+            }
+        })
+
+        var forecastUpdateButton = $$("[data-test-marker-update-forecast-button]")[0];
+        TestUtils.Simulate.click(forecastUpdateButton)
+
+        _.delay(function(){
+            var calls = $.ajax.calls;
+            expect(calls[0].arguments[0].url).toContain("rota_forecasts/10-03-2016")
+            expect(calls[1].arguments[0].url).toContain("rota_forecasts/07-03-2016/weekly")
+
+            $.ajax.restore()
+            done();
+        }, 200)
+    })
 });

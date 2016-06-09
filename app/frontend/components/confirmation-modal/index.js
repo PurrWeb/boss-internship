@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import {ModalDialog, ModalContainer} from "react-modal-dialog"
-import {completeConfirmationModal, cancelConfirmationModal} from "~redux/actions"
+import actionCreators from "~redux/actions"
 import oFetch from "o-fetch"
 
 class ConfirmationModal extends React.Component {
@@ -19,6 +19,9 @@ class ConfirmationModal extends React.Component {
             return null;
         }
 
+        // For now just use an if statement here.
+        // I'm not sure how exactly this modal will develop, if
+        // at all.
         if (this.props.confirmationType === "PIN") {
 
             return <ModalContainer onClick={() => this.cancel()}>
@@ -77,10 +80,10 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return {
         completeConfirmationModal: function(confirmationDetails){
-            dispatch(completeConfirmationModal(confirmationDetails));
+            dispatch(actionCreators.completeConfirmationModal(confirmationDetails));
         },
         cancelConfirmationModal: function(){
-            dispatch(cancelConfirmationModal());
+            dispatch(actionCreators.cancelConfirmationModal());
         }
     }
 }

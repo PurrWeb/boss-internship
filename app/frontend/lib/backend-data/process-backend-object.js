@@ -1,4 +1,7 @@
 import _ from "underscore"
+import utils from "~lib/utils"
+
+const unpersistedObjectPrefix =  "UNPERSISTED_OBJECT_"
 
 export function getClientId(serverId){
     if (serverId === undefined){
@@ -73,16 +76,41 @@ function processObjectLinks(obj){
     }
 }
 
+function addGetLink(obj){
+    obj.getLink = function(){
+        var link = {
+            clientId: obj.clientId,
+            serverId: obj.serverId
+        }
+        link.get = makeLinkResolverFunction(link, "(item obtained with getLink)")
+        return link;
+    }
+}
+
 export function processBackendObject(backendObj){
-    if (backendObj.clientId !== undefined){
+    if (objectHasBeenProcessed(backendObj)){
         throw new Error("Backend object has already been processed.");
     }
+
     var obj = {...backendObj};
 
+    if (obj.id === null){
+        obj.id = unpersistedObjectPrefix + _.uniqueId();
+    }
+
     setObjectIds(obj);
+    addGetLink(obj);
     processObjectLinks(obj);
-    
+
     return obj;
 }
 
 export {processObjectLinks}
+
+export function objectHasBeenProcessed(backendObj){
+    return backendObj.clientId !== undefined
+}
+
+export function objectHasBeenSavedToBackend(obj){
+    return !utils.stringContains(obj.serverId.toString(), unpersistedObjectPrefix)
+}

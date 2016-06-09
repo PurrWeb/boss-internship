@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import _ from "underscore"
 import ClockInOutStaffFinder from "./staff-finder/staff-finder"
-import * as actions from "~redux/actions"
+import actions from "~redux/actions"
 import {
     selectRotaOnClockInOutPage,
     selectClockInOutAppUserIsSupervisor,
@@ -43,6 +43,7 @@ class ClockInOutView extends Component {
                     leaveManagerMode={this.props.leaveManagerMode}
                     venue={this.props.venue}
                     rota={this.props.rota}
+                    refetchAllData={() => this.props.refreshAllData(this.props.apiKey)}
                 />
                 <ClockInOutStaffFinder
                     selectedStaffTypeClientId={this.props.selectedStaffTypeClientId}
@@ -63,7 +64,7 @@ class ClockInOutView extends Component {
 }
 
 function mapStateToProps(state) {
-    if (_.values(state.staff).length === 0) {
+    if (_.values(state.staffMembers).length === 0) {
         return {hadLoadedAppData: false};
     }
     var rota = selectRotaOnClockInOutPage(state);
@@ -75,10 +76,11 @@ function mapStateToProps(state) {
         userIsManager,
         userIsSupervisor,
         rota,
-        staffMembers: state.staff,
+        apiKey: state.apiKey,
+        staffMembers: state.staffMembers,
         leaveManagerModeInProgress: selectLeaveManagerModeIsInProgress(state),
         venue: rota.venue.get(state.venues),
-        staffTypes: getStaffTypesWithStaffMembers(state.staffTypes, state.staff),
+        staffTypes: getStaffTypesWithStaffMembers(state.staffTypes, state.staffMembers),
         selectedStaffTypeClientId: state.clockInOutAppSelectedStaffType
     }
 }
@@ -94,6 +96,11 @@ function mapDispatchToProps(dispatch){
             dispatch(actions.clockInOutAppSelectStaffType({
                 selectedStaffTypeClientId
             }))
+        },
+        refreshAllData: function(apiKey){
+            dispatch(actions.resetStore());
+            dispatch(actions.setApiKey({apiKey}))
+            dispatch(actions.clockInOutAppFetchAppData())
         }
     }
 }

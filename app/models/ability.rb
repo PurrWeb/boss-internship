@@ -110,10 +110,18 @@ class Ability
         can_update_fruit_order?(user, fruit_order)
       end
 
+      can :update, HoursAcceptancePeriod do |hours_acceptance_period|
+        can_manage_venue?(user, hours_acceptance_period.venue)
+      end
+
       can :destroy, FruitOrder do |fruit_order|
         fruit_order.persisted? &&
           !(fruit_order.done? || fruit_order.deleted?) &&
           can_update_fruit_order?(user, fruit_order)
+      end
+
+      can :perform_clocking_action, StaffMember do |staff_member|
+        can_edit_staff_member?(user, staff_member)
       end
     end
 

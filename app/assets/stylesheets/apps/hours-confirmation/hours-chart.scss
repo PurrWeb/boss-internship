@@ -28,6 +28,14 @@
     fill: green;
 }
 
+.hours-chart__amended-interval--hours {
+    fill: #006100;
+}
+
+.hours-chart__amended-interval--break {
+    fill: #f2a10d;
+}
+
 .hours-chart__clocked-interval--break {
     fill: orange
 }

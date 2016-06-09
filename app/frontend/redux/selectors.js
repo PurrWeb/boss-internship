@@ -1,3 +1,13 @@
+/*
+I'm sorry.
+
+This file needs to be cleaned up and potentially split into different files.
+
+As a general rule there should be selectors for different data types. Those should
+return denormalized data, so we don't have to fetch that data later.
+
+There is also overlapping functionality in some ~lib/* files.
+*/
 import _ from "underscore"
 import utils from "~lib/utils"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
@@ -42,8 +52,8 @@ export function selectVenuesWithShifts(state){
 }
 
 export function selectStaffMemberHolidays(state, staffId){
-    var staffMember = state.staff[staffId];
-    var staffMemberHolidayClientIds = _.pluck(state.staff[staffId].holidays, "clientId");
+    var staffMember = state.staffMembers[staffId];
+    var staffMemberHolidayClientIds = _.pluck(staffMember.holidays, "clientId");
     var allHolidays = staffMemberHolidayClientIds.map(function(clientId){
         return state.holidays[clientId];
     });
@@ -85,11 +95,11 @@ export function selectFetchWeeklyRotaIsInProgress(state){
 
 export function selectUpdateRotaForecastInProgress(state, {serverVenueId, dateOfRota}){
     var updatesInProgress = state.apiRequestsInProgress.UPDATE_ROTA_FORECAST;
-    return !_.isEmpty(_(updatesInProgress).filter(function(update){
+    return requestIsInProgressWithRequestData(updatesInProgress, function(update){
         var isSameDate = utils.datesAreEqual(update.dateOfRota, dateOfRota);
         var isSameVenue = serverVenueId === update.serverVenueId;
         return isSameVenue && isSameDate;
-    }))
+    })
 }
 
 export function selectForecastByRotaId(state, rotaClientId){
@@ -237,22 +247,162 @@ export function selectClockInOutAppUserPermissions(state){
     if (userMode === "manager") {
         return {
             toggleOnBreak: true,
-            changePin: true
+            changePin: true,
+            addNote: true
         }
     }
     if (userMode === "supervisor") {
         return {
             toggleOnBreak: true,
-            changePin: false
+            changePin: false,
+            addNote: true
         }
     }
     return {
         toggleOnBreak: false,
-        changePin: false
+        changePin: false,
+        addNote: false
     }
 }
 
 export function selectClockInOutLoadAppDataIsInProgress(state){
-    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_LOAD_APP_DATA;
+    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_FETCH_DATA;
     return requests !== undefined && requests.length > 0;
+}
+
+function addBreaksToClockInPeriod(clockInPeriod, clockInBreaks){
+    var breaks = _(clockInBreaks).filter(function(clockInBreak){
+        return clockInBreak.clock_in_period.clientId === clockInPeriod.clientId
+    })
+    return Object.assign({}, clockInPeriod, { breaks })
+}
+
+function addBreaksToHoursAcceptancePeriod(hoursAcceptancePeriod, hoursAcceptanceBreaks){
+    var breaks = _(hoursAcceptanceBreaks).filter(function(hoursAcceptanceBreak){
+        return hoursAcceptanceBreak.hours_acceptance_period.clientId === hoursAcceptancePeriod.clientId
+    })
+    return Object.assign({}, hoursAcceptancePeriod, { breaks })
+}
+
+export function selectClockInDayDetails(state, clockInDay){
+    var staffMember = clockInDay.staff_member.get(state.staffMembers);
+    var clockInDay = {...clockInDay}
+    clockInDay.forceClockoutIsInProgress = selectIsForceClockingOutClockInDay(state, staffMember.clientId)
+
+    var clockInPeriods = _(state.clockInPeriods).filter(function(clockInPeriod){
+        return clockInPeriod.clock_in_day.clientId === clockInDay.clientId;
+    });
+    var hoursAcceptancePeriods = _(state.hoursAcceptancePeriods).filter(function(hoursAcceptancePeriod){
+        return hoursAcceptancePeriod.clock_in_day.clientId === clockInDay.clientId;
+    })
+
+    clockInPeriods = clockInPeriods.map(function(clockInPeriod){
+        return addBreaksToClockInPeriod(clockInPeriod, state.clockInBreaks)
+    })
+    hoursAcceptancePeriods = hoursAcceptancePeriods.map(function(hoursAcceptancePeriod){
+        return addBreaksToHoursAcceptancePeriod(hoursAcceptancePeriod, state.hoursAcceptanceBreaks)
+    })
+    hoursAcceptancePeriods.forEach(function(hoursAcceptancePeriod){
+        hoursAcceptancePeriod.updateIsInProgress = selectEditHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod)
+        var hasReason = hoursAcceptancePeriod.hours_acceptance_reason !== null;
+        hoursAcceptancePeriod.hours_acceptance_reason =
+            state.hoursAcceptanceReasons[hoursAcceptancePeriod.hours_acceptance_reason.clientId]
+    })
+
+    var rota = getRotaFromDateAndVenue({
+        dateOfRota: clockInDay.date,
+        venueId: clockInDay.venue.clientId,
+        rotas: state.rotas
+    })
+
+    var rotaedShifts = _(state.rotaShifts).filter(function(shift){
+        return shift.rota.clientId === rota.clientId && shift.staff_member.clientId === staffMember.clientId
+    })
+
+    var clockInEvents = _(state.clockInEvents).filter(function(clockInEvent){
+        var clockInPeriod = clockInEvent.clock_in_period.get(state.clockInPeriods)
+        return clockInPeriod.clock_in_day.clientId === clockInDay.clientId
+    })
+
+    var clockInNotes = _(state.clockInNotes).filter(function(clockInNote){
+        return clockInNote.clock_in_day.clientId === clockInDay.clientId;
+    })
+
+    return {
+        clockedClockInPeriods: clockInPeriods,
+        hoursAcceptancePeriods: hoursAcceptancePeriods,
+        clockInEvents,
+        staffMember,
+        rotaedShifts,
+        clockInNotes,
+        clockInDay
+    }
+}
+
+export function selectEditHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod){
+    return selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) ||
+        selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) ||
+        selectDeleteHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod)
+}
+
+function requestIsInProgressWithRequestData(requests, matchFunction) {
+    if (!requests || requests.length === 0) {
+        return false;
+    }
+
+    return _.any(requests, matchFunction);
+}
+
+function selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
+    return requestIsInProgressWithRequestData(
+        state.apiRequestsInProgress.ACCEPT_HOURS_ACCEPTANCE_PERIOD,
+    function(requestOptions){
+        return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
+    });
+}
+
+function selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
+    return requestIsInProgressWithRequestData(
+        state.apiRequestsInProgress.UNACCEPT_HOURS_ACCEPTANCE_PERIOD,
+    function(requestOptions){
+        return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
+    });
+}
+
+function selectDeleteHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
+    return requestIsInProgressWithRequestData(
+        state.apiRequestsInProgress.DELETE_HOURS_ACCEPTANCE_PERIOD,
+    function(requestOptions){
+        return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
+    });
+}
+
+export function selectIsForceClockingOutClockInDay(state, staffMemberClientId){
+    return requestIsInProgressWithRequestData(
+        state.apiRequestsInProgress.FORCE_STAFF_MEMBER_CLOCK_OUT,
+    function(requestOptions){
+        return requestOptions.staffMember.clientId == staffMemberClientId
+    })
+}
+
+export function selectAddClockInNoteIsInProgress(state, clockInDayClientId){
+    return requestIsInProgressWithRequestData(
+        state.apiRequestsInProgress.ADD_CLOCK_IN_NOTE,
+    function(requestOptions){
+        return requestOptions.clockInDay.clientId === clockInDayClientId
+    })
+}
+
+export function selectClockInDay(state, {staffMemberClientId, date}) {
+    var clockInDay = _.find(state.clockInDays, function(clockInDay){
+        return clockInDay.staff_member.clientId === staffMemberClientId &&
+            utils.datesAreEqual(clockInDay.date, date)
+    })
+
+    if (!clockInDay) {
+        throw Error("ClockInDay for staffMember " + staffMemberClientId + " and date " +
+          date.toString() + "not found")
+    }
+
+    return clockInDay;
 }

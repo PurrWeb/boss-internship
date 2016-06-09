@@ -93,6 +93,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def whodunnit_data
+    {
+      class: 'User',
+      id: id,
+      name: full_name
+    }
+  end
+
   def enabled?
     state_machine.current_state == 'enabled'
   end

@@ -4,7 +4,7 @@ import RotaDate from "~lib/rota-date.js"
 import moment from "moment"
 import utils from "~lib/utils"
 import validation from "~lib/validation"
-import { possibleShiftStartTimeStrings, possibleShiftEndTimeStrings } from "~lib/possible-shift-time-strings"
+import { getPossibleShiftStartTimeStrings, getPossibleShiftEndTimeStrings } from "~lib/possible-shift-time-strings"
 
 var SHIFT_TIME_TYPES = {
     START: 2,
@@ -15,10 +15,11 @@ export default class ShiftTimeInput extends Component {
     static propTypes = {
         rotaDate: React.PropTypes.object.isRequired,
         onChange: React.PropTypes.func.isRequired,
-        // either one of these two: 
+        // either one of these two:
         startsAt: React.PropTypes.object,
-        endsAt: React.PropTypes.object
-
+        endsAt: React.PropTypes.object,
+        readonly: React.PropTypes.bool,
+        granularityInMinutes: React.PropTypes.number // defaults to 30
     }
     getShiftTimeType(){
         if (this.props.startsAt !== undefined){
@@ -53,19 +54,32 @@ export default class ShiftTimeInput extends Component {
             dateValue = "";
         }
 
-        return <div className="shift-time-input">
-            <Select
+        var select, readonlyString;
+        if (this.props.readonly) {
+            readonlyString = dateValue;
+        } else {
+            select = <Select
                 value={dateValue}
                 options={options}
                 clearable={false}
-                onChange={(value) => this.updateTime(value)} />
-            </div>
+                onChange={(value) => this.updateTime(value)}
+            />
+        }
+
+        return <div className="shift-time-input">
+            {select}
+            {readonlyString}
+        </div>
     }
     getPossibleShiftTimes(){
+        var granularityInMinutes = 30;
+        if (this.props.granularityInMinutes) {
+            granularityInMinutes = this.props.granularityInMinutes
+        }
         if (this.getShiftTimeType() === SHIFT_TIME_TYPES.START) {
-            return possibleShiftStartTimeStrings;
+            return getPossibleShiftStartTimeStrings(granularityInMinutes);
         } else {
-            return possibleShiftEndTimeStrings;
+            return getPossibleShiftEndTimeStrings(granularityInMinutes)
         }
     }
     getDateFromTime(timeString){

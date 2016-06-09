@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import _ from "underscore"
 import PublishRotaWeekButton from "./publish-rota-week-button"
-import { publishRotas } from "~redux/actions"
+import actionCreators from "~redux/actions"
 
 const ROTA_PUBLISHED_STATUS = "published"
 
@@ -31,7 +31,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch, ownProps){
     return {
         publishRotaWeek: function(){
-            dispatch(publishRotas({
+            dispatch(actionCreators.publishRotas({
                 venueServerId: ownProps.rotas[0].venue.serverId,
                 date: ownProps.firstDate
             }))

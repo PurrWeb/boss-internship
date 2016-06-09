@@ -24,7 +24,7 @@ class AddShiftViewContainer extends Component {
     }
     constructor(props){
         super(props);
-        
+
         var state = {
             shiftTimes: this.getDefaultShiftTimes(props),
             shiftType: "normal"
@@ -35,7 +35,7 @@ class AddShiftViewContainer extends Component {
         return <AddShiftView
             shiftTimes={this.state.shiftTimes}
             onShiftTimesChange={(shiftTimes) => this.onShiftTimesChange(shiftTimes)}
-            staff={this.props.staff} 
+            staff={this.props.staff}
             rotaDate={this.getRotaDate()}
             staffTypes={this.props.staffTypes}
             shiftType={this.state.shiftType}
@@ -58,7 +58,7 @@ function mapStateToProps(state, ownProps){
     var rota = selectRotaOnVenueRotaPage(state);
     return {
         staffTypes: state.staffTypes,
-        staff: state.staff,
+        staff: state.staffMembers,
         dateOfRota: ownProps.dateOfRota,
         rota
     }

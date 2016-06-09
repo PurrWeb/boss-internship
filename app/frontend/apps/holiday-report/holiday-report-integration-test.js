@@ -16,7 +16,7 @@ describe('Holiday Report Integration Test', function() {
         venues: [{
             name: "The Bar",
             id: THE_BAR_ID
-        }], 
+        }],
         staffMembers: [{
             first_name: "John",
             surname: "Smith",
@@ -49,7 +49,7 @@ describe('Holiday Report Integration Test', function() {
 
     it("Still shows a staff member after searching for 'John'", function(){
         var { $, $$ } = simpleRender(<HolidayReportApp viewData={viewData} />);
-        
+
         TestUtils.Simulate.change(
             $("[data-test-marker-staff-text-search]"),
             {target: {value: "John"}}
@@ -60,7 +60,7 @@ describe('Holiday Report Integration Test', function() {
 
     it("Still shows a staff member after searching for 'Sally'", function(){
         var { $, $$ } = simpleRender(<HolidayReportApp viewData={viewData} />);
-        
+
         TestUtils.Simulate.change(
             $("[data-test-marker-staff-text-search]"),
             {target: {value: "Sally"}}
@@ -68,4 +68,26 @@ describe('Holiday Report Integration Test', function() {
 
         expect($$(".staff-list-item").length).toBe(0);
     })
+});
+
+describe('Holiday Report Integration Test', function() {
+    var THE_BAR_ID = 3;
+    var viewData = {
+        staffTypes: [],
+        venues: [{
+            name: "The Bar",
+            id: THE_BAR_ID
+        }],
+        staffMembers: [],
+        holidays: [],
+        pageData: {
+            venueId: THE_BAR_ID,
+            weekStartDate: "2016-03-07",
+            weekEndDate: "2016-03-13"
+        }
+    };
+
+    it("Renders without errors if a only showing data for a specific venue", function(){
+        var {$, $$} = simpleRender(<HolidayReportApp viewData={viewData} />);
+    });
 });

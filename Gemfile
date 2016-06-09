@@ -43,6 +43,8 @@ gem 'reform-rails'
 gem 'newrelic_rpm'
 gem 'fitter-happier'
 gem "auto_strip_attributes", "~> 2.0"
+gem 'paper_trail'
+gem 'paper_trail-globalid'
 
 group :development, :test do
   gem "byebug"

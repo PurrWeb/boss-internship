@@ -2,7 +2,7 @@ import expect from "expect"
 import getStaffTypeBreakdownByTime from "./get-grouped-shift-breakdown-by-time"
 import RotaDate from "~lib/rota-date"
 import _ from "underscore"
-import { processStaffMemberObject, processShiftObject, processStaffTypeObject } from "~lib/backend-data/process-backend-objects"
+import { processStaffMemberObject, processRotaShiftObject, processStaffTypeObject } from "~lib/backend-data/process-backend-objects"
 import { getClientId } from "~lib/backend-data/process-backend-object"
 
 describe("getGroupedShiftBreakdownByTime", function() {
@@ -11,7 +11,7 @@ describe("getGroupedShiftBreakdownByTime", function() {
     var staffTypes = [{id: "kitchen"},{id: "bar_back"}];
     staffTypes = staffTypes.map(processStaffTypeObject);
     staffTypes = _.indexBy(staffTypes, "clientId");
-    
+
     it("Determines the staff count for each staff type at different times during the day", function(){
         function getOffsetDate(offsetInMinutes){
             var newMinutes = rotaDate.startTime.getMinutes() + offsetInMinutes;
@@ -37,7 +37,7 @@ describe("getGroupedShiftBreakdownByTime", function() {
                 ends_at: rotaDate.getDateFromShiftEndTime(8, 0)
             }
         ];
-        shifts = shifts.map(processShiftObject)
+        shifts = shifts.map(processRotaShiftObject)
         var staff = [
             {
                 id: 1,
@@ -118,7 +118,7 @@ describe("getGroupedShiftBreakdownByTime", function() {
             granularityInMinutes: 60 * 6,
             groupsById: staffTypes,
             getGroupFromShift: function(shift){
-                return staff[shift.staff_member.clientId].staff_type;       
+                return staff[shift.staff_member.clientId].staff_type;
             },
             rotaDate
         });
@@ -126,7 +126,7 @@ describe("getGroupedShiftBreakdownByTime", function() {
         result.forEach(function(r, i){
             var e = expectedResult[i];
             expect(r).toEqual(expectedResult[i])
-            
+
         })
     });
 

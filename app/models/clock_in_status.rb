@@ -1,32 +1,19 @@
 class ClockInStatus
   STATES = [:clocked_in, :clocked_out, :on_break]
 
-  def initialize(staff_member:, venue:, date:)
-    @staff_member = staff_member
-    @venue = venue
-    @date = date
+  def initialize(clock_in_day:)
+    @clock_in_day = clock_in_day
+    @date = clock_in_day.date
+    @venue = clock_in_day.venue
+    @staff_member = clock_in_day.staff_member
   end
-
-  attr_reader :staff_member
+  attr_reader :clock_in_day, :date, :venue, :staff_member
 
   def current_state
-    case last_event.andand.event_type
-    when 'clock_in'
-      :clocked_in
-    when 'clock_out'
-      :clocked_out
-    when 'start_break'
-      :on_break
-    when 'end_break'
-      :clocked_out
-    when nil
-      :clocked_out
-    else
-      raise "Usupported event type encountered :#{last_event.event_type}"
-    end
+    clock_in_day.current_clock_in_state
   end
 
-  def transition_to!(state:, at:, requester:)
+  def transition_to!(state:, at:, requester:, nested: false)
     raise "unsupported state encountered: #{state}" unless STATES.include?(state)
 
     transition_legal = allowed_event_transations.fetch(current_state).any? do |transition_data|
@@ -43,87 +30,125 @@ class ClockInStatus
       raise 'supplied at time before previous event'
     end
 
-    ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction(requires_new: nested) do
       saved_last_event = last_event
 
-      new_event = ClockingEvent.create!(
-        venue: venue,
-        staff_member: staff_member,
-        at: at,
-        creator: requester,
-        event_type: event_type_for_transition(from: current_state, to: state)
-      )
-
+      event_type = event_type_for_transition(from: current_state, to: state)
       current_recorded_clock_in_period = CurrentRecordedClockInPeriodQuery.
         new(
-          venue: venue,
-          staff_member: staff_member
+          clock_in_day: clock_in_day
         ).
         first
 
       if !current_recorded_clock_in_period.present?
         current_recorded_clock_in_period = ClockInPeriod.new(
-          period_type: 'recorded',
           creator: requester,
-          venue: venue,
-          date: date,
-          staff_member: staff_member,
-          starts_at: at,
-          clock_in_period_reason: nil
+          clock_in_day: clock_in_day,
+          starts_at: at
         )
-      elsif new_event.clock_out?
+      elsif event_type == 'clock_out'
+        if saved_last_event.event_type == 'start_break'
+          add_break_to_period(
+            clock_in_period: current_recorded_clock_in_period,
+            last_event: saved_last_event,
+            at: at
+          )
+        end
+
         current_recorded_clock_in_period.update_attributes!(ends_at: at)
-      elsif new_event.end_break?
-        new_break = ClockInBreak.create!(
-          clock_in_period: current_recorded_clock_in_period,
-          starts_at: saved_last_event.at,
-          ends_at: at
+
+        overlap_query = OverlappingHoursAcceptancePeriodQuery.new(
+          clock_in_day: clock_in_day,
+          starts_at: current_recorded_clock_in_period.starts_at,
+          ends_at: current_recorded_clock_in_period.ends_at
         )
-        current_recorded_clock_in_period.clock_in_breaks << new_break
+        new_period_will_conflict_with_existing = overlap_query.count > 0
+
+        if !new_period_will_conflict_with_existing
+          create_hours_confirmation_from_clock_in_period(
+            clock_in_period: current_recorded_clock_in_period,
+            creator: requester
+          )
+        end
+      elsif event_type == 'end_break'
+        add_break_to_period(
+          clock_in_period: current_recorded_clock_in_period,
+          last_event: saved_last_event,
+          at: at
+        )
       end
-      current_recorded_clock_in_period.clocking_events << new_event
 
       current_recorded_clock_in_period.save!
+
+      ClockInEvent.create!(
+        clock_in_period: current_recorded_clock_in_period,
+        at: at,
+        creator: requester,
+        event_type: event_type
+      )
     end
   end
 
   private
-  attr_reader :venue, :date
+ def create_hours_confirmation_from_clock_in_period(clock_in_period:, creator:)
+   clock_in_day = clock_in_period.clock_in_day
 
-  def interval_event?
-    last_event.clock_in? || last_event.start_break?
-  end
+   hours_acceptance_period = HoursAcceptancePeriod.create!(
+     starts_at: clock_in_period.starts_at,
+     ends_at: clock_in_period.ends_at,
+     clock_in_day: clock_in_day,
+     creator: creator
+   )
+
+   clock_in_period.clock_in_breaks.each do |_break|
+     hours_acceptance_break = HoursAcceptanceBreak.create!(
+       hours_acceptance_period: hours_acceptance_period,
+       starts_at: _break.starts_at,
+       ends_at: _break.ends_at
+     )
+
+     hours_acceptance_period.hours_acceptance_breaks << hours_acceptance_break
+   end
+ end
+
+ def add_break_to_period(clock_in_period:, at:, last_event:)
+    new_break = ClockInBreak.create!(
+      clock_in_period: clock_in_period,
+      starts_at: last_event.at,
+      ends_at: at
+    )
+    clock_in_period.clock_in_breaks << new_break
+ end
 
   def last_event
     events.last
   end
 
   def events
-    staff_member_events = ClockingEvent.where(
-      venue: venue,
-      staff_member: staff_member
-    )
-
-    InRangeQuery.new(
-      relation: staff_member_events,
-      start_value: RotaShiftDate.new(date).start_time,
-      end_value: RotaShiftDate.new(date).end_time,
-      start_column_name: 'at',
-      end_column_name: 'at'
-    ).all.order(:at)
+    ClockInEvent.
+      joins(:clock_in_period).
+      merge(
+        ClockInPeriod.
+        joins(:clock_in_day).
+        merge(
+          ClockInDay.where(id: clock_in_day.id)
+        )
+      ).
+      order(:at)
   end
 
   def allowed_event_transations
     {
       clocked_in: [
         { state: :clocked_out, transition_event: 'clock_out' },
-        { state: :on_break, transition_event: 'start_break' }
+        { state: :on_break,    transition_event: 'start_break' }
       ],
       clocked_out: [
         { state: :clocked_in, transition_event: 'clock_in' }
       ],
       on_break: [
-        { state: :clocked_in, transition_event: 'end_break' }
+        { state: :clocked_in,  transition_event: 'end_break' },
+        { state: :clocked_out, transition_event: 'clock_out' }
       ]
     }
   end

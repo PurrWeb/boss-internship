@@ -9,7 +9,7 @@ module.exports = {
     path: __dirname + '/app/assets/javascripts/bundles',
     filename: 'frontend_bundle.js'
   },
-  devtool: 'source-map',
+  devtool: 'eval-source-map',
   module: {
     loaders: [
       {

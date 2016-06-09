@@ -12,7 +12,7 @@ export default class RotaForecast extends React.Component {
         onUpdateForecastClick: React.PropTypes.func,
         isUpdatingForecast: React.PropTypes.bool
     }
-    render(){  
+    render(){
         return <div className="rota-forecast">
             {this.getForecastHeaderRow()}
             {this.getForecastBody()}
@@ -39,6 +39,7 @@ export default class RotaForecast extends React.Component {
             forecastedTakeComponent = <div>
                 &pound;&nbsp;
                 <input
+                    data-test-marker-forecasted-take
                     value={this.props.forecastedTake}
                     style={{width: "85%", textAlign: "right"}}
                     onChange={(event) => this.props.onForecastedTakeChanged(event.target.value)}
@@ -47,6 +48,7 @@ export default class RotaForecast extends React.Component {
 
             updateForecastButton = <a
                 className="btn btn-default btn-sm"
+                data-test-marker-update-forecast-button
                 onClick={this.props.onUpdateForecastClick} >
                 Update
             </a>
@@ -75,12 +77,10 @@ export default class RotaForecast extends React.Component {
         </div>
     }
     getErrorComponent(){
-        if (!this.props.errors){
-            return null;
-        }
-        return <div className="col-md-12" style={{marginBottom: -10, marginTop: 10}}>
-            <ComponentErrors errors={this.props.errors} />
-        </div>
+        return <ComponentErrors
+                errorHandlingId={this.props.errorHandlingId}
+                extraStyle={{marginBottom: -10, marginTop: 10}} />
+
     }
     getDataRowComponent(row){
         return <div className="row" key={row.title}>

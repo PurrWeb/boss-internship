@@ -1,5 +1,6 @@
 import React from "react"
 import expect from "expect"
+import Promise from "bluebird"
 import ClockInOutApp from "./clock-in-out-app"
 import { simpleRender } from "~lib/test-helpers"
 import ReactTestUtils from "react-addons-test-utils"
@@ -16,13 +17,16 @@ describe("Clock In/Out Page Integration Test", function(){
             "first_name":"Dermot",
             "surname":"O'Boyle"
         }],
-        clock_in_statuses: [{
-            "staff_member":{"id":2},
-            "status":"clocked_out"
+        clock_in_days: [{
+            id: 22,
+            date: "2016-04-29",
+            staff_member: {id: 2},
+            venue: {id: 1},
+            status: "clocked_out"
         }],
         staff_types: [{
             "id":7,
-            "name":"Bar Supervisor",
+            "name":"Manager",
             "color":"#bb4dff"
         }],
         rota_shifts: [],
@@ -72,11 +76,80 @@ describe("Clock In/Out Page Integration Test", function(){
         expect($$(".staff-list-item--clock-in-out").length).toBeGreaterThan(0);
     })
 
-    it("Shows a modal for pin entry after clicking on a staff member's clockin button", function(){
+    function accelerateTimeouts(fn){
+        // modal has a 500ms closing animation - couldn't find a config option
+        // to disable that
+        var originalSetTimeout = setTimeout;
+        window.setTimeout =  function(callback, time){
+            return originalSetTimeout(callback, time / 100);
+        }
+        fn();
+        window.setTimeout = originalSetTimeout;
+    }
+
+    function closePinModal(onClosed){
+        var closeButton = getPinModal().parentElement.querySelector(".closeButton--jss-0-1")
+
+        accelerateTimeouts(function(){
+            ReactTestUtils.Simulate.click(closeButton)
+        })
+
+        _.delay(function(){
+            expect(getPinModal()).toBe(undefined)
+            onClosed();
+        }, 10)
+    }
+
+    function getPinModal(){
+        return document.querySelectorAll("[data-test-marker-pin-modal]")[0];
+    }
+
+    it("Shows a modal for pin entry after clicking on a staff member's clockin button", function(done){
         ReactTestUtils.Simulate.click($$("[data-test-marker-toggle-staff-status]")[0])
         // I think the PIN modal module actually injects a new body-level element,
         // so it's not inside my component
-        expect(document.querySelectorAll("[data-test-marker-pin-modal]").length).toBeGreaterThan(0);
+        expect(getPinModal()).toNotBe(undefined)
+        closePinModal(done)
     });
+
+    it("Shows a modal after clicking on 'Enter Manager Mode'", function(){
+        ReactTestUtils.Simulate.click($$("[data-test-marker-enter-manager-mode]")[0]);
+        expect(getPinModal()).toNotBe(undefined)
+    })
+
+    it("Logs the manager in after entering a PIN and shows change PIN buttons for users", function(done){
+        var promise = Promise.resolve({access_token: "", expires_at: new Date(2050,10,10)})
+
+        var pinInput = getPinModal().querySelector("input[type='text']");
+
+        pinInput.value = "1234"
+        ReactTestUtils.Simulate.change(pinInput);
+
+        expect.spyOn($, "ajax").andReturn(promise);
+        var form = getPinModal().querySelector("form")
+
+        accelerateTimeouts(function(){
+            ReactTestUtils.Simulate.submit(form)
+        });
+
+        _.delay(function(){
+            expect(getPinModal()).toBe(undefined)
+            expect($$("[data-test-marker-change-pin-button]").length).toBeGreaterThan(0)
+
+            $.ajax.restore()
+
+            done();
+        }, 10);
+    })
+
+    it("Shows a modal after clicking on 'Change PIN'", function(done){
+        var changePinButton = $$("[data-test-marker-change-pin-button]")[0];
+        ReactTestUtils.Simulate.click(changePinButton);
+
+        _.defer(function(){
+            expect(getPinModal()).toNotBe(undefined);
+            closePinModal(done)
+        })
+    })
 
 });

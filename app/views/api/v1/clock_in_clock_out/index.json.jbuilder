@@ -3,9 +3,14 @@ json.staff_members do
     json.partial!('api/v1/shared/staff_member.json', locals: { staff_member: staff_member })
   end
 end
-json.clock_in_statuses do
-  json.array! clock_in_statuses do |clock_in_status|
-    json.partial! 'api/v1/shared/clock_in_status.json', locals: { clock_in_status: clock_in_status }
+json.clock_in_days do
+  json.array! clock_in_days do |clock_in_day|
+    json.partial! 'api/v1/shared/clock_in_day.json', locals: { clock_in_day: clock_in_day }
+  end
+end
+json.clock_in_notes do
+  json.array! clock_in_notes do |clock_in_note|
+    json.partial! 'api/v1/shared/clock_in_note.json', locals: { clock_in_note: clock_in_note }
   end
 end
 json.staff_types do

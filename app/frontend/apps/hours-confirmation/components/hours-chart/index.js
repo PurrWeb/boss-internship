@@ -2,35 +2,52 @@ import React from "react"
 import RotaDate from "~lib/rota-date"
 import _ from "underscore"
 import moment from "moment"
-import convertClockInHoursToIntervals from "./convert-clock-in-hours-to-intervals"
+import convertClockInPeriodToIntervals from "./convert-clock-in-period-to-intervals"
 import HoursChartUi from "./hours-chart-content"
 
 export default class HoursChart extends React.Component {
     static propTypes = {
-        clockedClockIns: React.PropTypes.array.isRequired,
+        clockedClockInPeriods: React.PropTypes.array.isRequired,
         rotaedShifts: React.PropTypes.array.isRequired,
-        proposedAcceptedClockIns: React.PropTypes.array.isRequired,
+        hoursAcceptancePeriods: React.PropTypes.array.isRequired,
         rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired,
-        events: React.PropTypes.array.isRequired
+        clockInEvents: React.PropTypes.array.isRequired
+    }
+    constructor(props){
+        super(props)
+        this.state = {
+            interactionState: {
+                hoveredInterval: null
+            }
+        }
     }
     render(){
         return <HoursChartUi
             clockedIntervals={this.getClockedChartIntervals()}
-            proposedAcceptedIntervals={this.getProposedAcceptedIntervals()}
+            hoursAcceptanceIntervals={this.getHoursAcceptanceIntervals()}
             rotaedIntervals={this.getRotaedChartIntervals()}
             events={this.getEventsList()}
+            interactionState={this.state.interactionState}
+            onHoveredIntervalChange={(hoveredInterval) =>
+                this.setInteractionState({hoveredInterval})
+            }
             />
     }
     getEventsList(){
-        return this.props.events.map((event) => {
+        return this.props.clockInEvents.map((event) => {
             return {
-                timeOffset: this.getHoursSinceStartOfDay(event.time),
-                type: event.type
+                timeOffset: this.getHoursSinceStartOfDay(event.at),
+                type: event.event_type
             }
         })
     }
-    getProposedAcceptedIntervals(){
-        return this.getIntervalsFromClockInList(this.props.proposedAcceptedClockIns)
+    setInteractionState(interactionState){
+        this.setState({
+            interactionState: Object.assign({}, this.state.interactionState, interactionState)
+        })
+    }
+    getHoursAcceptanceIntervals(){
+        return this.getIntervalsFromClockInPeriodList(this.props.hoursAcceptancePeriods)
     }
     getDateFromHoursOffset(hoursOffset){
         var date = new Date(this.props.rotaDate.startTime);
@@ -54,25 +71,27 @@ export default class HoursChart extends React.Component {
     getHoursSinceStartOfDay(date){
         return this.props.rotaDate.getHoursSinceStartOfDay(date);
     }
-    getIntervalsFromClockInList(clockInList){
+    getIntervalsFromClockInPeriodList(clockInList){
         var clockedIntervals = []
-        clockInList.forEach(function(clockIn){
-            clockedIntervals = clockedIntervals.concat(convertClockInHoursToIntervals(clockIn))
+        clockInList.forEach((clockIn) => {
+            clockedIntervals = clockedIntervals.concat(convertClockInPeriodToIntervals(clockIn, this.props.clockInBreaks))
         })
 
         var intervals = clockedIntervals.map((interval) => {
             var startTime = interval.starts_at;
             var endTime = interval.ends_at;
+            var tooltipLabel = moment(startTime).format("HH:mm") + " - " + moment(endTime).format("HH:mm");
             return {
                 startOffsetInHours: this.getHoursSinceStartOfDay(startTime),
                 endOffsetInHours: this.getHoursSinceStartOfDay(endTime),
-                type: interval.type
+                type: interval.type,
+                tooltipLabel
             }
         });
 
         return intervals;
     }
     getClockedChartIntervals(){
-        return this.getIntervalsFromClockInList(this.props.clockedClockIns)
+        return this.getIntervalsFromClockInPeriodList(this.props.clockedClockInPeriods)
     }
 }

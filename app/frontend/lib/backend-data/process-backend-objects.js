@@ -1,11 +1,7 @@
 import _ from "underscore"
-import { processBackendObject, processObjectLinks } from "./process-backend-object.js"
+import { objectHasBeenProcessed, processBackendObject, processObjectLinks, getClientId } from "./process-backend-object.js"
 
 export function processRotaObject(rota){
-    if (rota.id === null){
-        rota = {...rota};
-        rota.id = "UNPERSISTED_ROTA_" + _.uniqueId();
-    }
     var newRota = processBackendObject(rota);
 
     var date = rota.date;
@@ -31,17 +27,19 @@ export function processStaffMemberObject(staffMember){
     return staffMember;
 }
 
-export function processStaffStatusObject(staffStatus){
-    var staffStatus = {...staffStatus};
-    processObjectLinks(staffStatus);
-    return staffStatus;
-}
-
 export function processPageOptionsObject(pageOptions){
     // page options doesn't have an id, but we want to resolve IDs
     // in any links it contains
     pageOptions = {...pageOptions};
     processObjectLinks(pageOptions);
+
+    if (pageOptions.date){
+        pageOptions.date = new Date(pageOptions.date)
+    }
+    if (pageOptions.dateOfRota){
+        pageOptions.dateOfRota =  new Date(pageOptions.dateOfRota)
+    }
+
     return pageOptions;
 }
 
@@ -49,7 +47,60 @@ export function processStaffTypeObject(staffMember){
     return processBackendObject(staffMember);
 }
 
-export function processShiftObject(shift){
+export function processClockInPeriodObject(clockInPeriod){
+    clockInPeriod = processBackendObject(clockInPeriod);
+    clockInPeriod.starts_at = new Date(clockInPeriod.starts_at)
+    // clock in periods can be incomplete
+    if (clockInPeriod.ends_at !== null) {
+        clockInPeriod.ends_at = new Date(clockInPeriod.ends_at)
+    }
+    return clockInPeriod;
+}
+
+export function processHoursAcceptancePeriodObject(processHoursAcceptancePeriod){
+    processHoursAcceptancePeriod = processBackendObject(processHoursAcceptancePeriod);
+    processHoursAcceptancePeriod.starts_at = new Date(processHoursAcceptancePeriod.starts_at)
+    processHoursAcceptancePeriod.ends_at = new Date(processHoursAcceptancePeriod.ends_at)
+
+    return processHoursAcceptancePeriod;
+}
+
+
+export function processClockInEventObject(clockInEvent){
+    clockInEvent = processBackendObject(clockInEvent);
+    clockInEvent.at = new Date(clockInEvent.at);
+    return clockInEvent
+}
+
+export function processClockInNoteObject(clockInNote){
+    return processBackendObject(clockInNote);
+}
+
+export function processHoursAcceptanceReasonObject(clockInReason){
+    return processBackendObject(clockInReason);
+}
+
+export function processClockInBreakObject(clockInBreak){
+    clockInBreak = processBackendObject(clockInBreak);
+    clockInBreak.starts_at = new Date(clockInBreak.starts_at);
+    if (clockInBreak.ends_at !== null) {
+        // can be null if break is still in progress
+        clockInBreak.ends_at = new Date(clockInBreak.ends_at);
+    }
+
+    return clockInBreak;
+}
+
+export function processHoursAcceptanceBreakObject(hoursAcceptanceBreak){
+    hoursAcceptanceBreak = processBackendObject(hoursAcceptanceBreak);
+    hoursAcceptanceBreak.starts_at = new Date(hoursAcceptanceBreak.starts_at);
+    hoursAcceptanceBreak.ends_at = new Date(hoursAcceptanceBreak.ends_at)
+
+    return hoursAcceptanceBreak;
+}
+
+
+export function processRotaShiftObject(shift){
     shift = processBackendObject(shift);
 
     return Object.assign({}, shift, {
@@ -84,10 +135,16 @@ export function processRotaForecastObject(rotaForecast){
     return processedForecast;
 }
 
+export function processClockInDayObject(clockInDay){
+    clockInDay = processBackendObject(clockInDay)
+    clockInDay.date = new Date(clockInDay.date)
+    return clockInDay
+}
+
 export function processStaffTypeRotaOverviewObject(obj){
     return {
         date: new Date(obj.date),
-        rota_shifts: obj.rota_shifts.map(processShiftObject),
+        rota_shifts: obj.rota_shifts.map(processRotaShiftObject),
         rotas: obj.rotas.map(processRotaObject),
         staff_members: obj.staff_members.map(processStaffMemberObject),
         staff_types: obj.staff_types.map(processStaffTypeObject),
@@ -98,8 +155,31 @@ export function processStaffTypeRotaOverviewObject(obj){
 export function processVenueRotaOverviewObject(obj){
     return {
         rota: processRotaObject(obj.rota),
-        rota_shifts: obj.rota_shifts.map(processShiftObject),
+        rota_shifts: obj.rota_shifts.map(processRotaShiftObject),
         staff_members: obj.staff_members.map(processStaffMemberObject),
         staff_types: obj.staff_types.map(processStaffTypeObject)
     }
 }
+
+export function processHolidayAppViewData(viewData){
+    var pageData = {...viewData.pageData};
+    var venueServerId = pageData.venueId;
+    delete pageData.venueId;
+    pageData.venueServerId = venueServerId;
+    if (venueServerId === null){
+        // no venue filter
+        pageData.venueClientId = null;
+    } else {
+        pageData.venueClientId = getClientId(pageData.venueServerId);
+    }
+
+    return {
+        staffTypes: viewData.staffTypes.map(processStaffTypeObject),
+        staffMembers: viewData.staffMembers.map(processStaffMemberObject),
+        holidays: viewData.holidays.map(processHolidayObject),
+        venues: viewData.venues.map(processVenueObject),
+        pageData
+    }
+}
+
+export {objectHasBeenProcessed}

@@ -10,6 +10,8 @@ class StaffMember < ActiveRecord::Base
   has_many :work_venues, through: :staff_member_venues, source: :venue
   belongs_to :master_venue, class_name: 'Venue', inverse_of: :master_staff_members
 
+  has_many :clock_in_days
+
   belongs_to :address, inverse_of: :staff_member
   accepts_nested_attributes_for :address, allow_destroy: false
 

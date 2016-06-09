@@ -60,7 +60,7 @@ class AddShiftView extends React.Component {
 function mapStateToProps(state){
     var dateOfRota = state.pageOptions.dateOfRota;
     return {
-        staff: state.staff,
+        staff: state.staffMembers,
         staffTypes: state.staffTypes,
         venues: state.venues,
         dateOfRota,

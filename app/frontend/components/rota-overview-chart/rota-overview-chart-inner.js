@@ -29,7 +29,7 @@ export default class RotaOverviewChartInner extends Component {
         onElementMouseover: React.PropTypes.func.isRequired,
         onElementMouseout: React.PropTypes.func.isRequired,
         tooltipGenerator: React.PropTypes.func.isRequired,
-        rotaDate: React.PropTypes.func.isRequired
+        rotaDate: React.PropTypes.object.isRequired
     }
     render() {
         var self = this;

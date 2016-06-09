@@ -46,7 +46,7 @@ describe('Rota StaffListItem', function() {
     };
 
     var storeState = {
-        staff: utils.indexByClientId([staffMember]),
+        staffMembers: utils.indexByClientId([staffMember]),
         componentErrors: {},
         staffTypes: utils.indexByClientId(staffTypes),
         rotaShifts: {},
@@ -83,7 +83,7 @@ describe('Rota StaffListItem', function() {
         var itemStoreState = {...storeState}
         var itemStaff = {...staffMember}
         itemStaff.holidays = [{clientId: getClientId(1)}]
-        itemStoreState.staff = utils.indexByClientId([itemStaff]);
+        itemStoreState.staffMembers = utils.indexByClientId([itemStaff]);
 
         var holiday = {
             start_date: new Date(2016,0,1),
