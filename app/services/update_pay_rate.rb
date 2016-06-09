@@ -41,6 +41,7 @@ class UpdatePayRate
       joins(:rota_shifts).
       merge(
         RotaShift.
+        enabled.
         joins(:staff_member).
         merge(
           pay_rate_staff_members
