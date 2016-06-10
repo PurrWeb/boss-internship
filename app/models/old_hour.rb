@@ -11,8 +11,13 @@ class OldHour < ActiveRecord::Base
   validates :note, presence: true
 
   def week_start_date_valid
+    return unless week_start_date.present?
     if RotaWeek.new(week_start_date).start_date != week_start_date
       errors.add(:week_start_date, 'must be at start of week')
+    end
+
+    if RotaWeek.new(week_start_date).start_date < RotaWeek.new(Time.current).start_date
+      errors.add(:base, 'Cannot create old hours for weeks in the past')
     end
   end
 
