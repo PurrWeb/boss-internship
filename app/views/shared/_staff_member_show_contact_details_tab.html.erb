@@ -1,0 +1,43 @@
+<dl>
+  <dt class="show-page-detail-heading">Email Address</dt>
+  <dd class="show-page-detail" data-detail="email"><%= staff_member.email || 'Not supplied' %></dd>
+
+  <dt class="show-page-detail-heading">Phone number</dt>
+  <dd class="show-page-detail" data-detail="phone-number"><%= staff_member.phone_number.present? ? staff_member.phone_number : 'Not supplied' %></dd>
+
+  <dt class="show-page-detail-heading">Address</dt>
+  <% if staff_member.address.present? %>
+    <dd>
+      <% if staff_member.address.address_1.present? %>
+        <dd class="show-page-detail" data-detail="address-1"><%= staff_member.address.address_1 %></dd>
+      <% end %>
+      <% if staff_member.address.address_2.present? %>
+        <dd class="show-page-detail" data-detail="address-2"><%= staff_member.address.address_2 %></dd>
+      <% end %>
+      <% if staff_member.address.address_3.present? %>
+        <dd class="show-page-detail" data-detail="address-3"><%= staff_member.address.address_3 %></dd>
+      <% end %>
+      <% if staff_member.address.address_4.present? %>
+        <dd class="show-page-detail" data-detail="address-4"><%= staff_member.address.address_4 %></dd>
+      <% end %>
+      <% if staff_member.address.region.present? %>
+        <dd  class="show-page-detail" data-detail="region"><%= staff_member.address.region %></dd>
+      <% end %>
+      <% if staff_member.address.country.present? %>
+        <dd  class="show-page-detail" data-detail="country"><%= staff_member.address.country %></dd>
+      <% end %>
+      <% if staff_member.address.postcode.present? %>
+        <dd  class="show-page-detail" data-detail="postcode"><%= staff_member.address.postcode %></dd>
+      <% end %>
+    </dd>
+  <% else %>
+    <dd>Not Supplied</dd>
+  <% end %>
+  <% if staff_member.enabled? %>
+    <%= link_to(
+          'Edit',
+          edit_contact_details_staff_member_path(staff_member),
+          class: ['btn', 'btn-primary', 'staff-member-edit-contact-details-button']
+        ) %>
+  <% end %>
+</dl>
