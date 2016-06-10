@@ -37,13 +37,7 @@ class NewStaffMemberDetailsPDF
     end
 
     result << ['Staff Type', staff_member.staff_type.name]
-
-    pay_rate_name = staff_member.pay_rate.name
-    pay_rate_amount = number_to_currency(staff_member.pay_rate.pounds_per_hour, unit: '£', precision: 2)
-    result << [
-      'Pay Rate',
-      "#{pay_rate_name} #{pay_rate_amount}/h"
-    ]
+    result << ['Pay Rate', staff_member.pay_rate.text_description]
 
     if staff_member.security?
       result << ['SIA Badge Number', staff_member.sia_badge_number]
