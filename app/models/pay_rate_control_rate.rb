@@ -9,10 +9,16 @@ class PayRateControlRate
   def name
     if !pay_rate.editable_by?(user)
       pay_rate.name
-    elsif pay_rate.admin?
-      "Admin | #{pay_rate.name} (#{number_to_currency(pay_rate.pounds_per_hour, unit: '£')}/Hour)"
     else
-      "#{pay_rate.name} (#{number_to_currency(pay_rate.pounds_per_hour, unit: '£')}/Hour)"
+      result = ""
+      if pay_rate.admin?
+        result = result + "Admin | "
+      end
+      result = result + pay_rate.name.to_s
+      result = result + " ("
+      result = result + pay_rate.text_description
+      result = result + ")"
+      result
     end
   end
 

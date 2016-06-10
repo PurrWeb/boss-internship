@@ -9,6 +9,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Calculation Type</th>
         <th>Rate</th>
         <th></th>
       </tr>
@@ -17,7 +18,8 @@
       <% pay_rates.each do |pay_rate| %>
         <tr>
           <td><%= pay_rate.name %></td>
-          <td><%= number_to_currency(pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
+          <td><%= PayRate.calculation_type_display_name(pay_rate.calculation_type) %></td>
+          <td><%= number_to_currency(pay_rate.rate_in_pounds, unit: '£', precision: 2) %></td>
           <td>
             <%= link_to('Edit', edit_pay_rate_path(pay_rate), class: 'btn btn-success') %>
             <% if pay_rate.deletable? %>
@@ -43,6 +45,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Calculation Type</th>
         <th>Rate</th>
         <th></th>
       </tr>
@@ -51,7 +54,8 @@
       <% admin_pay_rates.each do |admin_pay_rate| %>
         <tr>
           <td><%= admin_pay_rate.name %></td>
-          <td><%= number_to_currency(admin_pay_rate.pounds_per_hour, unit: '£', precision: 2) %>/h</td>
+          <td><%= PayRate.calculation_type_display_name(admin_pay_rate.calculation_type) %></td>
+          <td><%= number_to_currency(admin_pay_rate.rate_in_pounds, unit: '£', precision: 2) %></td>
           <td>
             <%= link_to('Edit', edit_pay_rate_path(admin_pay_rate), class: 'btn btn-success') %>
             <% if admin_pay_rate.deletable? %>

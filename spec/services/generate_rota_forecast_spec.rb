@@ -32,7 +32,7 @@ RSpec.describe GenerateRotaForecast do
     end
 
     context 'a default staff member exists with a shift on the rota' do
-      let(:pay_rate) { FactoryGirl.create(:pay_rate, cents_per_hour: 1500) }
+      let(:pay_rate) { FactoryGirl.create(:pay_rate, cents: 1500) }
       let(:staff_type) { FactoryGirl.create(:staff_type) }
       let!(:staff_member) do
         FactoryGirl.create(
@@ -67,7 +67,7 @@ RSpec.describe GenerateRotaForecast do
     end
 
     context 'a pr exists with a shift on the rota' do
-      let(:pay_rate) { FactoryGirl.create(:pay_rate, cents_per_hour: 1500) }
+      let(:pay_rate) { FactoryGirl.create(:pay_rate, cents: 1500) }
       let(:pr_staff_type) { FactoryGirl.create(:pr_staff_type) }
       let!(:staff_member) do
         FactoryGirl.create(
@@ -102,7 +102,7 @@ RSpec.describe GenerateRotaForecast do
     end
 
     context 'a member of kitchen staff exists with a shift on the rota' do
-      let(:pay_rate) { FactoryGirl.create(:pay_rate, cents_per_hour: 1500) }
+      let(:pay_rate) { FactoryGirl.create(:pay_rate, cents: 1500) }
       let(:kitchen_staff_type) { FactoryGirl.create(:kitchen_staff_type) }
       let!(:staff_member) do
         FactoryGirl.create(
@@ -137,7 +137,7 @@ RSpec.describe GenerateRotaForecast do
     end
 
     context 'a member of security staff exists with a shift on the rota' do
-      let(:pay_rate) { FactoryGirl.create(:pay_rate, cents_per_hour: 1500) }
+      let(:pay_rate) { FactoryGirl.create(:pay_rate, cents: 1500) }
       let!(:staff_member) do
         FactoryGirl.create(
           :staff_member,

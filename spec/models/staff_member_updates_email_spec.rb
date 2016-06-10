@@ -120,7 +120,7 @@ describe StaffMemberUpdatesEmail do
     specify do
       expect(
         subject.data.fetch(:changed_attribute_data)
-      ).to include(pay_rate: 'New Pay Rate £10.00/h')
+      ).to include(pay_rate: '£10.00 Per Hour')
     end
   end
 

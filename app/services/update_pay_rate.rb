@@ -5,10 +5,11 @@ class UpdatePayRate
     end
   end
 
-  def initialize(pay_rate:, name:, cents_per_hour:)
+  def initialize(pay_rate:, name:, calculation_type:, cents:)
     @pay_rate = pay_rate
     @name = name
-    @cents_per_hour = cents_per_hour
+    @calculation_type = calculation_type
+    @cents = cents
   end
 
   def call
@@ -16,9 +17,10 @@ class UpdatePayRate
 
     pay_rate.assign_attributes(
       name: name,
-      cents_per_hour: cents_per_hour
+      calculation_type: calculation_type,
+      cents: cents
     )
-    pay_rate_changed = pay_rate.cents_per_hour_changed?
+    pay_rate_changed = pay_rate.cents_changed? || pay_rate.calculation_type_changed?
 
     ActiveRecord::Base.transaction do
       result = pay_rate.save
@@ -32,7 +34,7 @@ class UpdatePayRate
   end
 
   private
-  attr_reader :pay_rate, :name, :cents_per_hour
+  attr_reader :pay_rate, :name, :calculation_type, :cents
 
   def update_related_forecasts(pay_rate)
     pay_rate_staff_members = StaffMember.where(pay_rate: pay_rate)
@@ -41,6 +43,7 @@ class UpdatePayRate
       joins(:rota_shifts).
       merge(
         RotaShift.
+        enabled.
         joins(:staff_member).
         merge(
           pay_rate_staff_members
