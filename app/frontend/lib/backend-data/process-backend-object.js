@@ -108,6 +108,9 @@ export function processBackendObject(backendObj){
 export {processObjectLinks}
 
 export function objectHasBeenProcessed(backendObj){
+    if (backendObj === undefined) {
+        throw ("undefined backendObj passed into objectHasBeenProcessed")
+    }
     return backendObj.clientId !== undefined
 }
 

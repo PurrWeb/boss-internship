@@ -47,7 +47,7 @@ export default function makeApiRequestMaker(apiOptions){
             if (typeof accessToken === "undefined") {
                 callback(window.boss.access_token);
             } else if (typeof accessToken === "string") {
-                makeRequest(accessToken)
+                callback(accessToken)
             } else if (accessToken.pin !== undefined && accessToken.staffMemberServerId !== undefined
             ||
             accessToken.api_key !== undefined) {
@@ -92,7 +92,6 @@ export default function makeApiRequestMaker(apiOptions){
                 data = JSON.stringify(data)
                 contentType = "application/json"
             }
-
             $.ajax({
                url: API_ROOT + path,
                method: method,

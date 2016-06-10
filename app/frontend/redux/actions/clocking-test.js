@@ -21,7 +21,11 @@ describe("Clocking Actions", function(){
             }
         } }
 
-        var promise = Promise.resolve({})
+        var promise = Promise.resolve({
+            clock_in_day: {
+                id: 44
+            }
+        })
 
         expect.spyOn($, "ajax").andReturn(promise)
 

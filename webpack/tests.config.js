@@ -1,6 +1,7 @@
 // Use bluebird so unhandled exceptions aren't swallowed by default
 import Promise from "bluebird"
 Promise.onPossiblyUnhandledRejection(function(err){
+    console.warn("Unhandled exception in Promise")
     throw err;
 })
 
