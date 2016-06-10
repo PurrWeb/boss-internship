@@ -2,7 +2,11 @@
 import Promise from "bluebird"
 Promise.onPossiblyUnhandledRejection(function(err){
     console.warn("Unhandled exception in Promise")
-    throw err;
+    // throw error on next tick, because Karam won't
+    // recognize it if it's still inside the promise logic
+    setTimeout(function(){
+        throw err;
+    })
 })
 
 var context = require.context('../app/frontend', true, /-test\.jsx?$/);

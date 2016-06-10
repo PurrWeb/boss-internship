@@ -120,6 +120,7 @@ class ClockInOutStaffListItem extends Component {
         return <button
             className="btn btn-default btn-sm"
             style={{marginRight: 2}}
+            data-test-marker-add-note
             onClick={() => this.props.addNote(
                 this.props.staff,
                 this.props.clockInDay
