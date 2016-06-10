@@ -15,7 +15,13 @@ class NewStaffMemberDetailsPDF
   def data
     result = []
     result << ['Name', staff_member.full_name.titlecase]
-    result << ['Date of Birth', staff_member.date_of_birth.to_s(:human_date)]
+
+    if staff_member.date_of_birth.present?
+      result << ['Date of Birth', staff_member.date_of_birth.to_s(:human_date)]
+    else
+      result << ['Date of Birth', 'Not Supplied']
+    end
+
     result << ['Gender', staff_member.gender.titlecase]
 
     if staff_member.national_insurance_number.present?
@@ -31,13 +37,7 @@ class NewStaffMemberDetailsPDF
     end
 
     result << ['Staff Type', staff_member.staff_type.name]
-
-    pay_rate_name = staff_member.pay_rate.name
-    pay_rate_amount = number_to_currency(staff_member.pay_rate.pounds_per_hour, unit: '£', precision: 2)
-    result << [
-      'Pay Rate',
-      "#{pay_rate_name} #{pay_rate_amount}/h"
-    ]
+    result << ['Pay Rate', staff_member.pay_rate.text_description]
 
     if staff_member.security?
       result << ['SIA Badge Number', staff_member.sia_badge_number]
