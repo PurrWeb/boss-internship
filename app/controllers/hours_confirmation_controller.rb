@@ -44,7 +44,7 @@ class HoursConfirmationController < ApplicationController
       venues = if current_user.has_all_venue_access?
         Venue.all
       else
-        user.venues
+        current_user.venues
       end
 
       rota = Rota.where(
@@ -134,7 +134,7 @@ class HoursConfirmationController < ApplicationController
       venues = if current_user.has_all_venue_access?
         Venue.all
       else
-        user.venues
+        current_user.venues
       end
 
       rota = Rota.where(
