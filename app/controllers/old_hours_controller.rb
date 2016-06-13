@@ -31,14 +31,14 @@ class OldHoursController < ApplicationController
   end
 
   def edit
-    old_hour = OldHour.find(params[:id])
+    old_hour = OldHour.enabled.find(params[:id])
     authorize! :manage, old_hour
 
     render locals: { old_hour: old_hour }
   end
 
   def update
-    old_hour = OldHour.find(params[:id])
+    old_hour = OldHour.enabled.find(params[:id])
     authorize! :manage, old_hour
 
     result = EditOldHour.new(
@@ -60,7 +60,7 @@ class OldHoursController < ApplicationController
   end
 
   def destroy
-    old_hour = OldHour.find(params[:id])
+    old_hour = OldHour.enabled.find(params[:id])
     authorize! :manage, old_hour
 
     DeleteOldHour.new(
