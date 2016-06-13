@@ -11,7 +11,7 @@
 
 <% old_hours = OldHour.enabled.where(staff_member: staff_member).all %>
 <% if old_hours.present? %>
-  <% old_hours_by_week = old_hours.group_by { |old_hour| RotaWeek.new(old_hour.week_start_date)  } %>
+  <% old_hours_by_week = old_hours.group_by { |old_hour| RotaWeek.new(old_hour.week_start_date)  }.sort_by { |week, hours| week } %>
   <% old_hours_by_week.each do |week, hours| %>
     <p><strong>Mon <%= week.start_date %> - Sun <%= week.end_date %></strong></p>
     <p>Total: <%= hours.inject(0) { |sum, hours| sum + hours.minutes } %> minutes </p>
