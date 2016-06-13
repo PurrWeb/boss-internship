@@ -30,6 +30,35 @@ class OldHoursController < ApplicationController
     end
   end
 
+  def edit
+    old_hour = OldHour.find(params[:id])
+    authorize! :manage, old_hour
+
+    render locals: { old_hour: old_hour }
+  end
+
+  def update
+    old_hour = OldHour.find(params[:id])
+    authorize! :manage, old_hour
+
+    result = EditOldHour.new(
+      requester: current_user,
+      old_hour: old_hour,
+      params: old_hour_params
+    ).call
+
+    if result.success?
+      flash[:success] = "Old hours updated successfully"
+      redirect_to staff_member_path(result.old_hour.staff_member, tab: 'old-hours')
+    else
+      flash.now[:error] = "There was a problem updating these old hours"
+
+      render 'edit', locals: {
+        old_hour: result.old_hour
+      }
+    end
+  end
+
   def destroy
     old_hour = OldHour.find(params[:id])
     authorize! :manage, old_hour

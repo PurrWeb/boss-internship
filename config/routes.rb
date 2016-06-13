@@ -48,6 +48,7 @@ Rails.application.routes.draw do
   end
 
   resources :holidays, only: [:index, :edit, :update]
+  resources :old_hours, only: [:edit, :update]
 
   resources :staff_members, only: [:show, :index, :new, :create, :destroy] do
     resources :holidays, only: [:create, :destroy]

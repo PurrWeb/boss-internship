@@ -32,6 +32,7 @@
             <td><p><%= old_hour.note %></p></td>
             <td>
               <% if old_hour.editable? %>
+              <%= link_to('Edit', edit_old_hour_path(old_hour), class: 'btn btn-success') %>
                 <%= link_to(
                       staff_member_old_hour_path(
                         staff_member_id: staff_member.id,
