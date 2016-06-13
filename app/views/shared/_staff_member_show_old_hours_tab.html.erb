@@ -21,14 +21,29 @@
           <th>Duration (Minutes)</th>
           <th>Created By</th>
           <th>Note</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <% hours.each do |old_hour| %>
           <tr>
             <td><%= old_hour.minutes %></td>
-            <td><%= old_hour.creator.full_name %> at <%= old_hour.created_at.to_s(:human_date) %></td>
-            <td><%= old_hour.note %></td>
+            <td><%= old_hour.creator.full_name %> on <%= old_hour.created_at.to_s(:human_date) %></td>
+            <td><p><%= old_hour.note %></p></td>
+            <td>
+              <% if old_hour.editable? %>
+                <%= link_to(
+                      staff_member_old_hour_path(
+                        staff_member_id: staff_member.id,
+                        id: old_hour.id
+                      ),
+                      method: :delete,
+                      class: 'btn btn-danger'
+                    ) do %>
+                  Delete <span class="glyphicon glyphicon-remove"></span>
+                <% end %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>

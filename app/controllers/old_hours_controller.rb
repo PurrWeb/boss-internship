@@ -7,8 +7,7 @@ class OldHoursController < ApplicationController
       old_hour_params.
       merge(
         staff_member: staff_member,
-        creator: current_user,
-        enabled: true
+        creator: current_user
       )
     )
 
@@ -29,6 +28,19 @@ class OldHoursController < ApplicationController
         holiday: holiday
       }
     end
+  end
+
+  def destroy
+    old_hour = OldHour.find(params[:id])
+    authorize! :manage, old_hour
+
+    DeleteOldHour.new(
+      requester: current_user,
+      old_hour: old_hour
+    ).call
+
+    flash[:success] = 'Old hour deleted successfully'
+    redirect_to staff_member_path(old_hour.staff_member, tab: 'old-hours')
   end
 
   private

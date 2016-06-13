@@ -51,7 +51,7 @@ Rails.application.routes.draw do
 
   resources :staff_members, only: [:show, :index, :new, :create, :destroy] do
     resources :holidays, only: [:create, :destroy]
-    resources :old_hours, only: [:create]
+    resources :old_hours, only: [:create, :destroy]
     collection do
       get :flagged
     end
