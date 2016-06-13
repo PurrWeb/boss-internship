@@ -118,7 +118,7 @@ class HolidaysController < ApplicationController
       holiday: holiday
     ).call
 
-    flash[:success] = "Holiday deletedsuccessfully"
+    flash[:success] = "Holiday deleted successfully"
     redirect_to staff_member_path(staff_member, tab: 'holidays')
   end
 
