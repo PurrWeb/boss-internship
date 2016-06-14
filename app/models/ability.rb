@@ -43,6 +43,10 @@ class Ability
         holiday.editable? && can_edit_staff_member?(user, holiday.staff_member)
       end
 
+      can :manage, OldHour do |old_hour|
+        old_hour.editable? && can_edit_staff_member?(user, old_hour.staff_member)
+      end
+
       can :manage, Venue do |venue|
         can_manage_venue?(user, venue)
       end

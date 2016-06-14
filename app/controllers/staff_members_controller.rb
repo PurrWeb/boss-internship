@@ -39,10 +39,17 @@ class StaffMembersController < ApplicationController
         return redirect_to staff_member_path(staff_member, tab: 'employment-details')
       end
 
+      old_hours_week = RotaWeek.new(Time.current)
+      old_hour = OldHour.new(
+        minutes: 0,
+      )
+
       render locals: {
         staff_member: staff_member,
         active_tab: active_tab_from_params,
-        holiday: Holiday.new
+        holiday: Holiday.new,
+        old_hours_week: old_hours_week,
+        old_hour: old_hour
       }
     else
       flash.now[:alert] = "You're not authorized to view all of this staff member's details. Contact an admin for further assistance."
@@ -259,6 +266,7 @@ class StaffMembersController < ApplicationController
       'account-details',
       'personal-details',
       'contact-details',
+      'old-hours',
       'holidays'
     ]
   end

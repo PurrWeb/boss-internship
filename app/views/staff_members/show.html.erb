@@ -58,200 +58,36 @@
     <li role="presentation" class="<%= StaffMemberShowPage.tab_class('holidays', active_tab) %>">
       <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'holidays') %>" data-target="#holidays-tab">Holidays</a>
     </li>
+    <% if can?(:manage, :admin) %>
+      <li role="presentation" class="<%= StaffMemberShowPage.tab_class('old-hours', active_tab) %>">
+        <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'old-hours') %>" data-target="#old-hours-tab">Old Hours</a>
+      </li>
+    <% end %>
   </ul>
 
   <div class="tab-content">
     <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('employment-details', active_tab) %>" id="employment-tab">
-      <dl>
-        <dt class="show-page-detail-heading">Main Venue<dt>
-        <dd class="show-page-detail" data-detail="master-venue">
-          <% if staff_member.master_venue.present? %>
-            <%= staff_member.master_venue.name %>
-          <% else %>
-            N / A
-          <% end %>
-        </dd>
-        <dt class="show-page-detail-heading">Other Venues</dt>
-        <dd class="show-page-detail" data-detail="work-venues">
-          <% if staff_member.work_venues.count > 0 %>
-            <%= staff_member.work_venues.map(&:name).to_sentence %>
-          <% else %>
-            N / A
-          <% end %>
-        </dd>
-
-        <dt class="show-page-detail-heading">Job Type</dt>
-        <dd class="show-page-detail" data-detail="staff-type"><%= staff_member.staff_type.name.titlecase %></dd>
-
-        <dt class="show-page-detail-heading">Start Date</dt>
-        <dd class="show-page-detail" data-detail="start-date"><%= staff_member.starts_at.to_s(:human_date) %></dd>
-
-        <dt class="show-page-detail-heading">Pay Rate</dt>
-        <dd class="show-page-detail" data-detail="pay-rate"><%= staff_member.pay_rate.present? ? staff_member.pay_rate.name : 'Not set' %></dd>
-
-        <dt class="show-page-detail-heading">Hour Perference</dt>
-        <dd class="show-page-detail" data-detail="hour-preference"><%= staff_member.hours_preference_note.present? ? staff_member.hours_preference_note : 'Not specified' %></dd>
-
-        <dt class="show-page-detail-heading">Day Perference</dt>
-        <dd class="show-page-detail" data-detail="day-preference"><%= staff_member.day_perference_note.present? ? staff_member.day_perference_note : 'Not specified' %></dd>
-
-        <dt class="show-page-detail-heading">National Insurance Number</dt>
-        <dd class="show-page-detail" data-detail="national-insurance-number">
-          <% if staff_member.national_insurance_number.present? %>
-            <%= staff_member.national_insurance_number %>
-          <% else %>
-            <%= "Not Supplied" %>
-          <% end %>
-        </dd>
-
-        <dt class="show-page-detail-heading">Starter employment status statements</dt>
-        <% employment_status_statement = EmploymentStatusStatement.new(staff_member) %>
-        <% if employment_status_statement.point_list.present? %>
-          <dd class="show-page-detail" data-detail="employment-status-statements">
-            <%= employment_status_statement.point_list.join(', ') %>
-          </dd>
-        <% else %>
-          <dd class="show-page-detail" data-detail="employment-status-statements">_</dd>
-        <% end %>
-
-        <% if staff_member.security? %>
-          <dt class="show-page-detail-heading">SIA Badge Number</dt>
-          <dd class="show-page-detail" data-detail="sia-badge-number"><%= staff_member.sia_badge_number %></dd>
-
-          <dt class="show-page-detail-heading">SIA Badge Expiry Date</dt>
-          <dd class="show-page-detail" data-detail="sia-badge-expiry-date"><%= staff_member.sia_badge_expiry_date.to_s(:human_date) %></dd>
-        <% end %>
-
-
-        <% if staff_member.enabled? %>
-          <%= link_to(
-                'Edit',
-                edit_employment_details_staff_member_path(staff_member),
-                class: ['btn', 'btn-primary', 'staff-member-edit-employment-details-button']
-              ) %>
-        <% end %>
-      </dl>
+      <%= render partial: 'shared/staff_member_show_employment_details_tab', locals: { staff_member: staff_member } %>
     </div>
 
     <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('account-details', active_tab) %>" id="account-tab">
-      <dt class="show-page-detail-heading">Created</dt>
-      <dd class="show-page-detail" data-detail="created-at"><%= staff_member.created_at.to_date.to_s %></dd>
-
-      <dt class="show-page-detail-heading">Status</dt>
-      <dd class="show-page-detail" data-detail="status"><%= staff_member.enabled? ? 'Active' : 'Disabled' %></dd>
-
-      <% if can? :manage, :admin %>
-        <dt class="show-page-detail-heading">User</dt>
-        <dd class="show-page-detail" data-detail="user">
-          <% if staff_member.user.present? %>
-            <%= link_to(
-                  'View',
-                  user_path(staff_member.user),
-                  class: ['view-user-button', 'btn', 'btn-success']
-                )
-            %>
-          <% else %>
-            <span>No assocaited user</span>
-          <% end %>
-        </dd>
-      <% end %>
+      <%= render partial: 'shared/staff_member_show_account_details_tab', locals: { staff_member: staff_member } %>
     </div>
 
     <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('personal-details', active_tab) %>" id="personal-tab">
-      <dl>
-        <dt class="show-page-detail-heading">Name</dt>
-        <dd class="show-page-detail" data-detail="name"><%= staff_member.full_name.titlecase %></dd>
+      <%= render partial: 'shared/staff_member_show_personal_details_tab', locals: { staff_member: staff_member } %>
+    </div>
 
-        <dt class="show-page-detail-heading">Gender</dt>
-        <dd class="show-page-detail" data-detail="gender"><%= staff_member.gender.titlecase %></dd>
+    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('contact-details', active_tab) %>" id="contact-tab">
+      <%= render partial: 'shared/staff_member_show_contact_details_tab', locals: { staff_member: staff_member } %>
+    </div>
 
-        <dt class="show-page-detail-heading">Date of Birth</dt>
-        <% if staff_member.date_of_birth.present? %>
-          <dd class="show-page-detail" data-detail="date-of-birth"><%= staff_member.date_of_birth.to_date.to_s %></dd>
-        <% else %>
-          <dd class"show-page-detail" data-detail="date-of-birth">Not supplied</dd>
-        <% end %>
-        <% if staff_member.enabled? %>
-          <%= link_to(
-                'Edit',
-                edit_personal_details_staff_member_path(staff_member),
-                class: ['btn', 'btn-primary', 'staff-member-edit-personal-details-button']
-              ) %>
-        <% end %>
-      </div>
+    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('holidays', active_tab) %>" id="holidays-tab">
+      <%= render partial: 'shared/staff_member_show_holidays_tab', locals: { staff_member: staff_member, holiday: holiday } %>
+    </div>
 
-      <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('contact-details', active_tab) %>" id="contact-tab">
-        <dl>
-          <dt class="show-page-detail-heading">Email Address</dt>
-          <dd class="show-page-detail" data-detail="email"><%= staff_member.email || 'Not supplied' %></dd>
-
-          <dt class="show-page-detail-heading">Phone number</dt>
-          <dd class="show-page-detail" data-detail="phone-number"><%= staff_member.phone_number.present? ? staff_member.phone_number : 'Not supplied' %></dd>
-
-          <dt class="show-page-detail-heading">Address</dt>
-          <% if staff_member.address.present? %>
-            <dd>
-              <% if staff_member.address.address_1.present? %>
-                <dd class="show-page-detail" data-detail="address-1"><%= staff_member.address.address_1 %></dd>
-              <% end %>
-              <% if staff_member.address.address_2.present? %>
-                <dd class="show-page-detail" data-detail="address-2"><%= staff_member.address.address_2 %></dd>
-              <% end %>
-              <% if staff_member.address.address_3.present? %>
-                <dd class="show-page-detail" data-detail="address-3"><%= staff_member.address.address_3 %></dd>
-              <% end %>
-              <% if staff_member.address.address_4.present? %>
-                <dd class="show-page-detail" data-detail="address-4"><%= staff_member.address.address_4 %></dd>
-              <% end %>
-              <% if staff_member.address.region.present? %>
-                <dd  class="show-page-detail" data-detail="region"><%= staff_member.address.region %></dd>
-              <% end %>
-              <% if staff_member.address.country.present? %>
-                <dd  class="show-page-detail" data-detail="country"><%= staff_member.address.country %></dd>
-              <% end %>
-              <% if staff_member.address.postcode.present? %>
-                <dd  class="show-page-detail" data-detail="postcode"><%= staff_member.address.postcode %></dd>
-              <% end %>
-            </dd>
-          <% else %>
-            <dd>Not Supplied</dd>
-          <% end %>
-          <% if staff_member.enabled? %>
-            <%= link_to(
-                  'Edit',
-                  edit_contact_details_staff_member_path(staff_member),
-                  class: ['btn', 'btn-primary', 'staff-member-edit-contact-details-button']
-                ) %>
-          <% end %>
-        </dl>
-      </div>
-      <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('holidays', active_tab) %>" id="holidays-tab">
-        <% if staff_member.enabled? %>
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <span>Add holiday</span>
-            </div>
-            <div class="panel-body">
-              <%= render partial: 'shared/add_holiday_form', locals: { holiday: holiday, staff_member: staff_member } %>
-            </div>
-          </div>
-        <% end %>
-
-        <h2>Holidays</h2>
-        <% if staff_member.active_holidays.present? %>
-          <% holidays_this_year = HolidayThisYearQuery.new(relation: staff_member.active_holidays).all %>
-          <% if holidays_this_year.present? %>
-            <% paid_days = holidays_this_year.paid.to_a.sum { |holiday| holiday.days } %>
-            <% unpaid_days = holidays_this_year.unpaid.to_a.sum { |holiday| holiday.days } %>
-            <p><%= pluralize(paid_days, 'Paid day') %> this year</p>
-            <p><%= pluralize(unpaid_days, 'Unpaid day') %> this year</p>
-          <% end %>
-
-          <%= render partial: 'shared/holidays_table', locals: { staff_member: staff_member, holidays: staff_member.active_holidays } %>
-        <% else %>
-          <div>No holidays</div>
-        <% end %>
-      </div>
+    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('old-hours', active_tab) %>" id="old-hours-tab">
+      <%= render partial: 'shared/staff_member_show_old_hours_tab', locals: { staff_member: staff_member, old_hours_week: old_hours_week, old_hour: old_hour } %>
     </div>
   </div>
 </div>

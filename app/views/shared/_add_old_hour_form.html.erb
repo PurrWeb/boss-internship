@@ -1,0 +1,12 @@
+<% if old_hour.errors[:base].present? %>
+  <div class="alert alert-danger" role="alert">
+    <%= old_hour.errors[:base].to_sentence %>
+  </div>
+<% end %>
+
+<%= bootstrap_form_for(old_hour, url: staff_member_old_hours_path(staff_member_id: staff_member.id)) do |form| %>
+  <%= render partial: 'shared/old_hour_form_fields', locals: { form: form } %>
+  <button type="submit" class="btn btn-default">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+  </button>
+<% end %>

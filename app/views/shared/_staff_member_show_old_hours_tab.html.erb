@@ -1,0 +1,55 @@
+<h2> Old Hours</h2>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <span>Add Hours</span>
+  </div>
+  <div class="panel-body">
+    <%= render partial: 'shared/add_old_hour_form', locals: { old_hour: old_hour, staff_member: staff_member } %>
+  </div>
+</div>
+
+<% old_hours = OldHour.enabled.where(staff_member: staff_member).all %>
+<% if old_hours.present? %>
+  <% old_hours_by_week = old_hours.group_by { |old_hour| RotaWeek.new(old_hour.week_start_date)  }.sort_by { |week, hours| week } %>
+  <% old_hours_by_week.each do |week, hours| %>
+    <p><strong>Mon <%= week.start_date %> - Sun <%= week.end_date %></strong></p>
+    <p>Total: <%= hours.inject(0) { |sum, hours| sum + hours.minutes } %> minutes </p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Duration (Minutes)</th>
+          <th>Created By</th>
+          <th>Note</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% hours.each do |old_hour| %>
+          <tr>
+            <td><%= old_hour.minutes %></td>
+            <td><%= old_hour.creator.full_name %> on <%= old_hour.created_at.to_s(:human_date) %></td>
+            <td><p><%= old_hour.note %></p></td>
+            <td>
+              <% if old_hour.editable? %>
+              <%= link_to('Edit', edit_old_hour_path(old_hour), class: 'btn btn-success') %>
+                <%= link_to(
+                      staff_member_old_hour_path(
+                        staff_member_id: staff_member.id,
+                        id: old_hour.id
+                      ),
+                      method: :delete,
+                      class: 'btn btn-danger'
+                    ) do %>
+                  Delete <span class="glyphicon glyphicon-remove"></span>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    <table>
+  <% end %>
+<% else %>
+  <div>No Old Hours</div>
+<% end %>

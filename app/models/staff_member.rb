@@ -31,6 +31,8 @@ class StaffMember < ActiveRecord::Base
 
   has_many :holidays, inverse_of: :staff_member
 
+  has_many :old_hours, inverse_of: :staff_member
+
   has_many :staff_member_transitions, autosave: false
 
   belongs_to :pay_rate
@@ -170,6 +172,10 @@ class StaffMember < ActiveRecord::Base
 
   def active_holidays
     holidays.in_state(:enabled)
+  end
+
+  def active_old_hours
+    old_hours.enabled
   end
 
   def valid_pin_code_format
