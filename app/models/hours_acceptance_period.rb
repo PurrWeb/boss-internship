@@ -30,6 +30,10 @@ class HoursAcceptancePeriod < ActiveRecord::Base
     end
   end
 
+  def self.accepted
+    where(status: 'accepted')
+  end
+
   def self.pending
     where(status: 'pending')
   end
