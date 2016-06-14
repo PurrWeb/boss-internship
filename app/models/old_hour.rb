@@ -6,6 +6,7 @@ class OldHour < ActiveRecord::Base
   belongs_to :parent, class_name: 'OldHour', foreign_key: :parent_old_hour_id
   belongs_to :disabled_by, class_name: 'User', foreign_key: :disabled_by_user_id
 
+  validates :week_start_date, presence: true
   validates :minutes, numericality: { greater_than: 0 }
   validates :creator, presence: true
   validates :staff_member, presence: true
