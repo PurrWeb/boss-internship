@@ -61,4 +61,14 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   def date
     clock_in_day.andand.date
   end
+
+  def payable_hours
+    hour_length - hours_acceptance_breaks.enabled.inject(0) do |sum, _break|
+      sum + _break.hour_length
+    end
+  end
+
+  def hour_length
+    (ends_at - starts_at) / 1.hour
+  end
 end
