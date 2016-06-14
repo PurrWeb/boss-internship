@@ -71,6 +71,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :finance_reports, only: [:index]
+
   resources :staff_types, only: [:index] do
     collection do
       post :update_colors
