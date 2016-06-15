@@ -2,18 +2,41 @@ class FinanceReportsController < ApplicationController
   def index
     authorize! :manage, :admin
 
-    venue = Venue.first
-    week = RotaWeek.new(Time.current)
+    if venue_from_params.present? && week_from_params.present?
+      venue = venue_from_params
+      week = week_from_params
 
-    staff_members_data = GenerateFinanceReportData.new(
-      venue: venue,
-      week: week
-    ).call
+      staff_members_data = GenerateFinanceReportData.new(
+        venue: venue,
+        week: week
+      ).call
 
-    render locals: {
-      week: week,
-      venue: venue,
-      staff_members_data: staff_members_data
+      render locals: {
+        week: week,
+        venue: venue,
+        staff_members_data: staff_members_data
+      }
+    else
+      redirect_to(finance_reports_path(index_redirect_params))
+    end
+  end
+
+  private
+  def index_redirect_params
+    week_start = (week_from_params || RotaWeek.new(Time.current)).start_date
+    {
+      venue_id: venue_from_params.andand.id || current_user.default_venue.andand.id,
+      week_start: UIRotaDate.format(week_start),
     }
+  end
+
+  def venue_from_params
+    Venue.find_by(id: params[:venue_id])
+  end
+
+  def week_from_params
+    if params[:week_start].present?
+      RotaWeek.new(UIRotaDate.parse(params[:week_start]))
+    end
   end
 end
