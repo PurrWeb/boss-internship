@@ -1,7 +1,33 @@
 <h1>Finance Reports</h1>
 
-<p>Venue: <%= venue.name %></p>
-<p><%= week.start_date.to_s(:human_date) %> - <%= week.end_date.to_s(:human_date) %></p>
+<p><%= venue.name %> <%= week.start_date.to_s(:human_date) %> - <%= week.end_date.to_s(:human_date) %></p>
+
+<%= bootstrap_form_for('finance_reports_index', url: finance_reports_path, html: { method: :get }) do |form| %>
+  <div class="form-inline">
+    <%= form.select(
+          :venue_id,
+          options_for_select(
+            accessible_venues.map do |venue|
+              [venue.name, venue.id]
+            end,
+            venue.id
+          ),
+          {
+            include_blank: false
+          },
+          {
+            name: 'venue_id'
+          }) %>
+    <%= form.text_field(
+          :start_date,
+          label: 'Week',
+          value: week.start_date && UIRotaDate.format(week.start_date),
+          class: 'date-picker',
+          name: 'week_start'
+        ) %>
+    <%= form.submit('Update') %>
+  </div>
+<% end %>
 
 <table class="table">
   <thead>

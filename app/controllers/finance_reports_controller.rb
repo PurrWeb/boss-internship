@@ -11,9 +11,12 @@ class FinanceReportsController < ApplicationController
         week: week
       ).call
 
+      accessible_venues = AccessibleVenuesQuery.new(current_user).all
+
       render locals: {
         week: week,
         venue: venue,
+        accessible_venues: accessible_venues,
         staff_members_data: staff_members_data
       }
     else
