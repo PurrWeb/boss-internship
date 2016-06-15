@@ -6,7 +6,12 @@ class GenerateFinanceReportData
   attr_reader :staff_member, :week
 
   def call
-    staff_member_data = {}
+    report_data = FinanceReport.new(
+      staff_member: staff_member,
+      staff_member_name: staff_member.full_name,
+      week_start: week.start_date,
+      pay_rate_description: staff_member.pay_rate.text_description
+    )
 
     staff_member_clock_in_days = ClockInDay.
       where(staff_member: staff_member)
@@ -63,14 +68,14 @@ class GenerateFinanceReportData
       saturday_hours_count +
       sunday_hours_count
 
-    staff_member_data[:monday_hours_count] = monday_hours_count
-    staff_member_data[:tuesday_hours_count] = tuesday_hours_count
-    staff_member_data[:wednesday_hours_count] = wednesday_hours_count
-    staff_member_data[:thursday_hours_count] = thursday_hours_count
-    staff_member_data[:friday_hours_count] = friday_hours_count
-    staff_member_data[:saturday_hours_count] = saturday_hours_count
-    staff_member_data[:sunday_hours_count] = sunday_hours_count
-    staff_member_data[:hours_count] = approved_hours_count
+    report_data.monday_hours_count = monday_hours_count
+    report_data.tuesday_hours_count = tuesday_hours_count
+    report_data.wednesday_hours_count = wednesday_hours_count
+    report_data.thursday_hours_count = thursday_hours_count
+    report_data.friday_hours_count = friday_hours_count
+    report_data.saturday_hours_count = saturday_hours_count
+    report_data.sunday_hours_count = sunday_hours_count
+    report_data.total_hours_count = approved_hours_count
 
     staff_member_holidays = Holiday.
       paid.
@@ -85,35 +90,36 @@ class GenerateFinanceReportData
       end_column_name: 'end_date'
     ).all
 
-    holiday_day_count = holidays.inject(0) do |sum, holiday|
+    holiday_days_count = holidays.inject(0) do |sum, holiday|
       sum + holiday.days
     end
 
-    staff_member_data[:holiday_day_count] = holiday_day_count
+    report_data.holiday_days_count = holiday_days_count
 
     owed_hours = OwedHoursInWeekQuery.new(
       relation: OwedHour.enabled.where(staff_member: staff_member),
       week: week
     ).all
 
-    owed_hours_minutes =  owed_hours.inject(0) do |sum, owed_hour|
+    owed_hours_minute_count = owed_hours.inject(0) do |sum, owed_hour|
       sum + owed_hour.minutes
     end
-    owed_hours_count =  owed_hours_minutes / 60
 
-    staff_member_data[:owed_hours_count] = owed_hours_count
+    owed_hours_count = owed_hours_minute_count / 60.0
+
+    report_data.owed_hours_minute_count = owed_hours_minute_count
 
     if staff_member.pay_rate.weekly?
-      staff_member_data[:total] = staff_member.pay_rate.rate_in_pounds
+      report_data.total_cents = staff_member.pay_rate.cents
     elsif staff_member.pay_rate.hourly?
-      approved_hours_total = staff_member.pay_rate.rate_in_pounds * approved_hours_count
-      owed_hours_total = staff_member.pay_rate.rate_in_pounds * owed_hours_count
+      approved_hours_total_cents = staff_member.pay_rate.cents * approved_hours_count
+      owed_hours_total_cents = staff_member.pay_rate.cents * owed_hours_count
 
-      staff_member_data[:total] = approved_hours_total + owed_hours_total
+      report_data.total_cents = approved_hours_total_cents + owed_hours_total_cents
     else
       raise "Unsupported pay rate calculation_type: #{staff_member.pay_rate.calculation_type}"
     end
 
-    staff_member_data
+    report_data
   end
 end

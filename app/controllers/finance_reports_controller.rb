@@ -8,9 +8,9 @@ class FinanceReportsController < ApplicationController
 
       staff_members = venue.master_staff_members
 
-      staff_members_data = {}
+      reports = []
       staff_members.each do |staff_member|
-        staff_members_data[staff_member] = GenerateFinanceReportData.new(
+        reports << GenerateFinanceReportData.new(
           staff_member: staff_member,
           week: week
         ).call
@@ -22,7 +22,7 @@ class FinanceReportsController < ApplicationController
         week: week,
         venue: venue,
         accessible_venues: accessible_venues,
-        staff_members_data: staff_members_data
+        reports: reports
       }
     else
       redirect_to(finance_reports_path(index_redirect_params))

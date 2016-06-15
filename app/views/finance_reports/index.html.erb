@@ -55,26 +55,26 @@
     </tr>
   </thead>
   <tbody>
-    <% staff_members_data.each do |staff_member, staff_member_data| %>
+    <% reports.each do |report| %>
       <tr>
-        <td><%= staff_member.full_name.titlecase %></td>
+        <td><%= report.staff_member_name.titlecase %></td>
         <% week.each_with_day do |date, day| %>
-          <td><%= staff_member_data.fetch("#{day}_hours_count".to_sym).round(2) %></td>
+          <td><%= report.public_send("#{day}_hours_count".to_sym).round(2) %></td>
         <% end %>
         <td>
-          <%= staff_member_data.fetch(:hours_count).round(2) %>
+          <%= report.total_hours_count.round(2) %>
         </td>
         <td>
-          <%= staff_member_data.fetch(:owed_hours_count) %>
+          <%= report.owed_hours_count %>
         </td)>
         <td>
-          <%= staff_member.pay_rate.text_description %>
+          <%= report.pay_rate_description %>
         </td>
         <td>
-          <%= number_to_currency(staff_member_data.fetch(:total), unit: '£') %>
+          <%= number_to_currency(report.total, unit: '£') %>
         </td>
         <td>
-          <%= staff_member_data.fetch(:holiday_day_count) %>
+          <%= report.holiday_days_count %>
         </td>
       </tr>
     <% end %>
