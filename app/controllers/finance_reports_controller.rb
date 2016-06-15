@@ -6,10 +6,15 @@ class FinanceReportsController < ApplicationController
       venue = venue_from_params
       week = week_from_params
 
-      staff_members_data = GenerateFinanceReportData.new(
-        venue: venue,
-        week: week
-      ).call
+      staff_members = venue.master_staff_members
+
+      staff_members_data = {}
+      staff_members.each do |staff_member|
+        staff_members_data[staff_member] = GenerateFinanceReportData.new(
+          staff_member: staff_member,
+          week: week
+        ).call
+      end
 
       accessible_venues = AccessibleVenuesQuery.new(current_user).all
 
