@@ -29,6 +29,18 @@ class FinanceReport < ActiveRecord::Base
    (owed_hours_minute_count && owed_hours_minute_count / 60) || 0
   end
 
+  def status
+    if new_record?
+      'pending'
+    else
+      'complete'
+    end
+  end
+
+  def can_complete?
+    true
+  end
+
   #validation
   def week_start_valid
     return unless week_start.present?
