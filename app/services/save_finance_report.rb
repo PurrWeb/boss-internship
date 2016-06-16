@@ -11,6 +11,8 @@ class SaveFinanceReport
       week: week
     ).call
 
+    raise "Attempt to complete incompleatable finanace report with id: #{result.report.id}" unless result.report.can_complete?
+
     ActiveRecord::Base.transaction do
       report = result.report
 
@@ -24,8 +26,8 @@ class SaveFinanceReport
         holiday.update_attributes!(frozen_by: report)
       end
 
-      result.old_hours.each do |old_hour|
-        old_hour.update_attributes!(frozen_by: report)
+      result.owed_hours.each do |owed_hour|
+        owed_hour.update_attributes!(frozen_by: report)
       end
     end
   end

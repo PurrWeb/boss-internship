@@ -40,6 +40,7 @@ class FinanceReport < ActiveRecord::Base
   def can_complete?
     return false if !new_record?
     return false if !(venue.present? && week.present? && staff_member.present?)
+    return false if week >= RotaWeek.new(Time.current)
 
     pending_clock_in_days = ClockInDaysPendingConfirmationQuery.new(
       venue: venue
