@@ -10,10 +10,13 @@ class FinanceReportsController < ApplicationController
 
       reports = []
       staff_members.each do |staff_member|
-        reports << GenerateFinanceReportData.new(
+        reports << (FinanceReport.find_by(
+          staff_member: staff_member,
+          week_start: week.start_date
+        ) || GenerateFinanceReportData.new(
           staff_member: staff_member,
           week: week
-        ).call
+        ).call.report)
       end
 
       accessible_venues = AccessibleVenuesQuery.new(current_user).all
@@ -27,6 +30,27 @@ class FinanceReportsController < ApplicationController
     else
       redirect_to(finance_reports_path(index_redirect_params))
     end
+  end
+
+  def create
+    authorize! :manage, :admin
+
+    week = week_from_params
+    staff_member = staff_member_from_params
+    venue = staff_member.master_venue
+
+    SaveFinanceReport.new(
+      staff_member: staff_member,
+      week: week
+    ).call
+
+    flash[:success] = 'Report marked successfully'
+    redirect_to(
+      finance_reports_path(
+        week_start: UIRotaDate.format(week.start_date),
+        venue_id: venue.id
+      )
+    )
   end
 
   private
@@ -46,5 +70,9 @@ class FinanceReportsController < ApplicationController
     if params[:week_start].present?
       RotaWeek.new(UIRotaDate.parse(params[:week_start]))
     end
+  end
+
+  def staff_member_from_params
+    StaffMember.find(params[:staff_member_id])
   end
 end

@@ -1,4 +1,6 @@
 class GenerateFinanceReportData
+  class Result < Struct.new(:report, :hours_acceptance_periods, :holidays, :owed_hours); end
+
   def initialize(staff_member:, week:)
     @staff_member = staff_member
     @week = week
@@ -6,7 +8,7 @@ class GenerateFinanceReportData
   attr_reader :staff_member, :week
 
   def call
-    report_data = FinanceReport.new(
+    report = FinanceReport.new(
       staff_member: staff_member,
       staff_member_name: staff_member.full_name,
       week_start: week.start_date,
@@ -70,14 +72,14 @@ class GenerateFinanceReportData
       saturday_hours_count +
       sunday_hours_count
 
-    report_data.monday_hours_count = monday_hours_count
-    report_data.tuesday_hours_count = tuesday_hours_count
-    report_data.wednesday_hours_count = wednesday_hours_count
-    report_data.thursday_hours_count = thursday_hours_count
-    report_data.friday_hours_count = friday_hours_count
-    report_data.saturday_hours_count = saturday_hours_count
-    report_data.sunday_hours_count = sunday_hours_count
-    report_data.total_hours_count = approved_hours_count
+    report.monday_hours_count = monday_hours_count
+    report.tuesday_hours_count = tuesday_hours_count
+    report.wednesday_hours_count = wednesday_hours_count
+    report.thursday_hours_count = thursday_hours_count
+    report.friday_hours_count = friday_hours_count
+    report.saturday_hours_count = saturday_hours_count
+    report.sunday_hours_count = sunday_hours_count
+    report.total_hours_count = approved_hours_count
 
     staff_member_holidays = Holiday.
       paid.
@@ -96,7 +98,7 @@ class GenerateFinanceReportData
       sum + holiday.days
     end
 
-    report_data.holiday_days_count = holiday_days_count
+    report.holiday_days_count = holiday_days_count
 
     owed_hours = OwedHoursInWeekQuery.new(
       relation: OwedHour.enabled.where(staff_member: staff_member),
@@ -109,19 +111,19 @@ class GenerateFinanceReportData
 
     owed_hours_count = owed_hours_minute_count / 60.0
 
-    report_data.owed_hours_minute_count = owed_hours_minute_count
+    report.owed_hours_minute_count = owed_hours_minute_count
 
     if staff_member.pay_rate.weekly?
-      report_data.total_cents = staff_member.pay_rate.cents
+      report.total_cents = staff_member.pay_rate.cents
     elsif staff_member.pay_rate.hourly?
       approved_hours_total_cents = staff_member.pay_rate.cents * approved_hours_count
       owed_hours_total_cents = staff_member.pay_rate.cents * owed_hours_count
 
-      report_data.total_cents = approved_hours_total_cents + owed_hours_total_cents
+      report.total_cents = approved_hours_total_cents + owed_hours_total_cents
     else
       raise "Unsupported pay rate calculation_type: #{staff_member.pay_rate.calculation_type}"
     end
 
-    report_data
+    Result.new(report, hours_acceptance_periods, holidays, owed_hours)
   end
 end

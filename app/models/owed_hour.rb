@@ -5,6 +5,7 @@ class OwedHour < ActiveRecord::Base
   belongs_to :creator, class_name: 'User', foreign_key: :creator_user_id
   belongs_to :parent, class_name: 'OwedHour', foreign_key: :parent_owed_hour_id
   belongs_to :disabled_by, class_name: 'User', foreign_key: :disabled_by_user_id
+  belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
 
   validates :week_start_date, presence: true
   validates :minutes, numericality: { greater_than: 0 }

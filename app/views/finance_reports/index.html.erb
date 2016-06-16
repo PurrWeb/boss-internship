@@ -81,7 +81,7 @@
         <th>
           <%= report.status.titlecase %>
           <% if report.can_complete? %>
-            <%= link_to('Mark Completed' ,'#', class: 'btn btn-success') %>
+            <%= link_to('Mark Completed' , finance_reports_path(staff_member_id: report.staff_member.id, week_start: UIRotaDate.format(report.week.start_date)), class: 'btn btn-success', method: :post) %>
           <% end %>
         </th>
       </tr>

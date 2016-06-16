@@ -71,7 +71,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :finance_reports, only: [:index]
+  resources :finance_reports, only: [:index, :create]
 
   resources :staff_types, only: [:index] do
     collection do
