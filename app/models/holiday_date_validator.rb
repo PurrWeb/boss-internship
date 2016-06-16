@@ -14,10 +14,27 @@ class HolidayDateValidator
       return
     end
 
-    current_week = RotaWeek.new(Time.zone.now)
-    if holiday.start_date < current_week.start_date
-      holiday.errors.add(:base, 'Cannot create holidays for weeks that have already passed')
-      return
+    if RotaWeek.new(holiday.start_date).start_date != RotaWeek.new(holiday.end_date).start_date
+      holiday.errors.add(:base, "Holiday must be within a single week")
+    end
+
+    if holiday.validate_as_creation
+      if RotaWeek.new(holiday.start_date) < RotaWeek.new(Time.current)
+        holiday.errors.add(:base, "can't create holidays in the past")
+        return
+      end
+    else
+      start_date_moved_to_past = holiday.start_date_changed? && RotaWeek.new(holiday.start_date).week_status == :past
+      end_date_moved_to_past = holiday.end_date_changed? && RotaWeek.new(holiday.end_date).week_status == :past
+
+      if start_date_moved_to_past
+        holiday.errors.add(:start_date, "can't be changed to date in the past")
+      end
+      if end_date_moved_to_past
+        holiday.errors.add(:end_date, "can't be changed to date in the past")
+      end
+
+      return if start_date_moved_to_past || end_date_moved_to_past
     end
 
     staff_member_holidays = Holiday.
@@ -48,9 +65,9 @@ class HolidayDateValidator
     if conflicting_shifts.present?
       holiday.errors.add(:base, 'Staff member is assigned shifts on one of these days')
     end
+  end
 
-    if RotaWeek.new(holiday.start_date).start_date != RotaWeek.new(holiday.end_date).start_date
-      holiday.errors.add(:base, "Holiday must be within a single week")
-    end
+  def dates_changed?(holiday)
+    holiday.changed.include?(:start_date) || holiday.changed.include?(:end_date)
   end
 end

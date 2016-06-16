@@ -168,4 +168,31 @@ RSpec.describe 'Edit Holiday service'  do
       expect(result.holiday.errors.keys).to eq([:start_date])
     end
   end
+
+  context 'holiday is frozen' do
+    let(:finance_report) do
+      FactoryGirl.create(:finance_report)
+    end
+    let(:holiday) do
+      FactoryGirl.create(
+        :holiday,
+        start_date: start_date,
+        end_date: end_date,
+        frozen_by: finance_report
+      )
+    end
+    let(:result) { service.call }
+
+    before do
+      result
+    end
+
+    it 'should not be a success' do
+      expect(result).to_not be_success
+    end
+
+    specify 'it should return base error' do
+      expect(result.holiday.errors[:base]).to eq(['holiday is not editable'])
+    end
+  end
 end

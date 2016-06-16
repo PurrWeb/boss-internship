@@ -56,15 +56,16 @@ class HolidaysController < ApplicationController
     staff_member = StaffMember.find(params[:staff_member_id])
     authorize! :edit, staff_member
 
-    holiday = Holiday.new(
-      holiday_params.
+    result = CreateHoliday.new(
+      requester: current_user,
+      params: holiday_params.
         merge(staff_member: staff_member, creator: current_user)
-    )
+    ).call
 
     owed_hour = OwedHour.new
     owed_hours_week = RotaWeek.new(Time.current)
 
-    if holiday.save
+    if result.success?
       flash[:success] = "Holiday added successfully"
       redirect_to staff_member_path(staff_member, tab: 'holidays')
     else
@@ -76,7 +77,7 @@ class HolidaysController < ApplicationController
         active_tab: 'holidays',
         owed_hour: owed_hour,
         owed_hours_week: owed_hours_week,
-        holiday: holiday
+        holiday: result.holiday
       }
     end
   end
@@ -118,13 +119,18 @@ class HolidaysController < ApplicationController
 
     authorize! :manage, holiday
 
-    DeleteHoliday.new(
+    result = DeleteHoliday.new(
       requester: current_user,
       holiday: holiday
     ).call
 
-    flash[:success] = "Holiday deleted successfully"
-    redirect_to staff_member_path(staff_member, tab: 'holidays')
+    if result.success?
+      flash[:success] = "Holiday deleted successfully"
+      redirect_to staff_member_path(staff_member, tab: 'holidays')
+    else
+      flash[:error] = "There was a problem deleting this holiday"
+      render 'edit', locals: { holiday: result.holiday }
+    end
   end
 
   private

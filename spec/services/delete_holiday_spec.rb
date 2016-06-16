@@ -30,4 +30,29 @@ RSpec.describe 'DeleteHoliday service'  do
       expect(last_transition.metadata["requster_user_id"]).to eq(requester.id)
     end
   end
+
+  context 'holiday is frozen' do
+    let(:finance_report) do
+      FactoryGirl.create(:finance_report)
+    end
+    let(:holiday) do
+      FactoryGirl.create(
+        :holiday,
+        frozen_by: finance_report
+      )
+    end
+    let(:result) { service.call }
+
+    before do
+      result
+    end
+
+    it 'should not be a success' do
+      expect(result).to_not be_success
+    end
+
+    specify 'it should return base error' do
+      expect(result.holiday.errors[:base]).to eq(["can't delete holiday that has been frozen"])
+    end
+  end
 end
