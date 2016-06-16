@@ -10,7 +10,9 @@ class GenerateFinanceReportData
       staff_member: staff_member,
       staff_member_name: staff_member.full_name,
       week_start: week.start_date,
-      pay_rate_description: staff_member.pay_rate.text_description
+      pay_rate_description: staff_member.pay_rate.text_description,
+      venue: staff_member.master_venue,
+      venue_name: staff_member.master_venue.name
     )
 
     staff_member_clock_in_days = ClockInDay.

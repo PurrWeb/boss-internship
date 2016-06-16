@@ -31,20 +31,39 @@ class FinanceReport < ActiveRecord::Base
 
   def status
     if new_record?
-      'pending'
+      can_complete? ? 'ready' : 'incomplete'
     else
-      'complete'
+      'done'
     end
   end
 
   def can_complete?
-    true
+    return false unless venue.present? && week.present? && staff_member.present?
+
+    pending_clock_in_days = ClockInDaysPendingConfirmationQuery.new(
+      venue: venue
+    ).all.
+      where(staff_member: staff_member)
+
+    clock_in_days = InRangeQuery.new(
+      relation: pending_clock_in_days,
+      start_value: week.start_date,
+      end_value: week.end_date,
+      start_column_name: 'date',
+      end_column_name: 'date'
+    ).all
+
+    clock_in_days.count == 0
+  end
+
+  def week
+    RotaWeek.new(week_start)
   end
 
   #validation
   def week_start_valid
     return unless week_start.present?
-    if RotaWeek.new(week_start_date).start_date != week_start_date
+    if RotaWeek.new(week_start).start_date != week_start
       errors.add(:week_start, 'must be at start of week')
     end
   end

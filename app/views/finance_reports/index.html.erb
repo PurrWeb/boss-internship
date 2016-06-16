@@ -79,7 +79,7 @@
           <%= report.holiday_days_count %>
         </td>
         <th>
-          <%= report.status %>
+          <%= report.status.titlecase %>
           <% if report.can_complete? %>
             <%= link_to('Mark Completed' ,'#', class: 'btn btn-success') %>
           <% end %>
