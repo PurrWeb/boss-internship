@@ -13,30 +13,35 @@ class EditOwedHour
   end
 
   def call
-    return Result.new(true) if !attributes_changed
+    if !owed_hour.editable?
+      owed_hour.errors.add(:base, "owed hour is not editable")
+      return Result.new(false, owed_hour)
+    elsif !attributes_changed
+      Result.new(true, owed_hour) if !attributes_changed
+    else
+      success = false
+      ActiveRecord::Base.transaction do
+        owed_hour.disable!(requester: requester)
 
-    success = false
-    ActiveRecord::Base.transaction do
-      owed_hour.disable!(requester: requester)
+        new_owed_hour = OwedHour.new(
+          copy_params.
+            merge(update_params).
+            merge(creator: requester)
+        )
+        success = new_owed_hour.save
+        raise ActiveRecord::Rollback unless success
 
-      new_owed_hour = OwedHour.new(
-        copy_params.
-          merge(update_params).
-          merge(creator: requester)
-      )
-      success = new_owed_hour.save
-      raise ActiveRecord::Rollback unless success
+        owed_hour.update_attributes!(parent: new_owed_hour)
+      end
 
-      owed_hour.update_attributes!(parent: new_owed_hour)
+      if !success
+        owed_hour.reload
+        owed_hour.assign_attributes(update_params)
+        owed_hour.valid?
+      end
+
+      Result.new(success, owed_hour)
     end
-
-    if !success
-      owed_hour.reload
-      owed_hour.assign_attributes(update_params)
-      owed_hour.valid?
-    end
-
-    Result.new(success, owed_hour)
   end
 
   private
@@ -44,7 +49,7 @@ class EditOwedHour
 
   def assert_params
     if params.keys.map(&:to_sym).sort != edit_attributes.sort
-      raise ArgumentError.new(":week_start_date, :minutes, :note old hour params required, got:#{params.keys}")
+      raise ArgumentError.new(":week_start_date, :minutes, :note owed hour params required, got:#{params.keys}")
     end
   end
 
