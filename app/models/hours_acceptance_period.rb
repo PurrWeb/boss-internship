@@ -20,6 +20,10 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   include PeriodTimeValidations
 
+  def editable?
+    staff_member.enabled? && !frozen?
+  end
+
   #validation
   def validate_reason_note_presence
     if hours_acceptance_reason.present?
@@ -45,6 +49,10 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   def venue
     clock_in_day.venue
+  end
+
+  def frozen?
+    frozen_by.present?
   end
 
   def enabled?
