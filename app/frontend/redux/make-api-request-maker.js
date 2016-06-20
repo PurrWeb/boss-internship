@@ -47,7 +47,7 @@ export default function makeApiRequestMaker(apiOptions){
             if (typeof accessToken === "undefined") {
                 callback(window.boss.access_token);
             } else if (typeof accessToken === "string") {
-                makeRequest(accessToken)
+                callback(accessToken)
             } else if (accessToken.pin !== undefined && accessToken.staffMemberServerId !== undefined
             ||
             accessToken.api_key !== undefined) {
@@ -61,7 +61,7 @@ export default function makeApiRequestMaker(apiOptions){
                         callback(data.access_token)
                     },
                     error: function(response, textStatus){
-                        failApiRequest(response, textStatus)
+                        failApiRequest(response, textStatus, "accessTokenRequest")
                     }
                 });
             } else {
@@ -92,7 +92,6 @@ export default function makeApiRequestMaker(apiOptions){
                 data = JSON.stringify(data)
                 contentType = "application/json"
             }
-
             $.ajax({
                url: API_ROOT + path,
                method: method,
@@ -107,11 +106,15 @@ export default function makeApiRequestMaker(apiOptions){
                 copyComponentInformationFromRequestOptions(actionData, requestOptions);
                 success(actionData);
             }, function(response, textStatus){
-                failApiRequest(response, textStatus)
+                failApiRequest(response, textStatus, "dataRequest")
             });
         }
 
-        function failApiRequest(response, textStatus) {
+        function failApiRequest(response, textStatus, failedRequestType) {
+            if (failedRequestType !== "dataRequest" && failedRequestType !== "accessTokenRequest") {
+                throw Error("Invalid failedRequestType " + failedRequestType)
+            }
+
             var { responseText } = response;
             var responseData = null;
             if (utils.stringIsJson(responseText)) {
@@ -126,6 +129,12 @@ export default function makeApiRequestMaker(apiOptions){
 
             copyComponentInformationFromRequestOptions(responseData, requestOptions);
 
+            if (failedRequestType === "dataRequest" && apiOptions.getFailureActionData){
+                responseData = {
+                    ...responseData,
+                    ...apiOptions.getFailureActionData(responseData, requestOptions, getState)
+                }
+            }
             error(responseData);
         }
     }

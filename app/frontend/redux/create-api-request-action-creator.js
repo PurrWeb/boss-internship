@@ -47,8 +47,10 @@ export default function createApiRequestActionCreator(actionOptions){
     var { requestType, makeRequest } = actionOptions;
 
     const successType = requestType + "_SUCCESS";
+    const failureType = requestType + "_FAILURE"
     const startType = requestType + "_REQUEST_START";
     apiRequestActionTypes.push(successType);
+    apiRequestActionTypes.push(failureType);
     apiRequestActionTypes.push(startType);
 
     var actionCreator = generateActionCreator();
@@ -81,6 +83,11 @@ export default function createApiRequestActionCreator(actionOptions){
                 }
                 function error(responseOptions){
                     var actions = [requestEndAction()];
+                    actions.push({
+                        type: failureType,
+                        ...responseOptions,
+                        requestOptions
+                    })
                     if (requestOptions.errorHandlingId) {
                         actions.push(setComponentErrorAction(responseOptions.errors));
                     } else {
@@ -90,6 +97,7 @@ export default function createApiRequestActionCreator(actionOptions){
                             alert(JSON.stringify(responseOptions.errors));
                         }
                     }
+
                     dispatch(actions);
                 }
                 function setComponentErrorAction(errors){

@@ -72,9 +72,19 @@ export const clockInOutAppEnterUserMode = createApiRequestActionCreator({
     })
 });
 
+function getNewClockInDayFromUpdateStatusResponse(responseData, requestOptions, getState){
+    var {staffMemberObject, statusValue} = requestOptions;
+    var existingClockInDay = selectClockInDay(getState(), {
+        staffMemberClientId: staffMemberObject.clientId,
+        date: getState().pageOptions.dateOfRota
+    })
+    var newClockInDay = backendData.processClockInDayObject(responseData.clock_in_day)
+    newClockInDay.clientId = existingClockInDay.clientId;
+    return newClockInDay
+}
 
 export const updateClockInStatus = createApiRequestActionCreator({
-    requestType: "UPDATE_STAFF_STATUS",
+    requestType: "UPDATE_CLOCK_IN_STATUS",
     makeRequest: makeApiRequestMaker({
         method: apiRoutes.updateStaffClockingStatus.method,
         accessToken(requestOptions) {
@@ -110,19 +120,18 @@ export const updateClockInStatus = createApiRequestActionCreator({
         },
         getSuccessActionData(responseData, requestOptions, getState){
             var {staffMemberObject, statusValue} = requestOptions;
-            var clockInDay = selectClockInDay(getState(), {
-                staffMemberClientId: staffMemberObject.clientId,
-                date: getState().pageOptions.dateOfRota
-            })
+            var newClockInDay = getNewClockInDayFromUpdateStatusResponse(responseData, requestOptions, getState)
             return {
-                clockInDay: {
-                    clientId: clockInDay.clientId,
-                    status: statusValue
-                },
+                clockInDay: newClockInDay,
                 statusValue,
                 staffMemberObject,
                 userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(getState())
             }
+        },
+        getFailureActionData(responseData, requestOptions, getState){
+            return {
+                clockInDay: getNewClockInDayFromUpdateStatusResponse(responseData, requestOptions, getState)
+            };
         }
     }),
     additionalSuccessActionCreator: function(successActionData, requestOptions){
@@ -166,7 +175,7 @@ export function updateClockInStatusWithConfirmation(requestOptions){
                     confirmationType: "PIN"
                 },
                 confirmationAction: {
-                    apiRequestType: "UPDATE_STAFF_STATUS",
+                    apiRequestType: "UPDATE_CLOCK_IN_STATUS",
                     requestOptions
                 }
             }));

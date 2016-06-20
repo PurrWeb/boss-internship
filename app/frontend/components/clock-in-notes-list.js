@@ -7,7 +7,11 @@ export default class ClockInNotesList extends React.Component {
         }
         return  <ul style={{paddingLeft: 20}}>
                 {this.props.notes.map((note) =>
-                    <li key={note.clientId}>{note.note}</li>
+                    <li
+                        data-test-marker-clock-in-note
+                        key={note.clientId}>
+                        {note.note}
+                    </li>
                 )}
             </ul>
     }

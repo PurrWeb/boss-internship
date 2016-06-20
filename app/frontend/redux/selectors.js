@@ -206,7 +206,7 @@ export function selectClockInOutAppUserIsSupervisor(state){
 }
 
 export function selectIsUpdatingStaffMemberStatus(state, {staffMemberServerId}) {
-    var allRequests = state.apiRequestsInProgress.UPDATE_STAFF_STATUS;
+    var allRequests = state.apiRequestsInProgress.UPDATE_CLOCK_IN_STATUS;
     var requestsForStaffMember = _.filter(allRequests, function(request){
         return request.staffMemberObject.serverId === staffMemberServerId;
     });

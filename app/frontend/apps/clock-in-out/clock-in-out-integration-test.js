@@ -152,4 +152,25 @@ describe("Clock In/Out Page Integration Test", function(){
         })
     })
 
+    it("Lets managers view and add clockInNotes", function(done){
+        var addNoteButton = $$("[data-test-marker-add-note]")[0];
+        expect(addNoteButton).toNotBe(undefined);
+
+        expect.spyOn(window, "prompt").andReturn("New Note Content")
+        expect.spyOn($, "ajax").andReturn(Promise.resolve({
+            id: 88,
+            note: "New Note Content",
+            clock_in_day: {id: 22}
+        }))
+        ReactTestUtils.Simulate.click(addNoteButton)
+
+        _.defer(function(){
+            var clockInNote = $$("[data-test-marker-clock-in-note]")[0];
+            expect(clockInNote.innerHTML).toBe("New Note Content")
+            $.ajax.restore();
+            window.prompt.restore();
+
+            done();
+        })
+    })
 });

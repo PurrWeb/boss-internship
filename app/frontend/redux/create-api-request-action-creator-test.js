@@ -57,7 +57,8 @@ describe("createApiRequestActionCreator", function(){
 
 		var actionObjects = dispatch.calls[1].arguments[0];
 		expect(actionObjects[0].type).toEqual("API_REQUEST_END");
-		expect(actionObjects[1].type).toEqual("SET_COMPONENT_ERROR");
+		expect(actionObjects[1].type).toEqual("DO_SOMETHING_FAILURE");
+		expect(actionObjects[2].type).toEqual("SET_COMPONENT_ERROR");
 	});
 
 	it("Shows an alert box if a request fails without an errorHandlingId", function(){

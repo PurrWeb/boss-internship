@@ -8,7 +8,15 @@ export default makeDataHandler("clockInDays", {
         action: "update",
         generateActionCreator: false
     },
-    UPDATE_STAFF_STATUS_SUCCESS: {
+    UPDATE_CLOCK_IN_STATUS_SUCCESS: {
         action: "addOrUpdate"
+    },
+    UPDATE_CLOCK_IN_STATUS_FAILURE: {
+        action: "addOrUpdate",
+        shouldIgnoreAction: function(action){
+            if (!action.clockInDay) {
+                return true;
+            }
+        }
     }
 })

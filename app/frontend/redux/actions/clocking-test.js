@@ -21,7 +21,11 @@ describe("Clocking Actions", function(){
             }
         } }
 
-        var promise = Promise.resolve({})
+        var promise = Promise.resolve({
+            clock_in_day: {
+                id: 44
+            }
+        })
 
         expect.spyOn($, "ajax").andReturn(promise)
 
@@ -39,7 +43,7 @@ describe("Clocking Actions", function(){
 
         _.defer(function(){
             var actions = dispatch.calls[1].arguments[0];
-            expect(actions[0].type).toBe("UPDATE_STAFF_STATUS_SUCCESS");
+            expect(actions[0].type).toBe("UPDATE_CLOCK_IN_STATUS_SUCCESS");
 
             var additionalActionCreator = dispatch.calls[2].arguments[0];
             additionalActionCreator(dispatch, getState)
