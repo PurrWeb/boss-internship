@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160610150501) do
+ActiveRecord::Schema.define(version: 20160620161153) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -327,13 +327,13 @@ ActiveRecord::Schema.define(version: 20160610150501) do
   add_index "names", ["first_name"], name: "index_names_on_first_name", using: :btree
   add_index "names", ["surname"], name: "index_names_on_surname", using: :btree
 
-  create_table "old_hours", force: :cascade do |t|
+  create_table "owed_hours", force: :cascade do |t|
     t.date     "week_start_date",                   null: false
     t.integer  "minutes",             limit: 4,     null: false
     t.integer  "creator_user_id",     limit: 4,     null: false
     t.integer  "staff_member_id",     limit: 4,     null: false
     t.text     "note",                limit: 65535, null: false
-    t.integer  "parent_old_hour_id",  limit: 4
+    t.integer  "parent_owed_hour_id", limit: 4
     t.datetime "disabled_at"
     t.integer  "disabled_by_user_id", limit: 4
     t.datetime "created_at"

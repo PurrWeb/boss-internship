@@ -61,8 +61,8 @@ class HolidaysController < ApplicationController
         merge(staff_member: staff_member, creator: current_user)
     )
 
-    old_hour = OldHour.new
-    old_hours_week = RotaWeek.new(Time.current)
+    owed_hour = OwedHour.new
+    owed_hours_week = RotaWeek.new(Time.current)
 
     if holiday.save
       flash[:success] = "Holiday added successfully"
@@ -74,8 +74,8 @@ class HolidaysController < ApplicationController
       render 'staff_members/show', locals: {
         staff_member: staff_member,
         active_tab: 'holidays',
-        old_hour: old_hour,
-        old_hours_week: old_hours_week,
+        owed_hour: owed_hour,
+        owed_hours_week: owed_hours_week,
         holiday: holiday
       }
     end
