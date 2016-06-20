@@ -29,62 +29,75 @@
   </div>
 <% end %>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th></th>
-      <% week.each do |date| %>
-       <th><%= date %></th>
-      <% end %>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-    <tr>
-      <th>Name</th>
-      <% week.each_with_day do |date, day| %>
-       <th><%= day.to_s.titlecase %></th>
-      <% end %>
-      <th>Total Hours</th>
-      <th>Old Hours</th>
-      <th>Pay Rate</th>
-      <th>Total</th>
-      <th>Paid Holiday (Days)</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% reports.each do |report| %>
-      <tr>
-        <td><%= report.staff_member_name.titlecase %></td>
-        <% week.each_with_day do |date, day| %>
-          <td><%= report.public_send("#{day}_hours_count".to_sym).round(2) %></td>
-        <% end %>
-        <td>
-          <%= report.total_hours_count.round(2) %>
-        </td>
-        <td>
-          <%= report.owed_hours_count %>
-        </td)>
-        <td>
-          <%= report.pay_rate_description %>
-        </td>
-        <td>
-          <%= number_to_currency(report.total, unit: '£') %>
-        </td>
-        <td>
-          <%= report.holiday_days_count %>
-        </td>
-        <th>
-          <%= report.status.titlecase %>
-          <% if report.can_complete? %>
-            <%= link_to('Mark Completed' , finance_reports_path(staff_member_id: report.staff_member.id, week_start: UIRotaDate.format(report.week.start_date)), class: 'btn btn-success', method: :post) %>
+<% reports_by_staff_type.each do |staff_type, reports| %>
+  <div>
+    <h3>Staff Type: <%= staff_type.name %></h3>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <% week.each do |date| %>
+           <th><%= date %></th>
           <% end %>
-        </th>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <th>Name</th>
+          <% week.each_with_day do |date, day| %>
+           <th><%= day.to_s.titlecase %></th>
+          <% end %>
+          <th>Total Hours</th>
+          <th>Old Hours</th>
+          <th>Pay Rate</th>
+          <th>Total</th>
+          <th>Paid Holiday (Days)</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% sorted_reports = reports.sort do |a, b|
+             a_names = a.staff_member_name.split(' ')
+             b_names = b.staff_member_name.split(' ')
+             a_sort_string = a_names.last + ' ' + a_names.first(a_names.length - 1).join(' ')
+             b_sort_string = b_names.last + ' ' + b_names.first(b_names.length - 1).join(' ')
+             a_sort_string <=> b_sort_string
+           end %>
+        <% sorted_reports.each do |report| %>
+          <tr>
+            <td><%= report.staff_member_name.titlecase %></td>
+            <% week.each_with_day do |date, day| %>
+              <td><%= report.public_send("#{day}_hours_count".to_sym).round(2) %></td>
+            <% end %>
+            <td>
+              <%= report.total_hours_count.round(2) %>
+            </td>
+            <td>
+              <%= report.owed_hours_count %>
+            </td)>
+            <td>
+              <%= report.pay_rate_description %>
+            </td>
+            <td>
+              <%= number_to_currency(report.total, unit: '£') %>
+            </td>
+            <td>
+              <%= report.holiday_days_count %>
+            </td>
+            <th>
+              <%= report.status.titlecase %>
+              <% if report.can_complete? %>
+                <%= link_to('Mark Completed' , finance_reports_path(staff_member_id: report.staff_member.id, week_start: UIRotaDate.format(report.week.start_date)), class: 'btn btn-success', method: :post) %>
+              <% end %>
+            </th>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

@@ -8,9 +8,10 @@ class FinanceReportsController < ApplicationController
 
       staff_members = venue.master_staff_members
 
-      reports = []
+      reports_by_staff_type = {}
       staff_members.each do |staff_member|
-        reports << (FinanceReport.find_by(
+        reports_by_staff_type[staff_member.staff_type] ||= []
+        reports_by_staff_type[staff_member.staff_type] << (FinanceReport.find_by(
           staff_member: staff_member,
           week_start: week.start_date
         ) || GenerateFinanceReportData.new(
@@ -25,7 +26,7 @@ class FinanceReportsController < ApplicationController
         week: week,
         venue: venue,
         accessible_venues: accessible_venues,
-        reports: reports
+        reports_by_staff_type: reports_by_staff_type
       }
     else
       redirect_to(finance_reports_path(index_redirect_params))
