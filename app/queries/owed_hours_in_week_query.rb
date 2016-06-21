@@ -1,4 +1,4 @@
-class OldHoursInWeekQuery
+class OwedHoursInWeekQuery
   def initialize(staff_member:, week:)
     @staff_member = staff_member
     @week = week
@@ -6,7 +6,7 @@ class OldHoursInWeekQuery
   attr_reader :staff_member, :week
 
   def all
-    OldHour.
+    OwedHour.
       enabled.
       where(
         week_start_date: week.start_date,

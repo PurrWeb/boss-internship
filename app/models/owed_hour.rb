@@ -1,9 +1,9 @@
-class OldHour < ActiveRecord::Base
+class OwedHour < ActiveRecord::Base
   validate :week_start_date_valid
 
   belongs_to :staff_member
   belongs_to :creator, class_name: 'User', foreign_key: :creator_user_id
-  belongs_to :parent, class_name: 'OldHour', foreign_key: :parent_old_hour_id
+  belongs_to :parent, class_name: 'OwedHour', foreign_key: :parent_owed_hour_id
   belongs_to :disabled_by, class_name: 'User', foreign_key: :disabled_by_user_id
 
   validates :week_start_date, presence: true
@@ -20,7 +20,7 @@ class OldHour < ActiveRecord::Base
     end
 
     if RotaWeek.new(week_start_date).start_date < RotaWeek.new(Time.current).start_date
-      errors.add(:base, 'Cannot create old hours for weeks in the past')
+      errors.add(:base, 'Cannot create owed hours for weeks in the past')
     end
   end
 

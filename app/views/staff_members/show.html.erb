@@ -60,7 +60,7 @@
     </li>
     <% if can?(:manage, :admin) %>
       <li role="presentation" class="<%= StaffMemberShowPage.tab_class('old-hours', active_tab) %>">
-        <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'old-hours') %>" data-target="#old-hours-tab">Old Hours</a>
+        <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'old-hours') %>" data-target="#old-hours-tab">Owed Hours</a>
       </li>
     <% end %>
   </ul>
@@ -87,7 +87,7 @@
     </div>
 
     <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('old-hours', active_tab) %>" id="old-hours-tab">
-      <%= render partial: 'shared/staff_member_show_old_hours_tab', locals: { staff_member: staff_member, old_hours_week: old_hours_week, old_hour: old_hour } %>
+      <%= render partial: 'shared/staff_member_show_owed_hours_tab', locals: { staff_member: staff_member, owed_hours_week: owed_hours_week, owed_hour: owed_hour } %>
     </div>
   </div>
 </div>
