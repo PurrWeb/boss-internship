@@ -59,8 +59,8 @@
       <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'holidays') %>" data-target="#holidays-tab">Holidays</a>
     </li>
     <% if can?(:manage, :admin) %>
-      <li role="presentation" class="<%= StaffMemberShowPage.tab_class('old-hours', active_tab) %>">
-        <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'old-hours') %>" data-target="#old-hours-tab">Owed Hours</a>
+      <li role="presentation" class="<%= StaffMemberShowPage.tab_class('owed-hours', active_tab) %>">
+        <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'owed-hours') %>" data-target="#owed-hours-tab">Owed Hours</a>
       </li>
     <% end %>
   </ul>
@@ -86,7 +86,7 @@
       <%= render partial: 'shared/staff_member_show_holidays_tab', locals: { staff_member: staff_member, holiday: holiday } %>
     </div>
 
-    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('old-hours', active_tab) %>" id="old-hours-tab">
+    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('owed-hours', active_tab) %>" id="owed-hours-tab">
       <%= render partial: 'shared/staff_member_show_owed_hours_tab', locals: { staff_member: staff_member, owed_hours_week: owed_hours_week, owed_hour: owed_hour } %>
     </div>
   </div>
