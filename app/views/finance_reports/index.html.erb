@@ -70,7 +70,9 @@
            end %>
         <% sorted_reports.each do |report| %>
           <tr>
-            <td><%= report.staff_member_name.titlecase %></td>
+            <td>
+              <strong><%= report.staff_member_name.titlecase %></strong>
+            </td>
             <% week.each_with_day do |date, day| %>
               <td><%= report.public_send("#{day}_hours_count".to_sym).round(2) %></td>
             <% end %>
@@ -84,7 +86,9 @@
               <%= report.pay_rate_description %>
             </td>
             <td>
-              <%= number_to_currency(report.total, unit: '£') %>
+              <strong>
+                <%= number_to_currency(report.total, unit: '£') %>
+              </strong>
             </td>
             <td>
               <%= report.holiday_days_count %>
