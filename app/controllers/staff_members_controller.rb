@@ -266,7 +266,7 @@ class StaffMembersController < ApplicationController
       'account-details',
       'personal-details',
       'contact-details',
-      'old-hours',
+      'owed-hours',
       'holidays'
     ]
   end
