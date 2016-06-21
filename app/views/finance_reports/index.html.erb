@@ -31,7 +31,7 @@
 
 <% reports_by_staff_type.each do |staff_type, reports| %>
   <div>
-    <h3>Staff Type: <%= staff_type.name %></h3>
+    <h3><div class="boss-badge" style="font-size: 1.3em; background-color: #<%= staff_type.ui_color %>"><%= staff_type.name %></div></h3>
 
     <table class="table table-striped text-center">
       <thead>
