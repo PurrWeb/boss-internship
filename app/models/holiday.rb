@@ -8,6 +8,7 @@ class Holiday < ActiveRecord::Base
   has_many :holiday_transitions, autosave: false
   belongs_to :staff_member
   belongs_to :creator, foreign_key: 'creator_user_id', class_name: 'User'
+  belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
 
   validates :start_date, presence: true
   validates :end_date, presence: true
@@ -18,6 +19,8 @@ class Holiday < ActiveRecord::Base
   validate do |holiday|
     HolidayDateValidator.new(holiday).validate
   end
+
+  attr_accessor :validate_as_creation
 
   def self.paid
     where(holiday_type: 'paid_holiday')
@@ -56,12 +59,16 @@ class Holiday < ActiveRecord::Base
   end
 
   def editable?
-    staff_member.enabled? && (end_date > Time.zone.now.to_date)
+    staff_member.enabled? && !frozen?
   end
 
   def days
     day_delta = (end_date - start_date).to_i
     day_delta + 1
+  end
+
+  def frozen?
+    frozen_by.present?
   end
 
   private

@@ -31,4 +31,8 @@ class HoursAcceptanceBreak < ActiveRecord::Base
       disabled_by: requester
     )
   end
+
+  def hour_length
+    (ends_at - starts_at) / 1.hour
+  end
 end

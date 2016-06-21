@@ -64,12 +64,29 @@ class PayRate < ActiveRecord::Base
     result
   end
 
+  def text_description_short
+    result = "#{number_to_currency(rate_in_pounds, unit: '£')}"
+    result = result + PayRate.calculation_type_per_message_short(calculation_type)
+    result
+  end
+
   def self.calculation_type_per_message(calculation_type)
     case calculation_type
     when 'incremental_per_hour'
       'Per Hour'
     when 'salary_per_week'
       'Per Week'
+    else
+      raise ArgumentError, "invalid calculation_type #{calculation_type} supplied"
+    end
+  end
+
+  def self.calculation_type_per_message_short(calculation_type)
+    case calculation_type
+    when 'incremental_per_hour'
+      '/h'
+    when 'salary_per_week'
+      '/Wk'
     else
       raise ArgumentError, "invalid calculation_type #{calculation_type} supplied"
     end

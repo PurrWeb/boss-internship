@@ -3,15 +3,16 @@ class OwedHoursController < ApplicationController
     authorize! :manage, :admin
     staff_member = StaffMember.find(params[:staff_member_id])
 
-    owed_hour = OwedHour.new(
-      owed_hour_params.
-      merge(
-        staff_member: staff_member,
-        creator: current_user
-      )
-    )
+    result = CreateOwedHour.new(
+      requester: current_user,
+      params: owed_hour_params.
+        merge(
+          staff_member: staff_member,
+          creator: current_user
+        )
+    ).call
 
-    if owed_hour.save
+    if result.success?
       flash[:success] = "Hours added successfully"
       redirect_to staff_member_path(staff_member, tab: 'owed-hours')
     else
@@ -23,7 +24,7 @@ class OwedHoursController < ApplicationController
       render 'staff_members/show', locals: {
         staff_member: staff_member,
         active_tab: 'owed-hours',
-        owed_hour: owed_hour,
+        owed_hour: result.owed_hour,
         owed_hours_week: owed_hours_week,
         holiday: holiday
       }
@@ -63,13 +64,18 @@ class OwedHoursController < ApplicationController
     owed_hour = OwedHour.enabled.find(params[:id])
     authorize! :manage, owed_hour
 
-    DeleteOwedHour.new(
+    result = DeleteOwedHour.new(
       requester: current_user,
       owed_hour: owed_hour
     ).call
 
-    flash[:success] = 'Owed hour deleted successfully'
-    redirect_to staff_member_path(owed_hour.staff_member, tab: 'owed-hours')
+    if result.success?
+      flash[:success] = 'Owed hour deleted successfully'
+      redirect_to staff_member_path(owed_hour.staff_member, tab: 'owed-hours')
+    else
+      flash[:error] = "There was a problem deleting these hours"
+      render 'edit', locals: { owed_hour: result.owed_hour }
+    end
   end
 
   private

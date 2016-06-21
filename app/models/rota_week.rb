@@ -60,6 +60,17 @@ class RotaWeek
     end
   end
 
+  def week_status
+    current_week = RotaWeek.new(Time.current)
+    if self > current_week
+      :future
+    elsif self == current_week
+      :current
+    else
+      :past
+    end
+  end
+
   private
   attr_reader :supplied_date, :day_index
 end

@@ -13,30 +13,35 @@ class EditHoliday
   end
 
   def call
-    return Result.new(true) if !attributes_changed
+    if !holiday.editable?
+      holiday.errors.add(:base, "holiday is not editable")
+      return Result.new(false, holiday)
+    elsif !attributes_changed
+      Result.new(true, holiday) if !attributes_changed
+    else
+      success = false
+      ActiveRecord::Base.transaction do
+        holiday.disable!(requester: requester)
 
-    success = false
-    ActiveRecord::Base.transaction do
-      holiday.disable!(requester: requester)
+        new_holiday = Holiday.new(
+          copy_params.
+            merge(update_params).
+            merge(creator: requester)
+        )
+        success = new_holiday.save
+        raise ActiveRecord::Rollback unless success
 
-      new_holiday = Holiday.new(
-        copy_params.
-          merge(update_params).
-          merge(creator: requester)
-      )
-      success = new_holiday.save
-      raise ActiveRecord::Rollback unless success
+        holiday.update_attributes!(parent: new_holiday)
+      end
 
-      holiday.update_attributes!(parent: new_holiday)
+      if !success
+        holiday.reload
+        holiday.assign_attributes(update_params)
+        holiday.valid?
+      end
+
+      Result.new(success, holiday)
     end
-
-    if !success
-      holiday.reload
-      holiday.assign_attributes(update_params)
-      holiday.valid?
-    end
-
-    Result.new(success, holiday)
   end
 
   private

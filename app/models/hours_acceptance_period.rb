@@ -6,6 +6,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   belongs_to :clock_in_day
   belongs_to :creator, polymorphic: true
   belongs_to :hours_acceptance_reason
+  belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
   has_many :hours_acceptance_breaks
 
   validates_associated :hours_acceptance_breaks
@@ -19,6 +20,10 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   include PeriodTimeValidations
 
+  def editable?
+    staff_member.enabled? && !frozen?
+  end
+
   #validation
   def validate_reason_note_presence
     if hours_acceptance_reason.present?
@@ -28,6 +33,10 @@ class HoursAcceptancePeriod < ActiveRecord::Base
         errors.add(:reason_note, "must be ommited when choosing #{hours_acceptance_reason.text} reason")
       end
     end
+  end
+
+  def self.accepted
+    where(status: 'accepted')
   end
 
   def self.pending
@@ -40,6 +49,10 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   def venue
     clock_in_day.venue
+  end
+
+  def frozen?
+    frozen_by.present?
   end
 
   def enabled?
@@ -60,5 +73,15 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   def date
     clock_in_day.andand.date
+  end
+
+  def payable_hours
+    hour_length - hours_acceptance_breaks.enabled.inject(0) do |sum, _break|
+      sum + _break.hour_length
+    end
+  end
+
+  def hour_length
+    (ends_at - starts_at) / 1.hour
   end
 end

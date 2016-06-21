@@ -206,6 +206,34 @@ RSpec.describe 'Hours acceptance endpoints' do
       expect(hours_acceptance_period.versions.last.whodunnit).to eq(user.whodunnit_data.to_s)
     end
 
+    context 'when peroid is frozen' do
+      let(:finance_report) do
+        FactoryGirl.create(:finance_report)
+      end
+
+      let(:hours_acceptance_period) do
+        HoursAcceptancePeriod.create!(
+          creator: staff_member,
+          starts_at: start_of_shift,
+          ends_at: end_of_shift,
+          clock_in_day: clock_in_day,
+          frozen_by: finance_report
+        )
+      end
+
+      specify 'should work' do
+        result = patch(url, params)
+        expect(result.status).to eq(unprocessable_entity_status)
+      end
+
+      specify 'should work' do
+        response = patch(url, params)
+        json = JSON.parse(response.body)
+
+        expect(json.fetch("errors").fetch("base")).to eq(['these hours are not editable'])
+      end
+    end
+
     context 'when breaks exist' do
       let(:break1_start) { start_of_shift + 10.minutes }
       let(:break1_end) { start_of_shift + 10.minutes + 1.hour }

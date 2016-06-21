@@ -164,6 +164,33 @@ ActiveRecord::Schema.define(version: 20160620161153) do
 
   add_index "email_addresses", ["email"], name: "index_email_addresses_on_email", using: :btree
 
+  create_table "finance_reports", force: :cascade do |t|
+    t.integer  "staff_member_id",         limit: 4,   null: false
+    t.string   "staff_member_name",       limit: 255, null: false
+    t.integer  "venue_id",                limit: 4,   null: false
+    t.string   "venue_name",              limit: 255, null: false
+    t.date     "week_start",                          null: false
+    t.float    "monday_hours_count",      limit: 24,  null: false
+    t.float    "tuesday_hours_count",     limit: 24,  null: false
+    t.float    "wednesday_hours_count",   limit: 24,  null: false
+    t.float    "thursday_hours_count",    limit: 24,  null: false
+    t.float    "friday_hours_count",      limit: 24,  null: false
+    t.float    "saturday_hours_count",    limit: 24,  null: false
+    t.float    "sunday_hours_count",      limit: 24,  null: false
+    t.float    "total_hours_count",       limit: 24,  null: false
+    t.integer  "total_cents",             limit: 4,   null: false
+    t.integer  "holiday_days_count",      limit: 4,   null: false
+    t.integer  "owed_hours_minute_count", limit: 4,   null: false
+    t.string   "pay_rate_description",    limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "finance_reports", ["staff_member_id"], name: "index_finance_reports_on_staff_member_id", using: :btree
+  add_index "finance_reports", ["venue_id"], name: "index_finance_reports_on_venue_id", using: :btree
+  add_index "finance_reports", ["week_start", "staff_member_id"], name: "index_finance_reports_on_week_start_and_staff_member_id", unique: true, using: :btree
+  add_index "finance_reports", ["week_start"], name: "index_finance_reports_on_week_start", using: :btree
+
   create_table "fruit_order_transitions", force: :cascade do |t|
     t.string   "to_state",       limit: 255,   null: false
     t.text     "metadata",       limit: 65535
@@ -233,15 +260,16 @@ ActiveRecord::Schema.define(version: 20160620161153) do
   add_index "holiday_transitions", ["holiday_id", "sort_key"], name: "index_holiday_transitions_parent_sort", unique: true, using: :btree
 
   create_table "holidays", force: :cascade do |t|
-    t.date     "start_date",                      null: false
-    t.date     "end_date",                        null: false
-    t.string   "holiday_type",      limit: 255,   null: false
-    t.integer  "creator_user_id",   limit: 4,     null: false
-    t.integer  "staff_member_id",   limit: 4,     null: false
-    t.text     "note",              limit: 65535
+    t.date     "start_date",                                null: false
+    t.date     "end_date",                                  null: false
+    t.string   "holiday_type",                limit: 255,   null: false
+    t.integer  "creator_user_id",             limit: 4,     null: false
+    t.integer  "staff_member_id",             limit: 4,     null: false
+    t.text     "note",                        limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "parent_holiday_id", limit: 4
+    t.integer  "parent_holiday_id",           limit: 4
+    t.integer  "frozen_by_finance_report_id", limit: 4
   end
 
   add_index "holidays", ["end_date"], name: "index_holidays_on_end_date", using: :btree
@@ -261,16 +289,17 @@ ActiveRecord::Schema.define(version: 20160620161153) do
   end
 
   create_table "hours_acceptance_periods", force: :cascade do |t|
-    t.integer  "creator_id",                 limit: 4,                       null: false
-    t.string   "creator_type",               limit: 255,                     null: false
-    t.integer  "hours_acceptance_reason_id", limit: 4
-    t.string   "reason_note",                limit: 255
-    t.datetime "starts_at",                                                  null: false
-    t.datetime "ends_at",                                                    null: false
-    t.integer  "clock_in_day_id",            limit: 4
-    t.string   "status",                     limit: 255, default: "pending", null: false
+    t.integer  "creator_id",                  limit: 4,                       null: false
+    t.string   "creator_type",                limit: 255,                     null: false
+    t.integer  "hours_acceptance_reason_id",  limit: 4
+    t.string   "reason_note",                 limit: 255
+    t.datetime "starts_at",                                                   null: false
+    t.datetime "ends_at",                                                     null: false
+    t.integer  "clock_in_day_id",             limit: 4
+    t.string   "status",                      limit: 255, default: "pending", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "frozen_by_finance_report_id", limit: 4
   end
 
   create_table "hours_acceptance_reasons", force: :cascade do |t|
@@ -328,16 +357,17 @@ ActiveRecord::Schema.define(version: 20160620161153) do
   add_index "names", ["surname"], name: "index_names_on_surname", using: :btree
 
   create_table "owed_hours", force: :cascade do |t|
-    t.date     "week_start_date",                   null: false
-    t.integer  "minutes",             limit: 4,     null: false
-    t.integer  "creator_user_id",     limit: 4,     null: false
-    t.integer  "staff_member_id",     limit: 4,     null: false
-    t.text     "note",                limit: 65535, null: false
-    t.integer  "parent_owed_hour_id", limit: 4
+    t.date     "week_start_date",                           null: false
+    t.integer  "minutes",                     limit: 4,     null: false
+    t.integer  "creator_user_id",             limit: 4,     null: false
+    t.integer  "staff_member_id",             limit: 4,     null: false
+    t.text     "note",                        limit: 65535, null: false
+    t.integer  "parent_owed_hour_id",         limit: 4
     t.datetime "disabled_at"
-    t.integer  "disabled_by_user_id", limit: 4
+    t.integer  "disabled_by_user_id",         limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "frozen_by_finance_report_id", limit: 4
   end
 
   create_table "pay_rates", force: :cascade do |t|

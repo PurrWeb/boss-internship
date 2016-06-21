@@ -1,0 +1,107 @@
+<h1>Finance Reports</h1>
+
+<p><%= venue.name %> <%= week.start_date.to_s(:human_date) %> - <%= week.end_date.to_s(:human_date) %></p>
+
+<%= bootstrap_form_for('finance_reports_index', url: finance_reports_path, html: { method: :get }) do |form| %>
+  <div class="form-inline">
+    <%= form.select(
+          :venue_id,
+          options_for_select(
+            accessible_venues.map do |venue|
+              [venue.name, venue.id]
+            end,
+            venue.id
+          ),
+          {
+            include_blank: false
+          },
+          {
+            name: 'venue_id'
+          }) %>
+    <%= form.text_field(
+          :start_date,
+          label: 'Week',
+          value: week.start_date && UIRotaDate.format(week.start_date),
+          class: 'date-picker',
+          name: 'week_start'
+        ) %>
+    <%= form.submit('Update') %>
+  </div>
+<% end %>
+
+<% reports_by_staff_type.each do |staff_type, reports| %>
+  <div>
+    <h3><div class="boss-badge" style="font-size: 1.3em; background-color: #<%= staff_type.ui_color %>"><%= staff_type.name %></div></h3>
+
+    <table class="table table-striped text-center">
+      <thead>
+        <tr>
+          <th></th>
+          <% week.each do |date| %>
+           <th><%= date %></th>
+          <% end %>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <th class="text-center">Name</th>
+          <% week.each_with_day do |date, day| %>
+           <th class="text-center"><%= day.to_s.titlecase %></th>
+          <% end %>
+          <th class="text-center">Total Hours</th>
+          <th class="text-center">Owed Hours</th>
+          <th class="text-center">Pay Rate</th>
+          <th class="text-center">Total</th>
+          <th class="text-center">Paid Holiday (Days)</th>
+          <th class="text-center">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% sorted_reports = reports.sort do |a, b|
+             a_names = a.staff_member_name.split(' ')
+             b_names = b.staff_member_name.split(' ')
+             a_sort_string = a_names.last + ' ' + a_names.first(a_names.length - 1).join(' ')
+             b_sort_string = b_names.last + ' ' + b_names.first(b_names.length - 1).join(' ')
+             a_sort_string <=> b_sort_string
+           end %>
+        <% sorted_reports.each do |report| %>
+          <tr>
+            <td>
+              <strong><%= report.staff_member_name.titlecase %></strong>
+            </td>
+            <% week.each_with_day do |date, day| %>
+              <td><%= report.public_send("#{day}_hours_count".to_sym).round(2) %></td>
+            <% end %>
+            <td>
+              <%= report.total_hours_count.round(2) %>
+            </td>
+            <td>
+              <%= report.owed_hours_count %>
+            </td>
+            <td>
+              <%= report.pay_rate_description %>
+            </td>
+            <td>
+              <strong>
+                <%= number_to_currency(report.total, unit: '£') %>
+              </strong>
+            </td>
+            <td>
+              <%= report.holiday_days_count %>
+            </td>
+            <td>
+              <%= report.status.titlecase %>
+              <% if report.can_complete? %>
+                <%= link_to('Mark Completed' , finance_reports_path(staff_member_id: report.staff_member.id, week_start: UIRotaDate.format(report.week.start_date)), class: 'btn btn-success', method: :post) %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

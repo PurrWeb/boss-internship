@@ -13,55 +13,30 @@ module Api
         date = date_from_params
         staff_member = staff_member_from_params
 
-        hours_acceptance_period = nil
-        result = false
-        breaks = nil
+        result = CreateHoursAcceptancePeriod.new(
+          requester: requester,
+          staff_member: staff_member,
+          venue: venue,
+          date: date,
+          starts_at: params.fetch(:starts_at),
+          ends_at: params.fetch(:ends_at),
+          status: params.fetch(:status),
+          hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
+          reason_note: params[:reason_note],
+          breaks: new_breaks_from_params
+        ).call
 
-        ActiveRecord::Base.transaction do
-          clock_in_day = ClockInDay.find_or_initialize_by(
-            venue: venue,
-            date: date,
-            staff_member: staff_member
-          )
-
-          if clock_in_day.new_record?
-            clock_in_day.update_attributes!(creator: requester)
-          end
-
-          hours_acceptance_period = HoursAcceptancePeriod.new(
-            clock_in_day: clock_in_day,
-            creator: requester,
-            starts_at: params.fetch(:starts_at),
-            ends_at: params.fetch(:ends_at),
-            status: params.fetch(:status),
-            hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
-            reason_note: params[:reason_note]
-          )
-
-          breaks = new_breaks_from_params
-          breaks.each do |_break|
-            result = _break.update_attributes(
-              hours_acceptance_period: hours_acceptance_period
-            )
-            hours_acceptance_period.hours_acceptance_breaks << _break
-          end
-
-          result = hours_acceptance_period.save
-
-          raise ActiveRecord::Rollback unless result
-        end
-
-        if result
+        if result.success
           render locals: {
-            hours_acceptance_period: hours_acceptance_period,
-            hours_acceptance_breaks: breaks
+            hours_acceptance_period: result.hours_acceptance_period,
+            hours_acceptance_breaks: result.breaks
           }
         else
           render(
             'errors',
             locals: {
-              hours_acceptance_period: hours_acceptance_period,
-              hours_acceptance_breaks: breaks
+              hours_acceptance_period: result.hours_acceptance_period,
+              hours_acceptance_breaks: result.breaks
             },
             status: :unprocessable_entity
           )
@@ -103,14 +78,18 @@ module Api
 
       def destroy
         hours_acceptance_period = hours_acceptance_period_from_params
-
-        hours_acceptance_period.update_attributes!(
-          status: 'deleted'
-        )
-
         authorize! :update, hours_acceptance_period
 
-        render json: {}, status: :ok
+        result = DeleteHoursAcceptancePeriod.new(
+          requester: current_user,
+          hours_acceptance_period: hours_acceptance_period
+        ).call
+
+        if result.success?
+          render json: {}, status: :ok
+        else
+          render json: {}, status: :unprocessable_entity
+        end
       end
 
       def clock_out

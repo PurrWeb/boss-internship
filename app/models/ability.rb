@@ -40,11 +40,11 @@ class Ability
       end
 
       can :manage, Holiday do |holiday|
-        holiday.editable? && can_edit_staff_member?(user, holiday.staff_member)
+        can_edit_staff_member?(user, holiday.staff_member)
       end
 
       can :manage, OwedHour do |owed_hour|
-        owed_hour.editable? && can_edit_staff_member?(user, owed_hour.staff_member)
+        can_edit_staff_member?(user, owed_hour.staff_member)
       end
 
       can :manage, Venue do |venue|
