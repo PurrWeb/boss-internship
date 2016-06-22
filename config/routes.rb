@@ -95,8 +95,6 @@ Rails.application.routes.draw do
 
   resources :security_rotas, only: [:index, :show]
 
-  resources :clock_in_clock_out, only: [:index]
-
   resources :change_order_reports, only: [:index, :show] do
     member do
       put :accept
@@ -127,9 +125,35 @@ Rails.application.routes.draw do
     end
   end
 
+  clock_routes = proc do
+    resources :clock_in_clock_out, module: 'clock', only: [:index]
+
+    namespace :api, defaults: { format: 'json' } do
+      namespace :v1 do
+        resources :sessions, only: [:create]
+        resources :clock_in_clock_out, only: [:index]
+
+        resources :clocking, only: [] do
+          collection do
+            post :clock_in
+            post :clock_out
+            post :start_break
+            post :end_break
+            post :add_note
+          end
+        end
+      end
+    end
+  end
+
+  if ENV["USE_SUBDOMAINS"]
+    constraints subdomain: /^clock/, &clock_routes
+  else
+    scope "/clock", &clock_routes
+  end
+
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
-      resources :clock_in_clock_out, only: [:index]
       resources :test, only: [] do
         collection do
           get :get
@@ -169,15 +193,6 @@ Rails.application.routes.draw do
       resources :security_rotas, only: [] do
         member do
           get :overview
-        end
-      end
-      resources :clocking, only: [] do
-        collection do
-          post :clock_in
-          post :clock_out
-          post :start_break
-          post :end_break
-          post :add_note
         end
       end
       resources :hours_acceptance_periods, only: [:create, :update, :destroy] do
