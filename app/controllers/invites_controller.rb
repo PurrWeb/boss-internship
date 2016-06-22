@@ -68,7 +68,14 @@ class InvitesController < ApplicationController
     result = true
     ActiveRecord::Base.transaction do
       venues = invite.venue_ids.map { |id| Venue.find_by(id: id) }.compact
-      email_address = EmailAddress.new(email: invite.email)
+
+      existing_email_free = EmailAddressNotInUseQuery.new.all.where(email: invite.email).present?
+      if existing_email_free
+        email_address = EmailAddress.find_by!(email: invite.email)
+      else
+        email_address = EmailAddress.new(email: invite.email)
+      end
+
 
       result = user.update_attributes(
         user_params.merge(

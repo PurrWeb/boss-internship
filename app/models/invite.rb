@@ -77,7 +77,7 @@ class Invite < ActiveRecord::Base
 
   def user_doesnt_already_exist
     if email.present? && (User.joins(:email_address).merge(EmailAddress.where(email: email))).present?
-      errors.add :email, "is already signed up"
+      errors.add :base, "email is already taken"
     end
   end
 end
