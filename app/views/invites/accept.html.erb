@@ -2,4 +2,10 @@
 
 <p>Please fill in the following details to complete the sign up process.</p>
 
+<% if user.errors[:base].present? %>
+  <div class="alert alert-danger" role="alert">
+    <%= user.errors[:base].to_sentence %>
+  </div>
+<% end %>
+
 <%= render partial: 'user_form', locals: { user: user } %>
