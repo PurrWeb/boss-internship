@@ -147,7 +147,7 @@ Rails.application.routes.draw do
   end
 
   if ENV["USE_SUBDOMAINS"]
-    constraints subdomain: /^clock/, &clock_routes
+    constraints subdomain: /-clock$/, &clock_routes
   else
     scope "/clock", &clock_routes
   end
