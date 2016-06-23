@@ -44,7 +44,14 @@ class ClockInOutView extends Component {
                     venue={this.props.venue}
                     rota={this.props.rota}
                     reloadPage={() => location.reload()}
-                    resetApiKey={() => this.props.resetApiKey()}
+                    resetVenue={() => {
+                        var message = "You'll have to re-enter the venue key after resetting the venue." +
+                            "\n\n Do you want to continue?"
+                        if (!confirm(message)){
+                            return;
+                        }
+                        this.props.resetApiKey();
+                    }}
                 />
                 <ClockInOutStaffFinder
                     selectedStaffTypeClientId={this.props.selectedStaffTypeClientId}
