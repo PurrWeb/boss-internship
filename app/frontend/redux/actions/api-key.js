@@ -1,4 +1,3 @@
-import _ from "underscore"
 import { clockInOutAppFetchAppData } from "./clocking"
 
 var actionTypes = [];
@@ -15,14 +14,6 @@ export function setApiKeyAndFetchClockInOutAppData(apiKey){
     return function(dispatch){
         dispatch(setApiKey({apiKey}));
         dispatch(clockInOutAppFetchAppData())
-    }
-}
-
-actionTypes.push("SET_PAGE_OPTIONS")
-export function setPageOptions(options) {
-    return {
-        type: "SET_PAGE_OPTIONS",
-        pageOptions: options.pageOptions
     }
 }
 

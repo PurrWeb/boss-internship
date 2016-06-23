@@ -10,7 +10,7 @@ import {showConfirmationModal} from "./confirmation-modal"
 import { selectClockInDay} from "~redux/selectors"
 import _ from "underscore"
 import * as backendData from "~lib/backend-data/process-backend-objects"
-import {setApiKey} from "./misc"
+import {setApiKey} from "./api-key"
 import {
     loadInitialClockInOutAppState
 } from "./app-data"

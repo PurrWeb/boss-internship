@@ -7,7 +7,7 @@ import {
 } from "./rota-forecasts"
 import {
     setPageOptions
-} from "./misc"
+} from "./page-options"
 
 var getActionCreators = function(){
     throw Error("getActionCreators called before setGetActionCreators was called")
