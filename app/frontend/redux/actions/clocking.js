@@ -249,4 +249,11 @@ export const forceStaffMemberClockOut = createApiRequestActionCreator({
     })
 })
 
+export function setApiKeyAndFetchClockInOutAppData(apiKey){
+    return function(dispatch){
+        dispatch(setApiKey({apiKey}));
+        dispatch(clockInOutAppFetchAppData())
+    }
+}
+
 export {actionTypes}
