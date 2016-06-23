@@ -20,10 +20,22 @@ import LoadAppDataDialog from "./containers/load-app-data-dialog"
 class ClockInOutView extends Component {
     render() {
         if (!this.props.hasLoadedAppData) {
-            return <LoadAppDataDialog />
+            return <div>
+                <LoadAppDataDialog />
+                {this.getReloadPageButton()}
+            </div>
         } else {
             return this.getClockInOutUI();
         }
+    }
+    getReloadPageButton(){
+        return <div style={{marginTop: 20}}>
+            <button
+                className="btn btn-default btn-sm"
+                onClick={() => location.reload()}>
+                Reload Page
+            </button>
+        </div>
     }
     getClockInOutUI(){
         var classes = ["container"];
@@ -46,7 +58,7 @@ class ClockInOutView extends Component {
                     reloadPage={() => location.reload()}
                     resetVenue={() => {
                         var message = "You'll have to re-enter the venue key after resetting the venue." +
-                            "\n\n Do you want to continue?"
+                            "\n\nDo you want to continue?"
                         if (!confirm(message)){
                             return;
                         }
@@ -58,9 +70,12 @@ class ClockInOutView extends Component {
                     userIsManagerOrSupervisor={this.props.userIsManagerOrSupervisor} />
             </div>
         } else {
-            content = <LargeStaffTypeSelector
-                staffTypes={this.props.staffTypes}
-                onSelect={({staffType}) => this.props.selectStaffType(staffType.clientId)} />
+            content = <div>
+                <LargeStaffTypeSelector
+                    staffTypes={this.props.staffTypes}
+                    onSelect={({staffType}) => this.props.selectStaffType(staffType.clientId)} />
+                {this.getReloadPageButton()}
+            </div>
         }
 
         return <div className={classes.join(" ")}>

@@ -25,7 +25,7 @@ export default class LargeStaffTypeSelector extends React.Component {
                 onClick={() => this.props.onSelect({staffType})} />
         });
 
-        return <div>
+        return <div style={{overflow: "hidden"}}>
             {staffTypeButtons}
         </div>
     }
