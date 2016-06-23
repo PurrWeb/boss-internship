@@ -18,25 +18,34 @@ class DataHandler{
 Generates a data handler object that combines the actionCreators and reducer for
 a particular data type.
 
-Parameters:
 * collectionName
-Plural name of the object type, e.g. "users" or "clockInperiods"
-This is used to create action names and types, e.g. replaceALlUsers or ADD_USER
+    Plural name of the object type, e.g. "users" or "clockInperiods"
+    This is used to create action names and types, e.g. replaceALlUsers or ADD_USER
 * actionHandlers
-An object that is converted to a reducer. The keys are action types and the values
-are either functions or objects that are converted into reducer functions.
-Objects are used for default handlers:
-ADD_USERS: {action: "add"}
-In addition to adding a handler to the reducer this will also generate
-an action creator.
-Additional object properties other than `action`:
-- shouldIgnoreAction - function that returns true if the action shouldn't be handled
-- debug - pause when the reducer function runs
-Reducer function receive the state and action, but also a set of common
-handler functions like `add` or `update`.
+    An object that is converted to a reducer, by combining the reducers for each action type. Format:
+    {
+        ACTION_TYPE: function reducer(state, action, handlerHelpers){},
+        ...
+    }
+
+    Instead of passing in a reducer function as the property value you can also pass in an object
+    that is used to generate default reducer function. Example:
+    {
+        ADD_USERS: {
+            action: "add"
+        },
+        ...
+    }
+    In addition to adding a handler to the reducer, the object above will also generate
+    an action creator called `addUser`.
+    Possible properties for the default handler object:
+        - action - default action, e.g. "add", "replaceAll", "delete", "update", ...
+        - shouldIgnoreAction - function that is called before calling the reducer function,
+          if this function returns true the reducer function isn't called
+        - debug - pause when the reducer function runs
 * reducerOptions
-An object with any of these keys:
-- initialState (initial state of the reducer, e.g. [] or null, defaults to {})
+    An object with any of these keys:
+    - initialState (initial state of the reducer, e.g. [] or null, defaults to {})
 */
 export default function makeDataHandler(collectionName, actionHandlers, reducerOptions){
     if (typeof collectionName !== "string") {
