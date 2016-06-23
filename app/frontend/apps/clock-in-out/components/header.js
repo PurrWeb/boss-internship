@@ -10,7 +10,8 @@ export default class Header extends React.Component {
         userIsSupervisor: React.PropTypes.bool.isRequired,
         leaveManagerModeInProgress: React.PropTypes.bool.isRequired,
         leaveManagerMode: React.PropTypes.func.isRequired,
-        refetchAllData: React.PropTypes.func.isRequired,
+        reloadPage: React.PropTypes.func.isRequired,
+        resetApiKey: React.PropTypes.func.isRequired,
         venue: React.PropTypes.object.isRequired,
         rota: React.PropTypes.object.isRequired
     }
@@ -29,8 +30,14 @@ export default class Header extends React.Component {
                 <button
                     className="btn btn-default"
                     style={{marginRight: 2}}
-                    onClick={this.props.refetchAllData}>
-                    Reload All Data
+                    onClick={this.props.reloadPage}>
+                    Reload Page
+                </button>
+                <button
+                    className="btn btn-default"
+                    style={{marginRight: 2}}
+                    onClick={this.props.resetApiKey}>
+                    Unset Venue
                 </button>
                 <LeaveManagerModeButton
                     userIsManager={this.props.userIsManager}

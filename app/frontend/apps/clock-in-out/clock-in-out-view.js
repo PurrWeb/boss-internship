@@ -43,7 +43,8 @@ class ClockInOutView extends Component {
                     leaveManagerMode={this.props.leaveManagerMode}
                     venue={this.props.venue}
                     rota={this.props.rota}
-                    refetchAllData={() => this.props.refreshAllData(this.props.apiKey)}
+                    reloadPage={() => location.reload()}
+                    resetApiKey={() => this.props.resetApiKey()}
                 />
                 <ClockInOutStaffFinder
                     selectedStaffTypeClientId={this.props.selectedStaffTypeClientId}
@@ -97,10 +98,10 @@ function mapDispatchToProps(dispatch){
                 selectedStaffTypeClientId
             }))
         },
-        refreshAllData: function(apiKey){
+        resetApiKey: function(){
+            // reset store also updates the apiKey, which means it'll
+            // be updated in localStorage
             dispatch(actions.resetStore());
-            dispatch(actions.setApiKey({apiKey}))
-            dispatch(actions.clockInOutAppFetchAppData())
         }
     }
 }

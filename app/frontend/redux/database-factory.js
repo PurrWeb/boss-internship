@@ -93,7 +93,7 @@ export default class DatabaseFactory {
                 throw Error("Dispatched non-existent action type " + action.type)
             }
             if (action.type === "RESET_STORE") {
-                return undefined;
+                return rootReducer(undefined, action);
             }
             return rootReducer(state, action)
         }
