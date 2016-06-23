@@ -7,4 +7,4 @@ export default makeDataHandler("apiKey", {
     CLOCK_IN_OUT_APP_FETCH_DATA_FAILURE: function(state, action){
         return "";
     }
-})
+}, {initialState: ""})
