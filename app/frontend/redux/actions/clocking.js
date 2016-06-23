@@ -10,6 +10,7 @@ import {showConfirmationModal} from "./confirmation-modal"
 import { selectClockInDay} from "~redux/selectors"
 import _ from "underscore"
 import * as backendData from "~lib/backend-data/process-backend-objects"
+import {setApiKey} from "./api-key"
 import {
     loadInitialClockInOutAppState
 } from "./app-data"
@@ -204,6 +205,9 @@ export const clockInOutAppFetchAppData = createApiRequestActionCreator({
     },
     additionalSuccessActionCreator: function(responseData){
         return loadInitialClockInOutAppState(responseData);
+    },
+    getFailureActionData(responseData, requestOptions, getState){
+        return {}
     }
 })
 
@@ -244,5 +248,12 @@ export const forceStaffMemberClockOut = createApiRequestActionCreator({
         }
     })
 })
+
+export function setApiKeyAndFetchClockInOutAppData(apiKey){
+    return function(dispatch){
+        dispatch(setApiKey({apiKey}));
+        dispatch(clockInOutAppFetchAppData())
+    }
+}
 
 export {actionTypes}

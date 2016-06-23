@@ -14,13 +14,13 @@ import LargeStaffTypeSelector from "./components/large-staff-type-selector"
 import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
 import UserActionConfirmationMessages from "~components/user-action-confirmation-messages"
 import Header from "./components/header"
-import KeyDialog from "./containers/key-dialog"
+import LoadAppDataDialog from "./containers/load-app-data-dialog"
 
 
 class ClockInOutView extends Component {
     render() {
         if (!this.props.hasLoadedAppData) {
-            return <KeyDialog />
+            return <LoadAppDataDialog />
         } else {
             return this.getClockInOutUI();
         }

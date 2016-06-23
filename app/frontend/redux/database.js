@@ -16,7 +16,8 @@ import * as appDataActions from "./actions/app-data"
 import * as staffMemberActions from "./actions/staff-members"
 import * as clockingActions from "./actions/clocking"
 import * as hoursAcceptancePeriodActions from "./actions/hours-acceptance-periods"
-import * as miscActions from "./actions/misc"
+import * as apiKeyActions from "./actions/api-key"
+import * as pageOptionsActions from "./actions/page-options"
 import * as clockInNoteActions from "./actions/clock-in-notes"
 import DatabaseFactory from "./database-factory"
 
@@ -28,12 +29,13 @@ registerActionsObject(clockingActions)
 registerActionsObject(rotaActions)
 registerActionsObject(confirmationMessageActions)
 registerActionsObject(rotaForecastActions)
-registerActionsObject(confirmationModalActions);
+registerActionsObject(confirmationModalActions)
 registerActionsObject(shiftActions)
 registerActionsObject(appDataActions)
 registerActionsObject(staffMemberActions)
 registerActionsObject(hoursAcceptancePeriodActions)
-registerActionsObject(miscActions)
+registerActionsObject(apiKeyActions)
+registerActionsObject(pageOptionsActions)
 registerActionsObject(clockInNoteActions)
 
 dataHandlers.forEach(function(dataHandler){
