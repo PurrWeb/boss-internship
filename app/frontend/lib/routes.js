@@ -230,5 +230,5 @@ export function getApiRoot(){
     if (window.apiRootPrefix) {
         apiRootPrefix = window.apiRootPrefix
     }
-    return apiRootPrefix + "/api/v1/"    
+    return apiRootPrefix + "/api/v1/"
 }

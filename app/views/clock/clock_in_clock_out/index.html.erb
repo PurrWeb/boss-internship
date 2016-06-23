@@ -1,4 +1,7 @@
-<script>
-window.apiRootPrefix = "/clock/"
-</script>
 <%= react_component('ClockInOutApp') %>
+
+<script>
+  <% if !ENV["USE_SUBDOMAINS"] %>
+    window.apiRootPrefix = "/clock/"
+  <% end %>
+</script>
