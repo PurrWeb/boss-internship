@@ -1,10 +1,7 @@
 import React from "react"
-import { connect } from "react-redux"
-import actionCreators from "~redux/actions"
-import { selectClockInOutLoadAppDataIsInProgress } from "~redux/selectors"
 import Spinner from "~components/spinner"
 
-class KeyDialog extends React.Component {
+export default class KeyDialog extends React.Component {
     render(){
         var buttonOrSpinner;
         if (this.props.loadDataInProgress) {
@@ -29,20 +26,3 @@ class KeyDialog extends React.Component {
         </form>
     }
 }
-
-function mapStateToProps(state){
-    return {
-        loadDataInProgress: selectClockInOutLoadAppDataIsInProgress(state)
-    }
-}
-
-function mapDispatchToProps(dispatch){
-    return {
-        onApiKeySelected: function(apiKey){
-            dispatch(actionCreators.setApiKey({apiKey}));
-            dispatch(actionCreators.clockInOutAppFetchAppData())
-        }
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(KeyDialog)
