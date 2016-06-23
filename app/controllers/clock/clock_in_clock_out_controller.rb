@@ -1,7 +1,8 @@
 module Clock
   class ClockInClockOutController < ApplicationController
+    skip_before_filter :authenticate_user!
+
     def index
-      authorize! :manage, :clock_in_clock_out
       render locals: {}
     end
   end
