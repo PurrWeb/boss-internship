@@ -71,7 +71,7 @@
         <% sorted_reports.each do |report| %>
           <tr>
             <td>
-              <strong><%= report.staff_member_name.titlecase %></strong>
+              <strong><%= link_to(report.staff_member_name.titlecase, staff_member_path(report.staff_member)) %></strong>
             </td>
             <% week.each_with_day do |date, day| %>
               <td><%= report.public_send("#{day}_hours_count".to_sym).round(2) %></td>
@@ -80,7 +80,7 @@
               <%= report.total_hours_count.round(2) %>
             </td>
             <td>
-              <%= report.owed_hours_count %>
+              <%= link_to(report.owed_hours_count, staff_member_path(report.staff_member, tab: 'owed-hours')) %>
             </td>
             <td>
               <%= report.pay_rate_description %>
@@ -91,7 +91,7 @@
               </strong>
             </td>
             <td>
-              <%= report.holiday_days_count %>
+              <%= link_to(report.holiday_days_count, staff_member_path(report.staff_member, tab: 'holidays')) %>
             </td>
             <td>
               <%= report.status.titlecase %>
