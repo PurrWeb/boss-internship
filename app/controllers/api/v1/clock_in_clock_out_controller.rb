@@ -10,7 +10,14 @@ module Api
         venue = api_key.venue
         rota_date = RotaShiftDate.to_rota_date(Time.current)
 
-        staff_members = StaffMember.for_venue(venue).enabled
+        rota = Rota.find_or_initialize_by(venue: venue, date: rota_date)
+
+        rota_shifts = rota.rota_shifts.enabled
+
+        staff_members = ClockableStaffMembersQuery.new(
+          venue: venue,
+          rota_shifts: rota_shifts
+        ).all
 
         clock_in_days = staff_members.map do |staff_member|
           ClockInDay.find_or_initialize_by(
@@ -19,10 +26,6 @@ module Api
             date: rota_date
           )
         end
-
-        rota = Rota.find_or_initialize_by(venue: venue, date: rota_date)
-
-        rota_shifts = rota.rota_shifts.enabled
 
         clock_in_notes = ClockInNote.
           joins(:clock_in_day).
