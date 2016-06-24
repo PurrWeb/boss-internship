@@ -80,7 +80,7 @@
               <%= report.total_hours_count.round(2) %>
             </td>
             <td>
-              <%= report.owed_hours_count %>
+              <%= link_to(report.owed_hours_count, staff_member_path(report.staff_member, tab: 'owed-hours')) %>
             </td>
             <td>
               <%= report.pay_rate_description %>
