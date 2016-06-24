@@ -91,7 +91,7 @@
               </strong>
             </td>
             <td>
-              <%= report.holiday_days_count %>
+              <%= link_to(report.holiday_days_count, staff_member_path(report.staff_member, tab: 'holidays')) %>
             </td>
             <td>
               <%= report.status.titlecase %>
