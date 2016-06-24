@@ -1,6 +1,6 @@
 import _ from "underscore"
 import utils from "~lib/utils"
-import {API_ROOT, apiRoutes} from "~lib/routes"
+import {getApiRoot, apiRoutes} from "~lib/routes"
 import oFetch from "o-fetch"
 
 /*
@@ -93,7 +93,7 @@ export default function makeApiRequestMaker(apiOptions){
                 contentType = "application/json"
             }
             $.ajax({
-               url: API_ROOT + path,
+               url: getApiRoot() + path,
                method: method,
                data,
                headers,
@@ -149,7 +149,7 @@ export default function makeApiRequestMaker(apiOptions){
 function makeRequestForAccessToken({requestData, success, error}){
     $.ajax({
         method: apiRoutes.getSessionToken.method,
-        url: API_ROOT + apiRoutes.getSessionToken.getPath(),
+        url: getApiRoot() + apiRoutes.getSessionToken.getPath(),
         data: {
             api_key: requestData.apiKey,
             staff_member_id: requestData.staffMemberServerId,

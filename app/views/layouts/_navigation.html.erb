@@ -54,12 +54,6 @@
             </li>
           <% end %>
 
-          <% if can?(:manage, :clock_in_clock_out) && ApiKey.current_for(venue: current_user.default_venue).present? %>
-            <li class="nav-clock-in-clock-out-section">
-              <%= link_to('Clock In/Out', clock_in_clock_out_index_path, class: "nav-section-header-link") %>
-            </li>
-          <% end %>
-
           <% if !current_user.security_manager? %>
             <li class="nav-hours-confirmation-section">
               <%= link_to('Hours Confirmation', current_hours_confirmation_index_path, class: 'nav-section-header-link') %>

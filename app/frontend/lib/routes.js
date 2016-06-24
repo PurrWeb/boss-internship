@@ -224,4 +224,11 @@ const apiRoutes = {
 }
 
 export {apiRoutes}
-export const API_ROOT = "/api/v1/"
+var apiRootPrefix = ""
+
+export function getApiRoot(){
+    if (window.apiRootPrefix) {
+        apiRootPrefix = window.apiRootPrefix
+    }
+    return apiRootPrefix + "/api/v1/"
+}
