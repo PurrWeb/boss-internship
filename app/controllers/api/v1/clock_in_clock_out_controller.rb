@@ -5,7 +5,7 @@ module Api
 
       def index
         api_key = ApiKey.active.find_by(key: params[:api_key])
-        raise ActiveRecord::RecordNotFound unless api_key.present?
+        raise AuthorizationException unless api_key.present?
 
         venue = api_key.venue
         rota_date = RotaShiftDate.to_rota_date(Time.current)
