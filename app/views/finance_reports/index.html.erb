@@ -71,7 +71,7 @@
         <% sorted_reports.each do |report| %>
           <tr>
             <td>
-              <strong><%= report.staff_member_name.titlecase %></strong>
+              <strong><%= link_to(report.staff_member_name.titlecase, staff_member_path(report.staff_member)) %></strong>
             </td>
             <% week.each_with_day do |date, day| %>
               <td><%= report.public_send("#{day}_hours_count".to_sym).round(2) %></td>
