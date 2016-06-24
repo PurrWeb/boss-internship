@@ -20,10 +20,22 @@ import LoadAppDataDialog from "./containers/load-app-data-dialog"
 class ClockInOutView extends Component {
     render() {
         if (!this.props.hasLoadedAppData) {
-            return <LoadAppDataDialog />
+            return <div>
+                <LoadAppDataDialog />
+                {this.getReloadPageButton()}
+            </div>
         } else {
             return this.getClockInOutUI();
         }
+    }
+    getReloadPageButton(){
+        return <div style={{marginTop: 20}}>
+            <button
+                className="btn btn-default btn-sm"
+                onClick={() => location.reload()}>
+                Reload Page
+            </button>
+        </div>
     }
     getClockInOutUI(){
         var classes = ["container"];
@@ -43,16 +55,27 @@ class ClockInOutView extends Component {
                     leaveManagerMode={this.props.leaveManagerMode}
                     venue={this.props.venue}
                     rota={this.props.rota}
-                    refetchAllData={() => this.props.refreshAllData(this.props.apiKey)}
+                    reloadPage={() => location.reload()}
+                    resetVenue={() => {
+                        var message = "You'll have to re-enter the venue key after resetting the venue." +
+                            "\n\nDo you want to continue?"
+                        if (!confirm(message)){
+                            return;
+                        }
+                        this.props.resetApiKey();
+                    }}
                 />
                 <ClockInOutStaffFinder
                     selectedStaffTypeClientId={this.props.selectedStaffTypeClientId}
                     userIsManagerOrSupervisor={this.props.userIsManagerOrSupervisor} />
             </div>
         } else {
-            content = <LargeStaffTypeSelector
-                staffTypes={this.props.staffTypes}
-                onSelect={({staffType}) => this.props.selectStaffType(staffType.clientId)} />
+            content = <div>
+                <LargeStaffTypeSelector
+                    staffTypes={this.props.staffTypes}
+                    onSelect={({staffType}) => this.props.selectStaffType(staffType.clientId)} />
+                {this.getReloadPageButton()}
+            </div>
         }
 
         return <div className={classes.join(" ")}>
@@ -97,10 +120,10 @@ function mapDispatchToProps(dispatch){
                 selectedStaffTypeClientId
             }))
         },
-        refreshAllData: function(apiKey){
+        resetApiKey: function(){
+            // reset store also updates the apiKey, which means it'll
+            // be updated in localStorage
             dispatch(actions.resetStore());
-            dispatch(actions.setApiKey({apiKey}))
-            dispatch(actions.clockInOutAppFetchAppData())
         }
     }
 }

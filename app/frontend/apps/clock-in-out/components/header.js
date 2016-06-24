@@ -10,7 +10,8 @@ export default class Header extends React.Component {
         userIsSupervisor: React.PropTypes.bool.isRequired,
         leaveManagerModeInProgress: React.PropTypes.bool.isRequired,
         leaveManagerMode: React.PropTypes.func.isRequired,
-        refetchAllData: React.PropTypes.func.isRequired,
+        reloadPage: React.PropTypes.func.isRequired,
+        resetVenue: React.PropTypes.func.isRequired,
         venue: React.PropTypes.object.isRequired,
         rota: React.PropTypes.object.isRequired
     }
@@ -18,6 +19,12 @@ export default class Header extends React.Component {
         var returnToStaffTypeSelectorButton = null;
         var managerButtons = null;
         var refetchDataButton = null;
+        var reloadPageButton = <button
+            className="btn btn-default btn-sm"
+            style={{marginRight: 2}}
+            onClick={this.props.reloadPage}>
+            Reload Page
+        </button>
         if (!this.props.userIsManagerOrSupervisor) {
             returnToStaffTypeSelectorButton = <a
                     className="btn btn-default"
@@ -25,12 +32,12 @@ export default class Header extends React.Component {
                     Select a different staff type
                 </a>
         } else {
-            managerButtons = <div>
+            managerButtons = <div style={{display: "inline-block"}}>
                 <button
-                    className="btn btn-default"
+                    className="btn btn-default btn-sm"
                     style={{marginRight: 2}}
-                    onClick={this.props.refetchAllData}>
-                    Reload All Data
+                    onClick={this.props.resetVenue}>
+                    Reset Venue
                 </button>
                 <LeaveManagerModeButton
                     userIsManager={this.props.userIsManager}
@@ -41,6 +48,7 @@ export default class Header extends React.Component {
         }
         return <div>
             <div style={{float: "right"}}>
+                {reloadPageButton}
                 {managerButtons}
                 {returnToStaffTypeSelectorButton}
             </div>
