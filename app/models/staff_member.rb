@@ -137,6 +137,10 @@ class StaffMember < ActiveRecord::Base
     staff_type.andand.bar_supervisor?
   end
 
+  def general_manager?
+    staff_type.andand.general_manager?
+  end
+
   def manager?
     staff_type.andand.manager?
   end

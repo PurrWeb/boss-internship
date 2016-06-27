@@ -20,6 +20,7 @@ class ApiAbility
 
   def has_manager_mode_access?(staff_member)
     staff_member.manager? ||
-      staff_member.bar_supervisor?
+      staff_member.bar_supervisor? ||
+      staff_member.general_manager?
   end
 end

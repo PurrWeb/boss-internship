@@ -12,6 +12,10 @@ class StaffType < ActiveRecord::Base
     name == 'Bar Supervisor'
   end
 
+  def general_manager?
+    name == 'GM'
+  end
+
   def manager?
     name == 'Manager'
   end
