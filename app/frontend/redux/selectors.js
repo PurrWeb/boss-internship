@@ -259,6 +259,9 @@ export function selectStaffMembers(state){
         staffMember.updatePinInProgress = selectIsUpdatingStaffMemberPin(state, {
             staffMemberServerId: staffMember.serverId
         });
+        staffMember.enterManagerModeInProgress = selectEnterManagerModeIsInProgress(state, {
+            staffMemberServerId: staffMember.serverId
+        });
 
         return staffMember
     })

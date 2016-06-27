@@ -9,9 +9,6 @@ import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
 import {
     selectShiftsByStaffMemberClientId,
-    selectIsUpdatingStaffMemberStatus,
-    selectEnterManagerModeIsInProgress,
-    selectIsUpdatingStaffMemberPin,
     selectClockInOutAppUserPermissions,
     selectClockInDay,
     selectAddClockInNoteIsInProgress
@@ -165,7 +162,7 @@ class ClockInOutStaffListItem extends Component {
         if (!staffMember.canEnterManagerMode) {
             return null;
         }
-        if (this.props.enterManagerModeIsInProgress){
+        if (staffMember.enterManagerModeInProgress){
             return <Spinner />;
         }
         var buttonText = null;
@@ -197,7 +194,6 @@ function mapStateToProps(state, ownProps){
         staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
         rotas: state.rotas,
         venues: state.venues,
-        enterManagerModeIsInProgress: selectEnterManagerModeIsInProgress(state, {staffMemberServerId: ownProps.staff.serverId}),
         userPermissions: selectClockInOutAppUserPermissions(state),
         pageOptions: state.pageOptions,
         clockInNotes: _.filter(state.clockInNotes, function(note){
