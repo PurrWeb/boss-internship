@@ -153,11 +153,7 @@ Rails.application.routes.draw do
         end
         resources :holidays, only: :show
         resources :holiday_reports, only: :index
-        resources :staff_members, only: :show do
-          member do
-            post :change_pin
-          end
-        end
+        resources :staff_members, only: :show
         resources :staff_types,   only: :show
         resources :rota_shifts,   only: [:show, :destroy, :update]
         resources :rotas,         only: :show
@@ -201,6 +197,12 @@ Rails.application.routes.draw do
             post :start_break
             post :end_break
             post :add_note
+          end
+        end
+
+        resources :staff_members, only: [] do
+          member do
+            post :change_pin
           end
         end
       end
