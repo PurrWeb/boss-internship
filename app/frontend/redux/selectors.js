@@ -242,26 +242,43 @@ export function selectIsUpdatingStaffMemberPin(state, {staffMemberServerId}) {
     return requestsForStaffMember.length > 0;
 }
 
+export function selectStaffMembers(state){
+    return _.mapObject(state.staffMembers, function(staffMember){
+        var staffMember = {...staffMember}
+
+        var staffTypeObject = staffMember.staff_type.get(state.staffTypes);
+        staffMember.isManager = staffTypeObject.name === "Manager";
+        staffMember.isSupervisor = staffTypeObject.name === "Bar Supervisor";
+
+        return staffMember
+    })
+}
+
 export function selectClockInOutAppUserPermissions(state){
     var userMode = state.clockInOutAppUserMode.mode;
     if (userMode === "manager") {
         return {
             toggleOnBreak: true,
             changePin: true,
-            addNote: true
+            addNote: true,
+            canEnterManagerMode: true
         }
     }
     if (userMode === "supervisor") {
         return {
             toggleOnBreak: true,
             changePin: false,
-            addNote: true
+            addNote: true,
+            canEnterManagerMode: true
         }
     }
+
+    //  Normal user that's not a manager
     return {
         toggleOnBreak: false,
         changePin: false,
-        addNote: false
+        addNote: false,
+        canEnterManagerMode: false
     }
 }
 

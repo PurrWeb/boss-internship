@@ -16,14 +16,6 @@ export function processVenueObject(venue){
 
 export function processStaffMemberObject(staffMember){
     staffMember = processBackendObject(staffMember);
-    staffMember.isManager = function({staffTypes}){
-        var staffTypeObject = staffMember.staff_type.get(staffTypes);
-        return staffTypeObject.name === "Manager";
-    }
-    staffMember.isSupervisor = function({staffTypes}){
-        var staffTypeObject = staffMember.staff_type.get(staffTypes);
-        return staffTypeObject.name === "Bar Supervisor";
-    }
     return staffMember;
 }
 

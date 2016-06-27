@@ -158,17 +158,12 @@ class ClockInOutStaffListItem extends Component {
                 Change Pin
             </a>
     }
-    isManager(){
-        return this.props.staff.isManager({staffTypes: this.props.staffTypes});
-    }
-    isSupervisor(){
-        return this.props.staff.isSupervisor({staffTypes: this.props.staffTypes});
-    }
     enterManagerMode(){
         this.props.enterManagerMode();
     }
     getManagerModeButton(){
-        if (!this.isManager() && !this.isSupervisor()) {
+        var staffMember = this.props.staff;
+        if (!staffMember.isManager && !staffMember.isSupervisor) {
             return null;
         }
         if (this.props.enterManagerModeIsInProgress){
@@ -176,14 +171,12 @@ class ClockInOutStaffListItem extends Component {
         }
         var buttonText = null;
         var modeType = null;
-        if (this.isManager()){
-            buttonText = "Enter Manager Mode";
-            modeType = "manager"
-        } else if (this.isSupervisor()) {
+        if (staffMember.isSupervisor){
             buttonText = "Enter Supervisor Mode";
             modeType = "supervisor"
         } else {
-            throw new Error("Shouldn't be possible")
+            buttonText = "Enter Manager Mode";
+            modeType = "manager"
         }
 
         return <a
