@@ -272,14 +272,16 @@ export function selectClockInOutAppUserPermissions(state){
         return {
             toggleOnBreak: true,
             changePin: true,
-            addNote: true
+            addNote: true,
+            resetVenue: true
         }
     }
     if (userMode === "Bar Supervisor") {
         return {
             toggleOnBreak: true,
             changePin: false,
-            addNote: true
+            addNote: true,
+            resetVenue: true
         }
     }
 
@@ -287,7 +289,8 @@ export function selectClockInOutAppUserPermissions(state){
     return {
         toggleOnBreak: false,
         changePin: false,
-        addNote: false
+        addNote: false,
+        resetVenue: false
     }
 }
 

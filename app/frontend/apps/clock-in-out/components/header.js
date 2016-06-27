@@ -31,12 +31,6 @@ export default class Header extends React.Component {
                 </a>
         } else {
             managerButtons = <div style={{display: "inline-block"}}>
-                <button
-                    className="btn btn-default btn-sm"
-                    style={{marginRight: 2}}
-                    onClick={this.props.resetVenue}>
-                    Reset Venue
-                </button>
                 <LeaveManagerModeButton
                     leaveManagerModeInProgress={this.props.leaveManagerModeInProgress}
                     leaveManagerMode={this.props.leaveManagerMode} />
