@@ -62,12 +62,12 @@ describe("Clock In/Out Page Integration Test", function(){
             resolve(data);
         })
         expect.spyOn($, "ajax").andReturn(promise)
-        ReactTestUtils.Simulate.submit(getNode());
+        ReactTestUtils.Simulate.submit($$("[data-test-marker-key-dialog-form]")[0]);
 
         _.defer(function(){
             expect($$(".large-staff-type-selector__button").length).toBeGreaterThan(0);
             done();
-        }, 0)
+        })
     })
 
     it("Shows a list of staff members after selecting a staff type", function(){

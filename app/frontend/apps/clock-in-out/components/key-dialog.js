@@ -16,6 +16,7 @@ export default class KeyDialog extends React.Component {
                 e.preventDefault();
                 this.props.onApiKeySelected(this.apiKeyInput.value)
             }}
+                data-test-marker-key-dialog-form
             >
             <label>Enter key</label><br/>
             <input
