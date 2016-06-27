@@ -249,6 +249,7 @@ export function selectStaffMembers(state){
         var staffTypeObject = staffMember.staff_type.get(state.staffTypes);
         staffMember.isManager = staffTypeObject.name === "Manager";
         staffMember.isSupervisor = staffTypeObject.name === "Bar Supervisor";
+        staffMember.canEnterManagerMode = staffMember.isManager || staffMember.isSupervisor;
 
         return staffMember
     })
@@ -260,16 +261,14 @@ export function selectClockInOutAppUserPermissions(state){
         return {
             toggleOnBreak: true,
             changePin: true,
-            addNote: true,
-            canEnterManagerMode: true
+            addNote: true
         }
     }
     if (userMode === "supervisor") {
         return {
             toggleOnBreak: true,
             changePin: false,
-            addNote: true,
-            canEnterManagerMode: true
+            addNote: true
         }
     }
 
@@ -277,8 +276,7 @@ export function selectClockInOutAppUserPermissions(state){
     return {
         toggleOnBreak: false,
         changePin: false,
-        addNote: false,
-        canEnterManagerMode: false
+        addNote: false
     }
 }
 

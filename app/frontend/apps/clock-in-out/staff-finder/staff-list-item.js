@@ -163,7 +163,7 @@ class ClockInOutStaffListItem extends Component {
     }
     getManagerModeButton(){
         var staffMember = this.props.staff;
-        if (!staffMember.isManager && !staffMember.isSupervisor) {
+        if (!staffMember.canEnterManagerMode) {
             return null;
         }
         if (this.props.enterManagerModeIsInProgress){
