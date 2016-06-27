@@ -29,10 +29,10 @@ class ConfirmationModal extends React.Component {
                     {this.props.modalOptions.title}
                     <div className="row" data-test-marker-pin-modal>
                         <form onSubmit={(e) => {e.preventDefault(); this.complete()}}>
-                            <div className="col-md-9">
-                                <input type="text" ref="pinInput"/>
+                            <div className="col-sm-8">
+                                <input style={{width: "100%"}} type="number" ref="pinInput"/>
                             </div>
-                            <div className="col-md-3">
+                            <div className="col-sm-4">
                                 <button type="submit" className="btn btn-default">
                                     OK
                                 </button>
