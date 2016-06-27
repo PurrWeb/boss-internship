@@ -26,9 +26,8 @@ var columnNameStyle = {
 
 class ClockInOutStaffListItem extends Component {
     render(){
-        var staffObject = this.props.staff;
+        var staffMember = this.props.staff;
         var clockInStatusValue = this.props.clockInDay.status
-        var staffTypeObject = staffObject.staff_type.get(this.props.staffTypes);
 
         var rotaedShiftsColumn = null;
         var statusToggleButtons = null;
@@ -50,14 +49,14 @@ class ClockInOutStaffListItem extends Component {
         return <div className="staff-list-item staff-list-item--clock-in-out">
             <div className="row">
                 <div className="col-md-1 col-xs-2">
-                    <img src={staffObject.avatar_url} className="staff-list-item__avatar" />
+                    <img src={staffMember.avatar_url} className="staff-list-item__avatar" />
                 </div>
                 <div className="col-md-3 col-xs-10">
                     <div className="staff-list-item--clock-in-out__name">
-                        {staffObject.first_name} {staffObject.surname}
+                        {staffMember.first_name} {staffMember.surname}
                     </div>
                     <StaffTypeBadge
-                        staffTypeObject={staffTypeObject} />
+                        staffTypeObject={staffMember.staffType} />
                     <div className="staff-list-item--clock-in-out__manager-buttons">
                         {this.getAddNoteButton()}
                         {this.getChangePinButton()}
@@ -81,13 +80,13 @@ class ClockInOutStaffListItem extends Component {
             return <Spinner />
         }
 
-        var staffObject = this.props.staff;
+        var staffMember = this.props.staff;
         var toggleOnBreakButton = null;
         if (this.props.userPermissions.toggleOnBreak){
             toggleOnBreakButton = <div className="col-md-6 col-xs-2">
                 <ToggleStaffOnBreakButton
                     clockInDay={this.props.clockInDay}
-                    staffObject={staffObject}
+                    staffObject={staffMember}
                     updateClockInStatusWithConfirmation={(options) => this.updateClockInStatus(options)} />
             </div>;
         }
@@ -95,7 +94,7 @@ class ClockInOutStaffListItem extends Component {
             <div className="col-md-6 col-xs-2">
                 <ToggleStaffClockedInButton
                     clockInDay={this.props.clockInDay}
-                    staffObject={staffObject}
+                    staffObject={staffMember}
                     updateClockInStatusWithConfirmation={(options) => this.updateClockInStatus(options)} />
             </div>
             {toggleOnBreakButton}
@@ -140,7 +139,7 @@ class ClockInOutStaffListItem extends Component {
         })
     }
     getChangePinButton(){
-        var staffObject = this.props.staff;
+        var staffMember = this.props.staff;
         if (!this.props.userPermissions.changePin) {
             return null;
         }
@@ -153,7 +152,7 @@ class ClockInOutStaffListItem extends Component {
                 className="btn btn-default btn-sm show-in-manager-mode--inline-block"
                 data-test-marker-change-pin-button
                 onClick={() => this.props.updateStaffMemberPin({
-                    staffMemberObject: staffObject
+                    staffMemberObject: staffMember
                 })}>
                 Change Pin
             </a>
@@ -194,7 +193,6 @@ function mapStateToProps(state, ownProps){
         date: state.pageOptions.dateOfRota
     })
     return {
-        staffTypes: state.staffTypes,
         clockInDay,
         staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
         rotas: state.rotas,

@@ -247,9 +247,12 @@ export function selectStaffMembers(state){
         var staffMember = {...staffMember}
 
         var staffTypeObject = staffMember.staff_type.get(state.staffTypes);
+        staffMember.staffType = staffTypeObject;
+
         staffMember.isManager = staffTypeObject.name === "Manager";
         staffMember.isSupervisor = staffTypeObject.name === "Bar Supervisor";
         staffMember.canEnterManagerMode = staffMember.isManager || staffMember.isSupervisor;
+
 
         return staffMember
     })
