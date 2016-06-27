@@ -12,17 +12,21 @@
 * Run the rails server `bundle exec rails server`
 * Enjoy
 
+## Run server so it's accessible from the local network
+
+`bundle exec rails server --binding=0.0.0.0`
+
 ## To pull down data from production
 
 `bundle exec rake data:load_production_dump`
 
 ## Setting staff member PINs
 
-`bundle exec rails console`
-
-`staff_member = StaffMember.find(<put id here>)``
-
-`staff_member.update_attributes!(pin_code: "<put new pin here>")`
+```
+bundle exec rails console  
+$ staff_member = StaffMember.find(<put id here>)  
+$ staff_member.update_attributes!(pin_code: "<put new pin here>")
+```
 
 ## Running front-end tests
 
