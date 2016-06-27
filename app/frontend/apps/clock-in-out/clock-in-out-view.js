@@ -5,9 +5,8 @@ import ClockInOutStaffFinder from "./staff-finder/staff-finder"
 import actions from "~redux/actions"
 import {
     selectRotaOnClockInOutPage,
-    selectClockInOutAppUserIsSupervisor,
-    selectClockInOutAppUserIsManager,
-    selectLeaveManagerModeIsInProgress
+    selectLeaveManagerModeIsInProgress,
+    selectClockInOutAppIsInManagerMode
 } from "~redux/selectors"
 import ConfirmationModal from "~components/confirmation-modal"
 import LargeStaffTypeSelector from "./components/large-staff-type-selector"
@@ -91,13 +90,9 @@ function mapStateToProps(state) {
         return {hadLoadedAppData: false};
     }
     var rota = selectRotaOnClockInOutPage(state);
-    var userIsSupervisor = selectClockInOutAppUserIsSupervisor(state);
-    var userIsManager = selectClockInOutAppUserIsManager(state);
     return {
         hasLoadedAppData: true,
-        userIsManagerOrSupervisor: userIsSupervisor || userIsManager,
-        userIsManager,
-        userIsSupervisor,
+        userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(state),
         rota,
         apiKey: state.apiKey,
         staffMembers: state.staffMembers,
@@ -112,7 +107,7 @@ function mapDispatchToProps(dispatch){
     return {
         leaveManagerMode: function(){
             dispatch(actions.clockInOutAppEnterUserMode({
-                userMode: "user"
+                userMode: "User"
             }))
         },
         selectStaffType: function(selectedStaffTypeClientId){

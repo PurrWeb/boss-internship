@@ -6,8 +6,6 @@ export default class Header extends React.Component {
     static propTypes = {
         returnToStaffTypeSelector: React.PropTypes.func.isRequired,
         userIsManagerOrSupervisor: React.PropTypes.bool.isRequired,
-        userIsManager: React.PropTypes.bool.isRequired,
-        userIsSupervisor: React.PropTypes.bool.isRequired,
         leaveManagerModeInProgress: React.PropTypes.bool.isRequired,
         leaveManagerMode: React.PropTypes.func.isRequired,
         reloadPage: React.PropTypes.func.isRequired,
@@ -40,8 +38,6 @@ export default class Header extends React.Component {
                     Reset Venue
                 </button>
                 <LeaveManagerModeButton
-                    userIsManager={this.props.userIsManager}
-                    userIsSupervisor={this.props.userIsSupervisor}
                     leaveManagerModeInProgress={this.props.leaveManagerModeInProgress}
                     leaveManagerMode={this.props.leaveManagerMode} />
                 </div>

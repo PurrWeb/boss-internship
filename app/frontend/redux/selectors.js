@@ -192,19 +192,6 @@ export function selectRotaOnClockInOutPage(state){
     });
 }
 
-export function selectClockInOutAppIsInManagerMode(state){
-    var userMode = state.clockInOutAppUserMode.mode;
-    return userMode === "manager" || userMode === "supervisor";
-}
-
-export function selectClockInOutAppUserIsManager(state){
-    return state.clockInOutAppUserMode.mode === "manager";
-}
-
-export function selectClockInOutAppUserIsSupervisor(state){
-    return state.clockInOutAppUserMode.mode === "supervisor";
-}
-
 export function selectIsUpdatingStaffMemberStatus(state, {staffMemberServerId}) {
     var allRequests = state.apiRequestsInProgress.UPDATE_CLOCK_IN_STATUS;
     var requestsForStaffMember = _.filter(allRequests, function(request){
@@ -251,7 +238,7 @@ export function selectStaffMembers(state){
 
         staffMember.isManager = staffTypeObject.name === "Manager";
         staffMember.isSupervisor = staffTypeObject.name === "Bar Supervisor";
-        staffMember.canEnterManagerMode = staffMember.isManager || staffMember.isSupervisor;
+        staffMember.canEnterManagerMode = selectStaffMemberCanEnterManagerMode(staffMember);
 
         staffMember.updateStatusInProgress = selectIsUpdatingStaffMemberStatus(state, {
             staffMemberServerId: staffMember.serverId
@@ -267,16 +254,28 @@ export function selectStaffMembers(state){
     })
 }
 
+function selectStaffMemberCanEnterManagerMode(staffMember){
+    if (staffMember.isManager === undefined){
+        throw Error("This function needs a staff member that has been expanded in selectStaffMembers.")
+    }
+    return staffMember.isManager || staffMember.isSupervisor;
+}
+
+export function selectClockInOutAppIsInManagerMode(state){
+    var userMode = state.clockInOutAppUserMode.mode;
+    return userMode === "Manager" || userMode === "Bar Supervisor";
+}
+
 export function selectClockInOutAppUserPermissions(state){
     var userMode = state.clockInOutAppUserMode.mode;
-    if (userMode === "manager") {
+    if (userMode === "Manager") {
         return {
             toggleOnBreak: true,
             changePin: true,
             addNote: true
         }
     }
-    if (userMode === "supervisor") {
+    if (userMode === "Bar Supervisor") {
         return {
             toggleOnBreak: true,
             changePin: false,

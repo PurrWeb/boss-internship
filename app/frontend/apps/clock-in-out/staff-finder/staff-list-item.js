@@ -165,21 +165,12 @@ class ClockInOutStaffListItem extends Component {
         if (staffMember.enterManagerModeInProgress){
             return <Spinner />;
         }
-        var buttonText = null;
-        var modeType = null;
-        if (staffMember.isSupervisor){
-            buttonText = "Enter Supervisor Mode";
-            modeType = "supervisor"
-        } else {
-            buttonText = "Enter Manager Mode";
-            modeType = "manager"
-        }
 
         return <a
-            onClick={() => this.props.enterUserMode(modeType, this.props.staff)}
+            onClick={() => this.props.enterUserMode(staffMember.staffType.name, this.props.staff)}
             data-test-marker-enter-manager-mode
             className="btn btn-default btn-sm hide-in-manager-mode--inline-block">
-            {buttonText}
+            Enter Manager Mode
         </a>
     }
 }
