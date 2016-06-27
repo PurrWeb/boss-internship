@@ -76,11 +76,11 @@ class ClockInOutStaffListItem extends Component {
         </div>
     }
     getStaffMemberStatusToggleButtons(){
-        if (this.props.updateStatusIsInProgress) {
+        var staffMember = this.props.staff;
+        if (staffMember.updateStatusInProgress) {
             return <Spinner />
         }
 
-        var staffMember = this.props.staff;
         var toggleOnBreakButton = null;
         if (this.props.userPermissions.toggleOnBreak){
             toggleOnBreakButton = <div className="col-md-6 col-xs-2">
@@ -144,7 +144,7 @@ class ClockInOutStaffListItem extends Component {
             return null;
         }
 
-        if (this.props.updateStaffMemberPinInProgress) {
+        if (staffMember.updatePinInProgress) {
             return <Spinner />
         }
 
@@ -197,13 +197,7 @@ function mapStateToProps(state, ownProps){
         staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
         rotas: state.rotas,
         venues: state.venues,
-        updateStatusIsInProgress: selectIsUpdatingStaffMemberStatus(state, {
-            staffMemberServerId: ownProps.staff.serverId
-        }),
         enterManagerModeIsInProgress: selectEnterManagerModeIsInProgress(state, {staffMemberServerId: ownProps.staff.serverId}),
-        updateStaffMemberPinInProgress: selectIsUpdatingStaffMemberPin(state, {
-            staffMemberServerId: ownProps.staff.serverId
-        }),
         userPermissions: selectClockInOutAppUserPermissions(state),
         pageOptions: state.pageOptions,
         clockInNotes: _.filter(state.clockInNotes, function(note){

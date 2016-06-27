@@ -244,7 +244,7 @@ export function selectIsUpdatingStaffMemberPin(state, {staffMemberServerId}) {
 
 export function selectStaffMembers(state){
     return _.mapObject(state.staffMembers, function(staffMember){
-        var staffMember = {...staffMember}
+        staffMember = {...staffMember}
 
         var staffTypeObject = staffMember.staff_type.get(state.staffTypes);
         staffMember.staffType = staffTypeObject;
@@ -253,6 +253,12 @@ export function selectStaffMembers(state){
         staffMember.isSupervisor = staffTypeObject.name === "Bar Supervisor";
         staffMember.canEnterManagerMode = staffMember.isManager || staffMember.isSupervisor;
 
+        staffMember.updateStatusInProgress = selectIsUpdatingStaffMemberStatus(state, {
+            staffMemberServerId: staffMember.serverId
+        });
+        staffMember.updatePinInProgress = selectIsUpdatingStaffMemberPin(state, {
+            staffMemberServerId: staffMember.serverId
+        });
 
         return staffMember
     })
