@@ -238,6 +238,7 @@ export function selectStaffMembers(state){
 
         staffMember.isManager = staffTypeObject.name === "Manager";
         staffMember.isSupervisor = staffTypeObject.name === "Bar Supervisor";
+        staffMember.isGeneralManager = staffTypeObject.name === "GM";
         staffMember.canEnterManagerMode = selectStaffMemberCanEnterManagerMode(staffMember);
 
         staffMember.updateStatusInProgress = selectIsUpdatingStaffMemberStatus(state, {
@@ -258,12 +259,12 @@ function selectStaffMemberCanEnterManagerMode(staffMember){
     if (staffMember.isManager === undefined){
         throw Error("This function needs a staff member that has been expanded in selectStaffMembers.")
     }
-    return staffMember.isManager || staffMember.isSupervisor;
+    return staffMember.isManager || staffMember.isSupervisor || staffMember.isGeneralManager;
 }
 
 export function selectClockInOutAppIsInManagerMode(state){
     var userMode = state.clockInOutAppUserMode.mode;
-    return userMode === "Manager" || userMode === "Bar Supervisor";
+    return userMode === "Manager" || userMode === "Bar Supervisor" || userMode === "GM";
 }
 
 export function selectClockInOutAppUserPermissions(state){
@@ -277,6 +278,14 @@ export function selectClockInOutAppUserPermissions(state){
         }
     }
     if (userMode === "Bar Supervisor") {
+        return {
+            toggleOnBreak: true,
+            changePin: false,
+            addNote: true,
+            resetVenue: true
+        }
+    }
+    if (userMode === "GM") {
         return {
             toggleOnBreak: true,
             changePin: false,
