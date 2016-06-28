@@ -5,14 +5,23 @@ class UpdateVenue
     end
   end
 
-  def initialize(venue:, update_params:)
+  def initialize(venue:, params:, reminder_users:)
     @venue = venue
-    @update_params = update_params
+    @params = params
+    @reminder_users = reminder_users
   end
-  attr_reader :venue, :update_params
+  attr_reader :venue, :params, :reminder_users
 
   def call
-    success = venue.update_attributes(update_params)
+    success = false
+    ActiveRecord::Base.transaction do
+      success = venue.update_attributes(params)
+      if success
+        venue.reminder_users = reminder_users
+        success = venue.save
+      end
+      raise ActiveRecord::Rollback unless success
+    end
     Result.new(success, venue)
   end
 end
