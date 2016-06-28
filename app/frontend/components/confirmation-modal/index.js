@@ -3,8 +3,15 @@ import { connect } from "react-redux"
 import {ModalDialog, ModalContainer} from "react-modal-dialog"
 import actionCreators from "~redux/actions"
 import oFetch from "o-fetch"
+import PinInput from "~components/pin-input"
 
 class ConfirmationModal extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            pin: ""
+        }
+    }
     componentDidUpdate(){
         if (!this.props.isVisible) {
             return;
@@ -30,7 +37,11 @@ class ConfirmationModal extends React.Component {
                     <div className="row" data-test-marker-pin-modal>
                         <form onSubmit={(e) => {e.preventDefault(); this.complete()}}>
                             <div className="col-sm-8">
-                                <input style={{width: "100%"}} type="number" ref="pinInput"/>
+                                <PinInput
+                                    pin={this.state.pin}
+                                    onChange={pin => this.setState({pin})}
+                                    ref="pinInput"
+                                    />
                             </div>
                             <div className="col-sm-4">
                                 <button type="submit" className="btn btn-default">
@@ -51,15 +62,20 @@ class ConfirmationModal extends React.Component {
         if (!this.props.isVisible) {
             return;
         }
+        this.resetPinInputState();
         this.props.completeConfirmationModal({
-            pin: this.refs.pinInput.value
+            pin: this.state.pin
         });
     }
     cancel(){
         if (!this.props.isVisible) {
             return;
         }
+        this.resetPinInputState();
         this.props.cancelConfirmationModal();
+    }
+    resetPinInputState(){
+        this.setState({pin: ""})
     }
 }
 
