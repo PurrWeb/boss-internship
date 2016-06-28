@@ -62,12 +62,12 @@ describe("Clock In/Out Page Integration Test", function(){
             resolve(data);
         })
         expect.spyOn($, "ajax").andReturn(promise)
-        ReactTestUtils.Simulate.submit(getNode());
+        ReactTestUtils.Simulate.submit($$("[data-test-marker-key-dialog-form]")[0]);
 
         _.defer(function(){
             expect($$(".large-staff-type-selector__button").length).toBeGreaterThan(0);
             done();
-        }, 0)
+        })
     })
 
     it("Shows a list of staff members after selecting a staff type", function(){
@@ -120,7 +120,7 @@ describe("Clock In/Out Page Integration Test", function(){
     it("Logs the manager in after entering a PIN and shows change PIN buttons for users", function(done){
         var promise = Promise.resolve({access_token: "", expires_at: new Date(2050,10,10)})
 
-        var pinInput = getPinModal().querySelector("input[type='text']");
+        var pinInput = getPinModal().querySelector("input[type='number']");
 
         pinInput.value = "1234"
         ReactTestUtils.Simulate.change(pinInput);

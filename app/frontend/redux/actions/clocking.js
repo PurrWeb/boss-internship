@@ -43,10 +43,10 @@ export const clockInOutAppEnterUserMode = createApiRequestActionCreator({
     requestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
     makeRequest: makeApiRequestMakerIfNecessary({
         tryWithoutRequest: function(requestOptions){
-            if (requestOptions.userMode === "user") {
+            if (requestOptions.userMode === "User") {
                 return {
                     token: null,
-                    mode: "user"
+                    mode: "User"
                 }
             }
         },

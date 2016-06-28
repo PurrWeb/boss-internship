@@ -227,6 +227,7 @@ export {apiRoutes}
 var apiRootPrefix = ""
 
 export function getApiRoot(){
+    var apiRootPrefix = "";
     if (window.apiRootPrefix) {
         apiRootPrefix = window.apiRootPrefix
     }

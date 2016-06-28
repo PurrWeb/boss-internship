@@ -10,7 +10,7 @@ export default makeDataHandler("clockInOutAppUserMode", {
     }
 }, {
     initialState: {
-        mode: "user",
+        mode: "User",
         token: null
     }
 })

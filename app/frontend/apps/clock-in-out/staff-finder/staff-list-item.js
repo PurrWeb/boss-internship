@@ -9,9 +9,6 @@ import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
 import {
     selectShiftsByStaffMemberClientId,
-    selectIsUpdatingStaffMemberStatus,
-    selectEnterManagerModeIsInProgress,
-    selectIsUpdatingStaffMemberPin,
     selectClockInOutAppUserPermissions,
     selectClockInDay,
     selectAddClockInNoteIsInProgress
@@ -26,9 +23,8 @@ var columnNameStyle = {
 
 class ClockInOutStaffListItem extends Component {
     render(){
-        var staffObject = this.props.staff;
+        var staffMember = this.props.staff;
         var clockInStatusValue = this.props.clockInDay.status
-        var staffTypeObject = staffObject.staff_type.get(this.props.staffTypes);
 
         var rotaedShiftsColumn = null;
         var statusToggleButtons = null;
@@ -50,14 +46,14 @@ class ClockInOutStaffListItem extends Component {
         return <div className="staff-list-item staff-list-item--clock-in-out">
             <div className="row">
                 <div className="col-md-1 col-xs-2">
-                    <img src={staffObject.avatar_url} className="staff-list-item__avatar" />
+                    <img src={staffMember.avatar_url} className="staff-list-item__avatar" />
                 </div>
                 <div className="col-md-3 col-xs-10">
                     <div className="staff-list-item--clock-in-out__name">
-                        {staffObject.first_name} {staffObject.surname}
+                        {staffMember.first_name} {staffMember.surname}
                     </div>
                     <StaffTypeBadge
-                        staffTypeObject={staffTypeObject} />
+                        staffTypeObject={staffMember.staffType} />
                     <div className="staff-list-item--clock-in-out__manager-buttons">
                         {this.getAddNoteButton()}
                         {this.getChangePinButton()}
@@ -77,17 +73,17 @@ class ClockInOutStaffListItem extends Component {
         </div>
     }
     getStaffMemberStatusToggleButtons(){
-        if (this.props.updateStatusIsInProgress) {
+        var staffMember = this.props.staff;
+        if (staffMember.updateStatusInProgress) {
             return <Spinner />
         }
 
-        var staffObject = this.props.staff;
         var toggleOnBreakButton = null;
         if (this.props.userPermissions.toggleOnBreak){
             toggleOnBreakButton = <div className="col-md-6 col-xs-2">
                 <ToggleStaffOnBreakButton
                     clockInDay={this.props.clockInDay}
-                    staffObject={staffObject}
+                    staffObject={staffMember}
                     updateClockInStatusWithConfirmation={(options) => this.updateClockInStatus(options)} />
             </div>;
         }
@@ -95,7 +91,7 @@ class ClockInOutStaffListItem extends Component {
             <div className="col-md-6 col-xs-2">
                 <ToggleStaffClockedInButton
                     clockInDay={this.props.clockInDay}
-                    staffObject={staffObject}
+                    staffObject={staffMember}
                     updateClockInStatusWithConfirmation={(options) => this.updateClockInStatus(options)} />
             </div>
             {toggleOnBreakButton}
@@ -140,12 +136,12 @@ class ClockInOutStaffListItem extends Component {
         })
     }
     getChangePinButton(){
-        var staffObject = this.props.staff;
+        var staffMember = this.props.staff;
         if (!this.props.userPermissions.changePin) {
             return null;
         }
 
-        if (this.props.updateStaffMemberPinInProgress) {
+        if (staffMember.updatePinInProgress) {
             return <Spinner />
         }
 
@@ -153,44 +149,28 @@ class ClockInOutStaffListItem extends Component {
                 className="btn btn-default btn-sm show-in-manager-mode--inline-block"
                 data-test-marker-change-pin-button
                 onClick={() => this.props.updateStaffMemberPin({
-                    staffMemberObject: staffObject
+                    staffMemberObject: staffMember
                 })}>
                 Change Pin
             </a>
-    }
-    isManager(){
-        return this.props.staff.isManager({staffTypes: this.props.staffTypes});
-    }
-    isSupervisor(){
-        return this.props.staff.isSupervisor({staffTypes: this.props.staffTypes});
     }
     enterManagerMode(){
         this.props.enterManagerMode();
     }
     getManagerModeButton(){
-        if (!this.isManager() && !this.isSupervisor()) {
+        var staffMember = this.props.staff;
+        if (!staffMember.canEnterManagerMode) {
             return null;
         }
-        if (this.props.enterManagerModeIsInProgress){
+        if (staffMember.enterManagerModeInProgress){
             return <Spinner />;
-        }
-        var buttonText = null;
-        var modeType = null;
-        if (this.isManager()){
-            buttonText = "Enter Manager Mode";
-            modeType = "manager"
-        } else if (this.isSupervisor()) {
-            buttonText = "Enter Supervisor Mode";
-            modeType = "supervisor"
-        } else {
-            throw new Error("Shouldn't be possible")
         }
 
         return <a
-            onClick={() => this.props.enterUserMode(modeType, this.props.staff)}
+            onClick={() => this.props.enterUserMode(staffMember.staffType.name, this.props.staff)}
             data-test-marker-enter-manager-mode
             className="btn btn-default btn-sm hide-in-manager-mode--inline-block">
-            {buttonText}
+            Enter Manager Mode
         </a>
     }
 }
@@ -201,18 +181,10 @@ function mapStateToProps(state, ownProps){
         date: state.pageOptions.dateOfRota
     })
     return {
-        staffTypes: state.staffTypes,
         clockInDay,
         staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
         rotas: state.rotas,
         venues: state.venues,
-        updateStatusIsInProgress: selectIsUpdatingStaffMemberStatus(state, {
-            staffMemberServerId: ownProps.staff.serverId
-        }),
-        enterManagerModeIsInProgress: selectEnterManagerModeIsInProgress(state, {staffMemberServerId: ownProps.staff.serverId}),
-        updateStaffMemberPinInProgress: selectIsUpdatingStaffMemberPin(state, {
-            staffMemberServerId: ownProps.staff.serverId
-        }),
         userPermissions: selectClockInOutAppUserPermissions(state),
         pageOptions: state.pageOptions,
         clockInNotes: _.filter(state.clockInNotes, function(note){
