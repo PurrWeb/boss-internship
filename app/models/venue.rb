@@ -5,6 +5,9 @@ class Venue < ActiveRecord::Base
   has_many :staff_member_venues
   has_many :master_staff_members, class_name: 'StaffMember', inverse_of: :master_venue, foreign_key: :master_venue_id
   has_many :other_staff_members, through: :staff_member_venues, source: :staff_member
+  has_many :venue_reminder_users
+  has_many :reminder_users, through: :venue_reminder_users, source: :user
+
   serialize :fruit_order_fields, Array
 
   validates :name, presence: true, uniqueness: true
