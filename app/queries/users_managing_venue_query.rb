@@ -13,11 +13,11 @@ class UsersManagingVenueQuery
       joins(:venue_users).
       where('venue_users.venue_id = ?', venue.id)
 
-    User.where(
-      'id IN (?) OR id IN (?)',
-      all_venues_users.pluck(:id),
-      specific_venue_users.pluck(:id)
-    )
+    QueryCombiner.new(
+      base_scope: User,
+      relation_1: all_venues_users,
+      relation_2: specific_venue_users
+    ).all
   end
 
   private
