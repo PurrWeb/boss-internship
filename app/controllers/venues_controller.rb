@@ -34,12 +34,13 @@ class VenuesController < ApplicationController
   def update
     venue = Venue.find(params[:id])
 
-    if venue.update_attributes(update_params)
+    result = UpdateVenue.new(venue: venue, update_params: update_params).call
+    if result.success?
       flash[:success] = "Venue updated successfully"
       redirect_to action: :index
     else
       flash.now[:error] = "There was a problem updating this venue"
-      render 'edit', locals: { venue: venue }
+      render 'edit', locals: { venue: result.venue }
     end
   end
 
