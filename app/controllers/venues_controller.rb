@@ -15,14 +15,15 @@ class VenuesController < ApplicationController
   end
 
   def create
-    venue = Venue.new(create_params)
+    venue = Venue.new
 
-    if venue.save
+    result = UpdateVenue.new(venue: venue, params: create_params, reminder_users: reminder_users_from_params).call
+    if result.success?
       flash[:success] = "Venue added successfully"
       redirect_to action: :index
     else
       flash.now[:error] = "There was a problem creating this venue"
-      render 'new', locals: { venue: venue }
+      render 'new', locals: { venue: result.venue }
     end
   end
 
@@ -34,12 +35,13 @@ class VenuesController < ApplicationController
   def update
     venue = Venue.find(params[:id])
 
-    if venue.update_attributes(update_params)
+    result = UpdateVenue.new(venue: venue, params: update_params, reminder_users: reminder_users_from_params).call
+    if result.success?
       flash[:success] = "Venue updated successfully"
       redirect_to action: :index
     else
       flash.now[:error] = "There was a problem updating this venue"
-      render 'edit', locals: { venue: venue }
+      render 'edit', locals: { venue: result.venue }
     end
   end
 
@@ -65,6 +67,10 @@ class VenuesController < ApplicationController
       ).merge(
         fruit_order_fields: fruit_order_fields_from_params
       )
+  end
+
+  def reminder_users_from_params
+    User.enabled.where(id: Array(params[:venue][:reminder_user_ids]))
   end
 
   def fruit_order_fields_from_params

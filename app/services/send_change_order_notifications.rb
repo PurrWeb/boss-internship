@@ -5,8 +5,15 @@ class SendChangeOrderNotifications
 
   def call
     managers = UsersManagingVenueQuery.new(venue: venue).all
+    notify_users = venue.reminder_users.enabled
 
-    managers.each do |manager|
+    users = QueryCombiner.new(
+      base_scope: User,
+      relation_1: managers,
+      relation_2: notify_users
+    ).all
+
+    users.each do |manager|
       ChangeOrderNotificationMailer.
         change_order_reminder(
           user_id: manager.id,

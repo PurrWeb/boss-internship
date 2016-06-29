@@ -6,8 +6,15 @@ class TuesdayFruitOrderReminderJob < RecurringJob
 
     venues_without_fruit_order.each do |venue|
       managers = UsersManagingVenueQuery.new(venue: venue).all
+      notify_users = venue.reminder_users.enabled
 
-      managers.each do |manager|
+      users = QueryCombiner.new(
+        base_scope: User,
+        relation_1: managers,
+        relation_2: notify_users
+      ).all
+
+      users.each do |manager|
         FruitOrderNotificationMailer.
           tuesday_reminder(
             user_id: manager.id,

@@ -8,20 +8,6 @@ RSpec.describe UsersManagingVenueQuery do
     venue
   end
 
-  context 'when admin exists' do
-    let(:admin) do
-      FactoryGirl.create(:user, :admin)
-    end
-
-    before do
-      admin
-    end
-
-    it 'should be returned' do
-      expect(query.all).to eq([admin])
-    end
-  end
-
   context 'when venue\'s manager exists' do
     let(:user) do
       name = FactoryGirl.create(:name, first_name: 'venue manger')
