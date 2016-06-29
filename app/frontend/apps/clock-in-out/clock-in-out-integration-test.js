@@ -2,7 +2,7 @@ import React from "react"
 import expect from "expect"
 import Promise from "bluebird"
 import ClockInOutApp from "./clock-in-out-app"
-import { simpleRender } from "~lib/test-helpers"
+import { simpleRender, accelerateTimeouts } from "~lib/test-helpers"
 import ReactTestUtils from "react-addons-test-utils"
 import ReactDOM from "react-dom"
 import _ from "underscore"
@@ -52,68 +52,6 @@ describe("Clock In/Out Page Integration Test", function(){
         }
     };
 
-    it("Shows an API key field if no venue data has been loaded", function(){
-        var {$$} = simpleRender(<ClockInOutApp />)
-        expect($$("[data-test-marker-api-key-button]").length).toBe(1);
-    })
-
-    it("Shows a large staff type selector after loading the venue's clock in/out data", function(done){
-        var {$$} = simpleRender(<ClockInOutApp />)
-
-        var promise = new Promise(function(resolve, reject){
-            resolve(data);
-        })
-        expect.spyOn($, "ajax").andReturn(promise)
-        ReactTestUtils.Simulate.submit($$("[data-test-marker-key-dialog-form]")[0]);
-
-        _.defer(function(){
-            expect($$(".large-staff-type-selector__button").length).toBeGreaterThan(0);
-            done();
-        })
-    })
-
-    function loadAppWithData(data){
-        var componentDetails = simpleRender(<ClockInOutApp />)
-        componentDetails.component.store.dispatch(loadInitialClockInOutAppState(data))
-        return componentDetails
-    }
-
-    it("Shows a list of staff members after selecting a staff type", function(){
-        var {$$, component} = loadAppWithData(data)
-
-        ReactTestUtils.Simulate.click($$(".large-staff-type-selector__button")[0]);
-
-        expect($$(".staff-list-item--clock-in-out").length).toBeGreaterThan(0);
-    })
-
-    function accelerateTimeouts(fn){
-        // modal has a 500ms closing animation - couldn't find a config option
-        // to disable that
-        var originalSetTimeout = setTimeout;
-        window.setTimeout =  function(callback, time){
-            return originalSetTimeout(callback, time / 100);
-        }
-        fn();
-        window.setTimeout = originalSetTimeout;
-    }
-
-    function closePinModal(onClosed){
-        var closeButton = getPinModal().parentElement.querySelector(".closeButton--jss-0-1")
-
-        accelerateTimeouts(function(){
-            ReactTestUtils.Simulate.click(closeButton)
-        })
-
-        _.delay(function(){
-            expect(getPinModal()).toBe(undefined)
-            onClosed();
-        }, 10)
-    }
-
-    function getPinModal(){
-        return document.querySelectorAll("[data-test-marker-pin-modal]")[0];
-    }
-
     function selectStaffType(component){
         component.store.dispatch(clockInOutAppSelectStaffType({selectedStaffTypeClientId: "CLIENT_ID_7"}))
     }
@@ -136,6 +74,61 @@ describe("Clock In/Out Page Integration Test", function(){
             token: "TOKEN"
         })
     }
+
+    function loadAppWithData(data){
+        var componentDetails = simpleRender(<ClockInOutApp />)
+        componentDetails.component.store.dispatch(loadInitialClockInOutAppState(data))
+        return componentDetails
+    }
+
+    function closePinModal(onClosed){
+        var closeButton = getPinModal().parentElement.querySelector(".closeButton--jss-0-1")
+
+        accelerateTimeouts(function(){
+            // modal has a 500ms closing animation - couldn't find a config option
+            // to disable that
+            ReactTestUtils.Simulate.click(closeButton)
+        })
+
+        _.delay(function(){
+            expect(getPinModal()).toBe(undefined)
+            onClosed();
+        }, 10)
+    }
+
+    function getPinModal(){
+        return document.querySelectorAll("[data-test-marker-pin-modal]")[0];
+    }
+
+
+    it("Shows an API key field if no venue data has been loaded", function(){
+        var {$$} = simpleRender(<ClockInOutApp />)
+        expect($$("[data-test-marker-api-key-button]").length).toBe(1);
+    })
+
+
+    it("Shows a large staff type selector after loading the venue's clock in/out data", function(done){
+        var {$$} = simpleRender(<ClockInOutApp />)
+
+        var promise = new Promise(function(resolve, reject){
+            resolve(data);
+        })
+        expect.spyOn($, "ajax").andReturn(promise)
+        ReactTestUtils.Simulate.submit($$("[data-test-marker-key-dialog-form]")[0]);
+
+        _.defer(function(){
+            expect($$(".large-staff-type-selector__button").length).toBeGreaterThan(0);
+            done();
+        })
+    })
+
+    it("Shows a list of staff members after selecting a staff type", function(){
+        var {$$, component} = loadAppWithData(data)
+
+        ReactTestUtils.Simulate.click($$(".large-staff-type-selector__button")[0]);
+
+        expect($$(".staff-list-item--clock-in-out").length).toBeGreaterThan(0);
+    })
 
     it("Shows a modal for pin entry after clicking on a staff member's clockin button", function(done){
         var {$$, component} = loadAppWithData(data)
@@ -185,7 +178,7 @@ describe("Clock In/Out Page Integration Test", function(){
             done();
         }, 10);
     })
-    
+
     it("Shows a modal after clicking on 'Change PIN'", function(done){
         var {$$, component} = loadAppWithData(data)
         selectStaffType(component)
