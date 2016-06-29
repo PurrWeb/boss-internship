@@ -129,12 +129,7 @@ export default function makeApiRequestMaker(apiOptions){
 
             copyComponentInformationFromRequestOptions(responseData, requestOptions);
 
-            if (failedRequestType === "dataRequest" && apiOptions.getFailureActionData){
-                responseData = {
-                    ...responseData,
-                    ...apiOptions.getFailureActionData(responseData, requestOptions, getState)
-                }
-            }
+            responseData.requestStatus = response.status;
             error(responseData);
         }
     }

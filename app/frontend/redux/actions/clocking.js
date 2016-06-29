@@ -198,16 +198,13 @@ export const clockInOutAppFetchAppData = createApiRequestActionCreator({
         },
         getSuccessActionData(responseData){
             return responseData
-        }
+        },
     }),
     getSuccessActionData(){
         return {};
     },
     additionalSuccessActionCreator: function(responseData){
         return loadInitialClockInOutAppState(responseData);
-    },
-    getFailureActionData(responseData, requestOptions, getState){
-        return {}
     }
 })
 
