@@ -8,7 +8,17 @@ class ReviveStaffMember
   def initialize(requester:, staff_member:, staff_member_params:)
     @requester = requester
     @staff_member = staff_member
-    @staff_member_params = staff_member_params
+    @staff_member_params = normalise_params(staff_member_params)
+  end
+
+  def normalise_params(params)
+    result = params.dup
+    if params["email_address_attributes"].present? && staff_member.email_address.present?
+      if params["email_address_attributes"]["email"] == staff_member.email_address.email
+        result.delete("email_address_attributes")
+      end
+    end
+    result
   end
 
   def call
@@ -25,6 +35,8 @@ class ReviveStaffMember
             :enabled,
             requster_user_id: requester.id
           )
+
+        StaffMemberUpdatesMailer.staff_member_revived(staff_member).deliver_now
       end
       raise ActiveRecord::Rollback unless result
     end

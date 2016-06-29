@@ -20,6 +20,7 @@ class DeleteStaffMember
       disable_staff_member
       disable_upcoming_shifts
       disable_upcoming_holidays
+      StaffMemberUpdatesMailer.staff_member_disabled(staff_member).deliver_now
     end
   end
 
@@ -35,9 +36,7 @@ class DeleteStaffMember
         disable_reason: disable_reason
       )
 
-    if !would_rehire
-      staff_member.update_attributes!(would_rehire: false)
-    end
+    staff_member.update_attributes!(would_rehire: would_rehire)
   end
 
   def disable_upcoming_shifts

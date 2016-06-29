@@ -16,6 +16,10 @@ class NewStaffMemberDetailsPDF
     result = []
     result << ['Name', staff_member.full_name.titlecase]
 
+    if staff_member.master_venue.present?
+      result << ['Venue', staff_member.master_venue.name.titlecase]
+    end
+
     if staff_member.date_of_birth.present?
       result << ['Date of Birth', staff_member.date_of_birth.to_s(:human_date)]
     else
