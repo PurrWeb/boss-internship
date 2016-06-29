@@ -20,6 +20,7 @@ class DeleteStaffMember
       disable_staff_member
       disable_upcoming_shifts
       disable_upcoming_holidays
+      StaffMemberUpdatesMailer.staff_member_disabled(staff_member).deliver_now
     end
   end
 

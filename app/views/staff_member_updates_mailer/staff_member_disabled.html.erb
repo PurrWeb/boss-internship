@@ -1,0 +1,23 @@
+<p>
+  <%= staff_member.full_name.titlecase %> (id: <%= staff_member.id %>) has been disabled on the boss system.
+</p>
+
+<% if staff_member.master_venue.present? %>
+  <p>Venue: <%= staff_member.master_venue.name %></p>
+<% else %>
+  <p> Venue: N/A</p>
+<% end %>
+
+<% if staff_member.national_insurance_number.present? %>
+  <p>National Insurance Number: <%= staff_member.national_insurance_number%></p>
+<% else %>
+  <p>National Insurance Number: Not supplied</p>
+<% end %>
+
+<% if staff_member.would_rehire == false %>
+  <p><strong>!! Staff member was marked as do not rehire !!</strong></p>
+<% end %>
+
+<% if staff_member.disable_reason.present? %>
+  <p>Reason given for disabling: <%= staff_member.disable_reason %><p>
+<% end %>

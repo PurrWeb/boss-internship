@@ -38,6 +38,17 @@ class StaffMemberUpdatesMailer < ApplicationMailer
     end
   end
 
+  def staff_member_disabled(staff_member)
+    mail(
+      to: staff_updates_email,
+      subject: "Staff Member Disabled - #{staff_member.full_name.titlecase}"
+    ) do |format|
+      format.html do
+        render locals: { staff_member: staff_member }
+      end
+    end
+  end
+
   private
   def staff_updates_email
     'staffupdates@jsmbars.co.uk'
