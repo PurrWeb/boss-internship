@@ -36,9 +36,7 @@ class DeleteStaffMember
         disable_reason: disable_reason
       )
 
-    if !would_rehire
-      staff_member.update_attributes!(would_rehire: false)
-    end
+    staff_member.update_attributes!(would_rehire: would_rehire)
   end
 
   def disable_upcoming_shifts
