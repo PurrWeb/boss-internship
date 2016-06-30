@@ -15,7 +15,9 @@ import {
     selectIsUpdatingStaffMemberStatus,
     selectEnterManagerModeIsInProgress,
     selectLeaveManagerModeIsInProgress,
-    selectIsUpdatingStaffMemberPin
+    selectIsUpdatingStaffMemberPin,
+    selectShiftIsBeingEdited,
+    selectAddShiftIsInProgress
 } from "./selectors/api-requests"
 export {
     selectEditHoursAcceptancePeriodIsInProgress,
@@ -27,7 +29,9 @@ export {
     selectIsUpdatingStaffMemberStatus,
     selectEnterManagerModeIsInProgress,
     selectLeaveManagerModeIsInProgress,
-    selectIsUpdatingStaffMemberPin
+    selectIsUpdatingStaffMemberPin,
+    selectShiftIsBeingEdited,
+    selectAddShiftIsInProgress
 }
 
 import {
@@ -126,13 +130,6 @@ export function selectForecastByRotaId(state, rotaClientId){
     return forecast;
 }
 
-export function selectAddShiftIsInProgress(state, staffMemberServerId){
-    var shiftsBeingAdded = state.apiRequestsInProgress.ADD_SHIFT;
-    return _(shiftsBeingAdded).some(
-        (request) => request.staffMemberServerId === staffMemberServerId
-    );
-}
-
 export function selectRotaOnVenueRotaPage(state){
     return getRotaFromDateAndVenue({
         rotas: state.rotas,
@@ -154,17 +151,6 @@ export function canEditStaffTypeShifts({staffTypes, pageOptions}, {staffTypeClie
     return true;
 }
 
-export function selectShiftIsBeingEdited(state, options){
-    var shiftServerId = oFetch(options, "shiftServerId");
-
-    var shiftsBeingUpdated = state.apiRequestsInProgress.UPDATE_SHIFT;
-    var shiftsBeingDeleted = state.apiRequestsInProgress.DELETE_SHIFT;
-
-    var isBeingUpdated = _(shiftsBeingUpdated).some((request) => request.shiftServerId === shiftServerId);
-    var isBeingDeleted = _(shiftsBeingDeleted).some((request) => request.shift.serverId === shiftServerId);
-
-    return isBeingUpdated || isBeingDeleted;
-}
 
 export function selectShiftsWithRotaClientIds(state, clientIds){
     return _.filter(state.rotaShifts, function(shift){

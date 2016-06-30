@@ -109,3 +109,23 @@ export function selectIsUpdatingStaffMemberPin(state, {staffMemberServerId}) {
     });
     return requestsForStaffMember.length > 0;
 }
+
+export function selectShiftIsBeingEdited(state, options){
+    var shiftServerId = oFetch(options, "shiftServerId");
+
+    var shiftsBeingUpdated = state.apiRequestsInProgress.UPDATE_SHIFT;
+    var shiftsBeingDeleted = state.apiRequestsInProgress.DELETE_SHIFT;
+
+    var isBeingUpdated = _(shiftsBeingUpdated).some((request) => request.shiftServerId === shiftServerId);
+    var isBeingDeleted = _(shiftsBeingDeleted).some((request) => request.shift.serverId === shiftServerId);
+
+    return isBeingUpdated || isBeingDeleted;
+}
+
+
+export function selectAddShiftIsInProgress(state, staffMemberServerId){
+    var shiftsBeingAdded = state.apiRequestsInProgress.ADD_SHIFT;
+    return _(shiftsBeingAdded).some(
+        (request) => request.staffMemberServerId === staffMemberServerId
+    );
+}
