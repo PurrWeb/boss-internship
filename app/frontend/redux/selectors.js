@@ -38,13 +38,15 @@ import {
     selectStaffMemberCanEnterManagerMode,
     selectClockInOutAppIsInManagerMode,
     selectClockInOutAppUserPermissions,
-    selectStaffMembersForClockInOutStaffFinder
+    selectStaffMembersForClockInOutStaffFinder,
+    selectRotaOnClockInOutPage
 } from "./selectors/clock-in-out"
 export {
     selectStaffMemberCanEnterManagerMode,
     selectClockInOutAppIsInManagerMode,
     selectClockInOutAppUserPermissions,
-    selectStaffMembersForClockInOutStaffFinder
+    selectStaffMembersForClockInOutStaffFinder,
+    selectRotaOnClockInOutPage
 }
 
 import {
@@ -172,17 +174,6 @@ export function selectRotaShiftsOnDayOnStaffTypeRotaPage(state){
     var rotaShifts = selectShiftsWithRotaClientIds(state, clientIds);
     return rotaShifts;
 }
-
-
-
-export function selectRotaOnClockInOutPage(state){
-    return getRotaFromDateAndVenue({
-        rotas: state.rotas,
-        dateOfRota: state.pageOptions.dateOfRota,
-        venueId: state.pageOptions.venue.clientId
-    });
-}
-
 
 
 function addBreaksToClockInPeriod(clockInPeriod, clockInBreaks){

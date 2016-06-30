@@ -1,6 +1,7 @@
 import {selectStaffMembers} from "./staff-members"
 import _ from "underscore"
 import { selectClockInDay } from "./clock-in-day"
+import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import { selectShiftsByStaffMemberClientId } from "./shifts"
 
 export function selectStaffMemberCanEnterManagerMode(staffMember){
@@ -65,4 +66,13 @@ export function selectStaffMembersForClockInOutStaffFinder(state){
         staffMember.isActive = clockInDay.status !== "clocked_out";
         return staffMember
     })
+}
+
+
+export function selectRotaOnClockInOutPage(state){
+    return getRotaFromDateAndVenue({
+        rotas: state.rotas,
+        dateOfRota: state.pageOptions.dateOfRota,
+        venueId: state.pageOptions.venue.clientId
+    });
 }
