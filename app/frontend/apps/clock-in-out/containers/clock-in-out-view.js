@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import _ from "underscore"
-import ClockInOutStaffFinder from "./staff-finder/staff-finder"
+import ClockInOutStaffFinder from "./staff-finder"
 import actions from "~redux/actions"
 import {
     selectRotaOnClockInOutPage,
@@ -10,11 +10,11 @@ import {
     selectClockInOutAppUserPermissions
 } from "~redux/selectors"
 import ConfirmationModal from "~components/confirmation-modal"
-import LargeStaffTypeSelector from "./components/large-staff-type-selector"
+import LargeStaffTypeSelector from "../components/large-staff-type-selector"
 import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
 import UserActionConfirmationMessages from "~components/user-action-confirmation-messages"
-import Header from "./components/header"
-import LoadAppDataDialog from "./containers/load-app-data-dialog"
+import Header from "../components/header"
+import LoadAppDataDialog from "./load-app-data-dialog"
 
 
 class ClockInOutView extends Component {

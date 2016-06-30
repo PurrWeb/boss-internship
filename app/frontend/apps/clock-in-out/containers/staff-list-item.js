@@ -5,8 +5,8 @@ import utils from "~lib/utils"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
 import ClockInStatusBadge from "~components/clock-in-status-badge"
-import ToggleStaffClockedInButton from "../toggle-staff-clocked-in-button"
-import ToggleStaffOnBreakButton from "../toggle-staff-on-break-button"
+import ToggleStaffClockedInButton from "../components/toggle-staff-clocked-in-button"
+import ToggleStaffOnBreakButton from "../components/toggle-staff-on-break-button"
 import {
     selectShiftsByStaffMemberClientId,
     selectClockInOutAppUserPermissions,
