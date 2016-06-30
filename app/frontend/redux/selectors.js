@@ -1,17 +1,24 @@
-/*
-I'm sorry.
-
-This file needs to be cleaned up and potentially split into different files.
-
-As a general rule there should be selectors for different data types. Those should
-return denormalized data, so we don't have to fetch that data later.
-
-There is also overlapping functionality in some ~lib/* files.
-*/
 import _ from "underscore"
 import utils from "~lib/utils"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import oFetch from "o-fetch"
+
+// Just re-exporting here for now, later can either
+// import directly from ./selectors/api-requests, or bulk export from here
+import {
+    selectEditHoursAcceptancePeriodIsInProgress,
+    selectIsForceClockingOutClockInDay,
+    selectAddClockInNoteIsInProgress,
+    selectFetchWeeklyRotaIsInProgress,
+    selectUpdateRotaForecastInProgress
+} from "./selectors/api-requests"
+export {
+    selectEditHoursAcceptancePeriodIsInProgress,
+    selectIsForceClockingOutClockInDay,
+    selectAddClockInNoteIsInProgress,
+    selectFetchWeeklyRotaIsInProgress,
+    selectUpdateRotaForecastInProgress
+}
 
 export function selectStaffTypesWithShifts(state){
     var {rotaShifts, staff} = state;
@@ -81,18 +88,6 @@ export function selectStaffMemberIsOnHolidayOnDate(state, staffId, date){
     return isOnHoliday;
 }
 
-export function selectFetchWeeklyRotaIsInProgress(state){
-    return !_.isEmpty(state.apiRequestsInProgress.FETCH_WEEKLY_ROTA_FORECAST);
-}
-
-export function selectUpdateRotaForecastInProgress(state, {serverVenueId, dateOfRota}){
-    var updatesInProgress = state.apiRequestsInProgress.UPDATE_ROTA_FORECAST;
-    return requestIsInProgressWithRequestData(updatesInProgress, function(update){
-        var isSameDate = utils.datesAreEqual(update.dateOfRota, dateOfRota);
-        var isSameVenue = serverVenueId === update.serverVenueId;
-        return isSameVenue && isSameDate;
-    })
-}
 
 export function selectForecastByRotaId(state, rotaClientId){
     var rota = oFetch(state.rotas, rotaClientId);
@@ -380,60 +375,6 @@ export function selectClockInDayDetails(state, clockInDay){
         clockInNotes,
         clockInDay
     }
-}
-
-export function selectEditHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod){
-    return selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) ||
-        selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) ||
-        selectDeleteHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod)
-}
-
-function requestIsInProgressWithRequestData(requests, matchFunction) {
-    if (!requests || requests.length === 0) {
-        return false;
-    }
-
-    return _.any(requests, matchFunction);
-}
-
-function selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
-    return requestIsInProgressWithRequestData(
-        state.apiRequestsInProgress.ACCEPT_HOURS_ACCEPTANCE_PERIOD,
-    function(requestOptions){
-        return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
-    });
-}
-
-function selectUnacceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
-    return requestIsInProgressWithRequestData(
-        state.apiRequestsInProgress.UNACCEPT_HOURS_ACCEPTANCE_PERIOD,
-    function(requestOptions){
-        return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
-    });
-}
-
-function selectDeleteHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) {
-    return requestIsInProgressWithRequestData(
-        state.apiRequestsInProgress.DELETE_HOURS_ACCEPTANCE_PERIOD,
-    function(requestOptions){
-        return requestOptions.hoursAcceptancePeriod.clientId === hoursAcceptancePeriod.clientId;
-    });
-}
-
-export function selectIsForceClockingOutClockInDay(state, staffMemberClientId){
-    return requestIsInProgressWithRequestData(
-        state.apiRequestsInProgress.FORCE_STAFF_MEMBER_CLOCK_OUT,
-    function(requestOptions){
-        return requestOptions.staffMember.clientId == staffMemberClientId
-    })
-}
-
-export function selectAddClockInNoteIsInProgress(state, clockInDayClientId){
-    return requestIsInProgressWithRequestData(
-        state.apiRequestsInProgress.ADD_CLOCK_IN_NOTE,
-    function(requestOptions){
-        return requestOptions.clockInDay.clientId === clockInDayClientId
-    })
 }
 
 export function selectClockInDay(state, {staffMemberClientId, date}) {
