@@ -2,14 +2,19 @@ import React from "react"
 import expect from "expect"
 import Promise from "bluebird"
 import ClockInOutApp from "./clock-in-out-app"
-import { simpleRender } from "~lib/test-helpers"
+import { simpleRender, accelerateTimeouts } from "~lib/test-helpers"
 import ReactTestUtils from "react-addons-test-utils"
 import ReactDOM from "react-dom"
 import _ from "underscore"
+import {
+    clockInOutAppSelectStaffType,
+    enterUserModeWithConfirmation
+} from "~redux/actions/clocking"
+import { loadInitialClockInOutAppState } from "~redux/actions/app-data"
+import {createBossStore} from "~redux/store"
+
 
 describe("Clock In/Out Page Integration Test", function(){
-    var renderedApp, getNode, $$;
-
     var data = {
         staff_members: [{
             "id":2,
@@ -47,50 +52,41 @@ describe("Clock In/Out Page Integration Test", function(){
         }
     };
 
-    it("Renders without errors", function(){
-        renderedApp = simpleRender(<ClockInOutApp />)
-        getNode = renderedApp.getNode;
-        $$ = renderedApp.$$;
-    })
-
-    it("Shows a form to input an API key", function(){
-        expect($$("[data-test-marker-api-key-button]").length).toBe(1);
-    })
-
-    it("Shows a large staff type selector after loading the venue's clock in/out data", function(done){
-        var promise = new Promise(function(resolve, reject){
-            resolve(data);
+    function selectStaffType(component){
+        component.store.dispatch(clockInOutAppSelectStaffType({selectedStaffTypeClientId: "CLIENT_ID_7"}))
+    }
+    function clickOnEnterManagerMode(component){
+        component.store.dispatch(enterUserModeWithConfirmation({
+            userMode: "Manager",
+            staffMemberObject: {
+                serverId: 2,
+                clientId: "CLIENT_ID_2",
+                staff_type: {clientId: "CLIENT_ID_7", serverId: 7},
+                first_name :"Dermot",
+                surname: "O'Boyle"
+            }
+        }))
+    }
+    function enterManagerMode(component){
+        component.store.dispatch({
+            type: "CLOCK_IN_OUT_APP_ENTER_USER_MODE_SUCCESS",
+            mode: "Manager",
+            token: "TOKEN"
         })
-        expect.spyOn($, "ajax").andReturn(promise)
-        ReactTestUtils.Simulate.submit($$("[data-test-marker-key-dialog-form]")[0]);
+    }
 
-        _.defer(function(){
-            expect($$(".large-staff-type-selector__button").length).toBeGreaterThan(0);
-            done();
-        })
-    })
-
-    it("Shows a list of staff members after selecting a staff type", function(){
-        ReactTestUtils.Simulate.click($$(".large-staff-type-selector__button")[0]);
-
-        expect($$(".staff-list-item--clock-in-out").length).toBeGreaterThan(0);
-    })
-
-    function accelerateTimeouts(fn){
-        // modal has a 500ms closing animation - couldn't find a config option
-        // to disable that
-        var originalSetTimeout = setTimeout;
-        window.setTimeout =  function(callback, time){
-            return originalSetTimeout(callback, time / 100);
-        }
-        fn();
-        window.setTimeout = originalSetTimeout;
+    function loadAppWithData(data){
+        var componentDetails = simpleRender(<ClockInOutApp />)
+        componentDetails.component.store.dispatch(loadInitialClockInOutAppState(data))
+        return componentDetails
     }
 
     function closePinModal(onClosed){
         var closeButton = getPinModal().parentElement.querySelector(".closeButton--jss-0-1")
 
         accelerateTimeouts(function(){
+            // modal has a 500ms closing animation - couldn't find a config option
+            // to disable that
             ReactTestUtils.Simulate.click(closeButton)
         })
 
@@ -104,7 +100,39 @@ describe("Clock In/Out Page Integration Test", function(){
         return document.querySelectorAll("[data-test-marker-pin-modal]")[0];
     }
 
+
+    it("Shows an API key field if no venue data has been loaded", function(){
+        var {$$} = simpleRender(<ClockInOutApp />)
+        expect($$("[data-test-marker-api-key-button]").length).toBe(1);
+    })
+
+
+    it("Shows a large staff type selector after loading the venue's clock in/out data", function(done){
+        var {$$} = simpleRender(<ClockInOutApp />)
+
+        var promise = new Promise(function(resolve, reject){
+            resolve(data);
+        })
+        expect.spyOn($, "ajax").andReturn(promise)
+        ReactTestUtils.Simulate.submit($$("[data-test-marker-key-dialog-form]")[0]);
+
+        _.defer(function(){
+            expect($$(".large-staff-type-selector__button").length).toBeGreaterThan(0);
+            done();
+        })
+    })
+
+    it("Shows a list of staff members after selecting a staff type", function(){
+        var {$$, component} = loadAppWithData(data)
+
+        ReactTestUtils.Simulate.click($$(".large-staff-type-selector__button")[0]);
+
+        expect($$(".staff-list-item--clock-in-out").length).toBeGreaterThan(0);
+    })
+
     it("Shows a modal for pin entry after clicking on a staff member's clockin button", function(done){
+        var {$$, component} = loadAppWithData(data)
+        component.store.dispatch(clockInOutAppSelectStaffType({selectedStaffTypeClientId: "CLIENT_ID_7"}))
         ReactTestUtils.Simulate.click($$("[data-test-marker-toggle-staff-status]")[0])
         // I think the PIN modal module actually injects a new body-level element,
         // so it's not inside my component
@@ -112,12 +140,21 @@ describe("Clock In/Out Page Integration Test", function(){
         closePinModal(done)
     });
 
-    it("Shows a modal after clicking on 'Enter Manager Mode'", function(){
+    it("Shows a modal after clicking on 'Enter Manager Mode'", function(done){
+        var {$$, component} = loadAppWithData(data)
+        selectStaffType(component);
+        clickOnEnterManagerMode(component);
+
         ReactTestUtils.Simulate.click($$("[data-test-marker-enter-manager-mode]")[0]);
         expect(getPinModal()).toNotBe(undefined)
+        closePinModal(done)
     })
 
     it("Logs the manager in after entering a PIN and shows change PIN buttons for users", function(done){
+        var {$$, component} = loadAppWithData(data)
+        selectStaffType(component)
+        clickOnEnterManagerMode(component)
+
         var promise = Promise.resolve({access_token: "", expires_at: new Date(2050,10,10)})
 
         var pinInput = getPinModal().querySelector("input[type='number']");
@@ -143,6 +180,10 @@ describe("Clock In/Out Page Integration Test", function(){
     })
 
     it("Shows a modal after clicking on 'Change PIN'", function(done){
+        var {$$, component} = loadAppWithData(data)
+        selectStaffType(component)
+        enterManagerMode(component)
+
         var changePinButton = $$("[data-test-marker-change-pin-button]")[0];
         ReactTestUtils.Simulate.click(changePinButton);
 
@@ -153,6 +194,10 @@ describe("Clock In/Out Page Integration Test", function(){
     })
 
     it("Lets managers view and add clockInNotes", function(done){
+        var {$$, component} = loadAppWithData(data)
+        selectStaffType(component)
+        enterManagerMode(component)
+
         var addNoteButton = $$("[data-test-marker-add-note]")[0];
         expect(addNoteButton).toNotBe(undefined);
 

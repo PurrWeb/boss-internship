@@ -9,7 +9,6 @@ export default class Header extends React.Component {
         leaveManagerModeInProgress: React.PropTypes.bool.isRequired,
         leaveManagerMode: React.PropTypes.func.isRequired,
         reloadPage: React.PropTypes.func.isRequired,
-        resetVenue: React.PropTypes.func.isRequired,
         venue: React.PropTypes.object.isRequired,
         rota: React.PropTypes.object.isRequired
     }

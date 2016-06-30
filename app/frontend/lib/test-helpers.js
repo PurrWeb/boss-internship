@@ -90,3 +90,12 @@ export function simpleRender(createdElement, options){
 
     return {component, getNode, findChild, $, $$};
 }
+
+export function accelerateTimeouts(fn){
+    var originalSetTimeout = setTimeout;
+    window.setTimeout =  function(callback, time){
+        return originalSetTimeout(callback, time / 100);
+    }
+    fn();
+    window.setTimeout = originalSetTimeout;
+}
