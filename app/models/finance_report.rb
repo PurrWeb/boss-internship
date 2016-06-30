@@ -26,7 +26,7 @@ class FinanceReport < ActiveRecord::Base
   end
 
   def owed_hours_count
-   (owed_hours_minute_count && owed_hours_minute_count / 60) || 0
+   (owed_hours_minute_count && owed_hours_minute_count / 60.0) || 0
   end
 
   def status
