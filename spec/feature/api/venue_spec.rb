@@ -38,13 +38,7 @@ RSpec.describe 'Api access' do
         expect(json).to eq({
           "id" => venue.id,
           "url" => url_helpers.api_v1_venue_url(venue),
-          "name" => venue.name,
-          "staff_members" => staff_members.map do |staff_member|
-            {
-              "id" => staff_member.id,
-              "url" => url_helpers.api_v1_staff_member_url(staff_member)
-            }
-          end
+          "name" => venue.name
         })
       end
     end
