@@ -114,7 +114,7 @@ class ChangeClockInStatus
       end
     end
 
-    Result.new(result, clock_in_day, errors)
+    Result.new(result, clock_in_day.reload, errors)
   end
 
   private
