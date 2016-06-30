@@ -81,7 +81,6 @@ describe('Rota StaffListItem', function() {
 
     it("Disables the add button if the staff member is on holiday", function(){
         var itemStoreState = {...storeState}
-        itemStoreState.staffMembers = utils.indexByClientId([itemStaff]);
 
         var holiday = {
             start_date: new Date(2016,0,1),
@@ -92,7 +91,7 @@ describe('Rota StaffListItem', function() {
         holiday = processHolidayObject(holiday);
         itemStoreState.holidays = utils.indexByClientId([holiday]);
 
-        expect(canAddShift(context, itemStoreState, itemStaff)).toBe(false);
+        expect(canAddShift(context, itemStoreState, staffMember)).toBe(false);
     });
 
     it("Disables the add button if a shift is alrady being added", function(){
