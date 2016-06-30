@@ -52,17 +52,9 @@ export function selectVenuesWithShifts(state){
 }
 
 export function selectStaffMemberHolidays(state, staffId){
-    var staffMember = state.staffMembers[staffId];
-    var staffMemberHolidayClientIds = _.pluck(staffMember.holidays, "clientId");
-    var allHolidays = staffMemberHolidayClientIds.map(function(clientId){
-        return state.holidays[clientId];
-    });
-    // We only have this week's holidays in the state, so filter out
-    // any holidays we don't have in the state.
-    var availableHolidays = _(allHolidays).filter(function(holiday){
-        return holiday !== undefined;
+    return _(state.holidays).filter(function(holiday){
+        return holiday.staff_member.clientId == staffId
     })
-    return availableHolidays;
 }
 
 export function selectStaffMemberUnpaidHolidays(state, staffId){

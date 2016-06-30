@@ -21,7 +21,6 @@ describe('Holiday Report Integration Test', function() {
             first_name: "John",
             surname: "Smith",
             id: 50,
-            holidays: [{id: 9}],
             staff_type: {id: 4},
             venues: [{id: THE_BAR_ID}]
         }],
