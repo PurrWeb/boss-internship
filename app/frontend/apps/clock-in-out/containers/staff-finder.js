@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import StaffFinder from "~components/staff-finder"
 import StaffListItem from "./staff-list-item"
-import {selectStaffMembers} from "~redux/selectors"
+import {selectStaffMembersForClockInOutStaffFinder} from "~redux/selectors"
 
 class ClockInOutStaffFinder extends Component {
     render() {
@@ -20,7 +20,8 @@ class ClockInOutStaffFinder extends Component {
         return <StaffFinder
             filters={{
                 search: true,
-                staffType: showStaffTypeFilter
+                staffType: showStaffTypeFilter,
+                rotaedOrClockedIn: true
             }}
             staffItemComponent={StaffListItem}
             staffTypes={this.props.staffTypes}
@@ -31,7 +32,7 @@ class ClockInOutStaffFinder extends Component {
 
 function mapStateToProps(state){
     return {
-        staff: selectStaffMembers(state),
+        staff: selectStaffMembersForClockInOutStaffFinder(state),
         staffTypes: state.staffTypes
     }
 }

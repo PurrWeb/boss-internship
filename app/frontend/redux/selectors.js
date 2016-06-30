@@ -247,6 +247,20 @@ export function selectStaffMembers(state){
     })
 }
 
+export function selectStaffMembersForClockInOutStaffFinder(state){
+    var staffMembers = selectStaffMembers(state);
+    return _.mapObject(staffMembers, function(staffMember){
+        var clockInDay = selectClockInDay(state, {
+            staffMemberClientId: staffMember.clientId,
+            date: state.pageOptions.dateOfRota
+        });
+        staffMember.isRotaed = selectShiftsByStaffMemberClientId(state, staffMember.clientId).length > 0,
+        console.log("status", clockInDay.status)
+        staffMember.isActive = clockInDay.status !== "clocked_out";
+        return staffMember
+    })
+}
+
 function selectStaffMemberCanEnterManagerMode(staffMember){
     if (staffMember.isManager === undefined){
         throw Error("This function needs a staff member that has been expanded in selectStaffMembers.")
