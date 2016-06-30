@@ -45,6 +45,8 @@ gem 'fitter-happier'
 gem "auto_strip_attributes", "~> 2.0"
 gem 'paper_trail'
 gem 'paper_trail-globalid'
+gem 'oj'
+gem 'oj_mimic_json'
 
 group :development, :test do
   gem "byebug"
