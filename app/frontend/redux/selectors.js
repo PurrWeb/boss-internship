@@ -57,6 +57,19 @@ export {
     selectShiftsByStaffMemberClientId
 }
 
+import {
+    selectStaffMemberHolidays,
+    selectStaffMemberUnpaidHolidays,
+    selectStaffMemberPaidHolidays,
+    selectStaffMemberIsOnHolidayOnDate
+} from "./selectors/staff-members"
+export {
+    selectStaffMemberHolidays,
+    selectStaffMemberUnpaidHolidays,
+    selectStaffMemberPaidHolidays,
+    selectStaffMemberIsOnHolidayOnDate
+}
+
 export function selectStaffTypesWithShifts(state){
     var {rotaShifts, staff} = state;
     rotaShifts = _.values(rotaShifts);
@@ -95,35 +108,7 @@ export function selectVenuesWithShifts(state){
     }
 }
 
-export function selectStaffMemberHolidays(state, staffId){
-    return _(state.holidays).filter(function(holiday){
-        return holiday.staff_member.clientId == staffId
-    })
-}
 
-export function selectStaffMemberUnpaidHolidays(state, staffId){
-    return _.filter(selectStaffMemberHolidays(state, staffId), {
-        holiday_type: "unpaid_holiday"
-    })
-}
-
-export function selectStaffMemberPaidHolidays(state, staffId){
-    return _.filter(selectStaffMemberHolidays(state, staffId), {
-        holiday_type: "paid_holiday"
-    })
-}
-
-export function selectStaffMemberIsOnHolidayOnDate(state, staffId, date){
-    var staffMemberHolidays = selectStaffMemberHolidays(state, staffId);
-    var isOnHoliday = false;
-    staffMemberHolidays.forEach(function(holiday){
-        if (holiday.start_date <= date && holiday.end_date >= date){
-            isOnHoliday = true;
-        }
-    });
-
-    return isOnHoliday;
-}
 
 
 export function selectForecastByRotaId(state, rotaClientId){
