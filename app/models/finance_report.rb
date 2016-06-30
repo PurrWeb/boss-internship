@@ -22,11 +22,11 @@ class FinanceReport < ActiveRecord::Base
   validate  :week_start_valid
 
   def total
-    (total_cents && total_cents / 100) || 0
+    (total_cents && total_cents / 100.0) || 0
   end
 
   def owed_hours_count
-   (owed_hours_minute_count && owed_hours_minute_count / 60) || 0
+   (owed_hours_minute_count && owed_hours_minute_count / 60.0) || 0
   end
 
   def status
