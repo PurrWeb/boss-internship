@@ -10,14 +10,51 @@ import {
     selectIsForceClockingOutClockInDay,
     selectAddClockInNoteIsInProgress,
     selectFetchWeeklyRotaIsInProgress,
-    selectUpdateRotaForecastInProgress
+    selectUpdateRotaForecastInProgress,
+    selectClockInOutLoadAppDataIsInProgress,
+    selectIsUpdatingStaffMemberStatus,
+    selectEnterManagerModeIsInProgress,
+    selectLeaveManagerModeIsInProgress,
+    selectIsUpdatingStaffMemberPin
 } from "./selectors/api-requests"
 export {
     selectEditHoursAcceptancePeriodIsInProgress,
     selectIsForceClockingOutClockInDay,
     selectAddClockInNoteIsInProgress,
     selectFetchWeeklyRotaIsInProgress,
-    selectUpdateRotaForecastInProgress
+    selectUpdateRotaForecastInProgress,
+    selectClockInOutLoadAppDataIsInProgress,
+    selectIsUpdatingStaffMemberStatus,
+    selectEnterManagerModeIsInProgress,
+    selectLeaveManagerModeIsInProgress,
+    selectIsUpdatingStaffMemberPin
+}
+
+import {
+    selectStaffMemberCanEnterManagerMode,
+    selectClockInOutAppIsInManagerMode,
+    selectClockInOutAppUserPermissions,
+    selectStaffMembersForClockInOutStaffFinder
+} from "./selectors/clock-in-out"
+export {
+    selectStaffMemberCanEnterManagerMode,
+    selectClockInOutAppIsInManagerMode,
+    selectClockInOutAppUserPermissions,
+    selectStaffMembersForClockInOutStaffFinder
+}
+
+import {
+    selectClockInDay
+} from "./selectors/clock-in-day"
+export {
+    selectClockInDay
+}
+
+import {
+    selectShiftsByStaffMemberClientId
+} from "./selectors/shifts"
+export {
+    selectShiftsByStaffMemberClientId
 }
 
 export function selectStaffTypesWithShifts(state){
@@ -165,11 +202,7 @@ export function selectRotaShiftsOnDayOnStaffTypeRotaPage(state){
     return rotaShifts;
 }
 
-export function selectShiftsByStaffMemberClientId(state, staffMemberClientId){
-    return _(state.rotaShifts).filter(function(shift){
-        return shift.staff_member.clientId === staffMemberClientId
-    });
-}
+
 
 export function selectRotaOnClockInOutPage(state){
     return getRotaFromDateAndVenue({
@@ -179,134 +212,7 @@ export function selectRotaOnClockInOutPage(state){
     });
 }
 
-export function selectIsUpdatingStaffMemberStatus(state, {staffMemberServerId}) {
-    var allRequests = state.apiRequestsInProgress.UPDATE_CLOCK_IN_STATUS;
-    var requestsForStaffMember = _.filter(allRequests, function(request){
-        return request.staffMemberObject.serverId === staffMemberServerId;
-    });
-    return requestsForStaffMember.length > 0;
-}
 
-export function selectEnterManagerModeIsInProgress(state, {staffMemberServerId}){
-    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_ENTER_USER_MODE;
-    if (!requests || requests.length === 0) {
-        return false;
-    }
-    if (requests[0].staffMemberObject === undefined) {
-        return false; // no staff member specified, probably leaving manager mode
-    }
-    var staffMemberMatches = oFetch(requests[0], "staffMemberObject.serverId") === staffMemberServerId;
-    var isEnteringManagerMode = oFetch(requests[0], "userMode") !== "user";
-    return isEnteringManagerMode && staffMemberMatches;
-}
-
-export function selectLeaveManagerModeIsInProgress(state){
-    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_ENTER_USER_MODE;
-    if (!requests || requests.length === 0) {
-        return false;
-    }
-    return oFetch(requests[0], "userMode") === "user";
-}
-
-export function selectIsUpdatingStaffMemberPin(state, {staffMemberServerId}) {
-    var allRequests = state.apiRequestsInProgress.UPDATE_STAFF_MEMBER_PIN;
-    var requestsForStaffMember = _.filter(allRequests, function(request){
-        return request.staffMemberObject.serverId === staffMemberServerId;
-    });
-    return requestsForStaffMember.length > 0;
-}
-
-export function selectStaffMembers(state){
-    return _.mapObject(state.staffMembers, function(staffMember){
-        staffMember = {...staffMember}
-
-        var staffTypeObject = staffMember.staff_type.get(state.staffTypes);
-        staffMember.staffType = staffTypeObject;
-
-        staffMember.isManager = staffTypeObject.name === "Manager";
-        staffMember.isSupervisor = staffTypeObject.name === "Bar Supervisor";
-        staffMember.isGeneralManager = staffTypeObject.name === "GM";
-        staffMember.canEnterManagerMode = selectStaffMemberCanEnterManagerMode(staffMember);
-
-        staffMember.updateStatusInProgress = selectIsUpdatingStaffMemberStatus(state, {
-            staffMemberServerId: staffMember.serverId
-        });
-        staffMember.updatePinInProgress = selectIsUpdatingStaffMemberPin(state, {
-            staffMemberServerId: staffMember.serverId
-        });
-        staffMember.enterManagerModeInProgress = selectEnterManagerModeIsInProgress(state, {
-            staffMemberServerId: staffMember.serverId
-        });
-
-        return staffMember
-    })
-}
-
-export function selectStaffMembersForClockInOutStaffFinder(state){
-    var staffMembers = selectStaffMembers(state);
-    return _.mapObject(staffMembers, function(staffMember){
-        var clockInDay = selectClockInDay(state, {
-            staffMemberClientId: staffMember.clientId,
-            date: state.pageOptions.dateOfRota
-        });
-        staffMember.isRotaed = selectShiftsByStaffMemberClientId(state, staffMember.clientId).length > 0,
-        staffMember.isActive = clockInDay.status !== "clocked_out";
-        return staffMember
-    })
-}
-
-function selectStaffMemberCanEnterManagerMode(staffMember){
-    if (staffMember.isManager === undefined){
-        throw Error("This function needs a staff member that has been expanded in selectStaffMembers.")
-    }
-    return staffMember.isManager || staffMember.isSupervisor || staffMember.isGeneralManager;
-}
-
-export function selectClockInOutAppIsInManagerMode(state){
-    var userMode = state.clockInOutAppUserMode.mode;
-    return userMode === "Manager" || userMode === "Bar Supervisor" || userMode === "GM";
-}
-
-export function selectClockInOutAppUserPermissions(state){
-    var userMode = state.clockInOutAppUserMode.mode;
-    if (userMode === "Manager") {
-        return {
-            toggleOnBreak: true,
-            changePin: true,
-            addNote: true,
-            resetVenue: true
-        }
-    }
-    if (userMode === "Bar Supervisor") {
-        return {
-            toggleOnBreak: true,
-            changePin: false,
-            addNote: true,
-            resetVenue: true
-        }
-    }
-    if (userMode === "GM") {
-        return {
-            toggleOnBreak: true,
-            changePin: false,
-            addNote: true,
-            resetVenue: true
-        }
-    }
-
-    //  Normal user that's not a manager
-    return {
-        toggleOnBreak: false,
-        changePin: false,
-        addNote: false,
-        resetVenue: false
-    }
-}
-
-export function selectClockInOutLoadAppDataIsInProgress(state){
-    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_FETCH_DATA;
-    return requests !== undefined && requests.length > 0;
-}
 
 function addBreaksToClockInPeriod(clockInPeriod, clockInBreaks){
     var breaks = _(clockInBreaks).filter(function(clockInBreak){
@@ -375,18 +281,4 @@ export function selectClockInDayDetails(state, clockInDay){
         clockInNotes,
         clockInDay
     }
-}
-
-export function selectClockInDay(state, {staffMemberClientId, date}) {
-    var clockInDay = _.find(state.clockInDays, function(clockInDay){
-        return clockInDay.staff_member.clientId === staffMemberClientId &&
-            utils.datesAreEqual(clockInDay.date, date)
-    })
-
-    if (!clockInDay) {
-        throw Error("ClockInDay for staffMember " + staffMemberClientId + " and date " +
-          date.toString() + "not found")
-    }
-
-    return clockInDay;
 }

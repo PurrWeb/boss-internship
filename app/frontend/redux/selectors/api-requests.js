@@ -1,4 +1,5 @@
 import utils from "~lib/utils"
+import oFetch from "o-fetch"
 
 export function selectEditHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod){
     return selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) ||
@@ -65,4 +66,46 @@ export function selectUpdateRotaForecastInProgress(state, {serverVenueId, dateOf
         var isSameVenue = serverVenueId === update.serverVenueId;
         return isSameVenue && isSameDate;
     })
+}
+
+export function selectClockInOutLoadAppDataIsInProgress(state){
+    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_FETCH_DATA;
+    return requests !== undefined && requests.length > 0;
+}
+
+export function selectIsUpdatingStaffMemberStatus(state, {staffMemberServerId}) {
+    var allRequests = state.apiRequestsInProgress.UPDATE_CLOCK_IN_STATUS;
+    var requestsForStaffMember = _.filter(allRequests, function(request){
+        return request.staffMemberObject.serverId === staffMemberServerId;
+    });
+    return requestsForStaffMember.length > 0;
+}
+
+export function selectEnterManagerModeIsInProgress(state, {staffMemberServerId}){
+    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_ENTER_USER_MODE;
+    if (!requests || requests.length === 0) {
+        return false;
+    }
+    if (requests[0].staffMemberObject === undefined) {
+        return false; // no staff member specified, probably leaving manager mode
+    }
+    var staffMemberMatches = oFetch(requests[0], "staffMemberObject.serverId") === staffMemberServerId;
+    var isEnteringManagerMode = oFetch(requests[0], "userMode") !== "user";
+    return isEnteringManagerMode && staffMemberMatches;
+}
+
+export function selectLeaveManagerModeIsInProgress(state){
+    var requests = state.apiRequestsInProgress.CLOCK_IN_OUT_APP_ENTER_USER_MODE;
+    if (!requests || requests.length === 0) {
+        return false;
+    }
+    return oFetch(requests[0], "userMode") === "user";
+}
+
+export function selectIsUpdatingStaffMemberPin(state, {staffMemberServerId}) {
+    var allRequests = state.apiRequestsInProgress.UPDATE_STAFF_MEMBER_PIN;
+    var requestsForStaffMember = _.filter(allRequests, function(request){
+        return request.staffMemberObject.serverId === staffMemberServerId;
+    });
+    return requestsForStaffMember.length > 0;
 }
