@@ -81,8 +81,6 @@ describe('Rota StaffListItem', function() {
 
     it("Disables the add button if the staff member is on holiday", function(){
         var itemStoreState = {...storeState}
-        var itemStaff = {...staffMember}
-        itemStaff.holidays = [{clientId: getClientId(1)}]
         itemStoreState.staffMembers = utils.indexByClientId([itemStaff]);
 
         var holiday = {
