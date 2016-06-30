@@ -21,7 +21,7 @@ class ClockInOutStaffFinder extends Component {
             filters={{
                 search: true,
                 staffType: showStaffTypeFilter,
-                rotaedOrClockedIn: true
+                rotaedOrActive: true
             }}
             staffItemComponent={StaffListItem}
             staffTypes={this.props.staffTypes}

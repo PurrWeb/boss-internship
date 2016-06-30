@@ -255,7 +255,6 @@ export function selectStaffMembersForClockInOutStaffFinder(state){
             date: state.pageOptions.dateOfRota
         });
         staffMember.isRotaed = selectShiftsByStaffMemberClientId(state, staffMember.clientId).length > 0,
-        console.log("status", clockInDay.status)
         staffMember.isActive = clockInDay.status !== "clocked_out";
         return staffMember
     })
