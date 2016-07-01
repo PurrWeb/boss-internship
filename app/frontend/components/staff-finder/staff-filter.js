@@ -102,10 +102,14 @@ export default class StaffFilter extends Component {
         }
     }
     getRotaedOrActiveFilter(){
+        var rotaedOrActiveOption = "Rotaed / Active Only"
+        var allOption = "All"
         var component = <label style={{fontWeight: "normal"}}>
-            <select onChange={(e) => this.handleChange("rotaedOrActive", e.target.value !== "All")}>
-                <option>All</option>
-                <option>Rotaed / Active Only</option>
+            <select
+                value={this.props.filterSettings.rotaedOrActive ? rotaedOrActiveOption : allOption}
+                onChange={(e) => this.handleChange("rotaedOrActive", e.target.value !== allOption)}>
+                <option value={allOption}>{allOption}</option>
+                <option value={rotaedOrActiveOption}>{rotaedOrActiveOption}</option>
             </select>
         </label>
         return {

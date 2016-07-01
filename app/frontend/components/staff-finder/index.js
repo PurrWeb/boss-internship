@@ -9,12 +9,17 @@ export default class StaffFinder extends Component {
         staffItemComponent: React.PropTypes.func.isRequired,
         staff: React.PropTypes.object.isRequired,
         staffTypes: React.PropTypes.object,
-        filterOverrides: React.PropTypes.object
+        filterOverrides: React.PropTypes.object,
+        defaultFilterSettings: React.PropTypes.object
     }
     constructor(props) {
         super(props);
+        var staffFilterSettings = StaffFilter.getDefaultSettings();
+        if (props.defaultFilterSettings) {
+            staffFilterSettings = _.extend({}, staffFilterSettings, props.defaultFilterSettings)
+        }
         this.state = {
-            staffFilterSettings: StaffFilter.getDefaultSettings()
+            staffFilterSettings
         }
     }
     render() {

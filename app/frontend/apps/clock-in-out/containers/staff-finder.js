@@ -23,6 +23,9 @@ class ClockInOutStaffFinder extends Component {
                 staffType: showStaffTypeFilter,
                 rotaedOrActive: true
             }}
+            defaultFilterSettings={{
+                rotaedOrActive: true
+            }}
             staffItemComponent={StaffListItem}
             staffTypes={this.props.staffTypes}
             staff={this.props.staff}
