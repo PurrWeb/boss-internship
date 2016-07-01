@@ -103,12 +103,10 @@ export default class StaffFilter extends Component {
     }
     getRotaedOrActiveFilter(){
         var component = <label style={{fontWeight: "normal"}}>
-            <input
-                type="checkbox"
-                onChange={(e) => this.handleChange("rotaedOrActive", e.target.checked)}
-            />
-            &nbsp;
-            Rotaed or Active
+            <select onChange={(e) => this.handleChange("rotaedOrActive", e.target.value !== "All")}>
+                <option>All</option>
+                <option>Rotaed / Active Only</option>
+            </select>
         </label>
         return {
             title: "",
