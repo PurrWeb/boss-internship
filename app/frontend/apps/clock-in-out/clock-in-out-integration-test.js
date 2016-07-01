@@ -34,7 +34,14 @@ describe("Clock In/Out Page Integration Test", function(){
             "name":"Manager",
             "color":"#bb4dff"
         }],
-        rota_shifts: [],
+        rota_shifts: [{
+            id: 22,
+            rota: {id: 307},
+            venue: {id: 1},
+            starts_at: new Date(2016, 3, 29, 10, 0),
+            ends_at: new Date(2016, 3, 29, 12, 0),
+            staff_member: {id: 2}
+        }],
         venues: [{
             "id":1,
             "name":"McCooley's",

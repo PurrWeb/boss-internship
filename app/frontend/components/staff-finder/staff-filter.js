@@ -19,7 +19,8 @@ export default class StaffFilter extends Component {
         return {
             search: "",
             staffTypes: [],
-            venues: []
+            venues: [],
+            rotaedOrActive: false
         }
     }
     render() {
@@ -47,7 +48,7 @@ export default class StaffFilter extends Component {
     getFilters(){
         var selectedFilters = this.props.filters;
         var filterItems = [];
-        
+
         if (selectedFilters.search){
             filterItems.push(this.getSearchFilter());
         }
@@ -56,6 +57,9 @@ export default class StaffFilter extends Component {
         }
         if (selectedFilters.venue){
             filterItems.push(this.getVenueFilter());
+        }
+        if (selectedFilters.rotaedOrActive){
+            filterItems.push(this.getRotaedOrActiveFilter())
         }
 
         return filterItems;
@@ -76,7 +80,7 @@ export default class StaffFilter extends Component {
         var component = <StaffTypeDropdown
             selectedStaffTypes={this.props.filterSettings.staffTypes}
             staffTypes={this.props.staffTypes}
-            onChange={(staffTypes) => 
+            onChange={(staffTypes) =>
                 this.handleChange("staffTypes", staffTypes)
             } />
         return {
@@ -89,11 +93,27 @@ export default class StaffFilter extends Component {
             selectedVenues={this.props.filterSettings.venues}
             venues={this.props.venues}
             multi={true}
-            onChange={(venues) => 
+            onChange={(venues) =>
                 this.handleChange("venues", venues)
             } />
         return {
             title: "Venue",
+            component
+        }
+    }
+    getRotaedOrActiveFilter(){
+        var rotaedOrActiveOption = "Rotaed / Active Only"
+        var allOption = "All"
+        var component = <label style={{fontWeight: "normal"}}>
+            <select
+                value={this.props.filterSettings.rotaedOrActive ? rotaedOrActiveOption : allOption}
+                onChange={(e) => this.handleChange("rotaedOrActive", e.target.value !== allOption)}>
+                <option value={allOption}>{allOption}</option>
+                <option value={rotaedOrActiveOption}>{rotaedOrActiveOption}</option>
+            </select>
+        </label>
+        return {
+            title: "",
             component
         }
     }

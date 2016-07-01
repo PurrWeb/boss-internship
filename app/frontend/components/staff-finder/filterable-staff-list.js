@@ -56,7 +56,16 @@ export default class FilterableStaffList extends Component {
                 return venuesMatchingFilter.length > 0;
             });
         }
-    
+
+        if (filter.rotaedOrActive) {
+            staffToShow = _.filter(staffToShow, function(staffMember){
+                if (staffMember.isActive === undefined || staffMember.isRotaed === undefined) {
+                    throw Error("isActive or isRotaed not defined on staff member object")
+                }
+                return staffMember.isActive || staffMember.isRotaed;
+            });
+        }
+
         staffToShow = _(staffToShow).sortBy(function(staffMember){
             return staffMember.first_name + " " + staffMember.surname
         })
