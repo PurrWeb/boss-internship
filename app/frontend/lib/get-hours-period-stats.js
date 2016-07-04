@@ -48,5 +48,8 @@ export default function getHoursPeriodStats({denormalizedHoursPeriods}){
         total.breaks += singleStats.breaks;
     });
 
-    return total;
+    return {
+        hours: utils.round(total.hours, 2),
+        breaks: utils.round(total.hours, 2)
+    }
 }
