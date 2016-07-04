@@ -1,7 +1,7 @@
 class OwedHoursController < ApplicationController
   def create
-    authorize! :manage, :admin
     staff_member = StaffMember.find(params[:staff_member_id])
+    authorize! :view, StaffMember
 
     result = CreateOwedHour.new(
       requester: current_user,
