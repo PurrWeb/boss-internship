@@ -48,7 +48,7 @@ export class ChartAndFilter extends Component {
                         } />
 
                     <div styles={{marginTop: 4}}>
-                        Showing {rotaShifts.length} out of {this.props.rotaShifts.length} shifts.
+                        Showing {_.values(rotaShifts).length} out of {this.props.rotaShifts.length} shifts.
                     </div>
 
                     <div className="chart-and-filter__shift-editor-container">
