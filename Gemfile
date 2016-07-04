@@ -53,6 +53,7 @@ group :development, :test do
   gem "pry-rails"
   gem "factory_girl_rails"
   gem "letter_opener"
+  gem "bullet"
 end
 
 group :test do

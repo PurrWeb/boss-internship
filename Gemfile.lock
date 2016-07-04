@@ -53,6 +53,9 @@ GEM
       sass (>= 3.3.4)
     bootstrap_form (2.3.0)
     builder (3.2.2)
+    bullet (5.1.1)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.10.0)
     byebug (8.2.1)
     cancan (1.6.10)
     capybara (2.4.4)
@@ -419,6 +422,7 @@ GEM
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    uniform_notifier (1.10.0)
     warden (1.2.3)
       rack (>= 1.0)
     will_paginate (3.1.0)
@@ -437,6 +441,7 @@ DEPENDENCIES
   bootstrap-datepicker-rails
   bootstrap-sass (~> 3.3.6)
   bootstrap_form
+  bullet
   byebug
   cancan
   capybara
