@@ -40,7 +40,12 @@ class StaffMembersController < ApplicationController
   end
 
   def show
-    staff_member = StaffMember.find(params[:id])
+    staff_member = StaffMember.
+      includes(holidays: {creator: [:name]}).
+      includes(:owed_hours).
+      includes(:name).
+      find(params[:id])
+
     if can? :edit, staff_member
       if !active_tab_from_params.present?
         return redirect_to staff_member_path(staff_member, tab: 'employment-details')
