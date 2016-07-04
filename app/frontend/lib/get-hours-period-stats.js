@@ -8,6 +8,12 @@ function convertMsToHours(ms){
     return utils.round(hours, 2);
 }
 
+function getDateWithSecondsSetToZero(date){
+    date = new Date(date);
+    date.setSeconds(0)
+    return date;
+}
+
 function getSingleHoursPeriodStats({denormalizedHoursPeriod}){
     if (denormalizedHoursPeriod.ends_at === null){
         return {
@@ -16,12 +22,16 @@ function getSingleHoursPeriodStats({denormalizedHoursPeriod}){
         }
     }
 
-    var msTotalLength = denormalizedHoursPeriod.ends_at - denormalizedHoursPeriod.starts_at;
+    var ends_at = getDateWithSecondsSetToZero(denormalizedHoursPeriod.ends_at);
+    var starts_at = getDateWithSecondsSetToZero(denormalizedHoursPeriod.starts_at);
+    var msTotalLength = ends_at - starts_at;
     var msBreakLength = 0;
 
     var breakObjects = denormalizedHoursPeriod.breaks;
     breakObjects.forEach(function(breakItem){
-        msBreakLength += breakItem.ends_at - breakItem.starts_at;
+        var ends_at = getDateWithSecondsSetToZero(breakItem.ends_at);
+        var starts_at = getDateWithSecondsSetToZero(breakItem.starts_at)
+        msBreakLength += ends_at - starts_at
     });
 
     var msHoursLength = msTotalLength - msBreakLength;
@@ -48,5 +58,8 @@ export default function getHoursPeriodStats({denormalizedHoursPeriods}){
         total.breaks += singleStats.breaks;
     });
 
-    return total;
+    return {
+        hours: utils.round(total.hours, 2),
+        breaks: utils.round(total.hours, 2)
+    }
 }
