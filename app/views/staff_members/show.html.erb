@@ -58,11 +58,9 @@
     <li role="presentation" class="<%= StaffMemberShowPage.tab_class('holidays', active_tab) %>">
       <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'holidays') %>" data-target="#holidays-tab">Holidays</a>
     </li>
-    <% if can?(:manage, :admin) %>
-      <li role="presentation" class="<%= StaffMemberShowPage.tab_class('owed-hours', active_tab) %>">
-        <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'owed-hours') %>" data-target="#owed-hours-tab">Owed Hours</a>
-      </li>
-    <% end %>
+    <li role="presentation" class="<%= StaffMemberShowPage.tab_class('owed-hours', active_tab) %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'owed-hours') %>" data-target="#owed-hours-tab">Owed Hours</a>
+    </li>
   </ul>
 
   <div class="tab-content">
