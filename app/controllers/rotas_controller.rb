@@ -33,7 +33,11 @@ class RotasController < ApplicationController
 
     week = RotaWeek.new(rota.date)
 
-    staff_members = RotaStaffMemberQuery.new(rota).all
+    staff_members = RotaStaffMemberQuery.new(rota).
+      all.
+      includes(:name).
+      includes(:staff_type).
+      includes(:master_venue)
 
     holidays = Holiday.
       in_state(:enabled).
@@ -43,7 +47,9 @@ class RotasController < ApplicationController
       relation: holidays,
       start_date: week.start_date,
       end_date: week.end_date
-    ).all
+    ).all.
+      includes(:staff_member)
+
 
     week_start_time = RotaShiftDate.new(week.start_date).start_time
     week_end_time = RotaShiftDate.new(week.end_date).end_time
@@ -51,7 +57,9 @@ class RotasController < ApplicationController
       enabled.
       joins(:staff_member).
       merge(staff_members).
-      where(starts_at: week_start_time..week_end_time)
+      where(starts_at: week_start_time..week_end_time).
+      includes(:rota).
+      includes(:staff_member)
 
     shift_rotas = Rota.
       joins(:rota_shifts).
@@ -66,7 +74,9 @@ class RotasController < ApplicationController
       )
 
     rotas = Rota.
-      where(id: ([rota.id] + shift_rotas.pluck(:id)).compact).uniq
+      where(id: ([rota.id] + shift_rotas.pluck(:id)).compact).
+      includes(:venue).
+      uniq
 
     venues = Venue.where(id: [rota.venue.id] + shift_venues.pluck(:id)).uniq
 
