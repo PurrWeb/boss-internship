@@ -105,6 +105,10 @@ class StaffMember < ActiveRecord::Base
     disabled.where(would_rehire: false)
   end
 
+  def self.mark_requiring_notification!(time: Time.current)
+    update_all(shift_change_occured_at: time)
+  end
+
   def disabled_by_user
     if disabled?
       User.find(state_machine.last_transition.metadata.fetch("requster_user_id"))

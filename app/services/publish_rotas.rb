@@ -1,22 +1,19 @@
 class PublishRotas
-  def initialize(rotas: rotas)
+  def initialize(rotas: rotas, nested: false)
     @rotas = rotas
+    @nested = nested
   end
 
   def call
-    ActiveRecord::Base.transaction do
-      rotas.each do |rota|
-        if rota.new_record?
-          rota.save!
-        end
-
+    ActiveRecord::Base.transaction(requires_new: nested) do
+      rotas.find_each do |rota|
         if !rota.published?
           rota.transition_to!(:published)
 
           StaffMember.
             joins(:rota_shifts).
             merge(rota.rota_shifts).
-            find_each(&:mark_requiring_notification!)
+            mark_requiring_notification!
 
           UpdateRotaForecast.new(rota: rota).call
         end
@@ -25,5 +22,5 @@ class PublishRotas
   end
 
   private
-  attr_reader :rotas
+  attr_reader :rotas, :nested
 end
