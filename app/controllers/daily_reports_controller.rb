@@ -15,22 +15,22 @@ class DailyReportsController < ApplicationController
 
       ActiveRecord::Associations::Preloader.new.preload(staff_members, [:name, :staff_type])
 
-      total_rotaed_cost = 0
-      total_actual_cost = 0
-      total_overheads = 0
+      total_rotaed_cost_cents = 0
+      total_actual_cost_cents = 0
+      total_overheads_cents = 0
       staff_members.each do |staff_member|
-        total_overheads   += staff_member.overhead_cost
-        total_rotaed_cost += staff_member.rotaed_cost
-        total_actual_cost += staff_member.actual_cost
+        total_overheads_cents   += staff_member.overhead_cost_cents
+        total_rotaed_cost_cents += staff_member.rotaed_cost_cents
+        total_actual_cost_cents += staff_member.actual_cost_cents
       end
 
       render locals: {
         accessible_venues: accessible_venues,
         venue: venue,
         date: date,
-        total_overheads: total_overheads,
-        total_rotaed_cost: total_rotaed_cost,
-        total_actual_cost: total_actual_cost,
+        total_overheads_cents: total_overheads_cents,
+        total_rotaed_cost_cents: total_rotaed_cost_cents,
+        total_actual_cost_cents: total_actual_cost_cents,
         staff_members: staff_members
       }
     else

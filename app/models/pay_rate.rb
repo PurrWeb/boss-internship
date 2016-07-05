@@ -4,7 +4,6 @@ class PayRate < ActiveRecord::Base
   WEEKLY_CALCULATION_TYPE = 'salary_per_week'
   CALCULATION_TYPES = [HOURLY_CALCULATION_TYPE, WEEKLY_CALCULATION_TYPE]
 
-
   include ActionView::Helpers::NumberHelper
   include Enableable
 

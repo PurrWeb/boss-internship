@@ -34,7 +34,7 @@
     <% if display_totals %>
       <p class="h4">
         <strong>
-          Total: <%= number_to_currency(reports.sum(&:total), unit: '£') %>
+          Total: <%= number_to_currency(reports.sum(&:total_cents) / 100.0, unit: '£') %>
         </strong>
       </p>
     <% end %>
@@ -117,7 +117,7 @@
               </td>
               <td>
                 <strong>
-                  <%= number_to_currency(report.total, unit: '£') %>
+                  <%= number_to_currency(report.total_cents / 100.0, unit: '£') %>
                 </strong>
               </td>
             <% end %>

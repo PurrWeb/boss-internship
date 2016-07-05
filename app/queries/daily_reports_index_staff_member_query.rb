@@ -131,7 +131,7 @@ class DailyReportsIndexStaffMemberQuery
       project(
         staff_members[Arel.star],
         pay_rates[:calculation_type].as('calculation_type'),
-        (pay_rates[:cents] / 100).as('pay_rate_in_pounds'),
+        (pay_rates[:cents]).as('pay_rate_cents'),
         ArelHelpers.value_or_zero(
           rota_shifts_with_durations[:duration],
           as: "hours_rotaed"
@@ -175,20 +175,20 @@ class DailyReportsIndexStaffMemberQuery
         staff_members_with_hours[:hours_rotaed].as("hours_rotaed"),
         staff_members_with_hours[:hours_worked].as("hours_worked"),
         staff_members_with_hours[:break_hours].as("break_hours"),
-        ArelHelpers.staff_member_hourly_total_calculation(
+        ArelHelpers.staff_member_hourly_total_cents_calculation(
           calculation_type_column: staff_members_with_hours[:calculation_type],
-          pay_rate_column: staff_members_with_hours[:pay_rate_in_pounds],
+          pay_rate_cents_column: staff_members_with_hours[:pay_rate_cents],
           hours_column: staff_members_with_hours[:hours_rotaed]
-        ).as('rotaed_cost'),
-        ArelHelpers.staff_member_hourly_total_calculation(
+        ).as('rotaed_cost_cents'),
+        ArelHelpers.staff_member_hourly_total_cents_calculation(
           calculation_type_column: staff_members_with_hours[:calculation_type],
-          pay_rate_column: staff_members_with_hours[:pay_rate_in_pounds],
+          pay_rate_cents_column: staff_members_with_hours[:pay_rate_cents],
           hours_column: staff_members_with_hours[:payable_hours]
-        ).as('actual_cost'),
-        ArelHelpers.staff_members_daily_overhead_calculation(
+        ).as('actual_cost_cents'),
+        ArelHelpers.staff_members_daily_overhead_cents_calculation(
           calculation_type_column: staff_members_with_hours[:calculation_type],
-          pay_rate_column: staff_members_with_hours[:pay_rate_in_pounds]
-        ).as('overhead_cost')
+          pay_rate_cents_column: staff_members_with_hours[:pay_rate_cents]
+        ).as('overhead_cost_cents')
       )
 
     sql = staff_members_with_costs.to_sql
