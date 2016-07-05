@@ -29,7 +29,7 @@ class ClockInOutStaffListItem extends Component {
         var rotaedShiftsColumn = null;
         var statusToggleButtons = null;
 
-        rotaedShiftsColumn = <div className="col-md-2 col-xs-9">
+        rotaedShiftsColumn = <div className="col-md-2 col-xs-4">
             <span style={columnNameStyle}>
                 Rotaed Shifts
             </span>
@@ -62,7 +62,7 @@ class ClockInOutStaffListItem extends Component {
                     </div>
                 </div>
                 {rotaedShiftsColumn}
-                <div className="col-md-2">
+                <div className="col-md-2 col-xs-6">
                     {this.getClockInNotesList()}
                 </div>
                 <div className="col-md-2 col-xs-2 staff-list-item--clock-in-out__status">
