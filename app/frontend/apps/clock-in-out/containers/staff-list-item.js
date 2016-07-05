@@ -39,7 +39,7 @@ class ClockInOutStaffListItem extends Component {
                 venues={this.props.venues} />
         </div>;
 
-        statusToggleButtons = <div className="col-md-3 col-xs-9" style={{paddingTop: 5}}>
+        statusToggleButtons = <div className="col-md-3 col-xs-10" style={{paddingTop: 5}}>
             {this.getStaffMemberStatusToggleButtons()}
         </div>
 
@@ -80,21 +80,22 @@ class ClockInOutStaffListItem extends Component {
 
         var toggleOnBreakButton = null;
         if (this.props.userPermissions.toggleOnBreak){
-            toggleOnBreakButton = <div className="col-md-6 col-xs-2">
+            toggleOnBreakButton = <div style={{display: "inline-block", paddingLeft: 5}}>
                 <ToggleStaffOnBreakButton
                     clockInDay={this.props.clockInDay}
                     staffObject={staffMember}
                     updateClockInStatusWithConfirmation={(options) => this.updateClockInStatus(options)} />
-            </div>;
+            </div>
         }
-        return <div className="row">
-            <div className="col-md-6 col-xs-2">
+        return <div className="row" style={{marginRight: 0}}>
+            <div style={{float: "right"}}>
                 <ToggleStaffClockedInButton
                     clockInDay={this.props.clockInDay}
                     staffObject={staffMember}
                     updateClockInStatusWithConfirmation={(options) => this.updateClockInStatus(options)} />
+                {toggleOnBreakButton}
             </div>
-            {toggleOnBreakButton}
+
         </div>
     }
     getClockInNotesList(){
