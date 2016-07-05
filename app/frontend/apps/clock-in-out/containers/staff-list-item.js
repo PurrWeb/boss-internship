@@ -29,7 +29,7 @@ class ClockInOutStaffListItem extends Component {
         var rotaedShiftsColumn = null;
         var statusToggleButtons = null;
 
-        rotaedShiftsColumn = <div className="col-md-3 col-xs-9">
+        rotaedShiftsColumn = <div className="col-md-2 col-xs-9">
             <span style={columnNameStyle}>
                 Rotaed Shifts
             </span>
@@ -39,7 +39,7 @@ class ClockInOutStaffListItem extends Component {
                 venues={this.props.venues} />
         </div>;
 
-        statusToggleButtons = <div className="col-md-2 col-xs-9" style={{paddingTop: 5}}>
+        statusToggleButtons = <div className="col-md-3 col-xs-9" style={{paddingTop: 5}}>
             {this.getStaffMemberStatusToggleButtons()}
         </div>
 
@@ -48,7 +48,7 @@ class ClockInOutStaffListItem extends Component {
                 <div className="col-md-1 col-xs-2">
                     <img src={staffMember.avatar_url} className="staff-list-item__avatar" />
                 </div>
-                <div className="col-md-3 col-xs-10">
+                <div className="col-md-4 col-xs-10">
                     <div className="staff-list-item--clock-in-out__name">
                         {staffMember.first_name} {staffMember.surname}
                     </div>
@@ -62,7 +62,7 @@ class ClockInOutStaffListItem extends Component {
                     </div>
                 </div>
                 {rotaedShiftsColumn}
-                <div className="col-xs-3">
+                <div className="col-md-2">
                     {this.getClockInNotesList()}
                 </div>
                 <div className="col-md-2 col-xs-2 staff-list-item--clock-in-out__status">
