@@ -127,6 +127,7 @@ Rails.application.routes.draw do
     end
 
     resources :weekly_reports, only: [:index]
+    resources :daily_reports, only: [:index]
 
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
