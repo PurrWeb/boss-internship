@@ -63,20 +63,22 @@ class RotaShift < ActiveRecord::Base
 
   # validation
   def times_within_rota_boundary
-    if starts_at.present? && (starts_at < RotaShiftDate.new(rota.date).start_time)
-      raise "starts at time #{starts_at} suppiled too early for rota on #{rota.date}"
-    end
+    if rota.present?
+      if starts_at.present? && (starts_at < RotaShiftDate.new(rota.date).start_time)
+        raise "starts at time #{starts_at} suppiled too early for rota on #{rota.date}"
+      end
 
-    if ends_at.present? && (ends_at < RotaShiftDate.new(rota.date).start_time)
-      raise "ends at time #{ends_at} suppiled too early for rota on #{rota.date}"
-    end
+      if ends_at.present? && (ends_at < RotaShiftDate.new(rota.date).start_time)
+        raise "ends at time #{ends_at} suppiled too early for rota on #{rota.date}"
+      end
 
-    if starts_at.present? && (starts_at > RotaShiftDate.new(rota.date).end_time)
-      raise "starts_at time #{starts_at} suppiled too late for rota on #{rota.date}"
-    end
+      if starts_at.present? && (starts_at > RotaShiftDate.new(rota.date).end_time)
+        raise "starts_at time #{starts_at} suppiled too late for rota on #{rota.date}"
+      end
 
-    if ends_at.present? && (ends_at > RotaShiftDate.new(rota.date).end_time)
-      raise "ends_at time #{ends_at} suppiled too late for rota on #{rota.date}"
+      if ends_at.present? && (ends_at > RotaShiftDate.new(rota.date).end_time)
+        raise "ends_at time #{ends_at} suppiled too late for rota on #{rota.date}"
+      end
     end
   end
 
