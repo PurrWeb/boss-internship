@@ -40,7 +40,7 @@ class Ability
       end
 
       can :view, :weekly_reports do
-        user.has_all_venue_access? || !user.security_manager
+        user.has_all_venue_access? || !user.security_manager?
       end
 
       can :manage, Holiday do |holiday|
