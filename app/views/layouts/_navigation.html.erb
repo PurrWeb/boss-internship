@@ -59,6 +59,19 @@
               <%= link_to('Hours Confirmation', current_hours_confirmation_index_path, class: 'nav-section-header-link') %>
             </li>
           <% end %>
+
+          <li class="dropdown nav-reports-section">
+            <a href="#" class="nav-section-header-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              Reports <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <% if can?(:view, :weekly_reports) %>
+                <li class="nav-hours-weekly-reports-section">
+                  <%= link_to('Weekly Reports', weekly_reports_path) %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
