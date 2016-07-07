@@ -39,12 +39,12 @@ class FinanceReportStaffMembersQuery
         staff_members[:master_venue_id].eq(venue.id).
         and(
           staff_members[:created_at].gteq(week.start_date)
-        ).
-        and(
-          most_recent_staff_member_transitions[:to_state].eq(nil).
-          or(
-            most_recent_staff_member_transitions[:to_state].eq("enabled")
-          )
+        )
+      ).
+      where(
+        most_recent_staff_member_transitions[:to_state].eq(nil).
+        or(
+          most_recent_staff_member_transitions[:to_state].eq("enabled")
         ).
         or(
           InRangeInclusive.new(

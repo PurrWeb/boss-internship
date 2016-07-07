@@ -12,7 +12,11 @@ shared_examples "staff member has stuff on week" do
     end
 
     specify 'staff member should be returned' do
-      expect(query.all.map(&:id)).to eq([staff_member.id])
+      if _return_expectation
+        expect(query.all.map(&:id)).to eq([staff_member.id])
+      else
+        expect(query.all.map(&:id)).to eq([])
+      end
     end
   end
 
@@ -38,7 +42,11 @@ shared_examples "staff member has stuff on week" do
     end
 
     specify 'staff member should be returned' do
-      expect(query.all.map(&:id)).to eq([staff_member.id])
+      if _return_expectation
+        expect(query.all.map(&:id)).to eq([staff_member.id])
+      else
+        expect(query.all.map(&:id)).to eq([])
+      end
     end
   end
 
@@ -67,7 +75,11 @@ shared_examples "staff member has stuff on week" do
     end
 
     specify 'staff member should be returned' do
-      expect(query.all.map(&:id)).to eq([staff_member.id])
+      if _return_expectation
+        expect(query.all.map(&:id)).to eq([staff_member.id])
+      else
+        expect(query.all.map(&:id)).to eq([])
+      end
     end
   end
 end
@@ -100,19 +112,6 @@ describe FinanceReportStaffMembersQuery do
     expect(query.all.map(&:id)).to eq([staff_member.id])
   end
 
-  context 'staff_member was created before current week' do
-    let(:created_at) { week.start_date - 1.day }
-
-    specify 'staff_member should not be returned' do
-      expect(query.all.map(&:id)).to_not eq([staff_member.id])
-    end
-
-    include_examples "staff member has stuff on week" do
-      let(:_query) { query }
-      let(:_staff_member) { staff_member }
-    end
-  end
-
   context 'staff member is not associated with venue' do
     let(:other_venue) { FactoryGirl.create(:venue) }
     before do
@@ -126,6 +125,7 @@ describe FinanceReportStaffMembersQuery do
     include_examples "staff member has stuff on week" do
       let(:_query) { query }
       let(:_staff_member) { staff_member }
+      let(:_return_expectation) { false }
     end
   end
 
@@ -147,6 +147,7 @@ describe FinanceReportStaffMembersQuery do
     include_examples "staff member has stuff on week" do
       let(:_query) { query }
       let(:_staff_member) { staff_member }
+      let(:_return_expectation) { true }
     end
   end
 
@@ -162,6 +163,7 @@ describe FinanceReportStaffMembersQuery do
     include_examples "staff member has stuff on week" do
       let(:_query) { query }
       let(:_staff_member) { staff_member }
+      let(:_return_expectation) { false }
     end
   end
 end

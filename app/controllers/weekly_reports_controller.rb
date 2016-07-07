@@ -7,8 +7,13 @@ class WeeklyReportsController < ApplicationController
       week = week_from_params
       accessible_venues = AccessibleVenuesQuery.new(current_user).all
 
+      staff_members = FinanceReportStaffMembersQuery.new(
+        venue: venue,
+        week: week
+      ).all
+
       reports_by_staff_type = {}
-      venue.master_staff_members.each do |staff_member|
+      staff_members.each do |staff_member|
         reports_by_staff_type[staff_member.staff_type] ||= []
         reports_by_staff_type[staff_member.staff_type] << (FinanceReport.find_by(
           staff_member: staff_member,
