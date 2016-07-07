@@ -1,17 +1,22 @@
 require 'rails_helper'
 
 describe ShiftUpdateNotificationJob do
+  include ActiveSupport::Testing::TimeHelpers
+
   let(:job) { ShiftUpdateNotificationJob.new }
   let(:staff_member) { double('Dummy staff member') }
+  let(:staff_member_id) { double('Staff Member ID') }
   let(:query_scope) { double('Query scope') }
-  let(:notification_service) { double('Notification Service') }
+  let(:staff_member_shift_update_job_class) { double('Staff Member Shift Update Job class') }
+  let(:staff_member_shift_update_job_instance) { double('Staff Member Shift Update Job instance') }
 
   describe "#perform" do
     before do
       allow(query_scope).to receive(:find_each).and_yield(staff_member)
       allow_any_instance_of(StaffMemberWithShiftNotificationsQuery).to receive(:all).and_return(query_scope)
-      allow(SendShiftChangeNotifications).to receive(:new).with(staff_member).and_return(notification_service)
-      allow(notification_service).to receive(:call)
+      allow(SendStaffMemberShiftUpdateJob).to receive(:set).and_return(staff_member_shift_update_job_instance)
+      allow(staff_member).to receive(:id).and_return(staff_member_id)
+      allow(staff_member_shift_update_job_instance).to receive(:perform_later)
     end
 
     it 'should pull a list of all staff members' do
@@ -21,16 +26,6 @@ describe ShiftUpdateNotificationJob do
 
     it 'should iterate the staff members' do
       expect(query_scope).to receive(:find_each).and_yield(staff_member)
-      job.perform
-    end
-
-    it 'should instanciate the notification service' do
-      expect(SendShiftChangeNotifications).to receive(:new).with(staff_member).and_return(notification_service)
-      job.perform
-    end
-
-    it 'should call the notification service for the staff member' do
-      expect(notification_service).to receive(:call)
       job.perform
     end
   end

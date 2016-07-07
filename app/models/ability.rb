@@ -39,6 +39,10 @@ class Ability
         user.has_admin_access?
       end
 
+      can :view, :weekly_reports do
+        user.has_all_venue_access? || !user.security_manager?
+      end
+
       can :manage, Holiday do |holiday|
         can_edit_staff_member?(user, holiday.staff_member)
       end
