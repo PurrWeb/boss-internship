@@ -1,0 +1,14 @@
+@media print {
+    .table-striped *{
+        -webkit-print-color-adjust: exact;
+    }
+    .table-striped > tbody > tr:nth-of-type(odd) td{
+        background: #f9f9f9 !important; // overrule Bootstrap
+    }
+    a[href]:after {
+        content: "" !important; // override Bootstrap
+    }
+    form[action="/finance_reports"] {
+        display: none;
+    }
+}
