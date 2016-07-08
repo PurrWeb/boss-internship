@@ -15,6 +15,7 @@ import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-membe
 import UserActionConfirmationMessages from "~components/user-action-confirmation-messages"
 import Header from "../components/header"
 import LoadAppDataDialog from "./load-app-data-dialog"
+import Clock from "../components/clock"
 
 
 class ClockInOutView extends Component {
@@ -77,7 +78,12 @@ class ClockInOutView extends Component {
                 <LargeStaffTypeSelector
                     staffTypes={this.props.staffTypes}
                     onSelect={({staffType}) => this.props.selectStaffType(staffType.clientId)} />
-                {this.getReloadPageButton()}
+                <div>
+                    <div style={{marginRight: 16, float: "right"}}>
+                        <Clock />
+                    </div>
+                    {this.getReloadPageButton()}
+                </div>
             </div>
         }
 
