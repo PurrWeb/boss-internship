@@ -6,7 +6,10 @@ class FinanceReportsController < ApplicationController
       venue = venue_from_params
       week = week_from_params
 
-      staff_members = venue.master_staff_members
+      staff_members = FinanceReportStaffMembersQuery.new(
+        venue: venue,
+        week: week
+      ).all
 
       reports_by_staff_type = {}
       staff_members.each do |staff_member|
