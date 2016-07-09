@@ -151,9 +151,9 @@ describe FinanceReportStaffMembersQuery do
     end
   end
 
-  context 'staff member was created before week started' do
+  context 'staff member was created after week started' do
     before do
-      staff_member.update_attributes!(created_at: week.start_date - 1.day)
+      staff_member.update_attributes!(created_at: week.start_date + 1.week + 1.day)
     end
 
     specify 'staff_member should not be returned' do
