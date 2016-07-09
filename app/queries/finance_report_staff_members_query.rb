@@ -38,7 +38,9 @@ class FinanceReportStaffMembersQuery
       where(
         staff_members[:master_venue_id].eq(venue.id).
         and(
-          staff_members[:created_at].gteq(week.start_date)
+          staff_members[:created_at].lt(
+            RotaShiftDate.new(week.start_date + 1.week).start_time
+          )
         )
       ).
       where(
