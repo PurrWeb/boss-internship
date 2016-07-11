@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import _ from "underscore"
 import moment from "moment"
+import $ from "jquery"
 window.debug = window.debug || {};
 window.debug.React = React;
 window.debug.ReactDOM = ReactDOM;
@@ -37,3 +38,18 @@ registerComponent("StaffTypeRotaOverviewApp", StaffTypeRotaOverviewApp);
 
 import HoursConfirmationApp from "./apps/hours-confirmation"
 registerComponent("HoursConfirmationApp", HoursConfirmationApp)
+
+import WeekPicker from "~components/week-picker"
+$(document).ready(function(){
+    $(".week-picker").each(function(){
+        var input = this;
+
+        var el = document.createElement("div")
+        input.parentNode.insertBefore(el, input)
+        $(input).hide();
+
+        ReactDOM.render(<WeekPicker
+                onChange={({startDate}) => input.value = moment(startDate).format("DD-MM-YYYY")}
+                selectionStartDate={debug.moment(input.value, "DD-MM-YYYY").toDate()} />, el)
+    })
+})
