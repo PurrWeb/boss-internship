@@ -1,0 +1,53 @@
+<h1>Staff Vetting</h1>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="list-group">
+      <a href="#staff-members-without-email" class="list-group-item">
+        Staff without Email Address
+        <span class="badge"><%= staff_without_email.count %></span>
+      </a>
+      <a href="#staff-members-without-ni-number" class="list-group-item">
+        Staff without National Insurance Number
+        <span class="badge"><%= staff_without_ni_number.count %></span>
+      </a>
+      <a href="#staff-members-without-address" class="list-group-item">
+        Staff without Address
+        <span class="badge"><%= staff_without_address.count %></span>
+      </a>
+      <a href="#staff-members-without-photo" class="list-group-item">
+        Staff without Photo
+        <span class="badge"><%= staff_without_photo.count %></span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<% if staff_without_email.count > 0 %>
+  <div id="staff-members-without-email">
+    <h2>Staff without Email Address</h2>
+    <%= render partial: 'staff_member_list', locals: { staff_members: staff_without_email, link_tab: 'contact-details' } %>
+  </div>
+<% end %>
+
+<% if staff_without_ni_number.count > 0 %>
+  <div id="staff-members-without-ni-number">
+    <h2>Staff without Email Address</h2>
+    <%= render partial: 'staff_member_list', locals: { staff_members: staff_without_ni_number, link_tab: 'employment-details' } %>
+  </div>
+<% end %>
+
+<% if staff_without_address.count > 0 %>
+  <div id="staff-members-without-address">
+    <h2>Staff without Address</h2>
+    <%= render partial: 'staff_member_list', locals: { staff_members: staff_without_address, link_tab: 'contact-details' } %>
+  </div>
+<% end %>
+
+<% if staff_without_photo.count > 0 %>
+  <div id="staff-members-without-photo">
+    <h2>Staff without Photo</h2>
+    <% debugger %>
+    <%= render partial: 'staff_member_list', locals: { staff_members: staff_without_photo, link_tab: 'employment-details' } %>
+  </div>
+<% end %>
