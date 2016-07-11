@@ -299,7 +299,7 @@ class StaffMembersController < ApplicationController
 
     require_attributes << :staff_type if !current_user.security_manager?
 
-    require_attributes << :pay_rate_id if pay_rate_from_params.andand.editable_by?(current_user)
+    require_attributes << :pay_rate_id if pay_rate_from_params.andand.selectable_by?(current_user)
 
     require_attributes << {
       address_attributes: [
