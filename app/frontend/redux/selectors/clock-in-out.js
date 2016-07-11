@@ -37,7 +37,7 @@ export function selectClockInOutAppUserPermissions(state){
     if (userMode === "GM") {
         return {
             toggleOnBreak: true,
-            changePin: false,
+            changePin: true,
             addNote: true,
             resetVenue: true
         }
