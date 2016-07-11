@@ -47,7 +47,6 @@
 <% if staff_without_photo.count > 0 %>
   <div id="staff-members-without-photo">
     <h2>Staff without Photo</h2>
-    <% debugger %>
     <%= render partial: 'staff_member_list', locals: { staff_members: staff_without_photo, link_tab: 'employment-details' } %>
   </div>
 <% end %>
