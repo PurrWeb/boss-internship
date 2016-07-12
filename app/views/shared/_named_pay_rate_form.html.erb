@@ -8,7 +8,7 @@
   <%= form.select(
         :calculation_type,
         options_for_select(
-          PayRate::CALCULATION_TYPE.map do |calculation_type|
+          PayRate::CALCULATION_TYPES.map do |calculation_type|
             [PayRate.calculation_type_display_name(calculation_type), calculation_type]
           end,
           form.object.calculation_type

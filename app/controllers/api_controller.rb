@@ -7,7 +7,10 @@ class APIController < ApplicationController
   def parse_access_token
     token = nil
     authenticate_or_request_with_http_token do |supplied_token, other_options|
-      token = AccessToken.find_by(token: supplied_token)
+      token = AccessToken.
+        where(token: supplied_token).
+        includes(api_key: :venue).
+        first
     end
     if token && (token.expires_at.nil? || token.expires_at > Time.current)
       @_access_token = token

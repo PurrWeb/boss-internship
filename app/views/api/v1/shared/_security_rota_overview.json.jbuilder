@@ -1,12 +1,18 @@
 staff_types = StaffType.where(role: 'security')
-staff_members = StaffMember.joins(:staff_type).merge(staff_types)
+staff_members = StaffMember.
+  joins(:staff_type).
+  merge(staff_types).
+  includes(:staff_type).
+  includes(:name).
+  includes(:master_venue)
+
 rota_shifts = RotaShift.enabled.joins(:rota).merge(rotas).joins(:staff_member).merge(staff_members)
 venues = Venue.joins(:rotas).merge(rotas)
 
 json.date date.iso8601
 
 json.rotas do
-  json.partial! partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas }
+  json.partial! partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas.includes(:venue) }
 end
 
 json.venues do

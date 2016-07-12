@@ -6,4 +6,8 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
 
   before_filter :set_paper_trail_whodunnit
+
+  def current_user
+    @current_user ||= super && User.includes(:email_address).find(@current_user.id)
+  end
 end

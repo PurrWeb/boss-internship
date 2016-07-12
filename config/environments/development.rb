@@ -1,4 +1,9 @@
 Rails.application.configure do
+  Bullet.enable = true
+  Bullet.alert = true
+  Bullet.unused_eager_loading_enable = false
+  Bullet.console = true
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on

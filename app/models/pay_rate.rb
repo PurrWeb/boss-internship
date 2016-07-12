@@ -1,13 +1,14 @@
 class PayRate < ActiveRecord::Base
   TYPES = ['named', 'admin']
-  CALCULATION_TYPE = ['incremental_per_hour', 'salary_per_week']
+  CALCULATION_TYPES = ['incremental_per_hour', 'salary_per_week']
+
 
   include ActionView::Helpers::NumberHelper
   include Enableable
 
   has_many :staff_members, inverse_of: :pay_rate
   validates :pay_rate_type, inclusion: { in: TYPES, message: 'is invalid' }
-  validates :calculation_type, inclusion: { in: CALCULATION_TYPE, message: 'is invalid' }
+  validates :calculation_type, inclusion: { in: CALCULATION_TYPES, message: 'is invalid' }
   validates :cents, numericality: { greater_than: 0 }
 
   def self.named

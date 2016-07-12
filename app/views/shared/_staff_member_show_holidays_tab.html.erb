@@ -11,7 +11,7 @@
 
 <h2>Holidays</h2>
 <% if staff_member.active_holidays.present? %>
-  <% holidays_this_year = HolidayThisYearQuery.new(relation: staff_member.active_holidays).all %>
+  <% holidays_this_year = HolidayThisYearQuery.new(relation: staff_member.active_holidays).all.includes(:frozen_by) %>
   <% if holidays_this_year.present? %>
     <% paid_days = holidays_this_year.paid.to_a.sum { |holiday| holiday.days } %>
     <% unpaid_days = holidays_this_year.unpaid.to_a.sum { |holiday| holiday.days } %>

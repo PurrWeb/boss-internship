@@ -4,7 +4,10 @@ class InvitesController < ApplicationController
 
   def index
     filter = InvitesIndexFilter.new(params[:filter])
-    invites = filter.query.all.
+    invites = filter.
+      query.
+      all.
+      includes(:inviter).
       paginate(page: params[:page], per_page: 15)
 
     render locals: { filter: filter, invites: invites }

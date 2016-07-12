@@ -31,7 +31,16 @@ class SecurityRotasController < ApplicationController
 
     venues = Venue.all
     staff_types = StaffType.where(role: 'security')
-    staff_members = StaffMember.enabled.joins(:staff_type).merge(staff_types).uniq
+
+    staff_members = StaffMember.
+      enabled.
+      joins(:staff_type).
+      merge(staff_types).
+      includes(:name).
+      includes(:staff_type).
+      includes(:master_venue).
+      uniq
+
     holidays = Holiday.in_state(:enabled).joins(:staff_member).merge(staff_members)
 
     week = RotaWeek.new(date)
@@ -49,7 +58,10 @@ class SecurityRotasController < ApplicationController
       joins('INNER JOIN `rota_shifts` ON `rotas`.`id` = `rota_shifts`.`rota_id`').
       where('`rota_shifts`.`id` IN (?)', rota_shifts.pluck(:id))
 
-    rotas = Rota.where(id: date_rotas.pluck(:id) + shift_rotas.pluck(:id)).uniq
+    rotas = Rota.
+      where(id: date_rotas.pluck(:id) + shift_rotas.pluck(:id)).
+      includes(:venue).
+      uniq
 
     access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
 
