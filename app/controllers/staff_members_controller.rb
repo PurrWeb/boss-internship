@@ -214,7 +214,7 @@ class StaffMembersController < ApplicationController
     staff_member = StaffMember.find(params[:id])
     authorize! :enable, staff_member
 
-    staff_member = staff_member.include(:name)
+    staff_member = staff_member.includes(:name)
 
     result = ReviveStaffMember.new(
       requester: current_user,
