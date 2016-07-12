@@ -1,8 +1,7 @@
 <% current_pay_rate = form.object.pay_rate %>
-<% show_static_control = current_pay_rate.present? && !current_pay_rate.editable_by?(current_user) %>
 
 <% if show_static_control %>
-  <%= form.static_control label: "Pay Rate", help: 'This is an admin payrate get in touch with an admin to change it' do %>
+  <%= form.static_control label: "Pay Rate", help: 'Please contact an admin if you would like to change this value' do %>
      <%= PayRateControlRate.new(
           pay_rate: form.object.pay_rate,
           user: current_user
@@ -12,7 +11,7 @@
   <%= form.select(
         :pay_rate,
         options_for_select(
-          PayRate.options_for(current_user).map do |pay_rate|
+          PayRate.selectable_by(current_user).map do |pay_rate|
             control_rate = PayRateControlRate.new(
               pay_rate: pay_rate,
               user: current_user

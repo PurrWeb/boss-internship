@@ -18,7 +18,7 @@ class PayRate < ActiveRecord::Base
     where(pay_rate_type: 'admin')
   end
 
-  def self.options_for(user)
+  def self.selectable_by(user)
     if user.has_admin_access?
       pay_rate_options = PayRate.enabled
     else
@@ -46,8 +46,12 @@ class PayRate < ActiveRecord::Base
     pay_rate_type == 'admin'
   end
 
+  def selectable_by?(user)
+    PayRate.selectable_by(user).include?(self)
+  end
+
   def editable_by?(user)
-    PayRate.options_for(user).include?(self)
+    user.has_admin_access?
   end
 
   def rate_in_pounds

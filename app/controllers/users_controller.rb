@@ -192,7 +192,7 @@ class UsersController < ApplicationController
       :employment_status_p45_supplied
     ]
 
-    permit_attributes << :pay_rate_id if pay_rate_from_params.andand.editable_by?(current_user)
+    permit_attributes << :pay_rate_id if pay_rate_from_params.andand.selectable_by?(current_user)
 
     permit_attributes << {
       address_attributes: [
