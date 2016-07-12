@@ -30,7 +30,12 @@ class StaffMembersController < ApplicationController
     )
 
     staff_members = filter.
-      query(relation: StaffMember.flagged).all.
+      query(relation: StaffMember.flagged).
+      all.
+      includes(:name).
+      includes(:staff_type).
+      includes(:master_venue).
+      includes(:work_venues).
       paginate(page: params[:page], per_page: 20)
 
     render locals: {
@@ -41,10 +46,10 @@ class StaffMembersController < ApplicationController
 
   def show
     staff_member = StaffMember.
-      includes(holidays: {creator: [:name]}).
-      includes(:owed_hours).
-      includes(:name).
-      find(params[:id])
+        includes(holidays: {creator: [:name]}).
+        includes(:owed_hours).
+        includes(:name).
+        find(params[:id])
 
     if can? :edit, staff_member
       if !active_tab_from_params.present?
@@ -120,7 +125,9 @@ class StaffMembersController < ApplicationController
   end
 
   def edit_personal_details
-    staff_member = StaffMember.find(params[:id])
+    staff_member = StaffMember.
+      find_by!(id: params[:id])
+
     authorize! :edit, staff_member
 
     render locals: { staff_member: staff_member }
@@ -206,6 +213,8 @@ class StaffMembersController < ApplicationController
   def undestroy
     staff_member = StaffMember.find(params[:id])
     authorize! :enable, staff_member
+
+    staff_member = staff_member.include(:name)
 
     result = ReviveStaffMember.new(
       requester: current_user,
