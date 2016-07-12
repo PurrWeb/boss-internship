@@ -3,6 +3,7 @@ Rails.application.configure do
 
   Bullet.enable = true
   Bullet.bullet_logger = true
+  Bullet.unused_eager_loading_enable = false
   Bullet.raise = true # raise an error if n+1 query occurs
 
   # The test environment is used exclusively to run your application's
