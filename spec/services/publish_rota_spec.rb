@@ -59,17 +59,7 @@ describe PublishRotas do
     specify 'Should update the rotas status' do
       expect{
         service.call
-      }.to change{
-        rota.status
-      }.from("in_progress").to("published")
-    end
-
-    specify 'not save the rota models' do
-      expect{
-        service.call
-      }.to change{
-        rota.persisted?
-      }.from(false).to(true)
+      }.to raise_error(Exception)
     end
   end
 end
