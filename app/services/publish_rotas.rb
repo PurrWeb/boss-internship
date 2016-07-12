@@ -6,7 +6,7 @@ class PublishRotas
 
   def call
     ActiveRecord::Base.transaction(requires_new: nested) do
-      rotas.find_each do |rota|
+      rotas.each do |rota|
         if !rota.published?
           rota.transition_to!(:published)
 
