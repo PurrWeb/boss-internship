@@ -41,7 +41,7 @@ registerComponent("HoursConfirmationApp", HoursConfirmationApp)
 
 import WeekPicker from "~components/week-picker"
 $(document).ready(function(){
-    $(".week-picker").each(function(){
+    $(".static-week-picker").each(function(){
         var input = this;
 
         var el = document.createElement("div")
