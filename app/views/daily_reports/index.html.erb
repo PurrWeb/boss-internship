@@ -61,6 +61,7 @@
           <th style="text-align: center;">Name</th>
           <th style="text-align: center;">Pay rate</th>
           <th style="text-align: center;">Hours Rotaed</th>
+          <th style="text-align: center;">Hours Rotaed in Week</th>
           <th style="text-align: center;">Rotaed Cost</th>
           <th style="text-align: center;">Hours Worked</th>
           <th style="text-align: center;">Break Time (Hours)</th>
@@ -76,7 +77,19 @@
                       staff_member.hours_rotaed,
                       precision: 2,
                       strip_insignificant_zeros: true
-                    ) %></td>
+                    ) %>
+            </td>
+            <td>
+              <% if staff_member.pay_rate.weekly? %>
+                <%= number_with_precision(
+                      staff_member.week_hours_rotaed,
+                      precision: 2,
+                      strip_insignificant_zeros: true
+                    ) %>
+              <% else %>
+                 <span>-</span>
+              <% end %>
+            </td>
             <td><%= number_to_currency(staff_member.rotaed_cost, unit: '£') %></td>
             <td><%= number_with_precision(
                       staff_member.hours_worked,

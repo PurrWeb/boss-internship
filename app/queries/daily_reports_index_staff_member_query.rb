@@ -213,6 +213,7 @@ class DailyReportsIndexStaffMemberQuery
       project(
         staff_members[Arel.star],
         staff_members_with_hours[:hours_rotaed].as("hours_rotaed"),
+        staff_members_with_hours[:week_hours_rotaed].as("week_hours_rotaed"),
         staff_members_with_hours[:hours_worked].as("hours_worked"),
         staff_members_with_hours[:break_hours].as("break_hours"),
         ArelHelpers.staff_member_total_calculation(
