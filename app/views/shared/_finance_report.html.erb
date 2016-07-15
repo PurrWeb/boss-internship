@@ -31,6 +31,12 @@
   <div>
     <h3><div class="boss-badge" style="font-size: 1.3em; background-color: #<%= staff_type.ui_color %>"><%= staff_type.name %></div></h3>
 
+    <p class="h4">
+      <strong>
+        Total: <%= number_to_currency(reports.sum(&:total), unit: '£') %>
+      </strong>
+    </p>
+
     <table class="table table-striped text-center">
       <thead>
         <tr>
