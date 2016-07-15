@@ -1,7 +1,8 @@
 class HoursAcceptancePeriod < ActiveRecord::Base
   has_paper_trail
 
-  STATES = ['pending', 'accepted', 'deleted']
+  ACCEPTED_STATE = 'accepted'
+  STATES = ['pending', ACCEPTED_STATE, 'deleted']
 
   belongs_to :clock_in_day
   belongs_to :creator, polymorphic: true
@@ -36,7 +37,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   end
 
   def self.accepted
-    where(status: 'accepted')
+    where(status: ACCEPTED_STATE)
   end
 
   def self.pending
@@ -60,7 +61,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   end
 
   def accepted?
-    status == 'accepted'
+    status == ACCEPTED_STATE
   end
 
   def deleted?

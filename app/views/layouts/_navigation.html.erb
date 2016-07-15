@@ -65,6 +65,11 @@
               Reports <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
+              <% if can?(:view, :daily_reports) %>
+                <li class="nav-hours-daily-reports-section">
+                  <%= link_to('Daily Reports', daily_reports_path) %>
+                </li>
+              <% end %>
               <% if can?(:view, :weekly_reports) %>
                 <li class="nav-hours-weekly-reports-section">
                   <%= link_to('Weekly Reports', weekly_reports_path) %>

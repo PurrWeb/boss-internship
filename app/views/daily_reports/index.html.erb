@@ -1,0 +1,110 @@
+<h1>Daily Reports</h1>
+
+<p><%= venue.name.titlecase %> <%= date.to_s(:human_date) %></p>
+
+<%= bootstrap_form_for('daily_reports_index', url: daily_reports_path, html: { method: :get, class: 'form-inline' }) do |form| %>
+    <%= form.select(
+          :venue,
+          options_for_select(
+            accessible_venues.map do |venue|
+              [venue.name, venue.id]
+            end,
+            venue.id
+          ),
+          {
+            include_blank: false
+          }) %>
+
+  <%= form.text_field(
+        :date,
+        value: UIRotaDate.format(date),
+        class: 'date-picker'
+      ) %>
+
+  <%= form.submit('Update') %>
+<% end %>
+
+<div>
+  <h2>Overview</h2>
+  <dl>
+    <dt>Rotaed Cost:</dt>
+    <dd>
+      <%= number_to_currency(total_rotaed_cost, unit: '£') %>
+    </dd>
+    <dt>Actual Cost:</dt>
+    <dd>
+      <%= number_to_currency(total_actual_cost, unit: '£') %>
+    </dd>
+    <dt>Variance:</dt>
+    <dd>
+      <%= number_to_currency(total_actual_cost - total_rotaed_cost, unit: '£') %>
+    </dd>
+  </dl>
+</div>
+
+<% grouped_staff_members = staff_members.group_by(&:staff_type) %>
+<% grouped_staff_members.each do |staff_type, staff_members| %>
+  <% total_actual_cost = staff_members.sum(&:actual_cost) %>
+  <% total_rotaed_cost = staff_members.sum(&:rotaed_cost) %>
+  <div>
+    <div class="row">
+      <h3 style="display: inline-block">
+        <div class="boss-badge" style="font-size: 1.1em; background-color: #<%= staff_type.ui_color %>"><%= staff_type.name %></div>
+      </h3>
+      <div class="h4">
+        Rotaed Cost: <%= number_to_currency(total_rotaed_cost, unit: '£') %></span>, <span class="h4">Actual Cost: <%= number_to_currency(total_actual_cost, unit: '£') %>
+      </div>
+    </div>
+    <table class="table table-striped" style="text-align: center;">
+      <thead>
+        <tr>
+          <th style="text-align: center;">Name</th>
+          <th style="text-align: center;">Pay rate</th>
+          <th style="text-align: center;">Hours Rotaed</th>
+          <th style="text-align: center;">Hours Rotaed in Week</th>
+          <th style="text-align: center;">Rotaed Cost</th>
+          <th style="text-align: center;">Hours Worked</th>
+          <th style="text-align: center;">Break Time (Hours)</th>
+          <th style="text-align: center;">Actual Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% staff_members.each do |staff_member| %>
+          <tr>
+            <td><%= staff_member.full_name.titlecase %></td>
+            <td><%= staff_member.pay_rate.text_description_short %></td>
+            <td><%= number_with_precision(
+                      staff_member.hours_rotaed,
+                      precision: 2,
+                      strip_insignificant_zeros: true
+                    ) %>
+            </td>
+            <td>
+              <% if staff_member.pay_rate.weekly? %>
+                <%= number_with_precision(
+                      staff_member.week_hours_rotaed,
+                      precision: 2,
+                      strip_insignificant_zeros: true
+                    ) %>
+              <% else %>
+                 <span>-</span>
+              <% end %>
+            </td>
+            <td><%= number_to_currency(staff_member.rotaed_cost, unit: '£') %></td>
+            <td><%= number_with_precision(
+                      staff_member.hours_worked,
+                      precision: 2,
+                      strip_insignificant_zeros: true
+                    ) %></td>
+            <td><%= number_with_precision(
+                      staff_member.break_hours,
+                      precision: 2,
+                      strip_insignificant_zeros: true
+                    ) %></td>
+            <td><%= number_to_currency(staff_member.actual_cost, unit: '£') %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <div>
+<% end %>

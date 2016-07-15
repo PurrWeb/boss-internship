@@ -1,6 +1,8 @@
 class PayRate < ActiveRecord::Base
   TYPES = ['named', 'admin']
-  CALCULATION_TYPES = ['incremental_per_hour', 'salary_per_week']
+  HOURLY_CALCULATION_TYPE = 'incremental_per_hour'
+  WEEKLY_CALCULATION_TYPE = 'salary_per_week'
+  CALCULATION_TYPES = [HOURLY_CALCULATION_TYPE, WEEKLY_CALCULATION_TYPE]
 
 
   include ActionView::Helpers::NumberHelper
