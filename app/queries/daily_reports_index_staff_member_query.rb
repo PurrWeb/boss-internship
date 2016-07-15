@@ -116,77 +116,6 @@ class DailyReportsIndexStaffMemberQuery
       ).
       group("staff_member_id")
 
-
-    week_clock_in_days_query = clock_in_days.
-      where(
-        InRangeInclusive.new(
-          start_column: clock_in_days[:date],
-          end_column: clock_in_days[:date],
-          start_value: week.start_date,
-          end_value: week.end_date
-        ).arel
-      ).
-      project(
-        clock_in_days[:id],
-        clock_in_days[:staff_member_id]
-      )
-    week_clock_in_days = week_clock_in_days_query.as("week_clock_in_days")
-
-    week_hours_acceptance_periods_with_durations_query = hours_acceptance_periods.
-      join(week_clock_in_days).
-      on(
-        week_clock_in_days[:id].eq(hours_acceptance_periods[:clock_in_day_id])
-      ).
-      where(
-        hours_acceptance_periods[:status].eq(HoursAcceptancePeriod::ACCEPTED_STATE)
-      ).
-      project(
-        week_clock_in_days[:staff_member_id].as("staff_member_id"),
-        hours_acceptance_periods[:id].as("id"),
-        Arel::Nodes::NamedFunction.new(
-          "SUM",
-          [
-            ArelHelpers.value_or_zero(
-              ArelHelpers.duration_in_hours_column(
-                start_column: hours_acceptance_periods[:starts_at],
-                end_column: hours_acceptance_periods[:ends_at]
-              )
-            )
-          ],
-          "duration"
-        ),
-      ).
-      group("staff_member_id")
-    week_hours_acceptance_periods_with_durations = week_hours_acceptance_periods_with_durations_query.as("week_hours_acceptance_periods_with_durations")
-
-    week_hours_acceptance_periods_breaks_join = week_hours_acceptance_periods_with_durations_query.as("hours_acceptance_periods_breaks_join")
-    week_hours_acceptance_breaks_with_durations_query = hours_acceptance_breaks.
-      join(week_hours_acceptance_periods_breaks_join).
-      on(
-        week_hours_acceptance_periods_breaks_join[:id].eq(hours_acceptance_breaks[:hours_acceptance_period_id])
-      ).
-      where(
-        hours_acceptance_breaks[:disabled_at].eq(nil)
-      ).
-      project(
-        week_hours_acceptance_periods_breaks_join[:staff_member_id].as("staff_member_id"),
-        Arel::Nodes::NamedFunction.new(
-          "SUM",
-          [
-            ArelHelpers.value_or_zero(
-              ArelHelpers.duration_in_hours_column(
-                start_column: hours_acceptance_breaks[:starts_at],
-                end_column: hours_acceptance_breaks[:ends_at]
-              )
-            )
-          ],
-          "duration"
-        ),
-      ).
-      group("staff_member_id")
-
-    week_hours_acceptance_breaks_with_durations = week_hours_acceptance_breaks_with_durations_query.as("week_hours_acceptance_breaks_with_durations")
-
     rota_hours_acceptance_periods_with_durations = rota_hours_acceptance_periods_with_durations_query.as("rota_hours_acceptance_periods_with_durations")
     rota_hours_acceptance_breaks_with_durations = rota_hours_acceptance_breaks_with_durations_query.as("rota_hours_acceptance_breaks_with_durations")
     rota_shifts_with_durations = rota_shifts_with_durations_query.as("rota_shifts_with_durations")
@@ -208,18 +137,6 @@ class DailyReportsIndexStaffMemberQuery
       join(rota_hours_acceptance_breaks_with_durations, Arel::Nodes::OuterJoin).
       on(
         rota_hours_acceptance_breaks_with_durations[:staff_member_id].eq(staff_members[:id])
-      ).
-      join(week_hours_acceptance_periods_with_durations, Arel::Nodes::OuterJoin).
-      on(
-        week_hours_acceptance_periods_with_durations[:staff_member_id].eq(
-          staff_members[:id]
-        )
-      ).
-      join(week_hours_acceptance_breaks_with_durations, Arel::Nodes::OuterJoin).
-      on(
-        week_hours_acceptance_breaks_with_durations[:staff_member_id].eq(
-          staff_members[:id]
-        )
       ).
       join(clock_in_days, Arel::Nodes::OuterJoin).
       on(
@@ -267,14 +184,6 @@ class DailyReportsIndexStaffMemberQuery
           rota_hours_acceptance_breaks_with_durations[:duration],
           as: "break_hours"
         ),
-        ArelHelpers.value_or_zero(
-          week_hours_acceptance_periods_with_durations[:duration],
-          as: "week_hours_worked"
-        ),
-        ArelHelpers.value_or_zero(
-          week_hours_acceptance_breaks_with_durations[:duration],
-          as: "week_break_hours"
-        ),
         Arel::Nodes::NamedFunction.new(
           'GREATEST',
           [
@@ -290,22 +199,6 @@ class DailyReportsIndexStaffMemberQuery
             0
           ],
           "payable_hours"
-        ),
-        Arel::Nodes::NamedFunction.new(
-          'GREATEST',
-          [
-            Arel::Nodes::InfixOperation.new(
-              :-,
-              ArelHelpers.value_or_zero(
-                week_hours_acceptance_periods_with_durations[:duration]
-              ),
-              ArelHelpers.value_or_zero(
-                week_hours_acceptance_breaks_with_durations[:duration]
-              )
-            ),
-            0
-          ],
-          "week_payable_hours"
         )
       ).
       distinct
@@ -332,7 +225,7 @@ class DailyReportsIndexStaffMemberQuery
           calculation_type_column: staff_members_with_hours[:calculation_type],
           pay_rate_column: staff_members_with_hours[:pay_rate_in_pounds],
           hours_rotaed_column: staff_members_with_hours[:payable_hours],
-          hours_in_week_column: staff_members_with_hours[:week_payable_hours]
+          hours_in_week_column: staff_members_with_hours[:week_hours_rotaed]
         ).as('actual_cost'),
       )
 
