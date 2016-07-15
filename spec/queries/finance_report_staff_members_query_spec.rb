@@ -185,6 +185,43 @@ describe FinanceReportStaffMembersQuery do
         end
       end
     end
+
+    context 'has holiday' do
+      let(:holiday) do
+        FactoryGirl.create(
+          :holiday,
+          staff_member: _staff_member,
+          start_date: week.start_date,
+          end_date: week.start_date + 2.days
+        )
+      end
+
+      before do
+        travel_to week.start_date - 1.week do
+          holiday
+        end
+      end
+
+      specify 'staff member should be returned' do
+        expect(query.all.map(&:id)).to eq([staff_member.id])
+      end
+
+      context 'holidays is disabled' do
+        let(:holiday) do
+          FactoryGirl.create(
+            :holiday,
+            :disabled,
+            staff_member: _staff_member,
+            start_date: week.start_date,
+            end_date: week.start_date + 2.days
+          )
+        end
+
+        specify 'staff member should not be returned' do
+          expect(query.all.map(&:id)).to_not eq([staff_member.id])
+        end
+      end
+    end
   end
 
   context 'staff member was created after week started' do
