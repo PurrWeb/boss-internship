@@ -37,6 +37,15 @@ class FinanceReportStaffMembersQuery
       )
     paid_holidays = paid_holidays_query.as("paid_holidays")
 
+    enabled_owed_hours_query = owed_hours.
+      where(
+        owed_hours[:disabled_at].not_eq(nil)
+      ).
+      project(
+        owed_hours[Arel.star]
+      )
+    enabled_owed_hours = enabled_owed_hours_query.as("enabled_owed_hours")
+
     query = staff_members.
       join(most_recent_staff_member_transitions, Arel::Nodes::OuterJoin).
       on(
@@ -51,9 +60,9 @@ class FinanceReportStaffMembersQuery
       on(
         staff_members[:id].eq(paid_holidays[:staff_member_id])
       ).
-      join(owed_hours, Arel::Nodes::OuterJoin).
+      join(enabled_owed_hours, Arel::Nodes::OuterJoin).
       on(
-        staff_members[:id].eq(owed_hours[:staff_member_id])
+        staff_members[:id].eq(enabled_owed_hours[:staff_member_id])
       ).
       join(clock_in_days, Arel::Nodes::OuterJoin).
       on(
@@ -82,8 +91,8 @@ class FinanceReportStaffMembersQuery
         ).
         or(
           InRangeInclusive.new(
-            start_column: owed_hours[:week_start_date],
-            end_column: owed_hours[:week_start_date],
+            start_column: enabled_owed_hours[:week_start_date],
+            end_column: enabled_owed_hours[:week_start_date],
             start_value: week.start_date,
             end_value: week.end_date
           ).arel
