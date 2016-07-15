@@ -13,7 +13,6 @@ describe DailyReportsIndexStaffMemberQuery do
   let(:query) do
     DailyReportsIndexStaffMemberQuery.new(
       date: date,
-      rota: rota,
       venue: venue
     )
   end
