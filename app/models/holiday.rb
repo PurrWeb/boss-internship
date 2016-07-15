@@ -1,5 +1,6 @@
 class Holiday < ActiveRecord::Base
-  HOLIDAY_TYPES = ['paid_holiday', 'unpaid_holiday']
+  PAID_HOLIDAY_TYPE = "paid_holiday"
+  HOLIDAY_TYPES = [PAID_HOLIDAY_TYPE, 'unpaid_holiday']
 
   include Statesman::Adapters::ActiveRecordQueries
 
@@ -23,7 +24,7 @@ class Holiday < ActiveRecord::Base
   attr_accessor :validate_as_creation
 
   def self.paid
-    where(holiday_type: 'paid_holiday')
+    where(holiday_type: PAID_HOLIDAY_TYPE)
   end
 
   def self.unpaid
