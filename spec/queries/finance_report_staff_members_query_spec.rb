@@ -20,7 +20,7 @@ shared_examples "staff member has stuff on week" do
     end
   end
 
-  context 'when staff member has owed hours' do
+  context 'when staff member has enabled owed hours' do
     before do
       travel_to week.start_date - 1.week do
         FactoryGirl.create(
@@ -148,6 +148,79 @@ describe FinanceReportStaffMembersQuery do
       let(:_query) { query }
       let(:_staff_member) { staff_member }
       let(:_return_expectation) { true }
+    end
+
+    context 'has owed hours' do
+      let(:owed_hour) do
+        FactoryGirl.create(
+          :owed_hour,
+          staff_member: staff_member,
+          week_start_date: week.start_date
+        )
+      end
+
+      before do
+        travel_to week.start_date - 1.week do
+          owed_hour
+        end
+      end
+
+      specify 'staff member should be returned' do
+        expect(query.all.map(&:id)).to eq([staff_member.id])
+      end
+
+      context 'owed hours are disabled' do
+        let(:owed_hour) do
+          FactoryGirl.create(
+            :owed_hour,
+            :disabled,
+            disabled_by: FactoryGirl.create(:user),
+            staff_member: staff_member,
+            week_start_date: week.start_date
+          )
+        end
+
+        specify 'staff member should not be returned' do
+          expect(query.all.map(&:id)).to_not eq([staff_member.id])
+        end
+      end
+    end
+
+    context 'has holiday' do
+      let(:holiday) do
+        FactoryGirl.create(
+          :holiday,
+          staff_member: _staff_member,
+          start_date: week.start_date,
+          end_date: week.start_date + 2.days
+        )
+      end
+
+      before do
+        travel_to week.start_date - 1.week do
+          holiday
+        end
+      end
+
+      specify 'staff member should be returned' do
+        expect(query.all.map(&:id)).to eq([staff_member.id])
+      end
+
+      context 'holidays is disabled' do
+        let(:holiday) do
+          FactoryGirl.create(
+            :holiday,
+            :disabled,
+            staff_member: _staff_member,
+            start_date: week.start_date,
+            end_date: week.start_date + 2.days
+          )
+        end
+
+        specify 'staff member should not be returned' do
+          expect(query.all.map(&:id)).to_not eq([staff_member.id])
+        end
+      end
     end
   end
 

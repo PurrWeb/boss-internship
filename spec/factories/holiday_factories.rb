@@ -4,7 +4,7 @@ FactoryGirl.define do
     end_date { RotaWeek.new(Time.current.to_date).start_date + 2.days }
     staff_member
     association :creator, factory: :user
-    holiday_type { 'paid_holiday' }
+    holiday_type { Holiday::PAID_HOLIDAY_TYPE }
 
     trait :disabled do
       after(:create) do |holiday|
