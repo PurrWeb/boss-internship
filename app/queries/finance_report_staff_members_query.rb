@@ -39,7 +39,7 @@ class FinanceReportStaffMembersQuery
 
     enabled_owed_hours_query = owed_hours.
       where(
-        owed_hours[:disabled_at].not_eq(nil)
+        owed_hours[:disabled_at].eq(nil)
       ).
       project(
         owed_hours[Arel.star]
@@ -77,9 +77,11 @@ class FinanceReportStaffMembersQuery
         )
       ).
       where(
-        most_recent_staff_member_transitions[:to_state].eq(nil).
-        or(
-          most_recent_staff_member_transitions[:to_state].eq("enabled")
+        staff_members.grouping(
+          most_recent_staff_member_transitions[:to_state].eq(nil).
+          or(
+            most_recent_staff_member_transitions[:to_state].eq("enabled")
+          )
         ).
         or(
           InRangeInclusive.new(
