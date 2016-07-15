@@ -76,13 +76,28 @@
               <strong><%= link_to(report.staff_member_name.titlecase, staff_member_path(report.staff_member)) %></strong>
             </td>
             <% week.each_with_day do |date, day| %>
-              <td><%= report.public_send("#{day}_hours_count".to_sym).round(2) %></td>
+              <td>
+                <%= number_with_precision(
+                      report.public_send("#{day}_hours_count".to_sym),
+                      precision: 2,
+                      strip_insignificant_zeros: true
+                    ) %>
+              </td>
             <% end %>
             <td>
-              <%= report.total_hours_count.round(2) %>
+              <%= number_with_precision(
+                    report.total_hours_count,
+                    precision: 2,
+                    strip_insignificant_zeros: true
+                  ) %>
             </td>
             <td>
-              <%= link_to(report.owed_hours_count, staff_member_path(report.staff_member, tab: 'owed-hours')) %>
+              <% owed_hours_count = number_with_precision(
+                   report.owed_hours_count,
+                   precision: 2,
+                   strip_insignificant_zeros: true
+                 ) %>
+              <%= link_to(owed_hours_count, staff_member_path(report.staff_member, tab: 'owed-hours')) %>
             </td>
             <td>
               <%= report.pay_rate_description %>
