@@ -2,7 +2,8 @@ class RotaWeek
   include Comparable
 
   def initialize(date)
-    @supplied_date = date.to_date
+    raise ArgumentError, "Time supplied instead of rota date"  if date.is_a?(Time)
+    @supplied_date = date
   end
 
   def start_date
@@ -61,7 +62,7 @@ class RotaWeek
   end
 
   def week_status
-    current_week = RotaWeek.new(Time.current)
+    current_week = RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
     if self > current_week
       :future
     elsif self == current_week

@@ -3,7 +3,7 @@ require 'rails_helper'
 describe VenueWithoutChangeOrderNotificationQuery do
   include ActiveSupport::Testing::TimeHelpers
 
-  let(:date) { RotaWeek.new(Time.zone.now).start_date }
+  let(:date) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.zone.now)).start_date }
   let(:query) { VenueWithoutChangeOrderNotificationQuery.new(date: date) }
 
   context 'venue exists with no notifications' do

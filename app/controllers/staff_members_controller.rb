@@ -56,7 +56,7 @@ class StaffMembersController < ApplicationController
         return redirect_to staff_member_path(staff_member, tab: 'employment-details')
       end
 
-      owed_hours_week = RotaWeek.new(Time.current)
+      owed_hours_week = RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
       owed_hour = OwedHour.new(
         minutes: 0,
       )

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GenerateRotaForecast do
-  let(:week) { RotaWeek.new(Time.zone.now + 1.week) }
+  let(:week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.zone.now) + 1.week) }
   let(:rota_shift_date) { RotaShiftDate.new(week.start_date) }
   let(:forecasted_take) { Money.new(0) }
   let(:service) do

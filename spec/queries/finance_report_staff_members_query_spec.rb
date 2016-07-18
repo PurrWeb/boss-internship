@@ -88,7 +88,7 @@ describe FinanceReportStaffMembersQuery do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:venue) { FactoryGirl.create(:venue) }
-  let(:week) { RotaWeek.new(Time.current - 1.week) }
+  let(:week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current) - 1.week) }
   let(:created_at) { week.start_date + 1.day }
   let(:staff_member) do
     FactoryGirl.create(

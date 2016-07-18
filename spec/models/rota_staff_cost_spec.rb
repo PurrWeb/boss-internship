@@ -10,7 +10,7 @@ RSpec.describe RotaStaffCost do
       )
     end
     let(:venue) { staff_member.master_venue }
-    let(:week) { RotaWeek.new(Time.zone.now + 1.week) }
+    let(:week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current) + 1.week) }
     let(:rota) do
       FactoryGirl.create(
         :rota,

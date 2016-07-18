@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe CurrentAndFutureRotasQuery do
   let(:now) { Time.zone.now }
-  let(:week) { RotaWeek.new(now) }
+  let(:week) { RotaWeek.new(RotaShiftDate.to_rota_date(now)) }
   let!(:past_rota) { FactoryGirl.create(:rota, date: week.start_date - 1.day) }
   let!(:current_rota_1) { FactoryGirl.create(:rota, date: week.start_date) }
   let!(:current_rota_2) { FactoryGirl.create(:rota, date: week.end_date) }

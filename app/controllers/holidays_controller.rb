@@ -63,7 +63,7 @@ class HolidaysController < ApplicationController
     ).call
 
     owed_hour = OwedHour.new
-    owed_hours_week = RotaWeek.new(Time.current)
+    owed_hours_week = RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
 
     if result.success?
       flash[:success] = "Holiday added successfully"

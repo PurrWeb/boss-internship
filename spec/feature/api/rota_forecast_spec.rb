@@ -5,7 +5,7 @@ RSpec.describe 'Api access' do
   include HeaderHelpers
   include ActiveSupport::Testing::TimeHelpers
 
-  let(:date) { RotaWeek.new(Time.zone.now).start_date }
+  let(:date) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date }
   let(:venue) { FactoryGirl.create(:venue) }
   let(:rota) do
     FactoryGirl.create(
