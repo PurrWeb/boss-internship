@@ -2,6 +2,7 @@ class FruitOrder < ActiveRecord::Base
   FIELDS = [
     :limes,
     :lemons,
+    :eggs,
     :rasberries,
     :blueberries,
     :blackberries,
@@ -101,6 +102,7 @@ class FruitOrder < ActiveRecord::Base
   def self.message_for(property)
     {
       limes: 'Limes (Box)',
+      eggs:  'Eggs (Dozen)',
       lemons: 'Lemons (Box)',
       rasberries: 'Rasberries (Punnet)',
       blueberries: 'Blueberries (Punnet)',
