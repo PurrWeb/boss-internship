@@ -61,6 +61,11 @@ module PageObject
       button.click
     end
 
+    page_action :click_enable_staff_member_button do
+      button = find('a.btn.enable-staff-member-button')
+      button.click
+    end
+
     page_action :click_disable_staff_member_button do
       button = find('a.btn.disable-staff-member-button')
       button.click
@@ -71,6 +76,12 @@ module PageObject
       title_message = staff_member.enabled? ? staff_member_title : "#{staff_member_title} (Disabled)"
 
       expect(find('main h1').text).to eq(title_message)
+    end
+
+    def reload
+      # using find because staff_member.reload not working for some reason
+      @staff_member = StaffMember.find(staff_member.id)
+      self
     end
 
     private
