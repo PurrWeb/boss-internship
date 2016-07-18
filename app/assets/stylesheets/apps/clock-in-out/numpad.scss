@@ -1,0 +1,29 @@
+.numpad > div {
+    width: 100%;
+    &:last-child {
+        border-bottom: 1px solid #aaa;
+    }
+}
+.numpad > div > div {
+    width: 33.33%;
+    display: inline-block;
+    font-size: 20px;
+    min-width: 300px;
+
+    padding: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-align: center;
+
+    border: 1px solid #aaa;
+    border-bottom: none;
+
+    &:not(:last-child) {
+        border-right: none;
+    }
+
+    &:active {
+        background: #337ab7;
+        color: white;
+    }
+}

@@ -1,39 +1,62 @@
 import React from "react"
 
+class NumPadButton extends React.Component {
+    render(){
+        return <div
+                onClick={() => this.props.onNumberClick(this.props.number)}>
+            {this.props.number}
+        </div>
+    }
+}
+
+class NumPad extends React.Component {
+    render(){
+        return <div className="numpad">
+            <div>
+                <NumPadButton number={1} onNumberClick={this.props.onNumberClick }/>
+                <NumPadButton number={2} onNumberClick={this.props.onNumberClick }/>
+                <NumPadButton number={3} onNumberClick={this.props.onNumberClick }/>
+            </div>
+            <div>
+                <NumPadButton number={4} onNumberClick={this.props.onNumberClick }/>
+                <NumPadButton number={5} onNumberClick={this.props.onNumberClick }/>
+                <NumPadButton number={6} onNumberClick={this.props.onNumberClick }/>
+            </div>
+            <div>
+                <NumPadButton number={7} onNumberClick={this.props.onNumberClick }/>
+                <NumPadButton number={8} onNumberClick={this.props.onNumberClick }/>
+                <NumPadButton number={9} onNumberClick={this.props.onNumberClick }/>
+            </div>
+            <div>
+                <div>&nbsp;</div>
+                <NumPadButton number={0} onNumberClick={this.props.onNumberClick }/>
+                <div>&nbsp;</div>
+            </div>
+        </div>
+    }
+}
+
 export default class PinInput extends React.Component {
     static propTypes = {
         pin: React.PropTypes.string.isRequired,
         onChange: React.PropTypes.func.isRequired
     }
     render(){
-        var interactionInputStyle = {
-            width: "100%",
-            fontFamily: "monospace"
-        }
-        var visibleInputStyle = {
-            ...interactionInputStyle,
+        var inputStyle = {
             pointerEvents: "none",
-            position: "absolute",
-            top: 0,
-            left: 0
+            width: "100%",
+            fontSize: 20,
+            marginTop: 10
         }
 
         return <div style={{position: "relative"}}>
                 <input
                     type="password"
-                    style={visibleInputStyle}
+                    style={inputStyle}
                     value={this.props.pin}
                     />
-                <input
-                    type="number"
-                    pattern="\d*"
-                    style={interactionInputStyle}
-                    value={this.props.pin}
-                    onChange={() => this.props.onChange(this.refs.input.value)}
-                    ref={"input"} />
+                <br/><br/>
+                <NumPad onNumberClick={(number) => this.props.onChange(this.props.pin + "1")} />
             </div>
-    }
-    focus(){
-        this.refs.input.focus()
     }
 }
