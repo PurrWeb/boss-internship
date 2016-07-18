@@ -3,7 +3,7 @@ class SecurityRotasController < ApplicationController
 
   def index
     date = date_from_params
-    week = RotaWeek.new(date || Time.zone.now)
+    week = RotaWeek.new(date || RotaShiftDate.to_rota_date(Time.current))
 
     if date && (date == week.start_date)
       respond_to do |format|

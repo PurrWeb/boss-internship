@@ -4,7 +4,7 @@ RSpec.describe 'Shift notification Emails' do
   include ActiveSupport::Testing::TimeHelpers
 
   context 'when staff member is marked as requiring notification' do
-    let(:this_week) { RotaWeek.new(Time.zone.now) }
+    let(:this_week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)) }
     let(:next_week) { RotaWeek.new(this_week.start_date + 1.week) }
     let(:now) { this_week.start_date }
     around(:each) do |example|

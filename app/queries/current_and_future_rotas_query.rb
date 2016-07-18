@@ -1,7 +1,7 @@
 class CurrentAndFutureRotasQuery
   def initialize(relation: Rota.all, now: Time.zone.now)
     @relation = relation
-    @week = RotaWeek.new(now)
+    @week = RotaWeek.new(RotaShiftDate.to_rota_date(now))
   end
 
   def all

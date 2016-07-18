@@ -17,7 +17,7 @@ class RotaShiftsByWeek
       result = {}
 
       shifts.each do |shift|
-        week = RotaWeek.new(shift.starts_at)
+        week = RotaWeek.new(RotaShiftDate.to_rota_date(shift.starts_at))
         result[week] = result[week] || []
         result[week] << shift
       end

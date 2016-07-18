@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :finance_report do
-    week_start { RotaWeek.new(Time.current.to_date).start_date }
+    week_start { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date }
     staff_member
     staff_member_name 'Staff Member Name'
     venue

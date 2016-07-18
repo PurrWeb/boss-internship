@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe RotaForecast do
-  let(:week) { RotaWeek.new(Time.zone.now + 1.week) }
+  let(:week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.zone.now + 1.week)) }
   let(:rota_shift_date) { RotaShiftDate.new(week.start_date) }
   let(:rota) do
     FactoryGirl.create(

@@ -18,7 +18,7 @@ class OwedHoursController < ApplicationController
     else
       flash.now[:error] = "There was a problem creating these hours"
 
-      owed_hours_week = RotaWeek.new(Time.current)
+      owed_hours_week = RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
       holiday = Holiday.new
 
       render 'staff_members/show', locals: {
