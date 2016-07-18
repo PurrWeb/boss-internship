@@ -3,6 +3,7 @@ import React from "react"
 class NumPadButton extends React.Component {
     render(){
         return <div
+                onTouchStart={(e) => e.preventDefault() /* prevent zooming in */}
                 onClick={() => this.props.onNumberClick(this.props.number)}>
             {this.props.number}
         </div>
