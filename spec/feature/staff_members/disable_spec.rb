@@ -10,10 +10,23 @@ RSpec.feature 'Disabling a staff member' do
     )
   end
   let(:disable_staff_member_page) { PageObject::StaffMemberDisablePage.new(edited_staff_member) }
+  let(:staff_member_show_page) { PageObject::StaffMemberShowPage.new(edited_staff_member) }
 
   before do
     edited_staff_member
     login_as dev_user
+  end
+
+  scenario "disable staff member from index page" do
+    expect(edited_staff_member).to be_enabled
+    staff_member_show_page.surf_to
+    staff_member_show_page.click_disable_staff_member_button
+
+    disable_staff_member_page.fill_in_disable_reason("Didn't like")
+    disable_staff_member_page.submit_page
+
+    staff_member_show_page.assert_on_correct_page
+    expect(edited_staff_member).to be_disabled
   end
 
   scenario 'user disable warning message should not display' do

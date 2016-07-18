@@ -9,6 +9,14 @@ module PageObject
       visit(url_helpers.disable_staff_member_path(staff_member))
     end
 
+    page_action :fill_in_disable_reason do |reason|
+      scope.fill_in("Reason for disabling", with: reason)
+    end
+
+    page_action :submit_page do
+      scope.click_button('Disable')
+    end
+
     page_action :ensure_user_disable_warning_message_displayed do
       expect(page).to have_selector(user_disable_warning_message_selector)
     end
@@ -32,7 +40,7 @@ module PageObject
     attr_reader :staff_member
 
     def page_heading
-      page.find('main h1')
+      scope.find('h1')
     end
 
     def expected_page_heading_text
@@ -41,6 +49,10 @@ module PageObject
 
     def user_disable_warning_message_selector
       '.user-disable-warning'
+    end
+
+    def scope
+      page.find('main')
     end
   end
 end

@@ -61,8 +61,16 @@ module PageObject
       button.click
     end
 
+    page_action :click_disable_staff_member_button do
+      button = find('a.btn.disable-staff-member-button')
+      button.click
+    end
+
     def assert_on_correct_page
-      expect(find('main h1').text).to eq(staff_member.full_name.titlecase)
+      staff_member_title = staff_member.full_name.titlecase
+      title_message = staff_member.enabled? ? staff_member_title : "#{staff_member_title} (Disabled)"
+
+      expect(find('main h1').text).to eq(title_message)
     end
 
     private
