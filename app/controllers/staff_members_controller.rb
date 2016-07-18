@@ -211,10 +211,11 @@ class StaffMembersController < ApplicationController
   end
 
   def undestroy
-    staff_member = StaffMember.find(params[:id])
-    authorize! :enable, staff_member
+    staff_member = StaffMember.
+      includes(:name).
+      find(params[:id])
 
-    staff_member = staff_member.includes(:name)
+    authorize! :enable, staff_member
 
     result = ReviveStaffMember.new(
       requester: current_user,
