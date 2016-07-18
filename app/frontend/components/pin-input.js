@@ -3,6 +3,7 @@ import React from "react"
 class NumPadButton extends React.Component {
     render(){
         return <div
+                data-test-marker-numpad-key={this.props.number}
                 onTouchStart={(e) => e.preventDefault() /* prevent zooming in */}
                 onClick={() => this.props.onNumberClick(this.props.number)}>
             {this.props.number}

@@ -164,10 +164,12 @@ describe("Clock In/Out Page Integration Test", function(){
 
         var promise = Promise.resolve({access_token: "", expires_at: new Date(2050,10,10)})
 
-        var pinInput = getPinModal().querySelector("input[type='number']");
 
-        pinInput.value = "1234"
-        ReactTestUtils.Simulate.change(pinInput);
+        var oneButton = getPinModal().querySelector("[data-test-marker-numpad-key='1']");
+        ReactTestUtils.Simulate.click(oneButton)
+        ReactTestUtils.Simulate.click(oneButton)
+        ReactTestUtils.Simulate.click(oneButton)
+        ReactTestUtils.Simulate.click(oneButton)
 
         expect.spyOn($, "ajax").andReturn(promise);
         var form = getPinModal().querySelector("form")
