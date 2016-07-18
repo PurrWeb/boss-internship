@@ -262,7 +262,7 @@ class StaffMembersController < ApplicationController
       ).call
 
       flash[:success] = "Staff member disabled successfully"
-      redirect_to staff_members_path
+      redirect_to staff_member_path(staff_member)
     else
       flash.now[:error] = "There was a problem disabling this staff member"
       render 'disable', locals: {
