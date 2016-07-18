@@ -211,10 +211,11 @@ class StaffMembersController < ApplicationController
   end
 
   def undestroy
-    staff_member = StaffMember.find(params[:id])
-    authorize! :enable, staff_member
+    staff_member = StaffMember.
+      includes(:name).
+      find(params[:id])
 
-    staff_member = staff_member.includes(:name)
+    authorize! :enable, staff_member
 
     result = ReviveStaffMember.new(
       requester: current_user,
@@ -261,7 +262,7 @@ class StaffMembersController < ApplicationController
       ).call
 
       flash[:success] = "Staff member disabled successfully"
-      redirect_to staff_members_path
+      redirect_to staff_member_path(staff_member)
     else
       flash.now[:error] = "There was a problem disabling this staff member"
       render 'disable', locals: {

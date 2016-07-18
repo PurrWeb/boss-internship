@@ -27,12 +27,12 @@
   </div>
   <div class="media-right">
     <% if can?(:disable, staff_member) %>
-      <%= link_to(disable_staff_member_path(staff_member), class: 'btn btn-danger') do %>
+      <%= link_to(disable_staff_member_path(staff_member), class: 'btn btn-danger disable-staff-member-button') do %>
         <span class="glyphicon glyphicon-fire"></span> Disable Staff Member
       <% end %>
     <% end %>
     <% if can?(:enable, staff_member) %>
-      <%= link_to(enable_staff_member_path(staff_member), class: 'btn btn-danger') do %>
+      <%= link_to(enable_staff_member_path(staff_member), class: 'btn btn-danger enable-staff-member-button') do %>
         <span class="glyphicon glyphicon-heart"></span> Enable Staff Member
       <% end %>
     <% end %>
