@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RotaStaffCost do
+RSpec.describe HourlyStaffCost do
   describe '#total' do
     let(:pay_rate) { FactoryGirl.create(:pay_rate, cents: 1500) }
     let!(:staff_member) do
@@ -22,7 +22,7 @@ RSpec.describe RotaStaffCost do
 
     context 'when staff member has no shifts' do
       it 'should return 0' do
-        expect(RotaStaffCost.new(
+        expect(HourlyStaffCost.new(
           staff_members: staff_members,
           rota: rota
         ).total).to eq(Money.new(0))
@@ -52,7 +52,7 @@ RSpec.describe RotaStaffCost do
 
       it 'should calcualte the total cost' do
         expect(
-          RotaStaffCost.new(
+          HourlyStaffCost.new(
             staff_members: staff_members,
             rota: rota
           ).total
@@ -64,54 +64,15 @@ RSpec.describe RotaStaffCost do
       context 'when staff member has weekly salary' do
         let(:pay_rate) { FactoryGirl.create(:pay_rate, :weekly, cents: 20000) }
 
-        context 'all staff members hours for the week are part of rota' do
-          it 'should pay the full weekly rate' do
-            expect(
-              RotaStaffCost.new(
-                staff_members: staff_members,
-                rota: rota
-              ).total
-            ).to eq(
-              Money.from_amount(staff_member.pay_rate.rate_in_pounds)
-            )
-          end
-        end
-
-        context 'staff members has hours for the week in a different rota' do
-          before do
-            other_date = week.start_date + 1.day
-            other_start_time = RotaShiftDate.new(other_date).start_time
-            other_rota = FactoryGirl.create(
-              :rota,
-              date: other_date,
-              venue: venue
-            )
-            FactoryGirl.create(
-              :rota_shift,
-              rota: other_rota,
-              staff_member: staff_member,
-              starts_at: other_start_time + 4.hour,
-              ends_at: other_start_time + 5.hour
-            )
-            FactoryGirl.create(
-              :rota_shift,
-              rota: other_rota,
-              staff_member: staff_member,
-              starts_at: other_start_time + 7.hour,
-              ends_at: other_start_time + 7.hour + 30.minutes
-            )
-          end
-
-          it 'should pay the full weekly rate' do
-            expect(
-              RotaStaffCost.new(
-                staff_members: staff_members,
-                rota: rota
-              ).total
-            ).to eq(
-              Money.from_amount(staff_member.pay_rate.rate_in_pounds * 0.5)
-            )
-          end
+        specify 'their hours should not show up in staff members total' do
+          expect(
+            HourlyStaffCost.new(
+              staff_members: staff_members,
+              rota: rota
+            ).total
+          ).to eq(
+            Money.from_amount(0)
+          )
         end
       end
     end

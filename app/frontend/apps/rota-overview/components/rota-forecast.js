@@ -100,6 +100,11 @@ export default class RotaForecast extends React.Component {
 function getDataRows(rotaForecast){
     return [
         {
+          title: "Overheads",
+          total: rotaForecast.overhead_total,
+          percentage: rotaForecast.overhead_total_percentage
+        },
+        {
             title: "Staff",
             total: rotaForecast.staff_total,
             percentage: rotaForecast.staff_total_percentage

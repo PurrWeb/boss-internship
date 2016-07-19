@@ -3,6 +3,7 @@ class RotaForecast < ActiveRecord::Base
 
   validates :forecasted_take, presence: true
   validates :total, presence: true
+  validates :overhead_total, presence: true
   validates :staff_total, presence: true
   validates :pr_total, presence: true
   validates :kitchen_total, presence: true
@@ -16,7 +17,7 @@ class RotaForecast < ActiveRecord::Base
     rota.date
   end
 
-  [:forecasted_take, :total, :staff_total, :pr_total, :kitchen_total, :security_total].each do |money_attribute|
+  [:forecasted_take, :total, :overhead_total, :staff_total, :pr_total, :kitchen_total, :security_total].each do |money_attribute|
     define_method("#{money_attribute}") do
       cents = public_send("#{money_attribute}_cents")
       if cents.present?
@@ -29,7 +30,7 @@ class RotaForecast < ActiveRecord::Base
     end
   end
 
-  [:total, :staff_total, :pr_total, :kitchen_total, :security_total].each do |total_method|
+  [:total, :overhead_total, :staff_total, :pr_total, :kitchen_total, :security_total].each do |total_method|
     define_method("#{total_method}_percentage") do
       if forecasted_take.present? && forecasted_take > Money.new(0)
         public_send(total_method) / forecasted_take * 100

@@ -58,7 +58,8 @@ RSpec.describe 'Api access' do
             :rota_forecast,
             rota: rota,
             forecasted_take: Money.from_amount(100000),
-            total: Money.from_amount(20000),
+            total: Money.from_amount(40000),
+            overhead_total: Money.from_amount(20000),
             staff_total: Money.from_amount(10000),
             pr_total: Money.from_amount(5000),
             kitchen_total: Money.from_amount(2500),
@@ -99,7 +100,8 @@ RSpec.describe 'Api access' do
               forecasts << FactoryGirl.create(
                 :rota_forecast,
                 forecasted_take: forecasted_takes[index],
-                total: Money.from_amount(20000),
+                total: Money.from_amount(40000),
+                overhead_total: Money.from_amount(20000),
                 staff_total: Money.from_amount(10000),
                 pr_total: Money.from_amount(5000),
                 kitchen_total: Money.from_amount(2500),
@@ -174,7 +176,8 @@ RSpec.describe 'Api access' do
             :rota_forecast,
             rota: rota,
             forecasted_take: Money.from_amount(100000),
-            total: Money.from_amount(20000),
+            total: Money.from_amount(40000),
+            overhead_total: Money.from_amount(20000),
             staff_total: Money.from_amount(10000),
             pr_total: Money.from_amount(5000),
             kitchen_total: Money.from_amount(2500),
@@ -253,7 +256,7 @@ RSpec.describe 'Api access' do
   end
 
   def forecast_keys
-    ["id", "url", "venue", "date", "forecasted_take", "total", "total_percentage", "staff_total", "staff_total_percentage", "pr_total", "pr_total_percentage", "kitchen_total" , "kitchen_total_percentage", "security_total", "security_total_percentage"]
+    ["id", "url", "venue", "date", "forecasted_take", "total", "total_percentage", "overhead_total", "overhead_total_percentage", "staff_total", "staff_total_percentage", "pr_total", "pr_total_percentage", "kitchen_total" , "kitchen_total_percentage", "security_total", "security_total_percentage"]
   end
 
   def expected_values_for(forecast)
