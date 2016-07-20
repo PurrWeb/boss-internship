@@ -107,13 +107,6 @@ describe("Clock In/Out Page Integration Test", function(){
         return document.querySelectorAll("[data-test-marker-pin-modal]")[0];
     }
 
-
-    it("Shows an API key field if no venue data has been loaded", function(){
-        var {$$} = simpleRender(<ClockInOutApp />)
-        expect($$("[data-test-marker-api-key-button]").length).toBe(1);
-    })
-
-
     it("Shows a large staff type selector after loading the venue's clock in/out data", function(done){
         var {$$} = simpleRender(<ClockInOutApp />)
 
@@ -125,6 +118,7 @@ describe("Clock In/Out Page Integration Test", function(){
 
         _.defer(function(){
             expect($$(".large-staff-type-selector__button").length).toBeGreaterThan(0);
+            $.ajax.restore()
             done();
         })
     })
@@ -164,12 +158,14 @@ describe("Clock In/Out Page Integration Test", function(){
 
         var promise = Promise.resolve({access_token: "", expires_at: new Date(2050,10,10)})
 
-        var pinInput = getPinModal().querySelector("input[type='number']");
+        var oneButton = getPinModal().querySelector("[data-test-marker-numpad-key='1']");
+        var twoButton = getPinModal().querySelector("[data-test-marker-numpad-key='2']");
+        ReactTestUtils.Simulate.click(oneButton)
+        ReactTestUtils.Simulate.click(oneButton)
+        ReactTestUtils.Simulate.click(twoButton)
+        ReactTestUtils.Simulate.click(twoButton)
 
-        pinInput.value = "1234"
-        ReactTestUtils.Simulate.change(pinInput);
-
-        expect.spyOn($, "ajax").andReturn(promise);
+        expect.spyOn($, "ajax").andReturn(promise)
         var form = getPinModal().querySelector("form")
 
         accelerateTimeouts(function(){
@@ -177,6 +173,10 @@ describe("Clock In/Out Page Integration Test", function(){
         });
 
         _.delay(function(){
+            expect($.ajax).toHaveBeenCalled()
+            var ajaxData = JSON.parse($.ajax.calls[0].arguments[0].data)
+            expect(ajaxData.staff_member_pin).toBe("1122")
+
             expect(getPinModal()).toBe(undefined)
             expect($$("[data-test-marker-change-pin-button]").length).toBeGreaterThan(0)
 

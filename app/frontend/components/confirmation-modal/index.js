@@ -16,10 +16,6 @@ class ConfirmationModal extends React.Component {
         if (!this.props.isVisible) {
             return;
         }
-
-        if (this.props.confirmationType === "PIN") {
-            this.refs.pinInput.focus();
-        }
     }
     render(){
         if (!this.props.isVisible) {
@@ -34,20 +30,20 @@ class ConfirmationModal extends React.Component {
             return <ModalContainer onClick={() => this.cancel()}>
                 <ModalDialog onClose={() => this.cancel()}>
                     {this.props.modalOptions.title}
-                    <div className="row" data-test-marker-pin-modal>
+                    <div data-test-marker-pin-modal>
                         <form onSubmit={(e) => {e.preventDefault(); this.complete()}}>
-                            <div className="col-sm-8">
-                                <PinInput
-                                    pin={this.state.pin}
-                                    onChange={pin => this.setState({pin})}
-                                    ref="pinInput"
-                                    />
-                            </div>
-                            <div className="col-sm-4">
-                                <button type="submit" className="btn btn-default">
-                                    OK
-                                </button>
-                            </div>
+                            <PinInput
+                                pin={this.state.pin}
+                                onChange={pin => this.setState({pin})}
+                                />
+
+
+                            <button
+                                type="submit"
+                                className="btn btn-lg btn-primary"
+                                style={{marginTop: 10, width: "100%"}}>
+                                OK
+                            </button>
                         </form>
                     </div>
                 </ModalDialog>
