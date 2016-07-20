@@ -9,46 +9,15 @@ class DailyReportsIndexStaffMemberQuery
   def all
     staff_members = Arel::Table.new(:staff_members)
     rota_shifts = Arel::Table.new(:rota_shifts)
-    rotas = Arel::Table.new(:rotas)
     clock_in_days = Arel::Table.new(:clock_in_days)
     hours_acceptance_periods = Arel::Table.new(:hours_acceptance_periods)
     hours_acceptance_breaks = Arel::Table.new(:hours_acceptance_breaks)
     pay_rates = Arel::Table.new(:pay_rates)
 
-    week = RotaWeek.new(date)
     rota = Rota.find_by(date: date, venue: venue)
 
     rota_shifts_with_durations_query = rota_shifts.
       where(rota_shifts[:rota_id].eq(rota.andand.id)).
-      where(rota_shifts[:enabled].eq(true)).
-      project(
-        rota_shifts[:staff_member_id].as("staff_member_id"),
-        ArelHelpers.duration_in_hours_column(
-          start_column: rota_shifts[:starts_at],
-          end_column: rota_shifts[:ends_at]
-        ).sum.as("duration")
-      ).
-      group("staff_member_id")
-
-    week_rotas_query = rotas.
-      where(
-        InRangeInclusive.new(
-          start_column: rotas[:date],
-          end_column: rotas[:date],
-          start_value: week.start_date,
-          end_value: week.end_date
-        ).arel
-      ).
-      project(
-        rotas[:id]
-      )
-    week_rotas = week_rotas_query.as("week_rotas")
-
-    week_shifts_with_durations_query = rota_shifts.
-      join(week_rotas).
-      on(
-        rota_shifts[:rota_id].eq(week_rotas[:id])
-      ).
       where(rota_shifts[:enabled].eq(true)).
       project(
         rota_shifts[:staff_member_id].as("staff_member_id"),
@@ -119,16 +88,11 @@ class DailyReportsIndexStaffMemberQuery
     rota_hours_acceptance_periods_with_durations = rota_hours_acceptance_periods_with_durations_query.as("rota_hours_acceptance_periods_with_durations")
     rota_hours_acceptance_breaks_with_durations = rota_hours_acceptance_breaks_with_durations_query.as("rota_hours_acceptance_breaks_with_durations")
     rota_shifts_with_durations = rota_shifts_with_durations_query.as("rota_shifts_with_durations")
-    week_shifts_with_durations = week_shifts_with_durations_query.as("week_shifts_with_durations")
 
     staff_members_query = staff_members.
       join(rota_shifts_with_durations, Arel::Nodes::OuterJoin).
       on(
         rota_shifts_with_durations[:staff_member_id].eq(staff_members[:id])
-      ).
-      join(week_shifts_with_durations, Arel::Nodes::OuterJoin).
-      on(
-        week_shifts_with_durations[:staff_member_id].eq(staff_members[:id])
       ).
       join(rota_hours_acceptance_periods_with_durations, Arel::Nodes::OuterJoin).
       on(
@@ -171,10 +135,6 @@ class DailyReportsIndexStaffMemberQuery
         ArelHelpers.value_or_zero(
           rota_shifts_with_durations[:duration],
           as: "hours_rotaed"
-        ),
-        ArelHelpers.value_or_zero(
-          week_shifts_with_durations[:duration],
-          as: "week_hours_rotaed"
         ),
         ArelHelpers.value_or_zero(
           rota_hours_acceptance_periods_with_durations[:duration],
