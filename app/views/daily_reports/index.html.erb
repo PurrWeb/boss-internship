@@ -27,11 +27,15 @@
 <div>
   <h2>Overview</h2>
   <dl>
-    <dt>Rotaed Cost:</dt>
+    <dt>Overheads:</dt>
+    <dd>
+      <%= number_to_currency(total_overheads, unit: '£') %>
+    </dd>
+    <dt>Rotaed Cost - Overheads:</dt>
     <dd>
       <%= number_to_currency(total_rotaed_cost, unit: '£') %>
     </dd>
-    <dt>Actual Cost:</dt>
+    <dt>Actual Cost - Overheads:</dt>
     <dd>
       <%= number_to_currency(total_actual_cost, unit: '£') %>
     </dd>
@@ -61,7 +65,6 @@
           <th style="text-align: center;">Name</th>
           <th style="text-align: center;">Pay rate</th>
           <th style="text-align: center;">Hours Rotaed</th>
-          <th style="text-align: center;">Hours Rotaed in Week</th>
           <th style="text-align: center;">Rotaed Cost</th>
           <th style="text-align: center;">Hours Worked</th>
           <th style="text-align: center;">Break Time (Hours)</th>
@@ -78,17 +81,6 @@
                       precision: 2,
                       strip_insignificant_zeros: true
                     ) %>
-            </td>
-            <td>
-              <% if staff_member.pay_rate.weekly? %>
-                <%= number_with_precision(
-                      staff_member.week_hours_rotaed,
-                      precision: 2,
-                      strip_insignificant_zeros: true
-                    ) %>
-              <% else %>
-                 <span>-</span>
-              <% end %>
             </td>
             <td>
               <% if staff_member.pay_rate.hourly? %>

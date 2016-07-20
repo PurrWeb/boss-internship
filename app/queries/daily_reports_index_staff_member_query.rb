@@ -173,21 +173,22 @@ class DailyReportsIndexStaffMemberQuery
       project(
         staff_members[Arel.star],
         staff_members_with_hours[:hours_rotaed].as("hours_rotaed"),
-        staff_members_with_hours[:week_hours_rotaed].as("week_hours_rotaed"),
         staff_members_with_hours[:hours_worked].as("hours_worked"),
         staff_members_with_hours[:break_hours].as("break_hours"),
-        ArelHelpers.staff_member_total_calculation(
+        ArelHelpers.staff_member_hourly_total_calculation(
           calculation_type_column: staff_members_with_hours[:calculation_type],
           pay_rate_column: staff_members_with_hours[:pay_rate_in_pounds],
-          hours_rotaed_column: staff_members_with_hours[:hours_rotaed],
-          hours_in_week_column: staff_members_with_hours[:week_hours_rotaed]
+          hours_column: staff_members_with_hours[:hours_rotaed]
         ).as('rotaed_cost'),
-        ArelHelpers.staff_member_total_calculation(
+        ArelHelpers.staff_member_hourly_total_calculation(
           calculation_type_column: staff_members_with_hours[:calculation_type],
           pay_rate_column: staff_members_with_hours[:pay_rate_in_pounds],
-          hours_rotaed_column: staff_members_with_hours[:payable_hours],
-          hours_in_week_column: staff_members_with_hours[:week_hours_rotaed]
+          hours_column: staff_members_with_hours[:payable_hours]
         ).as('actual_cost'),
+        ArelHelpers.staff_members_daily_overhead_calculation(
+          calculation_type_column: staff_members_with_hours[:calculation_type],
+          pay_rate_column: staff_members_with_hours[:pay_rate_in_pounds]
+        ).as('overhead_cost')
       )
 
     sql = staff_members_with_costs.to_sql

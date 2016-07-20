@@ -17,7 +17,9 @@ class DailyReportsController < ApplicationController
 
       total_rotaed_cost = 0
       total_actual_cost = 0
+      total_overheads = 0
       staff_members.each do |staff_member|
+        total_overheads   += staff_member.overhead_cost
         total_rotaed_cost += staff_member.rotaed_cost
         total_actual_cost += staff_member.actual_cost
       end
@@ -26,6 +28,7 @@ class DailyReportsController < ApplicationController
         accessible_venues: accessible_venues,
         venue: venue,
         date: date,
+        total_overheads: total_overheads,
         total_rotaed_cost: total_rotaed_cost,
         total_actual_cost: total_actual_cost,
         staff_members: staff_members
