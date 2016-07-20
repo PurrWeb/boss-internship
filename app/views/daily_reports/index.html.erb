@@ -90,7 +90,13 @@
                  <span>-</span>
               <% end %>
             </td>
-            <td><%= number_to_currency(staff_member.rotaed_cost, unit: '£') %></td>
+            <td>
+              <% if staff_member.pay_rate.hourly? %>
+                <%= number_to_currency(staff_member.rotaed_cost, unit: '£') %>
+              <% else %>
+                <span>-</span>
+              <% end %>
+            </td>
             <td><%= number_with_precision(
                       staff_member.hours_worked,
                       precision: 2,
@@ -101,7 +107,13 @@
                       precision: 2,
                       strip_insignificant_zeros: true
                     ) %></td>
-            <td><%= number_to_currency(staff_member.actual_cost, unit: '£') %></td>
+            <td>
+              <% if staff_member.pay_rate.hourly? %>
+                <%= number_to_currency(staff_member.actual_cost, unit: '£') %>
+              <% else %>
+                <span>-</span>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>
