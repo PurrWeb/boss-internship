@@ -58,7 +58,7 @@ export default class PinInput extends React.Component {
                     value={this.props.pin}
                     />
                 <br/><br/>
-                <NumPad onNumberClick={(number) => this.props.onChange(this.props.pin + "1")} />
+                <NumPad onNumberClick={(number) => this.props.onChange(this.props.pin + number)} />
             </div>
     }
 }
