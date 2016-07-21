@@ -19,7 +19,7 @@ class HolidayDateValidator
     end
 
     if holiday.validate_as_creation
-      if RotaWeek.new(holiday.start_date) < RotaWeek.new(Time.current)
+      if RotaWeek.new(holiday.start_date) < RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
         holiday.errors.add(:base, "can't create holidays in the past")
         return
       end
