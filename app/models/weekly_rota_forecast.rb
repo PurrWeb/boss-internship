@@ -1,7 +1,7 @@
 class WeeklyRotaForecast
-  FIELDS = [:total, :staff_total, :pr_total, :kitchen_total, :security_total]
+  FIELDS = [:total, :staff_total, :pr_total, :kitchen_total, :security_total, :overhead_total]
 
-  def initialize(week:, forecasted_take:, total:, staff_total:, pr_total:, kitchen_total:, security_total:)
+  def initialize(week:, forecasted_take:, total:, overhead_total:, staff_total:, pr_total:, kitchen_total:, security_total:)
     @week = week
     @forecasted_take = forecasted_take
     @total = total
@@ -9,6 +9,7 @@ class WeeklyRotaForecast
     @pr_total = pr_total
     @kitchen_total = kitchen_total
     @security_total = security_total
+    @overhead_total = overhead_total
   end
 
   attr_reader :forecasted_take, :week

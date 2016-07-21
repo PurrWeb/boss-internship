@@ -31,11 +31,13 @@
   <div>
     <h3><div class="boss-badge" style="font-size: 1.3em; background-color: #<%= staff_type.ui_color %>"><%= staff_type.name %></div></h3>
 
-    <p class="h4">
-      <strong>
-        Total: <%= number_to_currency(reports.sum(&:total), unit: '£') %>
-      </strong>
-    </p>
+    <% if display_totals %>
+      <p class="h4">
+        <strong>
+          Total: <%= number_to_currency(reports.sum(&:total), unit: '£') %>
+        </strong>
+      </p>
+    <% end %>
 
     <table class="table table-striped text-center">
       <thead>
@@ -46,8 +48,10 @@
           <% end %>
           <th></th>
           <th></th>
-          <th></th>
-          <th></th>
+          <% if display_totals %>
+            <th></th>
+            <th></th>
+          <% end %>
           <th></th>
           <% if display_manager_actions %>
             <th></th>
@@ -60,8 +64,10 @@
           <% end %>
           <th class="text-center">Total Hours</th>
           <th class="text-center">Owed Hours</th>
-          <th class="text-center">Pay Rate</th>
-          <th class="text-center">Total</th>
+          <% if display_totals %>
+            <th class="text-center">Pay Rate</th>
+            <th class="text-center">Total</th>
+          <% end %>
           <th class="text-center">Paid Holiday (Days)</th>
           <% if display_manager_actions %>
             <th class="text-center">Status</th>
@@ -105,14 +111,16 @@
                  ) %>
               <%= link_to(owed_hours_count, staff_member_path(report.staff_member, tab: 'owed-hours')) %>
             </td>
-            <td>
-              <%= report.pay_rate_description %>
-            </td>
-            <td>
-              <strong>
-                <%= number_to_currency(report.total, unit: '£') %>
-              </strong>
-            </td>
+            <% if display_totals %>
+              <td>
+                <%= report.pay_rate_description %>
+              </td>
+              <td>
+                <strong>
+                  <%= number_to_currency(report.total, unit: '£') %>
+                </strong>
+              </td>
+            <% end %>
             <td>
               <%= link_to(report.holiday_days_count, staff_member_path(report.staff_member, tab: 'holidays')) %>
             </td>

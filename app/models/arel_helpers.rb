@@ -7,19 +7,31 @@ class ArelHelpers
     "`#{column.relation.name}`.`#{column.name}`"
   end
 
-  # Returns Arel SQL literal for selecting the total cost for a staff member taking into account
-  # the payment type and payrate
-  def self.staff_member_total_calculation(calculation_type_column:, hours_rotaed_column:, hours_in_week_column:, pay_rate_column:)
-    hourly_calculation = "#{get_column_name(hours_rotaed_column)} * #{get_column_name(pay_rate_column)}"
-
-    fraction_of_weekly_hours_ratio = "(#{get_column_name(hours_rotaed_column)} / #{get_column_name(hours_in_week_column)})"
-    weekly_sub_calculation = "#{get_column_name(pay_rate_column)} * #{fraction_of_weekly_hours_ratio}"
-    weekly_calculation = "IF(#{get_column_name(hours_in_week_column)} = 0, 0, #{weekly_sub_calculation})"
+  # Calculates hourly cost of staff member factoring in pay rate ammount and type.
+  # Staff members with weekly pay rates are assigned an hourly cost of 0
+  def self.staff_member_hourly_total_calculation(calculation_type_column:, hours_column:,  pay_rate_column:)
+    hourly_calculation = "#{get_column_name(hours_column)} * #{get_column_name(pay_rate_column)}"
 
     statement = ["CASE WHEN #{get_column_name(calculation_type_column)} = '#{PayRate::HOURLY_CALCULATION_TYPE}' THEN #{hourly_calculation} "]
-    statement << "WHEN #{get_column_name(calculation_type_column)} = '#{PayRate::WEEKLY_CALCULATION_TYPE}' THEN #{weekly_calculation} "
+    statement << "WHEN #{get_column_name(calculation_type_column)} = '#{PayRate::WEEKLY_CALCULATION_TYPE}' THEN 0 "
     statement << "END"
     Arel.sql(statement.join(''))
+  end
+
+  # Daily cost of staff members who are treated as overheads (i.e. are paid weekly)
+  # values is the persons weekly salary divided by 7.
+  # Staff members with hourly pay rates are assigned an overhead cost of 0
+  def self.staff_members_daily_overhead_calculation(calculation_type_column:, pay_rate_column:)
+    calculation = "#{get_column_name(pay_rate_column)} / 7"
+
+    Arel::Nodes::NamedFunction.new(
+      "IF",
+      [
+        calculation_type_column.eq(PayRate::WEEKLY_CALCULATION_TYPE),
+        Arel.sql(calculation),
+        0
+      ]
+    )
   end
 
   def self.value_or_zero(expression, as: nil)

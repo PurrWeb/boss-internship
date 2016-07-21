@@ -11,6 +11,7 @@ class GenerateWeeklyRotaForecast
     pr_total = Money.new(0)
     kitchen_total = Money.new(0)
     security_total = Money.new(0)
+    overhead_total = Money.new(0)
 
     (week.start_date..week.end_date).each do |date|
       rota = Rota.find_or_initialize_by(
@@ -32,12 +33,14 @@ class GenerateWeeklyRotaForecast
       pr_total = pr_total + forecast.pr_total
       kitchen_total = kitchen_total + forecast.kitchen_total
       security_total = security_total + forecast.security_total
+      overhead_total = overhead_total + forecast.overhead_total
     end
 
     WeeklyRotaForecast.new(
       week: week,
       forecasted_take: forecasted_take,
       total: total,
+      overhead_total: overhead_total,
       staff_total: staff_total,
       pr_total: pr_total,
       kitchen_total: kitchen_total,

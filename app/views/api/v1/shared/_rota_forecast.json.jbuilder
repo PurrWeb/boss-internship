@@ -11,6 +11,8 @@ json.date rota_forecast.date.iso8601
 json.forecasted_take Float(rota_forecast.forecasted_take.to_s)
 json.total Float(rota_forecast.total.to_s)
 json.total_percentage rota_forecast.total_percentage
+json.overhead_total Float(rota_forecast.overhead_total.to_s)
+json.overhead_total_percentage rota_forecast.overhead_total_percentage
 json.staff_total Float(rota_forecast.staff_total.to_s)
 json.staff_total_percentage rota_forecast.staff_total_percentage
 json.pr_total Float(rota_forecast.pr_total.to_s)

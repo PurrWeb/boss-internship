@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160718181740) do
+ActiveRecord::Schema.define(version: 20160719122857) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -347,6 +347,20 @@ ActiveRecord::Schema.define(version: 20160718181740) do
   add_index "invites", ["sent_at"], name: "index_invites_on_sent_at", using: :btree
   add_index "invites", ["token"], name: "index_invites_on_token", unique: true, using: :btree
 
+  create_table "legacy_rota_forecasts", force: :cascade do |t|
+    t.integer  "rota_id",               limit: 4
+    t.integer  "forecasted_take_cents", limit: 4
+    t.integer  "total_cents",           limit: 4
+    t.integer  "staff_total_cents",     limit: 4
+    t.integer  "pr_total_cents",        limit: 4
+    t.integer  "kitchen_total_cents",   limit: 4
+    t.integer  "security_total_cents",  limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "legacy_rota_forecasts", ["rota_id"], name: "index_legacy_rota_forecasts_on_rota_id", using: :btree
+
   create_table "names", force: :cascade do |t|
     t.string   "first_name", limit: 255, null: false
     t.string   "surname",    limit: 255, null: false
@@ -382,13 +396,14 @@ ActiveRecord::Schema.define(version: 20160718181740) do
   add_index "pay_rates", ["pay_rate_type"], name: "index_pay_rates_on_pay_rate_type", using: :btree
 
   create_table "rota_forecasts", force: :cascade do |t|
-    t.integer  "rota_id",               limit: 4
-    t.integer  "forecasted_take_cents", limit: 4
-    t.integer  "total_cents",           limit: 4
-    t.integer  "staff_total_cents",     limit: 4
-    t.integer  "pr_total_cents",        limit: 4
-    t.integer  "kitchen_total_cents",   limit: 4
-    t.integer  "security_total_cents",  limit: 4
+    t.integer  "rota_id",               limit: 4, null: false
+    t.integer  "forecasted_take_cents", limit: 4, null: false
+    t.integer  "overhead_total_cents",  limit: 4, null: false
+    t.integer  "total_cents",           limit: 4, null: false
+    t.integer  "staff_total_cents",     limit: 4, null: false
+    t.integer  "pr_total_cents",        limit: 4, null: false
+    t.integer  "kitchen_total_cents",   limit: 4, null: false
+    t.integer  "security_total_cents",  limit: 4, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -21,6 +21,10 @@ class PayRate < ActiveRecord::Base
     where(pay_rate_type: 'admin')
   end
 
+  def self.weekly
+    where(calculation_type: WEEKLY_CALCULATION_TYPE)
+  end
+
   def self.selectable_by(user)
     if user.has_admin_access?
       pay_rate_options = PayRate.enabled
