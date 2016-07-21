@@ -47,7 +47,9 @@
           <th></th>
           <th></th>
           <th></th>
-          <th></th>
+          <% if display_totals %>
+            <th></th>
+          <% end %>
           <th></th>
           <% if display_manager_actions %>
             <th></th>
@@ -61,7 +63,9 @@
           <th class="text-center">Total Hours</th>
           <th class="text-center">Owed Hours</th>
           <th class="text-center">Pay Rate</th>
-          <th class="text-center">Total</th>
+          <% if display_totals %>
+            <th class="text-center">Total</th>
+          <% end %>
           <th class="text-center">Paid Holiday (Days)</th>
           <% if display_manager_actions %>
             <th class="text-center">Status</th>
@@ -108,11 +112,13 @@
             <td>
               <%= report.pay_rate_description %>
             </td>
-            <td>
-              <strong>
-                <%= number_to_currency(report.total, unit: '£') %>
-              </strong>
-            </td>
+            <% if display_totals %>
+              <td>
+                <strong>
+                  <%= number_to_currency(report.total, unit: '£') %>
+                </strong>
+              </td>
+            <% end %>
             <td>
               <%= link_to(report.holiday_days_count, staff_member_path(report.staff_member, tab: 'holidays')) %>
             </td>
