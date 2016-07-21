@@ -75,7 +75,13 @@
         <% staff_members.each do |staff_member| %>
           <tr>
             <td><%= staff_member.full_name.titlecase %></td>
-            <td><%= staff_member.pay_rate.text_description_short %></td>
+            <td>
+              <% if staff_member.pay_rate.admin? %>
+                <%= staff_member.pay_rate.name.titlecase %>
+              <% else %>
+                <%= staff_member.pay_rate.text_description_short %>
+              <% end %>
+            </td>
             <td><%= number_with_precision(
                       staff_member.hours_rotaed,
                       precision: 2,
