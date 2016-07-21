@@ -5,13 +5,13 @@ class GenerateWeeklyRotaForecast
   end
 
   def call
-    forecasted_take = Money.new(0)
-    total = Money.new(0)
-    staff_total = Money.new(0)
-    pr_total = Money.new(0)
-    kitchen_total = Money.new(0)
-    security_total = Money.new(0)
-    overhead_total = Money.new(0)
+    forecasted_take_cents = 0
+    total_cents = 0
+    staff_total_cents = 0
+    pr_total_cents = 0
+    kitchen_total_cents = 0
+    security_total_cents = 0
+    overhead_total_cents = 0
 
     (week.start_date..week.end_date).each do |date|
       rota = Rota.find_or_initialize_by(
@@ -22,29 +22,29 @@ class GenerateWeeklyRotaForecast
 
       if !forecast.present?
         forecast = GenerateRotaForecast.new(
-          forecasted_take: Money.new(0),
+          forecasted_take_cents: 0,
           rota: rota
         ).call
       end
 
-      forecasted_take = forecasted_take + forecast.forecasted_take
-      total = total + forecast.total
-      staff_total = staff_total + forecast.staff_total
-      pr_total = pr_total + forecast.pr_total
-      kitchen_total = kitchen_total + forecast.kitchen_total
-      security_total = security_total + forecast.security_total
-      overhead_total = overhead_total + forecast.overhead_total
+      forecasted_take_cents = forecasted_take_cents + forecast.forecasted_take_cents
+      total_cents = total_cents + forecast.total_cents
+      staff_total_cents = staff_total_cents + forecast.staff_total_cents
+      pr_total_cents = pr_total_cents + forecast.pr_total_cents
+      kitchen_total_cents = kitchen_total_cents + forecast.kitchen_total_cents
+      security_total_cents = security_total_cents + forecast.security_total_cents
+      overhead_total_cents = overhead_total_cents + forecast.overhead_total_cents
     end
 
     WeeklyRotaForecast.new(
       week: week,
-      forecasted_take: forecasted_take,
-      total: total,
-      overhead_total: overhead_total,
-      staff_total: staff_total,
-      pr_total: pr_total,
-      kitchen_total: kitchen_total,
-      security_total: security_total
+      forecasted_take_cents: forecasted_take_cents,
+      total_cents: total_cents,
+      overhead_total_cents: overhead_total_cents,
+      staff_total_cents: staff_total_cents,
+      pr_total_cents: pr_total_cents,
+      kitchen_total_cents: kitchen_total_cents,
+      security_total_cents: security_total_cents
     )
   end
 

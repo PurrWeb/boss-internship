@@ -110,7 +110,7 @@ class RotasController < ApplicationController
 
       if !forecast.present?
         forecast = GenerateRotaForecast.new(
-          forecasted_take: Money.new(0),
+          forecasted_take_cents: 0,
           rota: rota
         ).call
       end
