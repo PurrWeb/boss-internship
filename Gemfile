@@ -13,7 +13,7 @@ gem "jquery-rails"
 gem "jquery-ui-rails"
 gem "uglifier"
 gem "fog"
-gem "carrierwave", "~> 0.10"
+gem "carrierwave", "~> 0.11"
 gem 'carrierwave-data-uri'
 gem 'rmagick', '2.13.2', require: false
 gem "figaro"
