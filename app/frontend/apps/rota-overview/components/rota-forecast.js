@@ -91,7 +91,7 @@ export default class RotaForecast extends React.Component {
                 &pound;{utils.formatMoney(row.total/100)}
             </div>
             <div className="col-md-3" style={{textAlign: "right"}}>
-                {Math.round(row.percentage*100)/100}%
+                {row.percentage !== null ? (Math.round(row.percentage*100)/100) + "%" : "-"}
             </div>
         </div>
     }
