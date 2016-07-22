@@ -28,12 +28,8 @@ class RotaForecast < ActiveRecord::Base
 
   [:total, :overhead_total, :staff_total, :pr_total, :kitchen_total, :security_total].each do |total_method|
     define_method("#{total_method}_percentage") do
-      if forecasted_take.present?
-        if forecasted_take <= 0
-          0.0
-        else
-          public_send(total_method) / forecasted_take * 100.0
-        end
+      if forecasted_take.present? && forecasted_take > 0.0
+        public_send(total_method) / forecasted_take * 100.0
       end
     end
   end
