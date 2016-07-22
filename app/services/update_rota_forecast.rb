@@ -7,9 +7,9 @@ class UpdateRotaForecast
     return unless rota.forecastable?
 
     rota_forecast = RotaForecast.where(rota: rota).last
-    forecasted_take = (rota_forecast && rota_forecast.forecasted_take) || Money.new(0)
+    forecasted_take_cents = (rota_forecast && rota_forecast.forecasted_take_cents) || 0
     GenerateRotaForecast.new(
-      forecasted_take: forecasted_take,
+      forecasted_take_cents: forecasted_take_cents,
       rota: rota
     ).call.save!
   end
