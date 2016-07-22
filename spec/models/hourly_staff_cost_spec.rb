@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe HourlyStaffCost do
-  describe '#total' do
+  describe '#total_cents' do
     let(:pay_rate) { FactoryGirl.create(:pay_rate, cents: 1500) }
     let!(:staff_member) do
       FactoryGirl.create(
@@ -25,7 +25,7 @@ RSpec.describe HourlyStaffCost do
         expect(HourlyStaffCost.new(
           staff_members: staff_members,
           rota: rota
-        ).total).to eq(Money.new(0))
+        ).total_cents).to eq(0)
       end
     end
 
@@ -55,9 +55,9 @@ RSpec.describe HourlyStaffCost do
           HourlyStaffCost.new(
             staff_members: staff_members,
             rota: rota
-          ).total
+          ).total_cents
         ).to eq(
-          Money.from_amount(staff_member.pay_rate.rate_in_pounds * 1.5)
+          staff_member.pay_rate.cents * 1.5
         )
       end
 
@@ -69,10 +69,8 @@ RSpec.describe HourlyStaffCost do
             HourlyStaffCost.new(
               staff_members: staff_members,
               rota: rota
-            ).total
-          ).to eq(
-            Money.from_amount(0)
-          )
+            ).total_cents
+          ).to eq(0)
         end
       end
     end

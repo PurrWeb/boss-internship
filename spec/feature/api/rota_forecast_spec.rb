@@ -57,13 +57,13 @@ RSpec.describe 'Api access' do
           FactoryGirl.create(
             :rota_forecast,
             rota: rota,
-            forecasted_take: Money.from_amount(100000),
-            total: Money.from_amount(40000),
-            overhead_total: Money.from_amount(20000),
-            staff_total: Money.from_amount(10000),
-            pr_total: Money.from_amount(5000),
-            kitchen_total: Money.from_amount(2500),
-            security_total: Money.from_amount(2500)
+            forecasted_take_cents: 10000000,
+            total_cents: 4000000,
+            overhead_total_cents: 2000000,
+            staff_total_cents: 10000,
+            pr_total_cents: 500000,
+            kitchen_total_cents: 250000,
+            security_total_cents: 250000
           )
         end
 
@@ -88,8 +88,8 @@ RSpec.describe 'Api access' do
 
         let(:forecasted_takes) do
           [
-            Money.from_amount(20000),
-            Money.from_amount(10000)
+            2000000,
+            1000000
           ]
         end
 
@@ -99,13 +99,13 @@ RSpec.describe 'Api access' do
             travel_to time do
               forecasts << FactoryGirl.create(
                 :rota_forecast,
-                forecasted_take: forecasted_takes[index],
-                total: Money.from_amount(40000),
-                overhead_total: Money.from_amount(20000),
-                staff_total: Money.from_amount(10000),
-                pr_total: Money.from_amount(5000),
-                kitchen_total: Money.from_amount(2500),
-                security_total: Money.from_amount(2500)
+                forecasted_take_cents: forecasted_takes[index],
+                total_cents: 4000000,
+                overhead_total_cents: 2000000,
+                staff_total_cents: 1000000,
+                pr_total_cents: 500000,
+                kitchen_total_cents: 250000,
+                security_total_cents: 250000
               )
             end
           end
@@ -123,7 +123,7 @@ RSpec.describe 'Api access' do
         specify 'it should return the latest forecast created' do
           json = JSON.parse(response.body)
 
-          expect(json["forecasted_take"]).to eq(Float(forecasted_takes.first.to_s))
+          expect(json["forecasted_take_cents"]).to eq(forecasted_takes.first)
         end
       end
     end
@@ -136,8 +136,8 @@ RSpec.describe 'Api access' do
             id: UIRotaDate.format(date)
           )
       end
-      let(:forecasted_take) { Money.from_amount(2000) }
-      let(:response) { post(url, forecasted_take: forecasted_take) }
+      let(:forecasted_take_cents) { 200000 }
+      let(:response) { post(url, forecasted_take_cents: forecasted_take_cents) }
 
       context 'before call' do
         specify 'no forecasts should exist' do
@@ -175,13 +175,13 @@ RSpec.describe 'Api access' do
           FactoryGirl.create(
             :rota_forecast,
             rota: rota,
-            forecasted_take: Money.from_amount(100000),
-            total: Money.from_amount(40000),
-            overhead_total: Money.from_amount(20000),
-            staff_total: Money.from_amount(10000),
-            pr_total: Money.from_amount(5000),
-            kitchen_total: Money.from_amount(2500),
-            security_total: Money.from_amount(2500)
+            forecasted_take_cents: 10000000,
+            total_cents: 4000000,
+            overhead_total_cents: 2000000,
+            staff_total_cents: 1000000,
+            pr_total_cents: 500000,
+            kitchen_total_cents: 250000,
+            security_total_cents: 250000
           )
         end
 
@@ -256,7 +256,7 @@ RSpec.describe 'Api access' do
   end
 
   def forecast_keys
-    ["id", "url", "venue", "date", "forecasted_take", "total", "total_percentage", "overhead_total", "overhead_total_percentage", "staff_total", "staff_total_percentage", "pr_total", "pr_total_percentage", "kitchen_total" , "kitchen_total_percentage", "security_total", "security_total_percentage"]
+    ["id", "url", "venue", "date", "forecasted_take_cents", "total_cents", "total_percentage", "overhead_total_cents", "overhead_total_percentage", "staff_total_cents", "staff_total_percentage", "pr_total_cents", "pr_total_percentage", "kitchen_total_cents" , "kitchen_total_percentage", "security_total_cents", "security_total_percentage"]
   end
 
   def expected_values_for(forecast)
@@ -268,16 +268,16 @@ RSpec.describe 'Api access' do
           id: UIRotaDate.format(forecast.rota.date)
         ),
       "date" => forecast.date.iso8601,
-      "forecasted_take" => Float(forecast.forecasted_take.to_s),
-      "total" => Float(forecast.total.to_s),
+      "forecasted_take_cents" => forecast.forecasted_take_cents,
+      "total_cents" => forecast.total_cents,
       "total_percentage" => forecast.total_percentage,
-      "staff_total" => Float(forecast.staff_total.to_s),
+      "staff_total_cents" => forecast.staff_total_cents,
       "staff_total_percentage" => forecast.staff_total_percentage,
-      "pr_total" => Float(forecast.pr_total.to_s),
+      "pr_total_cents" => forecast.pr_total_cents,
       "pr_total_percentage" => forecast.pr_total_percentage,
-      "security_total" => Float(forecast.security_total.to_s),
+      "security_total_cents" => forecast.security_total_cents,
       "security_total_percentage" => forecast.security_total_percentage,
-      "kitchen_total" => Float(forecast.kitchen_total.to_s),
+      "kitchen_total_cents" => forecast.kitchen_total_cents,
       "kitchen_total_percentage" => forecast.kitchen_total_percentage
     }
   end

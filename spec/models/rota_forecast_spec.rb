@@ -9,27 +9,29 @@ RSpec.describe RotaForecast do
       date: week.start_date
     )
   end
-  let(:forecasted_take) { Money.from_amount(10000) }
-  let(:total) { Money.new(0) }
-  let(:staff_total) { Money.new(0) }
-  let(:pr_total) { Money.new(0) }
-  let(:kitchen_total) { Money.new(0) }
-  let(:security_total) { Money.new(0) }
+  let(:forecasted_take_cents) { 1000000 }
+  let(:total_cents) { 0 }
+  let(:overhead_total_cents) { 0 }
+  let(:staff_total_cents) { 0 }
+  let(:pr_total_cents) { 0 }
+  let(:kitchen_total_cents) { 0 }
+  let(:security_total_cents) { 0 }
   let(:forecast) do
     RotaForecast.new(
       rota: rota,
-      forecasted_take: forecasted_take,
-      total: total,
-      staff_total: staff_total,
-      pr_total: pr_total,
-      kitchen_total: kitchen_total,
-      security_total: security_total
+      forecasted_take_cents: forecasted_take_cents,
+      total_cents: total_cents,
+      overhead_total_cents: overhead_total_cents,
+      staff_total_cents: staff_total_cents,
+      pr_total_cents: pr_total_cents,
+      kitchen_total_cents: kitchen_total_cents,
+      security_total_cents: security_total_cents
     )
   end
 
   describe "percentages" do
     context 'forecasted_take is 0' do
-      let(:forecasted_take) { Money.new(0) }
+      let(:forecasted_take_cents) { 0 }
 
       specify 'all percentages should be nil' do
         expect(forecast.total_percentage).to eq(nil)
@@ -49,7 +51,7 @@ RSpec.describe RotaForecast do
     end
 
     context 'staff member total is non zero' do
-      let(:staff_total) { Money.from_amount(1000) }
+      let(:staff_total_cents) { 100000 }
 
       specify 'should contribute to staff category percentage' do
         expect(forecast.staff_total_percentage).to eq(10)
@@ -63,7 +65,7 @@ RSpec.describe RotaForecast do
     end
 
     context 'pr total is non zero' do
-      let(:pr_total) { Money.from_amount(1000) }
+      let(:pr_total_cents) { 100000 }
 
       specify 'should contribute to pr category percentage' do
         expect(forecast.pr_total_percentage).to eq(10)
@@ -77,7 +79,7 @@ RSpec.describe RotaForecast do
     end
 
     context 'kitchen staff member has hours' do
-      let(:kitchen_total) { Money.from_amount(1000) }
+      let(:kitchen_total_cents) { 100000 }
 
       specify 'should contribute to kitchen category percentage' do
         expect(forecast.kitchen_total_percentage).to eq(10)
@@ -91,7 +93,7 @@ RSpec.describe RotaForecast do
     end
 
     context 'security staff member has hours' do
-      let(:security_total) { Money.from_amount(1000) }
+      let(:security_total_cents) { 100000 }
 
       specify 'should contribute to security category percentage' do
         expect(forecast.security_total_percentage).to eq(10)
@@ -108,6 +110,7 @@ RSpec.describe RotaForecast do
   def category_percentage_methods
     [
       :staff_total_percentage,
+      :overhead_total_percentage,
       :pr_total_percentage,
       :kitchen_total_percentage,
       :security_total_percentage

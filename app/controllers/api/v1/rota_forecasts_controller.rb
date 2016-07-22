@@ -12,7 +12,7 @@ module Api
 
         rota_forecast = RotaForecast.where(rota: rota).last
         rota_forecast ||= GenerateRotaForecast.new(
-          forecasted_take: Money.new(0),
+          forecasted_take_cents: 0,
           rota: rota
         ).call
 
@@ -36,9 +36,9 @@ module Api
             status: :forbidden
           )
         else
-          forecasted_take = forecasted_take_from_params
+          forecasted_take_cents = forecasted_take_cents_from_params
           curret_forecast = RotaForecast.where(rota: rota).last
-          if curret_forecast && curret_forecast.forecasted_take == forecasted_take
+          if curret_forecast && curret_forecast.forecasted_take_cents == forecasted_take_cents
             render "show", locals: { rota_forecast: curret_forecast }
           else
             rota_forecast = nil
@@ -48,7 +48,7 @@ module Api
               end
 
              rota_forecast = GenerateRotaForecast.new(
-                forecasted_take: forecasted_take,
+                forecasted_take_cents: forecasted_take_cents,
                 rota: rota
               ).call
 
@@ -82,10 +82,8 @@ module Api
         UIRotaDate.parse(params.fetch(:id))
       end
 
-      def forecasted_take_from_params
-        Money.from_amount(
-          Float(params.fetch(:forecasted_take))
-        )
+      def forecasted_take_cents_from_params
+        params.fetch(:forecasted_take_cents)
       end
     end
   end
