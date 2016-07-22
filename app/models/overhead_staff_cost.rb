@@ -5,7 +5,7 @@ class OverheadStaffCost
   end
   attr_reader :rota, :week
 
-  def total
+  def total_cents
     staff_members = StaffMember.
       enabled.
       where(master_venue: rota.venue).
@@ -15,7 +15,7 @@ class OverheadStaffCost
       includes(:pay_rate)
 
     staff_members.map do |staff_member|
-      Money.from_amount(staff_member.pay_rate.rate_in_pounds / 7.0)
-    end.sum(Money.new(0))
+      staff_member.pay_rate.cents / 7.0
+    end.sum
   end
 end

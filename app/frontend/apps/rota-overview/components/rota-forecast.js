@@ -88,10 +88,10 @@ export default class RotaForecast extends React.Component {
                 {row.title}
             </div>
             <div className="col-md-5" style={{textAlign: "right"}}>
-                &pound;{utils.formatMoney(row.total)}
+                &pound;{utils.formatMoney(row.total/100)}
             </div>
             <div className="col-md-3" style={{textAlign: "right"}}>
-                {Math.round(row.percentage*100)/100}%
+                {row.percentage !== null ? (Math.round(row.percentage*100)/100) + "%" : "-"}
             </div>
         </div>
     }
@@ -101,32 +101,32 @@ function getDataRows(rotaForecast){
     return [
         {
           title: "Overheads",
-          total: rotaForecast.overhead_total,
+          total: rotaForecast.overhead_total_cents,
           percentage: rotaForecast.overhead_total_percentage
         },
         {
             title: "Staff",
-            total: rotaForecast.staff_total,
+            total: rotaForecast.staff_total_cents,
             percentage: rotaForecast.staff_total_percentage
         },
         {
             title: "PRs",
-            total: rotaForecast.pr_total,
+            total: rotaForecast.pr_total_cents,
             percentage: rotaForecast.pr_total_percentage
         },
         {
             title: "Kitchen",
-            total: rotaForecast.kitchen_total,
+            total: rotaForecast.kitchen_total_cents,
             percentage: rotaForecast.kitchen_total_percentage
         },
         {
             title: "Security",
-            total: rotaForecast.security_total,
+            total: rotaForecast.security_total_cents,
             percentage: rotaForecast.security_total_percentage
         },
         {
             title: "Total",
-            total: rotaForecast.total,
+            total: rotaForecast.total_cents,
             percentage: rotaForecast.total_percentage
         }
     ];

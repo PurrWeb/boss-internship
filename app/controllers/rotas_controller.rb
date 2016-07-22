@@ -2,18 +2,17 @@ class RotasController < ApplicationController
   before_action :authorize
 
   def index
-    if start_date_from_params.present? && end_date_from_params.present? && venue_from_params.present?
+    if start_date_from_params.present? && venue_from_params.present?
       start_date = start_date_from_params
-      end_date = end_date_from_params
+      week = RotaWeek.new(start_date)
       venue = venue_from_params
 
       respond_to do |format|
         format.html do
-          render_rota_index(start_date, end_date, venue)
+          render_rota_index(week: week, venue: venue)
         end
 
         format.pdf do
-          week = RotaWeek.new(start_date)
           render_rota_pdf(week: week, venue: venue)
         end
       end
@@ -95,10 +94,8 @@ class RotasController < ApplicationController
   end
 
   private
-  def render_rota_index(start_date, end_date, venue)
-    UIRotaDate.assert_date_range_valid(start_date, end_date)
-
-    rotas = (start_date..end_date).map do |date|
+  def render_rota_index(week:, venue:)
+    rotas = (week.start_date..week.end_date).map do |date|
       Rota.find_or_initialize_by(
         date: date,
         venue: venue
@@ -110,7 +107,7 @@ class RotasController < ApplicationController
 
       if !forecast.present?
         forecast = GenerateRotaForecast.new(
-          forecasted_take: Money.new(0),
+          forecasted_take_cents: 0,
           rota: rota
         ).call
       end
@@ -118,9 +115,8 @@ class RotasController < ApplicationController
       forecast
     end
 
-    weekly_rota_forecast = GenerateWeeklyRotaForecast.new(
-      week: RotaWeek.new(start_date),
-      venue: venue
+    weekly_rota_forecast = GenerateCompositeRotaForecast.new(
+      rota_forecasts: rota_forecasts
     ).call
 
     access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
@@ -129,11 +125,12 @@ class RotasController < ApplicationController
       access_token: access_token,
       accessible_venues: accessible_venues_for(current_user),
       venue: venue,
-      start_date: start_date,
-      end_date: end_date,
+      start_date: week.start_date,
+      end_date: week.end_date,
       rotas: rotas,
       staff_types: StaffType.all,
       rota_forecasts: rota_forecasts,
+      week: week,
       weekly_rota_forecast: weekly_rota_forecast
     }
   end
@@ -159,7 +156,6 @@ class RotasController < ApplicationController
   def redirect_params
     {
       start_date: UIRotaDate.format(start_date_from_params || default_start_date),
-      end_date: UIRotaDate.format(end_date_from_params || default_end_date),
       venue_id: venue_from_params || current_user.default_venue.andand.id
     }
   end

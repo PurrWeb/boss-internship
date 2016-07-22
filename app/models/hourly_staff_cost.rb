@@ -4,7 +4,7 @@ class HourlyStaffCost
     @rota = rota
   end
 
-  def total
+  def total_cents
     if staff_members.present?
       staff_members.map do |staff_member|
         hours_rotaed = rota_shifts(staff_member).inject(0) do |sum, shift|
@@ -12,15 +12,15 @@ class HourlyStaffCost
         end
 
         if hours_rotaed == 0 || staff_member.pay_rate.weekly?
-          Money.new(0)
+          0
         elsif staff_member.pay_rate.hourly?
-          hours_rotaed * Money.from_amount(staff_member.pay_rate.rate_in_pounds)
+          hours_rotaed * staff_member.pay_rate.cents
         else
           raise 'unsupported payrate type'
         end
       end.sum
     else
-      Money.new(0)
+      0
     end
   end
 

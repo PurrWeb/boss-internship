@@ -12,7 +12,7 @@ module Api
 
         rota_forecast = RotaForecast.where(rota: rota).last
         rota_forecast ||= GenerateRotaForecast.new(
-          forecasted_take: Money.new(0),
+          forecasted_take_cents: 0,
           rota: rota
         ).call
 
@@ -36,9 +36,9 @@ module Api
             status: :forbidden
           )
         else
-          forecasted_take = forecasted_take_from_params
+          forecasted_take_cents = forecasted_take_cents_from_params
           curret_forecast = RotaForecast.where(rota: rota).last
-          if curret_forecast && curret_forecast.forecasted_take == forecasted_take
+          if curret_forecast && curret_forecast.forecasted_take_cents == forecasted_take_cents
             render "show", locals: { rota_forecast: curret_forecast }
           else
             rota_forecast = nil
@@ -48,7 +48,7 @@ module Api
               end
 
              rota_forecast = GenerateRotaForecast.new(
-                forecasted_take: forecasted_take,
+                forecasted_take_cents: forecasted_take_cents,
                 rota: rota
               ).call
 
@@ -65,12 +65,31 @@ module Api
         week = RotaWeek.new(date)
         venue = venue_from_params
 
-        weekly_forecast = GenerateWeeklyRotaForecast.new(
-          week: week,
-          venue: venue
+        rotas = (week.start_date..week.end_date).map do |date|
+          Rota.find_or_initialize_by(
+            date: date,
+            venue: venue
+          )
+        end
+
+        rota_forecasts = rotas.map do |rota|
+          forecast = RotaForecast.where(rota: rota).last
+
+          if !forecast.present?
+            forecast = GenerateRotaForecast.new(
+              forecasted_take_cents: 0,
+              rota: rota
+            ).call
+          end
+
+          forecast
+        end
+
+        weekly_forecast = GenerateCompositeRotaForecast.new(
+          rota_forecasts: rota_forecasts
         ).call
 
-        render locals: { weekly_forecast: weekly_forecast }
+        render locals: { week: week, weekly_forecast: weekly_forecast }
       end
 
       private
@@ -82,10 +101,8 @@ module Api
         UIRotaDate.parse(params.fetch(:id))
       end
 
-      def forecasted_take_from_params
-        Money.from_amount(
-          Float(params.fetch(:forecasted_take))
-        )
+      def forecasted_take_cents_from_params
+        params.fetch(:forecasted_take_cents)
       end
     end
   end

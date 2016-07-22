@@ -8,16 +8,16 @@ json.venue do
   json.url api_v1_venue_url(rota_forecast.venue)
 end
 json.date rota_forecast.date.iso8601
-json.forecasted_take Float(rota_forecast.forecasted_take.to_s)
-json.total Float(rota_forecast.total.to_s)
+json.forecasted_take_cents rota_forecast.forecasted_take_cents
+json.total_cents rota_forecast.total_cents
 json.total_percentage rota_forecast.total_percentage
-json.overhead_total Float(rota_forecast.overhead_total.to_s)
+json.overhead_total_cents rota_forecast.overhead_total_cents
 json.overhead_total_percentage rota_forecast.overhead_total_percentage
-json.staff_total Float(rota_forecast.staff_total.to_s)
+json.staff_total_cents rota_forecast.staff_total_cents
 json.staff_total_percentage rota_forecast.staff_total_percentage
-json.pr_total Float(rota_forecast.pr_total.to_s)
+json.pr_total_cents rota_forecast.pr_total_cents
 json.pr_total_percentage rota_forecast.pr_total_percentage
-json.kitchen_total Float(rota_forecast.kitchen_total.to_s)
+json.kitchen_total_cents rota_forecast.kitchen_total_cents
 json.kitchen_total_percentage rota_forecast.kitchen_total_percentage
-json.security_total Float(rota_forecast.security_total.to_s)
+json.security_total_cents rota_forecast.security_total_cents
 json.security_total_percentage rota_forecast.security_total_percentage

@@ -15,7 +15,7 @@ class RotaForecast extends React.Component {
         super(props);
         this.componentId = _.uniqueId();
         this.state = {
-            forecastedTake: utils.formatMoney(props.rotaForecast.forecasted_take)
+            forecastedTake: utils.formatMoney(props.rotaForecast.forecasted_take_cents / 100)
         }
     }
     render(){
@@ -31,7 +31,7 @@ class RotaForecast extends React.Component {
     }
     onUpdateForecastClick(){
         this.props.updateRotaForecast({
-            forecastedTake: utils.parseMoney(this.state.forecastedTake),
+            forecastedTakeCents: utils.parseMoney(this.state.forecastedTake) * 100,
             componentId: this.componentId
         })
     }
@@ -60,9 +60,9 @@ function mapDispatchToProps(dispatch, ownProps){
 
 function mergeProps(stateProps, dispatchProps, ownProps){
     var extraProps = {
-        updateRotaForecast: function({forecastedTake, componentId}){
+        updateRotaForecast: function({forecastedTakeCents, componentId}){
             dispatchProps.updateRotaForecastWithAllDetails({
-                forecastedTake,
+                forecastedTakeCents,
                 serverVenueId: stateProps.rota.venue.serverId,
                 dateOfRota: stateProps.rota.date,
                 errorHandlingId: componentId

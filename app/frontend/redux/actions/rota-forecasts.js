@@ -20,7 +20,7 @@ export const updateRotaForecast = createApiRequestActionCreator({
             var [dateOfRota, serverVenueId] = oFetch(options, "dateOfRota", "serverVenueId");
             return apiRoutes.updateRotaForecast.getPath({dateOfRota, venueId: serverVenueId})
         },
-        data: ({forecastedTake}) => {return {forecasted_take: forecastedTake} },
+        data: ({forecastedTakeCents}) => {return {forecasted_take_cents: forecastedTakeCents} },
         getSuccessActionData: function(responseData){
             return {
                 rotaForecast: backendData.processRotaForecastObject(responseData)

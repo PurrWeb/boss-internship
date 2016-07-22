@@ -3,10 +3,10 @@ require 'rails_helper'
 RSpec.describe GenerateRotaForecast do
   let(:week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.zone.now) + 1.week) }
   let(:rota_shift_date) { RotaShiftDate.new(week.start_date) }
-  let(:forecasted_take) { Money.new(0) }
+  let(:forecasted_take_cents) { 0 }
   let(:service) do
     GenerateRotaForecast.new(
-      forecasted_take: forecasted_take,
+      forecasted_take_cents: forecasted_take_cents,
       rota: rota
     )
   end
@@ -21,12 +21,12 @@ RSpec.describe GenerateRotaForecast do
   describe 'totals' do
     context 'no staff_members exist' do
       specify 'total should be 0' do
-        expect(result.total).to eq(Money.new(0))
+        expect(result.total_cents).to eq(0)
       end
 
       specify 'category totals should all be 0' do
         category_total_methods.each do |total_method|
-          expect(result.public_send(total_method)).to eq(Money.new(0))
+          expect(result.public_send(total_method)).to eq(0)
         end
       end
     end
@@ -52,16 +52,16 @@ RSpec.describe GenerateRotaForecast do
       end
 
       specify 'staffs hours should show up in total' do
-        expect(result.total).to eq(Money.from_amount(30))
+        expect(result.total_cents).to eq(3000)
       end
 
-      specify 'staffs hours should show up in staff_total' do
-          expect(result.staff_total).to eq(Money.from_amount(30))
+      specify 'staffs hours should show up in staff_total_cents' do
+          expect(result.staff_total_cents).to eq(3000)
       end
 
       specify 'staffs hours should not show up in other totals' do
-        (category_total_methods - [:staff_total]).each do |total_method|
-          expect(result.public_send(total_method)).to eq(Money.new(0))
+        (category_total_methods - [:staff_total_cents]).each do |total_method|
+          expect(result.public_send(total_method)).to eq(0)
         end
       end
     end
@@ -87,16 +87,16 @@ RSpec.describe GenerateRotaForecast do
       end
 
       specify 'prs hours should show up in total' do
-        expect(result.total).to eq(Money.from_amount(30))
+        expect(result.total_cents).to eq(3000)
       end
 
       specify 'prs hours should show up in pr_total' do
-          expect(result.pr_total).to eq(Money.from_amount(30))
+          expect(result.pr_total_cents).to eq(3000)
       end
 
       specify 'prs hours should not show up in other totals' do
-        (category_total_methods - [:pr_total]).each do |total_method|
-          expect(result.public_send(total_method)).to eq(Money.new(0))
+        (category_total_methods - [:pr_total_cents]).each do |total_method|
+          expect(result.public_send(total_method)).to eq(0)
         end
       end
     end
@@ -122,16 +122,16 @@ RSpec.describe GenerateRotaForecast do
       end
 
       specify 'kitchen_staffs hours should show up in total' do
-        expect(result.total).to eq(Money.from_amount(30))
+        expect(result.total_cents).to eq(3000)
       end
 
       specify 'kitchen_staffs hours should show up in kitchen staffs total' do
-          expect(result.kitchen_total).to eq(Money.from_amount(30))
+          expect(result.kitchen_total_cents).to eq(3000)
       end
 
       specify 'kitchen_staffs hours should not show up in other totals' do
-        (category_total_methods - [:kitchen_total]).each do |total_method|
-          expect(result.public_send(total_method)).to eq(Money.new(0))
+        (category_total_methods - [:kitchen_total_cents]).each do |total_method|
+          expect(result.public_send(total_method)).to eq(0)
         end
       end
     end
@@ -156,22 +156,22 @@ RSpec.describe GenerateRotaForecast do
       end
 
       specify 'security staffs hours should show up in total' do
-        expect(result.total).to eq(Money.from_amount(30))
+        expect(result.total_cents).to eq(3000)
       end
 
       specify 'security staffs hours should show up in security staffs total' do
-          expect(result.security_total).to eq(Money.from_amount(30))
+        expect(result.security_total_cents).to eq(3000)
       end
 
       specify 'security_staffs hours should not show up in other totals' do
-        (category_total_methods - [:security_total]).each do |total_method|
-          expect(result.public_send(total_method)).to eq(Money.new(0))
+        (category_total_methods - [:security_total_cents]).each do |total_method|
+          expect(result.public_send(total_method)).to eq(0)
         end
       end
     end
   end
 
   def category_total_methods
-    [:staff_total, :pr_total, :kitchen_total, :security_total]
+    [:staff_total_cents, :pr_total_cents, :kitchen_total_cents, :security_total_cents]
   end
 end
