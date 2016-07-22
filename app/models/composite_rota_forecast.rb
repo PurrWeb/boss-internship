@@ -20,7 +20,8 @@ class CompositeRotaForecast
 
     define_method("#{total_method}_percentage") do
       if forecasted_take_cents.present? && forecasted_take_cents > 0
-        public_send("#{total_method}_cents") / forecasted_take_cents * 100
+        (public_send("#{total_method}_cents") / 100.0) /
+          (forecasted_take_cents / 100.0) * 100
       end
     end
   end
