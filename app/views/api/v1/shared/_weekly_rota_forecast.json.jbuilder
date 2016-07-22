@@ -1,4 +1,4 @@
-json.date weekly_forecast.week.start_date.iso8601
+json.date week.start_date.iso8601
 json.forecasted_take_cents weekly_forecast.forecasted_take_cents
 json.total_cents weekly_forecast.total_cents
 json.total_percentage weekly_forecast.total_percentage

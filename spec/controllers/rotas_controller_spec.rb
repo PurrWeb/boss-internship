@@ -18,7 +18,6 @@ RSpec.describe RotasController do
           expect(response).to redirect_to(
             action: :index,
             start_date: UIRotaDate.format(expected_start_date),
-            end_date: UIRotaDate.format(expected_end_date)
           )
         end
       end
@@ -34,7 +33,6 @@ RSpec.describe RotasController do
           expect(response).to redirect_to(
             action: :index,
             start_date: UIRotaDate.format(expected_start_date),
-            end_date: UIRotaDate.format(expected_end_date),
             venue_id: venue.id
           )
         end
@@ -57,7 +55,6 @@ RSpec.describe RotasController do
         expect(response).to redirect_to(
           action: :index,
           start_date: UIRotaDate.format(start_date),
-          end_date: UIRotaDate.format(end_date),
           venue_id: venue.id
         )
       end
@@ -73,7 +70,6 @@ RSpec.describe RotasController do
         get(
           :index,
           start_date: UIRotaDate.format(start_date),
-          end_date: UIRotaDate.format(end_date),
           venue_id: venue.id
         )
         expect(response).to render_template(:index)
