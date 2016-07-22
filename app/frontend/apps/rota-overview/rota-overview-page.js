@@ -17,7 +17,7 @@ class RotaOverviewPage extends Component {
     }
     render() {
         var overviewViews = this.getOverviewViews();
-        
+
         var rotas = _.values(this.props.storeRotas);
         var firstRota = rotas[0];
         var lastRota = _.last(rotas);
@@ -27,7 +27,7 @@ class RotaOverviewPage extends Component {
             startDate: this.props.startDate,
             endDate: this.props.endDate
         });
-        
+
         return <div className="container">
             <div className="row">
                 <div className="col-md-6">

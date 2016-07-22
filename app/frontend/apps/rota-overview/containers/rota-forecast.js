@@ -15,7 +15,7 @@ class RotaForecast extends React.Component {
         super(props);
         this.componentId = _.uniqueId();
         this.state = {
-            forecastedTake: utils.formatMoney(props.rotaForecast.forecasted_take)
+            forecastedTake: utils.formatMoney(props.rotaForecast.forecasted_take_cents / 100)
         }
     }
     render(){
