@@ -115,8 +115,9 @@ class RotasController < ApplicationController
       forecast
     end
 
-    weekly_rota_forecast = GenerateCompositeRotaForecast.new(
-      rota_forecasts: rota_forecasts
+    weekly_rota_forecast = GenerateWeeklyRotaForecast.new(
+      rota_forecasts: rota_forecasts,
+      week: week
     ).call
 
     access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)

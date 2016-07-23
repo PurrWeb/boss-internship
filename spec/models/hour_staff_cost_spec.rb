@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RotaStaffCost do
+RSpec.describe HourlyStaffCost do
   describe '#total' do
     let(:pay_rate) { FactoryGirl.create(:pay_rate, cents: 1500) }
     let!(:staff_member) do
@@ -10,7 +10,7 @@ RSpec.describe RotaStaffCost do
       )
     end
     let(:venue) { staff_member.master_venue }
-    let(:week) { RotaWeek.new(Time.zone.now + 1.week) }
+    let(:week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.zone.now) + 1.week) }
     let(:rota) do
       FactoryGirl.create(
         :rota,
@@ -23,10 +23,12 @@ RSpec.describe RotaStaffCost do
 
     context 'when staff member has no shifts' do
       it 'should return 0' do
-        expect(RotaStaffCost.new(
-          staff_members_arel_query: staff_members_arel_query,
-          rota: rota
-        ).total).to eq(Money.new(0))
+        expect(
+          HourlyStaffCost.new(
+            staff_members_arel_query: staff_members_arel_query,
+            rota: rota
+          ).total_cents
+        ).to eq(0)
       end
     end
 
@@ -53,12 +55,12 @@ RSpec.describe RotaStaffCost do
 
       it 'should calcualte the total cost' do
         expect(
-          RotaStaffCost.new(
+          HourlyStaffCost.new(
             staff_members_arel_query: staff_members_arel_query,
             rota: rota
-          ).total
+          ).total_cents
         ).to eq(
-          Money.from_amount(staff_member.pay_rate.rate_in_pounds * 1.5)
+          staff_member.pay_rate.cents * 1.5
         )
       end
 
@@ -68,49 +70,12 @@ RSpec.describe RotaStaffCost do
         context 'all staff members hours for the week are part of rota' do
           it 'should pay the full weekly rate' do
             expect(
-              RotaStaffCost.new(
+              HourlyStaffCost.new(
                 staff_members_arel_query: staff_members_arel_query,
                 rota: rota
-              ).total
+              ).total_cents
             ).to eq(
-              Money.from_amount(staff_member.pay_rate.rate_in_pounds)
-            )
-          end
-        end
-
-        context 'staff members has hours for the week in a different rota' do
-          before do
-            other_date = week.start_date + 1.day
-            other_start_time = RotaShiftDate.new(other_date).start_time
-            other_rota = FactoryGirl.create(
-              :rota,
-              date: other_date,
-              venue: venue
-            )
-            FactoryGirl.create(
-              :rota_shift,
-              rota: other_rota,
-              staff_member: staff_member,
-              starts_at: other_start_time + 4.hour,
-              ends_at: other_start_time + 5.hour
-            )
-            FactoryGirl.create(
-              :rota_shift,
-              rota: other_rota,
-              staff_member: staff_member,
-              starts_at: other_start_time + 7.hour,
-              ends_at: other_start_time + 7.hour + 30.minutes
-            )
-          end
-
-          it 'should pay the full weekly rate' do
-            expect(
-              RotaStaffCost.new(
-                staff_members_arel_query: staff_members_arel_query,
-                rota: rota
-              ).total
-            ).to eq(
-              Money.from_amount(staff_member.pay_rate.rate_in_pounds * 0.5)
+              staff_member.pay_rate.cents
             )
           end
         end
@@ -135,7 +100,7 @@ RSpec.describe RotaStaffCost do
         )
       end
       let(:venue) { FactoryGirl.create(:venue) }
-      let(:week) { RotaWeek.new(Time.zone.now + 1.week) }
+      let(:week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.zone.now) + 1.week) }
       let(:rota) do
         FactoryGirl.create(
           :rota,
@@ -201,15 +166,13 @@ RSpec.describe RotaStaffCost do
         ratio_of_weekly_hours = total_weekly_hours / weekly_hours_in_current_rota
 
         expect(
-          RotaStaffCost.new(
+          HourlyStaffCost.new(
             staff_members_arel_query: staff_members_arel_query,
             rota: rota
-          ).total
+          ).total_cents
         ).to eq(
-          Money.from_amount(
-            (hourly_staff_member.pay_rate.rate_in_pounds * total_hourly_hours) +
-            (weekly_staff_member.pay_rate.rate_in_pounds / ratio_of_weekly_hours)
-          )
+          (hourly_staff_member.pay_rate.cents * total_hourly_hours) +
+          (weekly_staff_member.pay_rate.cents / ratio_of_weekly_hours)
         )
       end
     end

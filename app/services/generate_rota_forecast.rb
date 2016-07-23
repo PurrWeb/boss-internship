@@ -56,7 +56,7 @@ class GenerateRotaForecast
         required_columns(*staff_members)
       )
 
-    RotaStaffCost.new(
+    HourlyStaffCost.new(
       staff_members_arel_query: staff_members_arel_query,
       rota: rota
     ).total_cents
@@ -76,7 +76,7 @@ class GenerateRotaForecast
         required_columns(*staff_members)
       )
 
-    RotaStaffCost.new(
+    HourlyStaffCost.new(
       staff_members_arel_query: staff_members_arel_query,
       rota: rota
     ).total_cents
@@ -107,7 +107,7 @@ class GenerateRotaForecast
         required_columns(*staff_members)
       )
 
-    RotaStaffCost.new(
+    HourlyStaffCost.new(
       staff_members_arel_query: staff_members_arel_query,
       rota: rota
     ).total_cents
@@ -127,7 +127,7 @@ class GenerateRotaForecast
         required_columns(*staff_members)
       )
 
-    RotaStaffCost.new(
+    HourlyStaffCost.new(
       staff_members_arel_query: staff_members_arel_query,
       rota: rota
     ).total_cents

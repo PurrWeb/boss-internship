@@ -1,3 +1,5 @@
+# Takes a list of rota_forecasts and uses them to create one that is the combination
+# of their values
 class GenerateCompositeRotaForecast
   def initialize(rota_forecasts:)
     @rota_forecasts = rota_forecasts
