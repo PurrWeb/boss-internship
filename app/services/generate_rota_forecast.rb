@@ -91,7 +91,7 @@ class GenerateRotaForecast
       if result == nil
         condition
       else
-        result.and(condition)
+        result.or(condition)
       end
     end
 
