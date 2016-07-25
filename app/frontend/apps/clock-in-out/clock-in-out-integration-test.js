@@ -12,6 +12,7 @@ import {
 } from "~redux/actions/clocking"
 import { loadInitialClockInOutAppState } from "~redux/actions/app-data"
 import {createBossStore} from "~redux/store"
+import PinInput from "~components/pin-input"
 
 
 describe("Clock In/Out Page Integration Test", function(){
@@ -152,6 +153,13 @@ describe("Clock In/Out Page Integration Test", function(){
     })
 
     it("Logs the manager in after entering a PIN and shows change PIN buttons for users", function(done){
+        // Tapping on pin digit buttons is throttled, so disable that to prevent slow tests
+        PinInput.__Rewire__("_", _.extend(_, {
+            throttle: function(fn){
+                return fn
+            }
+        }))
+
         var {$$, component} = loadAppWithData(data)
         selectStaffType(component)
         clickOnEnterManagerMode(component)
@@ -180,6 +188,7 @@ describe("Clock In/Out Page Integration Test", function(){
             expect(getPinModal()).toBe(undefined)
             expect($$("[data-test-marker-change-pin-button]").length).toBeGreaterThan(0)
 
+            PinInput.__ResetDependency__("_")
             $.ajax.restore()
 
             done();
