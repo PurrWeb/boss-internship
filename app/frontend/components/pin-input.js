@@ -1,4 +1,5 @@
 import React from "react"
+import _ from "underscore"
 
 class NumPadButton extends React.Component {
     render(){
@@ -43,6 +44,11 @@ export default class PinInput extends React.Component {
         pin: React.PropTypes.string.isRequired,
         onChange: React.PropTypes.func.isRequired
     }
+    constructor(props){
+        super(props)
+        var boundOnNumberClick = _.bind(this.onNumberClick, this);
+        this.throttledOnNumberClick = _.throttle(boundOnNumberClick, 100, {trailing: false})
+    }
     render(){
         var inputStyle = {
             pointerEvents: "none",
@@ -58,7 +64,10 @@ export default class PinInput extends React.Component {
                     value={this.props.pin}
                     />
                 <br/><br/>
-                <NumPad onNumberClick={(number) => this.props.onChange(this.props.pin + number)} />
+                <NumPad onNumberClick={this.throttledOnNumberClick} />
             </div>
+    }
+    onNumberClick(number){
+        this.props.onChange(this.props.pin + number)
     }
 }
