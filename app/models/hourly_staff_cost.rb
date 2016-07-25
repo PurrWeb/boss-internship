@@ -79,7 +79,13 @@ class HourlyStaffCost
     ActiveRecord::Base.connection.execute(total.to_sql).first.first.to_f
   end
 
+  def self.required_columns(table)
+    [
+      table[:id],
+      table[:pay_rate_id]
+    ]
+  end
+
   private
   attr_reader :staff_members_arel_query, :rota
-
 end

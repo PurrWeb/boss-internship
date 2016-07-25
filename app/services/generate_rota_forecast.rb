@@ -53,7 +53,7 @@ class GenerateRotaForecast
         )
       ).
       project(
-        required_columns(*staff_members)
+        *HourlyStaffCost.required_columns(staff_members)
       )
 
     HourlyStaffCost.new(
@@ -73,7 +73,7 @@ class GenerateRotaForecast
       ).
       where(staff_types[:name].eq(StaffType::PR_TYPE_NAME)).
       project(
-        required_columns(*staff_members)
+        *HourlyStaffCost.required_columns(staff_members)
       )
 
     HourlyStaffCost.new(
@@ -104,7 +104,7 @@ class GenerateRotaForecast
         kitchen_type_conditions
       ).
       project(
-        required_columns(*staff_members)
+        *HourlyStaffCost.required_columns(staff_members)
       )
 
     HourlyStaffCost.new(
@@ -124,7 +124,7 @@ class GenerateRotaForecast
       ).
       where(staff_types[:role].eq(StaffType::SECURITY_ROLE)).
       project(
-        required_columns(*staff_members)
+        *HourlyStaffCost.required_columns(staff_members)
       )
 
     HourlyStaffCost.new(
@@ -137,13 +137,6 @@ class GenerateRotaForecast
     OverheadStaffCost.new(
       rota: rota
     ).total_cents
-  end
-
-  def required_columns(table)
-    [
-      table[:id],
-      table[:pay_rate_id]
-    ]
   end
 
   private
