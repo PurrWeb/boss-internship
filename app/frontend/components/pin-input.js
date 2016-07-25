@@ -62,6 +62,7 @@ export default class PinInput extends React.Component {
                     type="password"
                     style={inputStyle}
                     value={this.props.pin}
+                    onClick={e => e.preventDefault()}
                     />
                 <br/><br/>
                 <NumPad onNumberClick={this.throttledOnNumberClick} />
