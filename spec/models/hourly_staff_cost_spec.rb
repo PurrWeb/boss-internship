@@ -18,12 +18,17 @@ RSpec.describe HourlyStaffCost do
         venue: venue
       )
     end
-    let(:staff_members) { StaffMember.all }
+    let(:staff_members_arel_table) { StaffMember.arel_table }
+    let(:staff_members_arel_query) do
+      staff_members_arel_table.project(
+        *HourlyStaffCost.required_columns(staff_members_arel_table)
+      )
+    end
 
     context 'when staff member has no shifts' do
       it 'should return 0' do
         expect(HourlyStaffCost.new(
-          staff_members: staff_members,
+          staff_members_arel_query: staff_members_arel_query,
           rota: rota
         ).total_cents).to eq(0)
       end
@@ -53,7 +58,7 @@ RSpec.describe HourlyStaffCost do
       it 'should calcualte the total cost' do
         expect(
           HourlyStaffCost.new(
-            staff_members: staff_members,
+            staff_members_arel_query: staff_members_arel_query,
             rota: rota
           ).total_cents
         ).to eq(
@@ -67,7 +72,7 @@ RSpec.describe HourlyStaffCost do
         specify 'their hours should not show up in staff members total' do
           expect(
             HourlyStaffCost.new(
-              staff_members: staff_members,
+              staff_members_arel_query: staff_members_arel_query,
               rota: rota
             ).total_cents
           ).to eq(0)

@@ -68,14 +68,14 @@ RSpec.describe HourlyStaffCost do
         let(:pay_rate) { FactoryGirl.create(:pay_rate, :weekly, cents: 20000) }
 
         context 'all staff members hours for the week are part of rota' do
-          it 'should pay the full weekly rate' do
+          it 'should show up as 0' do
             expect(
               HourlyStaffCost.new(
                 staff_members_arel_query: staff_members_arel_query,
                 rota: rota
               ).total_cents
             ).to eq(
-              staff_member.pay_rate.cents
+              0
             )
           end
         end
@@ -83,19 +83,19 @@ RSpec.describe HourlyStaffCost do
     end
 
     context 'mutliple staff members exist' do
-      let(:weekly_pay_rate) { FactoryGirl.create(:pay_rate, :weekly, cents: 20500) }
-      let(:hourly_rate) { FactoryGirl.create(:pay_rate, cents: 1500) }
-      let!(:hourly_staff_member) do
+      let(:staff_member_2_pay_rate) { FactoryGirl.create(:pay_rate, cents: 20500) }
+      let(:staff_member_1_rate) { FactoryGirl.create(:pay_rate, cents: 1500) }
+      let!(:staff_member_1) do
         FactoryGirl.create(
           :staff_member,
-          pay_rate: hourly_rate,
+          pay_rate: staff_member_1_rate,
           master_venue: venue
         )
       end
-      let(:weekly_staff_member) do
+      let(:staff_member_2) do
         FactoryGirl.create(
           :staff_member,
-          pay_rate: weekly_pay_rate,
+          pay_rate: staff_member_2_pay_rate,
           master_venue: venue
         )
       end
@@ -109,61 +109,51 @@ RSpec.describe HourlyStaffCost do
         )
       end
       let(:start_time) { RotaShiftDate.new(rota.date).start_time }
-      let(:other_rota) do
-        FactoryGirl.create(
-          :rota,
-          date: week.start_date + 1.day,
-          venue: venue
-        )
-      end
-      let(:other_start_time) { RotaShiftDate.new(other_rota.date).start_time }
       let(:staff_members_arel_table) { Arel::Table.new(:staff_members) }
       let(:staff_members_arel_query) { staff_members_arel_table.project(staff_members_arel_table[Arel.star]) }
-      let(:weekly_staff_member_shifts) do
+      let(:staff_member_2_shifts) do
         FactoryGirl.create(
           :rota_shift,
           rota: rota,
-          staff_member: weekly_staff_member,
+          staff_member: staff_member_2,
           starts_at: start_time + 4.hour,
           ends_at: start_time + 5.hour + 30.minutes
         )
         FactoryGirl.create(
           :rota_shift,
-          rota: other_rota,
-          staff_member: weekly_staff_member,
-          starts_at: other_start_time + 4.hours,
-          ends_at: other_start_time + 4.hours + 30.minutes
+          rota: rota,
+          staff_member: staff_member_2,
+          starts_at: start_time + 6.hours,
+          ends_at: start_time + 6.hours + 30.minutes
         )
       end
-      let(:hourly_staff_member_shifts) do
+      let(:staff_member_1_shifts) do
         FactoryGirl.create(
           :rota_shift,
           rota: rota,
-          staff_member: hourly_staff_member,
+          staff_member: staff_member_1,
           starts_at: start_time + 4.hour,
           ends_at: start_time + 5.hour
         )
         FactoryGirl.create(
           :rota_shift,
           rota: rota,
-          staff_member: hourly_staff_member,
+          staff_member: staff_member_1,
           starts_at: start_time + 7.hour,
           ends_at: start_time + 7.hour + 30.minutes
         )
       end
 
       before do
-        weekly_staff_member
-        hourly_staff_member
-        weekly_staff_member_shifts
-        hourly_staff_member_shifts
+        staff_member_1
+        staff_member_1_shifts
+        staff_member_2
+        staff_member_2_shifts
       end
 
       specify do
-        total_hourly_hours = 1.5
-        total_weekly_hours = 2
-        weekly_hours_in_current_rota = 1.5
-        ratio_of_weekly_hours = total_weekly_hours / weekly_hours_in_current_rota
+        staff_member_1_hours = 1.5
+        staff_member_2_hours = 2
 
         expect(
           HourlyStaffCost.new(
@@ -171,8 +161,8 @@ RSpec.describe HourlyStaffCost do
             rota: rota
           ).total_cents
         ).to eq(
-          (hourly_staff_member.pay_rate.cents * total_hourly_hours) +
-          (weekly_staff_member.pay_rate.cents / ratio_of_weekly_hours)
+          (staff_member_1.pay_rate.cents * staff_member_1_hours) +
+          (staff_member_2.pay_rate.cents * staff_member_2_hours)
         )
       end
     end

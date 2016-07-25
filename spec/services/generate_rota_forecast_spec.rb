@@ -126,7 +126,7 @@ RSpec.describe GenerateRotaForecast do
       end
 
       specify 'kitchen_staffs hours should show up in kitchen staffs total' do
-          expect(result.kitchen_total_cents).to eq(3000)
+        expect(result.kitchen_total_cents).to eq(3000)
       end
 
       specify 'kitchen_staffs hours should not show up in other totals' do
