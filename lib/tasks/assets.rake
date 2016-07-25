@@ -17,12 +17,21 @@ namespace :assets do
 
   desc 'Compile Webpack assets'
   task :webpack do
-    sh "NODE_ENV=#{Rails.env} npm run build" # this runs a react_webpack_rails script
+    sh "NODE_ENV=#{normalised_node_env} npm run build" # this runs a react_webpack_rails script
   end
 
   desc 'Remove compiled Webpack assets'
   task :clobber_webpack do
     rm_rf "#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js"
     rm_rf "#{Rails.application.config.root}/app/assets/stylesheets/frontend_bundle.css"
+  end
+
+  def normalised_node_env
+    case Rails.env
+    when 'staging'
+      'production'
+    else
+      Rails.env
+    end
   end
 end
