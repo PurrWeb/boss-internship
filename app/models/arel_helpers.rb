@@ -9,8 +9,8 @@ class ArelHelpers
 
   # Calculates hourly cost of staff member factoring in pay rate ammount and type.
   # Staff members with weekly pay rates are assigned an hourly cost of 0
-  def self.staff_member_hourly_total_calculation(calculation_type_column:, hours_column:,  pay_rate_column:)
-    hourly_calculation = "#{get_column_name(hours_column)} * #{get_column_name(pay_rate_column)}"
+  def self.staff_member_hourly_total_cents_calculation(calculation_type_column:, hours_column:,  pay_rate_cents_column:)
+    hourly_calculation = "#{get_column_name(hours_column)} * #{get_column_name(pay_rate_cents_column)}"
 
     statement = ["CASE WHEN #{get_column_name(calculation_type_column)} = '#{PayRate::HOURLY_CALCULATION_TYPE}' THEN #{hourly_calculation} "]
     statement << "WHEN #{get_column_name(calculation_type_column)} = '#{PayRate::WEEKLY_CALCULATION_TYPE}' THEN 0 "
@@ -21,8 +21,8 @@ class ArelHelpers
   # Daily cost of staff members who are treated as overheads (i.e. are paid weekly)
   # values is the persons weekly salary divided by 7.
   # Staff members with hourly pay rates are assigned an overhead cost of 0
-  def self.staff_members_daily_overhead_calculation(calculation_type_column:, pay_rate_column:)
-    calculation = "#{get_column_name(pay_rate_column)} / 7"
+  def self.staff_members_daily_overhead_cents_calculation(calculation_type_column:, pay_rate_cents_column:)
+    calculation = "#{get_column_name(pay_rate_cents_column)} / 7.0"
 
     Arel::Nodes::NamedFunction.new(
       "IF",

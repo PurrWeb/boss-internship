@@ -85,8 +85,9 @@ module Api
           forecast
         end
 
-        weekly_forecast = GenerateCompositeRotaForecast.new(
-          rota_forecasts: rota_forecasts
+        weekly_forecast = GenerateWeeklyRotaForecast.new(
+          rota_forecasts: rota_forecasts,
+          week: week
         ).call
 
         render locals: { week: week, weekly_forecast: weekly_forecast }

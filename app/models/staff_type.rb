@@ -1,11 +1,14 @@
 class StaffType < ActiveRecord::Base
   ROLES = ['normal', 'security']
+  SECURITY_ROLE = 'security'
+  PR_TYPE_NAME = 'Pr'
+  KITCHEN_TYPE_NAMES = ['Chef', "Kp"]
 
   validates :name, presence: true, uniqueness: true
   validates :role, presence: true, inclusion: { in: ROLES, message: 'is required' }
 
   def security?
-    role == 'security'
+    role == SECURITY_ROLE
   end
 
   def bar_supervisor?
@@ -21,27 +24,27 @@ class StaffType < ActiveRecord::Base
   end
 
   def self.pr
-    where(name: 'Pr')
+    where(name: PR_TYPE_NAME)
   end
 
   def self.not_pr
-    where.not(name: 'Pr')
+    where.not(name: PR_TYPE_NAME)
   end
 
   def self.kitchen
-    where(name: ['Chef', "Kp"])
+    where(name: KITCHEN_TYPE_NAMES)
   end
 
   def self.not_kitchen
-    where.not(name: ['Chef', "Kp"])
+    where.not(name: KITCHEN_TYPE_NAMES)
   end
 
   def self.security
-    where(role: 'security')
+    where(role: SECURITY_ROLE)
   end
 
   def self.not_security
-    where.not(role: 'security')
+    where.not(role: SECURITY_ROLE)
   end
 end
 
