@@ -27,108 +27,29 @@ class GenerateRotaForecast
   end
 
   def staff_total_cents
-    staff_types = Arel::Table.new(:staff_types)
-    staff_members = Arel::Table.new(:staff_members)
-    kitchen_type_conditions = StaffType::KITCHEN_TYPE_NAMES.map do |name|
-      staff_types[:name].not_eq(name)
-    end.inject(nil) do |result, condition|
-      if result == nil
-        condition
-      else
-        result.and(condition)
-      end
-    end
-
-    staff_members_arel_query = staff_members.
-      join(staff_types).
-      on(
-        staff_members[:staff_type_id].eq(staff_types[:id])
-      ).
-      where(
-        staff_types[:name].not_eq(StaffType::PR_TYPE_NAME).
-        and(
-          kitchen_type_conditions
-        ).and(
-          staff_types[:role].not_eq(StaffType::SECURITY_ROLE)
-        )
-      ).
-      project(
-        *HourlyStaffCost.required_columns(staff_members)
-      )
-
     HourlyStaffCost.new(
-      staff_members_arel_query: staff_members_arel_query,
+      staff_members: RotaForecastStaffCategoryQuery.new.all,
       rota: rota
     ).total_cents
   end
 
   def pr_total_cents
-    staff_types = Arel::Table.new(:staff_types)
-    staff_members = Arel::Table.new(:staff_members)
-
-    staff_members_arel_query = staff_members.
-      join(staff_types).
-      on(
-        staff_members[:staff_type_id].eq(staff_types[:id])
-      ).
-      where(staff_types[:name].eq(StaffType::PR_TYPE_NAME)).
-      project(
-        *HourlyStaffCost.required_columns(staff_members)
-      )
-
     HourlyStaffCost.new(
-      staff_members_arel_query: staff_members_arel_query,
+      staff_members: RotaForecastPrsCategoryQuery.new.all,
       rota: rota
     ).total_cents
   end
 
   def kitchen_total_cents
-    staff_types = Arel::Table.new(:staff_types)
-    staff_members = Arel::Table.new(:staff_members)
-    kitchen_type_conditions = StaffType::KITCHEN_TYPE_NAMES.map do |name|
-      staff_types[:name].eq(name)
-    end.inject(nil) do |result, condition|
-      if result == nil
-        condition
-      else
-        result.or(condition)
-      end
-    end
-
-    staff_members_arel_query = staff_members.
-      join(staff_types).
-      on(
-        staff_members[:staff_type_id].eq(staff_types[:id])
-      ).
-      where(
-        kitchen_type_conditions
-      ).
-      project(
-        *HourlyStaffCost.required_columns(staff_members)
-      )
-
     HourlyStaffCost.new(
-      staff_members_arel_query: staff_members_arel_query,
+      staff_members: RotaForecastKitchenCategoryQuery.new.all,
       rota: rota
     ).total_cents
   end
 
   def security_total_cents
-    staff_types = Arel::Table.new(:staff_types)
-    staff_members = Arel::Table.new(:staff_members)
-
-    staff_members_arel_query = staff_members.
-      join(staff_types).
-      on(
-        staff_members[:staff_type_id].eq(staff_types[:id])
-      ).
-      where(staff_types[:role].eq(StaffType::SECURITY_ROLE)).
-      project(
-        *HourlyStaffCost.required_columns(staff_members)
-      )
-
     HourlyStaffCost.new(
-      staff_members_arel_query: staff_members_arel_query,
+      staff_members: RotaForecastSecurityCategoryQuery.new.all,
       rota: rota
     ).total_cents
   end
