@@ -11,18 +11,26 @@ class StaffVettingController < ApplicationController
   end
 
   def staff_members_without_email
+    authorize! :manage, :admin
+
     render locals: { staff_without_email: staff_without_email_query }
   end
 
   def staff_members_without_ni_number
+    authorize! :manage, :admin
+
     render locals: { staff_without_ni_number: staff_without_ni_number_query }
   end
 
   def staff_members_without_address
+    authorize! :manage, :admin
+
     render locals: { staff_without_address: staff_without_address_query }
   end
 
   def staff_members_without_photo
+    authorize! :manage, :admin
+
     render locals: { staff_without_photo: staff_without_photo_query }
   end
 
