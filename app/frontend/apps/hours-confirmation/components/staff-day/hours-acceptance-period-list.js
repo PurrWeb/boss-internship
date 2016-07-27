@@ -17,6 +17,16 @@ export default class HoursAcceptancePeriodList extends React.Component {
             return period.starts_at.valueOf();
         })
 
+        var addShiftButton = null;
+        if (this.hasClockedOut()){
+            addShiftButton = <a
+                className="btn btn-default"
+                data-test-marker-add-hours-acceptance-period
+                onClick={() => this.addHours()}>
+                Add Shift
+            </a>
+        }
+
         var intervalsOverlap = Validation.validateHoursPeriodsDontOverlap(this.props.hoursAcceptancePeriods)
 
         return <div>
@@ -33,24 +43,22 @@ export default class HoursAcceptancePeriodList extends React.Component {
                             clockInBreaks={this.props.clockInBreaks}
                             componentErrors={this.props.componentErrors}
                             rotaDate={this.props.rotaDate}
+                            hasClockedOut={this.hasClockedOut()}
                             hoursAcceptanceReasons={this.props.hoursAcceptanceReasons}
                             hoursAcceptancePeriod={hoursAcceptancePeriod}
                             overlapsOtherIntervals={!intervalsOverlap.isValid} />
                     </div>
             )}
             {markAsDoneButton}
-            <a
-                className="btn btn-default"
-                data-test-marker-add-hours-acceptance-period
-                onClick={() => this.addHours()}>
-                Add Shift
-            </a>
+            {addShiftButton}
 
         </div>
     }
+    hasClockedOut(){
+        return this.props.clockInDay.status === "clocked_out";
+    }
     getMarkAsDoneButton(){
-        var hasClockedOut = this.props.clockInDay.status === "clocked_out";
-        if (this.areAllShiftsAccepted() && hasClockedOut) {
+        if (this.areAllShiftsAccepted() && this.hasClockedOut()) {
             return <button
                 onClick={this.props.markDayAsDone}
                 style={{float: "right"}}
