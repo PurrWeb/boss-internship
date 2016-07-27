@@ -15,17 +15,10 @@
         Staff without Address
         <span class="badge"><%= staff_without_address.count %></span>
       <% end %>
-      <a href="#staff-members-without-photo" class="list-group-item">
+      <%= link_to(staff_members_without_photo_staff_vetting_index_path, class: "list-group-item") do %>
         Staff without Photo
         <span class="badge"><%= staff_without_photo.count %></span>
-      </a>
+      <% end %>
     </div>
   </div>
 </div>
-
-<% if staff_without_photo.count > 0 %>
-  <div id="staff-members-without-photo">
-    <h2>Staff without Photo</h2>
-    <%= render partial: 'staff_member_list', locals: { staff_members: staff_without_photo, link_tab: 'employment-details' } %>
-  </div>
-<% end %>

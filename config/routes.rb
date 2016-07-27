@@ -121,6 +121,7 @@ Rails.application.routes.draw do
         get :staff_members_without_email
         get :staff_members_without_ni_number
         get :staff_members_without_address
+        get :staff_members_without_photo
       end
     end
 
