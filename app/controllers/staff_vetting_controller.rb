@@ -2,11 +2,6 @@ class StaffVettingController < ApplicationController
   def index
     authorize! :manage, :admin
 
-    staff_without_email = StaffMember.
-      enabled.
-      where(email_address_id: nil).
-      includes([:name, :master_venue])
-
     staff_members_table = Arel::Table.new(:staff_members)
     staff_member_transitions = Arel::Table.new(:staff_member_transitions)
     most_recent_staff_member_transitions = staff_member_transitions.alias('most_recent_staff_member_transition')
@@ -48,10 +43,21 @@ class StaffVettingController < ApplicationController
       includes([:name, :master_venue])
 
     render locals: {
-      staff_without_email: staff_without_email,
+      staff_without_email: staff_without_email_query,
       staff_without_ni_number: staff_without_ni_number,
       staff_without_address: staff_without_address,
       staff_without_photo: staff_without_photo
     }
+  end
+
+  def staff_members_without_email
+    render locals: { staff_without_email: staff_without_email_query }
+  end
+
+  def staff_without_email_query
+    StaffMember.
+      enabled.
+      where(email_address_id: nil).
+      includes([:name, :master_venue])
   end
 end

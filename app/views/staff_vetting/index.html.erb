@@ -3,10 +3,10 @@
 <div class="row">
   <div class="col-md-4">
     <div class="list-group">
-      <a href="#staff-members-without-email" class="list-group-item">
+      <%= link_to(staff_members_without_email_staff_vetting_index_path, class: "list-group-item") do %>
         Staff without Email Address
         <span class="badge"><%= staff_without_email.count %></span>
-      </a>
+      <% end %>
       <a href="#staff-members-without-ni-number" class="list-group-item">
         Staff without National Insurance Number
         <span class="badge"><%= staff_without_ni_number.count %></span>
@@ -22,13 +22,6 @@
     </div>
   </div>
 </div>
-
-<% if staff_without_email.count > 0 %>
-  <div id="staff-members-without-email">
-    <h2>Staff without Email Address</h2>
-    <%= render partial: 'staff_member_list', locals: { staff_members: staff_without_email, link_tab: 'contact-details' } %>
-  </div>
-<% end %>
 
 <% if staff_without_ni_number.count > 0 %>
   <div id="staff-members-without-ni-number">

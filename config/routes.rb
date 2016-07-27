@@ -116,7 +116,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :staff_vetting, only: :index
+    resources :staff_vetting, only: [:index] do
+      collection do
+        get :staff_members_without_email
+      end
+    end
 
     resources :api_keys, only: [:index, :create, :destroy]
 
