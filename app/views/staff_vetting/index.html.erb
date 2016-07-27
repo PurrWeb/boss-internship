@@ -7,10 +7,10 @@
         Staff without Email Address
         <span class="badge"><%= staff_without_email.count %></span>
       <% end %>
-      <a href="#staff-members-without-ni-number" class="list-group-item">
-        Staff without National Insurance Number
+      <%= link_to(staff_members_without_ni_number_staff_vetting_index_path, class: "list-group-item") do %>
+        Staff without NI Number
         <span class="badge"><%= staff_without_ni_number.count %></span>
-      </a>
+      <% end %>
       <a href="#staff-members-without-address" class="list-group-item">
         Staff without Address
         <span class="badge"><%= staff_without_address.count %></span>
@@ -22,13 +22,6 @@
     </div>
   </div>
 </div>
-
-<% if staff_without_ni_number.count > 0 %>
-  <div id="staff-members-without-ni-number">
-    <h2>Staff without Email Address</h2>
-    <%= render partial: 'staff_member_list', locals: { staff_members: staff_without_ni_number, link_tab: 'employment-details' } %>
-  </div>
-<% end %>
 
 <% if staff_without_address.count > 0 %>
   <div id="staff-members-without-address">

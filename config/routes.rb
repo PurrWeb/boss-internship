@@ -119,6 +119,7 @@ Rails.application.routes.draw do
     resources :staff_vetting, only: [:index] do
       collection do
         get :staff_members_without_email
+        get :staff_members_without_ni_number
       end
     end
 
