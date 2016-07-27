@@ -144,6 +144,8 @@ Rails.application.routes.draw do
     resources :weekly_reports, only: [:index]
     resources :daily_reports, only: [:index]
 
+    resources :rollbar_error_test, only: [:index]
+
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
         resources :test, only: [] do
