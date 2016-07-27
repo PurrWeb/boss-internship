@@ -9,6 +9,10 @@ import _ from "underscore"
 
 import "~lib/load-underscore-mixins"
 
+function deepClone(data){
+    return JSON.parse(JSON.stringify(data))
+}
+
 describe('Hours Confirmation Integration Test', function() {
     var viewData = {
         venues: [{
@@ -24,7 +28,7 @@ describe('Hours Confirmation Integration Test', function() {
                 date: "2016-11-01",
                 staff_member: {id: 160},
                 venue: {id: 1},
-                status: "on_break"
+                status: "clocked_out"
             }
         ],
         clockInPeriods: [
@@ -32,12 +36,6 @@ describe('Hours Confirmation Integration Test', function() {
                 id: 2333,
                 starts_at: new Date(2016, 10, 1, 9, 0).toString(),
                 ends_at: new Date(2016, 10, 1, 18, 0).toString(),
-                clock_in_day: {id: 22}
-            },
-            {
-                id: 12222,
-                starts_at: new Date(2016, 10, 2, 1, 0).toString(),
-                ends_at: null,
                 clock_in_day: {id: 22}
             }
         ],
@@ -71,16 +69,6 @@ describe('Hours Confirmation Integration Test', function() {
                 type: "clock_out",
                 time: new Date(2016, 10, 1, 18, 0).toString(),
                 clock_in_period: {id: 2333}
-            }, {
-                id: 55,
-                type: "clock_in",
-                time: new Date(2016, 10, 2, 1, 0).toString(),
-                clock_in_period: {id: 12222}
-            }, {
-                id: 66,
-                type: "start_break",
-                time: new Date(2016, 10, 2, 2, 30).toString(),
-                clock_in_period: {id: 12222}
             }
         ],
         hoursAcceptanceReasons: [
@@ -166,6 +154,27 @@ describe('Hours Confirmation Integration Test', function() {
         ]
     };
 
+    var viewDataWhileClockedIn = deepClone(viewData)
+    viewDataWhileClockedIn.clockInDays[0].status = "on_break"
+    viewDataWhileClockedIn.clockInPeriods.push({
+        id: 12222,
+        starts_at: new Date(2016, 10, 2, 1, 0).toString(),
+        ends_at: null,
+        clock_in_day: {id: 22}
+    })
+    viewDataWhileClockedIn.clockInEvents.push({
+        id: 55,
+        type: "clock_in",
+        time: new Date(2016, 10, 2, 1, 0).toString(),
+        clock_in_period: {id: 12222}
+    })
+    viewDataWhileClockedIn.clockInEvents.push({
+        id: 66,
+        type: "start_break",
+        time: new Date(2016, 10, 2, 2, 30).toString(),
+        clock_in_period: {id: 12222}
+    })
+
     it("Renders without throwing an exception", function(){
         simpleRender(<HoursConfirmationApp viewData={viewData} />);
     });
@@ -186,6 +195,12 @@ describe('Hours Confirmation Integration Test', function() {
 
         $.ajax.restore();
     });
+
+    it("Doesn't allow accepting hours while the staff member is clocked in", function(){
+        var {$} = simpleRender(<HoursConfirmationApp viewData={viewDataWhileClockedIn} />);
+
+        expect($("[data-test-marker-delete-hours-acceptance-period]")).toBe(null)
+    })
 
     it("Shows a clockout button if the staff member is still clocked in and allows them to be clocked out", function(done){
         var clockoutResponseData = {
@@ -248,7 +263,7 @@ describe('Hours Confirmation Integration Test', function() {
             ]
         }
 
-        var {$$} = simpleRender(<HoursConfirmationApp viewData={viewData} />);
+        var {$$} = simpleRender(<HoursConfirmationApp viewData={viewDataWhileClockedIn} />);
         var forceClockoutButton = $$("[data-test-marker-force-clock-out]")[0];
         expect(forceClockoutButton).toNotBe(undefined)
 
