@@ -120,6 +120,7 @@ Rails.application.routes.draw do
       collection do
         get :staff_members_without_email
         get :staff_members_without_ni_number
+        get :staff_members_without_address
       end
     end
 

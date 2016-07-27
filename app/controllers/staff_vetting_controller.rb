@@ -2,11 +2,6 @@ class StaffVettingController < ApplicationController
   def index
     authorize! :manage, :admin
 
-    staff_without_address = StaffMember.
-      enabled.
-      where(address_id: nil).
-      includes([:name, :master_venue])
-
     staff_without_photo = StaffMember.
       enabled.
       where(avatar: nil).
@@ -15,7 +10,7 @@ class StaffVettingController < ApplicationController
     render locals: {
       staff_without_email: staff_without_email_query,
       staff_without_ni_number: staff_without_ni_number_query,
-      staff_without_address: staff_without_address,
+      staff_without_address: staff_without_address_query,
       staff_without_photo: staff_without_photo
     }
   end
@@ -26,6 +21,10 @@ class StaffVettingController < ApplicationController
 
   def staff_members_without_ni_number
     render locals: { staff_without_ni_number: staff_without_ni_number_query }
+  end
+
+  def staff_members_without_address
+    render locals: { staff_without_address: staff_without_address_query }
   end
 
   def staff_without_email_query
@@ -65,5 +64,12 @@ class StaffVettingController < ApplicationController
       project(staff_members_table[Arel.star])
 
     StaffMember.find_by_sql(query)
+  end
+
+  def staff_without_address_query
+    StaffMember.
+      enabled.
+      where(address_id: nil).
+      includes([:name, :master_venue])
   end
 end

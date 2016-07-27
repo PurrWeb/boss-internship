@@ -1,0 +1,10 @@
+<h1>Staff Members Without Address</h1>
+
+<%= link_to('Return to Staff Vetting Index', staff_vetting_index_path) %>
+
+<% if staff_without_address.count > 0 %>
+  <%= render partial: 'staff_member_list', locals: { staff_members: staff_without_address, link_tab: 'contact-details' } %>
+  </div>
+<% else %>
+  <p>No Staff Members found</p>
+<% end %>
