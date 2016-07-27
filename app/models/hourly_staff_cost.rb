@@ -19,6 +19,9 @@ class HourlyStaffCost
         rotas[:id].eq(rota_shifts[:rota_id]).
         and(
           rotas[:date].eq(rota.date)
+        ).
+        and(
+          rotas[:venue_id].eq(rota.venue_id)
         )
       ).
       where(rota_shifts[:enabled].eq(true)).
