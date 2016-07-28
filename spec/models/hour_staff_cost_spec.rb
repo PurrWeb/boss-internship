@@ -18,14 +18,14 @@ RSpec.describe HourlyStaffCost do
         venue: venue
       )
     end
-    let(:staff_members) { StaffMember.all }
-
+    let(:staff_members_arel_table) { Arel::Table.new(:staff_members) }
+    let(:staff_members_arel_query) { staff_members_arel_table.project(staff_members_arel_table[Arel.star]) }
 
     context 'when staff member has no shifts' do
       it 'should return 0' do
         expect(
           HourlyStaffCost.new(
-            staff_members: staff_members,
+            staff_members_arel_query: staff_members_arel_query,
             rota: rota
           ).total_cents
         ).to eq(0)
@@ -56,7 +56,7 @@ RSpec.describe HourlyStaffCost do
       it 'should calcualte the total cost' do
         expect(
           HourlyStaffCost.new(
-            staff_members: staff_members,
+            staff_members_arel_query: staff_members_arel_query,
             rota: rota
           ).total_cents
         ).to eq(
@@ -71,7 +71,7 @@ RSpec.describe HourlyStaffCost do
           it 'should show up as 0' do
             expect(
               HourlyStaffCost.new(
-                staff_members: staff_members,
+                staff_members_arel_query: staff_members_arel_query,
                 rota: rota
               ).total_cents
             ).to eq(
@@ -109,7 +109,8 @@ RSpec.describe HourlyStaffCost do
         )
       end
       let(:start_time) { RotaShiftDate.new(rota.date).start_time }
-      let(:staff_members) { StaffMember.all }
+      let(:staff_members_arel_table) { Arel::Table.new(:staff_members) }
+      let(:staff_members_arel_query) { staff_members_arel_table.project(staff_members_arel_table[Arel.star]) }
       let(:staff_member_2_shifts) do
         FactoryGirl.create(
           :rota_shift,
@@ -156,7 +157,7 @@ RSpec.describe HourlyStaffCost do
 
         expect(
           HourlyStaffCost.new(
-            staff_members: staff_members,
+            staff_members_arel_query: staff_members_arel_query,
             rota: rota
           ).total_cents
         ).to eq(
