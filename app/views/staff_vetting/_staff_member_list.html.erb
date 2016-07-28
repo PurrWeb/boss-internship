@@ -1,11 +1,14 @@
-<% grouped_staff_members = staff_members.group_by { |sm| sm.master_venue.present? ? sm.master_venue.name.titlecase : 'Security' } %>
-<% grouped_staff_members.each do |group_name, staff_members| %>
-  <p><%= group_name %> (<%= staff_members.count %>)</p>
-  <ul>
-    <% staff_members.each do |staff_member| %>
-      <li>
-        <%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member, tab: link_tab)) %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
+<div>
+  <p>Total: <%= staff_members.count %></p>
+  <% grouped_staff_members = staff_members.group_by { |sm| sm.master_venue.present? ? sm.master_venue.name.titlecase : 'Security' } %>
+  <% grouped_staff_members.each do |group_name, staff_members| %>
+    <p><%= group_name %> (<%= staff_members.count %>)</p>
+    <ul>
+      <% staff_members.each do |staff_member| %>
+        <li>
+          <%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member, tab: link_tab)) %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
