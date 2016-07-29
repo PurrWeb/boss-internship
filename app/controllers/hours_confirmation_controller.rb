@@ -11,7 +11,10 @@ class HoursConfirmationController < ApplicationController
         date: date
       )
 
-      staff_members = StaffMember.joins(:clock_in_days).merge(clock_in_days)
+      staff_members = StaffMember.
+        joins(:clock_in_days).
+        merge(clock_in_days).
+        includes([:master_venue, :staff_type, :name])
 
       staff_types = StaffType.all
 
@@ -21,13 +24,15 @@ class HoursConfirmationController < ApplicationController
 
       clock_in_breaks = ClockInBreak.
         joins(:clock_in_period).
-        merge(clock_in_periods)
+        merge(clock_in_periods).
+        includes(:clock_in_period)
 
       hours_acceptance_reasons = HoursAcceptanceReason.all
 
       clock_in_events = ClockInEvent.
         joins(:clock_in_period).
-        merge(clock_in_periods)
+        merge(clock_in_periods).
+        includes(:clock_in_period)
 
       hours_acceptance_periods = HoursAcceptancePeriod.
         enabled.
@@ -55,18 +60,23 @@ class HoursConfirmationController < ApplicationController
       rotas = Rota.
         where(date: clock_in_days.pluck(:date).uniq).
         joins(:venue).
-        merge(venues)
+        merge(venues).
+        includes(:venue)
 
 
       rota_shifts = RotaShift.
         joins(:rota).
         merge(rota).
         joins(:staff_member).
-        merge(staff_members)
+        merge(staff_members).
+        includes([:rota, :staff_member])
 
       clock_in_notes = ClockInNote.
         joins(:clock_in_day).
         merge(clock_in_days)
+
+      clock_in_days = clock_in_days.
+        includes([:venue, :staff_member])
 
       render locals: {
         access_token: access_token,
@@ -101,7 +111,10 @@ class HoursConfirmationController < ApplicationController
         venue: venue
       ).all
 
-      staff_members = StaffMember.joins(:clock_in_days).merge(clock_in_days)
+      staff_members = StaffMember.
+        joins(:clock_in_days).
+        merge(clock_in_days).
+        includes([:master_venue, :staff_type, :name])
 
       staff_types = StaffType.all
 
@@ -111,13 +124,15 @@ class HoursConfirmationController < ApplicationController
 
       clock_in_breaks = ClockInBreak.
         joins(:clock_in_period).
-        merge(clock_in_periods)
+        merge(clock_in_periods).
+        includes(:clock_in_period)
 
       hours_acceptance_reasons = HoursAcceptanceReason.all
 
       clock_in_events = ClockInEvent.
         joins(:clock_in_period).
-        merge(clock_in_periods)
+        merge(clock_in_periods).
+        includes(:clock_in_period)
 
       hours_acceptance_periods = HoursAcceptancePeriod.
         enabled.
@@ -156,6 +171,9 @@ class HoursConfirmationController < ApplicationController
       clock_in_notes = ClockInNote.
         joins(:clock_in_day).
         merge(clock_in_days)
+
+      clock_in_days = clock_in_days.
+        includes([:venue, :staff_member])
 
       render locals: {
         access_token: access_token,
