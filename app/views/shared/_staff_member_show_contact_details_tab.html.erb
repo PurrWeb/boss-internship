@@ -8,20 +8,15 @@
   <dt class="show-page-detail-heading">Address</dt>
   <% if staff_member.address.present? %>
     <dd>
-      <% if staff_member.address.address_1.present? %>
-        <dd class="show-page-detail" data-detail="address-1"><%= staff_member.address.address_1 %></dd>
+      <% if staff_member.address.address.present? %>
+        <dd class="show-page-detail" data-detail="address">
+          <% staff_member.address.address.lines do |line| %>
+            <p><%= line.strip %></p>
+          <% end %>
+        </dd>
       <% end %>
-      <% if staff_member.address.address_2.present? %>
-        <dd class="show-page-detail" data-detail="address-2"><%= staff_member.address.address_2 %></dd>
-      <% end %>
-      <% if staff_member.address.address_3.present? %>
-        <dd class="show-page-detail" data-detail="address-3"><%= staff_member.address.address_3 %></dd>
-      <% end %>
-      <% if staff_member.address.address_4.present? %>
-        <dd class="show-page-detail" data-detail="address-4"><%= staff_member.address.address_4 %></dd>
-      <% end %>
-      <% if staff_member.address.region.present? %>
-        <dd  class="show-page-detail" data-detail="region"><%= staff_member.address.region %></dd>
+      <% if staff_member.address.county.present? %>
+        <dd  class="show-page-detail" data-detail="county"><%= staff_member.address.county %></dd>
       <% end %>
       <% if staff_member.address.country.present? %>
         <dd  class="show-page-detail" data-detail="country"><%= staff_member.address.country %></dd>

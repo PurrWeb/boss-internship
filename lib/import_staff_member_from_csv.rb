@@ -21,12 +21,16 @@ class ImportStaffMemberFromCSV
           surname: values.fetch(surname_column)
         )
 
+        address_parts = [
+          values.fetch(address_1_column),
+          values.fetch(address_2_column),
+          values.fetch(address_3_column),
+          values.fetch(address_4_column)
+        ].compact
+
         address = Address.new(
-          address_1: values.fetch(address_1_column),
-          address_2: values.fetch(address_2_column),
-          address_3: values.fetch(address_3_column),
-          address_4: values.fetch(address_4_column),
-          region: values.fetch(region_column),
+          address: address_parts.join("\n"),
+          county: values.fetch(region_column),
           country: values.fetch(country_column),
           postcode: values.fetch(postcode_column)
         )

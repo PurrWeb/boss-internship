@@ -325,13 +325,10 @@ class StaffMembersController < ApplicationController
 
     require_attributes << {
       address_attributes: [
-        :address_1,
-        :address_2,
-        :address_3,
-        :address_4,
+        :address,
         :postcode,
         :country,
-        :region
+        :county
       ]
     } if address_params_present?
 
@@ -440,13 +437,10 @@ class StaffMembersController < ApplicationController
       permit(
         :phone_number,
         address_attributes: [
-          :address_1,
-          :address_2,
-          :address_3,
-          :address_4,
+          :address,
           :postcode,
           :country,
-          :region
+          :county
         ],
         email_address_attributes: :email
       )

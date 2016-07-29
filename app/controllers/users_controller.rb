@@ -199,13 +199,10 @@ class UsersController < ApplicationController
 
     permit_attributes << {
       address_attributes: [
-        :address_1,
-        :address_2,
-        :address_3,
-        :address_4,
+        :address,
         :postcode,
         :country,
-        :region
+        :county
       ],
       staff_member_venue_attributes: [:venue_id]
     }

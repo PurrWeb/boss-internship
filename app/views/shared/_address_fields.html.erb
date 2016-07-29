@@ -1,9 +1,6 @@
 <div class="address-form">
-  <%= form.text_field :address_1, label_class: "#{'force-not-required' unless required }" %>
-  <%= form.text_field :address_2, label_class: "#{'force-not-required' unless required }" %>
-  <%= form.text_field :address_3, label_class: "#{'force-not-required' unless required }" %>
-  <%= form.text_field :address_4, label_class: "#{'force-not-required' unless required }" %>
+  <%= form.text_area :address, label_class: "#{'force-not-required' unless required }" %>
   <%= form.text_field :postcode,  label_class: "#{'force-not-required' unless required }" %>
   <%= form.text_field :country,   label_class: "#{'force-not-required' unless required }" %>
-  <%= form.text_field :region,    label_class: "#{'force-not-required' unless required }" %>
+  <%= form.text_field :county,    label_class: "#{'force-not-required' unless required }" %>
 </div>

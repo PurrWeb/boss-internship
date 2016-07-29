@@ -1,10 +1,7 @@
 FactoryGirl.define do
   factory :address do
-    address_1 '21b Fake house name'
-    address_2 '200 fake street'
-    address_3 'lower fakeness'
-    address_4 'so fake'
-    region    'Fake county'
+    address "21b Fake house name\n 200 fake street\nlower fakeness\nso fake"
+    county    'Fake county'
     country   'United State of Fake'
     postcode  'BULL SH1T'
   end

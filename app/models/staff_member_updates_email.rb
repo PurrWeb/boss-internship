@@ -71,11 +71,8 @@ class StaffMemberUpdatesEmail
 
     if staff_member.address_changed?
       [
-        :address_1,
-        :address_2,
-        :address_3,
-        :address_4,
-        :region,
+        :address,
+        :county,
         :country,
         :postcode
       ].each do |address_attribute|

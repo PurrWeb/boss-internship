@@ -48,11 +48,8 @@ class NewStaffMemberDetailsPDF
       result << ['SIA Badge Expiry Date', staff_member.sia_badge_expiry_date.to_s(:human_date)]
     end
 
-    result << ['Address 1', staff_member.address.andand.address_1 || 'Not Supplied']
-    result << ['Address 2', staff_member.address.andand.address_2 || 'Not Supplied']
-    result << ['Address 3', staff_member.address.andand.address_3 || 'Not Supplied']
-    result << ['Address 4', staff_member.address.andand.address_4 || 'Not Supplied']
-    result << ['Region',    staff_member.address.andand.region || 'Not Supplied']
+    result << ['Address',   staff_member.address.andand.address || 'Not Supplied']
+    result << ['County',    staff_member.address.andand.county || 'Not Supplied']
     result << ['Country',   staff_member.address.andand.country || 'Not Supplied']
     result << ['Postcode',  staff_member.address.andand.postcode || 'Not Supplied']
 
