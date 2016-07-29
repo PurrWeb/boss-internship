@@ -28,5 +28,3 @@ var selectShiftsByStaffMemberClientId = function(state, staffMemberClientId){
 }
 
 export {selectShiftsByStaffMemberClientId}
-
-window.selectShiftsByStaffMemberClientId = selectShiftsByStaffMemberClientId
