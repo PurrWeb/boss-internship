@@ -3,6 +3,7 @@ import _ from "underscore"
 import { selectClockInDay } from "./clock-in-day"
 import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
 import { selectShiftsByStaffMemberClientId } from "./shifts"
+import { selectAddClockInNoteIsInProgress } from "./api-requests"
 
 export function selectStaffMemberCanEnterManagerMode(staffMember){
     if (staffMember.isManager === undefined){
@@ -76,3 +77,24 @@ export function selectRotaOnClockInOutPage(state){
         venueId: state.pageOptions.venue.clientId
     });
 }
+
+function selectClockInOutStaffListItemProps(state, ownProps) {
+    var clockInDay = selectClockInDay(state, {
+        staffMemberClientId: ownProps.staff.clientId,
+        date: state.pageOptions.dateOfRota
+    })
+    return {
+        clockInDay,
+        staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
+        rotas: state.rotas,
+        venues: state.venues,
+        userPermissions: selectClockInOutAppUserPermissions(state),
+        pageOptions: state.pageOptions,
+        clockInNotes: _.filter(state.clockInNotes, function(note){
+            return note.clock_in_day.clientId === clockInDay.clientId
+        }),
+        addClockInNoteIsInProgress: selectAddClockInNoteIsInProgress(state, clockInDay.clientId)
+    }
+}
+// selectClockInOutStaffListItemProps = _.memoize(selectClockInOutStaffListItemProps)
+export {selectClockInOutStaffListItemProps}
