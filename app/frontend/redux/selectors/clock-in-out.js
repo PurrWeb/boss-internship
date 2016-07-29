@@ -84,7 +84,27 @@ export function selectRotaOnClockInOutPage(state){
     });
 }
 
-function selectClockInOutStaffListItemProps(state, ownProps) {
+var getClockInNotes = state => state.clockInNotes
+
+var getClockInNotesByClockInDay = createSelector(
+    getClockInNotes,
+    function(clockInNotes){
+        return _(clockInNotes).groupBy(function(clockInNote){
+            return clockInNote.clock_in_day.clientId
+        })
+    }
+)
+
+var emptyList = []
+function getClockInNotesForClockInDay(state, clockInDay){
+    var ret = getClockInNotesByClockInDay(state)[clockInDay.clientId]
+    if (ret === undefined) {
+        ret = emptyList
+    }
+    return ret
+}
+
+export function selectClockInOutStaffListItemProps(state, ownProps) {
     var clockInDay = selectClockInDay(state, {
         staffMemberClientId: ownProps.staff.clientId,
         date: state.pageOptions.dateOfRota
@@ -96,10 +116,7 @@ function selectClockInOutStaffListItemProps(state, ownProps) {
         venues: state.venues,
         userPermissions: selectClockInOutAppUserPermissions(state),
         pageOptions: state.pageOptions,
-        clockInNotes: _.filter(state.clockInNotes, function(note){
-            return note.clock_in_day.clientId === clockInDay.clientId
-        }),
+        clockInNotes: getClockInNotesForClockInDay(state, clockInDay),
         addClockInNoteIsInProgress: selectAddClockInNoteIsInProgress(state, clockInDay.clientId)
     }
 }
-export {selectClockInOutStaffListItemProps}
