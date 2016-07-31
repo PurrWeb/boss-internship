@@ -109,13 +109,17 @@ RSpec.describe 'Hours acceptance endpoints' do
     end
 
     context 'when a clock in day exists' do
-      before do
+      let(:clock_in_day) do
         ClockInDay.create!(
           date: date,
           staff_member: staff_member,
           venue: venue,
           creator: staff_member
         )
+      end
+
+      before do
+        clock_in_day
       end
 
       context 'before call' do
@@ -131,6 +135,33 @@ RSpec.describe 'Hours acceptance endpoints' do
       specify 'does not create new clock in day' do
         post(url, params)
         expect(ClockInDay.count).to eq(1)
+      end
+
+      context 'staff member is not clocked out' do
+        before do
+          period = ClockInPeriod.create!(
+            starts_at: start_of_day,
+            clock_in_day: clock_in_day,
+            creator: user
+          )
+
+          ClockInEvent.create!(
+            at: start_of_day,
+            clock_in_period: period,
+            event_type: 'clock_in',
+            creator: user
+          )
+        end
+
+        specify 'request should be rejected' do
+          response = post(url, params)
+
+          expect(
+            response.status
+          ).to eq(
+            access_denied_status
+          )
+        end
       end
     end
   end
@@ -206,7 +237,7 @@ RSpec.describe 'Hours acceptance endpoints' do
       expect(hours_acceptance_period.versions.last.whodunnit).to eq(user.whodunnit_data.to_s)
     end
 
-    context 'when peroid is frozen' do
+    context 'when period is frozen' do
       let(:finance_report) do
         FactoryGirl.create(:finance_report)
       end
@@ -385,6 +416,33 @@ RSpec.describe 'Hours acceptance endpoints' do
           )
         end
       end
+
+      context 'staff member is not clocked out' do
+        before do
+          period = ClockInPeriod.create!(
+            starts_at: start_of_day,
+            clock_in_day: clock_in_day,
+            creator: user
+          )
+
+          ClockInEvent.create!(
+            at: start_of_day,
+            clock_in_period: period,
+            event_type: 'clock_in',
+            creator: user
+          )
+        end
+
+        specify 'request should be rejected' do
+          response = patch(url, params)
+
+          expect(
+            response.status
+          ).to eq(
+            access_denied_status
+          )
+        end
+      end
     end
   end
 
@@ -422,6 +480,33 @@ RSpec.describe 'Hours acceptance endpoints' do
     specify 'period is deleted' do
       delete(url, params)
       expect(hours_acceptance_period.reload).to be_deleted
+    end
+
+    context 'staff member is not clocked out' do
+      before do
+        period = ClockInPeriod.create!(
+          starts_at: start_of_day,
+          clock_in_day: clock_in_day,
+          creator: user
+        )
+
+        ClockInEvent.create!(
+          at: start_of_day,
+          clock_in_period: period,
+          event_type: 'clock_in',
+          creator: user
+        )
+      end
+
+      specify 'request should be rejected' do
+        response = delete(url, params)
+
+        expect(
+          response.status
+        ).to eq(
+          access_denied_status
+        )
+      end
     end
   end
 
@@ -497,5 +582,9 @@ RSpec.describe 'Hours acceptance endpoints' do
 
   def unprocessable_entity_status
     422
+  end
+
+  def access_denied_status
+    500
   end
 end
