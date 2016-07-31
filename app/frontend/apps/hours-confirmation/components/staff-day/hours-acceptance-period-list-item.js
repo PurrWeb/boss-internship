@@ -17,7 +17,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
     }
     render(){
         var hoursAcceptancePeriod = this.props.hoursAcceptancePeriod
-        var readonly = this.isAccepted();
+        var readonly = this.isAccepted() || !this.props.hasClockedOut;
 
         var periodTimeSelectorStyles = {};
         if (!this.periodTimesAreValid()) {
@@ -110,31 +110,31 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
             denormalizedHoursPeriods: [hoursAcceptancePeriod]
         });
         if (!this.isAccepted()) {
-            var classes = ["btn"]
-
-            classes.push("btn-success")
-
-            return <div>
-                <a
-                    data-test-marker-accept-hours-acceptance-period
-                    onClick={() => this.props.boundActions.acceptHoursAcceptancePeriod({
-                        hoursAcceptancePeriod,
-                        errorHandlingId: this.componentId
-                    })}
-                    className={classes.join(" ")} style={{marginTop: 4}}>
-                    Accept {stats.hours}h
-                </a>
-                <br/><br/>
-                <a data-test-marker-delete-hours-acceptance-period
-                onClick={() => {
-                    this.props.boundActions.deleteHoursAcceptancePeriod({
-                        hoursAcceptancePeriod,
-                        errorHandlingId: this.componentId
-                    })
-                }}>
-                    Delete
-                </a>
-            </div>
+            if (!this.props.hasClockedOut) {
+                return <span></span>
+            } else {
+                return <div>
+                    <a
+                        data-test-marker-accept-hours-acceptance-period
+                        onClick={() => this.props.boundActions.acceptHoursAcceptancePeriod({
+                            hoursAcceptancePeriod,
+                            errorHandlingId: this.componentId
+                        })}
+                        className="btn-success btn" style={{marginTop: 4}}>
+                        Accept {stats.hours}h
+                    </a>
+                    <br/><br/>
+                    <a data-test-marker-delete-hours-acceptance-period
+                    onClick={() => {
+                        this.props.boundActions.deleteHoursAcceptancePeriod({
+                            hoursAcceptancePeriod,
+                            errorHandlingId: this.componentId
+                        })
+                    }}>
+                        Delete
+                    </a>
+                </div>
+            }
         } else {
             return <div>
                 <div style={{

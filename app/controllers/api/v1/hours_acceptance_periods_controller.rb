@@ -13,33 +13,37 @@ module Api
         date = date_from_params
         staff_member = staff_member_from_params
 
-        result = CreateHoursAcceptancePeriod.new(
-          requester: requester,
-          staff_member: staff_member,
-          venue: venue,
-          date: date,
-          starts_at: params.fetch(:starts_at),
-          ends_at: params.fetch(:ends_at),
-          status: params.fetch(:status),
-          hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
-          reason_note: params[:reason_note],
-          breaks: new_breaks_from_params
-        ).call
-
-        if result.success
-          render locals: {
-            hours_acceptance_period: result.hours_acceptance_period,
-            hours_acceptance_breaks: result.breaks
-          }
+        if !staff_member.clocked_out?(date: date, venue: venue)
+          render(json: {}, status: :access_denied)
         else
-          render(
-            'errors',
-            locals: {
+          result = CreateHoursAcceptancePeriod.new(
+            requester: requester,
+            staff_member: staff_member,
+            venue: venue,
+            date: date,
+            starts_at: params.fetch(:starts_at),
+            ends_at: params.fetch(:ends_at),
+            status: params.fetch(:status),
+            hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
+            reason_note: params[:reason_note],
+            breaks: new_breaks_from_params
+          ).call
+
+          if result.success
+            render locals: {
               hours_acceptance_period: result.hours_acceptance_period,
               hours_acceptance_breaks: result.breaks
-            },
-            status: :unprocessable_entity
-          )
+            }
+          else
+            render(
+              'errors',
+              locals: {
+                hours_acceptance_period: result.hours_acceptance_period,
+                hours_acceptance_breaks: result.breaks
+              },
+              status: :unprocessable_entity
+            )
+          end
         end
       end
 
@@ -48,31 +52,38 @@ module Api
 
         authorize! :update, hours_acceptance_period
 
-        result = UpdateHoursAcceptancePeriod.new(
-          hours_acceptance_period: hours_acceptance_period,
-          starts_at: params.fetch(:starts_at),
-          ends_at: params.fetch(:ends_at),
-          breaks_data: params[:hours_acceptance_breaks] || [],
-          status: params.fetch(:status),
-          hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
-          reason_note: params[:reason_note],
-          requester: current_user
-        ).call
-
-        if result.success?
-          render locals: {
-            hours_acceptance_period: result.hours_acceptance_period,
-            hours_acceptance_breaks: result.hours_acceptance_breaks
-          }
+        if !hours_acceptance_period.staff_member.clocked_out?(
+             date:hours_acceptance_period.date,
+             venue: hours_acceptance_period.venue
+           )
+          render(json: {}, status: :access_denied)
         else
-          render(
-            'errors',
-            locals: {
+          result = UpdateHoursAcceptancePeriod.new(
+            hours_acceptance_period: hours_acceptance_period,
+            starts_at: params.fetch(:starts_at),
+            ends_at: params.fetch(:ends_at),
+            breaks_data: params[:hours_acceptance_breaks] || [],
+            status: params.fetch(:status),
+            hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
+            reason_note: params[:reason_note],
+            requester: current_user
+          ).call
+
+          if result.success?
+            render locals: {
               hours_acceptance_period: result.hours_acceptance_period,
               hours_acceptance_breaks: result.hours_acceptance_breaks
-            },
-            status: :unprocessable_entity
-          )
+            }
+          else
+            render(
+              'errors',
+              locals: {
+                hours_acceptance_period: result.hours_acceptance_period,
+                hours_acceptance_breaks: result.hours_acceptance_breaks
+              },
+              status: :unprocessable_entity
+            )
+          end
         end
       end
 
@@ -80,15 +91,22 @@ module Api
         hours_acceptance_period = hours_acceptance_period_from_params
         authorize! :update, hours_acceptance_period
 
-        result = DeleteHoursAcceptancePeriod.new(
-          requester: current_user,
-          hours_acceptance_period: hours_acceptance_period
-        ).call
-
-        if result.success?
-          render json: {}, status: :ok
+        if !hours_acceptance_period.staff_member.clocked_out?(
+             date: hours_acceptance_period.date,
+             venue: hours_acceptance_period.venue
+           )
+          render(json: {}, status: :access_denied)
         else
-          render json: {}, status: :unprocessable_entity
+          result = DeleteHoursAcceptancePeriod.new(
+            requester: current_user,
+            hours_acceptance_period: hours_acceptance_period
+          ).call
+
+          if result.success?
+            render json: {}, status: :ok
+          else
+            render json: {}, status: :unprocessable_entity
+          end
         end
       end
 

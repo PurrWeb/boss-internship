@@ -167,6 +167,16 @@ class StaffMember < ActiveRecord::Base
     pay_rate_id_changed?
   end
 
+  def clocked_out?(date:, venue:)
+    clock_in_day = ClockInDay.find_or_initialize_by(
+      date: date,
+      venue: venue,
+      staff_member: self
+    )
+
+    clock_in_day.current_clock_in_state == :clocked_out
+  end
+
   def address_changed?
     address &&
       (address.address_changed?  ||

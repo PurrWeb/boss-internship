@@ -59,6 +59,8 @@ export default class StaffDay extends React.Component {
 
         var staffType = this.props.staffType;
 
+        var clockOutToEditHoursMessage = null;
+
         return <div style={style}>
             <div style={{
                 marginBottom: 50,
@@ -83,14 +85,6 @@ export default class StaffDay extends React.Component {
                         <div style={{marginTop: 4}}>
                             Status: {clockInStatus.title}
                         </div>
-                        <ClockOutButton
-                            clockInDay={this.props.clockInDay}
-                            clockOut={() => this.props.boundActions.forceStaffMemberClockOut({
-                                staffMember: this.props.staffMember,
-                                clockInDay: this.props.clockInDay,
-                                errorHandlingId: this.clockOutErrorId
-                            })}
-                        />
                         <ComponentErrors errorHandlingId={this.clockOutErrorId} />
                     </div>
                     <div className="col-md-10">
@@ -120,6 +114,16 @@ export default class StaffDay extends React.Component {
                             boundActions={this.props.boundActions}
                             componentErrors={this.props.componentErrors}
                             onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
+                        <div>
+                            <ClockOutButton
+                                clockInDay={this.props.clockInDay}
+                                clockOut={() => this.props.boundActions.forceStaffMemberClockOut({
+                                    staffMember: this.props.staffMember,
+                                    clockInDay: this.props.clockInDay,
+                                    errorHandlingId: this.clockOutErrorId
+                                })}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
