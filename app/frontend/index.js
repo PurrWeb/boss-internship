@@ -4,11 +4,14 @@ import _ from "underscore"
 import moment from "moment"
 import $ from "jquery"
 import "react-fastclick" // import for side effects
+import * as selectors from "~redux/selectors"
+
 window.debug = window.debug || {};
 window.debug.React = React;
 window.debug.ReactDOM = ReactDOM;
 window.debug._ = _;
 window.debug.moment = moment;
+window.debug.selectors = selectors;
 
 window.React = React // expose globally because react rails relies on it
 import "./lib/load-underscore-mixins"

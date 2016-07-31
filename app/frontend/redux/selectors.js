@@ -39,14 +39,16 @@ import {
     selectClockInOutAppIsInManagerMode,
     selectClockInOutAppUserPermissions,
     selectStaffMembersForClockInOutStaffFinder,
-    selectRotaOnClockInOutPage
+    selectRotaOnClockInOutPage,
+    selectClockInOutStaffListItemProps
 } from "./selectors/clock-in-out"
 export {
     selectStaffMemberCanEnterManagerMode,
     selectClockInOutAppIsInManagerMode,
     selectClockInOutAppUserPermissions,
     selectStaffMembersForClockInOutStaffFinder,
-    selectRotaOnClockInOutPage
+    selectRotaOnClockInOutPage,
+    selectClockInOutStaffListItemProps
 }
 
 import {

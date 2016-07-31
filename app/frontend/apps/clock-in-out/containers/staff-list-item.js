@@ -8,10 +8,7 @@ import ClockInStatusBadge from "~components/clock-in-status-badge"
 import ToggleStaffClockedInButton from "../components/toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../components/toggle-staff-on-break-button"
 import {
-    selectShiftsByStaffMemberClientId,
-    selectClockInOutAppUserPermissions,
-    selectClockInDay,
-    selectAddClockInNoteIsInProgress
+    selectClockInOutStaffListItemProps
 } from "~redux/selectors"
 import actions from "~redux/actions"
 import Spinner from "~components/spinner"
@@ -176,25 +173,6 @@ class ClockInOutStaffListItem extends Component {
     }
 }
 
-function mapStateToProps(state, ownProps){
-    var clockInDay = selectClockInDay(state, {
-        staffMemberClientId: ownProps.staff.clientId,
-        date: state.pageOptions.dateOfRota
-    })
-    return {
-        clockInDay,
-        staffMemberShifts: selectShiftsByStaffMemberClientId(state, ownProps.staff.clientId),
-        rotas: state.rotas,
-        venues: state.venues,
-        userPermissions: selectClockInOutAppUserPermissions(state),
-        pageOptions: state.pageOptions,
-        clockInNotes: _.filter(state.clockInNotes, function(note){
-            return note.clock_in_day.clientId === clockInDay.clientId
-        }),
-        addClockInNoteIsInProgress: selectAddClockInNoteIsInProgress(state, clockInDay.clientId)
-    }
-}
-
 function mapDispatchToProps(dispatch){
     return {
         updateClockInStatusWithConfirmation: function(options){
@@ -220,4 +198,4 @@ function mapDispatchToProps(dispatch){
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ClockInOutStaffListItem);
+export default connect(selectClockInOutStaffListItemProps, mapDispatchToProps)(ClockInOutStaffListItem);

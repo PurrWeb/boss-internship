@@ -44,6 +44,8 @@ var utils =  {
     functions passed in from the parent deepEqual would always say the props
     have changed, so instead of their identities we compare their string
     representations.
+    (Not sure if this is even necessary. Won't the updated functions be called
+    even if the UI hasn't been re-rendered?)
     **/
     deepEqualTreatingFunctionsAsStrings(expected, actual) {
         return deepEqual(

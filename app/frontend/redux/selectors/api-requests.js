@@ -1,6 +1,7 @@
 import utils from "~lib/utils"
 import oFetch from "o-fetch"
 import _ from "underscore"
+import { createSelector } from "reselect"
 
 export function selectEditHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod){
     return selectAcceptHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod) ||
@@ -48,12 +49,26 @@ export function selectIsForceClockingOutClockInDay(state, staffMemberClientId){
     })
 }
 
+var emptyList = []
+function getAddClockInNoteApiRequestsInProgress(state){
+    var ret = state.apiRequestsInProgress.ADD_CLOCK_IN_NOTE;
+    if (!ret) {
+        ret = emptyList;
+    }
+    return ret
+}
+
+var getAddClockInNoteIsInProgressByClockInDay = createSelector(
+    getAddClockInNoteApiRequestsInProgress,
+    function(addClockInNoteRequestsInProgress){
+        return _(addClockInNoteRequestsInProgress).groupBy(function(clockInNote){
+            return clockInNote.clockInDay.clientId
+        })
+    }
+)
+
 export function selectAddClockInNoteIsInProgress(state, clockInDayClientId){
-    return requestIsInProgressWithRequestData(
-        state.apiRequestsInProgress.ADD_CLOCK_IN_NOTE,
-    function(requestOptions){
-        return requestOptions.clockInDay.clientId === clockInDayClientId
-    })
+    return getAddClockInNoteIsInProgressByClockInDay(state)[clockInDayClientId]
 }
 
 export function selectFetchWeeklyRotaIsInProgress(state){
