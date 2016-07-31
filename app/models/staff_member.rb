@@ -169,12 +169,9 @@ class StaffMember < ActiveRecord::Base
 
   def address_changed?
     address &&
-      (address.address_1_changed?  ||
-       address.address_2_changed?  ||
-       address.address_3_changed?  ||
-       address.address_4_changed?  ||
-       address.region_changed?     ||
-       address.country_changed?    ||
+      (address.address_changed?  ||
+       address.county_changed?   ||
+       address.country_changed?  ||
        address.postcode_changed?)
   end
 

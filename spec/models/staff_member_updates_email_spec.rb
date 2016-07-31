@@ -5,11 +5,8 @@ describe StaffMemberUpdatesEmail do
   let(:old_master_venue) { FactoryGirl.create(:venue) }
   let(:old_address_values) do
     {
-      address_1: 'old_address_1',
-      address_2: 'old_address_2',
-      address_3: 'old_address_3',
-      address_4: 'old_address_4',
-      region: 'old_region',
+      address: 'old_address_text',
+      county: 'old_county',
       country: 'old_country',
       postcode: 'old_postcode'
     }
@@ -17,11 +14,8 @@ describe StaffMemberUpdatesEmail do
   let(:address) do
     FactoryGirl.create(
       :address,
-      address_1: old_address_values.fetch(:address_1),
-      address_2: old_address_values.fetch(:address_2),
-      address_3: old_address_values.fetch(:address_3),
-      address_4: old_address_values.fetch(:address_4),
-      region:    old_address_values.fetch(:region),
+      address: old_address_values.fetch(:address),
+      county:    old_address_values.fetch(:county),
       country:   old_address_values.fetch(:country),
       postcode:  old_address_values.fetch(:postcode)
     )
@@ -206,11 +200,8 @@ describe StaffMemberUpdatesEmail do
 
   context 'changing address' do
     address_attributes = [
-      :address_1,
-      :address_2,
-      :address_3,
-      :address_4,
-      :region,
+      :address,
+      :county,
       :country,
       :postcode
     ]
