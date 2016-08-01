@@ -1,0 +1,58 @@
+<h1>Staff Members on Wrong Pay Rate</h1>
+
+<%= link_to('Back to Staff Vetting Index', staff_vetting_index_path) %>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="list-group">
+      <%= link_to("##{_18_21_section_id}", class: "list-group-item") do %>
+        Staff Members Wrongly on 18-21 Payrate
+        <span class="badge"><%= staff_wrongly_on_18_to_21_payrate.count %></span>
+      <% end %>
+      <%= link_to("##{_21_25_section_id}", class: "list-group-item") do %>
+        Staff Members Wrongly on 21-25 Payrate
+        <span class="badge"><%= staff_wrongly_on_21_to_25_payrate.count %></span>
+      <% end %>
+      <%= link_to("##{_25_plus_section_id}", class: "list-group-item") do %>
+        Staff Members Wrongly on 25+ Payrate
+        <span class="badge"><%= staff_wrongly_on_25_plus_payrate.count %></span>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<% if staff_wrongly_on_18_to_21_payrate.count > 0 %>
+  <%= render(
+        partial: "staff_on_wrong_payrate_section",
+        locals: {
+          payrate_name: '18-21',
+          section_id: _18_21_section_id,
+          total: staff_wrongly_on_18_to_21_payrate.count,
+          staff_members: staff_wrongly_on_18_to_21_payrate
+        }
+      ) %>
+<% end %>
+
+<% if staff_wrongly_on_21_to_25_payrate.count > 0 %>
+  <%= render(
+        partial: "staff_on_wrong_payrate_section",
+        locals: {
+          payrate_name: '21-25',
+          section_id: _21_25_section_id,
+          total: staff_wrongly_on_21_to_25_payrate.count,
+          staff_members: staff_wrongly_on_21_to_25_payrate
+        }
+      ) %>
+<% end %>
+
+<% if staff_wrongly_on_25_plus_payrate.count > 0 %>
+  <%= render(
+        partial: "staff_on_wrong_payrate_section",
+        locals: {
+          payrate_name: '25+',
+          section_id: _25_plus_section_id,
+          total: staff_wrongly_on_25_plus_payrate.count,
+          staff_members: staff_wrongly_on_25_plus_payrate
+        }
+      ) %>
+<% end %>

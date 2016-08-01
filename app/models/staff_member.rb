@@ -109,6 +109,12 @@ class StaffMember < ActiveRecord::Base
     update_all(shift_change_occured_at: time)
   end
 
+  def age(from: Time.current)
+    (
+      (from - date_of_birth) / 60 / 60 / 24 / 365
+    ).floor
+  end
+
   def disabled_by_user
     if disabled?
       User.find(state_machine.last_transition.metadata.fetch("requster_user_id"))

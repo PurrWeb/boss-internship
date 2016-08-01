@@ -5,19 +5,23 @@
     <div class="list-group">
       <%= link_to(staff_members_without_email_staff_vetting_index_path, class: "list-group-item") do %>
         Staff without Email Address
-        <span class="badge"><%= staff_without_email.count %></span>
+        <span class="badge"><%= staff_without_email_count %></span>
       <% end %>
       <%= link_to(staff_members_without_ni_number_staff_vetting_index_path, class: "list-group-item") do %>
         Staff without NI Number
-        <span class="badge"><%= staff_without_ni_number.count %></span>
+        <span class="badge"><%= staff_without_ni_number_count %></span>
       <% end %>
       <%= link_to(staff_members_without_address_staff_vetting_index_path, class: "list-group-item") do %>
         Staff without Address
-        <span class="badge"><%= staff_without_address.count %></span>
+        <span class="badge"><%= staff_without_address_count %></span>
       <% end %>
       <%= link_to(staff_members_without_photo_staff_vetting_index_path, class: "list-group-item") do %>
         Staff without Photo
-        <span class="badge"><%= staff_without_photo.count %></span>
+        <span class="badge"><%= staff_without_photo_count %></span>
+      <% end %>
+      <%= link_to(staff_members_on_wrong_payrate_staff_vetting_index_path, class: "list-group-item") do %>
+        Staff On Wrong Pay Rate
+        <span class="badge"><%= staff_on_wrong_payrate_count %></span>
       <% end %>
     </div>
   </div>
