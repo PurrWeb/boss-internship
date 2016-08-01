@@ -3,10 +3,10 @@ class StaffVettingController < ApplicationController
     authorize! :manage, :admin
 
     render locals: {
-      staff_without_email: StaffMembersWithoutEmailQuery.new.all,
-      staff_without_ni_number: StaffMembersWithoutNINumberQuery.new.all,
-      staff_without_address: StaffMembersWithoutAddressQuery.new.all,
-      staff_without_photo: StaffMembersWithoutPhotoQuery.new.all
+      staff_without_email_count: StaffMembersWithoutEmailQuery.new.all.count,
+      staff_without_ni_number_count: StaffMembersWithoutNINumberQuery.new.all.count,
+      staff_without_address_count: StaffMembersWithoutAddressQuery.new.all.count,
+      staff_without_photo_count: StaffMembersWithoutPhotoQuery.new.all.count
     }
   end
 
