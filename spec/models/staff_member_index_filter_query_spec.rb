@@ -45,7 +45,7 @@ describe StaffMemberIndexFilterQuery do
     allow(staff_type).to receive(:present?).and_return(false)
     allow(venue).to receive(:present?).and_return(false)
     allow(relation).to receive(:joins).with('LEFT JOIN `staff_member_venues` ON `staff_member_venues`.`staff_member_id` = `staff_members`.`id`').and_return(venue_join_relation)
-    allow(venue_join_relation).to receive(:where).with('(`staff_member_venues`.`staff_member_id` IS NULL) OR (`staff_member_venues`.`venue_id` IN (?))', accessible_venue_ids).and_return(filtered_venue_join_relation)
+    allow(relation).to receive(:for_venues).with(hash_including(venue_ids: accessible_venue_ids)).and_return(filtered_venue_join_relation)
     allow(accessible_venues).to receive(:pluck).with(:id).and_return(accessible_venue_ids)
     allow(filtered_venue_join_relation).to receive(:uniq).and_return(result)
   end
@@ -62,7 +62,7 @@ describe StaffMemberIndexFilterQuery do
       allow(relation).to receive(:enabled).and_return(
         relation_filtered_by_enabled
       )
-    allow(relation_filtered_by_enabled).to receive(:joins).with('LEFT JOIN `staff_member_venues` ON `staff_member_venues`.`staff_member_id` = `staff_members`.`id`').and_return(venue_join_relation)
+    allow(relation_filtered_by_enabled).to receive(:for_venues).with(hash_including(venue_ids: accessible_venue_ids)).and_return(filtered_venue_join_relation)
     end
 
     specify do
@@ -78,7 +78,7 @@ describe StaffMemberIndexFilterQuery do
       allow(relation).to receive(:disabled).and_return(
         relation_filtered_by_disabled
       )
-    allow(relation_filtered_by_disabled).to receive(:joins).with('LEFT JOIN `staff_member_venues` ON `staff_member_venues`.`staff_member_id` = `staff_members`.`id`').and_return(venue_join_relation)
+      allow(relation_filtered_by_disabled).to receive(:for_venues).with(hash_including(venue_ids: accessible_venue_ids)).and_return(filtered_venue_join_relation)
     end
 
     specify do
@@ -94,11 +94,7 @@ describe StaffMemberIndexFilterQuery do
       allow(relation).to receive(:where).
         with(staff_type: staff_type).
         and_return(relation_filtered_by_staff_type)
-      allow(relation_filtered_by_staff_type).to(
-        receive(:joins).
-          with('LEFT JOIN `staff_member_venues` ON `staff_member_venues`.`staff_member_id` = `staff_members`.`id`').
-          and_return(venue_join_relation)
-      )
+      allow(relation_filtered_by_staff_type).to receive(:for_venues).with(hash_including(venue_ids: accessible_venue_ids)).and_return(filtered_venue_join_relation)
     end
 
     specify do
@@ -161,7 +157,9 @@ describe StaffMemberIndexFilterQuery do
           ).
           and_return(relation_filtered_by_name)
       )
-      allow(relation_filtered_by_name).to receive(:joins).with('LEFT JOIN `staff_member_venues` ON `staff_member_venues`.`staff_member_id` = `staff_members`.`id`').and_return(venue_join_relation)
+      allow(relation_filtered_by_name).to receive(:for_venues).with(hash_including(venue_ids: accessible_venue_ids)).and_return(relation_filtered_by_venue)
+
+      allow(relation_filtered_by_venue).to receive(:uniq).and_return(result)
     end
 
     specify do
@@ -188,7 +186,8 @@ describe StaffMemberIndexFilterQuery do
           ).
           and_return(relation_filtered_by_email)
       )
-      allow(relation_filtered_by_email).to receive(:joins).with('LEFT JOIN `staff_member_venues` ON `staff_member_venues`.`staff_member_id` = `staff_members`.`id`').and_return(venue_join_relation)
+      allow(relation_filtered_by_email).to receive(:for_venues).with(hash_including(venue_ids: accessible_venue_ids)).and_return(relation_filtered_by_venue)
+      allow(relation_filtered_by_venue).to receive(:uniq).and_return(result)
     end
 
     specify do
