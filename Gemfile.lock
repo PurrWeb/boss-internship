@@ -64,11 +64,12 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    carrierwave (0.10.0)
+    carrierwave (0.11.2)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
+      mimemagic (>= 0.3.0)
     carrierwave-data-uri (0.0.2)
       carrierwave
     chosen-rails (1.4.3)
@@ -272,9 +273,10 @@ GEM
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)
-    mime-types (2.99)
+    mime-types (2.99.2)
+    mimemagic (0.3.1)
     mini_portile (0.6.2)
-    minitest (5.8.3)
+    minitest (5.9.0)
     money (6.7.0)
       i18n (>= 0.6.4, <= 0.7.0)
       sixarm_ruby_unaccent (>= 1.1.1, < 2)
@@ -445,7 +447,7 @@ DEPENDENCIES
   byebug
   cancan
   capybara
-  carrierwave (~> 0.10)
+  carrierwave (~> 0.11)
   carrierwave-data-uri
   chosen-rails
   clockwork
