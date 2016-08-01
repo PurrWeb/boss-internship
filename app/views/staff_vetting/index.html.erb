@@ -19,6 +19,10 @@
         Staff without Photo
         <span class="badge"><%= staff_without_photo_count %></span>
       <% end %>
+      <%= link_to(staff_members_on_wrong_payrate_staff_vetting_index_path, class: "list-group-item") do %>
+        Staff On Wrong Pay Rate
+        <span class="badge"><%= staff_on_wrong_payrate_count %></span>
+      <% end %>
     </div>
   </div>
 </div>

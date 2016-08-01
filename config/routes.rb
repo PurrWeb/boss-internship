@@ -122,6 +122,7 @@ Rails.application.routes.draw do
         get :staff_members_without_ni_number
         get :staff_members_without_address
         get :staff_members_without_photo
+        get :staff_members_on_wrong_payrate
       end
     end
 
