@@ -123,6 +123,12 @@ export function loadInitialHoursConfirmationAppState(viewData){
     }
 }
 
+export function loadInitialStaffHoursOverviewAppState(viewData){
+    return function(dispatch){
+        dispatch(getInititalLoadActions(viewData));
+    }
+}
+
 function getInititalLoadActions(initialLoadData){
     initialLoadData = {...initialLoadData}
     var actionCreators = getActionCreators();

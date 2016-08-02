@@ -89,11 +89,16 @@
             </td>
             <% week.each_with_day do |date, day| %>
               <td>
-                <%= number_with_precision(
-                      report.public_send("#{day}_hours_count".to_sym),
-                      precision: 2,
-                      strip_insignificant_zeros: true
-                    ) %>
+                <%= link_to(staff_member_hours_overview_path(
+                      staff_member_id: report.staff_member.id,
+                      id: UIRotaDate.format(date)
+                    )) do %>
+                  <%= number_with_precision(
+                        report.public_send("#{day}_hours_count".to_sym),
+                        precision: 2,
+                        strip_insignificant_zeros: true
+                      ) %>
+                <% end %>
               </td>
             <% end %>
             <td>
