@@ -31,7 +31,8 @@ class GenerateFinanceReportData
     hours_acceptance_periods = HoursAcceptancePeriod.
       accepted.
       joins(:clock_in_day).
-      merge(clock_in_days)
+      merge(clock_in_days).
+      includes(:clock_in_day)
 
     monday_hours_count = 0
     tuesday_hours_count = 0
