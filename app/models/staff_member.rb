@@ -76,13 +76,17 @@ class StaffMember < ActiveRecord::Base
   delegate :current_state, to: :state_machine
 
   def self.for_venue(venue)
+    for_venues(venue_ids: [venue.id])
+  end
+
+  def self.for_venues(venue_ids:)
     with_matching_master_venue = StaffMember.
-      where(master_venue_id: venue.id)
+      where(master_venue_id: venue_ids)
 
     with_matching_work_venue = StaffMember.
       joins(:work_venues).
       merge(
-        Venue.where(id: venue.id)
+        Venue.where(id: venue_ids)
       )
 
     ids = with_matching_master_venue.pluck(:id) + with_matching_work_venue.pluck(:id)
