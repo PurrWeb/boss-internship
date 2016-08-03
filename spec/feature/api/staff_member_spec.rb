@@ -61,7 +61,7 @@ RSpec.describe 'Api access' do
           "preferred_days" => staff_member.day_perference_note
         })
 
-        expect(json["avatar_url"]).to match(/\/uploads\/staff_member\/avatar\/\d+\/avatar\.jpg/)
+        expect(json["avatar_url"]).to match(/\/uploads\/staff_member\/avatar\/\d+\/[0-9a-g-]*\.jpg/)
       end
     end
   end
