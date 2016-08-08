@@ -17,9 +17,9 @@ class DeleteStaffMember
 
   def call
     ActiveRecord::Base.transaction(requires_new: nested) do
-      disable_staff_member
       disable_upcoming_shifts
       disable_upcoming_holidays
+      disable_staff_member
       StaffMemberUpdatesMailer.staff_member_disabled(staff_member).deliver_now
     end
   end
