@@ -454,6 +454,31 @@ ActiveRecord::Schema.define(version: 20160812145508) do
   add_index "rotas", ["date", "venue_id"], name: "index_rotas_on_date_and_venue_id", unique: true, using: :btree
   add_index "rotas", ["venue_id"], name: "index_rotas_on_venue_id", using: :btree
 
+  create_table "safe_checks", force: :cascade do |t|
+    t.integer  "venue_id",                 limit: 4,   null: false
+    t.integer  "creator_user_id",          limit: 4,   null: false
+    t.string   "checked_by_note",          limit: 255, null: false
+    t.integer  "fifty_pound_note_pounds",  limit: 4,   null: false
+    t.integer  "twenty_pound_note_pounds", limit: 4,   null: false
+    t.integer  "ten_pound_note_pounds",    limit: 4,   null: false
+    t.integer  "five_pound_note_pounds",   limit: 4,   null: false
+    t.integer  "two_pound_coins_pounds",   limit: 4,   null: false
+    t.integer  "one_pound_coins_pounds",   limit: 4,   null: false
+    t.integer  "fifty_pence_coins_cents",  limit: 4,   null: false
+    t.integer  "twenty_pence_coins_cents", limit: 4,   null: false
+    t.integer  "ten_pence_coins_cents",    limit: 4,   null: false
+    t.integer  "five_pence_coins_cents",   limit: 4,   null: false
+    t.integer  "coppers_cents",            limit: 4,   null: false
+    t.integer  "safe_float_cents",         limit: 4,   null: false
+    t.integer  "till_float_cents",         limit: 4,   null: false
+    t.integer  "out_to_order_cents",       limit: 4,   null: false
+    t.integer  "other_cents",              limit: 4,   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "safe_checks", ["created_at", "venue_id"], name: "index_safe_checks_on_created_at_and_venue_id", using: :btree
+
   create_table "staff_member_transitions", force: :cascade do |t|
     t.string   "to_state",        limit: 255,   null: false
     t.text     "metadata",        limit: 65535
