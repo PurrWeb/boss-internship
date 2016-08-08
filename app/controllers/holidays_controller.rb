@@ -26,12 +26,17 @@ class HolidaysController < ApplicationController
 
     holidays_reports_data = HolidayReportsDataQuery.new(week: week, venues: query_venues)
 
+    holidays = holidays_reports_data.holidays.includes([:staff_member])
+    staff_members = holidays_reports_data.
+      staff_members.
+      includes([:staff_type, :name, :master_venue])
+
     respond_to do |format|
       format.html do
         render locals: {
           week: week,
-          holidays: holidays_reports_data.holidays,
-          staff_members: holidays_reports_data.staff_members,
+          holidays: holidays,
+          staff_members: staff_members,
           accessible_venues: accessible_venues,
           staff_types: StaffType.all,
           filter_venue: filter_venue,
