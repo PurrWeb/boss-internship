@@ -60,6 +60,12 @@
             </li>
           <% end %>
 
+          <% if !current_user.security_manager? %>
+            <li>
+              <%= link_to('Safe Checks', safe_checks_path) %>
+            </li>
+          <% end %>
+
           <li class="dropdown nav-reports-section">
             <a href="#" class="nav-section-header-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               Reports <span class="caret"></span>

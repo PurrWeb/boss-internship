@@ -1,0 +1,88 @@
+<h1>New Safe Check</h1>
+
+<%= bootstrap_form_for(
+      safe_check,
+      url: safe_checks_path,
+      method: 'post'
+    ) do |form| %>
+  <%= form.static_control label: "Venue" do %>
+    <%= safe_check.venue.name.titlecase %>
+  <% end %>
+  <%= form.hidden_field(:venue_id) %>
+
+  <%= form.text_field(
+        :checked_by_note,
+        label: 'Checked By'
+      ) %>
+
+  <% SafeCheck::POUND_FIELDS.each do |field| %>
+    <%= form.number_field(
+          field,
+          prepend: '£',
+          value: safe_check.pound_value_for(field).to_int_if_whole,
+          label: SafeCheck.label_for(field),
+          step: 0.0
+        ) %>
+    <%= form.hidden_field(:venue_id) %>
+  <% end %>
+
+  <% (SafeCheck::CENTS_FIELDS - [:safe_float_cents, :till_float_cents, :out_to_order_cents]).each do |field| %>
+    <%= form.number_field(
+          field,
+          prepend: '£',
+          value: safe_check.pound_value_for(field).to_int_if_whole,
+          label: SafeCheck.label_for(field),
+          step: 0.01
+        ) %>
+  <% end %>
+
+  <%= form.static_control label: "Total" do %>
+    <% if safe_check.total_cents.present? %>
+      <%= number_to_currency(
+            safe_check.total_cents / 100.0,
+            unit: '£',
+            precision: 2
+          ) %>
+    <% else %>
+      <span>-</span>
+    <% end %>
+  <% end %>
+
+  <%= form.number_field(
+        :out_to_order_cents,
+        prepend: '£',
+        value: safe_check.pound_value_for(:out_to_order_cents).to_int_if_whole,
+        label: SafeCheck.label_for(:out_to_order_cents),
+        step: 0.01
+      ) %>
+
+  <%= form.static_control label: "Safe Float" do %>
+    <%= number_to_currency(
+          safe_check.safe_float_cents / 100.0,
+          unit: '£',
+          precision: 2
+        ) %>
+  <% end %>
+
+  <%= form.static_control label: "Till Float" do %>
+    <%= number_to_currency(
+          safe_check.till_float_cents / 100.0,
+          unit: '£',
+          precision: 2
+        ) %>
+  <% end %>
+
+  <%= form.static_control label: "Variance" do %>
+    <% if safe_check.variance_cents.present? %>
+      <%= number_to_currency(
+            safe_check.variance_cents / 100.0,
+            unit: '£',
+            precision: 2
+          ) %>
+    <% else %>
+      <span>-</span>
+    <% end %>
+  <% end %>
+
+  <%= form.submit('Update') %>
+<% end %>
