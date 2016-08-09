@@ -25,6 +25,23 @@ FactoryGirl.define do
     staff_type
     avatar { Rack::Test::UploadedFile.new(TestImageHelper.arnie_face_path) }
 
+    trait :flagged do
+      after(:create) do |staff_member|
+        FactoryGirl.create(
+          :staff_member_transition,
+          :disabled,
+          metadata: {
+            disable_reason: 'bad person' ,
+            requster_user_id: staff_member.creator.id
+          },
+          staff_member: staff_member
+        )
+        staff_member.update_attributes!(
+          would_rehire: false
+        )
+      end
+    end
+
     trait :disabled do
       after(:create) do |staff_member|
         FactoryGirl.create(
