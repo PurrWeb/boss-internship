@@ -21,7 +21,11 @@
           prepend: '£',
           value: safe_check.pound_value_for(field).to_int_if_whole,
           label: SafeCheck.label_for(field),
-          step: 0.0
+          step: 0.0,
+          class: [
+            'js-total-calculation-watch-field',
+            'js-total-calculation-value-field'
+          ]
         ) %>
     <%= form.hidden_field(:venue_id) %>
   <% end %>
@@ -32,20 +36,26 @@
           prepend: '£',
           value: safe_check.pound_value_for(field).to_int_if_whole,
           label: SafeCheck.label_for(field),
-          step: 0.01
+          step: 0.01,
+          class: [
+            'js-total-calculation-watch-field',
+            'js-total-calculation-value-field'
+          ]
         ) %>
   <% end %>
 
   <%= form.static_control label: "Total" do %>
-    <% if safe_check.total_cents.present? %>
-      <%= number_to_currency(
-            safe_check.total_cents / 100.0,
-            unit: '£',
-            precision: 2
-          ) %>
-    <% else %>
-      <span>-</span>
-    <% end %>
+    <span class="js-total-calculation-total-result">
+      <% if safe_check.total_cents.present? %>
+        <%= number_to_currency(
+              safe_check.total_cents / 100.0,
+              unit: '£',
+              precision: 2
+            ) %>
+      <% else %>
+        -
+      <% end %>
+    </span>
   <% end %>
 
   <%= form.number_field(
@@ -53,35 +63,45 @@
         prepend: '£',
         value: safe_check.pound_value_for(:out_to_order_cents).to_int_if_whole,
         label: SafeCheck.label_for(:out_to_order_cents),
-        step: 0.01
+        step: 0.01,
+        class: [
+          'js-total-calculation-watch-field',
+          'js-total-calculation-out-to-order-value'
+        ]
       ) %>
 
   <%= form.static_control label: "Safe Float" do %>
-    <%= number_to_currency(
-          safe_check.safe_float_cents / 100.0,
-          unit: '£',
-          precision: 2
-        ) %>
-  <% end %>
-
-  <%= form.static_control label: "Till Float" do %>
-    <%= number_to_currency(
-          safe_check.till_float_cents / 100.0,
-          unit: '£',
-          precision: 2
-        ) %>
-  <% end %>
-
-  <%= form.static_control label: "Variance" do %>
-    <% if safe_check.variance_cents.present? %>
+    <span class="js-total-calculation-float-value">
       <%= number_to_currency(
-            safe_check.variance_cents / 100.0,
+            safe_check.pound_value_for(:safe_float_cents).to_int_if_whole,
             unit: '£',
             precision: 2
           ) %>
-    <% else %>
-      <span>-</span>
-    <% end %>
+    </span>
+  <% end %>
+
+  <%= form.static_control label: "Till Float" do %>
+    <span class="js-total-calculation-float-value">
+      <%= number_to_currency(
+            safe_check.pound_value_for(:till_float_cents).to_int_if_whole,
+            unit: '£',
+            precision: 2
+          ) %>
+    </span>
+  <% end %>
+
+  <%= form.static_control label: "Variance" do %>
+    <span class="js-total-calculation-variance-result">
+      <% if safe_check.variance_cents.present? %>
+        <%= number_to_currency(
+              safe_check.variance_cents / 100.0,
+              unit: '£',
+              precision: 2
+            ) %>
+      <% else %>
+        -
+      <% end %>
+    </span>
   <% end %>
 
   <%= form.submit('Update') %>
