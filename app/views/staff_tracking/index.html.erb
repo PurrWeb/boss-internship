@@ -1,0 +1,107 @@
+<h1>Staff Tracking</h1>
+
+<h3><%= "#{venue.name.titlecase} " if venue.present? %><%= week.start_date %> - <%= week.end_date %></h3>
+
+<%= bootstrap_form_for('staff_tracking_index', url: staff_tracking_index_path, html: { method: :get }) do |form| %>
+  <div class="form-inline">
+    <%= form.select(
+          :venue_id,
+          options_for_select(
+            accessible_venues.map do |venue|
+              [venue.name, venue.id]
+            end,
+            venue.andand.id
+          ),
+          {
+            include_blank: true,
+            prompt: 'All Venues'
+          },
+          {
+            name: 'venue_id'
+          }) %>
+    <%= form.text_field(
+          :start_date,
+          label: 'Week',
+          value: week.start_date && UIRotaDate.format(week.start_date),
+          class: 'static-week-picker',
+          name: 'week_start'
+        ) %>
+    <%= form.submit('Update') %>
+  </div>
+<% end %>
+
+<div>
+  <h2>Staff Added</h2>
+  <p>Total: <%= creation_events.count %></p>
+  <% if creation_events.count > 0 %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Venue</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% grouped_creation_events = creation_events.
+             group_by(&:staff_member).
+             sort_by { |group|
+               staff_member = group.first
+               master_venue_name = staff_member.master_venue.present? ? staff_member.master_venue.name : 'N / A'
+               "#{master_venue_name} #{staff_member.full_name}"
+              } %>
+
+        <% grouped_creation_events.each do |group| %>
+          <% event = group.last.sort_by(&:at).last %>
+          <tr>
+            <td><%= link_to(event.staff_member.full_name.titlecase, staff_member_path(event.staff_member)) %></td>
+            <td><%= RotaShiftDate.to_rota_date(event.at) %></td>
+            <% if event.staff_member.master_venue.present? %>
+              <td><%= event.staff_member.master_venue.name.titlecase %></td>
+            <% else %>
+              <td> N / A </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+
+<div>
+  <h2>Staff Disabled</h2>
+  <p>Total: <%= deletion_events.count %></p>
+  <% if deletion_events.count > 0 %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Venue</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% grouped_deletion_events = deletion_events.
+             group_by(&:staff_member).
+             sort_by { |group|
+               staff_member = group.first
+               master_venue_name = staff_member.master_venue.present? ? staff_member.master_venue.name : 'N / A'
+               "#{master_venue_name} #{staff_member.full_name}"
+              } %>
+
+        <% grouped_deletion_events.each do |group| %>
+          <% event = group.last.sort_by(&:at).last %>
+          <tr>
+            <td><%= link_to(event.staff_member.full_name.titlecase, staff_member_path(event.staff_member)) %></td>
+            <td><%= RotaShiftDate.to_rota_date(event.at) %></td>
+            <% if event.staff_member.master_venue.present? %>
+              <td><%= event.staff_member.master_venue.name.titlecase %></td>
+            <% else %>
+              <td> N / A </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

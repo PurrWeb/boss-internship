@@ -135,6 +135,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :staff_tracking, only: [:index]
+
     resources :weekly_reports, only: [:index]
     resources :daily_reports, only: [:index]
 

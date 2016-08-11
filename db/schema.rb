@@ -514,6 +514,16 @@ ActiveRecord::Schema.define(version: 20160809084838) do
   add_index "staff_members", ["staff_type_id"], name: "index_staff_members_on_staff_type_id", using: :btree
   add_index "staff_members", ["would_rehire"], name: "index_staff_members_on_would_rehire", using: :btree
 
+  create_table "staff_tracking_events", force: :cascade do |t|
+    t.datetime "at",                          null: false
+    t.string   "event_type",      limit: 255, null: false
+    t.integer  "staff_member_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "staff_tracking_events", ["at", "event_type"], name: "index_staff_tracking_events_on_at_and_event_type", using: :btree
+
   create_table "staff_types", force: :cascade do |t|
     t.string   "name",       limit: 255, null: false
     t.datetime "created_at",             null: false

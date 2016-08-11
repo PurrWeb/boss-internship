@@ -20,6 +20,11 @@ class DeleteStaffMember
       disable_upcoming_shifts
       disable_upcoming_holidays
       disable_staff_member
+      StaffTrackingEvent.create!(
+        at: now,
+        staff_member: staff_member,
+        event_type: StaffTrackingEvent::DISABLE_EVENT_TYPE
+      )
       StaffMemberUpdatesMailer.staff_member_disabled(staff_member).deliver_now
     end
   end

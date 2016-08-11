@@ -22,6 +22,7 @@ class ReviveStaffMember
   end
 
   def call
+    now = Time.current
     result = false
 
     ActiveRecord::Base.transaction do
@@ -35,7 +36,11 @@ class ReviveStaffMember
             :enabled,
             requster_user_id: requester.id
           )
-
+        StaffTrackingEvent.create!(
+          at: now,
+          staff_member: staff_member,
+          event_type: StaffTrackingEvent::REENABLE_EVENT_TYPE
+        )
         StaffMemberUpdatesMailer.staff_member_revived(staff_member).deliver_now
       end
       raise ActiveRecord::Rollback unless result

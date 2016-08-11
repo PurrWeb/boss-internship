@@ -29,6 +29,11 @@ class CreateStaffMember
       result = staff_member.save
 
       if result
+        StaffTrackingEvent.create!(
+          at: staff_member.created_at,
+          event_type: StaffTrackingEvent::CREATION_EVENT_TYPE,
+          staff_member: staff_member
+        )
         StaffMemberUpdatesMailer.new_staff_member(staff_member).deliver_now
       end
     end
