@@ -3,6 +3,8 @@ class SafeChecksController < ApplicationController
     if venue_from_params.present?
       venue = venue_from_params
 
+      authorize! :manage, venue
+
       safe_checks = SafeCheck.
         where(venue: venue).
         order(created_at: :desc).
@@ -30,6 +32,8 @@ class SafeChecksController < ApplicationController
         safe_float_cents: venue.safe_float_cents
       )
 
+      authorize! :manage, safe_check.venue
+
       render locals: {
         safe_check: safe_check,
         accessible_venues: accessible_venues
@@ -41,6 +45,8 @@ class SafeChecksController < ApplicationController
 
   def create
     safe_check = SafeCheck.new(safe_check_params)
+
+    authorize! :manage, safe_check.venue
 
     if safe_check.save
       flash[:success] = "Safe check created successfully"
