@@ -23,6 +23,12 @@ class SafeChecksController < ApplicationController
     end
   end
 
+  def show
+    safe_check = SafeCheck.find(params[:id])
+
+    render locals: { safe_check: safe_check }
+  end
+
   def new
     if venue_from_params.present?
       venue = venue_from_params

@@ -117,7 +117,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :safe_checks, only: [:index, :new, :create]
+    resources :safe_checks, only: [:index, :new, :create, :show]
 
     resources :staff_vetting, only: [:index] do
       collection do

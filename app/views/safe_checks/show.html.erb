@@ -1,0 +1,43 @@
+<h1><%= safe_check.venue.name.titlecase %> Safe Check <%= safe_check.created_at.to_s(:human) %></h1>
+
+<dl class="dl-horizontal">
+  <dt>Venue</dt>
+  <dd><%= safe_check.venue.name.titlecase %></dd>
+
+  <dt>Time</dt>
+  <dd><%= safe_check.created_at.to_s(:human) %></dd>
+
+  <dt>Checked By</dt>
+  <dd><%= safe_check.checked_by_note %></dd>
+
+  <% SafeCheck::POUND_FIELDS.each do |field| %>
+    <dt><%= SafeCheck.label_for(field) %></dt>
+    <dd><%= safe_check.pound_value_for(field) %></dd>
+  <% end %>
+
+  <% SafeCheck::VALIDATABLE_CENT_FIELDS.each do |field| %>
+    <dt><%= SafeCheck.label_for(field) %></dt>
+    <dd><%= safe_check.pound_value_for(field) %></dd>
+  <% end %>
+
+  <dt><%= SafeCheck.label_for(:coppers_cents) %></dt>
+  <dd><%= safe_check.pound_value_for(:coppers_cents) %></dd>
+
+  <dt>Other</dt>
+  <dd><%= safe_check.pound_value_for(:other_cents) %></dd>
+
+  <dt>Total</dt>
+  <dd><%= safe_check.pound_value_for(:total_cents) %></dd>
+
+  <dt>Out to order</dt>
+  <dd><%= safe_check.pound_value_for(:out_to_order_cents) %></dd>
+
+  <dt>Till Float</dt>
+  <dd><%= safe_check.pound_value_for(:till_float_cents) %></dd>
+
+  <dt>Safe Float</dt>
+  <dd><%= safe_check.pound_value_for(:safe_float_cents) %></dd>
+
+  <dt>Variance</dt>
+  <dd><%= safe_check.pound_value_for(:variance_cents) %></dd>
+</dl>
