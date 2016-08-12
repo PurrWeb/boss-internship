@@ -57,6 +57,8 @@ class VenuesController < ApplicationController
       ).merge(
         creator: current_user,
         fruit_order_fields: fruit_order_fields_from_params
+      ).merge(
+        float_field_values
       )
   end
 
@@ -66,7 +68,28 @@ class VenuesController < ApplicationController
         :name
       ).merge(
         fruit_order_fields: fruit_order_fields_from_params
+      ).merge(
+        float_field_values
       )
+  end
+
+  def float_field_values
+    result = {}
+    [:till_float_cents, :safe_float_cents].each do |field|
+      parsed_value = nil
+      unparsed_value = params["venue"].fetch(field)
+      begin
+        parsed_value = Float(unparsed_value)
+      rescue ArgumentError, TypeError
+      end
+
+      if parsed_value.present?
+        result[field] = (parsed_value * 100.0).floor
+      else
+        result[field] = unparsed_value
+      end
+    end
+    result
   end
 
   def reminder_users_from_params

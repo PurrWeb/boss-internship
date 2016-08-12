@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160809084838) do
+ActiveRecord::Schema.define(version: 20160812145508) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -609,6 +609,8 @@ ActiveRecord::Schema.define(version: 20160809084838) do
     t.datetime "updated_at"
     t.integer  "creator_id",         limit: 4
     t.text     "fruit_order_fields", limit: 65535
+    t.integer  "till_float_cents",   limit: 4,     null: false
+    t.integer  "safe_float_cents",   limit: 4,     null: false
   end
 
   add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree

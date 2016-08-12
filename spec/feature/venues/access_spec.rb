@@ -94,7 +94,13 @@ RSpec.describe 'Staff member pages access' do
   describe 'create venue action' do
     let(:url) { url_helpers.venues_path }
     let(:params) do
-      { venue: { foo: 'bar' } }
+      {
+        venue: {
+          foo: 'bar',
+          till_float_cents: 0,
+          safe_float_cents: 0
+        }
+      }
     end
 
     context 'manager' do
