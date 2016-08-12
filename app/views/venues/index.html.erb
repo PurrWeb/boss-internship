@@ -3,12 +3,12 @@
 <%= link_to('Add Venue', new_venue_path, class: ['btn', 'btn-primary']) %>
 
 <% if venues.present? %>
-  <table class="table">
+  <table class="table table-striped" style="text-align: center;">
     <tr>
-      <th>Name</th>
-      <th>Staff</th>
-      <th>Fruit Order Fields</th>
-      <th></th>
+      <th style="text-align: center;">Name</th>
+      <th style="text-align: center;">Staff</th>
+      <th style="text-align: center;">Fruit Order Fields</th>
+      <th style="text-align: center;"></th>
     <tr/>
     <% venues.each do |venue| %>
       <tr class="venues-index-listing" data-venue-id="<%= venue.id %>">
