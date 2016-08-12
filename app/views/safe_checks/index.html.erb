@@ -30,22 +30,22 @@
 </div>
 
 <% if safe_checks.count > 0 %>
-  <table class="table">
+  <table class="table table-striped" style="text-align: center;">
     <thead>
       <tr>
-        <th>Time</th>
-        <th>Checked By</th>
+        <th style="text-align: center;">Time</th>
+        <th style="text-align: center;">Checked By</th>
         <% SafeCheck::POUND_FIELDS.each do |field| %>
-          <th><%= SafeCheck.label_for(field) %></th>
+          <th style="text-align: center;"><%= SafeCheck.label_for(field) %></th>
         <% end %>
         <% (SafeCheck::CENTS_FIELDS - [:till_float_cents, :safe_float_cents, :out_to_order_cents]).each do |field| %>
-          <th><%= SafeCheck.label_for(field) %></th>
+          <th style="text-align: center;"><%= SafeCheck.label_for(field) %></th>
         <% end %>
-        <th>Total</th>
-        <th>Out to Order</th>
-        <th>Safe Float</th>
-        <th>Till Float</th>
-        <th>Variance</th>
+        <th style="text-align: center;">Total</th>
+        <th style="text-align: center;">Out to Order</th>
+        <th style="text-align: center;">Safe Float</th>
+        <th style="text-align: center;">Till Float</th>
+        <th style="text-align: center;">Variance</th>
       </tr>
     </thead>
     <tbody>
