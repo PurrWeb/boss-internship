@@ -93,11 +93,13 @@
   <%= form.static_control label: "Variance" do %>
     <span class="js-total-calculation-variance-result">
       <% if safe_check.variance_cents.present? %>
-        <%= number_to_currency(
-              safe_check.variance_cents / 100.0,
-              unit: '£',
-              precision: 2
-            ) %>
+        <span class="<%= "text-danger" if safe_check.variance_cents < 0 %>">
+          <%= number_to_currency(
+                safe_check.variance_cents / 100.0,
+                unit: '£',
+                precision: 2
+              ) %>
+        <span>
       <% else %>
         -
       <% end %>

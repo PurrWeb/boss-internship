@@ -48,22 +48,35 @@ var poundValueString = function(cents){
   }
 }
 
-var updatePlaceHolderValue = function(selector, centValue){
+var updatePlaceHolderValue = function(selector, centValue, colorNegativeValue){
   resultPlaceholder = $(selector);
 
   if( isNaN(centValue) ){
     resultPlaceholder.html("-");
   } else {
-    resultPlaceholder.html("£" + poundValueString(centValue));
+    var htmlFragments = [];
+    var negativeColoringRequired = colorNegativeValue && (centValue < 0);
+
+    if( negativeColoringRequired ){
+      htmlFragments.push("<span class=\"text-danger\">");
+    }
+
+    htmlFragments.push("£" + poundValueString(centValue));
+
+    if( negativeColoringRequired ){
+      htmlFragments.push("</span>");
+    }
+
+    resultPlaceholder.html(htmlFragments.join(""));
   }
 }
 
 var updateRealtimeTotalField = function(totalCents){
-  updatePlaceHolderValue('.js-total-calculation-total-result', totalCents);
+  updatePlaceHolderValue('.js-total-calculation-total-result', totalCents, false);
 };
 
 var updateRealtimeVarienceField = function(varianceCents){
-  updatePlaceHolderValue('.js-total-calculation-variance-result', varianceCents);
+  updatePlaceHolderValue('.js-total-calculation-variance-result', varianceCents, true);
 };
 
 SafeChecksController.prototype.index = function(){

@@ -109,7 +109,7 @@
                   precision: 2
                 ) %>
           </td>
-          <td>
+          <td class="<%= "text-danger" if safe_check.variance_cents < 0 %>">
             <%= number_to_currency(
                   safe_check.pound_value_for(:variance_cents),
                   unit: '£',
