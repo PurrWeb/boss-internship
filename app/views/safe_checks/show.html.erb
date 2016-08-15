@@ -11,38 +11,52 @@
 
   <dt>Checked By</dt>
   <dd><%= safe_check.checked_by_note %></dd>
-
-  <% SafeCheck::POUND_FIELDS.each do |field| %>
-    <dt><%= SafeCheck.label_for(field) %></dt>
-    <dd><%= safe_check.pound_value_for(field) %></dd>
-  <% end %>
-
-  <% SafeCheck::VALIDATABLE_CENT_FIELDS.each do |field| %>
-    <dt><%= SafeCheck.label_for(field) %></dt>
-    <dd><%= safe_check.pound_value_for(field) %></dd>
-  <% end %>
-
-  <dt><%= SafeCheck.label_for(:coppers_cents) %></dt>
-  <dd><%= safe_check.pound_value_for(:coppers_cents) %></dd>
-
-  <dt>Other</dt>
-  <dd><%= safe_check.pound_value_for(:other_cents) %></dd>
-
-  <dt>Total</dt>
-  <dd><%= safe_check.pound_value_for(:total_cents) %></dd>
-
-  <dt>Out to order</dt>
-  <dd><%= safe_check.pound_value_for(:out_to_order_cents) %></dd>
-
-  <dt>Till Float</dt>
-  <dd><%= safe_check.pound_value_for(:till_float_cents) %></dd>
-
-  <dt>Safe Float</dt>
-  <dd><%= safe_check.pound_value_for(:safe_float_cents) %></dd>
-
-  <dt>Variance</dt>
-  <dd><%= safe_check.pound_value_for(:variance_cents) %></dd>
 </dl>
+
+<table class="table">
+  <thead>
+    <tr>
+      <% SafeCheck::POUND_FIELDS.each do |field| %>
+        <th><%= SafeCheck.label_for(field) %></th>
+      <% end %>
+      <% SafeCheck::VALIDATABLE_CENT_FIELDS.each do |field| %>
+        <th><%= SafeCheck.label_for(field) %></th>
+      <% end %>
+      <th><%= SafeCheck.label_for(:coppers_cents) %></th>
+      <th>Other</th>
+      <th>Total</th>
+      <th>Out to order</th>
+      <th>Till Float</th>
+      <th>Safe Float</th>
+      <th>Variance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <% SafeCheck::POUND_FIELDS.each do |field| %>
+        <td><%= safe_check.pound_value_for(field) %></td>
+      <% end %>
+
+      <% SafeCheck::VALIDATABLE_CENT_FIELDS.each do |field| %>
+        <td><%= safe_check.pound_value_for(field) %></td>
+      <% end %>
+
+      <td><%= safe_check.pound_value_for(:coppers_cents) %></td>
+
+      <td><%= safe_check.pound_value_for(:other_cents) %></td>
+
+      <td><%= safe_check.pound_value_for(:total_cents) %></td>
+
+      <td><%= safe_check.pound_value_for(:out_to_order_cents) %></td>
+
+      <td><%= safe_check.pound_value_for(:till_float_cents) %></td>
+
+      <td><%= safe_check.pound_value_for(:safe_float_cents) %></td>
+
+      <td><%= safe_check.pound_value_for(:variance_cents) %></td>
+    </tr>
+  </tbody>
+</table>
 
 <h2>Notes</h2>
 
