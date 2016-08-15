@@ -51,70 +51,85 @@
     <tbody>
       <% safe_checks.each do |safe_check| %>
         <tr>
-          <td><%= safe_check.created_at.to_s(:human) %></td>
-          <td><%= safe_check.checked_by_note %></td>
+          <td><%= link_to(safe_check.created_at.to_s(:human), safe_check_path(safe_check), class: 'link-unstyled') %></td>
+          <td><%= link_to(safe_check.checked_by_note, safe_check_path(safe_check), class: 'link-unstyled') %></td>
           <% SafeCheck::POUND_FIELDS.each do |field| %>
             <% value = safe_check.public_send(field) %>
             <% if value != 0 %>
               <td>
-                <%= number_to_currency(
-                      value,
-                      unit: '£',
-                      precision: 0
-                    ) %>
+                <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
+                  <%= number_to_currency(
+                        value,
+                        unit: '£',
+                        precision: 0
+                      ) %>
+                <% end %>
               </td>
             <% else %>
-              <td>-</td>
+              <td><%= link_to('-', safe_check_path(safe_check), class: 'link-unstyled') %></td>
             <% end %>
           <% end %>
           <% (SafeCheck::CENTS_FIELDS - [:till_float_cents, :safe_float_cents, :out_to_order_cents]).each do |field| %>
             <% value = safe_check.public_send(:pound_value_for, field) %>
             <% if value != 0 %>
               <td>
-                <%= number_to_currency(
-                      value,
-                      unit: '£',
-                      precision: 2
-                    ) %>
+
+                <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
+                  <%= number_to_currency(
+                        value,
+                        unit: '£',
+                        precision: 2
+                      ) %>
+                <% end %>
               </td>
             <% else %>
-              <td>-</td>
+              <td><%= link_to('-', safe_check_path(safe_check), class: 'link-unstyled') %></td>
             <% end %>
           <% end %>
           <td>
-            <%= number_to_currency(
-                  safe_check.pound_value_for(:total_cents),
-                  unit: '£',
-                  precision: 2
-                ) %>
+            <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
+              <%= number_to_currency(
+                    safe_check.pound_value_for(:total_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+            <% end %>
           </td>
           <td>
-            <%= number_to_currency(
-                  safe_check.pound_value_for(:out_to_order_cents),
-                  unit: '£',
-                  precision: 2
-                ) %>
+            <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
+              <%= number_to_currency(
+                    safe_check.pound_value_for(:out_to_order_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+            <% end %>
           </td>
           <td>
-            <%= number_to_currency(
-                  safe_check.pound_value_for(:safe_float_cents),
-                  unit: '£',
-                  precision: 2
-                ) %>
+            <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
+              <%= number_to_currency(
+                    safe_check.pound_value_for(:safe_float_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+            <% end %>
           </td>
           <td>
-            <%= number_to_currency(
-                  safe_check.pound_value_for(:till_float_cents),
-                  unit: '£',
-                  precision: 2
-                ) %>
+            <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
+              <%= number_to_currency(
+                    safe_check.pound_value_for(:till_float_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+            <% end %>
           </td>
           <td class="<%= "text-danger" if safe_check.variance_cents < 0 %>">
-            <%= number_to_currency(
-                  safe_check.pound_value_for(:variance_cents),
-                  unit: '£',
-                  precision: 2
-                ) %>
+            <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
+              <%= number_to_currency(
+                    safe_check.pound_value_for(:variance_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+            <% end %>
           </td>
         </tr>
       <% end %>

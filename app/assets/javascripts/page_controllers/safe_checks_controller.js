@@ -18,9 +18,14 @@ var calculateRealtimeTotals = function(){
 
   var floatValueCents = 0
   floatFields.each(function(index, field){
+    normalisedValue = field.
+      innerText.
+      replace('£', '').
+      replace(',', '');
+
     floatValueCents = floatValueCents +
       Math.floor(
-        parseFloat( field.innerText.replace('£', '') ) * 100
+        parseFloat( normalisedValue ) * 100
       );
   });
 
