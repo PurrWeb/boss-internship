@@ -34,26 +34,80 @@
   <tbody>
     <tr>
       <% SafeCheck::POUND_FIELDS.each do |field| %>
-        <td><%= safe_check.pound_value_for(field) %></td>
+        <td>
+          <%= number_to_currency(
+                safe_check.pound_value_for(field),
+                unit: '£',
+                precision: 0
+              ) %>
+        </td>
       <% end %>
 
       <% SafeCheck::VALIDATABLE_CENT_FIELDS.each do |field| %>
-        <td><%= safe_check.pound_value_for(field) %></td>
+        <td>
+          <%= number_to_currency(
+                safe_check.pound_value_for(field),
+                unit: '£',
+                precision: 2
+              ) %>
+        </td>
       <% end %>
 
-      <td><%= safe_check.pound_value_for(:coppers_cents) %></td>
+      <td>
+        <%= number_to_currency(
+              safe_check.pound_value_for(:coppers_cents),
+              unit: '£',
+              precision: 2
+            ) %>
+      </td>
 
-      <td><%= safe_check.pound_value_for(:other_cents) %></td>
+      <td>
+        <%= number_to_currency(
+              safe_check.pound_value_for(:other_cents),
+              unit: '£',
+              precision: 2
+            ) %>
+      </td>
 
-      <td><%= safe_check.pound_value_for(:total_cents) %></td>
+      <td>
+        <%= number_to_currency(
+              safe_check.pound_value_for(:total_cents),
+              unit: '£',
+              precision: 2
+            ) %>
+      </td>
 
-      <td><%= safe_check.pound_value_for(:out_to_order_cents) %></td>
+      <td>
+        <%= number_to_currency(
+              safe_check.pound_value_for(:out_to_order_cents),
+              unit: '£',
+              precision: 2
+            ) %>
+      </td>
 
-      <td><%= safe_check.pound_value_for(:till_float_cents) %></td>
+      <td>
+        <%= number_to_currency(
+              safe_check.pound_value_for(:till_float_cents),
+              unit: '£',
+              precision: 2
+            ) %>
+      </td>
 
-      <td><%= safe_check.pound_value_for(:safe_float_cents) %></td>
+      <td>
+        <%= number_to_currency(
+              safe_check.pound_value_for(:safe_float_cents),
+              unit: '£',
+              precision: 2
+            ) %>
+      </td>
 
-      <td><%= safe_check.pound_value_for(:variance_cents) %></td>
+      <td class="<%= "text-danger" if safe_check.variance_cents < 0 %>">
+        <%= number_to_currency(
+              safe_check.pound_value_for(:variance_cents),
+              unit: '£',
+              precision: 2
+            ) %>
+      </td>
     </tr>
   </tbody>
 </table>
