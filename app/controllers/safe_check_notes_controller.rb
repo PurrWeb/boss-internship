@@ -5,7 +5,7 @@ class SafeCheckNotesController < ApplicationController
     authorize! :manage, safe_check.venue
 
     safe_check_note = SafeCheckNote.new
-    safe_check_notes = safe_check.notes
+    safe_check_notes = safe_check.notes.enabled
 
     render locals: {
       safe_check_note: safe_check_note,
@@ -34,7 +34,7 @@ class SafeCheckNotesController < ApplicationController
     else
       flash.now[:error] = "There was a problem saving this note"
 
-      safe_check_notes = safe_check.notes
+      safe_check_notes = safe_check.notes.enabled
 
       render(
         'index',
@@ -47,6 +47,21 @@ class SafeCheckNotesController < ApplicationController
     end
   end
 
+  def destroy
+    safe_check_note = SafeCheckNote.find(params[:id])
+
+    authorize! :manage, safe_check_note.safe_check.venue
+
+    if safe_check_note.disabled?
+      flash[:error] = "Can't disable already disabled note"
+    else
+      safe_check_note.disable!(requester: current_user)
+      flash[:success] = 'Note disabled successfully'
+    end
+
+    redirect_to(safe_check_path(safe_check_note.safe_check))
+  end
+
   private
   def safe_check_note_params
     params.
@@ -56,5 +71,4 @@ class SafeCheckNotesController < ApplicationController
         :note_left_by_note
       ])
   end
-
 end

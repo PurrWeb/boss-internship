@@ -119,7 +119,7 @@ Rails.application.routes.draw do
 
     resources :safe_checks, only: [:index, :new, :create, :show]
 
-    resources :safe_check_notes, only: [:index, :create]
+    resources :safe_check_notes, only: [:index, :create, :destroy]
 
     resources :staff_vetting, only: [:index] do
       collection do

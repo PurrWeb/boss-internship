@@ -1,6 +1,6 @@
 class SafeCheckNote < ActiveRecord::Base
   belongs_to :created_by, class_name: 'User', foreign_key: :created_by_user_id
-  belongs_to :disabled_by, class_name: 'User', foreign_key: :disabled_by_user
+  belongs_to :disabled_by, class_name: 'User', foreign_key: :disabled_by_user_id
   belongs_to :safe_check
 
   validates :safe_check, presence: true
@@ -14,5 +14,16 @@ class SafeCheckNote < ActiveRecord::Base
 
   def disabled?
     disabled_at.present?
+  end
+
+  def self.enabled
+    where(disabled_at: nil)
+  end
+
+  def disable!(now: Time.current, requester:)
+    update_attributes!(
+      disabled_at: now,
+      disabled_by: requester
+    )
   end
 end

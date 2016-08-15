@@ -2,7 +2,10 @@
 <% safe_check_notes.each do |safe_check_note| %>
   <li>
     <p class="h4"><%= safe_check_note.note_text %></p>
-    <p>Left By: <%= safe_check_note.note_left_by_note %> at <%= safe_check_note.created_at.to_s(:human) %></p>
+    <p>Left By: <%= safe_check_note.note_left_by_note %> at <%= safe_check_note.created_at.to_s(:human) %> <%= link_to(safe_check_note_path(safe_check_note), method: :delete, class: 'link-unstyled') do %>
+        <span class="glyphicon glyphicon-remove"></span>
+      <% end %>
+    </p>
   </li>
 <% end %>
 </ul>
