@@ -1,4 +1,6 @@
-<h1><%= safe_check.venue.name.titlecase %> Safe Check <%= safe_check.created_at.to_s(:human) %></h1>
+<h1>Safe Check</h1>
+
+<%= link_to('Return to index', safe_checks_path(venue_id: safe_check.venue.id)) %>
 
 <dl class="dl-horizontal">
   <dt>Venue</dt>
@@ -41,3 +43,13 @@
   <dt>Variance</dt>
   <dd><%= safe_check.pound_value_for(:variance_cents) %></dd>
 </dl>
+
+<h2>Notes</h2>
+
+<p>Total: <%= safe_check_notes.count %></p>
+
+<%= link_to('Add new', notes_safe_check_path(safe_check), class: 'btn btn-primary') %>
+
+<% if safe_check_notes.count > 0 %>
+  <%= render partial: 'notes_list', locals: { safe_check_notes: safe_check_notes } %>
+<% end %>
