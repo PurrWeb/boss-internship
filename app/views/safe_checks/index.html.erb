@@ -34,6 +34,7 @@
     <thead>
       <tr>
         <th style="text-align: center;">Time</th>
+        <th></th>
         <th style="text-align: center;">Checked By</th>
         <% SafeCheck::POUND_FIELDS.each do |field| %>
           <th style="text-align: center;"><%= SafeCheck.label_for(field) %></th>
@@ -52,6 +53,13 @@
       <% safe_checks.each do |safe_check| %>
         <tr>
           <td><%= link_to(safe_check.created_at.to_s(:human), safe_check_path(safe_check)) %></td>
+          <td>
+            <% if safe_check.notes.enabled.count > 0 %>
+              <%= link_to(safe_check_path(safe_check)) do %>
+                <span class="glyphicon glyphicon-envelope"></span>
+              <% end %>
+            <% end %>
+          </td>
           <td><%= link_to(safe_check.checked_by_note, safe_check_path(safe_check)) %></td>
           <% SafeCheck::POUND_FIELDS.each do |field| %>
             <% value = safe_check.public_send(field) %>

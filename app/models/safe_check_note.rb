@@ -12,6 +12,10 @@ class SafeCheckNote < ActiveRecord::Base
   auto_strip_attributes :note_left_by_note, convert_non_breaking_spaces: true, squish: false
   auto_strip_attributes :note_text, convert_non_breaking_spaces: true, squish: false
 
+  def self.enabled
+    where(disabled_at: nil)
+  end
+
   def disabled?
     disabled_at.present?
   end
