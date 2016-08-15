@@ -25,7 +25,7 @@ class SafeChecksController < ApplicationController
 
   def show
     safe_check = SafeCheck.find(params[:id])
-    safe_check_notes = safe_check.notes.enabled
+    safe_check_notes = safe_check.notes
 
     render locals: {
       safe_check: safe_check,
