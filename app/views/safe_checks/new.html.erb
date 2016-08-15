@@ -106,5 +106,9 @@
     </span>
   <% end %>
 
+  <%= form.fields_for(safe_check_note) do |fields| %>
+    <%= fields.text_area(:note_text, label: 'Note', label_class: 'force-not-required') %>
+  <% end %>
+
   <%= form.submit('Update') %>
 <% end %>
