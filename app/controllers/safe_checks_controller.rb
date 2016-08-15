@@ -53,53 +53,6 @@ class SafeChecksController < ApplicationController
     end
   end
 
-  def notes
-    safe_check = SafeCheck.find(params[:id])
-
-    authorize! :manage, safe_check.venue
-
-    safe_check_note = SafeCheckNote.new
-    safe_check_notes = safe_check.notes
-
-    render locals: {
-      safe_check_note: safe_check_note,
-      safe_check: safe_check,
-      safe_check_notes: safe_check_notes
-    }
-  end
-
-  def create_note
-    safe_check = SafeCheck.find(params[:id])
-
-    authorize! :manage, safe_check.venue
-
-    safe_check_note = SafeCheckNote.new(
-      safe_check_note_params.
-      merge(
-        safe_check: safe_check,
-        created_by: current_user
-      )
-    )
-
-    if safe_check_note.save
-      flash[:success] = "Note Added Successfully"
-
-      redirect_to safe_check_path(safe_check)
-    else
-      flash.now[:error] = "There was a problem saving this note"
-
-      safe_check_notes = safe_check.notes
-
-      render(
-        'notes',
-        locals: {
-          safe_check_note: safe_check_note,
-          safe_check: safe_check,
-          safe_check_notes: safe_check_notes
-        }
-      )
-    end
-  end
 
   def create
     safe_check = SafeCheck.new(safe_check_params)

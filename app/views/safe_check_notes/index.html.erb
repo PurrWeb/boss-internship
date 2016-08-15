@@ -6,7 +6,7 @@
     <span>Add Note</span>
   </div>
   <div class="panel-body">
-    <%= bootstrap_form_for(safe_check_note, url: create_note_safe_check_path(safe_check.id), method: :put) do |form| %>
+    <%= bootstrap_form_for(safe_check_note, url: safe_check_notes_path(safe_check_id: safe_check.id)) do |form| %>
       <%= form.text_area :note_text, hide_label: true %>
       <%= form.text_field :note_left_by_note, label: 'Created By' %>
       <button type="submit" class="btn btn-default">
@@ -19,7 +19,7 @@
 <h2>Notes</h2>
 
 <% if safe_check_notes.count > 0 %>
-  <%= render partial: 'notes_list', locals: { safe_check_notes: safe_check_notes } %>
+  <%= render partial: 'shared/safe_check_notes_list', locals: { safe_check_notes: safe_check_notes } %>
 <% else %>
   <p>None found</p>
 <% end %>

@@ -117,12 +117,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :safe_checks, only: [:index, :new, :create, :show] do
-      member do
-         get :notes
-         put :create_note
-      end
-    end
+    resources :safe_checks, only: [:index, :new, :create, :show]
+
+    resources :safe_check_notes, only: [:index, :create]
 
     resources :staff_vetting, only: [:index] do
       collection do
