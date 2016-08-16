@@ -2,8 +2,10 @@
 
 <%= render partial: 'shared/finance_report', locals: {
       filter_form_path: finance_reports_path,
+      pay_rate_filter_path_helper: method(:finance_reports_path),
       venue: venue,
       week: week,
+      pay_rate_filtering: pay_rate_filtering,
       accessible_venues: accessible_venues,
       reports_by_staff_type: reports_by_staff_type,
       display_totals: true,

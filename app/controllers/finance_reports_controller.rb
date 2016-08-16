@@ -5,10 +5,12 @@ class FinanceReportsController < ApplicationController
     if venue_from_params.present? && week_from_params.present?
       venue = venue_from_params
       week = week_from_params
+      filter_by_weekly_pay_rate = params[:pay_rate_filter] == 'weekly'
 
       staff_members = FinanceReportStaffMembersQuery.new(
         venue: venue,
-        week: week
+        week: week,
+        filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
       ).all
 
       reports_by_staff_type = {}
@@ -29,7 +31,8 @@ class FinanceReportsController < ApplicationController
         week: week,
         venue: venue,
         accessible_venues: accessible_venues,
-        reports_by_staff_type: reports_by_staff_type
+        reports_by_staff_type: reports_by_staff_type,
+        pay_rate_filtering: params[:pay_rate_filter]
       }
     else
       redirect_to(finance_reports_path(index_redirect_params))
