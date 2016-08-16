@@ -89,15 +89,20 @@
             </td>
             <% week.each_with_day do |date, day| %>
               <td>
-                <%= link_to(staff_member_hours_overview_path(
-                      staff_member_id: report.staff_member.id,
-                      id: UIRotaDate.format(date)
-                    )) do %>
-                  <%= number_with_precision(
-                        report.public_send("#{day}_hours_count".to_sym),
-                        precision: 2,
-                        strip_insignificant_zeros: true
-                      ) %>
+                <% hour_value = report.public_send("#{day}_hours_count".to_sym) %>
+                <% if hour_value > 0%>
+                  <%= link_to(staff_member_hours_overview_path(
+                        staff_member_id: report.staff_member.id,
+                        id: UIRotaDate.format(date)
+                      )) do %>
+                    <%= number_with_precision(
+                          hour_value,
+                          precision: 2,
+                          strip_insignificant_zeros: true
+                        ) %>
+                  <% end %>
+                <% else %>
+                  <span>-</span>
                 <% end %>
               </td>
             <% end %>
@@ -114,7 +119,11 @@
                    precision: 2,
                    strip_insignificant_zeros: true
                  ) %>
-              <%= link_to(owed_hours_count, staff_member_path(report.staff_member, tab: 'owed-hours')) %>
+              <%= link_to_if(
+                    report.owed_hours_count > 0,
+                    owed_hours_count,
+                    staff_member_path(report.staff_member, tab: 'owed-hours')
+                  ) %>
             </td>
             <% if display_totals %>
               <td>
@@ -127,7 +136,11 @@
               </td>
             <% end %>
             <td>
-              <%= link_to(report.holiday_days_count, staff_member_path(report.staff_member, tab: 'holidays')) %>
+              <%= link_to_if(
+                    report.holiday_days_count > 0,
+                    report.holiday_days_count,
+                    staff_member_path(report.staff_member, tab: 'holidays')
+                  ) %>
             </td>
             <% if display_manager_actions %>
               <td>
