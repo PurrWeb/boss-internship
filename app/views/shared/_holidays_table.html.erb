@@ -24,11 +24,11 @@
           </p>
         </td>
         <td>
-          <% if holiday.editable? %>
+          <% if holiday.editable? && can?(:edit, holiday) %>
             <%= link_to('Edit', edit_holiday_path(holiday), class: 'btn btn-success') %>
           <% end %>
 
-          <% if holiday.editable? %>
+          <% if holiday.editable? && can?(:destroy, holiday) %>
             <%= link_to(
                   staff_member_holiday_path(
                     staff_member_id: staff_member.id,
