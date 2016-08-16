@@ -59,7 +59,7 @@ class HolidaysController < ApplicationController
 
   def create
     staff_member = StaffMember.find(params[:staff_member_id])
-    authorize! :edit, staff_member
+    authorize! :create, Holiday.new(staff_member: staff_member)
 
     result = CreateHoliday.new(
       requester: current_user,
@@ -89,7 +89,7 @@ class HolidaysController < ApplicationController
 
   def edit
     holiday = Holiday.find(params[:id])
-    authorize! :manage, holiday
+    authorize! :update, holiday
 
     render locals: { holiday: holiday }
   end
@@ -97,7 +97,7 @@ class HolidaysController < ApplicationController
   def update
     holiday = Holiday.find(params[:id])
     staff_member = holiday.staff_member
-    authorize! :manage, holiday
+    authorize! :update, holiday
 
     result = EditHoliday.new(
       requester: current_user,
@@ -122,7 +122,7 @@ class HolidaysController < ApplicationController
     holiday = staff_member.holidays.in_state(:enabled).where(id: params[:id]).first
     raise ActiveRecord::RecordNotFound unless holiday.present?
 
-    authorize! :manage, holiday
+    authorize! :destroy, holiday
 
     result = DeleteHoliday.new(
       requester: current_user,
