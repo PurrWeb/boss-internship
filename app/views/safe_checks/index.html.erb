@@ -1,0 +1,148 @@
+<h1>Safe Checks</h1>
+
+<%= bootstrap_form_for(
+      '',
+      url: safe_checks_path,
+      method: 'get',
+      html: {
+        id: 'safe-checks-venue-form'
+      }
+    )  do |form| %>
+  <%= form.select(
+        :venue_id,
+        options_for_select(
+          accessible_venues.map do |venue|
+            [venue.name, venue.id]
+          end,
+          current_venue.id
+        ),
+        {},
+        id: 'safe-checks-current-venue-select'
+      ) %>
+<% end %>
+
+<%= link_to(new_safe_check_path(venue_id: current_venue.id), class: ['btn', 'btn-primary']) do %>
+  Add New <span class="glyphicon glyphicon-plus"></span>
+<% end %>
+
+<div>
+  <%= page_entries_info(safe_checks, html: true, model: nil) %>
+</div>
+
+<% if safe_checks.count > 0 %>
+  <table class="table table-striped" style="text-align: center;">
+    <thead>
+      <tr>
+        <th style="text-align: center;">Time</th>
+        <th></th>
+        <th style="text-align: center;">Checked By</th>
+        <% SafeCheck::POUND_FIELDS.each do |field| %>
+          <th style="text-align: center;"><%= SafeCheck.label_for(field) %></th>
+        <% end %>
+        <% (SafeCheck::CENTS_FIELDS - [:till_float_cents, :safe_float_cents, :out_to_order_cents]).each do |field| %>
+          <th style="text-align: center;"><%= SafeCheck.label_for(field) %></th>
+        <% end %>
+        <th style="text-align: center;">Total</th>
+        <th style="text-align: center;">Out to Order</th>
+        <th style="text-align: center;">Safe Float</th>
+        <th style="text-align: center;">Till Float</th>
+        <th style="text-align: center;">Variance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% safe_checks.each do |safe_check| %>
+        <tr>
+          <td><%= link_to(safe_check.created_at.to_s(:human), safe_check_path(safe_check)) %></td>
+          <td>
+            <% if safe_check.notes.enabled.count > 0 %>
+              <%= link_to(safe_check_path(safe_check)) do %>
+                <span class="glyphicon glyphicon-envelope"></span>
+              <% end %>
+            <% end %>
+          </td>
+          <td><%= link_to(safe_check.checked_by_note, safe_check_path(safe_check)) %></td>
+          <% SafeCheck::POUND_FIELDS.each do |field| %>
+            <% value = safe_check.public_send(field) %>
+            <% if value != 0 %>
+              <td>
+                <%= link_to(safe_check_path(safe_check)) do %>
+                  <%= number_to_currency(
+                        value,
+                        unit: '£',
+                        precision: 0
+                      ) %>
+                <% end %>
+              </td>
+            <% else %>
+              <td><%= link_to('-', safe_check_path(safe_check)) %></td>
+            <% end %>
+          <% end %>
+          <% (SafeCheck::CENTS_FIELDS - [:till_float_cents, :safe_float_cents, :out_to_order_cents]).each do |field| %>
+            <% value = safe_check.public_send(:pound_value_for, field) %>
+            <% if value != 0 %>
+              <td>
+
+                <%= link_to(safe_check_path(safe_check)) do %>
+                  <%= number_to_currency(
+                        value,
+                        unit: '£',
+                        precision: 2
+                      ) %>
+                <% end %>
+              </td>
+            <% else %>
+              <td><%= link_to('-', safe_check_path(safe_check)) %></td>
+            <% end %>
+          <% end %>
+          <td>
+            <%= link_to(safe_check_path(safe_check)) do %>
+              <%= number_to_currency(
+                    safe_check.pound_value_for(:total_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to(safe_check_path(safe_check)) do %>
+              <%= number_to_currency(
+                    safe_check.pound_value_for(:out_to_order_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to(safe_check_path(safe_check)) do %>
+              <%= number_to_currency(
+                    safe_check.pound_value_for(:safe_float_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to(safe_check_path(safe_check)) do %>
+              <%= number_to_currency(
+                    safe_check.pound_value_for(:till_float_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+            <% end %>
+          </td>
+          <td class="<%= "text-danger" if safe_check.variance_cents < 0 %>">
+            <%= link_to(safe_check_path(safe_check)) do %>
+              <%= number_to_currency(
+                    safe_check.pound_value_for(:variance_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= will_paginate(safe_checks, renderer: BootstrapPagination::Rails) %>
+<% end %>

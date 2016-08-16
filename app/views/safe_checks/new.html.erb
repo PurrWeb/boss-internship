@@ -1,0 +1,114 @@
+<h1>New Safe Check</h1>
+
+<%= bootstrap_form_for(
+      safe_check,
+      url: safe_checks_path,
+      method: 'post'
+    ) do |form| %>
+  <%= form.static_control label: "Venue" do %>
+    <%= safe_check.venue.name.titlecase %>
+  <% end %>
+  <%= form.hidden_field(:venue_id) %>
+
+  <%= form.text_field(
+        :checked_by_note,
+        label: 'Checked By'
+      ) %>
+
+  <% SafeCheck::POUND_FIELDS.each do |field| %>
+    <%= form.number_field(
+          field,
+          prepend: '£',
+          value: safe_check.pound_value_for(field).to_int_if_whole,
+          label: SafeCheck.label_for(field),
+          step: 0.0,
+          class: [
+            'js-total-calculation-watch-field',
+            'js-total-calculation-value-field'
+          ]
+        ) %>
+    <%= form.hidden_field(:venue_id) %>
+  <% end %>
+
+  <% (SafeCheck::CENTS_FIELDS - [:safe_float_cents, :till_float_cents, :out_to_order_cents]).each do |field| %>
+    <%= form.number_field(
+          field,
+          prepend: '£',
+          value: safe_check.pound_value_for(field).to_int_if_whole,
+          label: SafeCheck.label_for(field),
+          step: 0.01,
+          class: [
+            'js-total-calculation-watch-field',
+            'js-total-calculation-value-field'
+          ]
+        ) %>
+  <% end %>
+
+  <%= form.static_control label: "Total" do %>
+    <span class="js-total-calculation-total-result">
+      <% if safe_check.total_cents.present? %>
+        <%= number_to_currency(
+              safe_check.total_cents / 100.0,
+              unit: '£',
+              precision: 2
+            ) %>
+      <% else %>
+        -
+      <% end %>
+    </span>
+  <% end %>
+
+  <%= form.number_field(
+        :out_to_order_cents,
+        prepend: '£',
+        value: safe_check.pound_value_for(:out_to_order_cents).to_int_if_whole,
+        label: SafeCheck.label_for(:out_to_order_cents),
+        step: 0.01,
+        class: [
+          'js-total-calculation-watch-field',
+          'js-total-calculation-out-to-order-value'
+        ]
+      ) %>
+
+  <%= form.static_control label: "Safe Float" do %>
+    <span class="js-total-calculation-float-value">
+      <%= number_to_currency(
+            safe_check.pound_value_for(:safe_float_cents).to_int_if_whole,
+            unit: '£',
+            precision: 2
+          ) %>
+    </span>
+  <% end %>
+
+  <%= form.static_control label: "Till Float" do %>
+    <span class="js-total-calculation-float-value">
+      <%= number_to_currency(
+            safe_check.pound_value_for(:till_float_cents).to_int_if_whole,
+            unit: '£',
+            precision: 2
+          ) %>
+    </span>
+  <% end %>
+
+  <%= form.static_control label: "Variance" do %>
+    <span class="js-total-calculation-variance-result">
+      <% if safe_check.variance_cents.present? %>
+        <span class="<%= "text-danger" if safe_check.variance_cents < 0 %>">
+          <%= number_to_currency(
+                safe_check.variance_cents / 100.0,
+                unit: '£',
+                precision: 2
+              ) %>
+        <span>
+      <% else %>
+        -
+      <% end %>
+    </span>
+  <% end %>
+
+  <%= form.fields_for(safe_check_note) do |fields| %>
+    <%= fields.text_area(:note_text, label: 'Note', label_class: 'force-not-required') %>
+  <% end %>
+
+  <%= form.submit('Update') %>
+<% end %>

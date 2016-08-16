@@ -3,6 +3,22 @@
 <%= bootstrap_form_for(venue, html: { class: 'venue-form' }) do |form| %>
   <%= form.text_field(:name) %>
 
+  <%= form.number_field(
+        :till_float_cents,
+        prepend: '£',
+        value: Float(form.object.till_float_pound_value).to_int_if_whole,
+        label: 'Till Float',
+        step: 0.01
+      ) %>
+
+  <%= form.number_field(
+        :safe_float_cents,
+        prepend: '£',
+        value: Float(form.object.safe_float_pound_value).to_int_if_whole,
+        label: 'Safe Float',
+        step: 0.01
+      ) %>
+
   <% reminder_users = User.enabled.with_all_venue_access %>
   <% managers = UsersManagingVenueQuery.new(venue: venue).all %>
   <% if managers.present? %>

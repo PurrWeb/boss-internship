@@ -3,12 +3,14 @@
 <%= link_to('Add Venue', new_venue_path, class: ['btn', 'btn-primary']) %>
 
 <% if venues.present? %>
-  <table class="table">
+  <table class="table table-striped" style="text-align: center;">
     <tr>
-      <th>Name</th>
-      <th>Staff</th>
-      <th>Fruit Order Fields</th>
-      <th></th>
+      <th style="text-align: center;">Name</th>
+      <th style="text-align: center;">Staff</th>
+      <th style="text-align: center;">Safe Float</th>
+      <th style="text-align: center;">Till Float</th>
+      <th style="text-align: center;">Fruit Order Fields</th>
+      <th style="text-align: center;"></th>
     <tr/>
     <% venues.each do |venue| %>
       <tr class="venues-index-listing" data-venue-id="<%= venue.id %>">
@@ -17,6 +19,23 @@
         <td data-role="staff-count">
           <%= link_to(StaffMember.for_venue(venue).enabled.count, staff_members_path(staff_member_index_filter: { venue: venue.id })) %>
         </td>
+
+        <td>
+          <%= number_to_currency(
+                venue.safe_float_pound_value,
+                unit: '£',
+                precision: 2
+              ) %>
+        </td>
+
+        <td>
+          <%= number_to_currency(
+                venue.till_float_pound_value,
+                unit: '£',
+                precision: 2
+              ) %>
+        </td>
+
         <td><%= venue.fruit_order_fields.map(&:to_s).map(&:humanize).to_sentence %></td>
         <td>
           <%= link_to('Edit', edit_venue_path(venue), class: 'btn btn-success') %>

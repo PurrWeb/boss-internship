@@ -10,11 +10,21 @@ class Venue < ActiveRecord::Base
 
   serialize :fruit_order_fields, Array
 
+  validates :safe_float_cents,
+    numericality: { greater_than_or_equal_to: 0 }
+  validates :till_float_cents,
+    numericality: { greater_than_or_equal_to: 0 }
   validates :name, presence: true, uniqueness: true
   validates :creator, presence: true
   validate do |venue|
     if venue.fruit_order_fields - FruitOrder::FIELDS != []
       venue.errors.add(:fruit_order_fields, 'must be valid')
+    end
+  end
+
+  [:till_float, :safe_float].each do |field_prefix|
+    define_method "#{field_prefix}_pound_value" do
+      Float(public_send("#{field_prefix}_cents") || 0.0) / 100.0
     end
   end
 end

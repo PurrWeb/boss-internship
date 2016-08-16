@@ -1,0 +1,8 @@
+<ul class="list-unstyled">
+<% safe_check_notes.each do |safe_check_note| %>
+  <li>
+    <p class="h4"><%= safe_check_note.note_text %></p>
+    <p>Left By: <%= safe_check_note.note_left_by_note %> at <%= safe_check_note.created_at.to_s(:human) %></p>
+  </li>
+<% end %>
+</ul>
