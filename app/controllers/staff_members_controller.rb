@@ -42,6 +42,7 @@ class StaffMembersController < ApplicationController
       includes(:staff_type).
       includes(:master_venue).
       includes(:work_venues).
+      includes(:email_address).
       paginate(page: params[:page], per_page: 20)
 
     render locals: {
