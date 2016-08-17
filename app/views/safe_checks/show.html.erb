@@ -28,6 +28,7 @@
       <th>Out to order</th>
       <th>Till Float</th>
       <th>Safe Float</th>
+      <th>Total Float</th>
       <th>Variance</th>
     </tr>
   </thead>
@@ -96,6 +97,14 @@
       <td>
         <%= number_to_currency(
               safe_check.pound_value_for(:safe_float_cents),
+              unit: '£',
+              precision: 2
+            ) %>
+      </td>
+
+      <td>
+        <%= number_to_currency(
+              safe_check.pound_value_for(:total_float_cents),
               unit: '£',
               precision: 2
             ) %>
