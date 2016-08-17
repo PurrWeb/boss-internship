@@ -26,38 +26,6 @@ class StaffMemberIndexFilter < Reform::Form
     StaffType.all
   end
 
-  def query(relation: StaffMember.unscoped)
-    if user.security_manager?
-      @query ||= begin
-        result = SecurityManagerStaffMemberIndexQuery.new(
-          relation: relation,
-          name_text: name_text,
-          email_text: email_text,
-          status: status
-        ).all
-
-        result.
-          joins(:name).
-          order("LOWER(CONCAT(`names`.first_name, `names`.surname))")
-      end
-    else
-      @query ||= begin
-        result = StaffMemberIndexFilterQuery.new(
-          relation: relation,
-          name_text: name_text,
-          email_text: email_text,
-          status: status,
-          staff_type: staff_type,
-          venue: venue,
-          accessible_venues: accessible_venues
-        ).all
-        result.
-          joins(:name).
-          order('LOWER(CONCAT(`names`.first_name, `names`.surname))')
-      end
-    end
-  end
-
   def select_statuses
     ['enabled', 'disabled']
   end
@@ -65,6 +33,70 @@ class StaffMemberIndexFilter < Reform::Form
   # Needed to back bootstrap form
   def self.validators_on(args)
     []
+  end
+
+  def security_manager_staff_member_index_query
+    StaffMemberIndexQuery.new(
+      relation: StaffMember.unscoped,
+      name_text: name_text,
+      email_text: email_text,
+      filter_venues: false,
+      venue: nil,
+      accessible_venues: nil,
+      status_proc: lambda do |relation|
+        StaffMemberIndexQuery.
+          filter_by_status(
+            status: status,
+            relation: relation
+          )
+      end,
+      staff_type_proc: lambda do |relation|
+        relation.
+         joins(:staff_type).
+         merge(StaffType.security)
+      end
+    ).all
+  end
+
+  def staff_member_index_query
+    StaffMemberIndexQuery.new(
+      relation: StaffMember.unscoped,
+      name_text: name_text,
+      email_text: email_text,
+      venue: venue,
+      accessible_venues: accessible_venues,
+      status_proc: lambda do |relation|
+        StaffMemberIndexQuery.
+          filter_by_status(
+            status: status,
+            relation: relation
+          )
+      end,
+      staff_type_proc: lambda do |relation|
+        if staff_type.present?
+          relation.where(staff_type: staff_type)
+        else
+          relation
+        end
+      end
+    ).all
+  end
+
+  def flagged_staff_member_query
+    StaffMemberIndexQuery.new(
+      relation: StaffMember.unscoped,
+      name_text: name_text,
+      email_text: email_text,
+      filter_venues: false,
+      venue: nil,
+      accessible_venues: nil,
+      status_proc: lambda do |relation|
+        relation.flagged
+      end,
+      staff_type_proc: lambda do |relation|
+        relation
+      end
+    ).all
   end
 
   private

@@ -2,12 +2,18 @@ class StaffMembersController < ApplicationController
   def index
     authorize! :manage, :staff_members
 
-    filter = StaffMemberIndexFilter.new(
+    staff_member_index_filter = StaffMemberIndexFilter.new(
       user: current_user,
       params: params[:staff_member_index_filter]
     )
-    staff_members = filter.
-      query.
+
+    query = if current_user.security_manager?
+      staff_member_index_filter.security_manager_staff_member_index_query
+    else
+      staff_member_index_filter.staff_member_index_query
+    end
+
+    staff_members = query.
       all.
       includes(:name).
       includes(:staff_type).
@@ -17,7 +23,7 @@ class StaffMembersController < ApplicationController
 
     render locals: {
       staff_members: staff_members,
-      filter: filter
+      filter: staff_member_index_filter
     }
   end
 
@@ -30,12 +36,13 @@ class StaffMembersController < ApplicationController
     )
 
     staff_members = filter.
-      query(relation: StaffMember.flagged).
+      flagged_staff_member_query.
       all.
       includes(:name).
       includes(:staff_type).
       includes(:master_venue).
       includes(:work_venues).
+      includes(:email_address).
       paginate(page: params[:page], per_page: 20)
 
     render locals: {

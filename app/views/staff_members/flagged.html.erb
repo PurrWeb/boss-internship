@@ -3,9 +3,9 @@
 <%= render partial: 'flagged_staff_member_filter', locals: { filter: filter, staff_members: staff_members } %>
 
 <% if staff_members.present? %>
-  <ul class="list-unstyled">
+  <ul class="list-unstyled flagged-staff-member-list">
     <% staff_members.each do |staff_member| %>
-      <li>
+      <li class="staff-member-listing" data-staff-member-id="<%= staff_member.id %>">
         <div class="panel panel-default">
           <div class="media">
             <div class="media-left">
