@@ -115,7 +115,7 @@
               safe_check.pound_value_for(:variance_cents),
               unit: '£',
               precision: 2
-            ) %>
+            ).gsub('-', "\u2011") %>
       </td>
     </tr>
   </tbody>
