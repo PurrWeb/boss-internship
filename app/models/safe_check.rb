@@ -1,7 +1,7 @@
 class SafeCheck < ActiveRecord::Base
    POUND_FIELDS = [:fifty_pound_note_pounds, :twenty_pound_note_pounds, :ten_pound_note_pounds, :five_pound_note_pounds, :two_pound_coins_pounds, :one_pound_coins_pounds]
    VALIDATABLE_CENT_FIELDS = [:fifty_pence_coins_cents, :twenty_pence_coins_cents, :ten_pence_coins_cents, :five_pence_coins_cents]
-   CENTS_FIELDS = VALIDATABLE_CENT_FIELDS + [:coppers_cents, :safe_float_cents, :till_float_cents, :out_to_order_cents, :other_cents]
+   CENTS_FIELDS = VALIDATABLE_CENT_FIELDS + [:coppers_cents, :safe_float_cents, :till_float_cents, :total_float_cents, :out_to_order_cents, :other_cents]
    TOTAL_FIELDS = POUND_FIELDS + VALIDATABLE_CENT_FIELDS + [:coppers_cents, :other_cents]
 
    belongs_to :venue
@@ -75,6 +75,12 @@ class SafeCheck < ActiveRecord::Base
      total
    end
 
+   def total_float_cents
+    if till_float_cents.present? && safe_float_cents.present?
+      till_float_cents + safe_float_cents
+    end
+   end
+
    def total_cents_prerequsites_present?
      TOTAL_FIELDS.map{ |f| public_send(f) }.all?(&:present?)
    end
@@ -121,6 +127,7 @@ class SafeCheck < ActiveRecord::Base
        other_cents: 'Other',
        safe_float_cents: "Safe Float",
        till_float_cents: "Till Float",
+       total_float_cents: "Total Float",
        out_to_order_cents: "Out to order"
      }.fetch(field)
    end
