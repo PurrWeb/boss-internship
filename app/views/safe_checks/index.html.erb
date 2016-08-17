@@ -69,7 +69,7 @@
             <% value = safe_check.public_send(field) %>
             <% if value != 0 %>
               <td>
-                <%= link_to(safe_check_path(safe_check), class: 'linked-unstyled') do %>
+                <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
                   <%= number_to_currency(
                         value,
                         unit: '£',
