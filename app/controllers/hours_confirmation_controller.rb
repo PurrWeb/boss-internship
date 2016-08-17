@@ -160,13 +160,15 @@ class HoursConfirmationController < ApplicationController
       rotas = Rota.
         where(date: clock_in_days.pluck(:date).uniq).
         joins(:venue).
-        merge(venues)
+        merge(venues).
+        includes(:venue)
 
       rota_shifts = RotaShift.
         joins(:rota).
         merge(rota).
         joins(:staff_member).
-        merge(staff_members)
+        merge(staff_members).
+        includes([:rota, :staff_member])
 
       clock_in_notes = ClockInNote.
         joins(:clock_in_day).
