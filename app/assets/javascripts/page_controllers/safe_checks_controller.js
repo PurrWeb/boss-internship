@@ -44,14 +44,23 @@ var isInt = function(value) {
     !isNaN(parseInt(value, 10));
 }
 
+var numberWithCommas = function(number) {
+  var parts = number.toString().split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return parts.join(".");
+}
+
 var poundValueString = function(cents){
   poundValue = cents / 100.0;
 
+  var result = "";
   if( isInt(poundValue) ){
-    return parseInt(poundValue).toString();
+    result = parseInt(poundValue).toString();
   } else {
-    return poundValue.toString().match(/^-?\d+(?:\.\d{0,2})?/);
+    result = poundValue.toString().match(/^-?\d+(?:\.\d{0,2})?/);
   }
+
+  return numberWithCommas(result);
 }
 
 var updatePlaceHolderValue = function(selector, centValue, colorNegativeValue){
