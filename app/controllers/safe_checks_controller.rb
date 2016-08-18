@@ -181,7 +181,7 @@ class SafeChecksController < ApplicationController
 
   def cent_params
     result = {}
-    (SafeCheck::CENTS_FIELDS - [:safe_float_cents, :till_float_cents]).each do |field|
+    (SafeCheck::CENTS_FIELDS - [:safe_float_cents, :total_float_cents, :till_float_cents]).each do |field|
       parsed_value = nil
       unparsed_value = _safe_check_params.fetch(field.to_s)
       begin
