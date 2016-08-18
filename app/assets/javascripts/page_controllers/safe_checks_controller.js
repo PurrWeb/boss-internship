@@ -34,6 +34,7 @@ var calculateRealtimeTotals = function(){
   var varianceCents = totalCents + outToOrderCents - floatValueCents;
 
   updateRealtimeTotalField(totalCents);
+  updateRealtimeTotalFloatField(floatValueCents);
   updateRealtimeVarienceField(varianceCents);
 }
 
@@ -43,14 +44,23 @@ var isInt = function(value) {
     !isNaN(parseInt(value, 10));
 }
 
+var numberWithCommas = function(number) {
+  var parts = number.toString().split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return parts.join(".");
+}
+
 var poundValueString = function(cents){
   poundValue = cents / 100.0;
 
+  var result = "";
   if( isInt(poundValue) ){
-    return parseInt(poundValue).toString();
+    result = parseInt(poundValue).toString();
   } else {
-    return poundValue.toString().match(/^-?\d+(?:\.\d{0,2})?/);
+    result = poundValue.toString().match(/^-?\d+(?:\.\d{0,2})?/);
   }
+
+  return numberWithCommas(result);
 }
 
 var updatePlaceHolderValue = function(selector, centValue, colorNegativeValue){
@@ -82,6 +92,10 @@ var updateRealtimeTotalField = function(totalCents){
 
 var updateRealtimeVarienceField = function(varianceCents){
   updatePlaceHolderValue('.js-total-calculation-variance-result', varianceCents, true);
+};
+
+var updateRealtimeTotalFloatField = function(floatValueCents){
+  updatePlaceHolderValue('.js-total-calculation-float-total', floatValueCents, false);
 };
 
 SafeChecksController.prototype.index = function(){

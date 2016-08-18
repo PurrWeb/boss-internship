@@ -30,7 +30,7 @@
     <%= form.hidden_field(:venue_id) %>
   <% end %>
 
-  <% (SafeCheck::CENTS_FIELDS - [:safe_float_cents, :till_float_cents, :out_to_order_cents]).each do |field| %>
+  <% (SafeCheck::CENTS_FIELDS - [:safe_float_cents, :till_float_cents, :total_float_cents, :out_to_order_cents]).each do |field| %>
     <%= form.number_field(
           field,
           prepend: '£',
@@ -84,6 +84,16 @@
     <span class="js-total-calculation-float-value">
       <%= number_to_currency(
             safe_check.pound_value_for(:till_float_cents).to_int_if_whole,
+            unit: '£',
+            precision: 2
+          ) %>
+    </span>
+  <% end %>
+
+  <%= form.static_control label: "Total Float" do %>
+    <span class="js-total-calculation-float-total">
+      <%= number_to_currency(
+            safe_check.pound_value_for(:total_float_cents).to_int_if_whole,
             unit: '£',
             precision: 2
           ) %>
