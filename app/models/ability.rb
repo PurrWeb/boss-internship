@@ -132,7 +132,7 @@ class Ability
 
       can :destroy, FruitOrder do |fruit_order|
         fruit_order.persisted? &&
-          !(fruit_order.done? || fruit_order.destroyd?) &&
+          !(fruit_order.done? || fruit_order.destroyed?) &&
           can_update_fruit_order?(user, fruit_order)
       end
 
