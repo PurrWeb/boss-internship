@@ -1,4 +1,5 @@
 import React from "react"
+import utils from "~lib/utils"
 import getHoursPeriodStats from "~lib/get-hours-period-stats"
 import moment from "moment"
 
@@ -13,6 +14,31 @@ export default class StaffDayHeader extends React.Component {
             }
         })
 
+        var getDifferenceMessage = function(differenceHours){
+          let resultFragments = ["("];
+
+          if (differenceHours == 0) {
+            resultFragments.push(differenceHours + "h");
+          } else if(differenceHours > 0) {
+            resultFragments.push("+" + differenceHours + "h");
+          } else {
+            resultFragments.push("" + differenceHours + "h");
+          }
+          resultFragments.push(")");
+
+          return resultFragments.join('');
+        };
+
+        var getDifferenceClass = function(differenceHours){
+          let result = "";
+          if( differenceHours > 0) {
+            result = 'text-success';
+          } else if( differenceHours < 0 ){
+            result = "text-danger";
+          }
+          return result;
+        };
+
         var clockInBreaks = this.props.clockInBreaks;
         var clockedStats = getHoursPeriodStats({
             denormalizedHoursPeriods: clockedClockInPeriods
@@ -22,7 +48,10 @@ export default class StaffDayHeader extends React.Component {
         });
         var rotaedStats = getHoursPeriodStats({
             denormalizedHoursPeriods: rotaedClockInPeriods
-        })
+        });
+        let differenceHours = utils.round(rotaedStats.hours - acceptedStats.hours, 2);
+        let differenceMessage = getDifferenceMessage(differenceHours);
+        let differenceClass = getDifferenceClass(differenceHours);
 
         return <h2 style={{
                 fontSize: 20,
@@ -41,7 +70,7 @@ export default class StaffDayHeader extends React.Component {
                 color: "#999",
                 fontSize: 16
             }}>
-                {rotaedStats.hours}h rotaed, {clockedStats.hours}h clocked, {acceptedStats.hours}h accepted
+                {rotaedStats.hours}h rotaed, {clockedStats.hours}h clocked, {acceptedStats.hours}h accepted <span className={ differenceClass }>{differenceMessage}</span>
             </div>
             <div style={{float: "right"}}>
                 {moment(rotaDate.startTime).format("DD MMM YYYY")}
