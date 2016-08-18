@@ -34,6 +34,7 @@ var calculateRealtimeTotals = function(){
   var varianceCents = totalCents + outToOrderCents - floatValueCents;
 
   updateRealtimeTotalField(totalCents);
+  updateRealtimeTotalFloatField(floatValueCents);
   updateRealtimeVarienceField(varianceCents);
 }
 
@@ -82,6 +83,10 @@ var updateRealtimeTotalField = function(totalCents){
 
 var updateRealtimeVarienceField = function(varianceCents){
   updatePlaceHolderValue('.js-total-calculation-variance-result', varianceCents, true);
+};
+
+var updateRealtimeTotalFloatField = function(floatValueCents){
+  updatePlaceHolderValue('.js-total-calculation-float-total', floatValueCents, false);
 };
 
 SafeChecksController.prototype.index = function(){
