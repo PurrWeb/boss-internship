@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160815101714) do
+ActiveRecord::Schema.define(version: 20160818164932) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -486,6 +486,7 @@ ActiveRecord::Schema.define(version: 20160815101714) do
     t.integer  "other_cents",              limit: 4,   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "payouts_cents",            limit: 4,   null: false
   end
 
   add_index "safe_checks", ["created_at", "venue_id"], name: "index_safe_checks_on_created_at_and_venue_id", using: :btree
