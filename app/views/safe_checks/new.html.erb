@@ -71,7 +71,7 @@
       ) %>
 
   <%= form.static_control label: "Safe Float" do %>
-    <span class="js-total-calculation-float-value">
+    <span class="js-total-calculation-float-value js-safe-float-field">
       <%= number_to_currency(
             safe_check.pound_value_for(:safe_float_cents).to_int_if_whole,
             unit: '£',

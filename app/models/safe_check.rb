@@ -86,8 +86,8 @@ class SafeCheck < ActiveRecord::Base
    end
 
    def variance_cents
-     total_cents + out_to_order_cents - safe_float_cents - till_float_cents if (
-      total_cents.present? && out_to_order_cents.present? && safe_float_cents.present? && till_float_cents.present?
+     total_cents + out_to_order_cents - safe_float_cents if (
+      total_cents.present? && out_to_order_cents.present? && safe_float_cents.present?
     )
    end
 

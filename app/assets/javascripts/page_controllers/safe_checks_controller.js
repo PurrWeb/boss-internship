@@ -5,6 +5,17 @@ var setupRealtimeTotalCalculations = function(){
   watchFields.on('input', calculateRealtimeTotals);
 }
 
+var parseCentsFromPlaceHolderField = function(field){
+  normalisedValue = field.
+    innerText.
+    replace('£', '').
+    replace(',', '');
+
+  return Math.floor(
+    parseFloat( normalisedValue ) * 100
+  );
+}
+
 var calculateRealtimeTotals = function(){
   var valueFields = $('.js-total-calculation-value-field');
   var floatFields = $('.js-total-calculation-float-value');
@@ -16,25 +27,21 @@ var calculateRealtimeTotals = function(){
     totalCents = totalCents + fieldValueCents;
   });
 
-  var floatValueCents = 0
+  var totalFloatValueCents = 0
   floatFields.each(function(index, field){
-    normalisedValue = field.
-      innerText.
-      replace('£', '').
-      replace(',', '');
-
-    floatValueCents = floatValueCents +
-      Math.floor(
-        parseFloat( normalisedValue ) * 100
-      );
+    totalFloatValueCents = totalFloatValueCents +
+      parseCentsFromPlaceHolderField(field);
   });
+
+  var safeFloatField = $('.js-safe-float-field')[0];
+  var safeFloatCents = parseCentsFromPlaceHolderField(safeFloatField);
 
   var outToOrderCents = Math.floor(parseFloat(outToOrderField.value) * 100);
 
-  var varianceCents = totalCents + outToOrderCents - floatValueCents;
+  var varianceCents = totalCents + outToOrderCents - safeFloatCents;
 
   updateRealtimeTotalField(totalCents);
-  updateRealtimeTotalFloatField(floatValueCents);
+  updateRealtimeTotalFloatField(totalFloatValueCents);
   updateRealtimeVarienceField(varianceCents);
 }
 
