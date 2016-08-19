@@ -5,7 +5,9 @@ import StaffTypeBadge from "~components/staff-type-badge"
 import ComponentErrors from "~components/component-errors"
 import clockInStatusOptionsByValue from "~lib/clock-in-status-options-by-value"
 
+import utils from "~lib/utils"
 import Validation from "~lib/validation"
+import getHoursPeriodStats from "~lib/get-hours-period-stats"
 import HoursChart from "../hours-chart"
 import ClockOutButton from "./clock-out-button"
 import StaffDayHeader from "./staff-day-header"
@@ -61,6 +63,32 @@ export default class StaffDay extends React.Component {
 
         var clockOutToEditHoursMessage = null;
 
+        let rotaedClockInPeriods = this.props.rotaedShifts.map(
+          function(shift){
+            return {
+                starts_at: shift.starts_at,
+                ends_at: shift.ends_at,
+                breaks: []
+            }
+          });
+
+        var acceptedStats = getHoursPeriodStats({
+            denormalizedHoursPeriods: acceptedClockInPeriods
+        });
+
+        let rotaedStats = getHoursPeriodStats({
+            denormalizedHoursPeriods: rotaedClockInPeriods
+        });
+
+        var clockedStats = getHoursPeriodStats({
+            denormalizedHoursPeriods: this.state.lastValidData.clockedClockInPeriods
+        });
+
+        let acceptedHours = acceptedStats.hours;
+        let clockedHours = clockedStats.hours;
+        let rotaedHours = rotaedStats.hours;
+        let rotaedAcceptedHoursDifference = utils.round(rotaedHours - acceptedStats.hours, 2);
+
         return <div style={style}>
             <div style={{
                 marginBottom: 50,
@@ -70,10 +98,10 @@ export default class StaffDay extends React.Component {
                 <StaffDayHeader
                     rotaDate={this.props.rotaDate}
                     staffMember={this.props.staffMember}
-                    clockedClockInPeriods={this.state.lastValidData.clockedClockInPeriods}
-                    acceptedClockInPeriods={acceptedClockInPeriods}
-                    rotaedShifts={this.props.rotaedShifts}
-                    clockInBreaks={this.props.clockInBreaks}
+                    rotaedHours={rotaedHours}
+                    clockedHours={clockedHours}
+                    acceptedHours={acceptedHours}
+                    rotaedAcceptedHoursDifference={rotaedAcceptedHoursDifference}
                 />
                 <div className="row">
                     <div className="col-md-2">
@@ -109,6 +137,7 @@ export default class StaffDay extends React.Component {
                             rotaDate={this.props.rotaDate}
                             clockInDay={this.props.clockInDay}
                             hoursAcceptancePeriods={this.props.hoursAcceptancePeriods}
+                            rotaedAcceptedHoursDifference={rotaedAcceptedHoursDifference}
                             markDayAsDone={this.props.markDayAsDone}
                             clockInBreaks={this.props.clockInBreaks}
                             boundActions={this.props.boundActions}

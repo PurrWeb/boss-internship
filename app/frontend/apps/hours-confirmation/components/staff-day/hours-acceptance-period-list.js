@@ -8,6 +8,8 @@ import _ from "underscore"
 
 export default class HoursAcceptancePeriodList extends React.Component {
     render(){
+        let rotaedAcceptedHoursDifference = this.props.rotaedAcceptedHoursDifference;
+
         var markAsDoneButton = this.getMarkAsDoneButton();
 
         var orderedHAPs = _.sortBy(this.props.hoursAcceptancePeriods, function(period){
@@ -45,6 +47,7 @@ export default class HoursAcceptancePeriodList extends React.Component {
                             rotaDate={this.props.rotaDate}
                             hasClockedOut={this.hasClockedOut()}
                             hoursAcceptanceReasons={this.props.hoursAcceptanceReasons}
+                            rotaedAcceptedHoursDifference={rotaedAcceptedHoursDifference}
                             hoursAcceptancePeriod={hoursAcceptancePeriod}
                             overlapsOtherIntervals={!intervalsOverlap.isValid} />
                     </div>

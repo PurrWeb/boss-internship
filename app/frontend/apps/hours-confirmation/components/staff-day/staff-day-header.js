@@ -1,57 +1,44 @@
 import React from "react"
-import utils from "~lib/utils"
-import getHoursPeriodStats from "~lib/get-hours-period-stats"
 import moment from "moment"
 
 export default class StaffDayHeader extends React.Component {
     render(){
-        var { staffMember, rotaDate, clockedClockInPeriods, acceptedClockInPeriods, rotaedShifts } = this.props;
-        var rotaedClockInPeriods = rotaedShifts.map(function(shift){
-            return {
-                starts_at: shift.starts_at,
-                ends_at: shift.ends_at,
-                breaks: []
-            }
-        })
+        var {
+          staffMember,
+          rotaDate,
+          rotaedHours,
+          clockedHours,
+          acceptedHours,
+          rotaedAcceptedHoursDifference
+        } = this.props;
 
-        var getDifferenceMessage = function(differenceHours){
+        var getDifferenceMessage = function(rotaedAcceptedHoursDifference){
           let resultFragments = ["("];
 
-          if (differenceHours == 0) {
-            resultFragments.push(differenceHours + "h");
-          } else if(differenceHours > 0) {
-            resultFragments.push("+" + differenceHours + "h");
+          if (rotaedAcceptedHoursDifference == 0) {
+            resultFragments.push(rotaedAcceptedHoursDifference + "h");
+          } else if(rotaedAcceptedHoursDifference > 0) {
+            resultFragments.push("+" + rotaedAcceptedHoursDifference + "h");
           } else {
-            resultFragments.push("" + differenceHours + "h");
+            resultFragments.push("" + rotaedAcceptedHoursDifference + "h");
           }
           resultFragments.push(")");
 
           return resultFragments.join('');
         };
 
-        var getDifferenceClass = function(differenceHours){
+        var getDifferenceClass = function(rotaedAcceptedHoursDifference){
           let result = "";
-          if( differenceHours > 0) {
+          if( rotaedAcceptedHoursDifference > 0) {
             result = 'text-success';
-          } else if( differenceHours < 0 ){
+          } else if( rotaedAcceptedHoursDifference < 0 ){
             result = "text-danger";
           }
           return result;
         };
 
-        var clockInBreaks = this.props.clockInBreaks;
-        var clockedStats = getHoursPeriodStats({
-            denormalizedHoursPeriods: clockedClockInPeriods
-        });
-        var acceptedStats = getHoursPeriodStats({
-            denormalizedHoursPeriods: acceptedClockInPeriods
-        });
-        var rotaedStats = getHoursPeriodStats({
-            denormalizedHoursPeriods: rotaedClockInPeriods
-        });
-        let differenceHours = utils.round(rotaedStats.hours - acceptedStats.hours, 2);
-        let differenceMessage = getDifferenceMessage(differenceHours);
-        let differenceClass = getDifferenceClass(differenceHours);
+        let differenceMessage = getDifferenceMessage(rotaedAcceptedHoursDifference);
+        let differenceClass = getDifferenceClass(rotaedAcceptedHoursDifference);
 
         return <h2 style={{
                 fontSize: 20,
@@ -70,7 +57,7 @@ export default class StaffDayHeader extends React.Component {
                 color: "#999",
                 fontSize: 16
             }}>
-                {rotaedStats.hours}h rotaed, {clockedStats.hours}h clocked, {acceptedStats.hours}h accepted <span className={ differenceClass }>{differenceMessage}</span>
+                {rotaedHours}h rotaed, {clockedHours}h clocked, {acceptedHours}h accepted <span className={ differenceClass }>{differenceMessage}</span>
             </div>
             <div style={{float: "right"}}>
                 {moment(rotaDate.startTime).format("DD MMM YYYY")}
