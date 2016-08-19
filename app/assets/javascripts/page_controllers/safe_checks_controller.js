@@ -20,6 +20,7 @@ var calculateRealtimeTotals = function(){
   var valueFields = $('.js-total-calculation-value-field');
   var floatFields = $('.js-total-calculation-float-value');
   var outToOrderField = $('.js-total-calculation-out-to-order-value')[0];
+  var payoutsField = $('.js-total-calculation-payouts-field')[0];
 
   var totalCents = 0;
   valueFields.each(function(index, field){
@@ -38,7 +39,9 @@ var calculateRealtimeTotals = function(){
 
   var outToOrderCents = Math.floor(parseFloat(outToOrderField.value) * 100);
 
-  var varianceCents = totalCents + outToOrderCents - safeFloatCents;
+  var payoutsCents = Math.floor(parseFloat(payoutsField.value) * 100);
+
+  var varianceCents = totalCents + outToOrderCents - payoutsCents - safeFloatCents;
 
   updateRealtimeTotalField(totalCents);
   updateRealtimeTotalFloatField(totalFloatValueCents);

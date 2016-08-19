@@ -1,7 +1,7 @@
 class SafeCheck < ActiveRecord::Base
    POUND_FIELDS = [:fifty_pound_note_pounds, :twenty_pound_note_pounds, :ten_pound_note_pounds, :five_pound_note_pounds, :two_pound_coins_pounds, :one_pound_coins_pounds]
    VALIDATABLE_CENT_FIELDS = [:fifty_pence_coins_cents, :twenty_pence_coins_cents, :ten_pence_coins_cents, :five_pence_coins_cents]
-   CENTS_FIELDS = VALIDATABLE_CENT_FIELDS + [:coppers_cents, :safe_float_cents, :till_float_cents, :total_float_cents, :out_to_order_cents, :other_cents]
+   CENTS_FIELDS = VALIDATABLE_CENT_FIELDS + [:coppers_cents, :safe_float_cents, :till_float_cents, :total_float_cents, :out_to_order_cents, :other_cents, :payouts_cents]
    TOTAL_FIELDS = POUND_FIELDS + VALIDATABLE_CENT_FIELDS + [:coppers_cents, :other_cents]
 
    belongs_to :venue
@@ -43,6 +43,8 @@ class SafeCheck < ActiveRecord::Base
      numericality: { greater_than_or_equal_to: 0 }
    validates :other_cents,
      numericality: { greater_than_or_equal_to: 0 }
+   validates :payouts_cents,
+    numericality: { greater_than_or_equal_to: 0 }
 
     auto_strip_attributes :checked_by_note, convert_non_breaking_spaces: true, squish: true
 
@@ -86,8 +88,8 @@ class SafeCheck < ActiveRecord::Base
    end
 
    def variance_cents
-     total_cents + out_to_order_cents - safe_float_cents if (
-      total_cents.present? && out_to_order_cents.present? && safe_float_cents.present?
+     total_cents + out_to_order_cents - payouts_cents - safe_float_cents if (
+      total_cents.present? && out_to_order_cents.present? && safe_float_cents.present? && payouts_cents.present?
     )
    end
 
@@ -125,10 +127,11 @@ class SafeCheck < ActiveRecord::Base
        five_pence_coins_cents: "5p Coins",
        coppers_cents: "Coppers",
        other_cents: 'Other',
+       payouts_cents: 'Payouts',
        safe_float_cents: "Safe Float",
        till_float_cents: "Till Float",
        total_float_cents: "Total Float",
-       out_to_order_cents: "Out to order"
+       out_to_order_cents: "Out to order",
      }.fetch(field)
    end
 
