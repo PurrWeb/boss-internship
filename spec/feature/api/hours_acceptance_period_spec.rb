@@ -22,16 +22,8 @@ RSpec.describe 'Hours acceptance endpoints' do
       user: user
     )
   end
-  let(:none_reason) do
-    HoursAcceptanceReason.create!(
-      text: 'None',
-      enabled: true,
-      rank: 0
-    )
-  end
 
   before do
-    none_reason
     set_token_header(access_token)
   end
 
@@ -43,7 +35,6 @@ RSpec.describe 'Hours acceptance endpoints' do
     let(:break1_end) { start_of_day + 1.hour }
     let(:break2_start) { start_of_day + 4.hours }
     let(:break2_end) { start_of_day + 5.hours }
-    let(:hours_acceptance_reason) { HoursAcceptanceReason.create!(text: 'none', enabled: true, rank: 0) }
     let(:params) do
       {
         venue_id: venue.id,
@@ -61,7 +52,6 @@ RSpec.describe 'Hours acceptance endpoints' do
             ends_at: break2_end
           }
         ],
-        hours_acceptance_reason_id: hours_acceptance_reason.id,
         status: 'accepted'
       }
     end
@@ -189,13 +179,11 @@ RSpec.describe 'Hours acceptance endpoints' do
     let(:new_status) { 'accepted' }
     let(:new_start_of_shift) { start_of_shift + 1.hour }
     let(:new_end_of_shift) { end_of_shift + 1.hour }
-    let(:hours_acceptance_reason) { HoursAcceptanceReason.create!(text: 'none', enabled: true, rank: 0) }
     let(:params) do
       {
         starts_at: new_start_of_shift,
         ends_at: new_end_of_shift,
-        status: new_status,
-        hours_acceptance_reason_id: hours_acceptance_reason.id
+        status: new_status
       }
     end
 
@@ -297,13 +285,11 @@ RSpec.describe 'Hours acceptance endpoints' do
         let(:update_break_end) { break2_end + 10.minutes }
         let(:new_break_start) { break1_start + 10.minutes }
         let(:new_break_end) { break1_end + 10.minutes }
-        let(:hours_acceptance_reason) { HoursAcceptanceReason.create!(text: 'none', enabled: true, rank: 0) }
         let(:params) do
           {
             starts_at: new_start_of_shift,
             ends_at: new_end_of_shift,
             status: new_status,
-            hours_acceptance_reason_id: hours_acceptance_reason.id,
             hours_acceptance_breaks: [
               {
                 id: update_break_id,
@@ -371,7 +357,6 @@ RSpec.describe 'Hours acceptance endpoints' do
             starts_at: new_start_of_shift,
             ends_at: new_end_of_shift,
             status: new_status,
-            hours_acceptance_reason_id: hours_acceptance_reason.id,
             hours_acceptance_breaks: [
               {
                 id: break1.id,
@@ -458,14 +443,12 @@ RSpec.describe 'Hours acceptance endpoints' do
     end
     let(:start_of_shift) { start_of_day + 1.hour }
     let(:end_of_shift) { start_of_day + 2.hours }
-    let(:hours_acceptance_reason) { HoursAcceptanceReason.create!(text: 'none', enabled: true, rank: 0) }
     let(:hours_acceptance_period) do
       HoursAcceptancePeriod.create!(
         creator: staff_member,
         starts_at: start_of_shift,
         ends_at: end_of_shift,
-        clock_in_day: clock_in_day,
-        hours_acceptance_reason_id: hours_acceptance_reason.id
+        clock_in_day: clock_in_day
       )
     end
     let(:params) do

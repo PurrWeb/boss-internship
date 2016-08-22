@@ -68,10 +68,6 @@ export function processClockInNoteObject(clockInNote){
     return processBackendObject(clockInNote);
 }
 
-export function processHoursAcceptanceReasonObject(clockInReason){
-    return processBackendObject(clockInReason);
-}
-
 export function processClockInBreakObject(clockInBreak){
     clockInBreak = processBackendObject(clockInBreak);
     clockInBreak.starts_at = new Date(clockInBreak.starts_at);

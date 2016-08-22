@@ -62,8 +62,6 @@ class HoursOverviewController < ApplicationController
       joins(:hours_acceptance_period).
       merge(hours_acceptance_periods)
 
-    hours_acceptance_reasons = HoursAcceptanceReason.all
-
     staff_types = StaffType.all
 
     render(
@@ -76,7 +74,6 @@ class HoursOverviewController < ApplicationController
         clock_in_periods: clock_in_periods,
         hours_acceptance_periods: hours_acceptance_periods,
         hours_acceptance_breaks: hours_acceptance_breaks,
-        hours_acceptance_reasons: hours_acceptance_reasons,
         venues: venues,
         rotas: rotas,
         rota_shifts: rota_shifts,

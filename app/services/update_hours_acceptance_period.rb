@@ -5,13 +5,12 @@ class UpdateHoursAcceptancePeriod
     end
   end
 
-  def initialize(hours_acceptance_period:, starts_at:, ends_at:, status:, breaks_data:, hours_acceptance_reason:, reason_note:, requester:)
+  def initialize(hours_acceptance_period:, starts_at:, ends_at:, status:, breaks_data:, reason_note:, requester:)
     @hours_acceptance_period = hours_acceptance_period
     @starts_at = starts_at
     @ends_at = ends_at
     @status = status
     @breaks_data = breaks_data
-    @hours_acceptance_reason = hours_acceptance_reason
     @reason_note = reason_note
     @requester = requester
   end
@@ -28,7 +27,6 @@ class UpdateHoursAcceptancePeriod
         hours_acceptance_period.assign_attributes(
           starts_at: starts_at,
           ends_at: ends_at,
-          hours_acceptance_reason: hours_acceptance_reason,
           reason_note: reason_note,
           status: status
         )
@@ -82,7 +80,7 @@ class UpdateHoursAcceptancePeriod
   end
 
   private
-  attr_reader :hours_acceptance_period, :starts_at, :ends_at, :status, :requester, :breaks_data, :hours_acceptance_reason, :reason_note
+  attr_reader :hours_acceptance_period, :starts_at, :ends_at, :status, :requester, :breaks_data, :reason_note
 
   def update_break_data
     breaks_data.select do |break_data|

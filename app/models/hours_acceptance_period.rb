@@ -6,7 +6,6 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   belongs_to :clock_in_day
   belongs_to :creator, polymorphic: true
-  belongs_to :hours_acceptance_reason
   belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
   has_many :hours_acceptance_breaks
 

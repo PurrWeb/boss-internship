@@ -1,7 +1,6 @@
 import React from "react"
 import BreakList from "./break-list"
 import ShiftTimeSelector from "~components/shift-time-selector"
-import ReasonSelector from "./reason-selector"
 import getHoursPeriodStats from "~lib/get-hours-period-stats"
 import ComponentErrors from "~components/component-errors"
 import { ModalContainer, ModalDialog} from "react-modal-dialog"
@@ -26,6 +25,24 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
         var periodTimeSelectorStyles = {};
         if (!this.periodTimesAreValid()) {
             periodTimeSelectorStyles.color = "red"
+        }
+
+        var reasonSection;
+        if ( readonly && !(hoursAcceptancePeriod.reason_note == null) ){
+          reasonSection = <p>{ hoursAcceptancePeriod.reason_note }</p>;
+        } else if ( readonly ){
+          reasonSection = <p>N/A</p>;
+        } else {
+          reasonSection = <textarea
+            value={ hoursAcceptancePeriod.reason_note }
+             onChange={(event) => {
+               let reasonNote = event.target.value;
+               this.props.boundActions.updateHoursAcceptancePeriod({
+                 clientId: hoursAcceptancePeriod.clientId,
+                 reason_note: reasonNote
+               })
+             }}
+          />;
         }
 
         return <div data-test-marker-hours-acceptance-period-item>
@@ -68,19 +85,9 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                     </div>
                     <div className="col-md-3">
                         <div className="staff-day__sub-heading">Reason</div>
-                        <ReasonSelector
-                            readonly={readonly}
-                            reasons={this.props.hoursAcceptanceReasons}
-                            reason={hoursAcceptancePeriod.hours_acceptance_reason}
-                            reasonNote={hoursAcceptancePeriod.reason_note}
-                            onChange={({reasonNote, reason}) => {
-                                this.props.boundActions.updateHoursAcceptancePeriod({
-                                    clientId: hoursAcceptancePeriod.clientId,
-                                    reason_note: reasonNote,
-                                    hours_acceptance_reason: reason
-                                })
-                            }}
-                        />
+                        <div>
+                          {reasonSection}
+                        </div>
                     </div>
                 </div>
                 <div className="col-md-2">

@@ -42,8 +42,7 @@ var dataHandlers = [
     hoursAcceptanceBreaks,
     hoursAcceptancePeriods,
     clockInEvents,
-    clockInNotes,
-    makeDefaultDataHandler("hoursAcceptanceReasons")
+    clockInNotes
 ]
 
 export default dataHandlers

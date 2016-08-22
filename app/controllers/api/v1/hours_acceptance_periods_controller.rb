@@ -24,7 +24,6 @@ module Api
             starts_at: params.fetch(:starts_at),
             ends_at: params.fetch(:ends_at),
             status: params.fetch(:status),
-            hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
             reason_note: params[:reason_note],
             breaks: new_breaks_from_params
           ).call
@@ -64,7 +63,6 @@ module Api
             ends_at: params.fetch(:ends_at),
             breaks_data: params[:hours_acceptance_breaks] || [],
             status: params.fetch(:status),
-            hours_acceptance_reason: HoursAcceptanceReason.find(params.fetch(:hours_acceptance_reason_id)),
             reason_note: params[:reason_note],
             requester: current_user
           ).call
