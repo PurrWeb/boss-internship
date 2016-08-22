@@ -99,7 +99,7 @@ export const unacceptHoursAcceptancePeriod = createApiRequestActionCreator({
 })
 
 function getHoursAcceptancePeriodAPIData(hoursAcceptancePeriod, clockInDay){
-    var {starts_at, ends_at, breaks, hours_acceptance_reason, reason_note} = hoursAcceptancePeriod
+    var {starts_at, ends_at, breaks, reason_note} = hoursAcceptancePeriod
 
     var periodIdentificationData;
     if (objectHasBeenSavedToBackend(hoursAcceptancePeriod)) {
@@ -125,7 +125,6 @@ function getHoursAcceptancePeriodAPIData(hoursAcceptancePeriod, clockInDay){
                 ends_at: b.ends_at
             }
         }),
-        hours_acceptance_reason_id: hoursAcceptancePeriod.hours_acceptance_reason.serverId,
         reason_note: reason_note
     }
 }

@@ -5,7 +5,7 @@ class CreateHoursAcceptancePeriod
     end
   end
 
-  def initialize(requester:, staff_member:, venue:, date:, starts_at:, ends_at:, status:, hours_acceptance_reason:, reason_note:, breaks:)
+  def initialize(requester:, staff_member:, venue:, date:, starts_at:, ends_at:, status:, reason_note:, breaks:)
     @requester = requester
     @staff_member = staff_member
     @venue = venue
@@ -13,7 +13,6 @@ class CreateHoursAcceptancePeriod
     @starts_at = starts_at
     @ends_at = ends_at
     @status = status
-    @hours_acceptance_reason = hours_acceptance_reason
     @reason_note = reason_note
     @breaks = breaks
   end
@@ -39,7 +38,6 @@ class CreateHoursAcceptancePeriod
         starts_at: starts_at,
         ends_at: ends_at,
         status: status,
-        hours_acceptance_reason: hours_acceptance_reason,
         reason_note: reason_note
       )
 
@@ -58,5 +56,5 @@ class CreateHoursAcceptancePeriod
   end
 
   private
-  attr_reader :requester, :staff_member, :venue, :date, :starts_at, :ends_at, :status, :status, :hours_acceptance_reason, :reason_note, :breaks
+  attr_reader :requester, :staff_member, :venue, :date, :starts_at, :ends_at, :status, :status, :reason_note, :breaks
 end

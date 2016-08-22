@@ -44,7 +44,6 @@ describe('Hours Confirmation Integration Test', function() {
             starts_at: new Date(2016, 10, 1, 9, 30).toString(),
             ends_at: new Date(2016, 10, 1, 18, 0).toString(),
             reason_note: "custom note entered here",
-            hours_acceptance_reason: {id: 912},
             clock_in_day: {id: 22},
             status: "pending",
         }],
@@ -69,16 +68,6 @@ describe('Hours Confirmation Integration Test', function() {
                 type: "clock_out",
                 time: new Date(2016, 10, 1, 18, 0).toString(),
                 clock_in_period: {id: 2333}
-            }
-        ],
-        hoursAcceptanceReasons: [
-            {
-                id: "599",
-                text: "Came in early"
-            },
-            {
-                id: "912",
-                text: "Other"
             }
         ],
         rotaShifts: [
@@ -247,7 +236,6 @@ describe('Hours Confirmation Integration Test', function() {
                 starts_at: new Date(2016, 10, 2, 1, 0).toString(),
                 ends_at: new Date(2016, 10, 2, 4, 0).toString(),
                 reason_note: "",
-                hours_acceptance_reason: {id: 912},
                 clock_in_day: {id: 22},
                 status: "pending"
             },

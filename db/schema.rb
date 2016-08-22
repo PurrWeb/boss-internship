@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160818164932) do
+ActiveRecord::Schema.define(version: 20160822123500) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -290,7 +290,6 @@ ActiveRecord::Schema.define(version: 20160818164932) do
   create_table "hours_acceptance_periods", force: :cascade do |t|
     t.integer  "creator_id",                  limit: 4,                       null: false
     t.string   "creator_type",                limit: 255,                     null: false
-    t.integer  "hours_acceptance_reason_id",  limit: 4
     t.string   "reason_note",                 limit: 255
     t.datetime "starts_at",                                                   null: false
     t.datetime "ends_at",                                                     null: false
@@ -299,15 +298,6 @@ ActiveRecord::Schema.define(version: 20160818164932) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "frozen_by_finance_report_id", limit: 4
-  end
-
-  create_table "hours_acceptance_reasons", force: :cascade do |t|
-    t.string   "text",          limit: 255,                 null: false
-    t.integer  "rank",          limit: 4,                   null: false
-    t.boolean  "enabled",                                   null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "note_required",             default: false, null: false
   end
 
   create_table "invite_transitions", force: :cascade do |t|

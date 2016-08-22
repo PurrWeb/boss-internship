@@ -8,6 +8,8 @@ import _ from "underscore"
 
 export default class HoursAcceptancePeriodList extends React.Component {
     render(){
+        let rotaedAcceptedHoursDifference = this.props.rotaedAcceptedHoursDifference;
+
         var markAsDoneButton = this.getMarkAsDoneButton();
 
         var orderedHAPs = _.sortBy(this.props.hoursAcceptancePeriods, function(period){
@@ -44,7 +46,7 @@ export default class HoursAcceptancePeriodList extends React.Component {
                             componentErrors={this.props.componentErrors}
                             rotaDate={this.props.rotaDate}
                             hasClockedOut={this.hasClockedOut()}
-                            hoursAcceptanceReasons={this.props.hoursAcceptanceReasons}
+                            rotaedAcceptedHoursDifference={rotaedAcceptedHoursDifference}
                             hoursAcceptancePeriod={hoursAcceptancePeriod}
                             overlapsOtherIntervals={!intervalsOverlap.isValid} />
                     </div>
@@ -103,17 +105,11 @@ export default class HoursAcceptancePeriodList extends React.Component {
         acceptedHours = _.clone(acceptedHours)
 
         var defaultTimes = this.getNewHoursDefaultTimes();
-        var defaultReason = _.chain(this.props.hoursAcceptanceReasons)
-            .values()
-            .sortBy("rank")
-            .first()
-            .value()
 
         var newHoursPeriod = {
             ...defaultTimes,
             id: null,
             clock_in_day: {id: this.props.clockInDay.serverId},
-            hours_acceptance_reason: defaultReason,
             reason_note: "",
             status: "pending"
         }
