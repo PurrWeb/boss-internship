@@ -39,9 +39,10 @@
         <% SafeCheck::POUND_FIELDS.each do |field| %>
           <th style="text-align: center;"><%= SafeCheck.label_for(field) %></th>
         <% end %>
-        <% (SafeCheck::CENTS_FIELDS - [:till_float_cents, :safe_float_cents, :total_float_cents, :out_to_order_cents]).each do |field| %>
+        <% (SafeCheck::CENTS_FIELDS - [:till_float_cents, :safe_float_cents, :total_float_cents, :out_to_order_cents, :payouts_cents]).each do |field| %>
           <th style="text-align: center;"><%= SafeCheck.label_for(field) %></th>
         <% end %>
+        <th style="text-align: center;">Payouts</th>
         <th style="text-align: center;">Total</th>
         <th style="text-align: center;">Out to Order</th>
         <th style="text-align: center;">Safe Float</th>
@@ -82,7 +83,7 @@
               <td><%= link_to('-', safe_check_path(safe_check), class: "link-unstyled") %></td>
             <% end %>
           <% end %>
-          <% (SafeCheck::CENTS_FIELDS - [:till_float_cents, :safe_float_cents, :total_float_cents, :out_to_order_cents]).each do |field| %>
+          <% (SafeCheck::CENTS_FIELDS - [:till_float_cents, :safe_float_cents, :total_float_cents, :out_to_order_cents, :payouts_cents]).each do |field| %>
             <% value = safe_check.public_send(:pound_value_for, field) %>
             <% if value != 0 %>
               <td>
@@ -98,6 +99,21 @@
             <% else %>
               <td><%= link_to('-', safe_check_path(safe_check), class: 'link-unstyled') %></td>
             <% end %>
+          <% end %>
+          <% payouts_value = safe_check.public_send(:pound_value_for, :payouts_cents) %>
+          <% if payouts_value != 0 %>
+            <td class="text-danger">
+
+              <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
+                <%= number_to_currency(
+                      payouts_value,
+                      unit: '£',
+                      precision: 2
+                    ) %>
+              <% end %>
+            </td>
+          <% else %>
+            <td><%= link_to('-', safe_check_path(safe_check), class: 'link-unstyled') %></td>
           <% end %>
           <td>
             <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>

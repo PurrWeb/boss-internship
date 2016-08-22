@@ -2,7 +2,7 @@ class SafeCheck < ActiveRecord::Base
    POUND_FIELDS = [:fifty_pound_note_pounds, :twenty_pound_note_pounds, :ten_pound_note_pounds, :five_pound_note_pounds, :two_pound_coins_pounds, :one_pound_coins_pounds]
    VALIDATABLE_CENT_FIELDS = [:fifty_pence_coins_cents, :twenty_pence_coins_cents, :ten_pence_coins_cents, :five_pence_coins_cents]
    CENTS_FIELDS = VALIDATABLE_CENT_FIELDS + [:coppers_cents, :safe_float_cents, :till_float_cents, :total_float_cents, :out_to_order_cents, :other_cents, :payouts_cents]
-   TOTAL_FIELDS = POUND_FIELDS + VALIDATABLE_CENT_FIELDS + [:coppers_cents, :other_cents]
+   TOTAL_FIELDS = POUND_FIELDS + VALIDATABLE_CENT_FIELDS + [:coppers_cents, :other_cents, :payouts_cents]
 
    belongs_to :venue
    belongs_to :creator, class_name: 'User', foreign_key: 'creator_user_id'
@@ -88,8 +88,8 @@ class SafeCheck < ActiveRecord::Base
    end
 
    def variance_cents
-     total_cents + out_to_order_cents - payouts_cents - safe_float_cents if (
-      total_cents.present? && out_to_order_cents.present? && safe_float_cents.present? && payouts_cents.present?
+     total_cents + out_to_order_cents - safe_float_cents if (
+      total_cents.present? && out_to_order_cents.present? && safe_float_cents.present?
     )
    end
 
