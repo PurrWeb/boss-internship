@@ -16,24 +16,11 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   validates :clock_in_day, presence: true
   validates :creator, presence: true
   validates :status, inclusion: { in: STATES, message: 'is required' }
-  validates :hours_acceptance_reason, presence: true, if: :accepted?
-  validate  :validate_reason_note_presence
 
   include PeriodTimeValidations
 
   def editable?
     staff_member.enabled? && !frozen?
-  end
-
-  #validation
-  def validate_reason_note_presence
-    if hours_acceptance_reason.present?
-      if hours_acceptance_reason.note_required? && reason_note.empty?
-        errors.add(:reason_note, "is required when choosing #{hours_acceptance_reason.text} reason")
-      elsif !hours_acceptance_reason.note_required && reason_note.present?
-        errors.add(:reason_note, "must be ommited when choosing #{hours_acceptance_reason.text} reason")
-      end
-    end
   end
 
   def self.accepted
