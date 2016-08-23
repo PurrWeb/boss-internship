@@ -60,8 +60,6 @@ group :test do
   gem "rspec-rails"
   gem "capybara"
   gem "database_cleaner"
-end
-
-group :test do
   gem "launchy"
+  gem 'poltergeist'
 end

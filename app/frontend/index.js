@@ -13,7 +13,10 @@ window.debug._ = _;
 window.debug.moment = moment;
 window.debug.selectors = selectors;
 
-window.React = React // expose globally because react rails relies on it
+// Expose these globally because react rails relies on them
+window.React = React;
+window.ReactDOM = ReactDOM;
+
 import "./lib/load-underscore-mixins"
 
 import "babel-core/polyfill"
