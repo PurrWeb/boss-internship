@@ -70,18 +70,6 @@
         ]
       ) %>
 
-  <%= form.number_field(
-        :payouts_cents,
-        prepend: '£',
-        value: safe_check.pound_value_for(:payouts_cents).to_int_if_whole,
-        label: SafeCheck.label_for(:payouts_cents),
-        step: 0.01,
-        class: [
-          'js-total-calculation-watch-field',
-          'js-total-calculation-payouts-field'
-        ]
-      ) %>
-
   <%= form.static_control label: "Safe Float" do %>
     <span class="js-total-calculation-float-value js-safe-float-field">
       <%= number_to_currency(

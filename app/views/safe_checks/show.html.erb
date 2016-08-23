@@ -71,9 +71,10 @@
             ) %>
       </td>
 
-      <td>
+      <% payouts_value = safe_check.pound_value_for(:payouts_cents) %>
+      <td class="<%= payouts_value > 0 ? 'text-danger' : '' %>">
         <%= number_to_currency(
-              safe_check.pound_value_for(:payouts_cents),
+              payouts_value,
               unit: '£',
               precision: 2
             ) %>
