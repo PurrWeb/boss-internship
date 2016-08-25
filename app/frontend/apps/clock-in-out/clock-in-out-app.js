@@ -8,11 +8,11 @@ export default class RotaApp extends AppComponent {
     componentWillMount(){
         var store = this.store;
         store.subscribe(function(){
-    		localStorage.setItem("clockInOutApiKey", store.getState().apiKey)
-    	})
+    		  localStorage.setItem("clockInOutApiKey", store.getState().apiKey)
+    	  })
 
         var localStorageApiKey = localStorage.getItem("clockInOutApiKey")
-        if (localStorageApiKey){
+        if (localStorageApiKey != null && localStorageApiKey != ""){
             store.dispatch(actionCreators.setApiKeyAndFetchClockInOutAppData(localStorageApiKey))
         }
     }

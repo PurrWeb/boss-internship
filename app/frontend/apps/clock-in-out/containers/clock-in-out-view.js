@@ -17,7 +17,6 @@ import Header from "../components/header"
 import LoadAppDataDialog from "./load-app-data-dialog"
 import Clock from "../components/clock"
 
-
 class ClockInOutView extends Component {
     render() {
         if (!this.props.hasLoadedAppData) {

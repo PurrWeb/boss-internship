@@ -17,9 +17,12 @@ apiOptions:
   or an object with a pin and staffMemberServerId, or an object with an api_key
 - getSuccessActionData
 */
+let globalAjaxTimeout = 5 * 1000; //5s
+
 export default function makeApiRequestMaker(apiOptions){
     return function(requestOptions, success, error, getState) {
         requestOptions = _.clone(requestOptions);
+
 
         var [method, path] = oFetch(apiOptions, "method", "path");
         method = resolveFunctionParameter(method);
@@ -95,6 +98,7 @@ export default function makeApiRequestMaker(apiOptions){
             $.ajax({
                url: getApiRoot() + path,
                method: method,
+               timeout: globalAjaxTimeout,
                data,
                headers,
                contentType
@@ -152,6 +156,7 @@ function makeRequestForAccessToken({requestData, success, error}){
     $.ajax({
         method: apiRoutes.getSessionToken.method,
         url: getApiRoot() + apiRoutes.getSessionToken.getPath(),
+        timeout: globalAjaxTimeout,
         data: {
             api_key: requestData.apiKey,
             staff_member_id: requestData.staffMemberServerId,
