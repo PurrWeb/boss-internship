@@ -31,6 +31,34 @@ var utils =  {
         }
         return number;
     },
+    addDaysToDate(date, days){
+      let result = new Date();
+      result.setTime(
+        date.getTime() + (days * 24 * 60 * 60 * 1000)
+      );
+      return result;
+    },
+    addHoursToDate(date, hours){
+      let result = new Date();
+      result.setTime(
+        date.getTime() + (hours * 60 * 60 * 1000)
+      );
+      return result;
+    },
+    beginningOfRotaDay(date){
+      let beginningOfCalendarDay = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+      );
+      let calendarDayRotaStartTime = this.addHoursToDate(beginningOfCalendarDay, 8);
+
+      if (date < calendarDayRotaStartTime) {
+        return this.addDaysToDate(calendarDayRotaStartTime, -1)
+      } else {
+        return calendarDayRotaStartTime;
+      }
+    },
     dateIsValid(date) {
         return !isNaN(date.valueOf());
     },
