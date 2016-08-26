@@ -19,6 +19,8 @@ class ChangeClockInStatus
   attr_reader :date, :venue, :staff_member, :requester, :state, :at, :nested
 
   def call
+    errors = {}
+
     clock_in_day = ClockInDay.find_or_initialize_by(
       venue: venue,
       date: date,
@@ -34,7 +36,6 @@ class ChangeClockInStatus
       raise 'supplied at time before previous event'
     end
 
-    errors = {}
 
     transition_legal = allowed_event_transations.fetch(clock_in_day.current_clock_in_state).any? do |transition_data|
       transition_data.fetch(:state) == state
