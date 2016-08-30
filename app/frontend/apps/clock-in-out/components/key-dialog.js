@@ -20,10 +20,12 @@ export default class KeyDialog extends React.Component {
             }}
                 data-test-marker-key-dialog-form
             >
-            <label>Enter key</label><br/>
-            <input
-                type="text"
-                ref={(input) => this.apiKeyInput = input}></input>
+            <label>Enter key<br/>
+              <input
+                  type="text"
+                  ref={(input) => this.apiKeyInput = input}>
+              </input>
+            </label>
             <br/><br/>
             {buttonOrSpinner}
         </form>
