@@ -20,6 +20,7 @@ class ChangeClockInStatus
 
   def call
     errors = {}
+    result = false
 
     clock_in_day = ClockInDay.find_or_initialize_by(
       venue: venue,
@@ -27,27 +28,19 @@ class ChangeClockInStatus
       staff_member: staff_member
     )
 
-    raise "unsupported state encountered: #{state}" unless STATES.include?(state)
-    if !RotaShiftDate.new(date).contains_time?(at)
+    if illegal_clock_in_attempt?(state: state, clock_in_day: clock_in_day)
       errors[:base] ||= []
+      errors[:base] << "Staff member is still clocked in at another venue.\nPlease clock out there before clocking in."
+    elsif !STATES.include?(state)
+      raise "unsupported state encountered: #{state}"
+    elsif !RotaShiftDate.new(date).contains_time?(at)
       raise "at time on wrong day. at: #{at}, date: #{date}"
-    end
-    if last_event(clock_in_day) && (at < last_event(clock_in_day).at)
+    elsif last_event(clock_in_day) && (at < last_event(clock_in_day).at)
       raise 'supplied at time before previous event'
-    end
-
-
-    transition_legal = allowed_event_transations.fetch(clock_in_day.current_clock_in_state).any? do |transition_data|
-      transition_data.fetch(:state) == state
-    end
-    if !transition_legal
+    elsif !transition_legal(clock_in_day)
       errors[:base] ||= []
       errors[:base] << "illegal attempt to transistion from #{clock_in_day.current_clock_in_state} to #{state}"
-    end
-
-    result = transition_legal
-
-    if transition_legal
+    else
       ActiveRecord::Base.transaction(requires_new: nested) do
         if clock_in_day.new_record?
           clock_in_day.update_attributes!(
@@ -115,10 +108,24 @@ class ChangeClockInStatus
       end
     end
 
-    Result.new(result, clock_in_day.reload, errors)
+    clock_in_day.reload if clock_in_day.persisted?
+
+    Result.new(result, clock_in_day, errors)
   end
 
   private
+  def illegal_clock_in_attempt?(state: state, clock_in_day: clock_in_day)
+    state == :clocked_in &&
+      clock_in_day.current_clock_in_state == :clocked_out &&
+      !clock_in_day.staff_member.clocked_out?(date: clock_in_day.date)
+  end
+
+  def transition_legal(clock_in_day)
+    allowed_event_transations.fetch(clock_in_day.current_clock_in_state).any? do |transition_data|
+      transition_data.fetch(:state) == state
+    end
+  end
+
  def create_hours_confirmation_from_clock_in_period(clock_in_period:, creator:)
    clock_in_day = clock_in_period.clock_in_day
 
