@@ -13,7 +13,7 @@ module Api
         date = date_from_params
         staff_member = staff_member_from_params
 
-        if !staff_member.clocked_out?(date: date, venue: venue)
+        if !staff_member.clocked_out?(date: date)
           render(json: {}, status: :access_denied)
         else
           result = CreateHoursAcceptancePeriod.new(
@@ -52,8 +52,7 @@ module Api
         authorize! :update, hours_acceptance_period
 
         if !hours_acceptance_period.staff_member.clocked_out?(
-             date:hours_acceptance_period.date,
-             venue: hours_acceptance_period.venue
+             date:hours_acceptance_period.date
            )
           render(json: {}, status: :access_denied)
         else
@@ -90,8 +89,7 @@ module Api
         authorize! :update, hours_acceptance_period
 
         if !hours_acceptance_period.staff_member.clocked_out?(
-             date: hours_acceptance_period.date,
-             venue: hours_acceptance_period.venue
+             date: hours_acceptance_period.date
            )
           render(json: {}, status: :access_denied)
         else
