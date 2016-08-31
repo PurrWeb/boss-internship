@@ -11,7 +11,7 @@ if ((getEnvironment() === "production") || (getEnvironment() === "staging")) {
             client: {
               javascript: {
                  source_map_enabled: true,
-                 code_version: "<%= ENV.fetch("GIT_REV") %>",
+                 code_version: "<%= sourcemap_version %>",
                  guess_uncaught_frames: true
               }
             }

@@ -9,3 +9,11 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
+
+# Include the SourcemapHelper in the asset context class so we can generate
+# the sourcemap version in rollbar.js.erb
+Rails.application.config.assets.configure do |env|
+  env.context_class.class_eval do
+    include SourcemapHelper
+  end
+end
