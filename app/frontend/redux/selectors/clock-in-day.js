@@ -56,10 +56,13 @@ export function selectClockInDayDetails(state, clockInDay){
         hoursAcceptancePeriod.updateIsInProgress = selectEditHoursAcceptancePeriodIsInProgress(state, hoursAcceptancePeriod)
     })
 
+    let generateIfNotFound = true;
+
     var rota = getRotaFromDateAndVenue({
         dateOfRota: clockInDay.date,
         venueId: clockInDay.venue.clientId,
-        rotas: state.rotas
+        rotas: state.rotas,
+        generateIfNotFound
     })
 
     var rotaedShifts = _(state.rotaShifts).filter(function(shift){
