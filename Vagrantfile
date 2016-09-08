@@ -6,6 +6,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.network "private_network", ip: "10.124.15.6"
 
+  # Forward the Rails server default port to the host§
+  config.vm.network :forwarded_port, guest: 5000, host: 5000
+
   config.vm.provider "virtualbox" do |vb|
     vb.name = "boss"
 
