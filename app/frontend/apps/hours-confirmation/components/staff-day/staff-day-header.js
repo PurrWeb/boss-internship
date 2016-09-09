@@ -2,6 +2,18 @@ import React from "react"
 import moment from "moment"
 
 export default class StaffDayHeader extends React.Component {
+    venueNameSection() {
+      if(this.props.displayVenue){
+        return <span>{this.props.venueName} </span>;
+      }
+    }
+
+    dateSection() {
+      if(this.props.displayDate){
+        return moment(this.props.rotaDate.startTime).format("DD MMM YYYY");
+      }
+    }
+
     render(){
         var {
           staffMember,
@@ -60,7 +72,7 @@ export default class StaffDayHeader extends React.Component {
                 {rotaedHours}h rotaed, {clockedHours}h clocked, {acceptedHours}h accepted <span className={ differenceClass }>{differenceMessage}</span>
             </div>
             <div style={{float: "right"}}>
-                {moment(rotaDate.startTime).format("DD MMM YYYY")}
+                { this.venueNameSection() }{ this.dateSection() }
             </div>
         </h2>
     }

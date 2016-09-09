@@ -18,6 +18,8 @@ class StaffDayList extends React.Component {
         return <div>
             {_.values(clockInDays).map(clockInDay =>
                 <StaffDay
+                    displayVenue={this.props.displayVenues}
+                    displayDate={this.props.displayDates}
                     key={clockInDay.clientId}
                     clockInDay={clockInDay} />
             )}
