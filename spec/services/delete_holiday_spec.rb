@@ -1,8 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe 'DeleteHoliday service'  do
+  let(:now) { Time.current + 1.week }
+  let(:start_date) { RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date }
+  let(:end_date) {  RotaWeek.new(RotaShiftDate.to_rota_date(now)).end_date }
   let(:requester) { FactoryGirl.create(:user) }
-  let(:holiday) { FactoryGirl.create(:holiday) }
+  let(:holiday) do
+    FactoryGirl.create(:holiday, start_date: start_date, end_date: end_date)
+  end
+
   let(:service) do
     DeleteHoliday.new(
       requester: requester,
@@ -38,6 +44,8 @@ RSpec.describe 'DeleteHoliday service'  do
     let(:holiday) do
       FactoryGirl.create(
         :holiday,
+        start_date: start_date,
+        end_date: end_date,
         frozen_by: finance_report
       )
     end

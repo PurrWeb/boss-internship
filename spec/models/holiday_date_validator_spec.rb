@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe HolidayDateValidator do
+  include ActiveSupport::Testing::TimeHelpers
+
   let(:holiday) do
     FactoryGirl.build(
       :holiday,
@@ -9,12 +11,19 @@ describe HolidayDateValidator do
       end_date: end_date
     )
   end
+  let(:now) { RotaWeek.new(Time.current.to_date).start_date }
   let(:staff_member) { FactoryGirl.build(:staff_member) }
   let(:validator) { HolidayDateValidator.new(holiday) }
 
+  around(:each) do |example|
+    travel_to now do
+      example.run
+    end
+  end
+
   context 'start_date not present' do
     let(:start_date) { nil }
-    let(:end_date) { Time.zone.now }
+    let(:end_date) { now + 1.hour}
 
     specify 'no errors should be added' do
       validator.validate
@@ -23,7 +32,7 @@ describe HolidayDateValidator do
   end
 
   context 'start_date not present' do
-    let(:start_date) { Time.zone.now }
+    let(:start_date) { now + 1.hour }
     let(:end_date) { nil }
 
     specify 'no errors should be added' do
@@ -33,8 +42,8 @@ describe HolidayDateValidator do
   end
 
   context 'start_date is after end date' do
-    let(:start_date) { 2.days.from_now }
-    let(:end_date) { Time.zone.now }
+    let(:start_date) { now + 2.days }
+    let(:end_date) { now + 1.day }
 
     specify 'an error message should be added on base' do
       validator.validate
@@ -62,7 +71,7 @@ describe HolidayDateValidator do
 
     context 'validating the existing holiday' do
       let(:validator) { HolidayDateValidator.new(existing_holiday) }
-      let(:existing_holiday_start_date) { Time.zone.now.to_date.monday }
+      let(:existing_holiday_start_date) { now.to_date + 1.day }
       let(:existing_holiday_end_date) { existing_holiday_start_date + 2.days }
 
       specify 'no error should be added' do

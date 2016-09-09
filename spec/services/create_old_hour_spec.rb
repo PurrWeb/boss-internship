@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'Edit Holiday service'  do
   let(:requester) { FactoryGirl.create(:user) }
-  let(:start_date) { Time.zone.now.beginning_of_week.to_date }
+  let(:now) { Time.current + 1.week }
+  let(:start_date) { now.beginning_of_week.to_date }
   let(:end_date) { start_date + 2.days }
   let(:holiday) do
     FactoryGirl.create(
