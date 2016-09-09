@@ -101,9 +101,6 @@ export default class StaffDay extends React.Component {
                     rotaedHours={rotaedHours}
                     clockedHours={clockedHours}
                     acceptedHours={acceptedHours}
-                    venueName={this.props.venue.name}
-                    displayVenue={this.props.displayVenue}
-                    displayDate={this.props.displayDate}
                     rotaedAcceptedHoursDifference={rotaedAcceptedHoursDifference}
                 />
                 <div className="row">

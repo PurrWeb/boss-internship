@@ -7,7 +7,7 @@ export default class HoursConfirmationView extends React.Component {
         return <div>
             <PageHeader/>
             <br/>
-            <StaffDayList displayVenues={false} displayDates={true}/>
+            <StaffDayList />
         </div>
     }
 }
