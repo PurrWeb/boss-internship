@@ -15,7 +15,7 @@ export default class StaffHoursOverviewApp extends AppComponent {
   render() {
     return <div>
       <Provider store={this.store}>
-        <StaffDayList />
+        <StaffDayList displayVenues={true} displayDates={false}/>
       </Provider>
     </div>
   }
