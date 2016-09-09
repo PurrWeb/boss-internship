@@ -20,7 +20,9 @@ RSpec.describe 'Holiday api end points' do
 
   describe '#show' do
     let(:url) { url_helpers.api_v1_holiday_path(holiday) }
-    let(:holiday) { FactoryGirl.create(:holiday) }
+    let(:holiday) do
+      FactoryGirl.create(:holiday)
+    end
 
     describe 'response' do
       let(:response) { get(url) }

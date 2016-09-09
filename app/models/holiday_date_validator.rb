@@ -1,8 +1,9 @@
 class HolidayDateValidator
   def initialize(holiday)
     @holiday = holiday
+    @now = Time.current
   end
-  attr_reader :holiday
+  attr_reader :holiday, :now
 
   def validate
     return unless holiday.enabled? && [:start_date, :end_date].all? do |method|
@@ -19,13 +20,18 @@ class HolidayDateValidator
     end
 
     if holiday.validate_as_creation
-      if RotaWeek.new(holiday.start_date) < RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
+      if holiday.start_date < RotaShiftDate.to_rota_date(now)
         holiday.errors.add(:base, "can't create holidays in the past")
         return
       end
     else
-      start_date_moved_to_past = holiday.start_date_changed? && RotaWeek.new(holiday.start_date).week_status == :past
-      end_date_moved_to_past = holiday.end_date_changed? && RotaWeek.new(holiday.end_date).week_status == :past
+      current_rota_date = RotaShiftDate.to_rota_date(now)
+      start_date_moved_to_past = holiday.start_date_changed? && (
+        holiday.start_date < current_rota_date
+      )
+      end_date_moved_to_past = holiday.end_date_changed? && (
+        holiday.end_date < current_rota_date
+      )
 
       if start_date_moved_to_past
         holiday.errors.add(:start_date, "can't be changed to date in the past")

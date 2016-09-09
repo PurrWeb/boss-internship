@@ -117,17 +117,15 @@ RSpec.describe 'DeleteStaffMember service'  do
     end
 
     context 'staff member has future holidays' do
-      let(:week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.zone.now)) }
+      let(:next_week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current + 1.week)) }
       let(:holiday) do
-        travel_to 1.week.ago do
-          FactoryGirl.create(
-            :holiday,
-            staff_member: staff_member,
-            start_date: week.start_date + 1.days,
-            end_date: week.start_date + 3.days,
-            creator: requester
-          )
-        end
+        FactoryGirl.create(
+          :holiday,
+          staff_member: staff_member,
+          start_date: next_week.start_date + 1.days,
+          end_date: next_week.start_date + 3.days,
+          creator: requester
+        )
       end
 
       before do
@@ -135,9 +133,7 @@ RSpec.describe 'DeleteStaffMember service'  do
       end
 
       specify 'holidays should be disabled' do
-        travel_to week.start_date do
-          service.call
-        end
+        service.call
         expect(holiday.reload).to be_disabled
       end
     end
