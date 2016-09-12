@@ -1,6 +1,6 @@
-class WeeklyReportsController < ApplicationController
+class PayrollReportsController < ApplicationController
   def index
-    authorize! :view, :weekly_reports
+    authorize! :view, :payroll_reports
 
     if venue_from_params.present? && week_from_params.present?
       venue = venue_from_params
@@ -34,7 +34,7 @@ class WeeklyReportsController < ApplicationController
         pay_rate_filtering: params[:pay_rate_filter]
       }
     else
-      redirect_to(weekly_reports_path(index_redirect_params))
+      redirect_to(payroll_reports_path(index_redirect_params))
     end
   end
 

@@ -39,7 +39,7 @@ class Ability
         user.has_admin_access?
       end
 
-      can :view, :weekly_reports do
+      can :view, :payroll_reports do
         user.has_all_venue_access? || !user.security_manager?
       end
 
