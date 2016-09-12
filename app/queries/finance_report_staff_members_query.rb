@@ -1,9 +1,10 @@
 class FinanceReportStaffMembersQuery
-  def initialize(venue:, week:)
+  def initialize(venue:, week:, filter_by_weekly_pay_rate:)
     @venue = venue
     @week = week
+    @filter_by_weekly_pay_rate = filter_by_weekly_pay_rate
   end
-  attr_reader :venue, :week
+  attr_reader :venue, :week, :filter_by_weekly_pay_rate
 
   def all
     staff_member_transitions = Arel::Table.new(:staff_member_transitions)
@@ -12,6 +13,7 @@ class FinanceReportStaffMembersQuery
     holidays = Arel::Table.new(:holidays)
     owed_hours = Arel::Table.new(:owed_hours)
     clock_in_days = Arel::Table.new(:clock_in_days)
+    pay_rates = Arel::Table.new(:pay_rates)
     holiday_transitions_table = Arel::Table.new(:holiday_transitions)
     holiday_transitions = holiday_transitions_table.alias("holiday_transitions")
 
@@ -46,7 +48,7 @@ class FinanceReportStaffMembersQuery
       )
     enabled_owed_hours = enabled_owed_hours_query.as("enabled_owed_hours")
 
-    query = staff_members.
+    base_query = staff_members.
       join(most_recent_staff_member_transitions, Arel::Nodes::OuterJoin).
       on(
         staff_members[:id].eq(
@@ -107,7 +109,19 @@ class FinanceReportStaffMembersQuery
             end_value: week.end_date
           ).arel
         )
-      ).
+      )
+
+    if filter_by_weekly_pay_rate
+      base_query = base_query.
+        join(pay_rates).
+        on(
+          staff_members[:pay_rate_id].eq(pay_rates[:id])
+        ).where(
+          pay_rates[:calculation_type].eq(PayRate::WEEKLY_CALCULATION_TYPE)
+        )
+    end
+
+    query = base_query.
       project(staff_members[Arel.star]).
       distinct
 

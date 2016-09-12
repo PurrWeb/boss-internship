@@ -89,6 +89,7 @@ describe FinanceReportStaffMembersQuery do
 
   let(:venue) { FactoryGirl.create(:venue) }
   let(:week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current) - 1.week) }
+  let(:filter_by_weekly_pay_rate) { false }
   let(:created_at) { week.start_date + 1.day }
   let(:staff_member) do
     FactoryGirl.create(
@@ -100,7 +101,8 @@ describe FinanceReportStaffMembersQuery do
   let(:query) do
     FinanceReportStaffMembersQuery.new(
       venue: venue,
-      week: week
+      week: week,
+      filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
     )
   end
 

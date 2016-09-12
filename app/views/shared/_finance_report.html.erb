@@ -23,9 +23,31 @@
           class: 'static-week-picker',
           name: 'week_start'
         ) %>
+
     <%= form.submit('Update') %>
-  </div>
 <% end %>
+
+<div class="row">
+  <label>Pay Rate Filter</label>
+  <%= link_to(
+        pay_rate_filter_path_helper.call(
+          venue_id: venue.id,
+          week_start:  week.start_date && UIRotaDate.format(week.start_date)
+        )
+      ) do %>
+    <button type="button" class="btn <%= pay_rate_filtering == 'weekly' ? "btn-default" : "btn-primary" %>">Show All</button>
+  <% end %>
+
+  <%= link_to(
+        pay_rate_filter_path_helper.call(
+          venue_id: venue.id,
+          week_start:  week.start_date && UIRotaDate.format(week.start_date),
+          pay_rate_filter: 'weekly'
+        )
+      ) do %>
+    <button type="button" class="btn <%= pay_rate_filtering == 'weekly' ? "btn-primary" : "btn-default" %>">Show Weekly Only</button>
+  <% end %>
+</div>
 
 <% reports_by_staff_type.each do |staff_type, reports| %>
   <div>
@@ -43,6 +65,9 @@
       <thead>
         <tr>
           <th></th>
+          <% if display_pay_rate_type %>
+            <th></th>
+          <% end %>
           <% week.each do |date| %>
            <th><%= date %></th>
           <% end %>
@@ -59,6 +84,9 @@
         </tr>
         <tr>
           <th class="text-center">Name</th>
+          <% if display_pay_rate_type %>
+            <th>Pay&nbsp;Type</th>
+          <% end %>
           <% week.each_with_day do |date, day| %>
            <th class="text-center"><%= day.to_s.titlecase %></th>
           <% end %>
@@ -87,6 +115,9 @@
             <td>
               <strong><%= link_to(report.staff_member_name.titlecase, staff_member_path(report.staff_member)) %></strong>
             </td>
+            <% if display_pay_rate_type %>
+              <td><%= report.staff_member.pay_rate.type_description %></td>
+            <% end %>
             <% week.each_with_day do |date, day| %>
               <td>
                 <% hour_value = report.public_send("#{day}_hours_count".to_sym) %>
