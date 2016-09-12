@@ -143,6 +143,7 @@ Rails.application.routes.draw do
 
     resources :payroll_reports, only: [:index]
     resources :daily_reports, only: [:index]
+    resources :weekly_reports, only: [:index]
 
     resources :rollbar_error_test, only: [:index]
 

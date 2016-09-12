@@ -6,3 +6,4 @@ Time::DATE_FORMATS[:human_time_no_date] = "%H:%M"
 
 Time::DATE_FORMATS[:human] = lambda { |time| time.strftime("%H:%M #{time.day.ordinalize} %B %Y") }
 Time::DATE_FORMATS[:human_with_day] = lambda {|time| time.strftime("%H:%M %A #{time.day.ordinalize} %B %Y") }
+Date::DATE_FORMATS[:weekday_only] = "%A"
