@@ -20,6 +20,10 @@ namespace :assets do
     upload_command << %{-F version="#{SourcemapHelper.sourcemap_version}"}
     upload_command << %{-F minified_url="#{bundle_url}"}
     upload_command << %{-F source_map="@#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"}
+    puts
+    puts 'Running file upload command'
+    puts upload_command.join(' ')
+    puts
     response = `#{upload_command.join(' ')}`
     json_result = JSON.parse(response)
     if json_result["err"] > 0
