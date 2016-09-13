@@ -44,23 +44,21 @@ class DailyReportsController < ApplicationController
   end
 
   def date_from_params
-    filter_params = params[:daily_reports_index] || {}
-    if filter_params[:date].present?
-      UIRotaDate.parse(filter_params[:date])
+    if params[:date].present?
+      UIRotaDate.parse(params[:date])
     end
   end
 
   def venue_from_params
-    filter_params = params[:daily_reports_index] || {}
-    accessible_venues.find_by(id: filter_params[:venue])
+    if params[:venue_id].present?
+      accessible_venues.find_by(id: params[:venue_id])
+    end
   end
 
   def redirect_params
     {
-      daily_reports_index: {
-        date: UIRotaDate.format(date_from_params || RotaShiftDate.to_rota_date(Time.current) - 1.day),
-        venue: (venue_from_params || accessible_venues.first).id
-      }
+      date: UIRotaDate.format(date_from_params || RotaShiftDate.to_rota_date(Time.current) - 1.day),
+      venue_id: (venue_from_params || accessible_venues.first).id
     }
   end
 end
