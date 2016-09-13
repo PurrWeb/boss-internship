@@ -318,6 +318,8 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -484,6 +486,7 @@ DEPENDENCIES
   prawn
   prawn-table
   pry-rails
+  quiet_assets
   rails (~> 4.2.0)
   react_webpack_rails
   reform
@@ -502,5 +505,8 @@ DEPENDENCIES
   uglifier
   will_paginate-bootstrap
 
+RUBY VERSION
+   ruby 2.1.2p95
+
 BUNDLED WITH
-   1.11.2
+   1.12.5
