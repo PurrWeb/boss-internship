@@ -14,17 +14,19 @@ namespace :assets do
   task :upload_sourcemaps => :environment do
     bundle_url = ActionController::Base.helpers.asset_url('bundles/frontend_bundle.js')
 
-    upload_command = ["curl https://api.rollbar.com/api/1/sourcemap"]
-    upload_command << %{-F access_token="#{ENV.fetch("ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN")}"}
+    upload_command_parts = ["curl https://api.rollbar.com/api/1/sourcemap"]
+    upload_command_parts << %{-F access_token="#{ENV.fetch("ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN")}"}
     # Supplied by dokku dokku-git-rev plugin
-    upload_command << %{-F version="#{SourcemapHelper.sourcemap_version}"}
-    upload_command << %{-F minified_url="#{bundle_url}"}
-    upload_command << %{-F source_map="@#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"}
+    upload_command_parts << %{-F version="#{SourcemapHelper.sourcemap_version}"}
+    upload_command_parts << %{-F minified_url="#{bundle_url}"}
+    upload_command_parts << %{-F source_map="@#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"}
+    upload_command = upload_command_parts.join(" ")
+
     puts
     puts 'Running file upload command'
-    puts upload_command.join(' ')
+    puts upload_command
     puts
-    response = `#{upload_command.join(' ')}`
+    response = `#{upload_command}`
     json_result = JSON.parse(response)
     if json_result["err"] > 0
       puts "Sourcemap Upload Failed"
