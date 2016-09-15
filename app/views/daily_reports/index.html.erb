@@ -29,19 +29,19 @@
   <dl>
     <dt>Overheads:</dt>
     <dd>
-      <%= number_to_currency(total_overheads_cents / 100.0, unit: '£') %>
+      <%= number_to_currency(report_summary_data.fetch(:overheads_cents) / 100.0, unit: '£') %>
     </dd>
     <dt>Rotaed Cost - Overheads:</dt>
     <dd>
-      <%= number_to_currency(total_rotaed_cost_cents / 100.0, unit: '£') %>
+      <%= number_to_currency(report_summary_data.fetch(:rotaed_cost_minus_overheads_cents) / 100.0, unit: '£') %>
     </dd>
     <dt>Actual Cost - Overheads:</dt>
     <dd>
-      <%= number_to_currency(total_actual_cost_cents / 100.0, unit: '£') %>
+      <%= number_to_currency(report_summary_data.fetch(:actual_cost_minus_overheads_cents) / 100.0, unit: '£') %>
     </dd>
     <dt>Variance:</dt>
     <dd>
-      <%= number_to_currency((total_rotaed_cost_cents - total_actual_cost_cents) / 100.0, unit: '£') %>
+      <%= number_to_currency(report_summary_data.fetch(:variance_cents) / 100.0, unit: '£') %>
     </dd>
   </dl>
 </div>

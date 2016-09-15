@@ -17,21 +17,11 @@ class WeeklyReportsController < ApplicationController
 
       reports = {}
       (week.start_date..week.end_date).each do |date|
-        report_data = {
-          overheads_cents: 0,
-          rotaed_cost_minus_overheads_cents: 0,
-          actual_cost_minus_overheads_cents: 0,
-          actual_cost_cents: 0
-        }
-
-        staff_members = DailyReportsIndexStaffMemberQuery.new(date: date, venue: venue).all
-        staff_members.each do |staff_member|
-          report_data[:overheads_cents] += staff_member.overhead_cost_cents.to_i
-          report_data[:rotaed_cost_minus_overheads_cents] += staff_member.rotaed_cost_cents.to_i
-          report_data[:actual_cost_minus_overheads_cents] += staff_member.actual_cost_cents.to_i
-        end
-        report_data[:actual_cost_cents] = report_data.fetch(:overheads_cents) + report_data.fetch(:actual_cost_minus_overheads_cents)
-        report_data[:variance_cents] = report_data.fetch(:rotaed_cost_minus_overheads_cents) - report_data.fetch(:actual_cost_minus_overheads_cents)
+        daily_report_summary = DailyReportSummaryCalculator.new(
+          date: date,
+          venue: venue
+        )
+        report_data = daily_report_summary.calculate
 
         totals[:overheads_cents] += report_data.fetch(:overheads_cents)
         totals[:rotaed_cost_minus_overheads_cents] += report_data.fetch(:rotaed_cost_minus_overheads_cents)
