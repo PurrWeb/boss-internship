@@ -25,29 +25,30 @@
         ) %>
 
     <%= form.submit('Update') %>
+  </div>
+
+  <div class="row" style="margin-top:10px">
+    <label>Pay Rate Filter</label>
+    <%= link_to(
+          pay_rate_filter_path_helper.call(
+            venue_id: venue.id,
+            week_start:  week.start_date && UIRotaDate.format(week.start_date)
+          )
+        ) do %>
+      <button type="button" class="btn <%= pay_rate_filtering == 'weekly' ? "btn-default" : "btn-primary" %>">Show All</button>
+    <% end %>
+
+    <%= link_to(
+          pay_rate_filter_path_helper.call(
+            venue_id: venue.id,
+            week_start:  week.start_date && UIRotaDate.format(week.start_date),
+            pay_rate_filter: 'weekly'
+          )
+        ) do %>
+      <button type="button" class="btn <%= pay_rate_filtering == 'weekly' ? "btn-primary" : "btn-default" %>">Show Weekly Only</button>
+    <% end %>
+  </div>
 <% end %>
-
-<div class="row">
-  <label>Pay Rate Filter</label>
-  <%= link_to(
-        pay_rate_filter_path_helper.call(
-          venue_id: venue.id,
-          week_start:  week.start_date && UIRotaDate.format(week.start_date)
-        )
-      ) do %>
-    <button type="button" class="btn <%= pay_rate_filtering == 'weekly' ? "btn-default" : "btn-primary" %>">Show All</button>
-  <% end %>
-
-  <%= link_to(
-        pay_rate_filter_path_helper.call(
-          venue_id: venue.id,
-          week_start:  week.start_date && UIRotaDate.format(week.start_date),
-          pay_rate_filter: 'weekly'
-        )
-      ) do %>
-    <button type="button" class="btn <%= pay_rate_filtering == 'weekly' ? "btn-primary" : "btn-default" %>">Show Weekly Only</button>
-  <% end %>
-</div>
 
 <% reports_by_staff_type.each do |staff_type, reports| %>
   <div>
