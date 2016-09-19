@@ -11,7 +11,7 @@ class StaffTrackingEvent < ActiveRecord::Base
   validates :at, presence: true
 
   def self.creation_event
-    where("(`#{table_name}`.event_type = ?) OR (`#{table_name}`.event_type = ?)", CREATION_EVENT_TYPE, DISABLE_EVENT_TYPE)
+    where("(`#{table_name}`.event_type = ?) OR (`#{table_name}`.event_type = ?)", CREATION_EVENT_TYPE, REENABLE_EVENT_TYPE)
   end
 
   def self.deletion_event
