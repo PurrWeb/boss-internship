@@ -9,27 +9,26 @@ class WeeklyReportsController < ApplicationController
 
       totals = {
         overheads_cents: 0,
-        rotaed_cost_minus_overheads_cents: 0,
-        actual_cost_minus_overheads_cents: 0,
+        rotaed_cost_cents: 0,
         actual_cost_cents: 0,
         variance_cents: 0
       }
 
       reports = {}
       (week.start_date..week.end_date).each do |date|
-        daily_report_summary = DailyReportSummaryCalculator.new(
+        report = DailyReport.find_by(
           date: date,
           venue: venue
         )
-        report_data = daily_report_summary.calculate
 
-        totals[:overheads_cents] += report_data.fetch(:overheads_cents)
-        totals[:rotaed_cost_minus_overheads_cents] += report_data.fetch(:rotaed_cost_minus_overheads_cents)
-        totals[:actual_cost_minus_overheads_cents] += report_data.fetch(:actual_cost_minus_overheads_cents)
-        totals[:variance_cents] += report_data.fetch(:variance_cents)
-        totals[:actual_cost_cents] += report_data.fetch(:actual_cost_cents)
+        if report.present?
+          totals[:overheads_cents] += report.overheads_cents
+          totals[:rotaed_cost_cents] += report.rotaed_cost_cents
+          totals[:actual_cost_cents] += report.actual_cost_cents
+          totals[:variance_cents] += report.variance_cents
+        end
 
-        reports[date] = report_data
+        reports[date] = report
       end
 
       render locals: {

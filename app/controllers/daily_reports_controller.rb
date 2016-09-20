@@ -6,17 +6,25 @@ class DailyReportsController < ApplicationController
       date = date_from_params
       venue = venue_from_params
 
-      daily_report_summary = DailyReportSummaryCalculator.new(
-        date: date,
-        venue: venue
-      )
+      daily_report = DailyReport.
+        includes([
+          staff_member_sections: [
+            :staff_type,
+            staff_member_listings: [
+              staff_member: [:name]
+            ]
+          ]
+        ]).
+        find_by(
+          date: date,
+          venue: venue
+        )
 
       render locals: {
         accessible_venues: accessible_venues,
         venue: venue,
         date: date,
-        report_summary_data: daily_report_summary.calculate,
-        staff_members: daily_report_summary.staff_members
+        daily_report: daily_report
       }
     else
       redirect_to(redirect_params)

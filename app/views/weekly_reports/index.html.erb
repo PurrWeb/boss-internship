@@ -32,16 +32,24 @@
   <thead>
     <tr>
       <th>Day</th>
-      <% reports.each do |date, report_data| %>
+      <% reports.each do |date, report| %>
         <th>
-          <%= link_to(
-                date.to_s(:weekday_only),
-                daily_reports_path(
-                  date: UIRotaDate.format(date),
-                  venue_id: venue.id
-                ),
-                class: 'link-unstyled'
-              ) %>
+          <% if report.present? && !report.pending_first_calculation? %>
+            <%= link_to(
+                  date.to_s(:weekday_only),
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          <% else %>
+            <span><%= date.to_s(:weekday_only) %> </span>
+          <% end %>
+
+          <% if report.present? && report.update_required? %>
+            <small><span class="glyphicon glyphicon-asterisk"></span></small>
+          <% end %>
         </th>
       <% end %>
       <th>Total</th>
@@ -50,20 +58,24 @@
   <tbody>
     <tr>
       <th>Overheads</th>
-      <% reports.each do |date, report_data| %>
-        <td>
-          <%= link_to(
-                number_to_currency(
-                  report_data.fetch(:overheads_cents) / 100.0,
-                  unit: '£'
-                ),
-                daily_reports_path(
-                  date: UIRotaDate.format(date),
-                  venue_id: venue.id
-                ),
-                class: 'link-unstyled'
-              ) %>
-        </td>
+      <% reports.each do |date, report| %>
+        <% if report.present? && !report.pending_first_calculation? %>
+          <td>
+            <%= link_to(
+                  number_to_currency(
+                    report.overheads_cents / 100.0,
+                    unit: '£'
+                  ),
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
+        <% else %>
+          <td>-</td>
+        <% end %>
       <% end %>
       <td>
         <strong>
@@ -76,25 +88,29 @@
     </tr>
     <tr>
       <th>Rotaed Cost - Overheads</th>
-      <% reports.each do |date, report_data| %>
-        <td>
-          <%= link_to(
-                number_to_currency(
-                  report_data.fetch(:rotaed_cost_minus_overheads_cents) / 100.0,
-                  unit: '£'
-                ),
-                daily_reports_path(
-                  date: UIRotaDate.format(date),
-                  venue_id: venue.id
-                ),
-                class: 'link-unstyled'
-              ) %>
-        </td>
+      <% reports.each do |date, report| %>
+        <% if report.present? && !report.pending_first_calculation? %>
+          <td>
+            <%= link_to(
+                  number_to_currency(
+                    report.rotaed_cost_cents / 100.0,
+                    unit: '£'
+                  ),
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
+        <% else %>
+          <td>-</td>
+        <% end %>
       <% end %>
       <td>
         <strong>
           <%= number_to_currency(
-                totals.fetch(:rotaed_cost_minus_overheads_cents) / 100.0,
+                totals.fetch(:rotaed_cost_cents) / 100.0,
                 unit: '£'
               ) %>
         </strong>
@@ -102,25 +118,29 @@
     </tr>
     <tr>
       <th>Actual Cost - Overheads</th>
-      <% reports.each do |date, report_data| %>
-        <td>
-          <%= link_to(
-                number_to_currency(
-                  report_data.fetch(:actual_cost_minus_overheads_cents) / 100.0,
-                  unit: '£'
-                ),
-                daily_reports_path(
-                  date: UIRotaDate.format(date),
-                  venue_id: venue.id
-                ),
-                class: 'link-unstyled'
-              ) %>
-        </td>
+      <% reports.each do |date, report| %>
+        <% if report.present? && !report.pending_first_calculation? %>
+          <td>
+            <%= link_to(
+                  number_to_currency(
+                    report.actual_cost_cents / 100.0,
+                    unit: '£'
+                  ),
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
+        <% else %>
+          <td>-</td>
+        <% end %>
       <% end %>
       <td>
         <strong>
           <%= number_to_currency(
-                totals.fetch(:actual_cost_minus_overheads_cents) / 100.0,
+                totals.fetch(:actual_cost_cents) / 100.0,
                 unit: '£'
               ) %>
         </strong>
@@ -128,20 +148,24 @@
     </tr>
     <tr>
       <th>Actual Cost</th>
-      <% reports.each do |date, report_data| %>
-        <td>
-          <%= link_to(
-                number_to_currency(
-                  report_data.fetch(:actual_cost_cents) / 100.0,
-                  unit: '£'
-                ),
-                daily_reports_path(
-                  date: UIRotaDate.format(date),
-                  venue_id: venue.id
-                ),
-                class: 'link-unstyled'
-              ) %>
-        </td>
+      <% reports.each do |date, report| %>
+        <% if report.present? && !report.pending_first_calculation? %>
+          <td>
+            <%= link_to(
+                  number_to_currency(
+                    report.actual_cost_cents / 100.0,
+                    unit: '£'
+                  ),
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
+        <% else %>
+          <td>-</td>
+        <% end %>
       <% end %>
       <td>
         <strong>
@@ -154,20 +178,24 @@
     </tr>
     <tr>
       <th>Variance</th>
-      <% reports.each do |date, report_data| %>
-        <td class="<%= "text-danger" if report_data.fetch(:variance_cents) < 0 %>">
-          <%= link_to(
-                number_to_currency(
-                  report_data.fetch(:variance_cents) / 100.0,
-                  unit: '£'
-                ),
-                daily_reports_path(
-                  date: UIRotaDate.format(date),
-                  venue_id: venue.id
-                ),
-                class: 'link-unstyled'
-              ) %>
-        </td>
+      <% reports.each do |date, report| %>
+        <% if report.present? && !report.pending_first_calculation? %>
+          <td class="<%= "text-danger" if report.variance_cents < 0 %>">
+            <%= link_to(
+                  number_to_currency(
+                    report.variance_cents / 100.0,
+                    unit: '£'
+                  ),
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
+        <% else %>
+          <td>-</td>
+        <% end %>
       <% end %>
       <td class="<%= "text-danger" if totals.fetch(:variance_cents) < 0 %>">
         <strong>
@@ -178,5 +206,15 @@
         </strong>
       </td>
     </tr>
+    <tr>
+      <th>Last Updated</th>
+      <% reports.each do |date, report| %>
+        <% if report.present? && !report.pending_first_calculation? %>
+          <td><%= report.last_calculated_at.to_s(:human) %></td>
+        <% else %>
+          <td>N / A</td>
+        <% end %>
+      <% end %>
+      <td></td>
   </tbody>
 </table>

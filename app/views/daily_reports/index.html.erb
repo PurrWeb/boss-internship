@@ -25,96 +25,114 @@
 <% end %>
 
 <div>
-  <h2>Overview</h2>
-  <dl>
-    <dt>Overheads:</dt>
-    <dd>
-      <%= number_to_currency(report_summary_data.fetch(:overheads_cents) / 100.0, unit: '£') %>
-    </dd>
-    <dt>Rotaed Cost - Overheads:</dt>
-    <dd>
-      <%= number_to_currency(report_summary_data.fetch(:rotaed_cost_minus_overheads_cents) / 100.0, unit: '£') %>
-    </dd>
-    <dt>Actual Cost - Overheads:</dt>
-    <dd>
-      <%= number_to_currency(report_summary_data.fetch(:actual_cost_minus_overheads_cents) / 100.0, unit: '£') %>
-    </dd>
-    <dt>Variance:</dt>
-    <dd>
-      <%= number_to_currency(report_summary_data.fetch(:variance_cents) / 100.0, unit: '£') %>
-    </dd>
-  </dl>
-</div>
+  <% if !daily_report.present? || daily_report.pending_first_calculation? %>
+    <p>No daily report currently exists for this day.</p>
+    <% if daily_report.present? && daily_report.update_required? %>
+      <p>
+        A report is scheduled to be calculated for this date.<br/>
+        The updated data should be online within the hour.
+      </p>
+    <% end %>
+  <% else %>
+    <div>
+      <h2>Overview</h2>
+      <dl>
+        <dt>Overheads:</dt>
+        <dd>
+          <%= number_to_currency(daily_report.overheads_cents / 100.0, unit: '£') %>
+        </dd>
+        <dt>Rotaed Cost - Overheads:</dt>
+        <dd>
+          <%= number_to_currency(daily_report.rotaed_cost_cents / 100.0, unit: '£') %>
+        </dd>
+        <dt>Actual Cost - Overheads:</dt>
+        <dd>
+          <%= number_to_currency(daily_report.actual_cost_cents / 100.0, unit: '£') %>
+        </dd>
+        <dt>Variance:</dt>
+        <dd>
+          <%= number_to_currency(daily_report.variance_cents / 100.0, unit: '£') %>
+        </dd>
 
-<% grouped_staff_members = staff_members.group_by(&:staff_type) %>
-<% grouped_staff_members.each do |staff_type, staff_members| %>
-  <% total_actual_cost_cents = staff_members.sum(&:actual_cost_cents) %>
-  <% total_rotaed_cost_cents = staff_members.sum(&:rotaed_cost_cents) %>
-  <div>
-    <div class="row">
-      <h3 style="display: inline-block">
-        <div class="boss-badge" style="font-size: 1.1em; background-color: #<%= staff_type.ui_color %>"><%= staff_type.name %></div>
-      </h3>
-      <div class="h4">
-        Rotaed Cost: <%= number_to_currency(total_rotaed_cost_cents / 100.0, unit: '£') %></span>, <span class="h4">Actual Cost: <%= number_to_currency(total_actual_cost_cents / 100.0, unit: '£') %>
-      </div>
-    </div>
-    <table class="table table-striped" style="text-align: center;">
-      <thead>
-        <tr>
-          <th style="text-align: center;">Name</th>
-          <th style="text-align: center;">Pay rate</th>
-          <th style="text-align: center;">Hours Rotaed</th>
-          <th style="text-align: center;">Rotaed Cost</th>
-          <th style="text-align: center;">Hours Worked</th>
-          <th style="text-align: center;">Break Time (Hours)</th>
-          <th style="text-align: center;">Actual Cost</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% staff_members.each do |staff_member| %>
-          <tr>
-            <td><%= staff_member.full_name.titlecase %></td>
-            <td>
-              <% if staff_member.pay_rate.admin? %>
-                <%= staff_member.pay_rate.name.titlecase %>
-              <% else %>
-                <%= staff_member.pay_rate.text_description_short %>
-              <% end %>
-            </td>
-            <td><%= number_with_precision(
-                      staff_member.hours_rotaed,
-                      precision: 2,
-                      strip_insignificant_zeros: true
-                    ) %>
-            </td>
-            <td>
-              <% if staff_member.pay_rate.hourly? %>
-                <%= number_to_currency(staff_member.rotaed_cost_cents / 100.0, unit: '£') %>
-              <% else %>
-                <span>-</span>
-              <% end %>
-            </td>
-            <td><%= number_with_precision(
-                      staff_member.hours_worked,
-                      precision: 2,
-                      strip_insignificant_zeros: true
-                    ) %></td>
-            <td><%= number_with_precision(
-                      staff_member.break_hours,
-                      precision: 2,
-                      strip_insignificant_zeros: true
-                    ) %></td>
-            <td>
-              <% if staff_member.pay_rate.hourly? %>
-                <%= number_to_currency(staff_member.actual_cost_cents / 100, unit: '£') %>
-              <% else %>
-                <span>-</span>
-              <% end %>
-            </td>
-          </tr>
+        <dt>Last Updated</dt>
+        <dd><%= daily_report.last_calculated_at.to_s(:human) %></dd>
+        <% if daily_report.update_required? %>
+          <p>
+            A report is scheduled to be calculated for this date.<br/>
+            The updated data should be online within the hour.
+          </p>
         <% end %>
-      </tbody>
-    </table>
-  <div>
-<% end %>
+      </dl>
+    </div>
+
+    <% daily_report.staff_member_sections.each do |section| %>
+      <div>
+        <div class="row">
+          <h3 style="display: inline-block">
+            <div class="boss-badge" style="font-size: 1.1em; background-color: #<%= section.staff_type.ui_color %>"><%= section.staff_type.name %></div>
+          </h3>
+          <div class="h4">
+            Rotaed Cost: <%= number_to_currency(section.rotaed_cost_cents / 100.0, unit: '£') %></span>, <span class="h4">Actual Cost: <%= number_to_currency(section.actual_cost_cents / 100.0, unit: '£') %>
+          </div>
+        </div>
+        <table class="table table-striped" style="text-align: center;">
+          <thead>
+            <tr>
+              <th style="text-align: center;">Name</th>
+              <th style="text-align: center;">Pay rate</th>
+              <th style="text-align: center;">Hours Rotaed</th>
+              <th style="text-align: center;">Rotaed Cost</th>
+              <th style="text-align: center;">Hours Worked</th>
+              <th style="text-align: center;">Break Time (Hours)</th>
+              <th style="text-align: center;">Actual Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% section.staff_member_listings.each do |listing| %>
+              <tr>
+                <td><%= listing.staff_member.full_name.titlecase %></td>
+                <td>
+                  <% if listing.pay_rate_admin? %>
+                    <%= listing.pay_rate_name.titlecase %>
+                  <% else %>
+                    <%= listing.pay_rate_text_description_short %>
+                  <% end %>
+                </td>
+                <td><%= number_with_precision(
+                          listing.rotaed_hours,
+                          precision: 2,
+                          strip_insignificant_zeros: true
+                        ) %>
+                </td>
+                <td>
+                  <% if listing.pay_rate_hourly? %>
+                    <%= number_to_currency(listing.rotaed_cost_cents / 100.0, unit: '£') %>
+                  <% else %>
+                    <span>-</span>
+                  <% end %>
+                </td>
+                <td><%= number_with_precision(
+                          listing.worked_hours,
+                          precision: 2,
+                          strip_insignificant_zeros: true
+                        ) %></td>
+                <td><%= number_with_precision(
+                          listing.break_hours,
+                          precision: 2,
+                          strip_insignificant_zeros: true
+                        ) %></td>
+                <td>
+                  <% if listing.pay_rate_hourly? %>
+                    <%= number_to_currency(listing.actual_cost_cents / 100, unit: '£') %>
+                  <% else %>
+                    <span>-</span>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  <% end %>
+</div>
