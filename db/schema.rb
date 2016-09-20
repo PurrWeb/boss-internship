@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160822123500) do
+ActiveRecord::Schema.define(version: 20160920150701) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -152,6 +152,53 @@ ActiveRecord::Schema.define(version: 20160822123500) do
   end
 
   add_index "cron_jobs", ["started_at"], name: "index_cron_jobs_on_started_at", using: :btree
+
+  create_table "daily_report_staff_member_listings", force: :cascade do |t|
+    t.integer  "daily_report_staff_member_section_id", limit: 4,   null: false
+    t.integer  "staff_member_id",                      limit: 4,   null: false
+    t.string   "pay_rate_name",                        limit: 255, null: false
+    t.integer  "pay_rate_cents",                       limit: 4,   null: false
+    t.string   "pay_rate_text_description_short",      limit: 255, null: false
+    t.string   "pay_rate_calculation_type",            limit: 255, null: false
+    t.boolean  "pay_rate_admin",                                   null: false
+    t.integer  "rotaed_cost_cents",                    limit: 4,   null: false
+    t.integer  "actual_cost_cents",                    limit: 4,   null: false
+    t.float    "rotaed_hours",                         limit: 24,  null: false
+    t.float    "worked_hours",                         limit: 24,  null: false
+    t.float    "break_hours",                          limit: 24,  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "daily_report_staff_member_listings", ["daily_report_staff_member_section_id"], name: "daily_report_section_index", using: :btree
+  add_index "daily_report_staff_member_listings", ["staff_member_id"], name: "index_daily_report_staff_member_listings_on_staff_member_id", using: :btree
+
+  create_table "daily_report_staff_member_sections", force: :cascade do |t|
+    t.integer  "daily_report_id",     limit: 4, null: false
+    t.integer  "staff_type_id",       limit: 4, null: false
+    t.integer  "overhead_cost_cents", limit: 4, null: false
+    t.integer  "rotaed_cost_cents",   limit: 4, null: false
+    t.integer  "actual_cost_cents",   limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "daily_report_staff_member_sections", ["daily_report_id"], name: "index_daily_report_staff_member_sections_on_daily_report_id", using: :btree
+  add_index "daily_report_staff_member_sections", ["staff_type_id"], name: "index_daily_report_staff_member_sections_on_staff_type_id", using: :btree
+
+  create_table "daily_reports", force: :cascade do |t|
+    t.integer  "venue_id",           limit: 4, null: false
+    t.date     "date",                         null: false
+    t.integer  "overheads_cents",    limit: 4, null: false
+    t.integer  "rotaed_cost_cents",  limit: 4, null: false
+    t.integer  "actual_cost_cents",  limit: 4, null: false
+    t.boolean  "update_required",              null: false
+    t.datetime "last_calculated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "daily_reports", ["venue_id", "date"], name: "index_daily_reports_on_venue_id_and_date", using: :btree
 
   create_table "email_addresses", force: :cascade do |t|
     t.string   "email",      limit: 255, null: false
