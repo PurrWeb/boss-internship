@@ -49,6 +49,13 @@ class CreateHoursAcceptancePeriod
       end
 
       success = hours_acceptance_period.save
+      if success && hours_acceptance_period.accepted?
+        DailyReport.mark_for_update!(
+          date: hours_acceptance_period.date,
+          venue: hours_acceptance_period.venue
+        )
+      end
+
       raise ActiveRecord::Rollback unless success
     end
 

@@ -16,6 +16,11 @@ class DeleteHoursAcceptancePeriod
       hours_acceptance_period.update_attributes!(
         status: 'deleted'
       )
+
+      DailyReport.mark_for_update!(
+        date: hours_acceptance_period.date,
+        venue: hours_acceptance_period.venue
+      )
     else
       hours_acceptance_period.errors.add(:base, "can't delete hours that have been frozen")
       result = false

@@ -47,6 +47,7 @@ gem 'paper_trail'
 gem 'paper_trail-globalid'
 gem 'oj'
 gem 'oj_mimic_json'
+gem 'sidekiq-unique-jobs'
 
 group :development, :test do
   gem "byebug"

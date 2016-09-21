@@ -47,6 +47,7 @@ module Clockwork
     Rollbar.error(e)
   end
 
+  every(15.seconds, "ProcessDailyReportsJob")
   every(20.minutes, "ShiftUpdateNotificationJob")
   every(1.week, "ChangeOrderReminderJob",     at: "Sunday 23:00", tz: 'Europe/London')
   every(1.week, "TuesdayFruitOrderReminderJob", at: "Sunday 23:00", tz: 'Europe/London')

@@ -1,11 +1,13 @@
 class UpdateDailyReport
-  def initialize(venue:, date:)
-    @venue = venue
-    @date = date
+  def initialize(report: report)
+    @daily_report = report
   end
-  attr_reader :venue, :date
+  attr_reader :daily_report
 
   def call
+    date = daily_report.date
+    venue = daily_report.venue
+
     daily_report_summary = DailyReportSummaryCalculator.new(
       date: date,
       venue: venue
@@ -15,14 +17,6 @@ class UpdateDailyReport
     grouped_staff_members = staff_members.group_by(&:staff_type)
 
     data = daily_report_summary.calculate
-
-    daily_report = DailyReport.find_by(
-      venue: venue,
-      date: date
-    ) || DailyReport.new(
-      venue: venue,
-      date: date
-    )
 
     ActiveRecord::Base.transaction do
       daily_report.update_attributes(
@@ -35,7 +29,6 @@ class UpdateDailyReport
 
       #clear old cached sections
       DailyReportStaffMemberSection.where(daily_report: daily_report).destroy_all
-
 
       grouped_staff_members.each do |staff_type, staff_members|
         group_data = {
