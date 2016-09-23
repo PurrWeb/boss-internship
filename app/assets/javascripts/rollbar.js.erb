@@ -12,7 +12,7 @@ if ((getEnvironment() === "production") || (getEnvironment() === "staging")) {
               javascript: {
                  source_map_enabled: true,
                  code_version: "<%= sourcemap_version %>",
-                 guess_uncaught_frames: true
+                 guess_uncaught_frames: false
               }
             }
         }
