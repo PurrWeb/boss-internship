@@ -16,7 +16,6 @@ namespace :assets do
 
     upload_command_parts = ["curl https://api.rollbar.com/api/1/sourcemap"]
     upload_command_parts << %{-F access_token="#{ENV.fetch("ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN")}"}
-    # Supplied by dokku dokku-git-rev plugin
     upload_command_parts << %{-F version="#{SourcemapHelper.sourcemap_version}"}
     upload_command_parts << %{-F minified_url="#{bundle_url}"}
     upload_command_parts << %{-F source_map="@#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"}
