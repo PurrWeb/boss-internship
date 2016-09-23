@@ -34,18 +34,14 @@
       <th>Day</th>
       <% reports.each do |date, report| %>
         <th>
-          <% if report.present? && !report.pending_first_calculation? %>
-            <%= link_to(
-                  date.to_s(:weekday_only),
-                  daily_reports_path(
-                    date: UIRotaDate.format(date),
-                    venue_id: venue.id
-                  ),
-                  class: 'link-unstyled'
-                ) %>
-          <% else %>
-            <span><%= date.to_s(:weekday_only) %> </span>
-          <% end %>
+          <%= link_to(
+                date.to_s(:weekday_only),
+                daily_reports_path(
+                  date: UIRotaDate.format(date),
+                  venue_id: venue.id
+                ),
+                class: 'link-unstyled'
+              ) %>
 
           <% if report.present? && report.update_required? %>
             <small><span class="glyphicon glyphicon-asterisk"></span></small>
@@ -74,7 +70,16 @@
                 ) %>
           </td>
         <% else %>
-          <td>-</td>
+          <td>
+            <%= link_to(
+                  '-',
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
         <% end %>
       <% end %>
       <td>
@@ -104,7 +109,16 @@
                 ) %>
           </td>
         <% else %>
-          <td>-</td>
+          <td>
+            <%= link_to(
+                  '-',
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
         <% end %>
       <% end %>
       <td>
@@ -134,7 +148,16 @@
                 ) %>
           </td>
         <% else %>
-          <td>-</td>
+          <td>
+            <%= link_to(
+                  '-',
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
         <% end %>
       <% end %>
       <td>
@@ -164,7 +187,16 @@
                 ) %>
           </td>
         <% else %>
-          <td>-</td>
+          <td>
+            <%= link_to(
+                  '-',
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
         <% end %>
       <% end %>
       <td>
@@ -194,7 +226,16 @@
                 ) %>
           </td>
         <% else %>
-          <td>-</td>
+          <td>
+            <%= link_to(
+                  '-',
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
         <% end %>
       <% end %>
       <td class="<%= "text-danger" if totals.fetch(:variance_cents) < 0 %>">
@@ -210,9 +251,27 @@
       <th>Last Updated</th>
       <% reports.each do |date, report| %>
         <% if report.present? && !report.pending_first_calculation? %>
-          <td><%= report.last_calculated_at.to_s(:human) %></td>
+          <td>
+            <%= link_to(
+                  report.last_calculated_at.to_s(:human),
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
         <% else %>
-          <td>N / A</td>
+          <td>
+            <%= link_to(
+                  'N / A',
+                  daily_reports_path(
+                    date: UIRotaDate.format(date),
+                    venue_id: venue.id
+                  ),
+                  class: 'link-unstyled'
+                ) %>
+          </td>
         <% end %>
       <% end %>
       <td></td>
