@@ -5,6 +5,7 @@ class DailyReportsController < ApplicationController
     if date_from_params.present? && venue_from_params.present?
       date = date_from_params
       venue = venue_from_params
+      week = RotaWeek.new(date)
 
       daily_report = DailyReport.
         includes([
@@ -24,6 +25,7 @@ class DailyReportsController < ApplicationController
         accessible_venues: accessible_venues,
         venue: venue,
         date: date,
+        week: week,
         daily_report: daily_report
       }
     else

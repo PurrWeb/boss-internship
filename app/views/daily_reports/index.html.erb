@@ -1,6 +1,6 @@
 <h1>Daily Reports</h1>
 
-<p><%= venue.name.titlecase %> <%= date.to_s(:human_date) %></p>
+<p><%= venue.name.titlecase %> <%= date.to_s(:human_date) %> <%= link_to('View weekly report', weekly_reports_path(venue_id: venue.id, week_start: UIRotaDate.format(week.start_date))) %></p>
 
 <%= bootstrap_form_for('', url: daily_reports_path, html: { method: :get, class: 'form-inline' }) do |form| %>
     <%= form.select(
