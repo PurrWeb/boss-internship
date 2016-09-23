@@ -12,25 +12,38 @@ namespace :assets do
 
   desc "Upload Sourcemaps"
   task :upload_sourcemaps => :environment do
-    bundle_url = ActionController::Base.helpers.asset_url('bundles/frontend_bundle.js')
+    bundle_path = ActionController::Base.helpers.asset_path('bundles/frontend_bundle.js')
 
-    upload_command_parts = ["curl https://api.rollbar.com/api/1/sourcemap"]
-    upload_command_parts << %{-F access_token="#{ENV.fetch("ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN")}"}
-    upload_command_parts << %{-F version="#{SourcemapHelper.sourcemap_version}"}
-    upload_command_parts << %{-F minified_url="#{bundle_url}"}
-    upload_command_parts << %{-F source_map="@#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"}
-    upload_command = upload_command_parts.join(" ")
+    upload_hosts = []
+    if Rails.env.staging?
+      upload_hosts << 'https://staging-boss.jsmbars.co.uk'
+      upload_hosts << 'https://staging-clock.jsmbars.co.uk'
+    elsif Rails.env.production?
+      upload_hosts << 'https://boss.jsmbars.co.uk'
+      upload_hosts << 'https://clock.jsmbars.co.uk'
+    end
 
-    puts
-    puts 'Running file upload command'
-    puts upload_command
-    puts
-    response = `#{upload_command}`
-    json_result = JSON.parse(response)
-    if json_result["err"] > 0
-      puts "Sourcemap Upload Failed"
-      puts json_result
-      raise json_result.to_s
+    upload_hosts.each do |host|
+      upload_url = "#{host}#{bundle_path}"
+
+      upload_command_parts = ["curl https://api.rollbar.com/api/1/sourcemap"]
+      upload_command_parts << %{-F access_token="#{ENV.fetch("ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN")}"}
+      upload_command_parts << %{-F version="#{SourcemapHelper.sourcemap_version}"}
+      upload_command_parts << %{-F minified_url="#{upload_url}"}
+      upload_command_parts << %{-F source_map="@#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"}
+      upload_command = upload_command_parts.join(" ")
+
+      puts
+      puts 'Running file upload command'
+      puts upload_command
+      puts
+      response = `#{upload_command}`
+      json_result = JSON.parse(response)
+      if json_result["err"] > 0
+        puts "Sourcemap Upload Failed"
+        puts json_result
+        raise json_result.to_s
+      end
     end
   end
 
