@@ -142,9 +142,9 @@ ActiveRecord::Schema.define(version: 20160924151830) do
   end
 
   create_table "cron_jobs", force: :cascade do |t|
-    t.string   "method",      limit: 255, null: false
-    t.string   "output",      limit: 255
-    t.datetime "started_at",              null: false
+    t.string   "method",      limit: 255,   null: false
+    t.text     "output",      limit: 65535
+    t.datetime "started_at",                null: false
     t.datetime "finished_at"
     t.string   "error",       limit: 255
     t.datetime "created_at"
