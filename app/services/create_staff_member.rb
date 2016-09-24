@@ -35,6 +35,9 @@ class CreateStaffMember
           staff_member: staff_member
         )
         StaffMemberUpdatesMailer.new_staff_member(staff_member).deliver_now
+        if staff_member.pay_rate.weekly?
+          update_related_daily_reports(staff_member)
+        end
       end
     end
 
@@ -43,4 +46,12 @@ class CreateStaffMember
 
   private
   attr_reader :now, :nested, :params
+
+  def update_related_daily_reports(staff_member)
+    DailyReportDatesEffectedByStaffMemberOnWeeklyPayRateQuery.new(
+      staff_member: staff_member
+    ).to_a.each do |date, venue|
+      DailyReport.mark_for_update!(date: date, venue: venue)
+    end
+  end
 end

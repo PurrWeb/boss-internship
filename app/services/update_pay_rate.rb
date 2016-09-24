@@ -27,7 +27,7 @@ class UpdatePayRate
 
       if result && pay_rate_changed
         update_related_forecasts(pay_rate)
-        update_realted_daily_reports(pay_rate)
+        update_related_daily_reports(pay_rate)
       end
     end
 
@@ -37,7 +37,7 @@ class UpdatePayRate
   private
   attr_reader :pay_rate, :name, :calculation_type, :cents
 
-  def update_realted_daily_reports(pay_rate)
+  def update_related_daily_reports(pay_rate)
     DailyReportDatesEffectedByPayRateChangeQuery.new(
       pay_rate: pay_rate
     ).to_a.each do |date, venue|
