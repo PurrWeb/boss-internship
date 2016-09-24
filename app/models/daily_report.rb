@@ -27,7 +27,7 @@ class DailyReport < ActiveRecord::Base
   def self.mark_for_update!(venue:, date:)
     report = DailyReport.find_by(venue: venue, date: date)
     if report
-      report.update_attributes(update_required: true)
+      report.update_attributes!(update_required: true)
     else
       DailyReport.create!(
         venue: venue,
