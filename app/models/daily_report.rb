@@ -1,7 +1,6 @@
 class DailyReport < ActiveRecord::Base
   belongs_to :venue
 
-  validates_inclusion_of :update_required, in: [true, false]
   validates :venue, presence: true
   validates :date, presence: true
   has_many :staff_member_sections, class_name: 'DailyReportStaffMemberSection', inverse_of: :daily_report
@@ -11,7 +10,7 @@ class DailyReport < ActiveRecord::Base
   validates :actual_cost_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   def self.requiring_update
-    where(update_required: true)
+    where('last_update_requested_at != last_update_request_serviced')
   end
 
   def variance_cents
@@ -24,10 +23,16 @@ class DailyReport < ActiveRecord::Base
     !last_calculated_at.present?
   end
 
+  def update_required?
+    last_update_requested_at != last_update_request_serviced
+  end
+
   def self.mark_for_update!(venue:, date:)
     report = DailyReport.find_by(venue: venue, date: date)
     if report
-      report.update_attributes!(update_required: true)
+      report.update_attributes!(
+        last_update_requested_at: Time.current
+      )
     else
       DailyReport.create!(
         venue: venue,
@@ -35,7 +40,7 @@ class DailyReport < ActiveRecord::Base
         overheads_cents: 0,
         rotaed_cost_cents: 0,
         actual_cost_cents: 0,
-        update_required: true
+        last_update_requested_at: Time.current
       )
     end
   end

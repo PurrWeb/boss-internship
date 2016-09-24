@@ -18,13 +18,15 @@ class UpdateDailyReport
 
     data = daily_report_summary.calculate
 
+    last_update_requested_at = daily_report.last_update_requested_at
+
     ActiveRecord::Base.transaction do
       daily_report.update_attributes(
         overheads_cents: data.fetch(:overheads_cents),
         rotaed_cost_cents: data.fetch(:rotaed_cost_minus_overheads_cents),
         actual_cost_cents: data.fetch(:actual_cost_minus_overheads_cents),
         last_calculated_at: Time.current,
-        update_required: false
+        last_update_request_serviced: last_update_requested_at
       )
 
       #clear old cached sections

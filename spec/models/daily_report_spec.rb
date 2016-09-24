@@ -13,7 +13,7 @@ describe DailyReport do
           overheads_cents: 0,
           rotaed_cost_cents: 0,
           actual_cost_cents: 0,
-          update_required: false
+          last_update_requested_at: nil
         )
       end
 

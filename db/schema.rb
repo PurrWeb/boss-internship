@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160920150701) do
+ActiveRecord::Schema.define(version: 20160924151830) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -187,15 +187,16 @@ ActiveRecord::Schema.define(version: 20160920150701) do
   add_index "daily_report_staff_member_sections", ["staff_type_id"], name: "index_daily_report_staff_member_sections_on_staff_type_id", using: :btree
 
   create_table "daily_reports", force: :cascade do |t|
-    t.integer  "venue_id",           limit: 4, null: false
-    t.date     "date",                         null: false
-    t.integer  "overheads_cents",    limit: 4, null: false
-    t.integer  "rotaed_cost_cents",  limit: 4, null: false
-    t.integer  "actual_cost_cents",  limit: 4, null: false
-    t.boolean  "update_required",              null: false
+    t.integer  "venue_id",                     limit: 4, null: false
+    t.date     "date",                                   null: false
+    t.integer  "overheads_cents",              limit: 4, null: false
+    t.integer  "rotaed_cost_cents",            limit: 4, null: false
+    t.integer  "actual_cost_cents",            limit: 4, null: false
     t.datetime "last_calculated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_update_requested_at"
+    t.datetime "last_update_request_serviced"
   end
 
   add_index "daily_reports", ["venue_id", "date"], name: "index_daily_reports_on_venue_id_and_date", using: :btree
