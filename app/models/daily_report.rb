@@ -10,7 +10,7 @@ class DailyReport < ActiveRecord::Base
   validates :actual_cost_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   def self.requiring_update
-    where('last_update_requested_at != last_update_request_serviced')
+    where('(last_update_requested_at IS NULL XOR last_update_request_serviced IS NULL) OR (last_update_requested_at != last_update_request_serviced)')
   end
 
   def variance_cents

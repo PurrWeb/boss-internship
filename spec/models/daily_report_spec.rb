@@ -3,7 +3,7 @@ require 'rails_helper'
 describe DailyReport do
   describe "DailyReport.mark_for_update!" do
     let(:venue) { FactoryGirl.create(:venue) }
-    let(:date) { Time.current.to_date }
+    let(:date) { RotaShiftDate.to_rota_date(Time.current) }
 
     describe "when report exists" do
       let(:existing_report) do
@@ -25,6 +25,11 @@ describe DailyReport do
         specify '1 report should exist' do
           expect(DailyReport.count).to eq(1)
         end
+
+        specify 'no reports should require updates' do
+          expect(DailyReport.requiring_update.count).to eq(0)
+          expect(DailyReport.first.update_required?).to eq(false)
+        end
       end
 
       it 'should not create a new report' do
@@ -36,6 +41,7 @@ describe DailyReport do
         DailyReport.mark_for_update!(venue: venue, date: date)
 
         report = DailyReport.find_by!(venue: venue, date: date)
+        expect(DailyReport.requiring_update.count).to eq(1)
         expect(report.update_required?).to eq(true)
       end
     end
