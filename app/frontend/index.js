@@ -48,6 +48,9 @@ registerComponent("HoursConfirmationApp", HoursConfirmationApp)
 import StaffHoursOverviewApp from "./apps/staff-hours-overview"
 registerComponent("StaffHoursOverviewApp", StaffHoursOverviewApp)
 
+import RollbarErrorTestApp from "./apps/rollbar-error-test/rollbar-error-test-app"
+registerComponent("RollbarErrorTestApp", RollbarErrorTestApp)
+
 import WeekPicker from "~components/week-picker"
 $(document).ready(function(){
     $(".static-week-picker").each(function(){

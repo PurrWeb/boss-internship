@@ -11,7 +11,6 @@
 // about supported directives.
 //
 //= require react_integration
-//= require bundles/frontend_bundle
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery_ujs

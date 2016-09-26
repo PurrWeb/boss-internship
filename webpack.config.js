@@ -2,8 +2,9 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
+  devtool: 'source-map',
   entry: {
-    main: ['./app/frontend/index.js']
+    main: ['./app/frontend/index.js'],
   },
   output: {
     path: __dirname + '/app/assets/javascripts/bundles',

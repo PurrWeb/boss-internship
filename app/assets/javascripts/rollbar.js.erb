@@ -7,7 +7,14 @@ if ((getEnvironment() === "production") || (getEnvironment() === "staging")) {
         accessToken: "9fb943a96f044c60ab8888cbfaa62925",
         captureUncaught: true,
         payload: {
-            environment: getEnvironment()
+            environment: getEnvironment(),
+            client: {
+              javascript: {
+                 source_map_enabled: true,
+                 code_version: "<%= sourcemap_version %>",
+                 guess_uncaught_frames: false
+              }
+            }
         }
     };
     // Rollbar Snippet

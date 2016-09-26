@@ -138,6 +138,12 @@
                 <li class="nav-admin-api-keys-section">
                   <%= link_to('API Keys', api_keys_path) %>
                 </li>
+
+                <% if current_user.dev? %>
+                  <li class="nav-admin-error-test-section">
+                    <%= link_to('Error Test', rollbar_error_test_index_path) %>
+                  </li>
+                <% end %>
               </ul>
             </li>
           <% end %>

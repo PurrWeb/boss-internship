@@ -5,7 +5,7 @@ config.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
       mangle: false,
       compress: false,
-      sourceMap: false
+      sourceMap: true
   }),
   new webpack.DefinePlugin({
       'process.env': {

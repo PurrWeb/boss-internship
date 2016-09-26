@@ -26,6 +26,7 @@ module Boss
 
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
     config.assets.precompile += %w( rollbar.js )
+    config.assets.precompile += %w( bundles/frontend_bundle.js )
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
