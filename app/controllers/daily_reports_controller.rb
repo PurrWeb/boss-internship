@@ -5,33 +5,28 @@ class DailyReportsController < ApplicationController
     if date_from_params.present? && venue_from_params.present?
       date = date_from_params
       venue = venue_from_params
+      week = RotaWeek.new(date)
 
-      query = DailyReportsIndexStaffMemberQuery.new(
-        date: date,
-        venue: venue
-      )
-
-      staff_members = query.all
-
-      ActiveRecord::Associations::Preloader.new.preload(staff_members, [:name, :staff_type])
-
-      total_rotaed_cost_cents = 0
-      total_actual_cost_cents = 0
-      total_overheads_cents = 0
-      staff_members.each do |staff_member|
-        total_overheads_cents   += staff_member.overhead_cost_cents
-        total_rotaed_cost_cents += staff_member.rotaed_cost_cents
-        total_actual_cost_cents += staff_member.actual_cost_cents
-      end
+      daily_report = DailyReport.
+        includes([
+          staff_member_sections: [
+            :staff_type,
+            staff_member_listings: [
+              staff_member: [:name]
+            ]
+          ]
+        ]).
+        find_by(
+          date: date,
+          venue: venue
+        )
 
       render locals: {
         accessible_venues: accessible_venues,
         venue: venue,
         date: date,
-        total_overheads_cents: total_overheads_cents,
-        total_rotaed_cost_cents: total_rotaed_cost_cents,
-        total_actual_cost_cents: total_actual_cost_cents,
-        staff_members: staff_members
+        week: week,
+        daily_report: daily_report
       }
     else
       redirect_to(redirect_params)
@@ -44,23 +39,21 @@ class DailyReportsController < ApplicationController
   end
 
   def date_from_params
-    filter_params = params[:daily_reports_index] || {}
-    if filter_params[:date].present?
-      UIRotaDate.parse(filter_params[:date])
+    if params[:date].present?
+      UIRotaDate.parse(params[:date])
     end
   end
 
   def venue_from_params
-    filter_params = params[:daily_reports_index] || {}
-    accessible_venues.find_by(id: filter_params[:venue])
+    if params[:venue_id].present?
+      accessible_venues.find_by(id: params[:venue_id])
+    end
   end
 
   def redirect_params
     {
-      daily_reports_index: {
-        date: UIRotaDate.format(date_from_params || RotaShiftDate.to_rota_date(Time.current) - 1.day),
-        venue: (venue_from_params || accessible_venues.first).id
-      }
+      date: UIRotaDate.format(date_from_params || RotaShiftDate.to_rota_date(Time.current) - 1.day),
+      venue_id: (venue_from_params || accessible_venues.first).id
     }
   end
 end

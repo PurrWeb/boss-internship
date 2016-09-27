@@ -7,6 +7,10 @@ namespace :data do
     sh "cat #{local_production_dump_path} | mysql -u root boss_development"
   end
 
+  task :reload_local_dump => ["db:drop", "db:create"] do
+    sh "cat #{local_production_dump_path} | mysql -u root boss_development"
+  end
+
   desc "sync staging environment database with production"
   task :sync_staging do
     db = "boss_staging"

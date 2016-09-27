@@ -26,6 +26,7 @@ class DeleteStaffMember
         event_type: StaffTrackingEvent::DISABLE_EVENT_TYPE
       )
       StaffMemberUpdatesMailer.staff_member_disabled(staff_member).deliver_now
+      update_related_daily_reports(staff_member)
     end
   end
 
@@ -78,6 +79,22 @@ class DeleteStaffMember
         requester: requester,
         holiday: holiday
       ).call
+    end
+  end
+
+  def update_related_daily_reports(staff_member)
+    if staff_member.pay_rate.weekly?
+      DailyReportDatesEffectedByStaffMemberOnWeeklyPayRateQuery.new(
+        staff_member: staff_member
+      ).to_a.each do |date, venue|
+        DailyReport.mark_for_update!(venue: venue, date: date)
+      end
+    else
+      DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery.new(
+        staff_member: staff_member
+      ).to_a.each do |date, venue|
+        DailyReport.mark_for_update!(venue: venue, date: date)
+      end
     end
   end
 end

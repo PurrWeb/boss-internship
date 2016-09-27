@@ -42,6 +42,9 @@ class ReviveStaffMember
           event_type: StaffTrackingEvent::REENABLE_EVENT_TYPE
         )
         StaffMemberUpdatesMailer.staff_member_revived(staff_member).deliver_now
+        if staff_member.pay_rate.weekly?
+          update_realted_daily_reports(staff_member)
+        end
       end
       raise ActiveRecord::Rollback unless result
     end
@@ -51,4 +54,12 @@ class ReviveStaffMember
 
   private
   attr_reader :requester, :staff_member, :staff_member_params
+
+  def update_realted_daily_reports(staff_member)
+    DailyReportDatesEffectedByStaffMemberOnWeeklyPayRateQuery.new(
+      staff_member: staff_member
+    ).to_a.each do |date, venue|
+      DailyReport.mark_for_update!(date: date, venue: venue)
+    end
+  end
 end

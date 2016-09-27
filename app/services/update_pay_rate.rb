@@ -27,6 +27,7 @@ class UpdatePayRate
 
       if result && pay_rate_changed
         update_related_forecasts(pay_rate)
+        update_related_daily_reports(pay_rate)
       end
     end
 
@@ -36,9 +37,15 @@ class UpdatePayRate
   private
   attr_reader :pay_rate, :name, :calculation_type, :cents
 
-  def update_related_forecasts(pay_rate)
-    pay_rate_staff_members = StaffMember.where(pay_rate: pay_rate)
+  def update_related_daily_reports(pay_rate)
+    DailyReportDatesEffectedByPayRateChangeQuery.new(
+      pay_rate: pay_rate
+    ).to_a.each do |date, venue|
+      DailyReport.mark_for_update!(venue: venue, date: date)
+    end
+  end
 
+  def update_related_forecasts(pay_rate)
     rotas = CurrentAndFutureRotasQuery.new(relation: Rota.with_forecasts).all.
       joins(:rota_shifts).
       merge(
@@ -46,7 +53,7 @@ class UpdatePayRate
         enabled.
         joins(:staff_member).
         merge(
-          pay_rate_staff_members
+          StaffMember.where(pay_rate: pay_rate)
         )
       )
 

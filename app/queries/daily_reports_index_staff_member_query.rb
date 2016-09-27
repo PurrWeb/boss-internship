@@ -1,4 +1,7 @@
-# Returns all staff members rotead or with clocked in for a given day with totals ffor hours worked and hours rotaed
+# Returns all staff members rotead or with clocked in for a given day with totals for hours worked and hours rotaed
+#
+# End result is a collection of staff members with extra calculated fields which can be summed together to obtain the values required for the daily reports table (See DailyReportSummaryCalculator)
+# Extra fields are 'hours_rotaed', 'hours_worked', 'break_hours', 'rotaed_cost_cents', 'actual_cost_cents', 'overhead_cost_cents'
 class DailyReportsIndexStaffMemberQuery
   def initialize(date:, venue:)
     @date = date

@@ -81,6 +81,11 @@
                   <%= link_to('Weekly Reports', weekly_reports_path) %>
                 </li>
               <% end %>
+              <% if can?(:view, :payroll_reports) %>
+                <li class="nav-hours-payroll-reports-section">
+                  <%= link_to('Payroll Reports', payroll_reports_path) %>
+                </li>
+              <% end %>
             </ul>
           </li>
         </ul>

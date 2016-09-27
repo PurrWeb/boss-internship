@@ -47,6 +47,7 @@ gem 'paper_trail'
 gem 'paper_trail-globalid'
 gem 'oj'
 gem 'oj_mimic_json'
+gem 'sidekiq-unique-jobs'
 
 group :development, :test do
   gem "byebug"
@@ -54,6 +55,7 @@ group :development, :test do
   gem "factory_girl_rails"
   gem "letter_opener"
   gem "bullet"
+  gem 'quiet_assets'
 end
 
 group :test do

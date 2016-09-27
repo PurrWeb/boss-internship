@@ -16,6 +16,7 @@ class UpdateStaffMemberEmploymentDetails
 
     ActiveRecord::Base.transaction do
       old_master_venue = staff_member.master_venue
+      old_pay_rate = staff_member.pay_rate
 
       staff_member.assign_attributes(params)
       pay_rate_changed = staff_member.pay_rate_id_changed?
@@ -44,6 +45,12 @@ class UpdateStaffMemberEmploymentDetails
         rotas.each do |rota|
           UpdateRotaForecast.new(rota: rota).call
         end
+
+        update_related_daily_reports(
+          staff_member: staff_member,
+          old_pay_rate: old_pay_rate,
+          new_pay_rate: staff_member.pay_rate
+        )
       end
 
       if result && staff_member_updates_email.send?
@@ -56,4 +63,22 @@ class UpdateStaffMemberEmploymentDetails
 
   private
   attr_reader :now, :staff_member, :params
+
+  def update_related_daily_reports(staff_member:, old_pay_rate:, new_pay_rate:)
+    if [old_pay_rate, new_pay_rate].any? { |pay_rate| pay_rate.weekly? }
+      DailyReportDatesEffectedByStaffMemberOnWeeklyPayRateQuery.new(
+        staff_member: staff_member
+      ).to_a.each do |date, venue|
+        DailyReport.mark_for_update!(date: date, venue: venue)
+      end
+    end
+
+    if [old_pay_rate, new_pay_rate].any? { |pay_rate| pay_rate.hourly? }
+      DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery.new(
+        staff_member: staff_member
+      ).to_a.each do |date, venue|
+        DailyReport.mark_for_update!(date: date, venue: venue)
+      end
+    end
+  end
 end

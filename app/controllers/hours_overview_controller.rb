@@ -1,6 +1,6 @@
 class HoursOverviewController < ApplicationController
   def show
-    authorize! :view, :weekly_reports
+    authorize! :view, :payroll_reports
 
     staff_member = StaffMember.find(params[:staff_member_id])
     date = date_from_params

@@ -1,37 +1,42 @@
 class WeeklyReportsController < ApplicationController
   def index
-    authorize! :view, :weekly_reports
+    authorize!(:view, :weekly_reports)
 
     if venue_from_params.present? && week_from_params.present?
       venue = venue_from_params
       week = week_from_params
-      filter_by_weekly_pay_rate = params[:pay_rate_filter] == 'weekly'
       accessible_venues = AccessibleVenuesQuery.new(current_user).all
 
-      staff_members = FinanceReportStaffMembersQuery.new(
-        venue: venue,
-        week: week,
-        filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
-      ).all
+      totals = {
+        overheads_cents: 0,
+        rotaed_cost_cents: 0,
+        actual_cost_cents: 0,
+        variance_cents: 0
+      }
 
-      reports_by_staff_type = {}
-      staff_members.each do |staff_member|
-        reports_by_staff_type[staff_member.staff_type] ||= []
-        reports_by_staff_type[staff_member.staff_type] << (FinanceReport.find_by(
-          staff_member: staff_member,
-          week_start: week.start_date
-        ) || GenerateFinanceReportData.new(
-          staff_member: staff_member,
-          week: week
-        ).call.report)
+      reports = {}
+      (week.start_date..week.end_date).each do |date|
+        report = DailyReport.find_by(
+          date: date,
+          venue: venue
+        )
+
+        if report.present?
+          totals[:overheads_cents] += report.overheads_cents
+          totals[:rotaed_cost_cents] += report.rotaed_cost_cents
+          totals[:actual_cost_cents] += report.actual_cost_cents
+          totals[:variance_cents] += report.variance_cents
+        end
+
+        reports[date] = report
       end
 
       render locals: {
+        accessible_venues: accessible_venues,
         venue: venue,
         week: week,
-        accessible_venues: accessible_venues,
-        reports_by_staff_type: reports_by_staff_type,
-        pay_rate_filtering: params[:pay_rate_filter]
+        reports: reports,
+        totals: totals
       }
     else
       redirect_to(weekly_reports_path(index_redirect_params))

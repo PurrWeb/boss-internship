@@ -19,6 +19,11 @@ class DisableRotaShift
         shift.staff_member.mark_requiring_notification!
       end
       UpdateRotaForecast.new(rota: shift.rota).call if shift.part_of_forecast?
+
+      DailyReport.mark_for_update!(
+        date: shift.rota.date,
+        venue: shift.rota.venue
+      )
     end
   end
 
