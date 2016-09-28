@@ -176,7 +176,7 @@
           <td>
             <%= link_to(
                   number_to_currency(
-                    report.actual_cost_cents / 100.0,
+                    (report.actual_cost_cents + report.overheads_cents) / 100.0,
                     unit: '£'
                   ),
                   daily_reports_path(
@@ -202,7 +202,7 @@
       <td>
         <strong>
           <%= number_to_currency(
-                totals.fetch(:actual_cost_cents) / 100.0,
+                (totals.fetch(:actual_cost_cents) + totals.fetch(:overheads_cents)) / 100.0,
                 unit: '£'
               ) %>
         </strong>
