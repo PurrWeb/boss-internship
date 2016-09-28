@@ -21,7 +21,7 @@ class UpdateDailyReport
     last_update_requested_at = daily_report.last_update_requested_at
 
     ActiveRecord::Base.transaction do
-      daily_report.update_attributes(
+      daily_report.update_attributes!(
         overheads_cents: data.fetch(:overheads_cents),
         rotaed_cost_cents: data.fetch(:rotaed_cost_minus_overheads_cents),
         actual_cost_cents: data.fetch(:actual_cost_minus_overheads_cents),

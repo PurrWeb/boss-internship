@@ -135,7 +135,8 @@ class GenerateRotaForecast
 
   def overhead_total_cents
     OverheadStaffCost.new(
-      rota: rota
+      venue: rota.venue,
+      date: rota.date
     ).total_cents
   end
 
