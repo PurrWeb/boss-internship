@@ -4,7 +4,7 @@ function getEnvironment(){
 
 if ((getEnvironment() === "production") || (getEnvironment() === "staging")) {
     var _rollbarConfig = {
-        accessToken: "9fb943a96f044c60ab8888cbfaa62925",
+        accessToken: "<%= ENV.fetch("ROLLBAR_API_ACCESS_TOKEN") %>",
         captureUncaught: true,
         payload: {
             environment: getEnvironment(),

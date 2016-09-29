@@ -10,7 +10,7 @@
 
 common: &default_settings
   # Required license key associated with your New Relic account.
-  license_key: bdf4c829f091aaf3933069fc495559df9c8bb138
+  license_key: ENV.fetch("NEW_RELIC_LICENSE_KEY")
 
   # To disable the agent regardless of other settings, uncomment the following:
   # agent_enabled: false
