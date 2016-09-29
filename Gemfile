@@ -50,12 +50,14 @@ gem 'oj_mimic_json'
 gem 'sidekiq-unique-jobs'
 
 group :development, :test do
+  gem "seedbank"
   gem "byebug"
   gem "pry-rails"
   gem "factory_girl_rails"
   gem "letter_opener"
   gem "bullet"
   gem 'quiet_assets'
+  gem 'faker'
 end
 
 group :test do
