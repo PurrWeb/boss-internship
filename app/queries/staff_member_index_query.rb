@@ -40,7 +40,7 @@ class StaffMemberIndexQuery
       if email_text.present?
         result = result.
           joins(:email_address).
-          where("LOWER(`email_addresses`.email) = LOWER(?)", email_text)
+          where("LOWER(`email_addresses`.email) = LOWER(?)", email_text.strip)
       end
 
       if filter_venues
