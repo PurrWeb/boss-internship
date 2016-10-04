@@ -25,12 +25,15 @@ class StaffMemberIndexQuery
       result = staff_type_proc.call(result)
 
       if name_text.present?
+        search_text = name_text.strip.gsub(/\s{2,}/, ' ')
+
         result = result.
           joins(:name).
           where(
-            "(`names`.first_name LIKE ?) OR (`names`.surname LIKE ?)",
-            "%#{name_text}%",
-            "%#{name_text}%"
+            "( concat(`names`.first_name, ' ', `names`.surname) LIKE ?) OR (`names`.first_name LIKE ?) OR (`names`.surname LIKE ?)",
+            "%#{search_text}%",
+            "%#{search_text}%",
+            "%#{search_text}%"
           )
       end
 
