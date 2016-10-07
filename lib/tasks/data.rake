@@ -39,6 +39,11 @@ namespace :data do
     StaffMember.update_all(avatar: nil)
   end
 
+  desc "Anonymise all data in development database and set up a single dev user with standard username and password"
+  task :anonymise_database => :environment do
+    AnonymiseDatabase.new.call
+  end
+
   def production_dump_command
     "ssh ubuntu@boss.jsmbars.co.uk mysqldump -u root --add-drop-table boss_production"
   end

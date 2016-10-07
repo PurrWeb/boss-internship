@@ -37,6 +37,10 @@ class User < ActiveRecord::Base
     :surname,
     to: :name
 
+  def self.dev
+    where(role: 'dev')
+  end
+
   def self.enabled
     in_state(:enabled)
   end

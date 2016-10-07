@@ -2,6 +2,7 @@ class StaffType < ActiveRecord::Base
   ROLES = ['normal', 'security']
   SECURITY_ROLE = 'security'
   PR_TYPE_NAME = 'Pr'
+  MANAGER_TYPE_NAME = 'Manager'
   KITCHEN_TYPE_NAMES = ['Chef', "Kp"]
 
   validates :name, presence: true, uniqueness: true
@@ -20,7 +21,11 @@ class StaffType < ActiveRecord::Base
   end
 
   def manager?
-    name == 'Manager'
+    name == MANAGER_TYPE_NAME
+  end
+
+  def self.manager
+    where(name: MANAGER_TYPE_NAME)
   end
 
   def self.pr
