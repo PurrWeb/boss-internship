@@ -48,6 +48,7 @@ gem 'paper_trail-globalid'
 gem 'oj'
 gem 'oj_mimic_json'
 gem 'sidekiq-unique-jobs'
+gem 'eventmachine', "1.0.9"
 
 group :development, :test do
   gem "seedbank"

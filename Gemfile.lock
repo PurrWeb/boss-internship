@@ -125,7 +125,7 @@ GEM
       representable (>= 2.4.0, <= 3.1.0)
       uber
     erubis (2.7.0)
-    eventmachine (1.0.8)
+    eventmachine (1.0.9)
     excon (0.45.4)
     execjs (2.6.0)
     factory_girl (4.5.0)
@@ -469,6 +469,7 @@ DEPENDENCIES
   clockwork
   database_cleaner
   devise (~> 3.4.0)
+  eventmachine (= 1.0.9)
   factory_girl_rails
   faker
   figaro
@@ -518,4 +519,4 @@ RUBY VERSION
    ruby 2.1.2p95
 
 BUNDLED WITH
-   1.12.5
+   1.13.2
