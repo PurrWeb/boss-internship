@@ -58,7 +58,7 @@ group :development, :test do
   gem "letter_opener"
   gem "bullet"
   gem 'quiet_assets'
-  gem 'faker'
+  gem 'factory-helper'
 end
 
 group :test do
