@@ -9,6 +9,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Staff Members</th>
         <th>Calculation Type</th>
         <th>Rate</th>
         <th></th>
@@ -18,6 +19,7 @@
       <% pay_rates.each do |pay_rate| %>
         <tr>
           <td><%= pay_rate.name %></td>
+          <td><%= pay_rate.staff_members.enabled.count %></td>
           <td><%= PayRate.calculation_type_display_name(pay_rate.calculation_type) %></td>
           <td><%= number_to_currency(pay_rate.rate_in_pounds, unit: '£', precision: 2) %></td>
           <td>
@@ -45,6 +47,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Staff Members</th>
         <th>Calculation Type</th>
         <th>Rate</th>
         <th></th>
@@ -54,6 +57,7 @@
       <% admin_pay_rates.each do |admin_pay_rate| %>
         <tr>
           <td><%= admin_pay_rate.name %></td>
+          <td><%= admin_pay_rate.staff_members.enabled.count %></td>
           <td><%= PayRate.calculation_type_display_name(admin_pay_rate.calculation_type) %></td>
           <td><%= number_to_currency(admin_pay_rate.rate_in_pounds, unit: '£', precision: 2) %></td>
           <td>
