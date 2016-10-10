@@ -80,6 +80,30 @@ class PayRatesController < ApplicationController
     end
   end
 
+  def staff_members
+    pay_rate = PayRate.find(params[:id])
+
+    filter = PayRateStaffMembersPageFilter.new(
+      user: current_user,
+      pay_rate: pay_rate,
+      params: params[:pay_rate_staff_members_page_filter]
+    )
+
+    staff_members = filter.
+      query.
+      includes([:name, :master_venue, :staff_type]).
+      paginate(
+        page: params[:page],
+        per_page: 20
+      )
+
+    render locals: {
+      pay_rate: pay_rate,
+      staff_members: staff_members,
+      filter: filter
+    }
+  end
+
   def destroy
     pay_rate = PayRate.enabled.where(id: params[:id]).take!
 

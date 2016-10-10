@@ -114,9 +114,11 @@ class StaffMember < ActiveRecord::Base
   end
 
   def age(from: Time.current)
-    (
-      (from - date_of_birth) / 60 / 60 / 24 / 365
-    ).floor
+    if date_of_birth.present?
+      (
+        (from - date_of_birth) / 60 / 60 / 24 / 365
+      ).floor
+    end
   end
 
   def disabled_by_user

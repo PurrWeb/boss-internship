@@ -4,6 +4,10 @@ class PayRate < ActiveRecord::Base
   WEEKLY_CALCULATION_TYPE = 'salary_per_week'
   CALCULATION_TYPES = [HOURLY_CALCULATION_TYPE, WEEKLY_CALCULATION_TYPE]
 
+  NAME_18_TO_20_ENDING = "18-20"
+  NAME_21_TO_24_ENDING = "21-24"
+  NAME_25_PLUS_ENDING  = "25+"
+
   include ActionView::Helpers::NumberHelper
   include Enableable
 
@@ -33,15 +37,33 @@ class PayRate < ActiveRecord::Base
   end
 
   def self.is_18_to_20
-    where("TRIM(`name`) LIKE '%18-20'")
+    where("TRIM(`name`) LIKE '%#{NAME_18_TO_20_ENDING}'")
   end
 
   def self.is_21_to_24
-    where("TRIM(`name`) LIKE '%21-24'")
+    where("TRIM(`name`) LIKE '%#{NAME_21_TO_24_ENDING}'")
   end
 
   def self.is_25_plus
-    where("TRIM(`name`) LIKE '%25+'")
+    where("TRIM(`name`) LIKE '%#{NAME_25_PLUS_ENDING}'")
+  end
+
+  def is_18_to_20?
+    /#{NAME_18_TO_20_ENDING}$/.match(name.strip)
+  end
+
+  def is_21_to_24?
+    /#{NAME_21_TO_24_ENDING}$/.match(name.strip)
+  end
+
+  def is_25_plus?
+    /#{NAME_25_PLUS_ENDING}$/.match(name.strip)
+  end
+
+  def aged?
+    is_18_to_20? ||
+      is_21_to_24? ||
+      is_25_plus?
   end
 
   def hourly?
