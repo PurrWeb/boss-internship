@@ -5,13 +5,13 @@
 <div class="row">
   <div class="col-md-4">
     <div class="list-group">
-      <%= link_to("##{_18_21_section_id}", class: "list-group-item") do %>
-        Staff Members Wrongly on 18-21 Payrate
-        <span class="badge"><%= staff_wrongly_on_18_to_21_payrate.count %></span>
+      <%= link_to("##{_18_20_section_id}", class: "list-group-item") do %>
+        Staff Members Wrongly on 18-20 Payrate
+        <span class="badge"><%= staff_wrongly_on_18_to_20_payrate.count %></span>
       <% end %>
-      <%= link_to("##{_21_25_section_id}", class: "list-group-item") do %>
-        Staff Members Wrongly on 21-25 Payrate
-        <span class="badge"><%= staff_wrongly_on_21_to_25_payrate.count %></span>
+      <%= link_to("##{_21_24_section_id}", class: "list-group-item") do %>
+        Staff Members Wrongly on 21-24 Payrate
+        <span class="badge"><%= staff_wrongly_on_21_to_24_payrate.count %></span>
       <% end %>
       <%= link_to("##{_25_plus_section_id}", class: "list-group-item") do %>
         Staff Members Wrongly on 25+ Payrate
@@ -21,26 +21,26 @@
   </div>
 </div>
 
-<% if staff_wrongly_on_18_to_21_payrate.count > 0 %>
+<% if staff_wrongly_on_18_to_20_payrate.count > 0 %>
   <%= render(
         partial: "staff_on_wrong_payrate_section",
         locals: {
-          payrate_name: '18-21',
-          section_id: _18_21_section_id,
-          total: staff_wrongly_on_18_to_21_payrate.count,
-          staff_members: staff_wrongly_on_18_to_21_payrate
+          payrate_name: '18-20',
+          section_id: _18_20_section_id,
+          total: staff_wrongly_on_18_to_20_payrate.count,
+          staff_members: staff_wrongly_on_18_to_20_payrate
         }
       ) %>
 <% end %>
 
-<% if staff_wrongly_on_21_to_25_payrate.count > 0 %>
+<% if staff_wrongly_on_21_to_24_payrate.count > 0 %>
   <%= render(
         partial: "staff_on_wrong_payrate_section",
         locals: {
-          payrate_name: '21-25',
-          section_id: _21_25_section_id,
-          total: staff_wrongly_on_21_to_25_payrate.count,
-          staff_members: staff_wrongly_on_21_to_25_payrate
+          payrate_name: '21-24',
+          section_id: _21_24_section_id,
+          total: staff_wrongly_on_21_to_24_payrate.count,
+          staff_members: staff_wrongly_on_21_to_24_payrate
         }
       ) %>
 <% end %>

@@ -3,8 +3,8 @@ class StaffVettingController < ApplicationController
     authorize! :manage, :admin
 
     staff_on_wrong_payrate_count = [
-      StaffMemberWronglyOn18To21PayrateQuery,
-      StaffMemberWronglyOn21To25PayrateQuery,
+      StaffMemberWronglyOn18To20PayrateQuery,
+      StaffMemberWronglyOn21To24PayrateQuery,
       StaffMemberWronglyOn25PlusPayrateQuery
     ].map do |query_class|
       query_class.new.all.count
@@ -55,10 +55,10 @@ class StaffVettingController < ApplicationController
   def staff_members_on_wrong_payrate
     authorize! :manage, :admin
 
-    staff_wrongly_on_18_to_21_payrate = StaffMemberWronglyOn18To21PayrateQuery.new.
+    staff_wrongly_on_18_to_20_payrate = StaffMemberWronglyOn18To20PayrateQuery.new.
       all.
       includes([:name, :master_venue])
-    staff_wrongly_on_21_to_25_payrate = StaffMemberWronglyOn21To25PayrateQuery.new.
+    staff_wrongly_on_21_to_24_payrate = StaffMemberWronglyOn21To24PayrateQuery.new.
       all.
       includes([:name, :master_venue])
     staff_wrongly_on_25_plus_payrate = StaffMemberWronglyOn25PlusPayrateQuery.new.
@@ -66,10 +66,10 @@ class StaffVettingController < ApplicationController
       includes([:name, :master_venue])
 
     render locals: {
-      staff_wrongly_on_18_to_21_payrate: staff_wrongly_on_18_to_21_payrate,
-      _18_21_section_id: "18-21",
-      staff_wrongly_on_21_to_25_payrate: staff_wrongly_on_21_to_25_payrate,
-      _21_25_section_id: "21-25",
+      staff_wrongly_on_18_to_20_payrate: staff_wrongly_on_18_to_20_payrate,
+      _18_20_section_id: "18-20",
+      staff_wrongly_on_21_to_24_payrate: staff_wrongly_on_21_to_24_payrate,
+      _21_24_section_id: "21-24",
       staff_wrongly_on_25_plus_payrate: staff_wrongly_on_25_plus_payrate,
       _25_plus_section_id: "25-plus"
     }

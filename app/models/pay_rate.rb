@@ -32,12 +32,12 @@ class PayRate < ActiveRecord::Base
     end
   end
 
-  def self.is_18_to_21
-    where(name: "Age 18-21")
+  def self.is_18_to_20
+    where(name: "Age 18-20")
   end
 
-  def self.is_21_to_25
-    where(name: "Age 21-25")
+  def self.is_21_to_24
+    where(name: "Age 21-24")
   end
 
   def self.is_25_plus

@@ -1,4 +1,4 @@
-class StaffMemberWronglyOn25PlusPayrateQuery
+class StaffMemberWronglyOn18To20PayrateQuery
   def initialize(now: Time.current)
     @now = now
   end
@@ -7,12 +7,16 @@ class StaffMemberWronglyOn25PlusPayrateQuery
     StaffMember.
       enabled.
       joins(:pay_rate).
-      merge(PayRate.is_25_plus).
+      merge(PayRate.is_18_to_20).
       where(
-        "date_of_birth > ?",
+        "(date_of_birth > ?) OR (date_of_birth < ?)",
         DateHelpers.years_before(
           time: now,
-          years: 25
+          years: 18
+        ),
+        DateHelpers.years_before(
+          time: now,
+          years: 21
         )
       )
   end
