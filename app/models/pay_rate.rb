@@ -33,15 +33,15 @@ class PayRate < ActiveRecord::Base
   end
 
   def self.is_18_to_20
-    where(name: "Age 18-20")
+    where("TRIM(`name`) LIKE '%18-20'")
   end
 
   def self.is_21_to_24
-    where(name: "Age 21-24")
+    where("TRIM(`name`) LIKE '%21-24'")
   end
 
   def self.is_25_plus
-    where(name: "Age 25+")
+    where("TRIM(`name`) LIKE '%25+'")
   end
 
   def hourly?
