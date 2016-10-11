@@ -8,7 +8,6 @@ gem "devise", "~> 3.4.0"
 gem "thin"
 gem "rollbar"
 gem 'sass-rails', '>= 3.2'
-gem 'bootstrap-sass', '~> 3.3.6'
 gem "jquery-rails"
 gem "jquery-ui-rails"
 gem "uglifier"
@@ -22,7 +21,6 @@ gem "sidekiq-failures"
 gem "sinatra", require: false
 gem "clockwork"
 gem 'require_all'
-gem 'bootstrap_form'
 gem 'react_webpack_rails'
 gem "statesman", '~> 1.3.1'
 gem "cancan"
