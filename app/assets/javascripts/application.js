@@ -10,8 +10,9 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require react_integration
 //= require jquery
+//= require react_integration
+//= require foundation
 //= require jquery_ujs
 //= require chosen-jquery
 //= require tinycolor-min
@@ -21,6 +22,8 @@
 //= require_tree ./page_controllers
 
 $(function(){
+  $(document).foundation();
+
   $('.chosen-select').chosen({width: '100%'});
 
   $('.pick-a-color').pickAColor({
