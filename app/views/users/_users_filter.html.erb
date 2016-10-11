@@ -4,7 +4,7 @@
       <div class="panel-title">Filter</div>
     </div>
     <div class="panel-body">
-      <%= bootstrap_form_for(
+      <%= form_for(
             'filter',
             url: users_path,
             html: { method: :get, class: 'form-inline' }

@@ -1,4 +1,4 @@
-<%= bootstrap_form_for(invite, html: { class: 'invite-form' }) do |form| %>
+<%= form_for(invite, html: { class: 'invite-form' }) do |form| %>
   <%= form.select(
         :role,
         options_for_select(

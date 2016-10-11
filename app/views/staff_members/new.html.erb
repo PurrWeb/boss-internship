@@ -1,6 +1,6 @@
 <h1>Add Staff Member</h1>
 
-<%= bootstrap_form_for(staff_member, html: { multipart: true, class: 'staff-member-form' }) do |form| %>
+<%= form_for(staff_member, html: { multipart: true, class: 'staff-member-form' }) do |form| %>
   <%= render(
         partial: 'shared/staff_member_form_fields',
         locals: {

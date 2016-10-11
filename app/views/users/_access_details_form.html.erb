@@ -17,7 +17,7 @@
   });
 <% end %>
 
-<%= bootstrap_form_for(user, url: update_access_details_user_path(user), method: :post, html: { class: 'user-form' }) do |form| %>
+<%= form_for(user, url: update_access_details_user_path(user), method: :post, html: { class: 'user-form' }) do |form| %>
   <% if current_user.can_edit_roles.include?(form.object.role) %>
     <%= form.select(
           :role,

@@ -1,7 +1,7 @@
 <div id="staff-member-edit-personal-details-page" data-staff-member-id="<%= staff_member.id %>">
   <h1>Edit Personal Details</h1>
 
-  <%= bootstrap_form_for(
+  <%= form_for(
         staff_member,
         method: :post,
         url: update_personal_details_staff_member_path(staff_member),

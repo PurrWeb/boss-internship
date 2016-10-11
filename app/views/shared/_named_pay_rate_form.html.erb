@@ -1,4 +1,4 @@
-<%= bootstrap_form_for(pay_rate, url: path, html: { class: 'pay-rate-form' }) do |form| %>
+<%= form_for(pay_rate, url: path, html: { class: 'pay-rate-form' }) do |form| %>
   <div class="form-group">
     <label>Type</label>
     <p class="form-control-static"><%= pay_rate_type.titlecase %></p>
