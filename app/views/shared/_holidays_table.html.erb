@@ -7,7 +7,7 @@
     <th></th>
   </thead>
   <tbody>
-    <% holidays.each do |holiday| %>
+    <% holidays.order(start_date: :desc).each do |holiday| %>
       <tr>
         <td><%= holiday.holiday_type.titleize %></td>
         <td><%= holiday.start_date %> - <%= holiday.end_date %></td>
