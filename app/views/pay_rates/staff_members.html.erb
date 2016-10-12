@@ -1,0 +1,76 @@
+<h1>Staff Members on <%= pay_rate.name %> Pay Rate</h1>
+
+<% if staff_members.count > 0 %>
+  <div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="panel-title">Filter</div>
+      </div>
+      <div class="panel-body">
+        <%= bootstrap_form_for(
+              filter,
+              url: staff_members_pay_rate_path(pay_rate),
+              html: { method: :get, class: 'form-inline' }
+            ) do |form| %>
+            <%= form.select(
+                  :staff_type,
+                  options_for_select(
+                    filter.accessible_staff_types.map do |type|
+                      [type.name.titlecase, type.id]
+                    end,
+                    filter.staff_type.try(:id)
+                  ),
+                  {
+                    :include_blank => 'Any'
+                  }
+                ) %>
+            <%= form.select(
+                  :venue,
+                  options_for_select(
+                    filter.accessible_venues.map do |venue|
+                      [venue.name.titlecase, venue.id]
+                    end,
+                    filter.venue.try(:id)
+                  ),
+                  {
+                    :include_blank => 'Any'
+                  }
+                ) %>
+          <%= form.submit('Update') %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <p>Total: <%= staff_members.count %></p>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Staff Type</th>
+        <% if pay_rate.aged? %>
+          <td>Age</th>
+        <% end %>
+        <th>Venue</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% staff_members.each do |staff_member| %>
+        <tr>
+          <td><%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member)) %></td>
+          <td><%= staff_member.staff_type.name.titlecase %></td>
+          <% if pay_rate.aged? %>
+            <td><%= staff_member.age %></td>
+          <% end %>
+          <td><%= staff_member.master_venue.name.titlecase %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= will_paginate(staff_members, renderer: BootstrapPagination::Rails) %>
+<% else %>
+  <p>No associated staff members found</p>
+<% end %>
