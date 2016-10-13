@@ -1,17 +1,22 @@
 require "shellwords"
 
 namespace :data do
-  def local_production_dump_path
-    'tmp/boss_production_dump.sql'
+  def local_dump_path
+    'tmp/boss_development.sql'
   end
 
   desc "dump the production database and load the data into your develpment database"
   task :load_production_dump => ["db:drop", "db:create"] do
-    sh "#{production_dump_command} > tmp/boss_production_dump.sql"
-    sh "cat #{local_production_dump_path} | mysql -u root boss_development"
+    now = Time.current
+    production_dump_filename = "boss_production_#{now.strftime('%Y-%m-%d_%H-%M-%S')}.sql"
+    production_dump_path = "tmp/#{production_dump_filename}"
+
+    sh "#{production_dump_command} > #{production_dump_path}"
+    sh "cp #{production_dump_path} #{local_dump_path}"
+    sh "cat #{local_dump_path} | mysql -u root boss_development"
   end
 
-  desc "load dump at #{local_production_dump_path} into development database"
+  desc "load dump at #{local_dump_path} into development database"
   task :reload_local_dump => ["db:drop", "db:create"] do
     sh "cat #{local_production_dump_path} | mysql -u root boss_development"
   end
