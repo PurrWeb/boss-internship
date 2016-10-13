@@ -12,13 +12,19 @@ namespace :data do
     production_dump_path = "tmp/#{production_dump_filename}"
 
     sh "#{production_dump_command} > #{production_dump_path}"
+    raise 'Command failed' if $? != 0
+
     sh "cp #{production_dump_path} #{local_dump_path}"
+    raise 'Command failed' if $? != 0
+
     sh "cat #{local_dump_path} | mysql -u root boss_development"
+    raise 'Command failed' if $? != 0
   end
 
   desc "load dump at #{local_dump_path} into development database"
   task :reload_local_dump => ["db:drop", "db:create"] do
     sh "cat #{local_production_dump_path} | mysql -u root boss_development"
+    raise 'Command failed' if $? != 0
   end
 
   desc "sync staging environment database with production"
