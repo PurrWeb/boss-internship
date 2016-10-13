@@ -34,6 +34,11 @@ namespace :data do
     sh "ssh -A ubuntu@staging-boss.jsmbars.co.uk bash -e -x -o pipefail -c '#{Shellwords.shellescape(cmds)}'", verbose: false
   end
 
+  desc "Removes avatar urls for all staff members non production environments"
+  task :overwrite_avatars => :environment do
+    StaffMember.update_all(avatar: nil)
+  end
+
   def production_dump_command
     "ssh ubuntu@boss.jsmbars.co.uk mysqldump -u root --add-drop-table boss_production"
   end
