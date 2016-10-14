@@ -30,7 +30,7 @@ namespace :data do
   desc "sync staging environment database with production"
   task :sync_staging do
     db = "boss_staging"
-    cmds = "mysqladmin -u root drop #{db} create #{db}; #{production_dump_command} | mysql -u root #{db}"
+    cmds = "mysqladmin -u root drop #{db} create #{db}; #{production_dump_command} | mysql -u root #{db} && sudo dokku run staging bundle exec rake data:overwrite_avatars"
     sh "ssh -A ubuntu@staging-boss.jsmbars.co.uk bash -e -x -o pipefail -c '#{Shellwords.shellescape(cmds)}'", verbose: false
   end
 
