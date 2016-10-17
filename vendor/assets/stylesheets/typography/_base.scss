@@ -323,6 +323,7 @@ $abbr-underline: 1px dotted $black !default;
     &:hover,
     &:focus {
       color: $anchor-color-hover;
+      outline: none;
       @if $anchor-text-decoration-hover != $anchor-text-decoration {
         text-decoration: $anchor-text-decoration-hover;
       }

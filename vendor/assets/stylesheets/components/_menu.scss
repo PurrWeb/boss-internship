@@ -35,24 +35,11 @@ $menu-icon-spacing: 0.25rem !default;
   margin: $menu-margin;
   list-style-type: none;
 
-  @if $global-flexbox {
-    width: 100%;
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-  }
-
   // List items are table cell to allow for vertical alignment
   > li {
     @include disable-mouse-outline;
-
-    @if $global-flexbox {
-      flex: 0 0 auto;
-    }
-    @else {
-      display: table-cell;
+      display: inline-block;
       vertical-align: middle;
-    }
   }
 
   // Reset line height to make the height of the overall item easier to calculate
@@ -220,7 +207,6 @@ $menu-icon-spacing: 0.25rem !default;
   line-height: 1;
   padding-top: 0;
   padding-bottom: 0;
-  padding: $menu-item-padding;
 }
 
 @mixin foundation-menu {
