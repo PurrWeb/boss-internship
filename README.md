@@ -12,6 +12,11 @@
 * Run the rails server `bundle exec rails server`
 * Enjoy
 
+## Run development mode (server and livereload together)
+
+* Make sure you have `foreman` installed. If not, run `gem install foreman`
+* Run `foreman start -f development.proc`
+
 ## Run server so it's accessible from the local network
 
 `bundle exec rails server --binding=0.0.0.0`
