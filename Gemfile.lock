@@ -42,6 +42,9 @@ GEM
     arel (6.0.3)
     auto_strip_attributes (2.0.6)
       activerecord (>= 3.0)
+    autoprefixer-rails (6.1.1)
+      execjs
+      json
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
@@ -487,6 +490,7 @@ PLATFORMS
 DEPENDENCIES
   andand
   auto_strip_attributes (~> 2.0)
+  autoprefixer-rails
   bootstrap-datepicker-rails
   bullet
   byebug
