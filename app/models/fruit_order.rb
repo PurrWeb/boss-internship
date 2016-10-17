@@ -62,11 +62,11 @@ class FruitOrder < ActiveRecord::Base
     if venue.fruit_order_fields.count == 0
       FruitOrder::FIELDS
     else
-      (venue.fruit_order_fields + set_fields).uniq
+      (venue.fruit_order_fields + fields_with_value).uniq
     end
   end
 
-  def set_fields
+  def fields_with_value
     FruitOrder::FIELDS.select do |field|
       public_send(field) > 0
     end

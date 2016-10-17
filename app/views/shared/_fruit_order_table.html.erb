@@ -1,5 +1,5 @@
 <dl class="dl-horizontal dt-horizontal__wrap-headings">
-  <% fruit_order.set_fields.each do |field| %>
+  <% fruit_order.fields_with_value.each do |field| %>
     <dt><%= FruitOrder.message_for(field) %></dt>
     <dd><%= fruit_order.public_send(field) %></dd>
   <% end %>
