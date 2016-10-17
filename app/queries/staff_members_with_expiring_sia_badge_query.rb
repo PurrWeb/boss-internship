@@ -1,5 +1,5 @@
 class StaffMembersWithExpiringSiaBadgeQuery
-  def initialize(expiring_before: Time.zone.now, relation: StaffMember.all)
+  def initialize(expiring_before: Time.zone.now, relation: StaffMember.security)
     @expiring_before = expiring_before.to_date
     @relation = relation
   end

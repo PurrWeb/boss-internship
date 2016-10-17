@@ -132,6 +132,7 @@ Rails.application.routes.draw do
         get :staff_members_without_address
         get :staff_members_without_photo
         get :staff_members_on_wrong_payrate
+        get :staff_members_with_expired_sia_badge
       end
     end
 

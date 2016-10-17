@@ -23,6 +23,10 @@
         Staff On Wrong Pay Rate
         <span class="badge"><%= staff_on_wrong_payrate_count %></span>
       <% end %>
+      <%= link_to(staff_members_with_expired_sia_badge_staff_vetting_index_path, class: 'list-group-item') do %>
+        Security Staff with Expired SIA Badge
+        <span class="badge"><%= staff_with_expired_sia_badge_count %></span>
+      <% end %>
     </div>
   </div>
 </div>
