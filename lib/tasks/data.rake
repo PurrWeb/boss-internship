@@ -23,7 +23,7 @@ namespace :data do
 
   desc "load dump at #{local_dump_path} into development database"
   task :reload_local_dump => ["db:drop", "db:create"] do
-    sh "cat #{local_production_dump_path} | mysql -u root boss_development"
+    sh "cat #{local_dump_path} | mysql -u root boss_development"
     raise 'Command failed' if $? != 0
   end
 
