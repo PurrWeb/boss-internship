@@ -68,7 +68,7 @@ class FruitOrder < ActiveRecord::Base
 
   def fields_with_value
     FruitOrder::FIELDS.select do |field|
-      public_send(field) > 0
+      public_send(field).to_i > 0
     end
   end
 
