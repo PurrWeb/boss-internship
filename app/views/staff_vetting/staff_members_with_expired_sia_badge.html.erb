@@ -1,0 +1,23 @@
+<h1>Staff Members with expired SIA badge</h1>
+
+<% if staff_members_with_expired_sia_badge.count > 0 %>
+  <p>Total: <%= staff_members_with_expired_sia_badge.count %></p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Expiry Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% staff_members_with_expired_sia_badge.find_each do |staff_member| %>
+        <tr>
+          <td><%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member, tab: 'employment-details')) %></td>
+          <td><%= link_to(staff_member.sia_badge_expiry_date.to_s(:human_date), staff_member_path(staff_member, tab: 'employment-details')) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No staff members found</p>
+<% end %>

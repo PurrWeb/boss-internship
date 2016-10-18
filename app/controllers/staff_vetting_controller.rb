@@ -15,6 +15,7 @@ class StaffVettingController < ApplicationController
       staff_without_ni_number_count: StaffMembersWithoutNINumberQuery.new.all.count,
       staff_without_address_count: StaffMembersWithoutAddressQuery.new.all.count,
       staff_without_photo_count: StaffMembersWithoutPhotoQuery.new.all.count,
+      staff_with_expired_sia_badge_count: StaffMembersWithExpiringSiaBadgeQuery.new.all.count,
       staff_on_wrong_payrate_count: staff_on_wrong_payrate_count
     }
   end
@@ -72,6 +73,19 @@ class StaffVettingController < ApplicationController
       _21_24_section_id: "21-24",
       staff_wrongly_on_25_plus_payrate: staff_wrongly_on_25_plus_payrate,
       _25_plus_section_id: "25-plus"
+    }
+  end
+
+  def staff_members_with_expired_sia_badge
+    authorize! :manage, :admin
+
+    staff_members_with_expired_sia_badge = StaffMembersWithExpiringSiaBadgeQuery.new.
+      all.
+      order(:sia_badge_expiry_date).
+      includes(:name)
+
+    render locals: {
+      staff_members_with_expired_sia_badge: staff_members_with_expired_sia_badge
     }
   end
 end

@@ -1,18 +1,17 @@
 class StaffMembersWithExpiringSiaBadgeQuery
-  def initialize(now: Time.zone.now, relation: StaffMember.all)
-    @now = now
+  def initialize(expiring_before: Time.zone.now, relation: StaffMember.security)
+    @expiring_before = expiring_before.to_date
     @relation = relation
   end
 
   def all
     relation.
-    where(
-      '`staff_members`.sia_badge_expiry_date < ?',
-      now + 6.weeks
-    ).
-    where(notified_of_sia_expiry_at: nil)
+      where(
+        '`staff_members`.sia_badge_expiry_date < ?',
+        expiring_before
+      )
   end
 
   private
-  attr_reader :now, :relation
+  attr_reader :expiring_before, :relation
 end

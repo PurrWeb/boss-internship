@@ -5,8 +5,8 @@ class SendSiaBadgeExpiryNotifications
 
   def call
     security_staff_members = StaffMembersWithExpiringSiaBadgeQuery.new(
-      now: now,
-      relation: StaffMember.security
+      expiring_before: now.to_date + 6.weeks,
+      relation: StaffMember.security.unnotified_of_sia_expiry
     ).all
 
     ActiveRecord::Base.transaction do

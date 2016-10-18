@@ -113,6 +113,10 @@ class StaffMember < ActiveRecord::Base
     update_all(shift_change_occured_at: time)
   end
 
+  def self.unnotified_of_sia_expiry
+    where(notified_of_sia_expiry_at: nil)
+  end
+
   def age(from: Time.current)
     if date_of_birth.present?
       (
