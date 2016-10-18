@@ -8,36 +8,40 @@
 <%= render partial: 'index_filter', locals: { filter: filter, staff_members: staff_members } %>
 
 <% if staff_members.present? %>
-  <table class="table" data-role="staff-members-index-table">
-    <tr>
-      <th></th>
-      <th>Name</th>
-      <th>Status</th>
-      <th>Type</th>
-      <th>Venues</th>
-    <tr>
-    <% staff_members.each do |staff_member| %>
-      <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
-        <td>
-          <%= image_tag(staff_member.avatar_url, class: "avatar_preview", height: 100, width: 100) %>
-        </td>
-        <td data-role="name"><%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member)) %></td>
-        <td>
-          <%= UIStaffMemberStatus.new(staff_member).to_s %>
-        </td>
-        <td data-role="staff-type">
-          <%= link_to(staff_member.staff_type.name.titlecase, staff_member_path(staff_member)) %>
-        </td>
-        <td data-role="venues">
-          <% venues = (Array(staff_member.master_venue) + staff_member.work_venues.to_a).compact %>
-          <% if venues.length > 0 %>
-            <%= link_to(venues.map(&:name).to_sentence, staff_member_path(staff_member)) %>
-          <% else %>
-            <%= link_to('N / A', staff_member_path(staff_member)) %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
+  <table class="stack" data-role="staff-members-index-table">
+    <thead>
+      <tr>
+        <th><th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Type</th>
+        <th>Venues</th>
+      <tr>
+    </thead>
+    <tbody>
+      <% staff_members.each do |staff_member| %>
+        <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
+          <td>
+            <%= image_tag(staff_member.avatar_url, class: "avatar_preview", height: 100, width: 100) %>
+          </td>
+          <td data-role="name"><%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member)) %></td>
+          <td>
+            <%= UIStaffMemberStatus.new(staff_member).to_s %>
+          </td>
+          <td data-role="staff-type">
+            <%= link_to(staff_member.staff_type.name.titlecase, staff_member_path(staff_member)) %>
+          </td>
+          <td data-role="venues">
+            <% venues = (Array(staff_member.master_venue) + staff_member.work_venues.to_a).compact %>
+            <% if venues.length > 0 %>
+              <%= link_to(venues.map(&:name).to_sentence, staff_member_path(staff_member)) %>
+            <% else %>
+              <%= link_to('N / A', staff_member_path(staff_member)) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
   <%= render partial: 'shared/pagination_control', locals: { relation: staff_members } %>
 <% end %>
