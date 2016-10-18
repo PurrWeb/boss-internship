@@ -477,8 +477,8 @@ GEM
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
-    will_paginate (3.1.0)
-    will_paginate-bootstrap (1.0.1)
+    will_paginate (3.1.5)
+    will_paginate-foundation (6.2.0)
       will_paginate (>= 3.0.3)
     xml-simple (1.1.5)
     xpath (2.0.0)
@@ -551,7 +551,7 @@ DEPENDENCIES
   thin
   tiny-color-rails
   uglifier
-  will_paginate-bootstrap
+  will_paginate-foundation
 
 RUBY VERSION
    ruby 2.1.2p95
