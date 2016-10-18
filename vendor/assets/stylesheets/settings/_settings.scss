@@ -42,6 +42,27 @@
 
 @import 'util/util';
 
+// Custom variables
+$pxing-sm:    5px;
+$pxing-base:  10px;
+$pxing-mn:    15px;
+$pxing-md:    20px;
+$pxing-mx:    25px;
+$pxing-lg:    30px;
+$pxing-xl:    40px;
+$pxing-hg:    60px;
+$pxing-gn:    80px;
+
+$spacing-sm:    rem-calc(5);
+$spacing-base:  rem-calc(10);
+$spacing-mn:    rem-calc(15);
+$spacing-md:    rem-calc(20);
+$spacing-mx:    rem-calc(25);
+$spacing-lg:    rem-calc(30);
+$spacing-xl:    rem-calc(40);
+$spacing-hg:    rem-calc(60);
+$spacing-gn:    rem-calc(80);
+
 // 1. Global
 // ---------
 
