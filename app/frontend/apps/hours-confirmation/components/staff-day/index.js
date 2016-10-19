@@ -107,7 +107,7 @@ export default class StaffDay extends React.Component {
                     rotaedAcceptedHoursDifference={rotaedAcceptedHoursDifference}
                 />
                 <div className="row">
-                    <div className="col-md-2">
+                    <div className="shrink column">
                         <img
                             src={staffMember.avatar_url}
                             style={{width: "90%", marginBottom: 4}}
@@ -118,9 +118,9 @@ export default class StaffDay extends React.Component {
                         </div>
                         <ComponentErrors errorHandlingId={this.clockOutErrorId} />
                     </div>
-                    <div className="col-md-10">
+                    <div className="column">
                         <div className="row">
-                            <div className="col-md-8">
+                            <div className="column">
                                 <HoursChart
                                     rotaDate={this.state.lastValidData.rotaDate}
                                     rotaedShifts={this.state.lastValidData.rotaedShifts}
@@ -130,7 +130,7 @@ export default class StaffDay extends React.Component {
                                     clockInBreaks={this.state.lastValidData.clockInBreaks}
                                 />
                             </div>
-                            <div className="col-md-4">
+                            <div className="shrink column">
                                 <div className="staff-day__sub-heading">Notes</div>
                                 <ClockInNotesList notes={this.props.clockInNotes} />
                             </div>
