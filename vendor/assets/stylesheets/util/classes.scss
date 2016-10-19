@@ -1,3 +1,13 @@
+.mb-base {
+  margin-bottom: $spacing-base;
+}
 .mb-md {
   margin-bottom: $spacing-md;
+}
+.mb-lg {
+  margin-bottom: $spacing-lg;
+}
+
+.npr {
+  padding-right: 0 !important;
 }

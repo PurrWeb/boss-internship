@@ -67,3 +67,7 @@ label:not(.force-not-required).required:after {
 .dt-horizontal__wrap-headings dt {
   white-space: normal;
 }
+
+.Select-control {
+  min-width: 200px;
+}

@@ -17,15 +17,19 @@ export default class StaffListItem extends React.Component {
         var staffType = this.props.staffType;
         return <div className="staff-list-item">
             <div className="row">
-                <div className="col-md-1">
+                <div className="shrink column">
                     <img src={staff.avatar_url} className="staff-list-item__avatar" />
                 </div>
-                <div className="col-md-4">
-                    <div style={{overflow: "hidden"}}>
-                        <h3 className="holiday-report-staff-list-item__name">
-                            {staff.first_name} {staff.surname}
-                        </h3>
-                        <StaffTypeBadge staffTypeObject={staffType} />
+                <div className="shrink column">
+                    <div className="row align-middle mb-base">
+                        <div className="shrink column npr">
+                            <h3 className="holiday-report-staff-list-item__name">
+                                {staff.first_name} {staff.surname}
+                            </h3>
+                        </div>
+                        <div className="shrink column">
+                            <StaffTypeBadge staffTypeObject={staffType} />
+                        </div>
                     </div>
                     <p>Venues: {this.props.venues.map(venue => venue.name).join(', ')}</p>
                     <StaffMemberHolidaysLink staffMemberServerId={staff.serverId}>
@@ -33,15 +37,15 @@ export default class StaffListItem extends React.Component {
                     </StaffMemberHolidaysLink>
                 </div>
 
-                <div className="col-md-2">
+                <div className="shrink column">
                     <h4>Paid Holiday</h4>
                     <StaffHolidaysList holidays={this.props.paidHolidays} />
                 </div>
-                <div className="col-md-2" data-test-marker-unpaid-holidays>
+                <div className="shrink column" data-test-marker-unpaid-holidays>
                     <h4>Unpaid Holiday</h4>
                     <StaffHolidaysList holidays={this.props.unpaidHolidays} />
                 </div>
-                <div className="col-md-2">
+                <div className="column">
                     <h4>Paid Holiday days</h4>
                     {holidayDaysCount(this.props.paidHolidays)}
                 </div>
