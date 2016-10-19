@@ -49,6 +49,10 @@ $select-radius: $global-radius !default;
     cursor: $input-cursor-disabled;
   }
 
+  &:focus {
+    outline: none;
+  }
+
   // Hide the dropdown arrow shown in newer IE versions
   &::-ms-expand {
     display: none;
