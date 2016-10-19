@@ -26,6 +26,9 @@
 
  @import "components/rota-overview-chart";
 
+ @import "font-awesome-sprockets";
+ @import "font-awesome";
+
 label:not(.force-not-required).required:after {
   content:" *";
 }

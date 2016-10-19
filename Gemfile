@@ -49,6 +49,7 @@ gem 'sidekiq-unique-jobs'
 gem 'eventmachine', "1.0.9"
 gem 'sprockets-es6', ">= 0.9.0"
 gem "autoprefixer-rails"
+gem 'font-awesome-sass'
 
 group :development, :test do
   gem "seedbank"
