@@ -14,8 +14,8 @@ export default class StaffTypeRotaOverviewPage extends Component {
         var self = this;
 
         return <div>
-          <div className="row">
-            <div className="col-md-3">
+          <div className="row align-top mb-lg">
+            <div className="shrink column">
               <WeekPicker
                   selectionStartDate={new Date(this.props.rotaDetailsObjects[0].date)}
                   onChange={({startDate}) =>
@@ -25,8 +25,8 @@ export default class StaffTypeRotaOverviewPage extends Component {
                       })
                   }/>
               </div>
-              <a href={ appRoutes.securityRotaPdfDownload({ date: new Date(this.props.rotaDetailsObjects[0].date) }) } className="btn btn-success">
-                <span className="glyphicon glyphicon-download"></span> Download PDF
+              <a href={ appRoutes.securityRotaPdfDownload({ date: new Date(this.props.rotaDetailsObjects[0].date) }) } className="button">
+                <i className="fa fa-download mr-base" aria-hidden />Download PDF
               </a>
             </div>
             {this.props.rotaDetailsObjects.map(function(rotaDetails){

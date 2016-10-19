@@ -45,8 +45,8 @@ class RotaOverviewPage extends Component {
                     </WeekAndVenueSelector>
                 </div>
                 <div className="medium-3 column">
-                    <a href={pdfHref} className="btn btn-success">
-                      <span className="glyphicon glyphicon-download"></span> Download PDF
+                    <a href={pdfHref} className="button">
+                      <i className="fa fa-download mr-base" aria-hidden />Download PDF
                     </a>
                 </div>
                 <div className="medium-3 column">

@@ -1,9 +1,13 @@
 <h1>Staff Members</h1>
 
-<%= link_to('Add Staff Member', new_staff_member_path, class: ['button', 'primary']) %>
-<%= link_to(flagged_staff_members_path, class: 'button alert') do %>
-  <span class="glyphicon glyphicon-warning-sign"></span> Flagged Staff Members
-<% end %>
+<div class="mb-md">
+  <%= link_to(new_staff_member_path, class: ['button', 'primary', 'mr-base']) do %>
+      <i class="fa fa-plus mr-base" aria-hidden="true"></i>Add Staff Member
+  <% end %>
+  <%= link_to(flagged_staff_members_path, class: 'button alert') do %>
+      <i class="fa fa-warning mr-base" aria-hidden="true"></i>Flagged Staff Members
+  <% end %>
+</div>
 
 <%= render partial: 'index_filter', locals: { filter: filter, staff_members: staff_members } %>
 

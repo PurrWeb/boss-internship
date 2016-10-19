@@ -62,7 +62,7 @@ function csvDownloadButton(props){
           date: props.pageOptions.weekStartDate,
           venueId: props.pageOptions.venueServerId
         })}>
-        Download as CSV
+        <i className="fa fa-download mr-base" />Download as CSV
     </a>;
   }
 }
