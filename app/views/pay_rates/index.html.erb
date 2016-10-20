@@ -2,10 +2,10 @@
 
 <p>These pay rates will be visible and selectable by all managers</p>
 
-<%= link_to('Add Rate', new_pay_rate_path, class: ['btn', 'btn-primary']) %>
+<%= link_to('Add Rate', new_pay_rate_path, class: ['button mb-md']) %>
 
 <% if pay_rates.present? %>
-  <table class="table">
+  <table class="stack">
     <thead>
       <tr>
         <th>Name</th>
@@ -23,9 +23,9 @@
           <td><%= PayRate.calculation_type_display_name(pay_rate.calculation_type) %></td>
           <td><%= number_to_currency(pay_rate.rate_in_pounds, unit: '£', precision: 2) %></td>
           <td>
-            <%= link_to('Edit', edit_pay_rate_path(pay_rate), class: 'btn btn-success') %>
+            <%= link_to('Edit', edit_pay_rate_path(pay_rate), class: 'button small') %>
             <% if pay_rate.deletable? %>
-              <%= link_to('Delete', pay_rate_path(pay_rate), method: 'DELETE', class: 'btn btn-danger') %>
+              <%= link_to('Delete', pay_rate_path(pay_rate), method: 'DELETE', class: 'button alert small') %>
             <% end %>
           </td>
         </tr>
@@ -40,10 +40,10 @@
 
 <p>These will only be visible and selectable to users with admin access</p>
 
-<%= link_to('Add Admin Rate', new_admin_pay_rate_path, class: ['btn', 'btn-primary']) %>
+<%= link_to('Add Admin Rate', new_admin_pay_rate_path, class: ['button mb-md']) %>
 
 <% if admin_pay_rates.present? %>
-  <table class="table">
+  <table class="stack">
     <thead>
       <tr>
         <th>Name</th>
@@ -61,9 +61,9 @@
           <td><%= PayRate.calculation_type_display_name(admin_pay_rate.calculation_type) %></td>
           <td><%= number_to_currency(admin_pay_rate.rate_in_pounds, unit: '£', precision: 2) %></td>
           <td>
-            <%= link_to('Edit', edit_pay_rate_path(admin_pay_rate), class: 'btn btn-success') %>
+            <%= link_to('Edit', edit_pay_rate_path(admin_pay_rate), class: 'button small') %>
             <% if admin_pay_rate.deletable? %>
-              <%= link_to('Delete', pay_rate_path(admin_pay_rate), method: 'DELETE', class: 'btn btn-danger') %>
+              <%= link_to('Delete', pay_rate_path(admin_pay_rate), method: 'DELETE', class: 'button alert small') %>
             <% end %>
           </td>
         </tr>

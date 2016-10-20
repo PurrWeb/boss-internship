@@ -42,6 +42,21 @@ $input-prefix-padding: 1rem !default;
         border-radius: if($global-text-direction == rtl, $global-radius 0 0 $global-radius, 0 $global-radius $global-radius 0);
       }
     }
+
+    input {
+      @extend %input-group-child;
+      border-radius: 0;
+
+      // scss-lint:disable ZeroUnit
+      @if $global-flexbox {
+        flex: 1 1 0px;
+        width: auto;
+        height: auto;
+      }
+      @else {
+        height: $height;
+      }
+    }
   }
 
   %input-group-child {
@@ -54,7 +69,7 @@ $input-prefix-padding: 1rem !default;
     }
   }
 
-  .input-group-label {
+  .input-group-addon {
     @extend %input-group-child;
     text-align: center;
     padding: 0 $input-prefix-padding;
@@ -81,21 +96,6 @@ $input-prefix-padding: 1rem !default;
       &:last-child {
         border-#{$global-left}: 0;
       }
-    }
-  }
-
-  .input-group-field {
-    @extend %input-group-child;
-    border-radius: 0;
-
-    // scss-lint:disable ZeroUnit
-    @if $global-flexbox {
-      flex: 1 1 0px;
-      width: auto;
-      height: auto;
-    }
-    @else {
-      height: $height;
     }
   }
 

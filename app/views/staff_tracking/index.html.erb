@@ -19,14 +19,16 @@
           {
             name: 'venue_id'
           }) %>
-    <%= form.text_field(
+    <div class="mb-md">
+      <%= form.text_field(
           :start_date,
           label: 'Week',
           value: week.start_date && UIRotaDate.format(week.start_date),
           class: 'static-week-picker',
           name: 'week_start'
-        ) %>
-    <%= form.submit('Update') %>
+      ) %>
+    </div>
+    <%= form.submit('Update', class: 'button') %>
   </div>
 <% end %>
 

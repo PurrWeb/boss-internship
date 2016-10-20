@@ -1,13 +1,13 @@
 <div class="invites-index-filter">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <div class="panel-title">Filter</div>
+      <h5 class="panel-title">Filter</h5>
     </div>
     <div class="panel-body">
       <%= bootstrap_form_for(
             'filter',
             url: users_path,
-            html: { method: :get, class: 'form-inline' }
+            html: { method: :get, class: '' }
           ) do |form| %>
         <%= form.text_field(:name_text, label: 'Name', value: filter.name_text) %>
         <%= form.text_field(:email_text, label: 'Email', value: filter.email_text) %>
@@ -27,9 +27,9 @@
               ),
               prompt: 'Any'
             ) %>
-        <%= form.submit('Update') %>
+        <%= form.submit('Update', class: 'button') %>
       <% end %>
     </div>
   </div>
-  <div><span class="records-returned-count"><%= users.count %></span> records returned</div>
+  <div class="mb-base"><span class="records-returned-count"><%= users.count %></span> records returned</div>
 </div>

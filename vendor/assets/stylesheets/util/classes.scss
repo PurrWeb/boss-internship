@@ -3,13 +3,20 @@
 }
 
 .mb-base {
-  margin-bottom: $spacing-base;
+  margin-bottom: $spacing-base !important;
+}
+.mb-mn {
+  margin-bottom: $spacing-mn !important;
 }
 .mb-md {
   margin-bottom: $spacing-md !important;
 }
 .mb-lg {
-  margin-bottom: $spacing-lg;
+  margin-bottom: $spacing-lg !important;
+}
+
+.nm {
+  margin: 0;
 }
 
 .npr {

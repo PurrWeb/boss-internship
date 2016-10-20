@@ -85,7 +85,7 @@ $callout-link-tint: 30% !default;
 }
 
 @mixin foundation-callout {
-  .callout {
+  .callout, [role="alert"] {
     @include callout;
 
     @each $name, $color in $foundation-palette {

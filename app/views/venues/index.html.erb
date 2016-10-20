@@ -1,18 +1,20 @@
 <h1>Venues</h1>
 
-<%= link_to('Add Venue', new_venue_path, class: ['btn', 'btn-primary']) %>
+<%= link_to('Add Venue', new_venue_path, class: ['button mb-md']) %>
 
 <% if venues.present? %>
-  <table class="table table-striped" style="text-align: center;">
-    <tr>
-      <th style="text-align: center;">Name</th>
-      <th style="text-align: center;">Available Staff</th>
-      <th style="text-align: center;">Fixed Staff</th>
-      <th style="text-align: center;">Safe Float</th>
-      <th style="text-align: center;">Till Float</th>
-      <th style="text-align: center;">Fruit Order Fields</th>
-      <th style="text-align: center;"></th>
-    <tr/>
+  <table class="scroll" style="text-align: center;">
+    <thead>
+      <tr>
+        <th style="text-align: center;">Name</th>
+        <th style="text-align: center;">Available Staff</th>
+        <th style="text-align: center;">Fixed Staff</th>
+        <th style="text-align: center;">Safe Float</th>
+        <th style="text-align: center;">Till Float</th>
+        <th style="text-align: center;">Fruit Order Fields</th>
+        <th style="text-align: center;"></th>
+      <tr/>
+    </thead>
     <% venues.each do |venue| %>
       <tr class="venues-index-listing" data-venue-id="<%= venue.id %>">
         <td data-role="name"><%= venue.name %></td>
@@ -41,9 +43,7 @@
         </td>
 
         <td><%= venue.fruit_order_fields.map(&:to_s).map(&:humanize).to_sentence %></td>
-        <td>
-          <%= link_to('Edit', edit_venue_path(venue), class: 'btn btn-success') %>
-        </td>
+        <td><%= link_to('Edit', edit_venue_path(venue), class: 'button small') %></td>
       </tr>
     <% end %>
   </table>

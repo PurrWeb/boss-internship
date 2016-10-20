@@ -48,16 +48,6 @@ $input-error-font-weight: $global-weight-bold !default;
   }
 }
 
-/// Adds error styles to a form element, using the values in the settings file.
-@mixin form-error {
-  display: none;
-  margin-top: $form-spacing * -0.5;
-  margin-bottom: $form-spacing;
-  font-size: $input-error-font-size;
-  font-weight: $input-error-font-weight;
-  color: $input-error-color;
-}
-
 @mixin foundation-form-error {
   @if $abide-inputs {
     // Error class for invalid inputs
@@ -73,12 +63,19 @@ $input-error-font-weight: $global-weight-bold !default;
     }
   }
 
-  // Form error element
-  .form-error {
-    @include form-error;
+  .help-block {
+    display: block;
+    margin-top: -$form-spacing;
+    margin-bottom: $form-spacing;
+  }
 
-    &.is-visible {
-      display: block;
+  // Form error element
+  .has-error {
+    input, .help-block, select {
+      color: $input-error-color;
+    }
+    input, select {
+      border-color: $input-error-color;
     }
   }
 }
