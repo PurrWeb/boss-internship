@@ -1,7 +1,7 @@
 <p><%= venue.name %> <%= week.start_date.to_s(:human_date) %> - <%= week.end_date.to_s(:human_date) %></p>
 
 <%= form_for('finance_reports_index', url: filter_form_path, html: { method: :get }) do |form| %>
-  <div class="form-inline">
+  <div class="mb-base">
     <%= form.select(
           :venue_id,
           options_for_select(
@@ -27,26 +27,29 @@
     <%= form.submit('Update') %>
   </div>
 
-  <div class="row" style="margin-top:10px">
-    <label>Pay Rate Filter</label>
-    <%= link_to(
-          pay_rate_filter_path_helper.call(
-            venue_id: venue.id,
-            week_start:  week.start_date && UIRotaDate.format(week.start_date)
-          )
-        ) do %>
-      <button type="button" class="btn <%= pay_rate_filtering == 'weekly' ? "btn-default" : "btn-primary" %>">Show All</button>
-    <% end %>
-
-    <%= link_to(
-          pay_rate_filter_path_helper.call(
-            venue_id: venue.id,
-            week_start:  week.start_date && UIRotaDate.format(week.start_date),
-            pay_rate_filter: 'weekly'
-          )
-        ) do %>
-      <button type="button" class="btn <%= pay_rate_filtering == 'weekly' ? "btn-primary" : "btn-default" %>">Show Weekly Only</button>
-    <% end %>
+  <div class="row align-middle mb-md">
+    <label class="shrink column">Pay Rate Filter</label>
+    <div class="shrink column">
+      <%= link_to(
+              pay_rate_filter_path_helper.call(
+                  venue_id: venue.id,
+                  week_start:  week.start_date && UIRotaDate.format(week.start_date)
+              )
+          ) do %>
+          <button type="button" class="button <%= pay_rate_filtering == 'weekly' ? "secondary" : "" %>">Show All</button>
+      <% end %>
+    </div>
+    <div class="shrink column">
+      <%= link_to(
+            pay_rate_filter_path_helper.call(
+              venue_id: venue.id,
+              week_start:  week.start_date && UIRotaDate.format(week.start_date),
+              pay_rate_filter: 'weekly'
+            )
+          ) do %>
+        <button type="button" class="button <%= pay_rate_filtering == 'weekly' ? "" : "secondary" %>">Show Weekly Only</button>
+      <% end %>
+    </div>
   </div>
 <% end %>
 
@@ -62,7 +65,7 @@
       </p>
     <% end %>
 
-    <table class="table table-striped text-center">
+    <table class="scroll text-center mb-lg">
       <thead>
         <tr>
           <th></th>
@@ -178,7 +181,7 @@
               <td>
                 <%= report.status.titlecase %>
                 <% if report.can_complete? %>
-                  <%= link_to('Mark Completed' , finance_reports_path(staff_member_id: report.staff_member.id, week_start: UIRotaDate.format(report.week.start_date)), class: 'btn btn-success', method: :post) %>
+                  <%= link_to('Mark Completed' , finance_reports_path(staff_member_id: report.staff_member.id, week_start: UIRotaDate.format(report.week.start_date)), class: 'button success', method: :post) %>
                 <% end %>
               </td>
             <% end %>

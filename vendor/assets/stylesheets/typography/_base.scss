@@ -281,12 +281,12 @@ $abbr-underline: 1px dotted $black !default;
   }
 
   // Headings
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, .h1,
+  h2, .h2,
+  h3, .h3,
+  h4, .h4,
+  h5, .h5,
+  h6, .h6 {
     font-family: $header-font-family;
     font-weight: $header-font-weight;
     font-style: $header-font-style;
@@ -306,7 +306,7 @@ $abbr-underline: 1px dotted $black !default;
   @each $size, $headers in $header-sizes {
     @include breakpoint($size) {
       @each $header, $font-size in $headers {
-        #{$header} {
+        #{$header}, .#{$header} {
           font-size: rem-calc($font-size);
         }
       }
