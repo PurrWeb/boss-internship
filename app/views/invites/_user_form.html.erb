@@ -1,4 +1,4 @@
-<%= form_for(user, url: accept_invite_path, html: { method: 'post', class: 'user-signup-form'}) do |form| %>
+<%= bootstrap_form_for(user, url: accept_invite_path, html: { method: 'post', class: 'user-signup-form'}) do |form| %>
   <%= form.fields_for(:name, (form.object.name || Name.new)) do |name_fields| %>
     <%= render partial: 'shared/name_fields', locals: { form: name_fields } %>
   <% end %>

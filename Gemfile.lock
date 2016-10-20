@@ -52,6 +52,7 @@ GEM
     bcrypt (3.1.10)
     bootstrap-datepicker-rails (1.5.0)
       railties (>= 3.0)
+    bootstrap_form (2.3.0)
     builder (3.2.2)
     bullet (5.1.1)
       activesupport (>= 3.0.0)
@@ -494,6 +495,7 @@ DEPENDENCIES
   auto_strip_attributes (~> 2.0)
   autoprefixer-rails
   bootstrap-datepicker-rails
+  bootstrap_form
   bullet
   byebug
   cancan

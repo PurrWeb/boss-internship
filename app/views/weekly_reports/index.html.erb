@@ -1,7 +1,7 @@
 <h1>Weekly Reports</h1>
 <div class="h3"><%= venue.name.titlecase %> <%= week.start_date.to_s(:human_date) %>-<%= week.end_date.to_s(:human_date) %></div>
 
-<%= form_for('weekly_report_index', url: weekly_reports_path, html: { method: :get }) do |form| %>
+<%= bootstrap_form_for('weekly_report_index', url: weekly_reports_path, html: { method: :get }) do |form| %>
   <div class="form-inline">
     <%= form.select(
           :venue_id,

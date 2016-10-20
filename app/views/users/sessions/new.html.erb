@@ -1,6 +1,6 @@
 <h1>Sign in</h1>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+<%= bootstrap_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
   <%= f.email_field :devise_email, label: 'Email', autofocus: true %>
 
   <%= f.password_field :password %>

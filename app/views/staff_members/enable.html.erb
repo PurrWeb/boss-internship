@@ -1,6 +1,6 @@
 <h1>Enable <%= staff_member.full_name.titlecase %></h1>
 
-<%= form_for(staff_member, url: undestroy_staff_member_path(staff_member), html: { multipart: true, class: 'staff-member-form' }) do |form| %>
+<%= bootstrap_form_for(staff_member, url: undestroy_staff_member_path(staff_member), html: { multipart: true, class: 'staff-member-form' }) do |form| %>
   <%= render(
         partial: 'shared/staff_member_form_fields',
         locals: {
