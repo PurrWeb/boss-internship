@@ -1,0 +1,7 @@
+<% options[:class] = Array(options[:class]) + ['input-group-field'] %>
+
+<%= form.label(*[method, options[:label]].compact) %>
+<div class="input-group">
+  <span class="input-group-label">£</span>
+  <%= form.number_field(method, options) %>
+</div>
