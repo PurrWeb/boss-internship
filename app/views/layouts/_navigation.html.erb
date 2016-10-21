@@ -63,7 +63,7 @@
               <a href="#">
                 Reports <span class="caret"></span>
               </a>
-              <ul class="submenu menu vertical">
+              <ul class="submenu menu vertical is-dropdown-submenu">
                 <% if can?(:view, :daily_reports) %>
                     <li class="nav-hours-daily-reports-section">
                       <%= link_to('Daily Reports', daily_reports_path) %>
@@ -91,7 +91,7 @@
                         Admin <span class="caret"></span>
                       </a>
 
-                      <ul class="submenu menu vertical" data-submenu>
+                      <ul class="submenu menu vertical is-dropdown-submenu" data-submenu>
                         <li class="nav-invites-section">
                           <%= link_to('Invites', invites_path) %>
                         </li>
@@ -149,7 +149,7 @@
 
                 <li class="has-submenu">
                   <a href="#">Signed in as <%= current_user.email %></a>
-                  <ul class="submenu menu vertical" data-submenu>
+                  <ul class="submenu menu vertical is-dropdown-submenu" data-submenu>
                     <li><%= link_to('Sign out', destroy_user_session_path, method: :delete) %></li>
                   </ul>
               </li>
