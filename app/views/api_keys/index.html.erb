@@ -1,6 +1,6 @@
 <h1>API Keys</h1>
 
-<table class="table">
+<table class="stack">
   <thead>
     <th>Venue</th>
     <th>Key</th>
@@ -19,9 +19,9 @@
         </td>
         <td>
           <% if key.present? %>
-            <%= link_to('Revoke', api_key_path(key), class: 'btn btn-danger', method: 'DELETE') %>
+            <%= link_to('Revoke', api_key_path(key), class: 'button small alert', method: 'DELETE') %>
           <% else %>
-            <%= link_to('Generate', api_keys_path(venue_id: venue.id), class: 'btn btn-primary', method: 'POST') %>
+            <%= link_to('Generate', api_keys_path(venue_id: venue.id), class: 'button small', method: 'POST') %>
           <% end %>
         </td>
     </tr>
