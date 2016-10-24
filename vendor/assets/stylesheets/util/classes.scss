@@ -1,6 +1,9 @@
 .mr-base {
   margin-right: $spacing-base !important;
 }
+.mr-md {
+  margin-right: $spacing-md !important;
+}
 
 .mb-base {
   margin-bottom: $spacing-base !important;
@@ -20,6 +23,10 @@
 
 .mb-form-label {
   margin-bottom: rem-calc(37);
+}
+
+.ml-base {
+  margin-left: $spacing-base !important;
 }
 
 .nm {

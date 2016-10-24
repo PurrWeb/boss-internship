@@ -39,25 +39,30 @@ class RotaStaffListItem extends Component {
         var staffTypeObject = staff.staff_type.get(this.props.staffTypes);
 
         return (
-            <div className="staff-list-item rota-staff-list-item">
-                <div className="row">
-                    <div className="col-md-1">
+            <tr className="staff-list-item rota-staff-list-item">
+                    <td>
                         <img src={staff.avatar_url} className="staff-list-item__avatar" />
-                    </div>
-                    <div className="col-md-8">
+                    </td>
+                    <td>
                         <div className="rota-staff-list-item__header">
-                            <h3 className="rota-staff-list-item__name">
-                              <a
-                                href={appRoutes.staffMember(staff.serverId)}
-                                className="link-unstyled"
-                              >
-                                {staff.first_name} {staff.surname}
-                              </a>
-                            </h3>
-                            <StaffTypeBadge staffTypeObject={staffTypeObject} />
+                            <div className="row align-middle">
+                                <div className="shrink column npr">
+                                    <h3 className="rota-staff-list-item__name nm">
+                                      <a
+                                        href={appRoutes.staffMember(staff.serverId)}
+                                        className="link-unstyled"
+                                      >
+                                        {staff.first_name} {staff.surname}
+                                      </a>
+                                    </h3>
+                                </div>
+                                <div className="shrink column">
+                                    <StaffTypeBadge staffTypeObject={staffTypeObject} />
+                                </div>
+                            </div>
                         </div>
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="shrink column">
                                 <h4 className="rota-staff-list-item__h4" style={{textDecoration: "none"}}>
                                     <u>Shifts</u>
                                     <span>
@@ -71,20 +76,18 @@ class RotaStaffListItem extends Component {
                                     showDate={true}
                                     showVenue={true} />
                             </div>
-                            <div className="col-md-3">
-                                <h4 className="rota-staff-list-item__h4" style={{
+                            <div className="shrink column">
+                                <h4 className="rota-staff-list-item__h4 mr-md" style={{
                                     display: "inline-block",
                                 }}>
                                     Holidays
                                 </h4>
-                                <span style={{marginLeft: 5, display: "inline-block"}}>
-                                    <StaffMemberHolidaysLink staffMemberServerId={staff.serverId} >
-                                        Edit
-                                    </StaffMemberHolidaysLink>
-                                </span>
+                                <StaffMemberHolidaysLink staffMemberServerId={staff.serverId} >
+                                    <i className="fa fa-pencil" /> Edit
+                                </StaffMemberHolidaysLink>
                                 <StaffHolidaysList staffMemberClientId={staff.clientId} />
                             </div>
-                            <div className="col-md-3">
+                            <div className="shrink column">
                                 <h4 className="rota-staff-list-item__h4">
                                     Preferences
                                 </h4>
@@ -93,10 +96,10 @@ class RotaStaffListItem extends Component {
                                 {staff.preferred_days}
                             </div>
                         </div>
-                    </div>
-                    <div className="col-md-3">
+                    </td>
+                    <td>
                         <div style={{overflow: "hidden"}}>
-                            <div className="rota-staff-list-item__add-button" style={{float: "left"}}>
+                            <div className="rota-staff-list-item__add-button">
                                 <AddShiftButton
                                     canAddShift={this.canAddShift()}
                                     addShift={() => this.addShift()}
@@ -113,9 +116,8 @@ class RotaStaffListItem extends Component {
                         <div style={{marginTop: 10}}>
                             <ComponentErrors errorHandlingId={this.componentId} />
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </td>
+                </tr>
         );
     }
     addShift(){

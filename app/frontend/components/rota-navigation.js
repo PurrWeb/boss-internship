@@ -11,15 +11,15 @@ export default class RotaNavigation extends React.Component {
     render(){
         var dates = this.getDates();
         return <div style={{textAlign: "center", overflow: "hidden"}}>
-            <div style={{float: "left"}}>
-                &lt; <a href={this.props.getRotaLink(dates.previousDate)}>
-                    {moment(dates.previousDate).format("DD MMM YYYY")}
+            <div className="pull-left">
+                <a href={this.props.getRotaLink(dates.previousDate)}>
+                    <i className="fa fa-chevron-left mr-base" />{moment(dates.previousDate).format("DD MMM YYYY")}
                 </a>
             </div>
-            <div style={{float: "right"}}>
+            <div className="pull-right">
                 <a href={this.props.getRotaLink(dates.nextDate)}>
-                    {moment(dates.nextDate).format("DD MMM YYYY")}
-                </a> &gt; 
+                    {moment(dates.nextDate).format("DD MMM YYYY")}<i className="fa fa-chevron-right ml-base" />
+                </a>
             </div>
             <div>
                 <a href={this.props.getRotaOverviewLink({

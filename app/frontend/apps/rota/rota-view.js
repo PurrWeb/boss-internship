@@ -19,10 +19,8 @@ class RotaView extends Component {
                 dateOfRota={this.props.rota.date}
                 venueServerId={this.props.venue.serverId} />
             <br/>
-            <div className="row">
-              <div className="col-md-4">
+            <div className="row column">
                 <RotaStatusToggle />
-              </div>
             </div>
             <h1>
                 Rota for {this.props.venue.name}: {moment(this.props.rota.date).format("ddd D MMMM YYYY")}

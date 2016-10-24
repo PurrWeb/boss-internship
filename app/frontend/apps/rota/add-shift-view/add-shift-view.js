@@ -15,19 +15,17 @@ export default class AddShiftView extends React.Component {
     }
     render(){
         return (
-            <div className="well well-lg">
-                <h2 style={{ marginTop: 0 }}>New shift hours</h2>
+            <div>
+                <h2>New shift hours</h2>
                 <div className="row">
-                    <div className="col-md-3">
+                    <div className="shrink column">
                         <ShiftTimeSelector
                             rotaDate={this.props.rotaDate}
                             defaultShiftTimes={this.props.shiftTimes}
                             onChange={this.props.onShiftTimesChange} />
                     </div>
-                    <div className="col-md-3">
-                        <div style={{marginBottom: 8}}>
-                            Shift Type
-                        </div>
+                    <div className="shrink column">
+                        <label>Shift Type</label>
                         <ShiftTypeSelector
                             shiftType={this.props.shiftType}
                             onChange={this.props.onShiftTypeChange} />

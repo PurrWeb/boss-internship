@@ -19,9 +19,9 @@ export default class FilterableStaffList extends Component {
         );
 
         return (
-            <div>
+            <table className="scroll">
                 {staffListItems}
-            </div>
+            </table>
         );
     }
     getStaffToShow() {
