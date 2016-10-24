@@ -3,12 +3,17 @@
       url: url,
       method: 'put'
     )  do |form| %>
-  <%= form.number_field(:five_pound_notes, prepend: "£") %>
-  <%= form.number_field(:one_pound_coins, prepend: "£") %>
-  <%= form.number_field(:fifty_pence_coins, prepend: "£") %>
-  <%= form.number_field(:twenty_pence_coins, prepend: "£") %>
-  <%= form.number_field(:ten_pence_coins, prepend: "£") %>
-  <%= form.number_field(:five_pence_coins, prepend: "£") %>
-
+    <div class="row mb-base">
+      <div class="small-12 medium-6 column">
+        <%= form.number_field(:five_pound_notes, prepend: "£") %>
+        <%= form.number_field(:one_pound_coins, prepend: "£") %>
+        <%= form.number_field(:fifty_pence_coins, prepend: "£") %>
+      </div>
+      <div class="small-12 medium-6 column">
+        <%= form.number_field(:twenty_pence_coins, prepend: "£") %>
+        <%= form.number_field(:ten_pence_coins, prepend: "£") %>
+        <%= form.number_field(:five_pence_coins, prepend: "£") %>
+      </div>
+    </div>
   <%= form.submit(action_text, class: 'button mb-md') %>
 <% end %>

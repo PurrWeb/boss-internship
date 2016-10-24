@@ -3,7 +3,7 @@
 <h3><%= "#{venue.name.titlecase} " if venue.present? %><%= week.start_date %> - <%= week.end_date %></h3>
 
 <%= bootstrap_form_for('staff_tracking_index', url: staff_tracking_index_path, html: { method: :get }) do |form| %>
-  <div class="form-inline">
+  <div class="mb-md">
     <%= form.select(
           :venue_id,
           options_for_select(

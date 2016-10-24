@@ -23,24 +23,26 @@
       class: 'button mb-md'
     ) %>
 
-<%= bootstrap_form_for(
-      :change_order,
-      url: change_orders_path,
-      id: 'current-change-order-form',
-      method: 'get'
-    )  do |form| %>
-  <%= form.select(
-        :venue_id,
-        options_for_select(
-          accessible_venues.map do |venue|
-            [venue.name, venue.id]
-          end,
-          current_venue.id
-        ),
-        {},
-        id: 'current-change-order-venue-select'
-      ) %>
-<% end %>
+  <%= bootstrap_form_for(
+          :change_order,
+          url: change_orders_path,
+          id: 'current-change-order-form',
+          method: 'get',
+          html: { class: ''}
+      )  do |form| %>
+      <%= form.select(
+              :venue_id,
+              options_for_select(
+                  accessible_venues.map do |venue|
+                    [venue.name, venue.id]
+                  end,
+                  current_venue.id
+              ),
+              {},
+              id: 'current-change-order-venue-select'
+          ) %>
+  <% end %>
+
 
 <% if current_change_order.persisted? %>
   <p>Last Updated at: <%= current_change_order.updated_at.to_s(:human) %></p>

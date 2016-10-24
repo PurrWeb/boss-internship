@@ -5,26 +5,30 @@
   <div class="shrink column"><%= link_to('View weekly report', weekly_reports_path(venue_id: venue.id, week_start: UIRotaDate.format(week.start_date)), class: 'button') %></div>
 </div>
 
-<%= bootstrap_form_for('', url: daily_reports_path, html: { method: :get, class: 'form-inline' }) do |form| %>
-    <%= form.select(
-          :venue_id,
-          options_for_select(
-            accessible_venues.map do |venue|
-              [venue.name, venue.id]
-            end,
-            venue.id
-          ),
-          {
-            include_blank: false
-          }) %>
-
-  <%= form.text_field(
+<%= bootstrap_form_for('', url: daily_reports_path, html: { method: :get, class: 'row align-bottom' }) do |form| %>
+    <div class="small-12 medium-expand column">
+      <%= form.select(
+              :venue_id,
+              options_for_select(
+                  accessible_venues.map do |venue|
+                    [venue.name, venue.id]
+                  end,
+                  venue.id
+              ),
+              {
+                  include_blank: false
+              }) %>
+    </div>
+    <div class="small-12 medium-expand column">
+      <%= form.text_field(
         :date,
         value: UIRotaDate.format(date),
         class: 'date-picker'
       ) %>
-
-  <%= form.submit('Update', class: 'button mb-md') %>
+    </div>
+    <div class="small-12 medium-shrink column">
+      <%= form.submit('Update', class: 'button mb-mn') %>
+    </div>
 <% end %>
 
 <div>

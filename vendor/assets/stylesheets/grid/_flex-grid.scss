@@ -251,6 +251,12 @@
 
       > .column { @include grid-col-uncollapse($gutter); }
     }
+
+    // Responsive shrinking
+    .#{$-zf-size}-shrink {
+      flex: flex-grid-column(shrink);
+      max-width: 100%;
+    }
   }
 
   // Sizing (shrink)
