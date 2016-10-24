@@ -80,11 +80,10 @@ $tab-content-padding: 1rem !default;
     &:hover {
       background: $tab-item-background-hover;
     }
+  }
 
-    &:focus,
-    &[aria-selected='true'] {
-      background: $tab-background-active;
-    }
+  &.is-active > a {
+    background: $tab-background-active;
   }
 }
 
