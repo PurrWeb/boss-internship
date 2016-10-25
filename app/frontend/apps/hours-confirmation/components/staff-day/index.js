@@ -120,7 +120,7 @@ export default class StaffDay extends React.Component {
                     </div>
                     <div className="column">
                         <div className="row">
-                            <div className="column">
+                            <div className="shrink column">
                                 <HoursChart
                                     rotaDate={this.state.lastValidData.rotaDate}
                                     rotaedShifts={this.state.lastValidData.rotaedShifts}
@@ -130,7 +130,7 @@ export default class StaffDay extends React.Component {
                                     clockInBreaks={this.state.lastValidData.clockInBreaks}
                                 />
                             </div>
-                            <div className="shrink column">
+                            <div className="column">
                                 <div className="staff-day__sub-heading">Notes</div>
                                 <ClockInNotesList notes={this.props.clockInNotes} />
                             </div>

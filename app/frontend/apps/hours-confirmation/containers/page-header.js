@@ -11,7 +11,7 @@ class PageHeader extends React.Component {
         var selector;
         var isDailyPage = this.props.pageOptions.date !== undefined;
         if (isDailyPage){
-            selector = <div className="column">
+            selector = <div className="shrink column">
                 <DateAndVenueSelector
                     date={this.props.pageOptions.date}
                     venueClientId={venueClientId}
