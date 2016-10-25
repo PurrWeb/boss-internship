@@ -42,6 +42,7 @@ $topbar-unstack-breakpoint: medium !default;
     @include clearfix;
   }
 
+  max-width: 100%;
   padding: $topbar-padding;
 
   &,
