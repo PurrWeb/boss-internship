@@ -19,7 +19,7 @@ export default class FilterableStaffList extends Component {
         );
 
         return (
-            <table className="scroll">
+            <table>
                 {staffListItems}
             </table>
         );
