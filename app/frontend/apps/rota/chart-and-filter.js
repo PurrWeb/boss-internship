@@ -26,7 +26,7 @@ export class ChartAndFilter extends Component {
 
         return (
             <div className="row">
-                <div className="column">
+                <div className="small-12 medium-8 column">
                     <RotaChart
                         rotaShifts={rotaShifts}
                         staff={this.props.staff}
@@ -38,7 +38,7 @@ export class ChartAndFilter extends Component {
                         getShiftColor={(shift) => this.getShiftColor(shift)}
                         />
                 </div>
-                <div className="shrink column">
+                <div className="small-12 medium-4 column">
                     <label>Filter chart</label>
                     <StaffTypeDropdown
                         className="mb-base"
