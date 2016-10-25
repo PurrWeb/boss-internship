@@ -40,7 +40,9 @@ class StaffMemberUpdatesMailer < ApplicationMailer
       mime_type: 'application/pdf',
       content: StaffMemberUpdateDetailsPDF.new(
         staff_member_name: staff_member_name,
-        changed_attributes: data.fetch(:changed_attribute_data)
+        changed_attributes: data.fetch(:changed_attributes),
+        old_values: data.fetch(:old_values),
+        new_values: data.fetch(:new_values)
       ).render
     }
 

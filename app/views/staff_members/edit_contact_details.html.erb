@@ -13,7 +13,6 @@
 
     <%= form.number_field :phone_number %>
 
-
     <%= form.fields_for(:address, (form.object.address || Address.new)) do |address_fields| %>
       <%= render partial: 'shared/address_fields', locals: { form: address_fields, required: false } %>
     <% end %>
