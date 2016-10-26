@@ -26,7 +26,7 @@ class ClockInOutStaffListItem extends Component {
         var rotaedShiftsColumn = null;
         var statusToggleButtons = null;
 
-        rotaedShiftsColumn = <div className="col-md-2 col-xs-4">
+        rotaedShiftsColumn = <div className="shrink column">
             <span style={columnNameStyle}>
                 Rotaed Shifts
             </span>
@@ -36,16 +36,16 @@ class ClockInOutStaffListItem extends Component {
                 venues={this.props.venues} />
         </div>;
 
-        statusToggleButtons = <div className="col-md-3 col-xs-10" style={{paddingTop: 5}}>
+        statusToggleButtons = <div className="shrink column">
             {this.getStaffMemberStatusToggleButtons()}
         </div>
 
         return <div className="staff-list-item staff-list-item--clock-in-out">
-            <div className="row">
-                <div className="col-md-1 col-xs-2">
+            <div className="row align-middle">
+                <div className="shrink column">
                     <img src={staffMember.avatar_url} className="staff-list-item__avatar" />
                 </div>
-                <div className="col-md-4 col-xs-10">
+                <div className="shrink column">
                     <div className="staff-list-item--clock-in-out__name">
                         {staffMember.first_name} {staffMember.surname}
                     </div>
@@ -59,10 +59,10 @@ class ClockInOutStaffListItem extends Component {
                     </div>
                 </div>
                 {rotaedShiftsColumn}
-                <div className="col-md-2 col-xs-6">
+                <div className="column">
                     {this.getClockInNotesList()}
                 </div>
-                <div className="col-md-2 col-xs-2 staff-list-item--clock-in-out__status">
+                <div className="staff-list-item--clock-in-out__status shrink column">
                     <ClockInStatusBadge clockInStatusValue={clockInStatusValue} />
                 </div>
                 {statusToggleButtons}
@@ -112,7 +112,7 @@ class ClockInOutStaffListItem extends Component {
             return <Spinner />
         }
         return <button
-            className="btn btn-default btn-sm"
+            className="button small"
             style={{marginRight: 2}}
             data-test-marker-add-note
             onClick={() => this.props.addNote(
@@ -144,7 +144,7 @@ class ClockInOutStaffListItem extends Component {
         }
 
         return <a
-                className="btn btn-default btn-sm show-in-manager-mode--inline-block"
+                className="button small show-in-manager-mode--inline-block"
                 data-test-marker-change-pin-button
                 onClick={() => this.props.updateStaffMemberPin({
                     staffMemberObject: staffMember
@@ -167,7 +167,7 @@ class ClockInOutStaffListItem extends Component {
         return <a
             onClick={() => this.props.enterUserMode(staffMember.staffType.name, this.props.staff)}
             data-test-marker-enter-manager-mode
-            className="btn btn-default btn-sm hide-in-manager-mode--inline-block">
+            className="button small hide-in-manager-mode--inline-block">
             Enter Manager Mode
         </a>
     }

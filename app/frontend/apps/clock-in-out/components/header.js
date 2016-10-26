@@ -24,7 +24,7 @@ export default class Header extends React.Component {
         </button>
         if (!this.props.userIsManagerOrSupervisor) {
             returnToStaffTypeSelectorButton = <a
-                    className="btn btn-default"
+                    className="button small ml-base"
                     onClick={this.props.returnToStaffTypeSelector}>
                     Select a different staff type
                 </a>
