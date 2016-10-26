@@ -1,10 +1,10 @@
 <% if holiday.errors[:base].present? %>
-  <div class="alert alert-danger" role="alert">
+  <div class="callout alert" role="alert">
     <%= holiday.errors[:base].to_sentence %>
   </div>
 <% end %>
 
 <%= bootstrap_form_for(holiday, url: holiday_path(holiday)) do |form| %>
   <%= render partial: 'shared/holiday_form_fields', locals: { form: form } %>
-  <button type="submit" class="btn btn-default">Edit</button>
+  <button type="submit" class="button">Edit</button>
 <% end %>

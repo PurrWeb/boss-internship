@@ -9,13 +9,13 @@
   <% if staff_member.date_of_birth.present? %>
     <dd class="show-page-detail" data-detail="date-of-birth"><%= staff_member.date_of_birth.to_date.to_s %></dd>
   <% else %>
-    <dd class"show-page-detail" data-detail="date-of-birth">Not supplied</dd>
+    <dd class="show-page-detail" data-detail="date-of-birth">Not supplied</dd>
   <% end %>
   <% if staff_member.enabled? %>
     <%= link_to(
           'Edit',
           edit_personal_details_staff_member_path(staff_member),
-          class: ['btn', 'btn-primary', 'staff-member-edit-personal-details-button']
+          class: ['button', 'staff-member-edit-personal-details-button']
         ) %>
   <% end %>
 </dl>
