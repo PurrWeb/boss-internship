@@ -1,18 +1,20 @@
-<div class="media-object">
-  <div class="media-object-section">
+<div class="row mb-md">
+  <div class="shrink column">
     <div class="staff-member-page-staff-image">
       <img class="avatar-image avatar-image_medium" src="<%= staff_member.avatar.medium.url %>" />
       <% if staff_member.enabled? %>
-        <%= link_to('Edit', edit_avatar_staff_member_path(staff_member), class: "button small") %>
+        <%= link_to(edit_avatar_staff_member_path(staff_member), class: "button small") do %>
+          <i class="fa fa-pencil mr-sm"></i>Edit
+        <% end %>
       <% end %>
     </div>
   </div>
-  <div class="media-object-section">
+  <div class="column">
     <h1>
       <% if staff_member.flagged? %>
         <%= staff_member.full_name.titlecase %>
         <span class="text-danger">
-          <span class="glyphicon glyphicon-warning-sign"></span> Flagged
+          <span class="fa fa-warning mr-base"></span>Flagged
         </span>
       <% elsif staff_member.disabled? %>
         <%= staff_member.full_name.titlecase %> (Disabled)
@@ -25,19 +27,19 @@
       <p class="h4">Reason for disabling: <%= staff_member.disable_reason %></p>
     <% end %>
   </div>
-  <div class="media-object-section">
+  <div class="shrink column">
     <% if can?(:disable, staff_member) %>
       <%= link_to(disable_staff_member_path(staff_member), class: 'button alert disable-staff-member-button') do %>
-        <span class="glyphicon glyphicon-fire"></span> Disable Staff Member
+        <span class="fa fa-fire mr-base"></span>Disable Staff Member
       <% end %>
     <% end %>
     <% if can?(:enable, staff_member) %>
       <%= link_to(enable_staff_member_path(staff_member), class: 'button alert enable-staff-member-button') do %>
-        <span class="glyphicon glyphicon-heart"></span> Enable Staff Member
+        <span class="fa fa-heart mr-base"></span>Enable Staff Member
       <% end %>
     <% end %>
   </div>
-</div
+</div>
 
 <div class="container-fluid">
   <ul class="tabs staff-member-nav-tabs" role="tablist" data-tabs id="staff-member-nav-tabs">
