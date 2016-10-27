@@ -11,11 +11,12 @@
   <% else %>
     <dd class="show-page-detail" data-detail="date-of-birth">Not supplied</dd>
   <% end %>
-  <% if staff_member.enabled? %>
-    <%= link_to(
-          'Edit',
-          edit_personal_details_staff_member_path(staff_member),
-          class: ['button', 'staff-member-edit-personal-details-button']
-        ) %>
-  <% end %>
 </dl>
+
+<% if staff_member.enabled? %>
+    <%= link_to(
+            'Edit',
+            edit_personal_details_staff_member_path(staff_member),
+            class: ['button', 'staff-member-edit-personal-details-button']
+        ) %>
+<% end %>

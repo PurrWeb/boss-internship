@@ -4,7 +4,7 @@
 </div>
 
 <div class="top-bar row align-top" id="main-menu">
-  <div class="column">
+  <div class="column npl">
     <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
       <li class="menu-text"><%= link_to 'Boss', root_path, class: 'navbar-brand' %></li>
         <% if current_user.present? %>
@@ -84,7 +84,7 @@
           </li>
           </ul>
           </div>
-          <div class="shrink column">
+          <div class="shrink column npr">
             <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
               <% if can?(:manage, :admin) %>
                 <li class="has-submenu">
