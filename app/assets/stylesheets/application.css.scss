@@ -15,11 +15,11 @@
  *= require bootstrap-datepicker3
  *= require_tree .
  *= require_self
- •= require foundation_and_overrides
  */
 
+ @import "foundation_and_overrides";
  @import "jquery-ui/jquery-ui";
- @import "jquery-ui/jquery.ui.datepicker";
+ @import "jquery-ui/flat.datepicker";
  @import "../../../node_modules/react-select/dist/react-select";
  @import "../../../node_modules/cropperjs/dist/cropper";
  @import "../../../node_modules/nvd3/build/nv.d3";
@@ -28,6 +28,11 @@
 
  @import "font-awesome-sprockets";
  @import "font-awesome";
+
+.main {
+  padding-top: $spacing-md;
+  padding-bottom: $spacing-md;
+}
 
 .page-header {
   line-height: 1;

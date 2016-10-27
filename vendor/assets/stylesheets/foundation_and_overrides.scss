@@ -11,11 +11,6 @@
 
 @include foundation-everything(true);
 
-.main {
-  padding-top: $spacing-md;
-  padding-bottom: $spacing-md;
-}
-
 // If you'd like to include motion-ui the foundation-rails gem comes prepackaged with it, uncomment the 3 @imports, if you are not using the gem you need to install the motion-ui sass package.
 //
 // @include motion-ui-transitions;
