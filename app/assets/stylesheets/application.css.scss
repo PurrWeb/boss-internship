@@ -29,6 +29,14 @@
  @import "font-awesome-sprockets";
  @import "font-awesome";
 
+.page-header {
+  line-height: 1;
+}
+
+.rota-overview-chart {
+  min-width: 700px;
+}
+
 label:not(.force-not-required).required:after {
   content:" *";
 }

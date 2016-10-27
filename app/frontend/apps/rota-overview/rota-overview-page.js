@@ -30,7 +30,7 @@ class RotaOverviewPage extends Component {
 
         return <div className="container">
             <div className="row">
-                <div className="medium-6 column">
+                <div className="shrink column mb-md">
                     <WeekAndVenueSelector
                         venueClientId={firstRota.venue.clientId}
                         weekStartDate={firstRota.date}
@@ -44,12 +44,12 @@ class RotaOverviewPage extends Component {
 
                     </WeekAndVenueSelector>
                 </div>
-                <div className="medium-3 column">
+                <div className="shrink column mb-md">
                     <a href={pdfHref} className="button">
                       <i className="fa fa-download mr-base" aria-hidden />Download PDF
                     </a>
                 </div>
-                <div className="medium-3 column">
+                <div className="shrink column mb-md">
                     <h2 style={{fontSize: 20, marginTop: 0}}>Weekly Forecast</h2>
                     <WeeklyRotaForecast
                         serverVenueId={firstRota.venue.serverId}

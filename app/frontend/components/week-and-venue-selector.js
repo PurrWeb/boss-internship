@@ -17,7 +17,7 @@ export default class WeekAndVenueSelector extends React.Component {
             selectedVenues = [this.props.venueClientId];
         }
         return <div className="row">
-            <div className="column">
+            <div className="shrink column">
                 <WeekPicker
                     selectionStartDate={this.props.weekStartDate}
                     onChange={(selection) => {
@@ -28,7 +28,7 @@ export default class WeekAndVenueSelector extends React.Component {
                         });
                     } }/>
             </div>
-            <div className="column">
+            <div className="shrink column">
                 <VenueDropdown
                     venues={this.props.venues}
                     selectedVenues={selectedVenues}
