@@ -115,6 +115,7 @@ $show-header-for-stacked: false !default;
     th,
     td {
       padding: $table-padding;
+      vertical-align: top;
     }
   }
 }
