@@ -45,56 +45,60 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
           />;
         }
 
-        return <div
-            className="row"
-            data-test-marker-hours-acceptance-period-item
-        >
-            { this.getModal() }
-                        <div className="shrink column">
-                            <div className="staff-day__sub-heading">From/To</div>
-                            <div style={periodTimeSelectorStyles}>
-                                <ShiftTimeSelector
-                                    showErrorMessages={false}
-                                    defaultShiftTimes={{
-                                        starts_at: hoursAcceptancePeriod.starts_at,
-                                        ends_at: hoursAcceptancePeriod.ends_at
-                                    }}
-                                    readonly={readonly}
-                                    rotaDate={this.props.rotaDate}
-                                    onChange={(times) => {
-                                        this.props.boundActions.updateHoursAcceptancePeriod({
-                                            ...times,
-                                            clientId: hoursAcceptancePeriod.clientId
-                                        })
-                                    }}
-                                    granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
-                                    />
-                            </div>
-                        </div>
-                        <div className="shrink column">
-                            <div style={{paddingRight: 30, paddingLeft: 30}}>
-                                <div className="staff-day__sub-heading">Breaks</div>
-                                <BreakList
-                                    boundActions={this.props.boundActions}
-                                    readonly={readonly}
-                                    clockInBreaks={this.props.clockInBreaks}
-                                    rotaDate={this.props.rotaDate}
-                                    granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
-                                    hoursAcceptancePeriod={hoursAcceptancePeriod}
+        return (
+          <div className="panel panel-default">
+            <div className="panel-heading">
+              <div className="panel-title">From/To</div>
+            </div>
+            <div className="panel-body">
+              <div
+                className="row"
+                data-test-marker-hours-acceptance-period-item
+              >
+                { this.getModal() }
+                    <div className="shrink column mb-md">
+                        <div style={periodTimeSelectorStyles}>
+                            <ShiftTimeSelector
+                                showErrorMessages={false}
+                                defaultShiftTimes={{
+                                    starts_at: hoursAcceptancePeriod.starts_at,
+                                    ends_at: hoursAcceptancePeriod.ends_at
+                                }}
+                                readonly={readonly}
+                                rotaDate={this.props.rotaDate}
+                                onChange={(times) => {
+                                    this.props.boundActions.updateHoursAcceptancePeriod({
+                                        ...times,
+                                        clientId: hoursAcceptancePeriod.clientId
+                                    })
+                                }}
+                                granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
                                 />
-                            </div>
                         </div>
-                        <div className="column">
-                            <div className="staff-day__sub-heading">Reason</div>
-                            <div>
-                              {reasonSection}
-                            </div>
-                        </div>
-                    <div className="shrink column">
-                        {this.getAcceptUi()}
                     </div>
-            <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
-        </div>
+                    <div className="shrink column">
+                        <div className="staff-day__sub-heading">Breaks</div>
+                        <BreakList
+                            boundActions={this.props.boundActions}
+                            readonly={readonly}
+                            clockInBreaks={this.props.clockInBreaks}
+                            rotaDate={this.props.rotaDate}
+                            granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
+                            hoursAcceptancePeriod={hoursAcceptancePeriod}
+                        />
+                    </div>
+                    <div className="column">
+                        <div className="staff-day__sub-heading">Reason</div>
+                        <div>
+                          {reasonSection}
+                        </div>
+                      {this.getAcceptUi()}
+                    </div>
+                  <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
+              </div>
+            </div>
+          </div>
+        )
     }
     acceptModalRequired(){
       let rotaedAcceptedHoursDifference = this.props.rotaedAcceptedHoursDifference;
@@ -185,14 +189,16 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
             if (!this.props.hasClockedOut) {
                 return <span></span>
             } else {
-                return <div>
+                return <div className="row">
+                  <div className="column">
                     <a
                         data-test-marker-accept-hours-acceptance-period
                         onClick={ acceptButtonOnClick }
-                        className="button success" style={{marginTop: 4}}>
-                        Accept {stats.hours}h
+                        className="button success">
+                        <i className="fa fa-check mr-sm" />Accept {stats.hours}h
                     </a>
-                    <br/><br/>
+                  </div>
+                  <div className="shrink column">
                     <a
                         className="button alert"
                         data-test-marker-delete-hours-acceptance-period
@@ -202,8 +208,9 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                             errorHandlingId: this.componentId
                         })
                     }}>
-                        Delete
+                      <i className="fa fa-remove mr-sm" />Delete
                     </a>
+                  </div>
                 </div>
             }
         } else {

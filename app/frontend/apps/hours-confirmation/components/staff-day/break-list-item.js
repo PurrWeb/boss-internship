@@ -9,14 +9,14 @@ export default class BreakListItem extends React.Component {
         var deleteBreakButton;
         if (!this.props.readonly) {
             deleteBreakButton = <a
-                className="button"
+                className="button small alert"
                 style={{marginLeft: -10}}
                 onClick={() => {
                     this.props.boundActions.deleteHoursAcceptanceBreak({
                         clientId: breakItem.clientId
                     })
                 }}>
-                x
+                <i className="fa fa-remove" />
             </a>
         }
 

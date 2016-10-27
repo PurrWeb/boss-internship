@@ -37,10 +37,7 @@ export default class HoursAcceptancePeriodList extends React.Component {
                     <div
                         className="mb-base"
                         key={hoursAcceptancePeriod.clientId}
-                        style={{
-                            border: "1px solid #ddd",
-                            padding: 5,
-                        }}>
+                    >
                         <HoursAcceptancePeriodListItem
                             boundActions={this.props.boundActions}
                             clockInBreaks={this.props.clockInBreaks}

@@ -121,7 +121,7 @@ export default class StaffDay extends React.Component {
                         <ComponentErrors errorHandlingId={this.clockOutErrorId} />
                     </div>
                     <div className="column">
-                        <div className="row">
+                        <div className="row mb-base">
                             <div className="shrink column">
                                 <HoursChart
                                     rotaDate={this.state.lastValidData.rotaDate}
