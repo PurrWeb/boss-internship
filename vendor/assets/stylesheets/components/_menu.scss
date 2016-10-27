@@ -44,7 +44,7 @@ $menu-icon-spacing: 0.25rem !default;
 
   // Reset line height to make the height of the overall item easier to calculate
   > li > a {
-    display: block;
+    display: inline-block;
     padding: $menu-item-padding;
     line-height: 1;
   }
@@ -76,37 +76,13 @@ $menu-icon-spacing: 0.25rem !default;
 /// @param {Keyword} $dir [horizontal] - Direction of the Menu. Can be `horizontal` or `vertical`.
 @mixin menu-direction($dir: horizontal) {
   @if $dir == horizontal {
-    @if $global-flexbox {
-      flex-wrap: nowrap;
-
-      > li {
-        flex: 0 0 auto;
-      }
-    }
-    @else {
-      > li {
-        display: table-cell;
-      }
+    > li {
+      display: inline-block;
     }
   }
   @else if $dir == vertical {
-    @if $global-flexbox {
-      flex-wrap: wrap;
-
-      > li {
-        flex: 0 0 100%;
-        max-width: 100%;
-      }
-
-      > li  > a {
-        align-items: flex-start;
-        justify-content: flex-start;
-      }
-    }
-    @else {
-      > li {
-        display: block;
-      }
+    > li {
+      display: block;
     }
   }
   @else {
@@ -138,21 +114,14 @@ $menu-icon-spacing: 0.25rem !default;
 /// @param {Boolean} $base [true] - Set to `false` to prevent the shared CSS between side- and top-aligned icons from being printed. Set this to `false` if you're calling the mixin multiple times on the same element.
 @mixin menu-icons($position: side, $base: true) {
   @if $base {
-    @if $global-flexbox {
-      > li > a {
-        display: flex;
-      }
-    }
-    @else {
-      > li > a {
-        img,
-        i,
-        svg {
-          vertical-align: middle;
+    > li > a {
+      img,
+      i,
+      svg {
+        vertical-align: middle;
 
-          + span {
-            vertical-align: middle;
-          }
+        + span {
+          vertical-align: middle;
         }
       }
     }

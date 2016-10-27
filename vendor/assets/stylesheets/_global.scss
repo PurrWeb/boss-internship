@@ -195,6 +195,10 @@ $-zf-flex-classes-imported: false;
     border: 0;
     border-radius: $global-radius;
     line-height: 1;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   // Internal classes to show/hide elements in JavaScript
