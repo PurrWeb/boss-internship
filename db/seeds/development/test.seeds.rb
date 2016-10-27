@@ -23,7 +23,7 @@ after ['development:staff_types', 'development:pay_rates'] do
     creator: dev_user
   )
 
-  got_character_name = Faker::GameOfThrones.character
+  got_character_name = Faker::Name.name
   first_name = got_character_name.split(' ').first
   surname = got_character_name.split(' ').last
   staff_member_name = Name.create!(

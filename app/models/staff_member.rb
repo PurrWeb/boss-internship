@@ -1,5 +1,8 @@
 class StaffMember < ActiveRecord::Base
-  GENDERS = ['male', 'female']
+  MALE_GENDER = 'male'
+  FEMALE_GENDER = 'female'
+
+  GENDERS = [MALE_GENDER, FEMALE_GENDER]
 
   include Statesman::Adapters::ActiveRecordQueries
 
