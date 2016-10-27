@@ -46,16 +46,21 @@ class ClockInOutStaffListItem extends Component {
                     <img src={staffMember.avatar_url} className="staff-list-item__avatar" />
                 </div>
                 <div className="shrink column">
-                    <div className="staff-list-item--clock-in-out__name">
+                    <div className="staff-list-item--clock-in-out__name mb-base">
                         {staffMember.first_name} {staffMember.surname}
                     </div>
-                    <StaffTypeBadge
-                        staffTypeObject={staffMember.staffType} />
-                    <div className="staff-list-item--clock-in-out__manager-buttons">
-                        {this.getAddNoteButton()}
-                        {this.getChangePinButton()}
-                        {this.getManagerModeButton()}
-
+                    <div className="row align-middle">
+                        <div className="shrink column npr">
+                            <StaffTypeBadge
+                                staffTypeObject={staffMember.staffType} />
+                        </div>
+                        <div className="shrink column">
+                            <div className="staff-list-item--clock-in-out__manager-buttons">
+                                {this.getAddNoteButton()}
+                                {this.getChangePinButton()}
+                                {this.getManagerModeButton()}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {rotaedShiftsColumn}
