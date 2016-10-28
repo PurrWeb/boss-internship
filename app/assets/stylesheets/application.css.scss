@@ -33,6 +33,9 @@
 .main {
   padding-top: $spacing-md;
   padding-bottom: $spacing-md;
+  &.wide {
+    max-width: $global-width-increased;
+  }
 }
 
 .page-header {
