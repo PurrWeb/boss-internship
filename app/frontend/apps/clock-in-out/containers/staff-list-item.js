@@ -43,7 +43,7 @@ class ClockInOutStaffListItem extends Component {
         return <div className="staff-list-item staff-list-item--clock-in-out">
             <div className="row align-middle">
                 <div className="shrink column">
-                    <img src={staffMember.avatar_url} className="staff-list-item__avatar" />
+                    <img src={staffMember.avatar_url} className="avatar" />
                 </div>
                 <div className="shrink column">
                     <div className="staff-list-item--clock-in-out__name mb-base">

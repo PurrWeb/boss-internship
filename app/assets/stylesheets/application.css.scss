@@ -38,6 +38,13 @@
   }
 }
 
+.avatar {
+  max-width: 150px;
+  max-height: 150px;
+  height: auto;
+  width: auto;
+}
+
 .page-header {
   line-height: 1;
 }
@@ -53,7 +60,6 @@ label:not(.force-not-required).required:after {
 .show-page-detail-heading {
   font-weight: bold;
 }
-
 
 .avatar-image_medium {
   width: 150px;

@@ -18,7 +18,7 @@ export default class StaffListItem extends React.Component {
         return <div className="staff-list-item">
             <div className="row">
                 <div className="shrink column">
-                    <img src={staff.avatar_url} className="staff-list-item__avatar" />
+                    <img src={staff.avatar_url} className="avatar" />
                 </div>
                 <div className="shrink column">
                     <div className="row align-middle mb-base">

@@ -110,8 +110,8 @@ export default class StaffDay extends React.Component {
                     <div className="shrink column">
                         <div className="mb-base">
                             <img
-                                src={staffMember.avatar_url}
-                                style={{maxWidth: 112, maxHeight: 112}}
+                              className="avatar"
+                              src={staffMember.avatar_url}
                             />
                         </div>
                         <StaffTypeBadge staffTypeObject={staffType} />

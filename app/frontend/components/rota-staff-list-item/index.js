@@ -41,7 +41,7 @@ class RotaStaffListItem extends Component {
         return (
             <tr className="staff-list-item rota-staff-list-item">
                     <td>
-                        <img src={staff.avatar_url} className="staff-list-item__avatar" />
+                        <img src={staff.avatar_url} className="avatar" />
                     </td>
                     <td>
                         <div className="rota-staff-list-item__header">
