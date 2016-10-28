@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery-ui
 //= require react_integration
 //= require foundation
 //= require jquery_ujs
