@@ -12,7 +12,11 @@
 <%= render partial: 'index_filter', locals: { filter: filter, staff_members: staff_members } %>
 
 <% if staff_members.present? %>
-  <table class="stack" data-role="staff-members-index-table">
+  <table
+    class="tablesaw tablesaw-stack"
+    data-tablesaw-mode="stack"
+    data-role="staff-members-index-table"
+  >
     <thead>
       <tr>
         <th><th>
@@ -20,7 +24,7 @@
         <th>Status</th>
         <th>Type</th>
         <th>Venues</th>
-      <tr>
+      </tr>
     </thead>
     <tbody>
       <% staff_members.each do |staff_member| %>

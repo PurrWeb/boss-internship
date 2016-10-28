@@ -20,6 +20,8 @@
 //= require paloma
 //= require bootstrap-datepicker
 //= require_tree ./page_controllers
+//= require tablesaw.jquery
+//= require tablesaw-init
 
 $(function(){
   $(document).foundation();

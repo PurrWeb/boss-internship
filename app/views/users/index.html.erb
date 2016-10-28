@@ -10,7 +10,10 @@
 <%= render partial: 'users_filter', locals: { filter: filter, users: users } %>
 
 <% if users.present? %>
-  <table class="stack">
+  <table
+    class="tablesaw tablesaw-stack"
+    data-tablesaw-mode="stack"
+  >
     <thead>
       <tr>
         <th>Name</th>
@@ -19,32 +22,34 @@
         <% end %>
         <th>Email</th>
         <th>Role</th>
-      <tr>
-    </thead>
-    <% users.each do |user| %>
-      <tr class="users-index-listing" data-user-id="<%= user.id %>">
-        <td data-role="name">
-          <%= link_to(user_path(user)) do %>
-            <%= user.full_name.titlecase %>
-          <% end %>
-        </td>
-        <% if filter.many_statuses? %>
-          <td>
-            <%= user.current_state.titlecase %>
-          </td>
-        <% end %>
-        <td data-role="email">
-          <%= link_to(user_path(user)) do %>
-            <%= user.email %>
-          <% end %>
-        </td>
-        <td data-role="role">
-          <%= link_to(user_path(user)) do %>
-            <%= user.role.titleize %>
-          <% end %>
-        </td>
       </tr>
-    <% end %>
+    </thead>
+    <tbody>
+      <% users.each do |user| %>
+          <tr class="users-index-listing" data-user-id="<%= user.id %>">
+            <td data-role="name">
+              <%= link_to(user_path(user)) do %>
+                  <%= user.full_name.titlecase %>
+              <% end %>
+            </td>
+            <% if filter.many_statuses? %>
+                <td>
+                  <%= user.current_state.titlecase %>
+                </td>
+            <% end %>
+            <td data-role="email">
+              <%= link_to(user_path(user)) do %>
+                  <%= user.email %>
+              <% end %>
+            </td>
+            <td data-role="role">
+              <%= link_to(user_path(user)) do %>
+                  <%= user.role.titleize %>
+              <% end %>
+            </td>
+          </tr>
+      <% end %>
+    </tbody>
   </table>
   <%= render partial: 'shared/pagination_control', locals: { relation: users } %>
 <% end %>
