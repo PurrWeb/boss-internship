@@ -2,6 +2,7 @@ class EmailAddress < ActiveRecord::Base
   has_many :users, inverse_of: :email_address
   has_many :staff_members, inverse_of: :email_address
 
+  auto_strip_attributes :email
   validates :email, presence: true, uniqueness: true
 
   validate :email_address_valid

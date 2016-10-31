@@ -4,6 +4,19 @@ describe EmailAddress do
   let(:subject) { EmailAddress.new(email: email) }
 
   describe 'email format validation' do
+    context 'email with whitespace at ends' do
+      let(:email) { '   bill@test.com     ' }
+
+      it 'should be valid' do
+        subject.valid?
+        expect(
+          subject.errors[:email]
+        ).to eq(
+          []
+        )
+      end
+    end
+
     context 'no email supplied' do
       let(:email) { nil }
 
