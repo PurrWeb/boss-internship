@@ -16,10 +16,8 @@
 //= require foundation
 //= require jquery_ujs
 //= require chosen-jquery
-//= require tinycolor-min
-//= require pick-a-color.min
 //= require paloma
-//= require bootstrap-datepicker
+//= require spectrum
 //= require_tree ./page_controllers
 //= require tablesaw.jquery
 //= require tablesaw-init
@@ -29,9 +27,10 @@ $(function(){
 
   $('.chosen-select').chosen({width: '100%'});
 
-  $('.pick-a-color').pickAColor({
-    showSavedColors: false,
-    showHexInput: false
+  $('.pick-a-color').spectrum({
+    preferredFormat: "hex",
+    showInput: true,
+    showInitial: true
   });
 
   $('.date-picker').datepicker({

@@ -11,7 +11,8 @@
  * file per style scope.
  *
  *= require chosen
- *= require pick-a-color.min
+ *= require jquery-ui
+ *= require spectrum
  *= require_tree .
  *= require_self
  */
