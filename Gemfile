@@ -60,9 +60,6 @@ group :development, :test do
   gem "bullet"
   gem 'quiet_assets'
   gem 'factory-helper'
-  gem "guard", ">= 2.2.2", :require => false
-  gem "guard-livereload",  :require => false
-  gem "rack-livereload"
   gem "rb-fsevent",        :require => false
 end
 
