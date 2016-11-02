@@ -97,3 +97,18 @@ label:not(.force-not-required).required:after {
 .Select-control {
   min-width: 200px;
 }
+
+// Class used in bootstrap for red text
+.text-danger{
+  color: red;
+}
+
+// Class used in bootstrap for green text
+.text-success{
+  color: green;
+}
+
+// Class used in bootstrap for orange text
+.text-warning{
+  color: #FF4500;
+}
