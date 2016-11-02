@@ -18,7 +18,7 @@ module PageObject
     end
 
     page_action :click_view_user_button do
-      find('.view-user-button.btn').click
+      find('.view-user-button.button').click
     end
 
     page_action :ensure_details_displayed_for do |staff_member|
@@ -49,22 +49,22 @@ module PageObject
     end
 
     page_action :click_edit_employment_details_button do
-      button = find('a.btn.staff-member-edit-employment-details-button')
+      button = find('a.button.staff-member-edit-employment-details-button')
       button.click
     end
 
     page_action :click_edit_personal_details_button do
-      button = find('a.btn.staff-member-edit-personal-details-button')
+      button = find('a.button.staff-member-edit-personal-details-button')
       button.click
     end
 
     page_action :click_enable_staff_member_button do
-      button = find('a.btn.enable-staff-member-button')
+      button = find('a.button.enable-staff-member-button')
       button.click
     end
 
     page_action :click_disable_staff_member_button do
-      button = find('a.btn.disable-staff-member-button')
+      button = find('a.button.disable-staff-member-button')
       button.click
     end
 

@@ -33,7 +33,7 @@ module PageObject
     end
 
     def scope
-      find('header div.navbar')
+      find('#main-menu')
     end
 
     private
@@ -55,7 +55,7 @@ module PageObject
     end
 
     def header_section
-      scope.find('.navbar-header')
+      scope.find('.menu-text')
     end
 
     def user_section

@@ -91,7 +91,7 @@
                   <a href="#">
                     Admin <span class="caret"></span>
                   </a>
-                  <ul class="submenu menu vertical is-dropdown-submenu" data-submenu>
+                  <ul class="nav-admin-section submenu menu vertical is-dropdown-submenu" data-submenu>
                     <li class="nav-invites-section">
                       <%= link_to('Invites', invites_path) %>
                     </li>
@@ -147,7 +147,7 @@
                 </li>
             <% end %>
 
-            <li class="has-submenu">
+            <li class="nav-user-section has-submenu">
               <a href="#">Signed in as <%= current_user.email %></a>
               <ul class="submenu menu vertical is-dropdown-submenu" data-submenu>
                 <li><%= link_to('Sign out', destroy_user_session_path, method: :delete) %></li>
