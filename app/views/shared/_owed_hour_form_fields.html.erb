@@ -1,8 +1,16 @@
-<%= form.text_field(
-    :week_start_date,
-    value: form.object.week_start_date && UIRotaDate.format(form.object.week_start_date),
-    label: 'Week',
-    class: 'date-picker'
-  ) %>
-<%= form.text_field(:minutes) %>
-<%= form.text_area :note %>
+<div class="container-fluid">
+  <div class="form-inline">
+    <%= form.text_field(
+          :week_start_date,
+          value: form.object.week_start_date && UIRotaDate.format(form.object.week_start_date),
+          label: 'Week',
+          class: 'date-picker'
+        ) %>
+
+    <%= form.text_field(:minutes) %>
+  </div>
+
+  <div class="col-md-6">
+    <%= form.text_area :note %>
+  </div>
+</div>

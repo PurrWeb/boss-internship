@@ -140,7 +140,7 @@ describe('Venue Rota Integration Test', function() {
     it("Does not allow adding security shifts", function(){
         var {$, $$} = simpleRender(<RotaApp viewData={viewData} />);
 
-        var classes = $$(".staff-list-item")[SALLY_SECURITY_INDEX].querySelector(".button").className;
+        var classes = $$(".staff-list-item")[SALLY_SECURITY_INDEX].querySelector(".btn").className;
         expect(classes).toContain("disabled");
     });
 

@@ -7,7 +7,7 @@ module PageObject
     end
 
     page_action :click_add_staff_type_button do
-      find('a.button', text: "Add Staff Type").click
+      find('a.btn', text: "Add Staff Type").click
     end
 
     page_action :ensure_staff_types_listed do |type_names:|

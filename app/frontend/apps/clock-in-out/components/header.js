@@ -17,14 +17,14 @@ export default class Header extends React.Component {
         var managerButtons = null;
         var refetchDataButton = null;
         var reloadPageButton = <button
-            className="button small secondary"
+            className="btn btn-default btn-sm"
             style={{marginRight: 2}}
             onClick={this.props.reloadPage}>
-            <i className="fa fa-refresh" /> Reload Page
+            Reload Page
         </button>
         if (!this.props.userIsManagerOrSupervisor) {
             returnToStaffTypeSelectorButton = <a
-                    className="button small ml-base"
+                    className="btn btn-default"
                     onClick={this.props.returnToStaffTypeSelector}>
                     Select a different staff type
                 </a>

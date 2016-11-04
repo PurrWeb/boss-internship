@@ -1,41 +1,35 @@
 <div class="invites-index-filter">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h5 class="panel-title">Filter</h5>
+      <div class="panel-title">Filter</div>
     </div>
     <div class="panel-body">
       <%= bootstrap_form_for(
             'filter',
             url: users_path,
-            html: { method: :get, class: '' }
+            html: { method: :get, class: 'form-inline' }
           ) do |form| %>
-          <div class="row">
-            <div class="small-12 medium-6 column">
-              <%= form.text_field(:name_text, label: 'Name', value: filter.name_text) %>
-              <%= form.text_field(:email_text, label: 'Email', value: filter.email_text) %>
-            </div>
-            <div class="small-12 medium-6 column">
-              <%= form.select(
-                      :status,
-                      options_for_select(
-                          filter.select_statuses.map { |status| [status.titlecase, status] },
-                          filter.status
-                      ),
-                      prompt: 'Any'
-                  ) %>
-              <%= form.select(
-                      :role,
-                      options_for_select(
-                          User::ROLES.map{ |role| [role.titlecase, role] },
-                          filter.role.to_s
-                      ),
-                      prompt: 'Any'
-                  ) %>
-            </div>
-          </div>
-        <%= form.submit('Update', class: 'button') %>
+        <%= form.text_field(:name_text, label: 'Name', value: filter.name_text) %>
+        <%= form.text_field(:email_text, label: 'Email', value: filter.email_text) %>
+        <%= form.select(
+              :status,
+              options_for_select(
+                filter.select_statuses.map { |status| [status.titlecase, status] },
+                filter.status
+              ),
+              prompt: 'Any'
+            ) %>
+        <%= form.select(
+              :role,
+              options_for_select(
+                User::ROLES.map{ |role| [role.titlecase, role] },
+                filter.role.to_s
+              ),
+              prompt: 'Any'
+            ) %>
+        <%= form.submit('Update') %>
       <% end %>
     </div>
   </div>
-  <div class="mb-base"><span class="records-returned-count"><%= users.count %></span> records returned</div>
+  <div><span class="records-returned-count"><%= users.count %></span> records returned</div>
 </div>

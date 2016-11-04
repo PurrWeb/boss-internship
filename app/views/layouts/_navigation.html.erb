@@ -1,159 +1,166 @@
-<div class="title-bar" data-responsive-toggle="main-menu" data-hide-for="medium">
-  <button class="menu-icon" type="button" data-toggle></button>
-  <div class="title-bar-title">Menu</div>
-</div>
+<div class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header nav-brand-section">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <%= link_to 'Boss', root_path, class: 'navbar-brand' %>
+    </div>
 
-<div class="top-bar row align-top" id="main-menu">
-  <div class="column npl">
-    <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
-      <li class="menu-text"><%= link_to 'Boss', root_path, class: 'navbar-brand' %></li>
-        <% if current_user.present? %>
+    <% if current_user.present? %>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
           <% if can?(:manage, :staff_members) %>
-              <li class="nav-staff-members-section">
-                <%= link_to('Staff Members', staff_members_path, class: "nav-section-header-link") %>
-              </li>
+            <li class="nav-staff-members-section">
+              <%= link_to('Staff Members', staff_members_path, class: "nav-section-header-link") %>
+            </li>
           <% end %>
 
           <% if can?(:manage, :rotas) %>
-              <% if Venue.count > 0 && !(current_user.manager? && current_user.venues.count == 0) %>
-                  <li class="nav-rota-section">
-                    <%= link_to('Rota', rotas_path, class: "nav-section-header-link") %>
-                  </li>
-              <% end %>
+            <% if Venue.count > 0 && !(current_user.manager? && current_user.venues.count == 0) %>
+              <li class="nav-rota-section">
+                <%= link_to('Rota', rotas_path, class: "nav-section-header-link") %>
+              </li>
+            <% end %>
           <% end %>
 
           <% if can?(:view, :holidays) %>
-              <li class="nav-holiday-reports-section">
-                <%= link_to('Holidays', holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday))) %>
-              </li>
+            <li class="nav-holiday-reports-section">
+              <%= link_to('Holidays', holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday))) %>
+            </li>
           <% end %>
 
           <% if can?(:manage, :security_rota) %>
-              <li class="nav-security-rota-section">
-                <%= link_to(security_rotas_path, class: "nav-section-header-link") do %>
-                    Security Rota
-                <% end %>
-              </li>
+            <li class="nav-security-rota-section">
+              <%= link_to(security_rotas_path, class: "nav-section-header-link") do %>
+                Security Rota
+              <% end %>
+            </li>
           <% end %>
 
           <% if can?(:manage, :change_orders) %>
-              <li class="nav-change-orders-section">
-                <%= link_to('Change Orders', change_orders_path, class: 'nav-section-header-link') %>
-              </li>
+            <li class="nav-change-orders-section">
+              <%= link_to('Change Orders', change_orders_path, class: 'nav-section-header-link') %>
+            </li>
           <% end %>
 
           <% if can?(:manage, :fruit_orders) %>
-              <li class="nav-fruit-orders-section">
-                <%= link_to('Fruit Orders', fruit_orders_path, class: 'nav-section-header-link') %>
-              </li>
+            <li class="nav-fruit-orders-section">
+              <%= link_to('Fruit Orders', fruit_orders_path, class: 'nav-section-header-link') %>
+            </li>
           <% end %>
 
           <% if !current_user.security_manager? %>
-              <li class="nav-hours-confirmation-section">
-                <%= link_to('Hours Confirmation', current_hours_confirmation_index_path, class: 'nav-section-header-link') %>
-              </li>
+            <li class="nav-hours-confirmation-section">
+              <%= link_to('Hours Confirmation', current_hours_confirmation_index_path, class: 'nav-section-header-link') %>
+            </li>
           <% end %>
 
           <% if !current_user.security_manager? %>
-              <li>
-                <%= link_to('Safe Checks', safe_checks_path) %>
-              </li>
+            <li>
+              <%= link_to('Safe Checks', safe_checks_path) %>
+            </li>
           <% end %>
 
-          <li class="has-submenu">
-            <a href="#">
+          <li class="dropdown nav-reports-section">
+            <a href="#" class="nav-section-header-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               Reports <span class="caret"></span>
             </a>
-            <ul class="submenu menu vertical is-dropdown-submenu">
+            <ul class="dropdown-menu">
               <% if can?(:view, :daily_reports) %>
-                  <li class="nav-hours-daily-reports-section">
-                    <%= link_to('Daily Reports', daily_reports_path) %>
-                  </li>
+                <li class="nav-hours-daily-reports-section">
+                  <%= link_to('Daily Reports', daily_reports_path) %>
+                </li>
               <% end %>
               <% if can?(:view, :weekly_reports) %>
-                  <li class="nav-hours-weekly-reports-section">
-                    <%= link_to('Weekly Reports', weekly_reports_path) %>
-                  </li>
+                <li class="nav-hours-weekly-reports-section">
+                  <%= link_to('Weekly Reports', weekly_reports_path) %>
+                </li>
               <% end %>
               <% if can?(:view, :payroll_reports) %>
-                  <li class="nav-hours-payroll-reports-section">
-                    <%= link_to('Payroll Reports', payroll_reports_path) %>
-                  </li>
+                <li class="nav-hours-payroll-reports-section">
+                  <%= link_to('Payroll Reports', payroll_reports_path) %>
+                </li>
               <% end %>
             </ul>
           </li>
-          </ul>
-          </div>
-          <div class="shrink column npr">
-            <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
-              <% if can?(:manage, :admin) %>
-                <li class="has-submenu">
-                  <a href="#">
-                    Admin <span class="caret"></span>
-                  </a>
-                  <ul class="nav-admin-section submenu menu vertical is-dropdown-submenu" data-submenu>
-                    <li class="nav-invites-section">
-                      <%= link_to('Invites', invites_path) %>
-                    </li>
+        </ul>
 
-                    <li class="nav-users-section">
-                      <%= link_to('Users', users_path) %>
-                    </li>
+        <ul class="nav navbar-nav navbar-right">
+          <% if can?(:manage, :admin) %>
+            <li class="dropdown nav-admin-section">
+              <a href="#" class="nav-section-header-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                Admin <span class="caret"></span>
+              </a>
 
-                    <li class="nav-venues-section">
-                      <%= link_to('Venues', venues_path) %>
-                    </li>
-
-                    <% if can?(:manage, :admin) %>
-                        <li class="nav-staff-types-section">
-                          <%= link_to('Staff Types', staff_types_path) %>
-                        </li>
-                    <% end %>
-
-                    <li class="nav-pay-rates-section">
-                      <%= link_to('Pay rates', pay_rates_path) %>
-                    </li>
-
-                    <li class="nav-admin-change-orders-section">
-                      <%= link_to('Change Order Reports', change_order_reports_path) %>
-                    </li>
-
-                    <li class="nav-admin-fruit-orders-section">
-                      <%= link_to('Fruit Order Reports', fruit_order_reports_path) %>
-                    </li>
-
-                    <li class="nav-admin-finance-reports-section">
-                      <%= link_to('Finance Reports', finance_reports_path) %>
-                    </li>
-
-                    <li class="nav-admin-api-keys-section">
-                      <%= link_to('Staff Tracking', staff_tracking_index_path) %>
-                    </li>
-
-                    <li class="nav-admin-staff-vetting-section">
-                      <%= link_to('Staff Vetting', staff_vetting_index_path) %>
-                    </li>
-
-                    <li class="nav-admin-api-keys-section">
-                      <%= link_to('API Keys', api_keys_path) %>
-                    </li>
-
-                    <% if current_user.dev? %>
-                        <li class="nav-admin-error-test-section">
-                          <%= link_to('Error Test', rollbar_error_test_index_path) %>
-                        </li>
-                    <% end %>
-                  </ul>
+              <ul class="dropdown-menu">
+                <li class="nav-invites-section">
+                  <%= link_to('Invites', invites_path) %>
                 </li>
-            <% end %>
 
-            <li class="nav-user-section has-submenu">
-              <a href="#">Signed in as <%= current_user.email %></a>
-              <ul class="submenu menu vertical is-dropdown-submenu" data-submenu>
-                <li><%= link_to('Sign out', destroy_user_session_path, method: :delete) %></li>
+                <li class="nav-users-section">
+                  <%= link_to('Users', users_path) %>
+                </li>
+
+                <li class="nav-venues-section">
+                  <%= link_to('Venues', venues_path) %>
+                </li>
+
+                <% if can?(:manage, :admin) %>
+                  <li class="nav-staff-types-section">
+                    <%= link_to('Staff Types', staff_types_path) %>
+                  </li>
+                <% end %>
+
+                <li class="nav-pay-rates-section">
+                  <%= link_to('Pay rates', pay_rates_path) %>
+                </li>
+
+                <li class="nav-admin-change-orders-section">
+                  <%= link_to('Change Order Reports', change_order_reports_path) %>
+                </li>
+
+                <li class="nav-admin-fruit-orders-section">
+                  <%= link_to('Fruit Order Reports', fruit_order_reports_path) %>
+                </li>
+
+                <li class="nav-admin-finance-reports-section">
+                  <%= link_to('Finance Reports', finance_reports_path) %>
+                </li>
+
+                <li class="nav-admin-api-keys-section">
+                  <%= link_to('Staff Tracking', staff_tracking_index_path) %>
+                </li>
+
+                <li class="nav-admin-staff-vetting-section">
+                  <%= link_to('Staff Vetting', staff_vetting_index_path) %>
+                </li>
+
+                <li class="nav-admin-api-keys-section">
+                  <%= link_to('API Keys', api_keys_path) %>
+                </li>
+
+                <% if current_user.dev? %>
+                  <li class="nav-admin-error-test-section">
+                    <%= link_to('Error Test', rollbar_error_test_index_path) %>
+                  </li>
+                <% end %>
               </ul>
+            </li>
+          <% end %>
+
+          <li class="dropdown nav-user-section">
+            <a href="#" class="nav-section-header-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as <%= current_user.email %><span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><%= link_to('Sign out', destroy_user_session_path, method: :delete) %></li>
+            </ul>
           </li>
-      <% end %>
-    </ul>
+        </ul>
+      </div>
+    <% end %>
   </div>
 </div>

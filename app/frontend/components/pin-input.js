@@ -59,12 +59,12 @@ export default class PinInput extends React.Component {
 
         return <div style={{position: "relative"}}>
                 <input
-                    classname="mb-md"
                     type="password"
                     style={inputStyle}
                     value={this.props.pin}
                     onClick={e => e.preventDefault()}
                     />
+                <br/><br/>
                 <NumPad onNumberClick={this.throttledOnNumberClick} />
             </div>
     }

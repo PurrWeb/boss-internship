@@ -1,55 +1,43 @@
-<div class="row align-middle mb-md">
-  <div class="column">
-    <h1 class="nm">Users</h1>
-  </div>
-  <div class="shrink column">
-    <%= link_to('Manage Invites', invites_path, class: ['button']) %>
-  </div>
-</div>
+<h1>Users</h1>
+
+<%= link_to('Manage Invites', invites_path, class: ['btn', 'btn-primary']) %>
 
 <%= render partial: 'users_filter', locals: { filter: filter, users: users } %>
 
 <% if users.present? %>
-  <table
-    class="tablesaw tablesaw-stack"
-    data-tablesaw-mode="stack"
-  >
-    <thead>
-      <tr>
-        <th>Name</th>
-        <% if filter.many_statuses? %>
-            <th>Status</th>
-        <% end %>
-        <th>Email</th>
-        <th>Role</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% users.each do |user| %>
-          <tr class="users-index-listing" data-user-id="<%= user.id %>">
-            <td data-role="name">
-              <%= link_to(user_path(user)) do %>
-                  <%= user.full_name.titlecase %>
-              <% end %>
-            </td>
-            <% if filter.many_statuses? %>
-                <td>
-                  <%= user.current_state.titlecase %>
-                </td>
-            <% end %>
-            <td data-role="email">
-              <%= link_to(user_path(user)) do %>
-                  <%= user.email %>
-              <% end %>
-            </td>
-            <td data-role="role">
-              <%= link_to(user_path(user)) do %>
-                  <%= user.role.titleize %>
-              <% end %>
-            </td>
-          </tr>
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <% if filter.many_statuses? %>
+        <th>Status</th>
       <% end %>
-    </tbody>
+      <th>Email</th>
+      <th>Role</th>
+    <tr>
+    <% users.each do |user| %>
+      <tr class="users-index-listing" data-user-id="<%= user.id %>">
+        <td data-role="name">
+          <%= link_to(user_path(user)) do %>
+            <%= user.full_name.titlecase %>
+          <% end %>
+        </td>
+        <% if filter.many_statuses? %>
+          <td>
+            <%= user.current_state.titlecase %>
+          </td>
+        <% end %>
+        <td data-role="email">
+          <%= link_to(user_path(user)) do %>
+            <%= user.email %>
+          <% end %>
+        </td>
+        <td data-role="role">
+          <%= link_to(user_path(user)) do %>
+            <%= user.role.titleize %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
   </table>
   <%= render partial: 'shared/pagination_control', locals: { relation: users } %>
 <% end %>

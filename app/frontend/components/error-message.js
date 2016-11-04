@@ -7,7 +7,7 @@ var style = {
 
 export default class ErrorMessage extends React.Component {
     render(){
-        return <div className="callout alert" style={style}>
+        return <div className="alert alert-danger" style={style}>
             {this.props.children}
         </div>
     }

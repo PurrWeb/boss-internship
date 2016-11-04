@@ -22,10 +22,10 @@ export default class HoursAcceptancePeriodList extends React.Component {
         var addShiftButton = null;
         if (this.hasClockedOut()){
             addShiftButton = <a
-                className="button"
+                className="btn btn-default"
                 data-test-marker-add-hours-acceptance-period
                 onClick={() => this.addHours()}>
-                <i className="fa fa-plus mr-base" />Add Shift
+                Add Shift
             </a>
         }
 
@@ -34,10 +34,12 @@ export default class HoursAcceptancePeriodList extends React.Component {
         return <div>
             {orderedHAPs.map(
                 (hoursAcceptancePeriod) =>
-                    <div
-                        className="mb-base"
-                        key={hoursAcceptancePeriod.clientId}
-                    >
+                    <div key={hoursAcceptancePeriod.clientId}
+                        style={{
+                            border: "1px solid #ddd",
+                            padding: 5,
+                            marginBottom: 5
+                        }}>
                         <HoursAcceptancePeriodListItem
                             boundActions={this.props.boundActions}
                             clockInBreaks={this.props.clockInBreaks}
@@ -61,8 +63,9 @@ export default class HoursAcceptancePeriodList extends React.Component {
         if (this.areAllShiftsAccepted() && this.hasClockedOut()) {
             return <button
                 onClick={this.props.markDayAsDone}
-                className="button success pull-right">
-                <i className="fa fa-check mr-base" />Done
+                style={{float: "right"}}
+                className="btn btn-success">
+                Done
             </button>
         }
         return null;

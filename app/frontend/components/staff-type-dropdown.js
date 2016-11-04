@@ -4,7 +4,6 @@ import { connect } from "react-redux"
 import Select from "react-select"
 import { selectStaffTypesWithShifts } from "~redux/selectors"
 import getArrayOfIdsFromReactSelectValue from "~lib/get-array-of-ids-from-react-select-value";
-import cx from 'classnames';
 
 export default class StaffTypeDropdown extends Component {
     static propTypes = {
@@ -19,9 +18,9 @@ export default class StaffTypeDropdown extends Component {
             }
         })
         staffTypeOptions = _.values(staffTypeOptions);
-        const className = cx('staff-type-dropdown', this.props.className);
+
         return (
-            <div className={className}>
+            <div className="staff-type-dropdown">
                 <Select
                     value={this.props.selectedStaffTypes.join(",")}
                     options={staffTypeOptions}

@@ -27,7 +27,7 @@ export default class ChartAndFilterUi extends React.Component {
         var previewStaffDetails = this.getStaffDetailsComponent(this.props.staffToPreview);
 
         return <div className="row">
-            <div className="column">
+            <div className="col-md-9">
                 <RotaChart
                     rotaShifts={this.getRotaShiftsToDisplay()}
                     staff={this.props.staffMembers}
@@ -38,7 +38,7 @@ export default class ChartAndFilterUi extends React.Component {
                     staffTypes={this.props.staffTypes}
                     getShiftColor={(shift) => this.getShiftColor(shift)} />
             </div>
-            <div className="shrink column">
+            <div className="col-md-3">
                 <VenueDropdown 
                     venues={this.props.venues}
                     multi={true}

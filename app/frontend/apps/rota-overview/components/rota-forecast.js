@@ -13,7 +13,7 @@ export default class RotaForecast extends React.Component {
         isUpdatingForecast: React.PropTypes.bool
     }
     render(){
-        return <div className="rota-forecast column">
+        return <div className="rota-forecast">
             {this.getForecastHeaderRow()}
             {this.getForecastBody()}
         </div>
@@ -41,13 +41,13 @@ export default class RotaForecast extends React.Component {
                 <input
                     data-test-marker-forecasted-take
                     value={this.props.forecastedTake}
-                    style={{width: "85%", textAlign: "right", display: "inline-block", margin: 0}}
+                    style={{width: "85%", textAlign: "right"}}
                     onChange={(event) => this.props.onForecastedTakeChanged(event.target.value)}
                     type="text" />
             </div>
 
             updateForecastButton = <a
-                className="button small"
+                className="btn btn-default btn-sm"
                 data-test-marker-update-forecast-button
                 onClick={this.props.onUpdateForecastClick} >
                 Update
@@ -58,18 +58,20 @@ export default class RotaForecast extends React.Component {
             }
         }
 
-        return <div className="rota-forecast__header-row">
-                <div className="row align-middle">
-                    <div className="column">
+        return <div className="rota-forecast__header-row row">
+            <div className="col-md-12">
+                <div className="row">
+                    <div className="col-md-4">
                         Forecast
                     </div>
-                    <div className="shrink column">
+                    <div className="col-md-5" style={{textAlign: "right"}}>
                         {forecastedTakeComponent}
                     </div>
-                    <div className="rota-forecast__update shrink column">
+                    <div className="col-md-3" style={{textAlign: "right"}}>
                         {updateForecastButton}
                     </div>
                 </div>
+            </div>
             {this.getErrorComponent()}
 
         </div>
@@ -82,13 +84,13 @@ export default class RotaForecast extends React.Component {
     }
     getDataRowComponent(row){
         return <div className="row" key={row.title}>
-            <div className="column">
+            <div className="col-md-4">
                 {row.title}
             </div>
-            <div className="shrink column">
+            <div className="col-md-5" style={{textAlign: "right"}}>
                 &pound;{utils.formatMoney(row.total/100)}
             </div>
-            <div className="small-2 column">
+            <div className="col-md-3" style={{textAlign: "right"}}>
                 {row.percentage !== null ? (Math.round(row.percentage*100)/100) + "%" : "-"}
             </div>
         </div>

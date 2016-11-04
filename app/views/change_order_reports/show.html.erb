@@ -4,7 +4,7 @@
     <%= link_to(
           'Back to Overview',
           change_order_reports_path,
-          class: 'button success'
+          class: 'btn btn-success'
         ) %>
   </div>
 </div>
@@ -17,16 +17,16 @@
 <% end %>
 
 <% if venues_without_change_orders.count > 0 %>
-  <h3>Venues without submissions</h3>
+  <h2 class="h3">Venues without submissions</h2>
   <p>
     <%= venues_without_change_orders.map(&:name).to_sentence %>
   </p>
 <% end %>
 
 <% if change_orders.count > 0 %>
-  <h3>Change orders</h3>
+  <h2 class="h3">Change orders</h2>
 
-  <table class="scroll">
+  <table class="table">
     <thead>
       <tr>
         <th>Venue</th>

@@ -11,14 +11,7 @@ class StaffTypesController < ApplicationController
     ids.each do |id|
       properties = update_color_params(params["staff_type"][id])
       type = StaffType.find(properties.fetch("id"))
-
-      form_color = properties.fetch("ui_color")
-
-      if color_valid?(form_color)
-        type.update_attributes!(ui_color: form_color[1, form_color.length].upcase)
-      else
-        Rollbar.error("Invalid color #{form_color} encountered")
-      end
+      type.update_attributes!(ui_color: properties.fetch("ui_color"))
     end
 
     flash[:success] = 'Update successful'
@@ -28,14 +21,6 @@ class StaffTypesController < ApplicationController
   private
   def authorize
     authorize! :manage, :admin
-  end
-
-  def color_valid?(form_color)
-    form_color =~ hex_color_regex
-  end
-
-  def hex_color_regex
-    /^\#[0-9a-fA-F]{6}$/
   end
 
   def update_color_params(properties)

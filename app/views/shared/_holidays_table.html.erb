@@ -1,15 +1,10 @@
-<table
-  class="tablesaw tablesaw-stack"
-  data-tablesaw-mode="stack"
->
+<table class="table">
   <thead>
-    <tr>
-      <th>Type</th>
-      <th>Dates</th>
-      <th>Note</th>
-      <th>Created By</th>
-      <th>Action</th>
-    </tr>
+    <th>Type</th>
+    <th>Dates</th>
+    <th>Note</th>
+    <th>Created By</th>
+    <th></th>
   </thead>
   <tbody>
     <% holidays.order(start_date: :desc).each do |holiday| %>
@@ -29,29 +24,22 @@
           </p>
         </td>
         <td>
-          <div class="row">
-            <div class="shrink column npr">
-              <% if holiday.editable? && can?(:edit, holiday) %>
-                  <%= link_to(edit_holiday_path(holiday), class: 'button small mb-sm') do %>
-                      <i class="fa fa-pencil mr-sm"></i>Edit
-                  <% end %>
+          <% if holiday.editable? && can?(:edit, holiday) %>
+            <%= link_to('Edit', edit_holiday_path(holiday), class: 'btn btn-success') %>
+          <% end %>
+
+          <% if holiday.editable? && can?(:destroy, holiday) %>
+            <%= link_to(
+                  staff_member_holiday_path(
+                    staff_member_id: staff_member.id,
+                    id: holiday.id
+                  ),
+                  method: :delete,
+                  class: 'btn btn-danger'
+                ) do %>
+              Delete <span class="glyphicon glyphicon-remove"></span>
             <% end %>
-            </div>
-            <div class="shrink column">
-              <% if holiday.editable? && can?(:destroy, holiday) %>
-                  <%= link_to(
-                          staff_member_holiday_path(
-                              staff_member_id: staff_member.id,
-                              id: holiday.id
-                          ),
-                          method: :delete,
-                          class: 'button small alert'
-                      ) do %>
-                      <i class="fa fa-remove mr-sm"></i>Delete
-                  <% end %>
-              <% end %>
-            </div>
-          </div>
+          <% end %>
         </td>
       </tr>
     <% end %>

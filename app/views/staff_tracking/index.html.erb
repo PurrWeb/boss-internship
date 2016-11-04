@@ -1,11 +1,9 @@
-<% content_for(:main_class, 'wide') %>
-
 <h1>Staff Tracking</h1>
 
 <h3><%= "#{venue.name.titlecase} " if venue.present? %><%= week.start_date %> - <%= week.end_date %></h3>
 
 <%= bootstrap_form_for('staff_tracking_index', url: staff_tracking_index_path, html: { method: :get }) do |form| %>
-  <div class="mb-md">
+  <div class="form-inline">
     <%= form.select(
           :venue_id,
           options_for_select(
@@ -21,16 +19,14 @@
           {
             name: 'venue_id'
           }) %>
-    <div class="mb-md">
-      <%= form.text_field(
+    <%= form.text_field(
           :start_date,
           label: 'Week',
           value: week.start_date && UIRotaDate.format(week.start_date),
           class: 'static-week-picker',
           name: 'week_start'
-      ) %>
-    </div>
-    <%= form.submit('Update', class: 'button') %>
+        ) %>
+    <%= form.submit('Update') %>
   </div>
 <% end %>
 

@@ -28,12 +28,11 @@
   <% else %>
     <dd>Not Supplied</dd>
   <% end %>
-</dl>
-
-<% if staff_member.enabled? %>
+  <% if staff_member.enabled? %>
     <%= link_to(
-            'Edit',
-            edit_contact_details_staff_member_path(staff_member),
-            class: ['button', 'staff-member-edit-contact-details-button']
+          'Edit',
+          edit_contact_details_staff_member_path(staff_member),
+          class: ['btn', 'btn-primary', 'staff-member-edit-contact-details-button']
         ) %>
-<% end %>
+  <% end %>
+</dl>

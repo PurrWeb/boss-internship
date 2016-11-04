@@ -1,15 +1,10 @@
 <h1>API Keys</h1>
 
-<table
-  class="tablesaw tablesaw-stack"
-  data-tablesaw-mode="stack"
->
+<table class="table">
   <thead>
-    <tr>
-      <th>Venue</th>
-      <th>Key</th>
-      <th>Action</th>
-    </tr>
+    <th>Venue</th>
+    <th>Key</th>
+    <th></th>
   </thead>
   <tbody>
     <% venue_keys.each do |venue, key| %>
@@ -24,13 +19,9 @@
         </td>
         <td>
           <% if key.present? %>
-            <%= link_to(api_key_path(key), class: 'button small alert', method: 'DELETE') do %>
-              <i class="fa fa-remove mr-sm"></i>Revoke
-            <% end %>
+            <%= link_to('Revoke', api_key_path(key), class: 'btn btn-danger', method: 'DELETE') %>
           <% else %>
-            <%= link_to(api_keys_path(venue_id: venue.id), class: 'button small', method: 'POST') do %>
-              <i class="fa fa-plus mr-sm"></i>Generate
-            <% end %>
+            <%= link_to('Generate', api_keys_path(venue_id: venue.id), class: 'btn btn-primary', method: 'POST') %>
           <% end %>
         </td>
     </tr>

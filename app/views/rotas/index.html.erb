@@ -1,11 +1,6 @@
-<h1 class="page-header row mb-xl">
-  <div class="shrink column">
-    <%= venue.name %> Rotas
-  </div>
-  <div class="shrink column">
-    <small><%= start_date.to_s(:human_date) %> - <%= end_date.to_s(:human_date) %></small>
-  </div>
-</h1>
+<div class="page-header">
+  <h1><%= venue.name %> Rotas <small><%= start_date.to_s(:human_date) %> - <%= end_date.to_s(:human_date) %></small></h1>
+</div>
 
 <%= javascript_tag do %>
   var rotas = [];

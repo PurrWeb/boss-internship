@@ -26,7 +26,7 @@ class ClockInOutStaffListItem extends Component {
         var rotaedShiftsColumn = null;
         var statusToggleButtons = null;
 
-        rotaedShiftsColumn = <div className="shrink column">
+        rotaedShiftsColumn = <div className="col-md-2 col-xs-4">
             <span style={columnNameStyle}>
                 Rotaed Shifts
             </span>
@@ -36,38 +36,33 @@ class ClockInOutStaffListItem extends Component {
                 venues={this.props.venues} />
         </div>;
 
-        statusToggleButtons = <div className="shrink column">
+        statusToggleButtons = <div className="col-md-3 col-xs-10" style={{paddingTop: 5}}>
             {this.getStaffMemberStatusToggleButtons()}
         </div>
 
         return <div className="staff-list-item staff-list-item--clock-in-out">
-            <div className="row align-middle">
-                <div className="shrink column">
-                    <img src={staffMember.avatar_url} className="avatar" />
+            <div className="row">
+                <div className="col-md-1 col-xs-2">
+                    <img src={staffMember.avatar_url} className="staff-list-item__avatar" />
                 </div>
-                <div className="shrink column">
-                    <div className="staff-list-item--clock-in-out__name mb-base">
+                <div className="col-md-4 col-xs-10">
+                    <div className="staff-list-item--clock-in-out__name">
                         {staffMember.first_name} {staffMember.surname}
                     </div>
-                    <div className="row align-middle">
-                        <div className="shrink column npr">
-                            <StaffTypeBadge
-                                staffTypeObject={staffMember.staffType} />
-                        </div>
-                        <div className="shrink column">
-                            <div className="staff-list-item--clock-in-out__manager-buttons">
-                                {this.getAddNoteButton()}
-                                {this.getChangePinButton()}
-                                {this.getManagerModeButton()}
-                            </div>
-                        </div>
+                    <StaffTypeBadge
+                        staffTypeObject={staffMember.staffType} />
+                    <div className="staff-list-item--clock-in-out__manager-buttons">
+                        {this.getAddNoteButton()}
+                        {this.getChangePinButton()}
+                        {this.getManagerModeButton()}
+
                     </div>
                 </div>
                 {rotaedShiftsColumn}
-                <div className="column">
+                <div className="col-md-2 col-xs-6">
                     {this.getClockInNotesList()}
                 </div>
-                <div className="staff-list-item--clock-in-out__status shrink column">
+                <div className="col-md-2 col-xs-2 staff-list-item--clock-in-out__status">
                     <ClockInStatusBadge clockInStatusValue={clockInStatusValue} />
                 </div>
                 {statusToggleButtons}
@@ -117,7 +112,7 @@ class ClockInOutStaffListItem extends Component {
             return <Spinner />
         }
         return <button
-            className="button small"
+            className="btn btn-default btn-sm"
             style={{marginRight: 2}}
             data-test-marker-add-note
             onClick={() => this.props.addNote(
@@ -149,7 +144,7 @@ class ClockInOutStaffListItem extends Component {
         }
 
         return <a
-                className="button small show-in-manager-mode--inline-block"
+                className="btn btn-default btn-sm show-in-manager-mode--inline-block"
                 data-test-marker-change-pin-button
                 onClick={() => this.props.updateStaffMemberPin({
                     staffMemberObject: staffMember
@@ -172,7 +167,7 @@ class ClockInOutStaffListItem extends Component {
         return <a
             onClick={() => this.props.enterUserMode(staffMember.staffType.name, this.props.staff)}
             data-test-marker-enter-manager-mode
-            className="button small hide-in-manager-mode--inline-block">
+            className="btn btn-default btn-sm hide-in-manager-mode--inline-block">
             Enter Manager Mode
         </a>
     }

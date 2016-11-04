@@ -21,16 +21,16 @@
       ) %>
 <% end %>
 
-<%= link_to(new_safe_check_path(venue_id: current_venue.id), class: ['button', 'mb-md']) do %>
-    <span class="fa fa-plus mr-base"></span>Add New
+<%= link_to(new_safe_check_path(venue_id: current_venue.id), class: ['btn', 'btn-primary']) do %>
+  Add New <span class="glyphicon glyphicon-plus"></span>
 <% end %>
 
-<div class="mb-md">
+<div>
   <%= page_entries_info(safe_checks, html: true, model: nil) %>
 </div>
 
 <% if safe_checks.count > 0 %>
-  <table class="scroll" style="text-align: center;">
+  <table class="table table-striped" style="text-align: center;">
     <thead>
       <tr>
         <th style="text-align: center;">Time</th>
@@ -174,5 +174,5 @@
     </tbody>
   </table>
 
-  <%= will_paginate(safe_checks, renderer: FoundationPagination::Rails) %>
+  <%= will_paginate(safe_checks, renderer: BootstrapPagination::Rails) %>
 <% end %>

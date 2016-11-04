@@ -1,11 +1,9 @@
 <div class="container">
-  <div class="row align-middle mb-md">
-    <div class="column"><h1 style="display: inline">Hours Confirmations for <%= venue.name %> <%= date %></h1></div>
-    <div class="shrink column">
+  <div>
+    <h1 style="display: inline">Hours Confirmations for <%= venue.name %> <%= date %></h1>
+    <div class="pull-right">
       <% date = RotaShiftDate.to_rota_date(Time.current) %>
-      <%= link_to(current_hours_confirmation_index_path(venue_id: venue.id), class: "button") do %>
-          <i class="fa fa-calendar-check-o mr-base"></i>View current
-      <% end %>
+      <%= link_to('View current',  current_hours_confirmation_index_path(venue_id: venue.id), class: "btn btn-success") %>
     </div>
   </div>
   <%= react_component('HoursConfirmationApp') %>
