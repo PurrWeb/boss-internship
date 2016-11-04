@@ -12,7 +12,7 @@ export default class DateAndVenueSelector extends React.Component {
     render(){
         var selectedVenues = [this.props.venueClientId];
         return <div className="row">
-            <div className="column">
+            <div className="col-md-6">
                 <DatePicker
                     date={this.props.date}
                     onChange={(date) => {
@@ -22,7 +22,7 @@ export default class DateAndVenueSelector extends React.Component {
                         });
                     } }/>
             </div>
-            <div className="column">
+            <div className="col-md-6">
                 <VenueDropdown
                     venues={this.props.venues}
                     selectedVenues={selectedVenues}

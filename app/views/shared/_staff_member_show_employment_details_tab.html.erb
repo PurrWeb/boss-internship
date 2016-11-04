@@ -57,12 +57,13 @@
     <dt class="show-page-detail-heading">SIA Badge Expiry Date</dt>
     <dd class="show-page-detail" data-detail="sia-badge-expiry-date"><%= staff_member.sia_badge_expiry_date.to_s(:human_date) %></dd>
   <% end %>
-</dl>
 
-<% if staff_member.enabled? %>
+
+  <% if staff_member.enabled? %>
     <%= link_to(
-            'Edit',
-            edit_employment_details_staff_member_path(staff_member),
-            class: ['button', 'staff-member-edit-employment-details-button']
+          'Edit',
+          edit_employment_details_staff_member_path(staff_member),
+          class: ['btn', 'btn-primary', 'staff-member-edit-employment-details-button']
         ) %>
-<% end %>
+  <% end %>
+</dl>

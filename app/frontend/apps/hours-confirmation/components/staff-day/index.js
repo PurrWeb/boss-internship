@@ -107,22 +107,20 @@ export default class StaffDay extends React.Component {
                     rotaedAcceptedHoursDifference={rotaedAcceptedHoursDifference}
                 />
                 <div className="row">
-                    <div className="shrink column">
-                        <div className="mb-base">
-                            <img
-                              className="avatar"
-                              src={staffMember.avatar_url}
-                            />
-                        </div>
+                    <div className="col-md-2">
+                        <img
+                            src={staffMember.avatar_url}
+                            style={{width: "90%", marginBottom: 4}}
+                        />
                         <StaffTypeBadge staffTypeObject={staffType} />
                         <div style={{marginTop: 4}}>
                             Status: {clockInStatus.title}
                         </div>
                         <ComponentErrors errorHandlingId={this.clockOutErrorId} />
                     </div>
-                    <div className="column">
-                        <div className="row mb-base">
-                            <div className="shrink column">
+                    <div className="col-md-10">
+                        <div className="row">
+                            <div className="col-md-8">
                                 <HoursChart
                                     rotaDate={this.state.lastValidData.rotaDate}
                                     rotaedShifts={this.state.lastValidData.rotaedShifts}
@@ -132,7 +130,7 @@ export default class StaffDay extends React.Component {
                                     clockInBreaks={this.state.lastValidData.clockInBreaks}
                                 />
                             </div>
-                            <div className="column">
+                            <div className="col-md-4">
                                 <div className="staff-day__sub-heading">Notes</div>
                                 <ClockInNotesList notes={this.props.clockInNotes} />
                             </div>

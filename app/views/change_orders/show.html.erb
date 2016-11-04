@@ -3,10 +3,10 @@
     <div class="pull-right">
       <%= link_to(
             change_order_path(change_order),
-            class: 'button alert',
+            class: 'btn btn-danger',
             method: :delete
           ) do %>
-          <span class="fa fa-fire mr-base"></span>Delete Change Order
+          <span class="glyphicon glyphicon-fire"></span> Delete Change Order
         <% end %>
     </div>
   <% end %>
@@ -14,7 +14,7 @@
   <h1>Change Order </h1>
 </div>
 
-<ul class="no-bullet">
+<ul class="list-unstyled">
   <li><b>Venue: <%= change_order.venue.name %></b></li>
   <li>Created at <%= change_order.created_at.to_s(:human) %></li>
   <li><b>Status: <%= change_order.current_state.titlecase %></b></li>

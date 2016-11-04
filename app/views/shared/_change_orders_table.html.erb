@@ -1,4 +1,4 @@
-<table class="scroll">
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Venue</th>
@@ -23,6 +23,8 @@
         <td><%= number_to_currency(change_order.ten_pence_coins, unit: '£', precision: 2) %></td>
         <td><%= number_to_currency(change_order.five_pence_coins, unit: '£', precision: 2) %></td>
         <td><%= number_to_currency(change_order.total, unit: '£', precision: 2) %></td>
+
+
         <td>
           <%= render partial: action_partial, locals: { change_order: change_order } %>
         </td>

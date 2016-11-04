@@ -29,13 +29,13 @@ export default class StaffFilter extends Component {
 
         var titleColumns = titles.map((title) => this.getFilterTitle(title));
         var componentColumns = filters.map(function(filter){
-            return <div className="small-3 medium-2 column" key={filter.title}>
+            return <div className="col-md-2 col-xs-3" key={filter.title}>
                 {filter.component}
             </div>
         });
 
         return (
-            <div className="mb-lg">
+            <div>
                 <div className="row">
                     {titleColumns}
                 </div>
@@ -66,7 +66,6 @@ export default class StaffFilter extends Component {
     }
     getSearchFilter(){
         var component = <input
-            type="text"
             value={this.props.filterSettings.search}
             style={{maxWidth: "100%"}}
             data-test-marker-staff-text-search
@@ -120,7 +119,7 @@ export default class StaffFilter extends Component {
         }
     }
     getFilterTitle(titleString){
-        return <div className="small-3 medium-2 column" key={titleString}>
+        return <div className="col-md-2 col-xs-3" key={titleString}>
             {titleString}
         </div>
     }

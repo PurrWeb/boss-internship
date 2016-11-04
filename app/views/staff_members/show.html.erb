@@ -1,20 +1,18 @@
-<div class="row mb-md">
-  <div class="shrink column mb-md">
+<div class="media">
+  <div class="media-left">
     <div class="staff-member-page-staff-image">
       <img class="avatar-image avatar-image_medium" src="<%= staff_member.avatar.medium.url %>" />
       <% if staff_member.enabled? %>
-        <%= link_to(edit_avatar_staff_member_path(staff_member), class: "button small") do %>
-          <i class="fa fa-pencil mr-sm"></i>Edit
-        <% end %>
+        <%= link_to('Edit', edit_avatar_staff_member_path(staff_member), class: "btn btn-primary btn-xs") %>
       <% end %>
     </div>
   </div>
-  <div class="column">
-    <h1>
+  <div class="media-body">
+    <h1 class="media-heading">
       <% if staff_member.flagged? %>
         <%= staff_member.full_name.titlecase %>
         <span class="text-danger">
-          <span class="fa fa-warning mr-base"></span>Flagged
+          <span class="glyphicon glyphicon-warning-sign"></span> Flagged
         </span>
       <% elsif staff_member.disabled? %>
         <%= staff_member.full_name.titlecase %> (Disabled)
@@ -27,66 +25,66 @@
       <p class="h4">Reason for disabling: <%= staff_member.disable_reason %></p>
     <% end %>
   </div>
-  <div class="shrink column">
+  <div class="media-right">
     <% if can?(:disable, staff_member) %>
-      <%= link_to(disable_staff_member_path(staff_member), class: 'button alert disable-staff-member-button') do %>
-        <span class="fa fa-fire mr-base"></span>Disable Staff Member
+      <%= link_to(disable_staff_member_path(staff_member), class: 'btn btn-danger disable-staff-member-button') do %>
+        <span class="glyphicon glyphicon-fire"></span> Disable Staff Member
       <% end %>
     <% end %>
     <% if can?(:enable, staff_member) %>
-      <%= link_to(enable_staff_member_path(staff_member), class: 'button alert enable-staff-member-button') do %>
-        <span class="fa fa-heart mr-base"></span>Enable Staff Member
+      <%= link_to(enable_staff_member_path(staff_member), class: 'btn btn-danger enable-staff-member-button') do %>
+        <span class="glyphicon glyphicon-heart"></span> Enable Staff Member
       <% end %>
     <% end %>
   </div>
-</div>
+</div
 
 <div class="container-fluid">
-  <ul class="tabs staff-member-nav-tabs" role="tablist" data-tabs id="staff-member-nav-tabs">
-    <li role="presentation" class="<%= StaffMemberShowPage.tab_title_class('employment-details', active_tab) %>">
-      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'employment-details') %>" href="#employment-tab">
+  <ul class="nav nav-tabs staff-member-nav-tabs" role="tablist">
+    <li role="presentation" class="<%= StaffMemberShowPage.tab_class('employment-details', active_tab) %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'employment-details') %>" data-target="#employment-tab">
         Employment Details
       </a>
     </li>
-    <li role="presentation" class="<%= StaffMemberShowPage.tab_title_class('account-details', active_tab) %>">
-      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'account-details') %>" href="#account-tab">Account Details</a>
+    <li role="presentation" class="<%= StaffMemberShowPage.tab_class('account-details', active_tab) %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'account-details') %>" data-target="#account-tab">Account Details</a>
     </li>
-    <li role="presentation" class="<%= StaffMemberShowPage.tab_title_class('personal-details', active_tab) %>">
-      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'personal-details') %>" href="#personal-tab">Personal Details</a>
+    <li role="presentation" class="<%= "active" if active_tab == 'personal-details' %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'personal-details') %>" data-target="#personal-tab">Personal Details</a>
     </li>
-    <li role="presentation" class="<%= StaffMemberShowPage.tab_title_class('contact-details', active_tab) %>">
-      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'contact-details') %>" href="#contact-tab">Contact Details</a>
+    <li role="presentation" class="<%= StaffMemberShowPage.tab_class('contact-details', active_tab) %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'contact-details') %>" data-target="#contact-tab">Contact Details</a>
     </li>
-    <li role="presentation" class="<%= StaffMemberShowPage.tab_title_class('holidays', active_tab) %>">
-      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'holidays') %>" href="#holidays-tab">Holidays</a>
+    <li role="presentation" class="<%= StaffMemberShowPage.tab_class('holidays', active_tab) %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'holidays') %>" data-target="#holidays-tab">Holidays</a>
     </li>
-    <li role="presentation" class="<%= StaffMemberShowPage.tab_title_class('owed-hours', active_tab) %>">
-      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'owed-hours') %>" href="#owed-hours-tab">Owed Hours</a>
+    <li role="presentation" class="<%= StaffMemberShowPage.tab_class('owed-hours', active_tab) %>">
+      <a data-push-state-url="<%= staff_member_path(staff_member, tab: 'owed-hours') %>" data-target="#owed-hours-tab">Owed Hours</a>
     </li>
   </ul>
 
-  <div class="tabs-content" data-tabs-content="staff-member-nav-tabs">
-    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_content_class('employment-details', active_tab) %>" id="employment-tab">
+  <div class="tab-content">
+    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('employment-details', active_tab) %>" id="employment-tab">
       <%= render partial: 'shared/staff_member_show_employment_details_tab', locals: { staff_member: staff_member } %>
     </div>
 
-    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_content_class('account-details', active_tab) %>" id="account-tab">
+    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('account-details', active_tab) %>" id="account-tab">
       <%= render partial: 'shared/staff_member_show_account_details_tab', locals: { staff_member: staff_member } %>
     </div>
 
-    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_content_class('personal-details', active_tab) %>" id="personal-tab">
+    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('personal-details', active_tab) %>" id="personal-tab">
       <%= render partial: 'shared/staff_member_show_personal_details_tab', locals: { staff_member: staff_member } %>
     </div>
 
-    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_content_class('contact-details', active_tab) %>" id="contact-tab">
+    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('contact-details', active_tab) %>" id="contact-tab">
       <%= render partial: 'shared/staff_member_show_contact_details_tab', locals: { staff_member: staff_member } %>
     </div>
 
-    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_content_class('holidays', active_tab) %>" id="holidays-tab">
+    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('holidays', active_tab) %>" id="holidays-tab">
       <%= render partial: 'shared/staff_member_show_holidays_tab', locals: { staff_member: staff_member, holiday: holiday } %>
     </div>
 
-    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_content_class('owed-hours', active_tab) %>" id="owed-hours-tab">
+    <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_class('owed-hours', active_tab) %>" id="owed-hours-tab">
       <%= render partial: 'shared/staff_member_show_owed_hours_tab', locals: { staff_member: staff_member, owed_hours_week: owed_hours_week, owed_hour: owed_hour } %>
     </div>
   </div>

@@ -10,7 +10,7 @@ export default class HolidayReportView extends React.Component {
         return <div>
 
             <div className="row">
-                <div className="shrink column">
+                <div className="col-md-6">
                     <WeekAndVenueSelector
                         weekStartDate={new Date(this.props.pageOptions.weekStartDate)}
                         onChange={({startDate, endDate, venueClientId}) => {
@@ -31,10 +31,8 @@ export default class HolidayReportView extends React.Component {
                 </div>
             </div>
             <hr/>
-            <div className="row">
-                <div className="column"><h2 style={{fontSize: 20}}>Find Staff</h2></div>
-                <div className="shrink column">{ csvDownloadButton(this.props) }</div>
-            </div>
+            { csvDownloadButton(this.props) }
+            <h2 style={{fontSize: 20}}>Find Staff</h2>
             <HolidayReportStaffFinder />
         </div>
     }
@@ -56,13 +54,13 @@ function csvDownloadButton(props){
       props.pageOptions.weekStartDate  &&
       (holidayCount > 0)
     ) {
-    return <a
-        className="button"
+    return <a className="btn btn-default"
+        style={{float: "right"}}
         href={appRoutes.holidaysCsv({
           date: props.pageOptions.weekStartDate,
           venueId: props.pageOptions.venueServerId
         })}>
-        <i className="fa fa-download mr-base" />Download as CSV
+        Download as CSV
     </a>;
   }
 }

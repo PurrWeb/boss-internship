@@ -7,17 +7,15 @@ export default class AddShiftButton extends Component {
         canAddShift: React.PropTypes.bool.isRequired
     }
     render() {
-        var className = "button small expanded";
+        var className = "btn btn-default";
         if (!this.props.canAddShift) {
             className += " disabled";
         }
 
         return <a
                 className={className}
-                onClick={() => this.onClick()}
-                style={{whiteSpace: 'nowrap'}}
-        >
-                <i className="fa fa-plus mr-base" />Add shift
+                onClick={() => this.onClick()}>
+                Add shift
             </a>
     }
     onClick() {

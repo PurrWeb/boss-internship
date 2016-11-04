@@ -1,3 +1,0 @@
-server: bundle exec rails server
-guard: bundle exec guard -P livereload
-webpack: webpack --watch

@@ -12,7 +12,7 @@ class UserActionConfirmationMessages extends React.Component {
                 {message}
             </div>
         })
-        return <div className="callout">
+        return <div className="alert alert-info">
             {messageElements}
         </div>
     }

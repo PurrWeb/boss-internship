@@ -1,34 +1,27 @@
 <h1>Daily Reports</h1>
 
-<div class="row align-middle mb-md">
-  <div class="shrink column"><%= venue.name.titlecase %> <%= date.to_s(:human_date) %></div>
-  <div class="shrink column"><%= link_to('View weekly report', weekly_reports_path(venue_id: venue.id, week_start: UIRotaDate.format(week.start_date)), class: 'button') %></div>
-</div>
+<p><%= venue.name.titlecase %> <%= date.to_s(:human_date) %> <%= link_to('View weekly report', weekly_reports_path(venue_id: venue.id, week_start: UIRotaDate.format(week.start_date))) %></p>
 
-<%= bootstrap_form_for('', url: daily_reports_path, html: { method: :get, class: 'row align-bottom' }) do |form| %>
-    <div class="small-12 medium-expand column">
-      <%= form.select(
-              :venue_id,
-              options_for_select(
-                  accessible_venues.map do |venue|
-                    [venue.name, venue.id]
-                  end,
-                  venue.id
-              ),
-              {
-                  include_blank: false
-              }) %>
-    </div>
-    <div class="small-12 medium-expand column">
-      <%= form.text_field(
+<%= bootstrap_form_for('', url: daily_reports_path, html: { method: :get, class: 'form-inline' }) do |form| %>
+    <%= form.select(
+          :venue_id,
+          options_for_select(
+            accessible_venues.map do |venue|
+              [venue.name, venue.id]
+            end,
+            venue.id
+          ),
+          {
+            include_blank: false
+          }) %>
+
+  <%= form.text_field(
         :date,
         value: UIRotaDate.format(date),
         class: 'date-picker'
       ) %>
-    </div>
-    <div class="small-12 medium-shrink column">
-      <%= form.submit('Update', class: 'button mb-mn') %>
-    </div>
+
+  <%= form.submit('Update') %>
 <% end %>
 
 <div>
@@ -41,7 +34,7 @@
       </p>
     <% end %>
   <% else %>
-    <div class="mb-lg">
+    <div>
       <h2>Overview</h2>
       <dl>
         <dt>Overheads:</dt>
@@ -74,17 +67,15 @@
 
     <% daily_report.staff_member_sections.each do |section| %>
       <div>
-        <div class="row align-middle">
-          <div class="shrink column">
-            <h3>
-              <div class="boss-badge" style="font-size: 1.1em; background-color: #<%= section.staff_type.ui_color %>"><%= section.staff_type.name %></div>
-            </h3>
-          </div>
-          <div class="column h4">
+        <div class="row">
+          <h3 style="display: inline-block">
+            <div class="boss-badge" style="font-size: 1.1em; background-color: #<%= section.staff_type.ui_color %>"><%= section.staff_type.name %></div>
+          </h3>
+          <div class="h4">
             Rotaed Cost: <%= number_to_currency(section.rotaed_cost_cents / 100.0, unit: '£') %></span>, <span class="h4">Actual Cost: <%= number_to_currency(section.actual_cost_cents / 100.0, unit: '£') %>
           </div>
         </div>
-        <table class="scroll mb-lg" style="text-align: center;">
+        <table class="table table-striped" style="text-align: center;">
           <thead>
             <tr>
               <th style="text-align: center;">Name</th>

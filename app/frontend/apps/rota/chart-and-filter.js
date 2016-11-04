@@ -26,7 +26,7 @@ export class ChartAndFilter extends Component {
 
         return (
             <div className="row">
-                <div className="shrink column">
+                <div className="col-md-9">
                     <RotaChart
                         rotaShifts={rotaShifts}
                         staff={this.props.staff}
@@ -38,16 +38,18 @@ export class ChartAndFilter extends Component {
                         getShiftColor={(shift) => this.getShiftColor(shift)}
                         />
                 </div>
-                <div className="column">
-                    <label>Filter chart</label>
+                <div className="col-md-3">
+                    Filter chart
                     <StaffTypeDropdown
-                        className="mb-base"
                         selectedStaffTypes={this.state.staffTypeFilter}
                         staffTypes={this.getStaffTypesWithShifts()}
                         onChange={
                             (value) => this.setState({"staffTypeFilter": value})
                         } />
-                        <p>Showing {_.values(rotaShifts).length} out of {this.props.rotaShifts.length} shifts.</p>
+
+                    <div styles={{marginTop: 4}}>
+                        Showing {_.values(rotaShifts).length} out of {this.props.rotaShifts.length} shifts.
+                    </div>
 
                     <div className="chart-and-filter__shift-editor-container">
                         <ChartSelectionView

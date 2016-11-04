@@ -2,7 +2,7 @@
 <div class="h3"><%= venue.name.titlecase %> <%= week.start_date.to_s(:human_date) %>-<%= week.end_date.to_s(:human_date) %></div>
 
 <%= bootstrap_form_for('weekly_report_index', url: weekly_reports_path, html: { method: :get }) do |form| %>
-  <div>
+  <div class="form-inline">
     <%= form.select(
           :venue_id,
           options_for_select(
@@ -17,19 +17,18 @@
           {
             name: 'venue_id'
           }) %>
-    <div class="mb-md">
-      <%= form.text_field(
-              :start_date,
-              label: 'Week',
-              value: week.start_date && UIRotaDate.format(week.start_date),
-              class: 'static-week-picker',
-              name: 'week_start'
-          ) %>
-    </div>
-    <%= form.submit('Update', class: 'button mb-lg') %>
+    <%= form.text_field(
+          :start_date,
+          label: 'Week',
+          value: week.start_date && UIRotaDate.format(week.start_date),
+          class: 'static-week-picker',
+          name: 'week_start'
+        ) %>
+
+    <%= form.submit('Update') %>
 <% end %>
 
-<table class="scroll">
+<table class="table">
   <thead>
     <tr>
       <th>Day</th>

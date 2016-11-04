@@ -12,10 +12,10 @@
             ) do |form| %>
           <%= form.text_field(:name_text, label: 'Name', value: filter.name_text) %>
           <%= form.text_field(:email_text, label: 'Email', value: filter.email_text) %>
-          <%= form.submit('Update', class: 'button') %>
+          <%= form.submit('Update') %>
         <% end %>
       </div>
     </div>
   </div>
-  <div class="mb-base"><span class="records-returned-count"><%= staff_members.count %></span> records returned</div>
+  <div><span class="records-returned-count"><%= staff_members.count %></span> records returned</div>
 </div>

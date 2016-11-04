@@ -259,7 +259,6 @@ export default class HoursChartUi extends React.Component {
         var group = chart
             .append("g")
             .attr("transform", "translate(" + (padding + labelSpacing - 10) + ",0)")
-            .attr("style", "font-size: .85em")
         group.append("text")
             .text("Rotaed")
             .attr("transform", "translate(0, 25)")

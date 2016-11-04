@@ -36,10 +36,12 @@ class ConfirmationModal extends React.Component {
                                 pin={this.state.pin}
                                 onChange={pin => this.setState({pin})}
                                 />
+
+
                             <button
                                 type="submit"
-                                className="button large expanded"
-                                style={{marginTop: 20}}>
+                                className="btn btn-lg btn-primary"
+                                style={{marginTop: 10, width: "100%"}}>
                                 OK
                             </button>
                         </form>

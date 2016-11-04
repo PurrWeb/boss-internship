@@ -1,24 +1,24 @@
-<div class="row align-middle">
-  <div class="column"><h1>Current Fruit Order</h1></div>
+<div>
   <% if can?(:destroy, current_fruit_order) %>
-      <div class="shrink column">
-        <%= link_to(
-                fruit_order_path(current_fruit_order),
-                class: 'button alert',
-                method: :delete
-            ) do %>
-            <span class="fa fa-fire mr-base"></span>Delete Current Order
+    <div class="pull-right">
+      <%= link_to(
+            fruit_order_path(current_fruit_order),
+            class: 'btn btn-danger',
+            method: :delete
+          ) do %>
+          <span class="glyphicon glyphicon-fire"></span> Delete Current Order
         <% end %>
-      </div>
+    </div>
   <% end %>
+
+  <h1>Current Fruit Order</h1>
 </div>
 
 <%= link_to(
       'View past fruit orders',
       submitted_fruit_orders_path(
         venue_id: current_venue.id
-      ),
-      class: 'button mb-md'
+      )
     ) %>
 
 <%= bootstrap_form_for(

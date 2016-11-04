@@ -11,7 +11,6 @@ import ComponentErrors from "~components/component-errors"
 import getStaffTypeFromShift from "~lib/get-staff-type-from-shift"
 import { canEditStaffTypeShifts, selectShiftIsBeingEdited } from "~redux/selectors"
 import ShiftTypeSelector from "~components/shift-type-selector"
-import cx from 'classnames';
 
 class ShiftEditorUi extends Component {
     render(){
@@ -21,27 +20,34 @@ class ShiftEditorUi extends Component {
 
         return <div>
             <div className="row">
-                <div className="column">
+                <div className="col-md-9">
                     <ShiftTimeSelector
                         rotaDate={this.props.rotaDate}
                         defaultShiftTimes={this.props.shift}
                         onChange={this.props.onShiftTimesChange} />
-                    <ShiftTypeSelector
-                        shiftType={this.props.shiftType}
-                        onChange={this.props.onShiftTypeChange}/>
                 </div>
-                <div className="shrink column">
+                <div className="col-md-3">
                     <br/>
                     {this.getUpdateButton()}
-                    {this.getDeleteButton()}
                     {this.getSpinner()}
                 </div>
             </div>
             {this.getComponentErrors()}
+
+            <div className="row">
+                <div className="col-md-9">
+                    <ShiftTypeSelector
+                        shiftType={this.props.shiftType}
+                        onChange={this.props.onShiftTypeChange}/>
+                </div>
+                <div className="col-md-3">
+                    {this.getDeleteButton()}
+                </div>
+            </div>
         </div>
     }
     getUpdateButton(){
-        var updateButtonClasses = ["button", "expanded", "mb-md"];
+        var updateButtonClasses = ["btn", "btn-primary"];
         if (!this.props.areBothTimesValid) {
             updateButtonClasses.push("disabled");
         }
@@ -65,10 +71,9 @@ class ShiftEditorUi extends Component {
         if (!this.props.canEditShift) {
             return null;
         }
-        const className = cx('button expanded alert', {disabled: this.props.shiftIsBeingEdited});
         return <a
             onClick={this.props.deleteShift}
-            className={className}>
+            className={this.props.shiftIsBeingEdited ? "link-disabled" : ""}>
             Delete
         </a>
     }

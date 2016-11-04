@@ -10,48 +10,25 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require rails_bootstrap_forms
  *= require chosen
- *= require jquery-ui
- *= require spectrum
+ *= require pick-a-color.min
+ *= require bootstrap-datepicker3
  *= require_tree .
  *= require_self
  */
 
- @import "foundation_and_overrides";
- @import "tablesaw";
+
+ @import "bootstrap-sprockets";
+ @import "bootstrap";
+ @import "bootstrap/theme";
  @import "jquery-ui/jquery-ui";
- @import "jquery-ui/flat.datepicker";
+ @import "jquery-ui/jquery.ui.datepicker";
  @import "../../../node_modules/react-select/dist/react-select";
  @import "../../../node_modules/cropperjs/dist/cropper";
  @import "../../../node_modules/nvd3/build/nv.d3";
 
  @import "components/rota-overview-chart";
-
- @import "font-awesome-sprockets";
- @import "font-awesome";
-
-.main {
-  padding-top: $spacing-md;
-  padding-bottom: $spacing-md;
-  &.wide {
-    max-width: $global-width-increased;
-  }
-}
-
-.avatar {
-  max-width: 150px;
-  max-height: 150px;
-  height: auto;
-  width: auto;
-}
-
-.page-header {
-  line-height: 1;
-}
-
-.rota-overview-chart {
-  min-width: 700px;
-}
 
 label:not(.force-not-required).required:after {
   content:" *";
@@ -60,6 +37,7 @@ label:not(.force-not-required).required:after {
 .show-page-detail-heading {
   font-weight: bold;
 }
+
 
 .avatar-image_medium {
   width: 150px;
@@ -92,23 +70,4 @@ label:not(.force-not-required).required:after {
 
 .dt-horizontal__wrap-headings dt {
   white-space: normal;
-}
-
-.Select-control {
-  min-width: 200px;
-}
-
-// Class used in bootstrap for red text
-.text-danger{
-  color: red;
-}
-
-// Class used in bootstrap for green text
-.text-success{
-  color: green;
-}
-
-// Class used in bootstrap for orange text
-.text-warning{
-  color: #FF4500;
 }
