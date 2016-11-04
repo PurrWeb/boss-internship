@@ -3,18 +3,18 @@
 <%= render partial: 'flagged_staff_member_filter', locals: { filter: filter, staff_members: staff_members } %>
 
 <% if staff_members.present? %>
-  <ul class="list-unstyled flagged-staff-member-list">
+  <ul class="no-bullet flagged-staff-member-list">
     <% staff_members.each do |staff_member| %>
       <li class="staff-member-listing" data-staff-member-id="<%= staff_member.id %>">
         <div class="panel panel-default">
-          <div class="media">
-            <div class="media-left">
-              <img class="media-object" src="<%= staff_member.avatar.small.url %>" />
+          <div class="panel-body media-object">
+            <div class="media-object-section">
+              <img src="<%= staff_member.avatar.small.url %>" alt="Avatar">
             </div>
-            <div class="media-body">
-              <h4 class="media-heading">
+            <div class="media-object-section">
+              <h4>
                 <%= staff_member.full_name.titlecase %>
-                <%= link_to('View', staff_member_path(staff_member), class: 'btn btn-success') %>
+                <%= link_to('View', staff_member_path(staff_member), class: 'button small') %>
               </h4>
               <p>Email Address: <%= staff_member.email || 'Not supplied' %></p>
               <p>Staff Type: <%= staff_member.staff_type.name.titlecase %></p>

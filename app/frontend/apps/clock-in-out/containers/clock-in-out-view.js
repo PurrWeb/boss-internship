@@ -31,9 +31,9 @@ class ClockInOutView extends Component {
     getReloadPageButton(){
         return <div style={{marginTop: 20}}>
             <button
-                className="btn btn-default btn-sm"
+                className="button small secondary"
                 onClick={() => location.reload()}>
-                Reload Page
+                <i className="fa fa-refresh" /> Reload Page
             </button>
         </div>
     }
@@ -46,7 +46,7 @@ class ClockInOutView extends Component {
         var resetVenueButton = null;
         if (this.props.userPermissions.resetVenue) {
             resetVenueButton = <button
-                className="btn btn-danger"
+                className="button alert"
                 style={{marginTop: 20, marginBottom: 20}}
                 onClick={() => this.resetVenue()}>
                 Reset Venue

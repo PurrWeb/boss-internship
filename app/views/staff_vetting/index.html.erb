@@ -1,27 +1,57 @@
 <h1>Staff Vetting</h1>
 
 <div class="row">
-  <div class="col-md-4">
+  <div class="shrink column">
     <div class="list-group">
       <%= link_to(staff_members_without_email_staff_vetting_index_path, class: "list-group-item") do %>
-        Staff without Email Address
-        <span class="badge"><%= staff_without_email_count %></span>
+        <div class="row align-middle">
+          <div class="column">
+            Staff without Email Address
+          </div>
+          <div class="shrink column">
+            <span class="badge"><%= staff_without_email_count %></span>
+          </div>
+        </div>
       <% end %>
       <%= link_to(staff_members_without_ni_number_staff_vetting_index_path, class: "list-group-item") do %>
-        Staff without NI Number
-        <span class="badge"><%= staff_without_ni_number_count %></span>
+        <div class="row align-middle">
+          <div class="column">
+            Staff without NI Number
+          </div>
+          <div class="shrink column">
+            <span class="badge"><%= staff_without_ni_number_count %></span>
+          </div>
+        </div>
       <% end %>
       <%= link_to(staff_members_without_address_staff_vetting_index_path, class: "list-group-item") do %>
-        Staff without Address
-        <span class="badge"><%= staff_without_address_count %></span>
+        <div class="row align-middle">
+          <div class="column">
+            Staff without Address
+          </div>
+          <div class="shrink column">
+            <span class="badge"><%= staff_without_address_count %></span>
+          </div>
+        </div>
       <% end %>
       <%= link_to(staff_members_without_photo_staff_vetting_index_path, class: "list-group-item") do %>
-        Staff without Photo
-        <span class="badge"><%= staff_without_photo_count %></span>
+        <div class="row align-middle">
+          <div class="column">
+            Staff without Photo
+          </div>
+          <div class="shrink column">
+            <span class="badge"><%= staff_without_photo_count %></span>
+          </div>
+        </div>
       <% end %>
       <%= link_to(staff_members_on_wrong_payrate_staff_vetting_index_path, class: "list-group-item") do %>
-        Staff On Wrong Pay Rate
-        <span class="badge"><%= staff_on_wrong_payrate_count %></span>
+        <div class="row align-middle">
+          <div class="column">
+            Staff On Wrong Pay Rate
+          </div>
+          <div class="shrink column">
+            <span class="badge"><%= staff_on_wrong_payrate_count %></span>
+          </div>
+        </div>
       <% end %>
       <%= link_to(staff_members_with_expired_sia_badge_staff_vetting_index_path, class: 'list-group-item') do %>
         Security Staff with Expired SIA Badge

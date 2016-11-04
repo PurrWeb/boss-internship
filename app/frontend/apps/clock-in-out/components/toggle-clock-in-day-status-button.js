@@ -20,13 +20,12 @@ export default class ToggleClockInDayStatusButton extends Component {
 
         var label = this.props.statusLabels[nextStatusId];
 
-        return <a className="btn btn-default btn-sm"
+        return <a className="button small"
             onClick={() => this.onClick()}
             data-test-marker-toggle-staff-status>
             <span
-                className={["glyphicon", "glyphicon-" + this.props.icon].join(" ")}
-                style={{display: "inline-block", marginRight: 3}} />
-            {label}
+                className={["fa", "fa-"  + this.props.icon].join(" ")}
+            /> {label}
         </a>
     }
     onClick(){

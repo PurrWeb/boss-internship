@@ -34,11 +34,11 @@ export default class StaffImageInput extends React.Component {
                 maxWidth: "80vw",
                 marginBottom: 10}
             }>
-            <div className="col-md-6">
+            <div className="small-12 medium-6 column">
                 {this.getImagePicker()}
                 {this.getImageCropper()}
             </div>
-            <div className="col-md-6">
+            <div className="small-12 medium-6 column">
                 {this.getCroppedImageUi()}
             </div>
         </div>
@@ -59,10 +59,10 @@ export default class StaffImageInput extends React.Component {
         </div>
     }
     getRotateButton(){
-        return <a className="btn btn-default" onClick={() => this.rotateImage()}>Rotate</a>
+        return <a className="button secondary" onClick={() => this.rotateImage()}>Rotate</a>
     }
     getOkButton(){
-        var classes = ["btn btn-primary"];
+        var classes = ["button"];
         if (!this.imageDimensionsAreValid(this.state.imageDimensions)){
             classes.push("disabled");
         }
@@ -134,7 +134,7 @@ export default class StaffImageInput extends React.Component {
         if (validation.isValid) {
             return null;
         }
-        return <div className="alert alert-danger" style={{marginTop: 10}}s>
+        return <div className="callout alert" style={{marginTop: 10}}s>
             {validation.message}
         </div>
     }
@@ -185,7 +185,7 @@ export default class StaffImageInput extends React.Component {
     }
     getResetButtton(){
         return <button
-            className="btn btn-default"
+            className="button"
             onClick={() => {
                 this.reset()
             }}>

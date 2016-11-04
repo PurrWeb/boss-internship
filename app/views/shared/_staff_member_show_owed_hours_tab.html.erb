@@ -32,16 +32,16 @@
             <td><p><%= owed_hour.note %></p></td>
             <td>
               <% if owed_hour.editable? %>
-              <%= link_to('Edit', edit_owed_hour_path(owed_hour), class: 'btn btn-success') %>
+              <%= link_to('Edit', edit_owed_hour_path(owed_hour), class: 'button success') %>
                 <%= link_to(
                       staff_member_owed_hour_path(
                         staff_member_id: staff_member.id,
                         id: owed_hour.id
                       ),
                       method: :delete,
-                      class: 'btn btn-danger'
+                      class: 'button alert'
                     ) do %>
-                  Delete <span class="glyphicon glyphicon-remove"></span>
+                  Delete <span class="fa fa-remove"></span>
                 <% end %>
               <% end %>
             </td>

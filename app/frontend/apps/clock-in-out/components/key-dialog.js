@@ -7,7 +7,7 @@ export default class KeyDialog extends React.Component {
         if (this.props.loadDataInProgress) {
             buttonOrSpinner = <Spinner />
         } else {
-            buttonOrSpinner = <button type="submit" className="btn btn-primary"
+            buttonOrSpinner = <button type="submit" className="button"
                 data-test-marker-api-key-button>
                 Load Clock In/Out page
             </button>
@@ -26,7 +26,6 @@ export default class KeyDialog extends React.Component {
                   ref={(input) => this.apiKeyInput = input}>
               </input>
             </label>
-            <br/><br/>
             {buttonOrSpinner}
         </form>
     }
