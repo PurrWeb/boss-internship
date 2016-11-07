@@ -20,7 +20,9 @@ export default class FilterableStaffList extends Component {
 
         return (
             <table>
+              <tbody>
                 {staffListItems}
+              </tbody>
             </table>
         );
     }
