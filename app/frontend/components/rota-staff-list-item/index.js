@@ -39,11 +39,11 @@ class RotaStaffListItem extends Component {
         var staffTypeObject = staff.staff_type.get(this.props.staffTypes);
 
         return (
-            <tr className="staff-list-item rota-staff-list-item">
-                    <td>
+            <div className="staff-list-item rota-staff-list-item">
+                    <div>
                         <img src={staff.avatar_url} className="avatar" />
-                    </td>
-                    <td>
+                    </div>
+                    <div>
                         <div className="rota-staff-list-item__header">
                             <div className="row align-middle">
                                 <div className="shrink column npr">
@@ -96,8 +96,8 @@ class RotaStaffListItem extends Component {
                                 {staff.preferred_days}
                             </div>
                         </div>
-                    </td>
-                    <td>
+                    </div>
+                    <div>
                         <div style={{overflow: "hidden"}}>
                             <div className="rota-staff-list-item__add-button">
                                 <AddShiftButton
@@ -116,8 +116,8 @@ class RotaStaffListItem extends Component {
                         <div style={{marginTop: 10}}>
                             <ComponentErrors errorHandlingId={this.componentId} />
                         </div>
-                    </td>
-                </tr>
+                    </div>
+                </div>
         );
     }
     addShift(){

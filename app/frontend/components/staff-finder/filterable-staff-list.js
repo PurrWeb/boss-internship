@@ -13,17 +13,17 @@ export default class FilterableStaffList extends Component {
         var self = this;
         var staffListItems = staffToShow.map(
             (staff, i) =>
+              <li key={staff.clientId}>
                 <this.props.staffItemComponent
                     key={staff.clientId}
                     staff={staff} />
+              </li>
         );
 
         return (
-            <table>
-              <tbody>
-                {staffListItems}
-              </tbody>
-            </table>
+            <ul className="no-bullet">
+              {staffListItems}
+            </ul>
         );
     }
     getStaffToShow() {
