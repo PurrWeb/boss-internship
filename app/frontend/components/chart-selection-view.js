@@ -41,6 +41,6 @@ export default class ChartSelectionView extends React.Component {
         }
         return <div
             onClick={this.props.clearSelection}
-            className={"glyphicon glyphicon-remove chart-selection-view__clear-button"} />
+            className={"fa fa-remove chart-selection-view__clear-button"} />
     }
 }

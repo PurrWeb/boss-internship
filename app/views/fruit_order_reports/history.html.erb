@@ -1,12 +1,12 @@
 <div>
   <div class="pull-right">
-    <%= link_to('Back to current orders', fruit_order_reports_path, class: 'btn btn-success') %>
+    <%= link_to('Back to current orders', fruit_order_reports_path, class: 'button success') %>
   </div>
 
   <h1>Fruit Order History</h1>
 
   <% if fruit_orders.to_a.count > 0 %>
-    <ul class="list-unstyled">
+    <ul class="no-bullet">
       <% fruit_orders.each do |fruit_order| %>
         <li>
           <p>
@@ -15,7 +15,7 @@
           <p>
             Marked compelete at <%= fruit_order.done_at.to_s(:human) %> by <%= fruit_order.done_user.full_name %>
           </p>
-          <%= link_to('View', fruit_order_path(fruit_order), class: 'btn btn-success') %>
+          <%= link_to('View', fruit_order_path(fruit_order), class: 'button success') %>
         </li>
       <% end %>
     </ul>

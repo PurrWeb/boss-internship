@@ -1,52 +1,56 @@
 <h1>Invites</h1>
 
-<%= link_to('Invite new user', new_invite_path, class: ['btn', 'btn-primary']) %>
+<%= link_to('Invite new user', new_invite_path, class: ['button mb-md']) %>
 
 <%= render partial: 'invites_filter', locals: { filter: filter, invites: invites } %>
 
 <% if invites.present? %>
-  <table class="table">
-    <tr>
-      <th>Email</th>
-      <th>Role</th>
-      <th>Venues</th>
-      <th>Status</th>
-      <th>Inviter</th>
-      <th>Invited At</th>
-      <th></th>
-    <tr>
+  <table class="scroll">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Venues</th>
+        <th>Status</th>
+        <th>Inviter</th>
+        <th>Invited At</th>
+        <th></th>
+      <tr>
+    </thead>
+    <tbody>
     <% invites.each do |invite| %>
-      <tr class="invites-index-listing" data-invite-id="<%= invite.id %>">
-        <td data-role="email">
-          <%= invite.email %>
-        </td>
-        <td data-role="role">
-          <%= invite.role.titleize %>
-        </td>
-        <td data-role="venues">
-          <% if invite.role == 'manager' %>
-            <% venues = invite.venue_ids.map { |id| Venue.find_by(id: id) }.compact %>
-            <%= venues.map(&:name).to_sentence %>
-          <% else %>
-            All
-          <% end %>
-        </td>
-        <td data-role="status">
-          <%= invite.current_state.titleize %>
-        </td>
-        <td data-role="inviter">
-          <%= invite.inviter.full_name.titlecase %>
-        </td>
-        <td data-role="invited-at">
-          <%= invite.created_at.to_s(:human_date) %>
-        </td>
-        <td data-role="revoke-button">
-          <% if invite.can_transition_to?(:revoked) %>
-            <%= button_to 'Revoke', revoke_invite_path(invite), class: 'btn btn-danger' %>
-          <% end %>
-        </td>
-      </tr>
+        <tr class="invites-index-listing" data-invite-id="<%= invite.id %>">
+          <td data-role="email">
+            <%= invite.email %>
+          </td>
+          <td data-role="role">
+            <%= invite.role.titleize %>
+          </td>
+          <td data-role="venues">
+            <% if invite.role == 'manager' %>
+                <% venues = invite.venue_ids.map { |id| Venue.find_by(id: id) }.compact %>
+                <%= venues.map(&:name).to_sentence %>
+            <% else %>
+                All
+            <% end %>
+          </td>
+          <td data-role="status">
+            <%= invite.current_state.titleize %>
+          </td>
+          <td data-role="inviter">
+            <%= invite.inviter.full_name.titlecase %>
+          </td>
+          <td data-role="invited-at">
+            <%= invite.created_at.to_s(:human_date) %>
+          </td>
+          <td data-role="revoke-button">
+            <% if invite.can_transition_to?(:revoked) %>
+                <%= button_to 'Revoke', revoke_invite_path(invite), class: 'button alert' %>
+            <% end %>
+          </td>
+        </tr>
     <% end %>
+    </tbody>
   </table>
   <%= render partial: 'shared/pagination_control', locals: { relation: invites } %>
 <% end %>

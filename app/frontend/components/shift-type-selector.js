@@ -7,7 +7,7 @@ export default class ShiftTypeSelector extends React.Component {
     }
     render(){
         var isStandby = this.props.shiftType === "standby";
-        return <label style={{fontWeight: "normal"}}>
+        return <label>
             <input
                 type="checkbox"
                 checked={isStandby}

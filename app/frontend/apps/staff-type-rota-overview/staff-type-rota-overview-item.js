@@ -36,7 +36,7 @@ export default class StaffTypeRotaOverviewItem extends Component {
                 <h2>{moment(dateOfRota).format("ddd D MMMM YYYY")}</h2>
             </a>    
             <div className="row">
-                <div className="col-md-9">
+                <div className="column">
                     <StaffTypeRotaOverviewChart
                         staff={this.props.staff}
                         shifts={utils.indexByClientId(this.props.rotaShifts)}
@@ -47,7 +47,7 @@ export default class StaffTypeRotaOverviewItem extends Component {
                         onHoverShiftsChange={(hoverData) => this.setState({hoverData})}
                         onSelectionShiftsChange={(selectionData) => this.setState({selectionData})} />
                 </div>
-                <div className="col-md-3">
+                <div className="shrink column">
                     <ChartSelectionView
                         previewComponent={previewShiftList}
                         selectionComponent={selectionShiftList} />

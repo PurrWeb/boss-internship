@@ -3,7 +3,7 @@
     <%= link_to(
           'View current order',
           change_orders_path(venue_id: venue.id),
-          class: 'btn btn-success'
+          class: 'button success'
         ) %>
   </div>
 
@@ -11,7 +11,7 @@
 </div>
 
 <% if change_orders.count > 0 %>
-  <ul class="list-unstyled">
+  <ul class="no-bullet">
     <% change_orders.each do |change_order| %>
       <li>
         <p><b>Status: <%= change_order.current_state.titlecase %></b></p>

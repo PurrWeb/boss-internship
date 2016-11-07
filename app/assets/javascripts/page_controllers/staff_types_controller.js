@@ -6,6 +6,6 @@ StaffTypesController.prototype.index = function(){
     type = field.data("type");
 
     badge = $('.staff-badge[data-type="' + type + '"]');
-    badge.attr('style', 'background-color: #' + field.val());
+    badge.attr('style', 'background-color: ' + field.val());
   });
 }

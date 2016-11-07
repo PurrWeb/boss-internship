@@ -7,6 +7,7 @@ import GenericRotaNavigation from "~components/rota-navigation"
 class RotaNavigation extends React.Component {
     render(){
         return <GenericRotaNavigation
+            className="mb-md"
             dateOfRota={this.props.dateOfRota}
             getRotaLink={(date) => appRoutes.staffTypeRota({
                 staffTypeSlug: this.props.staffTypeSlug,

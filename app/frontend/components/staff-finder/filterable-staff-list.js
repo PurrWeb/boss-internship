@@ -19,9 +19,9 @@ export default class FilterableStaffList extends Component {
         );
 
         return (
-            <div>
+            <table>
                 {staffListItems}
-            </div>
+            </table>
         );
     }
     getStaffToShow() {
