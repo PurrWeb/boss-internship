@@ -39,85 +39,91 @@ class RotaStaffListItem extends Component {
         var staffTypeObject = staff.staff_type.get(this.props.staffTypes);
 
         return (
-            <div className="staff-list-item rota-staff-list-item">
-                    <div>
-                        <img src={staff.avatar_url} className="avatar" />
-                    </div>
-                    <div>
-                        <div className="rota-staff-list-item__header">
-                            <div className="row align-middle">
-                                <div className="shrink column npr">
-                                    <h3 className="rota-staff-list-item__name nm">
-                                      <a
-                                        href={appRoutes.staffMember(staff.serverId)}
-                                        className="link-unstyled"
-                                      >
-                                        {staff.first_name} {staff.surname}
-                                      </a>
-                                    </h3>
-                                </div>
-                                <div className="shrink column">
-                                    <StaffTypeBadge staffTypeObject={staffTypeObject} />
-                                </div>
+            <div className="row staff-list-item rota-staff-list-item">
+                <div className="small-12  large-2 columns">
+                    <img src={staff.avatar_url} className="avatar" />
+                </div>
+                <div className="columns">
+                    <div className="row">
+                        <div className="shrink columns npr">
+                            <div className="rota-staff-list-item__header">
+                                <h3 className="rota-staff-list-item__name nm">
+                                  <a
+                                    href={appRoutes.staffMember(staff.serverId)}
+                                    className="link-unstyled"
+                                  >
+                                    {staff.first_name} {staff.surname}
+                                  </a>
+                                </h3>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="shrink column">
-                                <h4 className="rota-staff-list-item__h4" style={{textDecoration: "none"}}>
-                                    <u>Shifts</u>
-                                    <span>
-                                        &nbsp;({this.props.totalWeeklyHours}h)
-                                    </span>
-                                </h4>
-                                <StaffShiftList
-                                    shifts={utils.indexByClientId(this.props.staffMemberShifts)}
-                                    venues={this.props.venues}
-                                    rotas={this.props.rotas}
-                                    showDate={true}
-                                    showVenue={true} />
-                            </div>
-                            <div className="shrink column">
-                                <h4 className="rota-staff-list-item__h4 mr-md" style={{
-                                    display: "inline-block",
-                                }}>
-                                    Holidays
-                                </h4>
-                                <StaffMemberHolidaysLink staffMemberServerId={staff.serverId} >
-                                    <i className="fa fa-pencil" /> Edit
-                                </StaffMemberHolidaysLink>
-                                <StaffHolidaysList staffMemberClientId={staff.clientId} />
-                            </div>
-                            <div className="shrink column">
-                                <h4 className="rota-staff-list-item__h4">
-                                    Preferences
-                                </h4>
-                                Weekly Hours: {staff.preferred_hours}<br/>
-                                Day Preferences:&nbsp;
-                                {staff.preferred_days}
-                            </div>
+                        <div className="small-1 large-1 large-end column">
+                            <StaffTypeBadge staffTypeObject={staffTypeObject} />
                         </div>
                     </div>
-                    <div>
-                        <div style={{overflow: "hidden"}}>
-                            <div className="rota-staff-list-item__add-button">
-                                <AddShiftButton
-                                    canAddShift={this.canAddShift()}
-                                    addShift={() => this.addShift()}
-                                    />
-                            </div>
-                            <div style={{
-                                float: "left",
-                                marginTop: 40,
-                                marginLeft: 10
+                    <div className="row">
+                        <div className="small-12 large-shrink column">
+                            <h4 className="rota-staff-list-item__h4" style={{textDecoration: "none"}}>
+                                <u>Shifts</u>
+                                <span>
+                                    &nbsp;({this.props.totalWeeklyHours}h)
+                                </span>
+                            </h4>
+                            <StaffShiftList
+                                shifts={utils.indexByClientId(this.props.staffMemberShifts)}
+                                venues={this.props.venues}
+                                rotas={this.props.rotas}
+                                showDate={true}
+                                showVenue={true} />
+                        </div>
+                        <div className="large-shrink small-12 column">
+                            <h4 className="rota-staff-list-item__h4 mr-md" style={{
+                                display: "inline-block",
                             }}>
-                                {shiftSavingInProgressSpinner}
+                                Holidays
+                            </h4>
+                            <StaffMemberHolidaysLink staffMemberServerId={staff.serverId} >
+                                <i className="fa fa-pencil" /> Edit
+                            </StaffMemberHolidaysLink>
+                            <StaffHolidaysList staffMemberClientId={staff.clientId} />
+                        </div>
+                        <div className="large-shrink small-12 column">
+                            <h4 className="rota-staff-list-item__h4">
+                                Preferences
+                            </h4>
+                            Weekly Hours: {staff.preferred_hours}<br/>
+                            Day Preferences:&nbsp;
+                            {staff.preferred_days}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="shrink column">
+                            <div>
+                                <div className="rota-staff-list-item__add-button">
+                                    <AddShiftButton
+                                        canAddShift={this.canAddShift()}
+                                        addShift={() => this.addShift()}
+                                        />
+                                </div>
+                                <div style={{
+                                    float: "left",
+                                    marginTop: 40,
+                                    marginLeft: 10
+                                }}>
+                                    {shiftSavingInProgressSpinner}
+                                </div>
                             </div>
                         </div>
-                        <div style={{marginTop: 10}}>
-                            <ComponentErrors errorHandlingId={this.componentId} />
+                    </div>
+                    <div className="row">
+                        <div className="shrink column">
+                            <div style={{marginTop: 10}}>
+                                <ComponentErrors errorHandlingId={this.componentId} />
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
         );
     }
     addShift(){
