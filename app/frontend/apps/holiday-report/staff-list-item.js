@@ -17,37 +17,47 @@ export default class StaffListItem extends React.Component {
         var staffType = this.props.staffType;
         return <div className="staff-list-item">
             <div className="row">
-                <div className="shrink column">
+                <div className="large-2 small-12 column">
                     <img src={staff.avatar_url} className="avatar" />
                 </div>
-                <div className="shrink column">
-                    <div className="row align-middle mb-base">
-                        <div className="shrink column npr">
-                            <h3 className="holiday-report-staff-list-item__name">
-                                {staff.first_name} {staff.surname}
-                            </h3>
-                        </div>
+                <div className="column">
+                    <div className="row">
                         <div className="shrink column">
-                            <StaffTypeBadge staffTypeObject={staffType} />
+                            <div className="row align-middle mb-base">
+                                <div className="shrink column npr">
+                                    <h3 className="holiday-report-staff-list-item__name">
+                                        {staff.first_name} {staff.surname}
+                                    </h3>
+                                </div>
+                                <div className="shrink column">
+                                    <StaffTypeBadge staffTypeObject={staffType} />
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <p>Venues: {this.props.venues.map(venue => venue.name).join(', ')}</p>
-                    <StaffMemberHolidaysLink staffMemberServerId={staff.serverId}>
-                        View all holidays
-                    </StaffMemberHolidaysLink>
-                </div>
-
-                <div className="shrink column">
-                    <h4>Paid Holiday</h4>
-                    <StaffHolidaysList holidays={this.props.paidHolidays} />
-                </div>
-                <div className="shrink column" data-test-marker-unpaid-holidays>
-                    <h4>Unpaid Holiday</h4>
-                    <StaffHolidaysList holidays={this.props.unpaidHolidays} />
-                </div>
-                <div className="column">
-                    <h4>Paid Holiday days</h4>
-                    {holidayDaysCount(this.props.paidHolidays)}
+                    <div className="row">
+                        <div className="large-shrink small-12 column">
+                            <h4>Venues</h4>
+                            <p>{this.props.venues.map(venue => venue.name).join(', ')}</p>
+                        </div>
+                        <div className="large-shrink small-12 column">
+                            <h4>Paid Holiday</h4>
+                            <StaffHolidaysList holidays={this.props.paidHolidays} />
+                        </div>
+                        <div className="large-shrink small-12 column" data-test-marker-unpaid-holidays>
+                            <h4>Unpaid Holiday</h4>
+                            <StaffHolidaysList holidays={this.props.unpaidHolidays} />
+                        </div>
+                        <div className="large-shrink small-12 column">
+                            <h4>Paid Holiday days</h4>
+                            {holidayDaysCount(this.props.paidHolidays)}
+                        </div>
+                        <div className="large-shrink small-12 column">
+                                <StaffMemberHolidaysLink staffMemberServerId={staff.serverId}>
+                                    View all holidays
+                                </StaffMemberHolidaysLink>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
