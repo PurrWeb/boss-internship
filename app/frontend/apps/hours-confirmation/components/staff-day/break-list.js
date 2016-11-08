@@ -16,7 +16,7 @@ export default class BreakList extends React.Component {
             addBreakButton = <a
                 className="button"
                 onClick={() => this.addBreak()}
-                style={{display: "inline-block", marginBottom: 4}}>
+                style={{display: "inline-block", marginTop: 10, marginBottom: 4}}>
                 <i className="fa fa-plus mr-sm" />Add Break
             </a>
         }

@@ -46,7 +46,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
         }
 
         return (
-          <div className="panel panel-default">
+          <div className="panel panel-default clearfix">
             <div className="panel-heading">
               <div className="panel-title">From/To</div>
             </div>
@@ -56,7 +56,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                 data-test-marker-hours-acceptance-period-item
               >
                 { this.getModal() }
-                    <div className="shrink column mb-md">
+                    <div className="large-5 small-12 column mb-md">
                         <div style={periodTimeSelectorStyles}>
                             <ShiftTimeSelector
                                 showErrorMessages={false}
@@ -76,25 +76,27 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                                 />
                         </div>
                     </div>
-                    <div className="shrink column">
-                        <div className="staff-day__sub-heading">Breaks</div>
-                        <BreakList
-                            boundActions={this.props.boundActions}
-                            readonly={readonly}
-                            clockInBreaks={this.props.clockInBreaks}
-                            rotaDate={this.props.rotaDate}
-                            granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
-                            hoursAcceptancePeriod={hoursAcceptancePeriod}
-                        />
-                    </div>
-                    <div className="column">
+                    <div className="large-3 small-12 column">
                         <div className="staff-day__sub-heading">Reason</div>
                         <div>
                           {reasonSection}
                         </div>
+                    </div>
+                    <div className="large-2 column">
                       {this.getAcceptUi()}
                     </div>
                   <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
+              </div>
+              <div className="row">
+                <div className="staff-day__sub-heading">Breaks</div>
+                <BreakList
+                    boundActions={this.props.boundActions}
+                    readonly={readonly}
+                    clockInBreaks={this.props.clockInBreaks}
+                    rotaDate={this.props.rotaDate}
+                    granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
+                    hoursAcceptancePeriod={hoursAcceptancePeriod}
+                />
               </div>
             </div>
           </div>
@@ -190,26 +192,31 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                 return <span></span>
             } else {
                 return <div className="row">
-                  <div className="column">
-                    <a
-                        data-test-marker-accept-hours-acceptance-period
-                        onClick={ acceptButtonOnClick }
-                        className="button success">
-                        <i className="fa fa-check mr-sm" />Accept {stats.hours}h
-                    </a>
+                  <div className="row">
+                    <div className="large-12 small-end column">
+                      <a
+                          data-test-marker-accept-hours-acceptance-period
+                          onClick={ acceptButtonOnClick }
+                          className="button success">
+                          <i className="fa fa-check mr-sm" />Accept {stats.hours}h
+                      </a>
+                    </div>
                   </div>
-                  <div className="shrink column">
-                    <a
-                        className="button alert"
-                        data-test-marker-delete-hours-acceptance-period
-                    onClick={() => {
-                        this.props.boundActions.deleteHoursAcceptancePeriod({
-                            hoursAcceptancePeriod,
-                            errorHandlingId: this.componentId
-                        })
-                    }}>
-                      <i className="fa fa-remove mr-sm" />Delete
-                    </a>
+
+                  <div className="row">
+                    <div className="large-12 column">
+                      <a
+                          className="button alert"
+                          data-test-marker-delete-hours-acceptance-period
+                      onClick={() => {
+                          this.props.boundActions.deleteHoursAcceptancePeriod({
+                              hoursAcceptancePeriod,
+                              errorHandlingId: this.componentId
+                          })
+                      }}>
+                        <i className="fa fa-remove mr-sm" />Delete
+                      </a>
+                    </div>
                   </div>
                 </div>
             }

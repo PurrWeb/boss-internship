@@ -10,7 +10,6 @@ export default class BreakListItem extends React.Component {
         if (!this.props.readonly) {
             deleteBreakButton = <a
                 className="button small alert"
-                style={{marginLeft: -10}}
                 onClick={() => {
                     this.props.boundActions.deleteHoursAcceptanceBreak({
                         clientId: breakItem.clientId
@@ -25,8 +24,8 @@ export default class BreakListItem extends React.Component {
             style.color ="red"
         }
 
-        return <div className="row" style={{marginBottom: 10}}>
-            <div className="column"
+        return <div className="row clearfix">
+            <div className="large-shrink small-12 column"
                 style={style}>
                 <ShiftTimeSelector
                     defaultShiftTimes={{
@@ -47,8 +46,7 @@ export default class BreakListItem extends React.Component {
                 />
             </div>
             <div className="shrink column">
-                <br/>
-                {deleteBreakButton}
+              {deleteBreakButton}
             </div>
         </div>
     }
