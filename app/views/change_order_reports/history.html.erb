@@ -1,12 +1,15 @@
 <div>
-  <div class="pull-right">
-    <%= link_to('Back to current orders', change_order_reports_path, class: 'btn btn-success') %>
+  <div class="row align-middle mb-md">
+    <div class="column">
+      <h1 class="nm">Change Order History</h1>
+    </div>
+    <div class="shrink column">
+      <%= link_to('Back to current orders', change_order_reports_path, class: 'button') %>
+    </div>
   </div>
 
-  <h1>Change Order History</h1>
-
   <% if change_orders.to_a.count > 0 %>
-    <ul class="list-unstyled">
+    <ul class="no-bullet">
       <% change_orders.each do |change_order| %>
         <li>
           Venue: <%= change_order.venue.name %>

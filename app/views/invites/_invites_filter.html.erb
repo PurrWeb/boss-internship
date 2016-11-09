@@ -4,32 +4,36 @@
       <div class="panel-title">Filter</div>
     </div>
     <div class="panel-body">
-      <div>
-        <%= bootstrap_form_for(
-              'filter',
-              url: invites_path,
-              html: { method: :get, class: 'form-inline' }
-            ) do |form| %>
-          <%= form.select(
-                :status,
-                options_for_select(
-                  InviteStateMachine.states.map{ |status| [status.titlecase, status] },
-                  filter.status.to_s
-                ),
-                prompt: 'Any'
-              ) %>
-          <%= form.select(
-                :role,
-                options_for_select(
-                  User::ROLES.map{ |role| [role.titlecase, role] },
-                  filter.role.to_s
-                ),
-                prompt: 'Any'
-              ) %>
-          <%= form.submit('Update') %>
-        <% end %>
-      </div>
+      <%= bootstrap_form_for(
+            'filter',
+            url: invites_path,
+            html: { method: :get, class: 'row align-bottom' }
+          ) do |form| %>
+          <div class="small-12 medium-expand column">
+            <%= form.select(
+                    :status,
+                    options_for_select(
+                        InviteStateMachine.states.map{ |status| [status.titlecase, status] },
+                        filter.status.to_s
+                    ),
+                    prompt: 'Any'
+                ) %>
+          </div>
+          <div class="small-12 medium-expand column">
+            <%= form.select(
+                  :role,
+                  options_for_select(
+                    User::ROLES.map{ |role| [role.titlecase, role] },
+                    filter.role.to_s
+                  ),
+                  prompt: 'Any'
+                ) %>
+          </div>
+          <div class="small-12 medium-shrink column">
+            <%= form.submit('Update', class: 'button mb-mn') %>
+          </div>
+      <% end %>
     </div>
   </div>
-  <div><span class="records-returned-count"><%= invites.count %></span> records returned</div>
+  <div class="mb-base"><span class="records-returned-count"><%= invites.count %></span> records returned</div>
 </div>

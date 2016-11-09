@@ -17,11 +17,9 @@ export default class RotaStatusToggleUi extends React.Component {
             statusIfPublished = rotaStatusTitles[this.props.status];
         }
         return <div>
-            Rota Status: {statusIfPublished}
-            <div style={{maxWidth: 300}}>
-                {this.getDropdown()}
-                {this.getUpdateInProgressSpinner()}
-            </div>
+            <label>Rota Status: {statusIfPublished}</label>
+            {this.getDropdown()}
+            {this.getUpdateInProgressSpinner()}
             <ComponentErrors errors={this.props.errorMessages} />
         </div>
     }

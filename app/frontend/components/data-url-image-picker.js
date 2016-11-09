@@ -50,7 +50,7 @@ export default class DataUrlImagePicker extends React.Component {
         if (!message) {
             return null;
         }
-        return <div className="alert alert-danger" style={{marginTop: 10}}>
+        return <div className="callout alert" style={{marginTop: 10}}>
             {message}
         </div>
     }

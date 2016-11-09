@@ -17,7 +17,7 @@ apiOptions:
   or an object with a pin and staffMemberServerId, or an object with an api_key
 - getSuccessActionData
 */
-let globalAjaxTimeout = 5 * 1000; //5s
+let globalAjaxTimeout = 15 * 1000; //5s
 
 export default function makeApiRequestMaker(apiOptions){
     return function(requestOptions, success, error, getState) {

@@ -12,15 +12,8 @@ export default class ShiftTimeSelector extends Component {
     render(){
         return <div>
             <div className="row">
-                <div className="col-md-6">
-                    Start
-                </div>
-                <div className="col-md-6">
-                    End
-                </div>
-            </div>
-            <div className="row">
-                <div className="col-md-6">
+                <div className="large-shrink small-12 column">
+                    <label>Start</label>
                     <ShiftTimeInput
                         startsAt={this.state.starts_at}
                         rotaDate={this.props.rotaDate}
@@ -31,7 +24,8 @@ export default class ShiftTimeSelector extends Component {
                             this.onChange("starts_at", newValue);
                         } } />
                 </div>
-                <div className="col-md-6">
+                <div className="large-shrink small-12 column">
+                    <label>End</label>
                     <ShiftTimeInput
                         endsAt={this.state.ends_at}
                         readonly={this.props.readonly}

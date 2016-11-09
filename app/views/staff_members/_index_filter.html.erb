@@ -1,5 +1,5 @@
-<div class="staff-members-index-filter">
-  <div class="panel panel-default">
+<div class="staff-members-index-filter mb-md">
+  <div class="panel panel-default mb-md">
     <div class="panel-heading">
       <div class="panel-title">Filter</div>
     </div>
@@ -8,46 +8,51 @@
         <%= bootstrap_form_for(
               filter,
               url: staff_members_path,
-              html: { method: :get, class: 'form-inline' }
+              html: { method: :get, class: 'row' }
             ) do |form| %>
-          <%= form.text_field(:name_text, label: 'Name', value: filter.name_text) %>
-          <%= form.text_field(:email_text, label: 'Email', value: filter.email_text) %>
-          <%= form.select(
-                :status,
-                options_for_select(
-                  filter.select_statuses.map { |status| [status.titlecase, status] },
-                  filter.status
-                ),
-                prompt: 'Any'
-              ) %>
-          <% if !current_user.security_manager? %>
-            <%= form.select(
-                  :venue,
-                  options_for_select(
-                    filter.accessible_venues.map do |venue|
-                      [venue.name.titlecase, venue.id]
-                    end,
-                    filter.venue.try(:id)
-                  ),
-                  {
-                    :include_blank => 'Any'
-                  }
-                ) %>
-            <%= form.select(
-                  :staff_type,
-                  options_for_select(
-                    filter.accessible_staff_types.map do |type|
-                      [type.name.titlecase, type.id]
-                    end,
-                    filter.staff_type.try(:id)
-                  ),
-                  {
-                    :include_blank => 'Any'
-                  }
-                ) %>
-          <% end %>
-          <%= form.submit('Update') %>
-        <% end %>
+            <div class="small-12 medium-6 column">
+              <%= form.text_field(:name_text, label: 'Name', value: filter.name_text) %>
+              <%= form.text_field(:email_text, label: 'Email', value: filter.email_text) %>
+              <%= form.select(
+                      :status,
+                      options_for_select(
+                          filter.select_statuses.map { |status| [status.titlecase, status] },
+                          filter.status
+                      ),
+                      prompt: 'Any'
+                  ) %>
+            </div>
+            <div class="small-12 medium-6 column">
+              <% if !current_user.security_manager? %>
+                <%= form.select(
+                      :venue,
+                      options_for_select(
+                        filter.accessible_venues.map do |venue|
+                          [venue.name.titlecase, venue.id]
+                        end,
+                        filter.venue.try(:id)
+                      ),
+                      {
+                        :include_blank => 'Any'
+                      }
+                    ) %>
+                <%= form.select(
+                      :staff_type,
+                      options_for_select(
+                        filter.accessible_staff_types.map do |type|
+                          [type.name.titlecase, type.id]
+                        end,
+                        filter.staff_type.try(:id)
+                      ),
+                      {
+                        :include_blank => 'Any'
+                      },
+                      class: 'mb-form-label'
+                    ) %>
+              <% end %>
+              <%= form.submit('Update', class: ['button', 'primary', 'pull-right']) %>
+            <% end %>
+        </div>
       </div>
     </div>
   </div>

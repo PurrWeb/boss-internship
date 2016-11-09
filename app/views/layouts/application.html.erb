@@ -15,7 +15,7 @@
     <header>
       <%= render 'layouts/navigation' %>
     </header>
-    <main role="main" class="container-fluid">
+    <main role="main" class="main row column <%= content_for(:main_class) %>">
       <%= render 'layouts/messages' %>
       <%= yield %>
       <%= insert_paloma_hook %>

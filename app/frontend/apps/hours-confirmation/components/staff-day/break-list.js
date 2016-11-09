@@ -14,10 +14,10 @@ export default class BreakList extends React.Component {
         var addBreakButton;
         if (!this.props.readonly) {
             addBreakButton = <a
-                className="btn btn-default btn-sm"
+                className="button"
                 onClick={() => this.addBreak()}
-                style={{display: "inline-block", marginBottom: 4}}>
-                Add Break
+                style={{display: "inline-block", marginTop: 10, marginBottom: 4}}>
+                <i className="fa fa-plus mr-sm" />Add Break
             </a>
         }
 

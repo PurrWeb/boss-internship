@@ -18,7 +18,7 @@ export default class RotaOverviewView extends Component {
             selectionShiftList = this.getSelectionDataView(this.state.selectionData);
 
         return <div className="row">
-            <div className="col-md-9">
+            <div className="column">
                 <VenueRotaOverviewChart
                     staff={this.props.staff}
                     shifts={this.props.shifts}
@@ -27,7 +27,7 @@ export default class RotaOverviewView extends Component {
                     onHoverShiftsChange={(data) => this.setState({hoverData: data})}
                     onSelectionShiftsChange={(data) => this.setState({selectionData: data})} />
             </div>
-            <div className="col-md-3">
+            <div className="shrink column">
                 {this.getRotaForecast()}
                 <ChartSelectionView
                     previewComponent={previewShiftList}

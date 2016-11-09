@@ -1,16 +1,14 @@
-<div class="media">
-  <div class="media-body">
-    <h1 class="media-heading"><%= user.full_name.titlecase %><%= " (Disabled)" if user.disabled? %></h1>
-  </div>
-  <div class="media-right">
+<div class="media-object">
+  <h1><%= user.full_name.titlecase %><%= " (Disabled)" if user.disabled? %></h1>
+  <div class="media-object-section">
     <% if can?(:disable, user) %>
-      <%= link_to(disable_user_path(user), class: 'btn btn-danger') do %>
-        <span class="glyphicon glyphicon-fire"></span> Disable User
+      <%= link_to(disable_user_path(user), class: 'button alert') do %>
+        <span class="fa fa-fire mr-base"></span>Disable User
       <% end %>
     <% end %>
     <% if can?(:enable, user) %>
-      <%= link_to(undestroy_user_path(user), method: :post, class: 'btn btn-danger') do %>
-        <span class="glyphicon glyphicon-heart"></span> Enable User
+      <%= link_to(undestroy_user_path(user), method: :post, class: 'button alert') do %>
+        <span class="fa fa-heart mr-base"></span>Enable User
       <% end %>
     <% end %>
   </div>
@@ -25,7 +23,7 @@
           <%= link_to(
                 'Edit',
                 edit_personal_details_user_path(user),
-                class: ['btn', 'btn-primary', 'btn-xs', 'user-edit-personal-details-button']
+                class: ['button', 'small', 'user-edit-personal-details-button']
               ) %>
         </span>
       <% end %>
@@ -49,7 +47,7 @@
           <%= link_to(
                 'Edit',
                 edit_access_details_user_path(user),
-                class: ['btn', 'btn-primary', 'btn-xs', 'user-edit-access-details-button']
+                class: ['button', 'small', 'user-edit-access-details-button']
               ) %>
         </span>
       <% end %>
@@ -83,7 +81,7 @@
               <%= link_to(
                     'View',
                     staff_member_path(user.staff_member),
-                    class: ['view-staff-member-button' ,'btn', 'btn-success']
+                    class: ['view-staff-member-button' ,'button', 'success']
                   )
               %>
             <% else %>
@@ -95,7 +93,7 @@
                   <%= link_to(
                         'Create',
                         new_staff_member_user_path(user),
-                        class: ['create-staff-member-button', 'btn', 'btn-primary']
+                        class: ['create-staff-member-button', 'button', 'primary']
                       ) %>
                 </div>
               <% end %>

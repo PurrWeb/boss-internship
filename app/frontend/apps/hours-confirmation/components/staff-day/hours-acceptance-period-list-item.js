@@ -45,12 +45,18 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
           />;
         }
 
-        return <div data-test-marker-hours-acceptance-period-item>
-            { this.getModal() }
-            <div className="row" >
-                <div className="col-md-10">
-                    <div className="col-md-4">
-                        <div className="staff-day__sub-heading">From/To</div>
+        return (
+          <div className="panel panel-default clearfix">
+            <div className="panel-heading">
+              <div className="panel-title">From/To</div>
+            </div>
+            <div className="panel-body">
+              <div
+                className="row"
+                data-test-marker-hours-acceptance-period-item
+              >
+                { this.getModal() }
+                    <div className="large-5 small-12 column mb-md">
                         <div style={periodTimeSelectorStyles}>
                             <ShiftTimeSelector
                                 showErrorMessages={false}
@@ -70,32 +76,31 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                                 />
                         </div>
                     </div>
-                    <div className="col-md-5">
-                        <div style={{paddingRight: 30, paddingLeft: 30}}>
-                            <div className="staff-day__sub-heading">Breaks</div>
-                            <BreakList
-                                boundActions={this.props.boundActions}
-                                readonly={readonly}
-                                clockInBreaks={this.props.clockInBreaks}
-                                rotaDate={this.props.rotaDate}
-                                granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
-                                hoursAcceptancePeriod={hoursAcceptancePeriod}
-                            />
-                        </div>
-                    </div>
-                    <div className="col-md-3">
+                    <div className="large-3 small-12 column">
                         <div className="staff-day__sub-heading">Reason</div>
                         <div>
                           {reasonSection}
                         </div>
                     </div>
-                </div>
-                <div className="col-md-2">
-                    {this.getAcceptUi()}
-                </div>
+                    <div className="large-2 column">
+                      {this.getAcceptUi()}
+                    </div>
+                  <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
+              </div>
+              <div className="row">
+                <div className="staff-day__sub-heading">Breaks</div>
+                <BreakList
+                    boundActions={this.props.boundActions}
+                    readonly={readonly}
+                    clockInBreaks={this.props.clockInBreaks}
+                    rotaDate={this.props.rotaDate}
+                    granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
+                    hoursAcceptancePeriod={hoursAcceptancePeriod}
+                />
+              </div>
             </div>
-            <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
-        </div>
+          </div>
+        )
     }
     acceptModalRequired(){
       let rotaedAcceptedHoursDifference = this.props.rotaedAcceptedHoursDifference;
@@ -133,8 +138,8 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
           <p>If you accept these hours, the total amount of accepted hours for this staff member will be greater than what was rotaed.</p>
           <p>Please ensure you have added suitable reason notes to explain the time difference.</p>
           <p>These will be reviewed by senior management.</p>
-          <a className="btn btn-success" onClick={handleAccept}>Accept</a>
-          <a className="btn btn-default" onClick={closeModal}>Cancel</a>
+          <a className="button success" onClick={handleAccept}>Accept</a>
+          <a className="button" onClick={closeModal}>Cancel</a>
         </ModalDialog>
       </ModalContainer>
     }
@@ -186,23 +191,33 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
             if (!this.props.hasClockedOut) {
                 return <span></span>
             } else {
-                return <div>
-                    <a
-                        data-test-marker-accept-hours-acceptance-period
-                        onClick={ acceptButtonOnClick }
-                        className="btn-success btn" style={{marginTop: 4}}>
-                        Accept {stats.hours}h
-                    </a>
-                    <br/><br/>
-                    <a data-test-marker-delete-hours-acceptance-period
-                    onClick={() => {
-                        this.props.boundActions.deleteHoursAcceptancePeriod({
-                            hoursAcceptancePeriod,
-                            errorHandlingId: this.componentId
-                        })
-                    }}>
-                        Delete
-                    </a>
+                return <div className="row">
+                  <div className="row">
+                    <div className="large-12 small-end column">
+                      <a
+                          data-test-marker-accept-hours-acceptance-period
+                          onClick={ acceptButtonOnClick }
+                          className="button success">
+                          <i className="fa fa-check mr-sm" />Accept {stats.hours}h
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="large-12 column">
+                      <a
+                          className="button alert"
+                          data-test-marker-delete-hours-acceptance-period
+                      onClick={() => {
+                          this.props.boundActions.deleteHoursAcceptancePeriod({
+                              hoursAcceptancePeriod,
+                              errorHandlingId: this.componentId
+                          })
+                      }}>
+                        <i className="fa fa-remove mr-sm" />Delete
+                      </a>
+                    </div>
+                  </div>
                 </div>
             }
         } else {
@@ -216,11 +231,12 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                     {stats.hours}h ACCEPTED
                 </div>
                 <a
+                    className="button alert pull-right"
                     onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
                         hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
                         errorHandlingId: this.componentId
                     })}>
-                    Unaccept
+                    <i className="fa fa-close mr-base" />Unaccept
                 </a>
             </div>
         }

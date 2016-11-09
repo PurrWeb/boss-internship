@@ -10,27 +10,31 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require react_integration
 //= require jquery
-//= require bootstrap-sprockets
+//= require jquery-ui
+//= require react_integration
+//= require foundation
 //= require jquery_ujs
 //= require chosen-jquery
-//= require tinycolor-min
-//= require pick-a-color.min
 //= require paloma
-//= require bootstrap-datepicker
+//= require spectrum
 //= require_tree ./page_controllers
+//= require tablesaw.jquery
+//= require tablesaw-init
 
 $(function(){
+  $(document).foundation();
+
   $('.chosen-select').chosen({width: '100%'});
 
-  $('.pick-a-color').pickAColor({
-    showSavedColors: false,
-    showHexInput: false
+  $('.pick-a-color').spectrum({
+    preferredFormat: "hex",
+    showInput: true,
+    showInitial: true
   });
 
   $('.date-picker').datepicker({
-    format: "dd-mm-yyyy",
-    weekStart: 1
+    dateFormat: "dd-mm-yy",
+    firstDay: 1
   });
 });

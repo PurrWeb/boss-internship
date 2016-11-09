@@ -9,7 +9,7 @@ export default class PublishRotaWeekButton extends React.Component {
     }
     render(){
         if (this.props.hasBeenPublished) {
-            return <div className="alert alert-info">
+            return <div className="callout">
                 This week's rotas have been published.
                 <br/>
                 Changes to them will send out email notifications.
@@ -18,7 +18,7 @@ export default class PublishRotaWeekButton extends React.Component {
             if (this.props.publishingInProgress) {
                 return <Spinner />
             } else {
-                return <button className="btn btn-default" onClick={this.props.onClick}>
+                return <button className="button" onClick={this.props.onClick}>
                     Publish this week's rotas
                 </button>
             }

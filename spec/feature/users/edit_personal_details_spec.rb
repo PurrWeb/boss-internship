@@ -86,7 +86,7 @@ RSpec.feature 'Editing a users personal detials' do
 
     context 'new email is invalid' do
       let!(:old_email) { edited_user.email }
-      let(:new_email) { '' }
+      let(:new_email) { 'asdsad.asdsa.com' }
 
       it 'should return to the edit page with an error message' do
         edit_page.surf_to
@@ -105,7 +105,6 @@ RSpec.feature 'Editing a users personal detials' do
       it 'should persist the edit in the form' do
         edit_page.surf_to
         edit_page.form.update_email(new_email)
-        edited_user.reload
         edit_page.form.ui_shows_email(new_email)
       end
     end

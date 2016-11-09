@@ -8,7 +8,6 @@ gem "devise", "~> 3.4.0"
 gem "thin"
 gem "rollbar"
 gem 'sass-rails', '>= 3.2'
-gem 'bootstrap-sass', '~> 3.3.6'
 gem "jquery-rails"
 gem "jquery-ui-rails"
 gem "uglifier"
@@ -29,15 +28,13 @@ gem "cancan"
 gem 'file_validators'
 gem 'jbuilder'
 gem 'chosen-rails'
-gem 'tiny-color-rails'
-gem 'pick-a-color-rails'
+gem 'spectrum-rails'
 gem 'paloma'
 gem 'andand'
-gem 'bootstrap-datepicker-rails'
 gem 'money'
 gem 'prawn'
 gem 'prawn-table'
-gem 'will_paginate-bootstrap'
+gem 'will_paginate-foundation'
 gem 'reform'
 gem 'reform-rails'
 gem 'newrelic_rpm'
@@ -49,6 +46,9 @@ gem 'oj'
 gem 'oj_mimic_json'
 gem 'sidekiq-unique-jobs'
 gem 'eventmachine', "1.0.9"
+gem 'sprockets-es6', ">= 0.9.0"
+gem "autoprefixer-rails"
+gem 'font-awesome-sass'
 
 group :development, :test do
   gem "seedbank"
@@ -59,6 +59,7 @@ group :development, :test do
   gem "bullet"
   gem 'quiet_assets'
   gem 'factory-helper'
+  gem "rb-fsevent",        :require => false
 end
 
 group :test do
