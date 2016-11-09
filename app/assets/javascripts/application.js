@@ -34,7 +34,7 @@ $(function(){
   });
 
   $('.date-picker').datepicker({
-    format: "dd-mm-yyyy",
-    weekStart: 1
+    dateFormat: "dd-mm-yy",
+    firstDay: 1
   });
 });
