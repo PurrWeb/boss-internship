@@ -9,7 +9,8 @@
     "no-shadow": [2, { "builtinGlobals": true }],
     "one-var": [2, "never"],
     "quote-props": [2, "as-needed"],
-    "sort-keys": [0, "asc"]
+    "sort-keys": [0, "asc"],
+    "react/jsx-indent", [2, 2]
   },
   "env": {
     "es6": true,
