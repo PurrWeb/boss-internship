@@ -7,7 +7,13 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_paper_trail_whodunnit
 
+  helper_method :render_navigation?
+
   def current_user
     @current_user ||= super && User.includes(:email_address).find(@current_user.id)
+  end
+
+  def render_navigation?
+    true
   end
 end
