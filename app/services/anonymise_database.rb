@@ -47,6 +47,22 @@ class AnonymiseDatabase
         end
       end
 
+      puts "Anonymising Venues"
+      used_venue_names = []
+      Venue.find_each do |venue|
+        success = false
+
+        while !success do
+          new_venue_name = FactoryHelper::Commerce.color
+
+          if !used_venue_names.include?(new_venue_name)
+            used_venue_names << new_venue_name
+            venue.update_attributes!(name: new_venue_name)
+            success = true
+          end
+        end
+      end
+
       puts "Anonymising Users"
       User.find_each do |user|
         next if processed_user_ids.include?(user.id)
