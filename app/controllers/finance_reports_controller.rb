@@ -13,30 +13,23 @@ class FinanceReportsController < ApplicationController
         filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
       ).all
 
-      reports_by_staff_type = {}
-      staff_members.each do |staff_member|
-        reports_by_staff_type[staff_member.staff_type] ||= []
-        reports_by_staff_type[staff_member.staff_type] << (FinanceReport.find_by(
-          staff_member: staff_member,
-          week_start: week.start_date
-        ) || GenerateFinanceReportData.new(
-          staff_member: staff_member,
-          week: week
-        ).call.report)
-      end
-
-      accessible_venues = AccessibleVenuesQuery.new(current_user).all
-
-      render locals: {
-        week: week,
-        venue: venue,
-        accessible_venues: accessible_venues,
-        reports_by_staff_type: reports_by_staff_type,
-        pay_rate_filtering: params[:pay_rate_filter]
-      }
+      render_finance_reports_index(week: week, venue: venue, staff_members: staff_members)
     else
       redirect_to(finance_reports_path(index_redirect_params))
     end
+  end
+
+  def render_finance_reports_index(week:, venue:, staff_members:)
+    render locals: {
+      week: week,
+      venue: venue,
+      accessible_venues: AccessibleVenuesQuery.new(current_user).all,
+      reports_by_staff_type: reports_by_staff_type(
+        week: week,
+        staff_members: staff_members
+      ),
+      pay_rate_filtering: params[:pay_rate_filter]
+    }
   end
 
   def create
@@ -67,6 +60,21 @@ class FinanceReportsController < ApplicationController
       venue_id: venue_from_params.andand.id || current_user.default_venue.andand.id,
       week_start: UIRotaDate.format(week_start),
     }
+  end
+
+  def reports_by_staff_type(week:, staff_members:)
+    result = {}
+    staff_members.each do |staff_member|
+      result[staff_member.staff_type] ||= []
+      result[staff_member.staff_type] << (FinanceReport.find_by(
+        staff_member: staff_member,
+        week_start: week.start_date
+      ) || GenerateFinanceReportData.new(
+        staff_member: staff_member,
+        week: week
+      ).call.report)
+    end
+    result
   end
 
   def venue_from_params
