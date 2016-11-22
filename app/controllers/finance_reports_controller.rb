@@ -13,30 +13,70 @@ class FinanceReportsController < ApplicationController
         filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
       ).all
 
-      reports_by_staff_type = {}
-      staff_members.each do |staff_member|
-        reports_by_staff_type[staff_member.staff_type] ||= []
-        reports_by_staff_type[staff_member.staff_type] << (FinanceReport.find_by(
-          staff_member: staff_member,
-          week_start: week.start_date
-        ) || GenerateFinanceReportData.new(
-          staff_member: staff_member,
-          week: week
-        ).call.report)
+      respond_to do |format|
+        format.html do
+          render_finance_reports_index(
+            week: week,
+            venue: venue,
+            staff_members: staff_members
+          )
+        end
+
+        format.pdf do
+          render_finance_reports_pdf(
+            week: week,
+            venue: venue,
+            staff_members: staff_members,
+            filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
+          )
+        end
       end
-
-      accessible_venues = AccessibleVenuesQuery.new(current_user).all
-
-      render locals: {
-        week: week,
-        venue: venue,
-        accessible_venues: accessible_venues,
-        reports_by_staff_type: reports_by_staff_type,
-        pay_rate_filtering: params[:pay_rate_filter]
-      }
     else
       redirect_to(finance_reports_path(index_redirect_params))
     end
+  end
+
+  def render_finance_reports_index(week:, venue:, staff_members:)
+    render locals: {
+      week: week,
+      venue: venue,
+      accessible_venues: AccessibleVenuesQuery.new(current_user).all,
+      reports_by_staff_type: reports_by_staff_type(
+        week: week,
+        staff_members: staff_members
+      ),
+      pay_rate_filtering: params[:pay_rate_filter]
+    }
+  end
+
+  def render_finance_reports_pdf(week:, venue:, filter_by_weekly_pay_rate:, staff_members:)
+    pdf = FinanceReportPDF.new(
+      venue: venue,
+      week: week,
+      filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
+    )
+
+    staff_members.each do |staff_member|
+      pdf.add_report(
+        staff_type: staff_member.staff_type,
+        report: (
+          FinanceReport.find_by(
+            staff_member: staff_member,
+            week_start: week.start_date
+          ) || GenerateFinanceReportData.new(
+            staff_member: staff_member,
+            week: week
+          ).call.report
+        )
+      )
+    end
+
+    #TODO: Extract File Timestamp Format to somewhere
+    timestamp_start = week.start_date.strftime('%d-%b-%Y')
+    timestamp_end = week.end_date.strftime('%d-%b-%Y')
+    filename  = "#{venue.name.parameterize}_finance_report_#{timestamp_start}_#{timestamp_end}.pdf"
+    headers['Content-Disposition'] = "attachment; filename=#{filename}"
+    render text: pdf.render, content_type: 'application/pdf'
   end
 
   def create
@@ -67,6 +107,21 @@ class FinanceReportsController < ApplicationController
       venue_id: venue_from_params.andand.id || current_user.default_venue.andand.id,
       week_start: UIRotaDate.format(week_start),
     }
+  end
+
+  def reports_by_staff_type(week:, staff_members:)
+    result = {}
+    staff_members.each do |staff_member|
+      result[staff_member.staff_type] ||= []
+      result[staff_member.staff_type] << (FinanceReport.find_by(
+        staff_member: staff_member,
+        week_start: week.start_date
+      ) || GenerateFinanceReportData.new(
+        staff_member: staff_member,
+        week: week
+      ).call.report)
+    end
+    result
   end
 
   def venue_from_params

@@ -52,6 +52,21 @@
       <% end %>
     </div>
   </div>
+  <div class="row">
+    <div class="shrink column">
+      <%= link_to(
+            pay_rate_filter_path_helper.call(
+              venue_id: venue.id,
+              week_start:  week.start_date && UIRotaDate.format(week.start_date),
+              pay_rate_filter: params[:pay_rate_filter],
+              format: :pdf
+            ),
+            class: 'button mb-mn'
+          ) do %>
+            <i class="fa fa-download"></i> Download PDF
+      <% end %>
+    </div>
+  </div>
 <% end %>
 
 <% reports_by_staff_type.each do |staff_type, reports| %>
