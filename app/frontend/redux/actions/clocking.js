@@ -21,7 +21,9 @@ export function enterUserModeWithConfirmation(options){
     return showConfirmationModal({
         modalOptions: {
             title: "Enter manager password",
-            confirmationType: "PIN"
+            confirmationType: "PIN",
+            userMode: options.userMode,
+            staffMemberObject: options.staffMemberObject
         },
         confirmationAction: {
             apiRequestType: "CLOCK_IN_OUT_APP_ENTER_USER_MODE",
