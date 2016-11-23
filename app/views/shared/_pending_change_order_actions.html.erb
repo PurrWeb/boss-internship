@@ -1,2 +1,11 @@
-<%= link_to('Edit', change_orders_path(venue_id: change_order.venue.id), class: 'button expanded small mb-base') %>
-<%= link_to('Accept', accept_change_order_report_path(change_order), class: 'button expanded success small', method: :put) %>
+<div class="row">
+  <div class="column small-6 large-6">
+    <%= link_to('Edit', change_orders_path(venue_id: change_order.venue.id), class: 'button expanded mb-mn') %>
+  </div>
+  <div class="column small-6 show-for-small-only"></div>
+
+  <div class="column small-6 large-6">
+    <%= link_to('Accept', accept_change_order_report_path(change_order), class: 'button success expanded mb-mn', method: :put) %>
+  </div>
+  <div class="column small-6 show-for-small-only"></div>
+</span>

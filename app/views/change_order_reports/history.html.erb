@@ -9,19 +9,21 @@
   </div>
 
   <% if change_orders.to_a.count > 0 %>
-    <ul class="no-bullet">
-      <% change_orders.each do |change_order| %>
-        <li>
-          Venue: <%= change_order.venue.name %>
-        </li>
-        <li>
-          Marked Done at <%= change_order.done_at.to_s(:human) %> by <%= change_order.done_user.full_name %>
-        </li>
-        <li>
-          <%= render partial: 'shared/change_order_table', locals: { change_order: change_order } %>
-        </li>
-      <% end %>
-    </ul>
+    <% change_orders.each do |change_order| %>
+      <div class="panel">
+        <ul class="no-bullet">
+          <li class="h4">
+            Venue: <%= change_order.venue.name %>
+          </li>
+          <li class="h4">
+            Marked Done at <%= change_order.done_at.to_s(:human) %> by <%= change_order.done_user.full_name %>
+          </li>
+          <li>
+            <%= render partial: 'shared/change_order_table', locals: { change_order: change_order } %>
+          </li>
+        </ul>
+      </div>
+    <% end %>
     <%= render partial: 'shared/pagination_control', locals: { relation: change_orders } %>
   <% else %>
     <p>No previously accepted change orders exist</p>

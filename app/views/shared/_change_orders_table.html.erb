@@ -1,21 +1,21 @@
-<table class="scroll">
+<table
+    class="tablesaw tablesaw-stack"
+    data-tablesaw-mode="stack">
   <thead>
-    <tr>
-      <th>Venue</th>
-      <th>Five Pound Notes</th>
-      <th>One Pound Coins</th>
-      <th>Fifty Pence Coins</th>
-      <th>Twenty Pence Coins</th>
-      <th>Ten Pence Coins</th>
-      <th>Five Pence Coins</th>
-      <th>Total</th>
-      <th></th>
-    <tr>
+    <th>Venue</th>
+    <th>£5</th>
+    <th>£1</th>
+    <th>50p</th>
+    <th>20p</th>
+    <th>10p</th>
+    <th>5p</th>
+    <th>Total</th>
+    <th></th>
   </thead>
   <tbody>
     <% change_orders.each do |change_order| %>
       <tr>
-        <td><%= change_order.venue.name %></td>
+        <td><%= change_order.venue.name.titlecase %></td>
         <td><%= number_to_currency(change_order.five_pound_notes, unit: '£', precision: 2) %></td>
         <td><%= number_to_currency(change_order.one_pound_coins, unit: '£', precision: 2) %></td>
         <td><%= number_to_currency(change_order.fifty_pence_coins, unit: '£', precision: 2) %></td>
