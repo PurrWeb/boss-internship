@@ -10,6 +10,7 @@ export default class StaffFinder extends Component {
         staff: React.PropTypes.object.isRequired,
         staffTypes: React.PropTypes.object,
         filterOverrides: React.PropTypes.object,
+        resetVenue: React.PropTypes.func,
         defaultFilterSettings: React.PropTypes.object
     }
     constructor(props) {
@@ -23,19 +24,33 @@ export default class StaffFinder extends Component {
         }
     }
     render() {
-        return <div>
-            <StaffFilter
-                staffTypes={this.getStaffTypesWithStaffMembers()}
-                venues={this.props.venues}
-                filters={this.props.filters}
-                onChange={(arg) => this.onFilterChange(arg)}
-                filterSettings={this.getFilterSettings()} />
+        const resetVenueButton = this.props.resetVenue ? (
+            <div className="boss-buttons-block main-content__body_adjust_boss-buttons-block">
+                <div
+                    className="boss-button boss-button_role_reset-venue"
+                    onClick={this.props.resetVenue}
+                >
+                    Reset Venue
+                </div>
+            </div>
+        ) : null;
 
-            <FilterableStaffList
-                staff={this.props.staff}
-                staffItemComponent={this.props.staffItemComponent}
-                filterSettings={this.getFilterSettings()} />
-        </div>
+        return (
+            <div className="main-content__body">
+                <StaffFilter
+                    staffTypes={this.getStaffTypesWithStaffMembers()}
+                    venues={this.props.venues}
+                    filters={this.props.filters}
+                    onChange={(arg) => this.onFilterChange(arg)}
+                    filterSettings={this.getFilterSettings()} />
+
+                <FilterableStaffList
+                    staff={this.props.staff}
+                    staffItemComponent={this.props.staffItemComponent}
+                    filterSettings={this.getFilterSettings()} />
+                {resetVenueButton}
+            </div>
+        );
     }
     getFilterSettings(){
         return this.processFilterOverrides(this.props, this.state.staffFilterSettings)

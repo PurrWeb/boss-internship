@@ -14,7 +14,7 @@ export default class StaffFilter extends Component {
         filterSettings: React.PropTypes.object.isRequired,
         staffTypes: React.PropTypes.object,
         venues: React.PropTypes.object
-    }
+    };
     static getDefaultSettings() {
         return {
             search: "",
@@ -24,22 +24,48 @@ export default class StaffFilter extends Component {
         }
     }
     render() {
+        return (
+            <div className={`main-content__filters-block-container`}>
+                <div className="main-content__filters-block-label">
+                    Filter
+                </div>
+
+                <div className="boss-input-group__input-container main-content__filters-block-container_adjust_input-container">
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Search"
+                        data-test-marker-staff-text-search
+                        onChange={(event) =>
+                            this.handleChange("search", event.target.value)
+                        }
+                        className="boss-input boss-input_type_search boss-input-group_adjust_search-input"/>
+                </div>
+
+                {this.renderFiltersBlock()}
+            </div>
+        );
+    }
+    renderFiltersBlock() {
         var filters = this.getFilters();
         var titles = _(filters).pluck("title");
 
         var titleColumns = titles.map((title) => this.getFilterTitle(title));
         var componentColumns = filters.map(function(filter){
-            return <div className="small-3 medium-2 column" key={filter.title}>
+            const role = filter.title.toLowerCase();
+            const subClass = role === 'status' ? 'filters-block__cell_role_status' : ''
+
+            return <div className={`filters-block__cell ${subClass}`} key={filter.title}>
                 {filter.component}
             </div>
         });
 
         return (
-            <div className="mb-lg">
-                <div className="row">
+            <div className="filters-block">
+                <div className="filters-block__head">
                     {titleColumns}
                 </div>
-                <div className="row">
+                <div className="filters-block__row">
                     {componentColumns}
                 </div>
             </div>
@@ -49,9 +75,6 @@ export default class StaffFilter extends Component {
         var selectedFilters = this.props.filters;
         var filterItems = [];
 
-        if (selectedFilters.search){
-            filterItems.push(this.getSearchFilter());
-        }
         if (selectedFilters.staffType){
             filterItems.push(this.getStaffTypeFilter());
         }
@@ -106,21 +129,31 @@ export default class StaffFilter extends Component {
     getRotaedOrActiveFilter(){
         var rotaedOrActiveOption = "Rotaed / Active Only"
         var allOption = "All"
-        var component = <label style={{fontWeight: "normal"}}>
+        var component = (
             <select
+                className="boss-input boss-input_type_select boss-input_variant_filters-block"
                 value={this.props.filterSettings.rotaedOrActive ? rotaedOrActiveOption : allOption}
-                onChange={(e) => this.handleChange("rotaedOrActive", e.target.value !== allOption)}>
-                <option value={allOption}>{allOption}</option>
-                <option value={rotaedOrActiveOption}>{rotaedOrActiveOption}</option>
+                onChange={(e) => this.handleChange("rotaedOrActive", e.target.value !== allOption)}
+            >
+                <option className="boss-input boss-input_variant_filters-block" value={allOption}>
+                    {allOption}
+                </option>
+                <option className="boss-input boss-input_variant_filters-block" value={rotaedOrActiveOption}>
+                    {rotaedOrActiveOption}
+                </option>
             </select>
-        </label>
+        );
+
         return {
-            title: "",
+            title: "Status",
             component
         }
     }
     getFilterTitle(titleString){
-        return <div className="small-3 medium-2 column" key={titleString}>
+        const role = titleString.toLowerCase();
+        const subClass = role === 'status' ? 'filters-block__head-cell_role_status' : '';
+
+        return <div className={`filters-block__head-cell filters-block__head-cell_type_label ${subClass}`} key={titleString}>
             {titleString}
         </div>
     }

@@ -34,3 +34,5 @@
 *.sublime-workspace
 
 .idea/
+yarn.lock
+public/assets/

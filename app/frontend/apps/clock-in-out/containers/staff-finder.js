@@ -28,6 +28,7 @@ class ClockInOutStaffFinder extends Component {
             }}
             staffItemComponent={StaffListItem}
             staffTypes={this.props.staffTypes}
+            resetVenue={this.props.resetVenue}
             staff={this.props.staff}
             filterOverrides={filterOverrides} />
     }

@@ -1,0 +1,249 @@
+@import 'settings';
+@import 'mixins';
+
+$info-table-selector: info-table;
+$label-selector: __label;
+
+.#{$info-table-selector} {
+  @include normalize-block();
+
+  display: table;
+  width: 100%;
+
+  &__header {
+    display: table-row;
+  }
+
+  &__th {
+    display: table-cell;
+    text-transform: uppercase;
+    color: $boss-medium-gray;
+    padding: 0.7em 0 0.7em 1em;
+    border-bottom: 1px solid $boss-extra-light-gray;
+
+    &_rotaed {
+      text-transform: uppercase;
+    }
+    &_status {
+      width: 20%;
+    }
+    &_notes {
+      width: 20%;
+    }
+  }
+
+  &__tr {
+    display: table-row;
+  }
+
+  &__td {
+    display: table-cell;
+    padding: 1.6em 0 1.6em 1em;
+    border-bottom: 1px solid $boss-extra-light-gray;
+  }
+
+  &__rotaed-text {
+    display: block;
+    padding-left: 1em;
+    text-transform: capitalize;
+    color: $boss-medium-gray;
+    background: asset-url("icon-clock-medium-gray.svg") left 45% no-repeat;
+    background-size: 0.8em;
+  }
+
+  &__notes {
+    display: inline-block;
+    overflow: hidden;
+    max-width: 15em;
+    color: $boss-medium-gray;
+    text-transform: capitalize;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__user-status {
+    position: relative;
+    padding-left: 1.6em;
+    text-transform: capitalize;
+    line-height: 0.9em;
+    color: $boss-medium-gray;
+    cursor: pointer;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      display: block;
+      width: 0.8em;
+      height: 0.8em;
+      background-color: $boss-medium-gray;
+      border-radius: 50%;
+    }
+
+    &_clocked-out{
+      &:before {
+        background-color: map-get($boss-sign-palette, clocked-out);
+      };
+    }
+    &_clocked-in{
+      &:before {
+        background-color: map-get($boss-sign-palette, clocked-in);
+      };
+    }
+    &_break{
+      &:before {
+        background-color: map-get($boss-sign-palette, break);
+      };
+    }
+  }
+
+  &__change-user-status {
+    padding-left: 2.6em;
+    color: $boss-very-light-gray;
+    text-transform: capitalize;
+    font-size: 0.7em;
+    cursor: pointer;
+  }
+
+  &__user-avatar-container {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    height: 66px;
+    padding-right: 1em;
+
+    &:before {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      left: 56px;
+      top: 26px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3pt $boss-white;
+    }
+
+    &_clocked-out{
+      &:before {
+        background-color: map-get($boss-sign-palette, clocked-out);
+      };
+    }
+
+    &_clocked-in{
+      &:before {
+        background-color: map-get($boss-sign-palette, clocked-in);
+      };
+    }
+    &_break{
+      &:before {
+        background-color: map-get($boss-sign-palette, break);
+      };
+    }
+  }
+
+  &__user-avatar-image {
+    display: block;
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+  }
+
+  &__user-info {
+    display: inline-block;
+    padding-top: 0.4em;
+
+    &_adjust {
+      &_settings-sign {
+        margin-left: 0.3em;
+      }
+    }
+  }
+
+  &__user-name {
+    color: $boss-medium-gray;
+  }
+
+  &__nothing-found-message {
+    text-align: center;
+    padding: 1.5em;
+    font-size: 1.2rem;
+    color: $boss-medium-gray;
+  }
+
+  &_no-value {
+    color: $boss-very-light-gray;
+  }
+
+  &#{$label-selector} {
+    display: inline-block;
+    color: $boss-white;
+    font-size: 0.7em;
+    padding: 0.4em 0.8em;
+    text-transform: uppercase;
+    font-weight:700;
+    border-radius: $boss-global-border-radius;
+    vertical-align: top;
+
+    &_manager {
+      background-color: map-get($boss-roles-palette, manager);
+    }
+    &_gm {
+      background-color: map-get($boss-roles-palette, gm);
+    }
+    &_bar-supervisor {
+      background-color: map-get($boss-roles-palette, bar-supervisor);
+    }
+    &_bartender {
+      background-color: map-get($boss-roles-palette, bartender);
+    }
+    &_floor-staff {
+      background-color: map-get($boss-roles-palette, floor-staff);
+    }
+    &_waitress {
+      background-color: map-get($boss-roles-palette, waitress);
+    }
+    &_kp {
+      background-color: map-get($boss-roles-palette, kp);
+    }
+    &_hostess {
+      background-color: map-get($boss-roles-palette, hostess);
+    }
+    &_chef {
+      background-color: map-get($boss-roles-palette, chef);
+    }
+    &_security {
+      background-color: map-get($boss-roles-palette, security);
+    }
+    &_pr {
+      background-color: map-get($boss-roles-palette, pr);
+    }
+    &_bar-back {
+      background-color: map-get($boss-roles-palette, bar-back);
+    }
+  }
+
+  &__settings-sign {
+    display: inline-block;
+    width: 1.55em;
+    height: 1.55em;
+    border-radius: $boss-global-border-radius;
+    background: $boss-light-gray asset-url("icon-settings-white.svg") center center no-repeat;
+    background-size: 0.9em;
+    cursor: pointer;
+    &:hover {
+      background-color: $boss-medium-gray;
+    }
+  }
+
+  &_adjust {
+    &_button-small {
+      display: inline-block;
+      vertical-align: top;
+
+      .#{$info-table-selector}#{$label-selector} + & {
+        margin-left: 5px;
+      }
+    }
+  }
+
+}
