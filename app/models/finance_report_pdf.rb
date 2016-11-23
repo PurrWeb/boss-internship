@@ -18,7 +18,7 @@ class FinanceReportPDF
 
   def render
     Prawn::Document.new(
-      page_size: [800.00, 1500.00],
+      page_size: [800.00, 1600.00],
       page_layout: :landscape,
     ) do |pdf|
       pdf.font_size 20
@@ -35,17 +35,22 @@ class FinanceReportPDF
         if index == 0
           pdf.text_box(
             staff_type.name.titlecase,
-            at: [0, 680]
+            at: [0, 680],
+            style: :bold
           )
         else
-          pdf.text_box staff_type.name.titlecase
+          pdf.text_box(
+            staff_type.name.titlecase,
+            style: :bold
+          )
         end
-
         pdf.move_down 28
 
         pdf.text total_message(reports)
 
         pdf.font_size 14
+        pdf.move_down 10
+
         render_staff_type_table(
           pdf: pdf,
           reports: reports
@@ -61,16 +66,23 @@ class FinanceReportPDF
       header: 2,
       cell_style: {
         size: 16,
-        inline_format: true
+        inline_format: true,
+        align: :center,
+        overflow: :shrink_to_fit
       }
     ) do
-      # Ensure blank rows don't collapse
+      # Set minimum width
+      cells.style do |cell|
+        cell.width = [cell.width, 100].max
+      end
+
       (0..row_length).each do |index|
         cells = row(index)
+
+        # Ensure blank rows don't collapse
         if cells.all? {|cell| cell.content.blank? }
           cells.style do |cell|
             cell.height = 24
-            cell.width = [cell.width, 150].max
           end
         end
       end
@@ -111,7 +123,7 @@ class FinanceReportPDF
     heading << ''
     heading << '' if display_pay_rate_type
     week.each do |date|
-      heading << date
+      heading << "<b>#{date.to_s(:short)}</b>"
     end
     heading << ''
     heading << ''
@@ -123,21 +135,21 @@ class FinanceReportPDF
 
   def heading2
     heading = []
-    heading << 'Name'
-    heading << 'Pay Type' if display_pay_rate_type
+    heading << "<b>Name</b>"
+    heading << '<b>Pay Type</b>' if display_pay_rate_type
     week.each_with_day do |date, day|
-      heading << day.to_s.titlecase
+      heading << "<b>#{day.to_s.titlecase}</b>"
     end
-    heading << 'Total Hours'
-    heading << 'Owed Hours'
-    heading << 'Pay Rate' if display_totals
-    heading << 'Total' if display_totals
-    heading << 'Paid Holiday (Days)'
+    heading << '<b>Total Hours</b>'
+    heading << '<b>Owed Hours</b>'
+    heading << '<b>Pay Rate</b>' if display_totals
+    heading << '<b>Total</b>' if display_totals
+    heading << '<b>Paid Holiday (Days)</b>'
   end
 
   def report_row(report)
     columns = []
-    columns << report.staff_member_name.titlecase
+    columns << "<b>#{report.staff_member_name.titlecase}</b>"
     if display_pay_rate_type
       columns << report.staff_member.pay_rate.type_description
     end
@@ -165,7 +177,7 @@ class FinanceReportPDF
     )
     if display_totals
       columns << report.pay_rate_description
-      columns << number_to_currency(report.total_cents / 100.0, unit: '£')
+      columns << "<b>#{number_to_currency(report.total_cents / 100.0, unit: '£')}</b>"
     end
     columns << report.holiday_days_count
     columns
