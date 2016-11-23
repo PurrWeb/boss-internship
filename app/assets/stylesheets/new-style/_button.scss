@@ -1,0 +1,117 @@
+@import 'settings';
+@import 'mixins';
+
+@mixin button-role($image-name, $bg-color: null) {
+  background-image: asset-url("#{$image-name}.svg");
+  background-repeat: no-repeat;
+  background-position: 1em center;
+  background-size: 1.5em;
+
+  @if $bg-color {
+    @include button-hover-behavior($bg-color);
+  }
+
+  &.boss-button_big {
+    padding-left: 3em;
+    background-position: 1em center;
+    background-size: 1.5em;
+  }
+  &.boss-button_small {
+    padding-left: 1.8em;
+    background-position: 0.7em 45%;
+    background-size: 0.8em;
+  }
+}
+
+.boss-button {
+  $background-color: map-get($boss-app-palette, primary);
+
+  @include normalize-block();
+  @include link-to-button($color: $boss-white);
+  @include button-hover-behavior($background-color);
+
+  padding: 0.8em 2em 0.8em 3em;
+  background-color: $background-color;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+
+  display: inline-block;
+  border: none;
+  border-radius: $boss-global-border-radius;
+
+  &_small {
+    font-size: 0.7em;
+    padding: 0.4em 0.8em;
+    text-transform: uppercase;
+    font-weight:700;
+  }
+  &_big {
+    padding: 0.8em 2em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  &_very-big {
+    padding: 1.2em 2em;
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  &_role {
+    &_clock-in {
+      @include button-role($image-name: icon-clock-in-white);
+    }
+    &_clock-out {
+      @include button-role($image-name: icon-clock-out-white);
+    }
+    &_go-on-break {
+      @include button-role($image-name: icon-hour-glass-white);
+    }
+    &_enter-manager-mode {
+      @include button-role($image-name: icon-lock-white);
+    }
+    &_add-note {
+      @include button-role($image-name: icon-pencil-white);
+    }
+    &_change-pin {
+      background-color: map-get($boss-app-palette, fourth);
+      @include button-role($image-name: icon-lock-white, $bg-color: map-get($boss-app-palette, fourth));
+    }
+    &_reset-venue {
+      background-color: map-get($boss-app-palette, third);
+      @include button-role($image-name: icon-trash-white, $bg-color: map-get($boss-app-palette, third));
+    }
+    &_reload {
+      padding-left: 2.2em;
+      font-size: 1rem;
+      color: $boss-dark-gray;
+      text-transform: Capitalize;
+      font-weight: 400;
+      background: transparent asset-url("icon-reload-dark-gray.svg") left center no-repeat;
+      background-size: 1.6em;
+
+      &:hover {
+        background-color: transparent;
+        color: $boss-dark-gray;
+      }
+    }
+    &_pin-ok {
+      font-size: 1.8rem;
+      padding: 0.3em 0.5em;
+    }
+  }
+  &_inactive {
+    $background-color-inactive: map-get($boss-app-palette, secondary);
+
+    cursor: default;
+    background-color: $background-color-inactive;
+
+    &:hover {
+      color: $boss-white;
+      background-color: $background-color-inactive;
+    }
+  }
+}

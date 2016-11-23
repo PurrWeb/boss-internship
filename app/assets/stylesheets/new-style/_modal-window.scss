@@ -1,0 +1,139 @@
+@import 'settings';
+@import 'mixins';
+
+.boss-modal-window {
+  $border-radius: 5px;
+
+  @include normalize-block();
+
+  border-radius: $border-radius !important;
+  padding: 0 !important;
+
+  &__header {
+    background-color: #77dd6f;
+    color: $boss-white;
+    padding: 1.1em 0.5em;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+
+    &_error {
+      background-color: #dd6f70;
+    }
+    &_add-note {
+      background-color: #f3a84d;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 30px 30px 30px;
+
+    &_role {
+      &_error {
+        padding-top: 230px;
+        background: asset-url("icon-error-red.svg") center 35px no-repeat;
+        background-size: 165px 165px;
+      }
+      &_add-note {
+        padding-top: 1.7em;
+      }
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__message-block {
+    &_role {
+      &_error {
+        margin-bottom: 3em
+      }
+      &_add-note {
+        margin-bottom: 1.7em
+      }
+    }
+  }
+
+  &__message-text {
+    display: block;
+    text-align: center;
+    color: $boss-medium-gray;
+    font-size: 1.2rem;
+  }
+
+  &__controls-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__numpad {
+    display: table;
+    width: 340px;
+    border-collapse: collapse;
+    margin-bottom: 1.2rem;
+  }
+
+  &__numpad-row {
+    display: table-row;
+  }
+
+  &__numpad-button {
+    display: table-cell;
+    height: 80px;
+    color: $boss-light-gray;
+    text-align: center;
+    border: 2px solid $boss-light-gray;
+    vertical-align: middle;
+    font-size: 3.2rem;
+    padding: 0;
+    line-height: 1em;
+    font-weight: 300;
+    user-select: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    animation-timing-function: ease-out;
+
+    &:active {
+      background-color: $boss-light-gray;
+    }
+  }
+
+  &_adjust {
+    &_submit-button {
+      width: 340px !important;
+    }
+    &_input-pin {
+      width: 340px !important;
+      margin-bottom: 0.7em !important;
+    }
+    &_textarea {
+      margin-bottom: 1.7em !important;
+    }
+  }
+
+  & .closeButton--jss-0-1 {
+    width: 66px !important;
+    height: 66px !important;
+    left: auto !important;
+    right: -33px !important;
+    top: -30px !important;
+    background: transparent asset-url("icon-close-modal.svg") center center no-repeat !important;
+    background-size: 100% !important;
+    border-radius: 50%;
+    box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.3);
+
+    & svg {
+      display: none !important;
+    }
+  }
+}

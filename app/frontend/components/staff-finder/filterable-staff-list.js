@@ -1,29 +1,51 @@
 import React, { Component } from "react"
+import { connect } from "react-redux"
 import utils from "../../lib/utils"
 import _ from 'underscore'
 
-export default class FilterableStaffList extends Component {
+class FilterableStaffList extends Component {
     static propTypes = {
         staff: React.PropTypes.object.isRequired,
         staffItemComponent: React.PropTypes.func.isRequired,
+        toShowNotes: React.PropTypes.bool,
         filterSettings: React.PropTypes.object.isRequired
+    };
+    getTableContent() {
+        const staffToShow = this.getStaffToShow();
+        const staffListItems = staffToShow.map((staff, i) =>
+            <this.props.staffItemComponent
+                key={staff.clientId}
+                staff={staff} />
+        );
+        const notesCol = this.props.toShowNotes ? (
+            <div className="info-table__th info-table__th_notes">notes</div>
+        ) : null;
+
+        return staffListItems.length ? (
+            <div className="main-content__results-table-container">
+                <div className="info-table">
+                    <div className="info-table__header">
+                        <div className="info-table__th info-table__th_name">name</div>
+                        <div className="info-table__th info-table__th_rotaed">rotaed</div>
+                        {notesCol}
+                        <div className="info-table__th info-table__th_status">status</div>
+                    </div>
+                    {staffListItems}
+                </div>
+            </div>
+        ) : (
+            <div className="info-table__nothing-found-message">
+                No Staff Members Found
+            </div>
+        );
     }
     render() {
-        var staffToShow = this.getStaffToShow();
-        var self = this;
-        var staffListItems = staffToShow.map(
-            (staff, i) =>
-              <li key={staff.clientId}>
-                <this.props.staffItemComponent
-                    key={staff.clientId}
-                    staff={staff} />
-              </li>
-        );
+        const tableContent = this.getTableContent();
 
         return (
-            <ul className="no-bullet">
-              {staffListItems}
-            </ul>
+            <div className="main-content__results-table-container">
+                {tableContent}
+            </div>
         );
     }
     getStaffToShow() {
@@ -75,3 +97,16 @@ export default class FilterableStaffList extends Component {
         return staffToShow;
     }
 }
+
+function mapStateToProps(state, ownProps) {
+    const userMode = state.clockInOutAppUserMode.mode;
+    const toShowNotes = (userMode === 'Manager' || userMode === 'Bar Supervisor' || userMode === 'GM');
+
+    const additionalOpts = {
+        toShowNotes
+    };
+
+    return Object.assign({}, ownProps, additionalOpts);
+}
+
+export default connect(mapStateToProps)(FilterableStaffList);

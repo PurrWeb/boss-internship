@@ -1,4 +1,5 @@
 import _ from "underscore"
+import actions from "~redux/actions"
 
 var registeredApiRequestActionCreators = {};
 var apiRequestActionTypes = [];
@@ -82,23 +83,29 @@ export default function createApiRequestActionCreator(actionOptions){
                     }
                 }
                 function error(responseOptions){
-                    var actions = [requestEndAction()];
-                    actions.push({
+                    var actionsArr = [requestEndAction()];
+                    actionsArr.push({
                         type: failureType,
                         ...responseOptions,
                         requestOptions
-                    })
+                    });
+
                     if (requestOptions.errorHandlingId) {
-                        actions.push(setComponentErrorAction(responseOptions.errors));
-                    } else {
-                        if (responseOptions.errors.base){
-                            alert(responseOptions.errors.base.join("\n"));
-                        } else {
-                            alert(JSON.stringify(responseOptions.errors));
-                        }
+                        actionsArr.push(setComponentErrorAction(responseOptions.errors));
+                    } else if (requestType === 'CLOCK_IN_OUT_APP_ENTER_USER_MODE') {
+                        const {userMode, staffMemberObject} = requestOptions;
+                        const errorMessage = responseOptions.errors.base ?
+                            responseOptions.errors.base.join("\n") :
+                            JSON.stringify(responseOptions.errors);
+
+                        const onRetryClick = function () {
+                            dispatch(actions.enterUserModeWithConfirmation({userMode, staffMemberObject}));
+                        };
+
+                        dispatch(actions.showWrongPinMessage(errorMessage, 'WRONG_PIN', onRetryClick));
                     }
 
-                    dispatch(actions);
+                    dispatch(actionsArr);
                 }
                 function setComponentErrorAction(errors){
                     return {

@@ -23,18 +23,33 @@ export default class StaffTypeDropdown extends Component {
         return (
             <div className={className}>
                 <Select
+                    className="boss-react-select"
                     value={this.props.selectedStaffTypes.join(",")}
                     options={staffTypeOptions}
                     multi={true}
                     optionRenderer={(option) => this.renderOption(option, "option")}
-                    valueRenderer={(option) => this.renderOption(option, "value")}
-                    onChange={(value) => this.onChange(value)} />
+                    valueRenderer={this.renderValue}
+                    onChange={(value) => this.onChange(value)}
+                />
+            </div>
+        );
+    }
+    renderValue(option) {
+        const role = option.label.toLowerCase().replace(' ', '-');
+
+        return (
+            <div className={`Select-item-label__content Select-item-label__content_role_${role}`}>
+                {option.label}
             </div>
         );
     }
     renderOption(option, itemType){
-        return <div className={`staff-type-dropdown__item staff-type-dropdown__item--${itemType}`}>
-            <div  style={{background: option.color}} className="staff-type-dropdown__item-content">
+        const role = option.label.toLowerCase().replace(' ', '-');
+
+        return <div className={`staff-type-dropdown__item staff-type-dropdown__item--option`}>
+            <div
+                className={`staff-type-dropdown__item-content boss-react-select__dropdown-option_role_${role}`}
+            >
                 {option.label}
             </div>
             {option.label}

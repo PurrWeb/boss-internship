@@ -1,0 +1,90 @@
+@import 'settings';
+@import 'mixins';
+
+html {
+  box-sizing: border-box;
+  margin: 0;
+  height: 100%;
+}
+
+body.boss-body {
+  @include normalize-block();
+
+  height: 100%;
+  padding: 0;
+  margin: 0;
+
+  @if ($boss-body-antialiased) {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+.boss-root, [data-react-class=ClockInOutApp] {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+.boss-root {
+  background-color: $boss-body-background;
+
+  &_role {
+    &_manager {
+      background-color: #ffd9ac;
+
+      & .main-content {
+        margin: $main-content-margin-top auto 0;
+        min-height: initial;
+      }
+    }
+    &_normal {
+      & .main-content {
+        margin: $main-content-margin-top auto 0;
+        min-height: initial;
+      }
+    }
+  }
+}
+
+.drop-down-button {
+  display: block;
+  padding-right: 1.2em;
+  font-size: 1rem;
+  text-decoration: none;
+  color: $boss-medium-gray;
+  font-weight: 400;
+  text-transform: capitalize;
+  background: asset-url('icon-down-arrow-medium-gray.svg') center right no-repeat;
+  background-size: 0.5em;
+  &:hover {
+    color: $boss-dark-gray;
+    background-image: asset-url('icon-down-arrow-dark-gray.svg');
+    text-decoration: underline;
+  }
+
+  &_open {
+    background-image: asset-url('icon-up-arrow-medium-gray.svg');
+    &:hover {
+      color: $boss-dark-gray;
+      background-image: asset-url('icon-up-arrow-dark-gray.svg');
+    }
+  }
+}
+
+.boss-tooltip-portal {
+  &__background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.hidden {
+  display: none;
+}
