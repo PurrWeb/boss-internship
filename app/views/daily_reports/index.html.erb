@@ -31,6 +31,23 @@
     </div>
 <% end %>
 
+<% if daily_report.present? %>
+  <div class="row">
+    <div class="shrink column">
+      <%= link_to(
+            daily_reports_path(
+              venue_id: venue.id,
+              date:  UIRotaDate.format(date),
+              format: :pdf
+            ),
+            class: 'button mb-mn'
+          ) do %>
+            <i class="fa fa-download"></i> Download PDF
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
 <div>
   <% if !daily_report.present? || daily_report.pending_first_calculation? %>
     <p>No daily report currently exists for this day.</p>
