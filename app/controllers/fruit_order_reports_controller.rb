@@ -2,10 +2,10 @@ class FruitOrderReportsController < ApplicationController
   before_action :authorize_admin
 
   def index
-    pending_fruit_orders = FruitOrder.current
+    pending_fruit_orders = FruitOrder.current.includes(:venue)
     pending_show_fields = FruitOrderShowFields.new(pending_fruit_orders)
 
-    accepted_fruit_orders = FruitOrder.accepted
+    accepted_fruit_orders = FruitOrder.accepted.includes(:venue)
     accepted_show_fields = FruitOrderShowFields.new(accepted_fruit_orders)
 
     venues_without_pending_fruit_order = VenueWithoutAssociatedQuery.new(
@@ -52,7 +52,7 @@ class FruitOrderReportsController < ApplicationController
   def history
     fruit_orders = FruitOrder.
       done.
-      includes(:fruit_order_transitions).
+      includes([:fruit_order_transitions, :venue]).
       order('fruit_order_transitions.updated_at DESC').
       paginate(
         page: params[:page],
