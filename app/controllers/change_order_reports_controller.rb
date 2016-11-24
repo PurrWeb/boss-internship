@@ -2,8 +2,8 @@ class ChangeOrderReportsController < ApplicationController
   before_action :authorize_admin
 
   def index
-    pending_change_orders = ChangeOrder.current
-    accepted_change_orders = ChangeOrder.accepted
+    pending_change_orders = ChangeOrder.current.includes(:venue)
+    accepted_change_orders = ChangeOrder.accepted.includes(:venue)
 
     venues_without_pending_change_order = VenueWithoutAssociatedQuery.new(
       associated_relation: pending_change_orders
@@ -67,7 +67,7 @@ class ChangeOrderReportsController < ApplicationController
   def history
     change_orders = ChangeOrder.
       done.
-      includes(:change_order_transitions).
+      includes([:change_order_transitions, :venue]).
       order('change_order_transitions.updated_at DESC').
       paginate(
         page: params[:page],
