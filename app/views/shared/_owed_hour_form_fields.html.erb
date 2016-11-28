@@ -4,5 +4,6 @@
     label: 'Week',
     class: 'date-picker'
   ) %>
-<%= form.text_field(:minutes) %>
+<%= form.number_field(:hours, min: 0, max: 119) %>
+<%= form.number_field(:minutes, min: 0, max: 59) %>
 <%= form.text_area :note %>

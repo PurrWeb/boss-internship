@@ -5,6 +5,7 @@ ruby "2.1.2"
 gem "rails", "~> 4.2.0"
 gem 'mysql2', "~> 0.3.20"
 gem "devise", "~> 3.4.0"
+gem "disposable", "~> 0.3.0"
 gem "thin"
 gem "rollbar"
 gem 'sass-rails', '>= 3.2'
@@ -36,7 +37,7 @@ gem 'prawn'
 gem 'prawn-table'
 gem 'will_paginate-foundation'
 gem 'reform'
-gem 'reform-rails'
+gem 'reform-rails', '~> 0.1.7'
 gem 'newrelic_rpm'
 gem 'fitter-happier'
 gem "auto_strip_attributes", "~> 2.0"

@@ -87,7 +87,7 @@
     </div>
 
     <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_content_class('owed-hours', active_tab) %>" id="owed-hours-tab">
-      <%= render partial: 'shared/staff_member_show_owed_hours_tab', locals: { staff_member: staff_member, owed_hours_week: owed_hours_week, owed_hour: owed_hour } %>
+      <%= render partial: 'shared/staff_member_show_owed_hours_tab', locals: { staff_member: staff_member, owed_hour_form: owed_hour_form } %>
     </div>
   </div>
 </div>
