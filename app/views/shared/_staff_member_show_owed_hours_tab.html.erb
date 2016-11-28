@@ -14,10 +14,12 @@
   <% owed_hours_by_week = owed_hours.group_by { |owed_hour| RotaWeek.new(owed_hour.week_start_date)  }.sort_by { |week, hours| week } %>
   <% owed_hours_by_week.each do |week, hours| %>
     <p><strong>Mon <%= week.start_date %> - Sun <%= week.end_date %></strong></p>
-    <p>Total: <%= hours.inject(0) { |sum, hours| sum + hours.minutes } %> minutes </p>
+    <% total_minutes = hours.inject(0) { |sum, hours| sum + hours.minutes } %>
+    <p>Total: <%= HoursHelper.hour_and_minute_text(total_minutes) %> </p>
     <table class="table">
       <thead>
         <tr>
+          <th>Duration (Hours)</th>
           <th>Duration (Minutes)</th>
           <th>Created By</th>
           <th>Note</th>
@@ -27,7 +29,8 @@
       <tbody>
         <% hours.each do |owed_hour| %>
           <tr>
-            <td><%= owed_hour.minutes %></td>
+            <td><%= HoursHelper.hours_from_total_minutes(owed_hour.minutes) %></td>
+            <td><%= HoursHelper.hour_minutes_from_total_minutes(owed_hour.minutes) %></td>
             <td><%= owed_hour.creator.full_name %> on <%= owed_hour.created_at.to_s(:human_date) %></td>
             <td><p><%= owed_hour.note %></p></td>
             <td>
