@@ -37,7 +37,13 @@ class OwedHoursController < ApplicationController
     owed_hour = OwedHour.enabled.find(params[:id])
     authorize! :manage, owed_hour
 
-    render locals: { owed_hour: owed_hour }
+    owed_hour_form = EditOwedHourForm.new(
+      OwedHourViewModel.new(owed_hour)
+    )
+    owed_hour.creator = current_user
+    owed_hour.staff_member = staff_member
+
+    render locals: { owed_hour_form: owed_hour_form }
   end
 
   def update
@@ -46,8 +52,7 @@ class OwedHoursController < ApplicationController
 
     result = EditOwedHour.new(
       requester: current_user,
-      owed_hour: owed_hour,
-      params: edit_owed_hour_params
+      owed_hour_form: owed_hour_form
     ).call
 
     if result.success?
@@ -57,7 +62,7 @@ class OwedHoursController < ApplicationController
       flash.now[:error] = "There was a problem updating these owed hours"
 
       render 'edit', locals: {
-        owed_hour: result.owed_hour
+        owed_hour: result.owed_hour_form
       }
     end
   end
