@@ -58,7 +58,11 @@ class HolidaysController < ApplicationController
   end
 
   def create
-    staff_member = StaffMember.find(params[:staff_member_id])
+    query = StaffMember.where(id: params[:staff_member_id])
+    query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
+    staff_member = query.first
+    raise ActiveRecord::RecordNotFound.new unless staff_member.present?
+
     authorize! :create, Holiday.new(staff_member: staff_member)
 
     result = CreateHoliday.new(
@@ -67,9 +71,6 @@ class HolidaysController < ApplicationController
         merge(staff_member: staff_member, creator: current_user)
     ).call
 
-    owed_hour = OwedHour.new
-    owed_hours_week = RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
-
     if result.success?
       flash[:success] = "Holiday added successfully"
       redirect_to staff_member_path(staff_member, tab: 'holidays')
@@ -77,11 +78,12 @@ class HolidaysController < ApplicationController
       flash.now[:error] = "There was a problem creating this holiday"
       js 'StaffMembers#show'
 
+      owed_hour_form = CreateOwedHourForm.new(OwedHourViewModel.new(OwedHour.new))
+
       render 'staff_members/show', locals: {
         staff_member: staff_member,
         active_tab: 'holidays',
-        owed_hour: owed_hour,
-        owed_hours_week: owed_hours_week,
+        owed_hour_form: owed_hour_form,
         holiday: result.holiday
       }
     end
