@@ -53,8 +53,8 @@ class StaffMembersController < ApplicationController
 
   def show
     staff_member = StaffMember.
-        includes(holidays: {creator: [:name]}).
-        includes(:owed_hours).
+        includes(holidays: [:frozen_by, { creator: [:name]} ]).
+        includes(owed_hours: [:staff_member, :creator, :frozen_by]).
         includes(:name).
         find(params[:id])
 
