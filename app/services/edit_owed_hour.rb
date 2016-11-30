@@ -1,86 +1,33 @@
 class EditOwedHour
-  Result = Struct.new(:success, :owed_hour) do
-    def success?
-      success
-    end
-  end
-
-  def initialize(requester:, owed_hour:, params:)
+  def initialize(requester:, old_owed_hour:, new_owed_hour:)
     @requester = requester
-    @owed_hour = owed_hour
-    @params = params
-    assert_params
+    @old_owed_hour = old_owed_hour
+    @new_owed_hour = new_owed_hour
   end
 
   def call
-    if !owed_hour.editable?
-      owed_hour.errors.add(:base, "owed hour is not editable")
-      return Result.new(false, owed_hour)
-    elsif !attributes_changed
-      Result.new(true, owed_hour) if !attributes_changed
-    else
-      success = false
-      ActiveRecord::Base.transaction do
-        owed_hour.disable!(requester: requester)
+    assert_owed_hours_valid(old_owed_hour, new_owed_hour)
+    return if owed_hours_match?(old_owed_hour, new_owed_hour)
 
-        new_owed_hour = OwedHour.new(
-          copy_params.
-            merge(update_params).
-            merge(creator: requester)
-        )
-        success = new_owed_hour.save
-        raise ActiveRecord::Rollback unless success
-
-        owed_hour.update_attributes!(parent: new_owed_hour)
-      end
-
-      if !success
-        owed_hour.reload
-        owed_hour.assign_attributes(update_params)
-        owed_hour.valid?
-      end
-
-      Result.new(success, owed_hour)
+    ActiveRecord::Base.transaction do
+      old_owed_hour.disable!(requester: requester)
+      new_owed_hour.save!
+      old_owed_hour.update_attributes!(parent: new_owed_hour)
     end
   end
 
   private
-  attr_reader :requester, :owed_hour, :params
+  attr_reader :requester, :old_owed_hour, :new_owed_hour
 
-  def assert_params
-    if params.keys.map(&:to_sym).sort != edit_attributes.sort
-      raise ArgumentError.new(":week_start_date, :minutes, :note owed hour params required, got:#{params.keys}")
+  def owed_hours_match?(owed_hour_1, owed_hour_2)
+    [:week_start_date, :minutes, :note].all? do |attribute|
+      owed_hour_1.public_send(attribute) == owed_hour_2.public_send(attribute)
     end
   end
 
-  def edit_attributes
-    [:week_start_date, :minutes, :note]
-  end
-
-  def update_params
-    @update_params ||= begin
-      result = {}
-      edit_attributes.each do |attribute|
-        result[attribute] = params[attribute]
-      end
-      result
-    end
-  end
-
-  def copy_params
-    @copy_params ||= begin
-      result = {}
-      edit_attributes.each do |attribute|
-        result[attribute] = owed_hour.public_send(attribute)
-      end
-      result[:staff_member] = owed_hour.staff_member
-      result
-    end
-  end
-
-  def attributes_changed
-    update_params.keys.any? do |key|
-      owed_hour.public_send(key) != update_params[key]
-    end
+  def assert_owed_hours_valid(old_owed_hour, new_owed_hour)
+    raise ArgumentError.new("old_owed_hour must be enabled") unless old_owed_hour.enabled?
+    raise ArgumentError.new("new_owed_hour must be unpersisted") if new_owed_hour.persisted?
+    raise ArgumentError.new("old and new old hours must be for some staff member") unless old_owed_hour.staff_member.id == new_owed_hour.staff_member.id
   end
 end

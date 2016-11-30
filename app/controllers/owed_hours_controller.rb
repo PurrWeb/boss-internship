@@ -41,32 +41,58 @@ class OwedHoursController < ApplicationController
     owed_hour = OwedHour.enabled.find(params[:id])
     authorize! :manage, owed_hour
 
-    owed_hour_form = EditOwedHourForm.new(
+    edit_owed_hour_form = EditOwedHourForm.new(
       OwedHourViewModel.new(owed_hour)
     )
-    owed_hour.creator = current_user
-    owed_hour.staff_member = staff_member
 
-    render locals: { owed_hour_form: owed_hour_form }
+    render locals: { edit_owed_hour_form: edit_owed_hour_form }
   end
 
   def update
     owed_hour = OwedHour.enabled.find(params[:id])
     authorize! :manage, owed_hour
 
-    result = EditOwedHour.new(
-      requester: current_user,
-      owed_hour_form: owed_hour_form
-    ).call
+    edit_owed_hour_form = EditOwedHourForm.new(
+      OwedHourViewModel.new(owed_hour),
+      update_owed_hour_params
+    )
 
-    if result.success?
+    if edit_owed_hour_form.valid?
+      normalised_update_attributes = {}
+
+       edit_owed_hour_form.save do |attributes|
+        attributes.each do |key, value|
+          next if [:minutes, :hours].include?(key.to_sym)
+          normalised_update_attributes[key.to_sym] = value
+        end
+
+        normalised_update_attributes[:minutes] = HoursHelper.
+          total_minutes_from_hours_and_minutes(
+              hours: attributes[:hours],
+              minutes: attributes[:minutes]
+          )
+      end
+      new_owed_hour = OwedHour.new(
+        normalised_update_attributes.
+          merge(
+            creator: current_user,
+            staff_member: owed_hour.staff_member
+          )
+      )
+
+      EditOwedHour.new(
+        requester: current_user,
+        old_owed_hour: owed_hour,
+        new_owed_hour: new_owed_hour
+      ).call
+
       flash[:success] = "Owed hours updated successfully"
-      redirect_to staff_member_path(result.owed_hour.staff_member, tab: 'owed-hours')
+      redirect_to staff_member_path(owed_hour.staff_member, tab: 'owed-hours')
     else
       flash.now[:error] = "There was a problem updating these owed hours"
 
       render 'edit', locals: {
-        owed_hour: result.owed_hour_form
+        edit_owed_hour_form: edit_owed_hour_form
       }
     end
   end
@@ -98,11 +124,11 @@ class OwedHoursController < ApplicationController
         :minutes,
         :note
       ).merge(
-        week_start_date: week_start_date_from_params,
+        week_start_date: week_start_date_from_params(:create),
       )
   end
 
-  def edit_owed_hour_params
+  def update_owed_hour_params
     params.
       require(:edit_owed_hour).
       permit(
@@ -110,13 +136,13 @@ class OwedHoursController < ApplicationController
         :minutes,
         :note
       ).merge(
-        week_start_date: week_start_date_from_params,
+        week_start_date: week_start_date_from_params(:edit),
       )
   end
 
-  def week_start_date_from_params
-    if params['create_owed_hour']['week_start_date'].present?
-      UIRotaDate.parse(params['create_owed_hour']['week_start_date'])
+  def week_start_date_from_params(action)
+    if params["#{action}_owed_hour"]['week_start_date'].present?
+      UIRotaDate.parse(params["#{action}_owed_hour"]['week_start_date'])
     end
   end
 end

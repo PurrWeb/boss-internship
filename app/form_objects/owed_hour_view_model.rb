@@ -1,5 +1,6 @@
 class OwedHourViewModel < Disposable::Twin
   feature Sync
+  feature Changed
 
   property :week_start_date
   property :note
@@ -12,6 +13,14 @@ class OwedHourViewModel < Disposable::Twin
     self.hours = HoursHelper.hours_from_total_minutes(total_minutes)
     self.minutes = HoursHelper.hour_minutes_from_total_minutes(total_minutes)
     @total_minutes = total_minutes
+  end
+
+  def id
+    model.id
+  end
+
+  def model_editable?
+    model.editable?
   end
 
   def hours=(val)

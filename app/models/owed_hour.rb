@@ -40,6 +40,10 @@ class OwedHour < ActiveRecord::Base
     staff_member.enabled? && !frozen?
   end
 
+  def enabled?
+    !disabled?
+  end
+
   def disabled?
     disabled_at.present?
   end
