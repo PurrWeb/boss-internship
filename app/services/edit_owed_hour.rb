@@ -30,6 +30,7 @@ class EditOwedHour
 
   def assert_owed_hours_valid(old_owed_hour, new_owed_hour)
     raise ArgumentError.new("old_owed_hour must be enabled") unless old_owed_hour.enabled?
+    raise ArgumentError.new("old_owed_hour must be persisted") unless old_owed_hour.persisted?
     raise ArgumentError.new("new_owed_hour must be unpersisted") if new_owed_hour.persisted?
     raise ArgumentError.new("old and new old hours must be for some staff member") unless old_owed_hour.staff_member.id == new_owed_hour.staff_member.id
   end
