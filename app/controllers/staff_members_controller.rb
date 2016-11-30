@@ -52,11 +52,11 @@ class StaffMembersController < ApplicationController
   end
 
   def show
-    staff_member = StaffMember.
-        includes(holidays: [:frozen_by, { creator: [:name]} ]).
-        includes(owed_hours: [:staff_member, :creator, :frozen_by]).
-        includes(:name).
-        find(params[:id])
+    query = StaffMember.where(id: params[:id])
+    query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
+    staff_member = query.first
+
+    raise ActiveRecord::RecordNotFound.new unless staff_member.present?
 
     if can? :edit, staff_member
       if !active_tab_from_params.present?

@@ -1,7 +1,11 @@
 class OwedHoursController < ApplicationController
   def create
-    staff_member = StaffMember.find(params[:staff_member_id])
+    query = StaffMember.where(id: params[:staff_member_id])
+    query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
+    staff_member = query.first
+
     authorize! :view, StaffMember
+    raise ActiveRecord::RecordNotFound.new unless staff_member.present?
 
     owed_hour = OwedHour.new
     owed_hour_form = CreateOwedHourForm.new(
