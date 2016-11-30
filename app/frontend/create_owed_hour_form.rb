@@ -30,10 +30,10 @@ class CreateOwedHourForm < Reform::Form
       if week.start_date != week_start_date
         errors.add(:week_start_date, 'must be at start of week')
       end
-    end
 
-    if week.week_status == :past
-      errors.add(:base, "can't create owed hours in the past")
+      if week.week_status == :past
+        errors.add(:base, "can't create owed hours in the past")
+      end
     end
   end
 
