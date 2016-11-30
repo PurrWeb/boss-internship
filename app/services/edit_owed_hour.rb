@@ -14,7 +14,7 @@ class EditOwedHour
 
     ActiveRecord::Base.transaction do
       old_owed_hour.disable!(requester: requester)
-      new_owed_hour.save!
+      new_owed_hour.update_attributes!(creator: requester)
       old_owed_hour.update_attributes!(parent: new_owed_hour)
     end
   end
