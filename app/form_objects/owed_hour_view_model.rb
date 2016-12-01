@@ -1,3 +1,5 @@
+# Used to back OwedHourForm. Handles mapping of hours and minutes duration
+# in UI to minutes field of the model
 class OwedHourViewModel < Disposable::Twin
   feature Sync
   feature Changed
