@@ -34,25 +34,16 @@ class FinanceReportPDF
 
       pdf.font_size 14
       pdf.text filter_information
-      pdf.move_down 7
 
       reports_by_staff_type.each_with_index do |(staff_type, reports), index|
-        pdf.start_new_page if index > 0
+        pdf.move_down 25
 
         pdf.font_size 18
-        if index == 0
-          pdf.text_box(
-            staff_type.name.titlecase,
-            at: [0, 680],
-            style: :bold
-          )
-        else
-          pdf.text_box(
-            staff_type.name.titlecase,
-            style: :bold
-          )
-        end
-        pdf.move_down 28
+        pdf.text(
+          staff_type.name.titlecase,
+          style: :bold
+        )
+        pdf.move_down 10
 
         pdf.text total_message(reports)
 
