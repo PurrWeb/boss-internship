@@ -5,7 +5,7 @@
     <span>Add Hours</span>
   </div>
   <div class="panel-body">
-    <%= render partial: 'shared/add_owed_hour_form', locals: { owed_hour: owed_hour, staff_member: staff_member } %>
+    <%= render partial: 'shared/add_owed_hour_form', locals: { staff_member: staff_member, owed_hour_form: owed_hour_form } %>
   </div>
 </div>
 
@@ -14,10 +14,12 @@
   <% owed_hours_by_week = owed_hours.group_by { |owed_hour| RotaWeek.new(owed_hour.week_start_date)  }.sort_by { |week, hours| week } %>
   <% owed_hours_by_week.each do |week, hours| %>
     <p><strong>Mon <%= week.start_date %> - Sun <%= week.end_date %></strong></p>
-    <p>Total: <%= hours.inject(0) { |sum, hours| sum + hours.minutes } %> minutes </p>
+    <% total_minutes = hours.inject(0) { |sum, hours| sum + hours.minutes } %>
+    <p>Total: <%= HoursHelper.new(total_minutes: total_minutes).description %> </p>
     <table class="table">
       <thead>
         <tr>
+          <th>Duration (Hours)</th>
           <th>Duration (Minutes)</th>
           <th>Created By</th>
           <th>Note</th>
@@ -26,8 +28,10 @@
       </thead>
       <tbody>
         <% hours.each do |owed_hour| %>
+          <% hours_helper = HoursHelper.new(total_minutes: owed_hour.minutes) %>
           <tr>
-            <td><%= owed_hour.minutes %></td>
+            <td><%= hours_helper.hours %></td>
+            <td><%= hours_helper.minutes %></td>
             <td><%= owed_hour.creator.full_name %> on <%= owed_hour.created_at.to_s(:human_date) %></td>
             <td><p><%= owed_hour.note %></p></td>
             <td>

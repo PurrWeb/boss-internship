@@ -52,28 +52,26 @@ class StaffMembersController < ApplicationController
   end
 
   def show
-    staff_member = StaffMember.
-        includes(holidays: {creator: [:name]}).
-        includes(:owed_hours).
-        includes(:name).
-        find(params[:id])
+    query = StaffMember.where(id: params[:id])
+    query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
+    staff_member = query.first
+
+    raise ActiveRecord::RecordNotFound.new unless staff_member.present?
 
     if can? :edit, staff_member
       if !active_tab_from_params.present?
         return redirect_to staff_member_path(staff_member, tab: 'employment-details')
       end
 
-      owed_hours_week = RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
-      owed_hour = OwedHour.new(
-        minutes: 0,
+      owed_hour_form = CreateOwedHourForm.new(
+        OwedHourViewModel.new(OwedHour.new)
       )
 
       render locals: {
         staff_member: staff_member,
         active_tab: active_tab_from_params,
         holiday: Holiday.new,
-        owed_hours_week: owed_hours_week,
-        owed_hour: owed_hour
+        owed_hour_form: owed_hour_form
       }
     else
       flash.now[:alert] = "You're not authorized to view all of this staff member's details. Contact an admin for further assistance."

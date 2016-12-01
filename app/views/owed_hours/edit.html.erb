@@ -1,12 +1,12 @@
 <h1>Edit Owed Hours</h1>
 
-<% if owed_hour.errors[:base].present? %>
+<% if update_owed_hour_form.errors[:base].present? %>
   <div class="callout alert" role="alert">
-    <%= owed_hour.errors[:base].to_sentence %>
+    <%= update_owed_hour_form.errors[:base].to_sentence %>
   </div>
 <% end %>
 
-<%= bootstrap_form_for(owed_hour, url: owed_hour_path(id: owed_hour.id)) do |form| %>
+<%= bootstrap_form_for(update_owed_hour_form,  url: update_owed_hour_form.path, method: :patch, as: :update_owed_hour) do |form| %>
   <%= render partial: 'shared/owed_hour_form_fields', locals: { form: form } %>
   <button type="submit" class="button">Edit</button>
 <% end %>

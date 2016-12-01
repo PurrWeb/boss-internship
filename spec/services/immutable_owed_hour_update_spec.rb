@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'EditOwedHour service'  do
+RSpec.describe 'ImmutableOwedHourUpdate service'  do
   let(:requester) { FactoryGirl.create(:user) }
   let(:week_start_date) { Time.zone.now.beginning_of_week.to_date }
   let(:minutes) { 50 }
@@ -16,15 +16,16 @@ RSpec.describe 'EditOwedHour service'  do
     {
       week_start_date: owed_hour.week_start_date,
       minutes: owed_hour.minutes,
-      note: owed_hour.note
+      note: owed_hour.note,
+      staff_member: owed_hour.staff_member
     }
   end
-
+  let(:new_owed_hour) { OwedHour.new(owed_hour_params) }
   let(:service) do
-    EditOwedHour.new(
+    ImmutableOwedHourUpdate.new(
       requester: requester,
-      owed_hour: owed_hour,
-      params: owed_hour_params
+      old_owed_hour: owed_hour,
+      new_owed_hour: new_owed_hour
     )
   end
 
@@ -42,39 +43,17 @@ RSpec.describe 'EditOwedHour service'  do
     let(:owed_hour_params) do
       {
         week_start_date: owed_hour.week_start_date,
-        foo: 'asdsa'
+        foo: 'asdsa',
+        staff_member: owed_hour.staff_member
       }
     end
 
     specify 'it throws an argument error' do
-      expect{ service.call }.to raise_error(ArgumentError)
-    end
-  end
-
-  context 'supplying too few owed_hour params' do
-    let(:owed_hour_params) do
-      {
-        week_start_date: owed_hour.week_start_date,
-      }
-    end
-
-    specify 'it throws an argument error' do
-      expect{ service.call }.to raise_error(ArgumentError)
+      expect{ service.call }.to raise_error(ActiveRecord::UnknownAttributeError)
     end
   end
 
   context 'attributes have not changed' do
-    let(:result) { service.call }
-    before do
-      result
-    end
-
-    describe 'result' do
-      it 'should be' do
-        expect(result).to be_success
-      end
-    end
-
     specify 'owed_hour remains enabled' do
       expect(owed_hour.reload.disabled?).to eq(false)
     end
@@ -89,39 +68,34 @@ RSpec.describe 'EditOwedHour service'  do
       {
         week_start_date: owed_hour.week_start_date,
         minutes: 10,
-        note: owed_hour.note
+        note: owed_hour.note,
+        staff_member: owed_hour.staff_member
       }
-    end
-    let(:result) { service.call }
-
-    before do
-      result
-    end
-
-    it 'should be a success' do
-      expect(result).to be_success
     end
 
     specify 'owed_hour is disabled' do
+      service.call
       expect(owed_hour.reload.disabled?).to eq(true)
     end
 
     specify 'disabled_by field is set' do
+      service.call
       expect(owed_hour.reload.disabled_by).to eq(requester)
     end
 
     specify 'staff member has a new active owed_hour' do
+      service.call
       expect(staff_member.reload.active_owed_hours.count).to eq(1)
     end
 
     describe 'new owed_hour' do
-      let(:new_owed_hour) { staff_member.reload.active_owed_hours.first }
-
-      it 'adssda' do
-        expect(new_owed_hour).to be_present
+      it 'should persist new hour' do
+        service.call
+        expect(new_owed_hour).to be_persisted
       end
 
       it 'is parent of old owed_hour' do
+        service.call
         expect(owed_hour.reload.parent).to eq(new_owed_hour)
       end
     end
@@ -132,33 +106,13 @@ RSpec.describe 'EditOwedHour service'  do
       {
         week_start_date: nil,
         minutes: 30,
-        note: owed_hour.note
+        note: owed_hour.note,
+        staff_member: owed_hour.staff_member
       }
-    end
-    let(:result) { service.call }
-
-    before do
-      result
-    end
-
-    it 'should not be a success' do
-      expect(result).to_not be_success
     end
 
     specify 'owed_hour remains enabled' do
-      expect(owed_hour.reload.disabled?).to eq(false)
-    end
-
-    specify 'no new owed_hour should be created' do
-      expect(staff_member.reload.active_owed_hours.count).to eq(1)
-    end
-
-    specify 'it should return the owed_hour' do
-      expect(result.owed_hour).to eq(owed_hour)
-    end
-
-    specify 'it should return the error' do
-      expect(result.owed_hour.errors.keys).to eq([:week_start_date])
+      expect{ result.call }.to raise_error
     end
   end
 end

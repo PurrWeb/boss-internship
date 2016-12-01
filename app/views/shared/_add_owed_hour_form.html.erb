@@ -1,10 +1,10 @@
-<% if owed_hour.errors[:base].present? %>
+<% if (owed_hour_form.errors || {})[:base].present? %>
   <div class="callout alert" role="alert">
-    <%= owed_hour.errors[:base].to_sentence %>
+    <%= owed_hour_form.errors[:base].to_sentence %>
   </div>
 <% end %>
 
-<%= bootstrap_form_for(owed_hour, url: staff_member_owed_hours_path(staff_member_id: staff_member.id)) do |form| %>
+<%= bootstrap_form_for(owed_hour_form, url: staff_member_owed_hours_path(staff_member_id: staff_member.id)) do |form| %>
   <%= render partial: 'shared/owed_hour_form_fields', locals: { form: form } %>
   <button type="submit" class="button">
     <span class="fa fa-plus mr-base" aria-hidden="true"></span>Add
