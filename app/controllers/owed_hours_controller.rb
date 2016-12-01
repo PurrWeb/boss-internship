@@ -9,7 +9,7 @@ class OwedHoursController < ApplicationController
 
     owed_hour = OwedHour.new
     owed_hour_form = CreateOwedHourForm.new(
-      OwedHourViewModel.new(owed_hour), create_owed_hour_params
+      OwedHourViewModel.new(owed_hour), owed_hour_params(:create)
     )
     owed_hour.creator = current_user
     owed_hour.staff_member = staff_member
@@ -54,7 +54,7 @@ class OwedHoursController < ApplicationController
 
     edit_owed_hour_form = EditOwedHourForm.new(
       OwedHourViewModel.new(owed_hour),
-      update_owed_hour_params
+      owed_hour_params(:update)
     )
 
     if edit_owed_hour_form.valid?
@@ -116,27 +116,15 @@ class OwedHoursController < ApplicationController
   end
 
   private
-  def create_owed_hour_params
+  def owed_hour_params(action)
     params.
-      require(:create_owed_hour).
+      require("#{action}_owed_hour").
       permit(
         :hours,
         :minutes,
         :note
       ).merge(
-        week_start_date: week_start_date_from_params(:create),
-      )
-  end
-
-  def update_owed_hour_params
-    params.
-      require(:edit_owed_hour).
-      permit(
-        :hours,
-        :minutes,
-        :note
-      ).merge(
-        week_start_date: week_start_date_from_params(:edit),
+        week_start_date: week_start_date_from_params(action),
       )
   end
 
