@@ -80,7 +80,7 @@ class OwedHoursController < ApplicationController
           )
       )
 
-      UpdateOwedHour.new(
+      ImmutableOwedHourUpdate.new(
         requester: current_user,
         old_owed_hour: owed_hour,
         new_owed_hour: new_owed_hour

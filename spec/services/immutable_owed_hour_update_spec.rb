@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'UpdateOwedHour service'  do
+RSpec.describe 'ImmutableOwedHourUpdate service'  do
   let(:requester) { FactoryGirl.create(:user) }
   let(:week_start_date) { Time.zone.now.beginning_of_week.to_date }
   let(:minutes) { 50 }
@@ -22,7 +22,7 @@ RSpec.describe 'UpdateOwedHour service'  do
   end
   let(:new_owed_hour) { OwedHour.new(owed_hour_params) }
   let(:service) do
-    UpdateOwedHour.new(
+    ImmutableOwedHourUpdate.new(
       requester: requester,
       old_owed_hour: owed_hour,
       new_owed_hour: new_owed_hour
