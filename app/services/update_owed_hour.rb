@@ -1,7 +1,7 @@
 # Takes an persisted owed hour object and peforms an 'imutable update' using a second
 # unpersisted owed hour record to take it's place. This service performs the disabling
 # of the old record and links it with the new one.
-class EditOwedHour
+class UpdateOwedHour
   def initialize(requester:, old_owed_hour:, new_owed_hour:)
     @requester = requester
     @old_owed_hour = old_owed_hour

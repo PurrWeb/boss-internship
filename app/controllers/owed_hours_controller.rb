@@ -41,26 +41,26 @@ class OwedHoursController < ApplicationController
     owed_hour = OwedHour.enabled.find(params[:id])
     authorize! :manage, owed_hour
 
-    edit_owed_hour_form = EditOwedHourForm.new(
+    update_owed_hour_form = UpdateOwedHourForm.new(
       OwedHourViewModel.new(owed_hour)
     )
 
-    render locals: { edit_owed_hour_form: edit_owed_hour_form }
+    render locals: { update_owed_hour_form: update_owed_hour_form }
   end
 
   def update
     owed_hour = OwedHour.enabled.find(params[:id])
     authorize! :manage, owed_hour
 
-    edit_owed_hour_form = EditOwedHourForm.new(
+    update_owed_hour_form = UpdateOwedHourForm.new(
       OwedHourViewModel.new(owed_hour),
       owed_hour_params(:update)
     )
 
-    if edit_owed_hour_form.valid?
+    if update_owed_hour_form.valid?
       normalised_update_attributes = {}
 
-       edit_owed_hour_form.save do |attributes|
+       update_owed_hour_form.save do |attributes|
         attributes.each do |key, value|
           next if [:minutes, :hours].include?(key.to_sym)
           normalised_update_attributes[key.to_sym] = value
@@ -80,7 +80,7 @@ class OwedHoursController < ApplicationController
           )
       )
 
-      EditOwedHour.new(
+      UpdateOwedHour.new(
         requester: current_user,
         old_owed_hour: owed_hour,
         new_owed_hour: new_owed_hour
@@ -92,7 +92,7 @@ class OwedHoursController < ApplicationController
       flash.now[:error] = "There was a problem updating these owed hours"
 
       render 'edit', locals: {
-        edit_owed_hour_form: edit_owed_hour_form
+        update_owed_hour_form: update_owed_hour_form
       }
     end
   end
