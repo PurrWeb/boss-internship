@@ -15,7 +15,7 @@
   <% owed_hours_by_week.each do |week, hours| %>
     <p><strong>Mon <%= week.start_date %> - Sun <%= week.end_date %></strong></p>
     <% total_minutes = hours.inject(0) { |sum, hours| sum + hours.minutes } %>
-    <p>Total: <%= HoursHelper.hour_and_minute_text(total_minutes) %> </p>
+    <p>Total: <%= HoursHelper.new(total_minutes: total_minutes).description %> </p>
     <table class="table">
       <thead>
         <tr>
@@ -28,9 +28,10 @@
       </thead>
       <tbody>
         <% hours.each do |owed_hour| %>
+          <% hours_helper = HoursHelper.new(total_minutes: owed_hour.minutes) %>
           <tr>
-            <td><%= HoursHelper.hours_from_total_minutes(owed_hour.minutes) %></td>
-            <td><%= HoursHelper.hour_minutes_from_total_minutes(owed_hour.minutes) %></td>
+            <td><%= hours_helper.hours %></td>
+            <td><%= hours_helper.minutes %></td>
             <td><%= owed_hour.creator.full_name %> on <%= owed_hour.created_at.to_s(:human_date) %></td>
             <td><p><%= owed_hour.note %></p></td>
             <td>

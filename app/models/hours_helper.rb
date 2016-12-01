@@ -1,17 +1,19 @@
 class HoursHelper
-  def self.hours_from_total_minutes(total_minutes)
+  def initialize(total_minutes:)
+    @total_minutes = Integer(total_minutes)
+  end
+  attr_reader :total_minutes
+
+  def hours
    (total_minutes / 60).floor
   end
 
-  def self.hour_minutes_from_total_minutes(total_minutes)
+  def minutes
    (total_minutes % 60).floor
   end
 
-  def self.hour_and_minute_text(total_minutes)
+  def description
     parts = []
-    hours = hours_from_total_minutes(total_minutes)
-    minutes = hour_minutes_from_total_minutes(total_minutes)
-
     if hours > 0
       parts << "#{hours} Hours"
       if minutes > 0
@@ -26,7 +28,8 @@ class HoursHelper
     parts.join(" ")
   end
 
-  def self.total_minutes_from_hours_and_minutes(hours:, minutes:)
-    (Integer(hours) * 60) + Integer(minutes)
+  def self.from_hours_and_minutes(hours:, minutes:)
+    total_minutes = (Integer(hours) * 60) + Integer(minutes)
+    self.new(total_minutes: total_minutes)
   end
 end

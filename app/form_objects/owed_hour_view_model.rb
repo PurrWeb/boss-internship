@@ -12,8 +12,9 @@ class OwedHourViewModel < Disposable::Twin
   def initialize(model, params={})
     super(model, params)
     total_minutes = model.minutes || 0
-    self.hours = HoursHelper.hours_from_total_minutes(total_minutes)
-    self.minutes = HoursHelper.hour_minutes_from_total_minutes(total_minutes)
+    hours_helper = HoursHelper.new(total_minutes: total_minutes)
+    self.hours = hours_helper.hours
+    self.minutes = hours_helper.minutes
     @total_minutes = total_minutes
   end
 
@@ -35,10 +36,11 @@ class OwedHourViewModel < Disposable::Twin
 
   def sync
     super
-    model.minutes = HoursHelper.total_minutes_from_hours_and_minutes(
+    hours_helper = HoursHelper.from_hours_and_minutes(
       hours: self.hours,
       minutes: self.minutes
     )
+    model.minutes = hours_helper.total_minutes
   end
 
   def save

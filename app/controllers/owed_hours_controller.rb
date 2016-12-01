@@ -66,11 +66,11 @@ class OwedHoursController < ApplicationController
           normalised_update_attributes[key.to_sym] = value
         end
 
-        normalised_update_attributes[:minutes] = HoursHelper.
-          total_minutes_from_hours_and_minutes(
-              hours: attributes[:hours],
-              minutes: attributes[:minutes]
-          )
+        hours_helper = HoursHelper.from_hours_and_minutes(
+          hours: attributes[:hours],
+          minutes: attributes[:minutes]
+        )
+        normalised_update_attributes[:minutes] = hours_helper.total_minutes
       end
       new_owed_hour = OwedHour.new(
         normalised_update_attributes.
