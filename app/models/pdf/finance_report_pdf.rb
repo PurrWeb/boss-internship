@@ -1,7 +1,15 @@
 class FinanceReportPDF
   include ActionView::Helpers::NumberHelper
 
-  def initialize(venue:, week:, filter_by_weekly_pay_rate:, display_pay_rate_type: true, display_totals: true)
+  def initialize(
+    report_title:,
+    venue:,
+    week:,
+    filter_by_weekly_pay_rate:,
+    display_pay_rate_type: true,
+    display_totals: true
+  )
+    @report_title = report_title
     @venue = venue
     @week = week
     @filter_by_weekly_pay_rate = filter_by_weekly_pay_rate
@@ -9,7 +17,7 @@ class FinanceReportPDF
     @display_totals = display_totals
     @reports_by_staff_type = {}
   end
-  attr_reader :week, :venue, :filter_by_weekly_pay_rate, :display_pay_rate_type, :display_totals, :reports_by_staff_type
+  attr_reader :report_title, :week, :venue, :filter_by_weekly_pay_rate, :display_pay_rate_type, :display_totals, :reports_by_staff_type
 
   def add_report(staff_type:, report:)
     reports_by_staff_type[staff_type] ||= []
@@ -22,29 +30,20 @@ class FinanceReportPDF
       page_layout: :landscape,
     ) do |pdf|
       pdf.font_size 20
-      pdf.text report_title
+      pdf.text report_header
 
       pdf.font_size 14
       pdf.text filter_information
-      pdf.move_down 7
 
       reports_by_staff_type.each_with_index do |(staff_type, reports), index|
-        pdf.start_new_page if index > 0
+        pdf.move_down 25
 
         pdf.font_size 18
-        if index == 0
-          pdf.text_box(
-            staff_type.name.titlecase,
-            at: [0, 680],
-            style: :bold
-          )
-        else
-          pdf.text_box(
-            staff_type.name.titlecase,
-            style: :bold
-          )
-        end
-        pdf.move_down 28
+        pdf.text(
+          staff_type.name.titlecase,
+          style: :bold
+        )
+        pdf.move_down 10
 
         pdf.text total_message(reports)
 
@@ -89,13 +88,13 @@ class FinanceReportPDF
     end
   end
 
-  def report_title
+  def report_header
     start_date = week.start_date.to_s(:human_date)
     end_date = week.end_date.to_s(:human_date)
 
     sections = []
     sections << venue.name.titlecase
-    sections << " Finance Report"
+    sections << " #{report_title.titlecase}"
     sections << " (#{start_date} - #{end_date})"
     sections.join("")
   end

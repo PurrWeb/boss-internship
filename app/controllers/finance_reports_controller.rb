@@ -51,6 +51,7 @@ class FinanceReportsController < ApplicationController
 
   def render_finance_reports_pdf(week:, venue:, filter_by_weekly_pay_rate:, staff_members:)
     pdf = FinanceReportPDF.new(
+      report_title: 'Finance Report',
       venue: venue,
       week: week,
       filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
