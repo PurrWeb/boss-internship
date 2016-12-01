@@ -1,3 +1,5 @@
+# Some utility methods to help share earger loading code between
+# different controller actions that render the same view
 class QueryOptimiser
   OPTIMISATIONS = {
     staff_member_show: [
