@@ -1,7 +1,15 @@
 class FinanceReportPDF
   include ActionView::Helpers::NumberHelper
 
-  def initialize(venue:, week:, filter_by_weekly_pay_rate:, display_pay_rate_type: true, display_totals: true)
+  def initialize(
+    report_title:,
+    venue:,
+    week:,
+    filter_by_weekly_pay_rate:,
+    display_pay_rate_type: true,
+    display_totals: true
+  )
+    @report_title = report_title
     @venue = venue
     @week = week
     @filter_by_weekly_pay_rate = filter_by_weekly_pay_rate
@@ -9,7 +17,7 @@ class FinanceReportPDF
     @display_totals = display_totals
     @reports_by_staff_type = {}
   end
-  attr_reader :week, :venue, :filter_by_weekly_pay_rate, :display_pay_rate_type, :display_totals, :reports_by_staff_type
+  attr_reader :report_title, :week, :venue, :filter_by_weekly_pay_rate, :display_pay_rate_type, :display_totals, :reports_by_staff_type
 
   def add_report(staff_type:, report:)
     reports_by_staff_type[staff_type] ||= []
@@ -22,7 +30,7 @@ class FinanceReportPDF
       page_layout: :landscape,
     ) do |pdf|
       pdf.font_size 20
-      pdf.text report_title
+      pdf.text report_header
 
       pdf.font_size 14
       pdf.text filter_information
@@ -89,13 +97,13 @@ class FinanceReportPDF
     end
   end
 
-  def report_title
+  def report_header
     start_date = week.start_date.to_s(:human_date)
     end_date = week.end_date.to_s(:human_date)
 
     sections = []
     sections << venue.name.titlecase
-    sections << " Finance Report"
+    sections << " #{report_title.titlecase}"
     sections << " (#{start_date} - #{end_date})"
     sections.join("")
   end
