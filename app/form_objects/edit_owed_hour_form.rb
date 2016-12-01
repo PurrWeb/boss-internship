@@ -1,4 +1,4 @@
-class EditOwedHourForm < Reform::Form
+class EditOwedHourForm < Form
   include OwedHourForm
 
   def path
@@ -14,26 +14,5 @@ class EditOwedHourForm < Reform::Form
     if week.week_status == :past
       errors.add(:week_start_date, "can't be changed to date in the past")
     end
-  end
-
-  #TODO: Refom isn't calling sync on Disposable::Twin model by default
-  def sync
-    super
-    if model.respond_to?(:sync)
-      model.public_send(:sync)
-    end
-  end
-
-  def to_key(*args)
-    model.public_send(:to_key, *args)
-  end
-
-  # Needed to back bootstrap form
-  def self.validators_on(args)
-    []
-  end
-
-  def persisted?
-    false
   end
 end
