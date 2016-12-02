@@ -31,10 +31,10 @@ class ChangeOrderReportsController < ApplicationController
   def complete
     change_order = ChangeOrder.find(params[:id])
 
-    change_order.state_machine.transition_to!(
-      :done,
-      requster_user_id: current_user.id
-    )
+    CompleteChangeOrder.new(
+      requester: current_user,
+      change_order: change_order
+    ).call
 
     flash[:success] = "Change order completed successfully"
     redirect_to(change_order_reports_path)
