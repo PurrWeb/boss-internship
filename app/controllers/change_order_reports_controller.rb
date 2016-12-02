@@ -29,14 +29,16 @@ class ChangeOrderReportsController < ApplicationController
   end
 
   def complete
-    change_order = ChangeOrder.find(params[:id])
+    change_orders = ChangeOrder.where(
+      id: Array(params.fetch(:change_order_ids))
+    )
 
-    CompleteChangeOrder.new(
+    CompleteChangeOrders.new(
       requester: current_user,
-      change_order: change_order
+      change_orders: change_orders
     ).call
 
-    flash[:success] = "Change order completed successfully"
+    flash[:success] = "Change orders completed successfully"
     redirect_to(change_order_reports_path)
   end
 

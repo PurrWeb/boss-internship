@@ -1,10 +1,5 @@
 <div class="row">
-  <div class="column small-6 large-6">
+  <div class="column small-6 large-12">
     <%= link_to('Edit', edit_change_order_path(change_order), class: 'button expanded small mb-mn') %>
   </div>
-  <div class="column small-6 show-for-small-only"></div>
-  <div class="column small-6 large-6">
-    <%= link_to('Mark Done', complete_change_order_report_path(change_order), class: 'button expanded success mb-mn', method: :put) %>
-  </div>
-  <div class="column small-6 show-for-small-only"></div>
 </div>
