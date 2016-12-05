@@ -13,6 +13,12 @@ class CompleteChangeOrders
           requster_user_id: requester.id
         )
       end
+
+      ChangeOrderNotificationMailer.
+        completed_change_order_mail(
+          to: 'change@jsmbars.co.uk',
+          change_order_ids: change_orders.pluck(:id)
+        ).deliver_now
     end
   end
 end
