@@ -19,7 +19,7 @@
 
 <% if accepted_fruit_orders.count > 0 %>
   <h2>Accepted Orders</h2>
-  <%= link_to('Mark All Completed', complete_fruit_order_reports_path, class: 'button success', method: :put) %>
+  <%= link_to('Mark All Completed', complete_fruit_order_reports_path(fruit_order_ids: accepted_fruit_orders.pluck(:id)), class: 'button success', method: :put) %>
   <%= render partial: 'orders_table', locals: {
         fruit_orders: accepted_fruit_orders,
         show_fields: accepted_show_fields,

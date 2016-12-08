@@ -34,9 +34,11 @@ class FruitOrderReportsController < ApplicationController
   end
 
   def complete
+    fruit_orders = FruitOrder.where(id: params.fetch("fruit_order_ids"))
+
     CompleteFruitOrders.new(
       requester: current_user,
-      fruit_orders: FruitOrder.accepted
+      fruit_orders: fruit_orders
     ).call
 
     flash[:success] = "Fruit orders completed successfully"

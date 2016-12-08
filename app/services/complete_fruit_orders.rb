@@ -14,6 +14,12 @@ class CompleteFruitOrders
           requster_user_id: requester.id
         )
       end
+
+      FruitOrderNotificationMailer.
+        completed_fruit_order_mail(
+          to: 'fruit@jsmbars.co.uk',
+          fruit_order_ids: fruit_orders.pluck(:id)
+        ).deliver_now
     end
   end
 end
