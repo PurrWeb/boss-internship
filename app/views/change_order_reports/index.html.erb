@@ -17,12 +17,24 @@
 <% end %>
 
 <% if accepted_change_orders.count > 0 %>
-  <h2>Accepted Orders</h2>
+  <div class="mb-mn">
+    <h2>Accepted Orders</h2>
 
-  <%= render partial: 'shared/change_orders_table', locals: {
-        change_orders: accepted_change_orders,
-        action_partial: 'shared/accepted_change_order_actions'
-      } %>
+    <%= render partial: 'shared/change_orders_table', locals: {
+          change_orders: accepted_change_orders,
+          action_partial: 'shared/accepted_change_order_actions'
+        } %>
+
+    <%= link_to(
+          'Complete Orders',
+          complete_change_order_reports_path(
+            change_order_ids: accepted_change_orders.map(&:id)
+          ),
+          remote: true,
+          method: :put,
+          class: 'button'
+        ) %>
+  </div>
 <% end %>
 
-<%= link_to('Completed Orders', history_change_order_reports_path, class: 'button') %>
+<%= link_to('View Completed Orders', history_change_order_reports_path) %>

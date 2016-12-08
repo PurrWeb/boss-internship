@@ -102,11 +102,11 @@ Rails.application.routes.draw do
     resources :change_order_reports, only: [:index, :show] do
       member do
         put :accept
-        put :complete
       end
 
       collection do
         get :history
+        put :complete
       end
     end
 

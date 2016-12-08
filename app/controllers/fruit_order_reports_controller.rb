@@ -34,16 +34,12 @@ class FruitOrderReportsController < ApplicationController
   end
 
   def complete
-    accepted_fruit_orders = FruitOrder.accepted
+    fruit_orders = FruitOrder.where(id: params.fetch("fruit_order_ids"))
 
-    ActiveRecord::Base.transaction do
-      accepted_fruit_orders.each do |fruit_order|
-        fruit_order.state_machine.transition_to!(
-          :done,
-          requster_user_id: current_user.id
-        )
-      end
-    end
+    CompleteFruitOrders.new(
+      requester: current_user,
+      fruit_orders: fruit_orders
+    ).call
 
     flash[:success] = "Fruit orders completed successfully"
     redirect_to(fruit_order_reports_path)
