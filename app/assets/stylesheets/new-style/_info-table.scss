@@ -90,7 +90,7 @@ $label-selector: __label;
         background-color: map-get($boss-sign-palette, clocked-in);
       };
     }
-    &_break{
+    &_on-break{
       &:before {
         background-color: map-get($boss-sign-palette, break);
       };
@@ -134,7 +134,7 @@ $label-selector: __label;
         background-color: map-get($boss-sign-palette, clocked-in);
       };
     }
-    &_break{
+    &_on-break{
       &:before {
         background-color: map-get($boss-sign-palette, break);
       };
