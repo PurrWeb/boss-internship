@@ -68,9 +68,11 @@ class FilterableStaffList extends Component {
         }
 
         if (filter.staffTypes.length > 0) {
-            staffToShow = _.filter(staffToShow, function(staff){
-                return _(filter.staffTypes).contains(staff.staff_type.clientId);
-            });
+            if (!_(filter.staffTypes).contains('all')) {
+                staffToShow = _.filter(staffToShow, function(staff){
+                    return _(filter.staffTypes).contains(staff.staff_type.clientId);
+                });
+            }
         }
 
         if (filter.venues.length > 0){
