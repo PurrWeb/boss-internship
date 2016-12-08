@@ -137,6 +137,7 @@ class ClockInOutStaffListItem extends Component {
 
         return (
             <a className="boss-button boss-button_big boss-button_role_go-on-break boss-buttons-block_adjust_button"
+               data-test-marker-toggle-staff-status
                onClick={this.onBreakButtonClick.bind(this)}
             >
                 {label}
