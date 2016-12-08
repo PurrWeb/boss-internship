@@ -67,6 +67,9 @@
     &_clock-out {
       @include button-role($image-name: icon-clock-out-white);
     }
+    &_go-on-break {
+      @include button-role($image-name: icon-hour-glass-white);
+    }
     &_enter-manager-mode {
       @include button-role($image-name: icon-lock-white);
     }

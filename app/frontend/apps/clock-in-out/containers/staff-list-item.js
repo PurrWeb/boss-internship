@@ -95,6 +95,13 @@ class ClockInOutStaffListItem extends Component {
             clocked_out: 'clocked_in',
         }[currentStatus];
     }
+    getBreakStatusAfterClicking(currentStatus) {
+        return {
+            clocked_in: 'on_break',
+            clocked_out: null,
+            on_break: 'clocked_in'
+        }[currentStatus];
+    }
     onClockButtonClick(event) {
         event.preventDefault();
 
@@ -104,8 +111,37 @@ class ClockInOutStaffListItem extends Component {
         });
         this.setState({isChangeStatusTooltipActive: false})
     }
+    onBreakButtonClick(event) {
+        event.preventDefault();
+
+        this.updateClockInStatus({
+            statusValue: this.getBreakStatusAfterClicking(this.props.clockInDay.status),
+            staffMemberObject: this.props.staff
+        });
+        this.setState({isChangeStatusTooltipActive: false})
+    }
     stubClickHandler(event) {
         event.preventDefault();
+    }
+    getBreakButton() {
+        const breakStatusAfterClick = this.getBreakStatusAfterClicking(this.props.clockInDay.status);
+
+        if (breakStatusAfterClick === null) {
+            return null;
+        }
+
+        const label = {
+            clocked_in: 'End break',
+            on_break: 'Go On Break'
+        }[breakStatusAfterClick];
+
+        return (
+            <a className="boss-button boss-button_big boss-button_role_go-on-break boss-buttons-block_adjust_button"
+               onClick={this.onBreakButtonClick.bind(this)}
+            >
+                {label}
+            </a>
+        );
     }
     drawChangeStatusTooltip() {
         const toolTipStyle = {
@@ -129,11 +165,11 @@ class ClockInOutStaffListItem extends Component {
             updateClockInStatusWithConfirmation={(options) => this.updateClockInStatus(options)} /> : null;
 
         const clockedStatus = this.props.clockInDay.status;
+        const breakButton = this.getBreakButton();
 
         const clockInButton = clockedStatus === 'clocked_out' ? (
-            <a href="#"
-               className={`boss-button boss-button_big boss-button_role_clock-in
-                                boss-buttons-block_adjust_button`}
+            <a
+               className="boss-button boss-button_big boss-button_role_clock-in boss-buttons-block_adjust_button"
                onClick={this.onClockButtonClick.bind(this)}
             >
                 Clock in
@@ -141,9 +177,8 @@ class ClockInOutStaffListItem extends Component {
         ) : null;
 
         const clockOutButton = clockedStatus === 'clocked_out' ? null : (
-            <a href="#"
-               className={`boss-button boss-button_big boss-button_role_clock-out
-                                boss-buttons-block_adjust_button`}
+            <a
+               className="boss-button boss-button_big boss-button_role_clock-out boss-buttons-block_adjust_button"
                onClick={this.onClockButtonClick.bind(this)}
             >
                 Clock Out
@@ -163,7 +198,7 @@ class ClockInOutStaffListItem extends Component {
             >
                 <div className="boss-context-menu__content">
                     <div className="boss-buttons-block">
-                        {toggleStaffOnBreakButton}
+                        {breakButton}
                         {clockInButton}
                         {clockOutButton}
                     </div>
