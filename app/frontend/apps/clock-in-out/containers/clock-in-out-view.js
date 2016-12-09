@@ -84,13 +84,11 @@ class ClockInOutView extends Component {
                         reloadPage={() => location.reload()}
                 />
             );
-            content = [
-                <ClockInOutStaffFinder key="ClockInOutStaffFinder"
-                    selectedStaffTypeClientId={this.props.selectedStaffTypeClientId}
-                    userIsManagerOrSupervisor={this.props.userIsManagerOrSupervisor}
-                    resetVenue={resetVenueFn}
-                />,
-            ];
+            content = <ClockInOutStaffFinder
+                selectedStaffTypeClientId={this.props.selectedStaffTypeClientId}
+                userIsManagerOrSupervisor={this.props.userIsManagerOrSupervisor}
+                resetVenue={resetVenueFn}
+            />;
         } else {
             header = (
                 <div className="header__container">

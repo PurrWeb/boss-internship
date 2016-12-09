@@ -8,7 +8,7 @@ class ClockInOutStaffFinder extends Component {
     render() {
         var staffTypeClientIds = [this.props.selectedStaffTypeClientId];
         var filterOverrides = {
-            staffTypeClientIds
+            staffTypeClientIds,
         };
         var showStaffTypeFilter = false;
 
@@ -24,7 +24,7 @@ class ClockInOutStaffFinder extends Component {
                 rotaedOrActive: true
             }}
             defaultFilterSettings={{
-                rotaedOrActive: true
+                rotaedOrActive: this.props.userIsManagerOrSupervisor ? false : true
             }}
             staffItemComponent={StaffListItem}
             staffTypes={this.props.staffTypes}
