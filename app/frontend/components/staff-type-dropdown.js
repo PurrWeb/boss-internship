@@ -9,27 +9,16 @@ import cx from 'classnames';
 export default class StaffTypeDropdown extends Component {
     static propTypes = {
         staffTypes: React.PropTypes.object.isRequired
-    };
+    }
     render(){
-        const allOption = {
-            value: 'all',
-            label: 'all',
-            color: '#555'
-        };
-        const staffTypeOptions = _.chain(this.props.staffTypes)
-            .mapValues(function(staffType){
-                return {
-                    value: staffType.clientId,
-                    label: staffType.name,
-                    color: staffType.color
-                }
-            })
-            .values()
-            .transform((options) => {
-                return [allOption].concat(options)
-            })
-            .value();
-
+        var staffTypeOptions = _(this.props.staffTypes).mapValues(function(staffType){
+            return {
+                value: staffType.clientId,
+                label: staffType.name,
+                color: staffType.color
+            }
+        })
+        staffTypeOptions = _.values(staffTypeOptions);
         const className = cx('staff-type-dropdown', this.props.className);
         return (
             <div className={className}>

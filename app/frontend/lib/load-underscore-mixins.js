@@ -6,9 +6,6 @@ _.mixin({
             return obj;
         }, {});
     },
-    transform: function (input, transformer) {
-        return transformer(input);
-    },
     removeAtIndex: function(input, index) {
         return [
             ...input.slice(0, index),

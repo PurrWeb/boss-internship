@@ -74,9 +74,6 @@
       border-radius: 5px;
 
       &_role {
-        &_all {
-          background-color: map-get($boss-roles-palette, all);
-        }
         &_manager {
           background-color: map-get($boss-roles-palette, manager);
         }
@@ -119,9 +116,6 @@
 
   &__dropdown-option {
     &_role {
-      &_all {
-        background-color: map-get($boss-roles-palette, all);
-      }
       &_manager {
         background-color: map-get($boss-roles-palette, manager);
       }
