@@ -33,6 +33,17 @@ body.boss-body {
   &_role {
     &_manager {
       background-color: #ffd9ac;
+
+      & .main-content {
+        margin: $main-content-margin-top auto 0;
+        min-height: initial;
+      }
+    }
+    &_normal {
+      & .main-content {
+        margin: $main-content-margin-top auto 0;
+        min-height: initial;
+      }
     }
   }
 }

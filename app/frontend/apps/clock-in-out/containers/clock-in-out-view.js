@@ -37,6 +37,8 @@ class ClockInOutView extends Component {
         this.mainTag.className = this.defaultClassNameOfMain;
     }
     render() {
+        this.setMainTagClass();
+
         if (!this.props.hasLoadedAppData) {
             return <div className="page-wrapper">
                 <LoadAppDataDialog />
@@ -59,16 +61,23 @@ class ClockInOutView extends Component {
             </a>
         );
     }
+    setMainTagClass() {
+        if (!this.mainTag) {
+            return;
+        }
+
+        if (this.props.userIsManagerOrSupervisor) {
+            this.mainTag.classList.add('boss-root_role_manager');
+            this.mainTag.classList.remove('boss-root_role_normal');
+        } else {
+            this.mainTag.classList.add('boss-root_role_normal');
+            this.mainTag.classList.remove('boss-root_role_manager');
+        }
+    }
     getClockInOutUI(){
         const resetVenueFn = this.props.userPermissions.resetVenue ? this.resetVenue.bind(this) : null;
         let header = null;
         let content = null;
-
-        if (this.props.userIsManagerOrSupervisor) {
-            this.mainTag.classList.add('boss-root_role_manager');
-        } else {
-            this.mainTag.classList.remove('boss-root_role_manager');
-        }
 
         if (this.props.selectedStaffTypeClientId !== null) {
             header = (
