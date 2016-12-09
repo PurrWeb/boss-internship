@@ -15,10 +15,12 @@ class StaffTypeButton extends React.Component {
         const fixedName = name.replace(' ', '-');
 
         return (
-            <div className={`main-menu__button main-menu__button_role_${fixedName}`}>
+            <div
+                    className={`main-menu__button main-menu__button_role_${fixedName}`}
+                    onClick={this.onClick}
+            >
                 <a href="#"
                    className="main-menu__button-text"
-                   onClick={this.onClick}
                 >
                     {name}
                 </a>

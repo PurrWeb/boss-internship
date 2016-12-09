@@ -38,6 +38,7 @@
     width: calc((100% - (#{$margin-between-items} * 2)) / 3);
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 
     & + & {
       margin-left: $margin-between-items;
