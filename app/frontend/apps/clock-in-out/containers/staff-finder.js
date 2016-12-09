@@ -5,6 +5,18 @@ import StaffListItem from "./staff-list-item"
 import {selectStaffMembersForClockInOutStaffFinder} from "~redux/selectors"
 
 class ClockInOutStaffFinder extends Component {
+    state = {
+        justEnteredManagerOrSupervisor: false
+    };
+    componentWillReceiveProps(nextProps) {
+        let justEnteredManagerOrSupervisor = false;
+
+        if (nextProps.userIsManagerOrSupervisor && !this.props.userIsManagerOrSupervisor) {
+            justEnteredManagerOrSupervisor = true;
+        }
+
+        this.setState({justEnteredManagerOrSupervisor});
+    }
     render() {
         var staffTypeClientIds = [this.props.selectedStaffTypeClientId];
         var filterOverrides = {
@@ -24,8 +36,9 @@ class ClockInOutStaffFinder extends Component {
                 rotaedOrActive: true
             }}
             defaultFilterSettings={{
-                rotaedOrActive: this.props.userIsManagerOrSupervisor ? false : true
+                rotaedOrActive: true
             }}
+            justEnteredManagerOrSupervisor = {this.state.justEnteredManagerOrSupervisor}
             staffItemComponent={StaffListItem}
             staffTypes={this.props.staffTypes}
             resetVenue={this.props.resetVenue}

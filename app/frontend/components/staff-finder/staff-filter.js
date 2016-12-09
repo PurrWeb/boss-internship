@@ -30,18 +30,7 @@ export default class StaffFilter extends Component {
                     Filter
                 </div>
 
-                <div className="boss-input-group__input-container main-content__filters-block-container_adjust_input-container">
-                    <input
-                        type="text"
-                        name="search"
-                        placeholder="Search"
-                        data-test-marker-staff-text-search
-                        onChange={(event) =>
-                            this.handleChange("search", event.target.value)
-                        }
-                        className="boss-input boss-input_type_search boss-input-group_adjust_search-input"/>
-                </div>
-
+                {this.getSearchFilter()}
                 {this.renderFiltersBlock()}
             </div>
         );
@@ -88,18 +77,24 @@ export default class StaffFilter extends Component {
         return filterItems;
     }
     getSearchFilter(){
-        var component = <input
-            type="text"
-            value={this.props.filterSettings.search}
-            style={{maxWidth: "100%"}}
-            data-test-marker-staff-text-search
-            onChange={(event) =>
-                this.handleChange("search", event.target.value)
-            }/>
-        return {
-            title: "Search",
-            component
+        if (!this.props.filters) {
+            return null;
         }
+
+        return (
+            <div className="boss-input-group__input-container main-content__filters-block-container_adjust_input-container">
+                <input
+                    type="text"
+                    value={this.props.filterSettings.search}
+                    name="search"
+                    placeholder="Search"
+                    data-test-marker-staff-text-search
+                    onChange={(event) =>
+                        this.handleChange("search", event.target.value)
+                    }
+                    className="boss-input boss-input_type_search boss-input-group_adjust_search-input"/>
+            </div>
+        );
     }
     getStaffTypeFilter(){
         var component = <StaffTypeDropdown

@@ -11,7 +11,8 @@ export default class StaffFinder extends Component {
         staffTypes: React.PropTypes.object,
         filterOverrides: React.PropTypes.object,
         resetVenue: React.PropTypes.func,
-        defaultFilterSettings: React.PropTypes.object
+        defaultFilterSettings: React.PropTypes.object,
+        justEnteredManagerOrSupervisor: React.PropTypes.bool
     };
     constructor(props) {
         super(props);
@@ -26,13 +27,14 @@ export default class StaffFinder extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.defaultFilterSettings.rotaedOrActive !== nextProps.defaultFilterSettings.rotaedOrActive) {
-            const staffFilterSettings = this.state.staffFilterSettings;
-
-            staffFilterSettings.rotaedOrActive = nextProps.defaultFilterSettings.rotaedOrActive;
+        if (nextProps.justEnteredManagerOrSupervisor) {
+            const filterSettings = Object.assign({}, this.state.staffFilterSettings, {
+                search: '',
+                staffTypes: []
+            });
 
             this.setState({
-                staffFilterSettings
+                staffFilterSettings: filterSettings
             });
         }
     }
