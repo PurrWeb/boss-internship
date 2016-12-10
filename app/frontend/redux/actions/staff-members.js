@@ -6,7 +6,7 @@ import {apiRoutes} from "~lib/routes"
 
 export function updateStaffMemberPinWithEntryModal(requestOptions){
     var staffMemberObject = oFetch(requestOptions, "staffMemberObject");
-    var staffMemberName = `${staffMemberObject.first_name} ${staffMemberObject.surname}`;
+    var staffMemberName = staffMemberObject.first_name + staffMemberObject.surname;
     return showConfirmationModal({
         modalOptions: {
             title: "Enter a new PIN for " + staffMemberName,

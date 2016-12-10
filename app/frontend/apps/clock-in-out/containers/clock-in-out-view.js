@@ -18,123 +18,81 @@ import LoadAppDataDialog from "./load-app-data-dialog"
 import Clock from "../components/clock"
 
 class ClockInOutView extends Component {
-    defaultClassNameOfMain = ''; // to prevent collisions between new and old styles
-    mainTag = null; // the <main> tag of the app
-
-    constructor(){
-        super();
-        this.onReloadClick = this.onReloadClick.bind(this);
-    }
-    componentDidMount() {
-        this.mainTag = document.querySelector('main');
-        this.defaultClassNameOfMain = this.mainTag.className;
-
-        document.body.classList.add('boss-body');
-        this.mainTag.className = 'boss-root';
-    }
-    componentWillUnmount() {
-        document.body.classList.remove('boss-body');
-        this.mainTag.className = this.defaultClassNameOfMain;
-    }
     render() {
-        this.setMainTagClass();
-
         if (!this.props.hasLoadedAppData) {
-            return <div className="page-wrapper">
+            return <div>
                 <LoadAppDataDialog />
+                {this.getReloadPageButton()}
             </div>
         } else {
             return this.getClockInOutUI();
         }
     }
-    onReloadClick(event){
-        event.preventDefault();
-        location.reload()
-    }
     getReloadPageButton(){
-        return (
-            <a href="#"
-               className="header__reload-button"
-               onClick={this.onReloadClick}
-            >
-                Reload
-            </a>
-        );
-    }
-    setMainTagClass() {
-        if (!this.mainTag) {
-            return;
-        }
-
-        if (this.props.userIsManagerOrSupervisor) {
-            this.mainTag.classList.add('boss-root_role_manager');
-            this.mainTag.classList.remove('boss-root_role_normal');
-        } else {
-            this.mainTag.classList.add('boss-root_role_normal');
-            this.mainTag.classList.remove('boss-root_role_manager');
-        }
+        return <div style={{marginTop: 20}}>
+            <button
+                className="button small secondary"
+                onClick={() => location.reload()}>
+                <i className="fa fa-refresh" /> Reload Page
+            </button>
+        </div>
     }
     getClockInOutUI(){
-        const resetVenueFn = this.props.userPermissions.resetVenue ? this.resetVenue.bind(this) : null;
-        let header = null;
-        let content = null;
+        var classes = ["container"];
+        if (this.props.userIsManagerOrSupervisor) {
+            classes.push("managerMode");
+        }
 
+        var resetVenueButton = null;
+        if (this.props.userPermissions.resetVenue) {
+            resetVenueButton = <button
+                className="button alert"
+                style={{marginTop: 20, marginBottom: 20}}
+                onClick={() => this.resetVenue()}>
+                Reset Venue
+            </button>
+        }
+
+        var content = null;
         if (this.props.selectedStaffTypeClientId !== null) {
-            header = (
+            content = <div>
                 <Header
-                        returnToStaffTypeSelector={()=> this.props.selectStaffType(null)}
-                        userIsManager={this.props.userIsManager}
-                        userIsSupervisor={this.props.userIsSupervisor}
-                        userIsManagerOrSupervisor={this.props.userIsManagerOrSupervisor}
-                        leaveManagerModeInProgress={this.props.leaveManagerModeInProgress}
-                        leaveManagerMode={this.props.leaveManagerMode}
-                        venue={this.props.venue}
-                        rota={this.props.rota}
-                        reloadPage={() => location.reload()}
+                    returnToStaffTypeSelector={()=> this.props.selectStaffType(null)}
+                    userIsManager={this.props.userIsManager}
+                    userIsSupervisor={this.props.userIsSupervisor}
+                    userIsManagerOrSupervisor={this.props.userIsManagerOrSupervisor}
+                    leaveManagerModeInProgress={this.props.leaveManagerModeInProgress}
+                    leaveManagerMode={this.props.leaveManagerMode}
+                    venue={this.props.venue}
+                    rota={this.props.rota}
+                    reloadPage={() => location.reload()}
                 />
-            );
-            content = <ClockInOutStaffFinder
-                selectedStaffTypeClientId={this.props.selectedStaffTypeClientId}
-                userIsManagerOrSupervisor={this.props.userIsManagerOrSupervisor}
-                resetVenue={resetVenueFn}
-            />;
+                <ClockInOutStaffFinder
+                    selectedStaffTypeClientId={this.props.selectedStaffTypeClientId}
+                    userIsManagerOrSupervisor={this.props.userIsManagerOrSupervisor} />
+                {resetVenueButton}
+            </div>
         } else {
-            header = (
-                <div className="header__container">
-                    <div className="header">
-                        <div className="header__reload-cell">
-                            {this.getReloadPageButton()}
-                        </div>
-                        <div className="header__caption-cell">
-                            <div className="header__caption-text">Select Your Staff Type</div>
-                        </div>
-                        <div className="header__time-cell">
-                            <Clock />
-                        </div>
-                    </div>
-                </div>
-            );
-            content = (
+            content = <div>
                 <LargeStaffTypeSelector
                     staffTypes={this.props.staffTypes}
                     onSelect={({staffType}) => this.props.selectStaffType(staffType.clientId)} />
-            );
-        }
-
-        return (
-            <div className="page-wrapper">
-                <ConfirmationModal />
-                <UserActionConfirmationMessages />
-                {header}
-                <div className="main-content">
-                    {content}
+                <div>
+                    <div style={{marginRight: 16, float: "right"}}>
+                        <Clock />
+                    </div>
+                    {this.getReloadPageButton()}
                 </div>
             </div>
-        );
+        }
 
+        return <div className={classes.join(" ")}>
+            <ConfirmationModal />
+            <UserActionConfirmationMessages />
+            {content}
+        </div>
     }
-    resetVenue(event){
-        event.preventDefault();
+    resetVenue(){
         var message = "You'll have to re-enter the venue key after resetting the venue." +
             "\n\nDo you want to continue?"
         if (!confirm(message)){

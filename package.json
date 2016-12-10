@@ -37,7 +37,7 @@
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-fastclick": "^2.1.2",
-    "react-modal-dialog": "^4.0.2",
+    "react-modal-dialog": "^2.0.0",
     "react-nvd3": "^0.4.2",
     "react-redux": "^4.0.0",
     "react-router": "1.0.0-rc3",

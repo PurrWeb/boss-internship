@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import { connect } from "react-redux"
+import oFetch from "o-fetch"
 import utils from "~lib/utils"
 import StaffShiftList from "~components/staff-shift-list"
 import StaffTypeBadge from "~components/staff-type-badge"
@@ -7,262 +8,71 @@ import ClockInStatusBadge from "~components/clock-in-status-badge"
 import ToggleStaffClockedInButton from "../components/toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../components/toggle-staff-on-break-button"
 import {
-    selectClockInOutStaffListItemProps,
-    selectClockInOutAppIsInManagerMode
+    selectClockInOutStaffListItemProps
 } from "~redux/selectors"
 import actions from "~redux/actions"
 import Spinner from "~components/spinner"
-import ToolTip from '../components/tooltip';
+import ClockInNotesList from "~components/clock-in-notes-list"
+
+var columnNameStyle = {
+    textDecoration: "underline"
+}
 
 class ClockInOutStaffListItem extends Component {
-    state = {
-        isChangeStatusTooltipActive: false,
-        isChangeSettingsTooltipActive: false
-    };
-    changeStatusButtonId = '';
-    changeSettingsButtonId = '';
-
-    constructor(props){
-        super(props);
-
-        const randomNum = Math.floor(Math.random() * 1000000);
-        this.changeStatusButtonId = `changeButton${randomNum}`;
-        this.changeSettingsButtonId = `settingsButton${randomNum}`;
-    }
-    showChangeStatusTooltip(event) {
-        event.preventDefault();
-        this.setState({isChangeStatusTooltipActive: true})
-    }
-    hideChangeStatusTooltip() {
-        this.setState({isChangeStatusTooltipActive: false})
-    }
-    showChangeSettingsTooltip(event) {
-        event.preventDefault();
-        this.setState({isChangeSettingsTooltipActive: true})
-    }
-    hideChangeSettingsTooltip() {
-        this.setState({isChangeSettingsTooltipActive: false})
-    }
-    drawUserAvatar(url, status){
-        const statusForClassName = status.toLowerCase().replace(/( |_)/g, '-');
-
-        return (
-            <div className={`info-table__user-avatar-container info-table__user-avatar-container_${statusForClassName}`}>
-                <img src={url} className="info-table__user-avatar-image" />
-            </div>
-        );
-    }
-    drawChangeSettingsTooltip() {
-        const toolTipStyle = {
-            style: {
-                position: 'absolute',
-                top: '331px',
-                left: '456px',
-                padding: '0.6em 0.9em',
-                backgroundColor: 'white',
-                borderRadius: '5px',
-                border: '1px solid #f2f2f2',
-                boxShadow: '0 8px 40px rgba(0, 0, 0, 0.17)'
-            },
-            arrowStyle: {
-                borderColor: '#f2f2f2'
-            }
-        };
-
-        return (
-            <ToolTip
-                active={this.state.isChangeSettingsTooltipActive}
-                position="bottom"
-                tooltipTimeout={50}
-                arrow="right"
-                parent={`#${this.changeSettingsButtonId}`}
-                group="change-settings"
-                style={toolTipStyle}
-                onBackgroundClick={this.hideChangeSettingsTooltip.bind(this)}
-            >
-                <div className="boss-context-menu__content">
-                    <div className="boss-buttons-block boss-context-menu_adjust_buttons-block-small">
-                        {this.getAddNoteButton()}
-                        {this.getChangePinButton()}
-                    </div>
-                </div>
-            </ToolTip>
-        );
-    }
-    getStatusAfterClicking(currentStatus) {
-        return {
-            clocked_in: 'clocked_out',
-            clocked_out: 'clocked_in',
-        }[currentStatus];
-    }
-    getBreakStatusAfterClicking(currentStatus) {
-        return {
-            clocked_in: 'on_break',
-            clocked_out: null,
-            on_break: 'clocked_in'
-        }[currentStatus];
-    }
-    onClockButtonClick(event) {
-        event.preventDefault();
-
-        this.updateClockInStatus({
-            statusValue: this.getStatusAfterClicking(this.props.clockInDay.status),
-            staffMemberObject: this.props.staff
-        });
-        this.setState({isChangeStatusTooltipActive: false})
-    }
-    onBreakButtonClick(event) {
-        event.preventDefault();
-
-        this.updateClockInStatus({
-            statusValue: this.getBreakStatusAfterClicking(this.props.clockInDay.status),
-            staffMemberObject: this.props.staff
-        });
-        this.setState({isChangeStatusTooltipActive: false})
-    }
-    stubClickHandler(event) {
-        event.preventDefault();
-    }
-    getBreakButton() {
-        const breakStatusAfterClick = this.getBreakStatusAfterClicking(this.props.clockInDay.status);
-
-        if (breakStatusAfterClick === null) {
-            return null;
-        }
-
-        const label = {
-            clocked_in: 'End break',
-            on_break: 'Go On Break'
-        }[breakStatusAfterClick];
-
-        return (
-            <a className="boss-button boss-button_big boss-button_role_go-on-break boss-buttons-block_adjust_button"
-               data-test-marker-toggle-staff-status
-               onClick={this.onBreakButtonClick.bind(this)}
-            >
-                {label}
-            </a>
-        );
-    }
-    drawChangeStatusTooltip() {
-        const toolTipStyle = {
-            style: {
-                position: 'absolute',
-                top: '331px',
-                left: '456px',
-                padding: '1.6em 0.9em 1.3em 0.9em',
-                backgroundColor: 'white',
-                borderRadius: '5px',
-                border: '1px solid #f2f2f2',
-                boxShadow: '0 8px 40px rgba(0, 0, 0, 0.17)'
-            },
-            arrowStyle: {
-                borderColor: '#f2f2f2'
-            }
-        };
-        const toggleStaffOnBreakButton = this.props.userPermissions.toggleOnBreak ? <ToggleStaffOnBreakButton
-            clockInDay={this.props.clockInDay}
-            staffObject={this.props.staff}
-            updateClockInStatusWithConfirmation={(options) => this.updateClockInStatus(options)} /> : null;
-
-        const clockedStatus = this.props.clockInDay.status;
-        const breakButton = this.getBreakButton();
-
-        const clockInButton = clockedStatus === 'clocked_out' ? (
-            <a
-               className="boss-button boss-button_big boss-button_role_clock-in boss-buttons-block_adjust_button"
-               onClick={this.onClockButtonClick.bind(this)}
-            >
-                Clock in
-            </a>
-        ) : null;
-
-        const clockOutButton = clockedStatus === 'clocked_out' ? null : (
-            <a
-               className="boss-button boss-button_big boss-button_role_clock-out boss-buttons-block_adjust_button"
-               onClick={this.onClockButtonClick.bind(this)}
-            >
-                Clock Out
-            </a>
-        );
-
-        return (
-            <ToolTip
-                    active={this.state.isChangeStatusTooltipActive}
-                    position="bottom"
-                    tooltipTimeout={50}
-                    arrow="right"
-                    parent={`#${this.changeStatusButtonId}`}
-                    group="change-status"
-                    style={toolTipStyle}
-                    onBackgroundClick={this.hideChangeStatusTooltip.bind(this)}
-            >
-                <div className="boss-context-menu__content">
-                    <div className="boss-buttons-block">
-                        {breakButton}
-                        {clockInButton}
-                        {clockOutButton}
-                    </div>
-                </div>
-            </ToolTip>
-        );
-    }
     render(){
-        const staffMember = this.props.staff;
-        const clockInStatusValue = this.props.clockInDay.status;
-        const rotaedShiftsColumn = (
+        var staffMember = this.props.staff;
+        var clockInStatusValue = this.props.clockInDay.status
+
+        var rotaedShiftsColumn = null;
+        var statusToggleButtons = null;
+
+        rotaedShiftsColumn = <div className="shrink column">
+            <span style={columnNameStyle}>
+                Rotaed Shifts
+            </span>
             <StaffShiftList
                 shifts={utils.indexByClientId(this.props.staffMemberShifts)}
                 rotas={this.props.rotas}
                 venues={this.props.venues} />
-        );
+        </div>;
 
-        const statusToggleButtons = (
-            <span
-               className="info-table__change-user-status"
-               onClick={this.showChangeStatusTooltip.bind(this)}
-               id={this.changeStatusButtonId}
-            >(change)</span>
-        );
+        statusToggleButtons = <div className="shrink column">
+            {this.getStaffMemberStatusToggleButtons()}
+        </div>
 
-        return (
-            <div className="info-table__tr">
-                <div className="info-table__td">
-                    {this.drawUserAvatar(staffMember.avatar_url, clockInStatusValue)}
-                    <div className="info-table__user-info">
-                        <div className="info-table__user-name">
-                            {staffMember.first_name} {staffMember.surname}
+        return <div className="staff-list-item staff-list-item--clock-in-out">
+            <div className="row align-middle">
+                <div className="shrink column">
+                    <img src={staffMember.avatar_url} className="avatar" />
+                </div>
+                <div className="shrink column">
+                    <div className="staff-list-item--clock-in-out__name mb-base">
+                        {staffMember.first_name} {staffMember.surname}
+                    </div>
+                    <div className="row align-middle">
+                        <div className="shrink column npr">
+                            <StaffTypeBadge
+                                staffTypeObject={staffMember.staffType} />
                         </div>
-                        <StaffTypeBadge
-                            staffTypeObject={staffMember.staffType} />
-                        {this.getManagerModeButton()}
-                        {this.getSettingsButton()}
+                        <div className="shrink column">
+                            <div className="staff-list-item--clock-in-out__manager-buttons">
+                                {this.getAddNoteButton()}
+                                {this.getChangePinButton()}
+                                {this.getManagerModeButton()}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="info-table__td">
-                    {rotaedShiftsColumn}
+                {rotaedShiftsColumn}
+                <div className="column">
+                    {this.getClockInNotesList()}
                 </div>
-                {this.getClockInNotesList()}
-                <div className="info-table__td">
-                    {this.getClockInStatusBadge(this.props.staff.updateStatusInProgress, clockInStatusValue)}
-                    {statusToggleButtons}
+                <div className="staff-list-item--clock-in-out__status shrink column">
+                    <ClockInStatusBadge clockInStatusValue={clockInStatusValue} />
                 </div>
-
-                {this.drawChangeStatusTooltip()}
+                {statusToggleButtons}
             </div>
-        );
-    }
-    getClockInStatusBadge(updateStatusInProgress, clockInStatusValue) {
-        if (updateStatusInProgress) {
-            return <Spinner />;
-        } else {
-            return (
-                <ClockInStatusBadge
-                    clockInStatusValue={clockInStatusValue}
-                    onClick={this.showChangeStatusTooltip.bind(this)}
-                />
-            );
-        }
+        </div>
     }
     getStaffMemberStatusToggleButtons(){
         var staffMember = this.props.staff;
@@ -294,33 +104,10 @@ class ClockInOutStaffListItem extends Component {
         if (!this.props.userPermissions.addNote) {
             return null;
         }
-
-        const notes = this.props.clockInNotes.length ? (
-            this.props.clockInNotes.map((noteData, idx) => {
-                return <span
-                    key={idx}
-                    className="info-table__notes"
-                    data-test-marker-clock-in-note
-                >
-                    {noteData.note}
-                </span>;
-            })
-        ) : <div className="info-table__notes info-table_no-value">(none)</div>;
-
-        return (
-            <div className="info-table__td">
-                {notes}
-            </div>
-        );
-    }
-    onClickAddNote(event) {
-        event.preventDefault();
-
-        this.props.addNote(
-            this.props.staff,
-            this.props.clockInDay
-        );
-        this.hideChangeSettingsTooltip();
+        return <div>
+            <div style={{textDecoration: "underline"}}>Notes: </div>
+            <ClockInNotesList notes={this.props.clockInNotes} />
+        </div>
     }
     getAddNoteButton(){
         if (!this.props.userPermissions.addNote) {
@@ -329,16 +116,16 @@ class ClockInOutStaffListItem extends Component {
         if (this.props.addClockInNoteIsInProgress){
             return <Spinner />
         }
-
-        return (
-            <a href="#"
-               className="boss-button boss-button_small boss-button_role_add-note boss-buttons-block_adjust_button"
-               data-test-marker-add-note
-               onClick={this.onClickAddNote.bind(this)}
-            >
-                Add Note
-            </a>
-        );
+        return <button
+            className="button small"
+            style={{marginRight: 2}}
+            data-test-marker-add-note
+            onClick={() => this.props.addNote(
+                this.props.staff,
+                this.props.clockInDay
+            )}>
+            Add Note
+        </button>
     }
     updateClockInStatus({statusValue, staffMemberObject}){
         var currentStatus = this.props.clockInDay.status;
@@ -351,13 +138,6 @@ class ClockInOutStaffListItem extends Component {
             date: this.props.pageOptions.dateOfRota
         })
     }
-    onClickChangePin(event) {
-        event.preventDefault();
-        this.props.updateStaffMemberPin({
-            staffMemberObject: this.props.staff
-        });
-        this.hideChangeSettingsTooltip();
-    }
     getChangePinButton(){
         var staffMember = this.props.staff;
         if (!this.props.userPermissions.changePin) {
@@ -368,56 +148,33 @@ class ClockInOutStaffListItem extends Component {
             return <Spinner />
         }
 
-        return (
-            <a href="#"
-               className="boss-button boss-button_small boss-button_role_change-pin boss-buttons-block_adjust_button"
-               data-test-marker-change-pin-button
-               onClick={this.onClickChangePin.bind(this)}
-            >
+        return <a
+                className="button small show-in-manager-mode--inline-block"
+                data-test-marker-change-pin-button
+                onClick={() => this.props.updateStaffMemberPin({
+                    staffMemberObject: staffMember
+                })}>
                 Change Pin
             </a>
-        );
     }
     enterManagerMode(){
         this.props.enterManagerMode();
     }
-    onEnterManagerModeClick(event){
-        event.preventDefault();
-        this.props.enterUserMode(this.props.staff.staffType.name, this.props.staff);
-    }
-    getSettingsButton() {
-        if (!this.props.userIsManagerOrSupervisor) {
-            return null;
-        }
-
-        return (
-            <div
-                id={this.changeSettingsButtonId}
-                className="info-table__settings-sign info-table__user-info_adjust_settings-sign"
-                onClick={this.showChangeSettingsTooltip.bind(this)}
-            >
-                {this.drawChangeSettingsTooltip()}
-            </div>
-        );
-    }
     getManagerModeButton(){
         var staffMember = this.props.staff;
-        if (!staffMember.canEnterManagerMode || this.props.userIsManagerOrSupervisor) {
+        if (!staffMember.canEnterManagerMode) {
             return null;
         }
         if (staffMember.enterManagerModeInProgress){
             return <Spinner />;
         }
 
-        return (
-            <div
-                className="boss-button boss-button_small boss-button_role_enter-manager-mode info-table_adjust_button-small"
-                data-test-marker-enter-manager-mode
-                onClick={this.onEnterManagerModeClick.bind(this)}
-            >
-                enter manager mode
-            </div>
-        );
+        return <a
+            onClick={() => this.props.enterUserMode(staffMember.staffType.name, this.props.staff)}
+            data-test-marker-enter-manager-mode
+            className="button small hide-in-manager-mode--inline-block">
+            Enter Manager Mode
+        </a>
     }
 }
 
@@ -433,18 +190,17 @@ function mapDispatchToProps(dispatch){
             dispatch(actions.updateStaffMemberPinWithEntryModal(options))
         },
         addNote: function(staffMemberObject, clockInDay){
-            dispatch(actions.showAddNoteWindow(staffMemberObject.first_name, staffMemberObject.surname, staffMemberObject, clockInDay));
+            var note = prompt("Add staff note for " + staffMemberObject.first_name +
+                " " + staffMemberObject.surname)
+            if (typeof note === "string" && note !== "") {
+                dispatch(actions.addClockInNote({
+                    text: note,
+                    staffMemberObject,
+                    clockInDay
+                }))
+            }
         }
     }
 }
 
-function mapStateToProps(state, ownProps) {
-    const clockInOutStaffListItemProps = selectClockInOutStaffListItemProps(state, ownProps);
-    const extendedProps = {
-        userIsManagerOrSupervisor: selectClockInOutAppIsInManagerMode(state)
-    };
-
-    return Object.assign({}, clockInOutStaffListItemProps, extendedProps);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ClockInOutStaffListItem);
+export default connect(selectClockInOutStaffListItemProps, mapDispatchToProps)(ClockInOutStaffListItem);

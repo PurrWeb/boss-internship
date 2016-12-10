@@ -30,36 +30,6 @@ export function enterUserModeWithConfirmation(options){
     })
 }
 
-export function showAddNoteWindow(firstName, surname, staffMemberObject, clockInDay){
-    return showConfirmationModal({
-        modalOptions: {
-            firstName,
-            surname,
-            staffMemberObject,
-            clockInDay,
-            confirmationType: 'ADD_NOTE'
-        },
-        confirmationAction: {
-            apiRequestType: "null",
-            requestOptions: {}
-        }
-    })
-}
-
-export function showWrongPinMessage(errorMessage, type, onRetryClick){
-    return showConfirmationModal({
-        modalOptions: {
-            title: errorMessage,
-            confirmationType: type,
-            onRetryClick
-        },
-        confirmationAction: {
-            apiRequestType: "null",
-            requestOptions: {}
-        }
-    })
-}
-
 actionTypes.push("CLOCK_IN_OUT_APP_SELECT_STAFF_TYPE")
 export function clockInOutAppSelectStaffType({selectedStaffTypeClientId}){
     return {
