@@ -17,6 +17,16 @@ class ConfirmationModal extends React.Component {
             return;
         }
     }
+    onAddNoteSubmit(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const textarea = form.querySelector('textarea');
+        const noteText = textarea.value;
+
+        this.props.addNote(noteText, this.props.modalOptions.staffMemberObject, this.props.modalOptions.clockInDay);
+        this.closeModal();
+    }
     render(){
         if (!this.props.isVisible) {
             return null;
@@ -28,24 +38,93 @@ class ConfirmationModal extends React.Component {
         if (this.props.confirmationType === "PIN") {
 
             return <ModalContainer onClick={() => this.cancel()}>
-                <ModalDialog onClose={() => this.cancel()}>
-                    {this.props.modalOptions.title}
-                    <div data-test-marker-pin-modal>
-                        <form onSubmit={(e) => {e.preventDefault(); this.complete()}}>
+                <ModalDialog className="boss-modal-window" onClose={() => this.cancel()}>
+                    <div className="boss-modal-window__header">
+                        {this.props.modalOptions.title}
+                    </div>
+
+                    <div className="boss-modal-window__content" data-test-marker-pin-modal>
+                        <form
+                            className="boss-modal-window__form"
+                            onSubmit={(e) => {e.preventDefault(); this.complete()}}
+                        >
                             <PinInput
                                 pin={this.state.pin}
                                 onChange={pin => this.setState({pin})}
-                                />
+                            />
                             <button
                                 type="submit"
-                                className="button large expanded"
-                                style={{marginTop: 20}}>
+                                className="boss-button boss-button_very-big boss-button_role_pin-ok boss-modal-window_adjust_submit-button"
+                            >
                                 OK
                             </button>
                         </form>
                     </div>
+
                 </ModalDialog>
             </ModalContainer>;
+        } else if (this.props.confirmationType === "WRONG_PIN") {
+            return (
+                <ModalContainer onClick={() => this.closeModal()}>
+                    <ModalDialog className="boss-modal-window" onClose={() => this.closeModal()}>
+                        <div className="boss-modal-window__header boss-modal-window__header_error">
+                            {this.props.modalOptions.title}
+                        </div>
+
+                        <div className="boss-modal-window__content boss-modal-window__content_role_error">
+                            <div className="boss-modal-window__message-block boss-modal-window__message-block_role_error">
+                                <span className="boss-modal-window__message-text">Your Insert Pin Has been Wrong</span>
+                                <span className="boss-modal-window__message-text">Please Try Again</span>
+                            </div>
+                            <button
+                                type="button"
+                                className="boss-button boss-button_very-big boss-button_role_pin-ok boss-modal-window_adjust_submit-button"
+                                onClick={this.props.modalOptions.onRetryClick.bind(this)}
+                            >
+                                Try Again
+                            </button>
+                        </div>
+
+                    </ModalDialog>
+                </ModalContainer>
+            );
+        } else if (this.props.confirmationType === "ADD_NOTE") {
+            return (
+                <ModalContainer onClick={() => this.closeModal()}>
+                    <ModalDialog className="boss-modal-window" onClose={() => this.closeModal()}>
+
+                        <form
+                                className="boss-form"
+                                onSubmit={this.onAddNoteSubmit.bind(this)}
+                                action=""
+                        >
+                            <div className="boss-modal-window__header boss-modal-window__header_add-note">
+                                Add Note for {this.props.modalOptions.firstName} {this.props.modalOptions.surname}
+                            </div>
+
+                            <div className="boss-modal-window__content boss-modal-window__content_role_add-note">
+                                <div className="boss-modal-window__message-block boss-modal-window__message-block_role_add-note">
+                                    <span className="boss-modal-window__message-text">Add some note for</span>
+                                    <span className="boss-modal-window__message-text boss-modal-window__message-text_role_name">
+                                    {this.props.modalOptions.firstName} {this.props.modalOptions.surname}
+                                </span>
+                                </div>
+                                <textarea
+                                    className="boss-input boss-input_role_in-modal-window boss-input_role_add-note boss-modal-window_adjust_textarea"
+                                    placeholder="Type Notes Here..."
+                                    rows="6"
+                                />
+                                <input
+                                    type="submit"
+                                    className="boss-button boss-button_very-big boss-button_role_pin-ok boss-modal-window_adjust_submit-button"
+                                    value="Ok"
+                                />
+                            </div>
+                        </form>
+
+                    </ModalDialog>
+                </ModalContainer>
+            );
         } else {
             throw new Error("Modal confirmation type '" + this.props.modalOptions.confirmationType + "' is not supported");
         }
@@ -61,12 +140,15 @@ class ConfirmationModal extends React.Component {
             pin: this.state.pin
         });
     }
+    closeModal() {
+        this.props.cancelConfirmationModal();
+    }
     cancel(){
         if (!this.props.isVisible) {
             return;
         }
         this.resetPinInputState();
-        this.props.cancelConfirmationModal();
+        this.closeModal();
     }
     resetPinInputState(){
         this.setState({pin: ""})
@@ -94,6 +176,13 @@ function mapDispatchToProps(dispatch){
         },
         cancelConfirmationModal: function(){
             dispatch(actionCreators.cancelConfirmationModal());
+        },
+        addNote: function(text, staffMemberObject, clockInDay){
+            dispatch(actionCreators.addClockInNote({
+                text,
+                staffMemberObject,
+                clockInDay
+            }))
         }
     }
 }

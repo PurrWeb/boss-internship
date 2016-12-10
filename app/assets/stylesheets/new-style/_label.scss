@@ -1,0 +1,10 @@
+@import 'settings';
+@import 'mixins';
+
+.boss-label {
+  @include normalize-block();
+
+  &_big {
+    font-size: 1.5rem;
+  }
+}

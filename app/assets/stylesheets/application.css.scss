@@ -28,6 +28,7 @@
 
  @import "font-awesome-sprockets";
  @import "font-awesome";
+ @import "new-style/base";
 
 .main {
   padding-top: $spacing-md;
@@ -111,3 +112,6 @@ label:not(.force-not-required).required:after {
 .text-warning{
   color: #FF4500;
 }
+
+
+

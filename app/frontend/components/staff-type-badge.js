@@ -3,17 +3,15 @@ import React, { Component } from "react"
 export default class StaffTypeBadge extends Component {
     static propTypes = {
         staffTypeObject: React.PropTypes.object.isRequired
-    }
+    };
     render(){
-        var staffType = this.props.staffTypeObject;
+        const staffType = this.props.staffTypeObject;
+        const staffTypeForClassName = staffType.name.toLowerCase().replace(' ', '-');
 
-        var staffTypeStyle = {
-            backgroundColor: staffType.color
-        };
-        return <div
-            className="boss-badge"
-            style={staffTypeStyle} >
-            {staffType.name}
-        </div>
+        return (
+            <div className={`info-table__label info-table__label_${staffTypeForClassName}`}>
+                {staffType.name}
+            </div>
+        );
     }
 }

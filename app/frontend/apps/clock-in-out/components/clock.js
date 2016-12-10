@@ -9,11 +9,10 @@ export default class Clock extends React.Component {
         clearInterval(this.interval);
     }
     render(){
-        return <div style={{
-            fontSize: 32,
-            fontWeight: "bold",
-        }}>
-            {moment(new Date()).format("HH:mm")}
-        </div>
+        return (
+            <div className="header__time-value">
+                {moment(new Date()).format("HH:mm")}
+            </div>
+        );
     }
 }

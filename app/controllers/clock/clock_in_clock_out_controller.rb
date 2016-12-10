@@ -5,5 +5,10 @@ module Clock
     def index
       render locals: {}
     end
+
+    # disables naviation in layout
+    def render_navigation?
+      false
+    end
   end
 end
