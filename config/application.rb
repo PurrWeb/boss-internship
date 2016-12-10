@@ -24,9 +24,8 @@ module Boss
     config.autoload_paths += Dir["#{config.root}/app/reports/**/"]
     config.autoload_paths += Dir["#{config.root}/app/models/test_data/**/"]
     config.autoload_paths += Dir["#{config.root}/app/models/pdf/**/"]
-    config.autoload_paths += Dir["#{config.root}/app/assets/fonts/**/"]
 
-    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif *.svg *.otf)
+    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
     config.assets.precompile += %w( rollbar.js )
     config.assets.precompile += %w( bundles/frontend_bundle.js )
 

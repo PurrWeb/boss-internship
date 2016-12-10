@@ -12,21 +12,29 @@ class StaffShiftListItem extends Component {
 
         var date = "";
         if (this.props.showDate) {
-            date = moment(dateOfRota).format("DD MMM") + ' ';
+            date = <span>
+                {moment(dateOfRota).format("DD MMM")}
+                &nbsp;
+            </span>
         }
         var venue = "";
-        if (this.props.showVenue && this.props.venueName) {
-            venue = ` ${this.props.venueName}`;
+        if (this.props.showVenue) {
+            venue = <span>
+                &nbsp;
+                ({this.props.venueName})
+            </span>
         }
-        var isStandby = '';
+        var isStandby = null;
         if (shift.isStandby()) {
             isStandby = " - Standby";
         }
-
-        const resultString = `${date}${moment(shift.starts_at).format("H:mm")} to ${moment(shift.ends_at).format("H:mm")}${venue}${isStandby}`;
-
-        return <div>
-            {resultString}
+        return <div className="staff-shift-list__shift">
+            {date}
+            {moment(shift.starts_at).format("H:mm")}
+            &nbsp;to&nbsp;
+            {moment(shift.ends_at).format("H:mm")}
+            {venue}
+            {isStandby}
         </div>
     }
 }
@@ -55,10 +63,12 @@ export default class StaffShiftList extends Component {
                 showDate={this.props.showDate}
                 venueName={venue.name} />
         });
-        const noShiftsMessage = shifts.length === 0 ? 'none' : null;
-
+        var noShiftsMessage = null;
+        if (shifts.length === 0) {
+            noShiftsMessage = <div style={{paddingLeft: 15}}>None</div>
+        }
         return (
-            <div className="info-table__rotaed-text">
+            <div className="staff-shift-list">
                 {shiftElements}
                 {noShiftsMessage}
             </div>

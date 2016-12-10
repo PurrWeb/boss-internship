@@ -11,7 +11,7 @@ export default class LeaveManagerModeButton extends React.Component {
 
         var leaveManagerModeButtonText;
         return <a
-            className="header__leave-manager-mode-text"
+            className="button show-in-manager-mode__inline-block"
             onClick={() => this.props.leaveManagerMode()}>
             Leave Manager Mode
         </a>

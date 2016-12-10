@@ -13,11 +13,7 @@
   </head>
   <body>
     <header>
-      <% if render_navigation? %>
-        <%= render 'layouts/header_with_navigation' %>
-      <% else %>
-        <%= render 'layouts/header_without_navigation' %>
-      <% end %>
+      <%= render 'layouts/navigation' %>
     </header>
     <main role="main" class="main row column <%= content_for(:main_class) %>">
       <%= render 'layouts/messages' %>
