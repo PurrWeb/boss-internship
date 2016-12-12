@@ -16,11 +16,9 @@ export default class StaffFinder extends Component {
     };
     constructor(props) {
         super(props);
-        const staffDefaultFilterSettings = StaffFilter.getDefaultSettings();
-        let staffFilterSettings;
-
+        var staffFilterSettings = StaffFilter.getDefaultSettings();
         if (props.defaultFilterSettings) {
-            staffFilterSettings = _.extend({}, staffDefaultFilterSettings, props.defaultFilterSettings)
+            staffFilterSettings = _.extend({}, staffFilterSettings, props.defaultFilterSettings)
         }
         this.state = {
             staffFilterSettings
