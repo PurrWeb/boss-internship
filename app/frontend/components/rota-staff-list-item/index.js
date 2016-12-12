@@ -40,10 +40,10 @@ class RotaStaffListItem extends Component {
 
         return (
             <div className="row staff-list-item rota-staff-list-item">
-                <div className="small-12  large-2 columns">
+                <div className="small-12  large-3 columns">
                     <img src={staff.avatar_url} className="avatar" />
                 </div>
-                <div className="columns">
+                <div className="columns large-9">
                     <div className="row">
                         <div className="shrink columns npr">
                             <div className="rota-staff-list-item__header">
