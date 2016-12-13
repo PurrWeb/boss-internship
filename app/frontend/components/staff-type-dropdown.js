@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import _ from "underscore"
-import { connect } from "react-redux"
 import Select from "react-select"
 import { selectStaffTypesWithShifts } from "~redux/selectors"
 import getArrayOfIdsFromReactSelectValue from "~lib/get-array-of-ids-from-react-select-value";
@@ -8,8 +7,9 @@ import cx from 'classnames';
 
 export default class StaffTypeDropdown extends Component {
     static propTypes = {
-        staffTypes: React.PropTypes.object.isRequired
-    }
+        staffTypes: React.PropTypes.object.isRequired,
+        isNewDesign: React.PropTypes.bool
+    };
     render(){
         var staffTypeOptions = _(this.props.staffTypes).mapValues(function(staffType){
             return {
@@ -35,25 +35,38 @@ export default class StaffTypeDropdown extends Component {
         );
     }
     renderValue(option) {
-        const role = option.label.toLowerCase().replace(' ', '-');
+        if (this.props.isNewDesign) {
+            const role = option.label.toLowerCase().replace(' ', '-');
 
-        return (
-            <div className={`Select-item-label__content Select-item-label__content_role_${role}`}>
-                {option.label}
-            </div>
-        );
+            return (
+                <div className={`Select-item-label__content Select-item-label__content_role_${role}`}>
+                    {option.label}
+                </div>
+            );
+        } else {
+            return this.renderOption(option, "value");
+        }
     }
     renderOption(option, itemType){
-        const role = option.label.toLowerCase().replace(' ', '-');
+        if (this.props.isNewDesign) {
+            const role = option.label.toLowerCase().replace(' ', '-');
 
-        return <div className={`staff-type-dropdown__item staff-type-dropdown__item--option`}>
-            <div
-                className={`staff-type-dropdown__item-content boss-react-select__dropdown-option_role_${role}`}
-            >
+            return <div className={`staff-type-dropdown__item staff-type-dropdown__item--option`}>
+                <div
+                    className={`staff-type-dropdown__item-content boss-react-select__dropdown-option_role_${role}`}
+                >
+                    {option.label}
+                </div>
                 {option.label}
             </div>
-            {option.label}
-        </div>
+        } else {
+            return <div className={`staff-type-dropdown__item staff-type-dropdown__item--${itemType}`}>
+                <div  style={{background: option.color}} className="staff-type-dropdown__item-content">
+                    {option.label}
+                </div>
+                {option.label}
+            </div>
+        }
     }
     onChange(value){
         var value = getArrayOfIdsFromReactSelectValue(value);

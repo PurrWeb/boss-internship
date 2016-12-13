@@ -56,6 +56,7 @@ export default class StaffFinder extends Component {
                     venues={this.props.venues}
                     filters={this.props.filters}
                     onChange={(arg) => this.onFilterChange(arg)}
+                    isNewDesign={this.props.isNewDesign}
                     filterSettings={this.getFilterSettings()} />
 
                 <FilterableStaffList

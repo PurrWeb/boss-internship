@@ -13,8 +13,13 @@ export default class StaffFilter extends Component {
         }).isRequired,
         filterSettings: React.PropTypes.object.isRequired,
         staffTypes: React.PropTypes.object,
+        isNewDesign: React.PropTypes.bool,
         venues: React.PropTypes.object
     };
+    /*static defaultProps = {
+        isNewDesign: true
+    };*/
+
     static getDefaultSettings() {
         return {
             search: "",
@@ -24,41 +29,70 @@ export default class StaffFilter extends Component {
         }
     }
     render() {
-        return (
-            <div className={`main-content__filters-block-container`}>
-                <div className="main-content__filters-block-label">
-                    Filter
-                </div>
+        if (this.props.isNewDesign) {
+            return (
+                <div className="main-content__filters-block-container">
+                    <div className="main-content__filters-block-label">
+                        Filter
+                    </div>
 
-                {this.getSearchFilter()}
-                {this.renderFiltersBlock()}
-            </div>
-        );
+                    {this.getSearchField()}
+                    {this.renderFiltersBlock()}
+                </div>
+            );
+        } else {
+            return (
+                <div className="mb-lg">
+                    {this.getSearchField()}
+                    {this.renderFiltersBlock()}
+                </div>
+            );
+        }
     }
     renderFiltersBlock() {
         var filters = this.getFilters();
         var titles = _(filters).pluck("title");
-
         var titleColumns = titles.map((title) => this.getFilterTitle(title));
-        var componentColumns = filters.map(function(filter){
-            const role = filter.title.toLowerCase();
-            const subClass = role === 'status' ? 'filters-block__cell_role_status' : ''
+        var componentColumns;
 
-            return <div className={`filters-block__cell ${subClass}`} key={filter.title}>
-                {filter.component}
-            </div>
-        });
+        if (this.props.isNewDesign) {
+            componentColumns = filters.map(function(filter){
+                const role = filter.title.toLowerCase();
+                const subClass = role === 'status' ? 'filters-block__cell_role_status' : ''
 
-        return (
-            <div className="filters-block">
-                <div className="filters-block__head">
-                    {titleColumns}
+                return <div className={`filters-block__cell ${subClass}`} key={filter.title}>
+                    {filter.component}
                 </div>
-                <div className="filters-block__row">
-                    {componentColumns}
+            });
+
+            return (
+                <div className="filters-block">
+                    <div className="filters-block__head">
+                        {titleColumns}
+                    </div>
+                    <div className="filters-block__row">
+                        {componentColumns}
+                    </div>
                 </div>
-            </div>
-        )
+            );
+        } else {
+            componentColumns = filters.map(function(filter){
+                return <div className="small-3 medium-2 column" key={filter.title}>
+                    {filter.component}
+                </div>
+            });
+
+            return (
+                <div className="mb-lg">
+                    <div className="row">
+                        {titleColumns}
+                    </div>
+                    <div className="row">
+                        {componentColumns}
+                    </div>
+                </div>
+            );
+        }
     }
     getFilters(){
         var selectedFilters = this.props.filters;
@@ -76,30 +110,49 @@ export default class StaffFilter extends Component {
 
         return filterItems;
     }
-    getSearchFilter(){
+    getSearchField(){
         if (!this.props.filters) {
             return null;
         }
 
-        return (
-            <div className="boss-input-group__input-container main-content__filters-block-container_adjust_input-container">
-                <input
-                    type="text"
-                    value={this.props.filterSettings.search}
-                    name="search"
-                    placeholder="Search"
-                    data-test-marker-staff-text-search
-                    onChange={(event) =>
-                        this.handleChange("search", event.target.value)
-                    }
-                    className="boss-input boss-input_type_search boss-input-group_adjust_search-input"/>
-            </div>
-        );
+        if (this.props.isNewDesign) {
+            return (
+                <div className="boss-input-group__input-container main-content__filters-block-container_adjust_input-container">
+                    <input
+                        type="text"
+                        value={this.props.filterSettings.search}
+                        name="search"
+                        placeholder="Search"
+                        data-test-marker-staff-text-search
+                        onChange={(event) =>
+                            this.handleChange("search", event.target.value)
+                        }
+                        className="boss-input boss-input_type_search boss-input-group_adjust_search-input"/>
+                </div>
+            );
+        } else {
+            return (
+                <div className="boss-input-group__input-container main-content__filters-block-container_adjust_input-container">
+                    <input
+                        type="text"
+                        value={this.props.filterSettings.search}
+                        name="search"
+                        placeholder="Search"
+                        data-test-marker-staff-text-search
+                        style={{maxWidth: "100%"}}
+                        onChange={(event) =>
+                            this.handleChange("search", event.target.value)
+                        }
+                    />
+                </div>
+            );
+        }
     }
     getStaffTypeFilter(){
         var component = <StaffTypeDropdown
             selectedStaffTypes={this.props.filterSettings.staffTypes}
             staffTypes={this.props.staffTypes}
+            isNewDesign={true}
             onChange={(staffTypes) =>
                 this.handleChange("staffTypes", staffTypes)
             } />
@@ -148,9 +201,15 @@ export default class StaffFilter extends Component {
         const role = titleString.toLowerCase();
         const subClass = role === 'status' ? 'filters-block__head-cell_role_status' : '';
 
-        return <div className={`filters-block__head-cell filters-block__head-cell_type_label ${subClass}`} key={titleString}>
-            {titleString}
-        </div>
+        return this.props.isNewDesign ? (
+            <div className={`filters-block__head-cell filters-block__head-cell_type_label ${subClass}`} key={titleString}>
+                {titleString}
+            </div>
+        ) : (
+            <div className="small-3 medium-2 column" key={titleString}>
+                {titleString}
+            </div>
+        );
     }
     handleChange(filterName, filterValue) {
         var newFilter = _.clone(this.props.filterSettings)
