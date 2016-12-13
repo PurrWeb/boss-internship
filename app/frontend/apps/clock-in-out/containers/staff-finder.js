@@ -38,6 +38,7 @@ class ClockInOutStaffFinder extends Component {
             defaultFilterSettings={{
                 rotaedOrActive: true
             }}
+            isNewDesign={true}
             justEnteredManagerOrSupervisor = {this.state.justEnteredManagerOrSupervisor}
             staffItemComponent={StaffListItem}
             staffTypes={this.props.staffTypes}

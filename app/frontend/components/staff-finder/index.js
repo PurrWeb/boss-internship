@@ -12,6 +12,7 @@ export default class StaffFinder extends Component {
         filterOverrides: React.PropTypes.object,
         resetVenue: React.PropTypes.func,
         defaultFilterSettings: React.PropTypes.object,
+        isNewDesign: React.PropTypes.bool,
         justEnteredManagerOrSupervisor: React.PropTypes.bool
     };
     constructor(props) {
@@ -60,6 +61,7 @@ export default class StaffFinder extends Component {
                 <FilterableStaffList
                     staff={this.props.staff}
                     staffItemComponent={this.props.staffItemComponent}
+                    isNewDesign={this.props.isNewDesign}
                     filterSettings={this.getFilterSettings()} />
                 {resetVenueButton}
             </div>

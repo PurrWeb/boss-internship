@@ -8,15 +8,26 @@ class FilterableStaffList extends Component {
         staff: React.PropTypes.object.isRequired,
         staffItemComponent: React.PropTypes.func.isRequired,
         toShowNotes: React.PropTypes.bool,
+        isNewDesign: React.PropTypes.bool,
         filterSettings: React.PropTypes.object.isRequired
     };
-    getTableContent() {
+    getStaffListItems() {
         const staffToShow = this.getStaffToShow();
-        const staffListItems = staffToShow.map((staff, i) =>
-            <this.props.staffItemComponent
-                key={staff.clientId}
-                staff={staff} />
-        );
+
+        return this.props.isNewDesign ?
+            staffToShow.map((staff, i) =>
+                <this.props.staffItemComponent
+                    key={staff.clientId}
+                    staff={staff}/>
+            ) :
+            staffToShow.map((staff, i) =>
+                <li key={staff.clientId}>
+                    <this.props.staffItemComponent staff={staff} />
+                </li>
+            );
+    }
+    getNewStyleTableContent() {
+        const staffListItems = this.getStaffListItems();
         const notesCol = this.props.toShowNotes ? (
             <div className="info-table__th info-table__th_notes">notes</div>
         ) : null;
@@ -39,13 +50,20 @@ class FilterableStaffList extends Component {
             </div>
         );
     }
+    getTableContent() {
+        return this.props.isNewDesign ? this.getNewStyleTableContent() : this.getStaffListItems();
+    }
     render() {
         const tableContent = this.getTableContent();
 
-        return (
+        return this.props.isNewDesign ? (
             <div className="main-content__results-table-container">
                 {tableContent}
             </div>
+        ) : (
+            <ul className="no-bullet">
+                {tableContent}
+            </ul>
         );
     }
     getStaffToShow() {
