@@ -17,7 +17,11 @@
       <% staff_members.find_each do |staff_member| %>
         <tr>
           <td><%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member)) %></td>
-          <td><%= staff_member.master_venue.name.titlecase %></td>
+          <% if staff_member.master_venue.present? %>
+            <td><%= staff_member.master_venue.name.titlecase %></td>
+          <% else %>
+            <td>N / A</td>
+          <% end %>
           <td><%= staff_member.age %></td>
         </tr>
       <% end %>
