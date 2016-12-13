@@ -16,9 +16,6 @@ export default class StaffFilter extends Component {
         isNewDesign: React.PropTypes.bool,
         venues: React.PropTypes.object
     };
-    /*static defaultProps = {
-        isNewDesign: true
-    };*/
 
     static getDefaultSettings() {
         return {
@@ -152,7 +149,7 @@ export default class StaffFilter extends Component {
         var component = <StaffTypeDropdown
             selectedStaffTypes={this.props.filterSettings.staffTypes}
             staffTypes={this.props.staffTypes}
-            isNewDesign={true}
+            isNewDesign={this.props.isNewDesign}
             onChange={(staffTypes) =>
                 this.handleChange("staffTypes", staffTypes)
             } />
