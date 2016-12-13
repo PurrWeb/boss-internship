@@ -18,7 +18,7 @@ class HolidaysController < ApplicationController
     if params[:date]
       date = UIRotaDate.parse(params[:date])
     else
-      redirect_to holidays_path(date: UIRotaDate.format(Time.zone.now.to_date), venue: venue)
+      redirect_to holidays_path(date: UIRotaDate.format(Time.zone.now.to_date))
       return
     end
 
