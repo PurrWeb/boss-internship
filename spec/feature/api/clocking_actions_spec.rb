@@ -474,10 +474,19 @@ RSpec.describe 'Clocking actions' do
       end
 
       specify 'break should have correct times' do
-        end_break_time = day_start + 3.hours
+        end_break_time = start_break_time + 3.hours
         travel_to end_break_time do
+          historical_token = AccessToken.create!(
+            token_type: 'api',
+            expires_at: 30.minutes.from_now,
+            creator: user,
+            api_key: api_key,
+            staff_member: staff_member
+          )
+          set_token_header(historical_token)
           post(url, params)
         end
+        set_token_header(access_token)
 
         _break = ClockInBreak.last
         expect(_break.starts_at).to eq(start_break_time)
