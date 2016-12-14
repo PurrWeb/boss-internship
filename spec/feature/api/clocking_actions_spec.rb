@@ -175,8 +175,18 @@ RSpec.describe 'Clocking actions' do
       specify 'should associate event with create period' do
         call_time = day_start + 2.hours
         travel_to call_time do
+          token = AccessToken.create!(
+            token_type: 'api',
+            expires_at: 30.minutes.from_now,
+            creator: user,
+            api_key: api_key,
+            staff_member: staff_member
+          )
+          set_token_header(token)
           post(url, params)
         end
+        set_token_header(access_token)
+
         expect(ClockInPeriod.count).to eq(1)
         period = ClockInPeriod.last
         clock_out_event = ClockInEvent.last
