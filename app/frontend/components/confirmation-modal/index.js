@@ -98,7 +98,7 @@ class ConfirmationModal extends React.Component {
                                 onSubmit={this.onAddNoteSubmit.bind(this)}
                                 action=""
                         >
-                            <div className="boss-modal-window__header boss-modal-window__header_add-note">
+                            <div className="boss-modal-window__header boss-modal-window__header_add-note test-window-add-note">
                                 Add Note for {this.props.modalOptions.firstName} {this.props.modalOptions.surname}
                             </div>
 

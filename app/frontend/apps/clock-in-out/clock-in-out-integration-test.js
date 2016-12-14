@@ -118,7 +118,7 @@ describe("Clock In/Out Page Integration Test", function(){
         ReactTestUtils.Simulate.submit($$("[data-test-marker-key-dialog-form]")[0]);
 
         _.defer(function(){
-            expect($$(".large-staff-type-selector__button").length).toBeGreaterThan(0);
+            expect($$(".test-main-menu-staff-button").length).toBeGreaterThan(0);
             $.ajax.restore()
             done();
         })
@@ -210,28 +210,43 @@ describe("Clock In/Out Page Integration Test", function(){
     })
 
     it("Lets managers view and add clockInNotes", function(done){
-        var {$$, component} = loadAppWithData(data)
-        selectStaffType(component)
-        enterManagerMode(component)
+        const {$$, component} = loadAppWithData(data);
+        selectStaffType(component);
+        enterManagerMode(component);
 
-        var addNoteButton = $$("[data-test-marker-add-note]")[0];
-        expect(addNoteButton).toNotBe(undefined);
+        window.getTooltipRoot = () => document.querySelector('body');
 
-        expect.spyOn(window, "prompt").andReturn("New Note Content")
-        expect.spyOn($, "ajax").andReturn(Promise.resolve({
-            id: 88,
-            note: "New Note Content",
-            clock_in_day: {id: 22}
-        }))
-        ReactTestUtils.Simulate.click(addNoteButton)
+        ReactTestUtils.Simulate.click($$(".test-settings-sign")[0]);
 
         _.defer(function(){
-            var clockInNote = $$("[data-test-marker-clock-in-note]")[0];
-            expect(clockInNote.innerHTML).toBe("New Note Content")
-            $.ajax.restore();
-            window.prompt.restore();
+            const addNoteButton = document.querySelector('[data-test-marker-add-note]');
+            expect(addNoteButton).toNotBe(undefined);
+
+            ReactTestUtils.Simulate.click(addNoteButton);
+
+            _.defer(function(){
+                expect($$(".test-window-add-note")[0]).toNotBe(undefined);
+
+                expect.spyOn($, "ajax").andReturn(Promise.resolve({
+                    id: 88,
+                    note: "New Note Content",
+                    clock_in_day: {id: 22}
+                }));
+
+                _.defer(function(){
+                    const clockInNote = $$("[data-test-marker-clock-in-note]")[0];
+
+                    expect(clockInNote).toNotBe(undefined);
+                    expect(clockInNote.innerHTML).toBe("New Note Content");
+                    $.ajax.restore();
+
+                    done();
+                });
+
+                done();
+            });
 
             done();
-        })
+        });
     })
 });

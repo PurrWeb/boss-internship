@@ -434,14 +434,15 @@ export default class ToolTip extends React.Component {
         }
     }
     createPortal() {
-        const bossRoot = document.querySelector('.boss-root');
+        // for testing
+        const root = window.getTooltipRoot ? window.getTooltipRoot() : document.querySelector('.boss-root');
 
         portalNodes[this.props.group] = {
             rootNode: document.createElement('div'),
             timeout: false
         };
         portalNodes[this.props.group].rootNode.className = 'boss-tooltip-portal';
-        bossRoot.appendChild(portalNodes[this.props.group].rootNode);
+        root.appendChild(portalNodes[this.props.group].rootNode);
     }
     renderPortal(props) {
         if (!portalNodes[this.props.group]) {

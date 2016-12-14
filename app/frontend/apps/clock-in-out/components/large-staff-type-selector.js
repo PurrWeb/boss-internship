@@ -16,7 +16,7 @@ class StaffTypeButton extends React.Component {
 
         return (
             <div
-                    className={`main-menu__button main-menu__button_role_${fixedName}`}
+                    className={`main-menu__button main-menu__button_role_${fixedName} test-main-menu-staff-button`}
                     onClick={this.onClick}
             >
                 <a href="#"
