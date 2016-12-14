@@ -40,7 +40,6 @@ export default class StaffFilter extends Component {
         } else {
             return (
                 <div className="mb-lg">
-                    {this.getSearchField()}
                     {this.renderFiltersBlock()}
                 </div>
             );
@@ -95,6 +94,12 @@ export default class StaffFilter extends Component {
         var selectedFilters = this.props.filters;
         var filterItems = [];
 
+        if (!this.props.isNewDesign) {
+            if (selectedFilters.search){
+                filterItems.push(this.getSearchFilter());
+            }
+        }
+
         if (selectedFilters.staffType){
             filterItems.push(this.getStaffTypeFilter());
         }
@@ -107,43 +112,44 @@ export default class StaffFilter extends Component {
 
         return filterItems;
     }
+    getSearchFilter(){
+        var component = (
+            <input
+                type="text"
+                value={this.props.filterSettings.search}
+                name="search"
+                placeholder="Search"
+                data-test-marker-staff-text-search
+                style={{maxWidth: "100%"}}
+                onChange={(event) =>
+                    this.handleChange("search", event.target.value)
+                }
+            />
+        );
+        return {
+            title: "Search",
+            component
+        }
+    }
     getSearchField(){
         if (!this.props.filters) {
             return null;
         }
 
-        if (this.props.isNewDesign) {
-            return (
-                <div className="boss-input-group__input-container main-content__filters-block-container_adjust_input-container">
-                    <input
-                        type="text"
-                        value={this.props.filterSettings.search}
-                        name="search"
-                        placeholder="Search"
-                        data-test-marker-staff-text-search
-                        onChange={(event) =>
-                            this.handleChange("search", event.target.value)
-                        }
-                        className="boss-input boss-input_type_search boss-input-group_adjust_search-input"/>
-                </div>
-            );
-        } else {
-            return (
-                <div className="boss-input-group__input-container main-content__filters-block-container_adjust_input-container">
-                    <input
-                        type="text"
-                        value={this.props.filterSettings.search}
-                        name="search"
-                        placeholder="Search"
-                        data-test-marker-staff-text-search
-                        style={{maxWidth: "100%"}}
-                        onChange={(event) =>
-                            this.handleChange("search", event.target.value)
-                        }
-                    />
-                </div>
-            );
-        }
+        return (
+            <div className="boss-input-group__input-container main-content__filters-block-container_adjust_input-container">
+                <input
+                    type="text"
+                    value={this.props.filterSettings.search}
+                    name="search"
+                    placeholder="Search"
+                    data-test-marker-staff-text-search
+                    onChange={(event) =>
+                        this.handleChange("search", event.target.value)
+                    }
+                    className="boss-input boss-input_type_search boss-input-group_adjust_search-input"/>
+            </div>
+        );
     }
     getStaffTypeFilter(){
         var component = <StaffTypeDropdown
