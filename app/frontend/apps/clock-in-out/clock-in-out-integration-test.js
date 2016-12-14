@@ -127,9 +127,9 @@ describe("Clock In/Out Page Integration Test", function(){
     it("Shows a list of staff members after selecting a staff type", function(){
         var {$$, component} = loadAppWithData(data)
 
-        ReactTestUtils.Simulate.click($$(".large-staff-type-selector__button")[0]);
+        ReactTestUtils.Simulate.click($$(".main-menu__button")[0]);
 
-        expect($$(".staff-list-item--clock-in-out").length).toBeGreaterThan(0);
+        expect($$(".test-staff-row").length).toBeGreaterThan(0);
     })
 
     it("Shows a modal for pin entry after clicking on a staff member's clockin button", function(done){
