@@ -10,19 +10,14 @@ export default class RotaStaffFinder extends Component {
     }
     render() {
         return <div>
-            <div className="staff-finder__header">
-                <h3 className="staff-finder__h3">
-                    Find Staff
-                </h3>
-                <StaffFinder
-                    filters={{
-                        search: true,
-                        staffType: true
-                    }}
-                    staffTypes={this.props.staffTypes}
-                    staffItemComponent={StaffListItem}
-                    staff={this.props.staff} />
-            </div>
+          <StaffFinder
+              filters={{
+                  search: true,
+                  staffType: true
+              }}
+              staffTypes={this.props.staffTypes}
+              staffItemComponent={StaffListItem}
+              staff={this.props.staff} />
         </div>
     }
 }

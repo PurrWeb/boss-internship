@@ -1,28 +1,68 @@
 import React, { Component } from "react"
+import { connect } from "react-redux"
 import utils from "../../lib/utils"
 import _ from 'underscore'
 
-export default class FilterableStaffList extends Component {
+class FilterableStaffList extends Component {
     static propTypes = {
         staff: React.PropTypes.object.isRequired,
         staffItemComponent: React.PropTypes.func.isRequired,
+        toShowNotes: React.PropTypes.bool,
+        isNewDesign: React.PropTypes.bool,
         filterSettings: React.PropTypes.object.isRequired
-    }
-    render() {
-        var staffToShow = this.getStaffToShow();
-        var self = this;
-        var staffListItems = staffToShow.map(
-            (staff, i) =>
-              <li key={staff.clientId}>
+    };
+    getStaffListItems() {
+        const staffToShow = this.getStaffToShow();
+
+        return this.props.isNewDesign ?
+            staffToShow.map((staff, i) =>
                 <this.props.staffItemComponent
                     key={staff.clientId}
-                    staff={staff} />
-              </li>
-        );
+                    staff={staff}/>
+            ) :
+            staffToShow.map((staff, i) =>
+                <li key={staff.clientId}>
+                    <this.props.staffItemComponent staff={staff} />
+                </li>
+            );
+    }
+    getNewStyleTableContent() {
+        const staffListItems = this.getStaffListItems();
+        const notesCol = this.props.toShowNotes ? (
+            <div className="info-table__th info-table__th_notes">notes</div>
+        ) : null;
 
-        return (
+        return staffListItems.length ? (
+            <div className="main-content__results-table-container">
+                <div className="info-table">
+                    <div className="info-table__header">
+                        <div className="info-table__th info-table__th_name">name</div>
+                        <div className="info-table__th info-table__th_rotaed">rotaed</div>
+                        {notesCol}
+                        <div className="info-table__th info-table__th_status">status</div>
+                    </div>
+                    {staffListItems}
+                </div>
+            </div>
+        ) : (
+            <div className="info-table__nothing-found-message">
+                No Staff Members Found
+            </div>
+        );
+    }
+    getTableContent() {
+        return this.props.isNewDesign ? this.getNewStyleTableContent() : this.getStaffListItems();
+    }
+    render() {
+        const tableContent = this.getTableContent();
+
+        return this.props.isNewDesign ? (
+            <div className="main-content__results-table-container">
+                {tableContent}
+            </div>
+        ) : (
             <ul className="no-bullet">
-              {staffListItems}
+                {tableContent}
             </ul>
         );
     }
@@ -75,3 +115,16 @@ export default class FilterableStaffList extends Component {
         return staffToShow;
     }
 }
+
+function mapStateToProps(state, ownProps) {
+    const userMode = state.clockInOutAppUserMode ? state.clockInOutAppUserMode.mode : '';
+    const toShowNotes = (userMode === 'Manager' || userMode === 'Bar Supervisor' || userMode === 'GM');
+
+    const additionalOpts = {
+        toShowNotes
+    };
+
+    return Object.assign({}, ownProps, additionalOpts);
+}
+
+export default connect(mapStateToProps)(FilterableStaffList);

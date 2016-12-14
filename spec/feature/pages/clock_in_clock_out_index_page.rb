@@ -5,7 +5,7 @@ module PageObject
     end
 
     page_action :input_api_key do |api_key|
-      scope.fill_in('Enter key', with: api_key.key)
+      scope.fill_in('key', with: api_key.key)
       submit_form
     end
 
@@ -19,7 +19,7 @@ module PageObject
     end
 
     def submit_form
-      scope.click_button('Load Clock In/Out page')
+      scope.find("button[data-test-marker-api-key-button]")
     end
   end
 end
