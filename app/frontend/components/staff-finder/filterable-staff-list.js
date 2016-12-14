@@ -117,7 +117,7 @@ class FilterableStaffList extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-    const userMode = state.clockInOutAppUserMode.mode;
+    const userMode = state.clockInOutAppUserMode ? state.clockInOutAppUserMode.mode : '';
     const toShowNotes = (userMode === 'Manager' || userMode === 'Bar Supervisor' || userMode === 'GM');
 
     const additionalOpts = {
