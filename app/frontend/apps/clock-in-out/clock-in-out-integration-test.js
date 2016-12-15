@@ -196,25 +196,34 @@ describe("Clock In/Out Page Integration Test", function(){
     })
 
     it("Shows a modal after clicking on 'Change PIN'", function(done){
+        window.getTooltipRoot = () => document.querySelector('body');
+
         var {$$, component} = loadAppWithData(data)
         selectStaffType(component)
         enterManagerMode(component)
 
-        var changePinButton = $$("[data-test-marker-change-pin-button]")[0];
-        ReactTestUtils.Simulate.click(changePinButton);
+        ReactTestUtils.Simulate.click($$(".test-settings-sign")[0]);
 
         _.defer(function(){
-            expect(getPinModal()).toNotBe(undefined);
-            closePinModal(done)
-        })
-    })
+            var changePinButton = document.querySelector('[data-test-marker-change-pin-button]');
+            ReactTestUtils.Simulate.click(changePinButton);
+
+            _.defer(function(){
+                const window = document.querySelector('.test-window-enter-pin');
+                expect(window).toNotBe(undefined);
+                done();
+            })
+        });
+
+        window.getTooltipRoot = null;
+    });
 
     it("Lets managers view and add clockInNotes", function(done){
+        window.getTooltipRoot = () => document.querySelector('body');
+
         const {$$, component} = loadAppWithData(data);
         selectStaffType(component);
         enterManagerMode(component);
-
-        window.getTooltipRoot = () => document.querySelector('body');
 
         ReactTestUtils.Simulate.click($$(".test-settings-sign")[0]);
 
@@ -225,7 +234,8 @@ describe("Clock In/Out Page Integration Test", function(){
             ReactTestUtils.Simulate.click(addNoteButton);
 
             _.defer(function(){
-                expect($$(".test-window-add-note")[0]).toNotBe(undefined);
+                const window = document.querySelector('.test-window-add-note');
+                expect(window).toNotBe(undefined);
 
                 expect.spyOn($, "ajax").andReturn(Promise.resolve({
                     id: 88,
@@ -234,7 +244,7 @@ describe("Clock In/Out Page Integration Test", function(){
                 }));
 
                 _.defer(function(){
-                    const clockInNote = $$("[data-test-marker-clock-in-note]")[0];
+                    const clockInNote = document.querySelector('[data-test-marker-clock-in-note]');
 
                     expect(clockInNote).toNotBe(undefined);
                     expect(clockInNote.innerHTML).toBe("New Note Content");
@@ -245,8 +255,8 @@ describe("Clock In/Out Page Integration Test", function(){
 
                 done();
             });
-
-            done();
         });
+
+        window.getTooltipRoot = null;
     })
 });

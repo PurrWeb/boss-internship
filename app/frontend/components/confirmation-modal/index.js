@@ -38,7 +38,7 @@ class ConfirmationModal extends React.Component {
         if (this.props.confirmationType === "PIN") {
 
             return <ModalContainer onClick={() => this.cancel()}>
-                <ModalDialog className="boss-modal-window" onClose={() => this.cancel()}>
+                <ModalDialog className="boss-modal-window test-window-enter-pin" onClose={() => this.cancel()}>
                     <div className="boss-modal-window__header">
                         {this.props.modalOptions.title}
                     </div>
@@ -71,7 +71,7 @@ class ConfirmationModal extends React.Component {
                             {this.props.modalOptions.title}
                         </div>
 
-                        <div className="boss-modal-window__content boss-modal-window__content_role_error">
+                        <div className="boss-modal-window__content boss-modal-window__content_role_error" data-test-marker-pin-modal>
                             <div className="boss-modal-window__message-block boss-modal-window__message-block_role_error">
                                 <span className="boss-modal-window__message-text">Your Insert Pin Has been Wrong</span>
                                 <span className="boss-modal-window__message-text">Please Try Again</span>
@@ -91,18 +91,18 @@ class ConfirmationModal extends React.Component {
         } else if (this.props.confirmationType === "ADD_NOTE") {
             return (
                 <ModalContainer onClick={() => this.closeModal()}>
-                    <ModalDialog className="boss-modal-window" onClose={() => this.closeModal()}>
+                    <ModalDialog className="boss-modal-window test-window-add-note" onClose={() => this.closeModal()}>
 
                         <form
                                 className="boss-form"
                                 onSubmit={this.onAddNoteSubmit.bind(this)}
                                 action=""
                         >
-                            <div className="boss-modal-window__header boss-modal-window__header_add-note test-window-add-note">
+                            <div className="boss-modal-window__header boss-modal-window__header_add-note">
                                 Add Note for {this.props.modalOptions.firstName} {this.props.modalOptions.surname}
                             </div>
 
-                            <div className="boss-modal-window__content boss-modal-window__content_role_add-note">
+                            <div className="boss-modal-window__content boss-modal-window__content_role_add-note" data-test-marker-pin-modal>
                                 <div className="boss-modal-window__message-block boss-modal-window__message-block_role_add-note">
                                     <span className="boss-modal-window__message-text">Add some note for</span>
                                     <span className="boss-modal-window__message-text boss-modal-window__message-text_role_name">
