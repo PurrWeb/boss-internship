@@ -118,7 +118,7 @@ describe("Clock In/Out Page Integration Test", function(){
         ReactTestUtils.Simulate.submit($$("[data-test-marker-key-dialog-form]")[0]);
 
         _.defer(function(){
-            expect($$(".large-staff-type-selector__button").length).toBeGreaterThan(0);
+            expect($$(".test-main-menu-staff-button").length).toBeGreaterThan(0);
             $.ajax.restore()
             done();
         })
@@ -127,9 +127,9 @@ describe("Clock In/Out Page Integration Test", function(){
     it("Shows a list of staff members after selecting a staff type", function(){
         var {$$, component} = loadAppWithData(data)
 
-        ReactTestUtils.Simulate.click($$(".large-staff-type-selector__button")[0]);
+        ReactTestUtils.Simulate.click($$(".main-menu__button")[0]);
 
-        expect($$(".staff-list-item--clock-in-out").length).toBeGreaterThan(0);
+        expect($$(".test-staff-row").length).toBeGreaterThan(0);
     })
 
     it("Shows a modal for pin entry after clicking on a staff member's clockin button", function(done){
@@ -196,42 +196,67 @@ describe("Clock In/Out Page Integration Test", function(){
     })
 
     it("Shows a modal after clicking on 'Change PIN'", function(done){
+        window.getTooltipRoot = () => document.querySelector('body');
+
         var {$$, component} = loadAppWithData(data)
         selectStaffType(component)
         enterManagerMode(component)
 
-        var changePinButton = $$("[data-test-marker-change-pin-button]")[0];
-        ReactTestUtils.Simulate.click(changePinButton);
+        ReactTestUtils.Simulate.click($$(".test-settings-sign")[0]);
 
         _.defer(function(){
-            expect(getPinModal()).toNotBe(undefined);
-            closePinModal(done)
-        })
-    })
+            var changePinButton = document.querySelector('[data-test-marker-change-pin-button]');
+            ReactTestUtils.Simulate.click(changePinButton);
+
+            _.defer(function(){
+                const window = document.querySelector('.test-window-enter-pin');
+                expect(window).toNotBe(undefined);
+                done();
+            })
+        });
+
+        window.getTooltipRoot = null;
+    });
 
     it("Lets managers view and add clockInNotes", function(done){
-        var {$$, component} = loadAppWithData(data)
-        selectStaffType(component)
-        enterManagerMode(component)
+        window.getTooltipRoot = () => document.querySelector('body');
 
-        var addNoteButton = $$("[data-test-marker-add-note]")[0];
-        expect(addNoteButton).toNotBe(undefined);
+        const {$$, component} = loadAppWithData(data);
+        selectStaffType(component);
+        enterManagerMode(component);
 
-        expect.spyOn(window, "prompt").andReturn("New Note Content")
-        expect.spyOn($, "ajax").andReturn(Promise.resolve({
-            id: 88,
-            note: "New Note Content",
-            clock_in_day: {id: 22}
-        }))
-        ReactTestUtils.Simulate.click(addNoteButton)
+        ReactTestUtils.Simulate.click($$(".test-settings-sign")[0]);
 
         _.defer(function(){
-            var clockInNote = $$("[data-test-marker-clock-in-note]")[0];
-            expect(clockInNote.innerHTML).toBe("New Note Content")
-            $.ajax.restore();
-            window.prompt.restore();
+            const addNoteButton = document.querySelector('[data-test-marker-add-note]');
+            expect(addNoteButton).toNotBe(undefined);
 
-            done();
-        })
+            ReactTestUtils.Simulate.click(addNoteButton);
+
+            _.defer(function(){
+                const window = document.querySelector('.test-window-add-note');
+                expect(window).toNotBe(undefined);
+
+                expect.spyOn($, "ajax").andReturn(Promise.resolve({
+                    id: 88,
+                    note: "New Note Content",
+                    clock_in_day: {id: 22}
+                }));
+
+                _.defer(function(){
+                    const clockInNote = document.querySelector('[data-test-marker-clock-in-note]');
+
+                    expect(clockInNote).toNotBe(undefined);
+                    expect(clockInNote.innerHTML).toBe("New Note Content");
+                    $.ajax.restore();
+
+                    done();
+                });
+
+                done();
+            });
+        });
+
+        window.getTooltipRoot = null;
     })
 });

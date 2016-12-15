@@ -27,14 +27,20 @@ class ClockInOutView extends Component {
     }
     componentDidMount() {
         this.mainTag = document.querySelector('main');
-        this.defaultClassNameOfMain = this.mainTag.className;
 
         document.body.classList.add('boss-body');
-        this.mainTag.className = 'boss-root';
+
+        if (this.mainTag) {
+            this.defaultClassNameOfMain = this.mainTag.className;
+            this.mainTag.className = 'boss-root';
+        }
     }
     componentWillUnmount() {
         document.body.classList.remove('boss-body');
-        this.mainTag.className = this.defaultClassNameOfMain;
+
+        if (this.mainTag) {
+            this.mainTag.className = this.defaultClassNameOfMain;
+        }
     }
     render() {
         this.setMainTagClass();

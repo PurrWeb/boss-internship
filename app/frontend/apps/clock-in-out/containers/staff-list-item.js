@@ -226,7 +226,7 @@ class ClockInOutStaffListItem extends Component {
         );
 
         return (
-            <div className="info-table__tr">
+            <div className="info-table__tr test-staff-row">
                 <div className="info-table__td">
                     {this.drawUserAvatar(staffMember.avatar_url, clockInStatusValue)}
                     <div className="info-table__user-info">
@@ -393,7 +393,7 @@ class ClockInOutStaffListItem extends Component {
         return (
             <div
                 id={this.changeSettingsButtonId}
-                className="info-table__settings-sign info-table__user-info_adjust_settings-sign"
+                className="info-table__settings-sign info-table__user-info_adjust_settings-sign test-settings-sign"
                 onClick={this.showChangeSettingsTooltip.bind(this)}
             >
                 {this.drawChangeSettingsTooltip()}
