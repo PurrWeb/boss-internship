@@ -179,36 +179,28 @@ describe("Clock In/Out Page Integration Test", function(){
         selectStaffType(component)
         clickOnEnterManagerMode(component)
 
-        var promise = Promise.resolve({access_token: "", expires_at: new Date(2050,10,10)})
-
-        var oneButton = getPinModal().querySelector("[data-test-marker-numpad-key='1']");
         var twoButton = getPinModal().querySelector("[data-test-marker-numpad-key='2']");
-        ReactTestUtils.Simulate.click(oneButton)
-        ReactTestUtils.Simulate.click(oneButton)
-        ReactTestUtils.Simulate.click(twoButton)
         ReactTestUtils.Simulate.click(twoButton)
 
-        expect.spyOn($, "ajax").andReturn(promise)
-        var form = getPinModal().querySelector("form")
+        _.defer(function(){
+            expect.spyOn($, "ajax").andReturn(Promise.resolve({access_token: "", expires_at: new Date(2050,10,10)}));
+            var form = getPinModal().querySelector("form")
 
-        accelerateTimeouts(function(){
-            ReactTestUtils.Simulate.submit(form)
-        });
+            accelerateTimeouts(function(){
+                ReactTestUtils.Simulate.submit(form)
+            });
 
-        _.delay(function(){
-            expect($.ajax).toHaveBeenCalled()
-            var ajaxData = JSON.parse($.ajax.calls[0].arguments[0].data)
-            expect(ajaxData.staff_member_pin).toBe("1122")
+            _.defer(function(){
+                expect($.ajax).toHaveBeenCalled();
+                var ajaxData = $.ajax.calls[0].arguments[0].data;
+                expect(ajaxData.staff_member_pin).toBe("2");
+                PinInput.__ResetDependency__("_")
+                $.ajax.restore()
 
-            expect(getPinModal()).toBe(undefined)
-            expect($$("[data-test-marker-change-pin-button]").length).toBeGreaterThan(0)
-
-            PinInput.__ResetDependency__("_")
-            $.ajax.restore()
-
-            done();
-        }, 10);
-    })
+                done();
+            });
+        })
+    });
 
     it("Shows a modal after clicking on 'Change PIN'", function(done){
         window.getTooltipRoot = () => document.querySelector('body');
