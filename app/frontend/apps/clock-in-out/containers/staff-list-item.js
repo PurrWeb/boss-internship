@@ -171,6 +171,7 @@ class ClockInOutStaffListItem extends Component {
         const clockInButton = clockedStatus === 'clocked_out' ? (
             <a
                className="boss-button boss-button_big boss-button_role_clock-in boss-buttons-block_adjust_button"
+               data-test-marker-toggle-staff-status
                onClick={this.onClockButtonClick.bind(this)}
             >
                 Clock in
@@ -180,6 +181,7 @@ class ClockInOutStaffListItem extends Component {
         const clockOutButton = clockedStatus === 'clocked_out' ? null : (
             <a
                className="boss-button boss-button_big boss-button_role_clock-out boss-buttons-block_adjust_button"
+               data-test-marker-toggle-staff-status
                onClick={this.onClockButtonClick.bind(this)}
             >
                 Clock Out

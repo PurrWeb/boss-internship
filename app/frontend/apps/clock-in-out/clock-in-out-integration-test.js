@@ -133,13 +133,26 @@ describe("Clock In/Out Page Integration Test", function(){
     })
 
     it("Shows a modal for pin entry after clicking on a staff member's clockin button", function(done){
+        window.getTooltipRoot = () => document.querySelector('body');
         var {$$, component} = loadAppWithData(data)
         component.store.dispatch(clockInOutAppSelectStaffType({selectedStaffTypeClientId: "CLIENT_ID_7"}))
-        ReactTestUtils.Simulate.click($$("[data-test-marker-toggle-staff-status]")[0])
-        // I think the PIN modal module actually injects a new body-level element,
-        // so it's not inside my component
-        expect(getPinModal()).toNotBe(undefined)
-        closePinModal(done)
+
+        const infoStatus = $$(".info-table__user-status")[0];
+        ReactTestUtils.Simulate.click(infoStatus);
+
+        _.defer(function(){
+            const changeStatusButton = document.querySelector('[data-test-marker-toggle-staff-status]');
+            expect(changeStatusButton).toNotBe(undefined);
+
+            ReactTestUtils.Simulate.click(changeStatusButton);
+
+            _.defer(function(){
+                const window = document.querySelector('.test-window-enter-pin');
+                expect(window).toNotBe(undefined);
+                done();
+            })
+        });
+        window.getTooltipRoot = null;
     });
 
     it("Shows a modal after clicking on 'Enter Manager Mode'", function(done){
