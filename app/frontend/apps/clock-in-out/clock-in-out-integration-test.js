@@ -133,24 +133,39 @@ describe("Clock In/Out Page Integration Test", function(){
     })
 
     it("Shows a modal for pin entry after clicking on a staff member's clockin button", function(done){
+        window.getTooltipRoot = () => document.querySelector('body');
         var {$$, component} = loadAppWithData(data)
         component.store.dispatch(clockInOutAppSelectStaffType({selectedStaffTypeClientId: "CLIENT_ID_7"}))
-        ReactTestUtils.Simulate.click($$("[data-test-marker-toggle-staff-status]")[0])
-        // I think the PIN modal module actually injects a new body-level element,
-        // so it's not inside my component
-        expect(getPinModal()).toNotBe(undefined)
-        closePinModal(done)
+
+        const infoStatus = $$(".info-table__user-status")[0];
+        ReactTestUtils.Simulate.click(infoStatus);
+
+        _.defer(function(){
+            const changeStatusButton = document.querySelector('[data-test-marker-toggle-staff-status]');
+            expect(changeStatusButton).toNotBe(undefined);
+
+            ReactTestUtils.Simulate.click(changeStatusButton);
+
+            _.defer(function(){
+                const window = document.querySelector('.test-window-enter-pin');
+                expect(window).toNotBe(undefined);
+                done();
+            })
+        });
+        window.getTooltipRoot = null;
     });
 
     it("Shows a modal after clicking on 'Enter Manager Mode'", function(done){
+        window.getTooltipRoot = () => document.querySelector('body');
         var {$$, component} = loadAppWithData(data)
         selectStaffType(component);
         clickOnEnterManagerMode(component);
 
         ReactTestUtils.Simulate.click($$("[data-test-marker-enter-manager-mode]")[0]);
         expect(getPinModal()).toNotBe(undefined)
-        closePinModal(done)
-    })
+        done();
+        window.getTooltipRoot = null;
+    });
 
     it("Logs the manager in after entering a PIN and shows change PIN buttons for users", function(done){
         // Tapping on pin digit buttons is throttled, so disable that to prevent slow tests
@@ -164,36 +179,28 @@ describe("Clock In/Out Page Integration Test", function(){
         selectStaffType(component)
         clickOnEnterManagerMode(component)
 
-        var promise = Promise.resolve({access_token: "", expires_at: new Date(2050,10,10)})
-
-        var oneButton = getPinModal().querySelector("[data-test-marker-numpad-key='1']");
         var twoButton = getPinModal().querySelector("[data-test-marker-numpad-key='2']");
-        ReactTestUtils.Simulate.click(oneButton)
-        ReactTestUtils.Simulate.click(oneButton)
-        ReactTestUtils.Simulate.click(twoButton)
         ReactTestUtils.Simulate.click(twoButton)
 
-        expect.spyOn($, "ajax").andReturn(promise)
-        var form = getPinModal().querySelector("form")
+        _.defer(function(){
+            expect.spyOn($, "ajax").andReturn(Promise.resolve({access_token: "", expires_at: new Date(2050,10,10)}));
+            var form = getPinModal().querySelector("form")
 
-        accelerateTimeouts(function(){
-            ReactTestUtils.Simulate.submit(form)
-        });
+            accelerateTimeouts(function(){
+                ReactTestUtils.Simulate.submit(form)
+            });
 
-        _.delay(function(){
-            expect($.ajax).toHaveBeenCalled()
-            var ajaxData = JSON.parse($.ajax.calls[0].arguments[0].data)
-            expect(ajaxData.staff_member_pin).toBe("1122")
+            _.defer(function(){
+                expect($.ajax).toHaveBeenCalled();
+                var ajaxData = $.ajax.calls[0].arguments[0].data;
+                expect(ajaxData.staff_member_pin).toBe("2");
+                PinInput.__ResetDependency__("_")
+                $.ajax.restore()
 
-            expect(getPinModal()).toBe(undefined)
-            expect($$("[data-test-marker-change-pin-button]").length).toBeGreaterThan(0)
-
-            PinInput.__ResetDependency__("_")
-            $.ajax.restore()
-
-            done();
-        }, 10);
-    })
+                done();
+            });
+        })
+    });
 
     it("Shows a modal after clicking on 'Change PIN'", function(done){
         window.getTooltipRoot = () => document.querySelector('body');
