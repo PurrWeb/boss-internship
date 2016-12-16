@@ -156,14 +156,16 @@ describe("Clock In/Out Page Integration Test", function(){
     });
 
     it("Shows a modal after clicking on 'Enter Manager Mode'", function(done){
+        window.getTooltipRoot = () => document.querySelector('body');
         var {$$, component} = loadAppWithData(data)
         selectStaffType(component);
         clickOnEnterManagerMode(component);
 
         ReactTestUtils.Simulate.click($$("[data-test-marker-enter-manager-mode]")[0]);
         expect(getPinModal()).toNotBe(undefined)
-        closePinModal(done)
-    })
+        done();
+        window.getTooltipRoot = null;
+    });
 
     it("Logs the manager in after entering a PIN and shows change PIN buttons for users", function(done){
         // Tapping on pin digit buttons is throttled, so disable that to prevent slow tests
