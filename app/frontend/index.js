@@ -36,6 +36,9 @@ registerComponent("RotaOverviewApp", RotaOverviewApp)
 import StaffMemberFormAvatarImage from "./apps/staff-member-form/staff-member-form-avatar-image"
 registerComponent("StaffMemberFormAvatarImage", StaffMemberFormAvatarImage)
 
+import ColorPicker from "./apps/staff-types/color-picker.js";
+registerComponent("ColorPicker", ColorPicker);
+
 import HolidayReportView from "./apps/holiday-report/holiday-report-app"
 registerComponent("HolidayReportApp", HolidayReportView);
 

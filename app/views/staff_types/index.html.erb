@@ -19,10 +19,7 @@
             </td>
             <td>
               <div class="form-group">
-                <%= fields_for('staff_type[]', staff_type) do |staff_type_fields| %>
-                  <%= staff_type_fields.hidden_field(:id) %>
-                  <%= staff_type_fields.text_field(:ui_color, class: 'form-control pick-a-color staff-type-color-field', data: { type: staff_type.name.parameterize }) %>
-                <% end %>
+                <%= react_component("ColorPicker", color: "\##{staff_type.ui_color}") %>
               </div>
             </td>
           </tr>
