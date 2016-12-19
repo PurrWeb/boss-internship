@@ -3,7 +3,8 @@ import { GithubPicker } from 'react-color';
 
 export default class ColorPicker extends React.Component {
     static propTypes = {
-        color: React.PropTypes.string.isRequired
+        color: React.PropTypes.string.isRequired,
+        colors: React.PropTypes.arrayOf(React.PropTypes.string)
     };
 
     constructor(props){
@@ -48,7 +49,10 @@ export default class ColorPicker extends React.Component {
                             className="boss-color-picker__cover"
                             onClick={ this.handleClose }
                     />
-                    <GithubPicker onChange={ this.handleChange } />
+                    <GithubPicker
+                        colors={this.props.colors}
+                        onChange={ this.handleChange }
+                    />
                 </div>
             ) : '';
 
