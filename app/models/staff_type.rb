@@ -4,9 +4,11 @@ class StaffType < ActiveRecord::Base
   PR_TYPE_NAME = 'Pr'
   MANAGER_TYPE_NAME = 'Manager'
   KITCHEN_TYPE_NAMES = ['Chef', "Kp"]
+  VALID_COLORS = ['F0AF85', 'C1C1C1', '84BEF0', '74DC61', 'F3A84D', 'DB8EF8', '86A9DF', 'EC6A6A', 'A9815D', '84DAF1', 'D2D540', '1F1F1F']
 
   validates :name, presence: true, uniqueness: true
   validates :role, presence: true, inclusion: { in: ROLES, message: 'is required' }
+  validates :ui_color, presence: true, inclusion: { in: VALID_COLORS, message: 'must be valid' }
 
   def security?
     role == SECURITY_ROLE

@@ -13,7 +13,7 @@
           <tr>
             <td><%= staff_type.name.titlecase %></td>
             <td>
-              <div class="staff-badge" data-type="<%= staff_type.name.parameterize %>" style="background-color: #<%= staff_type.ui_color %>">
+              <div class="boss-badge" data-type="<%= staff_type.name.parameterize %>" style="background-color: #<%= staff_type.ui_color %>">
                 <%= staff_type.name.titlecase %>
               </div>
             </td>
@@ -21,8 +21,17 @@
               <div class="form-group">
                 <%= fields_for('staff_type[]', staff_type) do |staff_type_fields| %>
                   <%= staff_type_fields.hidden_field(:id) %>
-                  <%= staff_type_fields.text_field(:ui_color, class: 'form-control pick-a-color staff-type-color-field', data: { type: staff_type.name.parameterize }) %>
+                  <%= staff_type_fields.text_field(:ui_color,
+                    class: 'hidden',
+                    data: { type: staff_type.name.parameterize, selector: 'staff_type' }
+                  ) %>
                 <% end %>
+
+                <%= react_component(
+                    "ColorPicker",
+                    color: "\##{staff_type.ui_color}",
+                    colors: StaffType::VALID_COLORS.map {|hex_value| "##{hex_value}"}
+                ) %>
               </div>
             </td>
           </tr>

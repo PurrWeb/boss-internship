@@ -1,0 +1,43 @@
+@import 'settings';
+@import 'mixins';
+
+.boss-color-picker {
+  @include normalize-block();
+
+  position: relative;
+  display: inline-block;
+  padding: 4px;
+  border: 1px solid $boss-dark-gray;
+  background: #eee;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 1px;
+
+  &__color_preview {
+    display: inline-block;
+    width: 25px;
+    height: 20px;
+    margin-right: 4px;
+    border: solid 1px #222;
+    vertical-align: middle;
+  }
+
+  &__dropdown-arrow {
+    display: inline-block;
+    font-size: 10px;
+    vertical-align: middle;
+  }
+
+  &__popup-container {
+    position: absolute;
+    z-index: 1;
+  }
+
+  &__cover {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}

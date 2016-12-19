@@ -6,10 +6,12 @@ export default class StaffTypeBadge extends Component {
     };
     render(){
         const staffType = this.props.staffTypeObject;
-        const staffTypeForClassName = staffType.name.toLowerCase().replace(' ', '-');
 
         return (
-            <div className={`info-table__label info-table__label_${staffTypeForClassName}`}>
+            <div
+                    className="info-table__label"
+                    style={{backgroundColor: staffType.color}}
+            >
                 {staffType.name}
             </div>
         );
