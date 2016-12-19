@@ -41,7 +41,10 @@ export default class StaffTypeDropdown extends Component {
             const role = option.label.toLowerCase().replace(' ', '-');
 
             return (
-                <div className={`Select-item-label__content Select-item-label__content_role_${role}`}>
+                <div
+                        className="Select-item-label__content"
+                        style={{background: option.color}}
+                >
                     {option.label}
                 </div>
             );
@@ -55,7 +58,8 @@ export default class StaffTypeDropdown extends Component {
 
             return <div className={`staff-type-dropdown__item staff-type-dropdown__item--option`}>
                 <div
-                    className={`staff-type-dropdown__item-content boss-react-select__dropdown-option_role_${role}`}
+                        className="staff-type-dropdown__item-content"
+                        style={{background: option.color}}
                 >
                     {option.label}
                 </div>
@@ -63,7 +67,7 @@ export default class StaffTypeDropdown extends Component {
             </div>
         } else {
             return <div className={`staff-type-dropdown__item staff-type-dropdown__item--${itemType}`}>
-                <div  style={{background: option.color}} className="staff-type-dropdown__item-content">
+                <div style={{background: option.color}} className="staff-type-dropdown__item-content">
                     {option.label}
                 </div>
                 {option.label}
