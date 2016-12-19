@@ -10,12 +10,14 @@ class StaffTypesController < ApplicationController
     ids = params["staff_type"].map{ |x| x.first }
     ids.each do |id|
       properties = update_color_params(params["staff_type"][id])
-      type = StaffType.find(properties.fetch("id"))
-
+      staff_type = StaffType.find(properties.fetch("id"))
       form_color = properties.fetch("ui_color")
 
       if color_valid?(form_color)
-        type.update_attributes!(ui_color: form_color[1, form_color.length].upcase)
+        color_in_db_format = form_color[1, form_color.length].upcase
+        if color_changed?(staff_type, color_in_db_format)
+          staff_type.update_attributes!(ui_color: color_in_db_format)
+        end
       else
         Rollbar.error("Invalid color #{form_color} encountered")
       end
@@ -32,6 +34,10 @@ class StaffTypesController < ApplicationController
 
   def color_valid?(form_color)
     form_color =~ hex_color_regex
+  end
+
+  def color_changed?(staff_type, new_color)
+    staff_type.ui_color != new_color
   end
 
   def hex_color_regex

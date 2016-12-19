@@ -30,7 +30,7 @@
                 <%= react_component(
                     "ColorPicker",
                     color: "\##{staff_type.ui_color}",
-                    colors: StaffType::VALID_COLORS
+                    colors: StaffType::VALID_COLORS.map {|hex_value| "##{hex_value}"}
                 ) %>
               </div>
             </td>
