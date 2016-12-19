@@ -18,7 +18,7 @@ export default class ColorPicker extends React.Component {
     // FIXME: pass it as onChange prop
     static changeNeighboringElements(color, event) {
         const currTrJq = $(event.target).closest('tr');
-        const badgeJq = currTrJq.find('.staff-badge');
+        const badgeJq = currTrJq.find('.boss-badge');
         const textInp = currTrJq.find('[data-selector=staff_type]');
 
         badgeJq.css({
