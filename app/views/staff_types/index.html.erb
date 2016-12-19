@@ -30,8 +30,7 @@
                 <%= react_component(
                     "ColorPicker",
                     color: "\##{staff_type.ui_color}",
-                    colors: ['#f0af85', '#c1c1c1', '#84bef0', '#74dc61', '#f3a84d', '#db8ef8', '#86a9df',
-                        '#ec6a6a', '#a9815d', '#84daf1', '#d2d540', '#1f1f1f']
+                    colors: StaffType::VALID_COLORS
                 ) %>
               </div>
             </td>
