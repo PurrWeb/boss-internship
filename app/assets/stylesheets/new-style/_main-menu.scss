@@ -1,15 +1,6 @@
 @import 'settings';
 @import 'mixins';
 
-@mixin main-menu-button($color-name, $img-name, $role, $background-size: 2em, $top: 28px) {
-  background-color: map-get($boss-roles-palette, $color-name);
-  transition: background-color 0.2s;
-  animation-timing-function: ease-out;
-  &:hover {
-    background-color: adjust_color($color: map-get($boss-roles-palette, $role), $lightness: -10%, $saturation: +5%);
-  }
-}
-
 .main-menu {
   $margin-between-items: 24px;
 
@@ -34,57 +25,40 @@
   }
 
   &__button {
+    position: relative;
     display: flex;
     width: calc((100% - (#{$margin-between-items} * 2)) / 3);
     align-items: center;
     justify-content: center;
     cursor: pointer;
 
-    & + & {
-      margin-left: $margin-between-items;
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0);
+      transition: background-color 0.1s;
+      animation-timing-function: ease-out;
     }
 
-    &_role {
-      &_manager {
-        @include main-menu-button($color-name: manager, $img-name: manager, $role: manager, $background-size: 2.4em);
+    &:hover {
+      &:after {
+        background-color: rgba(0, 0, 0, 0.1);
       }
-      &_gm {
-        @include main-menu-button($color-name: gm, $img-name: gm, $role: gm, $top: 32px);
-      }
-      &_bar-supervisor {
-        @include main-menu-button($color-name: bar-supervisor, $img-name: bar-supervisor, $role: bar-supervisor, $top: 31px);
-      }
-      &_bartender {
-        @include main-menu-button($color-name: bartender, $img-name: bartender, $role: bartender, $background-size: 2.3em, $top: 23px);
-      }
-      &_floor-staff {
-        @include main-menu-button($color-name: floor-staff, $img-name: floor-staff, $role: floor-staff, $background-size: 1.8em, $top: 37px);
-      }
-      &_waitress {
-        @include main-menu-button($color-name: waitress, $img-name: waitress, $role: waitress, $background-size: 2.4em, $top: 28px);
-      }
-      &_kp {
-        @include main-menu-button($color-name: kp, $img-name: kp, $role: kp, $background-size: 2.6em, $top: 24px);
-      }
-      &_hostess {
-        @include main-menu-button($color-name: hostess, $img-name: hostess, $role: hostess, $background-size: 2.5em, $top: 24px);
-      }
-      &_chef {
-        @include main-menu-button($color-name: chef, $img-name: chef, $role: chef, $background-size: 2.4em, $top: 24px);
-      }
-      &_security {
-        @include main-menu-button($color-name: security, $img-name: security, $role: security, $background-size: 2.4em, $top: 23px);
-      }
-      &_pr {
-        @include main-menu-button($color-name: pr, $img-name: pr, $role: pr, $background-size: 2.3em, $top: 24px);
-      }
-      &_bar-back {
-        @include main-menu-button($color-name: bar-back, $img-name: bar-back, $role: bar-back, $background-size: 2.5em, $top: 20px);
-      }
+    }
+
+    & + & {
+      margin-left: $margin-between-items;
     }
   }
 
   &__button-text {
+    position: relative;
+    z-index: 1;
     display: block;
     text-decoration: none;
 

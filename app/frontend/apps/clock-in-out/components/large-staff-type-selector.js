@@ -17,7 +17,7 @@ class StaffTypeButton extends React.Component {
 
         return (
             <div
-                    className={`main-menu__button main-menu__button_role_${fixedName} test-main-menu-staff-button`}
+                    className={`main-menu__button test-main-menu-staff-button`}
                     style={{backgroundColor: staffType.color}}
                     onClick={this.onClick}
             >
