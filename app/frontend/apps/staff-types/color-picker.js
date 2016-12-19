@@ -16,13 +16,16 @@ export default class ColorPicker extends React.Component {
     }
 
     // FIXME: pass it as onChange prop
-    static setBadgeColor(color, event) {
+    static changeNeighboringElements(color, event) {
         const currTrJq = $(event.target).closest('tr');
-        const currBadgeJq = currTrJq.find('.staff-badge');
+        const badgeJq = currTrJq.find('.staff-badge');
+        const textInp = currTrJq.find('[data-selector=staff_type]');
 
-        currBadgeJq.css({
+        badgeJq.css({
             backgroundColor: color
         });
+
+        textInp.val(color);
     }
 
     handleClick = () => {
@@ -35,7 +38,7 @@ export default class ColorPicker extends React.Component {
 
     handleChange = (color, event) => {
         this.setState({ color: color.hex });
-        ColorPicker.setBadgeColor(color.hex, event);
+        ColorPicker.changeNeighboringElements(color.hex, event);
     };
 
     render(){

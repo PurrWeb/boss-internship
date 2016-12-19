@@ -11,12 +11,14 @@ class StaffTypeButton extends React.Component {
         this.props.onClick()
     }
     render(){
-        const name = this.props.staffType.name.toLowerCase();
+        const staffType = this.props.staffType;
+        const name = staffType.name.toLowerCase();
         const fixedName = name.replace(' ', '-');
 
         return (
             <div
                     className={`main-menu__button main-menu__button_role_${fixedName} test-main-menu-staff-button`}
+                    style={{backgroundColor: staffType.color}}
                     onClick={this.onClick}
             >
                 <a href="#"
