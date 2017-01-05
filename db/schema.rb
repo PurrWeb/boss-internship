@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160924151830) do
+ActiveRecord::Schema.define(version: 20170105115811) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -430,6 +430,31 @@ ActiveRecord::Schema.define(version: 20160924151830) do
   end
 
   add_index "pay_rates", ["pay_rate_type"], name: "index_pay_rates_on_pay_rate_type", using: :btree
+
+  create_table "pool_loft_table_session_edits", force: :cascade do |t|
+    t.string   "guid",                 limit: 255, null: false
+    t.integer  "table_session_id",     limit: 4,   null: false
+    t.string   "table_session_guid",   limit: 255, null: false
+    t.integer  "admin_token_id",       limit: 4,   null: false
+    t.string   "admin_token_guid",     limit: 255, null: false
+    t.integer  "old_duration_seconds", limit: 4,   null: false
+    t.integer  "new_duration_seconds", limit: 4,   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pool_loft_table_sessions", force: :cascade do |t|
+    t.string   "guid",             limit: 255, null: false
+    t.integer  "table_id",         limit: 4,   null: false
+    t.string   "table_guid",       limit: 255, null: false
+    t.string   "table_name",       limit: 255, null: false
+    t.string   "table_type",       limit: 255, null: false
+    t.boolean  "edited_by_admin",              null: false
+    t.datetime "starts_at",                    null: false
+    t.integer  "duration_seconds", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "rota_forecasts", force: :cascade do |t|
     t.integer  "rota_id",               limit: 4, null: false
