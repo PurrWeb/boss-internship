@@ -11,7 +11,7 @@ RSpec.describe 'Clock in clock out endpoint' do
   let(:response) { get(url, params) }
   let(:venue) { FactoryGirl.create(:venue) }
   let(:api_key) do
-    ApiKey.create!(venue: venue, user: user)
+    ApiKey.create!(venue: venue, user: user, key_type: ApiKey::BOSS_KEY_TYPE)
   end
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
 

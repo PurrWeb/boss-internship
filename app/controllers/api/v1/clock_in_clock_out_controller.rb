@@ -4,7 +4,7 @@ module Api
       skip_before_filter :authenticate_user!
 
       def index
-        api_key = ApiKey.active.find_by(key: params[:api_key])
+        api_key = ApiKey.boss.active.find_by(key: params[:api_key])
 
         if api_key.present?
           venue = api_key.venue

@@ -3,7 +3,7 @@ class ApiKeysController < ApplicationController
 
   def index
     venue_keys = Venue.all.map do |venue|
-      [venue, ApiKey.current_for(venue: venue)]
+      [venue, ApiKey.boss.current_for(venue: venue)]
     end
 
     render locals: { venue_keys: venue_keys }
@@ -18,7 +18,11 @@ class ApiKeysController < ApplicationController
   end
 
   def create
-    ApiKey.create!(venue: venue_from_params, user: current_user)
+    ApiKey.create!(
+      venue: venue_from_params,
+      user: current_user,
+      key_type: ApiKey::BOSS_KEY_TYPE
+    )
 
     flash[:success] = 'Key generation successful'
     redirect_to api_keys_path

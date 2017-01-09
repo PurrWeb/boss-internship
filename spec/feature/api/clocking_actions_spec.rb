@@ -8,7 +8,7 @@ RSpec.describe 'Clocking actions' do
 
   let(:venue) { FactoryGirl.create(:venue) }
   let(:api_key) do
-    ApiKey.create!(venue: venue, user: user)
+    ApiKey.create!(venue: venue, user: user, key_type: ApiKey::BOSS_KEY_TYPE)
   end
   let(:staff_member) do
     FactoryGirl.create(:staff_member, staff_type: manager_staff_type)

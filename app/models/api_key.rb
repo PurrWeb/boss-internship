@@ -1,5 +1,7 @@
 class ApiKey < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
+  BOSS_KEY_TYPE = 'boss'
+  KEY_TYPES = [BOSS_KEY_TYPE]
 
   belongs_to :venue
   belongs_to :user
@@ -8,10 +10,13 @@ class ApiKey < ActiveRecord::Base
   validates :user, presence: true
   validates :key, presence: true
   validates :venue, presence: true
+  validates :key_type, inclusion: { in: KEY_TYPES, message: 'is required' }
   validate  :key_change
   validate  :protect_from_duplicates
 
   before_validation :generate_key
+
+  attr_readonly :key_type
 
   def generate_key
     return if persisted?
@@ -31,8 +36,16 @@ class ApiKey < ActiveRecord::Base
     end
   end
 
+  def boss_key?
+    key_type == BOSS_KEY_TYPE
+  end
+
   def self.active
     in_state(:active)
+  end
+
+  def self.boss
+    where(key_type: BOSS_KEY_TYPE)
   end
 
   def self.current_for(venue:)

@@ -12,7 +12,7 @@ RSpec.describe 'Hours acceptance endpoints' do
   let(:date) { Time.current.to_date }
   let(:start_of_day) { RotaShiftDate.new(date).start_time }
   let(:api_key) do
-    ApiKey.create!(venue: venue, user: user)
+    ApiKey.create!(venue: venue, user: user, key_type: ApiKey::BOSS_KEY_TYPE)
   end
   let(:access_token) do
     AccessToken.create!(

@@ -19,7 +19,8 @@ RSpec.describe 'Api access' do
   let(:api_key) do
     ApiKey.create!(
       venue: venue,
-      user: user
+      user: user,
+      key_type: ApiKey::BOSS_KEY_TYPE
     )
   end
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }

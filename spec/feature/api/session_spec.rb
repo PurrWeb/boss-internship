@@ -36,7 +36,13 @@ RSpec.describe 'Access token end points' do
       context 'valid api key is supplied' do
         let(:venue) { FactoryGirl.create(:venue) }
         let(:user) { FactoryGirl.create(:user, venues: [venue]) }
-        let(:existing_key) { ApiKey.create!(venue: venue, user: user) }
+        let(:existing_key) do
+          ApiKey.create!(
+            venue: venue,
+            user: user,
+            key_type: ApiKey::BOSS_KEY_TYPE
+          )
+        end
 
         let(:url) do
           url_helpers.api_v1_sessions_path(

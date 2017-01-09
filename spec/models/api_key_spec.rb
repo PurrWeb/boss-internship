@@ -8,12 +8,20 @@ describe ApiKey do
     specify 'saving should set the key' do
       key = ApiKey.new
       expect(key.key).to eq(nil)
-      key.update_attributes!(venue: venue, user: user)
+      key.update_attributes!(
+        venue: venue,
+        user: user,
+        key_type: ApiKey::BOSS_KEY_TYPE
+      )
       expect(key.key).to match(/[a-f0-9]+/)
     end
 
     specify 'modifying existing key should fail validation' do
-      key = ApiKey.create!(venue: venue, user: user)
+      key = ApiKey.create!(
+        venue: venue,
+        user: user,
+        key_type: ApiKey::BOSS_KEY_TYPE
+      )
       expect(key.update_attributes(key: 'new_key')).to eq(false)
       expect(key.errors[:key]).to eq(["can't be modified"])
     end
@@ -21,7 +29,13 @@ describe ApiKey do
 
   describe 'duplicate contraint' do
     context 'venue has existing active key' do
-      let!(:key) { ApiKey.create(venue: venue, user: user) }
+      let!(:key) do
+        ApiKey.create(
+          venue: venue,
+          user: user,
+          key_type: ApiKey::BOSS_KEY_TYPE
+        )
+      end
 
       specify 'adding key for venue should fail' do
         new_key = ApiKey.new(venue: venue, user: user)
@@ -33,12 +47,22 @@ describe ApiKey do
     end
 
     context 'venue has existing deleted key' do
-      let!(:key) { ApiKey.create(venue: venue, user: user) }
+      let!(:key) do
+        ApiKey.create(
+          venue: venue,
+          user: user,
+          key_type: ApiKey::BOSS_KEY_TYPE
+        )
+      end
 
       specify 'adding key for venue should fail' do
         key.state_machine.transition_to!(:deleted, requster_user_id: user.id)
 
-        new_key = ApiKey.new(venue: venue, user: user)
+        new_key = ApiKey.new(
+          venue: venue,
+          user: user,
+          key_type: ApiKey::BOSS_KEY_TYPE
+        )
         expect(new_key.save).to eq(true)
       end
     end

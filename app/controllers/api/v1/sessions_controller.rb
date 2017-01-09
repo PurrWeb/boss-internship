@@ -4,7 +4,7 @@ module Api
       skip_before_filter :authenticate_user!
 
       def create
-        api_key = ApiKey.active.find_by(key: params[:api_key])
+        api_key = ApiKey.boss.active.find_by(key: params[:api_key])
         staff_member = StaffMember.enabled.find_by(id: params[:staff_member_id])
         pin_code = params[:staff_member_pin]
 
