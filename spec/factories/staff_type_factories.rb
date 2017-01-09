@@ -5,7 +5,7 @@ FactoryGirl.define do
     end
 
     role 'normal'
-    ui_color 'AABBCC'
+    ui_color StaffType::VALID_COLORS.first
 
     factory :pr_staff_type do
       name 'Pr'
