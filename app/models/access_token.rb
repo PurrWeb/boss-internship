@@ -27,7 +27,7 @@ class AccessToken < ActiveRecord::Base
 
   def ensure_user_or_staff_member_set
     unless user.present? ^ staff_member.present?
-      errors.base(add: 'one user or staff member must be set')
+      errors.add(:base, 'one user or staff member must be set')
     end
   end
 
