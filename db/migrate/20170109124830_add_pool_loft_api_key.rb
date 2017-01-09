@@ -7,7 +7,7 @@ class AddPoolLoftApiKey < ActiveRecord::Migration
       t.string :key_type
     end
 
-    ApiKey.find_all do |api_key|
+    ApiKey.all.find_all do |api_key|
       api_key.update_attribute(:key_type, 'boss')
     end
 
