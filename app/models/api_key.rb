@@ -1,7 +1,8 @@
 class ApiKey < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
   BOSS_KEY_TYPE = 'boss'
-  KEY_TYPES = [BOSS_KEY_TYPE]
+  POOL_HALL_KEY_TYPE = 'pool_hall'
+  KEY_TYPES = [BOSS_KEY_TYPE, POOL_HALL_KEY_TYPE]
 
   belongs_to :venue
   belongs_to :user
@@ -9,7 +10,7 @@ class ApiKey < ActiveRecord::Base
 
   validates :user, presence: true
   validates :key, presence: true
-  validates :venue, presence: true
+  validates :venue, presence: true, unless: :pool_hall_key?
   validates :key_type, inclusion: { in: KEY_TYPES, message: 'is required' }
   validate  :key_change
   validate  :protect_from_duplicates
@@ -40,12 +41,20 @@ class ApiKey < ActiveRecord::Base
     key_type == BOSS_KEY_TYPE
   end
 
+  def pool_hall_key?
+    key_type == POOL_HALL_KEY_TYPE
+  end
+
   def self.active
     in_state(:active)
   end
 
   def self.boss
     where(key_type: BOSS_KEY_TYPE)
+  end
+
+  def self.pool_hall
+    where(key_type: POOL_HALL_KEY_TYPE)
   end
 
   def self.current_for(venue:)
