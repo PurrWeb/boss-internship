@@ -196,6 +196,11 @@ Rails.application.routes.draw do
             post :clock_out
           end
         end
+        resources 'pool_hall', only: [] do
+          collection do
+            post :sync
+          end
+        end
       end
     end
   end
