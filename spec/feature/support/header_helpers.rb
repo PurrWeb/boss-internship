@@ -1,5 +1,5 @@
 module HeaderHelpers
-  def set_token_header(token)
-    header 'Authorization', "Token token=\"#{token.token}\""
+  def set_authorization_header(value)
+    header 'Authorization', "Token token=\"#{value}\""
   end
 end

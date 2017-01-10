@@ -16,7 +16,7 @@ RSpec.describe 'Api access' do
   end
 
   before do
-    set_token_header(access_token)
+    set_authorization_header(access_token.token)
   end
 
   describe '#show' do

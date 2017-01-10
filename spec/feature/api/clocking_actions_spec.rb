@@ -30,7 +30,7 @@ RSpec.describe 'Clocking actions' do
   end
 
   before do
-    set_token_header(access_token)
+    set_authorization_header(access_token.token)
   end
 
   describe '#clock_in' do
@@ -182,10 +182,10 @@ RSpec.describe 'Clocking actions' do
             api_key: api_key,
             staff_member: staff_member
           )
-          set_token_header(token)
+          set_authorization_header(token.token)
           post(url, params)
         end
-        set_token_header(access_token)
+        set_authorization_header(access_token.token)
 
         expect(ClockInPeriod.count).to eq(1)
         period = ClockInPeriod.last
@@ -493,10 +493,10 @@ RSpec.describe 'Clocking actions' do
             api_key: api_key,
             staff_member: staff_member
           )
-          set_token_header(historical_token)
+          set_authorization_header(historical_token.token)
           post(url, params)
         end
-        set_token_header(access_token)
+        set_authorization_header(access_token.token)
 
         _break = ClockInBreak.last
         expect(_break.starts_at).to eq(start_break_time)

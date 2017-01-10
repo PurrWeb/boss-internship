@@ -16,7 +16,7 @@ RSpec.describe 'Staff member pages access' do
   let(:staff_member) { FactoryGirl.create(:staff_member) }
 
   before do
-    set_token_header(access_token)
+    set_authorization_header(access_token.token)
   end
 
   specify do
