@@ -135,19 +135,82 @@ RSpec.describe 'Pool Loft Sync Endpoint' do
         response
         expect(PoolLoftTableSessionEdit.count).to eq(0)
       end
+
+      context 'remote table session already exists on server' do
+        let(:local_table_session_duration_seconds) { 2 }
+        let(:local_table_session_edited_by_admin) { true }
+        let(:local_table_session_starts_at) { remote_table_session_starts_at. - 1.day }
+        let(:local_table_session_updated_at) { remote_table_session_updated_at - 1.day}
+        let(:local_table_session) do
+          PoolLoftTableSession.create!(
+            id: remote_table_session_id,
+            guid: remote_table_session_guid,
+            duration_seconds: local_table_session_duration_seconds,
+            edited_by_admin: local_table_session_edited_by_admin,
+            starts_at: local_table_session_starts_at,
+            table_id: remote_table_id,
+            table_name: remote_table_name,
+            table_guid: remote_table_guid,
+            table_type: remote_table_type,
+            updated_at: local_table_session_updated_at,
+            created_at: remote_table_session_created_at
+          )
+        end
+
+        before do
+          local_table_session
+        end
+
+        context 'before call' do
+          specify '1 PoolLoftTableSession record exist' do
+            expect(PoolLoftTableSession.count).to eq(1)
+          end
+
+          specify 'no PoolLoftTableSessionEdit records exist' do
+            expect(PoolLoftTableSessionEdit.count).to eq(0)
+          end
+        end
+
+        it 'should succeed' do
+          expect(response.status).to eq(ok_status)
+        end
+
+        it 'should return empty response' do
+          json_response = JSON.parse(response.body)
+          expect(json_response).to eq({})
+        end
+
+        it 'should have updated the existing session' do
+          response
+          expect(
+            local_table_session.reload.duration_seconds
+          ).to eq(remote_table_session_duration_seconds)
+        end
+
+        specify 'no new PoolLoftTableSession records are created' do
+          response
+          expect(PoolLoftTableSession.count).to eq(1)
+        end
+
+        specify 'no PoolLoftTableSessionEdit records are created' do
+          response
+          expect(PoolLoftTableSessionEdit.count).to eq(0)
+        end
+      end
     end
 
     context 'table session duration data is supplied' do
       let(:now) { Time.current }
       let(:remote_table_session_duration_id) { 3 }
       let(:remote_table_session_duration_guid) { SecureRandom.uuid }
-      let(:remote_table_session_duration_duration_seconds) { 34 }
-      let(:remote_table_session_duration_edited_by_admin) { true }
-      let(:remote_table_session_duration_starts_at) { now }
-      let(:remote_table_id) { 75 }
-      let(:remote_table_guid) { SecureRandom.uuid }
-      let(:remote_table_session_duration_updated_at) { now - 1.day }
-      let(:remote_table_session_duration_created_at) { now - 2.days}
+      let(:remote_admin_token_id) { 63 }
+      let(:remote_admin_token_guid) { SecureRandom.uuid }
+      let(:remote_table_session_id) { 34 }
+      let(:remote_table_session_guid) { SecureRandom.uuid }
+      let(:remote_table_session_edit_old_duration_seconds) { 399 }
+      let(:remote_table_session_edit_new_duration_seconds) { 233 }
+      let(:remote_table_session_edit_updated_at) { now - 1.hour }
+      let(:remote_table_session_edit_created_at) { now - 2.hours }
       let(:remote_table_session_duration) do
         PoolLoftTableSessionEdit.new(
           id: remote_table_session_duration_id,
@@ -156,14 +219,14 @@ RSpec.describe 'Pool Loft Sync Endpoint' do
           admin_token_guid: remote_admin_token_guid,
           table_session_id: remote_table_session_id,
           table_session_guid: remote_table_session_guid,
-          old_duration_seconds: remote_table_session_duration_old_duration_seconds,
-          new_duration_seconds:  remote_table_session_duration_new_duration_seconds,
-          updated_at: remote_table_session_duration_updated_at,
-          created_at: remote_table_session_duration_created_at
+          old_duration_seconds: remote_table_session_edit_old_duration_seconds,
+          new_duration_seconds:  remote_table_session_edit_new_duration_seconds,
+          updated_at: remote_table_session_edit_updated_at.utc.iso8601,
+          created_at: remote_table_session_edit_created_at.utc.iso8601
         )
       end
-      let(:table_sessions__json) { [].to_json }
-      let(:table_session_durations_json) do
+      let(:table_sessions_json) { [].to_json }
+      let(:table_session_duration_edits_json) do
         {
           "id" => remote_table_session_duration.id,
           "guid" => remote_table_session_duration.guid,
@@ -195,6 +258,65 @@ RSpec.describe 'Pool Loft Sync Endpoint' do
       specify 'no PoolLoftTableSessionEdit records are created' do
         response
         expect(PoolLoftTableSessionEdit.count).to eq(1)
+      end
+
+      context 'remote table session edit already exists on server' do
+        let(:local_table_session_edit_old_duration_seconds) { 934 }
+        let(:local_table_session_edit_new_duration_seconds) { 23 }
+        let(:local_table_session_edit) do
+          PoolLoftTableSessionEdit.create!(
+            id: remote_table_session_duration_id,
+            guid: remote_table_session_duration_guid,
+            admin_token_id: remote_admin_token_id,
+            admin_token_guid: remote_admin_token_guid,
+            table_session_id: remote_table_session_id,
+            table_session_guid: remote_table_session_guid,
+            old_duration_seconds: local_table_session_edit_old_duration_seconds,
+            new_duration_seconds:  local_table_session_edit_new_duration_seconds,
+            updated_at: remote_table_session_edit_updated_at.utc.iso8601,
+            created_at: remote_table_session_edit_created_at.utc.iso8601
+          )
+        end
+
+        before do
+          local_table_session_edit
+        end
+
+        context 'before call' do
+          specify 'no PoolLoftTableSession records exist' do
+            expect(PoolLoftTableSession.count).to eq(0)
+          end
+
+          specify '1 PoolLoftTableSessionEdit record exists' do
+            expect(PoolLoftTableSessionEdit.count).to eq(1)
+          end
+        end
+
+        it 'should succeed' do
+          expect(response.status).to eq(ok_status)
+        end
+
+        it 'should return empty response' do
+          json_response = JSON.parse(response.body)
+          expect(json_response).to eq({})
+        end
+
+        it 'should have updated the existing session edit' do
+          response
+          expect(
+            local_table_session_edit.reload.new_duration_seconds
+          ).to eq(remote_table_session_edit_new_duration_seconds)
+        end
+
+        specify 'no new PoolLoftTableSession records are created' do
+          response
+          expect(PoolLoftTableSession.count).to eq(0)
+        end
+
+        specify 'no new PoolLoftTableSessionEdit records are created' do
+          response
+          expect(PoolLoftTableSessionEdit.count).to eq(1)
+        end
       end
     end
   end

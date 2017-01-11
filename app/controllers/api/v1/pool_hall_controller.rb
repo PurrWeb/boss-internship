@@ -23,6 +23,11 @@ module Api
               json: sync_table_sessions_from_params,
               nested: true
             )
+
+            UpdatePoolLoftTableSessionEditsFromJson.call(
+              json: sync_table_session_duration_edits_from_params,
+              nested: true
+            )
           end
 
           render json: {}, status: 200
