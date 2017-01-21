@@ -14,7 +14,7 @@ module Api
           end
 
           if !sync_fields_present?
-            render json: {}, status: 401
+            render json: {}, status: 422
             return
           end
 
