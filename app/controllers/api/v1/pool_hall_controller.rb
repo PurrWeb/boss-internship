@@ -40,11 +40,13 @@ module Api
       end
 
       def sync_table_sessions_from_params
-        JSON.parse(params["table_sessions"])
+        # Workaround for json arrays being read as nil
+        JSON.parse(params.fetch("table_sessions") || [].to_s)
       end
 
       def sync_table_session_duration_edits_from_params
-        JSON.parse(params["table_session_duration_edits"])
+        # Workaround for json arrays being read as nil
+        JSON.parse(params.fetch("table_session_duration_edits") || [].to_s)
       end
     end
   end
