@@ -30,14 +30,14 @@
           <td>
             <div class="row">
               <div class="shrink column npr">
-                <%= link_to(edit_pay_rate_path(pay_rate), class: 'button small mb-sm') do %>
-                  <i class="fa fa-pencil mr-sm"></i>Edit
+                <%= link_to(edit_pay_rate_path(pay_rate), class: 'boss2-button boss2-button_type_small boss2-button_role_edit') do %>
+                  Edit
                 <% end %>
               </div>
               <div class="shrink column">
                 <% if pay_rate.deletable? %>
-                  <%= link_to(pay_rate_path(pay_rate), method: 'DELETE', class: 'button alert small mb-sm') do %>
-                        <i class="fa fa-remove mr-sm"></i>Delete
+                  <%= link_to(pay_rate_path(pay_rate), method: 'DELETE', class: 'boss2-button boss2-button_type_small boss2-button_role_delete') do %>
+                        Delete
                     <% end %>
                 <% end %>
               </div>
@@ -83,14 +83,14 @@
           <td>
             <div class="row">
               <div class="shrink column npr">
-                <%= link_to(edit_pay_rate_path(admin_pay_rate), class: 'button small mb-sm') do %>
-                  <i class="fa fa-pencil mr-sm"></i>Edit
+                <%= link_to(edit_pay_rate_path(admin_pay_rate), class: 'boss2-button boss2-button_type_small boss2-button_role_edit') do %>
+                  Edit
                 <% end %>
               </div>
               <div class="shrink column">
                 <% if admin_pay_rate.deletable? %>
-                  <%= link_to(pay_rate_path(admin_pay_rate), method: 'DELETE', class: 'button alert small mb-sm') do %>
-                    <i class="fa fa-remove mr-sm"></i>Delete
+                  <%= link_to(pay_rate_path(admin_pay_rate), method: 'DELETE', class: 'boss2-button boss2-button_type_small boss2-button_role_delete') do %>
+                    Delete
                   <% end %>
                 <% end %>
               </div>

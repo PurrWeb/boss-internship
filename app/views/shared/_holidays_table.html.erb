@@ -32,8 +32,8 @@
           <div class="row">
             <div class="shrink column npr">
               <% if holiday.editable? && can?(:edit, holiday) %>
-                  <%= link_to(edit_holiday_path(holiday), class: 'button small mb-sm') do %>
-                      <i class="fa fa-pencil mr-sm"></i>Edit
+                  <%= link_to(edit_holiday_path(holiday), class: 'boss2-button boss2-button_type_small boss2-button_role_edit') do %>
+                      Edit
                   <% end %>
             <% end %>
             </div>
@@ -45,9 +45,9 @@
                               id: holiday.id
                           ),
                           method: :delete,
-                          class: 'button small alert'
+                          class: 'boss2-button boss2-button_type_small boss2-button_role_delete'
                       ) do %>
-                      <i class="fa fa-remove mr-sm"></i>Delete
+                      Delete
                   <% end %>
               <% end %>
             </div>

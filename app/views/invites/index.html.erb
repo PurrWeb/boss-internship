@@ -45,7 +45,7 @@
           </td>
           <td data-role="revoke-button">
             <% if invite.can_transition_to?(:revoked) %>
-                <%= button_to 'Revoke', revoke_invite_path(invite), class: 'button alert' %>
+                <%= button_to 'Revoke', revoke_invite_path(invite), class: 'boss2-button boss2-button_role_exclamation' %>
             <% end %>
           </td>
         </tr>

@@ -20,6 +20,7 @@
   line-height: 40px;
   color: white;
   font-weight: 300;
+  white-space: nowrap;
 
   &:hover {
     color: white;
@@ -44,6 +45,20 @@
       $background-color: map-get($boss-app-palette, primary);
 
       @include button-with-icon($icon-url: '/assets/icon-plus-white.svg', $background-height: 11px, $background-color: $background-color);
+      @include button-hover-behavior($background-color: $background-color);
+    }
+
+    &_delete {
+      $background-color: map-get($boss-app-palette, delete);
+
+      @include button-with-icon($icon-url: '/assets/icon-close-white.svg', $background-height: 11px, $background-color: $background-color);
+      @include button-hover-behavior($background-color: $background-color);
+    }
+
+    &_download {
+      $background-color: map-get($boss-app-palette, primary);
+
+      @include button-with-icon($icon-url: '/assets/icon-download-white.svg', $background-color: $background-color);
       @include button-hover-behavior($background-color: $background-color);
     }
 
@@ -73,6 +88,13 @@
       @include button-hover-behavior($background-color: map-get($boss-app-palette, primary));
 
       background-position-y: 48%;
+    }
+
+    &_accepted {
+      $background-color: #44ca45;
+
+      @include button-with-icon($icon-url: '/assets/icon-mark-white.svg', $background-color: $background-color);
+      @include button-hover-behavior($background-color: $background-color);
     }
   }
 

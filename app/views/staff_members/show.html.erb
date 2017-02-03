@@ -29,12 +29,12 @@
   </div>
   <div class="shrink column">
     <% if can?(:disable, staff_member) %>
-      <%= link_to(disable_staff_member_path(staff_member), class: 'button alert disable-staff-member-button') do %>
-        <span class="fa fa-fire mr-base"></span>Disable Staff Member
+      <%= link_to(disable_staff_member_path(staff_member), class: 'boss2-button boss2-button_role_exclamation') do %>
+        Disable Staff Member
       <% end %>
     <% end %>
     <% if can?(:enable, staff_member) %>
-      <%= link_to(enable_staff_member_path(staff_member), class: 'button alert enable-staff-member-button') do %>
+      <%= link_to(enable_staff_member_path(staff_member), class: 'boss2-button boss2-button_role_exclamation') do %>
         <span class="fa fa-heart mr-base"></span>Enable Staff Member
       <% end %>
     <% end %>

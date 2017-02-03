@@ -25,7 +25,7 @@
           name: 'week_start'
       ) %>
     </div>
-    <%= form.submit('Update', class: 'button mb-base') %>
+    <%= form.submit('Update', class: 'boss2-button') %>
   </div>
 
   <div class="row align-middle mb-md">
@@ -61,9 +61,9 @@
               pay_rate_filter: params[:pay_rate_filter],
               format: :pdf
             ),
-            class: 'button mb-mn'
+            class: 'boss2-button boss2-button_role_download'
           ) do %>
-            <i class="fa fa-download"></i> Download PDF
+            Download PDF
       <% end %>
     </div>
   </div>
@@ -197,7 +197,7 @@
               <td>
                 <%= report.status.titlecase %>
                 <% if report.can_complete? %>
-                  <%= link_to('Mark Completed' , finance_reports_path(staff_member_id: report.staff_member.id, week_start: UIRotaDate.format(report.week.start_date)), class: 'button success', method: :post) %>
+                  <%= link_to('Mark Completed' , finance_reports_path(staff_member_id: report.staff_member.id, week_start: UIRotaDate.format(report.week.start_date)), class: 'boss2-button', method: :post) %>
                 <% end %>
               </td>
             <% end %>

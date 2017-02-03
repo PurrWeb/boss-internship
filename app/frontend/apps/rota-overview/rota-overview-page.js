@@ -45,8 +45,8 @@ class RotaOverviewPage extends Component {
                     </WeekAndVenueSelector>
                 </div>
                 <div className="shrink column mb-md">
-                    <a href={pdfHref} className="button">
-                      <i className="fa fa-download mr-base" aria-hidden />Download PDF
+                    <a href={pdfHref} className="boss2-button boss2-button_role_download">
+                      Download PDF
                     </a>
                 </div>
                 <div className="shrink column mb-md">

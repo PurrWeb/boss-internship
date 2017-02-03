@@ -197,8 +197,8 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                       <a
                           data-test-marker-accept-hours-acceptance-period
                           onClick={ acceptButtonOnClick }
-                          className="button success">
-                          <i className="fa fa-check mr-sm" />Accept {stats.hours}h
+                          className="boss2-button boss2-button_role_accepted">
+                          Accept {stats.hours}h
                       </a>
                     </div>
                   </div>
