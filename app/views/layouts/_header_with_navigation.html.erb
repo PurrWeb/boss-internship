@@ -59,7 +59,7 @@
               </li>
           <% end %>
 
-          <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
+          <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown has-submenu">
             <a class="boss2-main-menu__button-link" href="#">
               Reports
             </a>
@@ -84,7 +84,7 @@
     </ul>
     <ul class="boss2-main-menu__buttons boss2-main-menu__buttons_type_secondary" data-dropdown-menu>
               <% if can?(:manage, :admin) %>
-                <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
+                <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown has-submenu">
                   <a class="boss2-main-menu__button-link" href="#">
                     Admin
                   </a>
@@ -144,7 +144,7 @@
                 </li>
             <% end %>
 
-            <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
+            <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown has-submenu">
               <a class="boss2-main-menu__button-link" href="#">Signed in as <%= current_user.email %></a>
               <ul class="submenu menu vertical is-dropdown-submenu" data-submenu>
                 <li><%= link_to('Sign out', destroy_user_session_path, method: :delete) %></li>
