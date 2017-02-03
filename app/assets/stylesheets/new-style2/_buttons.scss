@@ -106,7 +106,15 @@
       padding: 0 16px;
       line-height: 30px;
 
-      &.boss2-button_role_view-more {
+      &.boss2-button_role_edit,
+      &.boss2-button_role_view-more,
+      &.boss2-button_role_add,
+      &.boss2-button_role_delete,
+      &.boss2-button_role_download,
+      &.boss2-button_role_exclamation,
+      &.boss2-button_role_calendar,
+      &.boss2-button_role_accepted
+      {
         padding-left: $padding-left-with-icon;
         background-position-x: $background-position-x;
       }

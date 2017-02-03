@@ -82,8 +82,8 @@ class RotaStaffListItem extends Component {
                             }}>
                                 Holidays
                             </h4>
-                            <StaffMemberHolidaysLink staffMemberServerId={staff.serverId} >
-                                <i className="fa fa-pencil" /> Edit
+                            <StaffMemberHolidaysLink className="boss2-button boss2-button_role_edit" staffMemberServerId={staff.serverId} >
+                                Edit
                             </StaffMemberHolidaysLink>
                             <StaffHolidaysList staffMemberClientId={staff.clientId} />
                         </div>
