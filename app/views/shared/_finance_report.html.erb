@@ -70,7 +70,7 @@
 <% end %>
 
 <% reports_by_staff_type.each do |staff_type, reports| %>
-  <div>
+  <div class="boss2-table-container">
     <h3 class="boss2-page-content_adjust_h3"><div class="boss-badge" style="font-size: 1.3em; background-color: #<%= staff_type.ui_color %>"><%= staff_type.name %></div></h3>
 
     <% if display_totals %>

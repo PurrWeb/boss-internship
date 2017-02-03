@@ -18,9 +18,9 @@
 
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
 
-  padding: 25px $boss-root-side-padding 60px;
+  padding: 25px 25px 60px;
 
   &_type {
     &_with-additional-data {
@@ -54,6 +54,8 @@
   }
 
   &__inner-container {
+    width: 100%;
+    max-width: 1200px;
     padding: 20px;
     background-color: white;
   }
