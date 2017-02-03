@@ -206,7 +206,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                   <div className="row">
                     <div className="large-12 column">
                       <a
-                          className="button alert"
+                          className="boss2-button boss2-button_role_exclamation"
                           data-test-marker-delete-hours-acceptance-period
                       onClick={() => {
                           this.props.boundActions.deleteHoursAcceptancePeriod({
@@ -214,7 +214,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                               errorHandlingId: this.componentId
                           })
                       }}>
-                        <i className="fa fa-remove mr-sm" />Delete
+                        Delete
                       </a>
                     </div>
                   </div>
@@ -236,7 +236,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                         hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
                         errorHandlingId: this.componentId
                     })}>
-                    <i className="fa fa-close mr-base" />Unaccept
+                    Unaccept
                 </a>
             </div>
         }

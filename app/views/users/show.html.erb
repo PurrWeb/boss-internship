@@ -8,7 +8,7 @@
     <% end %>
     <% if can?(:enable, user) %>
       <%= link_to(undestroy_user_path(user), method: :post, class: 'boss2-button boss2-button_role_exclamation') do %>
-        <span class="fa fa-heart mr-base"></span>Enable User
+        Enable User
       <% end %>
     <% end %>
   </div>
