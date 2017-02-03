@@ -13,8 +13,8 @@
     <h1>
       <% if staff_member.flagged? %>
         <%= staff_member.full_name.titlecase %>
-        <span class="text-danger">
-          <span class="fa fa-warning mr-base"></span>Flagged
+        <span class="boss2-button boss2-button_role_exclamation">
+          Flagged
         </span>
       <% elsif staff_member.disabled? %>
         <%= staff_member.full_name.titlecase %> (Disabled)
