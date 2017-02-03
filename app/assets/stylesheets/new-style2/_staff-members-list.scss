@@ -1,0 +1,69 @@
+@import 'settings';
+@import 'mixins';
+
+.boss2-staff-members-list {
+  $avatar-side-size: 120px;
+  $avatar-offset-top: 8px;
+
+  @include normalize-block();
+
+  &_adjust {
+    &_h4 {
+      display: inline-block;
+      margin: 0 7px 15px 0 !important;
+    }
+
+    &_avatar {
+      position: absolute;
+      left: 0;
+      top: $avatar-offset-top;
+    }
+  }
+
+  &__list-item {
+    $list-item-padding-right: 40px;
+
+    @include normalize-block();
+
+    position: relative;
+    display: inline-block;
+    width: calc(49% - #{$list-item-padding-right});
+    min-height: $avatar-side-size + $avatar-offset-top;
+    padding-left: $avatar-side-size + 25px;
+    padding-right: $list-item-padding-right;
+    margin-bottom: 40px;
+    box-sizing: border-box;
+    vertical-align: top;
+
+    &:nth-child(even) {
+      padding-right: 0;
+    }
+
+    &:last-child, &:nth-last-child(2) {
+      margin-bottom: 0;
+    }
+  }
+
+  &__data-pair {
+    color: $boss-medium-gray;
+    font-size: 12px;
+    font-weight: 300;
+
+    & + & {
+      margin-top: 7px;
+    }
+  }
+
+  &__data-pair-label {
+    margin-right: 7px;
+  }
+  &__data-pair-value {
+
+  }
+  &__data-pair-link {
+    @include normalize-block($color: $boss-medium-gray, $cursor: pointer);
+    font-size: 12px;
+    font-weight: 300;
+    text-decoration: underline;
+  }
+}

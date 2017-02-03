@@ -1,0 +1,71 @@
+@import 'settings';
+@import 'mixins';
+
+.boss2-clock-in-out-block {
+  @include normalize-block();
+
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+
+  &__form {
+    @include normalize-block();
+  }
+
+  &__info-block {
+    $shadow-height: 20px;
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 14px 16px ($shadow-height + 14px);
+    box-sizing: border-box;
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: $shadow-height;
+      background: linear-gradient(#f2f2f2, white);
+    }
+  }
+
+  &__status-label {
+    margin-right: 16px;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  &__status {
+    @include normalize-block();
+
+    display: inline-block;
+    padding: 0 15px;
+    margin-right: 16px;
+    background-color: map-get($boss-sign-palette, clocked-out);
+    border-radius: $boss-global-border-radius;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    text-transform: uppercase;
+    line-height: 30px;
+  }
+
+  &__date {
+    margin-left: auto;
+    padding-left: 24px;
+    font-size: 15px;
+    font-weight: 300;
+    color: $boss-medium-gray;
+    background: url(/assets/icon-calendar.svg) 0 32% no-repeat;
+    background-size: 16px auto;
+  }
+
+  &_adjust {
+    &_chart-with-notes {
+      margin-bottom: 40px !important;
+    }
+  }
+}
