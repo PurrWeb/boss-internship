@@ -5,7 +5,7 @@
 
 <div class="boss2-main-menu" id="main-menu">
     <%= link_to 'BOSS', root_path, class: 'boss2-main-menu__logo-button menu-text' %>
-    <ul class="boss2-main-menu__buttons boss2-main-menu__buttons_type_primary" data-dropdown-menu>
+    <ul class="boss2-main-menu__buttons boss2-main-menu__buttons_type_primary dropdown menu align-right" data-dropdown-menu>
         <% if current_user.present? %>
           <% if can?(:manage, :staff_members) %>
               <li class="boss2-main-menu__button nav-staff-members-section">
@@ -59,11 +59,11 @@
               </li>
           <% end %>
 
-          <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown has-submenu">
+          <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
             <a class="boss2-main-menu__button-link" href="#">
               Reports
             </a>
-            <ul class="submenu menu vertical is-dropdown-submenu">
+            <ul class="boss2-submenu menu vertical">
               <% if can?(:view, :daily_reports) %>
                   <li class="nav-hours-daily-reports-section">
                     <%= link_to('Daily Reports', daily_reports_path) %>
@@ -82,13 +82,13 @@
             </ul>
           </li>
     </ul>
-    <ul class="boss2-main-menu__buttons boss2-main-menu__buttons_type_secondary" data-dropdown-menu>
+    <ul class="boss2-main-menu__buttons boss2-main-menu__buttons_type_secondary dropdown menu align-right" data-dropdown-menu>
               <% if can?(:manage, :admin) %>
-                <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown has-submenu">
+                <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
                   <a class="boss2-main-menu__button-link" href="#">
                     Admin
                   </a>
-                  <ul class="nav-admin-section submenu menu vertical is-dropdown-submenu" data-submenu>
+                  <ul class="boss2-submenu nav-admin-section menu vertical">
                     <li class="nav-invites-section">
                       <%= link_to('Invites', invites_path) %>
                     </li>
@@ -144,9 +144,9 @@
                 </li>
             <% end %>
 
-            <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown has-submenu">
+            <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
               <a class="boss2-main-menu__button-link" href="#">Signed in as <%= current_user.email %></a>
-              <ul class="submenu menu vertical is-dropdown-submenu" data-submenu>
+              <ul class="boss2-submenu menu vertical">
                 <li><%= link_to('Sign out', destroy_user_session_path, method: :delete) %></li>
               </ul>
           </li>

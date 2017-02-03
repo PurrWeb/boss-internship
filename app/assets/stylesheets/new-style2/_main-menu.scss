@@ -40,11 +40,13 @@
   }
 
   &__button {
-    display: inline-flex;
-    box-sizing: border-box;
-    height: $menu-min-height;
-    align-items: center;
-    cursor: pointer;
+    @at-root .menu > li#{&} {
+      display: inline-flex;
+      box-sizing: border-box;
+      height: $menu-min-height;
+      align-items: center;
+      cursor: pointer;
+    }
 
     &_state {
       &_active {
@@ -69,11 +71,19 @@
   }
 
   &__button-link {
-    @include normalize-block($color: $boss-light-gray);
+    @at-root .menu > li > a#{&},
+    .dropdown.menu > li.is-dropdown-submenu-parent > a#{&} {
+      @include normalize-block($color: $boss-light-gray);
 
-    display: block;
-    padding: 0 $button-padding-side;
-    font-size: 12px;
+      display: block;
+      padding: 0 $button-padding-side;
+      font-size: 12px;
+      font-weight: 500;
+
+      &:after {
+        display: none;
+      }
+    }
 
     .boss2-main-menu__button_state_active &, .boss2-main-menu__button:hover & {
       color: $boss-dark-gray;
