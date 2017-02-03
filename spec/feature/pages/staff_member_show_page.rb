@@ -18,7 +18,7 @@ module PageObject
     end
 
     page_action :click_view_user_button do
-      find('.view-user-button.boss2-button').click
+      find('.boss2-button').click
     end
 
     page_action :ensure_details_displayed_for do |staff_member|
@@ -59,12 +59,12 @@ module PageObject
     end
 
     page_action :click_enable_staff_member_button do
-      button = find('a.boss2-button.enable-staff-member-button')
+      button = find('a.boss2-button.boss2-button_role_exclamation')
       button.click
     end
 
     page_action :click_disable_staff_member_button do
-      button = find('a.boss2-button.disable-staff-member-button')
+      button = find('a.boss2-button.boss2-button_role_exclamation')
       button.click
     end
 
