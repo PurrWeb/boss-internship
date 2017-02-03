@@ -81,12 +81,18 @@
       margin-left: 20px;
     }
 
-    &_inputs-group-buttons-group {
+    &_buttons-group {
       margin-left: 20px;
     }
 
     &_textarea {
       width: 230px !important;
+    }
+
+    &_button {
+      & + & {
+        margin-top: 5px;
+      }
     }
   }
 }

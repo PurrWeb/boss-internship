@@ -87,7 +87,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                     </div>
                   <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
               </div>
-              <div className="row">
+              <div>
                 <div className="staff-day__sub-heading">Breaks</div>
                 <BreakList
                     boundActions={this.props.boundActions}
@@ -191,33 +191,25 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
             if (!this.props.hasClockedOut) {
                 return <span></span>
             } else {
-                return <div className="row">
-                  <div className="row">
-                    <div className="large-12 small-end column">
-                      <a
-                          data-test-marker-accept-hours-acceptance-period
-                          onClick={ acceptButtonOnClick }
-                          className="boss2-button boss2-button_role_accepted">
-                          Accept {stats.hours}h
-                      </a>
-                    </div>
-                  </div>
+                return <div className="boss2-buttons-group boss2-from-to-block_adjust_buttons-group">
+                    <a
+                        data-test-marker-accept-hours-acceptance-period
+                        onClick={ acceptButtonOnClick }
+                        className="boss2-button boss2-button_role_accepted boss2-from-to-block_adjust_button">
+                        Accept {stats.hours}h
+                    </a>
 
-                  <div className="row">
-                    <div className="large-12 column">
-                      <a
-                          className="boss2-button boss2-button_role_exclamation"
-                          data-test-marker-delete-hours-acceptance-period
-                      onClick={() => {
-                          this.props.boundActions.deleteHoursAcceptancePeriod({
-                              hoursAcceptancePeriod,
-                              errorHandlingId: this.componentId
-                          })
-                      }}>
+                    <a
+                        className="boss2-button boss2-button_role_exclamation boss2-from-to-block_adjust_button"
+                        data-test-marker-delete-hours-acceptance-period
+                        onClick={() => {
+                            this.props.boundActions.deleteHoursAcceptancePeriod({
+                                hoursAcceptancePeriod,
+                                errorHandlingId: this.componentId
+                            })
+                        }}>
                         Delete
-                      </a>
-                    </div>
-                  </div>
+                    </a>
                 </div>
             }
         } else {
