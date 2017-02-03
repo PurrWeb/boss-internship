@@ -37,7 +37,7 @@
                   week_start:  week.start_date && UIRotaDate.format(week.start_date)
               )
           ) do %>
-          <button type="button" class="boss2-button <%= pay_rate_filtering == 'weekly' ? "secondary" : "" %>">Show All</button>
+          <button type="boss2-button" class="boss2-button <%= pay_rate_filtering == 'weekly' ? "secondary" : "" %>">Show All</button>
       <% end %>
     </div>
     <div class="shrink column">
@@ -48,7 +48,7 @@
               pay_rate_filter: 'weekly'
             )
           ) do %>
-        <button type="button" class="boss2-button <%= pay_rate_filtering == 'weekly' ? "" : "secondary" %>">Show Weekly Only</button>
+        <button type="boss2-button" class="boss2-button <%= pay_rate_filtering == 'weekly' ? "" : "secondary" %>">Show Weekly Only</button>
       <% end %>
     </div>
   </div>

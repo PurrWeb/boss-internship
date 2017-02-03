@@ -41,7 +41,7 @@ class ShiftEditorUi extends Component {
         </div>
     }
     getUpdateButton(){
-        var updateButtonClasses = ["button", "expanded", "mb-md"];
+        var updateButtonClasses = ["boss2-button"];
         if (!this.props.areBothTimesValid) {
             updateButtonClasses.push("disabled");
         }
@@ -65,7 +65,7 @@ class ShiftEditorUi extends Component {
         if (!this.props.canEditShift) {
             return null;
         }
-        const className = cx('button expanded alert', {disabled: this.props.shiftIsBeingEdited});
+        const className = cx('boss2-button boss2-button_role_exclamation', {disabled: this.props.shiftIsBeingEdited});
         return <a
             onClick={this.props.deleteShift}
             className={className}>

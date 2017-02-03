@@ -62,7 +62,7 @@ export default class StaffImageInput extends React.Component {
         return <a className="boss2-button" onClick={() => this.rotateImage()}>Rotate</a>
     }
     getOkButton(){
-        var classes = ["button"];
+        var classes = ["boss2-button"];
         if (!this.imageDimensionsAreValid(this.state.imageDimensions)){
             classes.push("disabled");
         }
