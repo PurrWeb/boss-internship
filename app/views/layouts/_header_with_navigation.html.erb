@@ -3,66 +3,65 @@
   <div class="title-bar-title">Menu</div>
 </div>
 
-<div class="top-bar hide-for-print row align-top" id="main-menu">
-  <div class="column npl">
-    <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
-      <li class="menu-text"><%= link_to 'Boss', root_path, class: 'navbar-brand' %></li>
+<div class="boss2-main-menu" id="main-menu">
+    <%= link_to 'BOSS', root_path, class: 'boss2-main-menu__logo-button menu-text' %>
+    <ul class="boss2-main-menu__buttons boss2-main-menu__buttons_type_primary" data-dropdown-menu>
         <% if current_user.present? %>
           <% if can?(:manage, :staff_members) %>
-              <li class="nav-staff-members-section">
-                <%= link_to('Staff Members', staff_members_path, class: "nav-section-header-link") %>
+              <li class="boss2-main-menu__button nav-staff-members-section">
+                <%= link_to('Staff Members', staff_members_path, class: "boss2-main-menu__button-link") %>
               </li>
           <% end %>
 
           <% if can?(:manage, :rotas) %>
               <% if Venue.count > 0 && !(current_user.manager? && current_user.venues.count == 0) %>
-                  <li class="nav-rota-section">
-                    <%= link_to('Rota', rotas_path, class: "nav-section-header-link") %>
+                  <li class="boss2-main-menu__button nav-rota-section">
+                    <%= link_to('Rota', rotas_path, class: "boss2-main-menu__button-link") %>
                   </li>
               <% end %>
           <% end %>
 
           <% if can?(:view, :holidays) %>
-              <li class="nav-holiday-reports-section">
-                <%= link_to('Holidays', holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday))) %>
+              <li class="boss2-main-menu__button nav-holiday-reports-section">
+                <%= link_to('Holidays', holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday)), class: "boss2-main-menu__button-link") %>
               </li>
           <% end %>
 
           <% if can?(:manage, :security_rota) %>
-              <li class="nav-security-rota-section">
-                <%= link_to(security_rotas_path, class: "nav-section-header-link") do %>
+              <li class="boss2-main-menu__button nav-security-rota-section">
+                <%= link_to(security_rotas_path, class: "boss2-main-menu__button-link") do %>
                     Security Rota
                 <% end %>
               </li>
           <% end %>
 
           <% if can?(:manage, :change_orders) %>
-              <li class="nav-change-orders-section">
-                <%= link_to('Change Orders', change_orders_path, class: 'nav-section-header-link') %>
+              <li class="boss2-main-menu__button nav-change-orders-section">
+                <%= link_to('Change Orders', change_orders_path, class: 'boss2-main-menu__button-link') %>
               </li>
           <% end %>
 
           <% if can?(:manage, :fruit_orders) %>
-              <li class="nav-fruit-orders-section">
-                <%= link_to('Fruit Orders', fruit_orders_path, class: 'nav-section-header-link') %>
+              <li class="boss2-main-menu__button nav-fruit-orders-section">
+                <%= link_to('Fruit Orders', fruit_orders_path, class: 'boss2-main-menu__button-link') %>
               </li>
           <% end %>
 
           <% if !current_user.security_manager? %>
-              <li class="nav-hours-confirmation-section">
-                <%= link_to('Hours Confirmation', current_hours_confirmation_index_path, class: 'nav-section-header-link') %>
+              <li class="boss2-main-menu__button nav-hours-confirmation-section">
+                <%= link_to('Hours Confirmation', current_hours_confirmation_index_path, class: 'boss2-main-menu__button-link') %>
               </li>
           <% end %>
 
           <% if !current_user.security_manager? %>
-              <li>
-                <%= link_to('Safe Checks', safe_checks_path) %>
+              <li class="boss2-main-menu__button">
+                <%= link_to('Safe Checks', safe_checks_path, class: "boss2-main-menu__button-link") %>
               </li>
           <% end %>
 
-          <li class="has-submenu">
-            <a href="#">
-              Reports <span class="caret"></span>
+          <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
+            <a class="boss2-main-menu__button-link" href="#">
+              Reports
             </a>
             <ul class="submenu menu vertical is-dropdown-submenu">
               <% if can?(:view, :daily_reports) %>
@@ -82,14 +81,12 @@
               <% end %>
             </ul>
           </li>
-          </ul>
-          </div>
-          <div class="shrink column npr">
-            <ul class="dropdown vertical medium-horizontal menu" data-dropdown-menu>
+    </ul>
+    <ul class="boss2-main-menu__buttons boss2-main-menu__buttons_type_secondary" data-dropdown-menu>
               <% if can?(:manage, :admin) %>
-                <li class="has-submenu">
-                  <a href="#">
-                    Admin <span class="caret"></span>
+                <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
+                  <a class="boss2-main-menu__button-link" href="#">
+                    Admin
                   </a>
                   <ul class="nav-admin-section submenu menu vertical is-dropdown-submenu" data-submenu>
                     <li class="nav-invites-section">
@@ -147,13 +144,12 @@
                 </li>
             <% end %>
 
-            <li class="nav-user-section has-submenu">
-              <a href="#">Signed in as <%= current_user.email %></a>
+            <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
+              <a class="boss2-main-menu__button-link" href="#">Signed in as <%= current_user.email %></a>
               <ul class="submenu menu vertical is-dropdown-submenu" data-submenu>
                 <li><%= link_to('Sign out', destroy_user_session_path, method: :delete) %></li>
               </ul>
           </li>
       <% end %>
     </ul>
-  </div>
 </div>
