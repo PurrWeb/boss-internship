@@ -30,7 +30,7 @@
       <% staff_members.each do |staff_member| %>
         <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
           <td>
-            <%= image_tag(staff_member.avatar_url, class: "avatar_preview", height: 100, width: 100) %>
+            <%= image_tag(staff_member.avatar_url, class: "boss2-avatar", height: 100, width: 100) %>
           </td>
           <td data-role="name"><%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member)) %></td>
           <td>
