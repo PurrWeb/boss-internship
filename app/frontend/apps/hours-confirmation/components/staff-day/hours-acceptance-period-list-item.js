@@ -231,7 +231,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                     {stats.hours}h ACCEPTED
                 </div>
                 <a
-                    className="button alert pull-right"
+                    className="boss2-button boss2-button_role_exclamation"
                     onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
                         hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
                         errorHandlingId: this.componentId

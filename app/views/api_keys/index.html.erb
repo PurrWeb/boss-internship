@@ -28,8 +28,8 @@
               <i class="fa fa-remove mr-sm"></i>Revoke
             <% end %>
           <% else %>
-            <%= link_to(api_keys_path(venue_id: venue.id), class: 'button small', method: 'POST') do %>
-              <i class="fa fa-plus mr-sm"></i>Generate
+            <%= link_to(api_keys_path(venue_id: venue.id), class: 'boss2-button boss2-button_role_add boss2-button_type_small', method: 'POST') do %>
+              Generate
             <% end %>
           <% end %>
         </td>
