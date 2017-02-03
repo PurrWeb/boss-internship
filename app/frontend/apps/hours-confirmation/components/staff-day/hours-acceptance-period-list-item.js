@@ -138,8 +138,8 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
           <p>If you accept these hours, the total amount of accepted hours for this staff member will be greater than what was rotaed.</p>
           <p>Please ensure you have added suitable reason notes to explain the time difference.</p>
           <p>These will be reviewed by senior management.</p>
-          <a className="button success" onClick={handleAccept}>Accept</a>
-          <a className="button" onClick={closeModal}>Cancel</a>
+          <a className="boss2-button" onClick={handleAccept}>Accept</a>
+          <a className="boss2-button" onClick={closeModal}>Cancel</a>
         </ModalDialog>
       </ModalContainer>
     }

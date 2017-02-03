@@ -59,7 +59,7 @@ export default class StaffImageInput extends React.Component {
         </div>
     }
     getRotateButton(){
-        return <a className="button secondary" onClick={() => this.rotateImage()}>Rotate</a>
+        return <a className="boss2-button" onClick={() => this.rotateImage()}>Rotate</a>
     }
     getOkButton(){
         var classes = ["button"];
@@ -185,7 +185,7 @@ export default class StaffImageInput extends React.Component {
     }
     getResetButtton(){
         return <button
-            className="button"
+            className="boss2-button"
             onClick={() => {
                 this.reset()
             }}>

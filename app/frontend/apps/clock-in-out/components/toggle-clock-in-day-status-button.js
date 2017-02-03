@@ -20,7 +20,7 @@ export default class ToggleClockInDayStatusButton extends Component {
 
         var label = this.props.statusLabels[nextStatusId];
 
-        return <a className="button small"
+        return <a className="boss2-button boss2-button_type_small"
             onClick={() => this.onClick()}
             data-test-marker-toggle-staff-status>
             <span
