@@ -9,20 +9,34 @@ class FilterableStaffList extends Component {
         staffItemComponent: React.PropTypes.func.isRequired,
         toShowNotes: React.PropTypes.bool,
         isNewDesign: React.PropTypes.bool,
-        filterSettings: React.PropTypes.object.isRequired
+        filterSettings: React.PropTypes.object.isRequired,
+        newShiftSettings: React.PropTypes.shape({
+            venueServerId: React.PropTypes.any.isRequired,
+            venueClientId: React.PropTypes.any.isRequired,
+            startsAt: React.PropTypes.instanceOf(Date).isRequired,
+            endsAt: React.PropTypes.instanceOf(Date).isRequired,
+            shiftType: React.PropTypes.string.isRequired
+        })
     };
     getStaffListItems() {
         const staffToShow = this.getStaffToShow();
+        const newShiftSettings = this.context.newShiftSettings;
 
         return this.props.isNewDesign ?
             staffToShow.map((staff, i) =>
                 <this.props.staffItemComponent
                     key={staff.clientId}
-                    staff={staff}/>
+                    staff={staff}
+                    newShiftSettings={newShiftSettings}
+                />
             ) :
             staffToShow.map((staff, i) =>
                 <li key={staff.clientId}>
-                    <this.props.staffItemComponent staff={staff} />
+                    <this.props.staffItemComponent
+                        key={staff.clientId}
+                        staff={staff}
+                        newShiftSettings={newShiftSettings}
+                    />
                 </li>
             );
     }
