@@ -15,6 +15,15 @@ export default class StaffFinder extends Component {
         isNewDesign: React.PropTypes.bool,
         justEnteredManagerOrSupervisor: React.PropTypes.bool
     };
+    static contextTypes = {
+        newShiftSettings: React.PropTypes.shape({
+            venueServerId: React.PropTypes.any.isRequired,
+            venueClientId: React.PropTypes.any.isRequired,
+            startsAt: React.PropTypes.instanceOf(Date).isRequired,
+            endsAt: React.PropTypes.instanceOf(Date).isRequired,
+            shiftType: React.PropTypes.string.isRequired
+        })
+    };
     constructor(props) {
         super(props);
         var staffFilterSettings = StaffFilter.getDefaultSettings();
@@ -63,7 +72,9 @@ export default class StaffFinder extends Component {
                     staff={this.props.staff}
                     staffItemComponent={this.props.staffItemComponent}
                     isNewDesign={this.props.isNewDesign}
-                    filterSettings={this.getFilterSettings()} />
+                    filterSettings={this.getFilterSettings()}
+                    newShiftSettings={this.context.newShiftSettings}
+                />
                 {resetVenueButton}
             </div>
         );
