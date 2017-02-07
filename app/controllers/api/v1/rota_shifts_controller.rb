@@ -85,7 +85,9 @@ module Api
       end
 
       def staff_member_from_params
-        StaffMember.find_by(id: params[:staff_member_id])
+        StaffMember.
+          includes([:staff_type]).
+          find_by(id: params[:staff_member_id])
       end
     end
   end
