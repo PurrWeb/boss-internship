@@ -17,7 +17,7 @@ module Api
           venue: venue_from_params,
           rota_shift_params: rota_shift_params,
           authorization_proc: lambda do |rota_shift|
-            authorize! :manage, rota_shift.rota
+            authorize! :manage, rota_shift
           end
         ).call
 
