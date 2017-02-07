@@ -13,11 +13,7 @@ class StaffListItemContainer extends React.Component {
         var staff = this.props.staff;
         var staffTypeClientId = staff.staff_type.clientId;
         var staffType = this.props.staffTypes[staffTypeClientId];
-        var venues = staff.venues.reduce((memoArr, venue) => {
-            const resultVenue = props.venues[venue.clientId];
-
-            return resultVenue ? memoArr.concat([resultVenue]) : memoArr;
-        }, []);
+        var venues = staff.venues.map(venue => props.venues[venue.clientId]);
         return <StaffListItem
             staff={staff}
             venues={venues}
