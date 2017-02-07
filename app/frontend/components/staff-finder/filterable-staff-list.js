@@ -39,7 +39,6 @@ class FilterableStaffList extends Component {
                     />
                 </li>
             );
-
     }
     getNewStyleTableContent() {
         const staffListItems = this.getStaffListItems();
