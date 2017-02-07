@@ -9,7 +9,9 @@
 
   var staffMembers = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
 
-  var venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: accessible_venues } %>;
+  var venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: Venue.all } %>;
+
+  var accessibleVenueIds = <%= accessible_venues.map(&:id) %>;
 
   var staffTypes = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
 
@@ -21,6 +23,7 @@
   window.boss.access_token = "<%= access_token.token %>";
 
   window.boss.pageData = {
+    accessibleVenueIds: accessibleVenueIds,
     venueId: <%= filter_venue.try(:id) || 'null' %>,
     weekStartDate: "<%= week.start_date.iso8601 %>",
     weekEndDate: "<%= week.end_date.iso8601 %>",
