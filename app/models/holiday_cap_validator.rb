@@ -15,7 +15,7 @@ class HolidayCapValidator
         relation: staff_member.active_holidays.paid,
       ).count
 
-      if (paid_holidays_this_year + holiday.days) >= PAID_HOLIDAY_DAY_CAP
+      if (paid_holidays_this_year + holiday.days) > PAID_HOLIDAY_DAY_CAP
         holiday.errors.add(:base, HolidayCapValidator.cap_reached_error_message)
       end
     end

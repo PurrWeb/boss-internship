@@ -15,7 +15,7 @@ describe HolidayCapValidator do
   let(:now) { tax_year.end_date - 1.day }
   let(:tax_year) { TaxYear.new(Time.current)}
   let(:start_date) { now.to_date + 1.week }
-  let(:end_date) { start_date + 1.day }
+  let(:end_date) { start_date }
   let(:staff_member) { FactoryGirl.build(:staff_member) }
   let(:user) { FactoryGirl.create(:user) }
   let(:validator) { HolidayCapValidator.new(holiday) }
