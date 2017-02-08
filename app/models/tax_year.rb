@@ -25,7 +25,7 @@ class TaxYear
   end
 
   def current_calendar_year_tax_dealine
-    Date.new(date.year, 4, 5)
+    Date.new(date.year, 4, 9)
   end
 
   def next_calendar_year_tax_deadline
