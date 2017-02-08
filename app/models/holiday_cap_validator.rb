@@ -10,8 +10,10 @@ class HolidayCapValidator
   def validate
     if holiday.validate_as_creation && holiday.staff_member.present?
       staff_member = holiday.staff_member
-      query = PaidHolidaysInTaxYearQuery.new(staff_member: staff_member, date: now.to_date)
-      paid_holidays_this_year = query.count
+
+      paid_holidays_this_year = HolidayThisYearQuery.new(
+        relation: staff_member.active_holidays.paid,
+      ).count
 
       if paid_holidays_this_year >= PAID_HOLIDAY_DAY_CAP
         holiday.errors.add(:base, HolidayCapValidator.cap_reached_error_message)
