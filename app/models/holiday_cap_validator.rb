@@ -8,7 +8,7 @@ class HolidayCapValidator
   attr_reader :holiday, :now
 
   def validate
-    if holiday.validate_as_creation && holiday.staff_member.present?
+    if prerequisits_met?
       staff_member = holiday.staff_member
 
       paid_holidays_this_year = HolidayThisYearQuery.new(
@@ -19,6 +19,13 @@ class HolidayCapValidator
         holiday.errors.add(:base, HolidayCapValidator.cap_reached_error_message)
       end
     end
+  end
+
+  def prerequisits_met?
+    holiday.validate_as_creation &&
+      holiday.staff_member.present? &&
+      holiday.start_date.present? &&
+      holiday.end_date.present?
   end
 
   def self.cap_reached_error_message
