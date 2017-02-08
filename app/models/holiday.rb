@@ -19,6 +19,7 @@ class Holiday < ActiveRecord::Base
 
   validate do |holiday|
     HolidayDateValidator.new(holiday).validate
+    HolidayCapValidator.new(holiday).validate
   end
 
   attr_accessor :validate_as_creation
