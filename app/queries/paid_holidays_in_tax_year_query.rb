@@ -6,7 +6,11 @@ class PaidHolidaysInTaxYearQuery
   attr_reader :staff_member, :date
 
   def all
-    holiday_relation = Holiday.paid
+    holiday_relation = Holiday.
+      paid.
+      in_state(:enabled).
+      where(staff_member: staff_member)
+
     tax_year = TaxYear.new(date)
 
     InRangeQuery.new(
