@@ -14,8 +14,8 @@ class HolidayThisYearQuery
     ).all
   end
 
-  def count
-    all.count
+  def day_count
+    all.to_a.sum { |holiday| holiday.days }
   end
 
   private
