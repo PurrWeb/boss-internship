@@ -13,12 +13,10 @@ class PaidHolidaysInTaxYearQuery
 
     tax_year = TaxYear.new(date)
 
-    InRangeQuery.new(
+    HolidayInRangeQuery.new(
       relation: holiday_relation,
       start_value: tax_year.start_date,
-      end_value: tax_year.end_date,
-      start_column_name: :start_date,
-      end_column_name: :end_date
+      end_value: tax_year.end_date
     ).all
   end
 
