@@ -89,20 +89,6 @@ class StaffMembersController < ApplicationController
     render locals: { staff_member: staff_member }
   end
 
-  def create
-    authorize! :manage, :staff_members
-
-    result = CreateStaffMember.new(params: staff_member_params).call
-
-    if result.success?
-      flash[:success] = "Staff member added successfully"
-      redirect_to action: :index
-    else
-      flash.now[:error] = "There was a problem creating this staff member"
-      render 'new', locals: { staff_member: result.staff_member }
-    end
-  end
-
   def edit_employment_details
     staff_member = StaffMember.find(params[:id])
     authorize! :edit, staff_member

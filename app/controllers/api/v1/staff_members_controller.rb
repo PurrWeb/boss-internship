@@ -1,7 +1,7 @@
 module Api
   module V1
     class StaffMembersController < APIController
-      before_filter :web_token_authenticate!, only: [:show]
+      before_filter :web_token_authenticate!, only: [:show, :create]
       before_filter :api_token_athenticate!, only: [:change_pin]
 
       def show
@@ -9,6 +9,20 @@ module Api
         authorize! :view, staff_member
 
         render locals: { staff_member: staff_member }
+      end
+
+      def create
+        authorize! :manage, :staff_members
+
+        result = CreateStaffMember.new(params: staff_member_params).call
+
+        if result.success?
+          flash[:success] = "Staff member added successfully"
+          redirect_to action: :index
+        else
+          flash.now[:error] = "There was a problem creating this staff member"
+          render 'new', locals: { staff_member: result.staff_member }
+        end
       end
 
       def change_pin

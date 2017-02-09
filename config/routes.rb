@@ -49,7 +49,7 @@ Rails.application.routes.draw do
     resources :holidays, only: [:index, :edit, :update]
     resources :owed_hours, only: [:edit, :update]
 
-    resources :staff_members, only: [:show, :index, :new, :create, :destroy] do
+    resources :staff_members, only: [:show, :index, :new, :destroy] do
       resources :holidays, only: [:create, :destroy]
       resources :owed_hours, only: [:create, :destroy]
       resources :hours_overview, only: :show
@@ -181,7 +181,7 @@ Rails.application.routes.draw do
         end
         resources :holidays, only: :show
         resources :holiday_reports, only: :index
-        resources :staff_members, only: :show
+        resources :staff_members, only: [:show, :create]
         resources :staff_types,   only: :show
         resources :rota_shifts,   only: [:show, :destroy, :update]
         resources :rotas,         only: :show
