@@ -129,47 +129,6 @@ RSpec.describe 'Staff member pages access' do
     end
   end
 
-  describe 'create staff member (action)' do
-    let(:url) { url_helpers.staff_members_path }
-    let(:params) do
-      {
-        staff_member: { pin_number: '332432324' }
-      }
-    end
-
-    context 'manager' do
-      let(:user) { FactoryGirl.create(:user, :manager) }
-
-      specify 'should have access' do
-        expect(post(url, params).status).to eq(ok_status)
-      end
-    end
-
-    context 'ops manager' do
-      let(:user) { FactoryGirl.create(:user, :ops_manager) }
-
-      specify 'should have access' do
-        expect(post(url, params).status).to eq(ok_status)
-      end
-    end
-
-    context 'admin' do
-      let(:user) { FactoryGirl.create(:user, :admin) }
-
-      specify 'should have access' do
-        expect(post(url, params).status).to eq(ok_status)
-      end
-    end
-
-    context 'dev' do
-      let(:user) { FactoryGirl.create(:user, :dev) }
-
-      specify 'should have access' do
-        expect(post(url, params).status).to eq(ok_status)
-      end
-    end
-  end
-
   private
   def url_helpers
     Rails.application.routes.url_helpers
