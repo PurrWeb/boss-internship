@@ -19,7 +19,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   include PeriodTimeValidations
 
   def editable?
-    staff_member.enabled? && !frozen?
+    !frozen?
   end
 
   def self.accepted
