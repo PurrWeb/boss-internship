@@ -25,15 +25,16 @@
           action_partial: 'shared/accepted_change_order_actions'
         } %>
 
-    <%= link_to(
-          'Complete Orders',
-          complete_change_order_reports_path(
+    <%= bootstrap_form_for(
+          '',
+          url: complete_change_order_reports_path(
             change_order_ids: accepted_change_orders.map(&:id)
           ),
-          remote: true,
-          method: :put,
-          class: 'button'
-        ) %>
+          html: { method: :put }
+        ) do |form|
+    %>
+      <%= form.button('Complete Orders', class: 'button') %>
+    <% end %>
   </div>
 <% end %>
 
