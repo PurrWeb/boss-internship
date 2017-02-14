@@ -14,14 +14,23 @@ module Api
       def create
         authorize! :manage, :staff_members
 
-        result = CreateStaffMember.new(params: staff_member_params).call
+        params_json = JSON.parse(request.body)
+
+        api_params = AddStaffMemberApiCallParams.new(params_json: params_json, requester: current_user)
+
+        model_params = api_params.
+          model_params.
+          merge(
+            creator: current_user
+          )
+
+        result = CreateStaffMember.new(params: model_params).call
 
         if result.success?
-          flash[:success] = "Staff member added successfully"
-          redirect_to action: :index
+          render json: { staff_member_id: result.staff_member.id }.to_json, status: 200
         else
-          flash.now[:error] = "There was a problem creating this staff member"
-          render 'new', locals: { staff_member: result.staff_member }
+          api_errors = AddStaffMemberApiErrors.new(staff_member: result.staff_member)
+          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: api_errors }
         end
       end
 

@@ -230,7 +230,7 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :staff_members, only: [] do
+        resources :staff_members, only: [:create] do
           member do
             post :change_pin
           end
