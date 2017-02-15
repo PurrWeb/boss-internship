@@ -30,6 +30,7 @@
 .boss2-body {
   @include normalize-block();
 
+  min-width: 1024px;
   margin: 0;
   background-color: map-get($boss-app-palette, body-background);
   color: $boss-dark-gray;
