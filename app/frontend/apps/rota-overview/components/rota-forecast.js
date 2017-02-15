@@ -13,7 +13,7 @@ export default class RotaForecast extends React.Component {
         isUpdatingForecast: React.PropTypes.bool
     }
     render(){
-        return <div className="rota-forecast column">
+        return <div className="rota-forecast">
             {this.getForecastHeaderRow()}
             {this.getForecastBody()}
         </div>

@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import moment from "moment"
-import RotaOverviewChart from "~components/rota-overview-chart"
 import utils from "~lib/utils"
 import { appRoutes } from "~lib/routes"
 import StaffTypeRotaOverviewChart from "./staff-type-rota-overview-chart"
@@ -35,7 +34,7 @@ export default class StaffTypeRotaOverviewItem extends Component {
             <a href={appRoutes.staffTypeRota({staffTypeSlug: this.props.staffTypeSlug, dateOfRota})}>
                 <h2>{moment(dateOfRota).format("ddd D MMMM YYYY")}</h2>
             </a>    
-            <div className="row">
+            <div className="boss2-flex-row">
                 <div className="column">
                     <StaffTypeRotaOverviewChart
                         staff={this.props.staff}
