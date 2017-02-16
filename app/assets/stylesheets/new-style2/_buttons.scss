@@ -3,7 +3,7 @@
 
 @mixin button-with-icon($icon-url, $background-height: 13px, $background-color: map-get($boss-app-palette, primary) ) {
   padding-left: 40px;
-  background: $background-color url($icon-url) 18px center no-repeat;
+  background: $background-color asset-url($icon-url) 18px center no-repeat;
   background-size: auto $background-height;
 }
 
@@ -30,42 +30,42 @@
     &_edit {
       $background-color: map-get($boss-app-palette, secondary);
 
-      @include button-with-icon($icon-url: '/assets/icon-pencil-white.svg', $background-color: $background-color);
+      @include button-with-icon($icon-url: 'icon-pencil-white.svg', $background-color: $background-color);
       @include button-hover-behavior($background-color: $background-color);
     }
 
     &_view-more {
       $background-color: map-get($boss-app-palette, secondary);
 
-      @include button-with-icon($icon-url: '/assets/icon-plus-white.svg', $background-height: 11px, $background-color: $background-color);
+      @include button-with-icon($icon-url: 'icon-plus-white.svg', $background-height: 11px, $background-color: $background-color);
       @include button-hover-behavior($background-color: $background-color);
     }
 
     &_add {
       $background-color: map-get($boss-app-palette, primary);
 
-      @include button-with-icon($icon-url: '/assets/icon-plus-white.svg', $background-height: 11px, $background-color: $background-color);
+      @include button-with-icon($icon-url: 'icon-plus-white.svg', $background-height: 11px, $background-color: $background-color);
       @include button-hover-behavior($background-color: $background-color);
     }
 
     &_delete {
       $background-color: map-get($boss-app-palette, delete);
 
-      @include button-with-icon($icon-url: '/assets/icon-close-white.svg', $background-height: 11px, $background-color: $background-color);
+      @include button-with-icon($icon-url: 'icon-close-white.svg', $background-height: 11px, $background-color: $background-color);
       @include button-hover-behavior($background-color: $background-color);
     }
 
     &_download {
       $background-color: map-get($boss-app-palette, primary);
 
-      @include button-with-icon($icon-url: '/assets/icon-download-white.svg', $background-color: $background-color);
+      @include button-with-icon($icon-url: 'icon-download-white.svg', $background-color: $background-color);
       @include button-hover-behavior($background-color: $background-color);
     }
 
     &_exclamation {
       $background-color: map-get($boss-app-palette, alert);
 
-      @include button-with-icon($icon-url: '/assets/icon-danger-white.svg', $background-color: $background-color);
+      @include button-with-icon($icon-url: 'icon-danger-white.svg', $background-color: $background-color);
       @include button-hover-behavior($background-color: $background-color);
     }
 
@@ -84,7 +84,7 @@
     }
 
     &_calendar {
-      @include button-with-icon($icon-url: '/assets/icon-calendar-white.svg');
+      @include button-with-icon($icon-url: 'icon-calendar-white.svg');
       @include button-hover-behavior($background-color: map-get($boss-app-palette, primary));
 
       background-position-y: 48%;
@@ -93,7 +93,7 @@
     &_accepted {
       $background-color: #44ca45;
 
-      @include button-with-icon($icon-url: '/assets/icon-mark-white.svg', $background-color: $background-color);
+      @include button-with-icon($icon-url: 'icon-mark-white.svg', $background-color: $background-color);
       @include button-hover-behavior($background-color: $background-color);
     }
   }

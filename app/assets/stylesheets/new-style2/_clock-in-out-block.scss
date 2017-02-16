@@ -59,7 +59,7 @@
     font-size: 15px;
     font-weight: 300;
     color: $boss-medium-gray;
-    background: url(/assets/icon-calendar.svg) 0 32% no-repeat;
+    background: asset-url('icon-calendar.svg') 0 32% no-repeat;
     background-size: 16px auto;
   }
 

@@ -47,13 +47,13 @@
 
     .boss2-paginator__li_role_previous & {
       padding-left: $padding-with-icon-x;
-      background: white url(/assets/icon-navigation-back-dark-gray.svg) $background-offset-x center no-repeat;
+      background: white asset-url('icon-navigation-back-dark-gray.svg') $background-offset-x center no-repeat;
       background-size: auto 14px;
     }
 
     .boss2-paginator__li_role_next & {
       padding-right: $padding-with-icon-x;
-      background: white url(/assets/icon-navigation-forward-dark-gray.svg) right $background-offset-x center no-repeat;
+      background: white asset-url('icon-navigation-forward-dark-gray.svg') right $background-offset-x center no-repeat;
       background-size: auto 14px;
     }
 
