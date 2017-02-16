@@ -1,5 +1,5 @@
 <% if form.object.avatar? %>
-  <%= image_tag(form.object.avatar_url, class: "boss2-avatar", height: 120, width: 120) %>
+  <%= image_tag(form.object.avatar_url, class: "boss2-avatar") %>
 <% end %>
 <div class="form-group <%= "has-error" if form.object.errors[:avatar].count > 0 %>">
   <%= form.hidden_field(:avatar_base64, id: 'staff_member_avatar_base64', value: form.object.avatar_base64) %>

@@ -35,6 +35,7 @@
     width: $avatar-side-size;
     height: $avatar-side-size;
     border-radius: 50%;
+    max-width: inherit;
 
     &_type {
       &_small {
