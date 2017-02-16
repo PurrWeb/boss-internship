@@ -11,7 +11,7 @@
     <%= render 'layouts/favicon' %>
     <%= csrf_meta_tags %>
   </head>
-  <body>
+  <body class="boss2-body">
     <header>
       <% if render_navigation? %>
         <%= render 'layouts/header_with_navigation' %>
@@ -19,10 +19,12 @@
         <%= render 'layouts/header_without_navigation' %>
       <% end %>
     </header>
-    <main role="main" class="main row column <%= content_for(:main_class) %>">
-      <%= render 'layouts/messages' %>
-      <%= yield %>
-      <%= insert_paloma_hook %>
+    <main role="main" class="boss2-page-content <%= content_for(:main_class) %>">
+      <div class="boss2-page-content__inner-container">
+          <%= render 'layouts/messages' %>
+          <%= yield %>
+          <%= insert_paloma_hook %>
+      </div>
     </main>
   </body>
 </html>

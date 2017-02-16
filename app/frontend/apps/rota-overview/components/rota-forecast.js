@@ -13,7 +13,7 @@ export default class RotaForecast extends React.Component {
         isUpdatingForecast: React.PropTypes.bool
     }
     render(){
-        return <div className="rota-forecast column">
+        return <div className="rota-forecast">
             {this.getForecastHeaderRow()}
             {this.getForecastBody()}
         </div>
@@ -47,7 +47,7 @@ export default class RotaForecast extends React.Component {
             </div>
 
             updateForecastButton = <a
-                className="button small"
+                className="boss2-button boss2-button_type_small"
                 data-test-marker-update-forecast-button
                 onClick={this.props.onUpdateForecastClick} >
                 Update

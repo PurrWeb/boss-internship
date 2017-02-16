@@ -1,6 +1,6 @@
 @import 'settings';
 @import 'mixins';
-@import 'media-queries';
+@import '../media-queries';
 
 .main-content {
   $main-content-padding: 33px;

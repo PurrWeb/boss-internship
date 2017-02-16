@@ -13,12 +13,12 @@ module PageObject
     end
 
     page_action :click_edit_personal_details_button do
-      button = find('a.button.user-edit-personal-details-button')
+      button = find('a.boss2-button.boss2-button_role_edit')
       button.click
     end
 
     page_action :click_edit_access_details_button do
-      button = find('a.button.user-edit-access-details-button')
+      button = find('a.boss2-button.boss2-button_role_edit')
       button.click
     end
 
@@ -34,11 +34,11 @@ module PageObject
     end
 
     page_action :click_view_staff_member_button do
-      find('.view-staff-member-button.button').click
+      find('.view-staff-member-button').click
     end
 
     page_action :click_create_staff_member_link do
-      find('.create-staff-member-button.button').click
+      find('.create-staff-member-button.boss2-button').click
     end
 
     page_action :ensure_details_displayed_for do |user|

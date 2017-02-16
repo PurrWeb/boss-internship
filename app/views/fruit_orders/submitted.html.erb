@@ -3,7 +3,7 @@
     <%= link_to(
           'View current order',
           fruit_orders_path(venue_id: venue.id),
-          class: 'button success'
+          class: 'boss2-button'
         ) %>
   </div>
 
@@ -23,7 +23,7 @@
         <% if fruit_order.done? %>
           <p><b>Marked Done at <%= fruit_order.done_at.to_s(:human) %> by <%= fruit_order.done_user.full_name %></b></p>
         <% end %>
-        <%= link_to('View', fruit_order_path(fruit_order), class: 'button success') %>
+        <%= link_to('View', fruit_order_path(fruit_order), class: 'boss2-button') %>
       </li>
     <% end %>
   </ul>

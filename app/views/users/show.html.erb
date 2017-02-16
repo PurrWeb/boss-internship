@@ -2,13 +2,13 @@
   <h1><%= user.full_name.titlecase %><%= " (Disabled)" if user.disabled? %></h1>
   <div class="media-object-section">
     <% if can?(:disable, user) %>
-      <%= link_to(disable_user_path(user), class: 'button alert') do %>
-        <span class="fa fa-fire mr-base"></span>Disable User
+      <%= link_to(disable_user_path(user), class: 'boss2-button boss2-button_role_exclamation') do %>
+        Disable User
       <% end %>
     <% end %>
     <% if can?(:enable, user) %>
-      <%= link_to(undestroy_user_path(user), method: :post, class: 'button alert') do %>
-        <span class="fa fa-heart mr-base"></span>Enable User
+      <%= link_to(undestroy_user_path(user), method: :post, class: 'boss2-button boss2-button_role_exclamation') do %>
+        Enable User
       <% end %>
     <% end %>
   </div>
@@ -23,7 +23,7 @@
           <%= link_to(
                 'Edit',
                 edit_personal_details_user_path(user),
-                class: ['button', 'small', 'user-edit-personal-details-button']
+                class: ['boss2-button boss2-button_type_small boss2-button_role_edit']
               ) %>
         </span>
       <% end %>
@@ -47,7 +47,7 @@
           <%= link_to(
                 'Edit',
                 edit_access_details_user_path(user),
-                class: ['button', 'small', 'user-edit-access-details-button']
+                class: ['boss2-button boss2-button_type_small boss2-button_role_edit']
               ) %>
         </span>
       <% end %>
@@ -81,7 +81,7 @@
               <%= link_to(
                     'View',
                     staff_member_path(user.staff_member),
-                    class: ['view-staff-member-button' ,'button', 'success']
+                    class: ['boss2-button view-staff-member-button']
                   )
               %>
             <% else %>
@@ -93,7 +93,7 @@
                   <%= link_to(
                         'Create',
                         new_staff_member_user_path(user),
-                        class: ['create-staff-member-button', 'button', 'primary']
+                        class: ['boss2-button boss2-button_role_edit']
                       ) %>
                 </div>
               <% end %>

@@ -87,7 +87,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                     </div>
                   <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
               </div>
-              <div className="row">
+              <div>
                 <div className="staff-day__sub-heading">Breaks</div>
                 <BreakList
                     boundActions={this.props.boundActions}
@@ -138,8 +138,8 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
           <p>If you accept these hours, the total amount of accepted hours for this staff member will be greater than what was rotaed.</p>
           <p>Please ensure you have added suitable reason notes to explain the time difference.</p>
           <p>These will be reviewed by senior management.</p>
-          <a className="button success" onClick={handleAccept}>Accept</a>
-          <a className="button" onClick={closeModal}>Cancel</a>
+          <a className="boss2-button" onClick={handleAccept}>Accept</a>
+          <a className="boss2-button" onClick={closeModal}>Cancel</a>
         </ModalDialog>
       </ModalContainer>
     }
@@ -191,33 +191,25 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
             if (!this.props.hasClockedOut) {
                 return <span></span>
             } else {
-                return <div className="row">
-                  <div className="row">
-                    <div className="large-12 small-end column">
-                      <a
-                          data-test-marker-accept-hours-acceptance-period
-                          onClick={ acceptButtonOnClick }
-                          className="button success">
-                          <i className="fa fa-check mr-sm" />Accept {stats.hours}h
-                      </a>
-                    </div>
-                  </div>
+                return <div className="boss2-buttons-group boss2-from-to-block_adjust_buttons-group">
+                    <a
+                        data-test-marker-accept-hours-acceptance-period
+                        onClick={ acceptButtonOnClick }
+                        className="boss2-button boss2-button_role_accepted boss2-from-to-block_adjust_button">
+                        Accept {stats.hours}h
+                    </a>
 
-                  <div className="row">
-                    <div className="large-12 column">
-                      <a
-                          className="button alert"
-                          data-test-marker-delete-hours-acceptance-period
-                      onClick={() => {
-                          this.props.boundActions.deleteHoursAcceptancePeriod({
-                              hoursAcceptancePeriod,
-                              errorHandlingId: this.componentId
-                          })
-                      }}>
-                        <i className="fa fa-remove mr-sm" />Delete
-                      </a>
-                    </div>
-                  </div>
+                    <a
+                        className="boss2-button boss2-button_role_exclamation boss2-from-to-block_adjust_button"
+                        data-test-marker-delete-hours-acceptance-period
+                        onClick={() => {
+                            this.props.boundActions.deleteHoursAcceptancePeriod({
+                                hoursAcceptancePeriod,
+                                errorHandlingId: this.componentId
+                            })
+                        }}>
+                        Delete
+                    </a>
                 </div>
             }
         } else {
@@ -231,12 +223,12 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                     {stats.hours}h ACCEPTED
                 </div>
                 <a
-                    className="button alert pull-right"
+                    className="boss2-button boss2-button_role_exclamation"
                     onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
                         hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
                         errorHandlingId: this.componentId
                     })}>
-                    <i className="fa fa-close mr-base" />Unaccept
+                    Unaccept
                 </a>
             </div>
         }

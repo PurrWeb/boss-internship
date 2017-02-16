@@ -1,11 +1,11 @@
 <h1>Staff Members</h1>
 
 <div class="mb-md">
-  <%= link_to(new_staff_member_path, class: ['button', 'mr-base']) do %>
-      <i class="fa fa-plus mr-base" aria-hidden="true"></i>Add Staff Member
+  <%= link_to(new_staff_member_path, class: ['boss2-button', 'boss2-button_role_add']) do %>
+      Add Staff Member
   <% end %>
-  <%= link_to(flagged_staff_members_path, class: 'button alert') do %>
-      <i class="fa fa-warning mr-base" aria-hidden="true"></i>Flagged Staff Members
+  <%= link_to(flagged_staff_members_path, class: 'boss2-button boss2-button_role_exclamation') do %>
+      Flagged Staff Members
   <% end %>
 </div>
 
@@ -30,7 +30,7 @@
       <% staff_members.each do |staff_member| %>
         <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
           <td>
-            <%= image_tag(staff_member.avatar_url, class: "avatar_preview", height: 100, width: 100) %>
+            <%= image_tag(staff_member.avatar_url, class: "boss2-avatar") %>
           </td>
           <td data-role="name"><%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member)) %></td>
           <td>

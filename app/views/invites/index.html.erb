@@ -1,11 +1,11 @@
 <h1>Invites</h1>
 
-<%= link_to('Invite new user', new_invite_path, class: ['button mb-md']) %>
+<%= link_to('Invite new user', new_invite_path, class: ['boss2-button']) %>
 
 <%= render partial: 'invites_filter', locals: { filter: filter, invites: invites } %>
 
 <% if invites.present? %>
-  <table class="scroll">
+  <table class="boss2-table-scroll">
     <thead>
       <tr>
         <th>Email</th>
@@ -45,7 +45,7 @@
           </td>
           <td data-role="revoke-button">
             <% if invite.can_transition_to?(:revoked) %>
-                <%= button_to 'Revoke', revoke_invite_path(invite), class: 'button alert' %>
+                <%= button_to 'Revoke', revoke_invite_path(invite), class: 'boss2-button boss2-button_role_exclamation' %>
             <% end %>
           </td>
         </tr>

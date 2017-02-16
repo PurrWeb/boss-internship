@@ -24,12 +24,12 @@
         </td>
         <td>
           <% if key.present? %>
-            <%= link_to(api_key_path(key), class: 'button small alert', method: 'DELETE') do %>
-              <i class="fa fa-remove mr-sm"></i>Revoke
+            <%= link_to(api_key_path(key), class: 'boss2-button boss2-button_type_small boss2-button_role_delete', method: 'DELETE') do %>
+              Revoke
             <% end %>
           <% else %>
-            <%= link_to(api_keys_path(venue_id: venue.id), class: 'button small', method: 'POST') do %>
-              <i class="fa fa-plus mr-sm"></i>Generate
+            <%= link_to(api_keys_path(venue_id: venue.id), class: 'boss2-button boss2-button_role_add boss2-button_type_small', method: 'POST') do %>
+              Generate
             <% end %>
           <% end %>
         </td>

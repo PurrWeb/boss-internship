@@ -2,34 +2,38 @@
 
 <div class="row align-middle mb-md">
   <div class="shrink column"><%= venue.name.titlecase %> <%= date.to_s(:human_date) %></div>
-  <div class="shrink column"><%= link_to('View weekly report', weekly_reports_path(venue_id: venue.id, week_start: UIRotaDate.format(week.start_date)), class: 'button') %></div>
+  <div class="shrink column"><%= link_to('View weekly report', weekly_reports_path(venue_id: venue.id, week_start: UIRotaDate.format(week.start_date)), class: 'boss2-button') %></div>
 </div>
 
-<%= bootstrap_form_for('', url: daily_reports_path, html: { method: :get, class: 'row align-bottom' }) do |form| %>
-    <div class="small-12 medium-expand column">
-      <%= form.select(
-              :venue_id,
-              options_for_select(
-                  accessible_venues.map do |venue|
-                    [venue.name, venue.id]
-                  end,
-                  venue.id
-              ),
-              {
-                  include_blank: false
-              }) %>
-    </div>
-    <div class="small-12 medium-expand column">
-      <%= form.text_field(
-        :date,
-        value: UIRotaDate.format(date),
-        class: 'date-picker'
-      ) %>
-    </div>
-    <div class="small-12 medium-shrink column">
-      <%= form.submit('Update', class: 'button mb-mn') %>
-    </div>
-<% end %>
+<div class="boss2-buttons-group">
+    <%= bootstrap_form_for('', url: daily_reports_path, html: { method: :get, class: 'row align-bottom' }) do |form| %>
+        <div class="small-12 medium-expand column">
+          <%= form.select(
+                  :venue_id,
+                  options_for_select(
+                      accessible_venues.map do |venue|
+                        [venue.name, venue.id]
+                      end,
+                      venue.id
+                  ),
+                  {
+                      include_blank: false
+                  },
+                  {class: 'boss2-input'}
+                  ) %>
+        </div>
+        <div class="small-12 medium-expand column">
+          <%= form.text_field(
+            :date,
+            value: UIRotaDate.format(date),
+            class: 'date-picker boss2-input'
+          ) %>
+        </div>
+        <div class="small-12 medium-shrink column">
+          <%= form.submit('Update', class: 'boss2-button') %>
+        </div>
+    <% end %>
+</div>
 
 <% if daily_report.present? %>
   <div class="row">
@@ -40,9 +44,9 @@
               date:  UIRotaDate.format(date),
               format: :pdf
             ),
-            class: 'button mb-mn'
+            class: 'boss2-button boss2-button_role_download boss2-page-content_adjust_button'
           ) do %>
-            <i class="fa fa-download"></i> Download PDF
+            Download PDF
       <% end %>
     </div>
   </div>
@@ -101,7 +105,7 @@
             Rotaed Cost: <%= number_to_currency(section.rotaed_cost_cents / 100.0, unit: '£') %></span>, <span class="h4">Actual Cost: <%= number_to_currency(section.actual_cost_cents / 100.0, unit: '£') %>
           </div>
         </div>
-        <table class="scroll mb-lg" style="text-align: center;">
+        <table class="boss2-table-scroll" style="text-align: center;">
           <thead>
             <tr>
               <th style="text-align: center;">Name</th>
