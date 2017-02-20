@@ -23,7 +23,8 @@
           <%= link_to(
                 'Edit',
                 edit_personal_details_user_path(user),
-                class: ['boss2-button boss2-button_type_small boss2-button_role_edit']
+                class: ['boss2-button boss2-button_type_small boss2-button_role_edit'],
+                data: { "control-type" => "button", "button-role" => "edit-personal-details" }
               ) %>
         </span>
       <% end %>
@@ -47,7 +48,8 @@
           <%= link_to(
                 'Edit',
                 edit_access_details_user_path(user),
-                class: ['boss2-button boss2-button_type_small boss2-button_role_edit']
+                class: ['boss2-button boss2-button_type_small boss2-button_role_edit'],
+                data: { "control-type" => "button", "button-role" => "edit-user" }
               ) %>
         </span>
       <% end %>
@@ -93,7 +95,11 @@
                   <%= link_to(
                         'Create',
                         new_staff_member_user_path(user),
-                        class: ['boss2-button boss2-button_role_edit']
+                        class: ['boss2-button boss2-button_role_edit'],
+                        data: {
+                          "control-type" => "button",
+                          "button-role" => "create-staff-member"
+                        }
                       ) %>
                 </div>
               <% end %>

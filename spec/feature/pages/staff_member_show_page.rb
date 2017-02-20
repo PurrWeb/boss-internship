@@ -18,7 +18,7 @@ module PageObject
     end
 
     page_action :click_view_user_button do
-      find('.boss2-button').click
+      find("[data-control-type='button'][data-button-role='view-user']").click
     end
 
     page_action :ensure_details_displayed_for do |staff_member|
@@ -49,22 +49,22 @@ module PageObject
     end
 
     page_action :click_edit_employment_details_button do
-      button = find('a.boss2-button.boss2-button_role_edit')
+      button = find("[data-control-type='button'][data-button-role='edit-employment-details']")
       button.click
     end
 
     page_action :click_edit_personal_details_button do
-      button = find('a.boss2-button.boss2-button_role_edit')
+      button = find("[data-control-type='button'][data-button-role='edit-personal-details']")
       button.click
     end
 
     page_action :click_enable_staff_member_button do
-      button = find('a.boss2-button.boss2-button_role_exclamation')
+      button = find("[data-control-type='button'][data-button-role='enable-staff-member']")
       button.click
     end
 
     page_action :click_disable_staff_member_button do
-      button = find('a.boss2-button.boss2-button_role_exclamation')
+      button = find("[data-control-type='button'][data-button-role='disable-staff-member']")
       button.click
     end
 
