@@ -186,7 +186,7 @@ class StaffMember < ActiveRecord::Base
     pay_rate_id_changed?
   end
 
-  def clocked_out?(date:)
+  def clocked_out_everywhere?(date:)
     clock_in_days = ClockInDay.where(
       date: date,
       staff_member: self
