@@ -114,6 +114,8 @@ class ChangeClockInStatus
   end
 
   private
+  # Used to disallow staff member trying to clock in somewhere while still
+  # clocked in for another venue on the same day
   def illegal_clock_in_attempt?(state: state, clock_in_day: clock_in_day)
     state == :clocked_in &&
       clock_in_day.current_clock_in_state == :clocked_out &&
