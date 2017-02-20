@@ -1,8 +1,8 @@
 module PageObject
   class NavigationBar < Component
     page_action :ensure_branding_displayed do
-      link = header_section.find('a.navbar-brand')
-      expect(link).to have_text('Boss')
+      link = scope.find("[data-link-role='navbar-brand']")
+      expect(link).to have_text('BOSS')
       expect(link['href']).to eq('/')
     end
 
@@ -50,20 +50,12 @@ module PageObject
       expect(link['href']).to eq(url_helpers.destroy_user_session_path)
     end
 
-    def brand_section
-      scope.find(header_section)
-    end
-
-    def header_section
-      scope.find('.menu-text')
-    end
-
     def user_section
       scope.find(user_section_selector)
     end
 
     def user_section_selector
-      '.nav-user-section'
+      "[data-navbar-section='user']"
     end
 
     def admin_section_selector

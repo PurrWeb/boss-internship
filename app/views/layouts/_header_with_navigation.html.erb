@@ -4,7 +4,12 @@
 </div>
 
 <div class="boss2-main-menu" id="main-menu">
-    <%= link_to 'BOSS', root_path, class: 'boss2-main-menu__logo-button menu-text' %>
+    <%= link_to(
+          'BOSS',
+          root_path,
+          class: 'boss2-main-menu__logo-button menu-text',
+          data: { "link-role" => "navbar-brand" }
+        ) %>
     <ul class="boss2-main-menu__buttons boss2-main-menu__buttons_type_primary dropdown menu align-right" data-dropdown-menu>
         <% if current_user.present? %>
           <% if can?(:manage, :staff_members) %>
@@ -144,7 +149,7 @@
                 </li>
             <% end %>
 
-            <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
+            <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown" data-navbar-section="user">
               <a class="boss2-main-menu__button-link" href="#">Signed in as <%= current_user.email %></a>
               <ul class="boss2-submenu menu vertical">
                 <li><%= link_to('Sign out', destroy_user_session_path, method: :delete) %></li>
