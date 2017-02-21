@@ -10,17 +10,18 @@ import {StoreStructure, WorkFormFields} from '../../../interfaces/store-models';
 import {OfType} from '../../../interfaces/index';
 import {setInputClass, renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
 import {isRequiredField, formatInvalid} from '../../../constants/form-errors';
-import {isNotEmpty as isFilled, isNationalInsuranceNumber, isPinCode, isNotEmptyComboBox} from '../../../helpers';
+import {isNationalInsuranceNumber, isPinCode, isNotEmptyComboBox} from '../../../helpers';
 import workInfoBlockValidated from '../../../action-creators/work-info-block-validated';
 import registrationStepBack from '../../../action-creators/registration-step-back';
 import SelectFixed from './react-select-fixed';
-import {StaffType} from '../../../interfaces/common-data-types';
+import {StaffType, Payrate} from '../../../interfaces/common-data-types';
 
 interface Props {
 }
 
 interface MappedProps {
   readonly staffTypeOptions: Select.Option[];
+  readonly payrateOptions: Select.Option[];
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -38,6 +39,10 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   static getStaffTypeOptions(staffTypeIds: StaffType[]): Select.Option[] {
     return staffTypeIds.map((data) => ({value: data.id, label: data.name}));
+  }
+
+  static getPayrateOptions(payrateValues: Payrate[]): Select.Option[] {
+    return payrateValues.map((data) => ({value: data.id, label: data.name}));
   }
 
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
@@ -167,15 +172,21 @@ class Component extends React.Component<PropsFromConnect, State> {
 
           <label className="boss3-label">
             <span className="boss3-label-text boss3-label-text_type_required">Pay Rate</span>
-            <Control.text
+            <Control
+              component={SelectFixed}
               className="boss3-input"
               model=".payRate"
               mapProps={{
-                className: setInputClass
+                className: setInputClass,
+                options: () => this.props.payrateOptions,
+                value: (props) => props.modelValue,
+                onChange: (props) => {
+                  return props.onChange;
+                }
               }}
-              validateOn="blur"
+              validateOn="change"
               validators={{
-                isFilled
+                isFilled: isNotEmptyComboBox,
               }}
             />
             <Errors
@@ -217,7 +228,8 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
-    staffTypeOptions: Component.getStaffTypeOptions(state.app.staffTypeIds)
+    staffTypeOptions: Component.getStaffTypeOptions(state.app.staffTypeIds),
+    payrateOptions: Component.getPayrateOptions(state.app.payrateValues)
   };
 };
 

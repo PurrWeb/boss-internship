@@ -16,7 +16,7 @@ export interface Structure {
   readonly isAllStepsPassed: IsAllStepsPassedStructure;
   readonly accessToken: AccessTokenStructure;
   readonly venueValues: VenueValuesStructure;
-  readonly payrateValues: StaffTypeIdsStructure;
+  readonly payrateValues: PayrateValuesStructure;
   readonly staffTypeIds: StaffTypeIdsStructure;
   readonly genderValues: GenderValuesStructure;
 }
