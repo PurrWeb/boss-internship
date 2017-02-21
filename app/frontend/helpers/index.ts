@@ -29,6 +29,12 @@ export const isMobilePhone = (val = '') => {
     true;
 };
 
+export const isMobilePhoneSimpleCheck = (val = '') => {
+  return val ?
+      /^\+?([-\s]*\d){9,12}$/.test(val) :
+      true;
+};
+
 export const anyTypeGuard = <T>(dataToCheck: any, condition: (data: any) => boolean): dataToCheck is T => {
   return condition(dataToCheck);
 };

@@ -9,12 +9,11 @@ import * as isEmail from 'validator/lib/isEmail';
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, ContactDetailsFormFields} from '../../../interfaces/store-models';
 import {OfType} from '../../../interfaces/index';
-import {isNotEmpty as isFilled, isMobilePhone, isNotEmptyComboBox} from '../../../helpers';
+import {isNotEmpty as isFilled, isMobilePhoneSimpleCheck} from '../../../helpers';
 import {isRequiredField, isWrongEmail, isPhoneNumber} from '../../../constants/form-errors';
 import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
 import contactDetailsBlockValidated from '../../../action-creators/contact-details-block-validated';
 import registrationStepBack from '../../../action-creators/registration-step-back';
-import SelectFixed from './react-select-fixed';
 
 interface Props {
 }
@@ -87,21 +86,11 @@ class Component extends React.Component<PropsFromConnect, State> {
 
           <label className="boss3-label">
             <span className="boss3-label-text">Country</span>
-            <Control
-              component={SelectFixed}
+            <Control.textarea
               className="boss3-input"
               model=".country"
               mapProps={{
                 className: setInputClass,
-                options: () => [
-                  {value: 1, label: 'first country'},
-                  {value: 2, label: 'second country'},
-                  {value: 3, label: 'third country'}
-                ],
-                value: (props) => props.modelValue,
-                onChange: (props) => {
-                  return props.onChange;
-                }
               }}
             />
           </label>
@@ -128,7 +117,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               }}
               validateOn="blur"
               validators={{
-                isPhoneNumber: isMobilePhone
+                isPhoneNumber: isMobilePhoneSimpleCheck
               }}
             />
             <Errors

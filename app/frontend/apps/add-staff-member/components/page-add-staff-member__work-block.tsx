@@ -121,7 +121,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
           <label className="boss3-label">
             <span className="boss3-label-text">Day Preference</span>
-            <Control.text
+            <Control.textarea
               className="boss3-input"
               model=".dayPreference"
               mapProps={{
@@ -133,7 +133,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
           <label className="boss3-label">
             <span className="boss3-label-text">Hours Preference</span>
-            <Control.text
+            <Control.textarea
               className="boss3-input"
               model=".hoursPreference"
               mapProps={{
