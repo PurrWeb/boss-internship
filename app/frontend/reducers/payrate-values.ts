@@ -1,6 +1,6 @@
-import {ActionWithPayload} from '../../../interfaces/actions';
-import {PAYRATE_VALUES_CHANGED} from '../../../constants/action-names';
-import {Payrate} from '../../../interfaces/common-data-types';
+import {ActionWithPayload} from '../interfaces/actions';
+import {PAYRATE_VALUES_CHANGED} from '../constants/action-names';
+import {Payrate} from '../interfaces/common-data-types';
 
 export type Structure = Payrate[];
 

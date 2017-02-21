@@ -1,5 +1,5 @@
-import {ActionWithPayload} from '../../../interfaces/actions';
-import {IS_ALL_STEPS_PASSED_CHANGED} from '../../../constants/action-names';
+import {ActionWithPayload} from '../interfaces/actions';
+import {IS_ALL_STEPS_PASSED_CHANGED} from '../constants/action-names';
 
 export type Structure = boolean;
 

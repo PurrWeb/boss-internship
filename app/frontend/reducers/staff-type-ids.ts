@@ -1,6 +1,7 @@
-import {ActionWithPayload} from '../../../interfaces/actions';
-import {STAFF_TYPE_IDS_CHANGED} from '../../../constants/action-names';
-import {StaffType} from '../../../interfaces/common-data-types';
+// import {ActionWithPayload} from '../../../interfaces/actions';
+import {ActionWithPayload} from '../interfaces/actions';
+import {STAFF_TYPE_IDS_CHANGED} from '../constants/action-names';
+import {StaffType} from '../interfaces/common-data-types';
 
 export type Structure = StaffType[];
 

@@ -1,5 +1,5 @@
-import {ActionWithPayload} from '../../../interfaces/actions';
-import {ACCESS_TOKEN_CHANGED} from '../../../constants/action-names';
+import {ActionWithPayload} from '../interfaces/actions';
+import {ACCESS_TOKEN_CHANGED} from '../constants/action-names';
 
 export type Structure = string;
 

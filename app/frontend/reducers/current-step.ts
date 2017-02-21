@@ -1,5 +1,5 @@
-import {ActionWithPayload} from '../../../interfaces/actions';
-import {CURRENT_STEP_CHANGED, REGISTRATION_STEP_BACK} from '../../../constants/action-names';
+import {ActionWithPayload} from '../interfaces/actions';
+import {CURRENT_STEP_CHANGED, REGISTRATION_STEP_BACK} from '../constants/action-names';
 
 export type Structure = number;
 
