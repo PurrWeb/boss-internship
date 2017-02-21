@@ -25,8 +25,6 @@ class Component extends React.Component<PropsFromConnect, State> {
           className="boss3-page-content__inner-container"
       >
         <div className="boss3-page-dashboard">
-          <h2 className="boss3-h2 boss3-page-dashboard_adjust_h2">Add Staff Members</h2>
-
           <PassedStepsIndicator/>
 
         </div>
