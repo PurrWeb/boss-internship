@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
-import {ReducersOfType} from '../interfaces/index';
+import {ReducersOfType} from '../../../interfaces/index';
 import completedSteps, {Structure as CompletedStepsStructure} from './completed-steps';
 import currentStep, {Structure as CurrentStepStructure} from './current-step';
 import isAllStepsPassed, {Structure as IsAllStepsPassedStructure} from './is-all-steps-passed';

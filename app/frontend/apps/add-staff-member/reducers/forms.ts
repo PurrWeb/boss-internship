@@ -1,9 +1,9 @@
 import {combineForms, FieldState, FormState} from 'react-redux-form';
-import {OfType} from '../interfaces/index';
+import {OfType} from '../../../interfaces/index';
 import {
   BasicInformationFormFields, UploadPhotoFormFields, ContactDetailsFormFields,
   VenueFormFields, WorkFormFields
-} from '../interfaces/store-models';
+} from '../../../interfaces/store-models';
 
 interface FormStateWithValue<TValue> extends FormState {
   readonly initialValue: TValue;

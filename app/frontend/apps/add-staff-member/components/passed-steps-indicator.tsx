@@ -3,8 +3,8 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {PropsExtendedByConnect} from '../interfaces/component';
-import {StoreStructure} from '../interfaces/store-models';
+import {PropsExtendedByConnect} from '../../../interfaces/component';
+import {StoreStructure} from '../../../interfaces/store-models';
 
 interface Props {
 }

@@ -4,14 +4,14 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {Control, Form, Errors} from 'react-redux-form';
 
-import {PropsExtendedByConnect} from '../interfaces/component';
-import {StoreStructure, WorkFormFields} from '../interfaces/store-models';
-import {OfType} from '../interfaces/index';
-import {setInputClass, renderErrorsBlock, renderErrorComponent} from '../helpers/renderers';
-import {isRequiredField} from '../constants/form-errors';
-import {isNotEmpty as isFilled, isNationalInsuranceNumber, isPinCode} from '../helpers';
-import workInfoBlockValidated from '../action-creators/work-info-block-validated';
-import registrationStepBack from '../action-creators/registration-step-back';
+import {PropsExtendedByConnect} from '../../../interfaces/component';
+import {StoreStructure, WorkFormFields} from '../../../interfaces/store-models';
+import {OfType} from '../../../interfaces/index';
+import {setInputClass, renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
+import {isRequiredField} from '../../../constants/form-errors';
+import {isNotEmpty as isFilled, isNationalInsuranceNumber, isPinCode} from '../../../helpers';
+import workInfoBlockValidated from '../../../action-creators/work-info-block-validated';
+import registrationStepBack from '../../../action-creators/registration-step-back';
 
 interface Props {
 }

@@ -1,4 +1,4 @@
-import {Structure as ReducersStructure} from '../reducers/index';
+import {Structure as ReducersStructure} from '../apps/add-staff-member/reducers';
 
 export type StoreStructure = ReducersStructure;
 

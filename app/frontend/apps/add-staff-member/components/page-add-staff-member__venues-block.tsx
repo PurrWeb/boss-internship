@@ -6,13 +6,13 @@ import {Control, Form} from 'react-redux-form';
 import * as DatePicker from 'react-datepicker';
 import * as Select from 'react-select';
 
-import {PropsExtendedByConnect} from '../interfaces/component';
-import {StoreStructure, VenueFormFields} from '../interfaces/store-models';
-import {setInputClass} from '../helpers/renderers';
-import {Venue} from '../interfaces/common-data-types';
-import venuesInfoBlockValidated from '../action-creators/venues-info-block-validated';
-import registrationStepBack from '../action-creators/registration-step-back';
-import {OfType} from '../interfaces/index';
+import {PropsExtendedByConnect} from '../../../interfaces/component';
+import {StoreStructure, VenueFormFields} from '../../../interfaces/store-models';
+import {setInputClass} from '../../../helpers/renderers';
+import {Venue} from '../../../interfaces/common-data-types';
+import venuesInfoBlockValidated from '../../../action-creators/venues-info-block-validated';
+import registrationStepBack from '../../../action-creators/registration-step-back';
+import {OfType} from '../../../interfaces/index';
 import SelectFixed from './react-select-fixed';
 
 interface Props {

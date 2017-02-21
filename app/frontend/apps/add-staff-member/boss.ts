@@ -1,4 +1,4 @@
-import {BossData} from './interfaces/common-data-types';
+import {BossData} from '../../interfaces/common-data-types';
 
 const boss: BossData = {
   accessToken: 'someToken',

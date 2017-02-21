@@ -6,14 +6,14 @@ import {connect} from 'react-redux';
 import {Control, Form, Errors} from 'react-redux-form';
 import * as isEmail from 'validator/lib/isEmail';
 
-import {PropsExtendedByConnect} from '../interfaces/component';
-import {StoreStructure, ContactDetailsFormFields} from '../interfaces/store-models';
-import {OfType} from '../interfaces/index';
-import {isNotEmpty as isFilled, isMobilePhone, isNotEmptyComboBox} from '../helpers';
-import {isRequiredField, isWrongEmail, isPhoneNumber} from '../constants/form-errors';
-import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../helpers/renderers';
-import contactDetailsBlockValidated from '../action-creators/contact-details-block-validated';
-import registrationStepBack from '../action-creators/registration-step-back';
+import {PropsExtendedByConnect} from '../../../interfaces/component';
+import {StoreStructure, ContactDetailsFormFields} from '../../../interfaces/store-models';
+import {OfType} from '../../../interfaces/index';
+import {isNotEmpty as isFilled, isMobilePhone, isNotEmptyComboBox} from '../../../helpers';
+import {isRequiredField, isWrongEmail, isPhoneNumber} from '../../../constants/form-errors';
+import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
+import contactDetailsBlockValidated from '../../../action-creators/contact-details-block-validated';
+import registrationStepBack from '../../../action-creators/registration-step-back';
 import SelectFixed from './react-select-fixed';
 
 interface Props {

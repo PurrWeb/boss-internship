@@ -6,13 +6,13 @@ import {Control, Form, Errors} from 'react-redux-form';
 import * as DatePicker from 'react-datepicker';
 import * as Select from 'react-select';
 
-import {PropsExtendedByConnect} from '../interfaces/component';
-import {StoreStructure, BasicInformationFormFields} from '../interfaces/store-models';
-import {OfType} from '../interfaces/index';
-import {isNotEmptyComboBox} from '../helpers';
-import {isRequiredField} from '../constants/form-errors';
-import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../helpers/renderers';
-import basicInformationBlockValidated from '../action-creators/basic-information-block-validated';
+import {PropsExtendedByConnect} from '../../../interfaces/component';
+import {StoreStructure, BasicInformationFormFields} from '../../../interfaces/store-models';
+import {OfType} from '../../../interfaces/index';
+import {isNotEmptyComboBox} from '../../../helpers';
+import {isRequiredField} from '../../../constants/form-errors';
+import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
+import basicInformationBlockValidated from '../../../action-creators/basic-information-block-validated';
 import SelectFixed from './react-select-fixed';
 
 interface Props {

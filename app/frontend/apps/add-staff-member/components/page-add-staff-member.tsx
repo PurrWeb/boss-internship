@@ -3,8 +3,8 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {PropsExtendedByConnect} from '../interfaces/component';
-import {StoreStructure} from '../interfaces/store-models';
+import {PropsExtendedByConnect} from '../../../interfaces/component';
+import {StoreStructure} from '../../../interfaces/store-models';
 import BasicInformationBlock from './page-add-staff-member__basic-information-block';
 import AddAvatarBlock from './page-add-staff-member__add-avatar-block';
 import ContactDetailsBlock from './page-add-staff-member__contact-details-block';

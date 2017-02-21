@@ -3,10 +3,10 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {PropsExtendedByConnect} from '../interfaces/component';
-import {StoreStructure} from '../interfaces/store-models';
-import avatarAdded from '../action-creators/avatar-added';
-import registrationStepBack from '../action-creators/registration-step-back';
+import {PropsExtendedByConnect} from '../../../interfaces/component';
+import {StoreStructure} from '../../../interfaces/store-models';
+import avatarAdded from '../../../action-creators/avatar-added';
+import registrationStepBack from '../../../action-creators/registration-step-back';
 
 interface Props {
 }
