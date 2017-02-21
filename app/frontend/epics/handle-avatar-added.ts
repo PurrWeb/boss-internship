@@ -11,8 +11,11 @@ import currentStepChanged from '../action-creators/current-step-changed';
 const handleAvatarAdded = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(AVATAR_ADDED)
     .mergeMap(() => {
-      const completedStepsChangedAction = completedStepsChanged(2);
-      const currentStepChangedAction = currentStepChanged(2);
+      const stateData = store.getState();
+
+      const {currentStep, completedSteps} = stateData.app;
+      const completedStepsChangedAction = completedStepsChanged(completedSteps + 1);
+      const currentStepChangedAction = currentStepChanged(currentStep + 1);
 
       return Observable.of<SimpleAction>(
         completedStepsChangedAction,
