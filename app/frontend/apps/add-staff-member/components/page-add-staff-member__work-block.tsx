@@ -3,20 +3,24 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Control, Form, Errors} from 'react-redux-form';
+import * as Select from 'react-select';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, WorkFormFields} from '../../../interfaces/store-models';
 import {OfType} from '../../../interfaces/index';
 import {setInputClass, renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
 import {isRequiredField, formatInvalid} from '../../../constants/form-errors';
-import {isNotEmpty as isFilled, isNationalInsuranceNumber, isPinCode} from '../../../helpers';
+import {isNotEmpty as isFilled, isNationalInsuranceNumber, isPinCode, isNotEmptyComboBox} from '../../../helpers';
 import workInfoBlockValidated from '../../../action-creators/work-info-block-validated';
 import registrationStepBack from '../../../action-creators/registration-step-back';
+import SelectFixed from './react-select-fixed';
+import {StaffType} from '../../../interfaces/common-data-types';
 
 interface Props {
 }
 
 interface MappedProps {
+  readonly staffTypeOptions: Select.Option[];
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -32,6 +36,10 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(action);
   };
 
+  static getStaffTypeOptions(staffTypeIds: StaffType[]): Select.Option[] {
+    return staffTypeIds.map((data) => ({value: data.id, label: data.name}));
+  }
+
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
     this.props.dispatch(registrationStepBack);
   };
@@ -46,13 +54,18 @@ class Component extends React.Component<PropsFromConnect, State> {
         >
           <label className="boss3-label">
             <span className="boss3-label-text">Staff Type</span>
-            <Control.text
+            <Control
+              component={SelectFixed}
               className="boss3-input"
               model=".staffType"
               mapProps={{
-                    className: setInputClass
-                  }}
-              validateOn="blur"
+                className: setInputClass,
+                options: () => this.props.staffTypeOptions,
+                value: (props) => props.modelValue,
+                onChange: (props) => {
+                  return props.onChange;
+                }
+              }}
             />
           </label>
 
@@ -203,7 +216,9 @@ class Component extends React.Component<PropsFromConnect, State> {
 }
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
-  return {};
+  return {
+    staffTypeOptions: Component.getStaffTypeOptions(state.app.staffTypeIds)
+  };
 };
 
 export default connect(
