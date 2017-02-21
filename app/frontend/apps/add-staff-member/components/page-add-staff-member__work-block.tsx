@@ -120,7 +120,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text">Say Preference</span>
+            <span className="boss3-label-text">Day Preference</span>
             <Control.text
               className="boss3-input"
               model=".dayPreference"
