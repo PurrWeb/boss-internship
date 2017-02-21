@@ -22,6 +22,7 @@ interface Props {
 interface MappedProps {
   readonly staffTypeOptions: Select.Option[];
   readonly payrateOptions: Select.Option[];
+  readonly isStaffTypeNotEmpty: boolean;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -49,6 +50,38 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(registrationStepBack);
   };
 
+  renderSiaBadgeNumberInputBlock() {
+    return this.props.isStaffTypeNotEmpty ? (
+      <label className="boss3-label">
+        <span className="boss3-label-text">Sia Badge Number</span>
+        <Control.text
+          className="boss3-input"
+          model=".siaBadgeNumber"
+          mapProps={{
+                  className: setInputClass
+                }}
+          validateOn="blur"
+        />
+      </label>
+    ) : null;
+  }
+
+  renderSiaBadgeExpiryDateInputBlock() {
+    return this.props.isStaffTypeNotEmpty ? (
+      <label className="boss3-label">
+        <span className="boss3-label-text">Sia Badge Expiry Date</span>
+        <Control.text
+          className="boss3-input"
+          model=".siaBadgeExpiryDate"
+          mapProps={{
+                  className: setInputClass
+                }}
+          validateOn="blur"
+        />
+      </label>
+    ) : null;
+  }
+
   render() {
     return (
       <div className="boss3-forms-block">
@@ -74,29 +107,9 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label-text">Sia Badge Number</span>
-            <Control.text
-              className="boss3-input"
-              model=".siaBadgeNumber"
-              mapProps={{
-                    className: setInputClass
-                  }}
-              validateOn="blur"
-            />
-          </label>
+          {this.renderSiaBadgeNumberInputBlock()}
 
-          <label className="boss3-label">
-            <span className="boss3-label-text">Sia Badge Expiry Date</span>
-            <Control.text
-              className="boss3-input"
-              model=".siaBadgeExpiryDate"
-              mapProps={{
-                    className: setInputClass
-                  }}
-              validateOn="blur"
-            />
-          </label>
+          {this.renderSiaBadgeExpiryDateInputBlock()}
 
           <label className="boss3-label">
             <span className="boss3-label-text">PIN Code</span>
@@ -112,13 +125,13 @@ class Component extends React.Component<PropsFromConnect, State> {
               }}
             />
             <Errors
-                model=".pinCode"
-                messages={{
+              model=".pinCode"
+              messages={{
                     isPinCode: formatInvalid
                   }}
-                show={{touched: true, focus: false}}
-                wrapper={renderErrorsBlock}
-                component={renderErrorComponent}
+              show={{touched: true, focus: false}}
+              wrapper={renderErrorsBlock}
+              component={renderErrorComponent}
             />
           </label>
 
@@ -218,7 +231,8 @@ class Component extends React.Component<PropsFromConnect, State> {
                    value="Back"
                    onClick={this.onBackClick}
             />
-            <input type="submit" className="boss3-button boss3-button_role_submit boss3-buttons-group_adjust_button" value="Continue"/>
+            <input type="submit" className="boss3-button boss3-button_role_submit boss3-buttons-group_adjust_button"
+                   value="Continue"/>
           </div>
         </Form>
       </div>
@@ -229,7 +243,8 @@ class Component extends React.Component<PropsFromConnect, State> {
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
     staffTypeOptions: Component.getStaffTypeOptions(state.app.staffTypeIds),
-    payrateOptions: Component.getPayrateOptions(state.app.payrateValues)
+    payrateOptions: Component.getPayrateOptions(state.app.payrateValues),
+    isStaffTypeNotEmpty: isNotEmptyComboBox(state.formsData.workForm.staffType)
   };
 };
 
