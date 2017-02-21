@@ -41,3 +41,8 @@ export interface WorkFormFields {
   readonly starterEmploymentStatus?: string;
 }
 
+export interface GlobalError {
+  readonly message: string;
+  readonly date: number;
+}
+
