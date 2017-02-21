@@ -85,18 +85,6 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label-text">Starts At</span>
-            <Control.text
-              className="boss3-input"
-              model=".startsAt"
-              mapProps={{
-                className: setInputClass
-              }}
-              validateOn="blur"
-            />
-          </label>
-
           <label className="boss3-label boss3-label_role_datepicker">
             <span className="boss3-label-text">Starts At</span>
             <Control
