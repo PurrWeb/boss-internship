@@ -55,11 +55,11 @@
     &_type {
       &_dropdown {
         padding-right: 6px;
-        background: url(../../resources/img/icon-down-arrow-medium-gray.svg) no-repeat right 10px center;
+        background: asset-url('icon-down-arrow-medium-gray.svg') no-repeat right 10px center;
         background-size: auto 9px;
 
         &:hover {
-          background-image: url(../../resources/img/icon-down-arrow-dark-gray.svg);
+          background-image: asset-url('icon-down-arrow-dark-gray.svg');
         }
       }
       &_initials {

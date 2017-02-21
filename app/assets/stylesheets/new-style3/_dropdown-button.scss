@@ -16,14 +16,14 @@
     height: 9px;
     right: 0;
     top: 50%;
-    background: url(../../resources/img/icon-down-arrow-dark-gray.svg) no-repeat 0 0;
+    background: asset-url('icon-down-arrow-dark-gray.svg') no-repeat 0 0;
     transform: translateY(-50%);
   }
 
   &_role {
     &_filter {
       padding-left: 22px;
-      background: url(../../resources/img/icon-filter-dark-gray.svg) no-repeat 0 center;
+      background: asset-url('icon-filter-dark-gray.svg') no-repeat 0 center;
       background-size: auto 15px;
     }
   }

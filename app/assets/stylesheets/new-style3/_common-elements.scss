@@ -22,7 +22,7 @@
     position: relative;
     padding: 10px 15px 10px 43px;
     color: white;
-    background: map-get($boss-app-palette, alert) url(../../resources/img/icon-danger-white.svg) 15px center no-repeat;
+    background: map-get($boss-app-palette, alert) asset-url('icon-danger-white.svg') 15px center no-repeat;
     background-size: auto 13px;
     border-radius: $boss-global-border-radius;
 
@@ -36,7 +36,7 @@
       height: 10px;
       top: 16px;
       right: 15px;
-      background: url(../../resources/img/icon-close-white.svg) center center no-repeat;
+      background: asset-url('icon-close-white.svg') center center no-repeat;
       background-size: 100% 100%;
     }
   }

@@ -1,4 +1,4 @@
-/// <reference path="../custom-typings/react-redux-form.d.ts" />
+/// <reference path="../../../custom-typings/react-redux-form.d.ts" />
 
 import * as React from 'react';
 import {connect} from 'react-redux';

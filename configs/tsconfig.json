@@ -14,14 +14,18 @@
     "lib": ["dom", "es6"],
     "jsx": "react",
     "sourceMap": true,
+    "types": [
+      "node"
+    ],
     "paths": {
       "*": [
-        "src/custom-typings/*",
-        "src/*"
+        "app/frontend/custom-typings/*",
+        "app/frontend/*"
       ]
     }
   },
-  "files": [
-    "../src/index.tsx"
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
   ]
 }
