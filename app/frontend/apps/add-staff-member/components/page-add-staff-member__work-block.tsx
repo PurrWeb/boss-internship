@@ -22,7 +22,7 @@ interface Props {
 interface MappedProps {
   readonly staffTypeOptions: Select.Option[];
   readonly payrateOptions: Select.Option[];
-  readonly isStaffTypeNotEmpty: boolean;
+  readonly isStaffTypeSecurity: boolean;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -51,7 +51,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   renderSiaBadgeNumberInputBlock() {
-    return this.props.isStaffTypeNotEmpty ? (
+    return this.props.isStaffTypeSecurity ? (
       <label className="boss3-label">
         <span className="boss3-label-text">Sia Badge Number</span>
         <Control.text
@@ -67,7 +67,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   renderSiaBadgeExpiryDateInputBlock() {
-    return this.props.isStaffTypeNotEmpty ? (
+    return this.props.isStaffTypeSecurity ? (
       <label className="boss3-label">
         <span className="boss3-label-text">Sia Badge Expiry Date</span>
         <Control.text
@@ -244,7 +244,7 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
     staffTypeOptions: Component.getStaffTypeOptions(state.app.staffTypeIds),
     payrateOptions: Component.getPayrateOptions(state.app.payrateValues),
-    isStaffTypeNotEmpty: isNotEmptyComboBox(state.formsData.workForm.staffType)
+    isStaffTypeSecurity: (state.formsData.workForm.staffType as Select.Option).value === 11
   };
 };
 

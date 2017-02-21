@@ -1,4 +1,5 @@
 import {combineForms, FieldState, FormState} from 'react-redux-form';
+import * as Select from 'react-select';
 import {OfType} from '../interfaces/index';
 import {
   BasicInformationFormFields, UploadPhotoFormFields, ContactDetailsFormFields,
@@ -19,7 +20,7 @@ interface FormModels {
   readonly uploadPhotoForm: OfType<UploadPhotoFormFields, string>;
   readonly contactDetailsForm: OfType<ContactDetailsFormFields, string>;
   readonly venueForm: OfType<VenueFormFields, string>;
-  readonly workForm: OfType<WorkFormFields, string>;
+  readonly workForm: OfType<WorkFormFields, string | Select.Option>;
 }
 
 const formsData = combineForms({
