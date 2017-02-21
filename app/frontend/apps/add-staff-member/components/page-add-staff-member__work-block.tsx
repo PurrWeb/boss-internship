@@ -8,7 +8,7 @@ import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, WorkFormFields} from '../../../interfaces/store-models';
 import {OfType} from '../../../interfaces/index';
 import {setInputClass, renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
-import {isRequiredField} from '../../../constants/form-errors';
+import {isRequiredField, formatInvalid} from '../../../constants/form-errors';
 import {isNotEmpty as isFilled, isNationalInsuranceNumber, isPinCode} from '../../../helpers';
 import workInfoBlockValidated from '../../../action-creators/work-info-block-validated';
 import registrationStepBack from '../../../action-creators/registration-step-back';
@@ -93,6 +93,15 @@ class Component extends React.Component<PropsFromConnect, State> {
                 isPinCode
               }}
             />
+            <Errors
+                model=".pinCode"
+                messages={{
+                    isPinCode: formatInvalid
+                  }}
+                show={{touched: true, focus: false}}
+                wrapper={renderErrorsBlock}
+                component={renderErrorComponent}
+            />
           </label>
 
           <label className="boss3-label">
@@ -111,7 +120,7 @@ class Component extends React.Component<PropsFromConnect, State> {
             <Errors
               model=".nationalInsuranceNumber"
               messages={{
-                    isFilled: isRequiredField
+                    isNationalInsuranceNumber: formatInvalid
                   }}
               show={{touched: true, focus: false}}
               wrapper={renderErrorsBlock}
