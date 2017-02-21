@@ -186,7 +186,19 @@ class StaffMember < ActiveRecord::Base
     pay_rate_id_changed?
   end
 
-  def clocked_out?(date:)
+  def clocked_out_for_venue?(date:, venue:)
+    clock_in_days = ClockInDay.where(
+      date: date,
+      venue: venue,
+      staff_member: self
+    )
+
+    clock_in_days.count == 0 || clock_in_days.all? do |clock_in_day|
+      clock_in_day.current_clock_in_state == :clocked_out
+    end
+  end
+
+  def clocked_out_everywhere?(date:)
     clock_in_days = ClockInDay.where(
       date: date,
       staff_member: self
