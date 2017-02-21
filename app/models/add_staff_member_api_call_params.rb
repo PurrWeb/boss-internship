@@ -38,7 +38,7 @@ class AddStaffMemberApiCallParams
   end
 
   def model_params
-    {
+    result = {
       pin_code: params_json.fetch("pin_code"),
       gender: params_json.fetch("gender"),
       phone_number: params_json.fetch("phone_number"),
@@ -46,7 +46,7 @@ class AddStaffMemberApiCallParams
       starts_at: params_json.fetch("starts_at"),
       national_insurance_number: params_json.fetch("national_insurance_number"),
       hours_preference_note: params_json.fetch("hours_preference_note"),
-      day_perference_note: params_json.fetch("day_perference_note"),
+      day_perference_note: params_json.fetch("day_preference_note"),
       employment_status_a: params_json.fetch("employment_status_a"),
       employment_status_b: params_json.fetch("employment_status_b"),
       employment_status_c: params_json.fetch("employment_status_c"),
@@ -65,7 +65,6 @@ class AddStaffMemberApiCallParams
       },
       sia_badge_number: params_json.fetch("sia_badge_number"),
       sia_badge_expiry_date: params_json.fetch("sia_badge_expiry_date"),
-      avatar_data_uri: params_json.fetch("avatar_base64"),
       pay_rate: PayRate.find_by(id: params_json.fetch("pay_rate_id")),
       master_venue: Venue.find_by(id: params_json.fetch("master_venue_id")),
       work_venues: params_json.fetch("work_venue_ids").map{ |id| Venue.find(id) },
@@ -73,5 +72,12 @@ class AddStaffMemberApiCallParams
         email: params_json.fetch("email_address")
       }
     }
+
+    avatar_data_uri = params_json.fetch("avatar_base64"),
+    if avatar_data_uri.present?
+      result["avatar_data_uri"] = avatar_data_uri
+    end
+
+    result
   end
 end

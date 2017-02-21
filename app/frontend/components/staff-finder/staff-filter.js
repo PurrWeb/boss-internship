@@ -156,9 +156,8 @@ export default class StaffFilter extends Component {
             selectedStaffTypes={this.props.filterSettings.staffTypes}
             staffTypes={this.props.staffTypes}
             isNewDesign={this.props.isNewDesign}
-            onChange={(staffTypes) =>
-                this.handleChange("staffTypes", staffTypes)
-            } />
+            onChange={(staffTypes) => this.handleChange("staffTypes", staffTypes)}
+        />
         return {
             title: "Staff Type",
             component

@@ -30,6 +30,9 @@ registerComponent("RotaApp", RotaApp)
 import StaffTypeRotaApp from "./apps/staff-type-rota/staff-type-rota-app"
 registerComponent("StaffTypeRotaApp", StaffTypeRotaApp);
 
+import AddStaffMemberPageComponent from "./apps/add-staff-member/index"
+registerComponent("AddStaffMemberPageComponent", AddStaffMemberPageComponent);
+
 import ClockInOutApp from "./apps/clock-in-out/clock-in-out-app"
 registerComponent("ClockInOutApp", ClockInOutApp)
 
