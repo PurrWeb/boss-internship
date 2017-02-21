@@ -1,0 +1,65 @@
+@import 'settings';
+@import 'mixins';
+
+.boss3-form {
+  @include normalize-block();
+}
+
+.boss3-input {
+  @include normalize-block();
+
+  &[type=text], &[type=password] {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid $boss-very-light-gray;
+    padding: 13px 20px;
+  }
+
+  &_state {
+    &_error {
+      &[type=text], &[type=password] {
+        border-color: map-get($boss-app-palette, alert-border);
+        color: map-get($boss-app-palette, alert);
+      }
+    }
+  }
+}
+
+textarea.boss3-input {
+  @include normalize-block();
+
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid $boss-very-light-gray;
+  padding: 13px 20px;
+}
+
+.boss3-label {
+  display: block;
+
+  & + & {
+    margin-top: 20px;
+  }
+
+  &_role {
+    &_datepicker {
+      display: table;
+    }
+  }
+}
+
+.boss3-label-text {
+  display: block;
+  margin-bottom: 8px;
+
+  &_type {
+    &_required {
+      &:after {
+        content: '*';
+        margin-left: 2px;
+      }
+    }
+  }
+}

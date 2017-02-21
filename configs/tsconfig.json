@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "baseUrl": "..",
+    "allowJs": true,
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "importHelpers": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "ES5",
+    "lib": ["dom", "es6"],
+    "jsx": "react",
+    "sourceMap": true,
+    "paths": {
+      "*": [
+        "src/custom-typings/*",
+        "src/*"
+      ]
+    }
+  },
+  "files": [
+    "../src/index.tsx"
+  ]
+}

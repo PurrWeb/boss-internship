@@ -1,0 +1,103 @@
+@import 'settings';
+@import 'mixins';
+
+.boss3-main-menu {
+  $menu-min-height: 60px;
+  $button-padding-side: 17px;
+
+  @include normalize-block();
+
+  display: flex;
+  min-height: $menu-min-height;
+  background-color: white;
+  border-bottom: 1px solid $boss-very-light-gray;
+
+  &__logo-button {
+    @include normalize-block($color: $boss-global-font-color);
+
+    display: inline-block;
+    padding: 0 30px;
+    font-size: 20px;
+    line-height: $menu-min-height;
+    font-weight: 600;
+  }
+
+  &__buttons {
+    @include normalize-block();
+
+    display: flex;
+    flex-wrap: wrap;
+
+    &_type {
+      &_primary {
+      }
+
+      &_secondary {
+        margin-left: auto;
+        flex-wrap: nowrap;
+      }
+    }
+  }
+
+  &__button {
+    display: inline-flex;
+    box-sizing: border-box;
+    height: $menu-min-height;
+    align-items: center;
+    cursor: pointer;
+
+    &_state {
+      &_active {
+        border-bottom: 3px solid map-get($boss-app-palette, primary);
+      }
+    }
+
+    &_type {
+      &_dropdown {
+        padding-right: 6px;
+        background: url(../../resources/img/icon-down-arrow-medium-gray.svg) no-repeat right 10px center;
+        background-size: auto 9px;
+
+        &:hover {
+          background-image: url(../../resources/img/icon-down-arrow-dark-gray.svg);
+        }
+      }
+      &_initials {
+        padding: 0 $button-padding-side;
+      }
+    }
+  }
+
+  &__button-link {
+    @include normalize-block($color: $boss-light-gray);
+
+    display: block;
+    padding: 0 $button-padding-side;
+    font-size: 12px;
+
+    .boss3-main-menu__button_state_active &, .boss3-main-menu__button:hover & {
+      color: $boss-dark-gray;
+    }
+
+    &_type {
+      &_initials {
+        $side-size: 40px;
+
+        @include normalize-block($color: white);
+
+        width: $side-size;
+        height: $side-size;
+        padding: 0;
+        text-align: center;
+        line-height: $side-size;
+        border-radius: 50%;
+        background-color: map-get($boss-app-palette, secondary);
+        color: white;
+      }
+    }
+  }
+
+  &__dropdown-list {
+    display: none;
+  }
+}

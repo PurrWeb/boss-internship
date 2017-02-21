@@ -1,0 +1,30 @@
+@import 'settings';
+@import 'mixins';
+
+.boss3-dropdown-button {
+  @include normalize-block();
+
+  position: relative;
+  display: block;
+  padding-right: 13px;
+  cursor: pointer;
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    right: 0;
+    top: 50%;
+    background: url(../../resources/img/icon-down-arrow-dark-gray.svg) no-repeat 0 0;
+    transform: translateY(-50%);
+  }
+
+  &_role {
+    &_filter {
+      padding-left: 22px;
+      background: url(../../resources/img/icon-filter-dark-gray.svg) no-repeat 0 center;
+      background-size: auto 15px;
+    }
+  }
+}
