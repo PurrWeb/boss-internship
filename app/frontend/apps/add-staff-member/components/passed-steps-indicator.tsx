@@ -12,6 +12,7 @@ interface Props {
 
 interface MappedProps {
   readonly completedSteps: number;
+  readonly currentStep: number;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -54,10 +55,11 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   drawSteps() {
     return stepsData.map((stepData, idx) => {
-      const activeClassName = this.props.completedSteps === idx ? 'boss3-steps-block__step_state_active' : '';
+      const completeClassName = this.props.completedSteps === idx ? 'boss3-steps-block__step_state_complete' : '';
+      const currentStepClassName = this.props.currentStep === idx ? 'boss3-steps-block__step-title_state_active' : '';
 
       return (
-        <li key={idx} className={`boss3-steps-block__step ${activeClassName}`}>
+        <li key={idx} className={`boss3-steps-block__step ${completeClassName}`}>
           <div
               className="boss3-steps-block__step-index"
               onClick={() => {
@@ -66,7 +68,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           >
             {idx + 1}
           </div>
-          <div className="boss3-steps-block__step-title">{stepData.title}</div>
+          <div className={`boss3-steps-block__step-title ${currentStepClassName}`}>{stepData.title}</div>
         </li>
       );
     });
@@ -83,7 +85,8 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
-    completedSteps: state.app.completedSteps
+    completedSteps: state.app.completedSteps,
+    currentStep: state.app.currentStep
   };
 };
 

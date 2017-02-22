@@ -55,7 +55,7 @@
       }
     }
 
-    &_state_active {
+    &_state_complete {
       &:after {
         background-color: map-get($boss-app-palette, inactive);
       }
@@ -86,12 +86,18 @@
     background-color: map-get($boss-app-palette, primary);
     cursor: pointer;
 
-    .boss3-steps-block__step_state_active ~ .boss3-steps-block__step & {
+    .boss3-steps-block__step_state_complete ~ .boss3-steps-block__step & {
       background-color: map-get($boss-app-palette, inactive);
     }
   }
 
   &__step-title {
+    color: $boss-light-gray;
 
+    &_state {
+      &_active {
+        color: $boss-global-font-color;
+      }
+    }
   }
 }
