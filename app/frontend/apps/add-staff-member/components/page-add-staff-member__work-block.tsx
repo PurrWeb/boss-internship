@@ -53,7 +53,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   renderSiaBadgeNumberInputBlock() {
     return this.props.isStaffTypeSecurity ? (
       <label className="boss3-label">
-        <span className="boss3-label-text">Sia Badge Number</span>
+        <span className="boss3-label__text">Sia Badge Number</span>
         <Control.text
           className="boss3-input"
           model=".siaBadgeNumber"
@@ -69,7 +69,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   renderSiaBadgeExpiryDateInputBlock() {
     return this.props.isStaffTypeSecurity ? (
       <label className="boss3-label">
-        <span className="boss3-label-text">Sia Badge Expiry Date</span>
+        <span className="boss3-label__text">Sia Badge Expiry Date</span>
         <Control.text
           className="boss3-input"
           model=".siaBadgeExpiryDate"
@@ -91,7 +91,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           onSubmit={this.handleFormSubmit}
         >
           <label className="boss3-label">
-            <span className="boss3-label-text">Staff Type</span>
+            <span className="boss3-label__text">Staff Type</span>
             <Control
               component={SelectFixed}
               className="boss3-input"
@@ -112,7 +112,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           {this.renderSiaBadgeExpiryDateInputBlock()}
 
           <label className="boss3-label">
-            <span className="boss3-label-text">PIN Code</span>
+            <span className="boss3-label__text">PIN Code</span>
             <Control.text
               className="boss3-input"
               model=".pinCode"
@@ -137,7 +137,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text">National Insurance Number</span>
+            <span className="boss3-label__text">National Insurance Number</span>
             <Control.text
               className="boss3-input"
               model=".nationalInsuranceNumber"
@@ -162,7 +162,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text">Day Preference</span>
+            <span className="boss3-label__text">Day Preference</span>
             <Control.textarea
               className="boss3-input"
               model=".dayPreference"
@@ -171,10 +171,13 @@ class Component extends React.Component<PropsFromConnect, State> {
                   }}
               validateOn="blur"
             />
+            <span className="boss3-label__tip boss3-label_adjust_tip">
+              Preferred days to work displayed in the rota (e.g. mornings and weekends)
+            </span>
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text">Hours Preference</span>
+            <span className="boss3-label__text">Hours Preference</span>
             <Control.textarea
               className="boss3-input"
               model=".hoursPreference"
@@ -183,10 +186,13 @@ class Component extends React.Component<PropsFromConnect, State> {
                   }}
               validateOn="blur"
             />
+            <span className="boss3-label__tip boss3-label_adjust_tip">
+              Preferred number of hours to work per week displayed in the Rota (e.g. 40, 20+)
+            </span>
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text boss3-label-text_type_required">Pay Rate</span>
+            <span className="boss3-label__text boss3-label__text_type_required">Pay Rate</span>
             <Control
               component={SelectFixed}
               className="boss3-input"
@@ -217,7 +223,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text">Starter Employment Status</span>
+            <span className="boss3-label__text">Starter Employment Status</span>
             <Control.text
               className="boss3-input"
               model=".starterEmploymentStatus"

@@ -52,7 +52,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           onSubmit={this.handleFormSubmit}
         >
           <label className="boss3-label">
-            <span className="boss3-label-text">Main Venue</span>
+            <span className="boss3-label__text">Main Venue</span>
             <Control
               component={SelectFixed}
               className="boss3-input"
@@ -69,7 +69,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text">Other Venues</span>
+            <span className="boss3-label__text">Other Venues</span>
             <Control
               component={SelectFixed}
               className="boss3-input"
@@ -86,7 +86,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label boss3-label_role_datepicker">
-            <span className="boss3-label-text">Starts At</span>
+            <span className="boss3-label__text">Starts At</span>
             <Control
               component={DatePicker}
               className="boss3-input"

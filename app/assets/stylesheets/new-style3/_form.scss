@@ -48,18 +48,32 @@ textarea.boss3-input {
       display: table;
     }
   }
-}
 
-.boss3-label-text {
-  display: block;
-  margin-bottom: 8px;
+  &_adjust {
+    &_tip {
+      margin-top: 2px;
+      font-size: 13px;
+      color: $boss-light-gray;
+    }
+  }
 
-  &_type {
-    &_required {
-      &:after {
-        content: '*';
-        margin-left: 2px;
+  &__text {
+    display: block;
+    margin-bottom: 8px;
+
+    &_type {
+      &_required {
+        &:after {
+          content: '*';
+          margin-left: 2px;
+        }
       }
     }
   }
+
+  &__tip {
+    display: block;
+  }
+
 }
+

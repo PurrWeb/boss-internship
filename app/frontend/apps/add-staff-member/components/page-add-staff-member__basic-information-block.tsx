@@ -47,7 +47,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           onSubmit={this.handleFormSubmit}
         >
           <label className="boss3-label">
-            <span className="boss3-label-text">First Name</span>
+            <span className="boss3-label__text">First Name</span>
             <Control.text
               className="boss3-input"
               model=".firstName"
@@ -59,7 +59,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text">Surname</span>
+            <span className="boss3-label__text">Surname</span>
             <Control.text
               className="boss3-input"
               model=".surname"
@@ -71,7 +71,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text boss3-label-text_type_required">Gender</span>
+            <span className="boss3-label__text boss3-label__text_type_required">Gender</span>
             <Control
               component={SelectFixed}
               className="boss3-input"
@@ -102,7 +102,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label boss3-label_role_datepicker">
-            <span className="boss3-label-text">Date of Birth</span>
+            <span className="boss3-label__text">Date of Birth</span>
             <Control
               component={DatePicker}
               className="boss3-input"

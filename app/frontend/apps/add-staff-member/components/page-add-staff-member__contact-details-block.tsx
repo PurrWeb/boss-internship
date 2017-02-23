@@ -47,7 +47,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           onSubmit={this.handleFormSubmit}
         >
           <label className="boss3-label">
-            <span className="boss3-label-text boss3-label-text_type_required">Email</span>
+            <span className="boss3-label__text boss3-label__text_type_required">Email</span>
             <Control.text
               className="boss3-input"
               model=".email"
@@ -74,7 +74,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text">Address</span>
+            <span className="boss3-label__text">Address</span>
             <Control.text
               className="boss3-input"
               model=".address"
@@ -86,7 +86,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text">Country</span>
+            <span className="boss3-label__text">Country</span>
             <Control.textarea
               className="boss3-input"
               model=".country"
@@ -97,7 +97,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text">Post Code</span>
+            <span className="boss3-label__text">Post Code</span>
             <Control.text
               className="boss3-input"
               model=".postCode"
@@ -109,7 +109,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
-            <span className="boss3-label-text">Phone Number</span>
+            <span className="boss3-label__text">Phone Number</span>
             <Control.text
               className="boss3-input"
               model=".phoneNumber"
