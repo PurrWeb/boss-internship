@@ -49,6 +49,12 @@ const stepsData: StepData[] = [
   }
 ];
 
+const FormsWithRequiredFields = {
+  [AddStaffMemberSteps.BasicInformationBlock]: true,
+  [AddStaffMemberSteps.ContactDetailsBlock]: true,
+  [AddStaffMemberSteps.WorkBlock]: true
+};
+
 class Component extends React.Component<PropsFromConnect, State> {
   onStepClick = (step: number) => {
     const action = currentStepChanged(step);
@@ -56,28 +62,42 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(action);
   };
 
-  static getFormError(formData: FormStructure<any>): boolean {
-    return pipe< FormStructure<any>, {}, FieldState[], FieldState, boolean>(
+  static isFormWithoutErrors(formData: FormStructure<any>, formStepIdx: number, currentStep: number): boolean {
+    const isFormInvalid = pipe< FormStructure<any>, {}, FieldState[], FieldState, boolean>(
       omit(['$form']),
       values,
       find((fieldData: FieldState) => fieldData.touched && !fieldData.valid),
-      not
+      Boolean
     )(formData);
+
+    const isCurrentStepForm = formStepIdx === currentStep;
+
+    if (isCurrentStepForm) {
+      return !isFormInvalid;
+    } else {
+      const isPrevRequiredForm = formStepIdx < currentStep && FormsWithRequiredFields[formStepIdx];
+
+      if (isPrevRequiredForm) {
+        return formData.$form.touched && !isFormInvalid;
+      } else {
+        return true;
+      }
+    }
   }
 
-  static getStepsValidity(forms: AppForms) {
+  static getStepsValidity(forms: AppForms, currentStep: number) {
     return {
-      [AddStaffMemberSteps.BasicInformationBlock]: Component.getFormError(forms.basicInformationForm),
-      [AddStaffMemberSteps.AddAvatarBlock]: Component.getFormError(forms.uploadPhotoForm),
-      [AddStaffMemberSteps.VenuesBlock]: Component.getFormError(forms.venueForm),
-      [AddStaffMemberSteps.ContactDetailsBlock]: Component.getFormError(forms.contactDetailsForm),
-      [AddStaffMemberSteps.WorkBlock]: Component.getFormError(forms.workForm),
+      [AddStaffMemberSteps.BasicInformationBlock]: Component.isFormWithoutErrors(forms.basicInformationForm, AddStaffMemberSteps.BasicInformationBlock, currentStep),
+      [AddStaffMemberSteps.AddAvatarBlock]: Component.isFormWithoutErrors(forms.uploadPhotoForm, AddStaffMemberSteps.AddAvatarBlock, currentStep),
+      [AddStaffMemberSteps.VenuesBlock]: Component.isFormWithoutErrors(forms.venueForm, AddStaffMemberSteps.VenuesBlock, currentStep),
+      [AddStaffMemberSteps.ContactDetailsBlock]: Component.isFormWithoutErrors(forms.contactDetailsForm, AddStaffMemberSteps.ContactDetailsBlock, currentStep),
+      [AddStaffMemberSteps.WorkBlock]: Component.isFormWithoutErrors(forms.workForm, AddStaffMemberSteps.WorkBlock, currentStep),
       [AddStaffMemberSteps.PreviewBlock]: true
     };
   }
 
   drawSteps(completedSteps: number, currentStep: number) {
-    const stepsValidity = Component.getStepsValidity(this.props.forms);
+    const stepsValidity = Component.getStepsValidity(this.props.forms, currentStep);
 
     return stepsData.map((stepData, idx) => {
       const completeClassName = completedSteps === idx ? 'boss3-steps-block__step_state_complete' : '';
