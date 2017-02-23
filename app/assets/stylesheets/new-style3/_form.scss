@@ -3,6 +3,12 @@
 
 .boss3-form {
   @include normalize-block();
+
+  &_adjust {
+    &_boss3-fields-set {
+      margin-top: 40px;
+    }
+  }
 }
 
 .boss3-input {
@@ -60,6 +66,11 @@ textarea.boss3-input {
   &__text {
     display: block;
     margin-bottom: 8px;
+    color: $boss-dark-gray;
+
+    input[type=checkbox] + & {
+      display: inline-block;
+    }
 
     &_type {
       &_required {
@@ -77,3 +88,10 @@ textarea.boss3-input {
 
 }
 
+.boss3-inputs-list {
+  @include normalize-block();
+
+  & > li {
+    @include normalize-block();
+  }
+}

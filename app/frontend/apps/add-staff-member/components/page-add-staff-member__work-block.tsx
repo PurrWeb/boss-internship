@@ -222,17 +222,65 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text">Starter Employment Status</span>
-            <Control.text
-              className="boss3-input"
-              model=".starterEmploymentStatus"
-              mapProps={{
-                className: setInputClass
-              }}
-              validateOn="blur"
-            />
-          </label>
+          <div className="boss3-fields-set boss3-form_adjust_boss3-fields-set">
+            <h4 className="boss3-fields-set__header boss3-fields-set_adjust_header">
+              Starter Employment Status
+            </h4>
+
+            <h5 className="boss3-fields-set__section-header boss3-fields-set_adjust_section-header">
+              Tick one that applies
+            </h5>
+
+            <ul className="boss3-inputs-list boss3-fields-set_adjust_boss3-inputs-list">
+              <li>
+                <label className="boss3-label">
+                  <Control.checkbox
+                    className="boss3-input"
+                    model=".starterEmploymentStatus"
+                  />
+                  <span className="boss3-label__text">I have supplied...</span>
+                </label>
+              </li>
+              <li>
+                <label className="boss3-label">
+                  <Control.checkbox
+                    className="boss3-input"
+                    model=".starterEmploymentStatus1"
+                  />
+                  <span className="boss3-label__text">I have supplied...</span>
+                </label>
+              </li>
+              <li>
+                <label className="boss3-label">
+                  <Control.checkbox
+                    className="boss3-input"
+                    model=".starterEmploymentStatus2"
+                  />
+                  <span className="boss3-label__text">I have supplied...</span>
+                </label>
+              </li>
+              <li>
+                <label className="boss3-label">
+                  <Control.checkbox
+                    className="boss3-input"
+                    model=".starterEmploymentStatus3"
+                  />
+                  <span className="boss3-label__text">I have supplied...</span>
+                </label>
+              </li>
+              <li>
+                <label className="boss3-label">
+                  <Control.checkbox
+                    className="boss3-input"
+                    model=".starterEmploymentStatus4"
+                  />
+                  <span className="boss3-label__text">I have supplied...</span>
+                </label>
+              </li>
+            </ul>
+          </div>
+
+
 
           <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
             <input type="button"
