@@ -10,7 +10,7 @@ import {StoreStructure, WorkFormFields} from '../../../interfaces/store-models';
 import {OfType} from '../../../interfaces/index';
 import {setInputClass, renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
 import {isRequiredField, formatInvalid} from '../../../constants/form-errors';
-import {isNationalInsuranceNumber, isPinCode, isNotEmptyComboBox} from '../../../helpers';
+import {isNationalInsuranceNumber, isPinCode, isNotEmptyComboBox, isNotEmpty} from '../../../helpers';
 import workInfoBlockValidated from '../../../action-creators/work-info-block-validated';
 import registrationStepBack from '../../../action-creators/registration-step-back';
 import SelectFixed from './react-select-fixed';
@@ -89,6 +89,11 @@ class Component extends React.Component<PropsFromConnect, State> {
           model="formsData.workForm"
           className="boss3-form"
           onSubmit={this.handleFormSubmit}
+          validators={{
+            starterEmploymentStatus: {
+              isFilled: isNotEmpty
+            }
+          }}
         >
           <label className="boss3-label">
             <span className="boss3-label__text">Staff Type</span>
@@ -222,7 +227,7 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <div className="boss3-fields-set boss3-form_adjust_boss3-fields-set">
+          <fieldset className="boss3-fields-set boss3-form_adjust_boss3-fields-set">
             <h4 className="boss3-fields-set__header boss3-fields-set_adjust_header">
               Starter Employment Status
             </h4>
@@ -234,51 +239,68 @@ class Component extends React.Component<PropsFromConnect, State> {
             <ul className="boss3-inputs-list boss3-fields-set_adjust_boss3-inputs-list">
               <li>
                 <label className="boss3-label">
-                  <Control.checkbox
+                  <Control.radio
                     className="boss3-input"
                     model=".starterEmploymentStatus"
+                    value="1"
                   />
                   <span className="boss3-label__text">I have supplied...</span>
                 </label>
               </li>
               <li>
                 <label className="boss3-label">
-                  <Control.checkbox
+                  <Control.radio
                     className="boss3-input"
-                    model=".starterEmploymentStatus1"
+                    model=".starterEmploymentStatus"
+                    value="2"
                   />
                   <span className="boss3-label__text">I have supplied...</span>
                 </label>
               </li>
               <li>
                 <label className="boss3-label">
-                  <Control.checkbox
+                  <Control.radio
                     className="boss3-input"
-                    model=".starterEmploymentStatus2"
+                    model=".starterEmploymentStatus"
+                    value="3"
                   />
                   <span className="boss3-label__text">I have supplied...</span>
                 </label>
               </li>
               <li>
                 <label className="boss3-label">
-                  <Control.checkbox
+                  <Control.radio
                     className="boss3-input"
-                    model=".starterEmploymentStatus3"
+                    model=".starterEmploymentStatus"
+                    value="4"
                   />
                   <span className="boss3-label__text">I have supplied...</span>
                 </label>
               </li>
               <li>
                 <label className="boss3-label">
-                  <Control.checkbox
+                  <Control.radio
                     className="boss3-input"
-                    model=".starterEmploymentStatus4"
+                    model=".starterEmploymentStatus"
+                    value="5"
                   />
                   <span className="boss3-label__text">I have supplied...</span>
                 </label>
               </li>
             </ul>
-          </div>
+
+            <Errors
+              model=".starterEmploymentStatus"
+              messages={{
+                    isFilled: isRequiredField
+                  }}
+              show={(field) =>
+                field.submitFailed || field.touched
+              }
+              wrapper={renderErrorsBlock}
+              component={renderErrorComponent}
+            />
+          </fieldset>
 
 
 

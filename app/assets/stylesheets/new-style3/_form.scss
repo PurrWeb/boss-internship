@@ -68,6 +68,7 @@ textarea.boss3-input {
     margin-bottom: 8px;
     color: $boss-dark-gray;
 
+    input[type=radio] + &,
     input[type=checkbox] + & {
       display: inline-block;
     }
