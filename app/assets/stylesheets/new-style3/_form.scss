@@ -28,6 +28,10 @@
         border-color: map-get($boss-app-palette, alert-border);
         color: map-get($boss-app-palette, alert);
       }
+
+      .Select-control {
+        border-color: map-get($boss-app-palette, alert-border);
+      }
     }
   }
 }
