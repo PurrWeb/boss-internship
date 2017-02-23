@@ -3,10 +3,10 @@ import {ErrorsProps, WrapperProps, CustomComponentProps, MapPropsProps} from 're
 import {pipe, values, filter} from 'ramda';
 
 export const renderErrorsBlock: React.StatelessComponent<ErrorsProps & WrapperProps> =
-  (props) => <div className="form-errors">{props.children}</div>;
+  (props) => <div className="boss3-form-errors">{props.children}</div>;
 
 export const renderErrorComponent: React.StatelessComponent<ErrorsProps & CustomComponentProps> =
-  (props) => <div className="error">{props.children}</div>;
+  (props) => <div className="boss3-form-errors__error">{props.children}</div>;
 
 const haveSomeErrors = (errors: {}): boolean => pipe<{}, boolean[], boolean[], boolean>(
   values,

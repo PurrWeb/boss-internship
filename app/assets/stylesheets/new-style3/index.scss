@@ -20,6 +20,8 @@
 @import 'staff-members-list';
 @import 'chart-with-notes-block';
 @import 'from-to-block';
+@import 'fields-set';
+@import 'form-errors';
 
 .boss3-html {
   @include normalize-block();
