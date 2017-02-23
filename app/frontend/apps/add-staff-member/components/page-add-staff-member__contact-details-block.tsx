@@ -55,6 +55,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 className: setInputClass
               }}
               validateOn="blur"
+              persist={true}
               validators={{
                 isFilled,
                 isEmail
@@ -116,6 +117,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 className: setInputClass
               }}
               validateOn="blur"
+              persist={true}
               validators={{
                 isPhoneNumber: isMobilePhoneSimpleCheck
               }}

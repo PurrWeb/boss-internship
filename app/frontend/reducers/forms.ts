@@ -11,7 +11,7 @@ interface FormStateWithValue<TValue> extends FormState {
   readonly value: TValue;
 }
 
-type FormStructure<FormFields> = OfType<FormFields, FieldState> & {
+export type FormStructure<FormFields> = OfType<FormFields, FieldState> & {
   $form: FormStateWithValue< OfType<FormFields, string> >;
 };
 
@@ -64,15 +64,17 @@ export type ContactDetailsForm = FormStructure<ContactDetailsFormFields>;
 export type VenueForm = FormStructure<VenueFormFields>;
 export type WorkForm = FormStructure<WorkFormFields>;
 
+export interface AppForms {
+  readonly basicInformationForm: BasicInformationForm;
+  readonly uploadPhotoForm: UploadPhotoForm;
+  readonly venueForm: VenueForm;
+  readonly contactDetailsForm: ContactDetailsForm;
+  readonly workForm: WorkForm;
+  readonly $form: FormStateWithValue<FormModels>;
+};
+
 export interface Structure extends FormModels {
-  readonly forms: {
-    basicInformationForm: BasicInformationForm;
-    uploadPhotoForm: UploadPhotoForm;
-    contactDetailsForm: ContactDetailsForm;
-    venueForm: VenueForm;
-    workForm: WorkForm;
-    $form: FormStateWithValue<FormModels>;
-  };
+  readonly forms: AppForms;
 }
 
 export default formsData;

@@ -209,6 +209,10 @@ export interface ControlProps<T> extends React.HTMLProps<T> {
     withField?: boolean;
 
     onChange?: (data: any) => void;
+    /**
+     * Signifies that the field state (validation, etc.) should not persist when the component is unmounted. Default: false
+     */
+    persist?: boolean;
 }
 
 

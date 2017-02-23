@@ -120,6 +120,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 className: setInputClass
               }}
               validateOn="blur"
+              persist={true}
               validators={{
                 isPinCode
               }}
@@ -144,6 +145,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                     className: setInputClass
                   }}
               validateOn="blur"
+              persist={true}
               validators={{
                 isNationalInsuranceNumber
               }}
@@ -198,6 +200,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 }
               }}
               validateOn="change"
+              persist={true}
               validators={{
                 isFilled: isNotEmptyComboBox,
               }}

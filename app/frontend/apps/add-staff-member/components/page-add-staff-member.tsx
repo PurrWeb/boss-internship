@@ -11,6 +11,7 @@ import ContactDetailsBlock from './page-add-staff-member__contact-details-block'
 import VenuesBlock from './page-add-staff-member__venues-block';
 import WorkBlock from './page-add-staff-member__work-block';
 import PreviewBlock from './page-add-staff-member__preview-block';
+import {AddStaffMemberSteps} from '../../../constants/other';
 
 interface Props {
 }
@@ -25,27 +26,25 @@ interface State {
   readonly isMounted: boolean;
 }
 
-const formBlocks: React.ComponentClass<any>[] = [
-  BasicInformationBlock,
-  AddAvatarBlock,
-  VenuesBlock,
-  ContactDetailsBlock,
-  WorkBlock,
-  PreviewBlock
-];
+const formBlocks = {
+  [AddStaffMemberSteps.BasicInformationBlock]: <BasicInformationBlock/>,
+  [AddStaffMemberSteps.AddAvatarBlock]: <AddAvatarBlock/>,
+  [AddStaffMemberSteps.VenuesBlock]: <VenuesBlock/>,
+  [AddStaffMemberSteps.ContactDetailsBlock]: <ContactDetailsBlock/>,
+  [AddStaffMemberSteps.WorkBlock]: <WorkBlock/>,
+  [AddStaffMemberSteps.PreviewBlock]: <PreviewBlock/>,
+};
 
 class Component extends React.Component<PropsFromConnect, State> {
-  renderCurrentFormsBlock() {
-    const Block = formBlocks[this.props.currentStep];
-
-    return <Block/>;
+  static renderCurrentFormsBlock(currentStep: number) {
+    return formBlocks[currentStep] || <BasicInformationBlock/>;
   }
 
   render() {
     return (
       <div className="boss3-page-content">
 
-        {this.renderCurrentFormsBlock()}
+        {Component.renderCurrentFormsBlock(this.props.currentStep)}
 
       </div>
 

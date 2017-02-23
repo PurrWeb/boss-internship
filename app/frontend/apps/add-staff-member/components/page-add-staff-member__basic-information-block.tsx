@@ -85,6 +85,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 }
               }}
               validateOn="change"
+              persist={true}
               validators={{
                 isFilled: isNotEmptyComboBox,
               }}
