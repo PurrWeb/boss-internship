@@ -13,12 +13,16 @@
 
     &_info-block {
       width: 40%;
+      margin-bottom: 30px;
     }
   }
 }
 
 .boss3-info-block {
   @include normalize-block();
+
+  display: inline-block;
+  vertical-align: top;
 
   &_type {
     &_with-index {
