@@ -34,7 +34,28 @@ class Component extends React.Component<PropsFromConnect, State> {
     return (
       <div className="boss3-forms-block">
 
-        PREVIEW
+        <div className="boss3-info-block boss3-info-block_type_with-index boss3-forms-block_adjust_info-block">
+          <div className="boss3-info-block__index">1</div>
+          <h3 className="boss3-info-block__header">Basic Information</h3>
+
+          <ul className="boss3-info-fields-block">
+            <li className="boss3-info-fields-block__list-item">
+              <span className="boss3-info-fields-block__field-name">name</span>
+              <span className="boss3-info-fields-block__field-value">Michael</span>
+            </li>
+            <li className="boss3-info-fields-block__list-item">
+              <span className="boss3-info-fields-block__field-name">name</span>
+              <span className="boss3-info-fields-block__field-value">Michael</span>
+              <ul className="boss3-info-fields-block__field-errors">
+                <li className="boss3-info-fields-block__field-error">Some Error</li>
+              </ul>
+            </li>
+            <li className="boss3-info-fields-block__list-item">
+              <span className="boss3-info-fields-block__field-name">name</span>
+              <span className="boss3-info-fields-block__field-value">Michael</span>
+            </li>
+          </ul>
+        </div>
 
         <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
           <a href=""

@@ -10,6 +10,43 @@
       margin: $boss-buttons-group-margin;
       text-align: center;
     }
+
+    &_info-block {
+      width: 40%;
+    }
+  }
+}
+
+.boss3-info-block {
+  @include normalize-block();
+
+  &_type {
+    &_with-index {
+      position: relative;
+      padding-left: 45px;
+    }
+  }
+
+  &__header {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  &__index {
+    $index-side-size: 30px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $index-side-size;
+    height: $index-side-size;
+    margin-bottom: 8px;
+    border-radius: 50%;
+    text-align: center;
+    overflow: hidden;
+    color: white;
+    line-height: $index-side-size;
+    background-color: map-get($boss-app-palette, primary);
   }
 }
 
