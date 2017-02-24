@@ -1,11 +1,10 @@
-/// <reference path="../../../custom-typings/react-redux-form.d.ts" />
-
 import * as React from 'react';
 import {connect} from 'react-redux';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
 import registrationStepBack from '../../../action-creators/registration-step-back';
+import requestingStaffMemberSave from '../../../action-creators/requesting-staff-member-save';
 
 interface Props {
 }
@@ -23,9 +22,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   onFormComplete = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    // const action = avatarAdded('');
-    //
-    // this.props.dispatch(action);
+    this.props.dispatch(requestingStaffMemberSave);
   };
 
   onBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {

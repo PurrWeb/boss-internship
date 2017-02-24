@@ -9,7 +9,7 @@ import {
   STATUS_SERVICE_UNAVAILABLE
 } from '../constants/used-http-status-codes';
 import {ActionWithPayload} from '../interfaces/actions';
-import globalErrorHappened from '../../../action-creators/global-error-happened';
+import globalErrorHappened from '../action-creators/global-error-happened';
 import {GlobalError} from '../interfaces/store-models';
 import store from '../store/index';
 
