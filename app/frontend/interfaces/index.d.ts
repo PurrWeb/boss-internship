@@ -13,12 +13,10 @@ export interface Dict<T> {
   readonly [name: string]: T;
 }
 
-export interface StringDict extends Dict<string> {
-}
-export interface BoolDict extends Dict<boolean> {
-}
-export interface ObjDict extends Dict<{}> {
-}
+export interface StringDict extends Dict<string> {}
+export interface BoolDict extends Dict<boolean> {}
+export interface ObjDict extends Dict<{}> {}
+export interface ArrDict<T> extends Dict< T[] > {}
 
 type BasicType = boolean | number | string;
 

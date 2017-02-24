@@ -12,11 +12,12 @@ import {
   BasicInformationForm, UploadPhotoForm, VenueForm, ContactDetailsForm, WorkForm,
   FormStructure
 } from '../../../reducers/forms';
-import {StringDict, Dict} from '../../../interfaces/index';
+import {StringDict, Dict, BoolDict} from '../../../interfaces/index';
 import {FieldState} from 'react-redux-form';
 import {validateAllAddStaffMemberStepForms} from '../../../helpers/form-validators';
 
 type FieldDataPair = [string, FieldState];
+type ErrorPair = [string, boolean];
 
 interface Props {
 }
@@ -51,6 +52,26 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(registrationStepBack);
   };
 
+  static renderListItemErrors(errors: BoolDict) {
+    return pipe< BoolDict, ErrorPair[], JSX.Element[], JSX.Element | null >(
+      toPairs,
+      addIndex(map)((errorsPair: ErrorPair, idx: number) => {
+        return (
+          <li key={idx} className="boss3-info-fields-block__field-error">
+            {errorsPair[0]}
+          </li>
+        );
+      }),
+      (errorElements) => {
+        return errorElements.length ? (
+            <ul className="boss3-info-fields-block__field-errors">
+              {errorElements}
+            </ul>
+          ) : null;
+      }
+    )(errors);
+  }
+
   static renderInformationList(blockData: FormStructure<StringDict>, labelsMap: StringDict) {
     return pipe< FormStructure<StringDict>, Dict<FieldState>, FieldDataPair[], JSX.Element[] >(
       omit(['$form']),
@@ -62,6 +83,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           <li key={idx} className="boss3-info-fields-block__list-item">
             <span className="boss3-info-fields-block__field-name">{labelVal}</span>
             <span className="boss3-info-fields-block__field-value">{pair[1].value}</span>
+            { Component.renderListItemErrors(pair[1].errors) }
           </li>
         );
       })
