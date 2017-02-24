@@ -19,7 +19,7 @@
   }
 
   &__field-value {
-
+    display: inline-block;
   }
   &__field-errors {
     @include normalize-block();

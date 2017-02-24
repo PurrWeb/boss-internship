@@ -7,13 +7,13 @@
 
   &_adjust {
     &_buttons-group {
-      margin: $boss-buttons-group-margin;
-      text-align: center;
+      margin: $boss-buttons-group-margin !important;
+      text-align: center !important;
     }
 
     &_info-block {
-      width: 40%;
-      margin-bottom: 30px;
+      width: 50% !important;
+      margin-bottom: 30px !important;
     }
   }
 }

@@ -3,6 +3,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {pipe, omit, toPairs, map, addIndex} from 'ramda';
+import * as Select from 'react-select';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
@@ -82,17 +83,28 @@ class Component extends React.Component<PropsFromConnect, State> {
     )(errors);
   }
 
+  static getTextFromFieldValue(fieldValue: string | Select.Option | Date) {
+    if (typeof fieldValue === 'string') {
+      return fieldValue;
+    } else if (typeof (fieldValue as Select.Option).value !== 'undefined') {
+      return (fieldValue as Select.Option).value;
+    } else {
+      return String(fieldValue);
+    }
+  }
+
   static renderInformationList(blockData: FormStructure<StringDict>, labelsMap: StringDict) {
     return pipe< FormStructure<StringDict>, Dict<FieldState>, FieldDataPair[], JSX.Element[] >(
       omit(['$form']),
       toPairs,
       addIndex(map)((pair: FieldDataPair, idx: number) => {
         const labelVal = labelsMap[pair[0]];
+        const errorText = Component.getTextFromFieldValue(pair[1].value);
 
         return (
           <li key={idx} className="boss3-info-fields-block__list-item">
             <span className="boss3-info-fields-block__field-name">{labelVal}</span>
-            <span className="boss3-info-fields-block__field-value">{pair[1].value}</span>
+            <span className="boss3-info-fields-block__field-value">{errorText}</span>
             { Component.renderListItemErrors(pair[1].errors) }
           </li>
         );
