@@ -14,6 +14,7 @@ import {isRequiredField} from '../../../constants/form-errors';
 import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
 import basicInformationBlockValidated from '../../../action-creators/basic-information-block-validated';
 import SelectFixed from './react-select-fixed';
+import {GenderInputValidators} from '../../../interfaces/forms';
 
 interface Props {
 }
@@ -88,7 +89,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               persist={true}
               validators={{
                 isFilled: isNotEmptyComboBox,
-              }}
+              } as GenderInputValidators}
             />
             <Errors
               model=".gender"

@@ -17,10 +17,10 @@ export type FormStructure<FormFields> = OfType<FormFields, FieldState> & {
 
 interface FormModels {
   readonly basicInformationForm: BasicInformationFormFields;
-  readonly uploadPhotoForm: OfType<UploadPhotoFormFields, string>;
-  readonly contactDetailsForm: OfType<ContactDetailsFormFields, string>;
-  readonly venueForm: OfType<VenueFormFields, string>;
-  readonly workForm: OfType<WorkFormFields, string | Select.Option>;
+  readonly uploadPhotoForm: UploadPhotoFormFields;
+  readonly contactDetailsForm: ContactDetailsFormFields;
+  readonly venueForm: VenueFormFields;
+  readonly workForm: WorkFormFields;
 }
 
 const formsData = combineForms({

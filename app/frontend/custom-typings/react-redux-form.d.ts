@@ -554,6 +554,7 @@ interface _FieldState {
      * @default {}
      */
     validity: any;
+    value: string;
 }
 
 export interface FieldState extends _FieldState {

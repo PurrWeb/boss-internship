@@ -14,6 +14,7 @@ import {isRequiredField, isWrongEmail, isPhoneNumber} from '../../../constants/f
 import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
 import contactDetailsBlockValidated from '../../../action-creators/contact-details-block-validated';
 import registrationStepBack from '../../../action-creators/registration-step-back';
+import {EmailInputValidators, PhoneNumberInputValidators} from '../../../interfaces/forms';
 
 interface Props {
 }
@@ -59,7 +60,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               validators={{
                 isFilled,
                 isEmail
-              }}
+              } as EmailInputValidators}
             />
             <Errors
               model=".email"
@@ -120,7 +121,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               persist={true}
               validators={{
                 isPhoneNumber: isMobilePhoneSimpleCheck
-              }}
+              } as PhoneNumberInputValidators}
             />
             <Errors
               model=".phoneNumber"

@@ -15,6 +15,10 @@ import workInfoBlockValidated from '../../../action-creators/work-info-block-val
 import registrationStepBack from '../../../action-creators/registration-step-back';
 import SelectFixed from './react-select-fixed';
 import {StaffType, Payrate} from '../../../interfaces/common-data-types';
+import {
+  StarterEmploymentStatusNumberFormValidators, PinCodeInputValidators,
+  NationalInsuranceNumberInputValidators, PayRateInputValidators
+} from '../../../interfaces/forms';
 
 interface Props {
 }
@@ -93,7 +97,7 @@ class Component extends React.Component<PropsFromConnect, State> {
             starterEmploymentStatus: {
               isFilled: isNotEmpty
             }
-          }}
+          } as StarterEmploymentStatusNumberFormValidators}
         >
           <label className="boss3-label">
             <span className="boss3-label__text">Staff Type</span>
@@ -128,7 +132,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               persist={true}
               validators={{
                 isPinCode
-              }}
+              } as PinCodeInputValidators}
             />
             <Errors
               model=".pinCode"
@@ -153,7 +157,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               persist={true}
               validators={{
                 isNationalInsuranceNumber
-              }}
+              } as NationalInsuranceNumberInputValidators}
             />
             <Errors
               model=".nationalInsuranceNumber"
@@ -214,7 +218,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               persist={true}
               validators={{
                 isFilled: isNotEmptyComboBox,
-              }}
+              } as PayRateInputValidators}
             />
             <Errors
               model=".payRate"
