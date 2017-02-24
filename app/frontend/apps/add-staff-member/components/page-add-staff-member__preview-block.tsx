@@ -15,6 +15,7 @@ import {
 import {StringDict, Dict, BoolDict} from '../../../interfaces/index';
 import {FieldState} from 'react-redux-form';
 import {validateAllAddStaffMemberStepForms} from '../../../helpers/form-validators';
+import {isRequiredField, isWrongEmail, isPhoneNumber, formatInvalid} from '../../../constants/form-errors';
 
 type FieldDataPair = [string, FieldState];
 type ErrorPair = [string, boolean];
@@ -36,6 +37,14 @@ interface State {
   readonly isMounted: boolean;
 }
 
+const ErrorTextsMap: StringDict = {
+  isFilled: isRequiredField,
+  isEmail: isWrongEmail,
+  isPhoneNumber: isPhoneNumber,
+  isNationalInsuranceNumber: formatInvalid,
+  isPinCode: formatInvalid
+};
+
 class Component extends React.Component<PropsFromConnect, State> {
   componentDidMount() {
     validateAllAddStaffMemberStepForms();
@@ -56,9 +65,10 @@ class Component extends React.Component<PropsFromConnect, State> {
     return pipe< BoolDict, ErrorPair[], JSX.Element[], JSX.Element | null >(
       toPairs,
       addIndex(map)((errorsPair: ErrorPair, idx: number) => {
+        const errorText = ErrorTextsMap[errorsPair[0]];
         return (
           <li key={idx} className="boss3-info-fields-block__field-error">
-            {errorsPair[0]}
+            {errorText}
           </li>
         );
       }),
@@ -90,31 +100,106 @@ class Component extends React.Component<PropsFromConnect, State> {
     )(blockData);
   }
 
-  renderBasicInformationBlock() {
-    const labelsMap: StringDict = {
-      firstName: 'First Name',
-      surname: 'Surname',
-      gender: 'Gender',
-      dateOfBirth: 'Date of Birth'
-    };
+  static renderInformationBlock(formFields: FormStructure<{}>, labelsMap: StringDict, header: string, index?: number) {
+    const isWithIndex: boolean = index !== undefined;
+    const withIndexClass = isWithIndex ? 'boss3-info-block_type_with-index' : '';
+
+    const indexElement = isWithIndex ?
+      <div className="boss3-info-block__index">{index}</div> :
+      null;
 
     return (
-      <div className="boss3-info-block boss3-info-block_type_with-index boss3-forms-block_adjust_info-block">
-        <div className="boss3-info-block__index">1</div>
-        <h3 className="boss3-info-block__header">Basic Information</h3>
+      <div className={`boss3-info-block ${withIndexClass} boss3-forms-block_adjust_info-block`}>
+        {indexElement}
+        <h3 className="boss3-info-block__header">{header}</h3>
 
         <ul className="boss3-info-fields-block">
-          {Component.renderInformationList(this.props.basicInformationFields, labelsMap)}
+          {Component.renderInformationList(formFields, labelsMap)}
         </ul>
       </div>
     );
   }
 
+  renderBasicInformationSummaryBlock() {
+    return Component.renderInformationBlock(
+      this.props.basicInformationFields,
+      {
+        firstName: 'First Name',
+        surname: 'Surname',
+        gender: 'Gender',
+        dateOfBirth: 'Date of Birth'
+      },
+      'Basic Information',
+      1
+    );
+  }
+
+  renderAvatarSummaryBlock() {
+    return Component.renderInformationBlock(
+      this.props.uploadPhotoFormFields,
+      {},
+      'Avatar',
+      2
+    );
+  }
+
+  renderVenueSummaryBlock() {
+    return Component.renderInformationBlock(
+      this.props.venueFormFields,
+      {
+        mainVenue: 'Main Venue',
+        otherVenues: 'Other Venues',
+        startsAt: 'Starts At'
+      },
+      'Venue',
+      3
+    );
+  }
+
+  renderAddressSummaryBlock() {
+    return Component.renderInformationBlock(
+      this.props.contactDetailsFormFields,
+      {
+        email: 'Email',
+        address: 'Address',
+        country: 'Country',
+        postCode: 'Post Code',
+        phoneNumber: 'Phone Number'
+      },
+      'Address',
+      4
+    );
+  }
+
+  renderWorkSummaryBlock() {
+    return Component.renderInformationBlock(
+      this.props.workFormFields,
+      {
+        staffType: 'Staff Type',
+        siaBadgeNumber: 'Sia Badge Number',
+        siaBadgeExpiryDate: 'Sia Badge Expiry Date',
+        pinCode: 'PinCode',
+        nationalInsuranceNumber: 'National Insurance Number',
+        dayPreference: 'Day Preference',
+        hoursPreference: 'Hours Preference',
+        payRate: 'Pay Rate',
+        starterEmploymentStatus: 'Starter Employment Status'
+      },
+      'Work',
+      5
+    );
+  }
+
+
   render() {
     return (
       <div className="boss3-forms-block">
 
-        {this.renderBasicInformationBlock()}
+        {this.renderBasicInformationSummaryBlock()}
+        {this.renderAvatarSummaryBlock()}
+        {this.renderVenueSummaryBlock()}
+        {this.renderAddressSummaryBlock()}
+        {this.renderWorkSummaryBlock()}
 
         <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
           <a href=""
