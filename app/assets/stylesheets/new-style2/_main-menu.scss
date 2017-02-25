@@ -83,6 +83,7 @@
       padding: 0 $button-padding-side;
       font-size: 12px;
       font-weight: 500;
+      line-height: $menu-min-height;
 
       &:after {
         display: none;
