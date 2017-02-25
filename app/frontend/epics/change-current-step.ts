@@ -7,6 +7,7 @@ import {ActionType} from '../action-creators/changing-current-step';
 import {StoreStructure} from '../interfaces/store-models';
 import {Observable} from 'rxjs';
 import currentStepChanged from '../action-creators/current-step-changed';
+import validatingAllAddStaffMemberStepForms from '../action-creators/validating-all-add-staff-member-step-forms';
 
 const changeCurrentStep = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(CHANGING_CURRENT_STEP)
@@ -15,7 +16,8 @@ const changeCurrentStep = ((action$, store: Store<StoreStructure>) => {
       const currentStepChangedAction = currentStepChanged(stepId);
 
       return Observable.of<SimpleAction>(
-        currentStepChangedAction
+        currentStepChangedAction,
+        validatingAllAddStaffMemberStepForms
       );
   });
 }) as Epic<SimpleAction, StoreStructure>;

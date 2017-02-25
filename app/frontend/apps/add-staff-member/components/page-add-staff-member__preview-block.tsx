@@ -15,7 +15,6 @@ import {
 } from '../../../reducers/forms';
 import {StringDict, Dict, BoolDict} from '../../../interfaces/index';
 import {FieldState} from 'react-redux-form';
-import {validateAllAddStaffMemberStepForms} from '../../../helpers/form-validators';
 import {isRequiredField, isWrongEmail, isPhoneNumber, formatInvalid} from '../../../constants/form-errors';
 
 type FieldDataPair = [string, FieldState];
@@ -60,14 +59,6 @@ class Component extends React.Component<PropsFromConnect, State> {
       this.props.workFormFields
     ];
   }
-
-  componentDidMount() {
-    validateAllAddStaffMemberStepForms();
-  }
-
-  /*componentWillReceiveProps(newProps: PropsFromConnect) {
-    validateAllAddStaffMemberStepForms();
-  }*/
 
   onFormComplete = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
