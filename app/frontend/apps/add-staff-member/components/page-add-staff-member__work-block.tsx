@@ -16,8 +16,8 @@ import registrationStepBack from '../../../action-creators/registration-step-bac
 import SelectFixed from './react-select-fixed';
 import {StaffType, Payrate} from '../../../interfaces/common-data-types';
 import {
-  StarterEmploymentStatusNumberFormValidators, PinCodeInputValidators,
-  NationalInsuranceNumberInputValidators, PayRateInputValidators
+  PinCodeInputValidators,
+  NationalInsuranceNumberInputValidators, PayRateInputValidators, StarterEmploymentStatusInputValidators
 } from '../../../interfaces/forms';
 
 interface Props {
@@ -93,11 +93,6 @@ class Component extends React.Component<PropsFromConnect, State> {
           model="formsData.workForm"
           className="boss3-form"
           onSubmit={this.handleFormSubmit}
-          validators={{
-            starterEmploymentStatus: {
-              isFilled: isNotEmpty
-            }
-          } as StarterEmploymentStatusNumberFormValidators}
         >
           <label className="boss3-label">
             <span className="boss3-label__text">Staff Type</span>
@@ -232,7 +227,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <fieldset className="boss3-fields-set boss3-form_adjust_boss3-fields-set">
-            <h4 className="boss3-fields-set__header boss3-fields-set_adjust_header">
+            <h4 className="boss3-fields-set__header boss3-fields-set__header_type_required boss3-fields-set_adjust_header">
               Starter Employment Status Statements
             </h4>
 
@@ -247,6 +242,11 @@ class Component extends React.Component<PropsFromConnect, State> {
                     className="boss3-input"
                     model=".starterEmploymentStatus"
                     value="1"
+                    validateOn="change"
+                    persist={true}
+                    validators={{
+                      isFilled: isNotEmpty,
+                    } as StarterEmploymentStatusInputValidators}
                   />
                   <span className="boss3-label__text">I have supplied...</span>
                 </label>
@@ -257,6 +257,11 @@ class Component extends React.Component<PropsFromConnect, State> {
                     className="boss3-input"
                     model=".starterEmploymentStatus"
                     value="2"
+                    validateOn="change"
+                    persist={true}
+                    validators={{
+                      isFilled: isNotEmpty,
+                    } as StarterEmploymentStatusInputValidators}
                   />
                   <span className="boss3-label__text">I have supplied...</span>
                 </label>
@@ -267,6 +272,11 @@ class Component extends React.Component<PropsFromConnect, State> {
                     className="boss3-input"
                     model=".starterEmploymentStatus"
                     value="3"
+                    validateOn="change"
+                    persist={true}
+                    validators={{
+                      isFilled: isNotEmpty,
+                    } as StarterEmploymentStatusInputValidators}
                   />
                   <span className="boss3-label__text">I have supplied...</span>
                 </label>
@@ -277,6 +287,11 @@ class Component extends React.Component<PropsFromConnect, State> {
                     className="boss3-input"
                     model=".starterEmploymentStatus"
                     value="4"
+                    validateOn="change"
+                    persist={true}
+                    validators={{
+                      isFilled: isNotEmpty,
+                    } as StarterEmploymentStatusInputValidators}
                   />
                   <span className="boss3-label__text">I have supplied...</span>
                 </label>
@@ -287,6 +302,11 @@ class Component extends React.Component<PropsFromConnect, State> {
                     className="boss3-input"
                     model=".starterEmploymentStatus"
                     value="5"
+                    validateOn="change"
+                    persist={true}
+                    validators={{
+                      isFilled: isNotEmpty,
+                    } as StarterEmploymentStatusInputValidators}
                   />
                   <span className="boss3-label__text">I have supplied...</span>
                 </label>

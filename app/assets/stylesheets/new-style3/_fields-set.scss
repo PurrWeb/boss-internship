@@ -31,6 +31,15 @@
     background-color: map-get($boss-app-palette, item-background1);
     font-family: $boss-global-font-family;
     font-size: 14px;
+
+    &_type {
+      &_required {
+        &:after {
+          content: '*';
+          margin-left: 2px;
+        }
+      }
+    }
   }
 
   &__section-header {
