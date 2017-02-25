@@ -38,7 +38,7 @@ export const validateAllAddStaffMemberStepForms = () => {
   } as OfType<NationalInsuranceNumberInputValidators, boolean>));
 
   store.dispatch(actions.setValidity('formsData.workForm.starterEmploymentStatus', {
-    isFilled: isNotEmpty(workForm.payRate.value),
+    isFilled: isNotEmpty(workForm.starterEmploymentStatus.value),
   } as OfType<StarterEmploymentStatusInputValidators, boolean>));
 
   store.dispatch(actions.setValidity('formsData.workForm.payRate', {
