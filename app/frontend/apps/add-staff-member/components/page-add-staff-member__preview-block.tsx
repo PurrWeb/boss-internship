@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {pipe, omit, toPairs, map, addIndex} from 'ramda';
+import {pipe, omit, toPairs, map, addIndex, find} from 'ramda';
 import * as Select from 'react-select';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
@@ -19,7 +19,7 @@ import {validateAllAddStaffMemberStepForms} from '../../../helpers/form-validato
 import {isRequiredField, isWrongEmail, isPhoneNumber, formatInvalid} from '../../../constants/form-errors';
 
 type FieldDataPair = [string, FieldState];
-type ErrorPair = [string, boolean];
+type ValidityPair = [string, boolean];
 
 interface Props {
 }
@@ -47,9 +47,27 @@ const ErrorTextsMap: StringDict = {
 };
 
 class Component extends React.Component<PropsFromConnect, State> {
+  allUsedForms: FormStructure<{}>[];
+
+  constructor(props: PropsFromConnect) {
+    super(props);
+
+    this.allUsedForms = [
+      this.props.basicInformationFields,
+      this.props.uploadPhotoFormFields,
+      this.props.venueFormFields,
+      this.props.contactDetailsFormFields,
+      this.props.workFormFields
+    ];
+  }
+
   componentDidMount() {
     validateAllAddStaffMemberStepForms();
   }
+
+  /*componentWillReceiveProps(newProps: PropsFromConnect) {
+    validateAllAddStaffMemberStepForms();
+  }*/
 
   onFormComplete = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -62,25 +80,22 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(registrationStepBack);
   };
 
-  static renderListItemErrors(errors: BoolDict) {
-    return pipe< BoolDict, ErrorPair[], JSX.Element[], JSX.Element | null >(
+  static renderListItemErrors(validity: BoolDict) {
+    return pipe< BoolDict, ValidityPair[], JSX.Element[], JSX.Element | null >(
       toPairs,
-      addIndex(map)((errorsPair: ErrorPair, idx: number) => {
-        const errorText = ErrorTextsMap[errorsPair[0]];
-        return (
+      addIndex(map)((validityPair: ValidityPair, idx: number) => validityPair[1] ? null :
+        (
           <li key={idx} className="boss3-info-fields-block__field-error">
-            {errorText}
+            {ErrorTextsMap[validityPair[0]]}
           </li>
-        );
-      }),
-      (errorElements) => {
-        return errorElements.length ? (
-            <ul className="boss3-info-fields-block__field-errors">
-              {errorElements}
-            </ul>
-          ) : null;
-      }
-    )(errors);
+        )
+      ),
+      (errorElements) => errorElements.length ? (
+          <ul className="boss3-info-fields-block__field-errors">
+            {errorElements}
+          </ul>
+        ) : null
+    )(validity);
   }
 
   static getTextFromFieldValue(fieldValue: string | Select.Option | Date) {
@@ -105,7 +120,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           <li key={idx} className="boss3-info-fields-block__list-item">
             <span className="boss3-info-fields-block__field-name">{labelVal}</span>
             <span className="boss3-info-fields-block__field-value">{errorText}</span>
-            { Component.renderListItemErrors(pair[1].errors) }
+            { Component.renderListItemErrors(pair[1].validity) }
           </li>
         );
       })
@@ -130,6 +145,12 @@ class Component extends React.Component<PropsFromConnect, State> {
         </ul>
       </div>
     );
+  }
+
+  static isAllFormsValid(forms: FormStructure<{}>[]) {
+    return !find((form: FormStructure<{}>) => {
+      return form.$form.valid === false;
+    })(forms);
   }
 
   renderBasicInformationSummaryBlock() {
@@ -202,6 +223,16 @@ class Component extends React.Component<PropsFromConnect, State> {
     );
   }
 
+  renderContinueButton() {
+    return Component.isAllFormsValid(this.allUsedForms) ? (
+      <a href=""
+         onClick={this.onFormComplete}
+         className="boss3-button boss3-button_role_submit boss3-buttons-group_adjust_button"
+      >
+        Continue
+      </a>
+    ) : null;
+  }
 
   render() {
     return (
@@ -220,12 +251,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           >
             Back
           </a>
-          <a href=""
-             onClick={this.onFormComplete}
-             className="boss3-button boss3-button_role_submit boss3-buttons-group_adjust_button"
-          >
-            Continue
-          </a>
+          {this.renderContinueButton()}
         </div>
 
       </div>

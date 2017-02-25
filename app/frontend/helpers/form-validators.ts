@@ -9,7 +9,8 @@ import {
   StarterEmploymentStatusInputValidators, PhoneNumberInputValidators, NationalInsuranceNumberInputValidators
 } from '../interfaces/forms';
 import {OfType} from '../interfaces/index';
-import {isNotEmpty, isNationalInsuranceNumber} from './index';
+import {isNotEmpty, isNationalInsuranceNumber, isMobilePhoneSimpleCheck} from './index';
+import * as isEmail from 'validator/lib/isEmail';
 
 export const validateAllAddStaffMemberStepForms = () => {
   const {basicInformationForm, contactDetailsForm, workForm} =
@@ -21,15 +22,19 @@ export const validateAllAddStaffMemberStepForms = () => {
 
   store.dispatch(actions.setValidity('formsData.contactDetailsForm.email', {
     isFilled: isNotEmpty(contactDetailsForm.email.value),
-    isEmail: isNotEmpty(contactDetailsForm.email.value),
+    isEmail: (() => {
+      return contactDetailsForm.email.value ? isEmail(contactDetailsForm.email.value) : true;
+    })(),
   } as OfType<EmailInputValidators, boolean>));
 
   store.dispatch(actions.setValidity('formsData.contactDetailsForm.phoneNumber', {
-    isPhoneNumber: isNotEmpty(contactDetailsForm.phoneNumber.value)
+    isPhoneNumber: !contactDetailsForm.phoneNumber.value ||
+      isMobilePhoneSimpleCheck(contactDetailsForm.phoneNumber.value)
   } as OfType<PhoneNumberInputValidators, boolean>));
 
   store.dispatch(actions.setValidity('formsData.workForm.nationalInsuranceNumber', {
-    isNationalInsuranceNumber: isNationalInsuranceNumber(workForm.nationalInsuranceNumber.value),
+    isNationalInsuranceNumber: !workForm.nationalInsuranceNumber.value ||
+      isNationalInsuranceNumber(workForm.nationalInsuranceNumber.value),
   } as OfType<NationalInsuranceNumberInputValidators, boolean>));
 
   store.dispatch(actions.setValidity('formsData.workForm.starterEmploymentStatus', {
