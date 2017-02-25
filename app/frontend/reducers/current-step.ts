@@ -6,8 +6,6 @@ export type Structure = number;
 const currentStep = (state: Structure = 0, action: ActionWithPayload<Structure>): Structure => {
   if (action.type === CURRENT_STEP_CHANGED) {
     return action.payload;
-  } else if (action.type === STEPPING_BACK_REGISTRATION) {
-    return state - 1;
   } else {
     return state;
   }
