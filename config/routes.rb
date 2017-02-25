@@ -244,6 +244,10 @@ Rails.application.routes.draw do
           member do
             post :change_pin
           end
+
+          collection do
+            post :flagged
+          end
         end
       end
     end
