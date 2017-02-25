@@ -85,6 +85,10 @@ textarea.boss3-input {
         }
       }
     }
+
+    .boss3-input[type=radio] + &, .boss3-input[type=checkbox] + & {
+      display: inline;
+    }
   }
 
   &__tip {

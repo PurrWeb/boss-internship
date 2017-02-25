@@ -241,14 +241,14 @@ class Component extends React.Component<PropsFromConnect, State> {
                   <Control.radio
                     className="boss3-input"
                     model=".starterEmploymentStatus"
-                    value="1"
+                    value="staff_member[employment_status_p45_supplied]"
                     validateOn="change"
                     persist={true}
                     validators={{
                       isFilled: isNotEmpty,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss3-label__text">I have supplied...</span>
+                  <span className="boss3-label__text">I have supplied my P45 from my previous employer</span>
                 </label>
               </li>
               <li>
@@ -256,14 +256,14 @@ class Component extends React.Component<PropsFromConnect, State> {
                   <Control.radio
                     className="boss3-input"
                     model=".starterEmploymentStatus"
-                    value="2"
+                    value="staff_member[employment_status_a]"
                     validateOn="change"
                     persist={true}
                     validators={{
                       isFilled: isNotEmpty,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss3-label__text">I have supplied...</span>
+                  <span className="boss3-label__text">This is my first job since the 6th of April. I have not been receiving taxable Jobseeker's Allowance, Incapacity Benefit or a state/occupational pernsion.</span>
                 </label>
               </li>
               <li>
@@ -271,14 +271,14 @@ class Component extends React.Component<PropsFromConnect, State> {
                   <Control.radio
                     className="boss3-input"
                     model=".starterEmploymentStatus"
-                    value="3"
+                    value="staff_member[employment_status_b]"
                     validateOn="change"
                     persist={true}
                     validators={{
                       isFilled: isNotEmpty,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss3-label__text">I have supplied...</span>
+                  <span className="boss3-label__text">This is now my only job. Since the 6th of April I have had another job, received taxable Jobseeker's Allowance or Incapacity Benefit. I do not receive a state/occupational pension.</span>
                 </label>
               </li>
               <li>
@@ -286,14 +286,14 @@ class Component extends React.Component<PropsFromConnect, State> {
                   <Control.radio
                     className="boss3-input"
                     model=".starterEmploymentStatus"
-                    value="4"
+                    value="staff_member[employment_status_c]"
                     validateOn="change"
                     persist={true}
                     validators={{
                       isFilled: isNotEmpty,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss3-label__text">I have supplied...</span>
+                  <span className="boss3-label__text">I have another job or receive a state/occupational pernsion.</span>
                 </label>
               </li>
               <li>
@@ -301,14 +301,14 @@ class Component extends React.Component<PropsFromConnect, State> {
                   <Control.radio
                     className="boss3-input"
                     model=".starterEmploymentStatus"
-                    value="5"
+                    value="staff_member[employment_status_d]"
                     validateOn="change"
                     persist={true}
                     validators={{
                       isFilled: isNotEmpty,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss3-label__text">I have supplied...</span>
+                  <span className="boss3-label__text">I left a course of higher education before the 6th of April & received my first student loan instalment on or after the 1st of September 1998 & I have not fully repaid my student loan.</span>
                 </label>
               </li>
             </ul>
