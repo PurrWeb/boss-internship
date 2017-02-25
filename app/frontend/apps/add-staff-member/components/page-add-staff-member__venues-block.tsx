@@ -11,7 +11,7 @@ import {StoreStructure, VenueFormFields} from '../../../interfaces/store-models'
 import {setInputClass} from '../../../helpers/renderers';
 import {Venue} from '../../../interfaces/common-data-types';
 import venuesInfoBlockValidated from '../../../action-creators/venues-info-block-validated';
-import registrationStepBack from '../../../action-creators/registration-step-back';
+import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import {OfType} from '../../../interfaces/index';
 import SelectFixed from './react-select-fixed';
 
@@ -36,7 +36,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    this.props.dispatch(registrationStepBack);
+    this.props.dispatch(steppingBackRegistration);
   };
 
   static getVenueOptions(venueValues: Venue[]) {

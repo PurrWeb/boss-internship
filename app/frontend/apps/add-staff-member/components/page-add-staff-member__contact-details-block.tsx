@@ -13,7 +13,7 @@ import {isNotEmpty as isFilled, isMobilePhoneSimpleCheck} from '../../../helpers
 import {isRequiredField, isWrongEmail, isPhoneNumber} from '../../../constants/form-errors';
 import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
 import contactDetailsBlockValidated from '../../../action-creators/contact-details-block-validated';
-import registrationStepBack from '../../../action-creators/registration-step-back';
+import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import {EmailInputValidators, PhoneNumberInputValidators} from '../../../interfaces/forms';
 
 interface Props {
@@ -36,7 +36,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    this.props.dispatch(registrationStepBack);
+    this.props.dispatch(steppingBackRegistration);
   };
 
   render() {

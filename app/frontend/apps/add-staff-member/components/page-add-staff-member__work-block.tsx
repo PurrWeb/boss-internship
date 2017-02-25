@@ -12,7 +12,7 @@ import {setInputClass, renderErrorsBlock, renderErrorComponent} from '../../../h
 import {isRequiredField, formatInvalid} from '../../../constants/form-errors';
 import {isNationalInsuranceNumber, isPinCode, isNotEmptyComboBox, isNotEmpty} from '../../../helpers';
 import workInfoBlockValidated from '../../../action-creators/work-info-block-validated';
-import registrationStepBack from '../../../action-creators/registration-step-back';
+import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import SelectFixed from './react-select-fixed';
 import {StaffType, Payrate} from '../../../interfaces/common-data-types';
 import {
@@ -51,7 +51,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    this.props.dispatch(registrationStepBack);
+    this.props.dispatch(steppingBackRegistration);
   };
 
   renderSiaBadgeNumberInputBlock() {

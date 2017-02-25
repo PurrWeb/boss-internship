@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
 import avatarAdded from '../../../action-creators/avatar-added';
-import registrationStepBack from '../../../action-creators/registration-step-back';
+import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 
 interface Props {
 }
@@ -31,7 +31,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   onBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    this.props.dispatch(registrationStepBack);
+    this.props.dispatch(steppingBackRegistration);
   };
 
   render() {

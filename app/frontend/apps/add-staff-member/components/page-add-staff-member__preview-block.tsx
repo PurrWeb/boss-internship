@@ -7,7 +7,7 @@ import * as Select from 'react-select';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
-import registrationStepBack from '../../../action-creators/registration-step-back';
+import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import requestingStaffMemberSave from '../../../action-creators/requesting-staff-member-save';
 import {
   BasicInformationForm, UploadPhotoForm, VenueForm, ContactDetailsForm, WorkForm,
@@ -77,7 +77,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   onBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    this.props.dispatch(registrationStepBack);
+    this.props.dispatch(steppingBackRegistration);
   };
 
   static renderListItemErrors(validity: BoolDict) {
