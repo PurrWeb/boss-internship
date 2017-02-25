@@ -6,8 +6,10 @@ import handleContactDetailsBlockValidated from './handle-contact-details-block-v
 import handleVenuesInfoBlockValidated from './handle-venues-info-block-validated';
 import handleWorkInfoBlockValidated from './handle-work-info-block-validated';
 import requestStaffMemberSave from './request-staff-member-save';
+import changeCurrentStep from './change-current-step';
 
 export default combineEpics(
+  changeCurrentStep,
   requestStaffMemberSave,
   handleBasicInformationBlockValidated,
   handleContactDetailsBlockValidated,

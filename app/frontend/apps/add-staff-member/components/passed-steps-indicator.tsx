@@ -4,7 +4,7 @@ import {pipe, values, omit, find, not} from 'ramda';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
-import currentStepChanged from '../../../action-creators/current-step-changed';
+import changingCurrentStep from '../../../action-creators/changing-current-step';
 import {AppForms, FormStructure} from '../../../reducers/forms';
 import {AddStaffMemberSteps} from '../../../constants/other';
 import {FieldState} from 'react-redux-form';
@@ -57,7 +57,7 @@ const FormsWithRequiredFields = {
 
 class Component extends React.Component<PropsFromConnect, State> {
   onStepClick = (step: number) => {
-    const action = currentStepChanged(step);
+    const action = changingCurrentStep(step);
 
     this.props.dispatch(action);
   };
