@@ -46,7 +46,6 @@
       box-sizing: border-box;
       height: $menu-min-height;
       align-items: center;
-      cursor: pointer;
 
       @media screen and (max-width: 1024px) {
         height: 35px;
@@ -88,9 +87,13 @@
       &:after {
         display: none;
       }
+
+      &:hover {
+        color: $boss-dark-gray;
+      }
     }
 
-    .boss2-main-menu__button_state_active &, .boss2-main-menu__button:hover & {
+    .boss2-main-menu__button_state_active & {
       color: $boss-dark-gray;
     }
 
