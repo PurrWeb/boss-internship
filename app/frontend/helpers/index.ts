@@ -6,7 +6,13 @@ type MobilePhoneLocale = 'ar-DZ' | 'ar-SA' | 'ar-SY' | 'cs-CZ' | 'de-DE' | 'da-D
 
 export const isNotEmpty = (val = '') => !!val.length;
 
-export const isNotEmptyComboBox = (val: Select.Option) => !!val.value;
+export const isNotEmptyComboBox = (val: Select.Option | string) => {
+  if (typeof (val as Select.Option).value !== 'undefined') {
+    return !!(val as Select.Option).value;
+  } else {
+    return !!val;
+  }
+};
 
 export const isNationalInsuranceNumber = (val = '') =>
   val ?

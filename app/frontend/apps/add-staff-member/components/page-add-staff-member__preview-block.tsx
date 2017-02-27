@@ -3,7 +3,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {pipe, omit, toPairs, map, addIndex, find} from 'ramda';
-import * as Select from 'react-select';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
@@ -16,6 +15,7 @@ import {
 import {StringDict, Dict, BoolDict} from '../../../interfaces/index';
 import {FieldState} from 'react-redux-form';
 import {isRequiredField, isWrongEmail, isPhoneNumber, formatInvalid} from '../../../constants/form-errors';
+import validatingAllAddStaffMemberStepForms from '../../../action-creators/validating-all-add-staff-member-step-forms';
 
 type FieldDataPair = [string, FieldState];
 type ValidityPair = [string, boolean];
@@ -60,6 +60,10 @@ class Component extends React.Component<PropsFromConnect, State> {
     ];
   }
 
+  componentDidMount() {
+    this.props.dispatch(validatingAllAddStaffMemberStepForms);
+  }
+
   onFormComplete = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
@@ -89,11 +93,9 @@ class Component extends React.Component<PropsFromConnect, State> {
     )(validity);
   }
 
-  static getTextFromFieldValue(fieldValue: string | Select.Option | Date) {
+  static getTextFromFieldValue(fieldValue: string | Date) {
     if (typeof fieldValue === 'string') {
       return fieldValue;
-    } else if (typeof (fieldValue as Select.Option).value !== 'undefined') {
-      return (fieldValue as Select.Option).value;
     } else {
       return String(fieldValue);
     }

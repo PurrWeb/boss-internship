@@ -35,6 +35,8 @@ interface State {
   readonly isMounted: boolean;
 }
 
+const STAFF_TYPE_SECURITY_IDX = '11';
+
 class Component extends React.Component<PropsFromConnect, State> {
   handleFormSubmit = (formModelData: OfType<WorkFormFields, any>) => {
     const action = workInfoBlockValidated(formModelData);
@@ -336,7 +338,7 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
     staffTypeOptions: Component.getStaffTypeOptions(state.app.staffTypeIds),
     payrateOptions: Component.getPayrateOptions(state.app.payrateValues),
-    isStaffTypeSecurity: (state.formsData.workForm.staffType as Select.Option).value === 11
+    isStaffTypeSecurity: state.formsData.workForm.staffType === STAFF_TYPE_SECURITY_IDX
   };
 };
 

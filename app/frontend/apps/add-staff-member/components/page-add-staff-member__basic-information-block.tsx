@@ -28,14 +28,6 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 interface State {
 }
 
-function changeAction(model: string, value: Select.Option): ModelAction {
-  return {
-    type: 'rrf/change',
-    model,
-    value: value.value
-  };
-}
-
 class Component extends React.Component<PropsFromConnect, State> {
   handleFormSubmit = (formModelData: OfType<BasicInformationFormFields, any>) => {
     const action = basicInformationBlockValidated(formModelData);
