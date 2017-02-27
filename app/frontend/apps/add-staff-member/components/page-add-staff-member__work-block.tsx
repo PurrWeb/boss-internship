@@ -13,12 +13,12 @@ import {isRequiredField, formatInvalid} from '../../../constants/form-errors';
 import {isNationalInsuranceNumber, isPinCode, isNotEmptyComboBox, isNotEmpty} from '../../../helpers';
 import workInfoBlockValidated from '../../../action-creators/work-info-block-validated';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
-import SelectFixed from './react-select-fixed';
 import {StaffType, Payrate} from '../../../interfaces/common-data-types';
 import {
   PinCodeInputValidators,
   NationalInsuranceNumberInputValidators, PayRateInputValidators, StarterEmploymentStatusInputValidators
 } from '../../../interfaces/forms';
+import SelectControl from './select-control';
 
 interface Props {
 }
@@ -96,17 +96,12 @@ class Component extends React.Component<PropsFromConnect, State> {
         >
           <label className="boss3-label">
             <span className="boss3-label__text">Staff Type</span>
-            <Control
-              component={SelectFixed}
-              className="boss3-input"
+            <SelectControl
               model=".staffType"
+              className="boss3-input"
+              options={this.props.staffTypeOptions}
               mapProps={{
-                className: setInputClass,
-                options: () => this.props.staffTypeOptions,
                 value: (props) => props.modelValue,
-                onChange: (props) => {
-                  return props.onChange;
-                }
               }}
             />
           </label>
@@ -197,20 +192,14 @@ class Component extends React.Component<PropsFromConnect, State> {
 
           <label className="boss3-label">
             <span className="boss3-label__text boss3-label__text_type_required">Pay Rate</span>
-            <Control
-              component={SelectFixed}
-              className="boss3-input"
+            <SelectControl
               model=".payRate"
+              className="boss3-input"
+              options={this.props.payrateOptions}
               mapProps={{
-                className: setInputClass,
-                options: () => this.props.payrateOptions,
                 value: (props) => props.modelValue,
-                onChange: (props) => {
-                  return props.onChange;
-                }
               }}
               validateOn="change"
-              persist={true}
               validators={{
                 isFilled: isNotEmptyComboBox,
               } as PayRateInputValidators}

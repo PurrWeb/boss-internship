@@ -13,7 +13,7 @@ import {Venue} from '../../../interfaces/common-data-types';
 import venuesInfoBlockValidated from '../../../action-creators/venues-info-block-validated';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import {OfType} from '../../../interfaces/index';
-import SelectFixed from './react-select-fixed';
+import SelectControl from './select-control';
 
 interface Props {
 }
@@ -53,34 +53,24 @@ class Component extends React.Component<PropsFromConnect, State> {
         >
           <label className="boss3-label">
             <span className="boss3-label__text">Main Venue</span>
-            <Control
-              component={SelectFixed}
-              className="boss3-input"
+            <SelectControl
               model=".mainVenue"
+              className="boss3-input"
+              options={this.props.venueOptions}
               mapProps={{
-                className: setInputClass,
-                options: () => this.props.venueOptions,
                 value: (props) => props.modelValue,
-                onChange: (props) => {
-                  return props.onChange;
-                }
               }}
             />
           </label>
 
           <label className="boss3-label">
             <span className="boss3-label__text">Other Venues</span>
-            <Control
-              component={SelectFixed}
-              className="boss3-input"
+            <SelectControl
               model=".otherVenues"
+              className="boss3-input"
+              options={this.props.venueOptions}
               mapProps={{
-                className: setInputClass,
-                options: () => this.props.venueOptions,
                 value: (props) => props.modelValue,
-                onChange: (props) => {
-                  return props.onChange;
-                }
               }}
             />
           </label>
