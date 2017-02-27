@@ -10,7 +10,7 @@ import {StoreStructure, WorkFormFields} from '../../../interfaces/store-models';
 import {OfType} from '../../../interfaces/index';
 import {setInputClass, renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
 import {isRequiredField, formatInvalid} from '../../../constants/form-errors';
-import {isNationalInsuranceNumber, isPinCode, isNotEmptyComboBox, isNotEmpty} from '../../../helpers';
+import {isNationalInsuranceNumber, isPinCode, isNotEmptyInput} from '../../../helpers';
 import workInfoBlockValidated from '../../../action-creators/work-info-block-validated';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import {StaffType, Payrate} from '../../../interfaces/common-data-types';
@@ -203,7 +203,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               }}
               validateOn="change"
               validators={{
-                isFilled: isNotEmptyComboBox,
+                isFilled: isNotEmptyInput,
               } as PayRateInputValidators}
             />
             <Errors
@@ -236,7 +236,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                     validateOn="change"
                     persist={true}
                     validators={{
-                      isFilled: isNotEmpty,
+                      isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
                   <span className="boss3-label__text">I have supplied my P45 from my previous employer</span>
@@ -251,7 +251,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                     validateOn="change"
                     persist={true}
                     validators={{
-                      isFilled: isNotEmpty,
+                      isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
                   <span className="boss3-label__text">This is my first job since the 6th of April. I have not been receiving taxable Jobseeker's Allowance, Incapacity Benefit or a state/occupational pernsion.</span>
@@ -266,7 +266,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                     validateOn="change"
                     persist={true}
                     validators={{
-                      isFilled: isNotEmpty,
+                      isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
                   <span className="boss3-label__text">This is now my only job. Since the 6th of April I have had another job, received taxable Jobseeker's Allowance or Incapacity Benefit. I do not receive a state/occupational pension.</span>
@@ -281,7 +281,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                     validateOn="change"
                     persist={true}
                     validators={{
-                      isFilled: isNotEmpty,
+                      isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
                   <span className="boss3-label__text">I have another job or receive a state/occupational pernsion.</span>
@@ -296,7 +296,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                     validateOn="change"
                     persist={true}
                     validators={{
-                      isFilled: isNotEmpty,
+                      isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
                   <span className="boss3-label__text">I left a course of higher education before the 6th of April & received my first student loan instalment on or after the 1st of September 1998 & I have not fully repaid my student loan.</span>

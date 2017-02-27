@@ -9,7 +9,7 @@ import * as Select from 'react-select';
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, BasicInformationFormFields} from '../../../interfaces/store-models';
 import {OfType} from '../../../interfaces/index';
-import {isNotEmptyComboBox} from '../../../helpers';
+import {isNotEmptyInput} from '../../../helpers';
 import {isRequiredField} from '../../../constants/form-errors';
 import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
 import basicInformationBlockValidated from '../../../action-creators/basic-information-block-validated';
@@ -83,7 +83,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               }}
               validateOn="change"
               validators={{
-                isFilled: isNotEmptyComboBox,
+                isFilled: isNotEmptyInput,
               } as GenderInputValidators}
             />
             <Errors

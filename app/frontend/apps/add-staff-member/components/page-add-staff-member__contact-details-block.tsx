@@ -9,7 +9,7 @@ import * as isEmail from 'validator/lib/isEmail';
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, ContactDetailsFormFields} from '../../../interfaces/store-models';
 import {OfType} from '../../../interfaces/index';
-import {isNotEmpty as isFilled, isMobilePhoneSimpleCheck} from '../../../helpers';
+import {isNotEmptyInput as isFilled, isMobilePhoneSimpleCheck} from '../../../helpers';
 import {isRequiredField, isWrongEmail, isPhoneNumber} from '../../../constants/form-errors';
 import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
 import contactDetailsBlockValidated from '../../../action-creators/contact-details-block-validated';
