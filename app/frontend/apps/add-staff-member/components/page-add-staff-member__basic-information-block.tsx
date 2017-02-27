@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Control, Form, Errors} from 'react-redux-form';
+import {Control, Form, Errors, ModelAction} from 'react-redux-form';
 import * as DatePicker from 'react-datepicker';
 import * as Select from 'react-select';
 
@@ -26,6 +26,14 @@ interface MappedProps {
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 interface State {
+}
+
+function changeAction(model: string, value: Select.Option): ModelAction {
+  return {
+    type: 'rrf/change',
+    model,
+    value: value.value
+  };
 }
 
 class Component extends React.Component<PropsFromConnect, State> {
@@ -77,6 +85,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               component={SelectFixed}
               className="boss3-input"
               model=".gender"
+              changeAction={ changeAction }
               mapProps={{
                 className: setInputClass,
                 options: () => this.props.genderOptions,
