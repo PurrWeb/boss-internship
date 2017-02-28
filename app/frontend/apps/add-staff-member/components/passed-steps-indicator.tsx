@@ -78,7 +78,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       const isPrevRequiredForm = formStepIdx < currentStep && FormsWithRequiredFields[formStepIdx];
 
       if (isPrevRequiredForm) {
-        return formData.$form.touched && !isFormInvalid;
+        return formData.$form.valid;
       } else {
         return true;
       }
