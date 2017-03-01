@@ -20,6 +20,7 @@ interface State {
   readonly toShowImage: boolean;
   readonly validationMessage: string;
   readonly sourceImage?: string;
+  readonly croppedImage?: string;
 }
 
 const VALID_IMAGE_FILE_EXTENSIONS = ['jpeg', 'jpg', 'png'];
@@ -29,7 +30,8 @@ class Component extends React.Component<PropsFromConnect, State> {
   state = {
     toShowImage: false,
     validationMessage: '',
-    sourceImage: ''
+    sourceImage: '',
+    croppedImage: ''
   };
 
   fileInput: HTMLInputElement;
@@ -122,10 +124,13 @@ class Component extends React.Component<PropsFromConnect, State> {
     );
   }
 
-  _crop() {
-    // image in dataUrl
-    // console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
-  }
+  crop = () => {
+    const croppedImage = (this.refs.cropper as Cropper).getCroppedCanvas().toDataURL();
+
+    this.setState({
+      croppedImage
+    });
+  };
 
   renderCropper() {
     return this.state.sourceImage ? (
@@ -133,11 +138,21 @@ class Component extends React.Component<PropsFromConnect, State> {
         ref="cropper"
         src={this.state.sourceImage}
         style={{height: 400, width: 400}}
-        aspectRatio={16 / 9}
-        guides={false}
-        crop={this._crop.bind(this)}
+        aspectRatio={1}
+        guides={true}
+        crop={this.crop}
       />
     ) : null;
+  }
+
+  renderCroppedImagePreview() {
+    return (
+      <img
+        width="200"
+        height="200"
+        src={this.state.croppedImage}
+      />
+    );
   }
 
   render() {
@@ -145,6 +160,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       <div className="boss3-forms-block">
 
         {this.renderCropper()}
+        {this.renderCroppedImagePreview()}
 
         {this.getStaffImageInput()}
 
