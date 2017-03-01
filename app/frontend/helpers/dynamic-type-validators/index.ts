@@ -14,7 +14,6 @@ export const validateResponse = (format: InputFormat, ajaxData: AjaxResponse) =>
   const validationRes = t.validate(ajaxData.response, format);
 
   if (!validationRes.isValid()) {
-    console.log('validationRes', validationRes);
     const url = ajaxData.xhr.responseURL;
 
     pipe< string, string, ActionWithPayload<GlobalError>, void >(

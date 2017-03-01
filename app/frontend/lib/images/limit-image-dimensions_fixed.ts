@@ -5,7 +5,7 @@ import getImageDimensions from './get-image-dimensions_fixed';
  Resizes image if it's bigger than maxWidth x maxHeight.
  Otherwise just calls callback(dataUrl) with the original image.
  */
-export default function limitImageDimensions(dataUrl: any, maxWidth: number, maxHeight: number, callback: (data: any) => void) {
+export default function limitImageDimensions(dataUrl: string, maxWidth: number, maxHeight: number, callback: (data: string) => void) {
   getImageDimensions(dataUrl, function(dimensions){
     if (dimensions.width <= maxWidth && dimensions.height <= maxHeight) {
       callback(dataUrl);

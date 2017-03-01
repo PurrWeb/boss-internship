@@ -1,6 +1,6 @@
 // http://stackoverflow.com/questions/2516117/how-to-scale-an-image-in-data-uri-format-in-javascript-real-scaling-not-usin
 
-export default function resizeImage(dataUrl: any, width: number, height: number, callback: (data: any) => void) {
+export default function resizeImage(dataUrl: string, width: number, height: number, callback: (data: any) => void) {
   const sourceImage: HTMLImageElement = new Image();
 
   sourceImage.onload = function () {

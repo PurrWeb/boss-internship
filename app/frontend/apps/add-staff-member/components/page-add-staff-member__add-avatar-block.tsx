@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import Cropper from 'react-cropper';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
@@ -18,7 +19,7 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 interface State {
   readonly toShowImage: boolean;
   readonly validationMessage: string;
-  readonly sourceImage: any;
+  readonly sourceImage?: string;
 }
 
 const VALID_IMAGE_FILE_EXTENSIONS = ['jpeg', 'jpg', 'png'];
@@ -28,7 +29,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   state = {
     toShowImage: false,
     validationMessage: '',
-    sourceImage: null
+    sourceImage: ''
   };
 
   fileInput: HTMLInputElement;
@@ -71,17 +72,16 @@ class Component extends React.Component<PropsFromConnect, State> {
     return isExtensionValid;
   }
 
-  onReadFile = (dataUrl: any) => {
+  onReadFile = (dataUrl: string) => {
     // iOS has a bug where the image gets squashed in the canvas,
     // if it uses too much memory
     limitImageDimensions(
       dataUrl,
       MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
       MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
-      (data: any) => this.setState({
+      (data?: string) => this.setState({
         sourceImage: data
-      })
-    );
+      }));
   };
 
   onFileSelected() {
@@ -103,7 +103,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
     reader.addEventListener('load', () => {
       const dataUrl = reader.result;
-      this.onReadFile(dataUrl);
+      this.onReadFile(dataUrl || '');
     });
     reader.readAsDataURL(file);
   }
@@ -122,9 +122,29 @@ class Component extends React.Component<PropsFromConnect, State> {
     );
   }
 
+  _crop() {
+    // image in dataUrl
+    // console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
+  }
+
+  renderCropper() {
+    return this.state.sourceImage ? (
+      <Cropper
+        ref="cropper"
+        src={this.state.sourceImage}
+        style={{height: 400, width: 400}}
+        aspectRatio={16 / 9}
+        guides={false}
+        crop={this._crop.bind(this)}
+      />
+    ) : null;
+  }
+
   render() {
     return (
       <div className="boss3-forms-block">
+
+        {this.renderCropper()}
 
         {this.getStaffImageInput()}
 

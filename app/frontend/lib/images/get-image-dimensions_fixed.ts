@@ -6,7 +6,7 @@ interface Dimensions {
   readonly aspectRatio: number;
 }
 
-export default function getImageDimensions(dataUrl: any, callback: (dimensions: Dimensions) => void) {
+export default function getImageDimensions(dataUrl: string, callback: (dimensions: Dimensions) => void) {
     const img: HTMLImageElement = new Image;
 
     img.onload = function() {
