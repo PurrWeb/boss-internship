@@ -1,5 +1,3 @@
-/// <reference path="../../../custom-typings/react-redux-form.d.ts" />
-
 import * as React from 'react';
 import {connect} from 'react-redux';
 
@@ -7,6 +5,7 @@ import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
 import avatarAdded from '../../../action-creators/avatar-added';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
+import limitImageDimensions from '../../../lib/images/limit-image-dimensions_fixed';
 
 interface Props {
 }
@@ -17,10 +16,23 @@ interface MappedProps {
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 interface State {
-  readonly isMounted: boolean;
+  readonly toShowImage: boolean;
+  readonly validationMessage: string;
+  readonly sourceImage: any;
 }
 
+const VALID_IMAGE_FILE_EXTENSIONS = ['jpeg', 'jpg', 'png'];
+const MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING = 700;
+
 class Component extends React.Component<PropsFromConnect, State> {
+  state = {
+    toShowImage: false,
+    validationMessage: '',
+    sourceImage: null
+  };
+
+  fileInput: HTMLInputElement;
+
   onFormComplete = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
@@ -34,9 +46,93 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(steppingBackRegistration);
   };
 
+  onAddAvatarClick = () => {
+    this.setState({
+      toShowImage: true
+    });
+  };
+
+  getSupportedFormatsString = () => {
+    const lastExtension = VALID_IMAGE_FILE_EXTENSIONS[VALID_IMAGE_FILE_EXTENSIONS.length - 1];
+    const extensionsExceptLast = VALID_IMAGE_FILE_EXTENSIONS.filter((extension) => extension !== lastExtension);
+
+    return extensionsExceptLast.join(', ') + ' or ' + lastExtension;
+  };
+
+  validateFile(file: File) {
+    const extensionMatch = file.name.match(/\.([^.]+)$/);
+    const fileExtension = extensionMatch ? extensionMatch[1].toLowerCase() : '';
+    const isExtensionValid = VALID_IMAGE_FILE_EXTENSIONS.indexOf(fileExtension) !== -1;
+    const validationMessage = isExtensionValid ? '' : `File extension "${fileExtension}"
+                is not supported. Use a ${this.getSupportedFormatsString()} file.`;
+
+    this.setState({validationMessage: validationMessage});
+
+    return isExtensionValid;
+  }
+
+  onReadFile = (dataUrl: any) => {
+    // iOS has a bug where the image gets squashed in the canvas,
+    // if it uses too much memory
+    limitImageDimensions(
+      dataUrl,
+      MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
+      MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
+      (data: any) => this.setState({
+        sourceImage: data
+      })
+    );
+  };
+
+  onFileSelected() {
+    const files = this.fileInput.files;
+
+    if (!files || files.length === 0) {
+      // apparently it is sometimes possible to select 0 files.
+      // In that case reset the validation message and do nothing else.
+      this.setState({validationMessage: ''});
+      return;
+    }
+
+    const file = files[0];
+    if (!this.validateFile(file)) {
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+      const dataUrl = reader.result;
+      this.onReadFile(dataUrl);
+    });
+    reader.readAsDataURL(file);
+  }
+
+  getStaffImageInput() {
+    return (
+      <div>
+        <input type="file"
+            className="form-control"
+            onChange={() => this.onFileSelected()}
+            ref={(ref) => {
+              this.fileInput = ref;
+            }}
+         />
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="boss3-forms-block">
+
+        {this.getStaffImageInput()}
+
+        <a href=""
+           onClick={this.onAddAvatarClick}
+        >
+          add avatar
+        </a>
 
         <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
           <a href=""
