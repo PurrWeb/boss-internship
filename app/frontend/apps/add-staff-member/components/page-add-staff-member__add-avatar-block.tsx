@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import Cropper from 'react-cropper';
+import SyntheticEvent = React.MouseEvent;
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
@@ -47,12 +48,6 @@ class Component extends React.Component<PropsFromConnect, State> {
   onBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     this.props.dispatch(steppingBackRegistration);
-  };
-
-  onAddAvatarClick = () => {
-    this.setState({
-      toShowImage: true
-    });
   };
 
   getSupportedFormatsString = () => {
@@ -110,19 +105,26 @@ class Component extends React.Component<PropsFromConnect, State> {
     reader.readAsDataURL(file);
   }
 
-  getStaffImageInput() {
+  renderAddImageInput() {
     return (
       <div>
         <input type="file"
-            className="form-control"
-            onChange={() => this.onFileSelected()}
-            ref={(ref) => {
-              this.fileInput = ref;
-            }}
+          className="form-control"
+          style={{visibility: 'hidden'}}
+          onChange={() => this.onFileSelected()}
+          ref={(ref) => {
+            this.fileInput = ref;
+          }}
          />
       </div>
     );
   }
+
+  triggerLoadFileClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+
+    this.fileInput.click();
+  };
 
   crop = () => {
     const croppedImageUrl = (this.refs.cropper as Cropper).getCroppedCanvas().toDataURL();
@@ -160,16 +162,27 @@ class Component extends React.Component<PropsFromConnect, State> {
     return (
       <div className="boss3-forms-block">
 
+        {this.renderAddImageInput()}
+
+        <div className="boss3-add-avatar-block">
+          <div className="boss3-add-avatar-block__new-image-placeholder"
+               onClick={this.triggerLoadFileClick}
+          />
+
+          <a href=""
+             className="boss3-button boss3-button_role_file boss3-add-avatar-block_adjust_file-button"
+             onClick={this.triggerLoadFileClick}
+          >
+            Choose File
+          </a>
+
+          <span className="boss3-add-avatar-block__file-label">
+            Drag and drop files here or click choose file to upload photo
+          </span>
+        </div>
+
         {this.renderCropper()}
         {this.renderCroppedImagePreview()}
-
-        {this.getStaffImageInput()}
-
-        <a href=""
-           onClick={this.onAddAvatarClick}
-        >
-          add avatar
-        </a>
 
         <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
           <a href=""

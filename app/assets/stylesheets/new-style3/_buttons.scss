@@ -110,6 +110,13 @@
       background-color: $background-color;
       @include button-hover-behavior($background-color: $background-color);
     }
+
+    &_file {
+      $background-color: map-get($boss-app-palette, secondary);
+
+      background-color: $background-color;
+      @include button-hover-behavior($background-color: $background-color);
+    }
   }
 
   &_type {
