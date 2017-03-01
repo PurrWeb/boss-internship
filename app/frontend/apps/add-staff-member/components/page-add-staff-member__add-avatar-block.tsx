@@ -7,11 +7,13 @@ import {StoreStructure} from '../../../interfaces/store-models';
 import avatarAdded from '../../../action-creators/avatar-added';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import limitImageDimensions from '../../../lib/images/limit-image-dimensions_fixed';
+import avatarPreviewChanged from '../../../action-creators/avatar-preview-changed';
 
 interface Props {
 }
 
 interface MappedProps {
+  readonly avatarPreview: string;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -20,7 +22,6 @@ interface State {
   readonly toShowImage: boolean;
   readonly validationMessage: string;
   readonly sourceImage?: string;
-  readonly croppedImage?: string;
 }
 
 const VALID_IMAGE_FILE_EXTENSIONS = ['jpeg', 'jpg', 'png'];
@@ -31,7 +32,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     toShowImage: false,
     validationMessage: '',
     sourceImage: '',
-    croppedImage: ''
   };
 
   fileInput: HTMLInputElement;
@@ -125,11 +125,10 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   crop = () => {
-    const croppedImage = (this.refs.cropper as Cropper).getCroppedCanvas().toDataURL();
+    const croppedImageUrl = (this.refs.cropper as Cropper).getCroppedCanvas().toDataURL();
+    const action = avatarPreviewChanged(croppedImageUrl);
 
-    this.setState({
-      croppedImage
-    });
+    this.props.dispatch(action);
   };
 
   renderCropper() {
@@ -146,13 +145,15 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   renderCroppedImagePreview() {
-    return (
+    const {avatarPreview} = this.props;
+
+    return avatarPreview ? (
       <img
         width="200"
         height="200"
-        src={this.state.croppedImage}
+        src={avatarPreview}
       />
-    );
+    ) : '';
   }
 
   render() {
@@ -191,7 +192,9 @@ class Component extends React.Component<PropsFromConnect, State> {
 }
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
-  return {};
+  return {
+    avatarPreview: state.app.avatarPreview
+  };
 };
 
 export default connect(

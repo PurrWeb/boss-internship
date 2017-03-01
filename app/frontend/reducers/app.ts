@@ -10,8 +10,10 @@ import venueValues, {Structure as VenueValuesStructure} from './venue-values';
 import payrateValues, {Structure as PayrateValuesStructure} from './payrate-values';
 import staffTypeIds, {Structure as StaffTypeIdsStructure} from './staff-type-ids';
 import genderValues, {Structure as GenderValuesStructure} from './gender-values';
+import avatarPreview, {Structure as AvatarPreviewStructure} from './avatar-preview';
 
 export interface Structure {
+  readonly avatarPreview: AvatarPreviewStructure;
   readonly completedSteps: CompletedStepsStructure;
   readonly currentStep: CurrentStepStructure;
   readonly staffMemberSavePending: staffMemberSavePendingStructure;
@@ -24,6 +26,7 @@ export interface Structure {
 }
 
 const reducers: ReducersOfType<Structure> = {
+  avatarPreview,
   completedSteps,
   currentStep,
   staffMemberSavePending,

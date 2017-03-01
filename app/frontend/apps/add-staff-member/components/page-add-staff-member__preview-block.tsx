@@ -24,8 +24,8 @@ interface Props {
 }
 
 interface MappedProps {
+  readonly avatarPreview: string;
   readonly basicInformationFields: BasicInformationForm;
-  readonly uploadPhotoFormFields: UploadPhotoForm;
   readonly venueFormFields: VenueForm;
   readonly contactDetailsFormFields: ContactDetailsForm;
   readonly workFormFields: WorkForm;
@@ -53,7 +53,6 @@ class Component extends React.Component<PropsFromConnect, State> {
 
     this.allUsedForms = [
       this.props.basicInformationFields,
-      this.props.uploadPhotoFormFields,
       this.props.venueFormFields,
       this.props.contactDetailsFormFields,
       this.props.workFormFields
@@ -102,7 +101,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   static renderInformationList(blockData: FormStructure<StringDict>, labelsMap: StringDict) {
-    return pipe< FormStructure<StringDict>, Dict<FieldState>, FieldDataPair[], JSX.Element[] >(
+    const listElements = pipe< FormStructure<StringDict>, Dict<FieldState>, FieldDataPair[], JSX.Element[] >(
       omit(['$form']),
       toPairs,
       addIndex(map)((pair: FieldDataPair, idx: number) => {
@@ -118,9 +117,15 @@ class Component extends React.Component<PropsFromConnect, State> {
         );
       })
     )(blockData);
+
+    return (
+      <ul className="boss3-info-fields-block">
+        {listElements}
+      </ul>
+    );
   }
 
-  static renderInformationBlock(formFields: FormStructure<{}>, labelsMap: StringDict, header: string, index?: number) {
+  static renderInformationBlock(content: JSX.Element | null, header: string, index?: number) {
     const isWithIndex: boolean = index !== undefined;
     const withIndexClass = isWithIndex ? 'boss3-info-block_type_with-index' : '';
 
@@ -133,9 +138,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         {indexElement}
         <h3 className="boss3-info-block__header">{header}</h3>
 
-        <ul className="boss3-info-fields-block">
-          {Component.renderInformationList(formFields, labelsMap)}
-        </ul>
+        {content}
       </div>
     );
   }
@@ -147,59 +150,72 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   renderBasicInformationSummaryBlock() {
-    return Component.renderInformationBlock(
-      this.props.basicInformationFields,
+    const content = Component.renderInformationList(this.props.basicInformationFields,
       {
         firstName: 'First Name',
         surname: 'Surname',
         gender: 'Gender',
         dateOfBirth: 'Date of Birth'
-      },
+      });
+
+    return Component.renderInformationBlock(
+      content,
       'Basic Information',
       1
     );
   }
 
   renderAvatarSummaryBlock() {
+    const {avatarPreview} = this.props;
+
+    const content = avatarPreview ? (
+      <img
+        src={avatarPreview}
+        className="boss3-info-block__image"
+      />
+    ) : null;
+
     return Component.renderInformationBlock(
-      this.props.uploadPhotoFormFields,
-      {},
+      content,
       'Avatar',
       2
     );
   }
 
   renderVenueSummaryBlock() {
-    return Component.renderInformationBlock(
-      this.props.venueFormFields,
+    const content = Component.renderInformationList(this.props.venueFormFields,
       {
         mainVenue: 'Main Venue',
         otherVenues: 'Other Venues',
         startsAt: 'Starts At'
-      },
+      });
+
+    return Component.renderInformationBlock(
+      content,
       'Venue',
       3
     );
   }
 
   renderAddressSummaryBlock() {
-    return Component.renderInformationBlock(
-      this.props.contactDetailsFormFields,
+    const content = Component.renderInformationList(this.props.contactDetailsFormFields,
       {
         email: 'Email',
         address: 'Address',
         country: 'Country',
         postCode: 'Post Code',
         phoneNumber: 'Phone Number'
-      },
+      });
+
+    return Component.renderInformationBlock(
+      content,
       'Address',
       4
     );
   }
 
   renderWorkSummaryBlock() {
-    return Component.renderInformationBlock(
-      this.props.workFormFields,
+    const content = Component.renderInformationList(this.props.workFormFields,
       {
         staffType: 'Staff Type',
         siaBadgeNumber: 'Sia Badge Number',
@@ -210,7 +226,10 @@ class Component extends React.Component<PropsFromConnect, State> {
         hoursPreference: 'Hours Preference',
         payRate: 'Pay Rate',
         starterEmploymentStatus: 'Starter Employment Status'
-      },
+      });
+
+    return Component.renderInformationBlock(
+      content,
       'Work',
       5
     );
@@ -256,8 +275,8 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   const {forms} = state.formsData;
 
   return {
+    avatarPreview: state.app.avatarPreview,
     basicInformationFields: forms.basicInformationForm,
-    uploadPhotoFormFields: forms.uploadPhotoForm,
     venueFormFields: forms.venueForm,
     contactDetailsFormFields: forms.contactDetailsForm,
     workFormFields: forms.workForm

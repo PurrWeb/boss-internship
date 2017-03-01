@@ -52,6 +52,12 @@
     line-height: $index-side-size;
     background-color: map-get($boss-app-palette, primary);
   }
+
+  &__image {
+    display: block;
+    width: 150px;
+    height: 150px;
+  }
 }
 
 .boss3-page-content {
