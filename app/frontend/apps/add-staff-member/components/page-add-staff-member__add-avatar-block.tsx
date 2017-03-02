@@ -125,6 +125,18 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.fileInput.click();
   };
 
+  onRotateLeftClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    (this.refs.cropper as Cropper).rotate(-90);
+  };
+
+  onRotateRightClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    (this.refs.cropper as Cropper).rotate(90);
+  };
+
   crop = () => {
     const croppedImageUrl = (this.refs.cropper as Cropper).getCroppedCanvas().toDataURL();
     const action = avatarPreviewChanged(croppedImageUrl);
@@ -151,11 +163,13 @@ class Component extends React.Component<PropsFromConnect, State> {
           <div className="boss3-buttons-group boss3-edit-image-block_adjust_buttons-group">
             <a href=""
                className="boss3-button boss3-buttons-group_adjust_button"
+               onClick={this.onRotateLeftClick}
             >
               Rotate Left
             </a>
             <a href=""
                className="boss3-button boss3-buttons-group_adjust_button"
+               onClick={this.onRotateRightClick}
             >
               Rotate Right
             </a>
