@@ -1,14 +1,17 @@
+/// <reference path="../../../custom-typings/react-redux-form.d.ts" />
+
 import * as React from 'react';
 import {connect} from 'react-redux';
 import Cropper from 'react-cropper';
 import SyntheticEvent = React.MouseEvent;
+import {Control, Form, Errors} from 'react-redux-form';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
-import {StoreStructure} from '../../../interfaces/store-models';
-import avatarAdded from '../../../action-creators/avatar-added';
+import {StoreStructure, UploadPhotoFormFields} from '../../../interfaces/store-models';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import limitImageDimensions from '../../../lib/images/limit-image-dimensions_fixed';
 import avatarPreviewChanged from '../../../action-creators/avatar-preview-changed';
+import {OfType} from '../../../interfaces/index';
 
 interface Props {
 }
@@ -37,16 +40,13 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   fileInput: HTMLInputElement;
 
-  onFormComplete = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-
-    const action = avatarAdded('');
-
-    this.props.dispatch(action);
+  handleFormSubmit = (formModelData: OfType<UploadPhotoFormFields, any>) => {
+    // const action = contactDetailsBlockValidated(formModelData);
+    //
+    // this.props.dispatch(action);
   };
 
-  onBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
+  onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
     this.props.dispatch(steppingBackRegistration);
   };
 
@@ -81,7 +81,8 @@ class Component extends React.Component<PropsFromConnect, State> {
       }));
   };
 
-  onFileSelected() {
+
+  onFileSelected = () => {
     const files = this.fileInput.files;
 
     if (!files || files.length === 0) {
@@ -103,21 +104,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       this.onReadFile(dataUrl || '');
     });
     reader.readAsDataURL(file);
-  }
-
-  renderAddImageInput() {
-    return (
-      <input
-        type="file"
-        className="boss3-add-avatar-block__file-loader"
-        style={{visibility: 'hidden'}}
-        onChange={() => this.onFileSelected()}
-        ref={(ref) => {
-            this.fileInput = ref;
-          }}
-      />
-    );
-  }
+  };
 
   triggerLoadFileClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
@@ -210,38 +197,51 @@ class Component extends React.Component<PropsFromConnect, State> {
   render() {
     return (
       <div className="boss3-forms-block">
+        <Form
+          model="formsData.uploadPhotoForm"
+          className="boss3-form"
+          onSubmit={this.handleFormSubmit}
+        >
+          <div className="boss3-add-avatar-block">
+            <Control.file
+              model=".avatar"
+              className="boss3-add-avatar-block__file-loader"
+              style={{visibility: 'hidden'}}
+              onChange={this.onFileSelected}
+              mapProps={{
+                onChange: (props) => {
+                  return props.onChange;
+                }
+              }}
+              getRef={(node) => {
+                this.fileInput = node;
+              }}
+            />
 
-        <div className="boss3-add-avatar-block">
-          {this.renderAddImageInput()}
-          {this.renderImagePreviewBlock()}
+            {this.renderImagePreviewBlock()}
 
-          <a href=""
-             className="boss3-button boss3-button_role_file boss3-add-avatar-block_adjust_file-button"
-             onClick={this.triggerLoadFileClick}
-          >
-            Choose File
-          </a>
+            <a href=""
+               className="boss3-button boss3-button_role_file boss3-add-avatar-block_adjust_file-button"
+               onClick={this.triggerLoadFileClick}
+            >
+              Choose File
+            </a>
 
-          <span className="boss3-add-avatar-block__file-label">
+            <span className="boss3-add-avatar-block__file-label">
             Drag and drop files here or click choose file to upload photo
           </span>
-        </div>
+          </div>
 
-        <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
-          <a href=""
-             className="boss3-button boss3-button_role_back boss3-buttons-group_adjust_button"
-             onClick={this.onBackClick}
-          >
-            Back
-          </a>
-          <a href=""
-             className="boss3-button boss3-button_role_submit boss3-buttons-group_adjust_button"
-             onClick={this.onFormComplete}
-          >
-            Continue
-          </a>
-        </div>
+          <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
+            <input type="button"
+               className="boss3-button boss3-button_role_back boss3-buttons-group_adjust_button"
+               value="Back"
+               onClick={this.onBackClick}
+            />
+            <input type="submit" className="boss3-button boss3-button_role_submit boss3-buttons-group_adjust_button" value="Continue"/>
+          </div>
 
+        </Form>
       </div>
     );
   }
