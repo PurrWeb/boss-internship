@@ -107,15 +107,15 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   renderAddImageInput() {
     return (
-      <div>
-        <input type="file"
-          style={{visibility: 'hidden'}}
-          onChange={() => this.onFileSelected()}
-          ref={(ref) => {
+      <input
+        type="file"
+        className="boss3-add-avatar-block__file-loader"
+        style={{visibility: 'hidden'}}
+        onChange={() => this.onFileSelected()}
+        ref={(ref) => {
             this.fileInput = ref;
           }}
-         />
-      </div>
+      />
     );
   }
 
@@ -197,9 +197,8 @@ class Component extends React.Component<PropsFromConnect, State> {
     return (
       <div className="boss3-forms-block">
 
-        {this.renderAddImageInput()}
-
         <div className="boss3-add-avatar-block">
+          {this.renderAddImageInput()}
           {this.renderImagePreviewBlock()}
 
           <a href=""
