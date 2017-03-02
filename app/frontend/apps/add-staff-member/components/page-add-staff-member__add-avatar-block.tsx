@@ -109,7 +109,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     return (
       <div>
         <input type="file"
-          className="form-control"
           style={{visibility: 'hidden'}}
           onChange={() => this.onFileSelected()}
           ref={(ref) => {
@@ -133,19 +132,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(action);
   };
 
-  renderCropper() {
-    return this.state.sourceImage ? (
-      <Cropper
-        ref="cropper"
-        src={this.state.sourceImage}
-        style={{height: 400, width: 400}}
-        aspectRatio={1}
-        guides={true}
-        crop={this.crop}
-      />
-    ) : null;
-  }
-
   renderCroppedImagePreview() {
     const {avatarPreview} = this.props;
 
@@ -158,6 +144,55 @@ class Component extends React.Component<PropsFromConnect, State> {
     ) : '';
   }
 
+  renderImageEditorBlock() {
+    return (
+      <div className="boss3-edit-image-block boss3-add-avatar-block_adjust_edit-image-block">
+        <div className="boss3-edit-image-block__cropper-block">
+          <div className="boss3-buttons-group boss3-edit-image-block_adjust_buttons-group">
+            <a href=""
+               className="boss3-button boss3-buttons-group_adjust_button"
+            >
+              Rotate Left
+            </a>
+            <a href=""
+               className="boss3-button boss3-buttons-group_adjust_button"
+            >
+              Rotate Right
+            </a>
+          </div>
+
+          <div className="boss3-edit-image-block__cropper">
+            <Cropper
+              ref="cropper"
+              src={this.state.sourceImage}
+              style={{
+              height: '100%',
+              width: '100%'
+            }}
+              aspectRatio={1}
+              guides={true}
+              crop={this.crop}
+            />
+          </div>
+        </div>
+
+        <div className="boss3-edit-image-block__preview-section">
+          {this.renderCroppedImagePreview()}
+        </div>
+      </div>
+    );
+  }
+
+  renderImagePreviewBlock() {
+    return this.state.sourceImage ?
+      this.renderImageEditorBlock() :
+      (
+        <div className="boss3-add-avatar-block__new-image-placeholder"
+             onClick={this.triggerLoadFileClick}
+        />
+      );
+  }
+
   render() {
     return (
       <div className="boss3-forms-block">
@@ -165,9 +200,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         {this.renderAddImageInput()}
 
         <div className="boss3-add-avatar-block">
-          <div className="boss3-add-avatar-block__new-image-placeholder"
-               onClick={this.triggerLoadFileClick}
-          />
+          {this.renderImagePreviewBlock()}
 
           <a href=""
              className="boss3-button boss3-button_role_file boss3-add-avatar-block_adjust_file-button"
@@ -180,9 +213,6 @@ class Component extends React.Component<PropsFromConnect, State> {
             Drag and drop files here or click choose file to upload photo
           </span>
         </div>
-
-        {this.renderCropper()}
-        {this.renderCroppedImagePreview()}
 
         <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
           <a href=""
