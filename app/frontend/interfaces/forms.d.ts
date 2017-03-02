@@ -1,5 +1,9 @@
 import {ValidatorFn, Validators, FormValidators} from 'react-redux-form';
 
+export interface AvatarInputValidators extends Validators {
+  readonly isFilled: ValidatorFn;
+}
+
 export interface GenderInputValidators extends Validators {
   readonly isFilled: ValidatorFn;
 }

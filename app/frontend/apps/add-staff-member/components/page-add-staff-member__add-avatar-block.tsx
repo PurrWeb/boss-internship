@@ -13,6 +13,9 @@ import limitImageDimensions from '../../../lib/images/limit-image-dimensions_fix
 import avatarPreviewChanged from '../../../action-creators/avatar-preview-changed';
 import {OfType} from '../../../interfaces/index';
 import avatarBlockValidated from '../../../action-creators/avatar-block-validated';
+import {AvatarInputValidators} from '../../../interfaces/forms';
+import {isRequiredField} from '../../../constants/form-errors';
+import {renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
 
 interface Props {
 }
@@ -135,6 +138,16 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(action);
   };
 
+  isAvatarAdded = (data: any) => {
+    console.log('data', data);
+    return !!this.props.avatarPreview;
+  };
+
+  isAvatarHasProperExtension = (data: any) => {
+    console.log('data', data);
+    return !!this.props.avatarPreview;
+  };
+
   renderCroppedImagePreview() {
     const {avatarPreview} = this.props;
 
@@ -206,6 +219,16 @@ class Component extends React.Component<PropsFromConnect, State> {
           className="boss3-form"
           onSubmit={this.handleFormSubmit}
         >
+          <Errors
+            model=".avatar"
+            messages={{
+              isFilled: isRequiredField
+            }}
+            show={{touched: true}}
+            wrapper={renderErrorsBlock}
+            component={renderErrorComponent}
+          />
+
           <div className="boss3-add-avatar-block">
             <Control.file
               model=".avatar"
@@ -220,6 +243,10 @@ class Component extends React.Component<PropsFromConnect, State> {
               getRef={(node) => {
                 this.fileInput = node;
               }}
+              validateOn="change"
+              validators={{
+                isFilled: this.isAvatarAdded,
+              } as AvatarInputValidators}
             />
 
             {this.renderImagePreviewBlock()}
