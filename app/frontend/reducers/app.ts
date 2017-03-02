@@ -6,6 +6,7 @@ import currentStep, {Structure as CurrentStepStructure} from './current-step';
 import staffMemberSavePending, {Structure as staffMemberSavePendingStructure} from './staff-member-save-pending';
 import isAllStepsPassed, {Structure as IsAllStepsPassedStructure} from './is-all-steps-passed';
 import accessToken, {Structure as AccessTokenStructure} from './access-token';
+import sourceImage, {Structure as SourceImageStructure} from './source-image';
 import venueValues, {Structure as VenueValuesStructure} from './venue-values';
 import payrateValues, {Structure as PayrateValuesStructure} from './payrate-values';
 import staffTypeIds, {Structure as StaffTypeIdsStructure} from './staff-type-ids';
@@ -19,6 +20,7 @@ export interface Structure {
   readonly staffMemberSavePending: staffMemberSavePendingStructure;
   readonly isAllStepsPassed: IsAllStepsPassedStructure;
   readonly accessToken: AccessTokenStructure;
+  readonly sourceImage: SourceImageStructure;
   readonly venueValues: VenueValuesStructure;
   readonly payrateValues: PayrateValuesStructure;
   readonly staffTypeIds: StaffTypeIdsStructure;
@@ -32,6 +34,7 @@ const reducers: ReducersOfType<Structure> = {
   staffMemberSavePending,
   isAllStepsPassed,
   accessToken,
+  sourceImage,
   venueValues,
   payrateValues,
   staffTypeIds,

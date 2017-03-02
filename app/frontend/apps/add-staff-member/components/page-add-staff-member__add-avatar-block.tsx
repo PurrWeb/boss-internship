@@ -16,12 +16,14 @@ import avatarBlockValidated from '../../../action-creators/avatar-block-validate
 import {AvatarInputValidators} from '../../../interfaces/forms';
 import {isRequiredField} from '../../../constants/form-errors';
 import {renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
+import addingSourceImage from '../../../action-creators/adding-source-image';
 
 interface Props {
 }
 
 interface MappedProps {
   readonly avatarPreview: string;
+  readonly sourceImage: string;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -29,7 +31,6 @@ type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 interface State {
   readonly toShowImage: boolean;
   readonly validationMessage: string;
-  readonly sourceImage?: string;
 }
 
 const VALID_IMAGE_FILE_EXTENSIONS = ['jpeg', 'jpg', 'png'];
@@ -46,7 +47,6 @@ class Component extends React.Component<PropsFromConnect, State> {
   state = {
     toShowImage: false,
     validationMessage: '',
-    sourceImage: '',
   };
 
   fileInput: HTMLInputElement;
@@ -83,9 +83,8 @@ class Component extends React.Component<PropsFromConnect, State> {
       dataUrl,
       MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
       MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
-      (data?: string) => this.setState({
-        sourceImage: data
-      }));
+      (data = '') => this.props.dispatch( addingSourceImage(data) )
+    );
   };
 
   onFileSelected = () => {
@@ -177,7 +176,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           <div className="boss3-edit-image-block__cropper">
             <Cropper
               ref="cropper"
-              src={this.state.sourceImage}
+              src={this.props.sourceImage}
               style={{
               height: '100%',
               width: '100%'
@@ -197,7 +196,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   renderImagePreviewBlock() {
-    return this.state.sourceImage ?
+    return this.props.sourceImage ?
       this.renderImageEditorBlock() :
       (
         <div className="boss3-add-avatar-block__new-image-placeholder"
@@ -274,7 +273,8 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
-    avatarPreview: state.app.avatarPreview
+    avatarPreview: state.app.avatarPreview,
+    sourceImage: state.app.sourceImage
   };
 };
 
