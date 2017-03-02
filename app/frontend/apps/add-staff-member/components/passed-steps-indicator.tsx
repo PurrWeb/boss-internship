@@ -51,6 +51,7 @@ const stepsData: StepData[] = [
 
 const FormsWithRequiredFields = {
   [AddStaffMemberSteps.BasicInformationBlock]: true,
+  [AddStaffMemberSteps.AddAvatarBlock]: true,
   [AddStaffMemberSteps.ContactDetailsBlock]: true,
   [AddStaffMemberSteps.WorkBlock]: true
 };

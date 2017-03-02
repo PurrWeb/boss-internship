@@ -230,11 +230,6 @@ class Component extends React.Component<PropsFromConnect, State> {
               className="boss3-add-avatar-block__file-loader"
               style={{visibility: 'hidden'}}
               onChange={this.onFileSelected}
-              mapProps={{
-                onChange: (props) => {
-                  return props.onChange;
-                }
-              }}
               getRef={(node) => {
                 this.fileInput = node;
               }}
@@ -245,6 +240,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               errors={{
                 isFilled: (files: FileList) => !this.isAvatarAdded(files)
               }}
+              persist={true}
             />
 
             {this.renderImagePreviewBlock()}
