@@ -173,7 +173,11 @@ class Component extends React.Component<PropsFromConnect, State> {
         src={avatarPreview}
         className="boss3-info-block__image"
       />
-    ) : null;
+    ) : (
+      <span className="boss3-info-block__error">
+        {isRequiredField}
+      </span>
+    );
 
     return Component.renderInformationBlock(
       content,

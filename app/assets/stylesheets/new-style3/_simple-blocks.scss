@@ -58,6 +58,10 @@
     width: 150px;
     height: 150px;
   }
+
+  &__error {
+    color: map-get($boss-app-palette, error-text);
+  }
 }
 
 .boss3-page-content {
