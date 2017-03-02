@@ -9,6 +9,7 @@ import requestStaffMemberSave from './request-staff-member-save';
 import changeCurrentStep from './change-current-step';
 import stepBackRegistration from './step-back-registration';
 import validateAllAddStaffMemberStepForms from './validate-all-add-staff-member-step-forms';
+import handleAvatarBlockValidated from './handle-avatar-block-validated';
 
 export default combineEpics(
   validateAllAddStaffMemberStepForms,
@@ -16,6 +17,7 @@ export default combineEpics(
   changeCurrentStep,
   requestStaffMemberSave,
   handleBasicInformationBlockValidated,
+  handleAvatarBlockValidated,
   handleContactDetailsBlockValidated,
   handleVenuesInfoBlockValidated,
   handleWorkInfoBlockValidated,

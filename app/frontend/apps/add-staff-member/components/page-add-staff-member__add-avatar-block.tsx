@@ -12,6 +12,7 @@ import steppingBackRegistration from '../../../action-creators/stepping-back-reg
 import limitImageDimensions from '../../../lib/images/limit-image-dimensions_fixed';
 import avatarPreviewChanged from '../../../action-creators/avatar-preview-changed';
 import {OfType} from '../../../interfaces/index';
+import avatarBlockValidated from '../../../action-creators/avatar-block-validated';
 
 interface Props {
 }
@@ -40,10 +41,13 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   fileInput: HTMLInputElement;
 
-  handleFormSubmit = (formModelData: OfType<UploadPhotoFormFields, any>) => {
-    // const action = contactDetailsBlockValidated(formModelData);
-    //
-    // this.props.dispatch(action);
+  handleFormSubmit = () => {
+    const formModelData: OfType<UploadPhotoFormFields, string> = {
+      avatar: this.props.avatarPreview
+    };
+    const action = avatarBlockValidated(formModelData);
+
+    this.props.dispatch(action);
   };
 
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
