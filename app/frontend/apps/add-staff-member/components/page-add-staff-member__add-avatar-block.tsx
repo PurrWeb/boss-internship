@@ -4,7 +4,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import Cropper from 'react-cropper';
 import SyntheticEvent = React.MouseEvent;
-import {Control, Form, Errors} from 'react-redux-form';
+import {Control, Form, Errors, ModelAction} from 'react-redux-form';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, UploadPhotoFormFields} from '../../../interfaces/store-models';
@@ -34,6 +34,23 @@ interface State {
 
 const VALID_IMAGE_FILE_EXTENSIONS = ['jpeg', 'jpg', 'png'];
 const MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING = 700;
+const supportedFormatsString = (function () {
+  const extensions = VALID_IMAGE_FILE_EXTENSIONS.concat([]);
+  const lastExtension = extensions.pop();
+  const supportedFormats = extensions.join(', ') + ' or ' + lastExtension;
+
+  return `The file extension is not supported. Use a ${supportedFormats} file.`;
+})();
+
+function changeAction(model: string, files: FileList): ModelAction {
+  const file = files[0] || {};
+
+  return {
+    type: 'rrf/change',
+    model,
+    value: file
+  };
+}
 
 class Component extends React.Component<PropsFromConnect, State> {
   state = {
@@ -57,19 +74,12 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(steppingBackRegistration);
   };
 
-  getSupportedFormatsString = () => {
-    const lastExtension = VALID_IMAGE_FILE_EXTENSIONS[VALID_IMAGE_FILE_EXTENSIONS.length - 1];
-    const extensionsExceptLast = VALID_IMAGE_FILE_EXTENSIONS.filter((extension) => extension !== lastExtension);
-
-    return extensionsExceptLast.join(', ') + ' or ' + lastExtension;
-  };
-
   validateFile(file: File) {
     const extensionMatch = file.name.match(/\.([^.]+)$/);
     const fileExtension = extensionMatch ? extensionMatch[1].toLowerCase() : '';
     const isExtensionValid = VALID_IMAGE_FILE_EXTENSIONS.indexOf(fileExtension) !== -1;
     const validationMessage = isExtensionValid ? '' : `File extension "${fileExtension}"
-                is not supported. Use a ${this.getSupportedFormatsString()} file.`;
+                is not supported. Use a ${supportedFormatsString} file.`;
 
     this.setState({validationMessage: validationMessage});
 
@@ -138,14 +148,23 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(action);
   };
 
-  isAvatarAdded = (data: any) => {
-    console.log('data', data);
-    return !!this.props.avatarPreview;
+  isAvatarAdded = (files: FileList) => {
+    const file = files[0];
+
+    return !!file;
   };
 
-  isAvatarHasProperExtension = (data: any) => {
-    console.log('data', data);
-    return !!this.props.avatarPreview;
+  isAvatarHasProperExtension = (files: FileList) => {
+    const file = files[0];
+
+    if (file) {
+      const foundPars = file.name.split('.');
+      const fileExtension = (foundPars[foundPars.length - 1] || '').toLowerCase();
+
+      return VALID_IMAGE_FILE_EXTENSIONS.some((extension) => extension === fileExtension);
+    } else {
+      return true;
+    }
   };
 
   renderCroppedImagePreview() {
@@ -222,7 +241,8 @@ class Component extends React.Component<PropsFromConnect, State> {
           <Errors
             model=".avatar"
             messages={{
-              isFilled: isRequiredField
+              isFilled: isRequiredField,
+              isHasProperExtension: supportedFormatsString
             }}
             show={{touched: true}}
             wrapper={renderErrorsBlock}
@@ -243,9 +263,11 @@ class Component extends React.Component<PropsFromConnect, State> {
               getRef={(node) => {
                 this.fileInput = node;
               }}
+              changeAction={changeAction}
               validateOn="change"
               validators={{
                 isFilled: this.isAvatarAdded,
+                isHasProperExtension: this.isAvatarHasProperExtension,
               } as AvatarInputValidators}
             />
 
