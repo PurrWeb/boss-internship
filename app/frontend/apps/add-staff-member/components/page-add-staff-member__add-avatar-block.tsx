@@ -42,16 +42,6 @@ const supportedFormatsString = (function () {
   return `The file extension is not supported. Use a ${supportedFormats} file.`;
 })();
 
-function changeAction(model: string, files: FileList): ModelAction {
-  const file = files[0] || {};
-
-  return {
-    type: 'rrf/change',
-    model,
-    value: file
-  };
-}
-
 class Component extends React.Component<PropsFromConnect, State> {
   state = {
     toShowImage: false,
@@ -97,7 +87,6 @@ class Component extends React.Component<PropsFromConnect, State> {
         sourceImage: data
       }));
   };
-
 
   onFileSelected = () => {
     const files = this.fileInput.files;
@@ -152,19 +141,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     const file = files[0];
 
     return !!file;
-  };
-
-  isAvatarHasProperExtension = (files: FileList) => {
-    const file = files[0];
-
-    if (file) {
-      const foundPars = file.name.split('.');
-      const fileExtension = (foundPars[foundPars.length - 1] || '').toLowerCase();
-
-      return VALID_IMAGE_FILE_EXTENSIONS.some((extension) => extension === fileExtension);
-    } else {
-      return true;
-    }
   };
 
   renderCroppedImagePreview() {
@@ -241,8 +217,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           <Errors
             model=".avatar"
             messages={{
-              isFilled: isRequiredField,
-              isHasProperExtension: supportedFormatsString
+              isFilled: isRequiredField
             }}
             show={{touched: true}}
             wrapper={renderErrorsBlock}
@@ -263,12 +238,13 @@ class Component extends React.Component<PropsFromConnect, State> {
               getRef={(node) => {
                 this.fileInput = node;
               }}
-              changeAction={changeAction}
               validateOn="change"
               validators={{
-                isFilled: this.isAvatarAdded,
-                isHasProperExtension: this.isAvatarHasProperExtension,
+                isFilled: this.isAvatarAdded
               } as AvatarInputValidators}
+              errors={{
+                isFilled: (files: FileList) => !this.isAvatarAdded(files)
+              }}
             />
 
             {this.renderImagePreviewBlock()}
