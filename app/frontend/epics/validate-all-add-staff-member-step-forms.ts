@@ -13,19 +13,28 @@ import {isNotEmptyInput, isMobilePhoneSimpleCheck, isNationalInsuranceNumber} fr
 import {OfType} from '../interfaces/index';
 import {
   GenderInputValidators, EmailInputValidators, PhoneNumberInputValidators,
-  NationalInsuranceNumberInputValidators, StarterEmploymentStatusInputValidators, PayRateInputValidators
+  NationalInsuranceNumberInputValidators, StarterEmploymentStatusInputValidators, PayRateInputValidators,
+  AvatarInputValidators
 } from '../interfaces/forms';
 import * as isEmail from 'validator/lib/isEmail';
+
+const isAvatarAdded = (avatarData: any): boolean => {
+  return avatarData[0];
+};
 
 const validateAllAddStaffMemberStepForms = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(VALIDATING_ALL_ADD_STAFF_MEMBER_STEP_FORMS)
     .mergeMap(() => {
-      const {basicInformationForm, contactDetailsForm, workForm} =
+      const {basicInformationForm, uploadPhotoForm, contactDetailsForm, workForm} =
         store.getState().formsData.forms;
 
       const validateBasicInformationFormGenderAction = actions.setValidity('formsData.basicInformationForm.gender', {
-        isFilled: isNotEmptyInput(basicInformationForm.gender.value),
+        isFilled: isNotEmptyInput(basicInformationForm.gender.value)
       } as OfType<GenderInputValidators, boolean>);
+
+      const validateAddAvatarFormAvatarAction = actions.setValidity('formsData.uploadPhotoForm.avatar', {
+        isFilled: isAvatarAdded(uploadPhotoForm.avatar)
+      } as OfType<AvatarInputValidators, boolean>);
 
       const validateContactDetailsFormEmailAction = actions.setValidity('formsData.contactDetailsForm.email', {
         isFilled: isNotEmptyInput(contactDetailsForm.email.value),
@@ -54,6 +63,7 @@ const validateAllAddStaffMemberStepForms = ((action$, store: Store<StoreStructur
 
       return Observable.of<SimpleAction>(
         validateBasicInformationFormGenderAction,
+        validateAddAvatarFormAvatarAction,
         validateContactDetailsFormEmailAction,
         validateContactDetailsFormPhoneNumberAction,
         validateWorkFormNationalInsuranceNumberAction,
