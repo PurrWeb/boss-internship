@@ -213,6 +213,9 @@ class Component extends React.Component<PropsFromConnect, State> {
           className="boss3-form"
           onSubmit={this.handleFormSubmit}
         >
+          <label className="boss3-label">
+            <span className="boss3-label__text boss3-label__text_type_required">Avatar</span>
+          </label>
           <Errors
             model=".avatar"
             messages={{
