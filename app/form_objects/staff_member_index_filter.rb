@@ -65,6 +65,7 @@ class StaffMemberIndexFilter < Reform::Form
       email_text: email_text,
       venue: venue,
       accessible_venues: accessible_venues,
+      filter_venues: venue && !(staff_type && staff_type.security?),
       status_proc: lambda do |relation|
         StaffMemberIndexQuery.
           filter_by_status(
