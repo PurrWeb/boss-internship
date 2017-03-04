@@ -9,14 +9,14 @@ import {Control, Form, Errors, ModelAction} from 'react-redux-form';
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, UploadPhotoFormFields} from '../../../interfaces/store-models';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
-import limitImageDimensions from '../../../lib/images/limit-image-dimensions_fixed';
 import avatarPreviewChanged from '../../../action-creators/avatar-preview-changed';
-import {OfType} from '../../../interfaces/index';
+import {OfType, AnyDict} from '../../../interfaces/index';
 import avatarBlockValidated from '../../../action-creators/avatar-block-validated';
 import {AvatarInputValidators} from '../../../interfaces/forms';
 import {isRequiredField} from '../../../constants/form-errors';
 import {renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
 import addingSourceImage from '../../../action-creators/adding-source-image';
+import ImageLoader from './image-loader';
 
 interface Props {
 }
@@ -33,15 +33,13 @@ interface State {
   readonly validationMessage: string;
 }
 
-const VALID_IMAGE_FILE_EXTENSIONS = ['jpeg', 'jpg', 'png'];
-const MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING = 700;
-const supportedFormatsString = (function () {
-  const extensions = VALID_IMAGE_FILE_EXTENSIONS.concat([]);
-  const lastExtension = extensions.pop();
-  const supportedFormats = extensions.join(', ') + ' or ' + lastExtension;
-
-  return `The file extension is not supported. Use a ${supportedFormats} file.`;
-})();
+function changeAction(model: string, value: any): ModelAction {
+  return {
+    type: 'rrf/change',
+    model,
+    value: value
+  };
+}
 
 class Component extends React.Component<PropsFromConnect, State> {
   state = {
@@ -49,7 +47,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     validationMessage: '',
   };
 
-  fileInput: HTMLInputElement;
+  dropZone: ImageLoader;
 
   handleFormSubmit = () => {
     const formModelData: OfType<UploadPhotoFormFields, string> = {
@@ -64,57 +62,10 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(steppingBackRegistration);
   };
 
-  validateFile(file: File) {
-    const extensionMatch = file.name.match(/\.([^.]+)$/);
-    const fileExtension = extensionMatch ? extensionMatch[1].toLowerCase() : '';
-    const isExtensionValid = VALID_IMAGE_FILE_EXTENSIONS.indexOf(fileExtension) !== -1;
-    const validationMessage = isExtensionValid ? '' : `File extension "${fileExtension}"
-                is not supported. Use a ${supportedFormatsString} file.`;
-
-    this.setState({validationMessage: validationMessage});
-
-    return isExtensionValid;
-  }
-
-  onReadFile = (dataUrl: string) => {
-    // iOS has a bug where the image gets squashed in the canvas,
-    // if it uses too much memory
-    limitImageDimensions(
-      dataUrl,
-      MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
-      MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING,
-      (data = '') => this.props.dispatch( addingSourceImage(data) )
-    );
-  };
-
-  onFileSelected = () => {
-    const files = this.fileInput.files;
-
-    if (!files || files.length === 0) {
-      // apparently it is sometimes possible to select 0 files.
-      // In that case reset the validation message and do nothing else.
-      this.setState({validationMessage: ''});
-      return;
-    }
-
-    const file = files[0];
-    if (!this.validateFile(file)) {
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.addEventListener('load', () => {
-      const dataUrl = reader.result;
-      this.onReadFile(dataUrl || '');
-    });
-    reader.readAsDataURL(file);
-  };
-
   triggerLoadFileClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
 
-    this.fileInput.click();
+    this.dropZone.open();
   };
 
   onRotateLeftClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -197,13 +148,48 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   renderImagePreviewBlock() {
     return this.props.sourceImage ?
-      this.renderImageEditorBlock() :
-      (
-        <div className="boss3-add-avatar-block__new-image-placeholder"
-             onClick={this.triggerLoadFileClick}
+      this.renderImageEditorBlock() : (
+        <Control
+          model=".avatar"
+          component={ImageLoader}
+          className="boss3-add-avatar-block__new-image-placeholder"
+          changeAction={changeAction}
+          onChange={this.onDropFiles}
+          getRef={(node: any) => { this.dropZone = node; }}
+          accept="image/jpeg, image/jpg, image/png, image/gif"
+          maxSize={1000000}
+          mapProps={{
+            onDrop: (data: AnyDict) => {
+              return data.onChange;
+            }
+          }}
+          validateOn="change"
+          validators={{
+            isFilled: this.isAvatarAdded
+          } as AvatarInputValidators}
+          errors={{
+            isFilled: (files: FileList) => !this.isAvatarAdded(files)
+          }}
+          persist={true}
         />
       );
   }
+
+  onDropFiles = (acceptedFiles: FileList, rejectedFiles: FileList) => {
+    if (!acceptedFiles || acceptedFiles.length === 0) {
+      return;
+    } else {
+      const file = acceptedFiles[0];
+      const reader = new FileReader();
+
+      reader.addEventListener('load', () => {
+        const dataUrl = reader.result;
+
+        this.props.dispatch( addingSourceImage(dataUrl || '') );
+      });
+      reader.readAsDataURL(file);
+    }
+  };
 
   render() {
     return (
@@ -216,6 +202,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           <label className="boss3-label">
             <span className="boss3-label__text boss3-label__text_type_required">Avatar</span>
           </label>
+
           <Errors
             model=".avatar"
             messages={{
@@ -226,25 +213,8 @@ class Component extends React.Component<PropsFromConnect, State> {
             component={renderErrorComponent}
           />
 
-          <div className="boss3-add-avatar-block">
-            <Control.file
-              model=".avatar"
-              className="boss3-add-avatar-block__file-loader"
-              style={{visibility: 'hidden'}}
-              onChange={this.onFileSelected}
-              getRef={(node) => {
-                this.fileInput = node;
-              }}
-              validateOn="change"
-              validators={{
-                isFilled: this.isAvatarAdded
-              } as AvatarInputValidators}
-              errors={{
-                isFilled: (files: FileList) => !this.isAvatarAdded(files)
-              }}
-              persist={true}
-            />
 
+          <div className="boss3-add-avatar-block">
             {this.renderImagePreviewBlock()}
 
             <a href=""
