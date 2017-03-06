@@ -13,7 +13,7 @@ import avatarPreviewChanged from '../../../action-creators/avatar-preview-change
 import {OfType, AnyDict} from '../../../interfaces/index';
 import avatarBlockValidated from '../../../action-creators/avatar-block-validated';
 import {AvatarInputValidators} from '../../../interfaces/forms';
-import {isRequiredField} from '../../../constants/form-errors';
+import {isRequiredField, isWrongFileExtension, fileSizeIsTooBig} from '../../../constants/form-errors';
 import {renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
 import addingSourceImage from '../../../action-creators/adding-source-image';
 import ImageLoader from './image-loader';
@@ -245,8 +245,8 @@ class Component extends React.Component<PropsFromConnect, State> {
             model=".avatar"
             messages={{
               isFilled: isRequiredField,
-              isProperFormat: 'is not ProperFormat',
-              isProperFileSize: 'is not ProperFileSize'
+              isProperFormat: isWrongFileExtension,
+              isProperFileSize: fileSizeIsTooBig
             }}
             show={(field) => {
               const validity = field.validity as OfType<AvatarInputValidators, boolean>;
