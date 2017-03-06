@@ -4,7 +4,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import Cropper from 'react-cropper';
 import SyntheticEvent = React.MouseEvent;
-import {Control, Form, Errors, ModelAction} from 'react-redux-form';
+import {Control, Form, Errors, ModelAction, actions} from 'react-redux-form';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, UploadPhotoFormFields} from '../../../interfaces/store-models';
@@ -40,6 +40,9 @@ function changeAction(model: string, value: any): ModelAction {
     value: value
   };
 }
+
+const VALID_FILE_TYPES = 'image/jpeg, image/jpg, image/png, image/gif';
+const MAX_FILE_SIZE = 1000000;
 
 class Component extends React.Component<PropsFromConnect, State> {
   state = {
@@ -91,6 +94,26 @@ class Component extends React.Component<PropsFromConnect, State> {
     const file = files[0];
 
     return !!file;
+  };
+
+  isProperFormat = (files: FileList) => {
+    const file = files[0];
+
+    if (file) {
+      return VALID_FILE_TYPES.indexOf(file.type) !== -1;
+    } else {
+      return true;
+    }
+  };
+
+  isProperFileSize = (files: FileList) => {
+    const file = files[0];
+
+    if (file) {
+      return file.size <= MAX_FILE_SIZE;
+    } else {
+      return true;
+    }
   };
 
   renderCroppedImagePreview() {
@@ -156,8 +179,10 @@ class Component extends React.Component<PropsFromConnect, State> {
           changeAction={changeAction}
           onChange={this.onDropFiles}
           getRef={(node: any) => { this.dropZone = node; }}
-          accept="image/jpeg, image/jpg, image/png, image/gif"
-          maxSize={1000000}
+          accept={VALID_FILE_TYPES}
+          maxSize={MAX_FILE_SIZE}
+          onDropRejected={this.onDropRejected}
+          multiple={false}
           mapProps={{
             onDrop: (data: AnyDict) => {
               return data.onChange;
@@ -165,7 +190,9 @@ class Component extends React.Component<PropsFromConnect, State> {
           }}
           validateOn="change"
           validators={{
-            isFilled: this.isAvatarAdded
+            isFilled: this.isAvatarAdded,
+            isProperFormat: this.isProperFormat,
+            isProperFileSize: this.isProperFileSize
           } as AvatarInputValidators}
           errors={{
             isFilled: (files: FileList) => !this.isAvatarAdded(files)
@@ -176,7 +203,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   onDropFiles = (acceptedFiles: FileList, rejectedFiles: FileList) => {
-    if (!acceptedFiles || acceptedFiles.length === 0) {
+    if (!acceptedFiles || !acceptedFiles.length) {
       return;
     } else {
       const file = acceptedFiles[0];
@@ -188,6 +215,17 @@ class Component extends React.Component<PropsFromConnect, State> {
         this.props.dispatch( addingSourceImage(dataUrl || '') );
       });
       reader.readAsDataURL(file);
+    }
+  };
+
+  onDropRejected = (files: FileList) => {
+    if (!files || !files.length) {
+      return;
+    } else {
+      this.props.dispatch(actions.setValidity('formsData.uploadPhotoForm.avatar', {
+        isProperFormat: this.isProperFormat(files),
+        isProperFileSize: this.isProperFileSize(files),
+      }));
     }
   };
 
@@ -206,9 +244,19 @@ class Component extends React.Component<PropsFromConnect, State> {
           <Errors
             model=".avatar"
             messages={{
-              isFilled: isRequiredField
+              isFilled: isRequiredField,
+              isProperFormat: 'is not ProperFormat',
+              isProperFileSize: 'is not ProperFileSize'
             }}
-            show={{touched: true}}
+            show={(field) => {
+              const validity = field.validity as OfType<AvatarInputValidators, boolean>;
+
+              if (!validity.isProperFormat || !validity.isProperFileSize) {
+                return true;
+              } else {
+                return field.touched;
+              }
+            }}
             wrapper={renderErrorsBlock}
             component={renderErrorComponent}
           />
