@@ -84,27 +84,6 @@ module.exports = {
                     mimetype: 'application/octet-stream',
                     limit: 30000
                 }
-            },
-            {
-                test: /\.scss$/,
-                use: [
-                    'style-loader',
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 1
-                        }
-                    },
-                    'postcss-loader',
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            includePaths: [
-                                './node_modules'
-                            ]
-                        }
-                    }
-                ]
             }
         ]
     },
