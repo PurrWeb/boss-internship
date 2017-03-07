@@ -9,8 +9,6 @@ import genderValuesChanged from '../../action-creators/gender-values-changed';
 import staffTypeIdsChanged from '../../action-creators/staff-type-ids-changed';
 import venueValuesChanged from '../../action-creators/venue-values-changed';
 import {BossData} from '../../interfaces/common-data-types';
-// tslint:disable-next-line:no-require-imports
-require('../../../assets/stylesheets/new-style3/index.scss');
 
 const Root = class extends React.Component <{}, {}> {
   componentDidMount() {
