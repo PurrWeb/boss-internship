@@ -26,6 +26,10 @@
 @import 'add-avatar-block';
 @import 'edit-image-block';
 
+.boss3-hidden {
+  display: none;
+}
+
 .boss3-html {
   @include normalize-block();
 

@@ -3,6 +3,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import Cropper from 'react-cropper';
+import * as cx from 'classnames';
 import SyntheticEvent = React.MouseEvent;
 import {Control, Form, Errors, ModelAction, actions} from 'react-redux-form';
 
@@ -169,37 +170,8 @@ class Component extends React.Component<PropsFromConnect, State> {
     );
   }
 
-  renderImagePreviewBlock() {
-    return this.props.sourceImage ?
-      this.renderImageEditorBlock() : (
-        <Control
-          model=".avatar"
-          component={ImageLoader}
-          className="boss3-add-avatar-block__new-image-placeholder"
-          changeAction={changeAction}
-          onChange={this.onDropFiles}
-          getRef={(node: any) => { this.dropZone = node; }}
-          accept={VALID_FILE_TYPES}
-          maxSize={MAX_FILE_SIZE}
-          onDropRejected={this.onDropRejected}
-          multiple={false}
-          mapProps={{
-            onDrop: (data: AnyDict) => {
-              return data.onChange;
-            }
-          }}
-          validateOn="change"
-          validators={{
-            isFilled: this.isAvatarAdded,
-            isProperFormat: this.isProperFormat,
-            isProperFileSize: this.isProperFileSize
-          } as AvatarInputValidators}
-          errors={{
-            isFilled: (files: FileList) => !this.isAvatarAdded(files)
-          }}
-          persist={true}
-        />
-      );
+  renderImagePreviewBlock(toRender: boolean) {
+    return toRender ? this.renderImageEditorBlock() : null;
   }
 
   onDropFiles = (acceptedFiles: FileList, rejectedFiles: FileList) => {
@@ -230,6 +202,8 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   render() {
+    const imageLoaderClassName = cx('boss3-add-avatar-block__new-image-placeholder', {'boss3-hidden': !!this.props.sourceImage});
+
     return (
       <div className="boss3-forms-block">
         <Form
@@ -263,7 +237,36 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 
           <div className="boss3-add-avatar-block">
-            {this.renderImagePreviewBlock()}
+
+            {this.renderImagePreviewBlock(!!this.props.sourceImage)}
+
+            <Control
+              model=".avatar"
+              component={ImageLoader}
+              className={imageLoaderClassName}
+              changeAction={changeAction}
+              onChange={this.onDropFiles}
+              getRef={(node: any) => { this.dropZone = node; }}
+              accept={VALID_FILE_TYPES}
+              maxSize={MAX_FILE_SIZE}
+              onDropRejected={this.onDropRejected}
+              multiple={false}
+              mapProps={{
+                onDrop: (data: AnyDict) => {
+                  return data.onChange;
+                }
+              }}
+              validateOn="change"
+              validators={{
+                isFilled: this.isAvatarAdded,
+                isProperFormat: this.isProperFormat,
+                isProperFileSize: this.isProperFileSize
+              } as AvatarInputValidators}
+              errors={{
+                isFilled: (files: FileList) => !this.isAvatarAdded(files)
+              }}
+              persist={true}
+            />
 
             <a href=""
                className="boss3-button boss3-button_role_file boss3-add-avatar-block_adjust_file-button"
