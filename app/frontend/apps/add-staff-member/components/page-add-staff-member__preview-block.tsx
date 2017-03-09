@@ -16,7 +16,6 @@ import {
 import {StringDict, Dict, BoolDict} from '../../../interfaces/index';
 import {FieldState} from 'react-redux-form';
 import {isRequiredField, isWrongEmail, isPhoneNumber, formatInvalid} from '../../../constants/form-errors';
-import validatingAllAddStaffMemberStepForms from '../../../action-creators/validating-all-add-staff-member-step-forms';
 import {previewDateFormat} from '../../../constants/index';
 import {Structure as VenuesStructure, Structure as StaffTypesStructure} from '../../../reducers/venues';
 import {OptionData} from '../../../interfaces/common-data-types';
@@ -65,10 +64,6 @@ class Component extends React.Component<PropsFromConnect, State> {
       this.props.contactDetailsFormFields,
       this.props.workFormFields
     ];
-  }
-
-  componentDidMount() {
-    this.props.dispatch(validatingAllAddStaffMemberStepForms);
   }
 
   onFormComplete = (event: React.MouseEvent<HTMLAnchorElement>) => {
