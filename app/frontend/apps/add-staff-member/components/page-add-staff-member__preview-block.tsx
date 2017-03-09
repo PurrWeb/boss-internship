@@ -1,6 +1,7 @@
 /// <reference path="../../../custom-typings/react-redux-form.d.ts" />
 
 import * as React from 'react';
+import * as moment from 'moment';
 import {connect} from 'react-redux';
 import {pipe, omit, toPairs, map, addIndex, find} from 'ramda';
 
@@ -9,7 +10,7 @@ import {StoreStructure} from '../../../interfaces/store-models';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import requestingStaffMemberSave from '../../../action-creators/requesting-staff-member-save';
 import {
-  BasicInformationForm, UploadPhotoForm, VenueForm, ContactDetailsForm, WorkForm,
+  BasicInformationForm, VenueForm, ContactDetailsForm, WorkForm,
   FormStructure
 } from '../../../reducers/forms';
 import {StringDict, Dict, BoolDict} from '../../../interfaces/index';
@@ -19,6 +20,8 @@ import validatingAllAddStaffMemberStepForms from '../../../action-creators/valid
 
 type FieldDataPair = [string, FieldState];
 type ValidityPair = [string, boolean];
+
+type ValueTransformer = (val: any) => string;
 
 interface Props {
 }
@@ -100,19 +103,23 @@ class Component extends React.Component<PropsFromConnect, State> {
     }
   }
 
-  static renderInformationList(blockData: FormStructure<StringDict>, labelsMap: StringDict) {
+  static renderInformationList(blockData: FormStructure<StringDict>, labelsMap: StringDict,
+                               valueTransformers: Dict<ValueTransformer> = {} as Dict<ValueTransformer>) {
     const listElements = pipe< FormStructure<StringDict>, Dict<FieldState>, FieldDataPair[], JSX.Element[] >(
       omit(['$form']),
       toPairs,
       addIndex(map)((pair: FieldDataPair, idx: number) => {
-        const labelVal = labelsMap[pair[0]];
-        const errorText = Component.getTextFromFieldValue(pair[1].value);
+        const fieldName = pair[0];
+        const fieldData = pair[1];
+        const fieldTransformer = valueTransformers[fieldName];
+        const labelVal = labelsMap[fieldName];
+        const textValue = fieldTransformer ? fieldTransformer(fieldData.value) : Component.getTextFromFieldValue(fieldData.value);
 
         return (
           <li key={idx} className="boss3-info-fields-block__list-item">
             <span className="boss3-info-fields-block__field-name">{labelVal}</span>
-            <span className="boss3-info-fields-block__field-value">{errorText}</span>
-            { Component.renderListItemErrors(pair[1].validity) }
+            <span className="boss3-info-fields-block__field-value">{textValue}</span>
+            { Component.renderListItemErrors(fieldData.validity) }
           </li>
         );
       })
@@ -192,7 +199,18 @@ class Component extends React.Component<PropsFromConnect, State> {
         mainVenue: 'Main Venue',
         otherVenues: 'Other Venues',
         startsAt: 'Starts At'
-      });
+      }, {
+        startsAt: (val: any) => {
+          const momentDate = moment(val);
+
+          if (momentDate.isValid()) {
+            return momentDate.format('YYYY, MMMM D');
+          } else {
+            return '';
+          }
+        }
+      }
+    );
 
     return Component.renderInformationBlock(
       content,
