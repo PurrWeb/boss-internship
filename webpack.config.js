@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 
-const isProd = process.argv.includes('-p');
+const isProd = process.argv.indexOf('-p') !== -1;
 
 const nodeEnv = isProd ? 'production' : 'development';
 
