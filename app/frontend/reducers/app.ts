@@ -8,7 +8,7 @@ import isAllStepsPassed, {Structure as IsAllStepsPassedStructure} from './is-all
 import accessToken, {Structure as AccessTokenStructure} from './access-token';
 import sourceImage, {Structure as SourceImageStructure} from './source-image';
 import venueValues, {Structure as VenueValuesStructure} from './venue-values';
-import payrateValues, {Structure as PayrateValuesStructure} from './payrate-values';
+import payrates, {Structure as PayratesStructure} from './payrates';
 import staffTypes, {Structure as StaffTypesStructure} from './staff-types';
 import genderValues, {Structure as GenderValuesStructure} from './gender-values';
 import avatarPreview, {Structure as AvatarPreviewStructure} from './avatar-preview';
@@ -22,7 +22,7 @@ export interface Structure {
   readonly accessToken: AccessTokenStructure;
   readonly sourceImage: SourceImageStructure;
   readonly venueValues: VenueValuesStructure;
-  readonly payrateValues: PayrateValuesStructure;
+  readonly payrates: PayratesStructure;
   readonly staffTypes: StaffTypesStructure;
   readonly genderValues: GenderValuesStructure;
 }
@@ -36,7 +36,7 @@ const reducers: ReducersOfType<Structure> = {
   accessToken,
   sourceImage,
   venueValues,
-  payrateValues,
+  payrates,
   staffTypes,
   genderValues
 };
