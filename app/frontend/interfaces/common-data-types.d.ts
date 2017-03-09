@@ -1,22 +1,12 @@
-interface Venue {
-  readonly name: string;
-  readonly id: number;
-}
-
-interface Payrate {
-  readonly name: string;
-  readonly id: number;
-}
-
-interface StaffType {
+interface OptionData {
   readonly name: string;
   readonly id: number;
 }
 
 export interface BossData {
   readonly accessToken: string;
-  readonly venueValues: Venue[];
-  readonly payrateValues: Payrate[];
-  readonly staffTypeIds: StaffType[];
+  readonly venueValues: OptionData[];
+  readonly payrateValues: OptionData[];
+  readonly staffTypeIds: OptionData[];
   readonly genderValues: string[];
 }

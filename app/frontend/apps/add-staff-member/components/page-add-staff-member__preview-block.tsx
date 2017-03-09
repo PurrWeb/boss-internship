@@ -18,8 +18,8 @@ import {FieldState} from 'react-redux-form';
 import {isRequiredField, isWrongEmail, isPhoneNumber, formatInvalid} from '../../../constants/form-errors';
 import validatingAllAddStaffMemberStepForms from '../../../action-creators/validating-all-add-staff-member-step-forms';
 import {previewDateFormat} from '../../../constants/index';
-import {Structure as VenuesStructure} from '../../../reducers/venues';
-import {Venue} from '../../../interfaces/common-data-types';
+import {Structure as VenuesStructure, Structure as StaffTypesStructure} from '../../../reducers/venues';
+import {OptionData} from '../../../interfaces/common-data-types';
 
 type FieldDataPair = [string, FieldState];
 type ValidityPair = [string, boolean];
@@ -35,7 +35,8 @@ interface MappedProps {
   readonly venueFormFields: VenueForm;
   readonly contactDetailsFormFields: ContactDetailsForm;
   readonly workFormFields: WorkForm;
-  readonly venueOptions: VenuesStructure;
+  readonly venues: VenuesStructure;
+  readonly staffTypes: StaffTypesStructure;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -87,10 +88,10 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   getVenueValue: ValueTransformer = (venueNumber: number): string => {
-    return pipe< Venue[], Venue | undefined, string >(
-      find((venue: Venue) => venue.id === venueNumber),
-      (option?: Venue) => (option || {} as Partial<Venue>).name || ''
-    )(this.props.venueOptions);
+    return pipe< OptionData[], OptionData | undefined, string >(
+      find((venue: OptionData) => venue.id === venueNumber),
+      (option?: OptionData) => (option || {} as Partial<OptionData>).name || ''
+    )(this.props.venues);
   };
 
   onBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -312,7 +313,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   const {forms} = state.formsData;
-  const {avatarPreview, venues} = state.app;
+  const {avatarPreview, venues, staffTypes} = state.app;
 
   return {
     avatarPreview: avatarPreview,
@@ -320,7 +321,8 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
     venueFormFields: forms.venueForm,
     contactDetailsFormFields: forms.contactDetailsForm,
     workFormFields: forms.workForm,
-    venueOptions: venues
+    venues,
+    staffTypes
   };
 };
 

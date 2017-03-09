@@ -13,7 +13,7 @@ import {isRequiredField, formatInvalid} from '../../../constants/form-errors';
 import {isNationalInsuranceNumber, isPinCode, isNotEmptyInput} from '../../../helpers';
 import workInfoBlockValidated from '../../../action-creators/work-info-block-validated';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
-import {StaffType, Payrate} from '../../../interfaces/common-data-types';
+import {OptionData} from '../../../interfaces/common-data-types';
 import {
   PinCodeInputValidators,
   NationalInsuranceNumberInputValidators, PayRateInputValidators, StarterEmploymentStatusInputValidators
@@ -44,11 +44,11 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(action);
   };
 
-  static getStaffTypeOptions(staffTypes: StaffType[]): Select.Option[] {
+  static getStaffTypeOptions(staffTypes: OptionData[]): Select.Option[] {
     return staffTypes.map((data) => ({value: data.id, label: data.name}));
   }
 
-  static getPayrateOptions(payrates: Payrate[]): Select.Option[] {
+  static getPayrateOptions(payrates: OptionData[]): Select.Option[] {
     return payrates.map((data) => ({value: data.id, label: data.name}));
   }
 

@@ -1,9 +1,9 @@
 import {VENUES_CHANGED} from '../constants/action-names';
 import {createActionWithPayload} from '../helpers/actions';
 import {ActionWithPayload} from '../interfaces/actions';
-import {Venue} from '../interfaces/common-data-types';
+import {OptionData} from '../interfaces/common-data-types';
 
-type PayloadType = Venue[];
+type PayloadType = OptionData[];
 export type ActionType = ActionWithPayload<PayloadType>;
 
 const venuesChanged = (value: PayloadType): ActionType =>

@@ -1,8 +1,8 @@
 import {ActionWithPayload} from '../interfaces/actions';
 import {VENUES_CHANGED} from '../constants/action-names';
-import {Venue} from '../interfaces/common-data-types';
+import {OptionData} from '../interfaces/common-data-types';
 
-export type Structure = Venue[];
+export type Structure = OptionData[];
 
 const venues = (state: Structure = [], action: ActionWithPayload<Structure>): Structure => {
   if (action.type === VENUES_CHANGED) {

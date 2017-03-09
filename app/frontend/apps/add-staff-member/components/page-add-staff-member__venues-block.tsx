@@ -9,7 +9,7 @@ import * as Select from 'react-select';
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, VenueFormFields} from '../../../interfaces/store-models';
 import {setInputClass} from '../../../helpers/renderers';
-import {Venue} from '../../../interfaces/common-data-types';
+import {OptionData} from '../../../interfaces/common-data-types';
 import venuesInfoBlockValidated from '../../../action-creators/venues-info-block-validated';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import {OfType} from '../../../interfaces/index';
@@ -39,7 +39,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(steppingBackRegistration);
   };
 
-  static getVenueOptions(venues: Venue[]) {
+  static getVenueOptions(venues: OptionData[]) {
     return venues.map((venueValue) => ({value: venueValue.id, label: venueValue.name}));
   }
 
