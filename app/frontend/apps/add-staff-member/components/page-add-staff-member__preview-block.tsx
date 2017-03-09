@@ -17,6 +17,7 @@ import {StringDict, Dict, BoolDict} from '../../../interfaces/index';
 import {FieldState} from 'react-redux-form';
 import {isRequiredField, isWrongEmail, isPhoneNumber, formatInvalid} from '../../../constants/form-errors';
 import validatingAllAddStaffMemberStepForms from '../../../action-creators/validating-all-add-staff-member-step-forms';
+import {previewDateFormat} from '../../../constants/index';
 
 type FieldDataPair = [string, FieldState];
 type ValidityPair = [string, boolean];
@@ -71,6 +72,16 @@ class Component extends React.Component<PropsFromConnect, State> {
 
     this.props.dispatch(requestingStaffMemberSave);
   };
+
+  static getFormattedDate(val: any): string {
+    const momentDate = moment(val);
+
+    if (momentDate.isValid()) {
+      return momentDate.format(previewDateFormat);
+    } else {
+      return '';
+    }
+  }
 
   onBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -163,6 +174,8 @@ class Component extends React.Component<PropsFromConnect, State> {
         surname: 'Surname',
         gender: 'Gender',
         dateOfBirth: 'Date of Birth'
+      }, {
+        dateOfBirth: Component.getFormattedDate
       });
 
     return Component.renderInformationBlock(
@@ -200,15 +213,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         otherVenues: 'Other Venues',
         startsAt: 'Starts At'
       }, {
-        startsAt: (val: any) => {
-          const momentDate = moment(val);
-
-          if (momentDate.isValid()) {
-            return momentDate.format('YYYY, MMMM D');
-          } else {
-            return '';
-          }
-        }
+        startsAt: Component.getFormattedDate
       }
     );
 
