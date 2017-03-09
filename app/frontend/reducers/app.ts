@@ -7,7 +7,7 @@ import staffMemberSavePending, {Structure as staffMemberSavePendingStructure} fr
 import isAllStepsPassed, {Structure as IsAllStepsPassedStructure} from './is-all-steps-passed';
 import accessToken, {Structure as AccessTokenStructure} from './access-token';
 import sourceImage, {Structure as SourceImageStructure} from './source-image';
-import venueValues, {Structure as VenueValuesStructure} from './venue-values';
+import venues, {Structure as VenuesStructure} from './venues';
 import payrates, {Structure as PayratesStructure} from './payrates';
 import staffTypes, {Structure as StaffTypesStructure} from './staff-types';
 import genderValues, {Structure as GenderValuesStructure} from './gender-values';
@@ -21,7 +21,7 @@ export interface Structure {
   readonly isAllStepsPassed: IsAllStepsPassedStructure;
   readonly accessToken: AccessTokenStructure;
   readonly sourceImage: SourceImageStructure;
-  readonly venueValues: VenueValuesStructure;
+  readonly venues: VenuesStructure;
   readonly payrates: PayratesStructure;
   readonly staffTypes: StaffTypesStructure;
   readonly genderValues: GenderValuesStructure;
@@ -35,7 +35,7 @@ const reducers: ReducersOfType<Structure> = {
   isAllStepsPassed,
   accessToken,
   sourceImage,
-  venueValues,
+  venues,
   payrates,
   staffTypes,
   genderValues

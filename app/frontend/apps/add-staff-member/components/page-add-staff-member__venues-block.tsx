@@ -39,8 +39,8 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(steppingBackRegistration);
   };
 
-  static getVenueOptions(venueValues: Venue[]) {
-    return venueValues.map((venueValue) => ({value: venueValue.id, label: venueValue.name}));
+  static getVenueOptions(venues: Venue[]) {
+    return venues.map((venueValue) => ({value: venueValue.id, label: venueValue.name}));
   }
 
   render() {
@@ -108,7 +108,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
-    venueOptions: Component.getVenueOptions(state.app.venueValues)
+    venueOptions: Component.getVenueOptions(state.app.venues)
   };
 };
 

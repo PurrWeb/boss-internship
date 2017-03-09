@@ -18,7 +18,7 @@ import {FieldState} from 'react-redux-form';
 import {isRequiredField, isWrongEmail, isPhoneNumber, formatInvalid} from '../../../constants/form-errors';
 import validatingAllAddStaffMemberStepForms from '../../../action-creators/validating-all-add-staff-member-step-forms';
 import {previewDateFormat} from '../../../constants/index';
-import {Structure as VenuesStructure} from '../../../reducers/venue-values';
+import {Structure as VenuesStructure} from '../../../reducers/venues';
 import {Venue} from '../../../interfaces/common-data-types';
 
 type FieldDataPair = [string, FieldState];
@@ -312,7 +312,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   const {forms} = state.formsData;
-  const {avatarPreview, venueValues} = state.app;
+  const {avatarPreview, venues} = state.app;
 
   return {
     avatarPreview: avatarPreview,
@@ -320,7 +320,7 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
     venueFormFields: forms.venueForm,
     contactDetailsFormFields: forms.contactDetailsForm,
     workFormFields: forms.workForm,
-    venueOptions: venueValues
+    venueOptions: venues
   };
 };
 

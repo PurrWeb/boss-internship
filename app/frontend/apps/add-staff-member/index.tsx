@@ -7,7 +7,7 @@ import accessTokenChanged from '../../action-creators/access-token-changed';
 import payratesChanged from '../../action-creators/payrates-changed';
 import genderValuesChanged from '../../action-creators/gender-values-changed';
 import staffTypesChanged from '../../action-creators/staff-types-changed';
-import venueValuesChanged from '../../action-creators/venue-values-changed';
+import venuesChanged from '../../action-creators/venues-changed';
 import {BossData} from '../../interfaces/common-data-types';
 
 const Root = class extends React.Component <{}, {}> {
@@ -18,7 +18,7 @@ const Root = class extends React.Component <{}, {}> {
     store.dispatch( payratesChanged(boss.payrateValues) );
     store.dispatch( genderValuesChanged(boss.genderValues) );
     store.dispatch( staffTypesChanged(boss.staffTypeIds) );
-    store.dispatch( venueValuesChanged(boss.venueValues ) );
+    store.dispatch( venuesChanged(boss.venueValues ) );
   }
 
   render() {
