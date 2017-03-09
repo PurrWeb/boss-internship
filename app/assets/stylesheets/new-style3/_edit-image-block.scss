@@ -14,6 +14,8 @@
   }
 
   &__preview-section {
+    overflow: hidden;
+    border-radius: 50%;
   }
 
   &_adjust {
