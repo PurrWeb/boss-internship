@@ -18,6 +18,8 @@ import {FieldState} from 'react-redux-form';
 import {isRequiredField, isWrongEmail, isPhoneNumber, formatInvalid} from '../../../constants/form-errors';
 import validatingAllAddStaffMemberStepForms from '../../../action-creators/validating-all-add-staff-member-step-forms';
 import {previewDateFormat} from '../../../constants/index';
+import {Structure as VenuesStructure} from '../../../reducers/venue-values';
+import {Venue} from '../../../interfaces/common-data-types';
 
 type FieldDataPair = [string, FieldState];
 type ValidityPair = [string, boolean];
@@ -33,6 +35,7 @@ interface MappedProps {
   readonly venueFormFields: VenueForm;
   readonly contactDetailsFormFields: ContactDetailsForm;
   readonly workFormFields: WorkForm;
+  readonly venueOptions: VenuesStructure;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -82,6 +85,13 @@ class Component extends React.Component<PropsFromConnect, State> {
       return '';
     }
   }
+
+  getVenueValue: ValueTransformer = (venueNumber: number): string => {
+    return pipe< Venue[], Venue | undefined, string >(
+      find((venue: Venue) => venue.id === venueNumber),
+      (option?: Venue) => (option || {} as Partial<Venue>).name || ''
+    )(this.props.venueOptions);
+  };
 
   onBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -213,6 +223,8 @@ class Component extends React.Component<PropsFromConnect, State> {
         otherVenues: 'Other Venues',
         startsAt: 'Starts At'
       }, {
+        mainVenue: this.getVenueValue,
+        otherVenues: this.getVenueValue,
         startsAt: Component.getFormattedDate
       }
     );
@@ -300,13 +312,15 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   const {forms} = state.formsData;
+  const {avatarPreview, venueValues} = state.app;
 
   return {
-    avatarPreview: state.app.avatarPreview,
+    avatarPreview: avatarPreview,
     basicInformationFields: forms.basicInformationForm,
     venueFormFields: forms.venueForm,
     contactDetailsFormFields: forms.contactDetailsForm,
-    workFormFields: forms.workForm
+    workFormFields: forms.workForm,
+    venueOptions: venueValues
   };
 };
 
