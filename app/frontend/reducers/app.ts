@@ -9,7 +9,7 @@ import accessToken, {Structure as AccessTokenStructure} from './access-token';
 import sourceImage, {Structure as SourceImageStructure} from './source-image';
 import venueValues, {Structure as VenueValuesStructure} from './venue-values';
 import payrateValues, {Structure as PayrateValuesStructure} from './payrate-values';
-import staffTypeIds, {Structure as StaffTypeIdsStructure} from './staff-type-ids';
+import staffTypes, {Structure as StaffTypesStructure} from './staff-types';
 import genderValues, {Structure as GenderValuesStructure} from './gender-values';
 import avatarPreview, {Structure as AvatarPreviewStructure} from './avatar-preview';
 
@@ -23,7 +23,7 @@ export interface Structure {
   readonly sourceImage: SourceImageStructure;
   readonly venueValues: VenueValuesStructure;
   readonly payrateValues: PayrateValuesStructure;
-  readonly staffTypeIds: StaffTypeIdsStructure;
+  readonly staffTypes: StaffTypesStructure;
   readonly genderValues: GenderValuesStructure;
 }
 
@@ -37,7 +37,7 @@ const reducers: ReducersOfType<Structure> = {
   sourceImage,
   venueValues,
   payrateValues,
-  staffTypeIds,
+  staffTypes,
   genderValues
 };
 

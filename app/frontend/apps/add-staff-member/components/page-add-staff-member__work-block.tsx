@@ -44,8 +44,8 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(action);
   };
 
-  static getStaffTypeOptions(staffTypeIds: StaffType[]): Select.Option[] {
-    return staffTypeIds.map((data) => ({value: data.id, label: data.name}));
+  static getStaffTypeOptions(staffTypes: StaffType[]): Select.Option[] {
+    return staffTypes.map((data) => ({value: data.id, label: data.name}));
   }
 
   static getPayrateOptions(payrateValues: Payrate[]): Select.Option[] {
@@ -336,7 +336,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
-    staffTypeOptions: Component.getStaffTypeOptions(state.app.staffTypeIds),
+    staffTypeOptions: Component.getStaffTypeOptions(state.app.staffTypes),
     payrateOptions: Component.getPayrateOptions(state.app.payrateValues),
     isStaffTypeSecurity: state.formsData.workForm.staffType === STAFF_TYPE_SECURITY_IDX
   };

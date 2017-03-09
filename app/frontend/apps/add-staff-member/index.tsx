@@ -6,7 +6,7 @@ import App from './components/common-page-content';
 import accessTokenChanged from '../../action-creators/access-token-changed';
 import payrateValuesChanged from '../../action-creators/payrate-values-changed';
 import genderValuesChanged from '../../action-creators/gender-values-changed';
-import staffTypeIdsChanged from '../../action-creators/staff-type-ids-changed';
+import staffTypesChanged from '../../action-creators/staff-type-ids-changed';
 import venueValuesChanged from '../../action-creators/venue-values-changed';
 import {BossData} from '../../interfaces/common-data-types';
 
@@ -17,7 +17,7 @@ const Root = class extends React.Component <{}, {}> {
     store.dispatch( accessTokenChanged(boss.accessToken) );
     store.dispatch( payrateValuesChanged(boss.payrateValues) );
     store.dispatch( genderValuesChanged(boss.genderValues) );
-    store.dispatch( staffTypeIdsChanged(boss.staffTypeIds) );
+    store.dispatch( staffTypesChanged(boss.staffTypeIds) );
     store.dispatch( venueValuesChanged(boss.venueValues ) );
   }
 
