@@ -32,36 +32,34 @@ const getDataToSend = (storeState: StoreStructure): RequestStaffMemberSavePayloa
   const {basicInformationForm, contactDetailsForm, venueForm, workForm} =
     storeState.formsData;
 
-  return pipe<RequestStaffMemberSavePayload, RequestStaffMemberSavePayload>(
-    pickBy((val: any) => !isNil(val) && val !== '')
-  )({
-    pin_code: workForm.pinCode,
+  return {
+    pin_code: workForm.pinCode || null,
     gender: basicInformationForm.gender,
-    phone_number: contactDetailsForm.phoneNumber,
-    date_of_birth: basicInformationForm.dateOfBirth,
-    starts_at: venueForm.startsAt,
-    national_insurance_number: workForm.nationalInsuranceNumber,
-    hours_preference_note: workForm.hoursPreference,
-    day_preference_note: workForm.dayPreference,
+    phone_number: contactDetailsForm.phoneNumber || null,
+    date_of_birth: basicInformationForm.dateOfBirth || null,
+    starts_at: venueForm.startsAt || null,
+    national_insurance_number: workForm.nationalInsuranceNumber || null,
+    hours_preference_note: workForm.hoursPreference || null,
+    day_preference_note: workForm.dayPreference || null,
     avatar_base64: app.avatarPreview,
-    employment_status_a: workForm.starterEmploymentStatus === 'employment_status_a',
-    employment_status_b: workForm.starterEmploymentStatus === 'employment_status_b',
-    employment_status_c: workForm.starterEmploymentStatus === 'employment_status_c',
-    employment_status_d: workForm.starterEmploymentStatus === 'employment_status_d',
-    employment_status_p45_supplied: workForm.starterEmploymentStatus === 'employment_status_p45_supplied',
-    first_name: basicInformationForm.firstName,
-    surname: basicInformationForm.surname,
-    staff_type_id: workForm.staffType,
-    address: contactDetailsForm.address,
-    postcode: contactDetailsForm.postCode,
-    county: contactDetailsForm.country,
+    employment_status_a: workForm.starterEmploymentStatus === 'employment_status_a' || null,
+    employment_status_b: workForm.starterEmploymentStatus === 'employment_status_b' || null,
+    employment_status_c: workForm.starterEmploymentStatus === 'employment_status_c' || null,
+    employment_status_d: workForm.starterEmploymentStatus === 'employment_status_d' || null,
+    employment_status_p45_supplied: workForm.starterEmploymentStatus === 'employment_status_p45_supplied' || null,
+    first_name: basicInformationForm.firstName || null,
+    surname: basicInformationForm.surname || null,
+    staff_type_id: workForm.staffType || null,
+    address: contactDetailsForm.address || null,
+    postcode: contactDetailsForm.postCode || null,
+    county: contactDetailsForm.country || null,
     pay_rate_id: workForm.payRate,
-    master_venue_id: venueForm.mainVenue,
-    work_venue_ids: [1],
+    master_venue_id: venueForm.mainVenue || null,
+    work_venue_ids: [1] || null,
     email_address: contactDetailsForm.email,
-    sia_badge_number: workForm.siaBadgeNumber,
-    sia_badge_expiry_date: workForm.siaBadgeExpiryDate
-  });
+    sia_badge_number: workForm.siaBadgeNumber || null,
+    sia_badge_expiry_date: workForm.siaBadgeExpiryDate || null
+  };
 };
 
 const requestStaffMemberSave = ((action$, store: Store<StoreStructure>) => {
