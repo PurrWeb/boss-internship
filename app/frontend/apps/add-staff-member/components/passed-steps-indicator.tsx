@@ -15,6 +15,7 @@ interface Props {
 interface MappedProps {
   readonly forms: AppForms;
   readonly completedSteps: number;
+  readonly sourceImage: string;
   readonly currentStep: number;
 }
 
@@ -63,13 +64,14 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(action);
   };
 
-  static isFormWithoutErrors(formData: FormStructure<any>, formStepIdx: number, currentStep: number): boolean {
-    const isFormInvalid = pipe< FormStructure<any>, {}, FieldState[], FieldState, boolean>(
-      omit(['$form']),
-      values,
-      find((fieldData: FieldState) => fieldData.touched && !fieldData.valid),
-      Boolean
-    )(formData);
+  static isFormWithoutErrors(formData: FormStructure<any>, formStepIdx: number, currentStep: number, formValidator?: () => boolean): boolean {
+    const isFormInvalid = formValidator ? !formValidator() :
+      pipe< FormStructure<any>, {}, FieldState[], FieldState, boolean>(
+        omit(['$form']),
+        values,
+        find((fieldData: FieldState) => fieldData.touched && !fieldData.valid),
+        Boolean
+      )(formData);
 
     const isCurrentStepForm = formStepIdx === currentStep;
 
@@ -79,26 +81,30 @@ class Component extends React.Component<PropsFromConnect, State> {
       const isPrevRequiredForm = formStepIdx < currentStep && FormsWithRequiredFields[formStepIdx];
 
       if (isPrevRequiredForm) {
-        return formData.$form.valid;
+        return formValidator ? formValidator() : formData.$form.valid;
       } else {
         return true;
       }
     }
   }
 
-  static getStepsValidity(forms: AppForms, currentStep: number) {
+  isAvatarFormValid = () => !!this.props.sourceImage;
+
+  getStepsValidity(currentStep: number) {
+    const {basicInformationForm, uploadPhotoForm, venueForm, contactDetailsForm, workForm} = this.props.forms;
+
     return {
-      [AddStaffMemberSteps.BasicInformationBlock]: Component.isFormWithoutErrors(forms.basicInformationForm, AddStaffMemberSteps.BasicInformationBlock, currentStep),
-      [AddStaffMemberSteps.AddAvatarBlock]: Component.isFormWithoutErrors(forms.uploadPhotoForm, AddStaffMemberSteps.AddAvatarBlock, currentStep),
-      [AddStaffMemberSteps.VenuesBlock]: Component.isFormWithoutErrors(forms.venueForm, AddStaffMemberSteps.VenuesBlock, currentStep),
-      [AddStaffMemberSteps.ContactDetailsBlock]: Component.isFormWithoutErrors(forms.contactDetailsForm, AddStaffMemberSteps.ContactDetailsBlock, currentStep),
-      [AddStaffMemberSteps.WorkBlock]: Component.isFormWithoutErrors(forms.workForm, AddStaffMemberSteps.WorkBlock, currentStep),
+      [AddStaffMemberSteps.BasicInformationBlock]: Component.isFormWithoutErrors(basicInformationForm, AddStaffMemberSteps.BasicInformationBlock, currentStep),
+      [AddStaffMemberSteps.AddAvatarBlock]: Component.isFormWithoutErrors(uploadPhotoForm, AddStaffMemberSteps.AddAvatarBlock, currentStep, this.isAvatarFormValid),
+      [AddStaffMemberSteps.VenuesBlock]: Component.isFormWithoutErrors(venueForm, AddStaffMemberSteps.VenuesBlock, currentStep),
+      [AddStaffMemberSteps.ContactDetailsBlock]: Component.isFormWithoutErrors(contactDetailsForm, AddStaffMemberSteps.ContactDetailsBlock, currentStep),
+      [AddStaffMemberSteps.WorkBlock]: Component.isFormWithoutErrors(workForm, AddStaffMemberSteps.WorkBlock, currentStep),
       [AddStaffMemberSteps.PreviewBlock]: true
     };
   }
 
   drawSteps(completedSteps: number, currentStep: number) {
-    const stepsValidity = Component.getStepsValidity(this.props.forms, currentStep);
+    const stepsValidity = this.getStepsValidity(currentStep);
 
     return stepsData.map((stepData, idx) => {
       const completeClassName = completedSteps === idx ? 'boss3-steps-block__step_state_complete' : '';
@@ -131,10 +137,13 @@ class Component extends React.Component<PropsFromConnect, State> {
 }
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
+  const {completedSteps, currentStep, sourceImage} = state.app;
+
   return {
     forms: state.formsData.forms,
-    completedSteps: state.app.completedSteps,
-    currentStep: state.app.currentStep
+    completedSteps,
+    sourceImage,
+    currentStep
   };
 };
 

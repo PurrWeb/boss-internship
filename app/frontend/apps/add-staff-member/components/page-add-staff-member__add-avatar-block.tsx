@@ -24,13 +24,16 @@ interface Props {
 }
 
 interface MappedProps {
+  readonly avatarPreview: string;
   readonly sourceImage: string;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 interface State {
-  readonly toShowImage: boolean;
+  readonly toShowCropper: boolean;
+  readonly avatarPreviewSrc: string;
+  readonly avatarSrc: string;
   readonly validationMessage: string;
 }
 
@@ -46,13 +49,19 @@ const VALID_FILE_TYPES = 'image/jpeg, image/jpg, image/png, image/gif';
 const MAX_FILE_SIZE = 1000000;
 
 class Component extends React.Component<PropsFromConnect, State> {
-  state = {
-    toShowImage: false,
-    validationMessage: '',
-  };
-
   dropZone: ImageLoader;
   cropper: Cropper;
+
+  constructor(props: PropsFromConnect) {
+    super(props);
+
+    this.state = {
+      toShowCropper: false,
+      avatarPreviewSrc: '',
+      avatarSrc: props.sourceImage,
+      validationMessage: '',
+    };
+  }
 
   handleFormSubmit = () => {
     const cropper = this.cropper;
@@ -80,18 +89,34 @@ class Component extends React.Component<PropsFromConnect, State> {
     event.preventDefault();
 
     (this.cropper as Cropper).rotate(degrees);
-    this.crop();
+    this.saveImagePreviewToState();
   };
 
   onRotateLeftClick = curry(this.onRotateClick)(-90);
 
   onRotateRightClick = curry(this.onRotateClick)(90);
 
-  crop = () => {
-    const croppedImageUrl = this.cropper.getCroppedCanvas().toDataURL();
-    const action = avatarPreviewChanged(croppedImageUrl);
+  onCropSubmit = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
 
-    this.props.dispatch(action);
+    this.saveImagePreviewToState();
+    this.saveImagePreviewToStore();
+    this.setState({toShowCropper: false});
+  };
+
+  saveImagePreviewToState = () => {
+    const croppedImageUrl = this.cropper.getCroppedCanvas().toDataURL();
+
+    this.setState({avatarPreviewSrc: croppedImageUrl});
+  };
+
+  saveImagePreviewToStore = () => {
+    const croppedImageUrl = this.cropper.getCroppedCanvas().toDataURL();
+    const avatarPreviewChangedAction = avatarPreviewChanged(croppedImageUrl);
+    const sourceImageChangedAction = addingSourceImage(this.state.avatarSrc);
+
+    this.props.dispatch(avatarPreviewChangedAction);
+    this.props.dispatch(sourceImageChangedAction);
   };
 
   isAvatarAdded = (files: FileList) => {
@@ -120,9 +145,8 @@ class Component extends React.Component<PropsFromConnect, State> {
     }
   };
 
-  renderImageEditorBlock() {
-    return (
-      <div className="boss3-edit-image-block boss3-add-avatar-block_adjust_edit-image-block">
+  renderCropperBlock(toRender: boolean) {
+    return toRender ? (
         <div className="boss3-edit-image-block__cropper-block">
           <div className="boss3-buttons-group boss3-edit-image-block_adjust_buttons-group">
             <a href=""
@@ -142,7 +166,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           <div className="boss3-edit-image-block__cropper">
             <Cropper
               ref={(cropper: any) => { this.cropper = cropper; }}
-              src={this.props.sourceImage}
+              src={this.state.avatarSrc}
               preview="[data-avatarPreview]"
               style={{
               height: '100%',
@@ -150,16 +174,50 @@ class Component extends React.Component<PropsFromConnect, State> {
             }}
               aspectRatio={1}
               guides={true}
-              cropend={this.crop}
+              cropend={this.saveImagePreviewToState}
             />
           </div>
-        </div>
 
+          <div className="boss3-buttons-group boss3-edit-image-block_adjust_buttons-group">
+            <a href=""
+               className="boss3-button boss3-buttons-group_adjust_button"
+               onClick={this.onCropSubmit}
+            >
+              Ok
+            </a>
+          </div>
+
+        </div>
+      ) : null;
+  }
+
+  renderImageEditorBlock() {
+    const previewSectionOnEditing = this.state.toShowCropper ? (
         <div
           className="boss3-edit-image-block__preview-section"
+          alt="preview"
           data-avatarPreview
+        />
+      ) : null;
+
+    const previewSectionWithoutEditing = !this.state.toShowCropper && this.props.avatarPreview ?
+      (
+        <div
+            className="boss3-edit-image-block__preview-section"
         >
+          <img
+            src={this.props.avatarPreview}
+            alt="preview"
+          />
         </div>
+      ) : null;
+
+    return (
+      <div className="boss3-edit-image-block boss3-add-avatar-block_adjust_edit-image-block">
+        {this.renderCropperBlock(this.state.toShowCropper)}
+
+        {previewSectionOnEditing}
+        {previewSectionWithoutEditing}
       </div>
     );
   }
@@ -178,7 +236,10 @@ class Component extends React.Component<PropsFromConnect, State> {
       reader.addEventListener('load', () => {
         const dataUrl = reader.result;
 
-        this.props.dispatch( addingSourceImage(dataUrl || '') );
+        this.setState({
+          toShowCropper: true,
+          avatarSrc: dataUrl || ''
+        });
       });
       reader.readAsDataURL(file);
     }
@@ -196,7 +257,8 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   render() {
-    const imageLoaderClassName = cx('boss3-add-avatar-block__new-image-placeholder', {'boss3-hidden': !!this.props.sourceImage});
+    const toShowImageEditingBlock = !!this.state.avatarSrc;
+    const imageLoaderClassName = cx('boss3-add-avatar-block__new-image-placeholder', {'boss3-hidden': toShowImageEditingBlock});
 
     return (
       <div className="boss3-forms-block">
@@ -232,7 +294,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
           <div className="boss3-add-avatar-block">
 
-            {this.renderImagePreviewBlock(!!this.props.sourceImage)}
+            {this.renderImagePreviewBlock(toShowImageEditingBlock)}
 
             <Control
               model=".avatar"
@@ -291,6 +353,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
+    avatarPreview: state.app.avatarPreview,
     sourceImage: state.app.sourceImage
   };
 };
