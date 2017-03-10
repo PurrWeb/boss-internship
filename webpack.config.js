@@ -1,13 +1,13 @@
 const webpack = require('webpack');
 
-const isProd = process.argv.indexOf('-p') !== -1;
-
-const nodeEnv = isProd ? 'production' : 'development';
+const NODE_ENV = process.env.NODE_ENV || 'development';
+// const isProd = process.argv.indexOf('-p') !== -1;
+const isProd = NODE_ENV === 'production';
 
 const plugins = [
     new webpack.DefinePlugin({
         'process.env': {
-            NODE_ENV: JSON.stringify(nodeEnv)  // NODE_ENV: '"production"' for decreasing size of react library
+            NODE_ENV: '"' + NODE_ENV + '"'  // NODE_ENV: '"production"' for decreasing size of react library
         }
     })
 ];
