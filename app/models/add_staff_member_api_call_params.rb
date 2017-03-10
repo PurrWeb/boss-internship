@@ -46,7 +46,7 @@ class AddStaffMemberApiCallParams
       starts_at: params_json.fetch("starts_at"),
       national_insurance_number: params_json.fetch("national_insurance_number"),
       hours_preference_note: params_json.fetch("hours_preference_note"),
-      day_perference_note: params_json.fetch("day_perference_note"),
+      day_perference_note: params_json.fetch("day_preference_note"),
       employment_status_a: params_json.fetch("employment_status_a"),
       employment_status_b: params_json.fetch("employment_status_b"),
       employment_status_c: params_json.fetch("employment_status_c"),
