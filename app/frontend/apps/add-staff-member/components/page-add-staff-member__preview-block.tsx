@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as moment from 'moment';
 import {connect} from 'react-redux';
-import {pipe, omit, toPairs, map, addIndex, find} from 'ramda';
+import {pipe, omit, toPairs, map, addIndex, find, curry} from 'ramda';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
@@ -82,12 +82,12 @@ class Component extends React.Component<PropsFromConnect, State> {
     }
   }
 
-  getVenueValue: ValueTransformer = (venueNumber: number): string => {
+  static getOptionName(options: OptionData[], id: number): string {
     return pipe< OptionData[], OptionData | undefined, string >(
-      find((venue: OptionData) => venue.id === venueNumber),
+      find((option: OptionData) => option.id === id),
       (option?: OptionData) => (option || {} as Partial<OptionData>).name || ''
-    )(this.props.venues);
-  };
+    )(options);
+  }
 
   onBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -219,8 +219,8 @@ class Component extends React.Component<PropsFromConnect, State> {
         otherVenues: 'Other Venues',
         startsAt: 'Starts At'
       }, {
-        mainVenue: this.getVenueValue,
-        otherVenues: this.getVenueValue,
+        mainVenue: curry<OptionData[], number, string>(Component.getOptionName)(this.props.venues),
+        otherVenues: curry<OptionData[], number, string>(Component.getOptionName)(this.props.venues),
         startsAt: Component.getFormattedDate
       }
     );
