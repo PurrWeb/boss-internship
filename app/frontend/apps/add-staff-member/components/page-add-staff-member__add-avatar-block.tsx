@@ -6,6 +6,7 @@ import Cropper from 'react-cropper';
 import * as cx from 'classnames';
 import SyntheticEvent = React.MouseEvent;
 import {Control, Form, Errors, ModelAction, actions} from 'react-redux-form';
+import {curry} from 'ramda';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, UploadPhotoFormFields} from '../../../interfaces/store-models';
@@ -75,19 +76,16 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.dropZone.open();
   };
 
-  onRotateLeftClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  onRotateClick = (degrees: number, event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    (this.cropper as Cropper).rotate(-90);
+    (this.cropper as Cropper).rotate(degrees);
     this.crop();
   };
 
-  onRotateRightClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
+  onRotateLeftClick = curry(this.onRotateClick)(-90);
 
-    (this.cropper as Cropper).rotate(90);
-    this.crop();
-  };
+  onRotateRightClick = curry(this.onRotateClick)(90);
 
   crop = () => {
     const croppedImageUrl = this.cropper.getCroppedCanvas().toDataURL();
