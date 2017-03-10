@@ -232,7 +232,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                   <Control.radio
                     className="boss3-input"
                     model=".starterEmploymentStatus"
-                    value="staff_member[employment_status_p45_supplied]"
+                    value="employment_status_p45_supplied"
                     validateOn="change"
                     persist={true}
                     validators={{
@@ -247,7 +247,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                   <Control.radio
                     className="boss3-input"
                     model=".starterEmploymentStatus"
-                    value="staff_member[employment_status_a]"
+                    value="employment_status_a"
                     validateOn="change"
                     persist={true}
                     validators={{
@@ -262,7 +262,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                   <Control.radio
                     className="boss3-input"
                     model=".starterEmploymentStatus"
-                    value="staff_member[employment_status_b]"
+                    value="employment_status_b"
                     validateOn="change"
                     persist={true}
                     validators={{
@@ -277,7 +277,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                   <Control.radio
                     className="boss3-input"
                     model=".starterEmploymentStatus"
-                    value="staff_member[employment_status_c]"
+                    value="employment_status_c"
                     validateOn="change"
                     persist={true}
                     validators={{
@@ -292,7 +292,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                   <Control.radio
                     className="boss3-input"
                     model=".starterEmploymentStatus"
-                    value="staff_member[employment_status_d]"
+                    value="employment_status_d"
                     validateOn="change"
                     persist={true}
                     validators={{

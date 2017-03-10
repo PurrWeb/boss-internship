@@ -1,7 +1,7 @@
 import {Gender} from './store-models';
 import {StringDict} from './index';
 
-export interface RequestStaffMemberPayload {
+export interface RequestStaffMemberSavePayload {
   readonly pin_code: string;
   readonly gender: Gender;
   readonly phone_number: string;

@@ -3,6 +3,7 @@ import {Structure as ReducersStructure} from '../reducers';
 export type StoreStructure = ReducersStructure;
 
 export type Gender = 'male' | 'female';
+type StarterEmploymentStatus = 'employment_status_p45_supplied' | 'employment_status_a' | 'employment_status_b' | 'employment_status_c' | 'employment_status_d';
 
 export interface BasicInformationFormFields {
   readonly firstName?: string;
@@ -38,7 +39,7 @@ export interface WorkFormFields {
   readonly dayPreference?: string;
   readonly hoursPreference?: string;
   readonly payRate: string;
-  readonly starterEmploymentStatus?: string;
+  readonly starterEmploymentStatus: StarterEmploymentStatus;
 }
 
 export interface GlobalError {
