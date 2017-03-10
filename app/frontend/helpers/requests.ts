@@ -57,6 +57,13 @@ export function get<TData, THeaders extends {}>(url: string, dataToSend?: TData,
 }
 
 export const post = (url: string, body?: any, headers = {}): Observable<AjaxResponse | AjaxError> => {
+  if (typeof body === 'object') {
+    const headersToAdd = {
+      'Content-Type': 'application/json'
+    };
+
+    headers = {...headersToAdd, ...headers};
+  }
   const extendedHeaders = getExtendedHeaders(headers);
 
   return Observable.ajax.post(url, body, extendedHeaders)
