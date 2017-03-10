@@ -1,1 +1,1 @@
-export const previewDateFormat = 'YYYY, MMMM D';
+export const previewDateFormat = 'Do MMMM YYYY';
