@@ -48,8 +48,8 @@ class Component extends React.Component<PropsFromConnect, State> {
     return staffTypes.map((data) => ({value: data.id, label: data.name}));
   }
 
-  static getPayrateOptions(payrates: OptionData[]): Select.Option[] {
-    return payrates.map((data) => ({value: data.id, label: data.name}));
+  static getPayrateOptions(payRates: OptionData[]): Select.Option[] {
+    return payRates.map((data) => ({value: data.id, label: data.name}));
   }
 
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
@@ -337,7 +337,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
     staffTypeOptions: Component.getStaffTypeOptions(state.app.staffTypes),
-    payrateOptions: Component.getPayrateOptions(state.app.payrates),
+    payrateOptions: Component.getPayrateOptions(state.app.payRates),
     isStaffTypeSecurity: state.formsData.workForm.staffType === STAFF_TYPE_SECURITY_IDX
   };
 };

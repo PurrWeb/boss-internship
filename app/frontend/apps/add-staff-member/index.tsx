@@ -4,7 +4,7 @@ import {Provider} from 'react-redux';
 import store from '../../store/index';
 import App from './components/common-page-content';
 import accessTokenChanged from '../../action-creators/access-token-changed';
-import payratesChanged from '../../action-creators/payrates-changed';
+import payratesChanged from '../../action-creators/pay-rates-changed';
 import genderValuesChanged from '../../action-creators/gender-values-changed';
 import staffTypesChanged from '../../action-creators/staff-types-changed';
 import venuesChanged from '../../action-creators/venues-changed';

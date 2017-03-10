@@ -35,7 +35,7 @@ interface MappedProps {
   readonly workFormFields: WorkForm;
   readonly venues: OptionData[];
   readonly staffTypes: OptionData[];
-  readonly payrates: OptionData[];
+  readonly payRates: OptionData[];
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -263,7 +263,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         starterEmploymentStatus: 'Starter Employment Status'
       }, {
         staffType: curry<OptionData[], number, string>(Component.getOptionName)(this.props.staffTypes),
-        payRate: curry<OptionData[], number, string>(Component.getOptionName)(this.props.payrates)
+        payRate: curry<OptionData[], number, string>(Component.getOptionName)(this.props.payRates)
       });
 
     return Component.renderInformationBlock(
@@ -311,7 +311,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   const {forms} = state.formsData;
-  const {avatarPreview, venues, staffTypes, payrates} = state.app;
+  const {avatarPreview, venues, staffTypes, payRates} = state.app;
 
   return {
     avatarPreview: avatarPreview,
@@ -321,7 +321,7 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
     workFormFields: forms.workForm,
     venues,
     staffTypes,
-    payrates
+    payRates
   };
 };
 
