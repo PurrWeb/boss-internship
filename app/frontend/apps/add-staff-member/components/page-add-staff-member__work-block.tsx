@@ -35,7 +35,7 @@ interface State {
   readonly isMounted: boolean;
 }
 
-const STAFF_TYPE_SECURITY_IDX = '11';
+const STAFF_TYPE_SECURITY_IDX = 11;
 
 class Component extends React.Component<PropsFromConnect, State> {
   handleFormSubmit = (formModelData: OfType<WorkFormFields, any>) => {

@@ -23,7 +23,7 @@ const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
 const getExtendedHeaders = (headers = {}): Object => {
   const token = store.getState().app.accessToken || '';
   const dataToAdd = token ? {
-      Authorization: `Token token=${token}`
+      Authorization: `Token token="${token}"`
     } : {};
 
   return {...dataToAdd, ...headers};

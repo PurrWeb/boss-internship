@@ -25,20 +25,20 @@ export interface ContactDetailsFormFields {
 }
 
 export interface VenueFormFields {
-  readonly mainVenue: string;
-  readonly otherVenues?: string;
+  readonly mainVenue: number;
+  readonly otherVenues?: number[];
   readonly startsAt: string;
 }
 
 export interface WorkFormFields {
-  readonly staffType: string;
+  readonly staffType: number;
   readonly siaBadgeNumber: string;
   readonly siaBadgeExpiryDate: string;
   readonly pinCode: string;
   readonly nationalInsuranceNumber?: string;
   readonly dayPreference?: string;
   readonly hoursPreference?: string;
-  readonly payRate: string;
+  readonly payRate: number;
   readonly starterEmploymentStatus: StarterEmploymentStatus;
 }
 

@@ -32,7 +32,7 @@ const getDataToSend = (storeState: StoreStructure): RequestStaffMemberSavePayloa
   const {basicInformationForm, contactDetailsForm, venueForm, workForm} =
     storeState.formsData;
 
-  return pipe<AnyDict, RequestStaffMemberSavePayload>(
+  return pipe<RequestStaffMemberSavePayload, RequestStaffMemberSavePayload>(
     pickBy((val: any) => !isNil(val) && val !== '')
   )({
     pin_code: workForm.pinCode,
