@@ -23,7 +23,6 @@ interface Props {
 }
 
 interface MappedProps {
-  readonly avatarPreview: string;
   readonly sourceImage: string;
 }
 
@@ -52,10 +51,14 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   dropZone: ImageLoader;
+  cropper: Cropper;
 
   handleFormSubmit = () => {
+    const cropper = this.cropper;
+    const croppedImageUrl = cropper ? cropper.getCroppedCanvas().toDataURL() : '';
+
     const formModelData: OfType<UploadPhotoFormFields, string> = {
-      avatar: this.props.avatarPreview
+      avatar: croppedImageUrl
     };
     const action = avatarBlockValidated(formModelData);
 
@@ -75,17 +78,19 @@ class Component extends React.Component<PropsFromConnect, State> {
   onRotateLeftClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    (this.refs.cropper as Cropper).rotate(-90);
+    (this.cropper as Cropper).rotate(-90);
+    this.crop();
   };
 
   onRotateRightClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
-    (this.refs.cropper as Cropper).rotate(90);
+    (this.cropper as Cropper).rotate(90);
+    this.crop();
   };
 
   crop = () => {
-    const croppedImageUrl = (this.refs.cropper as Cropper).getCroppedCanvas().toDataURL();
+    const croppedImageUrl = this.cropper.getCroppedCanvas().toDataURL();
     const action = avatarPreviewChanged(croppedImageUrl);
 
     this.props.dispatch(action);
@@ -117,18 +122,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     }
   };
 
-  renderCroppedImagePreview() {
-    const {avatarPreview} = this.props;
-
-    return avatarPreview ? (
-      <img
-        width="200"
-        height="200"
-        src={avatarPreview}
-      />
-    ) : '';
-  }
-
   renderImageEditorBlock() {
     return (
       <div className="boss3-edit-image-block boss3-add-avatar-block_adjust_edit-image-block">
@@ -150,21 +143,24 @@ class Component extends React.Component<PropsFromConnect, State> {
 
           <div className="boss3-edit-image-block__cropper">
             <Cropper
-              ref="cropper"
+              ref={(cropper: any) => { this.cropper = cropper; }}
               src={this.props.sourceImage}
+              preview="[data-avatarPreview]"
               style={{
               height: '100%',
               width: '100%'
             }}
               aspectRatio={1}
               guides={true}
-              crop={this.crop}
+              cropend={this.crop}
             />
           </div>
         </div>
 
-        <div className="boss3-edit-image-block__preview-section">
-          {this.renderCroppedImagePreview()}
+        <div
+          className="boss3-edit-image-block__preview-section"
+          data-avatarPreview
+        >
         </div>
       </div>
     );
@@ -297,7 +293,6 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
-    avatarPreview: state.app.avatarPreview,
     sourceImage: state.app.sourceImage
   };
 };
