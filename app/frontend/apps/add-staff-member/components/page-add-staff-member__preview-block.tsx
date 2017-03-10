@@ -261,6 +261,8 @@ class Component extends React.Component<PropsFromConnect, State> {
         hoursPreference: 'Hours Preference',
         payRate: 'Pay Rate',
         starterEmploymentStatus: 'Starter Employment Status'
+      }, {
+        staffType: curry<OptionData[], number, string>(Component.getOptionName)(this.props.staffTypes)
       });
 
     return Component.renderInformationBlock(
