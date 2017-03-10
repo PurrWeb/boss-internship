@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {pipe, omit, toPairs, map, addIndex, find, curry} from 'ramda';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
-import {StoreStructure} from '../../../interfaces/store-models';
+import {StoreStructure, StarterEmploymentStatus} from '../../../interfaces/store-models';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import requestingStaffMemberSave from '../../../action-creators/requesting-staff-member-save';
 import {
@@ -18,6 +18,7 @@ import {FieldState} from 'react-redux-form';
 import {isRequiredField, isWrongEmail, isPhoneNumber, formatInvalid} from '../../../constants/form-errors';
 import {previewDateFormat} from '../../../constants/index';
 import {OptionData} from '../../../interfaces/common-data-types';
+import {starterEmploymentStatusLabels} from '../../../constants/other';
 
 type FieldDataPair = [string, FieldState];
 type ValidityPair = [string, boolean];
@@ -263,8 +264,10 @@ class Component extends React.Component<PropsFromConnect, State> {
         starterEmploymentStatus: 'Starter Employment Status'
       }, {
         staffType: curry<OptionData[], number, string>(Component.getOptionName)(this.props.staffTypes),
-        payRate: curry<OptionData[], number, string>(Component.getOptionName)(this.props.payRates)
-      });
+        payRate: curry<OptionData[], number, string>(Component.getOptionName)(this.props.payRates),
+        starterEmploymentStatus: (val: StarterEmploymentStatus) => starterEmploymentStatusLabels[val]
+      }
+    );
 
     return Component.renderInformationBlock(
       content,
