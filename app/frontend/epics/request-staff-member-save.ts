@@ -1,6 +1,6 @@
 import {Observable, AjaxError} from 'rxjs';
 import {Epic} from 'redux-observable';
-import {pipe, pickBy, isNil} from 'ramda';
+import * as Select from 'react-select';
 // tslint:disable-next-line:no-require-imports
 const t = require('tcomb-validation');
 
@@ -31,6 +31,8 @@ const getDataToSend = (storeState: StoreStructure): RequestStaffMemberSavePayloa
   const app = storeState.app;
   const {basicInformationForm, contactDetailsForm, venueForm, workForm} =
     storeState.formsData;
+  const otherVenues = Array.isArray(venueForm.otherVenues) ?
+    venueForm.otherVenues.map((option: Select.Option) => Number(option.value)) : null;
 
   return {
     pin_code: workForm.pinCode || null,
@@ -55,7 +57,7 @@ const getDataToSend = (storeState: StoreStructure): RequestStaffMemberSavePayloa
     country: contactDetailsForm.country || null,
     pay_rate_id: workForm.payRate,
     master_venue_id: venueForm.mainVenue || null,
-    work_venue_ids: [1] || null,
+    work_venue_ids: otherVenues,
     email_address: contactDetailsForm.email,
     sia_badge_number: workForm.siaBadgeNumber || null,
     sia_badge_expiry_date: workForm.siaBadgeExpiryDate || null

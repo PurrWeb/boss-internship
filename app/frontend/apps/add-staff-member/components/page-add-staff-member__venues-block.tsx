@@ -68,6 +68,7 @@ class Component extends React.Component<PropsFromConnect, State> {
             <SelectControl
               model=".otherVenues"
               className="boss3-input"
+              multi={true}
               options={this.props.venueOptions}
               mapProps={{
                 value: (props) => props.modelValue,

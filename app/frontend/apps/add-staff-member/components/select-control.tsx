@@ -12,20 +12,13 @@ interface Props {
   readonly model: string;
   readonly className?: string;
   readonly mapProps?: MapProps;
+  readonly multi?: boolean;
   readonly options?: Select.Option[];
   readonly validateOn?: ValidateOn;
   readonly validators?: Validators;
 }
 
 interface State {
-}
-
-function changeAction(model: string, value: Select.Option): ModelAction {
-  return {
-    type: 'rrf/change',
-    model,
-    value: value.value
-  };
 }
 
 class SelectControl extends React.Component<Props, State> {
@@ -44,8 +37,18 @@ class SelectControl extends React.Component<Props, State> {
     };
   }
 
+  changeAction = (model: string, selectValue: Select.Option): ModelAction => {
+    const value = this.props.multi ? selectValue : selectValue.value;
+
+    return {
+      type: 'rrf/change',
+      model,
+      value
+    };
+  };
+
   render() {
-    const {className, model, mapProps, validateOn, validators} = this.props;
+    const {className, model, multi, mapProps, validateOn, validators} = this.props;
     const mappedProps = merge(this.localMapProps, mapProps);
 
     return (
@@ -53,7 +56,8 @@ class SelectControl extends React.Component<Props, State> {
         component={SelectFixed}
         className={className}
         model={model}
-        changeAction={changeAction}
+        multi={multi}
+        changeAction={this.changeAction}
         mapProps={mappedProps}
         validateOn={validateOn}
         persist={true}
