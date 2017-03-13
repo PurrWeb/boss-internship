@@ -11,11 +11,11 @@ export interface RequestStaffMemberSavePayload {
   readonly hours_preference_note: string | null;
   readonly day_preference_note: string | null;
   readonly avatar_base64: string;
-  readonly employment_status_a: boolean | null;
-  readonly employment_status_b: boolean | null;
-  readonly employment_status_c: boolean | null;
-  readonly employment_status_d: boolean | null;
-  readonly employment_status_p45_supplied: boolean | null;
+  readonly employment_status_a: boolean;
+  readonly employment_status_b: boolean;
+  readonly employment_status_c: boolean;
+  readonly employment_status_d: boolean;
+  readonly employment_status_p45_supplied: boolean;
   readonly first_name: string | null;
   readonly surname: string | null;
   readonly staff_type_id: number | null;
