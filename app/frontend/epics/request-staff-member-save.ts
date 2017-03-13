@@ -32,7 +32,7 @@ const getDataToSend = (storeState: StoreStructure): RequestStaffMemberSavePayloa
   const {basicInformationForm, contactDetailsForm, venueForm, workForm} =
     storeState.formsData;
   const otherVenues = Array.isArray(venueForm.otherVenues) ?
-    venueForm.otherVenues.map((option: Select.Option) => Number(option.value)) : null;
+    venueForm.otherVenues.map((option: Select.Option) => Number(option.value)) : [];
 
   return {
     pin_code: workForm.pinCode || null,

@@ -78,9 +78,6 @@ class Component extends React.Component<PropsFromConnect, State> {
 
               className="boss3-input"
               options={this.props.genderOptions}
-              mapProps={{
-                value: (props) => props.modelValue,
-              }}
               validateOn="change"
               validators={{
                 isFilled: isNotEmptyInput,

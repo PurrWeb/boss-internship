@@ -2,7 +2,10 @@
 
 import * as React from 'react';
 import * as Select from 'react-select';
-import {Control, ModelAction, MapProps, WrapperProps, ValidateOn, Validators} from 'react-redux-form';
+import {
+  Control, ModelAction, MapProps, WrapperProps, ValidateOn, Validators, ControlProps,
+  MapPropsProps
+} from 'react-redux-form';
 import SelectFixed from './react-select-fixed';
 import {merge} from 'ramda';
 
@@ -10,6 +13,7 @@ import {setInputClass} from '../../../helpers/renderers';
 
 interface Props {
   readonly model: string;
+  readonly value?: any;
   readonly className?: string;
   readonly mapProps?: MapProps;
   readonly multi?: boolean;
@@ -27,10 +31,14 @@ class SelectControl extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
+    const valueFn = props.multi ?
+      ((data: MapPropsProps) => (data.modelValue as Select.Option[]).length ? data.modelValue : props.value) :
+      (data: MapPropsProps) => data.modelValue;
+
     this.localMapProps = {
       className: setInputClass,
       options: () => this.props.options,
-      value: (data: WrapperProps) => data.modelValue,
+      value: valueFn,
       onChange: (data: any) => {
         return data.onChange;
       }
@@ -48,7 +56,7 @@ class SelectControl extends React.Component<Props, State> {
   };
 
   render() {
-    const {className, model, multi, mapProps, validateOn, validators} = this.props;
+    const {className, model, multi, mapProps, validateOn, validators, value} = this.props;
     const mappedProps = merge(this.localMapProps, mapProps);
 
     return (
@@ -56,6 +64,7 @@ class SelectControl extends React.Component<Props, State> {
         component={SelectFixed}
         className={className}
         model={model}
+        value={value}
         multi={multi}
         changeAction={this.changeAction}
         mapProps={mappedProps}

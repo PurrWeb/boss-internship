@@ -57,9 +57,6 @@ class Component extends React.Component<PropsFromConnect, State> {
               model=".mainVenue"
               className="boss3-input"
               options={this.props.venueOptions}
-              mapProps={{
-                value: (props) => props.modelValue,
-              }}
             />
           </label>
 
@@ -67,12 +64,10 @@ class Component extends React.Component<PropsFromConnect, State> {
             <span className="boss3-label__text">Other Venues</span>
             <SelectControl
               model=".otherVenues"
+              value={[]}
               className="boss3-input"
               multi={true}
               options={this.props.venueOptions}
-              mapProps={{
-                value: (props) => props.modelValue,
-              }}
             />
           </label>
 

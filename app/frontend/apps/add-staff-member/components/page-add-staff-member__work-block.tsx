@@ -103,9 +103,6 @@ class Component extends React.Component<PropsFromConnect, State> {
               model=".staffType"
               className="boss3-input"
               options={this.props.staffTypeOptions}
-              mapProps={{
-                value: (props) => props.modelValue,
-              }}
             />
           </label>
 
@@ -199,9 +196,6 @@ class Component extends React.Component<PropsFromConnect, State> {
               model=".payRate"
               className="boss3-input"
               options={this.props.payrateOptions}
-              mapProps={{
-                value: (props) => props.modelValue,
-              }}
               validateOn="change"
               validators={{
                 isFilled: isNotEmptyInput,
