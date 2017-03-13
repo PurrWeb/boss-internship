@@ -16,6 +16,12 @@
     display: inline-block;
     width: 120px;
     font-weight: 600;
+
+    &_type {
+      &_unfilled {
+        color: $boss-light-gray;
+      }
+    }
   }
 
   &__field-value {

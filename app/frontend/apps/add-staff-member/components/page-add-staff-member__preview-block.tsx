@@ -3,7 +3,8 @@
 import * as React from 'react';
 import * as moment from 'moment';
 import {connect} from 'react-redux';
-import {pipe, omit, toPairs, map, addIndex, find, curry} from 'ramda';
+import {pipe, omit, toPairs, map, addIndex, find, curry, isNil} from 'ramda';
+import * as cx from 'classnames';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, StarterEmploymentStatus} from '../../../interfaces/store-models';
@@ -132,10 +133,13 @@ class Component extends React.Component<PropsFromConnect, State> {
         const fieldTransformer = valueTransformers[fieldName];
         const labelVal = labelsMap[fieldName];
         const textValue = fieldTransformer ? fieldTransformer(fieldData.value) : Component.getTextFromFieldValue(fieldData.value);
+        const labelClassName = cx('boss3-info-fields-block__field-name', {
+          'boss3-info-fields-block__field-name_type_unfilled': isNil(fieldData.value) || fieldData.value === ''
+        });
 
         return (
           <li key={idx} className="boss3-info-fields-block__list-item">
-            <span className="boss3-info-fields-block__field-name">{labelVal}</span>
+            <span className={labelClassName}>{labelVal}</span>
             <span className="boss3-info-fields-block__field-value">{textValue}</span>
             { Component.renderListItemErrors(fieldData.validity) }
           </li>
