@@ -8,11 +8,12 @@ class RotaShiftDate
   end
 
   def start_time
-    rota_date.beginning_of_day + 8.hours
+    Time.zone.local(rota_date.year, rota_date.month, rota_date.day, 8, 0)
   end
 
   def end_time
-    (rota_date + 1.day).beginning_of_day + 8.hours
+    next_day = rota_date + 1.day
+    Time.zone.local(next_day.year, next_day.month, next_day.day, 8, 0)
   end
 
   def contains_time?(time)
