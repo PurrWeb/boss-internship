@@ -1,12 +1,22 @@
 require 'rails_helper'
 
 describe 'Rota shift date' do
+  let(:calendar_date) { Time.current.to_date }
+  let(:eight_am) do
+    Time.zone.local(
+      calendar_date.year,
+      calendar_date.month,
+      calendar_date.day,
+      8,
+      0
+    )
+  end
+
   describe 'self#to_rota_date' do
     let(:call) { RotaShiftDate.to_rota_date(time) }
-    let(:calendar_date) { time.to_date }
 
     context 'time is before 8am' do
-      let(:time) { Time.zone.now.beginning_of_day + 4.hours }
+      let(:time) { eight_am - 1.hour }
 
       specify 'result is day before calendar date' do
         expect(call).to eq(calendar_date - 1.day)
@@ -14,7 +24,7 @@ describe 'Rota shift date' do
     end
 
     context 'time is after 8am' do
-      let(:time) { Time.zone.now.beginning_of_day + 12.hours }
+      let(:time) { eight_am + 1.hour }
 
       specify 'result is calendar date' do
         expect(call).to eq(calendar_date)
@@ -24,12 +34,18 @@ describe 'Rota shift date' do
 
   describe 'start_time' do
     let(:date) { RotaShiftDate.new(time) }
-    let(:calendar_date) { time.to_date }
 
     context 'time is before 8am' do
-      let(:time) { Time.zone.now.beginning_of_day + 4.hours }
+      let(:time) { eight_am - 1.hour }
+      let(:previous_day) { calendar_date - 1.day }
       let(:expected_start_time) do
-        (calendar_date - 1.day).beginning_of_day + 8.hours
+        Time.zone.local(
+          previous_day.year,
+          previous_day.month,
+          previous_day.day,
+          8,
+          0
+        )
       end
 
       specify 'starts_at is at 8am the previous calendar day' do
@@ -38,9 +54,9 @@ describe 'Rota shift date' do
     end
 
     context 'time is after 8am' do
-      let(:time) { Time.zone.now.beginning_of_day + 12.hours }
+      let(:time) { eight_am + 1.hour }
       let(:expected_start_time) do
-        calendar_date.beginning_of_day + 8.hours
+        eight_am
       end
 
       specify 'result is at 8am the current calendar day' do
@@ -51,12 +67,11 @@ describe 'Rota shift date' do
 
   describe 'end_time' do
     let(:date) { RotaShiftDate.new(time) }
-    let(:calendar_date) { time.to_date }
 
     context 'time is before 8am' do
-      let(:time) { Time.zone.now.beginning_of_day + 4.hours }
+      let(:time) { eight_am - 1.hour }
       let(:expected_end_time) do
-        calendar_date.beginning_of_day + 8.hours
+        eight_am
       end
 
       specify 'ends is at 8am on the calendar day' do
@@ -65,9 +80,16 @@ describe 'Rota shift date' do
     end
 
     context 'time is after 8am' do
-      let(:time) { Time.zone.now.beginning_of_day + 12.hours }
+      let(:time) { eight_am + 1.hour }
+      let(:next_day) { calendar_date + 1.day }
       let(:expected_end_time) do
-        (calendar_date + 1.day).beginning_of_day + 8.hours
+        Time.zone.local(
+          next_day.year,
+          next_day.month,
+          next_day.day,
+          8,
+          0
+        )
       end
 
       specify 'result is at 8am the next calendar day' do
