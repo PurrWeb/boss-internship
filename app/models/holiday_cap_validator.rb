@@ -3,16 +3,18 @@ class HolidayCapValidator
 
   def initialize(holiday)
     @holiday = holiday
-    @now = Time.current
+    @today = Time.current.to_date
   end
-  attr_reader :holiday, :now
+  attr_reader :holiday, :today
 
   def validate
     if holiday.paid? && prerequisits_met?
       staff_member = holiday.staff_member
 
-      paid_holidays_this_year = HolidayThisYearQuery.new(
+      tax_year = TaxYear.new(today)
+      paid_holidays_this_year = HolidayInTaxYearQuery.new(
         relation: staff_member.active_holidays.paid,
+        tax_year: tax_year
       ).day_count
 
       if (paid_holidays_this_year + holiday.days) > PAID_HOLIDAY_DAY_CAP

@@ -11,7 +11,11 @@
 
 <h2>Holidays</h2>
 <% if staff_member.active_holidays.present? %>
-  <% holidays_this_year = HolidayThisYearQuery.new(relation: staff_member.active_holidays).all.includes(:frozen_by) %>
+  <% tax_year = TaxYear.new(Time.current.to_date) %>
+  <% holidays_this_year = HolidayInTaxYearQuery.new(
+       relation: staff_member.active_holidays,
+       tax_year: tax_year
+      ).all.includes(:frozen_by) %>
   <% paid_days = holidays_this_year.paid.to_a.sum { |holiday| holiday.days } %>
   <% unpaid_days = holidays_this_year.unpaid.to_a.sum { |holiday| holiday.days } %>
   <p><%= pluralize(paid_days, 'Paid day') %> this year</p>
