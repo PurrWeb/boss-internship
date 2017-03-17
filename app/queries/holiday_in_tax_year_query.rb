@@ -1,12 +1,10 @@
-class HolidayThisYearQuery
-  def initialize(relation: Holiday.all, now: Time.zone.now)
+class HolidayInTaxYearQuery
+  def initialize(relation: Holiday.all, tax_year:)
     @relation = relation
-    @today = now.to_date
+    @tax_year = tax_year
   end
 
   def all
-    tax_year = TaxYear.new(today)
-
     HolidayInRangeQuery.new(
       relation: relation,
       start_date: tax_year.start_date,
@@ -19,5 +17,5 @@ class HolidayThisYearQuery
   end
 
   private
-  attr_reader :relation, :today
+  attr_reader :relation, :tax_year
 end
