@@ -14,8 +14,9 @@ describe HolidayCapValidator do
     )
   end
   let(:holiday_type) { Holiday::PAID_HOLIDAY_TYPE }
-  let(:now) { tax_year.end_date - 1.day }
+  let(:now) { end_of_current_tax_year - 2.weeks }
   let(:tax_year) { TaxYear.new(Time.current)}
+  let(:end_of_current_tax_year) { tax_year.end_date }
   let(:start_date) { now.to_date + 1.week }
   let(:end_date) { start_date }
   let(:staff_member) { FactoryGirl.build(:staff_member) }
@@ -54,7 +55,7 @@ describe HolidayCapValidator do
       end
     end
 
-    context 'number of holidays are at the threshold' do
+    context 'number of holidays are at the threshold for current year' do
       let(:holiday_number) { HolidayCapValidator::PAID_HOLIDAY_DAY_CAP - 1 }
 
       specify 'new holiday is valid' do
@@ -63,7 +64,7 @@ describe HolidayCapValidator do
       end
     end
 
-    context 'number of holidays are at the threshold' do
+    context 'number of holidays are at the threshold for current year' do
       let(:holiday_number) { HolidayCapValidator::PAID_HOLIDAY_DAY_CAP }
 
       specify 'new holiday is not valid' do
@@ -77,6 +78,41 @@ describe HolidayCapValidator do
         specify 'new holiday should be valid' do
           validator.validate
           expect(holiday.errors.to_a).to eq([])
+        end
+      end
+
+      context 'creating a holiday in future tax year' do
+        let(:start_date) do
+          end_of_current_tax_year +
+            HolidayCapValidator::PAID_HOLIDAY_DAY_CAP.days +
+            1.week
+        end
+        let(:end_date) { start_date + 1.day }
+        let(:future_tax_year) { TaxYear.new(start_date) }
+
+        specify 'new holiday should be valid' do
+          validator.validate
+          expect(holiday.errors.to_a).to eq([])
+        end
+
+        context 'future year is also at holiday cap' do
+          before do
+            holiday_number.times do |index|
+              previous_holiday_start_date = future_tax_year.start_date + index.days
+              Holiday.create!(
+                holiday_type: Holiday::PAID_HOLIDAY_TYPE,
+                staff_member: staff_member,
+                creator: user,
+                start_date: previous_holiday_start_date,
+                end_date: previous_holiday_start_date
+              )
+            end
+          end
+
+          specify 'new holiday is not valid' do
+            validator.validate
+            expect(holiday.errors[:base]).to eq([HolidayCapValidator.cap_reached_error_message])
+          end
         end
       end
     end
