@@ -6,7 +6,7 @@ export default class ShiftItem extends Component {
         var venueInfo = null;
         if (this.props.venueObject) {
             venueInfo = <div
-                className="boss-badge"
+                className="boss3-badge"
                 style={{
                     backgroundColor: this.props.venueColor,
                     display: "inline-block",

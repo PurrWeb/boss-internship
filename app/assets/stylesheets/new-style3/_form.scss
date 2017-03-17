@@ -46,7 +46,7 @@
         box-sizing: border-box;
         background: white asset-url("icon-key-dark-grey.svg") left center no-repeat;
         background-size: 0.9em;
-        &.boss-input_big {
+        &.boss3-input_big {
           background-position-x: 0.4em;
           background-size: 0.7em;
           padding-left: 1.4em;
@@ -95,7 +95,7 @@
         text-align: center;
         border-radius: 0;
         background-image: none;
-        &.boss-input_big {
+        &.boss3-input_big {
           padding: 0.15em 0.1em;
         }
       }

@@ -58,7 +58,7 @@ export default class StaffShiftList extends Component {
         const noShiftsMessage = shifts.length === 0 ? 'none' : null;
 
         return (
-            <div className="boss-info-table__rotaed-text">
+            <div className="boss3-info-table__rotaed-text">
                 {shiftElements}
                 {noShiftsMessage}
             </div>

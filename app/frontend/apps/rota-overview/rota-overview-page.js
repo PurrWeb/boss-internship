@@ -82,7 +82,7 @@ class RotaOverviewPage extends Component {
                     <a href={appRoutes.rota({venueId: storeRota.venue.serverId, date: storeRota.date}) }>
                         {moment(storeRota.date).format("ddd D MMMM YYYY")}
                     </a>
-                    <span className="boss-badge" style={{verticalAlign: "middle", marginLeft: 10}}>
+                    <span className="boss3-badge" style={{verticalAlign: "middle", marginLeft: 10}}>
                         {rotaStatusTitles[storeRota.status]}
                     </span>
                 </h2>

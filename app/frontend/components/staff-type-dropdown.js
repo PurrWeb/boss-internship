@@ -20,7 +20,7 @@ export default class StaffTypeDropdown extends Component {
         })
         staffTypeOptions = _.values(staffTypeOptions);
         const containerClassName = cx('staff-type-dropdown', this.props.className);
-        const dropDownClassName = cx({'boss-react-select': this.props.isNewDesign});
+        const dropDownClassName = cx({'boss3-react-select': this.props.isNewDesign});
 
         return (
             <div className={containerClassName}>

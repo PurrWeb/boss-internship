@@ -17,12 +17,12 @@ class StaffTypeButton extends React.Component {
 
         return (
             <div
-                    className={`boss-staff-type-menu__button test-main-menu-staff-button`}
+                    className={`boss3-staff-type-menu__button test-main-menu-staff-button`}
                     style={{backgroundColor: staffType.color}}
                     onClick={this.onClick}
             >
                 <a href="#"
-                   className="boss-staff-type-menu__button-text"
+                   className="boss3-staff-type-menu__button-text"
                 >
                     {name}
                 </a>
@@ -53,15 +53,15 @@ export default class LargeStaffTypeSelector extends React.Component {
             });
 
             return (
-                <div className="boss-staff-type-menu__row" key={idx}>
+                <div className="boss3-staff-type-menu__row" key={idx}>
                     {buttons}
                 </div>
             );
         });
 
         return (
-            <div className="boss-main-content__body">
-                <div className="boss-staff-type-menu boss-main-content__body_adjust_main-menu">
+            <div className="boss3-main-content__body">
+                <div className="boss3-staff-type-menu boss3-main-content__body_adjust_main-menu">
                     {staffTypeRows}
                 </div>
             </div>

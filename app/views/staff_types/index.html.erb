@@ -22,7 +22,7 @@
                 <%= fields_for('staff_type[]', staff_type) do |staff_type_fields| %>
                   <%= staff_type_fields.hidden_field(:id) %>
                   <%= staff_type_fields.text_field(:ui_color,
-                    class: 'boss-hidden',
+                    class: 'boss3-hidden',
                     data: { type: staff_type.name.parameterize, selector: 'staff_type' }
                   ) %>
                 <% end %>

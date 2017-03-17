@@ -1,11 +1,11 @@
 @import 'settings';
 @import 'mixins';
 
-.boss-clock-buttons-block {
+.boss3-clock-buttons-block {
   @include normalize-block();
 
   &_adjust_button {
-    &.boss-clock-button {
+    &.boss3-clock-button {
       &_big {
         margin-right: 1em;
       }

@@ -19,7 +19,7 @@ export default class ColorPicker extends React.Component {
     // FIXME: pass it as onChange prop
     static changeNeighboringElements(color, event) {
         const currTrJq = $(event.target).closest('tr');
-        const badgeJq = currTrJq.find('.boss-badge');
+        const badgeJq = currTrJq.find('.boss3-badge');
         const textInp = currTrJq.find('[data-selector=staff_type]');
 
         badgeJq.css({
@@ -44,9 +44,9 @@ export default class ColorPicker extends React.Component {
 
     render(){
         const popup = this.state.displayPopup ? (
-                <div className="boss-color-picker__popup-container">
+                <div className="boss3-color-picker__popup-container">
                     <div
-                            className="boss-color-picker__cover"
+                            className="boss3-color-picker__cover"
                             onClick={ this.handleClose }
                     />
                     <GithubPicker
@@ -58,14 +58,14 @@ export default class ColorPicker extends React.Component {
 
         return (
             <div
-                    className="boss-color-picker"
+                    className="boss3-color-picker"
                     onClick={ this.handleClick }
             >
                 <div
-                        className="boss-color-picker__color_preview"
+                        className="boss3-color-picker__color_preview"
                         style={{backgroundColor: this.state.color}}
                 />
-                <div className="boss-color-picker__dropdown-arrow">▼</div>
+                <div className="boss3-color-picker__dropdown-arrow">▼</div>
                 {popup}
             </div>
         );
