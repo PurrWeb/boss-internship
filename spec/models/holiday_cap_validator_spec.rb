@@ -6,12 +6,14 @@ describe HolidayCapValidator do
   let(:holiday) do
     FactoryGirl.build(
       :holiday,
+      holiday_type: holiday_type,
       validate_as_creation: true,
       staff_member: staff_member,
       start_date: start_date,
       end_date: end_date
     )
   end
+  let(:holiday_type) { Holiday::PAID_HOLIDAY_TYPE }
   let(:now) { tax_year.end_date - 1.day }
   let(:tax_year) { TaxYear.new(Time.current)}
   let(:start_date) { now.to_date + 1.week }
@@ -67,6 +69,15 @@ describe HolidayCapValidator do
       specify 'new holiday is not valid' do
         validator.validate
         expect(holiday.errors[:base]).to eq([HolidayCapValidator.cap_reached_error_message])
+      end
+
+      context 'when holiday is unpaid' do
+        let(:holiday_type) { Holiday::UNPAID_HOLIDAY_TYPE }
+
+        specify 'new holiday should be valid' do
+          validator.validate
+          expect(holiday.errors.to_a).to eq([])
+        end
       end
     end
   end

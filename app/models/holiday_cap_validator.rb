@@ -8,7 +8,7 @@ class HolidayCapValidator
   attr_reader :holiday, :now
 
   def validate
-    if prerequisits_met?
+    if holiday.paid? && prerequisits_met?
       staff_member = holiday.staff_member
 
       paid_holidays_this_year = HolidayThisYearQuery.new(
