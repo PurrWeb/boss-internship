@@ -127,7 +127,7 @@ describe("Clock In/Out Page Integration Test", function(){
     it("Shows a list of staff members after selecting a staff type", function(){
         var {$$, component} = loadAppWithData(data)
 
-        ReactTestUtils.Simulate.click($$(".boss-main-menu__button")[0]);
+        ReactTestUtils.Simulate.click($$(".boss-staff-type-menu__button")[0]);
 
         expect($$(".test-staff-row").length).toBeGreaterThan(0);
     })

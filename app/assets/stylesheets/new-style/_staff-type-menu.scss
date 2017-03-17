@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss-main-menu {
+.boss-staff-type-menu {
   $margin-between-items: 24px;
 
   @include normalize-block();
@@ -17,10 +17,6 @@
 
     & + & {
       margin-top: $margin-between-items;
-    }
-
-    &_incomplete {
-      justify-content: flex-start;
     }
   }
 

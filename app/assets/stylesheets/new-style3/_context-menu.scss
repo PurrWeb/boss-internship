@@ -1,0 +1,87 @@
+@import 'settings';
+@import 'mixins';
+
+.boss3-context-menu {
+  $shadow-color: rgba(0, 0, 0, 0.17);
+  $border-color: #f2f2f2;
+  $shadow-blur: 40px;
+
+  @include normalize-block();
+
+  position: absolute;
+  top: 600px;
+  left: 600px;
+  padding: 1.6em 0.9em 1.3em 0.9em;
+  background-color: white;
+  border-radius: $boss-global-border-radius;
+  border: 1px solid $border-color;
+  box-shadow: 0 8px $shadow-blur $shadow-color;
+
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    top: -12px;
+    right: 62px;
+    background-color: white;
+    border-left: 1px solid $border-color;
+    border-top: 1px solid $border-color;
+    transform: rotate(45deg);
+    box-shadow: 8px 8px $shadow-blur $shadow-color;
+  }
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 60px;
+    height: 32px;
+    top: 0;
+    right: 43px;
+    background-color: white;
+  }
+
+  &__container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    &_visible {
+      background-color: rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  &_small {
+    top: 531px;
+    left: 156px;
+    padding: 0.6em 0.9em;
+    box-shadow: 0 8px $shadow-blur $shadow-color;
+
+    &:before {
+      width: 10px;
+      height: 10px;
+      left: 50%;
+      top: -6px;
+    }
+    &:after {
+      width: 20px;
+      height: 16px;
+      left: calc(50% - 5px);
+    }
+  }
+
+  &_adjust {
+    &_buttons-block-small {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
