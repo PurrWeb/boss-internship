@@ -11,12 +11,12 @@
     @include button-hover-behavior($bg-color);
   }
 
-  &.boss-clock-button_big {
+  &.boss-clock-button_type_big {
     padding-left: 3em;
     background-position: 1em center;
     background-size: 1.5em;
   }
-  &.boss-clock-button_small {
+  &.boss-clock-button_type_small {
     padding-left: 1.8em;
     background-position: 0.7em 45%;
     background-size: 0.8em;
@@ -42,24 +42,27 @@
   border: none;
   border-radius: $boss-global-border-radius;
 
-  &_small {
-    font-size: 0.7em;
-    padding: 0.4em 0.8em;
-    text-transform: uppercase;
-    font-weight:700;
+  &_type {
+    &_small {
+      font-size: 0.7em;
+      padding: 0.4em 0.8em;
+      text-transform: uppercase;
+      font-weight:700;
+    }
+    &_big {
+      padding: 0.8em 2em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    &_very-big {
+      padding: 1.2em 2em;
+      text-transform: uppercase;
+      font-size: 1rem;
+      font-weight: 400;
+    }
   }
-  &_big {
-    padding: 0.8em 2em;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    font-weight: 700;
-  }
-  &_very-big {
-    padding: 1.2em 2em;
-    text-transform: uppercase;
-    font-size: 1rem;
-    font-weight: 400;
-  }
+
   &_role {
     &_clock-in {
       @include button-role($image-name: icon-clock-in-white);

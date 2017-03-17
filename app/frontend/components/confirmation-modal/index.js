@@ -54,7 +54,7 @@ class ConfirmationModal extends React.Component {
                             />
                             <button
                                 type="submit"
-                                className="boss-clock-button boss-clock-button_very-big boss-clock-button_role_pin-ok boss-modal-window_adjust_submit-button"
+                                className="boss-clock-button boss-clock-button_type_very-big boss-clock-button_role_pin-ok boss-modal-window_adjust_submit-button"
                             >
                                 OK
                             </button>
@@ -78,7 +78,7 @@ class ConfirmationModal extends React.Component {
                             </div>
                             <button
                                 type="button"
-                                className="boss-clock-button boss-clock-button_very-big boss-clock-button_role_pin-ok boss-modal-window_adjust_submit-button"
+                                className="boss-clock-button boss-clock-button_type_very-big boss-clock-button_role_pin-ok boss-modal-window_adjust_submit-button"
                                 onClick={this.props.modalOptions.onRetryClick.bind(this)}
                             >
                                 Try Again
@@ -116,7 +116,7 @@ class ConfirmationModal extends React.Component {
                                 />
                                 <input
                                     type="submit"
-                                    className="boss-clock-button boss-clock-button_very-big boss-clock-button_role_pin-ok boss-modal-window_adjust_submit-button"
+                                    className="boss-clock-button boss-clock-button_type_very-big boss-clock-button_role_pin-ok boss-modal-window_adjust_submit-button"
                                     value="Ok"
                                 />
                             </div>

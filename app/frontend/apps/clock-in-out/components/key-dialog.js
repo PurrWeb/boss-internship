@@ -5,7 +5,7 @@ export default class KeyDialog extends React.Component {
     render(){
         const buttonOrSpinner = this.props.loadDataInProgress ?
             <Spinner /> :
-            <button type="submit" className="boss-clock-button boss-clock-button_very-big" data-test-marker-api-key-button>Load Clock In/Out Page</button>;
+            <button type="submit" className="boss-clock-button boss-clock-button_type_very-big" data-test-marker-api-key-button>Load Clock In/Out Page</button>;
 
         return (
             <div className="boss-main-content">

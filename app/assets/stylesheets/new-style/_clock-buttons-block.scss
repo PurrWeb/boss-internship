@@ -5,13 +5,11 @@
   @include normalize-block();
 
   &_adjust_button {
-    &.boss-clock-button {
-      &_big {
-        margin-right: 1em;
-      }
-      &_small {
-        margin-bottom: 0.8em;
-      }
+    &.boss-clock-button_type_big {
+      margin-right: 1em;
+    }
+    &.boss-clock-button_type_small {
+      margin-bottom: 0.8em;
     }
     &:last-child {
       margin: 0;
