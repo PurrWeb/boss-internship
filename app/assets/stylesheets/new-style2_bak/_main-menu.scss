@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss3-main-menu {
+.boss2-main-menu {
   $menu-min-height: 60px;
   $button-padding-side: 17px;
 
@@ -38,11 +38,16 @@
   }
 
   &__button {
-    display: inline-flex;
-    box-sizing: border-box;
-    height: $menu-min-height;
-    align-items: center;
-    cursor: pointer;
+    @at-root .menu > li#{&} {
+      display: inline-flex;
+      box-sizing: border-box;
+      height: $menu-min-height;
+      align-items: center;
+
+      @media screen and (max-width: 1024px) {
+        height: 35px;
+      }
+    }
 
     &_state {
       &_active {
@@ -67,13 +72,26 @@
   }
 
   &__button-link {
-    @include normalize-block($color: $boss-light-gray);
+    @at-root .menu > li > a#{&},
+    .dropdown.menu > li.is-dropdown-submenu-parent > a#{&} {
+      @include normalize-block($color: $boss-light-gray);
 
-    display: block;
-    padding: 0 $button-padding-side;
-    font-size: 12px;
+      display: block;
+      padding: 0 $button-padding-side;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: $menu-min-height;
 
-    .boss3-main-menu__button_state_active &, .boss3-main-menu__button:hover & {
+      &:after {
+        display: none;
+      }
+
+      &:hover {
+        color: $boss-dark-gray;
+      }
+    }
+
+    .boss2-main-menu__button_state_active & {
       color: $boss-dark-gray;
     }
 

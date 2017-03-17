@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss3-user-hours-info-block {
+.boss2-user-hours-info-block {
   @include normalize-block();
 
   display: flex;
@@ -26,13 +26,13 @@
     font-weight: 500;
     line-height: 1;
 
-    .boss3-user-hours-info-block__hours-info_role_rotaed & {
+    .boss2-user-hours-info-block__hours-info_role_rotaed & {
       color: #85bfef;
     }
-    .boss3-user-hours-info-block__hours-info_role_clocked & {
+    .boss2-user-hours-info-block__hours-info_role_clocked & {
       color: #3ed027;
     }
-    .boss3-user-hours-info-block__hours-info_role_accepted & {
+    .boss2-user-hours-info-block__hours-info_role_accepted & {
       display: inline-block;
       color: black;
       &_type {

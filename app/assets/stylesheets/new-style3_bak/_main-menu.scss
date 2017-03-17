@@ -8,6 +8,7 @@
   @include normalize-block();
 
   display: flex;
+  width: 100%;
   min-height: $menu-min-height;
   background-color: white;
   border-bottom: 1px solid $boss-very-light-gray;
@@ -29,9 +30,6 @@
     flex-wrap: wrap;
 
     &_type {
-      &_primary {
-      }
-
       &_secondary {
         margin-left: auto;
         flex-wrap: nowrap;

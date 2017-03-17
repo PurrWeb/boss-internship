@@ -55,4 +55,17 @@
   &-username {
     font-size: 16px;
   }
+
+  &-submenu {
+    top: 55px;
+  }
+
+  &-flex-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &-table-scroll {
+    overflow-x: visible;
+  }
 }
