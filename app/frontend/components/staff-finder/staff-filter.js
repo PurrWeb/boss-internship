@@ -147,7 +147,7 @@ export default class StaffFilter extends Component {
                     onChange={(event) =>
                         this.handleChange("search", event.target.value)
                     }
-                    className="boss-input boss-input_type_search boss-input-group_adjust_search-input"/>
+                    className="boss-input boss-input_role_search boss-input-group_adjust_search-input"/>
             </div>
         );
     }
@@ -181,14 +181,14 @@ export default class StaffFilter extends Component {
         var allOption = "All"
         var component = (
             <select
-                className="boss-input boss-input_type_select boss-input_variant_filters-block"
+                className="boss-input boss-input_type_select boss-input_type_filters-block"
                 value={this.props.filterSettings.rotaedOrActive ? rotaedOrActiveOption : allOption}
                 onChange={(e) => this.handleChange("rotaedOrActive", e.target.value !== allOption)}
             >
-                <option className="boss-input boss-input_variant_filters-block" value={allOption}>
+                <option className="boss-input boss-input_type_filters-block" value={allOption}>
                     {allOption}
                 </option>
-                <option className="boss-input boss-input_variant_filters-block" value={rotaedOrActiveOption}>
+                <option className="boss-input boss-input_type_filters-block" value={rotaedOrActiveOption}>
                     {rotaedOrActiveOption}
                 </option>
             </select>

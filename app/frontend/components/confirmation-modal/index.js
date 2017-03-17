@@ -110,7 +110,7 @@ class ConfirmationModal extends React.Component {
                                 </span>
                                 </div>
                                 <textarea
-                                    className="boss-input boss-input_role_in-modal-window boss-input_role_add-note boss-modal-window_adjust_textarea"
+                                    className="boss-input boss-input_type_modal-window boss-input_role_add-note boss-modal-window_adjust_textarea"
                                     placeholder="Type Notes Here..."
                                     rows="6"
                                 />

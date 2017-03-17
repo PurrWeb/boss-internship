@@ -25,7 +25,7 @@ export default class KeyDialog extends React.Component {
                           data-test-marker-key-dialog-form
                     >
                         <label htmlFor="key" className="boss-label boss-label_type_big boss-main-content__body_adjust_lock-screen-label-big">Enter Key</label>
-                        <input type="text" id="key" className="boss-input boss-input_big boss-input_type_key
+                        <input type="text" id="key" className="boss-input boss-input_type_big boss-input_role_key
                                 boss-input_outlined boss-main-content__body_adjust_lock-screen-input"
                                 ref={(input) => this.apiKeyInput = input}
                         />
