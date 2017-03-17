@@ -33,6 +33,73 @@
     box-sizing: border-box;
     border: 1px solid $boss-very-light-gray;
     padding: 13px 20px;
+
+    &::placeholder {
+      color: $boss-input-placeholder-color;
+    }
+  }
+
+  &_type {
+    &_key {
+      [type=password]#{&} {
+        padding-left: 1.4em;
+        box-sizing: border-box;
+        background: white asset-url("icon-key-dark-grey.svg") left center no-repeat;
+        background-size: 0.9em;
+        &.boss-input_big {
+          background-position-x: 0.4em;
+          background-size: 0.7em;
+          padding-left: 1.4em;
+        }
+      }
+    }
+
+    &_search {
+      padding-left: 1.7em;
+      box-sizing: border-box;
+      background: white asset-url("icon-lens-gray.svg") left center no-repeat;
+      background-size: 0.9em;
+    }
+  }
+
+  &_variant {
+    &_filters-block {
+      padding: 0.4em;
+      color: $boss-medium-gray;
+    }
+  }
+
+  &_outlined {
+    border: 1px solid $boss-light-gray;
+  }
+
+  &_big {
+    font-size: 2rem;
+    padding: 0.1em;
+  }
+
+  &_role {
+    &_in-modal-window {
+      color: $boss-light-gray;
+      border: 2px solid $boss-light-gray;
+      border-radius: $boss-global-border-radius;
+      box-shadow: none;
+    }
+    &_add-note {
+      padding: 0.5em;
+    }
+    &_pin {
+      &[type='password'] {
+        pointer-events: none;
+        padding-left: 0;
+        text-align: center;
+        border-radius: 0;
+        background-image: none;
+        &.boss-input_big {
+          padding: 0.15em 0.1em;
+        }
+      }
+    }
   }
 
   &_state {
