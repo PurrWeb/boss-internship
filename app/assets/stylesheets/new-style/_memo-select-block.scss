@@ -6,22 +6,7 @@
 
   position: relative;
 
-  &__select {
-
-  }
   &__label {
     position: absolute;
-
-    &_role {
-      &_hostess {}
-      &_bartender {}
-      &_waitress {}
-      &_chef {}
-    }
-    &_variant {
-      &_filters-block {
-
-      }
-    }
   }
 }
