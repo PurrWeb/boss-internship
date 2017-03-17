@@ -9,7 +9,7 @@ export default class BreakListItem extends React.Component {
         var deleteBreakButton;
         if (!this.props.readonly) {
             deleteBreakButton = <a
-                className="boss2-button boss2-button_type_small boss2-button_role_exclamation"
+                className="boss3-button boss3-button_type_small boss3-button_role_exclamation"
                 onClick={() => {
                     this.props.boundActions.deleteHoursAcceptanceBreak({
                         clientId: breakItem.clientId

@@ -3,7 +3,7 @@
     <div class="staff-member-page-staff-image">
       <img class="avatar-image avatar-image_medium" src="<%= staff_member.avatar.medium.url %>" />
       <% if staff_member.enabled? %>
-        <%= link_to(edit_avatar_staff_member_path(staff_member), class: "boss2-button boss2-button_type_small boss2-button_role_edit") do %>
+        <%= link_to(edit_avatar_staff_member_path(staff_member), class: "boss3-button boss3-button_type_small boss3-button_role_edit") do %>
           Edit
         <% end %>
       <% end %>
@@ -13,7 +13,7 @@
     <h1>
       <% if staff_member.flagged? %>
         <%= staff_member.full_name.titlecase %>
-        <span class="boss2-button boss2-button_role_exclamation">
+        <span class="boss3-button boss3-button_role_exclamation">
           Flagged
         </span>
       <% elsif staff_member.disabled? %>
@@ -31,7 +31,7 @@
     <% if can?(:disable, staff_member) %>
       <%= link_to(
             disable_staff_member_path(staff_member),
-            class: 'boss2-button boss2-button_role_exclamation',
+            class: 'boss3-button boss3-button_role_exclamation',
             data: { "control-type" => "button", "button-role" => "disable-staff-member"}
           ) do %>
         Disable Staff Member
@@ -40,7 +40,7 @@
     <% if can?(:enable, staff_member) %>
       <%= link_to(
             enable_staff_member_path(staff_member),
-            class: 'boss2-button boss2-button_role_exclamation',
+            class: 'boss3-button boss3-button_role_exclamation',
             data: { "control-type" => "button", "button-role" => "enable-staff-member"}
           ) do %>
         Enable Staff Member

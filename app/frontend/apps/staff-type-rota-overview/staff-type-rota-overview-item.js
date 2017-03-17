@@ -34,7 +34,7 @@ export default class StaffTypeRotaOverviewItem extends Component {
             <a href={appRoutes.staffTypeRota({staffTypeSlug: this.props.staffTypeSlug, dateOfRota})}>
                 <h2>{moment(dateOfRota).format("ddd D MMMM YYYY")}</h2>
             </a>    
-            <div className="boss2-flex-row">
+            <div className="boss3-flex-row">
                 <div className="column">
                     <StaffTypeRotaOverviewChart
                         staff={this.props.staff}

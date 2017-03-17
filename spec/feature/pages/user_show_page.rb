@@ -34,7 +34,7 @@ module PageObject
     end
 
     page_action :click_view_staff_member_button do
-      find('.view-staff-member-button.boss2-button').click
+      find('.view-staff-member-button.boss3-button').click
     end
 
     page_action :click_create_staff_member_link do

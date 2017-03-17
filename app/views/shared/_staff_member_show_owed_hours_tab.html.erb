@@ -36,15 +36,15 @@
             <td><p><%= owed_hour.note %></p></td>
             <td>
               <% if owed_hour.editable? %>
-                <div class="boss2-page-content_adjust_columns-buttons-group">
-                    <%= link_to('Edit', edit_owed_hour_path(owed_hour), class: 'boss2-button boss2-button_role_edit boss2-page-content_adjust_button') %>
+                <div class="boss3-page-content_adjust_columns-buttons-group">
+                    <%= link_to('Edit', edit_owed_hour_path(owed_hour), class: 'boss3-button boss3-button_role_edit boss3-page-content_adjust_button') %>
                     <%= link_to(
                           staff_member_owed_hour_path(
                             staff_member_id: staff_member.id,
                             id: owed_hour.id
                           ),
                           method: :delete,
-                          class: 'boss2-button boss2-button_role_delete boss2-page-content_adjust_button'
+                          class: 'boss3-button boss3-button_role_delete boss3-page-content_adjust_button'
                         ) do %>
                       Delete
                     <% end %>

@@ -3,7 +3,7 @@
     <div class="column"><h1 style="display: inline">Hours Confirmations for <%= venue.name %> <%= date %></h1></div>
     <div class="shrink column">
       <% date = RotaShiftDate.to_rota_date(Time.current) %>
-      <%= link_to(current_hours_confirmation_index_path(venue_id: venue.id), class: "boss2-button boss2-button_role_calendar") do %>
+      <%= link_to(current_hours_confirmation_index_path(venue_id: venue.id), class: "boss3-button boss3-button_role_calendar") do %>
           View current
       <% end %>
     </div>

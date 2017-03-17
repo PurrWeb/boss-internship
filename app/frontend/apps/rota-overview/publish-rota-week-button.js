@@ -18,7 +18,7 @@ export default class PublishRotaWeekButton extends React.Component {
             if (this.props.publishingInProgress) {
                 return <Spinner />
             } else {
-                return <button className="boss2-button" onClick={this.props.onClick}>
+                return <button className="boss3-button" onClick={this.props.onClick}>
                     Publish this week's rotas
                 </button>
             }

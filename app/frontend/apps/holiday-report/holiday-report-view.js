@@ -64,7 +64,7 @@ function csvDownloadButton(props){
       (holidayCount > 0)
     ) {
     return <a
-        className="boss2-button boss2-button_role_download"
+        className="boss3-button boss3-button_role_download"
         href={appRoutes.holidaysCsv({
           date: props.pageOptions.weekStartDate,
           venueId: props.pageOptions.venueServerId

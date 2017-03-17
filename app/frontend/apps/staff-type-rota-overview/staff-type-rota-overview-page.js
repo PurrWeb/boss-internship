@@ -25,7 +25,7 @@ export default class StaffTypeRotaOverviewPage extends Component {
                       })
                   }/>
               </div>
-              <a href={ appRoutes.securityRotaPdfDownload({ date: new Date(this.props.rotaDetailsObjects[0].date) }) } className="boss2-button boss2-button_role_download">
+              <a href={ appRoutes.securityRotaPdfDownload({ date: new Date(this.props.rotaDetailsObjects[0].date) }) } className="boss3-button boss3-button_role_download">
                 Download PDF
               </a>
             </div>
