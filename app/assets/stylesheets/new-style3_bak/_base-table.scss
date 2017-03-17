@@ -18,6 +18,8 @@
     }
   }
 
+  &__tr {}
+
   &__th {
     padding: 20px 50px 15px;
     border-bottom: 1px solid $boss-extra-light-gray;
@@ -42,5 +44,9 @@
         padding-left: $cell-with-avatar-padding-left;
       }
     }
+  }
+
+  &__text {
+
   }
 }

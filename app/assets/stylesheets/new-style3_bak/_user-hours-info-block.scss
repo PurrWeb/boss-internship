@@ -19,6 +19,15 @@
     &:first-child {
       border-left: none;
     }
+
+    &_role {
+      &_rotaed {
+      }
+      &_clocked {
+      }
+      &_accepted {
+      }
+    }
   }
 
   &__hours {

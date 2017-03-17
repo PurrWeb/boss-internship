@@ -57,9 +57,6 @@
   &__data-pair-label {
     margin-right: 7px;
   }
-  &__data-pair-value {
-
-  }
   &__data-pair-link {
     @include normalize-block($color: $boss-medium-gray, $cursor: pointer);
     font-size: 12px;

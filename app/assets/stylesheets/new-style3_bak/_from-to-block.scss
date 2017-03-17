@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss2-from-to-block {
+.boss3-from-to-block {
   $padding-x: 14px;
   $padding-y: 18px;
 
@@ -19,6 +19,10 @@
     border-bottom: 1px solid $boss-extra-light-gray;
   }
 
+  &__head-text {
+
+  }
+
   &__body {
     padding: $padding-y $padding-x;
   }
@@ -30,6 +34,26 @@
     vertical-align: top;
   }
 
+  &__collapsible-block {
+    &_state {
+      &_collapsed {
+
+      }
+    }
+  }
+
+  &__collapsible-head {
+
+  }
+
+  &__collapsible-head-text {
+
+  }
+
+  &__collapsible-body {
+
+  }
+
   &__inputs-group {
     display: flex;
   }
@@ -39,6 +63,9 @@
   }
 
   &_adjust {
+    &_button-add {
+    }
+
     &_input {
       width: 120px !important;
     }

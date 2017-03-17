@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss2-staff-members-list {
+.boss3-staff-members-list {
   $avatar-side-size: 120px;
   $avatar-offset-top: 8px;
 
@@ -56,6 +56,9 @@
 
   &__data-pair-label {
     margin-right: 7px;
+  }
+  &__data-pair-value {
+
   }
   &__data-pair-link {
     @include normalize-block($color: $boss-medium-gray, $cursor: pointer);

@@ -1,14 +1,13 @@
 @import 'settings';
 @import 'mixins';
 
-.boss2-main-menu {
+.boss3-main-menu {
   $menu-min-height: 60px;
   $button-padding-side: 17px;
 
   @include normalize-block();
 
   display: flex;
-  width: 100%;
   min-height: $menu-min-height;
   background-color: white;
   border-bottom: 1px solid $boss-very-light-gray;
@@ -30,6 +29,9 @@
     flex-wrap: wrap;
 
     &_type {
+      &_primary {
+      }
+
       &_secondary {
         margin-left: auto;
         flex-wrap: nowrap;
@@ -38,16 +40,11 @@
   }
 
   &__button {
-    @at-root .menu > li#{&} {
-      display: inline-flex;
-      box-sizing: border-box;
-      height: $menu-min-height;
-      align-items: center;
-
-      @media screen and (max-width: 1024px) {
-        height: 35px;
-      }
-    }
+    display: inline-flex;
+    box-sizing: border-box;
+    height: $menu-min-height;
+    align-items: center;
+    cursor: pointer;
 
     &_state {
       &_active {
@@ -72,26 +69,13 @@
   }
 
   &__button-link {
-    @at-root .menu > li > a#{&},
-    .dropdown.menu > li.is-dropdown-submenu-parent > a#{&} {
-      @include normalize-block($color: $boss-light-gray);
+    @include normalize-block($color: $boss-light-gray);
 
-      display: block;
-      padding: 0 $button-padding-side;
-      font-size: 12px;
-      font-weight: 500;
-      line-height: $menu-min-height;
+    display: block;
+    padding: 0 $button-padding-side;
+    font-size: 12px;
 
-      &:after {
-        display: none;
-      }
-
-      &:hover {
-        color: $boss-dark-gray;
-      }
-    }
-
-    .boss2-main-menu__button_state_active & {
+    .boss3-main-menu__button_state_active &, .boss3-main-menu__button:hover & {
       color: $boss-dark-gray;
     }
 
