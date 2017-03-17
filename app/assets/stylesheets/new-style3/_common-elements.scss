@@ -1,7 +1,56 @@
 @import 'settings';
 @import 'mixins';
 
+html {
+  @include normalize-block();
+
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  height: 100% !important;
+}
+
+body.boss3-body {
+  @include normalize-block();
+
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: map-get($boss-app-palette, body-background);
+  color: $boss-dark-gray;
+
+  @if ($boss-body-antialiased) {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
 .boss3 {
+  &-root {
+    display: block;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    background-color: $boss-body-background;
+
+    &_role {
+      &_manager {
+        background-color: #ffd9ac;
+
+        & .boss3-main-content {
+          margin: $main-content-margin-top auto 0;
+          min-height: initial;
+        }
+      }
+      &_normal {
+        & .boss3-main-content {
+          margin: $main-content-margin-top auto 0;
+          min-height: initial;
+        }
+      }
+    }
+  }
+
   &-h2 {
     @include normalize-block();
 
@@ -67,5 +116,21 @@
 
   &-table-scroll {
     overflow-x: visible;
+  }
+
+  &-tooltip-portal {
+    &__background {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 3;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  &-hidden {
+    display: none;
   }
 }

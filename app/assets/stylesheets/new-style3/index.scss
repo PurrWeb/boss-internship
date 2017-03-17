@@ -37,21 +37,3 @@
 @import 'info-fields-block';
 @import 'add-avatar-block';
 @import 'edit-image-block';
-
-.boss3-hidden {
-  display: none;
-}
-
-.boss3-html {
-  @include normalize-block();
-
-  padding: 0;
-}
-
-.boss3-body {
-  @include normalize-block();
-
-  margin: 0;
-  background-color: map-get($boss-app-palette, body-background);
-  color: $boss-dark-gray;
-}
