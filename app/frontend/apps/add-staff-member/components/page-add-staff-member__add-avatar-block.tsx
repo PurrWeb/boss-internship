@@ -147,23 +147,23 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   renderCropperBlock(toRender: boolean) {
     return toRender ? (
-        <div className="boss3-edit-image-block__cropper-block">
-          <div className="boss3-buttons-group boss3-edit-image-block_adjust_buttons-group">
+        <div className="boss-edit-image-block__cropper-block">
+          <div className="boss-buttons-group boss-edit-image-block_adjust_buttons-group">
             <a href=""
-               className="boss3-button boss3-buttons-group_adjust_button"
+               className="boss-button boss-buttons-group_adjust_button"
                onClick={this.onRotateLeftClick}
             >
               Rotate Left
             </a>
             <a href=""
-               className="boss3-button boss3-buttons-group_adjust_button"
+               className="boss-button boss-buttons-group_adjust_button"
                onClick={this.onRotateRightClick}
             >
               Rotate Right
             </a>
           </div>
 
-          <div className="boss3-edit-image-block__cropper">
+          <div className="boss-edit-image-block__cropper">
             <Cropper
               ref={(cropper: any) => { this.cropper = cropper; }}
               src={this.state.avatarSrc}
@@ -178,9 +178,9 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </div>
 
-          <div className="boss3-buttons-group boss3-edit-image-block_adjust_buttons-group">
+          <div className="boss-buttons-group boss-edit-image-block_adjust_buttons-group">
             <a href=""
-               className="boss3-button boss3-buttons-group_adjust_button"
+               className="boss-button boss-buttons-group_adjust_button"
                onClick={this.onCropSubmit}
             >
               Ok
@@ -194,7 +194,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   renderImageEditorBlock() {
     const previewSectionOnEditing = this.state.toShowCropper ? (
         <div
-          className="boss3-edit-image-block__preview-section"
+          className="boss-edit-image-block__preview-section"
           alt="preview"
           data-avatarPreview
         />
@@ -203,7 +203,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     const previewSectionWithoutEditing = !this.state.toShowCropper && this.props.avatarPreview ?
       (
         <div
-            className="boss3-edit-image-block__preview-section"
+            className="boss-edit-image-block__preview-section"
         >
           <img
             src={this.props.avatarPreview}
@@ -213,7 +213,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       ) : null;
 
     return (
-      <div className="boss3-edit-image-block boss3-add-avatar-block_adjust_edit-image-block">
+      <div className="boss-edit-image-block boss-add-avatar-block_adjust_edit-image-block">
         {this.renderCropperBlock(this.state.toShowCropper)}
 
         {previewSectionOnEditing}
@@ -258,17 +258,17 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     const toShowImageEditingBlock = !!this.state.avatarSrc;
-    const imageLoaderClassName = cx('boss3-add-avatar-block__new-image-placeholder', {'boss3-hidden': toShowImageEditingBlock});
+    const imageLoaderClassName = cx('boss-add-avatar-block__new-image-placeholder', {'boss-hidden': toShowImageEditingBlock});
 
     return (
-      <div className="boss3-forms-block">
+      <div className="boss-forms-block">
         <Form
           model="formsData.uploadPhotoForm"
-          className="boss3-form"
+          className="boss-form"
           onSubmit={this.handleFormSubmit}
         >
-          <label className="boss3-label">
-            <span className="boss3-label__text boss3-label__text_type_required">Avatar</span>
+          <label className="boss-label">
+            <span className="boss-label__text boss-label__text_type_required">Avatar</span>
           </label>
 
           <Errors
@@ -292,7 +292,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           />
 
 
-          <div className="boss3-add-avatar-block">
+          <div className="boss-add-avatar-block">
 
             {this.renderImagePreviewBlock(toShowImageEditingBlock)}
 
@@ -325,24 +325,24 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
 
             <a href=""
-               className="boss3-button boss3-button_role_file boss3-add-avatar-block_adjust_file-button"
+               className="boss-button boss-button_role_file boss-add-avatar-block_adjust_file-button"
                onClick={this.triggerLoadFileClick}
             >
               Choose File
             </a>
 
-            <span className="boss3-add-avatar-block__file-label">
+            <span className="boss-add-avatar-block__file-label">
             Drag and drop files here or click choose file to upload photo
           </span>
           </div>
 
-          <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
+          <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
             <input type="button"
-               className="boss3-button boss3-button_role_back boss3-buttons-group_adjust_button"
+               className="boss-button boss-button_role_back boss-buttons-group_adjust_button"
                value="Back"
                onClick={this.onBackClick}
             />
-            <input type="submit" className="boss3-button boss3-button_role_submit boss3-buttons-group_adjust_button" value="Continue"/>
+            <input type="submit" className="boss-button boss-button_role_submit boss-buttons-group_adjust_button" value="Continue"/>
           </div>
 
         </Form>

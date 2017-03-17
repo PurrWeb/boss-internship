@@ -7,9 +7,9 @@ function newFormAction() {
     var venueSelectSection = $('.venue-select-section');
 
     if (value === 'manager'){
-      venueSelectSection.removeClass('boss3-hidden');
+      venueSelectSection.removeClass('boss-hidden');
     } else {
-      venueSelectSection.addClass('boss3-hidden');
+      venueSelectSection.addClass('boss-hidden');
     }
   };
 

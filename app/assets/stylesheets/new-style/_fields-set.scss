@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss3-fields-set {
+.boss-fields-set {
   $padding: 20px;
 
   @include normalize-block();

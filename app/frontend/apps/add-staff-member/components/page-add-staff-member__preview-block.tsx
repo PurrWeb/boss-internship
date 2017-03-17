@@ -101,13 +101,13 @@ class Component extends React.Component<PropsFromConnect, State> {
       toPairs,
       addIndex(map)((validityPair: ValidityPair, idx: number) => validityPair[1] ? null :
         (
-          <li key={idx} className="boss3-info-fields-block__field-error">
+          <li key={idx} className="boss-info-fields-block__field-error">
             {ErrorTextsMap[validityPair[0]]}
           </li>
         )
       ),
       (errorElements) => errorElements.length ? (
-          <ul className="boss3-info-fields-block__field-errors">
+          <ul className="boss-info-fields-block__field-errors">
             {errorElements}
           </ul>
         ) : null
@@ -133,14 +133,14 @@ class Component extends React.Component<PropsFromConnect, State> {
         const fieldTransformer = valueTransformers[fieldName];
         const labelVal = labelsMap[fieldName];
         const textValue = fieldTransformer ? fieldTransformer(fieldData.value) : Component.getTextFromFieldValue(fieldData.value);
-        const labelClassName = cx('boss3-info-fields-block__field-name', {
-          'boss3-info-fields-block__field-name_type_unfilled': isNil(fieldData.value) || fieldData.value === ''
+        const labelClassName = cx('boss-info-fields-block__field-name', {
+          'boss-info-fields-block__field-name_type_unfilled': isNil(fieldData.value) || fieldData.value === ''
         });
 
         return (
-          <li key={idx} className="boss3-info-fields-block__list-item">
+          <li key={idx} className="boss-info-fields-block__list-item">
             <span className={labelClassName}>{labelVal}</span>
-            <span className="boss3-info-fields-block__field-value">{textValue}</span>
+            <span className="boss-info-fields-block__field-value">{textValue}</span>
             { Component.renderListItemErrors(fieldData.validity) }
           </li>
         );
@@ -148,7 +148,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     )(blockData);
 
     return (
-      <ul className="boss3-info-fields-block">
+      <ul className="boss-info-fields-block">
         {listElements}
       </ul>
     );
@@ -156,16 +156,16 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   static renderInformationBlock(content: JSX.Element | null, header: string, index?: number) {
     const isWithIndex: boolean = index !== undefined;
-    const withIndexClass = isWithIndex ? 'boss3-info-block_type_with-index' : '';
+    const withIndexClass = isWithIndex ? 'boss-info-block_type_with-index' : '';
 
     const indexElement = isWithIndex ?
-      <div className="boss3-info-block__index">{index}</div> :
+      <div className="boss-info-block__index">{index}</div> :
       null;
 
     return (
-      <div className={`boss3-info-block ${withIndexClass} boss3-forms-block_adjust_info-block`}>
+      <div className={`boss-info-block ${withIndexClass} boss-forms-block_adjust_info-block`}>
         {indexElement}
-        <h3 className="boss3-info-block__header">{header}</h3>
+        <h3 className="boss-info-block__header">{header}</h3>
 
         {content}
       </div>
@@ -202,10 +202,10 @@ class Component extends React.Component<PropsFromConnect, State> {
     const content = avatarPreview ? (
       <img
         src={avatarPreview}
-        className="boss3-info-block__image"
+        className="boss-info-block__image"
       />
     ) : (
-      <span className="boss3-info-block__error">
+      <span className="boss-info-block__error">
         {isRequiredField}
       </span>
     );
@@ -284,7 +284,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     return Component.isAllFormsValid(this.allUsedForms) ? (
       <a href=""
          onClick={this.onFormComplete}
-         className="boss3-button boss3-button_role_submit boss3-buttons-group_adjust_button"
+         className="boss-button boss-button_role_submit boss-buttons-group_adjust_button"
       >
         Continue
       </a>
@@ -293,7 +293,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     return (
-      <div className="boss3-forms-block">
+      <div className="boss-forms-block">
 
         {this.renderBasicInformationSummaryBlock()}
         {this.renderAvatarSummaryBlock()}
@@ -301,9 +301,9 @@ class Component extends React.Component<PropsFromConnect, State> {
         {this.renderAddressSummaryBlock()}
         {this.renderWorkSummaryBlock()}
 
-        <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
+        <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
           <a href=""
-             className="boss3-button boss3-button_role_back boss3-buttons-group_adjust_button"
+             className="boss-button boss-button_role_back boss-buttons-group_adjust_button"
              onClick={this.onBackClick}
           >
             Back

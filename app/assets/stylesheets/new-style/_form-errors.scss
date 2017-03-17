@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss3-form-errors {
+.boss-form-errors {
   @include normalize-block();
 
   display: block;
@@ -10,7 +10,7 @@
   background: map-get($boss-app-palette, error-background) asset-url('icon-danger-white') 14px center no-repeat;
   background-size: 20px auto;
 
-  .boss3-input + & {
+  .boss-input + & {
     margin-top: 10px;
   }
 

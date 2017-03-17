@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss3-h2 {
+.boss-h2 {
   @include normalize-block();
 
   font-size: 24px;
@@ -30,7 +30,7 @@
   }
 }
 
-.boss3-h4 {
+.boss-h4 {
   @include normalize-block();
 
   display: inline-block;

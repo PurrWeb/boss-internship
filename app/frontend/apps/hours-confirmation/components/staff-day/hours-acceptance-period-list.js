@@ -22,7 +22,7 @@ export default class HoursAcceptancePeriodList extends React.Component {
         var addShiftButton = null;
         if (this.hasClockedOut()){
             addShiftButton = <a
-                className="boss3-button boss3-button_role_add"
+                className="boss-button boss-button_role_add"
                 data-test-marker-add-hours-acceptance-period
                 onClick={() => this.addHours()}>
                     Add Shift
@@ -61,7 +61,7 @@ export default class HoursAcceptancePeriodList extends React.Component {
         if (this.areAllShiftsAccepted() && this.hasClockedOut()) {
             return <button
                 onClick={this.props.markDayAsDone}
-                className="boss3-button">
+                className="boss-button">
                 Done
             </button>
         }

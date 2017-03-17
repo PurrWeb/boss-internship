@@ -38,14 +38,14 @@ class ConfirmationModal extends React.Component {
         if (this.props.confirmationType === "PIN") {
 
             return <ModalContainer onClick={() => this.cancel()}>
-                <ModalDialog className="boss3-modal-window test-window-enter-pin" onClose={() => this.cancel()}>
-                    <div className="boss3-modal-window__header">
+                <ModalDialog className="boss-modal-window test-window-enter-pin" onClose={() => this.cancel()}>
+                    <div className="boss-modal-window__header">
                         {this.props.modalOptions.title}
                     </div>
 
-                    <div className="boss3-modal-window__content" data-test-marker-pin-modal>
+                    <div className="boss-modal-window__content" data-test-marker-pin-modal>
                         <form
-                            className="boss3-modal-window__form"
+                            className="boss-modal-window__form"
                             onSubmit={(e) => {e.preventDefault(); this.complete()}}
                         >
                             <PinInput
@@ -54,7 +54,7 @@ class ConfirmationModal extends React.Component {
                             />
                             <button
                                 type="submit"
-                                className="boss3-clock-button boss3-clock-button_very-big boss3-clock-button_role_pin-ok boss3-modal-window_adjust_submit-button"
+                                className="boss-clock-button boss-clock-button_very-big boss-clock-button_role_pin-ok boss-modal-window_adjust_submit-button"
                             >
                                 OK
                             </button>
@@ -66,19 +66,19 @@ class ConfirmationModal extends React.Component {
         } else if (this.props.confirmationType === "WRONG_PIN") {
             return (
                 <ModalContainer onClick={() => this.closeModal()}>
-                    <ModalDialog className="boss3-modal-window" onClose={() => this.closeModal()}>
-                        <div className="boss3-modal-window__header boss3-modal-window__header_error">
+                    <ModalDialog className="boss-modal-window" onClose={() => this.closeModal()}>
+                        <div className="boss-modal-window__header boss-modal-window__header_error">
                             {this.props.modalOptions.title}
                         </div>
 
-                        <div className="boss3-modal-window__content boss3-modal-window__content_role_error" data-test-marker-pin-modal>
-                            <div className="boss3-modal-window__message-block boss3-modal-window__message-block_role_error">
-                                <span className="boss3-modal-window__message-text">Your Insert Pin Has been Wrong</span>
-                                <span className="boss3-modal-window__message-text">Please Try Again</span>
+                        <div className="boss-modal-window__content boss-modal-window__content_role_error" data-test-marker-pin-modal>
+                            <div className="boss-modal-window__message-block boss-modal-window__message-block_role_error">
+                                <span className="boss-modal-window__message-text">Your Insert Pin Has been Wrong</span>
+                                <span className="boss-modal-window__message-text">Please Try Again</span>
                             </div>
                             <button
                                 type="button"
-                                className="boss3-clock-button boss3-clock-button_very-big boss3-clock-button_role_pin-ok boss3-modal-window_adjust_submit-button"
+                                className="boss-clock-button boss-clock-button_very-big boss-clock-button_role_pin-ok boss-modal-window_adjust_submit-button"
                                 onClick={this.props.modalOptions.onRetryClick.bind(this)}
                             >
                                 Try Again
@@ -91,32 +91,32 @@ class ConfirmationModal extends React.Component {
         } else if (this.props.confirmationType === "ADD_NOTE") {
             return (
                 <ModalContainer onClick={() => this.closeModal()}>
-                    <ModalDialog className="boss3-modal-window test-window-add-note" onClose={() => this.closeModal()}>
+                    <ModalDialog className="boss-modal-window test-window-add-note" onClose={() => this.closeModal()}>
 
                         <form
-                                className="boss3-form"
+                                className="boss-form"
                                 onSubmit={this.onAddNoteSubmit.bind(this)}
                                 action=""
                         >
-                            <div className="boss3-modal-window__header boss3-modal-window__header_add-note">
+                            <div className="boss-modal-window__header boss-modal-window__header_add-note">
                                 Add Note for {this.props.modalOptions.firstName} {this.props.modalOptions.surname}
                             </div>
 
-                            <div className="boss3-modal-window__content boss3-modal-window__content_role_add-note" data-test-marker-pin-modal>
-                                <div className="boss3-modal-window__message-block boss3-modal-window__message-block_role_add-note">
-                                    <span className="boss3-modal-window__message-text">Add some note for</span>
-                                    <span className="boss3-modal-window__message-text boss3-modal-window__message-text_role_name">
+                            <div className="boss-modal-window__content boss-modal-window__content_role_add-note" data-test-marker-pin-modal>
+                                <div className="boss-modal-window__message-block boss-modal-window__message-block_role_add-note">
+                                    <span className="boss-modal-window__message-text">Add some note for</span>
+                                    <span className="boss-modal-window__message-text boss-modal-window__message-text_role_name">
                                     {this.props.modalOptions.firstName} {this.props.modalOptions.surname}
                                 </span>
                                 </div>
                                 <textarea
-                                    className="boss3-input boss3-input_role_in-modal-window boss3-input_role_add-note boss3-modal-window_adjust_textarea"
+                                    className="boss-input boss-input_role_in-modal-window boss-input_role_add-note boss-modal-window_adjust_textarea"
                                     placeholder="Type Notes Here..."
                                     rows="6"
                                 />
                                 <input
                                     type="submit"
-                                    className="boss3-clock-button boss3-clock-button_very-big boss3-clock-button_role_pin-ok boss3-modal-window_adjust_submit-button"
+                                    className="boss-clock-button boss-clock-button_very-big boss-clock-button_role_pin-ok boss-modal-window_adjust_submit-button"
                                     value="Ok"
                                 />
                             </div>

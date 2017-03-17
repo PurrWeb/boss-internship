@@ -1,9 +1,9 @@
 <h1>Venues</h1>
 
-<%= link_to('Add Venue', new_venue_path, class: ['boss3-button boss3-button_role_add']) %>
+<%= link_to('Add Venue', new_venue_path, class: ['boss-button boss-button_role_add']) %>
 
 <% if venues.present? %>
-  <table class="boss3-table-scroll" style="text-align: center;">
+  <table class="boss-table-scroll" style="text-align: center;">
     <thead>
       <tr>
         <th style="text-align: center;">Name</th>
@@ -43,7 +43,7 @@
         </td>
 
         <td><%= venue.fruit_order_fields.map(&:to_s).map(&:humanize).to_sentence %></td>
-        <td><%= link_to('Edit', edit_venue_path(venue), class: 'boss3-button boss3-button_type_small') %></td>
+        <td><%= link_to('Edit', edit_venue_path(venue), class: 'boss-button boss-button_type_small') %></td>
       </tr>
     <% end %>
   </table>

@@ -1,6 +1,6 @@
 <div>
   <div class="pull-right">
-    <%= link_to('Back to current orders', fruit_order_reports_path, class: 'boss3-button') %>
+    <%= link_to('Back to current orders', fruit_order_reports_path, class: 'boss-button') %>
   </div>
 
   <h1>Fruit Order History</h1>
@@ -15,7 +15,7 @@
           <p>
             Marked compelete at <%= fruit_order.done_at.to_s(:human) %> by <%= fruit_order.done_user.full_name %>
           </p>
-          <%= link_to('View', fruit_order_path(fruit_order), class: 'boss3-button') %>
+          <%= link_to('View', fruit_order_path(fruit_order), class: 'boss-button') %>
         </li>
       <% end %>
     </ul>

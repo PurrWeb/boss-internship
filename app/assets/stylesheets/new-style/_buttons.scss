@@ -7,7 +7,7 @@
   background-size: auto $background-height;
 }
 
-.boss3-button {
+.boss-button {
   $background-color: map-get($boss-app-palette, primary);
 
   @include normalize-block();
@@ -127,14 +127,14 @@
       padding: 0 16px;
       line-height: 30px;
 
-      &.boss3-button_role_edit,
-      &.boss3-button_role_view-more,
-      &.boss3-button_role_add,
-      &.boss3-button_role_delete,
-      &.boss3-button_role_download,
-      &.boss3-button_role_exclamation,
-      &.boss3-button_role_calendar,
-      &.boss3-button_role_accepted
+      &.boss-button_role_edit,
+      &.boss-button_role_view-more,
+      &.boss-button_role_add,
+      &.boss-button_role_delete,
+      &.boss-button_role_download,
+      &.boss-button_role_exclamation,
+      &.boss-button_role_calendar,
+      &.boss-button_role_accepted
       {
         padding-left: $padding-left-with-icon;
         background-position-x: $background-position-x;
@@ -143,7 +143,7 @@
   }
 }
 
-.boss3-buttons-group {
+.boss-buttons-group {
   @include normalize-block();
 
   &_adjust {

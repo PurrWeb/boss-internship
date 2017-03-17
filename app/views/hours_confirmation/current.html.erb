@@ -3,7 +3,7 @@
     <div class="column"><h1 style="display: inline">Hours Requiring Confirmation</h1></div>
     <div class="shrink column">
       <% date = RotaShiftDate.to_rota_date(Time.current) %>
-      <%= link_to(hours_confirmation_index_path(venue_id: venue.id, date:UIRotaDate.format(date)), class: "boss3-button boss3-button_role_calendar") do %>
+      <%= link_to(hours_confirmation_index_path(venue_id: venue.id, date:UIRotaDate.format(date)), class: "boss-button boss-button_role_calendar") do %>
           View by date
       <% end %>
     </div>

@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss3-info-fields-block {
+.boss-info-fields-block {
   @include normalize-block();
 
   &__list-item {

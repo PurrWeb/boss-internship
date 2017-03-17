@@ -2,12 +2,12 @@
   <h1><%= user.full_name.titlecase %><%= " (Disabled)" if user.disabled? %></h1>
   <div class="media-object-section">
     <% if can?(:disable, user) %>
-      <%= link_to(disable_user_path(user), class: 'boss3-button boss3-button_role_exclamation') do %>
+      <%= link_to(disable_user_path(user), class: 'boss-button boss-button_role_exclamation') do %>
         Disable User
       <% end %>
     <% end %>
     <% if can?(:enable, user) %>
-      <%= link_to(undestroy_user_path(user), method: :post, class: 'boss3-button boss3-button_role_exclamation') do %>
+      <%= link_to(undestroy_user_path(user), method: :post, class: 'boss-button boss-button_role_exclamation') do %>
         Enable User
       <% end %>
     <% end %>
@@ -23,7 +23,7 @@
           <%= link_to(
                 'Edit',
                 edit_personal_details_user_path(user),
-                class: ['boss3-button boss3-button_type_small boss3-button_role_edit'],
+                class: ['boss-button boss-button_type_small boss-button_role_edit'],
                 data: { "control-type" => "button", "button-role" => "edit-personal-details" }
               ) %>
         </span>
@@ -48,7 +48,7 @@
           <%= link_to(
                 'Edit',
                 edit_access_details_user_path(user),
-                class: ['boss3-button boss3-button_type_small boss3-button_role_edit'],
+                class: ['boss-button boss-button_type_small boss-button_role_edit'],
                 data: { "control-type" => "button", "button-role" => "edit-user" }
               ) %>
         </span>
@@ -83,7 +83,7 @@
               <%= link_to(
                     'View',
                     staff_member_path(user.staff_member),
-                    class: ['boss3-button view-staff-member-button']
+                    class: ['boss-button view-staff-member-button']
                   )
               %>
             <% else %>
@@ -95,7 +95,7 @@
                   <%= link_to(
                         'Create',
                         new_staff_member_user_path(user),
-                        class: ['boss3-button boss3-button_role_edit'],
+                        class: ['boss-button boss-button_role_edit'],
                         data: {
                           "control-type" => "button",
                           "button-role" => "create-staff-member"

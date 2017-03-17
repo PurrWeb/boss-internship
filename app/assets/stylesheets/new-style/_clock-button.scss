@@ -27,7 +27,7 @@
   $background-color: map-get($boss-app-palette, primary);
 
   @include normalize-block();
-  @include link-to-button($color: $boss-white);
+  @include link-to-button($color: white);
   @include button-hover-behavior($background-color);
 
   padding: 0.8em 2em 0.8em 3em;
@@ -110,7 +110,7 @@
     background-color: $background-color-inactive;
 
     &:hover {
-      color: $boss-white;
+      color: white;
       background-color: $background-color-inactive;
     }
   }

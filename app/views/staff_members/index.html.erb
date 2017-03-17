@@ -1,10 +1,10 @@
 <h1>Staff Members</h1>
 
 <div class="mb-md">
-  <%= link_to(new_staff_member_path, class: ['boss3-button', 'boss3-button_role_add']) do %>
+  <%= link_to(new_staff_member_path, class: ['boss-button', 'boss-button_role_add']) do %>
       Add Staff Member
   <% end %>
-  <%= link_to(flagged_staff_members_path, class: 'boss3-button boss3-button_role_exclamation') do %>
+  <%= link_to(flagged_staff_members_path, class: 'boss-button boss-button_role_exclamation') do %>
       Flagged Staff Members
   <% end %>
 </div>
@@ -30,7 +30,7 @@
       <% staff_members.each do |staff_member| %>
         <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
           <td>
-            <%= image_tag(staff_member.avatar_url, class: "boss3-avatar") %>
+            <%= image_tag(staff_member.avatar_url, class: "boss-avatar") %>
           </td>
           <td data-role="name"><%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member)) %></td>
           <td>

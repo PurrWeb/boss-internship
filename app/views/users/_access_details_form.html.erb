@@ -3,11 +3,11 @@
     function updateVenueField(){
       var role = $('.user-role-select-field').val();
       if(role == 'manager'){
-        $('.venue-access-select-field-section').removeClass('boss3-hidden');
-        $('.venue-access-detail-section').addClass('boss3-hidden');
+        $('.venue-access-select-field-section').removeClass('boss-hidden');
+        $('.venue-access-detail-section').addClass('boss-hidden');
       } else {
-        $('.venue-access-detail-section').removeClass('boss3-hidden');
-        $('.venue-access-select-field-section').addClass('boss3-hidden');
+        $('.venue-access-detail-section').removeClass('boss-hidden');
+        $('.venue-access-select-field-section').addClass('boss-hidden');
       }
     }
 
@@ -38,7 +38,7 @@
       <dd class="edit-page-detail" data-detail="role"><%= form.object.role.titleize %></dd>
     </dl>
   <% end %>
-  <div class="boss3-hidden venue-access-detail-section">
+  <div class="boss-hidden venue-access-detail-section">
     <dl>
       <dt class="edit-page-detail-heading">Venues</dt>
       <dd class="edit-page-detail" data-detail="venues">All</dd>

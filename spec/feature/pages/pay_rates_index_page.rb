@@ -7,7 +7,7 @@ module PageObject
     end
 
     page_action :click_add_pay_rate_button do
-      find('a.boss3-button', text: 'Add Rate').click
+      find('a.boss-button', text: 'Add Rate').click
     end
 
     def navigation

@@ -12,7 +12,7 @@ export default class ClockInStatusBadge extends Component {
 
         return (
             <div
-                className={`boss3-info-table__user-status boss3-info-table__user-status_${statusForSubclass}`}
+                className={`boss-info-table__user-status boss-info-table__user-status_${statusForSubclass}`}
                 onClick={this.props.onClick}
             >
                 {option.title}

@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss3-base-table {
+.boss-base-table {
   $cell-with-avatar-padding-left: 85px;
 
   @include normalize-block();

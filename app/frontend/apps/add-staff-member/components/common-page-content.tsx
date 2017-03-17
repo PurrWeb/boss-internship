@@ -22,9 +22,9 @@ class Component extends React.Component<PropsFromConnect, State> {
   render() {
     return (
       <div
-          className="boss3-page-content__inner-container"
+          className="boss-page-content__inner-container"
       >
-        <div className="boss3-page-dashboard">
+        <div className="boss-page-dashboard">
           <PassedStepsIndicator/>
 
         </div>

@@ -4,7 +4,7 @@
       <div class="shrink column">
         <%= link_to(
                 fruit_order_path(current_fruit_order),
-                class: 'boss3-button boss3-button_role_delete',
+                class: 'boss-button boss-button_role_delete',
                 method: :delete
             ) do %>
             Delete Current Order
@@ -18,7 +18,7 @@
       submitted_fruit_orders_path(
         venue_id: current_venue.id
       ),
-      class: 'boss3-button'
+      class: 'boss-button'
     ) %>
 
 <%= bootstrap_form_for(

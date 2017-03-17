@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss3-clock-in-out-block {
+.boss-clock-in-out-block {
   @include normalize-block();
 
   display: flex;

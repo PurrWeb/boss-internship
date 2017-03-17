@@ -13,7 +13,7 @@
   background-color: map-get($boss-app-palette, primary);
 }
 
-.boss3-steps-block {
+.boss-steps-block {
   @include normalize-block();
 
   $index-side-size: 30px;
@@ -61,7 +61,7 @@
           background-color: map-get($boss-app-palette, inactive);
         }
 
-        & ~ .boss3-steps-block__step {
+        & ~ .boss-steps-block__step {
           &:before {
             background-color: map-get($boss-app-palette, inactive);
           }
@@ -87,11 +87,11 @@
     background-color: map-get($boss-app-palette, primary);
     cursor: pointer;
 
-    .boss3-steps-block__step_state_complete ~ .boss3-steps-block__step & {
+    .boss-steps-block__step_state_complete ~ .boss-steps-block__step & {
       background-color: map-get($boss-app-palette, inactive);
     }
 
-    .boss3-steps-block__step_state_with-error & {
+    .boss-steps-block__step_state_with-error & {
       &:after {
         content: '';
         position: absolute;

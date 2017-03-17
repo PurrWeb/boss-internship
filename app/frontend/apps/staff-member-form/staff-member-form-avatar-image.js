@@ -44,7 +44,7 @@ export default class StaffMemberFormAvatarImage extends React.Component {
         if (!this.state.showModal) {
             var selectImageButtonText = hasExistingImage ? "Use a different image" : "Select image";
             selectImageButton = <a
-                className="boss3-button boss3-button_role_edit"
+                className="boss-button boss-button_role_edit"
                 style={{marginTop: hasExistingImage ? 4 : 0}}
                 onClick={() => this.setState({showModal: true})}>
                 {selectImageButtonText}

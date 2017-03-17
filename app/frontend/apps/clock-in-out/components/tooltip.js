@@ -33,7 +33,7 @@ class Card extends React.Component {
         arrow: null,
         style: {style: {}, arrowStyle: {}}
     };
-    static backgroundClassName = 'boss3-tooltip-portal__background';
+    static backgroundClassName = 'boss-tooltip-portal__background';
 
     state = {
         hover: false,
@@ -361,7 +361,7 @@ class Card extends React.Component {
                     onClick={this.onBackgroundClick.bind(this)}
             >
                 <div
-                        className="boss3-tooltip-portal__tooltip"
+                        className="boss-tooltip-portal__tooltip"
                         style={style}
                         onMouseEnter={this.handleMouseEnter.bind(this)}
                         onMouseLeave={this.handleMouseLeave.bind(this)}
@@ -435,13 +435,13 @@ export default class ToolTip extends React.Component {
     }
     createPortal() {
         // for testing
-        const root = window.getTooltipRoot ? window.getTooltipRoot() : document.querySelector('.boss3-root');
+        const root = window.getTooltipRoot ? window.getTooltipRoot() : document.querySelector('.boss-root');
 
         portalNodes[this.props.group] = {
             rootNode: document.createElement('div'),
             timeout: false
         };
-        portalNodes[this.props.group].rootNode.className = 'boss3-tooltip-portal';
+        portalNodes[this.props.group].rootNode.className = 'boss-tooltip-portal';
         root.appendChild(portalNodes[this.props.group].rootNode);
     }
     renderPortal(props) {

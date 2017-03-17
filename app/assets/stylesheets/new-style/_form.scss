@@ -2,6 +2,8 @@
 @import 'mixins';
 
 .boss-form {
+  @include normalize-block();
+
   &_role {
     &_enter_key {
       display: flex;
@@ -11,106 +13,117 @@
       width: 100%;
     }
   }
-}
 
-%input-rules {
-  display: block;
-  box-sizing: border-box;
-  height: inherit;
-  width: 100%;
-  margin: 0;
-  background-color: $boss-white;
-  border-radius: $boss-input-radius;
-  padding: 0.1em;
-  box-shadow: none;
-  border: none;
-  color: $boss-medium-gray;
-  font-size: 1rem;
-  font-family: $boss-input-font-family;
-  line-height: normal;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-}
-
-input, select, textarea {
-  &.boss-input {
-    @extend %input-rules;
-
-    &:focus {
-      border: none;
-      box-shadow: none;
+  &_adjust {
+    &_boss3-fields-set {
+      margin-top: 40px !important;
     }
+  }
+}
+
+.boss-input {
+  @at-root
+  &[type=text],
+  &[type=password],
+  textarea#{&} {
+    @include normalize-block();
+
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid $boss-very-light-gray;
+    padding: 13px 20px;
 
     &::placeholder {
       color: $boss-input-placeholder-color;
     }
+  }
 
-    &[type='password'],
-    &_type_key
-    {
-      padding-left: 1.4em;
-      box-sizing: border-box;
-      background: $boss-white asset-url("icon-key-dark-grey.svg") left center no-repeat;
-      background-size: 0.9em;
-      &.boss-input_big {
-        background-position-x: 0.4em;
-        background-size: 0.7em;
+  &_type {
+    &_key {
+      [type=password]#{&} {
         padding-left: 1.4em;
-      }
-    }
-
-    &_type {
-      &_search {
-        padding-left: 1.7em;
         box-sizing: border-box;
-        background: $boss-white asset-url("icon-lens-gray.svg") left center no-repeat;
+        background: white asset-url("icon-key-dark-grey.svg") left center no-repeat;
         background-size: 0.9em;
-      }
-    }
-
-    &_variant {
-      &_filters-block {
-        padding: 0.4em;
-        color: $boss-medium-gray;
-      }
-    }
-
-    &_outlined {
-      border: 1px solid $boss-light-gray;
-    }
-
-    &_big {
-      font-size: 2rem;
-      padding: 0.1em;
-    }
-
-    &_role {
-      &_in-modal-window {
-        color: $boss-light-gray;
-        border: 2px solid $boss-light-gray;
-        border-radius: $boss-global-border-radius;
-        box-shadow: none;
-      }
-      &_add-note {
-        padding: 0.5em;
-      }
-      &_pin {
-        &[type='password'] {
-          pointer-events: none;
-          padding-left: 0;
-          text-align: center;
-          border-radius: 0;
-          background-image: none;
-          &.boss-input_big {
-            padding: 0.15em 0.1em;
-          }
+        &.boss-input_big {
+          background-position-x: 0.4em;
+          background-size: 0.7em;
+          padding-left: 1.4em;
         }
+      }
+    }
+
+    &_search {
+      padding-left: 1.7em;
+      box-sizing: border-box;
+      background: white asset-url("icon-lens-gray.svg") left center no-repeat;
+      background-size: 0.9em;
+    }
+  }
+
+  &_variant {
+    &_filters-block {
+      padding: 0.4em;
+      color: $boss-medium-gray;
+    }
+  }
+
+  &_outlined {
+    border: 1px solid $boss-light-gray;
+  }
+
+  &_big {
+    font-size: 2rem;
+    padding: 0.1em;
+  }
+
+  &_role {
+    &_in-modal-window {
+      color: $boss-light-gray;
+      border: 2px solid $boss-light-gray;
+      border-radius: $boss-global-border-radius;
+      box-shadow: none;
+    }
+    &_add-note {
+      padding: 0.5em;
+    }
+    &_pin {
+      &[type='password'] {
+        pointer-events: none;
+        padding-left: 0;
+        text-align: center;
+        border-radius: 0;
+        background-image: none;
+        &.boss-input_big {
+          padding: 0.15em 0.1em;
+        }
+      }
+    }
+  }
+
+  &_state {
+    &_error {
+      &[type=text], &[type=password] {
+        border-color: map-get($boss-app-palette, alert-border);
+        color: map-get($boss-app-palette, alert);
+      }
+
+      .Select-control {
+        border-color: map-get($boss-app-palette, alert-border);
       }
     }
   }
 }
 
 select.boss-input {
-  background: asset-url("icon-down-arrow-medium-gray.svg") center right no-repeat;
-  background-size: 0.5em;
+  margin-bottom: 0;
+}
+
+.boss-inputs-list {
+  @include normalize-block();
+
+  & > li {
+    @include normalize-block();
+  }
 }

@@ -41,16 +41,16 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     return (
-      <div className="boss3-forms-block">
+      <div className="boss-forms-block">
         <Form
           model="formsData.contactDetailsForm"
-          className="boss3-form"
+          className="boss-form"
           onSubmit={this.handleFormSubmit}
         >
-          <label className="boss3-label">
-            <span className="boss3-label__text boss3-label__text_type_required">Email</span>
+          <label className="boss-label">
+            <span className="boss-label__text boss-label__text_type_required">Email</span>
             <Control.text
-              className="boss3-input"
+              className="boss-input"
               model=".email"
               mapProps={{
                 className: setInputClass
@@ -74,10 +74,10 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text">Address</span>
+          <label className="boss-label">
+            <span className="boss-label__text">Address</span>
             <Control.text
-              className="boss3-input"
+              className="boss-input"
               model=".address"
               mapProps={{
                 className: setInputClass
@@ -86,10 +86,10 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text">Country</span>
+          <label className="boss-label">
+            <span className="boss-label__text">Country</span>
             <Control.textarea
-              className="boss3-input"
+              className="boss-input"
               model=".country"
               mapProps={{
                 className: setInputClass,
@@ -97,10 +97,10 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text">Post Code</span>
+          <label className="boss-label">
+            <span className="boss-label__text">Post Code</span>
             <Control.text
-              className="boss3-input"
+              className="boss-input"
               model=".postCode"
               mapProps={{
                 className: setInputClass
@@ -109,10 +109,10 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text">Phone Number</span>
+          <label className="boss-label">
+            <span className="boss-label__text">Phone Number</span>
             <Control.text
-              className="boss3-input"
+              className="boss-input"
               model=".phoneNumber"
               mapProps={{
                 className: setInputClass
@@ -134,13 +134,13 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
+          <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
             <input type="button"
-                   className="boss3-button boss3-button_role_back boss3-buttons-group_adjust_button"
+                   className="boss-button boss-button_role_back boss-buttons-group_adjust_button"
                    value="Back"
                    onClick={this.onBackClick}
             />
-            <input type="submit" className="boss3-button boss3-button_role_submit boss3-buttons-group_adjust_button" value="Continue"/>
+            <input type="submit" className="boss-button boss-button_role_submit boss-buttons-group_adjust_button" value="Continue"/>
           </div>
         </Form>
       </div>

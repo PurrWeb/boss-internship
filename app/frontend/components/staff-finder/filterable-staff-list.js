@@ -43,23 +43,23 @@ class FilterableStaffList extends Component {
     getNewStyleTableContent() {
         const staffListItems = this.getStaffListItems();
         const notesCol = this.props.toShowNotes ? (
-            <div className="boss3-info-table__th boss3-info-table__th_notes">notes</div>
+            <div className="boss-info-table__th boss-info-table__th_notes">notes</div>
         ) : null;
 
         return staffListItems.length ? (
-            <div className="boss3-main-content__results-table-container">
-                <div className="boss3-info-table">
-                    <div className="boss3-info-table__header">
-                        <div className="boss3-info-table__th boss3-info-table__th_name">name</div>
-                        <div className="boss3-info-table__th boss3-info-table__th_rotaed">rotaed</div>
+            <div className="boss-main-content__results-table-container">
+                <div className="boss-info-table">
+                    <div className="boss-info-table__header">
+                        <div className="boss-info-table__th boss-info-table__th_name">name</div>
+                        <div className="boss-info-table__th boss-info-table__th_rotaed">rotaed</div>
                         {notesCol}
-                        <div className="boss3-info-table__th boss3-info-table__th_status">status</div>
+                        <div className="boss-info-table__th boss-info-table__th_status">status</div>
                     </div>
                     {staffListItems}
                 </div>
             </div>
         ) : (
-            <div className="boss3-info-table__nothing-found-message">
+            <div className="boss-info-table__nothing-found-message">
                 No Staff Members Found
             </div>
         );
@@ -71,7 +71,7 @@ class FilterableStaffList extends Component {
         const tableContent = this.getTableContent();
 
         return this.props.isNewDesign ? (
-            <div className="boss3-main-content__results-table-container">
+            <div className="boss-main-content__results-table-container">
                 {tableContent}
             </div>
         ) : (

@@ -28,15 +28,15 @@ class ClockInOutView extends Component {
     componentDidMount() {
         this.mainTag = document.querySelector('main');
 
-        document.body.classList.add('boss3-body');
+        document.body.classList.add('boss-body');
 
         if (this.mainTag) {
             this.defaultClassNameOfMain = this.mainTag.className;
-            this.mainTag.className = 'boss3-root';
+            this.mainTag.className = 'boss-root';
         }
     }
     componentWillUnmount() {
-        document.body.classList.remove('boss3-body');
+        document.body.classList.remove('boss-body');
 
         if (this.mainTag) {
             this.mainTag.className = this.defaultClassNameOfMain;
@@ -46,7 +46,7 @@ class ClockInOutView extends Component {
         this.setMainTagClass();
 
         if (!this.props.hasLoadedAppData) {
-            return <div className="boss3-page-wrapper">
+            return <div className="boss-page-wrapper">
                 <LoadAppDataDialog />
             </div>
         } else {
@@ -60,7 +60,7 @@ class ClockInOutView extends Component {
     getReloadPageButton(){
         return (
             <a href="#"
-               className="boss3-header__reload-button"
+               className="boss-header__reload-button"
                onClick={this.onReloadClick}
             >
                 Reload
@@ -73,11 +73,11 @@ class ClockInOutView extends Component {
         }
 
         if (this.props.userIsManagerOrSupervisor) {
-            this.mainTag.classList.add('boss3-root_role_manager');
-            this.mainTag.classList.remove('boss3-root_role_normal');
+            this.mainTag.classList.add('boss-root_role_manager');
+            this.mainTag.classList.remove('boss-root_role_normal');
         } else {
-            this.mainTag.classList.add('boss3-root_role_normal');
-            this.mainTag.classList.remove('boss3-root_role_manager');
+            this.mainTag.classList.add('boss-root_role_normal');
+            this.mainTag.classList.remove('boss-root_role_manager');
         }
     }
     getClockInOutUI(){
@@ -106,15 +106,15 @@ class ClockInOutView extends Component {
             />;
         } else {
             header = (
-                <div className="boss3-header__container">
-                    <div className="boss3-header">
-                        <div className="boss3-header__reload-cell">
+                <div className="boss-header__container">
+                    <div className="boss-header">
+                        <div className="boss-header__reload-cell">
                             {this.getReloadPageButton()}
                         </div>
-                        <div className="boss3-header__caption-cell">
-                            <div className="boss3-header__caption-text">Select Your Staff Type</div>
+                        <div className="boss-header__caption-cell">
+                            <div className="boss-header__caption-text">Select Your Staff Type</div>
                         </div>
-                        <div className="boss3-header__time-cell">
+                        <div className="boss-header__time-cell">
                             <Clock />
                         </div>
                     </div>
@@ -128,11 +128,11 @@ class ClockInOutView extends Component {
         }
 
         return (
-            <div className="boss3-page-wrapper">
+            <div className="boss-page-wrapper">
                 <ConfirmationModal />
                 <UserActionConfirmationMessages />
                 {header}
-                <div className="boss3-main-content">
+                <div className="boss-main-content">
                     {content}
                 </div>
             </div>

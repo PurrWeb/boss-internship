@@ -29,8 +29,8 @@ class RotaOverviewPage extends Component {
         });
 
         return <div className="container">
-            <div className="boss3-flex-row">
-                <div className="boss3-flex-column">
+            <div className="boss-flex-row">
+                <div className="boss-flex-column">
                     <WeekAndVenueSelector
                         venueClientId={firstRota.venue.clientId}
                         weekStartDate={firstRota.date}
@@ -44,12 +44,12 @@ class RotaOverviewPage extends Component {
 
                     </WeekAndVenueSelector>
                 </div>
-                <div className="boss3-flex-column">
-                    <a href={pdfHref} className="boss3-button boss3-button_role_download">
+                <div className="boss-flex-column">
+                    <a href={pdfHref} className="boss-button boss-button_role_download">
                       Download PDF
                     </a>
                 </div>
-                <div className="boss3-flex-column">
+                <div className="boss-flex-column">
                     <h2 style={{fontSize: 20, marginTop: 0}}>Weekly Forecast</h2>
                     <WeeklyRotaForecast
                         serverVenueId={firstRota.venue.serverId}
@@ -82,7 +82,7 @@ class RotaOverviewPage extends Component {
                     <a href={appRoutes.rota({venueId: storeRota.venue.serverId, date: storeRota.date}) }>
                         {moment(storeRota.date).format("ddd D MMMM YYYY")}
                     </a>
-                    <span className="boss3-badge" style={{verticalAlign: "middle", marginLeft: 10}}>
+                    <span className="boss-badge" style={{verticalAlign: "middle", marginLeft: 10}}>
                         {rotaStatusTitles[storeRota.status]}
                     </span>
                 </h2>

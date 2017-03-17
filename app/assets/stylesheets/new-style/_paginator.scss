@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss3-paginator {
+.boss-paginator {
   @include normalize-block();
 
   display: flex;
@@ -30,26 +30,26 @@
       text-decoration: underline;
     }
 
-    .boss3-paginator__li_role_previous & {
+    .boss-paginator__li_role_previous & {
       padding-left: $padding-with-icon-x;
       background: white asset-url('icon-navigation-back-dark-gray.svg') $background-offset-x center no-repeat;
       background-size: auto 14px;
     }
 
-    .boss3-paginator__li_role_next & {
+    .boss-paginator__li_role_next & {
       padding-right: $padding-with-icon-x;
       background: white asset-url('icon-navigation-forward-dark-gray.svg') right $background-offset-x center no-repeat;
       background-size: auto 14px;
     }
 
-    .boss3-paginator__li_state_disabled & {
+    .boss-paginator__li_state_disabled & {
       background-color: #ced9df;
       cursor: default;
       &:hover {
         text-decoration: none;
       }
     }
-    .boss3-paginator__li_state_active & {
+    .boss-paginator__li_state_active & {
       background-color: map-get($boss-app-palette, primary);
       color: white;
     }

@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss3-add-avatar-block {
+.boss-add-avatar-block {
   @include normalize-block();
   display: flex;
   flex-direction: column;

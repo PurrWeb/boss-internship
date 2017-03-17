@@ -107,21 +107,21 @@ class Component extends React.Component<PropsFromConnect, State> {
     const stepsValidity = this.getStepsValidity(currentStep);
 
     return stepsData.map((stepData, idx) => {
-      const completeClassName = completedSteps === idx ? 'boss3-steps-block__step_state_complete' : '';
-      const stepWithErrorClassName = stepsValidity[idx] ? '' : 'boss3-steps-block__step_state_with-error';
-      const currentStepClassName = currentStep === idx ? 'boss3-steps-block__step-title_state_active' : '';
+      const completeClassName = completedSteps === idx ? 'boss-steps-block__step_state_complete' : '';
+      const stepWithErrorClassName = stepsValidity[idx] ? '' : 'boss-steps-block__step_state_with-error';
+      const currentStepClassName = currentStep === idx ? 'boss-steps-block__step-title_state_active' : '';
 
       return (
-        <li key={idx} className={`boss3-steps-block__step ${completeClassName} ${stepWithErrorClassName}`}>
+        <li key={idx} className={`boss-steps-block__step ${completeClassName} ${stepWithErrorClassName}`}>
           <div
-              className="boss3-steps-block__step-index"
+              className="boss-steps-block__step-index"
               onClick={() => {
                 this.onStepClick(idx);
               }}
           >
             {idx + 1}
           </div>
-          <div className={`boss3-steps-block__step-title ${currentStepClassName}`}>{stepData.title}</div>
+          <div className={`boss-steps-block__step-title ${currentStepClassName}`}>{stepData.title}</div>
         </li>
       );
     });
@@ -129,7 +129,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     return (
-      <ul className="boss3-steps-block">
+      <ul className="boss-steps-block">
         {this.drawSteps(this.props.completedSteps, this.props.currentStep)}
       </ul>
     );

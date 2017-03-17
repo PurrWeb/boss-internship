@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss3-main-menu {
+.boss-main-menu {
   $menu-min-height: 60px;
   $button-padding-side: 17px;
 
@@ -92,7 +92,7 @@
       }
     }
 
-    .boss3-main-menu__button_state_active &, .boss3-main-menu__button:hover & {
+    .boss-main-menu__button_state_active &, .boss-main-menu__button:hover & {
       color: $boss-dark-gray;
     }
 

@@ -22,7 +22,7 @@
                 <%= fields_for('staff_type[]', staff_type) do |staff_type_fields| %>
                   <%= staff_type_fields.hidden_field(:id) %>
                   <%= staff_type_fields.text_field(:ui_color,
-                    class: 'boss3-hidden',
+                    class: 'boss-hidden',
                     data: { type: staff_type.name.parameterize, selector: 'staff_type' }
                   ) %>
                 <% end %>
@@ -38,7 +38,7 @@
         <% end %>
       </tbody>
     </table>
-    <%= submit_tag 'Update', class: "boss3-button" %>
+    <%= submit_tag 'Update', class: "boss-button" %>
   <% else %>
     <p>No staff types exist</p>
   <% end %>
