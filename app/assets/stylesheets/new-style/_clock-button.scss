@@ -11,19 +11,19 @@
     @include button-hover-behavior($bg-color);
   }
 
-  &.boss-button_big {
+  &.boss-clock-button_big {
     padding-left: 3em;
     background-position: 1em center;
     background-size: 1.5em;
   }
-  &.boss-button_small {
+  &.boss-clock-button_small {
     padding-left: 1.8em;
     background-position: 0.7em 45%;
     background-size: 0.8em;
   }
 }
 
-.boss-button {
+.boss-clock-button {
   $background-color: map-get($boss-app-palette, primary);
 
   @include normalize-block();

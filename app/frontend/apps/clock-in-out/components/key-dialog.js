@@ -5,12 +5,12 @@ export default class KeyDialog extends React.Component {
     render(){
         const buttonOrSpinner = this.props.loadDataInProgress ?
             <Spinner /> :
-            <button type="submit" className="boss-button boss-button_very-big" data-test-marker-api-key-button>Load Clock In/Out Page</button>;
+            <button type="submit" className="boss-clock-button boss-clock-button_very-big" data-test-marker-api-key-button>Load Clock In/Out Page</button>;
 
         return (
             <div className="boss-main-content">
                 <div className="boss-main-content__body boss-main-content__body_role_lock-screen">
-                    <a href="#" className="boss-button boss-button_role_reload
+                    <a href="#" className="boss-clock-button boss-clock-button_role_reload
                                 boss-main-content__body_adjust_lock-screen-reload-button"
                        onClick={() => { location.reload(); }}
                     >Reload</a>
