@@ -1,18 +1,6 @@
 @import 'settings';
 @import 'mixins';
 
-.boss2-filter-block {
-  @include normalize-block();
-  @include content-block();
-
-  &_adjust {
-    &_buttons-group {
-      margin: $boss-buttons-group-margin;
-      text-align: center;
-    }
-  }
-}
-
 .boss2-page-content {
   @include normalize-block();
 

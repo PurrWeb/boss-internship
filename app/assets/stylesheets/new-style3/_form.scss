@@ -12,9 +12,12 @@
 }
 
 .boss3-input {
-  @include normalize-block();
+  @at-root
+  &[type=text],
+  &[type=password],
+  textarea#{&} {
+    @include normalize-block();
 
-  &[type=text], &[type=password] {
     display: block;
     width: 100%;
     box-sizing: border-box;
@@ -36,14 +39,8 @@
   }
 }
 
-textarea.boss3-input {
-  @include normalize-block();
-
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid $boss-very-light-gray;
-  padding: 13px 20px;
+select.boss2-input {
+  margin-bottom: 0;
 }
 
 .boss3-label {
