@@ -12,6 +12,25 @@ $boss-app-palette: (
         warning: #ffae00,
         alert: #ec5840
 );
+$boss-roles-palette: (
+  manager: #f0af85,
+  gm: #c1c1c1,
+  bar-supervisor: #84bef0,
+  bartender: #74dc61,
+  floor-staff: #f3a84d,
+  waitress: #db8ef8,
+  kp: #86a9df,
+  hostess: #ec6a6a,
+  chef: #a9815d,
+  security: #84daf1,
+  pr: #d2d540,
+  bar-back: #1f1f1f
+);
+$boss-sign-palette: (
+  clocked-out: #8e8e8e,
+  clocked-in: #74df77,
+  break: #eebb4e
+);
 $boss-extra-light-gray: #f0f0f0;
 $boss-very-light-gray: #d8d8d8;
 $boss-light-gray: #aaaaaa;
@@ -32,25 +51,4 @@ $boss-input-placeholder-color: $boss-very-light-gray;
 $boss-input-font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
 //$input-color: $boss-medium-gray;
 $boss-input-radius: 2px;
-
-$boss-roles-palette: (
-        manager: #f0af85,
-        gm: #c1c1c1,
-        bar-supervisor: #84bef0,
-        bartender: #74dc61,
-        floor-staff: #f3a84d,
-        waitress: #db8ef8,
-        kp: #86a9df,
-        hostess: #ec6a6a,
-        chef: #a9815d,
-        security: #84daf1,
-        pr: #d2d540,
-        bar-back: #1f1f1f
-);
-$boss-sign-palette: (
-        clocked-out: #8e8e8e,
-        clocked-in: #74df77,
-        break: #eebb4e
-);
-
 $main-content-margin-top: 3.7rem;

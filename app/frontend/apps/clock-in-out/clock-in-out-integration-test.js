@@ -127,7 +127,7 @@ describe("Clock In/Out Page Integration Test", function(){
     it("Shows a list of staff members after selecting a staff type", function(){
         var {$$, component} = loadAppWithData(data)
 
-        ReactTestUtils.Simulate.click($$(".main-menu__button")[0]);
+        ReactTestUtils.Simulate.click($$(".boss-main-menu__button")[0]);
 
         expect($$(".test-staff-row").length).toBeGreaterThan(0);
     })
@@ -137,7 +137,7 @@ describe("Clock In/Out Page Integration Test", function(){
         var {$$, component} = loadAppWithData(data)
         component.store.dispatch(clockInOutAppSelectStaffType({selectedStaffTypeClientId: "CLIENT_ID_7"}))
 
-        const infoStatus = $$(".info-table__user-status")[0];
+        const infoStatus = $$(".boss-info-table__user-status")[0];
         ReactTestUtils.Simulate.click(infoStatus);
 
         _.defer(function(){

@@ -1,0 +1,78 @@
+@import 'settings';
+@import 'mixins';
+
+.boss3-react-select {
+  $close-button-width: 2em;
+  $content-side-padding: 0.8em;
+
+  @include normalize-block();
+
+  & .Select-control {
+    //height: 17px;
+    //line-height: 12px;
+    border: none;
+  }
+
+  & .Select-placeholder {
+    //line-height: 17px;
+  }
+
+  & .Select-input {
+    //height: 17px;
+    //line-height: 12px;
+  }
+
+  & .Select-arrow-zone {
+    //line-height: 12px;
+  }
+
+  & .Select-item {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    font-size: 0.7rem;
+  }
+
+  & .Select-item-icon {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: $close-button-width;
+    padding: 0;
+    border: none;
+    text-indent: 10em;
+    overflow: hidden;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.1) asset-url("icon-close-black-small.svg") center center no-repeat;
+      background-size: 0.9em;
+      opacity: 0.25;
+    }
+  }
+
+  & .Select-item-label {
+    padding: 0;
+    border: none;
+
+    &__content {
+      padding: 0.4em ($close-button-width + $content-side-padding) 0.4em $content-side-padding;
+      color: #fff;
+      text-transform: uppercase;
+      font-weight: 700;
+      border-radius: 5px;
+    }
+  }
+
+}

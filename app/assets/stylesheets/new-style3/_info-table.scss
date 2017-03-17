@@ -1,7 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-.boss-info-table {
+.boss3-info-table {
   @include normalize-block();
 
   display: table;
@@ -117,7 +117,7 @@
       left: 56px;
       top: 26px;
       border-radius: 50%;
-      box-shadow: 0 0 0 3pt $boss-white;
+      box-shadow: 0 0 0 3pt white;
     }
 
     &_clocked-out{
@@ -173,7 +173,7 @@
 
   &__label {
     display: inline-block;
-    color: $boss-white;
+    color: white;
     font-size: 0.7em;
     padding: 0.4em 0.8em;
     text-transform: uppercase;
@@ -237,7 +237,7 @@
       display: inline-block;
       vertical-align: top;
 
-      .boss-info-table__label + & {
+      .boss3-info-table__label + & {
         margin-left: 5px;
       }
     }

@@ -48,7 +48,7 @@ export default class StaffFinder extends Component {
     }
     render() {
         const resetVenueButton = this.props.resetVenue ? (
-            <div className="boss-buttons-block main-content__body_adjust_boss-buttons-block">
+            <div className="boss-buttons-block boss-main-content__body_adjust_boss-buttons-block">
                 <div
                     className="boss-button boss-button_role_reset-venue"
                     onClick={this.props.resetVenue}
@@ -59,7 +59,7 @@ export default class StaffFinder extends Component {
         ) : null;
 
         return (
-            <div className="main-content__body">
+            <div className="boss-main-content__body">
                 <StaffFilter
                     staffTypes={this.getStaffTypesWithStaffMembers()}
                     venues={this.props.venues}

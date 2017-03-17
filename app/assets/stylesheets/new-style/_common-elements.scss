@@ -1,0 +1,74 @@
+@import 'settings';
+@import 'mixins';
+
+html {
+  box-sizing: border-box;
+  margin: 0;
+  height: 100%;
+}
+
+[data-react-class=ClockInOutApp] {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+.boss {
+
+  &-body {
+    body#{&} {
+      @include normalize-block();
+
+      height: 100%;
+      padding: 0;
+      margin: 0;
+
+      @if ($boss-body-antialiased) {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    }
+  }
+
+  &-root {
+    display: block;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    background-color: $boss-body-background;
+
+    &_role {
+      &_manager {
+        background-color: #ffd9ac;
+
+        & .boss-main-content {
+          margin: $main-content-margin-top auto 0;
+          min-height: initial;
+        }
+      }
+      &_normal {
+        & .boss-main-content {
+          margin: $main-content-margin-top auto 0;
+          min-height: initial;
+        }
+      }
+    }
+  }
+
+  &-tooltip-portal {
+    &__background {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 3;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  &-hidden {
+    display: none;
+  }
+}

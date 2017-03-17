@@ -1,0 +1,20 @@
+@import 'settings';
+@import 'mixins';
+
+.boss3-buttons-block {
+  @include normalize-block();
+
+  &_adjust_button {
+    &.boss3-button {
+      &_big {
+        margin-right: 1em;
+      }
+      &_small {
+        margin-bottom: 0.8em;
+      }
+    }
+    &:last-child {
+      margin: 0;
+    }
+  }
+}

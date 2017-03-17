@@ -4,6 +4,16 @@
 .boss3-form {
   @include normalize-block();
 
+  &_role {
+    &_enter_key {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+  }
+
   &_adjust {
     &_boss3-fields-set {
       margin-top: 40px !important;
@@ -41,57 +51,6 @@
 
 select.boss3-input {
   margin-bottom: 0;
-}
-
-.boss3-label {
-  display: block;
-
-  & + & {
-    margin-top: 20px;
-  }
-
-  &_role {
-    &_datepicker {
-      display: table;
-    }
-  }
-
-  &_adjust {
-    &_tip {
-      margin-top: 2px;
-      font-size: 13px;
-      color: $boss-light-gray;
-    }
-  }
-
-  &__text {
-    display: block;
-    margin-bottom: 8px;
-    color: $boss-dark-gray;
-
-    input[type=radio] + &,
-    input[type=checkbox] + & {
-      display: inline-block;
-    }
-
-    &_type {
-      &_required {
-        &:after {
-          content: '*';
-          margin-left: 2px;
-        }
-      }
-    }
-
-    .boss3-input[type=radio] + &, .boss3-input[type=checkbox] + & {
-      display: inline;
-    }
-  }
-
-  &__tip {
-    display: block;
-  }
-
 }
 
 .boss3-inputs-list {
