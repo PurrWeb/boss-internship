@@ -37,8 +37,9 @@ export function selectStaffMemberHolidays(state, staffId){
 }
 
 export function selectStaffMemberUnpaidHolidays(state, staffId){
-    return _.filter(selectStaffMemberHolidays(state, staffId), {
-        holiday_type: "unpaid_holiday"
+    return _.filter(selectStaffMemberHolidays(state, staffId), (holiday) => {
+        return holiday.holiday_type == "unpaid_holiday" ||
+         holiday.holiday_type == "sick_leave"
     })
 }
 

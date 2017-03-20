@@ -1,6 +1,6 @@
 class Holiday < ActiveRecord::Base
   PAID_HOLIDAY_TYPE = "paid_holiday"
-  UNPAID_HOLIDAY_TYPES = ["unpaid_holiday"]
+  UNPAID_HOLIDAY_TYPES = ["unpaid_holiday", "sick_leave"]
   HOLIDAY_TYPES = [PAID_HOLIDAY_TYPE] + UNPAID_HOLIDAY_TYPES
 
   include Statesman::Adapters::ActiveRecordQueries
