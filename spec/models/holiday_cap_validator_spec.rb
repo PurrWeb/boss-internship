@@ -73,7 +73,7 @@ describe HolidayCapValidator do
       end
 
       context 'when holiday is unpaid' do
-        let(:holiday_type) { Holiday::UNPAID_HOLIDAY_TYPE }
+        let(:holiday_type) { Holiday::UNPAID_HOLIDAY_TYPES.first }
 
         specify 'new holiday should be valid' do
           validator.validate

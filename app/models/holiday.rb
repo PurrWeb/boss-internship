@@ -1,7 +1,7 @@
 class Holiday < ActiveRecord::Base
   PAID_HOLIDAY_TYPE = "paid_holiday"
-  UNPAID_HOLIDAY_TYPE = "unpaid_holiday"
-  HOLIDAY_TYPES = [PAID_HOLIDAY_TYPE, UNPAID_HOLIDAY_TYPE]
+  UNPAID_HOLIDAY_TYPES = ["unpaid_holiday", "sick_leave"]
+  HOLIDAY_TYPES = [PAID_HOLIDAY_TYPE] + UNPAID_HOLIDAY_TYPES
 
   include Statesman::Adapters::ActiveRecordQueries
 
@@ -30,7 +30,7 @@ class Holiday < ActiveRecord::Base
   end
 
   def self.unpaid
-    where(holiday_type: 'unpaid_holiday')
+    where(holiday_type: UNPAID_HOLIDAY_TYPES)
   end
 
   def state_machine
@@ -54,7 +54,7 @@ class Holiday < ActiveRecord::Base
   end
 
   def paid?
-    holiday_type == 'paid_holiday'
+    holiday_type == PAID_HOLIDAY_TYPE
   end
 
   def disable!(requester:)
