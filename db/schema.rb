@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170213130741) do
+ActiveRecord::Schema.define(version: 20170318141355) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -28,6 +28,8 @@ ActiveRecord::Schema.define(version: 20170213130741) do
 
   add_index "access_tokens", ["expires_at"], name: "index_access_tokens_on_expires_at", using: :btree
   add_index "access_tokens", ["token"], name: "index_access_tokens_on_token", using: :btree
+  add_index "access_tokens", ["token_type"], name: "index_access_tokens_on_token_type", using: :btree
+  add_index "access_tokens", ["user_id"], name: "index_access_tokens_on_user_id", using: :btree
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255
@@ -100,6 +102,8 @@ ActiveRecord::Schema.define(version: 20170213130741) do
     t.datetime "updated_at"
   end
 
+  add_index "clock_in_breaks", ["clock_in_period_id"], name: "index_clock_in_breaks_on_clock_in_period_id", using: :btree
+
   create_table "clock_in_days", force: :cascade do |t|
     t.date     "date",                        null: false
     t.integer  "staff_member_id", limit: 4,   null: false
@@ -121,6 +125,7 @@ ActiveRecord::Schema.define(version: 20170213130741) do
   end
 
   add_index "clock_in_events", ["at"], name: "index_clock_in_events_on_at", using: :btree
+  add_index "clock_in_events", ["clock_in_period_id"], name: "index_clock_in_events_on_clock_in_period_id", using: :btree
 
   create_table "clock_in_notes", force: :cascade do |t|
     t.integer  "creator_id",      limit: 4,                  null: false
@@ -132,6 +137,8 @@ ActiveRecord::Schema.define(version: 20170213130741) do
     t.integer  "clock_in_day_id", limit: 4,                  null: false
   end
 
+  add_index "clock_in_notes", ["clock_in_day_id"], name: "index_clock_in_notes_on_clock_in_day_id", using: :btree
+
   create_table "clock_in_periods", force: :cascade do |t|
     t.integer  "creator_id",      limit: 4,   null: false
     t.datetime "starts_at",                   null: false
@@ -141,6 +148,8 @@ ActiveRecord::Schema.define(version: 20170213130741) do
     t.integer  "clock_in_day_id", limit: 4,   null: false
     t.string   "creator_type",    limit: 255, null: false
   end
+
+  add_index "clock_in_periods", ["clock_in_day_id"], name: "index_clock_in_periods_on_clock_in_day_id", using: :btree
 
   create_table "cron_jobs", force: :cascade do |t|
     t.string   "method",      limit: 255,   null: false
@@ -338,6 +347,8 @@ ActiveRecord::Schema.define(version: 20170213130741) do
     t.string   "disabled_by_type",           limit: 255
   end
 
+  add_index "hours_acceptance_breaks", ["hours_acceptance_period_id"], name: "index_hours_acceptance_breaks_on_hours_acceptance_period_id", using: :btree
+
   create_table "hours_acceptance_periods", force: :cascade do |t|
     t.integer  "creator_id",                  limit: 4,                       null: false
     t.string   "creator_type",                limit: 255,                     null: false
@@ -350,6 +361,9 @@ ActiveRecord::Schema.define(version: 20170213130741) do
     t.datetime "updated_at"
     t.integer  "frozen_by_finance_report_id", limit: 4
   end
+
+  add_index "hours_acceptance_periods", ["clock_in_day_id"], name: "index_hours_acceptance_periods_on_clock_in_day_id", using: :btree
+  add_index "hours_acceptance_periods", ["status"], name: "index_hours_acceptance_periods_on_status", using: :btree
 
   create_table "invite_transitions", force: :cascade do |t|
     t.string   "to_state",    limit: 255,   null: false
