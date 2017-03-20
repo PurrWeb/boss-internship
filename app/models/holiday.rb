@@ -54,7 +54,7 @@ class Holiday < ActiveRecord::Base
   end
 
   def paid?
-    holiday_type == 'paid_holiday'
+    holiday_type == PAID_HOLIDAY_TYPE
   end
 
   def disable!(requester:)
