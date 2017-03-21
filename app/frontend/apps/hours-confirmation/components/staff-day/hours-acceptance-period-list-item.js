@@ -34,7 +34,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
           reasonSection = <p>N/A</p>;
         } else {
           reasonSection = <textarea
-            value={ hoursAcceptancePeriod.reason_note }
+            value={ hoursAcceptancePeriod.reason_note || '' }
              onChange={(event) => {
                let reasonNote = event.target.value;
                this.props.boundActions.updateHoursAcceptancePeriod({
@@ -55,25 +55,8 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                 className="row"
                 data-test-marker-hours-acceptance-period-item
               >
-                { this.getModal() }
                     <div className="large-5 small-12 column mb-md">
                         <div style={periodTimeSelectorStyles}>
-                            <ShiftTimeSelector
-                                showErrorMessages={false}
-                                defaultShiftTimes={{
-                                    starts_at: hoursAcceptancePeriod.starts_at,
-                                    ends_at: hoursAcceptancePeriod.ends_at
-                                }}
-                                readonly={readonly}
-                                rotaDate={this.props.rotaDate}
-                                onChange={(times) => {
-                                    this.props.boundActions.updateHoursAcceptancePeriod({
-                                        ...times,
-                                        clientId: hoursAcceptancePeriod.clientId
-                                    })
-                                }}
-                                granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
-                                />
                         </div>
                     </div>
                     <div className="large-3 small-12 column">
@@ -83,20 +66,11 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                         </div>
                     </div>
                     <div className="large-2 column">
-                      {this.getAcceptUi()}
                     </div>
                   <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
               </div>
               <div>
                 <div className="staff-day__sub-heading">Breaks</div>
-                <BreakList
-                    boundActions={this.props.boundActions}
-                    readonly={readonly}
-                    clockInBreaks={this.props.clockInBreaks}
-                    rotaDate={this.props.rotaDate}
-                    granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
-                    hoursAcceptancePeriod={hoursAcceptancePeriod}
-                />
               </div>
             </div>
           </div>
@@ -138,8 +112,8 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
           <p>If you accept these hours, the total amount of accepted hours for this staff member will be greater than what was rotaed.</p>
           <p>Please ensure you have added suitable reason notes to explain the time difference.</p>
           <p>These will be reviewed by senior management.</p>
-          <a className="boss2-button" onClick={handleAccept}>Accept</a>
-          <a className="boss2-button" onClick={closeModal}>Cancel</a>
+          <a className="boss-button" onClick={handleAccept}>Accept</a>
+          <a className="boss-button" onClick={closeModal}>Cancel</a>
         </ModalDialog>
       </ModalContainer>
     }
@@ -191,16 +165,16 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
             if (!this.props.hasClockedOut) {
                 return <span></span>
             } else {
-                return <div className="boss2-buttons-group boss2-from-to-block_adjust_buttons-group">
+                return <div className="boss-buttons-group boss-from-to-block_adjust_buttons-group">
                     <a
                         data-test-marker-accept-hours-acceptance-period
                         onClick={ acceptButtonOnClick }
-                        className="boss2-button boss2-button_role_accepted boss2-from-to-block_adjust_button">
+                        className="boss-button boss-button_role_accepted boss-from-to-block_adjust_button">
                         Accept {stats.hours}h
                     </a>
 
                     <a
-                        className="boss2-button boss2-button_role_exclamation boss2-from-to-block_adjust_button"
+                        className="boss-button boss-button_role_exclamation boss-from-to-block_adjust_button"
                         data-test-marker-delete-hours-acceptance-period
                         onClick={() => {
                             this.props.boundActions.deleteHoursAcceptancePeriod({
@@ -223,7 +197,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                     {stats.hours}h ACCEPTED
                 </div>
                 <a
-                    className="boss2-button boss2-button_role_exclamation"
+                    className="boss-button boss-button_role_exclamation"
                     onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
                         hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
                         errorHandlingId: this.componentId

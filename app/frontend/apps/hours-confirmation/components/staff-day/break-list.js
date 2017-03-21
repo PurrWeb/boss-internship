@@ -14,7 +14,7 @@ export default class BreakList extends React.Component {
         var addBreakButton;
         if (!this.props.readonly) {
             addBreakButton = <a
-                className="boss2-button boss2-button_role_add"
+                className="boss-button boss-button_role_add"
                 onClick={() => this.addBreak()}
                 style={{display: "inline-block", marginTop: 10, marginBottom: 4}}>
                 Add Break

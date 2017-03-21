@@ -1,0 +1,151 @@
+@import 'settings';
+@import 'mixins';
+
+.boss-forms-block {
+  @include normalize-block();
+  @include content-block();
+
+  &_adjust {
+    &_buttons-group {
+      margin: $boss-buttons-group-margin !important;
+      text-align: center !important;
+    }
+
+    &_info-block {
+      width: 50% !important;
+      margin-bottom: 30px !important;
+    }
+  }
+}
+
+.boss-info-block {
+  @include normalize-block();
+
+  display: inline-block;
+  vertical-align: top;
+
+  &_type {
+    &_with-index {
+      position: relative;
+      padding-left: 45px;
+    }
+  }
+
+  &__header {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  &__index {
+    $index-side-size: 30px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $index-side-size;
+    height: $index-side-size;
+    margin-bottom: 8px;
+    border-radius: 50%;
+    text-align: center;
+    overflow: hidden;
+    color: white;
+    line-height: $index-side-size;
+    background-color: map-get($boss-app-palette, primary);
+  }
+
+  &__image {
+    display: block;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+  &__error {
+    color: map-get($boss-app-palette, error-text);
+  }
+}
+
+.boss-page-content {
+  @include normalize-block();
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  padding: 25px $boss-root-side-padding 60px;
+
+  @media screen and (max-width: 1024px) {
+    padding: 25px 0 60px;
+  }
+
+  &_type {
+    &_with-additional-data {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+
+  &_adjust {
+    &_paginator {
+      margin-top: 20px !important;
+    }
+    &_user-info-block {
+      min-width: 400px;
+      margin-right: 30px !important;
+    }
+    &_button {
+      margin-top: 10px;
+    }
+    &_columns-buttons-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    &_table {
+      margin-top: 10px;
+    }
+    &_h3 {
+      margin-top: 10px;
+    }
+  }
+
+  &__inner-container {
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+  }
+}
+
+.boss-page-dashboard {
+  @include normalize-block();
+
+  padding: 30px $boss-root-side-padding 15px;
+  background-color: white;
+
+  &:after {
+    @include clear-fix();
+  }
+
+  &_adjust {
+    &_h2 {
+      float: left;
+      margin-bottom: 15px !important;
+    }
+
+    &_buttons-group {
+      float: right;
+    }
+
+    &_dropdown-button {
+      @include clear-fix();
+    }
+  }
+}
+
+.boss-staff-members-list-block {
+  @include normalize-block();
+  @include content-block();
+
+  padding-top: 120px;
+}

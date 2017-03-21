@@ -1,0 +1,71 @@
+@import 'settings';
+@import 'mixins';
+
+.boss-from-to-block {
+  $padding-x: 14px;
+  $padding-y: 18px;
+
+  @include normalize-block();
+
+  margin: 0 30px;
+  border: 1px solid $boss-extra-light-gray;
+
+  & + & {
+    margin-top: 25px;
+  }
+
+  &__head {
+    padding: $padding-y $padding-x;
+    border-bottom: 1px solid $boss-extra-light-gray;
+  }
+
+  &__body {
+    padding: $padding-y $padding-x;
+  }
+
+  &__start-end-block {
+    display: inline-flex;
+    flex-direction: column;
+    width: 280px;
+    vertical-align: top;
+  }
+
+  &__inputs-group {
+    display: flex;
+  }
+
+  &__start-end-inputs-set {
+    display: flex;
+  }
+
+  &_adjust {
+    &_input {
+      width: 120px !important;
+    }
+
+    &_start-end-label {
+      & + & {
+        margin-top: 0 !important;
+        padding-left: 30px !important;
+      }
+    }
+
+    &_label-reason {
+      margin-left: 20px;
+    }
+
+    &_buttons-group {
+      margin-left: 20px;
+    }
+
+    &_textarea {
+      width: 230px !important;
+    }
+
+    &_button {
+      & + & {
+        margin-top: 5px;
+      }
+    }
+  }
+}

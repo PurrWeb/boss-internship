@@ -1,0 +1,42 @@
+@import 'settings';
+@import 'mixins';
+
+.boss-info-fields-block {
+  @include normalize-block();
+
+  &__list-item {
+    @include normalize-block();
+
+    & + & {
+      margin-top: 10px;
+    }
+  }
+
+  &__field-name {
+    display: inline-block;
+    width: 120px;
+    font-weight: 600;
+
+    &_type {
+      &_unfilled {
+        color: $boss-light-gray;
+      }
+    }
+  }
+
+  &__field-value {
+    display: inline-block;
+  }
+  &__field-errors {
+    @include normalize-block();
+
+    margin-top: 3px;
+    padding: 0 15px;
+    border-radius: $boss-global-border-radius;
+    color: map-get($boss-app-palette, error-text);
+  }
+
+  &__field-error {
+    list-style: disc;
+  }
+}

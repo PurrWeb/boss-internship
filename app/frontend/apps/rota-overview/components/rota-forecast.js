@@ -47,7 +47,7 @@ export default class RotaForecast extends React.Component {
             </div>
 
             updateForecastButton = <a
-                className="boss2-button boss2-button_type_small"
+                className="boss-button boss-button_type_small"
                 data-test-marker-update-forecast-button
                 onClick={this.props.onUpdateForecastClick} >
                 Update

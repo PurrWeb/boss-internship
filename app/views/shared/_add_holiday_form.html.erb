@@ -6,7 +6,7 @@
 
 <%= bootstrap_form_for(holiday, url: staff_member_holidays_path(staff_member_id: staff_member.id)) do |form| %>
   <%= render partial: 'shared/holiday_form_fields', locals: { form: form } %>
-  <button type="submit" class="boss2-button boss2-button_role_add">
+  <button type="submit" class="boss-button boss-button_role_add">
     Add
   </button>
 <% end %>

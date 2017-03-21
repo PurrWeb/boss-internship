@@ -1,13 +1,15 @@
 <h1>Add Staff Member</h1>
 
-<%= bootstrap_form_for(staff_member, html: { multipart: true, class: 'staff-member-form' }) do |form| %>
-  <%= render(
-        partial: 'shared/staff_member_form_fields',
-        locals: {
-          form: form,
-          edit_name: true,
-          edit_email: true
-        }
-      ) %>
-  <button type="submit" class="boss2-button">Submit</button>
+<%= javascript_tag do %>
+  window.boss = window.boss || {};
+
+  window.boss.accessToken = "<%= access_token.token %>";
+  window.boss.venueValues = <%= venues.map{ |v| { name: v.name, id: v.id } }.to_json.html_safe %>;
+  window.boss.payrateValues = <%= pay_rates.map { |pr| { name: pr.name, id: pr.id } }.to_json.html_safe %>;
+  window.boss.staffTypeIds = <%= staff_types.map{ |st| { name: st.name, id: st.id } }.to_json.html_safe %>;
+  window.boss.genderValues = <%= gender_values.to_json.html_safe %>;
 <% end %>
+
+<%= react_component(
+    "AddStaffMemberPageComponent"
+) %>

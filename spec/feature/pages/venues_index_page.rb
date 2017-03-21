@@ -7,7 +7,7 @@ module PageObject
     end
 
     page_action :click_add_venue_button do
-      find('a.boss2-button', text: 'Add Venue').click
+      find('a.boss-button', text: 'Add Venue').click
     end
 
     page_action :ensure_record_displayed_for do |venue|

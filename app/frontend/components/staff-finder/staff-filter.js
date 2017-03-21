@@ -28,8 +28,8 @@ export default class StaffFilter extends Component {
     render() {
         if (this.props.isNewDesign) {
             return (
-                <div className="main-content__filters-block-container">
-                    <div className="main-content__filters-block-label">
+                <div className="boss-main-content__filters-block-container">
+                    <div className="boss-main-content__filters-block-label">
                         Filter
                     </div>
 
@@ -54,19 +54,19 @@ export default class StaffFilter extends Component {
         if (this.props.isNewDesign) {
             componentColumns = filters.map(function(filter){
                 const role = filter.title.toLowerCase();
-                const subClass = role === 'status' ? 'filters-block__cell_role_status' : ''
+                const subClass = role === 'status' ? 'boss-filters-block__cell_role_status' : ''
 
-                return <div className={`filters-block__cell ${subClass}`} key={filter.title}>
+                return <div className={`boss-filters-block__cell ${subClass}`} key={filter.title}>
                     {filter.component}
                 </div>
             });
 
             return (
-                <div className="filters-block">
-                    <div className="filters-block__head">
+                <div className="boss-filters-block">
+                    <div className="boss-filters-block__head">
                         {titleColumns}
                     </div>
-                    <div className="filters-block__row">
+                    <div className="boss-filters-block__row">
                         {componentColumns}
                     </div>
                 </div>
@@ -137,7 +137,7 @@ export default class StaffFilter extends Component {
         }
 
         return (
-            <div className="boss-input-group__input-container main-content__filters-block-container_adjust_input-container">
+            <div className="boss-input-group__input-container boss-main-content__filters-block-container_adjust_input-container">
                 <input
                     type="text"
                     value={this.props.filterSettings.search}
@@ -147,7 +147,7 @@ export default class StaffFilter extends Component {
                     onChange={(event) =>
                         this.handleChange("search", event.target.value)
                     }
-                    className="boss-input boss-input_type_search boss-input-group_adjust_search-input"/>
+                    className="boss-input boss-input_role_search boss-input-group_adjust_search-input"/>
             </div>
         );
     }
@@ -156,9 +156,8 @@ export default class StaffFilter extends Component {
             selectedStaffTypes={this.props.filterSettings.staffTypes}
             staffTypes={this.props.staffTypes}
             isNewDesign={this.props.isNewDesign}
-            onChange={(staffTypes) =>
-                this.handleChange("staffTypes", staffTypes)
-            } />
+            onChange={(staffTypes) => this.handleChange("staffTypes", staffTypes)}
+        />
         return {
             title: "Staff Type",
             component
@@ -182,14 +181,14 @@ export default class StaffFilter extends Component {
         var allOption = "All"
         var component = (
             <select
-                className="boss-input boss-input_type_select boss-input_variant_filters-block"
+                className="boss-input boss-input_type_select boss-input_type_filters-block"
                 value={this.props.filterSettings.rotaedOrActive ? rotaedOrActiveOption : allOption}
                 onChange={(e) => this.handleChange("rotaedOrActive", e.target.value !== allOption)}
             >
-                <option className="boss-input boss-input_variant_filters-block" value={allOption}>
+                <option className="boss-input boss-input_type_filters-block" value={allOption}>
                     {allOption}
                 </option>
-                <option className="boss-input boss-input_variant_filters-block" value={rotaedOrActiveOption}>
+                <option className="boss-input boss-input_type_filters-block" value={rotaedOrActiveOption}>
                     {rotaedOrActiveOption}
                 </option>
             </select>
@@ -202,10 +201,10 @@ export default class StaffFilter extends Component {
     }
     getFilterTitle(titleString){
         const role = titleString.toLowerCase();
-        const subClass = role === 'status' ? 'filters-block__head-cell_role_status' : '';
+        const subClass = role === 'status' ? 'boss-filters-block__head-cell_role_status' : '';
 
         return this.props.isNewDesign ? (
-            <div className={`filters-block__head-cell filters-block__head-cell_type_label ${subClass}`} key={titleString}>
+            <div className={`boss-filters-block__head-cell boss-filters-block__head-cell_type_label ${subClass}`} key={titleString}>
                 {titleString}
             </div>
         ) : (

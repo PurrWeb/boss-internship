@@ -25,7 +25,7 @@
           name: 'week_start'
       ) %>
     </div>
-    <%= form.submit('Update', class: 'boss2-button') %>
+    <%= form.submit('Update', class: 'boss-button') %>
   </div>
 
   <div class="row align-middle mb-md">
@@ -37,7 +37,7 @@
                   week_start:  week.start_date && UIRotaDate.format(week.start_date)
               )
           ) do %>
-          <button type="boss2-button" class="boss2-button <%= pay_rate_filtering == 'weekly' ? "secondary" : "" %>">Show All</button>
+          <button type="boss-button" class="boss-button <%= pay_rate_filtering == 'weekly' ? "secondary" : "" %>">Show All</button>
       <% end %>
     </div>
     <div class="shrink column">
@@ -48,7 +48,7 @@
               pay_rate_filter: 'weekly'
             )
           ) do %>
-        <button type="boss2-button" class="boss2-button <%= pay_rate_filtering == 'weekly' ? "" : "secondary" %>">Show Weekly Only</button>
+        <button type="boss-button" class="boss-button <%= pay_rate_filtering == 'weekly' ? "" : "secondary" %>">Show Weekly Only</button>
       <% end %>
     </div>
   </div>
@@ -61,7 +61,7 @@
               pay_rate_filter: params[:pay_rate_filter],
               format: :pdf
             ),
-            class: 'boss2-button boss2-button_role_download'
+            class: 'boss-button boss-button_role_download'
           ) do %>
             Download PDF
       <% end %>
@@ -70,8 +70,8 @@
 <% end %>
 
 <% reports_by_staff_type.each do |staff_type, reports| %>
-  <div class="boss2-table-container">
-    <h3 class="boss2-page-content_adjust_h3"><div class="boss-badge" style="font-size: 1.3em; background-color: #<%= staff_type.ui_color %>"><%= staff_type.name %></div></h3>
+  <div class="boss-table-container">
+    <h3 class="boss-page-content_adjust_h3"><div class="boss-badge" style="font-size: 1.3em; background-color: #<%= staff_type.ui_color %>"><%= staff_type.name %></div></h3>
 
     <% if display_totals %>
       <p class="h4">
@@ -197,7 +197,7 @@
               <td>
                 <%= report.status.titlecase %>
                 <% if report.can_complete? %>
-                  <%= link_to('Mark Completed' , finance_reports_path(staff_member_id: report.staff_member.id, week_start: UIRotaDate.format(report.week.start_date)), class: 'boss2-button', method: :post) %>
+                  <%= link_to('Mark Completed' , finance_reports_path(staff_member_id: report.staff_member.id, week_start: UIRotaDate.format(report.week.start_date)), class: 'boss-button', method: :post) %>
                 <% end %>
               </td>
             <% end %>

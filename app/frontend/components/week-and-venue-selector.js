@@ -16,7 +16,7 @@ export default class WeekAndVenueSelector extends React.Component {
         if (this.props.venueClientId) {
             selectedVenues = [this.props.venueClientId];
         }
-        return <div className="boss2-flex-row">
+        return <div className="boss-flex-row">
             <div className="shrink column">
                 <WeekPicker
                     selectionStartDate={this.props.weekStartDate}

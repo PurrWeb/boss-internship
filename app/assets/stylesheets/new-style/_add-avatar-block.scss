@@ -1,0 +1,35 @@
+@import 'settings';
+@import 'mixins';
+
+.boss-add-avatar-block {
+  @include normalize-block();
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__new-image-placeholder {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 10px;
+    background: asset-url('load-image-placeholder.svg') center center no-repeat;
+    background-size: 240px;
+    cursor: pointer;
+  }
+
+  &__file-label {
+    display: block;
+    margin-top: 30px;
+  }
+
+  &_adjust {
+    &_edit-image-block {
+      margin-bottom: 30px !important;
+    }
+  }
+
+  &__file-loader {
+    height: 0;
+    overflow: hidden;
+    margin-bottom: 0 !important;
+  }
+}

@@ -14,7 +14,7 @@
             <div class="media-object-section">
               <h4>
                 <%= staff_member.full_name.titlecase %>
-                <%= link_to('View', staff_member_path(staff_member), class: 'boss2-button boss2-button_type_small') %>
+                <%= link_to('View', staff_member_path(staff_member), class: 'boss-button boss-button_type_small') %>
               </h4>
               <p>Email Address: <%= staff_member.email || 'Not supplied' %></p>
               <p>Staff Type: <%= staff_member.staff_type.name.titlecase %></p>

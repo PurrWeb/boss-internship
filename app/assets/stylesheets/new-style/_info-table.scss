@@ -1,10 +1,7 @@
 @import 'settings';
 @import 'mixins';
 
-$info-table-selector: info-table;
-$label-selector: __label;
-
-.#{$info-table-selector} {
+.boss-info-table {
   @include normalize-block();
 
   display: table;
@@ -120,7 +117,7 @@ $label-selector: __label;
       left: 56px;
       top: 26px;
       border-radius: 50%;
-      box-shadow: 0 0 0 3pt $boss-white;
+      box-shadow: 0 0 0 3pt white;
     }
 
     &_clocked-out{
@@ -174,9 +171,9 @@ $label-selector: __label;
     color: $boss-very-light-gray;
   }
 
-  &#{$label-selector} {
+  &__label {
     display: inline-block;
-    color: $boss-white;
+    color: white;
     font-size: 0.7em;
     padding: 0.4em 0.8em;
     text-transform: uppercase;
@@ -240,7 +237,7 @@ $label-selector: __label;
       display: inline-block;
       vertical-align: top;
 
-      .#{$info-table-selector}#{$label-selector} + & {
+      .boss-info-table__label + & {
         margin-left: 5px;
       }
     }

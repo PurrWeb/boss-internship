@@ -59,10 +59,10 @@ export default class StaffImageInput extends React.Component {
         </div>
     }
     getRotateButton(){
-        return <a className="boss2-button" onClick={() => this.rotateImage()}>Rotate</a>
+        return <a className="boss-button" onClick={() => this.rotateImage()}>Rotate</a>
     }
     getOkButton(){
-        var classes = ["boss2-button"];
+        var classes = ["boss-button"];
         if (!this.imageDimensionsAreValid(this.state.imageDimensions)){
             classes.push("disabled");
         }
@@ -185,7 +185,7 @@ export default class StaffImageInput extends React.Component {
     }
     getResetButtton(){
         return <button
-            className="boss2-button"
+            className="boss-button"
             onClick={() => {
                 this.reset()
             }}>

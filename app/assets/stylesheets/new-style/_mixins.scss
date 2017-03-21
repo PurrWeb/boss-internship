@@ -1,12 +1,18 @@
 @import 'settings';
 
-@mixin normalize-block() {
+@mixin normalize-block($color: $boss-global-font-color, $cursor: auto) { // inheritable properties
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: none;
+  outline: 0;
+  color: $color;
+  text-decoration: none;
+  cursor: $cursor;
   border-collapse: separate;
   border-spacing: 0;
-  color: $boss-body-font-color;
-  cursor: auto;
   empty-cells: show;
-  font-family: $boss-body-font-family;
+  font-family: $boss-global-font-family;
   font-size: $boss-global-font-size;
   font-style: normal;
   font-variant: normal;
@@ -28,11 +34,22 @@
   }
 }
 
-@mixin button-hover-behavior($background-color) {
+@mixin button-hover-behavior($background-color, $amount: 3%) {
   cursor: pointer;
-  transition: background-color 0.2s;
-  animation-timing-function: ease-in-out;
   &:hover {
-    background-color: darken( $background-color, 5% );
+    background-color: lighten($background-color, $amount);
   }
+}
+
+@mixin content-block() {
+  position: relative;
+  padding: $boss-content-block-padding;
+  background-color: white;
+  border-bottom: 1px solid $boss-very-light-gray;
+}
+
+@mixin clear-fix() {
+  content: "";
+  display: table;
+  clear: both;
 }

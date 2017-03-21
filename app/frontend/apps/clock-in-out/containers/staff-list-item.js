@@ -47,8 +47,8 @@ class ClockInOutStaffListItem extends Component {
         const statusForClassName = status.toLowerCase().replace(/( |_)/g, '-');
 
         return (
-            <div className={`info-table__user-avatar-container info-table__user-avatar-container_${statusForClassName}`}>
-                <img src={url} className="info-table__user-avatar-image" />
+            <div className={`boss-info-table__user-avatar-container boss-info-table__user-avatar-container_${statusForClassName}`}>
+                <img src={url} className="boss-info-table__user-avatar-image" />
             </div>
         );
     }
@@ -81,7 +81,7 @@ class ClockInOutStaffListItem extends Component {
                 onBackgroundClick={this.hideChangeSettingsTooltip.bind(this)}
             >
                 <div className="boss-context-menu__content">
-                    <div className="boss-buttons-block boss-context-menu_adjust_buttons-block-small">
+                    <div className="boss-clock-buttons-block boss-context-menu_adjust_buttons-block-small">
                         {this.getAddNoteButton()}
                         {this.getChangePinButton()}
                     </div>
@@ -136,7 +136,7 @@ class ClockInOutStaffListItem extends Component {
         }[breakStatusAfterClick];
 
         return (
-            <a className="boss-button boss-button_big boss-button_role_go-on-break boss-buttons-block_adjust_button"
+            <a className="boss-clock-button boss-clock-button_type_big boss-clock-button_role_go-on-break boss-clock-buttons-block_adjust_button"
                data-test-marker-toggle-staff-status
                onClick={this.onBreakButtonClick.bind(this)}
             >
@@ -170,7 +170,7 @@ class ClockInOutStaffListItem extends Component {
 
         const clockInButton = clockedStatus === 'clocked_out' ? (
             <a
-               className="boss-button boss-button_big boss-button_role_clock-in boss-buttons-block_adjust_button"
+               className="boss-clock-button boss-clock-button_type_big boss-clock-button_role_clock-in boss-clock-buttons-block_adjust_button"
                data-test-marker-toggle-staff-status
                onClick={this.onClockButtonClick.bind(this)}
             >
@@ -180,7 +180,7 @@ class ClockInOutStaffListItem extends Component {
 
         const clockOutButton = clockedStatus === 'clocked_out' ? null : (
             <a
-               className="boss-button boss-button_big boss-button_role_clock-out boss-buttons-block_adjust_button"
+               className="boss-clock-button boss-clock-button_type_big boss-clock-button_role_clock-out boss-clock-buttons-block_adjust_button"
                data-test-marker-toggle-staff-status
                onClick={this.onClockButtonClick.bind(this)}
             >
@@ -200,7 +200,7 @@ class ClockInOutStaffListItem extends Component {
                     onBackgroundClick={this.hideChangeStatusTooltip.bind(this)}
             >
                 <div className="boss-context-menu__content">
-                    <div className="boss-buttons-block">
+                    <div className="boss-clock-buttons-block">
                         {breakButton}
                         {clockInButton}
                         {clockOutButton}
@@ -221,18 +221,18 @@ class ClockInOutStaffListItem extends Component {
 
         const statusToggleButtons = (
             <span
-               className="info-table__change-user-status"
+               className="boss-info-table__change-user-status"
                onClick={this.showChangeStatusTooltip.bind(this)}
                id={this.changeStatusButtonId}
             >(change)</span>
         );
 
         return (
-            <div className="info-table__tr test-staff-row">
-                <div className="info-table__td">
+            <div className="boss-info-table__tr test-staff-row">
+                <div className="boss-info-table__td">
                     {this.drawUserAvatar(staffMember.avatar_url, clockInStatusValue)}
-                    <div className="info-table__user-info">
-                        <div className="info-table__user-name">
+                    <div className="boss-info-table__user-info">
+                        <div className="boss-info-table__user-name">
                             {staffMember.first_name} {staffMember.surname}
                         </div>
                         <StaffTypeBadge
@@ -241,11 +241,11 @@ class ClockInOutStaffListItem extends Component {
                         {this.getSettingsButton()}
                     </div>
                 </div>
-                <div className="info-table__td">
+                <div className="boss-info-table__td">
                     {rotaedShiftsColumn}
                 </div>
                 {this.getClockInNotesList()}
-                <div className="info-table__td">
+                <div className="boss-info-table__td">
                     {this.getClockInStatusBadge(this.props.staff.updateStatusInProgress, clockInStatusValue)}
                     {statusToggleButtons}
                 </div>
@@ -301,16 +301,16 @@ class ClockInOutStaffListItem extends Component {
             this.props.clockInNotes.map((noteData, idx) => {
                 return <span
                     key={idx}
-                    className="info-table__notes"
+                    className="boss-info-table__notes"
                     data-test-marker-clock-in-note
                 >
                     {noteData.note}
                 </span>;
             })
-        ) : <div className="info-table__notes info-table_no-value">(none)</div>;
+        ) : <div className="boss-info-table__notes boss-info-table_no-value">(none)</div>;
 
         return (
-            <div className="info-table__td">
+            <div className="boss-info-table__td">
                 {notes}
             </div>
         );
@@ -334,7 +334,7 @@ class ClockInOutStaffListItem extends Component {
 
         return (
             <a href="#"
-               className="boss-button boss-button_small boss-button_role_add-note boss-buttons-block_adjust_button"
+               className="boss-clock-button boss-clock-button_type_small boss-clock-button_role_add-note boss-clock-buttons-block_adjust_button"
                data-test-marker-add-note
                onClick={this.onClickAddNote.bind(this)}
             >
@@ -372,7 +372,7 @@ class ClockInOutStaffListItem extends Component {
 
         return (
             <a href="#"
-               className="boss-button boss-button_small boss-button_role_change-pin boss-buttons-block_adjust_button"
+               className="boss-clock-button boss-clock-button_type_small boss-clock-button_role_change-pin boss-clock-buttons-block_adjust_button"
                data-test-marker-change-pin-button
                onClick={this.onClickChangePin.bind(this)}
             >
@@ -395,7 +395,7 @@ class ClockInOutStaffListItem extends Component {
         return (
             <div
                 id={this.changeSettingsButtonId}
-                className="info-table__settings-sign info-table__user-info_adjust_settings-sign test-settings-sign"
+                className="boss-info-table__settings-sign boss-info-table__user-info_adjust_settings-sign test-settings-sign"
                 onClick={this.showChangeSettingsTooltip.bind(this)}
             >
                 {this.drawChangeSettingsTooltip()}
@@ -413,7 +413,7 @@ class ClockInOutStaffListItem extends Component {
 
         return (
             <div
-                className="boss-button boss-button_small boss-button_role_enter-manager-mode info-table_adjust_button-small"
+                className="boss-clock-button boss-clock-button_type_small boss-clock-button_role_enter-manager-mode boss-info-table_adjust_button-small"
                 data-test-marker-enter-manager-mode
                 onClick={this.onEnterManagerModeClick.bind(this)}
             >

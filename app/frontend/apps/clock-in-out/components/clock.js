@@ -10,7 +10,7 @@ export default class Clock extends React.Component {
     }
     render(){
         return (
-            <div className="header__time-value">
+            <div className="boss-header__time-value">
                 {moment(new Date()).format("HH:mm")}
             </div>
         );
