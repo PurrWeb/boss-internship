@@ -85,19 +85,22 @@ class StaffMembersController < ApplicationController
   def new
     authorize! :manage, :staff_members
 
-    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
-    venues = Venue.all
-    pay_rates = PayRate.selectable_by(current_user)
-    staff_types = StaffType.all
-    gender_values = StaffMember::GENDERS
+    staff_member = StaffMember.new(starts_at: Time.zone.now)
+    render locals: { staff_member: staff_member }
+  end
 
-    render locals: {
-      access_token: access_token,
-      venues: venues,
-      pay_rates: pay_rates,
-      staff_types: staff_types,
-      gender_values: gender_values
-    }
+  def create
+    authorize! :manage, :staff_members
+
+    result = CreateStaffMember.new(params: staff_member_params).call
+
+    if result.success?
+      flash[:success] = "Staff member added successfully"
+      redirect_to action: :index
+    else
+      flash.now[:error] = "There was a problem creating this staff member"
+      render 'new', locals: { staff_member: result.staff_member }
+    end
   end
 
   def edit_employment_details

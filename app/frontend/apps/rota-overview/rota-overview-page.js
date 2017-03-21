@@ -29,8 +29,8 @@ class RotaOverviewPage extends Component {
         });
 
         return <div className="container">
-            <div className="boss-flex-row">
-                <div className="boss-flex-column">
+            <div className="boss2-flex-row">
+                <div className="boss2-flex-column">
                     <WeekAndVenueSelector
                         venueClientId={firstRota.venue.clientId}
                         weekStartDate={firstRota.date}
@@ -44,12 +44,12 @@ class RotaOverviewPage extends Component {
 
                     </WeekAndVenueSelector>
                 </div>
-                <div className="boss-flex-column">
-                    <a href={pdfHref} className="boss-button boss-button_role_download">
+                <div className="boss2-flex-column">
+                    <a href={pdfHref} className="boss2-button boss2-button_role_download">
                       Download PDF
                     </a>
                 </div>
-                <div className="boss-flex-column">
+                <div className="boss2-flex-column">
                     <h2 style={{fontSize: 20, marginTop: 0}}>Weekly Forecast</h2>
                     <WeeklyRotaForecast
                         serverVenueId={firstRota.venue.serverId}

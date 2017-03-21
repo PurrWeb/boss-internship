@@ -1,0 +1,39 @@
+@import 'settings';
+@import 'mixins';
+
+.boss2-h2 {
+  @include normalize-block();
+
+  font-size: 24px;
+  font-weight: 400;
+
+  &_type {
+    &_with-info {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__info-block {
+    $min-side-size: 50px;
+
+    display: inline-block;
+    min-width: $min-side-size;
+    margin-left: 18px;
+    border-radius: 50%;
+    line-height: $min-side-size;
+    background-color: map-get($boss-app-palette, primary);
+    text-align: center;
+    color: white;
+    font-size: 13px;
+    font-weight: 300;
+  }
+}
+
+.boss2-h4 {
+  @include normalize-block();
+
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 400;
+}

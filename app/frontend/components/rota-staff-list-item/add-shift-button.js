@@ -7,7 +7,7 @@ export default class AddShiftButton extends Component {
         canAddShift: React.PropTypes.bool.isRequired
     }
     render() {
-        var className = "boss-button boss-button_type_small boss-button_role_add ";
+        var className = "boss2-button boss2-button_type_small boss2-button_role_add ";
         if (!this.props.canAddShift) {
             className += " disabled";
         }

@@ -31,10 +31,7 @@ export default class StaffTypeDropdown extends Component {
                     multi={true}
                     optionRenderer={(option) => this.renderOption(option, "option")}
                     valueRenderer={this.renderValue.bind(this)}
-                    onChange={(options) => {
-                      const value = options.map((option, idx) => (idx ? ',' : '') + option.value);
-                      this.onChange(value);
-                    }}
+                    onChange={(value) => this.onChange(value)}
                 />
             </div>
         );

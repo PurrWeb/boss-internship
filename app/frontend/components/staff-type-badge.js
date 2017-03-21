@@ -9,7 +9,7 @@ export default class StaffTypeBadge extends Component {
 
         return (
             <div
-                    className="boss-info-table__label"
+                    className="info-table__label"
                     style={{backgroundColor: staffType.color}}
             >
                 {staffType.name}

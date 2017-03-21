@@ -74,9 +74,9 @@ class RotaDate {
     getDateFromShiftEndTime(hours, minutes) {
         return this._getDateAtTime(hours, minutes, true);
     }
-    _getDateAtTimeString(timeData, isEndOfShift) {
+    _getDateAtTimeString(timeString, isEndOfShift) {
         var startOrEnd = isEndOfShift ? "End" : "Start";
-        var [hours, minutes] = timeData.value.split(":").map(parseFloat);
+        var [hours, minutes] = timeString.split(":").map(parseFloat);
         return this["getDateFromShift" + startOrEnd + "Time"](hours, minutes);
     }
     getDateFromShiftStartTimeString(timeString){
