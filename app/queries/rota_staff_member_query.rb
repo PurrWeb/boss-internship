@@ -6,11 +6,15 @@ class RotaStaffMemberQuery
   end
 
   def all
-    venue_staff_member_ids = StaffMember.for_venue(rota.venue).enabled
-    shift_staff_member_ids = StaffMember.joins(:rota_shifts).merge(RotaShift.enabled.where(rota: rota)).pluck(:id)
-    ids = (venue_staff_member_ids + shift_staff_member_ids).uniq
+    venue_staff_member_ids = StaffMember.for_venue(rota.venue).enabled.map(&:id)
+    shift_staff_member_ids = StaffMember.joins(:rota_shifts).where(
+      rota_shifts: {
+        enabled: true,
+        rota: rota
+      }
+    ).map(&:id)
 
-    StaffMember.where(id: ids)
+    StaffMember.where(id: venue_staff_member_ids + shift_staff_member_ids)
   end
 
   private
