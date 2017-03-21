@@ -1,10 +1,10 @@
 json.id clock_in_day.id
 json.date clock_in_day.date.iso8601
 json.venue do
-  json.id clock_in_day.venue.id
+  json.id clock_in_day.venue_id
 end
 json.staff_member do
-  json.id clock_in_day.staff_member.id
+  json.id clock_in_day.staff_member_id
 end
 json.clock_in_notes clock_in_day.clock_in_notes do |clock_in_note|
   json.id clock_in_note.id
