@@ -115,24 +115,24 @@ class HoursConfirmationController < ApplicationController
       staff_types = StaffType.all
 
       clock_in_periods = ClockInPeriod.where(
-        clock_in_day_id: clock_in_days.map(&:id)
+        clock_in_day: clock_in_days
       ).includes(:clock_in_day)
 
       clock_in_breaks = ClockInBreak.where(
-        clock_in_period_id: clock_in_periods.map(&:id)
+        clock_in_period: clock_in_periods
       ).includes(:clock_in_period)
 
       clock_in_events = ClockInEvent.where(
-        clock_in_period_id: clock_in_periods.map(&:id)
+        clock_in_period: clock_in_periods
       ).includes(:clock_in_period)
 
       hours_acceptance_periods = HoursAcceptancePeriod.where(
-        clock_in_day_id: clock_in_days.map(&:id),
+        clock_in_day: clock_in_days,
         status: HoursAcceptancePeriod::STATES - ['deleted']
       ).includes(:hours_acceptance_breaks_enabled)
 
       hours_acceptance_breaks = HoursAcceptanceBreak.where(
-        hours_acceptance_period_id: hours_acceptance_periods.map(&:id),
+        hours_acceptance_period: hours_acceptance_periods,
         disabled_at: nil
       )
 
@@ -160,7 +160,7 @@ class HoursConfirmationController < ApplicationController
       ).includes([:rota, :staff_member])
 
       clock_in_notes = ClockInNote.where(
-        clock_in_day_id: clock_in_days.map(&:id)
+        clock_in_day: clock_in_days
       )
 
       clock_in_days = clock_in_days.includes(
