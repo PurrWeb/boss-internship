@@ -4,18 +4,20 @@ class ClockInDaysPendingConfirmationQuery
   end
 
   def all
-    days_with_pending_hour_acceptances = ClockInDay.
-      where(venue: venue).
-      joins(:hours_acceptance_periods).
-      merge(HoursAcceptancePeriod.pending)
+    clock_in_days = ClockInDay.where(venue: @venue)
 
-    days_with_incomplete_clock_in_periods = ClockInDay.
-      where(venue: venue).
-      joins(:clock_in_periods).
-      merge(ClockInPeriod.incomplete)
+    days_with_pending_hour_acceptances = HoursAcceptancePeriod.where(
+      clock_in_day: clock_in_days,
+      status: HoursAcceptancePeriod::PENDING_STATE
+    )
+
+    days_with_incomplete_clock_in_periods = ClockInPeriod.where(
+      clock_in_day: clock_in_days,
+      ends_at: nil
+    )
 
     ClockInDay.where(
-      id: days_with_pending_hour_acceptances.pluck(:id) + days_with_incomplete_clock_in_periods.pluck(:id)
+      id: days_with_pending_hour_acceptances.map(&:clock_in_day_id) + days_with_incomplete_clock_in_periods.map(&:clock_in_day_id)
     )
   end
 

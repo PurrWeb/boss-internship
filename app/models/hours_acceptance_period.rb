@@ -2,12 +2,16 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   has_paper_trail
 
   ACCEPTED_STATE = 'accepted'
-  STATES = ['pending', ACCEPTED_STATE, 'deleted']
+  PENDING_STATE = 'pending'
+  STATES = [PENDING_STATE, ACCEPTED_STATE, 'deleted']
 
   belongs_to :clock_in_day
   belongs_to :creator, polymorphic: true
   belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
   has_many :hours_acceptance_breaks
+  has_many :hours_acceptance_breaks_enabled, -> (_o) {
+    where(disabled_at: nil)
+  }, class_name: 'HoursAcceptanceBreak'
 
   validates_associated :hours_acceptance_breaks
   validates :starts_at, presence: true
@@ -27,7 +31,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   end
 
   def self.pending
-    where(status: 'pending')
+    where(status: PENDING_STATE)
   end
 
   def self.enabled
