@@ -205,5 +205,38 @@ describe HoursAcceptancePeriod do
         expect(period.payable_hours).to eq(1)
       end
     end
+
+    context '#.hours_acceptance_breaks_enabled' do
+      let!(:break1) do
+        period.save!
+
+        period.hours_acceptance_breaks.create!(
+          starts_at: start_of_day + 2.hours,
+          ends_at: start_of_day + 2.hours + 30.minutes
+        )
+      end
+
+      let!(:break2) do
+        period.hours_acceptance_breaks.create!(
+          starts_at: start_of_day + 1.hours,
+          ends_at: start_of_day + 2.hours,
+          disabled_by: user,
+          disabled_at: start_of_day.end_of_day
+        )
+      end
+
+      specify 'to be equal to #.hours_acceptance_breaks.enabled' do
+        expect(
+          period.hours_acceptance_breaks.enabled
+        ).to eq(
+          period.hours_acceptance_breaks_enabled
+        )
+
+        expect(period.hours_acceptance_breaks.enabled.count).to eq(1)
+        expect(period.hours_acceptance_breaks_enabled.count).to eq(1)
+        expect(period.hours_acceptance_breaks_enabled.first.id).to eq(break1.id)
+        expect(period.hours_acceptance_breaks.enabled.first.id).to eq(break1.id)
+      end
+    end
   end
 end
