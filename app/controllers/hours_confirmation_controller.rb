@@ -1,13 +1,11 @@
 class HoursConfirmationController < ApplicationController
-  before_action :set_venue, only: [:current]
+  before_action :set_venue
+  before_action :set_date, only: [:index]
 
-  attr_reader :venue
+  attr_reader :venue, :date
 
   def index
-    if venue_from_params.present? && date_from_params.present?
-      venue = venue_from_params
-      date = date_from_params
-
+    if venue.present? && date.present?
       authorize! :manage, venue
 
       clock_in_days = ClockInDay.where(
@@ -15,36 +13,31 @@ class HoursConfirmationController < ApplicationController
         date: date
       )
 
-      staff_members = StaffMember.
-        joins(:clock_in_days).
-        merge(clock_in_days).
-        includes([:master_venue, :staff_type, :name])
+      staff_members = StaffMember.where(
+        id: clock_in_days.map(&:staff_member_id).uniq
+      ).includes([:master_venue, :staff_type, :name, :work_venues])
 
       staff_types = StaffType.all
 
-      clock_in_periods = ClockInPeriod.
-        joins(:clock_in_day).
-        merge(clock_in_days)
+      clock_in_periods = ClockInPeriod.where(
+        clock_in_day: clock_in_days
+      ).includes(:clock_in_day)
 
-      clock_in_breaks = ClockInBreak.
-        joins(:clock_in_period).
-        merge(clock_in_periods).
-        includes(:clock_in_period)
+      clock_in_breaks = ClockInBreak.where(
+        clock_in_period: clock_in_periods
+      ).includes(:clock_in_period)
 
-      clock_in_events = ClockInEvent.
-        joins(:clock_in_period).
-        merge(clock_in_periods).
-        includes(:clock_in_period)
+      clock_in_events = ClockInEvent.where(
+        clock_in_period: clock_in_periods
+      ).includes(:clock_in_period)
 
-      hours_acceptance_periods = HoursAcceptancePeriod.
-        enabled.
-        joins(:clock_in_day).
-        merge(clock_in_days)
+      hours_acceptance_periods = HoursAcceptancePeriod.enabled.where(
+        clock_in_day: clock_in_days
+      ).includes(:hours_acceptance_breaks_enabled)
 
-      hours_acceptance_breaks = HoursAcceptanceBreak.
-        enabled.
-        joins(:hours_acceptance_period).
-        merge(hours_acceptance_periods)
+      hours_acceptance_breaks = HoursAcceptanceBreak.enabled.where(
+        hours_acceptance_period: hours_acceptance_periods
+      )
 
       access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
 
@@ -59,26 +52,26 @@ class HoursConfirmationController < ApplicationController
         date: date
       )
 
-      rotas = Rota.
-        where(date: clock_in_days.pluck(:date).uniq).
-        joins(:venue).
-        merge(venues).
-        includes(:venue)
+      rotas = Rota.where(
+        date: clock_in_days.map(&:date).uniq,
+        venue: venues
+      ).includes(:venue)
 
+      rota_shifts = RotaShift.where(
+        rota: rota,
+        staff_member: staff_members
+      ).includes([:rota, :staff_member])
 
-      rota_shifts = RotaShift.
-        joins(:rota).
-        merge(rota).
-        joins(:staff_member).
-        merge(staff_members).
-        includes([:rota, :staff_member])
+      clock_in_notes = ClockInNote.where(
+        clock_in_day_id: clock_in_days
+      )
 
-      clock_in_notes = ClockInNote.
-        joins(:clock_in_day).
-        merge(clock_in_days)
-
-      clock_in_days = clock_in_days.
-        includes([:venue, :staff_member])
+      clock_in_days = clock_in_days.includes(
+        [
+          :venue, :staff_member, :clock_in_notes,
+          :hours_acceptance_periods, :clock_in_periods
+        ]
+      )
 
       render locals: {
         access_token: access_token,
@@ -199,10 +192,8 @@ class HoursConfirmationController < ApplicationController
     @venue ||= Venue.find_by(id: params[:venue_id])
   end
 
-  def date_from_params
-    if params[:date].present?
-      UIRotaDate.parse(params[:date])
-    end
+  def set_date
+    @date ||= params[:date].present? ? UIRotaDate.parse(params[:date]) : nil
   end
 
   def venue_from_params
@@ -211,7 +202,7 @@ class HoursConfirmationController < ApplicationController
 
   def index_redirect_params
     {
-      date: date_from_params || UIRotaDate.format(Time.current.to_date),
+      date: date || UIRotaDate.format(Time.current.to_date),
       venue_id: venue_from_params.andand.id || current_user.default_venue.id
     }
   end
