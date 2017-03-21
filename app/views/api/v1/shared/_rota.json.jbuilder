@@ -5,7 +5,7 @@ else
   json.url nil
 end
 json.venue do
-  json.id rota.venue.id
+  json.id rota.venue_id
   json.url api_v1_venue_url(rota.venue)
 end
 json.date rota.date.iso8601

@@ -2,7 +2,7 @@ json.id staff_member.id
 json.url api_v1_staff_member_url(staff_member)
 json.avatar_url staff_member.avatar_url
 json.staff_type do
-  json.id staff_member.staff_type.id
+  json.id staff_member.staff_type_id
   json.url api_v1_staff_type_url(staff_member.staff_type)
 end
 json.first_name staff_member.name.first_name
