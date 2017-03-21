@@ -3,7 +3,8 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   ACCEPTED_STATE = 'accepted'
   PENDING_STATE = 'pending'
-  STATES = [PENDING_STATE, ACCEPTED_STATE, 'deleted']
+  DELETED_STATE = 'deleted'
+  STATES = [PENDING_STATE, ACCEPTED_STATE, DELETED_STATE]
 
   belongs_to :clock_in_day
   belongs_to :creator, polymorphic: true
@@ -35,7 +36,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   end
 
   def self.enabled
-    where('status != ?', 'deleted')
+    where('status != ?', DELETED_STATE)
   end
 
   def venue
@@ -55,7 +56,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   end
 
   def deleted?
-    status == 'deleted'
+    status == DELETED_STATE
   end
 
   def staff_member

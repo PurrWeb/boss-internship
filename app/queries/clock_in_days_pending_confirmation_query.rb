@@ -6,14 +6,12 @@ class ClockInDaysPendingConfirmationQuery
   def all
     clock_in_days = ClockInDay.where(venue: @venue)
 
-    days_with_pending_hour_acceptances = HoursAcceptancePeriod.where(
-      clock_in_day: clock_in_days,
-      status: HoursAcceptancePeriod::PENDING_STATE
+    days_with_pending_hour_acceptances = HoursAcceptancePeriod.pending.where(
+      clock_in_day: clock_in_days
     )
 
-    days_with_incomplete_clock_in_periods = ClockInPeriod.where(
-      clock_in_day: clock_in_days,
-      ends_at: nil
+    days_with_incomplete_clock_in_periods = ClockInPeriod.incomplete.where(
+      clock_in_day: clock_in_days
     )
 
     ClockInDay.where(

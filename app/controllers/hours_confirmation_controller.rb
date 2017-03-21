@@ -1,6 +1,8 @@
 class HoursConfirmationController < ApplicationController
   before_action :set_venue, only: [:current]
 
+  attr_reader :venue
+
   def index
     if venue_from_params.present? && date_from_params.present?
       venue = venue_from_params
@@ -101,11 +103,11 @@ class HoursConfirmationController < ApplicationController
   end
 
   def current
-    if @venue.present?
-      authorize! :manage, @venue
+    if venue.present?
+      authorize! :manage, venue
 
       clock_in_days = ClockInDaysPendingConfirmationQuery.new(
-        venue: @venue
+        venue: venue
       ).all
 
       staff_members = StaffMember.where(
@@ -128,7 +130,7 @@ class HoursConfirmationController < ApplicationController
 
       hours_acceptance_periods = HoursAcceptancePeriod.where(
         clock_in_day: clock_in_days,
-        status: HoursAcceptancePeriod::STATES - ['deleted']
+        status: HoursAcceptancePeriod::STATES - [HoursAcceptancePeriod::DELETED_STATE]
       ).includes(:hours_acceptance_breaks_enabled)
 
       hours_acceptance_breaks = HoursAcceptanceBreak.where(
@@ -139,13 +141,13 @@ class HoursConfirmationController < ApplicationController
       access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
 
       venues = if current_user.has_all_venue_access?
-                 Venue.all
-               else
-                 current_user.venues
-               end
+        Venue.all
+      else
+        current_user.venues
+      end
 
       rota = Rota.where(
-        venue: @venue,
+        venue: venue,
         date: clock_in_days.pluck(:date).uniq
       )
 
@@ -184,7 +186,7 @@ class HoursConfirmationController < ApplicationController
         rotas: rotas,
         rota_shifts: rota_shifts,
         venues: venues,
-        venue: @venue
+        venue: venue
       }
     else
       redirect_to current_hours_confirmation_index_path(current_redirect_params)
