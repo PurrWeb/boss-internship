@@ -41,7 +41,7 @@ class RotaStaffListItem extends Component {
         return (
             <div className="row staff-list-item rota-staff-list-item">
                 <div className="small-12  large-3 columns">
-                    <img src={staff.avatar_url} className="boss-avatar boss-avatar_type_big" />
+                    <img src={staff.avatar_url} className="boss2-avatar boss2-avatar_type_big" />
                 </div>
                 <div className="columns large-9">
                     <div className="row">
@@ -82,7 +82,7 @@ class RotaStaffListItem extends Component {
                             }}>
                                 Holidays
                             </h4>
-                            <StaffMemberHolidaysLink className="boss-button boss-button_type_small boss-button_role_edit" staffMemberServerId={staff.serverId} >
+                            <StaffMemberHolidaysLink className="boss2-button boss2-button_type_small boss2-button_role_edit" staffMemberServerId={staff.serverId} >
                                 Edit
                             </StaffMemberHolidaysLink>
                             <StaffHolidaysList staffMemberClientId={staff.clientId} />

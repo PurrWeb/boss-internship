@@ -4,55 +4,7 @@
 .boss-label {
   @include normalize-block();
 
-  display: block;
-
-  & + & {
-    margin-top: 20px;
+  &_big {
+    font-size: 1.5rem;
   }
-
-  &_role {
-    &_datepicker {
-      display: table;
-    }
-  }
-
-  &_adjust {
-    &_tip {
-      margin-top: 2px;
-      font-size: 13px;
-      color: $boss-light-gray;
-    }
-  }
-
-  &__text {
-    display: block;
-    margin-bottom: 8px;
-    color: $boss-dark-gray;
-
-    input[type=radio] + &,
-    input[type=checkbox] + & {
-      display: inline-block;
-    }
-
-    &_type {
-      &_big {
-        font-size: 1.5rem;
-      }
-      &_required {
-        &:after {
-          content: '*';
-          margin-left: 2px;
-        }
-      }
-    }
-
-    .boss-input[type=radio] + &, .boss-input[type=checkbox] + & {
-      display: inline;
-    }
-  }
-
-  &__tip {
-    display: block;
-  }
-
 }

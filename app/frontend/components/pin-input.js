@@ -53,7 +53,7 @@ export default class PinInput extends React.Component {
     render(){
         return <div className="boss-modal-window__controls-block" >
                 <input
-                    className="boss-input boss-input_type_big boss-input_type_modal-window boss-input_role_pin boss-modal-window_adjust_input-pin"
+                    className="boss-input boss-input_big boss-input_role_in-modal-window boss-input_role_pin boss-modal-window_adjust_input-pin"
                     type="password"
                     value={this.props.pin}
                     onClick={e => e.preventDefault()}

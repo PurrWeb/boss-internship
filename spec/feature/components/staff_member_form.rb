@@ -39,7 +39,7 @@ module PageObject
     end
 
     page_action :ensure_photo_displayed do
-      scope.find('.boss-avatar')
+      scope.find('.boss2-avatar')
     end
 
     page_action :submit do

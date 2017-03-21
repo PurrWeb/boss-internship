@@ -2,8 +2,7 @@
 @import 'mixins';
 @import '../media-queries';
 
-.boss-main-content {
-  $main-content-margin-top: 3.7rem;
+.main-content {
   $main-content-padding: 33px;
   $main-content-body-padding: 24px;
 
@@ -21,7 +20,7 @@
 
   &__body {
     padding: 24px;
-    background-color: white;
+    background-color: $boss-white;
     box-sizing: border-box;
 
     &_role {
@@ -85,7 +84,7 @@
     position: absolute;
     left: 1.7em;
     top: -0.7em;
-    background-color: white;
+    background-color: $boss-white;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
     padding: 0 0.6em;
     font-size: 0.9em;

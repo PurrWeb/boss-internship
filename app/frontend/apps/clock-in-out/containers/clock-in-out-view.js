@@ -46,7 +46,7 @@ class ClockInOutView extends Component {
         this.setMainTagClass();
 
         if (!this.props.hasLoadedAppData) {
-            return <div className="boss-page-wrapper">
+            return <div className="page-wrapper">
                 <LoadAppDataDialog />
             </div>
         } else {
@@ -60,7 +60,7 @@ class ClockInOutView extends Component {
     getReloadPageButton(){
         return (
             <a href="#"
-               className="boss-header__reload-button"
+               className="header__reload-button"
                onClick={this.onReloadClick}
             >
                 Reload
@@ -106,15 +106,15 @@ class ClockInOutView extends Component {
             />;
         } else {
             header = (
-                <div className="boss-header__container">
-                    <div className="boss-header">
-                        <div className="boss-header__reload-cell">
+                <div className="header__container">
+                    <div className="header">
+                        <div className="header__reload-cell">
                             {this.getReloadPageButton()}
                         </div>
-                        <div className="boss-header__caption-cell">
-                            <div className="boss-header__caption-text">Select Your Staff Type</div>
+                        <div className="header__caption-cell">
+                            <div className="header__caption-text">Select Your Staff Type</div>
                         </div>
-                        <div className="boss-header__time-cell">
+                        <div className="header__time-cell">
                             <Clock />
                         </div>
                     </div>
@@ -128,11 +128,11 @@ class ClockInOutView extends Component {
         }
 
         return (
-            <div className="boss-page-wrapper">
+            <div className="page-wrapper">
                 <ConfirmationModal />
                 <UserActionConfirmationMessages />
                 {header}
-                <div className="boss-main-content">
+                <div className="main-content">
                     {content}
                 </div>
             </div>

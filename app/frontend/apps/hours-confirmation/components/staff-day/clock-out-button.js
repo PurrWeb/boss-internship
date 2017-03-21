@@ -16,7 +16,7 @@ export default class ClockOutButton extends React.Component {
             <div className="shrink column">
                 <button
                     data-test-marker-force-clock-out
-                    className="boss-button boss-button_type_small boss-button_role_exclamation"
+                    className="boss2-button boss2-button_type_small boss2-button_role_exclamation"
                     onClick={this.props.clockOut}
                     style={{marginTop: 4, marginLeft: 4}}>
                     Clock Out
