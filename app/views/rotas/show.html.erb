@@ -1,7 +1,7 @@
 <%= javascript_tag do %>
   rotaData = {};
 
-  rotaData.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: Array(rotas) }  %>;
+  rotaData.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas }  %>;
 
   rotaData.staff_types = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
 
@@ -9,9 +9,9 @@
 
   rotaData.staff_members = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
 
-  rotaData.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: Array(venues) } %>;
+  rotaData.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: venues } %>;
 
-  rotaData.holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: Array(holidays) } %>;
+  rotaData.holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: holidays } %>;
 
   window.boss = window.boss || {};
   window.boss.access_token = "<%= access_token.token %>";
