@@ -18,6 +18,7 @@ import {GenderInputValidators} from '../../../interfaces/forms';
 import SelectControl from './select-control';
 import changingStepInfo from '../../../action-creators/changing-step-info';
 import {BasicInformationForm} from '../../../reducers/forms';
+import {hasFormValidationErrors, hasFormUnfilledRequiredFields} from '../../../helpers/validators';
 
 interface Props {
 }
@@ -39,39 +40,12 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   handleFormUpdate = (formModelData: BasicInformationForm) => {
-    const hasUnfilledRequiredFields = Component.hasUnfilledRequiredFields(formModelData);
-    const hasValidationErrors = Component.hasValidationErrors(formModelData);
+    const hasUnfilledRequiredFields = hasFormUnfilledRequiredFields<BasicInformationForm>(formModelData);
+    const hasValidationErrors = hasFormValidationErrors<BasicInformationForm>(formModelData);
     const action = changingStepInfo('BasicInformationBlock', hasUnfilledRequiredFields, hasValidationErrors);
 
     this.props.dispatch(action);
   };
-
-  static hasValidationErrors(formModelData: BasicInformationForm) {
-    return pipe<BasicInformationForm, Dict<FieldState>, FieldState[], FieldState | undefined, boolean>(
-      omit(['$form']),
-      values,
-      find((fieldData: FieldState) => !!fieldData.errors ?
-          pipe<ErrorsObject, ErrorsObject, (boolean | string)[], boolean | string, boolean>(
-            omit(['isFilled']),
-            values,
-            find((error: boolean | string) => error === true),
-            Boolean
-          )(fieldData.errors as ErrorsObject) :
-          false
-      ),
-      Boolean
-    )(formModelData);
-  }
-
-
-  static hasUnfilledRequiredFields(formModelData: BasicInformationForm) {
-    return pipe<BasicInformationForm, Dict<FieldState>, FieldState[], FieldState | undefined, boolean>(
-      omit(['$form']),
-      values,
-      find((fieldData: FieldState) => fieldData.errors && fieldData.errors.isFilled === true),
-      Boolean
-    )(formModelData);
-  }
 
   static getGenderOptions(genderValues: string[]) {
     return genderValues.map((venueValue) => ({value: venueValue, label: venueValue}));
