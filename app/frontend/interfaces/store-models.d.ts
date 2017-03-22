@@ -48,17 +48,17 @@ export interface GlobalError {
   readonly date: number;
 }
 
-export interface StepInfo {
+export interface AddStaffMemberStepInfo {
   readonly touched: boolean;
   readonly hasErrors: boolean;
 }
 
-export interface StepsInfo {
-  readonly 1?: StepInfo;
-  readonly 2?: StepInfo;
-  readonly 3?: StepInfo;
-  readonly 4?: StepInfo;
-  readonly 5?: StepInfo;
+export interface AddStaffMemberStepsInfo {
+  readonly 1: AddStaffMemberStepInfo;
+  readonly 2: AddStaffMemberStepInfo;
+  readonly 3: AddStaffMemberStepInfo;
+  readonly 4: AddStaffMemberStepInfo;
+  readonly 5: AddStaffMemberStepInfo;
 }
 
 export type AddStaffMemberStepName = 'BasicInformationBlock' | 'AddAvatarBlock' | 'VenuesBlock' | 'ContactDetailsBlock' | 'WorkBlock' | 'PreviewBlock';

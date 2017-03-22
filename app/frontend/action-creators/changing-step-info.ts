@@ -1,9 +1,9 @@
 import {CHANGING_STEP_INFO} from '../constants/action-names';
 import {createActionWithPayload} from '../helpers/actions';
 import {ActionWithPayload} from '../interfaces/actions';
-import {StepInfo, AddStaffMemberStepName} from '../interfaces/store-models';
+import {AddStaffMemberStepInfo, AddStaffMemberStepName} from '../interfaces/store-models';
 
-export interface PayloadType extends StepInfo {
+export interface PayloadType extends AddStaffMemberStepInfo {
   readonly stepName: AddStaffMemberStepName;
 }
 

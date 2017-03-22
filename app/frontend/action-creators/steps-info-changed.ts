@@ -1,9 +1,9 @@
 import {STEPS_INFO_CHANGED} from '../constants/action-names';
 import {createActionWithPayload} from '../helpers/actions';
 import {ActionWithPayload} from '../interfaces/actions';
-import {StepsInfo} from '../interfaces/store-models';
+import {AddStaffMemberStepsInfo} from '../interfaces/store-models';
 
-type PayloadType = StepsInfo;
+type PayloadType = AddStaffMemberStepsInfo;
 export type ActionType = ActionWithPayload<PayloadType>;
 
 const stepsInfoChanged = (stepsInfo: PayloadType): ActionType =>
