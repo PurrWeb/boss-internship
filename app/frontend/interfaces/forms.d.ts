@@ -15,6 +15,10 @@ export interface EmailInputValidators extends Validators {
   readonly isEmail: ValidatorFn;
 }
 
+export interface MainVenueValidators extends Validators {
+  readonly isFilled: ValidatorFn;
+}
+
 export interface PhoneNumberInputValidators extends Validators {
   readonly isPhoneNumber: ValidatorFn;
 }

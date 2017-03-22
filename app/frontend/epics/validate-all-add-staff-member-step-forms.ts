@@ -14,7 +14,7 @@ import {OfType} from '../interfaces/index';
 import {
   GenderInputValidators, EmailInputValidators, PhoneNumberInputValidators,
   NationalInsuranceNumberInputValidators, StarterEmploymentStatusInputValidators, PayRateInputValidators,
-  AvatarInputValidators
+  AvatarInputValidators, MainVenueValidators
 } from '../interfaces/forms';
 import * as isEmail from 'validator/lib/isEmail';
 
@@ -25,7 +25,7 @@ const isAvatarAdded = (avatarData: any): boolean => {
 const validateAllAddStaffMemberStepForms = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(VALIDATING_ALL_ADD_STAFF_MEMBER_STEP_FORMS)
     .mergeMap(() => {
-      const {basicInformationForm, uploadPhotoForm, contactDetailsForm, workForm} =
+      const {basicInformationForm, uploadPhotoForm, venueForm, contactDetailsForm, workForm} =
         store.getState().formsData.forms;
 
       const validateBasicInformationFormGenderAction = actions.setValidity('formsData.basicInformationForm.gender', {
@@ -35,6 +35,10 @@ const validateAllAddStaffMemberStepForms = ((action$, store: Store<StoreStructur
       const validateAddAvatarFormAvatarAction = actions.setValidity('formsData.uploadPhotoForm.avatar', {
         isFilled: isAvatarAdded(uploadPhotoForm.avatar)
       } as OfType<AvatarInputValidators, boolean>);
+
+      const validateVenuesFormMainVenueAction = actions.setValidity('formsData.venueForm.mainVenue', {
+        isFilled: isNotEmptyInput(venueForm.mainVenue.value)
+      } as OfType<MainVenueValidators, boolean>);
 
       const validateContactDetailsFormEmailAction = actions.setValidity('formsData.contactDetailsForm.email', {
         isFilled: isNotEmptyInput(contactDetailsForm.email.value),
@@ -64,6 +68,7 @@ const validateAllAddStaffMemberStepForms = ((action$, store: Store<StoreStructur
       return Observable.of<SimpleAction>(
         validateBasicInformationFormGenderAction,
         validateAddAvatarFormAvatarAction,
+        validateVenuesFormMainVenueAction,
         validateContactDetailsFormEmailAction,
         validateContactDetailsFormPhoneNumberAction,
         validateWorkFormNationalInsuranceNumberAction,

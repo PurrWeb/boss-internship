@@ -53,6 +53,7 @@ const stepsData: StepData[] = [
 const FormsWithRequiredFields = {
   [ADD_STAFF_MEMBER_STEPS.BasicInformationBlock]: true,
   [ADD_STAFF_MEMBER_STEPS.AddAvatarBlock]: true,
+  [ADD_STAFF_MEMBER_STEPS.VenuesBlock]: true,
   [ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock]: true,
   [ADD_STAFF_MEMBER_STEPS.WorkBlock]: true
 };

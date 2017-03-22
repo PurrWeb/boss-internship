@@ -2,18 +2,21 @@
 
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Control, Form} from 'react-redux-form';
+import {Control, Form, Errors} from 'react-redux-form';
 import * as DatePicker from 'react-datepicker';
 import * as Select from 'react-select';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, VenueFormFields} from '../../../interfaces/store-models';
-import {setInputClass} from '../../../helpers/renderers';
+import {setInputClass, renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
 import {OptionData} from '../../../interfaces/common-data-types';
 import venuesInfoBlockValidated from '../../../action-creators/venues-info-block-validated';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import {OfType} from '../../../interfaces/index';
 import SelectControl from './select-control';
+import {MainVenueValidators} from '../../../interfaces/forms';
+import {isNotEmptyInput} from '../../../helpers/index';
+import {isRequiredField} from '../../../constants/form-errors';
 
 interface Props {
 }
@@ -52,11 +55,23 @@ class Component extends React.Component<PropsFromConnect, State> {
           onSubmit={this.handleFormSubmit}
         >
           <label className="boss3-label">
-            <span className="boss3-label__text">Main Venue</span>
+            <span className="boss3-label__text boss3-label__text_type_required">Main Venue</span>
             <SelectControl
               model=".mainVenue"
               className="boss3-input"
               options={this.props.venueOptions}
+              validators={{
+                isFilled: isNotEmptyInput,
+              } as MainVenueValidators}
+            />
+            <Errors
+              model=".mainVenue"
+              messages={{
+                isFilled: isRequiredField
+              }}
+              show={{touched: true, focus: false}}
+              wrapper={renderErrorsBlock}
+              component={renderErrorComponent}
             />
           </label>
 
