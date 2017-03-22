@@ -2,13 +2,14 @@
 
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Control, Form, Errors} from 'react-redux-form';
+import {Control, Form, Errors, FieldState, ValidityObject} from 'react-redux-form';
 import * as DatePicker from 'react-datepicker';
 import * as Select from 'react-select';
+import {pipe, omit, values, find} from 'ramda';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, BasicInformationFormFields} from '../../../interfaces/store-models';
-import {OfType} from '../../../interfaces/index';
+import {OfType, Dict} from '../../../interfaces/index';
 import {isNotEmptyInput} from '../../../helpers';
 import {isRequiredField} from '../../../constants/form-errors';
 import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
@@ -38,11 +39,38 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   handleFormUpdate = (formModelData: BasicInformationForm) => {
-    const {valid} = formModelData.$form;
-    const action = changingStepInfo('BasicInformationBlock', false, !valid);
+    const hasUnfilledRequiredFields = Component.hasUnfilledRequiredFields(formModelData);
+    const hasValidationErrors = Component.hasValidationErrors(formModelData);
+    const action = changingStepInfo('BasicInformationBlock', hasUnfilledRequiredFields, hasValidationErrors);
 
     this.props.dispatch(action);
   };
+
+  static hasValidationErrors(formModelData: BasicInformationForm) {
+    return pipe<BasicInformationForm, Dict<FieldState>, FieldState[], FieldState | undefined, boolean>(
+      omit(['$form']),
+      values,
+      find((fieldData: FieldState) => fieldData.validity ?
+          pipe<ValidityObject, ValidityObject, boolean[], boolean>(
+            omit(['isFilled']),
+            values,
+            find((isValid: boolean) => isValid === false),
+          )(fieldData.validity as ValidityObject) :
+          false
+      ),
+      Boolean
+    )(formModelData);
+  }
+
+
+  static hasUnfilledRequiredFields(formModelData: BasicInformationForm) {
+    return pipe<BasicInformationForm, Dict<FieldState>, FieldState[], FieldState | undefined, boolean>(
+      omit(['$form']),
+      values,
+      find((fieldData: FieldState) => fieldData.validity && fieldData.validity.isFilled === false),
+      Boolean
+    )(formModelData);
+  }
 
   static getGenderOptions(genderValues: string[]) {
     return genderValues.map((venueValue) => ({value: venueValue, label: venueValue}));
