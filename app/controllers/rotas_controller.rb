@@ -46,7 +46,7 @@ class RotasController < ApplicationController
       relation: holidays,
       start_date: week.start_date,
       end_date: week.end_date
-    ).all.includes([:staff_member, :holiday_transitions])
+    ).all.includes(:staff_member)
 
     week_start_time = RotaShiftDate.new(week.start_date).start_time
     week_end_time = RotaShiftDate.new(week.end_date).end_time
@@ -57,10 +57,10 @@ class RotasController < ApplicationController
     ).includes([:rota, :staff_member])
 
     rotas = Rota.where(
-      id: ([rota.id] + rota_shifts.map(&:rota_id)).uniq.compact
-    ).includes([:venue, :rota_status_transitions])
+      id: ([rota.id] + rota_shifts.map(&:rota_id)).compact
+    ).includes(:venue)
 
-    venues = Venue.where(id: [rota.venue_id] + rotas.map(&:venue_id).uniq)
+    venues = Venue.where(id: [rota.venue.id] + rotas.map(&:venue_id))
     access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
 
     render locals: {

@@ -1,17 +1,17 @@
 <%= javascript_tag do %>
   rotaData = {};
 
-  rotaData.rotas = <%= api_v1_collection_json(rotas, Api::V1::RotaSerializer) %>;
+  rotaData.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: Array(rotas) }  %>;
 
-  rotaData.staff_types = <%= api_v1_collection_json(staff_types, Api::V1::StaffTypeSerializer) %>;
+  rotaData.staff_types = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
 
-  rotaData.rota_shifts = <%= api_v1_collection_json(rota_shifts, Api::V1::RotaShiftSerializer) %>;
+  rotaData.rota_shifts = <%= raw render partial: 'api/v1/shared/rota_shifts.json', locals: { rota_shifts: rota_shifts } %>;
 
-  rotaData.staff_members = <%= api_v1_collection_json(staff_members, Api::V1::StaffMemberSerializer) %>;
+  rotaData.staff_members = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
 
-  rotaData.venues = <%= api_v1_collection_json(venues, Api::V1::VenueSerializer) %>;
+  rotaData.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: Array(venues) } %>;
 
-  rotaData.holidays = <%= api_v1_collection_json(holidays, Api::V1::HolidaySerializer) %>;
+  rotaData.holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: Array(holidays) } %>;
 
   window.boss = window.boss || {};
   window.boss.access_token = "<%= access_token.token %>";
