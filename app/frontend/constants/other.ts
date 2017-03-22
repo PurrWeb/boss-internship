@@ -1,13 +1,4 @@
-import {StarterEmploymentStatus} from '../interfaces/store-models';
-
-export interface AddStaffMemberSteps {
-  readonly BasicInformationBlock: 0;
-  readonly AddAvatarBlock: 1;
-  readonly VenuesBlock: 2;
-  readonly ContactDetailsBlock: 3;
-  readonly WorkBlock: 4;
-  readonly PreviewBlock: 5;
-}
+import {StarterEmploymentStatus, AddStaffMemberSteps} from '../interfaces/store-models';
 
 export const ADD_STAFF_MEMBER_STEPS: AddStaffMemberSteps = {
   BasicInformationBlock: 0,

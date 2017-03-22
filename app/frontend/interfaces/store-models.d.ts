@@ -61,3 +61,8 @@ export interface StepsInfo {
   readonly 5?: StepInfo;
 }
 
+export type AddStaffMemberStepName = 'BasicInformationBlock' | 'AddAvatarBlock' | 'VenuesBlock' | 'ContactDetailsBlock' | 'WorkBlock' | 'PreviewBlock';
+
+export type AddStaffMemberSteps = Record<AddStaffMemberStepName, number>;
+
+
