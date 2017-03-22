@@ -9,7 +9,7 @@ export interface PayloadType extends AddStaffMemberStepInfo {
 
 export type ActionType = ActionWithPayload<PayloadType>;
 
-const changingStepInfo = (stepName: AddStaffMemberStepName, hasValidationErrors: boolean): ActionType =>
-  createActionWithPayload(CHANGING_STEP_INFO, {stepName, hasValidationErrors});
+const changingStepInfo = (stepName: AddStaffMemberStepName, hasUnfilledRequired: boolean, hasValidationErrors: boolean): ActionType =>
+  createActionWithPayload(CHANGING_STEP_INFO, {stepName, hasUnfilledRequired, hasValidationErrors});
 
 export default changingStepInfo;

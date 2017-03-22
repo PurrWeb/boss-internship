@@ -39,7 +39,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   handleFormUpdate = (formModelData: BasicInformationForm) => {
     const {valid} = formModelData.$form;
-    const action = changingStepInfo('BasicInformationBlock', !valid);
+    const action = changingStepInfo('BasicInformationBlock', false, !valid);
 
     this.props.dispatch(action);
   };
