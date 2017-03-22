@@ -4,15 +4,15 @@ import {ActionWithPayload} from '../interfaces/actions';
 import {StepInfo} from '../interfaces/store-models';
 import {AddStaffMemberSteps} from '../constants/other';
 
-type StepIdx = AddStaffMemberSteps.BasicInformationBlock | AddStaffMemberSteps.AddAvatarBlock | AddStaffMemberSteps.VenuesBlock | AddStaffMemberSteps.ContactDetailsBlock | AddStaffMemberSteps.WorkBlock;
+type StepName = keyof AddStaffMemberSteps;
 
 export interface PayloadType extends StepInfo {
-  readonly stepIdx: StepIdx;
+  readonly stepName: StepName;
 }
 
 export type ActionType = ActionWithPayload<PayloadType>;
 
-const changingStepInfo = (stepIdx: StepIdx, touched: boolean, hasErrors: boolean): ActionType =>
-  createActionWithPayload(CHANGING_STEP_INFO, {stepIdx, touched, hasErrors});
+const changingStepInfo = (stepName: StepName, touched: boolean, hasErrors: boolean): ActionType =>
+  createActionWithPayload(CHANGING_STEP_INFO, {stepName, touched, hasErrors});
 
 export default changingStepInfo;

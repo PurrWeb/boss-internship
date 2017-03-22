@@ -11,7 +11,7 @@ import ContactDetailsBlock from './page-add-staff-member__contact-details-block'
 import VenuesBlock from './page-add-staff-member__venues-block';
 import WorkBlock from './page-add-staff-member__work-block';
 import PreviewBlock from './page-add-staff-member__preview-block';
-import {AddStaffMemberSteps} from '../../../constants/other';
+import {ADD_STAFF_MEMBER_STEPS} from '../../../constants/other';
 
 interface Props {
 }
@@ -27,12 +27,12 @@ interface State {
 }
 
 const formBlocks = {
-  [AddStaffMemberSteps.BasicInformationBlock]: <BasicInformationBlock/>,
-  [AddStaffMemberSteps.AddAvatarBlock]: <AddAvatarBlock/>,
-  [AddStaffMemberSteps.VenuesBlock]: <VenuesBlock/>,
-  [AddStaffMemberSteps.ContactDetailsBlock]: <ContactDetailsBlock/>,
-  [AddStaffMemberSteps.WorkBlock]: <WorkBlock/>,
-  [AddStaffMemberSteps.PreviewBlock]: <PreviewBlock/>,
+  [ADD_STAFF_MEMBER_STEPS.BasicInformationBlock]: <BasicInformationBlock/>,
+  [ADD_STAFF_MEMBER_STEPS.AddAvatarBlock]: <AddAvatarBlock/>,
+  [ADD_STAFF_MEMBER_STEPS.VenuesBlock]: <VenuesBlock/>,
+  [ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock]: <ContactDetailsBlock/>,
+  [ADD_STAFF_MEMBER_STEPS.WorkBlock]: <WorkBlock/>,
+  [ADD_STAFF_MEMBER_STEPS.PreviewBlock]: <PreviewBlock/>,
 };
 
 class Component extends React.Component<PropsFromConnect, State> {

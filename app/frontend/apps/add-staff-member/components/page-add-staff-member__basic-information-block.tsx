@@ -16,7 +16,6 @@ import basicInformationBlockValidated from '../../../action-creators/basic-infor
 import {GenderInputValidators} from '../../../interfaces/forms';
 import SelectControl from './select-control';
 import changingStepInfo from '../../../action-creators/changing-step-info';
-import {AddStaffMemberSteps} from '../../../constants/other';
 import {BasicInformationForm} from '../../../reducers/forms';
 
 interface Props {
@@ -40,7 +39,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   handleFormUpdate = (formModelData: BasicInformationForm) => {
     const {touched, valid} = formModelData.$form;
-    const action = changingStepInfo(AddStaffMemberSteps.BasicInformationBlock, touched, !valid);
+    const action = changingStepInfo('BasicInformationBlock', touched, !valid);
 
     this.props.dispatch(action);
   };

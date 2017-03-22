@@ -6,7 +6,7 @@ import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
 import changingCurrentStep from '../../../action-creators/changing-current-step';
 import {AppForms, FormStructure} from '../../../reducers/forms';
-import {AddStaffMemberSteps} from '../../../constants/other';
+import {ADD_STAFF_MEMBER_STEPS} from '../../../constants/other';
 import {FieldState} from 'react-redux-form';
 
 interface Props {
@@ -51,10 +51,10 @@ const stepsData: StepData[] = [
 ];
 
 const FormsWithRequiredFields = {
-  [AddStaffMemberSteps.BasicInformationBlock]: true,
-  [AddStaffMemberSteps.AddAvatarBlock]: true,
-  [AddStaffMemberSteps.ContactDetailsBlock]: true,
-  [AddStaffMemberSteps.WorkBlock]: true
+  [ADD_STAFF_MEMBER_STEPS.BasicInformationBlock]: true,
+  [ADD_STAFF_MEMBER_STEPS.AddAvatarBlock]: true,
+  [ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock]: true,
+  [ADD_STAFF_MEMBER_STEPS.WorkBlock]: true
 };
 
 class Component extends React.Component<PropsFromConnect, State> {
@@ -94,12 +94,12 @@ class Component extends React.Component<PropsFromConnect, State> {
     const {basicInformationForm, uploadPhotoForm, venueForm, contactDetailsForm, workForm} = this.props.forms;
 
     return {
-      [AddStaffMemberSteps.BasicInformationBlock]: Component.isFormWithoutErrors(basicInformationForm, AddStaffMemberSteps.BasicInformationBlock, currentStep),
-      [AddStaffMemberSteps.AddAvatarBlock]: Component.isFormWithoutErrors(uploadPhotoForm, AddStaffMemberSteps.AddAvatarBlock, currentStep, this.isAvatarFormValid),
-      [AddStaffMemberSteps.VenuesBlock]: Component.isFormWithoutErrors(venueForm, AddStaffMemberSteps.VenuesBlock, currentStep),
-      [AddStaffMemberSteps.ContactDetailsBlock]: Component.isFormWithoutErrors(contactDetailsForm, AddStaffMemberSteps.ContactDetailsBlock, currentStep),
-      [AddStaffMemberSteps.WorkBlock]: Component.isFormWithoutErrors(workForm, AddStaffMemberSteps.WorkBlock, currentStep),
-      [AddStaffMemberSteps.PreviewBlock]: true
+      [ADD_STAFF_MEMBER_STEPS.BasicInformationBlock]: Component.isFormWithoutErrors(basicInformationForm, ADD_STAFF_MEMBER_STEPS.BasicInformationBlock, currentStep),
+      [ADD_STAFF_MEMBER_STEPS.AddAvatarBlock]: Component.isFormWithoutErrors(uploadPhotoForm, ADD_STAFF_MEMBER_STEPS.AddAvatarBlock, currentStep, this.isAvatarFormValid),
+      [ADD_STAFF_MEMBER_STEPS.VenuesBlock]: Component.isFormWithoutErrors(venueForm, ADD_STAFF_MEMBER_STEPS.VenuesBlock, currentStep),
+      [ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock]: Component.isFormWithoutErrors(contactDetailsForm, ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock, currentStep),
+      [ADD_STAFF_MEMBER_STEPS.WorkBlock]: Component.isFormWithoutErrors(workForm, ADD_STAFF_MEMBER_STEPS.WorkBlock, currentStep),
+      [ADD_STAFF_MEMBER_STEPS.PreviewBlock]: true
     };
   }
 

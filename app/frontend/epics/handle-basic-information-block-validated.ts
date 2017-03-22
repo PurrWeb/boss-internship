@@ -7,7 +7,7 @@ import {StoreStructure} from '../interfaces/store-models';
 import {SimpleAction} from '../interfaces/actions';
 import completedStepsChanged from '../action-creators/completed-steps-changed';
 import changingCurrentStep from '../action-creators/changing-current-step';
-import {AddStaffMemberSteps} from '../constants/other';
+import {ADD_STAFF_MEMBER_STEPS} from '../constants/other';
 
 const handleBasicInformationBlockValidated = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(BASIC_INFORMATION_BLOCK_VALIDATED)
@@ -15,7 +15,7 @@ const handleBasicInformationBlockValidated = ((action$, store: Store<StoreStruct
       const stateData = store.getState();
 
       const {currentStep} = stateData.app;
-      const completedStepsChangedAction = completedStepsChanged(AddStaffMemberSteps.BasicInformationBlock + 1);
+      const completedStepsChangedAction = completedStepsChanged(ADD_STAFF_MEMBER_STEPS.BasicInformationBlock + 1);
       const currentStepChangedAction = changingCurrentStep(currentStep + 1);
 
       return Observable.of<SimpleAction>(

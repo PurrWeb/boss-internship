@@ -1,13 +1,22 @@
 import {StarterEmploymentStatus} from '../interfaces/store-models';
 
-export enum AddStaffMemberSteps {
-  BasicInformationBlock,
-  AddAvatarBlock,
-  VenuesBlock,
-  ContactDetailsBlock,
-  WorkBlock,
-  PreviewBlock
+export interface AddStaffMemberSteps {
+  readonly BasicInformationBlock: 0;
+  readonly AddAvatarBlock: 1;
+  readonly VenuesBlock: 2;
+  readonly ContactDetailsBlock: 3;
+  readonly WorkBlock: 4;
+  readonly PreviewBlock: 5;
 }
+
+export const ADD_STAFF_MEMBER_STEPS: AddStaffMemberSteps = {
+  BasicInformationBlock: 0,
+  AddAvatarBlock: 1,
+  VenuesBlock: 2,
+  ContactDetailsBlock: 3,
+  WorkBlock: 4,
+  PreviewBlock: 5,
+};
 
 export const starterEmploymentStatusLabels: {[key in StarterEmploymentStatus]: string } = {
   employment_status_p45_supplied: 'I have supplied my P45 from my previous employer',
