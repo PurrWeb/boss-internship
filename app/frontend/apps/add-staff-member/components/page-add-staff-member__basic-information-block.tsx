@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Control, Form, Errors, FieldState, ValidityObject} from 'react-redux-form';
+import {Control, Form, Errors, FieldState, ErrorsObject} from 'react-redux-form';
 import * as DatePicker from 'react-datepicker';
 import * as Select from 'react-select';
 import {pipe, omit, values, find} from 'ramda';
@@ -50,12 +50,13 @@ class Component extends React.Component<PropsFromConnect, State> {
     return pipe<BasicInformationForm, Dict<FieldState>, FieldState[], FieldState | undefined, boolean>(
       omit(['$form']),
       values,
-      find((fieldData: FieldState) => fieldData.validity ?
-          pipe<ValidityObject, ValidityObject, boolean[], boolean>(
+      find((fieldData: FieldState) => !!fieldData.errors ?
+          pipe<ErrorsObject, ErrorsObject, (boolean | string)[], boolean | string, boolean>(
             omit(['isFilled']),
             values,
-            find((isValid: boolean) => isValid === false),
-          )(fieldData.validity as ValidityObject) :
+            find((error: boolean | string) => error === true),
+            Boolean
+          )(fieldData.errors as ErrorsObject) :
           false
       ),
       Boolean
@@ -67,7 +68,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     return pipe<BasicInformationForm, Dict<FieldState>, FieldState[], FieldState | undefined, boolean>(
       omit(['$form']),
       values,
-      find((fieldData: FieldState) => fieldData.validity && fieldData.validity.isFilled === false),
+      find((fieldData: FieldState) => fieldData.errors && fieldData.errors.isFilled === true),
       Boolean
     )(formModelData);
   }
