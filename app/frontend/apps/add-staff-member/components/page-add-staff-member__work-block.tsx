@@ -20,6 +20,9 @@ import {
 } from '../../../interfaces/forms';
 import SelectControl from './select-control';
 import {starterEmploymentStatusLabels} from '../../../constants/other';
+import {WorkForm} from '../../../reducers/forms';
+import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../helpers/validators';
+import changingStepInfo from '../../../action-creators/changing-step-info';
 
 interface Props {
 }
@@ -41,6 +44,14 @@ const STAFF_TYPE_SECURITY_IDX = 11;
 class Component extends React.Component<PropsFromConnect, State> {
   handleFormSubmit = (formModelData: OfType<WorkFormFields, any>) => {
     const action = workInfoBlockValidated(formModelData);
+
+    this.props.dispatch(action);
+  };
+
+  handleFormUpdate = (formModelData: WorkForm) => {
+    const hasUnfilledRequiredFields = hasFormUnfilledRequiredFields<WorkForm>(formModelData);
+    const hasValidationErrors = hasFormValidationErrors<WorkForm>(formModelData);
+    const action = changingStepInfo('WorkBlock', hasUnfilledRequiredFields, hasValidationErrors);
 
     this.props.dispatch(action);
   };
@@ -95,6 +106,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         <Form
           model="formsData.workForm"
           className="boss3-form"
+          onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
         >
           <label className="boss3-label">

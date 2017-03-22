@@ -19,6 +19,9 @@ import {isRequiredField, isWrongFileExtension, fileSizeIsTooBig} from '../../../
 import {renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
 import addingSourceImage from '../../../action-creators/adding-source-image';
 import ImageLoader from './image-loader';
+import {UploadPhotoForm} from '../../../reducers/forms';
+import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../helpers/validators';
+import changingStepInfo from '../../../action-creators/changing-step-info';
 
 interface Props {
 }
@@ -71,6 +74,14 @@ class Component extends React.Component<PropsFromConnect, State> {
       avatar: croppedImageUrl
     };
     const action = avatarBlockValidated(formModelData);
+
+    this.props.dispatch(action);
+  };
+
+  handleFormUpdate = (formModelData: UploadPhotoForm) => {
+    const hasUnfilledRequiredFields = hasFormUnfilledRequiredFields<UploadPhotoForm>(formModelData);
+    const hasValidationErrors = hasFormValidationErrors<UploadPhotoForm>(formModelData);
+    const action = changingStepInfo('AddAvatarBlock', hasUnfilledRequiredFields, hasValidationErrors);
 
     this.props.dispatch(action);
   };
@@ -265,6 +276,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         <Form
           model="formsData.uploadPhotoForm"
           className="boss3-form"
+          onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
         >
           <label className="boss3-label">

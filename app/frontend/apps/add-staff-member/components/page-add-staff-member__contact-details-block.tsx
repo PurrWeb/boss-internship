@@ -15,6 +15,9 @@ import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../h
 import contactDetailsBlockValidated from '../../../action-creators/contact-details-block-validated';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import {EmailInputValidators, PhoneNumberInputValidators} from '../../../interfaces/forms';
+import {ContactDetailsForm} from '../../../reducers/forms';
+import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../helpers/validators';
+import changingStepInfo from '../../../action-creators/changing-step-info';
 
 interface Props {
 }
@@ -35,9 +38,21 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(action);
   };
 
+  handleFormUpdate = (formModelData: ContactDetailsForm) => {
+    const hasUnfilledRequiredFields = hasFormUnfilledRequiredFields<ContactDetailsForm>(formModelData);
+    const hasValidationErrors = hasFormValidationErrors<ContactDetailsForm>(formModelData);
+    const action = changingStepInfo('ContactDetailsBlock', hasUnfilledRequiredFields, hasValidationErrors);
+
+    this.props.dispatch(action);
+  };
+
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
     this.props.dispatch(steppingBackRegistration);
   };
+
+  static isEmail(val: string) {
+    return val ? isEmail(val) : true;
+  }
 
   render() {
     return (
@@ -45,6 +60,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         <Form
           model="formsData.contactDetailsForm"
           className="boss3-form"
+          onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
         >
           <label className="boss3-label">
@@ -59,7 +75,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               persist={true}
               validators={{
                 isFilled,
-                isEmail
+                isEmail: Component.isEmail
               } as EmailInputValidators}
             />
             <Errors

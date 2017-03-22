@@ -17,6 +17,9 @@ import SelectControl from './select-control';
 import {MainVenueValidators} from '../../../interfaces/forms';
 import {isNotEmptyInput} from '../../../helpers/index';
 import {isRequiredField} from '../../../constants/form-errors';
+import {VenueForm} from '../../../reducers/forms';
+import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../helpers/validators';
+import changingStepInfo from '../../../action-creators/changing-step-info';
 
 interface Props {
 }
@@ -38,6 +41,14 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(action);
   };
 
+  handleFormUpdate = (formModelData: VenueForm) => {
+    const hasUnfilledRequiredFields = hasFormUnfilledRequiredFields<VenueForm>(formModelData);
+    const hasValidationErrors = hasFormValidationErrors<VenueForm>(formModelData);
+    const action = changingStepInfo('VenuesBlock', hasUnfilledRequiredFields, hasValidationErrors);
+
+    this.props.dispatch(action);
+  };
+
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
     this.props.dispatch(steppingBackRegistration);
   };
@@ -52,6 +63,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         <Form
           model="formsData.venueForm"
           className="boss3-form"
+          onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
         >
           <label className="boss3-label">

@@ -6,6 +6,10 @@ export type Structure = AddStaffMemberStepsInfo;
 
 
 const defaultData: Structure = {
+  0: {
+    hasUnfilledRequired: false,
+    hasValidationErrors: false
+  },
   1: {
     hasUnfilledRequired: false,
     hasValidationErrors: false
@@ -19,10 +23,6 @@ const defaultData: Structure = {
     hasValidationErrors: false
   },
   4: {
-    hasUnfilledRequired: false,
-    hasValidationErrors: false
-  },
-  5: {
     hasUnfilledRequired: false,
     hasValidationErrors: false
   }

@@ -54,11 +54,11 @@ export interface AddStaffMemberStepInfo {
 }
 
 export interface AddStaffMemberStepsInfo {
+  readonly 0: AddStaffMemberStepInfo;
   readonly 1: AddStaffMemberStepInfo;
   readonly 2: AddStaffMemberStepInfo;
   readonly 3: AddStaffMemberStepInfo;
   readonly 4: AddStaffMemberStepInfo;
-  readonly 5: AddStaffMemberStepInfo;
 }
 
 export type AddStaffMemberStepName = 'BasicInformationBlock' | 'AddAvatarBlock' | 'VenuesBlock' | 'ContactDetailsBlock' | 'WorkBlock' | 'PreviewBlock';
