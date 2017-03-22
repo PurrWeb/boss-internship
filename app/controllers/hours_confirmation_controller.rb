@@ -139,16 +139,12 @@ class HoursConfirmationController < ApplicationController
         current_user.venues
       end
 
-      rota = Rota.where(
-        venue: venue,
-        date: clock_in_days.pluck(:date).uniq
-      )
-
       rotas = Rota.where(
         date: clock_in_days.pluck(:date).uniq,
         venue: venues
-      ).includes(:venue)
+      ).includes([:venue, :rota_status_transitions])
 
+      rota = rotas.select { |r| r.venue_id == venue.id }
       rota_shifts = RotaShift.where(
         rota: rota,
         staff_member: staff_members
