@@ -16,28 +16,28 @@
 
   window.boss.access_token = "<%= access_token.token %>";
 
-  window.boss.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: venues } %>;
-  window.boss.clockInDays = <%= raw render partial: 'api/v1/shared/clock_in_days.json', locals: { clock_in_days: clock_in_days } %>;
+  window.boss.venues = <%= api_v1_collection_json(venues, Api::V1::VenueSerializer) %>;
+  window.boss.clockInDays = <%= api_v1_collection_json(clock_in_days, Api::V1::ClockInDaySerializer) %>;
 
-  window.boss.clockInPeriods = <%= raw render partial: 'api/v1/shared/clock_in_periods.json', locals: { clock_in_periods: clock_in_periods } %>;
+  window.boss.clockInPeriods = <%= api_v1_collection_json(clock_in_periods, Api::V1::ClockInPeriodSerializer) %>;
 
-  window.boss.hoursAcceptancePeriods = <%= raw render partial: 'api/v1/shared/hours_acceptance_periods.json', locals: { hours_acceptance_periods: hours_acceptance_periods } %>;
+  window.boss.hoursAcceptancePeriods = <%= api_v1_collection_json(hours_acceptance_periods, Api::V1::HoursAcceptancePeriodSerializer) %>;
 
-  window.boss.clockInEvents = <%= raw render partial: 'api/v1/shared/clock_in_events.json', locals: { clock_in_events: clock_in_events } %>;
+  window.boss.clockInEvents = <%= api_v1_collection_json(clock_in_events, Api::V1::ClockInEventSerializer) %>;
 
-  window.boss.rotaShifts = <%= raw render partial: 'api/v1/shared/rota_shifts.json', locals: { rota_shifts: rota_shifts } %>;
+  window.boss.rotaShifts = <%= api_v1_collection_json(rota_shifts, Api::V1::RotaShiftSerializer) %>;
 
-  window.boss.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas } %>;
+  window.boss.rotas = <%= api_v1_collection_json(rotas, Api::V1::RotaSerializer) %>;
 
-  window.boss.clockInBreaks = <%= raw render partial: 'api/v1/shared/clock_in_breaks.json', locals: { clock_in_breaks: clock_in_breaks } %>;
+  window.boss.clockInBreaks = <%= api_v1_collection_json(clock_in_breaks, Api::V1::ClockInBreakSerializer) %>;
 
-  window.boss.hoursAcceptanceBreaks = <%= raw render partial: 'api/v1/shared/hours_acceptance_breaks.json', locals: { hours_acceptance_breaks: hours_acceptance_breaks } %>;
+  window.boss.hoursAcceptanceBreaks = <%= api_v1_collection_json(hours_acceptance_breaks, Api::V1::HoursAcceptanceBreakSerializer) %>;
 
-  window.boss.staffMembers = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
+  window.boss.staffMembers = <%= api_v1_collection_json(staff_members, Api::V1::StaffMemberSerializer) %>;
 
-  window.boss.staffTypes = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
+  window.boss.staffTypes = <%= api_v1_collection_json(staff_types, Api::V1::StaffTypeSerializer) %>;
 
-  window.boss.clockInNotes = <%= raw render partial: 'api/v1/shared/clock_in_notes.json', locals: { clock_in_notes: clock_in_notes } %>;
+  window.boss.clockInNotes = <%= api_v1_collection_json(clock_in_notes, Api::V1::ClockInNoteSerializer) %>;
 
   window.boss.pageOptions = {
     venue: { id: <%= venue.id %> }
