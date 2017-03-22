@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Control, Form, Errors, ModelAction} from 'react-redux-form';
+import {Control, Form, Errors} from 'react-redux-form';
 import * as DatePicker from 'react-datepicker';
 import * as Select from 'react-select';
 
@@ -38,8 +38,8 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   handleFormUpdate = (formModelData: BasicInformationForm) => {
-    const {touched, valid} = formModelData.$form;
-    const action = changingStepInfo('BasicInformationBlock', touched, !valid);
+    const {valid} = formModelData.$form;
+    const action = changingStepInfo('BasicInformationBlock', !valid);
 
     this.props.dispatch(action);
   };

@@ -6,24 +6,19 @@ export type Structure = AddStaffMemberStepsInfo;
 
 const defaultData: Structure = {
   1: {
-    touched: false,
-    hasErrors: false
+    hasValidationErrors: false
   },
   2: {
-    touched: false,
-    hasErrors: false
+    hasValidationErrors: false
   },
   3: {
-    touched: false,
-    hasErrors: false
+    hasValidationErrors: false
   },
   4: {
-    touched: false,
-    hasErrors: false
+    hasValidationErrors: false
   },
   5: {
-    touched: false,
-    hasErrors: false
+    hasValidationErrors: false
   }
 };
 

@@ -49,8 +49,7 @@ export interface GlobalError {
 }
 
 export interface AddStaffMemberStepInfo {
-  readonly touched: boolean;
-  readonly hasErrors: boolean;
+  readonly hasValidationErrors: boolean;
 }
 
 export interface AddStaffMemberStepsInfo {
