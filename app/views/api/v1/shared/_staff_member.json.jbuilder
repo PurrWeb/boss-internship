@@ -9,12 +9,7 @@ json.first_name staff_member.name.first_name
 json.surname staff_member.name.surname
 json.preferred_hours staff_member.hours_preference_note
 json.preferred_days staff_member.day_perference_note
-
-venues = StaffMemberWorkableVenuesQuery.new(
-  staff_member: staff_member,
-  venues: venues
-).all
-
+venues = StaffMemberWorkableVenuesQuery.new(staff_member: staff_member).all
 json.venues venues do |venue|
   json.id venue.id
   json.url api_v1_venue_url(venue)
