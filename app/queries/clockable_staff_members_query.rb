@@ -7,18 +7,20 @@ class ClockableStaffMembersQuery
 
   def all
     venue_members = StaffMember.for_venue(venue)
+    rotaed_members = StaffMember.where(
+      id: rota_shifts.map(&:staff_member_id).uniq
+    )
 
-    rotaed_members = StaffMember.
-      joins(:rota_shifts).
-      merge(rota_shifts)
+    security_staff = StaffMember.where(
+      staff_type_id: StaffType.security.map(&:id)
+    )
 
-    security_staff = StaffMember.security
-
-    ids = venue_members.pluck(:id) + security_staff.pluck(:id) + rotaed_members.pluck(:id)
-
-    StaffMember.enabled.where(id: ids.uniq)
+    StaffMember.enabled.where(
+      id: venue_members.map(&:id) + security_staff.map(&:id) + rotaed_members.map(&:id)
+    )
   end
 
   private
+
   attr_reader :rota_shifts
 end
