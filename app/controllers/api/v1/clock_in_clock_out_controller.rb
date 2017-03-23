@@ -10,40 +10,55 @@ module Api
           venue = api_key.venue
           rota_date = RotaShiftDate.to_rota_date(Time.current)
 
-          rota = Rota.find_or_initialize_by(venue: venue, date: rota_date)
+          rota = Rota.find_or_initialize_by(
+            venue: venue,
+            date: rota_date
+          )
 
-          rota_shifts = rota.rota_shifts.enabled
+          rota_shifts = rota.rota_shifts.enabled.includes(:staff_member)
 
           staff_members = ClockableStaffMembersQuery.new(
             venue: venue,
             rota_shifts: rota_shifts
-          ).all
+          ).all.includes([:master_venue, :staff_type, :name, :work_venues])
 
-          clock_in_days = staff_members.map do |staff_member|
-            ClockInDay.find_or_initialize_by(
-              staff_member: staff_member,
+          clock_in_days = ClockInDay.where(
+            staff_member: staff_members,
+            venue: venue,
+            date: rota_date
+          ).includes([
+            :venue, :staff_member, :clock_in_notes,
+            :hours_acceptance_periods, :clock_in_periods
+          ]).to_a
+
+          total_staff_member_ids = staff_members.map(&:id)
+          staff_member_ids_with_clock_in_days = clock_in_days.map(&:staff_member_id)
+          staff_member_ids_without_clock_in_days = total_staff_member_ids - staff_member_ids_with_clock_in_days
+
+          new_clock_in_days = staff_member_ids_without_clock_in_days.map do |staff_member_id|
+            ClockInDay.new(
+              staff_member_id: staff_member_id,
               venue: venue,
               date: rota_date
             )
           end
 
-          clock_in_notes = ClockInNote.
-            joins(:clock_in_day).
-            merge(clock_in_days)
+          clock_in_days = clock_in_days + new_clock_in_days
 
-          staff_types = StaffType.all
+          clock_in_notes = ClockInNote.where(
+            clock_in_day_id: clock_in_days
+          )
 
-          render locals: {
+          render json: venue, serializer: Api::V1::ClockInClockOutSerializer, scope: {
             api_key: api_key,
             rota_date: rota_date,
             staff_members: staff_members,
             clock_in_days: clock_in_days,
             clock_in_notes: clock_in_notes,
-            staff_types: staff_types,
+            staff_types: StaffType.all,
             rota_shifts: rota_shifts,
             rotas: [rota],
-            venues: [venue],
-            venue: venue
+            venues: [venue]
           }
         else
           render json: { errors: 'API Key Invalid' }, status: :unauthorized
