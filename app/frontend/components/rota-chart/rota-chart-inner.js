@@ -203,14 +203,14 @@ class RotaChartInner extends Component {
     }
     getHoursNotShownOnTheLeft(){
         var rotaDate = this.getRotaDate();
-        var chartStartTime = rotaDate.getDateFromShiftStartTime(this.props.startTime, 0).valueOf();
+        var chartStartTime = this.props.startTime;
         var dayStartTime = rotaDate.startTime.valueOf();
         var msNotShown = chartStartTime - dayStartTime;
         return msNotShown / MILLISECONDS_PER_HOUR;
     }
     getHoursNotShownOnTheRight(){
         var rotaDate = this.getRotaDate();
-        var chartEndTime = rotaDate.getDateFromShiftEndTime(this.props.endTime, 0).valueOf();
+        var chartEndTime = this.props.endTime;
         var dayEndTime = rotaDate.endTime.valueOf();
         var msNotShown = dayEndTime - chartEndTime;
         return msNotShown / MILLISECONDS_PER_HOUR;
