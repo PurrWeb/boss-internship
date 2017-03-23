@@ -8,8 +8,8 @@ class Api::V1::RotaOverviewSerializer < ActiveModel::Serializer
   end
 
   def staff_members
-    staff_members = StaffMember.joins(:rota_shifts).merge(
-      object.rota_shifts.enabled
+    staff_members = StaffMember.where(
+      id: object.rota_shifts.enabled.map(&:staff_member_id)
     ).includes([:master_venue, :staff_type, :name, :work_venues])
 
     ActiveModel::Serializer::CollectionSerializer.new(
