@@ -21,6 +21,11 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    active_model_serializers (0.10.5)
+      actionpack (>= 4.1, < 6)
+      activemodel (>= 4.1, < 6)
+      case_transform (>= 0.2)
+      jsonapi-renderer (>= 0.1.1.beta1, < 0.2)
     activejob (4.2.5)
       activesupport (= 4.2.5)
       globalid (>= 0.3.0)
@@ -71,6 +76,8 @@ GEM
       mimemagic (>= 0.3.0)
     carrierwave-data-uri (0.0.2)
       carrierwave
+    case_transform (0.2)
+      activesupport
     chosen-rails (1.4.3)
       coffee-rails (>= 3.2)
       compass-rails (>= 2.0.4)
@@ -268,6 +275,7 @@ GEM
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
     json (1.8.3)
+    jsonapi-renderer (0.1.2)
     launchy (2.4.3)
       addressable (~> 2.3)
     letter_opener (1.4.1)
@@ -457,6 +465,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_model_serializers (~> 0.10.0)
   andand
   auto_strip_attributes (~> 2.0)
   autoprefixer-rails
@@ -519,9 +528,3 @@ DEPENDENCIES
   thin
   uglifier
   will_paginate-foundation
-
-RUBY VERSION
-   ruby 2.1.2p95
-
-BUNDLED WITH
-   1.13.5

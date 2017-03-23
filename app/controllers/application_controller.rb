@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
 
   before_filter :set_paper_trail_whodunnit
+  before_filter :set_host
 
   helper_method :render_navigation?
 
@@ -15,5 +16,9 @@ class ApplicationController < ActionController::Base
 
   def render_navigation?
     true
+  end
+
+  def set_host
+    Rails.application.routes.default_url_options[:host] = request.host
   end
 end
