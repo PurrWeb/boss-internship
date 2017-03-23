@@ -45,8 +45,8 @@ export default function calculateChartBoundaries(rotaShifts){
     }
 
     var boundaries = {
-        start: new Date(rotaDate.startTime.valueOf() + startOffset * MILLISECONDS_PER_HOUR).getHours(),
-        end: new Date(rotaDate.endTime.valueOf() + endOffset * MILLISECONDS_PER_HOUR).getHours(),
+        start: new Date(rotaDate.startTime.valueOf() + startOffset * MILLISECONDS_PER_HOUR),
+        end: new Date(rotaDate.startTime.valueOf() + endOffset * MILLISECONDS_PER_HOUR),
     };
     return boundaries;
 }   

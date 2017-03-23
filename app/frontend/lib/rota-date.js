@@ -41,6 +41,7 @@ class RotaDate {
 
         this.endTime = new Date(this.startTime);
         this.endTime.setDate(this.endTime.getDate() + 1);
+        this.endTime.setHours(DAY_START_TIME, 0, 0, 0);
     }
     /**
      * Returns a Date object with the specified time that's on the rota day.
