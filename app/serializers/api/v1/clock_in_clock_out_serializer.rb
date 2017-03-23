@@ -3,7 +3,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
              :rota_shifts, :venues, :rotas, :page_data
 
   def staff_members
-    staff_members = instance_options[:scope][:staff_members]
+    staff_members = instance_options.fetch(:scope).fetch(:staff_members)
 
     ActiveModel::Serializer::CollectionSerializer.new(
       staff_members,
@@ -12,7 +12,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
   end
 
   def clock_in_days
-    clock_in_days = instance_options[:scope][:clock_in_days]
+    clock_in_days = instance_options.fetch(:scope).fetch(:clock_in_days)
 
     ActiveModel::Serializer::CollectionSerializer.new(
       clock_in_days,
@@ -21,7 +21,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
   end
 
   def clock_in_notes
-    clock_in_notes = instance_options[:scope][:clock_in_notes]
+    clock_in_notes = instance_options.fetch(:scope).fetch(:clock_in_notes)
 
     ActiveModel::Serializer::CollectionSerializer.new(
       clock_in_notes,
@@ -30,7 +30,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
   end
 
   def staff_types
-    staff_types = instance_options[:scope][:staff_types]
+    staff_types = instance_options.fetch(:scope).fetch(:staff_types)
 
     ActiveModel::Serializer::CollectionSerializer.new(
       staff_types,
@@ -39,7 +39,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
   end
 
   def rota_shifts
-    rota_shifts = instance_options[:scope][:rota_shifts]
+    rota_shifts = instance_options.fetch(:scope).fetch(:rota_shifts)
 
     ActiveModel::Serializer::CollectionSerializer.new(
       rota_shifts,
@@ -48,7 +48,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
   end
 
   def venues
-    venues = instance_options[:scope][:venues]
+    venues = instance_options.fetch(:scope).fetch(:venues)
 
     ActiveModel::Serializer::CollectionSerializer.new(
       venues,
@@ -57,7 +57,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
   end
 
   def rotas
-    rotas = instance_options[:scope][:rotas]
+    rotas = instance_options.fetch(:scope).fetch(:rotas)
 
     ActiveModel::Serializer::CollectionSerializer.new(
       rotas,
@@ -66,7 +66,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
   end
 
   def page_data
-    rota_date = instance_options[:scope][:rota_date]
+    rota_date = instance_options.fetch(:scope).fetch(:rota_date)
 
     {
       rota_date: rota_date.iso8601,
