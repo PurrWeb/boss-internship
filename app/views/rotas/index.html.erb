@@ -11,11 +11,9 @@
   var rotas = [];
   var venues;
 
-  <% rotas.each do |rota| %>
-    rotas.push(<%= raw render partial: 'api/v1/shared/rota_overview.json', locals: { rota: rota, staff_types: staff_types } %>);
-  <% end %>
-  venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: accessible_venues } %>;
-  rotaForecasts = <%= raw render partial: 'api/v1/shared/rota_forecasts.json', locals: { rota_forecasts: rota_forecasts } %>;
+  rotas = <%= api_v1_collection_json(rotas, Api::V1::RotaOverviewSerializer, { staff_types: staff_types }) %>;
+  venues = <%= api_v1_collection_json(accessible_venues, Api::V1::VenueSerializer) %>;
+  rotaForecasts = <%= api_v1_collection_json(rota_forecasts, Api::V1::RotaForecastSerializer) %>;
 
   window.boss = window.boss || {};
   window.boss.rotas = rotas;
@@ -23,7 +21,7 @@
   window.boss.rotaForecasts = rotaForecasts;
   window.boss.access_token = "<%= access_token.token %>";
 
-  window.boss.weeklyRotaForecast = <%= raw render partial: 'api/v1/shared/weekly_rota_forecast.json', locals: { week: week, weekly_forecast: weekly_rota_forecast } %>;
+  window.boss.weeklyRotaForecast = <%= Api::V1::WeeklyRotaForecastSerializer.new(weekly_rota_forecast, scope: { week: week }).to_json.html_safe %>;
 
   window.boss.startDate = "<%= start_date.iso8601 %>";
   window.boss.endDate = "<%= end_date.iso8601 %>";
