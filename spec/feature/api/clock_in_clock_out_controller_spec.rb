@@ -23,6 +23,7 @@ RSpec.describe 'Clock in clock out endpoint' do
     now = Time.current
     json = JSON.parse(response.body)
     expect(json.keys).to eq([
+      "id",
       "staff_members",
       "clock_in_days",
       "clock_in_notes",
