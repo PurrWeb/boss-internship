@@ -10,7 +10,7 @@
   top: ($index-side-size / 2) - ($height / 2);
   right: 0;
   height: $height;
-  background-color: map-get($boss-app-palette, primary);
+  background-color: map-get($boss-app-palette, inactive);
 }
 
 .boss3-steps-block {
@@ -57,18 +57,6 @@
 
     &_state {
       &_complete {
-        &:after {
-          background-color: map-get($boss-app-palette, inactive);
-        }
-
-        & ~ .boss3-steps-block__step {
-          &:before {
-            background-color: map-get($boss-app-palette, inactive);
-          }
-          &:after {
-            background-color: map-get($boss-app-palette, inactive);
-          }
-        }
       }
 
       &_with-error {
@@ -87,11 +75,11 @@
     text-align: center;
     color: white;
     line-height: $index-side-size;
-    background-color: map-get($boss-app-palette, primary);
+    background-color: map-get($boss-app-palette, inactive);
     cursor: pointer;
 
-    .boss3-steps-block__step_state_complete ~ .boss3-steps-block__step & {
-      background-color: map-get($boss-app-palette, inactive);
+    .boss3-steps-block__step_state_complete & {
+      background-color: map-get($boss-app-palette, primary);
     }
 
     .boss3-steps-block__step_state_with-error & {

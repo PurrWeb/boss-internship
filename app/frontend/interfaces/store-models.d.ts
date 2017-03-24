@@ -1,4 +1,5 @@
 import {Structure as ReducersStructure} from '../reducers';
+import {IndexedDict} from './index';
 
 export type StoreStructure = ReducersStructure;
 
@@ -53,7 +54,7 @@ export interface AddStaffMemberStepInfo {
   readonly hasValidationErrors: boolean;
 }
 
-export interface AddStaffMemberStepsInfo {
+export interface AddStaffMemberStepsInfo extends IndexedDict<AddStaffMemberStepInfo> {
   readonly 0: AddStaffMemberStepInfo;
   readonly 1: AddStaffMemberStepInfo;
   readonly 2: AddStaffMemberStepInfo;

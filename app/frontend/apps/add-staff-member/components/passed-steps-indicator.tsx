@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {pipe, values, omit, find, not} from 'ramda';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
-import {StoreStructure} from '../../../interfaces/store-models';
+import {StoreStructure, AddStaffMemberStepsInfo} from '../../../interfaces/store-models';
 import changingCurrentStep from '../../../action-creators/changing-current-step';
 import {AppForms, FormStructure} from '../../../reducers/forms';
 import {ADD_STAFF_MEMBER_STEPS} from '../../../constants/other';
@@ -14,9 +14,9 @@ interface Props {
 
 interface MappedProps {
   readonly forms: AppForms;
-  readonly completedSteps: number;
   readonly sourceImage: string;
   readonly currentStep: number;
+  readonly stepsInfo: AddStaffMemberStepsInfo;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -104,11 +104,23 @@ class Component extends React.Component<PropsFromConnect, State> {
     };
   }
 
-  drawSteps(completedSteps: number, currentStep: number) {
+  drawSteps(currentStep: number) {
     const stepsValidity = this.getStepsValidity(currentStep);
+    const {stepsInfo} = this.props;
+    const stepsInfoKeys = Object.keys(stepsInfo).map((key) => Number(key));
+    const maxStepsInfoIdx = Math.max.apply(null, stepsInfoKeys);
+    const stepPreviewIdx = maxStepsInfoIdx + 1;
 
     return stepsData.map((stepData, idx) => {
-      const completeClassName = completedSteps === idx ? 'boss3-steps-block__step_state_complete' : '';
+      let completeClassName;
+
+      if (idx <= maxStepsInfoIdx) {
+        const currentStepInfo = stepsInfo[idx];
+        completeClassName = !currentStepInfo.hasUnfilledRequired ? 'boss3-steps-block__step_state_complete' : '';
+      } else if (idx === stepPreviewIdx) {
+        completeClassName = '';
+      }
+
       const stepWithErrorClassName = stepsValidity[idx] ? '' : 'boss3-steps-block__step_state_with-error';
       const currentStepClassName = currentStep === idx ? 'boss3-steps-block__step-title_state_active' : '';
 
@@ -131,20 +143,20 @@ class Component extends React.Component<PropsFromConnect, State> {
   render() {
     return (
       <ul className="boss3-steps-block">
-        {this.drawSteps(this.props.completedSteps, this.props.currentStep)}
+        {this.drawSteps(this.props.currentStep)}
       </ul>
     );
   }
 }
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
-  const {completedSteps, currentStep, sourceImage} = state.app;
+  const {currentStep, sourceImage, stepsInfo} = state.app;
 
   return {
     forms: state.formsData.forms,
-    completedSteps,
     sourceImage,
-    currentStep
+    currentStep,
+    stepsInfo
   };
 };
 

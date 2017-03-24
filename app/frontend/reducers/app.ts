@@ -1,7 +1,6 @@
 import {combineReducers} from 'redux';
 
 import {ReducersOfType} from '../interfaces/index';
-import completedSteps, {Structure as CompletedStepsStructure} from './completed-steps';
 import currentStep, {Structure as CurrentStepStructure} from './current-step';
 import staffMemberSavePending, {Structure as staffMemberSavePendingStructure} from './staff-member-save-pending';
 import isAllStepsPassed, {Structure as IsAllStepsPassedStructure} from './is-all-steps-passed';
@@ -16,7 +15,6 @@ import stepsInfo, {Structure as StepsInfoStructure} from './steps-info';
 
 export interface Structure {
   readonly avatarPreview: AvatarPreviewStructure;
-  readonly completedSteps: CompletedStepsStructure;
   readonly stepsInfo: StepsInfoStructure;
   readonly currentStep: CurrentStepStructure;
   readonly staffMemberSavePending: staffMemberSavePendingStructure;
@@ -31,7 +29,6 @@ export interface Structure {
 
 const reducers: ReducersOfType<Structure> = {
   avatarPreview,
-  completedSteps,
   stepsInfo,
   currentStep,
   staffMemberSavePending,
