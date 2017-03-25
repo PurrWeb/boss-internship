@@ -77,9 +77,9 @@ export default class ShiftTimeInput extends Component {
             granularityInMinutes = this.props.granularityInMinutes
         }
         if (this.getShiftTimeType() === SHIFT_TIME_TYPES.START) {
-            return getPossibleShiftStartTimeStrings(granularityInMinutes);
+            return getPossibleShiftStartTimeStrings(granularityInMinutes, this.props.rotaDate.startTime);
         } else {
-            return getPossibleShiftEndTimeStrings(granularityInMinutes)
+            return getPossibleShiftEndTimeStrings(granularityInMinutes, this.props.rotaDate.startTime)
         }
     }
     getDateFromTime(timeString){

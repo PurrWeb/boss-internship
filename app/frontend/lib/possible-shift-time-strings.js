@@ -3,13 +3,11 @@ import moment from "moment"
 import RotaDate from "./rota-date"
 import _ from "underscore"
 
-function unmemoizedGetPossibleShiftTimes(intervalSizeInMinutes) {
+function  unmemoizedGetPossibleShiftTimes(intervalSizeInMinutes, rotaStartTime) {
     var minutesOffsets = getSamplingTimeOffsetsForDay(intervalSizeInMinutes);
-    var rotaDate = new RotaDate({dateOfRota: new Date()});
     var possibleShiftStartTimeStrings = minutesOffsets.map(function(offset){
-        var time = new Date(rotaDate.startTime);
-        time.setMinutes(time.getMinutes() + offset);
-        return moment(time).format("HH:mm");
+        let shiftedTime = new Date(rotaStartTime.valueOf() + (offset * 60 * 1000 ));
+        return moment(shiftedTime).format("HH:mm");
     });
     var possibleShiftEndTimeStrings = _.clone(possibleShiftStartTimeStrings);
 
@@ -24,10 +22,11 @@ function unmemoizedGetPossibleShiftTimes(intervalSizeInMinutes) {
 
 var getPossibleShiftTimes = _.memoize(unmemoizedGetPossibleShiftTimes);
 
-export function getPossibleShiftStartTimeStrings(intervalSizeInMinutes) {
-    return getPossibleShiftTimes(intervalSizeInMinutes).startTimes
+export function getPossibleShiftStartTimeStrings(intervalSizeInMinutes, rotaStartTime) {
+  return getPossibleShiftTimes(intervalSizeInMinutes, rotaStartTime).startTimes
 }
 
-export function getPossibleShiftEndTimeStrings(intervalSizeInMinutes) {
-    return getPossibleShiftTimes(intervalSizeInMinutes).endTimes
+export function getPossibleShiftEndTimeStrings(intervalSizeInMinutes, rotaStartTime)
+{
+    return getPossibleShiftTimes(intervalSizeInMinutes, rotaStartTime).endTimes
 }
