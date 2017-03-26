@@ -24,7 +24,14 @@ class RotaShiftDate
 
   def self.to_rota_date(time)
     calendar_date = time.to_date
-    if time < (time.beginning_of_day + 8.hours)
+    eight_am = Time.zone.local(
+      calendar_date.year,
+      calendar_date.month,
+      calendar_date.day,
+      8,
+      0
+    )
+    if time < eight_am
       calendar_date - 1.day
     else
       calendar_date
