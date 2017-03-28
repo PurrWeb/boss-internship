@@ -112,23 +112,29 @@ class Component extends React.Component<PropsFromConnect, State> {
     const stepPreviewIdx = maxStepsInfoIdx + 1;
 
     return stepsData.map((stepData, idx) => {
-      let stepInfo = stepsInfo[idx];
+      let stepCompleteClassname = '';
+      let stepWithErrorClassName = '';
       let isCurrentStep = currentStepIdx === idx;
-      let isPreviewStep = idx === stepPreviewIdx;
-      let isStepValid = stepsValidity[idx];
-      let stepHasUnfilledRequired = stepInfo.hasUnfilledRequired;
-      let stepEncounted = idx <= maxStepsInfoIdx;
-
-      let completeClassName = '';
-      if (stepEncounted && !stepHasUnfilledRequired) {
-        completeClassName = 'boss3-steps-block__step_state_complete';
-      }
-
-      const stepWithErrorClassName = isStepValid ? '' : 'boss3-steps-block__step_state_with-error';
       const currentStepClassName = isCurrentStep ? 'boss3-steps-block__step-title_state_active' : '';
 
+      let isPreviewStep = idx === stepPreviewIdx;
+      if (!isPreviewStep) {
+        let stepInfo = stepsInfo[idx];
+        let isStepValid = stepsValidity[idx];
+        let stepHasUnfilledRequired = stepInfo.hasUnfilledRequired;
+        let stepEncounted = stepInfo.visited;
+
+        if (stepEncounted && !stepHasUnfilledRequired) {
+          stepCompleteClassname = 'boss3-steps-block__step_state_complete';
+        }
+
+        if ( stepEncounted && !isStepValid ) {
+          stepWithErrorClassName = 'boss3-steps-block__step_state_with-error';
+        }
+      }
+
       return (
-        <li key={idx} className={`boss3-steps-block__step ${completeClassName} ${stepWithErrorClassName}`}>
+        <li key={idx} className={`boss3-steps-block__step ${stepCompleteClassname} ${stepWithErrorClassName}`}>
           <div
               className="boss3-steps-block__step-index"
               onClick={() => {
