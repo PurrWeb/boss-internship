@@ -17,6 +17,7 @@ namespace :assets do
 
     upload_hosts = []
     if Rails.env.staging?
+      upload_hosts << 'https://dev-boss.jsmbars.co.uk'
       upload_hosts << 'https://staging-boss.jsmbars.co.uk'
       upload_hosts << 'https://staging-clock.jsmbars.co.uk'
     elsif Rails.env.production?
