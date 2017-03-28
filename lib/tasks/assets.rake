@@ -1,7 +1,7 @@
 # The webpack must compile assets before assets:environment task.
 # Otherwise Sprockets sees no changes and doesn't precompile assets.
 Rake::Task['assets:precompile'].
-  enhance(['assets:webpack'])
+  enhance(['assets:webpack', 'assets:upload_sourcemaps'])
 
 namespace :assets do
   desc 'Generate Webpack assets'
@@ -31,7 +31,7 @@ namespace :assets do
       upload_command_parts << %{-F access_token="#{ENV.fetch("ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN")}"}
       upload_command_parts << %{-F version="#{SourcemapHelper.sourcemap_version}"}
       upload_command_parts << %{-F minified_url="#{upload_url}"}
-      upload_command_parts << %{-F source_map="@#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"}
+      upload_command_parts << %{-F source_map="@#{Rails.application.config.root}/public/assets/bundles/frontend_bundle.js.map"}
       upload_command = upload_command_parts.join(" ")
 
       puts
