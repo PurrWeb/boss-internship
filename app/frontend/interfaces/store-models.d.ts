@@ -20,6 +20,7 @@ export interface ContactDetailsFormFields {
   readonly email: string;
   readonly address?: string;
   readonly country?: string;
+  readonly county?: string;
   readonly postCode?: string;
   readonly phoneNumber?: string;
 }

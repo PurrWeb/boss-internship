@@ -243,6 +243,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         email: 'Email',
         address: 'Address',
         country: 'Country',
+        county: 'County',
         postCode: 'Post Code',
         phoneNumber: 'Phone Number'
       });

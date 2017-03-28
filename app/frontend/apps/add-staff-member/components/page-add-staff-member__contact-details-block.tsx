@@ -98,6 +98,17 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss3-label">
+            <span className="boss3-label__text">County</span>
+            <Control.text
+              className="boss3-input"
+              model=".county"
+              mapProps={{
+                className: setInputClass,
+              }}
+            />
+          </label>
+
+          <label className="boss3-label">
             <span className="boss3-label__text">Post Code</span>
             <Control.text
               className="boss3-input"

@@ -55,6 +55,7 @@ const getDataToSend = (storeState: StoreStructure): RequestStaffMemberSavePayloa
     address: contactDetailsForm.address || null,
     postcode: contactDetailsForm.postCode || null,
     country: contactDetailsForm.country || null,
+    county: contactDetailsForm.county || null,
     pay_rate_id: workForm.payRate,
     master_venue_id: venueForm.mainVenue || null,
     work_venue_ids: otherVenues,

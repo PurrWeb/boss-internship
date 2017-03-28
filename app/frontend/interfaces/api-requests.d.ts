@@ -22,6 +22,7 @@ export interface RequestStaffMemberSavePayload {
   readonly address: string | null;
   readonly postcode: string | null;
   readonly country: string | null;
+  readonly county: string | null;
   readonly pay_rate_id: number;
   readonly master_venue_id: number | null;
   readonly work_venue_ids: number[] | null;
