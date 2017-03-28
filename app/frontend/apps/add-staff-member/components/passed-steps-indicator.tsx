@@ -15,7 +15,7 @@ interface Props {
 interface MappedProps {
   readonly forms: AppForms;
   readonly sourceImage: string;
-  readonly currentStep: number;
+  readonly currentStepIdx: number;
   readonly stepsInfo: AddStaffMemberStepsInfo;
 }
 
@@ -65,7 +65,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(action);
   };
 
-  static isFormWithoutErrors(formData: FormStructure<any>, formStepIdx: number, currentStep: number, formValidator?: () => boolean): boolean {
+  static isFormWithoutErrors(formData: FormStructure<any>, formStepIdx: number, currentStepIdx: number, formValidator?: () => boolean): boolean {
     const isFormInvalid = formValidator ? !formValidator() :
       pipe< FormStructure<any>, {}, FieldState[], FieldState, boolean>(
         omit(['$form']),
@@ -74,12 +74,12 @@ class Component extends React.Component<PropsFromConnect, State> {
         Boolean
       )(formData);
 
-    const isCurrentStepForm = formStepIdx === currentStep;
+    const isCurrentStepForm = formStepIdx === currentStepIdx;
 
     if (isCurrentStepForm) {
       return !isFormInvalid;
     } else {
-      const isPrevRequiredForm = formStepIdx < currentStep && FormsWithRequiredFields[formStepIdx];
+      const isPrevRequiredForm = formStepIdx < currentStepIdx && FormsWithRequiredFields[formStepIdx];
 
       if (isPrevRequiredForm) {
         return formValidator ? formValidator() : formData.$form.valid;
@@ -91,21 +91,21 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   isAvatarFormValid = () => !!this.props.sourceImage;
 
-  getStepsValidity(currentStep: number) {
+  getStepsValidity(currentStepIdx: number) {
     const {basicInformationForm, uploadPhotoForm, venueForm, contactDetailsForm, workForm} = this.props.forms;
 
     return {
-      [ADD_STAFF_MEMBER_STEPS.BasicInformationBlock]: Component.isFormWithoutErrors(basicInformationForm, ADD_STAFF_MEMBER_STEPS.BasicInformationBlock, currentStep),
-      [ADD_STAFF_MEMBER_STEPS.AddAvatarBlock]: Component.isFormWithoutErrors(uploadPhotoForm, ADD_STAFF_MEMBER_STEPS.AddAvatarBlock, currentStep, this.isAvatarFormValid),
-      [ADD_STAFF_MEMBER_STEPS.VenuesBlock]: Component.isFormWithoutErrors(venueForm, ADD_STAFF_MEMBER_STEPS.VenuesBlock, currentStep),
-      [ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock]: Component.isFormWithoutErrors(contactDetailsForm, ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock, currentStep),
-      [ADD_STAFF_MEMBER_STEPS.WorkBlock]: Component.isFormWithoutErrors(workForm, ADD_STAFF_MEMBER_STEPS.WorkBlock, currentStep),
+      [ADD_STAFF_MEMBER_STEPS.BasicInformationBlock]: Component.isFormWithoutErrors(basicInformationForm, ADD_STAFF_MEMBER_STEPS.BasicInformationBlock, currentStepIdx),
+      [ADD_STAFF_MEMBER_STEPS.AddAvatarBlock]: Component.isFormWithoutErrors(uploadPhotoForm, ADD_STAFF_MEMBER_STEPS.AddAvatarBlock, currentStepIdx, this.isAvatarFormValid),
+      [ADD_STAFF_MEMBER_STEPS.VenuesBlock]: Component.isFormWithoutErrors(venueForm, ADD_STAFF_MEMBER_STEPS.VenuesBlock, currentStepIdx),
+      [ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock]: Component.isFormWithoutErrors(contactDetailsForm, ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock, currentStepIdx),
+      [ADD_STAFF_MEMBER_STEPS.WorkBlock]: Component.isFormWithoutErrors(workForm, ADD_STAFF_MEMBER_STEPS.WorkBlock, currentStepIdx),
       [ADD_STAFF_MEMBER_STEPS.PreviewBlock]: true
     };
   }
 
-  drawSteps(currentStep: number) {
-    const stepsValidity = this.getStepsValidity(currentStep);
+  drawSteps(currentStepIdx: number) {
+    const stepsValidity = this.getStepsValidity(currentStepIdx);
     const {stepsInfo} = this.props;
     const stepsInfoKeys = Object.keys(stepsInfo).map((key) => Number(key));
     const maxStepsInfoIdx = Math.max.apply(null, stepsInfoKeys);
@@ -122,7 +122,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       }
 
       const stepWithErrorClassName = stepsValidity[idx] ? '' : 'boss3-steps-block__step_state_with-error';
-      const currentStepClassName = currentStep === idx ? 'boss3-steps-block__step-title_state_active' : '';
+      const currentStepClassName = currentStepIdx === idx ? 'boss3-steps-block__step-title_state_active' : '';
 
       return (
         <li key={idx} className={`boss3-steps-block__step ${completeClassName} ${stepWithErrorClassName}`}>
@@ -143,19 +143,19 @@ class Component extends React.Component<PropsFromConnect, State> {
   render() {
     return (
       <ul className="boss3-steps-block">
-        {this.drawSteps(this.props.currentStep)}
+        {this.drawSteps(this.props.currentStepIdx)}
       </ul>
     );
   }
 }
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
-  const {currentStep, sourceImage, stepsInfo} = state.app;
+  const {currentStepIdx, sourceImage, stepsInfo} = state.app;
 
   return {
     forms: state.formsData.forms,
     sourceImage,
-    currentStep,
+    currentStepIdx,
     stepsInfo
   };
 };

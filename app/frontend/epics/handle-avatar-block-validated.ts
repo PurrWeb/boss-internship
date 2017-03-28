@@ -14,9 +14,9 @@ const handleAvatarBlockValidated = ((action$, store: Store<StoreStructure>) => {
     .mergeMap(() => {
       const stateData = store.getState();
 
-      const {currentStep} = stateData.app;
+      const {currentStepIdx} = stateData.app;
       const completedStepsChangedAction = completedStepsChanged(ADD_STAFF_MEMBER_STEPS.AddAvatarBlock + 1);
-      const currentStepChangedAction = changingCurrentStep(currentStep + 1);
+      const currentStepChangedAction = changingCurrentStep(currentStepIdx + 1);
 
       return Observable.of<SimpleAction>(
         completedStepsChangedAction,

@@ -17,7 +17,7 @@ interface Props {
 }
 
 interface MappedProps {
-  readonly currentStep: number;
+  readonly currentStepIdx: number;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -36,15 +36,15 @@ const formBlocks = {
 };
 
 class Component extends React.Component<PropsFromConnect, State> {
-  static renderCurrentFormsBlock(currentStep: number) {
-    return formBlocks[currentStep] || <BasicInformationBlock/>;
+  static renderCurrentFormsBlock(currentStepIdx: number) {
+    return formBlocks[currentStepIdx] || <BasicInformationBlock/>;
   }
 
   render() {
     return (
       <div className="boss3-page-content">
 
-        {Component.renderCurrentFormsBlock(this.props.currentStep)}
+        {Component.renderCurrentFormsBlock(this.props.currentStepIdx)}
 
       </div>
 
@@ -54,7 +54,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
-    currentStep: state.app.currentStep
+    currentStepIdx: state.app.currentStepIdx
   };
 };
 

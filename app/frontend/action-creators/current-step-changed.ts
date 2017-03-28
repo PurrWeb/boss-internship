@@ -5,7 +5,7 @@ import {ActionWithPayload} from '../interfaces/actions';
 type PayloadType = number;
 export type ActionType = ActionWithPayload<PayloadType>;
 
-const currentStepChanged = (currentStep: PayloadType): ActionType =>
-  createActionWithPayload(CURRENT_STEP_CHANGED, currentStep);
+const currentStepChanged = (currentStepIdx: PayloadType): ActionType =>
+  createActionWithPayload(CURRENT_STEP_CHANGED, currentStepIdx);
 
 export default currentStepChanged;

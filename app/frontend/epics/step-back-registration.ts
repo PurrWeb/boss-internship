@@ -10,8 +10,8 @@ const stepBackRegistration = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(STEPPING_BACK_REGISTRATION)
     .map(() => {
       const stateData = store.getState();
-      const {currentStep} = stateData.app;
-      const goalStep = Math.max(currentStep - 1, 0);
+      const {currentStepIdx} = stateData.app;
+      const goalStep = Math.max(currentStepIdx - 1, 0);
 
       return changingCurrentStep(goalStep);
     });
