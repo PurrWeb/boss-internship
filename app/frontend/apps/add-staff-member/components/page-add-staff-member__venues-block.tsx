@@ -42,9 +42,10 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   handleFormUpdate = (formModelData: VenueForm) => {
+    const visited = true;
     const hasUnfilledRequiredFields = hasFormUnfilledRequiredFields<VenueForm>(formModelData);
     const hasValidationErrors = hasFormValidationErrors<VenueForm>(formModelData);
-    const action = changingStepInfo('VenuesBlock', hasUnfilledRequiredFields, hasValidationErrors);
+    const action = changingStepInfo('VenuesBlock', visited, hasUnfilledRequiredFields, hasValidationErrors);
 
     this.props.dispatch(action);
   };

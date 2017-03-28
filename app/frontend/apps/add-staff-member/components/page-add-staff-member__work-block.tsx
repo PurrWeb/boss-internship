@@ -49,9 +49,10 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   handleFormUpdate = (formModelData: WorkForm) => {
+    const visited = true;
     const hasUnfilledRequiredFields = hasFormUnfilledRequiredFields<WorkForm>(formModelData);
     const hasValidationErrors = hasFormValidationErrors<WorkForm>(formModelData);
-    const action = changingStepInfo('WorkBlock', hasUnfilledRequiredFields, hasValidationErrors);
+    const action = changingStepInfo('WorkBlock', visited, hasUnfilledRequiredFields, hasValidationErrors);
 
     this.props.dispatch(action);
   };

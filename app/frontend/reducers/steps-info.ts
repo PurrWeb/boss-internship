@@ -7,22 +7,27 @@ export type Structure = AddStaffMemberStepsInfo;
 
 const defaultData: Structure = {
   0: {
+    visited: false,
     hasUnfilledRequired: false,
     hasValidationErrors: false
   },
   1: {
+    visited: false,
     hasUnfilledRequired: false,
     hasValidationErrors: false
   },
   2: {
+    visited: false,
     hasUnfilledRequired: false,
     hasValidationErrors: false
   },
   3: {
+    visited: false,
     hasUnfilledRequired: false,
     hasValidationErrors: false
   },
   4: {
+    visited: false,
     hasUnfilledRequired: false,
     hasValidationErrors: false
   }

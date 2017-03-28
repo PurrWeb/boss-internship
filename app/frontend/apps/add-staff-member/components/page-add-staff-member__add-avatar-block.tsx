@@ -79,9 +79,10 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   handleFormUpdate = (formModelData: UploadPhotoForm) => {
+    const visited = true;
     const hasUnfilledRequiredFields = hasFormUnfilledRequiredFields<UploadPhotoForm>(formModelData);
     const hasValidationErrors = hasFormValidationErrors<UploadPhotoForm>(formModelData);
-    const action = changingStepInfo('AddAvatarBlock', hasUnfilledRequiredFields, hasValidationErrors);
+    const action = changingStepInfo('AddAvatarBlock', visited, hasUnfilledRequiredFields, hasValidationErrors);
 
     this.props.dispatch(action);
   };

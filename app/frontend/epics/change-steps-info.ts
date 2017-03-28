@@ -13,9 +13,9 @@ const changeStepsInfo = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(CHANGING_STEP_INFO)
     .map((action: ActionType) => {
       const stateData = store.getState();
-      const {stepName, hasUnfilledRequired, hasValidationErrors} = action.payload;
+      const {stepName, visited, hasUnfilledRequired, hasValidationErrors} = action.payload;
       const stepIdx = ADD_STAFF_MEMBER_STEPS[stepName];
-      const changedStepInfo: AddStaffMemberStepInfo = {hasUnfilledRequired, hasValidationErrors};
+      const changedStepInfo: AddStaffMemberStepInfo = {visited, hasUnfilledRequired, hasValidationErrors};
       const newStepsInfo: AddStaffMemberStepsInfo = {...stateData.app.stepsInfo, ...{[stepIdx]: changedStepInfo}};
 
       return stepsInfoChanged(newStepsInfo);

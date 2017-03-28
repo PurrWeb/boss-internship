@@ -50,6 +50,7 @@ export interface GlobalError {
 }
 
 export interface AddStaffMemberStepInfo {
+  readonly visited: boolean;
   readonly hasUnfilledRequired: boolean;
   readonly hasValidationErrors: boolean;
 }
