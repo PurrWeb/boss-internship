@@ -88,7 +88,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
           <label className="boss3-label">
             <span className="boss3-label__text">Country</span>
-            <Control.textarea
+            <Control.text
               className="boss3-input"
               model=".country"
               mapProps={{
