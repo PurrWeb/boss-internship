@@ -8,6 +8,7 @@ namespace :assets do
   task :webpack => :environment do
     clobber_webpack_assets
     build_webpack
+    copy_sourcemap
   end
 
   desc "Upload Sourcemaps"
@@ -62,7 +63,11 @@ namespace :assets do
 
   def clobber_webpack_assets
     rm_rf "#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js"
-    # rm_rf "#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"
+    rm_rf "#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"
     rm_rf "#{Rails.application.config.root}/app/assets/stylesheets/frontend_bundle.css"
+  end
+
+  def copy_sourcemap
+    cp "#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map", "#{Rails.application.config.root}/public/assets/bundles/frontend_bundle.js.map"
   end
 end
