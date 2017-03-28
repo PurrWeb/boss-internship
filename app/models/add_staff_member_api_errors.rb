@@ -58,9 +58,9 @@ class AddStaffMemberApiErrors
       :sia_badge_number,
       :sia_badge_expiry_date,
       :avatar_base64,
-      :pay_rate_id,
-      :master_venue_id,
-      :work_venue_ids,
+      :pay_rate,
+      :master_venue,
+      :work_venues,
       :email_address
     ]
   end
