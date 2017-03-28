@@ -62,7 +62,7 @@ namespace :assets do
 
   def clobber_webpack_assets
     rm_rf "#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js"
-    rm_rf "#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"
+    # rm_rf "#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"
     rm_rf "#{Rails.application.config.root}/app/assets/stylesheets/frontend_bundle.css"
   end
 end
