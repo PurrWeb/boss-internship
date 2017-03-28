@@ -112,17 +112,20 @@ class Component extends React.Component<PropsFromConnect, State> {
     const stepPreviewIdx = maxStepsInfoIdx + 1;
 
     return stepsData.map((stepData, idx) => {
-      let completeClassName;
+      let stepInfo = stepsInfo[idx];
+      let isCurrentStep = currentStepIdx === idx;
+      let isPreviewStep = idx === stepPreviewIdx;
+      let isStepValid = stepsValidity[idx];
+      let stepHasUnfilledRequired = stepInfo.hasUnfilledRequired;
+      let stepEncounted = idx <= maxStepsInfoIdx;
 
-      if (idx <= maxStepsInfoIdx) {
-        const currentStepInfo = stepsInfo[idx];
-        completeClassName = !currentStepInfo.hasUnfilledRequired ? 'boss3-steps-block__step_state_complete' : '';
-      } else if (idx === stepPreviewIdx) {
-        completeClassName = '';
+      let completeClassName = '';
+      if (stepEncounted && !stepHasUnfilledRequired) {
+        completeClassName = 'boss3-steps-block__step_state_complete';
       }
 
-      const stepWithErrorClassName = stepsValidity[idx] ? '' : 'boss3-steps-block__step_state_with-error';
-      const currentStepClassName = currentStepIdx === idx ? 'boss3-steps-block__step-title_state_active' : '';
+      const stepWithErrorClassName = isStepValid ? '' : 'boss3-steps-block__step_state_with-error';
+      const currentStepClassName = isCurrentStep ? 'boss3-steps-block__step-title_state_active' : '';
 
       return (
         <li key={idx} className={`boss3-steps-block__step ${completeClassName} ${stepWithErrorClassName}`}>
