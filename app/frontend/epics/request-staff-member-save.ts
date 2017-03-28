@@ -21,7 +21,7 @@ type ResponseOkDefined = AjaxResponseDefined<ResponseStaffMemberCreateSuccessPay
 
 const assertResponse = (ajaxData: ResponseOk) => {
   const tResponse = <ResponseStaffMemberCreateSuccessPayload>t.interface({
-    staff_member_id: t.String
+    staff_member_id: t.Number
   });
 
   validateResponse(tResponse, ajaxData);
