@@ -25,7 +25,7 @@
 $(function(){
   $(document).foundation();
 
-  $('.chosen-select').chosen({width: '100%'});
+  $('.chosen-select').chosen({ allow_single_deselect: true, width: '100%' });
 
   $('.pick-a-color').spectrum({
     preferredFormat: "hex",
