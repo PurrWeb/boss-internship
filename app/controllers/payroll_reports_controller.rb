@@ -5,28 +5,26 @@ class PayrollReportsController < ApplicationController
     if venue_from_params.present? && week_from_params.present?
       venue = venue_from_params
       week = week_from_params
+
       filter_by_weekly_pay_rate = params[:pay_rate_filter] == 'weekly'
 
-      staff_members = FinanceReportStaffMembersQuery.new(
-        venue: venue,
-        start_date: week.start_date,
-        end_date: week.end_date,
-        filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
-      ).all
 
       respond_to do |format|
         format.html do
-          render_payroll_report_html(
+          render locals: {
             venue: venue,
             week: week,
-            staff_members: staff_members,
+            accessible_venues: AccessibleVenuesQuery.new(current_user).all,
+            finance_reports_table: FinanceReportTable.new(
+              week: week,
+              venue: venue,
+              filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
+            ),
             pay_rate_filtering: params[:pay_rate_filter]
-          )
+          }
         end
 
         format.pdf do
-          filter_by_weekly_pay_rate = params[:pay_rate_filter] == 'weekly'
-
           render_payroll_report_pdf(
             venue: venue,
             week: week,
@@ -41,28 +39,6 @@ class PayrollReportsController < ApplicationController
   end
 
   private
-  def render_payroll_report_html(venue:, week:, staff_members:, pay_rate_filtering:)
-    reports_by_staff_type = {}
-    staff_members.each do |staff_member|
-      reports_by_staff_type[staff_member.staff_type] ||= []
-      reports_by_staff_type[staff_member.staff_type] << (FinanceReport.find_by(
-        staff_member: staff_member,
-        week_start: week.start_date
-      ) || GenerateFinanceReportData.new(
-        staff_member: staff_member,
-        week: week
-      ).call.report)
-    end
-
-    render locals: {
-      venue: venue,
-      week: week,
-      accessible_venues: AccessibleVenuesQuery.new(current_user).all,
-      reports_by_staff_type: reports_by_staff_type,
-      pay_rate_filtering: pay_rate_filtering
-    }
-  end
-
   def render_payroll_report_pdf(venue:, week:, staff_members:, filter_by_weekly_pay_rate:)
     pdf = FinanceReportPDF.new(
       report_title: 'Payroll Report',

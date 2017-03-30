@@ -73,6 +73,8 @@ Rails.application.routes.draw do
 
     resources :finance_reports, only: [:index, :create]
 
+    resources :yearly_reports, only: [:index]
+
     resources :staff_types, only: [:index] do
       collection do
         post :update_colors

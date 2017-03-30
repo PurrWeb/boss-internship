@@ -7,22 +7,29 @@ class FinanceReportsController < ApplicationController
       week = week_from_params
       filter_by_weekly_pay_rate = params[:pay_rate_filter] == 'weekly'
 
-      staff_members = FinanceReportStaffMembersQuery.new(
-        venue: venue,
-        week: week,
-        filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
-      ).all
-
       respond_to do |format|
         format.html do
-          render_finance_reports_index(
+          render locals: {
             week: week,
             venue: venue,
-            staff_members: staff_members
-          )
+            accessible_venues: AccessibleVenuesQuery.new(current_user).all,
+            finance_reports_table: FinanceReportTable.new(
+              week: week,
+              venue: venue,
+              filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
+            ),
+            pay_rate_filtering: params[:pay_rate_filter]
+          }
         end
 
         format.pdf do
+          staff_members = FinanceReportStaffMembersQuery.new(
+            venue: venue,
+            start_date: week.start_date,
+            end_date: week.end_date,
+            filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
+          ).all
+
           render_finance_reports_pdf(
             week: week,
             venue: venue,
@@ -34,19 +41,6 @@ class FinanceReportsController < ApplicationController
     else
       redirect_to(finance_reports_path(index_redirect_params))
     end
-  end
-
-  def render_finance_reports_index(week:, venue:, staff_members:)
-    render locals: {
-      week: week,
-      venue: venue,
-      accessible_venues: AccessibleVenuesQuery.new(current_user).all,
-      reports_by_staff_type: reports_by_staff_type(
-        week: week,
-        staff_members: staff_members
-      ),
-      pay_rate_filtering: params[:pay_rate_filter]
-    }
   end
 
   def render_finance_reports_pdf(week:, venue:, filter_by_weekly_pay_rate:, staff_members:)

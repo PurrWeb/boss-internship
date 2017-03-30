@@ -1,0 +1,161 @@
+<h1>Yearly Report</h1>
+
+<div class="boss2-buttons-group">
+    <%= bootstrap_form_for('', url: yearly_reports_path, html: { method: :get, class: 'row align-bottom' }) do |form| %>
+      <div class="small-12 medium-5 column">
+        <%= form.select(
+                :venue_id,
+                options_for_select(
+                    accessible_venues.map do |venue|
+                      [venue.name, venue.id]
+                    end,
+                    venue.id
+                ),
+                {
+                    include_blank: false
+                },
+                {
+                  class: 'boss2-input'
+                }
+                ) %>
+      </div>
+      <div class="small-12 medium-5 column">
+        <%= form.select(
+          :year,
+          options_for_select(
+            selectable_years,
+            tax_year.year
+          ),
+          {
+            include_blank: false
+          },
+          {
+            class: 'boss2-input'
+          }
+        ) %>
+      </div>
+      <div class="small-12 medium-2 column">
+        <%= form.submit('Update', class: 'boss2-button') %>
+      </div>
+    <% end %>
+</div>
+
+<% if !yearly_reports_table.empty? %>
+  <% yearly_reports_table.staff_types.each do |staff_type| %>
+    <div class="boss2-table-container">
+      <h3 class="boss2-page-content_adjust_h3"><div class="boss-badge" style="font-size: 1.3em; background-color: #<%= staff_type.ui_color %>"><%= staff_type.name %></div></h3>
+
+        <p class="h4">
+          <strong>
+            Total: <%= number_to_currency(yearly_reports_table.total(staff_type), unit: '£') %>
+          </strong>
+        </p>
+
+      <div style="width: 100%; max-width: 1200px;">
+        <table class="text-center mb-lg">
+          <thead>
+            <tr>
+              <th></th>
+              <th class="text-center">Week Number</th>
+              <% yearly_reports_table.dates.each_with_index do |date, index| %>
+                <th class="text-center">
+                  <p><%= index + 1 %></p>
+                </th>
+              <% end %>
+              <th class="text-center"></th>
+              <th class="text-center"></th>
+              <th class="text-center"></th>
+              <th class="text-center"></th>
+              <th class="text-center"></th>
+            </tr>
+            <tr>
+              <th class="text-center">Name</th>
+              <th>Pay&nbsp;Type</th>
+              <% yearly_reports_table.dates.each do |date| %>
+                <% week = RotaWeek.new(date) %>
+                <% start_date = [week.start_date, tax_year.start_date].max %>
+                <% end_date = [week.end_date, tax_year.end_date].min %>
+                <th class="text-center">
+                  <p><%= start_date.to_date.to_s(:short).html_safe %> - <%= end_date.to_date.to_s(:short).html_safe %></p>
+                </th>
+              <% end %>
+              <th class="text-center">Total Hours</th>
+              <th class="text-center">Owed Hours</th>
+              <th class="text-center">Pay Rate</th>
+              <th class="text-center">Total</th>
+              <th class="text-center">Paid Holiday (Days)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% yearly_reports_table.reports(staff_type).each do |report| %>
+              <tr>
+                <td>
+                  <strong><%= link_to(report.staff_member.full_name.titlecase, staff_member_path(report.staff_member)) %></strong>
+                </td>
+                <td><%= report.staff_member.pay_rate.type_description %></td>
+                <% yearly_reports_table.dates.each do |date| %>
+                  <% rota_week = RotaWeek.new(date) %>
+                  <td>
+                    <% hour_value = report.hours_count(rota_week: rota_week) %>
+                    <% if hour_value > 0 %>
+                      <%= link_to(staff_member_hours_overview_path(
+                            staff_member_id: report.staff_member.id,
+                            id: UIRotaDate.format(date)
+                          )) do %>
+                        <%= number_with_precision(
+                              hour_value,
+                              precision: 2,
+                              strip_insignificant_zeros: true
+                            ) %>
+                      <% end %>
+                    <% else %>
+                      <span>-</span>
+                    <% end %>
+                  </td>
+                <% end %>
+                <td>
+                  <%= number_with_precision(
+                        report.total_hours_count,
+                        precision: 2,
+                        strip_insignificant_zeros: true
+                      ) %>
+                </td>
+                <td>
+                  <% owed_hours_count = number_with_precision(
+                       report.owed_hours_count,
+                       precision: 2,
+                       strip_insignificant_zeros: true
+                     ) %>
+                  <%= link_to_if(
+                        report.owed_hours_count > 0,
+                        owed_hours_count,
+                        staff_member_path(report.staff_member, tab: 'owed-hours')
+                      ) %>
+                </td>
+                <td>
+                  <%= report.staff_member.pay_rate.text_description_short %>
+                </td>
+                <td>
+                  <strong>
+                    <%= number_to_currency(report.total_cents / 100.0, unit: '£') %>
+                  </strong>
+                </td>
+                <td>
+                  <%= link_to_if(
+                        report.holiday_days_count > 0,
+                        report.holiday_days_count,
+                        staff_member_path(report.staff_member, tab: 'holidays')
+                      ) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="boss2-table-container">
+    <p>No report data found</p>
+  </div>
+<% end %>
