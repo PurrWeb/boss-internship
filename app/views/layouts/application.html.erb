@@ -7,7 +7,9 @@
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'rollbar', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'bundles/frontend_bundle', 'data-turbolinks-track' => true %>
+
+    <script src="/assets/bundles/frontend_bundle.js" data-turbolinks-track="true"></script>
+
     <%= render 'layouts/favicon' %>
     <%= csrf_meta_tags %>
   </head>

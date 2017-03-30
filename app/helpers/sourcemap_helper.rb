@@ -4,6 +4,6 @@ module SourcemapHelper
   extend self
 
   def sourcemap_version
-    Rails.application.assets['bundles/frontend_bundle.js'].digest
+    SecureRandom.urlsafe_base64(nil, false)
   end
 end

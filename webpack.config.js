@@ -7,7 +7,7 @@ module.exports = {
     main: ['./app/frontend/index.js'],
   },
   output: {
-    path: __dirname + '/app/assets/javascripts/bundles',
+    path: __dirname + '/public/assets/bundles',
     filename: 'frontend_bundle.js'
   },
   module: {
