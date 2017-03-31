@@ -1,6 +1,7 @@
 {
   "name": "Boss",
   "devDependencies": {
+    "assets-webpack-plugin": "^3.5.1",
     "babel-eslint": "^4.1.3",
     "babel-plugin-rewire": "^0.1.22",
     "bluebird": "^3.4.0",

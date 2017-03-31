@@ -12,7 +12,7 @@ namespace :assets do
 
   desc "Upload Sourcemaps"
   task :upload_sourcemaps => :environment do
-    bundle_path = "/assets/bundles/frontend_bundle.js"
+    bundle_path = SourcemapHelper.script_path
 
     upload_hosts = []
     if Rails.env.staging?
@@ -31,7 +31,7 @@ namespace :assets do
       upload_command_parts << %{-F access_token="#{ENV.fetch("ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN")}"}
       upload_command_parts << %{-F version="#{SourcemapHelper.sourcemap_version}"}
       upload_command_parts << %{-F minified_url="#{upload_url}"}
-      upload_command_parts << %{-F source_map="@#{Rails.application.config.root}/public/assets/bundles/frontend_bundle.js.map"}
+      upload_command_parts << %{-F source_map="@#{Rails.application.config.root}/public#{SourcemapHelper.sourcemap_path}"}
       upload_command = upload_command_parts.join(" ")
 
       puts

@@ -1,4 +1,7 @@
 var webpack = require('webpack');
+var AssetsPlugin = require('assets-webpack-plugin');
+var assetsPluginInstance = new AssetsPlugin();
+
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
@@ -8,7 +11,8 @@ module.exports = {
   },
   output: {
     path: __dirname + '/public/assets/bundles',
-    filename: 'frontend_bundle.js'
+    filename: 'frontend_bundle-[hash:50].js',
+    publicPath: '/assets/bundles/'
   },
   module: {
     loaders: [
@@ -36,6 +40,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('../stylesheets/frontend_bundle.css', {
       allChunks: true
-    })
+    }),
+    assetsPluginInstance
   ]
 };
