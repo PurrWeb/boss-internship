@@ -1,6 +1,10 @@
 var webpack = require('webpack');
+var crypto = require('crypto');
+
+// This plug-in outputs a json file with the paths of the generated assets
+// so you can find them from somewhere else.
 var AssetsPlugin = require('assets-webpack-plugin');
-var assetsPluginInstance = new AssetsPlugin();
+var assetsPluginInstance = new AssetsPlugin({metadata: {version: crypto.randomBytes(20).toString('hex')}});
 
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
