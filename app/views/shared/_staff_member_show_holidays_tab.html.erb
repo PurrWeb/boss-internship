@@ -25,8 +25,8 @@
   <% paid_days = holidays_this_year.paid.to_a.sum { |holiday| holiday.days } %>
   <% unpaid_days = holidays_this_year.unpaid.to_a.sum { |holiday| holiday.days } %>
   <p><%= pluralize(estimated_accrued_holidays, "Day") %> accrued this year (Estimated)</p>
-  <p>Paid <%= pluralize(paid_days, 'Paid day') %> this year</p>
-  <p><%= pluralize(unpaid_days, 'Unpaid day') %> this year</p>
+  <p><%= pluralize(paid_days, 'Paid day') %> logged this year</p>
+  <p><%= pluralize(unpaid_days, 'Unpaid day') %> logged this year</p>
 
   <%= render partial: 'shared/holidays_table', locals: { staff_member: staff_member, holidays: holidays_this_year } %>
 <% else %>
