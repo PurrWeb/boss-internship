@@ -20,6 +20,14 @@ class TaxYear
     end
   end
 
+  def rota_start_time
+    RotaShiftDate.new(start_date).start_time
+  end
+
+  def rota_end_time
+    RotaShiftDate.new(end_date).end_time
+  end
+
   def before_current_calendar_year_tax_deadline?
     date < current_calendar_year_tax_dealine
   end
