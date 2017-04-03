@@ -26,7 +26,7 @@ class FinanceReportPDF
 
   def render
     Prawn::Document.new(
-      page_size: [800.00, 1600.00],
+      page_size: [800.00, 1800.00],
       page_layout: :landscape,
     ) do |pdf|
       pdf.font_size 20
@@ -70,9 +70,11 @@ class FinanceReportPDF
         overflow: :shrink_to_fit
       }
     ) do
-      # Set minimum width
       cells.style do |cell|
+        # Set minimum width
         cell.width = [cell.width, 100].max
+        # Set maximum width
+        cell.width = [cell.width, 120].min
       end
 
       (0..row_length).each do |index|
