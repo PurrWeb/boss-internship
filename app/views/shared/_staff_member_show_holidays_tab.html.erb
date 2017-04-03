@@ -17,7 +17,8 @@
      tax_year: tax_year
     ).all.includes(:frozen_by) %>
 <% estimated_accrued_holidays = AccruedHolidayEstimate.new(
-      staff_member: staff_member
+      staff_member: staff_member,
+      tax_year: tax_year
     ).call %>
 
 <% if holidays_this_year.present? %>
