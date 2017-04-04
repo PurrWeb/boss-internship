@@ -6,6 +6,7 @@ class FinanceReportStaffMembersQuery
   end
   attr_reader :venue, :week, :filter_by_weekly_pay_rate
 
+  # Returns staff member records with finance data over the time period
   def all
     staff_member_transitions = Arel::Table.new(:staff_member_transitions)
     most_recent_staff_member_transitions = staff_member_transitions.alias('most_recent_staff_member_transition')
