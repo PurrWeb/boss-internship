@@ -21,6 +21,7 @@
 //= require_tree ./page_controllers
 //= require tablesaw.jquery
 //= require tablesaw-init
+//= require asset_pipeline_error
 
 $(function(){
   $(document).foundation();

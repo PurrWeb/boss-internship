@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_paper_trail_whodunnit
   before_filter :set_host
+  before_filter :bundle_script
 
   helper_method :render_navigation?
 
@@ -20,5 +21,9 @@ class ApplicationController < ActionController::Base
 
   def set_host
     Rails.application.routes.default_url_options[:host] = request.host
+  end
+
+  def bundle_script
+    @bundle_script = SourcemapHelper.script_path
   end
 end

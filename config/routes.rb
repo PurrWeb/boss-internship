@@ -150,7 +150,11 @@ Rails.application.routes.draw do
     resources :daily_reports, only: [:index]
     resources :weekly_reports, only: [:index]
 
-    resources :rollbar_error_test, only: [:index]
+    resources :rollbar_error_test, only: [:index] do
+      collection do
+        get :asset_pipeline
+      end
+    end
 
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
