@@ -1,0 +1,11 @@
+<% content_for :full_width_section do %>
+  <%= form_tag venue_health_check_index_path, method: :get do %>
+    <div class="boss-form__field boss-form__field_layout_third">
+      <%= label_tag 'filter-area', 'Area', class: 'boss-form__label-text' %>
+      <div class="boss-form__select">
+        <%= select_tag "filter-area", options_from_collection_for_select(@accessible_venues, "id", "name", @venue.id), { name: 'venue_id' } %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+

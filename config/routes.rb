@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     resources :check_lists, only: [:index]
     resources :check_list_submissions, path: "checklist_submissions", only: [:index]
 
+    resources :venue_health_check, only: [:index, :show]
+
     resources :change_orders, only: [:index, :show, :edit, :update, :destroy] do
       collection do
         get :submitted
