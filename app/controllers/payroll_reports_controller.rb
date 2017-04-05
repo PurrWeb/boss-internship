@@ -9,7 +9,8 @@ class PayrollReportsController < ApplicationController
 
       staff_members = FinanceReportStaffMembersQuery.new(
         venue: venue,
-        week: week,
+        start_date: week.start_date,
+        end_date: week.end_date,
         filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
       ).all
 
