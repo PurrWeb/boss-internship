@@ -2,8 +2,9 @@ class CreateQuestionnaireQuestions < ActiveRecord::Migration
   def change
     create_table :questionnaire_questions do |t|
       t.references :questionnaire_category, index: true
-      t.string :type
-      t.string :text
+      t.references :questionnaire, index: true, null: false
+      t.string :type, null: false
+      t.string :text, null: false
       t.float :score
       t.float :scale_increment
       t.integer :scale_option_count

@@ -542,27 +542,7 @@ ActiveRecord::Schema.define(version: 20170803110533) do
     t.integer "position",              limit: 4
   end
 
-<<<<<<< HEAD
   create_table "questionnaire_categories", force: :cascade do |t|
-||||||| parent of 6e1f9f11... [card-5] Added Questionnaire Question model
-  create_table "questionnaires", force: :cascade do |t|
-=======
-  create_table "questionnaire_questions", force: :cascade do |t|
-    t.integer  "questionnaire_category_id", limit: 4
-    t.string   "type",                      limit: 255
-    t.string   "text",                      limit: 255
-    t.float    "score",                     limit: 24
-    t.float    "scale_increment",           limit: 24
-    t.integer  "scale_option_count",        limit: 4
-    t.string   "help_text",                 limit: 255
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
-  end
-
-  add_index "questionnaire_questions", ["questionnaire_category_id"], name: "index_questionnaire_questions_on_questionnaire_category_id", using: :btree
-
-  create_table "questionnaires", force: :cascade do |t|
->>>>>>> 6e1f9f11... [card-5] Added Questionnaire Question model
     t.string   "name",       limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
