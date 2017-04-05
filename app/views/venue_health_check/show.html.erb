@@ -1,3 +1,14 @@
+<%= javascript_tag do %>
+  venueHealthCheck = {};
+
+  venueHealthCheck.questionnaire = <%= Api::V1::QuestionnaireSerializer.new(questionnaire).to_json.html_safe %>;
+  venueHealthCheck.questions = <%= api_v1_collection_json(questionnaire_questions, Api::V1::QuestionnaireQuestionSerializer) %>;
+  venueHealthCheck.categories = <%= api_v1_collection_json(questionnaire_categories, Api::V1::QuestionnaireCategorySerializer) %>;
+
+  window.boss = window.boss || {};
+  window.boss.venueHealthCheck = venueHealthCheck;
+<% end %>
+
 <% content_for :full_width_section do %>
   <%= form_tag venue_health_check_index_path, method: :get do %>
     <div class="boss-form__field boss-form__field_layout_third">
@@ -9,3 +20,5 @@
   <% end %>
 <% end %>
 
+#venue-health-check-app
+  <%= react_component('VenueHealthCheckApp') %>
