@@ -1,0 +1,2 @@
+class BinaryQuestion < QuestionnaireQuestion
+end

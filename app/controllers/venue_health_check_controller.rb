@@ -17,6 +17,15 @@ class VenueHealthCheckController < ApplicationController
   end
 
   def show
+    questionnaire = Questionnaire.last
+    questionnaire_questions = QuestionnaireQuestion.all
+    questionnaire_categories = QuestionnaireCategory.all
+
+    render locals: {
+      questionnaire: questionnaire,
+      questionnaire_questions: questionnaire_questions,
+      questionnaire_categories: questionnaire_categories
+    }
   end
 
   def render_v2_layout?
