@@ -20,12 +20,17 @@ class AccruedHolidayEstimate
         sum + hours_acceptance_period.payable_hours
       end
 
-      owed_hours = OwedHour.
-        enabled
+      owed_hour_records = InRangeQuery.new(
+        relation: OwedHour.enabled.where(staff_member: staff_member),
+        start_value: tax_year.start_date,
+        end_value: tax_year.end_date,
+        start_column_name: 'week_start_date',
+        end_column_name: 'week_start_date'
+      ).all
 
-      owed_hours = owed_hours.inject(0) do |sum, owed_hour|
-        sum + owed_hour.minutes
-      end / 60.0
+      owed_hours = owed_hour_records.inject(0) do |sum, owed_hour|
+        sum + (owed_hour.minutes / 60.0)
+      end
 
       total_hours = accepted_hours + owed_hours
 
