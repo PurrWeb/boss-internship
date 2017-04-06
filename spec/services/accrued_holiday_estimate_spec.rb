@@ -45,6 +45,15 @@ describe AccruedHolidayEstimate do
       expect(service.call).to eq(4)
     end
 
+    context 'if staff member has accrues more than 28 days' do
+      # should accrue 37 days
+      let(:accepted_hours_in_year) { 2500 }
+
+      specify 'accrued days should cap at 28 days' do
+        expect(service.call).to eq(28)
+      end
+    end
+
     context 'user also has accrued coliday hours in previous year' do
       # Should not increase the year count
       let(:accepted_hours_previous_year) { 70 }

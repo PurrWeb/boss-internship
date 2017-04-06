@@ -34,7 +34,7 @@ class AccruedHolidayEstimate
 
       total_hours = accepted_hours + owed_hours
 
-     (total_hours * scaling_factor).floor
+     [(total_hours * scaling_factor).floor, 28].min
   end
 
   def scaling_factor
