@@ -7,11 +7,9 @@
 <% end %>
 
 <div class="boss-page-main__content">
-  <div class="boss-page-main__inner">
-    <%= render 'layouts/messages' %>
-      <main class="boss-page-main">
-        <%= yield %>
-      </main>
-    <%= insert_paloma_hook %>
-  </div>
+  <%= render 'layouts/messages' %>
+    <main class="boss-page-main">
+      <%= yield %>
+    </main>
+  <%= insert_paloma_hook %>
 </div>

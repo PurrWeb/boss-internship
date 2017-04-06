@@ -32,9 +32,30 @@ export class QuestionnaireContainer extends React.Component {
     };
   }
 
+  renderCollapsibleCardComponent() {
+    return this.props.categories.map(currentCategory => {
+      let categoryQuestions = this.props.questions.filter(question => {
+        return (question.questionnaire_category_id == currentCategory.id);
+      })
+
+      let cardProps = {
+        currentCategory: currentCategory,
+        categoryQuestions: categoryQuestions,
+        questionnaire: this.props.questionnaire
+      }
+
+      return(
+        <CollapsibleCard { ...cardProps } key={ currentCategory.id }>
+        </CollapsibleCard>
+      )
+    });
+  }
+
   render() {
     return (
-      <CollapsibleCard { ...this.props } />
+      <div className="boss-page-main__inner">
+        { this.renderCollapsibleCardComponent() }
+      </div>
     );
   }
 }
