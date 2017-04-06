@@ -45,6 +45,15 @@ describe AccruedHolidayEstimate do
       expect(service.call).to eq(4)
     end
 
+    context 'if staff member has accrues more than 28 days' do
+      # should accrue 37 days
+      let(:accepted_hours_in_year) { 2500 }
+
+      specify 'accrued days should cap at 28 days' do
+        expect(service.call).to eq(28)
+      end
+    end
+
     context 'user also has accrued coliday hours in previous year' do
       # Should not increase the year count
       let(:accepted_hours_previous_year) { 70 }
@@ -109,7 +118,7 @@ describe AccruedHolidayEstimate do
 
     context 'user also has owed hours in previous year' do
       # Should not increase the year count
-      let(:owed_hout_previous_year) { 70 }
+      let(:owed_hour_previous_year) { 70 }
       let(:last_tax_year) { TaxYear.new(current_tax_year.start_date - 2.days) }
 
       before do
@@ -118,17 +127,17 @@ describe AccruedHolidayEstimate do
 
         travel_to(start_date - 1.week) do
           OwedHour.create!(
-            minutes: owed_hours_minutes,
+            minutes: owed_hour_previous_year,
             week_start_date: start_date,
             staff_member: staff_member,
             creator: user,
             note: 'Test minutes'
           )
         end
+      end
 
-        specify 'extra hours should not affect result' do
-          expect(service.call).to eq(4)
-        end
+      specify 'extra hours should not affect result' do
+        expect(service.call).to eq(4)
       end
     end
   end
