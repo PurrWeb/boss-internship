@@ -1,6 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import QuestionCard from '../components/question-card';
+
 export default class CollapsibleCard extends React.Component {
   static displayName = 'CollapsibleCard';
 
@@ -23,6 +25,18 @@ export default class CollapsibleCard extends React.Component {
     $content.slideToggle().end().toggleClass(classToToggle);
   }
 
+  renderQuestionsCards() {
+    return this.props.categoryQuestions.map(question => {
+      let cardProps = {
+        currentQuestion: question
+      }
+
+      return(
+        <QuestionCard { ...cardProps } key={ question.id } />
+      )
+    });
+  }
+
   render() {
     let iconStateClass = (this.state.opened) ? 'boss-board__switch_state_opened' : '';
 
@@ -43,7 +57,13 @@ export default class CollapsibleCard extends React.Component {
         </header>
 
         <div className={ `boss-board__content boss-board__content_state_opened` }>
-          { this.props.children }
+          <div className="boss-board__content-inner">
+            <div className="boss-questionnaire">
+              <ul className="boss-questionnaire__list">
+                { this.renderQuestionsCards() }
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
     )
