@@ -20,7 +20,16 @@ class AccruedHolidayEstimate
         sum + hours_acceptance_period.payable_hours
       end
 
-     (accepted_hours * scaling_factor).floor
+      owed_hours = OwedHour.
+        enabled
+
+      owed_hours = owed_hours.inject(0) do |sum, owed_hour|
+        sum + owed_hour.minutes
+      end / 60.0
+
+      total_hours = accepted_hours + owed_hours
+
+     (total_hours * scaling_factor).floor
   end
 
   def scaling_factor
