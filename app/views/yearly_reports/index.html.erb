@@ -38,6 +38,21 @@
         <%= form.submit('Update', class: 'boss2-button') %>
       </div>
     <% end %>
+
+    <div class="row">
+      <div class="shrink column">
+        <%= link_to(
+              yearly_reports_path(
+                venue_id: venue.id,
+                year: tax_year.year,
+                format: :pdf
+              ),
+              class: 'boss2-button boss2-button_role_download'
+            ) do %>
+              Download PDF
+        <% end %>
+      </div>
+    </div>
 </div>
 
 <% if !yearly_reports_table.empty? %>

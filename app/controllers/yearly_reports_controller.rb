@@ -6,22 +6,33 @@ class YearlyReportsController < ApplicationController
       venue = venue_from_params
       tax_year = tax_year_from_params
 
-      accessible_venues = AccessibleVenuesQuery.new(current_user).all
-
-      selectable_years = YearlyReport.years
-
       yearly_reports_table = YearlyReportsTable.new(
         tax_year: tax_year,
         venue: venue
       )
 
-      render locals: {
-        venue: venue,
-        tax_year: tax_year_from_params,
-        selectable_years: selectable_years,
-        accessible_venues: accessible_venues,
-        yearly_reports_table: yearly_reports_table
-      }
+      respond_to do |format|
+        format.html do
+          accessible_venues = AccessibleVenuesQuery.new(current_user).all
+          selectable_years = YearlyReport.years
+
+          render locals: {
+            venue: venue,
+            tax_year: tax_year_from_params,
+            selectable_years: selectable_years,
+            accessible_venues: accessible_venues,
+            yearly_reports_table: yearly_reports_table
+          }
+        end
+
+        format.pdf do
+          render_yearly_reports_pdf(
+            venue: venue,
+            tax_year: tax_year_from_params,
+            yearly_reports_table: yearly_reports_table
+          )
+        end
+      end
     else
       redirect_to(
         yearly_reports_path(index_redirect_params)
@@ -34,6 +45,22 @@ class YearlyReportsController < ApplicationController
       venue_id: venue_from_params.andand.id || current_user.default_venue.andand.id,
       year: tax_year_from_params.andand.year || TaxYear.new(Time.current).year
     }
+  end
+
+  def render_yearly_reports_pdf(venue:, tax_year:, yearly_reports_table:)
+    time_stamp = Time.current.strftime('%d-%m-%Y-%H-%M')
+
+    pdf = YearlyReportPDF.new(
+      venue: venue,
+      tax_year: tax_year,
+      yearly_reports_table: yearly_reports_table,
+      time_stamp: time_stamp
+    )
+
+    #TODO: Extract File Timestamp Format to somewhere
+    filename  = "#{venue.name.parameterize}_#{tax_year.year}_yearly_report_#{time_stamp}.pdf"
+    headers['Content-Disposition'] = "attachment; filename=#{filename}"
+    render text: pdf.render, content_type: 'application/pdf'
   end
 
   def venue_from_params

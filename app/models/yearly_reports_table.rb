@@ -25,7 +25,13 @@ class YearlyReportsTable
   end
 
   def reports(staff_type)
-    @_reports_by_staff_type[staff_type]
+    @_reports_by_staff_type[staff_type].sort do |a, b|
+      a_names = a.staff_member.full_name.split(' ')
+      b_names = b.staff_member.full_name.split(' ')
+      a_sort_string = a_names.last + ' ' + a_names.first(a_names.length - 1).join(' ')
+      b_sort_string = b_names.last + ' ' + b_names.first(b_names.length - 1).join(' ')
+      a_sort_string <=> b_sort_string
+    end
   end
 
   def generate_report_data
