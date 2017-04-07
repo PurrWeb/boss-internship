@@ -1,6 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import QuestionActions from './question-actions'
+
 export default class QuestionCard extends React.Component {
   static displayName = 'QuestionCard';
 
@@ -19,6 +21,8 @@ export default class QuestionCard extends React.Component {
                   <p className="boss-question__number">Question { this.props.currentQuestion.id }</p>
                   <h3 className="boss-question__subject">{ this.props.currentQuestion.text }</h3>
                 </div>
+
+                <QuestionActions { ...this.props } />
               </div>
             </form>
           </div>
