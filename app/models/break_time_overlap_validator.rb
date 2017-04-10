@@ -17,7 +17,7 @@ class BreakTimeOverlapValidator
         relation: relation,
         start_value: starts_at,
         end_value: ends_at,
-        include_boundaries: false
+        include_boundaries: []
       ).all
 
       if _break.persisted?
