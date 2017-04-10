@@ -40,6 +40,26 @@ class YearlyReportsController < ApplicationController
     end
   end
 
+  def hour_report
+    authorize! :manage, :admin
+
+    staff_member = StaffMember.find(params.fetch(:staff_member_id))
+    venue = Venue.find_by!(id: params[:venue_id])
+    tax_year = tax_year_from_params
+    raise 'unsupported tax year' unless tax_year.present?
+    report = GenerateYearlyReportData.new(
+      staff_member: staff_member,
+      tax_year: tax_year
+    ).call
+
+    render locals: {
+      staff_member: staff_member,
+      venue: venue,
+      tax_year: tax_year,
+      report: report
+    }
+  end
+
   def index_redirect_params
     {
       venue_id: venue_from_params.andand.id || current_user.default_venue.andand.id,

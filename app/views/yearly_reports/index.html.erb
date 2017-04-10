@@ -96,11 +96,29 @@
                 </td>
                 <td><%= report.staff_member.pay_rate.type_description %></td>
                 <td>
-                  <%= number_with_precision(
+                  <% total_hours = report.total_hours_count %>
+                  <% if total_hours == 0 %>
+                    <%= number_with_precision(
                         report.total_hours_count,
                         precision: 2,
                         strip_insignificant_zeros: true
                       ) %>
+
+                  <% else %>
+                    <%= link_to(
+                          hour_report_yearly_reports_path(
+                            staff_member_id: report.staff_member.id,
+                            venue_id: venue.id,
+                            year: tax_year.year
+                          )) do %>
+
+                          <%= number_with_precision(
+                              report.total_hours_count,
+                              precision: 2,
+                              strip_insignificant_zeros: true
+                            ) %>
+                    <% end %>
+                  <% end %>
                 </td>
                 <td>
                   <% owed_hours_count = number_with_precision(
