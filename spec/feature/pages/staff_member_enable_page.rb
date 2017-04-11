@@ -5,6 +5,12 @@ module PageObject
       super()
     end
 
+    page_action :change_starts_at_date do |date:|
+      scope.find('#staff_member_starts_at_1i').select(date.year)
+      scope.find('#staff_member_starts_at_2i').select(date.strftime("%B"))
+      scope.find('#staff_member_starts_at_3i').select(date.day)
+    end
+
     page_action :submit_page do
       scope.click_button('Submit')
     end

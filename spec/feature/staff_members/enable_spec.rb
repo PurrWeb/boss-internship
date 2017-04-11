@@ -29,6 +29,9 @@ RSpec.feature 'Disabling a staff member' do
     staff_member_show_page.surf_to
     staff_member_show_page.click_enable_staff_member_button
 
+    staff_member_enable_page.change_starts_at_date(
+      date: Time.current.to_date + 3.days
+    )
     staff_member_enable_page.submit_page
 
     staff_member_show_page.reload.assert_on_correct_page

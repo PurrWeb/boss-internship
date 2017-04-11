@@ -28,11 +28,12 @@ class ReviveStaffMember
     ActiveRecord::Base.transaction do
       staff_member.assign_attributes(staff_member_params)
       starts_at_changed = staff_member.starts_at_changed?
-      if !starts_at_changed
-        staff_member.errors.add(:starts_at, 'must change when reactivating staff emember')
-      end
 
       result = staff_member.save && starts_at_changed
+
+      if !starts_at_changed
+        staff_member.errors.add(:starts_at, 'must change when reactivating staff member')
+      end
 
       if result
         staff_member.
