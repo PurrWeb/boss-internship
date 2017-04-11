@@ -80,7 +80,7 @@ describe ReviveStaffMember do
 
         specify 'validation error should be set on starts_at' do
           service.call
-          expect(staff_member.errors[:starts_at]).to eq(["must change when reactivating staff emember"])
+          expect(staff_member.errors[:starts_at]).to eq(["must change when reactivating staff member"])
         end
       end
 
