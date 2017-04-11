@@ -1,11 +1,13 @@
 class FinanceReportStaffMembersQuery
-  def initialize(venue:, week:, filter_by_weekly_pay_rate:)
+  def initialize(venue:, start_date:, end_date:, filter_by_weekly_pay_rate:)
     @venue = venue
-    @week = week
+    @start_date = start_date
+    @end_date = end_date
     @filter_by_weekly_pay_rate = filter_by_weekly_pay_rate
   end
-  attr_reader :venue, :week, :filter_by_weekly_pay_rate
+  attr_reader :venue, :start_date, :end_date, :filter_by_weekly_pay_rate
 
+  # Returns staff member records with finance data over the time period
   def all
     staff_member_transitions = Arel::Table.new(:staff_member_transitions)
     most_recent_staff_member_transitions = staff_member_transitions.alias('most_recent_staff_member_transition')
@@ -74,7 +76,7 @@ class FinanceReportStaffMembersQuery
         staff_members[:master_venue_id].eq(venue.id).
         and(
           staff_members[:created_at].lt(
-            RotaShiftDate.new(week.start_date + 1.week).start_time
+            RotaShiftDate.new(start_date + 1.week).start_time
           )
         )
       ).
@@ -89,24 +91,24 @@ class FinanceReportStaffMembersQuery
           InRangeInclusive.new(
             start_column: paid_holidays[:start_date],
             end_column: paid_holidays[:end_date],
-            start_value: week.start_date,
-            end_value: week.end_date
+            start_value: start_date,
+            end_value: end_date
           ).arel
         ).
         or(
           InRangeInclusive.new(
             start_column: enabled_owed_hours[:week_start_date],
             end_column: enabled_owed_hours[:week_start_date],
-            start_value: week.start_date,
-            end_value: week.end_date
+            start_value: start_date,
+            end_value: end_date
           ).arel
         ).
         or(
           InRangeInclusive.new(
             start_column: clock_in_days[:date],
             end_column: clock_in_days[:date],
-            start_value: week.start_date,
-            end_value: week.end_date
+            start_value: start_date,
+            end_value: end_date
           ).arel
         )
       )
