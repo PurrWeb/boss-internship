@@ -34,6 +34,7 @@ describe ReviveStaffMember do
       allow(staff_member).to(
         receive(:assign_attributes)
       )
+      allow(staff_member).to receive(:starts_at_changed?).and_return(true)
       allow(staff_member).to receive(:save).and_return(update_result)
     end
 
@@ -66,14 +67,30 @@ describe ReviveStaffMember do
           ).to eq(requester.id)
         end
       end
-    end
 
-    context 'when update is successful' do
-      let(:update_result) { false }
+      context 'when start_at is not updated' do
+        before do
+          allow(staff_member).to receive(:starts_at_changed?).and_return(false)
+        end
 
-      specify 'staff member is not enabled' do
-        service.call
-        expect(staff_member.reload).to_not be_enabled
+        specify 'staff member is not enabled' do
+          service.call
+          expect(staff_member.reload).to_not be_enabled
+        end
+
+        specify 'validation error should be set on starts_at' do
+          service.call
+          expect(staff_member.errors[:starts_at]).to eq(["must change when reactivating staff emember"])
+        end
+      end
+
+      context 'when save is unsuccessful' do
+        let(:update_result) { false }
+
+        specify 'staff member is not enabled' do
+          service.call
+          expect(staff_member.reload).to_not be_enabled
+        end
       end
     end
   end
