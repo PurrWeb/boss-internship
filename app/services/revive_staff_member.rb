@@ -32,7 +32,7 @@ class ReviveStaffMember
         staff_member.errors.add(:starts_at, 'must change when reactivating staff emember')
       end
 
-      result = starts_at_changed && staff_member.save
+      result = staff_member.save && starts_at_changed
 
       if result
         staff_member.
