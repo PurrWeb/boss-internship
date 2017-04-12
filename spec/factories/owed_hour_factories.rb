@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :owed_hour do
-    week_start_date { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date }
+    date { RotaShiftDate.to_rota_date(Time.current + 1.week) }
     staff_member
     association :creator, factory: :user
     note 'They just needed the cash'

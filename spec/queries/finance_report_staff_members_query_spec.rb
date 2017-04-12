@@ -26,7 +26,7 @@ shared_examples "staff member has stuff on week" do
         FactoryGirl.create(
           :owed_hour,
           staff_member: _staff_member,
-          week_start_date: week.start_date,
+          date: date,
         )
       end
 
@@ -36,7 +36,7 @@ shared_examples "staff member has stuff on week" do
         FactoryGirl.create(
           :owed_hour,
           staff_member: _staff_member,
-          week_start_date: week.start_date + 3.weeks,
+          date: date + 3.weeks,
         )
       end
     end
@@ -89,6 +89,7 @@ describe FinanceReportStaffMembersQuery do
 
   let(:venue) { FactoryGirl.create(:venue) }
   let(:week) { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current) - 1.week) }
+  let(:date) { week.start_date }
   let(:filter_by_weekly_pay_rate) { false }
   let(:created_at) { week.start_date + 1.day }
   let(:staff_member) do
@@ -158,7 +159,7 @@ describe FinanceReportStaffMembersQuery do
         FactoryGirl.create(
           :owed_hour,
           staff_member: staff_member,
-          week_start_date: week.start_date
+          date: date
         )
       end
 
@@ -179,7 +180,7 @@ describe FinanceReportStaffMembersQuery do
             :disabled,
             disabled_by: FactoryGirl.create(:user),
             staff_member: staff_member,
-            week_start_date: week.start_date
+            date: week.start_date
           )
         end
 

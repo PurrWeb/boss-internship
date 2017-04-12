@@ -99,12 +99,12 @@ describe AccruedHolidayEstimate do
       now
       # create owed hours this tax year
       week = RotaWeek.new(current_tax_year.start_date + 1.week)
-      start_date = week.start_date
+      date = week.start_date
 
-      travel_to(start_date - 1.week) do
+      travel_to(date - 1.week) do
         OwedHour.create!(
           minutes: owed_hours_minutes,
-          week_start_date: start_date,
+          date: date,
           staff_member: staff_member,
           creator: user,
           note: 'Test minutes'
@@ -123,12 +123,12 @@ describe AccruedHolidayEstimate do
 
       before do
         week = RotaWeek.new(last_tax_year.start_date)
-        start_date = week.start_date
+        date = week.start_date
 
-        travel_to(start_date - 1.week) do
+        travel_to(date - 1.week) do
           OwedHour.create!(
             minutes: owed_hour_previous_year,
-            week_start_date: start_date,
+            date: date,
             staff_member: staff_member,
             creator: user,
             note: 'Test minutes'

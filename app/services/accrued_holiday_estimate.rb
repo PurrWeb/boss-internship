@@ -24,8 +24,8 @@ class AccruedHolidayEstimate
         relation: OwedHour.enabled.where(staff_member: staff_member),
         start_value: tax_year.start_date,
         end_value: tax_year.end_date,
-        start_column_name: 'week_start_date',
-        end_column_name: 'week_start_date'
+        start_column_name: 'date',
+        end_column_name: 'date'
       ).all
 
       owed_hours = owed_hour_records.inject(0) do |sum, owed_hour|

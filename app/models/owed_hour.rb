@@ -5,34 +5,26 @@ class OwedHour < ActiveRecord::Base
   belongs_to :disabled_by, class_name: 'User', foreign_key: :disabled_by_user_id
   belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
 
-  validates :week_start_date, presence: true
+  validates :date, presence: true
   validates :minutes, numericality: { greater_than: 0 }
   validates :creator, presence: true
   validates :staff_member, presence: true
   validates :note, presence: true
   validates :disabled_by, presence: true, if: :disabled?
 
-  validate :week_start_date_valid
+  validate :date_valid
 
   attr_accessor :validate_as_creation
 
   #validation
-  def week_start_date_valid
-    return unless week_start_date.present?
+  def date_valid
+    return unless date.present?
+    date_past = date < RotaShiftDate.to_rota_date(Time.current)
 
-    week = RotaWeek.new(week_start_date)
-    if week.start_date != week_start_date
-      errors.add(:week_start_date, 'must be at start of week')
-    end
-
-    if validate_as_creation
-      if week.week_status == :past
-        errors.add(:base, "can't create owed hours in the past")
-        return
-      end
-    elsif week_start_date_changed? && week.week_status == :past
-      errors.add(:week_start_date, "can't be changed to date in the past")
-      return
+    if validate_as_creation && date_past
+      errors.add(:date, "can't create owed hours in the past")
+    elsif date_changed? && date_past
+      errors.add(:date, "can't be changed to date in the past")
     end
   end
 

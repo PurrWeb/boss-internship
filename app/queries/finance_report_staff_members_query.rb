@@ -97,8 +97,8 @@ class FinanceReportStaffMembersQuery
         ).
         or(
           InRangeInclusive.new(
-            start_column: enabled_owed_hours[:week_start_date],
-            end_column: enabled_owed_hours[:week_start_date],
+            start_column: enabled_owed_hours[:date],
+            end_column: enabled_owed_hours[:date],
             start_value: start_date,
             end_value: end_date
           ).arel
