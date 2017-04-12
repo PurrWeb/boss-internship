@@ -31,6 +31,8 @@ export default class CollapsibleCard extends React.Component {
         currentQuestion: question
       }
 
+      cardProps = Object.assign(cardProps, this.props);
+
       return(
         <QuestionCard { ...cardProps } key={ question.id } />
       )

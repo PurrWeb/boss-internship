@@ -5,6 +5,11 @@ class CreateQuestionnaireQuestions < ActiveRecord::Migration
       t.references :questionnaire, index: true, null: false
       t.string :type, null: false
       t.string :text, null: false
+      t.string :possible_values
+      t.string :pass_values
+      t.string :fail_values
+      t.integer :start_value
+      t.integer :end_value
       t.float :score
       t.float :scale_increment
       t.integer :scale_option_count

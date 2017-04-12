@@ -5,43 +5,61 @@ import _ from 'lodash';
 export default class Answer extends React.Component {
   static displayName = 'Answer';
 
-  setOptionForQuestion(e) {
-    // TODO: save state on answer reducer.
+  setOptionForQuestion(event) {
+    this.props.activateAnsweredState();
+
+    let questionnaireResponse = this.props.questionnaireResponse;
+    let answers = questionnaireResponse.answers;
+    let answerParams = {
+      questionId: this.props.currentQuestion.id,
+      selectedValue: event.target.value
+    };
+
+    this.props.setAnswer(answerParams);
   }
 
   renderBinaryQuestionAnswer() {
+    let question = this.props.currentQuestion;
+    let possibleValues = this.props.currentQuestion.possible_values;
+    let answerOptions = possibleValues.map(possibleValue => {
+      return(
+        <label className="boss-question__radio-label" key={ this.props.currentQuestion.id + possibleValue }>
+          <input
+            type="radio"
+            name={ this.props.currentQuestion.id }
+            value={ possibleValue }
+            className="boss-question__radio-button"
+            onChange={ this.setOptionForQuestion.bind(this) }
+          />
+          <span className="boss-question__radio-label-text">{ possibleValue }</span>
+        </label>
+      )
+    });
+
     return (
       <div className="boss-question__controls">
-        <label className="boss-question__radio-label">
-          <input type="radio" name="choice" value="yes" className="boss-question__radio-button" />
-          <span className="boss-question__radio-label-text">Yes</span>
-        </label>
-
-        <label className="boss-question__radio-label">
-          <input type="radio" name="choice" value="no" className="boss-question__radio-button" />
-          <span className="boss-question__radio-label-text">No</span>
-        </label>
+        { answerOptions }
       </div>
     )
   }
 
   renderScaleQuestionAnswer() {
     let question = this.props.currentQuestion;
-    let startScale = question.start_scale;
-    let endScale = question.end_scale;
-    let scaleRange = _.range(startScale, endScale + 1);
+    let startValue = question.start_value;
+    let endValue = question.end_value;
+    let scaleRange = _.range(startValue, endValue + 1);
 
-    let answerOptions = scaleRange.map(scale => {
+    let answerOptions = scaleRange.map(scaleValue => {
       return(
-        <label className="boss-question__radio-label">
+        <label className="boss-question__radio-label" key={ this.props.currentQuestion.id + scaleValue }>
           <input
             type="radio"
             name={ this.props.currentQuestion.id }
-            value={ scale }
+            value={ scaleValue }
             className="boss-question__radio-button"
             onChange={ this.setOptionForQuestion.bind(this) }
           />
-          <span className="boss-question__radio-label-text">{ scale }</span>
+          <span className="boss-question__radio-label-text">{ scaleValue }</span>
         </label>
       )
     });
@@ -56,7 +74,7 @@ export default class Answer extends React.Component {
   renderAnswer() {
     if (this.props.currentQuestion.type == 'BinaryQuestion') {
       return this.renderBinaryQuestionAnswer();
-    } else if (this.props.currentQuestion.type == 'BinaryQuestion') {
+    } else if (this.props.currentQuestion.type == 'ScaledQuestion') {
       return this.renderScaleQuestionAnswer();
     }
   }

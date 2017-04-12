@@ -4,18 +4,21 @@ import { bindActionCreators } from 'redux';
 
 import CollapsibleCard from '../components/collapsible-card';
 import { setInitialData } from '../actions/initial-load'
+import { setAnswer } from '../actions/answers'
 
 function mapStateToProps(state) {
   return {
     questionnaire: state.venueHealthCheck.get('questionnaire'),
     categories: state.venueHealthCheck.get('categories'),
-    questions: state.venueHealthCheck.get('questions')
+    questions: state.venueHealthCheck.get('questions'),
+    questionnaireResponse: state.venueHealthCheck.get('questionnaireResponse')
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    setInitialData
+    setInitialData,
+    setAnswer
   }, dispatch);
 }
 
@@ -28,7 +31,9 @@ export class QuestionnaireContainer extends React.Component {
     return {
       questionnaire: this.props.questionnaire,
       categories: this.props.categories,
-      questions: this.props.questions
+      questions: this.props.questions,
+      questionnaireResponse: this.props.questionnaireResponse,
+      setAnswer: this.props.setAnswer,
     };
   }
 
@@ -40,9 +45,10 @@ export class QuestionnaireContainer extends React.Component {
 
       let cardProps = {
         currentCategory: currentCategory,
-        categoryQuestions: categoryQuestions,
-        questionnaire: this.props.questionnaire
+        categoryQuestions: categoryQuestions
       }
+
+      cardProps = Object.assign(this.commonProps(), cardProps);
 
       return(
         <CollapsibleCard { ...cardProps } key={ currentCategory.id }>

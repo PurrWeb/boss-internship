@@ -1,11 +1,9 @@
 class Api::V1::QuestionnaireQuestionSerializer < ActiveModel::Serializer
-  attributes :id, :text, :questionnaire_category_id, :start_scale, :end_scale, :type
+  attributes :id, :text, :questionnaire_category_id, :start_value, :end_value, :type, :possible_values, :pass_values, :fail_values
 
-  def start_scale
-    1
-  end
+  def possible_values
+    return [] if object.possible_values.blank?
 
-  def end_scale
-    5
+    object.possible_values.split(',').map(&:strip)
   end
 end
