@@ -38,11 +38,10 @@ class GenerateYearlyReportData
 
     owed_hours = InRangeQuery.new(
       relation: staff_member_owed_hours,
-      start_value: RotaWeek.new(tax_year.start_date).start_date,
-      end_value: RotaWeek.new(tax_year.end_date).start_date,
-      start_column_name: 'week_start_date',
-      end_column_name: 'week_start_date',
-      include_boundaries: [:start]
+      start_value: tax_year.start_date,
+      end_value: tax_year.end_date,
+      start_column_name: 'date',
+      end_column_name: 'date'
     ).all
 
     hours_acceptance_periods.each do |hours_acceptance_period|

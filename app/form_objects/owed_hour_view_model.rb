@@ -4,7 +4,7 @@ class OwedHourViewModel < Disposable::Twin
   feature Sync
   feature Changed
 
-  property :week_start_date
+  property :date
   property :note
   property :hours, virtual: true
   property :minutes, virtual: false

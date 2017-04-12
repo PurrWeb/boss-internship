@@ -124,13 +124,13 @@ class OwedHoursController < ApplicationController
         :minutes,
         :note
       ).merge(
-        week_start_date: week_start_date_from_params(action),
+        date: date_from_params(action),
       )
   end
 
-  def week_start_date_from_params(action)
-    if params["#{action}_owed_hour"]['week_start_date'].present?
-      UIRotaDate.parse(params["#{action}_owed_hour"]['week_start_date'])
+  def date_from_params(action)
+    if params["#{action}_owed_hour"]['date'].present?
+      UIRotaDate.parse(params["#{action}_owed_hour"]['date'])
     end
   end
 end

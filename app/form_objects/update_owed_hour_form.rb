@@ -8,11 +8,10 @@ class UpdateOwedHourForm < Form
   validate :date_valid_for_update
 
   def date_valid_for_update
-    return unless week_start_date.present? && changed?(:week_start_date)
+    return unless date.present? && changed?(:date)
 
-    week = RotaWeek.new(week_start_date)
-    if week.week_status == :past
-      errors.add(:week_start_date, "can't be changed to date in the past")
+    if (date < RoteShiftDate.to_rota_date(Time.current))
+      errors.add(:date, "can't be changed to date in the past")
     end
   end
 end
