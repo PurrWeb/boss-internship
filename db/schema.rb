@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170323114401) do
+ActiveRecord::Schema.define(version: 20170412133007) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -425,18 +425,23 @@ ActiveRecord::Schema.define(version: 20170323114401) do
   add_index "names", ["surname"], name: "index_names_on_surname", using: :btree
 
   create_table "owed_hours", force: :cascade do |t|
-    t.date     "week_start_date",                           null: false
-    t.integer  "minutes",                     limit: 4,     null: false
-    t.integer  "creator_user_id",             limit: 4,     null: false
-    t.integer  "staff_member_id",             limit: 4,     null: false
-    t.text     "note",                        limit: 65535, null: false
+    t.date     "date",                                                     null: false
+    t.integer  "minutes",                     limit: 4,                    null: false
+    t.integer  "creator_user_id",             limit: 4,                    null: false
+    t.integer  "staff_member_id",             limit: 4,                    null: false
+    t.text     "note",                        limit: 65535,                null: false
     t.integer  "parent_owed_hour_id",         limit: 4
     t.datetime "disabled_at"
     t.integer  "disabled_by_user_id",         limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "frozen_by_finance_report_id", limit: 4
+    t.boolean  "require_times",                             default: true, null: false
+    t.datetime "starts_at"
+    t.datetime "ends_at"
   end
+
+  add_index "owed_hours", ["date"], name: "index_owed_hours_on_date", using: :btree
 
   create_table "pay_rates", force: :cascade do |t|
     t.string  "pay_rate_type",    limit: 255,                null: false
