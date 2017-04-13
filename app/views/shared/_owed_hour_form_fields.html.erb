@@ -1,6 +1,6 @@
 <%= form.text_field(
     :date,
-    value: form.object.date && UIRotaDate.format(form.object.date),
+    value: UIRotaDate.format(form.object.date || RotaShiftDate.to_rota_date(Time.current)),
     label: 'Date',
     class: 'date-picker'
   ) %>
