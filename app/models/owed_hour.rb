@@ -60,6 +60,10 @@ class OwedHour < ActiveRecord::Base
     end
   end
 
+  def has_times?
+    starts_at.present? && ends_at.present?
+  end
+
   def editable?
     staff_member.enabled? && !frozen?
   end
