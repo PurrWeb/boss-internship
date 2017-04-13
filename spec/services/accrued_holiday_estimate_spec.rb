@@ -96,19 +96,31 @@ describe AccruedHolidayEstimate do
     let(:owed_hours_minutes) { owed_hours * 60 }
 
     before do
+      minutes_created = 0
       now
       # create owed hours this tax year
       week = RotaWeek.new(current_tax_year.start_date + 1.week)
       date = week.start_date
+      rota_shift_date = RotaShiftDate.new(date)
 
       travel_to(date - 1.week) do
-        OwedHour.create!(
-          minutes: owed_hours_minutes,
-          date: date,
-          staff_member: staff_member,
-          creator: user,
-          note: 'Test minutes'
-        )
+        while minutes_created < owed_hours_minutes
+          minutes_to_create = [1200, owed_hours_minutes - minutes_created].min
+
+          OwedHour.create!(
+            minutes: minutes_to_create,
+            date: date,
+            staff_member: staff_member,
+            creator: user,
+            starts_at: rota_shift_date.start_time,
+            ends_at: rota_shift_date.start_time + minutes_to_create.minutes,
+            note: 'Test minutes'
+          )
+
+          date += 1.day
+          rota_shift_date = RotaShiftDate.new(date)
+          minutes_created += minutes_to_create
+        end
       end
     end
 
@@ -119,20 +131,34 @@ describe AccruedHolidayEstimate do
     context 'user also has owed hours in previous year' do
       # Should not increase the year count
       let(:owed_hour_previous_year) { 70 }
+      let(:owed_minutes_previous_year) { owed_hour_previous_year * 60 }
       let(:last_tax_year) { TaxYear.new(current_tax_year.start_date - 2.days) }
 
       before do
+        minutes_created = 0
+
         week = RotaWeek.new(last_tax_year.start_date)
         date = week.start_date
+        rota_shift_date = RotaShiftDate.new(date)
 
         travel_to(date - 1.week) do
-          OwedHour.create!(
-            minutes: owed_hour_previous_year,
-            date: date,
-            staff_member: staff_member,
-            creator: user,
-            note: 'Test minutes'
-          )
+          while minutes_created < owed_minutes_previous_year
+            minutes_to_create = [1200, owed_minutes_previous_year - minutes_created].min
+
+            OwedHour.create!(
+              minutes: minutes_to_create,
+              date: date,
+              staff_member: staff_member,
+              creator: user,
+              note: 'Test minutes',
+              starts_at: rota_shift_date.start_time,
+              ends_at: rota_shift_date.start_time + minutes_to_create.minutes
+            )
+
+            date += 1.day
+            rota_shift_date = RotaShiftDate.new(date)
+            minutes_created += minutes_to_create
+          end
         end
       end
 

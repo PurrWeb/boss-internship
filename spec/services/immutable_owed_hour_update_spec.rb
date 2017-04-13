@@ -3,12 +3,15 @@ require 'rails_helper'
 RSpec.describe 'ImmutableOwedHourUpdate service'  do
   let(:requester) { FactoryGirl.create(:user) }
   let(:date) { RotaShiftDate.to_rota_date(Time.current) }
+  let(:rota_shift_date) { RotaShiftDate.new(date) }
   let(:minutes) { 50 }
   let(:owed_hour) do
     FactoryGirl.create(
       :owed_hour,
       date: date,
-      minutes: minutes
+      minutes: minutes,
+      starts_at: rota_shift_date.start_time,
+      ends_at: rota_shift_date.start_time + minutes.minutes
     )
   end
   let(:staff_member) { owed_hour.staff_member }
@@ -64,12 +67,15 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
   end
 
   context 'owed_hour params have changed' do
+    let(:new_minutes) { 10 }
     let(:owed_hour_params) do
       {
         date: owed_hour.date,
-        minutes: 10,
+        minutes: new_minutes,
         note: owed_hour.note,
-        staff_member: owed_hour.staff_member
+        staff_member: owed_hour.staff_member,
+        starts_at: owed_hour.starts_at,
+        ends_at: owed_hour.starts_at + new_minutes.minutes
       }
     end
 
@@ -104,7 +110,7 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
   context 'params are invalid' do
     let(:owed_hour_params) do
       {
-        week_start_date: nil,
+        date: nil,
         minutes: 30,
         note: owed_hour.note,
         staff_member: owed_hour.staff_member

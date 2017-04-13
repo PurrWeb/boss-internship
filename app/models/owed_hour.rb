@@ -13,6 +13,7 @@ class OwedHour < ActiveRecord::Base
   validates :disabled_by, presence: true, if: :disabled?
 
   validate :date_valid
+  validate :times_valid
 
   attr_accessor :validate_as_creation
 
@@ -25,6 +26,26 @@ class OwedHour < ActiveRecord::Base
       errors.add(:date, "can't create owed hours in the past")
     elsif date_changed? && date_past
       errors.add(:date, "can't be changed to date in the past")
+    end
+  end
+
+  #validation
+  def times_valid
+    return unless date.present?
+    return unless require_times
+    shift_date = RotaShiftDate.new(date)
+
+    if !starts_at.present?
+      errors.add(:starts_at, 'must by supplied')
+    elsif !ends_at.present?
+      errors.add(:ends_at, 'must be supplied')
+    end
+
+    if starts_at.present? && !shift_date.contains_time?(starts_at)
+      errors.add(:starts_at, 'not valid for date')
+    end
+    if ends_at.present? && !shift_date.contains_time?(ends_at)
+      errors.add(:ends_at, 'not valid for date')
     end
   end
 

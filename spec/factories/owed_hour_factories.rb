@@ -5,6 +5,8 @@ FactoryGirl.define do
     association :creator, factory: :user
     note 'They just needed the cash'
     minutes 40
+    starts_at { RotaShiftDate.new(date).start_time }
+    ends_at { RotaShiftDate.new(date).start_time + 40.minutes }
 
     trait :disabled do
       disabled_at 2.weeks.ago
