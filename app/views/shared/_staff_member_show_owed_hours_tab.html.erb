@@ -9,7 +9,11 @@
   </div>
 </div>
 
-<% owed_hours = OwedHour.enabled.where(staff_member: staff_member).all %>
+<% owed_hours = OwedHour.
+    enabled.
+    where(staff_member: staff_member).
+    includes(creator: [:name]).
+    all %>
 <% if owed_hours.present? %>
   <% owed_hours_by_week = owed_hours.group_by { |owed_hour| RotaWeek.new(owed_hour.week_start_date)  }.sort_by { |week, hours| week } %>
   <% owed_hours_by_week.each do |week, hours| %>
