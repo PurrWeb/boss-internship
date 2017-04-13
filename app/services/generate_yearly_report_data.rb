@@ -41,7 +41,8 @@ class GenerateYearlyReportData
       start_value: tax_year.start_date,
       end_value: tax_year.end_date,
       start_column_name: 'date',
-      end_column_name: 'date'
+      end_column_name: 'date',
+      include_boundaries: [:start]
     ).all
 
     hours_acceptance_periods.each do |hours_acceptance_period|
