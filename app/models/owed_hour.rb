@@ -14,6 +14,7 @@ class OwedHour < ActiveRecord::Base
 
   validate :date_valid
   validate :times_valid
+  validate :minutes_valid_for_times
 
   attr_accessor :validate_as_creation
 
@@ -46,6 +47,16 @@ class OwedHour < ActiveRecord::Base
     end
     if ends_at.present? && !shift_date.contains_time?(ends_at)
       errors.add(:ends_at, 'not valid for date')
+    end
+  end
+
+  #validatation
+  def minutes_valid_for_times
+    return unless minutes.present? && starts_at.present? && ends_at.present?
+
+    times_delta_minutes = (ends_at - starts_at) / 60
+    if times_delta_minutes != minutes
+      errors.add(:minutes, 'must match times')
     end
   end
 
