@@ -5,35 +5,63 @@ class OwedHour < ActiveRecord::Base
   belongs_to :disabled_by, class_name: 'User', foreign_key: :disabled_by_user_id
   belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
 
-  validates :week_start_date, presence: true
+  validates :date, presence: true
   validates :minutes, numericality: { greater_than: 0 }
   validates :creator, presence: true
   validates :staff_member, presence: true
   validates :note, presence: true
   validates :disabled_by, presence: true, if: :disabled?
 
-  validate :week_start_date_valid
+  validate :date_valid
+  validate :times_valid
+  validate :minutes_valid_for_times
 
   attr_accessor :validate_as_creation
 
   #validation
-  def week_start_date_valid
-    return unless week_start_date.present?
+  def date_valid
+    return unless date.present?
+    date_past = date < RotaShiftDate.to_rota_date(Time.current)
 
-    week = RotaWeek.new(week_start_date)
-    if week.start_date != week_start_date
-      errors.add(:week_start_date, 'must be at start of week')
+    if validate_as_creation && date_past
+      errors.add(:date, "can't create owed hours in the past")
+    elsif date_changed? && date_past
+      errors.add(:date, "can't be changed to date in the past")
+    end
+  end
+
+  #validation
+  def times_valid
+    return unless date.present?
+    return unless require_times
+    shift_date = RotaShiftDate.new(date)
+
+    if !starts_at.present?
+      errors.add(:starts_at, 'must by supplied')
+    elsif !ends_at.present?
+      errors.add(:ends_at, 'must be supplied')
     end
 
-    if validate_as_creation
-      if week.week_status == :past
-        errors.add(:base, "can't create owed hours in the past")
-        return
-      end
-    elsif week_start_date_changed? && week.week_status == :past
-      errors.add(:week_start_date, "can't be changed to date in the past")
-      return
+    if starts_at.present? && !shift_date.contains_time?(starts_at)
+      errors.add(:starts_at, 'not valid for date')
     end
+    if ends_at.present? && !shift_date.contains_time?(ends_at)
+      errors.add(:ends_at, 'not valid for date')
+    end
+  end
+
+  #validatation
+  def minutes_valid_for_times
+    return unless minutes.present? && starts_at.present? && ends_at.present?
+
+    times_delta_minutes = (ends_at - starts_at) / 60
+    if times_delta_minutes != minutes
+      errors.add(:minutes, 'must match times')
+    end
+  end
+
+  def has_times?
+    starts_at.present? && ends_at.present?
   end
 
   def editable?

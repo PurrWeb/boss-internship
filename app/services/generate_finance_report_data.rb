@@ -101,9 +101,12 @@ class GenerateFinanceReportData
 
     report.holiday_days_count = holiday_days_count
 
-    owed_hours = OwedHoursInWeekQuery.new(
+    owed_hours = InRangeQuery.new(
       relation: OwedHour.enabled.where(staff_member: staff_member),
-      week: week
+      start_value: week.start_date,
+      end_value: week.end_date,
+      start_column_name: 'date',
+      end_column_name: 'date'
     ).all
 
     owed_hours_minute_count = owed_hours.inject(0) do |sum, owed_hour|

@@ -9,9 +9,13 @@
   </div>
 </div>
 
-<% owed_hours = OwedHour.enabled.where(staff_member: staff_member).all %>
+<% owed_hours = OwedHour.
+    enabled.
+    where(staff_member: staff_member).
+    includes(creator: [:name]).
+    all %>
 <% if owed_hours.present? %>
-  <% owed_hours_by_week = owed_hours.group_by { |owed_hour| RotaWeek.new(owed_hour.week_start_date)  }.sort_by { |week, hours| week } %>
+  <% owed_hours_by_week = owed_hours.group_by { |owed_hour| RotaWeek.new(owed_hour.date)  }.sort_by { |week, hours| week } %>
   <% owed_hours_by_week.each do |week, hours| %>
     <p><strong>Mon <%= week.start_date %> - Sun <%= week.end_date %></strong></p>
     <% total_minutes = hours.inject(0) { |sum, hours| sum + hours.minutes } %>
@@ -19,6 +23,8 @@
     <table class="table">
       <thead>
         <tr>
+          <th>Date</th>
+          <th>Times</th>
           <th>Duration (Hours)</th>
           <th>Duration (Minutes)</th>
           <th>Created By</th>
@@ -30,6 +36,20 @@
         <% hours.each do |owed_hour| %>
           <% hours_helper = HoursHelper.new(total_minutes: owed_hour.minutes) %>
           <tr>
+            <td>
+              <% if owed_hour.has_times? %>
+                <%= owed_hour.date.to_date.to_s(:human_date) %>
+              <% else %>
+                <%= 'N&nbsp;/&nbsp;A'.html_safe %>
+              <% end %>
+            </td>
+            <td>
+              <% if owed_hour.has_times? %>
+                <%= "#{owed_hour.starts_at.to_s(:human_time_no_date)} - #{owed_hour.ends_at.to_s(:human_time_no_date)}" %>
+              <% else %>
+                <%= 'N&nbsp;/&nbsp;A'.html_safe %>
+              <% end %>
+            </td>
             <td><%= hours_helper.hours %></td>
             <td><%= hours_helper.minutes %></td>
             <td><%= owed_hour.creator.full_name %> on <%= owed_hour.created_at.to_s(:human_date) %></td>

@@ -52,33 +52,18 @@ class OwedHoursController < ApplicationController
     owed_hour = OwedHour.enabled.find(params[:id])
     authorize! :manage, owed_hour
 
+    new_owed_hour = OwedHour.new(
+      owed_hour.attributes.
+        merge(id: nil, creator: current_user)
+    )
+
     update_owed_hour_form = UpdateOwedHourForm.new(
-      OwedHourViewModel.new(owed_hour),
+      OwedHourViewModel.new(new_owed_hour),
       owed_hour_params(:update)
     )
 
     if update_owed_hour_form.valid?
-      normalised_update_attributes = {}
-
-       update_owed_hour_form.save do |attributes|
-        attributes.each do |key, value|
-          next if [:minutes, :hours].include?(key.to_sym)
-          normalised_update_attributes[key.to_sym] = value
-        end
-
-        hours_helper = HoursHelper.from_hours_and_minutes(
-          hours: attributes[:hours],
-          minutes: attributes[:minutes]
-        )
-        normalised_update_attributes[:minutes] = hours_helper.total_minutes
-      end
-      new_owed_hour = OwedHour.new(
-        normalised_update_attributes.
-          merge(
-            creator: current_user,
-            staff_member: owed_hour.staff_member
-          )
-      )
+      update_owed_hour_form.sync
 
       ImmutableOwedHourUpdate.new(
         requester: current_user,
@@ -120,17 +105,18 @@ class OwedHoursController < ApplicationController
     params.
       require("#{action}_owed_hour").
       permit(
-        :hours,
-        :minutes,
+        :date,
+        :starts_at_offset,
+        :ends_at_offset,
         :note
       ).merge(
-        week_start_date: week_start_date_from_params(action),
+        date: date_from_params(action),
       )
   end
 
-  def week_start_date_from_params(action)
-    if params["#{action}_owed_hour"]['week_start_date'].present?
-      UIRotaDate.parse(params["#{action}_owed_hour"]['week_start_date'])
+  def date_from_params(action)
+    if params["#{action}_owed_hour"]['date'].present?
+      UIRotaDate.parse(params["#{action}_owed_hour"]['date'])
     end
   end
 end

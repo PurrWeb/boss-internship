@@ -1,9 +1,28 @@
 <%= form.text_field(
-    :week_start_date,
-    value: form.object.week_start_date && UIRotaDate.format(form.object.week_start_date),
-    label: 'Week',
+    :date,
+    value: UIRotaDate.format(form.object.date || RotaShiftDate.to_rota_date(Time.current)),
+    label: 'Date',
     class: 'date-picker'
   ) %>
-<%= form.number_field(:hours, min: 0, max: 119) %>
-<%= form.number_field(:minutes, min: 0, max: 59) %>
+
+<%= form.select(
+      :starts_at_offset,
+      options_for_select(
+        form.object.possible_time_values,
+        form.object.starts_at_offset
+      ),
+      {},
+      class: 'chosen-select'
+    ) %>
+
+<%= form.select(
+      :ends_at_offset,
+      options_for_select(
+        form.object.possible_time_values,
+        form.object.ends_at_offset
+      ),
+      {},
+      class: 'chosen-select'
+    ) %>
+
 <%= form.text_area :note %>

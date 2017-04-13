@@ -4,18 +4,20 @@ class OwedHourViewModel < Disposable::Twin
   feature Sync
   feature Changed
 
-  property :week_start_date
+  property :date
   property :note
-  property :hours, virtual: true
-  property :minutes, virtual: false
+  property :starts_at_offset, virtual: true
+  property :ends_at_offset, virtual: true
 
   def initialize(model, params={})
     super(model, params)
-    total_minutes = model.minutes || 0
-    hours_helper = HoursHelper.new(total_minutes: total_minutes)
-    self.hours = hours_helper.hours
-    self.minutes = hours_helper.minutes
-    @total_minutes = total_minutes
+    rota_shift_date = RotaShiftDate.new(model.date || RotaShiftDate.to_rota_date(Time.current))
+    if model.starts_at.present?
+      self.starts_at_offset = ((model.starts_at - rota_shift_date.start_time) / 60).floor
+    end
+    if model.ends_at.present?
+      self.ends_at_offset = ((model.ends_at - rota_shift_date.start_time) / 60).floor
+    end
   end
 
   def id
@@ -26,21 +28,22 @@ class OwedHourViewModel < Disposable::Twin
     model.editable?
   end
 
-  def hours=(val)
-    super(Integer(val)) if val.present?
-  end
-
-  def minutes=(val)
-    super(Integer(val)) if val.present?
-  end
-
   def sync
     super
-    hours_helper = HoursHelper.from_hours_and_minutes(
-      hours: self.hours,
-      minutes: self.minutes
+    starts_at = OwedHourForm.real_date_from_form_values(
+      date: date,
+      minute_offset: Integer(starts_at_offset)
     )
-    model.minutes = hours_helper.total_minutes
+    ends_at = OwedHourForm.real_date_from_form_values(
+      date: date,
+      minute_offset: Integer(ends_at_offset)
+    )
+
+    model.starts_at = starts_at
+    model.ends_at = ends_at
+    if starts_at.present? && ends_at.present?
+      model.minutes = (ends_at - starts_at) / 60
+    end
   end
 
   def save
