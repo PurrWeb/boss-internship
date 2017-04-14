@@ -67,10 +67,28 @@ class StaffMembersController < ApplicationController
         OwedHourViewModel.new(OwedHour.new)
       )
 
+      tax_year = TaxYear.new(Time.current.to_date)
+
+      holidays = HolidayInTaxYearQuery.new(
+       relation: staff_member.active_holidays,
+       tax_year: tax_year
+      ).all.includes(:frozen_by)
+
+      paid_holiday_days = holidays.paid.to_a.sum { |holiday| holiday.days }
+      unpaid_holiday_days = holidays.unpaid.to_a.sum { |holiday| holiday.days }
+      estimated_accrued_holiday_days = AccruedHolidayEstimate.new(
+        staff_member: staff_member,
+        tax_year: tax_year
+      ).call
+
       render locals: {
         staff_member: staff_member,
         active_tab: active_tab_from_params,
-        holiday: Holiday.new,
+        new_holiday: Holiday.new,
+        holidays: holidays,
+        paid_holiday_days: paid_holiday_days,
+        unpaid_holiday_days: unpaid_holiday_days,
+        estimated_accrued_holiday_days: estimated_accrued_holiday_days,
         owed_hour_form: owed_hour_form
       }
     else
