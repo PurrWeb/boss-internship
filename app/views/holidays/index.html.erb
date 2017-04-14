@@ -7,7 +7,7 @@
 <%= javascript_tag do %>
   var holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: holidays } %>;
 
-  var staffMembers = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
+  var staffMembers = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members.includes(:work_venues) } %>;
 
   var venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: Venue.all } %>;
 
