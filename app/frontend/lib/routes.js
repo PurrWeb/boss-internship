@@ -64,11 +64,15 @@ export const appRoutes = {
         }
         return "/staff_members/" + staffMemberId;
     },
-    staffMemberHolidays: function(staffMemberId){
+    staffMemberHolidays: function(staffMemberId, startDate, endDate){
         if (staffMemberId === undefined) {
             throw new Error("No staff member id supplied to appRoutes.staffMemberHolidays")
         }
-        return "/staff_members/" + staffMemberId + "?tab=holidays";
+        let result = "/staff_members/" + staffMemberId + "?tab=holidays";
+        if(startDate !== undefined && endDate !== undefined){
+          result = result + "&holiday_start_date=" + utils.formatRotaUrlDate(startDate) + "&holiday_end_date=" + utils.formatRotaUrlDate(endDate);
+        }
+        return result;
     },
     holidaysCsv: function(options){
         var date = oFetch(options, "date");

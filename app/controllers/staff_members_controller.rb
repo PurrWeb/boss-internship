@@ -68,7 +68,6 @@ class StaffMembersController < ApplicationController
       )
 
       tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
-
       if holiday_start_date_from_params.present? && holiday_end_date_from_params.present?
         holiday_start_date = holiday_start_date_from_params
         holiday_end_date = holiday_end_date_from_params
