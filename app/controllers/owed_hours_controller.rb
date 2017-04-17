@@ -102,6 +102,11 @@ class OwedHoursController < ApplicationController
 
   private
   def owed_hour_params(action)
+    # Had to work around rails not typecasting starts_at_offset and ends_at_offset
+    # to integer
+    starts_at_offset_from_params = params["#{action}_owed_hour"]['starts_at_offset']
+    ends_at_offset_from_params = params["#{action}_owed_hour"]['ends_at_offset']
+
     params.
       require("#{action}_owed_hour").
       permit(
@@ -111,6 +116,8 @@ class OwedHoursController < ApplicationController
         :note
       ).merge(
         date: date_from_params(action),
+        starts_at_offset: starts_at_offset_from_params.present? && Integer(starts_at_offset_from_params),
+        ends_at_offset: ends_at_offset_from_params.present? && Integer(ends_at_offset_from_params)
       )
   end
 
