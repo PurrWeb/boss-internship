@@ -29,7 +29,6 @@ class OwedHourForm < Form
 
   def sync
     super
-
   end
 
   #validation
