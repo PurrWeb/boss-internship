@@ -29,7 +29,6 @@ class OwedHourForm < Form
 
   def sync
     super
-
   end
 
   #validation
@@ -41,7 +40,7 @@ class OwedHourForm < Form
 
   #validation
   def time_order
-    if starts_at_offset.present? && ends_at_offset.present? && !(ends_at_offset > starts_at_offset)
+    if starts_at_offset.present? && ends_at_offset.present? && (ends_at_offset <= starts_at_offset)
       errors.add(:ends_at_offset, 'must be after starts_at')
     end
   end
