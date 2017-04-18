@@ -22,15 +22,6 @@ ActiveRecord::Schema.define(version: 20170803110533) do
     t.text     "address",    limit: 65535
   end
 
-  create_table "answers", force: :cascade do |t|
-    t.integer "question_id",               limit: 4
-    t.integer "questionnaire_response_id", limit: 4
-    t.string  "selected_value",            limit: 255
-  end
-
-  add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
-  add_index "answers", ["questionnaire_response_id"], name: "index_answers_on_questionnaire_response_id", using: :btree
-
   create_table "api_key_transitions", force: :cascade do |t|
     t.string   "to_state",    limit: 255,   null: false
     t.text     "metadata",    limit: 65535

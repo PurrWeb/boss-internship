@@ -24,7 +24,9 @@ class VenueHealthCheckController < ApplicationController
     render locals: {
       questionnaire: questionnaire,
       questionnaire_questions: questionnaire_questions,
-      questionnaire_categories: questionnaire_categories
+      questionnaire_categories: questionnaire_categories,
+      venues: @accessible_venues,
+      access_token: current_user.current_access_token || AccessToken.create_web!(user: current_user)
     }
   end
 

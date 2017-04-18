@@ -35,6 +35,7 @@
     <%= render 'layouts/favicon' %>
     <%= csrf_meta_tags %>
   </head>
+
   <body class="<%= render_v2_layout? ? 'boss-body' : 'boss2-body' %>">
     <header class="boss-page-header">
       <% if render_navigation? %>

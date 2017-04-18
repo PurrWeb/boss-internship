@@ -12,7 +12,7 @@ export default class Answer extends React.Component {
     let answers = questionnaireResponse.answers;
     let answerParams = {
       questionId: this.props.currentQuestion.id,
-      selectedValue: event.target.value
+      value: event.target.value
     };
 
     this.props.setAnswer(answerParams);

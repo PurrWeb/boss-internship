@@ -1,15 +1,5 @@
-<% if content_for?(:full_width_section) %>
-  <div class="boss-page-main__dashboard">
-    <div class="boss-page-main__inner">
-      <%= yield :full_width_section %>
-    </div>
-  </div>
-<% end %>
-
-<div class="boss-page-main__content">
-  <%= render 'layouts/messages' %>
-    <main class="boss-page-main">
-      <%= yield %>
-    </main>
-  <%= insert_paloma_hook %>
-</div>
+<%= render 'layouts/messages' %>
+  <main class="boss-page-main">
+    <%= yield %>
+  </main>
+<%= insert_paloma_hook %>

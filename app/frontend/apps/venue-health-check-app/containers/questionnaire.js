@@ -3,28 +3,44 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import CollapsibleCard from '../components/collapsible-card';
+import VenueSelector from '../components/venue-selector';
+import QuestionnaireActions from '../components/questionnaire-actions'
+
 import { setInitialData } from '../actions/initial-load'
-import { setAnswer } from '../actions/answers'
+import { setAnswer, saveAnswers } from '../actions/answers'
 
 function mapStateToProps(state) {
   return {
     questionnaire: state.venueHealthCheck.get('questionnaire'),
     categories: state.venueHealthCheck.get('categories'),
     questions: state.venueHealthCheck.get('questions'),
-    questionnaireResponse: state.venueHealthCheck.get('questionnaireResponse')
+    answers: state.venueHealthCheck.get('answers'),
+    venues: state.venueHealthCheck.get('venues'),
+    currentVenue: state.venueHealthCheck.get('currentVenue'),
+    questionnaireResponse: state.venueHealthCheck.get('questionnaireResponse'),
+    answerCount: state.venueHealthCheck.get('answerCount'),
+    questionCount: state.venueHealthCheck.get('questionCount'),
+    frontend: state.venueHealthCheck.get('frontend'),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     setInitialData,
-    setAnswer
+    setAnswer,
+    saveAnswers
   }, dispatch);
 }
 
 export class QuestionnaireContainer extends React.Component {
   componentWillMount() {
     this.props.setInitialData(window.boss.venueHealthCheck);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.frontend.saved) {
+      location.href = `/venue_health_check/${nextProps.currentVenue.name}/report`
+    }
   }
 
   commonProps() {
@@ -34,6 +50,10 @@ export class QuestionnaireContainer extends React.Component {
       questions: this.props.questions,
       questionnaireResponse: this.props.questionnaireResponse,
       setAnswer: this.props.setAnswer,
+      saveAnswers: this.props.saveAnswers,
+      venues: this.props.venues,
+      currentVenue: this.props.currentVenue,
+      frontend: this.props.frontend
     };
   }
 
@@ -59,9 +79,21 @@ export class QuestionnaireContainer extends React.Component {
 
   render() {
     return (
-      <div className="boss-page-main__inner">
-        { this.renderCollapsibleCardComponent() }
-      </div>
+      <main className="boss-page-main">
+        <div className="boss-page-main__dashboard">
+          <div className="boss-page-main__inner">
+            <VenueSelector { ...this.props } />
+
+            <QuestionnaireActions { ...this.props } />
+          </div>
+        </div>
+
+        <div className="boss-page-main__content">
+          <div className="boss-page-main__inner">
+            { this.renderCollapsibleCardComponent() }
+          </div>
+        </div>
+      </main>
     );
   }
 }

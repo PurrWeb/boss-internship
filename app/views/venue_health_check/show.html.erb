@@ -4,28 +4,19 @@
   venueHealthCheck.questionnaire = <%= Api::V1::QuestionnaireSerializer.new(questionnaire).to_json.html_safe %>;
   venueHealthCheck.questions = <%= api_v1_collection_json(questionnaire_questions, Api::V1::QuestionnaireQuestionSerializer) %>;
   venueHealthCheck.categories = <%= api_v1_collection_json(questionnaire_categories, Api::V1::QuestionnaireCategorySerializer) %>;
+  venueHealthCheck.venues = <%= api_v1_collection_json(venues, Api::V1::VenueSerializer) %>;
+  venueHealthCheck.currentVenue = <%= Api::V1::VenueSerializer.new(@venue).to_json.html_safe %>;
+  venueHealthCheck.accessToken = "<%= access_token.token %>";
 
   window.boss = window.boss || {};
   window.boss.venueHealthCheck = venueHealthCheck;
 <% end %>
 
 <% content_for :full_width_section do %>
-  <div class="boss-page-dashboard__group">
-    <h1 class="boss-page-dashboard__title">Magenta health check</h1>
-    <div class="boss-page-dashboard__controls-group">
-      <%= form_tag venue_health_check_index_path, method: :get, class: 'boss-form' do %>
-        <div class="boss-form__row boss-form__row_position_last">
-          <div class="boss-form__control">
-            <p class="boss-form__label boss-form__label_type_icon-venue"><span class="boss-form__label-text">Choose Venue</span></p>
-            <div class="boss-form__select">
-              <p class="boss-form__select-value"><%= @venue.name %></p>
-              <%= select_tag "filter-area", options_from_collection_for_select(@accessible_venues, "id", "name", @venue.id), { name: 'venue_id' } %>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  </div>
+
 <% end %>
 
 <%= react_component('VenueHealthCheckApp') %>
+
+<%= javascript_include_tag 'http://d3js.org/d3.v3.min.js', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'd3.completeness-chart', 'data-turbolinks-track' => true %>

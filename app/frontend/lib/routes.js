@@ -106,6 +106,12 @@ export const appRoutes = {
 }
 
 const apiRoutes = {
+    saveResponse: {
+        getPath: function(questionnaireId) {
+            return "/questionnaires/" + questionnaireId + "/responses";
+        },
+        method: 'POST'
+    },
     addShift: {
         getPath: function(venueId, date){
             return "venues/" + venueId + "/rotas/" + utils.formatDateForApi(date) + "/rota_shifts"

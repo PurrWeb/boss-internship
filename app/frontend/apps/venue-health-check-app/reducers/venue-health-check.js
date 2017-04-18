@@ -5,7 +5,19 @@ const initialState = Immutable.Map({
   questionnaire: {},
   questions: [],
   categories: [],
-  questionnaireResponse: {}
+  venues: [],
+  questionnaireResponse: {
+    questionnaireId: null,
+  },
+  answers: [],
+  questionCount: 0,
+  answerCount: 0,
+  frontend: {
+    loading: true,
+    saving: false,
+    saved: false,
+    failed: false
+  }
 });
 
 const venueHealthCheck = (state = initialState, action) => {
@@ -22,9 +34,17 @@ const venueHealthCheck = (state = initialState, action) => {
         questionnaireId: action.initialData.questionnaire.id,
         answers: []
       }
+    ).set(
+      'venues', action.initialData.venues
+    ).set(
+      'currentVenue', action.initialData.currentVenue
+    ).set(
+      'questionCount', action.initialData.questions.length
+    ).set(
+      'frontend', Object.assign({}, state.get('frontend'), { loading: true })
     );
   case constants.SET_ANSWER:
-    let answers = state.get('questionnaireResponse').answers;
+    let answers = state.get('answers');
     let existingAnswer = _.find(answers, answer => {
       return answer.questionId == action.answerParams.questionId;
     });
@@ -37,7 +57,20 @@ const venueHealthCheck = (state = initialState, action) => {
       answers.push(action.answerParams);
     }
 
-    return state;
+    return state.set('answers', answers).set('answerCount', answers.length);
+
+  case constants.SAVE_ANSWERS_REQUEST:
+    return state.set(
+      'frontend', Object.assign({}, state.get('frontend'), { saving: true })
+    );
+  case constants.SAVE_ANSWERS_RECEIVE:
+    return state.set(
+      'frontend', Object.assign({}, state.get('frontend'), { saving: false, saved: true })
+    );
+  case constants.SAVE_ANSWERS_FAILURE:
+    return state.set(
+      'frontend', Object.assign({}, state.get('frontend'), { saving: false, failed: true })
+    );
   default:
     return state;
   }

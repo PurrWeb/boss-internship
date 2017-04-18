@@ -1,5 +1,6 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import { apiMiddleware } from 'redux-api-middleware';
 
 export function configureStore(reducers) {
   const reducer = combineReducers({
@@ -14,7 +15,7 @@ export function configureStore(reducers) {
         // Specify here name, actionsBlacklist, actionsCreators and other options
       }) : compose;
 
-  const enhancer = composeEnhancers(applyMiddleware(thunkMiddleware));
+  const enhancer = composeEnhancers(applyMiddleware(apiMiddleware, thunkMiddleware));
   const store = createStore(reducer, enhancer);
 
   return store;
