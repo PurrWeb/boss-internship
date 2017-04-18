@@ -15,6 +15,7 @@ class OwedHour < ActiveRecord::Base
   validate :date_valid
   validate :times_valid
   validate :minutes_valid_for_times
+  validate :no_time_conflicts
 
   attr_accessor :validate_as_creation
 
@@ -56,6 +57,37 @@ class OwedHour < ActiveRecord::Base
     if times_delta_minutes != minutes
       errors.add(:minutes, 'must match times')
     end
+  end
+
+  #validation
+  def no_time_conflicts
+    return unless staff_member.present? && starts_at.present? && ends_at.present?
+
+    conflicting_owed_hours = InRangeQuery.new(
+      relation: staff_member.active_owed_hours,
+      start_value: starts_at,
+      end_value: ends_at
+    ).all
+
+    if conflicting_owed_hours.count > 0
+      errors.add(:base, 'conflicting owed hour exists')
+    end
+
+    conflicting_hours_acceptances = InRangeQuery.new(
+      relation: HoursAcceptancePeriod.
+        enabled.
+        joins(:clock_in_day).
+        where(
+          clock_in_days: { staff_member_id: staff_member }
+        ),
+      start_value: starts_at,
+      end_value: ends_at
+    ).all
+
+    if conflicting_hours_acceptances.count > 0
+      errors.add(:base, 'conflicting hour acceptance exists')
+    end
+
   end
 
   def has_times?
