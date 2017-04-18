@@ -21,13 +21,10 @@ class OwedHour < ActiveRecord::Base
   #validation
   def date_valid
     return unless date.present?
-    week = RotaWeek.new(date)
-    date_past = week.week_status == :past
 
-    if validate_as_creation && date_past
-      errors.add(:date, "can't create owed hours in previous week")
-    elsif date_changed? && date_past
-      errors.add(:date, "can't be changed to week in the past")
+    current_date = RotaShiftDate.to_rota_date(Time.current)
+    if date > current_date
+      errors.add(:date, "can't be in the future")
     end
   end
 
