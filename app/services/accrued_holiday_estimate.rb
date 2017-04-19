@@ -22,10 +22,11 @@ class AccruedHolidayEstimate
 
       owed_hour_records = InRangeQuery.new(
         relation: OwedHour.enabled.where(staff_member: staff_member),
-        start_value: tax_year.start_date,
-        end_value: tax_year.end_date,
-        start_column_name: 'date',
-        end_column_name: 'date'
+        start_value: RotaShiftDate.new(tax_year.start_date).start_time,
+        end_value: RotaShiftDate.new(tax_year.end_date).end_time,
+        start_column_name: 'created_at',
+        end_column_name: 'created_at',
+        include_boundaries: [:start]
       ).all
 
       owed_hours = owed_hour_records.inject(0) do |sum, owed_hour|

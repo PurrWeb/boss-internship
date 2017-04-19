@@ -103,10 +103,11 @@ class GenerateFinanceReportData
 
     owed_hours = InRangeQuery.new(
       relation: OwedHour.enabled.where(staff_member: staff_member),
-      start_value: week.start_date,
-      end_value: week.end_date,
-      start_column_name: 'date',
-      end_column_name: 'date'
+      start_value: RotaShiftDate.new(week.start_date).start_time,
+      end_value: RotaShiftDate.new(week.end_date).end_time,
+      start_column_name: 'created_at',
+      end_column_name: 'created_at',
+      include_boundaries: [:start]
     ).all
 
     owed_hours_minute_count = owed_hours.inject(0) do |sum, owed_hour|
