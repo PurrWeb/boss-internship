@@ -68,8 +68,14 @@ class OwedHour < ActiveRecord::Base
       ends_at.present?
     )
 
+    staff_member_active_owed_hours = staff_member.active_owed_hours
+    if persisted?
+      staff_member_active_owed_hours = staff_member_active_owed_hours.
+        where("id != ?", id)
+    end
+
     conflicting_owed_hours = InRangeQuery.new(
-      relation: staff_member.active_owed_hours.where("id != ?", id),
+      relation: staff_member_active_owed_hours,
       start_value: starts_at,
       end_value: ends_at
     ).all
