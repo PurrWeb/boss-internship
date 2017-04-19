@@ -61,10 +61,15 @@ class OwedHour < ActiveRecord::Base
 
   #validation
   def no_time_conflicts
-    return unless staff_member.present? && starts_at.present? && ends_at.present?
+    return unless (
+      enabled?  &&
+      staff_member.present? &&
+      starts_at.present?  &&
+      ends_at.present?
+    )
 
     conflicting_owed_hours = InRangeQuery.new(
-      relation: staff_member.active_owed_hours,
+      relation: staff_member.active_owed_hours.where("id != ?", id),
       start_value: starts_at,
       end_value: ends_at
     ).all
