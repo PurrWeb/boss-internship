@@ -10,7 +10,9 @@ export default class StaffListItem extends React.Component {
         venues: React.PropTypes.array.isRequired,
         staffType: React.PropTypes.object.isRequired,
         paidHolidays: React.PropTypes.array.isRequired,
-        unpaidHolidays: React.PropTypes.array.isRequired
+        unpaidHolidays: React.PropTypes.array.isRequired,
+        startDate: React.PropTypes.string.isRequired,
+        endDate: React.PropTypes.string.isRequired
     }
     render(){
         var staff = this.props.staff;
@@ -53,8 +55,8 @@ export default class StaffListItem extends React.Component {
                             {holidayDaysCount(this.props.paidHolidays)}
                         </div>
                         <div className="large-shrink small-12 column">
-                                <StaffMemberHolidaysLink staffMemberServerId={staff.serverId}>
-                                    View all holidays
+                                <StaffMemberHolidaysLink staffMemberServerId={staff.serverId} startDate={this.props.startDate} endDate={this.props.endDate}>
+                                    <p>View holidays</p>
                                 </StaffMemberHolidaysLink>
                         </div>
                     </div>

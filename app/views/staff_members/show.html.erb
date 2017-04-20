@@ -91,7 +91,19 @@
     </div>
 
     <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_content_class('holidays', active_tab) %>" id="holidays-tab">
-      <%= render partial: 'shared/staff_member_show_holidays_tab', locals: { staff_member: staff_member, holiday: holiday } %>
+      <%= render(
+            partial: 'shared/staff_member_show_holidays_tab',
+            locals: {
+              staff_member: staff_member,
+              new_holiday: new_holiday,
+              holidays: holidays,
+              holiday_start_date: holiday_start_date,
+              holiday_end_date: holiday_end_date,
+              paid_holiday_days: paid_holiday_days,
+              unpaid_holiday_days: unpaid_holiday_days,
+              estimated_accrued_holiday_days: estimated_accrued_holiday_days
+            }
+          ) %>
     </div>
 
     <div class="tab-pane container-fluid <%= StaffMemberShowPage.tab_content_class('owed-hours', active_tab) %>" id="owed-hours-tab">

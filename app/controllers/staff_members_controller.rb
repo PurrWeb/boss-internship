@@ -67,10 +67,45 @@ class StaffMembersController < ApplicationController
         OwedHourViewModel.new(OwedHour.new)
       )
 
+      tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
+      if holiday_start_date_from_params.present? && holiday_end_date_from_params.present?
+        holiday_start_date = holiday_start_date_from_params
+        holiday_end_date = holiday_end_date_from_params
+      else
+        holiday_start_date = tax_year.start_date
+        holiday_end_date = tax_year.end_date
+      end
+
+      filtered_holidays = InRangeQuery.new(
+        relation: staff_member.active_holidays,
+        start_value: holiday_start_date,
+        end_value: holiday_end_date,
+        start_column_name: 'start_date',
+        end_column_name: 'end_date'
+      ).all
+
+      holidays_in_tax_year = HolidayInTaxYearQuery.new(
+       relation: staff_member.active_holidays,
+       tax_year: tax_year
+      ).all.includes(:frozen_by)
+
+      paid_holiday_days = holidays_in_tax_year.paid.to_a.sum { |holiday| holiday.days }
+      unpaid_holiday_days = holidays_in_tax_year.unpaid.to_a.sum { |holiday| holiday.days }
+      estimated_accrued_holiday_days = AccruedHolidayEstimate.new(
+        staff_member: staff_member,
+        tax_year: tax_year
+      ).call
+
       render locals: {
         staff_member: staff_member,
         active_tab: active_tab_from_params,
-        holiday: Holiday.new,
+        new_holiday: Holiday.new,
+        holidays: filtered_holidays,
+        paid_holiday_days: paid_holiday_days,
+        unpaid_holiday_days: unpaid_holiday_days,
+        estimated_accrued_holiday_days: estimated_accrued_holiday_days,
+        holiday_start_date: holiday_start_date,
+        holiday_end_date: holiday_end_date,
         owed_hour_form: owed_hour_form
       }
     else
@@ -366,6 +401,30 @@ class StaffMembersController < ApplicationController
     result = result.merge(staff_type: staff_type)
 
     result
+  end
+
+  def holiday_start_date_from_params
+    if params[:holiday_start_date].present?
+      result = nil
+      begin
+        result = UIRotaDate.parse(params.fetch(:holiday_start_date))
+      rescue ArgumentError
+        # Do nothing
+      end
+      result
+    end
+  end
+
+  def holiday_end_date_from_params
+    if params[:holiday_end_date].present?
+      result = nil
+      begin
+        result = UIRotaDate.parse(params.fetch(:holiday_end_date))
+      rescue ArgumentError
+        # Do nothing
+      end
+      result
+    end
   end
 
   def email_params_present?

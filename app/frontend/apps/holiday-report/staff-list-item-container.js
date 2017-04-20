@@ -19,13 +19,17 @@ class StaffListItemContainer extends React.Component {
             venues={venues}
             staffType={staffType}
             unpaidHolidays={this.props.unpaidHolidays}
-            paidHolidays={this.props.paidHolidays} />
+            paidHolidays={this.props.paidHolidays}
+            startDate={this.props.startDate}
+            endDate={this.props.endDate} />
     }
 }
 
 function mapStateToProps(state, ownProps){
     var staffId = ownProps.staff.clientId;
     return {
+        startDate: state.pageOptions.weekStartDate,
+        endDate: state.pageOptions.weekEndDate,
         staffTypes: state.staffTypes,
         venues: state.venues,
         paidHolidays: selectStaffMemberPaidHolidays(state, staffId),

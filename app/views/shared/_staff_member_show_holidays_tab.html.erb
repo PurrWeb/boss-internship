@@ -4,31 +4,42 @@
       <span>Add holiday</span>
     </div>
     <div class="panel-body">
-      <%= render partial: 'shared/add_holiday_form', locals: { holiday: holiday, staff_member: staff_member } %>
+      <%= render partial: 'shared/add_holiday_form', locals: { holiday: new_holiday, staff_member: staff_member } %>
     </div>
   </div>
 <% end %>
 
 <h2>Holidays</h2>
 
-<% tax_year = TaxYear.new(Time.current.to_date) %>
-<% holidays_this_year = HolidayInTaxYearQuery.new(
-     relation: staff_member.active_holidays,
-     tax_year: tax_year
-    ).all.includes(:frozen_by) %>
-<% estimated_accrued_holidays = AccruedHolidayEstimate.new(
-      staff_member: staff_member,
-      tax_year: tax_year
-    ).call %>
+<p><%= pluralize(estimated_accrued_holiday_days, "Day") %> accrued in current tax year (Estimated)</p>
+<p><%= pluralize(paid_holiday_days, 'Paid day') %> logged in current tax year</p>
+<p><%= pluralize(unpaid_holiday_days, 'Unpaid day') %> logged in current tax year</p>
 
-<% if holidays_this_year.present? %>
-  <% paid_days = holidays_this_year.paid.to_a.sum { |holiday| holiday.days } %>
-  <% unpaid_days = holidays_this_year.unpaid.to_a.sum { |holiday| holiday.days } %>
-  <p><%= pluralize(estimated_accrued_holidays, "Day") %> accrued this year (Estimated)</p>
-  <p><%= pluralize(paid_days, 'Paid day') %> logged this year</p>
-  <p><%= pluralize(unpaid_days, 'Unpaid day') %> logged this year</p>
+<div class="row">
+  <%= bootstrap_form_for('', url: staff_member_path(staff_member), method: :get, html: { class: 'form-inline' }) do |form| %>
+    <div class="row">
+      <%= form.text_field(
+            :holiday_start_date,
+            label: 'Start Date',
+            value: UIRotaDate.format(holiday_start_date),
+            class: 'date-picker'
+          ) %>
+      <%= form.text_field(
+            :holiday_end_date,
+            label: 'End Date',
+            value: UIRotaDate.format(holiday_end_date),
+            class: 'date-picker'
+          ) %>
+      <%= form.hidden_field(:tab, value: 'holidays') %>
+      <div class="form-group">
+        <%= form.submit('Update', class: 'boss2-button') %>
+      </div>
+    </div>
+  <% end %>
+</div>
 
-  <%= render partial: 'shared/holidays_table', locals: { staff_member: staff_member, holidays: holidays_this_year } %>
+<% if holidays.present? %>
+  <%= render partial: 'shared/holidays_table', locals: { staff_member: staff_member, holidays: holidays } %>
 <% else %>
-  <div>No holidays this year</div>
+  <div>No holidays found in range</div>
 <% end %>
