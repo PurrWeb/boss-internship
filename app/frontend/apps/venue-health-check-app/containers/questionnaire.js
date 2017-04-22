@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux';
 
 import CollapsibleCard from '../components/collapsible-card';
 import VenueSelector from '../components/venue-selector';
-import QuestionnaireActions from '../components/questionnaire-actions'
+import QuestionnaireFilter from '../components/questionnaire-filter';
+import QuestionnaireActions from '../components/questionnaire-actions';
 
 import { setInitialData } from '../actions/initial-load'
 import { setAnswer, saveAnswers } from '../actions/answers'
@@ -33,6 +34,18 @@ function mapDispatchToProps(dispatch) {
 }
 
 export class QuestionnaireContainer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      filters: {
+        section: 'any',
+        display: 'all',
+        groupBy: 'section'
+      }
+    }
+  }
+
   componentWillMount() {
     this.props.setInitialData(window.boss.venueHealthCheck);
   }
@@ -43,38 +56,88 @@ export class QuestionnaireContainer extends React.Component {
     }
   }
 
+  setFilter(filter) {
+    let filters = this.state.filters;
+    filters = Object.assign(filters, filter);
+
+    this.setState({
+      filters: filters
+    })
+  }
+
   commonProps() {
-    return {
-      questionnaire: this.props.questionnaire,
-      categories: this.props.categories,
-      questions: this.props.questions,
-      questionnaireResponse: this.props.questionnaireResponse,
-      setAnswer: this.props.setAnswer,
-      saveAnswers: this.props.saveAnswers,
-      venues: this.props.venues,
-      currentVenue: this.props.currentVenue,
-      frontend: this.props.frontend
-    };
+    let { ...props } = this.props;
+
+    props = Object.assign(props, {
+      setFilter: this.setFilter.bind(this),
+      filters: this.state.filters
+    });
+
+    return props;
   }
 
   renderCollapsibleCardComponent() {
-    return this.props.categories.map(currentCategory => {
-      let categoryQuestions = this.props.questions.filter(question => {
-        return (question.questionnaire_category_id == currentCategory.id);
-      })
+    let sectionFilter = this.state.filters.section;
+    let groupByFilter = this.state.filters.groupBy;
+    let filteredCategories = [];
+    let filteredQuestions = [];
+    let filterCategory;
+    let categoryQuestions;
+    let cardProps = {};
 
-      let cardProps = {
-        currentCategory: currentCategory,
+    if (sectionFilter == 'any') {
+      filteredCategories = this.props.categories;
+      filteredQuestions = this.props.questions;
+    } else {
+      filterCategory = this.props.categories.find(category => {
+        return category.name == sectionFilter;
+      });
+
+      filteredCategories.push(filterCategory)
+    }
+
+    if (groupByFilter == 'section') {
+      return filteredCategories.map(currentCategory => {
+        categoryQuestions = this.props.questions.filter(question => {
+          return (question.questionnaire_category_id == currentCategory.id);
+        })
+
+        cardProps = {
+          currentCategory: currentCategory,
+          categoryQuestions: categoryQuestions
+        }
+
+        cardProps = Object.assign(this.commonProps(), cardProps);
+
+        return(
+          <CollapsibleCard { ...cardProps } key={ currentCategory.id }>
+          </CollapsibleCard>
+        )
+      });
+    } else {
+      filterCategory = this.props.categories.find(category => {
+        return category.name == sectionFilter;
+      });
+
+      if (filterCategory) {
+        categoryQuestions = this.props.questions.filter(question => {
+          return (question.questionnaire_category_id == filterCategory.id);
+        });
+      } else {
+        categoryQuestions = this.props.questions;
+      }
+
+      cardProps = {
         categoryQuestions: categoryQuestions
       }
 
       cardProps = Object.assign(this.commonProps(), cardProps);
 
       return(
-        <CollapsibleCard { ...cardProps } key={ currentCategory.id }>
+        <CollapsibleCard { ...cardProps } >
         </CollapsibleCard>
-      )
-    });
+      );
+    }
   }
 
   render() {
@@ -82,9 +145,11 @@ export class QuestionnaireContainer extends React.Component {
       <main className="boss-page-main">
         <div className="boss-page-main__dashboard">
           <div className="boss-page-main__inner">
-            <VenueSelector { ...this.props } />
+            <VenueSelector { ...this.commonProps() } />
 
-            <QuestionnaireActions { ...this.props } />
+            <QuestionnaireActions { ...this.commonProps() } />
+
+            <QuestionnaireFilter { ...this.commonProps() } />
           </div>
         </div>
 

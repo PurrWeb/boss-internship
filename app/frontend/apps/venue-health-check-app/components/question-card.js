@@ -10,7 +10,7 @@ export default class QuestionCard extends React.Component {
     super(props);
 
     this.state = {
-      answered: false,
+      answered: !!this.props.currentAnswer,
       displayNote: false,
       noteValue: ''
     }
@@ -24,7 +24,7 @@ export default class QuestionCard extends React.Component {
     })
   }
 
-  activateAnsweredState(s) {
+  activateAnsweredState() {
     this.setState({
       answered: true
     })

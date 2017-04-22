@@ -21,6 +21,8 @@ export default class Answer extends React.Component {
   renderBinaryQuestionAnswer() {
     let question = this.props.currentQuestion;
     let possibleValues = this.props.currentQuestion.possible_values;
+    let answer = (this.props.currentAnswer) ? this.props.currentAnswer.value : '';
+
     let answerOptions = possibleValues.map(possibleValue => {
       return(
         <label className="boss-question__radio-label" key={ this.props.currentQuestion.id + possibleValue }>
@@ -30,6 +32,7 @@ export default class Answer extends React.Component {
             value={ possibleValue }
             className="boss-question__radio-button"
             onChange={ this.setOptionForQuestion.bind(this) }
+            defaultChecked={ answer == possibleValue }
           />
           <span className="boss-question__radio-label-text">{ possibleValue }</span>
         </label>
@@ -48,6 +51,7 @@ export default class Answer extends React.Component {
     let startValue = question.start_value;
     let endValue = question.end_value;
     let scaleRange = _.range(startValue, endValue + 1);
+    let answer = (this.props.currentAnswer) ? this.props.currentAnswer.value : '';
 
     let answerOptions = scaleRange.map(scaleValue => {
       return(
@@ -58,6 +62,7 @@ export default class Answer extends React.Component {
             value={ scaleValue }
             className="boss-question__radio-button"
             onChange={ this.setOptionForQuestion.bind(this) }
+            defaultChecked={ answer == scaleValue }
           />
           <span className="boss-question__radio-label-text">{ scaleValue }</span>
         </label>
