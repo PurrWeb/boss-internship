@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe HoursAcceptancePeriod do
   describe 'validations' do
-    let(:date) { Time.current.to_date }
+    let(:date) { RotaShiftDate.to_rota_date(Time.current) }
     let(:start_of_day) { RotaShiftDate.new(date).start_time }
     let(:period) do
       HoursAcceptancePeriod.new(
@@ -45,15 +45,13 @@ describe HoursAcceptancePeriod do
       let(:starts_at) { start_of_day - 2.hours }
 
       specify 'should raise error' do
-        expect{
-          period.validate
-        }.to raise_error(
-          RuntimeError,
+        period.validate
+        expect(period.errors[:starts_at]).to eq([
           starts_at_early_error_message_for(
             time: period.starts_at,
             date: period.date
           )
-        )
+        ])
       end
     end
 
@@ -61,15 +59,13 @@ describe HoursAcceptancePeriod do
       let(:ends_at) { start_of_day - 2.hours }
 
       specify 'should raise error' do
-        expect{
-          period.validate
-        }.to raise_error(
-          RuntimeError,
+        period.validate
+        expect(period.errors[:ends_at]).to eq([
           ends_at_early_error_message_for(
             time: period.ends_at,
             date: period.date
           )
-        )
+        ])
       end
     end
 
@@ -142,12 +138,33 @@ describe HoursAcceptancePeriod do
       end
     end
 
+    context 'period overlaps existing owed hour' do
+      before do
+        minutes = (ends_at - starts_at) / 60
+
+        OwedHour.create!(
+          date: date,
+          staff_member: staff_member,
+          starts_at: starts_at,
+          ends_at: ends_at,
+          minutes: minutes,
+          creator: user,
+          note: 'test note'
+        )
+      end
+
+      specify 'should raise overlap error' do
+        period.validate
+        expect(period.errors[:base]).to eq(["conflicting owed hour exists"])
+      end
+    end
+
     def starts_at_early_error_message_for(time:,  date:)
-      "starts_at time #{time} suppiled too early for #{date}"
+      "time #{time} suppiled too early for #{date}"
     end
 
     def ends_at_early_error_message_for(time:,  date:)
-      "ends_at time #{time} suppiled too early for #{date}"
+      "time #{time} suppiled too early for #{date}"
     end
   end
 

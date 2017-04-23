@@ -8,7 +8,8 @@ describe HolidayDateValidator do
       :holiday,
       staff_member: staff_member,
       start_date: start_date,
-      end_date: end_date
+      end_date: end_date,
+      validate_as_creation: true
     )
   end
   let(:now) { RotaWeek.new(Time.current.to_date).start_date }
@@ -172,6 +173,36 @@ describe HolidayDateValidator do
     end
   end
 
+  context 'overlapping owed_hour exist' do
+    let(:now) { Time.current }
+    let(:start_date) { RotaShiftDate.to_rota_date(now) }
+    let(:end_date) { start_date }
+    let(:owed_hour_starts_at) { start_date.beginning_of_day + 10.hours }
+    let(:owed_hour_ends_at) { owed_hour_starts_at + 2.hours }
+    let!(:owed_hour) do
+      FactoryGirl.create(
+        :owed_hour,
+        date: start_date,
+        staff_member: holiday.staff_member,
+        starts_at: owed_hour_starts_at,
+        ends_at: owed_hour_ends_at,
+        minutes: 120
+      )
+    end
+
+    specify 'an error message should be added on base' do
+      validator.validate
+      expect(
+        holiday.errors['base']
+      ).to eq([overlapping_owed_hour_error_message])
+    end
+
+    specify 'only an error should be added for base' do
+      validator.validate
+      expect(holiday.errors.keys).to eq([:base])
+    end
+  end
+
   context 'holiday is not conatined within one week' do
     let(:start_date) do
       # Saturday
@@ -198,6 +229,10 @@ describe HolidayDateValidator do
   private
   def overlapping_shift_error_message
     'Staff member is assigned shifts on one of these days'
+  end
+
+  def overlapping_owed_hour_error_message
+    "Staff member is assigned owed hours on one of these days"
   end
 
   def overlapping_holiday_error_message

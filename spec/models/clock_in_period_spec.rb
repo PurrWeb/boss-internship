@@ -45,15 +45,13 @@ describe ClockInPeriod do
       let(:starts_at) { start_of_day - 2.hours }
 
       specify 'should raise error' do
-        expect{
-          period.validate
-        }.to raise_error(
-          RuntimeError,
+        period.validate
+        expect(period.errors[:starts_at]).to eq([
           starts_at_early_error_message_for(
             time: period.starts_at,
             date: period.date
           )
-        )
+        ])
       end
     end
 
@@ -61,15 +59,13 @@ describe ClockInPeriod do
       let(:ends_at) { start_of_day - 2.hours }
 
       specify 'should raise error' do
-        expect{
-          period.validate
-        }.to raise_error(
-          RuntimeError,
+        period.validate
+        expect(period.errors[:ends_at]).to eq([
           ends_at_early_error_message_for(
             time: period.ends_at,
             date: period.date
           )
-        )
+        ])
       end
     end
 
@@ -143,11 +139,11 @@ describe ClockInPeriod do
     end
 
     def starts_at_early_error_message_for(time:,  date:)
-      "starts_at time #{time} suppiled too early for #{date}"
+      "time #{time} suppiled too early for #{date}"
     end
 
     def ends_at_early_error_message_for(time:,  date:)
-      "ends_at time #{time} suppiled too early for #{date}"
+      "time #{time} suppiled too early for #{date}"
     end
   end
 end

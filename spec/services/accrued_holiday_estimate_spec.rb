@@ -103,7 +103,7 @@ describe AccruedHolidayEstimate do
       date = week.start_date
       rota_shift_date = RotaShiftDate.new(date)
 
-      travel_to(date - 1.week) do
+      travel_to(date + 2.months) do
         while minutes_created < owed_hours_minutes
           minutes_to_create = [1200, owed_hours_minutes - minutes_created].min
 
@@ -141,7 +141,7 @@ describe AccruedHolidayEstimate do
         date = week.start_date
         rota_shift_date = RotaShiftDate.new(date)
 
-        travel_to(date - 1.week) do
+        travel_to(date + 3.months) do
           while minutes_created < owed_minutes_previous_year
             minutes_to_create = [1200, owed_minutes_previous_year - minutes_created].min
 

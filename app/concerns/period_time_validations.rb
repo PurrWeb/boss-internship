@@ -20,19 +20,19 @@ module PeriodTimeValidations
   def times_within_correct_day
     if clock_in_day.present?
       if starts_at.present? && (starts_at < RotaShiftDate.new(clock_in_day.date).start_time)
-        raise "starts_at time #{starts_at} suppiled too early for #{clock_in_day.date}"
+        errors.add(:starts_at, "time #{starts_at} suppiled too early for #{clock_in_day.date}")
       end
 
       if ends_at.present? && (ends_at < RotaShiftDate.new(clock_in_day.date).start_time)
-        raise "ends_at time #{ends_at} suppiled too early for #{clock_in_day.date}"
+        errors.add(:ends_at, "time #{ends_at} suppiled too early for #{clock_in_day.date}")
       end
 
       if starts_at.present? && (starts_at > RotaShiftDate.new(clock_in_day.date).end_time)
-        raise "starts_at time #{starts_at} suppiled too late for #{clock_in_day.date}"
+        errors.add(:starts_at, "time #{starts_at} suppiled too late for #{clock_in_day.date}")
       end
 
       if ends_at.present? && (ends_at > RotaShiftDate.new(clock_in_day.date).end_time)
-        raise "ends_at time #{ends_at} suppiled too late for #{clock_in_day.date}"
+        errors.add(:ends_at, "time #{ends_at} suppiled too late for #{clock_in_day.date}")
       end
     end
   end

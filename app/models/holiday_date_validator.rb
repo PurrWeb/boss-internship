@@ -71,6 +71,18 @@ class HolidayDateValidator
     if conflicting_shifts.present?
       holiday.errors.add(:base, 'Staff member is assigned shifts on one of these days')
     end
+
+    conflicting_owed_hours = InRangeQuery.new(
+      relation: holiday.staff_member.active_owed_hours,
+      start_value: holiday.start_date,
+      end_value: holiday.end_date,
+      start_column_name: 'date',
+      end_column_name: 'date'
+    ).all
+
+    if conflicting_owed_hours.present?
+      holiday.errors.add(:base, 'Staff member is assigned owed hours on one of these days')
+    end
   end
 
   def dates_changed?(holiday)
