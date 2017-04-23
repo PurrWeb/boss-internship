@@ -4,6 +4,7 @@ import constants from '../constants';
 const initialState = Immutable.Map({
   questionnaire: {},
   questions: [],
+  areas: [],
   categories: [],
   venues: [],
   questionnaireResponse: {
@@ -29,6 +30,8 @@ const venueHealthCheck = (state = initialState, action) => {
       'questions', action.initialData.questions
     ).set(
       'categories', action.initialData.categories
+    ).set(
+      'areas', action.initialData.areas
     ).set(
       'questionnaireResponse', {
         questionnaireId: action.initialData.questionnaire.id,

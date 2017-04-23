@@ -28,38 +28,43 @@ export default class CollapsibleCard extends React.Component {
   }
 
   renderQuestionsCards() {
+    let currentAnswer;
+    let cardProps = {};
+
     return this.props.categoryQuestions.map(question => {
-      let filterOnlyUnanswered = this.props.filters.display == 'unanswered';
-      let currentAnswer = this.props.answers.find(answer => {
+      currentAnswer = this.props.answers.find(answer => {
         return answer.questionId == question.id;
       });
 
-      let cardProps = {
+      cardProps = Object.assign({
         currentQuestion: question,
         currentAnswer: currentAnswer
-      }
+      }, this.props);
 
-      cardProps = Object.assign(cardProps, this.props);
-
-      if (filterOnlyUnanswered && currentAnswer) {
-        return '';
-      } else {
-        return(
-          <QuestionCard { ...cardProps } key={ question.id } />
-        )
-      }
+      return(
+        <QuestionCard { ...cardProps } key={ question.id } />
+      )
     });
+  }
+
+  boardTitle() {
+    switch(this.props.filters.groupBy) {
+    case 'section':
+    case 'area':
+      return this.props.currentCategory.name;
+    default:
+      return 'Questions';
+    }
   }
 
   render() {
     let iconStateClass = (this.state.opened) ? 'boss-board__switch_state_opened' : '';
-    let boardTitle = (this.props.filters.groupBy == 'section') ? this.props.currentCategory.name : 'Questions';
 
     return (
       <section className="boss-board boss-board_context_stack">
         <header className="boss-board__header boss-board__header_status_passed">
           <h2 className="boss-board__title">
-            { boardTitle }
+            { this.boardTitle() }
           </h2>
 
           <div className="boss-board__button-group">

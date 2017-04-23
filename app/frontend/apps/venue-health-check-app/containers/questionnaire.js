@@ -14,6 +14,7 @@ function mapStateToProps(state) {
   return {
     questionnaire: state.venueHealthCheck.get('questionnaire'),
     categories: state.venueHealthCheck.get('categories'),
+    areas: state.venueHealthCheck.get('areas'),
     questions: state.venueHealthCheck.get('questions'),
     answers: state.venueHealthCheck.get('answers'),
     venues: state.venueHealthCheck.get('venues'),
@@ -41,7 +42,8 @@ export class QuestionnaireContainer extends React.Component {
       filters: {
         section: 'any',
         display: 'all',
-        groupBy: 'section'
+        groupBy: 'section',
+        area: 'any'
       }
     }
   }
@@ -76,67 +78,153 @@ export class QuestionnaireContainer extends React.Component {
     return props;
   }
 
-  renderCollapsibleCardComponent() {
-    let sectionFilter = this.state.filters.section;
-    let groupByFilter = this.state.filters.groupBy;
-    let filteredCategories = [];
-    let filteredQuestions = [];
-    let filterCategory;
-    let categoryQuestions;
-    let cardProps = {};
+  getCategoryByName(categoryName) {
+    return this.props.categories.find(category => {
+      return category.name == categoryName;
+    });
+  }
 
-    if (sectionFilter == 'any') {
-      filteredCategories = this.props.categories;
-      filteredQuestions = this.props.questions;
-    } else {
-      filterCategory = this.props.categories.find(category => {
-        return category.name == sectionFilter;
+  getAreaByName(areaName) {
+    return this.props.areas.find(area => {
+      return area.name == areaName;
+    });
+  }
+
+  getCurrentAnswer(question) {
+    return this.props.answers.find(answer => {
+      return answer.questionId == question.id;
+    });
+  }
+
+  filterDisplayQuestions(questions) {
+    if (this.state.filters.display == 'unanswered') {
+      return questions.filter(question => {
+        return !!!this.getCurrentAnswer(question);
       });
-
-      filteredCategories.push(filterCategory)
+    } else {
+      return questions;
     }
+  }
+
+  getQuestions() {
+    let sectionFilter = this.state.filters.section;
+    let areaFilter = this.state.filters.area;
+    let currentCategory = this.getCategoryByName(sectionFilter);
+    let currentArea = this.getAreaByName(areaFilter);
+
+    let questions = this.props.questions.filter(question => {
+      if (sectionFilter != 'any' && areaFilter != 'any') {
+        return(
+          (question.questionnaire_category_id == currentCategory.id)
+            && (question.questionnaire_area_id == currentArea.id)
+        );
+      } else if (sectionFilter == 'any' && areaFilter != 'any') {
+        return question.questionnaire_area_id == currentArea.id;
+      } else if (sectionFilter != 'any' && areaFilter == 'any') {
+        return question.questionnaire_category_id == currentCategory.id;
+      } else {
+        return true;
+      }
+    });
+
+    return this.filterDisplayQuestions(questions);
+  }
+
+  getQuestionsByCategoryName(categoryName) {
+    let category = this.getCategoryByName(categoryName);
+
+    return this.getQuestions().filter(question => {
+      return question.questionnaire_category_id == category.id;
+    });
+  }
+
+  getQuestionsByAreaName(areaName) {
+    let area = this.getAreaByName(areaName);
+
+    return this.getQuestions().filter(question => {
+      return question.questionnaire_area_id == area.id;
+    });
+  }
+
+  getCategorySections() {
+    let sectionFilter = this.state.filters.section;
+    let categories = [];
+
+    if (sectionFilter != 'any') {
+      categories.push(this.props.categories.find(category => {
+        return category.name == sectionFilter;
+      }));
+
+      return categories;
+    } else {
+      return this.props.categories;
+    }
+  }
+
+  getAreaSections() {
+    let areaFilter = this.state.filters.area;
+    let areas = [];
+
+    if (areaFilter != 'any') {
+      areas.push(this.props.areas.find(area => {
+        return area.name == areaFilter;
+      }));
+
+      return areas;
+    } else {
+      return this.props.areas;
+    }
+  }
+
+  getResourceForCollapsibleCard() {
+    let groupByFilter = this.state.filters.groupBy;
+    let viewSections = [];
 
     if (groupByFilter == 'section') {
-      return filteredCategories.map(currentCategory => {
-        categoryQuestions = this.props.questions.filter(question => {
-          return (question.questionnaire_category_id == currentCategory.id);
-        })
+      viewSections = this.getCategorySections();
+    } else if (groupByFilter == 'area') {
+      viewSections = this.getAreaSections();
+    } else {
+      viewSections;
+    }
 
-        cardProps = {
-          currentCategory: currentCategory,
-          categoryQuestions: categoryQuestions
+    return viewSections;
+  }
+
+  renderCollapsibleCardComponent() {
+    let cardProps = {};
+    let categoryQuestions = [];
+    let groupByFilter = this.state.filters.groupBy;
+
+    if (groupByFilter != 'question') {
+      return this.getResourceForCollapsibleCard().map(resource => {
+        if (groupByFilter == 'section') {
+          categoryQuestions = this.getQuestionsByCategoryName(resource.name)
+        } else if (groupByFilter == 'area') {
+          categoryQuestions = this.getQuestionsByAreaName(resource.name)
         }
 
-        cardProps = Object.assign(this.commonProps(), cardProps);
+        cardProps = Object.assign(this.commonProps(), {
+          currentCategory: resource,
+          categoryQuestions: categoryQuestions
+        });
+
+        if (categoryQuestions.length == 0) return '';
 
         return(
-          <CollapsibleCard { ...cardProps } key={ currentCategory.id }>
-          </CollapsibleCard>
+          <CollapsibleCard { ...cardProps } key={ resource.id }></CollapsibleCard>
         )
       });
     } else {
-      filterCategory = this.props.categories.find(category => {
-        return category.name == sectionFilter;
+      categoryQuestions = this.getQuestions();
+
+      cardProps = Object.assign(this.commonProps(), {
+        categoryQuestions: categoryQuestions
       });
 
-      if (filterCategory) {
-        categoryQuestions = this.props.questions.filter(question => {
-          return (question.questionnaire_category_id == filterCategory.id);
-        });
-      } else {
-        categoryQuestions = this.props.questions;
-      }
-
-      cardProps = {
-        categoryQuestions: categoryQuestions
-      }
-
-      cardProps = Object.assign(this.commonProps(), cardProps);
-
       return(
-        <CollapsibleCard { ...cardProps } >
-        </CollapsibleCard>
-      );
+        <CollapsibleCard { ...cardProps }></CollapsibleCard>
+      )
     }
   }
 

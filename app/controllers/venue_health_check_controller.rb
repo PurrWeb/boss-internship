@@ -20,11 +20,13 @@ class VenueHealthCheckController < ApplicationController
     questionnaire = Questionnaire.last
     questionnaire_questions = QuestionnaireQuestion.all
     questionnaire_categories = QuestionnaireCategory.all
+    questionnaire_areas = QuestionnaireArea.all
 
     render locals: {
       questionnaire: questionnaire,
       questionnaire_questions: questionnaire_questions,
       questionnaire_categories: questionnaire_categories,
+      questionnaire_areas: questionnaire_areas,
       venues: @accessible_venues,
       access_token: current_user.current_access_token || AccessToken.create_web!(user: current_user)
     }

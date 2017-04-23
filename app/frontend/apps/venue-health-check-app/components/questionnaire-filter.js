@@ -26,6 +26,10 @@ export default class QuestionnaireFilter extends React.Component {
     this.props.setFilter({ display: e.target.value });
   }
 
+  setAreaFilter(e) {
+    this.props.setFilter({ area: e.target.value });
+  }
+
   dropdownSectionOptions() {
     var sectionOptions = this.props.categories.map((category, index) => {
       return (
@@ -44,8 +48,26 @@ export default class QuestionnaireFilter extends React.Component {
     return sectionOptions;
   }
 
+  dropdownAreaOptions() {
+    var areaOptions = this.props.areas.map((area, index) => {
+      return (
+        <option value={ area.name } key={ area.name }>
+          { area.name }
+        </option>
+      );
+    });
+
+    areaOptions.unshift(
+      <option value="any" key="any" selected>
+        Any
+      </option>
+    );
+
+    return areaOptions;
+  }
+
   dropdownGroupByOptions() {
-    return ['section', 'question'].map((groupName, index) => {
+    return ['section', 'question', 'area'].map((groupName, index) => {
       return (
         <option value={ groupName } key={ groupName } selected={ groupName == this.props.filters.groupBy }>
           { groupName }
@@ -105,8 +127,17 @@ export default class QuestionnaireFilter extends React.Component {
                   <div className="boss-form__field boss-form__field_layout_third">
                     <label for="filter-section" className="boss-form__label"><span className="boss-form__label-text">Section</span></label>
                     <div className="boss-form__select">
-                      <select name="section" id="filter-section" onChange={ this.setSectionFilter.bind(this)}>
+                      <select name="section" id="filter-section" onChange={ this.setSectionFilter.bind(this) }>
                         { this.dropdownSectionOptions() }
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="boss-form__field boss-form__field_layout_third">
+                    <label for="filter-area" className="boss-form__label"><span className="boss-form__label-text">Area</span></label>
+                    <div className="boss-form__select">
+                      <select id="filter-area" name="area" onChange={ this.setAreaFilter.bind(this) }>
+                        { this.dropdownAreaOptions() }
                       </select>
                     </div>
                   </div>
@@ -114,7 +145,7 @@ export default class QuestionnaireFilter extends React.Component {
                   <div className="boss-form__field boss-form__field_layout_third">
                     <label for="filter-group-by" className="boss-form__label"><span className="boss-form__label-text">Group by</span></label>
                     <div className="boss-form__select">
-                      <select id="filter-group-by" name="group-by" onChange={ this.setGroupByFilter.bind(this)}>
+                      <select id="filter-group-by" name="group-by" onChange={ this.setGroupByFilter.bind(this) }>
                         { this.dropdownGroupByOptions() }
                       </select>
                     </div>
