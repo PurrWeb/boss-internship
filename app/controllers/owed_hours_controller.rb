@@ -107,8 +107,14 @@ class OwedHoursController < ApplicationController
     else
       flash.now[:error] = "There was a problem updating these owed hours"
 
+      owed_hours_form = UpdateOwedHourForm.new(
+        OwedHourViewModel.new(owed_hour),
+        owed_hour_params(:update)
+      )
+      owed_hours_form.valid?
+
       render 'edit', locals: {
-        update_owed_hour_form: update_owed_hour_form
+        update_owed_hour_form: owed_hours_form
       }
     end
   end

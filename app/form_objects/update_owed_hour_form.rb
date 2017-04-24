@@ -6,10 +6,11 @@ class UpdateOwedHourForm < OwedHourForm
   validate :date_valid_for_update
 
   def date_valid_for_update
-    return unless date.present? && changed?(:date)
+    return unless date.present?
 
-    if (date < RotaShiftDate.to_rota_date(Time.current))
-      errors.add(:date, "can't be changed to date in the past")
+    if (date > RotaShiftDate.to_rota_date(Time.current))
+      current_rota_date = RotaShiftDate.to_rota_date(Time.current)
+      errors.add(:base, "can't move owed hour to be in the future") if date > current_rota_date
     end
   end
 end

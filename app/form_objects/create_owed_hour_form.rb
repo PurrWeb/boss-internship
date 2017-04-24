@@ -3,10 +3,8 @@ class CreateOwedHourForm < OwedHourForm
 
   def date_valid_for_creation
     if date.present?
-      week = RotaWeek.new(date)
-      week_in_past = week.week_status == :past
-
-      errors.add(:base, "can't create owed hours in the past") if week_in_past
+      current_rota_date = RotaShiftDate.to_rota_date(Time.current)
+      errors.add(:base, "can't create owed hours in the future") if date > current_rota_date
     end
   end
 end
