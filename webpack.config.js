@@ -90,7 +90,8 @@ module.exports = {
                     mimetype: 'application/octet-stream',
                     limit: 30000
                 }
-            }
+            },
+            { test: /\.css$/, loader: "style-loader!css-loader" }
         ]
     },
     resolve: {
