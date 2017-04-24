@@ -58,6 +58,10 @@ export class QuestionnaireContainer extends React.Component {
     }
   }
 
+  reviewMode() {
+    return (this.props.questionCount == this.props.answerCount);
+  }
+
   setFilter(filter) {
     let filters = this.state.filters;
     filters = Object.assign(filters, filter);
@@ -72,7 +76,8 @@ export class QuestionnaireContainer extends React.Component {
 
     props = Object.assign(props, {
       setFilter: this.setFilter.bind(this),
-      filters: this.state.filters
+      filters: this.state.filters,
+      reviewMode: this.reviewMode()
     });
 
     return props;

@@ -63,6 +63,40 @@ export default class QuestionCard extends React.Component {
     })
   }
 
+  renderNote() {
+    if (this.props.reviewMode) return '';
+
+    return (
+      <div className="boss-question__note" style={ this.displayNote() }>
+        <div className="boss-question__note-inner">
+          <textarea
+            name="message"
+            className="boss-question__message-textarea"
+            placeholder="Type Notes Here..."
+            value={this.state.noteValue}
+            onChange={this.updateNoteValue.bind(this)}
+          >
+          </textarea>
+
+          <div className="boss-question__end">
+            <label className="boss-question__file-label">
+              <input name="image" type="file" multiple="" className="boss-question__file-input" />
+              <span className="boss-question__file-label-text">Add image</span>
+            </label>
+
+            <button
+              className="boss-button boss-button_type_small boss-question__submit"
+              type="submit"
+              onClick={ this.saveNote.bind(this) }
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   render() {
     let answeredPointerClass = (this.state.answered) ? 'boss-questionnaire__pointer_state_active' : '';
     let answeredQuestionClass = (this.state.answered) ? 'boss-questionnaire__question_state_active' : '';
@@ -85,33 +119,7 @@ export default class QuestionCard extends React.Component {
                 <QuestionActions { ...this.actionProps() } />
               </div>
 
-              <div className="boss-question__note" style={ this.displayNote() }>
-                <div className="boss-question__note-inner">
-                  <textarea
-                    name="message"
-                    className="boss-question__message-textarea"
-                    placeholder="Type Notes Here..."
-                    value={this.state.noteValue}
-                    onChange={this.updateNoteValue.bind(this)}
-                  >
-                  </textarea>
-
-                  <div className="boss-question__end">
-                    <label className="boss-question__file-label">
-                      <input name="image" type="file" multiple="" className="boss-question__file-input" />
-                      <span className="boss-question__file-label-text">Add image</span>
-                    </label>
-
-                    <button
-                      className="boss-button boss-button_type_small boss-question__submit"
-                      type="submit"
-                      onClick={ this.saveNote.bind(this) }
-                    >
-                      Save
-                    </button>
-                  </div>
-                </div>
-              </div>
+              { this.renderNote() }
             </form>
           </div>
         </div>

@@ -6,6 +6,11 @@ export default class Answer extends React.Component {
   static displayName = 'Answer';
 
   setOptionForQuestion(event) {
+    if (this.props.reviewMode) {
+      event.preventDefault();
+      return;
+    }
+
     this.props.activateAnsweredState();
 
     let questionnaireResponse = this.props.questionnaireResponse;
@@ -33,6 +38,7 @@ export default class Answer extends React.Component {
             className="boss-question__radio-button"
             onChange={ this.setOptionForQuestion.bind(this) }
             defaultChecked={ answer == possibleValue }
+            disabled={ this.props.reviewMode }
           />
           <span className="boss-question__radio-label-text">{ possibleValue }</span>
         </label>
@@ -42,8 +48,22 @@ export default class Answer extends React.Component {
     return (
       <div className="boss-question__controls">
         { answerOptions }
+
+        { this.renderIcon() }
       </div>
     )
+  }
+
+  renderIcon() {
+    let answer = (this.props.currentAnswer) ? this.props.currentAnswer.value : '';
+
+    if (this.props.reviewMode && answer) {
+      return (
+        <a className="boss-question__icon boss-question__icon_role_att">Attachment</a>
+      );
+    } else {
+      return '';
+    }
   }
 
   renderScaleQuestionAnswer() {
@@ -72,6 +92,8 @@ export default class Answer extends React.Component {
     return (
       <div className="boss-question__controls">
         { answerOptions }
+
+        { this.renderIcon() }
       </div>
     )
   }
