@@ -23,4 +23,12 @@ class QuestionnaireAnswer < ActiveRecord::Base
 
     uploads << image_uploads
   end
+
+  def pass_value?
+    return true if question.pass_values.blank?
+
+    pass_values = question.pass_values.split(',').map(&:strip)
+
+    pass_values.include?(value)
+  end
 end
