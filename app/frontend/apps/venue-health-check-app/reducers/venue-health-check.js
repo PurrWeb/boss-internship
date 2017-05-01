@@ -48,6 +48,7 @@ const venueHealthCheck = (state = initialState, action) => {
     );
   case constants.SET_ANSWER:
     let answers = state.get('answers');
+    let completedAnswers;
     let existingAnswer = _.find(answers, answer => {
       return answer.questionId == action.answerParams.questionId;
     });
@@ -60,7 +61,11 @@ const venueHealthCheck = (state = initialState, action) => {
       answers.push(action.answerParams);
     }
 
-    return state.set('answers', answers).set('answerCount', answers.length);
+    completedAnswers = _.filter(answers, answer => {
+      return !!answer.value;
+    });
+
+    return state.set('answers', answers).set('answerCount', completedAnswers.length);
 
   case constants.SAVE_ANSWERS_REQUEST:
     return state.set(

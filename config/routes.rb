@@ -178,6 +178,8 @@ Rails.application.routes.draw do
 
         resources :check_list_submissions, path: "checklist_submissions", only: [:index]
 
+        resources :uploads
+
         resources :questionnaires do
           resources :questionnaire_responses
         end

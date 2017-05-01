@@ -1,7 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import QuestionActions from './question-actions'
+import QuestionActions from './question-actions';
+import FileUpload from './file-upload';
 
 export default class QuestionCard extends React.Component {
   static displayName = 'QuestionCard';
@@ -79,10 +80,7 @@ export default class QuestionCard extends React.Component {
           </textarea>
 
           <div className="boss-question__end">
-            <label className="boss-question__file-label">
-              <input name="image" type="file" multiple="" className="boss-question__file-input" />
-              <span className="boss-question__file-label-text">Add image</span>
-            </label>
+            <FileUpload { ...this.actionProps() } />
 
             <button
               className="boss-button boss-button_type_small boss-question__submit"
