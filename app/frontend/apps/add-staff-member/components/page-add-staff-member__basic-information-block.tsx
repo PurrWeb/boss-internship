@@ -17,6 +17,7 @@ import basicInformationBlockValidated from '../../../action-creators/basic-infor
 import {GenderInputValidators} from '../../../interfaces/forms';
 import SelectControl from './select-control';
 import changingStepInfo from '../../../action-creators/changing-step-info';
+import findFlaggedStaffMembers from '../../../action-creators/requesting-flagged-staff-members';
 import {BasicInformationForm} from '../../../reducers/forms';
 import {hasFormValidationErrors, hasFormUnfilledRequiredFields} from '../../../helpers/validators';
 
@@ -38,6 +39,10 @@ class Component extends React.Component<PropsFromConnect, State> {
 
     this.props.dispatch(action);
   };
+
+  findFlaggedStaffMembers(event: any) {
+    this.props.dispatch(findFlaggedStaffMembers(event.target.value));
+  }
 
   handleFormUpdate = (formModelData: BasicInformationForm) => {
     const visited = true;
@@ -70,6 +75,8 @@ class Component extends React.Component<PropsFromConnect, State> {
                     className: setInputClass
                   }}
               validateOn="blur"
+              onChange={ (event: any) => {this.findFlaggedStaffMembers(event); }}
+              debounce={1000}
             />
           </label>
 

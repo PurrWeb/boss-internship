@@ -191,7 +191,11 @@ Rails.application.routes.draw do
         end
         resources :holidays, only: :show
         resources :holiday_reports, only: :index
-        resources :staff_members, only: [:show, :create]
+        resources :staff_members, only: [:show, :create] do
+          collection do
+            get :flagged
+          end
+        end
         resources :staff_types,   only: :show
         resources :rota_shifts,   only: [:show, :destroy, :update]
         resources :rotas,         only: :show

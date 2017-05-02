@@ -1,5 +1,6 @@
 import {Structure as ReducersStructure} from '../reducers';
 import {IndexedDict} from './index';
+import {StaffMember} from '../interfaces/staff-member';
 
 export type StoreStructure = ReducersStructure;
 
@@ -11,6 +12,7 @@ export interface BasicInformationFormFields {
   readonly surname?: string;
   readonly gender: Gender;
   readonly dateOfBirth?: string;
+  readonly unReviewedStaffMembers: StaffMember[];
 }
 
 export interface UploadPhotoFormFields {

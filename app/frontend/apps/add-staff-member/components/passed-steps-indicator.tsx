@@ -17,6 +17,7 @@ interface MappedProps {
   readonly sourceImage: string;
   readonly currentStepIdx: number;
   readonly stepsInfo: AddStaffMemberStepsInfo;
+  readonly unReviewedStaffMembers: any;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -90,12 +91,13 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   isAvatarFormValid = () => !!this.props.sourceImage;
+  isStaffMembersReviewed = () => !this.props.unReviewedStaffMembers();
 
   getStepsValidity(currentStepIdx: number) {
     const {basicInformationForm, uploadPhotoForm, venueForm, contactDetailsForm, workForm} = this.props.forms;
 
     return {
-      [ADD_STAFF_MEMBER_STEPS.BasicInformationBlock]: Component.isFormWithoutErrors(basicInformationForm, ADD_STAFF_MEMBER_STEPS.BasicInformationBlock, currentStepIdx),
+      [ADD_STAFF_MEMBER_STEPS.BasicInformationBlock]: Component.isFormWithoutErrors(basicInformationForm, ADD_STAFF_MEMBER_STEPS.BasicInformationBlock, currentStepIdx, this.isStaffMembersReviewed),
       [ADD_STAFF_MEMBER_STEPS.AddAvatarBlock]: Component.isFormWithoutErrors(uploadPhotoForm, ADD_STAFF_MEMBER_STEPS.AddAvatarBlock, currentStepIdx, this.isAvatarFormValid),
       [ADD_STAFF_MEMBER_STEPS.VenuesBlock]: Component.isFormWithoutErrors(venueForm, ADD_STAFF_MEMBER_STEPS.VenuesBlock, currentStepIdx),
       [ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock]: Component.isFormWithoutErrors(contactDetailsForm, ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock, currentStepIdx),
@@ -163,6 +165,10 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
 
   return {
     forms: state.formsData.forms,
+    unReviewedStaffMembers: () => {
+      console.log('Changed!');
+      return !!state.app.staffMembers.filter((item) => !item.reviewed).length;
+    },
     sourceImage,
     currentStepIdx,
     stepsInfo

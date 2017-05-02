@@ -10,6 +10,7 @@ import stepBackRegistration from './step-back-registration';
 import validateAllAddStaffMemberStepForms from './validate-all-add-staff-member-step-forms';
 import handleAvatarBlockValidated from './handle-avatar-block-validated';
 import changeStepsInfo from './change-steps-info';
+import requestFlaggedStaffMembers from './request-flagged-staff-members';
 
 export default combineEpics(
   validateAllAddStaffMemberStepForms,
@@ -21,5 +22,6 @@ export default combineEpics(
   handleAvatarBlockValidated,
   handleContactDetailsBlockValidated,
   handleVenuesInfoBlockValidated,
-  handleWorkInfoBlockValidated
+  handleWorkInfoBlockValidated,
+  requestFlaggedStaffMembers
 );

@@ -5,11 +5,16 @@ import * as cx from 'classnames';
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
 import StaffMembersReviewList from '../components/staff-members-review-list';
+import store from '../../../store/index';
+import toggleStaffMember from '../../../action-creators/toggle-staff-member';
+import {StaffMember} from '../../../interfaces/staff-member';
+import { UNREVIEWED_STAFF_MEMBERS, REVIEWED_STAFF_MEMBERS } from '../components/staff-members-review-list';
 
 interface Props {
 }
 
 interface MappedProps {
+  readonly flaggedStaffMembers: StaffMember[];
 }
 
 interface State {
@@ -19,34 +24,34 @@ interface State {
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, State> {
-  public unReviewedStaffMembers = [
-    {name: 'Igor Pugachev'},
-    {name: 'Vasili Pupkin'},
-    {name: 'Lyubov Pugacheva'},
-  ];
 
-  public reviewedStaffMembers = [
-  ];
-
-  constructor() {
-    super();
-
+  constructor(props: any) {
+    super(props);
     this.state = {
       reviewsShown: false
     };
+
+    console.log(this.props);
   }
 
   onToggleMenu = () => {
-    this.setState({reviewsShown: !this.state.reviewsShown});
+    this.setState({ reviewsShown: !this.state.reviewsShown });
   }
 
-  onStuffMemberDismiss = (stuffMember: any) => {
-    console.log('Dismissed: ', stuffMember.name);
-
+  onStuffMemberDismiss = (stuffMemberId: number) => {
+    store.dispatch(toggleStaffMember(stuffMemberId));
   }
 
-  onStuffMemberReview = (stuffMember: any) => {
-    console.log('Reviewed: ', stuffMember.name);
+  onStuffMemberReview = (stuffMemberId: number) => {
+    store.dispatch(toggleStaffMember(stuffMemberId));
+  }
+
+  flaggedStaffMembers() {
+    return this.props.flaggedStaffMembers.filter((staffMember) => !staffMember.reviewed );
+  }
+
+  reviewedStaffMembers() {
+    return this.props.flaggedStaffMembers.filter((staffMember) => staffMember.reviewed );
   }
 
   render() {
@@ -68,15 +73,16 @@ class Component extends React.Component<PropsFromConnect, State> {
         <div className={reviewContentClassName}>
           <div className="boss-dropdown__content-inner">
             <div className="boss-vetting">
-              <div className="boss-vetting__message">
-                <div className="boss-alert">
-                  <p className="boss-alert__text">
-                    Founded <span className="boss-alert__text-value">{this.unReviewedStaffMembers.length}</span> unreviewed staff members
-                  </p>
-                </div>
-              </div>
-              <StaffMembersReviewList onCardAction={this.onStuffMemberDismiss} staffMemberList={this.unReviewedStaffMembers} />
-              <StaffMembersReviewList onCardAction={this.onStuffMemberReview} staffMemberList={this.reviewedStaffMembers} />
+              {this.flaggedStaffMembers().length > 0 &&
+                <div className="boss-vetting__message">
+                  <div className="boss-alert">
+                      <p className="boss-alert__text">
+                        Founded <span className="boss-alert__text-value">{this.flaggedStaffMembers().length}</span> unreviewed staff members
+                      </p>
+                  </div>
+                </div>}
+              <StaffMembersReviewList listType={UNREVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberDismiss} staffMemberList={ this.flaggedStaffMembers() } />
+              <StaffMembersReviewList listType={REVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberReview} staffMemberList={ this.reviewedStaffMembers() } />
             </div>
           </div>
         </div>
@@ -86,8 +92,9 @@ class Component extends React.Component<PropsFromConnect, State> {
 }
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
-  console.log(state);
-  return {};
+  return {
+    flaggedStaffMembers: state.app.staffMembers
+  };
 };
 
 export default connect(
