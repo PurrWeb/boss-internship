@@ -17,7 +17,7 @@ export default class FileUpload extends React.Component {
 
   setAnswer() {
     let answerParams = {
-      questionId: this.props.currentQuestion.id,
+      questionnaireQuestionId: this.props.currentQuestion.id,
       image_ids: []
     };
 
@@ -35,7 +35,7 @@ export default class FileUpload extends React.Component {
     imageIds.push(imageId)
 
     this.props.setAnswer({
-      questionId: this.props.currentQuestion.id,
+      questionnaireQuestionId: this.props.currentQuestion.id,
       image_ids: imageIds
     })
   }

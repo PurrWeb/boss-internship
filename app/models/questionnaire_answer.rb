@@ -2,7 +2,7 @@ class QuestionnaireAnswer < ActiveRecord::Base
   attr_accessor :image_ids
 
   # Associations
-  belongs_to :question
+  belongs_to :questionnaire_question
   belongs_to :questionnaire_response
   has_many :uploads, as: :imageable
 

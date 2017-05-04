@@ -97,7 +97,7 @@ export class QuestionnaireContainer extends React.Component {
 
   getCurrentAnswer(question) {
     return this.props.answers.find(answer => {
-      return answer.questionId == question.id;
+      return answer.questionnaireQuestionId == question.id;
     });
   }
 

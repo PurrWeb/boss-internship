@@ -16,7 +16,7 @@ export default class Answer extends React.Component {
     let questionnaireResponse = this.props.questionnaireResponse;
     let answers = questionnaireResponse.answers;
     let answerParams = {
-      questionId: this.props.currentQuestion.id,
+      questionnaireQuestionId: this.props.currentQuestion.id,
       value: event.target.value
     };
 

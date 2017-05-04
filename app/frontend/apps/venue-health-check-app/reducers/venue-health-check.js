@@ -50,7 +50,7 @@ const venueHealthCheck = (state = initialState, action) => {
     let answers = state.get('answers');
     let completedAnswers;
     let existingAnswer = _.find(answers, answer => {
-      return answer.questionId == action.answerParams.questionId;
+      return answer.questionnaireQuestionId == action.answerParams.questionnaireQuestionId;
     });
 
     if (existingAnswer) {

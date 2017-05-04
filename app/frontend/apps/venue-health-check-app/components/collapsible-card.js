@@ -33,7 +33,7 @@ export default class CollapsibleCard extends React.Component {
 
     return this.props.categoryQuestions.map(question => {
       currentAnswer = this.props.answers.find(answer => {
-        return answer.questionId == question.id;
+        return answer.questionnaireQuestionId == question.id;
       });
 
       cardProps = Object.assign({

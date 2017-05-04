@@ -53,7 +53,7 @@ export default class QuestionCard extends React.Component {
     event.preventDefault();
 
     this.props.setAnswer({
-      questionId: this.props.currentQuestion.id,
+      questionnaireQuestionId: this.props.currentQuestion.id,
       note: this.state.noteValue
     })
   }
