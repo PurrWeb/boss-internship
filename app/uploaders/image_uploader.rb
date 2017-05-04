@@ -1,4 +1,4 @@
-class FileUploader < CarrierWave::Uploader::Base
+class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::RMagick
 
   if Rails.env.staging? || Rails.env.production?

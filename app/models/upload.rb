@@ -3,7 +3,7 @@ class Upload < ActiveRecord::Base
   belongs_to :imageable, polymorphic: true
 
   # Plugins
-  mount_uploader :file, FileUploader
+  mount_uploader :file, ImageUploader
 
   # Validations
   validates :file, {
