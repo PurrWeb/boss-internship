@@ -147,7 +147,7 @@ module Api
             hours_acceptance_period: hours_acceptance_period
           }
         else
-          render json: result.errors, status: 500
+          render json: { errors: result.errors }, status: 422
         end
       end
 
