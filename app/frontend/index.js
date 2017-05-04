@@ -98,6 +98,9 @@ registerComponent("Header", Header);
 import DetailsModal from "./components/safe-checks/details-modal"
 registerComponent("DetailsModal", DetailsModal)
 
+import VenueHealthCheckReportApp from "./apps/venue-health-check-report-app"
+registerComponent("VenueHealthCheckReportApp", VenueHealthCheckReportApp)
+
 import WeekPicker from "~/components/week-picker"
 
 import AppVersionChecker from '~/components/app-version-checker';
