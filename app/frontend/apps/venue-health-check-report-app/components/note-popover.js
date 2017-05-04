@@ -19,7 +19,7 @@ export default class NotePopover extends React.Component {
     }
 
     return (
-      <div className="boss-popover boss-popover_context_results-end" data-popover={ this.props.currentAnswer.question_id }>
+      <div className="boss-popover boss-popover_context_results-end" data-popover={ this.props.currentAnswer.questionnaire_question_id }>
         <header className="boss-popover__header">
           <i className="boss-popover__icon"></i>
           <h3 className="boss-popover__title">Notes</h3>

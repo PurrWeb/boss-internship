@@ -8,7 +8,7 @@ export default class AnswersTable extends React.Component {
 
   getAnswerForQuestion(question) {
     return this.props.answers.find(answer => {
-      return answer.question_id == question.id;
+      return answer.questionnaire_question_id == question.id;
     });
   }
 

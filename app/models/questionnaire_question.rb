@@ -3,7 +3,7 @@ class QuestionnaireQuestion < ActiveRecord::Base
   belongs_to :questionnaire_category
   belongs_to :questionnaire_area
   belongs_to :questionnaire
-  has_many :questionnaire_answers, class_name: 'QuestionnaireAnswer', foreign_key: :question_id
+  has_many :questionnaire_answers
 
   # Validations
   validates :text, presence: true
