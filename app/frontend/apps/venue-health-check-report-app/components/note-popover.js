@@ -1,6 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import ImageGallery from './image-gallery';
+
 export default class NotePopover extends React.Component {
   static displayName = 'NotePopover';
 
@@ -29,17 +31,9 @@ export default class NotePopover extends React.Component {
           <p className="boss-popover__text">
             { this.props.currentAnswer.note }
           </p>
+
           <h4 className="boss-popover__subtitle">Images</h4>
-
-          <div className="gallery">
-            <div className="boss-popover__image">
-              <img src="https://s-media-cache-ak0.pinimg.com/736x/42/ac/6a/42ac6ac364bd911e872d6f1e18ec7e42.jpg" alt="" />
-            </div>
-
-            <div className="boss-popover__image">
-              <img src="https://st.hzcdn.com/fimgs/cf3111130426c707_1308-w500-h400-b0-p0--traditional-bathroom.jpg" alt="" />
-            </div>
-          </div>
+          <ImageGallery { ...this.props } />
         </div>
       </div>
     )
