@@ -4,7 +4,7 @@ class QuestionnaireAnswer < ActiveRecord::Base
   # Associations
   belongs_to :questionnaire_question
   belongs_to :questionnaire_response
-  has_many :uploads, as: :imageable
+  has_many :uploads, as: :imageable, dependent: :destroy
 
   # Callbacks
   before_save :associate_uploads_to_answer
