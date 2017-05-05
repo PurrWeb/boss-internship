@@ -7,7 +7,7 @@ class VenueHealthCheckReportsController < ApplicationController
     questionnaire_questions = questionnaire.questionnaire_questions
     questionnaire_categories = questionnaire.questionnaire_categories
     questionnaire_answers = questionnaire.questionnaire_responses.last
-      .questionnaire_answers.includes(:question)
+      .questionnaire_answers.includes(:questionnaire_question)
 
     render locals: {
       questionnaire: questionnaire,

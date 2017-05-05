@@ -1,4 +1,4 @@
-class QuestionnaireCategoryService
+class QuestionnaireCategoryForm
   attr_reader :questionnaire, :categories, :questions, :answers, :response,
     :questionnaire_categories_questionnaire
 
@@ -31,7 +31,7 @@ class QuestionnaireCategoryService
     category_answers = category_answers(category_questions)
 
     category_answers.map do |answer|
-      score_for_answer(answer.question, answer)
+      score_for_answer(answer.questionnaire_question, answer)
     end.compact.sum
   end
 
@@ -40,7 +40,7 @@ class QuestionnaireCategoryService
     category_answers = category_answers(category_questions)
 
     category_answers.map do |answer|
-      maximum_alloted_score(answer.question)
+      maximum_alloted_score(answer.questionnaire_question)
     end.compact.sum
   end
 
@@ -70,7 +70,7 @@ class QuestionnaireCategoryService
 
   def category_answers(category_questions)
     answers.where(
-      question: category_questions
+      questionnaire_question: category_questions
     )
   end
 end

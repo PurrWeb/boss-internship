@@ -12,6 +12,14 @@ class QuestionnaireAnswer < ActiveRecord::Base
   # Validations
   # Custom Validates value
 
+  def pass_value?
+    return true if questionnaire_question.pass_values.blank?
+
+    pass_values = questionnaire_question.pass_values.split(',').map(&:strip)
+
+    pass_values.include?(value)
+  end
+
   private
 
   def associate_uploads_to_answer
@@ -22,13 +30,5 @@ class QuestionnaireAnswer < ActiveRecord::Base
     return if image_uploads.blank?
 
     uploads << image_uploads
-  end
-
-  def pass_value?
-    return true if question.pass_values.blank?
-
-    pass_values = question.pass_values.split(',').map(&:strip)
-
-    pass_values.include?(value)
   end
 end

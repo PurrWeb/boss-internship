@@ -25,7 +25,7 @@ class Api::V1::QuestionnaireCategoryScoreSerializer < ActiveModel::Serializer
   private
 
   def service
-    @service ||= QuestionnaireCategoryService.new(
+    @service ||= QuestionnaireCategoryForm.new(
       questionnaire: scope
     )
   end
