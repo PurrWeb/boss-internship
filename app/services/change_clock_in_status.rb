@@ -29,6 +29,7 @@ class ChangeClockInStatus
     )
 
     if illegal_clock_in_attempt?(state: state, clock_in_day: clock_in_day)
+      result = false
       errors[:base] ||= []
       errors[:base] << "Staff member is still clocked in at another venue.\nPlease clock out there before clocking in."
     elsif !STATES.include?(state)
@@ -38,6 +39,7 @@ class ChangeClockInStatus
     elsif last_event(clock_in_day) && (at < last_event(clock_in_day).at)
       raise 'supplied at time before previous event'
     elsif !transition_legal(clock_in_day)
+      result = false
       errors[:base] ||= []
       errors[:base] << "illegal attempt to transistion from #{clock_in_day.current_clock_in_state} to #{state}"
     else

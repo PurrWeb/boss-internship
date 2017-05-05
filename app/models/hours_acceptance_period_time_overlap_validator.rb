@@ -1,4 +1,4 @@
-class PeriodTimeOverlapValidator
+class HoursAcceptancePeriodTimeOverlapValidator
   def initialize(period)
     @period = period
   end
@@ -15,8 +15,7 @@ class PeriodTimeOverlapValidator
           )
         )
 
-      relation = relation.enabled
-      relation = relation.accepted if relation.respond_to?(:accepted)
+      relation = relation.enabled.accepted
 
       query = InRangeQuery.new(
         relation: relation,
@@ -57,10 +56,6 @@ class PeriodTimeOverlapValidator
     staff_member.present? &&
     clock_in_day.present? &&
     period.enabled? &&
-    (!period.respond_to?(:accepted?) || period.accepted?)
-  end
-
-  def accepted?
     period.accepted?
   end
 

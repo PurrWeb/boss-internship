@@ -4,9 +4,7 @@ module PeriodTimeValidations
   included do
     validate :times_in_correct_order
     validate :times_within_correct_day
-    validate do |period|
-      PeriodTimeOverlapValidator.new(period).validate
-    end
+    validate :times_overlap_validations
   end
 
   # validation
