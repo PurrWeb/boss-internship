@@ -1,4 +1,4 @@
-class PeriodTimeOverlapValidator
+class HoursAcceptancePeriodTimeOverlapValidator
   def initialize(period)
     @period = period
   end

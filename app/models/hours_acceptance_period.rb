@@ -23,6 +23,10 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   include PeriodTimeValidations
 
+  def times_overlap_validations
+    HoursAcceptancePeriodTimeOverlapValidator.new(self).validate
+  end
+
   def editable?
     !frozen?
   end
