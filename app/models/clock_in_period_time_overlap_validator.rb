@@ -34,16 +34,6 @@ class ClockInPeriodTimeOverlapValidator
       if query.count > 0
         period.errors.add(:base, 'period overlaps existing period')
       end
-
-      conflicting_owed_hours = InRangeQuery.new(
-        relation: staff_member.active_owed_hours,
-        start_value: starts_at,
-        end_value: ends_at
-      ).all
-
-      if conflicting_owed_hours.count > 0
-        period.errors.add(:base, 'conflicting owed hour exists')
-      end
     end
   end
 
