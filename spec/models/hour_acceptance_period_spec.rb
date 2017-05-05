@@ -9,7 +9,8 @@ describe HoursAcceptancePeriod do
         clock_in_day: clock_in_day,
         starts_at: starts_at,
         ends_at: ends_at,
-        creator: user
+        creator: user,
+        status: HoursAcceptancePeriod::ACCEPTED_STATE
       )
     end
     let(:starts_at) { start_of_day + 1.hour }
@@ -78,12 +79,18 @@ describe HoursAcceptancePeriod do
           clock_in_day: existing_period_clock_in_day,
           starts_at: existing_period_starts_at,
           ends_at: existing_period_ends_at,
-          creator: user
+          creator: user,
+          status: HoursAcceptancePeriod::ACCEPTED_STATE
         )
       end
 
       before do
         existing_period
+      end
+
+
+      specify do
+        expect(existing_period.accepted?).to eq(true)
       end
 
       specify 'should raise overlap error' do
@@ -105,6 +112,30 @@ describe HoursAcceptancePeriod do
         specify 'should raise overlap error' do
           period.validate
           expect(period.errors[:base]).to include("period overlaps existing period")
+        end
+      end
+
+      context 'existing period unaccepted' do
+        let(:existing_period) do
+          HoursAcceptancePeriod.create!(
+            clock_in_day: existing_period_clock_in_day,
+            starts_at: existing_period_starts_at,
+            ends_at: existing_period_ends_at,
+            creator: user
+          )
+        end
+
+        before do
+          existing_period
+        end
+
+        specify do
+          expect(existing_period.accepted?).to eq(false)
+        end
+
+        specify 'should not raise overlap error' do
+          period.validate
+          expect(period.errors[:base]).to_not include("period overlaps existing period")
         end
       end
 

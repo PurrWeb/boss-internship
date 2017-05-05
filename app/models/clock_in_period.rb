@@ -12,6 +12,10 @@ class ClockInPeriod < ActiveRecord::Base
 
   delegate :venue, :date, to: :clock_in_day
 
+  def self.enabled
+    all
+  end
+
   def self.incomplete
     where(ends_at: nil)
   end

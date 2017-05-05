@@ -20,7 +20,7 @@ class ChangeClockInStatus
 
   def call
     errors = {}
-    result = false
+    result = true
 
     clock_in_day = ClockInDay.find_or_initialize_by(
       venue: venue,
@@ -64,28 +64,37 @@ class ChangeClockInStatus
             starts_at: at
           )
         elsif event_type == 'clock_out'
-          if saved_last_event.event_type == 'start_break'
-            add_break_to_period(
-              clock_in_period: current_recorded_clock_in_period,
-              last_event: saved_last_event,
-              at: at
-            )
+          result = current_recorded_clock_in_period.update_attributes(ends_at: at)
+
+          if !result
+            current_recorded_clock_in_period.errors.messages.each do |key, message|
+              errors[key] = message
+            end
           end
 
-          current_recorded_clock_in_period.update_attributes!(ends_at: at)
+          if result
+            if saved_last_event.event_type == 'start_break'
 
-          overlap_query = OverlappingHoursAcceptancePeriodQuery.new(
-            clock_in_day: clock_in_day,
-            starts_at: current_recorded_clock_in_period.starts_at,
-            ends_at: current_recorded_clock_in_period.ends_at
-          )
-          new_period_will_conflict_with_existing = overlap_query.count > 0
+              add_break_to_period(
+                clock_in_period: current_recorded_clock_in_period,
+                last_event: saved_last_event,
+                at: at
+              )
+            end
 
-          if !new_period_will_conflict_with_existing
-            create_hours_confirmation_from_clock_in_period(
-              clock_in_period: current_recorded_clock_in_period,
-              creator: requester
+            overlap_query = OverlappingHoursAcceptancePeriodQuery.new(
+              clock_in_day: clock_in_day,
+              starts_at: current_recorded_clock_in_period.starts_at,
+              ends_at: current_recorded_clock_in_period.ends_at
             )
+            new_period_will_conflict_with_existing = overlap_query.count > 0
+
+            if !new_period_will_conflict_with_existing
+              create_hours_confirmation_from_clock_in_period(
+                clock_in_period: current_recorded_clock_in_period,
+                creator: requester
+              )
+            end
           end
         elsif event_type == 'end_break'
           add_break_to_period(
@@ -95,16 +104,18 @@ class ChangeClockInStatus
           )
         end
 
-        current_recorded_clock_in_period.save!
+        if result
+          current_recorded_clock_in_period.save!
 
-        ClockInEvent.create!(
-          clock_in_period: current_recorded_clock_in_period,
-          at: at,
-          creator: requester,
-          event_type: event_type
-        )
+          ClockInEvent.create!(
+            clock_in_period: current_recorded_clock_in_period,
+            at: at,
+            creator: requester,
+            event_type: event_type
+          )
+        end
 
-        result = true
+        raise ActiveRecord::Rollback unless result
       end
     end
 

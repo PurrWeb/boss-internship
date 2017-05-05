@@ -14,7 +14,9 @@ class PeriodTimeOverlapValidator
             date: date
           )
         )
-      relation = relation.enabled if relation.respond_to?(:enabled)
+
+      relation = relation.enabled
+      relation = relation.accepted if relation.respond_to?(:accepted)
 
       query = InRangeQuery.new(
         relation: relation,
@@ -50,11 +52,16 @@ class PeriodTimeOverlapValidator
   attr_accessor :period
 
   def prerequisites_persent?
-    starts_at.present? &&
+    starts_at.present?
     ends_at.present? &&
     staff_member.present? &&
     clock_in_day.present? &&
-    period.enabled?
+    period.enabled? &&
+    (!period.respond_to?(:accepted?) || period.accepted?)
+  end
+
+  def accepted?
+    period.accepted?
   end
 
   def starts_at
