@@ -16,7 +16,6 @@ class ClockInPeriodTimeOverlapValidator
         )
 
       relation = relation.enabled
-      relation = relation.accepted if relation.respond_to?(:accepted)
 
       query = InRangeQuery.new(
         relation: relation,
@@ -56,12 +55,7 @@ class ClockInPeriodTimeOverlapValidator
     ends_at.present? &&
     staff_member.present? &&
     clock_in_day.present? &&
-    period.enabled? &&
-    (!period.respond_to?(:accepted?) || period.accepted?)
-  end
-
-  def accepted?
-    period.accepted?
+    period.enabled?
   end
 
   def starts_at
