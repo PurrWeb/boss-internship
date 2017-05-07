@@ -23,7 +23,7 @@ export default class Answer extends React.Component {
     this.props.setAnswer(answerParams);
   }
 
-  renderBinaryQuestionAnswer() {
+  renderBinaryOrScaledQuestionAnswer() {
     let question = this.props.currentQuestion;
     let possibleValues = this.props.currentQuestion.possible_values;
     let answer = (this.props.currentAnswer) ? this.props.currentAnswer.value : '';
@@ -99,10 +99,10 @@ export default class Answer extends React.Component {
   }
 
   renderAnswer() {
-    if (this.props.currentQuestion.type == 'BinaryQuestion') {
-      return this.renderBinaryQuestionAnswer();
-    } else if (this.props.currentQuestion.type == 'ScaledQuestion') {
+    if (this.props.currentQuestion.type == 'ScaledQuestion') {
       return this.renderScaleQuestionAnswer();
+    } else {
+      return this.renderBinaryOrScaledQuestionAnswer();
     }
   }
 

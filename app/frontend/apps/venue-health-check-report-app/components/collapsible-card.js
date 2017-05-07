@@ -39,6 +39,24 @@ export default class CollapsibleCard extends React.Component {
     }
   }
 
+  renderScore() {
+    let currentScore = this.props.currentScore;
+    let totalScore = currentScore.total_score || 0;
+
+    if (!currentScore.required_question_passed && parseInt(totalScore) === 0) return;
+
+    return (
+      <div className="boss-chart__score">
+        <p className="boss-chart__score-label">Score</p>
+        <p className="boss-chart__score-value">
+          <span className="boss-chart__score-current">{ currentScore.category_score }</span>
+          <span> / </span>
+          <span className="boss-chart__score-total">{ currentScore.total_score }</span>
+        </p>
+      </div>
+    );
+  }
+
   render() {
     let categoryPassed = this.props.currentScore.passed;
     let iconStateClass = (this.state.opened) ? 'boss-board__switch_state_opened' : '';
@@ -79,14 +97,7 @@ export default class CollapsibleCard extends React.Component {
                     </svg>
                   </div>
 
-                  <div className="boss-chart__score">
-                    <p className="boss-chart__score-label">Score</p>
-                    <p className="boss-chart__score-value">
-                      <span className="boss-chart__score-current">{this.props.currentScore.category_score}</span>
-                      <span> / </span>
-                      <span className="boss-chart__score-total">{this.props.currentScore.total_score}</span>
-                    </p>
-                  </div>
+                  { this.renderScore() }
                 </div>
               </div>
             </div>

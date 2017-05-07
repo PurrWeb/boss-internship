@@ -4,7 +4,7 @@ class Api::V1::QuestionnaireAnswerSerializer < ActiveModel::Serializer
   has_many :uploads
 
   def passed
-    if object.questionnaire_question.is_a?(BinaryQuestion)
+    if ['BinaryQuestion', 'RequiredQuestion'].include?(object.questionnaire_question.type)
       object.pass_value?
     else
       true

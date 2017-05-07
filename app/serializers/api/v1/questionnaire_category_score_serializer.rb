@@ -1,6 +1,6 @@
 class Api::V1::QuestionnaireCategoryScoreSerializer < ActiveModel::Serializer
   attributes :questionnaire_category_id, :passed, :threshold, :category_score,
-    :total_score
+    :total_score, :required_question_passed
 
   def questionnaire_category_id
     object.id
@@ -8,6 +8,10 @@ class Api::V1::QuestionnaireCategoryScoreSerializer < ActiveModel::Serializer
 
   def passed
     service.category_passed?(object)
+  end
+
+  def required_question_passed
+    service.required_questions_passed?(object)
   end
 
   def threshold

@@ -9,4 +9,7 @@ class Questionnaire < ActiveRecord::Base
   has_many :questionnaire_categories_questionnaires
   has_many :questionnaire_categories,
            through: :questionnaire_categories_questionnaires
+
+  # Validations
+  validates :name, presence: true
 end

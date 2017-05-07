@@ -31,7 +31,7 @@ export default class Header extends React.Component {
     });
     let failedCategoryTags = failedCategoryNames.map(categoryName => {
       return (
-        <a className="boss-page-dashboard__meta-link">{ categoryName }</a>
+        <a className="boss-page-dashboard__meta-link" key={ categoryName }>{ categoryName }</a>
       );
     });
 

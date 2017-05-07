@@ -16,14 +16,23 @@ class QuestionnaireCategoryForm
       )
   end
 
+  def required_questions_passed?(category)
+    questions = category_questions(category).where(type: 'RequiredQuestion')
+
+    return true if questions.blank?
+
+    category_answers(questions).map(&:pass_value?).exclude?(false)
+  end
+
   def category_passed?(category)
-    category_score(category) >= category_threshold(category)
+    category_score(category) >= category_threshold(category) &&
+      required_questions_passed?(category)
   end
 
   def category_threshold(category)
     questionnaire_categories_questionnaire.where(
       questionnaire_category: category
-    ).last.threshold_score
+    ).last.threshold_score || 0
   end
 
   def category_score(category)
@@ -51,6 +60,8 @@ class QuestionnaireCategoryForm
       question.end_value * question.scale_increment
     elsif question.is_a?(BinaryQuestion)
       question.score
+    else
+      0
     end
   end
 
@@ -59,6 +70,8 @@ class QuestionnaireCategoryForm
       answer.value.to_s.to_i * question.scale_increment
     elsif question.is_a?(BinaryQuestion)
       answer.pass_value? ? question.score : 0
+    else
+      0
     end
   end
 
