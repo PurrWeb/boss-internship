@@ -3,7 +3,7 @@ class VenueHealthCheckReportsController < ApplicationController
   before_filter :find_venue, only: [:show]
 
   def show
-    questionnaire = Questionnaire.last
+    questionnaire = @venue.questionnaires.last
     questionnaire_questions = questionnaire.questionnaire_questions
     questionnaire_categories = questionnaire.questionnaire_categories
     questionnaire_answers = questionnaire.questionnaire_responses.last
