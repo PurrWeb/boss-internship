@@ -22,7 +22,6 @@
 'use strict';
 
 var ccharts = document.getElementsByClassName('boss-chart-questionnaire');
-window.healthCheckChart = {};
 
 function CompletenessChart(placeholderName, configuration) {
   this.placeholderName = placeholderName;
@@ -164,10 +163,7 @@ function newCompletenessChart(id, current, total, size, breakpoint) {
   }];
 
   var createCompletenessChart = new CompletenessChart(config.id, config);
-
-  if (config.total > 0) {
-    createCompletenessChart.render();
-  }
+  createCompletenessChart.render();
 }
 
 function createCompletenessCharts() {
@@ -177,6 +173,6 @@ function createCompletenessCharts() {
   });
 }
 
-window.healthCheckChart.initialize = function() {
+function initializeCompletenessCharts() {
   createCompletenessCharts();
 }

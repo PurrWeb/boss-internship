@@ -238,11 +238,13 @@ export class QuestionnaireContainer extends React.Component {
       <main className="boss-page-main">
         <div className="boss-page-main__dashboard">
           <div className="boss-page-main__inner">
-            <VenueSelector { ...this.commonProps() } />
+            <div className="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_questionnaire">
+              <VenueSelector { ...this.commonProps() } />
 
-            <QuestionnaireActions { ...this.commonProps() } />
+              <QuestionnaireActions { ...this.commonProps() } />
 
-            <QuestionnaireFilter { ...this.commonProps() } />
+              <QuestionnaireFilter { ...this.commonProps() } />
+            </div>
           </div>
         </div>
 

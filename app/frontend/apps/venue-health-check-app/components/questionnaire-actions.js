@@ -11,7 +11,7 @@ export default class QuestionnaireActions extends React.Component {
       chartComponent.innerHTML = '';
     }
 
-    window.healthCheckChart.initialize();
+    initializeCompletenessCharts();
   }
 
   saveAnswers() {
