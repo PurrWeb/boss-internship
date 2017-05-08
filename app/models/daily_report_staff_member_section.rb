@@ -1,7 +1,7 @@
 class DailyReportStaffMemberSection < ActiveRecord::Base
   belongs_to :staff_type
   belongs_to :daily_report, inverse_of: :staff_member_sections
-  has_many :staff_member_listings, class_name: "DailyReportStaffMemberListing", inverse_of: :daily_report_staff_member_section
+  has_many :staff_member_listings, class_name: "DailyReportStaffMemberListing", inverse_of: :daily_report_staff_member_section, dependent: :delete_all
 
   validates :daily_report, presence: true
   validates :staff_type, presence: true
