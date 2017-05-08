@@ -1,4 +1,4 @@
-class ShiftUpdateNotificationJob < RecurringJob
+class ShiftUpdateNotificationJob < ActiveJob::Base
   def perform
     staff_members = StaffMemberWithShiftNotificationsQuery.new.all
     job_time = Time.current

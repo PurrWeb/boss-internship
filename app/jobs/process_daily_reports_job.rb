@@ -1,4 +1,4 @@
-class ProcessDailyReportsJob < RecurringJob
+class ProcessDailyReportsJob < ActiveJob::Base
   def perform
     reports = DailyReport.requiring_update.last(2)
     reports.each do |report|
