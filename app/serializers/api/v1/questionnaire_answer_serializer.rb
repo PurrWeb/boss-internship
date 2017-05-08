@@ -7,7 +7,7 @@ class Api::V1::QuestionnaireAnswerSerializer < ActiveModel::Serializer
     if ['BinaryQuestion', 'RequiredQuestion'].include?(object.questionnaire_question.type)
       object.pass_value?
     else
-      true
+      nil
     end
   end
 end

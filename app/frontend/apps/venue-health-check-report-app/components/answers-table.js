@@ -37,7 +37,18 @@ export default class AnswersTable extends React.Component {
 
     return this.props.categoryQuestions.map(question => {
       answer = this.getAnswerForQuestion(question);
-      statusIcon = (answer.passed) ? 'boss-results__cell_status_approved' : 'boss-results__cell_status_rejected';
+
+      if (question.type !== 'ScaledQuestion') {
+        console.log(question.type)
+        if (answer.passed) {
+          statusIcon = 'boss-results__cell_status_approved';
+        } else {
+          statusIcon = 'boss-results__cell_status_rejected';
+        }
+      } else {
+        statusIcon = '';
+      }
+
       noteIcon = (answer.note) ? 'boss-results__cell_action_popover' : '';
 
       return (
