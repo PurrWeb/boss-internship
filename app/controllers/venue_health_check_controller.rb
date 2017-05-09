@@ -15,7 +15,7 @@ class VenueHealthCheckController < ApplicationController
 
     # This action will automatically redirect to the last venue in the accessible_venues array
     # as a temporary solution until the venue page is ready.
-    redirect_to venue_health_check_path(id: venue.name)
+    redirect_to venue_health_check_path(id: venue.id)
   end
 
   def show
@@ -51,7 +51,7 @@ class VenueHealthCheckController < ApplicationController
   end
 
   def find_venue
-    @venue = @accessible_venues.detect { |venue| venue.name == params[:id] }
+    @venue = @accessible_venues.detect { |venue| venue.id == params[:id].to_i }
   end
 
   def ensure_venue_exists

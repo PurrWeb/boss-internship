@@ -43,7 +43,7 @@ class VenueHealthCheckReportsController < ApplicationController
   end
 
   def find_venue
-    @venue = @accessible_venues.detect { |venue| venue.name == params[:venue_health_check_id] }
+    @venue = @accessible_venues.detect { |venue| venue.id == params[:venue_health_check_id].to_i }
   end
 
   def ensure_venue_exists
