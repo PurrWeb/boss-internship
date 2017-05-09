@@ -25,8 +25,15 @@ class QuestionnaireCategoryForm
   end
 
   def category_passed?(category)
-    category_score(category) >= category_threshold(category) &&
-      required_questions_passed?(category)
+    c_score = category_score(category)
+    total_score = total_category_score(category)
+    score_percentage = if total_score == 0
+      0
+    else
+      (c_score / total_score) * 100
+    end
+
+    score_percentage >= 95 && required_questions_passed?(category)
   end
 
   def category_threshold(category)
