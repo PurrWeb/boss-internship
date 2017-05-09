@@ -1,6 +1,8 @@
 class VenueHealthCheckReportsController < ApplicationController
   before_filter :find_accessible_venues
   before_filter :find_venue, only: [:show]
+  before_filter :ensure_venue_exists, only: [:show]
+  before_filter :ensure_report_exists, only: [:show]
 
   def show
     questionnaire = @venue.questionnaires.last
@@ -21,6 +23,14 @@ class VenueHealthCheckReportsController < ApplicationController
 
   private
 
+  def ensure_report_exists
+    questionnaire = @venue.questionnaires.last
+
+    if questionnaire.blank? || questionnaire.questionnaire_responses.blank?
+      render_not_found!
+    end
+  end
+
   def render_v2_layout?
     true
   end
@@ -31,5 +41,11 @@ class VenueHealthCheckReportsController < ApplicationController
 
   def find_venue
     @venue = @accessible_venues.detect { |venue| venue.name == params[:venue_health_check_id] }
+  end
+
+  def ensure_venue_exists
+    if @venue.blank?
+      render_not_found!
+    end
   end
 end

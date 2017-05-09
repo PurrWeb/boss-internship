@@ -45,4 +45,8 @@ class ApplicationController < ActionController::Base
   def bundle_script
     @bundle_script = SourcemapHelper.script_path
   end
+
+  def render_not_found!
+    render file: "#{Rails.root}/public/404.html", layout: false, status: 404
+  end
 end
