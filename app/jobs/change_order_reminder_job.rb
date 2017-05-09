@@ -1,4 +1,4 @@
-class ChangeOrderReminderJob < RecurringJob
+class ChangeOrderReminderJob < ActiveJob::Base
   def perform
     change_orders = ChangeOrder.current
     venues_without_current_change_order = VenueWithoutAssociatedQuery.new(associated_relation: change_orders).all

@@ -1,4 +1,4 @@
-class FridayFruitOrderReminderJob < RecurringJob
+class FridayFruitOrderReminderJob < ActiveJob::Base
   def perform
     venues_without_fruit_order = VenueWithoutAssociatedQuery.new(
       associated_relation: FruitOrder.current

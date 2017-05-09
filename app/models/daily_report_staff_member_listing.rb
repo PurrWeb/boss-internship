@@ -1,5 +1,5 @@
 class DailyReportStaffMemberListing < ActiveRecord::Base
-  belongs_to :daily_report_staff_member_section, dependent: :destroy
+  belongs_to :daily_report_staff_member_section
   belongs_to :staff_member
 
   validates :daily_report_staff_member_section, presence: true
