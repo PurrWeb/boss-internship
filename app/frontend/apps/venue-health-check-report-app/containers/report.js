@@ -11,11 +11,13 @@ function mapStateToProps(state) {
   return {
     categories: state.venueHealthCheckReport.get('categories'),
     answers: state.venueHealthCheckReport.get('answers'),
+    response: state.venueHealthCheckReport.get('response'),
     scores: state.venueHealthCheckReport.get('scores'),
     questions: state.venueHealthCheckReport.get('questions'),
     venues: state.venueHealthCheckReport.get('venues'),
     currentVenue: state.venueHealthCheckReport.get('currentVenue'),
-    frontend: state.venueHealthCheckReport.get('frontend'),
+    user: state.venueHealthCheckReport.get('user'),
+    frontend: state.venueHealthCheckReport.get('frontend')
   };
 }
 

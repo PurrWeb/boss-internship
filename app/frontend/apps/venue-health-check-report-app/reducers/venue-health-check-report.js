@@ -20,7 +20,11 @@ const venueHealthCheckReport = (state = initialState, action) => {
     return state.set(
       'questions', action.initialData.questions
     ).set(
+      'response', action.initialData.response
+    ).set(
       'answers', action.initialData.answers
+    ).set(
+      'user', action.initialData.user
     ).set(
       'categories', action.initialData.categories
     ).set(

@@ -8,16 +8,19 @@ class VenueHealthCheckReportsController < ApplicationController
     questionnaire = @venue.questionnaires.last
     questionnaire_questions = questionnaire.questionnaire_questions
     questionnaire_categories = questionnaire.questionnaire_categories
-    questionnaire_answers = questionnaire.questionnaire_responses.last
-      .questionnaire_answers.includes(:questionnaire_question, :uploads)
+    questionnaire_response = questionnaire.questionnaire_responses.last
+    questionnaire_answers = questionnaire_response.questionnaire_answers
+      .includes(:questionnaire_question, :uploads)
 
     render locals: {
       questionnaire: questionnaire,
+      questionnaire_response: questionnaire_response,
       questionnaire_questions: questionnaire_questions,
       questionnaire_categories: questionnaire_categories,
       questionnaire_answers: questionnaire_answers,
       venues: @accessible_venues,
-      access_token: current_user.current_access_token || AccessToken.create_web!(user: current_user)
+      access_token: current_user.current_access_token || AccessToken.create_web!(user: current_user),
+      user: questionnaire_response.user
     }
   end
 

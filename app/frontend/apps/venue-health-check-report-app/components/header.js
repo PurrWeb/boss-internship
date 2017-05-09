@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import moment from 'moment';
 
 export default class Header extends React.Component {
   static displayName = 'Header';
@@ -52,6 +53,40 @@ export default class Header extends React.Component {
     }
   }
 
+  renderUser() {
+    if (!this.props.user) return;
+
+    return (
+      <p className="boss-page-dashboard__meta-item  boss-page-dashboard__meta-item_role_user">
+        <span className="boss-page-dashboard__meta-text">Checked by </span>
+        <a
+          className="boss-page-dashboard__meta-link boss-page-dashboard__meta-link_role_name"
+          href={ `/users/${this.props.user.id}` }
+        >
+          { this.props.user.name }
+        </a>
+      </p>
+    );
+  }
+
+  renderDate() {
+    if (!this.props.response) return;
+
+    var createdAt = this.props.response.created_at
+
+    if (!createdAt) return;
+
+    return (
+      <p className="boss-page-dashboard__meta-item boss-page-dashboard__meta-item_role_date">
+        <span
+          className="boss-page-dashboard__meta-text"
+        >
+          { moment(new Date(createdAt)).format('MMMM Do YYYY') }
+        </span>
+      </p>
+    );
+  }
+
   render() {
     return (
       <div className="boss-page-main__dashboard">
@@ -67,14 +102,9 @@ export default class Header extends React.Component {
 
             <div className="boss-page-dashboard__group">
               <div className="boss-page-dashboard__meta">
-                <p className="boss-page-dashboard__meta-item  boss-page-dashboard__meta-item_role_user">
-                  <span className="boss-page-dashboard__meta-text">Checked by </span>
-                  <a className="boss-page-dashboard__meta-link boss-page-dashboard__meta-link_role_name" href="#">Liam Graham</a>
-                </p>
+                { this.renderUser() }
 
-                <p className="boss-page-dashboard__meta-item boss-page-dashboard__meta-item_role_date">
-                  <span className="boss-page-dashboard__meta-text">2nd November 2016</span>
-                </p>
+                { this.renderDate() }
               </div>
 
               <div className="boss-page-dashboard__buttons-group boss-page-dashboard__buttons-group_mobile">
