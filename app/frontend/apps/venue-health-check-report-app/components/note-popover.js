@@ -15,6 +15,12 @@ export default class NotePopover extends React.Component {
     });
   }
 
+  renderTitle() {
+    if (!this.props.currentAnswer.uploads.length) return '';
+
+    return <h4 className="boss-popover__subtitle">Images</h4>;
+  }
+
   render() {
     if (!this.props.currentAnswer.note) {
       return <div></div>;
@@ -32,7 +38,7 @@ export default class NotePopover extends React.Component {
             { this.props.currentAnswer.note }
           </p>
 
-          <h4 className="boss-popover__subtitle">Images</h4>
+          { this.renderTitle() }
           <ImageGallery { ...this.props } />
         </div>
       </div>

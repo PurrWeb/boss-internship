@@ -54,7 +54,7 @@ export class QuestionnaireContainer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.frontend.saved) {
-      location.href = `/venue_health_check/${nextProps.currentVenue.name}/report`
+      location.href = `/venue_health_check/${nextProps.currentVenue.id}/report`
     }
   }
 
