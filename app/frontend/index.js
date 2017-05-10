@@ -17,9 +17,6 @@ window.debug.selectors = selectors;
 window.React = React;
 window.ReactDOM = ReactDOM;
 
-// Import all sass from submodule(boss-css repo)
-import './assets/sass/index.sass';
-
 import "./lib/load-underscore-mixins"
 
 import "babel-core/polyfill"
