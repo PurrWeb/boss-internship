@@ -9,6 +9,13 @@ export function setAnswer(answerParams) {
   };
 }
 
+export function setUpload(uploadParams) {
+  return {
+    type: constants.SET_UPLOAD,
+    uploadParams
+  };
+}
+
 export function saveAnswers(questionnaireId, answers) {
   let token = window.boss.venueHealthCheck.accessToken;
   let params = {

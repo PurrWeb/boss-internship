@@ -11,8 +11,10 @@ const initialState = Immutable.Map({
     questionnaireId: null,
   },
   answers: [],
+  uploads: [],
   questionCount: 0,
   answerCount: 0,
+  uploadCount: 0,
   frontend: {
     loading: true,
     saving: false,
@@ -22,6 +24,10 @@ const initialState = Immutable.Map({
 });
 
 const venueHealthCheck = (state = initialState, action) => {
+  let answers;
+  let existingAnswer;
+  let updatedAnswer;
+
   switch (action.type) {
   case constants.INITIAL_LOAD:
     return state.set(
@@ -47,14 +53,15 @@ const venueHealthCheck = (state = initialState, action) => {
       'frontend', Object.assign({}, state.get('frontend'), { loading: true })
     );
   case constants.SET_ANSWER:
-    let answers = state.get('answers');
     let completedAnswers;
-    let existingAnswer = _.find(answers, answer => {
+
+    answers = state.get('answers');
+    existingAnswer = _.find(answers, answer => {
       return answer.questionnaireQuestionId == action.answerParams.questionnaireQuestionId;
     });
 
     if (existingAnswer) {
-      let updatedAnswer = Object.assign(existingAnswer, action.answerParams);
+      updatedAnswer = Object.assign(existingAnswer, action.answerParams);
 
       answers[answers.indexOf(existingAnswer)] = updatedAnswer;
     } else {
@@ -66,6 +73,35 @@ const venueHealthCheck = (state = initialState, action) => {
     });
 
     return state.set('answers', answers).set('answerCount', completedAnswers.length);
+
+  case constants.SET_UPLOAD:
+    let uploads = state.get('uploads');
+    answers = state.get('answers');
+
+    uploads.push(action.uploadParams);
+
+    existingAnswer = _.find(answers, answer => {
+      return answer.questionnaireQuestionId == action.uploadParams.questionnaireQuestionId;
+    });
+
+    if (existingAnswer) {
+      let imageIds = existingAnswer.image_ids || [];
+
+      imageIds.push(action.uploadParams.id);
+
+      updatedAnswer = Object.assign(existingAnswer, {
+        image_ids: imageIds
+      });
+
+      answers[answers.indexOf(existingAnswer)] = updatedAnswer;
+    } else {
+      answers.push({
+        questionnaireQuestionId: action.uploadParams.questionnaireQuestionId,
+        image_ids: [action.uploadParams.id]
+      });
+    }
+
+    return state.set('uploads', uploads).set('answers', answers).set('uploadCount', uploads.length);
 
   case constants.SAVE_ANSWERS_REQUEST:
     return state.set(

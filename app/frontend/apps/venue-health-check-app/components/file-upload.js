@@ -16,27 +16,27 @@ export default class FileUpload extends React.Component {
   }
 
   setAnswer() {
-    let answerParams = {
-      questionnaireQuestionId: this.props.currentQuestion.id,
-      image_ids: []
-    };
-
-    this.props.setAnswer(answerParams);
-  }
-
-  saveImageToAnswer(imageId) {
-    let answer = this.props.currentAnswer || this.setAnswer;
-    let imageIds = [];
-
-    if (answer.image_ids) {
-      imageIds = answer.image_ids;
-    }
-
-    imageIds.push(imageId)
-
     this.props.setAnswer({
       questionnaireQuestionId: this.props.currentQuestion.id,
-      image_ids: imageIds
+      image_ids: [],
+      image_uploads: []
+    });
+
+    return this.props.answers.find(answer => {
+      return answer.questionnaireQuestionId == this.props.currentQuestion.id;
+    });
+  }
+
+  saveImageToAnswer(upload) {
+    let uploads = this.props.uploads;
+    let answerUploads = this.props.uploads.filter((upload) => {
+      return upload.questionnaireQuestionId == this.props.currentQuestion.id
+    });
+
+    this.props.setUpload({
+      questionnaireQuestionId: this.props.currentQuestion.id,
+      url: upload.url,
+      id: upload.id
     })
   }
 
@@ -64,7 +64,7 @@ export default class FileUpload extends React.Component {
             uploadedFiles: uploadedFiles
           });
 
-          this.saveImageToAnswer(response.id);
+          this.saveImageToAnswer(response);
         });
       }
     }

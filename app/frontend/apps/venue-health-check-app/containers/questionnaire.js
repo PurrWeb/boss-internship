@@ -8,7 +8,7 @@ import QuestionnaireFilter from '../components/questionnaire-filter';
 import QuestionnaireActions from '../components/questionnaire-actions';
 
 import { setInitialData } from '../actions/initial-load'
-import { setAnswer, saveAnswers } from '../actions/answers'
+import { setAnswer, saveAnswers, setUpload } from '../actions/answers'
 
 function mapStateToProps(state) {
   return {
@@ -21,8 +21,10 @@ function mapStateToProps(state) {
     currentVenue: state.venueHealthCheck.get('currentVenue'),
     questionnaireResponse: state.venueHealthCheck.get('questionnaireResponse'),
     answerCount: state.venueHealthCheck.get('answerCount'),
+    uploadCount: state.venueHealthCheck.get('uploadCount'),
     questionCount: state.venueHealthCheck.get('questionCount'),
     frontend: state.venueHealthCheck.get('frontend'),
+    uploads: state.venueHealthCheck.get('uploads')
   };
 }
 
@@ -30,6 +32,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     setInitialData,
     setAnswer,
+    setUpload,
     saveAnswers
   }, dispatch);
 }

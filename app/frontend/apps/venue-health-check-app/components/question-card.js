@@ -3,6 +3,7 @@ import classnames from 'classnames';
 
 import QuestionActions from './question-actions';
 import FileUpload from './file-upload';
+import FilePreview from './file-preview';
 
 export default class QuestionCard extends React.Component {
   static displayName = 'QuestionCard';
@@ -81,6 +82,7 @@ export default class QuestionCard extends React.Component {
 
           <div className="boss-question__end">
             <FileUpload { ...this.actionProps() } />
+            <FilePreview { ...this.actionProps() } />
 
             <button
               className="boss-button boss-button_type_small boss-question__submit"
@@ -117,7 +119,31 @@ export default class QuestionCard extends React.Component {
                 <QuestionActions { ...this.actionProps() } />
               </div>
 
-              { this.renderNote() }
+              <div className="boss-question__note" style={ this.displayNote() }>
+                <div className="boss-question__note-inner">
+                  <textarea
+                    name="message"
+                    className="boss-question__message-textarea"
+                    placeholder="Type Notes Here..."
+                    value={this.state.noteValue}
+                    onChange={this.updateNoteValue.bind(this)}
+                  >
+                  </textarea>
+
+                  <div className="boss-question__end">
+                    <FileUpload { ...this.actionProps() } />
+                    <FilePreview { ...this.actionProps() } />
+
+                    <button
+                      className="boss-button boss-button_type_small boss-question__submit"
+                      type="submit"
+                      onClick={ this.saveNote.bind(this) }
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
             </form>
           </div>
         </div>
