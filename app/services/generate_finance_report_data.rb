@@ -42,7 +42,7 @@ class GenerateFinanceReportData
     saturday_hours_count = 0
     sunday_hours_count = 0
 
-    hours_acceptance_periods.each do |hours_acceptance_period|
+    hours_acceptance_periods.includes(:hours_acceptance_breaks_enabled).each do |hours_acceptance_period|
       hours_count = hours_acceptance_period.payable_hours
 
       case hours_acceptance_period.clock_in_day.date.strftime('%A')
