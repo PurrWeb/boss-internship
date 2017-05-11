@@ -103,6 +103,24 @@ const venueHealthCheck = (state = initialState, action) => {
 
     return state.set('uploads', uploads).set('answers', answers).set('uploadCount', uploads.length);
 
+  case constants.REMOVE_UPLOAD:
+    let upload = action.upload;
+    uploads = state.get('uploads');
+    answers = state.get('answers');
+    existingAnswer = _.find(answers, answer => {
+      return answer.questionnaireQuestionId == upload.questionnaireQuestionId;
+    });
+
+    _.remove(existingAnswer.image_ids, function(image_id) {
+      return upload.id == image_id;
+    });
+
+    _.remove(uploads, function(u) {
+      return u.id == upload.id;
+    });
+
+    return state.set('answers', answers).set('uploads', uploads).set('uploadCount', uploads.length);
+
   case constants.SAVE_ANSWERS_REQUEST:
     return state.set(
       'frontend', Object.assign({}, state.get('frontend'), { saving: true })

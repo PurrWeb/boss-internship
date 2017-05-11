@@ -22,7 +22,7 @@ export default class NotePopover extends React.Component {
   }
 
   render() {
-    if (!this.props.currentAnswer.note) {
+    if (!this.props.currentAnswer.note && !this.props.currentAnswer.uploads.length) {
       return <div></div>;
     }
 

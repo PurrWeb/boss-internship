@@ -6,9 +6,10 @@ import CollapsibleCard from '../components/collapsible-card';
 import VenueSelector from '../components/venue-selector';
 import QuestionnaireFilter from '../components/questionnaire-filter';
 import QuestionnaireActions from '../components/questionnaire-actions';
+import ImageModal from '../components/image-modal'
 
 import { setInitialData } from '../actions/initial-load'
-import { setAnswer, saveAnswers, setUpload } from '../actions/answers'
+import { setAnswer, saveAnswers, setUpload, deleteUpload } from '../actions/answers'
 
 function mapStateToProps(state) {
   return {
@@ -33,7 +34,8 @@ function mapDispatchToProps(dispatch) {
     setInitialData,
     setAnswer,
     setUpload,
-    saveAnswers
+    saveAnswers,
+    deleteUpload
   }, dispatch);
 }
 
@@ -42,6 +44,8 @@ export class QuestionnaireContainer extends React.Component {
     super(props);
 
     this.state = {
+      showModal: false,
+      currentImage: null,
       filters: {
         section: 'any',
         display: 'all',
@@ -49,6 +53,18 @@ export class QuestionnaireContainer extends React.Component {
         area: 'any'
       }
     }
+  }
+
+  setModal(value) {
+    this.setState({
+      showModal: value
+    });
+  }
+
+  setModalImage(image) {
+    this.setState({
+      currentImage: image
+    })
   }
 
   componentWillMount() {
@@ -80,7 +96,11 @@ export class QuestionnaireContainer extends React.Component {
     props = Object.assign(props, {
       setFilter: this.setFilter.bind(this),
       filters: this.state.filters,
-      reviewMode: this.reviewMode()
+      reviewMode: this.reviewMode(),
+      setModal: this.setModal.bind(this),
+      setModalImage: this.setModalImage.bind(this),
+      currentImage: this.state.currentImage,
+      showModal: this.state.showModal
     });
 
     return props;
@@ -239,6 +259,8 @@ export class QuestionnaireContainer extends React.Component {
   render() {
     return (
       <main className="boss-page-main">
+        <ImageModal { ...this.commonProps() }/>
+
         <div className="boss-page-main__dashboard">
           <div className="boss-page-main__inner">
             <div className="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_questionnaire">

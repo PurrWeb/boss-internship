@@ -16,6 +16,13 @@ export function setUpload(uploadParams) {
   };
 }
 
+export function deleteUpload(upload) {
+  return {
+    type: constants.REMOVE_UPLOAD,
+    upload
+  };
+}
+
 export function saveAnswers(questionnaireId, answers) {
   let token = window.boss.venueHealthCheck.accessToken;
   let params = {

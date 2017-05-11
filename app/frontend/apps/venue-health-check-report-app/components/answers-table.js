@@ -49,7 +49,7 @@ export default class AnswersTable extends React.Component {
         statusIcon = '';
       }
 
-      noteIcon = (answer.note) ? 'boss-results__cell_action_popover' : '';
+      noteIcon = (!answer.note && !answer.uploads.length) ?  '' : 'boss-results__cell_action_popover';
 
       return (
         <div className="boss-results__group" key={question.id}>

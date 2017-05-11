@@ -4,6 +4,19 @@ import classnames from 'classnames';
 export default class FilePreview extends React.Component {
   static displayName = 'FilePreview';
 
+  openModal(e) {
+    e.preventDefault();
+
+    let uploadId = parseInt(e.target.getAttribute('data-upload-id'));
+
+    let image = this.props.uploads.find((upload) => {
+      return upload.id == uploadId
+    });
+
+    this.props.setModal(true);
+    this.props.setModalImage(image)
+  }
+
   renderImages() {
     if (!this.props.currentAnswer) return;
 
@@ -11,7 +24,6 @@ export default class FilePreview extends React.Component {
       return upload.questionnaireQuestionId == this.props.currentQuestion.id
     });
 
-    console.log(uploads);
     if (!uploads.length) return;
 
     return uploads.map((upload, index) => {
@@ -20,6 +32,8 @@ export default class FilePreview extends React.Component {
           <img
             src={ upload.url }
             className="boss-question__preview-image"
+            onClick={ this.openModal.bind(this) }
+            data-upload-id={ upload.id }
           />
         </a>
       );
