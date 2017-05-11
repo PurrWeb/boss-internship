@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170510174324) do
+ActiveRecord::Schema.define(version: 20170511004941) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(version: 20170510174324) do
   end
 
   add_index "clock_in_periods", ["clock_in_day_id"], name: "index_clock_in_periods_on_clock_in_day_id", using: :btree
+  add_index "clock_in_periods", ["ends_at"], name: "index_clock_in_periods_on_ends_at", using: :btree
 
   create_table "cron_jobs", force: :cascade do |t|
     t.string   "method",      limit: 255,   null: false
@@ -445,6 +446,8 @@ ActiveRecord::Schema.define(version: 20170510174324) do
   end
 
   add_index "owed_hours", ["date"], name: "index_owed_hours_on_date", using: :btree
+  add_index "owed_hours", ["disabled_at"], name: "index_owed_hours_on_disabled_at", using: :btree
+  add_index "owed_hours", ["staff_member_id"], name: "index_owed_hours_on_staff_member_id", using: :btree
 
   create_table "pay_rates", force: :cascade do |t|
     t.string  "pay_rate_type",    limit: 255,                null: false
