@@ -8,9 +8,12 @@ class Api::V1::RotaOverviewSerializer < ActiveModel::Serializer
   end
 
   def staff_members
-    staff_members = StaffMember.where(
-      id: object.rota_shifts.enabled.map(&:staff_member_id)
-    ).includes([:master_venue, :staff_type, :name, :work_venues])
+    staff_members = StaffMember.
+      joins('INNER JOIN rota_shifts ON rota_shifts.staff_member_id = staff_members.id').
+      where(
+       rota_shifts: { rota_id: object.id, enabled: true }
+      ).
+      includes([:staff_type, :name, :master_venue, :work_venues])
 
     ActiveModel::Serializer::CollectionSerializer.new(
       staff_members,
@@ -19,7 +22,7 @@ class Api::V1::RotaOverviewSerializer < ActiveModel::Serializer
   end
 
   def rota_shifts
-    rota_shifts = object.rota_shifts.enabled.includes(:staff_member)
+    rota_shifts = object.enabled_rota_shifts.includes([:staff_member, :rota])
 
     ActiveModel::Serializer::CollectionSerializer.new(
       rota_shifts,
@@ -28,7 +31,7 @@ class Api::V1::RotaOverviewSerializer < ActiveModel::Serializer
   end
 
   def staff_types
-    staff_types = instance_options[:scopes][:staff_types]
+    staff_types = @instance_options[:scopes][:staff_types]
 
     ActiveModel::Serializer::CollectionSerializer.new(
       staff_types,

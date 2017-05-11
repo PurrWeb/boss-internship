@@ -6,7 +6,8 @@ class StaffMemberWorkableVenuesQuery
   attr_reader :staff_member
 
   def all
-    Venue.where(
+    Venue.
+      where(
       id: [staff_member.master_venue.andand.id] + staff_member.work_venues.map(&:id)
     )
   end

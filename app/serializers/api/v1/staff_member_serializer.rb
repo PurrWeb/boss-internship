@@ -32,11 +32,7 @@ class Api::V1::StaffMemberSerializer < ActiveModel::Serializer
   end
 
   def venues
-    venues = StaffMemberWorkableVenuesQuery.new(
-      staff_member: object
-    ).all
-
-    venues.map do |venue|
+    object.workable_venues.map do |venue|
       {
         id: venue.id,
         url: api_v1_venue_url(venue)
