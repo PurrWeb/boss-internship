@@ -178,7 +178,7 @@ class Ability
   end
 
   def can_edit_staff_member?(user, staff_member)
-    workable_venues = StaffMemberWorkableVenuesQuery.new(staff_member: staff_member).all
+    workable_venues = staff_member.workable_venues
 
     staff_member.security? ||
       workable_venues.length == 0 ||

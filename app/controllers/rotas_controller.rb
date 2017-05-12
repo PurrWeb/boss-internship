@@ -84,6 +84,9 @@ class RotasController < ApplicationController
         venue: venue
       )
     end
+    ActiveRecord::Associations::Preloader.new.preload(
+      rotas, [:enabled_rota_shifts, :venue]
+    )
 
     rota_forecasts = rotas.map do |rota|
       forecast = RotaForecast.where(rota: rota).last
