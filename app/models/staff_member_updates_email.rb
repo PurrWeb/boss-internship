@@ -198,7 +198,7 @@ class StaffMemberUpdatesEmail
     return unless staff_member.master_venue != old_master_venue
 
     changed_attributes << :master_venue
-    old_values[:master_venue] = old_master_venue.name
-    new_values[:master_venue] = staff_member.master_venue.name
+    old_values[:master_venue] = old_master_venue.andand.name
+    new_values[:master_venue] = staff_member.master_venue.andand.name
   end
 end
