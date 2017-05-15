@@ -12,7 +12,18 @@ export default class FileUpload {
     if (!file) return;
 
     return new Promise((resolve, reject) => {
-      this.new(file).upload().then(json => resolve(json))
+      return this.new(file)
+        .upload()
+        .then(json => {
+          resolve(json)
+        }).fail(error => {
+          reject({
+            file: file,
+            status: error.status,
+            statusText: error.statusText,
+            responseJSON: error.responseJSON
+          });
+        });
     });
   }
 

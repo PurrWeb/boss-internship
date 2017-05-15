@@ -17,6 +17,19 @@ export default class FilePreview extends React.Component {
     this.props.setModalImage(image)
   }
 
+  openReuploadModal(e) {
+    e.preventDefault();
+
+    let uuidUploadId = e.target.getAttribute('data-upload-uuid');
+
+    let image = this.props.uploads.find((upload) => {
+      return upload.uuid == uuidUploadId
+    });
+
+    this.props.setModal(true);
+    this.props.setModalImage(image)
+  }
+
   renderImages() {
     if (!this.props.currentAnswer) return;
 
@@ -27,16 +40,42 @@ export default class FilePreview extends React.Component {
     if (!uploads.length) return;
 
     return uploads.map((upload, index) => {
-      return (
-        <a href="#" className="boss-question__preview-link" data-modal={ index } key={ upload.id }>
-          <img
-            src={ upload.url }
-            className="boss-question__preview-image"
-            onClick={ this.openModal.bind(this) }
+      let uploadClass = '';
+
+      if (!upload.id) {
+        uploadClass = 'boss-question__preview-link_state_broken';
+      }
+
+      if (upload.id) {
+        return (
+          <a
+            href="#"
+            className={ `boss-question__preview-link`}
+            data-modal={ index }
+            key={ upload.id }
             data-upload-id={ upload.id }
-          />
-        </a>
-      );
+            onClick={ this.openModal.bind(this) }
+          >
+            <img
+              src={ upload.url }
+              className="boss-question__preview-image"
+              data-upload-id={ upload.id }
+            />
+          </a>
+        );
+      } else {
+        return (
+          <a
+            href="#"
+            className={ `boss-question__preview-link boss-question__preview-link_state_broken`}
+            data-modal={ index }
+            key={ upload.uuid }
+            data-upload-uuid={ upload.uuid }
+            onClick={ this.openReuploadModal.bind(this) }
+          >
+          </a>
+        );
+      }
     });
   }
 

@@ -4,6 +4,8 @@ import classnames from 'classnames';
 import Answer from './answer';
 import FileUploadService from '../services/file-upload';
 
+import uuid from 'uuid/v1'
+
 export default class FileUpload extends React.Component {
   static displayName = 'FileUpload';
 
@@ -29,9 +31,6 @@ export default class FileUpload extends React.Component {
 
   saveImageToAnswer(upload) {
     let uploads = this.props.uploads;
-    let answerUploads = this.props.uploads.filter((upload) => {
-      return upload.questionnaireQuestionId == this.props.currentQuestion.id
-    });
 
     this.props.setUpload({
       questionnaireQuestionId: this.props.currentQuestion.id,
@@ -41,6 +40,8 @@ export default class FileUpload extends React.Component {
   }
 
   hasFilePreviouslyUploaded(file) {
+    if (!file.id) return false;
+
     let uploadedFiles = this.state.uploadedFiles;
     let uploadedFilesArray = uploadedFiles.map(function(uploadedFile) {
       return [uploadedFile.name, uploadedFile.lastModified, uploadedFile.size];
@@ -56,15 +57,23 @@ export default class FileUpload extends React.Component {
     let uploadedFiles = this.state.uploadedFiles;
 
     for (count; count < files.length; count++) {
-      if (!this.hasFilePreviouslyUploaded(files[count])) {
-        FileUploadService.perform(files[count]).then(response => {
-          uploadedFiles.push(files[count - 1])
+      let currentFile = files[count];
+
+      if (!this.hasFilePreviouslyUploaded(currentFile)) {
+        FileUploadService.perform(currentFile).then(response => {
+          uploadedFiles.push(currentFile)
 
           this.setState({
             uploadedFiles: uploadedFiles
           });
 
           this.saveImageToAnswer(response);
+        }).catch(error => {
+          this.props.setUpload({
+            uuid: uuid(),
+            file: error.file,
+            questionnaireQuestionId: this.props.currentQuestion.id
+          });
         });
       }
     }

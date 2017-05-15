@@ -87,7 +87,9 @@ const venueHealthCheck = (state = initialState, action) => {
     if (existingAnswer) {
       let imageIds = existingAnswer.image_ids || [];
 
-      imageIds.push(action.uploadParams.id);
+      if (action.uploadParams.id) {
+        imageIds.push(action.uploadParams.id);
+      }
 
       updatedAnswer = Object.assign(existingAnswer, {
         image_ids: imageIds
@@ -95,10 +97,12 @@ const venueHealthCheck = (state = initialState, action) => {
 
       answers[answers.indexOf(existingAnswer)] = updatedAnswer;
     } else {
-      answers.push({
-        questionnaireQuestionId: action.uploadParams.questionnaireQuestionId,
-        image_ids: [action.uploadParams.id]
-      });
+      if (action.uploadParams.id) {
+        answers.push({
+          questionnaireQuestionId: action.uploadParams.questionnaireQuestionId,
+          image_ids: [action.uploadParams.id]
+        });
+      }
     }
 
     return state.set('uploads', uploads).set('answers', answers).set('uploadCount', uploads.length);
@@ -116,7 +120,7 @@ const venueHealthCheck = (state = initialState, action) => {
     });
 
     _.remove(uploads, function(u) {
-      return u.id == upload.id;
+      return (u.id == upload.id && u.id !== undefined) || u.uuid == upload.uuid;
     });
 
     return state.set('answers', answers).set('uploads', uploads).set('uploadCount', uploads.length);
