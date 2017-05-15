@@ -7,6 +7,14 @@ import FileUploadService from '../services/file-upload';
 export default class ImageModal extends React.Component {
   static displayName = 'ImageModal';
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      uploading: false
+    }
+  }
+
   cancel() {
     this.props.setModal(false);
     this.props.setModalImage(null);
@@ -22,11 +30,21 @@ export default class ImageModal extends React.Component {
   reuploadImage(e) {
     e.preventDefault();
 
+    this.setState({
+      uploading: true
+    });
+
     FileUploadService.perform(this.props.currentImage.file).then(response => {
+      this.setState({
+        uploading: false
+      });
       this.props.deleteUpload(this.props.currentImage);
       this.saveImageToAnswer(response);
       this.cancel();
     }).catch(error => {
+      this.setState({
+        uploading: false
+      });
       alert('Image couldnt be uploaded, please try again');
       this.cancel();
     });
@@ -53,6 +71,14 @@ export default class ImageModal extends React.Component {
     reader.readAsDataURL(this.props.currentImage.file);
   }
 
+  uploadState() {
+    if (this.state.uploading) {
+      return 'Uploading';
+    } else {
+      return 'Reupload'
+    }
+  }
+
   renderButton() {
     if (this.props.currentImage.id) {
       return (
@@ -74,7 +100,7 @@ export default class ImageModal extends React.Component {
             className="boss-button boss-button_role_reload boss-modal-window__button"
             onClick={ this.reuploadImage.bind(this) }
           >
-            Reupload
+            { this.uploadState() }
           </button>
           <button
             type="button"

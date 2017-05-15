@@ -102,6 +102,11 @@ const venueHealthCheck = (state = initialState, action) => {
           questionnaireQuestionId: action.uploadParams.questionnaireQuestionId,
           image_ids: [action.uploadParams.id]
         });
+      } else {
+        answers.push({
+          questionnaireQuestionId: action.uploadParams.questionnaireQuestionId,
+          image_ids: []
+        });
       }
     }
 
