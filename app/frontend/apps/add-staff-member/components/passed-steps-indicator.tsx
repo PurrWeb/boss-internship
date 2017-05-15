@@ -166,7 +166,6 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
     forms: state.formsData.forms,
     unReviewedStaffMembers: () => {
-      console.log('Changed!');
       return !!state.app.staffMembers.filter((item) => !item.reviewed).length;
     },
     sourceImage,

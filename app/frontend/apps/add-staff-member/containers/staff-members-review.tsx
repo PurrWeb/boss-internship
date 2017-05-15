@@ -7,7 +7,7 @@ import {StoreStructure} from '../../../interfaces/store-models';
 import StaffMembersReviewList from '../components/staff-members-review-list';
 import store from '../../../store/index';
 import toggleStaffMember from '../../../action-creators/toggle-staff-member';
-import {StaffMember} from '../../../interfaces/staff-member';
+import {StaffMember, FlaggedRequestFields} from '../../../interfaces/staff-member';
 import { UNREVIEWED_STAFF_MEMBERS, REVIEWED_STAFF_MEMBERS } from '../components/staff-members-review-list';
 
 interface Props {
@@ -15,6 +15,7 @@ interface Props {
 
 interface MappedProps {
   readonly flaggedStaffMembers: StaffMember[];
+  readonly flaggedRequestFields: FlaggedRequestFields;
 }
 
 interface State {
@@ -30,8 +31,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.state = {
       reviewsShown: false
     };
-
-    console.log(this.props);
   }
 
   onToggleMenu = () => {
@@ -66,6 +65,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     return (
       <div className={reviewDropDownClassName}>
         <div className="boss-dropdown__header">
+          <div>{this.props.flaggedRequestFields.first_name}</div>
           <a href="javascript:;" onClick={this.onToggleMenu} className={dropDownArrowClassName}>
             Review
           </a>
@@ -93,7 +93,8 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
-    flaggedStaffMembers: state.app.staffMembers
+    flaggedStaffMembers: state.app.staffMembers,
+    flaggedRequestFields: state.app.flaggedFields
   };
 };
 

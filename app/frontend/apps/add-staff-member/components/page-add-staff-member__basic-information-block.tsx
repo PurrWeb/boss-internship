@@ -20,8 +20,12 @@ import changingStepInfo from '../../../action-creators/changing-step-info';
 import findFlaggedStaffMembers from '../../../action-creators/requesting-flagged-staff-members';
 import {BasicInformationForm} from '../../../reducers/forms';
 import {hasFormValidationErrors, hasFormUnfilledRequiredFields} from '../../../helpers/validators';
+import {AddStaffMemberStepInfo, AddStaffMemberStepName} from '../../../interfaces/store-models';
 
 interface Props {
+  readonly findFlaggedStaffMembers: any;
+  readonly basicInformationBlockValidated: any;
+  readonly changingStepInfo: any;
 }
 
 interface MappedProps {
@@ -35,22 +39,19 @@ interface State {
 
 class Component extends React.Component<PropsFromConnect, State> {
   handleFormSubmit = (formModelData: OfType<BasicInformationFormFields, any>) => {
-    const action = basicInformationBlockValidated(formModelData);
-
-    this.props.dispatch(action);
+    this.props.basicInformationBlockValidated(formModelData);
   };
 
-  findFlaggedStaffMembers(event: any) {
-    this.props.dispatch(findFlaggedStaffMembers(event.target.value));
+  test = (values: any) => {
+    console.log(values);
   }
 
   handleFormUpdate = (formModelData: BasicInformationForm) => {
     const visited = true;
     const hasUnfilledRequiredFields = hasFormUnfilledRequiredFields<BasicInformationForm>(formModelData);
     const hasValidationErrors = hasFormValidationErrors<BasicInformationForm>(formModelData);
-    const action = changingStepInfo('BasicInformationBlock', visited, hasUnfilledRequiredFields, hasValidationErrors);
 
-    this.props.dispatch(action);
+    this.props.changingStepInfo('BasicInformationBlock', visited, hasUnfilledRequiredFields, hasValidationErrors);
   };
 
   static getGenderOptions(genderValues: string[]) {
@@ -65,6 +66,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           className="boss3-form"
           onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
+          onChange={this.test}
         >
           <label className="boss3-label">
             <span className="boss3-label__text">First Name</span>
@@ -75,7 +77,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                     className: setInputClass
                   }}
               validateOn="blur"
-              onChange={ (event: any) => {this.findFlaggedStaffMembers(event); }}
+              changeAction={this.props.findFlaggedStaffMembers}
               debounce={1000}
             />
           </label>
@@ -89,6 +91,10 @@ class Component extends React.Component<PropsFromConnect, State> {
                     className: setInputClass
                   }}
               validateOn="blur"
+
+              changeAction={this.props.findFlaggedStaffMembers}
+              debounce={1000}
+
             />
           </label>
 
@@ -131,6 +137,8 @@ class Component extends React.Component<PropsFromConnect, State> {
                   return props.onChange;
                 }
               }}
+              changeAction={this.props.findFlaggedStaffMembers}
+              debounce={1000}
               validateOn="blur"
             />
           </label>
@@ -150,6 +158,15 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   };
 };
 
+const mapDispatchToProps = (dispatch: any) => (
+  {
+    findFlaggedStaffMembers: (model: any, value: any) => dispatch(findFlaggedStaffMembers({model, value})),
+    basicInformationBlockValidated: (formModelData: OfType<BasicInformationFormFields, any>) => dispatch(basicInformationBlockValidated(formModelData)),
+    changingStepInfo: (stepName: AddStaffMemberStepName, visited: boolean, hasUnfilledRequired: boolean, hasValidationErrors: boolean) => dispatch(changingStepInfo(stepName, visited, hasUnfilledRequired, hasValidationErrors))
+  }
+);
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Component);

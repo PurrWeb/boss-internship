@@ -18,11 +18,6 @@ class FlaggedStaffMemberQuery
       names_table.grouping(
         names_table.grouping(
           names_table[:first_name].matches("%#{first_name}%")
-        ).
-        and(
-          names_table.grouping(
-            names_table[:surname].eq(surname)
-          )
         )
       )
     )

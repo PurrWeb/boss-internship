@@ -13,6 +13,7 @@ import genderValues, {Structure as GenderValuesStructure} from './gender-values'
 import avatarPreview, {Structure as AvatarPreviewStructure} from './avatar-preview';
 import stepsInfo, {Structure as StepsInfoStructure} from './steps-info';
 import staffMembers, {Structure as StaffMembers} from './staff-member';
+import flaggedFields, {Structure as FlaggedFieldsStructure} from'./flagged-request-fields';
 
 export interface Structure {
   readonly avatarPreview: AvatarPreviewStructure;
@@ -27,9 +28,11 @@ export interface Structure {
   readonly staffTypes: StaffTypesStructure;
   readonly staffMembers: StaffMembers;
   readonly genderValues: GenderValuesStructure;
+  readonly flaggedFields: FlaggedFieldsStructure;
 }
 
 const reducers: ReducersOfType<Structure> = {
+  flaggedFields,
   avatarPreview,
   stepsInfo,
   currentStepIdx,

@@ -1,6 +1,7 @@
 import {combineForms, FieldState, FormState} from 'react-redux-form';
+
 import * as Select from 'react-select';
-import {OfType} from '../interfaces/index';
+import {OfType, ReducersOfType} from '../interfaces/index';
 import {
   BasicInformationFormFields, UploadPhotoFormFields, ContactDetailsFormFields,
   VenueFormFields, WorkFormFields

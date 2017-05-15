@@ -50,12 +50,12 @@ module Api
           staff_members = FlaggedStaffMemberQuery.new(
             first_name: params.fetch("first_name").strip,
             surname: params.fetch("surname").strip,
-            date_of_birth: Date.iso8601(params.fetch("date_of_birth")),
+            date_of_birth: params.fetch("date_of_birth"),
             email_address: params.fetch("email_address").strip,
             national_insurance_number: params.fetch("national_insurance_number").strip
           ).all
 
-          render locals: { staff_members: staff_members }
+          render json: staff_members, each_serializer: FlaggedStaffMemberSerializer, status: :ok
         else
           render(
             json: {

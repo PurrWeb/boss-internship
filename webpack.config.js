@@ -6,14 +6,12 @@ var crypto = require('crypto');
 var AssetsPlugin = require('assets-webpack-plugin');
 var assetsPluginInstance = new AssetsPlugin({metadata: {version: crypto.randomBytes(20).toString('hex')}});
 
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 const plugins = [
-  new webpack.DefinePlugin({
-    'process.env': {
-      NODE_ENV: '"' + NODE_ENV + '"'  // NODE_ENV: '"production"' for decreasing size of react library
-    }
-  }),
+  // new webpack.DefinePlugin({
+  //   'process.env': {
+  //     NODE_ENV: '"' + NODE_ENV + '"'  // NODE_ENV: '"production"' for decreasing size of react library
+  //   }
+  // }),
   assetsPluginInstance
 ];
 

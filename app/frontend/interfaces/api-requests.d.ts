@@ -1,6 +1,14 @@
 import {Gender} from './store-models';
 import {StringDict} from './index';
 
+export interface RequestFlaggedStaffMembers {
+  readonly first_name: string | null;
+  readonly surname: string | null;
+  readonly date_of_birth: string | null;
+  readonly email_address: string | null;
+  readonly national_insurance_number: string | null;
+}
+
 export interface RequestStaffMemberSavePayload {
   readonly pin_code: string | null;
   readonly gender: Gender;
