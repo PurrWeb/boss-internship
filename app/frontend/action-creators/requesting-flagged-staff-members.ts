@@ -13,7 +13,7 @@ const requestingFlaggedStaffMembers = (value: PayloadType): ActionType =>
 
 const flaggedFields = (field: any) => (dispatch: any, getState: any) => {
   const {model, value} = field;
-
+  console.log(field);
   dispatch(actions.change(model, value));
   dispatch(flaggedRequestFields({model, value}));
 

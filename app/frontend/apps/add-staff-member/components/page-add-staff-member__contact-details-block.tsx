@@ -18,6 +18,7 @@ import {EmailInputValidators, PhoneNumberInputValidators} from '../../../interfa
 import {ContactDetailsForm} from '../../../reducers/forms';
 import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../helpers/validators';
 import changingStepInfo from '../../../action-creators/changing-step-info';
+import findFlaggedStaffMembers from '../../../action-creators/requesting-flagged-staff-members';
 
 interface Props {
 }
@@ -51,6 +52,10 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(steppingBackRegistration);
   };
 
+  findFlaggedStaffMembers = (model: any, value: any) => {
+    this.props.dispatch(findFlaggedStaffMembers({model, value}));
+  }
+  
   static isEmail(val: string) {
     return val ? isEmail(val) : true;
   }
@@ -72,6 +77,8 @@ class Component extends React.Component<PropsFromConnect, State> {
               mapProps={{
                 className: setInputClass
               }}
+              changeAction={this.findFlaggedStaffMembers}
+              debounce={1000}
               validateOn="blur"
               persist={true}
               validators={{

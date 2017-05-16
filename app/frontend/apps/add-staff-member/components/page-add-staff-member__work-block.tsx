@@ -23,6 +23,7 @@ import {starterEmploymentStatusLabels} from '../../../constants/other';
 import {WorkForm} from '../../../reducers/forms';
 import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../helpers/validators';
 import changingStepInfo from '../../../action-creators/changing-step-info';
+import findFlaggedStaffMembers from '../../../action-creators/requesting-flagged-staff-members';
 
 interface Props {
 }
@@ -56,6 +57,10 @@ class Component extends React.Component<PropsFromConnect, State> {
 
     this.props.dispatch(action);
   };
+
+  findFlaggedStaffMembers = (model: string, value: string) => {
+    this.props.dispatch(findFlaggedStaffMembers({model, value}));
+  }
 
   static getStaffTypeOptions(staffTypes: OptionData[]): Select.Option[] {
     return staffTypes.map((data) => ({value: data.id, label: data.name}));
@@ -156,6 +161,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               mapProps={{
                     className: setInputClass
                   }}
+              changeAction={this.findFlaggedStaffMembers}
               validateOn="blur"
               persist={true}
               validators={{

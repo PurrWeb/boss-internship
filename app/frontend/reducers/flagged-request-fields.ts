@@ -33,6 +33,18 @@ const flaggedRequestFields = (state: Structure = defaultRequestFields, action: A
           date_of_birth: action.payload.value.toString()
         };
       }
+      if (action.payload.model === 'formsData.contactDetailsForm.email') {
+        return {
+          ...state,
+          email_address: action.payload.value
+        };
+      }
+      if (action.payload.model === 'formsData.workForm.nationalInsuranceNumber') {
+        return {
+          ...state,
+          national_insurance_number: action.payload.value
+        };
+      }
       return state;
     }
     default: {
