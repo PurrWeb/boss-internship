@@ -30,7 +30,8 @@ class VenueHealthCheckReportsController < ApplicationController
     questionnaire = @venue.questionnaires.last
 
     if questionnaire.blank? || questionnaire.questionnaire_responses.blank?
-      render_not_found!
+      flash[:error] = "Report for this questionnaire doesn't exist"
+      redirect_to venue_health_check_index_path
     end
   end
 
@@ -48,7 +49,8 @@ class VenueHealthCheckReportsController < ApplicationController
 
   def ensure_venue_exists
     if @venue.blank?
-      render_not_found!
+      flash[:error] = "Venue doesn't exist"
+      redirect_to venue_health_check_index_path
     end
   end
 end

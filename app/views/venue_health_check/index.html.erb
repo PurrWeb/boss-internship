@@ -1,0 +1,50 @@
+<main class="boss-page-main">
+  <div class="boss-page-main__content">
+    <div class="boss-page-main__inner">
+      <div class="boss-table boss-table_page_staff-members-index">
+        <div class="boss-table__row">
+          <div class="boss-table__cell boss-table__cell_role_header">Venue</div>
+          <div class="boss-table__cell boss-table__cell_role_header">Report</div>
+          <div class="boss-table__cell boss-table__cell_role_header">Questionnaire</div>
+        </div>
+
+        <% @accessible_venues.each do |venue| %>
+          <div class="boss-table__row">
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Venue</p>
+                <p class="boss-table__text"><%= venue.name %></p>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Report</p>
+                <p class="boss-table__text">
+                  <% if venue.questionnaires.present? %>
+                    <%= link_to 'View', venue_health_check_report_path(venue_health_check_id: venue.id) %>
+                  <% else %>
+                    <p>No Questionnaire</p>
+                  <% end %>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Questionnaire</p>
+                <p class="boss-table__text">
+                  <% if venue.questionnaires.last.try(:questionnaire_response).present? %>
+                    <%= link_to 'Take', venue_health_check_path(id: venue.id) %>
+                  <% else %>
+                    <p>No Report</p>
+                  <% end %>
+                </p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</main>

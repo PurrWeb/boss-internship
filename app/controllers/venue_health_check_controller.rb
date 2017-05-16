@@ -5,17 +5,6 @@ class VenueHealthCheckController < ApplicationController
   before_filter :ensure_questionnaire_exists, only: [:show]
 
   def index
-    venue_id = params[:venue_id]
-
-    if venue_id.present?
-      venue = @accessible_venues.find_by(id: venue_id)
-    else
-      venue = @accessible_venues.last
-    end
-
-    # This action will automatically redirect to the last venue in the accessible_venues array
-    # as a temporary solution until the venue page is ready.
-    redirect_to venue_health_check_path(id: venue.id)
   end
 
   def show
@@ -42,12 +31,13 @@ class VenueHealthCheckController < ApplicationController
 
   def ensure_questionnaire_exists
     if @venue.questionnaires.last.blank?
-      render_not_found!
+      flash[:error] = "Questionnaire hasn't been created yet"
+      redirect_to venue_health_check_index_path
     end
   end
 
   def find_accessible_venues
-    @accessible_venues = AccessibleVenuesQuery.new(current_user).all
+    @accessible_venues = AccessibleVenuesQuery.new(current_user).all.includes(:questionnaires)
   end
 
   def find_venue
@@ -56,7 +46,8 @@ class VenueHealthCheckController < ApplicationController
 
   def ensure_venue_exists
     if @venue.blank?
-      render_not_found!
+      flash[:error] = "Venue doesn't exist"
+      redirect_to venue_health_check_index_path
     end
   end
 end
