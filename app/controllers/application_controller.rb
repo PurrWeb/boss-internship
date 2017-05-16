@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_host
   before_filter :bundle_script
 
-  helper_method :render_navigation?
+  helper_method [:render_navigation?, :render_v2_layout?]
 
   def current_user
     @current_user ||= super && User.includes(:email_address).find(@current_user.id)
@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
 
   def render_navigation?
     true
+  end
+
+  def render_v2_layout?
+    false
   end
 
   def set_host

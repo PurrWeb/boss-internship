@@ -1,15 +1,19 @@
-<h1>Add Staff Member</h1>
+<main class="boss-page-content">
+  <div class="boss-page-content__inner boss-page-content__inner_opaque">
+    <h1>Add Staff Member</h1>
 
-<%= javascript_tag do %>
-  window.boss = window.boss || {};
+    <%= javascript_tag do %>
+        window.boss = window.boss || {};
 
-  window.boss.accessToken = "<%= access_token.token %>";
-  window.boss.venueValues = <%= venues.map{ |v| { name: v.name, id: v.id } }.to_json.html_safe %>;
-  window.boss.payrateValues = <%= pay_rates.map { |pr| { name: pr.name, id: pr.id } }.to_json.html_safe %>;
-  window.boss.staffTypeIds = <%= staff_types.map{ |st| { name: st.name, id: st.id } }.to_json.html_safe %>;
-  window.boss.genderValues = <%= gender_values.to_json.html_safe %>;
-<% end %>
+        window.boss.accessToken = "<%= access_token.token %>";
+        window.boss.venueValues = <%= venues.map{ |v| { name: v.name, id: v.id } }.to_json.html_safe %>;
+        window.boss.payrateValues = <%= pay_rates.map { |pr| { name: pr.name, id: pr.id } }.to_json.html_safe %>;
+        window.boss.staffTypeIds = <%= staff_types.map{ |st| { name: st.name, id: st.id } }.to_json.html_safe %>;
+        window.boss.genderValues = <%= gender_values.to_json.html_safe %>;
+    <% end %>
 
-<%= react_component(
-    "AddStaffMemberPageComponent"
-) %>
+    <%= react_component(
+            "AddStaffMemberPageComponent"
+        ) %>
+  </div>
+</main>

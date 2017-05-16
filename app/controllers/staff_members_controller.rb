@@ -1,4 +1,9 @@
 class StaffMembersController < ApplicationController
+
+  def render_v2_layout?
+    true
+  end
+
   def index
     authorize! :manage, :staff_members
 
