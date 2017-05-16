@@ -60,18 +60,18 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     return (
-      <div className="boss3-forms-block">
+      <div className="boss-forms-block">
         <Form
           model="formsData.venueForm"
-          className="boss3-form"
+          className="boss-form"
           onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
         >
-          <label className="boss3-label">
-            <span className="boss3-label__text boss3-label__text_type_required">Main Venue</span>
+          <label className="boss-label">
+            <span className="boss-label__text boss-label__text_type_required">Main Venue</span>
             <SelectControl
               model=".mainVenue"
-              className="boss3-input"
+              className="boss-input"
               options={this.props.venueOptions}
               validators={{
                 isFilled: isNotEmptyInput,
@@ -88,22 +88,22 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text">Other Venues</span>
+          <label className="boss-label">
+            <span className="boss-label__text">Other Venues</span>
             <SelectControl
               model=".otherVenues"
               value={[]}
-              className="boss3-input"
+              className="boss-input"
               multi={true}
               options={this.props.venueOptions}
             />
           </label>
 
-          <label className="boss3-label boss3-label_role_datepicker">
-            <span className="boss3-label__text">Starts At</span>
+          <label className="boss-label boss-label_role_datepicker">
+            <span className="boss-label__text">Starts At</span>
             <Control
               component={DatePicker}
-              className="boss3-input"
+              className="boss-input"
               model=".startsAt"
               mapProps={{
                 className: setInputClass,
@@ -116,13 +116,13 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
+          <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
             <input type="button"
-                   className="boss3-button boss3-button_role_back boss3-buttons-group_adjust_button"
+                   className="boss-button boss-button_role_back boss-buttons-group_adjust_button"
                    value="Back"
                    onClick={this.onBackClick}
             />
-            <input type="submit" className="boss3-button boss3-button_role_submit boss3-buttons-group_adjust_button" value="Continue"/>
+            <input type="submit" className="boss-button boss-button_role_submit boss-buttons-group_adjust_button" value="Continue"/>
           </div>
         </Form>
       </div>

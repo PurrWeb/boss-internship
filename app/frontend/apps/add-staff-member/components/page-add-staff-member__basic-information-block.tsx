@@ -60,18 +60,18 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     return (
-      <div className="boss3-forms-block">
+      <div className="boss-forms-block">
         <Form
           model="formsData.basicInformationForm"
-          className="boss3-form"
+          className="boss-form"
           onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
           onChange={this.test}
         >
-          <label className="boss3-label">
-            <span className="boss3-label__text">First Name</span>
+          <label className="boss-label">
+            <span className="boss-label__text">First Name</span>
             <Control.text
-              className="boss3-input"
+              className="boss-input"
               model=".firstName"
               mapProps={{
                     className: setInputClass
@@ -82,10 +82,10 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text">Surname</span>
+          <label className="boss-label">
+            <span className="boss-label__text">Surname</span>
             <Control.text
-              className="boss3-input"
+              className="boss-input"
               model=".surname"
               mapProps={{
                     className: setInputClass
@@ -98,12 +98,12 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text boss3-label__text_type_required">Gender</span>
+          <label className="boss-label">
+            <span className="boss-label__text boss-label__text_type_required">Gender</span>
             <SelectControl
               model=".gender"
 
-              className="boss3-input"
+              className="boss-input"
               options={this.props.genderOptions}
               validateOn="change"
               validators={{
@@ -121,11 +121,11 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label boss3-label_role_datepicker">
-            <span className="boss3-label__text">Date of Birth</span>
+          <label className="boss-label boss-label_role_datepicker">
+            <span className="boss-label__text">Date of Birth</span>
             <Control
               component={DatePicker}
-              className="boss3-input"
+              className="boss-input"
               model=".dateOfBirth"
               mapProps={{
                 className: setInputClass,
@@ -143,8 +143,8 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
-            <input type="submit" className="boss3-button boss3-buttons-group_adjust_button" value="Continue"/>
+          <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
+            <input type="submit" className="boss-button boss-buttons-group_adjust_button" value="Continue"/>
           </div>
         </Form>
       </div>

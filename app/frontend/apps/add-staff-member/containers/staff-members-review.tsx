@@ -65,7 +65,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     return (
       <div className={reviewDropDownClassName}>
         <div className="boss-dropdown__header">
-          <div>{this.props.flaggedRequestFields.first_name}</div>
           <a href="javascript:;" onClick={this.onToggleMenu} className={dropDownArrowClassName}>
             Review
           </a>
@@ -73,14 +72,6 @@ class Component extends React.Component<PropsFromConnect, State> {
         <div className={reviewContentClassName}>
           <div className="boss-dropdown__content-inner">
             <div className="boss-vetting">
-              {this.flaggedStaffMembers().length > 0 &&
-                <div className="boss-vetting__message">
-                  <div className="boss-alert">
-                      <p className="boss-alert__text">
-                        Founded <span className="boss-alert__text-value">{this.flaggedStaffMembers().length}</span> unreviewed staff members
-                      </p>
-                  </div>
-                </div>}
               <StaffMembersReviewList listType={UNREVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberDismiss} staffMemberList={ this.flaggedStaffMembers() } />
               <StaffMembersReviewList listType={REVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberReview} staffMemberList={ this.reviewedStaffMembers() } />
             </div>

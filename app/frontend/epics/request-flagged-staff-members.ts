@@ -7,6 +7,7 @@ import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-flagged-staff-members';
 import requestingFlaggedStaffMembers from '../action-creators/requesting-flagged-staff-members';
 import flaggedRequestFields from '../action-creators/flagged-request-fields';
+import * as _ from 'lodash';
 
 import {get} from '../helpers/requests';
 import {Observable} from 'rxjs';
@@ -15,13 +16,26 @@ import {RequestFlaggedStaffMembers} from '../interfaces/api-requests';
 const requestFlaggedStaffMembers = (action$: any, store: Store<StoreStructure>) =>
   action$.ofType(REQUESTING_FLAGGED_STAFF_MEMBERS)
     .switchMap((action: any) => {
-        return get('/api/v1/staff_members/flagged', action.payload)
-          .map((resp: any) => {
-            return {
+        let isEmptyFields = true;
+        
+        // Check flaged request fields on empty values, if empty do not send request
+        _.forOwn(action.payload, (value, key) => {
+          if (!!value) {
+            isEmptyFields = false;
+          }
+        });
+        return isEmptyFields
+          ? Observable.of({
               type: FLAGGED_STAFF_MEMBERS,
-              payload: resp.response
-            };
-          });
+              payload: []
+            })
+          : get('/api/v1/staff_members/flagged', action.payload)
+              .map((resp: any) => {
+                return {
+                  type: FLAGGED_STAFF_MEMBERS,
+                  payload: resp.response
+                };
+              });
       }
     );
 

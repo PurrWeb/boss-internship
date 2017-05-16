@@ -71,10 +71,10 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   renderSiaBadgeNumberInputBlock() {
     return this.props.isStaffTypeSecurity ? (
-      <label className="boss3-label">
-        <span className="boss3-label__text">Sia Badge Number</span>
+      <label className="boss-label">
+        <span className="boss-label__text">Sia Badge Number</span>
         <Control.text
-          className="boss3-input"
+          className="boss-input"
           model=".siaBadgeNumber"
           mapProps={{
                   className: setInputClass
@@ -87,10 +87,10 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   renderSiaBadgeExpiryDateInputBlock() {
     return this.props.isStaffTypeSecurity ? (
-      <label className="boss3-label">
-        <span className="boss3-label__text">Sia Badge Expiry Date</span>
+      <label className="boss-label">
+        <span className="boss-label__text">Sia Badge Expiry Date</span>
         <Control.text
-          className="boss3-input"
+          className="boss-input"
           model=".siaBadgeExpiryDate"
           mapProps={{
                   className: setInputClass
@@ -103,18 +103,18 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     return (
-      <div className="boss3-forms-block">
+      <div className="boss-forms-block">
         <Form
           model="formsData.workForm"
-          className="boss3-form"
+          className="boss-form"
           onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
         >
-          <label className="boss3-label">
-            <span className="boss3-label__text">Staff Type</span>
+          <label className="boss-label">
+            <span className="boss-label__text">Staff Type</span>
             <SelectControl
               model=".staffType"
-              className="boss3-input"
+              className="boss-input"
               options={this.props.staffTypeOptions}
             />
           </label>
@@ -123,10 +123,10 @@ class Component extends React.Component<PropsFromConnect, State> {
 
           {this.renderSiaBadgeExpiryDateInputBlock()}
 
-          <label className="boss3-label">
-            <span className="boss3-label__text">PIN Code</span>
+          <label className="boss-label">
+            <span className="boss-label__text">PIN Code</span>
             <Control.text
-              className="boss3-input"
+              className="boss-input"
               model=".pinCode"
               mapProps={{
                 className: setInputClass
@@ -148,10 +148,10 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text">National Insurance Number</span>
+          <label className="boss-label">
+            <span className="boss-label__text">National Insurance Number</span>
             <Control.text
-              className="boss3-input"
+              className="boss-input"
               model=".nationalInsuranceNumber"
               mapProps={{
                     className: setInputClass
@@ -173,41 +173,41 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text">Day Preference</span>
+          <label className="boss-label">
+            <span className="boss-label__text">Day Preference</span>
             <Control.textarea
-              className="boss3-input"
+              className="boss-input"
               model=".dayPreference"
               mapProps={{
                     className: setInputClass
                   }}
               validateOn="blur"
             />
-            <span className="boss3-label__tip boss3-label_adjust_tip">
+            <span className="boss-label__tip boss-label_adjust_tip">
               Preferred days to work displayed in the rota (e.g. mornings and weekends)
             </span>
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text">Hours Preference</span>
+          <label className="boss-label">
+            <span className="boss-label__text">Hours Preference</span>
             <Control.textarea
-              className="boss3-input"
+              className="boss-input"
               model=".hoursPreference"
               mapProps={{
                     className: setInputClass
                   }}
               validateOn="blur"
             />
-            <span className="boss3-label__tip boss3-label_adjust_tip">
+            <span className="boss-label__tip boss-label_adjust_tip">
               Preferred number of hours to work per week displayed in the Rota (e.g. 40, 20+)
             </span>
           </label>
 
-          <label className="boss3-label">
-            <span className="boss3-label__text boss3-label__text_type_required">Pay Rate</span>
+          <label className="boss-label">
+            <span className="boss-label__text boss-label__text_type_required">Pay Rate</span>
             <SelectControl
               model=".payRate"
-              className="boss3-input"
+              className="boss-input"
               options={this.props.payrateOptions}
               validateOn="change"
               validators={{
@@ -225,20 +225,20 @@ class Component extends React.Component<PropsFromConnect, State> {
             />
           </label>
 
-          <fieldset className="boss3-fields-set boss3-form_adjust_boss3-fields-set">
-            <h4 className="boss3-fields-set__header boss3-fields-set__header_type_required boss3-fields-set_adjust_header">
+          <fieldset className="boss-fields-set boss-form_adjust_boss-fields-set">
+            <h4 className="boss-fields-set__header boss-fields-set__header_type_required boss-fields-set_adjust_header">
               Starter Employment Status Statements
             </h4>
 
-            <h5 className="boss3-fields-set__section-header boss3-fields-set_adjust_section-header">
+            <h5 className="boss-fields-set__section-header boss-fields-set_adjust_section-header">
               Tick one that applies
             </h5>
 
-            <ul className="boss3-inputs-list boss3-fields-set_adjust_boss3-inputs-list">
+            <ul className="boss-inputs-list boss-fields-set_adjust_boss-inputs-list">
               <li>
-                <label className="boss3-label">
+                <label className="boss-label">
                   <Control.radio
-                    className="boss3-input"
+                    className="boss-input"
                     model=".starterEmploymentStatus"
                     value="employment_status_p45_supplied"
                     validateOn="change"
@@ -247,15 +247,15 @@ class Component extends React.Component<PropsFromConnect, State> {
                       isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss3-label__text">
+                  <span className="boss-label__text">
                     {starterEmploymentStatusLabels['employment_status_p45_supplied']}
                   </span>
                 </label>
               </li>
               <li>
-                <label className="boss3-label">
+                <label className="boss-label">
                   <Control.radio
-                    className="boss3-input"
+                    className="boss-input"
                     model=".starterEmploymentStatus"
                     value="employment_status_a"
                     validateOn="change"
@@ -264,15 +264,15 @@ class Component extends React.Component<PropsFromConnect, State> {
                       isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss3-label__text">
+                  <span className="boss-label__text">
                     {starterEmploymentStatusLabels['employment_status_a']}
                   </span>
                 </label>
               </li>
               <li>
-                <label className="boss3-label">
+                <label className="boss-label">
                   <Control.radio
-                    className="boss3-input"
+                    className="boss-input"
                     model=".starterEmploymentStatus"
                     value="employment_status_b"
                     validateOn="change"
@@ -281,15 +281,15 @@ class Component extends React.Component<PropsFromConnect, State> {
                       isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss3-label__text">
+                  <span className="boss-label__text">
                     {starterEmploymentStatusLabels['employment_status_b']}
                   </span>
                 </label>
               </li>
               <li>
-                <label className="boss3-label">
+                <label className="boss-label">
                   <Control.radio
-                    className="boss3-input"
+                    className="boss-input"
                     model=".starterEmploymentStatus"
                     value="employment_status_c"
                     validateOn="change"
@@ -298,15 +298,15 @@ class Component extends React.Component<PropsFromConnect, State> {
                       isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss3-label__text">
+                  <span className="boss-label__text">
                     {starterEmploymentStatusLabels['employment_status_c']}
                   </span>
                 </label>
               </li>
               <li>
-                <label className="boss3-label">
+                <label className="boss-label">
                   <Control.radio
-                    className="boss3-input"
+                    className="boss-input"
                     model=".starterEmploymentStatus"
                     value="employment_status_d"
                     validateOn="change"
@@ -315,7 +315,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                       isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss3-label__text">
+                  <span className="boss-label__text">
                     {starterEmploymentStatusLabels['employment_status_d']}
                   </span>
                 </label>
@@ -337,13 +337,13 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 
 
-          <div className="boss3-buttons-group boss3-forms-block_adjust_buttons-group">
+          <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
             <input type="button"
-                   className="boss3-button boss3-button_role_back boss3-buttons-group_adjust_button"
+                   className="boss-button boss-button_role_back boss-buttons-group_adjust_button"
                    value="Back"
                    onClick={this.onBackClick}
             />
-            <input type="submit" className="boss3-button boss3-button_role_submit boss3-buttons-group_adjust_button"
+            <input type="submit" className="boss-button boss-button_role_submit boss-buttons-group_adjust_button"
                    value="Continue"/>
           </div>
         </Form>
