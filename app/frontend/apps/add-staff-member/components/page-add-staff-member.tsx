@@ -42,7 +42,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     return (
-      <div className="boss-page-content">
+      <div className="boss-page-content__group">
 
         {Component.renderCurrentFormsBlock(this.props.currentStepIdx)}
 

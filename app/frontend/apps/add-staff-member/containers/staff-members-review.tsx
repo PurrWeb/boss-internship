@@ -63,20 +63,22 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 
     return (
-      <div className={reviewDropDownClassName}>
-        <div className="boss-dropdown__header">
-          <a href="javascript:;" onClick={this.onToggleMenu} className={dropDownArrowClassName}>
-            Review
-          </a>
-        </div>
-        <div className={reviewContentClassName}>
-          <div className="boss-dropdown__content-inner">
-            <div className="boss-vetting">
-              <StaffMembersReviewList listType={UNREVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberDismiss} staffMemberList={ this.flaggedStaffMembers() } />
-              <StaffMembersReviewList listType={REVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberReview} staffMemberList={ this.reviewedStaffMembers() } />
+      <div className="boss-page-content__group">
+          <div className={reviewDropDownClassName}>
+            <div className="boss-dropdown__header">
+              <a href="javascript:;" onClick={this.onToggleMenu} className={dropDownArrowClassName}>
+                Review
+              </a>
+            </div>
+            <div className={reviewContentClassName}>
+              <div className="boss-dropdown__content-inner">
+                <div className="boss-vetting">
+                  <StaffMembersReviewList listType={UNREVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberDismiss} staffMemberList={ this.flaggedStaffMembers() } />
+                  <StaffMembersReviewList listType={REVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberReview} staffMemberList={ this.reviewedStaffMembers() } />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
       </div>
     );
   }

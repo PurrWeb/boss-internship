@@ -97,7 +97,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     const {basicInformationForm, uploadPhotoForm, venueForm, contactDetailsForm, workForm} = this.props.forms;
 
     return {
-      [ADD_STAFF_MEMBER_STEPS.BasicInformationBlock]: Component.isFormWithoutErrors(basicInformationForm, ADD_STAFF_MEMBER_STEPS.BasicInformationBlock, currentStepIdx, this.isStaffMembersReviewed),
+      [ADD_STAFF_MEMBER_STEPS.BasicInformationBlock]: Component.isFormWithoutErrors(basicInformationForm, ADD_STAFF_MEMBER_STEPS.BasicInformationBlock, currentStepIdx),
       [ADD_STAFF_MEMBER_STEPS.AddAvatarBlock]: Component.isFormWithoutErrors(uploadPhotoForm, ADD_STAFF_MEMBER_STEPS.AddAvatarBlock, currentStepIdx, this.isAvatarFormValid),
       [ADD_STAFF_MEMBER_STEPS.VenuesBlock]: Component.isFormWithoutErrors(venueForm, ADD_STAFF_MEMBER_STEPS.VenuesBlock, currentStepIdx),
       [ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock]: Component.isFormWithoutErrors(contactDetailsForm, ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock, currentStepIdx),
@@ -118,6 +118,8 @@ class Component extends React.Component<PropsFromConnect, State> {
       let stepWithErrorClassName = '';
       let isCurrentStep = currentStepIdx === idx;
       const currentStepClassName = isCurrentStep ? 'boss-steps-block__step-title_state_active' : '';
+      const unReviewedClassName = (idx === 0 && !this.isStaffMembersReviewed()) ? 'boss-steps-block__step_state_review-error' : '';
+      const initialStepClassName = idx === 0 ? 'boss-steps-block__step_state_initial' : '';
 
       let isPreviewStep = idx === stepPreviewIdx;
       if (!isPreviewStep) {
@@ -131,12 +133,12 @@ class Component extends React.Component<PropsFromConnect, State> {
         }
 
         if ( stepEncounted && !isStepValid ) {
-          stepWithErrorClassName = 'boss-steps-block__step_state_with-error';
+          stepWithErrorClassName = `boss-steps-block__step_state_with-error`;
         }
       }
 
       return (
-        <li key={idx} className={`boss-steps-block__step ${stepCompleteClassname} ${stepWithErrorClassName}`}>
+        <li key={idx} className={`boss-steps-block__step ${initialStepClassName} ${stepCompleteClassname} ${stepWithErrorClassName} ${unReviewedClassName}`}>
           <div
               className="boss-steps-block__step-index"
               onClick={() => {

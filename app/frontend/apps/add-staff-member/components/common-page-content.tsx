@@ -30,9 +30,9 @@ class Component extends React.Component<PropsFromConnect, State> {
   render() {
     return (
       <div
-          className="boss-page-content__inner-container"
+          className="boss-page-content__root"
       >
-        <div className="boss-page-dashboard">
+        <div className="boss-page-content__group">
           <PassedStepsIndicator/>
         </div>
         <FlaggedStaffMembersMessage flaggedStaffMembersCount={this.flaggedStaffMembers().length} />

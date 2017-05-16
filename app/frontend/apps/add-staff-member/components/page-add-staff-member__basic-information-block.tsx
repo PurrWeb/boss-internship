@@ -42,10 +42,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.basicInformationBlockValidated(formModelData);
   };
 
-  test = (values: any) => {
-    console.log(values);
-  }
-
   handleFormUpdate = (formModelData: BasicInformationForm) => {
     const visited = true;
     const hasUnfilledRequiredFields = hasFormUnfilledRequiredFields<BasicInformationForm>(formModelData);
@@ -66,7 +62,6 @@ class Component extends React.Component<PropsFromConnect, State> {
           className="boss-form"
           onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
-          onChange={this.test}
         >
           <label className="boss-label">
             <span className="boss-label__text">First Name</span>
