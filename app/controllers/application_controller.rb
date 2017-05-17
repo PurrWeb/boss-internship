@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_filter :authenticate_user!
+  before_filter :set_default_layout
 
   before_filter :set_paper_trail_whodunnit
   before_filter :set_host
@@ -13,6 +14,10 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= super && User.includes(:email_address).find(@current_user.id)
+  end
+
+  def set_default_layout
+    @current_layout = 'oldLayout';
   end
 
   def render_navigation?
