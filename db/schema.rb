@@ -249,6 +249,19 @@ ActiveRecord::Schema.define(version: 20170511004941) do
   add_index "finance_reports", ["week_start", "staff_member_id"], name: "index_finance_reports_on_week_start_and_staff_member_id", unique: true, using: :btree
   add_index "finance_reports", ["week_start"], name: "index_finance_reports_on_week_start", using: :btree
 
+  create_table "first_name_groups", force: :cascade do |t|
+    t.boolean  "enabled",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "first_name_options", force: :cascade do |t|
+    t.integer  "first_name_group_id", limit: 4,   null: false
+    t.string   "name",                limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "fruit_order_transitions", force: :cascade do |t|
     t.string   "to_state",       limit: 255,   null: false
     t.text     "metadata",       limit: 65535
