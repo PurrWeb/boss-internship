@@ -10,7 +10,7 @@ import {StoreStructure, WorkFormFields} from '../../../interfaces/store-models';
 import {OfType} from '../../../interfaces/index';
 import {setInputClass, renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
 import {isRequiredField, formatInvalid} from '../../../constants/form-errors';
-import {isNationalInsuranceNumber, isPinCode, isNotEmptyInput} from '../../../helpers';
+import {isNationalInsuranceNumber, isPinCode, isNotEmptyInput, isNotEmptyInput as isFilled} from '../../../helpers';
 import workInfoBlockValidated from '../../../action-creators/work-info-block-validated';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import {OptionData} from '../../../interfaces/common-data-types';
@@ -129,7 +129,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           {this.renderSiaBadgeExpiryDateInputBlock()}
 
           <label className="boss-label">
-            <span className="boss-label__text">PIN Code</span>
+            <span className="boss-label__text boss-label__text_type_required">PIN Code</span>
             <Control.text
               className="boss-input"
               model=".pinCode"
@@ -139,13 +139,15 @@ class Component extends React.Component<PropsFromConnect, State> {
               validateOn="blur"
               persist={true}
               validators={{
+                isFilled,
                 isPinCode
               } as PinCodeInputValidators}
             />
             <Errors
               model=".pinCode"
               messages={{
-                    isPinCode: formatInvalid
+                    isPinCode: formatInvalid,
+                    isFilled: isRequiredField
                   }}
               show={{touched: true, focus: false}}
               wrapper={renderErrorsBlock}
@@ -162,6 +164,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                     className: setInputClass
                   }}
               changeAction={this.findFlaggedStaffMembers}
+              debounce={1000}
               validateOn="blur"
               persist={true}
               validators={{
@@ -230,21 +233,34 @@ class Component extends React.Component<PropsFromConnect, State> {
               component={renderErrorComponent}
             />
           </label>
+          
+            <div className="boss-form__field">
+              <Errors
+                model=".starterEmploymentStatus"
+                messages={{
+                      isFilled: isRequiredField
+                    }}
+                show={(field) =>
+                  field.submitFailed || field.touched
+                }
+                wrapper={renderErrorsBlock}
+                component={renderErrorComponent}
+              />
+          <div className="boss-choice-list boss-choice-list_type_required">
+            <div className="boss-choice-list__header">
+              <h3 className="boss-choice-list__title">
+                Starter Employment Status Statements
+              </h3>
+            </div>
+            <div className="boss-choice-list__content">
 
-          <fieldset className="boss-fields-set boss-form_adjust_boss-fields-set">
-            <h4 className="boss-fields-set__header boss-fields-set__header_type_required boss-fields-set_adjust_header">
-              Starter Employment Status Statements
-            </h4>
-
-            <h5 className="boss-fields-set__section-header boss-fields-set_adjust_section-header">
-              Tick one that applies
-            </h5>
-
-            <ul className="boss-inputs-list boss-fields-set_adjust_boss-inputs-list">
-              <li>
-                <label className="boss-label">
+              <p className="boss-choice-list__text">
+                Tick one that applies
+              </p>
+              <div className="boss-choice-list__controls">
+                <label className="boss-choice-list__radio-label">
                   <Control.radio
-                    className="boss-input"
+                    className="boss-choice-list__radio-button"
                     model=".starterEmploymentStatus"
                     value="employment_status_p45_supplied"
                     validateOn="change"
@@ -253,15 +269,13 @@ class Component extends React.Component<PropsFromConnect, State> {
                       isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss-label__text">
+                  <span className="boss-choice-list__radio-label-text">
                     {starterEmploymentStatusLabels['employment_status_p45_supplied']}
                   </span>
                 </label>
-              </li>
-              <li>
-                <label className="boss-label">
+                <label className="boss-choice-list__radio-label">
                   <Control.radio
-                    className="boss-input"
+                    className="boss-choice-list__radio-button"
                     model=".starterEmploymentStatus"
                     value="employment_status_a"
                     validateOn="change"
@@ -270,15 +284,13 @@ class Component extends React.Component<PropsFromConnect, State> {
                       isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss-label__text">
+                  <span className="boss-choice-list__radio-label-text">
                     {starterEmploymentStatusLabels['employment_status_a']}
                   </span>
                 </label>
-              </li>
-              <li>
-                <label className="boss-label">
+                <label className="boss-choice-list__radio-label">
                   <Control.radio
-                    className="boss-input"
+                    className="boss-choice-list__radio-button"
                     model=".starterEmploymentStatus"
                     value="employment_status_b"
                     validateOn="change"
@@ -287,15 +299,14 @@ class Component extends React.Component<PropsFromConnect, State> {
                       isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss-label__text">
+                  <span className="boss-choice-list__radio-label-text">
                     {starterEmploymentStatusLabels['employment_status_b']}
                   </span>
                 </label>
-              </li>
-              <li>
-                <label className="boss-label">
+
+                <label className="boss-choice-list__radio-label">
                   <Control.radio
-                    className="boss-input"
+                    className="boss-choice-list__radio-button"
                     model=".starterEmploymentStatus"
                     value="employment_status_c"
                     validateOn="change"
@@ -304,15 +315,13 @@ class Component extends React.Component<PropsFromConnect, State> {
                       isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss-label__text">
+                  <span className="boss-choice-list__radio-label-text">
                     {starterEmploymentStatusLabels['employment_status_c']}
                   </span>
                 </label>
-              </li>
-              <li>
-                <label className="boss-label">
+                <label className="boss-choice-list__radio-label">
                   <Control.radio
-                    className="boss-input"
+                    className="boss-choice-list__radio-button"
                     model=".starterEmploymentStatus"
                     value="employment_status_d"
                     validateOn="change"
@@ -321,25 +330,15 @@ class Component extends React.Component<PropsFromConnect, State> {
                       isFilled: isNotEmptyInput,
                     } as StarterEmploymentStatusInputValidators}
                   />
-                  <span className="boss-label__text">
+                  <span className="boss-choice-list__radio-label-text">
                     {starterEmploymentStatusLabels['employment_status_d']}
                   </span>
                 </label>
-              </li>
-            </ul>
+              </div>
+            </div>
+          </div>
 
-            <Errors
-              model=".starterEmploymentStatus"
-              messages={{
-                    isFilled: isRequiredField
-                  }}
-              show={(field) =>
-                field.submitFailed || field.touched
-              }
-              wrapper={renderErrorsBlock}
-              component={renderErrorComponent}
-            />
-          </fieldset>
+            </div>
 
 
 

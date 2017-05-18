@@ -13,7 +13,6 @@ const handleBasicInformationBlockValidated = ((action$, store: Store<StoreStruct
   return action$.ofType(BASIC_INFORMATION_BLOCK_VALIDATED)
     .mergeMap(() => {
       const stateData = store.getState();
-
       const {currentStepIdx} = stateData.app;
       const completedStepsChangedAction = completedStepsChanged(ADD_STAFF_MEMBER_STEPS.BasicInformationBlock + 1);
       const currentStepChangedAction = changingCurrentStep(currentStepIdx + 1);

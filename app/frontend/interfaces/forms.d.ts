@@ -10,6 +10,14 @@ export interface GenderInputValidators extends Validators {
   readonly isFilled: ValidatorFn;
 }
 
+export interface CountryInputValidators extends Validators {
+  readonly isFilled: ValidatorFn;
+}
+
+export interface IsFilledInputValidator extends Validators {
+  readonly isFilled: ValidatorFn;
+}
+
 export interface EmailInputValidators extends Validators {
   readonly isFilled: ValidatorFn;
   readonly isEmail: ValidatorFn;
@@ -32,6 +40,7 @@ export interface StarterEmploymentStatusNumberFormValidators extends FormValidat
 }
 
 export interface PinCodeInputValidators extends Validators {
+  readonly isFilled: ValidatorFn;
   readonly isPinCode: ValidatorFn;
 }
 

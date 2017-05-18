@@ -30,7 +30,7 @@ const flaggedRequestFields = (state: Structure = defaultRequestFields, action: A
       if (action.payload.model === 'formsData.basicInformationForm.dateOfBirth') {
         return {
           ...state,
-          date_of_birth: action.payload.value.toString()
+          date_of_birth: action.payload.value.toISOString()
         };
       }
       if (action.payload.model === 'formsData.contactDetailsForm.email') {

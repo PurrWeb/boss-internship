@@ -119,7 +119,7 @@ class Component extends React.Component<PropsFromConnect, State> {
       let isCurrentStep = currentStepIdx === idx;
       const currentStepClassName = isCurrentStep ? 'boss-steps-block__step-title_state_active' : '';
       const unReviewedClassName = (idx === 0 && !this.isStaffMembersReviewed()) ? 'boss-steps-block__step_state_review-error' : '';
-      const initialStepClassName = idx === 0 ? 'boss-steps-block__step_state_initial' : '';
+      let initialStepClassName = '';
 
       let isPreviewStep = idx === stepPreviewIdx;
       if (!isPreviewStep) {
@@ -131,6 +131,10 @@ class Component extends React.Component<PropsFromConnect, State> {
         if (stepEncounted && !stepHasUnfilledRequired) {
           stepCompleteClassname = 'boss-steps-block__step_state_complete';
         }
+        
+        if (stepHasUnfilledRequired && idx === 0) {
+          initialStepClassName = 'boss-steps-block__step_state_initial';
+        }
 
         if ( stepEncounted && !isStepValid ) {
           stepWithErrorClassName = `boss-steps-block__step_state_with-error`;
@@ -141,7 +145,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         <li key={idx} className={`boss-steps-block__step ${initialStepClassName} ${stepCompleteClassname} ${stepWithErrorClassName} ${unReviewedClassName}`}>
           <div
               className="boss-steps-block__step-index"
-              onClick={() => {
+          onClick={() => {
                 this.onStepClick(idx);
               }}
           >

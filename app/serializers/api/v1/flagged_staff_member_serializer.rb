@@ -1,7 +1,7 @@
 class Api::V1::FlaggedStaffMemberSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
 
-  attributes :id, :url, :avatar_url, :staff_type, :first_name, :surname, :preferred_hours,
+  attributes :id, :date_of_birth, :url, :avatar_url, :staff_type, :first_name, :surname, :preferred_hours,
              :preferred_days, :venues, :email_address, :disabled_by_user, :disabled_at, :disable_reason
 
   def url

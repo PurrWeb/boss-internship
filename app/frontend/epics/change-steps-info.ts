@@ -17,7 +17,6 @@ const changeStepsInfo = ((action$, store: Store<StoreStructure>) => {
       const stepIdx = ADD_STAFF_MEMBER_STEPS[stepName];
       const changedStepInfo: AddStaffMemberStepInfo = {visited, hasUnfilledRequired, hasValidationErrors};
       const newStepsInfo: AddStaffMemberStepsInfo = {...stateData.app.stepsInfo, ...{[stepIdx]: changedStepInfo}};
-
       return stepsInfoChanged(newStepsInfo);
     });
 }) as Epic<ActionWithPayload<AddStaffMemberStepsInfo>, StoreStructure>;

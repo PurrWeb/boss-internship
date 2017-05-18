@@ -27,19 +27,37 @@ class Component extends React.Component<PropsFromConnect, State> {
     return this.props.flaggedStaffMembers.filter((staffMember) => !staffMember.reviewed );
   }
 
+  renderTitle(title: string) {
+    return (
+      <div className="boss-page-dashboard__group boss-page-dashboard__group_spaced">
+        <h1 className="boss-page-dashboard__title">{title}</h1>
+      </div>
+    );
+  }
+
   render() {
     return (
-      <div
-          className="boss-page-content__root"
-      >
-        <div className="boss-page-content__group">
-          <PassedStepsIndicator/>
+      <main className="boss-page-main">
+        <div className="boss-page-main__dashboard">
+          <div className="boss-page-main__inner">
+            <div className="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_add-staff-member">
+              {this.renderTitle('Add Staff Member')}
+              <div className="boss-page-dashboard__group boss-page-dashboard__group_spaced">
+                <PassedStepsIndicator/>
+              </div>
+            </div>
+          </div>
         </div>
-        <FlaggedStaffMembersMessage flaggedStaffMembersCount={this.flaggedStaffMembers().length} />
-        <PageAddStaffMember/>
-
-        <StaffMembersReview/>
-      </div>
+        <div className="boss-page-main__content">
+          <div className="boss-page-main__inner boss-page-main__inner_opaque">
+            <div className="boss-page-main__root">
+              <FlaggedStaffMembersMessage flaggedStaffMembersCount={this.flaggedStaffMembers().length} />
+              <PageAddStaffMember/>
+              <StaffMembersReview/>
+            </div>
+          </div>
+        </div>
+      </main>
     );
   }
 }

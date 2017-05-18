@@ -3,18 +3,19 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Control, Form, Errors, FieldState, ErrorsObject} from 'react-redux-form';
-import * as DatePicker from 'react-datepicker';
+import DatePicker from 'react-datepicker';
 import * as Select from 'react-select';
 import {pipe, omit, values, find} from 'ramda';
+import * as moment from 'moment';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, BasicInformationFormFields} from '../../../interfaces/store-models';
 import {OfType, Dict} from '../../../interfaces/index';
-import {isNotEmptyInput} from '../../../helpers';
+import {isNotEmptyInput, isNotEmptyInput as isFilled} from '../../../helpers';
 import {isRequiredField} from '../../../constants/form-errors';
 import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
 import basicInformationBlockValidated from '../../../action-creators/basic-information-block-validated';
-import {GenderInputValidators} from '../../../interfaces/forms';
+import {GenderInputValidators, IsFilledInputValidator} from '../../../interfaces/forms';
 import SelectControl from './select-control';
 import changingStepInfo from '../../../action-creators/changing-step-info';
 import findFlaggedStaffMembers from '../../../action-creators/requesting-flagged-staff-members';
@@ -47,6 +48,8 @@ class Component extends React.Component<PropsFromConnect, State> {
     const hasUnfilledRequiredFields = hasFormUnfilledRequiredFields<BasicInformationForm>(formModelData);
     const hasValidationErrors = hasFormValidationErrors<BasicInformationForm>(formModelData);
 
+    // this.setState({isValid: hasUnfilledRequiredFields || hasValidationErrors});
+
     this.props.changingStepInfo('BasicInformationBlock', visited, hasUnfilledRequiredFields, hasValidationErrors);
   };
 
@@ -56,90 +59,126 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     return (
-      <div className="boss-forms-block">
+      <div className="boss-form">
         <Form
           model="formsData.basicInformationForm"
           className="boss-form"
           onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
         >
-          <label className="boss-label">
-            <span className="boss-label__text">First Name</span>
-            <Control.text
-              className="boss-input"
-              model=".firstName"
-              mapProps={{
-                    className: setInputClass
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text boss-form__label-text_type_required">First Name</span>
+              <Control.text
+                className="boss-form__input"
+                model=".firstName"
+                mapProps={{
+                      className: setInputClass
+                    }}
+                validateOn="blur"
+                changeAction={this.props.findFlaggedStaffMembers}
+                debounce={1000}
+                validators={{
+                  isFilled,
+                } as IsFilledInputValidator}              
+              />
+              <Errors
+                model=".firstName"
+                messages={{
+                  isFilled: isRequiredField
+                }}
+                show={{touched: true, focus: false}}
+                wrapper={renderErrorsBlock}
+                component={renderErrorComponent}
+              />
+            </label>
+
+          </div>
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text boss-form__label-text_type_required">Surname</span>
+              <Control.text
+                className="boss-form__input"
+                model=".surname"
+                mapProps={{
+                      className: setInputClass
+                    }}
+                validateOn="blur"
+
+                changeAction={this.props.findFlaggedStaffMembers}
+                debounce={1000}
+                validators={{
+                  isFilled,
+                } as IsFilledInputValidator}              
+
+              />
+              <Errors
+                model=".surname"
+                messages={{
+                  isFilled: isRequiredField
+                }}
+                show={{touched: true, focus: false}}
+                wrapper={renderErrorsBlock}
+                component={renderErrorComponent}
+              />
+            </label>
+          </div>
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text boss-form__label-text_type_required">Gender</span>
+              <div className="boss-form__select">
+                <SelectControl
+                  model=".gender"
+                  className="myclass"
+                  options={this.props.genderOptions}
+                  validateOn="change"
+                  validators={{
+                    isFilled: isNotEmptyInput,
+                  } as GenderInputValidators}
+                />
+              </div>
+              <Errors
+                model=".gender"
+                messages={{
+                  isFilled: isRequiredField
+                }}
+                show={{touched: true, focus: false}}
+                wrapper={renderErrorsBlock}
+                component={renderErrorComponent}
+              />
+            </label>
+          </div>
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text">Date of Birth</span>
+              <div className="react-datepicker__input-container">
+                <Control
+                  component={DatePicker}
+                  className=""
+                  model=".dateOfBirth"
+                  mapProps={{
+                    className: setInputClass,
+                    selected: (props) => props.viewValue,
+                    showMonthDropdown: () => true,
+                    showYearDropdown: () => true,
+                    dropdownMode: () => 'select',
+                    dateFormat: () => 'YYYY/MM/DD',
+                    onChange: (props) => {
+                      return props.onChange;
+                    }
                   }}
-              validateOn="blur"
-              changeAction={this.props.findFlaggedStaffMembers}
-              debounce={1000}
-            />
-          </label>
-
-          <label className="boss-label">
-            <span className="boss-label__text">Surname</span>
-            <Control.text
-              className="boss-input"
-              model=".surname"
-              mapProps={{
-                    className: setInputClass
-                  }}
-              validateOn="blur"
-
-              changeAction={this.props.findFlaggedStaffMembers}
-              debounce={1000}
-
-            />
-          </label>
-
-          <label className="boss-label">
-            <span className="boss-label__text boss-label__text_type_required">Gender</span>
-            <SelectControl
-              model=".gender"
-
-              className="boss-input"
-              options={this.props.genderOptions}
-              validateOn="change"
-              validators={{
-                isFilled: isNotEmptyInput,
-              } as GenderInputValidators}
-            />
-            <Errors
-              model=".gender"
-              messages={{
-                isFilled: isRequiredField
-              }}
-              show={{touched: true, focus: false}}
-              wrapper={renderErrorsBlock}
-              component={renderErrorComponent}
-            />
-          </label>
-
-          <label className="boss-label boss-label_role_datepicker">
-            <span className="boss-label__text">Date of Birth</span>
-            <Control
-              component={DatePicker}
-              className="boss-input"
-              model=".dateOfBirth"
-              mapProps={{
-                className: setInputClass,
-                selected: (props) => props.viewValue,
-                showMonthDropdown: () => true,
-                showYearDropdown: () => true,
-                dropdownMode: () => 'select',
-                onChange: (props) => {
-                  return props.onChange;
-                }
-              }}
-              changeAction={this.props.findFlaggedStaffMembers}
-              debounce={1000}
-              validateOn="blur"
-            />
-          </label>
-
+                  changeAction={this.props.findFlaggedStaffMembers}
+                  debounce={1000}
+                  validateOn="blur"
+                />
+              </div>
+            </label>
+          </div>
           <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
-            <input type="submit" className="boss-button boss-buttons-group_adjust_button" value="Continue"/>
+            <input
+              type="submit"
+              className={`boss-button boss-buttons-group_adjust_button`}
+              value="Continue"/>
           </div>
         </Form>
       </div>

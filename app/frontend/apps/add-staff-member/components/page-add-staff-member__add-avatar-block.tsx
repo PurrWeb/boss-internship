@@ -57,7 +57,6 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   constructor(props: PropsFromConnect) {
     super(props);
-
     this.state = {
       toShowCropper: false,
       avatarPreviewSrc: '',
@@ -69,12 +68,10 @@ class Component extends React.Component<PropsFromConnect, State> {
   handleFormSubmit = () => {
     const cropper = this.cropper;
     const croppedImageUrl = cropper ? cropper.getCroppedCanvas().toDataURL() : '';
-
     const formModelData: OfType<UploadPhotoFormFields, string> = {
       avatar: croppedImageUrl
     };
     const action = avatarBlockValidated(formModelData);
-
     this.props.dispatch(action);
   };
 
@@ -118,7 +115,6 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   saveImagePreviewToState = () => {
     const croppedImageUrl = this.cropper.getCroppedCanvas().toDataURL();
-
     this.setState({avatarPreviewSrc: croppedImageUrl});
   };
 
@@ -355,7 +351,10 @@ class Component extends React.Component<PropsFromConnect, State> {
                value="Back"
                onClick={this.onBackClick}
             />
-            <input type="submit" className="boss-button boss-button_role_submit boss-buttons-group_adjust_button" value="Continue"/>
+            <input
+              type="submit"
+              className="boss-button boss-button_role_submit boss-buttons-group_adjust_button"
+              value="Continue"/>
           </div>
 
         </Form>

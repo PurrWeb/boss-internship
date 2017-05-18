@@ -16,14 +16,7 @@ import {RequestFlaggedStaffMembers} from '../interfaces/api-requests';
 const requestFlaggedStaffMembers = (action$: any, store: Store<StoreStructure>) =>
   action$.ofType(REQUESTING_FLAGGED_STAFF_MEMBERS)
     .switchMap((action: any) => {
-        let isEmptyFields = true;
-        
-        // Check flaged request fields on empty values, if empty do not send request
-        _.forOwn(action.payload, (value, key) => {
-          if (!!value) {
-            isEmptyFields = false;
-          }
-        });
+        const isEmptyFields = !action.payload.first_name;
         return isEmptyFields
           ? Observable.of({
               type: FLAGGED_STAFF_MEMBERS,

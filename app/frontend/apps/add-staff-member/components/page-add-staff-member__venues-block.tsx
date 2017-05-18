@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Control, Form, Errors} from 'react-redux-form';
-import * as DatePicker from 'react-datepicker';
+import DatePicker from 'react-datepicker';
 import * as Select from 'react-select';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
@@ -67,16 +67,21 @@ class Component extends React.Component<PropsFromConnect, State> {
           onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
         >
-          <label className="boss-label">
-            <span className="boss-label__text boss-label__text_type_required">Main Venue</span>
-            <SelectControl
-              model=".mainVenue"
-              className="boss-input"
-              options={this.props.venueOptions}
-              validators={{
-                isFilled: isNotEmptyInput,
-              } as MainVenueValidators}
-            />
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text boss-form__label-text_type_required">Main Venue</span>
+            </label>
+            <div className="boss-form__select">
+              <SelectControl
+                className=""
+                model=".mainVenue"
+                options={this.props.venueOptions}
+                validators={{
+                  isFilled: isNotEmptyInput,
+                } as MainVenueValidators}
+              />
+            </div>
+
             <Errors
               model=".mainVenue"
               messages={{
@@ -86,18 +91,22 @@ class Component extends React.Component<PropsFromConnect, State> {
               wrapper={renderErrorsBlock}
               component={renderErrorComponent}
             />
-          </label>
+          </div>
 
-          <label className="boss-label">
-            <span className="boss-label__text">Other Venues</span>
-            <SelectControl
-              model=".otherVenues"
-              value={[]}
-              className="boss-input"
-              multi={true}
-              options={this.props.venueOptions}
-            />
-          </label>
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text boss-form__label-text_type_required">Other Venues</span>
+            </label>
+            <div className="boss-form__select">
+              <SelectControl
+                model=".otherVenues"
+                value={[]}
+                className="boss-form__select"
+                multi={true}
+                options={this.props.venueOptions}
+              />
+            </div>
+          </div>
 
           <label className="boss-label boss-label_role_datepicker">
             <span className="boss-label__text">Starts At</span>

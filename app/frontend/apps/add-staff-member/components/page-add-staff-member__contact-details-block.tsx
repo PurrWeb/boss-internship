@@ -14,7 +14,7 @@ import {isRequiredField, isWrongEmail, isPhoneNumber} from '../../../constants/f
 import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
 import contactDetailsBlockValidated from '../../../action-creators/contact-details-block-validated';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
-import {EmailInputValidators, PhoneNumberInputValidators} from '../../../interfaces/forms';
+import {EmailInputValidators, PhoneNumberInputValidators, IsFilledInputValidator} from '../../../interfaces/forms';
 import {ContactDetailsForm} from '../../../reducers/forms';
 import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../helpers/validators';
 import changingStepInfo from '../../../action-creators/changing-step-info';
@@ -99,7 +99,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           </label>
 
           <label className="boss-label">
-            <span className="boss-label__text">Address</span>
+            <span className="boss-label__text boss-label__text_type_required">Address</span>
             <Control.text
               className="boss-input"
               model=".address"
@@ -107,20 +107,47 @@ class Component extends React.Component<PropsFromConnect, State> {
                 className: setInputClass
               }}
               validateOn="blur"
+              validators={{
+                isFilled,
+              } as IsFilledInputValidator}
+
+            />
+            <Errors
+              model=".address"
+              messages={{
+                isFilled: isRequiredField
+              }}
+              show={{touched: true, focus: false}}
+              wrapper={renderErrorsBlock}
+              component={renderErrorComponent}
             />
           </label>
 
           <label className="boss-label">
-            <span className="boss-label__text">Country</span>
+            <span className="boss-label__text boss-label__text_type_required">Country</span>
             <Control.text
               className="boss-input"
               model=".country"
               mapProps={{
                 className: setInputClass,
               }}
+              validateOn="blur"
+              persist={true}
+              validators={{
+                isFilled,
+              } as IsFilledInputValidator}
+
+            />
+            <Errors
+              model=".country"
+              messages={{
+                isFilled: isRequiredField
+              }}
+              show={{touched: true, focus: false}}
+              wrapper={renderErrorsBlock}
+              component={renderErrorComponent}
             />
           </label>
-
           <label className="boss-label">
             <span className="boss-label__text">County</span>
             <Control.text
@@ -131,9 +158,8 @@ class Component extends React.Component<PropsFromConnect, State> {
               }}
             />
           </label>
-
           <label className="boss-label">
-            <span className="boss-label__text">Post Code</span>
+            <span className="boss-label__text boss-label__text_type_required">Post Code</span>
             <Control.text
               className="boss-input"
               model=".postCode"
@@ -141,6 +167,18 @@ class Component extends React.Component<PropsFromConnect, State> {
                 className: setInputClass
               }}
               validateOn="blur"
+              validators={{
+                isFilled,
+              } as IsFilledInputValidator}
+            />
+            <Errors
+              model=".postCode"
+              messages={{
+                isFilled: isRequiredField
+              }}
+              show={{touched: true, focus: false}}
+              wrapper={renderErrorsBlock}
+              component={renderErrorComponent}
             />
           </label>
 
