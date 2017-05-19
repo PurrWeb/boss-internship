@@ -31,6 +31,7 @@ class StaffMember < ActiveRecord::Base
   has_one :user, inverse_of: :staff_member
 
   has_many :rota_shifts, inverse_of: :staff_member
+  has_many :enabled_rota_shifts, lambda { RotaShift.enabled }, class_name: "RotaShift"
 
   has_many :holidays, inverse_of: :staff_member
 
@@ -261,6 +262,10 @@ class StaffMember < ActiveRecord::Base
 
   def email
     email_address.try(:email)
+  end
+
+  def workable_venues
+    StaffMemberWorkableVenuesQuery.new(staff_member: self).all
   end
 
   def mark_requiring_notification!(time: Time.zone.now)

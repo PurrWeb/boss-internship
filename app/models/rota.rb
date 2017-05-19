@@ -4,6 +4,7 @@ class Rota < ActiveRecord::Base
   has_many :rota_forecasts, inverse_of: :rota
   has_many :rota_shifts, inverse_of: :rota
   has_many :rota_status_transitions, autosave: false
+  has_many :enabled_rota_shifts, lambda { RotaShift.enabled }, class_name: "RotaShift"
 
   belongs_to :creator, class_name: "User"
   belongs_to :venue

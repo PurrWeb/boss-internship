@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170508202806) do
+ActiveRecord::Schema.define(version: 20170511004941) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -112,6 +112,10 @@ ActiveRecord::Schema.define(version: 20170508202806) do
     t.datetime "updated_at"
   end
 
+  add_index "clock_in_days", ["date"], name: "index_clock_in_days_on_date", using: :btree
+  add_index "clock_in_days", ["staff_member_id"], name: "index_clock_in_days_on_staff_member_id", using: :btree
+  add_index "clock_in_days", ["venue_id"], name: "index_clock_in_days_on_venue_id", using: :btree
+
   create_table "clock_in_events", force: :cascade do |t|
     t.string   "event_type",         limit: 255, null: false
     t.integer  "creator_id",         limit: 4,   null: false
@@ -148,6 +152,7 @@ ActiveRecord::Schema.define(version: 20170508202806) do
   end
 
   add_index "clock_in_periods", ["clock_in_day_id"], name: "index_clock_in_periods_on_clock_in_day_id", using: :btree
+  add_index "clock_in_periods", ["ends_at"], name: "index_clock_in_periods_on_ends_at", using: :btree
 
   create_table "cron_jobs", force: :cascade do |t|
     t.string   "method",      limit: 255,   null: false
@@ -358,6 +363,7 @@ ActiveRecord::Schema.define(version: 20170508202806) do
     t.string   "disabled_by_type",           limit: 255
   end
 
+  add_index "hours_acceptance_breaks", ["disabled_at"], name: "index_hours_acceptance_breaks_on_disabled_at", using: :btree
   add_index "hours_acceptance_breaks", ["hours_acceptance_period_id"], name: "index_hours_acceptance_breaks_on_hours_acceptance_period_id", using: :btree
 
   create_table "hours_acceptance_periods", force: :cascade do |t|
@@ -453,6 +459,8 @@ ActiveRecord::Schema.define(version: 20170508202806) do
   end
 
   add_index "owed_hours", ["date"], name: "index_owed_hours_on_date", using: :btree
+  add_index "owed_hours", ["disabled_at"], name: "index_owed_hours_on_disabled_at", using: :btree
+  add_index "owed_hours", ["staff_member_id"], name: "index_owed_hours_on_staff_member_id", using: :btree
 
   create_table "pay_rates", force: :cascade do |t|
     t.string  "pay_rate_type",    limit: 255,                null: false
@@ -642,6 +650,7 @@ ActiveRecord::Schema.define(version: 20170508202806) do
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
   add_index "staff_members", ["name_id"], name: "index_staff_members_on_name_id", using: :btree
   add_index "staff_members", ["notified_of_sia_expiry_at"], name: "index_staff_members_on_notified_of_sia_expiry_at", using: :btree
+  add_index "staff_members", ["pay_rate_id"], name: "index_staff_members_on_pay_rate_id", using: :btree
   add_index "staff_members", ["phone_number"], name: "index_staff_members_on_phone_number", using: :btree
   add_index "staff_members", ["shift_change_occured_at"], name: "index_staff_members_on_shift_change_occured_at", using: :btree
   add_index "staff_members", ["sia_badge_expiry_date"], name: "index_staff_members_on_sia_badge_expiry_date", using: :btree

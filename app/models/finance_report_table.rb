@@ -34,6 +34,8 @@ class FinanceReportTable
       filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
     ).all
 
+    ActiveRecord::Associations::Preloader.new.preload(staff_members, [:pay_rate])
+
     @_staff_types = []
     @_reports_by_staff_type ||= begin
       result = {}
