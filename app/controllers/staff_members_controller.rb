@@ -4,6 +4,10 @@ class StaffMembersController < ApplicationController
     true
   end
 
+  def set_default_layout
+    @current_layout = 'newLayout';
+  end
+
   def index
     authorize! :manage, :staff_members
 
@@ -124,7 +128,6 @@ class StaffMembersController < ApplicationController
 
   def new
     authorize! :manage, :staff_members
-
     access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
     venues = Venue.all
     pay_rates = PayRate.selectable_by(current_user)

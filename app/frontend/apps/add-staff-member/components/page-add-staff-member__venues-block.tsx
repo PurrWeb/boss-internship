@@ -114,7 +114,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
             <Control
               component={DatePicker}
-              className="react-datepicker__input-container"
+              className="boss-form__input"
               model=".startsAt"
               mapProps={{
                 className: setInputClass,

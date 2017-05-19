@@ -153,7 +153,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               <div className="react-datepicker__input-container">
                 <Control
                   component={DatePicker}
-                  className=""
+                  className="boss-form__input"
                   model=".dateOfBirth"
                   mapProps={{
                     className: setInputClass,

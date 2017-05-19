@@ -131,7 +131,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           stepCompleteClassname = 'boss-steps-block__step_state_complete';
         }
         
-        if (stepHasUnfilledRequired && idx === 0) {
+        if (currentStepIdx === 0) {
           initialStepClassName = 'boss-steps-block__step_state_initial';
         }
 
