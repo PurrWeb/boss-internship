@@ -7,6 +7,11 @@
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'rollbar', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    
+    <script>
+      window.boss = window.boss || {};
+      window.boss.currentLayout = "<%= @current_layout %>"
+    </script>
 
     <script src="<%= @bundle_script %>" data-turbolinks-track="true"></script>
 

@@ -1,0 +1,3 @@
+[submodule "app/frontend/assets"]
+	path = app/frontend/assets
+	url = https://github.com/jsmbars/boss-css.git
