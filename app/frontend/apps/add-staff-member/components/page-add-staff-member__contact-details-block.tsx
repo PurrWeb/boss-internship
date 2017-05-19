@@ -62,24 +62,24 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   render() {
     return (
-      <div className="boss-forms-block">
-        <Form
-          model="formsData.contactDetailsForm"
-          className="boss-form"
-          onUpdate={this.handleFormUpdate}
-          onSubmit={this.handleFormSubmit}
-        >
-          <label className="boss-label">
-            <span className="boss-label__text boss-label__text_type_required">Email</span>
+      <Form
+        model="formsData.contactDetailsForm"
+        className="boss-form"
+        onUpdate={this.handleFormUpdate}
+        onSubmit={this.handleFormSubmit}
+      >
+        <div className="boss-form__field">
+          <label className="boss-form__label">
+            <span className="boss-form__label-text boss-form__label-text_type_required">Email</span>
             <Control.text
-              className="boss-input"
+              className="boss-form__input"
               model=".email"
               mapProps={{
                 className: setInputClass
               }}
               changeAction={this.findFlaggedStaffMembers}
               debounce={1000}
-              validateOn="blur"
+              asyncValidateOn="blur"
               persist={true}
               validators={{
                 isFilled,
@@ -97,11 +97,13 @@ class Component extends React.Component<PropsFromConnect, State> {
               component={renderErrorComponent}
             />
           </label>
+        </div>
 
-          <label className="boss-label">
-            <span className="boss-label__text boss-label__text_type_required">Address</span>
+        <div className="boss-form__field">
+          <label className="boss-form__label">
+            <span className="boss-form__label-text boss-form__label-text_type_required">Address</span>
             <Control.text
-              className="boss-input"
+              className="boss-form__input"
               model=".address"
               mapProps={{
                 className: setInputClass
@@ -122,11 +124,13 @@ class Component extends React.Component<PropsFromConnect, State> {
               component={renderErrorComponent}
             />
           </label>
+        </div>
 
-          <label className="boss-label">
-            <span className="boss-label__text boss-label__text_type_required">Country</span>
+        <div className="boss-form__field">
+          <label className="boss-form__label">
+            <span className="boss-form__label-text boss-form__label-text_type_required">Country</span>
             <Control.text
-              className="boss-input"
+              className="boss-form__input"
               model=".country"
               mapProps={{
                 className: setInputClass,
@@ -148,20 +152,24 @@ class Component extends React.Component<PropsFromConnect, State> {
               component={renderErrorComponent}
             />
           </label>
-          <label className="boss-label">
-            <span className="boss-label__text">County</span>
+        </div>
+        <div className="boss-form__field">
+          <label className="boss-form__label">
+            <span className="boss-form__label-text">County</span>
             <Control.text
-              className="boss-input"
+              className="boss-form__input"
               model=".county"
               mapProps={{
                 className: setInputClass,
               }}
             />
           </label>
-          <label className="boss-label">
-            <span className="boss-label__text boss-label__text_type_required">Post Code</span>
+        </div>
+        <div className="boss-form__field">
+          <label className="boss-form__label">
+            <span className="boss-form__label-text boss-form__label-text_type_required">Post Code</span>
             <Control.text
-              className="boss-input"
+              className="boss-form__input"
               model=".postCode"
               mapProps={{
                 className: setInputClass
@@ -181,11 +189,13 @@ class Component extends React.Component<PropsFromConnect, State> {
               component={renderErrorComponent}
             />
           </label>
+        </div>
+        <div className="boss-form__field">
+          <label className="boss-form__label">
+            <span className="boss-form__label-text">Phone Number</span>
 
-          <label className="boss-label">
-            <span className="boss-label__text">Phone Number</span>
             <Control.text
-              className="boss-input"
+              className="boss-form__input"
               model=".phoneNumber"
               mapProps={{
                 className: setInputClass
@@ -206,17 +216,17 @@ class Component extends React.Component<PropsFromConnect, State> {
               component={renderErrorComponent}
             />
           </label>
+        </div>
 
-          <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
-            <input type="button"
-                   className="boss-button boss-button_role_back boss-buttons-group_adjust_button"
-                   value="Back"
-                   onClick={this.onBackClick}
-            />
-            <input type="submit" className="boss-button boss-button_role_submit boss-buttons-group_adjust_button" value="Continue"/>
-          </div>
-        </Form>
-      </div>
+        <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
+          <input type="button"
+                  className="boss-button boss-button_role_back boss-buttons-group_adjust_button"
+                  value="Back"
+                  onClick={this.onBackClick}
+          />
+          <input type="submit" className="boss-button boss-button_role_submit boss-buttons-group_adjust_button" value="Continue"/>
+        </div>
+      </Form>
     );
   }
 }

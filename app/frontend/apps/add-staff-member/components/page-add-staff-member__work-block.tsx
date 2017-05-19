@@ -76,163 +76,179 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   renderSiaBadgeNumberInputBlock() {
     return this.props.isStaffTypeSecurity ? (
-      <label className="boss-label">
-        <span className="boss-label__text">Sia Badge Number</span>
-        <Control.text
-          className="boss-input"
-          model=".siaBadgeNumber"
-          mapProps={{
-                  className: setInputClass
-                }}
-          validateOn="blur"
-        />
-      </label>
+      <div className="boss-form__field">
+        <label className="boss-form__label">
+          <span className="boss-form__label-text">Sia Badge Number</span>
+          <Control.text
+            className="boss-form__input"
+            model=".siaBadgeNumber"
+            mapProps={{
+                    className: setInputClass
+                  }}
+            validateOn="blur"
+          />
+        </label>
+      </div>
     ) : null;
   }
 
   renderSiaBadgeExpiryDateInputBlock() {
     return this.props.isStaffTypeSecurity ? (
-      <label className="boss-label">
-        <span className="boss-label__text">Sia Badge Expiry Date</span>
-        <Control.text
-          className="boss-input"
-          model=".siaBadgeExpiryDate"
-          mapProps={{
-                  className: setInputClass
-                }}
-          validateOn="blur"
-        />
-      </label>
+      <div className="boss-form__field">
+        <label className="boss-form__label">
+          <span className="boss-form__label-text">Sia Badge Expiry Date</span>
+          <Control.text
+            className="boss-form__input"
+            model=".siaBadgeExpiryDate"
+            mapProps={{
+                    className: setInputClass
+                  }}
+            validateOn="blur"
+          />
+        </label>
+      </div>
     ) : null;
   }
 
   render() {
     return (
-      <div className="boss-forms-block">
         <Form
           model="formsData.workForm"
           className="boss-form"
           onUpdate={this.handleFormUpdate}
           onSubmit={this.handleFormSubmit}
         >
-          <label className="boss-label">
-            <span className="boss-label__text">Staff Type</span>
-            <SelectControl
-              model=".staffType"
-              className="boss-input"
-              options={this.props.staffTypeOptions}
-            />
-          </label>
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text">Staff Type</span>
+            </label>
+            <div className="boss-form__select">
+              <SelectControl
+                model=".staffType"
+                className=""
+                options={this.props.staffTypeOptions}
+              />
+            </div>
+          </div>
 
           {this.renderSiaBadgeNumberInputBlock()}
 
           {this.renderSiaBadgeExpiryDateInputBlock()}
 
-          <label className="boss-label">
-            <span className="boss-label__text boss-label__text_type_required">PIN Code</span>
-            <Control.text
-              className="boss-input"
-              model=".pinCode"
-              mapProps={{
-                className: setInputClass
-              }}
-              validateOn="blur"
-              persist={true}
-              validators={{
-                isFilled,
-                isPinCode
-              } as PinCodeInputValidators}
-            />
-            <Errors
-              model=".pinCode"
-              messages={{
-                    isPinCode: formatInvalid,
-                    isFilled: isRequiredField
-                  }}
-              show={{touched: true, focus: false}}
-              wrapper={renderErrorsBlock}
-              component={renderErrorComponent}
-            />
-          </label>
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text boss-form__label-text_type_required">PIN Code</span>
+              <Control.text
+                className="boss-form__input"
+                model=".pinCode"
+                mapProps={{
+                  className: setInputClass
+                }}
+                validateOn="blur"
+                persist={true}
+                validators={{
+                  isFilled,
+                  isPinCode
+                } as PinCodeInputValidators}
+              />
+              <Errors
+                model=".pinCode"
+                messages={{
+                      isPinCode: formatInvalid,
+                      isFilled: isRequiredField
+                    }}
+                show={{touched: true, focus: false}}
+                wrapper={renderErrorsBlock}
+                component={renderErrorComponent}
+              />
+            </label>
+          </div>
 
-          <label className="boss-label">
-            <span className="boss-label__text">National Insurance Number</span>
-            <Control.text
-              className="boss-input"
-              model=".nationalInsuranceNumber"
-              mapProps={{
-                    className: setInputClass
-                  }}
-              changeAction={this.findFlaggedStaffMembers}
-              debounce={1000}
-              validateOn="blur"
-              persist={true}
-              validators={{
-                isNationalInsuranceNumber
-              } as NationalInsuranceNumberInputValidators}
-            />
-            <Errors
-              model=".nationalInsuranceNumber"
-              messages={{
-                    isNationalInsuranceNumber: formatInvalid
-                  }}
-              show={{touched: true, focus: false}}
-              wrapper={renderErrorsBlock}
-              component={renderErrorComponent}
-            />
-          </label>
-
-          <label className="boss-label">
-            <span className="boss-label__text">Day Preference</span>
-            <Control.textarea
-              className="boss-input"
-              model=".dayPreference"
-              mapProps={{
-                    className: setInputClass
-                  }}
-              validateOn="blur"
-            />
-            <span className="boss-label__tip boss-label_adjust_tip">
-              Preferred days to work displayed in the rota (e.g. mornings and weekends)
-            </span>
-          </label>
-
-          <label className="boss-label">
-            <span className="boss-label__text">Hours Preference</span>
-            <Control.textarea
-              className="boss-input"
-              model=".hoursPreference"
-              mapProps={{
-                    className: setInputClass
-                  }}
-              validateOn="blur"
-            />
-            <span className="boss-label__tip boss-label_adjust_tip">
-              Preferred number of hours to work per week displayed in the Rota (e.g. 40, 20+)
-            </span>
-          </label>
-
-          <label className="boss-label">
-            <span className="boss-label__text boss-label__text_type_required">Pay Rate</span>
-            <SelectControl
-              model=".payRate"
-              className="boss-input"
-              options={this.props.payrateOptions}
-              validateOn="change"
-              validators={{
-                isFilled: isNotEmptyInput,
-              } as PayRateInputValidators}
-            />
-            <Errors
-              model=".payRate"
-              messages={{
-                    isFilled: isRequiredField
-                  }}
-              show={{touched: true, focus: false}}
-              wrapper={renderErrorsBlock}
-              component={renderErrorComponent}
-            />
-          </label>
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text">National Insurance Number</span>
+              <Control.text
+                className="boss-form__input"
+                model=".nationalInsuranceNumber"
+                mapProps={{
+                      className: setInputClass
+                    }}
+                changeAction={this.findFlaggedStaffMembers}
+                debounce={1000}
+                asyncValidateOn="blur"
+                persist={true}
+                validators={{
+                  isNationalInsuranceNumber
+                } as NationalInsuranceNumberInputValidators}
+              />
+              <Errors
+                model=".nationalInsuranceNumber"
+                messages={{
+                      isNationalInsuranceNumber: formatInvalid
+                    }}
+                show={{touched: true, focus: false}}
+                wrapper={renderErrorsBlock}
+                component={renderErrorComponent}
+              />
+            </label>
+          </div>
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text">Day Preference</span>
+              <Control.textarea
+                className="boss-form__input"
+                model=".dayPreference"
+                mapProps={{
+                      className: setInputClass
+                    }}
+                validateOn="blur"
+              />
+              <span className="boss-label__tip boss-label_adjust_tip">
+                Preferred days to work displayed in the rota (e.g. mornings and weekends)
+              </span>
+            </label>
+          </div>
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text">Hours Preference</span>
+              <Control.textarea
+                className="boss-form__input"
+                model=".hoursPreference"
+                mapProps={{
+                      className: setInputClass
+                    }}
+                validateOn="blur"
+              />
+              <span className="boss-label__tip boss-label_adjust_tip">
+                Preferred number of hours to work per week displayed in the Rota (e.g. 40, 20+)
+              </span>
+            </label>
+          </div>
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-form__label-text">Pay Rate</span>
+              <div className="boss-form__select">
+                <SelectControl
+                  model=".payRate"
+                  className=""
+                  options={this.props.payrateOptions}
+                  validateOn="change"
+                  validators={{
+                    isFilled: isNotEmptyInput,
+                  } as PayRateInputValidators}
+                />
+                <Errors
+                  model=".payRate"
+                  messages={{
+                        isFilled: isRequiredField
+                      }}
+                  show={{touched: true, focus: false}}
+                  wrapper={renderErrorsBlock}
+                  component={renderErrorComponent}
+                />
+              </div>
+            </label>
+          </div>
           
             <div className="boss-form__field">
               <Errors
@@ -352,7 +368,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                    value="Continue"/>
           </div>
         </Form>
-      </div>
+
     );
   }
 }

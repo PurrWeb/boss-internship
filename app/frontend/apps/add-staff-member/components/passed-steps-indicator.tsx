@@ -112,7 +112,6 @@ class Component extends React.Component<PropsFromConnect, State> {
     const stepsInfoKeys = Object.keys(stepsInfo).map((key) => Number(key));
     const maxStepsInfoIdx = Math.max.apply(null, stepsInfoKeys);
     const stepPreviewIdx = maxStepsInfoIdx + 1;
-
     return stepsData.map((stepData, idx) => {
       let stepCompleteClassname = '';
       let stepWithErrorClassName = '';
@@ -128,7 +127,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         let stepHasUnfilledRequired = stepInfo.hasUnfilledRequired;
         let stepEncounted = stepInfo.visited;
 
-        if (stepEncounted && !stepHasUnfilledRequired) {
+        if (stepEncounted && !stepHasUnfilledRequired && (idx === (currentStepIdx - 1))) {
           stepCompleteClassname = 'boss-steps-block__step_state_complete';
         }
         
@@ -145,9 +144,6 @@ class Component extends React.Component<PropsFromConnect, State> {
         <li key={idx} className={`boss-steps-block__step ${initialStepClassName} ${stepCompleteClassname} ${stepWithErrorClassName} ${unReviewedClassName}`}>
           <div
               className="boss-steps-block__step-index"
-          onClick={() => {
-                this.onStepClick(idx);
-              }}
           >
             {idx + 1}
           </div>

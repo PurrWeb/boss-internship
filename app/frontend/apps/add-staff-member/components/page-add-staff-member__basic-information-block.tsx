@@ -75,7 +75,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 mapProps={{
                       className: setInputClass
                     }}
-                validateOn="blur"
+                asyncValidateOn="blur"
                 changeAction={this.props.findFlaggedStaffMembers}
                 debounce={1000}
                 validators={{
@@ -103,8 +103,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 mapProps={{
                       className: setInputClass
                     }}
-                validateOn="blur"
-
+                asyncValidateOn="blur"
                 changeAction={this.props.findFlaggedStaffMembers}
                 debounce={1000}
                 validators={{
@@ -169,7 +168,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                   }}
                   changeAction={this.props.findFlaggedStaffMembers}
                   debounce={1000}
-                  validateOn="blur"
+                  asyncValidateOn="blur"
                 />
               </div>
             </label>

@@ -107,12 +107,14 @@ class Component extends React.Component<PropsFromConnect, State> {
               />
             </div>
           </div>
+          <div className="boss-form__field">
+            <label className="boss-form__label">
+              <span className="boss-label__text">Starts At</span>
+            </label>
 
-          <label className="boss-label boss-label_role_datepicker">
-            <span className="boss-label__text">Starts At</span>
             <Control
               component={DatePicker}
-              className="boss-input"
+              className="react-datepicker__input-container"
               model=".startsAt"
               mapProps={{
                 className: setInputClass,
@@ -123,8 +125,8 @@ class Component extends React.Component<PropsFromConnect, State> {
               }}
               validateOn="blur"
             />
-          </label>
-
+          </div>
+          
           <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
             <input type="button"
                    className="boss-button boss-button_role_back boss-buttons-group_adjust_button"

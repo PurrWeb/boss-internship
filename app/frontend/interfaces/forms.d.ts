@@ -1,4 +1,4 @@
-import {ValidatorFn, Validators, FormValidators} from 'react-redux-form';
+import {ValidatorFn, AsyncValidatorFn, AsyncValidators, Validators, FormValidators} from 'react-redux-form';
 
 export interface AvatarInputValidators extends Validators {
   readonly isFilled: ValidatorFn;
@@ -16,6 +16,10 @@ export interface CountryInputValidators extends Validators {
 
 export interface IsFilledInputValidator extends Validators {
   readonly isFilled: ValidatorFn;
+}
+
+export interface IsAsyncFilledInputValidator extends AsyncValidators {
+  readonly isFilled: AsyncValidatorFn;
 }
 
 export interface EmailInputValidators extends Validators {
