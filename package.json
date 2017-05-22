@@ -21,7 +21,7 @@
     "@types/validator": "^5.7.35",
     "css-loader": "^0.26.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
-    "node-sass": "^4.5.2",
+    "node-sass": "^4.0.0",
     "sass-loader": "^6.0.3",
     "ts-loader": "^2.0.3",
     "webpack": "^2.4.1",
@@ -99,7 +99,7 @@
     "test": "karma start",
     "start": "rm -rf ./public/assets/bundles && webpack -w --config ./webpack/dev.config.js",
     "start-hot-dev": "webpack-dev-server --hot --inline --config webpack/hot-dev.config.js",
-    "build": "rm -rf ./public/assets/bundles && webpack --config ./webpack/production.config.js"
+    "build": "rm -rf ./public/assets/bundles && webpack --bail --config ./webpack/production.config.js"
   },
   "license": "",
   "engines": {
