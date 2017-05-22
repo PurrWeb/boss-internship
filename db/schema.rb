@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170511004941) do
+ActiveRecord::Schema.define(version: 20170522113834) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -619,7 +619,7 @@ ActiveRecord::Schema.define(version: 20170511004941) do
     t.integer  "address_id",                            limit: 4
     t.string   "gender",                                limit: 255,                   null: false
     t.string   "phone_number",                          limit: 255
-    t.datetime "date_of_birth"
+    t.date     "date_of_birth"
     t.string   "national_insurance_number",             limit: 255
     t.text     "hours_preference_note",                 limit: 65535
     t.text     "day_perference_note",                   limit: 65535
