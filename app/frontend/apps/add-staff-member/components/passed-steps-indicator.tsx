@@ -131,7 +131,7 @@ class Component extends React.Component<PropsFromConnect, State> {
           stepCompleteClassname = 'boss-steps-block__step_state_complete';
         }
         
-        if (currentStepIdx === 0) {
+        if (currentStepIdx === 0 || (stepEncounted && !isStepValid)) {
           initialStepClassName = 'boss-steps-block__step_state_initial';
         }
 
@@ -144,6 +144,9 @@ class Component extends React.Component<PropsFromConnect, State> {
         <li key={idx} className={`boss-steps-block__step ${initialStepClassName} ${stepCompleteClassname} ${stepWithErrorClassName} ${unReviewedClassName}`}>
           <div
               className="boss-steps-block__step-index"
+              onClick={() => {
+                this.onStepClick(idx);
+              }}
           >
             {idx + 1}
           </div>
