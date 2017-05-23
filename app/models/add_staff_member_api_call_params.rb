@@ -72,10 +72,9 @@ class AddStaffMemberApiCallParams
         email: params_json.fetch("email_address")
       }
     }
-
-    avatar_data_uri = params_json.fetch("avatar_base64"),
+    avatar_data_uri = params_json.fetch("avatar_base64")
     if avatar_data_uri.present?
-      result["avatar_data_uri"] = avatar_data_uri
+      result[:avatar_data_uri] = avatar_data_uri
     end
 
     result
