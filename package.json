@@ -99,7 +99,7 @@
     "test": "karma start",
     "start": "rm -rf ./public/assets/bundles && webpack -w --config ./webpack/dev.config.js",
     "start-hot-dev": "webpack-dev-server --hot --inline --config webpack/hot-dev.config.js",
-    "build": "rm -rf ./public/assets/bundles && webpack --bail --config ./webpack/production.config.js"
+    "build": "npm rebuild node-sass && rm -rf ./public/assets/bundles && webpack --bail --config ./webpack/production.config.js"
   },
   "license": "",
   "engines": {
