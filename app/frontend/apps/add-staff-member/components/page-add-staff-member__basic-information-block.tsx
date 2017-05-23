@@ -77,7 +77,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                     }}
                 asyncValidateOn="blur"
                 changeAction={this.props.findFlaggedStaffMembers}
-                debounce={1000}
+                debounce={500}
                 validators={{
                   isFilled,
                 } as IsFilledInputValidator}              
@@ -105,7 +105,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                     }}
                 asyncValidateOn="blur"
                 changeAction={this.props.findFlaggedStaffMembers}
-                debounce={1000}
+                debounce={500}
                 validators={{
                   isFilled,
                 } as IsFilledInputValidator}              
@@ -150,28 +150,27 @@ class Component extends React.Component<PropsFromConnect, State> {
           <div className="boss-form__field">
             <label className="boss-form__label">
               <span className="boss-form__label-text">Date of Birth</span>
-              <div className="react-datepicker__input-container">
-                <Control
-                  component={DatePicker}
-                  className="boss-form__input"
-                  model=".dateOfBirth"
-                  mapProps={{
-                    className: setInputClass,
-                    selected: (props) => props.viewValue,
-                    showMonthDropdown: () => true,
-                    showYearDropdown: () => true,
-                    dropdownMode: () => 'select',
-                    dateFormat: () => 'YYYY/MM/DD',
-                    onChange: (props) => {
-                      return props.onChange;
-                    }
-                  }}
-                  changeAction={this.props.findFlaggedStaffMembers}
-                  debounce={1000}
-                  asyncValidateOn="blur"
-                />
-              </div>
             </label>
+            <Control
+                component={DatePicker}
+                className="boss-form__input"
+                model=".dateOfBirth"
+                mapProps={{
+                  calendarClassName: () => 'date-picker',
+                  className: setInputClass,
+                  selected: (props) => props.viewValue,
+                  showMonthDropdown: () => true,
+                  showYearDropdown: () => true,
+                  dropdownMode: () => 'select',
+                  dateFormat: () => 'YYYY/MM/DD',
+                  onChange: (props) => {
+                    return props.onChange;
+                  }
+                }}
+                changeAction={this.props.findFlaggedStaffMembers}
+                debounce={500}
+                asyncValidateOn="blur"
+              />
           </div>
           <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
             <input

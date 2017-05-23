@@ -104,6 +104,10 @@ class Component extends React.Component<PropsFromConnect, State> {
   onRotateLeftClick = curry(this.onRotateClick)(-90);
 
   onRotateRightClick = curry(this.onRotateClick)(90);
+  
+  onClearAvatar = () => {
+    this.setState({avatarSrc: ''});
+  };
 
   onCropSubmit = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -142,6 +146,8 @@ class Component extends React.Component<PropsFromConnect, State> {
       return true;
     }
   };
+
+  
 
   isProperFileSize = (files: FileList) => {
     const file = files[0];
@@ -193,6 +199,12 @@ class Component extends React.Component<PropsFromConnect, State> {
             >
               Ok
             </a>
+            <a href="javascript:;"
+               className="boss-button boss-buttons-group_adjust_button"
+               onClick={this.onClearAvatar}
+            >
+              Clear
+            </a>
           </div>
 
         </div>
@@ -210,13 +222,21 @@ class Component extends React.Component<PropsFromConnect, State> {
 
     const previewSectionWithoutEditing = !this.state.toShowCropper && this.props.avatarPreview ?
       (
-        <div
-            className="boss-edit-image-block__preview-section"
-        >
-          <img
-            src={this.props.avatarPreview}
-            alt="preview"
-          />
+        <div>
+          <div
+              className="boss-edit-image-block__preview-section"
+          >
+            <img
+              src={this.props.avatarPreview}
+              alt="preview"
+            />
+          </div>
+          <a href="javascript:;"
+              className="boss-button boss-buttons-group_adjust_button"
+              onClick={this.onClearAvatar}
+            >
+            Clear
+          </a>
         </div>
       ) : null;
 
@@ -304,45 +324,46 @@ class Component extends React.Component<PropsFromConnect, State> {
           <div className="boss-add-avatar-block">
 
             {this.renderImagePreviewBlock(toShowImageEditingBlock)}
+            { !toShowImageEditingBlock && <div className="boss-add-avatar-block">
+              <Control
+                model=".avatar"
+                component={ImageLoader}
+                className={imageLoaderClassName}
+                changeAction={changeAction}
+                onChange={this.onDropFiles}
+                getRef={(node: any) => { this.dropZone = node; }}
+                accept={VALID_FILE_TYPES}
+                maxSize={MAX_FILE_SIZE}
+                onDropRejected={this.onDropRejected}
+                multiple={false}
+                mapProps={{
+                  onDrop: (data: AnyDict) => {
+                    return data.onChange;
+                  }
+                }}
+                validateOn="change"
+                validators={{
+                  isFilled: this.isAvatarAdded,
+                  isProperFormat: this.isProperFormat,
+                  isProperFileSize: this.isProperFileSize
+                } as AvatarInputValidators}
+                errors={{
+                  isFilled: (files: FileList) => !this.isAvatarAdded(files)
+                }}
+                persist={true}
+              />
 
-            <Control
-              model=".avatar"
-              component={ImageLoader}
-              className={imageLoaderClassName}
-              changeAction={changeAction}
-              onChange={this.onDropFiles}
-              getRef={(node: any) => { this.dropZone = node; }}
-              accept={VALID_FILE_TYPES}
-              maxSize={MAX_FILE_SIZE}
-              onDropRejected={this.onDropRejected}
-              multiple={false}
-              mapProps={{
-                onDrop: (data: AnyDict) => {
-                  return data.onChange;
-                }
-              }}
-              validateOn="change"
-              validators={{
-                isFilled: this.isAvatarAdded,
-                isProperFormat: this.isProperFormat,
-                isProperFileSize: this.isProperFileSize
-              } as AvatarInputValidators}
-              errors={{
-                isFilled: (files: FileList) => !this.isAvatarAdded(files)
-              }}
-              persist={true}
-            />
+              <a href=""
+                 className="boss-button boss-button_role_file boss-add-avatar-block_adjust_file-button"
+                 onClick={this.triggerLoadFileClick}
+              >
+                Choose File
+              </a>
 
-            <a href=""
-               className="boss-button boss-button_role_file boss-add-avatar-block_adjust_file-button"
-               onClick={this.triggerLoadFileClick}
-            >
-              Choose File
-            </a>
-
-            <span className="boss-add-avatar-block__file-label">
-            Drag and drop files here or click choose file to upload photo
-          </span>
+              <span className="boss-add-avatar-block__file-label">
+                Drag and drop files here or click choose file to upload photo
+              </span>
+            </div> }
           </div>
 
           <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">

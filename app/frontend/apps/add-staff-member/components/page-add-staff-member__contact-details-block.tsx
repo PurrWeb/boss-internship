@@ -78,7 +78,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 className: setInputClass
               }}
               changeAction={this.findFlaggedStaffMembers}
-              debounce={1000}
+              debounce={500}
               asyncValidateOn="blur"
               persist={true}
               validators={{
