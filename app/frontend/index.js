@@ -25,6 +25,8 @@ if (window.boss.currentLayout !== 'oldLayout') {
     require ('./assets/sass/index.sass');
 }
 
+import './maxims';
+
 import "./lib/load-underscore-mixins"
 
 import "babel-core/polyfill"
