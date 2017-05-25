@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_default_layout
-    @current_layout = 'oldLayout';
+    @current_layout = 'newLayout';
   end
 
   def render_navigation?

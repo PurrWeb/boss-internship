@@ -117,6 +117,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               className="boss-form__input"
               model=".startsAt"
               mapProps={{
+                withPortal: () => 'withPortal',
                 calendarClassName: () => 'date-picker',
                 className: setInputClass,
                 selected: (props) => props.viewValue,
