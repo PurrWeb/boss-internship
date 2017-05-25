@@ -7,6 +7,7 @@ import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-flagged-staff-members';
 import requestingFlaggedStaffMembers from '../action-creators/requesting-flagged-staff-members';
 import flaggedRequestFields from '../action-creators/flagged-request-fields';
+import {showReviewed} from '../action-creators/reviewed';
 import * as _ from 'lodash';
 
 import {get} from '../helpers/requests';
@@ -23,11 +24,14 @@ const requestFlaggedStaffMembers = (action$: any, store: Store<StoreStructure>) 
               payload: []
             })
           : get('/api/v1/staff_members/flagged', action.payload)
-              .map((resp: any) => {
-                return {
+              .mergeMap((resp: any) => {
+                if (resp.response.length) {
+                  store.dispatch(showReviewed());
+                }
+                return Observable.of({
                   type: FLAGGED_STAFF_MEMBERS,
                   payload: resp.response
-                };
+                }, );
               });
       }
     );

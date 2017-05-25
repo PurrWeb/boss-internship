@@ -107,7 +107,6 @@ class Component extends React.Component<PropsFromConnect, State> {
                 validators={{
                   isFilled,
                 } as IsFilledInputValidator}              
-
               />
               <Errors
                 model=".surname"

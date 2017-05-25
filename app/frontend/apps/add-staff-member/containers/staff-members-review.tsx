@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import * as cx from 'classnames';
-
+import {Element} from 'react-scroll';
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure} from '../../../interfaces/store-models';
 import StaffMembersReviewList from '../components/staff-members-review-list';
 import store from '../../../store/index';
 import toggleStaffMember from '../../../action-creators/toggle-staff-member';
+import {toggleReviewed} from '../../../action-creators/reviewed';
 import {StaffMember, FlaggedRequestFields} from '../../../interfaces/staff-member';
 import { UNREVIEWED_STAFF_MEMBERS, REVIEWED_STAFF_MEMBERS } from '../components/staff-members-review-list';
 
@@ -16,25 +17,18 @@ interface Props {
 interface MappedProps {
   readonly flaggedStaffMembers: StaffMember[];
   readonly flaggedRequestFields: FlaggedRequestFields;
+  readonly isReviewShown: boolean;
 }
 
 interface State {
-  readonly reviewsShown: boolean;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
 
 class Component extends React.Component<PropsFromConnect, State> {
 
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      reviewsShown: false
-    };
-  }
-
   onToggleMenu = () => {
-    this.setState({ reviewsShown: !this.state.reviewsShown });
+    this.props.dispatch(toggleReviewed());
   }
 
   onStuffMemberDismiss = (stuffMemberId: number) => {
@@ -54,12 +48,12 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   render() {
-    const reviewContentClassName = cx('boss-dropdown__content', {'boss-dropdown__content_state_opened': this.state.reviewsShown});
-    const reviewDropDownClassName = cx('boss-dropdown', {'boss-dropdown__content_state_opened': !this.state.reviewsShown});
+    const reviewContentClassName = cx('boss-dropdown__content', {'boss-dropdown__content_state_opened': this.props.isReviewShown});
+    const reviewDropDownClassName = cx('boss-dropdown', {'boss-dropdown__content_state_opened': !this.props.isReviewShown});
     const dropDownArrowClassName = cx(
       'boss-dropdown__switch',
       'boss-dropdown__switch_role_user-review',
-      {'boss-dropdown__switch_state_opened': !this.state.reviewsShown});
+      {'boss-dropdown__switch_state_opened': !this.props.isReviewShown});
 
 
     return (
@@ -70,15 +64,15 @@ class Component extends React.Component<PropsFromConnect, State> {
                 Review
               </a>
             </div>
-            <div className={reviewContentClassName}>
+            <Element name="reviewBlock" className={reviewContentClassName}>
               <div className="boss-dropdown__content-inner">
                 <div className="boss-vetting">
                   { !this.props.flaggedStaffMembers.length && <h3>Nothing to review</h3> }
-                  <StaffMembersReviewList listType={UNREVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberDismiss} staffMemberList={ this.flaggedStaffMembers() } />
-                  <StaffMembersReviewList listType={REVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberReview} staffMemberList={ this.reviewedStaffMembers() } />
+                  { !!this.flaggedStaffMembers().length && <StaffMembersReviewList listType={UNREVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberDismiss} staffMemberList={ this.flaggedStaffMembers() } /> }
+                  { !!this.reviewedStaffMembers().length && <StaffMembersReviewList listType={REVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberReview} staffMemberList={ this.reviewedStaffMembers() } /> }
                 </div>
               </div>
-            </div>
+            </Element>
           </div>
       </div>
     );
@@ -88,7 +82,8 @@ class Component extends React.Component<PropsFromConnect, State> {
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
     flaggedStaffMembers: state.app.staffMembers,
-    flaggedRequestFields: state.app.flaggedFields
+    flaggedRequestFields: state.app.flaggedFields,
+    isReviewShown: state.app.review
   };
 };
 
