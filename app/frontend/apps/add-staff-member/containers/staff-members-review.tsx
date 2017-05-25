@@ -73,6 +73,7 @@ class Component extends React.Component<PropsFromConnect, State> {
             <div className={reviewContentClassName}>
               <div className="boss-dropdown__content-inner">
                 <div className="boss-vetting">
+                  { !this.props.flaggedStaffMembers.length && <h3>Nothing to review</h3> }
                   <StaffMembersReviewList listType={UNREVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberDismiss} staffMemberList={ this.flaggedStaffMembers() } />
                   <StaffMembersReviewList listType={REVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberReview} staffMemberList={ this.reviewedStaffMembers() } />
                 </div>
