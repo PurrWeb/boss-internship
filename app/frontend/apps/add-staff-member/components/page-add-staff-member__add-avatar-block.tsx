@@ -23,6 +23,9 @@ import {UploadPhotoForm} from '../../../reducers/forms';
 import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../helpers/validators';
 import changingStepInfo from '../../../action-creators/changing-step-info';
 
+import {ADD_STAFF_MEMBER_STEPS} from '../../../constants/other';
+import changeStep from '../../../action-creators/current-step-changed';
+
 interface Props {
 }
 
@@ -40,13 +43,6 @@ interface State {
   readonly validationMessage: string;
 }
 
-function changeAction(model: string, value: any): ModelAction {
-  return {
-    type: 'rrf/change',
-    model,
-    value: value
-  };
-}
 
 const VALID_FILE_TYPES = 'image/jpeg, image/jpg, image/png, image/gif';
 const MAX_FILE_SIZE = 1000000;
@@ -65,14 +61,18 @@ class Component extends React.Component<PropsFromConnect, State> {
     };
   }
 
+  changeAction = (model: string, value: any) => {
+    this.props.dispatch(actions.change(model, value));
+    this.props.dispatch(actions.setTouched(model));
+  }
+
   handleFormSubmit = () => {
     const cropper = this.cropper;
-    const croppedImageUrl = cropper ? cropper.getCroppedCanvas().toDataURL() : '';
-    const formModelData: OfType<UploadPhotoFormFields, string> = {
-      avatar: croppedImageUrl
-    };
-    const action = avatarBlockValidated(formModelData);
-    this.props.dispatch(action);
+    // const croppedImageUrl = cropper ? cropper.getCroppedCanvas().toDataURL() : '';
+    // const formModelData: OfType<UploadPhotoFormFields, string> = {
+    //   avatar: croppedImageUrl
+    // };
+    this.props.dispatch(changeStep('formsData.basicInformationForm', ADD_STAFF_MEMBER_STEPS.AddAvatarBlock + 1));
   };
 
   handleFormUpdate = (formModelData: UploadPhotoForm) => {
@@ -85,7 +85,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    this.props.dispatch(steppingBackRegistration);
+    this.props.dispatch(changeStep('formsData.basicInformationForm', ADD_STAFF_MEMBER_STEPS.AddAvatarBlock - 1));
   };
 
   triggerLoadFileClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -294,7 +294,6 @@ class Component extends React.Component<PropsFromConnect, State> {
           model="formsData.uploadPhotoForm"
           className="boss-form"
           onUpdate={this.handleFormUpdate}
-          onSubmit={this.handleFormSubmit}
         >
           <label className="boss-label">
             <span className="boss-label__text boss-label__text_type_required">Avatar</span>
@@ -329,7 +328,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 model=".avatar"
                 component={ImageLoader}
                 className={imageLoaderClassName}
-                changeAction={changeAction}
+                changeAction={this.changeAction}
                 onChange={this.onDropFiles}
                 getRef={(node: any) => { this.dropZone = node; }}
                 accept={VALID_FILE_TYPES}
@@ -373,8 +372,9 @@ class Component extends React.Component<PropsFromConnect, State> {
                onClick={this.onBackClick}
             />
             <input
-              type="submit"
+              type="button"
               className="boss-button boss-button_role_submit boss-buttons-group_adjust_button"
+              onClick={this.handleFormSubmit}
               value="Continue"/>
           </div>
 

@@ -25,6 +25,9 @@ import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../h
 import changingStepInfo from '../../../action-creators/changing-step-info';
 import findFlaggedStaffMembers from '../../../action-creators/requesting-flagged-staff-members';
 
+import {ADD_STAFF_MEMBER_STEPS} from '../../../constants/other';
+import changeStep from '../../../action-creators/current-step-changed';
+
 interface Props {
 }
 
@@ -43,10 +46,8 @@ interface State {
 const STAFF_TYPE_SECURITY_IDX = 11;
 
 class Component extends React.Component<PropsFromConnect, State> {
-  handleFormSubmit = (formModelData: OfType<WorkFormFields, any>) => {
-    const action = workInfoBlockValidated(formModelData);
-
-    this.props.dispatch(action);
+  handleFormSubmit = () => {
+    this.props.dispatch(changeStep('formsData.workForm', ADD_STAFF_MEMBER_STEPS.WorkBlock + 1));
   };
 
   handleFormUpdate = (formModelData: WorkForm) => {
@@ -71,7 +72,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    this.props.dispatch(steppingBackRegistration);
+    this.props.dispatch(changeStep('formsData.workForm', ADD_STAFF_MEMBER_STEPS.WorkBlock - 1));
   };
 
   renderSiaBadgeNumberInputBlock() {
@@ -116,7 +117,6 @@ class Component extends React.Component<PropsFromConnect, State> {
           model="formsData.workForm"
           className="boss-form"
           onUpdate={this.handleFormUpdate}
-          onSubmit={this.handleFormSubmit}
         >
           <div className="boss-form__field">
             <label className="boss-form__label">
@@ -364,7 +364,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                    value="Back"
                    onClick={this.onBackClick}
             />
-            <input type="submit" className="boss-button boss-button_role_submit boss-buttons-group_adjust_button"
+            <input type="button" onClick={this.handleFormSubmit} className="boss-button boss-button_role_submit boss-buttons-group_adjust_button"
                    value="Continue"/>
           </div>
         </Form>

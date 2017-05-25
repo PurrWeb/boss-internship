@@ -13,11 +13,10 @@ const changeCurrentStep = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(CHANGING_CURRENT_STEP)
     .mergeMap((action: ActionType) => {
       const stepId = action.payload;
-      const currentStepChangedAction = currentStepChanged(stepId);
+      // const currentStepChangedAction = currentStepChanged(stepId);
 
-      return Observable.of<SimpleAction>(
-        currentStepChangedAction,
-        validatingAllAddStaffMemberStepFormsAction
+      return Observable.of<any>(
+        // validatingAllAddStaffMemberStepFormsAction
       );
   });
 }) as Epic<SimpleAction, StoreStructure>;

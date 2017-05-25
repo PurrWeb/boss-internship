@@ -55,6 +55,7 @@ export interface AddStaffMemberStepInfo {
   readonly visited: boolean;
   readonly hasUnfilledRequired: boolean;
   readonly hasValidationErrors: boolean;
+  readonly unfilledFields?: any;
 }
 
 export interface AddStaffMemberStepsInfo extends IndexedDict<AddStaffMemberStepInfo> {

@@ -14,7 +14,6 @@ import {OfType, Dict} from '../../../interfaces/index';
 import {isNotEmptyInput, isNotEmptyInput as isFilled} from '../../../helpers';
 import {isRequiredField} from '../../../constants/form-errors';
 import {renderErrorsBlock, renderErrorComponent, setInputClass} from '../../../helpers/renderers';
-import basicInformationBlockValidated from '../../../action-creators/basic-information-block-validated';
 import {GenderInputValidators, IsFilledInputValidator} from '../../../interfaces/forms';
 import SelectControl from './select-control';
 import changingStepInfo from '../../../action-creators/changing-step-info';
@@ -22,10 +21,12 @@ import findFlaggedStaffMembers from '../../../action-creators/requesting-flagged
 import {BasicInformationForm} from '../../../reducers/forms';
 import {hasFormValidationErrors, hasFormUnfilledRequiredFields} from '../../../helpers/validators';
 import {AddStaffMemberStepInfo, AddStaffMemberStepName} from '../../../interfaces/store-models';
+import {ADD_STAFF_MEMBER_STEPS} from '../../../constants/other';
+import changeStep from '../../../action-creators/current-step-changed';
 
 interface Props {
   readonly findFlaggedStaffMembers: any;
-  readonly basicInformationBlockValidated: any;
+  readonly changeStep: any;
   readonly changingStepInfo: any;
 }
 
@@ -39,8 +40,8 @@ interface State {
 }
 
 class Component extends React.Component<PropsFromConnect, State> {
-  handleFormSubmit = (formModelData: OfType<BasicInformationFormFields, any>) => {
-    this.props.basicInformationBlockValidated(formModelData);
+  handleFormSubmit = () => {
+    this.props.changeStep('formsData.basicInformationForm', ADD_STAFF_MEMBER_STEPS.BasicInformationBlock + 1);
   };
 
   handleFormUpdate = (formModelData: BasicInformationForm) => {
@@ -64,7 +65,6 @@ class Component extends React.Component<PropsFromConnect, State> {
           model="formsData.basicInformationForm"
           className="boss-form"
           onUpdate={this.handleFormUpdate}
-          onSubmit={this.handleFormSubmit}
         >
           <div className="boss-form__field">
             <label className="boss-form__label">
@@ -75,7 +75,6 @@ class Component extends React.Component<PropsFromConnect, State> {
                 mapProps={{
                       className: setInputClass
                     }}
-                asyncValidateOn="blur"
                 changeAction={this.props.findFlaggedStaffMembers}
                 debounce={500}
                 validators={{
@@ -87,7 +86,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 messages={{
                   isFilled: isRequiredField
                 }}
-                show={{touched: true, focus: false}}
+                show={ field => field.submitFailed }
                 wrapper={renderErrorsBlock}
                 component={renderErrorComponent}
               />
@@ -103,7 +102,6 @@ class Component extends React.Component<PropsFromConnect, State> {
                 mapProps={{
                       className: setInputClass
                     }}
-                asyncValidateOn="blur"
                 changeAction={this.props.findFlaggedStaffMembers}
                 debounce={500}
                 validators={{
@@ -116,7 +114,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 messages={{
                   isFilled: isRequiredField
                 }}
-                show={{touched: true, focus: false}}
+                show={ field => field.submitFailed }
                 wrapper={renderErrorsBlock}
                 component={renderErrorComponent}
               />
@@ -130,7 +128,6 @@ class Component extends React.Component<PropsFromConnect, State> {
                   model=".gender"
                   className="myclass"
                   options={this.props.genderOptions}
-                  validateOn="change"
                   validators={{
                     isFilled: isNotEmptyInput,
                   } as GenderInputValidators}
@@ -141,7 +138,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 messages={{
                   isFilled: isRequiredField
                 }}
-                show={{touched: true, focus: false}}
+                show={ field => field.submitFailed }
                 wrapper={renderErrorsBlock}
                 component={renderErrorComponent}
               />
@@ -169,12 +166,12 @@ class Component extends React.Component<PropsFromConnect, State> {
                 }}
                 changeAction={this.props.findFlaggedStaffMembers}
                 debounce={500}
-                asyncValidateOn="blur"
               />
           </div>
           <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
             <input
-              type="submit"
+              type="button"
+              onClick={this.handleFormSubmit}
               className={`boss-button boss-buttons-group_adjust_button`}
               value="Continue"/>
           </div>
@@ -193,7 +190,7 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
 const mapDispatchToProps = (dispatch: any) => (
   {
     findFlaggedStaffMembers: (model: any, value: any) => dispatch(findFlaggedStaffMembers({model, value})),
-    basicInformationBlockValidated: (formModelData: OfType<BasicInformationFormFields, any>) => dispatch(basicInformationBlockValidated(formModelData)),
+    changeStep: (formModelData: string, step: number) => dispatch(changeStep(formModelData, step)),
     changingStepInfo: (stepName: AddStaffMemberStepName, visited: boolean, hasUnfilledRequired: boolean, hasValidationErrors: boolean) => dispatch(changingStepInfo(stepName, visited, hasUnfilledRequired, hasValidationErrors))
   }
 );

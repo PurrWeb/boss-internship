@@ -8,7 +8,6 @@ import {ActionType} from '../action-creators/changing-step-info';
 import stepsInfoChanged from '../action-creators/steps-info-changed';
 import {ADD_STAFF_MEMBER_STEPS} from '../constants/other';
 
-
 const changeStepsInfo = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(CHANGING_STEP_INFO)
     .map((action: ActionType) => {

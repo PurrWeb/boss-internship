@@ -21,6 +21,9 @@ import {previewDateFormat} from '../../../constants/index';
 import {OptionData} from '../../../interfaces/common-data-types';
 import {starterEmploymentStatusLabels} from '../../../constants/other';
 
+import {ADD_STAFF_MEMBER_STEPS} from '../../../constants/other';
+import changeStep from '../../../action-creators/current-step-changed';
+
 type FieldDataPair = [string, FieldState];
 type ValidityPair = [string, boolean];
 
@@ -93,7 +96,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   onBackClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    this.props.dispatch(steppingBackRegistration);
+    this.props.dispatch(changeStep('', ADD_STAFF_MEMBER_STEPS.PreviewBlock - 1));
   };
 
   static renderListItemErrors(validity: BoolDict) {

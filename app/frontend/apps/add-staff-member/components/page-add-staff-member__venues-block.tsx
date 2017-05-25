@@ -21,6 +21,9 @@ import {VenueForm} from '../../../reducers/forms';
 import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../helpers/validators';
 import changingStepInfo from '../../../action-creators/changing-step-info';
 
+import {ADD_STAFF_MEMBER_STEPS} from '../../../constants/other';
+import changeStep from '../../../action-creators/current-step-changed';
+
 interface Props {
 }
 
@@ -35,10 +38,8 @@ interface State {
 }
 
 class Component extends React.Component<PropsFromConnect, State> {
-  handleFormSubmit = (formModelData: OfType<VenueFormFields, any>) => {
-    const action = venuesInfoBlockValidated(formModelData);
-
-    this.props.dispatch(action);
+  handleFormSubmit = () => {
+    this.props.dispatch(changeStep('formsData.venueForm', ADD_STAFF_MEMBER_STEPS.VenuesBlock + 1));
   };
 
   handleFormUpdate = (formModelData: VenueForm) => {
@@ -51,7 +52,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    this.props.dispatch(steppingBackRegistration);
+    this.props.dispatch(changeStep('formsData.venueForm', ADD_STAFF_MEMBER_STEPS.VenuesBlock - 1));
   };
 
   static getVenueOptions(venues: OptionData[]) {
@@ -65,7 +66,6 @@ class Component extends React.Component<PropsFromConnect, State> {
           model="formsData.venueForm"
           className="boss-form"
           onUpdate={this.handleFormUpdate}
-          onSubmit={this.handleFormSubmit}
         >
           <div className="boss-form__field">
             <label className="boss-form__label">
@@ -134,7 +134,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                    value="Back"
                    onClick={this.onBackClick}
             />
-            <input type="submit" className="boss-button boss-button_role_submit boss-buttons-group_adjust_button" value="Continue"/>
+            <input type="button" onClick={this.handleFormSubmit} className="boss-button boss-button_role_submit boss-buttons-group_adjust_button" value="Continue"/>
           </div>
         </Form>
       </div>
