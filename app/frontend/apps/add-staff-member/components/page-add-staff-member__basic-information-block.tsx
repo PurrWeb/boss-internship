@@ -126,6 +126,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 <SelectControl
                   model=".gender"
                   className="myclass"
+                  searchable={false}
                   options={this.props.genderOptions}
                   validators={{
                     isFilled: isNotEmptyInput,

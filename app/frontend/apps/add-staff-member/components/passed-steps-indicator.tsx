@@ -9,6 +9,7 @@ import changeStep from '../../../action-creators/current-step-changed';
 import {AppForms, FormStructure} from '../../../reducers/forms';
 import {ADD_STAFF_MEMBER_STEPS} from '../../../constants/other';
 import {FieldState} from 'react-redux-form';
+import * as _ from 'lodash';
 
 interface Props {
 }
@@ -130,6 +131,18 @@ class Component extends React.Component<PropsFromConnect, State> {
     return isNextValid && isCurrentValid;
   }
 
+  isAllFormsValid(formsData: any, hasUnreviewedStaffMembers: boolean) {
+    let isFieldsValid = true;
+    _.each(formsData, (formData: any) => {
+      if (!formData.visited || formData.hasUnfilledRequired || formData.hasValidationErrors) {
+        isFieldsValid = false;
+      } else {
+        isFieldsValid = true;
+      }
+    });
+    return isFieldsValid && !hasUnreviewedStaffMembers;
+  }
+
   drawSteps(currentStepIdx: number) {
     const stepsValidity = this.getStepsValidity(currentStepIdx);
     const {stepsInfo} = this.props;
@@ -153,15 +166,19 @@ class Component extends React.Component<PropsFromConnect, State> {
       
       const currentStepClassName = isCurrentStep ? 'boss-steps__step-title_state_active' : '';
       const unReviewedClassName = (idx === 0 && !this.isStaffMembersReviewed()) ? 'boss-steps-block__step_state_review-error' : '';
-
+      if (isLastStep) {
+        if (this.isAllFormsValid(stepsInfo, this.props.unReviewedStaffMembers())) {
+          stepCompleteClassname = 'boss-steps__step-index_state_completed';
+        }
+      }
       if (!isLastStep) {
         let stepInfo = stepsInfo[idx];
 
-        let isStepValid = stepsValidity[idx].errors;
         let stepHasUnfilledRequired = stepInfo.hasUnfilledRequired;
+        let stepHasValidationError = stepInfo.hasValidationErrors;
         let isVisited = stepInfo.visited;
 
-        let isShowError = isVisited && stepHasUnfilledRequired;
+        let isShowError = (isVisited && stepHasUnfilledRequired) || stepHasValidationError;
         let isCompleted = isVisited && !stepHasUnfilledRequired;
 
 
@@ -172,7 +189,7 @@ class Component extends React.Component<PropsFromConnect, State> {
         if ( isShowError ) {
           stepWithErrorClassName = `boss-steps__step-index_state_with-error`;
         }
-      }
+      } 
 
       return (
         <div key={idx} className="boss-steps__step">

@@ -15,6 +15,7 @@ import {
   FormStructure
 } from '../../../reducers/forms';
 import {StringDict, Dict, BoolDict} from '../../../interfaces/index';
+import {StaffMember} from '../../../interfaces/staff-member';
 import {FieldState} from 'react-redux-form';
 import {isRequiredField, isWrongEmail, isPhoneNumber, formatInvalid} from '../../../constants/form-errors';
 import {previewDateFormat} from '../../../constants/index';
@@ -41,6 +42,7 @@ interface MappedProps {
   readonly venues: OptionData[];
   readonly staffTypes: OptionData[];
   readonly payRates: OptionData[];
+  readonly staffMembers: StaffMember[];
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -69,6 +71,10 @@ class Component extends React.Component<PropsFromConnect, State> {
       this.props.contactDetailsFormFields,
       this.props.workFormFields
     ];
+  }
+
+  flaggedUnreviewedStaffMembers = () => {
+    return this.props.staffMembers.filter((staffMember) => !staffMember.reviewed );
   }
 
   onFormComplete = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -175,10 +181,10 @@ class Component extends React.Component<PropsFromConnect, State> {
     );
   }
 
-  static isAllFormsValid(forms: FormStructure<{}>[]) {
+  static isAllFormsValid(forms: FormStructure<{}>[], haveUnreviewedStaffMembers: boolean) {
     return !find((form: FormStructure<{}>) => {
       return form.$form.valid === false;
-    })(forms);
+    })(forms) && !haveUnreviewedStaffMembers;
   }
 
   renderBasicInformationSummaryBlock() {
@@ -285,7 +291,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   renderContinueButton() {
-    return Component.isAllFormsValid(this.allUsedForms) ? (
+    return Component.isAllFormsValid(this.allUsedForms, !!this.flaggedUnreviewedStaffMembers().length) ? (
       <a href=""
          onClick={this.onFormComplete}
          className="boss-button boss-button_role_submit boss-buttons-group_adjust_button"
@@ -322,7 +328,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   const {forms} = state.formsData;
-  const {avatarPreview, venues, staffTypes, payRates} = state.app;
+  const {avatarPreview, venues, staffTypes, payRates, staffMembers} = state.app;
 
   return {
     avatarPreview: avatarPreview,
@@ -332,7 +338,8 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
     workFormFields: forms.workForm,
     venues,
     staffTypes,
-    payRates
+    payRates,
+    staffMembers
   };
 };
 

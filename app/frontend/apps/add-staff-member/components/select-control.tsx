@@ -20,6 +20,7 @@ interface Props {
   readonly options?: Select.Option[];
   readonly validateOn?: ValidateOn;
   readonly validators?: Validators;
+  readonly searchable?: boolean;
 }
 
 interface State {
@@ -38,6 +39,7 @@ class SelectControl extends React.Component<Props, State> {
     this.localMapProps = {
       className: setInputClass,
       options: () => this.props.options,
+      searchable: () => this.props.searchable,
       value: valueFn,
       onChange: (data: any) => {
         return data.onChange;
