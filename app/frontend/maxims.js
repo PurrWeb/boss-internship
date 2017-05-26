@@ -20,8 +20,6 @@ window.initMaximsJs = () => {
         });
     })
 
-    dropIcon
-
     function openMobileMenu() {
         document.body.style.overflow = "hidden";
         mobileMenu.classList.add('boss-mobile-menu_state_active');

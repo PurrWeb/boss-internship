@@ -36,30 +36,6 @@ class StaffMembersController < ApplicationController
     }
   end
 
-  def flagged
-    authorize! :manage, :staff_members
-
-    filter = StaffMemberIndexFilter.new(
-      user: current_user,
-      params: Hash(params[:staff_member_index_filter]).merge(status: nil)
-    )
-
-    staff_members = filter.
-      flagged_staff_member_query.
-      all.
-      includes(:name).
-      includes(:staff_type).
-      includes(:master_venue).
-      includes(:work_venues).
-      includes(:email_address).
-      paginate(page: params[:page], per_page: 20)
-
-    render locals: {
-      staff_members: staff_members,
-      filter: filter
-    }
-  end
-
   def show
     query = StaffMember.where(id: params[:id])
     query = QueryOptimiser.apply_optimisations(query, :staff_member_show)

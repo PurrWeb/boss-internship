@@ -6,9 +6,6 @@
       <%= link_to(new_staff_member_path, class: ['boss2-button', 'boss2-button_role_add']) do %>
           Add Staff Member
       <% end %>
-      <%= link_to(flagged_staff_members_path, class: 'boss2-button boss2-button_role_exclamation') do %>
-          Flagged Staff Members
-      <% end %>
     </div>
 
     <%= render partial: 'index_filter', locals: {filter: filter, staff_members: staff_members} %>

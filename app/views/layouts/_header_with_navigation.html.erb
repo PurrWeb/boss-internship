@@ -1,74 +1,74 @@
 <div class="title-bar hide-for-print" data-responsive-toggle="main-menu" data-hide-for="small">
-  <button class="menu-icon" type="boss-button" data-toggle></button>
+  <button class="menu-icon" type="boss2-button" data-toggle></button>
   <div class="title-bar-title">Menu</div>
 </div>
 
-<div class="boss-main-menu" id="main-menu">
+<div class="boss2-main-menu" id="main-menu">
     <%= link_to(
           'BOSS',
           root_path,
-          class: 'boss-main-menu__logo-button menu-text',
+          class: 'boss2-main-menu__logo-button menu-text',
           data: { "link-role" => "navbar-brand" }
         ) %>
-    <ul class="boss-main-menu__buttons boss-main-menu__buttons_type_primary dropdown menu align-right" data-dropdown-menu>
+    <ul class="boss2-main-menu__buttons boss2-main-menu__buttons_type_primary dropdown menu align-right" data-dropdown-menu>
         <% if current_user.present? %>
           <% if can?(:manage, :staff_members) %>
-              <li class="boss-main-menu__button nav-staff-members-section">
-                <%= link_to('Staff Members', staff_members_path, class: "boss-main-menu__button-link") %>
+              <li class="boss2-main-menu__button nav-staff-members-section">
+                <%= link_to('Staff Members', staff_members_path, class: "boss2-main-menu__button-link") %>
               </li>
           <% end %>
 
           <% if can?(:manage, :rotas) %>
               <% if Venue.count > 0 && !(current_user.manager? && current_user.venues.count == 0) %>
-                  <li class="boss-main-menu__button nav-rota-section">
-                    <%= link_to('Rota', rotas_path, class: "boss-main-menu__button-link") %>
+                  <li class="boss2-main-menu__button nav-rota-section">
+                    <%= link_to('Rota', rotas_path, class: "boss2-main-menu__button-link") %>
                   </li>
               <% end %>
           <% end %>
 
           <% if can?(:view, :holidays) %>
-              <li class="boss-main-menu__button nav-holiday-reports-section">
-                <%= link_to('Holidays', holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday)), class: "boss-main-menu__button-link") %>
+              <li class="boss2-main-menu__button nav-holiday-reports-section">
+                <%= link_to('Holidays', holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday)), class: "boss2-main-menu__button-link") %>
               </li>
           <% end %>
 
           <% if can?(:manage, :security_rota) %>
-              <li class="boss-main-menu__button nav-security-rota-section">
-                <%= link_to(security_rotas_path, class: "boss-main-menu__button-link") do %>
+              <li class="boss2-main-menu__button nav-security-rota-section">
+                <%= link_to(security_rotas_path, class: "boss2-main-menu__button-link") do %>
                     Security Rota
                 <% end %>
               </li>
           <% end %>
 
           <% if can?(:manage, :change_orders) %>
-              <li class="boss-main-menu__button nav-change-orders-section">
-                <%= link_to('Change Orders', change_orders_path, class: 'boss-main-menu__button-link') %>
+              <li class="boss2-main-menu__button nav-change-orders-section">
+                <%= link_to('Change Orders', change_orders_path, class: 'boss2-main-menu__button-link') %>
               </li>
           <% end %>
 
           <% if can?(:manage, :fruit_orders) %>
-              <li class="boss-main-menu__button nav-fruit-orders-section">
-                <%= link_to('Fruit Orders', fruit_orders_path, class: 'boss-main-menu__button-link') %>
+              <li class="boss2-main-menu__button nav-fruit-orders-section">
+                <%= link_to('Fruit Orders', fruit_orders_path, class: 'boss2-main-menu__button-link') %>
               </li>
           <% end %>
 
           <% if !current_user.security_manager? %>
-              <li class="boss-main-menu__button nav-hours-confirmation-section">
-                <%= link_to('Hours Confirmation', current_hours_confirmation_index_path, class: 'boss-main-menu__button-link') %>
+              <li class="boss2-main-menu__button nav-hours-confirmation-section">
+                <%= link_to('Hours Confirmation', current_hours_confirmation_index_path, class: 'boss2-main-menu__button-link') %>
               </li>
           <% end %>
 
           <% if !current_user.security_manager? %>
-              <li class="boss-main-menu__button">
-                <%= link_to('Safe Checks', safe_checks_path, class: "boss-main-menu__button-link") %>
+              <li class="boss2-main-menu__button">
+                <%= link_to('Safe Checks', safe_checks_path, class: "boss2-main-menu__button-link") %>
               </li>
           <% end %>
 
-          <li class="boss-main-menu__button boss-main-menu__button_type_dropdown">
-            <a class="boss-main-menu__button-link" href="#">
+          <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
+            <a class="boss2-main-menu__button-link" href="#">
               Reports
             </a>
-            <ul class="boss-submenu menu vertical">
+            <ul class="boss2-submenu menu vertical">
               <% if can?(:view, :daily_reports) %>
                   <li class="nav-hours-daily-reports-section">
                     <%= link_to('Daily Reports', daily_reports_path) %>
@@ -87,13 +87,13 @@
             </ul>
           </li>
     </ul>
-    <ul class="boss-main-menu__buttons boss-main-menu__buttons_type_secondary dropdown menu align-right" data-dropdown-menu>
+    <ul class="boss2-main-menu__buttons boss2-main-menu__buttons_type_secondary dropdown menu align-right" data-dropdown-menu>
               <% if can?(:manage, :admin) %>
-                <li class="boss-main-menu__button boss-main-menu__button_type_dropdown">
-                  <a class="boss-main-menu__button-link" href="#">
+                <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown">
+                  <a class="boss2-main-menu__button-link" href="#">
                     Admin
                   </a>
-                  <ul class="boss-submenu nav-admin-section menu vertical">
+                  <ul class="boss2-submenu nav-admin-section menu vertical">
                     <li class="nav-invites-section">
                       <%= link_to('Invites', invites_path) %>
                     </li>
@@ -153,165 +153,13 @@
                 </li>
             <% end %>
 
-            <li class="boss-main-menu__button boss-main-menu__button_type_dropdown" data-navbar-section="user">
-              <a class="boss-main-menu__button-link" href="#">Signed in as <%= current_user.email %></a>
-              <ul class="boss-submenu menu vertical">
+            <li class="boss2-main-menu__button boss2-main-menu__button_type_dropdown" data-navbar-section="user">
+              <a class="boss2-main-menu__button-link" href="#">Signed in as <%= current_user.email %></a>
+              <ul class="boss2-submenu menu vertical">
                 <li><%= link_to('Sign out', destroy_user_session_path, method: :delete) %></li>
               </ul>
           </li>
       <% end %>
     </ul>
-    <div class="boss-main-menu__navicon"></div>
-</div>
-<div class="boss-mobile-menu">
-  <div class="boss-mobile-menu__closearea"></div>
-  <div class="boss-mobile-menu__side">
-      <div class="boss-mobile-menu__close">✕</div>
-      <%= link_to(
-          'BOSS',
-          root_path,
-          class: 'boss-main-menu__logo-button menu-text',
-          data: { "link-role" => "navbar-brand" }
-        ) %>
-      <ul class="boss-mobile-menu__buttons">
-      <% if current_user.present? %>
-          <% if can?(:manage, :staff_members) %>
-              <li class="boss-mobile-menu__button">
-                <%= link_to('Staff Members', staff_members_path, class: "boss-mobile-menu__button-link") %>
-              </li>
-          <% end %>
-          <% if can?(:manage, :rotas) %>
-              <% if Venue.count > 0 && !(current_user.manager? && current_user.venues.count == 0) %>
-                  <li class="boss-mobile-menu__button nav-rota-section">
-                    <%= link_to('Rota', rotas_path, class: "boss-mobile-menu__button-link") %>
-                  </li>
-              <% end %>
-          <% end %>
-
-          <% if can?(:view, :holidays) %>
-              <li class="boss-mobile-menu__button nav-holiday-reports-section">
-                <%= link_to('Holidays', holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday)), class: "boss-mobile-menu__button-link") %>
-              </li>
-          <% end %>
-
-          <% if can?(:manage, :security_rota) %>
-              <li class="boss-mobile-menu__button nav-security-rota-section">
-                <%= link_to(security_rotas_path, class: "boss-mobile-menu__button-link") do %>
-                    Security Rota
-                <% end %>
-              </li>
-          <% end %>
-
-          <% if can?(:manage, :change_orders) %>
-              <li class="boss-mobile-menu__button nav-change-orders-section">
-                <%= link_to('Change Orders', change_orders_path, class: 'boss-mobile-menu__button-link') %>
-              </li>
-          <% end %>
-
-          <% if can?(:manage, :fruit_orders) %>
-              <li class="boss-mobile-menu__button nav-fruit-orders-section">
-                <%= link_to('Fruit Orders', fruit_orders_path, class: 'boss-mobile-menu__button-link') %>
-              </li>
-          <% end %>
-
-          <% if !current_user.security_manager? %>
-              <li class="boss-mobile-menu__button nav-hours-confirmation-section">
-                <%= link_to('Hours Confirmation', current_hours_confirmation_index_path, class: 'boss-mobile-menu__button-link') %>
-              </li>
-          <% end %>
-
-          <% if !current_user.security_manager? %>
-              <li class="boss-mobile-menu__button">
-                <%= link_to('Safe Checks', safe_checks_path, class: "boss-mobile-menu__button-link") %>
-              </li>
-          <% end %>
-          <li class="boss-mobile-menu__button boss-mobile-menu__button_dropdown">
-            <a class="boss-mobile-menu__button-link" href="#">
-              Reports
-            </a>
-            <i class="boss-mobile-menu__button-drop"></i>
-            <ul class="boss-mobile-menu__dropdown">
-              <% if can?(:view, :daily_reports) %>
-                  <li class="boss-mobile-menu__button">
-                    <%= link_to('Daily Reports', daily_reports_path, class: "boss-mobile-menu__button-link") %>
-                  </li>
-              <% end %>
-              <% if can?(:view, :weekly_reports) %>
-                  <li class="boss-mobile-menu__button">
-                    <%= link_to('Weekly Reports', weekly_reports_path, class: "boss-mobile-menu__button-link") %>
-                  </li>
-              <% end %>
-              <% if can?(:view, :payroll_reports) %>
-                  <li class="boss-mobile-menu__button">
-                    <%= link_to('Payroll Reports', payroll_reports_path, class: "boss-mobile-menu__button-link") %>
-                  </li>
-              <% end %>
-            </ul>
-          </li>
-        <% end %>
-        <% if can?(:manage, :admin) %>
-            <li class="boss-mobile-menu__button boss-mobile-menu__button_dropdown">
-              <a href="#" class="boss-mobile-menu__button-link">Admin</a>
-              <i class="boss-mobile-menu__button-drop"></i>
-              <ul class="boss-mobile-menu__dropdown">
-                <li class="boss-mobile-menu__button">
-                  <%= link_to('Invites', invites_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <li class="boss-mobile-menu__button">
-                  <%= link_to('Users', users_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <li class="boss-mobile-menu__button">
-                  <%= link_to('Venues', venues_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <% if can?(:manage, :admin) %>
-                    <li class="boss-mobile-menu__button">
-                      <%= link_to('Staff Types', staff_types_path, class: "boss-mobile-menu__button-link") %>
-                    </li>
-                <% end %>
-
-                <li class="boss-mobile-menu__button">
-                  <%= link_to('Pay rates', pay_rates_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <li class="boss-mobile-menu__button">
-                  <%= link_to('Change Order Reports', change_order_reports_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <li class="boss-mobile-menu__button">
-                  <%= link_to('Fruit Order Reports', fruit_order_reports_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <li class="boss-mobile-menu__button">
-                  <%= link_to('Finance Reports', finance_reports_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <li class="boss-mobile-menu__button">
-                  <%= link_to("Yearly Reports", yearly_reports_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <li class="boss-mobile-menu__button">
-                  <%= link_to('Staff Tracking', staff_tracking_index_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <li class="boss-mobile-menu__button">
-                  <%= link_to('Staff Vetting', staff_vetting_index_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <li class="boss-mobile-menu__button">
-                  <%= link_to('API Keys', api_keys_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <% if current_user.dev? %>
-                    <li class="boss-mobile-menu__button">
-                      <%= link_to('Error Test', rollbar_error_test_index_path, class: "boss-mobile-menu__button-link") %>
-                    </li>
-                <% end %>
-              </ul>
-            </li>
-        <% end %>
-        </ul>
-  </div>
+    <div class="boss2-main-menu__navicon"></div>
 </div>
