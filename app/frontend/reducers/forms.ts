@@ -43,7 +43,7 @@ const formsData = combineForms({
   },
   venueForm : {
     mainVenue: '',
-    otherVenues: '',
+    otherVenues: [],
     startsAt: ''
   },
   workForm : {

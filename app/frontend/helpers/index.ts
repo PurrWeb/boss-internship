@@ -12,6 +12,16 @@ export const isNotEmptyInput = (val: Select.Option | string | number) => {
   }
 };
 
+export const otherVenuesDontContainMainVenue = (vals: any) => {
+  const { mainVenue, otherVenues } = vals;
+
+  if (!otherVenues.length) {
+    return true;
+  }
+
+  return !otherVenues.filter((otherVenue: any) => otherVenue.value === mainVenue).length;
+};
+
 export const isNationalInsuranceNumber = (val = '') =>
   val ?
     /^[A-Z]{2}[0-9]{6}(A|B|C|D|F)$/.test(val) :

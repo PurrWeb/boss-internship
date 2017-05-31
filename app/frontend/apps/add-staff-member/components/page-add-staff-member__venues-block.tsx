@@ -15,8 +15,8 @@ import steppingBackRegistration from '../../../action-creators/stepping-back-reg
 import {OfType} from '../../../interfaces/index';
 import SelectControl from './select-control';
 import {MainVenueValidators} from '../../../interfaces/forms';
-import {isNotEmptyInput} from '../../../helpers/index';
-import {isRequiredField} from '../../../constants/form-errors';
+import {isNotEmptyInput, otherVenuesDontContainMainVenue} from '../../../helpers/index';
+import {isRequiredField, isOtherVenuesDontContainMainVenue} from '../../../constants/form-errors';
 import {VenueForm} from '../../../reducers/forms';
 import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../helpers/validators';
 import changingStepInfo from '../../../action-creators/changing-step-info';
@@ -50,7 +50,9 @@ class Component extends React.Component<PropsFromConnect, State> {
 
     this.props.dispatch(action);
   };
-
+  onMainVenueChange(event: any) {
+    console.log(event);
+  }
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
     this.props.dispatch(changeStep('formsData.venueForm', ADD_STAFF_MEMBER_STEPS.VenuesBlock - 1));
   };
@@ -66,7 +68,21 @@ class Component extends React.Component<PropsFromConnect, State> {
           model="formsData.venueForm"
           className="boss-form"
           onUpdate={this.handleFormUpdate}
+          validators={{
+            '': {
+                  isValidVenue: otherVenuesDontContainMainVenue,
+                },
+          }}
         >
+        <Errors
+              model="formsData.venueForm"
+              messages={{
+                isValidVenue: isOtherVenuesDontContainMainVenue
+              }}
+              show={{touched: true, focus: false}}
+              wrapper={renderErrorsBlock}
+              component={renderErrorComponent}
+            />
           <div className="boss-form__field">
             <label className="boss-form__label">
               <span className="boss-form__label-text boss-form__label-text_type_required">Main Venue</span>
