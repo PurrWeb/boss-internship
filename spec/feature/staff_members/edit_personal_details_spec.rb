@@ -97,7 +97,7 @@ RSpec.feature 'Editing a staff members personal detials' do
   end
 
   describe 'editing date_of_birth' do
-    let(:new_date_of_birth) { Date.new(1941, 2, 3).in_time_zone }
+    let(:new_date_of_birth) { Date.new(1941, 2, 3) }
 
     specify 'new date_of_birth should not match orginal' do
       expect(edited_staff_member.date_of_birth).

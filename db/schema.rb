@@ -619,7 +619,7 @@ ActiveRecord::Schema.define(version: 20170523060715) do
     t.integer  "address_id",                            limit: 4
     t.string   "gender",                                limit: 255,                   null: false
     t.string   "phone_number",                          limit: 255
-    t.datetime "date_of_birth"
+    t.date     "date_of_birth"
     t.string   "national_insurance_number",             limit: 255
     t.text     "hours_preference_note",                 limit: 65535
     t.text     "day_perference_note",                   limit: 65535

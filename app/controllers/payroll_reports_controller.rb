@@ -28,7 +28,6 @@ class PayrollReportsController < ApplicationController
           render_payroll_report_pdf(
             venue: venue,
             week: week,
-            staff_members: staff_members,
             filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
           )
         end
@@ -39,7 +38,7 @@ class PayrollReportsController < ApplicationController
   end
 
   private
-  def render_payroll_report_pdf(venue:, week:, staff_members:, filter_by_weekly_pay_rate:)
+  def render_payroll_report_pdf(venue:, week:, filter_by_weekly_pay_rate:)
     pdf = FinanceReportPDF.new(
       report_title: 'Payroll Report',
       venue: venue,
@@ -48,6 +47,15 @@ class PayrollReportsController < ApplicationController
       display_pay_rate_type: false,
       display_totals: false
     )
+
+    staff_members = FinanceReportStaffMembersQuery.new(
+      venue: venue,
+      start_date: week.start_date,
+      end_date: week.end_date,
+      filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
+    ).all
+
+    ActiveRecord::Associations::Preloader.new.preload(staff_members, [:pay_rate])
 
     staff_members.each do |staff_member|
       pdf.add_report(
