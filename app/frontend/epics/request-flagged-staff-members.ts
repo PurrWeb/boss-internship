@@ -18,10 +18,11 @@ const requestFlaggedStaffMembers = (action$: any, store: Store<StoreStructure>) 
   action$.ofType(REQUESTING_FLAGGED_STAFF_MEMBERS)
     .switchMap((action: any) => {
         const isEmptyFields = !action.payload.first_name;
+        const { reviewedStaffMembers } = store.getState().app;
         return isEmptyFields
           ? Observable.of({
               type: FLAGGED_STAFF_MEMBERS,
-              payload: []
+              payload: { flagged: [], reviewed: [] }
             })
           : get('/api/v1/staff_members/flagged', action.payload)
               .mergeMap((resp: any) => {
@@ -30,7 +31,7 @@ const requestFlaggedStaffMembers = (action$: any, store: Store<StoreStructure>) 
                 }
                 return Observable.of({
                   type: FLAGGED_STAFF_MEMBERS,
-                  payload: resp.response
+                  payload: { flagged: resp.response, reviewed: reviewedStaffMembers }
                 }, );
               });
       }

@@ -8,14 +8,15 @@ export type Structure = StaffMember[];
 const staffMembers = (state: Structure = [], action: ActionWithPayload<any>): Structure => {
   switch (action.type) {
     case FLAGGED_STAFF_MEMBERS: {
-      return action.payload.map((payloadItem: any) => {
-        let equalItem = _.find(state, { 'id': payloadItem.id });
-        return equalItem || payloadItem;
+      const { flagged, reviewed } = action.payload;
+      return flagged.map((flaggedMember: any) => {
+        let equalFlaggedMember = _.find(reviewed, { 'id': flaggedMember.id });
+        return equalFlaggedMember || flaggedMember;
       });
     }
     case TOGGLE_STAFF_MEMBER: {
       return state.map(staffMember =>
-        staffMember.id === action.payload ?
+        staffMember.id === action.payload.id ?
           { ...staffMember, reviewed: !staffMember.reviewed } :
           staffMember
       );

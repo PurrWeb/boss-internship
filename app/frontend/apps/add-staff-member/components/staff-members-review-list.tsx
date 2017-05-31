@@ -34,7 +34,7 @@ const StaffMembersReviewCard = (props: any) => {
             </a>
           </div>
           <div className="boss-user-summary__controls">
-            <a onClick={() => props.onCardAction(props.staffMember.id)} href="javascript:;"
+            <a onClick={() => props.onCardAction(props.staffMember)} href="javascript:;"
                className={classes.buttonClass}>
               {classes.buttonText}
             </a>

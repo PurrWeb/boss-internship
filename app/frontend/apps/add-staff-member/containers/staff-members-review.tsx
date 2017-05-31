@@ -31,12 +31,12 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(toggleReviewed());
   }
 
-  onStuffMemberDismiss = (stuffMemberId: number) => {
-    store.dispatch(toggleStaffMember(stuffMemberId));
+  onStaffMemberDismiss = (staffMember: any) => {
+    store.dispatch(toggleStaffMember(staffMember));
   }
 
-  onStuffMemberReview = (stuffMemberId: number) => {
-    store.dispatch(toggleStaffMember(stuffMemberId));
+  onStaffMemberReview = (staffMember: any) => {
+    store.dispatch(toggleStaffMember(staffMember));
   }
 
   flaggedStaffMembers() {
@@ -68,8 +68,8 @@ class Component extends React.Component<PropsFromConnect, State> {
               <div className="boss-dropdown__content-inner">
                 <div className="boss-vetting">
                   { !this.props.flaggedStaffMembers.length && <h3>Nothing to review</h3> }
-                  { !!this.flaggedStaffMembers().length && <StaffMembersReviewList listType={UNREVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberDismiss} staffMemberList={ this.flaggedStaffMembers() } /> }
-                  { !!this.reviewedStaffMembers().length && <StaffMembersReviewList listType={REVIEWED_STAFF_MEMBERS} onCardAction={this.onStuffMemberReview} staffMemberList={ this.reviewedStaffMembers() } /> }
+                  { !!this.flaggedStaffMembers().length && <StaffMembersReviewList listType={UNREVIEWED_STAFF_MEMBERS} onCardAction={this.onStaffMemberDismiss} staffMemberList={ this.flaggedStaffMembers() } /> }
+                  { !!this.reviewedStaffMembers().length && <StaffMembersReviewList listType={REVIEWED_STAFF_MEMBERS} onCardAction={this.onStaffMemberReview} staffMemberList={ this.reviewedStaffMembers() } /> }
                 </div>
               </div>
             </Element>
