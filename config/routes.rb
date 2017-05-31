@@ -190,7 +190,7 @@ Rails.application.routes.draw do
         resources :holiday_reports, only: :index
         resources :staff_members, only: [:show, :create] do
           collection do
-            get :flagged
+            post :flagged
           end
         end
         resources :staff_types,   only: :show

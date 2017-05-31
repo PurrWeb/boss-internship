@@ -10,7 +10,7 @@ import flaggedRequestFields from '../action-creators/flagged-request-fields';
 import {showReviewed} from '../action-creators/reviewed';
 import * as _ from 'lodash';
 
-import {get} from '../helpers/requests';
+import {get, post} from '../helpers/requests';
 import {Observable} from 'rxjs';
 import {RequestFlaggedStaffMembers} from '../interfaces/api-requests';
 
@@ -24,7 +24,7 @@ const requestFlaggedStaffMembers = (action$: any, store: Store<StoreStructure>) 
               type: FLAGGED_STAFF_MEMBERS,
               payload: { flagged: [], reviewed: [] }
             })
-          : get('/api/v1/staff_members/flagged', action.payload)
+          : post('/api/v1/staff_members/flagged', action.payload)
               .mergeMap((resp: any) => {
                 if (resp.response.length) {
                   store.dispatch(showReviewed());

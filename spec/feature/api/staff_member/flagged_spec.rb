@@ -1,4 +1,5 @@
 require 'rails_helper'
+include Rails.application.routes.url_helpers
 
 RSpec.describe 'Flagged staff member endpoint' do
   include Rack::Test::Methods
@@ -50,9 +51,8 @@ RSpec.describe 'Flagged staff member endpoint' do
   end
 
   specify 'should return a json representation' do
-    json = JSON.parse(response.body)
-    expect(json.keys).to eq(["staff_members"])
-    expect(json.fetch("staff_members")).to eq([])
+    data = JSON.parse(response.body)
+    expect(data).to eq([])
   end
 
   describe 'required params' do
@@ -85,17 +85,22 @@ RSpec.describe 'Flagged staff member endpoint' do
       specify 'should return a json representation' do
         flagged_staff_member
 
-        json = JSON.parse(response.body)
-        expect(json.keys).to eq(["staff_members"])
-        expect(json.fetch("staff_members")).to eq([
+        data = JSON.parse(response.body)
+        expect(data).to eq([
           {
             "id" => flagged_staff_member.id,
-            "full_name" => flagged_staff_member.full_name,
+            "date_of_birth" => flagged_staff_member.date_of_birth.strftime("%F"),
+            "url" => api_v1_staff_member_url(flagged_staff_member),
             "avatar_url" => flagged_staff_member.avatar_url,
-            "master_venue_name" => flagged_staff_member.master_venue.name,
-            "type" => flagged_staff_member.staff_type.name,
-            "disabled_by" => flagged_staff_member.disabled_by_user.full_name,
-            "disabled_at" => flagged_staff_member.disabled_at.utc.iso8601
+            "staff_type" => flagged_staff_member.staff_type.name,
+            "first_name" => flagged_staff_member.name.first_name,
+            "surname" => flagged_staff_member.name.surname,
+            "preferred_hours" => flagged_staff_member.hours_preference_note,
+            "preferred_days" => flagged_staff_member.day_perference_note,
+            "email_address" => flagged_staff_member.email_address.email,
+            "disabled_by_user" => flagged_staff_member.disabled_by_user.full_name,
+            "disabled_at" => flagged_staff_member.disabled_at.to_s(:human_date),
+            "disable_reason" => flagged_staff_member.disable_reason
           }
         ])
       end
