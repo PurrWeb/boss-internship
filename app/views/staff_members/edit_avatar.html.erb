@@ -1,10 +1,10 @@
 <main role="main" class="boss2-page-content <%= content_for(:main_class) %>">
   <div class="boss2-page-content__inner-container">
-<h2>Edit Avatar</h2>
+    <h2>Edit Avatar</h2>
 
-<%= bootstrap_form_for(staff_member, url: update_avatar_staff_member_path(staff_member), method: :post, html: { multipart: true, class: 'staff-member-form' }) do |form| %>
-  <%= render partial: 'shared/avatar_picker_control', locals: { form: form } %>
-  <button type="submit" class="boss2-button">Submit</button>
-<% end %>
-</div>
+    <%= bootstrap_form_for(staff_member, url: update_avatar_staff_member_path(staff_member), method: :post, html: {multipart: true, class: 'staff-member-form'}) do |form| %>
+        <%= render partial: 'shared/avatar_picker_control', locals: {form: form} %>
+        <button type="submit" class="boss2-button">Submit</button>
+    <% end %>
+  </div>
 </main>
