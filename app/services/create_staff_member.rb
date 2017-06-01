@@ -34,10 +34,10 @@ class CreateStaffMember
           event_type: StaffTrackingEvent::CREATION_EVENT_TYPE,
           staff_member: staff_member
         )
-        # StaffMemberUpdatesMailer.new_staff_member(staff_member).deliver_now
-        # if staff_member.pay_rate.weekly?
-        #   update_related_daily_reports(staff_member)
-        # end
+        StaffMemberUpdatesMailer.new_staff_member(staff_member).deliver_now
+        if staff_member.pay_rate.weekly?
+          update_related_daily_reports(staff_member)
+        end
       end
     end
 

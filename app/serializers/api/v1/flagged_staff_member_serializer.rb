@@ -43,18 +43,4 @@ class Api::V1::FlaggedStaffMemberSerializer < ActiveModel::Serializer
   def preferred_days
     object.day_perference_note
   end
-
-  # def venues
-  #   venues = StaffMemberWorkableVenuesQuery.new(
-  #     staff_member: object
-  #   ).all
-  #
-  #   venues.map do |venue|
-  #     {
-  #       id: venue.id,
-  #       url: api_v1_venue_url(venue)
-  #     }
-  #   end
-  # end
-
 end
