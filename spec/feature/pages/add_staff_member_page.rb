@@ -18,18 +18,11 @@ module PageObject
     end
 
     def assert_on_correct_page
-      expect(page_heading).to(
-        have_text(expected_page_heading_text),
-        "expected page heading to have test '#{expected_page_heading_text}' got '#{page_heading.text}'"
-      )
+      expect(page_heading).to be_present
     end
 
     def page_heading
-      page.find('main h1')
-    end
-
-    def expected_page_heading_text
-      'Add Staff Member'
+      page.find('div[data-react-class="AddStaffMemberPageComponent"]')
     end
 
     private

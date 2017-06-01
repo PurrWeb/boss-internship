@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe FlaggedStaffMemberQuery do
-  let(:now) { Time.current }
+  let(:now) { Date.current }
   let(:query) do
     FlaggedStaffMemberQuery.new(
       first_name: first_name,
