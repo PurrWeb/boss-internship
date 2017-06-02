@@ -7,7 +7,7 @@ import {pipe, omit, toPairs, map, addIndex, find, curry, isNil} from 'ramda';
 import * as cx from 'classnames';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
-import {StoreStructure, StarterEmploymentStatus} from '../../../interfaces/store-models';
+import {StoreStructure, StarterEmploymentStatus, ArrayErrors} from '../../../interfaces/store-models';
 import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
 import requestingStaffMemberSave from '../../../action-creators/requesting-staff-member-save';
 import {
@@ -43,6 +43,7 @@ interface MappedProps {
   readonly staffTypes: OptionData[];
   readonly payRates: OptionData[];
   readonly staffMembers: StaffMember[];
+  readonly errors: ArrayErrors;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -304,7 +305,13 @@ class Component extends React.Component<PropsFromConnect, State> {
   render() {
     return (
       <div className="boss-forms-block">
-
+        { !!this.props.errors.messages.length && <div className="boss-form__field ">
+          <div className="boss-form__error">
+            <p className="boss-form__error-text">
+              { this.props.errors.messages.map((message, i) => <span key={i} className="boss-form__error-line">{message}</span>)}
+            </p>
+          </div>
+        </div>}
         {this.renderBasicInformationSummaryBlock()}
         {this.renderAvatarSummaryBlock()}
         {this.renderVenueSummaryBlock()}
@@ -328,7 +335,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   const {forms} = state.formsData;
-  const {avatarPreview, venues, staffTypes, payRates, staffMembers} = state.app;
+  const {avatarPreview, venues, staffTypes, payRates, staffMembers, errors} = state.app;
 
   return {
     avatarPreview: avatarPreview,
@@ -339,7 +346,8 @@ const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
     venues,
     staffTypes,
     payRates,
-    staffMembers
+    staffMembers,
+    errors
   };
 };
 

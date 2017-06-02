@@ -5,13 +5,14 @@ import * as Select from 'react-select';
 const t = require('tcomb-validation');
 
 import {REQUESTING_STAFF_MEMBER_SAVE} from '../constants/action-names';
-import {isAjaxResponseDefined, getRequestFailedAction, post} from '../helpers/requests';
+import {isAjaxResponseDefined, getStaffMemberSaveFailedAction, post} from '../helpers/requests';
 import {ResponseStaffMemberCreateSuccessPayload} from '../interfaces/api-responses';
 import {AjaxResponseTyped, AjaxResponseDefined, AnyDict} from '../interfaces/index';
 import {urlStaffMembersEdit, urlStaffMembersRedirectTemplate} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
 import {StoreStructure} from '../interfaces/store-models';
 import pendingStaffMemberSave from '../action-creators/pending-staff-member-save';
+import clearErrors from '../action-creators/clear-errors';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
 import {RequestStaffMemberSavePayload} from '../interfaces/api-requests';
 import {Store} from 'redux';
@@ -69,34 +70,37 @@ const requestStaffMemberSave = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(REQUESTING_STAFF_MEMBER_SAVE)
     .switchMap(() => {
       const pendingStaffMemberSaveStart$ = Observable.of(pendingStaffMemberSave(true));
+      const clearErrors$ = Observable.of(clearErrors());
+      
       const pendingStaffMemberSaveStopAction = pendingStaffMemberSave(false);
       const dataToSend = getDataToSend( store.getState() );
 
       const request$ = Observable.of(null)
-        .mergeMap(() =>
-          post(urlStaffMembersEdit, dataToSend)
+        .mergeMap(() => {
+          return post(urlStaffMembersEdit, dataToSend)
             .mergeMap((ajaxData: ResponseOk | AjaxError) => {
               if ( isAjaxResponseDefined<ResponseOkDefined>(ajaxData) ) {
                 assertResponse(ajaxData);
                 const memberId = ajaxData.response.staff_member_id;
-
                 location.pathname = urlStaffMembersRedirectTemplate.replace(/:id\b/, String(memberId));
 
                 return Observable.of<SimpleAction>(
                   pendingStaffMemberSaveStopAction
                 );
               } else {
-                const requestFailedAction = getRequestFailedAction(ajaxData.status, 'Saving a staff member error');
+                const requestFailedAction = getStaffMemberSaveFailedAction(ajaxData);
 
                 return Observable.of<SimpleAction>(
                   pendingStaffMemberSaveStopAction,
                   requestFailedAction
                 );
               }
-            })
+            });
+          }
         );
 
       return Observable.concat(
+        clearErrors$,
         pendingStaffMemberSaveStart$,
         request$
       );

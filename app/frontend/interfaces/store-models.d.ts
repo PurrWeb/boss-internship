@@ -51,6 +51,11 @@ export interface GlobalError {
   readonly date: number;
 }
 
+export interface ArrayErrors {
+  readonly messages: string[];
+  readonly date: number;
+}
+
 export interface AddStaffMemberStepInfo {
   readonly visited: boolean;
   readonly hasUnfilledRequired: boolean;
