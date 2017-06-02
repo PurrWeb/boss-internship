@@ -27,8 +27,8 @@ class FlaggedStaffMemberQuery
       )
     )
     where_clauses << staff_members_table[:date_of_birth].eq(date_of_birth) if date_of_birth.present?
-    where_clauses << email_addresses_table[:email].eq(email_address)
-    where_clauses << staff_members_table[:national_insurance_number].eq(national_insurance_number.upcase)
+    where_clauses << email_addresses_table[:email].eq(email_address) if email_address.present?
+    where_clauses << staff_members_table[:national_insurance_number].eq(national_insurance_number.upcase) if national_insurance_number.present?
 
     StaffMember.
       flagged.
