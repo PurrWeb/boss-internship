@@ -1,6 +1,9 @@
 import {Observable, AjaxResponse, AjaxError} from 'rxjs';
 import * as queryString from 'query-string';
 import {pipe} from 'ramda';
+import * as _ from 'lodash';
+// tslint:disable-next-line:no-require-imports
+const humanize = require('string-humanize');
 
 import {AjaxResponseDefined, Defined} from '../interfaces/index';
 import {
@@ -9,8 +12,9 @@ import {
   STATUS_SERVICE_UNAVAILABLE
 } from '../constants/used-http-status-codes';
 import {ActionWithPayload} from '../interfaces/actions';
+import saveStaffMemberErrorHappened from '../action-creators/save-staff-member-error-happened';
 import globalErrorHappened from '../action-creators/global-error-happened';
-import {GlobalError} from '../interfaces/store-models';
+import {GlobalError, ArrayErrors} from '../interfaces/store-models';
 import store from '../store/index';
 
 const handleError = (ajaxErrorData: AjaxError): Observable<AjaxError> => {
@@ -110,14 +114,31 @@ const ajaxStatusMessages = {
   [STATUS_SERVICE_UNAVAILABLE]: 'Service unavailable'
 };
 
-export const getMessageFromAjaxErrorStatus = (status: number): string => {
-  return ajaxStatusMessages[status] || 'Some strange error';
+export const getMessageFromAjaxErrorStatus = (ajaxError: AjaxError): string[] => {
+  const errors = ajaxError.xhr.response.errors;
+  if (!!errors) {
+    let errorsArray: string[] = [];
+    _.each(errors, (items, errorGroup) => {
+      const group = humanize(errorGroup);
+      errorsArray.push(`${group}: ${items.join(', ')}`);
+    });
+    return errorsArray;
+  } else {
+    return [ajaxStatusMessages[ajaxError.status]] || ['Some strange error'];
+  }
 };
 
-export const getRequestFailedAction = (ajaxErrorStatus: number, messagePrefix: string) => {
-  return pipe< number, string, string, ActionWithPayload<GlobalError> >(
-    (status: number) => getMessageFromAjaxErrorStatus(status),
+export const getRequestFailedAction = (ajaxErrorStatus: any, messagePrefix: string) => {
+  return pipe< AjaxError, string|any[], string, ActionWithPayload<GlobalError> >(
+    (ajaxError: AjaxError) => getMessageFromAjaxErrorStatus(ajaxError),
     (errorFromStatus: string) => `${messagePrefix}: ${errorFromStatus}`,
     globalErrorHappened
+  )(ajaxErrorStatus);
+};
+
+export const getStaffMemberSaveFailedAction = (ajaxErrorStatus: any) => {
+  return pipe< AjaxError, string[], ActionWithPayload<ArrayErrors> >(
+    (ajaxError: AjaxError) => getMessageFromAjaxErrorStatus(ajaxError),
+    saveStaffMemberErrorHappened
   )(ajaxErrorStatus);
 };

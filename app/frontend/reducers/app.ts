@@ -16,6 +16,7 @@ import staffMembers, {Structure as StaffMembers} from './staff-member';
 import flaggedFields, {Structure as FlaggedFieldsStructure} from'./flagged-request-fields';
 import review, {Structure as ReviewStructure} from'./review';
 import reviewedStaffMembers, {Structure as ReviewedMembersStructure} from'./reviewed-staff-members';
+import errors, {Structure as ErrorsStructure} from './errors';
 
 export interface Structure {
   readonly avatarPreview: AvatarPreviewStructure;
@@ -33,9 +34,11 @@ export interface Structure {
   readonly flaggedFields: FlaggedFieldsStructure;
   readonly review: ReviewStructure;
   readonly reviewedStaffMembers: ReviewedMembersStructure;
+  readonly errors: ErrorsStructure;
 }
 
 const reducers: ReducersOfType<Structure> = {
+  errors,
   flaggedFields,
   avatarPreview,
   stepsInfo,
