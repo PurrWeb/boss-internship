@@ -1,0 +1,108 @@
+@import 'settings';
+@import 'mixins';
+
+@mixin stepLine($index-side-size) {
+  $height: 4px;
+
+  content: '';
+  position: absolute;
+  left: 0;
+  top: ($index-side-size / 2) - ($height / 2);
+  right: 0;
+  height: $height;
+  background-color: map-get($boss-app-palette, inactive);
+}
+
+.boss3-steps-block {
+  @include normalize-block();
+
+  $index-side-size: 30px;
+
+  clear: both;
+  display: flex;
+  justify-content: space-between;
+
+  &:before {
+    @include clear-fix();
+  }
+
+  &__step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 16.6%;
+    align-items: center;
+
+    &:before {
+      @include stepLine($index-side-size: $index-side-size);
+      right: 50%;
+    }
+
+    &:after {
+      @include stepLine($index-side-size: $index-side-size);
+      left: 50%;
+      right: -1px;
+    }
+
+    &:first-child {
+      &:before {
+        display: none;
+      }
+    }
+    &:last-child {
+      &:after {
+        display: none;
+      }
+    }
+
+    &_state {
+      &_complete {
+      }
+
+      &_with-error {
+      }
+    }
+  }
+
+  &__step-index {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: $index-side-size;
+    height: $index-side-size;
+    margin-bottom: 8px;
+    border-radius: 50%;
+    text-align: center;
+    color: white;
+    line-height: $index-side-size;
+    background-color: map-get($boss-app-palette, inactive);
+    cursor: pointer;
+
+    .boss3-steps-block__step_state_complete & {
+      background-color: map-get($boss-app-palette, primary);
+    }
+
+    .boss3-steps-block__step_state_with-error & {
+      &:after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: -3px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: red;
+      }
+    }
+  }
+
+  &__step-title {
+    color: $boss-light-gray;
+
+    &_state {
+      &_active {
+        color: $boss-global-font-color;
+      }
+    }
+  }
+}

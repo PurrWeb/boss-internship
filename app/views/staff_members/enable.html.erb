@@ -1,13 +1,17 @@
-<h1>Enable <%= staff_member.full_name.titlecase %></h1>
+<main role="main" class="boss2-page-content <%= content_for(:main_class) %>">
+  <div class="boss2-page-content__inner-container">
+    <h1>Enable <%= staff_member.full_name.titlecase %></h1>
 
-<%= bootstrap_form_for(staff_member, url: undestroy_staff_member_path(staff_member), html: { multipart: true, class: 'staff-member-form' }) do |form| %>
-  <%= render(
-        partial: 'shared/staff_member_form_fields',
-        locals: {
-          form: form,
-          edit_name: true,
-          edit_email: true
-        }
-      ) %>
-  <button type="submit" class="boss2-button">Submit</button>
-<% end %>
+    <%= bootstrap_form_for(staff_member, url: undestroy_staff_member_path(staff_member), html: {multipart: true, class: 'staff-member-form'}) do |form| %>
+        <%= render(
+                partial: 'shared/staff_member_form_fields',
+                locals: {
+                    form: form,
+                    edit_name: true,
+                    edit_email: true
+                }
+            ) %>
+        <button type="submit" class="boss2-button">Submit</button>
+    <% end %>
+  </div>
+</main>

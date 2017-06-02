@@ -1,4 +1,13 @@
 class StaffMembersController < ApplicationController
+
+  def render_v2_layout?
+    true
+  end
+
+  def set_default_layout
+    @current_layout = 'newLayout';
+  end
+
   def index
     authorize! :manage, :staff_members
 
@@ -24,30 +33,6 @@ class StaffMembersController < ApplicationController
     render locals: {
       staff_members: staff_members,
       filter: staff_member_index_filter
-    }
-  end
-
-  def flagged
-    authorize! :manage, :staff_members
-
-    filter = StaffMemberIndexFilter.new(
-      user: current_user,
-      params: Hash(params[:staff_member_index_filter]).merge(status: nil)
-    )
-
-    staff_members = filter.
-      flagged_staff_member_query.
-      all.
-      includes(:name).
-      includes(:staff_type).
-      includes(:master_venue).
-      includes(:work_venues).
-      includes(:email_address).
-      paginate(page: params[:page], per_page: 20)
-
-    render locals: {
-      staff_members: staff_members,
-      filter: filter
     }
   end
 
@@ -119,23 +104,19 @@ class StaffMembersController < ApplicationController
 
   def new
     authorize! :manage, :staff_members
+    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
+    venues = Venue.all
+    pay_rates = PayRate.selectable_by(current_user)
+    staff_types = StaffType.all
+    gender_values = StaffMember::GENDERS
 
-    staff_member = StaffMember.new(starts_at: Time.zone.now)
-    render locals: { staff_member: staff_member }
-  end
-
-  def create
-    authorize! :manage, :staff_members
-
-    result = CreateStaffMember.new(params: staff_member_params).call
-
-    if result.success?
-      flash[:success] = "Staff member added successfully"
-      redirect_to action: :index
-    else
-      flash.now[:error] = "There was a problem creating this staff member"
-      render 'new', locals: { staff_member: result.staff_member }
-    end
+    render locals: {
+      access_token: access_token,
+      venues: venues,
+      pay_rates: pay_rates,
+      staff_types: staff_types,
+      gender_values: gender_values
+    }
   end
 
   def edit_employment_details
