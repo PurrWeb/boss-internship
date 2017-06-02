@@ -1,5 +1,4 @@
 require 'rails_helper'
-include Rails.application.routes.url_helpers
 
 RSpec.describe 'Flagged staff member endpoint' do
   include Rack::Test::Methods
@@ -90,7 +89,7 @@ RSpec.describe 'Flagged staff member endpoint' do
           {
             "id" => flagged_staff_member.id,
             "date_of_birth" => flagged_staff_member.date_of_birth.strftime("%F"),
-            "url" => api_v1_staff_member_url(flagged_staff_member),
+            "url" => url_helpers.api_v1_staff_member_url(flagged_staff_member),
             "avatar_url" => flagged_staff_member.avatar_url,
             "staff_type" => flagged_staff_member.staff_type.name,
             "first_name" => flagged_staff_member.name.first_name,
