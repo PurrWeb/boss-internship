@@ -55,8 +55,25 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                 className="row"
                 data-test-marker-hours-acceptance-period-item
               >
+                { this.getModal() }
                     <div className="large-5 small-12 column mb-md">
                         <div style={periodTimeSelectorStyles}>
+                            <ShiftTimeSelector
+                                showErrorMessages={false}
+                                defaultShiftTimes={{
+                                    starts_at: hoursAcceptancePeriod.starts_at,
+                                    ends_at: hoursAcceptancePeriod.ends_at
+                                }}
+                                readonly={readonly}
+                                rotaDate={this.props.rotaDate}
+                                onChange={(times) => {
+                                    this.props.boundActions.updateHoursAcceptancePeriod({
+                                        ...times,
+                                        clientId: hoursAcceptancePeriod.clientId
+                                    })
+                                }}
+                                granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
+                                />
                         </div>
                     </div>
                     <div className="large-3 small-12 column">
@@ -66,11 +83,20 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                         </div>
                     </div>
                     <div className="large-2 column">
+                      {this.getAcceptUi()}
                     </div>
                   <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
               </div>
               <div>
                 <div className="staff-day__sub-heading">Breaks</div>
+                <BreakList
+                    boundActions={this.props.boundActions}
+                    readonly={readonly}
+                    clockInBreaks={this.props.clockInBreaks}
+                    rotaDate={this.props.rotaDate}
+                    granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
+                    hoursAcceptancePeriod={hoursAcceptancePeriod}
+                />
               </div>
             </div>
           </div>
