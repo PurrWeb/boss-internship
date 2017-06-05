@@ -24,6 +24,7 @@ import {starterEmploymentStatusLabels} from '../../../constants/other';
 
 import {ADD_STAFF_MEMBER_STEPS} from '../../../constants/other';
 import changeStep from '../../../action-creators/current-step-changed';
+import {ProgressButton} from './progress-button';
 
 type FieldDataPair = [string, FieldState];
 type ValidityPair = [string, boolean];
@@ -78,9 +79,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     return this.props.staffMembers.filter((staffMember) => !staffMember.reviewed );
   }
 
-  onFormComplete = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-
+  onFormComplete = () => {
     this.props.dispatch(requestingStaffMemberSave);
   };
 
@@ -293,18 +292,20 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   renderContinueButton() {
     return Component.isAllFormsValid(this.allUsedForms, !!this.flaggedUnreviewedStaffMembers().length) ? (
-      <a href=""
-         onClick={this.onFormComplete}
-         className="boss-button boss-button_role_submit boss-buttons-group_adjust_button"
-      >
+      <ProgressButton onClick={this.onFormComplete} pendingText="Saving ...">
         Continue
-      </a>
+      </ProgressButton>
     ) : null;
   }
 
   render() {
     return (
       <div className="boss-forms-block">
+        {this.renderBasicInformationSummaryBlock()}
+        {this.renderAvatarSummaryBlock()}
+        {this.renderVenueSummaryBlock()}
+        {this.renderAddressSummaryBlock()}
+        {this.renderWorkSummaryBlock()}
         { !!this.props.errors.messages.length && <div className="boss-form__field ">
           <div className="boss-form__error">
             <p className="boss-form__error-text">
@@ -312,11 +313,6 @@ class Component extends React.Component<PropsFromConnect, State> {
             </p>
           </div>
         </div>}
-        {this.renderBasicInformationSummaryBlock()}
-        {this.renderAvatarSummaryBlock()}
-        {this.renderVenueSummaryBlock()}
-        {this.renderAddressSummaryBlock()}
-        {this.renderWorkSummaryBlock()}
 
         <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
           <a href=""
