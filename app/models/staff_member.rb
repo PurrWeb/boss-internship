@@ -121,10 +121,10 @@ class StaffMember < ActiveRecord::Base
     where(notified_of_sia_expiry_at: nil)
   end
 
-  def age(from: Time.current)
+  def age(from: Time.current.utc)
     if date_of_birth.present?
       (
-        (from - date_of_birth) / 60 / 60 / 24 / 365
+        (from - date_of_birth.to_time.utc) / 60 / 60 / 24 / 365
       ).floor
     end
   end
