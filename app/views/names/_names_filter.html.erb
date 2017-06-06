@@ -10,16 +10,6 @@
             html: { method: :get, class: 'row align-bottom' }
           ) do |form| %>
           <div class="small-12 medium-expand column">
-            <%= form.select(
-                    :enabled,
-                    options_for_select(
-                        FirstNameGroup::STATUSES.map{ |title, value| [title.to_s.titlecase, value] },
-                        filter.enabled.to_s
-                    ),
-                    prompt: 'Any'
-                ) %>
-          </div>
-          <div class="small-12 medium-expand column">
             <%=
               form.text_field(:name, :value => filter.name.to_s)
             %>
