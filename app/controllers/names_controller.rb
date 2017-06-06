@@ -6,8 +6,7 @@ class NamesController < ApplicationController
     groups = filter
       .query
       .all
-      .includes(:first_name_group)
-      .group_by(&:first_name_group)
+      .group_by(&:first_name_group_id)
 
     render locals: {filter: filter, groups: groups}
   end

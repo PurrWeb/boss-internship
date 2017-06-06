@@ -1,16 +1,17 @@
 class NamesIndexQuery
-  def initialize(enabled:, relation: FirstNameOption.unscoped)
+  def initialize(enabled:, name:, relation: FirstNameOption.unscoped)
     @enabled = enabled
+    @name = name
     @relation = relation
   end
-  attr_reader :enabled
+  attr_reader :enabled, :name
 
   def all
+    first_name_service = NameVariationLookup.new
     @all ||= begin
-      result = relation
-      result = result.select([:first_name_group_id, :name])
-      result = result.where(first_name_groups: {enabled: enabled === '1' ? true : false}) if enabled.present?
-      result
+      enabled = ActiveRecord::Type::Boolean.new.type_cast_from_user(self.enabled)
+      result = first_name_service.query(name, enabled)
+      relation.find_by_sql(result)
     end
   end
 
