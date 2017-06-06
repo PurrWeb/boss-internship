@@ -38,6 +38,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :names, only: [:index]
+
     resources :invites, only: [:index, :new, :create] do
       member do
         post :revoke

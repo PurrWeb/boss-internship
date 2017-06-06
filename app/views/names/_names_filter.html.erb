@@ -1,0 +1,29 @@
+<div class="invites-index-filter">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">Filter</div>
+    </div>
+    <div class="panel-body">
+      <%= bootstrap_form_for(
+            'filter',
+            url: names_path,
+            html: { method: :get, class: 'row align-bottom' }
+          ) do |form| %>
+          <div class="small-12 medium-expand column">
+            <%= form.select(
+                    :enabled,
+                    options_for_select(
+                        FirstNameGroup::STATUSES.map{ |title, value| [title.to_s.titlecase, value] },
+                        filter.enabled.to_s
+                    ),
+                    prompt: 'Any'
+                ) %>
+          </div>
+          <div class="small-12 medium-shrink column">
+            <%= form.submit('Update', class: 'boss2-button') %>
+          </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="mb-base"><span class="records-returned-count"><%= groups.size %></span> records returned</div>
+</div>

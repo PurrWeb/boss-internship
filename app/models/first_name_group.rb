@@ -1,5 +1,3 @@
 class FirstNameGroup < ActiveRecord::Base
-  def self.enabled
-    where(enabled: true)
-  end
+  STATUSES = { enabled: 1, disabled: 0}
 end
