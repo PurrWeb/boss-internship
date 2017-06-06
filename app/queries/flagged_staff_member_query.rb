@@ -13,11 +13,19 @@ class FlaggedStaffMemberQuery
     staff_members_table = Arel::Table.new(:staff_members)
     email_addresses_table = Arel::Table.new(:email_addresses)
 
+    first_name_service = NameVariationLookup.new
+    names = first_name_service.call(first_name)
+
+    first_name_clause = if names.present?
+                          names_table[:first_name].in(names)
+                        else
+                          names_table[:first_name].matches("%#{first_name}%")
+                        end
     where_clauses = []
     where_clauses << (
       names_table.grouping(
         names_table.grouping(
-          names_table[:first_name].matches("%#{first_name}%")
+          first_name_clause
         ).
         and(
           names_table.grouping(
@@ -29,7 +37,6 @@ class FlaggedStaffMemberQuery
     where_clauses << staff_members_table[:date_of_birth].eq(date_of_birth) if date_of_birth.present?
     where_clauses << email_addresses_table[:email].eq(email_address) if email_address.present?
     where_clauses << staff_members_table[:national_insurance_number].eq(national_insurance_number.upcase) if national_insurance_number.present?
-
     StaffMember.
       flagged.
       joins(:name).
