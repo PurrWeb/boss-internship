@@ -19,7 +19,12 @@
                     prompt: 'Any'
                 ) %>
           </div>
-          <div class="small-12 medium-shrink column">
+          <div class="small-12 medium-expand column">
+            <%=
+              form.text_field(:name, :value => filter.name.to_s)
+            %>
+          </div>
+          <div class="small-12 medium-expand column">
             <%= form.submit('Update', class: 'boss2-button') %>
           </div>
       <% end %>

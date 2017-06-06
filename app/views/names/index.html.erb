@@ -6,20 +6,12 @@
   <table class="boss2-table-scroll">
     <thead>
       <tr>
-        <th>Id</th>
-        <th>Enabled</th>
         <th>Names</th>
       <tr>
     </thead>
     <tbody>
     <% groups.each do |group, names| %>
-        <tr class="invites-index-listing" data-invite-id="<%= group.id %>">
-          <td data-role="names">
-            <%= group.id %>
-          </td>
-          <td>
-            <%= group.enabled %>
-          </td>
+        <tr class="invites-index-listing" data-invite-id="<%= group %>">
           <td data-role="names">
             <%= names.map(&:name).join(', ') %>
           </td>
