@@ -22,10 +22,9 @@
   </head>
   <body class="<%= render_v2_layout? ? 'boss-body' : 'boss2-body' %>">
     <header class="boss-page-header">
-      <% if render_navigation? && !render_v2_layout? %>
-        <%= render 'layouts/header_with_navigation' %>
-      <% elsif %>
-        <%= render 'layouts/new_header_with_navigation' %>
+      <% if render_navigation? %>
+        <%= render 'layouts/header_with_navigation' unless render_v2_layout? %>
+        <%= render 'layouts/new_header_with_navigation' if render_v2_layout? %>
       <% else %>
         <%= render 'layouts/header_without_navigation' %>
       <% end %>
