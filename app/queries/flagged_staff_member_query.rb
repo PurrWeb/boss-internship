@@ -21,6 +21,16 @@ class FlaggedStaffMemberQuery
                         else
                           names_table[:first_name].matches("%#{first_name}%")
                         end
+    surname_clause = names_table[:surname].eq(surname)
+
+    surname_matches = /\A(mc|van|o)(\s|\')?([a-zA-Z]*)\z/i.match(surname)
+
+    if !surname_matches.nil? && surname_matches[3].present?
+      prefix = surname_matches[1]
+      name = surname_matches[3]
+      surname_clause = names_table[:surname].in(["#{prefix}#{name}", "#{prefix} #{name}", "#{prefix}'#{name}"])
+    end
+
     where_clauses = []
     where_clauses << (
       names_table.grouping(
@@ -29,7 +39,7 @@ class FlaggedStaffMemberQuery
         ).
         and(
           names_table.grouping(
-            names_table[:surname].eq(surname)
+            surname_clause
           )
         )
       )
