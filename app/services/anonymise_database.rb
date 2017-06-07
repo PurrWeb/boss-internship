@@ -53,7 +53,7 @@ class AnonymiseDatabase
         success = false
 
         while !success do
-          new_venue_name = FactoryHelper::Commerce.color
+          new_venue_name = FactoryHelper::Commerce.color.titlecase
 
           if !used_venue_names.include?(new_venue_name)
             used_venue_names << new_venue_name
