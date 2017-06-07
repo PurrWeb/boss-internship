@@ -1,0 +1,22 @@
+<h1>Names</h1>
+
+<%= render partial: 'names_filter', locals: { filter: filter, groups: groups } %>
+
+<% if groups.present? %>
+  <table class="boss2-table-scroll">
+    <thead>
+      <tr>
+        <th>Names</th>
+      <tr>
+    </thead>
+    <tbody>
+    <% groups.each do |group, names| %>
+        <tr class="invites-index-listing" data-invite-id="<%= group %>">
+          <td data-role="names">
+            <%= names.map(&:name).join(', ') %>
+          </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>
