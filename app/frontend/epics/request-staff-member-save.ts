@@ -11,7 +11,7 @@ import {AjaxResponseTyped, AjaxResponseDefined, AnyDict} from '../interfaces/ind
 import {urlStaffMembersEdit, urlStaffMembersRedirectTemplate} from '../constants/urls';
 import {SimpleAction} from '../interfaces/actions';
 import {StoreStructure} from '../interfaces/store-models';
-import pendingStaffMemberSave from '../action-creators/pending-staff-member-save';
+import pendingRequest from '../action-creators/pending-request';
 import clearErrors from '../action-creators/clear-errors';
 import {validateResponse} from '../helpers/dynamic-type-validators/index';
 import {RequestStaffMemberSavePayload} from '../interfaces/api-requests';
@@ -69,10 +69,10 @@ const getDataToSend = (storeState: StoreStructure): RequestStaffMemberSavePayloa
 const requestStaffMemberSave = ((action$, store: Store<StoreStructure>) => {
   return action$.ofType(REQUESTING_STAFF_MEMBER_SAVE)
     .switchMap(() => {
-      const pendingStaffMemberSaveStart$ = Observable.of(pendingStaffMemberSave(true));
+      const pendingStaffMemberSaveStart$ = Observable.of(pendingRequest(true));
       const clearErrors$ = Observable.of(clearErrors());
       
-      const pendingStaffMemberSaveStopAction = pendingStaffMemberSave(false);
+      const pendingStaffMemberSaveStopAction = pendingRequest(false);
       const dataToSend = getDataToSend( store.getState() );
 
       const request$ = Observable.of(null)

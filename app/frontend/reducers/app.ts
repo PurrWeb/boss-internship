@@ -17,6 +17,7 @@ import flaggedFields, {Structure as FlaggedFieldsStructure} from'./flagged-reque
 import review, {Structure as ReviewStructure} from'./review';
 import reviewedStaffMembers, {Structure as ReviewedMembersStructure} from'./reviewed-staff-members';
 import errors, {Structure as ErrorsStructure} from './errors';
+import pendingRequest, {Structure as PendingRequestStructure} from './pending-request';
 
 export interface Structure {
   readonly avatarPreview: AvatarPreviewStructure;
@@ -35,6 +36,7 @@ export interface Structure {
   readonly review: ReviewStructure;
   readonly reviewedStaffMembers: ReviewedMembersStructure;
   readonly errors: ErrorsStructure;
+  readonly pendingRequest: PendingRequestStructure;
 }
 
 const reducers: ReducersOfType<Structure> = {
@@ -53,7 +55,8 @@ const reducers: ReducersOfType<Structure> = {
   staffMembers,
   genderValues,
   review,
-  reviewedStaffMembers
+  reviewedStaffMembers,
+  pendingRequest
 };
 
 const app = combineReducers<Structure>(reducers);
