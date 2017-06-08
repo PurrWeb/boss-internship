@@ -1,6 +1,17 @@
 class NameVariationLookup
-  def call(name)
+  def first_name(name)
     FirstNameOption.find_by_sql(query(name)).map(&:name)
+  end
+
+  def surname(name)
+    case name
+      when /\A(mc|van|o)[\s|\']*([a-zA-Z]+)\z/i
+        prefix = $1
+        name = $2
+        ["#{prefix}#{name}", "#{prefix} #{name}", "#{prefix}'#{name}"]
+      else
+        []
+    end
   end
 
   def query(name, enabled = true)
