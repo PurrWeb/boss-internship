@@ -5,9 +5,10 @@ describe NameVariationLookup do
 
   let(:name_group_enabled) { true }
   let(:name_group) { FirstNameGroup.create!(enabled: name_group_enabled) }
-  let(:test_names) { ['James', 'Jim', 'Jimmy', 'Jimbo', 'Jamie'] }
+  let(:first_names) { ['James', 'Jim', 'Jimmy', 'Jimbo', 'Jamie'] }
+  let(:surnames) { ['McCloud', 'Mc Cloud', "Mc'Cloud"] }
   let(:name_options) do
-    test_names.each do |name|
+    first_names.each do |name|
       FirstNameOption.create!(
         first_name_group: name_group,
         name: name
@@ -20,12 +21,21 @@ describe NameVariationLookup do
     name_options
   end
 
-  describe "#options_for" do
-    let(:test_name)  { test_names.first }
+  describe "#first name spellings" do
+    let(:first_name)  { first_names.sample }
     specify do
       expect(
-        service.call(test_name)
-      ).to eq(test_names)
+        service.first_name(first_name)
+      ).to eq(first_names)
+    end
+  end
+
+  describe "#surname spellings" do
+    let(:surname)  { surnames.sample }
+    specify do
+      expect(
+        service.surname(surname)
+      ).to eq(surnames)
     end
   end
 end

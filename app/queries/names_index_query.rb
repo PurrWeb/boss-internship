@@ -7,10 +7,10 @@ class NamesIndexQuery
   attr_reader :enabled, :name
 
   def all
-    first_name_service = NameVariationLookup.new
+    name_service = NameVariationLookup.new
     @all ||= begin
       enabled = ActiveRecord::Type::Boolean.new.type_cast_from_user(self.enabled)
-      result = first_name_service.query(name, enabled)
+      result = name_service.query(name, enabled)
       relation.find_by_sql(result)
     end
   end
