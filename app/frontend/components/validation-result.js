@@ -9,7 +9,7 @@ export default class ValidationResult extends React.Component {
         }
         return <ErrorMessage>
             {this.props.result.messages.map(
-                msg => <div>{msg}</div>
+                (msg, i) => <div key={i}>{msg}</div>
             )}
         </ErrorMessage>
     }
