@@ -1,56 +1,89 @@
-<main role="main" class="boss2-page-content <%= content_for(:main_class) %>">
-  <div class="boss2-page-content__inner-container">
-    <h1>Staff Members</h1>
+<main class="boss-page-main">
+  <div class="boss-page-main__dashboard">
+    <div class="boss-page-main__inner">
+        <!-- Page dashboard start -->
+      <div class="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_staff-members-index">
+        <div class="boss-page-dashboard__group">
+          <h1 class="boss-page-dashboard__title">
+            <span class="boss-page-dashboard__title-text">Staff Members</span>
+            <span class="boss-page-dashboard__title-info"><%= staff_members.count %></span>
+          </h1>
 
-    <div class="mb-md">
-      <%= link_to(new_staff_member_path, class: ['boss2-button', 'boss2-button_role_add']) do %>
-          Add Staff Member
-      <% end %>
+          <div class="boss-page-dashboard__buttons-group">
+            <%= link_to new_staff_member_path, class: 'boss-button boss-button_role_add boss-page-dashboard__button' do %>
+              Add Staff Member
+            <% end %>
+            <a href="" class="boss-button boss-button_role_exclamation boss-page-dashboard__button">
+              Flagged Staff Members
+            </a>
+          </div>
+        </div>
+
+        <%= render partial: 'index_filter', locals: { filter: filter, staff_members: staff_members } %>
+
+        </div>
+      </div>
+        <!-- Page dashboard end -->
     </div>
+  </div>
 
-    <%= render partial: 'index_filter', locals: {filter: filter, staff_members: staff_members} %>
+  <div class="boss-page-main__content">
+    <div class="boss-page-main__inner">
+      <div class="boss-table boss-table_page_staff-members-index">
+        <div class="boss-table__row">
+            <div class="boss-table__cell boss-table__cell_role_header"></div>
+            <div class="boss-table__cell boss-table__cell_role_header">Name</div>
+            <div class="boss-table__cell boss-table__cell_role_header">Status</div>
+            <div class="boss-table__cell boss-table__cell_role_header">Type</div>
+            <div class="boss-table__cell boss-table__cell_role_header">Venue</div>
+        </div>
 
-    <% if staff_members.present? %>
-        <table
-        class="table tablesaw tablesaw-stack"
-        data-tablesaw-mode="stack"
-        data-role="staff-members-index-table"
-        >
-          <thead>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Type</th>
-            <th>Venues</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% staff_members.each do |staff_member| %>
-              <tr class="staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
-                <td>
-                  <%= image_tag(staff_member.avatar_url, class: "boss2-avatar") %>
-                </td>
-                <td data-role="name"><%= link_to(staff_member.full_name.titlecase, staff_member_path(staff_member)) %></td>
-                <td>
-                  <%= UIStaffMemberStatus.new(staff_member).to_s %>
-                </td>
-                <td data-role="staff-type">
-                  <%= link_to(staff_member.staff_type.name.titlecase, staff_member_path(staff_member)) %>
-                </td>
-                <td data-role="venues">
-                  <% venues = (Array(staff_member.master_venue) + staff_member.work_venues.to_a).compact %>
-                  <% if venues.length > 0 %>
-                      <%= link_to(venues.map(&:name).to_sentence, staff_member_path(staff_member)) %>
-                  <% else %>
-                      <%= link_to('N / A', staff_member_path(staff_member)) %>
-                  <% end %>
-                </td>
-              </tr>
-          <% end %>
-          </tbody>
-        </table>
-        <%= render partial: 'shared/pagination_control', locals: {relation: staff_members} %>
-    <% end %>
+        <% staff_members.each do |staff_member| %>
+          <div class="boss-table__row">
+            <div class="boss-table__cell">
+              <div class="boss-table__image">
+                <div class="boss-avatar boss-avatar_type_combined">
+                  <%= image_tag(staff_member.avatar_url, class: 'boss-avatar__image') %>
+                </div>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Name</p>
+                <p class="boss-table__text"><%= staff_member.name.full_name.titlecase %></p>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Status</p>
+                <p class="boss-table__text">
+                  <a href="" class="boss-button boss-button_type_small boss-button_role_enabled">
+                    <%= UIStaffMemberStatus.new(staff_member).to_s %>
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Type</p>
+                <p class="boss-table__text"><%= staff_member.staff_type.name.titlecase %></p>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Venue</p>
+                <p class="boss-table__text"><%= venues_for(staff_member) %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <%= will_paginate staff_members, renderer: CustomPaginationLinkRenderer %>
+    </div>
   </div>
 </main>

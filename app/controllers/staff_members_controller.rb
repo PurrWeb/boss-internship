@@ -1,4 +1,5 @@
 class StaffMembersController < ApplicationController
+  require 'custom_pagination_link_renderer'
 
   def render_v2_layout?
     true

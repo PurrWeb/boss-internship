@@ -1,60 +1,157 @@
-<div class="staff-members-index-filter mb-md">
-  <div class="panel panel-default mb-md">
-    <div class="panel-heading">
-      <div class="panel-title">Filter</div>
+<div class="boss-page-dashboard__filter">
+  <div class="boss-dropdown">
+    <div class="boss-dropdown__header">
+        <a href="#" class="boss-dropdown__switch boss-dropdown__switch_role_filter">Filter</a>
     </div>
-    <div class="panel-body">
-      <div>
-        <%= bootstrap_form_for(
-              filter,
-              url: staff_members_path,
-              html: { method: :get, class: 'row' }
-            ) do |form| %>
-            <div class="small-12 medium-6 column">
-              <%= form.text_field(:name_text, label: 'Name', value: filter.name_text) %>
-              <%= form.text_field(:email_text, label: 'Email', value: filter.email_text) %>
-              <%= form.select(
-                      :status,
-                      options_for_select(
-                          filter.select_statuses.map { |status| [status.titlecase, status] },
-                          filter.status
-                      ),
-                      prompt: 'Any'
-                  ) %>
+
+    <div class="boss-dropdown__content">
+      <div class="boss-dropdown__content-inner">
+        <%= form_for filter, url: staff_members_path, method: :get, html: { class: 'boss-form' } do |form| %>
+          <div class="boss-form__row boss-form__row_position_last">
+            <div class="boss-form__group boss-form__group_layout_half">
+              <div class="boss-form__field">
+                <label class="boss-form__label">
+                  <span class="boss-form__label-text">Name</span>
+                  <%= form.text_field :name_text, value: filter.name_text, class: 'boss-form__input' %>
+                </label>
+              </div>
+
+              <div class="boss-form__field">
+                <label class="boss-form__label">
+                  <span class="boss-form__label-text">Email</span>
+                  <%= form.text_field :email_text, value: filter.email_text, class: 'boss-form__input' %>
+                </label>
+              </div>
+
+              <div class="boss-form__field">
+                <label class="boss-form__label"><span class="boss-form__label-text">Status</span></label>
+
+                <div class="boss-form__select">
+                  <div class="Select Select--single">
+                    <div class="Select-control">
+                      <span class="Select-multi-value-wrapper" id="react-select-2--value">
+                        <div class="Select-placeholder"><%= filter.status.titleize %></div>
+                        <div role="combobox" aria-expanded="true" aria-owns="react-select-2--list" aria-activedescendant="react-select-2--option-1" class="Select-input" tabindex="0" aria-readonly="false" style="border: 0px none; width: 1px; display: inline-block;">
+                        </div>
+                      </span>
+
+                      <span class="Select-arrow-zone">
+                        <span class="Select-arrow"></span>
+                      </span>
+                    </div>
+
+                    <div class="Select-menu-outer">
+                      <div role="listbox" class="Select-menu" id="react-select-2--list">
+                        <%= form.select(
+                          :status,
+                          options_for_select(
+                            filter.select_statuses.map { |status| [status.titlecase, status] },
+                            filter.status
+                          ),
+                          { include_blank: 'Any' },
+                          { style: 'display: none' }
+                        ) %>
+
+                        <% filter.select_statuses.each_with_index do |status, index| %>
+                          <div data-value-id="<%= status %>" class="Select-option <%= (filter.status == status) ? 'is-focused selected-option' : '' %>" role="option" id="react-select-2--option-<%= index + 1 %>"><%= status.titleize %></div>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+              </div>
             </div>
-            <div class="small-12 medium-6 column">
-              <% if !current_user.security_manager? %>
-                <%= form.select(
-                      :venue,
-                      options_for_select(
-                        filter.accessible_venues.map do |venue|
-                          [venue.name.titlecase, venue.id]
-                        end,
-                        filter.venue.try(:id)
-                      ),
-                      {
-                        :include_blank => 'Any'
-                      }
-                    ) %>
-                <%= form.select(
-                      :staff_type,
-                      options_for_select(
-                        filter.accessible_staff_types.map do |type|
-                          [type.name.titlecase, type.id]
-                        end,
-                        filter.staff_type.try(:id)
-                      ),
-                      {
-                        :include_blank => 'Any'
-                      },
-                      class: 'mb-form-label'
-                    ) %>
+          </div>
+
+          <% if !current_user.security_manager? %>
+            <div class="boss-form__group boss-form__group_layout_half">
+                <div class="boss-form__field">
+                  <label class="boss-form__label"><span class="boss-form__label-text">Venue</span></label>
+
+                  <div class="boss-form__select">
+                    <div class="Select Select--single">
+                      <div class="Select-control">
+                        <span class="Select-multi-value-wrapper" id="react-select-2--value">
+                          <div class="Select-placeholder"><%= filter.venue.try(:name).try(:titleize) || 'Any' %></div>
+                          <div role="combobox" aria-expanded="true" aria-owns="react-select-2--list" aria-activedescendant="react-select-2--option-1" class="Select-input" tabindex="0" aria-readonly="false" style="border: 0px none; width: 1px; display: inline-block;">
+                          </div>
+                        </span>
+
+                        <span class="Select-arrow-zone"><span class="Select-arrow"></span></span>
+                      </div>
+                      <div class="Select-menu-outer">
+                        <div role="listbox" class="Select-menu" id="react-select-2--list">
+                          <%= form.select(
+                            :venue,
+                            options_for_select(
+                              filter.accessible_venues.map do |venue|
+                                [venue.name.titlecase, venue.id]
+                              end,
+                              filter.venue.try(:id)
+                            ),
+                            { include_blank: 'Any' },
+                            { style: 'display: none' }
+                          ) %>
+
+                          <div data-value-id="" class="Select-option" role="option" id="react-select-2--option-0">Any</div>
+                          <% filter.accessible_venues.each_with_index do |venue, index| %>
+                            <div data-value-id="<%= venue.id %>" class="Select-option <%= (filter.venue == venue) ? 'is-focused selected-option' : '' %>" role="option" id="react-select-2--option-<%= index + 1 %>">
+                              <%= venue.name.titleize %>
+                            </div>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="boss-form__field">
+                  <label class="boss-form__label"><span class="boss-form__label-text">Staff Type</span></label>
+                  <div class="boss-form__select">
+                    <div class="Select Select--single">
+                      <div class="Select-control">
+                        <span class="Select-multi-value-wrapper" id="react-select-2--value">
+                          <div class="Select-placeholder"><%= filter.staff_type.try(:name).try(:titleize) || 'Any' %></div>
+                          <div role="combobox" aria-expanded="true" aria-owns="react-select-2--list" aria-activedescendant="react-select-2--option-1" class="Select-input" tabindex="0" aria-readonly="false" style="border: 0px none; width: 1px; display: inline-block;">
+                          </div>
+                        </span>
+
+                        <span class="Select-arrow-zone">
+                          <span class="Select-arrow"></span>
+                        </span>
+                      </div>
+
+                      <div class="Select-menu-outer">
+                        <div role="listbox" class="Select-menu" id="react-select-2--list">
+                          <%= form.select(
+                            :staff_type,
+                            options_for_select(
+                              filter.accessible_staff_types.map do |type|
+                                [type.name.titlecase, type.id]
+                              end,
+                              filter.staff_type.try(:id)
+                            ),
+                            { include_blank: 'Any' },
+                            { style: 'display: none' }
+                          ) %>
+
+                          <div data-value-id="" class="Select-option" role="option" id="react-select-2--option-0">Any</div>
+                          <% filter.accessible_staff_types.each_with_index do |staff_type, index| %>
+                            <div data-value-id="<%= staff_type.id %>" class="Select-option <%= (filter.staff_type == staff_type) ? 'is-focused selected-option' : '' %>" role="option" id="react-select-2--option-<%= index + 1 %>"><%= staff_type.name.titleize %></div>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               <% end %>
-              <%= form.submit('Update', class: ['boss2-button']) %>
-            <% end %>
-        </div>
+
+              <div class="boss-form__field boss-form__field_justify_end boss-form__field_no-label">
+                <%= form.submit 'Update', class: 'boss-button boss-form__submit boss-form__submit_adjust_single' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
-  <div><span class="records-returned-count"><%= staff_members.count %></span> records returned</div>
 </div>

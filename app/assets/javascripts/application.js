@@ -19,6 +19,7 @@
 //= require paloma
 //= require spectrum
 //= require_tree ./page_controllers
+//= require_tree ./v3_scripts
 //= require tablesaw.jquery
 //= require tablesaw-init
 //= require asset_pipeline_error
