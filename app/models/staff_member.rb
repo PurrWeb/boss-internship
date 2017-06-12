@@ -113,6 +113,10 @@ class StaffMember < ActiveRecord::Base
     disabled.where(would_rehire: false)
   end
 
+  def self.not_flagged
+    where(would_rehire: true)
+  end
+
   def self.mark_requiring_notification!(time: Time.current)
     update_all(shift_change_occured_at: time)
   end

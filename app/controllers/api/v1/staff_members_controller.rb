@@ -54,8 +54,19 @@ module Api
             email_address: params.fetch("email_address").strip,
             national_insurance_number: params.fetch("national_insurance_number").strip
           ).all
+          
+          existing_profiles = []
 
-          render json: staff_members, each_serializer: FlaggedStaffMemberSerializer, status: :ok
+          if params.fetch("email_address").strip.present? || params.fetch("national_insurance_number").strip.present?
+            email = params.fetch("email_address").strip
+            nin = params.fetch("national_insurance_number").strip
+            existing_profiles = StaffMembersExistingQuery.new(email, nin).profiles
+          end
+
+          render json: staff_members,
+                 each_serializer: FlaggedStaffMemberSerializer,
+                 meta: { existing_profiles: existing_profiles },
+                 adapter: :json, status: :ok
         else
           render(
             json: {
