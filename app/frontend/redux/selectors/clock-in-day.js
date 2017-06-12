@@ -12,7 +12,7 @@ export function selectClockInDay(state, {staffMemberClientId, date}) {
 
     var clockInDay = _.find(state.clockInDays, function(clockInDay){
         clockInDate = clockInDay.date;
-        clockinDayStaff = clockInDay.staff_member;
+        clockInDayStaff = clockInDay.staff_member;
         return clockInDay.staff_member.clientId === staffMemberClientId &&
             utils.datesAreEqual(clockInDay.date, date)
     })
@@ -24,8 +24,8 @@ export function selectClockInDay(state, {staffMemberClientId, date}) {
         
         let clockInDayInfo = 'Undefined';
 
-        if (!!clockinDayStaff) {
-            clockInDayInfo = `CID: ${clockinDayStaff.clientId}, SID: ${clockinDayStaff.serverId}`;
+        if (!!clockInDayStaff) {
+            clockInDayInfo = `CID: ${clockInDayStaff.clientId}, SID: ${clockInDayStaff.serverId}`;
         }
 
         handleError.throwWithErrorPage(`
