@@ -57,6 +57,9 @@ class ComponentErrors extends React.Component {
 
         var fieldErrorMessages = [];
         errors[fieldName].forEach(function(message, i){
+            if (!message) {
+                return;
+            }
             if (typeof message !== "string") {
                 if (_.isArray(message.base)) {
                     message = message.base.join(", ")
