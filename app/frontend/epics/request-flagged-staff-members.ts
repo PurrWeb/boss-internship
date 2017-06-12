@@ -7,6 +7,8 @@ import {SimpleAction, ActionWithPayload} from '../interfaces/actions';
 import {ActionType} from '../action-creators/requesting-flagged-staff-members';
 import requestingFlaggedStaffMembers from '../action-creators/requesting-flagged-staff-members';
 import flaggedRequestFields from '../action-creators/flagged-request-fields';
+import flaggedStaffMembers from '../action-creators/flagged-staff-members';
+import storeExistingProfiles from '../action-creators/store-existing-profiles';
 import {showReviewed} from '../action-creators/reviewed';
 import * as _ from 'lodash';
 
@@ -26,13 +28,14 @@ const requestFlaggedStaffMembers = (action$: any, store: Store<StoreStructure>) 
             })
           : post('/api/v1/staff_members/flagged', action.payload)
               .mergeMap((resp: any) => {
-                if (resp.response.length) {
+                if (resp.response.staff_members.length) {
                   store.dispatch(showReviewed());
                 }
-                return Observable.of({
-                  type: FLAGGED_STAFF_MEMBERS,
-                  payload: { flagged: resp.response, reviewed: reviewedStaffMembers }
-                }, );
+                
+                return Observable.of(
+                  flaggedStaffMembers({ flagged: resp.response.staff_members, reviewed: reviewedStaffMembers }),
+                  storeExistingProfiles(resp.response.meta.existing_profiles)
+                );
               });
       }
     );
