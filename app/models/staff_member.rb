@@ -113,8 +113,10 @@ class StaffMember < ActiveRecord::Base
     disabled.where(would_rehire: false)
   end
 
+  # Does not include enabled staff members as this can't
+  # be composed easily
   def self.not_flagged
-    where(would_rehire: true)
+    disabled.where(would_rehire: true)
   end
 
   def self.mark_requiring_notification!(time: Time.current)

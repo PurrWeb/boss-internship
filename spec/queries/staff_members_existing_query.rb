@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 describe StaffMembersExistingQuery do
-  let(:query) { StaffMembersExistingQuery.new(email, nin) }
+  let(:query) do
+    StaffMembersExistingQuery.new(email: email, national_insurance_number: national_insurance_number)
+  end
 
   let(:flagged_staff_member) do
     FactoryGirl.create(
@@ -40,7 +42,7 @@ describe StaffMembersExistingQuery do
 
   context 'Flagged member match' do
     let(:email) {flagged_staff_member.email_address.email}
-    let(:nin) {flagged_staff_member.national_insurance_number}
+    let(:national_insurance_number) {flagged_staff_member.national_insurance_number}
 
     it "should return empty profile data" do
       expect(query.profiles).to eq([])
@@ -50,7 +52,7 @@ describe StaffMembersExistingQuery do
   context 'Staff member match' do
     context 'when `Email` and `Nin` present, and belongs to one' do
       let(:email) {staff_members[0].email_address.email}
-      let(:nin) {staff_members[0].national_insurance_number}
+      let(:national_insurance_number) {staff_members[0].national_insurance_number}
       let(:field1) { "email and national insurance number" }
 
       it "should return one staff member profile data" do
@@ -59,7 +61,7 @@ describe StaffMembersExistingQuery do
     end
     context 'when `Email` and `Nin` present, and belongs to different' do
       let(:email) {staff_members[0].email_address.email}
-      let(:nin) {staff_members[1].national_insurance_number}
+      let(:national_insurance_number) {staff_members[1].national_insurance_number}
       let(:field1) { "email" }
       let(:field2) { "national insurance number" }
 
@@ -69,7 +71,7 @@ describe StaffMembersExistingQuery do
     end
     context 'when only `Email` present' do
       let(:email) {staff_members[0].email_address.email}
-      let(:nin) {nil}
+      let(:national_insurance_number) {nil}
       let(:field1) { "email" }
 
       it "should return one staff members profile data" do
@@ -79,7 +81,7 @@ describe StaffMembersExistingQuery do
 
     context 'when only `NIN` present' do
       let(:email) {nil}
-      let(:nin) {staff_members[0].national_insurance_number}
+      let(:national_insurance_number) {staff_members[0].national_insurance_number}
       let(:field1) { "national insurance number" }
 
       it "should return one staff members profile data" do
@@ -90,7 +92,7 @@ describe StaffMembersExistingQuery do
   context 'Staff member don\'t match' do
     context 'when `Email` and `Nin` present' do
       let(:email) { 'test@fake.com' }
-      let(:nin) { 'QQ123456C' }
+      let(:national_insurance_number) { 'QQ123456C' }
 
       it "should return empty profile data" do
         expect(query.profiles).to eq([])
@@ -98,7 +100,7 @@ describe StaffMembersExistingQuery do
     end
     context 'when only `Email` present' do
       let(:email) { 'test@fake.com' }
-      let(:nin) { nil }
+      let(:national_insurance_number) { nil }
 
       it "should return empty profile data" do
         expect(query.profiles).to eq([])
@@ -106,7 +108,7 @@ describe StaffMembersExistingQuery do
     end
     context 'when only `NIN` present' do
       let(:email) { nil }
-      let(:nin) { 'QQ123456C' }
+      let(:national_insurance_number) { 'QQ123456C' }
 
       it "should return empty profile data" do
         expect(query.profiles).to eq([])
