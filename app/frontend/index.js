@@ -1,3 +1,4 @@
+import './polyfills';
 import React from 'react';
 import ReactDOM from 'react-dom'
 import _ from "underscore"
@@ -6,7 +7,6 @@ import $ from "jquery"
 import "react-fastclick" // import for side effects
 import * as selectors from "~redux/selectors"
 import './lib/error-handlers';
-
 window.boss = window.boss || {};
 window.boss.currentLayout = window.boss.currentLayout || 'oldLayout';
 window.debug = window.debug || {};
@@ -26,7 +26,7 @@ if (window.boss.currentLayout !== 'oldLayout') {
     require ('./assets/sass/index.sass');
 }
 
-import './maxims';
+import './mobile-menu';
 
 import "./lib/load-underscore-mixins"
 

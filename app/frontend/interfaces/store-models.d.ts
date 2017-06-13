@@ -15,6 +15,12 @@ export interface BasicInformationFormFields {
   readonly unReviewedStaffMembers: StaffMember[];
 }
 
+export interface ExistingProfiles {
+  readonly field: string;
+  readonly full_name: string;
+  readonly profile_url: string;
+}
+
 export interface UploadPhotoFormFields {
   readonly avatar: string;
 }

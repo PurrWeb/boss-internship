@@ -18,6 +18,7 @@ import review, {Structure as ReviewStructure} from'./review';
 import reviewedStaffMembers, {Structure as ReviewedMembersStructure} from'./reviewed-staff-members';
 import errors, {Structure as ErrorsStructure} from './errors';
 import pendingRequest, {Structure as PendingRequestStructure} from './pending-request';
+import existingProfiles, {Structure as ExistingProfilesStructure} from './existing-profiles';
 
 export interface Structure {
   readonly avatarPreview: AvatarPreviewStructure;
@@ -37,6 +38,7 @@ export interface Structure {
   readonly reviewedStaffMembers: ReviewedMembersStructure;
   readonly errors: ErrorsStructure;
   readonly pendingRequest: PendingRequestStructure;
+  readonly existingProfiles: ExistingProfilesStructure;
 }
 
 const reducers: ReducersOfType<Structure> = {
@@ -56,7 +58,8 @@ const reducers: ReducersOfType<Structure> = {
   genderValues,
   review,
   reviewedStaffMembers,
-  pendingRequest
+  pendingRequest,
+  existingProfiles
 };
 
 const app = combineReducers<Structure>(reducers);

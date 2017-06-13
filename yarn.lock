@@ -26,6 +26,10 @@
   version "7.0.21"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.21.tgz#22a890f19b26cff9b6699b493dea1bcee4410da1"
 
+"@types/pluralize@^0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@types/pluralize/-/pluralize-0.0.27.tgz#087354a791ce027db1101ff399db6111fc9275f7"
+
 "@types/query-string@^3.0.31":
   version "3.0.32"
   resolved "https://registry.yarnpkg.com/@types/query-string/-/query-string-3.0.32.tgz#c780ae7ec1322df4db88fc5644f9c8298c6426a9"
@@ -4789,6 +4793,10 @@ pinkie-promise@^2.0.0:
 pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
+
+pluralize@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-5.0.0.tgz#e8b9073af9a0cb02e4c2efa95b55bebbdbf01299"
 
 portfinder@^1.0.9:
   version "1.0.13"

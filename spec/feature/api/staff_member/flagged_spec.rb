@@ -50,8 +50,8 @@ RSpec.describe 'Flagged staff member endpoint' do
   end
 
   specify 'should return a json representation' do
-    data = JSON.parse(response.body)
-    expect(data).to eq([])
+    json = JSON.parse(response.body)
+    expect(json.fetch("staff_members")).to eq([])
   end
 
   describe 'required params' do
@@ -84,8 +84,8 @@ RSpec.describe 'Flagged staff member endpoint' do
       specify 'should return a json representation' do
         flagged_staff_member
 
-        data = JSON.parse(response.body)
-        expect(data).to eq([
+        json = JSON.parse(response.body)
+        expect(json.fetch("staff_members")).to eq([
           {
             "id" => flagged_staff_member.id,
             "date_of_birth" => flagged_staff_member.date_of_birth.strftime("%F"),

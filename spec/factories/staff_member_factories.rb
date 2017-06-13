@@ -8,7 +8,7 @@ FactoryGirl.define do
     phone_number "1234-567890"
     gender 'female'
     date_of_birth DateTime.new(2000, 1, 1)
-    national_insurance_number 'GM-12-45-34-A'
+    sequence(:national_insurance_number, (50..80).cycle) { |n| "GM-12-#{n}-34-A" }
     creator factory: :user
     starts_at { 1.day.ago }
     association :master_venue, factory: :venue

@@ -1,14 +1,14 @@
-window.initMaximsJs = () => {
+window.initMobileMenu = () => {
     var mobileIcon = document.querySelector('.boss-main-menu__navicon');
     var mobileShadowClose = document.querySelector('.boss-mobile-menu__closearea');
     var mobileMenu = document.querySelector('.boss-mobile-menu');
     var mobileMenuSide = document.querySelector('.boss-mobile-menu__side');
     var mobileClose = document.querySelector('.boss-mobile-menu__close');
-    var dropIcon = document.querySelectorAll('.boss-mobile-menu__button_dropdown i');
+    var dropLink = document.querySelectorAll('.boss-mobile-menu__button_dropdown .boss-mobile-menu__button-link_dropdown');
     var drop;
 
-    if (!!dropIcon) {
-      dropIcon.forEach((item) => {
+    if (!!dropLink && Object.prototype.toString.call(dropLink) === '[object NodeList]') {
+      dropLink.forEach((item) => {
         item.addEventListener('click', function () {
           drop = this.nextElementSibling;
           drop.classList.toggle('boss-mobile-menu__dropdown_state_active');
