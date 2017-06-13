@@ -230,10 +230,9 @@
               </li>
           <% end %>
           <li class="boss-mobile-menu__button boss-mobile-menu__button_dropdown">
-            <a class="boss-mobile-menu__button-link" href="#">
+            <a class="boss-mobile-menu__button-link boss-mobile-menu__button-link_dropdown" href="#">
               Reports
             </a>
-            <i class="boss-mobile-menu__button-drop"></i>
             <ul class="boss-mobile-menu__dropdown">
               <% if can?(:view, :daily_reports) %>
                   <li class="boss-mobile-menu__button">
@@ -255,8 +254,7 @@
         <% end %>
         <% if can?(:manage, :admin) %>
             <li class="boss-mobile-menu__button boss-mobile-menu__button_dropdown">
-              <a href="#" class="boss-mobile-menu__button-link">Admin</a>
-              <i class="boss-mobile-menu__button-drop"></i>
+              <a href="#" class="boss-mobile-menu__button-link boss-mobile-menu__button-link_dropdown">Admin</a>
               <ul class="boss-mobile-menu__dropdown">
                 <li class="boss-mobile-menu__button">
                   <%= link_to('Names', names_path, class: "boss-mobile-menu__button-link") %>

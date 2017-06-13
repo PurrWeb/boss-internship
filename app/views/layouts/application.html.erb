@@ -43,7 +43,9 @@
 
     <% if render_v2_layout? %>
       <script>
-        initMaximsJs();
+        window.onload = function() {
+          initMobileMenu();
+        };
       </script>
     <% end %>
   </body>
