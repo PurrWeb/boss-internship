@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170523060715) do
+ActiveRecord::Schema.define(version: 20170614102939) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.string   "token",           limit: 255, null: false
@@ -627,7 +627,6 @@ ActiveRecord::Schema.define(version: 20170523060715) do
     t.datetime "updated_at",                                                          null: false
     t.integer  "name_id",                               limit: 4,                     null: false
     t.integer  "email_address_id",                      limit: 4
-    t.string   "pin_code",                              limit: 255,                   null: false
     t.string   "avatar",                                limit: 255
     t.integer  "staff_type_id",                         limit: 4,                     null: false
     t.integer  "creator_id",                            limit: 4
@@ -646,6 +645,8 @@ ActiveRecord::Schema.define(version: 20170523060715) do
     t.boolean  "would_rehire",                                        default: true,  null: false
     t.integer  "master_venue_id",                       limit: 4
     t.text     "avatar_data_uri",                       limit: 65535
+    t.string   "pin_code_hash",                         limit: 255
+    t.string   "pin_code_salt",                         limit: 255
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
