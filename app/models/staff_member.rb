@@ -48,7 +48,8 @@ class StaffMember < ActiveRecord::Base
 
   # Transient attribute used to preserve image uploads
   # during form resubmissions
-  attr_accessor :avatar_base64
+  attr_accessor :avatar_base64, :pin_code
+  before_save :encrypt_pin_code
 
   validates :name, presence: true
   validates :gender, inclusion: { in: GENDERS, message: 'is required' }
@@ -78,6 +79,17 @@ class StaffMember < ActiveRecord::Base
   before_validation :normalise_national_insurance_number
 
   delegate :current_state, to: :state_machine
+
+  def encrypt_pin_code
+    if pin_code.present?
+      self.pin_code_salt = BCrypt::Engine.generate_salt
+      self.pin_code_hash = BCrypt::Engine.hash_secret(pin_code, pin_code_salt)
+    end
+  end
+
+  def pin_code_valid?(pin_code)
+    pin_code_hash == BCrypt::Engine.hash_secret(pin_code, pin_code_salt)
+  end
 
   def self.for_venue(venue)
     for_venues(venue_ids: [venue.id])
