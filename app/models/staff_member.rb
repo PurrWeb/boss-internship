@@ -54,7 +54,7 @@ class StaffMember < ActiveRecord::Base
   validates :name, presence: true
   validates :gender, inclusion: { in: GENDERS, message: 'is required' }
   validate  :national_insurance_number_valid
-  validates :pin_code, presence: true
+  validates :pin_code, presence: true, on: :create
   validate  :valid_pin_code_format
   validates :staff_type, presence: true
   validates :creator, presence: true
