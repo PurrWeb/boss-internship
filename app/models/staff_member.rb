@@ -82,13 +82,17 @@ class StaffMember < ActiveRecord::Base
 
   def encrypt_pin_code
     if pin_code.present?
-      self.pin_code_salt = BCrypt::Engine.generate_salt
       self.pin_code_hash = BCrypt::Engine.hash_secret(pin_code, pin_code_salt)
     end
   end
 
   def pin_code_valid?(pin_code)
     pin_code_hash == BCrypt::Engine.hash_secret(pin_code, pin_code_salt)
+  end
+
+  def pin_code_salt
+    self.pin_code_salt = BCrypt::Engine.generate_salt unless super.present?
+    super
   end
 
   def self.for_venue(venue)
