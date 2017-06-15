@@ -36,3 +36,21 @@
     background-color: darken( $background-color, 5% );
   }
 }
+
+@mixin text-normalizer() {
+  margin: 0;
+  padding: 0;
+  color: $boss-body-font-color;
+  font-family: $boss-body-font-family;
+  font-size: $boss-global-font-size;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: $boss-global-weight-normal;
+  letter-spacing: normal;
+  line-height: $boss-global-line-height;
+  text-align: left;
+  text-indent: 0;
+  text-transform: none;
+  white-space: normal;
+  word-spacing: normal;
+}
