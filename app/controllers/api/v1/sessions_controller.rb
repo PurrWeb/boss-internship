@@ -20,7 +20,7 @@ module Api
               base: ['staff member invalid or inactive']
             }
           }, status: :unprocessable_entity
-        elsif pin_code && (staff_member.pin_code == pin_code)
+        elsif pin_code && staff_member.pin_code_valid?(pin_code)
           access_token = AccessToken.create!(
             token_type: 'api',
             expires_at: 30.minutes.from_now,
