@@ -8,11 +8,11 @@ class UserActionConfirmationMessages extends React.Component {
             return null;
         }
         var messageElements = messages.map((message, i) => {
-            return <div key={i}>
+            return <p className="boss-message__text" key={i}>
                 {message}
-            </div>
+            </p>
         })
-        return <div className="callout">
+        return <div className="boss-message boss-message_role_ca-note">
             {messageElements}
         </div>
     }
