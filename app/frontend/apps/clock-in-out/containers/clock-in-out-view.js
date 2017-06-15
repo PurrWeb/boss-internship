@@ -12,7 +12,6 @@ import {
 import ConfirmationModal from "~components/confirmation-modal"
 import LargeStaffTypeSelector from "../components/large-staff-type-selector"
 import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
-import UserActionConfirmationMessages from "~components/user-action-confirmation-messages"
 import Header from "../components/header"
 import LoadAppDataDialog from "./load-app-data-dialog"
 import Clock from "../components/clock"
@@ -130,7 +129,6 @@ class ClockInOutView extends Component {
         return (
             <div className="page-wrapper">
                 <ConfirmationModal />
-                <UserActionConfirmationMessages />
                 {header}
                 <div className="main-content">
                     {content}

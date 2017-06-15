@@ -1,5 +1,6 @@
 import React from "react"
 import _ from "underscore"
+import UserActionConfirmationMessages from "~components/user-action-confirmation-messages"
 
 class StaffTypeButton extends React.Component {
     constructor(){
@@ -62,6 +63,7 @@ export default class LargeStaffTypeSelector extends React.Component {
         return (
             <div className="main-content__body">
                 <div className="main-menu main-content__body_adjust_main-menu">
+                    <UserActionConfirmationMessages />
                     {staffTypeRows}
                 </div>
             </div>
