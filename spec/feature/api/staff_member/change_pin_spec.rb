@@ -90,7 +90,7 @@ RSpec.describe 'Api access' do
 
   specify 'it should change staff members pin' do
     post(url, params)
-    expect(staff_member.reload.pin_code).to eq(new_pin)
+    expect(staff_member.reload.pin_code_valid?(new_pin)).to eq(true)
   end
 
   private
