@@ -19,14 +19,8 @@ import {RequestFlaggedStaffMembers} from '../interfaces/api-requests';
 const requestFlaggedStaffMembers = (action$: any, store: Store<StoreStructure>) =>
   action$.ofType(REQUESTING_FLAGGED_STAFF_MEMBERS)
     .switchMap((action: any) => {
-        const isEmptyFields = !action.payload.first_name || !action.payload.surname;
         const { reviewedStaffMembers } = store.getState().app;
-        return isEmptyFields
-          ? Observable.of({
-              type: FLAGGED_STAFF_MEMBERS,
-              payload: { flagged: [], reviewed: [] }
-            })
-          : post('/api/v1/staff_members/flagged', action.payload)
+        return post('/api/v1/staff_members/flagged', action.payload)
               .mergeMap((resp: any) => {
                 if (resp.response.staff_members.length) {
                   store.dispatch(showReviewed());
