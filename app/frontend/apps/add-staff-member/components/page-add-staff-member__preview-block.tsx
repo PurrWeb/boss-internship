@@ -181,10 +181,10 @@ class Component extends React.Component<PropsFromConnect, State> {
     );
   }
 
-  static isAllFormsValid(forms: FormStructure<{}>[], haveUnreviewedStaffMembers: boolean) {
+  static isAllFormsValid(forms: FormStructure<{}>[], haveUnreviewedStaffMembers: boolean, avatarPresent: boolean) {
     return !find((form: FormStructure<{}>) => {
       return form.$form.valid === false;
-    })(forms) && !haveUnreviewedStaffMembers;
+    })(forms) && !haveUnreviewedStaffMembers && avatarPresent;
   }
 
   renderBasicInformationSummaryBlock() {
@@ -291,7 +291,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   renderContinueButton() {
-    return Component.isAllFormsValid(this.allUsedForms, !!this.flaggedUnreviewedStaffMembers().length) ? (
+    return Component.isAllFormsValid(this.allUsedForms, !!this.flaggedUnreviewedStaffMembers().length, !!this.props.avatarPreview) ? (
       <ProgressButton onClick={this.onFormComplete} pendingText="Saving ...">
         Continue
       </ProgressButton>

@@ -45,7 +45,7 @@ interface State {
 
 
 const VALID_FILE_TYPES = 'image/jpeg, image/jpg, image/png, image/gif';
-const MAX_FILE_SIZE = 1000000;
+const MAX_FILE_SIZE = 10000000;
 
 class Component extends React.Component<PropsFromConnect, State> {
   dropZone: ImageLoader;
@@ -262,12 +262,40 @@ class Component extends React.Component<PropsFromConnect, State> {
       const reader = new FileReader();
 
       reader.addEventListener('load', () => {
-        const dataUrl = reader.result;
+        let dataUrl = reader.result;
 
-        this.setState({
-          toShowCropper: true,
-          avatarSrc: dataUrl || ''
-        });
+        let image = new Image();
+
+        image.onload = () => {
+            let canvas = document.createElement('canvas');
+            
+            let iw = image.width;
+            let ih = image.height;
+            
+            let scale = Math.min((1024 / iw), (768 / ih));
+            
+            let iwScaled = iw * scale;
+            let ihScaled = ih * scale;
+            
+            canvas.width = iwScaled;
+            canvas.height = ihScaled;
+
+            let ctx = canvas.getContext('2d');
+            
+            if (ctx === null) {
+              return;
+            }
+
+            ctx.drawImage(image, 0, 0, iwScaled, ihScaled);
+
+            dataUrl = canvas.toDataURL('image/jpeg');
+
+            this.setState({
+              toShowCropper: true,
+              avatarSrc: dataUrl || ''
+            });
+        };
+        image.src = dataUrl;
       });
       reader.readAsDataURL(file);
     }
