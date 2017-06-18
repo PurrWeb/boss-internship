@@ -1,7 +1,7 @@
 <main class="boss-page-main">
   <div class="boss-page-main__dashboard">
     <div class="boss-page-main__inner">
-        <!-- Page dashboard start -->
+      <!-- Page dashboard start -->
       <div class="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_staff-members-index">
         <div class="boss-page-dashboard__group">
           <h1 class="boss-page-dashboard__title">
@@ -13,18 +13,27 @@
             <%= link_to new_staff_member_path, class: 'boss-button boss-button_role_add boss-page-dashboard__button' do %>
               Add Staff Member
             <% end %>
-            <a href="" class="boss-button boss-button_role_exclamation boss-page-dashboard__button">
-              Flagged Staff Members
-            </a>
           </div>
         </div>
 
-        <%= render partial: 'index_filter', locals: { filter: filter, staff_members: staff_members } %>
-
-        </div>
+        <%= react_component(
+            'StaffMembersFilterForm',
+            selected_name: filter.name_text || '',
+            selected_email: filter.email_text || '',
+            selected_status: filter.status,
+            selected_venue: filter.venue,
+            selected_staff_type: filter.staff_type,
+            staff_members: staff_members,
+            staff_type: filter.staff_type,
+            staff_types: filter.accessible_staff_types,
+            statuses: filter.select_statuses,
+            is_security_manager: true,
+            venues: filter.accessible_venues
+          )
+        %>
       </div>
-        <!-- Page dashboard end -->
     </div>
+    <!-- Page dashboard end -->
   </div>
 
   <div class="boss-page-main__content">
@@ -42,16 +51,20 @@
           <div class="boss-table__row">
             <div class="boss-table__cell">
               <div class="boss-table__image">
-                <div class="boss-avatar boss-avatar_type_combined">
-                  <%= image_tag(staff_member.avatar_url, class: 'boss-avatar__image') %>
-                </div>
+                <%= link_to staff_member_path(id: staff_member.id), class: 'boss-table__link' do %>
+                  <div class="boss-avatar boss-avatar_type_combined">
+                    <%= image_tag(staff_member.avatar_url, class: 'boss-avatar__image') %>
+                  </div>
+                <% end %>
               </div>
             </div>
 
             <div class="boss-table__cell">
               <div class="boss-table__info">
                 <p class="boss-table__label">Name</p>
-                <p class="boss-table__text"><%= staff_member.name.full_name.titlecase %></p>
+                <p class="boss-table__text">
+                  <%= link_to staff_member.name.full_name.titlecase, staff_member_path(id: staff_member.id), class: 'boss-table__link' %>
+                </p>
               </div>
             </div>
 
@@ -59,9 +72,9 @@
               <div class="boss-table__info">
                 <p class="boss-table__label">Status</p>
                 <p class="boss-table__text">
-                  <a href="" class="boss-button boss-button_type_small boss-button_role_enabled">
+                  <button class="boss-button boss-button_type_small boss-button_role_enabled">
                     <%= UIStaffMemberStatus.new(staff_member).to_s %>
-                  </a>
+                  </button>
                 </p>
               </div>
             </div>
@@ -69,14 +82,18 @@
             <div class="boss-table__cell">
               <div class="boss-table__info">
                 <p class="boss-table__label">Type</p>
-                <p class="boss-table__text"><%= staff_member.staff_type.name.titlecase %></p>
+                <p class="boss-table__text">
+                  <%= link_to staff_member.staff_type.name.titlecase, staff_member_path(id: staff_member.id), class: 'boss-table__link' %>
+                </p>
               </div>
             </div>
 
             <div class="boss-table__cell">
               <div class="boss-table__info">
                 <p class="boss-table__label">Venue</p>
-                <p class="boss-table__text"><%= venues_for(staff_member) %></p>
+                <p class="boss-table__text">
+                  <%= link_to venues_for(staff_member), staff_member_path(id: staff_member.id), class: 'boss-table__link' %>
+                </p>
               </div>
             </div>
           </div>
