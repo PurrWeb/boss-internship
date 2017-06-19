@@ -61,7 +61,6 @@ export default class ShiftTimeInput extends Component {
             select = <Select
                 value={dateValue}
                 options={options}
-                searchable={false}
                 clearable={false}
                 onChange={(value) => this.updateTime(value)}
             />
