@@ -51,6 +51,7 @@ gem 'sprockets-es6', ">= 0.9.0"
 gem "autoprefixer-rails"
 gem 'font-awesome-sass'
 gem 'active_model_serializers', '~> 0.10.0'
+gem "shell-spinner"
 
 group :development, :test do
   gem "seedbank"
