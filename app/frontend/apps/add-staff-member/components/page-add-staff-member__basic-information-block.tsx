@@ -58,6 +58,10 @@ class Component extends React.Component<PropsFromConnect, State> {
     return genderValues.map((venueValue) => ({value: venueValue, label: venueValue}));
   }
 
+  findFlaggedStaffMembers = (model: string, value: string) => {
+    return (dispatch: any) => { this.props.findFlaggedStaffMembers(model, value); };
+  }
+
   render() {
     return (
       <div className="boss-form">
@@ -75,7 +79,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 mapProps={{
                       className: setInputClass
                     }}
-                changeAction={this.props.findFlaggedStaffMembers}
+                changeAction={this.findFlaggedStaffMembers}
                 debounce={500}
                 validators={{
                   isFilled,
@@ -102,7 +106,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 mapProps={{
                       className: setInputClass
                     }}
-                changeAction={this.props.findFlaggedStaffMembers}
+                changeAction={this.findFlaggedStaffMembers}
                 debounce={500}
                 validators={{
                   isFilled,
@@ -165,7 +169,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                     return props.onChange;
                   }
                 }}
-                changeAction={this.props.findFlaggedStaffMembers}
+                changeAction={this.findFlaggedStaffMembers}
                 debounce={500}
               />
           </div>

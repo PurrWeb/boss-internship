@@ -53,8 +53,8 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(changeStep('formsData.contactDetailsForm', ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock - 1));
   };
 
-  findFlaggedStaffMembers = (model: any, value: any) => {
-    this.props.dispatch(findFlaggedStaffMembers({model, value}));
+  findFlaggedStaffMembers = (model: string, value: string) => {
+    return (dispatch: any) => { dispatch(findFlaggedStaffMembers({model, value})); };
   }
   
   static isEmail(val: string) {
