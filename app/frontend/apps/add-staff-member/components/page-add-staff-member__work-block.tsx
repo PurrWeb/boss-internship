@@ -60,7 +60,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   findFlaggedStaffMembers = (model: string, value: string) => {
-    this.props.dispatch(findFlaggedStaffMembers({model, value}));
+    return (dispatch: any) => { dispatch(findFlaggedStaffMembers({model, value})); };
   }
 
   static getStaffTypeOptions(staffTypes: OptionData[]): Select.Option[] {
