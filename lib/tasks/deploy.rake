@@ -22,36 +22,43 @@ namespace :deploy do
     namespace :release do
         task :minor => :release do
             @current_version = increment_minor(@latest_version)
-            begin
-                unless git_modified? || git_cached? # || git_untracked?
-                    write_latest_version
-                    git_add
-                    git_commit
-                    git_push_version
-                    add_version_tag
-                    # run("asd")
-                    deploy_on_production
-                    success
-                end
-            rescue => err
-                begin
-                    undo_changes
-                    failed
-                rescue
-                    puts err.message.red
-                    failed
-                end
-            end
+            run_deploy
         end
 
         task :major => :release do
             @current_version = increment_major(@latest_version)
-            puts @current_version
+            run_deploy
         end
     end
 
+    def run_deploy
+        begin
+            unless git_modified? || git_cached? # || git_untracked?
+                write_latest_version
+                git_add
+                git_commit
+                git_push_version
+                add_version_tag
+                deploy_on_production
+                success
+            end
+        rescue => err
+            begin
+                undo_changes
+                failed
+            rescue
+                puts err.message.red
+                failed
+            end
+        end        
+    end
 
     def get_latest_version
+        unless File.file?(@versions_file)
+            File.open(@versions_file, 'w') do |f|
+                f.puts "0.0"
+            end
+        end
         File.read(@versions_file).strip
     end
 
