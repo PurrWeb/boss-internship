@@ -15,7 +15,6 @@ window.debug.ReactDOM = ReactDOM;
 window.debug._ = _;
 window.debug.moment = moment;
 window.debug.selectors = selectors;
-
 // Expose these globally because react rails relies on them
 window.React = React;
 window.ReactDOM = ReactDOM;
