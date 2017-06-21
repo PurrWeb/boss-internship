@@ -257,8 +257,8 @@ Rails.application.routes.draw do
   end
 
   if ENV["USE_SUBDOMAINS"]
-    constraints subdomain: /^[a-z]*?-*?boss/, &boss_routes
-    constraints subdomain: /^[a-z]*?-*?clock/, &clock_routes
+    constraints subdomain: /^([a-z0-9]+-+)?boss/, &boss_routes
+    constraints subdomain: /^([a-z0-9]+-+)?clock/, &clock_routes
   else
     scope "", &boss_routes
     scope "/clock", &clock_routes
