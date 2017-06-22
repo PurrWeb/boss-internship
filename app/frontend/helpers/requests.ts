@@ -115,16 +115,16 @@ const ajaxStatusMessages = {
 };
 
 export const getMessageFromAjaxErrorStatus = (ajaxError: AjaxError): string[] => {
-  const errors = ajaxError.xhr.response.errors;
-  if (!!errors) {
+  if (!ajaxError.xhr.response || !ajaxError.xhr.response.errors) {
+    return [ajaxStatusMessages[ajaxError.status]] || ['Some strange error'];
+  } else {
+    const errors = ajaxError.xhr.response.errors;
     let errorsArray: string[] = [];
     _.each(errors, (items, errorGroup) => {
       const group = humanize(errorGroup);
       errorsArray.push(`${group}: ${items.join(', ')}`);
     });
     return errorsArray;
-  } else {
-    return [ajaxStatusMessages[ajaxError.status]] || ['Some strange error'];
   }
 };
 
