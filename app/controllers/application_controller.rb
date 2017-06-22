@@ -20,12 +20,16 @@ class ApplicationController < ActionController::Base
     @current_layout = 'oldLayout';
   end
 
+  def set_new_layout
+    @current_layout = 'newLayout';
+  end
+
   def render_navigation?
     true
   end
 
   def render_v2_layout?
-    false
+    @current_layout != 'oldLayout'
   end
 
   def set_host
