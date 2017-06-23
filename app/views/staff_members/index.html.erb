@@ -39,15 +39,15 @@
   <div class="boss-page-main__inner">
     <div class="boss-table boss-table_page_staff-members-index">
       <div class="boss-table__row">
-          <div class="boss-table__cell boss-table__cell_role_header"></div>
-          <div class="boss-table__cell boss-table__cell_role_header">Name</div>
-          <div class="boss-table__cell boss-table__cell_role_header">Status</div>
-          <div class="boss-table__cell boss-table__cell_role_header">Type</div>
-          <div class="boss-table__cell boss-table__cell_role_header">Venue</div>
+        <div class="boss-table__cell boss-table__cell_role_header"></div>
+        <div class="boss-table__cell boss-table__cell_role_header">Name</div>
+        <div class="boss-table__cell boss-table__cell_role_header">Status</div>
+        <div class="boss-table__cell boss-table__cell_role_header">Type</div>
+        <div class="boss-table__cell boss-table__cell_role_header">Venue</div>
       </div>
 
       <% staff_members.each do |staff_member| %>
-        <div class="boss-table__row">
+        <div class="boss-table__row test-staff-members-index-listing" data-staff-member-id="<%= staff_member.id %>">
           <div class="boss-table__cell">
             <div class="boss-table__image">
               <%= link_to staff_member_path(id: staff_member.id), class: 'boss-table__link' do %>
@@ -59,7 +59,7 @@
           </div>
 
           <div class="boss-table__cell">
-            <div class="boss-table__info">
+            <div class="boss-table__info" data-role="name">
               <p class="boss-table__label">Name</p>
               <p class="boss-table__text">
                 <%= link_to staff_member.name.full_name.titlecase, staff_member_path(id: staff_member.id), class: 'boss-table__link' %>
@@ -79,7 +79,7 @@
           </div>
 
           <div class="boss-table__cell">
-            <div class="boss-table__info">
+            <div class="boss-table__info" data-role="staff-type">
               <p class="boss-table__label">Type</p>
               <p class="boss-table__text">
                 <%= link_to staff_member.staff_type.name.titlecase, staff_member_path(id: staff_member.id), class: 'boss-table__link' %>
@@ -88,7 +88,7 @@
           </div>
 
           <div class="boss-table__cell">
-            <div class="boss-table__info">
+            <div class="boss-table__info" data-role="venues">
               <p class="boss-table__label">Venue</p>
               <p class="boss-table__text">
                 <%= link_to venues_for(staff_member), staff_member_path(id: staff_member.id), class: 'boss-table__link' %>

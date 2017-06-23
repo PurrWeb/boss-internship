@@ -26,7 +26,7 @@ module PageObject
     end
 
     def scope
-      page.find('table[data-role="staff-members-index-table"]')
+      page.find('div.boss-table_page_staff-members-index')
     end
 
     private
@@ -35,7 +35,7 @@ module PageObject
     end
 
     def staff_member_entry_selector(staff_member)
-      ".staff-members-index-listing[data-staff-member-id=\"#{staff_member.id}\"]"
+      ".test-staff-members-index-listing[data-staff-member-id=\"#{staff_member.id}\"]"
     end
 
     def detail_text(listing, column)
@@ -51,9 +51,9 @@ module PageObject
 
     def column_data
       {
-        name:  { detail_selector: 'td[data-role="name"]'  },
-        venues:  { detail_selector: 'td[data-role="venues"]'  },
-        staff_type:  { detail_selector: 'td[data-role="staff-type"]'  }
+        name:  { detail_selector: '.boss-table__info[data-role="name"] > .boss-table__text'  },
+        venues:  { detail_selector: '.boss-table__info[data-role="venues"] > .boss-table__text'  },
+        staff_type:  { detail_selector: '.boss-table__info[data-role="staff-type"] > .boss-table__text'  }
       }
     end
   end

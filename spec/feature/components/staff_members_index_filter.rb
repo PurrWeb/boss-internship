@@ -1,12 +1,16 @@
 module PageObject
   class StaffMembersIndexFilter < Component
+    page_action :toggle_show do
+      scope.find(".boss-dropdown__switch_role_filter").click
+    end
+
     page_action :filter_by_staff_type do |staff_type|
       scope.select(staff_type.name.titlecase, from: 'Staff type')
       submit_form
     end
 
     page_action :ui_shows_filtering_by_staff_type do |staff_type|
-      select = scope.find(:select, 'Staff type')
+      select = scope.find('input[name="staff_type"]', visible: false)
       expect(select.value).to eq(staff_type.try(:id).to_s)
     end
 
@@ -16,7 +20,7 @@ module PageObject
     end
 
     page_action :ui_shows_filtering_by_venue do |venue|
-      select = scope.find(:select, 'Venue')
+      select = scope.find('input[name="venue"]', visible: false)
       expect(select.value).to eq(venue.try(:id).to_s)
     end
 
@@ -30,7 +34,7 @@ module PageObject
 
     private
     def filter_selector
-      '.staff-members-index-filter'
+      '.boss-page-dashboard__filter'
     end
 
     def scope
