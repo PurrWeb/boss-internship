@@ -1,19 +1,14 @@
 class StaffMembersController < ApplicationController
+  require 'custom_pagination_link_renderer'
 
-  def render_v2_layout?
-    true
-  end
-
-  def set_default_layout
-    @current_layout = 'newLayout';
-  end
+  before_action :set_new_layout, only: [:index]
 
   def index
     authorize! :manage, :staff_members
 
     staff_member_index_filter = StaffMemberIndexFilter.new(
       user: current_user,
-      params: params[:staff_member_index_filter]
+      params: params
     )
 
     query = if current_user.security_manager?
@@ -294,6 +289,7 @@ class StaffMembersController < ApplicationController
   end
 
   private
+
   def assert_update_permitted(staff_member)
     raise 'Attempt to update disabled staff_member' if staff_member.disabled?
   end

@@ -58,6 +58,9 @@ registerComponent("HolidayReportApp", HolidayReportView);
 import StaffTypeRotaOverviewApp from "./apps/staff-type-rota-overview"
 registerComponent("StaffTypeRotaOverviewApp", StaffTypeRotaOverviewApp);
 
+import StaffMembersFilterForm from "./apps/staff-members/components/staff-members-filter-form.js"
+registerComponent("StaffMembersFilterForm", StaffMembersFilterForm);
+
 import HoursConfirmationApp from "./apps/hours-confirmation"
 registerComponent("HoursConfirmationApp", HoursConfirmationApp)
 

@@ -16,4 +16,14 @@ module ApplicationHelper
     end
     File.read(@versions_file).strip
   end
+
+  def venues_for(staff_member)
+    venues = ([staff_member.master_venue] + staff_member.work_venues.to_a).compact
+
+    if venues.present?
+      venues.map(&:name).to_sentence
+    else
+      'N / A'
+    end
+  end
 end
