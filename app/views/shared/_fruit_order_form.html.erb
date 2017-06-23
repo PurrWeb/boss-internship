@@ -1,14 +1,33 @@
-<%= bootstrap_form_for(
-      fruit_order,
-      url: url,
-      method: 'put'
-    )  do |form| %>
-  <% fruit_order.form_fruit_order_fields.each do |field| %>
-    <%= form.number_field(
-      field,
-      label: FruitOrder.message_for(field),
-      label_class: 'force-not-required'
-    ) %>
-  <% end %>
-  <%= form.submit(action_text, class: 'boss2-button') %>
-<% end %>
+<div class="boss-page-main__content">
+  <div class="boss-page-main__inner boss-page-main__inner_space_regular boss-page-main__inner_opaque">
+    <%= form_for(
+        fruit_order,
+        url: url,
+        method: 'put'
+      )  do |form| %>
+        <% if !fruit_order.persisted? %>
+          <div class="boss-form__field">
+            <div class="boss-alert boss-alert_role_note">
+              <p class="boss-alert__text">No Fruit order is currently pending for this venue</p>
+            </div>
+          </div>
+        <% end %>
+
+        <% fruit_order.form_fruit_order_fields.each do |field| %>
+          <div class="boss-form__field">
+            <label class="boss-form__label">
+              <span class="boss-form__label-text"><%= FruitOrder.message_for(field) %></span>
+              <%= form.number_field(
+                field,
+                class: 'boss-form__input'
+              ) %>
+            </label>
+          </div>
+        <% end %>
+
+      <div class="boss-form__field boss-form__field_justify_mobile-center">
+        <%= form.submit(action_text, class: 'boss-button boss-form__submit') %>
+      </div>
+    <% end %>
+  </div>
+</div>

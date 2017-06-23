@@ -70,6 +70,9 @@ registerComponent("StaffHoursOverviewApp", StaffHoursOverviewApp)
 import RollbarErrorTestApp from "./apps/rollbar-error-test/rollbar-error-test-app"
 registerComponent("RollbarErrorTestApp", RollbarErrorTestApp)
 
+import VenueFinder from "./components/shared/venue-finder"
+registerComponent("VenueFinder", VenueFinder)
+
 import WeekPicker from "~components/week-picker"
 $(document).ready(function(){
     $(".static-week-picker").each(function(){
