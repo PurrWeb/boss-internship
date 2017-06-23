@@ -33,8 +33,6 @@ RSpec.feature 'Creating a staff member from a user' do
       end
     end
 
-    # user_show_page.ensure_flash_success_message_displayed('Staff member added successfully')
-
     edited_user.reload
     created_staff_member = StaffMember.
       joins(:email_address).
@@ -53,5 +51,7 @@ RSpec.feature 'Creating a staff member from a user' do
     # Send new staff member update email
     expect(ActionMailer::Base.deliveries.count).to eq(1)
     expect(ActionMailer::Base.deliveries.first.subject).to eq("New Staff Member Added - #{created_staff_member.full_name.titlecase}")
+
+    user_show_page.ensure_flash_success_message_displayed('Staff member added successfully')
   end
 end
