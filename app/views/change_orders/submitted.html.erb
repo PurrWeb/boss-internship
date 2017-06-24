@@ -1,34 +1,34 @@
-<div>
-  <div class="pull-right">
-    <%= link_to(
-          'View current order',
-          change_orders_path(venue_id: venue.id),
-          class: 'boss2-button'
-        ) %>
-  </div>
+<div class="boss-page-main__dashboard">
+  <div class="boss-page-main__inner">
+    <div class="boss-page-dashboard boss-page-dashboard_updated">
+      <div class="boss-page-dashboard__group">
+        <h1 class="boss-page-dashboard__title">
+          <span class="boss-page-dashboard__title-text">Previously Submitted Change Orders for</span>
+          <span class="boss-page-dashboard__title-text boss-page-dashboard__title-text_marked"><%= venue.name.titleize %></span>
+        </h1>
 
-  <h1>Previously submitted Change Orders for <%= venue.name %></h1>
+        <div class="boss-page-dashboard__buttons-group">
+          <%= link_to(
+            'View Current Order',
+            change_orders_path(venue_id: venue.id),
+            class: 'boss-button boss-button_role_view-order boss-page-dashboard__button'
+          ) %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<% if change_orders.count > 0 %>
-  <ul class="no-bullet">
-    <% change_orders.each do |change_order| %>
-      <li>
-        <p><b>Status: <%= change_order.current_state.titlecase %></b></p>
-        <% if change_order.accepted? %>
-          <p>
-            <b>Accepted at <%= change_order.accepted_at.to_s(:human) %> by <%= change_order.accepted_user.full_name %></b>
-          </p>
-        <% end %>
-        <% if change_order.done? %>
-          <p><b>Marked Done at <%= change_order.done_at.to_s(:human) %> by <%= change_order.done_user.full_name %></b></p>
-        <% end %>
-        <%= render partial: 'shared/change_order_table', locals: { change_order: change_order } %>
-      </li>
-    <% end %>
-  </ul>
+<div class="boss-page-main__content">
+  <div class="boss-page-main__inner">
+    <div class="boss-page-main__list">
+      <% if change_orders.present? %>
+        <%= render partial: 'shared/change_order_block', locals: { change_orders: change_orders } %>
+      <% else %>
+        <p class="boss-board__header boss-board__header_type_no-border">No previously submitted change orders exist</p>
+      <% end %>
+    </div>
 
-  <%= render partial: 'shared/pagination_control', locals: { relation: change_orders } %>
-<% else %>
-  <p>No previously submitted change orders exist</p>
-<% end %>
+    <%= render partial: 'shared/pagination_control_v2', locals: { relation: change_orders } %>
+  </div>
+</div>

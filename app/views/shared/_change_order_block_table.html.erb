@@ -1,0 +1,101 @@
+<div class="boss-order-summary__group">
+  <div class="boss-order-summary__table">
+    <div class="boss-table boss-table_page_change-order-history">
+      <div class="boss-table__row">
+        <div class="boss-table__cell boss-table__cell_role_header">£5</div>
+        <div class="boss-table__cell boss-table__cell_role_header">£1</div>
+        <div class="boss-table__cell boss-table__cell_role_header">50p</div>
+        <div class="boss-table__cell boss-table__cell_role_header">20p</div>
+        <div class="boss-table__cell boss-table__cell_role_header">10p</div>
+        <div class="boss-table__cell boss-table__cell_role_header">5p</div>
+        <div class="boss-table__cell boss-table__cell_role_header">Total</div>
+      </div>
+
+      <div class="boss-table__row">
+        <div class="boss-table__cell">
+          <div class="boss-table__info">
+            <p class="boss-table__label">£5</p>
+            <p class="boss-table__text">
+              <span class="boss-table__text-currency">£</span>
+              <span class="boss-table__text-amount">
+                <%= number_to_currency(change_order.five_pound_notes, unit: '£', precision: 2) %>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div class="boss-table__cell">
+          <div class="boss-table__info">
+            <p class="boss-table__label">£1</p>
+            <p class="boss-table__text">
+              <span class="boss-table__text-currency">£</span>
+              <span class="boss-table__text-amount">
+                <%= number_to_currency(change_order.one_pound_coins, unit: '£', precision: 2) %>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div class="boss-table__cell">
+          <div class="boss-table__info">
+            <p class="boss-table__label">50p</p>
+            <p class="boss-table__text">
+              <span class="boss-table__text-currency">£</span>
+              <span class="boss-table__text-amount">
+                <%= number_to_currency(change_order.fifty_pence_coins, unit: '£', precision: 2) %>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div class="boss-table__cell">
+          <div class="boss-table__info">
+            <p class="boss-table__label">20p</p>
+            <p class="boss-table__text">
+              <span class="boss-table__text-currency">£</span>
+              <span class="boss-table__text-amount">
+                <%= number_to_currency(change_order.twenty_pence_coins, unit: '£', precision: 2) %>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div class="boss-table__cell">
+          <div class="boss-table__info">
+            <p class="boss-table__label">10p</p>
+            <p class="boss-table__text">
+              <span class="boss-table__text-currency">£</span>
+              <span class="boss-table__text-amount">
+                <%= number_to_currency(change_order.ten_pence_coins, unit: '£', precision: 2) %>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div class="boss-table__cell">
+          <div class="boss-table__info">
+            <p class="boss-table__label">5p</p>
+            <p class="boss-table__text">
+              <span class="boss-table__text-currency">£</span>
+              <span class="boss-table__text-amount">
+                <%= number_to_currency(change_order.five_pence_coins, unit: '£', precision: 2) %>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div class="boss-table__cell">
+          <div class="boss-table__info">
+            <p class="boss-table__label">Total</p>
+            <p class="boss-table__text">
+              <span class="boss-table__text-currency">£</span>
+              <span class="boss-table__text-amount">
+                <%= number_to_currency(change_order.total, unit: '£', precision: 2) %>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

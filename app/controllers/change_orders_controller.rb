@@ -1,5 +1,5 @@
 class ChangeOrdersController < ApplicationController
-  before_action :set_new_layout, only: [:index]
+  before_action :set_new_layout, only: [:index, :submitted]
 
   def index
     if venue_from_params.present?
