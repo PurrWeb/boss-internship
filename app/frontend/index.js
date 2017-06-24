@@ -73,6 +73,9 @@ registerComponent("RollbarErrorTestApp", RollbarErrorTestApp)
 import VenueFinder from "./components/shared/venue-finder"
 registerComponent("VenueFinder", VenueFinder)
 
+import FruitPopover from "./components/shared/fruit-popover"
+registerComponent("FruitPopover", FruitPopover)
+
 import WeekPicker from "~components/week-picker"
 $(document).ready(function(){
     $(".static-week-picker").each(function(){
