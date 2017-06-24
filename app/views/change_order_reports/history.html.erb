@@ -1,3 +1,56 @@
+<div class="boss-page-main__dashboard">
+  <div class="boss-page-main__inner">
+    <div class="boss-page-dashboard boss-page-dashboard_updated">
+      <div class="boss-page-dashboard__group">
+        <h1 class="boss-page-dashboard__title">Change Order History</h1>
+
+        <div class="boss-page-dashboard__buttons-group">
+          <%= link_to('Back to current orders', change_order_reports_path, class: 'boss-button boss-button_role_view-order boss-page-dashboard__button') %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="boss-page-main__content">
+  <div class="boss-page-main__inner">
+    <div class="boss-page-main__list">
+      <% if change_orders.present? %>
+        <% change_orders.each do |change_order| %>
+          <div class="boss-page-main__list-item">
+            <div class="boss-order-summary boss-order-summary_page_change-order-history">
+              <div class="boss-order-summary__header">
+                <h4 class="boss-order-summary__title">Venue
+                  <span class="boss-button boss-button_type_small boss-button_role_secondary boss-order-summary__title-label boss-order-summary__title-label_role_value">
+                    <%= change_order.venue.name.titlecase %>
+                  </span>
+                </h4>
+                <ul class="boss-order-summary__status boss-order-summary__status_adjust_row">
+                  <li class="boss-order-summary__status-item boss-order-summary__status-item_role_done">
+                    <p class="boss-order-summary__meta">
+                      <span class="boss-order-summary__meta-label">Marked Done at</span>
+                      <span class="boss-order-summary__meta-date"><%= change_order.done_at.to_s(:human) %></span>
+                      by
+                      <span class="boss-order-summary__meta-user"><%= change_order.done_user.full_name %></span>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+
+              <%= render partial: 'shared/change_order_block_table', locals: { change_order: change_order } %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="boss-board__header boss-board__header_type_no-border">No previously submitted change orders exist</p>
+      <% end %>
+    </div>
+
+    <%= render partial: 'shared/pagination_control_v2', locals: { relation: change_orders } %>
+  </div>
+</div>
+
+
 <div>
   <div class="row align-middle mb-md">
     <div class="column">
