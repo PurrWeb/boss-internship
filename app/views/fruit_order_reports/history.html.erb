@@ -1,26 +1,90 @@
-<div>
-  <div class="pull-right">
-    <%= link_to('Back to current orders', fruit_order_reports_path, class: 'boss2-button') %>
+<% content_for(:dashboard) do %>
+  <div class="boss-page-main__dashboard">
+    <div class="boss-page-main__inner">
+      <!-- Page dashboard start -->
+      <div class="boss-page-dashboard boss-page-dashboard_updated">
+        <div class="boss-page-dashboard__group">
+          <h1 class="boss-page-dashboard__title">Fruit Order History</h1>
+
+          <div class="boss-page-dashboard__buttons-group">
+            <%= link_to 'Back to current orders', fruit_order_reports_path, class: 'boss-button boss-button_role_view-order boss-page-dashboard__button' %>
+          </div>
+        </div>
+      </div>
+      <!-- Page dashboard end -->
+    </div>
   </div>
+<% end %>
 
-  <h1>Fruit Order History</h1>
+<% content_for(:content) do %>
+  <div class="boss-page-main__content">
+    <div class="boss-page-main__inner">
+      <div class="boss-table boss-table_page_fruit-order-history">
+        <div class="boss-table__row">
+          <div class="boss-table__cell boss-table__cell_role_header">Venue</div>
+          <div class="boss-table__cell boss-table__cell_role_header">Completed</div>
+          <div class="boss-table__cell boss-table__cell_role_header">User</div>
+          <div class="boss-table__cell boss-table__cell_role_header">Action</div>
+        </div>
 
-  <% if fruit_orders.to_a.count > 0 %>
-    <ul class="no-bullet">
-      <% fruit_orders.each do |fruit_order| %>
-        <li>
-          <p>
-            Venue: <%= fruit_order.venue.name %>
-          </p>
-          <p>
-            Marked compelete at <%= fruit_order.done_at.to_s(:human) %> by <%= fruit_order.done_user.full_name %>
-          </p>
-          <%= link_to('View', fruit_order_path(fruit_order), class: 'boss2-button') %>
-        </li>
-      <% end %>
-    </ul>
-    <%= render partial: 'shared/pagination_control', locals: { relation: fruit_orders } %>
-  <% else %>
-    <p>No previously completed fruit orders exist</p>
-  <% end %>
-</div>
+        <% fruit_orders.each_with_index do |fruit_order, index| %>
+          <div class="boss-table__row">
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Venue</p>
+                <p class="boss-table__text">
+                  <%= fruit_order.venue.name.titleize %>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Completed</p>
+                <% if fruit_order.done? %>
+                  <p class="boss-table__text">
+                    <%= fruit_order.done_at.to_s(:human) %>
+                  </p>
+                <% else %>
+                  <p class="boss-table__text"> - </p>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">User</p>
+                <% if fruit_order.done? %>
+                  <p class="boss-table__text">
+                    <%= fruit_order.done_user.full_name.titleize %>
+                  </p>
+                <% else %>
+                  <p class="boss-table__text"> - </p>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <%= react_component(
+                'FruitPopover',
+                popover_id: index + 1,
+                venue_name: fruit_order.venue.name.titleize,
+                created_at: fruit_order.created_at.to_s(:human),
+                fruit_order_accepted: fruit_order.accepted?,
+                fruit_order_accepted_at: fruit_order.accepted_at.to_s(:human),
+                fruit_order_accepted_user: fruit_order.accepted_user.full_name,
+                fruit_order_done: fruit_order.done?,
+                fruit_order_done_at: fruit_order.done_at.to_s(:human),
+                fruit_order_done_user: fruit_order.done_user.full_name,
+                fruit_orders: fruit_order_fields_with_value(fruit_order),
+                user_can_delete: can?(:destroy, fruit_order)
+              ) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <%= render partial: 'shared/pagination_control_v2', locals: { relation: fruit_orders } %>
+    </div>
+  </div>
+<% end %>
