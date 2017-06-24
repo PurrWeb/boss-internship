@@ -26,6 +26,7 @@ if (window.boss.currentLayout !== 'oldLayout') {
 }
 
 import './mobile-menu';
+import './vendors/owl.carousel';
 
 import "./lib/load-underscore-mixins"
 

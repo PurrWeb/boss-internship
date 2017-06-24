@@ -1,34 +1,43 @@
-<table
-  class="table tablesaw tablesaw-stack table-striped table-bordered"
-  data-tablesaw-mode="stack"
->
-  <thead>
-    <th>Venue</th>
-    <% fruit_orders.each do |fruit_order| %>
-      <th><%= fruit_order.venue.name.titlecase %></th>
-    <% end %>
-    <th class="hide-for-small-only">Total</th>
-  </thead>
-  <tbody>
-    <tr>
+<div class="boss-board__orders">
+  <div class="boss-horizontal-table boss-horizontal-table_page_fruit-order-report">
+    <div class="boss-horizontal-table__column">
+      <div class="boss-horizontal-table__group">
+        <div class="boss-horizontal-table__cell boss-horizontal-table__cell_role_header">Venue</div>
+
+        <% show_fields.each do |field| %>
+          <div class="boss-horizontal-table__cell boss-horizontal-table__cell_role_header">
+            <%= FruitOrder.message_for(field) %>
+          </div>
+        <% end %>
+      </div>
+
+      <% if show_complete_actions %>
+        <%= render partial: action_partial, locals: { fruit_orders: fruit_orders, show_complete_actions: show_complete_actions } %>
+      <% end %>
+    </div>
+
+    <div class="boss-horizontal-table__column boss-horizontal-table__column_role_scroller">
+      <div class="boss-horizontal-table__scroll" id="pending-orders">
+        <% fruit_orders.each_with_index do |fruit_order, index| %>
+          <div class="boss-horizontal-table__scroll-item">
+            <div class="boss-horizontal-table__cell"><%= fruit_order.venue.name.titleize %></div>
+
+            <% show_fields.each do |field| %>
+              <div class="boss-horizontal-table__cell"><%= fruit_order.public_send(field) %></div>
+            <% end %>
+
+            <%= render partial: action_partial, locals: { fruit_order: fruit_order, show_complete_actions: false } %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="boss-horizontal-table__column">
+      <div class="boss-horizontal-table__cell boss-horizontal-table__cell_role_footer">Total</div>
+
       <% show_fields.each do |field| %>
-        <tr>
-          <th><%= FruitOrder.message_for(field) %></th>
-          <% fruit_orders.each do |fruit_order| %>
-            <td><%= fruit_order.public_send(field) %></td>
-          <% end %>
-          <td class="hide-for-small-only"><%= fruit_orders.to_a.sum { |fo| fo.public_send(field) } %></td>
-        </tr>
+        <div class="boss-horizontal-table__cell boss-horizontal-table__cell_role_footer"><%= fruit_orders.to_a.sum { |fo| fo.public_send(field) } %></div>
       <% end %>
-    </tr>
-    <tr>
-      <th><span class="show-for-small-only">Actions</span></th>
-      <% fruit_orders.each do |fruit_order| %>
-        <td>
-          <%= render partial: action_partial, locals: { fruit_order: fruit_order } %>
-        </td>
-      <% end %>
-      <td class="hide-for-small-only"></td>
-    </tr>
-  </tbody>
-</table>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,51 @@
-<%= link_to('Edit', edit_fruit_order_path(fruit_order), class: 'boss2-button') %>
+<% if show_complete_actions %>
+  <div class="boss-horizontal-table__cell boss-horizontal-table__cell_role_header boss-horizontal-table__cell_role_actions">
+    <div class="boss-horizontal-table__actions">
+      <%= link_to(
+        'Complete All',
+        complete_fruit_order_reports_path(
+          fruit_order_ids: fruit_orders.pluck(:id)
+        ),
+        class: 'boss-button boss-button_type_small boss-button_role_success boss-horizontal-table__action boss-horizontal-table__action_role_complete-all',
+        method: :put
+      ) %>
+    </div>
+  </div>
+<% else %>
+  <div class="boss-horizontal-table__cell boss-horizontal-table__cell_role_actions">
+    <div class="boss-horizontal-table__actions">
+      <%= link_to(
+          'Edit',
+          edit_fruit_order_path(fruit_order),
+          class: 'boss-button boss-button_type_small boss-button_role_edit boss-horizontal-table__action boss-horizontal-table__action_desktop'
+        )
+      %>
+
+      <%= link_to(
+          '',
+          edit_fruit_order_path(fruit_order),
+          class: 'boss-button boss-button_type_small boss-button_type_icon boss-button_role_edit boss-horizontal-table__action boss-horizontal-table__action_mobile'
+        )
+      %>
+
+      <%= link_to(
+          'Complete',
+          complete_fruit_order_reports_path(
+            fruit_order_ids: fruit_order.id
+          ),
+          class: 'boss-button boss-button_type_small boss-button_role_success boss-horizontal-table__action boss-horizontal-table__action_desktop',
+          method: :put
+        )
+      %>
+
+      <%= link_to(
+          '',
+          accept_fruit_order_report_path(fruit_order),
+          class: 'boss-button boss-button_type_small boss-button_type_icon boss-button_role_success boss-horizontal-table__action boss-horizontal-table__action_mobile',
+          method: :put
+        )
+      %>
+    </div>
+  </div>
+<% end %>
+
