@@ -1,19 +1,81 @@
-<%= bootstrap_form_for(
-      change_order,
-      url: url,
-      method: 'put'
-    )  do |form| %>
-    <div class="row mb-base">
-      <div class="small-12 medium-6 column">
-        <%= form.number_field(:five_pound_notes, prepend: "£") %>
-        <%= form.number_field(:one_pound_coins, prepend: "£") %>
-        <%= form.number_field(:fifty_pence_coins, prepend: "£") %>
-      </div>
-      <div class="small-12 medium-6 column">
-        <%= form.number_field(:twenty_pence_coins, prepend: "£") %>
-        <%= form.number_field(:ten_pence_coins, prepend: "£") %>
-        <%= form.number_field(:five_pence_coins, prepend: "£") %>
-      </div>
-    </div>
-  <%= form.submit(action_text, class: 'boss2-button boss2-button_type_small boss2-button_role_edit') %>
-<% end %>
+<div class="boss-page-main__content">
+  <div class="boss-page-main__inner boss-page-main__inner_space_regular boss-page-main__inner_opaque">
+    <%= form_for(change_order, url: url, method: 'put', class: 'boss-form')  do |form| %>
+        <div class="boss-form__field">
+          <% if change_order.persisted? %>
+            <div class="boss-alert boss-alert_role_time boss-alert_status_success">
+              <p class="boss-alert__text">Last Updated at: <span class="boss-alert__text-date"><%= change_order.updated_at.to_s(:human) %></span></p>
+            </div>
+          <% else %>
+            <div class="boss-alert boss-alert_role_note">
+              <p class="boss-alert__text">No Fruit order is currently pending for this venue</p>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="boss-form__row">
+            <div class="boss-form__field boss-form__field_layout_half">
+                <label class="boss-form__label">
+                    <span class="boss-form__label-text boss-form__label-text_type_required">£5</span>
+                    <span class="boss-form__units">
+                        <span class="boss-form__units-value">£</span>
+                        <%= form.number_field(:five_pound_notes, prepend: "£", class: 'boss-form__input') %>
+                    </span>
+                </label>
+            </div>
+            <div class="boss-form__field boss-form__field_layout_half">
+                <label class="boss-form__label">
+                    <span class="boss-form__label-text boss-form__label-text_type_required">20p</span>
+                    <span class="boss-form__units">
+                        <span class="boss-form__units-value">£</span>
+                        <%= form.number_field(:twenty_pence_coins, prepend: "£", class: 'boss-form__input') %>
+                    </span>
+                </label>
+            </div>
+        </div>
+        <div class="boss-form__row">
+            <div class="boss-form__field boss-form__field_layout_half">
+                <label class="boss-form__label">
+                    <span class="boss-form__label-text boss-form__label-text_type_required">£1</span>
+                    <span class="boss-form__units">
+                        <span class="boss-form__units-value">£</span>
+                        <%= form.number_field(:one_pound_coins, prepend: "£", class: 'boss-form__input') %>
+                    </span>
+                </label>
+            </div>
+            <div class="boss-form__field boss-form__field_layout_half">
+                <label class="boss-form__label">
+                    <span class="boss-form__label-text boss-form__label-text_type_required">10p</span>
+                    <span class="boss-form__units">
+                        <span class="boss-form__units-value">£</span>
+                        <%= form.number_field(:ten_pence_coins, prepend: "£", class: 'boss-form__input') %>
+                    </span>
+                </label>
+            </div>
+        </div>
+        <div class="boss-form__row">
+            <div class="boss-form__field boss-form__field_layout_half">
+                <label class="boss-form__label">
+                    <span class="boss-form__label-text boss-form__label-text_type_required">50p</span>
+                    <span class="boss-form__units">
+                        <span class="boss-form__units-value">£</span>
+                        <%= form.number_field(:fifty_pence_coins, prepend: "£", class: 'boss-form__input') %>
+                    </span>
+                </label>
+            </div>
+            <div class="boss-form__field boss-form__field_layout_half">
+                <label class="boss-form__label">
+                    <span class="boss-form__label-text boss-form__label-text_type_required">5p</span>
+                    <span class="boss-form__units">
+                        <span class="boss-form__units-value">£</span>
+                        <%= form.number_field(:five_pence_coins, prepend: "£", class: 'boss-form__input') %>
+                    </span>
+                </label>
+            </div>
+        </div>
+        <div class="boss-form__field boss-form__field_justify_mobile-center">
+            <button class="boss-button boss-form__submit" type="submit">Update</button>
+        </div>
+    <% end %>
+  </div>
+</div>

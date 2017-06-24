@@ -1,59 +1,55 @@
-<div class="row align-middle">
-  <div class="column">
-    <h1>Current Change Order</h1>
-  </div>
-  <% if can?(:destroy, current_change_order) %>
-      <div class="shrink column">
-        <%= link_to(
+<main class="boss-page-main">
+  <div class="boss-page-main__dashboard">
+    <div class="boss-page-main__inner">
+      <div class="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_change-order-form">
+        <div class="boss-page-dashboard__group">
+          <div class="boss-page-dashboard__sub-group">
+            <h1 class="boss-page-dashboard__title">Current Change Order</h1>
+            <!-- Select box -->
+            <div class="boss-page-dashboard__controls-group">
+              <form action="#" class="boss-form">
+                <div class="boss-form__field">
+                  <div class="boss-form__select boss-form__select_size_small-fluid">
+                    <%= react_component(
+                      'VenueFinder',
+                      selected_venue: current_venue,
+                      venues: accessible_venues
+                    ) %>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="boss-page-dashboard__buttons-group">
+            <% if can?(:destroy, current_change_order) %>
+              <%= link_to(
                 change_order_path(current_change_order),
-                class: 'boss2-button boss2-button_role_delete',
+                class: 'boss-button boss-button_role_exclamation boss-page-dashboard__button',
                 method: :delete
-            ) do %>
-            Delete Current Order
-        <% end %>
-      </div>
-  <% end %>
-</div>
+              ) do %>
+                Delete Current Order
+              <% end %>
+            <% end %>
 
-<%= link_to(
-      'View submitted change orders',
-      submitted_change_orders_path(
-        venue_id: current_venue.id
-      ),
-      class: 'boss2-button'
-    ) %>
-
-  <%= bootstrap_form_for(
-          :change_order,
-          url: change_orders_path,
-          id: 'current-change-order-form',
-          method: 'get',
-          html: { class: ''}
-      )  do |form| %>
-      <%= form.select(
-              :venue_id,
-              options_for_select(
-                  accessible_venues.map do |venue|
-                    [venue.name, venue.id]
-                  end,
-                  current_venue.id
+            <%= link_to(
+              'View Submitted Orders',
+              submitted_change_orders_path(
+                venue_id: current_venue.id
               ),
-              {},
-              id: 'current-change-order-venue-select'
-          ) %>
-  <% end %>
+              class: 'boss-button boss-button_role_view-orders boss-page-dashboard__button'
+            ) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-
-<% if current_change_order.persisted? %>
-  <p>Last Updated at: <%= current_change_order.updated_at.to_s(:human) %></p>
-<% else %>
-  <p>No change order is currently pending for this venue</p>
-<% end %>
-
-<%= render partial: 'shared/change_order_form', locals: {
-      change_order: current_change_order,
-      url: update_current_change_orders_path(
-        venue_id: current_change_order.venue.id
-      ),
-      action_text: current_change_order.persisted? ? 'Update' : 'Create'
-    } %>
+  <%= render partial: 'shared/change_order_form', locals: {
+    change_order: current_change_order,
+    url: update_current_change_orders_path(
+      venue_id: current_change_order.venue.id
+    ),
+    action_text: current_change_order.persisted? ? 'Update' : 'Create'
+  } %>
+</main>

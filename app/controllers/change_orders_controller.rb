@@ -1,4 +1,6 @@
 class ChangeOrdersController < ApplicationController
+  before_action :set_new_layout, only: [:index]
+
   def index
     if venue_from_params.present?
       current_venue = venue_from_params
