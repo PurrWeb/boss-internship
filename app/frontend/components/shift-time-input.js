@@ -91,9 +91,10 @@ export default class ShiftTimeInput extends Component {
         }
     }
     updateTime(newValue){
-        if (!newValue && !newValue.value) {
+        if (!newValue.value) {
             return;
         }
+        
         var newDate = this.getDateFromTime(newValue);
         this.props.onChange(newDate);
     }
