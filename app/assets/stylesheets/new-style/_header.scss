@@ -156,7 +156,7 @@
     font-size: 1.1em;
     line-height: 1.2em;
     color: $boss-white;
-    background: $background-color url(/assets/icon-lock-white.svg) 0.6em center no-repeat;
+    background: $background-color asset-url("icon-lock-white.svg") 0.6em center no-repeat;
     background-size: 1.1em;
 
     @include link-to-button($color: $boss-white);
