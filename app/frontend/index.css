@@ -14733,7 +14733,7 @@ input[type=checkbox] + .boss-label__text {
   font-size: 1.1em;
   line-height: 1.2em;
   color: white;
-  background: #ffae00 url(/assets/icon-lock-white.svg) 0.6em center no-repeat;
+  background: #ffae00 url("./icons/icon-lock-white.svg") 0.6em center no-repeat;
   background-size: 1.1em;
   color: white;
   text-decoration: none; }
