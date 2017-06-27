@@ -1,5 +1,6 @@
 class ChangeOrderReportsController < ApplicationController
   before_action :authorize_admin
+  before_action :set_new_layout, only: [:history, :index]
 
   def index
     pending_change_orders = ChangeOrder.current.includes(:venue)

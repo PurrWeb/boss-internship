@@ -1,41 +1,58 @@
-<h1>Change Order Report</h1>
+<div class="boss-page-main__dashboard">
+  <div class="boss-page-main__inner">
+    <!-- Page dashboard start -->
+    <div class="boss-page-dashboard boss-page-dashboard_updated">
+       <h1 class="boss-page-dashboard__title">Change Order Report</h1>
+       <% if venues_without_pending_change_order.count > 0 %>
+         <div class="boss-page-dashboard__message">
+           <div class="boss-message boss-message_role_note">
+              <h3 class="boss-message__text boss-message__text_marked">Venues without current fruit order submissions:</h3>
+              <p class="boss-message__text"><%= venues_without_pending_change_order.map(&:name).map(&:titleize).to_sentence %></p>
+            </div>
+         </div>
+      <% end %>
+    </div>
+    <!-- Page dashboard end -->
+  </div>
+</div>
 
-<% if venues_without_pending_change_order.count > 0 %>
-  <p>
-    <b>Venues without current change order submissions:</b> <%= venues_without_pending_change_order.map(&:name).to_sentence %>
-  </p>
-<% end %>
+<!-- Page main container start -->
+<div class="boss-page-main__content">
+  <div class="boss-page-main__inner">
+    <section class="boss-board boss-board_context_stack">
+      <header class="boss-board__header boss-board__header_type_no-border">
+        <h2 class="boss-board__title">Pending Orders</h2>
+      </header>
 
-<h2>Pending Orders</h2>
-<% if pending_change_orders.count > 0 %>
-  <%= render partial: 'shared/change_orders_table', locals: {
-        change_orders: pending_change_orders,
-        action_partial: 'shared/pending_change_order_actions'
-      } %>
-<% else %>
-  <p>No pending change orders</p>
-<% end %>
+      <% if pending_change_orders.count > 0 %>
+        <%= render partial: 'shared/change_orders_table', locals: {
+          change_orders: pending_change_orders,
+          action_partial: 'shared/pending_change_order_actions'
+        } %>
+      <% else %>
+        <p class="boss-board__header boss-board__header_type_no-border">No change orders currently pending</p>
+      <% end %>
+    </section>
 
-<% if accepted_change_orders.count > 0 %>
-  <div class="mb-mn">
-    <h2>Accepted Orders</h2>
+    <section class="boss-board boss-board_context_stack">
+      <header class="boss-board__header boss-board__header_type_no-border">
+        <h2 class="boss-board__title">Accepted Orders</h2>
+      </header>
 
-    <%= render partial: 'shared/change_orders_table', locals: {
+      <% if accepted_change_orders.count > 0 %>
+        <%= render partial: 'shared/change_orders_table', locals: {
           change_orders: accepted_change_orders,
           action_partial: 'shared/accepted_change_order_actions'
         } %>
+      <% else %>
+        <p class="boss-board__header boss-board__header_type_no-border">No change orders currently to be accepted</p>
+      <% end %>
+    </section>
 
-    <%= bootstrap_form_for(
-          '',
-          url: complete_change_order_reports_path(
-            change_order_ids: accepted_change_orders.map(&:id)
-          ),
-          html: { method: :put }
-        ) do |form|
-    %>
-      <%= form.button('Complete Orders', class: 'boss2-button') %>
-    <% end %>
+    <div class="boss-page-main__controls boss-page-main__controls_position_last">
+      <%= link_to('Complete All Orders', complete_change_order_reports_path(change_order_ids: accepted_change_orders.pluck(:id)), class: 'boss-page-main__control boss-page-main__control_role_view-history', method: :put) %>
+      <%= link_to('View Completed Orders', history_change_order_reports_path, class: 'boss-page-main__control boss-page-main__control_role_view-history') %>
+    </div>
   </div>
-<% end %>
+</div>
 
-<%= link_to('View Completed Orders', history_change_order_reports_path) %>

@@ -26,6 +26,7 @@ if (window.boss.currentLayout !== 'oldLayout') {
 }
 
 import './mobile-menu';
+import './vendors/owl.carousel';
 
 import "./lib/load-underscore-mixins"
 
@@ -69,6 +70,12 @@ registerComponent("StaffHoursOverviewApp", StaffHoursOverviewApp)
 
 import RollbarErrorTestApp from "./apps/rollbar-error-test/rollbar-error-test-app"
 registerComponent("RollbarErrorTestApp", RollbarErrorTestApp)
+
+import VenueFinder from "./components/shared/venue-finder"
+registerComponent("VenueFinder", VenueFinder)
+
+import FruitPopover from "./components/shared/fruit-popover"
+registerComponent("FruitPopover", FruitPopover)
 
 import WeekPicker from "~components/week-picker"
 $(document).ready(function(){

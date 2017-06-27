@@ -1,30 +1,69 @@
-<h1>Fruit Order Report</h1>
+<div class="boss-page-main__dashboard">
+  <div class="boss-page-main__inner">
+    <!-- Page dashboard start -->
+    <div class="boss-page-dashboard boss-page-dashboard_updated">
+       <h1 class="boss-page-dashboard__title">Fruit Order Report</h1>
+       <% if venues_without_pending_fruit_order.count > 0 %>
+         <div class="boss-page-dashboard__message">
+           <div class="boss-message boss-message_role_note boss-message_status_success">
+              <h3 class="boss-message__text boss-message__text_marked">Venues without current fruit order submissions:</h3>
+              <p class="boss-message__text"><%= venues_without_pending_fruit_order.map(&:name).map(&:titleize).to_sentence %></p>
+            </div>
+         </div>
+      <% end %>
+    </div>
+    <!-- Page dashboard end -->
+  </div>
+</div>
 
-<% if venues_without_pending_fruit_order.count > 0 %>
-  <p>
-    <b>Venues without current fruit order submissions:</b> <%= venues_without_pending_fruit_order.map(&:name).to_sentence %>
-  </p>
-<% end %>
+<!-- Page main container start -->
+<div class="boss-page-main__content">
+  <div class="boss-page-main__inner">
+    <section class="boss-board boss-board_context_stack">
+      <header class="boss-board__header boss-board__header_type_no-border">
+        <h2 class="boss-board__title">Pending Orders</h2>
+      </header>
 
-<h2>Pending Orders</h2>
-<% if pending_fruit_orders.count > 0 %>
-  <%= render partial: 'orders_table', locals: {
-        fruit_orders: pending_fruit_orders,
-        show_fields: pending_show_fields,
-        action_partial: 'pending_order_actions'
-      } %>
-<% else %>
-  <p>No fruit orders currently pending</p>
-<% end %>
+      <% if pending_fruit_orders.count > 0 %>
+        <%= render partial: 'orders_table', locals: {
+          fruit_orders: pending_fruit_orders,
+          show_fields: pending_show_fields,
+          action_partial: 'pending_order_actions',
+          show_complete_actions: false
+        } %>
+      <% else %>
+        <p class="boss-board__header boss-board__header_type_no-border">No fruit orders currently pending</p>
+      <% end %>
+    </section>
 
-<% if accepted_fruit_orders.count > 0 %>
-  <h2>Accepted Orders</h2>
-  <%= link_to('Mark All Completed', complete_fruit_order_reports_path(fruit_order_ids: accepted_fruit_orders.pluck(:id)), class: 'boss2-button', method: :put) %>
-  <%= render partial: 'orders_table', locals: {
-        fruit_orders: accepted_fruit_orders,
-        show_fields: accepted_show_fields,
-        action_partial: 'accepted_order_actions'
-      } %>
-<% end %>
+    <section class="boss-board boss-board_context_stack">
+      <header class="boss-board__header boss-board__header_type_no-border">
+        <h2 class="boss-board__title">Accepted Orders</h2>
+      </header>
 
-<%= link_to('View Full History', history_fruit_order_reports_path, class: 'boss2-button') %>
+      <% if accepted_fruit_orders.count > 0 %>
+        <%= render partial: 'orders_table', locals: {
+          fruit_orders: accepted_fruit_orders,
+          show_fields: accepted_show_fields,
+          action_partial: 'accepted_order_actions',
+          show_complete_actions: true
+        } %>
+      <% else %>
+        <p class="boss-board__header boss-board__header_type_no-border">No fruit orders currently to be accepted</p>
+      <% end %>
+    </section>
+
+    <div class="boss-page-main__controls boss-page-main__controls_position_last">
+      <%= link_to(
+        'View Full History',
+        history_fruit_order_reports_path,
+        class: 'boss-page-main__control boss-page-main__control_role_view-history')
+      %>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.initOwlCarousel();
+  window.createCarousel();
+</script>

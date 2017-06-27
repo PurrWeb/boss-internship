@@ -1,2 +1,37 @@
-<%= link_to('Edit', fruit_orders_path(venue_id: fruit_order.venue.id), class: 'boss2-button') %>
-<%= link_to('Accept', accept_fruit_order_report_path(fruit_order), class: 'boss2-button', method: :put) %>
+<div class="boss-horizontal-table__cell boss-horizontal-table__cell_role_actions">
+  <div class="boss-horizontal-table__actions">
+    <%= link_to(
+        'Edit',
+        fruit_orders_path(
+          venue_id: fruit_order.venue.id
+        ),
+        class: 'boss-button boss-button_type_small boss-button_role_edit boss-horizontal-table__action boss-horizontal-table__action_desktop'
+      )
+    %>
+
+    <%= link_to(
+        '',
+        fruit_orders_path(
+          venue_id: fruit_order.venue.id
+        ),
+        class: 'boss-button boss-button_type_small boss-button_type_icon boss-button_role_edit boss-horizontal-table__action boss-horizontal-table__action_mobile'
+      )
+    %>
+
+    <%= link_to(
+        'Accept',
+        accept_fruit_order_report_path(fruit_order),
+        class: 'boss-button boss-button_type_small boss-button_role_success boss-horizontal-table__action boss-horizontal-table__action_desktop',
+        method: :put
+      )
+    %>
+
+    <%= link_to(
+        '',
+        accept_fruit_order_report_path(fruit_order),
+        class: 'boss-button boss-button_type_small boss-button_type_icon boss-button_role_success boss-horizontal-table__action boss-horizontal-table__action_mobile',
+        method: :put
+      )
+    %>
+  </div>
+</div>

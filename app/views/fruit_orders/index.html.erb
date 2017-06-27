@@ -1,55 +1,53 @@
-<div class="row align-middle">
-  <div class="column"><h1>Current Fruit Order</h1></div>
-  <% if can?(:destroy, current_fruit_order) %>
-      <div class="shrink column">
-        <%= link_to(
-                fruit_order_path(current_fruit_order),
-                class: 'boss2-button boss2-button_role_delete',
-                method: :delete
+<div class="boss-page-main__dashboard">
+  <div class="boss-page-main__inner">
+    <div class="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_change-order-form">
+      <div class="boss-page-dashboard__group">
+        <div class="boss-page-dashboard__sub-group">
+          <h1 class="boss-page-dashboard__title">Current Fruit Order</h1>
+          <!-- Select box -->
+          <div class="boss-page-dashboard__controls-group">
+            <form action="#" class="boss-form">
+              <div class="boss-form__field">
+                <div class="boss-form__select boss-form__select_size_small-fluid">
+                  <%= react_component(
+                    'VenueFinder',
+                    selected_venue: current_venue,
+                    venues: accessible_venues
+                  ) %>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="boss-page-dashboard__buttons-group">
+          <% if can?(:destroy, current_fruit_order) %>
+            <%= link_to(
+              fruit_order_path(current_fruit_order),
+              class: 'boss-button boss-button_role_exclamation boss-page-dashboard__button',
+              method: :delete
             ) do %>
-            Delete Current Order
-        <% end %>
+              Delete Current Order
+            <% end %>
+          <% end %>
+
+          <%= link_to(
+            'View Past Fruit Orders',
+            submitted_fruit_orders_path(
+              venue_id: current_venue.id
+            ),
+            class: 'boss-button boss-button_role_view-orders boss-page-dashboard__button'
+          ) %>
+        </div>
       </div>
-  <% end %>
+    </div>
+  </div>
 </div>
 
-<%= link_to(
-      'View past fruit orders',
-      submitted_fruit_orders_path(
-        venue_id: current_venue.id
-      ),
-      class: 'boss2-button'
-    ) %>
-
-<%= bootstrap_form_for(
-      :fruit_order,
-      url: fruit_orders_path,
-      id: 'current-fruit-order-form',
-      method: 'get'
-    )  do |form| %>
-  <%= form.select(
-        :venue_id,
-        options_for_select(
-          accessible_venues.map do |venue|
-            [venue.name, venue.id]
-          end,
-          current_venue.id
-        ),
-        {},
-        id: 'current-fruit-order-venue-select'
-      ) %>
-<% end %>
-
-<% if current_fruit_order.persisted? %>
-  <p>Last Updated at: <%= current_fruit_order.updated_at.to_s(:human) %></p>
-<% else %>
-  <p>No fruit order is currently pending for this venue</p>
-<% end %>
-
 <%= render partial: 'shared/fruit_order_form', locals: {
-      fruit_order: current_fruit_order,
-      url: update_current_fruit_orders_path(
-        venue_id: current_fruit_order.venue.id
-      ),
-      action_text: current_fruit_order.persisted? ? 'Update' : 'Create'
-    } %>
+  fruit_order: current_fruit_order,
+  url: update_current_fruit_orders_path(
+    venue_id: current_fruit_order.venue.id
+  ),
+  action_text: current_fruit_order.persisted? ? 'Update' : 'Create'
+} %>
