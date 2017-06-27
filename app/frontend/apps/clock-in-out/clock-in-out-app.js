@@ -4,11 +4,12 @@ import ClockInOutView from "./containers/clock-in-out-view"
 import actionCreators from "~redux/actions"
 import AppComponent from "../app-component"
 import utils from "~lib/utils"
+import '~lib/global-try-catch';
 
 export default class RotaApp extends AppComponent {
     componentWillMount(){
         this.ensureOnCorrectDay();
-
+        
         var store = this.store;
         store.subscribe(function(){
     		  localStorage.setItem("clockInOutApiKey", store.getState().apiKey)
