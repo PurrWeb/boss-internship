@@ -1,6 +1,4 @@
 class StaffMembersController < ApplicationController
-  require 'custom_pagination_link_renderer'
-
   before_action :set_new_layout, only: [:index]
 
   def index
