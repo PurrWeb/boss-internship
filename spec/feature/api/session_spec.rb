@@ -80,7 +80,11 @@ RSpec.describe 'Access token end points' do
           token = AccessToken.find_by(staff_member: staff_member)
           expect(json).to eq({
             "access_token" => token.token,
-            "expires_at" => token.expires_at.utc.iso8601.to_s
+            "expires_at" => token.expires_at.utc.iso8601.to_s,
+            "staff_member" => {
+              "id" => token.staff_member.id,
+              "name" => token.staff_member.full_name
+            }
           })
         end
 

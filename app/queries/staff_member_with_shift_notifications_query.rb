@@ -1,5 +1,5 @@
 class StaffMemberWithShiftNotificationsQuery
-  def initialize(now: Time.zone.now)
+  def initialize(now: Time.current)
     @now = now
   end
 

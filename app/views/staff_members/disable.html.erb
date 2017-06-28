@@ -1,16 +1,14 @@
-<main role="main" class="boss2-page-content <%= content_for(:main_class) %>">
-  <div class="boss2-page-content__inner-container">
-    <h1>Disable Staff Member</h1>
+<div class="boss2-page-content__inner-container">
+  <h1>Disable Staff Member</h1>
 
-    <% if staff_member.user.present? %>
-        <div class="user-disable-warning">
-          <p class="text-warning">
-            Warning! This staff member has an associated user account. Disabling here will not disable the user and they
-            will still be able to log in.
-          </p>
-        </div>
-    <% end %>
+  <% if staff_member.user.present? %>
+      <div class="user-disable-warning">
+        <p class="text-warning">
+          Warning! This staff member has an associated user account. Disabling here will not disable the user and they
+          will still be able to log in.
+        </p>
+      </div>
+  <% end %>
 
-    <%= render partial: 'shared/disable_staff_member_form', locals: {url: staff_member_path(staff_member), form: form} %>
-  </div>
-</main>
+  <%= render partial: 'shared/disable_staff_member_form', locals: {url: staff_member_path(staff_member), form: form} %>
+</div>
