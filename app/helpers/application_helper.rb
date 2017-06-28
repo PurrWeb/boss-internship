@@ -26,4 +26,13 @@ module ApplicationHelper
       'N / A'
     end
   end
+
+  def logged_in_user_info_json
+    if @current_user.present?
+      {
+        id: @current_user.id,
+        name: @current_user.full_name
+      }
+    end
+  end
 end

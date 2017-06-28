@@ -94,6 +94,9 @@ export const clockInOutAppEnterUserMode = createApiRequestActionCreator({
                 }
             },
             getSuccessActionData(responseData, requestOptions){
+                window.RollbarData = window.RollbarData || {};
+                window.RollbarData.currentStaffMember = responseData.staff_member;
+
                 return {
                     mode: requestOptions.userMode,
                     token: responseData.access_token
@@ -227,6 +230,11 @@ export const clockInOutAppFetchAppData = createApiRequestActionCreator({
             }
         },
         getSuccessActionData(responseData){
+            window.RollbarData = window.RollbarData || {};
+            window.RollbarData.currentVenue = {
+                id: responseData.venues[0].id,
+                name: responseData.venues[0].name,
+            }
             return responseData
         },
     }),

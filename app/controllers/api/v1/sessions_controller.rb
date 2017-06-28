@@ -29,7 +29,13 @@ module Api
             staff_member: staff_member,
           )
 
-          render 'create', locals: { access_token: access_token }
+          render 'create', locals: {
+            access_token: access_token,
+            staff_member: {
+              id: staff_member.id,
+              name: staff_member.name.full_name
+            }
+          }
         else
           render json: {
               errors: {
