@@ -15,11 +15,13 @@
     
     <script>
       window.boss = window.boss || {};
-      window.boss.currentLayout = "<%= @current_layout %>"
-      window.boss.current_version = "<%= application_version %>";
-      if (typeof Rollbar !== 'undefined') {
-        Rollbar.configure({payload: {app_version: window.boss.current_version}});
-      }
+      window.RollbarData = window.RollbarData || {};
+      window.currentLayout = "<%= @current_layout %>"
+      window.RollbarData.currentVersion = "<%= application_version %>";
+      window.RollbarData.currentUser = {
+        id: "<%= @current_user.id %>",
+        name: "<%= @current_user.full_name %>"
+      };
     </script>
     
     <script src="<%= @bundle_script %>" data-turbolinks-track="true"></script>

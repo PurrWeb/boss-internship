@@ -6,9 +6,9 @@ import moment from "moment"
 import $ from "jquery"
 import "react-fastclick" // import for side effects
 import * as selectors from "~redux/selectors"
-import './lib/error-handlers';
+
 window.boss = window.boss || {};
-window.boss.currentLayout = window.boss.currentLayout || 'oldLayout';
+window.currentLayout = window.currentLayout || 'oldLayout';
 window.debug = window.debug || {};
 window.debug.React = React;
 window.debug.ReactDOM = ReactDOM;
@@ -20,7 +20,7 @@ window.React = React;
 window.ReactDOM = ReactDOM;
 
 // ToDo: Need to remove this condition, after fix old layout issues
-if (window.boss.currentLayout !== 'oldLayout') {
+if (window.currentLayout !== 'oldLayout') {
     // Import all sass from submodule(boss-css repo)
     require ('./assets/sass/index.sass');
 }
