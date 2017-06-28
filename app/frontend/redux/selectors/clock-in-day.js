@@ -13,7 +13,7 @@ export function selectClockInDay(state, {staffMemberClientId, date}) {
     })
 
     if (!clockInDay) {
-        throw Error('Clock in day');
+        throw Error('Clock in day not found');
     }
 
     return clockInDay;
