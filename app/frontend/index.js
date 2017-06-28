@@ -6,6 +6,7 @@ import moment from "moment"
 import $ from "jquery"
 import "react-fastclick" // import for side effects
 import * as selectors from "~redux/selectors"
+import '~lib/global-try-catch';
 
 window.boss = window.boss || {};
 window.currentLayout = window.currentLayout || 'oldLayout';
