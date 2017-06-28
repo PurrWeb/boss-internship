@@ -11,8 +11,24 @@ const ReactTryCatchBatchingStrategy = {
     try {
       ReactDefaultBatchingStrategy.batchedUpdates(...args);
     } catch (e) {
+      if (typeof Rollbar !== 'undefined') {
+        window.RollbarData = window.RollbarData || {};
+        let payload = {};
+        if (typeof window.RollbarData.currentVenue !== 'undefined') {
+          payload.venue = window.RollbarData.currentVenue;
+        }
+        if (typeof window.RollbarData.currentVersion !== 'undefined') {
+          payload.app_version = window.RollbarData.currentVenue;
+        }
+        if (typeof window.RollbarData.currentUser !== 'undefined') {
+          payload.person = window.RollbarData.currentUser;
+        }
+        if (typeof window.RollbarData.currentStaffMember !== 'undefined') {
+          payload.person = window.RollbarData.currentStaffMember;
+        }
+        Rollbar.configure({payload: payload});
+      }
       errorHandler.throwErrorPage();
-
       throw e;
     }
   },
