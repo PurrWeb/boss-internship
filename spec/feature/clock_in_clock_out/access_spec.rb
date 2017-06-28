@@ -1,6 +1,6 @@
 require 'feature/feature_spec_helper'
 
-RSpec.describe 'Clock in clock out', :type => :feature, js: true do
+RSpec.describe 'Clock in clock out', :type => :feature do
   let(:clock_in_clock_out_page) { PageObject::ClockInClockOutIndexPage.new }
 
   specify 'the rect app should be rendered' do
