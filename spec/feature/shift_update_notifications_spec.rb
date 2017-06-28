@@ -2,6 +2,7 @@ require 'feature/feature_spec_helper'
 
 RSpec.describe 'Shift notification Emails' do
   include ActiveSupport::Testing::TimeHelpers
+  include ActiveJob::TestHelper
 
   context 'when staff member is marked as requiring notification' do
     let(:now) { Time.current }
@@ -28,18 +29,18 @@ RSpec.describe 'Shift notification Emails' do
 
     context 'when less than 30 minutes have passed' do
       specify 'running the ShiftUpdateNotificationJob should not send any emails' do
-        ShiftUpdateNotificationJob.new.perform
-        expect(ActionMailer::Base.deliveries).to be_empty
+        assert_enqueued_jobs 0 do
+          ShiftUpdateNotificationJob.new.perform
+        end
       end
     end
 
     context 'when more than 30 minutes have passed' do
       specify 'running the ShiftUpdateNotificationJob should send the staff member an update email' do
         travel_to(now + 32.minutes) do
-          ShiftUpdateNotificationJob.new.perform
-        end
-        travel_to(now + 34.minutes) do
-          expect(ActionMailer::Base.deliveries).to_not be_empty
+          assert_enqueued_with(job: SendStaffMemberShiftUpdateJob, args: [staff_member.id]) do
+            ShiftUpdateNotificationJob.new.perform
+          end
         end
       end
     end
