@@ -28,7 +28,9 @@ RSpec.feature 'Venues Section Index page' do
     scenario 'clicking the staff count should take you to a pre filtered staff members index' do
       venues_index_page.surf_to
       venues_index_page.venues_table.click_on_detail(:staff_count, venue: venue)
-      staff_member_index_page.filter.ui_shows_filtering_by_venue(venue)
+      staff_member_index_page.assert_on_correct_page
+      query_params = CGI::parse(URI(page.current_url).query)
+      expect(query_params.fetch("staff_member_index_filter[venue]")).to eq([venue.id.to_s])
     end
   end
 end
