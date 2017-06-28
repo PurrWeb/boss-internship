@@ -18,10 +18,12 @@
       window.RollbarData = window.RollbarData || {};
       window.currentLayout = "<%= @current_layout %>"
       window.RollbarData.currentVersion = "<%= application_version %>";
-      window.RollbarData.currentUser = {
-        id: "<%= @current_user.id %>",
-        name: "<%= @current_user.full_name %>"
-      };
+      <% if logged_in_user_info_json.present? %>
+        window.RollbarData.currentUser = {
+          id: "<%= logged_in_user_info_json[:id] %>",
+          name: "<%= logged_in_user_info_json[:name] %>"
+        };
+      <% end%>
     </script>
     
     <script src="<%= @bundle_script %>" data-turbolinks-track="true"></script>
