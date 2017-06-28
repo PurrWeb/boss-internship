@@ -37,6 +37,11 @@ export default class RotaApp extends AppComponent {
       }
     }
     render() {
+        // window.RollbarData.currentUser - use as additional(person) information in Rollbar
+        // In Clocking App we using StaffMember instead of authenticated user
+        // So we just delete this object 
+        delete window.RollbarData.currentUser;
+
         return <Provider store={this.store}>
             <ClockInOutView />
         </Provider>
