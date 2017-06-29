@@ -647,7 +647,7 @@ ActiveRecord::Schema.define(version: 20170629102524) do
     t.text     "avatar_data_uri",                       limit: 65535
     t.string   "pin_code_hash",                         limit: 255
     t.string   "pin_code_salt",                         limit: 255
-    t.string   "rollbar_guid",                          limit: 255
+    t.string   "rollbar_guid",                          limit: 255,                   null: false
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
@@ -720,7 +720,7 @@ ActiveRecord::Schema.define(version: 20170629102524) do
     t.boolean  "first"
     t.integer  "staff_member_id",        limit: 4
     t.boolean  "would_rehire",                       default: true, null: false
-    t.string   "rollbar_guid",           limit: 255
+    t.string   "rollbar_guid",           limit: 255,                null: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
@@ -758,7 +758,7 @@ ActiveRecord::Schema.define(version: 20170629102524) do
     t.text     "fruit_order_fields", limit: 65535
     t.integer  "till_float_cents",   limit: 4,     null: false
     t.integer  "safe_float_cents",   limit: 4,     null: false
-    t.string   "rollbar_guid",       limit: 255
+    t.string   "rollbar_guid",       limit: 255,   null: false
   end
 
   add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree
