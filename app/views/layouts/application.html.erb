@@ -21,7 +21,7 @@
       <% if logged_in_user_info_json.present? %>
         window.RollbarData.currentUser = {
           id: "<%= logged_in_user_info_json[:id] %>",
-          name: "<%= logged_in_user_info_json[:name] %>"
+          username: "<%= logged_in_user_info_json[:name] %>"
         };
       <% end%>
     </script>

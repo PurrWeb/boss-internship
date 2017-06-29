@@ -33,7 +33,7 @@ module Api
             access_token: access_token,
             staff_member: {
               id: staff_member.id,
-              name: staff_member.name.full_name
+              username: staff_member.name.full_name
             }
           }
         else
