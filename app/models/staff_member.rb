@@ -76,6 +76,7 @@ class StaffMember < ActiveRecord::Base
   validates :employment_status_p45_supplied, inclusion: { in: [true, false], message: 'is required' }
 
   validates :would_rehire, inclusion: { in: [true, false], message: 'is required' }
+  validates :rollbar_guid, presence: true
 
   before_validation :normalise_national_insurance_number
 

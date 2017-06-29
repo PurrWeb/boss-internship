@@ -11,7 +11,7 @@ class Venue < ActiveRecord::Base
   before_create :generate_rollbar_guid
 
   serialize :fruit_order_fields, Array
-
+  validates :rollbar_guid, presence: true
   validates :safe_float_cents,
     numericality: { greater_than_or_equal_to: 0 }
   validates :till_float_cents,
