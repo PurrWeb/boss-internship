@@ -18,7 +18,7 @@ const ReactTryCatchBatchingStrategy = {
           payload.venue = window.RollbarData.currentVenue;
         }
         if (typeof window.RollbarData.currentVersion !== 'undefined') {
-          payload.app_version = window.RollbarData.currentVenue;
+          payload.app_version = window.RollbarData.currentVersion;
         }
         if (typeof window.RollbarData.currentUser !== 'undefined') {
           payload.person = window.RollbarData.currentUser;
