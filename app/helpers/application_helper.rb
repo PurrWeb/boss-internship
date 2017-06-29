@@ -31,7 +31,8 @@ module ApplicationHelper
     if @current_user.present?
       {
         id: @current_user.id,
-        name: @current_user.full_name
+        name: @current_user.full_name,
+        rollbar_guid: @current_user.rollbar_guid
       }
     end
   end

@@ -33,7 +33,8 @@ module Api
             access_token: access_token,
             staff_member: {
               id: staff_member.id,
-              username: staff_member.name.full_name
+              name: staff_member.name.full_name,
+              rollbar_guid: staff_member.rollbar_guid
             }
           }
         else
