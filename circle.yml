@@ -1,0 +1,14 @@
+machine:
+  timezone: Europe/London
+  node:
+    version: 4.7
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+    - npm install yarn -g
+    - yarn install
+    - yarn run build
+test:
+  override:
+    - bundle exec rspec
