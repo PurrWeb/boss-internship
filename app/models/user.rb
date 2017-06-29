@@ -29,6 +29,8 @@ class User < ActiveRecord::Base
   validates :email_address, presence: true
   validates :invite, presence: true, unless: :first?
 
+  before_create :generate_rollbar_guid
+
   delegate :current_state, to: :state_machine
 
   delegate \
@@ -239,5 +241,9 @@ class User < ActiveRecord::Base
   private
   def current_web_access_tokens
     AccessToken.where(token_type: 'web', user: self, expires_at: nil)
+  end
+
+  def generate_rollbar_guid
+    self.rollbar_guid = SecureRandom.uuid
   end
 end

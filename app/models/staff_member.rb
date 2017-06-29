@@ -49,6 +49,7 @@ class StaffMember < ActiveRecord::Base
   # Transient attribute used to preserve image uploads
   # during form resubmissions
   attr_accessor :avatar_base64, :pin_code
+  before_create :generate_rollbar_guid
   before_save :encrypt_pin_code
 
   validates :name, presence: true
@@ -326,5 +327,9 @@ class StaffMember < ActiveRecord::Base
 
   def self.initial_state
     StaffMemberStateMachine.initial_state
+  end
+
+  def generate_rollbar_guid
+    self.rollbar_guid = SecureRandom.uuid
   end
 end

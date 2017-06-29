@@ -8,6 +8,8 @@ class Venue < ActiveRecord::Base
   has_many :venue_reminder_users
   has_many :reminder_users, through: :venue_reminder_users, source: :user
 
+  before_create :generate_rollbar_guid
+
   serialize :fruit_order_fields, Array
 
   validates :safe_float_cents,
@@ -26,5 +28,10 @@ class Venue < ActiveRecord::Base
     define_method "#{field_prefix}_pound_value" do
       Float(public_send("#{field_prefix}_cents") || 0.0) / 100.0
     end
+  end
+
+  private
+  def generate_rollbar_guid
+    self.rollbar_guid = SecureRandom.uuid
   end
 end
