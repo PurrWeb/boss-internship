@@ -234,6 +234,7 @@ export const clockInOutAppFetchAppData = createApiRequestActionCreator({
             window.RollbarData.currentVenue = {
                 id: responseData.venues[0].id,
                 name: responseData.venues[0].name,
+                rollbar_guid: responseData.venues[0].rollbar_guid,
             }
             return responseData
         },

@@ -15,16 +15,31 @@ const ReactTryCatchBatchingStrategy = {
         window.RollbarData = window.RollbarData || {};
         let payload = {};
         if (typeof window.RollbarData.currentVenue !== 'undefined') {
-          payload.venue = window.RollbarData.currentVenue;
+          let { id, name, rollbar_guid } = window.RollbarData.currentVenue
+          payload.venue = { id, name };
+          payload.person = {
+            id: rollbar_guid,
+            username: `Venue: ${ name }`,
+          }
         }
         if (typeof window.RollbarData.currentVersion !== 'undefined') {
           payload.app_version = window.RollbarData.currentVersion;
         }
         if (typeof window.RollbarData.currentUser !== 'undefined') {
-          payload.person = window.RollbarData.currentUser;
+          let { id, name, rollbar_guid } = window.RollbarData.currentUser;
+          payload.user = { id, name };
+          payload.person = {
+            id: rollbar_guid,
+            username: `User: ${ name }`,
+          }
         }
         if (typeof window.RollbarData.currentStaffMember !== 'undefined') {
-          payload.person = window.RollbarData.currentStaffMember;
+          let { id, name, rollbar_guid } = window.RollbarData.currentStaffMember
+          payload.staff_member = { id, name };
+          payload.person = {
+            id: rollbar_guid,
+            username: `StaffMember: ${ name }`,
+          }
         }
         Rollbar.configure({payload: payload});
       }
