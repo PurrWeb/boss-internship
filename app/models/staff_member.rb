@@ -49,9 +49,11 @@ class StaffMember < ActiveRecord::Base
   # Transient attribute used to preserve image uploads
   # during form resubmissions
   attr_accessor :avatar_base64, :pin_code
+  
   before_save :encrypt_pin_code
 
   validates :name, presence: true
+  validates :rollbar_guid, presence: true
   validates :gender, inclusion: { in: GENDERS, message: 'is required' }
   validate  :national_insurance_number_valid
   validates :pin_code, presence: true, on: :create
@@ -77,6 +79,7 @@ class StaffMember < ActiveRecord::Base
   validates :would_rehire, inclusion: { in: [true, false], message: 'is required' }
 
   before_validation :normalise_national_insurance_number
+  before_validation :check_rollbar_guid
 
   delegate :current_state, to: :state_machine
 
@@ -326,5 +329,15 @@ class StaffMember < ActiveRecord::Base
 
   def self.initial_state
     StaffMemberStateMachine.initial_state
+  end
+
+  def check_rollbar_guid
+    unless rollbar_guid.present?
+      generate_rollbar_guid
+    end
+  end
+
+  def generate_rollbar_guid
+    self.rollbar_guid = SecureRandom.uuid
   end
 end

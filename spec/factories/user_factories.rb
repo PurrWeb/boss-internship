@@ -4,6 +4,7 @@ FactoryGirl.define do
     association :email_address, strategy: :build
     invite nil
     first true
+    rollbar_guid SecureRandom.uuid
 
     transient do
       venues nil

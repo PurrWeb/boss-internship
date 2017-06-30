@@ -24,10 +24,15 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable,
           :lockable, :authentication_keys => [:devise_email]
 
+  before_validation :check_rollbar_guid
+  
+  validates :rollbar_guid, presence: true
   validates :role, inclusion: { in: ROLES, message: 'is required' }
   validates :name, presence: true
   validates :email_address, presence: true
   validates :invite, presence: true, unless: :first?
+
+  before_create :generate_rollbar_guid
 
   delegate :current_state, to: :state_machine
 
@@ -239,5 +244,15 @@ class User < ActiveRecord::Base
   private
   def current_web_access_tokens
     AccessToken.where(token_type: 'web', user: self, expires_at: nil)
+  end
+
+  def check_rollbar_guid
+    unless rollbar_guid.present?
+      generate_rollbar_guid
+    end
+  end
+
+  def generate_rollbar_guid
+    self.rollbar_guid = SecureRandom.uuid
   end
 end

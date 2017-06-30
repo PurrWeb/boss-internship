@@ -83,7 +83,8 @@ RSpec.describe 'Access token end points' do
             "expires_at" => token.expires_at.utc.iso8601.to_s,
             "staff_member" => {
               "id" => token.staff_member.id,
-              "name" => token.staff_member.full_name
+              "name" => token.staff_member.full_name,
+              "rollbar_guid" => token.staff_member.rollbar_guid
             }
           })
         end
