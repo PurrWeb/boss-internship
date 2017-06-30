@@ -18,14 +18,7 @@ class APIController < ApplicationController
     end
     @_access_token.present?
   end
-
-  def version
-    render(
-      json: {version: ApplicationVersion.version},
-      status: :ok
-    )
-  end
-
+  
   def api_token_athenticate!
     render(
       json: { errors: "Not authenticated" },
