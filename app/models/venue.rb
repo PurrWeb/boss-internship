@@ -11,6 +11,9 @@ class Venue < ActiveRecord::Base
   before_create :generate_rollbar_guid
 
   serialize :fruit_order_fields, Array
+  before_validation :check_rollbar_guid
+
+  validates :rollbar_guid, presence: true
   validates :safe_float_cents,
     numericality: { greater_than_or_equal_to: 0 }
   validates :till_float_cents,
@@ -30,6 +33,12 @@ class Venue < ActiveRecord::Base
   end
 
   private
+  def check_rollbar_guid
+    unless rollbar_guid.present?
+      generate_rollbar_guid
+    end
+  end
+
   def generate_rollbar_guid
     self.rollbar_guid = SecureRandom.uuid
   end
