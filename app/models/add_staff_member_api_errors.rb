@@ -61,7 +61,8 @@ class AddStaffMemberApiErrors
       :pay_rate,
       :master_venue,
       :work_venues,
-      :email_address
+      :email_address,
+      :rollbar_guid
     ]
   end
 
