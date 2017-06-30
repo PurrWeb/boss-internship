@@ -1,4 +1,5 @@
 import './polyfills';
+
 import React from 'react';
 import ReactDOM from 'react-dom'
 import _ from "underscore"
@@ -79,7 +80,16 @@ import FruitPopover from "./components/shared/fruit-popover"
 registerComponent("FruitPopover", FruitPopover)
 
 import WeekPicker from "~components/week-picker"
+
+import AppVersionChecker from '~components/app-version-checker';
+
 $(document).ready(function(){
+    let versionCheckerEl = document.createElement("div");
+    document.body.appendChild(versionCheckerEl);
+    let fiveMinutes = 5 * 60 * 1000;
+    let countDown = 5 * 60; // In seconds
+    ReactDOM.render(<AppVersionChecker countdown={ countDown } checkEvery={ fiveMinutes } />, versionCheckerEl);
+
     $(".static-week-picker").each(function(){
         var input = this;
 
