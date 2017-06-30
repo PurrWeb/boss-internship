@@ -22,7 +22,7 @@ const plugins = [
 module.exports = {
   devtool: 'source-map',
   entry: {
-    main: ['./app/frontend/index.js'],
+    main: ['whatwg-fetch', './app/frontend/index.js'],
   },
   output: {
     path: __dirname + '/public/assets/bundles',
