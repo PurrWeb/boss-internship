@@ -28,7 +28,6 @@ class User < ActiveRecord::Base
   validates :name, presence: true
   validates :email_address, presence: true
   validates :invite, presence: true, unless: :first?
-  validates :rollbar_guid, presence: true
 
   before_create :generate_rollbar_guid
 
