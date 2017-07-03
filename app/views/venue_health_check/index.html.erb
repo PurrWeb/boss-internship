@@ -48,14 +48,14 @@
                   <div class="boss-table__info">
                     <p class="boss-table__label">Date</p>
                     <p class="boss-table__text">
-                      <a href="#" class="boss-table__link"><%= questionnaire_response.date %></a>
+                      <a href="#" class="boss-table__link"><%= questionnaire_response.created_at %></a>
                     </p>
                   </div>
 
                   <div class="boss-table__cell">
                     <div class="boss-table__info">
                       <p class="boss-table__text">
-                        <a href="#" class="boss-table__link"><%= questionnaire_response.user.name %></a>
+                        <a href="#" class="boss-table__link"><%= questionnaire_response.user.full_name %></a>
                       </p>
                     </div>
                   </div>
@@ -87,19 +87,23 @@
               <div class="boss-check boss-check_role_board boss-check_page_vhci">
                 <div class="boss-check__row">
                   <div class="boss-check__cell boss-check__cell_status_pass">
-                    <p class="boss-check__text boss-check__text_status_pass">Pass</p>
+                    <% if questionnaire_response.pass? %>
+                      <p class="boss-check__text boss-check__text_status_pass">Pass</p>
+                    <% else %>
+                      <p class="boss-check__text boss-check__text_status_fail">Fail</p>
+                    <% end %>
                   </div>
                   <div class="boss-check__row">
                     <div class="boss-check__cell">
                       <p class="boss-check__text boss-check__text_role_date">
-                        <a href="#" class="boss-check__link"><%= questionnaire_response.date %></a>
+                        <a href="#" class="boss-check__link"><%= questionnaire_response.created_at %></a>
                       </p>
                     </div>
                   </div>
                   <div class="boss-check__row">
                     <div class="boss-check__cell">
                       <p class="boss-check__text boss-check__text_role_user">
-                        <a href="#" class="boss-check__link"><%= questionnaire_response.user.name %></a>
+                        <a href="#" class="boss-check__link"><%= questionnaire_response.user.full_name %></a>
                       </p>
                     </div>
                   </div>

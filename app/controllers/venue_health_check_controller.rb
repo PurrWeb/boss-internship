@@ -6,7 +6,8 @@ class VenueHealthCheckController < ApplicationController
   before_filter :ensure_questionnaire_exists, only: [:show]
 
   def index
-    current_venue = @venue || current_user.default_venue
+    venue_from_params = @accessible_venues.detect { |venue| venue.id == params[:venue_id].to_i }
+    current_venue = venue_from_params || current_user.default_venue
     questionnaire_exists = current_venue.questionnaires.last.present?
     questionnaire_responses = QuestionnaireResponse.all.paginate(page: params[:page], per_page: 20)
 
