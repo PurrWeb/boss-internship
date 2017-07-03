@@ -1,10 +1,21 @@
 class VenueHealthCheckController < ApplicationController
+  before_filter :set_new_layout
   before_filter :find_accessible_venues
-  before_filter :find_venue, only: [:show]
+  before_filter :find_venue
   before_filter :ensure_venue_exists, only: [:show]
   before_filter :ensure_questionnaire_exists, only: [:show]
 
   def index
+    current_venue = @venue || current_user.default_venue
+    questionnaire_exists = current_venue.questionnaires.last.present?
+    questionnaire_responses = QuestionnaireResponse.all.paginate(page: params[:page], per_page: 20)
+
+    render locals: {
+      current_venue: current_venue,
+      accessible_venues: @accessible_venues,
+      questionnaire_exists: questionnaire_exists,
+      questionnaire_responses: questionnaire_responses
+    }
   end
 
   def show
@@ -41,7 +52,7 @@ class VenueHealthCheckController < ApplicationController
   end
 
   def find_venue
-    @venue = @accessible_venues.detect { |venue| venue.id == params[:id].to_i }
+    @venue = @accessible_venues.detect { |venue| venue.id == params[:venue_id].to_i }
   end
 
   def ensure_venue_exists
