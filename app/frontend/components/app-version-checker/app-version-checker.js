@@ -20,7 +20,7 @@ export default class AppVersionChecker extends React.PureComponent {
   render() {
     return (
       <div>
-        { this.state.isNewVersionExist === true && <NewVersionNotification countdown={this.props.countdown} /> }
+        { this.state.isNewVersionExist && <NewVersionNotification countdown={this.props.countdown} /> }
       </div>
     )
   }

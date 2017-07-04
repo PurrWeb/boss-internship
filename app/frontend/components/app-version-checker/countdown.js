@@ -1,32 +1,16 @@
 import React from 'react';
-import Timer from './timer.styled';
-
+import utils from '~lib/utils';
 export default class CountDown extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { time: {}, seconds: this.props.countdown, readableTime: "" };
+    this.state = { time: utils.secondsToTime(this.props.countdown), seconds: this.props.countdown, readableTime: "" };
+    this.state.readableTime = this.readableTime();
     this.timer = 0;
     this.startTimer();
   }
 
-  secondsToTime(secs){
-    let hours = Math.floor(secs / (60 * 60));
-
-    let divisor_for_minutes = secs % (60 * 60);
-    let minutes = Math.floor(divisor_for_minutes / 60);
-
-    let divisor_for_seconds = divisor_for_minutes % 60;
-    let seconds = Math.ceil(divisor_for_seconds);
-
-    let obj = {
-      "m": minutes,
-      "s": seconds
-    };
-    return obj;
-  }
-
   componentDidMount() {
-    let timeLeftVar = this.secondsToTime(this.state.seconds);
+    let timeLeftVar = utils.secondsToTime(this.state.seconds);
     this.setState({ time: timeLeftVar });
   }
 
@@ -39,7 +23,7 @@ export default class CountDown extends React.PureComponent {
   countDown = () => {
     let seconds = this.state.seconds - 1;
     this.setState({
-      time: this.secondsToTime(seconds),
+      time: utils.secondsToTime(seconds),
       seconds: seconds,
       readableTime: this.readableTime(),
     });
@@ -58,9 +42,9 @@ export default class CountDown extends React.PureComponent {
 
   render() {
     return (
-      <p>
-        <Timer>{this.state.readableTime}</Timer>
-      </p>
+      <span className="boss-notification__text-counter">
+        {"\u00a0" + this.state.readableTime + "\u00a0"}
+      </span>
     )
   }
 }
