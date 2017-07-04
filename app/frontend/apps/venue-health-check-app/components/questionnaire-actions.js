@@ -32,8 +32,6 @@ export default class QuestionnaireActions extends React.Component {
     let alertBox = document.getElementsByClassName('boss-alert_role_page-note')[0];
 
     if (this.props.reviewMode) {
-      if (this.props.questionCount > 0) alertBox.style['display'] = 'block';
-
       return(
         <div className="boss-page-dashboard__buttons-group">
           <a
