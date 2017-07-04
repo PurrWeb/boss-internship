@@ -39,13 +39,13 @@
       </div>
       <div class="shrink column">
         <%= link_to(
+              "Show All",
               pay_rate_filter_path_helper.call(
                   venue_id: venue.id,
                   week_start:  week.start_date && UIRotaDate.format(week.start_date)
-              )
-            ) do %>
-          <button type="boss2-button" class="boss2-button">Show All</button>
-        <% end %>
+              ),
+              class: 'boss2-button'
+            ) %>
       </div>
     <% else %>
       <div class="shrink column">
@@ -53,14 +53,14 @@
       </div>
       <div class="shrink column">
         <%= link_to(
+              "Show Weekly Only",
               pay_rate_filter_path_helper.call(
                 venue_id: venue.id,
                 week_start:  week.start_date && UIRotaDate.format(week.start_date),
                 pay_rate_filter: 'weekly'
-              )
-            ) do %>
-          <button type="boss2-button" class="boss2-button">Show Weekly Only</button>
-        <% end %>
+              ),
+              class: 'boss2-button'
+            ) %>
       </div>
     <% end %>
   </div>
