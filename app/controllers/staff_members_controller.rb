@@ -1,5 +1,5 @@
 class StaffMembersController < ApplicationController
-  before_action :set_new_layout, only: [:index]
+  before_action :set_new_layout, only: [:index, :new]
 
   def index
     authorize! :manage, :staff_members

@@ -7,6 +7,7 @@ import * as cx from 'classnames';
 import SyntheticEvent = React.MouseEvent;
 import {Control, Form, Errors, ModelAction, actions} from 'react-redux-form';
 import {curry} from 'ramda';
+import 'cropperjs/dist/cropper.css';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, UploadPhotoFormFields} from '../../../interfaces/store-models';
@@ -62,7 +63,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   }
 
   changeAction = (model: string, value: any) => {
-    this.props.dispatch(actions.change(model, value));
+    this.props.dispatch(actions.change(model, value[0]));
     this.props.dispatch(actions.setTouched(model));
   }
 
@@ -107,6 +108,12 @@ class Component extends React.Component<PropsFromConnect, State> {
   
   onClearAvatar = () => {
     this.setState({avatarSrc: ''});
+    const avatarPreviewChangedAction = avatarPreviewChanged('');
+    const sourceImageChangedAction = addingSourceImage('');
+
+    this.props.dispatch(avatarPreviewChangedAction);
+    this.props.dispatch(sourceImageChangedAction);
+    this.props.dispatch(actions.change('formsData.uploadPhotoForm.avatar', ''));
   };
 
   onCropSubmit = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -131,9 +138,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     this.props.dispatch(sourceImageChangedAction);
   };
 
-  isAvatarAdded = (files: FileList) => {
-    const file = files[0];
-
+  isAvatarAdded = (file: FileList) => {
     return !!file;
   };
 
