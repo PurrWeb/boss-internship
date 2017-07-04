@@ -64,7 +64,7 @@
                     <div class="boss-table__info">
                       <p class="boss-table__label">Status</p>
                       <p class="boss-table__text">
-                        <a href="#" class="boss-button boss-button_type_small boss-button_role_alert"><%= questionnaire_response.result %></a>
+                        <a href="#" class="boss-button boss-button_type_small boss-button_role_alert"><%= QuestionnaireResponseLogic.new(questionnaire_response: questionnaire_response).pass? ? 'Pass' : 'Fail' %></a>
                       </p>
                     </div>
                   </div>
@@ -87,7 +87,7 @@
               <div class="boss-check boss-check_role_board boss-check_page_vhci">
                 <div class="boss-check__row">
                   <div class="boss-check__cell boss-check__cell_status_pass">
-                    <% if questionnaire_response.pass? %>
+                    <% if QuestionnaireResponseLogic.new(questionnaire_response: questionnaire_response).pass? %>
                       <p class="boss-check__text boss-check__text_status_pass">Pass</p>
                     <% else %>
                       <p class="boss-check__text boss-check__text_status_fail">Fail</p>

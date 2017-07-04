@@ -1,6 +1,6 @@
 class QuestionnaireResponse < ActiveRecord::Base
   # Associations
-  belongs_to :questionnaires
+  belongs_to :questionnaire
   belongs_to :venue
   belongs_to :user
   has_many :questionnaire_answers, dependent: :destroy

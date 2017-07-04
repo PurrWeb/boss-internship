@@ -1,14 +1,17 @@
 class QuestionnaireResponseLogic
   def initialize(questionnaire_response:)
-    @questionnaire_response = questionnaire_response
-    @questionnaire = questionnaire_response.questionnaire
+    @response = questionnaire_response
+    @questionnaire = response.questionnaire
   end
-  attr_reader :questionnaire_response, :questionnaire
+  attr_reader :response, :questionnaire
 
   def result
     result = :fail
     if questionnaire.questionnaire_categories.all? { |category|
-      QuestoinnaireCategoryLogic.new(questionnaire_category: category).pass?
+      QuestionnaireCategoryLogic.new(
+        questionnaire: questionnaire,
+        questionnaire_category: category
+      ).pass?(response: response)
     }
       result = :pass
     end

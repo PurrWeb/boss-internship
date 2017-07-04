@@ -7,4 +7,8 @@ class QuestionnaireQuestion < ActiveRecord::Base
 
   # Validations
   validates :text, presence: true
+
+  def self.required
+    where(type: 'RequiredQuestion')
+  end
 end

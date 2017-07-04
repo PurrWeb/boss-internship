@@ -7,30 +7,38 @@ class Api::V1::QuestionnaireCategoryScoreSerializer < ActiveModel::Serializer
   end
 
   def passed
-    service.category_passed?(object)
+    service.pass?(response: response)
   end
 
   def required_question_passed
-    service.required_questions_passed?(object)
+    service.required_questions_passed?(response: response)
   end
 
   def threshold
-    service.category_threshold(object)
+    service.threshold_percentage
   end
 
   def category_score
-    service.category_score(object)
+    service.score(response: response)
   end
 
   def total_score
-    service.total_category_score(object)
+    service.posible_score
   end
 
   private
+  def questionnaire
+    @questionnaire ||= scope.fetch(:questionnaire)
+  end
+
+  def response
+    @response ||= scope.fetch(:response)
+  end
 
   def service
-    @service ||= QuestionnaireCategoryForm.new(
-      questionnaire: scope
+    @service ||= QuestionnaireCategoryLogic.new(
+      questionnaire: scope.fetch(:questionnaire),
+      questionnaire_category: object
     )
   end
 end

@@ -4,7 +4,7 @@
   venueHealthCheckReport.questions = <%= api_v1_collection_json(questionnaire_questions, Api::V1::QuestionnaireQuestionSerializer) %>;
   venueHealthCheckReport.categories = <%= api_v1_collection_json(questionnaire_categories, Api::V1::QuestionnaireCategorySerializer) %>;
   venueHealthCheckReport.answers = <%= api_v1_collection_json(questionnaire_answers, Api::V1::QuestionnaireAnswerSerializer) %>;
-  venueHealthCheckReport.scores = <%= api_v1_collection_json(questionnaire_categories, Api::V1::QuestionnaireCategoryScoreSerializer, questionnaire) %>;
+  venueHealthCheckReport.scores = <%= api_v1_collection_json(questionnaire_categories, Api::V1::QuestionnaireCategoryScoreSerializer, { questionnaire: questionnaire, response: questionnaire_response }) %>;
   venueHealthCheckReport.venues = <%= api_v1_collection_json(venues, Api::V1::VenueSerializer) %>;
   venueHealthCheckReport.currentVenue = <%= Api::V1::VenueSerializer.new(@venue).to_json.html_safe %>;
   venueHealthCheckReport.accessToken = "<%= access_token.token %>";
