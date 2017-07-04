@@ -5,6 +5,7 @@ window.initMobileMenu = () => {
     var mobileMenuSide = document.querySelector('.boss-mobile-menu__side');
     var mobileClose = document.querySelector('.boss-mobile-menu__close');
     var dropLink = document.querySelectorAll('.boss-mobile-menu__button_dropdown .boss-mobile-menu__button-link_dropdown');
+    var bossCheck = $('.boss-check');
     var drop;
 
     if (!!dropLink && Object.prototype.toString.call(dropLink) === '[object NodeList]') {
@@ -20,6 +21,29 @@ window.initMobileMenu = () => {
           }
         });
       })
+    }
+
+    if (!!bossCheck) {
+      bossCheck.each(function(){
+        var checkDropdown = $(this).find('.boss-check__dropdown'),
+            checkDropdownLink = $(this).find('.boss-check__dropdown-link');
+
+        function toggleCheckDropdown(e) {
+          e.preventDefault();
+          var text = checkDropdownLink.text();
+          checkDropdownLink.text(text === 'See Total' ? 'Hide Totals' : 'See Totals');
+
+          if(checkDropdown.hasClass('boss-check__dropdown_state_closed')) {
+            checkDropdown.slideToggle().removeClass('boss-check__dropdown_state_closed');
+            $(this).removeClass('boss-check__dropdown-link_state_closed');
+          } else {
+            checkDropdown.slideToggle().addClass('boss-check__dropdown_state_closed');
+            $(this).addClass('boss-check__dropdown-link_state_closed');
+          }
+        }
+
+        checkDropdownLink.on('click', toggleCheckDropdown);
+      });
     }
 
     function openMobileMenu() {

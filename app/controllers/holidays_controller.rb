@@ -1,4 +1,6 @@
 class HolidaysController < ApplicationController
+  before_action :set_new_layout, only: [:index]
+
   def index
     authorize!(:view, :holidays)
 

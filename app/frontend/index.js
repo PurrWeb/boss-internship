@@ -79,6 +79,9 @@ registerComponent("VenueFinder", VenueFinder)
 import FruitPopover from "./components/shared/fruit-popover"
 registerComponent("FruitPopover", FruitPopover)
 
+import DetailsModal from "./components/safe-checks/details-modal"
+registerComponent("DetailsModal", DetailsModal)
+
 import WeekPicker from "~components/week-picker"
 
 import AppVersionChecker from '~components/app-version-checker';

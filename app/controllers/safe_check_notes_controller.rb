@@ -1,4 +1,6 @@
 class SafeCheckNotesController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:create]
+
   def index
     safe_check = SafeCheck.find(params.fetch(:safe_check_id))
 

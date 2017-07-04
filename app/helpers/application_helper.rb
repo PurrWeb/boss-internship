@@ -30,4 +30,12 @@ module ApplicationHelper
       }
     end
   end
+
+  def negative?(number)
+    number < 0
+  end
+
+  def positive?(number)
+    number > 0
+  end
 end
