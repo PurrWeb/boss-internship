@@ -18,7 +18,7 @@ class APIController < ApplicationController
     end
     @_access_token.present?
   end
-
+  
   def api_token_athenticate!
     render(
       json: { errors: "Not authenticated" },

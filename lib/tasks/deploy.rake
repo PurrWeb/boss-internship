@@ -64,12 +64,7 @@ namespace :deploy do
   end
 
   def get_latest_version
-    unless File.file?(@versions_file)
-      File.open(@versions_file, 'w') do |f|
-        f.puts "0.0"
-      end
-    end
-    File.read(@versions_file).strip
+    ApplicationVersion.version
   end
 
   def write_latest_version
