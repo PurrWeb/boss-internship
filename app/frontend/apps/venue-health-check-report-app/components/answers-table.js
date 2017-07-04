@@ -29,6 +29,20 @@ export default class AnswersTable extends React.Component {
     $currentPopover.fadeIn().addClass('boss-popover_state_opened');
   }
 
+  toggleSwitch(event) {
+    let $target = $(event.target);
+    let $targetMeta = $target.closest('.boss-results__group').find('.boss-results__meta');
+
+    let $switches = $('.boss-results__switch').not($target);
+    let $metas = $('.boss-results__meta').not($targetMeta);
+
+    $switches.removeClass('boss-results__switch_state_opened');
+    $metas.removeClass('boss-results__meta_state_opened');
+
+    $target.toggleClass('boss-results__switch_state_opened');
+    $targetMeta.toggleClass('boss-results__meta_state_opened');
+  }
+
   renderAnswerGroups() {
     let answer;
     let answerValue;
@@ -54,7 +68,10 @@ export default class AnswersTable extends React.Component {
       return (
         <div className="boss-results__group" key={question.id}>
           <div className="boss-results__row">
-            <div className={ `boss-results__cell ${statusIcon}` }><span className="boss-results__switch"></span></div>
+            <div className={ `boss-results__cell ${statusIcon}` }>
+              <span className="boss-results__switch" onClick={ this.toggleSwitch.bind(this) }></span>
+            </div>
+
             <div className="boss-results__cell">{ question.id }</div>
             <div className="boss-results__cell">{ question.text }</div>
             <div className="boss-results__cell">{ answer.value }</div>
@@ -63,6 +80,20 @@ export default class AnswersTable extends React.Component {
               data-popover={ question.id }
               onClick={ this.toggleNotePopup.bind(this) }
             >
+            </div>
+          </div>
+
+          <div className="boss-results__meta">
+            <div className="boss-results__meta-inner">
+              <div className="boss-results__meta-item">
+                <h4 className="boss-results__meta-label">Number</h4>
+                <p className="boss-results__meta-value">{ question.id }</p>
+              </div>
+
+              <div className="boss-results__meta-item">
+                <h4 className="boss-results__meta-label">Answer</h4>
+                <p className="boss-results__meta-value">{ answer.value }</p>
+              </div>
             </div>
           </div>
 
