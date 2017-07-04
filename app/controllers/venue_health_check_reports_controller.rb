@@ -1,4 +1,6 @@
 class VenueHealthCheckReportsController < ApplicationController
+  before_filter :set_new_layout
+
   before_filter :find_accessible_venues
   before_filter :find_venue, only: [:show]
   before_filter :ensure_venue_exists, only: [:show]
