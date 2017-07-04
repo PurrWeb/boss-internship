@@ -6,6 +6,16 @@ import NotePopover from '../components/note-popover';
 export default class AnswersTable extends React.Component {
   static displayName = 'AnswersTable';
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      filterBy: 'number',
+      filterAscending: true,
+      categoryQuestions: this.props.categoryQuestions
+    }
+  }
+
   getAnswerForQuestion(question) {
     return this.props.answers.find(answer => {
       return answer.questionnaire_question_id == question.id;
@@ -49,11 +59,10 @@ export default class AnswersTable extends React.Component {
     let noteIcon;
     let statusIcon;
 
-    return this.props.categoryQuestions.map(question => {
+    return this.state.categoryQuestions.map(question => {
       answer = this.getAnswerForQuestion(question);
 
       if (question.type !== 'ScaledQuestion') {
-        console.log(question.type)
         if (answer.passed) {
           statusIcon = 'boss-results__cell_status_approved';
         } else {
@@ -103,15 +112,119 @@ export default class AnswersTable extends React.Component {
     })
   }
 
+  setFilterBy(event) {
+    let $target = $(event.target);
+    let targetValue = $target.attr('data-filter-name');
+
+    if (this.state.filterBy == targetValue) {
+      this.setState({
+        filterAscending: !this.state.filterAscending,
+        categoryQuestions: this.getCategoryQuestionsByFilter(targetValue, !this.state.filterAscending)
+      });
+    } else {
+      this.setState({
+        filterBy: targetValue,
+        filterAscending: true,
+        categoryQuestions: this.getCategoryQuestionsByFilter(targetValue, true)
+      });
+    }
+  }
+
+  getCategoryQuestionsByFilter(filterBy, ascending) {
+    let questions = [];
+
+    switch(filterBy) {
+      case 'result':
+        questions = this.getQuestionsFilteredByResult(ascending);
+        break;
+      case 'number':
+        questions = this.getQuestionsFilteredByNumber(ascending);
+        break;
+      case 'name':
+        questions = this.getQuestionsFilteredByName(ascending);
+        break;
+    }
+
+    return questions;
+  }
+
+  getQuestionsFilteredByResult(ascending) {
+    let questions = this.props.categoryQuestions;
+    let answer;
+
+    let binaryQuestions = questions.filter(question => {
+      return (question.type !== 'ScaledQuestion');
+    });
+
+    let scaledQuestions = questions.filter(question => {
+      return (question.type === 'ScaledQuestion');
+    });
+
+    questions = binaryQuestions.sort(question => {
+      answer = this.getAnswerForQuestion(question);
+
+      if (ascending) {
+        return (answer.passed);
+      } else {
+        return (!answer.passed);
+      }
+    });
+
+    return questions.concat(scaledQuestions);
+  }
+
+  getQuestionsFilteredByNumber(ascending) {
+    let sortedArray = this.props.categoryQuestions.sort(function(a, b){
+      if (a.id < b.id) return -1;
+      if (a.id > b.id) return 1;
+      return 0;
+    });
+
+    if (ascending) {
+      return sortedArray;
+    } else {
+      return sortedArray.reverse();
+    }
+  }
+
+  getQuestionsFilteredByName(ascending) {
+    let sortedArray = this.props.categoryQuestions.sort(function(a, b){
+      if (a.text < b.text) return -1;
+      if (a.text > b.text) return 1;
+      return 0;
+    });
+
+    if (ascending) {
+      return sortedArray;
+    } else {
+      return sortedArray.reverse();
+    }
+  }
+
   render() {
     return (
       <div className="boss-board__report">
         <div className="boss-board__results">
           <div className="boss-results">
             <div className="boss-results__row">
-              <div className="boss-results__cell boss-results__cell_role_header">Result</div>
-              <div className="boss-results__cell boss-results__cell_role_header">Number</div>
-              <div className="boss-results__cell boss-results__cell_role_header">Name</div>
+              <div className="boss-results__cell boss-results__cell_role_header">
+                Result
+
+                <a className="boss-results__sort" data-filter-name="result" onClick={ this.setFilterBy.bind(this) }>Sort</a>
+              </div>
+
+              <div className="boss-results__cell boss-results__cell_role_header">
+                Number
+
+                <a className="boss-results__sort" data-filter-name="number" onClick={ this.setFilterBy.bind(this) }>Sort</a>
+              </div>
+
+              <div className="boss-results__cell boss-results__cell_role_header">
+                Name
+
+                <a className="boss-results__sort" data-filter-name="name" onClick={ this.setFilterBy.bind(this) }>Sort</a>
+              </div>
+
               <div className="boss-results__cell boss-results__cell_role_header">Answer</div>
               <div className="boss-results__cell boss-results__cell_role_header">Note</div>
             </div>
