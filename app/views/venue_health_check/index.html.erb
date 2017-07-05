@@ -32,30 +32,33 @@
 
     <div class="boss-page-main__content">
       <div class="boss-page-main__inner">
-          <% if questionnaire_responses.count == 0 %>
-            <p> No responses found for this venue </p>
-          <% else %>
+        <% if questionnaire_responses.count == 0 %>
+          <p> No responses found for this venue </p>
+        <% else %>
           <div class="boss-page-main__group boss-page-main__group_adjust_vhci-table">
             <!-- Common table start -->
             <div class="boss-table boss-table_page_vhci">
               <div class="boss-table__row">
                 <div class="boss-table__cell boss-table__cell_role_header">Date</div>
+                <div class="boss-table__cell boss-table__cell_role_header">Created By</div>
                 <div class="boss-table__cell boss-table__cell_role_header">Status</div>
                 <div class="boss-table__cell boss-table__cell_role_header">Action</div>
               </div>
               <% questionnaire_responses.find_each do |questionnaire_response| %>
                 <div class="boss-table__row">
-                  <div class="boss-table__info">
-                    <p class="boss-table__label">Date</p>
-                    <p class="boss-table__text">
-                      <a href="#" class="boss-table__link"><%= questionnaire_response.created_at %></a>
-                    </p>
+                  <div class="boss-table__cell">
+                    <div class="boss-table__info">
+                      <p class="boss-table__label">Date</p>
+                      <p class="boss-table__text">
+                        <%= questionnaire_response.created_at %>
+                      </p>
+                    </div>
                   </div>
 
                   <div class="boss-table__cell">
                     <div class="boss-table__info">
                       <p class="boss-table__text">
-                        <a href="#" class="boss-table__link"><%= questionnaire_response.user.full_name %></a>
+                        <p class="boss-table__link"><%= questionnaire_response.user.full_name %></p>
                       </p>
                     </div>
                   </div>
@@ -64,7 +67,11 @@
                     <div class="boss-table__info">
                       <p class="boss-table__label">Status</p>
                       <p class="boss-table__text">
-                        <a href="#" class="boss-button boss-button_type_small boss-button_role_alert"><%= QuestionnaireResponseLogic.new(questionnaire_response: questionnaire_response).pass? ? 'Pass' : 'Fail' %></a>
+                        <% if QuestionnaireResponseLogic.new(questionnaire_response: questionnaire_response).pass? %>
+                          <a href="" class="boss-button boss-button_type_small boss-button_role_success">Pass</a>
+                        <% else %>
+                          <a href="#" class="boss-button boss-button_type_small boss-button_role_alert">Fail</a>
+                        <% end %>
                       </p>
                     </div>
                   </div>
@@ -80,41 +87,43 @@
                 </div>
               <% end %>
             </div>
-            <!-- Common table start -->
+            <!-- Common table end -->
 
             <% questionnaire_responses.find_each do |questionnaire_response| %>
               <!-- Check block Start -->
               <div class="boss-check boss-check_role_board boss-check_page_vhci">
                 <div class="boss-check__row">
-                  <div class="boss-check__cell boss-check__cell_status_pass">
-                    <% if QuestionnaireResponseLogic.new(questionnaire_response: questionnaire_response).pass? %>
+                  <% if QuestionnaireResponseLogic.new(questionnaire_response: questionnaire_response).pass? %>
+                    <div class="boss-check__cell boss-check__cell_status_pass">
                       <p class="boss-check__text boss-check__text_status_pass">Pass</p>
-                    <% else %>
+                    </div>
+                  <% else %>
+                    <div class="boss-check__cell boss-check__cell_status_fail">
                       <p class="boss-check__text boss-check__text_status_fail">Fail</p>
-                    <% end %>
-                  </div>
-                  <div class="boss-check__row">
-                    <div class="boss-check__cell">
-                      <p class="boss-check__text boss-check__text_role_date">
-                        <a href="#" class="boss-check__link"><%= questionnaire_response.created_at %></a>
-                      </p>
                     </div>
-                  </div>
-                  <div class="boss-check__row">
-                    <div class="boss-check__cell">
-                      <p class="boss-check__text boss-check__text_role_user">
-                        <a href="#" class="boss-check__link"><%= questionnaire_response.user.full_name %></a>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="boss-check__row">
-                    <div class="boss-check__cell">
-                      <a href="#" class="boss-button boss-button_role_view-report boss-table__action">View Report</a>
-                    </div>
+                  <% end %>
+                </div>
+                <div class="boss-check__row">
+                  <div class="boss-check__cell">
+                    <p class="boss-check__text boss-check__text_role_date">
+                      <a href="#" class="boss-check__link"><%= questionnaire_response.created_at %></a>
+                    </p>
                   </div>
                 </div>
-                <!-- Check block end -->
+                <div class="boss-check__row">
+                  <div class="boss-check__cell">
+                    <p class="boss-check__text boss-check__text_role_user">
+                      <a href="#" class="boss-check__link"><%= questionnaire_response.user.full_name %></a>
+                    </p>
+                  </div>
+                </div>
+                <div class="boss-check__row">
+                  <div class="boss-check__cell">
+                    <a href="#" class="boss-button boss-button_role_view-report boss-table__action">View Report</a>
+                  </div>
+                </div>
               </div>
+              <!-- Check block end -->
             <% end %>
 
             <%= will_paginate questionnaire_responses, renderer: ::CustomPaginationLinkRenderer %>
