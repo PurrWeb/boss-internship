@@ -7,7 +7,7 @@ class QuestionnaireResponseLogic
 
   def result
     result = :fail
-    if questionnaire.questionnaire_categories.all? { |category|
+    if questionnaire.questionnaire_categories.includes(:questionnaires).all? { |category|
       QuestionnaireCategoryLogic.new(
         questionnaire: questionnaire,
         questionnaire_category: category

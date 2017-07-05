@@ -19,7 +19,7 @@ class QuestionnaireCategoryLogic
   end
 
   def score(response:)
-    answers = response.questionnaire_answers.where(questionnaire_question: questions)
+    answers = response.questionnaire_answers.where(questionnaire_question: questions).includes(:questionnaire_question)
 
     answers.map do |answer|
       answer_score(answer: answer)
