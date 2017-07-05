@@ -9,7 +9,11 @@ class VenueHealthCheckController < ApplicationController
     venue_from_params = @accessible_venues.detect { |venue| venue.id == params[:venue_id].to_i }
     current_venue = venue_from_params || current_user.default_venue
     questionnaire_exists = current_venue.questionnaires.last.present?
-    questionnaire_responses = QuestionnaireResponse.all.paginate(page: params[:page], per_page: 20)
+    questionnaire_responses = QuestionnaireResponse.where(
+      venue: current_venue
+    ).paginate(
+      page: params[:page], per_page: 20
+    )
 
     render locals: {
       current_venue: current_venue,

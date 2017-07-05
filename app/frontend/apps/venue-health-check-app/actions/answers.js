@@ -23,10 +23,11 @@ export function deleteUpload(upload) {
   };
 }
 
-export function saveAnswers(questionnaireId, answers) {
+export function saveAnswers(questionnaireId, answers, venueId) {
   let token = window.boss.venueHealthCheck.accessToken;
   let params = {
     response: {
+      venue_id: venueId,
       questionnaire_id: questionnaireId,
       questionnaire_answers_attributes: humps.decamelizeKeys(answers)
     }

@@ -20,7 +20,9 @@ module Api
 
       def create_params
         params.require(:response).permit(
-          :questionnaire_id, questionnaire_answers_attributes: [
+          :venue_id,
+          :questionnaire_id,
+          questionnaire_answers_attributes: [
             :questionnaire_question_id, :value, :note, :image_ids => []
           ]
         )

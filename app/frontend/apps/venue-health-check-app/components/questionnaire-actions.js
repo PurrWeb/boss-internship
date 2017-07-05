@@ -15,7 +15,7 @@ export default class QuestionnaireActions extends React.Component {
   }
 
   saveAnswers() {
-    this.props.saveAnswers(this.props.questionnaire.id, this.props.answers);
+    this.props.saveAnswers(this.props.questionnaire.id, this.props.answers, this.props.currentVenue.id);
   }
 
   renderButtonState() {
