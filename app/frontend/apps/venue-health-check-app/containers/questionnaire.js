@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import CollapsibleCard from '../components/collapsible-card';
-import VenueSelector from '../components/venue-selector';
 import QuestionnaireFilter from '../components/questionnaire-filter';
 import QuestionnaireActions from '../components/questionnaire-actions';
 import ImageModal from '../components/image-modal'
@@ -264,8 +263,6 @@ export class QuestionnaireContainer extends React.Component {
         <div className="boss-page-main__dashboard">
           <div className="boss-page-main__inner">
             <div className="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_questionnaire">
-              <VenueSelector { ...this.commonProps() } />
-
               <QuestionnaireActions { ...this.commonProps() } />
 
               <QuestionnaireFilter { ...this.commonProps() } />
