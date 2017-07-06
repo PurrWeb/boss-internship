@@ -74,9 +74,9 @@
                       <p class="boss-table__label">Status</p>
                       <p class="boss-table__text">
                         <% if QuestionnaireResponseLogic.new(questionnaire_response: questionnaire_response).pass? %>
-                          <a href="" class="boss-button boss-button_type_small boss-button_role_success">Pass</a>
+                          <%= link_to("Pass", venue_health_check_report_path(questionnaire_response.id), class: "boss-button boss-button_type_small boss-button_role_success") %>
                         <% else %>
-                          <a href="#" class="boss-button boss-button_type_small boss-button_role_alert">Fail</a>
+                          <%= link_to("Fail", venue_health_check_report_path(questionnaire_response.id), class: "boss-button boss-button_type_small boss-button_role_alert") %>
                         <% end %>
                       </p>
                     </div>
@@ -86,7 +86,7 @@
                     <div class="boss-table__info">
                       <p class="boss-table__label">Action</p>
                       <div class="boss-table__actions">
-                        <a href="#" class="boss-button boss-button_role_view-report boss-table__action">View Report</a>
+                        <%= link_to("View Report", venue_health_check_report_path(questionnaire_response.id), class: "boss-button boss-button_role_view-report boss-table__action") %>
                       </div>
                     </div>
                   </div>
@@ -129,7 +129,7 @@
                 </div>
                 <div class="boss-check__row">
                   <div class="boss-check__cell">
-                    <a href="#" class="boss-button boss-button_role_view-report boss-table__action">View Report</a>
+                    <%= link_to("View Report", venue_health_check_report_path(questionnaire_response.id), class: "boss-button boss-button_role_view-report boss-table__action") %>
                   </div>
                 </div>
               </div>
