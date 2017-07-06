@@ -6,8 +6,12 @@ class VenueHealthCheckController < ApplicationController
     venue_from_params = @accessible_venues.detect { |venue| venue.id == params[:venue_id].to_i }
     current_venue = venue_from_params || current_user.default_venue
     questionnaire_exists = current_venue.questionnaires.last.present?
-    questionnaire_responses = QuestionnaireResponse.where(
-      venue: current_venue
+    questionnaire_responses = QuestionnaireResponse.
+      where(
+        venue: current_venue
+      ).
+      includes(
+        [:user, :questionnaire]
       ).
       order(created_at: :desc).
       paginate(
