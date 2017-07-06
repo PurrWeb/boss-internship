@@ -22,7 +22,7 @@
         </div>
         <div class="boss-page-dashboard__buttons-group boss-page-dashboard__buttons-group_position_last">
           <% if questionnaire_exists %>
-            <%= link_to("Add New", venue_health_check_path(current_venue), class: ["boss-button", "boss-button_role_add", "boss-page-dashboard__button"]) %>
+            <%= link_to("Add New", new_venue_health_check_path(venue_id: current_venue.id), class: ["boss-button", "boss-button_role_add", "boss-page-dashboard__button"]) %>
           <% else %>
             <p style="color: red">No questionnaire exists for <%= current_venue.name.titlecase %></p>
           <% end %>
