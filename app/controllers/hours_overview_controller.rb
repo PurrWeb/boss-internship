@@ -26,12 +26,8 @@ class HoursOverviewController < ApplicationController
     staff_clock_in_days = staff_clock_in_days.
       includes([:venue, :staff_member, :hours_acceptance_periods])
     
-    clock_in_days_service = ClockInDays.new(staff_clock_in_days, staff_venues)
-    venues = clock_in_days_service.owned_venues
-    clock_in_days = clock_in_days_service.owned_venues_clock_in_days
-    readonly_venues = clock_in_days_service.readonly_venues
-    readonly_clock_in_days = clock_in_days_service.readonly_venues_clock_in_days
-
+    hours_confirmation_page_data = HoursConfirmationPageDataQuery.new(staff_clock_in_days, staff_venues).query
+    
     rotas = Rota.
       where(
         date: date
@@ -72,22 +68,18 @@ class HoursOverviewController < ApplicationController
     render(
       locals: {
         access_token: access_token,
-        clock_in_days: clock_in_days,
-        readonly_clock_in_days: readonly_clock_in_days,
         clock_in_breaks: clock_in_breaks,
         clock_in_notes: clock_in_notes,
         clock_in_events: clock_in_events,
         clock_in_periods: clock_in_periods,
         hours_acceptance_periods: hours_acceptance_periods,
         hours_acceptance_breaks: hours_acceptance_breaks,
-        venues: venues,
-        readonly_venues: readonly_venues,
         rotas: rotas,
         rota_shifts: rota_shifts,
         staff_member: staff_member,
         staff_types: staff_types,
         date: date
-      }
+      }.merge(hours_confirmation_page_data)
     )
   end
 
