@@ -8,12 +8,12 @@ class HoursOverviewController < ApplicationController
 
     access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
 
-    clock_in_days = ClockInDay.where(
+    staff_clock_in_days = ClockInDay.where(
       staff_member: staff_member,
       date: date
     )
 
-    venues = if current_user.has_all_venue_access?
+    staff_venues = if current_user.has_all_venue_access?
       Venue.all
     else
       current_user.venues
@@ -21,10 +21,16 @@ class HoursOverviewController < ApplicationController
 
     clock_in_notes = ClockInNote.
       joins(:clock_in_day).
-      merge(clock_in_days)
+      merge(staff_clock_in_days)
 
-    clock_in_days = clock_in_days.
-      includes([:venue, :staff_member])
+    staff_clock_in_days = staff_clock_in_days.
+      includes([:venue, :staff_member, :hours_acceptance_periods])
+    
+    clock_in_days_service = ClockInDays.new(staff_clock_in_days, staff_venues)
+    venues = clock_in_days_service.owned_venues
+    clock_in_days = clock_in_days_service.owned_venues_clock_in_days
+    readonly_venues = clock_in_days_service.readonly_venues
+    readonly_clock_in_days = clock_in_days_service.readonly_venues_clock_in_days
 
     rotas = Rota.
       where(
@@ -40,7 +46,7 @@ class HoursOverviewController < ApplicationController
 
     clock_in_periods = ClockInPeriod.
       joins(:clock_in_day).
-      merge(clock_in_days)
+      merge(staff_clock_in_days)
 
     clock_in_breaks = ClockInBreak.
       joins(:clock_in_period).
@@ -55,7 +61,7 @@ class HoursOverviewController < ApplicationController
     hours_acceptance_periods = HoursAcceptancePeriod.
       enabled.
       joins(:clock_in_day).
-      merge(clock_in_days)
+      merge(staff_clock_in_days)
 
     hours_acceptance_breaks = HoursAcceptanceBreak.
       enabled.
@@ -63,11 +69,11 @@ class HoursOverviewController < ApplicationController
       merge(hours_acceptance_periods)
 
     staff_types = StaffType.all
-
     render(
       locals: {
         access_token: access_token,
         clock_in_days: clock_in_days,
+        readonly_clock_in_days: readonly_clock_in_days,
         clock_in_breaks: clock_in_breaks,
         clock_in_notes: clock_in_notes,
         clock_in_events: clock_in_events,
@@ -75,6 +81,7 @@ class HoursOverviewController < ApplicationController
         hours_acceptance_periods: hours_acceptance_periods,
         hours_acceptance_breaks: hours_acceptance_breaks,
         venues: venues,
+        readonly_venues: readonly_venues,
         rotas: rotas,
         rota_shifts: rota_shifts,
         staff_member: staff_member,
