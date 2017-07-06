@@ -50,7 +50,7 @@
                     <div class="boss-table__info">
                       <p class="boss-table__label">Date</p>
                       <p class="boss-table__text">
-                        <%= questionnaire_response.created_at %>
+                        <%= questionnaire_response.created_at.to_s(:human) %>
                       </p>
                     </div>
                   </div>
@@ -112,7 +112,7 @@
                 <div class="boss-check__row">
                   <div class="boss-check__cell">
                     <p class="boss-check__text boss-check__text_role_date">
-                      <a href="#" class="boss-check__link"><%= questionnaire_response.created_at %></a>
+                      <%= questionnaire_response.created_at.to_s(:human) %>
                     </p>
                   </div>
                 </div>
