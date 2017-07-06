@@ -7,8 +7,11 @@ checkout:
     - git submodule sync
     - git submodule update --init
     - npm install yarn -g
+dependencies:
+  override:
     - yarn install
     - yarn run build
+    - bundle install
 test:
   override:
     - bundle exec rspec
