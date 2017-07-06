@@ -40,7 +40,7 @@ export default class QuestionnaireFilter extends React.Component {
     });
 
     sectionOptions.unshift(
-      <option value="any" key="any" selected>
+      <option value="any" key="any">
         Any
       </option>
     );
@@ -58,7 +58,7 @@ export default class QuestionnaireFilter extends React.Component {
     });
 
     areaOptions.unshift(
-      <option value="any" key="any" selected>
+      <option value="any" key="any">
         Any
       </option>
     );
@@ -69,7 +69,7 @@ export default class QuestionnaireFilter extends React.Component {
   dropdownGroupByOptions() {
     return ['section', 'question', 'area'].map((groupName, index) => {
       return (
-        <option value={ groupName } key={ groupName } selected={ groupName == this.props.filters.groupBy }>
+        <option value={ groupName } key={ groupName }>
           { groupName }
         </option>
       );
@@ -125,27 +125,27 @@ export default class QuestionnaireFilter extends React.Component {
 
                 <div className="boss-form__row boss-form__row_position_last">
                   <div className="boss-form__field boss-form__field_layout_third">
-                    <label for="filter-section" className="boss-form__label"><span className="boss-form__label-text">Section</span></label>
+                    <label htmlFor="filter-section" className="boss-form__label"><span className="boss-form__label-text">Section</span></label>
                     <div className="boss-form__select">
-                      <select name="section" id="filter-section" onChange={ this.setSectionFilter.bind(this) }>
+                      <select name="section" id="filter-section" onChange={ this.setSectionFilter.bind(this) } defaultValue={ 'any' }>
                         { this.dropdownSectionOptions() }
                       </select>
                     </div>
                   </div>
 
                   <div className="boss-form__field boss-form__field_layout_third">
-                    <label for="filter-area" className="boss-form__label"><span className="boss-form__label-text">Area</span></label>
+                    <label htmlFor="filter-area" className="boss-form__label"><span className="boss-form__label-text">Area</span></label>
                     <div className="boss-form__select">
-                      <select id="filter-area" name="area" onChange={ this.setAreaFilter.bind(this) }>
+                      <select id="filter-area" name="area" onChange={ this.setAreaFilter.bind(this) } defaultValue={ 'any' }>
                         { this.dropdownAreaOptions() }
                       </select>
                     </div>
                   </div>
 
                   <div className="boss-form__field boss-form__field_layout_third">
-                    <label for="filter-group-by" className="boss-form__label"><span className="boss-form__label-text">Group by</span></label>
+                    <label htmlFor="filter-group-by" className="boss-form__label"><span className="boss-form__label-text">Group by</span></label>
                     <div className="boss-form__select">
-                      <select id="filter-group-by" name="group-by" onChange={ this.setGroupByFilter.bind(this) }>
+                      <select id="filter-group-by" name="group-by" onChange={ this.setGroupByFilter.bind(this) } value={ this.props.filters.groupBy }>
                         { this.dropdownGroupByOptions() }
                       </select>
                     </div>
