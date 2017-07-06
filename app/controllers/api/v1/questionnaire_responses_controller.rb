@@ -8,7 +8,9 @@ module Api
         questionnaire_response = QuestionnaireResponse.new(create_params.merge(user: current_user))
 
         if questionnaire_response.save
-          render json: {}
+          render json: {
+            questionnaire_response_id: questionnaire_response.id
+          }
         else
           render json: resource,
             serializer: ActiveModel::Serializer::ErrorSerializer,

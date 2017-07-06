@@ -24,6 +24,7 @@ function mapStateToProps(state) {
     uploadCount: state.venueHealthCheck.get('uploadCount'),
     questionCount: state.venueHealthCheck.get('questionCount'),
     frontend: state.venueHealthCheck.get('frontend'),
+    savedResponseId: state.venueHealthCheck.get('savedResponseId'),
     uploads: state.venueHealthCheck.get('uploads')
   };
 }
@@ -72,7 +73,7 @@ export class QuestionnaireContainer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.frontend.saved) {
-      location.href = `/venue_health_check/${nextProps.currentVenue.id}/report`
+      location.href = `/venue_health_check_reports/${nextProps.savedResponseId}`
     }
   }
 

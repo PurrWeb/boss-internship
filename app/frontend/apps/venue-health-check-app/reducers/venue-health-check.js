@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import constants from '../constants';
+import oFetch from "o-fetch";
 
 const initialState = Immutable.Map({
   questionnaire: {},
@@ -137,6 +138,8 @@ const venueHealthCheck = (state = initialState, action) => {
   case constants.SAVE_ANSWERS_RECEIVE:
     return state.set(
       'frontend', Object.assign({}, state.get('frontend'), { saving: false, saved: true })
+    ).set(
+      'savedResponseId', oFetch(action.payload, "questionnaire_response_id")
     );
   case constants.SAVE_ANSWERS_FAILURE:
     return state.set(
