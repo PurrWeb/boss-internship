@@ -44,7 +44,7 @@
                 <div class="boss-table__cell boss-table__cell_role_header">Status</div>
                 <div class="boss-table__cell boss-table__cell_role_header">Action</div>
               </div>
-              <% questionnaire_responses.find_each do |questionnaire_response| %>
+              <% questionnaire_responses.each do |questionnaire_response| %>
                 <div class="boss-table__row">
                   <div class="boss-table__cell">
                     <div class="boss-table__info">
@@ -95,7 +95,7 @@
             </div>
             <!-- Common table end -->
 
-            <% questionnaire_responses.find_each do |questionnaire_response| %>
+            <% questionnaire_responses.each do |questionnaire_response| %>
               <!-- Check block Start -->
               <div class="boss-check boss-check_role_board boss-check_page_vhci">
                 <div class="boss-check__row">

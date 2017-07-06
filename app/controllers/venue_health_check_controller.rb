@@ -8,9 +8,11 @@ class VenueHealthCheckController < ApplicationController
     questionnaire_exists = current_venue.questionnaires.last.present?
     questionnaire_responses = QuestionnaireResponse.where(
       venue: current_venue
-    ).paginate(
-      page: params[:page], per_page: 20
-    )
+      ).
+      order(created_at: :desc).
+      paginate(
+        page: params[:page], per_page: 20
+      )
 
     render locals: {
       current_venue: current_venue,
