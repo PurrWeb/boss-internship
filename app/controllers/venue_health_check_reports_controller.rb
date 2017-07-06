@@ -1,20 +1,28 @@
 class VenueHealthCheckReportsController < ApplicationController
   before_filter :set_new_layout
-
   before_filter :find_accessible_venues
-  before_filter :find_venue, only: [:show]
-  before_filter :ensure_venue_exists, only: [:show]
-  before_filter :ensure_report_exists, only: [:show]
 
   def show
-    questionnaire = @venue.questionnaires.last
+    questionnaire_response = QuestionnaireResponse.
+      includes([
+        :venue,
+        questionnaire: [
+          questionnaire_categories: [:questionnaires],
+          questionnaire_responses: [:questionnaire_answers]
+        ]
+      ]).
+      find(params[:id])
+
+
+    authorize! :view, questionnaire_response
+    questionnaire = questionnaire_response.questionnaire
     questionnaire_questions = questionnaire.questionnaire_questions
     questionnaire_categories = questionnaire.questionnaire_categories
-    questionnaire_response = questionnaire.questionnaire_responses.last
     questionnaire_answers = questionnaire_response.questionnaire_answers
       .includes(:questionnaire_question, :uploads)
 
     render locals: {
+      venue: questionnaire_response.venue,
       questionnaire: questionnaire,
       questionnaire_response: questionnaire_response,
       questionnaire_questions: questionnaire_questions,
@@ -27,32 +35,11 @@ class VenueHealthCheckReportsController < ApplicationController
   end
 
   private
-
-  def ensure_report_exists
-    questionnaire = @venue.questionnaires.last
-
-    if questionnaire.blank? || questionnaire.questionnaire_responses.blank?
-      flash[:error] = "Report for this questionnaire doesn't exist"
-      redirect_to venue_health_check_index_path
-    end
-  end
-
   def render_v2_layout?
     true
   end
 
   def find_accessible_venues
     @accessible_venues = AccessibleVenuesQuery.new(current_user).all
-  end
-
-  def find_venue
-    @venue = @accessible_venues.detect { |venue| venue.id == params[:venue_health_check_id].to_i }
-  end
-
-  def ensure_venue_exists
-    if @venue.blank?
-      flash[:error] = "Venue doesn't exist"
-      redirect_to venue_health_check_index_path
-    end
   end
 end

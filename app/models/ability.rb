@@ -55,6 +55,10 @@ class Ability
         user.has_all_venue_access? || !user.security_manager?
       end
 
+      can [:view], QuestionnaireResponse do |questionnaire_response|
+        can_manage_venue?(user, questionnaire_response.venue)
+      end
+
       can [:view, :create, :update, :destroy], Holiday do |holiday|
         can_edit_staff_member?(user, holiday.staff_member)
       end
