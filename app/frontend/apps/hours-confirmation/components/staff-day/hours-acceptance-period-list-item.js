@@ -187,7 +187,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
           };
         }
 
-        if (!this.isAccepted()) {
+        if (!this.isAccepted() && !this.props.readonly) {
             if (!this.props.hasClockedOut) {
                 return <span></span>
             } else {
@@ -222,14 +222,16 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                 }}>
                     {stats.hours}h ACCEPTED
                 </div>
-                <a
-                    className="boss2-button boss2-button_role_exclamation"
-                    onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
-                        hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
-                        errorHandlingId: this.componentId
-                    })}>
-                    Unaccept
-                </a>
+                { !this.props.readonly && 
+                  <a
+                      className="boss2-button boss2-button_role_exclamation"
+                      onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
+                          hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
+                          errorHandlingId: this.componentId
+                      })}>
+                      Unaccept
+                  </a>
+                }
             </div>
         }
     }

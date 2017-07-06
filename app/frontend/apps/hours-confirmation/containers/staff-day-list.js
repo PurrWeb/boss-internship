@@ -6,8 +6,9 @@ import _ from "underscore"
 class StaffDayList extends React.Component {
     render(){
         var clockInDays = this.props.clockInDays;
+        var readOnlyclockInDays = this.props.readonlyClockInDays;
 
-        if (_.values(clockInDays).length === 0) {
+        if (_.values(clockInDays).length === 0 && _.values(readOnlyclockInDays).length === 0) {
             if (_.values(this.props.hoursAcceptancePeriods).length === 0) {
                 return <p>
                     There are no hours to confirm.
@@ -21,6 +22,15 @@ class StaffDayList extends React.Component {
                     displayVenue={this.props.displayVenues}
                     displayDate={this.props.displayDates}
                     key={clockInDay.clientId}
+                    readonly={false}
+                    clockInDay={clockInDay} />
+            )}
+            {_.values(readOnlyclockInDays).map(clockInDay =>
+                <StaffDay
+                    displayVenue={this.props.displayVenues}
+                    displayDate={this.props.displayDates}
+                    key={clockInDay.clientId}
+                    readonly={true}
                     clockInDay={clockInDay} />
             )}
         </div>
@@ -29,7 +39,8 @@ class StaffDayList extends React.Component {
 
 function mapStateToProps(state){
     return {
-        clockInDays: state.clockInDays
+        clockInDays: state.clockInDays,
+        readonlyClockInDays: state.readonlyClockInDays,
     }
 }
 

@@ -14,6 +14,10 @@ export function processVenueObject(venue){
     return processBackendObject(venue);
 }
 
+export function processReadonlyVenueObject(venue){
+    return processBackendObject(venue);
+}
+
 export function processStaffMemberObject(staffMember){
     staffMember = processBackendObject(staffMember);
     return staffMember;
@@ -124,6 +128,12 @@ export function processRotaForecastObject(rotaForecast){
 }
 
 export function processClockInDayObject(clockInDay){
+    clockInDay = processBackendObject(clockInDay)
+    clockInDay.date = new Date(clockInDay.date)
+    return clockInDay
+}
+
+export function processReadonlyClockInDayObject(clockInDay){
     clockInDay = processBackendObject(clockInDay)
     clockInDay.date = new Date(clockInDay.date)
     return clockInDay

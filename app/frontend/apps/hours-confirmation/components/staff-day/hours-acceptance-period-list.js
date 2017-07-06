@@ -9,7 +9,7 @@ import _ from "underscore"
 export default class HoursAcceptancePeriodList extends React.Component {
     render(){
         let rotaedAcceptedHoursDifference = this.props.rotaedAcceptedHoursDifference;
-
+        let readonly = this.props.readonly;
         var markAsDoneButton = this.getMarkAsDoneButton();
 
         var orderedHAPs = _.sortBy(this.props.hoursAcceptancePeriods, function(period){
@@ -39,6 +39,7 @@ export default class HoursAcceptancePeriodList extends React.Component {
                         key={hoursAcceptancePeriod.clientId}
                     >
                         <HoursAcceptancePeriodListItem
+                            readonly={readonly}
                             boundActions={this.props.boundActions}
                             clockInBreaks={this.props.clockInBreaks}
                             componentErrors={this.props.componentErrors}
@@ -49,8 +50,11 @@ export default class HoursAcceptancePeriodList extends React.Component {
                             overlapsOtherIntervals={!intervalsOverlap.isValid} />
                     </div>
             )}
-            {markAsDoneButton}
-            {addShiftButton}
+            { !readonly && <div>
+                {markAsDoneButton}
+                {addShiftButton}
+              </div>
+            }
 
         </div>
     }

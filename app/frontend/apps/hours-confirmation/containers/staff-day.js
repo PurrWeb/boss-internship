@@ -27,10 +27,11 @@ function mapStateToProps(state, ownProps){
     var details = selectClockInDayDetails(state, ownProps.clockInDay)
     var staffMember = details.staffMember;
     var clockInDay = details.clockInDay;
+    var readonly = ownProps.readonly;
     var props = {
         ...details,
         clockInReasons: state.clockInReasons,
-        venue: clockInDay.venue.get(state.venues),
+        venue: clockInDay.venue.get(readonly ? state.readonlyVenues : state.venues),
         staffType: staffMember.staff_type.get(state.staffTypes),
         rotaDate: new RotaDate({
             dateOfRota: ownProps.clockInDay.date
