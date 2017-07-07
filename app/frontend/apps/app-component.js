@@ -12,6 +12,6 @@ export default class RotaApp extends React.Component {
         if (this.props.viewData) {
             return this.props.viewData;
         }
-        return window.boss;
+        return window.boss.store;
     }
 }

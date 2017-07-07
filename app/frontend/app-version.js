@@ -9,7 +9,7 @@ const checkStatus = (response) => {
 }
 export default class AppVersion {
   constructor(options = {}) {
-    let currentVersion = window.RollbarData.currentVersion;
+    let currentVersion = window.boss.currentVersion;
     if (!currentVersion) {
       throw Error('No current version available :(');
     }

@@ -12,29 +12,29 @@ const ReactTryCatchBatchingStrategy = {
       ReactDefaultBatchingStrategy.batchedUpdates(...args);
     } catch (e) {
       if (typeof Rollbar !== 'undefined') {
-        window.RollbarData = window.RollbarData || {};
+        window.boss = window.boss || {};
         let payload = {};
-        if (typeof window.RollbarData.currentVenue !== 'undefined') {
-          let { id, name, rollbar_guid } = window.RollbarData.currentVenue
+        if (typeof window.boss.currentVenue !== 'undefined') {
+          let { id, name, rollbar_guid } = window.boss.currentVenue
           payload.venue = { id, name };
           payload.person = {
             id: rollbar_guid,
             username: `Venue: ${ name }`,
           }
         }
-        if (typeof window.RollbarData.currentVersion !== 'undefined') {
-          payload.app_version = window.RollbarData.currentVersion;
+        if (typeof window.boss.currentVersion !== 'undefined') {
+          payload.app_version = window.boss.currentVersion;
         }
-        if (typeof window.RollbarData.currentUser !== 'undefined') {
-          let { id, name, rollbar_guid } = window.RollbarData.currentUser;
+        if (typeof window.boss.currentUser !== 'undefined') {
+          let { id, name, rollbar_guid } = window.boss.currentUser;
           payload.user = { id, name };
           payload.person = {
             id: rollbar_guid,
             username: `User: ${ name }`,
           }
         }
-        if (typeof window.RollbarData.currentStaffMember !== 'undefined') {
-          let { id, name, rollbar_guid } = window.RollbarData.currentStaffMember
+        if (typeof window.boss.currentStaffMember !== 'undefined') {
+          let { id, name, rollbar_guid } = window.boss.currentStaffMember
           payload.staff_member = { id, name };
           payload.person = {
             id: rollbar_guid,

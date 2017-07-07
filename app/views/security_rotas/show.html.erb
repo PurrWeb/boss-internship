@@ -17,10 +17,11 @@
     rotaData.holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: holidays } %>
 
     window.boss = window.boss || {};
-    window.boss.rota = rotaData;
-    window.boss.access_token = "<%= access_token.token %>";
+    window.boss.store = window.boss.store || {};
+    window.boss.store.rota = rotaData;
+    window.boss.store.access_token = "<%= access_token.token %>";
 
-    window.boss.staffTypeSlug = "security";
+    window.boss.store.staffTypeSlug = "security";
   })()
 </script>
 

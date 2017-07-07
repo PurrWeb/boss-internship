@@ -14,11 +14,12 @@
   rotaData.holidays = <%= api_v1_collection_json(holidays, Api::V1::HolidaySerializer) %>;
 
   window.boss = window.boss || {};
-  window.boss.access_token = "<%= access_token.token %>";
-  window.boss.rota = rotaData;
+  window.boss.store = window.boss.store || {};
+  window.boss.store.access_token = "<%= access_token.token %>";
+  window.boss.store.rota = rotaData;
 
-  window.boss.rotaVenueId = <%= current_rota.venue.id %>;
-  window.boss.rotaDate = "<%= current_rota.date.iso8601 %>";
+  window.boss.store.rotaVenueId = <%= current_rota.venue.id %>;
+  window.boss.store.rotaDate = "<%= current_rota.date.iso8601 %>";
 <% end %>
 
 <%= react_component('RotaApp') %>

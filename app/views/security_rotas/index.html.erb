@@ -15,9 +15,10 @@
     <% end %>
 
     window.boss = window.boss || {};
-    window.boss.staffTypeSlug = "security";
-    window.boss.securityRotaOverviews = securityRotaOverviews;
-    window.boss.access_token = "<%= access_token.token %>";
+    window.boss.store = window.boss.store || {};
+    window.boss.store.staffTypeSlug = "security";
+    window.boss.store.securityRotaOverviews = securityRotaOverviews;
+    window.boss.store.access_token = "<%= access_token.token %>";
   })();
 </script>
 

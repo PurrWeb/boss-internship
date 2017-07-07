@@ -22,9 +22,9 @@ var createStoreWithMiddleware = compose(
 export function createBossStore(){
 	var rootReducer = getRootReducer();
 
-    var store = createStoreWithMiddleware(batching(rootReducer));
-    window.debug = window.debug || {};
-    window.debug.store = store;
-	window.rootReducer = rootReducer
-    return store;
+  var store = createStoreWithMiddleware(batching(rootReducer));
+  window.debug = window.debug || {};
+  window.debug.store = store;
+  window.rootReducer = rootReducer;
+  return store;
 }

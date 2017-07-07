@@ -10,7 +10,7 @@ import * as selectors from "~redux/selectors"
 import '~lib/global-try-catch';
 
 window.boss = window.boss || {};
-window.currentLayout = window.currentLayout || 'oldLayout';
+window.boss.currentLayout = window.boss.currentLayout || 'oldLayout';
 window.debug = window.debug || {};
 window.debug.React = React;
 window.debug.ReactDOM = ReactDOM;
@@ -22,7 +22,7 @@ window.React = React;
 window.ReactDOM = ReactDOM;
 
 // ToDo: Need to remove this condition, after fix old layout issues
-if (window.currentLayout !== 'oldLayout') {
+if (window.boss.currentLayout !== 'oldLayout') {
     // Import all sass from submodule(boss-css repo)
     require ('./assets/sass/index.sass');
 }

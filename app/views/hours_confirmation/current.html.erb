@@ -12,34 +12,34 @@
 </div>
 
 <script>
-  window.boss = {};
+  window.boss = window.boss || {};
+  window.boss.store = window.boss.store || {};
+  window.boss.store.access_token = "<%= access_token.token %>";
 
-  window.boss.access_token = "<%= access_token.token %>";
+  window.boss.store.venues = <%= api_v1_collection_json(venues, Api::V1::VenueSerializer) %>;
+  window.boss.store.clockInDays = <%= api_v1_collection_json(clock_in_days, Api::V1::ClockInDaySerializer) %>;
 
-  window.boss.venues = <%= api_v1_collection_json(venues, Api::V1::VenueSerializer) %>;
-  window.boss.clockInDays = <%= api_v1_collection_json(clock_in_days, Api::V1::ClockInDaySerializer) %>;
+  window.boss.store.clockInPeriods = <%= api_v1_collection_json(clock_in_periods, Api::V1::ClockInPeriodSerializer) %>;
 
-  window.boss.clockInPeriods = <%= api_v1_collection_json(clock_in_periods, Api::V1::ClockInPeriodSerializer) %>;
+  window.boss.store.hoursAcceptancePeriods = <%= api_v1_collection_json(hours_acceptance_periods, Api::V1::HoursAcceptancePeriodSerializer) %>;
 
-  window.boss.hoursAcceptancePeriods = <%= api_v1_collection_json(hours_acceptance_periods, Api::V1::HoursAcceptancePeriodSerializer) %>;
+  window.boss.store.clockInEvents = <%= api_v1_collection_json(clock_in_events, Api::V1::ClockInEventSerializer) %>;
 
-  window.boss.clockInEvents = <%= api_v1_collection_json(clock_in_events, Api::V1::ClockInEventSerializer) %>;
+  window.boss.store.rotaShifts = <%= api_v1_collection_json(rota_shifts, Api::V1::RotaShiftSerializer) %>;
 
-  window.boss.rotaShifts = <%= api_v1_collection_json(rota_shifts, Api::V1::RotaShiftSerializer) %>;
+  window.boss.store.rotas = <%= api_v1_collection_json(rotas, Api::V1::RotaSerializer) %>;
 
-  window.boss.rotas = <%= api_v1_collection_json(rotas, Api::V1::RotaSerializer) %>;
+  window.boss.store.clockInBreaks = <%= api_v1_collection_json(clock_in_breaks, Api::V1::ClockInBreakSerializer) %>;
 
-  window.boss.clockInBreaks = <%= api_v1_collection_json(clock_in_breaks, Api::V1::ClockInBreakSerializer) %>;
+  window.boss.store.hoursAcceptanceBreaks = <%= api_v1_collection_json(hours_acceptance_breaks, Api::V1::HoursAcceptanceBreakSerializer) %>;
 
-  window.boss.hoursAcceptanceBreaks = <%= api_v1_collection_json(hours_acceptance_breaks, Api::V1::HoursAcceptanceBreakSerializer) %>;
+  window.boss.store.staffMembers = <%= api_v1_collection_json(staff_members, Api::V1::StaffMemberSerializer) %>;
 
-  window.boss.staffMembers = <%= api_v1_collection_json(staff_members, Api::V1::StaffMemberSerializer) %>;
+  window.boss.store.staffTypes = <%= api_v1_collection_json(staff_types, Api::V1::StaffTypeSerializer) %>;
 
-  window.boss.staffTypes = <%= api_v1_collection_json(staff_types, Api::V1::StaffTypeSerializer) %>;
+  window.boss.store.clockInNotes = <%= api_v1_collection_json(clock_in_notes, Api::V1::ClockInNoteSerializer) %>;
 
-  window.boss.clockInNotes = <%= api_v1_collection_json(clock_in_notes, Api::V1::ClockInNoteSerializer) %>;
-
-  window.boss.pageOptions = {
+  window.boss.store.pageOptions = {
     venue: { id: <%= venue.id %> }
   }
 </script>

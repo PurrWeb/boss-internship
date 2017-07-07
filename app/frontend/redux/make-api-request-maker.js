@@ -61,8 +61,8 @@ export default function makeApiRequestMaker(apiOptions){
                         staffMemberServerId: accessToken.staffMemberServerId
                     },
                     success: function(data){
-                        window.RollbarData = window.RollbarData || {};
-                        window.RollbarData.currentStaffMember = data.staff_member;
+                        window.boss = window.boss || {};
+                        window.boss.currentStaffMember = data.staff_member;
                         
                         callback(data.access_token)
                     },
