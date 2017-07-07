@@ -138,6 +138,7 @@ export default class StaffDay extends React.Component {
                             </div>
                         </div>
                         <HoursAcceptancePeriodList
+                            readonly={this.props.readonly}
                             rotaDate={this.props.rotaDate}
                             clockInDay={this.props.clockInDay}
                             hoursAcceptancePeriods={this.props.hoursAcceptancePeriods}

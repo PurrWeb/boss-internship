@@ -27,6 +27,8 @@ var dataHandlers = [
     apiRequestsInProgress,
     componentErrors,
     makeDefaultDataHandler("venues"),
+    makeDefaultDataHandler("readonlyVenues"),
+    makeDefaultDataHandler("readonlyClockInDays"),
     rotas,
     pageOptions,
     makeDefaultDataHandler("staffTypes"),
