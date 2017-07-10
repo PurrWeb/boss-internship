@@ -13,7 +13,6 @@ import {BossData} from '../../interfaces/common-data-types';
 const Root = class extends React.Component <{}, {}> {
   componentDidMount() {
     const boss: BossData = (window as any).boss.store;
-
     store.dispatch( accessTokenChanged(boss.accessToken) );
     store.dispatch( payratesChanged(boss.payrateValues) );
     store.dispatch( genderValuesChanged(boss.genderValues) );

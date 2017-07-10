@@ -1,3 +1,5 @@
+import oFetch from "o-fetch";
+
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response
@@ -7,12 +9,10 @@ const checkStatus = (response) => {
     throw error
   }
 }
+
+const currentVersion = oFetch(window, "boss.currentVersion");
 export default class AppVersion {
   constructor(options = {}) {
-    let currentVersion = window.boss.currentVersion;
-    if (!currentVersion) {
-      throw Error('No current version available :(');
-    }
     this.currentVersion = parseFloat(currentVersion);
     this.options = {
       failedLimit: 5,
