@@ -1,6 +1,7 @@
 import ReactUpdates from "react-dom/lib/ReactUpdates";
 import ReactDefaultBatchingStrategy from "react-dom/lib/ReactDefaultBatchingStrategy";
 import errorHandler from '~lib/error-handlers';
+import oFetch from 'o-fetch';
 
 const ReactTryCatchBatchingStrategy = {
   // this is part of the BatchingStrategy API. simply pass along
@@ -12,29 +13,28 @@ const ReactTryCatchBatchingStrategy = {
       ReactDefaultBatchingStrategy.batchedUpdates(...args);
     } catch (e) {
       if (typeof Rollbar !== 'undefined') {
-        window.RollbarData = window.RollbarData || {};
         let payload = {};
-        if (typeof window.RollbarData.currentVenue !== 'undefined') {
-          let { id, name, rollbar_guid } = window.RollbarData.currentVenue
+        if (typeof oFetch(window, 'boss.rollbarData.currentVenue') !== 'undefined') {
+          let { id, name, rollbar_guid } = window.boss.rollbarData.currentVenue
           payload.venue = { id, name };
           payload.person = {
             id: rollbar_guid,
             username: `Venue: ${ name }`,
           }
         }
-        if (typeof window.RollbarData.currentVersion !== 'undefined') {
-          payload.app_version = window.RollbarData.currentVersion;
+        if (typeof oFetch(window, 'boss.currentVersion') !== 'undefined') {
+          payload.app_version = window.boss.currentVersion;
         }
-        if (typeof window.RollbarData.currentUser !== 'undefined') {
-          let { id, name, rollbar_guid } = window.RollbarData.currentUser;
+        if (typeof oFetch(window, 'boss.rollbarData.currentUser') !== 'undefined') {
+          let { id, name, rollbar_guid } = window.boss.rollbarData.currentUser;
           payload.user = { id, name };
           payload.person = {
             id: rollbar_guid,
             username: `User: ${ name }`,
           }
         }
-        if (typeof window.RollbarData.currentStaffMember !== 'undefined') {
-          let { id, name, rollbar_guid } = window.RollbarData.currentStaffMember
+        if (typeof oFetch(window, 'boss.rollbarData.currentStaffMember') !== 'undefined') {
+          let { id, name, rollbar_guid } = window.boss.rollbarData.currentStaffMember
           payload.staff_member = { id, name };
           payload.person = {
             id: rollbar_guid,

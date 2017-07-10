@@ -48,7 +48,7 @@ export default function makeApiRequestMaker(apiOptions){
             }
 
             if (typeof accessToken === "undefined") {
-                callback(window.boss.access_token);
+                callback(oFetch(window, "boss.store.access_token"));
             } else if (typeof accessToken === "string") {
                 callback(accessToken)
             } else if (accessToken.pin !== undefined && accessToken.staffMemberServerId !== undefined
@@ -61,8 +61,8 @@ export default function makeApiRequestMaker(apiOptions){
                         staffMemberServerId: accessToken.staffMemberServerId
                     },
                     success: function(data){
-                        window.RollbarData = window.RollbarData || {};
-                        window.RollbarData.currentStaffMember = data.staff_member;
+                        let rollbarData = oFetch(window, 'boss.rollbarData');
+                        rollbarData.currentStaffMember = data.staff_member;
                         
                         callback(data.access_token)
                     },

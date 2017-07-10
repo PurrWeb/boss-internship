@@ -16,13 +16,14 @@
   var staffTypes = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
 
   window.boss = window.boss || {};
-  window.boss.holidays = holidays;
-  window.boss.staffMembers = staffMembers;
-  window.boss.venues = venues;
-  window.boss.staffTypes = staffTypes;
-  window.boss.access_token = "<%= access_token.token %>";
+  window.boss.store = window.boss.store || {};
+  window.boss.store.holidays = holidays;
+  window.boss.store.staffMembers = staffMembers;
+  window.boss.store.venues = venues;
+  window.boss.store.staffTypes = staffTypes;
+  window.boss.store.access_token = "<%= access_token.token %>";
 
-  window.boss.pageData = {
+  window.boss.store.pageData = {
     accessibleVenueIds: accessibleVenueIds,
     venueId: <%= filter_venue.try(:id) || 'null' %>,
     weekStartDate: "<%= week.start_date.iso8601 %>",

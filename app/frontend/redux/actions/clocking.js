@@ -94,8 +94,8 @@ export const clockInOutAppEnterUserMode = createApiRequestActionCreator({
                 }
             },
             getSuccessActionData(responseData, requestOptions){
-                window.RollbarData = window.RollbarData || {};
-                window.RollbarData.currentStaffMember = responseData.staff_member;
+                let rollbarData = oFetch(window, 'boss.rollbarData');
+                rollbarData.currentStaffMember = responseData.staff_member;
 
                 return {
                     mode: requestOptions.userMode,
@@ -230,8 +230,8 @@ export const clockInOutAppFetchAppData = createApiRequestActionCreator({
             }
         },
         getSuccessActionData(responseData){
-            window.RollbarData = window.RollbarData || {};
-            window.RollbarData.currentVenue = {
+            let rollbarData = oFetch(window, "boss.rollbarData");
+            rollbarData.currentVenue = {
                 id: responseData.venues[0].id,
                 name: responseData.venues[0].name,
                 rollbar_guid: responseData.venues[0].rollbar_guid,

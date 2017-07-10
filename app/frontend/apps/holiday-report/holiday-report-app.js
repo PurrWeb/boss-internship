@@ -33,7 +33,7 @@ export default class HolidayReportApp extends Component {
         if (this.props.viewData) {
             return this.props.viewData;
         }
-        return window.boss;
+        return oFetch(window, "boss.store");
     }
     render() {
         return <Provider store={this.store}>
