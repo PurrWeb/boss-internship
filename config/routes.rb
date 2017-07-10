@@ -231,6 +231,8 @@ Rails.application.routes.draw do
 
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
+        get 'version', to: 'version#version'
+
         resources :sessions, only: [:create]
         resources :clock_in_clock_out, only: [:index]
 
