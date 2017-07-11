@@ -95,10 +95,6 @@
                   </a>
                   <ul class="boss-submenu nav-admin-section menu vertical">
                     <li class="nav-invites-section">
-                      <%= link_to('Names', names_path) %>
-                    </li>
-
-                    <li class="nav-invites-section">
                       <%= link_to('Invites', invites_path) %>
                     </li>
 
@@ -146,6 +142,10 @@
 
                     <li class="nav-admin-api-keys-section">
                       <%= link_to('API Keys', api_keys_path) %>
+                    </li>
+
+                    <li class="nav-invites-section">
+                      <%= link_to('Names', names_path) %>
                     </li>
 
                     <% if current_user.dev? %>
@@ -257,10 +257,6 @@
               <a href="#" class="boss-mobile-menu__button-link boss-mobile-menu__button-link_dropdown">Admin</a>
               <ul class="boss-mobile-menu__dropdown">
                 <li class="boss-mobile-menu__button">
-                  <%= link_to('Names', names_path, class: "boss-mobile-menu__button-link") %>
-                </li>
-
-                <li class="boss-mobile-menu__button">
                   <%= link_to('Invites', invites_path, class: "boss-mobile-menu__button-link") %>
                 </li>
 
@@ -308,6 +304,10 @@
 
                 <li class="boss-mobile-menu__button">
                   <%= link_to('API Keys', api_keys_path, class: "boss-mobile-menu__button-link") %>
+                </li>
+
+                <li class="boss-mobile-menu__button">
+                  <%= link_to('Names', names_path, class: "boss-mobile-menu__button-link") %>
                 </li>
 
                 <% if current_user.dev? %>
