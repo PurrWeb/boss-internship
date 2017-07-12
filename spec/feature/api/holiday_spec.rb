@@ -6,12 +6,10 @@ RSpec.describe 'Holiday api end points' do
 
   let(:user) { FactoryGirl.create(:user, :admin) }
   let(:access_token) do
-    AccessToken.create!(
-      token_type: 'web',
+    WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      creator: user,
       user: user
-    )
+    ).persist!
   end
 
   before do

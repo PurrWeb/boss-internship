@@ -22,8 +22,7 @@ module Api
           }, status: :unprocessable_entity
         elsif pin_code && staff_member.pin_code_valid?(pin_code)
 
-          access_token = ApiAccessToken.new(staff_member: staff_member, api_key: api_key)
-          access_token.persist!
+          access_token = ApiAccessToken.new(staff_member: staff_member, api_key: api_key).persist!
 
           render 'create', locals: {
             access_token: access_token,

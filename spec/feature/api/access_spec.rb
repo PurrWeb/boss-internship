@@ -17,12 +17,9 @@ RSpec.describe 'Api access' do
     context 'active token supplied' do
       let(:user) { FactoryGirl.create(:user) }
       let(:access_token) do
-        AccessToken.create!(
-          token_type: 'web',
-          expires_at: 30.minutes.from_now,
-          creator: user,
+        WebApiAccessToken.new(
           user: user
-        )
+        ).persist!
       end
 
       before do
@@ -39,12 +36,9 @@ RSpec.describe 'Api access' do
     context 'expired token supplied' do
       let(:user) { FactoryGirl.create(:user) }
       let(:access_token) do
-        AccessToken.create!(
-          token_type: 'web',
-          expires_at: 30.minutes.ago,
-          creator: user,
+        WebApiAccessToken.new(
           user: user
-        )
+        ).persist!
       end
 
       before do
@@ -71,12 +65,9 @@ RSpec.describe 'Api access' do
     context 'authenticated user' do
       let(:user) { FactoryGirl.create(:user) }
       let(:access_token) do
-        AccessToken.create!(
-          token_type: 'web',
-          expires_at: 30.minutes.from_now,
-          creator: user,
+        WebApiAccessToken.new(
           user: user
-        )
+        ).persist!
       end
 
       before do

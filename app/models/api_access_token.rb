@@ -1,17 +1,21 @@
 class ApiAccessToken
-  
   @@redis = Redis.new
 
-  def initialize(token: nil, staff_member:, api_key:)
+  def initialize(token: nil, expires_at: nil, staff_member:, api_key:)
     if token.present?
       @token = token
     else
       @token = SecureRandom.hex
     end
-    
+
     @api_key = api_key
     @staff_member = staff_member
-    @expires_at = 30.minutes.from_now.utc.iso8601
+
+    if expires_at.present?
+      @expires_at = expires_at.utc
+    else
+      @expires_at = 30.minutes.from_now.utc
+    end
   end
 
   attr_reader :token, :staff_member, :expires_at, :api_key
@@ -87,6 +91,7 @@ class ApiAccessToken
         (keys + [token]).to_json
       )
     end
+    self
   end
 
   def self.redis

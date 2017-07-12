@@ -8,12 +8,10 @@ RSpec.describe 'Api access' do
   let(:staff_members) { FactoryGirl.create_list(:staff_member, 2) }
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
   let(:access_token) do
-    AccessToken.create!(
-      token_type: 'web',
+    WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      creator: user,
       user: user
-    )
+    ).persist!
   end
 
   before do

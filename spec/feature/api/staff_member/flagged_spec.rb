@@ -14,12 +14,10 @@ RSpec.describe 'Flagged staff member endpoint' do
   let(:venue) { FactoryGirl.create(:venue) }
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
   let(:access_token) do
-    AccessToken.create!(
-      token_type: 'web',
+    WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      creator: user,
       user: user
-    )
+    ).persist!
   end
   let(:url) do
     url_helpers.flagged_api_v1_staff_members_path

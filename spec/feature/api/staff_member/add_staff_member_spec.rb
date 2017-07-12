@@ -19,12 +19,10 @@ RSpec.describe 'Api access' do
   end
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
   let(:access_token) do
-    AccessToken.create!(
-      token_type: 'web',
+    WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      creator: user,
       user: user
-    )
+    ).persist!
   end
 
   before do
@@ -37,13 +35,10 @@ RSpec.describe 'Api access' do
     )
   end
   let(:access_token) do
-    AccessToken.create(
-      token_type: 'web',
+    WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      creator: api_key,
-      api_key: api_key,
       user: user
-    )
+    ).persist!
   end
   let(:first_name) { 'Jake' }
   let(:email_address) { 'foo@bar.car' }

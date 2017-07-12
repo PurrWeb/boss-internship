@@ -15,12 +15,10 @@ RSpec.describe 'Hours acceptance endpoints' do
     ApiKey.create!(venue: venue, user: user, key_type: ApiKey::BOSS_KEY_TYPE)
   end
   let(:access_token) do
-    AccessToken.create!(
-      token_type: 'web',
+    WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      creator: user,
       user: user
-    )
+    ).persist!
   end
 
   before do

@@ -2,14 +2,19 @@ class WebApiAccessToken
   
   @@redis = Redis.new
 
-  def initialize(token: nil, user:)
+  def initialize(token: nil, expires_at: nil, user:)
     if token.present?
       @token = token
     else
       @token = SecureRandom.hex
     end
     @user = user
-    @expires_at = 30.minutes.from_now.utc.iso8601
+
+    if expires_at.present?
+      @expires_at = expires_at.utc
+    else
+      @expires_at = 30.minutes.from_now.utc
+    end
   end
 
   attr_reader :token, :user, :expires_at

@@ -20,13 +20,10 @@ RSpec.describe 'Clocking actions' do
   let(:target_staff_member) { FactoryGirl.create(:staff_member) }
   let(:token_expires_at) { 30.minutes.from_now }
   let(:access_token) do
-    AccessToken.create!(
-      token_type: 'api',
-      expires_at: token_expires_at,
-      creator: user,
-      api_key: api_key,
-      staff_member: staff_member
-    )
+    ApiAccessToken.new(
+      staff_member: staff_member,
+      api_key: api_key
+    ).persist!
   end
 
   before do
@@ -175,13 +172,11 @@ RSpec.describe 'Clocking actions' do
       specify 'should associate event with create period' do
         call_time = day_start + 2.hours
         travel_to call_time do
-          token = AccessToken.create!(
-            token_type: 'api',
+          token = ApiAccessToken.new(
             expires_at: 30.minutes.from_now,
-            creator: user,
             api_key: api_key,
             staff_member: staff_member
-          )
+          ).persist!
           set_authorization_header(token.token)
           post(url, params)
         end
@@ -486,13 +481,11 @@ RSpec.describe 'Clocking actions' do
       specify 'break should have correct times' do
         end_break_time = start_break_time + 3.hours
         travel_to end_break_time do
-          historical_token = AccessToken.create!(
-            token_type: 'api',
+          historical_token = ApiAccessToken.new(
             expires_at: 30.minutes.from_now,
-            creator: user,
             api_key: api_key,
             staff_member: staff_member
-          )
+          ).persist!
           set_authorization_header(historical_token.token)
           post(url, params)
         end
