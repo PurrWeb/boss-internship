@@ -7,7 +7,7 @@ module Api
         api_key = ApiKey.boss.active.find_by(key: params[:api_key])
         staff_member = StaffMember.enabled.find_by(id: params[:staff_member_id])
         pin_code = params[:staff_member_pin]
-
+        
         if !api_key.present?
           render json: {
             errors: {
@@ -21,13 +21,9 @@ module Api
             }
           }, status: :unprocessable_entity
         elsif pin_code && staff_member.pin_code_valid?(pin_code)
-          access_token = AccessToken.create!(
-            token_type: 'api',
-            expires_at: 30.minutes.from_now,
-            creator: api_key,
-            api_key: api_key,
-            staff_member: staff_member,
-          )
+
+          access_token = ApiAccessToken.new(staff_member: staff_member, api_key: api_key)
+          access_token.persist!
 
           render 'create', locals: {
             access_token: access_token,
