@@ -15,6 +15,7 @@
     
     <script>
       window.boss = window.boss || {};
+      window.boss.quickMenu = JSON.parse('<%= raw quick_menu %>');
       window.boss.store = window.boss.store || {};
       window.boss.rollbarData = window.boss.rollbarData || {};
 
@@ -26,7 +27,7 @@
           name: "<%= logged_in_user_info_json[:name] %>",
           rollbar_guid: "<%= logged_in_user_info_json[:rollbar_guid] %>"
         };
-      <% end%>
+      <% end %>
     </script>
     
     <script src="<%= @bundle_script %>" data-turbolinks-track="true"></script>

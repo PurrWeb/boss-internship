@@ -168,7 +168,55 @@ var utils =  {
         var parts = str.match(/([A-Z]?[a-z]*)/g)
         parts = parts.filter(part => part !== "");
         return parts.join("_").toUpperCase();
-    }
+    },
+    generateQuickMenuAlias(text){
+      var splitedText = text.split(' ');
+      if ( splitedText.length > 1 ) {
+        return splitedText[0][0] + splitedText[1][0].toLowerCase();
+      } else {
+        return text.slice(0,2);
+      }
+    },
+    deepCopy(obj) {
+      return JSON.parse(JSON.stringify(obj));
+    },
+    quickMenuFilter(searchQuery, quickMenu){
+      const searchQueryFilters = searchQuery.split(' ');
+      let menu = this.deepCopy(quickMenu);
+      console.log(`original:`, quickMenu);
+      console.log(`Cloned: `, menu);
+      let unfilteredResult = []; 
+
+
+      searchQueryFilters.forEach((filter) => {
+        menu.forEach((parentItem, index) => {
+          parentItem.items.forEach(childItem => {
+            const lowerDescription = childItem.description.toLowerCase();
+            const lowerFilter = filter.toLowerCase();
+            if (lowerDescription.indexOf(lowerFilter) !== -1) {
+              childItem.inResult = true;
+            } else {
+              childItem.inResult = childItem.inResult === true ? true : false;
+            }
+            console.log(childItem.inResult, childItem.description, searchQueryFilters);
+          });
+        });
+      });
+      
+      console.log(menu);
+      
+      const b = menu.map(parentItem => {
+        const childItems = parentItem.items.filter(childItem => {
+          return childItem.inResult;
+        });
+        let a = Object.assign({}, parentItem);
+        a.items = childItems;
+        return a;
+      })
+
+      console.log(a);
+      return Object.assign([], menu);
+    },
 }
 
 

@@ -1,0 +1,181 @@
+class PermissionsPageData
+  def initialize(user:)
+    @role = Ability.new(user)
+    @user = user
+    @path = Rails.application.routes.url_helpers
+  end
+
+  attr_reader :user, :role
+
+  def to_json
+    venue = {
+      name: "Venue",
+      color: "#e74c3c",
+      items: [
+        {
+          description: "Rota",
+          permitted: role.can?(:manage, :rotas),
+          path: @path.rotas_path
+        },
+        {
+          description: "Security Rota",
+          permitted: role.can?(:manage, :security_rota),
+          path: @path.security_rotas_path
+        },
+        {
+          description: "Change Orders",
+          permitted: role.can?(:manage, :change_orders),
+          path: @path.change_orders_path
+        },
+        {
+          description: "Safe Checks",
+          permitted: !user.security_manager?,
+          path: @path.safe_checks_path
+        },
+      ]
+    }
+
+    staff_members = {
+      name: "Staff Members",
+      color: "#27ae60",
+      items: [
+        {
+          description: "Hours Confirmation",
+          permitted: !user.security_manager?,
+          path: @path.current_hours_confirmation_index_path
+        },
+        {
+          description: "Holidays",
+          permitted: role.can?(:view, :holidays),
+          path: @path.holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday))
+        },
+        {
+          description: "Add Staff Member",
+          permitted: role.can?(:manage, :staff_members),
+          path: @path.new_staff_member_path
+        }
+      ]
+    }
+
+    reports = {
+      name: "Dayly Report",
+      color: "#9b59b6",
+      items: [
+        {
+          description: "Dayly Report",
+          permitted: role.can?(:view, :daily_reports),
+          path: @path.daily_reports_path
+        },
+        {
+          description: "Weekly Report",
+          permitted: role.can?(:view, :weekly_reports),
+          path: @path.weekly_reports_path
+        },
+        {
+          description: "Payroll Reports",
+          permitted: role.can?(:view, :payroll_reports),
+          path: @path.payroll_reports_path
+        }
+      ]
+    }
+
+    admin_general = {
+      name: "Admin: General",
+      color: "#e67e22",
+      items: [
+        {
+          description: "Names",
+          path: @path.names_path
+        },
+        {
+          description: "Venues",
+          path: @path.venues_path
+        }
+      ]
+    }
+
+    admin_users = {
+      name: "Admin: Users",
+      color: "#1abc9c",
+      items: [
+        {
+          description: "Invites",
+          path: @path.invites_path
+        }
+      ]
+    }
+
+    admin_staff_members = {
+      name: "Admin: Staff Members",
+      color: "#3498db",
+      items: [
+        {
+          description: "Staff Type",
+          path: @path.staff_types_path
+        },
+        {
+          description: "Pay Rates",
+          path: @path.pay_rates_path
+        },
+        {
+          description: "Staff Vetting",
+          path: @path.staff_vetting_index_path
+        },
+        {
+          description: "Staff Tracking",
+          path: @path.staff_tracking_index_path
+        }
+      ]
+    }
+
+    admin_venue = {
+      name: "Admin: Venue",
+      color: "#c0392b",
+      items: reports[:items]
+    }
+
+    admin_reports = {
+      name: "Admin: Reports",
+      color: "#f39c12",
+      items: [
+        {
+          description: "Finance Reports",
+          path: @path.finance_reports_path
+        },
+        {
+          description: "Yearly Reports",
+          path: @path.yearly_reports_path
+        }
+      ]
+    }
+
+    menu = [
+      venue,
+      staff_members,
+      reports
+    ]
+
+    admin_menu = [
+      admin_general,
+      admin_users,
+      admin_staff_members,
+      admin_venue,
+      admin_reports
+    ]
+
+
+    quick_menu = menu.map do |parent_item|
+      parent_item[:items] = parent_item[:items].map do |child_item|
+        child_item if child_item[:permitted]
+      end.compact
+      parent_item
+    end
+
+    if role.can?(:manage, :admin)
+      (quick_menu + admin_menu).to_json
+    else
+      quick_menu.to_json
+    end
+
+  end
+end

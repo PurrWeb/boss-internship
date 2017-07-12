@@ -65,19 +65,22 @@ import StaffMembersFilterForm from "./apps/staff-members/components/staff-member
 registerComponent("StaffMembersFilterForm", StaffMembersFilterForm);
 
 import HoursConfirmationApp from "./apps/hours-confirmation"
-registerComponent("HoursConfirmationApp", HoursConfirmationApp)
+registerComponent("HoursConfirmationApp", HoursConfirmationApp);
 
 import StaffHoursOverviewApp from "./apps/staff-hours-overview"
-registerComponent("StaffHoursOverviewApp", StaffHoursOverviewApp)
+registerComponent("StaffHoursOverviewApp", StaffHoursOverviewApp);
 
 import RollbarErrorTestApp from "./apps/rollbar-error-test/rollbar-error-test-app"
 registerComponent("RollbarErrorTestApp", RollbarErrorTestApp)
 
 import VenueFinder from "./components/shared/venue-finder"
-registerComponent("VenueFinder", VenueFinder)
+registerComponent("VenueFinder", VenueFinder);
 
 import FruitPopover from "./components/shared/fruit-popover"
-registerComponent("FruitPopover", FruitPopover)
+registerComponent("FruitPopover", FruitPopover);
+
+import Header from "./components/containers/header/header.js"
+registerComponent("Header", Header);
 
 import DetailsModal from "./components/safe-checks/details-modal"
 registerComponent("DetailsModal", DetailsModal)

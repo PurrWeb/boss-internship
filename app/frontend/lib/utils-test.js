@@ -21,3 +21,12 @@ describe("utils.round", function(){
         expect(utils.round(1.456, 2)).toEqual(1.46);
     })
 })
+
+describe("utils.generateQuickMenuAlias", function() {
+    it("Create alias from 'Rota' as 'Ro'", function() {
+      expect(utils.generateQuickMenuAlias('Rota').toEqual('Ro'));
+    });
+    it("Create alias from 'Security Rota' as 'Sr'", function() {
+      expect(utils.generateQuickMenuAlias('Security Rota').toEqual('Sr'));
+    });
+});
