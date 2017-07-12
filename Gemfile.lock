@@ -517,6 +517,7 @@ DEPENDENCIES
   rails (~> 4.2.0)
   rb-fsevent
   react_webpack_rails
+  redis (~> 3.2)
   reform
   reform-rails (~> 0.1.7)
   require_all

@@ -52,6 +52,7 @@ gem "autoprefixer-rails"
 gem 'font-awesome-sass'
 gem 'active_model_serializers', '~> 0.10.0'
 gem "shell-spinner"
+gem 'redis', '~>3.2'
 
 group :development, :test do
   gem "seedbank"
