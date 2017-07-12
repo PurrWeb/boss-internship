@@ -61,7 +61,7 @@ class RotasController < ApplicationController
     ).includes([:venue, :rota_status_transitions])
 
     venues = Venue.where(id: [rota.venue_id] + rotas.map(&:venue_id).uniq)
-    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
       access_token: access_token,
@@ -106,7 +106,7 @@ class RotasController < ApplicationController
       week: week
     ).call
 
-    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
       access_token: access_token,

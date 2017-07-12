@@ -8,7 +8,7 @@ class SecurityRotasController < ApplicationController
     if date && (date == week.start_date)
       respond_to do |format|
         format.html do
-          access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user) || @_access_token.user.staff_member
+          access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
           render locals: {
             access_token: access_token,
@@ -63,7 +63,7 @@ class SecurityRotasController < ApplicationController
       includes(:venue).
       uniq
 
-    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
       access_token: access_token,

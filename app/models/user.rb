@@ -68,11 +68,12 @@ class User < ActiveRecord::Base
   end
 
   def expire_web_tokens!
-    current_web_access_tokens.update_all(expires_at: Time.current)
+    
+    # current_web_access_tokens.update_all(expires_at: Time.current)
   end
 
   def current_access_token
-    current_web_access_tokens.first
+    current_web_access_tokens.last
   end
 
   def email
@@ -243,7 +244,8 @@ class User < ActiveRecord::Base
 
   private
   def current_web_access_tokens
-    AccessToken.where(token_type: 'web', user: self, expires_at: nil)
+    WebApiAccessToken.find_by_user(user: self)
+    # AccessToken.where(token_type: 'web', user: self, expires_at: nil)
   end
 
   def check_rollbar_guid
