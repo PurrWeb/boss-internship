@@ -13,7 +13,7 @@ class Users::SessionsController < Devise::SessionsController
 
   # DELETE /resource/sign_out
   def destroy
-    current_user.expire_web_tokens!
+    WebApiAccessToken.revoke!(user: current_user)
     super
   end
 

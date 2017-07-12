@@ -68,8 +68,7 @@ class User < ActiveRecord::Base
   end
 
   def expire_web_tokens!
-    
-    # current_web_access_tokens.update_all(expires_at: Time.current)
+    WebApiAccessToken.revoke!(user: self)
   end
 
   def current_access_token
