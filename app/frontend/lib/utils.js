@@ -185,13 +185,18 @@ var utils =  {
       let unfilteredResult = []; 
 
       unfilteredResult = searchQueryFilters.reduce((menu, filter) => {
+        const lowerFilter = filter.toLowerCase();
         return menu.map((parentItem) => {
           let items = parentItem.items.map(childItem => {
             const lowerDescription = childItem.description.toLowerCase();
-            const lowerFilter = filter.toLowerCase();
             let item = Object.assign({}, childItem);
-            if (lowerDescription.indexOf(lowerFilter) !== -1) {
+            let matches = lowerDescription.indexOf(lowerFilter);
+            if (matches !== -1) {
+              let query = new RegExp(filter, "gi");
+              let matchedString = item.description.substring(matches, matches + filter.length)
+              let description = item.highlightedDescription || item.description;
               item.inResult = true;
+              item.highlightedDescription = item.description.replace(query, `<strong>${matchedString}</strong>`);
             } else {
               item.inResult = !!item.inResult;
             }

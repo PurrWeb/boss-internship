@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import utils from "~lib/utils"
 
 export const DropDownListItem = ({item}) => {
-  const {description, path} = item;
+  const {description, highlightedDescription, path} = item;
   return <div className="boss-alias">
       <a href={path} className="boss-alias__link">
       <span className="boss-alias__icon boss-alias__icon_type_solid boss-alias__icon_role_venue">{utils.generateQuickMenuAlias(description)}</span>
-      <span className="boss-alias__text boss-alias__text_role_venue">{description}</span>
+      <span className="boss-alias__text boss-alias__text_role_venue" dangerouslySetInnerHTML={{__html: highlightedDescription || description}}></span>
     </a>
   </div>
 };
