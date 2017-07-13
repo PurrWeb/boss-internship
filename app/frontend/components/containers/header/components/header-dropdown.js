@@ -27,11 +27,15 @@ export default class HeaderDropdown extends Component {
   componentWillMount() {
     document.body.addEventListener('keydown', this.props.handleEscPress);
     document.body.addEventListener('keypress', this.keyPress);
+    document.body.addEventListener('keydown', this.keyPress);
+    
   }
 
   componentWillUnmount() {
     document.body.removeEventListener('keydown', this.props.handleEscPress);
     document.body.removeEventListener('keypress', this.keyPress);
+    document.body.removeEventListener('keydown', this.keyPress);
+    
   }
 
   onInuputChange = (e) => {
