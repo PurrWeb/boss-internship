@@ -1,6 +1,4 @@
 class ApiAccessToken
-  @@redis = Redis.new
-
   def initialize(token: nil, expires_at: nil, staff_member:, api_key:)
     if token.present?
       @token = token
@@ -95,10 +93,10 @@ class ApiAccessToken
   end
 
   def self.redis
-    @@redis
+    Redis.current
   end
 
   def redis
-    ApiAccessToken.redis
+    Redis.current
   end
 end

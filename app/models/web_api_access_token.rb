@@ -1,7 +1,4 @@
 class WebApiAccessToken
-
-  @@redis = Redis.new
-
   def initialize(token: nil, expires_at: nil, user:)
     if token.present?
       @token = token
@@ -91,11 +88,10 @@ class WebApiAccessToken
   end
 
   def self.redis
-    @@redis
+    Redis.current
   end
 
   def redis
-    WebApiAccessToken.redis
+    Redis.current
   end
-
 end
