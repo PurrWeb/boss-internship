@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import HeaderDropdownList from './header-dropdown-list';
 import cn from 'classnames';
 import utils from '~lib/utils'
+import iScroll from 'iscroll';
+import ReactIScroll from 'react-iscroll';
 
 const objects = window.boss.quickMenu;
 
@@ -11,6 +13,15 @@ export default class HeaderDropdown extends Component {
     this.state = {
       quickMenu: objects,
     };
+    this.scrollOptions = {
+      crollbars: true,
+      mouseWheel: true,
+      interactiveScrollbars: true,
+      shrinkScrollbars: 'scale',
+      fadeScrollbars: false,
+      click: true,
+      scrollbars: true,
+    }
   }
 
   componentWillMount() {
@@ -46,9 +57,11 @@ export default class HeaderDropdown extends Component {
             <a href="#" onClick={this.props.closeDropdown} className="boss-page-header__dropdown-label boss-page-header__dropdown-label_role_action boss-page-header__dropdown-label_role_close boss-page-header__dropdown-label_type_icon">Close</a>
         </div>
         <div className="boss-page-header__dropdown-scroll">
-          <div className="boss-page-header__dropdown-content">
-            <HeaderDropdownList items={this.state.quickMenu} />
-          </div>
+          <ReactIScroll iScroll={iScroll} options={this.scrollOptions}>
+            <div className="boss-page-header__dropdown-content">
+              <HeaderDropdownList items={this.state.quickMenu} />
+            </div>
+          </ReactIScroll>
         </div>
       </div>
     </div>
