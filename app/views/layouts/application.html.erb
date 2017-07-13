@@ -15,13 +15,13 @@
     
     <script>
       window.boss = window.boss || {};
-      window.boss.quickMenu = JSON.parse('<%= raw quick_menu %>');
       window.boss.store = window.boss.store || {};
       window.boss.rollbarData = window.boss.rollbarData || {};
 
       window.boss.currentLayout = "<%= @current_layout %>"
       window.boss.currentVersion = "<%= application_version %>";
       <% if logged_in_user_info_json.present? %>
+        window.boss.quickMenu = JSON.parse('<%= raw quick_menu %>');
         window.boss.rollbarData.currentUser = {
           id: "<%= logged_in_user_info_json[:id] %>",
           name: "<%= logged_in_user_info_json[:name] %>",

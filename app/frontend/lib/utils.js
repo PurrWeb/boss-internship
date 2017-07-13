@@ -181,41 +181,40 @@ var utils =  {
       return JSON.parse(JSON.stringify(obj));
     },
     quickMenuFilter(searchQuery, quickMenu){
-      const searchQueryFilters = searchQuery.split(' ');
-      let menu = this.deepCopy(quickMenu);
-      console.log(`original:`, quickMenu);
-      console.log(`Cloned: `, menu);
+      const searchQueryFilters = searchQuery.split(' ').filter(i => i);
       let unfilteredResult = []; 
 
-
-      searchQueryFilters.forEach((filter) => {
-        menu.forEach((parentItem, index) => {
-          parentItem.items.forEach(childItem => {
+      unfilteredResult = searchQueryFilters.reduce((menu, filter) => {
+        return menu.map((parentItem) => {
+          let items = parentItem.items.map(childItem => {
             const lowerDescription = childItem.description.toLowerCase();
             const lowerFilter = filter.toLowerCase();
+            let item = Object.assign({}, childItem);
             if (lowerDescription.indexOf(lowerFilter) !== -1) {
-              childItem.inResult = true;
+              item.inResult = true;
             } else {
-              childItem.inResult = childItem.inResult === true ? true : false;
+              item.inResult = !!item.inResult;
             }
-            console.log(childItem.inResult, childItem.description, searchQueryFilters);
+            return item;
           });
+          return {
+            name: parentItem.name,
+            color: parentItem.color,
+            items: items
+          };
         });
-      });
+      }, quickMenu);
       
-      console.log(menu);
-      
-      const b = menu.map(parentItem => {
+      const filteredResult = unfilteredResult.map(parentItem => {
         const childItems = parentItem.items.filter(childItem => {
           return childItem.inResult;
         });
-        let a = Object.assign({}, parentItem);
-        a.items = childItems;
-        return a;
-      })
+        if (!childItems.length) return null;
+        parentItem.items = childItems;
+        return parentItem;
+      }).filter(i => i);
 
-      console.log(a);
-      return Object.assign([], menu);
+      return filteredResult;
     },
 }
 

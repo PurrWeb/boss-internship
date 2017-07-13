@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import HeaderDropdown from './components/header-dropdown';
 
+const userName = window.boss.rollbarData.currentUser.name
+
 export default class Header extends Component {
 
   constructor(props) {
@@ -36,10 +38,12 @@ export default class Header extends Component {
   }
 
   handleToggleDropdown = () => {
+    this.closeAllDropdowns();
     this.setState({isDropdownOpen: !this.state.isDropdownOpen});
   };
 
   handleToggleUserDropdown = () => {
+    this.closeAllDropdowns();
     this.setState({isUserDropdownOpen: !this.state.isUserDropdownOpen})
   };
 
@@ -52,12 +56,12 @@ export default class Header extends Component {
         { this.state.isUserDropdownOpen && 
           <div className="boss-page-header__dropdown boss-page-header__dropdown_role_profile boss-page-header__dropdown_state_opened">
             <nav className="boss-menu">
-              <p href="::javascript" className="boss-menu__label boss-menu__label_role_user">John Doe</p>
-              <a href="::javascript" className="boss-menu__link boss-menu__link_role_logout">Logout</a>
+              <p href="::javascript" className="boss-menu__label boss-menu__label_role_user">{userName}</p>
+              <a href="/auth/sign_out" data-method="delete" className="boss-menu__link boss-menu__link_role_logout">Logout</a>
             </nav>
           </div>
         }
-        <HeaderDropdown isOpen={this.state.isDropdownOpen} handleEscPress={this.handleEscPress} />
+        <HeaderDropdown isOpen={this.state.isDropdownOpen} handleEscPress={this.handleEscPress} closeDropdown={this.closeAllDropdowns} />
       </div>
     </header>
   }

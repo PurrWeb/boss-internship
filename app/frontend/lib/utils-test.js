@@ -30,3 +30,42 @@ describe("utils.generateQuickMenuAlias", function() {
       expect(utils.generateQuickMenuAlias('Security Rota').toEqual('Sr'));
     });
 });
+
+describe("quickMenuFilter", function() {
+    var quickMenu = [
+      {
+        items: [
+          {description: "Rota"},
+          {description: "Security Rota"},
+          {description: "Change Orders"},
+        ]
+      },
+      {
+        items: [
+          {description: "Hours Confirmation"},
+          {description: "Holidays"},
+          {description: "Add Staff Member"},
+        ]
+      },
+      {
+        items: [
+          {description: "Dayly Report"},
+          {description: "Weekly Report"},
+          {description: "Payroll Reports"},
+        ]
+      },
+    ];
+
+    var exQuickMenuOneWord = [
+      {
+        items: [
+          {description: "Rota"},
+          {description: "Security Rota"},
+        ]
+      },
+    ]
+
+    it("Filtering quick menu", function() {
+      expect(utils.quickMenuFilter('Rota', quickMenu).toEqual(exQuickMenuOneWord));
+    });
+});

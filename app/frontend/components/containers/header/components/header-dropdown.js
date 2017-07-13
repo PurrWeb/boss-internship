@@ -9,23 +9,28 @@ export default class HeaderDropdown extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      quickMenu: objects.slice(0),
+      quickMenu: objects,
     };
   }
 
   componentWillMount() {
     document.body.addEventListener('keydown', this.props.handleEscPress);
+    document.body.addEventListener('keypress', this.keyPress);
   }
 
   componentWillUnmount() {
     document.body.removeEventListener('keydown', this.props.handleEscPress);
+    document.body.removeEventListener('keypress', this.keyPress);
   }
 
   onInuputChange = (e) => {
-    // this.setState({
-    //   quickMenu: !e.target.value ? objects.slice(0) : utils.quickMenuFilter(e.target.value, objects),
-    // })
-    console.log(utils.quickMenuFilter(e.target.value, objects));
+    this.setState({
+      quickMenu: !e.target.value ? objects : utils.quickMenuFilter(e.target.value, objects),
+    })
+  }
+
+  keyPress = () => {
+    document.getElementById('onFocusInput').focus();
   }
 
   render() {
@@ -36,9 +41,9 @@ export default class HeaderDropdown extends Component {
         <div className="boss-page-header__dropdown-header">
             <p className="boss-page-header__dropdown-label boss-page-header__dropdown-label_role_search">Search</p>
             <div className="boss-page-header__dropdown-filter">
-              <input type="text" onChange={this.onInuputChange} />
+              <input type="text" id="onFocusInput" onChange={this.onInuputChange} />
             </div>
-            <a href="#" className="boss-page-header__dropdown-label boss-page-header__dropdown-label_role_action boss-page-header__dropdown-label_role_close boss-page-header__dropdown-label_type_icon">Close</a>
+            <a href="#" onClick={this.props.closeDropdown} className="boss-page-header__dropdown-label boss-page-header__dropdown-label_role_action boss-page-header__dropdown-label_role_close boss-page-header__dropdown-label_type_icon">Close</a>
         </div>
         <div className="boss-page-header__dropdown-scroll">
           <div className="boss-page-header__dropdown-content">
