@@ -1,5 +1,5 @@
 class WebApiAccessToken
-  
+
   @@redis = Redis.new
 
   def initialize(token: nil, expires_at: nil, user:)
@@ -29,6 +29,7 @@ class WebApiAccessToken
 
   def self.revoke!(user:)
     tokens = find_by_user(user: user)
+
     redis.del(user_key_token_list_key(user))
     tokens.each do |token|
       redis.del(token_key(token.token))

@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
           :lockable, :authentication_keys => [:devise_email]
 
   before_validation :check_rollbar_guid
-  
+
   validates :rollbar_guid, presence: true
   validates :role, inclusion: { in: ROLES, message: 'is required' }
   validates :name, presence: true
@@ -244,7 +244,6 @@ class User < ActiveRecord::Base
   private
   def current_web_access_tokens
     WebApiAccessToken.find_by_user(user: self)
-    # AccessToken.where(token_type: 'web', user: self, expires_at: nil)
   end
 
   def check_rollbar_guid
