@@ -15,3 +15,4 @@ dependencies:
 test:
   override:
     - bundle exec rspec
+    - yarn run test
