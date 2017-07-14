@@ -40,7 +40,7 @@ export default class HeaderDropdown extends Component {
 
   onInuputChange = (e) => {
     this.setState({
-      quickMenu: !e.target.value ? objects : utils.quickMenuFilter(e.target.value, objects),
+      quickMenu: utils.quickMenuFilter(e.target.value, objects),
     })
   }
 
@@ -56,7 +56,13 @@ export default class HeaderDropdown extends Component {
         <div className="boss-page-header__dropdown-header">
             <p className="boss-page-header__dropdown-label boss-page-header__dropdown-label_role_search">Search</p>
             <div className="boss-page-header__dropdown-filter">
-              <input type="text" id="onFocusInput" onChange={this.onInuputChange} />
+              <form className="boss-form">
+                <div className="boss-form__field boss-form__field_position_last">
+                  <label className="boss-form__label">
+                    <input type="text" id="onFocusInput" onChange={this.onInuputChange} className="boss-form__input boss-form__input_type_narrow" />
+                  </label>
+                </div>
+              </form>
             </div>
             <a href="#" onClick={this.props.closeDropdown} className="boss-page-header__dropdown-label boss-page-header__dropdown-label_role_action boss-page-header__dropdown-label_role_close boss-page-header__dropdown-label_type_icon">Close</a>
         </div>

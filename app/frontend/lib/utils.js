@@ -177,9 +177,6 @@ var utils =  {
         return text.slice(0,2);
       }
     },
-    deepCopy(obj) {
-      return JSON.parse(JSON.stringify(obj));
-    },
     quickMenuFilter(searchQuery, quickMenu){
       const searchQueryFilters = searchQuery.split(' ').filter(i => i);
       let unfilteredResult = []; 
@@ -187,20 +184,9 @@ var utils =  {
       unfilteredResult = searchQueryFilters.reduce((menu, filter) => {
         const lowerFilter = filter.toLowerCase();
         return menu.map((parentItem) => {
-          let items = parentItem.items.map(childItem => {
+          let items = parentItem.items.filter(childItem => {
             const lowerDescription = childItem.description.toLowerCase();
-            let item = Object.assign({}, childItem);
-            let matches = lowerDescription.indexOf(lowerFilter);
-            if (matches !== -1) {
-              let query = new RegExp(filter, "gi");
-              let matchedString = item.description.substring(matches, matches + filter.length)
-              let description = item.highlightedDescription || item.description;
-              item.inResult = true;
-              item.highlightedDescription = item.description.replace(query, `<strong>${matchedString}</strong>`);
-            } else {
-              item.inResult = !!item.inResult;
-            }
-            return item;
+            return lowerDescription.indexOf(lowerFilter) >= 0;
           });
           return {
             name: parentItem.name,
@@ -208,20 +194,26 @@ var utils =  {
             items: items
           };
         });
-      }, quickMenu);
+      }, quickMenu).filter(i => !!i.items.length);
       
       const filteredResult = unfilteredResult.map(parentItem => {
-        const childItems = parentItem.items.filter(childItem => {
-          return childItem.inResult;
+        const childItems = parentItem.items.map(childItem => {
+          let uniqueFilter = searchQueryFilters.filter((v, i, a) => a.indexOf(v) === i);
+          if (childItem.highlightedDescription) {
+            childItem.highlightedDescription = childItem.highlightedDescription.replace(/(<strong style="background-color:#FF9">|<\/strong>)/ig, "")
+          }
+          let query = new RegExp(uniqueFilter.join("|"), "gi");
+          childItem.highlightedDescription = childItem.description.replace(query, matched => {
+            return `<strong style="background-color:#FF9">${matched}</strong>`
+          });
+          return childItem;
         });
-        if (!childItems.length) return null;
         parentItem.items = childItems;
         return parentItem;
-      }).filter(i => i);
+      });
 
       return filteredResult;
     },
 }
-
 
 export default utils;
