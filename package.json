@@ -49,14 +49,7 @@
     "jest": "^20.0.4",
     "jquery": "^2.2.0",
     "jquery-ui": "1.10.5",
-    "karma": "^1.5.0",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-mocha": "^1.3.0",
-    "karma-sinon": "^1.0.5",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^2.0.2",
     "lodash": "^4.17.4",
-    "mocha": "^2.5.3",
     "moment": "^2.17.1",
     "node-sass": "^4.0.0",
     "nvd3": "^1.8.5",
@@ -115,9 +108,7 @@
     "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
-    "test": "karma start",
-    "jest": "jest --colors --notify",
-    "jest-update": "jest --updateSnapshot",
+    "test": "jest --colors --notify",
     "start": "rm -rf ./public/assets/bundles && webpack -w --config ./webpack/dev.config.js",
     "start-hot-dev": "webpack-dev-server --hot --inline --config webpack/hot-dev.config.js",
     "build": "npm rebuild node-sass && rm -rf ./public/assets/bundles && webpack --bail --config ./webpack/production.config.js"
