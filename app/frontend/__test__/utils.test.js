@@ -23,10 +23,10 @@ describe("utils.round", function(){
 
 describe("utils.generateQuickMenuAlias", function() {
     it("Create alias from 'Rota' as 'Ro'", function() {
-      expect(utils.generateQuickMenuAlias('Rota').toEqual('Ro'));
+      expect(utils.generateQuickMenuAlias('Rota')).toBe('Ro');
     });
     it("Create alias from 'Security Rota' as 'Sr'", function() {
-      expect(utils.generateQuickMenuAlias('Security Rota').toEqual('Sr'));
+      expect(utils.generateQuickMenuAlias('Security Rota')).toBe('Sr');
     });
 });
 
@@ -57,14 +57,39 @@ describe("quickMenuFilter", function() {
 
     var exQuickMenuOneWord = [
       {
+        name: undefined,
+        color: undefined,
         items: [
-          {description: "Rota"},
-          {description: "Security Rota"},
+          {
+            description: "Rota",
+            highlightedDescription: '<strong style="background-color:#FF9">Rota</strong>'
+          },
+          {
+            description: "Security Rota",
+            highlightedDescription: 'Security <strong style="background-color:#FF9">Rota</strong>'
+          },
         ]
       },
-    ]
+    ];
 
-    it("Filtering quick menu", function() {
-      expect(utils.quickMenuFilter('Rota', quickMenu).toEqual(exQuickMenuOneWord));
+    var exQuickMenuTwoWord = [
+      {
+        name: undefined,
+        color: undefined,
+        items: [
+          {
+            description: "Security Rota",
+            highlightedDescription: '<strong style="background-color:#FF9">Secu</strong>rity <strong style="background-color:#FF9">Ro</strong>ta'
+          },
+        ]
+      },
+    ];
+
+    it("Filtering quick menu (one word)", function() {
+      expect(utils.quickMenuFilter('Rota', quickMenu)).toEqual(exQuickMenuOneWord);
+    });
+
+    it("Filtering quick menu (two words)", function() {
+      expect(utils.quickMenuFilter('SeCu rO', quickMenu)).toEqual(exQuickMenuTwoWord);
     });
 });

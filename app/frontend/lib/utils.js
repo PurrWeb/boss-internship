@@ -179,9 +179,9 @@ var utils =  {
     },
     quickMenuFilter(searchQuery, quickMenu){
       const searchQueryFilters = searchQuery.split(' ').filter(i => i);
-      let unfilteredResult = []; 
+      let result = []; 
 
-      unfilteredResult = searchQueryFilters.reduce((menu, filter) => {
+      result = searchQueryFilters.reduce((menu, filter) => {
         const lowerFilter = filter.toLowerCase();
         return menu.map((parentItem) => {
           let items = parentItem.items.filter(childItem => {
@@ -196,7 +196,7 @@ var utils =  {
         });
       }, quickMenu).filter(i => !!i.items.length);
       
-      const filteredResult = unfilteredResult.map(parentItem => {
+      const highlightedResult = result.map(parentItem => {
         const childItems = parentItem.items.map(childItem => {
           let uniqueFilter = searchQueryFilters.filter((v, i, a) => a.indexOf(v) === i);
           if (childItem.highlightedDescription) {
@@ -212,7 +212,7 @@ var utils =  {
         return parentItem;
       });
 
-      return filteredResult;
+      return highlightedResult;
     },
 }
 
