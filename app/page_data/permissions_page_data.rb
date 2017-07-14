@@ -172,9 +172,9 @@ class PermissionsPageData
     end
 
     if role.can?(:manage, :admin)
-      (quick_menu + admin_menu).to_json
+      (quick_menu + admin_menu)
     else
-      quick_menu.to_json
+      quick_menu
     end
 
   end

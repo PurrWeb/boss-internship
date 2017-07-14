@@ -2,14 +2,11 @@ import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import HeaderDropdown from './components/header-dropdown';
 
-const userName = window.boss.rollbarData.currentUser.name
-
 export default class Header extends Component {
 
   constructor(props) {
     super(props);
 
-    this.quickMenu = JSON.parse(props.quickMenu);
     this.state = {
       isDropdownOpen: false,
       isUserDropdownOpen: false,
@@ -57,17 +54,16 @@ export default class Header extends Component {
         { this.state.isUserDropdownOpen && 
           <div className="boss-page-header__dropdown boss-page-header__dropdown_role_profile boss-page-header__dropdown_state_opened">
             <nav className="boss-menu">
-              <p href="::javascript" className="boss-menu__label boss-menu__label_role_user">{userName}</p>
+              <p href="::javascript" className="boss-menu__label boss-menu__label_role_user">{this.props.user.name}</p>
               <a href="/auth/sign_out" data-method="delete" className="boss-menu__link boss-menu__link_role_logout">Logout</a>
             </nav>
           </div>
         }
-        <HeaderDropdown
-          quickMenu={ this.quickMenu }
-          isOpen={this.state.isDropdownOpen}
+        { this.state.isDropdownOpen && <HeaderDropdown
+          quickMenu={ this.props.quickMenu }
           handleEscPress={this.handleEscPress}
           closeDropdown={this.closeAllDropdowns}
-        />
+        /> }
       </div>
     </header>
   }

@@ -1,6 +1,10 @@
 <%= react_component(
   'Header',
   {
-    quickMenu: quick_menu
+    quickMenu: quick_menu,
+    user: {
+      id: logged_in_user_info_json[:id],
+      name: logged_in_user_info_json[:name]
+    }
   }
 )%>

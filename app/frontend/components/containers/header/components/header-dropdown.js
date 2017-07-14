@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import HeaderDropdownList from './header-dropdown-list';
-import cn from 'classnames';
 import utils from '~/lib/utils'
 import iScroll from 'iscroll';
 import ReactIScroll from 'react-iscroll';
@@ -47,10 +46,8 @@ export default class HeaderDropdown extends Component {
   }
 
   render() {
-    const dropDownCn = cn('boss-page-header__dropdown boss-page-header__dropdown_role_search boss-page-header__dropdown_no-select', {'boss-page-header__dropdown_state_opened': this.props.isOpen});
-
     return <div className="boss-page-header__dropdowns">
-      <div className={dropDownCn}>
+      <div className="boss-page-header__dropdown boss-page-header__dropdown_role_search boss-page-header__dropdown_no-select boss-page-header__dropdown_state_opened">
         <div className="boss-page-header__dropdown-header">
             <p className="boss-page-header__dropdown-label boss-page-header__dropdown-label_role_search">Search</p>
             <div className="boss-page-header__dropdown-filter">
