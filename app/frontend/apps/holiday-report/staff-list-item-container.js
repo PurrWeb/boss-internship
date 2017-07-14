@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import StaffListItem from "./staff-list-item"
-import { selectStaffMemberPaidHolidays, selectStaffMemberUnpaidHolidays } from "~redux/selectors"
+import { selectStaffMemberPaidHolidays, selectStaffMemberUnpaidHolidays } from "~/redux/selectors"
 
 
 class StaffListItemContainer extends React.Component {

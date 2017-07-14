@@ -2,8 +2,8 @@ import React from "react"
 import DataUrlImagePicker from "./data-url-image-picker"
 import ImageCropper from "./image-cropper"
 import AvatarPreview from "./avatar-preview"
-import resizeImage from "~lib/images/resize-image"
-import limitImageDimensions from "~lib/images/limit-image-dimensions"
+import resizeImage from "~/lib/images/resize-image"
+import limitImageDimensions from "~/lib/images/limit-image-dimensions"
 
 const STAFF_IMAGE_MIN_WIDTH = 250;
 const STAFF_IMAGE_MAX_WIDTH = 600;

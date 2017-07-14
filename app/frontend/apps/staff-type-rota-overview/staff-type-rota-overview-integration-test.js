@@ -1,11 +1,11 @@
 import React from "react"
 import expect from "expect"
-import { simpleRender, NoOpComponent } from "~lib/test-helpers"
+import { simpleRender, NoOpComponent } from "~/lib/test-helpers"
 import StaffTypeRotaOverviewApp from "./index"
 import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
 
-import RotaOverviewChart from "~components/rota-overview-chart"
+import RotaOverviewChart from "~/components/rota-overview-chart"
 
 import "~lib/load-underscore-mixins"
 

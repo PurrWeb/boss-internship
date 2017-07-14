@@ -1,7 +1,7 @@
 import expect from "expect"
 import { createStore } from "redux"
 import WeeklyRotaForecast from "./weekly-rota-forecast"
-import { simpleRender } from "~lib/test-helpers"
+import { simpleRender } from "~/lib/test-helpers"
 import React from "react"
 
 describe("WeeklyRotaForecast", function(){

@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import Select from "react-select"
-import RotaDate from "~lib/rota-date.js"
+import RotaDate from "~/lib/rota-date.js"
 import moment from "moment"
-import utils from "~lib/utils"
-import validation from "~lib/validation"
-import { getPossibleShiftStartTimeStrings, getPossibleShiftEndTimeStrings } from "~lib/possible-shift-time-strings"
+import utils from "~/lib/utils"
+import validation from "~/lib/validation"
+import { getPossibleShiftStartTimeStrings, getPossibleShiftEndTimeStrings } from "~/lib/possible-shift-time-strings"
 
 var SHIFT_TIME_TYPES = {
     START: 2,

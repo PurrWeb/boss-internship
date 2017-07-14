@@ -1,10 +1,10 @@
-import RotaDate from "~lib/rota-date"
+import RotaDate from "~/lib/rota-date"
 import createApiRequestActionCreator from "../create-api-request-action-creator"
 import makeApiRequestMaker from "../make-api-request-maker"
 import oFetch from "o-fetch"
-import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
-import * as backendData from "~lib/backend-data/process-backend-objects"
-import {apiRoutes} from "~lib/routes"
+import getRotaFromDateAndVenue from "~/lib/get-rota-from-date-and-venue"
+import * as backendData from "~/lib/backend-data/process-backend-objects"
+import {apiRoutes} from "~/lib/routes"
 
 function confirmIfRotaIsPublished(options){
     var rota = getRotaFromDateAndVenue({

@@ -1,12 +1,12 @@
 import React from "react"
-import RotaChart from "~components/rota-chart"
+import RotaChart from "~/components/rota-chart"
 import _ from "underscore"
-import ChartSelectionView from "~components/chart-selection-view"
-import StaffDetailsAndShifts from "~components/staff-details-and-shifts"
-import VenueDropdown from "~components/venue-dropdown"
-import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
-import getVenueColor from "~lib/get-venue-color"
-import getVenueFromShift from "~lib/get-venue-from-shift"
+import ChartSelectionView from "~/components/chart-selection-view"
+import StaffDetailsAndShifts from "~/components/staff-details-and-shifts"
+import VenueDropdown from "~/components/venue-dropdown"
+import getRotaFromDateAndVenue from "~/lib/get-rota-from-date-and-venue"
+import getVenueColor from "~/lib/get-venue-color"
+import getVenueFromShift from "~/lib/get-venue-from-shift"
 
 export default class ChartAndFilterUi extends React.Component {
     static propTypes = {

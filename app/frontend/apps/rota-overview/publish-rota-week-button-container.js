@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import _ from "underscore"
 import PublishRotaWeekButton from "./publish-rota-week-button"
-import actionCreators from "~redux/actions"
+import actionCreators from "~/redux/actions"
 
 const ROTA_PUBLISHED_STATUS = "published"
 

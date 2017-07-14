@@ -1,7 +1,7 @@
 import React from "react"
-import utils from "~lib/utils"
-import Spinner from "~components/spinner"
-import ComponentErrors from "~components/component-errors"
+import utils from "~/lib/utils"
+import Spinner from "~/components/spinner"
+import ComponentErrors from "~/components/component-errors"
 
 export default class RotaForecast extends React.Component {
     static propTypes = {

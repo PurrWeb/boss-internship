@@ -1,5 +1,5 @@
 import React from "react"
-import RotaDate from "~lib/rota-date"
+import RotaDate from "~/lib/rota-date"
 import _ from "underscore"
 import moment from "moment"
 import convertClockInPeriodToIntervals from "./convert-clock-in-period-to-intervals"

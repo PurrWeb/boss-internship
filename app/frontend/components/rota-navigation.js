@@ -1,6 +1,6 @@
 import React from "react"
 import moment from "moment"
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import cx from 'classnames'
 
 export default class RotaNavigation extends React.Component {

@@ -2,7 +2,7 @@ import makeApiRequestMaker from "../make-api-request-maker"
 import createApiRequestActionCreator from "../create-api-request-action-creator"
 import oFetch from "o-fetch"
 import { showConfirmationModal } from "./confirmation-modal"
-import {apiRoutes} from "~lib/routes"
+import {apiRoutes} from "~/lib/routes"
 
 export function updateStaffMemberPinWithEntryModal(requestOptions){
     var staffMemberObject = oFetch(requestOptions, "staffMemberObject");

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderDropdownList from './header-dropdown-list';
 import cn from 'classnames';
-import utils from '~lib/utils'
+import utils from '~/lib/utils'
 import iScroll from 'iscroll';
 import ReactIScroll from 'react-iscroll';
 

@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Provider } from "react-redux"
 import {createStore } from "redux"
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import HolidayReportView from './holiday-report-view'
-import actionCreators from "~redux/actions"
+import actionCreators from "~/redux/actions"
 import oFetch from "o-fetch"
-import { processHolidayAppViewData } from "~lib/backend-data/process-backend-objects"
+import { processHolidayAppViewData } from "~/lib/backend-data/process-backend-objects"
 
 
 export default class HolidayReportApp extends Component {

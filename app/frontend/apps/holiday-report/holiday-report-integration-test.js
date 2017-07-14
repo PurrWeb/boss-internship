@@ -1,6 +1,6 @@
 import React from "react"
 import expect from "expect"
-import { simpleRender } from "~lib/test-helpers"
+import { simpleRender } from "~/lib/test-helpers"
 import HolidayReportApp from "./holiday-report-app"
 import TestUtils from "react-addons-test-utils"
 

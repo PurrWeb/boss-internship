@@ -1,8 +1,8 @@
 import _ from "underscore"
 import oFetch from "o-fetch"
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import makeReducer from "./make-reducer"
-import * as backendData from "~lib/backend-data/process-backend-objects"
+import * as backendData from "~/lib/backend-data/process-backend-objects"
 
 class DataHandler{
     constructor(options){

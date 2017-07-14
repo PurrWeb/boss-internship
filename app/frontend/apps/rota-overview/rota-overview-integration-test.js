@@ -1,13 +1,13 @@
 import React from "react"
 import expect from "expect"
-import { simpleRender, NoOpComponent } from "~lib/test-helpers"
+import { simpleRender, NoOpComponent } from "~/lib/test-helpers"
 import RotaOverviewApp from "./rota-overview-app"
 import _ from "underscore"
 import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
 import Promise from "bluebird"
 
-import RotaOverviewChart from "~components/rota-overview-chart"
+import RotaOverviewChart from "~/components/rota-overview-chart"
 
 import "~lib/load-underscore-mixins"
 

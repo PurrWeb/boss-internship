@@ -2,17 +2,17 @@ import React from "react"
 import expect from "expect"
 import Promise from "bluebird"
 import ClockInOutApp from "./clock-in-out-app"
-import { simpleRender, accelerateTimeouts } from "~lib/test-helpers"
+import { simpleRender, accelerateTimeouts } from "~/lib/test-helpers"
 import ReactTestUtils from "react-addons-test-utils"
 import ReactDOM from "react-dom"
 import _ from "underscore"
 import {
     clockInOutAppSelectStaffType,
     enterUserModeWithConfirmation
-} from "~redux/actions/clocking"
-import { loadInitialClockInOutAppState } from "~redux/actions/app-data"
-import {createBossStore} from "~redux/store"
-import PinInput from "~components/pin-input"
+} from "~/redux/actions/clocking"
+import { loadInitialClockInOutAppState } from "~/redux/actions/app-data"
+import {createBossStore} from "~/redux/store"
+import PinInput from "~/components/pin-input"
 
 
 describe("Clock In/Out Page Integration Test", function(){

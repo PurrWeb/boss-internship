@@ -6,8 +6,8 @@ import _ from "underscore"
 import moment from "moment"
 import $ from "jquery"
 import "react-fastclick" // import for side effects
-import * as selectors from "~redux/selectors"
-import '~lib/global-try-catch';
+import * as selectors from "~/redux/selectors"
+import '~/lib/global-try-catch';
 
 window.boss = window.boss || {};
 window.boss.currentLayout = window.boss.currentLayout || 'oldLayout';
@@ -87,7 +87,7 @@ registerComponent("DetailsModal", DetailsModal)
 
 import WeekPicker from "~components/week-picker"
 
-import AppVersionChecker from '~components/app-version-checker';
+import AppVersionChecker from '~/components/app-version-checker';
 
 $(document).ready(function(){
     let versionCheckerEl = document.createElement("div");

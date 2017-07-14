@@ -1,6 +1,6 @@
 import React from "react"
-import StaffFinder from "~components/staff-finder"
-import StaffListItem from "~components/rota-staff-list-item"
+import StaffFinder from "~/components/staff-finder"
+import StaffListItem from "~/components/rota-staff-list-item"
 
 
 export default class StaffTypeRotaStaffFinder extends React.Component {

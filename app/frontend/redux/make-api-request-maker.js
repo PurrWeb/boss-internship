@@ -1,6 +1,6 @@
 import _ from "underscore"
-import utils from "~lib/utils"
-import {getApiRoot, apiRoutes} from "~lib/routes"
+import utils from "~/lib/utils"
+import {getApiRoot, apiRoutes} from "~/lib/routes"
 import oFetch from "o-fetch"
 
 /*

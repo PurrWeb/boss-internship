@@ -1,9 +1,9 @@
 import React from "react"
-import { objectHasBeenSavedToBackend } from "~lib/backend-data/process-backend-object"
-import Validation from "~lib/validation"
+import { objectHasBeenSavedToBackend } from "~/lib/backend-data/process-backend-object"
+import Validation from "~/lib/validation"
 import HoursAcceptancePeriodListItem from "./hours-acceptance-period-list-item"
-import ValidationResult from "~components/validation-result"
-import utils from "~lib/utils"
+import ValidationResult from "~/components/validation-result"
+import utils from "~/lib/utils"
 import _ from "underscore"
 
 export default class HoursAcceptancePeriodList extends React.Component {

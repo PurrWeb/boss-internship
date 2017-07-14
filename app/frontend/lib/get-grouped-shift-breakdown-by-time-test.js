@@ -1,9 +1,9 @@
 import expect from "expect"
 import getStaffTypeBreakdownByTime from "./get-grouped-shift-breakdown-by-time"
-import RotaDate from "~lib/rota-date"
+import RotaDate from "~/lib/rota-date"
 import _ from "underscore"
-import { processStaffMemberObject, processRotaShiftObject, processStaffTypeObject } from "~lib/backend-data/process-backend-objects"
-import { getClientId } from "~lib/backend-data/process-backend-object"
+import { processStaffMemberObject, processRotaShiftObject, processStaffTypeObject } from "~/lib/backend-data/process-backend-objects"
+import { getClientId } from "~/lib/backend-data/process-backend-object"
 
 describe("getGroupedShiftBreakdownByTime", function() {
     var rotaDate = new RotaDate({dateOfRota: new Date(2015,10, 1, 0, 0, 0)});

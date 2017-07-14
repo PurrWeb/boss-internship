@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import moment from "moment"
-import utils from "~lib/utils"
-import { appRoutes } from "~lib/routes"
+import utils from "~/lib/utils"
+import { appRoutes } from "~/lib/routes"
 import StaffTypeRotaOverviewChart from "./staff-type-rota-overview-chart"
-import SelectionDataView from "~components/rota-overview-chart/selection-data-view"
-import ChartSelectionView from "~components/chart-selection-view"
+import SelectionDataView from "~/components/rota-overview-chart/selection-data-view"
+import ChartSelectionView from "~/components/chart-selection-view"
 
 export default class StaffTypeRotaOverviewItem extends Component {
     static propTypes = {

@@ -2,8 +2,8 @@ import React, { Component } from "react"
 import {connect } from "react-redux"
 import _ from "underscore"
 import AddShiftView from "./add-shift-view/add-shift-view"
-import { selectRotaOnVenueRotaPage } from "~redux/selectors"
-import RotaDate from "~lib/rota-date"
+import { selectRotaOnVenueRotaPage } from "~/redux/selectors"
+import RotaDate from "~/lib/rota-date"
 
 
 class AddShiftViewContainer extends Component {

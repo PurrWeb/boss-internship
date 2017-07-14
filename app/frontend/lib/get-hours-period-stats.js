@@ -1,4 +1,4 @@
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import _ from "underscore"
 
 const MS_PER_HOUR = 1000 * 60 * 60;

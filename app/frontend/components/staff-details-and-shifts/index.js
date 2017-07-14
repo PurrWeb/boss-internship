@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import EditableShiftList from "./editable-shift-list"
 import _ from "underscore"
-import StaffTypeBadge from "~components/staff-type-badge"
+import StaffTypeBadge from "~/components/staff-type-badge"
 import oFetch from "o-fetch"
-import { appRoutes } from "~lib/routes"
+import { appRoutes } from "~/lib/routes"
 
 export default class StaffDetailsAndShifts extends Component {
     static propTypes = {

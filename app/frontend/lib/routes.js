@@ -1,4 +1,4 @@
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import moment from "moment"
 import oFetch from "o-fetch"
 

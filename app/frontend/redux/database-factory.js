@@ -1,6 +1,6 @@
 import { combineReducers } from "redux"
 import _ from "underscore"
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 
 /*
     Collects action types, action creators and reducers and then

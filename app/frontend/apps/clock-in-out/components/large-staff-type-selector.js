@@ -1,6 +1,6 @@
 import React from "react"
 import _ from "underscore"
-import UserActionConfirmationMessages from "~components/user-action-confirmation-messages"
+import UserActionConfirmationMessages from "~/components/user-action-confirmation-messages"
 
 class StaffTypeButton extends React.Component {
     constructor(){

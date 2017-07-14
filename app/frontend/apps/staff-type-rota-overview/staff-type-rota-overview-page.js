@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import StaffTypeRotaOverviewItem from "./staff-type-rota-overview-item"
-import utils from "~lib/utils"
-import WeekPicker from "~components/week-picker"
-import { appRoutes } from "~lib/routes"
+import utils from "~/lib/utils"
+import WeekPicker from "~/components/week-picker"
+import { appRoutes } from "~/lib/routes"
 
 export default class StaffTypeRotaOverviewPage extends Component {
     static propTypes = {

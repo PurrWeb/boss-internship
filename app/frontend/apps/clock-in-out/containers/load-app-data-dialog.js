@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
-import actionCreators from "~redux/actions"
-import { selectClockInOutLoadAppDataIsInProgress } from "~redux/selectors"
+import actionCreators from "~/redux/actions"
+import { selectClockInOutLoadAppDataIsInProgress } from "~/redux/selectors"
 import KeyDialog from "../components/key-dialog"
 
 class LoadAppDataDialog extends React.Component {

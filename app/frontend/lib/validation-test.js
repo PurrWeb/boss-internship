@@ -1,6 +1,6 @@
 import expect from "expect"
 import Validation from "./validation"
-import RotaDate from "~lib/rota-date"
+import RotaDate from "~/lib/rota-date"
 
 describe("Validation.validateBreaksDontOverlap", function(){
     var rotaDate = new RotaDate({dateOfRota: new Date(2016, 1,1)});

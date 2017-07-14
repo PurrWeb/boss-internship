@@ -1,6 +1,6 @@
 import ReactUpdates from "react-dom/lib/ReactUpdates";
 import ReactDefaultBatchingStrategy from "react-dom/lib/ReactDefaultBatchingStrategy";
-import errorHandler from '~lib/error-handlers';
+import errorHandler from '~/lib/error-handlers';
 import oFetch from 'o-fetch';
 
 const rollbarData = oFetch(window, 'boss.rollbarData');

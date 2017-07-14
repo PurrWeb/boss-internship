@@ -1,6 +1,6 @@
 import _ from "underscore"
-import RotaDate from "~lib/rota-date"
-import utils from "~lib/utils"
+import RotaDate from "~/lib/rota-date"
+import utils from "~/lib/utils"
 
 const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react"
-import StaffFilter from "~components/staff-finder/staff-filter"
-import FilterableStaffList from "~components/staff-finder/filterable-staff-list"
-import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
+import StaffFilter from "~/components/staff-finder/staff-filter"
+import FilterableStaffList from "~/components/staff-finder/filterable-staff-list"
+import getStaffTypesWithStaffMembers from "~/lib/get-staff-types-with-staff-members"
 import _ from "underscore"
 
 export default class StaffFinder extends Component {

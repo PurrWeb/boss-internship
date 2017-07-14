@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import _ from "underscore"
-import getVenueFromShift from "~lib/get-venue-from-shift"
-import getVenueColor from "~lib/get-venue-color"
+import getVenueFromShift from "~/lib/get-venue-from-shift"
+import getVenueColor from "~/lib/get-venue-color"
 import EditableShiftListItem from "./editable-shift-list-item"
 
 export default class EditableShiftList extends Component {

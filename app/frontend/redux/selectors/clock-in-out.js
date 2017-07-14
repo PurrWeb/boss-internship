@@ -1,7 +1,7 @@
 import {selectStaffMembers} from "./staff-members"
 import _ from "underscore"
 import { selectClockInDay } from "./clock-in-day"
-import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
+import getRotaFromDateAndVenue from "~/lib/get-rota-from-date-and-venue"
 import { selectShiftsByStaffMemberClientId } from "./shifts"
 import { selectAddClockInNoteIsInProgress } from "./api-requests"
 import {createSelector} from "reselect"

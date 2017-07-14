@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import StaffFinder from "~components/staff-finder"
+import StaffFinder from "~/components/staff-finder"
 import StaffListItem from "./staff-list-item"
-import {selectStaffMembersForClockInOutStaffFinder} from "~redux/selectors"
+import {selectStaffMembersForClockInOutStaffFinder} from "~/redux/selectors"
 
 class ClockInOutStaffFinder extends Component {
     state = {

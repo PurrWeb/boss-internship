@@ -1,6 +1,8 @@
 {
-    "presets": ["stage-1", "react"],
+    "presets": ["env", "stage-1", "react"],
     "plugins": [
-        ["babel-plugin-root-import"]
+        ["babel-plugin-root-import", {
+          "rootPathSuffix": "app/frontend"
+        }]
     ]
 }

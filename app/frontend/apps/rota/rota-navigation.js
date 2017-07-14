@@ -1,6 +1,6 @@
 import React from "react"
-import GenericRotaNavigation from "~components/rota-navigation"
-import {appRoutes} from "~lib/routes"
+import GenericRotaNavigation from "~/components/rota-navigation"
+import {appRoutes} from "~/lib/routes"
 
 export default class RotaNavigation extends React.Component {
     static PropTypes = {

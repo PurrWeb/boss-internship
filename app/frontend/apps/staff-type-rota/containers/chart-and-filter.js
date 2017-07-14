@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import ChartAndFilterUi from "../components/chart-and-filter"
-import { selectVenuesWithShifts, selectRotaShiftsOnDayOnStaffTypeRotaPage  }  from "~redux/selectors"
+import { selectVenuesWithShifts, selectRotaShiftsOnDayOnStaffTypeRotaPage  }  from "~/redux/selectors"
 
 class ChartAndFilterContainer extends React.Component {
     constructor(props){

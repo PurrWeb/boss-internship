@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import Select from "react-select"
 import _ from "underscore"
-import getArrayOfIdsFromReactSelectValue from "~lib/get-array-of-ids-from-react-select-value";
+import getArrayOfIdsFromReactSelectValue from "~/lib/get-array-of-ids-from-react-select-value";
 
 export default class VenueDropdown extends Component {
     static propTypes = {

@@ -4,7 +4,7 @@
 */
 
 
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import {apiRequestActionTypes} from "./create-api-request-action-creator"
 import dataHandlers from "./data-handlers"
 import * as rotaActions from "./actions/rotas"

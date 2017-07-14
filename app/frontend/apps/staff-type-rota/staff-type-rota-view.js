@@ -4,7 +4,7 @@ import ChartAndFilter from "./containers/chart-and-filter"
 import RotaNavigation from "./containers/rota-navigation"
 import { connect } from "react-redux"
 
-export default class StaffTypeRotaView extends React.Component {
+class StaffTypeRotaView extends React.Component {
     render(){
         return <div>
             <RotaNavigation />

@@ -1,4 +1,4 @@
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import oFetch from "o-fetch"
 import _ from "underscore"
 import { createSelector } from "reselect"

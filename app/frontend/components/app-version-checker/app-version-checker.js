@@ -1,5 +1,5 @@
 import React from 'react';
-import AppVersion from "~app-version";
+import AppVersion from "~/app-version";
 import NewVersionNotification from './new-version-notification';
 
 export default class AppVersionChecker extends React.PureComponent {

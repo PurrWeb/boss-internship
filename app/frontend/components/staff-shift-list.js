@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import moment from "moment"
 import _ from "underscore"
-import getVenueFromShift from "~lib/get-venue-from-shift"
-import RotaDate from "~lib/rota-date"
+import getVenueFromShift from "~/lib/get-venue-from-shift"
+import RotaDate from "~/lib/rota-date"
 
 class StaffShiftListItem extends Component {
     render(){

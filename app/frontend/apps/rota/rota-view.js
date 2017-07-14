@@ -1,15 +1,15 @@
 import React, { Component } from "react"
 import { connect, Provider } from "react-redux"
-import actionCreators from "~redux/actions"
+import actionCreators from "~/redux/actions"
 import ChartAndFilter from "./chart-and-filter"
 import _ from "underscore"
 import AddShiftViewContainer from "./add-shift-view-container"
 import RotaNavigation from "./rota-navigation"
-import store from "~redux/store"
+import store from "~/redux/store"
 import moment from "moment"
 import RotaStatusToggle from "./status-toggle/rota-status-toggle"
-import { selectRotaOnVenueRotaPage } from "~redux/selectors"
-import {appRoutes} from "~lib/routes"
+import { selectRotaOnVenueRotaPage } from "~/redux/selectors"
+import {appRoutes} from "~/lib/routes"
 
 
 class RotaView extends Component {

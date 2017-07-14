@@ -1,5 +1,5 @@
 import React from "react"
-import ErrorMessage from "~components/error-message"
+import ErrorMessage from "~/components/error-message"
 
 
 export default class ValidationResult extends React.Component {

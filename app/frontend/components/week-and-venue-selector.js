@@ -1,6 +1,6 @@
 import React from "react"
-import WeekPicker from "~components/week-picker"
-import VenueDropdown from "~components/venue-dropdown"
+import WeekPicker from "~/components/week-picker"
+import VenueDropdown from "~/components/venue-dropdown"
 import _ from "underscore"
 
 export default class WeekAndVenueSelector extends React.Component {

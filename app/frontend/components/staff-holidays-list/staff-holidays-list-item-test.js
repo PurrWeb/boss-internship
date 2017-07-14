@@ -1,7 +1,7 @@
 import expect from "expect"
 import React from "react"
 import StaffHolidaysListItem from "./staff-holidays-list-item"
-import { simpleRender } from "~lib/test-helpers"
+import { simpleRender } from "~/lib/test-helpers"
 
 describe("StaffHolidaysListItem", function(){
     it("Displays two dates if the holiday is longer than one day.", function(){

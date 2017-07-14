@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import clockInStatusOptionsByValue from "~lib/clock-in-status-options-by-value"
+import clockInStatusOptionsByValue from "~/lib/clock-in-status-options-by-value"
 
 export default class ClockInStatusBadge extends Component {
     static propTypes = {

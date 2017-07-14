@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 
 export const DropDownListItem = ({item, color}) => {
   const {description, highlightedDescription, path} = item;

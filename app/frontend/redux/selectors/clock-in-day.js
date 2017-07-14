@@ -1,6 +1,6 @@
 import _ from "underscore"
-import utils from "~lib/utils"
-import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
+import utils from "~/lib/utils"
+import getRotaFromDateAndVenue from "~/lib/get-rota-from-date-and-venue"
 import {
     selectIsForceClockingOutClockInDay,
     selectEditHoursAcceptancePeriodIsInProgress

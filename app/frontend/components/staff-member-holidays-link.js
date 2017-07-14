@@ -1,5 +1,5 @@
 import React from "react"
-import { appRoutes } from "~lib/routes"
+import { appRoutes } from "~/lib/routes"
 
 export default class StaffMemberHolidaysLink extends React.Component {
     static propTypes = {

@@ -1,4 +1,4 @@
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import _ from "underscore"
 import oFetch from "o-fetch"
 import makeDataHandler from "./make-data-handler"
