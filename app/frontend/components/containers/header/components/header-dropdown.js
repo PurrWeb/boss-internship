@@ -49,7 +49,7 @@ export default class HeaderDropdown extends Component {
   }
 
   render() {
-    const dropDownCn = cn('boss-page-header__dropdown boss-page-header__dropdown_role_search', {'boss-page-header__dropdown_state_opened': this.props.isOpen});
+    const dropDownCn = cn('boss-page-header__dropdown boss-page-header__dropdown_role_search boss-page-header__dropdown_no-select', {'boss-page-header__dropdown_state_opened': this.props.isOpen});
 
     return <div className="boss-page-header__dropdowns">
       <div className={dropDownCn}>
