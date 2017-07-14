@@ -9,6 +9,7 @@ export default class Header extends Component {
   constructor(props) {
     super(props);
 
+    this.quickMenu = JSON.parse(props.quickMenu);
     this.state = {
       isDropdownOpen: false,
       isUserDropdownOpen: false,
@@ -61,7 +62,12 @@ export default class Header extends Component {
             </nav>
           </div>
         }
-        <HeaderDropdown isOpen={this.state.isDropdownOpen} handleEscPress={this.handleEscPress} closeDropdown={this.closeAllDropdowns} />
+        <HeaderDropdown
+          quickMenu={ this.quickMenu }
+          isOpen={this.state.isDropdownOpen}
+          handleEscPress={this.handleEscPress}
+          closeDropdown={this.closeAllDropdowns}
+        />
       </div>
     </header>
   }

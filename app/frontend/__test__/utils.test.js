@@ -62,11 +62,9 @@ describe("quickMenuFilter", function() {
         items: [
           {
             description: "Rota",
-            highlightedDescription: '<strong style="background-color:#FF9">Rota</strong>'
           },
           {
             description: "Security Rota",
-            highlightedDescription: 'Security <strong style="background-color:#FF9">Rota</strong>'
           },
         ]
       },
@@ -79,17 +77,36 @@ describe("quickMenuFilter", function() {
         items: [
           {
             description: "Security Rota",
-            highlightedDescription: '<strong style="background-color:#FF9">Secu</strong>rity <strong style="background-color:#FF9">Ro</strong>ta'
           },
         ]
       },
     ];
 
+    var exQuickMenuHighlighted = [
+      {
+        name: undefined,
+        color: undefined,
+        items: [
+          {
+            description: "Rota",
+            highlightedDescription: '<strong style="background-color:#FF9">Rota</strong>'
+          },
+          {
+            description: "Security Rota",
+            highlightedDescription: 'Security <strong style="background-color:#FF9">Rota</strong>'
+          },
+        ]
+      },
+    ]
     it("Filtering quick menu (one word)", function() {
       expect(utils.quickMenuFilter('Rota', quickMenu)).toEqual(exQuickMenuOneWord);
     });
 
     it("Filtering quick menu (two words)", function() {
       expect(utils.quickMenuFilter('SeCu rO', quickMenu)).toEqual(exQuickMenuTwoWord);
+    });
+
+    it("Filter quick menu highlighted results", function() {
+      expect(utils.quickMenuHighlightResults(exQuickMenuOneWord, 'Rota')).toEqual(exQuickMenuHighlighted);
     });
 });

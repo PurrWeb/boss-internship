@@ -5,13 +5,11 @@ import utils from '~/lib/utils'
 import iScroll from 'iscroll';
 import ReactIScroll from 'react-iscroll';
 
-const objects = window.boss.quickMenu;
-
 export default class HeaderDropdown extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      quickMenu: objects,
+      quickMenu: this.props.quickMenu,
     };
     this.scrollOptions = {
       crollbars: true,
@@ -40,7 +38,7 @@ export default class HeaderDropdown extends Component {
 
   onInuputChange = (e) => {
     this.setState({
-      quickMenu: utils.quickMenuFilter(e.target.value, objects),
+      quickMenu: utils.quickMenuHighlightResults(utils.quickMenuFilter(e.target.value, this.props.quickMenu), e.target.value),
     })
   }
 

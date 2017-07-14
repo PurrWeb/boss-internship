@@ -177,6 +177,24 @@ var utils =  {
         return text.slice(0,2);
       }
     },
+    quickMenuHighlightResults(result, searchQuery){
+      const searchQueryFilters = searchQuery.split(' ').filter(i => i);
+      return result.map(parentItem => {
+        const childItems = parentItem.items.map(childItem => {
+          let uniqueFilter = searchQueryFilters.filter((v, i, a) => a.indexOf(v) === i);
+          if (childItem.highlightedDescription) {
+            childItem.highlightedDescription = childItem.highlightedDescription.replace(/(<strong style="background-color:#FF9">|<\/strong>)/ig, "")
+          }
+          let query = new RegExp(uniqueFilter.join("|"), "gi");
+          childItem.highlightedDescription = childItem.description.replace(query, matched => {
+            return `<strong style="background-color:#FF9">${matched}</strong>`
+          });
+          return childItem;
+        });
+        parentItem.items = childItems;
+        return parentItem;
+      });
+    },
     quickMenuFilter(searchQuery, quickMenu){
       const searchQueryFilters = searchQuery.split(' ').filter(i => i);
       let result = []; 
@@ -195,24 +213,7 @@ var utils =  {
           };
         });
       }, quickMenu).filter(i => !!i.items.length);
-      
-      const highlightedResult = result.map(parentItem => {
-        const childItems = parentItem.items.map(childItem => {
-          let uniqueFilter = searchQueryFilters.filter((v, i, a) => a.indexOf(v) === i);
-          if (childItem.highlightedDescription) {
-            childItem.highlightedDescription = childItem.highlightedDescription.replace(/(<strong style="background-color:#FF9">|<\/strong>)/ig, "")
-          }
-          let query = new RegExp(uniqueFilter.join("|"), "gi");
-          childItem.highlightedDescription = childItem.description.replace(query, matched => {
-            return `<strong style="background-color:#FF9">${matched}</strong>`
-          });
-          return childItem;
-        });
-        parentItem.items = childItems;
-        return parentItem;
-      });
-
-      return highlightedResult;
+      return result;
     },
 }
 
