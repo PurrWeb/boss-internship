@@ -40,10 +40,20 @@
       <div class="boss-page-main__group boss-page-main__group_adjust_sc-form">
           <%= form_for(safe_check, url: safe_checks_path, method: 'post') do |form| %>
               <div class="boss-form__field">
-                  <label class="boss-form__label">
-                      <span class="boss-form__label-text boss-form__label-text_type_required">Checked by</span>
-                      <%= form.text_field(:checked_by_note, label: 'Checked By', class: 'boss-form__input') %>
-                  </label>
+                <label class="boss-form__label">
+                    <span class="boss-form__label-text boss-form__label-text_type_required">Checked by</span>
+                    <%= form.text_field(:checked_by_note, label: 'Checked By', class: "boss-form__input #{ (safe_check.errors[:checked_by_note]).present? ? 'boss-form__input_state_error' : '' }") %>
+                </label>
+
+                <% if (safe_check.errors[:checked_by_note]).present? %>
+                  <div class="boss-form__error">
+                    <p class="boss-form__error-text">
+                      <span class="boss-form__error-line">
+                        <%= safe_check.errors[:checked_by_note].join(', ') %>
+                      </span>
+                    </p>
+                  </div>
+                <% end %>
               </div>
 
               <%= form.hidden_field(:venue_id) %>
@@ -65,6 +75,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:fifty_pound_note_pounds]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:fifty_pound_note_pounds].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
                   <div class="boss-form__field boss-form__field_layout_half">
                       <label class="boss-form__label">
@@ -82,6 +102,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:twenty_pound_note_pounds]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:twenty_pound_note_pounds].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
               </div>
 
@@ -102,6 +132,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:ten_pound_note_pounds]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:ten_pound_note_pounds].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
                   <div class="boss-form__field boss-form__field_layout_half">
                       <label class="boss-form__label">
@@ -119,6 +159,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:five_pound_note_pounds]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:five_pound_note_pounds].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
               </div>
 
@@ -139,6 +189,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:two_pound_coins_pounds]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:two_pound_coins_pounds].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
                   <div class="boss-form__field boss-form__field_layout_half">
                       <label class="boss-form__label">
@@ -156,6 +216,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:one_pound_coins_pounds]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:one_pound_coins_pounds].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
               </div>
 
@@ -176,6 +246,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:fifty_pence_coins_cents]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:fifty_pence_coins_cents].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
                   <div class="boss-form__field boss-form__field_layout_half">
                       <label class="boss-form__label">
@@ -193,6 +273,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:twenty_pence_coins_cents]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:twenty_pence_coins_cents].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
               </div>
 
@@ -213,6 +303,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:ten_pence_coins_cents]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:ten_pence_coins_cents].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
                   <div class="boss-form__field boss-form__field_layout_half">
                       <label class="boss-form__label">
@@ -230,6 +330,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:five_pence_coins_cents]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:five_pence_coins_cents].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
               </div>
 
@@ -250,6 +360,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:coppers_cents]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:coppers_cents].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
                   <div class="boss-form__field boss-form__field_layout_half">
                       <label class="boss-form__label">
@@ -267,6 +387,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:other_cents]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:other_cents].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
               </div>
 
@@ -287,6 +417,16 @@
                               ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:payouts_cents]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:payouts_cents].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
                   <div class="boss-form__field boss-form__field_layout_half">
                       <label class="boss-form__label">
@@ -304,6 +444,16 @@
                             ) %>
                           </span>
                       </label>
+
+                      <% if (safe_check.errors[:out_to_order_cents]).present? %>
+                        <div class="boss-form__error">
+                          <p class="boss-form__error-text">
+                            <span class="boss-form__error-line">
+                              <%= safe_check.errors[:out_to_order_cents].join(', ') %>
+                            </span>
+                          </p>
+                        </div>
+                      <% end %>
                   </div>
               </div>
 
@@ -376,6 +526,16 @@
                 <div class="boss-form__field">
                   <p class="boss-form__label"><span class="boss-form__label-text boss-form__label-text_type_optional">Note</span></p>
                   <%= fields.text_area(:note_text, label: 'Note', label_class: 'force-not-required', class: 'boss-form__textarea boss-form__textarea_type_transparent') %>
+
+                  <% if (safe_check.errors[:note_text]).present? %>
+                    <div class="boss-form__error">
+                      <p class="boss-form__error-text">
+                        <span class="boss-form__error-line">
+                          <%= safe_check.errors[:note_text].join(', ') %>
+                        </span>
+                      </p>
+                    </div>
+                  <% end %>
                 </div>
               <% end %>
 

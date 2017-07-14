@@ -36,6 +36,8 @@ export default class ModalNote extends React.Component {
   }
 
   render() {
+    let AUTH_TOKEN = $('meta[name=csrf-token]').attr('content');
+
     return (
       <div className="boss-stats__note">
         <div className="boss-stats__note-control">
@@ -49,6 +51,8 @@ export default class ModalNote extends React.Component {
 
         <div className="boss-stats__note-form boss-stats__note-form_state_closed">
           <form role="form" className="boss-form" id="new_safe_check_note" action={"/safe_check_notes?safe_check_id=" + this.props.safe_check.id } accept-charset="UTF-8" method="post">
+            <input name="utf8" type="hidden" value="✓" />
+            <input type="hidden" name="authenticity_token" value={ AUTH_TOKEN } />
             <div className="boss-form__field">
               <p className="boss-form__label"><span className="boss-form__label-text">Add notes</span></p>
               <textarea name="safe_check_note[note_text]" className="boss-form__textarea boss-form__textarea_type_transparent"></textarea>

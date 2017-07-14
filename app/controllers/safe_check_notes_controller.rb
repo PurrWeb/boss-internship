@@ -1,9 +1,4 @@
 class SafeCheckNotesController < ApplicationController
-  # When the user submits the form, Rails looks for the authenticity_token,
-  # compares it to the one stored in the session, and if they match the request is allowed to continue.
-  # Create is now done via JS, so the token is no longer valid
-  skip_before_action :verify_authenticity_token, only: [:create]
-
   def index
     safe_check = SafeCheck.find(params.fetch(:safe_check_id))
 
@@ -35,7 +30,7 @@ class SafeCheckNotesController < ApplicationController
     if safe_check_note.save
       flash[:success] = "Note Added Successfully"
 
-      redirect_to safe_check_path(safe_check)
+      redirect_to safe_checks_path(venue_id: safe_check.venue.id)
     else
       flash.now[:error] = "There was a problem saving this note"
 
