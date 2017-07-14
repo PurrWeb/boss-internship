@@ -1,6 +1,6 @@
 {
-    "stage": 1,
+    "presets": ["stage-1", "react"],
     "plugins": [
-        "./babel-plugins/root-import.js"
+        ["babel-plugin-root-import"]
     ]
 }
