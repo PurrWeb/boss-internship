@@ -1,5 +1,5 @@
 class SafeChecksController < ApplicationController
-  before_action :set_new_layout, only: [:index]
+  before_action :set_new_layout, only: [:index, :new, :create]
 
   def index
     if venue_from_params.present?
@@ -48,6 +48,8 @@ class SafeChecksController < ApplicationController
       safe_check_note = SafeCheckNote.new
 
       render locals: {
+        current_venue: venue,
+        accessible_venues: accessible_venues,
         safe_check: safe_check,
         safe_check_note: safe_check_note
       }
@@ -90,6 +92,8 @@ class SafeChecksController < ApplicationController
       )
     else
       render 'new', locals: {
+        current_venue: find_accessible_venue(params['safe_check']['venue_id']),
+        accessible_venues: accessible_venues,
         safe_check: safe_check,
         safe_check_note: safe_check_note
       }
