@@ -1,5 +1,4 @@
-import expect from "expect"
-import calculateChartBoundaries from "./calculate-chart-boundaries"
+import calculateChartBoundaries from "~/components/rota-chart/calculate-chart-boundaries"
 
 describe('calculateChartBoundaries', function() {
     function makeDate(hours, minutes){
