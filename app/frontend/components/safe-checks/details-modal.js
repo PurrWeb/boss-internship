@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
 import ReactDOM from 'react-dom';
 import ModalNote from './modal-note';
