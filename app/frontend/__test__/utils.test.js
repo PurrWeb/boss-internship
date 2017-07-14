@@ -48,9 +48,9 @@ describe("quickMenuFilter", function() {
       },
       {
         items: [
-          {description: "Dayly Report"},
+          {description: "Daily Report"},
           {description: "Weekly Report"},
-          {description: "Payroll Reports"},
+          {description: "Payroll Report"},
         ]
       },
     ];

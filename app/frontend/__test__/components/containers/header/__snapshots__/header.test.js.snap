@@ -112,7 +112,7 @@ exports[`Quick menu should opens, when click on icon 2`] = `
             "color": "#9b59b6",
             "items": Array [
               Object {
-                "description": "Dayly Report",
+                "description": "Daily Report",
                 "path": "/daily_reports",
                 "permitted": true,
               },
@@ -122,12 +122,12 @@ exports[`Quick menu should opens, when click on icon 2`] = `
                 "permitted": true,
               },
               Object {
-                "description": "Payroll Reports",
+                "description": "Payroll Report",
                 "path": "/payroll_reports",
                 "permitted": true,
               },
             ],
-            "name": "Dayly Report",
+            "name": "Reports",
           },
           Object {
             "color": "#e67e22",
@@ -179,7 +179,7 @@ exports[`Quick menu should opens, when click on icon 2`] = `
             "color": "#c0392b",
             "items": Array [
               Object {
-                "description": "Dayly Report",
+                "description": "Daily Report",
                 "path": "/daily_reports",
                 "permitted": true,
               },
@@ -189,7 +189,7 @@ exports[`Quick menu should opens, when click on icon 2`] = `
                 "permitted": true,
               },
               Object {
-                "description": "Payroll Reports",
+                "description": "Payroll Report",
                 "path": "/payroll_reports",
                 "permitted": true,
               },
@@ -200,11 +200,11 @@ exports[`Quick menu should opens, when click on icon 2`] = `
             "color": "#f39c12",
             "items": Array [
               Object {
-                "description": "Finance Reports",
+                "description": "Finance Report",
                 "path": "/finance_reports",
               },
               Object {
-                "description": "Yearly Reports",
+                "description": "Yearly Report",
                 "path": "/yearly_reports",
               },
             ],

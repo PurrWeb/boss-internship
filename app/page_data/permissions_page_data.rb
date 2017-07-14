@@ -58,11 +58,11 @@ class PermissionsPageData
     }
 
     reports = {
-      name: "Dayly Report",
+      name: "Reports",
       color: "#9b59b6",
       items: [
         {
-          description: "Dayly Report",
+          description: "Daily Report",
           permitted: role.can?(:view, :daily_reports),
           path: @path.daily_reports_path
         },
@@ -72,7 +72,7 @@ class PermissionsPageData
           path: @path.weekly_reports_path
         },
         {
-          description: "Payroll Reports",
+          description: "Payroll Report",
           permitted: role.can?(:view, :payroll_reports),
           path: @path.payroll_reports_path
         }
@@ -139,11 +139,11 @@ class PermissionsPageData
       color: "#f39c12",
       items: [
         {
-          description: "Finance Reports",
+          description: "Finance Report",
           path: @path.finance_reports_path
         },
         {
-          description: "Yearly Reports",
+          description: "Yearly Report",
           path: @path.yearly_reports_path
         }
       ]
