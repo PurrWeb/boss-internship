@@ -32,7 +32,7 @@ export default class HeaderDropdown extends Component {
     document.body.removeEventListener('keydown', this.props.handleEscPress);
     document.body.removeEventListener('keypress', this.keyPress);
     document.body.removeEventListener('keydown', this.keyPress);
-    
+    this.setState({quickMenu: utils.quickMenuHighlightResults(this.props.quickMenu, '')});
   }
 
   onInuputChange = (e) => {
