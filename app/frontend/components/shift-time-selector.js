@@ -9,11 +9,12 @@ export default class ShiftTimeSelector extends Component {
         var {starts_at, ends_at} = props.defaultShiftTimes;
         this.state = {starts_at, ends_at};
     }
+
     render(){
-        return <div>
-            <div className="row">
-                <div className="large-shrink small-12 column">
-                    <label>Start</label>
+        return <div className="boss-time-shift__interval">
+            <div className="boss-time-shift__hours">
+                <p className="boss-time-shift__label">
+                    <span className="boss-time-shift__label-text">Start</span>
                     <ShiftTimeInput
                         startsAt={this.state.starts_at}
                         rotaDate={this.props.rotaDate}
@@ -23,9 +24,14 @@ export default class ShiftTimeSelector extends Component {
                         onChange={(newValue) => {
                             this.onChange("starts_at", newValue);
                         } } />
-                </div>
-                <div className="large-shrink small-12 column">
-                    <label>End</label>
+                </p>
+              </div>
+
+              <div className="boss-time-shift__delimiter"></div>
+
+                <div className="boss-time-shift__hours">
+                  <p className="boss-time-shift__label">
+                    <span className="boss-time-shift__label">End</span>
                     <ShiftTimeInput
                         endsAt={this.state.ends_at}
                         readonly={this.props.readonly}
@@ -35,8 +41,8 @@ export default class ShiftTimeSelector extends Component {
                         onChange={(newValue) => {
                             this.onChange("ends_at", newValue);
                         } } />
+                    </p>
                 </div>
-            </div>
             {this.getErrorMessages()}
         </div>
     }

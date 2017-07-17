@@ -4,6 +4,19 @@ import BreakListItem from "./break-list-item"
 import ValidationResult from "~/components/validation-result"
 
 export default class BreakList extends React.Component {
+    constructor() {
+      super();
+      this.state = {
+        breakIsOpen: false
+      }
+    }
+
+    toggleBreak = () => {
+      this.setState({
+        breakIsOpen: !this.breakIsOpen
+      })
+    }
+
     render(){
         var breaks = this.props.hoursAcceptancePeriod.breaks;
         var validationResult = Validation.validateBreaks({
@@ -12,12 +25,19 @@ export default class BreakList extends React.Component {
         })
 
         var addBreakButton;
-        if (!this.props.readonly) {
+        if ( (!this.props.readonly) && !this.breakIsOpen) {
             addBreakButton = <a
-                className="boss2-button boss2-button_role_add"
+                className="boss-time-shift__break-add"
                 onClick={() => this.addBreak()}
                 style={{display: "inline-block", marginTop: 10, marginBottom: 4}}>
                 Add Break
+            </a>
+        } else {
+          addBreakButton = <a
+                className="boss-time-shift__break-toggle boss-time-shift__break-toggle_state_visible boss-time-shift__break-toggle_state_opened"
+                onClick={this.toggleBreak}
+                style={{display: "inline-block", marginTop: 10, marginBottom: 4}}>
+                Break
             </a>
         }
 
@@ -32,7 +52,7 @@ export default class BreakList extends React.Component {
                     granularityInMinutes={this.props.granularityInMinutes}
                     breakItem={breakItem} />
             })}
-            <div>
+            <div className="boss-time-shift__break-controls">
                 {addBreakButton}
             </div>
             <ValidationResult result={validationResult} />
@@ -58,5 +78,6 @@ export default class BreakList extends React.Component {
         }
 
         this.props.boundActions.addHoursAcceptanceBreak(newBreak)
+        this.toggleBreak()
     }
 }

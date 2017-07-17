@@ -15,7 +15,9 @@ var outerHeight = innerHeight + padding * 2;
 export default class HoursChartUi extends React.Component {
     render(){
         return <div className="hours-chart">
+          <div className="hours-chart__inner">
             <svg ref={(el) => this.el = el} />
+          </div>
         </div>
     }
     componentDidMount(){

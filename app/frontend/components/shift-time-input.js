@@ -62,13 +62,13 @@ export default class ShiftTimeInput extends Component {
                 value={dateValue}
                 options={options}
                 clearable={false}
+                searchable={false}
                 onChange={(value) => this.updateTime(value)}
             />
         }
-
-        return <div className="shift-time-input">
-            {select}
-            {readonlyString}
+        return <div className="boss-time-shift__select">
+              {select}
+              {readonlyString}
         </div>
     }
     getPossibleShiftTimes(){

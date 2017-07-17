@@ -46,49 +46,51 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
         }
 
         return (
-          <div className="panel panel-default clearfix">
-            <div className="panel-heading">
-              <div className="panel-title">From/To</div>
+          <div className="boss-time-shift">
+            <div className="boss-time-shift__header">
+              <h4 className="boss-time-shift__title">From/To </h4>
             </div>
-            <div className="panel-body">
-              <div
-                className="row"
-                data-test-marker-hours-acceptance-period-item
-              >
-                { this.getModal() }
-                    <div className="large-5 small-12 column mb-md">
-                        <div style={periodTimeSelectorStyles}>
-                            <ShiftTimeSelector
-                                showErrorMessages={false}
-                                defaultShiftTimes={{
-                                    starts_at: hoursAcceptancePeriod.starts_at,
-                                    ends_at: hoursAcceptancePeriod.ends_at
-                                }}
-                                readonly={readonly}
-                                rotaDate={this.props.rotaDate}
-                                onChange={(times) => {
-                                    this.props.boundActions.updateHoursAcceptancePeriod({
-                                        ...times,
-                                        clientId: hoursAcceptancePeriod.clientId
-                                    })
-                                }}
-                                granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
-                                />
-                        </div>
-                    </div>
-                    <div className="large-3 small-12 column">
-                        <div className="staff-day__sub-heading">Reason</div>
-                        <div>
-                          {reasonSection}
-                        </div>
-                    </div>
-                    <div className="large-2 column">
-                      {this.getAcceptUi()}
-                    </div>
-                  <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
+            <form className="boss-time-shift__form">
+              <div className="boss-time-shift__log">
+                <div className="boss-time-shift__group">
+                  <div className="boss-time-shift__time">
+                    <ShiftTimeSelector
+                      showErrorMessages={false}
+                      defaultShiftTimes={{
+                        starts_at: hoursAcceptancePeriod.starts_at,
+                        ends_at: hoursAcceptancePeriod.ends_at
+                      }}
+                      readonly={readonly}
+                      rotaDate={this.props.rotaDate}
+                      onChange={(times) => {
+                      this.props.boundActions.updateHoursAcceptancePeriod({
+                          ...times,
+                          clientId: hoursAcceptancePeriod.clientId
+                        })
+                      }}
+                      granularityInMinutes={TIME_GRANULARITY_IN_MINUTES}
+                    />
+                  </div>
+                  <div className="boss-time-shift__message">
+                    <p className="boss-time-shift__label">
+                      <span className="boss-time-shift__label-text">Reason</span>
+                    </p>
+                    <p className="boss-time-shift__message-value"> N/A </p>
+                    <textarea name="time-shift-reason" className="boss-time-shift__textarea"> </textarea>
+                  </div>
+                </div>
+                <div className="boss-time-shift__actions">
+                  <p className="boss-time-shift__status">
+                    <span className="boss-time-shift__status-count">10</span>h Accepted.
+                  </p>
+                  <a href="::javascript" className="boss-button boss-button_role_success boss-time-shift__button boss-time-shift__button_role_accept-shift">
+                    Accepted
+                    <span className="boss-time-shift__button-count"> 10 </span>
+                    h
+                  </a>
+                </div>
               </div>
-              <div>
-                <div className="staff-day__sub-heading">Breaks</div>
+              <div className="boss-time-shift__break">
                 <BreakList
                     boundActions={this.props.boundActions}
                     readonly={readonly}
@@ -98,7 +100,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                     hoursAcceptancePeriod={hoursAcceptancePeriod}
                 />
               </div>
-            </div>
+            </form>
           </div>
         )
     }
@@ -236,3 +238,32 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
         }
     }
 }
+
+
+
+
+            // <div className="panel-body">
+            //   <div
+            //     className="row"
+            //     data-test-marker-hours-acceptance-period-item
+            //   >
+            //     { this.getModal() }
+            //         <div className="large-5 small-12 column mb-md">
+            //             <div style={periodTimeSelectorStyles}>
+
+            //             </div>
+            //         </div>
+            //         <div className="large-3 small-12 column">
+            //             <div className="staff-day__sub-heading">Reason</div>
+            //             <div>
+            //               {reasonSection}
+            //             </div>
+            //         </div>
+            //         <div className="large-2 column">
+            //           {this.getAcceptUi()}
+            //         </div>
+            //       <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
+            //   </div>
+            //   <div>
+            //     <div className="staff-day__sub-heading">Breaks</div>
+            // </div>

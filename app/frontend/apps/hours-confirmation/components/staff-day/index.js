@@ -11,8 +11,9 @@ import getHoursPeriodStats from "~/lib/get-hours-period-stats"
 import HoursChart from "../hours-chart"
 import ClockOutButton from "./clock-out-button"
 import StaffDayHeader from "./staff-day-header"
-import ClockInNotesList from "~/components/clock-in-notes-list"
+import ClockInNotesList from "../../components/clock-in-notes-list"
 import HoursAcceptancePeriodList from "./hours-acceptance-period-list"
+import StaffDayAside from './staff-day-aside'
 
 export default class StaffDay extends React.Component {
     constructor(props){
@@ -46,7 +47,9 @@ export default class StaffDay extends React.Component {
 
         var style = {
             transition: ".2s all",
-            maxHeight: 1000
+            maxHeight: 1000,
+            marginTop: 20,
+            marginBotoom: 20,
         };
 
         if (this.props.markedAsDone){
@@ -89,40 +92,36 @@ export default class StaffDay extends React.Component {
         let rotaedHours = rotaedStats.hours;
         let rotaedAcceptedHoursDifference = utils.round(rotaedHours - acceptedStats.hours, 2);
 
-        return <div style={style}>
-            <div style={{
-                marginBottom: 50,
-                padding: 10,
-                border: "1px solid #ddd"
-            }}>
-                <StaffDayHeader
-                    rotaDate={this.props.rotaDate}
+        return <div className="boss-page-main__inner boss-page-main__inner_layout_sidebar" style={style}>
+                <aside className="boss-page-main__sidebar">
+                  <StaffDayAside
                     staffMember={this.props.staffMember}
                     rotaedHours={rotaedHours}
                     clockedHours={clockedHours}
                     acceptedHours={acceptedHours}
-                    venueName={this.props.venue.name}
-                    displayVenue={this.props.displayVenue}
-                    displayDate={this.props.displayDate}
                     rotaedAcceptedHoursDifference={rotaedAcceptedHoursDifference}
-                />
-                <div className="row">
-                    <div className="shrink column">
-                        <div className="mb-base">
-                            <img
-                              className="avatar"
-                              src={staffMember.avatar_url}
-                            />
-                        </div>
-                        <StaffTypeBadge staffTypeObject={staffType} />
-                        <div style={{marginTop: 4}}>
-                            Status: {clockInStatus.title}
-                        </div>
-                        <ComponentErrors errorHandlingId={this.clockOutErrorId} />
+                    staffTypeObject={staffType}
+                  />
+                </aside>
+                <section className="boss-page-main__middle">
+                    <div className="boss-hrc">
+                      <StaffDayHeader
+                        staffMember={this.props.staffMember}
+                        rotaedHours={rotaedHours}
+                        clockedHours={clockedHours}
+                        acceptedHours={acceptedHours}
+                        rotaDate={this.props.rotaDate}
+                        venueName={this.props.venue.name}
+                        displayVenue={this.props.displayVenue}
+                        displayDate={this.props.displayDate}
+                        rotaedAcceptedHoursDifference={rotaedAcceptedHoursDifference}
+                        status={clockInStatus.title}
+                      />
+                      <ComponentErrors errorHandlingId={this.clockOutErrorId} />
                     </div>
-                    <div className="column">
-                        <div className="row mb-base">
-                            <div className="shrink column">
+                    <div className="boss-hrc__content">
+                        <div className="boss-hrc__info">
+                            <div className="boss-hrc__graph">
                                 <HoursChart
                                     rotaDate={this.state.lastValidData.rotaDate}
                                     rotaedShifts={this.state.lastValidData.rotaedShifts}
@@ -132,12 +131,12 @@ export default class StaffDay extends React.Component {
                                     clockInBreaks={this.state.lastValidData.clockInBreaks}
                                 />
                             </div>
-                            <div className="column">
-                                <div className="staff-day__sub-heading">Notes</div>
+                            <div className="boss-hrc__notes">
                                 <ClockInNotesList notes={this.props.clockInNotes} />
                             </div>
                         </div>
-                        <HoursAcceptancePeriodList
+                        <div className="boss-hrc__shifts">
+                          <HoursAcceptancePeriodList
                             readonly={this.props.readonly}
                             rotaDate={this.props.rotaDate}
                             clockInDay={this.props.clockInDay}
@@ -147,20 +146,22 @@ export default class StaffDay extends React.Component {
                             clockInBreaks={this.props.clockInBreaks}
                             boundActions={this.props.boundActions}
                             componentErrors={this.props.componentErrors}
-                            onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)} />
+                            onChange={(acceptedHoursList) => this.props.onAcceptedHoursChanged(acceptedHoursList)}
+                          />
+                        </div>
                         <div>
-                            <ClockOutButton
-                                clockInDay={this.props.clockInDay}
-                                clockOut={() => this.props.boundActions.forceStaffMemberClockOut({
-                                    staffMember: this.props.staffMember,
-                                    clockInDay: this.props.clockInDay,
-                                    errorHandlingId: this.clockOutErrorId
-                                })}
-                            />
+                          <ClockOutButton
+                              clockInDay={this.props.clockInDay}
+                              clockOut={() => this.props.boundActions.forceStaffMemberClockOut({
+                                  staffMember: this.props.staffMember,
+                                  clockInDay: this.props.clockInDay,
+                                  errorHandlingId: this.clockOutErrorId
+                              })}
+                          />
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
-        </div>
+
     }
 }

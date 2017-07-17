@@ -31,11 +31,10 @@ export default class HoursAcceptancePeriodList extends React.Component {
 
         var intervalsOverlap = Validation.validateHoursPeriodsDontOverlap(this.props.hoursAcceptancePeriods)
 
-        return <div>
+        return <div className="boss-hrc__shift">
             {orderedHAPs.map(
                 (hoursAcceptancePeriod) =>
                     <div
-                        className="mb-base"
                         key={hoursAcceptancePeriod.clientId}
                     >
                         <HoursAcceptancePeriodListItem
