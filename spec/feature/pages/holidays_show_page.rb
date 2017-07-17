@@ -34,7 +34,7 @@ module PageObject
     end
 
     def assert_on_correct_page
-      expect(page).to have_selector("#holiday-report-show-page")
+      expect(page).to have_xpath("//div[@data-react-class='HolidayReportApp']")
     end
 
     attr_reader :date, :venue, :format
