@@ -1,8 +1,4 @@
-<div id="holiday-report-show-page" class="container">
-  <h1>Holiday Reports</h1>
-
-  <%= react_component("HolidayReportApp") %>
-</div>
+<%= react_component("HolidayReportApp") %>
 
 <%= javascript_tag do %>
   var holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: holidays } %>;

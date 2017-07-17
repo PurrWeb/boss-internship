@@ -30,7 +30,7 @@ class SafeCheckNotesController < ApplicationController
     if safe_check_note.save
       flash[:success] = "Note Added Successfully"
 
-      redirect_to safe_check_path(safe_check)
+      redirect_to safe_checks_path(venue_id: safe_check.venue.id)
     else
       flash.now[:error] = "There was a problem saving this note"
 

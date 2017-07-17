@@ -11,7 +11,7 @@ export default class WeekPicker extends React.Component {
         onChange: React.PropTypes.func.isRequired
     }
     render(){
-        return <div className="week-picker"/>
+        return <div className="week-picker" id="week-picker" />
     }
     componentWillReceiveProps(newProps) {
         this.reactToProps(newProps);
@@ -48,20 +48,20 @@ export default class WeekPicker extends React.Component {
             startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - weekDay);
             endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - weekDay + 6);
         }
-        
+
         setStartEndDateBasedOnClickedDate(this.props.selectionStartDate)
 
         $(node).datepicker( {
             showOtherMonths: true,
             selectOtherMonths: true,
             firstDay: 1,
-            onSelect: function(dateText, inst) { 
+            onSelect: function(dateText, inst) {
                 var date = $(this).datepicker('getDate');
                 setStartEndDateBasedOnClickedDate(date);
                 var dateFormat = inst.settings.dateFormat || $.datepicker._defaults.dateFormat;
                 $('#startDate').text($.datepicker.formatDate( dateFormat, startDate, inst.settings ));
                 $('#endDate').text($.datepicker.formatDate( dateFormat, endDate, inst.settings ));
-                
+
                 self.selectCurrentWeek();
 
                 self.props.onChange({
@@ -80,7 +80,7 @@ export default class WeekPicker extends React.Component {
                 self.selectCurrentWeek();
             }
         });
-        
+
 
         $(node).on('mousemove', "tr", function() {
             $(this).find('td a').addClass('ui-state-hover');

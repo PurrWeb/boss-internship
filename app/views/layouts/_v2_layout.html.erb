@@ -5,3 +5,7 @@
 </main>
 
 <%= insert_paloma_hook %>
+
+<% if content_for?(:modal) %>
+  <%= yield(:modal) %>
+<% end %>

@@ -1,180 +1,309 @@
-<% content_for(:main_class, 'wide') %>
+<div class="boss-page-main__dashboard">
+  <div class="boss-page-main__inner">
+    <!-- Page dashboard start -->
+    <div class="boss-page-dashboard boss-page-dashboard_updated">
+      <h1 class="boss-page-dashboard__title">Safe Check</h1>
 
-<h1>Safe Checks</h1>
+      <div class="boss-page-dashboard__group">
 
-<%= bootstrap_form_for(
-      '',
-      url: safe_checks_path,
-      method: 'get',
-      html: {
-        id: 'safe-checks-venue-form'
-      }
-    )  do |form| %>
-  <%= form.select(
-        :venue_id,
-        options_for_select(
-          accessible_venues.map do |venue|
-            [venue.name, venue.id]
-          end,
-          current_venue.id
-        ),
-        {},
-        id: 'safe-checks-current-venue-select'
-      ) %>
-<% end %>
-
-<%= link_to(new_safe_check_path(venue_id: current_venue.id), class: ['boss2-button boss2-button_role_add']) do %>
-    Add New
-<% end %>
-
-<div class="mb-md">
-  <%= page_entries_info(safe_checks, html: true, model: nil) %>
+        <div class="boss-page-dashboard__controls-group">
+          <!-- Form start -->
+          <form action="#" class="boss-form">
+            <div class="boss-form__field">
+              <div class="boss-form__select boss-form__select_size_small-fluid">
+                <%= react_component(
+                    'VenueFinder',
+                    selected_venue: current_venue,
+                    venues: accessible_venues
+                  ) %>
+              </div>
+            </div>
+          </form>
+          <!-- Form end -->
+        </div>
+        <div class="boss-page-dashboard__buttons-group boss-page-dashboard__buttons-group_position_last">
+          <%= link_to(new_safe_check_path(venue_id: current_venue.id), class: 'boss-button boss-button_role_add boss-page-dashboard__button') do %>
+            Add New
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <!-- Page dashboard end -->
+  </div>
 </div>
 
-<% if safe_checks.count > 0 %>
-  <table class="boss2-table-scroll" style="text-align: center;">
-    <thead>
-      <tr>
-        <th style="text-align: center;">Time</th>
-        <th></th>
-        <th style="text-align: center;">Checked By</th>
-        <% SafeCheck::POUND_FIELDS.each do |field| %>
-          <th style="text-align: center;"><%= SafeCheck.label_for(field) %></th>
-        <% end %>
-        <% (SafeCheck::CENTS_FIELDS - [:till_float_cents, :safe_float_cents, :total_float_cents, :out_to_order_cents, :payouts_cents]).each do |field| %>
-          <th style="text-align: center;"><%= SafeCheck.label_for(field) %></th>
-        <% end %>
-        <th style="text-align: center;">Payouts</th>
-        <th style="text-align: center;">Total</th>
-        <th style="text-align: center;">Out to Order</th>
-        <th style="text-align: center;">Safe Float</th>
-        <th style="text-align: center;">Till Float</th>
-        <th style="text-align: center;">Total Float</th>
-        <th style="text-align: center;">Variance</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% safe_checks.each do |safe_check| %>
-        <tr>
-          <td><%= link_to(safe_check.created_at.to_s(:human), safe_check_path(safe_check)) %></td>
-          <td>
-            <% if safe_check.notes.enabled.count > 0 %>
-              <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
-                <span class="fa fa-envelope-o" style="font-size: 2em"></span>
-              <% end %>
-            <% end %>
-          </td>
-          <td><%= link_to(
-                    safe_check.checked_by_note,
-                    safe_check_path(safe_check),
-                    class: 'link-unstyled'
-                  ) %></td>
-          <% SafeCheck::POUND_FIELDS.each do |field| %>
-            <% value = safe_check.public_send(field) %>
-            <% if value != 0 %>
-              <td>
-                <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
-                  <%= number_to_currency(
-                        value,
-                        unit: '£',
-                        precision: 0
-                      ) %>
-                <% end %>
-              </td>
-            <% else %>
-              <td><%= link_to('-', safe_check_path(safe_check), class: "link-unstyled") %></td>
-            <% end %>
-          <% end %>
-          <% (SafeCheck::CENTS_FIELDS - [:till_float_cents, :safe_float_cents, :total_float_cents, :out_to_order_cents, :payouts_cents]).each do |field| %>
-            <% value = safe_check.public_send(:pound_value_for, field) %>
-            <% if value != 0 %>
-              <td>
+<div class="boss-page-main__content">
+  <div class="boss-page-main__inner">
+    <div class="boss-page-main__group boss-page-main__group_adjust_sc-table">
+      <!-- Common table start -->
+      <div class="boss-table boss-table_page_safe-checks-index">
+        <div class="boss-table__row">
+          <div class="boss-table__cell boss-table__cell_role_header">Variance</div>
+          <div class="boss-table__cell boss-table__cell_role_header">Info</div>
+          <div class="boss-table__cell boss-table__cell_role_header">Total</div>
+          <div class="boss-table__cell boss-table__cell_role_header">Out to Order</div>
+          <div class="boss-table__cell boss-table__cell_role_header">Safe Float</div>
+          <div class="boss-table__cell boss-table__cell_role_header">Till Float</div>
+          <div class="boss-table__cell boss-table__cell_role_header">Total Float</div>
+          <div class="boss-table__cell boss-table__cell_role_header">£ (Notes &amp; Coins)</div>
+        </div>
 
-                <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
+        <% safe_checks.each_with_index do |safe_check, index| %>
+          <div class="boss-table__row <%= (negative?(safe_check.variance_cents) ? 'boss-table__row_state_alert' : '') %>">
+            <div class="boss-table__cell <%= (negative?(safe_check.variance_cents) ? 'boss-table__cell_state_alert' : '') %>">
+              <div class="boss-table__info">
+                <p class="boss-table__label <%= (negative?(safe_check.variance_cents) ? 'boss-table__label_state_alert' : '') %>">Variance</p>
+                <p class="boss-table__text <%= (negative?(safe_check.variance_cents) ? 'boss-table__text_state_alert' : '') %>">
                   <%= number_to_currency(
-                        value,
-                        unit: '£',
-                        precision: 2
-                      ) %>
-                <% end %>
-              </td>
-            <% else %>
-              <td><%= link_to('-', safe_check_path(safe_check), class: 'link-unstyled') %></td>
-            <% end %>
-          <% end %>
-          <% payouts_value = safe_check.public_send(:pound_value_for, :payouts_cents) %>
-          <% if payouts_value != 0 %>
-            <td class="text-danger">
-
-              <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
-                <%= number_to_currency(
-                      payouts_value,
-                      unit: '£',
-                      precision: 2
-                    ) %>
-              <% end %>
-            </td>
-          <% else %>
-            <td><%= link_to('-', safe_check_path(safe_check), class: 'link-unstyled') %></td>
-          <% end %>
-          <td>
-            <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
-              <%= number_to_currency(
-                    safe_check.pound_value_for(:total_cents),
-                    unit: '£',
-                    precision: 2
-                  ) %>
-            <% end %>
-          </td>
-          <td>
-            <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
-              <%= number_to_currency(
-                    safe_check.pound_value_for(:out_to_order_cents),
-                    unit: '£',
-                    precision: 2
-                  ) %>
-            <% end %>
-          </td>
-          <td>
-            <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
-              <%= number_to_currency(
-                    safe_check.pound_value_for(:safe_float_cents),
-                    unit: '£',
-                    precision: 2
-                  ) %>
-            <% end %>
-          </td>
-          <td>
-            <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
-              <%= number_to_currency(
-                    safe_check.pound_value_for(:till_float_cents),
-                    unit: '£',
-                    precision: 2
-                  ) %>
-            <% end %>
-          </td>
-          <td>
-            <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
-              <%= number_to_currency(
-                    safe_check.pound_value_for(:total_float_cents),
-                    unit: '£',
-                    precision: 2
-                  ) %>
-            <% end %>
-          </td>
-          <td class="<%= "text-danger" if safe_check.variance_cents < 0 %>">
-            <%= link_to(safe_check_path(safe_check), class: 'link-unstyled') do %>
-              <%= number_to_currency(
                     safe_check.pound_value_for(:variance_cents),
                     unit: '£',
                     precision: 2
                   ).gsub("-", "\u2011") %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+                </p>
+              </div>
+            </div>
 
-  <%= will_paginate(safe_checks, renderer: FoundationPagination::Rails) %>
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Info</p>
+
+                <div class="boss-table__stats">
+                  <div class="boss-stats boss-stats_adjust_table">
+                    <p class="boss-stats__text <%= positive?(safe_check.notes.enabled.count) ? 'boss-stats__text_indicator_att' : '' %>">
+                      <span><%= safe_check.checked_by_note %></span>
+                    </p>
+
+                    <div class="boss-stats__meta">
+                      <p class="boss-stats__label">
+                        <span><%= safe_check.created_at.to_s(:human) %></span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Total</p>
+                <p class="boss-table__text">
+                  <%= number_to_currency(
+                    safe_check.pound_value_for(:total_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Out to Order</p>
+                <p class="boss-table__text">
+                  <%= number_to_currency(
+                    safe_check.pound_value_for(:out_to_order_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Safe Float</p>
+                <p class="boss-table__text">
+                  <%= number_to_currency(
+                    safe_check.pound_value_for(:safe_float_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Till Float</p>
+                <p class="boss-table__text">
+                  <%= number_to_currency(
+                    safe_check.pound_value_for(:till_float_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Total Float</p>
+                <p class="boss-table__text">
+                  <%= number_to_currency(
+                    safe_check.pound_value_for(:total_float_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-table__cell">
+              <div class="boss-table__info">
+                <p class="boss-table__label">Actions</p>
+                <div class="boss-table__actions">
+                  <a href="#" class="boss-button boss-button_type_small boss-button_role_coins boss-table__action" data-modal-id="<%= index %>">View Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        <!-- Common table end -->
+      </div>
+
+      <% safe_checks.each_with_index do |safe_check, index| %>
+        <div class="boss-check boss-check_role_board boss-check_page_safe-checks-index <%= negative?(safe_check.variance_cents) ? 'boss-check_state_alert' : '' %>">
+          <div class="boss-check__row boss-check__row_role_header">
+            <div class="boss-check__cell boss-check__cell_size_half <%= negative?(safe_check.variance_cents) ? 'boss-check__cell_state_alert' : '' %>">
+              <p class="boss-check__text boss-check__text_marked <%= negative?(safe_check.variance_cents) ? 'boss-check__text_state_alert' : '' %>">
+                <%= number_to_currency(
+                  safe_check.pound_value_for(:variance_cents),
+                  unit: '£',
+                  precision: 2
+                ).gsub("-", "\u2011") %>
+              </p>
+            </div>
+
+            <div class="boss-check__cell boss-check__cell_size_half">
+              <p class="boss-check__text boss-check__text_role_date">
+                <span><%= safe_check.created_at.to_s(:human).split(' ').first %></span>
+                <span class="boss-check__text-line"><%= safe_check.created_at.to_s(:human).split(' ').last %></span>
+              </p>
+            </div>
+          </div>
+
+          <div class="boss-check__row">
+            <div class="boss-check__cell">
+              <p class="boss-check__text boss-check__text_role_user boss-check__text_indicator_att">
+                <%= safe_check.checked_by_note %>
+              </p>
+            </div>
+          </div>
+
+          <div class="boss-check__row boss-check__row_role_control">
+            <div class="boss-check__cell boss-check__cell_no-border">
+              <a href="#" class="boss-button boss-button_type_small boss-button_role_coins boss-table__action" data-modal-id="<%= index %>">View Details</a>
+            </div>
+
+            <div class="boss-check__cell">
+              <a href="#" class="boss-check__dropdown-link boss-check__dropdown-link_state_closed">See Totals</a>
+            </div>
+          </div>
+
+          <div class="boss-check__dropdown boss-check__dropdown_state_closed">
+            <div class="boss-check__row boss-check__row_role_table">
+              <div class="boss-check__cell boss-check__cell_role_table">
+                <p class="boss-check__text boss-check__text_marked">Total</p>
+              </div>
+
+              <div class="boss-check__cell boss-check__cell_role_table">
+                <p class="boss-check__text">
+                  <%= number_to_currency(
+                    safe_check.pound_value_for(:total_float_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-check__row boss-check__row_role_table">
+              <div class="boss-check__cell boss-check__cell_role_table">
+                <p class="boss-check__text boss-check__text_marked">Out to Order</p>
+              </div>
+
+              <div class="boss-check__cell boss-check__cell_role_table">
+                <p class="boss-check__text">
+                  <%= number_to_currency(
+                    safe_check.pound_value_for(:out_to_order_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-check__row boss-check__row_role_table">
+              <div class="boss-check__cell boss-check__cell_role_table">
+                <p class="boss-check__text boss-check__text_marked">Safe Float</p>
+              </div>
+
+              <div class="boss-check__cell boss-check__cell_role_table">
+                <p class="boss-check__text">
+                  <%= number_to_currency(
+                    safe_check.pound_value_for(:safe_float_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-check__row boss-check__row_role_table">
+              <div class="boss-check__cell boss-check__cell_role_table">
+                <p class="boss-check__text boss-check__text_marked">Till Float</p>
+              </div>
+
+              <div class="boss-check__cell boss-check__cell_role_table">
+                <p class="boss-check__text">
+                  <%= number_to_currency(
+                    safe_check.pound_value_for(:till_float_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+                </p>
+              </div>
+            </div>
+
+            <div class="boss-check__row boss-check__row_role_table">
+              <div class="boss-check__cell boss-check__cell_role_table">
+                <p class="boss-check__text boss-check__text_marked">Total Float</p>
+              </div>
+
+              <div class="boss-check__cell boss-check__cell_role_table">
+                <p class="boss-check__text">
+                  <%= number_to_currency(
+                    safe_check.pound_value_for(:total_float_cents),
+                    unit: '£',
+                    precision: 2
+                  ) %>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <!-- Paginator start -->
+    <%= will_paginate safe_checks, renderer: CustomPaginationLinkRenderer %>
+    <!-- Paginator end -->
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <% safe_checks.each_with_index do |safe_check, index| %>
+    <%= react_component(
+      'DetailsModal',
+      {
+        modal_id: index,
+        created_at: safe_check.created_at.to_s(:human),
+        checked_by: safe_check.checked_by_note,
+        notes: safe_check.notes.enabled,
+        safe_check: safe_check,
+        costs: notes_and_coins(safe_check),
+        variance_cents: number_to_currency(safe_check.pound_value_for(:variance_cents), unit: '£', precision: 2).gsub("-", "\u2011")
+      },
+      { class: 'react-modal' }
+    ) %>
+  <% end %>
 <% end %>
