@@ -24,6 +24,23 @@ export default class BreakList extends React.Component {
             hoursPeriod: this.props.hoursAcceptancePeriod
         })
 
+        var addBreakButton;
+        if ( (!this.props.readonly) && !this.breakIsOpen) {
+            addBreakButton = <a
+                className="boss-time-shift__break-add"
+                onClick={() => this.addBreak()}
+                style={{display: "inline-block", marginTop: 10, marginBottom: 4}}>
+                Add Break
+            </a>
+        } else {
+          addBreakButton = <a
+                className="boss-time-shift__break-toggle boss-time-shift__break-toggle_state_visible boss-time-shift__break-toggle_state_opened"
+                onClick={this.toggleBreak}
+                style={{display: "inline-block", marginTop: 10, marginBottom: 4}}>
+                Break
+            </a>
+        }
+
         return <div>
             {breaks.map((breakItem) => {
                 return <BreakListItem
@@ -36,21 +53,7 @@ export default class BreakList extends React.Component {
                     breakItem={breakItem} />
             })}
             <div className="boss-time-shift__break-controls">
-              {!this.breakIsOpen ? (
-                <a
-                  className="boss-time-shift__break-add"
-                  onClick={() => this.addBreak()}
-                  style={{display: "inline-block", marginTop: 10, marginBottom: 4}}>
-                  Add Break
-                </a>
-              ) : (
-                <a
-                  className="boss-time-shift__break-toggle boss-time-shift__break-toggle_state_visible boss-time-shift__break-toggle_state_opened"
-                  onClick={this.toggleBreak}
-                  style={{display: "inline-block", marginTop: 10, marginBottom: 4}}>
-                  Break
-                </a>
-              )}
+              {addBreakButton}
             </div>
             <ValidationResult result={validationResult} />
         </div>
@@ -63,17 +66,18 @@ export default class BreakList extends React.Component {
       var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(hoursAcceptancePeriod.starts_at);
       var breakHoursOffset = shiftStartOffset + 1;
       if (breakHoursOffset > 23){
-          breakHoursOffset = 23;
+        breakHoursOffset = 23;
       }
 
       var newBreak = {
-          starts_at: rotaDate.getDateNHoursAfterStartTime(breakHoursOffset, 0),
-          ends_at: rotaDate.getDateNHoursAfterStartTime(breakHoursOffset, 15),
-          id: null,
-          clock_in_day: {id: hoursAcceptancePeriod.clock_in_day.serverId},
-          hours_acceptance_period: {id: hoursAcceptancePeriod.serverId}
+        starts_at: rotaDate.getDateNHoursAfterStartTime(breakHoursOffset, 0),
+        ends_at: rotaDate.getDateNHoursAfterStartTime(breakHoursOffset, 15),
+        id: null,
+        clock_in_day: {id: hoursAcceptancePeriod.clock_in_day.serverId},
+        hours_acceptance_period: {id: hoursAcceptancePeriod.serverId}
       }
 
-      this.props.boundActions.addHoursAcceptanceBreak(newBreak);
-  }
+      this.props.boundActions.addHoursAcceptanceBreak(newBreak)
+      this.toggleBreak()
+    }
 }

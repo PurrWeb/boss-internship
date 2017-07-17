@@ -29,11 +29,7 @@ export default class HoursChartUi extends React.Component {
     render(){
         return <div className="hours-chart">
           <div className="hours-chart__inner">
-            <ReactIScroll iScroll={iScroll} options={scrollOptions}>
-              <div className="hours-chart__content">
-                <svg ref={(el) => this.el = el} />
-              </div>
-            </ReactIScroll>
+            <svg ref={(el) => this.el = el} />
           </div>
         </div>
     }

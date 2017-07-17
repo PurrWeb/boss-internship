@@ -16,7 +16,7 @@ class StaffDayList extends React.Component {
             }
         }
 
-        return <div className="boss-page-main__inner">
+        return <div className="">
             {_.values(clockInDays).map(clockInDay =>
                 <StaffDay
                     displayVenue={this.props.displayVenues}

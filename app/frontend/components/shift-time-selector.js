@@ -13,10 +13,9 @@ export default class ShiftTimeSelector extends Component {
     render(){
         return <div className="boss-time-shift__interval">
             <div className="boss-time-shift__hours">
-                <div className="boss-time-shift__label">
+                <p className="boss-time-shift__label">
                     <span className="boss-time-shift__label-text">Start</span>
-                    <div>
-                      <ShiftTimeInput
+                    <ShiftTimeInput
                         startsAt={this.state.starts_at}
                         rotaDate={this.props.rotaDate}
                         readonly={this.props.readonly}
@@ -25,27 +24,24 @@ export default class ShiftTimeSelector extends Component {
                         onChange={(newValue) => {
                             this.onChange("starts_at", newValue);
                         } } />
-                    </div>
-                </div>
+                </p>
               </div>
 
               <div className="boss-time-shift__delimiter"></div>
 
                 <div className="boss-time-shift__hours">
-                  <div className="boss-time-shift__label">
+                  <p className="boss-time-shift__label">
                     <span className="boss-time-shift__label">End</span>
-                      <div>
-                        <ShiftTimeInput
-                            endsAt={this.state.ends_at}
-                            readonly={this.props.readonly}
-                            rotaDate={this.props.rotaDate}
-                            showErrorMessages={this.props.showErrorMessages}
-                            granularityInMinutes={this.props.granularityInMinutes}
-                            onChange={(newValue) => {
-                                this.onChange("ends_at", newValue);
-                            }} />
-                      </div>
-                    </div>
+                    <ShiftTimeInput
+                        endsAt={this.state.ends_at}
+                        readonly={this.props.readonly}
+                        rotaDate={this.props.rotaDate}
+                        showErrorMessages={this.props.showErrorMessages}
+                        granularityInMinutes={this.props.granularityInMinutes}
+                        onChange={(newValue) => {
+                            this.onChange("ends_at", newValue);
+                        } } />
+                    </p>
                 </div>
             {this.getErrorMessages()}
         </div>

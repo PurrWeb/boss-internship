@@ -76,10 +76,19 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                       <span className="boss-time-shift__label-text">Reason</span>
                     </p>
                     <p className="boss-time-shift__message-value"> N/A </p>
-                      {reasonSection}
+                    <textarea name="time-shift-reason" className="boss-time-shift__textarea"> </textarea>
                   </div>
                 </div>
-                {this.getAcceptUi()}
+                <div className="boss-time-shift__actions">
+                  <p className="boss-time-shift__status">
+                    <span className="boss-time-shift__status-count">10</span>h Accepted.
+                  </p>
+                  <a href="::javascript" className="boss-button boss-button_role_success boss-time-shift__button boss-time-shift__button_role_accept-shift">
+                    Accepted
+                    <span className="boss-time-shift__button-count"> 10 </span>
+                    h
+                  </a>
+                </div>
               </div>
               <div className="boss-time-shift__break">
                 <BreakList
@@ -189,7 +198,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                         data-test-marker-accept-hours-acceptance-period
                         onClick={ acceptButtonOnClick }
                         className="boss-button boss-button_role_success boss-time-shift__button boss-time-shift__button_role_accept-shift">
-                        Accepted 
+                        Accepted
                         <span className="boss-time-shift__button-count">
                            {' ' + stats.hours}h
                         </span>
@@ -213,7 +222,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                 <p className="boss-time-shift__status  boss-time-shift__status_state_visible">
                     {stats.hours}h ACCEPTED
                 </p>
-                { !this.props.readonly && 
+                { !this.props.readonly &&
                   <button
                       className="boss-button boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_unaccept-shift boss-time-shift__button_state_visible"
                       onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
@@ -227,3 +236,32 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
         }
     }
 }
+
+
+
+
+            // <div className="panel-body">
+            //   <div
+            //     className="row"
+            //     data-test-marker-hours-acceptance-period-item
+            //   >
+            //     { this.getModal() }
+            //         <div className="large-5 small-12 column mb-md">
+            //             <div style={periodTimeSelectorStyles}>
+
+            //             </div>
+            //         </div>
+            //         <div className="large-3 small-12 column">
+            //             <div className="staff-day__sub-heading">Reason</div>
+            //             <div>
+            //               {reasonSection}
+            //             </div>
+            //         </div>
+            //         <div className="large-2 column">
+            //           {this.getAcceptUi()}
+            //         </div>
+            //       <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
+            //   </div>
+            //   <div>
+            //     <div className="staff-day__sub-heading">Breaks</div>
+            // </div>

@@ -13,7 +13,7 @@ export default class StaffDayHeader extends React.Component {
         let {
           status,
         } = this.props;
-        
+
         return <div className="boss-hrc__header">
          <h3 className="boss-hrc__status">
           <span className="boss-hrc__status-text"> Status </span>
