@@ -66,10 +66,10 @@ export default class ShiftTimeInput extends Component {
                 onChange={(value) => this.updateTime(value)}
             />
         }
-        return <div className="boss-time-shift__select">
+        return <p className="boss-time-shift__select">
               {select}
               {readonlyString}
-        </div>
+        </p>
     }
     getPossibleShiftTimes(){
         var granularityInMinutes = 30;

@@ -22,7 +22,7 @@ export default class HoursAcceptancePeriodList extends React.Component {
         var addShiftButton = null;
         if (this.hasClockedOut()){
             addShiftButton = <a
-                className="boss2-button boss2-button_role_add"
+                className="boss-button boss-button_role_add boss-hrc__button boss-hrc__button_role_add"
                 data-test-marker-add-hours-acceptance-period
                 onClick={() => this.addHours()}>
                     Add Shift
@@ -31,10 +31,10 @@ export default class HoursAcceptancePeriodList extends React.Component {
 
         var intervalsOverlap = Validation.validateHoursPeriodsDontOverlap(this.props.hoursAcceptancePeriods)
 
-        return <div className="boss-hrc__shift">
+        return <div >
             {orderedHAPs.map(
                 (hoursAcceptancePeriod) =>
-                    <div
+                    <div className="boss-hrc__shift"
                         key={hoursAcceptancePeriod.clientId}
                     >
                         <HoursAcceptancePeriodListItem
@@ -51,7 +51,9 @@ export default class HoursAcceptancePeriodList extends React.Component {
             )}
             { !readonly && <div>
                 {markAsDoneButton}
-                {addShiftButton}
+                <div className="boss-hrc__controls">
+                  {addShiftButton}
+                </div>
               </div>
             }
 

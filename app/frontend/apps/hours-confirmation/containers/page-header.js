@@ -11,7 +11,7 @@ class PageHeader extends React.Component {
         var selector;
         var isDailyPage = this.props.pageOptions.date !== undefined;
         if (isDailyPage){
-            selector = <div className="shrink column">
+            selector = <div className="boss-page-dashboard__controls-group">
                 <DateAndVenueSelector
                     date={this.props.pageOptions.date}
                     venueClientId={venueClientId}
@@ -26,7 +26,7 @@ class PageHeader extends React.Component {
                 />
             </div>
         } else {
-            selector = <div className="shrink column">
+            selector = <div className="boss-page-dashboard__controls-group">
                 <VenueDropdown
                     selectedVenues={[venueClientId]}
                     venues={this.props.venues}
@@ -41,8 +41,10 @@ class PageHeader extends React.Component {
             </div>
         }
 
-        return <div className="row">
+        return <div className="">
+          <div className="">
             {selector}
+          </div>
         </div>
     }
 }

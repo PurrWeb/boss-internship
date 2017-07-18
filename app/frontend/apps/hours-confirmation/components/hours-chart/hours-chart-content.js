@@ -1,13 +1,26 @@
 import React from "react"
 import d3 from "d3"
-import utils from "~/lib/utils"
-import makeRotaHoursXAxis from "~/lib/make-rota-hours-x-axis"
+import utils from "~lib/utils"
+import makeRotaHoursXAxis from "~lib/make-rota-hours-x-axis"
+import iScroll from 'iscroll'
+import ReactIScroll from 'react-iscroll'
 
-var innerWidth = 525;
+
+var scrollOptions = {
+  scrollX: true,
+  scrollY: false,
+  scrollbars: true,
+  mouseWheel: true,
+  interactiveScrollbars: true,
+  shrinkScrollbars: 'scale',
+  fadeScrollbars: false,
+  click: true
+};
+var innerWidth = 480;
 var innerHeight = 80;
-var padding = 20;
+var padding = 50;
 var paddingRight = 200;
-var labelSpacing = 50;
+var labelSpacing = 150;
 var barHeight = 25;
 var outerWidth = innerWidth + padding + paddingRight;
 var outerHeight = innerHeight + padding * 2;
@@ -16,7 +29,11 @@ export default class HoursChartUi extends React.Component {
     render(){
         return <div className="hours-chart">
           <div className="hours-chart__inner">
-            <svg ref={(el) => this.el = el} />
+            <ReactIScroll iScroll={iScroll} options={scrollOptions}>
+              <div className="hours-chart__content">
+                <svg ref={(el) => this.el = el} />
+              </div>
+            </ReactIScroll>
           </div>
         </div>
     }
@@ -53,7 +70,7 @@ export default class HoursChartUi extends React.Component {
 
         var chartContent = chart
             .append("g")
-            .attr("transform", "translate(" + labelSpacing + ", 0)")
+            .attr("transform", "translate(" + 60 + ", 0)")
 
 
         this.renderXAxis({chartContent, xScale})
@@ -80,7 +97,7 @@ export default class HoursChartUi extends React.Component {
             .append("g")
             .attr("transform", function(event){
                 var x  = xScale(event.timeOffset) + padding;
-                return "translate(" + x + ",40)";
+                return "translate(" + x + ",55)";
             })
 
         lineContainers
@@ -151,8 +168,8 @@ export default class HoursChartUi extends React.Component {
     }
     renderIntervals({chart, xScale, intervals, lane}){
         var y = {
-            "amended": 70,
-            "clocked": 40,
+            "amended": 100,
+            "clocked": 55,
             "rotaed": 10
         }[lane]
         var intervalGroup = chart
@@ -260,17 +277,17 @@ export default class HoursChartUi extends React.Component {
     renderLaneLabels({chart}){
         var group = chart
             .append("g")
-            .attr("transform", "translate(" + (padding + labelSpacing - 10) + ",0)")
+            .attr("transform", "translate(" + 60 + ",0)")
             .attr("style", "font-size: .85em")
         group.append("text")
             .text("Rotaed")
             .attr("transform", "translate(0, 25)")
         group.append("text")
             .text("Clocked")
-            .attr("transform", "translate(0, 55)")
+            .attr("transform", "translate(0, 75)")
         group.append("text")
             .text("Amended")
-            .attr("transform", "translate(0, 85)")
+            .attr("transform", "translate(0, 125)")
         group.selectAll("text")
             .attr("text-anchor", "end")
     }
@@ -278,7 +295,7 @@ export default class HoursChartUi extends React.Component {
         var xAxis = makeRotaHoursXAxis(xScale);
          chartContent
             .append("g")
-            .attr("transform", "translate(" + padding + "," + (innerHeight + padding) + ")")
+            .attr("transform", "translate(20, 150)")
             .attr("class", "axis")
             .call(xAxis);
     }
