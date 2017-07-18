@@ -92,7 +92,7 @@ export default class StaffDay extends React.Component {
         let rotaedHours = rotaedStats.hours;
         let rotaedAcceptedHoursDifference = utils.round(rotaedHours - acceptedStats.hours, 2);
 
-        return <div className="boss-page-main__inner boss-page-main__inner_layout_sidebar" style={style}>
+        return <div className="boss-page-main__inner boss-page-main__inner_layout_sidebar boss-page-main__inner_context_stack" style={style}>
                 <aside className="boss-page-main__sidebar">
                   <StaffDayAside
                     staffMember={this.props.staffMember}

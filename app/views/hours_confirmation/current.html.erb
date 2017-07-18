@@ -1,4 +1,18 @@
+<div class="boss-page-main__dashboard">
+  <div class="boss-page-main__inner">
+    <div class="boss-page-dashboard boss-page-dashboard_updated">
+      <h1 class="boss-page-dashboard__title">Hours Requiring Confirmation</h1>
+        <% date = RotaShiftDate.to_rota_date(Time.current) %>
+        <div class="boss-page-dashboard__buttons-group boss-page-dashboard__buttons-group_position_last" style="float: right">
+          <%= link_to(hours_confirmation_index_path(venue_id: venue.id, date:UIRotaDate.format(date)), class: "boss-button boss-button_role_calendar boss-page-dashboard__button") do %>
+              View by date
+          <% end %>
+        </div>
+    </div>
+  </div>
+</div>
 <%= react_component('HoursConfirmationApp') %>
+
 
 <script>
   window.boss = window.boss || {};
