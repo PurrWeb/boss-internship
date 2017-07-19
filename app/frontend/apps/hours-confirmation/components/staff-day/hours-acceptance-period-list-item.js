@@ -76,19 +76,10 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                       <span className="boss-time-shift__label-text">Reason</span>
                     </p>
                     <p className="boss-time-shift__message-value"> N/A </p>
-                    <textarea name="time-shift-reason" className="boss-time-shift__textarea"> </textarea>
+                      {reasonSection}
                   </div>
                 </div>
-                <div className="boss-time-shift__actions">
-                  <p className="boss-time-shift__status">
-                    <span className="boss-time-shift__status-count">10</span>h Accepted.
-                  </p>
-                  <a href="::javascript" className="boss-button boss-button_role_success boss-time-shift__button boss-time-shift__button_role_accept-shift">
-                    Accepted
-                    <span className="boss-time-shift__button-count"> 10 </span>
-                    h
-                  </a>
-                </div>
+                {this.getAcceptUi()}
               </div>
               <div className="boss-time-shift__break">
                 <BreakList
@@ -236,32 +227,3 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
         }
     }
 }
-
-
-
-
-            // <div className="panel-body">
-            //   <div
-            //     className="row"
-            //     data-test-marker-hours-acceptance-period-item
-            //   >
-            //     { this.getModal() }
-            //         <div className="large-5 small-12 column mb-md">
-            //             <div style={periodTimeSelectorStyles}>
-
-            //             </div>
-            //         </div>
-            //         <div className="large-3 small-12 column">
-            //             <div className="staff-day__sub-heading">Reason</div>
-            //             <div>
-            //               {reasonSection}
-            //             </div>
-            //         </div>
-            //         <div className="large-2 column">
-            //           {this.getAcceptUi()}
-            //         </div>
-            //       <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
-            //   </div>
-            //   <div>
-            //     <div className="staff-day__sub-heading">Breaks</div>
-            // </div>
