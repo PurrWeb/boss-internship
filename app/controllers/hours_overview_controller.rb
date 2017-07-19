@@ -6,7 +6,7 @@ class HoursOverviewController < ApplicationController
     date = date_from_params
 
 
-    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     staff_clock_in_days = ClockInDay.where(
       staff_member: staff_member,

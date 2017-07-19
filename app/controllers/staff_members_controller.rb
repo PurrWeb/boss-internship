@@ -97,7 +97,7 @@ class StaffMembersController < ApplicationController
 
   def new
     authorize! :manage, :staff_members
-    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     venues = Venue.all
     pay_rates = PayRate.selectable_by(current_user)
     staff_types = StaffType.all

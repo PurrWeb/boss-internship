@@ -4,7 +4,7 @@ class HolidaysController < ApplicationController
   def index
     authorize!(:view, :holidays)
 
-    access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     query_venues = nil
     filter_venue = Venue.find_by(id: params[:venue])

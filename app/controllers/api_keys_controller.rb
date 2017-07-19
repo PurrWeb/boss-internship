@@ -13,6 +13,9 @@ class ApiKeysController < ApplicationController
     key = ApiKey.find(params[:id])
 
     key.state_machine.transition_to!(:deleted, requster_user_id: current_user)
+    
+    ApiAccessToken.revoke!(api_key: key)
+
     flash[:success] = 'Key revoked successfully'
     redirect_to api_keys_path
   end

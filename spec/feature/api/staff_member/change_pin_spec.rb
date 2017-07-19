@@ -24,14 +24,6 @@ RSpec.describe 'Api access' do
     )
   end
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
-  let(:access_token) do
-    AccessToken.create!(
-      token_type: 'web',
-      expires_at: 30.minutes.from_now,
-      creator: user,
-      user: user
-    )
-  end
 
   before do
     set_authorization_header(access_token.token)
@@ -55,13 +47,11 @@ RSpec.describe 'Api access' do
     )
   end
   let(:access_token) do
-    AccessToken.create(
-      token_type: 'api',
+    ApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      creator: api_key,
       api_key: api_key,
       staff_member: user_staff_member
-    )
+    ).persist!
   end
   let(:old_pin) { '123456778' }
   let(:staff_member) {

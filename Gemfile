@@ -53,6 +53,10 @@ gem 'font-awesome-sass'
 gem 'active_model_serializers', '~> 0.10.0'
 gem "shell-spinner"
 
+group :production, :development do
+  gem 'redis', '~>3.2'
+end
+
 group :development, :test do
   gem "seedbank"
   gem "byebug"
@@ -72,4 +76,5 @@ group :test do
   gem "launchy"
   gem 'poltergeist'
   gem 'shoulda-matchers', '~> 3.1'
+  gem 'fakeredis', '~> 0.6'
 end

@@ -19,12 +19,6 @@ RSpec.describe 'Access token end points' do
     let(:now) { Time.now }
 
     describe '#api_key' do
-      describe 'pre call' do
-        specify do
-          expect(AccessToken.count).to eq(0)
-        end
-      end
-
       context 'no api key is supplied' do
         let(:url) { url_helpers.api_v1_sessions_path }
 
@@ -43,10 +37,11 @@ RSpec.describe 'Access token end points' do
             key_type: ApiKey::BOSS_KEY_TYPE
           )
         end
+        let(:api_key) { existing_key }
 
         let(:url) do
           url_helpers.api_v1_sessions_path(
-            api_key: api_key,
+            api_key: api_key.key,
             staff_member_id: staff_member_id,
             staff_member_pin: staff_member_pin
           )
@@ -61,8 +56,15 @@ RSpec.describe 'Access token end points' do
         end
         let(:staff_member_id) { staff_member.id }
         let(:staff_member_pin) { staff_member.pin_code }
-        let(:api_key) { existing_key.key }
         let(:response) { post(url) }
+
+        describe 'pre call' do
+          specify do
+            expect(
+              ApiAccessToken.find_by_api_key(api_key: existing_key).count
+            ).to eq(0)
+          end
+        end
 
         specify 'should succeed' do
           expect(response.status).to eq(ok_status)
@@ -70,17 +72,18 @@ RSpec.describe 'Access token end points' do
 
         specify 'access token should be created' do
           post(url)
-          access_token = AccessToken.first
+          access_token = ApiAccessToken.find_by_api_key(api_key: existing_key).first
           expect(access_token).to be_present
           expect(access_token.staff_member).to eq(staff_member)
         end
 
         specify 'should return an access token' do
           json = JSON.parse(response.body)
-          token = AccessToken.find_by(staff_member: staff_member)
+
+          token = ApiAccessToken.find_by_api_key(api_key: existing_key).first
           expect(json).to eq({
             "access_token" => token.token,
-            "expires_at" => token.expires_at.utc.iso8601.to_s,
+            "expires_at" => token.expires_at.utc.iso8601(3),
             "staff_member" => {
               "id" => token.staff_member.id,
               "name" => token.staff_member.full_name,
@@ -90,7 +93,7 @@ RSpec.describe 'Access token end points' do
         end
 
         context 'supplying invalid api key' do
-          let(:api_key) { 'sdadas' }
+          let(:api_key) { ApiKey.new(key: 'sdadas') }
           specify 'should fail' do
             expect(post(url).status).to eq(unprocessable_entity_status)
           end

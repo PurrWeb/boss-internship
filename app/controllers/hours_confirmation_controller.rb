@@ -39,7 +39,7 @@ class HoursConfirmationController < ApplicationController
         hours_acceptance_period: hours_acceptance_periods
       )
 
-      access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
+      access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
       venues = if current_user.has_all_venue_access?
         Venue.all
@@ -131,8 +131,7 @@ class HoursConfirmationController < ApplicationController
         disabled_at: nil
       )
 
-      access_token = current_user.current_access_token || AccessToken.create_web!(user: current_user)
-
+      access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
       venues = if current_user.has_all_venue_access?
         Venue.all
       else

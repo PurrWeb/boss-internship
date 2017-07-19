@@ -6,12 +6,10 @@ RSpec.describe 'Staff member pages access' do
 
   let(:user) { FactoryGirl.create(:user, venues: [staff_member.master_venue]) }
   let(:access_token) do
-    AccessToken.create!(
-      token_type: 'web',
+    WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      creator: user,
       user: user
-    )
+    ).persist!
   end
   let(:staff_member) { FactoryGirl.create(:staff_member) }
 

@@ -1,57 +1,61 @@
 class APIController < ApplicationController
-  skip_before_filter  :verify_authenticity_token
+  skip_before_filter :verify_authenticity_token
   skip_before_filter :authenticate_user!
   skip_before_filter :set_paper_trail_whodunnit
 
-  before_filter :parse_access_token
+  before_filter :parse_access_tokens
 
-  def parse_access_token
-    token = nil
+  def parse_access_tokens
+    api_token = nil
+    web_token = nil
     authenticate_or_request_with_http_token do |supplied_token, other_options|
-      token = AccessToken.
-        where(token: supplied_token).
-        includes(api_key: :venue).
-        first
+      api_token = ApiAccessToken.find_by_token(token: supplied_token)
+      web_token = WebApiAccessToken.find_by_token(token: supplied_token)
+      api_token || web_token
     end
-    if token && (token.expires_at.nil? || token.expires_at > Time.current)
-      @_access_token = token
+    if api_token && (api_token.expires_at.nil? || api_token.expires_at > Time.current)
+      @api_access_token = api_token
     end
-    @_access_token.present?
+    if web_token && (web_token.expires_at.nil? || web_token.expires_at > Time.current)
+      @web_access_token = web_token
+    end
   end
   
   def api_token_athenticate!
     render(
       json: { errors: "Not authenticated" },
       status: :unauthorized
-    ) unless @_access_token && @_access_token.api?
-  end
-
-  def staff_member_from_token
-    @_access_token.staff_member || @_access_token.user.staff_member
-  end
-
-  def current_user
-    @_access_token.user
-  end
-
-  def venue_from_api_key
-    @_access_token.andand.api_key.andand.venue
+    ) unless @api_access_token.present?
   end
 
   def web_token_authenticate!
     render(
       json: { errors: "Not authenticated" },
       status: :unauthorized
-    ) unless @_access_token && @_access_token.web?
+    ) unless @web_access_token.present?
 
     set_paper_trail_whodunnit
   end
 
+  def staff_member_from_token
+    @api_access_token.staff_member
+  end
+
+  def current_user
+    if @web_access_token.present?
+      @web_access_token.user
+    end
+  end
+
+  def venue_from_api_key
+    @api_access_token.andand.api_key.andand.venue
+  end
+
   def current_ability
-    if @_access_token && @_access_token.web?
-      @current_ability ||= Ability.new(@_access_token.user)
-    elsif @_access_token && @_access_token.api?
-      @current_ability ||= ApiAbility.new(@_access_token.staff_member)
+    if @web_access_token
+      @current_ability ||= Ability.new(@web_access_token.user)
+    elsif @api_access_token
+      @current_ability ||= ApiAbility.new(@api_access_token.staff_member)
     end
   end
 end
