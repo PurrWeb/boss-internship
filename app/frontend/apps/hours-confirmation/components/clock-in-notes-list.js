@@ -12,7 +12,7 @@ export default class ClockInNotesList extends React.Component {
                   <li className="notes__item"
                       data-test-marker-clock-in-note
                       key={note.clientId}>
-                      <a href="::javascript" className="boss-notes__link"> {note.note} </a>
+                      <button href="" className="boss-notes__link"> {note.note} </button>
                   </li>
               )}
           </ul>

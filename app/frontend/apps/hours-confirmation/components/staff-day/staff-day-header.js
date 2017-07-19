@@ -5,7 +5,7 @@ export default class StaffDayHeader extends React.Component {
 
     dateSection() {
       if(this.props.displayDate){
-        return moment(this.props.rotaDate.startTime).format("DD MMM YYYY");
+        return moment(this.props.rotaDate.startTime).format("dddd, DD MMM YYYY");
       }
     }
 
@@ -27,28 +27,3 @@ export default class StaffDayHeader extends React.Component {
       </div>
     }
 }
-
-
-// return <h2 style={{
-//         fontSize: 20,
-//         margin: 0,
-//         marginBottom: 10,
-//         borderBottom: "1px solid #eee",
-//         paddingBottom: 5
-//     }}>
-//     <div style={{display: "inline-block"}}>
-//         {staffMember.first_name} {staffMember.surname}
-//     </div>
-//     <div style={{
-//         display: "inline-block",
-//         fontWeight: "normal",
-//         marginLeft: 4,
-//         color: "#999",
-//         fontSize: 16
-//     }}>
-//         {rotaedHours}h rotaed, {clockedHours}h clocked, {acceptedHours}h accepted <span className={ differenceClass }>{differenceMessage}</span>
-//     </div>
-//     <div style={{float: "right"}}>
-//         { this.venueNameSection() }{ this.dateSection() }
-//     </div>
-// </h2>

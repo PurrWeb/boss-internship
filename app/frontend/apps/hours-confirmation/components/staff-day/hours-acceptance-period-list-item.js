@@ -33,7 +33,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
         } else if ( readonly ){
           reasonSection = <p>N/A</p>;
         } else {
-          reasonSection = <textarea
+          reasonSection = <textarea className="boss-time-shift__textarea"
             value={ hoursAcceptancePeriod.reason_note || '' }
              onChange={(event) => {
                let reasonNote = event.target.value;
@@ -76,19 +76,10 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                       <span className="boss-time-shift__label-text">Reason</span>
                     </p>
                     <p className="boss-time-shift__message-value"> N/A </p>
-                    <textarea name="time-shift-reason" className="boss-time-shift__textarea"> </textarea>
+                      {reasonSection}
                   </div>
                 </div>
-                <div className="boss-time-shift__actions">
-                  <p className="boss-time-shift__status">
-                    <span className="boss-time-shift__status-count">10</span>h Accepted.
-                  </p>
-                  <a href="::javascript" className="boss-button boss-button_role_success boss-time-shift__button boss-time-shift__button_role_accept-shift">
-                    Accepted
-                    <span className="boss-time-shift__button-count"> 10 </span>
-                    h
-                  </a>
-                </div>
+                {this.getAcceptUi()}
               </div>
               <div className="boss-time-shift__break">
                 <BreakList
@@ -193,16 +184,19 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
             if (!this.props.hasClockedOut) {
                 return <span></span>
             } else {
-                return <div className="boss2-buttons-group boss2-from-to-block_adjust_buttons-group">
-                    <a
+                return <div className="boss-time-shift__actions">
+                 <button
                         data-test-marker-accept-hours-acceptance-period
                         onClick={ acceptButtonOnClick }
-                        className="boss2-button boss2-button_role_accepted boss2-from-to-block_adjust_button">
-                        Accept {stats.hours}h
-                    </a>
+                        className="boss-button boss-button_role_success boss-time-shift__button boss-time-shift__button_role_accept-shift">
+                        Accepted 
+                        <span className="boss-time-shift__button-count">
+                           {' ' + stats.hours}h
+                        </span>
+                    </button>
 
-                    <a
-                        className="boss2-button boss2-button_role_exclamation boss2-from-to-block_adjust_button"
+                    <button
+                        className="boss-button boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_delete-shift"
                         data-test-marker-delete-hours-acceptance-period
                         onClick={() => {
                             this.props.boundActions.deleteHoursAcceptancePeriod({
@@ -211,59 +205,25 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                             })
                         }}>
                         Delete
-                    </a>
+                    </button>
                 </div>
             }
         } else {
             return <div>
-                <div style={{
-                    color: "green",
-                    fontWeight: "bold",
-                    fontSize: 20,
-                    marginBottom: 4
-                }}>
+                <p className="boss-time-shift__status  boss-time-shift__status_state_visible">
                     {stats.hours}h ACCEPTED
-                </div>
+                </p>
                 { !this.props.readonly && 
-                  <a
-                      className="boss2-button boss2-button_role_exclamation"
+                  <button
+                      className="boss-button boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_unaccept-shift boss-time-shift__button_state_visible"
                       onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
                           hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
                           errorHandlingId: this.componentId
                       })}>
                       Unaccept
-                  </a>
+                  </button>
                 }
             </div>
         }
     }
 }
-
-
-
-
-            // <div className="panel-body">
-            //   <div
-            //     className="row"
-            //     data-test-marker-hours-acceptance-period-item
-            //   >
-            //     { this.getModal() }
-            //         <div className="large-5 small-12 column mb-md">
-            //             <div style={periodTimeSelectorStyles}>
-
-            //             </div>
-            //         </div>
-            //         <div className="large-3 small-12 column">
-            //             <div className="staff-day__sub-heading">Reason</div>
-            //             <div>
-            //               {reasonSection}
-            //             </div>
-            //         </div>
-            //         <div className="large-2 column">
-            //           {this.getAcceptUi()}
-            //         </div>
-            //       <ComponentErrors errorHandlingId={this.componentId} extraStyle={{marginTop: 4}}/>
-            //   </div>
-            //   <div>
-            //     <div className="staff-day__sub-heading">Breaks</div>
-            // </div>

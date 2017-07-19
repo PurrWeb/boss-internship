@@ -13,7 +13,7 @@ export default class ShiftTimeSelector extends Component {
     render(){
         return <div className="boss-time-shift__interval">
             <div className="boss-time-shift__hours">
-                <p className="boss-time-shift__label">
+                <div className="boss-time-shift__label">
                     <span className="boss-time-shift__label-text">Start</span>
                     <div>
                       <ShiftTimeInput
@@ -26,13 +26,13 @@ export default class ShiftTimeSelector extends Component {
                             this.onChange("starts_at", newValue);
                         } } />
                     </div>
-                </p>
+                </div>
               </div>
 
               <div className="boss-time-shift__delimiter"></div>
 
                 <div className="boss-time-shift__hours">
-                  <p className="boss-time-shift__label">
+                  <div className="boss-time-shift__label">
                     <span className="boss-time-shift__label">End</span>
                       <div>
                         <ShiftTimeInput
@@ -45,7 +45,7 @@ export default class ShiftTimeSelector extends Component {
                                 this.onChange("ends_at", newValue);
                             }} />
                       </div>
-                    </p>
+                    </div>
                 </div>
             {this.getErrorMessages()}
         </div>

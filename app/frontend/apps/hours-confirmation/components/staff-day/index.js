@@ -45,13 +45,6 @@ export default class StaffDay extends React.Component {
         var amendedClockInPeriods = this.props.hoursAcceptancePeriods
         var {staffMember} = this.props;
 
-        var style = {
-            transition: ".2s all",
-            maxHeight: 1000,
-            marginTop: 20,
-            marginBotoom: 20,
-        };
-
         if (this.props.markedAsDone){
             style.maxHeight = 0;
             style.overflow = "hidden";
@@ -92,8 +85,8 @@ export default class StaffDay extends React.Component {
         let rotaedHours = rotaedStats.hours;
         let rotaedAcceptedHoursDifference = utils.round(rotaedHours - acceptedStats.hours, 2);
 
-        return <div className="boss-page-main__inner boss-page-main__inner_layout_sidebar boss-page-main__inner_context_stack" style={style}>
-                <aside className="boss-page-main__sidebar">
+        return <div className="boss-hrc boss-hrc_context_stack">
+                <div className="boss-hrc__side">
                   <StaffDayAside
                     staffMember={this.props.staffMember}
                     rotaedHours={rotaedHours}
@@ -102,8 +95,8 @@ export default class StaffDay extends React.Component {
                     rotaedAcceptedHoursDifference={rotaedAcceptedHoursDifference}
                     staffTypeObject={staffType}
                   />
-                </aside>
-                <section className="boss-page-main__middle">
+                </div>
+                <div className="boss-hrc__main">
                     <div className="boss-hrc">
                       <StaffDayHeader
                         staffMember={this.props.staffMember}
@@ -160,7 +153,7 @@ export default class StaffDay extends React.Component {
                           />
                         </div>
                     </div>
-                </section>
+                </div>
             </div>
 
     }
