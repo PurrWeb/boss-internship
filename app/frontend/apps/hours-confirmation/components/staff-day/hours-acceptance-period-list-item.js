@@ -186,6 +186,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
             } else {
                 return <div className="boss-time-shift__actions">
                  <button
+                        type="button"
                         data-test-marker-accept-hours-acceptance-period
                         onClick={ acceptButtonOnClick }
                         className="boss-button boss-button_role_success boss-time-shift__button boss-time-shift__button_role_accept-shift">
@@ -196,6 +197,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                     </button>
 
                     <button
+                        type="button"
                         className="boss-button boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_delete-shift"
                         data-test-marker-delete-hours-acceptance-period
                         onClick={() => {
@@ -215,6 +217,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                 </p>
                 { !this.props.readonly &&
                   <button
+                      type="button"
                       className="boss-button boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_unaccept-shift boss-time-shift__button_state_visible"
                       onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
                           hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,

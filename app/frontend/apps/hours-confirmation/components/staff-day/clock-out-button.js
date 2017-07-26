@@ -13,7 +13,7 @@ export default class ClockOutButton extends React.Component {
             return null;
         }
         return <div className="boss-hrc__action">
-            <button
+            <button type="button"
                 data-test-marker-force-clock-out
                 className="boss-button boss-button_type_small boss-button_role_exclamation boss-hrc__action-btn"
                 onClick={this.props.clockOut}
