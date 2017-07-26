@@ -12,17 +12,15 @@ export default class ClockOutButton extends React.Component {
         if (status === "clocked_out") {
             return null;
         }
-        return <div className="row align-middle">
-            <div className="shrink column">
-                <button
-                    data-test-marker-force-clock-out
-                    className="boss2-button boss2-button_type_small boss2-button_role_exclamation"
-                    onClick={this.props.clockOut}
-                    style={{marginTop: 4, marginLeft: 4}}>
-                    Clock Out
-                </button>
-            </div>
-            <div className="shrink column">
+        return <div className="boss-hrc__action">
+            <button
+                data-test-marker-force-clock-out
+                className="boss-button boss-button_type_small boss-button_role_exclamation boss-hrc__action-btn"
+                onClick={this.props.clockOut}
+                >
+                Clock Out
+            </button>
+            <div className="boss-hrc__action-text">
                 Clock out to edit hours.
             </div>
         </div>

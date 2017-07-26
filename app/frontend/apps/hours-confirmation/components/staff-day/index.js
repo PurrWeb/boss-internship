@@ -44,6 +44,7 @@ export default class StaffDay extends React.Component {
     render(){
         var amendedClockInPeriods = this.props.hoursAcceptancePeriods
         var {staffMember} = this.props;
+        var style = {}
 
         if (this.props.markedAsDone){
             style.maxHeight = 0;

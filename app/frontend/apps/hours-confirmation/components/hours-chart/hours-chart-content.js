@@ -19,7 +19,7 @@ var scrollOptions = {
 var innerWidth = 480;
 var innerHeight = 80;
 var padding = 50;
-var paddingRight = 200;
+var paddingRight = 180;
 var labelSpacing = 150;
 var barHeight = 25;
 var outerWidth = innerWidth + padding + paddingRight;
@@ -179,7 +179,7 @@ export default class HoursChartUi extends React.Component {
             .enter()
             .append("g")
             .attr("transform", function(interval, i){
-                var x = xScale(interval.startOffsetInHours) + padding
+                var x = xScale(interval.startOffsetInHours) + padding - 30;
                 return "translate(" + x + "," + y + ")"
             })
             .attr("class", function(interval){
