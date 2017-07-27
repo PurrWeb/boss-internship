@@ -39,6 +39,12 @@ import "babel-polyfill"
 import RotaApp from "./apps/rota/rota-app"
 registerComponent("RotaApp", RotaApp)
 
+import CheckListsApp from "./apps/check-list"
+registerComponent("CheckListsApp", CheckListsApp)
+
+import Submissions from "./apps/submissions"
+registerComponent("Submissions", Submissions)
+
 import StaffTypeRotaApp from "./apps/staff-type-rota/staff-type-rota-app"
 registerComponent("StaffTypeRotaApp", StaffTypeRotaApp);
 
