@@ -167,6 +167,7 @@ Rails.application.routes.draw do
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
         get 'version', to: 'version#version'
+
         resources :check_lists, only: [:index, :create, :update, :destroy] do
           collection do
             post :submit
@@ -174,6 +175,7 @@ Rails.application.routes.draw do
         end
 
         resources :check_list_submissions, path: "checklist_submissions", only: [:index]
+
         resources :test, only: [] do
           collection do
             get :get
