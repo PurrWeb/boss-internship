@@ -54,7 +54,7 @@ const ACTION_HANDLERS = {
       .setIn(['pagination', 'perPage'], perPage)
       .setIn(['pagination', 'pageCount'], Math.ceil(size / perPage))
       .setIn(['filter', 'status'], status)
-      .setIn(['filter', 'createdBy'], parseInt(created_by))
+      .setIn(['filter', 'createdBy'], created_by)
       .setIn(['filter', 'range', 'startDate'], momentStartDate)
       .setIn(['filter', 'range', 'endDate'], momentEndDate);
     

@@ -1,5 +1,5 @@
 import { createConfirmation } from 'react-confirm';
-import WarningModal from '~components/warning-modal';
+import WarningModal from '~/components/warning-modal';
 
 // create confirm function
 const confirm = createConfirmation(WarningModal);

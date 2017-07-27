@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BossModal from '~components/boss-modal';
 import { confirmable } from 'react-confirm';
 import Modal from 'react-modal';
 
