@@ -42,7 +42,7 @@ export default class ShiftTimeInput extends Component {
         var options = this.getPossibleShiftTimes().map(function(timeString){
             return {
                 value: timeString,
-                label: timeString
+                label: timeString,
             }
         });
 

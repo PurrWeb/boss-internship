@@ -29,7 +29,7 @@ export default (props) => {
 
   let differenceMessage = getDifferenceMessage(rotaedAcceptedHoursDifference);
 
-  return <div className="boss-page-main__widget">
+  return <div className="boss-hrc__user-info">
     <div className="boss-user-badge">
       <div className="boss-user-badge__avatar">
         <div className="boss-user-badge__avatar-inner">
