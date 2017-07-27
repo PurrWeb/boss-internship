@@ -7,6 +7,8 @@ class Venue < ActiveRecord::Base
   has_many :other_staff_members, through: :staff_member_venues, source: :staff_member
   has_many :venue_reminder_users
   has_many :reminder_users, through: :venue_reminder_users, source: :user
+  has_many :check_list_submissions
+  has_many :check_lists
 
   before_create :generate_rollbar_guid
 
