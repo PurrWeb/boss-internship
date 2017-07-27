@@ -11,6 +11,9 @@ Rails.application.routes.draw do
       passwords: 'users/passwords'
     }
 
+    resources :check_lists, only: [:index]
+    resources :check_list_submissions, path: "checklist_submissions", only: [:index]
+
     resources :change_orders, only: [:index, :show, :edit, :update, :destroy] do
       collection do
         get :submitted
@@ -164,6 +167,13 @@ Rails.application.routes.draw do
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
         get 'version', to: 'version#version'
+        resources :check_lists, only: [:index, :create, :update, :destroy] do
+          collection do
+            post :submit
+          end
+        end
+
+        resources :check_list_submissions, path: "checklist_submissions", only: [:index]
         resources :test, only: [] do
           collection do
             get :get

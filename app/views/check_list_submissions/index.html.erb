@@ -1,0 +1,20 @@
+<script>
+  window.boss.store.submissions = <%= submissions.to_json.html_safe %>;
+  window.boss.store.accessToken = "<%= access_token.token %>";
+  window.boss.store.currentVenue = <%= current_venue.to_json.html_safe %>;
+  window.boss.store.venues = <%= venues.to_json.html_safe %>;
+</script>
+
+<%= react_component('Submissions', {
+  submissions: submissions,
+  accessToken: access_token.token,
+  currentVenue: current_venue,
+  venues: venues,
+  currentPage: page,
+  size: size,
+  perPage: per_page,
+  status: status,
+  created_by: created_by,
+  startDate: start_date,
+  endDate: end_date,
+}) %>
