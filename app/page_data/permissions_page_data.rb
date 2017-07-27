@@ -50,6 +50,11 @@ class PermissionsPageData
           path: @path.holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday))
         },
         {
+          description: "Staff Members",
+          permitted: role.can?(:manage, :staff_members),
+          path: @path.staff_members_path
+        },
+        {
           description: "Add Staff Member",
           permitted: role.can?(:manage, :staff_members),
           path: @path.new_staff_member_path

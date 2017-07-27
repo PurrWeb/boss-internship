@@ -11,7 +11,6 @@ export default class HeaderDropdown extends Component {
       quickMenu: this.props.quickMenu,
     };
     this.scrollOptions = {
-      crollbars: true,
       mouseWheel: true,
       interactiveScrollbars: true,
       shrinkScrollbars: 'scale',
