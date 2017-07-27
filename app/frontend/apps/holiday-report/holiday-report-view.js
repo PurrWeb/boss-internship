@@ -5,9 +5,9 @@ import { appRoutes } from "~/lib/routes"
 import HolidayReportStaffFinder from "./holiday-report-staff-finder"
 import ReportsHeader from "./reports-header"
 import ReportsBody from "./reports-body"
-import WeekAndVenueSelector from "~components/week-and-venue-selector"
+import WeekAndVenueSelector from "~/components/week-and-venue-selector"
 
-export default class HolidayReportView extends React.Component {
+export class HolidayReportView extends React.Component {
   render() {
     let accessibleVenues = _.pick(this.props.venues, (venue, clientId) => {
       return this.props.pageOptions.accessibleVenueIds.includes(venue.serverId)

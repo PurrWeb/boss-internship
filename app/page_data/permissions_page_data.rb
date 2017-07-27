@@ -29,7 +29,7 @@ class PermissionsPageData
         },
         {
           description: "Safe Checks",
-          permitted: !user.security_manager?,
+          permitted: user.present? && !user.security_manager?,
           path: @path.safe_checks_path
         },
       ]
@@ -41,7 +41,7 @@ class PermissionsPageData
       items: [
         {
           description: "Hours Confirmation",
-          permitted: !user.security_manager?,
+          permitted: user.present? && !user.security_manager?,
           path: @path.current_hours_confirmation_index_path
         },
         {

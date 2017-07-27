@@ -25,6 +25,8 @@ window.ReactDOM = ReactDOM;
 if (window.boss.currentLayout !== 'oldLayout') {
     // Import all sass from submodule(boss-css repo)
     require ('./assets/sass/index.sass');
+} else {
+    require ('./assets/sass/quick-menu.sass')
 }
 
 import './mobile-menu';
@@ -79,13 +81,16 @@ registerComponent("VenueFinder", VenueFinder);
 import FruitPopover from "./components/shared/fruit-popover"
 registerComponent("FruitPopover", FruitPopover);
 
+import {EmptyHeader} from "./components/containers/header/header.js"
+registerComponent("EmptyHeader", EmptyHeader);
+
 import Header from "./components/containers/header/header.js"
 registerComponent("Header", Header);
 
 import DetailsModal from "./components/safe-checks/details-modal"
 registerComponent("DetailsModal", DetailsModal)
 
-import WeekPicker from "~components/week-picker"
+import WeekPicker from "~/components/week-picker"
 
 import AppVersionChecker from '~/components/app-version-checker';
 

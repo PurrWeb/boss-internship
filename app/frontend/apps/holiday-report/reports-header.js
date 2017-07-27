@@ -1,7 +1,7 @@
 import React from "react"
-import WeekAndVenueSelector from "~components/week-and-venue-selector"
-import WeekPicker from "~components/week-picker"
-import { appRoutes } from "~lib/routes"
+import WeekAndVenueSelector from "~/components/week-and-venue-selector"
+import WeekPicker from "~/components/week-picker"
+import { appRoutes } from "~/lib/routes"
 import moment from "moment"
 
 export default class ReportsHeader extends React.Component {

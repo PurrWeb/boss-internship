@@ -2,6 +2,17 @@ import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import HeaderDropdown from './components/header-dropdown';
 
+
+export const EmptyHeader = () => {
+  return (
+    <header className="boss-page-header">
+      <div className="boss-page-header__inner">
+        <a className="boss-page-header__logo">Boss</a>
+      </div>
+    </header>    
+  )
+}
+
 export default class Header extends Component {
 
   constructor(props) {
