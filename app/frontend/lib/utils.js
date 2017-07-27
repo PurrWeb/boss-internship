@@ -12,6 +12,13 @@ function replaceFunctionPropsWithStrings(obj){
 }
 
 var utils =  {
+    insertUrlParams: function(params) {
+      return Object.keys(params).filter(function(k) {
+        return (params[k] !== undefined) && (params[k] !== null);
+      }).map(function(k) {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+      }).join('&')
+    },
     stringEndsWith: function(string, suffix) {
         return string.slice(-suffix.length) == suffix;
     },
