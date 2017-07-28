@@ -17,7 +17,14 @@ class CompleteFruitOrders
 
       FruitOrderNotificationMailer.
         completed_fruit_order_mail(
-          to: ['fruit@jsmbars.co.uk', 'sina@jsmbars.co.uk', 'pwoods@totalproduce.com', 'imack@totalproduce.com', 'Mike@jsmbars.co.uk'],
+          to: [
+            'fruit@jsmbars.co.uk',
+            'sina@jsmbars.co.uk',
+            'pwoods@totalproduce.com',
+            'imack@totalproduce.com',
+            'Mike@jsmbars.co.uk',
+            'jrowe@totalproduce.com'
+          ],
           fruit_order_ids: fruit_orders.pluck(:id)
         ).deliver_now
     end
