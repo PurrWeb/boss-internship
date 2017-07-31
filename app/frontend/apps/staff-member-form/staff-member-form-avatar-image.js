@@ -1,7 +1,7 @@
 import React from "react"
-import StaffImageInput from "~components/staff-image-input"
+import StaffImageInput from "~/components/staff-image-input"
 import $ from "jquery"
-import AvatarPreview from "~components/avatar-preview"
+import AvatarPreview from "~/components/avatar-preview"
 import { ModalContainer, ModalDialog} from "react-modal-dialog"
 
 export default class StaffMemberFormAvatarImage extends React.Component {

@@ -1,8 +1,8 @@
 import React from "react"
 import { connect } from "react-redux"
 import _ from "underscore"
-import { appRoutes } from "~lib/routes"
-import GenericRotaNavigation from "~components/rota-navigation"
+import { appRoutes } from "~/lib/routes"
+import GenericRotaNavigation from "~/components/rota-navigation"
 
 class RotaNavigation extends React.Component {
     render(){

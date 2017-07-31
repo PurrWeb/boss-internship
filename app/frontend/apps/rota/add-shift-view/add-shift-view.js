@@ -1,7 +1,7 @@
 import React from "react"
-import ShiftTimeSelector from "~components/shift-time-selector"
+import ShiftTimeSelector from "~/components/shift-time-selector"
 import RotaStaffFinder from "../staff-finder/staff-finder"
-import ShiftTypeSelector from "~components/shift-type-selector"
+import ShiftTypeSelector from "~/components/shift-type-selector"
 
 export default class AddShiftView extends React.Component {
     static propTypes = {

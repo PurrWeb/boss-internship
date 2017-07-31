@@ -168,8 +168,65 @@ var utils =  {
         var parts = str.match(/([A-Z]?[a-z]*)/g)
         parts = parts.filter(part => part !== "");
         return parts.join("_").toUpperCase();
-    }
-}
+    },
+    generateQuickMenuAlias(text){
+      var splitedText = text.split(' ');
+      if ( splitedText.length > 1 ) {
+        return splitedText[0][0] + splitedText[1][0].toLowerCase();
+      } else {
+        return text.slice(0,2);
+      }
+    },
+    quickMenuHighlightResults(result, searchQuery){
+      const searchQueryFilters = searchQuery.split(' ').filter(i => i);
+      const uniqueFilter = searchQueryFilters.filter((v, i, a) => a.indexOf(v) === i);
+      const query = new RegExp(uniqueFilter.join("|"), "gi");
 
+      return result.map(parentItem => {
+        if (parentItem.highlightedName) {
+          parentItem.highlightedName = parentItem.highlightedName.replace(/(<strong style="background-color:#FF9">|<\/strong>)/ig, "");
+        }
+        parentItem.highlightedName = parentItem.name.replace(query, matched => {
+          return `<strong style="background-color:#FF9">${matched}</strong>`
+        });
+        const childItems = parentItem.items.map(childItem => {
+          if (childItem.highlightedDescription) {
+            childItem.highlightedDescription = childItem.highlightedDescription.replace(/(<strong style="background-color:#FF9">|<\/strong>)/ig, "")
+          }
+          childItem.highlightedDescription = childItem.description.replace(query, matched => {
+            return `<strong style="background-color:#FF9">${matched}</strong>`
+          });
+          return childItem;
+        });
+        parentItem.items = childItems;
+        return parentItem;
+      });
+    },
+    quickMenuFilter(searchQuery, quickMenu){
+      const searchQueryFilters = searchQuery.split(' ').filter(i => i);
+      let result = []; 
+
+      result = searchQueryFilters.reduce((menu, filter) => {
+        const lowerFilter = filter.toLowerCase();
+        return menu.map((parentItem) => {
+          let items = [];
+          if (parentItem.name.toLowerCase().indexOf(lowerFilter) >= 0) {
+            items = parentItem.items;
+          } else {
+            items = parentItem.items.filter(childItem => {
+              const lowerDescription = childItem.description.toLowerCase();
+              return lowerDescription.indexOf(lowerFilter) >= 0;
+            });
+          }
+          return {
+            name: parentItem.name,
+            color: parentItem.color,
+            items: items
+          };
+        });
+      }, quickMenu).filter(i => !!i.items.length);
+      return result;
+    },
+}
 
 export default utils;

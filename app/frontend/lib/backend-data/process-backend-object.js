@@ -1,5 +1,5 @@
 import _ from "underscore"
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 
 const unpersistedObjectPrefix =  "UNPERSISTED_OBJECT_"
 

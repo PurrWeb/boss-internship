@@ -1,8 +1,8 @@
 import React from "react"
 import StaffTypeRotaStaffFinder from "./staff-type-rota-staff-finder"
-import ShiftTimeSelector from "~components/shift-time-selector"
-import VenueDropdown from "~components/venue-dropdown"
-import ShiftTypeSelector from "~components/shift-type-selector"
+import ShiftTimeSelector from "~/components/shift-time-selector"
+import VenueDropdown from "~/components/venue-dropdown"
+import ShiftTypeSelector from "~/components/shift-type-selector"
 
 export default class AddShiftView extends React.Component {
     render(){

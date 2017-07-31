@@ -1,7 +1,7 @@
 import React from "react"
-import Validation from "~lib/validation"
+import Validation from "~/lib/validation"
 import BreakListItem from "./break-list-item"
-import ValidationResult from "~components/validation-result"
+import ValidationResult from "~/components/validation-result"
 
 export default class BreakList extends React.Component {
     render(){

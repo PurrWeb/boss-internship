@@ -1,9 +1,9 @@
 import React from "react"
 import StaffDayUi from "../components/staff-day"
 import { connect } from "react-redux"
-import RotaDate from "~lib/rota-date"
-import { selectClockInDayDetails } from "~redux/selectors"
-import actionCreators from "~redux/actions"
+import RotaDate from "~/lib/rota-date"
+import { selectClockInDayDetails } from "~/redux/selectors"
+import actionCreators from "~/redux/actions"
 import { bindActionCreators } from "redux"
 
 class StaffDay extends React.Component {

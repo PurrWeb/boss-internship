@@ -1,6 +1,6 @@
 import React from "react"
 import expect from "expect"
-import { simpleRender } from "~lib/test-helpers"
+import { simpleRender } from "~/lib/test-helpers"
 import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
 import HoursConfirmationApp from "./index"

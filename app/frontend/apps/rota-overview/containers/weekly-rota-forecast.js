@@ -1,12 +1,12 @@
 import React from "react"
 import _ from "underscore"
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import { connect } from "react-redux"
 import RotaForecastUi from "../components/rota-forecast"
-import actionCreators from "~redux/actions"
-import { selectFetchWeeklyRotaIsInProgress } from "~redux/selectors"
-import Spinner from "~components/spinner"
-import ComponentErrors from "~components/component-errors"
+import actionCreators from "~/redux/actions"
+import { selectFetchWeeklyRotaIsInProgress } from "~/redux/selectors"
+import Spinner from "~/components/spinner"
+import ComponentErrors from "~/components/component-errors"
 
 class WeeklyRotaForecast extends React.Component {
     static propTypes = {

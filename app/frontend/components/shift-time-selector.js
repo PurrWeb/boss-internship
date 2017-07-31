@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import ShiftTimeInput from "./shift-time-input.js"
-import validation from "~lib/validation"
-import ErrorMessage from "~components/error-message.js"
+import validation from "~/lib/validation"
+import ErrorMessage from "~/components/error-message.js"
 
 export default class ShiftTimeSelector extends Component {
     constructor(props){

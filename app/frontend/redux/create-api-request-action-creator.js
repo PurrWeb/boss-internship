@@ -1,5 +1,5 @@
 import _ from "underscore"
-import actions from "~redux/actions"
+import actions from "~/redux/actions"
 
 var registeredApiRequestActionCreators = {};
 var apiRequestActionTypes = [];

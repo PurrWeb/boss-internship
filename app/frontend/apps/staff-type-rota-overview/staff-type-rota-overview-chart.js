@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import _ from "underscore"
-import RotaOverviewChart from "~components/rota-overview-chart"
-import getGroupedShiftBreakdownByTime from "~lib/get-grouped-shift-breakdown-by-time"
-import RotaDate from "~lib/rota-date"
-import getVenueColor from "~lib/get-venue-color"
-import getVenueFromShift from "~lib/get-venue-from-shift"
+import RotaOverviewChart from "~/components/rota-overview-chart"
+import getGroupedShiftBreakdownByTime from "~/lib/get-grouped-shift-breakdown-by-time"
+import RotaDate from "~/lib/rota-date"
+import getVenueColor from "~/lib/get-venue-color"
+import getVenueFromShift from "~/lib/get-venue-from-shift"
 
 const GRANULARITY = 30;
 

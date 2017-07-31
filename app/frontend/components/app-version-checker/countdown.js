@@ -1,5 +1,5 @@
 import React from 'react';
-import utils from '~lib/utils';
+import utils from '~/lib/utils';
 export default class CountDown extends React.PureComponent {
   constructor(props) {
     super(props);

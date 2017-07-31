@@ -1,7 +1,7 @@
 import React from "react"
-import ComponentErrors from "~components/component-errors"
-import rotaStatusTitles from "~lib/rota-status-titles"
-import Spinner from "~components/spinner"
+import ComponentErrors from "~/components/component-errors"
+import rotaStatusTitles from "~/lib/rota-status-titles"
+import Spinner from "~/components/spinner"
 import RotaStatusDropdown from "./rota-status-dropdown"
 
 export default class RotaStatusToggleUi extends React.Component {

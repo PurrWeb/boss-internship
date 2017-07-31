@@ -2,16 +2,16 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import _ from "underscore"
 import ClockInOutStaffFinder from "./staff-finder"
-import actions from "~redux/actions"
+import actions from "~/redux/actions"
 import {
     selectRotaOnClockInOutPage,
     selectLeaveManagerModeIsInProgress,
     selectClockInOutAppIsInManagerMode,
     selectClockInOutAppUserPermissions
-} from "~redux/selectors"
-import ConfirmationModal from "~components/confirmation-modal"
+} from "~/redux/selectors"
+import ConfirmationModal from "~/components/confirmation-modal"
 import LargeStaffTypeSelector from "../components/large-staff-type-selector"
-import getStaffTypesWithStaffMembers from "~lib/get-staff-types-with-staff-members"
+import getStaffTypesWithStaffMembers from "~/lib/get-staff-types-with-staff-members"
 import Header from "../components/header"
 import LoadAppDataDialog from "./load-app-data-dialog"
 import Clock from "../components/clock"

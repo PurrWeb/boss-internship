@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import Select from "react-select"
-import rotaStatusTitles from "~lib/rota-status-titles"
+import rotaStatusTitles from "~/lib/rota-status-titles"
 
 
 export default class RotaStatusDropdown extends Component {

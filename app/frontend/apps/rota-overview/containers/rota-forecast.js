@@ -1,10 +1,10 @@
 import React from "react"
 import _ from "underscore"
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import { connect } from "react-redux"
 import RotaForecastUi from "../components/rota-forecast"
-import actionCreators from "~redux/actions"
-import { selectUpdateRotaForecastInProgress, selectForecastByRotaId } from "~redux/selectors"
+import actionCreators from "~/redux/actions"
+import { selectUpdateRotaForecastInProgress, selectForecastByRotaId } from "~/redux/selectors"
 
 class RotaForecast extends React.Component {
     static propTypes = {

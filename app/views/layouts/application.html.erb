@@ -21,12 +21,13 @@
       window.boss.currentLayout = "<%= @current_layout %>"
       window.boss.currentVersion = "<%= application_version %>";
       <% if logged_in_user_info_json.present? %>
+        window.boss.quickMenu = JSON.parse('<%= raw quick_menu.to_json %>');
         window.boss.rollbarData.currentUser = {
           id: "<%= logged_in_user_info_json[:id] %>",
           name: "<%= logged_in_user_info_json[:name] %>",
           rollbar_guid: "<%= logged_in_user_info_json[:rollbar_guid] %>"
         };
-      <% end%>
+      <% end %>
     </script>
     
     <script src="<%= @bundle_script %>" data-turbolinks-track="true"></script>

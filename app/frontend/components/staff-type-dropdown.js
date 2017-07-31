@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import _ from "underscore"
 import Select from "react-select"
-import { selectStaffTypesWithShifts } from "~redux/selectors"
-import getArrayOfIdsFromReactSelectValue from "~lib/get-array-of-ids-from-react-select-value";
+import { selectStaffTypesWithShifts } from "~/redux/selectors"
+import getArrayOfIdsFromReactSelectValue from "~/lib/get-array-of-ids-from-react-select-value";
 import cx from 'classnames';
 
 export default class StaffTypeDropdown extends Component {

@@ -1,7 +1,7 @@
 import React from "react"
 import d3 from "d3"
-import utils from "~lib/utils"
-import makeRotaHoursXAxis from "~lib/make-rota-hours-x-axis"
+import utils from "~/lib/utils"
+import makeRotaHoursXAxis from "~/lib/make-rota-hours-x-axis"
 
 var innerWidth = 525;
 var innerHeight = 80;

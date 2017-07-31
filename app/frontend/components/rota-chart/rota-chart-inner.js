@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import d3 from "d3"
-import RotaDate from "~lib/rota-date.js"
+import RotaDate from "~/lib/rota-date.js"
 import moment from "moment"
 import _ from 'underscore'
-import utils from "~lib/utils"
-import makeRotaHoursXAxis from "~lib/make-rota-hours-x-axis"
+import utils from "~/lib/utils"
+import makeRotaHoursXAxis from "~/lib/make-rota-hours-x-axis"
 
 const MAX_HEIGHT_PER_PERSON = 20;
 const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;

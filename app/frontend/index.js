@@ -6,8 +6,8 @@ import _ from "underscore"
 import moment from "moment"
 import $ from "jquery"
 import "react-fastclick" // import for side effects
-import * as selectors from "~redux/selectors"
-import '~lib/global-try-catch';
+import * as selectors from "~/redux/selectors"
+import '~/lib/global-try-catch';
 
 window.boss = window.boss || {};
 window.boss.currentLayout = window.boss.currentLayout || 'oldLayout';
@@ -25,6 +25,8 @@ window.ReactDOM = ReactDOM;
 if (window.boss.currentLayout !== 'oldLayout') {
     // Import all sass from submodule(boss-css repo)
     require ('./assets/sass/index.sass');
+} else {
+    require ('./assets/sass/quick-menu.sass')
 }
 
 import './mobile-menu';
@@ -32,7 +34,7 @@ import './vendors/owl.carousel';
 
 import "./lib/load-underscore-mixins"
 
-import "babel-core/polyfill"
+import "babel-polyfill"
 
 import RotaApp from "./apps/rota/rota-app"
 registerComponent("RotaApp", RotaApp)
@@ -65,26 +67,32 @@ import StaffMembersFilterForm from "./apps/staff-members/components/staff-member
 registerComponent("StaffMembersFilterForm", StaffMembersFilterForm);
 
 import HoursConfirmationApp from "./apps/hours-confirmation"
-registerComponent("HoursConfirmationApp", HoursConfirmationApp)
+registerComponent("HoursConfirmationApp", HoursConfirmationApp);
 
 import StaffHoursOverviewApp from "./apps/staff-hours-overview"
-registerComponent("StaffHoursOverviewApp", StaffHoursOverviewApp)
+registerComponent("StaffHoursOverviewApp", StaffHoursOverviewApp);
 
 import RollbarErrorTestApp from "./apps/rollbar-error-test/rollbar-error-test-app"
 registerComponent("RollbarErrorTestApp", RollbarErrorTestApp)
 
 import VenueFinder from "./components/shared/venue-finder"
-registerComponent("VenueFinder", VenueFinder)
+registerComponent("VenueFinder", VenueFinder);
 
 import FruitPopover from "./components/shared/fruit-popover"
-registerComponent("FruitPopover", FruitPopover)
+registerComponent("FruitPopover", FruitPopover);
+
+import {EmptyHeader} from "./components/containers/header/header.js"
+registerComponent("EmptyHeader", EmptyHeader);
+
+import Header from "./components/containers/header/header.js"
+registerComponent("Header", Header);
 
 import DetailsModal from "./components/safe-checks/details-modal"
 registerComponent("DetailsModal", DetailsModal)
 
-import WeekPicker from "~components/week-picker"
+import WeekPicker from "~/components/week-picker"
 
-import AppVersionChecker from '~components/app-version-checker';
+import AppVersionChecker from '~/components/app-version-checker';
 
 $(document).ready(function(){
     let versionCheckerEl = document.createElement("div");

@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import VenueRotaOverviewChart from "./venue-rota-overview-chart"
-import ChartSelectionView from "~components/chart-selection-view"
+import ChartSelectionView from "~/components/chart-selection-view"
 import _ from "underscore"
 import RotaForecast from "./containers/rota-forecast"
-import SelectionDataView from "~components/rota-overview-chart/selection-data-view"
+import SelectionDataView from "~/components/rota-overview-chart/selection-data-view"
 
 export default class RotaOverviewView extends Component {
     constructor(props){

@@ -1,9 +1,9 @@
 import React from "react"
-import actionCreators from "~redux/actions"
+import actionCreators from "~/redux/actions"
 import RotaStatusToggleUi from "./rota-status-toggle-ui"
 import { connect } from "react-redux"
 import _ from "underscore"
-import { selectRotaOnVenueRotaPage } from "~redux/selectors"
+import { selectRotaOnVenueRotaPage } from "~/redux/selectors"
 import oFetch from "o-fetch"
 
 class RotaStatusToggle extends React.Component {

@@ -1,8 +1,8 @@
 import React from "react"
 import _ from "underscore"
-import StaffTypeBadge from "~components/staff-type-badge"
-import StaffHolidaysList from "~components/staff-holidays-list/staff-holidays-list"
-import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
+import StaffTypeBadge from "~/components/staff-type-badge"
+import StaffHolidaysList from "~/components/staff-holidays-list/staff-holidays-list"
+import StaffMemberHolidaysLink from "~/components/staff-member-holidays-link"
 
 export default class StaffListItem extends React.Component {
     static propTypes = {

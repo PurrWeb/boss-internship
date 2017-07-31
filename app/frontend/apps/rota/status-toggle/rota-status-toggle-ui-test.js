@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
 import expect from "expect"
-import {simpleRender} from "~lib/test-helpers"
+import {simpleRender} from "~/lib/test-helpers"
 
 describe("RotaStatusToggleUi", function(){
     it("If the status is in_progress it shows the a dropdown where the status can be changed", function(){

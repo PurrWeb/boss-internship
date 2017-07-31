@@ -1,5 +1,5 @@
-import Shift from "~models/shift"
-import utils from "~lib/utils"
+import Shift from "~/models/shift"
+import utils from "~/lib/utils"
 
 export default {
     getTotalShiftHours(shiftList){

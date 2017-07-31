@@ -1,9 +1,9 @@
 import React from "react"
 import { connect } from "react-redux"
 import {ModalDialog, ModalContainer} from "react-modal-dialog"
-import actionCreators from "~redux/actions"
+import actionCreators from "~/redux/actions"
 import oFetch from "o-fetch"
-import PinInput from "~components/pin-input"
+import PinInput from "~/components/pin-input"
 
 class ConfirmationModal extends React.Component {
     constructor(props){

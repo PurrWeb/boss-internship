@@ -1,5 +1,5 @@
 import React from "react"
-import Spinner from "~components/spinner"
+import Spinner from "~/components/spinner"
 
 export default class KeyDialog extends React.Component {
     render(){

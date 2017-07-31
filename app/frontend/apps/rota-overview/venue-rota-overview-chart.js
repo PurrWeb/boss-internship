@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import _ from "underscore"
-import RotaOverviewChart from "~components/rota-overview-chart"
-import getGroupedShiftBreakdownByTime from "~lib/get-grouped-shift-breakdown-by-time"
-import RotaDate from "~lib/rota-date"
+import RotaOverviewChart from "~/components/rota-overview-chart"
+import getGroupedShiftBreakdownByTime from "~/lib/get-grouped-shift-breakdown-by-time"
+import RotaDate from "~/lib/rota-date"
 
 const GRANULARITY = 30;
 

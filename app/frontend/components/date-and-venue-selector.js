@@ -1,6 +1,6 @@
 import React from "react"
-import DatePicker from "~components/date-picker"
-import VenueDropdown from "~components/venue-dropdown"
+import DatePicker from "~/components/date-picker"
+import VenueDropdown from "~/components/venue-dropdown"
 import _ from "underscore"
 
 export default class DateAndVenueSelector extends React.Component {

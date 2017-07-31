@@ -1,8 +1,8 @@
 import React from "react"
 import { connect } from "react-redux"
-import VenueDropdown from "~components/venue-dropdown"
-import { appRoutes } from "~lib/routes"
-import DateAndVenueSelector from "~components/date-and-venue-selector"
+import VenueDropdown from "~/components/venue-dropdown"
+import { appRoutes } from "~/lib/routes"
+import DateAndVenueSelector from "~/components/date-and-venue-selector"
 
 class PageHeader extends React.Component {
     render(){

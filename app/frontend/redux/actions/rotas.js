@@ -1,8 +1,8 @@
 import createApiRequestActionCreator from "../create-api-request-action-creator"
-import {apiRoutes} from "~lib/routes"
+import {apiRoutes} from "~/lib/routes"
 import makeApiRequestMaker from "../make-api-request-maker"
 import oFetch from "o-fetch"
-import getRotaFromDateAndVenue from "~lib/get-rota-from-date-and-venue"
+import getRotaFromDateAndVenue from "~/lib/get-rota-from-date-and-venue"
 
 export const updateRotaStatus = createApiRequestActionCreator({
     requestType: "UPDATE_ROTA_STATUS",

@@ -2,13 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
 import expect from "expect"
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import StaffListItem from "./index"
-import {ContextProvider, NoOpComponent, simpleRender} from "~lib/test-helpers"
+import {ContextProvider, NoOpComponent, simpleRender} from "~/lib/test-helpers"
 import {createStore} from "redux"
 import AddShiftButton from "./add-shift-button"
-import { getClientId } from "~lib/backend-data/process-backend-object"
-import { processStaffMemberObject, processStaffTypeObject, processHolidayObject } from "~lib/backend-data/process-backend-objects"
+import { getClientId } from "~/lib/backend-data/process-backend-object"
+import { processStaffMemberObject, processStaffTypeObject, processHolidayObject } from "~/lib/backend-data/process-backend-objects"
 
 describe('Rota StaffListItem', function() {
     beforeEach(function(){

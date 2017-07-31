@@ -1,5 +1,5 @@
 import React from "react"
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 import ErrorMessage from "./error-message"
 import {connect} from "react-redux"
 

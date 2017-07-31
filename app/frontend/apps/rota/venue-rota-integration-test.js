@@ -1,14 +1,14 @@
 import React from "react"
 import expect from "expect"
-import { simpleRender } from "~lib/test-helpers"
+import { simpleRender } from "~/lib/test-helpers"
 import RotaApp from "./rota-app"
 import ReactDOM from "react-dom"
 import TestUtils from "react-addons-test-utils"
-import { getClientId } from "~lib/backend-data/process-backend-object"
-import RotaStatusDropdown from "~apps/rota/status-toggle/rota-status-dropdown"
+import { getClientId } from "~/lib/backend-data/process-backend-object"
+import RotaStatusDropdown from "~/apps/rota/status-toggle/rota-status-dropdown"
 import Promise from "bluebird"
 
-import StaffDetailsAndShifts from "~components/staff-details-and-shifts"
+import StaffDetailsAndShifts from "~/components/staff-details-and-shifts"
 import ChartAndFilter from "./chart-and-filter"
 
 import "~lib/load-underscore-mixins"

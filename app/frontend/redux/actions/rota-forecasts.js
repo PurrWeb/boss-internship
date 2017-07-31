@@ -1,7 +1,7 @@
 import createApiRequestActionCreator from "../create-api-request-action-creator"
 import makeApiRequestMaker from "../make-api-request-maker"
-import {apiRoutes} from "~lib/routes"
-import * as backendData from "~lib/backend-data/process-backend-objects"
+import {apiRoutes} from "~/lib/routes"
+import * as backendData from "~/lib/backend-data/process-backend-objects"
 import oFetch from "o-fetch"
 import { registerActionType } from "./index"
 

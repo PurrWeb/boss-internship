@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import { Provider} from "react-redux"
 import ClockInOutView from "./containers/clock-in-out-view"
-import actionCreators from "~redux/actions"
+import actionCreators from "~/redux/actions"
 import AppComponent from "../app-component"
-import utils from "~lib/utils"
+import utils from "~/lib/utils"
 
 export default class RotaApp extends AppComponent {
     componentWillMount(){

@@ -1,17 +1,17 @@
 import React, {Component} from "react"
 import { connect } from "react-redux"
-import utils from "~lib/utils"
-import StaffShiftList from "~components/staff-shift-list"
-import StaffTypeBadge from "~components/staff-type-badge"
-import ClockInStatusBadge from "~components/clock-in-status-badge"
+import utils from "~/lib/utils"
+import StaffShiftList from "~/components/staff-shift-list"
+import StaffTypeBadge from "~/components/staff-type-badge"
+import ClockInStatusBadge from "~/components/clock-in-status-badge"
 import ToggleStaffClockedInButton from "../components/toggle-staff-clocked-in-button"
 import ToggleStaffOnBreakButton from "../components/toggle-staff-on-break-button"
 import {
     selectClockInOutStaffListItemProps,
     selectClockInOutAppIsInManagerMode
-} from "~redux/selectors"
-import actions from "~redux/actions"
-import Spinner from "~components/spinner"
+} from "~/redux/selectors"
+import actions from "~/redux/actions"
+import Spinner from "~/components/spinner"
 import ToolTip from '../components/tooltip';
 
 class ClockInOutStaffListItem extends Component {

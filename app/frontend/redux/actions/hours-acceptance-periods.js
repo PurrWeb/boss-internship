@@ -1,10 +1,10 @@
 import createApiRequestActionCreator from "../create-api-request-action-creator"
 import makeApiRequestMaker, {makeApiRequestMakerIfNecessary} from "../make-api-request-maker"
 import oFetch from "o-fetch"
-import { apiRoutes } from "~lib/routes"
-import utils from "~lib/utils"
-import * as backendData from "~lib/backend-data/process-backend-objects"
-import {objectHasBeenSavedToBackend} from "~lib/backend-data/process-backend-object"
+import { apiRoutes } from "~/lib/routes"
+import utils from "~/lib/utils"
+import * as backendData from "~/lib/backend-data/process-backend-objects"
+import {objectHasBeenSavedToBackend} from "~/lib/backend-data/process-backend-object"
 
 export const deleteHoursAcceptancePeriod = createApiRequestActionCreator({
     requestType: "DELETE_HOURS_ACCEPTANCE_PERIOD",

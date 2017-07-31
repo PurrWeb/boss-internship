@@ -2,7 +2,7 @@ import React from "react"
 import _ from "underscore"
 import moment from "moment"
 import Select from "react-select"
-import StaffMemberHolidaysLink from "~components/staff-member-holidays-link"
+import StaffMemberHolidaysLink from "~/components/staff-member-holidays-link"
 
 export default class ReportsBody extends React.Component {
   renderHolidayCell(holiday) {

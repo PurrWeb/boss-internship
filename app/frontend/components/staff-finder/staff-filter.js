@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import StaffTypeDropdown from "../staff-type-dropdown"
-import VenueDropdown from "~components/venue-dropdown"
+import VenueDropdown from "~/components/venue-dropdown"
 import _ from "underscore"
 
 export default class StaffFilter extends Component {

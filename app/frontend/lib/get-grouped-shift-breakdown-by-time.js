@@ -1,6 +1,6 @@
 import _ from "underscore"
-import RotaDate from "~lib/rota-date"
-import getSamplingTimeOffsetsForDay from "~lib/get-sampling-time-offsets-for-day"
+import RotaDate from "~/lib/rota-date"
+import getSamplingTimeOffsetsForDay from "~/lib/get-sampling-time-offsets-for-day"
 
 /**
 Processes a list of shifts and returns a list of shifts that are scheduled for each
