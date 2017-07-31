@@ -33,6 +33,7 @@ describe("utils.generateQuickMenuAlias", function() {
 describe("quickMenuFilter", function() {
     var quickMenu = [
       {
+        name: "Venue",
         items: [
           {description: "Rota"},
           {description: "Security Rota"},
@@ -40,6 +41,7 @@ describe("quickMenuFilter", function() {
         ]
       },
       {
+        name: "Staff Members",
         items: [
           {description: "Hours Confirmation"},
           {description: "Holidays"},
@@ -47,6 +49,7 @@ describe("quickMenuFilter", function() {
         ]
       },
       {
+        name: "Reports",
         items: [
           {description: "Daily Report"},
           {description: "Weekly Report"},
@@ -57,7 +60,7 @@ describe("quickMenuFilter", function() {
 
     var exQuickMenuOneWord = [
       {
-        name: undefined,
+        name: "Venue",
         color: undefined,
         items: [
           {
@@ -72,7 +75,7 @@ describe("quickMenuFilter", function() {
 
     var exQuickMenuTwoWord = [
       {
-        name: undefined,
+        name: "Venue",
         color: undefined,
         items: [
           {
@@ -84,8 +87,9 @@ describe("quickMenuFilter", function() {
 
     var exQuickMenuHighlighted = [
       {
-        name: undefined,
+        name: "Venue",
         color: undefined,
+        highlightedName: "Venue",
         items: [
           {
             description: "Rota",

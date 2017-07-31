@@ -9,23 +9,23 @@ exports[`Quick menu should opens, when click on icon 1`] = `
   >
     <a
       className="boss-page-header__logo"
+      href="/"
     >
       Boss
     </a>
-    <a
+    <button
       className="boss-page-header__action boss-page-header__action_role_search"
       href="javascript:;"
       onClick={[Function]}
     >
       Search
-    </a>
-    <a
+    </button>
+    <button
       className="boss-page-header__action boss-page-header__action_role_profile"
-      href="#"
       onClick={[Function]}
     >
       Profile
-    </a>
+    </button>
   </div>
 </header>
 `;
@@ -39,23 +39,23 @@ exports[`Quick menu should opens, when click on icon 2`] = `
   >
     <a
       className="boss-page-header__logo"
+      href="/"
     >
       Boss
     </a>
-    <a
+    <button
       className="boss-page-header__action boss-page-header__action_role_search"
       href="javascript:;"
       onClick={[Function]}
     >
       Search
-    </a>
-    <a
+    </button>
+    <button
       className="boss-page-header__action boss-page-header__action_role_profile"
-      href="#"
       onClick={[Function]}
     >
       Profile
-    </a>
+    </button>
     <HeaderDropdown
       closeDropdown={[Function]}
       handleEscPress={[Function]}

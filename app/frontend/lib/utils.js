@@ -203,7 +203,6 @@ var utils =  {
       });
     },
     quickMenuFilter(searchQuery, quickMenu){
-      console.log(quickMenu);
       const searchQueryFilters = searchQuery.split(' ').filter(i => i);
       let result = []; 
 
