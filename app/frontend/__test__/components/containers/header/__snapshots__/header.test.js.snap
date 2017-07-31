@@ -7,15 +7,18 @@ exports[`Quick menu should opens, when click on icon 1`] = `
   <div
     className="boss-page-header__inner"
   >
-    <a
-      className="boss-page-header__logo"
-      href="/"
+    <div
+      className="boss-page-header__group boss-page-header__group_role_logo"
     >
-      Boss
-    </a>
+      <a
+        className="boss-page-header__logo"
+        href="/"
+      >
+        Boss
+      </a>
+    </div>
     <button
       className="boss-page-header__action boss-page-header__action_role_search"
-      href="javascript:;"
       onClick={[Function]}
     >
       Search
@@ -37,15 +40,18 @@ exports[`Quick menu should opens, when click on icon 2`] = `
   <div
     className="boss-page-header__inner"
   >
-    <a
-      className="boss-page-header__logo"
-      href="/"
+    <div
+      className="boss-page-header__group boss-page-header__group_role_logo"
     >
-      Boss
-    </a>
+      <a
+        className="boss-page-header__logo"
+        href="/"
+      >
+        Boss
+      </a>
+    </div>
     <button
       className="boss-page-header__action boss-page-header__action_role_search"
-      href="javascript:;"
       onClick={[Function]}
     >
       Search

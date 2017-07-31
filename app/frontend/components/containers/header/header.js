@@ -30,9 +30,13 @@ export default class Header extends Component {
 
   handleDropdownsClose = (e) => {
     let domNode = ReactDOM.findDOMNode(this);
-
-    if (!domNode || !domNode.contains(e.target)) {
-      this.closeAllDropdowns()
+    let dropdownNode = ReactDOM.findDOMNode(this.headerDropdown);
+    let searchButtonNode = ReactDOM.findDOMNode(this.headerSearchButton);
+    if (searchButtonNode === e.target) {
+      return;
+    }
+    if (!dropdownNode || !dropdownNode.contains(e.target)) {
+      this.closeAllDropdowns();
     }
   };
 
@@ -62,7 +66,13 @@ export default class Header extends Component {
         <div className="boss-page-header__group boss-page-header__group_role_logo">
           <a href="/" className="boss-page-header__logo">Boss</a>
         </div>
-        <button className="boss-page-header__action boss-page-header__action_role_search" onClick={this.handleToggleDropdown} >Search</button>
+        <button
+          className="boss-page-header__action boss-page-header__action_role_search"
+          onClick={this.handleToggleDropdown}
+          ref={(headerSearchButton) => this.headerSearchButton = headerSearchButton}
+        >
+          Search
+        </button>
         <button className="boss-page-header__action boss-page-header__action_role_profile" onClick={this.handleToggleUserDropdown}>Profile</button>
         { this.state.isUserDropdownOpen && 
           <div className="boss-page-header__dropdown boss-page-header__dropdown_role_profile boss-page-header__dropdown_state_opened">
@@ -73,6 +83,7 @@ export default class Header extends Component {
           </div>
         }
         { this.state.isDropdownOpen && <HeaderDropdown
+          ref={(headerDropdown) => this.headerDropdown = headerDropdown}
           quickMenu={ this.props.quickMenu }
           handleEscPress={this.handleEscPress}
           closeDropdown={this.closeAllDropdowns}
