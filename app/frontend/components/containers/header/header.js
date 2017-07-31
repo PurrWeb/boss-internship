@@ -59,8 +59,10 @@ export default class Header extends Component {
   render() {
     return <header className="boss-page-header">
       <div className="boss-page-header__inner">
-        <a href="/" className="boss-page-header__logo">Boss</a>
-        <button href="javascript:;" className="boss-page-header__action boss-page-header__action_role_search" onClick={this.handleToggleDropdown} >Search</button>
+        <div className="boss-page-header__group boss-page-header__group_role_logo">
+          <a href="/" className="boss-page-header__logo">Boss</a>
+        </div>
+        <button className="boss-page-header__action boss-page-header__action_role_search" onClick={this.handleToggleDropdown} >Search</button>
         <button className="boss-page-header__action boss-page-header__action_role_profile" onClick={this.handleToggleUserDropdown}>Profile</button>
         { this.state.isUserDropdownOpen && 
           <div className="boss-page-header__dropdown boss-page-header__dropdown_role_profile boss-page-header__dropdown_state_opened">
