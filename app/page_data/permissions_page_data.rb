@@ -28,6 +28,11 @@ class PermissionsPageData
           path: @path.change_orders_path
         },
         {
+          description: "Fruit Orders",
+          permitted: role.can?(:manage, :fruit_orders),
+          path: @path.fruit_orders_path
+        },
+        {
           description: "Safe Checks",
           permitted: user.present? && !user.security_manager?,
           path: @path.safe_checks_path
