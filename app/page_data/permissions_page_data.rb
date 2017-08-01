@@ -28,6 +28,11 @@ class PermissionsPageData
           path: @path.change_orders_path
         },
         {
+          description: "Fruit Orders",
+          permitted: role.can?(:manage, :fruit_orders),
+          path: @path.fruit_orders_path
+        },
+        {
           description: "Safe Checks",
           permitted: user.present? && !user.security_manager?,
           path: @path.safe_checks_path
@@ -50,7 +55,7 @@ class PermissionsPageData
           path: @path.holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday))
         },
         {
-          description: "Staff Members",
+          description: "Directory",
           permitted: role.can?(:manage, :staff_members),
           path: @path.staff_members_path
         },
@@ -95,6 +100,10 @@ class PermissionsPageData
         {
           description: "Venues",
           path: @path.venues_path
+        },
+        {
+          description: 'API Keys',
+          path: @path.api_keys_path,
         }
       ]
     }
@@ -103,6 +112,10 @@ class PermissionsPageData
       name: "Admin: Users",
       color: "#1abc9c",
       items: [
+        {
+          description: "Directory",
+          path: @path.users_path
+        },
         {
           description: "Invites",
           path: @path.invites_path
@@ -133,16 +146,18 @@ class PermissionsPageData
       ]
     }
 
-    admin_venue = {
-      name: "Admin: Venue",
-      color: "#c0392b",
-      items: reports[:items]
-    }
-
     admin_reports = {
       name: "Admin: Reports",
       color: "#f39c12",
       items: [
+        {
+          description: "Fruit Order Report",
+          path: @path.fruit_order_reports_path
+        },
+        {
+          description: "Change Order Report",
+          path: @path.change_order_reports_path
+        },
         {
           description: "Finance Report",
           path: @path.finance_reports_path
@@ -164,7 +179,6 @@ class PermissionsPageData
       admin_general,
       admin_users,
       admin_staff_members,
-      admin_venue,
       admin_reports
     ]
 
