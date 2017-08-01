@@ -61,7 +61,6 @@ class SafeChecksController < ApplicationController
 
   def create
     safe_check = SafeCheck.new(safe_check_params)
-    save_models = [safe_check]
 
     safe_check_note = SafeCheckNote.new(
       safe_check_note_params.
@@ -72,16 +71,16 @@ class SafeChecksController < ApplicationController
         )
     )
 
-    if safe_check_note_params["note_text"].strip.present?
-      save_models << safe_check_note
-    end
-
     authorize! :manage, safe_check.venue
 
     success = false
-
     ActiveRecord::Base.transaction do
-      success = save_models.map(&:save).all?
+      success = safe_check.save
+      if success
+        success = safe_check_note.save if safe_check.checked_by_note.present?
+      else
+        safe_check_note.valid?
+      end
       raise ActiveRecord::Rollback unless success
     end
 
