@@ -109,6 +109,10 @@ class PermissionsPageData
       color: "#1abc9c",
       items: [
         {
+          description: "Directory",
+          path: @path.users_path
+        },
+        {
           description: "Invites",
           path: @path.invites_path
         }
