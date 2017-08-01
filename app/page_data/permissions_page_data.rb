@@ -100,6 +100,10 @@ class PermissionsPageData
         {
           description: "Venues",
           path: @path.venues_path
+        },
+        {
+          description: 'API Keys',
+          path: @path.api_keys_path,
         }
       ]
     }
