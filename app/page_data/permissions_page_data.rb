@@ -142,16 +142,18 @@ class PermissionsPageData
       ]
     }
 
-    admin_venue = {
-      name: "Admin: Venue",
-      color: "#c0392b",
-      items: reports[:items]
-    }
-
     admin_reports = {
       name: "Admin: Reports",
       color: "#f39c12",
       items: [
+        {
+          description: "Fruit Order Report",
+          path: @path.fruit_order_reports_path
+        },
+        {
+          description: "Change Order Report",
+          path: @path.change_order_reports_path
+        },
         {
           description: "Finance Report",
           path: @path.finance_reports_path
@@ -173,7 +175,6 @@ class PermissionsPageData
       admin_general,
       admin_users,
       admin_staff_members,
-      admin_venue,
       admin_reports
     ]
 
