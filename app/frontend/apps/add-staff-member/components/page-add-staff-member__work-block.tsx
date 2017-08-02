@@ -4,6 +4,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {Control, Form, Errors} from 'react-redux-form';
 import * as Select from 'react-select';
+import DatePicker from 'react-datepicker';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, WorkFormFields} from '../../../interfaces/store-models';
@@ -98,15 +99,22 @@ class Component extends React.Component<PropsFromConnect, State> {
       <div className="boss-form__field">
         <label className="boss-form__label">
           <span className="boss-form__label-text">Sia Badge Expiry Date</span>
-          <Control.text
-            className="boss-form__input"
-            model=".siaBadgeExpiryDate"
-            mapProps={{
-                    className: setInputClass
-                  }}
-            validateOn="blur"
-          />
         </label>
+        <Control.text
+          component={DatePicker}
+          className="boss-form__input"
+          model=".siaBadgeExpiryDate"
+          mapProps={{
+            withPortal: () => 'withPortal',
+            calendarClassName: () => 'date-picker',
+            className: setInputClass,
+            selected: (props) => props.viewValue,
+            onChange: (props) => {
+              return props.onChange;
+            }
+          }}
+          validateOn="blur"
+        />
       </div>
     ) : null;
   }
