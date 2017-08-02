@@ -15,8 +15,8 @@ import steppingBackRegistration from '../../../action-creators/stepping-back-reg
 import {OfType} from '../../../interfaces/index';
 import SelectControl from './select-control';
 import {MainVenueValidators} from '../../../interfaces/forms';
-import {isNotEmptyInput, otherVenuesDontContainMainVenue} from '../../../helpers/index';
-import {isRequiredField, isOtherVenuesDontContainMainVenue} from '../../../constants/form-errors';
+import {isNotEmptyInput, mustBeBlank, otherVenuesDontContainMainVenue} from '../../../helpers/index';
+import {isRequiredField, mustBeBlankForSecurityStaff, isOtherVenuesDontContainMainVenue} from '../../../constants/form-errors';
 import {VenueForm} from '../../../reducers/forms';
 import {hasFormUnfilledRequiredFields, hasFormValidationErrors} from '../../../helpers/validators';
 import changingStepInfo from '../../../action-creators/changing-step-info';
@@ -29,6 +29,7 @@ interface Props {
 
 interface MappedProps {
   readonly venueOptions: Select.Option[];
+  readonly isSecurity: () => boolean;
 }
 
 type PropsFromConnect = PropsExtendedByConnect<Props, MappedProps>;
@@ -56,6 +57,30 @@ class Component extends React.Component<PropsFromConnect, State> {
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
     this.props.dispatch(changeStep('formsData.venueForm', ADD_STAFF_MEMBER_STEPS.VenuesBlock - 1));
   };
+
+  mainVenueFormValidator() {
+    if (this.props.isSecurity()) {
+      return {
+       isFilled: mustBeBlank
+      };
+    } else {
+      return {
+        isFilled: isNotEmptyInput
+      };
+    }
+  }
+
+  mainVenueErrorMessage() {
+    if (this.props.isSecurity()) {
+      return {
+        isFilled: mustBeBlankForSecurityStaff
+      };
+    } else {
+      return {
+        isFilled: isRequiredField
+      };
+    }
+  }
 
   static getVenueOptions(venues: OptionData[]) {
     return venues.map((venueValue) => ({value: venueValue.id, label: venueValue.name}));
@@ -92,17 +117,15 @@ class Component extends React.Component<PropsFromConnect, State> {
                 className=""
                 model=".mainVenue"
                 options={this.props.venueOptions}
-                validators={{
-                  isFilled: isNotEmptyInput,
-                } as MainVenueValidators}
+                validators={ this.mainVenueFormValidator() }
               />
             </div>
 
             <Errors
               model=".mainVenue"
-              messages={{
-                isFilled: isRequiredField
-              }}
+              messages={
+                this.mainVenueErrorMessage()
+              }
               show={{touched: true, focus: false}}
               wrapper={renderErrorsBlock}
               component={renderErrorComponent}
@@ -144,7 +167,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               validateOn="blur"
             />
           </div>
-          
+
           <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
             <input type="button"
                    className="boss-button boss-button_role_back boss-buttons-group_adjust_button"
@@ -161,7 +184,8 @@ class Component extends React.Component<PropsFromConnect, State> {
 
 const mapStateToProps = (state: StoreStructure, ownProps?: {}): MappedProps => {
   return {
-    venueOptions: Component.getVenueOptions(state.app.venues)
+    venueOptions: Component.getVenueOptions(state.app.venues),
+    isSecurity: () => state.app.staffTypes.filter(item => item.name === 'Security')[0].id === state.formsData.workForm.staffType,
   };
 };
 
