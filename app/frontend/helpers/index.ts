@@ -12,6 +12,14 @@ export const isNotEmptyInput = (val: Select.Option | string | number) => {
   }
 };
 
+export const mustBeBlank = (val: Select.Option | string | number) => {
+  if (typeof (val as Select.Option).value !== 'undefined') {
+    return !(val as Select.Option).value;
+  } else {
+    return !val;
+  }
+};
+
 export const otherVenuesDontContainMainVenue = (vals: any) => {
   const { mainVenue, otherVenues } = vals;
 

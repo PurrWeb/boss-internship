@@ -56,7 +56,7 @@ class AddStaffMemberApiCallParams
         first_name: params_json.fetch("first_name"),
         surname: params_json.fetch("surname"),
       },
-      staff_type: StaffType.find_by(params_json.fetch("staff_type_id")),
+      staff_type: StaffType.find_by(id: params_json.fetch("staff_type_id")),
       address_attributes: {
         address: params_json.fetch("address"),
         postcode: params_json.fetch("postcode"),

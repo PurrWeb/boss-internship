@@ -1,4 +1,5 @@
 export const isRequiredField = 'This is a required field!';
+export const mustBeBlankForSecurityStaff = 'Must be blank for security Staff!';
 export const isOtherVenuesDontContainMainVenue = `Other venues list can't contain main venue`;
 export const isWrongEmail = 'It should be a correct email address!';
 export const isPhoneNumber = 'It should be a correct phone number!';
