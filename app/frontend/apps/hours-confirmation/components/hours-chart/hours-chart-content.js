@@ -1,7 +1,7 @@
 import React from "react"
 import d3 from "d3"
-import utils from "~lib/utils"
-import makeRotaHoursXAxis from "~lib/make-rota-hours-x-axis"
+import utils from "~/lib/utils"
+import makeRotaHoursXAxis from "~/lib/make-rota-hours-x-axis"
 import iScroll from 'iscroll'
 import ReactIScroll from 'react-iscroll'
 
