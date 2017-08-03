@@ -69,7 +69,7 @@
 
                 <div class="boss-table__stats">
                   <div class="boss-stats boss-stats_adjust_table">
-                    <p class="boss-stats__text <%= positive?(safe_check.notes.enabled.count) ? 'boss-stats__text_indicator_att' : '' %>">
+                    <p class="boss-stats__text <%= positive?(safe_check.enabled_notes.count) ? 'boss-stats__text_indicator_att' : '' %>">
                       <span><%= safe_check.checked_by_note %></span>
                     </p>
 
@@ -298,7 +298,7 @@
         modal_id: index,
         created_at: safe_check.created_at.to_s(:human),
         checked_by: safe_check.checked_by_note,
-        notes: safe_check.notes.enabled,
+        notes: safe_check.enabled_notes,
         safe_check: safe_check,
         costs: notes_and_coins(safe_check),
         variance_cents: number_to_currency(safe_check.pound_value_for(:variance_cents), unit: '£', precision: 2).gsub("-", "\u2011")

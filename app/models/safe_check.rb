@@ -8,6 +8,7 @@ class SafeCheck < ActiveRecord::Base
    belongs_to :creator, class_name: 'User', foreign_key: 'creator_user_id'
 
    has_many :notes, class_name: 'SafeCheckNote'
+   has_many :enabled_notes, lambda { enabled }, class_name: "SafeCheckNote"
 
    validates :venue, presence: true
    validates :creator, presence: true
