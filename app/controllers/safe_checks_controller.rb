@@ -10,6 +10,7 @@ class SafeChecksController < ApplicationController
       safe_checks = SafeCheck.
         where(venue: venue).
         order(created_at: :desc).
+        includes(:enabled_notes).
         paginate(
           page: params[:page],
           per_page: 20
