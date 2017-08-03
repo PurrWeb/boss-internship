@@ -175,7 +175,7 @@
               <div class="boss-form__row">
                   <div class="boss-form__field boss-form__field_layout_half">
                       <label class="boss-form__label">
-                          <span class="boss-form__label-text">£2 Notes</span>
+                          <span class="boss-form__label-text">£2 Coins</span>
                           <span class="boss-form__units">
                               <span class="boss-form__units-value">£</span>
                               <!-- <input name="£2-notes" type="text" class="boss-form__input" placeholder="0"> -->
@@ -202,7 +202,7 @@
                   </div>
                   <div class="boss-form__field boss-form__field_layout_half">
                       <label class="boss-form__label">
-                          <span class="boss-form__label-text">£1 Notes</span>
+                          <span class="boss-form__label-text">£1 Coins</span>
                           <span class="boss-form__units">
                               <span class="boss-form__units-value">£</span>
                               <!-- <input name="£1-notes" type="text" class="boss-form__input" placeholder="0"> -->
@@ -535,11 +535,15 @@
                   <p class="boss-form__label"><span class="boss-form__label-text boss-form__label-text_type_optional">Note</span></p>
                   <%= fields.text_area(:note_text, label: 'Note', label_class: 'force-not-required', class: 'boss-form__textarea boss-form__textarea_type_transparent') %>
 
-                  <% if (safe_check.errors[:note_text]).present? %>
+                  <% if (safe_check_note.errors.to_a).present? %>
                     <div class="boss-form__error">
                       <p class="boss-form__error-text">
                         <span class="boss-form__error-line">
-                          <%= safe_check.errors[:note_text].join(', ') %>
+                          <%= "Couldn't save note:" %>
+                          <% safe_check_note.errors.keys.each_with_index do |key, index| %>
+                            <%= ', ' if index > 0 %>
+                            <%= "'#{key}' #{safe_check_note.errors[key].first}" %>
+                          <% end %>
                         </span>
                       </p>
                     </div>
