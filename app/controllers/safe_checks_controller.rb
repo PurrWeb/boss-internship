@@ -77,9 +77,7 @@ class SafeChecksController < ApplicationController
     ActiveRecord::Base.transaction do
       success = safe_check.save
       if success
-        success = safe_check_note.save if safe_check.checked_by_note.present?
-      else
-        safe_check_note.valid?
+        (success = safe_check_note.save) if safe_check_note.note_text.present?
       end
       raise ActiveRecord::Rollback unless success
     end
