@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170713103520) do
+ActiveRecord::Schema.define(version: 20170803110533) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255
@@ -632,6 +632,8 @@ ActiveRecord::Schema.define(version: 20170713103520) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "safe_check_notes", ["safe_check_id"], name: "index_safe_check_notes_on_safe_check_id", using: :btree
 
   create_table "safe_checks", force: :cascade do |t|
     t.integer  "venue_id",                 limit: 4,   null: false
