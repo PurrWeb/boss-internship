@@ -33,6 +33,11 @@ class PermissionsPageData
           path: @path.fruit_orders_path
         },
         {
+          description: "Check Lists",
+          permitted: role.can?(:manage, :check_lists),
+          path: @path.check_lists_path
+        },
+        {
           description: "Safe Checks",
           permitted: user.present? && !user.security_manager?,
           path: @path.safe_checks_path
@@ -146,6 +151,16 @@ class PermissionsPageData
       ]
     }
 
+    admin_venues = {
+      name: "Admin: Venue",
+      color: "#f39c12",
+      items: [
+        {
+          description: "Checklist Submissions",
+          path: @path.check_list_submissions_path
+        }
+      ]
+    }
     admin_reports = {
       name: "Admin: Reports",
       color: "#f39c12",
@@ -179,7 +194,8 @@ class PermissionsPageData
       admin_general,
       admin_users,
       admin_staff_members,
-      admin_reports
+      admin_reports,
+      admin_venues
     ]
 
 

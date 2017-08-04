@@ -15,6 +15,10 @@ class Ability
         !user.security_manager?
       end
 
+      can :manage, :check_lists do
+        !user.security_manager?
+      end
+
       can :manage, :fruit_orders do
         !user.security_manager?
       end
