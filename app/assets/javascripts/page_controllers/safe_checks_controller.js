@@ -98,7 +98,16 @@ var updateRealtimeTotalField = function(totalCents){
 };
 
 var updateRealtimeVarienceField = function(varianceCents){
-  updatePlaceHolderValue('.js-total-calculation-variance-result', varianceCents, true);
+  var variancePlaceholderSelector = '.js-total-calculation-variance-result';
+  var alertClass = "boss-form__value_state_alert";
+
+  if(varianceCents < 0){
+    $(variancePlaceholderSelector).addClass(alertClass);
+  } else {
+    $(variancePlaceholderSelector).removeClass(alertClass)
+  }
+
+  updatePlaceHolderValue(variancePlaceholderSelector, varianceCents, true);
 };
 
 var updateRealtimeTotalFloatField = function(floatValueCents){

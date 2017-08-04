@@ -39,6 +39,16 @@
   <div class="boss-page-main__inner">
       <div class="boss-page-main__group boss-page-main__group_adjust_sc-form">
           <%= form_for(safe_check, url: safe_checks_path, method: 'post') do |form| %>
+              <% if safe_check.errors[:base].present? %>
+                <div class="boss-form__error">
+                  <p class="boss-form__error-text">
+                    <span class="boss-form__error-line">
+                      <%= safe_check.errors[:base].to_sentence %>
+                    </span>
+                  </p>
+                </div>
+              <% end %>
+
               <div class="boss-form__field">
                 <label class="boss-form__label">
                     <span class="boss-form__label-text boss-form__label-text_type_required">Checked by</span>
@@ -440,7 +450,7 @@
                               value: safe_check.pound_value_for(:out_to_order_cents).to_int_if_whole,
                               label: SafeCheck.label_for(:out_to_order_cents),
                               step: 0.01,
-                              class: ['boss-form__input', 'js-total-calculation-out-to-order-value']
+                              class: ['boss-form__input', 'js-total-calculation-out-to-order-value', 'js-total-calculation-watch-field']
                             ) %>
                           </span>
                       </label>
@@ -515,18 +525,16 @@
 
               <div class="boss-form__field">
                   <p class="boss-form__label"><span class="boss-form__label-text">Variance</span></p>
-                  <p class="boss-form__value boss-form__value_state_alert">
-                    <span class="js-total-calculation-variance-result">
-                      <% if safe_check.variance_cents.present? %>
-                        <%= number_to_currency(
-                          safe_check.variance_cents / 100.0,
-                          unit: '£',
-                          precision: 2
-                        ) %>
-                      <% else %>
-                        -
-                      <% end %>
-                    </span>
+                  <p class="boss-form__value js-total-calculation-variance-result <%= "boss-form__value_state_alert" if (safe_check.variance_cents || 0) < 0 %>">
+                    <% if safe_check.variance_cents.present? %>
+                      <%= number_to_currency(
+                        safe_check.variance_cents / 100.0,
+                        unit: '£',
+                        precision: 2
+                      ) %>
+                    <% else %>
+                      -
+                    <% end %>
                   </p>
               </div>
 
