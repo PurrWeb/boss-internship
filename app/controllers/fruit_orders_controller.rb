@@ -25,12 +25,6 @@ class FruitOrdersController < ApplicationController
     end
   end
 
-  def show
-    fruit_order = FruitOrder.find(params[:id])
-
-    render locals: { fruit_order: fruit_order }
-  end
-
   def edit
     fruit_order = FruitOrder.find(params[:id])
 
@@ -43,7 +37,7 @@ class FruitOrdersController < ApplicationController
 
     if fruit_order.update_attributes(update_params)
       flash[:success] = "Update successful"
-      redirect_to fruit_order_path(fruit_order)
+      redirect_to fruit_orders_path
     else
       flash.now[:error] = "There was a problem updating this fruit order"
       render 'index', locals: {
@@ -112,7 +106,7 @@ class FruitOrdersController < ApplicationController
     )
 
     flash[:success] = "Delete successful"
-    redirect_to(fruit_order_path(fruit_order))
+    redirect_to(fruit_orders_path)
   end
 
   private
