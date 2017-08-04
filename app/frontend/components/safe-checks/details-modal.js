@@ -97,7 +97,7 @@ export default class DetailsModal extends React.Component {
 
                   <div className="boss-stats__table-row">
                     <div className="boss-stats__table-cell">
-                      <p className="boss-stats__table-text boss-stats__table-text_role_label">£2 Notes</p>
+                      <p className="boss-stats__table-text boss-stats__table-text_role_label">£2 Coins</p>
                     </div>
 
                     <div className="boss-stats__table-cell">
@@ -107,7 +107,7 @@ export default class DetailsModal extends React.Component {
 
                   <div className="boss-stats__table-row">
                     <div className="boss-stats__table-cell">
-                      <p className="boss-stats__table-text boss-stats__table-text_role_label">£1 Notes</p>
+                      <p className="boss-stats__table-text boss-stats__table-text_role_label">£1 Coins</p>
                     </div>
 
                     <div className="boss-stats__table-cell">
