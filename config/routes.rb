@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :fruit_orders, only: [:index, :show, :edit, :update, :destroy] do
+    resources :fruit_orders, only: [:index, :edit, :update, :destroy] do
       collection do
         get :submitted
         put :update_current
