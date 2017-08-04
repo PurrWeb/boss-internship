@@ -22,8 +22,8 @@ class ChecklistSubmissionsIndexQuery
     @all ||= begin
       result = venue.check_list_submissions
       if (start_date && end_date).present?
-        paresed_start_date = DateTime.strptime(start_date, '%m-%d-%Y').beginning_of_day
-        paresed_end_date = DateTime.strptime(end_date, '%m-%d-%Y').end_of_day
+        paresed_start_date = DateTime.strptime(start_date, '%d-%m-%Y').beginning_of_day
+        paresed_end_date = DateTime.strptime(end_date, '%d-%m-%Y').end_of_day
         result = result.where(created_at: [paresed_start_date..paresed_end_date])
       end
       

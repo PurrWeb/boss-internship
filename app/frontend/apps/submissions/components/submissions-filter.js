@@ -51,6 +51,7 @@ class SubmissionsFilter extends React.PureComponent {
     const selectedStatus = statusOptions.filter(item => item.value === status)[0];
     const filterCn = isFilterOpen ? 'boss-dropdown__content_state_opened' : '';
     const filterButtonCn = isFilterOpen ? 'boss-dropdown__switch_state_opened' : '';
+
     return (
       <div className={`boss-page-dashboard__filter ${filterCn}`}>
         <div className="boss-dropdown">
@@ -76,6 +77,7 @@ class SubmissionsFilter extends React.PureComponent {
                         numberOfMonths={1}
                         withPortal
                         showClearDates
+                        displayFormat={"DD/MM/YYYY"}
                         isOutsideRange={() => false}
                         startDate={startDate}
                         endDate={endDate}

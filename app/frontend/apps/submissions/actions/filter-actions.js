@@ -45,8 +45,8 @@ export const search = (currentPage) => (dispatch, getState) => {
   const page = currentPage || getState().getIn(['pagination', 'currentPage']);
   const params = {
     venue_id: venueId,
-    start_date: filter.getIn(['range', 'startDate']) ? filter.getIn(['range', 'startDate']).format('MM-DD-YYYY') : undefined,
-    end_date: filter.getIn(['range', 'endDate']) ? filter.getIn(['range', 'endDate']).format('MM-DD-YYYY') : undefined,
+    start_date: filter.getIn(['range', 'startDate']) ? filter.getIn(['range', 'startDate']).format('DD-MM-YYYY') : undefined,
+    end_date: filter.getIn(['range', 'endDate']) ? filter.getIn(['range', 'endDate']).format('DD-MM-YYYY') : undefined,
     created_by: filter.get('createdBy'),
     status: filter.get('status'),
     page: page,

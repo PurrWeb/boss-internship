@@ -40,8 +40,8 @@ const ACTION_HANDLERS = {
     }
 
     if (!!startDate && !!endDate) {
-      momentStartDate = moment(startDate);
-      momentEndDate = moment(endDate);
+      momentStartDate = moment(startDate, "DD-MM-YYYY");
+      momentEndDate = moment(endDate, "DD-MM-YYYY");
     }
 
     state = state
