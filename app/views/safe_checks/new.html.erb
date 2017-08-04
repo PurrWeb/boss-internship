@@ -515,18 +515,16 @@
 
               <div class="boss-form__field">
                   <p class="boss-form__label"><span class="boss-form__label-text">Variance</span></p>
-                  <p class="boss-form__value boss-form__value_state_alert">
-                    <span class="js-total-calculation-variance-result">
-                      <% if safe_check.variance_cents.present? %>
-                        <%= number_to_currency(
-                          safe_check.variance_cents / 100.0,
-                          unit: '£',
-                          precision: 2
-                        ) %>
-                      <% else %>
-                        -
-                      <% end %>
-                    </span>
+                  <p class="boss-form__value js-total-calculation-variance-result <%= "boss-form__value_state_alert" if (safe_check.variance_cents || 0) < 0 %>">
+                    <% if safe_check.variance_cents.present? %>
+                      <%= number_to_currency(
+                        safe_check.variance_cents / 100.0,
+                        unit: '£',
+                        precision: 2
+                      ) %>
+                    <% else %>
+                      -
+                    <% end %>
                   </p>
               </div>
 
