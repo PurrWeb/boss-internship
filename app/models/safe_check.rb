@@ -13,6 +13,7 @@ class SafeCheck < ActiveRecord::Base
    validates :venue, presence: true
    validates :creator, presence: true
    validates :checked_by_note, presence: true
+   validate :note_if_negative
 
    validates :fifty_pound_note_pounds,
      numericality: { greater_than_or_equal_to: 0, only_integer: true }
@@ -65,6 +66,13 @@ class SafeCheck < ActiveRecord::Base
         errors.add(field, "must be multiple of #{cent_value}p")
       end
     end
+   end
+
+   #validation
+   def note_if_negative
+     if (variance_cents || 0) < 0
+       errors.add(:base, "Note required when variance is negative") if enabled_notes.count == 0
+     end
    end
 
    def total_cents

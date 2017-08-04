@@ -39,6 +39,16 @@
   <div class="boss-page-main__inner">
       <div class="boss-page-main__group boss-page-main__group_adjust_sc-form">
           <%= form_for(safe_check, url: safe_checks_path, method: 'post') do |form| %>
+              <% if safe_check.errors[:base].present? %>
+                <div class="boss-form__error">
+                  <p class="boss-form__error-text">
+                    <span class="boss-form__error-line">
+                      <%= safe_check.errors[:base].to_sentence %>
+                    </span>
+                  </p>
+                </div>
+              <% end %>
+
               <div class="boss-form__field">
                 <label class="boss-form__label">
                     <span class="boss-form__label-text boss-form__label-text_type_required">Checked by</span>
