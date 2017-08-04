@@ -10,22 +10,16 @@ export default class BreakListItem extends React.Component {
 
         var actionBreakButton;
         if (!this.props.readonly) {
-            actionBreakButton = <a
+            actionBreakButton = <button
+                type="button"
                 className="boss-button boss-button_type_icon boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_delete-break"
                 onClick={() => {
-                    this.props.boundActions.deleteHoursAcceptanceBreak({
-                        clientId: breakItem.clientId
-                    })
-                }}>
-                <i className="fa fa-remove" />
-            </a>
-        } else {
-          actionBreakButton = <a
-          className="boss-button boss-button_role_add boss-time-shift__button boss-time-shift__button_role_add-break"
-          onClick={() => {
-            this.props.boundActions.updateHoursAcceptanceBreak(newBreak)
-          }}
-          >Add a break</a> 
+                  this.props.boundActions.deleteHoursAcceptanceBreak({
+                    clientId: breakItem.clientId
+                  })
+              }}>
+              <i className="fa fa-remove" />
+            </button>
         };
 
         var style = {};
@@ -49,31 +43,15 @@ export default class BreakListItem extends React.Component {
                           ...times,
                           clientId: breakItem.clientId
                         };
+                        this.props.boundActions.updateHoursAcceptanceBreak(newBreak);
                     }}
                     granularityInMinutes={this.props.granularityInMinutes}
                     readonly={this.props.readonly}
                   />
                 </div>
               </div>
-               <div className="boss-time-shift__actions">
-                 <button
-                    className="boss-button boss-button_type_icon boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_delete-break"
-                    onClick={() => {
-                      this.props.boundActions.deleteHoursAcceptanceBreak({
-                        clientId: breakItem.clientId
-                      })
-                  }}>
-                  <i className="fa fa-remove" />
-                </button>
-                <button
-                  className="boss-button boss-button_role_add boss-time-shift__button boss-time-shift__button_role_add-break"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      this.props.boundActions.updateHoursAcceptanceBreak(newBreak)
-                    }}
-                  >
-                  Add a break
-                </button> 
+              <div className="boss-time-shift__actions">
+                { actionBreakButton }
               </div>
             </div>
         </div>

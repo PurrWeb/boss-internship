@@ -86,7 +86,7 @@ export default class StaffDay extends React.Component {
         let rotaedHours = rotaedStats.hours;
         let rotaedAcceptedHoursDifference = utils.round(rotaedHours - acceptedStats.hours, 2);
 
-        return <div className="boss-hrc boss-hrc_context_stack">
+        return <div style={style} className="boss-hrc boss-hrc_context_stack">
                 <div className="boss-hrc__side">
                   <StaffDayAside
                     staffMember={this.props.staffMember}
@@ -111,7 +111,6 @@ export default class StaffDay extends React.Component {
                         rotaedAcceptedHoursDifference={rotaedAcceptedHoursDifference}
                         status={clockInStatus.title}
                       />
-                      <ComponentErrors errorHandlingId={this.clockOutErrorId} />
                     </div>
                     <div className="boss-hrc__content">
                         <div className="boss-hrc__info">

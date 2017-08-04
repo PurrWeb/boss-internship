@@ -1,7 +1,7 @@
 import React from "react"
 import Validation from "~/lib/validation"
 import BreakListItem from "./break-list-item"
-import ValidationResult from "~/components/validation-result"
+import ValidationResult from "../validation-result"
 
 export default class BreakList extends React.Component {
     constructor() {
@@ -13,7 +13,7 @@ export default class BreakList extends React.Component {
 
     toggleBreak = () => {
       this.setState({
-        breakIsOpen: !this.breakIsOpen
+        breakIsOpen: !this.state.breakIsOpen
       })
     }
 
@@ -23,20 +23,44 @@ export default class BreakList extends React.Component {
             breaks: breaks,
             hoursPeriod: this.props.hoursAcceptancePeriod
         })
-
-        return <div>
-            {breaks.map((breakItem) => {
-                return <BreakListItem
-                    key={breakItem.clientId}
-                    boundActions={this.props.boundActions}
-                    readonly={this.props.readonly}
-                    hoursAcceptancePeriod={this.props.hoursAcceptancePeriod}
-                    rotaDate={this.props.rotaDate}
-                    granularityInMinutes={this.props.granularityInMinutes}
-                    breakItem={breakItem} />
-            })}
+        const readonly = this.props.readonly;
+        return <div className={`boss-time-shift__break ${readonly ? 'boss-time-shift__log_state_accepted' : ''}`}>
             <div className="boss-time-shift__break-controls">
-              {!this.breakIsOpen ? (
+              <button
+                type="button"
+                className="boss-time-shift__break-toggle boss-time-shift__break-toggle_state_visible boss-time-shift__break-toggle_state_opened"
+                onClick={this.toggleBreak}
+                style={{display: "inline-block", marginTop: 10, marginBottom: 4}}>
+                Breaks
+              </button>
+            </div>
+            <div className="boss-time-shift__break-content boss-time-shift__break_state_opened" style={{display: this.state.breakIsOpen ? 'block' : 'none'}}>
+              <div className="boss-time-shift__break-inner">
+                { breaks.map((breakItem) => {
+                    return <BreakListItem
+                        key={breakItem.clientId}
+                        boundActions={this.props.boundActions}
+                        readonly={this.props.readonly}
+                        hoursAcceptancePeriod={this.props.hoursAcceptancePeriod}
+                        rotaDate={this.props.rotaDate}
+                        granularityInMinutes={this.props.granularityInMinutes}
+                        breakItem={breakItem} />
+                })}
+              </div>
+              { !this.props.readonly && <div className="boss-time-shift__actions">
+                  <button
+                    type="button"
+                    className="boss-button boss-button_role_add boss-time-shift__button boss-time-shift__button_role_add-break"
+                    onClick={() => this.addBreak()}
+                  >
+                    Add Break
+                  </button>
+                </div>
+              }
+              
+            </div>
+            {/* <div className="boss-time-shift__break-controls">
+              {!this.state.breakIsOpen ? (
                 <a
                   className="boss-time-shift__break-add"
                   onClick={() => this.addBreak()}
@@ -51,7 +75,7 @@ export default class BreakList extends React.Component {
                   Break
                 </a>
               )}
-            </div>
+            </div> */}
             <ValidationResult result={validationResult} />
         </div>
     }
