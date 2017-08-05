@@ -39,12 +39,12 @@ const SubmissionsListItemMobile = ({item, onDetailsClick}) => {
       <CardRow>
         <p className="boss-check__text boss-check__text_role_user">
           <span className="boss-check__link">
-            {item.get('check_list_name')}
+            {item.get('creator_name')}
           </span>
         </p>
       </CardRow>
       <CardRow>
-        <span className={`boss-button boss-button_type_small ${statusCn}`}>
+        <span className={`boss-button boss-button_type_small boss-button_type_no-behavior ${statusCn}`}>
           {statusText}
         </span>
       </CardRow>

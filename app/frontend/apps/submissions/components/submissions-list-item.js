@@ -36,18 +36,22 @@ class SubmissionsListItem extends React.Component {
     const status = this.getSubmissionStatus(item.get('answers'));
     const statusCn = status ? 'boss-button_role_secondary' : 'boss-button_role_alert';
     const statusText = status ? 'OK' : 'Problem'
+    const creatorName = item.get('creator_name');
+    const checklistName = item.get('check_list_name');
+    const createdAt = moment(item.get('created_at')).format('HH:mm DD/MM/YYYY');
+
     return (
       <div className="boss-table__row">
-        <TableCell label="Date">{moment(item.get('created_at')).format('HH:mm DD/MM/YYYY')}</TableCell>
-        <TableCell label="Checklist">{item.get('check_list_name')}</TableCell>
-        <TableCell label="Created By">{item.get('creator_name')}</TableCell>
+        <TableCell label="Date">{createdAt}</TableCell>
+        <TableCell label="Checklist">{checklistName}</TableCell>
+        <TableCell label="Created By">{creatorName}</TableCell>
         <TableCell label="Status">
-          <div className="boss-table__text">          
-            <a href="javascript:;" className={`boss-button boss-button_type_small ${statusCn}`}>{statusText}</a>
+          <div className="boss-table__text">
+            <a href="javascript:;" className={`boss-button boss-button_type_small boss-button_type_no-behavior ${statusCn}`}>{statusText}</a>
           </div>
         </TableCell>
         <TableCell label="Action">
-          <div className="boss-table__actions">          
+          <div className="boss-table__actions">
             <a
               onClick={this.props.onDetailsClick.bind(null, item)}
               href="javascript:;"
