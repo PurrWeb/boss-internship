@@ -7,8 +7,7 @@ const CheckListItemNote = ({note}) => {
     <div className="boss-checklist__notes">
       <div className="boss-checklist__notes-inner">
         <p className="boss-checklist__notes-label">
-          Notes
-          <span className="boss-checklist__notes-icon">?</span>
+          Note
         </p>
         <p className="boss-checklist__notes-text">
           {note}
