@@ -105,7 +105,7 @@ class Submissions extends React.Component {
         <BossModal isOpen={isDetailsOpen} onCloseClick={closeDetailsModal}>
           <ModalDetailsContent submission={detailedSubmission} />
         </BossModal>
-        <Dashboard title="Checklist">
+        <Dashboard title="Checklist Submissions">
           <SubmissionsFilter
             onToggleFilter={toggleFilter}
             onSelectVenue={changeVenue}
