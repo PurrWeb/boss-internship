@@ -1,0 +1,57 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Select from 'react-select';
+import _ from 'lodash';
+
+class BossSelect extends React.Component {
+  static propTypes = {
+    onChange: PropTypes.func.isRequired,
+    options: PropTypes.array.isRequired,
+    mappedProps: PropTypes.object,
+    value: PropTypes.string,
+    label: PropTypes.string,
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selected: props.selected ? this.getItemOption(props.selected) : "",
+    }
+  }
+  
+  getItemOption(option) {
+    return {
+        value: option[this.props.value || 'value'],
+        label: option[this.props.label || 'label']
+    };
+  }
+
+  getOptions(options) {
+    return options.map(option => {
+      return this.getItemOption(option);
+    });
+  }
+
+  onChange = (newValue) => {
+    this.setState({
+      selected: newValue,
+    });
+
+    this.props.onChange(newValue);
+  }
+
+  render() {
+    return (
+      <div className="boss-form__select">
+        <Select
+          options={this.getOptions(this.props.options)}
+          value={this.state.selected}
+          onChange={this.onChange}
+          {...this.props.mappedProps}
+        />
+      </div>
+    )
+  }
+}
+
+export default BossSelect;
