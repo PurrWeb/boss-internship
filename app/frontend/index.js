@@ -88,6 +88,7 @@ import FruitPopover from "./components/shared/fruit-popover"
 registerComponent("FruitPopover", FruitPopover);
 
 import {EmptyHeader} from "./components/containers/header/header.js"
+registerComponent("EmptyHeader", EmptyHeader);
 
 import VenueHealthCheckApp from "./apps/venue-health-check-app"
 registerComponent("VenueHealthCheckApp", VenueHealthCheckApp)
