@@ -8,7 +8,7 @@ const BossModal = ({isOpen, children, onCloseClick, className}) => {
       isOpen={isOpen}
       contentLabel="Modal"
       className={{
-        base: `ReactModal__Content boss-modal-window boss-modal-window_role_details ${className}`,
+        base: `ReactModal__Content boss-modal-window boss-modal-window_role_details ${className && className}`,
         afterOpen: 'ReactModal__Content--after-open',
       }}
     >
