@@ -76,6 +76,45 @@ ActiveRecord::Schema.define(version: 20170803110533) do
     t.datetime "updated_at"
   end
 
+  create_table "check_list_items", force: :cascade do |t|
+    t.integer  "check_list_id", limit: 4,   null: false
+    t.string   "description",   limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "check_list_items", ["check_list_id"], name: "index_check_list_items_on_check_list_id", using: :btree
+
+  create_table "check_list_submission_answers", force: :cascade do |t|
+    t.integer  "check_list_submission_id", limit: 4,                   null: false
+    t.string   "description",              limit: 255,                 null: false
+    t.string   "note",                     limit: 255
+    t.boolean  "answer",                               default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "check_list_submission_answers", ["check_list_submission_id"], name: "index_check_list_submission_answers_on_check_list_submission_id", using: :btree
+
+  create_table "check_list_submissions", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4,   null: false
+    t.integer  "venue_id",   limit: 4,   null: false
+    t.string   "name",       limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "check_list_submissions", ["user_id"], name: "index_check_list_submissions_on_user_id", using: :btree
+
+  create_table "check_lists", force: :cascade do |t|
+    t.string   "name",       limit: 255, null: false
+    t.integer  "venue_id",   limit: 4,   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "check_lists", ["venue_id"], name: "index_check_lists_on_venue_id", using: :btree
+
   create_table "clock_in_breaks", force: :cascade do |t|
     t.integer  "clock_in_period_id", limit: 4, null: false
     t.datetime "starts_at",                    null: false
@@ -481,6 +520,86 @@ ActiveRecord::Schema.define(version: 20170803110533) do
     t.datetime "updated_at"
   end
 
+  create_table "questionnaire_answers", force: :cascade do |t|
+    t.integer "questionnaire_question_id", limit: 4
+    t.integer "questionnaire_response_id", limit: 4
+    t.string  "value",                     limit: 255,   null: false
+    t.text    "note",                      limit: 65535
+  end
+
+  add_index "questionnaire_answers", ["questionnaire_question_id"], name: "index_questionnaire_answers_on_questionnaire_question_id", using: :btree
+  add_index "questionnaire_answers", ["questionnaire_response_id"], name: "index_questionnaire_answers_on_questionnaire_response_id", using: :btree
+
+  create_table "questionnaire_areas", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "questionnaire_areas_questionnaires", force: :cascade do |t|
+    t.integer "questionnaire_id",      limit: 4, null: false
+    t.integer "questionnaire_area_id", limit: 4, null: false
+    t.integer "position",              limit: 4
+  end
+
+  create_table "questionnaire_categories", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "questionnaire_categories_questionnaires", force: :cascade do |t|
+    t.integer "questionnaire_id",          limit: 4,  null: false
+    t.integer "questionnaire_category_id", limit: 4,  null: false
+    t.integer "position",                  limit: 4
+    t.float   "threshold_score",           limit: 24
+  end
+
+  add_index "questionnaire_categories_questionnaires", ["questionnaire_category_id", "questionnaire_id"], name: "questionnaire_categories_questionnaire_unique_index", unique: true, using: :btree
+
+  create_table "questionnaire_questions", force: :cascade do |t|
+    t.integer  "questionnaire_category_id", limit: 4
+    t.integer  "questionnaire_id",          limit: 4,   null: false
+    t.string   "type",                      limit: 255, null: false
+    t.string   "text",                      limit: 255, null: false
+    t.string   "possible_values",           limit: 255
+    t.string   "pass_values",               limit: 255
+    t.string   "fail_values",               limit: 255
+    t.integer  "start_value",               limit: 4
+    t.integer  "end_value",                 limit: 4
+    t.float    "score",                     limit: 24
+    t.float    "scale_increment",           limit: 24
+    t.string   "help_text",                 limit: 255
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.integer  "questionnaire_area_id",     limit: 4
+  end
+
+  add_index "questionnaire_questions", ["questionnaire_category_id"], name: "index_questionnaire_questions_on_questionnaire_category_id", using: :btree
+  add_index "questionnaire_questions", ["questionnaire_id"], name: "index_questionnaire_questions_on_questionnaire_id", using: :btree
+
+  create_table "questionnaire_responses", force: :cascade do |t|
+    t.integer  "questionnaire_id", limit: 4
+    t.integer  "user_id",          limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "venue_id",         limit: 4, null: false
+  end
+
+  add_index "questionnaire_responses", ["questionnaire_id"], name: "index_questionnaire_responses_on_questionnaire_id", using: :btree
+  add_index "questionnaire_responses", ["user_id"], name: "index_questionnaire_responses_on_user_id", using: :btree
+  add_index "questionnaire_responses", ["venue_id"], name: "index_questionnaire_responses_on_venue_id", using: :btree
+
+  create_table "questionnaires", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "questionnaires_venues", force: :cascade do |t|
+    t.integer "questionnaire_id", limit: 4, null: false
+    t.integer "venue_id",         limit: 4, null: false
+  end
+
   create_table "rota_forecasts", force: :cascade do |t|
     t.integer  "rota_id",               limit: 4, null: false
     t.integer  "forecasted_take_cents", limit: 4, null: false
@@ -665,6 +784,14 @@ ActiveRecord::Schema.define(version: 20170803110533) do
   end
 
   add_index "staff_types", ["name"], name: "index_staff_types_on_name", unique: true, using: :btree
+
+  create_table "uploads", force: :cascade do |t|
+    t.string   "file",           limit: 255
+    t.integer  "imageable_id",   limit: 4
+    t.string   "imageable_type", limit: 255
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
 
   create_table "user_transitions", force: :cascade do |t|
     t.string   "to_state",    limit: 255,   null: false
