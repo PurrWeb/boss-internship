@@ -8,7 +8,7 @@ import Dashboard from './components/dashboard';
 import MainContent from './components/main-content';
 import SubmissionsFilter from './components/submissions-filter';
 import SubmissionsList from './components/submissions-list';
-import BossModal from '~/components/boss-modal';
+import BossDetailsModal from '~/components/boss-details-modal';
 import ModalDetailsContent from './components/modal-details-content';
 import setInitial from './actions/initial-load';
 import Submissions from './containers/submissions';

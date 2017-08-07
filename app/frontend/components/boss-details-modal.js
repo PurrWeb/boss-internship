@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
-const BossModal = ({isOpen, children, onCloseClick, className}) => {
+const BossDetailsModal = ({isOpen, children, onCloseClick, className}) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -18,4 +18,4 @@ const BossModal = ({isOpen, children, onCloseClick, className}) => {
   )
 }
 
-export default BossModal;
+export default BossDetailsModal;

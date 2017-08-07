@@ -8,7 +8,7 @@ import MainContent from '../components/main-content';
 import SubmissionsFilter from '../components/submissions-filter';
 import SubmissionsList from '../components/submissions-list';
 import SubmissionsListMobile from '../components/submissions-list.mobile';
-import BossModal from '~/components/boss-modal';
+import BossDetailsModal from '~/components/boss-details-modal';
 import ModalDetailsContent from '../components/modal-details-content';
 import Pagination from '../components/pagination';
 import {openDetailsModal, closeDetailsModal} from '../actions/details-modal-actions.js';
@@ -26,7 +26,7 @@ import {
   makeSelectIsFilterOpen,
   makeSelectDetailedSubmission,
   makeSelectSubmissions,
-  makeSelectPageCount,  
+  makeSelectPageCount,
   makeSelectCurrentVenue,
   makeSelectVenues,
   makeSelectStartDate,
@@ -67,11 +67,11 @@ const mapDispatchToProps = (dispatch) => {
   createdBy: makeSelectCreatedBy(),
   status: makeSelectStatus(),
 }), mapDispatchToProps)
-class Submissions extends React.Component {  
+class Submissions extends React.Component {
   search = () => {
     this.props.actions.search(1);
   }
-  
+
   render() {
     const {
       isDetailsOpen,
@@ -87,7 +87,7 @@ class Submissions extends React.Component {
       createdBy,
       status,
     } = this.props;
-    
+
     const {
       toggleFilter,
       changeVenue,
@@ -102,12 +102,12 @@ class Submissions extends React.Component {
 
     return (
       <div>
-        <BossModal
+        <BossDetailsModal
           isOpen={isDetailsOpen}
           onCloseClick={closeDetailsModal}
         >
           <ModalDetailsContent submission={detailedSubmission} />
-        </BossModal>
+        </BossDetailsModal>
         <Dashboard title="Checklist Submissions">
           <SubmissionsFilter
             onToggleFilter={toggleFilter}
