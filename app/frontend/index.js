@@ -90,11 +90,17 @@ registerComponent("FruitPopover", FruitPopover);
 import {EmptyHeader} from "./components/containers/header/header.js"
 registerComponent("EmptyHeader", EmptyHeader);
 
+import VenueHealthCheckApp from "./apps/venue-health-check-app"
+registerComponent("VenueHealthCheckApp", VenueHealthCheckApp)
+
 import Header from "./components/containers/header/header.js"
 registerComponent("Header", Header);
 
 import DetailsModal from "./components/safe-checks/details-modal"
 registerComponent("DetailsModal", DetailsModal)
+
+import VenueHealthCheckReportApp from "./apps/venue-health-check-report-app"
+registerComponent("VenueHealthCheckReportApp", VenueHealthCheckReportApp)
 
 import WeekPicker from "~/components/week-picker"
 

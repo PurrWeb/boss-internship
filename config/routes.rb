@@ -14,6 +14,9 @@ Rails.application.routes.draw do
     resources :check_lists, only: [:index]
     resources :check_list_submissions, path: "checklist_submissions", only: [:index]
 
+    resources :venue_health_check, only: [:index, :new]
+    resources :venue_health_check_reports, only: [:show]
+
     resources :change_orders, only: [:index, :show, :edit, :update, :destroy] do
       collection do
         get :submitted
@@ -175,6 +178,12 @@ Rails.application.routes.draw do
         end
 
         resources :check_list_submissions, path: "checklist_submissions", only: [:index]
+
+        resources :uploads
+
+        resources :questionnaires do
+          resources :questionnaire_responses
+        end
 
         resources :test, only: [] do
           collection do

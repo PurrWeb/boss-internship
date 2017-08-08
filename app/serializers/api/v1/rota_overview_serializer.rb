@@ -31,7 +31,7 @@ class Api::V1::RotaOverviewSerializer < ActiveModel::Serializer
   end
 
   def staff_types
-    staff_types = @instance_options[:scopes][:staff_types]
+    staff_types = instance_options[:scope][:staff_types]
 
     ActiveModel::Serializer::CollectionSerializer.new(
       staff_types,

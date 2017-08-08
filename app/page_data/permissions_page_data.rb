@@ -109,6 +109,10 @@ class PermissionsPageData
         {
           description: 'API Keys',
           path: @path.api_keys_path,
+        },
+        {
+          description: "Venue Health Check",
+          path: @path.venue_health_check_index_path
         }
       ]
     }

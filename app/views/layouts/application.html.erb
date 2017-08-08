@@ -12,7 +12,7 @@
     <% end %>
     <%= javascript_include_tag 'rollbar', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-    
+
     <script>
       window.boss = window.boss || {};
       window.boss.store = window.boss.store || {};
@@ -29,12 +29,13 @@
         };
       <% end %>
     </script>
-    
+
     <script src="<%= @bundle_script %>" data-turbolinks-track="true"></script>
-      
+
     <%= render 'layouts/favicon' %>
     <%= csrf_meta_tags %>
   </head>
+
   <body class="<%= render_v2_layout? ? 'boss-body' : 'boss2-body' %>">
     <header class="boss-page-header">
       <% if render_navigation? %>
@@ -44,6 +45,7 @@
         <%= render 'layouts/header_without_navigation' %>
       <% end %>
     </header>
+
     <% if render_v2_layout? %>
       <%= render partial: 'layouts/v2_layout' %>
     <% else %>

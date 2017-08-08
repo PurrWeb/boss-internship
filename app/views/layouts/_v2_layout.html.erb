@@ -1,11 +1,10 @@
+<div class="boss-alert boss-alert_role_page-note" style="display: none;">
+    <p class="boss-alert__text">Review Mode</p>
+    <a href="#" class="boss-alert__button-close"></a>
+</div>
+
 <%= render 'layouts/messages' %>
-
-<main class="boss-page-main">
-  <%= yield %>
-</main>
-
+  <main class="boss-page-main">
+    <%= yield %>
+  </main>
 <%= insert_paloma_hook %>
-
-<% if content_for?(:modal) %>
-  <%= yield(:modal) %>
-<% end %>

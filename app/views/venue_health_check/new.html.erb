@@ -1,0 +1,23 @@
+<%= javascript_tag do %>
+  venueHealthCheck = {};
+
+  venueHealthCheck.questionnaire = <%= Api::V1::QuestionnaireSerializer.new(questionnaire).to_json.html_safe %>;
+  venueHealthCheck.questions = <%= api_v1_collection_json(questionnaire_questions, Api::V1::QuestionnaireQuestionSerializer) %>;
+  venueHealthCheck.categories = <%= api_v1_collection_json(questionnaire_categories, Api::V1::QuestionnaireCategorySerializer) %>;
+  venueHealthCheck.areas = <%= api_v1_collection_json(questionnaire_areas, Api::V1::QuestionnaireAreaSerializer) %>;
+  venueHealthCheck.venues = <%= api_v1_collection_json(venues, Api::V1::VenueSerializer) %>;
+  venueHealthCheck.currentVenue = <%= Api::V1::VenueSerializer.new(venue).to_json.html_safe %>;
+  venueHealthCheck.accessToken = "<%= access_token.token %>";
+
+  window.boss = window.boss || {};
+  window.boss.venueHealthCheck = venueHealthCheck;
+<% end %>
+
+<% content_for :full_width_section do %>
+
+<% end %>
+
+<%= react_component('VenueHealthCheckApp') %>
+
+<%= javascript_include_tag 'http://d3js.org/d3.v3.min.js', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'd3.completeness-chart', 'data-turbolinks-track' => true %>

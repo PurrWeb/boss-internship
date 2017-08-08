@@ -1,0 +1,2 @@
+class RequiredQuestion < QuestionnaireQuestion
+end
