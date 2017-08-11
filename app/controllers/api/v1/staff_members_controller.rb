@@ -109,6 +109,49 @@ module Api
         end
       end
 
+      def enable
+        staff_member = StaffMember.find(params[:id])
+
+        result = StaffMemberApiUpdateService.new(
+          staff_member: staff_member,
+          requester: current_user
+        ).enable({
+          starts_at: params.fetch("starts_at"),
+          staff_type_id: params.fetch("staff_type_id"),
+          main_venue_id: params.fetch("main_venue_id"),
+          pay_rate_id: params.fetch("pay_rate_id"),
+          other_venue_ids: Array(params.fetch("other_venue_ids")),
+          pin_code: params.fetch("pin_code"),
+          gender: params.fetch("gender"),
+          phone_number: params.fetch("phone_number"),
+          date_of_birth: params.fetch("date_of_birth"),
+          starts_at: params.fetch("starts_at"),
+          national_insurance_number: params.fetch("national_insurance_number"),
+          hours_preference_note: params["hours_preference_note"],
+          avatar_base64: params["avatar_base64"],
+          day_preference_note: params["day_preference_note"],
+          employment_status: params.fetch("employment_status"),
+          first_name: params.fetch("first_name"),
+          surname: params.fetch("surname"),
+          sia_badge_number: params["sia_badge_number"],
+          sia_badge_expiry_date: params["sia_badge_expiry_date"],
+          address: params.fetch("address"),
+          postcode: params.fetch("postcode"),
+          country: params.fetch("country"),
+          county: params.fetch("county"),
+          email_address: params.fetch("email_address")
+        })
+
+        if result.success?
+          render(
+            json: {},
+            status: 200
+          )
+        else
+          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+        end
+      end
+
       def flagged
         if required_flagged_staff_member_parameters_present?
           staff_members = FlaggedStaffMemberQuery.new(
