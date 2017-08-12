@@ -74,14 +74,8 @@ class SafeChecksController < ApplicationController
 
     authorize! :manage, safe_check.venue
 
-    success = false
-    ActiveRecord::Base.transaction do
-      success = safe_check.save
-      if success
-        (success = safe_check_note.save) if safe_check_note.note_text.present?
-      end
-      raise ActiveRecord::Rollback unless success
-    end
+    safe_check.enabled_notes << safe_check_note if safe_check_note.note_text.present?
+    success = safe_check.save
 
     if success
       flash[:success] = "Safe check created successfully"
