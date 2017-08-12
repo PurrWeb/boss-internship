@@ -290,20 +290,18 @@
   </div>
 </div>
 
-<% content_for :modal do %>
-  <% safe_checks.each_with_index do |safe_check, index| %>
-    <%= react_component(
-      'DetailsModal',
-      {
-        modal_id: index,
-        created_at: safe_check.created_at.to_s(:human),
-        checked_by: safe_check.checked_by_note,
-        notes: safe_check.enabled_notes,
-        safe_check: safe_check,
-        costs: notes_and_coins(safe_check),
-        variance_cents: number_to_currency(safe_check.pound_value_for(:variance_cents), unit: '£', precision: 2).gsub("-", "\u2011")
-      },
-      { class: 'react-modal' }
-    ) %>
-  <% end %>
+<% safe_checks.each_with_index do |safe_check, index| %>
+  <%= react_component(
+    'DetailsModal',
+    {
+      modal_id: index,
+      created_at: safe_check.created_at.to_s(:human),
+      checked_by: safe_check.checked_by_note,
+      notes: safe_check.enabled_notes,
+      safe_check: safe_check,
+      costs: notes_and_coins(safe_check),
+      variance_cents: number_to_currency(safe_check.pound_value_for(:variance_cents), unit: '£', precision: 2).gsub("-", "\u2011")
+    },
+    { class: 'react-modal' }
+  ) %>
 <% end %>

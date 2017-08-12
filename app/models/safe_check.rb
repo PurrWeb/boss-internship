@@ -71,7 +71,7 @@ class SafeCheck < ActiveRecord::Base
    #validation
    def note_if_negative
      if (variance_cents || 0) < 0
-       errors.add(:base, "Note required when variance is negative") if enabled_notes.count == 0
+       errors.add(:base, "Note required when variance is negative") if enabled_notes.length == 0
      end
    end
 

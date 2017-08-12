@@ -36,7 +36,7 @@ export default class DetailsModal extends React.Component {
   render() {
     if (this.state.showModal) {
       return (
-          <Modal className="boss-modal-window boss-modal-window_role_details" isOpen={ this.state.showModal }>
+          <Modal className="boss-modal-window boss-modal-window_role_details" isOpen={ this.state.showModal } contentLabel={"Details"}>
             <a className="boss-modal-window__close" onClick={ this.handleClose.bind(this) }></a>
             <div className="boss-modal-window__header boss-modal-window__header_details">Details View</div>
             <div className="boss-modal-window__content">

@@ -22,7 +22,7 @@ export default class ModalNote extends React.Component {
   renderNotes() {
     return this.props.notes.map(note => {
       return (
-        <div className="boss-message boss-message_role_sc-details">
+        <div className="boss-message boss-message_role_sc-details" key={note.id}>
           <p className="boss-message__text">{ note.note_text }</p>
           <div className="boss-message__meta">
             <p className="boss-message__meta-text boss-message__meta-text_role_user">{ note.note_left_by_note }</p>
@@ -50,7 +50,7 @@ export default class ModalNote extends React.Component {
         </div>
 
         <div className="boss-stats__note-form boss-stats__note-form_state_closed">
-          <form role="form" className="boss-form" id="new_safe_check_note" action={"/safe_check_notes?safe_check_id=" + this.props.safe_check.id } accept-charset="UTF-8" method="post">
+          <form role="form" className="boss-form" id={this.props.safe_check.id} action={"/safe_check_notes?safe_check_id=" + this.props.safe_check.id } acceptCharset="UTF-8" method="post">
             <input name="utf8" type="hidden" value="✓" />
             <input type="hidden" name="authenticity_token" value={ AUTH_TOKEN } />
             <div className="boss-form__field">
