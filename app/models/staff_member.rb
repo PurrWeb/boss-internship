@@ -49,7 +49,7 @@ class StaffMember < ActiveRecord::Base
   # Transient attribute used to preserve image uploads
   # during form resubmissions
   attr_accessor :avatar_base64, :pin_code
-  
+
   before_save :encrypt_pin_code
 
   validates :name, presence: true
@@ -258,7 +258,7 @@ class StaffMember < ActiveRecord::Base
   end
 
   def disable_reason
-    disabled? && state_machine.last_transition.metadata.fetch("disable_reason")
+    state_machine.last_transition.metadata.fetch("disable_reason") if disabled?
   end
 
   def pin_code_regex

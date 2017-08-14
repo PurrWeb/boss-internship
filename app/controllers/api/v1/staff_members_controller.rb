@@ -129,7 +129,7 @@ module Api
               national_insurance_number: national_insurance_number
             ).profiles
           end
-
+          
           render json: staff_members,
                  each_serializer: FlaggedStaffMemberSerializer,
                  meta: { existing_profiles: existing_profiles },
@@ -141,6 +141,108 @@ module Api
             },
             status: 422
           )
+        end
+      end
+
+      def update_avatar
+        staff_member = StaffMember.find(params[:id])
+
+        result = StaffMemberApiUpdateService.new(
+          staff_member: staff_member,
+          requester: current_user
+        ).update_avatar({
+          avatar_base64: params.fetch("avatar_base64")
+        })
+
+        if result.success?
+          render(
+            json: result.staff_member,
+            serializer: ::StaffMemberSerializer,
+            status: 200
+          )
+        else
+          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+        end
+      end
+
+      def update_contact_details
+        staff_member = StaffMember.find(params.fetch(:id))
+
+        result = StaffMemberApiUpdateService.new(
+          staff_member: staff_member,
+          requester: current_user
+        ).update_contact_details({
+          phone_number: params.fetch("phone_number"),
+          address: params.fetch("address"),
+          postcode: params.fetch("postcode"),
+          country: params.fetch("country"),
+          county: params.fetch("county"),
+          email_address: params.fetch("email_address") || ""
+        })
+
+        if result.success?
+          render(
+            json: result.staff_member,
+            serializer: ::StaffMemberSerializer,
+            status: 200
+          )
+        else
+          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+        end
+      end
+
+      def update_personal_details
+        staff_member = StaffMember.find(params[:id])
+
+        result = StaffMemberApiUpdateService.new(
+          staff_member: staff_member,
+          requester: current_user
+        ).update_personal_details({
+          gender: params.fetch(:gender),
+          date_of_birth: params.fetch(:date_of_birth),
+          first_name: params.fetch(:first_name),
+          surname: params.fetch(:surname)
+        })
+
+        if result.success?
+          render(
+            json: result.staff_member,
+            serializer: ::StaffMemberSerializer,
+            status: 200
+          )
+        else
+          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+        end
+      end
+
+      def update_employment_details
+        staff_member = StaffMember.find(params[:id])
+
+        result = StaffMemberApiUpdateService.new(
+          staff_member: staff_member,
+          requester: current_user
+        ).update_employment_details({
+          national_insurance_number: params["national_insurance_number"],
+          hours_preference_note: params["hours_preference_note"],
+          day_preference_note: params["day_preference_note"],
+          starts_at: params.fetch("starts_at"),
+          employment_status: params.fetch("employment_status"),
+          pay_rate_id: params.fetch("pay_rate_id"),
+          master_venue_id: params.fetch("master_venue_id"),
+          other_venue_ids: params.fetch("other_venue_ids") || [],
+          staff_type_id: params.fetch("staff_type_id"),
+          sia_badge_number: params["sia_badge_number"],
+          sia_badge_expiry_date: params["sia_badge_expiry_date"]
+        })
+        
+        if result.success?
+          render(
+            json: result.staff_member,
+            serializer: ::StaffMemberSerializer,
+            status: 200
+          )
+        else
+          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
         end
       end
 

@@ -1,0 +1,15 @@
+<script>
+  window.boss = window.boss || {};
+  window.boss.store = window.boss.store || {};
+  window.boss.store.staffMember = <%= staff_member.to_json.html_safe %>;
+  window.boss.store.accessToken = "<%= access_token.token %>";
+</script>
+
+<%= react_component('StaffMemberProfileDetailsApp', {
+  staffMember: staff_member,
+  accessToken: access_token.token,
+  staffTypes: staff_types,
+  venues: venues,
+  payRates: pay_rates,
+  genderValues: gender_values
+}) %>
