@@ -21,6 +21,7 @@ class StaffMembersController < ApplicationController
       includes(:staff_type).
       includes(:master_venue).
       includes(:work_venues).
+      order(updated_at: :desc).
       paginate(page: params[:page], per_page: 20)
 
     render locals: {
