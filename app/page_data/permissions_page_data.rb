@@ -155,16 +155,6 @@ class PermissionsPageData
       ]
     }
 
-    admin_venues = {
-      name: "Admin: Venue",
-      color: "#f39c12",
-      items: [
-        {
-          description: "Checklist Submissions",
-          path: @path.check_list_submissions_path
-        }
-      ]
-    }
     admin_reports = {
       name: "Admin: Reports",
       color: "#f39c12",
@@ -199,7 +189,6 @@ class PermissionsPageData
       admin_users,
       admin_staff_members,
       admin_reports,
-      admin_venues
     ]
 
 
