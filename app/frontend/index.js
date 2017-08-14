@@ -51,6 +51,12 @@ registerComponent("IncidentReportsIndexApp", IncidentReportsIndexApp)
 import {IncidentReportsShowApp} from "./apps/incident-reports"
 registerComponent("IncidentReportsShowApp", IncidentReportsShowApp)
 
+import {StaffMemberProfileDetailsApp} from "./apps/staff-member-profile"
+registerComponent("StaffMemberProfileDetailsApp", StaffMemberProfileDetailsApp)
+
+// import {StaffMemberHolidaysApp} from "./apps/staff-member-profile";
+// registerComponent("StaffMemberHolidaysApp", StaffMemberHolidaysApp)
+
 import StaffTypeRotaApp from "./apps/staff-type-rota/staff-type-rota-app"
 registerComponent("StaffTypeRotaApp", StaffTypeRotaApp);
 
