@@ -41,6 +41,7 @@
       <div class="boss-table__row">
         <div class="boss-table__cell boss-table__cell_role_header"></div>
         <div class="boss-table__cell boss-table__cell_role_header">Name</div>
+        <div class="boss-table__cell boss-table__cell_role_header">Modified</div>
         <div class="boss-table__cell boss-table__cell_role_header">Status</div>
         <div class="boss-table__cell boss-table__cell_role_header">Type</div>
         <div class="boss-table__cell boss-table__cell_role_header">Venue</div>
@@ -63,6 +64,15 @@
               <p class="boss-table__label">Name</p>
               <p class="boss-table__text">
                 <%= link_to staff_member.name.full_name.titlecase, staff_member_path(id: staff_member.id), class: 'boss-table__link' %>
+              </p>
+            </div>
+          </div>
+
+          <div class="boss-table__cell">
+            <div class="boss-table__info" data-role="modified">
+              <p class="boss-table__label">Modified</p>
+              <p class="boss-table__text">
+                <%= staff_member.updated_at.to_s(:short) %>
               </p>
             </div>
           </div>
