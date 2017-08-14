@@ -43,7 +43,7 @@ RSpec.feature 'Viewing a user' do
 
   context 'user has an associated staff member' do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
-    let(:staff_member_show_page) { PageObject::StaffMemberShowPage.new(dev_user.staff_member) }
+    let(:staff_member_profile_page) { PageObject::StaffMemberProfilePage.new(dev_user.staff_member) }
 
     before do
       dev_user.update_attributes!(staff_member: staff_member)
@@ -52,7 +52,7 @@ RSpec.feature 'Viewing a user' do
     scenario 'clicking on the view staff member link should take you to the staff member show page' do
       show_page.surf_to
       show_page.click_view_staff_member_button
-      staff_member_show_page.assert_on_correct_page
+      staff_member_profile_page.assert_on_correct_page
     end
   end
 end

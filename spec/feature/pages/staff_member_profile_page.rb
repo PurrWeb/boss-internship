@@ -1,5 +1,5 @@
 module PageObject
-  class StaffMemberShowPage < Page
+  class StaffMemberProfilePage < Page
     def initialize(staff_member)
       @staff_member = staff_member
       super()
@@ -12,7 +12,7 @@ module PageObject
     end
 
     def assert_on_correct_page
-      expect(find('h1').text).to eq('Staff Member Show Placeholder')
+      expect(find('h1').text).to eq('Staff Member Profile Placeholder')
     end
   end
 end

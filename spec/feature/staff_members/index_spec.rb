@@ -17,7 +17,7 @@ RSpec.feature 'Staff members section index page' do
 
   context 'staff members exist' do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
-    let(:staff_member_show_page) { PageObject::StaffMemberShowPage.new(staff_member) }
+    let(:staff_member_profile_page) { PageObject::StaffMemberProfilePage.new(staff_member) }
 
     before do
       staff_member
@@ -32,7 +32,7 @@ RSpec.feature 'Staff members section index page' do
       PageObject::StaffMembersIndexTable.columns.each do |column|
         staff_members_index_page.surf_to
         staff_members_index_page.staff_members_table.click_on_detail(column, staff_member: staff_member)
-        staff_member_show_page.assert_on_correct_page
+        staff_member_profile_page.assert_on_correct_page
       end
     end
   end
