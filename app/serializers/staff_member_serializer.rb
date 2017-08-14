@@ -44,19 +44,19 @@ class StaffMemberSerializer < ActiveModel::Serializer
   end
 
   def address
-    object.address.address
+    object.address && object.address.address
   end
 
   def postcode
-    object.address.postcode
+    object.address && object.address.postcode
   end
 
   def country
-    object.address.country
+    object.address && object.address.country
   end
 
   def county
-    object.address.county
+    object.address && object.address.county
   end
 
   def disabled_by_user
@@ -78,7 +78,7 @@ class StaffMemberSerializer < ActiveModel::Serializer
   end
 
   def pay_rate
-    { value: object.pay_rate.id, label: object.pay_rate.name }
+    { value: object.pay_rate.id, label: object.pay_rate.name } if object.pay_rate.present?
   end
 
   def start_date
@@ -86,19 +86,19 @@ class StaffMemberSerializer < ActiveModel::Serializer
   end
 
   def staff_type
-    {value: object.staff_type.id, label: object.staff_type.name}
+    {value: object.staff_type.id, label: object.staff_type.name} if object.staff_type.present?
   end
 
   def master_venue
-    {value: object.master_venue.id, label: object.master_venue.name}
+    {value: object.master_venue.id, label: object.master_venue.name} if object.master_venue.present?
   end
 
   def first_name
-    object.name.first_name
+    object.name && object.name.first_name
   end
 
   def surname
-    object.name.surname
+    object.name && object.name.surname
   end
 
   def other_venues

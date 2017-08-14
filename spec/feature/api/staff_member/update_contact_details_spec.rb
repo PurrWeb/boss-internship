@@ -142,7 +142,7 @@ RSpec.describe 'Update Contact Details' do
       expect(json).to eq({
         "errors" => {
           "address" => ["can't be blank"],
-          "email_addres" => ["can't be blank"]
+          "email_address" => ["can't be blank"]
         }
       })
     end

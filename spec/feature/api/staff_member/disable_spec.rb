@@ -109,7 +109,7 @@ RSpec.describe 'Disable Staff Members' do
     let(:params) { valid_params.merge(never_rehire: nil) }
 
     it 'should return unprocessable_entity status' do
-      expect{ response }.to raise_error(NoMethodError, "undefined method `downcase' for nil:NilClass")
+      expect{ response }.to raise_error(RuntimeError, "attempt to parse unsuported string \"\" as boolean")
     end
 
     it 'should not have updated the staff member' do

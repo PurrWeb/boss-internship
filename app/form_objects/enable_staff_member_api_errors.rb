@@ -29,7 +29,7 @@ class EnableStaffMemberApiErrors
     result[:county] = address.errors[:county] if address.errors[:county].present?
 
     email_address = staff_member.email_address
-    result[:email_addres] = email_address.errors[:email] if email_address.errors[:email].present?
+    result[:email_address] = email_address.errors[:email] if email_address.errors[:email].present?
     result[:sia_badge_number] = staff_member.errors[:sia_badge_number] if staff_member.errors[:sia_badge_number].present?
     result[:sia_badge_expiry_date] = staff_member.errors[:sia_badge_expiry_date] if staff_member.errors[:sia_badge_expiry_date].present?
 

@@ -75,7 +75,7 @@ class HolidaysController < ApplicationController
 
     if result.success?
       flash[:success] = "Holiday added successfully"
-      redirect_to staff_member_path(staff_member, tab: 'holidays')
+      redirect_to profile_staff_member_path(staff_member, tab: 'holidays')
     else
       flash.now[:error] = "There was a problem creating this holiday"
       js 'StaffMembers#show'
@@ -142,7 +142,7 @@ class HolidaysController < ApplicationController
 
     if result.success?
       flash[:success] = "Holiday updated successfully"
-      redirect_to staff_member_path(staff_member, tab: 'holidays')
+      redirect_to profile_staff_member_path(staff_member, tab: 'holidays')
     else
       flash.now[:error] = "There was a problem updating this holiday"
 
@@ -166,7 +166,7 @@ class HolidaysController < ApplicationController
 
     if result.success?
       flash[:success] = "Holiday deleted successfully"
-      redirect_to staff_member_path(staff_member, tab: 'holidays')
+      redirect_to profile_staff_member_path(staff_member, tab: 'holidays')
     else
       flash[:error] = "There was a problem deleting this holiday"
       render 'edit', locals: { holiday: result.holiday }

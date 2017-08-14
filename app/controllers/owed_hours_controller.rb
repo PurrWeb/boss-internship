@@ -23,7 +23,7 @@ class OwedHoursController < ApplicationController
       end
 
       flash[:success] = "Hours added successfully"
-      redirect_to staff_member_path(staff_member, tab: 'owed-hours')
+      redirect_to profile_staff_member_path(staff_member, tab: 'owed-hours')
     else
       flash.now[:error] = "There was a problem creating these hours"
 
@@ -103,7 +103,7 @@ class OwedHoursController < ApplicationController
       ).call
 
       flash[:success] = "Owed hours updated successfully"
-      redirect_to staff_member_path(owed_hour.staff_member, tab: 'owed-hours')
+      redirect_to profile_staff_member_path(owed_hour.staff_member, tab: 'owed-hours')
     else
       flash.now[:error] = "There was a problem updating these owed hours"
 
@@ -130,7 +130,7 @@ class OwedHoursController < ApplicationController
 
     if result.success?
       flash[:success] = 'Owed hour deleted successfully'
-      redirect_to staff_member_path(owed_hour.staff_member, tab: 'owed-hours')
+      redirect_to profile_staff_member_path(owed_hour.staff_member, tab: 'owed-hours')
     else
       flash[:error] = "There was a problem deleting these hours"
       render 'edit', locals: { owed_hour: result.owed_hour }
