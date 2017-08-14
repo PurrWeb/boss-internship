@@ -1,5 +1,5 @@
 class StaffMembersController < ApplicationController
-  before_action :set_new_layout, only: [:index, :new, :show, :holidays, :details]
+  before_action :set_new_layout, only: [:index, :new, :show, :holidays, :profile]
 
   def index
     authorize! :manage, :staff_members
@@ -31,10 +31,10 @@ class StaffMembersController < ApplicationController
   end
 
   def show
-    return redirect_to details_staff_member_path
+    return redirect_to profile_staff_member_path
   end
 
-  def details
+  def profile
     query = StaffMember.where(id: params[:id])
     query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
     staff_member = query.first

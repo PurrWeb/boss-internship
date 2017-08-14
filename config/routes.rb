@@ -62,7 +62,7 @@ Rails.application.routes.draw do
       resources :hours_overview, only: :show
       member do
         get :holidays
-        get :details
+        get :profile
       end
     end
 
