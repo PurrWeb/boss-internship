@@ -4,7 +4,7 @@ import SubmissionsListItem from './submissions-list-item';
 
 class SubmissionsList extends React.Component {
   static propTypes = {
-    items: PropTypes.array.isRequired,
+    items: PropTypes.object.isRequired,
     onDetailsClick: PropTypes.func.isRequired,
   }
 
@@ -45,7 +45,7 @@ class SubmissionsList extends React.Component {
 
   render() {
     return (
-      !this.props.items.size 
+      !this.props.items.size
         ? this.renderEmptyList()
         : this.renderSubmissionsList()
     )

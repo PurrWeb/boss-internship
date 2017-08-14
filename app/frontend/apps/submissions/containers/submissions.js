@@ -5,7 +5,6 @@ import { createStructuredSelector } from 'reselect';
 
 import Dashboard from '../components/dashboard';
 import MainContent from '../components/main-content';
-import SubmissionsFilter from '../components/submissions-filter';
 import SubmissionsList from '../components/submissions-list';
 import SubmissionsListMobile from '../components/submissions-list.mobile';
 import BossDetailsModal from '~/components/boss-details-modal';
@@ -67,6 +66,7 @@ const mapDispatchToProps = (dispatch) => {
   createdBy: makeSelectCreatedBy(),
   status: makeSelectStatus(),
 }), mapDispatchToProps)
+
 class Submissions extends React.Component {
   search = () => {
     this.props.actions.search(1);
@@ -100,6 +100,7 @@ class Submissions extends React.Component {
       changePage,
     } = this.props.actions;
 
+    let currentVenueId = currentVenue.toJS().id;
     return (
       <div>
         <BossDetailsModal
@@ -108,24 +109,7 @@ class Submissions extends React.Component {
         >
           <ModalDetailsContent submission={detailedSubmission} />
         </BossDetailsModal>
-        <Dashboard title="Checklist Submissions">
-          <SubmissionsFilter
-            onToggleFilter={toggleFilter}
-            onSelectVenue={changeVenue}
-            isFilterOpen={isFilterOpen}
-            onCretedByChange={setFilterCreatetBy}
-            onStatusChange={setFilterSubmissionStatus}
-            onDatesChange={setFilterDateRange}
-            venues={venues}
-            startDate={startDate}
-            endDate={endDate}
-            currentVenue={currentVenue}
-            submissions={submissions}
-            createdBy={createdBy}
-            status={status}
-            onSearch={this.search}
-          />
-        </Dashboard>
+        <Dashboard {...this.props} title="Checklist Submissions"/>
         <MainContent inactive={isFilterOpen}>
           <div className="boss-page-main__group boss-page-main__group_adjust_checklist-table">
             <SubmissionsList onDetailsClick={openDetailsModal} items={submissions} />

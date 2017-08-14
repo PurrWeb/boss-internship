@@ -1,9 +1,10 @@
 class CheckListSubmissionsController < ApplicationController
-  before_action :authorize_admin
   before_filter :check_venue
   before_filter :set_new_layout
 
   def index
+    authorize! :manage, :check_lists
+
     result = ChecklistSubmissionsIndexFilter.new(user: current_user, params: params)
     query = result.checklist_submissions_index_query
     submissions = query
@@ -46,9 +47,5 @@ class CheckListSubmissionsController < ApplicationController
     else
       current_user.venues.find(venue_params[:venue_id])
     end
-  end
-
-  def authorize_admin
-    authorize! :manage, :admin
   end
 end

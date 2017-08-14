@@ -102,6 +102,14 @@ export const appRoutes = {
         var [date, venueId] = oFetch(options, "date", "venueId");
         return "/hours_confirmation?date=" + utils.formatRotaUrlDate(date)
             + "&venue_id=" + venueId
+    },
+    checklistsPage: function(options){
+      let venueId = oFetch(options, "venueId");
+      return "/check_lists?venue_id=" + venueId;
+    },
+    checklistSubmissionsPage: function(options){
+      let venueId = oFetch(options, "venueId");
+      return "/checklist_submissions?venue_id=" + venueId;
     }
 }
 

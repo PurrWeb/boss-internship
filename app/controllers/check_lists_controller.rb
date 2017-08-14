@@ -3,6 +3,8 @@ class CheckListsController < ApplicationController
   before_filter :set_new_layout
   
   def index
+    authorize! :manage, :check_lists
+
     check_lists = venue_from_params
       .check_lists
       .includes(:check_list_items)
