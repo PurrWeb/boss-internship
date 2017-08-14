@@ -2,7 +2,7 @@ import React from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import BossFormAvatar from '~/components/boss-form/boss-form-avatar';
 
-import {updateAvatarRequest} from '../profile-details/actions';
+import {updateAvatarRequest} from '../profile-details-page/actions';
 
 const validate = values => {
   const errors = {}

@@ -3,7 +3,7 @@ import React from 'react';
 import EnableProfileForm from './enable-profile-form';
 import moment from 'moment';
 
-const EnableProfile = ({
+const EnableProfilePage = ({
     staffMember,
     venues,
     staffTypes,
@@ -45,4 +45,4 @@ const EnableProfile = ({
 }
 
 
-export default EnableProfile;
+export default EnableProfilePage;

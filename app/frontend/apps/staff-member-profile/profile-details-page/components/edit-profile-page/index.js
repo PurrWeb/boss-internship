@@ -6,7 +6,7 @@ import EmploymentDetailsForm from './employment-details-form';
 import PersonalDetailsForm from './personal-details-form';
 import ContactDetailsForm from './contact-details-form';
 
-const EditProfile = ({
+const EditProfilePage = ({
     venues,
     staffTypes,
     payRates,
@@ -92,4 +92,4 @@ const EditProfile = ({
   )
 }
 
-export default EditProfile;
+export default EditProfilePage;

@@ -10,8 +10,8 @@ import Dashboard from '../../common/dashboard';
 import StaffMemberCard from '../../common/staff-member-card';
 import StaffMemberProfileActions from '../../common/staff-member-profile-actions';
 import DetailsList from '../components/details-list';
-import EditProfile from '../components/edit-profile';
-import EnableProfile from '../components/enable-profile';
+import EditProfilePage from '../components/edit-profile-page';
+import EnableProfilePage from '../components/enable-profile-page';
 import DashboardProfile from '../components/dashboard-profile';
 
 import ContentModal from '~/components/content-modal';
@@ -63,7 +63,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
-class ProfileDetails extends React.PureComponent {
+class ProfileDetailsPage extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -229,8 +229,8 @@ class ProfileDetails extends React.PureComponent {
 
         <ContentWrapper>
           
-          { editProfile && <EditProfile {...profileProps} />}
-          { enableProfile && <EnableProfile {...profileProps} />}
+          { editProfile && <EditProfilePage {...profileProps} />}
+          { enableProfile && <EnableProfilePage {...profileProps} />}
           { !editProfile && !enableProfile && <div className="boss-page-main__flow">
                 { this.renderDetailsList(categories) }
               </div>
@@ -241,4 +241,4 @@ class ProfileDetails extends React.PureComponent {
   }
 }
 
-export default ProfileDetails;
+export default ProfileDetailsPage;

@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import configureStore from '../store';
 import {initialLoad} from './actions';
 
-import ProfileDetails from './containers/profile-details';
+import ProfileDetailsPage from './containers/profile-details-page';
 import profileDetailsReducer from './reducers';
 
 const store = configureStore(profileDetailsReducer);
@@ -17,7 +17,7 @@ class StaffMemberProfileDetailsApp extends React.Component {
 
   render() {
     return <Provider store={store}>
-      <ProfileDetails />
+      <ProfileDetailsPage />
     </Provider>
   }
 }
