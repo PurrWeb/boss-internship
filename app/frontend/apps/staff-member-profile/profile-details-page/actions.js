@@ -50,6 +50,7 @@ export const enableStaffMemberRequest = (payload) => (dispatch, getState) => {
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   return enableStaffMember({...payload, staffMemberId}).then((resp) => {
     dispatch(updateStaffMember(resp.data));
+    dispatch(cancelEnableProfile());
   });
 }
 
