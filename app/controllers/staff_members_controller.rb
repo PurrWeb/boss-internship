@@ -68,7 +68,8 @@ class StaffMembersController < ApplicationController
 
     raise ActiveRecord::RecordNotFound.new unless staff_member.present?
     if can? :edit, staff_member
-      tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.new(2016, 10, 10)))
+      tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
+      
       if holiday_start_date_from_params.present? && holiday_end_date_from_params.present?
         holiday_start_date = holiday_start_date_from_params
         holiday_end_date = holiday_end_date_from_params
@@ -102,7 +103,7 @@ class StaffMembersController < ApplicationController
       render locals: {
         staff_member: StaffMemberSerializer.new(staff_member),
         access_token: access_token,
-        holidays: ActiveModel::Serializer::CollectionSerializer.new(filtered_holidays, serializer: HolidaySerializer),
+        holidays: ActiveModel::Serializer::CollectionSerializer.new(filtered_holidays, serializer: ::HolidaySerializer),
         paid_holiday_days: paid_holiday_days,
         unpaid_holiday_days: unpaid_holiday_days,
         estimated_accrued_holiday_days: estimated_accrued_holiday_days,
@@ -134,28 +135,13 @@ class StaffMembersController < ApplicationController
       gender_values: gender_values
     }
   end
-
+  
+  private
   def holiday_start_date_from_params
-    if params[:holiday_start_date].present?
-      result = nil
-      begin
-        result = UIRotaDate.parse(params.fetch(:holiday_start_date))
-      rescue ArgumentError
-        # Do nothing
-      end
-      result
-    end
+    UIRotaDate.parse(params.fetch['start_date'])
   end
 
   def holiday_end_date_from_params
-    if params[:holiday_end_date].present?
-      result = nil
-      begin
-        result = UIRotaDate.parse(params.fetch(:holiday_end_date))
-      rescue ArgumentError
-        # Do nothing
-      end
-      result
-    end
+    UIRotaDate.parse(params.fetch['end_date'])
   end
 end

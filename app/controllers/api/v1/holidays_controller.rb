@@ -16,12 +16,7 @@ module Api
         result = HolidayApiService.new(
           requester: current_user,
           holiday: holiday,
-        ).update({
-          start_date: params[:start_date],
-          end_date: params[:end_date],
-          holiday_type: params[:holiday_type],
-          note: params[:note]
-        })
+        ).update(holiday_from_params)
 
         if result.success?
           render(
@@ -61,12 +56,7 @@ module Api
         result = HolidayApiService.new(
           requester: current_user,
           holiday: Holiday.new(staff_member: staff_member),
-        ).create({
-          start_date: params[:start_date],
-          end_date: params[:end_date],
-          holiday_type: params[:holiday_type],
-          note: params[:note]
-        })
+        ).create(holiday_from_params)
 
         if result.success?
           render(
@@ -77,6 +67,16 @@ module Api
         else
           render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
         end
+      end
+
+      private
+      def holiday_from_params
+        {
+          start_date: params.fetch(:start_date),
+          end_date: params.fetch(:end_date),
+          holiday_type: params.fetch(:holiday_type),
+          note: params[:note]
+        }
       end
     end
   end
