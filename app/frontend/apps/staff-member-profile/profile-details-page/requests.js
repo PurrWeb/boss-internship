@@ -27,7 +27,7 @@ export const enableStaffMember = (payload) => {
 
   const {
     staffMemberId,
-    pin_code,
+    pinCode,
     gender,
     phone_number,
     date_of_birth,
@@ -43,10 +43,15 @@ export const enableStaffMember = (payload) => {
     staff_type,
     master_venue,
     other_venues,
+    address,
+    postcode,
+    country,
+    county,
+    email_address
   } = payload;
-  
-  return http.post(`/api/v1/staff_members/${staffMemberId}/enable`, {
-    pin_code,
+
+  let requestParams = {
+    pin_code: pinCode,
     gender,
     phone_number,
     date_of_birth,
@@ -60,9 +65,16 @@ export const enableStaffMember = (payload) => {
     main_venue_id: master_venue.value,
     pay_rate_id: pay_rate.value,
     other_venue_ids: other_venues.map(venue => venue.value),
+    email_address,
     first_name,
     surname,
-  });
+    address,
+    postcode,
+    country,
+    county
+  }
+
+  return http.post(`/api/v1/staff_members/${staffMemberId}/enable`, requestParams);
 }
 
 export const updateEmploymentDetails = (payload) => {

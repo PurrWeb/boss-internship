@@ -60,7 +60,6 @@ class StaffMemberApiUpdateService
       work_venues: work_venues,
       pay_rate: pay_rate,
       staff_type: staff_type,
-      pin_code: params.fetch(:pin_code),
       gender: params.fetch(:gender),
       phone_number: params.fetch(:phone_number),
       date_of_birth: params.fetch(:date_of_birth),
@@ -75,13 +74,17 @@ class StaffMemberApiUpdateService
         county: params.fetch(:county),
         postcode: params.fetch(:postcode)
       },
-      email_address_attributes: {
-        email: params.fetch(:email_address)
-      },
       sia_badge_number: params.fetch(:sia_badge_number),
       sia_badge_expiry_date: params.fetch(:sia_badge_expiry_date)
     }
 
+    new_email_address = params.fetch(:email_address).downcase.strip
+    if staff_member.email != new_email_address
+      staff_member_params[:email_address_attributes] = {
+        email: new_email_address
+      }
+    end
+    staff_member_params[:pin_code] = params.fetch(:pin_code) if params[:pin_code].present?
     staff_member_params[:avatar_data_uri] = params[:avatar_base64] if params[:avatar_base64].present?
     EmploymentStatusApiEnum.new(value: params.fetch(:employment_status)).to_params do |param, value|
       staff_member_params[param] = value

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form/immutable';
+import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormInput from '~/components/boss-form/boss-form-input';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
@@ -124,7 +124,7 @@ const EnableProfileForm = ({
         <Field
           component={BossFormInput}
           required
-          name="email"
+          name="email_address"
           type="text"
           label="Email"
         />
@@ -142,7 +142,13 @@ const EnableProfileForm = ({
           type="text"
           label="Country"
         />
-
+        <Field
+          component={BossFormInput}
+          required
+          name="county"
+          type="text"
+          label="County"
+        />
         <Field
           component={BossFormInput}
           required
@@ -173,7 +179,6 @@ const EnableProfileForm = ({
         />
         <Field
           component={BossFormInput}
-          required
           name="pinCode"
           type="text"
           label="Pin Code"
