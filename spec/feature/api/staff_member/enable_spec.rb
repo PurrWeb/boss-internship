@@ -145,6 +145,60 @@ RSpec.describe 'Enable Staff Members' do
       expect(response.status).to eq(ok_status)
     end
 
+    it 'should return staff member json' do
+      response_json = JSON.parse(response.body)
+
+      expect(response_json.fetch("disabled")).to eq(false)
+      expect(
+        UIRotaDate.parse(response_json.fetch("starts_at"))
+      ).to eq(new_starts_at)
+      expect(
+        response_json.fetch("master_venue").fetch("id")
+      ).to eq(new_main_venue.id)
+      expect(
+        response_json.fetch("staff_type").fetch("id")
+      ).to eq(new_staff_type.id)
+      expect(
+        response_json.fetch("work_venues").map { |venue_json|
+          venue_json.fetch("id")
+      }).to eq(new_other_venues.map(&:id))
+      expect(response_json.fetch("gender")).to eq(new_gender)
+      expect(response_json.fetch("phone_number")).to eq(new_phone_number)
+      expect(
+        UIRotaDate.parse(response_json.fetch("date_of_birth"))
+      ).to eq(new_date_of_birth)
+      expect(
+        response_json.fetch("national_insurance_number")
+      ).to eq(new_national_insurance_number)
+      expect(
+        response_json.fetch("pay_rate").fetch("id")
+      ).to eq(new_pay_rate.id)
+      expect(
+        response_json.fetch("status_statement")
+      ).to eq(new_employment_status)
+      expect(
+        response_json.fetch("name").fetch("first_name")
+      ).to eq(new_first_name)
+      expect(
+        response_json.fetch("name").fetch("surname")
+      ).to eq(new_surname)
+      expect(
+        response_json.fetch("address").fetch("address")
+      ).to eq(new_address)
+      expect(
+        response_json.fetch("address").fetch("postcode")
+      ).to eq(new_postcode)
+      expect(
+        response_json.fetch("address").fetch("country")
+      ).to eq(new_country)
+      expect(
+        response_json.fetch("address").fetch("county")
+      ).to eq(new_county)
+      expect(
+        response_json.fetch("email")
+      ).to eq(new_email_address)
+    end
+
     it 'should have updated the staff member' do
       #reload doesn't seem to be working with statesman gem
       test_member = StaffMember.find(staff_member.id)
