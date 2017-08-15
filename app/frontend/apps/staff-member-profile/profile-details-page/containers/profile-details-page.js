@@ -74,7 +74,7 @@ class ProfileDetailsPage extends React.PureComponent {
           (item, name = "master_venue") => ({name: "Main Venue", value: item[name].label}),
           (item, name = "other_venues") => ({name: humanize(name), value: item[name].map(venue => venue.label).join(', ')}),
           (item, name = "staff_type") => ({name: "Job Type", value: item[name].label}),
-          (item, name = "start_date") => ({name: humanize(name), value: moment(item[name]).format('DD MMMM YYYY')}),
+          (item, name = "starts_at") => ({name: "Start Date", value: moment(item[name]).format('DD MMMM YYYY')}),
           (item, name = "pay_rate") => ({name: humanize(name), value: item[name].label}),
           "hour_preference", "day_preference", "national_insurance_number"
         ]

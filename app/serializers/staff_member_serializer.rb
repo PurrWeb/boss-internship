@@ -11,7 +11,7 @@ class StaffMemberSerializer < ActiveModel::Serializer
              :master_venue,
              :other_venues,
              :staff_type,
-             :start_date,
+             :starts_at,
              :pay_rate,
              :hours_preference,
              :day_preference,
@@ -79,10 +79,6 @@ class StaffMemberSerializer < ActiveModel::Serializer
 
   def pay_rate
     { value: object.pay_rate.id, label: object.pay_rate.name } if object.pay_rate.present?
-  end
-
-  def start_date
-    object.starts_at
   end
 
   def staff_type

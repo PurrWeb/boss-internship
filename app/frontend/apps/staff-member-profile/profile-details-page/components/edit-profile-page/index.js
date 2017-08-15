@@ -33,7 +33,7 @@ const EditProfilePage = ({
   const employmentDetailsFormInitial = {
     master_venue: staffMember.get('master_venue'),
     other_venues: staffMember.get('other_venues').toJS(),
-    start_date: moment(staffMember.get('start_date')),
+    starts_at: moment(staffMember.get('starts_at')),
     staff_type: staffMember.get('staff_type'),
     national_insurance_number: staffMember.get('national_insurance_number'),
     day_preference: staffMember.get('day_preference'),

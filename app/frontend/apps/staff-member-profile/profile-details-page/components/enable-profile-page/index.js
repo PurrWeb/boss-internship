@@ -19,7 +19,7 @@ const EnableProfilePage = ({
     date_of_birth: moment(staffMember.get('date_of_birth')),
     master_venue: staffMember.get('master_venue'),
     other_venues: staffMember.get('other_venues'),
-    start_date: moment(staffMember.get('start_date')),
+    starts_at: moment(staffMember.get('starts_at')),
     email_address: staffMember.get('email'),
     address: staffMember.get('address'),
     country: staffMember.get('country'),

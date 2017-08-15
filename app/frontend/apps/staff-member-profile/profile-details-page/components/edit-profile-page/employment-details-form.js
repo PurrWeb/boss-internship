@@ -89,9 +89,9 @@ const EmploymentDetailsForm = ({
       />
 
       <Field
-        name="start_date"
+        name="starts_at"
         component={BossFormCalendar}
-        label="Starts at"
+        label="Starts Date"
         required
       />
 

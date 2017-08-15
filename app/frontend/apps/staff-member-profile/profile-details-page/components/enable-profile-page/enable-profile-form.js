@@ -113,9 +113,9 @@ const EnableProfileForm = ({
           options={venues.toJS()}
         />
         <Field
-          name="start_date"
+          name="starts_at"
           component={BossFormCalendar}
-          label="Starts at"
+          label="Starts Date"
           required
         />
 
