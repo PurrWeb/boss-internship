@@ -23,7 +23,9 @@ class CompleteFruitOrders
             'pwoods@totalproduce.com',
             'imack@totalproduce.com',
             'Mike@jsmbars.co.uk',
-            'jrowe@totalproduce.com'
+            'jrowe@totalproduce.com',
+            'skennedy@totalproduce.com',
+            'JRowe@totalproduce.com'
           ],
           fruit_order_ids: fruit_orders.pluck(:id)
         ).deliver_now
