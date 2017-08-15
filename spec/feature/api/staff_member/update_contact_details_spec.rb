@@ -62,6 +62,7 @@ RSpec.describe 'Update Contact Details' do
       post(url, params)
     end
   end
+  
   let(:old_phone_number) { '123456789' }
   let(:new_phone_number) { '987654321' }
   let(:new_address) { 'new Address' }

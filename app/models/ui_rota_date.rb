@@ -6,7 +6,7 @@ class UIRotaDate
   end
 
   def self.parse!(date_param)
-    unless date_param.nil?
+    if date_param.present?
       Date.strptime(date_param, URL_DATE_FORMAT)
     end
   end
