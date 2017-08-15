@@ -211,6 +211,7 @@ Rails.application.routes.draw do
         resources :holidays, only: :show
         resources :holiday_reports, only: :index
         resources :staff_members, only: [:show, :create] do
+          resources :holidays, only: [:update, :destroy, :create]
           member do
             post :disable
             post :enable

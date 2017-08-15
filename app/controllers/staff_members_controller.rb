@@ -102,7 +102,6 @@ class StaffMembersController < ApplicationController
       render locals: {
         staff_member: StaffMemberSerializer.new(staff_member),
         access_token: access_token,
-        new_holiday: Holiday.new,
         holidays: ActiveModel::Serializer::CollectionSerializer.new(filtered_holidays, serializer: HolidaySerializer),
         paid_holiday_days: paid_holiday_days,
         unpaid_holiday_days: unpaid_holiday_days,
@@ -134,5 +133,29 @@ class StaffMembersController < ApplicationController
       staff_types: staff_types,
       gender_values: gender_values
     }
+  end
+
+  def holiday_start_date_from_params
+    if params[:holiday_start_date].present?
+      result = nil
+      begin
+        result = UIRotaDate.parse(params.fetch(:holiday_start_date))
+      rescue ArgumentError
+        # Do nothing
+      end
+      result
+    end
+  end
+
+  def holiday_end_date_from_params
+    if params[:holiday_end_date].present?
+      result = nil
+      begin
+        result = UIRotaDate.parse(params.fetch(:holiday_end_date))
+      rescue ArgumentError
+        # Do nothing
+      end
+      result
+    end
   end
 end
