@@ -52,7 +52,7 @@ export const enableStaffMember = (payload) => {
 
   let requestParams = {
     pin_code: pinCode,
-    gender,
+    gender: gender.label || gender,
     phone_number,
     date_of_birth,
     starts_at: moment(starts_at).format('DD-MM-YYYY'),
