@@ -8,7 +8,7 @@ class EnableStaffMemberApiErrors
     result = {}
 
     result[:base] = staff_member.errors[:base] if staff_member.errors[:base].present?
-    result[:start_date] = staff_member.errors[:starts_at] if staff_member.errors[:starts_at].present?
+    result[:starts_at] = staff_member.errors[:starts_at] if staff_member.errors[:starts_at].present?
     result[:main_venue_id] = staff_member.errors[:master_venue] if staff_member.errors[:master_venue].present?
     result[:other_venue_ids] = staff_member.errors[:work_venues] if staff_member.errors[:work_venues].present?
     result[:staff_type_id] = staff_member.errors[:staff_type] if staff_member.errors[:staff_type].present?
