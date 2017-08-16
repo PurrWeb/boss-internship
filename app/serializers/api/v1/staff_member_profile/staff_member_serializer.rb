@@ -1,4 +1,4 @@
-class StaffMemberSerializer < ActiveModel::Serializer
+class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
 
   attributes :id,
@@ -11,7 +11,6 @@ class StaffMemberSerializer < ActiveModel::Serializer
              :master_venue,
              :other_venues,
              :staff_type,
-             :starts_at,
              :pay_rate,
              :hours_preference,
              :day_preference,
@@ -22,17 +21,22 @@ class StaffMemberSerializer < ActiveModel::Serializer
              :disabled_by_user,
              :gender,
              :date_of_birth,
+             :starts_at,
              :address,
              :country,
              :postcode,
              :county,
              :status_statement
-             
+
+
+  def starts_at
+    UIRotaDate.format(object.starts_at)
+  end
 
   def url
     api_v1_staff_member_url(object)
   end
-  
+
   def status_statement
     [:employment_status_a,
      :employment_status_b,
@@ -64,7 +68,7 @@ class StaffMemberSerializer < ActiveModel::Serializer
       object.disabled_by_user.full_name.titlecase
     end
   end
-  
+
   def disabled
     object.disabled?
   end

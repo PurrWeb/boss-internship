@@ -67,6 +67,17 @@ RSpec.describe 'Disable Staff Members' do
       expect(response.status).to eq(ok_status)
     end
 
+    it 'should return staff member json' do
+      staff_member.reload
+
+      response_json = JSON.parse(response.body)
+      expect(response_json).to eq(
+        JSON.parse(
+          Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member).to_json
+        )
+      )
+    end
+
     it 'should have updated the staff member' do
       staff_member.reload
       expect(staff_member).to be_disabled

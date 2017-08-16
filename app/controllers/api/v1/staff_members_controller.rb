@@ -58,7 +58,7 @@ module Api
         if result.success?
           render(
             json: result.staff_member,
-            serializer: ::StaffMemberSerializer,
+            serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
             status: 200
           )
         else
@@ -102,7 +102,7 @@ module Api
         if result.success?
           render(
             json: result.staff_member,
-            serializer: ::StaffMemberSerializer,
+            serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
             status: 200
           )
         else
@@ -158,7 +158,7 @@ module Api
         if result.success?
           render(
             json: result.staff_member,
-            serializer: ::StaffMemberSerializer,
+            serializer: StaffMemberProfile::StaffMemberSerializer,
             status: 200
           )
         else
@@ -184,7 +184,7 @@ module Api
         if result.success?
           render(
             json: result.staff_member,
-            serializer: ::StaffMemberSerializer,
+            serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
             status: 200
           )
         else
@@ -208,7 +208,7 @@ module Api
         if result.success?
           render(
             json: result.staff_member,
-            serializer: ::StaffMemberSerializer,
+            serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
             status: 200
           )
         else
@@ -235,11 +235,11 @@ module Api
           sia_badge_number: params["sia_badge_number"],
           sia_badge_expiry_date: params["sia_badge_expiry_date"]
         })
-        
+
         if result.success?
           render(
             json: result.staff_member,
-            serializer: ::StaffMemberSerializer,
+            serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
             status: 200
           )
         else

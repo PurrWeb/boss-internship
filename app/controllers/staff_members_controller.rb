@@ -45,7 +45,7 @@ class StaffMembersController < ApplicationController
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
       render locals: {
-        staff_member: StaffMemberSerializer.new(staff_member),
+        staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
         access_token: access_token,
         staff_types: StaffType.all,
         venues: Venue.all,
