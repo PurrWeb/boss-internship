@@ -115,7 +115,7 @@ const EnableProfileForm = ({
         <Field
           name="starts_at"
           component={BossFormCalendar}
-          label="Starts Date"
+          label="Start Date"
           required
         />
 
