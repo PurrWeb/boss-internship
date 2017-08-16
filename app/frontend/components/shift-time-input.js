@@ -63,7 +63,7 @@ export default class ShiftTimeInput extends Component {
                 value={dateValue}
                 loadOptions={this.getOptions}
                 clearable={false}
-                searchable={false}
+                searchable={true}
                 onChange={(value) => this.updateTime(value)}
             />
         }
