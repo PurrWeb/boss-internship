@@ -14,6 +14,7 @@ const submission = (values, dispatch) => {
   return dispatch(updateContactDetailsRequest(values.toJS())).catch((resp) => {
     const errors = resp.response.data.errors;
     if (errors) {
+      window.scrollTo(0, 0);
       throw new SubmissionError(errors);
     }
   });
