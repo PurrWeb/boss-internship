@@ -26,11 +26,12 @@ import {
 
 export const updateAvatarRequest = (avatarUrl) => (dispatch, getState) => {
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
-  
+
   return updateAvatar({staffMemberId, avatarUrl})
     .then((resp) => {
       dispatch(hideEditAvatarModal());
       dispatch(updateStaffMember(resp.data));
+      window.scrollTo(0, 0);
     });
 }
 
@@ -39,6 +40,7 @@ export const disableStaffMemberRequest = ({neverRehire, reason}) => (dispatch, g
   return disableStaffMember({staffMemberId, neverRehire, reason}).then((resp) => {
     dispatch(hideDisableStaffMemberModal());
     dispatch(updateStaffMember(resp.data));
+    window.scrollTo(0, 0);
   });
 }
 
@@ -47,6 +49,7 @@ export const enableStaffMemberRequest = (payload) => (dispatch, getState) => {
   return enableStaffMember({...payload, staffMemberId}).then((resp) => {
     dispatch(updateStaffMember(resp.data));
     dispatch(cancelEnableProfile());
+    window.scrollTo(0, 0);
   });
 }
 
@@ -54,6 +57,8 @@ export const updateEmploymentDetailsRequest = (payload) => (dispatch, getState) 
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   return updateEmploymentDetails({...payload, staffMemberId}).then((resp) => {
     dispatch(updateStaffMember(resp.data));
+    dispatch(cancelEditProfile());
+    window.scrollTo(0, 0);
   });
 }
 
@@ -61,6 +66,8 @@ export const updatePersonalDetailsRequest = (payload) => (dispatch, getState) =>
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   return updatePersonalDetails({...payload, staffMemberId}).then((resp) => {
     dispatch(updateStaffMember(resp.data));
+    dispatch(cancelEditProfile());
+    window.scrollTo(0, 0);
   });
 }
 
@@ -68,6 +75,8 @@ export const updateContactDetailsRequest = (payload) => (dispatch, getState) => 
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   return updateContactDetails({...payload, staffMemberId}).then((resp) => {
     dispatch(updateStaffMember(resp.data));
+    dispatch(cancelEditProfile());
+    window.scrollTo(0, 0);
   });
 }
 
