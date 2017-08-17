@@ -55,7 +55,7 @@ export const enableStaffMember = (payload) => {
     gender: gender.label || gender,
     phone_number,
     date_of_birth,
-    starts_at: moment(starts_at).format('DD-MM-YYYY'),
+    starts_at: moment(starts_at).format("DD-MM-YYYY"),
     national_insurance_number,
     hours_preference_note: hours_preference,
     avatar_base64: avatar_url,
@@ -82,8 +82,8 @@ export const updateEmploymentDetails = (payload) => {
   const {
     staffMemberId,
     national_insurance_number,
-    hours_preference_note,
-    day_perference_note,
+    hours_preference,
+    day_preference,
     starts_at,
     employment_status,
     pay_rate,
@@ -91,12 +91,12 @@ export const updateEmploymentDetails = (payload) => {
     other_venues,
     staff_type,
   } = payload;
-  
+
   return http.post(`/api/v1/staff_members/${staffMemberId}/update_employment_details`, {
     national_insurance_number,
-    hours_preference_note,
-    day_perference_note,
-    starts_at: moment(starts_at).format('DD-MM-YYYY'),
+    hours_preference_note: hours_preference,
+    day_preference_note: day_preference,
+    starts_at: moment(starts_at).format("DD-MM-YYYY"),
     employment_status,
     pay_rate_id: pay_rate.value,
     master_venue_id: master_venue.value,

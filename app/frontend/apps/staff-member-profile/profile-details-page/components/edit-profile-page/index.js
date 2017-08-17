@@ -27,13 +27,13 @@ const EditProfilePage = ({
     first_name: staffMember.get('first_name'),
     surname: staffMember.get('surname'),
     gender: staffMember.get('gender'),
-    date_of_birth: moment(staffMember.get('date_of_birth')),
+    date_of_birth: moment(staffMember.get('date_of_birth'), 'DD-MM-YYYY'),
   }
 
   const employmentDetailsFormInitial = {
     master_venue: staffMember.get('master_venue'),
     other_venues: staffMember.get('other_venues').toJS(),
-    starts_at: moment(staffMember.get('starts_at')),
+    starts_at: moment(staffMember.get('starts_at'), 'DD-MM-YYYY'),
     staff_type: staffMember.get('staff_type'),
     national_insurance_number: staffMember.get('national_insurance_number'),
     day_preference: staffMember.get('day_preference'),

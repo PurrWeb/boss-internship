@@ -107,14 +107,14 @@ const EmploymentDetailsForm = ({
       />
 
       <Field
+        name="day_preference"
         component={BossFormInput}
-        name="day_preference_note"
         type="text"
         label="Day Preference"
       />
 
       <Field
-        name="hours_preference_note"
+        name="hours_preference"
         component={BossFormInput}
         type="text"
         label="Hours Preference"

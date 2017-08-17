@@ -158,7 +158,7 @@ module Api
         if result.success?
           render(
             json: result.staff_member,
-            serializer: StaffMemberProfile::StaffMemberSerializer,
+            serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
             status: 200
           )
         else

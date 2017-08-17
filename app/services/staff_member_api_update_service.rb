@@ -55,7 +55,7 @@ class StaffMemberApiUpdateService
     pay_rate = PayRate.find(params.fetch(:pay_rate_id))
 
     staff_member_params = {
-      starts_at: params.fetch(:starts_at),
+      starts_at: UIRotaDate.parse(params.fetch(:starts_at)),
       master_venue: master_venue,
       work_venues: work_venues,
       pay_rate: pay_rate,
@@ -86,7 +86,9 @@ class StaffMemberApiUpdateService
     end
     staff_member_params[:pin_code] = params.fetch(:pin_code) if params[:pin_code].present?
     staff_member_params[:avatar_data_uri] = params[:avatar_base64] if params[:avatar_base64].present?
-    EmploymentStatusApiEnum.new(value: params.fetch(:employment_status)).to_params do |param, value|
+    staff_member_params[:hours_preference_note] = params[:hours_preference_note] if params[:hours_preference_note].present?
+    staff_member_params[:day_perference_note] = params[:day_preference_note] if params[:day_preference_note].present?
+    EmploymentStatusApiEnum.new(value: params.fetch(:employment_status)).to_params.each do |param, value|
       staff_member_params[param] = value
     end
 
@@ -170,7 +172,7 @@ class StaffMemberApiUpdateService
     }
     update_params[:national_insurance_number] = params[:national_insurance_number]if params[:national_insurance_number].present?
     update_params[:hours_preference_note] = params[:hours_preference_note] if params[:hours_preference_note].present?
-    update_params[:day_preference_note] = params[:day_preference_note] if params[:day_preference_note].present?
+    update_params[:day_perference_note] = params[:day_preference_note] if params[:day_preference_note].present?
     EmploymentStatusApiEnum.new(value: params.fetch(:employment_status)).to_params.each do |param, value|
       update_params[param] = value
     end
