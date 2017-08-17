@@ -4,7 +4,7 @@ import EditHolidayContent from './edit-holiday-content';
 
 const AddNewHoliday = (props) => {
   return (
-    <EditHolidayContent onSubmit={props.proceed} />
+    <EditHolidayContent startDate={props.startDate} endDate={props.endDate} onSubmit={props.proceed} />
   )
 }
 

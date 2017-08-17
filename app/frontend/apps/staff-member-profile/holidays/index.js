@@ -12,6 +12,7 @@ const store = configureStore(holidaysReducer);
 class StaffMemberHolidaysApp extends React.Component {
   constructor(props) {
     super(props);
+
     store.dispatch(initialLoad({...props}));
   }
 

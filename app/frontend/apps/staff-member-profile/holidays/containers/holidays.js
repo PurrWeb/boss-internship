@@ -10,28 +10,32 @@ import ContentWrapper from '~/components/content-wrapper';
 import Dashboard from '../../common/dashboard';
 import StaffMemberCard from '../../common/staff-member-card';
 import StaffMemberProfileActions from '../../common/staff-member-profile-actions';
+import HolidayasMobileItems from '../components/holidays-mobile-items';
 
 import {
   updateAvatarRequest,
   addNewHoliday,
   cancelAddNewHoliday,
+  deleteHoliday
 } from '../actions';
 
 import Stats from '../components/stats';
 import HolidaysHeader from '../components/holidays-header';
 import HolidaysFilter from '../components/holidays-filter';
 import HolidaysTable from '../components/holidays-table';
+import AddNewHoliday from '../components/add-new-holiday';
+import ContentModal from '~/components/content-modal';
 
 const mapStateToProps = (state) => {
   return {
-    staffMember: state.get('staffMember'),
-    holidays: state.get('holidays'),
-    paidHolidayDays: state.get('paidHolidayDays'),
-    unpaidHolidayDays: state.get('unpaidHolidayDays'),
-    estimatedAccruedHolidayDays: state.get('estimatedAccruedHolidayDays'),
-    holidayStartDate: state.get('holidayStartDate'),
-    holidayEndDate: state.get('holidayEndDate'),
-    newHoliday: state.get('newHoliday'),
+    staffMember: state.getIn(['profile','staffMember']),
+    holidays: state.getIn(['profile','holidays']),
+    paidHolidayDays: state.getIn(['profile','paidHolidayDays']),
+    unpaidHolidayDays: state.getIn(['profile','unpaidHolidayDays']),
+    estimatedAccruedHolidayDays: state.getIn(['profile','estimatedAccruedHolidayDays']),
+    holidayStartDate: state.getIn(['profile', 'holidayStartDate']),
+    holidayEndDate: state.getIn(['profile','holidayEndDate']),
+    newHoliday: state.getIn(['profile', 'newHoliday']),
   };
 }
 
@@ -40,13 +44,18 @@ const mapDispatchToProps = (dispatch) => {
     actions: bindActionCreators({
       updateAvatarRequest,
       addNewHoliday,
-      cancelAddNewHoliday
+      cancelAddNewHoliday,
+      deleteHoliday
     }, dispatch)
   };
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
 class Holidays extends React.PureComponent {
+
+  constructor(props){
+    super(props);
+  }
   
   onAddNew = () => {
     this.props.actions.addNewHoliday();
@@ -54,14 +63,6 @@ class Holidays extends React.PureComponent {
 
   onCancelAddNew = () => {
     this.props.actions.cancelAddNewHoliday();
-  }
-
-  renderNewHoliday() {
-
-  }
-
-  renderHolidays() {
-
   }
 
   render() {
@@ -96,27 +97,34 @@ class Holidays extends React.PureComponent {
         </DashboardWrapper>
 
         <ContentWrapper>
-            { newHoliday
-              ? <section className="boss-board">
-                  <HolidaysHeader title="Add Holiday" onAddNew={this.onCancelAddNew} />
-                </section>
-              : <section className="boss-board">
-                  <HolidaysHeader title="Holidays" onAddNew={this.onAddNew} />
-                  <div className="boss-board__main">
-                    <div className="boss-board__manager">
-                      <div className="boss-board__manager-stats boss-board__manager-stats_layout_row">
-                        <Stats value={estimatedAccruedHolidayDays} label={`${pluralize('Day', estimatedAccruedHolidayDays)} accured current tax year (Estimated)`} />
-                        <Stats value={paidHolidayDays} label={`Paid ${pluralize('day', paidHolidayDays)} logged in current tax year`} />
-                        <Stats value={unpaidHolidayDays} label={`Unpaid ${pluralize('day', unpaidHolidayDays)} logged in current tax year`} />
-                      </div>
-                      <div className="boss-board__manager-data">
-                        <HolidaysFilter startDate={holidayStartDate} endDate={holidayEndDate} />
-                        <HolidaysTable holidays={holidays} />
-                      </div>
-                    </div>
-                  </div> 
-                </section>
-            }
+          <ContentModal
+              show={newHoliday}
+              onClose={() => this.onCancelAddNew()}
+              title="Add holiday"
+            >
+            <AddNewHoliday
+              title="Add Holiday"
+              startDate={holidayStartDate}
+              endDate={holidayEndDate}
+             />
+          </ContentModal>
+          <section className="boss-board">
+            <HolidaysHeader title="Holidays" onAddNew={this.onAddNew} />
+            <div className="boss-board__main">
+              <div className="boss-board__manager">
+                <div className="boss-board__manager-stats boss-board__manager-stats_layout_row">
+                  <Stats value={estimatedAccruedHolidayDays} label={`${pluralize('Day', estimatedAccruedHolidayDays)} accured current tax year (Estimated)`} />
+                  <Stats value={paidHolidayDays} label={`Paid ${pluralize('day', paidHolidayDays)} logged in current tax year`} />
+                  <Stats value={unpaidHolidayDays} label={`Unpaid ${pluralize('day', unpaidHolidayDays)} logged in current tax year`} />
+                </div>
+                <div className="boss-board__manager-data">
+                  <HolidaysFilter startDate={holidayStartDate} endDate={holidayEndDate} />
+                  <HolidaysTable holidays={holidays} deleteHoliday={deleteHoliday} />
+                  <HolidayasMobileItems holidays={holidays} deleteHoliday={deleteHoliday}/>
+                </div>
+              </div>
+            </div> 
+          </section>
         </ContentWrapper>
       </div>
     )

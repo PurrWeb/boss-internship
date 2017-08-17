@@ -10,4 +10,4 @@ export const updateAvatar = ({staffMemberId, avatarUrl}) => {
   return http.put(`/api/v1/staff_members/${staffMemberId}`, {
     avatar_url: avatarUrl,
   });
-}
+};

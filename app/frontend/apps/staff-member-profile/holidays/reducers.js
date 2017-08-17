@@ -1,11 +1,16 @@
 import { fromJS, Map, List } from 'immutable';
+import { combineReducers } from 'redux-immutable';
 import { handleActions } from 'redux-actions';
+
+import { reducer as formReducer } from 'redux-form/immutable';
 import moment from 'moment';
 
 import {
   INITIAL_LOAD,
   ADD_NEW_HOLIDAY,
   CANCEL_ADD_NEW_HOLIDAY,
+  DELETE_HOLIDAY,
+  FILTER
 } from './constants';
 
 const initialState = fromJS({
@@ -20,7 +25,7 @@ const initialState = fromJS({
   newHoliday: false,
 });
 
-export default handleActions({
+const holidaysReducer = handleActions({
   [INITIAL_LOAD]: (state, action) => {
     const { 
       staffMember,
@@ -50,5 +55,22 @@ export default handleActions({
   [CANCEL_ADD_NEW_HOLIDAY]: (state) => {
     return state
       .set('newHoliday', false)
+  },
+  [DELETE_HOLIDAY]: (state) => {
+    return state;
+  },
+  [FILTER]: (state, action) => {
+    const {
+      holidays
+    } = action.payload
+
+    return state
+      set('holidays', fromJS(holidays));
   }
 }, initialState);
+
+export default combineReducers({
+  profile: holidaysReducer,
+  form: formReducer,
+})
+
