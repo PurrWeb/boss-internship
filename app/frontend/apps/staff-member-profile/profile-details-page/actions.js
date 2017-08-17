@@ -24,10 +24,6 @@ import {
   UPDATE_STAFF_MEMBER,
 } from './constants';
 
-// export const updateAvatar = createAction(UPDATE_AVATAR);
-
-
-
 export const updateAvatarRequest = (avatarUrl) => (dispatch, getState) => {
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   
