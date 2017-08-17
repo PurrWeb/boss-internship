@@ -10,6 +10,8 @@ import {
   ADD_NEW_HOLIDAY,
   CANCEL_ADD_NEW_HOLIDAY,
   DELETE_HOLIDAY,
+  ADD_HOLIDAY_SUCCESS,
+  CLOSE_HOLIDAY_MODAL,
   FILTER
 } from './constants';
 
@@ -58,6 +60,17 @@ const holidaysReducer = handleActions({
   },
   [DELETE_HOLIDAY]: (state) => {
     return state;
+  },
+  [ADD_HOLIDAY_SUCCESS]: (state, action) => {
+    let holidays = state.get('holidays');
+    console.log(holidays);
+    holidays.push(fromJS(action.payload));
+    return state
+      .set('holidays', fromJS(holidays));
+  },
+  [CLOSE_HOLIDAY_MODAL]: (state) => {
+    return state.
+      set('newHoliday', false);
   },
   [FILTER]: (state, action) => {
     const {

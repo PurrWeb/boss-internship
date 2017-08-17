@@ -2,11 +2,13 @@ class UIRotaDate
   URL_DATE_FORMAT = '%d-%m-%Y'
 
   def self.parse(date_param)
+    puts date_param
     Date.strptime(date_param, URL_DATE_FORMAT)
   end
 
   def self.parse!(date_param)
     if date_param.present?
+      puts date_param
       Date.strptime(date_param, URL_DATE_FORMAT)
     end
   end

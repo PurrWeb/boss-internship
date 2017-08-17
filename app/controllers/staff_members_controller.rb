@@ -138,10 +138,10 @@ class StaffMembersController < ApplicationController
   
   private
   def holiday_start_date_from_params
-    UIRotaDate.parse!(params.fetch['start_date'])
+    UIRotaDate.parse!(params['start_date'])
   end
 
   def holiday_end_date_from_params
-    UIRotaDate.parse!(params.fetch['end_date'])
+    UIRotaDate.parse!(params['end_date'])
   end
 end
