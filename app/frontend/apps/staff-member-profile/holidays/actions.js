@@ -30,8 +30,9 @@ export const updateAvatarRequest = (staffMemberId, avatarUrl) => (dispatch, getS
 
 export const deleteHoliday = (holidayId) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
+  const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
 
-  axios.delete(`/api/v1/holidays/${holidayId}`,
+  axios.delete(`/api/v1/staff_members/${staffMemberId}/holidays/${holidayId}`,
   {
     headers: {
       Authorization: `Token token="${accessToken}"`
@@ -39,7 +40,7 @@ export const deleteHoliday = (holidayId) => (dispatch, getState) => {
   }).then((resp) => {
     dispatch({
       type: DELETE_HOLIDAY,
-      payload: resp.data.holiday,
+      payload: resp.data,
     });
   });
 }
@@ -71,8 +72,9 @@ export const addHoliday = ({start_date, ends_date, holidays_type, note}) => (dis
 
 export const filter = (startDate, endDate) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
+  const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
 
-  axios.get(`/api/v1/holidays?startDate=${startDate}&endDate=${endDate}`,
+  axios.get(`/api/v1/staff_members/${staffMemberId}/holidays?start_date=${startDate}&end_date=${endDate}`,
   {
     headers: {
       Authorization: `Token token="${accessToken}"`

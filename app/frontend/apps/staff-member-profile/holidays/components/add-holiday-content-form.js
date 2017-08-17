@@ -4,7 +4,7 @@ import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormTextarea from '~/components/boss-form/boss-form-textarea';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
-// import BossFormDateRangePicker from '~/components/boss-form/boss-form-daterange-picker';
+
 import {addHoliday} from '../actions';
 
 import {

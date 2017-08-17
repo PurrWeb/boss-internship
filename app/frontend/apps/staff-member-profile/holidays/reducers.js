@@ -58,12 +58,19 @@ const holidaysReducer = handleActions({
     return state
       .set('newHoliday', false)
   },
-  [DELETE_HOLIDAY]: (state) => {
-    return state;
+  [DELETE_HOLIDAY]: (state, action) => {
+    const id = action.payload.id
+    
+    return state
+      .update('holidays',
+      (holidays) => holidays.filter(
+        (item) => item.get('id') !== id
+      )
+    )
   },
   [ADD_HOLIDAY_SUCCESS]: (state, action) => {
     let holidays = state.get('holidays');
-    console.log(holidays);
+
     holidays.push(fromJS(action.payload));
     return state
       .set('holidays', fromJS(holidays));
@@ -74,11 +81,21 @@ const holidaysReducer = handleActions({
   },
   [FILTER]: (state, action) => {
     const {
-      holidays
-    } = action.payload
+      holidays,
+      paidHolidayDays,
+      unpaidHolidayDays,
+      estimatedAccruedHolidayDays,
+      holidayStartDate,
+      holidayEndDate,
+    } = action.payload;
 
     return state
-      set('holidays', fromJS(holidays));
+      .set('holidays', fromJS(holidays))
+      .set('paidHolidayDays', fromJS(paidHolidayDays))
+      .set('unpaidHolidayDays', fromJS(unpaidHolidayDays))
+      .set('estimatedAccruedHolidayDays', fromJS(estimatedAccruedHolidayDays))
+      .set('holidayStartDate', moment(holidayStartDate))
+      .set('holidayEndDate', moment(holidayEndDate))
   }
 }, initialState);
 

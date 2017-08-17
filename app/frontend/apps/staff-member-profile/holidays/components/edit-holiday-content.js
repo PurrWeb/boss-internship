@@ -1,6 +1,6 @@
 import React from 'react';
 import { DateRangePicker } from 'react-dates';
-import HolidaysForm from './edit-holiday-content-form';
+import HolidaysForm from './add-holiday-content-form';
 
 class EditHolidayContent extends React.PureComponent {
   constructor(props) {

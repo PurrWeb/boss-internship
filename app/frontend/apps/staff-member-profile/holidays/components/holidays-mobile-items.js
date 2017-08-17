@@ -81,7 +81,7 @@ export default class HolidayasMobileItems extends React.Component {
 
   renderMobileItems = (holidays) => {
     return holidays.map(holiday => {
-      return <HolidayMobileItem holiday={holiday} key={holiday.get('id')} />
+      return <HolidayMobileItem holiday={holiday} deleteHoliday={this.props.deleteHoliday} key={holiday.get('id')} />
     })
   };
 

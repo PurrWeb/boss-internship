@@ -16,7 +16,8 @@ import {
   updateAvatarRequest,
   addNewHoliday,
   cancelAddNewHoliday,
-  deleteHoliday
+  deleteHoliday,
+  filter
 } from '../actions';
 
 import Stats from '../components/stats';
@@ -45,7 +46,8 @@ const mapDispatchToProps = (dispatch) => {
       updateAvatarRequest,
       addNewHoliday,
       cancelAddNewHoliday,
-      deleteHoliday
+      deleteHoliday,
+      filter
     }, dispatch)
   };
 }
@@ -79,6 +81,8 @@ class Holidays extends React.PureComponent {
         updateAvatarRequest,
         addNewHoliday,
         cancelAddNewHoliday,
+        deleteHoliday,
+        filter
       }
     } = this.props;
 
@@ -118,7 +122,7 @@ class Holidays extends React.PureComponent {
                   <Stats value={unpaidHolidayDays} label={`Unpaid ${pluralize('day', unpaidHolidayDays)} logged in current tax year`} />
                 </div>
                 <div className="boss-board__manager-data">
-                  <HolidaysFilter startDate={holidayStartDate} endDate={holidayEndDate} />
+                  <HolidaysFilter startDate={holidayStartDate} endDate={holidayEndDate} filter={filter} />
                   <HolidaysTable holidays={holidays} deleteHoliday={deleteHoliday} />
                   <HolidayasMobileItems holidays={holidays} deleteHoliday={deleteHoliday}/>
                 </div>

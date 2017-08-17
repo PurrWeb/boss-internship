@@ -21,6 +21,12 @@ class HolidaysFilter extends React.PureComponent {
     })
   }
 
+  onUpdate = () => {
+    const formatedStartDate = this.state.startDate.format('DD-MM-YYYY');
+    const formatedEndDate = this.state.endDate.format('DD-MM-YYYY');
+    this.props.filter(formatedStartDate, formatedEndDate);
+  }
+
   render() {
     const {
       focusedInput,
@@ -53,7 +59,7 @@ class HolidaysFilter extends React.PureComponent {
               </div>
             </div>
             <div className="boss-form__field boss-form__field_layout_min">
-              <button className="boss-button boss-form__submit">Update</button>
+              <button className="boss-button boss-form__submit" onClick={() => (this.onUpdate())}>Update</button>
             </div>
           </div>
           <div className="boss-form__row boss-form__row_mobile">
