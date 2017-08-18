@@ -136,7 +136,7 @@ class StaffMembersController < ApplicationController
       serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize      
 
       render locals: {
-        staff_member: StaffMemberSerializer.new(staff_member),
+        staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
         owed_hours: serialized_owed_hours,
         access_token: access_token.token
       }
