@@ -17,7 +17,8 @@ class ImmutableOwedHourUpdate
 
   def call
     success = false
-    
+    new_owed_hour = nil
+
     ActiveRecord::Base.transaction do
 
       new_owed_hour = OwedHour.new(
@@ -39,9 +40,10 @@ class ImmutableOwedHourUpdate
       owed_hour.reload
       owed_hour.assign_attributes(update_params)
       owed_hour.valid?
+      Result.new(success, owed_hour)
+    else
+      Result.new(success, new_owed_hour)
     end
-
-    Result.new(success, owed_hour)
   end
 
   private

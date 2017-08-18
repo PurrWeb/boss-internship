@@ -23,9 +23,9 @@ class OwedHourApiService
 
     api_errors = nil
     unless model_service_result.success?
-      api_errors = OwedHourApiErrors.new(owed_hour: owed_hour)
+      api_errors = OwedHourApiErrors.new(owed_hour: model_service_result.owed_hour)
     end
-    Result.new(owed_hour, model_service_result.success?, api_errors)
+    Result.new(model_service_result.owed_hour, model_service_result.success?, api_errors)
   end
 
   def create(params)

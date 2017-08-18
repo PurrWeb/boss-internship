@@ -30,7 +30,7 @@ class HolidayApiService
     
     api_errors = nil
     unless model_service_result.success?
-      api_errors = HolidayApiErrors.new(holiday: holiday)
+      api_errors = HolidayApiErrors.new(holiday: model_service_result.holiday)
     end
     Result.new(model_service_result.holiday, model_service_result.success?, api_errors)
   end
