@@ -44,8 +44,17 @@ const owedHoursReducer = handleActions({
     return state
       .set('newOwedHour', false)
   },
-  [DELETE_OWED_HOURS]: (state) => {
-    return state;
+  [DELETE_OWED_HOURS]: (state, action) => {
+    const deletedId = action.payload.id;
+
+    return state
+      .update('owedhours',
+        (owedhours) => owedhours.filter(
+          (item) => item.get('owedHours').filter(
+            (owedHoursItem) => owedHoursItem.get('id') !== deletedId
+          )
+        )
+  )
   },
 }, initialState);
 

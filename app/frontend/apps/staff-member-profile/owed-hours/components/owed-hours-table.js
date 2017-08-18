@@ -8,6 +8,8 @@ import OwedHoursMobileItems from './owed-hours-mobile-items';
 const ActionsCell = ({label, owedHourId, deleteOwedHours}) => {
   
  const onDelete = (owedHourId) => {
+  console.log(owedHourId);
+
     confirm('Are you sure ?', {
       title: 'Delete owed hours',
       actionButtonText: 'Delete',
@@ -25,7 +27,7 @@ const ActionsCell = ({label, owedHourId, deleteOwedHours}) => {
             className="boss-button boss-button_type_small boss-button_role_update boss-table__action"
           >Edit</button>
           <button
-            onClick={onDelete}
+            onClick={() => (onDelete(owedHourId))}
             className="boss-button boss-button_type_small boss-button_role_cancel boss-table__action"
           >Delete</button>
         </p>
@@ -72,7 +74,7 @@ const Row = ({owedHour, deleteOwedHours}) => {
   const note = owedHour.get('note') || '-';
   const creator = owedHour.get('createdBy');
   const cerated = `(${moment(owedHour.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
-  const editable = owedHour.get('')
+  const editable = owedHour.get('');
 
   return (
     <div className="boss-table__row">

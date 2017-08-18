@@ -33,13 +33,13 @@ export const deleteOwedHours = (owedHourId) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
 
+
   axios.delete(`/api/v1/staff_members/${staffMemberId}/owed_hours/${owedHourId}`,
   {
     headers: {
       Authorization: `Token token="${accessToken}"`
     }
   }).then((resp) => {
-    console.log(resp.data);
     dispatch({
       type: DELETE_OWED_HOURS,
       payload: resp.data,
