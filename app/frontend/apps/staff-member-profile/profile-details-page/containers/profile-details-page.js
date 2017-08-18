@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import humanize from 'string-humanize';
 import oFetch from "o-fetch";
+import {starterEmploymentStatusLabels} from '../../../../constants/other';
 
 import DashboardWrapper from '~/components/dashboard-wrapper';
 import ContentWrapper from '~/components/content-wrapper';
@@ -79,7 +80,15 @@ class ProfileDetailsPage extends React.PureComponent {
           (item, name = "pay_rate") => ({name: humanize(name), value: oFetch(item, name).label}),
           "hours_preference",
           "day_preference",
-          "national_insurance_number"
+          "national_insurance_number",
+          (item, name="status_statement") => {
+            let statusEnumValue = oFetch(item, name);
+            let statusText = oFetch(starterEmploymentStatusLabels, statusEnumValue);
+            return {
+              name: "Status Statement",
+              value: statusText
+            };
+          }
         ]
       },
       {
