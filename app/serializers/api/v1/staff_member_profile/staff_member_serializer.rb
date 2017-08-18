@@ -116,7 +116,7 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
   end
 
   def sia_badge_expiry_date
-    UIRotaDate.format(object.sia_badge_expiry_date)
+    UIRotaDate.format(object.sia_badge_expiry_date) if object.sia_badge_expiry_date.present?
   end
 
   def updated_at
