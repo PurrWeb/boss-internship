@@ -25,6 +25,7 @@ const ActionsCell = ({label, owedHourId, deleteOwedHours}) => {
             className="boss-button boss-button_type_small boss-button_role_update boss-table__action"
           >Edit</button>
           <button
+            onClick={onDelete}
             className="boss-button boss-button_type_small boss-button_role_cancel boss-table__action"
           >Delete</button>
         </p>
