@@ -20,6 +20,8 @@ class EditHoliday
       Result.new(true, holiday) if !attributes_changed
     else
       success = false
+      new_holiday = nil
+
       ActiveRecord::Base.transaction do
         holiday.disable!(requester: requester)
 
@@ -38,9 +40,10 @@ class EditHoliday
         holiday.reload
         holiday.assign_attributes(update_params)
         holiday.valid?
+        Result.new(success, holiday)
+      else
+        Result.new(success, new_holiday)
       end
-
-      Result.new(success, holiday)
     end
   end
 

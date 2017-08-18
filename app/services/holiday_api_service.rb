@@ -32,7 +32,7 @@ class HolidayApiService
     unless model_service_result.success?
       api_errors = HolidayApiErrors.new(holiday: holiday)
     end
-    Result.new(holiday, model_service_result.success?, api_errors)
+    Result.new(model_service_result.holiday, model_service_result.success?, api_errors)
   end
 
   def destroy
