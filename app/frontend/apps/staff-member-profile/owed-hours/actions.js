@@ -47,17 +47,16 @@ export const deleteOwedHours = (owedHourId) => (dispatch, getState) => {
   });
 }
 
-export const editOwedHours = ({start_date, ends_date, holidays_type, note, id}) => (dispatch, getState) => {
+export const editOwedHours = ({startsAt, endsAt, date, note, id}) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id'])
-  const formateStartDate = start_date.format('DD-MM-YYYY');
-  const formatedEndDate = ends_date.format('DD-MM-YYYY');
+  const formatedDate = date.format('DD-MM-YYYY')
   
-  return axios.put(`/api/v1/staff_members/${staffMemberId}/holidays/${id}`, {
-    start_date: formateStartDate,
-    end_date: formatedEndDate,
+  return axios.put(`/api/v1/staff_members/${staffMemberId}/owed_hours/${id}`, {
+    startsAt: startsAt,
+    endsAt: endsAt,
     note: note,
-    holiday_type: holidays_type.value
+    date: formatedDate,
   },
   {
     headers: {
@@ -74,14 +73,14 @@ export const editOwedHours = ({start_date, ends_date, holidays_type, note, id}) 
   });
 }
 
-export const addOwedHours = ({start_time, end_time, date, note}) => (dispatch, getState) => {
+export const addOwedHours = ({startsAt, endsAt, date, note}) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   const formatedDate = date.format('DD-MM-YYYY')
   
   return axios.post(`/api/v1/staff_members/${staffMemberId}/owed_hours`, {
-    startsAt: start_time,
-    endsAt: end_time,
+    startsAt: startsAt,
+    endsAt: endsAt,
     note: note,
     date: formatedDate
   },

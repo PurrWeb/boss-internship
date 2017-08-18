@@ -17,18 +17,18 @@ const validate = values => {
   }
 
   if (!values.get('startsAt')) {
-    errors.startTime = "You mast fill start time"
+    errors.startsAt = "You mast fill start time"
   }
 
   if (!values.get('endsAt')) {
-    errors.endTime = "You mast fill end time"
+    errors.endsAt = "You mast fill end time"
   }
 
   return errors;
 }
 
 const submission = (values, dispatch) => {
-  return dispatch(addOwedHours(values.toJS())).catch((resp) => {
+  return dispatch(editOwedHours(values.toJS())).catch((resp) => {
     const errors = resp.response.data.errors;
     if (errors) {
       let base = {};
