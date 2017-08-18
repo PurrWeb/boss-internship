@@ -9,24 +9,6 @@ import {updateEmploymentDetailsRequest} from '../../actions';
 
 const validate = values => {
   const errors = {}
-  if (!values.get('master_venue')) {
-    errors.master_venue = 'Main Venue is Required';
-  }
-
-  if (values.get('other_venues') && values.get('master_venue')) {
-    const contains =values.get('other_venues').filter(item => item.value === values.get('master_venue').value);
-    if (contains.length) {
-      errors.other_venues = `Other venues can't contain Main Venue`;
-    }
-  }
-  if (!values.get('staff_type')) {
-    errors.staff_type = 'Staff Type is Required';
-  }
-
-  if (!values.get('pay_rate')) {
-    errors.pay_rate = 'Pay Rate is Required';
-  }
-
   return errors;
 }
 import {updateEmploymentDetails} from '../../requests';
