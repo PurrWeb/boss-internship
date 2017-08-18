@@ -132,7 +132,6 @@ class StaffMembersController < ApplicationController
         includes(creator: [:name]).all
 
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-      
       serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize      
 
       render locals: {

@@ -29,18 +29,19 @@ export const updateAvatarRequest = (staffMemberId, avatarUrl) => (dispatch, getS
     })
 }
 
-export const deleteOwedHours = (holidayId) => (dispatch, getState) => {
+export const deleteOwedHours = (owedHourId) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
 
-  axios.delete(`/api/v1/staff_members/${staffMemberId}/holidays/${holidayId}`,
+  axios.delete(`/api/v1/staff_members/${staffMemberId}/owed_hours/${owedHourId}`,
   {
     headers: {
       Authorization: `Token token="${accessToken}"`
     }
   }).then((resp) => {
+    console.log(resp.data);
     dispatch({
-      type: DELETE_HOLIDAY,
+      type: DELETE_OWED_HOURS,
       payload: resp.data,
     });
   });
@@ -73,17 +74,16 @@ export const editOwedHours = ({start_date, ends_date, holidays_type, note, id}) 
   });
 }
 
-export const addOwedHours = ({start_date, ends_date, holidays_type, note}) => (dispatch, getState) => {
+export const addOwedHours = ({start_time, end_time, date, note}) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
-  const staffMemberId = getState().getIn(['profile', 'staffMember', 'id'])
-  const formateStartDate = start_date.format('DD-MM-YYYY');
-  const formatedEndDate = end_date.format('DD-MM-YYYY');
+  const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
+  const formatedDate = date.format('DD-MM-YYYY')
   
-  return axios.post(`/api/v1/staff_members/${staffMemberId}/holidays`, {
-    start_date: formateStartDate,
-    end_date: formatedEndDate,
+  return axios.post(`/api/v1/staff_members/${staffMemberId}/owed_hours`, {
+    startsAt: start_time,
+    endsAt: end_time,
     note: note,
-    holiday_type: holidays_type.value
+    date: formatedDate
   },
   {
     headers: {

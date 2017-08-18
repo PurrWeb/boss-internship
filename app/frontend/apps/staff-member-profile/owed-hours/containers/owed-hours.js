@@ -68,6 +68,7 @@ class OwedHours extends React.PureComponent {
         updateAvatarRequest,
         addNewOwedHours,
         cancelAddNewOwedHours,
+        deleteOwedHours,
       }
     } = this.props;
 

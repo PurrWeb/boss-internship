@@ -5,6 +5,7 @@ import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormTextarea from '~/components/boss-form/boss-form-textarea';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
+import BossFormInput from '~/components/boss-form/boss-form-input';
 
 import {addOwedHours} from '../actions';
 
@@ -12,15 +13,15 @@ const validate = values => {
   const errors = {}
   
   if (!values.get('date')) {
-    errors.holidays_type = "You must fill date"
+    errors.date = "You must fill date"
   }
 
   if (!values.get('start_time')) {
-    errors.start_date = "You mast fill start time"
+    errors.start_time = "You mast fill start time"
   }
 
   if (!values.get('end_time')) {
-    errors.ends_date = "You mast fill end time"
+    errors.end_time = "You mast fill end time"
   }
 
   return errors;
@@ -34,7 +35,6 @@ const submission = (values, dispatch) => {
     }
   });
 }
-
 
 const OwedHoursForm = ({
     handleSubmit,
@@ -56,26 +56,20 @@ const OwedHoursForm = ({
       </div>
       <div className="boss-form__row">
         <div className="boss-form__field boss-form__field_layout_half">
-          {/* <Field
-            component={BossFormSelect}
+          <Field
+            component={BossFormInput}
             name="start_time"
             required
             label="Starts at"
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Select holiday type ..."
-          /> */}
+          />
         </div>
         <div className="boss-form__field boss-form__field_layout_half">
-          {/* <Field
-            component={BossFormSelect}
-            name="ends_time"
+          <Field
+            component={BossFormInput}
+            name="end_time"
             required
             label="Ends at"
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Select holiday type ..."
-          /> */}
+          />
         </div>
       </div>
       <Field

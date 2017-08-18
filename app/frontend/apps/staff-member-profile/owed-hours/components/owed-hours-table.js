@@ -63,24 +63,25 @@ const CreatedByCell = ({label, creator, created}) => {
 }
 
 const Row = ({owedHour, deleteOwedHours}) => {
-  const date = moment(owedHour.get('date')).format('DD MMM YYYY');
-  const startTime = moment(owedHour.get('start_date')).format('DD MMM YYYY');
-  const endTime = moment(owedHour.get('end_date')).format('DD MMM YYYY');
-  const durationHours = owedHour.get('hours');
-  const durationMinutes = owedHour.get('minutes');
+  const date = moment(owedHour.get('date')).format('ddd DD MMM YYYY');
+  const startTime = moment(owedHour.getIn(['times', 'startsAt'])).format('HH:mm');
+  const endTime = moment(owedHour.getIn(['times', 'endsAt'])).format('HH:mm');
+  const durationHours = owedHour.getIn(['duration','hours']);
+  const durationMinutes = owedHour.getIn(['duration', 'minutes']);
   const note = owedHour.get('note') || '-';
-  const creator = owedHour.get('creator');
+  const creator = owedHour.get('createdBy');
   const cerated = `(${moment(owedHour.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
+  const editable = owedHour.get('')
 
   return (
     <div className="boss-table__row">
-      <SimpleCell label="date" text={date} />
-      <SimpleCell label="times" text={`${startTime} - ${endTime}`} />
-      <SimpleCell label="duration (hours)" text={durationHours} />
-      <SimpleCell label="duration (minutes)" text={durationMinutes} />      
-      <CreatedByCell label="createdBy" creator={creator} created={cerated} />
-      <SimpleCell label="note" text={note} />
-      <ActionsCell label="actions" owedHourId={owedHour.get('id')} deleteOwedHours={deleteOwedHours} />
+      <SimpleCell label="Date" text={date} />
+      <SimpleCell label="Times" text={`${startTime} - ${endTime}`} />
+      <SimpleCell label="Duration (hours)" text={durationHours} />
+      <SimpleCell label="Duration (minutes)" text={durationMinutes} />      
+      <CreatedByCell label="CreatedBy" creator={creator} created={cerated} />
+      <SimpleCell label="Note" text={note} />
+      <ActionsCell label="Actions" owedHourId={owedHour.get('id')} deleteOwedHours={deleteOwedHours} />
     </div>
   )
 }
@@ -99,14 +100,17 @@ const Header = () => {
   )
 }
 
-const OwedStats = ({week, totalHours}) => {
+const OwedStats = ({week}) => {
+
+  const startDate = moment(week.get('startDate')).format('ddd DD MMM YYYY');
+  const endDate = moment(week.get('endDate')).format('ddd DD MMM YYYY');
   return (
-    <div className="boss-board__manager-stats boss-board__manager-stats_role_group-header">
+    <div>
       <div className="boss-count boss-count_adjust_flow boss-count_type_solid">
-        <p className="boss-count__label boss-count__label_role_date">{week}</p>
+        <p className="boss-count__label boss-count__label_role_date">{startDate} - {endDate}</p>
       </div>
       <div className="boss-count boss-count_adjust_flow boss-count_type_solid">
-        <p className="boss-count__label boss-count__label_role_time">{totalHours}</p>
+        <p className="boss-count__label boss-count__label_role_time">Total: {week.get('totalHours')}</p>
       </div>
     </div>
   )
@@ -115,26 +119,32 @@ const OwedStats = ({week, totalHours}) => {
 
 
 const OwedHoursTableDesktop = ({owedHours, deleteOwedHours}) => {
-  const week = "dummy week data"
-  const totalHours = "dummy total hours data"
 
-  const renderHolidays = (owedHours) => {
+  const renderRows = (owedHours, deleteOwedHours) => {
     return owedHours.map(owedHour => {
       return <Row key={owedHour.get('id')} owedHour={owedHour} deleteOwedHours={deleteOwedHours}/>
-    })
+    });
+  }
+
+  const renderOwedhours = (owedHours) => {
+    return owedHours.map(owedHour => {
+      return <div key={owedHour.get('id')}>
+        <div className="boss-board__manager-stats boss-board__manager-stats_role_group-header">
+          <OwedStats week={owedHour.get('week')}/>
+        </div>
+        <div className="boss-board__manager-table">
+          <div className="boss-table boss-table_page_smp-owed-hours">
+            <Header />
+            {renderRows(owedHour.get('owedHours'), deleteOwedHours)}
+          </div>          
+        </div>
+      </div>
+    });
   }
 
   return (
-    <div>
-      <div className="boss-board__manager-stats boss-board__manager-stats_role_group-header">
-        <OwedStats week={week} totalHours={totalHours}/>
-      </div>
-      <div className="boss-board__manager-table">
-        <div className="boss-table boss-table_page_smp-owed-hours">
-          <Header />
-          { renderHolidays(owedHours) }
-        </div>
-      </div>
+    <div className="boss-board__manager-group boss-board__manager-group_context_stack">
+      { renderOwedhours(owedHours) }
     </div>
   )
 }

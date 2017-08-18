@@ -1,0 +1,16 @@
+<script>
+  window.boss = window.boss || {};
+  window.boss.store = window.boss.store || {};
+  window.boss.store.owedHours = <%= raw owed_hours.to_json %>;
+  window.boss.store.staffMember = <%= raw staff_member.to_json %>;
+  window.boss.store.accessToken = "<%= access_token %>";
+</script>
+
+ <%= react_component(
+    'StaffMemberOwedHoursApp',{
+      owedhours: owed_hours,
+      staffMember: staff_member,
+      accessToken: access_token
+    }
+  )
+%>
