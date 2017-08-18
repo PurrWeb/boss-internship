@@ -31,6 +31,7 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :sia_badge_number,
              :sia_badge_expiry_date,
              :updated_at,
+             :is_security_staff,
              :created_at
 
   def starts_at
@@ -125,5 +126,9 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
 
   def created_at
     object.created_at.iso8601
+  end
+
+  def is_security_staff
+    object.security?
   end
 end

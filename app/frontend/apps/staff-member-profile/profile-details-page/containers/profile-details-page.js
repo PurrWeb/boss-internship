@@ -68,28 +68,47 @@ const mapDispatchToProps = (dispatch) => {
 class ProfileDetailsPage extends React.PureComponent {
   constructor(props) {
     super(props);
+    let staffMemberData = this.props.staffMember.toJS();
+
+    let employmentDetailItems = [
+      (item, name = "master_venue") => ({name: "Main Venue", value: oFetch(item, name).label}),
+      (item, name = "other_venues") => ({name: humanize(name), value: oFetch(item, name).map(venue => venue.label).join(', ')}),
+      (item, name = "staff_type") => ({name: "Job Type", value: oFetch(item, name).label}),
+      (item, name = "starts_at") => ({name: "Start Date", value: moment(oFetch(item, name), 'DD-MM-YYYY').format('DD MMMM YYYY')}),
+      (item, name = "pay_rate") => ({name: humanize(name), value: oFetch(item, name).label}),
+      "hours_preference",
+      "day_preference",
+      "national_insurance_number",
+      (item, name="status_statement") => {
+        let statusEnumValue = oFetch(item, name);
+        let statusText = oFetch(starterEmploymentStatusLabels, statusEnumValue);
+        return {
+          name: "Status Statement",
+          value: statusText
+        };
+      }
+    ];
+
+    if (oFetch(staffMemberData, 'is_security_staff')) {
+      employmentDetailItems.push(
+        (item, name="sia_badge_expiry_date") => ({
+          name: humanize(name),
+          value: moment(oFetch(item, name), 'DD-MM-YYYY').format('DD MMM YYYY')
+        })
+      )
+
+      employmentDetailItems.push(
+        (item, name="sia_badge_number") => ({
+          name: humanize(name),
+          value: oFetch(item, name)
+        })
+      )
+    }
 
     this.detailsListOptions = [
       {
         categoryName: "Employment Details",
-        items: [
-          (item, name = "master_venue") => ({name: "Main Venue", value: oFetch(item, name).label}),
-          (item, name = "other_venues") => ({name: humanize(name), value: oFetch(item, name).map(venue => venue.label).join(', ')}),
-          (item, name = "staff_type") => ({name: "Job Type", value: oFetch(item, name).label}),
-          (item, name = "starts_at") => ({name: "Start Date", value: moment(oFetch(item, name), 'DD-MM-YYYY').format('DD MMMM YYYY')}),
-          (item, name = "pay_rate") => ({name: humanize(name), value: oFetch(item, name).label}),
-          "hours_preference",
-          "day_preference",
-          "national_insurance_number",
-          (item, name="status_statement") => {
-            let statusEnumValue = oFetch(item, name);
-            let statusText = oFetch(starterEmploymentStatusLabels, statusEnumValue);
-            return {
-              name: "Status Statement",
-              value: statusText
-            };
-          }
-        ]
+        items: employmentDetailItems
       },
       {
         categoryName: "Account Details",
