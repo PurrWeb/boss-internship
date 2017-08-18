@@ -26,8 +26,12 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :country,
              :postcode,
              :county,
-             :status_statement
-
+             :status_statement,
+             :updated_at,
+             :sia_badge_number,
+             :sia_badge_expiry_date,
+             :updated_at,
+             :created_at
 
   def starts_at
     UIRotaDate.format(object.starts_at)
@@ -107,4 +111,19 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
     end
   end
 
+  def sia_badge_number
+    object.sia_badge_number
+  end
+
+  def sia_badge_expiry_date
+    UIRotaDate.format(object.sia_badge_expiry_date)
+  end
+
+  def updated_at
+    object.updated_at.iso8601
+  end
+
+  def created_at
+    object.created_at.iso8601
+  end
 end

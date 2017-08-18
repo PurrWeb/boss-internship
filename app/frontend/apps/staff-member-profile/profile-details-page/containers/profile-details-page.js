@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import humanize from 'string-humanize';
+import oFetch from "o-fetch";
 
 import DashboardWrapper from '~/components/dashboard-wrapper';
 import ContentWrapper from '~/components/content-wrapper';
@@ -71,33 +72,41 @@ class ProfileDetailsPage extends React.PureComponent {
       {
         categoryName: "Employment Details",
         items: [
-          (item, name = "master_venue") => ({name: "Main Venue", value: item[name].label}),
-          (item, name = "other_venues") => ({name: humanize(name), value: item[name].map(venue => venue.label).join(', ')}),
-          (item, name = "staff_type") => ({name: "Job Type", value: item[name].label}),
-          (item, name = "starts_at") => ({name: "Start Date", value: moment(item[name]).format('DD MMMM YYYY')}),
-          (item, name = "pay_rate") => ({name: humanize(name), value: item[name].label}),
-          "hour_preference", "day_preference", "national_insurance_number"
+          (item, name = "master_venue") => ({name: "Main Venue", value: oFetch(item, name).label}),
+          (item, name = "other_venues") => ({name: humanize(name), value: oFetch(item, name).map(venue => venue.label).join(', ')}),
+          (item, name = "staff_type") => ({name: "Job Type", value: oFetch(item, name).label}),
+          (item, name = "starts_at") => ({name: "Start Date", value: moment(oFetch(item, name), 'DD-MM-YYYY').format('DD MMMM YYYY')}),
+          (item, name = "pay_rate") => ({name: humanize(name), value: oFetch(item, name).label}),
+          "hours_preference",
+          "day_preference",
+          "national_insurance_number"
         ]
       },
       {
         categoryName: "Account Details",
         items: [
-          (item, name = "created") => ({name: humanize(name), value: moment(item[name]).format('DD MMMM YYYY')}),
-          "status", "user"
+          (item, name = "created_at") => ({name: "Created", value: moment(oFetch(item, name)).format('HH:mm DD MMMM YYYY')}),
+          (item, name = "updated_at") => ({name: "Modified", value: moment(oFetch(item, name)).format('HH:mm DD MMMM YYYY')})
         ]
       },
       {
         categoryName: "Personal Details",
         items: [
-          (item, name = "name") => ({name: humanize(name), value: `${item.first_name} ${item.surname}` }),
-          "gender",
-          (item, name = "date_of_birth") => ({name: humanize(name), value: moment(item[name]).format('DD MMMM YYYY')})
+          (item, name = "name") => ({name: humanize(name), value: `${oFetch(item, 'first_name')} ${oFetch(item, 'surname')}` }),
+          (item, name = "gender") => ({name: humanize(name), value: humanize(oFetch(item, name))}),
+          (item, name = "date_of_birth") => ({name: humanize(name), value: moment(oFetch(item, name)).format('DD MMMM YYYY')}),
+          (item, name = "date_of_birth") => ({name: "Age", value: moment().diff(moment(oFetch(item, name)), 'years')})
         ]
       },
       {
         categoryName: "Contact Details",
         items: [
-          "email_address", "phone_number", "address"
+          "address",
+          'county',
+          "country",
+          'postcode',
+          (item, name = "email") => ({name: "Email Address", value: oFetch(item, name)}),
+          "phone_number"
         ]
       }
     ];
@@ -111,14 +120,13 @@ class ProfileDetailsPage extends React.PureComponent {
           if (typeof item === 'function') {
             return item(data);
           }
+
           const [realName, name] = item.split(":");
           const key = realName;
-          
-          if (!data[key]) return;
 
           return {
             name: humanize(name || realName),
-            value: data[key],
+            value: oFetch(data, key),
           }
         }).filter(item => item)
       }
