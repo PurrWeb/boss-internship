@@ -119,6 +119,30 @@ class StaffMembersController < ApplicationController
     end
   end
 
+  def owed_hours
+    query = StaffMember.where(id: params[:id])
+    query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
+    staff_member = query.first
+
+    raise ActiveRecord::RecordNotFound.new unless staff_member.present?
+
+    if can? :edit, staff_member
+      owed_hours = OwedHour.enabled.
+        where(staff_member: staff_member).
+        includes(creator: [:name]).all
+
+      access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+      
+      serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize      
+
+      render locals: {
+        staff_member: StaffMemberSerializer.new(staff_member),
+        owed_hours: serialized_owed_hours,
+        access_token: access_token.token
+      }
+    end
+  end
+
   def new
     authorize! :manage, :staff_members
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!

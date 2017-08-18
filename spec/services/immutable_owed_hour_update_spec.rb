@@ -27,8 +27,8 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
   let(:service) do
     ImmutableOwedHourUpdate.new(
       requester: requester,
-      old_owed_hour: owed_hour,
-      new_owed_hour: new_owed_hour
+      owed_hour: owed_hour,
+      params: owed_hour_params
     )
   end
 
@@ -52,7 +52,7 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
     end
 
     specify 'it throws an argument error' do
-      expect{ service.call }.to raise_error(ActiveRecord::UnknownAttributeError)
+      expect{ service.call }.to raise_error(ArgumentError)
     end
   end
 
@@ -73,7 +73,6 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
         date: owed_hour.date,
         minutes: new_minutes,
         note: owed_hour.note,
-        staff_member: owed_hour.staff_member,
         starts_at: owed_hour.starts_at,
         ends_at: owed_hour.starts_at + new_minutes.minutes
       }

@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       member do
         get :holidays
         get :profile
+        get :owed_hours
       end
     end
 
@@ -212,6 +213,7 @@ Rails.application.routes.draw do
         resources :holiday_reports, only: :index
         resources :staff_members, only: [:show, :create] do
           resources :holidays, only: [:index, :update, :destroy, :create]
+          resources :owed_hours, only: [:index, :update, :destroy, :create]
           member do
             post :disable
             post :enable
