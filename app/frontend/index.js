@@ -57,6 +57,9 @@ registerComponent("StaffMemberProfileDetailsApp", StaffMemberProfileDetailsApp)
 import {StaffMemberHolidaysApp} from "./apps/staff-member-profile";
 registerComponent("StaffMemberHolidaysApp", StaffMemberHolidaysApp)
 
+import {StaffMemberOwedHoursApp} from "./apps/staff-member-profile";
+registerComponent("StaffMemberOwedHoursApp", StaffMemberOwedHoursApp);
+
 import StaffTypeRotaApp from "./apps/staff-type-rota/staff-type-rota-app"
 registerComponent("StaffTypeRotaApp", StaffTypeRotaApp);
 
