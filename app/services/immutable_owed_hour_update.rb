@@ -40,7 +40,7 @@ class ImmutableOwedHourUpdate
       owed_hour.reload
       owed_hour.assign_attributes(update_params)
       owed_hour.valid?
-      Result.new(success, owed_hour)
+      Result.new(success, new_owed_hour)
     else
       Result.new(success, new_owed_hour)
     end

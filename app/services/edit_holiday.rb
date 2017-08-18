@@ -40,7 +40,7 @@ class EditHoliday
         holiday.reload
         holiday.assign_attributes(update_params)
         holiday.valid?
-        Result.new(success, holiday)
+        Result.new(success, new_holiday)
       else
         Result.new(success, new_holiday)
       end
