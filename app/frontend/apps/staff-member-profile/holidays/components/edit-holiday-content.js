@@ -18,9 +18,9 @@ class EditHolidayContent extends React.PureComponent {
 
     const initialValues = {
       note: holiday.get('note'),
-      start_date: moment(holiday.get('start_date')),
-      ends_date: moment(holiday.get('ends_date')),
-      holidays_type: HOLIDAYS_OPTIONS.find(item => item.value === holiday.get('holiday_type')),
+      startDate: moment(holiday.get('start_date'), 'DD-MM-YYYY'),
+      endDate: moment(holiday.get('end_date'), 'DD-MM-YYYY'),
+      holidaysType: HOLIDAYS_OPTIONS.find(item => item.value === holiday.get('holiday_type')),
       id: holiday.get('id')
     }
 

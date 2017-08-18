@@ -33,26 +33,45 @@ const submission = (values, dispatch) => {
   return dispatch(addHoliday(values.toJS())).catch((resp) => {
     const errors = resp.response.data.errors;
     if (errors) {
-      throw new SubmissionError(errors);
+      let base = {};
+      
+      if (errors.base) {
+        base = {
+          _error: errors.base
+        }
+      }
+      throw new SubmissionError({...errors, ...base});
     }
   });
 }
 
 
 const HolidaysForm = ({
+    error,
     handleSubmit,
     submitting
   }) => {
-
+  
+  const renderBaseError = (error) => {
+    return (
+      <div className="boss-modal-window__alert">
+        <div className="boss-alert boss-alert_role_area boss-alert_context_above">
+          <p className="boss-alert__text">{error}</p>
+        </div>
+      </div>
+    )
+  }
+  
   return (
     <form
       className="boss-form"
       onSubmit={handleSubmit(submission)}
     >
+      {error && renderBaseError(error)}
       <div className="boss-form__row">
         <div className="boss-form__field boss-form__field_layout_third">
           <Field
-            name="start_date"
+            name="startDate"
             component={BossFormCalendar}
             label="Starts at"
             required
@@ -60,7 +79,7 @@ const HolidaysForm = ({
         </div>
         <div className="boss-form__field boss-form__field_layout_third">
           <Field
-            name="ends_date"
+            name="endDate"
             component={BossFormCalendar}
             label="Ends at"
             required
@@ -69,7 +88,7 @@ const HolidaysForm = ({
         <div className="boss-form__field boss-form__field_layout_third">
           <Field
             component={BossFormSelect}
-            name="holidays_type"
+            name="holidayType"
             required
             label="Holiday Type"
             optionLabel="label"

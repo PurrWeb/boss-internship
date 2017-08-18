@@ -69,8 +69,8 @@ const CreatedByCell = ({label, creator, created}) => {
 
 const Row = ({holiday, deleteHoliday, onEditHoliday}) => {
   const type = humanize(holiday.get('holiday_type'));
-  const startDate = moment(holiday.get('start_date')).format('DD MMM YYYY');
-  const endDate = moment(holiday.get('end_date')).format('DD MMM YYYY');
+  const startDate = moment(holiday.get('start_date'), "DD-MM-YYYY").format('DD MMM YYYY');
+  const endDate = moment(holiday.get('end_date'), "DD-MM-YYYY").format('DD MMM YYYY');
   const note = holiday.get('note') || '-';
   const creator = holiday.get('creator');
   const cerated = `(${moment(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;

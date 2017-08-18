@@ -48,17 +48,17 @@ export const deleteHoliday = (holidayId) => (dispatch, getState) => {
   });
 }
 
-export const editHoliady = ({start_date, ends_date, holidays_type, note, id}) => (dispatch, getState) => {
+export const editHoliady = ({startDate, endDate, holidaysType, note, id}) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id'])
-  const formateStartDate = start_date.format('DD-MM-YYYY');
-  const formatedEndDate = ends_date.format('DD-MM-YYYY');
+  const formateStartDate = startDate.format('DD-MM-YYYY');
+  const formatedEndDate = endDate.format('DD-MM-YYYY');
   
   return axios.put(`/api/v1/staff_members/${staffMemberId}/holidays/${id}`, {
     start_date: formateStartDate,
     end_date: formatedEndDate,
     note: note,
-    holiday_type: holidays_type.value
+    holiday_type: holidaysType.value
   },
   {
     headers: {
@@ -75,17 +75,17 @@ export const editHoliady = ({start_date, ends_date, holidays_type, note, id}) =>
   });
 }
 
-export const addHoliday = ({start_date, ends_date, holidays_type, note}) => (dispatch, getState) => {
+export const addHoliday = ({startDate, endDate, holidayType, note}) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id'])
-  const formateStartDate = start_date.format('DD-MM-YYYY');
-  const formatedEndDate = end_date.format('DD-MM-YYYY');
+  const formateStartDate = startDate ? startDate.format('DD-MM-YYYY') : null;
+  const formatedEndDate = endDate ? endDate.format('DD-MM-YYYY') : null;
   
   return axios.post(`/api/v1/staff_members/${staffMemberId}/holidays`, {
     start_date: formateStartDate,
     end_date: formatedEndDate,
     note: note,
-    holiday_type: holidays_type.value
+    holiday_type: holidayType ? holidayType.value || holidayType : null
   },
   {
     headers: {

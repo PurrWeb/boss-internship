@@ -74,19 +74,18 @@ const holidaysReducer = handleActions({
     )
   },
   [EDIT_HOLIDAY_SUCCESS]: (state, action) => {
-    const editedItem = action.payload;
+    const editedItem = fromJS(action.payload);
     const id = editedItem.get('id');
     const index = state.get('holidays').findIndex(item => item.get("id") === id);
-    
+
     return state
       .setIn(['holidays', index], editedItem)
   },
   [ADD_HOLIDAY_SUCCESS]: (state, action) => {
-    let holidays = state.get('holidays');
+    const newHoliday = fromJS(action.payload);
 
-    holidays.push(fromJS(action.payload));
     return state
-      .set('holidays', fromJS(holidays));
+      .update('holidays', holidays => holidays.push(newHoliday));
   },
   [CLOSE_HOLIDAY_MODAL]: (state) => {
     return state
