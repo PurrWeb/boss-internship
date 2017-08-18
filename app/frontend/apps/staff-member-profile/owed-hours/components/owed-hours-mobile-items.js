@@ -3,7 +3,7 @@ import humanize from 'string-humanize';
 import moment from 'moment';
 import confirm from '~/lib/confirm-utils';
 
-const OwedHourMobileItem = ({owedhour, deleteOwedHour}) => {
+const OwedHourMobileItem = ({owedHour, deleteOwedHour}) => {
 
   const onDelete = (id) => {
     confirm('Are you sure ?', {
@@ -14,16 +14,16 @@ const OwedHourMobileItem = ({owedhour, deleteOwedHour}) => {
     });
   }
 
-  const date = moment(owedhour.get('date')).format('DD MMM YYYY');
-  const startTime = moment(owedhour.get('start_date')).format('DD MMM YYYY');
-  const endTime = moment(owedhour.get('end_date')).format('DD MMM YYYY');
-  const durationHours = owedhour.get('hours');
-  const durationMinutes = owedhour.get('minutes');
-  const note = owedhour.get('note') || '-';
-  const creator = owedhour.get('creator');
-  const cerated = `(${moment(owedhour.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
-  const duration = "blaaaaaaaaa";
-
+  const date = moment(owedHour.get('date')).format('ddd DD MMM YYYY');
+  const startTime = moment(owedHour.getIn(['times', 'startsAt'])).format('HH:mm');
+  const endTime = moment(owedHour.getIn(['times', 'endsAt'])).format('HH:mm');
+  const durationHours = owedHour.getIn(['duration','hours']);
+  const durationMinutes = owedHour.getIn(['duration', 'minutes']);
+  const duration = `(${durationHours} hours ${durationMinutes} minutes)`
+  const note = owedHour.get('note') || '-';
+  const creator = owedHour.get('createdBy');
+  const cerated = `(${moment(owedHour.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
+  const editable = owedHour.get('editable');
 
   return <div className="boss-check boss-check_role_panel boss-check_page_smp-owed-hours">
     <div className="boss-check__row">
@@ -81,7 +81,7 @@ export default class OwedHourMobileItems extends React.Component {
 
   renderMobileItems = (owedhours) => {
     return owedhours.map(owedhour => {
-      return <OwedHourMobileItem owedhour={owedhour} key={owedhour.get('id')} />
+      return <OwedHourMobileItem owedHour={owedhour} key={owedhour.get('id')} />
     })
   };
 

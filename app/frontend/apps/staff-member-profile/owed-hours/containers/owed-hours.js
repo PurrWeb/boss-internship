@@ -16,12 +16,15 @@ import {
   updateAvatarRequest,
   addNewOwedHours,
   cancelAddNewOwedHours,
-  deleteOwedHours
+  deleteOwedHours,
+  cancelEditOwedHours,
+  openEditModal,
 } from '../actions';
 
 import OwedHoursHeader from '../components/owed-hours-header';
 import OwedHoursTable from '../components/owed-hours-table';
 import AddNewOwedHours from '../components/add-new-owed-hours';
+import EditOwedHours from '../components/edit-owed-hours';
 import OwedHoursMobileItems from '../components/owed-hours-mobile-items';
 
 const mapStateToProps = (state) => {
@@ -29,6 +32,8 @@ const mapStateToProps = (state) => {
     staffMember: state.getIn(['profile','staffMember']),
     owedhours: state.getIn(['profile','owedhours']),
     newOwedHour: state.getIn(['profile', 'newOwedHour']),
+    editOwedHour: state.getIn(['profile', 'editOwedHour']),
+    editedOwedHours: state.getIn(['profile', 'editedOwedHours']),
   };
 }
 
@@ -39,6 +44,8 @@ const mapDispatchToProps = (dispatch) => {
       addNewOwedHours,
       cancelAddNewOwedHours,
       deleteOwedHours,
+      cancelEditOwedHours,
+      openEditModal,
     }, dispatch)
   };
 }
@@ -58,17 +65,29 @@ class OwedHours extends React.PureComponent {
     this.props.actions.cancelAddNewOwedHours();
   }
 
+  onCanceEdit = () => {
+    this.props.actions.cancelEditOwedHours();
+  }
+
+  onOpenEdit = () => {
+    this.props.actions.openEditModal();
+  }
+
   render() {
 
     const {
       staffMember,
       newOwedHour,
+      editOwedHour,
       owedhours,
+      editedOwedHours,
       actions: {
         updateAvatarRequest,
         addNewOwedHours,
         cancelAddNewOwedHours,
+        cancelEditOwedHours,
         deleteOwedHours,
+        openEditModal,
       }
     } = this.props;
 
@@ -95,12 +114,19 @@ class OwedHours extends React.PureComponent {
             <AddNewOwedHours
              />
           </ContentModal>
+          <ContentModal
+            show={editOwedHour}
+            onClose={() => this.onCanceEdit()}
+            title="Edit owed hours"
+          >
+            <EditOwedHours owedHour={editedOwedHours}/>
+          </ContentModal>
           <section className="boss-board">
             <OwedHoursHeader title="Owed hours" onAddNew={this.onAddNew} />
             <div className="boss-board__main">
               <div className="boss-board__manager">
-                <OwedHoursTable owedhours={owedhours} deleteOwedHours={deleteOwedHours} />
-                <OwedHoursMobileItems owedhours={owedhours} deleteOwedHours={deleteOwedHours}/>
+                <OwedHoursTable owedhours={owedhours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
+                <OwedHoursMobileItems owedhours={owedhours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal}/>
               </div>
             </div> 
           </section>

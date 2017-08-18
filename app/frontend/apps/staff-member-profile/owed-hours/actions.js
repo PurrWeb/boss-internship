@@ -117,3 +117,4 @@ export const closeEditModal = () => {
 export const initialLoad = createAction(INITIAL_LOAD);
 export const addNewOwedHours = createAction(ADD_NEW_OWED_HOUR);
 export const cancelAddNewOwedHours = createAction(CANCEL_ADD_NEW_OWED_HOUR);
+export const cancelEditOwedHours = createAction(CLOSE_EDIT_OWED_HOURS_MODAL);

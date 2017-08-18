@@ -5,11 +5,14 @@ import confirm from '~/lib/confirm-utils';
 
 import OwedHoursMobileItems from './owed-hours-mobile-items';
 
-const ActionsCell = ({label, owedHourId, deleteOwedHours}) => {
-  
- const onDelete = (owedHourId) => {
-  console.log(owedHourId);
+const ActionsCell = ({label, owedHourId, deleteOwedHours, openEditModal, owedHour}) => {
 
+
+  const onEdit = (owedHour) => {
+    openEditModal(owedHour);
+  }
+  
+  const onDelete = (owedHourId) => {
     confirm('Are you sure ?', {
       title: 'Delete owed hours',
       actionButtonText: 'Delete',
@@ -24,6 +27,7 @@ const ActionsCell = ({label, owedHourId, deleteOwedHours}) => {
         <p className="boss-table__label">{label}</p>
         <p className="boss-table__actions">
           <button
+            onClick={() => (onEdit(owedHour))}
             className="boss-button boss-button_type_small boss-button_role_update boss-table__action"
           >Edit</button>
           <button
@@ -65,7 +69,7 @@ const CreatedByCell = ({label, creator, created}) => {
   )
 }
 
-const Row = ({owedHour, deleteOwedHours}) => {
+const Row = ({owedHour, deleteOwedHours, openEditModal}) => {
   const date = moment(owedHour.get('date')).format('ddd DD MMM YYYY');
   const startTime = moment(owedHour.getIn(['times', 'startsAt'])).format('HH:mm');
   const endTime = moment(owedHour.getIn(['times', 'endsAt'])).format('HH:mm');
@@ -74,7 +78,7 @@ const Row = ({owedHour, deleteOwedHours}) => {
   const note = owedHour.get('note') || '-';
   const creator = owedHour.get('createdBy');
   const cerated = `(${moment(owedHour.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
-  const editable = owedHour.get('');
+  const editable = owedHour.get('editable');
 
   return (
     <div className="boss-table__row">
@@ -84,7 +88,9 @@ const Row = ({owedHour, deleteOwedHours}) => {
       <SimpleCell label="Duration (minutes)" text={durationMinutes} />      
       <CreatedByCell label="CreatedBy" creator={creator} created={cerated} />
       <SimpleCell label="Note" text={note} />
-      <ActionsCell label="Actions" owedHourId={owedHour.get('id')} deleteOwedHours={deleteOwedHours} />
+      {editable &&
+        <ActionsCell label="Actions" owedHourId={owedHour.get('id')} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} owedHour={owedHour}/>      
+      }
     </div>
   )
 }
@@ -121,24 +127,24 @@ const OwedStats = ({week}) => {
 };
 
 
-const OwedHoursTableDesktop = ({owedHours, deleteOwedHours}) => {
+const OwedHoursTableDesktop = ({owedHours, deleteOwedHours, openEditModal}) => {
 
-  const renderRows = (owedHours, deleteOwedHours) => {
+  const renderRows = (owedHours, deleteOwedHours, openEditModal) => {
     return owedHours.map(owedHour => {
-      return <Row key={owedHour.get('id')} owedHour={owedHour} deleteOwedHours={deleteOwedHours}/>
+      return <Row key={owedHour.get('id')} owedHour={owedHour} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal}/>
     });
   }
 
   const renderOwedhours = (owedHours) => {
     return owedHours.map(owedHour => {
-      return <div key={owedHour.get('id')}>
+      return <div className="boss-board__manager-group boss-board__manager-group_context_stack" key={owedHour.get('id')}>
         <div className="boss-board__manager-stats boss-board__manager-stats_role_group-header">
           <OwedStats week={owedHour.get('week')}/>
         </div>
         <div className="boss-board__manager-table">
           <div className="boss-table boss-table_page_smp-owed-hours">
             <Header />
-            {renderRows(owedHour.get('owedHours'), deleteOwedHours)}
+            {renderRows(owedHour.get('owedHours'), deleteOwedHours, openEditModal)}
           </div>          
         </div>
       </div>
@@ -146,16 +152,16 @@ const OwedHoursTableDesktop = ({owedHours, deleteOwedHours}) => {
   }
 
   return (
-    <div className="boss-board__manager-group boss-board__manager-group_context_stack">
+    <div>
       { renderOwedhours(owedHours) }
     </div>
   )
 }
 
-const OwedHoursTable = ({owedhours, deleteOwedHours}) => {
+const OwedHoursTable = ({owedhours, deleteOwedHours, openEditModal}) => {
   return (
     <div >
-      <OwedHoursTableDesktop owedHours={owedhours} deleteOwedHours={deleteOwedHours} />
+      <OwedHoursTableDesktop owedHours={owedhours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
     </div>
   )
 }

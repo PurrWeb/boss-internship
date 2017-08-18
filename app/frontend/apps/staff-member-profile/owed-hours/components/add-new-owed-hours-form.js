@@ -16,11 +16,11 @@ const validate = values => {
     errors.date = "You must fill date"
   }
 
-  if (!values.get('start_time')) {
+  if (!values.get('startsAt')) {
     errors.start_time = "You mast fill start time"
   }
 
-  if (!values.get('end_time')) {
+  if (!values.get('endsAt')) {
     errors.end_time = "You mast fill end time"
   }
 
@@ -31,21 +31,40 @@ const submission = (values, dispatch) => {
   return dispatch(addOwedHours(values.toJS())).catch((resp) => {
     const errors = resp.response.data.errors;
     if (errors) {
-      throw new SubmissionError(errors);
+      let base = {};
+
+      if (errors.base) {
+        base = {
+          _error: errors.base
+        }
+      }
+      throw new SubmissionError({...errors, ...base});
     }
   });
 }
 
 const OwedHoursForm = ({
+    error,
     handleSubmit,
     submitting
   }) => {
+
+  const renderBaseError = (error) => {
+    return (
+      <div className="boss-modal-window__alert">
+        <div className="boss-alert boss-alert_role_area boss-alert_context_above">
+          <p className="boss-alert__text">{error}</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <form
       className="boss-form"
       onSubmit={handleSubmit(submission)}
     >
+      {error && renderBaseError(error)}
       <div className="boss-form__field">
         <Field
           name="date"
@@ -58,7 +77,7 @@ const OwedHoursForm = ({
         <div className="boss-form__field boss-form__field_layout_half">
           <Field
             component={BossFormInput}
-            name="start_time"
+            name="startsAt"
             required
             label="Starts at"
           />
@@ -66,7 +85,7 @@ const OwedHoursForm = ({
         <div className="boss-form__field boss-form__field_layout_half">
           <Field
             component={BossFormInput}
-            name="end_time"
+            name="endsAt"
             required
             label="Ends at"
           />

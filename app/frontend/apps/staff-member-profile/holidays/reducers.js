@@ -103,7 +103,7 @@ const holidaysReducer = handleActions({
   },
   [ADD_HOLIDAY_SUCCESS]: (state, action) => {
     let holidays = state.get('holidays');
-    console.log(holidays);
+
     holidays.push(fromJS(action.payload));
     return state
       .set('holidays', fromJS(holidays));
