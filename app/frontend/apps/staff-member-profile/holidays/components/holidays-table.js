@@ -1,19 +1,12 @@
 import React from 'react';
 import humanize from 'string-humanize';
 import moment from 'moment';
-import editHolidayModal from '~/lib/content-modal';
-import EditHolidayModalContent from './edit-holiday-modal-content';
 import confirm from '~/lib/confirm-utils';
 
-const ActionsCell = ({label, holidaysId, deleteHoliday}) => {
+const ActionsCell = ({label, holidaysId,holiday, deleteHoliday, onEditHoliday}) => {
   
   const openEditHoliday = () => {
-    editHolidayModal(null, {
-      title: 'Edit Holiday',
-      component: EditHolidayModalContent,
-    }).then((resp) => {
-      console.log('Edited');
-    });
+   onEditHoliday(holiday)
   }
 
  const onDelete = (holidaysId) => {
@@ -74,7 +67,7 @@ const CreatedByCell = ({label, creator, created}) => {
   )
 }
 
-const Row = ({holiday, deleteHoliday}) => {
+const Row = ({holiday, deleteHoliday, onEditHoliday}) => {
   const type = humanize(holiday.get('holiday_type'));
   const startDate = moment(holiday.get('start_date')).format('DD MMM YYYY');
   const endDate = moment(holiday.get('end_date')).format('DD MMM YYYY');
@@ -88,7 +81,7 @@ const Row = ({holiday, deleteHoliday}) => {
       <SimpleCell label="dates" text={`${startDate} - ${endDate}`} />
       <SimpleCell label="note" text={note} />
       <CreatedByCell label="createdBy" creator={creator} created={cerated} />
-      <ActionsCell label="actions" holidaysId={holiday.get('id')} deleteHoliday={deleteHoliday} />
+      <ActionsCell label="actions" holidaysId={holiday.get('id')} holiday={holiday} deleteHoliday={deleteHoliday} onEditHoliday={onEditHoliday} />
     </div>
   )
 }
@@ -106,11 +99,11 @@ const Header = () => {
 }
 
 
-const HolidaysTableDesktop = ({holidays, deleteHoliday}) => {
+const HolidaysTableDesktop = ({holidays, deleteHoliday, onEditHoliday}) => {
 
   const renderHolidays = (holidays) => {
     return holidays.map(holiday => {
-      return <Row key={holiday.get('id')} holiday={holiday} deleteHoliday={deleteHoliday}/>
+      return <Row key={holiday.get('id')} holiday={holiday} deleteHoliday={deleteHoliday} onEditHoliday={onEditHoliday}/>
     })
   }
 
@@ -122,10 +115,10 @@ const HolidaysTableDesktop = ({holidays, deleteHoliday}) => {
   )
 }
 
-const HolidaysTable = ({holidays, deleteHoliday}) => {
+const HolidaysTable = ({holidays, deleteHoliday, onEditHoliday}) => {
   return (
     <div className="boss-board__manager-table">
-      <HolidaysTableDesktop holidays={holidays} deleteHoliday={deleteHoliday} />
+      <HolidaysTableDesktop holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={onEditHoliday} />
     </div>
   )
 }

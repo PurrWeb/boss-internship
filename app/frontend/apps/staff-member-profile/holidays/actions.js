@@ -13,6 +13,9 @@ import {
   ADD_HOLIDAY_SUCCESS,
   CLOSE_HOLIDAY_MODAL,
   DELETE_HOLIDAY,
+  OPEN_EDIT_HOLIDAY_MODAL,
+  EDIT_HOLIDAY_SUCCESS,
+  CLOSE_EDIT_HOLIDAY_MODAL,
   FILTER,
 } from './constants';
 
@@ -45,13 +48,42 @@ export const deleteHoliday = (holidayId) => (dispatch, getState) => {
   });
 }
 
+export const editHoliady = ({start_date, ends_date, holidays_type, note, id}) => (dispatch, getState) => {
+  const accessToken = getState().getIn(['profile', 'accessToken']);
+  const staffMemberId = getState().getIn(['profile', 'staffMember', 'id'])
+  const formateStartDate = start_date.format('DD-MM-YYYY');
+  const formatedEndDate = ends_date.format('DD-MM-YYYY');
+  
+  return axios.put(`/api/v1/staff_members/${staffMemberId}/holidays/${id}`, {
+    start_date: formateStartDate,
+    end_date: formatedEndDate,
+    note: note,
+    holiday_type: holidays_type.value
+  },
+  {
+    headers: {
+      Authorization: `Token token="${accessToken}"`
+    }
+  }).then((resp) => {
+    dispatch({
+      type: EDIT_HOLIDAY_SUCCESS,
+      payload: resp.data
+    });
+    dispatch({
+      type: CLOSE_EDIT_HOLIDAY_MODAL
+    })
+  });
+}
+
 export const addHoliday = ({start_date, ends_date, holidays_type, note}) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id'])
+  const formateStartDate = start_date.format('DD-MM-YYYY');
+  const formatedEndDate = end_date.format('DD-MM-YYYY');
   
-  axios.post(`/api/v1/staff_members/${staffMemberId}/holidays`, {
-    start_date: start_date.format('DD-MM-YYYY'),
-    end_date: ends_date.format('DD-MM-YYYY'),
+  return axios.post(`/api/v1/staff_members/${staffMemberId}/holidays`, {
+    start_date: formateStartDate,
+    end_date: formatedEndDate,
     note: note,
     holiday_type: holidays_type.value
   },
@@ -83,9 +115,24 @@ export const filter = (startDate, endDate) => (dispatch, getState) => {
     dispatch({
       type: FILTER,
       payload: resp.data
-    })
+    });
+    window.history.pushState('state', 'title', `holidays?start_date=${startDate}&end_date=${endDate}`);
   });
 }
+
+export const openEditModal = (holiday) => {
+  return {
+    type: OPEN_EDIT_HOLIDAY_MODAL,
+    payload: holiday,
+  };
+}
+
+export const closeEditModal = () => {
+  return {
+    type: CLOSE_EDIT_HOLIDAY_MODAL,
+  };
+}
+
 
 export const initialLoad = createAction(INITIAL_LOAD);
 export const addNewHoliday = createAction(ADD_NEW_HOLIDAY);

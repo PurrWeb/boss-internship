@@ -1,40 +1,33 @@
 import React from 'react';
-import { DateRangePicker } from 'react-dates';
-import HolidaysForm from './add-holiday-content-form';
+import EditHolidayForm from './edit-holiday-content-form';
+import moment from 'moment';
+
+import {
+  HOLIDAYS_OPTIONS
+} from '../constants'
 
 class EditHolidayContent extends React.PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = {
-      focusedInput: null,
-      startDate: props.startDate,
-      endDate: props.endDate,
-      holidayType: null,
-      note: null
-    }
   }
 
   render() {
     const {
-      focusedInput,
-      startDate,
-      endDate,
-    } = this.state;
-
-    const {
-      onSubmit,
+      holiday
     } = this.props;
+
+    const initialValues = {
+      note: holiday.get('note'),
+      start_date: moment(holiday.get('start_date')),
+      ends_date: moment(holiday.get('ends_date')),
+      holidays_type: HOLIDAYS_OPTIONS.find(item => item.value === holiday.get('holiday_type')),
+      id: holiday.get('id')
+    }
 
     return (
       <div>
-        <HolidaysForm
-          onDatesChange={this.onDatesChange}
-          startDate={startDate}
-          endDate={endDate}
-          onSubmit={this.onSubmit}
-          onChangeType={this.onChangeType}
-          focusedInput={focusedInput}
+        <EditHolidayForm
+          initialValues={initialValues}
         />
       </div>
     )

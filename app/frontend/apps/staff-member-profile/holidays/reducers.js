@@ -12,6 +12,9 @@ import {
   DELETE_HOLIDAY,
   ADD_HOLIDAY_SUCCESS,
   CLOSE_HOLIDAY_MODAL,
+  OPEN_EDIT_HOLIDAY_MODAL,
+  CLOSE_EDIT_HOLIDAY_MODAL,
+  EDIT_HOLIDAY_SUCCESS,
   FILTER
 } from './constants';
 
@@ -25,6 +28,8 @@ const initialState = fromJS({
   holidayStartDate: null,
   holidayEndDate: null,
   newHoliday: false,
+  editHoliday: false,
+  editedHoliday: {}
 });
 
 const holidaysReducer = handleActions({
@@ -68,6 +73,14 @@ const holidaysReducer = handleActions({
       )
     )
   },
+  [EDIT_HOLIDAY_SUCCESS]: (state, action) => {
+    const editedItem = action.payload;
+    const id = editedItem.get('id');
+    const index = state.get('holidays').findIndex(item => item.get("id") === id);
+    
+    return state
+      .setIn(['holidays', index], editedItem)
+  },
   [ADD_HOLIDAY_SUCCESS]: (state, action) => {
     let holidays = state.get('holidays');
 
@@ -76,26 +89,34 @@ const holidaysReducer = handleActions({
       .set('holidays', fromJS(holidays));
   },
   [CLOSE_HOLIDAY_MODAL]: (state) => {
-    return state.
-      set('newHoliday', false);
+    return state
+      .set('newHoliday', false);
+  },
+  [OPEN_EDIT_HOLIDAY_MODAL]: (state, action) => {
+    return state
+      .set('editHoliday', true)
+      .set('editedHoliday',fromJS(action.payload))
+  },
+  [CLOSE_EDIT_HOLIDAY_MODAL]: (state) => {
+    return state
+      .set('editHoliday', false)
+      .set('editedHoliday', fromJS({}))
   },
   [FILTER]: (state, action) => {
     const {
       holidays,
-      paidHolidayDays,
-      unpaidHolidayDays,
-      estimatedAccruedHolidayDays,
+      paid_holiday_days,
+      unpaid_holiday_days,
+      estimated_accrued_holiday_days,
       holidayStartDate,
       holidayEndDate,
     } = action.payload;
 
     return state
       .set('holidays', fromJS(holidays))
-      .set('paidHolidayDays', fromJS(paidHolidayDays))
-      .set('unpaidHolidayDays', fromJS(unpaidHolidayDays))
-      .set('estimatedAccruedHolidayDays', fromJS(estimatedAccruedHolidayDays))
-      .set('holidayStartDate', moment(holidayStartDate))
-      .set('holidayEndDate', moment(holidayEndDate))
+      .set('paidHolidayDays', fromJS(paid_holiday_days))
+      .set('unpaidHolidayDays', fromJS(unpaid_holiday_days))
+      .set('estimatedAccruedHolidayDays', fromJS(estimated_accrued_holiday_days))
   }
 }, initialState);
 

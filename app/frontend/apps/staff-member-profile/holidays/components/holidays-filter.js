@@ -3,7 +3,7 @@ import { DateRangePicker } from 'react-dates';
 
 import {filter} from '../actions'
 
-class HolidaysFilter extends React.PureComponent {
+class HolidaysFilter extends React.Component {
   constructor(props) {
     super(props);
 
@@ -18,7 +18,15 @@ class HolidaysFilter extends React.PureComponent {
     this.setState({
       startDate: startDate,
       endDate: endDate,
-    })
+    });
+  }
+
+  onMobileDatesChange = ({startDate, endDate}) => {
+    this.setState({
+      startDate: startDate,
+      endDate: endDate,
+    });
+    this.props.filter(formatedStartDate, formatedEndDate);
   }
 
   onUpdate = () => {
@@ -75,7 +83,7 @@ class HolidaysFilter extends React.PureComponent {
                   isOutsideRange={() => false}
                   startDate={startDate}
                   endDate={endDate}
-                  onDatesChange={this.onDatesChange}
+                  onDatesChange={this.onMobileDatesChange}
                   focusedInput={focusedInput}
                   onFocusChange={focusedInput => this.setState({ focusedInput })}
                 />

@@ -5,7 +5,7 @@ import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormTextarea from '~/components/boss-form/boss-form-textarea';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
 
-import {addHoliday} from '../actions';
+import {editHoliady} from '../actions';
 
 import {
   HOLIDAYS_OPTIONS
@@ -30,7 +30,7 @@ const validate = values => {
 }
 
 const submission = (values, dispatch) => {
-  return dispatch(addHoliday(values.toJS())).catch((resp) => {
+  return dispatch(editHoliady(values.toJS())).catch((resp) => {
     const errors = resp.response.data.errors;
     if (errors) {
       throw new SubmissionError(errors);
@@ -39,11 +39,10 @@ const submission = (values, dispatch) => {
 }
 
 
-const HolidaysForm = ({
+const EditHolidayForm = ({
     handleSubmit,
-    submitting
+    submitting,
   }) => {
-
   return (
     <form
       className="boss-form"
@@ -89,7 +88,7 @@ const HolidaysForm = ({
           disabled={submitting}
           className="boss-button boss-button_role_add boss-form__submit"
         >
-            Add Holiday
+            Update Holiday
         </button>
       </div>
     </form>
@@ -97,6 +96,6 @@ const HolidaysForm = ({
 }
 
 export default reduxForm({
-  form: 'holiday-form',
+  form: 'edit-holiday-form',
   validate
-})(HolidaysForm);
+})(EditHolidayForm);

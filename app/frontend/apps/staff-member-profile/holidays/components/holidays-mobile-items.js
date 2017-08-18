@@ -1,19 +1,12 @@
 import React from 'react';
 import humanize from 'string-humanize';
 import moment from 'moment';
-import editHolidayModal from '~/lib/content-modal';
-import EditHolidayModalContent from './edit-holiday-modal-content';
 import confirm from '~/lib/confirm-utils';
 
-const HolidayMobileItem = ({holiday, deleteHoliday}) => {
+const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday}) => {
 
-  const openEditHoliday = () => {
-    editHolidayModal(null, {
-      title: 'Edit Holiday',
-      component: EditHolidayModalContent,
-    }).then((resp) => {
-      console.log('Edited');
-    });
+  const onEdit = (holiday) => {
+    onEditHoliday(holiday);
   }
 
   const onDelete = (id) => {
@@ -26,11 +19,11 @@ const HolidayMobileItem = ({holiday, deleteHoliday}) => {
   }
 
   const type = humanize(holiday.get('holiday_type'));
-  const startDate = moment(holiday.get('start_date')).format('DD MMM YYYY');
-  const endDate = moment(holiday.get('end_date')).format('DD MMM YYYY');
   const note = holiday.get('note') || '-';
   const creator = holiday.get('creator');
   const cerated = `(${moment(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
+  const startDate = moment(holiday.get('start_date'), 'D-M-Y').format('DD MMM Y')
+  const endDate = moment(holiday.get('end_date'), 'D-M-Y').format('DD MMM Y')
 
   return <div className="boss-check boss-check_role_panel boss-check_page_smp-holidays">
     <div className="boss-check__row">
@@ -65,7 +58,7 @@ const HolidayMobileItem = ({holiday, deleteHoliday}) => {
       </div>
     }
     <div className="boss-check__row boss-check__row_role_actions">
-      <button className="boss-button boss-button_role_update boss-check__action" onClick={openEditHoliday}>
+      <button className="boss-button boss-button_role_update boss-check__action" onClick={() => (onEdit(holiday))}>
         Edit
       </button>
       <button className="boss-button boss-button_role_cancel boss-check__action" onClick={() => (onDelete(holiday.get('id')))}>
@@ -81,7 +74,7 @@ export default class HolidayasMobileItems extends React.Component {
 
   renderMobileItems = (holidays) => {
     return holidays.map(holiday => {
-      return <HolidayMobileItem holiday={holiday} deleteHoliday={this.props.deleteHoliday} key={holiday.get('id')} />
+      return <HolidayMobileItem holiday={holiday} deleteHoliday={this.props.deleteHoliday} onEditHoliday={this.props.onEditHoliday} key={holiday.get('id')} />
     })
   };
 
