@@ -3,47 +3,6 @@ module Api
     class OwedHoursController < APIController
       before_filter :web_token_authenticate!
 
-      def index
-        query = StaffMember.where(id: params.fetch(:staff_member_id))
-        query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
-        staff_member = query.first
-        raise ActiveRecord::RecordNotFound.new unless staff_member.present?
-        if can? :edit, staff_member
-          owed_hours = OwedHour.enabled.
-          where(staff_member: staff_member).
-          includes(creator: [:name]).all
-          
-        owed_hours_by_week = owed_hours.group_by { |owed_hour| RotaWeek.new(owed_hour.date)  }.sort_by { |week, hours| week }
-    
-          access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-    
-          render(
-            json: {
-              staff_member: ::StaffMemberSerializer.new(staff_member),
-              access_token: access_token.token,
-              holidays: ActiveModel::Serializer::CollectionSerializer.new(filtered_holidays, serializer: ::HolidaySerializer),
-              paid_holiday_days: paid_holiday_days,
-              unpaid_holiday_days: unpaid_holiday_days,
-              estimated_accrued_holiday_days: estimated_accrued_holiday_days,
-              holiday_start_date: holiday_start_date,
-              holiday_end_date: holiday_end_date,
-            },
-            status: :ok
-          ) 
-        else
-          render(
-            json: {},
-            status: 422
-          )
-        end
-      end
-
-      def show
-        holiday = Holiday.find(params[:id])
-
-        render locals: { holiday: holiday }
-      end
-
       def update
         staff_member = StaffMember.find(params.fetch(:staff_member_id))
         owed_hour = staff_member.owed_hours.find(params.fetch(:id))        
@@ -54,8 +13,14 @@ module Api
         ).update(owed_hour_from_params)
 
         if result.success?
+          owed_hours = OwedHour.enabled
+            .where(staff_member: staff_member)
+            .includes(creator: [:name]).all
+        
+          serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize      
+          
           render(
-            json: OwedHourView.new(owed_hour: result.owed_hour).serialize,
+            json: serialized_owed_hours,
             status: 200
           )
         else
@@ -73,8 +38,14 @@ module Api
         ).create(owed_hour_from_params)
 
         if result.success?
+          owed_hours = OwedHour.enabled
+            .where(staff_member: staff_member)
+            .includes(creator: [:name]).all
+          
+          serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize      
+            
           render(
-            json: OwedHourView.new(owed_hour: result.owed_hour).serialize,
+            json: serialized_owed_hours,
             status: 200
           )
         else
@@ -93,8 +64,14 @@ module Api
         ).destroy
 
         if result.success?
+          owed_hours = OwedHour.enabled
+            .where(staff_member: staff_member)
+            .includes(creator: [:name]).all
+          
+          serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize      
+            
           render(
-            json: OwedHourView.new(owed_hour: result.owed_hour).serialize,
+            json: serialized_owed_hours,
             status: 200
           )
         else
