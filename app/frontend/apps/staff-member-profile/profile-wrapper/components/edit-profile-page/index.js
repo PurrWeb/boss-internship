@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import moment from 'moment';
+import oFetch from "o-fetch";
 
 import EmploymentDetailsForm from './employment-details-form';
 import PersonalDetailsForm from './personal-details-form';
@@ -14,35 +15,36 @@ const EditProfilePage = ({
     staffMember,
     onSubmissionComplete,
   }) => {
+  let staffMemberData = staffMember.toJS();
 
   const contactDetailsFormInitial = {
-    email_address: staffMember.get('email'),
-    phone_number: staffMember.get('phone_number'),
-    address: staffMember.get('address'),
-    postcode: staffMember.get('postcode'),
-    country: staffMember.get('country'),
-    county: staffMember.get('county'),
+    email_address: oFetch(staffMemberData, 'email'),
+    phone_number: oFetch(staffMemberData, 'phone_number'),
+    address: oFetch(staffMemberData, 'address'),
+    postcode: oFetch(staffMemberData, 'postcode'),
+    country: oFetch(staffMemberData, 'country'),
+    county: oFetch(staffMemberData, 'county'),
   }
 
   const personaletailsFormInitial = {
-    first_name: staffMember.get('first_name'),
-    surname: staffMember.get('surname'),
-    gender: staffMember.get('gender'),
-    date_of_birth: moment(staffMember.get('date_of_birth'), 'DD-MM-YYYY'),
+    first_name: oFetch(staffMemberData, 'first_name'),
+    surname: oFetch(staffMemberData, 'surname'),
+    gender: oFetch(staffMemberData, 'gender'),
+    date_of_birth: moment(oFetch(staffMemberData, 'date_of_birth'), 'DD-MM-YYYY'),
   }
 
   const employmentDetailsFormInitial = {
-    master_venue: staffMember.get('master_venue'),
-    other_venues: staffMember.get('other_venues').toJS(),
-    starts_at: moment(staffMember.get('starts_at'), 'DD-MM-YYYY'),
-    staff_type: staffMember.get('staff_type'),
-    sia_badge_number: staffMember.get('sia_badge_number'),
-    sia_badge_expiry_date: moment(staffMember.get('sia_badge_expiry_date') || moment(), 'DD-MM-YYYY'),
-    national_insurance_number: staffMember.get('national_insurance_number'),
-    day_preference: staffMember.get('day_preference'),
-    hours_preference: staffMember.get('hours_preference'),
-    pay_rate: staffMember.get('pay_rate'),
-    employment_status: staffMember.get('status_statement'),
+    master_venue: oFetch(staffMemberData, 'master_venue'),
+    other_venues: oFetch(staffMemberData, 'other_venues'),
+    starts_at: moment(oFetch(staffMemberData, 'starts_at'), 'DD-MM-YYYY'),
+    staff_type: oFetch(staffMemberData, 'staff_type'),
+    sia_badge_number: oFetch(staffMemberData, 'sia_badge_number'),
+    sia_badge_expiry_date: moment(oFetch(staffMemberData, 'sia_badge_expiry_date') || moment(), 'DD-MM-YYYY'),
+    national_insurance_number: oFetch(staffMemberData, 'national_insurance_number'),
+    day_preference: oFetch(staffMemberData, 'day_preference'),
+    hours_preference: oFetch(staffMemberData, 'hours_preference'),
+    pay_rate: oFetch(staffMemberData, 'pay_rate'),
+    employment_status: oFetch(staffMemberData, 'status_statement'),
   }
 
   return (
@@ -87,7 +89,7 @@ const EditProfilePage = ({
             selectedClassName="boss-content-switcher__chapter_state_visible"
             className="boss-content-switcher__chapter"
           >
-            <ContactDetailsForm 
+            <ContactDetailsForm
               initialValues={contactDetailsFormInitial}
               onSubmissionComplete={onSubmissionComplete}
             />
