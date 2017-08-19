@@ -4,12 +4,11 @@ import moment from 'moment';
 import editAvatarModal from '~/lib/content-modal';
 
 const StaffMemberCard = ({staffMember, onUpdateAvatar, onEditAvatar}) => {
-  const avatarUrl = staffMember.get('avatar_url');
+  const avatar = staffMember.get('avatar');
   const fullName = `${staffMember.get('first_name')} ${staffMember.get('surname')}`;
   const email = staffMember.get('email');
   const phoneNumber = staffMember.get('phone_number');
   const jobType = staffMember.getIn(['staff_type', 'label']);
-
   const disabled = staffMember.get('disabled');
   const disabledByUser = staffMember.get('disabled_by_user');
   const disabledAt = staffMember.get('disabled_at');
@@ -48,15 +47,15 @@ const StaffMemberCard = ({staffMember, onUpdateAvatar, onEditAvatar}) => {
         </div>
         <div className="boss-user-summary__meta">
           <a
-            href="#"
+            href={`profile`}
             className="boss-button boss-button_type_small boss-button_role_profile boss-button_state_active boss-user-summary__switch"
           >Profile</a>
           <a
-            href="#"
+            href={`holidays`}
             className="boss-button boss-button_type_small boss-button_role_holidays boss-user-summary__switch"
           >Holidays</a>
           <a
-            href="#"
+            href={`owed_hours`}
             className="boss-button boss-button_type_small boss-button_role_timelog boss-user-summary__switch"
           >Owed hours</a>
         </div> 
@@ -93,7 +92,7 @@ const StaffMemberCard = ({staffMember, onUpdateAvatar, onEditAvatar}) => {
         <div className="boss-user-summary__side">
           <div className="boss-user-summary__avatar">
             <div className="boss-user-summary__avatar-inner">
-              <img src={avatarUrl} alt="avatar"/>
+              <img src={avatar} alt="avatar"/>
               <button
                 className="boss-user-summary__avatar-icon boss-user-summary__avatar-icon_role_edit"
                 onClick={() => onEditAvatar()}

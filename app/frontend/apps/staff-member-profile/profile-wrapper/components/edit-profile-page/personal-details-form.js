@@ -12,23 +12,28 @@ const validate = values => {
   return errors;
 }
 
-const submission = (values, dispatch) => {
-  return dispatch(updatePersonalDetailsRequest(values.toJS())).catch((resp) => {
-    const errors = resp.response.data.errors;
-    if (errors) {
-      window.scrollTo(0, 0);
-      throw new SubmissionError(errors);
-    }
-  });
-}
-
 const PersonalDetailsForm = ({
     handleSubmit,
     submitting,
     genderValues,
+    onSubmissionComplete,
     ...props
   }) => {
-
+  
+  const submission = (values, dispatch) => {
+    return dispatch(updatePersonalDetailsRequest(values.toJS()))
+      .then((resp) => {
+        onSubmissionComplete(resp);
+      })    
+      .catch((resp) => {
+        const errors = resp.response.data.errors;
+        if (errors) {
+          window.scrollTo(0, 0);
+          throw new SubmissionError(errors);
+        }
+      });
+  }
+    
   return (
     <form
       onSubmit={handleSubmit(submission)}

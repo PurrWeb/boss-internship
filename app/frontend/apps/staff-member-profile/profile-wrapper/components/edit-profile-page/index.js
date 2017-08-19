@@ -12,6 +12,7 @@ const EditProfilePage = ({
     payRates,
     genderValues,
     staffMember,
+    onSubmissionComplete,
   }) => {
 
   const contactDetailsFormInitial = {
@@ -63,6 +64,7 @@ const EditProfilePage = ({
               initialValues={employmentDetailsFormInitial}
               venues={venues}
               staffTypes={staffTypes}
+              onSubmissionComplete={onSubmissionComplete}
               payRates={payRates}
             />
           </TabPanel>
@@ -76,6 +78,7 @@ const EditProfilePage = ({
               staffTypes={staffTypes}
               payRates={payRates}
               genderValues={genderValues}
+              onSubmissionComplete={onSubmissionComplete}
             />
           </TabPanel>
           <TabPanel
@@ -84,6 +87,7 @@ const EditProfilePage = ({
           >
             <ContactDetailsForm 
               initialValues={contactDetailsFormInitial}
+              onSubmissionComplete={onSubmissionComplete}
             />
           </TabPanel>
         </section>

@@ -13,24 +13,29 @@ const validate = values => {
 }
 import {updateEmploymentDetails} from '../../requests';
 
-function submission(values, dispatch) {
-  return dispatch(updateEmploymentDetailsRequest(values.toJS())).catch((resp) => {
-    const errors = resp.response.data.errors;
-    if (errors) {
-      window.scrollTo(0, 0);
-      throw new SubmissionError(errors);
-    }
-  });
-}
-
 const EmploymentDetailsForm = ({
     handleSubmit,
     submitting,
     venues,
     staffTypes,
     payRates,
+    onSubmissionComplete,
   }) => {
-
+  
+  const submission = (values, dispatch) => {
+    return dispatch(updateEmploymentDetailsRequest(values.toJS()))
+      .then((resp) => {
+        onSubmissionComplete(resp);
+      })
+      .catch((resp) => {
+        const errors = resp.response.data.errors;
+        if (errors) {
+          window.scrollTo(0, 0);
+          throw new SubmissionError(errors);
+        }
+      });
+  }
+    
   return (
     <form
       onSubmit={handleSubmit(submission)}

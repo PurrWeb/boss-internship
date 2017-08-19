@@ -1,4 +1,4 @@
-export StaffMemberProfileDetailsApp from './profile-details-page';
-export StaffMemberHolidaysApp from './holidays';
-export StaffMemberOwedHoursApp from './owed-hours';
+export StaffMemberProfileDetailsApp from './profile-page';
+export StaffMemberHolidaysApp from './holidays-page';
+export StaffMemberOwedHoursApp from './owed-hours-page';
 

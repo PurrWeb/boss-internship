@@ -109,6 +109,10 @@ class StaffMembersController < ApplicationController
         estimated_accrued_holiday_days: estimated_accrued_holiday_days,
         holiday_start_date: holiday_start_date,
         holiday_end_date: holiday_end_date,
+        staff_types: StaffType.all,
+        venues: Venue.all,
+        pay_rates: PayRate.selectable_by(current_user),
+        gender_values: StaffMember::GENDERS
       }
     else
       flash.now[:alert] = "You're not authorized to view all of this staff member's details. Contact an admin for further assistance."
@@ -137,7 +141,11 @@ class StaffMembersController < ApplicationController
       render locals: {
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
         owed_hours: serialized_owed_hours,
-        access_token: access_token.token
+        access_token: access_token.token,
+        staff_types: StaffType.all,
+        venues: Venue.all,
+        pay_rates: PayRate.selectable_by(current_user),
+        gender_values: StaffMember::GENDERS        
       }
     end
   end

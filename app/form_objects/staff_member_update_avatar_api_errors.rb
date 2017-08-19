@@ -8,7 +8,7 @@ class StaffMemberUpdateAvatarApiErrors
     result = {}
 
     result[:base] = staff_member.errors[:base] if staff_member.errors[:base].present?
-    result[:avatar_base64] = staff_member.errors[:avatar] if staff_member.errors[:avatar].present?
+    result[:avatar] = staff_member.errors[:avatar] if staff_member.errors[:avatar].present?
 
     result
   end

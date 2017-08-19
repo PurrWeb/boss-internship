@@ -130,8 +130,5 @@ const holidaysReducer = handleActions({
   }
 }, initialState);
 
-export default combineReducers({
-  profile: holidaysReducer,
-  form: formReducer,
-})
+export default holidaysReducer;
 

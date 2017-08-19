@@ -2,7 +2,7 @@ import React from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import BossFormAvatar from '~/components/boss-form/boss-form-avatar';
 
-import {updateAvatarRequest} from '../profile-details-page/actions';
+import {updateAvatarRequest} from '../actions';
 
 const validate = values => {
   const errors = {}
@@ -11,7 +11,7 @@ const validate = values => {
 }
 
 const submission = (values, dispatch) => {
-  const avatar_base64 = values.get('avatar_base64');
+  const avatar_base64 = values.get('avatar');
   return dispatch(updateAvatarRequest(avatar_base64)).catch((resp) => {
     const errors = resp.response.data.errors;
     if (errors) {
@@ -30,7 +30,7 @@ const EditAvatar = ({
       className="boss-form"
     >
       <Field 
-        name="avatar_base64"
+        name="avatar"
         component={BossFormAvatar}
       />
       <div className="boss-form__field boss-form__field_justify_center">

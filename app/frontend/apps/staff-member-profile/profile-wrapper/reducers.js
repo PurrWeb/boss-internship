@@ -1,8 +1,5 @@
 import { fromJS, Map, List } from 'immutable';
-import { combineReducers } from 'redux-immutable';
-
 import { handleActions } from 'redux-actions';
-import { reducer as formReducer } from 'redux-form/immutable';
 
 import {
   INITIAL_LOAD,
@@ -87,7 +84,4 @@ const profileReducer = handleActions({
   }
 }, initialState);
 
-export default combineReducers({
-  profile: profileReducer,
-  form: formReducer,
-})
+export default profileReducer;

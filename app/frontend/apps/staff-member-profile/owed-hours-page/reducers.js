@@ -1,8 +1,5 @@
 import { fromJS, Map, List } from 'immutable';
-import { combineReducers } from 'redux-immutable';
 import { handleActions } from 'redux-actions';
-
-import { reducer as formReducer } from 'redux-form/immutable';
 import moment from 'moment';
 
 import {
@@ -80,8 +77,4 @@ const owedHoursReducer = handleActions({
   },
 }, initialState);
 
-export default combineReducers({
-  profile: owedHoursReducer,
-  form: formReducer,
-})
-
+export default owedHoursReducer;

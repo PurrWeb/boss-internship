@@ -55,7 +55,7 @@ const BossFormSelect = ({
     
     return value;
   }
-  console.log(error);
+
   return (
     <div className="boss-form__field">
       <label htmlFor={name} className="boss-form__label">

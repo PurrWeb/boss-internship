@@ -1,5 +1,4 @@
 import { createAction } from 'redux-actions';
-import { SubmissionError } from 'redux-form';
 
 import {
   updateAvatar,
@@ -59,6 +58,7 @@ export const updateEmploymentDetailsRequest = (payload) => (dispatch, getState) 
     dispatch(updateStaffMember(resp.data));
     dispatch(cancelEditProfile());
     window.scrollTo(0, 0);
+    return (resp.data);
   });
 }
 
@@ -68,6 +68,7 @@ export const updatePersonalDetailsRequest = (payload) => (dispatch, getState) =>
     dispatch(updateStaffMember(resp.data));
     dispatch(cancelEditProfile());
     window.scrollTo(0, 0);
+    return (resp.data);
   });
 }
 
@@ -77,10 +78,11 @@ export const updateContactDetailsRequest = (payload) => (dispatch, getState) => 
     dispatch(updateStaffMember(resp.data));
     dispatch(cancelEditProfile());
     window.scrollTo(0, 0);
+    return resp.data;
   });
 }
 
-export const initialLoad = createAction(INITIAL_LOAD);
+export const initialProfileLoad = createAction(INITIAL_LOAD);
 
 export const editProfile = createAction(EDIT_PROFILE);
 export const cancelEditProfile = createAction(CANCEL_EDIT_PROFILE);

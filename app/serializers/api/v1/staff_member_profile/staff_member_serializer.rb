@@ -3,7 +3,7 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
 
   attributes :id,
              :url,
-             :avatar_url,
+             :avatar,
              :first_name,
              :surname,
              :email,
@@ -34,6 +34,10 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :is_security_staff,
              :created_at
 
+  def avatar
+    object.avatar_url
+  end
+  
   def starts_at
     UIRotaDate.format(object.starts_at)
   end
