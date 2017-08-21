@@ -11,17 +11,18 @@ class CheckListSubmissionsController < ApplicationController
       .all
       .includes(:check_list_submission_answers)
       .includes(:user)
-    
+
     submissions_page_data = ChecklistSubmissionsPageData.new(submissions: submissions, params: params)
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+    accessible_venues = AccessibleVenuesQuery.new(current_user).all
 
     render locals: {
       access_token: access_token,
       current_venue: Api::V1::VenueForSelectSerializer.new(venue_from_params),
-      venues:  ActiveModel::Serializer::CollectionSerializer.new(Venue.all, serializer: Api::V1::VenueForSelectSerializer),
+      venues:  ActiveModel::Serializer::CollectionSerializer.new(accessible_venues, serializer: Api::V1::VenueForSelectSerializer),
     }.merge(submissions_page_data.get_data)
   end
-  
+
   private
 
   def check_venue
@@ -45,7 +46,7 @@ class CheckListSubmissionsController < ApplicationController
     if current_user.has_all_venue_access?
       Venue.find_by({id: venue_params[:venue_id]})
     else
-      current_user.venues.find(venue_params[:venue_id])
+      current_user.venues.find_by(id: venue_params[:venue_id])
     end
   end
 end
