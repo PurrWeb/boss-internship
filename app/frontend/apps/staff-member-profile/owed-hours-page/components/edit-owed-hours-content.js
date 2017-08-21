@@ -16,17 +16,17 @@ class EditOwedHoursContent extends React.PureComponent {
 
     const initialValues = {
       note: owedHour.get('note'),
-      startsAt: owedHour.get('startsAt'),
-      endsAt: owedHour.get('endsAt'),
+      startsAt: owedHour.getIn(['times' ,'startsAtOffset']),
+      endsAt: owedHour.getIn(['times', 'endsAtOffset']),
       id: owedHour.get('id'),
-      date: moment(owedHour.get('date'), 'DD-MM-YYYY'),
+      date: moment(owedHour.get('date')),
     }
-
 
     return (
       <div>
         <EditOwedHoursForm
-        initialValues={initialValues}
+          rotaDate={moment(owedHour.get('date'))}
+          initialValues={initialValues}
         />
       </div>
     )

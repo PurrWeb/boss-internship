@@ -5,25 +5,13 @@ import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormTextarea from '~/components/boss-form/boss-form-textarea';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
-import BossFormInput from '~/components/boss-form/boss-form-input';
+import BossFormTimeSelect from '~/components/boss-form/boss-form-time-select';
 
 import {editOwedHours} from '../actions';
 
 const validate = values => {
   const errors = {}
   
-  if (!values.get('date')) {
-    errors.date = "You must fill date"
-  }
-
-  if (!values.get('startsAt')) {
-    errors.startsAt = "You mast fill start time"
-  }
-
-  if (!values.get('endsAt')) {
-    errors.endsAt = "You mast fill end time"
-  }
-
   return errors;
 }
 
@@ -46,6 +34,7 @@ const submission = (values, dispatch) => {
 const EditOwedHoursForm = ({
     error,
     handleSubmit,
+    rotaDate,
     submitting
   }) => {
 
@@ -76,18 +65,24 @@ const EditOwedHoursForm = ({
       <div className="boss-form__row">
         <div className="boss-form__field boss-form__field_layout_half">
           <Field
-            component={BossFormInput}
+            component={BossFormTimeSelect}
             name="startsAt"
+            date={rotaDate}
+            interval={15}
             required
             label="Starts at"
+            normalize={value => value.value}
           />
         </div>
         <div className="boss-form__field boss-form__field_layout_half">
           <Field
-            component={BossFormInput}
+            component={BossFormTimeSelect}
             name="endsAt"
+            interval={15}
+            date={rotaDate}
             required
             label="Ends at"
+            normalize={value => value.value}
           />
         </div>
       </div>

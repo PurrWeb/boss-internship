@@ -12,8 +12,7 @@ class AddOwedHoursContent extends React.PureComponent {
 
     return (
       <div>
-        <OwedHoursForm
-        />
+        <OwedHoursForm/>
       </div>
     )
   }

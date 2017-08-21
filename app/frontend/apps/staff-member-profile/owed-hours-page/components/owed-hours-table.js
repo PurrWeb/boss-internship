@@ -70,23 +70,28 @@ const CreatedByCell = ({label, creator, created}) => {
 }
 
 const Row = ({owedHour, deleteOwedHours, openEditModal}) => {
+  const hasDate = owedHour.get('hasDate');
   const date = moment(owedHour.get('date')).format('ddd DD MMM YYYY');
-  const startTime = moment(owedHour.getIn(['times', 'startsAt'])).format('HH:mm');
-  const endTime = moment(owedHour.getIn(['times', 'endsAt'])).format('HH:mm');
+  let times = 'N/A';
+  if (hasDate) {
+    const startTime = moment(owedHour.getIn(['times', 'startsAt'])).utcOffset(owedHour.getIn(['times', 'startsAt'])).format('HH:mm');
+    const endTime = moment(owedHour.getIn(['times', 'endsAt'])).utcOffset(owedHour.getIn(['times', 'endsAt'])).format('HH:mm');
+    times = `${startTime} - ${endTime}`;
+  } 
   const durationHours = owedHour.getIn(['duration','hours']);
   const durationMinutes = owedHour.getIn(['duration', 'minutes']);
   const note = owedHour.get('note') || '-';
   const creator = owedHour.get('createdBy');
-  const cerated = `(${moment(owedHour.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
+  const created = moment(owedHour.get('createdAt')).utcOffset(owedHour.get('createdAt')).format('Do MMMM YYYY - HH:mm');
   const editable = owedHour.get('editable');
 
   return (
     <div className="boss-table__row">
       <SimpleCell label="Date" text={date} />
-      <SimpleCell label="Times" text={`${startTime} - ${endTime}`} />
+      <SimpleCell label="Times" text={times} />
       <SimpleCell label="Duration (hours)" text={durationHours} />
       <SimpleCell label="Duration (minutes)" text={durationMinutes} />      
-      <CreatedByCell label="CreatedBy" creator={creator} created={cerated} />
+      <CreatedByCell label="CreatedBy" creator={creator} created={created} />
       <SimpleCell label="Note" text={note} />
       {editable &&
         <ActionsCell label="Actions" owedHourId={owedHour.get('id')} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} owedHour={owedHour}/>      
@@ -110,9 +115,8 @@ const Header = () => {
 }
 
 const OwedStats = ({week}) => {
-
-  const startDate = moment(week.get('startDate')).format('ddd DD MMM YYYY');
-  const endDate = moment(week.get('endDate')).format('ddd DD MMM YYYY');
+  const startDate = moment(week.get('startDate'), 'DD-MM-YYYY').format('ddd DD MMM YYYY');
+  const endDate = moment(week.get('endDate'), 'DD-MM-YYYY').format('ddd DD MMM YYYY');
   return (
     <div>
       <div className="boss-count boss-count_adjust_flow boss-count_type_solid">
@@ -123,7 +127,6 @@ const OwedStats = ({week}) => {
       </div>
     </div>
   )
-
 };
 
 
@@ -160,9 +163,7 @@ const OwedHoursTableDesktop = ({owedHours, deleteOwedHours, openEditModal}) => {
 
 const OwedHoursTable = ({owedhours, deleteOwedHours, openEditModal}) => {
   return (
-    <div >
-      <OwedHoursTableDesktop owedHours={owedhours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
-    </div>
+    <OwedHoursTableDesktop owedHours={owedhours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
   )
 }
 

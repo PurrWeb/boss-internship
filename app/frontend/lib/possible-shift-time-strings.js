@@ -3,7 +3,7 @@ import moment from "moment"
 import RotaDate from "./rota-date"
 import _ from "underscore"
 
-function  unmemoizedGetPossibleShiftTimes(intervalSizeInMinutes, rotaStartTime) {
+function unmemoizedGetPossibleShiftTimes(intervalSizeInMinutes, rotaStartTime) {
     var minutesOffsets = getSamplingTimeOffsetsForDay(intervalSizeInMinutes);
     var possibleShiftStartTimeStrings = minutesOffsets.map(function(offset){
         let shiftedTime = new Date(rotaStartTime.valueOf() + (offset * 60 * 1000 ));
