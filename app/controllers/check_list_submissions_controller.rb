@@ -46,7 +46,7 @@ class CheckListSubmissionsController < ApplicationController
     if current_user.has_all_venue_access?
       Venue.find_by({id: venue_params[:venue_id]})
     else
-      current_user.venues.find(venue_params[:venue_id])
+      current_user.venues.find_by(id: venue_params[:venue_id])
     end
   end
 end
