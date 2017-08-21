@@ -20,13 +20,12 @@ import OwedHoursHeader from '../components/owed-hours-header';
 import OwedHoursTable from '../components/owed-hours-table';
 import AddNewOwedHours from '../components/add-new-owed-hours';
 import EditOwedHours from '../components/edit-owed-hours';
-import OwedHoursMobileItems from '../components/owed-hours-mobile-items';
 import ProfileWrapper from '../../profile-wrapper';
 
 const mapStateToProps = (state) => {
   return {
     staffMember: state.getIn(['owedHours','staffMember']),
-    owedhours: state.getIn(['owedHours','owedhours']),
+    owedHours: state.getIn(['owedHours','owedHours']),
     newOwedHour: state.getIn(['owedHours', 'newOwedHour']),
     editOwedHour: state.getIn(['owedHours', 'editOwedHour']),
     editedOwedHours: state.getIn(['owedHours', 'editedOwedHours']),
@@ -75,7 +74,7 @@ class OwedHours extends React.PureComponent {
       staffMember,
       newOwedHour,
       editOwedHour,
-      owedhours,
+      owedHours,
       editedOwedHours,
       actions: {
         updateAvatarRequest,
@@ -86,9 +85,8 @@ class OwedHours extends React.PureComponent {
         openEditModal,
       }
     } = this.props;
-
     return (
-      <ProfileWrapper>
+      <ProfileWrapper currentPage="owed_hours">
         <ContentModal
             show={newOwedHour}
             onClose={() => this.onCancelAddNew()}
@@ -108,8 +106,7 @@ class OwedHours extends React.PureComponent {
           <OwedHoursHeader title="Owed hours" onAddNew={this.onAddNew} />
           <div className="boss-board__main">
             <div className="boss-board__manager">
-              <OwedHoursTable owedhours={owedhours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
-              <OwedHoursMobileItems owedhours={owedhours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal}/>
+              <OwedHoursTable owedHours={owedHours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
             </div>
           </div> 
         </section>

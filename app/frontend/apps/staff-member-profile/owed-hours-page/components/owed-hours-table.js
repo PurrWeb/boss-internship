@@ -3,11 +3,28 @@ import humanize from 'string-humanize';
 import moment from 'moment';
 import confirm from '~/lib/confirm-utils';
 
-import OwedHoursMobileItems from './owed-hours-mobile-items';
+import OwedHoursMobileItem from './owed-hours-mobile-item';
+
+export const getOwedHourUIData = (owedHour) => {
+  const hasDate = owedHour.get('hasDate');
+  const date = moment(owedHour.get('date')).format('ddd DD MMM YYYY');
+  let times = 'N/A';
+  if (hasDate) {
+    const startTime = moment(owedHour.getIn(['times', 'startsAt'])).utcOffset(owedHour.getIn(['times', 'startsAt'])).format('HH:mm');
+    const endTime = moment(owedHour.getIn(['times', 'endsAt'])).utcOffset(owedHour.getIn(['times', 'endsAt'])).format('HH:mm');
+    times = `${startTime} - ${endTime}`;
+  } 
+  const durationHours = owedHour.getIn(['duration','hours']);
+  const durationMinutes = owedHour.getIn(['duration', 'minutes']);
+  const note = owedHour.get('note') || '-';
+  const creator = owedHour.get('createdBy');
+  const created = moment(owedHour.get('createdAt')).utcOffset(owedHour.get('createdAt')).format('Do MMMM YYYY - HH:mm');
+  const editable = owedHour.get('editable');
+  
+  return { hasDate, date, times, durationHours, durationMinutes, note, creator, created, editable };
+}
 
 const ActionsCell = ({label, owedHourId, deleteOwedHours, openEditModal, owedHour}) => {
-
-
   const onEdit = (owedHour) => {
     openEditModal(owedHour);
   }
@@ -70,20 +87,16 @@ const CreatedByCell = ({label, creator, created}) => {
 }
 
 const Row = ({owedHour, deleteOwedHours, openEditModal}) => {
-  const hasDate = owedHour.get('hasDate');
-  const date = moment(owedHour.get('date')).format('ddd DD MMM YYYY');
-  let times = 'N/A';
-  if (hasDate) {
-    const startTime = moment(owedHour.getIn(['times', 'startsAt'])).utcOffset(owedHour.getIn(['times', 'startsAt'])).format('HH:mm');
-    const endTime = moment(owedHour.getIn(['times', 'endsAt'])).utcOffset(owedHour.getIn(['times', 'endsAt'])).format('HH:mm');
-    times = `${startTime} - ${endTime}`;
-  } 
-  const durationHours = owedHour.getIn(['duration','hours']);
-  const durationMinutes = owedHour.getIn(['duration', 'minutes']);
-  const note = owedHour.get('note') || '-';
-  const creator = owedHour.get('createdBy');
-  const created = moment(owedHour.get('createdAt')).utcOffset(owedHour.get('createdAt')).format('Do MMMM YYYY - HH:mm');
-  const editable = owedHour.get('editable');
+  const {
+    date,
+    times,
+    durationHours,
+    durationMinutes,
+    creator,
+    created,
+    note,
+    editable,
+  } = getOwedHourUIData(owedHour);
 
   return (
     <div className="boss-table__row">
@@ -130,12 +143,17 @@ const OwedStats = ({week}) => {
 };
 
 
-const OwedHoursTableDesktop = ({owedHours, deleteOwedHours, openEditModal}) => {
-
+const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal}) => {    
   const renderRows = (owedHours, deleteOwedHours, openEditModal) => {
     return owedHours.map(owedHour => {
       return <Row key={owedHour.get('id')} owedHour={owedHour} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal}/>
     });
+  }
+
+  const renderMobileItems = (owedHours, deleteOwedHours, openEditModal) => {
+    return owedHours.map(owedHour => {
+      return <OwedHoursMobileItem key={owedHour.get('id')} owedHour={owedHour} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />;
+    })
   }
 
   const renderOwedhours = (owedHours) => {
@@ -148,7 +166,8 @@ const OwedHoursTableDesktop = ({owedHours, deleteOwedHours, openEditModal}) => {
           <div className="boss-table boss-table_page_smp-owed-hours">
             <Header />
             {renderRows(owedHour.get('owedHours'), deleteOwedHours, openEditModal)}
-          </div>          
+          </div>
+          {renderMobileItems(owedHour.get('owedHours'), deleteOwedHours, openEditModal)}   
         </div>
       </div>
     });
@@ -158,12 +177,6 @@ const OwedHoursTableDesktop = ({owedHours, deleteOwedHours, openEditModal}) => {
     <div>
       { renderOwedhours(owedHours) }
     </div>
-  )
-}
-
-const OwedHoursTable = ({owedhours, deleteOwedHours, openEditModal}) => {
-  return (
-    <OwedHoursTableDesktop owedHours={owedhours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
   )
 }
 

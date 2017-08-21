@@ -25,7 +25,7 @@ class EditHolidayContent extends React.PureComponent {
     }
 
     return (
-      <div>
+      <div className="boss-modal-window__form">
         <EditHolidayForm
           initialValues={initialValues}
         />

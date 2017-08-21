@@ -1,5 +1,4 @@
 import React from 'react';
-import { DateRangePicker } from 'react-dates';
 import AddHolidayContent from './add-holiday-content';
 
 const AddNewHoliday = (props) => {

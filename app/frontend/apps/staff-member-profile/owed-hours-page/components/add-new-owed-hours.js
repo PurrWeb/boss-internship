@@ -1,9 +1,11 @@
 import React from 'react';
-import AddOwedHoursContent from './add-new-owed-hours-content';
+import OwedHoursForm from './add-new-owed-hours-form';
 
 const AddNewOwedHours = (props) => {
   return (
-    <AddOwedHoursContent />
+    <div className="boss-modal-window__form">
+      <OwedHoursForm/>
+    </div>
   )
 }
 

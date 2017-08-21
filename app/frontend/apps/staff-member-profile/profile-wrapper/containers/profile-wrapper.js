@@ -64,7 +64,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
-class ProfileDetailsPage extends React.PureComponent {
+class ProfileWrapper extends React.PureComponent {
   constructor(props) {
     super(props);
   }
@@ -90,6 +90,7 @@ class ProfileDetailsPage extends React.PureComponent {
       disableStaffMemberModal,
       editAvatarModal,
       onStaffMemberChanged,
+      currentPage,
       actions: {
         startEditProfile,
         cancelEditProfile,
@@ -152,6 +153,7 @@ class ProfileDetailsPage extends React.PureComponent {
           }
           { !editProfile && !enableProfile &&  <Dashboard>
                 <StaffMemberCard
+                  currentPage={currentPage}
                   staffMember={staffMember}
                   onEditAvatar={showEditAvatarModal}
                 />
@@ -179,4 +181,4 @@ class ProfileDetailsPage extends React.PureComponent {
   }
 }
 
-export default ProfileDetailsPage;
+export default ProfileWrapper;

@@ -25,8 +25,12 @@ class HolidaysFilter extends React.Component {
     this.setState({
       startDate: startDate,
       endDate: endDate,
+    }, () => {
+      const formatedStartDate = this.state.startDate.format('DD-MM-YYYY');
+      const formatedEndDate = this.state.endDate.format('DD-MM-YYYY');
+  
+      this.props.filter(formatedStartDate, formatedEndDate);
     });
-    this.props.filter(formatedStartDate, formatedEndDate);
   }
 
   onUpdate = () => {
@@ -41,7 +45,7 @@ class HolidaysFilter extends React.Component {
       startDate,
       endDate,
     } = this.state;
-
+    console.log(startDate);
     return (
       <div className="boss-board__manager-filter">
         <div className="boss-form">
@@ -58,6 +62,7 @@ class HolidaysFilter extends React.Component {
                   withPortal
                   showClearDates
                   isOutsideRange={() => false}
+                  displayFormat={"DD-MM-YYYY"}
                   startDate={startDate}
                   endDate={endDate}
                   onDatesChange={this.onDatesChange}
@@ -81,6 +86,7 @@ class HolidaysFilter extends React.Component {
                   withPortal
                   showClearDates
                   isOutsideRange={() => false}
+                  displayFormat={"DD-MM-YYYY"}
                   startDate={startDate}
                   endDate={endDate}
                   onDatesChange={this.onMobileDatesChange}

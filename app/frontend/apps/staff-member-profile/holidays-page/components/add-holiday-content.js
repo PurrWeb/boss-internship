@@ -1,5 +1,4 @@
 import React from 'react';
-import { DateRangePicker } from 'react-dates';
 import HolidaysForm from './add-holiday-content-form';
 
 class AddHolidayContent extends React.PureComponent {
@@ -27,7 +26,7 @@ class AddHolidayContent extends React.PureComponent {
     } = this.props;
 
     return (
-      <div>
+      <div className="boss-modal-window__form">
         <HolidaysForm
           onDatesChange={this.onDatesChange}
           startDate={startDate}

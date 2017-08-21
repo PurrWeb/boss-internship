@@ -18,7 +18,7 @@ import {
 const initialState = fromJS({
   staffMember: {},
   accessToken: null,
-  owedhours: [],
+  owedHours: [],
   newOwedHour: false,
   editOwedHour: false,
   editedOwedHours: {},
@@ -29,13 +29,13 @@ const owedHoursReducer = handleActions({
     const { 
       staffMember,
       accessToken,
-      owedhours,
+      owedHours,
     } = action.payload;
 
     return state
       .set('staffMember', fromJS(staffMember))
       .set('accessToken', fromJS(accessToken))
-      .set('owedhours', fromJS(owedhours))
+      .set('owedHours', fromJS(owedHours))
   },
   [ADD_NEW_OWED_HOUR]: (state) => {
     return state
@@ -45,7 +45,7 @@ const owedHoursReducer = handleActions({
     const owedHours = fromJS(action.payload);
     
     return state
-      .set('owedhours', owedHours);
+      .set('owedHours', owedHours);
   },
   [OPEN_EDIT_OWED_HOURS_MODAL]: (state, action) => {
     return state
@@ -59,7 +59,7 @@ const owedHoursReducer = handleActions({
   },
   [EDIT_OWED_HOURS_SUCCESS]: (state, action) => {
     return state
-      .set('owedhours', fromJS(action.payload))
+      .set('owedHours', fromJS(action.payload))
   },
   [CLOSE_OWED_HOURS_MODAL]: (state) => {
     return state
@@ -73,7 +73,7 @@ const owedHoursReducer = handleActions({
     const owedHours = action.payload;
 
     return state
-      .set('owedhours', fromJS(owedHours));
+      .set('owedHours', fromJS(owedHours));
   },
 }, initialState);
 

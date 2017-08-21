@@ -2,8 +2,14 @@ import React from 'react';
 import humanize from 'string-humanize';
 import moment from 'moment';
 import confirm from '~/lib/confirm-utils';
+import {getOwedHourUIData} from './owed-hours-table';
 
-const OwedHourMobileItem = ({owedHour, deleteOwedHour}) => {
+
+const OwedHourMobileItem = ({owedHour, deleteOwedHour, openEditModal}) => {
+  
+  const onEdit = (owedHour) => {
+    openEditModal(owedHour);
+  }
 
   const onDelete = (id) => {
     confirm('Are you sure ?', {
@@ -13,17 +19,20 @@ const OwedHourMobileItem = ({owedHour, deleteOwedHour}) => {
       deleteOwedHour(id);
     });
   }
-
-  const date = moment(owedHour.get('date')).format('ddd DD MMM YYYY');
-  const startTime = moment(owedHour.getIn(['times', 'startsAt'])).format('HH:mm');
-  const endTime = moment(owedHour.getIn(['times', 'endsAt'])).format('HH:mm');
-  const durationHours = owedHour.getIn(['duration','hours']);
-  const durationMinutes = owedHour.getIn(['duration', 'minutes']);
-  const duration = `(${durationHours} hours ${durationMinutes} minutes)`
-  const note = owedHour.get('note') || '-';
-  const creator = owedHour.get('createdBy');
-  const cerated = `(${moment(owedHour.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
-  const editable = owedHour.get('editable');
+  
+  const {
+    date,
+    times,
+    durationHours,
+    durationMinutes,
+    creator,
+    created,
+    note,
+    editable,
+  } = getOwedHourUIData(owedHour);
+  
+  const duration = `${durationHours} hours ${durationMinutes} minutes`;
+  const owedHourId = owedHour.get('id');
 
   return <div className="boss-check boss-check_role_panel boss-check_page_smp-owed-hours">
     <div className="boss-check__row">
@@ -35,10 +44,10 @@ const OwedHourMobileItem = ({owedHour, deleteOwedHour}) => {
       <div className="boss-check__cell">
         <p className="boss-check__text boss-check__text_role_time boss-check__text_marked">
           <span>
-            {startTime} - {endTime}
+            {times}&nbsp;
           </span>
           <span>
-            {duration} 
+            ({duration})
           </span>
         </p>
       </div>
@@ -50,7 +59,7 @@ const OwedHourMobileItem = ({owedHour, deleteOwedHour}) => {
           {creator}
         </p>
         <p className="boss-check__text boss-check__text_role_secondary">
-          {cerated}
+          {created}
         </p>
       </div>
     </div>
@@ -64,30 +73,18 @@ const OwedHourMobileItem = ({owedHour, deleteOwedHour}) => {
         </div>
       </div>
     }
-    <div className="boss-check__row boss-check__row_role_actions">
-      <button className="boss-button boss-button_role_update boss-check__action">
-        Edit
-      </button>
-      <button className="boss-button boss-button_role_cancel boss-check__action">
-        Delete
-      </button>
-    </div>
+    {editable && <div className="boss-check__row boss-check__row_role_actions">
+        <button
+          onClick={() => onEdit(owedHour)}
+          className="boss-button boss-button_role_update boss-check__action"
+        >Edit</button>
+        <button
+          onClick={() => onDelete(owedHourId)}
+          className="boss-button boss-button_role_cancel boss-check__action"
+        >Delete</button>
+      </div>}
+
   </div>
 }
-export default class OwedHourMobileItems extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
-  renderMobileItems = (owedhours) => {
-    return owedhours.map(owedhour => {
-      return <OwedHourMobileItem owedHour={owedhour} key={owedhour.get('id')} />
-    })
-  };
-
-  render(){
-    return <div>
-      {this.renderMobileItems(this.props.owedhours)}
-    </div>
-  }
-}
+export default OwedHourMobileItem;

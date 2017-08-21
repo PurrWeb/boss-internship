@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import editAvatarModal from '~/lib/content-modal';
 
-const StaffMemberCard = ({staffMember, onUpdateAvatar, onEditAvatar}) => {
+const StaffMemberCard = ({staffMember, onUpdateAvatar, onEditAvatar, currentPage}) => {
   const avatar = staffMember.get('avatar');
   const fullName = `${staffMember.get('first_name')} ${staffMember.get('surname')}`;
   const email = staffMember.get('email');
@@ -38,28 +38,34 @@ const StaffMemberCard = ({staffMember, onUpdateAvatar, onEditAvatar}) => {
       : fullName
   }
 
-  const renderCardContent = (email, phoneNumber) => {
+  const renderCardContacts = (email, phoneNumber) => {
     return (
-      <div>
-        <div className="boss-user-summary__contacts">
-          { renderEmail(email) }
-          { renderPhoneNumber(phoneNumber) }
-        </div>
-        <div className="boss-user-summary__meta">
-          <a
-            href={`profile`}
-            className="boss-button boss-button_type_small boss-button_role_profile boss-button_state_active boss-user-summary__switch"
-          >Profile</a>
-          <a
-            href={`holidays`}
-            className="boss-button boss-button_type_small boss-button_role_holidays boss-user-summary__switch"
-          >Holidays</a>
-          <a
-            href={`owed_hours`}
-            className="boss-button boss-button_type_small boss-button_role_timelog boss-user-summary__switch"
-          >Owed hours</a>
-        </div> 
-      </div>     
+      <div className="boss-user-summary__contacts">
+        { renderEmail(email) }
+        { renderPhoneNumber(phoneNumber) }
+      </div>   
+    )
+  }
+  const isActive = (currentPage, page) => {
+    return currentPage === page ? 'boss-button_state_active' : '';
+  }
+
+  const renderCardActions = () => {
+    return (
+      <div className="boss-user-summary__meta">
+        <a
+          href={`profile`}
+          className={`${isActive(currentPage, "profile")} boss-button boss-button_type_small boss-button_role_profile boss-user-summary__switch`}
+        >Profile</a>
+        <a
+          href={`holidays`}
+          className={`${isActive(currentPage ,"holidays")} boss-button boss-button_type_small boss-button_role_holidays boss-user-summary__switch`}
+        >Holidays</a>
+        <a
+          href={`owed_hours`}
+          className={`${isActive(currentPage ,"owed_hours")} boss-button boss-button_type_small boss-button_role_timelog boss-user-summary__switch`}
+        >Owed hours</a>
+      </div> 
     )
   }
 
@@ -111,7 +117,7 @@ const StaffMemberCard = ({staffMember, onUpdateAvatar, onEditAvatar}) => {
           </div>
           { disabled
             ? renderdisabledContent({disabledByUser, disabledAt, disabledReason})
-            : renderCardContent(email, phoneNumber)
+            : [renderCardContacts(email, phoneNumber), renderCardActions()]
           }
         </div>
       </div>

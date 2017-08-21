@@ -102,7 +102,7 @@ class Holidays extends React.PureComponent {
     } = this.props;
 
     return (
-      <ProfileWrapper>
+      <ProfileWrapper currentPage="holidays">
         <ContentModal
             show={newHoliday}
             onClose={() => this.onCancelAddNew()}

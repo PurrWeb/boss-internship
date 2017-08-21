@@ -151,9 +151,10 @@ class ProfilePage extends React.PureComponent {
     const categories = this.filledDetailsOptions(this.detailsListOptions, staffMember.toJS());
 
     return (
-      <ProfileWrapper onStaffMemberChanged={(staffMember) => updateStaffMember(staffMember)}>
-        {this.renderDetailsList(categories)}
-      </ProfileWrapper>
+      <ProfileWrapper
+        currentPage="profile"
+        onStaffMemberChanged={(staffMember) => updateStaffMember(staffMember)}
+      >{this.renderDetailsList(categories)}</ProfileWrapper>
     )
   }
 }
