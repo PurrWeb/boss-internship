@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import humanize from 'string-humanize';
 import oFetch from "o-fetch";
+import _ from 'lodash';
 
 import DetailsList from '../components/details-list';
 import {starterEmploymentStatusLabels} from '../../../../constants/other';
@@ -17,6 +18,9 @@ import {
 const mapStateToProps = (state) => {
   return {
     staffMember: state.getIn(['profileDetails', 'staffMember']),
+    venues: state.getIn(['profile', 'venues']),
+    staffTypes: state.getIn(['profile', 'staffTypes']),
+    payRates: state.getIn(['profile', 'payRates']),
   };
 }
 
@@ -28,18 +32,29 @@ const mapDispatchToProps = (dispatch) => {
   };
 }
 
+const findById = (collection, id) => {
+  if (Object.prototype.toString.call(id) === '[object Array]') {
+    return _(collection).keyBy('id').at(id).filter().value();
+  } else {
+    return collection.find(item => item.id === id);
+  }
+}
+
 @connect(mapStateToProps, mapDispatchToProps)
 class ProfilePage extends React.PureComponent {
   constructor(props) {
     super(props);
-    let staffMemberData = this.props.staffMember.toJS();
+    let staffMemberData = props.staffMember.toJS();
+    let venues = props.venues.toJS();
+    let staffTypes = props.staffTypes.toJS();
+    let payRates = props.payRates.toJS();
 
     let employmentDetailItems = [
-      (item, name = "master_venue") => ({name: "Main Venue", value: oFetch(item, name).label}),
-      (item, name = "other_venues") => ({name: humanize(name), value: oFetch(item, name).map(venue => venue.label).join(', ')}),
-      (item, name = "staff_type") => ({name: "Job Type", value: oFetch(item, name).label}),
+      (item, name = "master_venue") => ({name: "Main Venue", value: oFetch(findById(venues, oFetch(item, name)), 'name')}),
+      (item, name = "other_venues") => ({name: humanize(name), value: findById(venues, oFetch(item, name)).map(item => oFetch(item, 'name')).join(', ')}),
+      (item, name = "staff_type") => ({name: "Job Type", value: oFetch(findById(staffTypes, oFetch(item, name)), 'name')}),
       (item, name = "starts_at") => ({name: "Start Date", value: moment(oFetch(item, name), 'DD-MM-YYYY').format('DD MMMM YYYY')}),
-      (item, name = "pay_rate") => ({name: humanize(name), value: oFetch(item, name).label}),
+      (item, name = "pay_rate") => ({name: humanize(name), value: oFetch(findById(payRates, oFetch(item, name)), 'name')}),
       "hours_preference",
       "day_preference",
       "national_insurance_number",

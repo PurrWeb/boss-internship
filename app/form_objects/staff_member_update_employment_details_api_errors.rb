@@ -8,10 +8,10 @@ class StaffMemberUpdateEmploymentDetailsApiErrors
     result = {}
 
     result[:base] = staff_member.errors[:base] if staff_member.errors[:base].present?
-    result[:master_venue_id] = staff_member.errors[:master_venue] if staff_member.errors[:master_venue].present?
-    result[:other_venue_ids] = staff_member.errors[:work_venues] if staff_member.errors[:work_venues].present?
-    result[:staff_type_id] = staff_member.errors[:staff_type] if staff_member.errors[:staff_type].present?
-    result[:pay_rate_id] = staff_member.errors[:pay_rate] if staff_member.errors[:pay_rate].present?
+    result[:master_venue] = staff_member.errors[:master_venue] if staff_member.errors[:master_venue].present?
+    result[:other_venues] = staff_member.errors[:work_venues] if staff_member.errors[:work_venues].present?
+    result[:staff_type] = staff_member.errors[:staff_type] if staff_member.errors[:staff_type].present?
+    result[:pay_rate] = staff_member.errors[:pay_rate] if staff_member.errors[:pay_rate].present?
     result[:national_insurance_number] = staff_member.errors[:national_insurance_number] if staff_member.errors[:national_insurance_number].present?
     result[:hours_preference_note] = staff_member.errors[:hours_preference_note] if staff_member.errors[:hours_preference_note].present?
     result[:day_preference_note] = staff_member.errors[:day_preference_note] if staff_member.errors[:day_preference_note].present?

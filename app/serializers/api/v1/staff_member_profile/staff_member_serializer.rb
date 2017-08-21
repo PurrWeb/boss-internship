@@ -91,15 +91,15 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
   end
 
   def pay_rate
-    { value: object.pay_rate.id, label: object.pay_rate.name } if object.pay_rate.present?
+    object.pay_rate.id if object.pay_rate.present?
   end
 
   def staff_type
-    {value: object.staff_type.id, label: object.staff_type.name} if object.staff_type.present?
+    object.staff_type.id if object.staff_type.present?
   end
 
   def master_venue
-    {value: object.master_venue.id, label: object.master_venue.name} if object.master_venue.present?
+    object.master_venue.id if object.master_venue.present?
   end
 
   def first_name
@@ -112,7 +112,7 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
 
   def other_venues
     object.work_venues.map do |venue|
-      {value: venue.id, label: venue.name}
+      venue.id
     end
   end
 

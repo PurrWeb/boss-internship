@@ -1,5 +1,8 @@
 import React from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
+import { connect } from 'react-redux';
+import { formValueSelector } from 'redux-form/immutable';
+
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormInput from '~/components/boss-form/boss-form-input';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
@@ -13,13 +16,14 @@ const validate = values => {
 }
 import {updateEmploymentDetails} from '../../requests';
 
-const EmploymentDetailsForm = ({
+let EmploymentDetailsForm = ({
     handleSubmit,
     submitting,
     venues,
     staffTypes,
     payRates,
     onSubmissionComplete,
+    staffType,
   }) => {
   
   const submission = (values, dispatch) => {
@@ -35,7 +39,7 @@ const EmploymentDetailsForm = ({
         }
       });
   }
-    
+  
   return (
     <form
       onSubmit={handleSubmit(submission)}
@@ -134,7 +138,17 @@ const EmploymentDetailsForm = ({
   )
 }
 
-export default reduxForm({
+EmploymentDetailsForm = reduxForm({
   form: 'employment-details-form',
   validate,
 })(EmploymentDetailsForm);
+
+const selector = formValueSelector('employment-details-form')
+
+const mapStateToProps = (state) => {
+  return {
+    staffType: selector(state, 'staff_type'),
+  }
+};
+
+export default connect(mapStateToProps)(EmploymentDetailsForm);

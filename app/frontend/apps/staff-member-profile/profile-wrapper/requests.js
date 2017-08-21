@@ -52,7 +52,7 @@ export const enableStaffMember = (payload) => {
 
   let requestParams = {
     pin_code: pinCode,
-    gender: gender.label || gender,
+    gender: gender,
     phone_number,
     date_of_birth,
     starts_at: moment(starts_at).format("DD-MM-YYYY"),
@@ -64,7 +64,7 @@ export const enableStaffMember = (payload) => {
     staff_type_id: staff_type.value,
     main_venue_id: master_venue.value,
     pay_rate_id: pay_rate.value,
-    other_venue_ids: other_venues.map(venue => venue.value),
+    other_venue_ids: other_venues,
     email_address,
     first_name,
     surname,
@@ -98,10 +98,10 @@ export const updateEmploymentDetails = (payload) => {
     day_preference_note: day_preference,
     starts_at: moment(starts_at).format("DD-MM-YYYY"),
     employment_status,
-    pay_rate_id: pay_rate.value,
-    master_venue_id: master_venue.value,
-    other_venue_ids: other_venues.map(venue => venue.value),
-    staff_type_id: staff_type.value,
+    pay_rate_id: pay_rate,
+    master_venue_id: master_venue,
+    other_venue_ids: other_venues,
+    staff_type_id: staff_type,
   });
 }
 
@@ -117,7 +117,7 @@ export const updatePersonalDetails = (payload) => {
   } = payload;
 
   return http.post(`/api/v1/staff_members/${staffMemberId}/update_personal_details`, {
-    gender: gender.label || gender,
+    gender: gender,
     date_of_birth: moment(date_of_birth).format("DD-MM-YYYY"),
     first_name,
     surname
