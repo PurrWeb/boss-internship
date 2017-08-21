@@ -20,20 +20,21 @@ class ImmutableOwedHourUpdate
     new_owed_hour = nil
 
     ActiveRecord::Base.transaction do
-
       new_owed_hour = OwedHour.new(
         copy_params.
           merge(update_params).
           merge(creator: requester)
       )
       assert_owed_hours_valid(owed_hour, new_owed_hour)
-      return if owed_hours_match?(owed_hour, new_owed_hour)
-      owed_hour.disable!(requester: requester)
-      
-      success = new_owed_hour.save
-
-      raise ActiveRecord::Rollback unless success
-      owed_hour.update_attributes!(parent: new_owed_hour)
+      if owed_hours_match?(owed_hour, new_owed_hour)
+        success = true
+        return Result.new(success, owed_hour)
+      else
+        owed_hour.disable!(requester: requester)
+        success = new_owed_hour.save
+        raise ActiveRecord::Rollback unless success
+        owed_hour.update_attributes!(parent: new_owed_hour)
+      end
     end
 
     if !success

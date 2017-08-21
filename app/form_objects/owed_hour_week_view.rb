@@ -13,8 +13,8 @@ class OwedHourWeekView
       total_minutes = owed_hours.inject(0) { |sum, owed_hours| sum + owed_hours.minutes }
       {
         week: {
-          startDate: week.start_date,
-          endDate: week.end_date,
+          startDate: week.start_date.strftime('%d-%m-%Y'),
+          endDate: week.end_date.strftime('%d-%m-%Y'),
           totalHours: HoursHelper.new(total_minutes: total_minutes).description
         },
         owedHours: owed_hours.map do |owed_hour|
