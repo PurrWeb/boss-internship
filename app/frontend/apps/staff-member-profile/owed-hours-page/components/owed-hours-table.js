@@ -146,7 +146,7 @@ const OwedStats = ({week}) => {
 const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal}) => {    
   const renderRows = (owedHours, deleteOwedHours, openEditModal) => {
     return owedHours.map(owedHour => {
-      return <Row key={owedHour.get('id')} owedHour={owedHour} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal}/>
+      return <Row key={`${owedHour.get('id')}`} owedHour={owedHour} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal}/>
     });
   }
 
@@ -157,19 +157,21 @@ const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal}) => {
   }
 
   const renderOwedhours = (owedHours) => {
-    return owedHours.map(owedHour => {
-      return <div className="boss-board__manager-group boss-board__manager-group_context_stack" key={owedHour.get('id')}>
-        <div className="boss-board__manager-stats boss-board__manager-stats_role_group-header">
-          <OwedStats week={owedHour.get('week')}/>
-        </div>
-        <div className="boss-board__manager-table">
-          <div className="boss-table boss-table_page_smp-owed-hours">
-            <Header />
-            {renderRows(owedHour.get('owedHours'), deleteOwedHours, openEditModal)}
+    return owedHours.map((owedHour, index) => {
+      return (
+        <div key={index} className="boss-board__manager-group boss-board__manager-group_context_stack">
+          <div className="boss-board__manager-stats boss-board__manager-stats_role_group-header">
+            <OwedStats week={owedHour.get('week')}/>
           </div>
-          {renderMobileItems(owedHour.get('owedHours'), deleteOwedHours, openEditModal)}   
+          <div className="boss-board__manager-table">
+            <div className="boss-table boss-table_page_smp-owed-hours">
+              <Header />
+              {renderRows(owedHour.get('owedHours'), deleteOwedHours, openEditModal)}
+            </div>
+            {renderMobileItems(owedHour.get('owedHours'), deleteOwedHours, openEditModal)}   
+          </div>
         </div>
-      </div>
+      )
     });
   }
 

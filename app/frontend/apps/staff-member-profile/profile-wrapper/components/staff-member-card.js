@@ -40,7 +40,7 @@ const StaffMemberCard = ({staffMember, onUpdateAvatar, onEditAvatar, currentPage
 
   const renderCardContacts = (email, phoneNumber) => {
     return (
-      <div className="boss-user-summary__contacts">
+      <div key={1} className="boss-user-summary__contacts">
         { renderEmail(email) }
         { renderPhoneNumber(phoneNumber) }
       </div>   
@@ -52,7 +52,7 @@ const StaffMemberCard = ({staffMember, onUpdateAvatar, onEditAvatar, currentPage
 
   const renderCardActions = () => {
     return (
-      <div className="boss-user-summary__meta">
+      <div key={2} className="boss-user-summary__meta">
         <a
           href={`profile`}
           className={`${isActive(currentPage, "profile")} boss-button boss-button_type_small boss-button_role_profile boss-user-summary__switch`}
