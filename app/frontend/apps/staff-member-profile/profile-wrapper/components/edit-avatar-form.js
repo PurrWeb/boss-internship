@@ -25,24 +25,26 @@ const EditAvatar = ({
   submitting,
 }) => {
   return (
-    <form
-      onSubmit={handleSubmit(submission)}
-      className="boss-form"
-    >
-      <Field 
-        name="avatar"
-        component={BossFormAvatar}
-      />
-      <div className="boss-form__field boss-form__field_justify_center">
-        <button
-          disabled={submitting}
-          type="submit"
-          className="boss-button boss-button_role_submit"
-        >
-          Update
-        </button>
-      </div>
-    </form>
+    <div className="boss-modal-window__form">
+      <form
+        onSubmit={handleSubmit(submission)}
+        className="boss-form"
+      >
+        <Field 
+          name="avatar"
+          component={BossFormAvatar}
+        />
+        <div className="boss-form__field boss-form__field_justify_center">
+          <button
+            disabled={submitting}
+            type="submit"
+            className="boss-button boss-button_role_submit"
+          >
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }
 

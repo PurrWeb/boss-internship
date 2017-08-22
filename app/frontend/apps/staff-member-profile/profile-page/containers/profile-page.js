@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import humanize from 'string-humanize';
 import oFetch from "o-fetch";
@@ -11,24 +10,12 @@ import DetailsList from '../components/details-list';
 import {starterEmploymentStatusLabels} from '../../../../constants/other';
 import ProfileWrapper from '../../profile-wrapper';
 
-import {
-  updateStaffMember,
-} from '../actions';
-
 const mapStateToProps = (state) => {
   return {
-    staffMember: state.getIn(['profileDetails', 'staffMember']),
+    staffMember: state.getIn(['profile', 'staffMember']),
     venues: state.getIn(['profile', 'venues']),
     staffTypes: state.getIn(['profile', 'staffTypes']),
     payRates: state.getIn(['profile', 'payRates']),
-  };
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    actions: bindActionCreators({
-      updateStaffMember,
-    }, dispatch)
   };
 }
 
@@ -40,17 +27,51 @@ const findById = (collection, id) => {
   }
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
+@connect(mapStateToProps)
 class ProfilePage extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    let staffMemberData = props.staffMember.toJS();
-    let venues = props.venues.toJS();
-    let staffTypes = props.staffTypes.toJS();
-    let payRates = props.payRates.toJS();
+  filledDetailsOptions(options, data) {
+    return options.map(category => {
+      return {
+        categoryName: category.categoryName,
+        items: category.items.map(item => {
+          if (typeof item === 'function') {
+            return item(data);
+          }
+
+          const [realName, name] = item.split(":");
+          const key = realName;
+
+          return {
+            name: humanize(name || realName),
+            value: oFetch(data, key),
+          }
+        }).filter(item => item)
+      }
+    })
+  }
+
+  renderDetailsList(categories) {
+    return categories.map((category, key) => {
+      return <DetailsList key={key} category={category} index={key + 1}/>
+    });
+  }
+
+  handleDisableStaffMemberSubmit = (values) => {
+    confirm('This staff member has an associated user account. Disabling here will not disable the user and the will still be able to log in.', {
+      actionButtonText: 'Confirm',
+      title: 'WARNING !!!',
+    }).then(() => {
+      this.props.actions.disableStaffMemberRequest(values.toJS());
+    })
+  }
+
+  initializeData() {
+    let staffMemberData = this.props.staffMember.toJS();
+    let venues = this.props.venues.toJS();
+    let staffTypes = this.props.staffTypes.toJS();
+    let payRates = this.props.payRates.toJS();
 
     let employmentDetailItems = [
-      (item, name = "master_venue") => ({name: "Main Venue", value: oFetch(findById(venues, oFetch(item, name)), 'name')}),
       (item, name = "other_venues") => ({name: humanize(name), value: findById(venues, oFetch(item, name)).map(item => oFetch(item, 'name')).join(', ')}),
       (item, name = "staff_type") => ({name: "Job Type", value: oFetch(findById(staffTypes, oFetch(item, name)), 'name')}),
       (item, name = "starts_at") => ({name: "Start Date", value: moment(oFetch(item, name), 'DD-MM-YYYY').format('DD MMMM YYYY')}),
@@ -81,6 +102,13 @@ class ProfilePage extends React.PureComponent {
           name: humanize(name),
           value: oFetch(item, name)
         })
+      )
+    } else {
+      employmentDetailItems.unshift(
+        (item, name = "master_venue") => ({
+          name: "Main Venue",
+          value: oFetch(findById(venues, oFetch(item, name)), 'name')
+        }),
       )
     }
 
@@ -119,56 +147,17 @@ class ProfilePage extends React.PureComponent {
     ];
   }
 
-  filledDetailsOptions(options, data) {
-    return options.map(category => {
-      return {
-        categoryName: category.categoryName,
-        items: category.items.map(item => {
-          if (typeof item === 'function') {
-            return item(data);
-          }
-
-          const [realName, name] = item.split(":");
-          const key = realName;
-
-          return {
-            name: humanize(name || realName),
-            value: oFetch(data, key),
-          }
-        }).filter(item => item)
-      }
-    })
-  }
-
-  renderDetailsList(categories) {
-    return categories.map((category, key) => {
-      return <DetailsList key={key} category={category} index={key + 1}/>
-    });
-  }
-
-  handleDisableStaffMemberSubmit = (values) => {
-    confirm('This staff member has an associated user account. Disabling here will not disable the user and the will still be able to log in.', {
-      actionButtonText: 'Confirm',
-      title: 'WARNING !!!',
-    }).then(() => {
-      this.props.actions.disableStaffMemberRequest(values.toJS());
-    })
-  }
-
   render() {
     const {
       staffMember,
-      actions: {
-        updateStaffMember,
-      }
     } = this.props;
-
+    
+    this.initializeData();
     const categories = this.filledDetailsOptions(this.detailsListOptions, staffMember.toJS());
 
     return (
       <ProfileWrapper
         currentPage="profile"
-        onStaffMemberChanged={(staffMember) => updateStaffMember(staffMember)}
       >{this.renderDetailsList(categories)}</ProfileWrapper>
     )
   }

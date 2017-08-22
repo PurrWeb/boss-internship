@@ -1,5 +1,6 @@
 import React from 'react';
-import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
+import { Field, reduxForm, SubmissionError, formValueSelector } from 'redux-form/immutable';
+import { connect } from 'react-redux';
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormInput from '~/components/boss-form/boss-form-input';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
@@ -7,6 +8,7 @@ import BossFormEmployementStatus from '~/components/boss-form/boss-form-employem
 import BossFormAvatar from '~/components/boss-form/boss-form-avatar';
 
 import {enableStaffMemberRequest} from '../../actions';
+import {SECURITY_TYPE_ID} from '../../constants';
 
 const validate = values => {
   const errors = {}
@@ -41,14 +43,32 @@ const Panel = ({title, children}) => {
   )
 }
 
-const EnableProfileForm = ({
+let EnableProfileForm = ({
     handleSubmit,
     submitting,
     genderValues,
     staffTypes,
     payRates,
     venues,
+    isSecurityStaff,
   }) => {
+
+  const renderSecurityStaffFields = () => {
+    return [<Field
+      key={'sia_badge_number'}
+      name="sia_badge_number"
+      component={BossFormInput}
+      type="text"
+      label="SIA badge number"
+    />,
+    <Field
+      key={'sia_badge_expiry_date'}
+      component={BossFormCalendar}
+      required
+      name="sia_badge_expiry_date"
+      label="SIA badge expiry date"
+    />]
+  }
 
   return (
     <form
@@ -87,12 +107,12 @@ const EnableProfileForm = ({
       </Panel>
       <Panel title="Photo">
         <Field
-          name="avatar_url"
+          name="avatar"
           component={BossFormAvatar}
         />
       </Panel>
       <Panel title="Venue">
-        <Field
+        { !isSecurityStaff && <Field
           component={BossFormSelect}
           name="master_venue"
           required
@@ -101,7 +121,7 @@ const EnableProfileForm = ({
           optionValue="id"
           placeholder="Select main venue ..."
           options={venues.toJS()}
-        />
+        />}
         <Field
           component={BossFormSelect}
           name="other_venues"
@@ -178,6 +198,7 @@ const EnableProfileForm = ({
           placeholder="Select staff type ..."
           options={staffTypes.toJS()}
         />
+        { isSecurityStaff && renderSecurityStaffFields() }
         <Field
           component={BossFormInput}
           name="pinCode"
@@ -233,7 +254,17 @@ const EnableProfileForm = ({
   )
 }
 
-export default reduxForm({
+EnableProfileForm = reduxForm({
   form: 'enable-profile-form',
   validate,
 })(EnableProfileForm);
+
+const selector = formValueSelector('enable-profile-form');
+
+const mapStateToProps = (state) => {
+  return {
+    isSecurityStaff: selector(state, 'staff_type') === SECURITY_TYPE_ID,
+  }
+};
+
+export default connect(mapStateToProps)(EnableProfileForm);

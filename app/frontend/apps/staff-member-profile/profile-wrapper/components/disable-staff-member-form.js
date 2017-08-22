@@ -21,30 +21,32 @@ const asyncValidate = (values) => {
 
 export const DisableStaffMemberForm = ({onDisable, handleSubmit}) => {
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="boss-form"
-    >
-      <Field
-        component={BossFormCheckbox}
-        name="neverRehire"
-        label="Do not rehire this person (Give reason below)"
-      />
-      <Field
-        component={BossFormTextarea}
-        required
-        name="reason"
-        label="Reason for disabling"
-      />
-      <div className="boss-form__field">
-        <button
-          type="submit"
-          className="boss-button boss-button_role_block boss-form__submit"
-        >
-          Disable
-        </button>
-      </div>
-    </form>
+    <div className="boss-modal-window__form">
+      <form
+        onSubmit={handleSubmit}
+        className="boss-form"
+      >
+        <Field
+          component={BossFormCheckbox}
+          name="neverRehire"
+          label="Do not rehire this person (Give reason below)"
+        />
+        <Field
+          component={BossFormTextarea}
+          required
+          name="reason"
+          label="Reason for disabling"
+        />
+        <div className="boss-form__field">
+          <button
+            type="submit"
+            className="boss-button boss-button_role_block boss-form__submit"
+          >
+            Disable
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }
 

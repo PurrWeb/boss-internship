@@ -36,6 +36,8 @@ const EditProfilePage = ({
     other_venues: staffMember.get('other_venues').toJS(),
     starts_at: moment(staffMember.get('starts_at'), 'DD-MM-YYYY'),
     staff_type: staffMember.get('staff_type'),
+    sia_badge_number: staffMember.get('sia_badge_number'),
+    sia_badge_expiry_date: moment(staffMember.get('sia_badge_expiry_date') || moment(), 'DD-MM-YYYY'),
     national_insurance_number: staffMember.get('national_insurance_number'),
     day_preference: staffMember.get('day_preference'),
     hours_preference: staffMember.get('hours_preference'),

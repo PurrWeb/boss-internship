@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import { connect } from 'react-redux';
-import { formValueSelector } from 'redux-form/immutable';
+import { formValueSelector, change } from 'redux-form/immutable';
 
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormInput from '~/components/boss-form/boss-form-input';
@@ -9,6 +9,7 @@ import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
 import BossFormEmployementStatus from '~/components/boss-form/boss-form-employement-status';
 
 import {updateEmploymentDetailsRequest} from '../../actions';
+import {SECURITY_TYPE_ID} from '../../constants';
 
 const validate = values => {
   const errors = {}
@@ -23,7 +24,8 @@ let EmploymentDetailsForm = ({
     staffTypes,
     payRates,
     onSubmissionComplete,
-    staffType,
+    isSecurityStaff,
+    dispatch,
   }) => {
   
   const submission = (values, dispatch) => {
@@ -40,23 +42,42 @@ let EmploymentDetailsForm = ({
       });
   }
   
+  const renderSecurityStaffFields = () => {
+    return [<Field
+      key={'sia_badge_number'}
+      name="sia_badge_number"
+      component={BossFormInput}
+      type="text"
+      label="SIA badge number"
+    />,
+    <Field
+      key={'sia_badge_expiry_date'}
+      component={BossFormCalendar}
+      required
+      name="sia_badge_expiry_date"
+      label="SIA badge expiry date"
+    />]
+  }
+
   return (
     <form
       onSubmit={handleSubmit(submission)}
     >
       <header className="boss-content-switcher__header">
-        <h2 className="boss-content-switcher__title">Employment Details</h2>
+        <h2 className="boss-content-switcher__title">Employment Details {isSecurityStaff ? 'SECURITY' : 'NOT SECURITY'}</h2>
       </header>
-      <Field
-        component={BossFormSelect}
-        name="master_venue"
-        required
-        label="Main Venue"
-        optionLabel="name"
-        optionValue="id"
-        placeholder="Select main venue ..."
-        options={venues.toJS()}
-      />
+      { !isSecurityStaff &&
+        <Field
+          component={BossFormSelect}
+          name="master_venue"
+          required
+          label="Main Venue"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Select main venue ..."
+          options={venues.toJS()}
+        />
+      }
       
       <Field
         component={BossFormSelect}
@@ -79,6 +100,8 @@ let EmploymentDetailsForm = ({
         placeholder="Select staff type ..."
         options={staffTypes.toJS()}
       />
+
+      { isSecurityStaff && renderSecurityStaffFields() }
 
       <Field
         name="starts_at"
@@ -143,11 +166,11 @@ EmploymentDetailsForm = reduxForm({
   validate,
 })(EmploymentDetailsForm);
 
-const selector = formValueSelector('employment-details-form')
+const selector = formValueSelector('employment-details-form');
 
 const mapStateToProps = (state) => {
   return {
-    staffType: selector(state, 'staff_type'),
+    isSecurityStaff: selector(state, 'staff_type') === SECURITY_TYPE_ID,
   }
 };
 

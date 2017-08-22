@@ -14,7 +14,7 @@ const EnableProfilePage = ({
   const initialValues = {
     first_name: staffMember.get('first_name'),
     surname: staffMember.get('surname'),
-    avatar_url: staffMember.get('avatar_url'),
+    avatar: staffMember.get('avatar'),
     gender: staffMember.get('gender'),
     date_of_birth: moment(staffMember.get('date_of_birth')),
     master_venue: staffMember.get('master_venue'),
@@ -32,6 +32,8 @@ const EnableProfilePage = ({
     hours_preference: staffMember.get('hours_preference'),
     pay_rate: staffMember.get('pay_rate'),
     status_statement: staffMember.get('status_statement'),
+    sia_badge_number: staffMember.get('sia_badge_number'),
+    sia_badge_expiry_date: moment(staffMember.get('sia_badge_expiry_date') || moment(), 'DD-MM-YYYY'),
   }
   return (
     <EnableProfileForm

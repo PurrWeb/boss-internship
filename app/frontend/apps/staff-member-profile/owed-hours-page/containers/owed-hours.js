@@ -24,11 +24,12 @@ import ProfileWrapper from '../../profile-wrapper';
 
 const mapStateToProps = (state) => {
   return {
-    staffMember: state.getIn(['owedHours','staffMember']),
+    staffMember: state.getIn(['profile','staffMember']),
     owedHours: state.getIn(['owedHours','owedHours']),
     newOwedHour: state.getIn(['owedHours', 'newOwedHour']),
     editOwedHour: state.getIn(['owedHours', 'editOwedHour']),
     editedOwedHours: state.getIn(['owedHours', 'editedOwedHours']),
+    disabled: state.getIn(['profile', 'staffMember', 'disabled']),
   };
 }
 
@@ -76,6 +77,7 @@ class OwedHours extends React.PureComponent {
       editOwedHour,
       owedHours,
       editedOwedHours,
+      disabled,
       actions: {
         updateAvatarRequest,
         addNewOwedHours,
@@ -87,29 +89,29 @@ class OwedHours extends React.PureComponent {
     } = this.props;
     return (
       <ProfileWrapper currentPage="owed_hours">
-        <ContentModal
-            show={newOwedHour}
-            onClose={() => this.onCancelAddNew()}
-            title="Add owed hours"
+        { !disabled && <section className="boss-board">
+          <ContentModal
+              show={newOwedHour}
+              onClose={() => this.onCancelAddNew()}
+              title="Add owed hours"
+            >
+            <AddNewOwedHours
+              />
+          </ContentModal>
+          <ContentModal
+            show={editOwedHour}
+            onClose={() => this.onCanceEdit()}
+            title="Edit owed hours"
           >
-          <AddNewOwedHours
-            />
-        </ContentModal>
-        <ContentModal
-          show={editOwedHour}
-          onClose={() => this.onCanceEdit()}
-          title="Edit owed hours"
-        >
-          <EditOwedHours owedHour={editedOwedHours}/>
-        </ContentModal>
-        <section className="boss-board">
+            <EditOwedHours owedHour={editedOwedHours}/>
+          </ContentModal>
           <OwedHoursHeader title="Owed hours" onAddNew={this.onAddNew} />
           <div className="boss-board__main">
             <div className="boss-board__manager">
               <OwedHoursTable owedHours={owedHours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
             </div>
           </div> 
-        </section>
+        </section> }
       </ProfileWrapper>
     )
   }

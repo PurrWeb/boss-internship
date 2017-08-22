@@ -28,7 +28,7 @@ import EditHoliday from '../components/edit-holiday';
 
 const mapStateToProps = (state) => {
   return {
-    staffMember: state.getIn(['holidays','staffMember']),
+    staffMember: state.getIn(['profile','staffMember']),
     holidays: state.getIn(['holidays','holidays']),
     paidHolidayDays: state.getIn(['holidays','paidHolidayDays']),
     unpaidHolidayDays: state.getIn(['holidays','unpaidHolidayDays']),
@@ -37,7 +37,8 @@ const mapStateToProps = (state) => {
     holidayEndDate: state.getIn(['holidays','holidayEndDate']),
     newHoliday: state.getIn(['holidays', 'newHoliday']),
     editHoliday: state.getIn(['holidays', 'editHoliday']),
-    editedHoliday: state.getIn(['holidays', 'editedHoliday'])
+    editedHoliday: state.getIn(['holidays', 'editedHoliday']),
+    disabled: state.getIn(['profile', 'staffMember', 'disabled']),
   };
 }
 
@@ -90,6 +91,7 @@ class Holidays extends React.PureComponent {
       newHoliday,
       editHoliday,
       editedHoliday,
+      disabled,
       actions: {
         updateAvatarRequest,
         addNewHoliday,
@@ -103,25 +105,25 @@ class Holidays extends React.PureComponent {
 
     return (
       <ProfileWrapper currentPage="holidays">
-        <ContentModal
+        { !disabled && <section className="boss-board">
+          <ContentModal
             show={newHoliday}
             onClose={() => this.onCancelAddNew()}
             title="Add holiday"
           >
-          <AddNewHoliday
-            title="Add Holiday"
-            startDate={holidayStartDate}
-            endDate={holidayEndDate}
-            />
-        </ContentModal>
-        <ContentModal
-          show={editHoliday}
-          onClose={() => this.onCloseEdit()}
-          title="Edit holiday"
-        >
-          <EditHoliday holiday={editedHoliday}/>
-        </ContentModal>
-        <section className="boss-board">
+            <AddNewHoliday
+              title="Add Holiday"
+              startDate={holidayStartDate}
+              endDate={holidayEndDate}
+              />
+          </ContentModal>
+          <ContentModal
+            show={editHoliday}
+            onClose={() => this.onCloseEdit()}
+            title="Edit holiday"
+          >
+            <EditHoliday holiday={editedHoliday}/>
+          </ContentModal>
           <HolidaysHeader title="Holidays" onAddNew={this.onAddNew} />
           <div className="boss-board__main">
             <div className="boss-board__manager">
@@ -137,7 +139,7 @@ class Holidays extends React.PureComponent {
               </div>
             </div>
           </div> 
-        </section>
+        </section> }
       </ProfileWrapper>
     )
   }

@@ -24,7 +24,7 @@ import {
 export const updateAvatarRequest = (staffMemberId, avatarUrl) => (dispatch, getState) => {
   updateAvatar({staffMemberId, avatarUrl})
     .then((resp) => {
-      console.log(resp);
+
     })
     .catch((error) => {
 

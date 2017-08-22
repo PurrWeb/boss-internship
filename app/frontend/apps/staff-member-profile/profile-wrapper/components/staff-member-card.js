@@ -3,12 +3,11 @@ import moment from 'moment';
 
 import editAvatarModal from '~/lib/content-modal';
 
-const StaffMemberCard = ({staffMember, onUpdateAvatar, onEditAvatar, currentPage}) => {
+const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, currentPage}) => {
   const avatar = staffMember.get('avatar');
   const fullName = `${staffMember.get('first_name')} ${staffMember.get('surname')}`;
   const email = staffMember.get('email');
   const phoneNumber = staffMember.get('phone_number');
-  const jobType = staffMember.getIn(['staff_type', 'label']);
   const disabled = staffMember.get('disabled');
   const disabledByUser = staffMember.get('disabled_by_user');
   const disabledAt = staffMember.get('disabled_at');
@@ -99,10 +98,10 @@ const StaffMemberCard = ({staffMember, onUpdateAvatar, onEditAvatar, currentPage
           <div className="boss-user-summary__avatar">
             <div className="boss-user-summary__avatar-inner">
               <img src={avatar} alt="avatar"/>
-              <button
+              { !disabled && <button
                 className="boss-user-summary__avatar-icon boss-user-summary__avatar-icon_role_edit"
                 onClick={() => onEditAvatar()}
-              >Edit</button>
+              >Edit</button> }
             </div>
           </div>
         </div>

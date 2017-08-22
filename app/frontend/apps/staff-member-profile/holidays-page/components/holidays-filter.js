@@ -45,7 +45,7 @@ class HolidaysFilter extends React.Component {
       startDate,
       endDate,
     } = this.state;
-    console.log(startDate);
+
     return (
       <div className="boss-board__manager-filter">
         <div className="boss-form">

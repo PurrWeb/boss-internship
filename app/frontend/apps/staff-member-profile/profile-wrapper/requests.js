@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
+import {SECURITY_TYPE_ID} from './constants';
 
 const accessToken = window.boss.store.accessToken;
 
@@ -34,7 +35,7 @@ export const enableStaffMember = (payload) => {
     starts_at,
     national_insurance_number,
     hours_preference,
-    avatar_url,
+    avatar,
     day_preference,
     status_statement,
     first_name,
@@ -47,7 +48,9 @@ export const enableStaffMember = (payload) => {
     postcode,
     country,
     county,
-    email_address
+    email_address,
+    sia_badge_number,
+    sia_badge_expiry_date,
   } = payload;
 
   let requestParams = {
@@ -58,12 +61,11 @@ export const enableStaffMember = (payload) => {
     starts_at: moment(starts_at).format("DD-MM-YYYY"),
     national_insurance_number,
     hours_preference_note: hours_preference,
-    avatar_base64: avatar_url,
+    avatar_base64: avatar,
     day_preference_note: day_preference,
     employment_status: status_statement,
-    staff_type_id: staff_type.value,
-    main_venue_id: master_venue.value,
-    pay_rate_id: pay_rate.value,
+    staff_type_id: staff_type,
+    pay_rate_id: pay_rate,
     other_venue_ids: other_venues,
     email_address,
     first_name,
@@ -72,6 +74,22 @@ export const enableStaffMember = (payload) => {
     postcode,
     country,
     county
+  }
+
+  if (staff_type === SECURITY_TYPE_ID) {
+    requestParams = {
+      ...requestParams,
+      main_venue_id: null,
+      sia_badge_number,
+      sia_badge_expiry_date: moment(sia_badge_expiry_date).format("DD-MM-YYYY")
+    }
+  } else {
+    requestParams = {
+      ...requestParams,
+      sia_badge_number: null,
+      sia_badge_expiry_date: null,
+      main_venue_id: master_venue
+    }
   }
 
   return http.post(`/api/v1/staff_members/${staffMemberId}/enable`, requestParams);
@@ -90,19 +108,38 @@ export const updateEmploymentDetails = (payload) => {
     master_venue,
     other_venues,
     staff_type,
+    sia_badge_expiry_date,
+    sia_badge_number,
   } = payload;
 
-  return http.post(`/api/v1/staff_members/${staffMemberId}/update_employment_details`, {
+  let fields = {
     national_insurance_number,
     hours_preference_note: hours_preference,
     day_preference_note: day_preference,
     starts_at: moment(starts_at).format("DD-MM-YYYY"),
     employment_status,
     pay_rate_id: pay_rate,
-    master_venue_id: master_venue,
     other_venue_ids: other_venues,
     staff_type_id: staff_type,
-  });
+  }
+
+  if (staff_type === SECURITY_TYPE_ID) {
+    fields = {
+      ...fields,
+      master_venue_id: null,
+      sia_badge_number,
+      sia_badge_expiry_date: moment(sia_badge_expiry_date).format("DD-MM-YYYY")
+    }
+  } else {
+    fields = {
+      ...fields,
+      sia_badge_number: null,
+      sia_badge_expiry_date: null,
+      master_venue_id: master_venue
+    }
+  }
+  
+  return http.post(`/api/v1/staff_members/${staffMemberId}/update_employment_details`, fields);
 }
 
 export const updatePersonalDetails = (payload) => {
