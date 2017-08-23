@@ -46,7 +46,7 @@ export default class DatabaseFactory {
         }
         this._reducers[name] = reducerFunction;
     }
-    registerDataHandler(dataHandler){
+    registerDataHandler(dataHandler) {
         this._registerReducer(dataHandler.collectionName, dataHandler.reducer, dataHandler.handledActionTypes);
         this._handledActionTypesByReducer[dataHandler.collectionName] = dataHandler.handledActionTypes
         this.registerActionTypes(dataHandler.actionTypes)

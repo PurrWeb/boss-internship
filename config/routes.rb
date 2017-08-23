@@ -192,6 +192,9 @@ Rails.application.routes.draw do
             post :post
           end
         end
+
+        resources :rota_weekly_day_data, only: [:index]
+
         resources :venues, only: :show do
           resources :rota_forecasts, only: [:show] do
             member do

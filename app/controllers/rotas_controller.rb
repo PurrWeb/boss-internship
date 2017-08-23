@@ -111,9 +111,9 @@ class RotasController < ApplicationController
       venue: venue,
       start_date: week.start_date,
       end_date: week.end_date,
-      rotas: [rota],
+      rota: rota,
       staff_types: StaffType.all,
-      rota_forecasts: [rota_forecast],
+      rota_forecast: rota_forecast,
       week: week,
       weekly_rota_forecast: weekly_rota_forecast
     }
