@@ -1,6 +1,11 @@
 class RotasController < ApplicationController
   before_action :authorize
+<<<<<<< HEAD
   before_filter :check_venue
+=======
+  before_action :set_venue
+  before_action :set_new_layout
+>>>>>>> [rota-page] Add react components
 
   attr_reader :venue
 

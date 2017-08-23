@@ -10,55 +10,95 @@ import { selectStaffTypesWithShifts } from "~/redux/selectors"
 import PublishRotaWeekButtonContainer from "./publish-rota-week-button-container"
 import WeekAndVenueSelector from "~/components/week-and-venue-selector"
 import WeeklyRotaForecast from "./containers/weekly-rota-forecast"
+import WeekPicker from "~/components/week-picker"
+import VenueDropdown from "~/components/venue-dropdown"
+import RotaHeader from "./components/rota-header.js";
+import RotaCurrentDay from "./components/rota-current-day.js"
 
 class RotaOverviewPage extends Component {
     static propTypes = {
         rotaDetailsObject: React.PropTypes.object.isRequired
     }
     render() {
-        var overviewViews = this.getOverviewViews();
+      const overviewViews = this.getOverviewViews();
 
-        var rotas = _.values(this.props.storeRotas);
-        var firstRota = rotas[0];
-        var lastRota = _.last(rotas);
+      const rotas = _.values(this.props.storeRotas);
+      const firstRota = rotas[0];
+      const lastRota = _.last(rotas);
 
-        var pdfHref = appRoutes.rotaPdfDownload({
-            venueId: firstRota.venue.serverId,
-            startDate: this.props.startDate,
-            endDate: this.props.endDate
-        });
+      const pdfHref = appRoutes.rotaPdfDownload({
+        venueId: firstRota.venue.serverId,
+        startDate: this.props.startDate,
+        endDate: this.props.endDate
+      });
 
-        return <div className="container">
-            <div className="boss2-flex-row">
-                <div className="boss2-flex-column">
-                    <WeekAndVenueSelector
-                        venueClientId={firstRota.venue.clientId}
-                        weekStartDate={firstRota.date}
-                        venues={utils.indexByClientId(this.props.venues)}
-                        onChange={this.goToOverviewPage.bind(this)}>
-                        <br/>
-                        <PublishRotaWeekButtonContainer
-                            rotas={rotas}
-                            firstDate={firstRota.date}
-                            lastDate={lastRota.date} />
+        return <div className="boss-page-main">
+          <RotaHeader startDate={this.props.startDate} endDate={this.props.endDate} pdfHref={pdfHref}/>
+          <div className="boss-page-main__content">
+            <div className="boss-page-main__inner">
+                <div className="boss-rotas">
+                  <div className="boss-rotas__filter">
+                    <div className="boss-form">
+                      <div className="boss-form__row boss-form__row_position_last">
+                        <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_min">
+                          <p className="boss-form__label boss-form__label_type_icon-venue">
+                            <span className="boss-form__label-text"> Venue </span>
+                          </p>
+                          <div className="boss-form__select">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="boss-rotas__summary">
+                    <section className="boss-board boss-board_layout_double">
+                      <div className="boss-board__calendar">
+                        <div className="boss-board__calendar-inner">
+                          <WeekPicker
+                            selectionStartDate={firstRota.date}
+                            onChange={(selection) => {
+                              this.goToOverviewPage({
+                                startDate: selection.startDate,
+                                endDate: selection.endDate,
+                                venueClientId: this.props.venueClientId
+                              });
+                            }}
+                          />
+                        </div>
+                        <div className="boss-board__calendar-note">
+                          <div className="boss-message boss-message_role_calendar-note">
+                            <p className="boss-message__text"> Simple text </p>
+                            <p className="boss-message__text"> Simple text </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="boss-board__info">
+                        <header className="boss-board__header">
+                          <h2 className="boss-board__title"> Weekly Forecast </h2>
+                        </header>
+                        <div className="boss-board__main">
+                          <WeeklyRotaForecast
+                            serverVenueId={firstRota.venue.serverId}
+                            startOfWeek={utils.getWeekStartDate(firstRota.date)}
+                          />
+                        </div>
+                      </div>
+                    </section>
+                  </div>
 
-                    </WeekAndVenueSelector>
                 </div>
-                <div className="boss2-flex-column">
-                    <a href={pdfHref} className="boss2-button boss2-button_role_download">
-                      Download PDF
-                    </a>
-                </div>
-                <div className="boss2-flex-column">
-                    <h2 style={{fontSize: 20, marginTop: 0}}>Weekly Forecast</h2>
-                    <WeeklyRotaForecast
-                        serverVenueId={firstRota.venue.serverId}
-                        startOfWeek={utils.getWeekStartDate(firstRota.date)} />
+                <div className="boss-rotas__days">
+                  <div className="boss-rotas__days-nav">
+                    <nav className="boss-paginator boss-paginator_size_full">
+                      <a className="boss-paginator__action boss-paginator__action_type_light boss-paginator__action_state_active">14</a>
+                    </nav>
+                  </div>
+                  <RotaCurrentDay />
                 </div>
             </div>
-            <br/>
-            {overviewViews}
+            {/* {overviewViews} */}
         </div>
+      </div>
     }
     getOverviewViews(){
         var self = this;

@@ -103,12 +103,14 @@ export function loadInitialClockInOutAppState(viewData) {
 }
 
 export function loadInitialRotaOverviewAppState(viewData){
+  console.log(viewData);
     return function(dispatch) {
         dispatch(getInititalLoadActions({
             rotas: viewData.rota.rota,
             venues: viewData.venues,
             rotaForecasts: viewData.rotaForecast,
             weeklyRotaForecast: viewData.weeklyRotaForecast,
+            venue: viewData.venue,
             pageOptions: {
                 startDate: new Date(viewData.startDate),
                 endDate: new Date(viewData.endDate)
@@ -146,7 +148,7 @@ function getInititalLoadActions(initialLoadData){
     var actions = [];
 
     for (var objectName in initialLoadData) {
-        if (objectName === "access_token") {
+        if (objectName === "access_token" || objectName === "venue") {
             // Is used a global rather than being put in the store
             continue;
         }

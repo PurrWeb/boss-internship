@@ -13,9 +13,11 @@ export default class RotaForecast extends React.Component {
         isUpdatingForecast: React.PropTypes.bool
     }
     render(){
-        return <div className="rota-forecast">
+        return <div className="boss-board__rota">
+          <div className="boss-forecast">
             {this.getForecastHeaderRow()}
             {this.getForecastBody()}
+          </div>
         </div>
     }
     getForecastBody(){
@@ -24,7 +26,7 @@ export default class RotaForecast extends React.Component {
             (row) => this.getDataRowComponent(row)
         );
 
-        return <div className="rota-forecast__body">
+        return <div>
             {dataRowComponents}
         </div>;
     }
@@ -58,20 +60,17 @@ export default class RotaForecast extends React.Component {
             }
         }
 
-        return <div className="rota-forecast__header-row">
-                <div className="row align-middle">
-                    <div className="column">
-                        Forecast
-                    </div>
-                    <div className="shrink column">
-                        {forecastedTakeComponent}
-                    </div>
-                    <div className="rota-forecast__update shrink column">
-                        {updateForecastButton}
-                    </div>
+        return <div className="boss-forecast__row boss-forecast__row_role_header">
+                <div className="boss-forecast__cell">
+                  Forecast
+                </div>
+                <div className="boss-forecast__cell">
+                  {forecastedTakeComponent}
+                </div>
+                <div className="boss-forecast__cell">
+                    {updateForecastButton}
                 </div>
             {this.getErrorComponent()}
-
         </div>
     }
     getErrorComponent(){
@@ -81,17 +80,18 @@ export default class RotaForecast extends React.Component {
 
     }
     getDataRowComponent(row){
-        return <div className="row" key={row.title}>
-            <div className="column">
-                {row.title}
-            </div>
-            <div className="shrink column">
-                &pound;{utils.formatMoney(row.total/100)}
-            </div>
-            <div className="small-2 column">
-                {row.percentage !== null ? (Math.round(row.percentage*100)/100) + "%" : "-"}
-            </div>
-        </div>
+      const rowClassName = row.title === 'Total' ? 'boss-forecast__row boss-forecast__row_role_footer' : 'boss-forecast__row';
+      return <div className={rowClassName} key={row.title}>
+          <div className="boss-forecast__cell">
+              {row.title}
+          </div>
+          <div className="boss-forecast__cell">
+              &pound;{utils.formatMoney(row.total/100)}
+          </div>
+          <div className="boss-forecast__cell">
+              {row.percentage !== null ? (Math.round(row.percentage*100)/100) + "%" : "-"}
+          </div>
+      </div>
     }
 }
 
