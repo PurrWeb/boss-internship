@@ -1,13 +1,13 @@
 class RotasController < ApplicationController
   before_action :authorize
-  before_action :set_venue
+  before_filter :check_venue
 
   attr_reader :venue
 
   def index
-    if start_date_from_params.present? && venue.present?
-      start_date = start_date_from_params
-      week = RotaWeek.new(start_date)
+    if highlight_date_from_params.present?
+      highlight_date = highlight_date_from_params
+      week = RotaWeek.new(highlight_date)
 
       respond_to do |format|
         format.html do
@@ -19,7 +19,7 @@ class RotasController < ApplicationController
         end
       end
     else
-      redirect_to(rotas_path(redirect_params))
+      redirect_to(venue_rotas_path(redirect_params))
     end
   end
 
@@ -78,31 +78,28 @@ class RotasController < ApplicationController
   private
 
   def render_rota_index(week:)
-    rotas = (week.start_date..week.end_date).map do |date|
-      Rota.find_or_initialize_by(
-        date: date,
-        venue: venue
-      )
-    end
+    date = highlight_date_from_params
+    rota = Rota.find_or_initialize_by(
+      date: date,
+      venue: venue
+    )
     ActiveRecord::Associations::Preloader.new.preload(
-      rotas, [:enabled_rota_shifts, :venue]
+      rota, [:enabled_rota_shifts, :venue]
     )
 
-    rota_forecasts = rotas.map do |rota|
-      forecast = RotaForecast.where(rota: rota).last
+    forecast = RotaForecast.where(rota: rota).last
 
-      if !forecast.present?
-        forecast = GenerateRotaForecast.new(
-          forecasted_take_cents: 0,
-          rota: rota
-        ).call
-      end
-
+    rota_forecast = if forecast.present?
       forecast
+    else
+      GenerateRotaForecast.new(
+        forecasted_take_cents: 0,
+        rota: rota
+      ).call
     end
 
     weekly_rota_forecast = GenerateWeeklyRotaForecast.new(
-      rota_forecasts: rota_forecasts,
+      rota_forecasts: [rota_forecast],
       week: week
     ).call
 
@@ -114,9 +111,9 @@ class RotasController < ApplicationController
       venue: venue,
       start_date: week.start_date,
       end_date: week.end_date,
-      rotas: rotas,
+      rotas: [rota],
       staff_types: StaffType.all,
-      rota_forecasts: rota_forecasts,
+      rota_forecasts: [rota_forecast],
       week: week,
       weekly_rota_forecast: weekly_rota_forecast
     }
@@ -142,36 +139,42 @@ class RotasController < ApplicationController
 
   def redirect_params
     {
-      start_date: UIRotaDate.format(start_date_from_params || default_start_date),
-      venue_id: venue || current_user.default_venue.andand.id
+      highlight_date: UIRotaDate.format(highlight_date_from_params || default_highlight_date),
     }
   end
 
-  def start_date_from_params
-    if params[:start_date].present?
-      UIRotaDate.parse(params[:start_date])
+  def highlight_date_from_params
+    if params[:highlight_date].present?
+      UIRotaDate.parse(params[:highlight_date])
     end
   end
 
-  def default_start_date
+  def default_highlight_date
     Time.zone.now.beginning_of_week
-  end
-
-  def end_date_from_params
-    if params[:end_date].present?
-      UIRotaDate.parse(params[:end_date])
-    end
-  end
-
-  def default_end_date
-    Time.zone.now.end_of_week
   end
 
   def rota_date_from_params
     UIRotaDate.parse(params.fetch(:id))
   end
+  
+  def check_venue
+    unless venue_from_params.present?
+      redirect_to(venue_rotas_path(index_redirect_params))
+    end
+  end
 
-  def set_venue
-    @venue ||= Venue.find_by(id: params[:venue_id])
+  def index_redirect_params
+    venue = venue_from_params || current_user.default_venue
+    {
+      venue_id: venue.andand.id
+    }
+  end
+
+  def venue_from_params
+    @venue ||= if current_user.has_all_venue_access?
+      Venue.find_by({id: params[:venue_id]})
+    else
+      current_user.venues.find_by(id: params[:venue_id])
+    end
   end
 end

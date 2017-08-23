@@ -91,10 +91,11 @@ Rails.application.routes.draw do
     end
 
     resources :venues, only: [:index, :new, :create, :edit, :update] do
-      resources :rotas, only: [:show]
+      collection do
+        resources :rotas, only: [:index]
+      end
+      resources :rotas, only: [:index, :show]
     end
-
-    resources :rotas, only: [:index]
 
     resources :pay_rates, only: [:index, :new, :create, :edit, :update, :destroy] do
       member do
