@@ -3,7 +3,7 @@ import _ from "underscore"
 import RotaDate from "~/lib/rota-date"
 import utils from "~/lib/utils"
 import moment from "moment"
-import renderTooltipHtml from "./render-tooltip-html"
+import {renderTooltipInfoHtml, renderTooltipTimeHtml} from "./render-tooltip-html"
 import RotaOverviewChartInner from "./rota-overview-chart-inner"
 
 const MILLISECONDS_PER_MINUTE = 60 * 1000;
@@ -49,7 +49,7 @@ export default class RotaOverviewChart extends Component {
             onElementMouseout={function(obj){
                 self.props.onHoverShiftsChange(null);
             }}
-            tooltipGenerator={
+            tooltipInfoGenerator={
                 function(obj) {
                     var groupsById = utils.indexByClientId(self.props.groups);
                     var selectedGroupTitle = obj.series[0].key;
@@ -59,14 +59,30 @@ export default class RotaOverviewChart extends Component {
                     );
                     var selectedGroupId = _(groupsById).find({name: selectedGroupTitle}).clientId;
 
-                    var html = renderTooltipHtml({
+                    var html = renderTooltipInfoHtml({
                         shiftsByGroupId: breakdownAtPoint.shiftsByGroup,
                         selectedGroupId,
-                        groupsById
+                        groupsById,
+                        shiftDates:  self.getSelectionData(breakdown, obj)
                     });
                     return html;
-                }
-            } />
+                }}
+            tooltipTimeGenerator={
+                function(obj) {
+                  var groupsById = utils.indexByClientId(self.props.groups);
+                  var selectedGroupTitle = obj.series[0].key;
+
+                  var selectedGroupId = _(groupsById).find({name: selectedGroupTitle}).clientId;
+
+                  var html = renderTooltipTimeHtml({
+                      selectedGroupId,
+                      groupsById,
+                      shiftDates:  self.getSelectionData(breakdown, obj),
+                      staff: self.props.staff
+                  });
+                  return html;
+                }}
+            />
     }
     getRotaDate(){
         return new RotaDate({dateOfRota: this.props.dateOfRota});

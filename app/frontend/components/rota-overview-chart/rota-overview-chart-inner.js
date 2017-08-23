@@ -28,13 +28,24 @@ export default class RotaOverviewChartInner extends Component {
         onElementClick: React.PropTypes.func.isRequired,
         onElementMouseover: React.PropTypes.func.isRequired,
         onElementMouseout: React.PropTypes.func.isRequired,
-        tooltipGenerator: React.PropTypes.func.isRequired,
+        tooltipInfoGenerator: React.PropTypes.func.isRequired,
+        tooltipTimeGenerator: React.PropTypes.func.isRequired,
         rotaDate: React.PropTypes.object.isRequired
     }
+
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        rotasInfo: true,
+        rotasTime: false
+      }
+    }
+
     render() {
         var self = this;
-
         var datum = this.props.chartData;
+        const tooltipGenerator = this.state.rotasInfo ? this.props.tooltipInfoGenerator : this.props.tooltipTimeGenerator;
         var options = {
             margin: {},
             stacked: true,
@@ -50,24 +61,32 @@ export default class RotaOverviewChartInner extends Component {
                 axisLabel: "Time"
             },
             tooltip: {
-                contentGenerator: this.props.tooltipGenerator
+              classes: 'rota-overview-chart-tooltip',
+              contentGenerator: tooltipGenerator,
             },
             reduceXTicks: false
         }
 
-        var renderEnd = function(chart){
-            chart.multibar.dispatch.on("elementClick", self.props.onElementClick);
-            chart.multibar.dispatch.on("elementMouseover", function(obj){
-                self.props.onElementMouseover(obj);
-                self.updateHoverIndicator();
+        const renderEnd = (chart) => {
+  
+            chart.multibar.dispatch.on("elementClick", (obj) => {
+              this.props.onElementClick(obj);
             });
-            chart.multibar.dispatch.on("elementMouseout", function(obj){
-                self.props.onElementMouseout(obj);
-                self.updateHoverIndicator();
+            chart.multibar.dispatch.on("elementMouseover", (obj) => {
+                this.props.onElementMouseover(obj);
+                // self.updateHoverIndicator();
+            });
+            chart.multibar.dispatch.on("elementMouseout", (obj) => {
+                this.props.onElementMouseout(obj);
+                // self.updateHoverIndicator();
             });
         }
 
         return <div className="rota-overview-chart">
+            <div>
+              <button className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: true, rotasTime: false})}>Rotas Info</button>
+              <button className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: false, rotasTime: true})}>Rotas Time</button>
+            </div>
             <NVD3Chart
                 options={options}
                 type="multiBarChart"
@@ -90,10 +109,10 @@ export default class RotaOverviewChartInner extends Component {
         return tickValues;
     }
     updateHoverIndicator(){
-        var indicator = this.getHoverIndicator();
         var svg = this.getChartSvgElement();
         var hoverBar = d3.select(svg).selectAll(".nv-bar.hover");
-
+        var indicator = this.getHoverIndicator();
+        
         if (hoverBar.empty()) {
             indicator.style("opacity", 0);
         } else {
@@ -104,7 +123,7 @@ export default class RotaOverviewChartInner extends Component {
             indicator.attr({
                 "transform": getTranslateTransform(x, y),
             });
-            indicator.style("opacity", 1);
+            indicator.style("opacity", 0);
         }
     }
     getChartSvgElement(){
@@ -116,18 +135,18 @@ export default class RotaOverviewChartInner extends Component {
         var nvWrap = svg.select(".nv-wrap");
 
         if (indicator.empty()) {
-            var g = svg.append("g");
-            g.attr("transform", nvWrap.attr("transform"));
-            indicator = g.append("g");
-            indicator.classed("rota-overview-chart__hover-indicator", true);
-            indicator.append("circle")
-                .attr({
-                    cx: HOVER_INDICATOR_WIDTH / 2,
-                    cy: 0,
-                    r: HOVER_INDICATOR_WIDTH / 2
-                })
-                .style("fill", "orange");
-        }
-        return indicator
+          var g = svg.append("g");
+          g.attr("transform", nvWrap.attr("transform"));
+          indicator = g.append("g");
+          indicator.classed("rota-overview-chart__hover-indicator", true);
+          indicator.append("circle")
+              .attr({
+                  cx: HOVER_INDICATOR_WIDTH / 2,
+                  cy: 0,
+                  r: HOVER_INDICATOR_WIDTH / 2
+              })
+              .style("fill", "orange");
+      }
+      return indicator
     }
 }
