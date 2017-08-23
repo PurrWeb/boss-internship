@@ -20,17 +20,31 @@ class RotaOverviewPage extends Component {
         rotaDetailsObject: React.PropTypes.object.isRequired
     }
     render() {
-      const overviewViews = this.getOverviewViews();
+        const overviewViews = this.getOverviewViews();
 
-      const rotas = _.values(this.props.storeRotas);
-      const firstRota = rotas[0];
-      const lastRota = _.last(rotas);
+        const rotas = _.values(this.props.storeRotas);
+        const firstRota = rotas[0];
+        const lastRota = _.last(rotas);
 
-      const pdfHref = appRoutes.rotaPdfDownload({
-        venueId: firstRota.venue.serverId,
-        startDate: this.props.startDate,
-        endDate: this.props.endDate
-      });
+        const pdfHref = appRoutes.rotaPdfDownload({
+          venueId: firstRota.venue.serverId,
+          startDate: this.props.startDate,
+          endDate: this.props.endDate
+        });
+
+        var storeRota = firstRota;
+      
+        var rotaDetails = _.find(this.props.rotaDetailsObjects, function(obj){
+          var venuesAreEqual = obj.rota.venue.clientId === storeRota.venue.clientId;
+          var datesAreEqual = utils.datesAreEqual(new Date(obj.rota.date), storeRota.date);
+          return venuesAreEqual && datesAreEqual;
+        });
+
+        var staffTypesWithShifts = selectStaffTypesWithShifts({
+            staffTypes: utils.indexByClientId(rotaDetails.staff_types),
+            rotaShifts: utils.indexByClientId(rotaDetails.rota_shifts),
+            staff: utils.indexByClientId(rotaDetails.staff_members)
+        });
 
         return <div className="boss-page-main">
           <RotaHeader startDate={this.props.startDate} endDate={this.props.endDate} pdfHref={pdfHref}/>
@@ -93,7 +107,13 @@ class RotaOverviewPage extends Component {
                       <a className="boss-paginator__action boss-paginator__action_type_light boss-paginator__action_state_active">14</a>
                     </nav>
                   </div>
-                  <RotaCurrentDay />
+                  <RotaCurrentDay 
+                    staff={ utils.indexByClientId(rotaDetails.staff_members) }
+                    shifts={ utils.indexByClientId(rotaDetails.rota_shifts) }
+                    rota={storeRota}
+                    dateOfRota={ storeRota.date }
+                    staffTypesWithShifts={ utils.indexByClientId(staffTypesWithShifts)}
+                  />
                 </div>
             </div>
             {/* {overviewViews} */}
