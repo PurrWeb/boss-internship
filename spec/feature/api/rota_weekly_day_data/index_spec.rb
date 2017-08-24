@@ -70,7 +70,6 @@ RSpec.describe 'Rota Weekly Day Data #Index API endpoint' do
       it 'should return security error' do
         set_authorization_header(another_access_token.token)
         response
-        byebug
         expect(response.status).to eq(200)
       end
 
@@ -86,13 +85,6 @@ RSpec.describe 'Rota Weekly Day Data #Index API endpoint' do
   
       it 'should return 422 status' do
         expect(response.status).to eq(unprocessable_entity_status)
-      end
-
-      it 'should return security error' do
-        set_authorization_header(another_access_token.token)
-        response
-        byebug
-        expect(response.status).to eq(200)
       end
     end
   end

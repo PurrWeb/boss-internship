@@ -7,7 +7,7 @@ import { processVenueRotaOverviewObject } from "~/lib/backend-data/process-backe
 
 export default class RotaApp extends AppComponent {
     componentWillMount(){
-        let viewData = this.getViewData();
+        let viewData = this.props;
         this.store.dispatch(actionCreators.loadInitialRotaOverviewAppState(viewData));
     }
     render() {
