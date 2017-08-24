@@ -81,6 +81,8 @@ export default class RotaForecast extends React.Component {
     }
     getDataRowComponent(row){
       const rowClassName = row.title === 'Total' ? 'boss-forecast__row boss-forecast__row_role_footer' : 'boss-forecast__row';
+      const rowPercentageClass = row.percentage > 0 ? 'boss-button_role_secondary' : 'boss-button_role_alert';
+      
       return <div className={rowClassName} key={row.title}>
           <div className="boss-forecast__cell">
               {row.title}
@@ -89,7 +91,9 @@ export default class RotaForecast extends React.Component {
               &pound;{utils.formatMoney(row.total/100)}
           </div>
           <div className="boss-forecast__cell">
+            <p className={'boss-button boss-button_type_small boss-button_type_no-behavior boss-button_role_secondary ' + rowPercentageClass}>
               {row.percentage !== null ? (Math.round(row.percentage*100)/100) + "%" : "-"}
+              </p>
           </div>
       </div>
     }

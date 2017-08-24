@@ -7,8 +7,6 @@ import moment from 'moment';
 export default class RotaCurrentDay extends React.Component {
   constructor (props) {
     super(props);
-
-    console.log(props);
     
     this.state = {
       hoverData: null,
@@ -18,6 +16,7 @@ export default class RotaCurrentDay extends React.Component {
 
   render() {
     const date = moment(this.props.rota.date).format('dddd, D MMMM YYYY');
+    const status = this.props.rota.status;
 
     return (
       <div className="boss-rotas__days-item">
@@ -29,7 +28,7 @@ export default class RotaCurrentDay extends React.Component {
             </h2>
             <div className="boss-board__button-group">
               <p className="boss-button boss-button_role_published boss-button_type_small boss-button_type_no-behavior boss-board__button">
-                Published
+                {status}
               </p>
             </div>
           </header>
@@ -53,9 +52,11 @@ export default class RotaCurrentDay extends React.Component {
               </div>
               <div className="boss-board__forecast">
                 <RotaForecast
-                  rotaClientId={this.props.rota.rota.clientId}
-                  canEditForecastedTake={true} />
-                </div>
+                  rotaClientId={this.props.rota.clientId}
+                  forecast={this.props.rotaForecast}
+                  canEditForecastedTake={true} 
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -63,4 +64,3 @@ export default class RotaCurrentDay extends React.Component {
     )
   }
 }
-

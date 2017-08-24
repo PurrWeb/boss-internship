@@ -16,6 +16,16 @@ export const appRoutes = {
             '&venue_id=' + venueId
         ].join("")
     },
+    rotaOverviewPdfDownload: function(options){
+      var [venueId, startDate, endDate] = oFetch(options, "venueId", "startDate", "endDate");
+      return [
+          '/venues/' + venueId,
+          '/rotas.pdf?',
+          'start_date=' + utils.formatRotaUrlDate(startDate),
+          '&end_date=' + utils.formatRotaUrlDate(endDate),
+          '&venue_id=' + venueId
+      ].join("")
+    },
     securityRotaPdfDownload: function(options){
         var date = oFetch(options, "date");
         return [
@@ -26,8 +36,8 @@ export const appRoutes = {
     rotaOverview: function(options){
         var [venueId, startDate, endDate] = oFetch(options, "venueId", "startDate", "endDate");
         return [
-            "/rotas/?venue_id=" + venueId,
-            "&start_date=" + utils.formatRotaUrlDate(startDate),
+            "/venues/" + venueId,
+            "/rotas?start_date=" + utils.formatRotaUrlDate(startDate),
             "&end_date=" + utils.formatRotaUrlDate(endDate)
         ].join("");
     },

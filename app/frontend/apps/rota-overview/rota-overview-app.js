@@ -11,12 +11,16 @@ export default class RotaApp extends AppComponent {
         this.store.dispatch(actionCreators.loadInitialRotaOverviewAppState(viewData));
     }
     render() {
-        var rotaDetailsObject = this.props.rota;
+        var rotaDetailsObject = this.props.rotaWeeklyDay;
         rotaDetailsObject = processVenueRotaOverviewObject(rotaDetailsObject);
 
         return <Provider store={this.store}>
             <RotaOverviewPage
-              rotaDetailsObject={rotaDetailsObject} />
+              rotaDetailsObject={rotaDetailsObject}
+              rotaForecast={this.props.rotaForecast}
+              venue={this.props.venue}
+              venues={this.props.venues}
+            />
         </Provider>
     }
 }

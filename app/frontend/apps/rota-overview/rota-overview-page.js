@@ -16,16 +16,16 @@ import RotaHeader from "./components/rota-header";
 import RotaCurrentDay from "./components/rota-current-day"
 import VenuesSelect from '~/components/select-venue';
 
+const ROTA_PUBLISHED_STATUS = "published"
+
 class RotaOverviewPage extends Component {
     static propTypes = {
         rotaDetailsObject: React.PropTypes.object.isRequired
     }
     render() {
-        // const overviewViews = this.getOverviewViews();
-
         const storeRota = this.props.storeRotas;
 
-        const pdfHref = appRoutes.rotaPdfDownload({
+        const pdfHref = appRoutes.rotaOverviewPdfDownload({
           venueId: this.props.storeRotas.venue.serverId,
           startDate: this.props.startDate,
           endDate: this.props.endDate
@@ -38,13 +38,13 @@ class RotaOverviewPage extends Component {
         });
 
         var staffTypesWithShifts = selectStaffTypesWithShifts({
-            staffTypes: utils.indexByClientId(rotaDetails.staff_types),
-            rotaShifts: utils.indexByClientId(rotaDetails.rota_shifts),
-            staff: utils.indexByClientId(rotaDetails.staff_members)
+            staffTypes: utils.indexByClientId(this.props.rotaDetailsObject.staff_types),
+            rotaShifts: utils.indexByClientId(this.props.rotaDetailsObject.rota_shifts),
+            staff: utils.indexByClientId(this.props.rotaDetailsObject.staff_members)
         });
 
         return <div className="boss-page-main">
-          <RotaHeader startDate={this.props.startDate} endDate={this.props.endDate} pdfHref={pdfHref}/>
+          <RotaHeader startDate={this.props.startDate} venue={this.props.venue} endDate={this.props.endDate} pdfHref={pdfHref}/>
           <div className="boss-page-main__content">
             <div className="boss-page-main__inner">
                 <div className="boss-rotas">
@@ -56,7 +56,7 @@ class RotaOverviewPage extends Component {
                             <span className="boss-form__label-text"> Venue </span>
                           </p>
                           <div className="boss-form__select">
-                            {/* <VenuesSelect options={this.props.venues} selected={this.props.currentVenue} onSelect={this.props.changeVenue} /> */}
+                            <VenuesSelect options={this.props.venues} selected={this.props.venue} onSelect={(e) => (console.log(e))} clientId/>
                           </div>
                         </div>
                       </div>
@@ -67,22 +67,24 @@ class RotaOverviewPage extends Component {
                       <div className="boss-board__calendar">
                         <div className="boss-board__calendar-inner">
                           <WeekPicker
-                            selectionStartDate={this.props.storeRotas.date}
+                            selectionStartDate={rotaDetails.date}
                             onChange={(selection) => {
                               this.goToOverviewPage({
                                 startDate: selection.startDate,
                                 endDate: selection.endDate,
-                                venueClientId: this.props.venueClientId
+                                venueClientId: this.props.venue.id
                               });
                             }}
                           />
                         </div>
-                        <div className="boss-board__calendar-note">
-                          <div className="boss-message boss-message_role_calendar-note">
-                            <p className="boss-message__text"> Simple text </p>
-                            <p className="boss-message__text"> Simple text </p>
+                        { storeRota.status === ROTA_PUBLISHED_STATUS &&
+                          <div className="boss-board__calendar-note">
+                            <div className="boss-message boss-message_role_calendar-note">
+                              <p className="boss-message__text"> This week's rotas have been published.</p>
+                              <p className="boss-message__text"> Changes to them will send out email notifications. </p>
+                            </div>
                           </div>
-                        </div>
+                        }
                       </div>
                       <div className="boss-board__info">
                         <header className="boss-board__header">
@@ -107,10 +109,11 @@ class RotaOverviewPage extends Component {
                   </div>
                   <RotaCurrentDay 
                     staff={this.props.rotaDetailsObject.staff_members }
-                    shifts={ this.props.rotaDetailsObject.rota_shifts }
-                    rota={this.props.rotaDetailsObject}
-                    dateOfRota={ this.props.rotaDetailsObject.date }
-                    staffTypesWithShifts={staffTypesWithShifts}
+                    shifts={this.props.rotaDetailsObject.rota_shifts}
+                    rota={rotaDetails}
+                    dateOfRota={rotaDetails.date}
+                    staffTypesWithShifts={utils.indexByClientId(staffTypesWithShifts)}
+                    rotaForecast={this.props.rotaForecast}
                   />
                 </div>
             </div>
@@ -119,7 +122,7 @@ class RotaOverviewPage extends Component {
     }
     goToOverviewPage({startDate, endDate, venueClientId}){
         location.href = appRoutes.rotaOverview({
-            venueId: this.props.venues[venueClientId].serverId,
+            venueId: venueClientId,
             startDate,
             endDate
         });
