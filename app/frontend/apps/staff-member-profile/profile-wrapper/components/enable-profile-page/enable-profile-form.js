@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field, reduxForm, SubmissionError, formValueSelector } from 'redux-form/immutable';
+import { Field, reduxForm, SubmissionError, formValueSelector, change } from 'redux-form/immutable';
 import { connect } from 'react-redux';
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormInput from '~/components/boss-form/boss-form-input';
@@ -112,16 +112,17 @@ let EnableProfileForm = ({
         />
       </Panel>
       <Panel title="Venue">
-        { !isSecurityStaff && <Field
+        <Field
           component={BossFormSelect}
           name="master_venue"
+          disabled={isSecurityStaff}
           required
           label="Main Venue"
           optionLabel="name"
           optionValue="id"
           placeholder="Select main venue ..."
           options={venues.toJS()}
-        />}
+        />
         <Field
           component={BossFormSelect}
           name="other_venues"
@@ -257,6 +258,13 @@ let EnableProfileForm = ({
 EnableProfileForm = reduxForm({
   form: 'enable-profile-form',
   validate,
+  onChange: (values, dispatch, props) => {
+    if(values.get('staff_type') === SECURITY_TYPE_ID) {
+      dispatch(change('enable-profile-form', 'master_venue', null));
+    } else {
+      dispatch(change('enable-profile-form', 'master_venue', values.get('master_venue') || props.initialValues.get('master_venue')));
+    }
+  },
 })(EnableProfileForm);
 
 const selector = formValueSelector('enable-profile-form');

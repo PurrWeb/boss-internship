@@ -73,13 +73,13 @@ export const enableStaffMember = (payload) => {
     address,
     postcode,
     country,
-    county
+    county,
+    main_venue_id: master_venue,
   }
 
   if (staff_type === SECURITY_TYPE_ID) {
     requestParams = {
       ...requestParams,
-      main_venue_id: null,
       sia_badge_number,
       sia_badge_expiry_date: moment(sia_badge_expiry_date).format("DD-MM-YYYY")
     }
@@ -88,7 +88,6 @@ export const enableStaffMember = (payload) => {
       ...requestParams,
       sia_badge_number: null,
       sia_badge_expiry_date: null,
-      main_venue_id: master_venue
     }
   }
 

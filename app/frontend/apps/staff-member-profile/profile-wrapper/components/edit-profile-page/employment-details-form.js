@@ -15,6 +15,7 @@ const validate = values => {
   const errors = {}
   return errors;
 }
+
 import {updateEmploymentDetails} from '../../requests';
 
 let EmploymentDetailsForm = ({
@@ -64,20 +65,19 @@ let EmploymentDetailsForm = ({
       onSubmit={handleSubmit(submission)}
     >
       <header className="boss-content-switcher__header">
-        <h2 className="boss-content-switcher__title">Employment Details {isSecurityStaff ? 'SECURITY' : 'NOT SECURITY'}</h2>
+        <h2 className="boss-content-switcher__title">Employment Details</h2>
       </header>
-      { !isSecurityStaff &&
-        <Field
-          component={BossFormSelect}
-          name="master_venue"
-          required
-          label="Main Venue"
-          optionLabel="name"
-          optionValue="id"
-          placeholder="Select main venue ..."
-          options={venues.toJS()}
-        />
-      }
+      <Field
+        component={BossFormSelect}
+        name="master_venue"
+        required
+        label="Main Venue"
+        disabled={isSecurityStaff}
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Select main venue ..."
+        options={venues.toJS()}
+      />
       
       <Field
         component={BossFormSelect}
@@ -163,6 +163,13 @@ let EmploymentDetailsForm = ({
 
 EmploymentDetailsForm = reduxForm({
   form: 'employment-details-form',
+  onChange: (values, dispatch, props) => {
+    if(values.get('staff_type') === SECURITY_TYPE_ID) {
+      dispatch(change('employment-details-form', 'master_venue', null));
+    } else {
+      dispatch(change('employment-details-form', 'master_venue', values.get('master_venue') || props.initialValues.get('master_venue')));
+    }
+  },
   validate,
 })(EmploymentDetailsForm);
 

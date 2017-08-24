@@ -12,6 +12,7 @@ const BossFormSelect = ({
     required,
     multi,
     placeholder,
+    disabled,
     input: { onBlur, value, onChange, name },
     meta: { asyncValidating, touched, error },
   }) => {
@@ -63,6 +64,7 @@ const BossFormSelect = ({
           options={getOptions(options, {label: optionLabel, value: optionValue})}
           onChange={onValueChange}
           name={name}
+          disabled={disabled}
           placeholder={placeholder || 'Select ...'}
           value={getValue(value)}
           multi={multi || false}
