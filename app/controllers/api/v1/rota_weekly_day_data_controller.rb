@@ -7,43 +7,11 @@ module Api
         if required_rota_weekly_day_fields_present?
           date = date_from_params
           venue = venue_from_params
-          week = RotaWeek.new(date)
-          
-          rota = Rota.find_or_initialize_by(
-            date: date,
-            venue: venue
-          )
-          ActiveRecord::Associations::Preloader.new.preload(
-            rota, [:enabled_rota_shifts, :venue]
-          )
-      
-          forecast = RotaForecast.where(rota: rota).last
-      
-          rota_forecast = if forecast.present?
-            forecast
-          else
-            GenerateRotaForecast.new(
-              forecasted_take_cents: 0,
-              rota: rota
-            ).call
-          end
-      
-          weekly_rota_forecast = GenerateWeeklyRotaForecast.new(
-            rota_forecasts: [rota_forecast],
-            week: week
-          ).call
+          rota_weekly_day_data = RotaWeeklyDayPageData.new(date: date, venue: venue).serialize
 
           render json: {
             accessible_venues: accessible_venues_for(current_user),
-            currentVenue: venue,
-            start_date: week.start_date,
-            end_date: week.end_date,
-            rota: rota,
-            staff_types: StaffType.all,
-            rota_forecast: rota_forecast,
-            week: week,
-            weekly_rota_forecast: weekly_rota_forecast
-          }, status: 200
+          }.merge(rota_weekly_day_data), status: 200
         else
           render json: { }, status: 422
         end

@@ -79,44 +79,13 @@ class RotasController < ApplicationController
 
   def render_rota_index(week:)
     date = highlight_date_from_params
-    rota = Rota.find_or_initialize_by(
-      date: date,
-      venue: venue
-    )
-    ActiveRecord::Associations::Preloader.new.preload(
-      rota, [:enabled_rota_shifts, :venue]
-    )
-
-    forecast = RotaForecast.where(rota: rota).last
-
-    rota_forecast = if forecast.present?
-      forecast
-    else
-      GenerateRotaForecast.new(
-        forecasted_take_cents: 0,
-        rota: rota
-      ).call
-    end
-
-    weekly_rota_forecast = GenerateWeeklyRotaForecast.new(
-      rota_forecasts: [rota_forecast],
-      week: week
-    ).call
-
+    rota_weekly_day_data = RotaWeeklyDayPageData.new(date: date, venue: venue).serialize
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
       access_token: access_token,
       accessible_venues: accessible_venues_for(current_user),
-      venue: venue,
-      start_date: week.start_date,
-      end_date: week.end_date,
-      rota: rota,
-      staff_types: StaffType.all,
-      rota_forecast: rota_forecast,
-      week: week,
-      weekly_rota_forecast: weekly_rota_forecast
-    }
+    }.merge(rota_weekly_day_data)
   end
 
   def render_rota_pdf(week:)
