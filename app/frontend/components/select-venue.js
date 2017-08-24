@@ -1,8 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
+import _ from 'lodash';
 
-const VenuesSelect = ({options, selected, onSelect}) => {
+const VenuesSelect = ({options, selected, onSelect, clientId}) => {
+  let mappedOptions = [];
+
+  if (clientId) {
+    mappedOptions = _.values(options).map(function(venue){
+      return {
+          value: venue.clientId,
+          label: venue.name
+      };
+    });
+  } else {
+    mappedOptions = options;
+  }
+  
   return (
     <div className="boss-form">
       <div className="boss-form__field boss-form__field_position_last">
@@ -11,7 +25,7 @@ const VenuesSelect = ({options, selected, onSelect}) => {
             name="venue-select"
             value={selected}
             clearable={false}
-            options={options}
+            options={mappedOptions}
             onChange={onSelect}
           />
         </div>
