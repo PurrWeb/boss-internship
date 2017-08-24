@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import VenueRotaOverviewChart from "../venue-rota-overview-chart"
+import VenueRotaOverviewChart from "../venue-rota-overview-chart";
+import RotaForecast from "../containers/rota-forecast";
 
 export default class RotaCurrentDay extends React.Component {
   constructor (props) {
@@ -31,16 +32,25 @@ export default class RotaCurrentDay extends React.Component {
             <div className="boss-board__rota">
               <div className="boss-board__graph">
                 <div className="boss-board__graph-inner">
-                  <VenueRotaOverviewChart
-                    staff={this.props.staff}
-                    shifts={this.props.shifts}
-                    dateOfRota={this.props.dateOfRota}
-                    staffTypes={this.props.staffTypesWithShifts}
-                    onHoverShiftsChange={(data) => this.setState({hoverData: data})}
-                    onSelectionShiftsChange={(data) => this.setState({selectionData: data})} 
-                  />
+                  <div className="rota-overview-chart">
+                    <div className="rota-overview-chart__inner">
+                      <VenueRotaOverviewChart
+                        staff={this.props.staff}
+                        shifts={this.props.shifts}
+                        dateOfRota={this.props.dateOfRota}
+                        staffTypes={this.props.staffTypesWithShifts}
+                        onHoverShiftsChange={(data) => this.setState({hoverData: data})}
+                        onSelectionShiftsChange={(data) => this.setState({selectionData: data})} 
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
+              <div className="boss-board__forecast">
+                <RotaForecast
+                  rotaClientId={this.props.rota.clientId}
+                  canEditForecastedTake={true} />
+                </div>
             </div>
           </div>
         </section>

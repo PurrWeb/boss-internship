@@ -12,8 +12,9 @@ import WeekAndVenueSelector from "~/components/week-and-venue-selector"
 import WeeklyRotaForecast from "./containers/weekly-rota-forecast"
 import WeekPicker from "~/components/week-picker"
 import VenueDropdown from "~/components/venue-dropdown"
-import RotaHeader from "./components/rota-header.js";
-import RotaCurrentDay from "./components/rota-current-day.js"
+import RotaHeader from "./components/rota-header";
+import RotaCurrentDay from "./components/rota-current-day"
+import VenuesSelect from '~/components/select-venue';
 
 class RotaOverviewPage extends Component {
     static propTypes = {
@@ -59,6 +60,7 @@ class RotaOverviewPage extends Component {
                             <span className="boss-form__label-text"> Venue </span>
                           </p>
                           <div className="boss-form__select">
+                            {/* <VenuesSelect options={this.props.venues} selected={this.props.currentVenue} onSelect={this.props.changeVenue} /> */}
                           </div>
                         </div>
                       </div>
