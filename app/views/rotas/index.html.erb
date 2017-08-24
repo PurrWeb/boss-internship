@@ -1,8 +1,8 @@
 <%= react_component('RotaOverviewApp', {
   accessToken: access_token.token,
   rota: Api::V1::RotaOverviewSerializer.new(rota, scope: { staff_types: staff_types }),
-  venues: ActiveModel::Serializer::CollectionSerializer.new(accessible_venues,serializer: Api::V1::VenueSerializer,),
-  rotaForecasts: Api::V1::RotaForecastSerializer.new(rota_forecast),
+  venues: ActiveModel::Serializer::CollectionSerializer.new(accessible_venues, serializer: Api::V1::VenueSerializer),
+  rotaForecast: Api::V1::RotaForecastSerializer.new(rota_forecast),
   weeklyRotaForecast: Api::V1::WeeklyRotaForecastSerializer.new(weekly_rota_forecast, scope: { week: week }),
   startDate: start_date.iso8601,
   endDate: end_date.iso8601,

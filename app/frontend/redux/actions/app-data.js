@@ -105,9 +105,9 @@ export function loadInitialClockInOutAppState(viewData) {
 export function loadInitialRotaOverviewAppState(viewData){
     return function(dispatch) {
         dispatch(getInititalLoadActions({
-            rotas: _.pluck(viewData.rotas, "rota"),
+            rotas: viewData.rota.rota,
             venues: viewData.venues,
-            rotaForecasts: viewData.rotaForecasts,
+            rotaForecasts: viewData.rotaForecast,
             weeklyRotaForecast: viewData.weeklyRotaForecast,
             pageOptions: {
                 startDate: new Date(viewData.startDate),

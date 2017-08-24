@@ -13,7 +13,7 @@ import WeeklyRotaForecast from "./containers/weekly-rota-forecast"
 
 class RotaOverviewPage extends Component {
     static propTypes = {
-        rotaDetailsObjects: React.PropTypes.array.isRequired
+        rotaDetailsObject: React.PropTypes.object.isRequired
     }
     render() {
         var overviewViews = this.getOverviewViews();
