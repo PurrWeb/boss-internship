@@ -21,23 +21,19 @@ class RotaOverviewPage extends Component {
         rotaDetailsObject: React.PropTypes.object.isRequired
     }
     render() {
-        const overviewViews = this.getOverviewViews();
+        // const overviewViews = this.getOverviewViews();
 
-        const rotas = _.values(this.props.storeRotas);
-        const firstRota = rotas[0];
-        const lastRota = _.last(rotas);
+        const storeRota = this.props.storeRotas;
 
         const pdfHref = appRoutes.rotaPdfDownload({
-          venueId: firstRota.venue.serverId,
+          venueId: this.props.storeRotas.venue.serverId,
           startDate: this.props.startDate,
           endDate: this.props.endDate
         });
-
-        var storeRota = firstRota;
       
-        var rotaDetails = _.find(this.props.rotaDetailsObjects, function(obj){
-          var venuesAreEqual = obj.rota.venue.clientId === storeRota.venue.clientId;
-          var datesAreEqual = utils.datesAreEqual(new Date(obj.rota.date), storeRota.date);
+        var rotaDetails = _.find(this.props.rotaDetailsObject, function(obj){
+          var venuesAreEqual = obj.venue.clientId === storeRota.venue.clientId;
+          var datesAreEqual = utils.datesAreEqual(new Date(obj.date), storeRota.date);
           return venuesAreEqual && datesAreEqual;
         });
 
@@ -71,7 +67,7 @@ class RotaOverviewPage extends Component {
                       <div className="boss-board__calendar">
                         <div className="boss-board__calendar-inner">
                           <WeekPicker
-                            selectionStartDate={firstRota.date}
+                            selectionStartDate={this.props.storeRotas.date}
                             onChange={(selection) => {
                               this.goToOverviewPage({
                                 startDate: selection.startDate,
@@ -94,8 +90,8 @@ class RotaOverviewPage extends Component {
                         </header>
                         <div className="boss-board__main">
                           <WeeklyRotaForecast
-                            serverVenueId={firstRota.venue.serverId}
-                            startOfWeek={utils.getWeekStartDate(firstRota.date)}
+                            serverVenueId={this.props.storeRotas.venue.serverId}
+                            startOfWeek={utils.getWeekStartDate(this.props.storeRotas.date)}
                           />
                         </div>
                       </div>
@@ -110,52 +106,16 @@ class RotaOverviewPage extends Component {
                     </nav>
                   </div>
                   <RotaCurrentDay 
-                    staff={ utils.indexByClientId(rotaDetails.staff_members) }
-                    shifts={ utils.indexByClientId(rotaDetails.rota_shifts) }
-                    rota={storeRota}
-                    dateOfRota={ storeRota.date }
-                    staffTypesWithShifts={ utils.indexByClientId(staffTypesWithShifts)}
+                    staff={this.props.rotaDetailsObject.staff_members }
+                    shifts={ this.props.rotaDetailsObject.rota_shifts }
+                    rota={this.props.rotaDetailsObject}
+                    dateOfRota={ this.props.rotaDetailsObject.date }
+                    staffTypesWithShifts={staffTypesWithShifts}
                   />
                 </div>
             </div>
-            {/* {overviewViews} */}
         </div>
       </div>
-    }
-    getOverviewViews(){
-        var self = this;
-        // Use store rotas, because otherwise some rotas won't have an ID/ won't
-        // have the same IDs as the store rotas
-        return _.values(this.props.storeRotas).map(function(storeRota){
-            var rotaDetails = _.find(self.props.rotaDetailsObjects, function(obj){
-                var venuesAreEqual = obj.rota.venue.clientId === storeRota.venue.clientId;
-                var datesAreEqual = utils.datesAreEqual(new Date(obj.rota.date), storeRota.date);
-                return venuesAreEqual && datesAreEqual;
-            });
-
-            var staffTypesWithShifts = selectStaffTypesWithShifts({
-                staffTypes: utils.indexByClientId(rotaDetails.staff_types),
-                rotaShifts: utils.indexByClientId(rotaDetails.rota_shifts),
-                staff: utils.indexByClientId(rotaDetails.staff_members)
-            });
-
-            return <div key={ storeRota.clientId }>
-                <h2>
-                    <a href={appRoutes.rota({venueId: storeRota.venue.serverId, date: storeRota.date}) }>
-                        {moment(storeRota.date).format("ddd D MMMM YYYY")}
-                    </a>
-                    <span className="boss-badge" style={{verticalAlign: "middle", marginLeft: 10}}>
-                        {rotaStatusTitles[storeRota.status]}
-                    </span>
-                </h2>
-                <RotaOverviewView
-                    staff={ utils.indexByClientId(rotaDetails.staff_members) }
-                    shifts={ utils.indexByClientId(rotaDetails.rota_shifts) }
-                    rota={storeRota}
-                    dateOfRota={ storeRota.date }
-                    staffTypesWithShifts={ utils.indexByClientId(staffTypesWithShifts)} />
-            </div>
-        });
     }
     goToOverviewPage({startDate, endDate, venueClientId}){
         location.href = appRoutes.rotaOverview({
