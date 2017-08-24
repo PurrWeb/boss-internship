@@ -39,7 +39,14 @@ export default class RotaCurrentDay extends React.Component {
                 <div className="boss-board__graph-inner">
                   <div className="rota-overview-chart">
                     <div className="rota-overview-chart__inner">
-
+                      <VenueRotaOverviewChart
+                          staff={this.props.staff}
+                          shifts={this.props.shifts}
+                          dateOfRota={this.props.dateOfRota}
+                          staffTypes={this.props.staffTypesWithShifts}
+                          onHoverShiftsChange={(data) => this.setState({hoverData: data})}
+                          onSelectionShiftsChange={(data) => this.setState({selectionData: data})} 
+                        />
                     </div>
                   </div>
                 </div>
