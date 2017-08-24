@@ -34,11 +34,10 @@ export const appRoutes = {
         ].join("");
     },
     rotaOverview: function(options){
-        var [venueId, startDate, endDate] = oFetch(options, "venueId", "startDate", "endDate");
+        var [venueId, startDate] = oFetch(options, "venueId", "startDate");
         return [
             "/venues/" + venueId,
-            "/rotas?start_date=" + utils.formatRotaUrlDate(startDate),
-            "&end_date=" + utils.formatRotaUrlDate(endDate)
+            "/rotas?highlight_date=" + utils.formatRotaUrlDate(startDate),
         ].join("");
     },
     changeOrdersIndex: function(options){

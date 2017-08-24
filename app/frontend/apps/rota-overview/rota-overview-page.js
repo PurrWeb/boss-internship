@@ -71,7 +71,6 @@ class RotaOverviewPage extends Component {
                             onChange={(selection) => {
                               this.goToOverviewPage({
                                 startDate: selection.startDate,
-                                endDate: selection.endDate,
                                 venueClientId: this.props.venue.id
                               });
                             }}
@@ -123,8 +122,7 @@ class RotaOverviewPage extends Component {
     goToOverviewPage({startDate, endDate, venueClientId}){
         location.href = appRoutes.rotaOverview({
             venueId: venueClientId,
-            startDate,
-            endDate
+            startDate
         });
     }
 }
