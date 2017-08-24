@@ -7,14 +7,13 @@ import _ from "underscore"
 import utils from "~/lib/utils"
 import rotaStatusTitles from "~/lib/rota-status-titles"
 import { selectStaffTypesWithShifts } from "~/redux/selectors"
-import PublishRotaWeekButtonContainer from "./publish-rota-week-button-container"
-import WeekAndVenueSelector from "~/components/week-and-venue-selector"
 import WeeklyRotaForecast from "./containers/weekly-rota-forecast"
 import WeekPicker from "~/components/week-picker"
 import VenueDropdown from "~/components/venue-dropdown"
 import RotaHeader from "./components/rota-header";
 import RotaCurrentDay from "./components/rota-current-day"
 import VenuesSelect from '~/components/select-venue';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 const ROTA_PUBLISHED_STATUS = "published"
 
@@ -24,6 +23,7 @@ class RotaOverviewPage extends Component {
     }
     render() {
         const storeRota = this.props.storeRotas;
+        const venues = this.props.venues;
 
         const pdfHref = appRoutes.rotaOverviewPdfDownload({
           venueId: this.props.storeRotas.venue.serverId,
@@ -43,6 +43,8 @@ class RotaOverviewPage extends Component {
             staff: utils.indexByClientId(this.props.rotaDetailsObject.staff_members)
         });
 
+        let currentWeek = this.generateWeek(rotaDetails.date);
+
         return <div className="boss-page-main">
           <RotaHeader startDate={this.props.startDate} venue={this.props.venue} endDate={this.props.endDate} pdfHref={pdfHref}/>
           <div className="boss-page-main__content">
@@ -56,7 +58,7 @@ class RotaOverviewPage extends Component {
                             <span className="boss-form__label-text"> Venue </span>
                           </p>
                           <div className="boss-form__select">
-                            <VenuesSelect options={this.props.venues} selected={this.props.venue} onSelect={(e) => (console.log(e))} clientId/>
+                            <VenuesSelect options={this.props.venues} selected={this.props.venue} onSelect={this.changeVenue} clientId/>
                           </div>
                         </div>
                       </div>
@@ -102,9 +104,7 @@ class RotaOverviewPage extends Component {
                 </div>
                 <div className="boss-rotas__days">
                   <div className="boss-rotas__days-nav">
-                    <nav className="boss-paginator boss-paginator_size_full">
-                      <a className="boss-paginator__action boss-paginator__action_type_light boss-paginator__action_state_active">14</a>
-                    </nav>
+                    {this.renderDays(currentWeek)}
                   </div>
                   <RotaCurrentDay 
                     staff={this.props.rotaDetailsObject.staff_members }
@@ -124,6 +124,38 @@ class RotaOverviewPage extends Component {
             venueId: venueClientId,
             startDate
         });
+    }
+    changeVenue(venue){
+
+    }
+    generateWeek(startDate){
+      let startOfWeek = moment(startDate).startOf('isoweek');
+      let endOfWeek = moment(startDate).endOf('isoweek');
+      
+      let days = [];
+      let day = startOfWeek;
+      
+      while (day <= endOfWeek) {
+        days.push(day.toDate());
+        day = day.clone().add(1, 'd');
+      }
+      return days;
+    }
+    renderDays(week){
+      return <Tabs>
+        <TabList className="boss-paginator boss-paginator_size_full" onSelect={() => (console.log('selected tab'))} >
+          {this.renderTabList(week)}
+        </TabList>
+        <TabPanel></TabPanel>
+      </Tabs>
+    }
+    renderTabList(week){
+      return week.map((item, index) => {
+        const tabClassName = index === 0 ? 'boss-paginator__action_state_active' : '';
+        const formatedDate = index === 0 ? moment(item).format('D MMMM') : moment(item).format('D');
+
+        return <Tab className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}>{formatedDate}</Tab>      
+      })
     }
 }
 

@@ -9,13 +9,14 @@ const VenuesSelect = ({options, selected, onSelect, clientId}) => {
   if (clientId) {
     mappedOptions = _.values(options).map(function(venue){
       return {
-          value: venue.clientId,
+          value: venue.serverId,
           label: venue.name
       };
     });
   } else {
     mappedOptions = options;
   }
+
   
   return (
     <div className="boss-form">
