@@ -8,8 +8,8 @@ const GRANULARITY = 30;
 
 export default class VenueRotaOverviewChart extends Component {
     static propTypes = {
-        staff: React.PropTypes.object.isRequired,
-        shifts: React.PropTypes.object.isRequired,
+        staff: React.PropTypes.array.isRequired,
+        shifts: React.PropTypes.array.isRequired,
         dateOfRota: React.PropTypes.instanceOf(Date).isRequired,
         staffTypes: React.PropTypes.object.isRequired,
         onHoverShiftsChange: React.PropTypes.func.isRequired,

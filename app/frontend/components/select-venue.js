@@ -5,6 +5,7 @@ import _ from 'lodash';
 
 const VenuesSelect = ({options, selected, onSelect, clientId}) => {
   let mappedOptions = [];
+  let selectedOptions = {};
 
   if (clientId) {
     mappedOptions = _.values(options).map(function(venue){
@@ -13,8 +14,14 @@ const VenuesSelect = ({options, selected, onSelect, clientId}) => {
           label: venue.name
       };
     });
+    selectedOptions = {
+      value: selected.id,
+      label: selected.name
+    }
+    
   } else {
     mappedOptions = options;
+    selectedOptions = selected;
   }
 
   
@@ -24,7 +31,7 @@ const VenuesSelect = ({options, selected, onSelect, clientId}) => {
         <div className="boss-form__select boss-form__select_size_small-fluid">
           <Select
             name="venue-select"
-            value={selected}
+            value={selectedOptions}
             clearable={false}
             options={mappedOptions}
             onChange={onSelect}

@@ -19,8 +19,26 @@ const ROTA_PUBLISHED_STATUS = "published"
 
 class RotaOverviewPage extends Component {
     static propTypes = {
-        rotaDetailsObject: React.PropTypes.object.isRequired
+      rotaDetailsObject: React.PropTypes.object.isRequired
     }
+    
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        highlightDate: this.props.storeRotas.date,
+        selectedIndex: 0,
+      };
+
+    }
+    
+    changeVenue = (venue) => {
+      location.href = appRoutes.rotaOverview({
+        venueId: venue.value,
+        startDate: this.state.highlightDate
+      })
+    }
+    
     render() {
         const storeRota = this.props.storeRotas;
         const venues = this.props.venues;
@@ -58,7 +76,7 @@ class RotaOverviewPage extends Component {
                             <span className="boss-form__label-text"> Venue </span>
                           </p>
                           <div className="boss-form__select">
-                            <VenuesSelect options={this.props.venues} selected={this.props.venue} onSelect={this.changeVenue} clientId/>
+                            <VenuesSelect options={this.props.venues} selected={this.props.venue} onSelect={this.changeVenue.bind(this)} clientId/>
                           </div>
                         </div>
                       </div>
@@ -120,13 +138,10 @@ class RotaOverviewPage extends Component {
       </div>
     }
     goToOverviewPage({startDate, endDate, venueClientId}){
-        location.href = appRoutes.rotaOverview({
-            venueId: venueClientId,
-            startDate
-        });
-    }
-    changeVenue(venue){
-
+      location.href = appRoutes.rotaOverview({
+        venueId: venueClientId,
+        startDate
+      });
     }
     generateWeek(startDate){
       let startOfWeek = moment(startDate).startOf('isoweek');
@@ -142,8 +157,8 @@ class RotaOverviewPage extends Component {
       return days;
     }
     renderDays(week){
-      return <Tabs>
-        <TabList className="boss-paginator boss-paginator_size_full" onSelect={() => (console.log('selected tab'))} >
+      return <Tabs selectedIndex={this.state.selectedIndex} onSelect={(index) => (console.log(`selected tab ${index}`))}>
+        <TabList className="boss-paginator boss-paginator_size_full" >
           {this.renderTabList(week)}
         </TabList>
         <TabPanel></TabPanel>
@@ -154,7 +169,7 @@ class RotaOverviewPage extends Component {
         const tabClassName = index === 0 ? 'boss-paginator__action_state_active' : '';
         const formatedDate = index === 0 ? moment(item).format('D MMMM') : moment(item).format('D');
 
-        return <Tab className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}>{formatedDate}</Tab>      
+        return <Tab key={index} className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}>{formatedDate}</Tab>      
       })
     }
 }

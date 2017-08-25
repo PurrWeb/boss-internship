@@ -31,7 +31,7 @@ class RotaHeader extends React.Component {
         <div className="boss-page-main__inner">
           <div className="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_rotas-weekly">
             <h1 className="boss-page-dashboard__title">
-              <span className="boss-page-dashboard__title-text boss-page-dashboard__title-text_marked">{venueName } </span>
+              <span className="boss-page-dashboard__title-text boss-page-dashboard__title-text_marked">{venueName} &nbsp; </span>
               <span className="boss-page-dashboard__title-text"> Rotas </span>
             </h1>
             <div className="boss-page-dashboard__group">

@@ -1,3 +1,8 @@
+<%= javascript_tag do %>
+  window.boss.store.access_token = "<%= access_token.token %>";
+<% end %>
+
+
 <%= react_component('RotaOverviewApp', {
   accessToken: access_token.token,
   venue: venue,
