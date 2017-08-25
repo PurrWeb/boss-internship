@@ -103,7 +103,6 @@ export function loadInitialClockInOutAppState(viewData) {
 }
 
 export function loadInitialRotaOverviewAppState(viewData){
-    console.log(viewData);
     return function(dispatch) {
         dispatch(getInititalLoadActions({
             rotas: viewData.rotaWeeklyDay.rota,

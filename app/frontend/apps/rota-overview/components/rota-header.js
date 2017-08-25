@@ -53,18 +53,18 @@ class RotaHeader extends React.Component {
 }
 function mapStateToProps(state){
   return {
-      publishingInProgress: _.some(state.apiRequestsInProgress.PUBLISH_ROTAS)
+    publishingInProgress: _.some(state.apiRequestsInProgress.PUBLISH_ROTAS)
   }
 }
 
 function mapDispatchToProps(dispatch, ownProps){
   return {
-      publishRotaWeek: function(){
-          dispatch(actionCreators.publishRotas({
-              venueServerId: ownProps.venue.venueServerId,
-              date: ownProps.startDate
-          }))
-      }
+    publishRotaWeek: function(){
+      dispatch(actionCreators.publishRotas({
+        venueServerId: ownProps.venue.venueServerId,
+        date: ownProps.startDate
+      }))
+    }
   }
 }
 

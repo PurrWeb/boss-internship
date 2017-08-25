@@ -247,6 +247,12 @@ const apiRoutes = {
             return "clocking/add_note"
         },
         method: "POST"
+    },
+    getRotaWeeklyDay: {
+      getPath(options){
+        return  "rota_weekly_day_data?date=" + oFetch(options, "date") + "&venue_id=" + oFetch(options, "serverVenueId")
+      },
+      method: "GET"
     }
 }
 

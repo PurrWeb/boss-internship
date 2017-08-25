@@ -14,6 +14,7 @@ import RotaHeader from "./components/rota-header";
 import RotaCurrentDay from "./components/rota-current-day"
 import VenuesSelect from '~/components/select-venue';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import actionCreators from "~/redux/actions";
 
 const ROTA_PUBLISHED_STATUS = "published"
 
@@ -28,6 +29,9 @@ class RotaOverviewPage extends Component {
       this.state = {
         highlightDate: this.props.storeRotas.date,
         selectedIndex: 0,
+        storeRota: this.props.storeRotas,
+        venue: this.props.venue,
+        venues: this.props.venues
       };
 
     }
@@ -40,8 +44,8 @@ class RotaOverviewPage extends Component {
     }
     
     render() {
-        const storeRota = this.props.storeRotas;
-        const venues = this.props.venues;
+        const storeRota = this.state.storeRota;
+        const venues = this.state.venues;
 
         const pdfHref = appRoutes.rotaOverviewPdfDownload({
           venueId: this.props.storeRotas.venue.serverId,
@@ -157,7 +161,7 @@ class RotaOverviewPage extends Component {
       return days;
     }
     renderDays(week){
-      return <Tabs selectedIndex={this.state.selectedIndex} onSelect={(index) => (console.log(`selected tab ${index}`))}>
+      return <Tabs selectedIndex={this.state.selectedIndex} onSelect={(index) => (this.loadDayRota(index, week))}>
         <TabList className="boss-paginator boss-paginator_size_full" >
           {this.renderTabList(week)}
         </TabList>
@@ -165,22 +169,41 @@ class RotaOverviewPage extends Component {
       </Tabs>
     }
     renderTabList(week){
+      const highlightDate = moment(this.state.highlightDate, 'YYYY-MM-DD');
       return week.map((item, index) => {
-        const tabClassName = index === 0 ? 'boss-paginator__action_state_active' : '';
-        const formatedDate = index === 0 ? moment(item).format('D MMMM') : moment(item).format('D');
+        const modifiedItem = moment(item,'YYYY-MM-DD');
+        const tabClassName = highlightDate.isSame(modifiedItem, 'days') ? 'boss-paginator__action_state_active' : '';
+        const formatedDate = highlightDate.isSame(modifiedItem, 'days') ? moment(item).format('D MMMM') : moment(item).format('D');
 
         return <Tab key={index} className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}>{formatedDate}</Tab>      
       })
     }
+    loadDayRota = (index, week) => {
+      const date = moment(week[index]).format('DD-MM-YYYY');
+      const venueId = this.state.venue.id
+      this.props.getRotaWeeklyDay(date, venueId);
+    }
+}
+
+function mapDispatchToProps(dispatch, ownProps){
+  return {
+    getRotaWeeklyDay: function(date, venueId){
+      dispatch(actionCreators.getRotaWeeklyDay({
+        serverVenueId: venueId,
+        date: date
+      }))
+    }
+  }
 }
 
 function mapStateToProps(state){
-    return {
-        storeRotas: state.rotas,
-        endDate: state.pageOptions.endDate,
-        startDate: state.pageOptions.startDate,
-        venues: state.venues
-    };
+  return {
+    storeRotas: state.rotas,
+    endDate: state.pageOptions.endDate,
+    startDate: state.pageOptions.startDate,
+    venues: state.venues
+  };
 }
 
-export default connect(mapStateToProps)(RotaOverviewPage)
+
+export default connect(mapStateToProps,mapDispatchToProps)(RotaOverviewPage)

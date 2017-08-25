@@ -45,4 +45,22 @@ export const fetchWeeklyRotaForecast = createApiRequestActionCreator({
     })
 });
 
+export const getRotaWeeklyDay = createApiRequestActionCreator({
+  requestType: 'GET_ROTA_WEEKLY_DAY',
+  makeRequest: makeApiRequestMaker({
+    method: apiRoutes.getRotaWeeklyDay.method,
+    path: (options) => {
+      var [serverVenueId, date] = oFetch(options, "serverVenueId", "date")
+      return apiRoutes.getRotaWeeklyDay.getPath({serverVenueId: serverVenueId, date, date})
+    },
+    getSuccessActionData: function(responseData, requestOptions, getState){
+      var state = getState();
+      debugger;
+      return {
+        rotaWeeklyDay: responseData.rota_weekly_day
+      };
+    }
+  })
+})
+
 export const actionTypes = ["REPLACE_WEEKLY_ROTA_FORECAST"]
