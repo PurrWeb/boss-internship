@@ -13,7 +13,6 @@ import VenueDropdown from "~/components/venue-dropdown"
 import RotaHeader from "./components/rota-header";
 import RotaCurrentDay from "./components/rota-current-day"
 import VenuesSelect from '~/components/select-venue';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import actionCreators from "~/redux/actions";
 
 const ROTA_PUBLISHED_STATUS = "published"
@@ -161,12 +160,9 @@ class RotaOverviewPage extends Component {
       return days;
     }
     renderDays(week){
-      return <Tabs selectedIndex={this.state.selectedIndex} onSelect={(index) => (this.loadDayRota(index, week))}>
-        <TabList className="boss-paginator boss-paginator_size_full" >
+      return <div className="boss-paginator boss-paginator_size_full" >
           {this.renderTabList(week)}
-        </TabList>
-        <TabPanel></TabPanel>
-      </Tabs>
+        </div>
     }
     renderTabList(week){
       const highlightDate = moment(this.state.highlightDate, 'YYYY-MM-DD');
@@ -175,13 +171,17 @@ class RotaOverviewPage extends Component {
         const tabClassName = highlightDate.isSame(modifiedItem, 'days') ? 'boss-paginator__action_state_active' : '';
         const formatedDate = highlightDate.isSame(modifiedItem, 'days') ? moment(item).format('D MMMM') : moment(item).format('D');
 
-        return <Tab key={index} className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}>{formatedDate}</Tab>      
+        return <div key={index} onClick={() => (this.loadDayRota(index, week))} className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}>{formatedDate}</div>      
       })
     }
     loadDayRota = (index, week) => {
-      const date = moment(week[index]).format('DD-MM-YYYY');
+      const date = week[index];
+      const formatedDate = moment(date).format('DD-MM-YYYY');
       const venueId = this.state.venue.id
-      this.props.getRotaWeeklyDay(date, venueId);
+      this.setState({
+        highlightDate: date,
+      })
+      this.props.getRotaWeeklyDay(formatedDate, venueId);
     }
 }
 

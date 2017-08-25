@@ -17,7 +17,7 @@ export default class RotaOverviewChart extends Component {
             color: React.PropTypes.string.isRequired,
             name: React.PropTypes.string.isRequired
         })),
-        staff: React.PropTypes.object.isRequired,
+        staff: React.PropTypes.array.isRequired,
         dateOfRota: React.PropTypes.instanceOf(Date),
         onHoverShiftsChange: React.PropTypes.func.isRequired,
         onSelectionShiftsChange: React.PropTypes.func.isRequired,
