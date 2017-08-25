@@ -38,18 +38,18 @@ export default class RotaForecast extends React.Component {
         var updateForecastButton = null
 
         if (this.props.canEditForecastedTake){
-            forecastedTakeComponent = <div>
-                &pound;&nbsp;
+            forecastedTakeComponent = <div className="boss-forecast__cell">
+                <span className="boss-forecast__amount-currency">&pound;&nbsp;</span>
                 <input
                     data-test-marker-forecasted-take
                     value={this.props.forecastedTake}
-                    style={{width: "85%", textAlign: "right", display: "inline-block", margin: 0}}
+                    className="boss-forecast__amount-input"
                     onChange={(event) => this.props.onForecastedTakeChanged(event.target.value)}
                     type="text" />
             </div>
 
             updateForecastButton = <a
-                className="boss2-button boss2-button_type_small"
+                className="boss-button boss-button_type_small"
                 data-test-marker-update-forecast-button
                 onClick={this.props.onUpdateForecastClick} >
                 Update

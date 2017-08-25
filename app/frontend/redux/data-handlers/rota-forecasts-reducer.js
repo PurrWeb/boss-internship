@@ -7,12 +7,12 @@ export default makeDataHandler("rotaForecasts", {
         action: "replaceAll"
     },
     UPDATE_ROTA_FORECAST_SUCCESS: function(state, action){
-        var newForecast = action.rotaForecast;
-        var existingRotaForecast = _.find(state, function(rotaForecast){
-            var datesAreEqual = utils.datesAreEqual(rotaForecast.date, newForecast.date);
-            var venuesAreEqual = rotaForecast.venue.clientId === newForecast.venue.clientId;
-            return datesAreEqual && venuesAreEqual;
-        });
+        let newForecast = action.rotaForecast;
+        let rotaForecast = state;
+
+        let datesAreEqual = utils.datesAreEqual(rotaForecast.date, newForecast.date);
+        let venuesAreEqual = rotaForecast.venue.clientId === newForecast.venue.clientId;
+        let existingRotaForecast = datesAreEqual && venuesAreEqual;
 
         var newState = Object.assign({}, state);
         if (existingRotaForecast){
