@@ -67,7 +67,7 @@ class RotaOverviewPage extends Component {
         let currentWeek = this.generateWeek(rotaDetails.date);
 
         return <div className="boss-page-main">
-          <RotaHeader startDate={this.props.startDate} venue={this.props.venue} endDate={this.props.endDate} pdfHref={pdfHref}/>
+          <RotaHeader startDate={this.props.startDate} venue={this.props.venue} rotas={this.props.rotas} endDate={this.props.endDate} pdfHref={pdfHref}/>
           <div className="boss-page-main__content">
             <div className="boss-page-main__inner">
                 <div className="boss-rotas">
@@ -201,7 +201,8 @@ function mapStateToProps(state){
     storeRotas: state.rotas,
     endDate: state.pageOptions.endDate,
     startDate: state.pageOptions.startDate,
-    venues: state.venues
+    venues: state.venues,
+    rotas: state.rotas,
   };
 }
 

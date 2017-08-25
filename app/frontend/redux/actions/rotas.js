@@ -44,7 +44,4 @@ export const publishRotas = createApiRequestActionCreator({
             return requestOptions;
         }
     }),
-    confirm: function(){
-        return confirm("Publishing a rota will send out email confirmations and can't be undone.\nDo you want to continue?")
-    }
 })
