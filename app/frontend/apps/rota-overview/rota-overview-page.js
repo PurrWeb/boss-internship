@@ -127,14 +127,20 @@ class RotaOverviewPage extends Component {
                   <div className="boss-rotas__days-nav">
                     {this.renderDays(currentWeek)}
                   </div>
-                  <RotaCurrentDay 
-                    staff={this.props.rotaDetailsObject.staff_members }
-                    shifts={this.props.rotaDetailsObject.rota_shifts}
-                    rota={rotaDetails}
-                    dateOfRota={rotaDetails.date}
-                    staffTypesWithShifts={utils.indexByClientId(staffTypesWithShifts)}
-                    rotaForecast={this.props.rotaForecast}
-                  />
+                  { this.props.requestsInProgress ? (
+                    <div className="boss-spinner"></div>                    
+                  ) :
+                    (
+                      <RotaCurrentDay 
+                      staff={this.props.rotaDetailsObject.staff_members }
+                      shifts={this.props.rotaDetailsObject.rota_shifts}
+                      rota={rotaDetails}
+                      dateOfRota={rotaDetails.date}
+                      staffTypesWithShifts={utils.indexByClientId(staffTypesWithShifts)}
+                      rotaForecast={this.props.rotaForecasts}
+                    />
+                    )
+                  }
                 </div>
             </div>
         </div>
@@ -203,6 +209,8 @@ function mapStateToProps(state){
     startDate: state.pageOptions.startDate,
     venues: state.venues,
     rotas: state.rotas,
+    rotaForecasts: state.rotaForecasts,
+    requestsInProgress: _.some(state.apiRequestsInProgress.GET_ROTA_WEEKLY_DAY)
   };
 }
 

@@ -61,7 +61,6 @@ function mapDispatchToProps(dispatch, ownProps){
 function mergeProps(stateProps, dispatchProps, ownProps){
     var extraProps = {
         updateRotaForecast: function({forecastedTakeCents, componentId}){
-          console.log(stateProps);
             dispatchProps.updateRotaForecastWithAllDetails({
                 forecastedTakeCents,
                 serverVenueId: stateProps.rota.venue.serverId,

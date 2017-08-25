@@ -17,7 +17,6 @@ export default class RotaApp extends AppComponent {
         return <Provider store={this.store}>
             <RotaOverviewPage
               rotaDetailsObject={rotaDetailsObject}
-              rotaForecast={this.props.rotaForecast}
               venue={this.props.venue}
               venues={this.props.venues}
             />
