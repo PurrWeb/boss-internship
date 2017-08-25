@@ -51,11 +51,11 @@ export const getRotaWeeklyDay = createApiRequestActionCreator({
     method: apiRoutes.getRotaWeeklyDay.method,
     path: (options) => {
       var [serverVenueId, date] = oFetch(options, "serverVenueId", "date")
-      return apiRoutes.getRotaWeeklyDay.getPath({serverVenueId: serverVenueId, date, date})
+      return apiRoutes.getRotaWeeklyDay.getPath({serverVenueId: serverVenueId, date: date})
     },
     getSuccessActionData: function(responseData, requestOptions, getState){
       var state = getState();
-      debugger;
+
       return {
         rotaWeeklyDay: responseData.rota_weekly_day
       };
