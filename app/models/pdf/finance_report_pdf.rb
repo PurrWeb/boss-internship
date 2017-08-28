@@ -43,9 +43,11 @@ class FinanceReportPDF
           staff_type.name.titlecase,
           style: :bold
         )
-        pdf.move_down 10
 
-        pdf.text total_message(reports)
+        if display_totals
+          pdf.move_down 10
+          pdf.text total_message(reports)
+        end
 
         pdf.font_size 14
         pdf.move_down 10
