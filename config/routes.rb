@@ -182,6 +182,8 @@ Rails.application.routes.draw do
 
         resources :uploads
 
+        resources :incident_reports, only: :create
+
         resources :questionnaires do
           resources :questionnaire_responses
         end

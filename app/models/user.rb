@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
 
   has_many :venues, through: :venue_users
+  has_many :incident_reports
+  has_many :disabled_incident_reports, foreign_key: "disabled_by_id", class_name: "IncidentReport"
   has_many :venue_users
 
   belongs_to :staff_member
