@@ -3,7 +3,8 @@ import getRotaFromDateAndVenue from "~/lib/get-rota-from-date-and-venue"
 import utils from "~/lib/utils"
 import _ from "underscore"
 import {
-    replaceWeeklyRotaForecast
+    replaceWeeklyRotaForecast,
+    replaceRotaWeeklyDay,
 } from "./rota-forecasts"
 import {
     setPageOptions
@@ -105,9 +106,10 @@ export function loadInitialClockInOutAppState(viewData) {
 export function loadInitialRotaOverviewAppState(viewData){
     return function(dispatch) {
         dispatch(getInititalLoadActions({
-            rotas: viewData.rotaWeeklyDay.rota,
+            rotaWeeklyDay: viewData.rotaWeeklyDay,
+            // rotas: viewData.rotaWeeklyDay.rota,
             venues: viewData.venues,
-            rotaForecasts: viewData.rotaForecast,
+            // rotaForecasts: viewData.rotaForecast,
             weeklyRotaForecast: viewData.weeklyRotaForecast,
             venue: viewData.venue,
             pageOptions: {
@@ -137,6 +139,10 @@ function getInititalLoadActions(initialLoadData){
         "weeklyRotaForecast": {
             replaceAction: replaceWeeklyRotaForecast,
             processFunction: backendData.processRotaForecastObject
+        },
+        "rotaWeeklyDay": {
+          replaceAction: replaceRotaWeeklyDay,
+          processFunction: backendData.processVenueRotaOverviewObject
         },
         "pageOptions": {
             replaceAction: actionCreators.setPageOptions,
@@ -188,6 +194,7 @@ function getInititalLoadActions(initialLoadData){
         if (replaceAction === undefined) {
             replaceAction = actionCreators["replaceAll" + utils.capitalize(objectName)]
         }
+
         actions.push(replaceAction({
             [objectName]: processedValue
         }))

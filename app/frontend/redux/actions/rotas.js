@@ -3,6 +3,8 @@ import {apiRoutes} from "~/lib/routes"
 import makeApiRequestMaker from "../make-api-request-maker"
 import oFetch from "o-fetch"
 import getRotaFromDateAndVenue from "~/lib/get-rota-from-date-and-venue"
+import * as backendData from "~/lib/backend-data/process-backend-objects"
+import notify from '~/components/global-notification';
 
 export const updateRotaStatus = createApiRequestActionCreator({
     requestType: "UPDATE_ROTA_STATUS",
@@ -41,7 +43,39 @@ export const publishRotas = createApiRequestActionCreator({
             })
         },
         getSuccessActionData: function(responseData, requestOptions){
-            return requestOptions;
+          notify('Rota Published Successfully', {
+            interval: 5000,
+            status: 'success'
+          });
+          return requestOptions;
         }
     }),
-})
+});
+
+export const getRotaWeeklyDay = createApiRequestActionCreator({
+  requestType: 'GET_ROTA_WEEKLY_DAY',
+  makeRequest: makeApiRequestMaker({
+    method: apiRoutes.getRotaWeeklyDay.method,
+    path: (options) => {
+      var [serverVenueId, date] = oFetch(options, "serverVenueId", "date")
+      return apiRoutes.getRotaWeeklyDay.getPath({serverVenueId: serverVenueId, date: date})
+    },
+    getSuccessActionData: function(responseData, requestOptions, getState){
+      return {
+        rotaWeeklyDay: backendData.processVenueRotaOverviewObject(responseData.rotaWeeklyDay),
+      };
+    },
+  }),
+  additionalSuccessActionCreator: (successActionData, requestOptions) => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: "UPDATE_ROTA_WEEKLY_DAY",
+        payload: successActionData
+      });
+      const date = oFetch(requestOptions, "date");
+      window.history.pushState('state', 'title', `rotas?highlight_date=${date}`);
+    }
+  }
+});
+
+export const actionTypes = ["UPDATE_ROTA_WEEKLY_DAY"]

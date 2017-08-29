@@ -155,7 +155,8 @@ export function processVenueRotaOverviewObject(obj){
         rota: processRotaObject(obj.rota),
         rota_shifts: obj.rota_shifts.map(processRotaShiftObject),
         staff_members: obj.staff_members.map(processStaffMemberObject),
-        staff_types: obj.staff_types.map(processStaffTypeObject)
+        staff_types: obj.staff_types.map(processStaffTypeObject),
+        rota_forecast: processRotaForecastObject(obj.rota_forecast)
     }
 }
 
