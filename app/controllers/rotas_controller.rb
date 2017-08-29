@@ -73,9 +73,8 @@ class RotasController < ApplicationController
 
   def render_rota_index
     unless highlight_date_from_params.present?
-      redirect_to(venue_rotas_path(redirect_params))
+      return redirect_to(venue_rotas_path(redirect_params))
     end
-
     highlight_date = highlight_date_from_params
     week = RotaWeek.new(highlight_date)
     date = highlight_date_from_params
@@ -95,7 +94,7 @@ class RotasController < ApplicationController
 
   def render_rota_pdf
     unless start_date_from_params.present?
-      redirect_to(venue_rotas_path(redirect_params))
+      return redirect_to(venue_rotas_path(redirect_params))
     end
     start_date = start_date_from_params
     week = RotaWeek.new(start_date)
