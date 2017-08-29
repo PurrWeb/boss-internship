@@ -75,6 +75,7 @@ class RotasController < ApplicationController
     unless highlight_date_from_params.present?
       return redirect_to(venue_rotas_path(redirect_params))
     end
+    
     highlight_date = highlight_date_from_params
     week = RotaWeek.new(highlight_date)
     date = highlight_date_from_params
@@ -87,7 +88,7 @@ class RotasController < ApplicationController
       venue: rota_weekly.venue,
       start_date: rota_weekly.week.start_date,
       end_date: rota_weekly.week.end_date,
-      weekly_rota_forecast: Api::V1::WeeklyRotaForecastSerializer.new(rota_weekly.weekly_rota_forecast, scope: { week: rota_weekly.week }),
+      weekly_rota_forecast: Api::V1::WeeklyRotaForecastSerializer.new(rota_weekly.weekly_rota_forecasts, scope: { week: rota_weekly.week }),
       rota_weekly_day: Api::V1::RotaWeeklyDaySerializer.new(rota_weekly, scope: { staff_types: StaffType.all }),
     }
   end
