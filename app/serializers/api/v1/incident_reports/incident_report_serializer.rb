@@ -26,7 +26,7 @@ class Api::V1::IncidentReports::IncidentReportSerializer < ActiveModel::Serializ
   end
 
   def recordedByName
-    object.user.full_name
+    object.recorded_by_name
   end
 
   def cameraName
