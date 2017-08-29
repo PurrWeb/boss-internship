@@ -21,4 +21,8 @@ class IncidentReport < ActiveRecord::Base
       errors.add(:base, 'disabled user and time must both be present')
     end
   end
+
+  def self.enabled
+    where(disabled_at: nil)
+  end
 end

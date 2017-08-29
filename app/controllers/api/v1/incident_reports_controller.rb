@@ -68,6 +68,20 @@ module Api
         end
       end
 
+      def destroy
+        incident_report = IncidentReport.find(params.fetch("id"))
+
+        IncidentReportDisableApiService.new(
+          requester: current_user,
+          incident_report: incident_report
+        ).call!
+
+        render(
+          json: {},
+          status: 200
+        )
+      end
+
       private
       def authorize_admin
         authorize! :manage, :admin
