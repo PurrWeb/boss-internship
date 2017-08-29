@@ -85,17 +85,25 @@ export default class RotaForecast extends React.Component {
             }
         }
 
-        return <div className="boss-forecast__row boss-forecast__row_role_header">
-          <div className="boss-forecast__cell">
-            Forecast
+        return (
+          <div className="boss-forecast__row boss-forecast__row_role_header">
+          {
+            this.props.isUpdatingForecast
+              ? <div className="boss-spinner"></div>
+              : <div className="boss-forecast__row boss-forecast__row_role_header">
+                  <div className="boss-forecast__cell">
+                    Forecast
+                  </div>
+                  <div className="boss-forecast__cell">
+                    {forecastedTakeComponent}
+                  </div>
+                  <div className="boss-forecast__cell">
+                    {updateForecastButton}
+                  </div>
+                </div>
+          }
           </div>
-          <div className="boss-forecast__cell">
-            {forecastedTakeComponent}
-          </div>
-          <div className="boss-forecast__cell">
-            {updateForecastButton}
-          </div>
-        </div>
+        )
     }
     getErrorComponent(){
         return <ComponentErrors
