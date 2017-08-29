@@ -14,6 +14,7 @@ import RotaHeader from "./components/rota-header";
 import RotaCurrentDay from "./components/rota-current-day"
 import VenuesSelect from '~/components/select-venue';
 import actionCreators from "~/redux/actions";
+import { processVenueRotaOverviewObject } from "~/lib/backend-data/process-backend-objects"
 
 const ROTA_PUBLISHED_STATUS = "published"
 
@@ -28,7 +29,6 @@ class RotaOverviewPage extends Component {
       this.state = {
         highlightDate: this.props.storeRotas.date,
         selectedIndex: 0,
-        storeRota: this.props.storeRotas,
         venue: this.props.venue,
         venues: this.props.venues
       };
@@ -43,31 +43,27 @@ class RotaOverviewPage extends Component {
     }
     
     render() {
-        const storeRota = this.state.storeRota;
+        const storeRota = this.props.storeRotas;
         const venues = this.state.venues;
-
+        const rotaDetailsObject = this.props.rotaDetailsObject;
+        
         const pdfHref = appRoutes.rotaOverviewPdfDownload({
-          venueId: this.props.storeRotas.venue.serverId,
           startDate: this.props.startDate,
           endDate: this.props.endDate
         });
       
-        var rotaDetails = _.find(this.props.rotaDetailsObject, function(obj){
-          var venuesAreEqual = obj.venue.clientId === storeRota.venue.clientId;
-          var datesAreEqual = utils.datesAreEqual(new Date(obj.date), storeRota.date);
-          return venuesAreEqual && datesAreEqual;
-        });
+        var rotaDetails = storeRota;
 
         var staffTypesWithShifts = selectStaffTypesWithShifts({
-            staffTypes: utils.indexByClientId(this.props.rotaDetailsObject.staff_types),
-            rotaShifts: utils.indexByClientId(this.props.rotaDetailsObject.rota_shifts),
-            staff: utils.indexByClientId(this.props.rotaDetailsObject.staff_members)
+            staffTypes: utils.indexByClientId(rotaDetailsObject.staff_types),
+            rotaShifts: utils.indexByClientId(rotaDetailsObject.rota_shifts),
+            staff: utils.indexByClientId(rotaDetailsObject.staff_members)
         });
 
         let currentWeek = this.generateWeek(rotaDetails.date);
 
         return <div className="boss-page-main">
-          <RotaHeader startDate={this.props.startDate} venue={this.props.venue} rotas={this.props.rotas} endDate={this.props.endDate} pdfHref={pdfHref}/>
+          <RotaHeader startDate={this.props.startDate} venue={this.props.venue} rota={this.props.storeRotas} endDate={this.props.endDate} pdfHref={pdfHref}/>
           <div className="boss-page-main__content">
             <div className="boss-page-main__inner">
                 <div className="boss-rotas">
@@ -127,20 +123,15 @@ class RotaOverviewPage extends Component {
                   <div className="boss-rotas__days-nav">
                     {this.renderDays(currentWeek)}
                   </div>
-                  { this.props.requestsInProgress ? (
-                    <div className="boss-spinner"></div>                    
-                  ) :
-                    (
-                      <RotaCurrentDay 
-                      staff={this.props.rotaDetailsObject.staff_members }
-                      shifts={this.props.rotaDetailsObject.rota_shifts}
-                      rota={rotaDetails}
-                      dateOfRota={rotaDetails.date}
-                      staffTypesWithShifts={utils.indexByClientId(staffTypesWithShifts)}
-                      rotaForecast={this.props.rotaForecasts}
-                    />
-                    )
-                  }
+                  <RotaCurrentDay
+                    isLoading={this.props.requestsInProgress}
+                    staff={rotaDetailsObject.staff_members }
+                    shifts={rotaDetailsObject.rota_shifts}
+                    rota={rotaDetailsObject.rota}
+                    dateOfRota={rotaDetailsObject.rota.date}
+                    staffTypesWithShifts={utils.indexByClientId(staffTypesWithShifts)}
+                    rotaForecast={this.props.rotaForecasts}
+                  />
                 </div>
             </div>
         </div>
@@ -177,7 +168,7 @@ class RotaOverviewPage extends Component {
         const tabClassName = highlightDate.isSame(modifiedItem, 'days') ? 'boss-paginator__action_state_active' : '';
         const formatedDate = highlightDate.isSame(modifiedItem, 'days') ? moment(item).format('D MMMM') : moment(item).format('D');
 
-        return <div key={index} onClick={() => (this.loadDayRota(index, week))} className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}>{formatedDate}</div>      
+        return <button key={index} onClick={() => (this.loadDayRota(index, week))} className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}>{formatedDate}</button>      
       })
     }
     loadDayRota = (index, week) => {
@@ -204,12 +195,12 @@ function mapDispatchToProps(dispatch, ownProps){
 
 function mapStateToProps(state){
   return {
-    storeRotas: state.rotas,
+    storeRotas: state.rotaWeeklyDay.rota,
+    rotaDetailsObject: state.rotaWeeklyDay,
     endDate: state.pageOptions.endDate,
     startDate: state.pageOptions.startDate,
     venues: state.venues,
-    rotas: state.rotas,
-    rotaForecasts: state.rotaForecasts,
+    rotaForecasts: state.rotaWeeklyDay.rota_forecast,
     requestsInProgress: _.some(state.apiRequestsInProgress.GET_ROTA_WEEKLY_DAY)
   };
 }

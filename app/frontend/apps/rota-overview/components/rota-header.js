@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import confirm from '~/lib/confirm-utils';
+import {confirmation} from '~/lib/confirm-utils';
 import actionCreators from "~/redux/actions";
 import { connect } from "react-redux";
+
+const ROTA_PUBLISHED_STATUS = "published"
 
 class RotaHeader extends React.Component {
   constructor (props) {
@@ -11,9 +13,8 @@ class RotaHeader extends React.Component {
   }
 
   onPublish = () => {
-    confirm("Publishing a rota will send out email confirmations and can't be undone. Do you want to continue?", {
+    confirmation(["Publishing a rota will send out email confirmations and can't be undone.", "Do you want to continue?"], {
       title: 'WARNING !!!',
-      actionButtonText: 'Publish',
     }).then(() => {
       this.props.publishRotaWeek();
     });
@@ -23,6 +24,7 @@ class RotaHeader extends React.Component {
     const startDate = moment(this.props.startDate).format('Do MMMM YYYY');
     const endDate = moment(this.props.endDate).format('Do MMMM YYYY');
     const venueName = this.props.venue.name;
+    var hasBeenPublished = this.props.rota.status === ROTA_PUBLISHED_STATUS;
 
     const date = `${startDate} - ${endDate}`;
 
@@ -41,7 +43,10 @@ class RotaHeader extends React.Component {
                 </p>
               </div>
               <div className="boss-page-dashboard__buttons-group">
-                <button type="button" onClick={this.onPublish} className="boss-button boss-button_role_publish boss-page-dashboard__button">Publish</button>
+                {this.props.publishingInProgress
+                  ? <div className="boss-spinner"></div>
+                  : hasBeenPublished ? null : <button type="button" onClick={this.onPublish} className="boss-button boss-button_role_publish boss-page-dashboard__button">Publish</button>
+                }
                 <a href={this.props.pdfHref} className="boss-button boss-button_role_pdf-download boss-page-dashboard__button">Download PDF</a>
               </div>
             </div>
@@ -61,7 +66,7 @@ function mapDispatchToProps(dispatch, ownProps){
   return {
     publishRotaWeek: function(){
       dispatch(actionCreators.publishRotas({
-        venueServerId: ownProps.rotas.venue.serverId,
+        venueServerId: ownProps.rota.venue.serverId,
         date: ownProps.startDate
       }))
     }

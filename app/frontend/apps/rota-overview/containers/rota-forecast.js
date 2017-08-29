@@ -20,18 +20,19 @@ class RotaForecast extends React.Component {
     }
     render(){
         return <RotaForecastUi
+            isLoading={this.props.requestsInProgress}
             rotaForecast={this.props.rotaForecast}
             forecastedTake={this.state.forecastedTake}
             canEditForecastedTake={this.props.canEditForecastedTake}
             onForecastedTakeChanged={(forecastedTake) => this.setState({forecastedTake})}
-            onUpdateForecastClick={() => this.onUpdateForecastClick()}
+            onUpdateForecastClick={(forecastedTake) => this.onUpdateForecastClick(forecastedTake)}
             isUpdatingForecast={this.props.isUpdatingForecast}
             errorHandlingId={this.componentId}
         />
     }
-    onUpdateForecastClick(){
+    onUpdateForecastClick(forecastedTake){
         this.props.updateRotaForecast({
-            forecastedTakeCents: utils.parseMoney(this.state.forecastedTake) * 100,
+            forecastedTakeCents: utils.parseMoney(forecastedTake) * 100,
             componentId: this.componentId
         })
     }
@@ -39,9 +40,10 @@ class RotaForecast extends React.Component {
 
 function mapStateToProps(state, ownProps){
     var forecast = ownProps.forecast;
-    var rota = state.rotas;
+    var rota = state.rotaWeeklyDay.rota;
     return {
-        rotaForecast: forecast,
+        requestsInProgress: _.some(state.apiRequestsInProgress),
+        rotaForecast: state.rotaWeeklyDay.rota_forecast,
         rota,
         isUpdatingForecast: selectUpdateRotaForecastInProgress(state, {
             serverVenueId: rota.venue.serverId,

@@ -84,8 +84,9 @@ export default class RotaOverviewChartInner extends Component {
 
         return <div className="rota-overview-chart">
             <div>
-              <button className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: true, rotasTime: false})}>Rotas Info</button>
-              <button className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: false, rotasTime: true})}>Rotas Time</button>
+              <span>Highlight:&nbsp;</span>
+              <button style={{marginRight: '10px'}} className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: true, rotasTime: false})}>Staff Counts</button>
+              <button className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: false, rotasTime: true})}>Shift Info</button>
             </div>
             <NVD3Chart
                 options={options}

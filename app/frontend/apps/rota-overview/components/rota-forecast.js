@@ -12,14 +12,39 @@ export default class RotaForecast extends React.Component {
         onUpdateForecastClick: React.PropTypes.func,
         isUpdatingForecast: React.PropTypes.bool
     }
+
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        forecastedTake: utils.formatMoney(props.rotaForecast.forecasted_take_cents / 100)
+      }
+    }
+
+    componentWillReceiveProps(nextProps) {
+      this.setState({
+        forecastedTake: utils.formatMoney(nextProps.rotaForecast.forecasted_take_cents / 100)
+      });
+    }
+
     render(){
         return <div className="boss-board__rota">
           <div className="boss-forecast">
             {this.getForecastHeaderRow()}
+            {this.getErrorComponent()}
             {this.getForecastBody()}
           </div>
         </div>
     }
+
+    onUpdateForecast = (forecastedTake) => {
+      this.setState({
+        forecastedTake: this.state.forecastedTake
+      }, () => {
+        this.props.onUpdateForecastClick(this.state.forecastedTake);
+      });
+    }
+
     getForecastBody(){
         var dataRows = getDataRows(this.props.rotaForecast);
         var dataRowComponents = dataRows.map(
@@ -42,35 +67,34 @@ export default class RotaForecast extends React.Component {
                 <span className="boss-forecast__amount-currency">&pound;&nbsp;</span>
                 <input
                     data-test-marker-forecasted-take
-                    value={this.props.forecastedTake}
+                    value={this.state.forecastedTake}
                     className="boss-forecast__amount-input"
-                    onChange={(event) => this.props.onForecastedTakeChanged(event.target.value)}
+                    onChange={(event) => this.setState({forecastedTake: event.target.value})}
                     type="text" />
             </div>
 
             updateForecastButton = <a
                 className="boss-button boss-button_type_small"
                 data-test-marker-update-forecast-button
-                onClick={this.props.onUpdateForecastClick} >
+                onClick={() => this.onUpdateForecast()} >
                 Update
             </a>
 
             if (this.props.isUpdatingForecast){
-                updateForecastButton = <Spinner />
+                updateForecastButton = <div className="boss-spinner"></div>
             }
         }
 
         return <div className="boss-forecast__row boss-forecast__row_role_header">
-                <div className="boss-forecast__cell">
-                  Forecast
-                </div>
-                <div className="boss-forecast__cell">
-                  {forecastedTakeComponent}
-                </div>
-                <div className="boss-forecast__cell">
-                    {updateForecastButton}
-                </div>
-            {this.getErrorComponent()}
+          <div className="boss-forecast__cell">
+            Forecast
+          </div>
+          <div className="boss-forecast__cell">
+            {forecastedTakeComponent}
+          </div>
+          <div className="boss-forecast__cell">
+            {updateForecastButton}
+          </div>
         </div>
     }
     getErrorComponent(){
@@ -92,7 +116,7 @@ export default class RotaForecast extends React.Component {
           </div>
           <div className="boss-forecast__cell">
             <p className={'boss-button boss-button_type_small boss-button_type_no-behavior boss-button_role_secondary ' + rowPercentageClass}>
-              {row.percentage !== null ? (Math.round(row.percentage*100)/100) + "%" : "-"}
+              {row.percentage !== null ? (Math.round(row.percentage*100)/100) + "%" : "0%"}
               </p>
           </div>
       </div>
