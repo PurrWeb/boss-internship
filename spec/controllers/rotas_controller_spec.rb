@@ -17,7 +17,7 @@ RSpec.describe RotasController do
           get :index
           expect(response).to redirect_to(
             action: :index,
-            start_date: UIRotaDate.format(expected_start_date),
+            highlight_date: UIRotaDate.format(expected_start_date),
           )
         end
       end
@@ -29,10 +29,13 @@ RSpec.describe RotasController do
         let(:expected_end_date) { Time.zone.now.beginning_of_week.to_date + 6.days }
 
         it 'should redirect to index for users first venue with current week dates set' do
-          get :index
+          get(
+            :index,
+            highlight_date: UIRotaDate.format(expected_start_date),
+          )
           expect(response).to redirect_to(
             action: :index,
-            start_date: UIRotaDate.format(expected_start_date),
+            highlight_date: UIRotaDate.format(expected_start_date),
             venue_id: venue.id
           )
         end
@@ -48,13 +51,12 @@ RSpec.describe RotasController do
       it 'should redirect to index with venue id' do
         get(
           :index,
-          start_date: UIRotaDate.format(start_date),
-          end_date: UIRotaDate.format(end_date),
+          highlight_date: UIRotaDate.format(start_date),
           venue_id: nil
         )
         expect(response).to redirect_to(
           action: :index,
-          start_date: UIRotaDate.format(start_date),
+          highlight_date: UIRotaDate.format(start_date),
           venue_id: venue.id
         )
       end

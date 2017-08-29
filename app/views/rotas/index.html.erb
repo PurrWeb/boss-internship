@@ -8,7 +8,6 @@
   venue: venue,
   rotaWeeklyDay: rota_weekly_day,
   venues: ActiveModel::Serializer::CollectionSerializer.new(accessible_venues, serializer: Api::V1::VenueSerializer),
-  rotaForecast: rota_forecast,
   weeklyRotaForecast:weekly_rota_forecast,
   startDate: start_date,
   endDate: end_date,

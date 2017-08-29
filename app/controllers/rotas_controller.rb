@@ -1,26 +1,19 @@
 class RotasController < ApplicationController
   before_action :authorize
-  before_action :set_new_layout
+  before_action :set_new_layout, only: [:index]
   before_filter :check_venue
 
   attr_reader :venue
 
   def index
-    if highlight_date_from_params.present?
-      highlight_date = highlight_date_from_params
-      week = RotaWeek.new(highlight_date)
-
-      respond_to do |format|
-        format.html do
-          render_rota_index(week: week)
-        end
-
-        format.pdf do
-          render_rota_pdf(week: week)
-        end
+    respond_to do |format|
+      format.html do
+        render_rota_index
       end
-    else
-      redirect_to(venue_rotas_path(redirect_params))
+
+      format.pdf do
+        render_rota_pdf
+      end
     end
   end
 
@@ -78,18 +71,35 @@ class RotasController < ApplicationController
 
   private
 
-  def render_rota_index(week:)
+  def render_rota_index
+    unless highlight_date_from_params.present?
+      redirect_to(venue_rotas_path(redirect_params))
+    end
+
+    highlight_date = highlight_date_from_params
+    week = RotaWeek.new(highlight_date)
     date = highlight_date_from_params
-    rota_weekly_day_data = RotaWeeklyDayPageData.new(date: date, venue: venue).serialize
+    rota_weekly = RotaWeeklyPageData.new(date: date, venue: venue).call
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
       access_token: access_token,
       accessible_venues: accessible_venues_for(current_user),
-    }.merge(rota_weekly_day_data)
+      venue: rota_weekly.venue,
+      start_date: rota_weekly.week.start_date,
+      end_date: rota_weekly.week.end_date,
+      weekly_rota_forecast: Api::V1::WeeklyRotaForecastSerializer.new(rota_weekly.weekly_rota_forecast, scope: { week: rota_weekly.week }),
+      rota_weekly_day: Api::V1::RotaWeeklyDaySerializer.new(rota_weekly, scope: { staff_types: StaffType.all }),
+    }
   end
 
-  def render_rota_pdf(week:)
+  def render_rota_pdf
+    unless start_date_from_params.present?
+      redirect_to(venue_rotas_path(redirect_params))
+    end
+    start_date = start_date_from_params
+    week = RotaWeek.new(start_date)
+
     pdf = RotaPDF.new(RotaPDFTableData.new(week: week, venue: venue))
     #TODO: Extract File Timestamp Format to somewhere
     timestamp_start = week.start_date.strftime('%d-%b-%Y')
@@ -116,6 +126,12 @@ class RotasController < ApplicationController
   def highlight_date_from_params
     if params[:highlight_date].present?
       UIRotaDate.parse(params[:highlight_date])
+    end
+  end
+
+  def start_date_from_params
+    if params[:start_date].present?
+      UIRotaDate.parse(params[:start_date])
     end
   end
 

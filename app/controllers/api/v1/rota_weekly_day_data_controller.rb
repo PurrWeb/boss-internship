@@ -7,11 +7,11 @@ module Api
         if required_rota_weekly_day_fields_present?
           date = date_from_params
           venue = venue_from_params
-          rota_weekly_day_data = RotaWeeklyDayPageData.new(date: date, venue: venue).serialize
-
+          rota_weekly = RotaWeeklyPageData.new(date: date, venue: venue).call
+          
           render json: {
-            accessible_venues: accessible_venues_for(current_user),
-          }.merge(rota_weekly_day_data), status: 200
+            rotaWeeklyDay: Api::V1::RotaWeeklyDaySerializer.new(rota_weekly, scope: { staff_types: StaffType.all }),
+          }, status: 200
         else
           render json: { }, status: 422
         end

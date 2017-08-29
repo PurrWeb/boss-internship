@@ -66,13 +66,6 @@ RSpec.describe 'Rota Weekly Day Data #Index API endpoint' do
       it 'should return valid json' do
         json = JSON.parse(response.body)
       end
-
-      it 'should return security error' do
-        set_authorization_header(another_access_token.token)
-        response
-        expect(response.status).to eq(200)
-      end
-
     end
     context ' with invalid params' do
       let(:params) do
