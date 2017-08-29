@@ -3,6 +3,17 @@ module Api
     class IncidentReportsController < APIController
       before_filter :web_token_authenticate!
 
+      def show
+        incident_report = IncidentReport.find(params.fetch("id"))
+        authorize! :manage, incident_report.venue
+
+        render(
+          json: incident_report,
+          serializer: Api::V1::IncidentReports::IncidentReportSerializer,
+          status: 200
+        )
+      end
+
       def create
         result = IncidentReportCreationApiService.new(
           requester: current_user,

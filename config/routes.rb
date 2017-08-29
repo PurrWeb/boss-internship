@@ -182,7 +182,7 @@ Rails.application.routes.draw do
 
         resources :uploads
 
-        resources :incident_reports, only: [:create, :update, :destroy]
+        resources :incident_reports, only: [:show, :create, :update, :destroy]
 
         resources :questionnaires do
           resources :questionnaire_responses
