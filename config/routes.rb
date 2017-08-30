@@ -148,6 +148,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :incident_reports, only: [:index]
+
     resources :api_keys, only: [:index, :create, :destroy]
 
     resources :hours_confirmation, only: [:index] do

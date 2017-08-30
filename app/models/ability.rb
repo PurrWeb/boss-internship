@@ -35,6 +35,10 @@ class Ability
         user.has_admin_access? || user.security_manager?
       end
 
+      can :manage, :incident_reports do
+        !user.security_manager?
+      end
+
       can :view, :holidays do
         !user.security_manager?
       end
