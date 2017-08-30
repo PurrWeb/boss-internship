@@ -1,7 +1,7 @@
 module Api
   module V1
     class CheckListSubmissionsController < APIController
-      before_action :authorize_admin
+      before_action :authorize_checklists
       before_filter :web_token_authenticate!
       before_filter :check_venue
 
@@ -22,8 +22,8 @@ module Api
 
       private
 
-      def authorize_admin
-        authorize! :manage, :admin
+      def authorize_checklists
+        authorize! :manage, :check_lists
       end
 
       def check_venue
