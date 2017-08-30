@@ -107,7 +107,7 @@ RSpec.describe 'Create incident report API endpoint' do
         "involvedWitnessDetails" => involved_witness_details,
         "location" => location,
         "policeOfficerDetails" => police_officer_details,
-        "recordedByName" => user.full_name,
+        "recordedByName" => recorded_by_name,
         "uninvolvedWitnessDetails" => uninvolved_witness_details,
         "report" => report_text
       })
