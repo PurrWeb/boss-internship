@@ -112,7 +112,7 @@ RSpec.describe 'Show incident report API endpoint' do
 
     specify 'it should return report data' do
       json_response = nil
-      call_time = now
+      call_time = now.round
       travel_to call_time do
         json_response = JSON.parse(response.body)
       end
