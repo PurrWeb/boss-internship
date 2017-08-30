@@ -148,7 +148,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :incident_reports, only: [:index]
+    resources :incident_reports, only: [:index, :show]
 
     resources :api_keys, only: [:index, :create, :destroy]
 

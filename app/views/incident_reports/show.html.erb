@@ -1,0 +1,5 @@
+<%= javascript_tag do %>
+  window.boss = window.boss || {};
+  window.boss.store = window.boss.store || {};
+  window.boss.store.incidentReport = <%= Api::V1::IncidentReports::IncidentReportSerializer.new(incident_report).to_json.html_safe %>;
+<% end %>

@@ -1,5 +1,5 @@
 class IncidentReportsController < ApplicationController
-  before_filter :set_new_layout, only: [:index]
+  before_filter :set_new_layout, only: [:index, :show]
 
   def index
     if !index_params_present?
@@ -20,6 +20,16 @@ class IncidentReportsController < ApplicationController
       start_date: start_date_from_params,
       end_date: end_date_from_params,
       filter_report_creator_id: params[:created_by]
+    }
+  end
+
+  def show
+    incident_report = IncidentReport.find(params[:id])
+
+    authorize! :manage, incident_report
+
+    render locals: {
+      incident_report: incident_report
     }
   end
 

@@ -67,6 +67,10 @@ class Ability
         can_edit_staff_member?(user, holiday.staff_member)
       end
 
+      can :manage, IncidentReport do |incident_report|
+        can_manage_venue?(user, incident_report.venue)
+      end
+
       can :manage, OwedHour do |owed_hour|
         can_edit_staff_member?(user, owed_hour.staff_member)
       end
