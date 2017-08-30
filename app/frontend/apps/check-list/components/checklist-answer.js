@@ -6,9 +6,9 @@ import ErrorComponent from './error-component';
 
 class ChecklistAnswer extends React.PureComponent {
 
-  onNoteChange = _.debounce((value) => {
-    return this.props.onNoteChange(value);
-  }, 500);
+  onNoteChange = (value) => {
+    this.props.onNoteChange(value);
+  };
 
   render() {
     const {
@@ -21,7 +21,7 @@ class ChecklistAnswer extends React.PureComponent {
       valid,
       error,
     } = this.props;
-
+    console.log(answer.get('note'));
     const isAnswerValid = answer.get('answer') || !!answer.get('note');
     return (
       <div className="boss-checklist__item">
@@ -36,7 +36,7 @@ class ChecklistAnswer extends React.PureComponent {
         <Note 
           onChange={this.onNoteChange}
           showNote={isFormSubmitted && !answer.get('answer')}
-          value={answer.get('note')}
+          value={answer.get('note') || ''}
         />
       </div>
     )
@@ -79,13 +79,14 @@ const AnswerError = ({children}) => {
 }
 
 const Note = ({value, onChange, showNote}) => {
+  console.log(value);
   return (
     <div className="boss-checklist__notes" style={{display: showNote ? 'block' : 'none'}}>
       <div className="boss-checklist__notes-inner">
         <textarea className="boss-checklist__notes-textarea"
+          value={value}
           onChange={(e) => onChange(e.target.value)}
         >
-          {value}
         </textarea>
       </div>
     </div>

@@ -81,7 +81,7 @@ class Dashboard extends React.Component {
               submissions={submissions}
               createdBy={createdBy}
               status={status}
-              onSearch={this.search}
+              onSearch={() => search(1)}
             />
           </div>
         </div>

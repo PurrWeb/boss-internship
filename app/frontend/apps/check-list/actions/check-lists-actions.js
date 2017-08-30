@@ -27,7 +27,7 @@ import {
   TOGGLE_NEW_CHECKLIST,
   RAISE_ERRORS,
 } from '../constants/action-names';
-
+import { reset } from 'redux-form/immutable';
 import {
    CHECKLIST_ADDED,
    CHECKLIST_SUBMITTED,
@@ -39,6 +39,9 @@ import {
    NOTIFICATION_CLASSES,
    CHECKLIST_DELETED,
 } from '../constants/notifications';
+
+
+import {toggleEditMode} from './toggle-edit-mode';
 
 import { fromJS, Map, List } from 'immutable';
 import _ from 'lodash';
@@ -95,7 +98,7 @@ export const onNoteChange = (checklistId, answerId, value) => (dispatch, getStat
 }
 
 export const onAnswerChange = (checklistId, answerId, value) => (dispatch, getState) => {
-  const checklistIndex = getState().get('checklists')
+  const checklistIndex = getState().getIn(['checklists', 'checklists'])
     .findIndex(item => item.get('id') === checklistId);
   
   dispatch({
@@ -103,7 +106,7 @@ export const onAnswerChange = (checklistId, answerId, value) => (dispatch, getSt
     payload: {checklistId, answerId, value}
   });
   
-  const isValid = getState().getIn(['checklists', checklistIndex, 'items']).filter(item => {
+  const isValid = getState().getIn(['checklists', 'checklists', checklistIndex, 'items']).filter(item => {
     return !item.get('answer') && !item.get('note');
   }).size === 0;
 
@@ -114,21 +117,21 @@ export const onAnswerChange = (checklistId, answerId, value) => (dispatch, getSt
 };
 
 export const submitChecklist = (checklistId) => (dispatch, getState) => {
-  const checklistIndex = getState().get('checklists')
+  const checklistIndex = getState().getIn(['checklists', 'checklists'])
     .findIndex(item => item.get('id') === checklistId);
   
 
-  const currentVenue = getState().get('currentVenue');
-  const accessToken = getState().get('accessToken');
+  const currentVenue = getState().getIn(['checklists', 'currentVenue']);
+  const accessToken = getState().getIn(['checklists', 'accessToken']);
   const checklist = getState()
-    .deleteIn(['checklists', checklistIndex, 'form'])
-    .updateIn(['checklists', checklistIndex, 'items'], (items) => {
+    .deleteIn(['checklists', 'checklists', checklistIndex, 'form'])
+    .updateIn(['checklists', 'checklists', checklistIndex, 'items'], (items) => {
       return items.map((item) => {
         return item.get('answer')
           ? item.set('note', null)
           : item;
       });
-    }).getIn(['checklists', checklistIndex]);
+    }).getIn(['checklists', 'checklists', checklistIndex]);
 
   axios.post('/api/v1/check_lists/submit', {
     check_list: checklist,
@@ -241,9 +244,9 @@ export const addEditingItem = (item) => {
 };
 
 export const deleteChecklist = (checklist) => (dispatch, getState) => {
-  const accessToken = getState().get('accessToken');
+  const accessToken = getState().getIn(['checklists', 'accessToken']);
   const id = checklist.get('id');
-  const currentVenue = getState().get('currentVenue');
+  const currentVenue = getState().getIn(['checklists', 'currentVenue']);
 
   axios.delete(`/api/v1/check_lists/${id}`,
   {
@@ -279,16 +282,12 @@ export const updateNewChecklistName = (name) => {
   }
 }
 
-export const submitAddNew = () => (dispatch, getState) => {
-  const accessToken = getState().get('accessToken');
-  const currentVenue = getState().get('currentVenue');
+export const submitAddNew = (values) => (dispatch, getState) => {
+  const accessToken = getState().getIn(['checklists', 'accessToken']);
+  const currentVenue = getState().getIn(['checklists', 'currentVenue']);
   
-  const newChecklist = getState()
-    .setIn(['newCheckList', 'venue_id'], currentVenue.get('id'))
-    .get('newCheckList')
-
-  axios.post('/api/v1/check_lists', {
-    check_list: newChecklist,
+  return axios.post('/api/v1/check_lists', {
+    check_list: values,
     venue_id: currentVenue.get('id'),
   },
   {
@@ -297,8 +296,10 @@ export const submitAddNew = () => (dispatch, getState) => {
     }
   }).then((resp) => {
     const checklist = resp.data.check_list;
-    dispatch(cancelAddNew());
     dispatch(addToList(checklist));
+    dispatch(cancelAddNew());
+    dispatch(reset('checklist-add-new'));
+    dispatch(toggleEditMode());
     dispatch(showNotification({
       status: NOTIFICATION_SUCCESS,
       message: CHECKLIST_ADDED,
@@ -313,17 +314,11 @@ const updateEditedInList = (editingChecklist) => {
   }
 }
 
-export const submitEdited = (checklistName) => (dispatch, getState) => {
-  const accessToken = getState().get('accessToken');
-  const currentVenue = getState().get('currentVenue');
-  
-  const editingChecklist = getState()
-    .setIn(['editingChecklist', 'name'], checklistName)
-    .setIn(['editingChecklist', 'venue_id'], currentVenue.get('id'))
-    .get('editingChecklist')
-
-  axios.put(`/api/v1/check_lists/${editingChecklist.get('id')}`, {
-    check_list: editingChecklist,
+export const submitEdited = (values) => (dispatch, getState) => {
+  const accessToken = getState().getIn(['checklists', 'accessToken']);
+  const currentVenue = getState().getIn(['checklists', 'currentVenue']);
+  return axios.put(`/api/v1/check_lists/${values.id}`, {
+    check_list: values,
     venue_id: currentVenue.get('id'),
   },
   {
@@ -331,12 +326,11 @@ export const submitEdited = (checklistName) => (dispatch, getState) => {
       Authorization: `Token token="${accessToken}"`
     }
   }).then((resp) => {
-    dispatch(updateEditedInList(editingChecklist));
+    dispatch(updateEditedInList(resp.data.check_list));
     dispatch(cancelEditSingle());
     dispatch(showNotification({
       status: NOTIFICATION_SUCCESS,
       message: CHECKLIST_UPDATED,
     }));
-  })
-
+  });
 };

@@ -1,10 +1,6 @@
 import React from 'react';
 import VenuesSelect from '~/components/select-venue';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { appRoutes } from "~/lib/routes"
-
-
 
 export default class ChecklistDashboard extends React.Component {
 

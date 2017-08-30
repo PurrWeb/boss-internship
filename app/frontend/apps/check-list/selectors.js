@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-const selectGlobal = (state) => state;
+const selectGlobal = (state) => state.get('checklists');
 
 const makeSelectChecklists = () => createSelector(
   selectGlobal,

@@ -8,7 +8,7 @@ import _ from 'lodash';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    errors: state.get('errors'),
+    errors: state.getIn(['checklists', 'errors']),
   };
 }
 
