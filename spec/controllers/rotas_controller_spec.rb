@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe RotasController do
+  let(:venue) { FactoryGirl.create(:venue) }
   before do
+    venue
     allow(request.env['warden']).to receive(:authenticate!).and_return(user)
     allow(controller).to receive(:current_user).and_return(user)
   end
@@ -13,17 +15,17 @@ RSpec.describe RotasController do
         let(:expected_start_date) { Time.zone.now.beginning_of_week.to_date }
         let(:expected_end_date) { Time.zone.now.beginning_of_week.to_date + 6.days }
 
-        it 'should redirect to index with current week dates set' do
+        it 'should give 404' do
           get :index
           expect(response).to redirect_to(
             action: :index,
             highlight_date: UIRotaDate.format(expected_start_date),
+            venue_id: venue.id
           )
         end
       end
 
-      context 'user has no venue assciated' do
-        let(:venue) { FactoryGirl.create(:venue) }
+      context 'user has venue assciated' do
         let(:user) { FactoryGirl.create(:user, :manager, venues: [venue]) }
         let(:expected_start_date) { Time.zone.now.beginning_of_week.to_date }
         let(:expected_end_date) { Time.zone.now.beginning_of_week.to_date + 6.days }
@@ -71,7 +73,7 @@ RSpec.describe RotasController do
       it 'should render the users index' do
         get(
           :index,
-          start_date: UIRotaDate.format(start_date),
+          highlight_date: UIRotaDate.format(start_date),
           venue_id: venue.id
         )
         expect(response).to render_template(:index)

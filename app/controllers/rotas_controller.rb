@@ -1,7 +1,6 @@
 class RotasController < ApplicationController
   before_action :authorize
   before_action :set_new_layout, only: [:index]
-  before_filter :check_venue
 
   attr_reader :venue
 
@@ -18,11 +17,11 @@ class RotasController < ApplicationController
   end
 
   def show
-    raise ActiveRecord::RecordNotFound unless venue.present?
+    raise ActiveRecord::RecordNotFound unless venue_from_params.present?
 
     rota = Rota.find_or_initialize_by(
       date: rota_date_from_params,
-      venue: venue
+      venue: venue_from_params
     )
 
     authorize!(:manage, rota)
@@ -72,12 +71,11 @@ class RotasController < ApplicationController
   private
 
   def render_rota_index
-    unless highlight_date_from_params.present?
-      return redirect_to(venue_rotas_path(redirect_params))
+    unless highlight_date_from_params.present? && venue_from_params.present?
+      return redirect_to(venue_rotas_path(index_redirect_params))
     end
-    
-    highlight_date = highlight_date_from_params
-    week = RotaWeek.new(highlight_date)
+
+    venue = venue_from_params
     date = highlight_date_from_params
     rota_weekly = RotaWeeklyPageData.new(date: date, venue: venue).call
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
@@ -94,9 +92,10 @@ class RotasController < ApplicationController
   end
 
   def render_rota_pdf
-    unless start_date_from_params.present?
-      return redirect_to(venue_rotas_path(redirect_params))
+    unless start_date_from_params.present? && venue_from_params.present?
+      return redirect_to(venue_rotas_path(index_redirect_params.merge(format: :pdf)))
     end
+    venue = venue_from_params
     start_date = start_date_from_params
     week = RotaWeek.new(start_date)
 
@@ -117,12 +116,6 @@ class RotasController < ApplicationController
     AccessibleVenuesQuery.new(user).all
   end
 
-  def redirect_params
-    {
-      highlight_date: UIRotaDate.format(highlight_date_from_params || default_highlight_date),
-    }
-  end
-
   def highlight_date_from_params
     if params[:highlight_date].present?
       UIRotaDate.parse(params[:highlight_date])
@@ -130,37 +123,33 @@ class RotasController < ApplicationController
   end
 
   def start_date_from_params
-    if params[:start_date].present?
-      UIRotaDate.parse(params[:start_date])
+    if highlight_date_from_params.present?
+      RotaWeek.new(highlight_date_from_params).start_date
     end
   end
 
   def default_highlight_date
-    Time.zone.now.beginning_of_week
+    RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date
   end
 
   def rota_date_from_params
     UIRotaDate.parse(params.fetch(:id))
   end
-  
-  def check_venue
-    unless venue_from_params.present?
-      redirect_to(venue_rotas_path(index_redirect_params))
-    end
-  end
 
   def index_redirect_params
-    venue = venue_from_params || current_user.default_venue
+    venue = venue_from_params || current_user.default_venue || Venue.first
+    highlight_date = highlight_date_from_params || default_highlight_date
     {
-      venue_id: venue.andand.id
+      venue_id: venue.andand.id,
+      highlight_date: UIRotaDate.format(highlight_date)
     }
   end
 
+  def accessible_venues
+    AccessibleVenuesQuery.new(current_user).all
+  end
+
   def venue_from_params
-    @venue ||= if current_user.has_all_venue_access?
-      Venue.find_by({id: params[:venue_id]})
-    else
-      current_user.venues.find_by(id: params[:venue_id])
-    end
+    @venue_from_params ||= accessible_venues.find_by(id: params[:venue_id])
   end
 end
