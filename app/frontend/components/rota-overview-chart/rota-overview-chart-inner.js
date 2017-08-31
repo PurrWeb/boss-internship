@@ -46,6 +46,7 @@ export default class RotaOverviewChartInner extends Component {
         var self = this;
         var datum = this.props.chartData;
         const tooltipGenerator = this.state.rotasInfo ? this.props.tooltipInfoGenerator : this.props.tooltipTimeGenerator;
+        const noDataMessage = this.props.noData || "There is no Data to display";
         var options = {
             margin: {},
             stacked: true,
@@ -64,11 +65,12 @@ export default class RotaOverviewChartInner extends Component {
               classes: 'rota-overview-chart-tooltip',
               contentGenerator: tooltipGenerator,
             },
-            reduceXTicks: false
+            reduceXTicks: false,
+            noData: noDataMessage
         }
 
         const renderEnd = (chart) => {
-  
+
             chart.multibar.dispatch.on("elementClick", (obj) => {
               this.props.onElementClick(obj);
             });

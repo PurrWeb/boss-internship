@@ -82,6 +82,7 @@ export default class RotaOverviewChart extends Component {
                   });
                   return html;
                 }}
+            noData={ "No Shifts currently rotaed" }
             />
     }
     getRotaDate(){
