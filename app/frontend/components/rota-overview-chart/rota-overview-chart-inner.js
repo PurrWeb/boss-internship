@@ -42,6 +42,17 @@ export default class RotaOverviewChartInner extends Component {
       }
     }
 
+    highlightControls(){
+      let result = null;
+      if(this.props.chartData.length > 0) {
+        return (<div>
+          <span>Highlight:&nbsp;</span>
+          <button style={{marginRight: '10px'}} className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: true, rotasTime: false})}>Staff Counts</button>
+          <button className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: false, rotasTime: true})}>Shift Info</button>
+        </div>);
+      }
+    }
+
     render() {
         var self = this;
         var datum = this.props.chartData;
@@ -85,11 +96,7 @@ export default class RotaOverviewChartInner extends Component {
         }
 
         return <div className="rota-overview-chart">
-            <div>
-              <span>Highlight:&nbsp;</span>
-              <button style={{marginRight: '10px'}} className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: true, rotasTime: false})}>Staff Counts</button>
-              <button className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: false, rotasTime: true})}>Shift Info</button>
-            </div>
+            { this.highlightControls() }
             <NVD3Chart
                 options={options}
                 type="multiBarChart"
