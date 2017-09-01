@@ -18,10 +18,10 @@ import {
 
 const mapStateToProps = (state) => {
   return {
-    venues: state.get('venues'),
-    currentVenue: state.get('currentVenue'),
-    isEditMode: state.get('isEditMode'),
-    notification: state.get('notification'),
+    venues: state.getIn(['checklists', 'venues']),
+    currentVenue: state.getIn(['checklists', 'currentVenue']),
+    isEditMode: state.getIn(['checklists', 'isEditMode']),
+    notification: state.getIn(['checklists', 'notification']),
   };
 }
 

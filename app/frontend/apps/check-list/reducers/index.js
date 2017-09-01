@@ -1,4 +1,8 @@
 import { fromJS, Map, List } from 'immutable';
+import { combineReducers } from 'redux-immutable';
+import { handleActions } from 'redux-actions';
+
+import { reducer as formReducer } from 'redux-form/immutable';
 
 import {
   INITIAL,
@@ -32,7 +36,23 @@ import {
   RAISE_ERRORS,
 } from '../constants/action-names';
 
-const ACTION_HANDLERS = {
+const initialState = fromJS({
+  isEditMode: false,
+  checklists: [],
+  currentVenue: null,
+  venues: [],
+  newCheckList: {
+    name: '',
+    venue_id: null,
+    items: [],
+    isOpen: false,
+  },
+  editingChecklist: false,
+  notification: null,
+  errors: {},
+});
+
+const checklistReducer = handleActions({
   [INITIAL]: (state, action) => {
     const checklists = fromJS(action.payload.checklists).map(item => {
       return item
@@ -205,7 +225,7 @@ const ACTION_HANDLERS = {
       )
   },
   [UPDATE_EDITED_IN_LIST]: (state, action) => {
-    const editedChecklist = action.payload;
+    const editedChecklist = fromJS(action.payload);
     const id = editedChecklist.get('id');
     const index = state.get('checklists').findIndex(item => item.get("id") === id);
     
@@ -222,26 +242,9 @@ const ACTION_HANDLERS = {
       )
     )
   }
-} 
+}, initialState);
 
-const initialState = fromJS({
-  isEditMode: false,
-  checklists: [],
-  currentVenue: null,
-  venues: [],
-  newCheckList: {
-    name: '',
-    venue_id: null,
-    items: [],
-    isOpen: false,
-  },
-  editingChecklist: false,
-  notification: null,
-  errors: {},
-});
-
-export default function checkListsReducer(state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
-
-  return handler ? handler(state, action) : state
-}
+export default combineReducers({
+  checklists: checklistReducer,
+  form: formReducer,
+})

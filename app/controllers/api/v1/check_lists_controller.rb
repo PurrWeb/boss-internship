@@ -19,28 +19,47 @@ module Api
       end 
 
       def create
-        check_list_items = checklist_params.fetch(:items)
+        check_list_items = checklist_params[:check_list_items] || []
         check_list = CheckList.new({
-          name: checklist_params.fetch(:name),
+          name: checklist_params[:name],
           venue: venue_from_params
         })
-        check_list.check_list_items.build(check_list_items);
+        check_list.check_list_items.build(check_list_items.map{|item| {description: item}})
         check_list.save
-
-        render json: {check_list: CheckListSerializer.new(check_list)}, status: :ok
+        if check_list.valid?
+          render json: {check_list: CheckListSerializer.new(check_list)}, status: :ok
+        else
+          render(
+            'errors',
+            locals: {
+              checklist: check_list,
+            },
+            status: :unprocessable_entity
+          )
+        end
       end
       
       def update
         check_list = venue_from_params.check_lists.find(params[:id])
-        check_list_items = checklist_params.fetch(:items)
+        check_list_items = checklist_params[:check_list_items] || []
         
-        check_list.name = checklist_params.fetch(:name)
+        check_list.name = checklist_params[:name]
 
         check_list.check_list_items.destroy_all
-        check_list.check_list_items.create(check_list_items)
+        check_list.check_list_items.create(check_list_items.map{|item| {description: item}})
         check_list.save
 
-        render json: {}, status: :ok
+        if check_list.valid?
+          render json: {check_list: CheckListSerializer.new(check_list)}, status: :ok
+        else
+          render(
+            'errors',
+            locals: {
+              checklist: check_list,
+            },
+            status: :unprocessable_entity
+          )
+        end
       end
 
       def destroy
@@ -85,7 +104,7 @@ module Api
       end
 
       def checklist_params
-        params.require(:check_list).permit(:name, :venue_id, items: [:description])
+        params.require(:check_list).permit(:name, :venue_id, check_list_items: [])
       end
 
       def submit_checklist_params

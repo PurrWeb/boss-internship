@@ -13,8 +13,8 @@ import CheckList from './checklist';
 
 const mapStateToProps = (state) => {
   return {
-    checklists: state.get('checklists'),
-    errors: state.get('errors'),
+    checklists: state.getIn(['checklists', 'checklists']),
+    errors: state.getIn(['checklists', 'errors']),
   }
 };
 

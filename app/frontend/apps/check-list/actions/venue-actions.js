@@ -5,7 +5,7 @@ import {
 } from '../constants/action-names';
 
 export const changeVenue = (venue) => (dispatch, getState) => {
-  const accessToken = getState().get('accessToken');
+  const accessToken = getState().getIn(['checklists', 'accessToken']);
   axios.get('/api/v1/check_lists', {
     params: {
         venue_id: venue.id

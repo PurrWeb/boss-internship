@@ -1,6 +1,7 @@
 import React from 'react';
 
-import ChecklistEditSingleWrapper from './checklist-edit-single-wrapper';
+import ChecklistEditSingleForm from './checklist-edit-single-form';
+
 import {
   AddedNewItem,
   AddNewItem,
@@ -40,34 +41,14 @@ class ChecklistEditSingle extends React.PureComponent {
       title,
     } = this.state;
 
-    return (
-      <ChecklistEditSingleWrapper
-        title={title}
-        onTitleChange={this.onTitleChange}
-        onCancel={onCancel}
-      >
-        <div className="boss-checklist__items">
-          { checklist.get('items').map((item, index) => {
-            return <AddedNewItem
-              item={item.toJS()}
-              key={index}
-              onUpdateItem={onUpdateItem.bind(null, index)}
-              onRemoveItem={onRemoveItem.bind(null, index)}
-            />
-          }) }
-          <AddNewItem
-            onAddNew={onAddNew}
-          />
-        </div>
-        <div className="boss-checklist__actions">
-          <button
-            disabled={!this.isValid()}
-            className="boss-button boss-button_role_primary"
-            onClick={onSubmit.bind(null, this.state.title)}
-          >Done</button>
-        </div>
-      </ChecklistEditSingleWrapper>      
-    ) 
+    const initialValues = {
+      id: checklist.get('id'),
+      venue_id: checklist.get('venue_id'),
+      name: checklist.get('name'),
+      check_list_items: checklist.get('items').map(item => item.get('description')),
+    }
+
+    return <ChecklistEditSingleForm initialValues={initialValues} />
   }
 }
 
