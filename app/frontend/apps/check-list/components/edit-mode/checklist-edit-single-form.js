@@ -82,26 +82,24 @@ function ChecklistEditSingleForm(props) {
           >Cancel Editing</button>
         </div>
         </header>
-        <Collapse isOpened={true}>
-          <div className="boss-board__content boss-board__content_state_opened">
-            <div className="boss-board__content-inner">
-              <div className="boss-board__checklist">
-                <div className="boss-checklist">
-                  <div className="boss-checklist__content">
-                    <FieldArray name="check_list_items" component={renderChecklistItems} />
-                    <div className="boss-checklist__actions">
-                      <button
-                        type="submit"
-                        disabled={submitting}
-                        className="boss-button boss-button_role_primary"
-                      >Done</button>
-                    </div>
+        <div className="boss-board__content boss-board__content_state_opened">
+          <div className="boss-board__content-inner">
+            <div className="boss-board__checklist">
+              <div className="boss-checklist">
+                <div className="boss-checklist__content">
+                  <FieldArray name="check_list_items" component={renderChecklistItems} />
+                  <div className="boss-checklist__actions">
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="boss-button boss-button_role_primary"
+                    >Done</button>
                   </div>
                 </div>
               </div>
             </div>
-          </div>          
-        </Collapse>
+          </div>
+        </div>          
       </form>
     </section>
   )

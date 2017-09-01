@@ -91,8 +91,7 @@ function ChecklistAddNewForm(props) {
             }
           </div>
         </header>
-        <Collapse isOpened={isOpen}>
-          <div className="boss-board__content boss-board__content_state_opened">
+          { isOpen && <div className="boss-board__content boss-board__content_state_opened">
             <div className="boss-board__content-inner">
               <div className="boss-board__checklist">
                 <div className="boss-checklist">
@@ -109,8 +108,7 @@ function ChecklistAddNewForm(props) {
                 </div>
               </div>
             </div>
-          </div>          
-        </Collapse>
+          </div>}   
       </form>
     </section>
   )
