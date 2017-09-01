@@ -45,10 +45,10 @@ export default class RotaOverviewChartInner extends Component {
     highlightControls(){
       let result = null;
       if(this.props.chartData.length > 0) {
-        return (<div>
-          <span>Highlight:&nbsp;</span>
-          <button style={{marginRight: '10px'}} className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: true, rotasTime: false})}>Staff Counts</button>
-          <button className="boss-button boss-button_type_small" onClick={() => this.setState({rotasInfo: false, rotasTime: true})}>Shift Info</button>
+        return (<div className="rota-overview-chart__controls">
+          <span className="rota-overview-chart__controls-label">Highlight:&nbsp;</span>
+          <button style={{marginRight: '10px'}} className="boss-button boss-button_type_small rota-overview-chart__controls-button" onClick={() => this.setState({rotasInfo: true, rotasTime: false})}>Staff Counts</button>
+          <button className="boss-button boss-button_type_small rota-overview-chart__controls-button" onClick={() => this.setState({rotasInfo: false, rotasTime: true})}>Shift Info</button>
         </div>);
       }
     }
