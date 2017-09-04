@@ -87,6 +87,16 @@ export default class Header extends React.Component {
     );
   }
 
+  statusBadge(){
+    if (this.failedCategories() === undefined) return;
+
+    if (this.failedCategories().length > 0) {
+      return <a href="#" className="boss-button boss-button_role_fail_reverse boss-page-dashboard__button">Fail</a>
+    } else {
+      return <a href="#" className="boss-button boss-button_role_success_reverse boss-page-dashboard__button">Pass</a>
+    }
+  }
+
   render() {
     return (
       <div className="boss-page-main__dashboard">
@@ -96,7 +106,7 @@ export default class Header extends React.Component {
               <h1 className="boss-page-dashboard__title">{this.venueName()} Health Check Report</h1>
 
               <div className="boss-page-dashboard__buttons-group boss-page-dashboard__buttons-group_desktop">
-                <a href="#" className="boss-button boss-button_role_fail_reverse boss-page-dashboard__button">Fail</a>
+                { this.statusBadge() }
               </div>
             </div>
 
@@ -108,7 +118,7 @@ export default class Header extends React.Component {
               </div>
 
               <div className="boss-page-dashboard__buttons-group boss-page-dashboard__buttons-group_mobile">
-                <a href="#" className="boss-button boss-button_role_fail_reverse boss-page-dashboard__button">Fail</a>
+                { this.statusBadge() }
               </div>
 
               <div className="boss-page-dashboard__meta">
