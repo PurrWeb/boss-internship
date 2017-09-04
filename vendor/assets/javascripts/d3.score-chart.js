@@ -85,10 +85,9 @@ function ScoreChart(placeholderName, configuration) {
       .style('line-height', '1')
       .style('font-weight', '600');
 
-    if(this.config.current <= this.config.breakpoint) {
+    if (scorePercentage <= this.config.breakpoint) {
       chartInfoNumber.style('fill', this.config.failColor);
-
-    } else if(this.config.current > this.config.breakpoint) {
+    } else {
       chartInfoNumber.style('fill', this.config.successColor);
     }
 
