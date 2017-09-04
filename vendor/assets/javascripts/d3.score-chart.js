@@ -77,7 +77,7 @@ function ScoreChart(placeholderName, configuration) {
     var scorePercentage = Math.round((this.config.current/this.config.total) * 100);
 
     chartInfoNumber
-      .text(scorePercentage)
+      .text(scorePercentage + '%')
       .attr('x', this.config.cx)
       .attr('y', this.config.cy + 20)
       .attr('text-anchor', 'middle')
