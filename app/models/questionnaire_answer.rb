@@ -15,7 +15,7 @@ class QuestionnaireAnswer < ActiveRecord::Base
   def pass_value?
     return true if questionnaire_question.pass_values.blank?
 
-    pass_values = questionnaire_question.pass_values.split(',').map(&:strip)
+    pass_values = JSON.parse(questionnaire_question.pass_values)
 
     pass_values.include?(value)
   end

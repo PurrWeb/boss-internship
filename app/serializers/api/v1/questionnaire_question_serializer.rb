@@ -3,7 +3,6 @@ class Api::V1::QuestionnaireQuestionSerializer < ActiveModel::Serializer
 
   def possible_values
     return [] if object.possible_values.blank?
-
-    object.possible_values.split(',').map(&:strip)
+    JSON.parse(object.possible_values)
   end
 end

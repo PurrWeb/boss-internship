@@ -77,7 +77,7 @@ function ScoreChart(placeholderName, configuration) {
     var scorePercentage = Math.round((this.config.current/this.config.total) * 100);
 
     chartInfoNumber
-      .text(scorePercentage)
+      .text(scorePercentage + '%')
       .attr('x', this.config.cx)
       .attr('y', this.config.cy + 20)
       .attr('text-anchor', 'middle')
@@ -85,10 +85,9 @@ function ScoreChart(placeholderName, configuration) {
       .style('line-height', '1')
       .style('font-weight', '600');
 
-    if(this.config.current <= this.config.breakpoint) {
+    if (scorePercentage <= this.config.breakpoint) {
       chartInfoNumber.style('fill', this.config.failColor);
-
-    } else if(this.config.current > this.config.breakpoint) {
+    } else {
       chartInfoNumber.style('fill', this.config.successColor);
     }
 
