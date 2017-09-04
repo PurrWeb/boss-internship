@@ -110,7 +110,7 @@ class Submissions extends React.Component {
           <ModalDetailsContent submission={detailedSubmission} />
         </BossDetailsModal>
         <Dashboard {...this.props} title="Checklist Submissions"/>
-        <MainContent inactive={isFilterOpen}>
+        <MainContent>
           <div className="boss-page-main__group boss-page-main__group_adjust_checklist-table">
             <SubmissionsList onDetailsClick={openDetailsModal} items={submissions} />
             <SubmissionsListMobile onDetailsClick={openDetailsModal} items={submissions}/>

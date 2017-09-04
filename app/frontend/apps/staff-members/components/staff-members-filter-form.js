@@ -14,7 +14,6 @@ export default class StaffMembersFilterForm extends React.Component {
         e.preventDefault();
         filterSwitch.toggleClass('boss-dropdown__switch_state_opened');
         filterContent.slideToggle().end().toggleClass('boss-dropdown__content_state_opened');
-        pageContent.toggleClass('boss-page-main__content_state_inactive');
       }
 
       filterSwitch.on('click', toggleFilter);
