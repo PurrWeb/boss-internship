@@ -32,7 +32,7 @@ class QuestionnaireCategoryLogic
     if join_table_record.present? && join_table_record.threshold_score.present?
       join_table_record.threshold_score
     else
-      0
+      90
     end
   end
 
