@@ -66,8 +66,6 @@ export default class QuestionCard extends React.Component {
   }
 
   renderNote() {
-    if (this.props.reviewMode) return '';
-
     return (
       <div className="boss-question__note" style={ this.displayNote() }>
         <div className="boss-question__note-inner">

@@ -15,8 +15,6 @@ export default class QuestionActions extends React.Component {
   }
 
   renderNote() {
-    if (this.props.reviewMode) return null;
-
     if (this.props.displayNote) {
       return (
         <div className="boss-question__helpers">

@@ -6,11 +6,6 @@ export default class Answer extends React.Component {
   static displayName = 'Answer';
 
   setOptionForQuestion(event) {
-    if (this.props.reviewMode) {
-      event.preventDefault();
-      return;
-    }
-
     this.props.activateAnsweredState();
 
     let questionnaireResponse = this.props.questionnaireResponse;
@@ -38,7 +33,6 @@ export default class Answer extends React.Component {
             className="boss-question__radio-button"
             onChange={ this.setOptionForQuestion.bind(this) }
             defaultChecked={ answer == possibleValue }
-            disabled={ this.props.reviewMode }
           />
           <span className="boss-question__radio-label-text">{ possibleValue }</span>
         </label>
