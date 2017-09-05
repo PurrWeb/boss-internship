@@ -56,10 +56,15 @@ const venueHealthCheck = (state = initialState, action) => {
   case constants.SET_ANSWER:
     let completedAnswers;
 
+    let questionCount = state.get("questions").length;
     answers = state.get('answers');
     existingAnswer = _.find(answers, answer => {
       return answer.questionnaireQuestionId == action.answerParams.questionnaireQuestionId;
     });
+
+    let previousCompletedAnswerCount = _.filter(answers, answer => {
+      return !!answer.value;
+    }).length;
 
     if (existingAnswer) {
       updatedAnswer = Object.assign(existingAnswer, action.answerParams);
@@ -72,6 +77,14 @@ const venueHealthCheck = (state = initialState, action) => {
     completedAnswers = _.filter(answers, answer => {
       return !!answer.value;
     });
+
+    let completedAnswersCount = completedAnswers.length;
+    if(
+      (completedAnswersCount > previousCompletedAnswerCount) &&
+      (completedAnswersCount >= questionCount)
+    ){
+      window.scrollTo(0, 0);
+    }
 
     return state.set('answers', answers).set('answerCount', completedAnswers.length);
 
