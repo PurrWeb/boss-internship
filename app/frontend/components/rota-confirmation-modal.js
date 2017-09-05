@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { confirmable } from 'react-confirm';
 import Modal from 'react-modal';
 
-const ConfirmationModal = ({
+const RotaConfirmationModal = ({
   show,
   confirmations,
   options,
@@ -57,4 +57,4 @@ const ConfirmationModal = ({
   )
 }
 
-export default confirmable(ConfirmationModal);
+export default confirmable(RotaConfirmationModal);
