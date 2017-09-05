@@ -104,7 +104,7 @@ export default class QuestionCard extends React.Component {
     return (
       <li className="boss-questionnaire__item">
         <p className={ `boss-questionnaire__pointer ${ answeredPointerClass }`}>
-          <span className="boss-questionnaire__pointer-text">{ this.props.currentQuestion.id }</span>
+          <span className="boss-questionnaire__pointer-text">{ this.props.questionNumber }</span>
         </p>
 
         <div className={ `boss-questionnaire__question ${ answeredQuestionClass }` }>
@@ -112,7 +112,7 @@ export default class QuestionCard extends React.Component {
             <form className="boss-question__form">
               <div className="boss-question__main">
                 <div className="boss-question__info">
-                  <p className="boss-question__number">Question { this.props.currentQuestion.id }</p>
+                  <p className="boss-question__number">Question { this.props.questionNumber }</p>
                   <h3 className="boss-question__subject">{ this.props.currentQuestion.text }</h3>
                 </div>
 
