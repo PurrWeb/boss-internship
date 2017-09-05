@@ -30,6 +30,7 @@ export default class CollapsibleCard extends React.Component {
   renderQuestionsCards() {
     let currentAnswer;
     let cardProps = {};
+    let questionNumber = 1;
 
     return this.props.categoryQuestions.map(question => {
       currentAnswer = this.props.answers.find(answer => {
@@ -38,8 +39,11 @@ export default class CollapsibleCard extends React.Component {
 
       cardProps = Object.assign({
         currentQuestion: question,
-        currentAnswer: currentAnswer
+        currentAnswer: currentAnswer,
+        questionNumber: questionNumber
       }, this.props);
+
+      questionNumber = questionNumber + 1;
 
       return(
         <QuestionCard { ...cardProps } key={ question.id } />
