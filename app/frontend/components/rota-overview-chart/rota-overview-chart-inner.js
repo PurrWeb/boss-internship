@@ -5,7 +5,8 @@ window.d3 = d3; // nvd3 relies on global D3
 import nvd3 from "nvd3"
 import NVD3Chart from "react-nvd3"
 import ReactDOM from "react-dom"
-
+import iScroll from 'iscroll';
+import ReactIScroll from 'react-iscroll';
 
 const HOVER_INDICATOR_WIDTH = 10;
 
@@ -39,7 +40,12 @@ export default class RotaOverviewChartInner extends Component {
       this.state = {
         rotasInfo: true,
         rotasTime: false
-      }
+      };
+
+      this.scrollOptions = {
+        scrollbars: true,
+        scrollX: true,
+      };
     }
 
     highlightControls(){
@@ -95,18 +101,22 @@ export default class RotaOverviewChartInner extends Component {
             });
         }
 
-        return <div className="rota-overview-chart">
-            { this.highlightControls() }
-            <NVD3Chart
-                options={options}
-                type="multiBarChart"
-                datum={datum}
-                x="label"
-                y="value"
-                margin={{}}
-                renderEnd={renderEnd}/>
-        </div>
-    }
+        return(
+          <div className="rota-overview-chart">
+          { this.highlightControls() }
+            <ReactIScroll iScroll={iScroll} options={this.scrollOptions}>
+              <NVD3Chart
+                  options={options}
+                  type="multiBarChart"
+                  datum={datum}
+                  x="label"
+                  y="value"
+                  margin={{}}
+                  renderEnd={renderEnd}/>
+            </ReactIScroll>
+          </div>
+        )}
+
     getTickValues(){
         var tickValues = [];
         var startTime = this.props.rotaDate.startTime;
