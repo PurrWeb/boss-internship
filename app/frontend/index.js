@@ -45,6 +45,12 @@ registerComponent("CheckListsApp", CheckListsApp)
 import Submissions from "./apps/submissions"
 registerComponent("Submissions", Submissions)
 
+import {IncidentReportsIndexApp} from "./apps/incident-reports"
+registerComponent("IncidentReportsIndexApp", IncidentReportsIndexApp)
+
+import {IncidentReportsShowApp} from "./apps/incident-reports"
+registerComponent("IncidentReportsShowApp", IncidentReportsShowApp)
+
 import StaffTypeRotaApp from "./apps/staff-type-rota/staff-type-rota-app"
 registerComponent("StaffTypeRotaApp", StaffTypeRotaApp);
 
