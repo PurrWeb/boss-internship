@@ -53,8 +53,6 @@ class StaffMembersController < ApplicationController
         gender_values: StaffMember::GENDERS
       }
     else
-      flash.now[:alert] = "You're not authorized to view all of this staff member's details. Contact an admin for further assistance."
-
       render 'reduced_show', locals: {
         staff_member: staff_member
       }
