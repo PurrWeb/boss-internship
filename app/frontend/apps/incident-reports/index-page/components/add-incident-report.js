@@ -1,6 +1,6 @@
 import React from 'react';
 import { SubmissionError } from 'redux-form/immutable';
-
+import RichTextEditor from 'react-rte';
 import moment from 'moment';
 
 import IncidentReportForm from '../../components/incident-report-form';
@@ -10,18 +10,17 @@ import {
 } from '../actions';
 
 function AddIncidentReport() {
-  
   const initialValues = {
     date: null,
     time: null,
     location: '',
     description: '',
-    involvedWitnessDetails: '',
+    involvedWitnessDetails: RichTextEditor.createEmptyValue(),
     recordedByName: '',
     cameraName: '',
-    report: '',
-    uninvolvedWitnessDetails: '',
-    policeOfficerDetails: ''
+    report: RichTextEditor.createEmptyValue(),
+    uninvolvedWitnessDetails: RichTextEditor.createEmptyValue(),
+    policeOfficerDetails: RichTextEditor.createEmptyValue()
   }
 
   function submission(values, dispatch) {

@@ -39,11 +39,14 @@ export default function IncidentReportShow({incidentReport}) {
     )
   }
 
-  function RecordWrapper({title, text}) {
+  function RecordWrapper({title, text, html}) {
     return (
       <div className="boss-report__record">
         <h3 className="boss-report__subtitle">{title}</h3>
-        <p className="boss-report__text">{text}</p>
+        { html
+          ? <p className="boss-report__text" dangerouslySetInnerHTML={{__html: text}}></p>
+          : <p className="boss-report__text">{text}</p>
+        }
       </div>
     )
   }
@@ -52,12 +55,12 @@ export default function IncidentReportShow({incidentReport}) {
     <div className="boss-page-main__group boss-page-main__group_adjust_ir-full">
       <div className="boss-report">
         {renderBoard(incidentReport)}
-        <RecordWrapper title="Details of Staff Involved" text={incidentReport.uninvolvedWitnessDetails} />
-        <RecordWrapper title="Details of Witnesses Involved" text={incidentReport.involvedWitnessDetails} />
-        <RecordWrapper title="Details of Police Officers in attendance" text={incidentReport.policeOfficerDetails} />
+        <RecordWrapper title="Details of Witnesses not directly Involved in the Incident" html text={incidentReport.uninvolvedWitnessDetails} />
+        <RecordWrapper title="Details of Witness Involved in the Incident" html text={incidentReport.involvedWitnessDetails} />
+        <RecordWrapper title="Details of Police Officers in attendance" html text={incidentReport.policeOfficerDetails} />
         <RecordWrapper title="CCTV Recorded By" text={incidentReport.recordedByName} />
         <RecordWrapper title="Cameras Recorded Incident" text={incidentReport.cameraName} />
-        <RecordWrapper title="Report" text={incidentReport.report} />
+        <RecordWrapper title="Report" html text={incidentReport.report} />
       </div>
     </div>
   )

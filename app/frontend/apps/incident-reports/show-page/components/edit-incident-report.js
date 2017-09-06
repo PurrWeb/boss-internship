@@ -1,6 +1,7 @@
 import React from 'react';
 import { SubmissionError } from 'redux-form/immutable';
 import { fromJS } from 'immutable';
+import RichTextEditor from 'react-rte';
 
 import moment from 'moment';
 
@@ -12,29 +13,19 @@ import {
 
 function EditIncidentReport({incidentReport}) {
 
-  function setTime(time) {
-    return {
-      hour: moment(incidentReport.incidentTime).format('hh'),
-      hour24: moment(incidentReport.incidentTime).hour(),
-      minute: moment(incidentReport.incidentTime).minute(),
-      formatted: moment(incidentReport.incidentTime).format('hh:mma'),
-      formatted24: moment(incidentReport.incidentTime).format('HH:mm')
-    };
-  }
-
   const initialValues = {
     id: incidentReport.id,
     venueId: incidentReport.venueId,
     date: moment(incidentReport.incidentTime),
-    time: setTime(incidentReport.incidentTime),
+    time: moment(incidentReport.incidentTime),
     location: incidentReport.location,
     description: incidentReport.description,
-    involvedWitnessDetails: incidentReport.involvedWitnessDetails,
+    involvedWitnessDetails: RichTextEditor.createValueFromString(incidentReport.involvedWitnessDetails, 'html'),
     recordedByName: incidentReport.recordedByName,
     cameraName: incidentReport.cameraName,
-    report: incidentReport.report,
-    uninvolvedWitnessDetails: incidentReport.uninvolvedWitnessDetails,
-    policeOfficerDetails: incidentReport.policeOfficerDetails
+    report: RichTextEditor.createValueFromString(incidentReport.report, 'html'),
+    uninvolvedWitnessDetails: RichTextEditor.createValueFromString(incidentReport.uninvolvedWitnessDetails, 'html'),
+    policeOfficerDetails: RichTextEditor.createValueFromString(incidentReport.policeOfficerDetails, 'html'),
   }
 
   function submission(values, dispatch) {

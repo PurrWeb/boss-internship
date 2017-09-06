@@ -34,8 +34,6 @@ import './vendors/owl.carousel';
 
 import "./lib/load-underscore-mixins"
 
-import "babel-polyfill"
-
 import RotaApp from "./apps/rota/rota-app"
 registerComponent("RotaApp", RotaApp)
 

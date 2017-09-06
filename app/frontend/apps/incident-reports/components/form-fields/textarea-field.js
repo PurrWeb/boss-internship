@@ -1,4 +1,5 @@
 import React from 'react';
+import RichTextEditor from 'react-rte';
 
 const TextareaField = ({
     input,
@@ -12,7 +13,11 @@ const TextareaField = ({
         <label className="boss-form__label">
           <span className="boss-form__label-text">{`${label} ${required ? '*' : ''}`}</span>
         </label>
-        <textarea {...input} placeholder={label} className={`boss-form__textarea boss-form__textarea_size_large ${touched && error && 'boss-form__textarea_state_error'}`} />
+        <RichTextEditor
+          value={input.value}
+          onChange={input.onChange}
+          className={`boss-form__textarea boss-form__textarea_size_large ${touched && error && 'boss-form__textarea_state_error'}`}
+        />
         <p className="boss-form__field-note">{note}</p>
         {
           touched && error &&

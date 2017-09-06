@@ -26,16 +26,30 @@ export const setCurrentVenue = createAction(SET_CURRENT_VENUE);
 export const setCurrentCreator = createAction(SET_CURRENT_CREATOR);
 export const setCurrentStartEnd = createAction(SET_CURRENT_START_END);
 
+function convertRichToHtmlAndCheckIfEmpty(value) {
+  if (value.getEditorState().getCurrentContent().hasText()) {
+    return value.toString('html');
+  }
+  return '';
+}
+
 export const createIncidentReport = (values) => (dispatch, getState) => {
   const venueId = getState().getIn(['page', 'currentVenueId']);
+  
   let incidentTime = '';
   
   if (values.date && values.time) {
-    values.date.hour(values.time.hour24).minute(values.time.minute);
-    incidentTime = values.date;
+    incidentTime = moment(values.date).hour(values.time.hour()).minute(values.time.minute());
   }
 
-  return createIncidentReportRequest({values: {...values, incidentTime}, venueId})
+  const parsedValues = {
+    involvedWitnessDetails: convertRichToHtmlAndCheckIfEmpty(values.involvedWitnessDetails),
+    report: convertRichToHtmlAndCheckIfEmpty(values.report),
+    uninvolvedWitnessDetails: convertRichToHtmlAndCheckIfEmpty(values.uninvolvedWitnessDetails),
+    policeOfficerDetails: convertRichToHtmlAndCheckIfEmpty(values.policeOfficerDetails),
+  }
+
+  return createIncidentReportRequest({values: {...values, ...parsedValues, incidentTime}, venueId})
     .then((resp) => {
       dispatch(addIncidentReport(resp.data))
       dispatch(hideAddNewReport());

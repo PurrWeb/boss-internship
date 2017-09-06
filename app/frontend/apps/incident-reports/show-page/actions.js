@@ -26,16 +26,29 @@ export const disableIncidentReport = (incidentReportId) => (dispatch, getState) 
     })
 }
 
+function convertRichToHtmlAndCheckIfEmpty(value) {
+  if (value.getEditorState().getCurrentContent().hasText()) {
+    return value.toString('html');
+  }
+  return '';
+}
+
 export const saveIncidentReport = (values) => (dispatch, getState) => {
   const venueId = getState().getIn(['page', 'currentVenueId']);
   let incidentTime = null;
 
   if (values.date && values.time) {
-    values.date.hour(values.time.hour24).minute(values.time.minute);
-    incidentTime = values.date;
+    incidentTime = moment(values.date).hour(values.time.hour()).minute(values.time.minute());
+  }
+  
+  const parsedValues = {
+    involvedWitnessDetails: convertRichToHtmlAndCheckIfEmpty(values.involvedWitnessDetails),
+    report: convertRichToHtmlAndCheckIfEmpty(values.report),
+    uninvolvedWitnessDetails: convertRichToHtmlAndCheckIfEmpty(values.uninvolvedWitnessDetails),
+    policeOfficerDetails: convertRichToHtmlAndCheckIfEmpty(values.policeOfficerDetails),
   }
 
-  return saveIncidentReportRequest({values: {...values, incidentTime}, venueId})
+  return saveIncidentReportRequest({values: {...values, ...parsedValues, incidentTime}, venueId})
     .then((resp) => {
       dispatch(updateIncidentReport(resp.data))
       dispatch(hideEditReport());

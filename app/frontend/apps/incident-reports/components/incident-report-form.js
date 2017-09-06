@@ -17,25 +17,12 @@ function IncidentReportForm({
   submission,
 }) {
 
-  const check24Time = ({hour, minute}) => {
-    return moment().hour(hour).minute(minute).format('HH:mm');
-  }
-
-  const timeDefaultFormat = (value) => {
-    if (!value) return;
-    if (Map.isMap(value)) {
-      return check24Time({hour: value.get('hour24'), minute: value.get('minute')});
-    }
-    return check24Time({hour: value.hour24, minute: value.minute});
-  }
-
   return (
     <form onSubmit={handleSubmit(submission)} className="boss-form">
       <div className="boss-form__group boss-form__group_role_board">
         <Fields
           names={['date', 'time']}
           label="Date and Time of Incident"
-          format={(value, name) => name === 'time' ? timeDefaultFormat(value) : value }
           component={DateTimeField}
         />
         <Field
@@ -51,13 +38,13 @@ function IncidentReportForm({
       </div>
       <Field
         name="uninvolvedWitnessDetails"
-        label="Details of Staff Involved"
+        label="Details of Witnesses not directly Involved in the Incident"
         note="(Please include Name, Phone number, and Badge number if applicable)"
         component={TextareaField}
       />
       <Field
         name="involvedWitnessDetails"
-        label="Details of Witnesses Involved"
+        label="Details of Witness Involved in the Incident"
         note="(Please include Name, Phone number, and Badge number if applicable)"
         component={TextareaField}
       />
