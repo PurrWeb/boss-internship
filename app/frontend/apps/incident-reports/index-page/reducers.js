@@ -48,8 +48,8 @@ const incidentReportsIndexReducer = handleActions({
       .set('accessibleVenues', fromJS(accessibleVenues))
       .set('reportCreators', fromJS(reportCreators))
       .set('incidentReports', fromJS(incidentReports))
-      .set('filterStartDate', moment(filterStartDate, 'DD-MM-YYYY').utc())
-      .set('filterEndDate', moment(filterEndDate, 'DD-MM-YYYY').utc())
+      .set('filterStartDate', moment(filterStartDate, 'DD-MM-YYYY'))
+      .set('filterEndDate', moment(filterEndDate, 'DD-MM-YYYY'))
       .set('filterReportCreatorId', filterReportCreatorId)
   },
   [ADD_INCIDENT_REPORT]: (state, action) => {
