@@ -17,7 +17,7 @@ class IncidentReportsController < ApplicationController
       venue_from_params.incident_reports.enabled.includes(:venue, :user, :disabled_by)
     end
 
-    report_creator_users = User.joins(:incident_reports).uniq{|user| user.id}
+    report_creator_users = User.joins(:incident_reports).includes(:name).uniq{|user| user.id}
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     
     render locals: {
