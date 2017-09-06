@@ -3,6 +3,29 @@ module Api
     class IncidentReportsController < APIController
       before_filter :web_token_authenticate!
 
+      def index
+        created_by = params[:creatorId]
+        start_date = params[:startDate]
+        end_date = params[:endDate]
+
+        incident_reports = venue_from_params.incident_reports.enabled
+        if created_by.present?
+          incident_reports = incident_reports.where(user_id: created_by)
+        end
+
+        if start_date.present? && end_date.present?
+          incident_reports = incident_reports.where(created_at: [start_date_from_params..end_date_from_params])
+        end
+
+        incident_reports = incident_reports.includes(:venue, :user, :disabled_by)
+
+        render(
+          json: incident_reports,
+          each_serializer: Api::V1::IncidentReports::IncidentReportSerializer,
+          status: 200
+        )
+      end
+
       def show
         incident_report = IncidentReport.find(params.fetch("id"))
         authorize! :manage, incident_report.venue
@@ -19,13 +42,13 @@ module Api
           requester: current_user,
           venue: venue_from_params
         ).call(
-          incident_time: Time.parse(params.fetch("incidentTime")),
+          incident_time: params.fetch("incidentTime").present? ? Time.parse(params.fetch("incidentTime")) : "",
           location: params.fetch("location"),
           description: params.fetch("description"),
           involved_witness_details: params.fetch("involvedWitnessDetails"),
           recorded_by_name: params.fetch("recordedByName"),
           camera_name: params.fetch("cameraName"),
-          report_text: params.fetch("reportText"),
+          report_text: params.fetch("report"),
           uninvolved_witness_details: params.fetch("uninvolvedWitnessDetails"),
           police_officer_details: params.fetch("policeOfficerDetails")
         )
@@ -59,7 +82,7 @@ module Api
           involved_witness_details: params.fetch("involvedWitnessDetails"),
           recorded_by_name: params.fetch("recordedByName"),
           camera_name: params.fetch("cameraName"),
-          report_text: params.fetch("reportText"),
+          report_text: params.fetch("report"),
           uninvolved_witness_details: params.fetch("uninvolvedWitnessDetails"),
           police_officer_details: params.fetch("policeOfficerDetails")
         )
@@ -96,6 +119,22 @@ module Api
       private
       def authorize_admin
         authorize! :manage, :admin
+      end
+
+      def start_date_from_params
+        result = nil
+        begin
+          result = UIRotaDate.parse(params[:startDate]).beginning_of_day
+        rescue; end
+        result
+      end
+    
+      def end_date_from_params
+        result = nil
+        begin
+          result = UIRotaDate.parse(params[:endDate]).end_of_day
+        rescue; end
+        result
       end
 
       def accessible_venues

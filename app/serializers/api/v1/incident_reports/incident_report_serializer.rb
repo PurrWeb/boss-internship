@@ -1,11 +1,11 @@
 class Api::V1::IncidentReports::IncidentReportSerializer < ActiveModel::Serializer
-  attributes  :id, :venueId, :incidentTime, :location, :description, :involvedWitnessDetails, :uninvolvedWitnessDetails, :policeOfficerDetails, :recordedByName, :cameraName, :report, :disabledAt, :disabledByUserId
+  attributes  :id, :venueId, :incidentTime, :location, :description, :involvedWitnessDetails, :uninvolvedWitnessDetails, :policeOfficerDetails, :recordedByName, :cameraName, :report, :disabledAt, :disabledByUserId, :creator, :createdAt
 
   def venueId
     object.venue.id
   end
 
-  def created_at
+  def createdAt
     object.created_at.iso8601
   end
 
@@ -39,6 +39,10 @@ class Api::V1::IncidentReports::IncidentReportSerializer < ActiveModel::Serializ
 
   def disabledByUserId
     object.disabled_by.andand.id
+  end
+
+  def creator
+    Api::V1::UserSerializer.new(object.user)
   end
 
   def report

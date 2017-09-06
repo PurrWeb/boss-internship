@@ -1,11 +1,32 @@
 <%= javascript_tag do %>
-  const window.boss = window.boss || {};
-  const bossData = {};
+  window.boss = window.boss || {};
+  bossData = {};
+  bossData.accessToken = '<%= access_token %>';
   bossData.currentVenueId = <%= current_venue.id %>;
   bossData.reportCreators = <%= api_v1_collection_json(report_creator_users, Api::V1::UserSerializer) %>;
   bossData.accessibleVenues = <%= api_v1_collection_json(accessible_venues, Api::V1::VenueSerializer) %>;
-  bossData.filterStartDate = <%= UIRotaDate.format(start_date) %>;
-  bossData.filterEndDate = <%= UIRotaDate.format(end_date) %>;
-  bossData.filterReportCreatorId = <%= filter_report_creator_id %>;
+  bossData.filterStartDate = '<%= UIRotaDate.format(start_date) %>';
+  bossData.filterEndDate = '<%= UIRotaDate.format(end_date) %>';
+  bossData.filterReportCreatorId = '<%= filter_report_creator_id %>';
   window.boss = bossData;
 <% end %>
+
+<%= react_component('IncidentReportsIndexApp', {
+  currentVenueId: current_venue.id,
+  accessToken: access_token,
+  accessibleVenues: ActiveModel::Serializer::CollectionSerializer.new(
+    accessible_venues,
+    serializer: Api::V1::VenueSerializer,
+  ),
+  reportCreators: ActiveModel::Serializer::CollectionSerializer.new(
+    report_creator_users,
+    serializer: Api::V1::UserSerializer,
+  ),
+  incidentReports: ActiveModel::Serializer::CollectionSerializer.new(
+    incident_reports,
+    serializer: Api::V1::IncidentReports::IncidentReportSerializer,
+  ),
+  filterStartDate: UIRotaDate.format(start_date),
+  filterEndDate: UIRotaDate.format(end_date),
+  filterReportCreatorId: filter_report_creator_id
+}) %>

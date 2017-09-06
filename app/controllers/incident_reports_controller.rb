@@ -9,17 +9,26 @@ class IncidentReportsController < ApplicationController
     authorize! :manage, venue_from_params
     authorize! :manage, :incident_reports
 
-    incident_reports = IncidentReport.enabled
-    report_creator_users = User.joins(:incident_reports)
+    created_by = params[:created_by]
 
+    incident_reports = if created_by.present?
+      venue_from_params.incident_reports.enabled.where(user_id: created_by).includes(:venue, :user, :disabled_by)
+    else
+      venue_from_params.incident_reports.enabled.includes(:venue, :user, :disabled_by)
+    end
+
+    report_creator_users = User.joins(:incident_reports).uniq{|user| user.id}
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+    
     render locals: {
+      access_token: access_token.token,
       incident_reports: incident_reports,
       current_venue: venue_from_params,
       report_creator_users: report_creator_users,
       accessible_venues: accessible_venues,
       start_date: start_date_from_params,
       end_date: end_date_from_params,
-      filter_report_creator_id: params[:created_by]
+      filter_report_creator_id: created_by
     }
   end
 
@@ -27,8 +36,10 @@ class IncidentReportsController < ApplicationController
     incident_report = IncidentReport.find(params[:id])
 
     authorize! :manage, incident_report
-
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+    
     render locals: {
+      access_token: access_token.token,
       incident_report: incident_report
     }
   end
