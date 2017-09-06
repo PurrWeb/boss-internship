@@ -27,7 +27,7 @@ class FormDateInterval extends React.PureComponent {
             numberOfMonths={1}
             withPortal
             showClearDates
-            displayFormat={"DD/MM/YYYY"}
+            displayFormat={"DD-MM-YYYY"}
             isOutsideRange={() => false}
             startDate={startDate}
             onDatesChange={onDatesChange}
