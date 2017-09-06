@@ -32,7 +32,6 @@ class DateTimeField extends React.Component {
               showYearDropdown
               selected={date.input.value}
               onChange={date.input.onChange}
-              dropdownMode="select"
               dateFormat="DD-MM-YYYY"
             />
           </div>

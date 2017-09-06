@@ -26,7 +26,6 @@ function AddIncidentReport() {
   function submission(values, dispatch) {
     return dispatch(createIncidentReport(values.toJS()))
       .catch(resp => {
-        console.log(resp);
         let errors = resp.response.data.errors;
         if (errors) {
           if (errors.base) {
