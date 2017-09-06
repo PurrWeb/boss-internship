@@ -16,6 +16,14 @@ export const appRoutes = {
             '&venue_id=' + venueId
         ].join("")
     },
+    rotaOverviewPdfDownload: function(options){
+      var [startDate, endDate] = oFetch(options, "startDate", "endDate");
+      return [
+          'rotas.pdf?',
+          'start_date=' + utils.formatRotaUrlDate(startDate),
+          '&end_date=' + utils.formatRotaUrlDate(endDate),
+      ].join("")
+    },
     securityRotaPdfDownload: function(options){
         var date = oFetch(options, "date");
         return [
@@ -24,11 +32,10 @@ export const appRoutes = {
         ].join("");
     },
     rotaOverview: function(options){
-        var [venueId, startDate, endDate] = oFetch(options, "venueId", "startDate", "endDate");
+        var [venueId, startDate] = oFetch(options, "venueId", "startDate");
         return [
-            "/rotas/?venue_id=" + venueId,
-            "&start_date=" + utils.formatRotaUrlDate(startDate),
-            "&end_date=" + utils.formatRotaUrlDate(endDate)
+            "/venues/" + venueId,
+            "/rotas?highlight_date=" + utils.formatRotaUrlDate(startDate),
         ].join("");
     },
     changeOrdersIndex: function(options){
@@ -238,6 +245,12 @@ const apiRoutes = {
             return "clocking/add_note"
         },
         method: "POST"
+    },
+    getRotaWeeklyDay: {
+      getPath(options){
+        return  "rota_weekly_day_data?date=" + oFetch(options, "date") + "&venue_id=" + oFetch(options, "serverVenueId")
+      },
+      method: "GET"
     }
 }
 

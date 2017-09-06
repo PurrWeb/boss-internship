@@ -24,4 +24,4 @@ export default class PublishRotaWeekButton extends React.Component {
             }
         }
     }
-}
+}  

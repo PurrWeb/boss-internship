@@ -4,6 +4,7 @@ import clockInOutAppSelectedStaffType from "./data-handlers/clock-in-out-app-sel
 import apiRequestsInProgress from "./data-handlers/api-requests-in-progress-reducer"
 import componentErrors from "./data-handlers/component-errors-reducer"
 import rotas from "./data-handlers/rotas-reducer"
+import rotaWeeklyDay from "./data-handlers/rota-weekly-day-reducer"
 import hoursAcceptancePeriods from "./data-handlers/hours-acceptance-periods"
 import pageOptions from "./data-handlers/page-options-reducer"
 import rotaForecasts from "./data-handlers/rota-forecasts-reducer"
@@ -30,6 +31,7 @@ var dataHandlers = [
     makeDefaultDataHandler("readonlyVenues"),
     makeDefaultDataHandler("readonlyClockInDays"),
     rotas,
+    rotaWeeklyDay,
     pageOptions,
     makeDefaultDataHandler("staffTypes"),
     makeDefaultDataHandler("holidays"),

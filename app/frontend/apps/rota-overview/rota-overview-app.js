@@ -3,20 +3,20 @@ import AppComponent from "../app-component";
 import { Provider} from "react-redux"
 import RotaOverviewPage from "./rota-overview-page"
 import actionCreators from "~/redux/actions"
-import { processVenueRotaOverviewObject } from "~/lib/backend-data/process-backend-objects"
 
 export default class RotaApp extends AppComponent {
     componentWillMount(){
-        let viewData = this.getViewData();
+        let viewData = this.props;
         this.store.dispatch(actionCreators.loadInitialRotaOverviewAppState(viewData));
     }
     render() {
-        var rotaDetailsObjects = this.getViewData().rotas;
-        rotaDetailsObjects = rotaDetailsObjects.map(processVenueRotaOverviewObject);
-
+        var rotaDetailsObject = this.props.rotaWeeklyDay;
         return <Provider store={this.store}>
             <RotaOverviewPage
-                rotaDetailsObjects={rotaDetailsObjects} />
+              rotaDetailsObject={rotaDetailsObject}
+              venue={this.props.venue}
+              venues={this.props.venues}
+            />
         </Provider>
     }
 }

@@ -34,7 +34,7 @@ class WeeklyRotaForecast extends React.Component {
             </div>
         }
         if (this.props.isFetchingWeeklyRotaForecast) {
-            return <Spinner />
+            return <div className="boss-spinner"></div>
         }
         if (!this.props.weeklyRotaForecast.forecast) {
             return null;

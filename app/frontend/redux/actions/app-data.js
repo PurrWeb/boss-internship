@@ -3,7 +3,8 @@ import getRotaFromDateAndVenue from "~/lib/get-rota-from-date-and-venue"
 import utils from "~/lib/utils"
 import _ from "underscore"
 import {
-    replaceWeeklyRotaForecast
+    replaceWeeklyRotaForecast,
+    replaceRotaWeeklyDay,
 } from "./rota-forecasts"
 import {
     setPageOptions
@@ -105,10 +106,12 @@ export function loadInitialClockInOutAppState(viewData) {
 export function loadInitialRotaOverviewAppState(viewData){
     return function(dispatch) {
         dispatch(getInititalLoadActions({
-            rotas: _.pluck(viewData.rotas, "rota"),
+            rotaWeeklyDay: viewData.rotaWeeklyDay,
+            // rotas: viewData.rotaWeeklyDay.rota,
             venues: viewData.venues,
-            rotaForecasts: viewData.rotaForecasts,
+            // rotaForecasts: viewData.rotaForecast,
             weeklyRotaForecast: viewData.weeklyRotaForecast,
+            venue: viewData.venue,
             pageOptions: {
                 startDate: new Date(viewData.startDate),
                 endDate: new Date(viewData.endDate)
@@ -137,6 +140,10 @@ function getInititalLoadActions(initialLoadData){
             replaceAction: replaceWeeklyRotaForecast,
             processFunction: backendData.processRotaForecastObject
         },
+        "rotaWeeklyDay": {
+          replaceAction: replaceRotaWeeklyDay,
+          processFunction: backendData.processVenueRotaOverviewObject
+        },
         "pageOptions": {
             replaceAction: actionCreators.setPageOptions,
             processFunction: backendData.processPageOptionsObject
@@ -146,7 +153,7 @@ function getInititalLoadActions(initialLoadData){
     var actions = [];
 
     for (var objectName in initialLoadData) {
-        if (objectName === "access_token") {
+        if (objectName === "access_token" || objectName === "venue") {
             // Is used a global rather than being put in the store
             continue;
         }
@@ -187,6 +194,7 @@ function getInititalLoadActions(initialLoadData){
         if (replaceAction === undefined) {
             replaceAction = actionCreators["replaceAll" + utils.capitalize(objectName)]
         }
+
         actions.push(replaceAction({
             [objectName]: processedValue
         }))

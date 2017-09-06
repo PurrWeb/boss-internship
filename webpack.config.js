@@ -66,7 +66,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           mimetype: 'image/gif',
-          limit: 30000
+          limit: 300000
         }
       },
       {

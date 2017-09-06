@@ -4,6 +4,7 @@ import {apiRoutes} from "~/lib/routes"
 import * as backendData from "~/lib/backend-data/process-backend-objects"
 import oFetch from "o-fetch"
 import { registerActionType } from "./index"
+import notify from '~/components/global-notification';
 
 export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
     return {
@@ -11,6 +12,14 @@ export function replaceWeeklyRotaForecast({weeklyRotaForecast}) {
         weeklyRotaForecast
     }
 }
+
+export function replaceRotaWeeklyDay({rotaWeeklyDay}) {
+  return {
+      type: "REPLACE_ROTA_WEEKLY_DAY",
+      rotaWeeklyDay
+  }
+}
+
 
 export const updateRotaForecast = createApiRequestActionCreator({
     requestType: "UPDATE_ROTA_FORECAST",
@@ -22,6 +31,12 @@ export const updateRotaForecast = createApiRequestActionCreator({
         },
         data: ({forecastedTakeCents}) => {return {forecasted_take_cents: forecastedTakeCents} },
         getSuccessActionData: function(responseData){
+            
+            notify('Forecast Updated Successfully', {
+              interval: 5000,
+              status: 'success'
+            });
+
             return {
                 rotaForecast: backendData.processRotaForecastObject(responseData)
             }
@@ -39,10 +54,12 @@ export const fetchWeeklyRotaForecast = createApiRequestActionCreator({
         },
         getSuccessActionData: function(responseData){
             return {
-              weeklyRotaForecast: responseData
+              weeklyRotaForecast: responseData,
             };
         }
     })
 });
 
-export const actionTypes = ["REPLACE_WEEKLY_ROTA_FORECAST"]
+
+
+export const actionTypes = ["REPLACE_WEEKLY_ROTA_FORECAST", "REPLACE_ROTA_WEEKLY_DAY"]
