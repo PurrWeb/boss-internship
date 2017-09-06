@@ -78,6 +78,14 @@ module.exports = {
         }
       },
       {
+        test: /\.gif$/,
+        loader: 'url-loader',
+        options: {
+          mimetype: 'image/gif',
+          limit: 30000
+        }
+      },
+      {
         test: /\.(woff|woff2)$/,
         loader: 'url-loader',
         options: {
