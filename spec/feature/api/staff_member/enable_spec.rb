@@ -50,7 +50,7 @@ RSpec.describe 'Enable Staff Members' do
   end
   let(:valid_params) do
     {
-      starts_at: new_starts_at,
+      starts_at: UIRotaDate.format(new_starts_at),
       main_venue_id: new_main_venue.id,
       staff_type_id: new_staff_type.id,
       other_venue_ids: new_other_venues.map(&:id),
