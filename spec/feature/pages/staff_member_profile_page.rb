@@ -12,7 +12,7 @@ module PageObject
     end
 
     def assert_on_correct_page
-      expect(find('h1').text).to eq('Staff Member Profile Placeholder')
+      find('div[data-react-class=StaffMemberProfileDetailsApp]')
     end
   end
 end
