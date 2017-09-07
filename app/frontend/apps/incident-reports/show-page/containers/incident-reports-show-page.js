@@ -5,7 +5,7 @@ import IncidentReportsShowDashboard from '../components/incident-reports-show-da
 import ContentWrapper from '../../components/content-wrapper';
 import EditIncidentReport from '../components/edit-incident-report';
 import IncidentReportShow from '../components/incident-report-show';
-
+import EditIndicator from '~/components/edit-indicator';
 
 const mapStateToProps = (state) => {
   return {
@@ -25,6 +25,7 @@ class IncidentReportsShowPage extends React.PureComponent {
 
     return (
       <div>
+        {editingReport && <EditIndicator />}
         <IncidentReportsShowDashboard
           title="Incident Reports"
           incidentReport={incidentReport.toJS()}

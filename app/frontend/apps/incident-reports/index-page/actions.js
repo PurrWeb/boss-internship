@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions';
 import utils from '~/lib/utils';
 import moment from 'moment';
+import notify from '~/components/global-notification';
 
 import {
   INITIAL_LOAD,
@@ -54,20 +55,31 @@ export const createIncidentReport = (values) => (dispatch, getState) => {
       dispatch(addIncidentReport(resp.data))
       dispatch(hideAddNewReport());
       window.scrollTo(0, 0);
+      notify('Incident Report Created Successfully', {
+        interval: 5000,
+        status: 'success'
+      });
     });
 }
 
 export const handleVenueSelect = ({venueId}) => (dispatch, getState) => {
+  let startDate = getState().getIn(['page', 'filterStartDate']);
+  let endDate = getState().getIn(['page', 'filterEndDate']);
+  const creatorId = getState().getIn(['page', 'filterReportCreatorId']);
 
-  return getIncidentReportsRequest({venueId})
+  startDate = startDate ? moment(startDate).format('DD-MM-YYYY') : null;
+  endDate = startDate ? moment(endDate).format('DD-MM-YYYY') : null;
+
+  return getIncidentReportsRequest({venueId, startDate, endDate, creatorId})
     .then((resp) => {
       dispatch(setIncidentReports(resp.data));
       dispatch(setCurrentVenue(venueId));
-      const params = {
+      const queryParams = {
         venue_id: venueId,
+        start_date: startDate,
+        end_date: endDate,
+        created_by: creatorId,
       }
-      let queryParams = utils.parseQueryString(window.location.search.substring(1));
-      
       const newParams = utils.insertUrlParams({...queryParams, venue_id: venueId});
       window.history.pushState('state', 'title', `incident_reports?${newParams}`);
     });
@@ -93,9 +105,6 @@ export const handleFilter = () => (dispatch, getState) => {
       }
       const newParams = utils.insertUrlParams(params);
       window.history.pushState('state', 'title', `incident_reports?${newParams}`);
-      
-      // dispatch(hideAddNewReport());
-      // window.scrollTo(0, 0);
     });
 }
 

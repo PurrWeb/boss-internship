@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
 import moment from 'moment';
+import notify from '~/components/global-notification';
 
 import {
   INITIAL_LOAD,
@@ -22,7 +23,11 @@ export const hideEditReport = createAction(HIDE_EDIT_REPORT);
 export const disableIncidentReport = (incidentReportId) => (dispatch, getState) => {
   return disableIncidentReportRequest(incidentReportId)
     .then(() => {
-      console.log('What to do next?');
+      notify('Incident Report Disabled Successfully', {
+        interval: 5000,
+        status: 'success'
+      });
+      window.location = '/incident_reports';
     })
 }
 
@@ -53,5 +58,9 @@ export const saveIncidentReport = (values) => (dispatch, getState) => {
       dispatch(updateIncidentReport(resp.data))
       dispatch(hideEditReport());
       window.scrollTo(0, 0);
+      notify('Incident Report Updated Successfully', {
+        interval: 5000,
+        status: 'success'
+      });
     });
 }
