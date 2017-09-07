@@ -1,7 +1,7 @@
 class HoursConfirmationController < ApplicationController
   before_action :set_venue
   before_action :set_date, only: [:index]
-  before_action :set_new_layout, only: [:current]
+  before_action :set_new_layout, only: [:index, :current]
 
   attr_reader :venue, :date
 
