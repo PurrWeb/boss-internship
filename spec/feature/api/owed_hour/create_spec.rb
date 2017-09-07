@@ -60,11 +60,26 @@ RSpec.describe 'Create owed hour API endpoint' do
       expect(response.status).to eq(ok_status)
     end
 
-    it 'should have create the owed hour' do
+    it 'should return all owed hour data grouped by week' do
+      response_json = JSON.parse(response.body)
+      expect(response_json.class).to eq(Array)
+      expect(response_json.count).to eq(1)
+      week_json = response_json.first
+
+      expect(week_json.keys).to eq(["week", "owedHours"])
+    end
+
+    it 'should create the owed hour' do
       json = JSON.parse(response.body)
-      expect(json["id"]).to eq(staff_member.owed_hours.first.id)
+
+
+      owed_hours_json = json.first.fetch("owedHours")
+      expect(owed_hours_json.count).to eq(1)
+
+      owed_hour_json = owed_hours_json.first
+      expect(owed_hour_json.fetch("id")).to eq(staff_member.owed_hours.last.id)
+    end
   end
-  end    
 
   private
   def app
