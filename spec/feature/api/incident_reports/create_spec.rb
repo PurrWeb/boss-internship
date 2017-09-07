@@ -43,7 +43,7 @@ RSpec.describe 'Create incident report API endpoint' do
       involvedWitnessDetails: involved_witness_details,
       recordedByName: recorded_by_name,
       cameraName: camera_name,
-      reportText: report_text,
+      report: report_text,
       uninvolvedWitnessDetails: uninvolved_witness_details,
       policeOfficerDetails: police_officer_details
     }
@@ -102,6 +102,8 @@ RSpec.describe 'Create incident report API endpoint' do
         "cameraName" => camera_name,
         "description" => description,
         "disabledAt" => nil,
+        "createdAt" => created_report.created_at.iso8601,
+        "creator" => JSON.parse(Api::V1::UserSerializer.new(created_report.user).to_json),
         "disabledByUserId" => nil,
         "incidentTime" => incident_time.iso8601,
         "involvedWitnessDetails" => involved_witness_details,
