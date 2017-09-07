@@ -78,6 +78,11 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
       }
     end
 
+    specify 'call to succeed' do
+      result = service.call
+      expect(result.success?).to eq(true)
+    end
+
     specify 'owed_hour is disabled' do
       service.call
       expect(owed_hour.reload.disabled?).to eq(true)
@@ -95,13 +100,13 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
 
     describe 'new owed_hour' do
       it 'should persist new hour' do
-        service.call
-        expect(new_owed_hour).to be_persisted
+        result = service.call
+        expect(result.owed_hour).to be_persisted
       end
 
       it 'is parent of old owed_hour' do
-        service.call
-        expect(owed_hour.reload.parent).to eq(new_owed_hour)
+        result = service.call
+        expect(owed_hour.reload.parent.id).to eq(result.owed_hour.id)
       end
     end
   end
