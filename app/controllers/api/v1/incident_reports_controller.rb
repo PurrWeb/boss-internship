@@ -4,20 +4,12 @@ module Api
       before_filter :web_token_authenticate!
 
       def index
-        created_by = params[:creatorId]
-        start_date = params[:startDate]
-        end_date = params[:endDate]
-
-        incident_reports = venue_from_params.incident_reports.enabled
-        if created_by.present?
-          incident_reports = incident_reports.where(user_id: created_by)
-        end
-
-        if start_date.present? && end_date.present?
-          incident_reports = incident_reports.where(created_at: [start_date_from_params..end_date_from_params])
-        end
-
-        incident_reports = incident_reports.includes(:venue, :user, :disabled_by)
+        incident_reports = IncidentReportIndexQuery.new(
+          venue: venue_from_params,
+          start_date: start_date_from_params,
+          end_date: end_date_from_params,
+          created_by: params[:creatorId],
+        ).all
 
         render(
           json: incident_reports,
@@ -124,7 +116,7 @@ module Api
       def start_date_from_params
         result = nil
         begin
-          result = UIRotaDate.parse(params[:startDate]).beginning_of_day
+          result = UIRotaDate.parse(params[:startDate])
         rescue; end
         result
       end
@@ -132,7 +124,7 @@ module Api
       def end_date_from_params
         result = nil
         begin
-          result = UIRotaDate.parse(params[:endDate]).end_of_day
+          result = UIRotaDate.parse(params[:endDate])
         rescue; end
         result
       end
