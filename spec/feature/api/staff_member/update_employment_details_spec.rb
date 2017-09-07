@@ -161,7 +161,7 @@ RSpec.describe 'Update Employment Details' do
       json = JSON.parse(response.body)
       expect(json).to eq({
         "errors" => {
-          "master_venue_id" => ["must be blank"],
+          "master_venue" => ["must be blank"],
           "sia_badge_number" => ["is required"],
           "sia_badge_expiry_date" => ["is required"]
         }
