@@ -95,14 +95,16 @@ RSpec.describe 'Update holiday API endpoint' do
 
     it 'it should return created holiday' do
       json = JSON.parse(response.body)
-      expect(json["id"]).to eq(staff_member.holidays.first.id)
-      expect(json["start_date"]).to eq(UIRotaDate.format(staff_member.holidays.first.start_date))
-      expect(json["end_date"]).to eq(UIRotaDate.format(staff_member.holidays.first.end_date))
-      expect(json["holiday_type"]).to eq(staff_member.holidays.first.holiday_type)
-      expect(json["creator"]).to eq(staff_member.holidays.first.creator.full_name)
+      holiday = staff_member.holidays.last
+
+      expect(json.fetch("id")).to eq(holiday.id)
+      expect(json.fetch("start_date")).to eq(UIRotaDate.format(holiday.start_date))
+      expect(json.fetch("end_date")).to eq(UIRotaDate.format(holiday.end_date))
+      expect(json.fetch("holiday_type")).to eq(holiday.holiday_type)
+      expect(json.fetch("creator")).to eq(holiday.creator.full_name)
   end
-  
-  end    
+
+  end
 
   context 'when validation errors occur' do
     let(:params) do
