@@ -19,10 +19,10 @@ var scrollOptions = {
 var innerWidth = 480;
 var innerHeight = 80;
 var padding = 50;
-var paddingRight = 180;
-var labelSpacing = 150;
+var paddingRight = 50;
+var labelSpacing = 50;
 var barHeight = 25;
-var outerWidth = 580; //innerWidth + padding + paddingRight;
+var outerWidth = innerWidth + padding + paddingRight;
 var outerHeight = innerHeight + padding * 2;
 
 export default class HoursChartUi extends React.Component {
@@ -96,7 +96,7 @@ export default class HoursChartUi extends React.Component {
             .enter()
             .append("g")
             .attr("transform", function(event){
-                var x  = xScale(event.timeOffset) + padding;
+                var x  = xScale(event.timeOffset) + 20;
                 return "translate(" + x + ",55)";
             })
 
@@ -192,13 +192,8 @@ export default class HoursChartUi extends React.Component {
 
         var rectangle = intervalGroup.append("rect")
             .attr("width", function(interval, i){
-                if (interval.startOffsetInHours > 24 && interval.endOffsetInHours > 24) {
-                  interval.startOffsetInHours = interval.startOffsetInHours - 24;
-                  interval.endOffsetInHours = interval.endOffsetInHours - 24;
-                }
-                var endOffsetInHours = interval.endOffsetInHours > 24 ? 24 : interval.endOffsetInHours;
-                var intervalLength = xScale(endOffsetInHours - interval.startOffsetInHours);
-                return intervalLength;
+              var intervalLengthInHours = interval.endOffsetInHours - interval.startOffsetInHours;
+              return xScale(intervalLengthInHours);
             })
             .attr("height", barHeight)
             .attr("class", function(interval){
@@ -250,17 +245,12 @@ export default class HoursChartUi extends React.Component {
         var xScale = this.getXScale()
         var chart = this.getChart()
         var hoveredInterval = this.props.interactionState.hoveredInterval;
-        const tooltipWidth = 100;
+        const tooltipWidth = 120;
 
         if (hoveredInterval) {
-            if (hoveredInterval.startOffsetInHours > 24 && hoveredInterval.endOffsetInHours > 24) {
-              hoveredInterval.startOffsetInHours = hoveredInterval.startOffsetInHours - 24;
-              hoveredInterval.endOffsetInHours = hoveredInterval.endOffsetInHours - 24;
-            }
-            var endOffsetInHours = hoveredInterval.endOffsetInHours > 24 ? 24 : hoveredInterval.endOffsetInHours;
+          var intervalWidth = xScale(hoveredInterval.endOffsetInHours) - xScale(hoveredInterval.startOffsetInHours);
+          var x = xScale(hoveredInterval.startOffsetInHours) + intervalWidth / 2 + padding + labelSpacing - tooltipWidth / 2;
 
-            var intervalWidth = xScale(endOffsetInHours) - xScale(hoveredInterval.startOffsetInHours)
-            var x = xScale(hoveredInterval.startOffsetInHours) + intervalWidth / 2 + labelSpacing - tooltipWidth / 2;
 
             var g = chart.append("g")
                 .attr("transform", "translate(" + x + ", 4)")
