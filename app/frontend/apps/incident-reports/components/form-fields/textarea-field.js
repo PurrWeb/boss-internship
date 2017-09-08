@@ -17,17 +17,19 @@ const TextareaField = ({
           <RichTextEditor
             value={input.value}
             onChange={input.onChange}
-            className={`boss-form__textarea boss-form__textarea_size_large ${touched && error && 'boss-form__textarea_state_error'}`}
+            className={`${touched && error && 'wysiwyg-editor_state_error'}`}
+            toolbarClassName="wysiwyg-editor__toolbar"
+            editorClassName="wysiwyg-editor__editor"
             toolbarConfig={{
               display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'HISTORY_BUTTONS'],
               INLINE_STYLE_BUTTONS: [
-                {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
-                {label: 'Italic', style: 'ITALIC'},
-                {label: 'Underline', style: 'UNDERLINE'}
+                {label: 'Bold', style: 'BOLD', className: 'wysiwyg-editor__button'},
+                {label: 'Italic', style: 'ITALIC', className: 'wysiwyg-editor__button'},
+                {label: 'Underline', style: 'UNDERLINE', className: 'wysiwyg-editor__button'}
               ],
               BLOCK_TYPE_BUTTONS: [
-                {label: 'UL', style: 'unordered-list-item'},
-                {label: 'OL', style: 'ordered-list-item'}
+                {label: 'UL', style: 'unordered-list-item', className: 'wysiwyg-editor__button'},
+                {label: 'OL', style: 'ordered-list-item', className: 'wysiwyg-editor__button'}
               ]
             }}
           />
