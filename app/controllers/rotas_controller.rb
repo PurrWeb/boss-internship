@@ -92,11 +92,11 @@ class RotasController < ApplicationController
   end
 
   def render_rota_pdf
-    unless start_date_from_params.present? && venue_from_params.present?
-      return redirect_to(venue_rotas_path(index_redirect_params.merge(format: :pdf)))
-    end
+    raise 'Invalid params' unless start_date_from_params.present? && venue_from_params.present?
+
     venue = venue_from_params
     start_date = start_date_from_params
+
     week = RotaWeek.new(start_date)
 
     pdf = RotaPDF.new(RotaPDFTableData.new(week: week, venue: venue))
