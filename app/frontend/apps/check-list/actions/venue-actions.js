@@ -15,6 +15,7 @@ export const changeVenue = (venue) => (dispatch, getState) => {
     }
   }).then((resp) => {
     dispatch(fillChecklists(resp.data));
+    window.history.pushState('state', 'title', `check_lists?venue_id=${venue.id}`);
   });
 }
 
