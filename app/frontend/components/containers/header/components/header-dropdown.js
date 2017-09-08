@@ -10,6 +10,7 @@ export default class HeaderDropdown extends Component {
     this.state = {
       quickMenu: this.props.quickMenu,
     };
+    
     this.scrollOptions = {
       mouseWheel: true,
       interactiveScrollbars: true,
@@ -17,7 +18,7 @@ export default class HeaderDropdown extends Component {
       fadeScrollbars: false,
       click: true,
       scrollbars: true,
-    }
+    };
   }
 
   componentWillMount() {
@@ -45,7 +46,7 @@ export default class HeaderDropdown extends Component {
   }
 
   render() {
-    return <div className="boss-page-header__dropdowns">
+    return (
       <div className="boss-page-header__dropdown boss-page-header__dropdown_role_search boss-page-header__dropdown_no-select boss-page-header__dropdown_state_opened">
         <div className="boss-page-header__dropdown-header">
             <p className="boss-page-header__dropdown-label boss-page-header__dropdown-label_role_search">Search</p>
@@ -68,6 +69,6 @@ export default class HeaderDropdown extends Component {
           </ReactIScroll>
         </div>
       </div>
-    </div>
+    )
   };
 };

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import HeaderDropdown from './components/header-dropdown';
-
+import iScroll from 'iscroll';
+import ReactIScroll from 'react-iscroll';
+import utils from '~/lib/utils';
 
 export const EmptyHeader = () => {
   return (
@@ -17,11 +19,23 @@ export default class Header extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       isDropdownOpen: false,
       isUserDropdownOpen: false,
-    };    
+      isGlobalVenueOpen: false,
+    };
+
+    this.queryString = new URLSearchParams(window.location.search);
+    this.globalVenueId = this.queryString.get('venue_id');
+
+    this.scrollOptions = {
+      mouseWheel: true,
+      interactiveScrollbars: true,
+      shrinkScrollbars: 'scale',
+      fadeScrollbars: false,
+      click: true,
+      scrollbars: true,
+    };
   };
 
   componentWillMount() {
@@ -47,7 +61,7 @@ export default class Header extends Component {
   }
 
   closeAllDropdowns = () => {
-    this.setState({isDropdownOpen: false, isUserDropdownOpen: false});
+    this.setState({isDropdownOpen: false, isUserDropdownOpen: false, isGlobalVenueOpen: false});
   }
 
   handleToggleDropdown = () => {
@@ -59,6 +73,33 @@ export default class Header extends Component {
     this.closeAllDropdowns();
     this.setState({isUserDropdownOpen: !this.state.isUserDropdownOpen})
   };
+
+  toggleGlobalVenue = () => {
+    this.closeAllDropdowns();
+    this.setState(state => ({isGlobalVenueOpen: !state.isGlobalVenueOpen}));
+  }
+
+  getCurrentVenueName(venues, currentVenueId) {
+    const currentVenue = venues.find(venue => {
+      return venue.id === parseInt(currentVenueId);
+    });
+
+    if (currentVenue) {
+      return currentVenue.name;
+    } else {
+      throw Error('Undefined venue id');
+    }
+  }
+
+  renderVenues(venues) {
+    return venues.map((venue, index) => {
+      let venueLink = new URLSearchParams(window.location.search);
+      venueLink.set('venue_id', venue.id);
+      return (
+        <a href={`${window.location.href.split('?')[0]}?${venueLink.toString()}`} key={index} className="boss-menu__link">{venue.name}</a>
+      );
+    })
+  }
 
   render() {
     return <header className="boss-page-header">
@@ -73,21 +114,43 @@ export default class Header extends Component {
         >
           Search
         </button>
+  
+        { this.globalVenueId && <div className="boss-page-header__control boss-page-header__control_role_site-select">
+          <p className="boss-page-header__control-value">{this.getCurrentVenueName(this.props.venues, this.globalVenueId)}</p>
+          <button
+            onClick={this.toggleGlobalVenue}
+            className="boss-page-header__control-arrow"
+          ></button>
+        </div> }
+
         <button className="boss-page-header__action boss-page-header__action_role_profile" onClick={this.handleToggleUserDropdown}>Profile</button>
         { this.state.isUserDropdownOpen && 
           <div className="boss-page-header__dropdown boss-page-header__dropdown_role_profile boss-page-header__dropdown_state_opened">
             <nav className="boss-menu">
-              <p href="::javascript" className="boss-menu__label boss-menu__label_role_user">{this.props.user.name}</p>
+              <p className="boss-menu__label boss-menu__label_role_user">{this.props.user.name}</p>
               <a href="/auth/sign_out" data-method="delete" className="boss-menu__link boss-menu__link_role_logout">Logout</a>
             </nav>
           </div>
         }
-        { this.state.isDropdownOpen && <HeaderDropdown
-          ref={(headerDropdown) => this.headerDropdown = headerDropdown}
-          quickMenu={ this.props.quickMenu }
-          handleEscPress={this.handleEscPress}
-          closeDropdown={this.closeAllDropdowns}
-        /> }
+        <div className="boss-page-header__dropdowns">
+          { this.state.isDropdownOpen && <HeaderDropdown
+            ref={(headerDropdown) => this.headerDropdown = headerDropdown}
+            quickMenu={ this.props.quickMenu }
+            handleEscPress={this.handleEscPress}
+            closeDropdown={this.closeAllDropdowns}
+          /> }
+          { this.state.isGlobalVenueOpen && <div className={`boss-page-header__dropdown boss-page-header__dropdown_role_site-select boss-page-header__dropdown_state_opened`}>
+            <div className="boss-page-header__dropdown-scroll">
+              <ReactIScroll iScroll={iScroll} options={this.scrollOptions}>
+                <div className="boss-page-header__dropdown-content">
+                  <div className="boss-menu">
+                    { this.renderVenues(this.props.venues) }
+                  </div>
+                </div>
+              </ReactIScroll>
+            </div>
+          </div> }
+        </div>
       </div>
     </header>
   }

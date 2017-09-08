@@ -73,7 +73,9 @@ export const getRotaWeeklyDay = createApiRequestActionCreator({
         payload: successActionData
       });
       const date = oFetch(requestOptions, "date");
-      window.history.pushState('state', 'title', `rotas?highlight_date=${date}`);
+      const venue_id = oFetch(requestOptions, "serverVenueId");
+      
+      window.history.pushState('state', 'title', `rotas?highlight_date=${date}&venue_id=${venue_id}`);
     }
   }
 });

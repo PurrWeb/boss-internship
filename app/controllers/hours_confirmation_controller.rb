@@ -199,13 +199,13 @@ class HoursConfirmationController < ApplicationController
   def index_redirect_params
     {
       date: date || UIRotaDate.format(Time.current.to_date),
-      venue_id: venue_from_params.andand.id || current_user.default_venue.id
+      venue_id: CurrentVenueService.new(user: current_user, venue_id: params[:venue_id]).venue.id
     }
   end
 
   def current_redirect_params
     {
-      venue_id: current_user.default_venue.id
+      venue_id: CurrentVenueService.new(user: current_user, venue_id: params[:venue_id]).venue.id
     }
   end
 end

@@ -23,21 +23,6 @@ export default function DashboardDate({
           </span>
         </h1>
         <div className="boss-page-dashboard__controls-group">
-          <div className="boss-form">
-            <div className="boss-form__row boss-form__row_position_last">
-              <div className="boss-form__control">
-                <p className="boss-form__label boss-form__label_type_icon-venue boss-form__label_type_icon-single"></p>
-                <div className="boss-form__select">
-                  <VenueDropdown
-                    venues={venues}
-                    selectedVenues={selectedVenues}
-                    clearable={false}
-                    onChange={(venueClientIds) => onChange({date, venueClientId: venueClientIds[0]})}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div className="boss-page-dashboard__group">

@@ -5,7 +5,6 @@ import makeDataHandler from "./make-data-handler"
 
 export default makeDataHandler("rotaWeeklyDay", {
     UPDATE_ROTA_WEEKLY_DAY: (state, action) => {
-      console.log(action.payload);
       return action.payload.rotaWeeklyDay;
     },
     REPLACE_ROTA_WEEKLY_DAY: {

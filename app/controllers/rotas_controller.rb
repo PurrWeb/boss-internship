@@ -72,7 +72,7 @@ class RotasController < ApplicationController
 
   def render_rota_index
     unless highlight_date_from_params.present? && venue_from_params.present?
-      return redirect_to(venue_rotas_path(index_redirect_params))
+      return redirect_to(rotas_path(index_redirect_params))
     end
 
     venue = venue_from_params
@@ -131,7 +131,7 @@ class RotasController < ApplicationController
   end
 
   def index_redirect_params
-    venue = venue_from_params || current_user.default_venue || Venue.first
+    venue = venue_from_params
     highlight_date = highlight_date_from_params || default_highlight_date
     {
       venue_id: venue.andand.id,
@@ -144,6 +144,6 @@ class RotasController < ApplicationController
   end
 
   def venue_from_params
-    @venue_from_params ||= accessible_venues.find_by(id: params[:venue_id])
+    @venue_from_params ||= CurrentVenueService.new(user: current_user, venue_id: params[:venue_id]).venue
   end
 end
