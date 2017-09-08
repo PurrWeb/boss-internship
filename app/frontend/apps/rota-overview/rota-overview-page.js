@@ -15,6 +15,7 @@ import RotaCurrentDay from "./components/rota-current-day"
 import VenuesSelect from '~/components/select-venue';
 import actionCreators from "~/redux/actions";
 import { processVenueRotaOverviewObject } from "~/lib/backend-data/process-backend-objects"
+import oFetch from "o-fetch";
 
 const ROTA_PUBLISHED_STATUS = "published"
 
@@ -34,24 +35,24 @@ class RotaOverviewPage extends Component {
       };
 
     }
-    
+
     changeVenue = (venue) => {
       location.href = appRoutes.rotaOverview({
         venueId: venue.value,
         startDate: this.state.highlightDate
       })
     }
-    
+
     render() {
         const storeRota = this.props.storeRotas;
         const venues = this.state.venues;
         const rotaDetailsObject = this.props.rotaDetailsObject;
-        
+
         const pdfHref = appRoutes.rotaOverviewPdfDownload({
-          startDate: this.props.startDate,
-          endDate: this.props.endDate
+          venueId: oFetch(this.props, "venue.id"),
+          highlightDate: oFetch(this.state, "highlightDate")
         });
-      
+
         var rotaDetails = storeRota;
 
         var staffTypesWithShifts = selectStaffTypesWithShifts({

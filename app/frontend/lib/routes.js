@@ -17,11 +17,11 @@ export const appRoutes = {
         ].join("")
     },
     rotaOverviewPdfDownload: function(options){
-      var [startDate, endDate] = oFetch(options, "startDate", "endDate");
+      let [highlightDate, venueId] = oFetch(options, "highlightDate", "venueId");
       return [
           'rotas.pdf?',
-          'start_date=' + utils.formatRotaUrlDate(startDate),
-          '&end_date=' + utils.formatRotaUrlDate(endDate),
+          'highlight_date=' + utils.formatRotaUrlDate(highlightDate),
+          '&venue_id=' + venueId,
       ].join("")
     },
     securityRotaPdfDownload: function(options){
