@@ -40,7 +40,6 @@ import {
    CHECKLIST_DELETED,
 } from '../constants/notifications';
 
-
 import {toggleEditMode} from './toggle-edit-mode';
 
 import { fromJS, Map, List } from 'immutable';
@@ -162,7 +161,7 @@ export const submitChecklist = (checklistId) => (dispatch, getState) => {
     });
     dispatch(showNotification({
       status: NOTIFICATION_ERROR,
-      mesasge: SUBMITTING_FAILED,
+      message: SUBMITTING_FAILED,
     }));
     dispatch(raiseValidationError({errors, checklistId}));
   })
