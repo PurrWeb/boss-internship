@@ -18,6 +18,18 @@ const TextareaField = ({
             value={input.value}
             onChange={input.onChange}
             className={`boss-form__textarea boss-form__textarea_size_large ${touched && error && 'boss-form__textarea_state_error'}`}
+            toolbarConfig={{
+              display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'HISTORY_BUTTONS'],
+              INLINE_STYLE_BUTTONS: [
+                {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
+                {label: 'Italic', style: 'ITALIC'},
+                {label: 'Underline', style: 'UNDERLINE'}
+              ],
+              BLOCK_TYPE_BUTTONS: [
+                {label: 'UL', style: 'unordered-list-item'},
+                {label: 'OL', style: 'ordered-list-item'}
+              ]
+            }}
           />
         </div>
         <p className="boss-form__field-note">{note}</p>
