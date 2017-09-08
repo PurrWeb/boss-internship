@@ -9,11 +9,11 @@ class StaffDayList extends React.Component {
         var readOnlyclockInDays = this.props.readonlyClockInDays;
 
         if (_.values(clockInDays).length === 0 && _.values(readOnlyclockInDays).length === 0) {
-            if (_.values(this.props.hoursAcceptancePeriods).length === 0) {
-                return <p>
-                    There are no hours to confirm.
-                </p>
-            }
+          if (_.values(this.props.hoursAcceptancePeriods).length === 0) {
+            return <div className="boss-page-main__inner boss-page-main__inner_space_regular boss-page-main__inner_opaque">
+              <p className="boss-page-main__text-placeholder">There are no hours to confirm.</p>
+            </div>;
+          }
         }
 
         return <div className="boss-page-main__inner">
