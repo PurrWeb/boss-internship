@@ -7,7 +7,7 @@ import HoursConfirmationApp from "./index"
 import Promise from "bluebird"
 import _ from "underscore"
 
-import "~lib/load-underscore-mixins"
+import "~/lib/load-underscore-mixins"
 
 function deepClone(data){
     return JSON.parse(JSON.stringify(data))

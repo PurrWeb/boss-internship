@@ -2,11 +2,24 @@ import React from "react"
 import d3 from "d3"
 import utils from "~/lib/utils"
 import makeRotaHoursXAxis from "~/lib/make-rota-hours-x-axis"
+import iScroll from 'iscroll'
+import ReactIScroll from 'react-iscroll'
 
-var innerWidth = 525;
+
+var scrollOptions = {
+  scrollX: true,
+  scrollY: false,
+  scrollbars: true,
+  // mouseWheel: true,
+  interactiveScrollbars: true,
+  shrinkScrollbars: 'scale',
+  fadeScrollbars: false,
+  click: true
+};
+var innerWidth = 480;
 var innerHeight = 80;
-var padding = 20;
-var paddingRight = 200;
+var padding = 50;
+var paddingRight = 50;
 var labelSpacing = 50;
 var barHeight = 25;
 var outerWidth = innerWidth + padding + paddingRight;
@@ -15,7 +28,13 @@ var outerHeight = innerHeight + padding * 2;
 export default class HoursChartUi extends React.Component {
     render(){
         return <div className="hours-chart">
-            <svg ref={(el) => this.el = el} />
+          <div className="hours-chart__inner">
+            <ReactIScroll iScroll={iScroll} options={scrollOptions}>
+              <div className="hours-chart__content">
+                <svg ref={(el) => this.el = el} />
+              </div>
+            </ReactIScroll>              
+          </div>
         </div>
     }
     componentDidMount(){
@@ -51,7 +70,7 @@ export default class HoursChartUi extends React.Component {
 
         var chartContent = chart
             .append("g")
-            .attr("transform", "translate(" + labelSpacing + ", 0)")
+            .attr("transform", "translate(" + 60 + ", 0)")
 
 
         this.renderXAxis({chartContent, xScale})
@@ -77,8 +96,8 @@ export default class HoursChartUi extends React.Component {
             .enter()
             .append("g")
             .attr("transform", function(event){
-                var x  = xScale(event.timeOffset) + padding;
-                return "translate(" + x + ",40)";
+                var x  = xScale(event.timeOffset) + 20;
+                return "translate(" + x + ",55)";
             })
 
         lineContainers
@@ -149,8 +168,8 @@ export default class HoursChartUi extends React.Component {
     }
     renderIntervals({chart, xScale, intervals, lane}){
         var y = {
-            "amended": 70,
-            "clocked": 40,
+            "amended": 100,
+            "clocked": 55,
             "rotaed": 10
         }[lane]
         var intervalGroup = chart
@@ -160,7 +179,7 @@ export default class HoursChartUi extends React.Component {
             .enter()
             .append("g")
             .attr("transform", function(interval, i){
-                var x = xScale(interval.startOffsetInHours) + padding
+                var x = xScale(interval.startOffsetInHours) + padding - 30;
                 return "translate(" + x + "," + y + ")"
             })
             .attr("class", function(interval){
@@ -173,8 +192,8 @@ export default class HoursChartUi extends React.Component {
 
         var rectangle = intervalGroup.append("rect")
             .attr("width", function(interval, i){
-                var intervalLengthInHours = interval.endOffsetInHours - interval.startOffsetInHours;
-                return xScale(intervalLengthInHours);
+              var intervalLengthInHours = interval.endOffsetInHours - interval.startOffsetInHours;
+              return xScale(intervalLengthInHours);
             })
             .attr("height", barHeight)
             .attr("class", function(interval){
@@ -226,12 +245,12 @@ export default class HoursChartUi extends React.Component {
         var xScale = this.getXScale()
         var chart = this.getChart()
         var hoveredInterval = this.props.interactionState.hoveredInterval;
-        const tooltipWidth = 90;
+        const tooltipWidth = 120;
 
         if (hoveredInterval) {
-            var intervalWidth = xScale(hoveredInterval.endOffsetInHours) - xScale(hoveredInterval.startOffsetInHours)
-            var x = xScale(hoveredInterval.startOffsetInHours) + intervalWidth / 2 +
-                padding + labelSpacing - tooltipWidth / 2;
+          var intervalWidth = xScale(hoveredInterval.endOffsetInHours) - xScale(hoveredInterval.startOffsetInHours);
+          var x = xScale(hoveredInterval.startOffsetInHours) + intervalWidth / 2 + padding + labelSpacing - tooltipWidth / 2;
+
 
             var g = chart.append("g")
                 .attr("transform", "translate(" + x + ", 4)")
@@ -258,17 +277,17 @@ export default class HoursChartUi extends React.Component {
     renderLaneLabels({chart}){
         var group = chart
             .append("g")
-            .attr("transform", "translate(" + (padding + labelSpacing - 10) + ",0)")
+            .attr("transform", "translate(" + 60 + ",0)")
             .attr("style", "font-size: .85em")
         group.append("text")
             .text("Rotaed")
             .attr("transform", "translate(0, 25)")
         group.append("text")
             .text("Clocked")
-            .attr("transform", "translate(0, 55)")
+            .attr("transform", "translate(0, 75)")
         group.append("text")
             .text("Amended")
-            .attr("transform", "translate(0, 85)")
+            .attr("transform", "translate(0, 125)")
         group.selectAll("text")
             .attr("text-anchor", "end")
     }
@@ -276,7 +295,7 @@ export default class HoursChartUi extends React.Component {
         var xAxis = makeRotaHoursXAxis(xScale);
          chartContent
             .append("g")
-            .attr("transform", "translate(" + padding + "," + (innerHeight + padding) + ")")
+            .attr("transform", "translate(20, 150)")
             .attr("class", "axis")
             .call(xAxis);
     }

@@ -1,4 +1,4 @@
-import utils from "../lib/utils"
+import utils from "~/lib/utils"
 
 describe("utils.stringStartsWith", function() {
     it("Knows that 'hello' starts with 'h'", function() {
