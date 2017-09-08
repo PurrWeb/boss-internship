@@ -13,11 +13,13 @@ const TextareaField = ({
         <label className="boss-form__label">
           <span className="boss-form__label-text">{`${label} ${required ? '*' : ''}`}</span>
         </label>
-        <RichTextEditor
-          value={input.value}
-          onChange={input.onChange}
-          className={`boss-form__textarea boss-form__textarea_size_large ${touched && error && 'boss-form__textarea_state_error'}`}
-        />
+        <div className="wysiwyg-editor">
+          <RichTextEditor
+            value={input.value}
+            onChange={input.onChange}
+            className={`boss-form__textarea boss-form__textarea_size_large ${touched && error && 'boss-form__textarea_state_error'}`}
+          />
+        </div>
         <p className="boss-form__field-note">{note}</p>
         {
           touched && error &&
