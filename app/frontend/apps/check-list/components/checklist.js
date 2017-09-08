@@ -19,7 +19,6 @@ import {
 class CheckValidation extends React.PureComponent {
   render() {
     const {answer, error} = this.props;
-    console.log(error);
     return <div>{answer.get('description')}</div>
   }
 }
