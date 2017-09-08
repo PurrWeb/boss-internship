@@ -92,12 +92,12 @@ class RotasController < ApplicationController
   end
 
   def render_rota_pdf
-    unless start_date_from_params.present? && venue_from_params.present?
-      return redirect_to(venue_rotas_path(index_redirect_params.merge(format: :pdf)))
-    end
+    raise 'Invalid params' unless highlight_date_from_params.present? && venue_from_params.present?
+
     venue = venue_from_params
-    start_date = start_date_from_params
-    week = RotaWeek.new(start_date)
+    highlight_date = highlight_date_from_params
+
+    week = RotaWeek.new(highlight_date_from_params)
 
     pdf = RotaPDF.new(RotaPDFTableData.new(week: week, venue: venue))
     #TODO: Extract File Timestamp Format to somewhere
@@ -119,12 +119,6 @@ class RotasController < ApplicationController
   def highlight_date_from_params
     if params[:highlight_date].present?
       UIRotaDate.parse(params[:highlight_date])
-    end
-  end
-
-  def start_date_from_params
-    if highlight_date_from_params.present?
-      RotaWeek.new(highlight_date_from_params).start_date
     end
   end
 
