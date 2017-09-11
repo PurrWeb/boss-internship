@@ -20,7 +20,7 @@ module Api
 
       def show
         incident_report = IncidentReport.find(params.fetch("id"))
-        authorize! :manage, incident_report.venue
+        authorize! :manage, incident_report
 
         render(
           json: incident_report,

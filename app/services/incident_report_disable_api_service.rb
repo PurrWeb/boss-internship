@@ -8,7 +8,7 @@ class IncidentReportDisableApiService
   attr_reader :requester, :incident_report, :ability, :now
 
   def call!
-    ability.authorize! :manage, incident_report.venue
+    ability.authorize! :manage, incident_report
 
     incident_report.update_attributes!(
       disabled_by: requester,
