@@ -101,11 +101,15 @@ RSpec.describe 'Show incident report API endpoint' do
   end
 
   context 'when report is disabled' do
+    let(:call_time) { now.round }
+
     before do
-      IncidentReportDisableApiService.new(
-        requester: user,
-        incident_report: existing_incident_report
-      ).call!
+      travel_to call_time do
+        IncidentReportDisableApiService.new(
+          requester: user,
+          incident_report: existing_incident_report
+        ).call!
+      end
     end
 
     specify 'it should succeed' do
@@ -113,11 +117,7 @@ RSpec.describe 'Show incident report API endpoint' do
     end
 
     specify 'it should return report data' do
-      json_response = nil
-      call_time = now.round
-      travel_to call_time do
-        json_response = JSON.parse(response.body)
-      end
+      json_response = JSON.parse(response.body)
       existing_incident_report.reload
 
       expect(
