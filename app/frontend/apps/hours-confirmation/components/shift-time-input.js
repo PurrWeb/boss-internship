@@ -38,14 +38,15 @@ export default class ShiftTimeInput extends Component {
             return this.props.endsAt;
         }
     }
-    render(){
-        var options = this.getPossibleShiftTimes().map(function(timeString){
-            return {
-                value: timeString,
-                label: timeString
-            }
-        });
 
+    getOptions = (input, callback) => {
+      callback(null, {
+        options: this.getPossibleShiftTimes().map(timeString => ({value: timeString, label: timeString})),
+        complete: true
+      })
+    }
+
+    render(){
         var date = this.getDateFromProps();
         var dateValue;
         if (utils.dateIsValid(date)) {
@@ -58,17 +59,17 @@ export default class ShiftTimeInput extends Component {
         if (this.props.readonly) {
             readonlyString = dateValue;
         } else {
-            select = <Select
+            select = <Select.Async
                 value={dateValue}
-                options={options}
+                loadOptions={this.getOptions}
                 clearable={false}
+                searchable={true}
                 onChange={(value) => this.updateTime(value)}
             />
         }
-
-        return <div className="shift-time-input">
-            {select}
-            {readonlyString}
+        return <div className="boss-time-shift__select">
+              {select}
+              <p className="boss-time-shift__select-value">{readonlyString}</p>
         </div>
     }
     getPossibleShiftTimes(){
