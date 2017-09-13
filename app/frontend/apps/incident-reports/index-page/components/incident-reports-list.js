@@ -1,4 +1,5 @@
 import React from 'react';
+import utils from "~/lib/utils";
 import moment from 'moment';
 
 export default function IncidentReportsList({incidentReports}) {
@@ -12,10 +13,10 @@ export default function IncidentReportsList({incidentReports}) {
       </div>
     )
   }
-  
+
   const renderReport = (report, index) => {
 
-    const incidentTime = moment(report.incidentTime).format('DD-MM-YYYY HH:mm');
+    const incidentTime = moment(report.incidentTime).format(utils.humanDateFormatWithTime());
 
     return (
       <div key={index} className="boss-check boss-check_role_board">

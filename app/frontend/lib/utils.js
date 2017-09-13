@@ -114,6 +114,9 @@ var utils =  {
             replaceFunctionPropsWithStrings(actual)
         );
     },
+    humanDateFormatWithTime(){
+      return 'HH:mm ddd DD-MM-YYYY';
+    },
     formatRotaUrlDate(date){
         return moment(date).format("DD-MM-YYYY");
     },
