@@ -4,6 +4,7 @@ FactoryGirl.define do
 
     forecasted_take_cents 0
     total_cents 0
+    overhead_total_cents 0
     staff_total_cents 0
     pr_total_cents 0
     kitchen_total_cents 0
