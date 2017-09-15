@@ -82,9 +82,9 @@ module Api
       private
       def owed_hour_from_params
         {
-          date: UIRotaDate.parse(params.fetch(:date)),
-          starts_at: Integer(params.fetch(:startsAt)),
-          ends_at: Integer(params.fetch(:endsAt)),
+          date: UIRotaDate.parse!(params.fetch(:date)),
+          starts_at: params.fetch(:startsAt) && Integer(params.fetch(:startsAt)),
+          ends_at: params.fetch(:endsAt) && Integer(params.fetch(:endsAt)),
           note: params[:note]
         }
       end
