@@ -24,7 +24,8 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday}) => {
   const cerated = `(${moment(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
   const startDate = moment(holiday.get('start_date'), 'D-M-Y').format('DD MMM Y')
   const endDate = moment(holiday.get('end_date'), 'D-M-Y').format('DD MMM Y')
-
+  const editable = holiday.get('editable');
+  
   return <div className="boss-check boss-check_role_panel boss-check_page_smp-holidays">
     <div className="boss-check__row">
       <div className="boss-check__cell">
@@ -57,14 +58,14 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday}) => {
         </div>
       </div>
     }
-    <div className="boss-check__row boss-check__row_role_actions">
+    { editable && <div className="boss-check__row boss-check__row_role_actions">
       <button className="boss-button boss-button_role_update boss-check__action" onClick={() => (onEdit(holiday))}>
         Edit
       </button>
       <button className="boss-button boss-button_role_cancel boss-check__action" onClick={() => (onDelete(holiday.get('id')))}>
         Delete
       </button>
-    </div>
+    </div> }
   </div>
 }
 export default class HolidayasMobileItems extends React.Component {

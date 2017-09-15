@@ -153,8 +153,8 @@ export const updatePersonalDetails = (payload) => {
   } = payload;
 
   return http.post(`/api/v1/staff_members/${staffMemberId}/update_personal_details`, {
-    gender: gender,
-    date_of_birth: moment(date_of_birth).format("DD-MM-YYYY"),
+    gender: gender ? gender.toLowerCase() : null,
+    date_of_birth: date_of_birth ? moment(date_of_birth).format("DD-MM-YYYY") : null,
     first_name,
     surname
   });

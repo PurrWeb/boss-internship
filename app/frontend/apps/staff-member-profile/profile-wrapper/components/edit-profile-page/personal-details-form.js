@@ -3,6 +3,8 @@ import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormInput from '~/components/boss-form/boss-form-input';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
+import humanize from 'string-humanize';
+import notify from '~/components/global-notification';
 
 import {updatePersonalDetailsRequest} from '../../actions';
 
@@ -22,10 +24,11 @@ const PersonalDetailsForm = ({
   
   const submission = (values, dispatch) => {
     return dispatch(updatePersonalDetailsRequest(values.toJS()))
-      .then((resp) => {
-        onSubmissionComplete(resp);
-      })    
       .catch((resp) => {
+        notify('Updating Staff Member Personal Details was Failed', {
+          interval: 5000,
+          status: 'error'
+        });
         const errors = resp.response.data.errors;
         if (errors) {
           window.scrollTo(0, 0);
@@ -33,7 +36,9 @@ const PersonalDetailsForm = ({
         }
       });
   }
-    
+
+  const capitalizedGenderValues = genderValues.map(gender => humanize(gender));
+
   return (
     <form
       onSubmit={handleSubmit(submission)}
@@ -62,7 +67,7 @@ const PersonalDetailsForm = ({
         required
         label="Gender"
         placeholder="Select gender ..."
-        options={genderValues.toJS()}
+        options={capitalizedGenderValues.toJS()}
       />
       <Field
         name="date_of_birth"

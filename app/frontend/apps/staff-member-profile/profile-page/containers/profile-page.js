@@ -81,11 +81,13 @@ class ProfilePage extends React.PureComponent {
       "national_insurance_number",
       (item, name="status_statement") => {
         let statusEnumValue = oFetch(item, name);
-        let statusText = oFetch(starterEmploymentStatusLabels, statusEnumValue);
-        return {
-          name: "Status Statement",
-          value: statusText
-        };
+        if (statusEnumValue) {
+          let statusText = oFetch(starterEmploymentStatusLabels, statusEnumValue);
+          return {
+            name: "Status Statement",
+            value: statusText
+          };
+        }
       }
     ];
 

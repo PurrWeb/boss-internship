@@ -7,6 +7,7 @@ import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormInput from '~/components/boss-form/boss-form-input';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
 import BossFormEmployementStatus from '~/components/boss-form/boss-form-employement-status';
+import notify from '~/components/global-notification';
 
 import {updateEmploymentDetailsRequest} from '../../actions';
 import {SECURITY_TYPE_ID} from '../../constants';
@@ -31,10 +32,12 @@ let EmploymentDetailsForm = ({
   
   const submission = (values, dispatch) => {
     return dispatch(updateEmploymentDetailsRequest(values.toJS()))
-      .then((resp) => {
-        onSubmissionComplete(resp);
-      })
-      .catch((resp) => {
+    .catch((resp) => {
+        notify('Updating Staff Member Employment Details was Failed', {
+          interval: 5000,
+          status: 'error'
+        });
+
         const errors = resp.response.data.errors;
         if (errors) {
           window.scrollTo(0, 0);
@@ -166,8 +169,6 @@ EmploymentDetailsForm = reduxForm({
   onChange: (values, dispatch, props) => {
     if(values.get('staff_type') === SECURITY_TYPE_ID) {
       dispatch(change('employment-details-form', 'master_venue', null));
-    } else {
-      dispatch(change('employment-details-form', 'master_venue', values.get('master_venue') || props.initialValues.get('master_venue')));
     }
   },
   validate,

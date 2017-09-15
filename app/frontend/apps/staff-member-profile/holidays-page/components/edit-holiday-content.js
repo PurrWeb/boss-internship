@@ -21,7 +21,7 @@ class EditHolidayContent extends React.PureComponent {
 
     const initialValues = {
       note: oFetch(holidayData, 'note'),
-      startDate: moment(oFetch(holiday, 'start_date'), 'DD-MM-YYYY'),
+      startDate: moment(oFetch(holidayData, 'start_date'), 'DD-MM-YYYY'),
       endDate: moment(oFetch(holidayData, 'end_date'), 'DD-MM-YYYY'),
       holidaysType: HOLIDAYS_OPTIONS.find(item => item.value === oFetch(holidayData, 'holiday_type')),
       id: oFetch(holidayData, 'id')

@@ -24,7 +24,7 @@ export const getOwedHourUIData = (owedHour) => {
   return { hasDate, date, times, durationHours, durationMinutes, note, creator, created, editable };
 }
 
-const ActionsCell = ({label, owedHourId, deleteOwedHours, openEditModal, owedHour}) => {
+const ActionsCell = ({label, owedHourId, deleteOwedHours, openEditModal, owedHour, editable}) => {
   const onEdit = (owedHour) => {
     openEditModal(owedHour);
   }
@@ -40,7 +40,7 @@ const ActionsCell = ({label, owedHourId, deleteOwedHours, openEditModal, owedHou
 
   return (
     <div className="boss-table__cell">
-      <div className="boss-table__info">
+      { editable && <div className="boss-table__info">
         <p className="boss-table__label">{label}</p>
         <p className="boss-table__actions">
           <button
@@ -52,7 +52,7 @@ const ActionsCell = ({label, owedHourId, deleteOwedHours, openEditModal, owedHou
             className="boss-button boss-button_type_small boss-button_role_cancel boss-table__action"
           >Delete</button>
         </p>
-      </div>
+      </div> }
     </div>
   )
 }
@@ -106,9 +106,7 @@ const Row = ({owedHour, deleteOwedHours, openEditModal}) => {
       <SimpleCell label="Duration (minutes)" text={durationMinutes} />      
       <CreatedByCell label="CreatedBy" creator={creator} created={created} />
       <SimpleCell label="Note" text={note} />
-      {editable &&
-        <ActionsCell label="Actions" owedHourId={owedHour.get('id')} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} owedHour={owedHour}/>      
-      }
+      <ActionsCell editable={editable} label="Actions" owedHourId={owedHour.get('id')} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} owedHour={owedHour}/>      
     </div>
   )
 }
@@ -156,7 +154,9 @@ const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal}) => {
     })
   }
 
+
   const renderOwedhours = (owedHours) => {
+
     return owedHours.map((owedHour, index) => {
       return (
         <div key={index} className="boss-board__manager-group boss-board__manager-group_context_stack">
@@ -175,9 +175,16 @@ const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal}) => {
     });
   }
 
+  const hasOwedHours = !!owedHours.size;
+
   return (
     <div>
-      { renderOwedhours(owedHours) }
+      { hasOwedHours
+          ? renderOwedhours(owedHours)
+          : <h1 className="boss-table__cell boss-table__cell_role_header">
+              NO OWED HOURS FOUND
+            </h1>
+      }
     </div>
   )
 }
