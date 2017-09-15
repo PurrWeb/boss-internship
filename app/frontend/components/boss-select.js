@@ -33,6 +33,8 @@ class BossSelect extends React.Component {
   }
 
   onChange = (newValue) => {
+    if (Array.isArray(newValue) && !newValue.length) return;
+
     this.setState({
       selected: newValue,
     });

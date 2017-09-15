@@ -2,6 +2,7 @@ class Venue < ActiveRecord::Base
   # Associations
   belongs_to :creator, class_name: 'User'
   has_many :rotas, inverse_of: :venue
+  has_many :incident_reports
   has_many :staff_member_venues
   has_many :master_staff_members, class_name: 'StaffMember', inverse_of: :master_venue, foreign_key: :master_venue_id
   has_many :other_staff_members, through: :staff_member_venues, source: :staff_member

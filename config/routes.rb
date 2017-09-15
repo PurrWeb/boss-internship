@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       passwords: 'users/passwords'
     }
 
+    resources :incident_reports, only: [:index]
     resources :check_lists, only: [:index]
     resources :check_list_submissions, path: "checklist_submissions", only: [:index]
 
@@ -148,6 +149,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :incident_reports, only: [:index, :show]
+
     resources :api_keys, only: [:index, :create, :destroy]
 
     resources :hours_confirmation, only: [:index] do
@@ -181,6 +184,8 @@ Rails.application.routes.draw do
         resources :check_list_submissions, path: "checklist_submissions", only: [:index]
 
         resources :uploads
+
+        resources :incident_reports, only: [:index, :show, :create, :update, :destroy]
 
         resources :questionnaires do
           resources :questionnaire_responses

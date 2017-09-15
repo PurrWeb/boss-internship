@@ -1,6 +1,6 @@
 import React from "react"
 import BreakList from "./break-list"
-import ShiftTimeSelector from "~/components/shift-time-selector"
+import ShiftTimeSelector from "../shift-time-selector"
 import getHoursPeriodStats from "~/lib/get-hours-period-stats"
 import ComponentErrors from "../component-errors"
 import Modal from "react-modal"

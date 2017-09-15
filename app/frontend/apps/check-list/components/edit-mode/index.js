@@ -64,14 +64,15 @@ class CheckListsEditMode extends React.Component {
     return this.props.checklists.map((checklist, index) => {
       return (
         <ChecklistEditWrapper
+          key={index}
           title={checklist.get('name')}
           onEdit={this.onEdit.bind(null, checklist)}
           onDelete={this.onDelete.bind(null, checklist)}
         >
           {
-            checklist.get('items').map(item => {
+            checklist.get('items').map((item, index) => {
               return (
-                <div className="boss-checklist__item">
+                <div key={index} className="boss-checklist__item">
                   <div className="boss-checklist__control">
                     <p className="boss-checklist__label">
                       <span className="boss-checklist__label-text">
@@ -113,7 +114,7 @@ class CheckListsEditMode extends React.Component {
         <div className="boss-page-main__inner">
           { !editingChecklist
             ? <div>
-                <AddNewCheckList />
+                <AddNewCheckList key="add new" />
                 { this.renderChecklists() } 
               </div>
             : <ChecklistEditSingle

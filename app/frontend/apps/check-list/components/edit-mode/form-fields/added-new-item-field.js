@@ -12,6 +12,16 @@ export default class AddedNewItemField extends React.PureComponent {
   handleSwitchToEdit = () => {
     this.setState(state => ({editing: true}));
   }
+  
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+
+      if (!e.target.value) return;
+      
+      this.handleValueConfirm();
+    }
+  }
 
   handleValueChange = (value) => {
     this.setState(state => ({value: value}));
@@ -47,6 +57,7 @@ export default class AddedNewItemField extends React.PureComponent {
                 <div className="boss-checklist__field">
                   <input
                     type="text"
+                    onKeyPress={this.handleKeyPress}
                     value={this.state.value}
                     onChange={(e) => this.handleValueChange(e.target.value)}
                     className="boss-checklist__text-input"

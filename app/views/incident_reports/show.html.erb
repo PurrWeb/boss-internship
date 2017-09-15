@@ -1,0 +1,11 @@
+<%= javascript_tag do %>
+  window.boss = window.boss || {};
+  window.boss.store = window.boss.store || {};
+  window.boss.store.accessToken = '<%= access_token %>';
+  window.boss.store.incidentReport = <%= Api::V1::IncidentReports::IncidentReportSerializer.new(incident_report).to_json.html_safe %>;
+<% end %>
+
+<%= react_component('IncidentReportsShowApp', {
+  accessToken: access_token,
+  incidentReport: Api::V1::IncidentReports::IncidentReportSerializer.new(incident_report)
+}) %>

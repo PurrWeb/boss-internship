@@ -1,6 +1,6 @@
 import React from "react"
 import Validation from "~/lib/validation"
-import ShiftTimeSelector from "~/components/shift-time-selector"
+import ShiftTimeSelector from "../shift-time-selector"
 
 export default class BreakListItem extends React.Component {
     render(){

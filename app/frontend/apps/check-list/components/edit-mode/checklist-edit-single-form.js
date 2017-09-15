@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field, reduxForm, FieldArray, SubmissionError, reset } from 'redux-form/immutable';
+import { Field, reduxForm, FieldArray, SubmissionError, reset, change } from 'redux-form/immutable';
 import {Collapse} from 'react-collapse';
 import { connect } from 'react-redux';
 import humanize from 'string-humanize';
@@ -11,6 +11,15 @@ import AddedNewItemField from './form-fields/added-new-item-field';
 import {submitEdited} from '../../actions/check-lists-actions';
 
 function submission(values, dispatch) {
+  if (values.get('lastValue')) {
+    if (!values.get('check_list_items')) {
+      values = values.set('check_list_items', List([]))
+    }
+    values = values
+      .updateIn(['check_list_items'], (items) => items.push(values.get('lastValue')))
+      .delete('lastValue');
+  }
+
   return dispatch(submitEdited(values.toJS())).catch(resp => {
     let errors = resp.response.data.errors;
     if (errors) {
@@ -32,23 +41,17 @@ function submission(values, dispatch) {
   })
 }
 
-function ChecklistEditSingleForm(props) {
-  const {
-    handleSubmit,
-    submitting,
-    dispatch
-  } = props;
-  
-  function cancelAddNew() {
-    isOpen && onToggleChecklist();
-    dispatch(reset('checklist-add-new'));
+class ChecklistEditSingleForm extends React.Component {
+  onAddNewValueChange = (value) => {
+    this.props.dispatch(change('checklist-edit-single', 'lastValue', value));
   }
 
-  function renderChecklistItems({ fields, meta: { error } }) {
+  renderChecklistItems = ({ fields, meta: { error } }) => {
     return (
       <div className="boss-checklist__items">
         { fields.map((item, index) => 
             <Field
+              key={index}
               name={item}
               onRemove={() => fields.remove(index)}
               component={AddedNewItemField}
@@ -62,50 +65,56 @@ function ChecklistEditSingleForm(props) {
               </p>
             </div>
         }
-        <AddNewItemField onAddNew={(value) => fields.push(value)} />
-      </div>
+      <AddNewItemField
+        onValueChange={(value) => this.onAddNewValueChange(value)}
+        onValueClear={() => this.onAddNewValueChange('')}
+        onAddNew={(value) => fields.push(value)}
+      />
+    </div>
     )
   }
 
-  return (
-    <section className="boss-board boss-board_context_stack">
-      <form onSubmit={handleSubmit(submission)} className="boss-board__form">
-        <header className="boss-board__header">
-          <Field
-            name="name"
-            component={ChecklistNameField}
-            required
-          />
-          <div className="boss-board__button-group boss-board__button-group_role_edit">
-          <button
-            className="boss-button boss-button_type_small boss-button_role_cancel boss-board__action"
-          >Cancel Editing</button>
-        </div>
-        </header>
-        <div className="boss-board__content boss-board__content_state_opened">
-          <div className="boss-board__content-inner">
-            <div className="boss-board__checklist">
-              <div className="boss-checklist">
-                <div className="boss-checklist__content">
-                  <FieldArray name="check_list_items" component={renderChecklistItems} />
-                  <div className="boss-checklist__actions">
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="boss-button boss-button_role_primary"
-                    >Done</button>
+  render() {
+    return (
+      <section className="boss-board boss-board_context_stack">
+        <form onSubmit={this.props.handleSubmit(submission)} className="boss-board__form">
+          <header className="boss-board__header">
+            <Field
+              name="name"
+              component={ChecklistNameField}
+              required
+            />
+            <div className="boss-board__button-group boss-board__button-group_role_edit">
+            <button
+              className="boss-button boss-button_type_small boss-button_role_cancel boss-board__action"
+            >Cancel Editing</button>
+          </div>
+          </header>
+          <div className="boss-board__content boss-board__content_state_opened">
+            <div className="boss-board__content-inner">
+              <div className="boss-board__checklist">
+                <div className="boss-checklist">
+                  <div className="boss-checklist__content">
+                    <FieldArray name="check_list_items" component={this.renderChecklistItems} />
+                    <div className="boss-checklist__actions">
+                      <button
+                        type="submit"
+                        disabled={this.props.submitting}
+                        className="boss-button boss-button_role_primary"
+                      >Done</button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>          
-      </form>
-    </section>
-  )
+          </div>          
+        </form>
+      </section>
+    )
+  }
 }
 
 export default reduxForm({
   form: 'checklist-edit-single',
-  fields: ['id', 'venue_id'],
+  fields: ['id', 'venue_id', 'lastValue'],
 })(ChecklistEditSingleForm);

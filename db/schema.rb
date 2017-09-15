@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170803110533) do
+ActiveRecord::Schema.define(version: 20170825183926) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255
@@ -404,6 +404,28 @@ ActiveRecord::Schema.define(version: 20170803110533) do
 
   add_index "hours_acceptance_periods", ["clock_in_day_id"], name: "index_hours_acceptance_periods_on_clock_in_day_id", using: :btree
   add_index "hours_acceptance_periods", ["status"], name: "index_hours_acceptance_periods_on_status", using: :btree
+
+  create_table "incident_reports", force: :cascade do |t|
+    t.integer  "user_id",                    limit: 4,     null: false
+    t.integer  "venue_id",                   limit: 4,     null: false
+    t.datetime "time",                                     null: false
+    t.string   "location",                   limit: 255,   null: false
+    t.string   "description",                limit: 255,   null: false
+    t.text     "involved_witness_details",   limit: 65535, null: false
+    t.text     "uninvolved_witness_details", limit: 65535
+    t.text     "police_officer_details",     limit: 65535
+    t.string   "recorded_by_name",           limit: 255,   null: false
+    t.string   "camera_name",                limit: 255,   null: false
+    t.text     "report_text",                limit: 65535, null: false
+    t.datetime "disabled_at"
+    t.integer  "disabled_by_id",             limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "incident_reports", ["disabled_by_id"], name: "index_incident_reports_on_disabled_by_id", using: :btree
+  add_index "incident_reports", ["user_id"], name: "index_incident_reports_on_user_id", using: :btree
+  add_index "incident_reports", ["venue_id"], name: "index_incident_reports_on_venue_id", using: :btree
 
   create_table "invite_transitions", force: :cascade do |t|
     t.string   "to_state",    limit: 255,   null: false
@@ -888,4 +910,7 @@ ActiveRecord::Schema.define(version: 20170803110533) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  add_foreign_key "incident_reports", "users"
+  add_foreign_key "incident_reports", "users", column: "disabled_by_id"
+  add_foreign_key "incident_reports", "venues"
 end

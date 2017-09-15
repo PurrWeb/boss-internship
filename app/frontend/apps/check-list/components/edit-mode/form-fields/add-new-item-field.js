@@ -1,6 +1,7 @@
 import React from 'react';
+import { change } from 'redux-form/immutable';
 
-export default class AddNewItemField extends React.PureComponent {
+export default class AddNewItemField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -9,16 +10,27 @@ export default class AddNewItemField extends React.PureComponent {
   }
 
   onValueChange = (value) => {
+    this.props.onValueChange(value);
     this.setState(state => ({value: value}))
   }
 
   clearValue = () => {
+    this.props.onValueClear();
     this.setState(state => ({value: ''}))
   }
 
   onAddNew = () => {
     this.props.onAddNew(this.state.value);
     this.clearValue();
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (!e.target.value) return;
+
+      this.onAddNew();
+    }
   }
 
   render() {
@@ -34,6 +46,7 @@ export default class AddNewItemField extends React.PureComponent {
               className="boss-checklist__text-input boss-checklist__text-input_adjust_icon"
               placeholder="Type item name here..."
               value={this.state.value}
+              onKeyPress={this.handleKeyPress}
               onChange={(e) => this.onValueChange(e.target.value)}
             />
             { !!this.state.value

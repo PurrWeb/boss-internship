@@ -35,6 +35,10 @@ class Ability
         user.has_admin_access? || user.security_manager?
       end
 
+      can :manage, :incident_reports do
+        !user.security_manager?
+      end
+
       can :view, :holidays do
         !user.security_manager?
       end
@@ -61,6 +65,10 @@ class Ability
 
       can [:view, :create, :update, :destroy], Holiday do |holiday|
         can_edit_staff_member?(user, holiday.staff_member)
+      end
+
+      can :manage, IncidentReport do |incident_report|
+        can_manage_venue?(user, incident_report.venue)
       end
 
       can :manage, OwedHour do |owed_hour|

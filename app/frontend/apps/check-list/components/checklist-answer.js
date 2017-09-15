@@ -21,7 +21,7 @@ class ChecklistAnswer extends React.PureComponent {
       valid,
       error,
     } = this.props;
-    console.log(answer.get('note'));
+
     const isAnswerValid = answer.get('answer') || !!answer.get('note');
     return (
       <div className="boss-checklist__item">
@@ -79,7 +79,7 @@ const AnswerError = ({children}) => {
 }
 
 const Note = ({value, onChange, showNote}) => {
-  console.log(value);
+
   return (
     <div className="boss-checklist__notes" style={{display: showNote ? 'block' : 'none'}}>
       <div className="boss-checklist__notes-inner">

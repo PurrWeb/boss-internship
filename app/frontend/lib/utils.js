@@ -12,6 +12,17 @@ function replaceFunctionPropsWithStrings(obj){
 }
 
 var utils =  {
+    parseQueryString: function( queryString ) {
+      let params = {}, queries, temp, i, l;
+      queries = queryString.split("&");
+
+      for ( i = 0, l = queries.length; i < l; i++ ) {
+          temp = queries[i].split('=');
+          params[temp[0]] = temp[1];
+      }
+
+      return params;
+    },
     insertUrlParams: function(params) {
       return Object.keys(params).filter(function(k) {
         return (params[k] !== undefined) && (params[k] !== null);
@@ -102,6 +113,9 @@ var utils =  {
             replaceFunctionPropsWithStrings(expected),
             replaceFunctionPropsWithStrings(actual)
         );
+    },
+    humanDateFormatWithTime(){
+      return 'HH:mm ddd DD-MM-YYYY';
     },
     formatRotaUrlDate(date){
         return moment(date).format("DD-MM-YYYY");

@@ -42,6 +42,11 @@ class PermissionsPageData
           permitted: user.present? && !user.security_manager?,
           path: @path.safe_checks_path
         },
+        {
+          description: "Incident Reports",
+          permitted: role.can?(:manage, :incident_reports),
+          path: @path.incident_reports_path
+        }
       ]
     }
 
