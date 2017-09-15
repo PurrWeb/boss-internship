@@ -3,7 +3,7 @@ import humanize from 'string-humanize';
 import moment from 'moment';
 import confirm from '~/lib/confirm-utils';
 
-const ActionsCell = ({label, holidaysId,holiday, deleteHoliday, onEditHoliday}) => {
+const ActionsCell = ({label, holidaysId,holiday, deleteHoliday, onEditHoliday, editableHoliday}) => {
   
   const openEditHoliday = () => {
    onEditHoliday(holiday)
@@ -23,7 +23,7 @@ const ActionsCell = ({label, holidaysId,holiday, deleteHoliday, onEditHoliday}) 
     <div className="boss-table__cell">
       <div className="boss-table__info">
         <p className="boss-table__label">{label}</p>
-        <p className="boss-table__actions">
+        { editableHoliday && <p className="boss-table__actions">
           <button
             onClick={openEditHoliday}
             className="boss-button boss-button_type_small boss-button_role_update boss-table__action"
@@ -32,7 +32,7 @@ const ActionsCell = ({label, holidaysId,holiday, deleteHoliday, onEditHoliday}) 
             onClick={() => (onDelete(holidaysId))}
             className="boss-button boss-button_type_small boss-button_role_cancel boss-table__action"
           >Delete</button>
-        </p>
+        </p> }
       </div>
     </div>
   )
@@ -74,6 +74,7 @@ const Row = ({holiday, deleteHoliday, onEditHoliday}) => {
   const note = holiday.get('note') || '-';
   const creator = holiday.get('creator');
   const cerated = `(${moment(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
+  const editable = holiday.get('editable');
 
   return (
     <div className="boss-table__row">
@@ -81,7 +82,14 @@ const Row = ({holiday, deleteHoliday, onEditHoliday}) => {
       <SimpleCell label="dates" text={`${startDate} - ${endDate}`} />
       <SimpleCell label="note" text={note} />
       <CreatedByCell label="createdBy" creator={creator} created={cerated} />
-      <ActionsCell label="actions" holidaysId={holiday.get('id')} holiday={holiday} deleteHoliday={deleteHoliday} onEditHoliday={onEditHoliday} />
+      <ActionsCell
+        label="actions"
+        editableHoliday={editable}
+        holidaysId={holiday.get('id')}
+        holiday={holiday}
+        deleteHoliday={deleteHoliday}
+        onEditHoliday={onEditHoliday}
+      />
     </div>
   )
 }

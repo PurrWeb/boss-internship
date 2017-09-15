@@ -20,7 +20,6 @@ class OwedHourApiService
       owed_hour: owed_hour,
       params: owed_hour_params(params: params)
     ).call
-
     api_errors = nil
     unless model_service_result.success?
       api_errors = OwedHourApiErrors.new(owed_hour: model_service_result.owed_hour)
@@ -37,7 +36,7 @@ class OwedHourApiService
     model_service_result = CreateOwedHour.new(
       params: create_owed_hour_params
     ).call
-
+    
     api_errors = nil
     unless model_service_result.success?
       api_errors = OwedHourApiErrors.new(owed_hour: model_service_result.owed_hour)
@@ -64,9 +63,10 @@ class OwedHourApiService
 
   def owed_hour_params(params:)
     date = params.fetch(:date)
-    starts_at = RotaShiftDate.new(date).start_time + params.fetch(:starts_at).minutes
-    ends_at = RotaShiftDate.new(date).start_time + params.fetch(:ends_at).minutes
-    minutes = (ends_at - starts_at) / 60
+
+    starts_at = starts_at_param(date: date, starts_at: params.fetch(:starts_at))
+    ends_at = ends_at_param(date: date, ends_at: params.fetch(:ends_at))
+    minutes = (starts_at.present? && ends_at.present?) && ((ends_at - starts_at) / 60)
     {
       date: date,
       starts_at: starts_at,
@@ -74,6 +74,26 @@ class OwedHourApiService
       minutes: minutes,
       note: params[:note]
     }
+  end
+
+  def starts_at_param(date:, starts_at:)
+    unless date.present?
+      if starts_at.present?
+        return starts_at.minutes 
+      end
+      return nil
+    end
+    RotaShiftDate.new(date).start_time + starts_at.minutes
+  end
+
+  def ends_at_param(date:, ends_at:)
+    unless date.present?
+      if ends_at.present?
+        return ends_at.minutes 
+      end
+      return nil
+    end
+    RotaShiftDate.new(date).start_time + ends_at.minutes
   end
 
   def assert_action_permitted(action)

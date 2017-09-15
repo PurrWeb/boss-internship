@@ -4,6 +4,7 @@ import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormTextarea from '~/components/boss-form/boss-form-textarea';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
+import notify from '~/components/global-notification';
 
 import {addHoliday} from '../actions';
 
@@ -31,6 +32,11 @@ const validate = values => {
 
 const submission = (values, dispatch) => {
   return dispatch(addHoliday(values.toJS())).catch((resp) => {
+    notify('Adding Staff Member Holiday was Failed', {
+      interval: 5000,
+      status: 'error'
+    });
+
     const errors = resp.response.data.errors;
     if (errors) {
       let base = {};

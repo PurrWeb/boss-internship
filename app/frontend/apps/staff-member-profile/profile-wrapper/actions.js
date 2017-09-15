@@ -1,4 +1,5 @@
 import { createAction } from 'redux-actions';
+import notify from '~/components/global-notification';
 
 import {
   updateAvatar,
@@ -30,7 +31,16 @@ export const updateAvatarRequest = (avatarUrl) => (dispatch, getState) => {
     .then((resp) => {
       dispatch(hideEditAvatarModal());
       dispatch(updateStaffMember(resp.data));
+      notify('Staff Member Avatar Updated Successfully', {
+        interval: 5000,
+        status: 'success'
+      });
       window.scrollTo(0, 0);
+    }).catch(() => {
+      notify('Updating Staff Member Avatar was Failed', {
+        interval: 5000,
+        status: 'error'
+      });
     });
 }
 
@@ -40,6 +50,15 @@ export const disableStaffMemberRequest = ({neverRehire, reason}) => (dispatch, g
     dispatch(hideDisableStaffMemberModal());
     dispatch(updateStaffMember(resp.data));
     window.scrollTo(0, 0);
+    notify('Staff Member Disabled Successfully', {
+      interval: 5000,
+      status: 'success'
+    });
+  }).catch(() => {
+    notify('Disabling Staff Member was Failed', {
+      interval: 5000,
+      status: 'error'
+    });
   });
 }
 
@@ -49,6 +68,10 @@ export const enableStaffMemberRequest = (payload) => (dispatch, getState) => {
     dispatch(updateStaffMember(resp.data));
     dispatch(cancelEnableProfile());
     window.scrollTo(0, 0);
+    notify('Staff Member Enabled Successfully', {
+      interval: 5000,
+      status: 'success'
+    });
   });
 }
 
@@ -58,7 +81,11 @@ export const updateEmploymentDetailsRequest = (payload) => (dispatch, getState) 
     dispatch(updateStaffMember(resp.data));
     dispatch(cancelEditProfile());
     window.scrollTo(0, 0);
-    return (resp.data);
+    notify('Staff Member Employment Details Updated Successfully', {
+      interval: 5000,
+      status: 'success'
+    });
+    return resp.data;
   });
 }
 
@@ -68,6 +95,10 @@ export const updatePersonalDetailsRequest = (payload) => (dispatch, getState) =>
     dispatch(updateStaffMember(resp.data));
     dispatch(cancelEditProfile());
     window.scrollTo(0, 0);
+    notify('Staff Member Personal Details Updated Successfully', {
+      interval: 5000,
+      status: 'success'
+    });
     return (resp.data);
   });
 }
@@ -78,6 +109,10 @@ export const updateContactDetailsRequest = (payload) => (dispatch, getState) => 
     dispatch(updateStaffMember(resp.data));
     dispatch(cancelEditProfile());
     window.scrollTo(0, 0);
+    notify('Staff Member Contact Details Updated Successfully', {
+      interval: 5000,
+      status: 'success'
+    });
     return resp.data;
   });
 }

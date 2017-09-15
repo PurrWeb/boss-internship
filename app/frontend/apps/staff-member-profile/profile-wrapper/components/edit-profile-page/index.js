@@ -6,6 +6,7 @@ import oFetch from "o-fetch";
 import EmploymentDetailsForm from './employment-details-form';
 import PersonalDetailsForm from './personal-details-form';
 import ContactDetailsForm from './contact-details-form';
+import humanize from 'string-humanize';
 
 const EditProfilePage = ({
     venues,
@@ -16,7 +17,6 @@ const EditProfilePage = ({
     onSubmissionComplete,
   }) => {
   let staffMemberData = staffMember.toJS();
-
   const contactDetailsFormInitial = {
     email_address: oFetch(staffMemberData, 'email'),
     phone_number: oFetch(staffMemberData, 'phone_number'),
@@ -29,7 +29,7 @@ const EditProfilePage = ({
   const personaletailsFormInitial = {
     first_name: oFetch(staffMemberData, 'first_name'),
     surname: oFetch(staffMemberData, 'surname'),
-    gender: oFetch(staffMemberData, 'gender'),
+    gender: humanize(oFetch(staffMemberData, 'gender')),
     date_of_birth: moment(oFetch(staffMemberData, 'date_of_birth'), 'DD-MM-YYYY'),
   }
 

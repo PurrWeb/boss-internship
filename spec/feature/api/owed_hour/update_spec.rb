@@ -70,6 +70,32 @@ RSpec.describe 'Update owed hour API endpoint' do
       note: "TEST"
     }
   end
+  let(:empty_params) do
+    {
+      date: nil,
+      startsAt: nil,
+      endsAt: nil,
+      note: nil
+    }
+  end
+  
+  context 'when empty params supplied' do
+    let(:params) do
+      empty_params
+    end
+
+    before do
+      response
+    end
+    
+    it 'should return validation errors' do
+      json = JSON.parse(response.body)
+
+      expect(json["errors"]["date"]).to eq(["can't be blank"])
+      expect(json["errors"]["startsAt"]).to eq(["can't be blank"])
+      expect(json["errors"]["endsAt"]).to eq(["can't be blank"])
+    end
+  end
 
   context 'when valid params supplied' do
     let(:params) do

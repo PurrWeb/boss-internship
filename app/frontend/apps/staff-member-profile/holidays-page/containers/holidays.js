@@ -103,6 +103,8 @@ class Holidays extends React.PureComponent {
       }
     } = this.props;
 
+    const hasHolidays = !!holidays.size;
+
     return (
       <ProfileWrapper currentPage="holidays">
         { !disabled && <section className="boss-board">
@@ -134,8 +136,14 @@ class Holidays extends React.PureComponent {
               </div>
               <div className="boss-board__manager-data">
                 <HolidaysFilter startDate={holidayStartDate} endDate={holidayEndDate} filter={filter} />
-                <HolidaysTable holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={openEditModal}/>
-                <HolidayasMobileItems holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={openEditModal}/>
+                { hasHolidays
+                    ? [<HolidaysTable key="desktop" holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={openEditModal}/>,
+                      <HolidayasMobileItems key="mobile" holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={openEditModal}/>]
+                    : <h1 className="boss-table__cell boss-table__cell_role_header">
+                        NO HOLIDAYS FOUND
+                      </h1>
+                }
+                
               </div>
             </div>
           </div> 

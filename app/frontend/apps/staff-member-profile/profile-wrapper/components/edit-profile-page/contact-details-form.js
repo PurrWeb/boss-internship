@@ -1,6 +1,7 @@
 import React from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import BossFormInput from '~/components/boss-form/boss-form-input';
+import notify from '~/components/global-notification';
 
 import {updateContactDetailsRequest} from '../../actions';
 
@@ -18,10 +19,12 @@ const ContactDetailsForm = ({
  
   const submission = (values, dispatch) => {
     return dispatch(updateContactDetailsRequest(values.toJS()))
-      .then((resp) => {
-        onSubmissionComplete(resp);
-      })
       .catch((resp) => {
+        notify('Updating Staff Member Contact Details was Failed', {
+          interval: 5000,
+          status: 'error'
+        });
+
         const errors = resp.response.data.errors;
         if (errors) {
           window.scrollTo(0, 0);

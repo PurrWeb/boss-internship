@@ -38,11 +38,15 @@ const BossFormSelect = ({
   }
 
   const onValueChange = (value) => {
-    if (!multi) {
-      if (Array.isArray(value) && !value.length) return;
-      onChange(value.value);
+    if (value) {
+      if (!multi) {
+        if (Array.isArray(value) && !value.length) return;
+        onChange(value.value);
+      } else {
+        onChange(value.map(value => value.value));
+      }
     } else {
-      onChange(value.map(value => value.value));
+      onChange(value);
     }
   }
   
@@ -64,6 +68,7 @@ const BossFormSelect = ({
           options={getOptions(options, {label: optionLabel, value: optionValue})}
           onChange={onValueChange}
           name={name}
+          ignoreCase
           disabled={disabled}
           placeholder={placeholder || 'Select ...'}
           value={getValue(value)}

@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
 import axios from 'axios';
+import notify from '~/components/global-notification';
 
 import {
   updateAvatar,
@@ -45,6 +46,15 @@ export const deleteHoliday = (holidayId) => (dispatch, getState) => {
       type: DELETE_HOLIDAY,
       payload: resp.data,
     });
+    notify('Staff Member Holiday Deleted Successfully', {
+      interval: 5000,
+      status: 'success'
+    });
+  }).catch(() => {
+    notify('Deliting Staff Member Holiday was Failed', {
+      interval: 5000,
+      status: 'error'
+    });
   });
 }
 
@@ -71,7 +81,11 @@ export const editHoliady = ({startDate, endDate, holidaysType, note, id}) => (di
     });
     dispatch({
       type: CLOSE_EDIT_HOLIDAY_MODAL
-    })
+    });
+    notify('Staff Member Holiday Updated Successfully', {
+      interval: 5000,
+      status: 'success'
+    });
   });
 }
 
@@ -98,7 +112,11 @@ export const addHoliday = ({startDate, endDate, holidayType, note}) => (dispatch
     });
     dispatch({
       type: CLOSE_HOLIDAY_MODAL
-    })
+    });
+    notify('Staff Member Holiday Added Successfully', {
+      interval: 5000,
+      status: 'success'
+    });
   });
 }
 

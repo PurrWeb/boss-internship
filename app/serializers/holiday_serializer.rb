@@ -1,5 +1,5 @@
 class HolidaySerializer < ActiveModel::Serializer
-  attributes :id, :holiday_type, :start_date, :end_date, :creator, :note, :created_at
+  attributes :id, :holiday_type, :start_date, :end_date, :creator, :note, :created_at, :editable
 
   def start_date
     UIRotaDate.format(object.start_date)
@@ -11,6 +11,10 @@ class HolidaySerializer < ActiveModel::Serializer
   
   def creator
     object.creator.full_name
+  end
+
+  def editable
+    object.editable?
   end
 
 end

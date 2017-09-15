@@ -8,6 +8,8 @@ class OwedHour < ActiveRecord::Base
   validates :date, presence: true
   validates :minutes, numericality: { greater_than: 0 }
   validates :creator, presence: true
+  validates :starts_at, presence: true
+  validates :ends_at, presence: true
   validates :staff_member, presence: true
   validates :note, presence: true
   validates :disabled_by, presence: true, if: :disabled?

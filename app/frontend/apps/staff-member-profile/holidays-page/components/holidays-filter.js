@@ -26,17 +26,21 @@ class HolidaysFilter extends React.Component {
       startDate: startDate,
       endDate: endDate,
     }, () => {
-      const formatedStartDate = this.state.startDate.format('DD-MM-YYYY');
-      const formatedEndDate = this.state.endDate.format('DD-MM-YYYY');
-  
-      this.props.filter(formatedStartDate, formatedEndDate);
+      if (startDate && endDate) {
+        const formatedStartDate = this.state.startDate.format('DD-MM-YYYY');
+        const formatedEndDate = this.state.endDate.format('DD-MM-YYYY');
+    
+        this.props.filter(formatedStartDate, formatedEndDate);
+      }
     });
   }
 
   onUpdate = () => {
-    const formatedStartDate = this.state.startDate.format('DD-MM-YYYY');
-    const formatedEndDate = this.state.endDate.format('DD-MM-YYYY');
-    this.props.filter(formatedStartDate, formatedEndDate);
+    if (this.state.startDate && this.state.endDate) {
+      const formatedStartDate = this.state.startDate.format('DD-MM-YYYY');
+      const formatedEndDate = this.state.endDate.format('DD-MM-YYYY');
+      this.props.filter(formatedStartDate, formatedEndDate);
+    }
   }
 
   render() {
@@ -64,6 +68,7 @@ class HolidaysFilter extends React.Component {
                   isOutsideRange={() => false}
                   displayFormat={"DD-MM-YYYY"}
                   startDate={startDate}
+                  keepOpenOnDateSelect={false}
                   endDate={endDate}
                   onDatesChange={this.onDatesChange}
                   focusedInput={focusedInput}
