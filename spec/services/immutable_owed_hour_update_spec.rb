@@ -27,8 +27,8 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
   let(:service) do
     ImmutableOwedHourUpdate.new(
       requester: requester,
-      old_owed_hour: owed_hour,
-      new_owed_hour: new_owed_hour
+      owed_hour: owed_hour,
+      params: owed_hour_params
     )
   end
 
@@ -52,7 +52,7 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
     end
 
     specify 'it throws an argument error' do
-      expect{ service.call }.to raise_error(ActiveRecord::UnknownAttributeError)
+      expect{ service.call }.to raise_error(ArgumentError)
     end
   end
 
@@ -73,10 +73,14 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
         date: owed_hour.date,
         minutes: new_minutes,
         note: owed_hour.note,
-        staff_member: owed_hour.staff_member,
         starts_at: owed_hour.starts_at,
         ends_at: owed_hour.starts_at + new_minutes.minutes
       }
+    end
+
+    specify 'call to succeed' do
+      result = service.call
+      expect(result.success?).to eq(true)
     end
 
     specify 'owed_hour is disabled' do
@@ -96,13 +100,13 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
 
     describe 'new owed_hour' do
       it 'should persist new hour' do
-        service.call
-        expect(new_owed_hour).to be_persisted
+        result = service.call
+        expect(result.owed_hour).to be_persisted
       end
 
       it 'is parent of old owed_hour' do
-        service.call
-        expect(owed_hour.reload.parent).to eq(new_owed_hour)
+        result = service.call
+        expect(owed_hour.reload.parent.id).to eq(result.owed_hour.id)
       end
     end
   end

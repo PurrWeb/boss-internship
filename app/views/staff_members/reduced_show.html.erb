@@ -1,22 +1,79 @@
-<div class="media">
-  <div class="media-left">
-    <a href="#">
-      <img class="avatar-image avatar-image_medium" src="<%= staff_member.avatar.medium.url %>" />
-    </a>
-  </div>
-  <div class="media-body">
-    <h1 class="media-heading"><%= staff_member.full_name.titlecase %></h1>
+<div class="boss-page-main__dashboard">
+  <div class="boss-page-main__inner">
+    <!-- Page dashboard start -->
+    <div class="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_profile-reduced">
+      <div class="boss-page-dashboard__group">
+        <div class="boss-page-dashboard__buttons-group">
+          <%= link_to("Return to Index", staff_members_path, class: "boss-button boss-page-dashboard__button") %>
+        </div>
+      </div>
+    </div>
+    <!-- Page dashboard end -->
   </div>
 </div>
 
-<dl>
-  <dt>Staff Type:</dt><dd><%= staff_member.staff_type.name %></dd>
-  <dt>Main Venue:</dt><dd><%= staff_member.master_venue.name %></dd>
-  <% if staff_member.work_venues.count > 0 %>
-    <dt>Extra Venues</dt><dd><%= staff_member.work_venues.map(&:name).to_sentence %></dd>
-  <% else %>
-    <dt>Extra Venues</dt><dd>None</dd>
-  <% end %>
-</dl>
+<div class="boss-page-main__content">
+  <div class="boss-page-main__inner">
 
-<%= link_to('Return to index', staff_members_path) %>
+    <div class="boss-alert boss-alert_context_above">
+      <p class="boss-alert__text">You're not authorized to view all of this staff member's details. Contact an admin for further assistance.</p>
+    </div>
+
+    <!-- Board start -->
+    <div class="boss-board">
+      <div class="boss-board__main">
+        <div class="boss-board__manager">
+        <!-- User informtion start -->
+        <div class="boss-user-summary">
+          <div class="boss-user-summary__side">
+            <div class="boss-user-summary__avatar">
+              <div class="boss-user-summary__avatar-inner">
+                <img src="<%= staff_member.avatar.medium.url %>" alt="<%= staff_member.full_name %>" class="boss-user-summary__pic">
+              </div>
+            </div>
+          </div>
+          <div class="boss-user-summary__content">
+            <div class="boss-user-summary__header">
+            <h2 class="boss-user-summary__name"><%= staff_member.full_name.titlecase %><span><%= '(Disabled)' if staff_member.disabled? %></span></h2>
+            <span class="boss-button boss-button_type_small boss-button_type_no-behavior boss-user-summary__label" style="background-color:#<%= staff_member.staff_type.ui_color %>"><%= staff_member.staff_type.name %></span>
+          </div>
+            <ul class="boss-user-summary__review-list">
+              <li class="boss-user-summary__review-item">
+                <span class="boss-user-summary__review-label">Main Venue: </span>
+                <span class="boss-user-summary__review-val boss-user-summary__review-val_marked"><%= staff_member.master_venue.name %></span>
+              </li>
+              <li class="boss-user-summary__review-item">
+              <span class="boss-user-summary__review-label">Extra Venues: </span>
+              <span class="boss-user-summary__review-val boss-user-summary__review-val_marked"><%= staff_member.work_venues.count == 0 ? 'None' : staff_member.work_venues.map(&:name).join(", ") %></span>
+              </li>
+            </ul>
+            <% if staff_member.disabled? %>
+              <ul class="boss-user-summary__review-list boss-user-summary__review-list_type_box<%= "-alert" if staff_member.flagged? %>">
+                <% if staff_member.flagged? %>
+                  <li class="boss-user-summary__review-item">
+                    <span class="boss-button boss-button_type_small boss-button_type_no-behavior boss-button_role_exclamation boss-user-summary__label">Flagged</span>
+                  </li>
+                <% end %>
+                <li class="boss-user-summary__review-item boss-user-summary__review-item_role_reason">
+                  <span class="boss-user-summary__review-label">Reason for disabling: </span>
+                  <span class="boss-user-summary__review-val boss-user-summary__review-val_marked"><%= staff_member.disable_reason %></span>
+                </li>
+                <li class="boss-user-summary__review-item boss-user-summary__review-item_role_user">
+                  <span class="boss-user-summary__review-label">Disabled by: </span>
+                  <span class="boss-user-summary__review-val boss-user-summary__review-val_marked"><%= staff_member.disabled_by_user.full_name %></span>
+                </li>
+                <li class="boss-user-summary__review-item boss-user-summary__review-item_role_date">
+                  <span class="boss-user-summary__review-label">Disabled on: </span>
+                  <span class="boss-user-summary__review-val boss-user-summary__review-val_marked"><%= staff_member.disabled_at.to_s(:human) %></span>
+                </li>
+              </ul>
+            <% end %>
+          </div>
+        </div>
+        <!-- User informtion end -->
+        </div>
+      </div>
+    </div>
+    <!-- Board end -->
+  </div>
+</div>

@@ -8,6 +8,6 @@ class TestImageHelper
   end
 
   def self.square_arnie_face_path
-    File.join(Rails.root, 'spec', 'support', 'images', 'square_arnie_face.jpg')
+    File.join(Rails.root, 'spec', 'support', 'images', 'arnie_face_square.jpeg')
   end
 end

@@ -16,6 +16,7 @@ class AccruedHolidayEstimate
         ends_at: tax_year.rota_start_time..tax_year.rota_end_time
       ).
       accepted.
+      includes(:hours_acceptance_breaks_enabled).
       inject(0) do |sum, hours_acceptance_period|
         sum + hours_acceptance_period.payable_hours
       end

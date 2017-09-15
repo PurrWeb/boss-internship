@@ -58,22 +58,12 @@ Rails.application.routes.draw do
     resources :holidays, only: [:index, :edit, :update]
     resources :owed_hours, only: [:edit, :update]
 
-    resources :staff_members, only: [:show, :index, :new, :destroy] do
-      resources :holidays, only: [:create, :destroy]
-      resources :owed_hours, only: [:create, :destroy]
+    resources :staff_members, only: [:show, :new, :index] do
       resources :hours_overview, only: :show
       member do
-        get :disable
-        get :enable
-        patch :undestroy
-        get :edit_employment_details
-        post :update_employment_details
-        get :edit_personal_details
-        post :update_personal_details
-        get :edit_contact_details
-        post :update_contact_details
-        get :edit_avatar
-        post :update_avatar
+        get :holidays
+        get :profile
+        get :owed_hours
       end
     end
 
@@ -222,6 +212,17 @@ Rails.application.routes.draw do
         resources :holidays, only: :show
         resources :holiday_reports, only: :index
         resources :staff_members, only: [:show, :create] do
+          resources :holidays, only: [:index, :update, :destroy, :create]
+          resources :owed_hours, only: [:index, :update, :destroy, :create]
+          member do
+            post :disable
+            post :enable
+            post :update_employment_details
+            post :update_personal_details
+            post :update_contact_details
+            post :update_avatar
+          end
+
           collection do
             post :flagged
           end

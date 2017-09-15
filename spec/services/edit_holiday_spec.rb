@@ -161,10 +161,6 @@ RSpec.describe 'Edit Holiday service'  do
       expect(staff_member.reload.active_holidays.count).to eq(1)
     end
 
-    specify 'it should return the holiday' do
-      expect(result.holiday).to eq(holiday)
-    end
-
     specify 'it should return the error' do
       expect(result.holiday.errors.keys).to eq([:start_date])
     end
