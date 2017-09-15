@@ -10,7 +10,6 @@ class OwedHourApiErrors
     result[:date] = owed_hour.errors[:date] if owed_hour.errors[:date].present?
     result[:startsAt] = owed_hour.errors[:starts_at] if owed_hour.errors[:starts_at].present?
     result[:endsAt] = owed_hour.errors[:ends_at] if owed_hour.errors[:ends_at].present?
-    result[:minutes] = owed_hour.errors[:minutes] if owed_hour.errors[:minutes].present?
     result
   end
 end
