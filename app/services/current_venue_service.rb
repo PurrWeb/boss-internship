@@ -8,7 +8,7 @@ class CurrentVenueService
   attr_reader :user, :venue_id, :accessible_venues
 
   def venue
-    accessible_venues.find(venue_id_from_redis) || accessible_venues.find(venue_id) || user.default_venue
+    accessible_venues.find_by(id: venue_id) || accessible_venues.find_by(id: venue_id_from_redis) || user.default_venue
   end
 
   def set_current_venue

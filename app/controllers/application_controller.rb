@@ -59,4 +59,8 @@ class ApplicationController < ActionController::Base
       ).set_current_venue
     end
   end
+
+  def current_venue
+    CurrentVenueService.new(user: current_user, venue_id: params[:venue_id]).venue
+  end
 end

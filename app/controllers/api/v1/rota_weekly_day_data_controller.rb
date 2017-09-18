@@ -2,7 +2,6 @@ module Api
   module V1
     class RotaWeeklyDayDataController < APIController
       before_filter :web_token_authenticate!
-      skip_before_filter :set_current_venue_on_redis
 
       def index
         if required_rota_weekly_day_fields_present?

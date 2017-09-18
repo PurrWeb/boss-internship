@@ -28,7 +28,7 @@ class CheckListsController < ApplicationController
   end
 
   def index_redirect_params
-    venue = CurrentVenueService.new(user: current_user, venue_id: params[:venue_id]).venue
+    venue = current_venue
     {
       venue_id: venue.andand.id
     }

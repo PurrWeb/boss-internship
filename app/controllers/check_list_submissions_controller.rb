@@ -34,7 +34,7 @@ class CheckListSubmissionsController < ApplicationController
   
   def index_redirect_params
     {
-      venue_id: CurrentVenueService.new(user: current_user, venue_id: venue_params[:venue_id]).venue.id
+      venue_id: current_venue.id
     }
   end
 
