@@ -49,7 +49,7 @@ class StaffMembersController < ApplicationController
         access_token: access_token,
         staff_types: StaffType.all,
         venues: Venue.all,
-        pay_rates: PayRate.selectable_by(current_user),
+        pay_rates: PayRate.all,
         gender_values: StaffMember::GENDERS
       }
     else
@@ -109,7 +109,7 @@ class StaffMembersController < ApplicationController
         holiday_end_date: holiday_end_date,
         staff_types: StaffType.all,
         venues: Venue.all,
-        pay_rates: PayRate.selectable_by(current_user),
+        pay_rates: PayRate.all,
         gender_values: StaffMember::GENDERS
       }
     else
@@ -142,8 +142,8 @@ class StaffMembersController < ApplicationController
         access_token: access_token.token,
         staff_types: StaffType.all,
         venues: Venue.all,
-        pay_rates: PayRate.selectable_by(current_user),
-        gender_values: StaffMember::GENDERS        
+        pay_rates: PayRate.all,
+        gender_values: StaffMember::GENDERS
       }
     end
   end
