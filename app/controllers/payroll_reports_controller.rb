@@ -83,7 +83,7 @@ class PayrollReportsController < ApplicationController
   def index_redirect_params
     week_start = (week_from_params || RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))).start_date
     {
-      venue_id: venue_from_params.andand.id || current_user.default_venue.andand.id,
+      venue_id: venue_from_params.andand.id || current_venue.andand.id,
       week_start: UIRotaDate.format(week_start),
     }
   end
