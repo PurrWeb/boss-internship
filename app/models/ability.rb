@@ -23,6 +23,10 @@ class Ability
         !user.security_manager?
       end
 
+      can :manage, :venue_health_checks do
+        !user.security_manager?
+      end
+
       can :manage, :rotas do
         !user.security_manager?
       end

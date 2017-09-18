@@ -43,6 +43,11 @@ class PermissionsPageData
           path: @path.safe_checks_path
         },
         {
+          description: "Venue Health Check",
+          permitted: role.can?(:manage, :venue_health_checks),
+          path: @path.venue_health_check_index_path
+        },
+        {
           description: "Incident Reports",
           permitted: role.can?(:manage, :incident_reports),
           path: @path.incident_reports_path
@@ -114,10 +119,6 @@ class PermissionsPageData
         {
           description: 'API Keys',
           path: @path.api_keys_path,
-        },
-        {
-          description: "Venue Health Check",
-          path: @path.venue_health_check_index_path
         }
       ]
     }
