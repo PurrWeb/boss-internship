@@ -130,7 +130,7 @@ class Holidays extends React.PureComponent {
           <div className="boss-board__main">
             <div className="boss-board__manager">
               <div className="boss-board__manager-stats boss-board__manager-stats_layout_row">
-                <Stats value={estimatedAccruedHolidayDays} label={`${pluralize('Day', estimatedAccruedHolidayDays)} accured current tax year (Estimated)`} />
+                <Stats value={estimatedAccruedHolidayDays} label={`${pluralize('Day', estimatedAccruedHolidayDays)} accrued in current tax year (Estimated)`} />
                 <Stats value={paidHolidayDays} label={`Paid ${pluralize('day', paidHolidayDays)} logged in current tax year`} />
                 <Stats value={unpaidHolidayDays} label={`Unpaid ${pluralize('day', unpaidHolidayDays)} logged in current tax year`} />
               </div>
