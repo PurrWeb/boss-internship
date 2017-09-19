@@ -10,7 +10,7 @@ class CheckListSubmissionsController < ApplicationController
     submissions = query
       .all
       .includes(:check_list_submission_answers)
-      .includes(:user)
+      .includes({user: :name})
 
     submissions_page_data = ChecklistSubmissionsPageData.new(submissions: submissions, params: params)
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
