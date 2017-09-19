@@ -9,6 +9,7 @@ class CheckListSubmissionsController < ApplicationController
     query = result.checklist_submissions_index_query
     submissions = query
       .all
+      .order(created_at: :desc)
       .includes(:check_list_submission_answers)
       .includes({user: :name})
 
