@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import utils from "~/lib/utils"
 
 export const CardRow = ({children, title}) => {
-  
+
   return (
     <div className="boss-check__row">
       <div className="boss-check__cell">
@@ -32,7 +33,7 @@ const SubmissionsListItemMobile = ({item, onDetailsClick}) => {
       <CardRow>
         <div className="boss-check__text boss-check__text_role_date">
           <span className="boss-check__link">
-            {moment(item.get('created_at')).format('HH:mm DD/MM/YYYY')}
+            {moment(item.get('created_at')).format(utils.humanDateFormatWithTime("short"))}
           </span>
         </div>
       </CardRow>
