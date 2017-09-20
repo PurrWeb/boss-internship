@@ -16,6 +16,12 @@ class Rota < ActiveRecord::Base
 
   delegate :transition_to!, to: :state_machine
 
+  def self.four_weeks_old(now: Time.current.to_date)
+    current_rota_date = RotaShiftDate.to_rota_date(now)
+    four_weeks_ago = current_rota_date - 4.weeks
+    where('`rotas`.date < ?', four_weeks_ago)
+  end
+
   def self.published
     in_state(:published)
   end

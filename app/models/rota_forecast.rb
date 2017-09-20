@@ -1,6 +1,7 @@
 class RotaForecast < ActiveRecord::Base
   belongs_to :rota
 
+  belongs_to :four_week_old_rotas, lambda { Rota.four_weeks_old }, class_name: "Rota", foreign_key: :rota_id
   validates :forecasted_take_cents, presence: true
   validates :total_cents, presence: true
   validates :overhead_total_cents, presence: true
