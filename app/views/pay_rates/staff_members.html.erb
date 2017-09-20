@@ -64,7 +64,7 @@
           <% if pay_rate.aged? %>
             <td><%= staff_member.age %></td>
           <% end %>
-          <td><%= staff_member.master_venue.name.titlecase %></td>
+          <td><%= staff_member.master_venue.present? ? staff_member.master_venue.name.titlecase : 'N/A' %></td>
         </tr>
       <% end %>
     </tbody>
