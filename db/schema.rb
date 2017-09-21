@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170825183926) do
+ActiveRecord::Schema.define(version: 20170919065923) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255
@@ -476,6 +476,25 @@ ActiveRecord::Schema.define(version: 20170825183926) do
 
   add_index "legacy_rota_forecasts", ["rota_id"], name: "index_legacy_rota_forecasts_on_rota_id", using: :btree
 
+  create_table "machines", force: :cascade do |t|
+    t.integer  "created_by_user_id",     limit: 4,   null: false
+    t.integer  "venue_id",               limit: 4,   null: false
+    t.string   "name",                   limit: 255, null: false
+    t.string   "location",               limit: 255, null: false
+    t.integer  "float_cents",            limit: 4,   null: false
+    t.integer  "initial_refill_x_10p",   limit: 4,   null: false
+    t.integer  "initial_cash_in_x_10p",  limit: 4,   null: false
+    t.integer  "initial_cash_out_x_10p", limit: 4,   null: false
+    t.datetime "disabled_at"
+    t.integer  "disabled_by_id",         limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "machines", ["created_by_user_id"], name: "index_machines_on_created_by_user_id", using: :btree
+  add_index "machines", ["disabled_by_id"], name: "index_machines_on_disabled_by_id", using: :btree
+  add_index "machines", ["venue_id"], name: "index_machines_on_venue_id", using: :btree
+
   create_table "names", force: :cascade do |t|
     t.string   "first_name", limit: 255, null: false
     t.string   "surname",    limit: 255, null: false
@@ -913,4 +932,7 @@ ActiveRecord::Schema.define(version: 20170825183926) do
   add_foreign_key "incident_reports", "users"
   add_foreign_key "incident_reports", "users", column: "disabled_by_id"
   add_foreign_key "incident_reports", "venues"
+  add_foreign_key "machines", "users", column: "created_by_user_id"
+  add_foreign_key "machines", "users", column: "disabled_by_id"
+  add_foreign_key "machines", "venues"
 end
