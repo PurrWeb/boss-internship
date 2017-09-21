@@ -95,6 +95,26 @@ class FinanceReportsController < ApplicationController
     )
   end
 
+  def complete_multiple
+    authorize! :manage, :admin
+    week = week_from_params
+    staff_members = staff_members_from_params
+    venue = staff_members.first.master_venue
+
+    SaveFinanceReports.new(
+      staff_members: staff_members,
+      week: week
+    ).call
+
+    flash[:success] = 'Reports marked successfully'
+    redirect_to(
+      finance_reports_path(
+        week_start: UIRotaDate.format(week.start_date),
+        venue_id: venue.id
+      )
+    )
+  end
+
   private
   def index_redirect_params
     week_start = (week_from_params || RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))).start_date
@@ -131,5 +151,12 @@ class FinanceReportsController < ApplicationController
 
   def staff_member_from_params
     StaffMember.find(params[:staff_member_id])
+  end
+
+  def staff_members_from_params
+    params.fetch("staff_member_ids").map do |id_param|
+      id = Integer(id_param)
+      StaffMember.find(id)
+    end
   end
 end
