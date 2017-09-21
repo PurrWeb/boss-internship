@@ -43,6 +43,9 @@ registerComponent("CheckListsApp", CheckListsApp)
 import Submissions from "./apps/submissions"
 registerComponent("Submissions", Submissions)
 
+import {MachinesIndexApp} from "./apps/machines"
+registerComponent("MachinesIndexApp", MachinesIndexApp)
+
 import {IncidentReportsIndexApp} from "./apps/incident-reports"
 registerComponent("IncidentReportsIndexApp", IncidentReportsIndexApp)
 
