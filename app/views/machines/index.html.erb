@@ -1,0 +1,28 @@
+<%= javascript_tag do %>
+  window.boss = window.boss || {};
+  bossData = {};
+  bossData.accessToken = '<%= access_token %>';
+  bossData.currentVenueId = <%= venue.id %>;
+  window.boss = bossData;
+<% end %>
+
+<%= react_component('MachinesIndexApp', {
+  accessToken: access_token,
+  machines: ActiveModel::Serializer::CollectionSerializer.new(
+    machines,
+    serializer: Api::V1::Machines::MachinesSerializer
+  ),
+  machinesCreators: ActiveModel::Serializer::CollectionSerializer.new(
+    machine_creator_users,
+    serializer: Api::V1::UserSerializer
+  ),
+  currentVenueId: venue.id,
+  accessibleVenues: ActiveModel::Serializer::CollectionSerializer.new(
+    accessible_venues,
+    serializer: Api::V1::VenueSerializer,
+  ),
+  filter: filter,
+  currentPage: page,
+  size: machines_size,
+  perPage: per_page
+})%>
