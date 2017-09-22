@@ -162,7 +162,7 @@ class StaffMemberApiUpdateService
     other_venues = params.fetch(:other_venue_ids).map do |id|
       Venue.find_by!(id: id)
     end
-    pay_rate = PayRate.selectable_by(requester).find_by!(id: params.fetch(:pay_rate_id))
+    pay_rate = PayRate.find_by!(id: params.fetch(:pay_rate_id))
     staff_type = StaffType.find_by!(id: params.fetch(:staff_type_id))
 
     update_params = {

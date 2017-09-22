@@ -50,7 +50,9 @@ class StaffMembersController < ApplicationController
         staff_types: StaffType.all,
         venues: Venue.all,
         pay_rates: PayRate.all,
-        gender_values: StaffMember::GENDERS
+        gender_values: StaffMember::GENDERS,
+        accessible_venues: accessible_venues.pluck(:id),
+        accessible_payrates: accessible_payrates.pluck(:id),
       }
     else
       render 'reduced_show', locals: {
@@ -113,7 +115,9 @@ class StaffMembersController < ApplicationController
         staff_types: StaffType.all,
         venues: Venue.all,
         pay_rates: PayRate.all,
-        gender_values: StaffMember::GENDERS
+        gender_values: StaffMember::GENDERS,
+        accessible_venues: accessible_venues.pluck(:id),
+        accessible_payrates: accessible_payrates.pluck(:id)
       }
     else
       flash.now[:alert] = "You're not authorized to view all of this staff member's details. Contact an admin for further assistance."
@@ -146,7 +150,9 @@ class StaffMembersController < ApplicationController
         staff_types: StaffType.all,
         venues: Venue.all,
         pay_rates: PayRate.all,
-        gender_values: StaffMember::GENDERS
+        gender_values: StaffMember::GENDERS,
+        accessible_venues: accessible_venues.pluck(:id),
+        accessible_payrates: accessible_payrates.pluck(:id)
       }
     end
   end
@@ -155,7 +161,7 @@ class StaffMembersController < ApplicationController
     authorize! :manage, :staff_members
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     venues = Venue.all
-    pay_rates = PayRate.selectable_by(current_user)
+    pay_rates = accessible_payrates
     staff_types = StaffType.all
     gender_values = StaffMember::GENDERS
 
@@ -169,6 +175,14 @@ class StaffMembersController < ApplicationController
   end
   
   private
+  def accessible_venues
+    AccessibleVenuesQuery.new(current_user).all
+  end
+
+  def accessible_payrates
+    PayRate.selectable_by(current_user)
+  end
+
   def holiday_start_date_from_params
     UIRotaDate.parse!(params['start_date'])
   end

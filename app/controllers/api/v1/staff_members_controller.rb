@@ -218,7 +218,7 @@ module Api
 
       def update_employment_details
         staff_member = StaffMember.find(params[:id])
-
+        staff_member.current_user = current_user
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user

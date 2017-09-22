@@ -5,7 +5,7 @@ class StaffMember < ActiveRecord::Base
   GENDERS = [MALE_GENDER, FEMALE_GENDER]
 
   include Statesman::Adapters::ActiveRecordQueries
-
+  
   belongs_to :creator, class_name: 'User'
   belongs_to :staff_type
 
@@ -48,7 +48,7 @@ class StaffMember < ActiveRecord::Base
 
   # Transient attribute used to preserve image uploads
   # during form resubmissions
-  attr_accessor :avatar_base64, :pin_code
+  attr_accessor :avatar_base64, :pin_code, :current_user, :work_venues_changed
 
   before_save :encrypt_pin_code
 
@@ -68,7 +68,8 @@ class StaffMember < ActiveRecord::Base
   validate  do |staff_member|
     SecurityStaffMemberValidator.new(staff_member).validate
   end
-
+  validate :current_user_has_access_to_pay_rate
+  validate :current_user_has_access_to_venues
 
   validates :employment_status_a, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_b, inclusion: { in: [true, false], message: 'is required' }
@@ -82,6 +83,43 @@ class StaffMember < ActiveRecord::Base
   before_validation :check_rollbar_guid
 
   delegate :current_state, to: :state_machine
+
+  def work_venues= new_work_venues
+    self.work_venues_changed = false
+    old_ids = work_venues.pluck(:id)
+    new_ids = new_work_venues.map(&:id)
+    
+    if (old_ids - new_ids | new_ids - old_ids).present?
+      self.work_venues_changed = true
+    end
+    super new_work_venues
+  end
+
+  def current_user_has_access_to_pay_rate
+    if current_user.present? && pay_rate_id_changed?
+      unless PayRate.selectable_by(current_user).include?(pay_rate)
+        errors.add(:pay_rate, :invalid, message: "You don't have access to `#{pay_rate.name}` pay rate.")
+      end
+    end
+  end
+
+  def current_user_has_access_to_venues
+    if current_user.present?
+      if master_venue_id_changed?
+        unless current_user.venues.include?(master_venue)
+          errors.add(:master_venue, :invalid, message: "You don't have access to `#{master_venue.name}` venue.")
+        end
+      end
+      if work_venues_changed
+        venues_without_access = work_venues.inject([]) do |result, venue|
+          current_user.venues.include?(venue) ? result : result << venue.name
+        end
+        if venues_without_access.present?
+          errors.add(:work_venues, :invalid, message: "You don't have access to `#{venues_without_access.join(", ")}` venues.")
+        end
+      end
+    end
+  end
 
   def encrypt_pin_code
     if pin_code.present?
