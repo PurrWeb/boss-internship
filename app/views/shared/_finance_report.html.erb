@@ -83,6 +83,7 @@
 <% end %>
 
 <% finance_reports_table.staff_types.each do |staff_type| %>
+  <% reports = finance_reports_table.reports(staff_type) %>
   <div class="boss2-table-container">
     <h3 class="boss2-page-content_adjust_h3"><div class="boss-badge" style="font-size: 1.3em; background-color: #<%= staff_type.ui_color %>"><%= staff_type.name %></div></h3>
 
@@ -91,6 +92,21 @@
         <strong>
           Total: <%= number_to_currency(finance_reports_table.total(staff_type), unit: '£') %>
         </strong>
+      </p>
+    <% end %>
+
+    <% if display_manager_actions && reports.all?(&:can_complete?) %>
+      <p>
+        <%= link_to(
+          'Mark all complete',
+          complete_multiple_finance_reports_path(
+            staff_member_ids: reports.map(&:staff_member_id),
+            venue_id: venue.id,
+            week_start: UIRotaDate.format(week.start_date)
+          ),
+          method: "post",
+          class: 'boss2-button'
+        ) %>
       </p>
     <% end %>
 
@@ -136,7 +152,7 @@
         </tr>
       </thead>
       <tbody>
-        <% finance_reports_table.reports(staff_type).each do |report| %>
+        <% reports.each do |report| %>
           <tr>
             <td>
               <strong><%= link_to(report.staff_member_name.titlecase, staff_member_path(report.staff_member)) %></strong>
