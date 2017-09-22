@@ -43,13 +43,23 @@ class StaffMembersController < ApplicationController
 
     if can? :edit, staff_member
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-
+      venues = UserAccessibleVenuesQuery.new(
+        user: current_user,
+        master_venue: staff_member.master_venue,
+        work_venues: staff_member.work_venues
+      ).page_venues
+      
+      pay_rates = UserAccessiblePayRatesQuery.new(
+        user: current_user,
+        pay_rate: staff_member.pay_rate,
+      ).page_pay_rates
+      
       render locals: {
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
         access_token: access_token,
         staff_types: StaffType.all,
-        venues: Venue.all,
-        pay_rates: PayRate.all,
+        venues: venues,
+        pay_rates: pay_rates,
         gender_values: StaffMember::GENDERS,
         accessible_venues: accessible_venues.pluck(:id),
         accessible_payrates: accessible_payrates.pluck(:id),
@@ -175,6 +185,10 @@ class StaffMembersController < ApplicationController
   end
   
   private
+  def venues
+
+  end
+
   def accessible_venues
     AccessibleVenuesQuery.new(current_user).all
   end

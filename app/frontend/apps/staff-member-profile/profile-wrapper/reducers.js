@@ -39,31 +39,12 @@ const profileReducer = handleActions({
       accessiblePayrates,
     } = action.payload;
 
-    const pageVenuesIds = [...new Set([...accessibleVenues, staffMember.master_venue, ...staffMember.other_venues])];
-    const pagePayRatesIds = [...new Set([...accessiblePayrates, staffMember.pay_rate])];
-
-    const pageVenues = pageVenuesIds.reduce((prev, id) => {
-      if (id) {
-        const venue = venues.find(venue => venue.id === id);
-        return [...prev, {id: venue.id, name: venue.name}];      
-      }
-      return prev;
-    }, []);
-
-    const pagePayRates = pagePayRatesIds.reduce((prev, id) => {
-      if (id) {
-        const payRate = payRates.find(payRate => payRate.id === id);
-        return [...prev, {id: payRate.id, name: payRate.name}];      
-      }
-      return prev;
-    }, []);
-
     return state
       .set('staffMember', fromJS(staffMember))
       .set('accessToken', fromJS(accessToken))
       .set('staffTypes', fromJS(staffTypes))
-      .set('venues', fromJS(pageVenues))
-      .set('payRates', fromJS(pagePayRates))
+      .set('venues', fromJS(venues))
+      .set('payRates', fromJS(payRates))
       .set('genderValues', fromJS(genderValues))
   },
   [UPDATE_STAFF_MEMBER]: (state, action) => {

@@ -112,7 +112,7 @@ class StaffMember < ActiveRecord::Base
       end
       if work_venues_changed
         venues_without_access = work_venues.inject([]) do |result, venue|
-          current_user.venues.include?(venue) ? result : result << venue.name
+          AccessibleVenuesQuery.new(current_user).all.include?(venue) ? result : result << venue.name
         end
         if venues_without_access.present?
           errors.add(:work_venues, :invalid, message: "You don't have access to `#{venues_without_access.join(", ")}` venues.")
