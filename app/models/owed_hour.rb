@@ -8,8 +8,6 @@ class OwedHour < ActiveRecord::Base
   validates :date, presence: true
   validates :minutes, numericality: { greater_than: 0 }
   validates :creator, presence: true
-  validates :starts_at, presence: true
-  validates :ends_at, presence: true
   validates :staff_member, presence: true
   validates :note, presence: true
   validates :disabled_by, presence: true, if: :disabled?
@@ -33,21 +31,24 @@ class OwedHour < ActiveRecord::Base
 
   #validation
   def times_valid
-    return unless date.present?
     return unless require_times
-    shift_date = RotaShiftDate.new(date)
 
     if !starts_at.present?
-      errors.add(:starts_at, 'must by supplied')
-    elsif !ends_at.present?
-      errors.add(:ends_at, 'must be supplied')
+      errors.add(:starts_at, "can't be blank")
+    end
+    if !ends_at.present?
+      errors.add(:ends_at, "can't be blank")
     end
 
-    if starts_at.present? && !shift_date.contains_time?(starts_at)
-      errors.add(:starts_at, 'not valid for date')
-    end
-    if ends_at.present? && !shift_date.contains_time?(ends_at)
-      errors.add(:ends_at, 'not valid for date')
+    if date.present?
+      shift_date = RotaShiftDate.new(date)
+
+      if starts_at.present? && !shift_date.contains_time?(starts_at)
+        errors.add(:starts_at, 'not valid for date')
+      end
+      if ends_at.present? && !shift_date.contains_time?(ends_at)
+        errors.add(:ends_at, 'not valid for date')
+      end
     end
   end
 
