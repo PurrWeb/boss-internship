@@ -81,13 +81,6 @@ class AnonymiseDatabase
         api_key.update_attribute(:key, SecureRandom.hex)
       end
 
-      puts "Anonymising Access Tokens"
-      AccessToken.find_each do |access_token|
-        access_token.update_attributes!(
-          token: SecureRandom.hex
-        )
-      end
-
       puts "Anonymising Invites"
       Invite.find_each do |invite|
         new_email = invite.user.present? ? invite.user.email : FactoryHelper::Internet.free_email
