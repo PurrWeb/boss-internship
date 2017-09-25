@@ -94,6 +94,7 @@ class AnonymiseDatabase
       puts "Setting up Users"
       manager_staff_type = StaffType.manager.first
       non_manager_staff_type = StaffType.pr.first
+      main_venue = Venue.first
 
       user_data = [
         {
@@ -102,7 +103,8 @@ class AnonymiseDatabase
           email: 'dev@jsmbars.co.uk',
           password: 'dev_password',
           staff_type: manager_staff_type,
-          role: 'dev'
+          role: 'dev',
+          venues: [main_venue],
         },
         {
           first_name: 'An',
@@ -110,7 +112,8 @@ class AnonymiseDatabase
           email: 'admin@jsmbars.co.uk',
           password: 'admin_password',
           staff_type: manager_staff_type,
-          role: 'admin'
+          role: 'admin',
+          venues: [main_venue]
         },
         {
           first_name: 'A',
@@ -118,7 +121,8 @@ class AnonymiseDatabase
           email: 'manager@jsmbars.co.uk',
           password: 'manager_password',
           staff_type: manager_staff_type,
-          role: 'manager'
+          role: 'manager',
+          venues: [main_venue]
         },
         {
           first_name: 'Ops',
@@ -126,7 +130,8 @@ class AnonymiseDatabase
           email: 'ops_manager@jsmbars.co.uk',
           password: 'ops_manager_password',
           staff_type: manager_staff_type,
-          role: 'ops_manager'
+          role: 'ops_manager',
+          venues: [main_venue]
         },
         {
           first_name: 'Other',
@@ -134,7 +139,8 @@ class AnonymiseDatabase
           email: 'other_manager@jsmbars.co.uk',
           password: 'other_manager_password',
           staff_type: manager_staff_type,
-          role: 'manager'
+          role: 'manager',
+          venues: [Venue.last]
         }
       ]
 
@@ -155,11 +161,13 @@ class AnonymiseDatabase
         )
         user.email_address = email_address
 
-        user.update_attributes!(password: user_datum.fetch(:password))
+        user.update_attributes!(
+          password: user_datum.fetch(:password),
+          venues: user_datum.fetch(:venues)
+        )
 
         puts "Creating staff member with email #{user_datum.fetch(:email)}"
         staff_member = user.staff_member
-        staff_member_master_venue = Venue.first
 
         staff_member_params = {
           name: user.name,
@@ -174,7 +182,7 @@ class AnonymiseDatabase
           employment_status_c: true,
           employment_status_d: true,
           employment_status_p45_supplied: true,
-          master_venue: staff_member_master_venue,
+          master_venue: user.venues.first,
           staff_member_venues: [],
           pay_rate: PayRate.weekly.first
         }
@@ -196,7 +204,7 @@ class AnonymiseDatabase
           first_name: 'Venue',
           surname: 'StaffMember',
           email: 'venue_staff_member@jsmbars.co.uk',
-          master_venue: Venue.first
+          master_venue: master_venue
         },
         {
           first_name: 'NonVenue',
