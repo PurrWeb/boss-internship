@@ -101,6 +101,33 @@ export default class Header extends Component {
     })
   }
 
+  currentVenueControl(currentVenueId, venues) {
+    if(!this.globalVenueId){
+      return null;
+    }
+
+    let allowVenueSelection = venues.length > 1;
+
+    let changeVenueButton = null;
+    if(allowVenueSelection) {
+      changeVenueButton = <button
+        className="boss-page-header__control-arrow"
+      />
+    }
+
+    let divOnClick = false;
+    if(allowVenueSelection) {
+      divOnClick = this.toggleGlobalVenue;
+    }
+
+    return <div className="boss-page-header__control boss-page-header__control_role_site-select" onClick={divOnClick}>
+      <p className="boss-page-header__control-value">
+        {this.getCurrentVenueName(this.props.venues, this.globalVenueId)}
+      </p>
+     {changeVenueButton}
+    </div>;
+  }
+
   render() {
     return <header className="boss-page-header">
       <div className="boss-page-header__inner">
@@ -115,16 +142,10 @@ export default class Header extends Component {
           Search
         </button>
 
-        { <div className="boss-page-header__control boss-page-header__control_role_site-select">
-          <p className="boss-page-header__control-value">{this.getCurrentVenueName(this.props.venues, this.globalVenueId)}</p>
-          <button
-            onClick={this.toggleGlobalVenue}
-            className="boss-page-header__control-arrow"
-          ></button>
-        </div> }
+        { this.currentVenueControl(this.globalVenueId, this.props.venues) }
 
         <button className="boss-page-header__action boss-page-header__action_role_profile" onClick={this.handleToggleUserDropdown}>Profile</button>
-        { this.state.isUserDropdownOpen && 
+        { this.state.isUserDropdownOpen &&
           <div className="boss-page-header__dropdown boss-page-header__dropdown_role_profile boss-page-header__dropdown_state_opened">
             <nav className="boss-menu">
               <p className="boss-menu__label boss-menu__label_role_user">{this.props.user.name}</p>
