@@ -47,7 +47,7 @@ export default class HeaderDropdown extends Component {
 
   render() {
     return (
-      <div className="boss-page-header__dropdown boss-page-header__dropdown_role_search boss-page-header__dropdown_no-select boss-page-header__dropdown_state_opened">
+      <div className="boss-page-header__dropdown boss-page-header__dropdown_role_search boss-page-header__dropdown_state_opened">
         <div className="boss-page-header__dropdown-header">
             <p className="boss-page-header__dropdown-label boss-page-header__dropdown-label_role_search">Search</p>
             <div className="boss-page-header__dropdown-filter">
