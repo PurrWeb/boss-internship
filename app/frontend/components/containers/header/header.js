@@ -114,8 +114,8 @@ export default class Header extends Component {
         >
           Search
         </button>
-  
-        { this.globalVenueId && <div className="boss-page-header__control boss-page-header__control_role_site-select">
+
+        { <div className="boss-page-header__control boss-page-header__control_role_site-select">
           <p className="boss-page-header__control-value">{this.getCurrentVenueName(this.props.venues, this.globalVenueId)}</p>
           <button
             onClick={this.toggleGlobalVenue}
