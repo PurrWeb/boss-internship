@@ -1,4 +1,5 @@
 require "shellwords"
+require "optparse"
 
 namespace :data do
   def local_dump_path
@@ -32,6 +33,23 @@ namespace :data do
     db = "boss_staging"
     cmds = "mysqladmin -u root drop #{db} create #{db}; #{production_dump_command} | mysql -u root #{db} && sudo dokku run staging bundle exec rake data:overwrite_avatars"
     sh "ssh -A ubuntu@staging-boss.jsmbars.co.uk bash -e -x -o pipefail -c '#{Shellwords.shellescape(cmds)}'", verbose: false
+  end
+
+  desc "dump local db to specified file"
+  task :create_local_dump do
+    arguments = ARGV - ['--'] - ['data:create_local_dump']
+
+    options = {}
+    parser = OptionParser.new do |opts|
+      opts.on("--filename ARG", "File name of dump created in project root") do |filename|
+        options[:filename] = filename
+      end
+    end
+    parser.parse!(arguments)
+
+    raise '"--filename" arg missing' unless options[:filename].present?
+
+    sh "mysqldump -u root --add-drop-table boss_development > #{options.fetch(:filename)}"
   end
 
   desc "Removes avatar urls for all staff members non production environments"
