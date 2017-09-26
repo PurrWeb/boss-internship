@@ -17,7 +17,7 @@ class RotasController < ApplicationController
   end
 
   def show
-    unless current_venue.present?
+    unless venue_from_params.present?
       return redirect_to(rota_path(show_redirect_params))
     end
 
@@ -73,7 +73,7 @@ class RotasController < ApplicationController
   private
 
   def render_rota_index
-    unless highlight_date_from_params.present? && current_venue.present?
+    unless highlight_date_from_params.present? && venue_from_params.present?
       return redirect_to(rotas_path(index_redirect_params))
     end
 
@@ -139,6 +139,10 @@ class RotasController < ApplicationController
       venue_id: redirect_venue.id,
       highlight_date: UIRotaDate.format(highlight_date)
     }
+  end
+
+  def venue_from_params
+    accessible_venues.find_by(id: params[:venue_id])
   end
 
   def show_redirect_params
