@@ -36,11 +36,6 @@ export default class ChecklistDashboard extends React.Component {
 
     return <div className="boss-page-dashboard__group">
       <div className="boss-page-dashboard__controls-group">
-        <VenuesSelect
-          options={venues.toJS()}
-          selected={currentVenue.toJS()}
-          onSelect={onChangeVenue}
-        />
       </div>
       { this.actionButtons(isEditMode, onToggleEditMode, currentVenue.toJS()) }
     </div>

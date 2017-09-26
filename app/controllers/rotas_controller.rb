@@ -17,11 +17,13 @@ class RotasController < ApplicationController
   end
 
   def show
-    raise ActiveRecord::RecordNotFound unless venue_from_params.present?
+    unless venue_from_params.present?
+      return redirect_to(rota_path(show_redirect_params))
+    end
 
     rota = Rota.find_or_initialize_by(
       date: rota_date_from_params,
-      venue: venue_from_params
+      venue: current_venue
     )
 
     authorize!(:manage, rota)
@@ -72,10 +74,10 @@ class RotasController < ApplicationController
 
   def render_rota_index
     unless highlight_date_from_params.present? && venue_from_params.present?
-      return redirect_to(venue_rotas_path(index_redirect_params))
+      return redirect_to(rotas_path(index_redirect_params))
     end
 
-    venue = venue_from_params
+    venue = current_venue
     date = highlight_date_from_params
     rota_weekly = RotaWeeklyPageData.new(date: date, venue: venue).call
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
@@ -92,9 +94,9 @@ class RotasController < ApplicationController
   end
 
   def render_rota_pdf
-    raise 'Invalid params' unless highlight_date_from_params.present? && venue_from_params.present?
+    raise 'Invalid params' unless highlight_date_from_params.present? && params[:venue_id].present?
 
-    venue = venue_from_params
+    venue = current_venue
     highlight_date = highlight_date_from_params
 
     week = RotaWeek.new(highlight_date_from_params)
@@ -131,19 +133,28 @@ class RotasController < ApplicationController
   end
 
   def index_redirect_params
-    venue = venue_from_params || current_user.default_venue || Venue.first
+    redirect_venue = current_venue || current_user.default_venue
     highlight_date = highlight_date_from_params || default_highlight_date
     {
-      venue_id: venue.andand.id,
+      venue_id: redirect_venue.id,
       highlight_date: UIRotaDate.format(highlight_date)
+    }
+  end
+
+  def venue_from_params
+    accessible_venues.find_by(id: params[:venue_id])
+  end
+
+  def show_redirect_params
+    redirect_venue = current_venue || current_user.default_venue
+    id = params[:id]
+    {
+      venue_id: redirect_venue.id,
+      id: id
     }
   end
 
   def accessible_venues
     AccessibleVenuesQuery.new(current_user).all
-  end
-
-  def venue_from_params
-    @venue_from_params ||= accessible_venues.find_by(id: params[:venue_id])
   end
 end
