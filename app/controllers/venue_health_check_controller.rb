@@ -3,15 +3,12 @@ class VenueHealthCheckController < ApplicationController
   before_filter :find_accessible_venues
 
   def index
-    unless params[:venue_id].present?
-      return redirect_to(venue_health_check_index_path(index_redirect_params))
-    end
     venue_from_params = @accessible_venues.detect { |venue| venue.id == params[:venue_id].to_i }
-    venue = venue_from_params || current_venue
+    current_venue = venue_from_params || current_user.default_venue
     questionnaire_exists = current_venue.questionnaires.last.present?
     questionnaire_responses = QuestionnaireResponse.
       where(
-        venue: venue
+        venue: current_venue
       ).
       includes(
         [:user, :questionnaire]
@@ -22,7 +19,7 @@ class VenueHealthCheckController < ApplicationController
       )
 
     render locals: {
-      current_venue: venue,
+      current_venue: current_venue,
       accessible_venues: @accessible_venues,
       questionnaire_exists: questionnaire_exists,
       questionnaire_responses: questionnaire_responses
@@ -61,12 +58,5 @@ class VenueHealthCheckController < ApplicationController
   private
   def find_accessible_venues
     @accessible_venues = AccessibleVenuesQuery.new(current_user).all.includes(:questionnaires)
-  end
-
-  def index_redirect_params
-    venue = current_venue
-    {
-      venue_id: venue.andand.id,
-    }
   end
 end

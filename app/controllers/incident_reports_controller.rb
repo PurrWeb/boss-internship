@@ -67,7 +67,7 @@ class IncidentReportsController < ApplicationController
   end
 
   def index_redirect_params
-    venue = venue_from_params || current_venue
+    venue = venue_from_params || current_user.default_venue
     start_date = start_date_from_params || current_tax_year.start_date
     end_date = end_date_from_params || RotaShiftDate.to_rota_date(Time.current)
     {

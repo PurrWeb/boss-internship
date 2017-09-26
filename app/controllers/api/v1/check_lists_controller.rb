@@ -3,7 +3,6 @@ module Api
     class CheckListsController < APIController
       before_filter :web_token_authenticate!
       before_filter :check_venue
-      
       def index
         check_lists = venue_from_params
           .check_lists

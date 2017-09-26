@@ -112,7 +112,8 @@ class ChangeOrdersController < ApplicationController
 
   private
   def index_redirect_params
-    venue = venue_from_params || current_venue
+    venue = venue_from_params || current_user.default_venue
+
     {
       venue_id: venue.andand.id
     }

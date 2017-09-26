@@ -1,8 +1,7 @@
 <%= react_component(
   'Header',
   {
-    quickMenu: header_data[:quick_menu],
-    venues: header_data[:venues],
+    quickMenu: quick_menu,
     user: {
       id: logged_in_user_info_json[:id],
       name: logged_in_user_info_json[:name]

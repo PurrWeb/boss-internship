@@ -11,9 +11,8 @@ class ApplicationController < ActionController::Base
   before_filter :set_paper_trail_whodunnit
   before_filter :set_host
   before_filter :bundle_script
-  before_filter :set_current_venue_on_redis
 
-  helper_method [:render_navigation?, :render_v2_layout?, :header_data]
+  helper_method [:render_navigation?, :render_v2_layout?, :quick_menu]
 
   def current_user
     @current_user ||= super && User.includes(:email_address).find(@current_user.id)
@@ -31,7 +30,7 @@ class ApplicationController < ActionController::Base
     true
   end
 
-  def header_data
+  def quick_menu
     PermissionsPageData.new(user: current_user).to_json
   end
 
@@ -49,18 +48,5 @@ class ApplicationController < ActionController::Base
 
   def render_not_found!
     render file: "#{Rails.root}/public/404.html", layout: false, status: 404
-  end
-
-  def set_current_venue_on_redis
-    if params[:venue_id].present?
-      CurrentVenueService.new(
-        user: current_user,
-        venue_id: params[:venue_id]
-      ).set_current_venue
-    end
-  end
-
-  def current_venue
-    CurrentVenueService.new(user: current_user, venue_id: params[:venue_id]).venue
   end
 end

@@ -76,7 +76,7 @@ class DailyReportsController < ApplicationController
   def redirect_params
     {
       date: UIRotaDate.format(date_from_params || RotaShiftDate.to_rota_date(Time.current) - 1.day),
-      venue_id: (venue_from_params || current_venue).id
+      venue_id: (venue_from_params || accessible_venues.first).id
     }
   end
 end

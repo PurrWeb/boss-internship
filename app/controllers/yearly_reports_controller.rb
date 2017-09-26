@@ -62,7 +62,7 @@ class YearlyReportsController < ApplicationController
 
   def index_redirect_params
     {
-      venue_id: venue_from_params.andand.id || current_venue.andand.id,
+      venue_id: venue_from_params.andand.id || current_user.default_venue.andand.id,
       year: tax_year_from_params.andand.year || TaxYear.new(Time.current).year
     }
   end

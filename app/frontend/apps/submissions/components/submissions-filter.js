@@ -57,6 +57,7 @@ class SubmissionsFilter extends React.PureComponent {
         <div className="boss-dropdown">
           <div className="boss-dropdown__header">
             <div className="boss-dropdown__header-group">
+              <VenuesSelect options={venues.toJS()} selected={currentVenue.toJS()} onSelect={onSelectVenue} />
             </div>
             <button
               onClick={onToggleFilter}

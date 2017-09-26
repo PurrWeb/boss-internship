@@ -11,6 +11,11 @@
           <form action="#" class="boss-form">
             <div class="boss-form__field">
               <div class="boss-form__select boss-form__select_size_small-fluid">
+                <%= react_component(
+                    'VenueFinder',
+                    selected_venue: current_venue,
+                    venues: accessible_venues
+                  ) %>
               </div>
             </div>
           </form>

@@ -3,6 +3,20 @@
 
 <%= bootstrap_form_for('weekly_report_index', url: weekly_reports_path, html: { method: :get }) do |form| %>
   <div>
+    <%= form.select(
+          :venue_id,
+          options_for_select(
+            accessible_venues.map do |venue|
+              [venue.name, venue.id]
+            end,
+            venue.id
+          ),
+          {
+            include_blank: false
+          },
+          {
+            name: 'venue_id'
+          }) %>
     <div class="mb-md">
       <%= form.text_field(
               :start_date,

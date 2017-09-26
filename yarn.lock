@@ -6441,7 +6441,7 @@ react-tools@*:
     commoner "^0.10.0"
     jstransform "^10.1.0"
 
-react@^15.0.0, react@^15.6.1:
+react@>=0.12.0, react@^15.0.0, react@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react/-/react-15.6.1.tgz#baa8434ec6780bde997cdc380b79cd33b96393df"
   dependencies:
@@ -7722,10 +7722,6 @@ url-parse@^1.1.1:
   dependencies:
     querystringify "~1.0.0"
     requires-port "1.0.x"
-
-url-search-params@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/url-search-params/-/url-search-params-0.10.0.tgz#d428c1fa9d78d5c5a3feb634147873890f4adcf0"
 
 url@^0.11.0:
   version "0.11.0"

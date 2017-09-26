@@ -2,8 +2,7 @@ class APIController < ApplicationController
   skip_before_filter :verify_authenticity_token
   skip_before_filter :authenticate_user!
   skip_before_filter :set_paper_trail_whodunnit
-  skip_before_filter :set_current_venue_on_redis
-  
+
   before_filter :parse_access_tokens
 
   def parse_access_tokens
