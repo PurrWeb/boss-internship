@@ -4,23 +4,6 @@
     <%= bootstrap_form_for('', url: yearly_reports_path, html: { method: :get, class: 'row align-bottom' }) do |form| %>
       <div class="small-12 medium-5 column">
         <%= form.select(
-                :venue_id,
-                options_for_select(
-                    accessible_venues.map do |venue|
-                      [venue.name, venue.id]
-                    end,
-                    venue.id
-                ),
-                {
-                    include_blank: false
-                },
-                {
-                  class: 'boss2-input'
-                }
-                ) %>
-      </div>
-      <div class="small-12 medium-5 column">
-        <%= form.select(
           :year,
           options_for_select(
             selectable_years,
