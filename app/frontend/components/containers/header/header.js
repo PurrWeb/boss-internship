@@ -4,6 +4,7 @@ import HeaderDropdown from './components/header-dropdown';
 import iScroll from 'iscroll';
 import ReactIScroll from 'react-iscroll';
 import utils from '~/lib/utils';
+import URLSearchParams from 'url-search-params';
 
 export const EmptyHeader = () => {
   return (
