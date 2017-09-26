@@ -32,12 +32,13 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :sia_badge_expiry_date,
              :updated_at,
              :is_security_staff,
-             :created_at
+             :created_at,
+             :has_user
 
   def avatar
     object.avatar_url
   end
-  
+
   def starts_at
     UIRotaDate.format(object.starts_at)
   end
@@ -134,5 +135,9 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
 
   def is_security_staff
     object.security?
+  end
+
+  def has_user
+    object.has_user?
   end
 end

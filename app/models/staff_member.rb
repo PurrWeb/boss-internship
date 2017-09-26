@@ -321,6 +321,10 @@ class StaffMember < ActiveRecord::Base
     )
   end
 
+  def has_user?
+    user.present? && user.enabled?
+  end
+
   private
   # Needed for statesman
   def self.transition_class

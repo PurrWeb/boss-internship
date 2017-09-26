@@ -69,13 +69,22 @@ class ProfileWrapper extends React.PureComponent {
     super(props);
   }
 
-  handleDisableStaffMemberSubmit = (values) => {
-    confirm('This staff member has an associated user account. Disabling here will not disable the user and the will still be able to log in.', {
-      actionButtonText: 'Confirm',
-      title: 'WARNING !!!',
-    }).then(() => {
-      this.props.actions.disableStaffMemberRequest(values.toJS());
-    })
+  getHandleDisableStaffMemberSubmit(staffMember) {
+    return (values) => {
+      let staffMemberData = staffMember.toJS()
+
+      let warningMessage = null
+      if (oFetch(staffMemberData, 'has_user')) {
+        confirm('This staff member has an associated user account. Disabling here will not disable the user and the will still be able to log in.', {
+          actionButtonText: 'Confirm',
+          title: 'WARNING !!!',
+        }).then(() => {
+          this.props.actions.disableStaffMemberRequest(values.toJS());
+        })
+      } else {
+        this.props.actions.disableStaffMemberRequest(values.toJS());
+      }
+    }
   }
 
   render() {
@@ -127,7 +136,7 @@ class ProfileWrapper extends React.PureComponent {
           title="Disable staff member"
         >
           <DisableStaffMemberForm
-            onSubmit={this.handleDisableStaffMemberSubmit}
+            onSubmit={this.getHandleDisableStaffMemberSubmit(staffMember)}
           />
         </ContentModal>
         <ContentModal
