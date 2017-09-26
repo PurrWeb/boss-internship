@@ -133,19 +133,19 @@ class RotasController < ApplicationController
   end
 
   def index_redirect_params
-    venue = current_venue || current_user.default_venue
+    redirect_venue = current_venue || current_user.default_venue
     highlight_date = highlight_date_from_params || default_highlight_date
     {
-      venue_id: venue.andand.id,
+      venue_id: redirect_venue.id,
       highlight_date: UIRotaDate.format(highlight_date)
     }
   end
 
   def show_redirect_params
-    venue = current_venue || current_user.default_venue
+    redirect_venue = current_venue || current_user.default_venue
     id = params[:id]
     {
-      venue_id: venue.andand.id,
+      venue_id: redirect_venue.id,
       id: id
     }
   end
