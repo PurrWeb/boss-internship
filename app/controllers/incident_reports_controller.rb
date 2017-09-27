@@ -14,7 +14,9 @@ class IncidentReportsController < ApplicationController
       start_date: start_date_from_params,
       end_date: end_date_from_params,
       created_by: params[:created_by],
-    ).all
+    ).
+    all.
+    order(created_at: :desc)
 
     report_creator_users = User.joins(:incident_reports).includes(:name).uniq{|user| user.id}
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
