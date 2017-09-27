@@ -45,7 +45,7 @@ Rails.application.routes.draw do
         get :redeem
       end
     end
-    
+
     resources :users, only: [:show, :index, :destroy] do
       member do
         get :disable
@@ -202,7 +202,7 @@ Rails.application.routes.draw do
             post :restore
           end
         end
-        
+
         resources :incident_reports, only: [:index, :show, :create, :update, :destroy]
 
         resources :questionnaires do
