@@ -3,7 +3,7 @@ import humanize from 'string-humanize';
 import moment from 'moment';
 import confirm from '~/lib/confirm-utils';
 
-const ActionsCell = ({label, holidaysId,holiday, deleteHoliday, onEditHoliday, editableHoliday}) => {
+const ActionsCell = ({label, holidaysId,holiday, deleteHoliday, onEditHoliday, editableHoliday, isStaffMemberDisabled}) => {
   
   const openEditHoliday = () => {
    onEditHoliday(holiday)
@@ -23,7 +23,7 @@ const ActionsCell = ({label, holidaysId,holiday, deleteHoliday, onEditHoliday, e
     <div className="boss-table__cell">
       <div className="boss-table__info">
         <p className="boss-table__label">{label}</p>
-        { editableHoliday && <p className="boss-table__actions">
+        { (editableHoliday && !isStaffMemberDisabled) && <p className="boss-table__actions">
           <button
             onClick={openEditHoliday}
             className="boss-button boss-button_type_small boss-button_role_update boss-table__action"
@@ -67,7 +67,7 @@ const CreatedByCell = ({label, creator, created}) => {
   )
 }
 
-const Row = ({holiday, deleteHoliday, onEditHoliday}) => {
+const Row = ({holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled}) => {
   const type = humanize(holiday.get('holiday_type'));
   const startDate = moment(holiday.get('start_date'), "DD-MM-YYYY").format('DD MMM YYYY');
   const endDate = moment(holiday.get('end_date'), "DD-MM-YYYY").format('DD MMM YYYY');
@@ -85,6 +85,7 @@ const Row = ({holiday, deleteHoliday, onEditHoliday}) => {
       <ActionsCell
         label="actions"
         editableHoliday={editable}
+        isStaffMemberDisabled={isStaffMemberDisabled}
         holidaysId={holiday.get('id')}
         holiday={holiday}
         deleteHoliday={deleteHoliday}
@@ -107,11 +108,11 @@ const Header = () => {
 }
 
 
-const HolidaysTableDesktop = ({holidays, deleteHoliday, onEditHoliday}) => {
+const HolidaysTableDesktop = ({holidays, deleteHoliday, onEditHoliday, isStaffMemberDisabled}) => {
 
   const renderHolidays = (holidays) => {
     return holidays.map(holiday => {
-      return <Row key={holiday.get('id')} holiday={holiday} deleteHoliday={deleteHoliday} onEditHoliday={onEditHoliday}/>
+      return <Row key={holiday.get('id')} isStaffMemberDisabled={isStaffMemberDisabled} holiday={holiday} deleteHoliday={deleteHoliday} onEditHoliday={onEditHoliday}/>
     })
   }
 
@@ -123,10 +124,10 @@ const HolidaysTableDesktop = ({holidays, deleteHoliday, onEditHoliday}) => {
   )
 }
 
-const HolidaysTable = ({holidays, deleteHoliday, onEditHoliday}) => {
+const HolidaysTable = ({holidays, deleteHoliday, onEditHoliday, isStaffMemberDisabled}) => {
   return (
     <div className="boss-board__manager-table">
-      <HolidaysTableDesktop holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={onEditHoliday} />
+      <HolidaysTableDesktop holidays={holidays} isStaffMemberDisabled={isStaffMemberDisabled} deleteHoliday={deleteHoliday} onEditHoliday={onEditHoliday} />
     </div>
   )
 }

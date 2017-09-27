@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HolidaysHeader = ({title, onAddNew}) => {
+const HolidaysHeader = ({title, onAddNew, isStaffMemberDisabled}) => {
   
   return (
     <header className="boss-board__header">
@@ -8,10 +8,11 @@ const HolidaysHeader = ({title, onAddNew}) => {
         {title}
       </h2>
       <div className="boss-board__button-group">
-        <button
-          onClick={onAddNew}
-          className="boss-button boss-button_role_add"
-        >Add Holidays</button>
+        { !isStaffMemberDisabled && <button
+            onClick={onAddNew}
+            className="boss-button boss-button_role_add"
+          >Add Holidays</button>
+        }
       </div>
     </header>
   )

@@ -24,7 +24,16 @@ export const getOwedHourUIData = (owedHour) => {
   return { hasDate, date, times, durationHours, durationMinutes, note, creator, created, editable };
 }
 
-const ActionsCell = ({label, owedHourId, deleteOwedHours, openEditModal, owedHour, editable}) => {
+const ActionsCell = ({
+  label,
+  owedHourId,
+  deleteOwedHours,
+  openEditModal,
+  owedHour,
+  editable,
+  isStaffMemberDisabled,
+}) => {
+
   const onEdit = (owedHour) => {
     openEditModal(owedHour);
   }
@@ -40,7 +49,7 @@ const ActionsCell = ({label, owedHourId, deleteOwedHours, openEditModal, owedHou
 
   return (
     <div className="boss-table__cell">
-      { editable && <div className="boss-table__info">
+      { (editable && !isStaffMemberDisabled) && <div className="boss-table__info">
         <p className="boss-table__label">{label}</p>
         <p className="boss-table__actions">
           <button
@@ -86,7 +95,7 @@ const CreatedByCell = ({label, creator, created}) => {
   )
 }
 
-const Row = ({owedHour, deleteOwedHours, openEditModal}) => {
+const Row = ({owedHour, deleteOwedHours, openEditModal, isStaffMemberDisabled}) => {
   const {
     date,
     times,
@@ -106,7 +115,15 @@ const Row = ({owedHour, deleteOwedHours, openEditModal}) => {
       <SimpleCell label="Duration (minutes)" text={durationMinutes} />      
       <CreatedByCell label="CreatedBy" creator={creator} created={created} />
       <SimpleCell label="Note" text={note} />
-      <ActionsCell editable={editable} label="Actions" owedHourId={owedHour.get('id')} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} owedHour={owedHour}/>      
+      <ActionsCell
+        editable={editable}
+        label="Actions"
+        owedHourId={owedHour.get('id')}
+        deleteOwedHours={deleteOwedHours}
+        openEditModal={openEditModal}
+        owedHour={owedHour}
+        isStaffMemberDisabled={isStaffMemberDisabled}
+      />      
     </div>
   )
 }
@@ -141,16 +158,28 @@ const OwedStats = ({week}) => {
 };
 
 
-const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal}) => {    
+const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal, isStaffMemberDisabled}) => {    
   const renderRows = (owedHours, deleteOwedHours, openEditModal) => {
     return owedHours.map(owedHour => {
-      return <Row key={`${owedHour.get('id')}`} owedHour={owedHour} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal}/>
+      return <Row
+        key={`${owedHour.get('id')}`}
+        owedHour={owedHour}
+        deleteOwedHours={deleteOwedHours}
+        openEditModal={openEditModal}
+        isStaffMemberDisabled={isStaffMemberDisabled}
+      />
     });
   }
 
   const renderMobileItems = (owedHours, deleteOwedHours, openEditModal) => {
     return owedHours.map(owedHour => {
-      return <OwedHoursMobileItem key={owedHour.get('id')} owedHour={owedHour} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />;
+      return <OwedHoursMobileItem
+        key={owedHour.get('id')}
+        owedHour={owedHour}
+        isStaffMemberDisabled={isStaffMemberDisabled}
+        deleteOwedHours={deleteOwedHours}
+        openEditModal={openEditModal}
+      />;
     })
   }
 

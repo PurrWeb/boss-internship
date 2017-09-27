@@ -89,7 +89,7 @@ class OwedHours extends React.PureComponent {
     } = this.props;
     return (
       <ProfileWrapper currentPage="owed_hours">
-        { !disabled && <section className="boss-board">
+        <section className="boss-board">
           <ContentModal
               show={newOwedHour}
               onClose={() => this.onCancelAddNew()}
@@ -105,13 +105,13 @@ class OwedHours extends React.PureComponent {
           >
             <EditOwedHours owedHour={editedOwedHours}/>
           </ContentModal>
-          <OwedHoursHeader title="Owed hours" onAddNew={this.onAddNew} />
+          <OwedHoursHeader isStaffMemberDisabled={disabled} title="Owed hours" onAddNew={this.onAddNew} />
           <div className="boss-board__main">
             <div className="boss-board__manager">
-              <OwedHoursTable owedHours={owedHours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
+              <OwedHoursTable isStaffMemberDisabled={disabled} owedHours={owedHours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
             </div>
           </div> 
-        </section> }
+        </section>
       </ProfileWrapper>
     )
   }
