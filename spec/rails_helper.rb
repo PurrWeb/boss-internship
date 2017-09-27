@@ -32,6 +32,7 @@ ActiveRecord::Migration.maintain_test_schema!
 RSpec.configure do |config|
   # Hack required to make rspec code work that asserts using urls helpers
   Rails.application.routes.default_url_options[:host] = 'example.org'
+  config.include HeaderHelpers, type: :request
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

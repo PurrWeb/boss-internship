@@ -9,6 +9,7 @@ RSpec.describe Venue, type: :model do
   it { should have_many(:other_staff_members) }
   it { should have_many(:venue_reminder_users) }
   it { should have_many(:reminder_users) }
+  it { should have_many(:maintenance_tasks) }
 
   it { should validate_numericality_of(:safe_float_cents).is_greater_than_or_equal_to(0) }
   it { should validate_numericality_of(:till_float_cents).is_greater_than_or_equal_to(0) }

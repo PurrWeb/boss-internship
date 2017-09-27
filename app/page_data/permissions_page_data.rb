@@ -72,6 +72,11 @@ class PermissionsPageData
           permitted: true,
           path: @path.redeem_vouchers_path
         },
+        {
+          description: "Maintenance Tasks",
+          permitted: role.can?(:view, MaintenanceTask),
+          path: @path.maintenance_index_path
+        },
       ]
     }
 

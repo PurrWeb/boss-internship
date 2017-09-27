@@ -21,7 +21,7 @@ class APIController < ApplicationController
       @web_access_token = web_token
     end
   end
-  
+
   def api_token_athenticate!
     render(
       json: { errors: "Not authenticated" },
@@ -50,6 +50,11 @@ class APIController < ApplicationController
 
   def venue_from_api_key
     @api_access_token.andand.api_key.andand.venue
+  end
+
+  def render_unprocessable_entity(resource)
+    render json: ActiveModel::Serializer::ErrorSerializer.new(resource).as_json,
+      status: :unprocessable_entity
   end
 
   def current_ability
