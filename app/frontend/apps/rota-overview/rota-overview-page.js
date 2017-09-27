@@ -68,20 +68,6 @@ class RotaOverviewPage extends Component {
           <div className="boss-page-main__content">
             <div className="boss-page-main__inner">
                 <div className="boss-rotas">
-                  <div className="boss-rotas__filter">
-                    <div className="boss-form">
-                      <div className="boss-form__row boss-form__row_position_last">
-                        <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_min">
-                          <p className="boss-form__label boss-form__label_type_icon-venue">
-                            <span className="boss-form__label-text"> Venue </span>
-                          </p>
-                          <div className="boss-form__select">
-                            <VenuesSelect options={this.props.venues} selected={this.props.venue} onSelect={this.changeVenue.bind(this)} clientId/>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                   <div className="boss-rotas__summary">
                     <section className="boss-board boss-board_layout_double">
                       <div className="boss-board__calendar">

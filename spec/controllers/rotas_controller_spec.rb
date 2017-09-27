@@ -15,13 +15,10 @@ RSpec.describe RotasController do
         let(:expected_start_date) { Time.zone.now.beginning_of_week.to_date }
         let(:expected_end_date) { Time.zone.now.beginning_of_week.to_date + 6.days }
 
-        it 'should give 404' do
-          get :index
-          expect(response).to redirect_to(
-            action: :index,
-            highlight_date: UIRotaDate.format(expected_start_date),
-            venue_id: venue.id
-          )
+        it 'should raise error' do
+          expect{
+            get :index
+          }.to raise_error(NoMethodError, /undefined method .id. for nil:NilClass/)
         end
       end
 
@@ -30,11 +27,8 @@ RSpec.describe RotasController do
         let(:expected_start_date) { Time.zone.now.beginning_of_week.to_date }
         let(:expected_end_date) { Time.zone.now.beginning_of_week.to_date + 6.days }
 
-        it 'should redirect to index for users first venue with current week dates set' do
-          get(
-            :index,
-            highlight_date: UIRotaDate.format(expected_start_date),
-          )
+        it 'should redirect to index for users default venue with current week dates set' do
+          get(:index)
           expect(response).to redirect_to(
             action: :index,
             highlight_date: UIRotaDate.format(expected_start_date),

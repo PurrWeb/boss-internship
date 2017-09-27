@@ -205,11 +205,15 @@ class PermissionsPageData
       parent_item
     end
 
-    if role.can?(:manage, :admin)
-      (quick_menu + admin_menu)
-    else
-      quick_menu
-    end
+    venues = ActiveModel::Serializer::CollectionSerializer.new(
+      AccessibleVenuesQuery.new(user).all,
+      serializer: Api::V1::VenueSerializer,
+    )
 
+    if role.can?(:manage, :admin)
+      { quick_menu: (quick_menu + admin_menu), venues: venues }
+    else
+      { quick_menu: quick_menu, venues: venues }
+    end
   end
 end

@@ -5,7 +5,7 @@ import oFetch from "o-fetch"
 export const appRoutes = {
     rota: function (options){
         var [venueId, date] = oFetch(options, "venueId", "date");
-        return "/venues/" + venueId + "/rotas/" + utils.formatRotaUrlDate(date);
+        return "/rotas/" + utils.formatRotaUrlDate(date) + "&venue_id=" + venueId;
     },
     rotaPdfDownload: function(options){
         var [venueId, startDate, endDate] = oFetch(options, "venueId", "startDate", "endDate");
@@ -34,8 +34,7 @@ export const appRoutes = {
     rotaOverview: function(options){
         var [venueId, startDate] = oFetch(options, "venueId", "startDate");
         return [
-            "/venues/" + venueId,
-            "/rotas?highlight_date=" + utils.formatRotaUrlDate(startDate),
+            "/rotas?venue_id=" + venueId + "&highlight_date=" + utils.formatRotaUrlDate(startDate),
         ].join("");
     },
     changeOrdersIndex: function(options){

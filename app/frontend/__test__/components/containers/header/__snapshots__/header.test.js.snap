@@ -29,6 +29,9 @@ exports[`Quick menu should opens, when click on icon 1`] = `
     >
       Profile
     </button>
+    <div
+      className="boss-page-header__dropdowns"
+    />
   </div>
 </header>
 `;
@@ -62,163 +65,167 @@ exports[`Quick menu should opens, when click on icon 2`] = `
     >
       Profile
     </button>
-    <HeaderDropdown
-      closeDropdown={[Function]}
-      handleEscPress={[Function]}
-      quickMenu={
-        Array [
-          Object {
-            "color": "#e74c3c",
-            "items": Array [
-              Object {
-                "description": "Rota",
-                "path": "/rotas",
-                "permitted": true,
-              },
-              Object {
-                "description": "Security Rota",
-                "path": "/security_rotas",
-                "permitted": true,
-              },
-              Object {
-                "description": "Change Orders",
-                "path": "/change_orders",
-                "permitted": true,
-              },
-              Object {
-                "description": "Safe Checks",
-                "path": "/safe_checks",
-                "permitted": true,
-              },
-            ],
-            "name": "Venue",
-          },
-          Object {
-            "color": "#27ae60",
-            "items": Array [
-              Object {
-                "description": "Hours Confirmation",
-                "path": "/hours_confirmation/current",
-                "permitted": true,
-              },
-              Object {
-                "description": "Holidays",
-                "path": "/holidays?date=10-07-2017",
-                "permitted": true,
-              },
-              Object {
-                "description": "Add Staff Member",
-                "path": "/staff_members/new",
-                "permitted": true,
-              },
-            ],
-            "name": "Staff Members",
-          },
-          Object {
-            "color": "#9b59b6",
-            "items": Array [
-              Object {
-                "description": "Daily Report",
-                "path": "/daily_reports",
-                "permitted": true,
-              },
-              Object {
-                "description": "Weekly Report",
-                "path": "/weekly_reports",
-                "permitted": true,
-              },
-              Object {
-                "description": "Payroll Report",
-                "path": "/payroll_reports",
-                "permitted": true,
-              },
-            ],
-            "name": "Reports",
-          },
-          Object {
-            "color": "#e67e22",
-            "items": Array [
-              Object {
-                "description": "Names",
-                "path": "/names",
-              },
-              Object {
-                "description": "Venues",
-                "path": "/venues",
-              },
-            ],
-            "name": "Admin: General",
-          },
-          Object {
-            "color": "#1abc9c",
-            "items": Array [
-              Object {
-                "description": "Invites",
-                "path": "/invites",
-              },
-            ],
-            "name": "Admin: Users",
-          },
-          Object {
-            "color": "#3498db",
-            "items": Array [
-              Object {
-                "description": "Staff Type",
-                "path": "/staff_types",
-              },
-              Object {
-                "description": "Pay Rates",
-                "path": "/pay_rates",
-              },
-              Object {
-                "description": "Staff Vetting",
-                "path": "/staff_vetting",
-              },
-              Object {
-                "description": "Staff Tracking",
-                "path": "/staff_tracking",
-              },
-            ],
-            "name": "Admin: Staff Members",
-          },
-          Object {
-            "color": "#c0392b",
-            "items": Array [
-              Object {
-                "description": "Daily Report",
-                "path": "/daily_reports",
-                "permitted": true,
-              },
-              Object {
-                "description": "Weekly Report",
-                "path": "/weekly_reports",
-                "permitted": true,
-              },
-              Object {
-                "description": "Payroll Report",
-                "path": "/payroll_reports",
-                "permitted": true,
-              },
-            ],
-            "name": "Admin: Venue",
-          },
-          Object {
-            "color": "#f39c12",
-            "items": Array [
-              Object {
-                "description": "Finance Report",
-                "path": "/finance_reports",
-              },
-              Object {
-                "description": "Yearly Report",
-                "path": "/yearly_reports",
-              },
-            ],
-            "name": "Admin: Reports",
-          },
-        ]
-      }
-    />
+    <div
+      className="boss-page-header__dropdowns"
+    >
+      <HeaderDropdown
+        closeDropdown={[Function]}
+        handleEscPress={[Function]}
+        quickMenu={
+          Array [
+            Object {
+              "color": "#e74c3c",
+              "items": Array [
+                Object {
+                  "description": "Rota",
+                  "path": "/rotas",
+                  "permitted": true,
+                },
+                Object {
+                  "description": "Security Rota",
+                  "path": "/security_rotas",
+                  "permitted": true,
+                },
+                Object {
+                  "description": "Change Orders",
+                  "path": "/change_orders",
+                  "permitted": true,
+                },
+                Object {
+                  "description": "Safe Checks",
+                  "path": "/safe_checks",
+                  "permitted": true,
+                },
+              ],
+              "name": "Venue",
+            },
+            Object {
+              "color": "#27ae60",
+              "items": Array [
+                Object {
+                  "description": "Hours Confirmation",
+                  "path": "/hours_confirmation/current",
+                  "permitted": true,
+                },
+                Object {
+                  "description": "Holidays",
+                  "path": "/holidays?date=10-07-2017",
+                  "permitted": true,
+                },
+                Object {
+                  "description": "Add Staff Member",
+                  "path": "/staff_members/new",
+                  "permitted": true,
+                },
+              ],
+              "name": "Staff Members",
+            },
+            Object {
+              "color": "#9b59b6",
+              "items": Array [
+                Object {
+                  "description": "Daily Report",
+                  "path": "/daily_reports",
+                  "permitted": true,
+                },
+                Object {
+                  "description": "Weekly Report",
+                  "path": "/weekly_reports",
+                  "permitted": true,
+                },
+                Object {
+                  "description": "Payroll Report",
+                  "path": "/payroll_reports",
+                  "permitted": true,
+                },
+              ],
+              "name": "Reports",
+            },
+            Object {
+              "color": "#e67e22",
+              "items": Array [
+                Object {
+                  "description": "Names",
+                  "path": "/names",
+                },
+                Object {
+                  "description": "Venues",
+                  "path": "/venues",
+                },
+              ],
+              "name": "Admin: General",
+            },
+            Object {
+              "color": "#1abc9c",
+              "items": Array [
+                Object {
+                  "description": "Invites",
+                  "path": "/invites",
+                },
+              ],
+              "name": "Admin: Users",
+            },
+            Object {
+              "color": "#3498db",
+              "items": Array [
+                Object {
+                  "description": "Staff Type",
+                  "path": "/staff_types",
+                },
+                Object {
+                  "description": "Pay Rates",
+                  "path": "/pay_rates",
+                },
+                Object {
+                  "description": "Staff Vetting",
+                  "path": "/staff_vetting",
+                },
+                Object {
+                  "description": "Staff Tracking",
+                  "path": "/staff_tracking",
+                },
+              ],
+              "name": "Admin: Staff Members",
+            },
+            Object {
+              "color": "#c0392b",
+              "items": Array [
+                Object {
+                  "description": "Daily Report",
+                  "path": "/daily_reports",
+                  "permitted": true,
+                },
+                Object {
+                  "description": "Weekly Report",
+                  "path": "/weekly_reports",
+                  "permitted": true,
+                },
+                Object {
+                  "description": "Payroll Report",
+                  "path": "/payroll_reports",
+                  "permitted": true,
+                },
+              ],
+              "name": "Admin: Venue",
+            },
+            Object {
+              "color": "#f39c12",
+              "items": Array [
+                Object {
+                  "description": "Finance Report",
+                  "path": "/finance_reports",
+                },
+                Object {
+                  "description": "Yearly Report",
+                  "path": "/yearly_reports",
+                },
+              ],
+              "name": "Admin: Reports",
+            },
+          ]
+        }
+      />
+    </div>
   </div>
 </header>
 `;

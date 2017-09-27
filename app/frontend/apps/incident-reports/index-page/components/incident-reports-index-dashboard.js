@@ -72,7 +72,6 @@ class IncidentReportsIndexDashboard extends React.PureComponent {
         <div className="boss-page-dashboard__controls-group">
           <div className="boss-form">
             <div className="boss-form__field">
-              { this.renderVenueSelect() }
             </div>
           </div>
         </div>
@@ -94,29 +93,6 @@ class IncidentReportsIndexDashboard extends React.PureComponent {
     this.props.actions.handleFilter(filterParams)
   }
 
-  renderVenueSelect() {
-    const currentVenue = this.props.accessibleVenues.find((venue) => venue.get('id') === this.props.currentVenueId);
-
-    if (!currentVenue) {
-      throw Error('Wrong venue');
-    }
-
-    return (
-      <div className="boss-form__select boss-form__select_size_small-fluid">
-        <BossSelect
-          options={this.props.accessibleVenues.toJS()}
-          onChange={this.handleSelectVenue}
-          selected={currentVenue.toJS()}
-          label="name"
-          value="id"
-          mappedProps={{
-            clearable: false
-          }}
-        />
-      </div>
-    )
-  }
-
   renderFilter() {
     const reportCreators = this.props.reportCreators;
     const selectedCreatorId = this.props.selectedCreatorId;
@@ -128,7 +104,6 @@ class IncidentReportsIndexDashboard extends React.PureComponent {
             <div className="boss-dropdown__header-group">
               <div className="boss-form">
                 <div className="boss-form__field boss-form__field_position_last">
-                  { this.renderVenueSelect() }
                 </div>
               </div>
             </div>

@@ -42,17 +42,7 @@ class PageHeader extends React.Component {
               <div className="boss-form boss-form_page_hrc">
                 <div className="boss-form__field">
                   <div className="boss-form__select boss-form__select_size_small">
-                      <VenueDropdown
-                        selectedVenues={[venueClientId]}
-                        venues={this.props.venues}
-                        clearable={false}
-                        onChange={(venueIds) => {
-                            var venue = this.props.venues[venueIds[0]]
-                            location.href = appRoutes.hoursConfirmationCurrentPage({
-                                venueId: venue.serverId
-                            })
-                        }}
-                    />
+                      
                   </div>
                 </div>
               </div>

@@ -8,21 +8,6 @@
 <div class="boss2-buttons-group">
     <%= bootstrap_form_for('', url: daily_reports_path, html: { method: :get, class: 'row align-bottom' }) do |form| %>
         <div class="small-12 medium-expand column">
-          <%= form.select(
-                  :venue_id,
-                  options_for_select(
-                      accessible_venues.map do |venue|
-                        [venue.name, venue.id]
-                      end,
-                      venue.id
-                  ),
-                  {
-                      include_blank: false
-                  },
-                  {class: 'boss2-input'}
-                  ) %>
-        </div>
-        <div class="small-12 medium-expand column">
           <%= form.text_field(
             :date,
             value: UIRotaDate.format(date),
