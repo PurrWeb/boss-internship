@@ -6,10 +6,13 @@ class OwedHourWeekView
   end
 
   attr_reader :owed_hours
-  
+
   def serialize
-    owed_hours_by_week = owed_hours.group_by { |owed_hour| RotaWeek.new(owed_hour.date)  }.sort_by { |week, hours| week }
-    serialized_owed_hours = owed_hours_by_week.map do |week, owed_hours|
+    owed_hours_by_week = owed_hours.
+      group_by { |owed_hour| RotaWeek.new(owed_hour.date)  }.sort do |a, b|
+        b.first <=> a.first
+      end
+    owed_hours_by_week.map do |week, owed_hours|
       total_minutes = owed_hours.inject(0) { |sum, owed_hours| sum + owed_hours.minutes }
       {
         week: {
