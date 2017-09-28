@@ -7,6 +7,7 @@ import moment from "moment"
 import $ from "jquery"
 import * as selectors from "~/redux/selectors"
 import '~/lib/global-try-catch';
+import Bowser from 'bowser'
 
 window.boss = window.boss || {};
 window.boss.currentLayout = window.boss.currentLayout || 'oldLayout';
@@ -136,4 +137,8 @@ $(document).ready(function(){
                 onChange={({startDate}) => input.value = moment(startDate).format("DD-MM-YYYY")}
                 selectionStartDate={debug.moment(input.value, "DD-MM-YYYY").toDate()} />, el)
     })
+
+    if(Bowser.ios){
+      document.querySelector('html').classList.add('is-ios');
+    }
 })
