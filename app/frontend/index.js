@@ -5,11 +5,8 @@ import ReactDOM from 'react-dom'
 import _ from "underscore"
 import moment from "moment"
 import $ from "jquery"
-import initReactFastclick from "react-fastclick" // import for side effects
 import * as selectors from "~/redux/selectors"
 import '~/lib/global-try-catch';
-
-initReactFastclick();
 
 window.boss = window.boss || {};
 window.boss.currentLayout = window.boss.currentLayout || 'oldLayout';
