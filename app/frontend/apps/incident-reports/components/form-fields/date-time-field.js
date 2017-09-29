@@ -5,6 +5,18 @@ import 'rc-time-picker/assets/index.css';
 import './time.sass';
 
 class DateTimeField extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      displayDatePicker: false
+    };
+    this.datePickerOnClick = this.datePickerOnClick.bind(this);
+  }
+
+  datePickerOnClick() {
+    this.setState({displayDatePicker: true});
+  }
+
   render() {
     const {
       date,
@@ -12,7 +24,7 @@ class DateTimeField extends React.Component {
       label,
       required,
     } = this.props;
-    
+
     return (
       <div className="boss-form__row">
         <div className="boss-form__field boss-form__field_role_label-small boss-form__field_position_last">
@@ -23,19 +35,19 @@ class DateTimeField extends React.Component {
           </p>
         </div>
         <div className="boss-form__field boss-form__field_layout_max">
-          <div className="date-picker-input date-picker-input_type_icon">
+          <div className="date-picker-input date-picker-input_type_icon" onClick={this.datePickerOnClick}/>
+          { this.state.displayDatePicker && (
             <DatePicker
               withPortal="withPortal"
               calendarClassName="date-picker"
               className={`${date.meta.touched && date.meta.error && 'boss-input_state_error'}`}
               showMonthDropdown
               showYearDropdown
-              selected={date.input.value}
-              onChange={date.input.onChange}
               dropdownMode="select"
               dateFormat="DD-MM-YYYY"
-            />
-          </div>
+              inline="inline"
+            /> )
+          }
           {
             date.meta.touched && date.meta.error &&
               <div className="boss-form__error">
@@ -62,7 +74,7 @@ class DateTimeField extends React.Component {
               </div>
           }
         </div>
-        
+
       </div>
     )
   }
