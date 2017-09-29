@@ -2,6 +2,7 @@ class Machine < ActiveRecord::Base
   belongs_to :user
   belongs_to :created_by_user, class_name: "User"
   belongs_to :venue
+  has_many :machines_refloats
   belongs_to :disabled_by, class_name: "User"
 
   validates :venue, presence: true

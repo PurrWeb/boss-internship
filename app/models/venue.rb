@@ -3,6 +3,7 @@ class Venue < ActiveRecord::Base
   belongs_to :creator, class_name: 'User'
   has_many :rotas, inverse_of: :venue
   has_many :machines
+  has_many :machines_refloats, through: :machines
   has_many :incident_reports
   has_many :staff_member_venues
   has_many :master_staff_members, class_name: 'StaffMember', inverse_of: :master_venue, foreign_key: :master_venue_id
