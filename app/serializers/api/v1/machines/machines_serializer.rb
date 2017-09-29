@@ -9,7 +9,8 @@ class Api::V1::Machines::MachinesSerializer < ActiveModel::Serializer
               :floatCents,
               :initialRefillX10p,
               :initialCashInX10p,
-              :initialCashOutX10p
+              :initialCashOutX10p,
+              :initialFloatTopupCents
 
   def venueId
     object.venue.id
@@ -41,6 +42,10 @@ class Api::V1::Machines::MachinesSerializer < ActiveModel::Serializer
 
   def initialCashOutX10p
     object.initial_cash_out_x_10p
+  end
+
+  def initialFloatTopupCents
+    object.initial_float_topup_cents
   end
 
 end  

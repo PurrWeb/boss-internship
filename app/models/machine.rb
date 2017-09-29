@@ -12,6 +12,7 @@ class Machine < ActiveRecord::Base
   validates :initial_refill_x_10p, presence: true
   validates :initial_cash_in_x_10p, presence: true
   validates :initial_cash_out_x_10p, presence: true
+  validates :initial_float_topup_cents, presence: true
 
   validate :disable_fields_correct
   validate :float_cents_positive

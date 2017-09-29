@@ -32,8 +32,11 @@ export const updateMachine = createAction(UPDATE_MACHINE);
 
 export const createMachine = (values) => (dispatch, getState) => {
   const venueId = getState().getIn(['page', 'currentVenueId']);
-  const formatedValues = {...values, floatCents: values.floatCents ? values.floatCents * 100 : null};
-  return createMachineRequest({formatedValues, venueId})
+  const formatedValues = {
+    floatCents: values.floatCents ? values.floatCents * 100 : null,
+    initialFloatTopupCents: values.initialFloatTopupCents * 100,
+  };
+  return createMachineRequest({formatedValues: {...values, ...formatedValues}, venueId})
     .then((resp) => {
       dispatch(addMachine(resp.data))
       dispatch(hideAddNewMachine());

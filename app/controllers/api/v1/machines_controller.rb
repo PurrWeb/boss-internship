@@ -13,7 +13,8 @@ module Api
           float_cents: params.fetch("floatCents"),
           initial_refill_x_10p: params.fetch("initialRefillX10p"),
           initial_cash_in_x_10p: params.fetch("initialCashInX10p"),
-          initial_cash_out_x_10p: params.fetch("initialCashOutX10p")
+          initial_cash_out_x_10p: params.fetch("initialCashOutX10p"),
+          initial_float_topup_cents: params.fetch("initialFloatTopupCents")
         })
 
         if result.success?

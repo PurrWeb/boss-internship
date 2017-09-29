@@ -24,6 +24,7 @@ class MachineApiService
       initial_refill_x_10p: params.fetch(:initial_refill_x_10p),
       initial_cash_in_x_10p: params.fetch(:initial_cash_in_x_10p),
       initial_cash_out_x_10p: params.fetch(:initial_cash_out_x_10p),
+      initial_float_topup_cents: params.fetch(:initial_float_topup_cents),
     )
 
     result = machine.save

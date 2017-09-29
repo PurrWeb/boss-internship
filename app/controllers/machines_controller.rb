@@ -18,7 +18,8 @@ class MachinesController < ApplicationController
       page: page_from_params,
       per_page: per_page
     )
-    machine_creator_users = User.joins(:machines).includes(:name).uniq{|user| user.id}
+    machine_creator_users = User.joins(:machines).includes(:name)  << current_user
+    machine_creator_users = machine_creator_users.uniq{|user| user.id}
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {

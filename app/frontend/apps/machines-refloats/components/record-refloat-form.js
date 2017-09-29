@@ -29,6 +29,7 @@ class RecordRefloatForm extends React.Component {
     let lastMachineRefloat = machinesRefloats.find(machine => machine.get('id') === selectedMachine.lastMachineRefloatId);
     lastMachineRefloat = lastMachineRefloat && lastMachineRefloat.toJS();
     const machineFloatPounds = selectedMachine.floatCents / 100;
+    const machineFloatTopupPounds = selectedMachine.initialFloatTopupCents / 100;
     const errors = submitErrors && submitErrors.toJS();
     const lastRefillPounds = lastMachineRefloat ? lastMachineRefloat.refillX10p / 10 : selectedMachine.refillX10p / 10;
     const lastCashInPounds = lastMachineRefloat ? lastMachineRefloat.cashInX10p / 10 : selectedMachine.cashInX10p / 10;
@@ -39,8 +40,7 @@ class RecordRefloatForm extends React.Component {
     const refillPounds = refillX10p / 10;
     const cashInPounds = cashInX10p / 10;
     const cashOutPounds = cashOutX10p / 10;
-    
-    const lastFloatTopupPounds = lastMachineRefloat ? lastMachineRefloat.floatTopupCents / 100 : 0;
+    const lastFloatTopupPounds = lastMachineRefloat ? lastMachineRefloat.floatTopupCents / 100 : machineFloatTopupPounds;
     const cashInDiffPounds = Math.abs(lastCashInPounds - cashInPounds);
     const cashOutDiffPounds = Math.abs(lastCashOutPounds - cashOutPounds);
     const refillDiffPounds = Math.abs(lastRefillPounds - refillPounds);

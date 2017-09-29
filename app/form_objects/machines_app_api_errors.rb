@@ -15,6 +15,7 @@ class MachinesAppApiErrors
     result[:initialRefillX10p] = machine.errors[:initial_refill_x_10p] if machine.errors[:initial_refill_x_10p].present?
     result[:initialCashInX10p] = machine.errors[:initial_cash_in_x_10p] if machine.errors[:initial_cash_in_x_10p].present?
     result[:initialCashOutX10p] = machine.errors[:initial_cash_out_x_10p] if machine.errors[:initial_cash_out_x_10p].present?
+    result[:initialFloatTopupCents] = machine.errors[:initial_float_topup_cents] if machine.errors[:initial_float_topup_cents].present?
 
     result[:disabledAt] = machine.errors[:disabled_at] if machine.errors[:disabled_at].present?
     result[:disabledByUserId] = machine.errors[:disabled_by] if machine.errors[:disabled_by].present?

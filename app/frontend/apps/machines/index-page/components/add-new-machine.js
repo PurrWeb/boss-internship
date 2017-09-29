@@ -12,6 +12,7 @@ export default class AddNewMachine extends React.Component {
   handleSubmit = (values, dispatch) => {
     return dispatch(createMachine(values.toJS()))
       .catch(resp => {
+        console.log(resp);
         let errors = resp.response.data.errors;
         if (errors) {
           if (errors.base) {
@@ -31,6 +32,7 @@ export default class AddNewMachine extends React.Component {
       initialRefillX10p: null,
       initialCashInX10p: null,
       initialCashOutX10p: null,
+      initialFloatTopupCents: null,
     }
 
     return (

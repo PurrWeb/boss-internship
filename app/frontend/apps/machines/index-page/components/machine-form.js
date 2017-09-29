@@ -54,6 +54,13 @@ class MachineForm extends React.Component {
               type="number"
               component={PenceInput}
             />
+            <Field
+              name="initialFloatTopupCents"
+              label="Float topup cents"
+              unit="£"
+              type="number"
+              component={BossInput}
+            />
           </div>
           <div className="boss-form__field boss-form__field_justify_mobile-center">
             <button
