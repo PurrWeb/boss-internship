@@ -28,6 +28,7 @@ export default class Header extends Component {
 
     this.queryString = new URLSearchParams(window.location.search);
     this.globalVenueId = this.queryString.get('venue_id');
+    this.dropdownKeys = ["isDropdownOpen", "isUserDropdownOpen", "isGlobalVenueOpen"];
 
     this.scrollOptions = {
       mouseWheel: true,
@@ -45,12 +46,32 @@ export default class Header extends Component {
 
   handleDropdownsClose = (e) => {
     let domNode = ReactDOM.findDOMNode(this);
-    let dropdownNode = ReactDOM.findDOMNode(this.headerDropdown);
+
     let searchButtonNode = ReactDOM.findDOMNode(this.headerSearchButton);
     if (searchButtonNode === e.target) {
       return;
     }
-    if (!dropdownNode || !dropdownNode.contains(e.target)) {
+    let globalVenueDivNode = ReactDOM.findDOMNode(this.headerGlobalVenueDiv);
+    if (globalVenueDivNode === e.target || globalVenueDivNode.contains(e.target)) {
+      return;
+    }
+    let userMenuButtonNode = ReactDOM.findDOMNode(this.headerUserMenuButton);
+    if (userMenuButtonNode === e.target) {
+      return;
+    }
+
+    let quickMenuDropdownNode = ReactDOM.findDOMNode(this.headerDropdown);
+    let globalVenueDropdownNode = ReactDOM.findDOMNode(this.globalVenueDropdown);
+    let userMenuDropdownNode = ReactDOM.findDOMNode(this.userMenuDropdown);
+
+    let clickedOnDropDowns = (
+      quickMenuDropdownNode && quickMenuDropdownNode.contains(e.target)
+    ) || (
+      globalVenueDropdownNode && globalVenueDropdownNode.contains(e.target)
+    ) || (
+      userMenuDropdownNode && userMenuDropdownNode.contains(e.target)
+    )
+    if (!clickedOnDropDowns) {
       this.closeAllDropdowns();
     }
   };
@@ -61,23 +82,44 @@ export default class Header extends Component {
     };
   }
 
+  closeDropdowns = (dropdownsToClose) => {
+    //assert dropdowns valid
+    dropdownsToClose.forEach(item => {
+      if(!this.dropdownKeys.includes(item)){
+        throw new Error("Invalid dropdown key " + item + " supplied");
+      }
+    });
+
+    this.setState(previousState => {
+      let newState = Object.assign({}, previousState);
+      dropdownsToClose.forEach(key => {
+        newState[key] = false
+      });
+      return newState
+    })
+  }
+
   closeAllDropdowns = () => {
     this.setState({isDropdownOpen: false, isUserDropdownOpen: false, isGlobalVenueOpen: false});
   }
 
   handleToggleDropdown = () => {
-    this.closeAllDropdowns();
+    this.closeDropdowns(['isUserDropdownOpen', 'isGlobalVenueOpen']);
     this.setState({isDropdownOpen: !this.state.isDropdownOpen});
   };
 
   handleToggleUserDropdown = () => {
-    this.closeAllDropdowns();
-    this.setState({isUserDropdownOpen: !this.state.isUserDropdownOpen})
+    this.closeDropdowns(['isDropdownOpen', 'isGlobalVenueOpen'])
+    this.setState(previousState => {
+      return {isUserDropdownOpen: !previousState.isUserDropdownOpen}
+    })
   };
 
   toggleGlobalVenue = () => {
-    this.closeAllDropdowns();
-    this.setState(state => ({isGlobalVenueOpen: !state.isGlobalVenueOpen}));
+    this.closeDropdowns(['isDropdownOpen', 'isUserDropdownOpen']);
+    this.setState(previousState => {
+      return {isGlobalVenueOpen: !previousState.isGlobalVenueOpen}
+    });
   }
 
   getCurrentVenueName(venues, currentVenueId) {
@@ -121,7 +163,10 @@ export default class Header extends Component {
       divOnClick = this.toggleGlobalVenue;
     }
 
-    return <div className="boss-page-header__control boss-page-header__control_role_site-select" onClick={divOnClick}>
+    return <div
+      ref={(headerGlobalVenueDiv) => {this.headerGlobalVenueDiv = headerGlobalVenueDiv}}
+      className="boss-page-header__control boss-page-header__control_role_site-select"
+      onClick={divOnClick}>
       <p className="boss-page-header__control-value">
         {this.getCurrentVenueName(this.props.venues, this.globalVenueId)}
       </p>
@@ -145,9 +190,16 @@ export default class Header extends Component {
 
         { this.currentVenueControl(this.globalVenueId, this.props.venues) }
 
-        <button className="boss-page-header__action boss-page-header__action_role_profile" onClick={this.handleToggleUserDropdown}>Profile</button>
+        <button
+          ref={(headerUserMenuButton) => { this.headerUserMenuButton = headerUserMenuButton }}
+          className="boss-page-header__action boss-page-header__action_role_profile"
+          onClick={this.handleToggleUserDropdown}
+        >Profile</button>
         { this.state.isUserDropdownOpen &&
-          <div className="boss-page-header__dropdown boss-page-header__dropdown_role_profile boss-page-header__dropdown_state_opened">
+          <div
+            className="boss-page-header__dropdown boss-page-header__dropdown_role_profile boss-page-header__dropdown_state_opened"
+            ref={(userMenuDropdown) => this.userMenuDropdown = userMenuDropdown }
+            >
             <nav className="boss-menu">
               <p className="boss-menu__label boss-menu__label_role_user">{this.props.user.name}</p>
               <a href="/auth/sign_out" data-method="delete" className="boss-menu__link boss-menu__link_role_logout">Logout</a>
@@ -161,7 +213,10 @@ export default class Header extends Component {
             handleEscPress={this.handleEscPress}
             closeDropdown={this.closeAllDropdowns}
           /> }
-          { this.state.isGlobalVenueOpen && <div className={`boss-page-header__dropdown boss-page-header__dropdown_role_site-select boss-page-header__dropdown_state_opened`}>
+          { this.state.isGlobalVenueOpen && <div
+            className={`boss-page-header__dropdown boss-page-header__dropdown_role_site-select boss-page-header__dropdown_state_opened`}
+            ref={(globalVenueDropdown) => this.globalVenueDropdown = globalVenueDropdown}
+            >
             <div className="boss-page-header__dropdown-scroll">
               <ReactIScroll iScroll={iScroll} options={this.scrollOptions}>
                 <div className="boss-page-header__dropdown-content">
