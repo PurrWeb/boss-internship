@@ -12,6 +12,7 @@ import ContentModal from '~/components/content-modal';
 import EditMachine from '../components/edit-machine';
 import confirm from '~/lib/confirm-utils';
 import Pagination from '~/components/pagination';
+import URLSearchParams from 'url-search-params';
 
 import {
   showEditMachine,
