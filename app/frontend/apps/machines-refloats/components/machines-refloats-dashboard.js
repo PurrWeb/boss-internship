@@ -51,7 +51,7 @@ export default class MachhinesRefloatsDashboard extends React.Component {
         hideRecordRefloat,
       }
     } = this.props;
-
+    console.log(venueMachines.size);
     return (
       <DashboardWrapper classes="boss-page-dashboard_updated">
         <DashboardTitle
@@ -62,7 +62,7 @@ export default class MachhinesRefloatsDashboard extends React.Component {
                   onClick={() => hideRecordRefloat()}
                   className="boss-button boss-button_role_cancel boss-page-dashboard__button"
                 >Cancel</button>
-              : <button
+              : venueMachines.size !== 0 && <button
                   onClick={() => showRecordRefloat()}
                   className="boss-button boss-button_role_add boss-page-dashboard__button"
                 >Record Refloat</button>
