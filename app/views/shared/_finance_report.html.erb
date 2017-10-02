@@ -216,3 +216,26 @@
     </table>
   </div>
 <% end %>
+
+<% all_reports = finance_reports_table.staff_types.map{|st|finance_reports_table.reports(st)}.flatten %>
+<% if all_reports.all?(&:can_complete?) %>
+<div class="panel radius">
+  <h3> Complete all reports</h3>
+  <p>All Reports on this page are completable</p>
+  <p>Clicking here will complete all reports on this week after which no edits will be possible.</p>
+  <p>
+    <em>Do not</em> click unless you are <em>sure</em> the numbers are correct.
+  </p>
+      <%= link_to(
+        'Mark all complete',
+        complete_multiple_finance_reports_path(
+          staff_member_ids: all_reports.map(&:staff_member_id),
+          venue_id: venue.id,
+          week_start: UIRotaDate.format(week.start_date)
+        ),
+        method: "post",
+        class: 'boss2-button'
+      ) %>
+</div>
+<% end %>
+
