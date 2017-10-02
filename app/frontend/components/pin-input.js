@@ -47,8 +47,8 @@ export default class PinInput extends React.Component {
     }
     constructor(props){
         super(props)
-        var boundOnNumberClick = _.bind(this.onNumberClick, this);
-        this.throttledOnNumberClick = _.throttle(boundOnNumberClick, 100, {trailing: false})
+        this.boundOnNumberClick = _.bind(this.onNumberClick, this);
+        //this.throttledOnNumberClick = _.throttle(boundOnNumberClick, 100, {trailing: false})
     }
     render(){
         return <div className="boss-modal-window__controls-block" >
@@ -58,10 +58,10 @@ export default class PinInput extends React.Component {
                     value={this.props.pin}
                     onClick={e => e.preventDefault()}
                     />
-                <NumPad onNumberClick={this.throttledOnNumberClick} />
+                <NumPad onNumberClick={this.boundOnNumberClick} />
             </div>
     }
     onNumberClick(number){
-        this.props.onChange(this.props.pin + number)
+      this.props.onChange(this.props.pin + number)
     }
 }
