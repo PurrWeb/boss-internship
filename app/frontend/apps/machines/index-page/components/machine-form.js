@@ -30,6 +30,7 @@ class MachineForm extends React.Component {
             name="floatCents"
             label="Float"
             unit="£"
+            isCurrency
             type="number"
             disabled={restoring}
             component={BossInput}
@@ -58,6 +59,7 @@ class MachineForm extends React.Component {
               name="initialFloatTopupCents"
               label="Float topup cents"
               unit="£"
+              isCurrency
               type="number"
               component={BossInput}
             />

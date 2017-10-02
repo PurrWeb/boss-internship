@@ -12,7 +12,6 @@ export default class AddNewMachine extends React.Component {
   handleSubmit = (values, dispatch) => {
     return dispatch(createMachine(values.toJS()))
       .catch(resp => {
-        console.log(resp);
         let errors = resp.response.data.errors;
         if (errors) {
           if (errors.base) {

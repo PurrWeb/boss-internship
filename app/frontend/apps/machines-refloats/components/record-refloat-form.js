@@ -35,8 +35,8 @@ class RecordRefloatForm extends React.Component {
     const lastCashInPounds = lastMachineRefloat ? lastMachineRefloat.cashInX10p / 10 : selectedMachine.cashInX10p / 10;
     const lastCashOutPounds = lastMachineRefloat ? lastMachineRefloat.cashOutX10p / 10 : selectedMachine.cashOutX10p / 10;
     const lastCalculatedMoneyBankedPounds = lastMachineRefloat ? lastMachineRefloat.calculatedMoneyBankedCents / 100 : 0;
-    const lastCalculatedFloatTopupPounds = lastMachineRefloat ? lastMachineRefloat.calculatedFloatTopupCents / 100 : 0;
-    const lastMoneyBankedPounds = lastMachineRefloat ? lastMachineRefloat.moneyBankedCents / 100 : 0;
+    const lastCalculatedFloatTopupPounds = lastMachineRefloat ? lastMachineRefloat.calculatedFloatTopupCents / 100 : machineFloatPounds;
+    const lastMoneyBankedPounds = lastMachineRefloat ? lastMachineRefloat.moneyBankedCents / 100 : machineFloatTopupPounds;
     const refillPounds = refillX10p / 10;
     const cashInPounds = cashInX10p / 10;
     const cashOutPounds = cashOutX10p / 10;
@@ -46,9 +46,13 @@ class RecordRefloatForm extends React.Component {
     const refillDiffPounds = Math.abs(lastRefillPounds - refillPounds);
     const lastUnbankedPounds = lastCalculatedMoneyBankedPounds - lastMoneyBankedPounds;
     const lastUntoppedupFloatPounds = lastCalculatedFloatTopupPounds - lastFloatTopupPounds;
-    let calculatedFloatTopup = cashOutDiffPounds - (refillDiffPounds - lastFloatTopupPounds) + lastUntoppedupFloatPounds;
-    let calculatedMoneyBanked = cashInDiffPounds - (refillDiffPounds - lastFloatTopupPounds) + lastUnbankedPounds;
     const topupAndBankedCanEdit = (refillX10p || refillX10p === 0) && (cashInX10p || cashInX10p === 0) && (cashOutX10p || cashOutX10p === 0);
+    let calculatedFloatTopup = null;
+    let calculatedMoneyBanked = null;
+    if (topupAndBankedCanEdit) {
+      calculatedFloatTopup = cashOutDiffPounds - (refillDiffPounds - lastFloatTopupPounds) + lastUntoppedupFloatPounds;
+      calculatedMoneyBanked = cashInDiffPounds - (refillDiffPounds - lastFloatTopupPounds) + lastUnbankedPounds;
+    }
 
     return (
       <form
@@ -87,7 +91,6 @@ class RecordRefloatForm extends React.Component {
           label="Float Topup"
           tooltip="How much the float was topped up after readings."
           disabled={!topupAndBankedCanEdit}
-          normalize={value => (value || value === 0) && parseInt(value)}
           calculated={calculatedFloatTopup}
           component={BossFormCalculatedInput}
         />
@@ -101,7 +104,6 @@ class RecordRefloatForm extends React.Component {
           name="moneyBanked"
           label="Money Banked"
           disabled={!topupAndBankedCanEdit}
-          normalize={value => (value || value === 0) && parseInt(value)}
           tooltip="How much money was taken from the machine after readings."
           calculated={calculatedMoneyBanked}
           component={BossFormCalculatedInput}
