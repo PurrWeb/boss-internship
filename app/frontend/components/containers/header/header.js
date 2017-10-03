@@ -85,7 +85,7 @@ export default class Header extends Component {
   closeDropdowns = (dropdownsToClose) => {
     //assert dropdowns valid
     dropdownsToClose.forEach(item => {
-      if(!this.dropdownKeys.includes(item)){
+      if(this.dropdownKeys.indexOf(item) === -1){
         throw new Error("Invalid dropdown key " + item + " supplied");
       }
     });
