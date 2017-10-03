@@ -32,7 +32,6 @@ class DateTimeField extends React.Component {
       label,
       required,
     } = this.props;
-    console.log(date);
     return (
       <div className="boss-form__row">
         <div className="boss-form__field boss-form__field_role_label-small boss-form__field_position_last">
