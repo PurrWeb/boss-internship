@@ -52,7 +52,7 @@ export default class Header extends Component {
       return;
     }
     let globalVenueDivNode = ReactDOM.findDOMNode(this.headerGlobalVenueDiv);
-    if (globalVenueDivNode === e.target || globalVenueDivNode.contains(e.target)) {
+    if (globalVenueDivNode === e.target || (globalVenueDivNode && globalVenueDivNode.contains(e.target))) {
       return;
     }
     let userMenuButtonNode = ReactDOM.findDOMNode(this.headerUserMenuButton);

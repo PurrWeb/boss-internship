@@ -5,6 +5,8 @@ import {connect} from 'react-redux';
 import {Control, Form, Errors} from 'react-redux-form';
 import DatePicker from 'react-datepicker';
 import * as Select from 'react-select';
+// tslint:disable-next-line:no-require-imports
+const CalendarCustomInput = require('../../../components/boss-form/calendar-custom-input').default;
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, VenueFormFields} from '../../../interfaces/store-models';
@@ -153,6 +155,7 @@ class Component extends React.Component<PropsFromConnect, State> {
               className="boss-form__input"
               model=".startsAt"
               mapProps={{
+                customInput: () => (<CalendarCustomInput />),
                 withPortal: () => 'withPortal',
                 calendarClassName: () => 'date-picker',
                 className: setInputClass,
