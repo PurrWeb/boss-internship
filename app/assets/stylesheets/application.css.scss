@@ -11201,9 +11201,6 @@ html {
   }
   .boss-modal-window__numpad-button {
     margin: 0;
-    text-align: center;
-    justify-content: center;
-    align-content: center;
     padding: 0;
     color: #4c4c4c;
     font-family: "Montserrat", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
@@ -11225,19 +11222,7 @@ html {
     flex-grow: 0;
     -ms-flex-negative: 0;
     flex-shrink: 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
+    display: block;
     width: 113px;
     height: 80px;
     padding: 0;
