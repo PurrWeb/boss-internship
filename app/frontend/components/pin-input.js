@@ -5,7 +5,7 @@ class NumPadButton extends React.Component {
     render(){
         return <button
                 type="button"
-                className="boss-button"
+                className="boss-modal-window__numpad-button no-zoom"
                 onClick={() => this.props.onNumberClick(this.props.number)}>
             {this.props.number}
         </button>
@@ -13,6 +13,14 @@ class NumPadButton extends React.Component {
 }
 
 class NumPad extends React.Component {
+    componentDidMount() {
+      // Hack to prevent double click zooming
+      $('.no-zoom').bind('touchend', function(e) {
+        e.preventDefault();
+        $(this).click();
+      })
+    }
+  
     render(){
         return <div className="boss-modal-window__numpad">
             <div className="boss-modal-window__numpad-row">
@@ -58,9 +66,8 @@ export default class PinInput extends React.Component {
     }
 
     render(){
-        return <div className="boss-modal-window__controls-block" >
-              <div>{this.generatePasswordLabel(this.props.pin.length)}</div>
-              <NumPad onNumberClick={this.boundOnNumberClick} onRowClick={this.OnRowClick}/>
+        return <div className="boss-modal-window__controls-block">
+              <div className="boss-modal-window__numpad-label">{this.generatePasswordLabel(this.props.pin.length)}</div>
               <NumPad onNumberClick={this.boundOnNumberClick} />
             </div>
     }
