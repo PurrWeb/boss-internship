@@ -70,44 +70,6 @@
     font-size: 1.2rem;
   }
 
-  &__controls-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  &__numpad {
-    display: table;
-    width: 340px;
-    border-collapse: collapse;
-    margin-bottom: 1.2rem;
-  }
-
-  &__numpad-row {
-    display: table-row;
-  }
-
-  &__numpad-button {
-    display: table-cell;
-    height: 80px;
-    color: $boss-light-gray;
-    text-align: center;
-    border: 2px solid $boss-light-gray;
-    vertical-align: middle;
-    font-size: 3.2rem;
-    padding: 0;
-    line-height: 1em;
-    font-weight: 300;
-    user-select: none;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    animation-timing-function: ease-out;
-
-    &:active {
-      background-color: $boss-light-gray;
-    }
-  }
-
   &_adjust {
     &_submit-button {
       width: 340px !important;

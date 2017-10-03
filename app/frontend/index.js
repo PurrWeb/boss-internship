@@ -5,11 +5,9 @@ import ReactDOM from 'react-dom'
 import _ from "underscore"
 import moment from "moment"
 import $ from "jquery"
-import initReactFastclick from "react-fastclick" // import for side effects
 import * as selectors from "~/redux/selectors"
 import '~/lib/global-try-catch';
-
-initReactFastclick();
+import Bowser from 'bowser'
 
 window.boss = window.boss || {};
 window.boss.currentLayout = window.boss.currentLayout || 'oldLayout';
@@ -139,4 +137,8 @@ $(document).ready(function(){
                 onChange={({startDate}) => input.value = moment(startDate).format("DD-MM-YYYY")}
                 selectionStartDate={debug.moment(input.value, "DD-MM-YYYY").toDate()} />, el)
     })
+
+    if(Bowser.ios){
+      document.querySelector('html').classList.add('is-ios');
+    }
 })

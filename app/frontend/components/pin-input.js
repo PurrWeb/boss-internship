@@ -3,17 +3,24 @@ import _ from "underscore"
 
 class NumPadButton extends React.Component {
     render(){
-        return <div
-                className="boss-modal-window__numpad-button"
-                data-test-marker-numpad-key={this.props.number}
-                onTouchStart={(e) => e.preventDefault() /* prevent zooming in */}
+        return <button
+                type="button"
+                className="boss-modal-window__numpad-button no-zoom"
                 onClick={() => this.props.onNumberClick(this.props.number)}>
             {this.props.number}
-        </div>
+        </button>
     }
 }
 
 class NumPad extends React.Component {
+    componentDidMount() {
+      // Hack to prevent double click zooming
+      $('.no-zoom').bind('touchend', function(e) {
+        e.preventDefault();
+        $(this).click();
+      })
+    }
+  
     render(){
         return <div className="boss-modal-window__numpad">
             <div className="boss-modal-window__numpad-row">
@@ -32,9 +39,7 @@ class NumPad extends React.Component {
                 <NumPadButton number={9} onNumberClick={this.props.onNumberClick }/>
             </div>
             <div className="boss-modal-window__numpad-row">
-                <div className="boss-modal-window__numpad-button">&nbsp;</div>
                 <NumPadButton number={0} onNumberClick={this.props.onNumberClick }/>
-                <div className="boss-modal-window__numpad-button">&nbsp;</div>
             </div>
         </div>
     }
@@ -47,21 +52,26 @@ export default class PinInput extends React.Component {
     }
     constructor(props){
         super(props)
-        var boundOnNumberClick = _.bind(this.onNumberClick, this);
-        this.throttledOnNumberClick = _.throttle(boundOnNumberClick, 100, {trailing: false})
+        this.boundOnNumberClick = _.bind(this.onNumberClick, this);
     }
+
+    generatePasswordLabel = (length) => {
+      let asterix = "*";
+      let label = "";
+      for (let i = 0; i < length; i++) {
+        label = label + asterix;
+      }
+
+      return label;
+    }
+
     render(){
-        return <div className="boss-modal-window__controls-block" >
-                <input
-                    className="boss-input boss-input_big boss-input_role_in-modal-window boss-input_role_pin boss-modal-window_adjust_input-pin"
-                    type="password"
-                    value={this.props.pin}
-                    onClick={e => e.preventDefault()}
-                    />
-                <NumPad onNumberClick={this.throttledOnNumberClick} />
+        return <div className="boss-modal-window__controls-block">
+              <div className="boss-modal-window__numpad-label">{this.generatePasswordLabel(this.props.pin.length)}</div>
+              <NumPad onNumberClick={this.boundOnNumberClick} />
             </div>
     }
     onNumberClick(number){
-        this.props.onChange(this.props.pin + number)
+      this.props.onChange(this.props.pin + number)
     }
 }
