@@ -16,9 +16,4 @@ const store: Store<StoreStructure> = composeEnhancers(
   applyMiddleware(...middleware)
 )(createStore)(allReducers);
 
-// store.subscribe(() => {
-//   console.log('store.getState()', store.getState());
-// });
-
-
 export default store;

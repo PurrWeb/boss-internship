@@ -51,9 +51,6 @@ class Component extends React.Component<PropsFromConnect, State> {
 
     this.props.dispatch(action);
   };
-  onMainVenueChange(event: any) {
-    console.log(event);
-  }
   onBackClick = (event: React.MouseEvent<HTMLInputElement>) => {
     this.props.dispatch(changeStep('formsData.venueForm', ADD_STAFF_MEMBER_STEPS.VenuesBlock - 1));
   };

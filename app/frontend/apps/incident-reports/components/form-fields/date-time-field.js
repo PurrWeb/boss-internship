@@ -5,6 +5,26 @@ import 'rc-time-picker/assets/index.css';
 import './time.sass';
 
 class DateTimeField extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      displayDatePicker: false
+    };
+  }
+
+  datePickerOnClick = () => {
+    this.setState({displayDatePicker: true});
+  }
+
+  datePickerOnDateClick = () => {
+    this.setState({displayDatePicker: false});
+  }
+
+  handleDateClick = (value) => {
+    this.props.date.input.onChange(value);
+    this.datePickerOnDateClick();
+  }
+
   render() {
     const {
       date,
@@ -12,7 +32,6 @@ class DateTimeField extends React.Component {
       label,
       required,
     } = this.props;
-    
     return (
       <div className="boss-form__row">
         <div className="boss-form__field boss-form__field_role_label-small boss-form__field_position_last">
@@ -23,7 +42,12 @@ class DateTimeField extends React.Component {
           </p>
         </div>
         <div className="boss-form__field boss-form__field_layout_max">
-          <div className="date-picker-input date-picker-input_type_icon">
+          <div className="date-picker-input date-picker-input_type_icon" onClick={this.datePickerOnClick}>
+            <div className="react-datepicker__input-container react-datepicker__tether-target react-datepicker__tether-element-attached-bottom react-datepicker__tether-element-attached-left react-datepicker__tether-target-attached-top react-datepicker__tether-target-attached-left react-datepicker__tether-enabled">
+              <div className="date-picker-input-field">{date.input.value && date.input.value.format('DD-MM-YYYY')}</div>
+            </div>
+          </div>
+          { this.state.displayDatePicker && (
             <DatePicker
               withPortal="withPortal"
               calendarClassName="date-picker"
@@ -31,11 +55,12 @@ class DateTimeField extends React.Component {
               showMonthDropdown
               showYearDropdown
               selected={date.input.value}
-              onChange={date.input.onChange}
+              onChange={(value) => this.handleDateClick(value)}
               dropdownMode="select"
               dateFormat="DD-MM-YYYY"
-            />
-          </div>
+              inline
+            /> )
+          }
           {
             date.meta.touched && date.meta.error &&
               <div className="boss-form__error">
@@ -50,6 +75,7 @@ class DateTimeField extends React.Component {
             className={`time-picker-input time-picker-input_type_icon ${date.meta.touched && date.meta.error && 'time-picker-input_state_error'}`}
             placeholder="Select time ..."
             value={time.input.value}
+            hideDisabledOptions
             showSecond={false}
             onChange={time.input.onChange}
           />
@@ -62,7 +88,6 @@ class DateTimeField extends React.Component {
               </div>
           }
         </div>
-        
       </div>
     )
   }
