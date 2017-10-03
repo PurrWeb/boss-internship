@@ -43,8 +43,10 @@ export default class RotaOverviewChartInner extends Component {
       };
 
       this.scrollOptions = {
-        scrollbars: true,
         scrollX: true,
+        scrollY: false,
+        scrollbars: true,
+        eventPassthrough: true,
       };
     }
 

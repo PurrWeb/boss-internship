@@ -14,6 +14,7 @@ var scrollOptions = {
   interactiveScrollbars: true,
   shrinkScrollbars: 'scale',
   fadeScrollbars: false,
+  eventPassthrough: true,
   click: true
 };
 var innerWidth = 480;
