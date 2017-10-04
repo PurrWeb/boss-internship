@@ -2,7 +2,6 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
 
 import BossInput from '~/components/boss-form/boss-form-input';
-import PenceInput from './form-input/pence-input';
 
 class MachineForm extends React.Component {
   render() {
@@ -41,19 +40,19 @@ class MachineForm extends React.Component {
               name="initialRefillX10p"
               label="Refill (A)"
               type="number"
-              component={PenceInput}
+              component={BossInput}
             />
             <Field
               name="initialCashInX10p"
               label="Cash In (B)"
               type="number"
-              component={PenceInput}
+              component={BossInput}
             />
             <Field
               name="initialCashOutX10p"
               label="Cash Out (C)"
               type="number"
-              component={PenceInput}
+              component={BossInput}
             />
             <Field
               name="initialFloatTopupCents"

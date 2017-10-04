@@ -118,9 +118,9 @@ export function MachinesRefloatsItem({machineRefloat, machine}) {
   const cashOutDiffPounds = cashOutPounds - lastCashOutPounds;
   const cashInDiff = numeral(cashInDiffPounds).format('0,0.00');
   const cashOutDiff = numeral(cashOutDiffPounds).format('0,0.00');
-  const refill = numeral(refillPounds).format('0,0.00');
-  const cashIn = numeral(cashInPounds).format('0,0.00');
-  const cashOut = numeral(cashOutPounds).format('0,0.00');
+  const refillReading = machineRefloat.get('refillX10p');
+  const cashInReading = machineRefloat.get('cashInX10p');
+  const cashOutReading = machineRefloat.get('cashOutX10p');
   const lastFloatTopup = numeral(floatTopupPounds).format('0,0.00');
   const lastMoneyBanked = numeral(moneyBankedPounds).format('0,0.00');
   const refillSinceStartPounds = refillPounds - initialRefillPounds;
@@ -160,23 +160,20 @@ export function MachinesRefloatsItem({machineRefloat, machine}) {
             <MachinesReportsItemStat
               statClasses="boss-report__stats-item_layout_table"
               labelClasses="boss-report__stats-text_size_m"
-              tip="How much the float has been topped up the float since the start of time, including money taken from customers."
               label="Refill"
-              value={`£${refill}`}
+              value={refillReading}
             />
             <MachinesReportsItemStat
               statClasses="boss-report__stats-item_layout_table"
               labelClasses="boss-report__stats-text_size_m"
-              tip="How much customer money put into machine since start of time."
               label="Cash In"
-              value={`£${cashIn}`}
+              value={cashInReading}
             />
             <MachinesReportsItemStat
               statClasses="boss-report__stats-item_layout_table"
               labelClasses="boss-report__stats-text_size_m"
-              tip="How much money has been taken out of the machine since the start of time."
               label="Cash Out"
-              value={`£${cashOut}`}
+              value={cashOutReading}
             />
           </div>
         </MachinesReportsItemBoard>

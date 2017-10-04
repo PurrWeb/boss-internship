@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormTextarea from '~/components/boss-form/boss-form-textarea';
-import BossFormPenceInput from '~/components/boss-form/boss-form-pence-input';
+import BossInput from '~/components/boss-form/boss-form-input';
 import BossFormCalculatedInput from '~/components/boss-form/boss-form-calculated-input';
 class RecordRefloatForm extends React.Component {
 
@@ -66,24 +66,21 @@ class RecordRefloatForm extends React.Component {
             name="refillX10p"
             label="Refill (A)"
             type="number"
-            tooltip="How much the float has been topped up the float since the start of time, including money taken from customers."
-            component={BossFormPenceInput}
+            component={BossInput}
             normalize={value => (value || value === 0) ? parseInt(value) : null}
           />
           <Field
             name="cashInX10p"
             label="Cash In (B)"
             type="number"
-            tooltip="How much customer money put into machine since start of time."
-            component={BossFormPenceInput}
+            component={BossInput}
             normalize={value => (value || value === 0) ? parseInt(value) : null}
           />
           <Field
             name="cashOutX10p"
             label="Cash Out (C)"
             type="number"
-            tooltip="How much money has been taken out of the machine since the start of time"
-            component={BossFormPenceInput}
+            component={BossInput}
             normalize={value => (value || value === 0) ? parseInt(value) : null}
           />
         </div>
