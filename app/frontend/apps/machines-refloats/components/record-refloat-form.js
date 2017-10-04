@@ -45,7 +45,8 @@ class RecordRefloatForm extends React.Component {
     const cashOutDiffPounds = Math.abs(lastCashOutPounds - cashOutPounds);
     const refillDiffPounds = Math.abs(lastRefillPounds - refillPounds);
     const lastUnbankedPounds = lastCalculatedMoneyBankedPounds - lastMoneyBankedPounds;
-    const lastUntoppedupFloatPounds = lastCalculatedFloatTopupPounds - lastFloatTopupPounds;
+    const lastUntoppedupFloatPounds = lastMachineRefloat ?  lastCalculatedFloatTopupPounds - lastFloatTopupPounds : 0
+
     const topupAndBankedCanEdit = (refillX10p || refillX10p === 0) && (cashInX10p || cashInX10p === 0) && (cashOutX10p || cashOutX10p === 0);
     let calculatedFloatTopup = null;
     let calculatedMoneyBanked = null;
