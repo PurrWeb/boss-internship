@@ -7,6 +7,8 @@ import DatePicker from 'react-datepicker';
 import * as Select from 'react-select';
 import {pipe, omit, values, find} from 'ramda';
 import * as moment from 'moment';
+// tslint:disable-next-line:no-require-imports
+const CalendarCustomInput = require('../../../components/boss-form/calendar-custom-input').default;
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, BasicInformationFormFields} from '../../../interfaces/store-models';
@@ -61,7 +63,7 @@ class Component extends React.Component<PropsFromConnect, State> {
   findFlaggedStaffMembers = (model: string, value: string) => {
     return (dispatch: any) => { this.props.findFlaggedStaffMembers(model, value); };
   }
-
+  
   render() {
     return (
       <div className="boss-form">
@@ -157,6 +159,8 @@ class Component extends React.Component<PropsFromConnect, State> {
                 className="boss-form__input"
                 model=".dateOfBirth"
                 mapProps={{
+                  customInput: () => (<CalendarCustomInput />),
+                  allowSameDay: () => true,
                   withPortal: () => 'withPortal',
                   calendarClassName: () => 'date-picker',
                   className: setInputClass,
@@ -164,13 +168,12 @@ class Component extends React.Component<PropsFromConnect, State> {
                   showMonthDropdown: () => true,
                   showYearDropdown: () => true,
                   dropdownMode: () => 'select',
-                  dateFormat: () => 'YYYY/MM/DD',
+                  dateFormat: () => 'DD-MM-YYYY',
                   onChange: (props) => {
                     return props.onChange;
                   }
                 }}
                 changeAction={this.findFlaggedStaffMembers}
-                debounce={500}
               />
           </div>
           <div className="boss-buttons-group boss-forms-block_adjust_buttons-group">
