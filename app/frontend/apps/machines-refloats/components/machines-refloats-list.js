@@ -100,6 +100,9 @@ export function MachineRefloatsItemMeta({machineRefloat, machine}) {
 
 export function MachinesRefloatsItem({machineRefloat, machine}) {
   const machineFloatPounds = machine.get('floatCents') / 100;
+  const initialCashInPounds = machine.get('cashInX10p') / 10;
+  const initialCashOutPounds = machine.get('cashOutX10p') / 10;
+  const initialRefillPounds = machine.get('refillX10p') / 10;
   const floatTopupPounds = machineRefloat.get('floatTopupCents') / 100;
   const moneyBankedPounds = machineRefloat.get('moneyBankedCents') / 100;
   const refillPounds = (machineRefloat.get('refillX10p') / 10);
@@ -120,7 +123,9 @@ export function MachinesRefloatsItem({machineRefloat, machine}) {
   const cashOut = numeral(cashOutPounds).format('0,0.00');
   const lastFloatTopup = numeral(floatTopupPounds).format('0,0.00');
   const lastMoneyBanked = numeral(moneyBankedPounds).format('0,0.00');
-  const currentFloatPounds = machineFloatPounds + refillPounds + floatTopupPounds - cashOutPounds;
+  const refillSinceStartPounds = refillPounds - initialRefillPounds;
+  const cashOutSinceStartPounds = cashOutPounds - initialCashOutPounds;
+  const currentFloatPounds = machineFloatPounds + refillSinceStartPounds + floatTopupPounds - cashOutSinceStartPounds;
   const currentFloat = numeral(currentFloatPounds).format('0,0.00');
 
   let lastFloatTopupDiff = lastCalculatedFloatTopupPounds - floatTopupPounds;
