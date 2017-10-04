@@ -3,6 +3,7 @@ import DashboardWrapper from './dashboard-wrapper';
 import VenueDropdown from "~/components/venue-dropdown"
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
+import CalendarCustomInputLeft from '~/components/boss-form/calendar-custom-input-left';
 
 export default function DashboardDate({
   title,
@@ -29,20 +30,18 @@ export default function DashboardDate({
         <div className="boss-page-dashboard__controls-group">
           <div className="boss-form">
             <div className="boss-form__row boss-form__row_justify_space boss-form__row_position_last">
-              <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_min boss-form__field_position_last">
-                <p className="boss-form__label boss-form__label_type_icon-date boss-form__label_type_icon-single"></p>
-                <div className="date-picker-input">
-                  <DatePicker
-                    withPortal="withPortal"
-                    calendarClassName="date-picker"
-                    showMonthDropdown
-                    showYearDropdown
-                    selected={moment(date)}
-                    onChange={(date) => onChange({date, venueClientId})}
-                    dateFormat="DD-MM-YYYY"
-                  />
-                </div>
-              </div>
+              <DatePicker
+                customInput={<CalendarCustomInputLeft />}
+                withPortal="withPortal"
+                calendarClassName="date-picker"
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                selected={moment(date)}
+                onChange={(date) => onChange({date, venueClientId})}
+                dateFormat="DD-MM-YYYY"
+                allowSameDay
+              />
             </div>
           </div>
         </div>
