@@ -110,9 +110,9 @@ export function MachinesRefloatsItem({machineRefloat, machine}) {
   const lastCashOutPounds = machineRefloat.get('lastCashOutCents') / 10;
   const lastCalculatedFloatTopupPounds = machineRefloat.get('calculatedFloatTopupCents') / 100;
   const lastCalculatedMoneyBankedPounds = machineRefloat.get('calculatedMoneyBankedCents') / 100;
-  const refillDiffPounds = Math.abs(refillPounds - lastRefillPounds);
-  const cashInDiffPounds = Math.abs(cashInPounds - lastCashInPounds);
-  const cashOutDiffPounds = Math.abs(cashOutPounds - lastCashOutPounds);
+  const refillDiffPounds = refillPounds - lastRefillPounds;
+  const cashInDiffPounds = cashInPounds - lastCashInPounds;
+  const cashOutDiffPounds = cashOutPounds - lastCashOutPounds;
   const cashInDiff = numeral(cashInDiffPounds).format('0,0.00');
   const cashOutDiff = numeral(cashOutDiffPounds).format('0,0.00');
   const refill = numeral(refillPounds).format('0,0.00');
@@ -126,20 +126,20 @@ export function MachinesRefloatsItem({machineRefloat, machine}) {
   let lastFloatTopupDiff = lastCalculatedFloatTopupPounds - floatTopupPounds;
   let lastMoneyBankedDiff = lastCalculatedMoneyBankedPounds - moneyBankedPounds;
   const currentFloatDiffPounds = machineFloatPounds - currentFloatPounds;
-  
+
   let lastFloatTopupExtra = null;
   if (lastFloatTopupDiff !== 0) {
-    lastFloatTopupExtra = `£${numeral(Math.abs(lastFloatTopupDiff)).format('0,0.00')}`;
+    lastFloatTopupExtra = `£${numeral(lastFloatTopupDiff).format('0,0.00')}`;
   }
   let lastMoneyBankedExtra = null;
   if (lastMoneyBankedDiff !== 0) {
-    lastMoneyBankedExtra = `£${numeral(Math.abs(lastMoneyBankedDiff)).format('0,0.00')}`;
+    lastMoneyBankedExtra = `£${numeral(lastMoneyBankedDiff).format('0,0.00')}`;
   }
   let currentFloatExtra = null;
   if (currentFloatDiffPounds !== 0) {
-    currentFloatExtra = `£${numeral(Math.abs(currentFloatDiffPounds)).format('0,0.00')}`;
+    currentFloatExtra = `£${numeral(currentFloatDiffPounds).format('0,0.00')}`;
   }
-  
+
   const floatTopupNote = machineRefloat.get('floatTopupNote');
   const moneyBankedNote = machineRefloat.get('moneyBankedNote');
 
