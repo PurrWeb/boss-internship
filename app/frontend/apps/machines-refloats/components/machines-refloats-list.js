@@ -1,11 +1,12 @@
 import React from "react";
 import ContentWrapper from '~/components/content-wrapper';
-import Tooltip from '~/components/boss-form/tooltip';
 import Pagination from '~/components/pagination';
 import URLSearchParams from 'url-search-params';
 import utils from '~/lib/utils';
 import moment from 'moment';
 import numeral from 'numeral';
+import MachinesReportsItemStat from './machines-reports-item-stat';
+import MachineRefloatIndexReadingsDropdown from './machine-refloat-index-readings-dropdown';
 
 export function Badge({
   labelClasses = '',
@@ -32,37 +33,6 @@ export function MachinesReportsItemStatNote({note}) {
             {note}
           </p>
         </div>
-      </div>
-    </div>
-  )
-}
-
-export function MachinesReportsItemStat({
-  label,
-  value,
-  statClasses = '',
-  labelClasses = '',
-  tip = '',
-  tooltipDelimiter = false,
-  extraValue = '',
-}) {
-
-  const statClassName = `boss-report__stats-item ${statClasses}`
-  const labelClassName = `boss-report__stats-text ${labelClasses}`
-
-  return (
-    <div className={statClassName}>
-      <div className="boss-report__stats-label">
-        <p className={labelClassName}>
-          <span>{label}</span>
-          {tip && <Tooltip delimiter={tooltipDelimiter} message={tip} />}
-        </p>
-      </div>
-      <div className="boss-report__stats-value">
-        <p className="boss-report__stats-text boss-report__stats-text_size_m boss-report__stats-text_marked">
-          {value}
-          {extraValue && <span className="boss-report__stats-text-alert boss-report__stats-text-nowrap"> {extraValue}</span>}
-        </p>
       </div>
     </div>
   )
@@ -153,36 +123,10 @@ export function MachinesRefloatsItem({machineRefloat, machine}) {
       <div className="boss-report">
         <MachineRefloatsItemMeta machineRefloat={machineRefloat} machine={machine} />
         <MachinesReportsItemBoard boardClasses="boss-report__group_role_board">
-          <div className="boss-report__dropdown">
-            <div className="boss-report__dropdown-header">
-                <h3 className="boss-report__subtitle boss-report__subtitle_role_readings">
-                  Readings
-                </h3>
-                <a className="boss-report__dropdown-switch boss-report__dropdown-switch_state_closed">Toggle Dropdown</a>
-            </div>
-            <div className="boss-report__dropdown-content boss-report__dropdown-content_state_closed">
-              <div className="boss-report__stats">
-                <MachinesReportsItemStat
-                  statClasses="boss-report__stats-item_layout_table"
-                  labelClasses="boss-report__stats-text_size_m"
-                  label="Refill"
-                  value={refillReading}
-                />
-                <MachinesReportsItemStat
-                  statClasses="boss-report__stats-item_layout_table"
-                  labelClasses="boss-report__stats-text_size_m"
-                  label="Cash In"
-                  value={cashInReading}
-                />
-                <MachinesReportsItemStat
-                  statClasses="boss-report__stats-item_layout_table"
-                  labelClasses="boss-report__stats-text_size_m"
-                  label="Cash Out"
-                  value={cashOutReading}
-                />
-              </div>
-            </div>
-          </div>
+          <MachineRefloatIndexReadingsDropdown
+            refillReading={refillReading}
+            cashInReading={cashInReading}
+            cashOutReading={cashOutReading} />
         </MachinesReportsItemBoard>
         <MachinesReportsItemBoard boardClasses="boss-report__group_role_middle">
           <div className="boss-report__stats">
