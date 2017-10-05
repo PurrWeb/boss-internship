@@ -51,7 +51,6 @@ export default class MachhinesRefloatsDashboard extends React.Component {
         hideRecordRefloat,
       }
     } = this.props;
-    console.log(venueMachines.size);
     return (
       <DashboardWrapper classes="boss-page-dashboard_updated">
         <DashboardTitle
