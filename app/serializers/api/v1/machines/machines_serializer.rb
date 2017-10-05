@@ -50,6 +50,6 @@ class Api::V1::Machines::MachinesSerializer < ActiveModel::Serializer
   end
 
   def totalBankedCents
-    object.machines_refloats.sum(:money_banked_cents)
+    object.total_banked_cents
   end
 end

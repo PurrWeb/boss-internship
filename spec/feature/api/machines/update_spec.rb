@@ -16,6 +16,7 @@ RSpec.describe 'Create machine API endpoint' do
   let(:old_initial_refill_x_10p) { 400000 }
   let(:old_initial_cash_in_x_10p) { 405000 }
   let(:old_initial_cash_out_x_10p) { 205000 }
+  let(:old_initial_float_topup_cents) { 323 }
   let(:existing_machine) do
     FactoryGirl.create(
       :machine,
@@ -25,6 +26,7 @@ RSpec.describe 'Create machine API endpoint' do
       name: old_name,
       location: old_location,
       float_cents: old_float_cents,
+      initial_float_topup_cents: old_initial_float_topup_cents,
       initial_refill_x_10p: old_initial_refill_x_10p,
       initial_cash_in_x_10p: old_initial_cash_in_x_10p,
       initial_cash_out_x_10p: old_initial_cash_out_x_10p
@@ -84,7 +86,7 @@ RSpec.describe 'Create machine API endpoint' do
       expect(response.status).to eq(unprocessible_entity_status)
     end
   end
-  
+
   context 'when using valid params' do
     let(:params) { valid_params }
 
@@ -97,10 +99,6 @@ RSpec.describe 'Create machine API endpoint' do
       machine = Machine.first
       expect(machine.name).to eq(new_name)
       expect(machine.location).to eq(new_location)
-      expect(machine.float_cents).to eq(old_float_cents)
-      expect(machine.initial_refill_x_10p).to eq(old_initial_refill_x_10p)
-      expect(machine.initial_cash_in_x_10p).to eq(old_initial_cash_in_x_10p)
-      expect(machine.initial_cash_out_x_10p).to eq(old_initial_cash_out_x_10p)
     end
 
     specify 'it update create the machine' do
@@ -118,9 +116,11 @@ RSpec.describe 'Create machine API endpoint' do
         "createdAt" => updated_machine.created_at.iso8601,
         "creatorId" => updated_machine.created_by_user.id,
         "floatCents" => old_float_cents,
+        "initialFloatTopupCents" => old_initial_float_topup_cents,
         "initialRefillX10p" => old_initial_refill_x_10p,
         "initialCashInX10p" => old_initial_cash_in_x_10p,
         "initialCashOutX10p" => old_initial_cash_out_x_10p,
+        "totalBankedCents" => updated_machine.total_banked_cents
       })
     end
   end

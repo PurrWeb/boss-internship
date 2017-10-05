@@ -14,6 +14,7 @@ RSpec.describe 'Create machine API endpoint' do
   let(:initial_refill_x_10p) { 400000 }
   let(:initial_cash_in_x_10p) { 405000 }
   let(:initial_cash_out_x_10p) { 205000 }
+  let(:initial_float_topup_cents) { 5000 }
   let(:access_token) do
     WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
@@ -44,7 +45,8 @@ RSpec.describe 'Create machine API endpoint' do
       floatCents: float_cents,
       initialRefillX10p: initial_refill_x_10p,
       initialCashInX10p: initial_cash_in_x_10p,
-      initialCashOutX10p: initial_cash_out_x_10p
+      initialCashOutX10p: initial_cash_out_x_10p,
+      initialFloatTopupCents: initial_float_topup_cents
     }
   end
   let(:null_params) do
@@ -55,7 +57,8 @@ RSpec.describe 'Create machine API endpoint' do
       floatCents: nil,
       initialRefillX10p: nil,
       initialCashInX10p: nil,
-      initialCashOutX10p: nil
+      initialCashOutX10p: nil,
+      initialFloatTopupCents: nil
     }
   end
   let(:now) { Time.current.round }
@@ -78,7 +81,7 @@ RSpec.describe 'Create machine API endpoint' do
       expect(response.status).to eq(unprocessible_entity_status)
     end
   end
-  
+
   context 'when using valid params' do
     let(:params) { valid_params }
 
@@ -97,6 +100,7 @@ RSpec.describe 'Create machine API endpoint' do
       expect(machine.initial_refill_x_10p).to eq(initial_refill_x_10p)
       expect(machine.initial_cash_in_x_10p).to eq(initial_cash_in_x_10p)
       expect(machine.initial_cash_out_x_10p).to eq(initial_cash_out_x_10p)
+      expect(machine.initial_float_topup_cents).to eq(initial_float_topup_cents)
     end
 
     specify 'it should create the machine' do
@@ -114,9 +118,11 @@ RSpec.describe 'Create machine API endpoint' do
         "createdAt" => created_machine.created_at.iso8601,
         "creatorId" => created_machine.created_by_user.id,
         "floatCents" => float_cents,
+        "initialFloatTopupCents" => initial_float_topup_cents,
         "initialRefillX10p" => initial_refill_x_10p,
         "initialCashInX10p" => initial_cash_in_x_10p,
         "initialCashOutX10p" => initial_cash_out_x_10p,
+        "totalBankedCents" => 0
       })
     end
   end

@@ -18,7 +18,7 @@ RSpec.describe 'Enable machine API endpoint' do
     FactoryGirl.create(
       :machine,
       venue: venue,
-      created_by_user: user, 
+      created_by_user: user,
       disabled_by: user,
       disabled_at: Time.now
     )
@@ -66,27 +66,27 @@ RSpec.describe 'Enable machine API endpoint' do
     disabled_machine
     set_authorization_header(access_token.token)
   end
-  
+
   context 'before call' do
     specify '0 machines should exist' do
       expect(Machine.count).to eq(1)
       expect(Machine.enabled.count).to eq(0)
     end
   end
-  
+
   context 'when using valid params' do
     let(:params) { valid_params }
-  
+
     specify 'it should succeed' do
       expect(response.status).to eq(ok_status)
     end
-  
+
     specify 'it should enable the machine' do
       perform_call
       expect(Machine.count).to eq(1)
       expect(Machine.enabled.count).to eq(1)
     end
-  
+
     specify 'it should return machine json' do
       json_response = JSON.parse(response.body)
       disabled_machine.reload
@@ -102,9 +102,11 @@ RSpec.describe 'Enable machine API endpoint' do
         "createdAt" => machine.created_at.iso8601,
         "creatorId" => machine.created_by_user.id,
         "floatCents" => disabled_machine.float_cents,
+        "initialFloatTopupCents" => machine.initial_float_topup_cents,
         "initialRefillX10p" => machine.initial_refill_x_10p,
         "initialCashInX10p" => machine.initial_cash_in_x_10p,
         "initialCashOutX10p" => machine.initial_cash_out_x_10p,
+        "totalBankedCents" => machine.total_banked_cents
       })
     end
   end

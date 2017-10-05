@@ -53,4 +53,8 @@ class Machine < ActiveRecord::Base
   def self.enabled
     where(disabled_at: nil)
   end
+
+  def total_banked_cents
+    machines_refloats.sum(:money_banked_cents)
+  end
 end

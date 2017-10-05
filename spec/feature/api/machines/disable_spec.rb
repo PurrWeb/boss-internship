@@ -54,27 +54,27 @@ RSpec.describe 'Disable machine API endpoint' do
     existing_machine
     set_authorization_header(access_token.token)
   end
-  
+
   context 'before call' do
     specify '1 machine should exist' do
       expect(Machine.count).to eq(1)
       expect(Machine.enabled.count).to eq(1)
     end
   end
-  
+
   context 'when using valid params' do
     let(:params) { valid_params }
-  
+
     specify 'it should succeed' do
       expect(response.status).to eq(ok_status)
     end
-  
+
     specify 'it should disable the machine' do
       perform_call
       expect(Machine.count).to eq(1)
       expect(Machine.enabled.count).to eq(0)
     end
-  
+
     specify 'it should return machine json' do
       json_response = JSON.parse(response.body)
       existing_machine.reload
@@ -90,9 +90,11 @@ RSpec.describe 'Disable machine API endpoint' do
         "createdAt" => existing_machine.created_at.iso8601,
         "creatorId" => existing_machine.created_by_user.id,
         "floatCents" => existing_machine.float_cents,
+        "initialFloatTopupCents" => existing_machine.initial_float_topup_cents,
         "initialRefillX10p" => existing_machine.initial_refill_x_10p,
         "initialCashInX10p" => existing_machine.initial_cash_in_x_10p,
         "initialCashOutX10p" => existing_machine.initial_cash_out_x_10p,
+        "totalBankedCents" => existing_machine.total_banked_cents
       })
     end
   end
