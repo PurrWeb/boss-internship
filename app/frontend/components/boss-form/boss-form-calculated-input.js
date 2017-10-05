@@ -37,7 +37,7 @@ export default class BossFormCalculatedInput extends React.Component {
           </span>
           <span className="boss-form__units">
             <span className="boss-form__units-value">{unit}</span>
-            <CurrencyInput disabled={disabled} value={value} onChange={this.handleChange} className="boss-form__input" decimalSeparator="." thousandSeparator="," />
+            <CurrencyInput disabled={disabled} value={value} onChange={this.handleChange} className="boss-form__input" decimalSeparator="." thousandSeparator="" />
           </span>
         </label>
         {error && touched && <div className="boss-form__error">
