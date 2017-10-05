@@ -153,28 +153,35 @@ export function MachinesRefloatsItem({machineRefloat, machine}) {
       <div className="boss-report">
         <MachineRefloatsItemMeta machineRefloat={machineRefloat} machine={machine} />
         <MachinesReportsItemBoard boardClasses="boss-report__group_role_board">
-          <h3 className="boss-report__subtitle boss-report__subtitle_role_readings">
-            Readings
-          </h3>
-          <div className="boss-report__stats">
-            <MachinesReportsItemStat
-              statClasses="boss-report__stats-item_layout_table"
-              labelClasses="boss-report__stats-text_size_m"
-              label="Refill"
-              value={refillReading}
-            />
-            <MachinesReportsItemStat
-              statClasses="boss-report__stats-item_layout_table"
-              labelClasses="boss-report__stats-text_size_m"
-              label="Cash In"
-              value={cashInReading}
-            />
-            <MachinesReportsItemStat
-              statClasses="boss-report__stats-item_layout_table"
-              labelClasses="boss-report__stats-text_size_m"
-              label="Cash Out"
-              value={cashOutReading}
-            />
+          <div className="boss-report__dropdown">
+            <div className="boss-report__dropdown-header">
+                <h3 className="boss-report__subtitle boss-report__subtitle_role_readings">
+                  Readings
+                </h3>
+                <a className="boss-report__dropdown-switch boss-report__dropdown-switch_state_closed">Toggle Dropdown</a>
+            </div>
+            <div className="boss-report__dropdown-content boss-report__dropdown-content_state_closed">
+              <div className="boss-report__stats">
+                <MachinesReportsItemStat
+                  statClasses="boss-report__stats-item_layout_table"
+                  labelClasses="boss-report__stats-text_size_m"
+                  label="Refill"
+                  value={refillReading}
+                />
+                <MachinesReportsItemStat
+                  statClasses="boss-report__stats-item_layout_table"
+                  labelClasses="boss-report__stats-text_size_m"
+                  label="Cash In"
+                  value={cashInReading}
+                />
+                <MachinesReportsItemStat
+                  statClasses="boss-report__stats-item_layout_table"
+                  labelClasses="boss-report__stats-text_size_m"
+                  label="Cash Out"
+                  value={cashOutReading}
+                />
+              </div>
+            </div>
           </div>
         </MachinesReportsItemBoard>
         <MachinesReportsItemBoard boardClasses="boss-report__group_role_middle">
