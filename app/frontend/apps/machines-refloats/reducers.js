@@ -70,7 +70,7 @@ const machinesRefloatsReducer = handleActions({
   },
   [ADD_MACHINES_REFLOAT]: (state, actions) => {
     const newRefloat = actions.payload.machines_refloat;
-    return state.update('machinesRefloats', machines => machines.unshift(fromJS(newRefloat)));
+    return state.update('machinesRefloats', refloats => refloats.unshift(fromJS(newRefloat)));
   },
 }, initialState);
 
