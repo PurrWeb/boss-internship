@@ -10,12 +10,13 @@ class Api::V1::Machines::MachinesSerializer < ActiveModel::Serializer
               :initialRefillX10p,
               :initialCashInX10p,
               :initialCashOutX10p,
-              :initialFloatTopupCents
+              :initialFloatTopupCents,
+              :totalBankedCents
 
   def venueId
     object.venue.id
   end
-  
+
   def createdAt
     object.created_at.iso8601
   end
@@ -48,4 +49,7 @@ class Api::V1::Machines::MachinesSerializer < ActiveModel::Serializer
     object.initial_float_topup_cents
   end
 
-end  
+  def totalBankedCents
+    object.machines_refloats.sum(:money_banked_cents)
+  end
+end

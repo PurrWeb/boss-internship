@@ -46,6 +46,10 @@ export default function MachinesIndexBoard({
     return moment(value).format('HH:mm DD-MM-YYYY');
   }
 
+  function totalBankedCents(){
+    return machine.get("totalBankedCents");
+  }
+
   function renderActionButtons(machine) {
     return machine.get('disabledAt')
       ? <div className="boss-check__row boss-check__row_role_buttons">
@@ -80,6 +84,11 @@ export default function MachinesIndexBoard({
       </Row>
       <Row classNames="boss-check__row_marked">
         <div className="boss-check__info-table">
+          <InfoRow text="Total Banked">
+            <p className="boss-check__text boss-check__text_role_primary">
+              £{money(totalBankedCents())}
+            </p>
+          </InfoRow>
           <InfoRow text="Float">
             <p className="boss-check__text boss-check__text_role_primary">
               <button className="boss-check__link">£{money(machine.get('floatCents'))}</button>
