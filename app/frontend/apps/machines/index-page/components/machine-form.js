@@ -56,7 +56,7 @@ class MachineForm extends React.Component {
             />
             <Field
               name="initialFloatTopupCents"
-              label="Float topup cents"
+              label="Float Topup"
               unit="£"
               isCurrency
               type="number"
