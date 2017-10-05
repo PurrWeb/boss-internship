@@ -48,17 +48,6 @@ export default function MachinesIndexDashboard({
         <h1 className="boss-page-dashboard__title">{title}</h1>
       </div>
       <div className="boss-page-dashboard__group">
-        <div className="boss-page-dashboard__controls-group">
-          <VenueSelect
-            optionsType={{
-              value: "id",
-              label: "name",
-            }}
-            options={venues}
-            selected={selectedVenue}
-            onSelect={handleSelectVenue}
-          />
-        </div>
         <div className="boss-page-dashboard__buttons-group boss-page-dashboard__buttons-group_position_last">
           {renderActionButtons()}
         </div>
