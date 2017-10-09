@@ -82,7 +82,9 @@ class StaffMembersController < ApplicationController
         end_value: holiday_end_date,
         start_column_name: 'start_date',
         end_column_name: 'end_date'
-      ).all
+      ).
+      all.
+      order(start_date: :desc)
 
       holidays_in_tax_year = HolidayInTaxYearQuery.new(
        relation: staff_member.active_holidays,
