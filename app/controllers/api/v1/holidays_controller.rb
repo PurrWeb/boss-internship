@@ -127,12 +127,13 @@ module Api
       def holidays_count
         staff_member = StaffMember.find(params.fetch(:staff_member_id))
         tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
-        
+
         holidays_in_tax_year = HolidayInTaxYearQuery.new(
           relation: staff_member.active_holidays,
-          tax_year: tax_year
+          tax_year: tax_year,
+           staff_member_start_date: staff_member.starts_at
          ).all.includes(:frozen_by)
-   
+
          paid_holiday_days = holidays_in_tax_year.paid.to_a.sum { |holiday| holiday.days }
          unpaid_holiday_days = holidays_in_tax_year.unpaid.to_a.sum { |holiday| holiday.days }
          estimated_accrued_holiday_days = AccruedHolidayEstimate.new(
