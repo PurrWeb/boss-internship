@@ -14,13 +14,15 @@ export default (props) => {
   let getDifferenceMessage = function(rotaedAcceptedHoursDifference){
 
     let resultFragments = ["("];
-
+    if (acceptedHours === 0) {
+      return '';
+    }
     if (rotaedAcceptedHoursDifference == 0) {
       resultFragments.push(rotaedAcceptedHoursDifference + "h");
-    } else if(rotaedAcceptedHoursDifference > 0) {
-      resultFragments.push("+" + rotaedAcceptedHoursDifference + "h");
+    } else if(rotaedAcceptedHoursDifference < 0) {
+      resultFragments.push("+" + Math.abs(rotaedAcceptedHoursDifference) + "h");
     } else {
-      resultFragments.push("" + rotaedAcceptedHoursDifference + "h");
+      resultFragments.push("-" + Math.abs(rotaedAcceptedHoursDifference) + "h");
     }
     resultFragments.push(")");
 
