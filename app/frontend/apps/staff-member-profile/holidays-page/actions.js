@@ -18,9 +18,8 @@ import {
   EDIT_HOLIDAY_SUCCESS,
   CLOSE_EDIT_HOLIDAY_MODAL,
   FILTER,
+  UPDATE_HOLIDAYS_COUNT,
 } from './constants';
-
-// export const updateAvatar = createAction(UPDATE_AVATAR);
 
 export const updateAvatarRequest = (staffMemberId, avatarUrl) => (dispatch, getState) => {
   updateAvatar({staffMemberId, avatarUrl})
@@ -45,6 +44,12 @@ export const deleteHoliday = (holidayId) => (dispatch, getState) => {
     dispatch({
       type: DELETE_HOLIDAY,
       payload: resp.data,
+    });
+    updateHolidaysCount(accessToken, staffMemberId).then(resp => {
+      dispatch({
+        type: UPDATE_HOLIDAYS_COUNT,
+        payload: resp.data,
+      });
     });
     notify('Staff Member Holiday Deleted Successfully', {
       interval: 5000,
@@ -79,6 +84,12 @@ export const editHoliady = ({startDate, endDate, holidaysType, note, id}) => (di
       type: EDIT_HOLIDAY_SUCCESS,
       payload: resp.data
     });
+    updateHolidaysCount(accessToken, staffMemberId).then(resp => {
+      dispatch({
+        type: UPDATE_HOLIDAYS_COUNT,
+        payload: resp.data,
+      });
+    });
     dispatch({
       type: CLOSE_EDIT_HOLIDAY_MODAL
     });
@@ -108,7 +119,13 @@ export const addHoliday = ({startDate, endDate, holidayType, note}) => (dispatch
   }).then((resp) => {
     dispatch({
       type: ADD_HOLIDAY_SUCCESS,
-      payload: resp.data
+      payload: resp.data,
+    });
+    updateHolidaysCount(accessToken, staffMemberId).then(resp => {
+      dispatch({
+        type: UPDATE_HOLIDAYS_COUNT,
+        payload: resp.data,
+      });
     });
     dispatch({
       type: CLOSE_HOLIDAY_MODAL
@@ -117,6 +134,15 @@ export const addHoliday = ({startDate, endDate, holidayType, note}) => (dispatch
       interval: 5000,
       status: 'success'
     });
+  });
+}
+
+const updateHolidaysCount = (accessToken, staffMemberId) => {
+  return axios.get(`/api/v1/staff_members/${staffMemberId}/holidays/holidays_count`,
+  {
+    headers: {
+      Authorization: `Token token="${accessToken}"`
+    }
   });
 }
 

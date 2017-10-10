@@ -15,7 +15,8 @@ import {
   OPEN_EDIT_HOLIDAY_MODAL,
   CLOSE_EDIT_HOLIDAY_MODAL,
   EDIT_HOLIDAY_SUCCESS,
-  FILTER
+  FILTER,
+  UPDATE_HOLIDAYS_COUNT,
 } from './constants';
 
 const initialState = fromJS({
@@ -54,6 +55,18 @@ const holidaysReducer = handleActions({
       .set('estimatedAccruedHolidayDays', fromJS(estimatedAccruedHolidayDays))
       .set('holidayStartDate', moment(holidayStartDate))
       .set('holidayEndDate', moment(holidayEndDate))
+  },
+  [UPDATE_HOLIDAYS_COUNT]: (state, action) => {
+    const {
+      paidHolidayDays,
+      unpaidHolidayDays,
+      estimatedAccruedHolidayDays,
+    } = action.payload;
+    
+    return state
+      .set('paidHolidayDays', paidHolidayDays)
+      .set('unpaidHolidayDays', unpaidHolidayDays)
+      .set('estimatedAccruedHolidayDays', estimatedAccruedHolidayDays)
   },
   [ADD_NEW_HOLIDAY]: (state) => {
     return state

@@ -81,13 +81,6 @@ class AnonymiseDatabase
         api_key.update_attribute(:key, SecureRandom.hex)
       end
 
-      puts "Anonymising Access Tokens"
-      AccessToken.find_each do |access_token|
-        access_token.update_attributes!(
-          token: SecureRandom.hex
-        )
-      end
-
       puts "Anonymising Invites"
       Invite.find_each do |invite|
         new_email = invite.user.present? ? invite.user.email : FactoryHelper::Internet.free_email
@@ -98,55 +91,156 @@ class AnonymiseDatabase
         )
       end
 
-      puts "Setting up Dev User"
-      dev_user = User.enabled.dev.first
-      raise 'Dev user not found' unless dev_user.present?
+      puts "Setting up Users"
+      manager_staff_type = StaffType.manager.first
+      non_manager_staff_type = StaffType.pr.first
+      main_venue = Venue.first
+      other_venue = Venue.last
 
-      dev_user_first_name = 'Dev'
-      dev_user_surname = 'User'
-      dev_user_email = 'dev@jsmbars.co.uk'
-      dev_user_password = 'dev_password'
+      user_data = [
+        {
+          first_name: 'Dev',
+          surname: 'User',
+          email: 'dev@jsmbars.co.uk',
+          password: 'dev_password',
+          staff_type: manager_staff_type,
+          role: 'dev',
+          venues: [main_venue],
+        },
+        {
+          first_name: 'An',
+          surname: 'Admin',
+          email: 'admin@jsmbars.co.uk',
+          password: 'admin_password',
+          staff_type: manager_staff_type,
+          role: 'admin',
+          venues: [main_venue]
+        },
+        {
+          first_name: 'A',
+          surname: 'Manager',
+          email: 'manager@jsmbars.co.uk',
+          password: 'manager_password',
+          staff_type: manager_staff_type,
+          role: 'manager',
+          venues: [main_venue]
+        },
+        {
+          first_name: 'Ops',
+          surname: 'Manager',
+          email: 'ops_manager@jsmbars.co.uk',
+          password: 'ops_manager_password',
+          staff_type: manager_staff_type,
+          role: 'ops_manager',
+          venues: [main_venue]
+        },
+        {
+          first_name: 'Other',
+          surname: 'Manager',
+          email: 'other_manager@jsmbars.co.uk',
+          password: 'other_manager_password',
+          staff_type: manager_staff_type,
+          role: 'manager',
+          venues: [other_venue]
+        }
+      ]
 
-      dev_user.name.update_attributes!(
-        first_name: dev_user_first_name,
-        surname: dev_user_surname
-      )
+      user_data.each_with_index do |user_datum, index|
+        user = User.new(
+          role: user_datum.fetch(:role),
+          invite: Invite.first
+        )
 
-      dev_user.email_address.update_attributes!(
-        email: dev_user_email
-      )
+        name = Name.create!(
+          first_name: user_datum.fetch(:first_name),
+          surname: user_datum.fetch(:surname)
+        )
+        user.name = name
 
-      dev_user.update_attributes!(password: dev_user_password)
+        email_address = EmailAddress.create!(
+          email: user_datum.fetch(:email)
+        )
+        user.email_address = email_address
 
-      puts 'Creating dev staff member'
-      dev_staff_member = dev_user.staff_member
-      dev_staff_member_master_venue = Venue.first
+        user.update_attributes!(password: user_datum.fetch(:password))
+        #Assigning again because user must have id to create join
+        user.update_attributes!(venues: user_datum.fetch(:venues))
 
-      dev_staff_member_params = {
-        name: dev_user.name,
-        email_address: dev_user.email_address,
-        gender: StaffMember::MALE_GENDER,
-        pin_code: '12345',
-        creator: dev_user,
-        staff_type: StaffType.manager.first,
-        starts_at: 4.years.ago,
-        employment_status_a: true,
-        employment_status_b: true,
-        employment_status_c: true,
-        employment_status_d: true,
-        employment_status_p45_supplied: true,
-        master_venue: dev_staff_member_master_venue,
-        staff_member_venues: [],
-        pay_rate: PayRate.weekly.first
-      }
+        puts "Creating staff member with email #{user_datum.fetch(:email)}"
+        staff_member = user.staff_member
 
-      if dev_staff_member.present?
-        dev_staff_member.update_attributes!(dev_staff_member_params)
-      else
-        result = CreateStaffMemberFromUser.new(user: dev_user, params: dev_staff_member_params).call
-        raise "Dev User Staff member creation failed #{result.staff_member.errors.to_a}" unless result.success?
+        staff_member_params = {
+          name: user.name,
+          email_address: user.email_address,
+          gender: StaffMember::MALE_GENDER,
+          pin_code: '12345',
+          creator: user,
+          staff_type: user_datum.fetch(:staff_type),
+          starts_at: 4.years.ago,
+          employment_status_a: true,
+          employment_status_b: true,
+          employment_status_c: true,
+          employment_status_d: true,
+          employment_status_p45_supplied: true,
+          master_venue: user.venues.first,
+          staff_member_venues: [],
+          pay_rate: PayRate.weekly.first
+        }
 
-        dev_staff_member = result.staff_member
+        if staff_member.present?
+          staff_member.update_attributes!(staff_member_params)
+        else
+          result = CreateStaffMemberFromUser.new(user: user, params: staff_member_params).call
+          raise "Staff member creation failed #{result.staff_member.errors.to_a}" unless result.success?
+
+          staff_member = result.staff_member
+        end
+      end
+
+
+      puts "Setting up Staff Members"
+      staff_member_data = [
+        {
+          first_name: 'Venue',
+          surname: 'StaffMember',
+          email: 'venue_staff_member@jsmbars.co.uk',
+          master_venue: main_venue
+        },
+        {
+          first_name: 'NonVenue',
+          surname: 'StaffMember',
+          email: 'non_venue_staff_member@jsmbars.co.uk',
+          master_venue: Venue.last
+        },
+      ]
+
+      staff_member_data.each do |staff_member_datum|
+        staff_member_name = Name.create!(
+          first_name: staff_member_datum.fetch(:first_name),
+          surname: staff_member_datum.fetch(:surname)
+        )
+
+        staff_member_email_address = EmailAddress.create!(
+          email: staff_member_datum.fetch(:email)
+        )
+
+        StaffMember.create!(
+          name: staff_member_name,
+          email_address: staff_member_email_address,
+          gender: StaffMember::MALE_GENDER,
+          pin_code: '12345',
+          creator: User.first,
+          staff_type: non_manager_staff_type,
+          starts_at: 4.years.ago,
+          employment_status_a: true,
+          employment_status_b: true,
+          employment_status_c: true,
+          employment_status_d: true,
+          employment_status_p45_supplied: true,
+          master_venue: staff_member_datum.fetch(:master_venue),
+          staff_member_venues: [],
+          pay_rate: PayRate.weekly.first
+        )
       end
     end
   end
