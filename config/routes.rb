@@ -212,7 +212,11 @@ Rails.application.routes.draw do
         resources :holidays, only: :show
         resources :holiday_reports, only: :index
         resources :staff_members, only: [:show, :create] do
-          resources :holidays, only: [:index, :update, :destroy, :create]
+          resources :holidays, only: [:index, :update, :destroy, :create] do
+            collection do
+              get :holidays_count
+            end
+          end
           resources :owed_hours, only: [:index, :update, :destroy, :create]
           member do
             post :disable

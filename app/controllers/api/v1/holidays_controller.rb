@@ -11,13 +11,8 @@ module Api
         if can? :edit, staff_member
           tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
           
-          if holiday_start_date_from_params.present? && holiday_end_date_from_params.present?
-            holiday_start_date = holiday_start_date_from_params
-            holiday_end_date = holiday_end_date_from_params
-          else
-            holiday_start_date = tax_year.start_date
-            holiday_end_date = tax_year.end_date
-          end
+          holiday_start_date = holiday_start_date_from_params
+          holiday_end_date = holiday_end_date_from_params
     
           filtered_holidays = InRangeQuery.new(
             relation: staff_member.active_holidays,
@@ -129,6 +124,32 @@ module Api
         end
       end
 
+      def holidays_count
+        staff_member = StaffMember.find(params.fetch(:staff_member_id))
+        tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
+        
+        holidays_in_tax_year = HolidayInTaxYearQuery.new(
+          relation: staff_member.active_holidays,
+          tax_year: tax_year
+         ).all.includes(:frozen_by)
+   
+         paid_holiday_days = holidays_in_tax_year.paid.to_a.sum { |holiday| holiday.days }
+         unpaid_holiday_days = holidays_in_tax_year.unpaid.to_a.sum { |holiday| holiday.days }
+         estimated_accrued_holiday_days = AccruedHolidayEstimate.new(
+           staff_member: staff_member,
+           tax_year: tax_year
+         ).call
+
+         render(
+           json: {
+            paidHolidayDays: paid_holiday_days,
+            unpaidHolidayDays: unpaid_holiday_days,
+            estimatedAccruedHolidayDays: estimated_accrued_holiday_days,
+           },
+           status: 200
+         )
+      end
+
       private
       def holiday_from_params
         {
@@ -140,11 +161,23 @@ module Api
       end
 
       def holiday_start_date_from_params
-        UIRotaDate.parse!(params['start_date'])
+        start_date_from_params = UIRotaDate.parse!(params['start_date'])
+        result = if start_date_from_params.present?
+          start_date_from_params
+        else
+          tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
+          tax_year.start_date
+        end
       end
     
       def holiday_end_date_from_params
-        UIRotaDate.parse!(params['end_date'])
+        end_date_from_params = UIRotaDate.parse!(params['end_date'])
+        result = if end_date_from_params.present?
+        end_date_from_params
+        else
+          tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
+          tax_year.end_date
+        end
       end
     end
   end
