@@ -107,7 +107,7 @@ class Holidays extends React.PureComponent {
 
     return (
       <ProfileWrapper currentPage="holidays">
-        { !disabled && <section className="boss-board">
+        <section className="boss-board">
           <ContentModal
             show={newHoliday}
             onClose={() => this.onCancelAddNew()}
@@ -126,7 +126,7 @@ class Holidays extends React.PureComponent {
           >
             <EditHoliday holiday={editedHoliday}/>
           </ContentModal>
-          <HolidaysHeader title="Holidays" onAddNew={this.onAddNew} />
+          <HolidaysHeader isStaffMemberDisabled={disabled} title="Holidays" onAddNew={this.onAddNew} />
           <div className="boss-board__main">
             <div className="boss-board__manager">
               <div className="boss-board__manager-stats boss-board__manager-stats_layout_row">
@@ -137,8 +137,8 @@ class Holidays extends React.PureComponent {
               <div className="boss-board__manager-data">
                 <HolidaysFilter startDate={holidayStartDate} endDate={holidayEndDate} filter={filter} />
                 { hasHolidays
-                    ? [<HolidaysTable key="desktop" holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={openEditModal}/>,
-                      <HolidayasMobileItems key="mobile" holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={openEditModal}/>]
+                    ? [<HolidaysTable key="desktop" isStaffMemberDisabled={disabled} holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={openEditModal}/>,
+                      <HolidayasMobileItems key="mobile" isStaffMemberDisabled={disabled} holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={openEditModal}/>]
                     : <h1 className="boss-table__cell boss-table__cell_role_header">
                         NO HOLIDAYS FOUND
                       </h1>
@@ -147,7 +147,7 @@ class Holidays extends React.PureComponent {
               </div>
             </div>
           </div> 
-        </section> }
+        </section>
       </ProfileWrapper>
     )
   }

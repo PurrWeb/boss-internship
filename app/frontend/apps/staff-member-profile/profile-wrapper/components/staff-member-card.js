@@ -114,10 +114,8 @@ const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, cu
               {jobType}
             </span>
           </div>
-          { disabled
-            ? renderdisabledContent({disabledByUser, disabledAt, disabledReason})
-            : [renderCardContacts(email, phoneNumber), renderCardActions()]
-          }
+          { disabled && renderdisabledContent({disabledByUser, disabledAt, disabledReason}) }
+          { [renderCardContacts(email, phoneNumber), renderCardActions()] }
         </div>
       </div>
     </div>

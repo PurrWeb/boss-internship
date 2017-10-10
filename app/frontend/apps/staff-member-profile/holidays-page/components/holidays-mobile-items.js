@@ -3,7 +3,7 @@ import humanize from 'string-humanize';
 import moment from 'moment';
 import confirm from '~/lib/confirm-utils';
 
-const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday}) => {
+const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled}) => {
 
   const onEdit = (holiday) => {
     onEditHoliday(holiday);
@@ -58,7 +58,7 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday}) => {
         </div>
       </div>
     }
-    { editable && <div className="boss-check__row boss-check__row_role_actions">
+    { (editable && !isStaffMemberDisabled) && <div className="boss-check__row boss-check__row_role_actions">
       <button className="boss-button boss-button_role_update boss-check__action" onClick={() => (onEdit(holiday))}>
         Edit
       </button>
@@ -75,7 +75,13 @@ export default class HolidayasMobileItems extends React.Component {
 
   renderMobileItems = (holidays) => {
     return holidays.map(holiday => {
-      return <HolidayMobileItem holiday={holiday} deleteHoliday={this.props.deleteHoliday} onEditHoliday={this.props.onEditHoliday} key={holiday.get('id')} />
+      return <HolidayMobileItem
+        holiday={holiday}
+        deleteHoliday={this.props.deleteHoliday}
+        onEditHoliday={this.props.onEditHoliday}
+        key={holiday.get('id')}
+        isStaffMemberDisabled={this.props.isStaffMemberDisabled}
+      />
     })
   };
 

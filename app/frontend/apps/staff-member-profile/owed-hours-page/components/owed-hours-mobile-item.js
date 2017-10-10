@@ -5,7 +5,7 @@ import confirm from '~/lib/confirm-utils';
 import {getOwedHourUIData} from './owed-hours-table';
 
 
-const OwedHourMobileItem = ({owedHour, deleteOwedHour, openEditModal}) => {
+const OwedHourMobileItem = ({owedHour, deleteOwedHour, openEditModal, isStaffMemberDisabled}) => {
   
   const onEdit = (owedHour) => {
     openEditModal(owedHour);
@@ -73,7 +73,7 @@ const OwedHourMobileItem = ({owedHour, deleteOwedHour, openEditModal}) => {
         </div>
       </div>
     }
-    {editable && <div className="boss-check__row boss-check__row_role_actions">
+    { (editable && !isStaffMemberDisabled) && <div className="boss-check__row boss-check__row_role_actions">
         <button
           onClick={() => onEdit(owedHour)}
           className="boss-button boss-button_role_update boss-check__action"
@@ -82,7 +82,8 @@ const OwedHourMobileItem = ({owedHour, deleteOwedHour, openEditModal}) => {
           onClick={() => onDelete(owedHourId)}
           className="boss-button boss-button_role_cancel boss-check__action"
         >Delete</button>
-      </div>}
+      </div>
+    }
 
   </div>
 }
