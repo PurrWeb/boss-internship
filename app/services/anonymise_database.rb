@@ -95,6 +95,7 @@ class AnonymiseDatabase
       manager_staff_type = StaffType.manager.first
       non_manager_staff_type = StaffType.pr.first
       main_venue = Venue.first
+      other_venue = Venue.last
 
       user_data = [
         {
@@ -140,7 +141,7 @@ class AnonymiseDatabase
           password: 'other_manager_password',
           staff_type: manager_staff_type,
           role: 'manager',
-          venues: [Venue.last]
+          venues: [other_venue]
         }
       ]
 
@@ -161,10 +162,9 @@ class AnonymiseDatabase
         )
         user.email_address = email_address
 
-        user.update_attributes!(
-          password: user_datum.fetch(:password),
-          venues: user_datum.fetch(:venues)
-        )
+        user.update_attributes!(password: user_datum.fetch(:password))
+        #Assigning again because user must have id to create join
+        user.update_attributes!(venues: user_datum.fetch(:venues))
 
         puts "Creating staff member with email #{user_datum.fetch(:email)}"
         staff_member = user.staff_member
@@ -204,7 +204,7 @@ class AnonymiseDatabase
           first_name: 'Venue',
           surname: 'StaffMember',
           email: 'venue_staff_member@jsmbars.co.uk',
-          master_venue: master_venue
+          master_venue: main_venue
         },
         {
           first_name: 'NonVenue',
