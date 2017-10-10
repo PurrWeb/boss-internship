@@ -162,7 +162,7 @@ module Api
 
       def holiday_start_date_from_params
         start_date_from_params = UIRotaDate.parse!(params['start_date'])
-        result = if start_date_from_params.present?
+        if start_date_from_params.present?
           start_date_from_params
         else
           tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
@@ -172,8 +172,8 @@ module Api
     
       def holiday_end_date_from_params
         end_date_from_params = UIRotaDate.parse!(params['end_date'])
-        result = if end_date_from_params.present?
-        end_date_from_params
+        if end_date_from_params.present?
+          end_date_from_params
         else
           tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
           tax_year.end_date
