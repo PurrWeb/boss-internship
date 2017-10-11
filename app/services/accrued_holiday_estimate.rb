@@ -2,18 +2,23 @@ class AccruedHolidayEstimate
   def initialize(staff_member:, tax_year:)
     @staff_member = staff_member
     @tax_year = tax_year
+    @staff_member_start_date = staff_member.starts_at
   end
-  attr_reader :staff_member, :tax_year
+  attr_reader :staff_member, :tax_year, :staff_member_start_date
 
   def call
+    start_date = [tax_year.start_date, staff_member_start_date].max
+    start_time = RotaShiftDate.new(start_date).start_time
+    end_time = tax_year.rota_end_time
+
     accepted_hours = HoursAcceptancePeriod.
       joins(:clock_in_day).
       where(
         clock_in_days: {
           staff_member_id: staff_member.id,
         },
-        starts_at: tax_year.rota_start_time..tax_year.rota_end_time,
-        ends_at: tax_year.rota_start_time..tax_year.rota_end_time
+        starts_at: start_time..end_time,
+        ends_at: start_time..end_time
       ).
       accepted.
       includes(:hours_acceptance_breaks_enabled).
@@ -23,8 +28,8 @@ class AccruedHolidayEstimate
 
       owed_hour_records = InRangeQuery.new(
         relation: OwedHour.enabled.where(staff_member: staff_member),
-        start_value: RotaShiftDate.new(tax_year.start_date).start_time,
-        end_value: RotaShiftDate.new(tax_year.end_date).end_time,
+        start_value: start_time,
+        end_value: end_time,
         start_column_name: 'created_at',
         end_column_name: 'created_at',
         include_boundaries: [:start]

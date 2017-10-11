@@ -84,7 +84,8 @@ class HolidaysController < ApplicationController
 
       holidays_in_tax_year = HolidayInTaxYearQuery.new(
        relation: staff_member.active_holidays,
-       tax_year: tax_year
+       tax_year: tax_year,
+       staff_member_start_date: staff_member.starts_at
       ).all.includes(:frozen_by)
 
       holiday_start_date = tax_year.start_date

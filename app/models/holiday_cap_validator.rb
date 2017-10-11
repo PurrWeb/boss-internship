@@ -13,7 +13,8 @@ class HolidayCapValidator
       tax_year = TaxYear.new(holiday.start_date)
       paid_holidays_this_year = HolidayInTaxYearQuery.new(
         relation: staff_member.active_holidays.paid,
-        tax_year: tax_year
+        tax_year: tax_year,
+        staff_member_start_date: staff_member.starts_at
       ).day_count
 
       if (paid_holidays_this_year + holiday.days) > PAID_HOLIDAY_DAY_CAP

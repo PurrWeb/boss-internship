@@ -14,8 +14,9 @@ describe HolidayCapValidator do
     )
   end
   let(:holiday_type) { Holiday::PAID_HOLIDAY_TYPE }
-  let(:now) { end_of_current_tax_year - 2.weeks }
-  let(:tax_year) { TaxYear.new(Time.current)}
+  let(:call_time) { tax_year.start_date + 1.day }
+  let(:now) { Time.current }
+  let(:tax_year) { TaxYear.new(now)}
   let(:end_of_current_tax_year) { tax_year.end_date }
   let(:start_date) { now.to_date + 1.week }
   let(:end_date) { start_date }
@@ -24,7 +25,7 @@ describe HolidayCapValidator do
   let(:validator) { HolidayCapValidator.new(holiday) }
 
   around(:each) do |example|
-    travel_to now do
+    travel_to call_time do
       example.run
     end
   end
@@ -41,7 +42,7 @@ describe HolidayCapValidator do
   context 'staff member has paid holidays in the tax year' do
     before do
       holiday_number.times do |index|
-        previous_holiday_start_date = tax_year.start_date + index.days
+        previous_holiday_start_date = call_time + index.days
 
         travel_to(previous_holiday_start_date - 1.week) do
           Holiday.create!(
