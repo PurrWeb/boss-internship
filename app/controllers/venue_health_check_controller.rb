@@ -46,7 +46,7 @@ class VenueHealthCheckController < ApplicationController
         questionnaire_categories: questionnaire_categories,
         questionnaire_areas: questionnaire_areas,
         venues: @accessible_venues,
-        access_token: current_user.current_access_token || AccessToken.create_web!(user: current_user)
+        access_token: current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
       }
     else
       flash[:error] = "Questionnaire hasn't been created yet"
