@@ -21,7 +21,7 @@ export default class BossFormCalculatedInput extends React.Component {
     } = this.props;
     let calculatedValue = '-';
     if (calculated !== null) {
-      calculatedValue = `${unit}${numeral(calculated).format('0,0.00')}`;
+      calculatedValue = `${unit}${numeral(calculated / 100).format('0,0.00')}`;
     }
 
     return(

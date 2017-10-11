@@ -26,33 +26,34 @@ class RecordRefloatForm extends React.Component {
       cashInX10p,
       machinesRefloats,
     } = this.props;
+    
     let lastMachineRefloat = machinesRefloats.find(machine => machine.get('id') === selectedMachine.lastMachineRefloatId);
     lastMachineRefloat = lastMachineRefloat && lastMachineRefloat.toJS();
-    const machineFloatPounds = selectedMachine.floatCents / 100;
-    const machineFloatTopupPounds = selectedMachine.initialFloatTopupCents / 100;
+    const machineFloatCents = selectedMachine.floatCents;
+    const machineFloatTopupCents = selectedMachine.initialFloatTopupCents;
     const errors = submitErrors && submitErrors.toJS();
-    const lastRefillPounds = lastMachineRefloat ? lastMachineRefloat.refillX10p / 10 : selectedMachine.refillX10p / 10;
-    const lastCashInPounds = lastMachineRefloat ? lastMachineRefloat.cashInX10p / 10 : selectedMachine.cashInX10p / 10;
-    const lastCashOutPounds = lastMachineRefloat ? lastMachineRefloat.cashOutX10p / 10 : selectedMachine.cashOutX10p / 10;
-    const lastCalculatedMoneyBankedPounds = lastMachineRefloat ? lastMachineRefloat.calculatedMoneyBankedCents / 100 : 0;
-    const lastCalculatedFloatTopupPounds = lastMachineRefloat ? lastMachineRefloat.calculatedFloatTopupCents / 100 : machineFloatPounds;
-    const lastMoneyBankedPounds = lastMachineRefloat ? lastMachineRefloat.moneyBankedCents / 100 : machineFloatTopupPounds;
-    const refillPounds = refillX10p / 10;
-    const cashInPounds = cashInX10p / 10;
-    const cashOutPounds = cashOutX10p / 10;
-    const lastFloatTopupPounds = lastMachineRefloat ? lastMachineRefloat.floatTopupCents / 100 : machineFloatTopupPounds;
-    const cashInDiffPounds = Math.abs(lastCashInPounds - cashInPounds);
-    const cashOutDiffPounds = Math.abs(lastCashOutPounds - cashOutPounds);
-    const refillDiffPounds = Math.abs(lastRefillPounds - refillPounds);
-    const lastUnbankedPounds = lastCalculatedMoneyBankedPounds - lastMoneyBankedPounds;
-    const lastUntoppedupFloatPounds = lastMachineRefloat ?  lastCalculatedFloatTopupPounds - lastFloatTopupPounds : 0
+    const lastRefillCents = lastMachineRefloat ? lastMachineRefloat.refillX10p * 10 : selectedMachine.refillX10p * 10;
+    const lastCashInCents = lastMachineRefloat ? lastMachineRefloat.cashInX10p * 10 : selectedMachine.cashInX10p * 10;
+    const lastCashOutCents = lastMachineRefloat ? lastMachineRefloat.cashOutX10p * 10 : selectedMachine.cashOutX10p * 10;
+    const lastCalculatedMoneyBankedCents = lastMachineRefloat ? lastMachineRefloat.calculatedMoneyBankedCents : 0;
+    const lastCalculatedFloatTopupCents = lastMachineRefloat ? lastMachineRefloat.calculatedFloatTopupCents : machineFloatCents;
+    const lastMoneyBankedCents = lastMachineRefloat ? lastMachineRefloat.moneyBankedCents : machineFloatTopupCents;
+    const refillCents = refillX10p * 10;
+    const cashInCents = cashInX10p * 10;
+    const cashOutCents = cashOutX10p * 10;
+    const lastFloatTopupCents = lastMachineRefloat ? lastMachineRefloat.floatTopupCents : machineFloatTopupCents;
+    const cashInDiffCents = cashInCents - lastCashInCents;
+    const cashOutDiffCents = cashOutCents - lastCashOutCents;
+    const refillDiffCents = refillCents - lastRefillCents;
+    const lastUnbankedCents = lastCalculatedMoneyBankedCents - lastMoneyBankedCents;
+    const lastUntoppedupFloatCents = lastMachineRefloat ?  lastCalculatedFloatTopupCents - lastFloatTopupCents : 0
 
     const topupAndBankedCanEdit = (refillX10p || refillX10p === 0) && (cashInX10p || cashInX10p === 0) && (cashOutX10p || cashOutX10p === 0);
     let calculatedFloatTopup = null;
     let calculatedMoneyBanked = null;
     if (topupAndBankedCanEdit) {
-      calculatedFloatTopup = cashOutDiffPounds - (refillDiffPounds - lastFloatTopupPounds) + lastUntoppedupFloatPounds;
-      calculatedMoneyBanked = cashInDiffPounds - (refillDiffPounds - lastFloatTopupPounds) + lastUnbankedPounds;
+      calculatedFloatTopup = cashOutDiffCents - (refillDiffCents - lastFloatTopupCents) + lastUntoppedupFloatCents;
+      calculatedMoneyBanked = cashInDiffCents - (refillDiffCents - lastFloatTopupCents) + lastUnbankedCents;
     }
 
     return (

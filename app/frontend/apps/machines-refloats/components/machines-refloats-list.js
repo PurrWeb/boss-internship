@@ -7,6 +7,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import MachinesReportsItemStat from './machines-reports-item-stat';
 import MachineRefloatIndexReadingsDropdown from './machine-refloat-index-readings-dropdown';
+import oFetch from 'o-fetch';
 
 export function Badge({
   labelClasses = '',
@@ -56,67 +57,70 @@ export function MachineRefloatsItemMeta({machineRefloat, machine}) {
   return (
     <div className="boss-report__meta">
       <Badge labelClasses="boss-count__label_role_time">
-        {moment(machineRefloat.get('createdAt')).format(utils.humanDateFormatWithTime()) }
+        {moment(oFetch(machineRefloat, 'createdAt')).format(utils.humanDateFormatWithTime()) }
       </Badge>
       <Badge labelClasses="boss-count__label_role_arcade">
-        {`${machine.get('name')}(${machine.get('location')})`}
+        {`${oFetch(machine, 'name')}(${oFetch(machine, 'location')})`}
       </Badge>
       <Badge labelClasses="boss-count__label_role_user">
-        {machineRefloat.get('createdBy')}
+        {oFetch(machineRefloat, 'createdBy')}
       </Badge>
     </div>
   )
 }
 
 export function MachinesRefloatsItem({machineRefloat, machine}) {
-  const machineFloatPounds = machine.get('floatCents') / 100;
-  const initialCashInPounds = machine.get('cashInX10p') / 10;
-  const initialCashOutPounds = machine.get('cashOutX10p') / 10;
-  const initialRefillPounds = machine.get('refillX10p') / 10;
-  const floatTopupPounds = machineRefloat.get('floatTopupCents') / 100;
-  const moneyBankedPounds = machineRefloat.get('moneyBankedCents') / 100;
-  const refillPounds = (machineRefloat.get('refillX10p') / 10);
-  const cashInPounds = machineRefloat.get('cashInX10p') / 10;
-  const cashOutPounds = machineRefloat.get('cashOutX10p') / 10;
-  const lastRefillPounds = machineRefloat.get('lastRefillCents') / 10;
-  const lastCashInPounds = machineRefloat.get('lastCashInCents') / 10;
-  const lastCashOutPounds = machineRefloat.get('lastCashOutCents') / 10;
-  const lastCalculatedFloatTopupPounds = machineRefloat.get('calculatedFloatTopupCents') / 100;
-  const lastCalculatedMoneyBankedPounds = machineRefloat.get('calculatedMoneyBankedCents') / 100;
-  const refillDiffPounds = refillPounds - lastRefillPounds;
-  const cashInDiffPounds = cashInPounds - lastCashInPounds;
-  const cashOutDiffPounds = cashOutPounds - lastCashOutPounds;
-  const cashInDiff = numeral(cashInDiffPounds).format('0,0.00');
-  const cashOutDiff = numeral(cashOutDiffPounds).format('0,0.00');
-  const refillReading = machineRefloat.get('refillX10p');
-  const cashInReading = machineRefloat.get('cashInX10p');
-  const cashOutReading = machineRefloat.get('cashOutX10p');
-  const lastFloatTopup = numeral(floatTopupPounds).format('0,0.00');
-  const lastMoneyBanked = numeral(moneyBankedPounds).format('0,0.00');
-  const refillSinceStartPounds = refillPounds - initialRefillPounds;
-  const cashOutSinceStartPounds = cashOutPounds - initialCashOutPounds;
-  const currentFloatPounds = machineFloatPounds + refillSinceStartPounds + floatTopupPounds - cashOutSinceStartPounds;
-  const currentFloat = numeral(currentFloatPounds).format('0,0.00');
+  machine = machine.toJS();
+  machineRefloat = machineRefloat.toJS();
 
-  let lastFloatTopupDiff = lastCalculatedFloatTopupPounds - floatTopupPounds;
-  let lastMoneyBankedDiff = lastCalculatedMoneyBankedPounds - moneyBankedPounds;
-  const currentFloatDiffPounds = machineFloatPounds - currentFloatPounds;
+  const machineFloatCents = oFetch(machine, 'floatCents');
+  const initialCashInCents = oFetch(machine, 'cashInX10p') * 10;
+  const initialCashOutCents = oFetch(machine, 'cashOutX10p') * 10;
+  const initialRefillCents = oFetch(machine, 'refillX10p') * 10;
+  const floatTopupCents = oFetch(machineRefloat, 'floatTopupCents');
+  const moneyBankedCents = oFetch(machineRefloat, 'moneyBankedCents');
+  const refillCents = oFetch(machineRefloat, 'refillX10p') * 10;
+  const cashInCents = oFetch(machineRefloat, 'cashInX10p') * 10;
+  const cashOutCents = oFetch(machineRefloat, 'cashOutX10p') * 10;
+  const lastRefillCents = oFetch(machineRefloat, 'lastRefillCents') * 10;
+  const lastCashInCents = oFetch(machineRefloat, 'lastCashInCents') * 10;
+  const lastCashOutCents = oFetch(machineRefloat, 'lastCashOutCents') * 10;
+  const lastCalculatedFloatTopupCents = oFetch(machineRefloat, 'calculatedFloatTopupCents');
+  const lastCalculatedMoneyBankedCents = oFetch(machineRefloat, 'calculatedMoneyBankedCents');
+  const refillDiffCents = refillCents - lastRefillCents;
+  const cashInDiffCents = cashInCents - lastCashInCents;
+  const cashOutDiffCents = cashOutCents - lastCashOutCents;
+  const cashInDiff = numeral(cashInDiffCents / 100).format('0,0.00');
+  const cashOutDiff = numeral(cashOutDiffCents / 100).format('0,0.00');
+  const refillReading = oFetch(machineRefloat, 'refillX10p');
+  const cashInReading = oFetch(machineRefloat, 'cashInX10p');
+  const cashOutReading = oFetch(machineRefloat, 'cashOutX10p');
+  const lastFloatTopup = numeral(floatTopupCents / 100).format('0,0.00');
+  const lastMoneyBanked = numeral(moneyBankedCents / 100).format('0,0.00');
+  const refillSinceStartCents = refillCents - initialRefillCents;
+  const cashOutSinceStartCents = cashOutCents - initialCashOutCents;
+  const currentFloatCents = machineFloatCents + refillSinceStartCents + floatTopupCents - cashOutSinceStartCents;
+  const currentFloat = numeral(currentFloatCents / 100).format('0,0.00');
+
+  let lastFloatTopupDiff = lastCalculatedFloatTopupCents - floatTopupCents;
+  let lastMoneyBankedDiff = lastCalculatedMoneyBankedCents - moneyBankedCents;
+  const currentFloatDiffCents = machineFloatCents - currentFloatCents;
 
   let lastFloatTopupExtra = null;
   if (lastFloatTopupDiff !== 0) {
-    lastFloatTopupExtra = `£${numeral(lastFloatTopupDiff).format('0,0.00')}`;
+    lastFloatTopupExtra = `£${numeral(lastFloatTopupDiff / 100).format('0,0.00')}`;
   }
   let lastMoneyBankedExtra = null;
   if (lastMoneyBankedDiff !== 0) {
-    lastMoneyBankedExtra = `£${numeral(lastMoneyBankedDiff).format('0,0.00')}`;
+    lastMoneyBankedExtra = `£${numeral(lastMoneyBankedDiff / 100).format('0,0.00')}`;
   }
   let currentFloatExtra = null;
-  if (currentFloatDiffPounds !== 0) {
-    currentFloatExtra = `£${numeral(currentFloatDiffPounds).format('0,0.00')}`;
+  if (currentFloatDiffCents !== 0) {
+    currentFloatExtra = `£${numeral(currentFloatDiffCents / 100).format('0,0.00')}`;
   }
 
-  const floatTopupNote = machineRefloat.get('floatTopupNote');
-  const moneyBankedNote = machineRefloat.get('moneyBankedNote');
+  const floatTopupNote = oFetch(machineRefloat, 'floatTopupNote');
+  const moneyBankedNote = oFetch(machineRefloat, 'moneyBankedNote');
 
   return (
     <div className="boss-page-main__group boss-page-main__group_adjust_machine-refloats boss-page-main__group_context_stack">

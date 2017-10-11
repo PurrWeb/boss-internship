@@ -24,8 +24,6 @@ export const createMachinesRefloat = (values) => (dispatch, getState) => {
   const venueId = getState().getIn(['page', 'currentVenueId']);
 
   const formatedValues = {
-    calculatedFloatTopup: values.calculatedFloatTopup * 100,
-    calculatedMoneyBanked: values.calculatedMoneyBanked * 100,
     moneyBanked: values.moneyBanked * 100,
     floatTopup: values.floatTopup * 100,
   }
