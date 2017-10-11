@@ -11,10 +11,8 @@ module Api
           refill_x_10p: params.fetch("refillX10p"),
           cash_in_x_10p: params.fetch("cashInX10p"),
           cash_out_x_10p: params.fetch("cashOutX10p"),
-          calculated_float_topup_cents: params.fetch("calculatedFloatTopup"),
           float_topup_cents: params.fetch("floatTopup"),
           float_topup_note: params.fetch("floatTopupNote"),
-          calculated_money_banked_cents: params.fetch("calculatedMoneyBanked"),
           money_banked_cents: params.fetch("moneyBanked"),
           money_banked_note: params.fetch("moneyBankedNote")
         })

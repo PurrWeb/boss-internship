@@ -20,10 +20,8 @@ class MachinesRefloatsApiService
       refill_x_10p: params.fetch(:refill_x_10p),
       cash_in_x_10p: params.fetch(:cash_in_x_10p),
       cash_out_x_10p: params.fetch(:cash_out_x_10p),
-      calculated_float_topup_cents: params.fetch(:calculated_float_topup_cents),
       float_topup_cents: params.fetch(:float_topup_cents),
       float_topup_note: params.fetch(:float_topup_note),
-      calculated_money_banked_cents: params.fetch(:calculated_money_banked_cents),
       money_banked_cents: params.fetch(:money_banked_cents),
       money_banked_note: params.fetch(:money_banked_note)
     )

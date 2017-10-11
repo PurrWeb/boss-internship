@@ -11,13 +11,20 @@ class MachinesRefloat < ActiveRecord::Base
   validate :calculated_money_banked_should_match
   
   before_validation :set_last_machine_refloat_id
+  before_validation :set_calculated_fields
 
-  attr_accessor :float_topup_error, :money_banked_error
+  attr_accessor :float_topup_error, :money_banked_error 
 
   def set_last_machine_refloat_id
     if last_machine_refloat_present?
       self.last_machine_refloat_id = machine.machines_refloats.last.id
     end
+  end
+
+  def set_calculated_fields
+    machines_refloat_calculation = MachinesRefloatsCalculationService.new(machines_refloat: self)
+    self.calculated_float_topup_cents = machines_refloat_calculation.calculated_float_topup_cents
+    self.calculated_money_banked_cents = machines_refloat_calculation.calculated_money_banked_cents
   end
 
   def last_machine_refloat_present?
