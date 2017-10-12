@@ -61,7 +61,17 @@ class PermissionsPageData
           description: "Incident Reports",
           permitted: role.can?(:manage, :incident_reports),
           path: @path.incident_reports_path
-        }
+        },
+        {
+          description: "Vouchers",
+          permitted: true,
+          path: @path.vouchers_path
+        },
+        {
+          description: "Reedem Vouchers",
+          permitted: true,
+          path: @path.redeem_vouchers_path
+        },
       ]
     }
 
@@ -171,6 +181,16 @@ class PermissionsPageData
       ]
     }
 
+    admin_venues = {
+      name: "Admin: Venue",
+      color: "#f39c12",
+      items: [
+        {
+          description: "Checklist Submissions",
+          path: @path.check_list_submissions_path
+        },
+      ]
+    }
     admin_reports = {
       name: "Admin: Reports",
       color: "#f39c12",
