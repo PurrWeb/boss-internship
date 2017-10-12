@@ -9,6 +9,7 @@ const BossFormSelect = ({
     options,
     optionValue,
     optionLabel,
+    normalizeLabel,
     required,
     multi,
     placeholder,
@@ -18,9 +19,15 @@ const BossFormSelect = ({
   }) => {
 
   const getItemOption = (option, {value, label}) => {
+    let normalizedLabel = null;
+
+    if (typeof normalizeLabel === 'function') {
+      normalizedLabel = normalizeLabel(option);
+    }
+    
     return {
         value: option[value || 'value'],
-        label: option[label || 'label'],
+        label: normalizedLabel || option[label || 'label'],
     };
   }
 
@@ -60,9 +67,11 @@ const BossFormSelect = ({
 
   return (
     <div className="boss-form__field">
-      <label htmlFor={name} className="boss-form__label">
-        <span className="boss-form__label-text">{`${label} ${required ? '*' : ''}`}</span>
-      </label>
+      { label && (
+        <label htmlFor={name} className="boss-form__label">
+          <span className="boss-form__label-text">{`${label} ${required ? '*' : ''}`}</span>
+        </label>
+      )}
       <div className={`boss-form__select ${touched && error && 'boss-form__select_state_error'}`}>
         <Select
           options={getOptions(options, {label: optionLabel, value: optionValue})}
