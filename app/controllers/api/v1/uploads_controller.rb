@@ -6,9 +6,8 @@ module Api
 
       def create
         upload = Upload.new(file: create_params.fetch(:file))
-
         if upload.save
-          render json: upload, status: :created
+          render json: upload, serializer: UploadSerializer, status: :created
         else
           render json: upload,
             serializer: ActiveModel::Serializer::ErrorSerializer,
