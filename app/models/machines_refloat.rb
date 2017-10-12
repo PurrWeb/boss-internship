@@ -28,7 +28,7 @@ class MachinesRefloat < ActiveRecord::Base
   end
 
   def last_machine_refloat_present?
-    machine.machines_refloats.present?
+    machine.machines_refloats.count > 0
   end
 
   def calculated_float_topup_should_match
