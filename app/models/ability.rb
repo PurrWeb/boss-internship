@@ -75,6 +75,10 @@ class Ability
         can_manage_venue?(user, incident_report.venue)
       end
 
+      can :manage, Voucher do |voucher|
+        can_manage_venue?(user, voucher.venue)
+      end
+
       can :manage, OwedHour do |owed_hour|
         can_edit_staff_member?(user, owed_hour.staff_member)
       end

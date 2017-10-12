@@ -12,7 +12,9 @@ class Venue < ActiveRecord::Base
   has_many :reminder_users, through: :venue_reminder_users, source: :user
   has_many :check_list_submissions
   has_many :check_lists
+  has_many :vouchers
   has_and_belongs_to_many :questionnaires
+  has_many :vouchers
 
   before_create :generate_rollbar_guid
   before_validation :check_rollbar_guid
