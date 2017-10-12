@@ -950,6 +950,27 @@ ActiveRecord::Schema.define(version: 20170929143901) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  create_table "voucher_usages", force: :cascade do |t|
+    t.integer  "voucher_id",      limit: 4, null: false
+    t.integer  "user_id",         limit: 4, null: false
+    t.integer  "staff_member_id", limit: 4, null: false
+    t.boolean  "enabled",                   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "vouchers", force: :cascade do |t|
+    t.integer  "user_id",     limit: 4,   null: false
+    t.integer  "venue_id",    limit: 4,   null: false
+    t.boolean  "enabled",                 null: false
+    t.string   "description", limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "vouchers", ["venue_id", "enabled"], name: "index_vouchers_on_venue_id_and_enabled", using: :btree
+  add_index "vouchers", ["venue_id"], name: "index_vouchers_on_venue_id", using: :btree
+
   add_foreign_key "incident_reports", "users"
   add_foreign_key "incident_reports", "users", column: "disabled_by_id"
   add_foreign_key "incident_reports", "venues"
