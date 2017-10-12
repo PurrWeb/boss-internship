@@ -32,6 +32,8 @@ RSpec.describe 'Machines refloat calculation' do
       )
     end
 
+    let(:result) { service.call }
+
     context 'initial refloat' do
       context 'readings have not changed' do
         let(:new_machine_refloat) do
@@ -48,11 +50,11 @@ RSpec.describe 'Machines refloat calculation' do
         end
 
         specify 'calculated_float_topup_cents should be 0' do
-          expect(service.calculated_float_topup_cents).to eq(0)
+          expect(result.fetch(:calculated_float_topup_cents)).to eq(0)
         end
 
         specify 'calculated_money_banked_cents should be 0' do
-          expect(service.calculated_money_banked_cents).to eq(0)
+          expect(result.fetch(:calculated_money_banked_cents)).to eq(0)
         end
       end
 
@@ -81,11 +83,11 @@ RSpec.describe 'Machines refloat calculation' do
         let(:expected_money_banked_pounds) { 500 }
 
         specify 'calculated_float_topup_cents should be £100' do
-          expect(service.calculated_float_topup_cents).to eq(expected_float_topup_pounds * 100)
+          expect(result.fetch(:calculated_float_topup_cents)).to eq(expected_float_topup_pounds * 100)
         end
 
         specify 'calculated_money_banked_cents should be £500' do
-          expect(service.calculated_money_banked_cents).to eq(expected_money_banked_pounds * 100)
+          expect(result.fetch(:calculated_money_banked_cents)).to eq(expected_money_banked_pounds * 100)
         end
       end
     end
@@ -165,11 +167,11 @@ RSpec.describe 'Machines refloat calculation' do
       end
 
       specify 'calculated_float_topup_cents should be untopped up from previous' do
-        expect(service.calculated_float_topup_cents).to eq(expected_float_topup_pounds * 100)
+        expect(result.fetch(:calculated_float_topup_cents)).to eq(expected_float_topup_pounds * 100)
       end
 
       specify 'calculated_money_banked_cents should be unbanked from previous' do
-        expect(service.calculated_money_banked_cents).to eq(expected_money_banked_pounds * 100)
+        expect(service.call.fetch(:calculated_money_banked_cents)).to eq(expected_money_banked_pounds * 100)
       end
     end
   end

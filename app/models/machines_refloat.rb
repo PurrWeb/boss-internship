@@ -22,9 +22,9 @@ class MachinesRefloat < ActiveRecord::Base
   end
 
   def set_calculated_fields
-    machines_refloat_calculation = MachinesRefloatsCalculationService.new(machines_refloat: self)
-    self.calculated_float_topup_cents = machines_refloat_calculation.calculated_float_topup_cents
-    self.calculated_money_banked_cents = machines_refloat_calculation.calculated_money_banked_cents
+    machines_refloat_calculations = MachinesRefloatsCalculationService.new(machines_refloat: self).call
+    self.calculated_float_topup_cents = machines_refloat_calculations.fetch(:calculated_float_topup_cents)
+    self.calculated_money_banked_cents = machines_refloat_calculations.fetch(:calculated_money_banked_cents)
   end
 
   def last_machine_refloat_present?
