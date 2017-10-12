@@ -160,13 +160,15 @@ RSpec.describe 'Machines refloat calculation' do
       # unbanked from refloat 2
       let(:expected_money_banked_pounds) { 200 }
 
-      specify 'calculated_float_topup_cents should be untopped up from previous' do
+      before do
         create_refloats
+      end
+
+      specify 'calculated_float_topup_cents should be untopped up from previous' do
         expect(service.calculated_float_topup_cents).to eq(expected_float_topup_pounds * 100)
       end
 
       specify 'calculated_money_banked_cents should be unbanked from previous' do
-        create_refloats
         expect(service.calculated_money_banked_cents).to eq(expected_money_banked_pounds * 100)
       end
     end
