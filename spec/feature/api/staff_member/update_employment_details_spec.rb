@@ -20,7 +20,8 @@ RSpec.describe 'Update Employment Details' do
     FactoryGirl.create(:staff_member, create_params)
   end
   let(:venue) { staff_member.master_venue }
-  let(:user) { FactoryGirl.create(:user, venues: [venue]) }
+  let(:user_venues) { related_with_user_venues }
+  let(:user) { FactoryGirl.create(:user, venues: user_venues) }
   let(:api_key) do
     ApiKey.create!(
       venue: venue,
@@ -41,7 +42,7 @@ RSpec.describe 'Update Employment Details' do
   let(:valid_params) do
     {
       master_venue_id: new_master_venue.id,
-      other_venue_ids: new_other_venue_ids,
+      other_venue_ids: new_related_with_user_other_venue_ids,
       staff_type_id: new_staff_type.id,
       starts_at: UIRotaDate.format(new_starts_at),
       employment_status: new_employment_status,
@@ -54,10 +55,14 @@ RSpec.describe 'Update Employment Details' do
       post(url, params)
     end
   end
-  let(:old_master_venue) { FactoryGirl.create(:venue) }
-  let(:new_master_venue) { FactoryGirl.create(:venue) }
-  let(:new_other_venues) { Array.new(4) { FactoryGirl.create(:venue) } }
-  let(:new_other_venue_ids) { new_other_venues.map(&:id) }
+  let(:venues) { Array.new(10) { FactoryGirl.create(:venue) } }
+  let(:old_master_venue) {venues[0]}
+  let(:new_master_venue) {venues[1]}
+  let(:related_with_user_venues) {venues[0..5]}
+  let(:new_related_with_user_other_venues) { related_with_user_venues[2..5] }
+  let(:new_unrelated_with_user_other_venues) { venues[6..10] }
+  let(:new_related_with_user_other_venue_ids) { new_related_with_user_other_venues.map(&:id) }
+  let(:new_unrelated_with_user_other_venue_ids) { new_unrelated_with_user_other_venues.map(&:id) }
   let(:old_staff_type) { FactoryGirl.create(:staff_type) }
   let(:new_staff_type) { FactoryGirl.create(:staff_type) }
   let(:old_starts_at) { (now - 2.months).to_date }
@@ -103,7 +108,7 @@ RSpec.describe 'Update Employment Details' do
     it 'should have updated the staff member' do
       staff_member.reload
       expect(staff_member.master_venue.id).to eq(new_master_venue.id)
-      expect(staff_member.work_venues.map(&:id)).to eq(new_other_venue_ids)
+      expect(staff_member.work_venues.map(&:id)).to eq(new_related_with_user_other_venue_ids)
       expect(staff_member.staff_type.id).to eq(new_staff_type.id)
       expect(staff_member.starts_at).to eq(new_starts_at)
       expect(staff_member.pay_rate.id).to eq(new_pay_rate.id)
@@ -142,6 +147,28 @@ RSpec.describe 'Update Employment Details' do
       expect(json).to eq({
         "errors" => {
           "national_insurance_number" => ["format must be 2 letters, followed by 6 numbers, and a letter "]
+        }
+      })
+    end
+  end
+
+  context 'when unaccessable venues present' do
+    let(:params) do
+      valid_params.merge({
+        other_venue_ids: new_unrelated_with_user_other_venue_ids
+      })
+    end
+
+    it 'should return unprocessable_entity status' do
+      expect(response.status).to eq(unprocessable_entity_status)
+    end
+    
+    it 'should return errors json' do
+      json = JSON.parse(response.body)
+      error_string = new_unrelated_with_user_other_venues.map(&:name).join(", ")
+      expect(json).to eq({
+        "errors" => {
+          "other_venues" => ["You don't have access to `#{error_string}` venues."]
         }
       })
     end
