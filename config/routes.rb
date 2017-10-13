@@ -11,6 +11,9 @@ Rails.application.routes.draw do
       passwords: 'users/passwords'
     }
 
+    resources :machines, only: [:index]
+    resources :machine_refloats, only: [:index]
+
     resources :incident_reports, only: [:index]
     resources :check_lists, only: [:index]
     resources :check_list_submissions, path: "checklist_submissions", only: [:index]
@@ -175,6 +178,13 @@ Rails.application.routes.draw do
 
         resources :uploads
 
+        resources :machines_refloats, only: [:index, :create]
+        resources :machines, only: [:index, :show, :create, :update, :destroy] do
+          member do
+            post :restore
+          end
+        end
+        
         resources :incident_reports, only: [:index, :show, :create, :update, :destroy]
 
         resources :questionnaires do

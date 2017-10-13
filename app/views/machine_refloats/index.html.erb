@@ -1,0 +1,31 @@
+<%= javascript_tag do %>
+  window.boss = window.boss || {};
+  bossData = {};
+  bossData.accessToken = '<%= access_token %>';
+  bossData.currentVenueId = <%= current_venue.id %>;
+  window.boss = bossData;
+<% end %>
+
+<%= react_component('MachinesRefloatsApp', {
+  currentVenueId: current_venue.id,
+  accessToken: access_token,
+  machinesRefloats: ActiveModel::Serializer::CollectionSerializer.new(
+    machines_refloats,
+    serializer: Api::V1::MachinesRefloats::MachinesRefloatSerializer
+  ),
+  machinesRefloatsUsers: ActiveModel::Serializer::CollectionSerializer.new(
+    machines_refloats_users,
+    serializer: Api::V1::UserSerializer
+  ),
+  startDate: start_date,
+  endDate: end_date,
+  machineId: machine_id,
+  userId: user_id,
+  venueMachines: ActiveModel::Serializer::CollectionSerializer.new(
+    venue_machines,
+    serializer: Api::V1::MachinesRefloats::MachinesSerializer
+  ),
+  page: page,
+  perPage: per_page,
+  size: size,
+}) %>

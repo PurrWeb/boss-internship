@@ -8,7 +8,10 @@ import $ from "jquery"
 import * as selectors from "~/redux/selectors"
 import '~/lib/global-try-catch';
 import Bowser from 'bowser'
+import Spinner from 'react-spinner';
+import 'react-spinner/react-spinner.css';
 
+window.Spinner = Spinner;
 window.boss = window.boss || {};
 window.boss.currentLayout = window.boss.currentLayout || 'oldLayout';
 window.debug = window.debug || {};
@@ -42,6 +45,12 @@ registerComponent("CheckListsApp", CheckListsApp)
 
 import Submissions from "./apps/submissions"
 registerComponent("Submissions", Submissions)
+
+import {MachinesIndexApp} from "./apps/machines"
+registerComponent("MachinesIndexApp", MachinesIndexApp)
+
+import MachinesRefloatsApp from "./apps/machines-refloats";
+registerComponent("MachinesRefloatsApp", MachinesRefloatsApp);
 
 import {IncidentReportsIndexApp} from "./apps/incident-reports"
 registerComponent("IncidentReportsIndexApp", IncidentReportsIndexApp)

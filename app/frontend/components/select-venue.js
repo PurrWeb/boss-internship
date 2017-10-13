@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import _ from 'lodash';
 
-const VenuesSelect = ({options, selected, onSelect, clientId}) => {
+const VenuesSelect = ({options, optionsType = {value: "value", label: "label"}, selected, onSelect, clientId = false}) => {
   let mappedOptions = [];
   let selectedOptions = {};
 
@@ -20,8 +20,16 @@ const VenuesSelect = ({options, selected, onSelect, clientId}) => {
     }
     
   } else {
-    mappedOptions = options;
-    selectedOptions = selected;
+    mappedOptions = options.map(option => {
+      return {
+        value: option[optionsType.value],
+        label: option[optionsType.label],
+      }
+    });
+    selectedOptions = {
+      value: selected[optionsType.value],
+      label: selected[optionsType.label]
+    };
   }
 
   

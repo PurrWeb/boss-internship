@@ -13,6 +13,16 @@ class PermissionsPageData
       color: "#e74c3c",
       items: [
         {
+          description: "Machines",
+          permitted: true,
+          path: @path.machines_path
+        },
+        {
+          description: "Machines Refloats",
+          permitted: true,
+          path: @path.machine_refloats_path
+        },
+        {
           description: "Rota",
           permitted: role.can?(:manage, :rotas),
           path: @path.rotas_path
