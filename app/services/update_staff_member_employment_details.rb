@@ -10,6 +10,7 @@ class UpdateStaffMemberEmploymentDetails
     @requester = requester
     @staff_member = staff_member
     @params = params
+    @requester = requester
   end
 
   def call
@@ -18,6 +19,22 @@ class UpdateStaffMemberEmploymentDetails
     ActiveRecord::Base.transaction do
       old_master_venue = staff_member.master_venue
       old_pay_rate = staff_member.pay_rate
+
+      work_venues_ids = staff_member.work_venues.map(&:id)
+      new_work_venues = params[:work_venues]
+      new_work_venues_ids = new_work_venues.map(&:id)
+      new_venues_diff = new_work_venues.select {|venue| work_venues_ids.exclude?(venue.id)}
+
+      if new_venues_diff.present?
+        venues_without_access = new_venues_diff.inject([]) do |result, venue|
+          AccessibleVenuesQuery.new(requester).all.include?(venue) ? result : result << venue.name
+        end
+        if venues_without_access.present?
+          staff_member.has_work_venues_without_access = true
+          staff_member.venues_without_access = venues_without_access
+          params.delete(:work_venues)
+        end
+      end
 
       staff_member.assign_attributes(params)
       pay_rate_changed = staff_member.pay_rate_id_changed?

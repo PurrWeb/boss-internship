@@ -172,7 +172,7 @@ class StaffMemberApiUpdateService
       master_venue: master_venue,
       work_venues: other_venues,
     }
-    update_params[:national_insurance_number] = params[:national_insurance_number]if params[:national_insurance_number].present?
+    update_params[:national_insurance_number] = params[:national_insurance_number] if params[:national_insurance_number].present?
     update_params[:hours_preference_note] = params[:hours_preference_note] if params[:hours_preference_note].present?
     update_params[:day_perference_note] = params[:day_preference_note] if params[:day_preference_note].present?
     EmploymentStatusApiEnum.new(value: params.fetch(:employment_status)).to_params.each do |param, value|
@@ -188,6 +188,7 @@ class StaffMemberApiUpdateService
     ).call
 
     api_errors = nil
+
     if !model_service_result.success?
       api_errors = StaffMemberUpdateEmploymentDetailsApiErrors.new(staff_member: staff_member)
     end
