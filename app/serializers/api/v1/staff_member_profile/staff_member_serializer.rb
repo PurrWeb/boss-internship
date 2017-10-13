@@ -35,6 +35,10 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :created_at,
              :has_user
 
+  def date_of_birth
+    UIRotaDate.format(object.date_of_birth)
+  end
+
   def avatar
     object.avatar_url
   end

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import moment from 'moment';
 import safeMoment from "~/lib/safe-moment"
 import humanize from 'string-humanize';
 import oFetch from "o-fetch";
@@ -132,7 +133,7 @@ class ProfilePage extends React.PureComponent {
           (item, name = "name") => ({name: humanize(name), value: `${oFetch(item, 'first_name')} ${oFetch(item, 'surname')}` }),
           (item, name = "gender") => ({name: humanize(name), value: humanize(oFetch(item, name))}),
           (item, name = "date_of_birth") => ({name: humanize(name), value: safeMoment.uiDateParse(oFetch(item, name)).format('DD MMMM YYYY')}),
-          (item, name = "date_of_birth") => ({name: "Age", value: safeMoment.parse().diff(safeMoment.parse(oFetch(item, name)), 'years')})
+          (item, name = "date_of_birth") => ({name: "Age", value: moment().diff(safeMoment.uiDateParse(oFetch(item, name)), 'years')})
         ]
       },
       {
