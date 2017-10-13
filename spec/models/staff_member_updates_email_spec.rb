@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 describe StaffMemberUpdatesEmail do
-  subject { StaffMemberUpdatesEmail.new(staff_member: staff_member, old_master_venue: old_master_venue) }
+  subject { StaffMemberUpdatesEmail.new(user: user, staff_member: staff_member, old_master_venue: old_master_venue) }
+  let(:user) { FactoryGirl.create(:user, venues: [old_master_venue]) }
   let(:old_master_venue) { FactoryGirl.create(:venue) }
   let(:old_address_values) do
     {

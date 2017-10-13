@@ -5,7 +5,8 @@ class UpdateStaffMemberContactDetails
     end
   end
 
-  def initialize(staff_member:, email:, phone_number:, address:)
+  def initialize(requester:, staff_member:, email:, phone_number:, address:)
+    @requester = requester
     @staff_member = staff_member
     @email = email
     @phone_number = phone_number
@@ -29,7 +30,11 @@ class UpdateStaffMemberContactDetails
       staff_member.address = address
     end
 
-    staff_member_updates_email = StaffMemberUpdatesEmail.new(old_master_venue: staff_member.master_venue, staff_member: staff_member)
+    staff_member_updates_email = StaffMemberUpdatesEmail.new(
+      user: requester,
+      old_master_venue: staff_member.master_venue,
+      staff_member: staff_member
+    )
 
     result = staff_member.save
 
@@ -41,5 +46,5 @@ class UpdateStaffMemberContactDetails
   end
 
   private
-  attr_reader :staff_member, :email, :address, :phone_number
+  attr_reader :staff_member, :email, :address, :phone_number, :requester
 end

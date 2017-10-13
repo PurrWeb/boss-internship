@@ -1,10 +1,11 @@
 # Takes a staff member record with assigned attributes (pre save)
 # and represents
 class StaffMemberUpdatesEmail
-  def initialize(old_master_venue:, staff_member:)
+  def initialize(user:, old_master_venue:, staff_member:)
     @changed_attributes = []
     @old_values = {}
     @new_values = {}
+    @user_name = user.full_name
     @staff_member_id = staff_member.id
     @staff_member_name = staff_member.full_name.titlecase
     @old_master_venue = old_master_venue
@@ -12,10 +13,11 @@ class StaffMemberUpdatesEmail
   end
   include ActionView::Helpers::NumberHelper
 
-  attr_reader :staff_member_id, :staff_member_name, :old_master_venue
+  attr_reader :staff_member_id, :staff_member_name, :old_master_venue, :user_name
 
   def data
     {
+      user_name: user_name,
       staff_member_id: staff_member_id,
       staff_member_name: staff_member_name,
       changed_attributes: changed_attributes,

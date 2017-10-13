@@ -5,8 +5,9 @@ class UpdateStaffMemberEmploymentDetails
     end
   end
 
-  def initialize(now: Time.zone.now, staff_member:, params:)
+  def initialize(now: Time.zone.now, requester:, staff_member:, params:)
     @now = now
+    @requester = requester
     @staff_member = staff_member
     @params = params
   end
@@ -31,7 +32,11 @@ class UpdateStaffMemberEmploymentDetails
         end
       end
 
-      staff_member_updates_email = StaffMemberUpdatesEmail.new(staff_member: staff_member, old_master_venue: old_master_venue)
+      staff_member_updates_email = StaffMemberUpdatesEmail.new(
+        user: requester,
+        staff_member: staff_member,
+        old_master_venue: old_master_venue
+      )
 
       result = staff_member.save
 
@@ -62,7 +67,7 @@ class UpdateStaffMemberEmploymentDetails
   end
 
   private
-  attr_reader :now, :staff_member, :params
+  attr_reader :now, :staff_member, :params, :requester
 
   def update_related_daily_reports(staff_member:, old_pay_rate:, new_pay_rate:)
     if [old_pay_rate, new_pay_rate].any? { |pay_rate| pay_rate.weekly? }

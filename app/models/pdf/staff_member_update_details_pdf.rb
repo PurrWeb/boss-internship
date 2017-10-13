@@ -1,17 +1,22 @@
 class StaffMemberUpdateDetailsPDF
   include ActionView::Helpers::NumberHelper
 
-  def initialize(staff_member_name:, changed_attributes:, new_values:, old_values:)
+  def initialize(user_name:, staff_member_id:, staff_member_name:, changed_attributes:, new_values:, old_values:, update_time:)
+    @update_time = update_time
+    @user_name = user_name
+    @staff_member_id = staff_member_id
     @staff_member_name = staff_member_name
     @changed_attributes = changed_attributes
     @old_values = old_values
     @new_values = new_values
   end
-  attr_reader :staff_member_name, :changed_attributes, :new_values, :old_values
+  attr_reader :staff_member_id, :staff_member_name, :changed_attributes, :new_values, :old_values, :user_name, :update_time
 
   def render
     Prawn::Document.new do |pdf|
-      pdf.text "#{staff_member_name} - Updates"
+      pdf.text "#{staff_member_name} (id: #{staff_member_id}) - Updates"
+      pdf.text "\n"
+      pdf.text "Updated by #{user_name} at #{update_time.to_s(:human)}"
       pdf.table(data)
     end.render
   end
