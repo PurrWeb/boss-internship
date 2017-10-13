@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment"
 import humanize from 'string-humanize';
 import oFetch from "o-fetch";
 import _ from 'lodash';
@@ -74,7 +74,7 @@ class ProfilePage extends React.PureComponent {
     let employmentDetailItems = [
       (item, name = "other_venues") => ({name: humanize(name), value: findById(venues, oFetch(item, name)).map(item => oFetch(item, 'name')).join(', ')}),
       (item, name = "staff_type") => ({name: "Job Type", value: oFetch(findById(staffTypes, oFetch(item, name)), 'name')}),
-      (item, name = "starts_at") => ({name: "Start Date", value: moment(oFetch(item, name), 'DD-MM-YYYY').format('DD MMMM YYYY')}),
+      (item, name = "starts_at") => ({name: "Start Date", value: safeMoment.uiDateParse(oFetch(item, name)).format('DD MMMM YYYY')}),
       (item, name = "pay_rate") => ({name: humanize(name), value: oFetch(findById(payRates, oFetch(item, name)), 'name')}),
       "hours_preference",
       "day_preference",
@@ -95,7 +95,7 @@ class ProfilePage extends React.PureComponent {
       employmentDetailItems.push(
         (item, name="sia_badge_expiry_date") => ({
           name: humanize(name),
-          value: moment(oFetch(item, name), 'DD-MM-YYYY').format('DD MMM YYYY')
+          value: safeMoment.uiDateParse(oFetch(item, name)).format('DD MMM YYYY')
         })
       )
 
@@ -122,8 +122,8 @@ class ProfilePage extends React.PureComponent {
       {
         categoryName: "Account Details",
         items: [
-          (item, name = "created_at") => ({name: "Created", value: moment(oFetch(item, name)).format('HH:mm DD MMMM YYYY')}),
-          (item, name = "updated_at") => ({name: "Modified", value: moment(oFetch(item, name)).format('HH:mm DD MMMM YYYY')})
+          (item, name = "created_at") => ({name: "Created", value: safeMoment.iso8601Parse(oFetch(item, name)).format('HH:mm DD MMMM YYYY')}),
+          (item, name = "updated_at") => ({name: "Modified", value: safeMoment.iso8601Parse(oFetch(item, name)).format('HH:mm DD MMMM YYYY')})
         ]
       },
       {
@@ -131,8 +131,8 @@ class ProfilePage extends React.PureComponent {
         items: [
           (item, name = "name") => ({name: humanize(name), value: `${oFetch(item, 'first_name')} ${oFetch(item, 'surname')}` }),
           (item, name = "gender") => ({name: humanize(name), value: humanize(oFetch(item, name))}),
-          (item, name = "date_of_birth") => ({name: humanize(name), value: moment(oFetch(item, name)).format('DD MMMM YYYY')}),
-          (item, name = "date_of_birth") => ({name: "Age", value: moment().diff(moment(oFetch(item, name)), 'years')})
+          (item, name = "date_of_birth") => ({name: humanize(name), value: safeMoment.uiDateParse(oFetch(item, name)).format('DD MMMM YYYY')}),
+          (item, name = "date_of_birth") => ({name: "Age", value: safeMoment.parse().diff(safeMoment.parse(oFetch(item, name)), 'years')})
         ]
       },
       {
