@@ -14,8 +14,18 @@ let parse = function(input, dateFormat) {
   }
 
   return result;
-}
+};
+
+let iso8601Parse = function(input){
+  return parse(input, moment.ISO_8601)
+};
+
+let uiDateParse = function(input){
+  return parse(input, 'DD-MM-YYYY');
+};
 
 export default {
-  parse: parse
+  parse: parse,
+  iso8601Parse: iso8601Parse,
+  uiDateParse: uiDateParse
 }
