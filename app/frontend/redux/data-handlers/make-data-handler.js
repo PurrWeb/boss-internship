@@ -73,7 +73,6 @@ export default function makeDataHandler(collectionName, actionHandlers, reducerO
                         return state;
                     }
                 }
-                if(handler.debug) {debugger;}
                 return defaultHandler.handlerFunction.apply(this, [state, action, handlerHelpers])
             }
         } else {

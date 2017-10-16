@@ -167,8 +167,6 @@ export default class ReportsBody extends React.Component {
       filteredStaffMembers = this.filterByStaffType(this.state.filterByStaffType)
     }
 
-    if (!filteredStaffMembers) { debugger }
-
     this.setState({
       staffMemberCollection: filteredStaffMembers
     });
@@ -198,8 +196,6 @@ export default class ReportsBody extends React.Component {
     } else {
       filteredStaffMembers = Object.values(this.props.staffMembers)
     }
-
-    if (!filteredStaffMembers) { debugger }
 
     this.setState({
       staffMemberCollection: filteredStaffMembers
