@@ -48,7 +48,15 @@ class StaffMember < ActiveRecord::Base
 
   # Transient attribute used to preserve image uploads
   # during form resubmissions
-  attr_accessor :avatar_base64, :pin_code, :current_user, :has_work_venues_without_access, :venues_without_access
+  attr_accessor \
+    :avatar_base64,
+    :pin_code,
+    :current_user,
+    # Attrs below used in `current_user_has_access_to_venues` validate method,
+    # to check if the user have an access to staff member work_venues when he updates
+    # staff member employment details in `UpdateStaffMemberEmploymentDetails` service `call` method
+    :has_work_venues_without_access,
+    :venues_without_access
 
   before_save :encrypt_pin_code
 

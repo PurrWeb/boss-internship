@@ -25,13 +25,18 @@ class UpdateStaffMemberEmploymentDetails
       new_work_venues_ids = new_work_venues.map(&:id)
       new_venues_diff = new_work_venues.select {|venue| work_venues_ids.exclude?(venue.id)}
 
+      # Check if the new work venues present and if the user have an access for them
+      # If user doesn't have access, set error string and mode additional fields for validation
       if new_venues_diff.present?
         venues_without_access = new_venues_diff.inject([]) do |result, venue|
           AccessibleVenuesQuery.new(requester).all.include?(venue) ? result : result << venue.name
         end
         if venues_without_access.present?
+          # Set additional model fields, this fields are used when validating
           staff_member.has_work_venues_without_access = true
           staff_member.venues_without_access = venues_without_access
+          # Remove `work_venues` from params, because if not,
+          # `assign_attributes` method saves this venues, even the validation is wrong
           params.delete(:work_venues)
         end
       end
