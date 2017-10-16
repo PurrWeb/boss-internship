@@ -1,4 +1,6 @@
 import React from "react"
+import machineRefloatCalculation from "~/lib/machine-refloat-calculation"
+import oFetch from "o-fetch"
 import {
   Field,
   Fields,
@@ -26,35 +28,23 @@ class RecordRefloatForm extends React.Component {
       cashInX10p,
       machinesRefloats,
     } = this.props;
-    
-    let lastMachineRefloat = machinesRefloats.find(machine => machine.get('id') === selectedMachine.lastMachineRefloatId);
-    lastMachineRefloat = lastMachineRefloat && lastMachineRefloat.toJS();
-    const machineFloatCents = selectedMachine.floatCents;
-    const machineFloatTopupCents = selectedMachine.initialFloatTopupCents;
-    const errors = submitErrors && submitErrors.toJS();
-    const lastRefillCents = lastMachineRefloat ? lastMachineRefloat.refillX10p * 10 : selectedMachine.refillX10p * 10;
-    const lastCashInCents = lastMachineRefloat ? lastMachineRefloat.cashInX10p * 10 : selectedMachine.cashInX10p * 10;
-    const lastCashOutCents = lastMachineRefloat ? lastMachineRefloat.cashOutX10p * 10 : selectedMachine.cashOutX10p * 10;
-    const lastCalculatedMoneyBankedCents = lastMachineRefloat ? lastMachineRefloat.calculatedMoneyBankedCents : 0;
-    const lastCalculatedFloatTopupCents = lastMachineRefloat ? lastMachineRefloat.calculatedFloatTopupCents : machineFloatCents;
-    const lastMoneyBankedCents = lastMachineRefloat ? lastMachineRefloat.moneyBankedCents : machineFloatTopupCents;
-    const refillCents = refillX10p * 10;
-    const cashInCents = cashInX10p * 10;
-    const cashOutCents = cashOutX10p * 10;
-    const lastFloatTopupCents = lastMachineRefloat ? lastMachineRefloat.floatTopupCents : machineFloatTopupCents;
-    const cashInDiffCents = cashInCents - lastCashInCents;
-    const cashOutDiffCents = cashOutCents - lastCashOutCents;
-    const refillDiffCents = refillCents - lastRefillCents;
-    const lastUnbankedCents = lastCalculatedMoneyBankedCents - lastMoneyBankedCents;
-    const lastUntoppedupFloatCents = lastMachineRefloat ?  lastCalculatedFloatTopupCents - lastFloatTopupCents : 0
 
-    const topupAndBankedCanEdit = (refillX10p || refillX10p === 0) && (cashInX10p || cashInX10p === 0) && (cashOutX10p || cashOutX10p === 0);
-    let calculatedFloatTopup = null;
-    let calculatedMoneyBanked = null;
-    if (topupAndBankedCanEdit) {
-      calculatedFloatTopup = cashOutDiffCents - (refillDiffCents - lastFloatTopupCents) + lastUntoppedupFloatCents;
-      calculatedMoneyBanked = cashInDiffCents - (refillDiffCents - lastFloatTopupCents) + lastUnbankedCents;
-    }
+    let lastMachineRefloat = machinesRefloats.find(machine => machine.get('id') === selectedMachine.lastMachineRefloatId) || null;
+    lastMachineRefloat = lastMachineRefloat && lastMachineRefloat.toJS();
+
+    const errors = submitErrors && submitErrors.toJS();
+
+    let calculatedValues = machineRefloatCalculation({
+      selectedMachine: selectedMachine,
+      lastMachineRefloat: lastMachineRefloat,
+      refillX10pReading: refillX10p || null,
+      cashInX10pReading: cashInX10p || null,
+      cashOutX10pReading: cashOutX10p || null
+    });
+
+    let topupAndBankedCanEdit = oFetch(calculatedValues, 'topupAndBankedCanEdit');
+    let calculatedFloatTopup = oFetch(calculatedValues, 'calculatedFloatTopupCents') / 100;
+    let calculatedMoneyBanked = oFetch(calculatedValues, 'calculatedMoneyBankedCents') / 100;
 
     return (
       <form
