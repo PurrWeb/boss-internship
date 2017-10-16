@@ -15,13 +15,15 @@ const EnableProfilePage = ({
   let staffMemberData = staffMember.toJS();
   let siaBadgeExpiryDateString = staffMemberData.sia_badge_expiry_date;
   let siaBadgeExpiryDate = siaBadgeExpiryDateString ? safeMoment.uiDateParse(siaBadgeExpiryDateString) : moment();
+  let dateOfBirthString = staffMemberData.date_of_birth;
+  let dateOfBirth = dateOfBirthString ? safeMoment.uiDateParse(dateOfBirthString) : null;
 
   const initialValues = {
     first_name: staffMember.get('first_name'),
     surname: staffMember.get('surname'),
     avatar: staffMember.get('avatar'),
     gender: staffMember.get('gender'),
-    date_of_birth: safeMoment.uiDateParse(staffMember.get('date_of_birth')),
+    date_of_birth: dateOfBirth,
     master_venue: staffMember.get('master_venue'),
     other_venues: staffMember.get('other_venues'),
     starts_at: safeMoment.uiDateParse(staffMember.get('starts_at')),
