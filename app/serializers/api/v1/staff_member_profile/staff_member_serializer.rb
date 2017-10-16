@@ -36,7 +36,7 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :has_user
 
   def date_of_birth
-    UIRotaDate.format(object.date_of_birth)
+    UIRotaDate.format(object.date_of_birth) if object.date_of_birth.present?
   end
 
   def avatar

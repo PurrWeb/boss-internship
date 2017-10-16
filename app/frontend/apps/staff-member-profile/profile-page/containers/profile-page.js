@@ -132,8 +132,14 @@ class ProfilePage extends React.PureComponent {
         items: [
           (item, name = "name") => ({name: humanize(name), value: `${oFetch(item, 'first_name')} ${oFetch(item, 'surname')}` }),
           (item, name = "gender") => ({name: humanize(name), value: humanize(oFetch(item, name))}),
-          (item, name = "date_of_birth") => ({name: humanize(name), value: safeMoment.uiDateParse(oFetch(item, name)).format('DD MMMM YYYY')}),
-          (item, name = "date_of_birth") => ({name: "Age", value: moment().diff(safeMoment.uiDateParse(oFetch(item, name)), 'years')})
+          (item, name = "date_of_birth") => ({
+            name: humanize(name),
+            value: this.dateOfBirthMoment(oFetch(item, name)) && this.dateOfBirthMoment(oFetch(item, name)).format("DD-MM-YYYY")
+          }),
+          (item, name = "date_of_birth") => ({
+            name: "Age",
+            value: this.ageDescription(this.dateOfBirthMoment(oFetch(item, name)))
+          })
         ]
       },
       {
@@ -148,6 +154,14 @@ class ProfilePage extends React.PureComponent {
         ]
       }
     ];
+  }
+
+  dateOfBirthMoment(rawValue){
+    return rawValue ? safeMoment.uiDateParse(rawValue) : null;
+  }
+
+  ageDescription(dobMoment){
+    return dobMoment ? moment().diff(dobMoment, 'years') : 'N/A';
   }
 
   render() {
