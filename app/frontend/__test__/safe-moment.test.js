@@ -22,7 +22,6 @@ describe("safeMoment.parse()", () => {
   describe("date has whitespace at start", () => {
     it("should raise error", () => {
       let input = '    01-02-2018';
-      debugger
       expect(() => {
         safeMoment.parse(input, defaultDateFormat)
       }).toThrow(dateInvalidMessage(input))
