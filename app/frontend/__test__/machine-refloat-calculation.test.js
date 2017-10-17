@@ -281,7 +281,7 @@ describe("machineRefloatCalculation()", () => {
 
       let refloat3BaseRefillReading = refloat2RefillX10pReading + (refloat2FloatTopupCents / 10);
 
-      test.only("should calculate diff properly", () => {
+      it("should calculate diff properly", () => {
         let options = {
           selectedMachine: selectedMachine,
           lastMachineRefloat: lastMachineRefloat,
