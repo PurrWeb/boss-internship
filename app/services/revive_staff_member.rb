@@ -47,7 +47,11 @@ class ReviveStaffMember
           staff_member: staff_member,
           event_type: StaffTrackingEvent::REENABLE_EVENT_TYPE
         )
-        StaffMemberUpdatesMailer.staff_member_revived(staff_member).deliver_now
+        StaffMemberUpdatesMailer.staff_member_revived({
+          user_name: requester.full_name,
+          update_time: now,
+          staff_member: staff_member
+        }).deliver_now
         if staff_member.pay_rate.weekly?
           update_realted_daily_reports(staff_member)
         end

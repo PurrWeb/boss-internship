@@ -25,7 +25,11 @@ class DeleteStaffMember
         staff_member: staff_member,
         event_type: StaffTrackingEvent::DISABLE_EVENT_TYPE
       )
-      StaffMemberUpdatesMailer.staff_member_disabled(staff_member).deliver_now
+      StaffMemberUpdatesMailer.staff_member_disabled({
+        user_name: requester.full_name,
+        update_time: now,
+        staff_member: staff_member
+      }).deliver_now
       update_related_daily_reports(staff_member)
     end
   end

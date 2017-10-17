@@ -110,6 +110,7 @@ class StaffMemberApiUpdateService
     assert_action_permitted(:update_contact_details)
 
     model_service_result = UpdateStaffMemberContactDetails.new(
+      requester: requester,
       staff_member: staff_member,
       phone_number: params.fetch(:phone_number),
       address: Address.new(
@@ -133,6 +134,7 @@ class StaffMemberApiUpdateService
     assert_action_permitted(:update_personal_details)
 
     model_service_result = UpdateStaffMemberPersonalDetails.new(
+      requester: requester,
       staff_member: staff_member,
       params: {
         gender: params.fetch(:gender),
@@ -180,6 +182,7 @@ class StaffMemberApiUpdateService
     update_params[:sia_badge_expiry_date] = params[:sia_badge_expiry_date] if params[:sia_badge_expiry_date].present?
 
     model_service_result = UpdateStaffMemberEmploymentDetails.new(
+      requester: requester,
       staff_member: staff_member,
       params: update_params
     ).call

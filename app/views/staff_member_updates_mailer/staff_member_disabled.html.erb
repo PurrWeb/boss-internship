@@ -1,5 +1,5 @@
 <p>
-  <%= staff_member.full_name.titlecase %> (id: <%= staff_member.id %>) has been disabled on the boss system.
+  <%= staff_member.full_name.titlecase %> (id: <%= staff_member.id %>) was disabled on the boss system by <%= user_name %> at <%= update_time.to_s(:human) %>.
 </p>
 
 <% if staff_member.master_venue.present? %>
