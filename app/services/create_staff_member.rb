@@ -5,7 +5,8 @@ class CreateStaffMember
     end
   end
 
-  def initialize(now: Time.zone.now, params:, nested: false)
+  def initialize(requester:, now: Time.zone.now, params:, nested: false)
+    @requester = requester
     @now = now
     @params = params
     @nested = nested
@@ -17,6 +18,8 @@ class CreateStaffMember
 
     ActiveRecord::Base.transaction(requires_new: nested) do
       staff_member.assign_attributes(params)
+
+      StaffMemberPostAssignAccessiblePayRateValidation.new(requester: requester).call(staff_member: staff_member)
 
       # notified_of_sia_expiry_at is set to now if we don't want to send
       # an update
@@ -45,7 +48,7 @@ class CreateStaffMember
   end
 
   private
-  attr_reader :now, :nested, :params
+  attr_reader :now, :nested, :params, :requester
 
   def update_related_daily_reports(staff_member)
     DailyReportDatesEffectedByStaffMemberOnWeeklyPayRateQuery.new(

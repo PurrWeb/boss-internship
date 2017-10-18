@@ -5,7 +5,8 @@ class CreateStaffMemberFromUser
     end
   end
 
-  def initialize(user:, params:)
+  def initialize(requester:, user:, params:)
+    @requester = requester
     @user = user
     @params = params
   end
@@ -15,7 +16,7 @@ class CreateStaffMemberFromUser
     staff_member = nil
 
     ActiveRecord::Base.transaction do
-      staff_member_result = CreateStaffMember.new(params: params, nested: true).call
+      staff_member_result = CreateStaffMember.new(requester: requester, params: params, nested: true).call
       result = staff_member_result.success?
       staff_member = staff_member_result.staff_member
 
@@ -28,5 +29,5 @@ class CreateStaffMemberFromUser
   end
 
   private
-  attr_reader :user, :params
+  attr_reader :user, :params, :requester
 end

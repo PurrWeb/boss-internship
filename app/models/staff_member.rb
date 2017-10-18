@@ -5,7 +5,7 @@ class StaffMember < ActiveRecord::Base
   GENDERS = [MALE_GENDER, FEMALE_GENDER]
 
   include Statesman::Adapters::ActiveRecordQueries
-  
+
   belongs_to :creator, class_name: 'User'
   belongs_to :staff_type
 
@@ -51,12 +51,13 @@ class StaffMember < ActiveRecord::Base
   attr_accessor \
     :avatar_base64,
     :pin_code,
-    :current_user,
-    # Attrs below used in `current_user_has_access_to_venues` validate method,
+    # Attrs below used in `venue_update_access` validate method,
     # to check if the user have an access to staff member work_venues when he updates
     # staff member employment details in `UpdateStaffMemberEmploymentDetails` service `call` method
-    :has_work_venues_without_access,
-    :venues_without_access
+    :has_master_venue_without_access,
+    :has_pay_rate_without_access,
+    :work_venues_without_access
+
 
   before_save :encrypt_pin_code
 
@@ -76,8 +77,8 @@ class StaffMember < ActiveRecord::Base
   validate  do |staff_member|
     SecurityStaffMemberValidator.new(staff_member).validate
   end
-  validate :current_user_has_access_to_pay_rate
-  validate :current_user_has_access_to_venues
+  validate :pay_rate_update_access
+  validate :venue_update_access
 
   validates :employment_status_a, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_b, inclusion: { in: [true, false], message: 'is required' }
@@ -92,24 +93,18 @@ class StaffMember < ActiveRecord::Base
 
   delegate :current_state, to: :state_machine
 
-  def current_user_has_access_to_pay_rate
-    if current_user.present? && pay_rate_id_changed?
-      unless PayRate.selectable_by(current_user).include?(pay_rate)
-        errors.add(:pay_rate, :invalid, message: "You don't have access to `#{pay_rate.name}` pay rate.")
-      end
+  def pay_rate_update_access
+    if has_pay_rate_without_access
+      errors.add(:pay_rate, :invalid, message: "You don't have access to `#{pay_rate.name}` pay rate.")
     end
   end
 
-  def current_user_has_access_to_venues
-    if current_user.present?
-      if master_venue.present? && master_venue_id_changed?
-        unless current_user.venues.include?(master_venue)
-          errors.add(:master_venue, :invalid, message: "You don't have access to `#{master_venue.name}` venue.")
-        end
-      end
-      if has_work_venues_without_access
-        errors.add(:work_venues, :invalid, message: "You don't have access to `#{venues_without_access.join(", ")}` venues.")
-      end
+  def venue_update_access
+    if has_master_venue_without_access
+        errors.add(:master_venue, :invalid, message: "You don't have access to venue `#{master_venue.name}`.")
+    end
+    if work_venues_without_access && (work_venues_without_access.count > 0)
+      errors.add(:work_venues, :invalid, message: "You don't have access to venues: `#{work_venues_without_access.join(", ")}`.")
     end
   end
 
