@@ -22,14 +22,14 @@ import {updateEmploymentDetails} from '../../requests';
 let EmploymentDetailsForm = ({
     handleSubmit,
     submitting,
-    venues,
     staffTypes,
-    payRates,
+    accessiblePayRates,
+    accessibleVenues,
     onSubmissionComplete,
     isSecurityStaff,
     dispatch,
   }) => {
-  
+
   const submission = (values, dispatch) => {
     return dispatch(updateEmploymentDetailsRequest(values.toJS()))
     .catch((resp) => {
@@ -45,7 +45,7 @@ let EmploymentDetailsForm = ({
         }
       });
   }
-  
+
   const renderSecurityStaffFields = () => {
     return [<Field
       key={'sia_badge_number'}
@@ -79,9 +79,9 @@ let EmploymentDetailsForm = ({
         optionLabel="name"
         optionValue="id"
         placeholder="Select main venue ..."
-        options={venues.toJS()}
+        options={accessibleVenues}
       />
-      
+
       <Field
         component={BossFormSelect}
         name="other_venues"
@@ -90,7 +90,7 @@ let EmploymentDetailsForm = ({
         optionValue="id"
         multi
         placeholder="Select other venues ..."
-        options={venues.toJS()}
+        options={accessibleVenues}
       />
 
       <Field
@@ -121,7 +121,7 @@ let EmploymentDetailsForm = ({
         optionLabel="name"
         optionValue="id"
         placeholder="Select pay rate ..."
-        options={payRates.toJS()}
+        options={accessiblePayRates}
       />
 
       <Field

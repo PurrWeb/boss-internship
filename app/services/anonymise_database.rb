@@ -190,7 +190,7 @@ class AnonymiseDatabase
         if staff_member.present?
           staff_member.update_attributes!(staff_member_params)
         else
-          result = CreateStaffMemberFromUser.new(user: user, params: staff_member_params).call
+          result = CreateStaffMemberFromUser.new(requester: user, user: user, params: staff_member_params).call
           raise "Staff member creation failed #{result.staff_member.errors.to_a}" unless result.success?
 
           staff_member = result.staff_member

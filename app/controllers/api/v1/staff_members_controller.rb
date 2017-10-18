@@ -24,7 +24,7 @@ module Api
             creator: current_user
           )
 
-        result = CreateStaffMember.new(params: model_params).call
+        result = CreateStaffMember.new(requester: current_user, params: model_params).call
 
         if result.success?
           render json: { staff_member_id: result.staff_member.id }.to_json, status: 200
@@ -218,7 +218,6 @@ module Api
 
       def update_employment_details
         staff_member = StaffMember.find(params[:id])
-
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user

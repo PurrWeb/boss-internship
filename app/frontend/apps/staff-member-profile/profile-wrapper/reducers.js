@@ -1,5 +1,6 @@
 import { fromJS, Map, List } from 'immutable';
 import { handleActions } from 'redux-actions';
+import oFetch from 'o-fetch'
 
 import {
   INITIAL_LOAD,
@@ -28,14 +29,17 @@ const initialState = fromJS({
 
 const profileReducer = handleActions({
   [INITIAL_LOAD]: (state, action) => {
-    const { 
+    const {
       staffMember,
       accessToken,
       staffTypes,
       venues,
       payRates,
       genderValues,
+      accessibleVenueIds,
+      accessiblePayRateIds,
     } = action.payload;
+
     return state
       .set('staffMember', fromJS(staffMember))
       .set('accessToken', fromJS(accessToken))
@@ -43,7 +47,16 @@ const profileReducer = handleActions({
       .set('venues', fromJS(venues))
       .set('payRates', fromJS(payRates))
       .set('genderValues', fromJS(genderValues))
-
+      .set('accessiblePayRates', accessiblePayRateIds.map(id => {
+        return payRates.find(payRate => {
+          return oFetch(payRate, 'id') === id
+        })
+      }))
+      .set('accessibleVenues', accessibleVenueIds.map(id => {
+        return venues.find(venue => {
+          return oFetch(venue, 'id') === id
+        })
+      }));
   },
   [UPDATE_STAFF_MEMBER]: (state, action) => {
     const staffMember = action.payload;

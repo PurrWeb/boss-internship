@@ -71,6 +71,7 @@ class UsersController < ApplicationController
     authorize! :create_staff_member, user
 
     result = CreateStaffMemberFromUser.new(
+      requester: current_user,
       user: user,
       params: staff_member_params(user)
     ).call

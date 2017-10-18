@@ -38,12 +38,14 @@ const mapStateToProps = (state) => {
     staffMember: state.getIn(['profile', 'staffMember']),
     editProfile: state.getIn(['profile', 'editProfile']),
     enableProfile: state.getIn(['profile', 'enableProfile']),
-    venues: state.getIn(['profile', 'venues']),
     staffTypes: state.getIn(['profile', 'staffTypes']),
-    payRates: state.getIn(['profile', 'payRates']),
     genderValues: state.getIn(['profile', 'genderValues']),
     disableStaffMemberModal: state.getIn(['profile', 'disableStaffMemberModal']),
     editAvatarModal: state.getIn(['profile', 'editAvatarModal']),
+    venues: state.getIn(['profile', 'venues']),
+    accessibleVenues: state.getIn(['profile', 'accessibleVenues']),
+    payRates: state.getIn(['profile', 'payRates']),
+    accessiblePayRates: state.getIn(['profile', 'accessiblePayRates'])
   };
 }
 
@@ -92,9 +94,9 @@ class ProfileWrapper extends React.PureComponent {
       staffMember,
       editProfile,
       enableProfile,
-      venues,
+      accessibleVenues,
       staffTypes,
-      payRates,
+      accessiblePayRates,
       genderValues,
       disableStaffMemberModal,
       editAvatarModal,
@@ -112,22 +114,22 @@ class ProfileWrapper extends React.PureComponent {
         hideEditAvatarModal,
       }
     } = this.props;
-    
+
     const staffMemberFullName = `${staffMember.get('first_name')} ${staffMember.get('surname')}`
 
     const profileProps = {
-      venues,
+      accessibleVenues,
       staffTypes,
-      payRates,
+      accessiblePayRates,
       genderValues,
       staffMember,
     };
-    
+
     const editAvatarFormInitial = {
       avatar: staffMember.get('avatar'),
     }
     const jobType = staffTypes.find(type => type.get('id') === staffMember.get('staff_type')).get('name');
-    
+
     return (
       <div>
         <ContentModal
@@ -179,7 +181,7 @@ class ProfileWrapper extends React.PureComponent {
         </DashboardWrapper>
 
         <ContentWrapper>
-          
+
           { editProfile && <EditProfilePage onSubmissionComplete={onStaffMemberChanged} {...profileProps} />}
           { enableProfile && <EnableProfilePage {...profileProps} />}
           { !editProfile && !enableProfile && <div className="boss-page-main__flow">

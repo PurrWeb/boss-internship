@@ -10,6 +10,7 @@ class UpdateStaffMemberEmploymentDetails
     @requester = requester
     @staff_member = staff_member
     @params = params
+    @requester = requester
   end
 
   def call
@@ -20,6 +21,10 @@ class UpdateStaffMemberEmploymentDetails
       old_pay_rate = staff_member.pay_rate
 
       staff_member.assign_attributes(params)
+
+      StaffMemberPostAssignAccessiblePayRateValidation.new(requester: requester).call(staff_member: staff_member)
+
+      # Used below for system updates
       pay_rate_changed = staff_member.pay_rate_id_changed?
 
       if staff_member.security? && staff_member.sia_badge_expiry_date.present? && staff_member.sia_badge_expiry_date_changed?

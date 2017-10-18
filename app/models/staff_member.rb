@@ -48,7 +48,16 @@ class StaffMember < ActiveRecord::Base
 
   # Transient attribute used to preserve image uploads
   # during form resubmissions
-  attr_accessor :avatar_base64, :pin_code
+  attr_accessor \
+    :avatar_base64,
+    :pin_code,
+    # Attrs below used in `venue_update_access` validate method,
+    # to check if the user have an access to staff member work_venues when he updates
+    # staff member employment details in `UpdateStaffMemberEmploymentDetails` service `call` method
+    :has_master_venue_without_access,
+    :has_pay_rate_without_access,
+    :work_venues_without_access
+
 
   before_save :encrypt_pin_code
 
@@ -68,7 +77,8 @@ class StaffMember < ActiveRecord::Base
   validate  do |staff_member|
     SecurityStaffMemberValidator.new(staff_member).validate
   end
-
+  validate :pay_rate_update_access
+  validate :venue_update_access
 
   validates :employment_status_a, inclusion: { in: [true, false], message: 'is required' }
   validates :employment_status_b, inclusion: { in: [true, false], message: 'is required' }
@@ -82,6 +92,21 @@ class StaffMember < ActiveRecord::Base
   before_validation :check_rollbar_guid
 
   delegate :current_state, to: :state_machine
+
+  def pay_rate_update_access
+    if has_pay_rate_without_access
+      errors.add(:pay_rate, :invalid, message: "You don't have access to `#{pay_rate.name}` pay rate.")
+    end
+  end
+
+  def venue_update_access
+    if has_master_venue_without_access
+        errors.add(:master_venue, :invalid, message: "You don't have access to venue `#{master_venue.name}`.")
+    end
+    if work_venues_without_access && (work_venues_without_access.count > 0)
+      errors.add(:work_venues, :invalid, message: "You don't have access to venues: `#{work_venues_without_access.join(", ")}`.")
+    end
+  end
 
   def encrypt_pin_code
     if pin_code.present?

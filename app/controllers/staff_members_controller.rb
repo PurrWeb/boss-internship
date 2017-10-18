@@ -43,6 +43,10 @@ class StaffMembersController < ApplicationController
 
     if can? :edit, staff_member
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+      accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
+        user: current_user,
+        pay_rate: staff_member.pay_rate
+      ).page_pay_rates.map(&:id)
 
       render locals: {
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
@@ -50,7 +54,9 @@ class StaffMembersController < ApplicationController
         staff_types: StaffType.all,
         venues: Venue.all,
         pay_rates: PayRate.all,
-        gender_values: StaffMember::GENDERS
+        gender_values: StaffMember::GENDERS,
+        accessible_venue_ids: Venue.all.pluck(:id),
+        accessible_pay_rate_ids: accessible_pay_rate_ids
       }
     else
       render 'reduced_show', locals: {
@@ -67,7 +73,7 @@ class StaffMembersController < ApplicationController
     raise ActiveRecord::RecordNotFound.new unless staff_member.present?
     if can? :edit, staff_member
       tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
-      
+
       if holiday_start_date_from_params.present? && holiday_end_date_from_params.present?
         holiday_start_date = holiday_start_date_from_params
         holiday_end_date = holiday_end_date_from_params
@@ -101,6 +107,11 @@ class StaffMembersController < ApplicationController
 
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
+      accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
+        user: current_user,
+        pay_rate: staff_member.pay_rate
+      ).page_pay_rates.map(&:id)
+
       render locals: {
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
         access_token: access_token,
@@ -111,9 +122,12 @@ class StaffMembersController < ApplicationController
         holiday_start_date: holiday_start_date,
         holiday_end_date: holiday_end_date,
         staff_types: StaffType.all,
+        accessible_pay_rate_ids: accessible_pay_rate_ids,
+        gender_values: StaffMember::GENDERS,
         venues: Venue.all,
+        accessible_venue_ids: Venue.all.pluck(:id),
         pay_rates: PayRate.all,
-        gender_values: StaffMember::GENDERS
+        accessible_pay_rates: accessible_pay_rate_ids
       }
     else
       flash.now[:alert] = "You're not authorized to view all of this staff member's details. Contact an admin for further assistance."
@@ -137,7 +151,12 @@ class StaffMembersController < ApplicationController
         includes(creator: [:name]).all
 
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-      serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize      
+      serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize
+
+      accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
+        user: current_user,
+        pay_rate: staff_member.pay_rate
+      ).page_pay_rates.map(&:id)
 
       render locals: {
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
@@ -145,8 +164,13 @@ class StaffMembersController < ApplicationController
         access_token: access_token.token,
         staff_types: StaffType.all,
         venues: Venue.all,
+        gender_values: StaffMember::GENDERS,
+        accessible_venue_ids: Venue.all.pluck(:id),
         pay_rates: PayRate.all,
-        gender_values: StaffMember::GENDERS
+        accessible_pay_rate_ids: accessible_pay_rate_ids,
+        venues: Venue.all,
+        accessible_venue_ids: Venue.all.pluck(:id),
+        accessible_pay_rates: accessible_pay_rate_ids
       }
     end
   end
@@ -155,7 +179,9 @@ class StaffMembersController < ApplicationController
     authorize! :manage, :staff_members
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     venues = Venue.all
+
     pay_rates = PayRate.selectable_by(current_user)
+
     staff_types = StaffType.all
     gender_values = StaffMember::GENDERS
 
@@ -167,7 +193,7 @@ class StaffMembersController < ApplicationController
       gender_values: gender_values
     }
   end
-  
+
   private
   def holiday_start_date_from_params
     UIRotaDate.parse!(params['start_date'])
