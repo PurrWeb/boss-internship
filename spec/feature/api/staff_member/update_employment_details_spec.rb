@@ -152,28 +152,6 @@ RSpec.describe 'Update Employment Details' do
     end
   end
 
-  context 'when unaccessable venues present' do
-    let(:params) do
-      valid_params.merge({
-        other_venue_ids: new_unrelated_with_user_other_venue_ids
-      })
-    end
-
-    it 'should return unprocessable_entity status' do
-      expect(response.status).to eq(unprocessable_entity_status)
-    end
-
-    it 'should return errors json' do
-      json = JSON.parse(response.body)
-      error_string = new_unrelated_with_user_other_venues.map(&:name).join(", ")
-      expect(json).to eq({
-        "errors" => {
-          "other_venues" => ["You don't have access to venues: `#{error_string}`."]
-        }
-      })
-    end
-  end
-
   context 'when security staff type' do
     let(:security_staff_type) { FactoryGirl.create(:security_staff_type) }
     let(:new_staff_type) { security_staff_type }
