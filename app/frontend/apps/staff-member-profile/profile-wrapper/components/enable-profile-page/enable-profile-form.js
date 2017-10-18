@@ -43,7 +43,7 @@ const Panel = ({title, children}) => {
           {children}
         </div>
       </div>
-    </div>    
+    </div>
   )
 }
 
@@ -125,7 +125,7 @@ let EnableProfileForm = ({
           optionLabel="name"
           optionValue="id"
           placeholder="Select main venue ..."
-          options={venues.toJS()}
+          options={venues}
         />
         <Field
           component={BossFormSelect}
@@ -136,7 +136,7 @@ let EnableProfileForm = ({
           optionLabel="name"
           optionValue="id"
           placeholder="Select other venues ..."
-          options={venues.toJS()}
+          options={venues}
         />
         <Field
           name="starts_at"
@@ -238,7 +238,7 @@ let EnableProfileForm = ({
           optionLabel="name"
           optionValue="id"
           placeholder="Select pay rate ..."
-          options={payRates.toJS()}
+          options={payRates}
         />
         <Field
           component={BossFormEmployementStatus}

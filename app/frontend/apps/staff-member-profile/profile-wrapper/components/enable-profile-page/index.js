@@ -6,9 +6,9 @@ import safeMoment from "~/lib/safe-moment"
 
 const EnableProfilePage = ({
     staffMember,
-    venues,
+    accessibleVenues,
     staffTypes,
-    payRates,
+    accessiblePayRates,
     genderValues,
   }) => {
 
@@ -48,8 +48,8 @@ const EnableProfilePage = ({
       staffMember={staffMember}
       genderValues={genderValues}
       staffTypes={staffTypes}
-      payRates={payRates}
-      venues={venues}
+      payRates={accessiblePayRates}
+      venues={accessibleVenues}
     />
   )
 }

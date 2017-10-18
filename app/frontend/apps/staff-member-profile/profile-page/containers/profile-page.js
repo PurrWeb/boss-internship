@@ -14,9 +14,11 @@ import ProfileWrapper from '../../profile-wrapper';
 const mapStateToProps = (state) => {
   return {
     staffMember: state.getIn(['profile', 'staffMember']),
-    venues: state.getIn(['profile', 'venues']),
     staffTypes: state.getIn(['profile', 'staffTypes']),
     payRates: state.getIn(['profile', 'payRates']),
+    accessiblePayRates: state.getIn(['profile', 'accessiblePayRates']),
+    venues: state.getIn(['profile', 'venues']),
+    accessibleVenues: state.getIn(['profile', 'accessibleVenues'])
   };
 }
 
@@ -71,12 +73,14 @@ class ProfilePage extends React.PureComponent {
     let venues = this.props.venues.toJS();
     let staffTypes = this.props.staffTypes.toJS();
     let payRates = this.props.payRates.toJS();
+    let accessiblePayRates = this.props.accessiblePayRates;
+    let accessibleVenues = this.props.accessibleVenues;
 
     let employmentDetailItems = [
       (item, name = "other_venues") => ({name: humanize(name), value: findById(venues, oFetch(item, name)).map(item => oFetch(item, 'name')).join(', ')}),
       (item, name = "staff_type") => ({name: "Job Type", value: oFetch(findById(staffTypes, oFetch(item, name)), 'name')}),
       (item, name = "starts_at") => ({name: "Start Date", value: safeMoment.uiDateParse(oFetch(item, name)).format('DD MMMM YYYY')}),
-      (item, name = "pay_rate") => ({name: humanize(name), value: oFetch(findById(payRates, oFetch(item, name)), 'name')}),
+      (item, name = "pay_rate") => ({name: humanize(name), value: oFetch(findById(accessiblePayRates, oFetch(item, name)), 'name')}),
       "hours_preference",
       "day_preference",
       "national_insurance_number",
@@ -168,7 +172,7 @@ class ProfilePage extends React.PureComponent {
     const {
       staffMember,
     } = this.props;
-    
+
     this.initializeData();
     const categories = this.filledDetailsOptions(this.detailsListOptions, staffMember.toJS());
 

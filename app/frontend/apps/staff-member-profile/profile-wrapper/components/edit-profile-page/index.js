@@ -9,9 +9,9 @@ import ContactDetailsForm from './contact-details-form';
 import humanize from 'string-humanize';
 
 const EditProfilePage = ({
-    venues,
+    accessibleVenues,
     staffTypes,
-    payRates,
+    accessiblePayRates,
     genderValues,
     staffMember,
     onSubmissionComplete,
@@ -66,10 +66,10 @@ const EditProfilePage = ({
           >
             <EmploymentDetailsForm
               initialValues={employmentDetailsFormInitial}
-              venues={venues}
               staffTypes={staffTypes}
               onSubmissionComplete={onSubmissionComplete}
-              payRates={payRates}
+              accessiblePayRates={accessiblePayRates}
+              accessibleVenues={accessibleVenues}
             />
           </TabPanel>
           <TabPanel
@@ -78,9 +78,9 @@ const EditProfilePage = ({
           >
             <PersonalDetailsForm
               initialValues={personaletailsFormInitial}
-              venues={venues}
+              venues={accessibleVenues}
               staffTypes={staffTypes}
-              payRates={payRates}
+              payRates={accessiblePayRates}
               genderValues={genderValues}
               onSubmissionComplete={onSubmissionComplete}
             />
