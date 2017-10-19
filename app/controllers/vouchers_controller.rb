@@ -64,23 +64,21 @@ class VouchersController < ApplicationController
     voucher = Voucher.find_by(id: params.fetch(:id))
     usages = VoucherUsagesIndexQuery.new(
       voucher: voucher,
-      status: status_from_params,
       start_date: start_date_from_params,
       end_date: end_date_from_params
     ).all
-    
+
     paginated_usages = usages.paginate(
       page: page_from_params,
       per_page: per_page
     )
 
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-    
+
     render locals: {
       voucher: voucher,
       usages: paginated_usages,
       access_token: access_token.token,
-      status: status_from_params,
       size: usages.size,
       page: page_from_params,
       per_page: per_page,
@@ -100,7 +98,7 @@ class VouchersController < ApplicationController
       page: page
     }
   end
-  
+
   def redeem_redirect_params
     venue = venue_from_params || current_venue
     {
@@ -109,11 +107,8 @@ class VouchersController < ApplicationController
   end
 
   def usages_redirect_params
-    status = status_from_params || "active"
-    page = page_from_params || "1"
     {
-      status: status,
-      page: page
+      page: page_from_params || "1"
     }
   end
 
@@ -150,8 +145,7 @@ class VouchersController < ApplicationController
   end
 
   def usages_params_present?
-    status_from_params.present? &&
-    page_from_params
+    page_from_params.present?
   end
 
   def start_date_from_params

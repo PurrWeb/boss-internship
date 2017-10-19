@@ -8,7 +8,6 @@
 <%= react_component('VouchersUsageApp', {
   usages: ActiveModel::Serializer::CollectionSerializer.new(usages, serializer: Api::V1::Vouchers::UsageSerializer),
   voucher: Api::V1::Vouchers::VoucherSerializer.new(voucher),
-  status: status,
   startDate: start_date,
   endDate: end_date,
   size: size,

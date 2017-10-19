@@ -7,7 +7,6 @@ export default function VoucherUsagesMobileItem({item}) {
   const staffMemberName = oFetch(item, 'staff_member');
   const masterVenueName = oFetch(item, 'venue_name');
   const createdTime = moment(oFetch(item, 'created_at')).format(utils.humanDateFormatWithTime());
-  const status = oFetch(item, 'enabled') ? 'Active' : 'Deleted';
 
   return (
     <div className="boss-check boss-check_role_board boss-check_page_voucher-usage">
@@ -24,11 +23,6 @@ export default function VoucherUsagesMobileItem({item}) {
       <div className="boss-check__row">
         <div className="boss-check__cell">
           <p className="boss-check__text">{createdTime}</p>
-        </div>
-      </div>
-      <div className="boss-check__row">
-        <div className="boss-check__cell">
-          <p className="boss-check__text">Status: {status}</p>
         </div>
       </div>
     </div>

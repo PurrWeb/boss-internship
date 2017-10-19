@@ -4,12 +4,11 @@ import moment from 'moment';
 import utils from '~/lib/utils';
 
 export default function VoucherUsagesTableItem({items}) {
-  
+
   const renderTableItem = (item, key) => {
     const staffMemberName = oFetch(item, 'staff_member');
     const masterVenueName = oFetch(item, 'venue_name');
     const createdTime = moment(oFetch(item, 'created_at')).format(utils.humanDateFormatWithTime());
-    const status = oFetch(item, 'enabled') ? 'Active' : 'Deleted';
 
     return (
       <div key={key} className="boss-table__row">
@@ -31,12 +30,6 @@ export default function VoucherUsagesTableItem({items}) {
             <p className="boss-table__text">{createdTime}</p>
           </div>
         </div>
-        <div className="boss-table__cell">
-          <div className="boss-table__info">
-            <p className="boss-table__label">Status</p>
-            <p className="boss-table__text">{status}</p>
-          </div>
-        </div>
       </div>
     )
   }
@@ -53,7 +46,6 @@ export default function VoucherUsagesTableItem({items}) {
         <div className="boss-table__cell boss-table__cell_role_header">Staff Member</div>
         <div className="boss-table__cell boss-table__cell_role_header">Master Venue</div>
         <div className="boss-table__cell boss-table__cell_role_header">Time</div>
-        <div className="boss-table__cell boss-table__cell_role_header">Status</div>
       </div>
       {renderTableItems(items)}
     </div>

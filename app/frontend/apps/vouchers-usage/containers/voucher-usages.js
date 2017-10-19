@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import VoucherUsagesList from '../components/voucher-usages-list';
 import VoucherUsagesDashboard from '../components/voucher-usages-dashboard';
-import AllDisabledDateRangeFilter from '~/components/all-disabled-date-range-filter';
+import VoucherUsagesFilter from '../components/voucher-usages-filter';
 import Pagination from '~/components/pagination.js';
 
 const mapStateToProps = (state) => {
@@ -13,7 +13,6 @@ const mapStateToProps = (state) => {
     voucher: state.getIn(['page','voucher']),
     startDate: state.getIn(['page','filter', 'startDate']),
     endDate: state.getIn(['page','filter', 'endDate']),
-    status: state.getIn(['page','filter', 'status']),
     currentPage: state.getIn(['page','pagination', 'currentPage']),
     pageCount: state.getIn(['page','pagination', 'pageCount']),
   };
@@ -38,9 +37,8 @@ class VoucherUsages extends React.Component {
         />
         <div key="content" className="boss-page-main__content">
           <div className="boss-page-main__inner">
-            <AllDisabledDateRangeFilter
+            <VoucherUsagesFilter
               dateTitle="Used"
-              selectedStatus={this.props.status}
               startDate={this.props.startDate}
               endDate={this.props.endDate}
             />
