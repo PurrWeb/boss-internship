@@ -11,7 +11,8 @@ export default class VouchersMobileItem extends React.Component {
 
   render() {
     const {
-      item
+      item,
+      filteringByStatus
     } = this.props
 
     const isVoucherEnabled = item.get('enabled');
@@ -39,9 +40,10 @@ export default class VouchersMobileItem extends React.Component {
             <span>Used: {voucherUsages}</span>
           </p>
         </a>
-        <div className="boss-check__cell boss-check__cell_size_half">
-          <p className="boss-check__text">Status: {voucherStatus}</p>
-        </div>
+        { !filteringByStatus && <div className="boss-check__cell boss-check__cell_size_half">
+            <p className="boss-check__text">Status: {voucherStatus}</p>
+          </div>
+        }
       </div>
       { isVoucherEnabled  && <div className="boss-check__row">
           <div className="boss-check__cell">

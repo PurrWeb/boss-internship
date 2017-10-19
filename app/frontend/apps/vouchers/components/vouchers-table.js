@@ -1,14 +1,14 @@
 import React from 'react';
 
-const VouchersTableItem = ({item, onDelete}) => {
-  
+const VouchersTableItem = ({item, onDelete, filteringByStatus}) => {
+
     const isVoucherEnabled = item.get('enabled');
     const voucherStatus = isVoucherEnabled ? 'Active' : 'Deleted';
     const voucherUsages = item.get('usages');
     const voucherDescription = item.get('description');
     const voucherVenue = item.get('venue_name');
     const voucherId = item.get('id');
-    
+
     return <div className="boss-table__row">
         <div className="boss-table__cell">
             <div className="boss-table__info">
@@ -22,18 +22,21 @@ const VouchersTableItem = ({item, onDelete}) => {
                 <p className="boss-table__text">{voucherDescription}</p>
             </div>
         </div>
-        <div className="boss-table__cell">
+        <a href={`/vouchers/${voucherId}/usages`} className="boss-table__cell">
+          <div className="boss-table__info">
+            <p className="boss-table__label">Usage</p>
+            <p className="boss-table__text">
+              <button className="boss-button">View</button> {voucherUsages}
+            </p>
+          </div>
+        </a>
+        { !filteringByStatus && <div className="boss-table__cell">
             <div className="boss-table__info">
-                <p className="boss-table__label">Usage</p>
-                <p className="boss-table__text"><a href={`/vouchers/${voucherId}/usages`} className="boss-table__link">{voucherUsages}</a></p>
+              <p className="boss-table__label">Status</p>
+              <p className="boss-table__text">{voucherStatus}</p>
             </div>
-        </div>
-        <div className="boss-table__cell">
-            <div className="boss-table__info">
-                <p className="boss-table__label">Status</p>
-                <p className="boss-table__text">{voucherStatus}</p>
-            </div>
-        </div>
+          </div>
+        }
         <div className="boss-table__cell">
             <div className="boss-table__info">
                 <p className="boss-table__label">Action</p>
@@ -55,26 +58,27 @@ export default class VouchersTable extends React.Component {
     super(props);
   };
 
-  renderTableItems = (items, onDelete) => {
+  renderTableItems = (items, onDelete, filteringByStatus) => {
     return items.map((item, key) => {
-      return <VouchersTableItem key={key} item={item} onDelete={onDelete}/>
+      return <VouchersTableItem key={key} item={item} onDelete={onDelete} filteringByStatus={filteringByStatus}/>
     });
   };
 
   render() {
     const {
       vouchers,
-      onDelete
+      onDelete,
+      filteringByStatus
     } = this.props
     return <div className="boss-table boss-table_page_vouchers-index">
       <div className="boss-table__row">
         <div className="boss-table__cell boss-table__cell_role_header">Venue</div>
         <div className="boss-table__cell boss-table__cell_role_header">Description</div>
         <div className="boss-table__cell boss-table__cell_role_header">Usage</div>
-        <div className="boss-table__cell boss-table__cell_role_header">Status</div>
+        { !filteringByStatus && <div className="boss-table__cell boss-table__cell_role_header">Status</div> }
         <div className="boss-table__cell boss-table__cell_role_header">Action</div>
       </div>
-      {this.renderTableItems(vouchers, onDelete)}
+      {this.renderTableItems(vouchers, onDelete, filteringByStatus)}
     </div>
   }
 };

@@ -58,7 +58,7 @@ class Vouchers extends React.Component {
     const link = `${window.location.href.split('?')[0]}?${queryParams.toString()}`
     window.location.href = link;
   }
-  
+
   render() {
     const {
       venues,
@@ -81,6 +81,9 @@ class Vouchers extends React.Component {
       changeVenue,
       changeStatusFilter,
     } = this.props.actions;
+
+    let filteringByStatus = status === 'active';
+
     return (
       <div>
         <BossDetailsModal
@@ -100,7 +103,7 @@ class Vouchers extends React.Component {
                 startDate={startDate}
                 endDate={endDate}
               />
-              <VouchersUI vouchers={vouchers} deleteVoucher={deleteVoucher} />
+              <VouchersUI vouchers={vouchers} deleteVoucher={deleteVoucher} filteringByStatus={filteringByStatus} />
               {pageCount > 1 && <Pagination pageCount={pageCount} initialPage={currentPage} onPageChange={this.handleChangePage} />}
             </div>
           </div>

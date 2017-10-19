@@ -19,7 +19,7 @@ export default class VoucherUI extends React.Component {
 
   renderMobileItems = (items) => {
     return items.map((item, key) => {
-      return <VouchersMobileItem key={key} item={item} deleteVoucher={this.onDelete}/>
+      return <VouchersMobileItem key={key} item={item} deleteVoucher={this.onDelete} filteringByStatus={this.props.filteringByStatus}/>
     });
   }
 
@@ -30,7 +30,7 @@ export default class VoucherUI extends React.Component {
 
     return <div className="boss-page-main__group boss-page-main__group_adjust_vouchers-index-table">
       <div className="boss-table boss-table_page_vouchers-index">
-        <VouchersTable vouchers={vouchers} onDelete={this.onDelete}/>
+        <VouchersTable vouchers={vouchers} onDelete={this.onDelete} filteringByStatus={this.props.filteringByStatus}/>
       </div>
       {this.renderMobileItems(vouchers)}
     </div>
