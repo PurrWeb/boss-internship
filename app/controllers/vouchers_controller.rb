@@ -92,7 +92,7 @@ class VouchersController < ApplicationController
   private
   def index_redirect_params
     venue = venue_from_params || current_venue
-    status = status_from_params || "all"
+    status = status_from_params || "active"
     page = page_from_params || "1"
     {
       venue_id: venue.andand.id,
@@ -109,7 +109,7 @@ class VouchersController < ApplicationController
   end
 
   def usages_redirect_params
-    status = status_from_params || "all"
+    status = status_from_params || "active"
     page = page_from_params || "1"
     {
       status: status,
