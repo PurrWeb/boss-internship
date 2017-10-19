@@ -25,8 +25,8 @@ const VouchersTableItem = ({item, onDelete, filteringByStatus}) => {
         <a href={`/vouchers/${voucherId}/usages`} className="boss-table__cell">
           <div className="boss-table__info">
             <p className="boss-table__label">Usage</p>
-            <p className="boss-table__text">
-              <button className="boss-button">View</button> {voucherUsages}
+            <p className="boss-table__actions">
+              <button className="boss-button boss-button_role_view-details boss-table__action">{voucherUsages}</button>
             </p>
           </div>
         </a>

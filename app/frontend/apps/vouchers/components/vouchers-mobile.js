@@ -36,8 +36,8 @@ export default class VouchersMobileItem extends React.Component {
       <div className="boss-check__row">
         <a href={`/vouchers/${voucherId}/usages`} className="boss-check__cell boss-check__cell_size_half">
           <p className="boss-check__text">
-            <button className="boss-button">View</button>
-            <span>Used: {voucherUsages}</span>
+            Used:
+            <button className="boss-button boss-button_role_view-details boss-button_type_small">{voucherUsages}</button>
           </p>
         </a>
         { !filteringByStatus && <div className="boss-check__cell boss-check__cell_size_half">
