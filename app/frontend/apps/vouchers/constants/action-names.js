@@ -1,0 +1,13 @@
+export const INITIAL = 'vouchers/INITIAL';
+export const OPEN_ADD_VOUCHER_MODAL = 'vouchers/OPEN_ADD_VOUCHER_MODAL';
+export const CLOSE_ADD_VOUCHER_MODAL = 'vouchers/CLOSE_ADD_VOUCHER_MODAL';
+export const CREATE_VOUCHER = 'vouchers/CREATE_VOUCHER';
+export const ADD_VOUCHER_SUCCESS = 'vouchers/ADD_VOUCHER_SUCCESS';
+export const DELETE_VOUCHER = 'vouchers/DELETE_VOUCHER';
+export const CHANGE_PAGE = 'vouchers/CHANGE_PAGE';
+export const CHANGE_VENUE = 'vouchers/CHANGE_VENUE';
+export const FILL_VOUCHERS_DATA = 'vouchers/FILL_VOUCHERS_DATA';
+export const SET_FILTER_DATE_RANGE = 'vouchers/SET_FILTER_DATE_RANGE';
+export const SET_FILTER_CREATED_BY = 'vouchers/SET_FILTER_CREATED_BY';
+export const SET_FILTER_VOUCHERS_STATUS = 'vouchers/SET_FILTER_VOUCHERS_STATUS';
+export const CHANGE_STATUS_FILTER = 'vouchers/CHANGE_STATUS_FILTER';

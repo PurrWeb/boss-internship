@@ -106,6 +106,7 @@ class Submissions extends React.Component {
         <BossDetailsModal
           isOpen={isDetailsOpen}
           onCloseClick={closeDetailsModal}
+          className="boss-modal-window boss-modal-window_role_details"
         >
           <ModalDetailsContent submission={detailedSubmission} />
         </BossDetailsModal>

@@ -128,6 +128,15 @@ import WeekPicker from "~/components/week-picker"
 
 import AppVersionChecker from '~/components/app-version-checker';
 
+import VouchersApp from "./apps/vouchers";
+registerComponent("VouchersApp", VouchersApp);
+
+import VouchersUsageApp from './apps/vouchers-usage';
+registerComponent("VouchersUsageApp", VouchersUsageApp);
+
+import VouchersRedeemApp from './apps/vouchers-redeem';
+registerComponent("VouchersRedeemApp", VouchersRedeemApp);
+
 $(document).ready(function(){
     let versionCheckerEl = document.createElement("div");
     document.body.appendChild(versionCheckerEl);

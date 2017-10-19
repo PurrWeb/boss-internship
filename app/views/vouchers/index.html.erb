@@ -1,0 +1,18 @@
+<%= javascript_tag do %>
+  window.boss = window.boss || {};
+  bossData = {};
+  bossData.accessToken = '<%= access_token %>';
+  window.boss = bossData;
+<% end %>
+
+<%= react_component('VouchersApp', {
+  vouchers: ActiveModel::Serializer::CollectionSerializer.new(vouchers, serializer: Api::V1::Vouchers::VoucherSerializer),
+  currentVenue: Api::V1::VenueForSelectSerializer.new(current_venue),
+  accessToken: access_token,
+  page: page,
+  status: status,
+  startDate: start_date,
+  endDate: end_date,
+  size: size,
+  perPage: per_page,
+}) %> 

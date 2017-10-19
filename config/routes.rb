@@ -35,6 +35,15 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :vouchers, only: [:index] do
+      member do
+        get :usages
+      end
+      collection do
+        get :redeem
+      end
+    end
+    
     resources :users, only: [:show, :index, :destroy] do
       member do
         get :disable
@@ -189,6 +198,12 @@ Rails.application.routes.draw do
 
         resources :questionnaires do
           resources :questionnaire_responses
+        end
+
+        resources :vouchers, only: [:index, :create, :destroy ] do
+          member do
+            post :redeem
+          end
         end
 
         resources :test, only: [] do

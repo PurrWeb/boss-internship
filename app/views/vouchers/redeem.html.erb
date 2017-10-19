@@ -1,0 +1,12 @@
+<%= javascript_tag do %>
+  window.boss = window.boss || {};
+  bossData = {};
+  bossData.accessToken = '<%= access_token %>';
+  window.boss = bossData;
+<% end %>
+
+<%= react_component('VouchersRedeemApp', {
+  vouchers: ActiveModel::Serializer::CollectionSerializer.new(vouchers, serializer: Api::V1::Vouchers::VoucherSerializer),
+  venueStaffMembers: ActiveModel::Serializer::CollectionSerializer.new(venue_staff_members, serializer: Api::V1::Vouchers::StaffMemberSerializer),
+  status: status
+}) %>
