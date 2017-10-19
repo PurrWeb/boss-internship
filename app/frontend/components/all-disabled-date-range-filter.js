@@ -72,12 +72,12 @@ class AllDisabledDateRangeFilter extends React.PureComponent {
             <div className="boss-form__field boss-form__field_layout_fluid">
               <RadioGroup name="filter" selectedValue={selectedStatus} onChange={this.handleStatusChange} className="boss-form__switcher">
                 <label className="boss-form__switcher-label">
-                  <Radio value="all" className="boss-form__switcher-radio" />
-                  <span className="boss-form__switcher-label-text">Show All</span>
-                </label>
-                <label className="boss-form__switcher-label">
                   <Radio value="active" className="boss-form__switcher-radio" />
                   <span className="boss-form__switcher-label-text">Active</span>
+                </label>
+                <label className="boss-form__switcher-label">
+                  <Radio value="all" className="boss-form__switcher-radio" />
+                  <span className="boss-form__switcher-label-text">Show All</span>
                 </label>
               </RadioGroup>
             </div>
