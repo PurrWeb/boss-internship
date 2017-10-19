@@ -43,16 +43,17 @@ export default class VouchersMobileItem extends React.Component {
           <p className="boss-check__text">Status: {voucherStatus}</p>
         </div>
       </div>
-      <div className="boss-check__row">
-        <div className="boss-check__cell">
-          { isVoucherEnabled && <button
-              type="button"
-              onClick={() => (this.props.onDelete(item.get('id')))}
-              className="boss-button boss-button_role_cancel boss-table__action"
-            >Delete</button>
-          }
+      { isVoucherEnabled  && <div className="boss-check__row">
+          <div className="boss-check__cell">
+            <button
+                type="button"
+                onClick={() => (this.props.onDelete(item.get('id')))}
+                className="boss-button boss-button_role_cancel boss-table__action"
+              >Delete
+            </button>
+          </div>
         </div>
-      </div>
+      }
    </div>
   }
 }
