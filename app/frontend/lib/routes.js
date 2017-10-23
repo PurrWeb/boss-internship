@@ -74,9 +74,9 @@ export const appRoutes = {
         if (staffMemberId === undefined) {
             throw new Error("No staff member id supplied to appRoutes.staffMemberHolidays")
         }
-        let result = "/staff_members/" + staffMemberId + "?tab=holidays";
+        let result = "/staff_members/" + staffMemberId + "/holidays";
         if(startDate !== undefined && endDate !== undefined){
-          result = result + "&holiday_start_date=" + utils.formatRotaUrlDate(startDate) + "&holiday_end_date=" + utils.formatRotaUrlDate(endDate);
+          result = result + "?start_date=" + utils.formatRotaUrlDate(startDate) + "&end_date=" + utils.formatRotaUrlDate(endDate);
         }
         return result;
     },
