@@ -1,7 +1,6 @@
 import React from 'react';
 import { SubmissionError } from 'redux-form/immutable';
 import RichTextEditor from 'react-rte';
-import moment from 'moment';
 
 import IncidentReportForm from '../../components/incident-report-form';
 
@@ -41,7 +40,7 @@ function AddIncidentReport() {
         }
       })
   }
-  
+
   return (
     <div className="boss-page-main__group boss-page-main__group_adjust_ir-form">
       <IncidentReportForm

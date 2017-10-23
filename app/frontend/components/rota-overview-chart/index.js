@@ -3,7 +3,6 @@ import React, { Component } from "react"
 import _ from "underscore"
 import RotaDate from "~/lib/rota-date"
 import utils from "~/lib/utils"
-import moment from "moment"
 import {renderTooltipInfoHtml, renderTooltipTimeHtml} from "./render-tooltip-html"
 import RotaOverviewChartInner from "./rota-overview-chart-inner"
 

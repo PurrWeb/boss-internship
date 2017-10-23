@@ -1,6 +1,6 @@
 import React from 'react';
 import humanize from 'string-humanize';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 import confirm from '~/lib/confirm-utils';
 
 const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled}) => {
@@ -21,11 +21,11 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
   const type = humanize(holiday.get('holiday_type'));
   const note = holiday.get('note') || '-';
   const creator = holiday.get('creator');
-  const cerated = `(${moment(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
-  const startDate = moment(holiday.get('start_date'), 'D-M-Y').format('DD MMM Y')
-  const endDate = moment(holiday.get('end_date'), 'D-M-Y').format('DD MMM Y')
+  const cerated = `(${safeMoment.iso8601Parse(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
+  const startDate = safeMoment.uiDateParse(holiday.get('start_date')).format('DD MMM Y')
+  const endDate = safeMoment.uiDateParse(holiday.get('end_date')).format('DD MMM Y')
   const editable = holiday.get('editable');
-  
+
   return <div className="boss-check boss-check_role_panel boss-check_page_smp-holidays">
     <div className="boss-check__row">
       <div className="boss-check__cell">

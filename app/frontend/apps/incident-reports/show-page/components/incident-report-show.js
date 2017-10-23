@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import RotaDate from "~/lib/rota-date"
 
 export default function IncidentReportShow({incidentReport}) {
   function BoardItem({label, children}) {
@@ -21,7 +22,7 @@ export default function IncidentReportShow({incidentReport}) {
         <ul className="boss-report__summary">
           <BoardItem label="Date and Time of Incident">
             <p className="boss-report__summary-text boss-report__summary-text_role_time boss-report__summary-text_marked">
-              {moment(report.incidentTime).format('DD-MM-YYYY HH:mm')}
+              { moment(new RotaDate({ shiftStartsAt: report.incidentTime }).getDateOfRota()).format('DD-MM-YYYY') }
             </p>
           </BoardItem>
           <BoardItem label="Exact Location of Incident">

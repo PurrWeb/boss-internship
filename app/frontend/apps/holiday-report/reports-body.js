@@ -1,14 +1,14 @@
 import React from "react"
 import _ from "underscore"
-import moment from "moment"
+import safeMoment from "~/lib/safe-moment"
 import Select from "react-select"
 import StaffMemberHolidaysLink from "~/components/staff-member-holidays-link"
 
 export default class ReportsBody extends React.Component {
   renderHolidayCell(holiday) {
     if (holiday) {
-      let startDate = moment(holiday.start_date).format('DD MMM');
-      let endDate = moment(holiday.end_date).format('DD MMM');
+      let startDate = safeMoment.uiDateParse(holiday.start_date).format('DD MMM');
+      let endDate = safeMoment.uiDateParse(holiday.end_date).format('DD MMM');
 
       if (startDate == endDate) {
         return startDate;

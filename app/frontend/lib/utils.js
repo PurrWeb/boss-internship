@@ -225,7 +225,7 @@ var utils =  {
     },
     quickMenuFilter(searchQuery, quickMenu){
       const searchQueryFilters = searchQuery.split(' ').filter(i => i);
-      let result = []; 
+      let result = [];
 
       result = searchQueryFilters.reduce((menu, filter) => {
         const lowerFilter = filter.toLowerCase();

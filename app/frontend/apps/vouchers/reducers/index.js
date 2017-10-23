@@ -1,5 +1,5 @@
 import { fromJS, Map, List } from 'immutable';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 
 import {
   INITIAL,
@@ -32,8 +32,8 @@ const ACTION_HANDLERS = {
     } = action.payload;
 
     if (!!startDate && !!endDate) {
-      momentStartDate = moment(startDate, "YYYY-MM-DD");
-      momentEndDate = moment(endDate, "YYYY-MM-DD");
+      momentStartDate = safeMoment.uiDateParse(startDate);
+      momentEndDate = safeMoment.uiDateParse(endDate);
     }
 
     state = state
@@ -49,7 +49,7 @@ const ACTION_HANDLERS = {
       .setIn(['filter', 'status'], status)
       .setIn(['filter', 'range', 'startDate'], momentStartDate)
       .setIn(['filter', 'range', 'endDate'], momentEndDate);
-    
+
     return state;
   },
   [OPEN_ADD_VOUCHER_MODAL]: (state) => {
@@ -91,7 +91,7 @@ const ACTION_HANDLERS = {
   [CHANGE_STATUS_FILTER]: (state) => {
     let status = null;
     const currentStatus = state.getIn(['filter', 'status']);
-    
+
     if (currentStatus === 'all') {
       status = 'active'
     } else {

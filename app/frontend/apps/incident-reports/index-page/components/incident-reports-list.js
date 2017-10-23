@@ -1,6 +1,6 @@
 import React from 'react';
 import utils from "~/lib/utils";
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 
 export default function IncidentReportsList({incidentReports}) {
 
@@ -16,7 +16,7 @@ export default function IncidentReportsList({incidentReports}) {
 
   const renderReport = (report, index) => {
 
-    const incidentTime = moment(report.incidentTime).format(utils.humanDateFormatWithTime());
+    const incidentTime = safeMoment.iso8601Parse(report.incidentTime).format(utils.humanDateFormatWithTime());
 
     return (
       <div key={index} className="boss-check boss-check_role_board">

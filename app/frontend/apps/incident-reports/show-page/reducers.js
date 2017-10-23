@@ -4,8 +4,6 @@ import { combineReducers } from 'redux-immutable';
 import { handleActions } from 'redux-actions';
 import { reducer as formReducer } from 'redux-form/immutable';
 
-import moment from 'moment';
-
 import {
   INITIAL_LOAD,
   UPDATE_INCIDENT_REPORT,
@@ -24,7 +22,7 @@ const incidentReportsShowReducer = handleActions({
       accessToken,
       incidentReport,
     } = action.payload;
-    
+
     return state
       .set('accessToken', accessToken)
       .set('incidentReport', fromJS(incidentReport))

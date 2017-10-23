@@ -2,7 +2,6 @@ import React from 'react';
 import { Field, Fields, reduxForm, SubmissionError } from 'redux-form/immutable';
 import DatePicker from 'react-datepicker';
 import { fromJS, Map, List } from 'immutable';
-import moment from 'moment';
 
 import {
   InputInlineField,

@@ -3,7 +3,8 @@ import React, { Component } from "react"
 import RotaOverviewView from "./rota-overview-view"
 import {appRoutes} from "~/lib/routes"
 import {connect} from "react-redux"
-import moment from "moment"
+import moment from "moment";
+import safeMoment from "~/lib/safe-moment";
 import _ from "underscore"
 import utils from "~/lib/utils"
 import rotaStatusTitles from "~/lib/rota-status-titles"
@@ -24,7 +25,7 @@ class RotaOverviewPage extends Component {
     static propTypes = {
       rotaDetailsObject: PropTypes.object.isRequired
     }
-    
+
     constructor(props) {
       super(props);
 
@@ -132,12 +133,12 @@ class RotaOverviewPage extends Component {
       });
     }
     generateWeek(startDate){
-      let startOfWeek = moment(startDate).startOf('isoweek');
-      let endOfWeek = moment(startDate).endOf('isoweek');
-      
+      let startOfWeek = safeMoment.uiDateParse(startDate).startOf('isoweek');
+      let endOfWeek = safeMoment.uiDateParse(startDate).endOf('isoweek');
+
       let days = [];
       let day = startOfWeek;
-      
+
       while (day <= endOfWeek) {
         days.push(day.toDate());
         day = day.clone().add(1, 'd');
@@ -150,13 +151,13 @@ class RotaOverviewPage extends Component {
         </div>
     }
     renderTabList(week){
-      const highlightDate = moment(this.state.highlightDate, 'YYYY-MM-DD');
+      const highlightDate = safeMoment.uiDateParse(this.state.highlightDate);
       return week.map((item, index) => {
-        const modifiedItem = moment(item,'YYYY-MM-DD');
+        const modifiedItem = safeMoment.uiDateParse(item);
         const tabClassName = highlightDate.isSame(modifiedItem, 'days') ? 'boss-paginator__action_state_active' : '';
-        const formatedDate = highlightDate.isSame(modifiedItem, 'days') ? moment(item).format('D MMMM') : moment(item).format('D');
+        const formatedDate = highlightDate.isSame(modifiedItem, 'days') ? modifiedItem.format('D MMMM') : modifiedItem.format('D');
 
-        return <button key={index} onClick={() => (this.loadDayRota(index, week))} className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}>{formatedDate}</button>      
+        return <button key={index} onClick={() => (this.loadDayRota(index, week))} className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}>{formatedDate}</button>
       })
     }
     loadDayRota = (index, week) => {

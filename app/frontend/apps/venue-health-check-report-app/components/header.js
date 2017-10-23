@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import moment from 'moment';
+import RotaDate from "~/lib/rota-date.js";
 
 export default class Header extends React.Component {
   static displayName = 'Header';
@@ -72,16 +73,17 @@ export default class Header extends React.Component {
   renderDate() {
     if (!this.props.response) return;
 
-    var createdAt = this.props.response.created_at
+    let sCreatedAt = this.props.response.created_at;
+    if (!sCreatedAt) return;
 
-    if (!createdAt) return;
+    let dCreatedAtDate = new RotaDate({ shiftStartsAt: sCreatedAt}).getDateOfRota();
 
     return (
       <p className="boss-page-dashboard__meta-item boss-page-dashboard__meta-item_role_date">
         <span
           className="boss-page-dashboard__meta-text"
         >
-          { moment(new Date(createdAt)).format('MMMM Do YYYY') }
+          { moment(dCreatedAtDate).format('MMMM Do YYYY') }
         </span>
       </p>
     );

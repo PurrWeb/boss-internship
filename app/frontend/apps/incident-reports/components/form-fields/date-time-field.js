@@ -2,6 +2,7 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import TimePicker from 'rc-time-picker';
 import CalendarCustomInput from '~/components/boss-form/calendar-custom-input';
+import safeMoment from "~/lib/safe-moment";
 
 import 'rc-time-picker/assets/index.css';
 import './time.sass';
@@ -51,7 +52,7 @@ class DateTimeField extends React.Component {
           <TimePicker
             className={`time-picker-input time-picker-input_type_icon ${date.meta.touched && date.meta.error && 'time-picker-input_state_error'}`}
             placeholder="Select time ..."
-            value={time.input.value}
+            value={ time.input.value ? safeMoment.iso8601Parse(time.input.value) : null }
             hideDisabledOptions
             showSecond={false}
             onChange={time.input.onChange}

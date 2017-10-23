@@ -3,7 +3,7 @@ import ContentWrapper from '~/components/content-wrapper';
 import Pagination from '~/components/pagination';
 import URLSearchParams from 'url-search-params';
 import utils from '~/lib/utils';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 import numeral from 'numeral';
 import MachinesReportsItemStat from './machines-reports-item-stat';
 import MachineRefloatIndexReadingsDropdown from './machine-refloat-index-readings-dropdown';
@@ -57,7 +57,7 @@ export function MachineRefloatsItemMeta({machineRefloat, machine}) {
   return (
     <div className="boss-report__meta">
       <Badge labelClasses="boss-count__label_role_time">
-        {moment(oFetch(machineRefloat, 'createdAt')).format(utils.humanDateFormatWithTime()) }
+        {safeMoment.iso8601Parse(oFetch(machineRefloat, 'createdAt')).format(utils.humanDateFormatWithTime()) }
       </Badge>
       <Badge labelClasses="boss-count__label_role_arcade">
         {`${oFetch(machine, 'name')}(${oFetch(machine, 'location')})`}

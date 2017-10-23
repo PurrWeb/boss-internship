@@ -9,15 +9,15 @@ class OwedHourWeekView
 
   def serialize
     owed_hours_by_week = owed_hours.
-      group_by { |owed_hour| RotaWeek.new(owed_hour.date)  }.sort do |a, b|
+      group_by { |owed_hour| RotaWeek.new(owed_hour.date) }.sort do |a, b|
         b.first <=> a.first
       end
     owed_hours_by_week.map do |week, owed_hours|
       total_minutes = owed_hours.inject(0) { |sum, owed_hours| sum + owed_hours.minutes }
       {
         week: {
-          startDate: week.start_date.strftime('%d-%m-%Y'),
-          endDate: week.end_date.strftime('%d-%m-%Y'),
+          startDate: UIRotaDate.format(week.start_date),
+          endDate: UIRotaDate.format(week.end_date),
           totalHours: HoursHelper.new(total_minutes: total_minutes).description
         },
         owedHours: owed_hours.map do |owed_hour|

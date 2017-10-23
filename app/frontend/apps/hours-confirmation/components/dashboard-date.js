@@ -1,7 +1,7 @@
 import React from "react"
 import DashboardWrapper from './dashboard-wrapper';
 import VenueDropdown from "~/components/venue-dropdown"
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment"
 import DatePicker from 'react-datepicker';
 import CalendarCustomInputLeft from '~/components/boss-form/calendar-custom-input-left';
 
@@ -37,7 +37,7 @@ export default function DashboardDate({
                 showMonthDropdown
                 showYearDropdown
                 dropdownMode="select"
-                selected={moment(date)}
+                selected={safeMoment.uiDateParse(date)}
                 onChange={(date) => onChange({date, venueClientId})}
                 dateFormat="DD-MM-YYYY"
                 allowSameDay

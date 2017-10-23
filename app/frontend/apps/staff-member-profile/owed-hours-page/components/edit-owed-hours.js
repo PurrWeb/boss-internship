@@ -1,6 +1,6 @@
 import React from 'react';
 import EditOwedHoursForm from './edit-owed-hours-form';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 
 const EditNewOwedHours = ({owedHour}) => {
   const initialValues = {
@@ -8,13 +8,13 @@ const EditNewOwedHours = ({owedHour}) => {
     startsAt: owedHour.getIn(['times' ,'startsAtOffset']),
     endsAt: owedHour.getIn(['times', 'endsAtOffset']),
     id: owedHour.get('id'),
-    date: moment(owedHour.get('date')),
+    date: safeMoment.uiDateParse(owedHour.get('date')),
   }
 
   return (
     <div className="boss-modal-window__form">
       <EditOwedHoursForm
-        rotaDate={moment(owedHour.get('date'))}
+        rotaDate={safeMoment.uiDateParse(owedHour.get('date'))}
         initialValues={initialValues}
       />
     </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import humanize from 'string-humanize';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 import confirm from '~/lib/confirm-utils';
 
 const ActionsCell = ({label, holidaysId,holiday, deleteHoliday, onEditHoliday, editableHoliday, isStaffMemberDisabled}) => {
@@ -69,11 +69,11 @@ const CreatedByCell = ({label, creator, created}) => {
 
 const Row = ({holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled}) => {
   const type = humanize(holiday.get('holiday_type'));
-  const startDate = moment(holiday.get('start_date'), "DD-MM-YYYY").format('DD MMM YYYY');
-  const endDate = moment(holiday.get('end_date'), "DD-MM-YYYY").format('DD MMM YYYY');
+  const startDate = safeMoment.uiDateParse(holiday.get('start_date')).format('DD MMM YYYY');
+  const endDate = safeMoment.uiDateParse(holiday.get('end_date')).format('DD MMM YYYY');
   const note = holiday.get('note') || '-';
   const creator = holiday.get('creator');
-  const cerated = `(${moment(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
+  const cerated = `(${safeMoment.iso8601Parse(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
   const editable = holiday.get('editable');
 
   return (

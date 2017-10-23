@@ -2,7 +2,7 @@ import React from "react"
 import WeekAndVenueSelector from "~/components/week-and-venue-selector"
 import WeekPicker from "~/components/week-picker"
 import { appRoutes } from "~/lib/routes"
-import moment from "moment"
+import safeMoment from "~/lib/safe-moment"
 
 export default class ReportsHeader extends React.Component {
   componentDidMount() {
@@ -64,8 +64,8 @@ export default class ReportsHeader extends React.Component {
       return this.props.pageOptions.accessibleVenueIds.includes(venue.serverId)
     });
 
-    let today = moment(new Date(this.props.pageOptions.weekStartDate)).format("ddd D MMMM YYYY");
-    let nextWeek = moment(new Date(this.props.pageOptions.weekStartDate)).add(6, 'days').format("ddd D MMMM YYYY");
+    let today = safeMoment.uiDateParse(this.props.pageOptions.weekStartDate).format("ddd D MMMM YYYY");
+    let nextWeek = safeMoment.uiDateParse(this.props.pageOptions.weekStartDate).add(6, 'days').format("ddd D MMMM YYYY");
 
     return (
       <div className="boss-page-main__dashboard">
@@ -76,7 +76,8 @@ export default class ReportsHeader extends React.Component {
             <div className="boss-page-dashboard__group">
               <div className="boss-page-dashboard__meta">
                 <p className="boss-page-dashboard__meta-item boss-page-dashboard__meta-item_type_faded boss-page-dashboard__meta-item_role_date boss-page-dashboard__meta-item_role_popover" data-popover="1">
-                  <span className="boss-page-dashboard__meta-text">{ today }</span> -
+                  <span className="boss-page-dashboard__meta-text">{ today }</span>
+                  <span> - </span>
                   <span className="boss-page-dashboard__meta-text">{ nextWeek }</span>
                 </p>
 

@@ -1,7 +1,6 @@
 import React from "react"
 
 import { DateRangePicker } from 'react-dates';
-import moment from 'moment';
 
 import {
   DashboardWrapper,
@@ -15,7 +14,7 @@ import BossSelect from '~/components/boss-select';
 export default class MachinesRefloatsFilter extends React.Component {
   constructor(props) {
     super(props);
-    
+
     const {
       filterData: {
         startDate,
@@ -40,19 +39,19 @@ export default class MachinesRefloatsFilter extends React.Component {
       endDate: endDate,
     })
   }
-  
+
   onMachineChange = (machine) => {
     this.setState({
       machineId: machine ? machine.value : null,
     })
   }
-  
+
   onUserChange = (user) => {
     this.setState({
       userId: user ? user.value : null,
     })
   }
-  
+
   onFilterUpdate = () => {
     const filterValues = {
       startDate: this.state.startDate,
@@ -62,7 +61,7 @@ export default class MachinesRefloatsFilter extends React.Component {
     }
     this.props.onFilterUpdate(filterValues);
   }
-  
+
   render() {
     const {
       startDate,
@@ -75,7 +74,7 @@ export default class MachinesRefloatsFilter extends React.Component {
       machinesRefloatsUsers,
       venueMachines,
     } = this.props;
-    
+
     const selecteMachine = venueMachines.find(machine => machine.id === machineId) || null;
     const selecteUser = machinesRefloatsUsers.find(user => user.id === userId) || null;
 

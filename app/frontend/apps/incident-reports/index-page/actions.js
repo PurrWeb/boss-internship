@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import utils from '~/lib/utils';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 import notify from '~/components/global-notification';
 
 import {
@@ -36,11 +36,11 @@ function convertRichToHtmlAndCheckIfEmpty(value) {
 
 export const createIncidentReport = (values) => (dispatch, getState) => {
   const venueId = getState().getIn(['page', 'currentVenueId']);
-  
+
   let incidentTime = '';
-  
+
   if (values.date && values.time) {
-    incidentTime = moment(values.date).hour(values.time.hour()).minute(values.time.minute());
+    incidentTime = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
   }
 
   const parsedValues = {
@@ -63,12 +63,13 @@ export const createIncidentReport = (values) => (dispatch, getState) => {
 }
 
 export const handleVenueSelect = ({venueId}) => (dispatch, getState) => {
-  let startDate = getState().getIn(['page', 'filterStartDate']);
-  let endDate = getState().getIn(['page', 'filterEndDate']);
-  const creatorId = getState().getIn(['page', 'filterReportCreatorId']);
+  let filterStartDate =  getState().getIn(['page', 'filterStartDate']);
+  let startDate = filterStartDate && safeMoment.uiDateParse(filterStartDate).format("DD-MM-YYYY");
 
-  startDate = startDate ? moment(startDate).format('DD-MM-YYYY') : null;
-  endDate = startDate ? moment(endDate).format('DD-MM-YYYY') : null;
+  let filterEndDate =  getState().getIn(['page', 'filterEndDate']);
+  let endDate = filterEndDate && safeMoment.uiDateParse(filterEndDate).format("DD-MM-YYYY");
+
+  const creatorId = getState().getIn(['page', 'filterReportCreatorId']);
 
   return getIncidentReportsRequest({venueId, startDate, endDate, creatorId})
     .then((resp) => {
@@ -87,12 +88,14 @@ export const handleVenueSelect = ({venueId}) => (dispatch, getState) => {
 
 export const handleFilter = () => (dispatch, getState) => {
   const venueId = getState().getIn(['page', 'currentVenueId']);
-  let startDate = getState().getIn(['page', 'filterStartDate']);
-  let endDate = getState().getIn(['page', 'filterEndDate']);
-  const creatorId = getState().getIn(['page', 'filterReportCreatorId']);
 
-  startDate = startDate ? moment(startDate).format('DD-MM-YYYY') : null;
-  endDate = startDate ? moment(endDate).format('DD-MM-YYYY') : null;
+  let filterStartDate = getState().getIn(['page', 'filterStartDate']);
+  let startDate = filterStartDate && safeMoment.uiDateParse(filterStartDate).format('DD-MM-YYYY');
+
+  let filterEndDate = getState().getIn(['page', 'filterEndDate']);
+  let endDate = filterEndDate && safeMoment.uiDateParse(filterEndDate).format('DD-MM-YYYY');
+
+  const creatorId = getState().getIn(['page', 'filterReportCreatorId']);
 
   return getIncidentReportsRequest({venueId, startDate, endDate, creatorId})
     .then((resp) => {

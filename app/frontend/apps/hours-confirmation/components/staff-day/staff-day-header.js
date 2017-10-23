@@ -1,11 +1,11 @@
 import React from "react"
-import moment from "moment"
+import safeMoment from "~/lib/safe-moment";
 import oFetch from "o-fetch";
 
 export default class StaffDayHeader extends React.Component {
     dateSection() {
       if(this.props.displayDate){
-        let dateString =moment(this.props.rotaDate.startTime).format("dddd, DD MMM YYYY");
+        let dateString = safeMoment.iso8601Parse(this.props.rotaDate.startTime).format("dddd, DD MMM YYYY");
         return <p className="boss-hrc__date">
           <span className="boss-hrc__date-text">{dateString}</span>
         </p>

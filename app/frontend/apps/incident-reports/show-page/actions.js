@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
+
 import notify from '~/components/global-notification';
 
 import {
@@ -43,9 +44,9 @@ export const saveIncidentReport = (values) => (dispatch, getState) => {
   let incidentTime = null;
 
   if (values.date && values.time) {
-    incidentTime = moment(values.date).hour(values.time.hour()).minute(values.time.minute());
+    incidentTime = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
   }
-  
+
   const parsedValues = {
     involvedWitnessDetails: convertRichToHtmlAndCheckIfEmpty(values.involvedWitnessDetails),
     report: convertRichToHtmlAndCheckIfEmpty(values.report),

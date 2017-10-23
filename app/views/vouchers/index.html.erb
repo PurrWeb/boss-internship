@@ -11,8 +11,8 @@
   accessToken: access_token,
   page: page,
   status: status,
-  startDate: start_date,
-  endDate: end_date,
+  startDate: start_date && UIRotaDate.format(start_date),
+  endDate: end_date && UIRotaDate.format(end_date),
   size: size,
   perPage: per_page,
-}) %> 
+}) %>

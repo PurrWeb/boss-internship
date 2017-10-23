@@ -3,7 +3,7 @@ import { combineReducers } from 'redux-immutable';
 import { handleActions } from 'redux-actions';
 
 import { reducer as formReducer } from 'redux-form/immutable';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 
 import {
   INITIAL_LOAD,
@@ -53,8 +53,8 @@ const holidaysReducer = handleActions({
       .set('paidHolidayDays', fromJS(paidHolidayDays))
       .set('unpaidHolidayDays', fromJS(unpaidHolidayDays))
       .set('estimatedAccruedHolidayDays', fromJS(estimatedAccruedHolidayDays))
-      .set('holidayStartDate', moment(holidayStartDate))
-      .set('holidayEndDate', moment(holidayEndDate))
+      .set('holidayStartDate', safeMoment.uiDateParse(holidayStartDate))
+      .set('holidayEndDate', safeMoment.uiDateParse(holidayEndDate))
   },
   [UPDATE_HOLIDAYS_COUNT]: (state, action) => {
     const {

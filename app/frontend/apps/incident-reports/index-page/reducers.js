@@ -4,7 +4,7 @@ import { combineReducers } from 'redux-immutable';
 import { handleActions } from 'redux-actions';
 import { reducer as formReducer } from 'redux-form/immutable';
 
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment"
 
 import {
   INITIAL_LOAD,
@@ -41,15 +41,15 @@ const incidentReportsIndexReducer = handleActions({
       filterEndDate,
       filterReportCreatorId,
     } = action.payload;
-    
+
     return state
       .set('currentVenueId', currentVenueId)
       .set('accessToken', accessToken)
       .set('accessibleVenues', fromJS(accessibleVenues))
       .set('reportCreators', fromJS(reportCreators))
       .set('incidentReports', fromJS(incidentReports))
-      .set('filterStartDate', moment(filterStartDate, 'DD-MM-YYYY'))
-      .set('filterEndDate', moment(filterEndDate, 'DD-MM-YYYY'))
+      .set('filterStartDate', safeMoment.uiDateParse(filterStartDate))
+      .set('filterEndDate', safeMoment.uiDateParse(filterEndDate))
       .set('filterReportCreatorId', filterReportCreatorId)
   },
   [ADD_INCIDENT_REPORT]: (state, action) => {
