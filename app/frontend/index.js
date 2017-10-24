@@ -40,6 +40,9 @@ import "./lib/load-underscore-mixins"
 import RotaApp from "./apps/rota/rota-app"
 registerComponent("RotaApp", RotaApp)
 
+import RotaDailyApp from "./apps/rota-daily";
+registerComponent("RotaDailyApp", RotaDailyApp);
+
 import CheckListsApp from "./apps/check-list"
 registerComponent("CheckListsApp", CheckListsApp)
 
