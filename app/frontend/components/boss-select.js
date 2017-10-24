@@ -12,6 +12,10 @@ class BossSelect extends React.Component {
     label: PropTypes.string,
   }
 
+  static defaultProps = {
+    className: ''
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -44,7 +48,7 @@ class BossSelect extends React.Component {
 
   render() {
     return (
-      <div className="boss-form__select">
+      <div className={`boss-form__select ${this.props.className}`}>
         <Select
           options={this.getOptions(this.props.options)}
           value={this.state.selected}

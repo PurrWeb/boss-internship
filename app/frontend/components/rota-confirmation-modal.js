@@ -14,6 +14,7 @@ const RotaConfirmationModal = ({
   
   const {
     title,
+    id = "rota-modal"
   } = options;
 
   const isMessagesInArray = Array.isArray(confirmations);
@@ -30,8 +31,12 @@ const RotaConfirmationModal = ({
         base: `ReactModal__Content boss-modal-window boss-modal-window_role_warning`,
         afterOpen: 'ReactModal__Content--after-open',
       }}
+      overlayClassName={{
+        base: `ReactModal__Overlay ${id}`,
+        afterOpen: `ReactModal__Overlay--after-open`
+      }}
     >
-    <button onClick={dismiss} className="boss-modal-window__close"></button>
+    <button onClick={cancel} className="boss-modal-window__close"></button>
       <div className="boss-modal-window__header">
         {title}
       </div>
@@ -44,7 +49,7 @@ const RotaConfirmationModal = ({
         </div>
         <div className="boss-modal-window__actions">
           <button
-            onClick={dismiss}
+            onClick={cancel}
             className="boss-button boss-button_role_inactive boss-modal-window__button"
           >Cancel</button>
           <button
