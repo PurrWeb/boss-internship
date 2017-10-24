@@ -1,25 +1,38 @@
 <%= javascript_tag do %>
-  rotaData = {};
-
-  rotaData.rotas = <%= api_v1_collection_json(rotas, Api::V1::RotaSerializer) %>;
-
-  rotaData.staff_types = <%= api_v1_collection_json(staff_types, Api::V1::StaffTypeSerializer) %>;
-
-  rotaData.rota_shifts = <%= api_v1_collection_json(rota_shifts, Api::V1::RotaShiftSerializer) %>;
-
-  rotaData.staff_members = <%= api_v1_collection_json(staff_members, Api::V1::StaffMemberSerializer) %>;
-
-  rotaData.venues = <%= api_v1_collection_json(venues, Api::V1::VenueSerializer) %>;
-
-  rotaData.holidays = <%= api_v1_collection_json(holidays, Api::V1::HolidaySerializer) %>;
-
   window.boss = window.boss || {};
-  window.boss.store = window.boss.store || {};
-  window.boss.store.access_token = "<%= access_token.token %>";
-  window.boss.store.rota = rotaData;
-
-  window.boss.store.rotaVenueId = <%= current_rota.venue.id %>;
-  window.boss.store.rotaDate = "<%= current_rota.date.iso8601 %>";
+  window.boss.accessToken = "<%= access_token.token %>";
 <% end %>
 
-<%= react_component('RotaApp') %>
+<%= react_component('RotaDailyApp', {
+  accessToken: access_token.token,
+  currentVenue: Api::V1::VenueSerializer.new(current_venue),
+  venues: ActiveModel::Serializer::CollectionSerializer.new(
+    venues,
+    serializer: Api::V1::VenueSerializer,
+  ),
+  holidays: ActiveModel::Serializer::CollectionSerializer.new(
+    holidays,
+    serializer: Api::V1::RotaDaily::HolidaySerializer,
+  ),
+  staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_types,
+    serializer: Api::V1::RotaDaily::StaffTypeSerializer,
+  ),
+  staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_members,
+    serializer: Api::V1::RotaDaily::StaffMemberSerializer,
+  ),
+  rotas: ActiveModel::Serializer::CollectionSerializer.new(
+    rotas,
+    serializer: Api::V1::RotaDaily::RotaSerializer,
+  ),
+  rota: Api::V1::RotaDaily::RotaSerializer.new(rota),
+  rotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    rota_shifts,
+    serializer: Api::V1::RotaDaily::RotaShiftSerializer,
+  ),
+  weekRotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    week_rota_shifts,
+    serializer: Api::V1::RotaDaily::RotaShiftSerializer,
+  ),
+}) %>
