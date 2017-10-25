@@ -1,5 +1,5 @@
 import { fromJS, Map, List } from 'immutable';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 
 import {
   INITIAL,
@@ -40,8 +40,8 @@ const ACTION_HANDLERS = {
     }
 
     if (!!startDate && !!endDate) {
-      momentStartDate = moment(startDate, "DD-MM-YYYY");
-      momentEndDate = moment(endDate, "DD-MM-YYYY");
+      momentStartDate = safeMoment.uiDateParse(startDate);
+      momentEndDate = safeMoment.uiDateParse(endDate);
     }
 
     state = state
@@ -57,7 +57,7 @@ const ACTION_HANDLERS = {
       .setIn(['filter', 'createdBy'], created_by)
       .setIn(['filter', 'range', 'startDate'], momentStartDate)
       .setIn(['filter', 'range', 'endDate'], momentEndDate);
-    
+
     return state;
   },
   [FILL_SUBMISSIONS_DATA]: (state, action) => {
@@ -105,7 +105,7 @@ const ACTION_HANDLERS = {
       .set('isDetailsOpen', false)
       .set('detailedSubmission', fromJS({}))
   },
-  
+
 }
 
 const initialState = fromJS({

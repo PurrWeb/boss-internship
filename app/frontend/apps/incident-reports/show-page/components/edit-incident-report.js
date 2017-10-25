@@ -2,8 +2,9 @@ import React from 'react';
 import { SubmissionError } from 'redux-form/immutable';
 import { fromJS } from 'immutable';
 import RichTextEditor from 'react-rte';
-
+import RotaDate from "~/lib/rota-date.js";
 import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 
 import IncidentReportForm from '../../components/incident-report-form';
 
@@ -16,8 +17,10 @@ function EditIncidentReport({incidentReport}) {
   const initialValues = {
     id: incidentReport.id,
     venueId: incidentReport.venueId,
-    date: moment(incidentReport.incidentTime),
-    time: moment(incidentReport.incidentTime),
+    date: moment(
+      new RotaDate({ shiftStartsAt: incidentReport.incidentTime }).getDateOfRota()
+    ),
+    time: safeMoment.iso8601Parse(incidentReport.incidentTime),
     location: incidentReport.location,
     description: incidentReport.description,
     involvedWitnessDetails: RichTextEditor.createValueFromString(incidentReport.involvedWitnessDetails, 'html'),
@@ -46,7 +49,7 @@ function EditIncidentReport({incidentReport}) {
         }
       })
   }
-  
+
   return (
     <div className="boss-page-main__group boss-page-main__group_adjust_ir-form">
       <IncidentReportForm

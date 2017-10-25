@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment"
 
 import editAvatarModal from '~/lib/content-modal';
 
@@ -64,12 +64,12 @@ const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, cu
           href={`owed_hours`}
           className={`${isActive(currentPage ,"owed_hours")} boss-button boss-button_type_small boss-button_role_timelog boss-user-summary__switch`}
         >Owed hours</a>
-      </div> 
+      </div>
     )
   }
 
   const renderdisabledContent = ({disabledByUser, disabledAt, disabledReason}) => {
-    const disabledAtFormatted = moment(disabledAt).format('Do MMMM YYYY');
+    const disabledAtFormatted = safeMoment.iso8601Parse(disabledAt).format('Do MMMM YYYY');
     return (
       <ul className="boss-user-summary__review-list">
         <li className="boss-user-summary__review-item">

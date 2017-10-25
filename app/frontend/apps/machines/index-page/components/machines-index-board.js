@@ -1,6 +1,6 @@
 import React from 'react';
 import numeral from 'numeral';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 
 function Row({children, classNames = null}) {
   return (
@@ -43,7 +43,7 @@ export default function MachinesIndexBoard({
   }
 
   function date(value) {
-    return moment(value).format('HH:mm DD-MM-YYYY');
+    return safeMoment.iso8601Parse(value).format('HH:mm DD-MM-YYYY');
   }
 
   function totalBankedCents(){

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 import oFetch from "o-fetch";
 
 import EmploymentDetailsForm from './employment-details-form';
@@ -26,20 +26,23 @@ const EditProfilePage = ({
     county: oFetch(staffMemberData, 'county'),
   }
 
+  let sDateOfBirth = oFetch(staffMemberData, 'date_of_birth');
   const personaletailsFormInitial = {
     first_name: oFetch(staffMemberData, 'first_name'),
     surname: oFetch(staffMemberData, 'surname'),
     gender: humanize(oFetch(staffMemberData, 'gender')),
-    date_of_birth: moment(oFetch(staffMemberData, 'date_of_birth'), 'DD-MM-YYYY'),
+    date_of_birth: sDateOfBirth && safeMoment.uiDateParse(sDateOfBirth)
   }
 
+  let sSiaBadgeExpiryDate = oFetch(staffMemberData, 'sia_badge_expiry_date');
+  let mSiaBadgeExpiryDate = sSiaBadgeExpiryDate && safeMoment.uiDateParse(sSiaBadgeExpiryDate);
   const employmentDetailsFormInitial = {
     master_venue: oFetch(staffMemberData, 'master_venue'),
     other_venues: oFetch(staffMemberData, 'other_venues'),
-    starts_at: moment(oFetch(staffMemberData, 'starts_at'), 'DD-MM-YYYY'),
+    starts_at: safeMoment.uiDateParse(oFetch(staffMemberData, 'starts_at')),
     staff_type: oFetch(staffMemberData, 'staff_type'),
     sia_badge_number: oFetch(staffMemberData, 'sia_badge_number'),
-    sia_badge_expiry_date: moment(oFetch(staffMemberData, 'sia_badge_expiry_date') || moment(), 'DD-MM-YYYY'),
+    sia_badge_expiry_date: mSiaBadgeExpiryDate,
     national_insurance_number: oFetch(staffMemberData, 'national_insurance_number'),
     day_preference: oFetch(staffMemberData, 'day_preference'),
     hours_preference: oFetch(staffMemberData, 'hours_preference'),

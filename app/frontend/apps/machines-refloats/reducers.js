@@ -4,6 +4,7 @@ import { combineReducers } from 'redux-immutable';
 import { handleActions } from 'redux-actions';
 import { reducer as formReducer } from 'redux-form/immutable';
 
+import RotaDate from "~/lib/rota-date";
 import moment from 'moment';
 
 import {
@@ -13,6 +14,8 @@ import {
   ADD_MACHINES_REFLOAT,
 } from './constants';
 
+const currentDateMoment = moment(new RotaDate({ shiftStartsAt: new Date() }).getDateOfRota());
+
 const initialState = fromJS({
   currentVenueId: null,
   accessToken: null,
@@ -21,8 +24,8 @@ const initialState = fromJS({
   machinesRefloatsUsers: [],
   venueMachines: [],
   filter: {
-    startDate: moment(),
-    endDate: moment().add(1, 'month'),
+    startDate: currentDateMoment,
+    endDate: currentDateMoment.add(1, 'month'),
   },
   page: 1,
   perPage: null,

@@ -5,7 +5,7 @@ import { appRoutes } from "~/lib/routes"
 import DateAndVenueSelector from "~/components/date-and-venue-selector"
 import DashboardCurrentWrapper from '../components/dashboard-current-wrapper';
 import DashboardDate from '../components/dashboard-date';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 
 class PageHeader extends React.Component {
 
@@ -24,9 +24,9 @@ class PageHeader extends React.Component {
         var isDailyPage = this.props.pageOptions.date !== undefined;
         if (isDailyPage){
             const venueName = this.props.venues[venueClientId].name;
-            const date = moment(this.props.pageOptions.date).format('DD MMMM YYYY');
+            const date = safeMoment.uiDateParse(this.props.pageOptions.date).format('DD MMMM YYYY');
             const title = `Hours Confirmations for ${venueName} ${date}`;
-            selector = 
+            selector =
               <DashboardDate
                 title={title}
                 date={this.props.pageOptions.date}
@@ -36,13 +36,13 @@ class PageHeader extends React.Component {
               />
 
         } else {
-          selector = 
+          selector =
           <DashboardCurrentWrapper title={this.props.pageOptions.pageName}>
             <div className="boss-page-dashboard__controls-group">
               <div className="boss-form boss-form_page_hrc">
                 <div className="boss-form__field">
                   <div className="boss-form__select boss-form__select_size_small">
-                      
+
                   </div>
                 </div>
               </div>

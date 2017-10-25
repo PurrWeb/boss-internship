@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from "react"
-import moment from "moment"
+import safeMoment from "~/lib/safe-moment";
 import utils from "~/lib/utils"
 import { appRoutes } from "~/lib/routes"
 import StaffTypeRotaOverviewChart from "./staff-type-rota-overview-chart"
@@ -33,8 +33,8 @@ export default class StaffTypeRotaOverviewItem extends Component {
 
         return <div>
             <a href={appRoutes.staffTypeRota({staffTypeSlug: this.props.staffTypeSlug, dateOfRota})}>
-                <h2>{moment(dateOfRota).format("ddd D MMMM YYYY")}</h2>
-            </a>    
+                <h2>{safeMoment.uiDateParse(dateOfRota).format("ddd D MMMM YYYY")}</h2>
+            </a>
             <div className="boss2-flex-row">
                 <div className="column">
                     <StaffTypeRotaOverviewChart

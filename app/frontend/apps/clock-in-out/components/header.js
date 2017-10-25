@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from "react"
-import moment from "moment"
+import safeMoment from "~/lib/safe-moment"
 import LeaveManagerModeButton from "./leave-manager-mode-button"
 
 export default class Header extends React.Component {
@@ -62,7 +62,7 @@ export default class Header extends React.Component {
                     {leaveManagerModeCell}
                     <div className="header__name-cell">
                         <div className="header__name">{this.props.venue.name}</div>
-                        <div className="header__date">{moment(this.props.rota.date).format("ddd D MMMM YYYY")}</div>
+                        <div className="header__date">{safeMoment.uiDateParse(this.props.rota.date).format("ddd D MMMM YYYY")}</div>
                     </div>
                     <div className="header__reload-cell">
                         {reloadPageButton}

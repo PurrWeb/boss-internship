@@ -1,6 +1,5 @@
 import React from 'react';
 import humanize from 'string-humanize';
-import moment from 'moment';
 import confirm from '~/lib/confirm-utils';
 import {getOwedHourUIData} from './owed-hours-table';
 

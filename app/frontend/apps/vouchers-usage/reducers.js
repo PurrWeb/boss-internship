@@ -1,6 +1,6 @@
 import { fromJS, Map, List } from 'immutable';
 import { combineReducers } from 'redux-immutable';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 import { handleActions } from 'redux-actions';
 
 import {INITIAL} from './constants'
@@ -25,7 +25,7 @@ const voucherUsagesReducer = handleActions({
   [INITIAL]: (state, action) => {
     let momentStartDate = null;
     let momentEndDate = null;
-    
+
     const {
       startDate,
       endDate,
@@ -38,8 +38,8 @@ const voucherUsagesReducer = handleActions({
     } = action.payload;
 
     if (!!startDate && !!endDate) {
-      momentStartDate = moment(startDate, "YYYY-MM-DD");
-      momentEndDate = moment(endDate, "YYYY-MM-DD");
+      momentStartDate = safeMoment.uiDateParse(startDate);
+      momentEndDate = safeMoment.uiDateParse(endDate);
     }
 
     return state

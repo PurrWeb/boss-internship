@@ -9,11 +9,11 @@ class Api::V1::HolidaySerializer < ActiveModel::Serializer
   end
 
   def start_date
-    object.start_date.iso8601
+    UIRotaDate.format(object.start_date)
   end
 
   def end_date
-    object.end_date.iso8601
+    UIRotaDate.format(object.end_date)
   end
 
   def status

@@ -1,6 +1,5 @@
 import { fromJS, Map, List } from 'immutable';
 import { handleActions } from 'redux-actions';
-import moment from 'moment';
 
 import {
   INITIAL_LOAD,

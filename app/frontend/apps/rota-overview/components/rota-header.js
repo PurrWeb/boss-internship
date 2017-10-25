@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
+
 import {confirmation} from '~/lib/confirm-utils';
 import actionCreators from "~/redux/actions";
 import { connect } from "react-redux";
@@ -21,8 +22,8 @@ class RotaHeader extends React.Component {
   }
 
   render() {
-    const startDate = moment(this.props.startDate).format('Do MMMM YYYY');
-    const endDate = moment(this.props.endDate).format('Do MMMM YYYY');
+    const startDate = safeMoment.uiDateParse(this.props.startDate).format('Do MMMM YYYY');
+    const endDate = safeMoment.uiDateParse(this.props.endDate).format('Do MMMM YYYY');
     const venueName = this.props.venue.name;
     var hasBeenPublished = this.props.rota.status === ROTA_PUBLISHED_STATUS;
 

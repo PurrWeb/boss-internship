@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 
 const CheckListItemNote = ({note}) => {
   return (
@@ -80,7 +80,7 @@ class ModalDetailsContent extends React.Component {
                 {submission.get('venue_name')}
               </p>
               <p className="boss-stats__label boss-stats__label_role_date">
-                {moment(submission.get('created_at')).format('HH:mm DD/MM/YYYY')}
+                {safeMoment.iso8601Parse(submission.get('created_at')).format('HH:mm DD/MM/YYYY')}
               </p>
               <p className="boss-stats__label boss-stats__label_role_user">
                 {submission.get('creator_name')}

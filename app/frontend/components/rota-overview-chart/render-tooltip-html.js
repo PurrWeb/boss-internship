@@ -16,7 +16,7 @@ export const renderTooltipTimeHtml = (data) => {
       </span>
       <span> Roated for </span>
       <span class="boss-rotas-time__total">${moment(shiftDates.date).format("HH:mm")}</span>
-    </div>    
+    </div>
     `;
   };
 
@@ -32,7 +32,7 @@ export const renderTooltipTimeHtml = (data) => {
               <span class="boss-rotas-time__end">${moment(shift.ends_at).format("HH:mm")}</span>
           </p>
           <p class="boss-rotas-time__name">${shiftStaff.first_name} ${shiftStaff.surname}</p>
-        </li>      
+        </li>
       `;
     }, '');
   }
@@ -43,7 +43,7 @@ export const renderTooltipTimeHtml = (data) => {
     <ul class="boss-rotas-time__list">
       ${renderShifts(shifts, staff)}
     </ul>
-  </div>  
+  </div>
   `;
 }
 
@@ -59,7 +59,7 @@ export const renderTooltipInfoHtml = (data) => {
             <span class="boss-rotas-info__pointer" style="background-color: ${groupObject.color}"></span>
             <p class="boss-rotas-info__text"><span>${groupObject.name}</span>: <span>${shifts.length}</span></p>
           </li>`;
-  
+
         if (isSelected) {
             line = `
               <li class="boss-rotas-info__item">
@@ -79,7 +79,7 @@ export const renderTooltipInfoHtml = (data) => {
         }
         tooltipLines = tooltipLines + renderLine(group);
     });
-    
+
     return `
     <div class="nvtooltip-pointer nvtooltip-pointer_position_left" style="right:100%; top:50%"></div>
     <div class="boss-rotas-info">

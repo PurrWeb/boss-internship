@@ -6,7 +6,7 @@ import _ from "underscore"
 import AddShiftViewContainer from "./add-shift-view-container"
 import RotaNavigation from "./rota-navigation"
 import store from "~/redux/store"
-import moment from "moment"
+import safeMoment from "~/lib/safe-moment";
 import RotaStatusToggle from "./status-toggle/rota-status-toggle"
 import { selectRotaOnVenueRotaPage } from "~/redux/selectors"
 import {appRoutes} from "~/lib/routes"
@@ -23,7 +23,7 @@ class RotaView extends Component {
                 <RotaStatusToggle />
             </div>
             <h1 className="mb-md">
-                Rota for {this.props.venue.name}: {moment(this.props.rota.date).format("ddd D MMMM YYYY")}
+                Rota for {this.props.venue.name}: {safeMoment.uiDateParse(this.props.rota.date).format("ddd D MMMM YYYY")}
             </h1>
             <ChartAndFilter />
             <AddShiftViewContainer

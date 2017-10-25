@@ -34,8 +34,8 @@ class RotaDate {
     // A `rota.date` value also can't be pased in directly because it's midnight on the previous rota day.
     initUsingBaseDate(baseDate){
         this.startTime = new Date(baseDate);
-        if (baseDate.getHours() < 8) {
-            this.startTime.setDate(baseDate.getDate() - 1);
+        if (this.startTime.getHours() < 8) {
+            this.startTime.setDate(this.startTime.getDate() - 1);
         }
         this.startTime.setHours(DAY_START_TIME, 0, 0, 0);
 

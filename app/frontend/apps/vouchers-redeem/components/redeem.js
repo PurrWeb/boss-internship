@@ -2,8 +2,6 @@ import React from 'react';
 import { SubmissionError } from 'redux-form/immutable';
 import { fromJS } from 'immutable';
 
-import moment from 'moment';
-
 import RedeemForm from './redeem-form';
 import {
   redeemVoucher,
@@ -13,7 +11,7 @@ class Redeem extends React.Component {
   submission = (values, dispatch) => {
     return dispatch(redeemVoucher(values.toJS()))
   }
-  
+
   render() {
     const initialValues = {
       staffMemberId: null,

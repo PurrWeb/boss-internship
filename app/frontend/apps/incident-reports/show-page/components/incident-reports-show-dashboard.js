@@ -2,7 +2,7 @@ import React from 'react';
 import {Collapse} from 'react-collapse';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 
 import DashboardWrapper from '~/components/dashboard-wrapper';
 import confirm from '~/lib/confirm-utils';
@@ -76,7 +76,7 @@ class IncidentReportsShowDashboard extends React.PureComponent {
       incidentReport,
     } = this.props;
 
-    const createdAtFormatted = moment(incidentReport.createdAt).format('Mo MMMM YYYY');
+    const createdAtFormatted = safeMoment.iso8601Parse(incidentReport.createdAt).format('Mo MMMM YYYY');
 
     return (
       <DashboardWrapper>

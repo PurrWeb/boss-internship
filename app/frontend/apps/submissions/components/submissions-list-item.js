@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import utils from "~/lib/utils"
+import safeMoment from "~/lib/safe-moment";
 
 class TableCell extends React.Component {
   static propTypes = {
@@ -39,7 +39,7 @@ class SubmissionsListItem extends React.Component {
     const statusText = status ? 'OK' : 'Problem'
     const creatorName = item.get('creator_name');
     const checklistName = item.get('check_list_name');
-    const createdAt = moment(item.get('created_at')).format(utils.humanDateFormatWithTime("short"));
+    const createdAt = safeMoment.iso8601Parse(item.get('created_at')).format(utils.humanDateFormatWithTime("short"));
 
     return (
       <div className="boss-table__row">

@@ -1,26 +1,26 @@
 import React from 'react';
 import humanize from 'string-humanize';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 import confirm from '~/lib/confirm-utils';
 
 import OwedHoursMobileItem from './owed-hours-mobile-item';
 
 export const getOwedHourUIData = (owedHour) => {
-  const hasDate = owedHour.get('hasDate');
-  const date = moment(owedHour.get('date')).format('ddd DD MMM YYYY');
+  let hasDate = owedHour.get('hasDate');
+  const date = safeMoment.uiDateParse(owedHour.get('date')).format('ddd DD MMM YYYY');
   let times = 'N/A';
   if (hasDate) {
-    const startTime = moment(owedHour.getIn(['times', 'startsAt'])).utcOffset(owedHour.getIn(['times', 'startsAt'])).format('HH:mm');
-    const endTime = moment(owedHour.getIn(['times', 'endsAt'])).utcOffset(owedHour.getIn(['times', 'endsAt'])).format('HH:mm');
+    const startTime = safeMoment.iso8601Parse(owedHour.getIn(['times', 'startsAt'])).utcOffset(owedHour.getIn(['times', 'startsAt'])).format('HH:mm');
+    const endTime = safeMoment.iso8601Parse(owedHour.getIn(['times', 'endsAt'])).utcOffset(owedHour.getIn(['times', 'endsAt'])).format('HH:mm');
     times = `${startTime} - ${endTime}`;
-  } 
+  }
   const durationHours = owedHour.getIn(['duration','hours']);
   const durationMinutes = owedHour.getIn(['duration', 'minutes']);
   const note = owedHour.get('note') || '-';
   const creator = owedHour.get('createdBy');
-  const created = moment(owedHour.get('createdAt')).utcOffset(owedHour.get('createdAt')).format('Do MMMM YYYY - HH:mm');
+  const created = safeMoment.iso8601Parse(owedHour.get('createdAt')).utcOffset(owedHour.get('createdAt')).format('Do MMMM YYYY - HH:mm');
   const editable = owedHour.get('editable');
-  
+
   return { hasDate, date, times, durationHours, durationMinutes, note, creator, created, editable };
 }
 
@@ -143,8 +143,8 @@ const Header = () => {
 }
 
 const OwedStats = ({week}) => {
-  const startDate = moment(week.get('startDate'), 'DD-MM-YYYY').format('ddd DD MMM YYYY');
-  const endDate = moment(week.get('endDate'), 'DD-MM-YYYY').format('ddd DD MMM YYYY');
+  const startDate = safeMoment.uiDateParse(week.get('startDate')).format('ddd DD MMM YYYY');
+  const endDate = safeMoment.uiDateParse(week.get('endDate')).format('ddd DD MMM YYYY');
   return (
     <div>
       <div className="boss-count boss-count_adjust_flow boss-count_type_solid">

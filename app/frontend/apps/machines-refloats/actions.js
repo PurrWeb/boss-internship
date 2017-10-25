@@ -1,6 +1,5 @@
 import { createAction } from 'redux-actions';
 import utils from '~/lib/utils';
-import moment from 'moment';
 import notify from '~/components/global-notification';
 import URLSearchParams from 'url-search-params';
 
@@ -42,7 +41,7 @@ export const createMachinesRefloat = (values) => (dispatch, getState) => {
 
 export const filterMachinesRefloat = (values) => (dispatch, getState) => {
   const venueId = getState().getIn(['page', 'currentVenueId']);
-  
+
   const formatedValues = {
     startDate: values.startDate && utils.formatRotaUrlDate(values.startDate),
     endDate: values.endDate && utils.formatRotaUrlDate(values.endDate),

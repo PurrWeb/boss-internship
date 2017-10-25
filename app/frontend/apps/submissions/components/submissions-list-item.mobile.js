@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 import utils from "~/lib/utils"
 
 export const CardRow = ({children, title}) => {
@@ -33,7 +33,7 @@ const SubmissionsListItemMobile = ({item, onDetailsClick}) => {
       <CardRow>
         <div className="boss-check__text boss-check__text_role_date">
           <span className="boss-check__link">
-            {moment(item.get('created_at')).format(utils.humanDateFormatWithTime("short"))}
+            {safeMoment.iso8601Parse(item.get('created_at')).format(utils.humanDateFormatWithTime("short"))}
           </span>
         </div>
       </CardRow>

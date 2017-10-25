@@ -1,5 +1,5 @@
 import axios from 'axios';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 import {SECURITY_TYPE_ID} from './constants';
 
 const accessToken = window.boss.store.accessToken;
@@ -58,7 +58,7 @@ export const enableStaffMember = (payload) => {
     gender: gender,
     phone_number,
     date_of_birth,
-    starts_at: moment(starts_at).format("DD-MM-YYYY"),
+    starts_at: safeMoment.iso8601Parse(starts_at).format("DD-MM-YYYY"),
     national_insurance_number,
     hours_preference_note: hours_preference,
     avatar_base64: avatar,
@@ -81,7 +81,7 @@ export const enableStaffMember = (payload) => {
     requestParams = {
       ...requestParams,
       sia_badge_number,
-      sia_badge_expiry_date: moment(sia_badge_expiry_date).format("DD-MM-YYYY")
+      sia_badge_expiry_date: safeMoment.uiDateParse(sia_badge_expiry_date).format("DD-MM-YYYY")
     }
   } else {
     requestParams = {
@@ -115,7 +115,7 @@ export const updateEmploymentDetails = (payload) => {
     national_insurance_number,
     hours_preference_note: hours_preference,
     day_preference_note: day_preference,
-    starts_at: moment(starts_at).format("DD-MM-YYYY"),
+    starts_at: safeMoment.iso8601Parse(starts_at).format("DD-MM-YYYY"),
     employment_status,
     pay_rate_id: pay_rate,
     other_venue_ids: other_venues,
@@ -127,7 +127,7 @@ export const updateEmploymentDetails = (payload) => {
       ...fields,
       master_venue_id: null,
       sia_badge_number,
-      sia_badge_expiry_date: moment(sia_badge_expiry_date).format("DD-MM-YYYY")
+      sia_badge_expiry_date: safeMoment.uiDateParse(sia_badge_expiry_date).format("DD-MM-YYYY")
     }
   } else {
     fields = {
@@ -154,7 +154,7 @@ export const updatePersonalDetails = (payload) => {
 
   return http.post(`/api/v1/staff_members/${staffMemberId}/update_personal_details`, {
     gender: gender ? gender.toLowerCase() : null,
-    date_of_birth: date_of_birth ? moment(date_of_birth).format("DD-MM-YYYY") : null,
+    date_of_birth: date_of_birth ? safeMoment.uiDateParse(date_of_birth).format("DD-MM-YYYY") : null,
     first_name,
     surname
   });

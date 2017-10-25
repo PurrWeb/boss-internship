@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from "react"
 import RotaDate from "~/lib/rota-date"
 import _ from "underscore"
-import moment from "moment"
+import safeMoment from "~/lib/safe-moment"
 import convertClockInPeriodToIntervals from "./convert-clock-in-period-to-intervals"
 import HoursChartUi from "./hours-chart-content"
 
@@ -58,8 +58,8 @@ export default class HoursChart extends React.Component {
     getRotaedChartIntervals(){
         var self = this;
         return this.props.rotaedShifts.map(function(shift){
-            var label = moment(shift.starts_at).format("HH:mm") + " - " +
-                moment(shift.ends_at).format("HH:mm");
+            var label = safeMoment.iso8601Parse(shift.starts_at).format("HH:mm") + " - " +
+                safeMoment.iso8601Parse(shift.ends_at).format("HH:mm");
 
             return {
                 startOffsetInHours: self.getHoursSinceStartOfDay(shift.starts_at),
@@ -81,7 +81,7 @@ export default class HoursChart extends React.Component {
         var intervals = clockedIntervals.map((interval) => {
             var startTime = interval.starts_at;
             var endTime = interval.ends_at;
-            var tooltipLabel = moment(startTime).format("HH:mm") + " - " + moment(endTime).format("HH:mm");
+            var tooltipLabel = safeMoment.iso8601Parse(startTime).format("HH:mm") + " - " + safeMoment.iso8601Parse(endTime).format("HH:mm");
             return {
                 startOffsetInHours: this.getHoursSinceStartOfDay(startTime),
                 endOffsetInHours: this.getHoursSinceStartOfDay(endTime),

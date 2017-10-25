@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import Select from "react-select"
 import RotaDate from "~/lib/rota-date.js"
-import moment from "moment"
+import safeMoment from "~/lib/safe-moment"
 import utils from "~/lib/utils"
 import validation from "~/lib/validation"
 import { getPossibleShiftStartTimeStrings, getPossibleShiftEndTimeStrings } from "~/lib/possible-shift-time-strings"
@@ -51,7 +51,7 @@ export default class ShiftTimeInput extends Component {
         var date = this.getDateFromProps();
         var dateValue;
         if (utils.dateIsValid(date)) {
-            dateValue = moment(date).format("HH:mm");
+            dateValue = safeMoment.iso8601Parse(date).format("HH:mm");
         } else {
             dateValue = "";
         }
@@ -96,7 +96,7 @@ export default class ShiftTimeInput extends Component {
         if (!newValue.value) {
             return;
         }
-        
+
         var newDate = this.getDateFromTime(newValue);
         this.props.onChange(newDate);
     }

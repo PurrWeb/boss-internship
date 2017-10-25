@@ -22,8 +22,8 @@
   window.boss.store.pageData = {
     accessibleVenueIds: accessibleVenueIds,
     venueId: <%= filter_venue.try(:id) || 'null' %>,
-    weekStartDate: "<%= week.start_date.iso8601 %>",
-    weekEndDate: "<%= week.end_date.iso8601 %>",
+    weekStartDate: "<%= UIRotaDate.format(week.start_date) %>",
+    weekEndDate: "<%= UIRotaDate.format(week.end_date) %>",
     displayCsvLink: <%= can?(:view, :holidays_csv).to_s %>
   }
 <% end %>

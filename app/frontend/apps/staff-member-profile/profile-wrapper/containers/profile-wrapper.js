@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
 import humanize from 'string-humanize';
 import oFetch from "o-fetch";
 import {starterEmploymentStatusLabels} from '../../../../constants/other';

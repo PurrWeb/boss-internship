@@ -37,9 +37,9 @@ class RecordRefloatForm extends React.Component {
     let calculatedValues = machineRefloatCalculation({
       selectedMachine: selectedMachine,
       lastMachineRefloat: lastMachineRefloat,
-      refillX10pReading: refillX10p || null,
-      cashInX10pReading: cashInX10p || null,
-      cashOutX10pReading: cashOutX10p || null
+      refillX10p: refillX10p || null,
+      cashInX10p: cashInX10p || null,
+      cashOutX10p: cashOutX10p || null
     });
 
     let topupAndBankedCanEdit = oFetch(calculatedValues, 'topupAndBankedCanEdit');

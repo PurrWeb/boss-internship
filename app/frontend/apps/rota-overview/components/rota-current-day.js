@@ -2,22 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import VenueRotaOverviewChart from "../venue-rota-overview-chart";
 import RotaForecast from "../containers/rota-forecast";
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 import rotaStatusTitles from "~/lib/rota-status-titles";
 
 export default class RotaCurrentDay extends React.Component {
   constructor (props) {
     super(props);
-    
+
     this.state = {
       hoverData: null,
       selectionData: null
     }
   }
-  
+
   render() {
-    const date = moment(this.props.rota.date).format('dddd, D MMMM YYYY');
-    const rotaEditUrlDate = moment(this.props.rota.date).format('DD-MM-YYYY');
+    const date = safeMoment.uiDateParse(this.props.rota.date).format('dddd, D MMMM YYYY');
+    const rotaEditUrlDate = safeMoment.uiDateParse(this.props.rota.date).format('DD-MM-YYYY');
     const status = this.props.rota.status;
 
     return (
@@ -54,7 +54,7 @@ export default class RotaCurrentDay extends React.Component {
                           dateOfRota={this.props.dateOfRota}
                           staffTypes={this.props.staffTypesWithShifts}
                           onHoverShiftsChange={(data) => this.setState({hoverData: data})}
-                          onSelectionShiftsChange={(data) => this.setState({selectionData: data})} 
+                          onSelectionShiftsChange={(data) => this.setState({selectionData: data})}
                         />
                     </div>
                   </div>
@@ -65,7 +65,7 @@ export default class RotaCurrentDay extends React.Component {
                   isLoading={this.props.isLoading}
                   rotaClientId={this.props.rota.clientId}
                   forecast={this.props.rotaForecast}
-                  canEditForecastedTake={true} 
+                  canEditForecastedTake={true}
                 />
               </div>
             </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import oFetch from 'o-fetch';
-import moment from 'moment';
+import safeMoment from "~/lib/safe-moment";
 import utils from '~/lib/utils';
 
 export default function VoucherUsagesTableItem({items}) {
@@ -8,7 +8,7 @@ export default function VoucherUsagesTableItem({items}) {
   const renderTableItem = (item, key) => {
     const staffMemberName = oFetch(item, 'staff_member');
     const masterVenueName = oFetch(item, 'venue_name');
-    const createdTime = moment(oFetch(item, 'created_at')).format(utils.humanDateFormatWithTime());
+    const createdTime = safeMoment.iso8601Parse(oFetch(item, 'created_at')).format(utils.humanDateFormatWithTime());
 
     return (
       <div key={key} className="boss-table__row">
