@@ -40,13 +40,21 @@ class StaffMemberList extends React.PureComponent {
 
     this.state = {
       currentStaffId: null,
-      staffMemberOffset: 0,
       staffMembers: props.staffMembers.slice(0, PAGE_SIZE)
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({staffMembers: nextProps.staffMembers.slice(0, PAGE_SIZE)})
+    this.setState(state => {
+      if (this.props.staffMembers.size === nextProps.staffMembers.size) {
+        return {
+          staffMembers: nextProps.staffMembers.slice(0, state.staffMembers.size)
+        }
+      }
+      return {
+        staffMembers: nextProps.staffMembers.slice(0, PAGE_SIZE)
+      }
+    })
   }
 
   handleCloseTooltip = () => {
@@ -81,15 +89,20 @@ class StaffMemberList extends React.PureComponent {
     this.node = tooltip;
   }
 
+  getLoadMoreSizes = () => {
+    const currentSize = this.state.staffMembers.size;
+    const fullSize = this.props.staffMembers.size;
+    let loadSize = PAGE_SIZE;
+    if ((fullSize - currentSize) < PAGE_SIZE) {
+      loadSize = fullSize - currentSize;
+    }
+
+    return {currentSize, loadSize};
+  }
+
   loadMore = () => {
     this.setState(state => {
-      const currentSize = state.staffMembers.size;
-      const fullSize = this.props.staffMembers.size;
-      let loadSize = PAGE_SIZE;
-      if ((fullSize - currentSize) < PAGE_SIZE) {
-        loadSize = fullSize - currentSize;
-      }
-
+      const {currentSize, loadSize} = this.getLoadMoreSizes();
       const staffMembers = this.props.staffMembers.slice(currentSize, currentSize + loadSize);
       
       return {
