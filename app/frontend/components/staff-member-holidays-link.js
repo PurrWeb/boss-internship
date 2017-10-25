@@ -1,19 +1,23 @@
 import PropTypes from 'prop-types';
 import React from "react"
 import { appRoutes } from "~/lib/routes"
+import safeMoment from "~/lib/safe-moment";
 
 export default class StaffMemberHolidaysLink extends React.Component {
     static propTypes = {
         staffMemberServerId: PropTypes.any.isRequired,
         className: PropTypes.string,
-        startDate: PropTypes.string,
-        endDate: PropTypes.string
+        sStartDate: PropTypes.string,
+        sEndDate: PropTypes.string
     };
     render(){
+        let sStartDate = this.props.sStartDate;
+        let sEndDate = this.props.sEndDate;
+
         let href = appRoutes.staffMemberHolidays(
           this.props.staffMemberServerId,
-          this.props.startDate,
-          this.props.endDate
+          sStartDate && safeMoment.uiDateParse(sStartDate).toDate(),
+          sEndDate && safeMoment.uiDateParse(sEndDate).toDate()
         );
 
         return <a

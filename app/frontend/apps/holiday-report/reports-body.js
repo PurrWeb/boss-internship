@@ -99,8 +99,8 @@ export default class ReportsBody extends React.Component {
                 <StaffMemberHolidaysLink
                   className="boss-button boss-button_type_small boss-button_role_details"
                   staffMemberServerId={staffMember.serverId}
-                  startDate={this.props.pageOptions.weekStartDate}
-                  endDate={this.props.pageOptions.weekEndDate}
+                  sStartDate={this.props.pageOptions.weekStartDate}
+                  sEndDate={this.props.pageOptions.weekEndDate}
                 >
                   View All
                 </StaffMemberHolidaysLink>

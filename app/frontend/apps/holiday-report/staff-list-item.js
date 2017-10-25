@@ -56,7 +56,7 @@ export default class StaffListItem extends React.Component {
                             {holidayDaysCount(this.props.paidHolidays)}
                         </div>
                         <div className="large-shrink small-12 column">
-                                <StaffMemberHolidaysLink staffMemberServerId={staff.serverId} startDate={this.props.startDate} endDate={this.props.endDate}>
+                                <StaffMemberHolidaysLink staffMemberServerId={staff.serverId} sStartDate={this.props.startDate} sEndDate={this.props.endDate}>
                                     <p>View holidays</p>
                                 </StaffMemberHolidaysLink>
                         </div>

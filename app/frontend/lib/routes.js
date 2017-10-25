@@ -70,13 +70,13 @@ export const appRoutes = {
         }
         return "/staff_members/" + staffMemberId;
     },
-    staffMemberHolidays: function(staffMemberId, startDate, endDate){
+    staffMemberHolidays: function(staffMemberId, dStartDate, dEndDate){
         if (staffMemberId === undefined) {
             throw new Error("No staff member id supplied to appRoutes.staffMemberHolidays")
         }
         let result = "/staff_members/" + staffMemberId + "/holidays";
-        if(startDate !== undefined && endDate !== undefined){
-          result = result + "?start_date=" + utils.formatRotaUrlDate(startDate) + "&end_date=" + utils.formatRotaUrlDate(endDate);
+        if(dStartDate !== undefined && dEndDate !== undefined){
+          result = result + "?start_date=" + utils.formatRotaUrlDate(dStartDate) + "&end_date=" + utils.formatRotaUrlDate(dEndDate);
         }
         return result;
     },
