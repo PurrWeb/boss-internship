@@ -93,10 +93,12 @@ class RotaDailyContent extends React.Component {
       }
     } = this.props;
     
+    const rotaGraphClassName = isAddingNewShift ? 'boss-rotas__graphs_state_mobile-hidden' : '';
+    const addShiftsClassName =  !isAddingNewShift ? 'boss-rotas__manager_state_mobile-hidden' : '';
     return (
       <ContentWrapper>
         <div className="boss-rotas">
-          <div className="boss-rotas__graphs">
+          <div className={`boss-rotas__graphs ${rotaGraphClassName}`}>
             <ModalWrapper
               show={isGraphDetailsOpen}
               onClose={this.closeGraphDetails}
@@ -116,24 +118,23 @@ class RotaDailyContent extends React.Component {
               rotaDate={rotaDate}
               onStaffTypesChange={this.handleGraphStaffTypeChange}
             />
-            { !isAddingNewShift && <RotaGraph
-                rotaShifts={this.getRotaShifts()}
-                staffTypes={staffTypes.toJS()}
-                staffMembers={staffMembers.toJS()}
-                onShiftClick={this.handleShiftClick}
-              />
-            }
-          </div>
-          { isAddingNewShift && <AddShifts
-              staffTypes={staffTypes}
-              staffMembers={this.props.staffMembers}
-              rotaDate={rotaDate}
-              rotaStatus={rotaStatus}
-              isMultipleShift={isMultipleShift}
-              onOpenMultipleShift={openMultipleShift}
-              onCloseMultipleShift={closeMultipleShift}
+            <RotaGraph
+              rotaShifts={this.getRotaShifts()}
+              staffTypes={staffTypes.toJS()}
+              staffMembers={staffMembers.toJS()}
+              onShiftClick={this.handleShiftClick}
             />
-          }
+          </div>
+          <AddShifts
+            staffTypes={staffTypes}
+            staffMembers={this.props.staffMembers}
+            rotaDate={rotaDate}
+            rotaStatus={rotaStatus}
+            className={addShiftsClassName}
+            isMultipleShift={isMultipleShift}
+            onOpenMultipleShift={openMultipleShift}
+            onCloseMultipleShift={closeMultipleShift}
+          />
         </div>
       </ContentWrapper>
     )

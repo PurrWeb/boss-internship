@@ -45,7 +45,7 @@ class AddShifts extends React.Component {
 
   render() {
     return (
-      <div className="boss-rotas__manager">
+      <div className={`boss-rotas__manager ${this.props.className}`}>
         <div className="boss-rotas__filter boss-rotas__filter_type_inner">
           <div className="boss-form">
             <div className="boss-form__row">

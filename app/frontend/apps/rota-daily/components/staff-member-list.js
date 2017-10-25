@@ -116,7 +116,7 @@ class StaffMemberList extends React.PureComponent {
       <div className="boss-staff-summary__actions">
         <button
           onClick={this.loadMore}
-          className="boss-button boss-button_role_load-moreboss-button_adjust_full-mobile"
+          className="boss-button boss-button_role_load-more boss-button_adjust_full-mobile"
         >Load More</button>
       </div>
     )
