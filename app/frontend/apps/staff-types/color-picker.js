@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import { GithubPicker } from 'react-color';
 
 export default class ColorPicker extends React.Component {
     static propTypes = {
-        color: React.PropTypes.string.isRequired,
-        colors: React.PropTypes.arrayOf(React.PropTypes.string)
+        color: PropTypes.string.isRequired,
+        colors: PropTypes.arrayOf(PropTypes.string)
     };
 
     constructor(props){

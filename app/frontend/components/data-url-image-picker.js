@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import _ from "underscore"
 import ReactDOM from "react-dom"
@@ -13,8 +14,8 @@ function getSupportedFormatsString(formats){
 
 export default class DataUrlImagePicker extends React.Component {
     static propTypes = {
-        onChange: React.PropTypes.func.isRequired,
-        shouldOpenFilePicker: React.PropTypes.func
+        onChange: PropTypes.func.isRequired,
+        shouldOpenFilePicker: PropTypes.func
     }
     constructor(props){
         super(props);

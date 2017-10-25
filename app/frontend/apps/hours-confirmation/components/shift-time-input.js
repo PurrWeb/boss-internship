@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import Select from "react-select"
 import RotaDate from "~/lib/rota-date.js"
@@ -13,13 +14,13 @@ var SHIFT_TIME_TYPES = {
 
 export default class ShiftTimeInput extends Component {
     static propTypes = {
-        rotaDate: React.PropTypes.object.isRequired,
-        onChange: React.PropTypes.func.isRequired,
+        rotaDate: PropTypes.object.isRequired,
+        onChange: PropTypes.func.isRequired,
         // either one of these two:
-        startsAt: React.PropTypes.object,
-        endsAt: React.PropTypes.object,
-        readonly: React.PropTypes.bool,
-        granularityInMinutes: React.PropTypes.number // defaults to 30
+        startsAt: PropTypes.object,
+        endsAt: PropTypes.object,
+        readonly: PropTypes.bool,
+        granularityInMinutes: PropTypes.number // defaults to 30
     }
     getShiftTimeType(){
         if (this.props.startsAt !== undefined){

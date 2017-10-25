@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import _ from "underscore"
 import RotaOverviewChart from "~/components/rota-overview-chart"
@@ -8,12 +9,12 @@ const GRANULARITY = 30;
 
 export default class VenueRotaOverviewChart extends Component {
     static propTypes = {
-        staff: React.PropTypes.array.isRequired,
-        shifts: React.PropTypes.array.isRequired,
-        dateOfRota: React.PropTypes.instanceOf(Date).isRequired,
-        staffTypes: React.PropTypes.object.isRequired,
-        onHoverShiftsChange: React.PropTypes.func.isRequired,
-        onSelectionShiftsChange: React.PropTypes.func.isRequired
+        staff: PropTypes.array.isRequired,
+        shifts: PropTypes.array.isRequired,
+        dateOfRota: PropTypes.instanceOf(Date).isRequired,
+        staffTypes: PropTypes.object.isRequired,
+        onHoverShiftsChange: PropTypes.func.isRequired,
+        onSelectionShiftsChange: PropTypes.func.isRequired
     }
     render() {
         return <RotaOverviewChart

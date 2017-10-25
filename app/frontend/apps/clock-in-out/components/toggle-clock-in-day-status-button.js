@@ -1,14 +1,15 @@
+import PropTypes from 'prop-types';
 import React, {Component} from "react"
 
 export default class ToggleClockInDayStatusButton extends Component {
     static propTypes = {
-        statusLabels: React.PropTypes.object.isRequired,
+        statusLabels: PropTypes.object.isRequired,
         // If `getStatusAfterClicking` returns null the button is not shown
-        getStatusAfterClicking: React.PropTypes.func.isRequired,
-        staffObject: React.PropTypes.object.isRequired,
-        clockInDay: React.PropTypes.object.isRequired,
-        updateClockInStatusWithConfirmation: React.PropTypes.func.isRequired,
-        icon: React.PropTypes.string.isRequired
+        getStatusAfterClicking: PropTypes.func.isRequired,
+        staffObject: PropTypes.object.isRequired,
+        clockInDay: PropTypes.object.isRequired,
+        updateClockInStatusWithConfirmation: PropTypes.func.isRequired,
+        icon: PropTypes.string.isRequired
     }
     render(){
         var clockInStatus = this.props.clockInDay.status

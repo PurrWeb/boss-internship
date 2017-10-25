@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import Select from "react-select"
 import _ from "underscore"
@@ -5,11 +6,11 @@ import getArrayOfIdsFromReactSelectValue from "~/lib/get-array-of-ids-from-react
 
 export default class VenueDropdown extends Component {
     static propTypes = {
-        selectedVenues: React.PropTypes.arrayOf(React.PropTypes.string),
-        venues: React.PropTypes.object.isRequired,
-        onChange: React.PropTypes.func.isRequired,
-        multi: React.PropTypes.bool,
-        clearable: React.PropTypes.bool // defaults to true
+        selectedVenues: PropTypes.arrayOf(PropTypes.string),
+        venues: PropTypes.object.isRequired,
+        onChange: PropTypes.func.isRequired,
+        multi: PropTypes.bool,
+        clearable: PropTypes.bool // defaults to true
     };
     render(){
         var venueOptions = _.values(this.props.venues).map(function(venue){

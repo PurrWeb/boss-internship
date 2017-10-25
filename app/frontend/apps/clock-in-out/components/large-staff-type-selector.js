@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import _ from "underscore"
 import UserActionConfirmationMessages from "~/components/user-action-confirmation-messages"
@@ -34,8 +35,8 @@ class StaffTypeButton extends React.Component {
 
 export default class LargeStaffTypeSelector extends React.Component {
     static propTypes = {
-        staffTypes: React.PropTypes.object.isRequired,
-        onSelect: React.PropTypes.func.isRequired
+        staffTypes: PropTypes.object.isRequired,
+        onSelect: PropTypes.func.isRequired
     };
     render(){
         const buttonsInRow = 3;

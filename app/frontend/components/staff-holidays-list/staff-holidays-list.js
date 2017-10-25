@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import StaffHolidaysListItem from "./staff-holidays-list-item"
 
 export default class StaffHolidaysList extends React.Component {
     static propTypes = {
-        holidays: React.PropTypes.array.isRequired
+        holidays: PropTypes.array.isRequired
     }
     render(){
         return <div>

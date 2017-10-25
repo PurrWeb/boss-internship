@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import StaffFilter from "~/components/staff-finder/staff-filter"
 import FilterableStaffList from "~/components/staff-finder/filterable-staff-list"
@@ -6,22 +7,22 @@ import _ from "underscore"
 
 export default class StaffFinder extends Component {
     static propTypes = {
-        staffItemComponent: React.PropTypes.func.isRequired,
-        staff: React.PropTypes.object.isRequired,
-        staffTypes: React.PropTypes.object,
-        filterOverrides: React.PropTypes.object,
-        resetVenue: React.PropTypes.func,
-        defaultFilterSettings: React.PropTypes.object,
-        isNewDesign: React.PropTypes.bool,
-        justEnteredManagerOrSupervisor: React.PropTypes.bool
+        staffItemComponent: PropTypes.func.isRequired,
+        staff: PropTypes.object.isRequired,
+        staffTypes: PropTypes.object,
+        filterOverrides: PropTypes.object,
+        resetVenue: PropTypes.func,
+        defaultFilterSettings: PropTypes.object,
+        isNewDesign: PropTypes.bool,
+        justEnteredManagerOrSupervisor: PropTypes.bool
     };
     static contextTypes = {
-        newShiftSettings: React.PropTypes.shape({
-            venueServerId: React.PropTypes.any.isRequired,
-            venueClientId: React.PropTypes.any.isRequired,
-            startsAt: React.PropTypes.instanceOf(Date).isRequired,
-            endsAt: React.PropTypes.instanceOf(Date).isRequired,
-            shiftType: React.PropTypes.string.isRequired
+        newShiftSettings: PropTypes.shape({
+            venueServerId: PropTypes.any.isRequired,
+            venueClientId: PropTypes.any.isRequired,
+            startsAt: PropTypes.instanceOf(Date).isRequired,
+            endsAt: PropTypes.instanceOf(Date).isRequired,
+            shiftType: PropTypes.string.isRequired
         })
     };
     constructor(props) {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import utils from "../../lib/utils"
@@ -5,17 +6,17 @@ import _ from 'underscore'
 
 class FilterableStaffList extends Component {
     static propTypes = {
-        staff: React.PropTypes.object.isRequired,
-        staffItemComponent: React.PropTypes.func.isRequired,
-        toShowNotes: React.PropTypes.bool,
-        isNewDesign: React.PropTypes.bool,
-        filterSettings: React.PropTypes.object.isRequired,
-        newShiftSettings: React.PropTypes.shape({
-            venueServerId: React.PropTypes.any.isRequired,
-            venueClientId: React.PropTypes.any.isRequired,
-            startsAt: React.PropTypes.instanceOf(Date).isRequired,
-            endsAt: React.PropTypes.instanceOf(Date).isRequired,
-            shiftType: React.PropTypes.string.isRequired
+        staff: PropTypes.object.isRequired,
+        staffItemComponent: PropTypes.func.isRequired,
+        toShowNotes: PropTypes.bool,
+        isNewDesign: PropTypes.bool,
+        filterSettings: PropTypes.object.isRequired,
+        newShiftSettings: PropTypes.shape({
+            venueServerId: PropTypes.any.isRequired,
+            venueClientId: PropTypes.any.isRequired,
+            startsAt: PropTypes.instanceOf(Date).isRequired,
+            endsAt: PropTypes.instanceOf(Date).isRequired,
+            shiftType: PropTypes.string.isRequired
         })
     };
     getStaffListItems() {

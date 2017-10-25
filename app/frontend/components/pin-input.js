@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import _ from "underscore"
 
@@ -47,8 +48,8 @@ class NumPad extends React.Component {
 
 export default class PinInput extends React.Component {
     static propTypes = {
-        pin: React.PropTypes.string.isRequired,
-        onChange: React.PropTypes.func.isRequired
+        pin: PropTypes.string.isRequired,
+        onChange: PropTypes.func.isRequired
     }
     constructor(props){
         super(props)

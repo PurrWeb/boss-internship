@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import AddShiftButton from "./add-shift-button"
 import StaffShiftList from "~/components/staff-shift-list"
@@ -18,12 +19,12 @@ import ShiftList from "~/models/shift-list"
 
 class RotaStaffListItem extends Component {
     static contextTypes = {
-        newShiftSettings: React.PropTypes.shape({
-            venueServerId: React.PropTypes.any.isRequired,
-            venueClientId: React.PropTypes.any.isRequired,
-            startsAt: React.PropTypes.instanceOf(Date).isRequired,
-            endsAt: React.PropTypes.instanceOf(Date).isRequired,
-            shiftType: React.PropTypes.string.isRequired
+        newShiftSettings: PropTypes.shape({
+            venueServerId: PropTypes.any.isRequired,
+            venueClientId: PropTypes.any.isRequired,
+            startsAt: PropTypes.instanceOf(Date).isRequired,
+            endsAt: PropTypes.instanceOf(Date).isRequired,
+            shiftType: PropTypes.string.isRequired
         }).isRequired
     }
     componentWillMount(){

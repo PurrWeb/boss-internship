@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import { connect } from "react-redux"
 import StaffListItem from "./staff-list-item"
@@ -6,7 +7,7 @@ import { selectStaffMemberPaidHolidays, selectStaffMemberUnpaidHolidays } from "
 
 class StaffListItemContainer extends React.Component {
     static propTypes = {
-        staff: React.PropTypes.object.isRequired
+        staff: PropTypes.object.isRequired
     }
     render(){
         var props = this.props;

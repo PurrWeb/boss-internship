@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import clockInStatusOptionsByValue from "~/lib/clock-in-status-options-by-value"
 
 export default class ClockInStatusBadge extends Component {
     static propTypes = {
-        clockInStatusValue: React.PropTypes.string.isRequired,
-        onClick: React.PropTypes.func
+        clockInStatusValue: PropTypes.string.isRequired,
+        onClick: PropTypes.func
     };
     render(){
         const option = clockInStatusOptionsByValue[this.props.clockInStatusValue]

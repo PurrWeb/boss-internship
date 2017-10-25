@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import WeekPicker from "~/components/week-picker"
 import VenueDropdown from "~/components/venue-dropdown"
@@ -5,11 +6,11 @@ import _ from "underscore"
 
 export default class WeekAndVenueSelector extends React.Component {
     static propTypes = {
-        venueClientId: React.PropTypes.string,
-        weekStartDate: React.PropTypes.instanceOf(Date).isRequired,
-        onChange: React.PropTypes.func.isRequired,
-        venues: React.PropTypes.object.isRequired,
-        canSelectAllVenues: React.PropTypes.bool
+        venueClientId: PropTypes.string,
+        weekStartDate: PropTypes.instanceOf(Date).isRequired,
+        onChange: PropTypes.func.isRequired,
+        venues: PropTypes.object.isRequired,
+        canSelectAllVenues: PropTypes.bool
     }
     render(){
         var selectedVenues = [];

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import { connect } from "react-redux"
 import _ from "underscore"
@@ -8,9 +9,9 @@ const ROTA_PUBLISHED_STATUS = "published"
 
 class PublishRotaWeekButtonContainer extends React.Component {
     static propTypes = {
-        rotas: React.PropTypes.array.isRequired,
-        firstDate: React.PropTypes.instanceOf(Date).isRequired,
-        lastDate: React.PropTypes.instanceOf(Date).isRequired,
+        rotas: PropTypes.array.isRequired,
+        firstDate: PropTypes.instanceOf(Date).isRequired,
+        lastDate: PropTypes.instanceOf(Date).isRequired,
     }
     render(){
         var hasBeenPublished = this.props.rotas[0].status === ROTA_PUBLISHED_STATUS;

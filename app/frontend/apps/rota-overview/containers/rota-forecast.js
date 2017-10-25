@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import _ from "underscore"
 import utils from "~/lib/utils"
@@ -8,8 +9,8 @@ import { selectUpdateRotaForecastInProgress, selectForecastByRotaId } from "~/re
 
 class RotaForecast extends React.Component {
     static propTypes = {
-        rotaClientId: React.PropTypes.any.isRequired,
-        canEditForecastedTake: React.PropTypes.bool
+        rotaClientId: PropTypes.any.isRequired,
+        canEditForecastedTake: PropTypes.bool
     }
     constructor(props){
         super(props);

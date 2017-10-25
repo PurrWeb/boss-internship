@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import { connect } from "react-redux"
 import AddShiftViewUi from "../components/add-shift-view"
@@ -6,7 +7,7 @@ import RotaDate from "~/lib/rota-date"
 
 class AddShiftView extends React.Component {
     static childContextTypes = {
-        newShiftSettings: React.PropTypes.object
+        newShiftSettings: PropTypes.object
     }
     getChildContext(){
         var venue = this.props.venues[this.state.venueClientId];

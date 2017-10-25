@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import EditableShiftList from "./editable-shift-list"
 import _ from "underscore"
@@ -7,13 +8,13 @@ import { appRoutes } from "~/lib/routes"
 
 export default class StaffDetailsAndShifts extends Component {
     static propTypes = {
-        staffTypes: React.PropTypes.object.isRequired,
-        staffMemberClientId: React.PropTypes.string.isRequired,
-        staff: React.PropTypes.object.isRequired,
-        rotaShifts: React.PropTypes.array.isRequired,
-        showShiftVenue: React.PropTypes.bool,
-        rotasById: React.PropTypes.object.isRequired,
-        venuesById: React.PropTypes.object
+        staffTypes: PropTypes.object.isRequired,
+        staffMemberClientId: PropTypes.string.isRequired,
+        staff: PropTypes.object.isRequired,
+        rotaShifts: PropTypes.array.isRequired,
+        showShiftVenue: PropTypes.bool,
+        rotasById: PropTypes.object.isRequired,
+        venuesById: PropTypes.object
     }
     render(){
         var staff = this.getStaff();

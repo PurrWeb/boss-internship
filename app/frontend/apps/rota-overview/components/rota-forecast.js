@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import utils from "~/lib/utils"
 import Spinner from "~/components/spinner"
@@ -5,12 +6,12 @@ import ComponentErrors from "~/components/component-errors"
 
 export default class RotaForecast extends React.Component {
     static propTypes = {
-        rotaForecast: React.PropTypes.object.isRequired,
-        forecastedTake: React.PropTypes.string.isRequired,
-        canEditForecastedTake: React.PropTypes.bool,
-        onForecastedTakeChanged: React.PropTypes.func,
-        onUpdateForecastClick: React.PropTypes.func,
-        isUpdatingForecast: React.PropTypes.bool
+        rotaForecast: PropTypes.object.isRequired,
+        forecastedTake: PropTypes.string.isRequired,
+        canEditForecastedTake: PropTypes.bool,
+        onForecastedTakeChanged: PropTypes.func,
+        onUpdateForecastClick: PropTypes.func,
+        isUpdatingForecast: PropTypes.bool
     }
 
     constructor(props) {

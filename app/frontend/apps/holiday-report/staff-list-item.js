@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import _ from "underscore"
 import StaffTypeBadge from "~/components/staff-type-badge"
@@ -6,13 +7,13 @@ import StaffMemberHolidaysLink from "~/components/staff-member-holidays-link"
 
 export default class StaffListItem extends React.Component {
     static propTypes = {
-        staff: React.PropTypes.object.isRequired,
-        venues: React.PropTypes.array.isRequired,
-        staffType: React.PropTypes.object.isRequired,
-        paidHolidays: React.PropTypes.array.isRequired,
-        unpaidHolidays: React.PropTypes.array.isRequired,
-        startDate: React.PropTypes.string.isRequired,
-        endDate: React.PropTypes.string.isRequired
+        staff: PropTypes.object.isRequired,
+        venues: PropTypes.array.isRequired,
+        staffType: PropTypes.object.isRequired,
+        paidHolidays: PropTypes.array.isRequired,
+        unpaidHolidays: PropTypes.array.isRequired,
+        startDate: PropTypes.string.isRequired,
+        endDate: PropTypes.string.isRequired
     }
     render(){
         var staff = this.props.staff;

@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import _ from "underscore"
 
 export default class AddShiftButton extends Component {
     static PropTypes = {
-        addShift: React.PropTypes.func.isRequired,
-        canAddShift: React.PropTypes.bool.isRequired
+        addShift: PropTypes.func.isRequired,
+        canAddShift: PropTypes.bool.isRequired
     }
     render() {
         var className = "boss2-button boss2-button_type_small boss2-button_role_add ";

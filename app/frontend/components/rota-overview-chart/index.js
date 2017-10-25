@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import _ from "underscore"
 import RotaDate from "~/lib/rota-date"
@@ -11,18 +12,18 @@ const MINUTES_PER_HOUR = 60;
 
 export default class RotaOverviewChart extends Component {
     static propTypes = {
-        shifts: React.PropTypes.array.isRequired,
-        groups: React.PropTypes.arrayOf(React.PropTypes.shape({
-            clientId: React.PropTypes.any.isRequired,
-            color: React.PropTypes.string.isRequired,
-            name: React.PropTypes.string.isRequired
+        shifts: PropTypes.array.isRequired,
+        groups: PropTypes.arrayOf(PropTypes.shape({
+            clientId: PropTypes.any.isRequired,
+            color: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired
         })),
-        staff: React.PropTypes.array.isRequired,
-        dateOfRota: React.PropTypes.instanceOf(Date),
-        onHoverShiftsChange: React.PropTypes.func.isRequired,
-        onSelectionShiftsChange: React.PropTypes.func.isRequired,
-        getBreakdown: React.PropTypes.func.isRequired,
-        granularity: React.PropTypes.number.isRequired
+        staff: PropTypes.array.isRequired,
+        dateOfRota: PropTypes.instanceOf(Date),
+        onHoverShiftsChange: PropTypes.func.isRequired,
+        onSelectionShiftsChange: PropTypes.func.isRequired,
+        getBreakdown: PropTypes.func.isRequired,
+        granularity: PropTypes.number.isRequired
     }
     shouldComponentUpdate(nextProps, nextState){
         return !utils.deepEqualTreatingFunctionsAsStrings(

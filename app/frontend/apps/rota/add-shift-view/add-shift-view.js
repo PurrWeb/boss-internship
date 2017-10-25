@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import ShiftTimeSelector from "~/components/shift-time-selector"
 import RotaStaffFinder from "../staff-finder/staff-finder"
@@ -5,13 +6,13 @@ import ShiftTypeSelector from "~/components/shift-type-selector"
 
 export default class AddShiftView extends React.Component {
     static propTypes = {
-        shiftTimes: React.PropTypes.object.isRequired,
-        onShiftTimesChange: React.PropTypes.func.isRequired,
-        staff: React.PropTypes.object.isRequired,
-        staffTypes: React.PropTypes.object.isRequired,
-        rotaDate: React.PropTypes.object.isRequired,
-        shiftType: React.PropTypes.string.isRequired,
-        onShiftTypeChange: React.PropTypes.func.isRequired
+        shiftTimes: PropTypes.object.isRequired,
+        onShiftTimesChange: PropTypes.func.isRequired,
+        staff: PropTypes.object.isRequired,
+        staffTypes: PropTypes.object.isRequired,
+        rotaDate: PropTypes.object.isRequired,
+        shiftType: PropTypes.string.isRequired,
+        onShiftTypeChange: PropTypes.func.isRequired
     }
     render(){
         return (

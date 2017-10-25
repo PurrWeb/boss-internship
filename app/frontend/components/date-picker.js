@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import ReactDOM from "react-dom"
 
@@ -6,8 +7,8 @@ require("jquery-ui/datepicker");
 
 export default class DatePicker extends React.Component {
     static propTypes = {
-        date: React.PropTypes.instanceOf(Date),
-        onChange: React.PropTypes.func.isRequired
+        date: PropTypes.instanceOf(Date),
+        onChange: PropTypes.func.isRequired
     }
     render(){
         // The page automatically interprets a date-picker class

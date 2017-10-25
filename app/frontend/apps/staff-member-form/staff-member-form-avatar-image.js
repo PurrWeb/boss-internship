@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import StaffImageInput from "~/components/staff-image-input"
 import $ from "jquery"
@@ -6,8 +7,8 @@ import { ModalContainer, ModalDialog} from "react-modal-dialog"
 
 export default class StaffMemberFormAvatarImage extends React.Component {
     static propTypes = {
-        dataUrlInputSelector: React.PropTypes.string.isRequired,
-        selectedImageSelector: React.PropTypes.string.isRequired
+        dataUrlInputSelector: PropTypes.string.isRequired,
+        selectedImageSelector: PropTypes.string.isRequired
     }
     constructor(props){
         super(props);

@@ -1,11 +1,12 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import _ from "underscore"
 import moment from "moment"
 
 export default class ShiftList extends React.Component {
     static propTypes = {
-        shifts: React.PropTypes.array,
-        staff: React.PropTypes.object
+        shifts: PropTypes.array,
+        staff: PropTypes.object
     }
     render (){
         var shiftElements = this.props.shifts.map((shift) => {

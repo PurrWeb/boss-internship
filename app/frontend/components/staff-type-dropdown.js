@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import _ from "underscore"
 import Select from "react-select"
@@ -7,8 +8,8 @@ import cx from 'classnames';
 
 export default class StaffTypeDropdown extends Component {
     static propTypes = {
-        staffTypes: React.PropTypes.object.isRequired,
-        isNewDesign: React.PropTypes.bool
+        staffTypes: PropTypes.object.isRequired,
+        isNewDesign: PropTypes.bool
     };
     render(){
         var staffTypeOptions = _(this.props.staffTypes).mapValues(function(staffType){

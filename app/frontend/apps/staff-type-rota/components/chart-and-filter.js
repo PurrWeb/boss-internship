@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import RotaChart from "~/components/rota-chart"
 import _ from "underscore"
@@ -10,17 +11,17 @@ import getVenueFromShift from "~/lib/get-venue-from-shift"
 
 export default class ChartAndFilterUi extends React.Component {
     static propTypes = {
-        staffMembers: React.PropTypes.object.isRequired,
-        rotaShifts: React.PropTypes.array.isRequired,
-        staffTypes: React.PropTypes.object.isRequired,
-        updateStaffToPreview: React.PropTypes.func.isRequired,
-        updateStaffToShow: React.PropTypes.func.isRequired,
-        onVenueFilterChange: React.PropTypes.func.isRequired,
-        venues: React.PropTypes.object.isRequired,
-        selectedVenueIds: React.PropTypes.array.isRequired,
-        staffToPreview: React.PropTypes.string,
-        staffToShow: React.PropTypes.string,
-        rotas: React.PropTypes.object
+        staffMembers: PropTypes.object.isRequired,
+        rotaShifts: PropTypes.array.isRequired,
+        staffTypes: PropTypes.object.isRequired,
+        updateStaffToPreview: PropTypes.func.isRequired,
+        updateStaffToShow: PropTypes.func.isRequired,
+        onVenueFilterChange: PropTypes.func.isRequired,
+        venues: PropTypes.object.isRequired,
+        selectedVenueIds: PropTypes.array.isRequired,
+        staffToPreview: PropTypes.string,
+        staffToShow: PropTypes.string,
+        rotas: PropTypes.object
     }
     render(){
         var staffDetails = this.getStaffDetailsComponent(this.props.staffToShow);

@@ -1,12 +1,13 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import Cropper from "cropperjs"
 import _ from "underscore"
 
 export default class ImageCropper extends React.Component {
     static propTypes = {
-        sourceImage: React.PropTypes.string.isRequired,
-        onChange: React.PropTypes.func.isRequired,
-        rotateFunctionReceiver: React.PropTypes.func.isRequired
+        sourceImage: PropTypes.string.isRequired,
+        onChange: PropTypes.func.isRequired,
+        rotateFunctionReceiver: PropTypes.func.isRequired
     }
     shouldComponentUpdate(nextProps){
         return this.props.sourceImage !== nextProps.sourceImage;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 
 /**
@@ -8,10 +9,10 @@ import React from "react"
 */
 export default class ChartSelectionView extends React.Component {
     static propTypes = {
-        previewComponent: React.PropTypes.object,
-        selectionComponent: React.PropTypes.object,
-        selectionIsClearable: React.PropTypes.bool,
-        clearSelection: React.PropTypes.func
+        previewComponent: PropTypes.object,
+        selectionComponent: PropTypes.object,
+        selectionIsClearable: PropTypes.bool,
+        clearSelection: PropTypes.func
     }
     render(){
         return <div style={{position: "relative"}}>

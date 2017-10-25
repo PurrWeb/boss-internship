@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import React from "react"
 
 export default class ShiftTypeSelector extends React.Component {
     static propTypes = {
-        shiftType: React.PropTypes.string.isRequired,
-        onChange: React.PropTypes.func.isRequired
+        shiftType: PropTypes.string.isRequired,
+        onChange: PropTypes.func.isRequired
     }
     render(){
         var isStandby = this.props.shiftType === "standby";
