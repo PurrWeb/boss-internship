@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import _ from "underscore"
 import utils from "~/lib/utils"
@@ -10,7 +11,7 @@ import ComponentErrors from "~/components/component-errors"
 
 class WeeklyRotaForecast extends React.Component {
     static propTypes = {
-        startOfWeek: React.PropTypes.instanceOf(Date).isRequired
+        startOfWeek: PropTypes.instanceOf(Date).isRequired
     }
     constructor(props){
         super(props);

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import DatePicker from "~/components/date-picker"
 import VenueDropdown from "~/components/venue-dropdown"
@@ -5,10 +6,10 @@ import _ from "underscore"
 
 export default class DateAndVenueSelector extends React.Component {
     static propTypes = {
-        venueClientId: React.PropTypes.string,
-        date: React.PropTypes.instanceOf(Date).isRequired,
-        onChange: React.PropTypes.func.isRequired,
-        venues: React.PropTypes.object.isRequired    }
+        venueClientId: PropTypes.string,
+        date: PropTypes.instanceOf(Date).isRequired,
+        onChange: PropTypes.func.isRequired,
+        venues: PropTypes.object.isRequired    }
     render(){
         var selectedVenues = [this.props.venueClientId];
         return <div className="row">

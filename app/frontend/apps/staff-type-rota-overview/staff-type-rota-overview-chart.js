@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import _ from "underscore"
 import RotaOverviewChart from "~/components/rota-overview-chart"
@@ -10,13 +11,13 @@ const GRANULARITY = 30;
 
 export default class StaffTypeRotaOverviewChart extends Component {
     static propTypes = {
-        staff: React.PropTypes.object.isRequired,
-        shifts: React.PropTypes.object.isRequired,
-        dateOfRota: React.PropTypes.instanceOf(Date).isRequired,
-        staffTypes: React.PropTypes.object.isRequired,
-        onHoverShiftsChange: React.PropTypes.func.isRequired,
-        onSelectionShiftsChange: React.PropTypes.func.isRequired,
-        rotas: React.PropTypes.object.isRequired
+        staff: PropTypes.object.isRequired,
+        shifts: PropTypes.object.isRequired,
+        dateOfRota: PropTypes.instanceOf(Date).isRequired,
+        staffTypes: PropTypes.object.isRequired,
+        onHoverShiftsChange: PropTypes.func.isRequired,
+        onSelectionShiftsChange: PropTypes.func.isRequired,
+        rotas: PropTypes.object.isRequired
     }
     render() {
         var venuesArray = _.values(this.props.venues);

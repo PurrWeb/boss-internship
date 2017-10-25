@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import utils from "~/lib/utils"
 import ErrorMessage from "./error-message"
@@ -5,7 +6,7 @@ import {connect} from "react-redux"
 
 class ComponentErrors extends React.Component {
     static propTypes = {
-        errors: React.PropTypes.object
+        errors: PropTypes.object
     }
     render(){
         if (!this.props.errors) {

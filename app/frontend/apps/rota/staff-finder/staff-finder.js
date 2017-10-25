@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import _ from "underscore"
 import StaffListItem from "~/components/rota-staff-list-item"
@@ -5,8 +6,8 @@ import StaffFinder from "~/components/staff-finder"
 
 export default class RotaStaffFinder extends Component {
     static propTypes = {
-        staff: React.PropTypes.object.isRequired,
-        staffTypes: React.PropTypes.object.isRequired
+        staff: PropTypes.object.isRequired,
+        staffTypes: PropTypes.object.isRequired
     }
     render() {
         return <div>

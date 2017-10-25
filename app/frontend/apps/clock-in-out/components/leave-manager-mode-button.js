@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import React from "react"
 
 export default class LeaveManagerModeButton extends React.Component {
     static propTypes = {
-        leaveManagerModeInProgress: React.PropTypes.bool.isRequired
+        leaveManagerModeInProgress: PropTypes.bool.isRequired
     }
     render(){
         if (this.props.leaveManagerModeInProgress) {

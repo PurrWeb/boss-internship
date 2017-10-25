@@ -1,16 +1,17 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import moment from "moment"
 import LeaveManagerModeButton from "./leave-manager-mode-button"
 
 export default class Header extends React.Component {
     static propTypes = {
-        returnToStaffTypeSelector: React.PropTypes.func.isRequired,
-        userIsManagerOrSupervisor: React.PropTypes.bool.isRequired,
-        leaveManagerModeInProgress: React.PropTypes.bool.isRequired,
-        leaveManagerMode: React.PropTypes.func.isRequired,
-        reloadPage: React.PropTypes.func.isRequired,
-        venue: React.PropTypes.object.isRequired,
-        rota: React.PropTypes.object.isRequired
+        returnToStaffTypeSelector: PropTypes.func.isRequired,
+        userIsManagerOrSupervisor: PropTypes.bool.isRequired,
+        leaveManagerModeInProgress: PropTypes.bool.isRequired,
+        leaveManagerMode: PropTypes.func.isRequired,
+        reloadPage: PropTypes.func.isRequired,
+        venue: PropTypes.object.isRequired,
+        rota: PropTypes.object.isRequired
     };
     constructor(){
         super();

@@ -1,11 +1,12 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import GenericRotaNavigation from "~/components/rota-navigation"
 import {appRoutes} from "~/lib/routes"
 
 export default class RotaNavigation extends React.Component {
     static PropTypes = {
-        dateOfRota: React.PropTypes.instanceOf(Date).isRequired,
-        venueServerId: React.PropTypes.number.isRequired
+        dateOfRota: PropTypes.instanceOf(Date).isRequired,
+        venueServerId: PropTypes.number.isRequired
     }
     render(){
         return <GenericRotaNavigation

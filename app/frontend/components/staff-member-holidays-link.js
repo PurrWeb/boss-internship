@@ -1,12 +1,13 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import { appRoutes } from "~/lib/routes"
 
 export default class StaffMemberHolidaysLink extends React.Component {
     static propTypes = {
-        staffMemberServerId: React.PropTypes.any.isRequired,
-        className: React.PropTypes.string,
-        startDate: React.PropTypes.string,
-        endDate: React.PropTypes.string
+        staffMemberServerId: PropTypes.any.isRequired,
+        className: PropTypes.string,
+        startDate: PropTypes.string,
+        endDate: PropTypes.string
     };
     render(){
         let href = appRoutes.staffMemberHolidays(

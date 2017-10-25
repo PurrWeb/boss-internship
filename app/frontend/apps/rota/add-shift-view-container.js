@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import {connect } from "react-redux"
 import _ from "underscore"
@@ -8,7 +9,7 @@ import RotaDate from "~/lib/rota-date"
 
 class AddShiftViewContainer extends Component {
     static childContextTypes = {
-        newShiftSettings: React.PropTypes.object
+        newShiftSettings: PropTypes.object
     }
     getChildContext(){
         var venue = this.props.rota.venue;

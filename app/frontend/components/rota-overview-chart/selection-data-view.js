@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import moment from "moment"
 import ShiftList from "./shift-list"
@@ -7,9 +8,9 @@ Shows shifts selected in overview for a specific group.
 */
 export default class SelectionDateView extends React.Component {
     static propTypes = {
-        data: React.PropTypes.object.isRequired,
-        staff: React.PropTypes.object.isRequired,
-        groupsById: React.PropTypes.object.isRequired
+        data: PropTypes.object.isRequired,
+        staff: PropTypes.object.isRequired,
+        groupsById: PropTypes.object.isRequired
     }
     render(){
         var { data } = this.props;

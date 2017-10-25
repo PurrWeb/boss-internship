@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import { connect } from "react-redux"
 import _ from "underscore"
@@ -6,7 +7,7 @@ import { selectStaffMemberHolidays } from "~/redux/selectors"
 
 class StaffHolidaysListContainer extends React.Component {
     static propTypes = {
-        staffMemberClientId: React.PropTypes.string.isRequired
+        staffMemberClientId: PropTypes.string.isRequired
     }
     render(){
         return <StaffHolidaysList holidays={this.props.holidays} />

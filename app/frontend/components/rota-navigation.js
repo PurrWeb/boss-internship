@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import moment from "moment"
 import utils from "~/lib/utils"
@@ -5,10 +6,10 @@ import cx from 'classnames'
 
 export default class RotaNavigation extends React.Component {
     static PropTypes = {
-        dateOfRota: React.PropTypes.instanceOf(Date).isRequired,
-        getRotaLink: React.PropTypes.func.isRequired,
-        getRotaOverviewLink: React.PropTypes.func.isRequired,
-        className: React.PropTypes.string,
+        dateOfRota: PropTypes.instanceOf(Date).isRequired,
+        getRotaLink: PropTypes.func.isRequired,
+        getRotaOverviewLink: PropTypes.func.isRequired,
+        className: PropTypes.string,
     }
     render(){
         var dates = this.getDates();

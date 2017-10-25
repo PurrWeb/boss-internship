@@ -2,7 +2,9 @@
     Inspired by react-portal-tooltip
  */
 
-import React, {PropTypes} from 'react'
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import ReactDOM, {unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer} from 'react-dom'
 
 class Card extends React.Component {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import DataUrlImagePicker from "./data-url-image-picker"
 import ImageCropper from "./image-cropper"
@@ -12,13 +13,13 @@ const MAXIMUM_IMAGE_SIZE_BEFORE_CROPPING = 700;
 export default class StaffImageInput extends React.Component {
     static propTypes = {
         // called when user clicks OK button
-        onImageConfirmed: React.PropTypes.func.isRequired,
+        onImageConfirmed: PropTypes.func.isRequired,
         // called after user selected a file from the file picker
-        onPickedImageChanged: React.PropTypes.func.isRequired,
+        onPickedImageChanged: PropTypes.func.isRequired,
         // Checked every time the file input reference is obtained,
         // if the function returns true a click event is simulated
         // on the file input.
-        shouldOpenFilePicker: React.PropTypes.func
+        shouldOpenFilePicker: PropTypes.func
     }
     constructor(props){
         super(props);

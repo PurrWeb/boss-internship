@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import StaffTypeRotaOverviewItem from "./staff-type-rota-overview-item"
 import utils from "~/lib/utils"
@@ -6,8 +7,8 @@ import { appRoutes } from "~/lib/routes"
 
 export default class StaffTypeRotaOverviewPage extends Component {
     static propTypes = {
-        rotaDetailsObjects: React.PropTypes.array.isRequired,
-        staffTypeSlug: React.PropTypes.string.isRequired
+        rotaDetailsObjects: PropTypes.array.isRequired,
+        staffTypeSlug: PropTypes.string.isRequired
     }
     render() {
         var staffTypeSlug = this.props.staffTypeSlug;

@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import moment from "moment"
 
 export default class StaffHolidaysListItem extends React.Component {
     static propTypes = {
-        holiday: React.PropTypes.object.isRequired
+        holiday: PropTypes.object.isRequired
     }
     render(){
         var { holiday } = this.props;

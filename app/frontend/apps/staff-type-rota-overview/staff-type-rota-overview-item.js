@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import moment from "moment"
 import utils from "~/lib/utils"
@@ -8,13 +9,13 @@ import ChartSelectionView from "~/components/chart-selection-view"
 
 export default class StaffTypeRotaOverviewItem extends Component {
     static propTypes = {
-        dateOfRota: React.PropTypes.instanceOf(Date).isRequired,
-        rotaShifts: React.PropTypes.array.isRequired,
-        staff: React.PropTypes.object.isRequired,
-        staffTypes: React.PropTypes.object.isRequired,
-        staffTypeSlug: React.PropTypes.string.isRequired,
-        venues: React.PropTypes.object.isRequired,
-        rotas: React.PropTypes.object.isRequired
+        dateOfRota: PropTypes.instanceOf(Date).isRequired,
+        rotaShifts: PropTypes.array.isRequired,
+        staff: PropTypes.object.isRequired,
+        staffTypes: PropTypes.object.isRequired,
+        staffTypeSlug: PropTypes.string.isRequired,
+        venues: PropTypes.object.isRequired,
+        rotas: PropTypes.object.isRequired
     }
     constructor(props){
         super(props);

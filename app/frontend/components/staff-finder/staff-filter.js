@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import StaffTypeDropdown from "../staff-type-dropdown"
 import VenueDropdown from "~/components/venue-dropdown"
@@ -5,16 +6,16 @@ import _ from "underscore"
 
 export default class StaffFilter extends Component {
     static propTypes = {
-        onChange: React.PropTypes.func.isRequired,
-        filters: React.PropTypes.shape({
-            search: React.PropTypes.bool,
-            staffType: React.PropTypes.bool,
-            venue: React.PropTypes.bool
+        onChange: PropTypes.func.isRequired,
+        filters: PropTypes.shape({
+            search: PropTypes.bool,
+            staffType: PropTypes.bool,
+            venue: PropTypes.bool
         }).isRequired,
-        filterSettings: React.PropTypes.object.isRequired,
-        staffTypes: React.PropTypes.object,
-        isNewDesign: React.PropTypes.bool,
-        venues: React.PropTypes.object
+        filterSettings: PropTypes.object.isRequired,
+        staffTypes: PropTypes.object,
+        isNewDesign: PropTypes.bool,
+        venues: PropTypes.object
     };
 
     static getDefaultSettings() {

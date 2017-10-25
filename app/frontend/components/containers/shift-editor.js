@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import ShiftTimeSelector from "~/components/shift-time-selector"
 import Spinner from "~/components/spinner"
@@ -90,7 +91,7 @@ class ShiftEditorUi extends Component {
 
 class ShiftEditor extends Component {
     static propTypes = {
-        shift: React.PropTypes.object.isRequired
+        shift: PropTypes.object.isRequired
     }
     componentWillMount(){
         this.componentId = _.uniqueId();

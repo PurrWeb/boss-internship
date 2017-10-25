@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import TestUtils from "react-addons-test-utils"
 import ReactDOM from "react-dom"
@@ -7,7 +8,7 @@ export class ContextProvider extends Component {
     render(){
         var dynamicChildContextTypes = {};
         for (var key in this.props.context) {
-            dynamicChildContextTypes[key] = React.PropTypes.any;
+            dynamicChildContextTypes[key] = PropTypes.any;
         }
 
         class DynamicContextProvider extends Component{

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import moment from "moment"
 import _ from "underscore"
@@ -33,11 +34,11 @@ class StaffShiftListItem extends Component {
 
 export default class StaffShiftList extends Component {
     static propTypes = {
-        shifts: React.PropTypes.object.isRequired,
-        venues: React.PropTypes.object.isRequired,
-        rotas: React.PropTypes.object.isRequired,
-        showDate: React.PropTypes.bool,
-        showVenue: React.PropTypes.bool
+        shifts: PropTypes.object.isRequired,
+        venues: PropTypes.object.isRequired,
+        rotas: PropTypes.object.isRequired,
+        showDate: PropTypes.bool,
+        showVenue: PropTypes.bool
     }
     render() {
         var shifts = _.values(this.props.shifts);

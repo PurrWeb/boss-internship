@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import RotaOverviewView from "./rota-overview-view"
 import {appRoutes} from "~/lib/routes"
@@ -21,7 +22,7 @@ const ROTA_PUBLISHED_STATUS = "published"
 
 class RotaOverviewPage extends Component {
     static propTypes = {
-      rotaDetailsObject: React.PropTypes.object.isRequired
+      rotaDetailsObject: PropTypes.object.isRequired
     }
     
     constructor(props) {

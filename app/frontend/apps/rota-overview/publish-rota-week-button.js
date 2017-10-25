@@ -1,11 +1,12 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import Spinner from "~/components/spinner"
 
 export default class PublishRotaWeekButton extends React.Component {
     static propTypes = {
-        onClick: React.PropTypes.func.isRequired,
-        hasBeenPublished: React.PropTypes.bool.isRequired,
-        publishingInProgress: React.PropTypes.bool.isRequired
+        onClick: PropTypes.func.isRequired,
+        hasBeenPublished: PropTypes.bool.isRequired,
+        publishingInProgress: PropTypes.bool.isRequired
     }
     render(){
         if (this.props.hasBeenPublished) {

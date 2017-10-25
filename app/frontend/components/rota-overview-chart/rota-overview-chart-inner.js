@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import _ from "underscore"
 import d3 from "d3"
@@ -25,13 +26,13 @@ function convertTranslateToXY(translate){
 
 export default class RotaOverviewChartInner extends Component {
     static propTypes = {
-        chartData: React.PropTypes.array.isRequired,
-        onElementClick: React.PropTypes.func.isRequired,
-        onElementMouseover: React.PropTypes.func.isRequired,
-        onElementMouseout: React.PropTypes.func.isRequired,
-        tooltipInfoGenerator: React.PropTypes.func.isRequired,
-        tooltipTimeGenerator: React.PropTypes.func.isRequired,
-        rotaDate: React.PropTypes.object.isRequired
+        chartData: PropTypes.array.isRequired,
+        onElementClick: PropTypes.func.isRequired,
+        onElementMouseover: PropTypes.func.isRequired,
+        onElementMouseout: PropTypes.func.isRequired,
+        tooltipInfoGenerator: PropTypes.func.isRequired,
+        tooltipTimeGenerator: PropTypes.func.isRequired,
+        rotaDate: PropTypes.object.isRequired
     }
 
     constructor(props) {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import ComponentErrors from "~/components/component-errors"
 import rotaStatusTitles from "~/lib/rota-status-titles"
@@ -6,10 +7,10 @@ import RotaStatusDropdown from "./rota-status-dropdown"
 
 export default class RotaStatusToggleUi extends React.Component {
     static propTypes = {
-        status: React.PropTypes.string.isRequired,
-        onStatusSelected: React.PropTypes.func.isRequired,
-        errorMessages: React.PropTypes.object,
-        statusUpdateInProgress: React.PropTypes.bool
+        status: PropTypes.string.isRequired,
+        onStatusSelected: PropTypes.func.isRequired,
+        errorMessages: PropTypes.object,
+        statusUpdateInProgress: PropTypes.bool
     }
     render(){
         var statusIfPublished = null;

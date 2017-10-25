@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import actionCreators from "~/redux/actions"
 import RotaStatusToggleUi from "./rota-status-toggle-ui"
@@ -8,7 +9,7 @@ import oFetch from "o-fetch"
 
 class RotaStatusToggle extends React.Component {
     static propTypes = {
-        status: React.PropTypes.string.isRequired
+        status: PropTypes.string.isRequired
     }
     render(){
         return <RotaStatusToggleUi

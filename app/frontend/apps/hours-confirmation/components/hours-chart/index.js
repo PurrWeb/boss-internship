@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react"
 import RotaDate from "~/lib/rota-date"
 import _ from "underscore"
@@ -7,11 +8,11 @@ import HoursChartUi from "./hours-chart-content"
 
 export default class HoursChart extends React.Component {
     static propTypes = {
-        clockedClockInPeriods: React.PropTypes.array.isRequired,
-        rotaedShifts: React.PropTypes.array.isRequired,
-        hoursAcceptancePeriods: React.PropTypes.array.isRequired,
-        rotaDate: React.PropTypes.instanceOf(RotaDate).isRequired,
-        clockInEvents: React.PropTypes.array.isRequired
+        clockedClockInPeriods: PropTypes.array.isRequired,
+        rotaedShifts: PropTypes.array.isRequired,
+        hoursAcceptancePeriods: PropTypes.array.isRequired,
+        rotaDate: PropTypes.instanceOf(RotaDate).isRequired,
+        clockInEvents: PropTypes.array.isRequired
     }
     constructor(props){
         super(props)

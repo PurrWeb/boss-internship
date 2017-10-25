@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react"
 
 export default class StaffTypeBadge extends Component {
     static propTypes = {
-        staffTypeObject: React.PropTypes.object.isRequired
+        staffTypeObject: PropTypes.object.isRequired
     };
     render(){
         const staffType = this.props.staffTypeObject;
