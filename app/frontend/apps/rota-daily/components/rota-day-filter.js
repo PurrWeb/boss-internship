@@ -1,10 +1,10 @@
 import React from 'react';
-import SafeMoment from '~/lib/safe-moment';
+import safeMoment from '~/lib/safe-moment';
 
 export default function RotaDayFilter({currentRotaDay, desktop = true}) {
-  const currentDay = SafeMoment.uiDateParse(currentRotaDay).format('dddd, DD MMMM YYYY');
-  const previousDay = SafeMoment.uiDateParse(currentRotaDay).subtract(1, 'day').format('DD-MM-YYYY')
-  const nextDay = SafeMoment.uiDateParse(currentRotaDay).add(1, 'day').format('DD-MM-YYYY');
+  const currentDay = safeMoment.uiDateParse(currentRotaDay).format('dddd, DD MMMM YYYY');
+  const previousDay = safeMoment.uiDateParse(currentRotaDay).subtract(1, 'day').format('DD-MM-YYYY')
+  const nextDay = safeMoment.uiDateParse(currentRotaDay).add(1, 'day').format('DD-MM-YYYY');
   
   const additionalClassName = desktop ? "boss-form__row_desktop" : ""
 

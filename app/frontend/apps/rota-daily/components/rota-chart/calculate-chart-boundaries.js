@@ -1,6 +1,7 @@
 import _ from "underscore"
-import RotaDate from "./rota-date"
+import RotaDate from "~/lib/rota-date-new"
 import utils from "~/lib/utils"
+import safeMoment from '~/lib/safe-moment';
 
 const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
 
@@ -22,15 +23,15 @@ export default function calculateChartBoundaries(rotaShifts){
     if (_.isEmpty(rotaShifts)) {
         startOffset = 0;
         endOffset = 24;
-        rotaDate = new RotaDate({dateOfRota: Date()});
+        rotaDate = new RotaDate({dateOfRota: safeMoment.iso8601Parse(Date())});
     } else {
-        rotaDate = new RotaDate({shiftStartsAt: new Date(rotaShifts[0].starts_at)});
+        rotaDate = new RotaDate({shiftStartsAt: safeMoment.iso8601Parse(rotaShifts[0].starts_at)});
 
         // Adjust offset range everytime we find a shift that's not contained inside it
         rotaShifts.forEach(function(rotaShift){
-            var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(rotaShift.starts_at);
+            var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(safeMoment.iso8601Parse(rotaShift.starts_at));
             
-            var shiftEndOffset = rotaDate.getHoursSinceStartOfDay(rotaShift.ends_at);
+            var shiftEndOffset = rotaDate.getHoursSinceStartOfDay(safeMoment.iso8601Parse(rotaShift.ends_at));
             if (shiftStartOffset < startOffset) {
                 startOffset = Math.floor(shiftStartOffset);
             }

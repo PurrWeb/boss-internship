@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import d3 from "d3"
-import RotaDate from "./rota-date"
-import moment from "moment"
+import RotaDate from "~/lib/rota-date-new"
+import safeMoment from "~/lib/safe-moment"
 import _ from 'underscore'
 import utils from "~/lib/utils"
 import makeRotaHoursXAxis from "~/lib/make-rota-hours-x-axis"
@@ -50,7 +50,7 @@ class RotaChartInner extends Component {
             // Any date will do since there's no data anyway
             exampleDateFromTheDay = new Date();
         }
-        var rotaDate = new RotaDate({shiftStartsAt: new Date(exampleDateFromTheDay)});
+        var rotaDate = new RotaDate({shiftStartsAt: safeMoment.iso8601Parse(exampleDateFromTheDay)});
         return rotaDate;
     }
     generateRotaShiftList(staffList){
@@ -201,8 +201,8 @@ class RotaChartInner extends Component {
                     return "";
                 }
                 var staff = shift.staff;
-                var formattedStartTime = moment(shift.originalShiftObject.starts_at).format("HH:mm");
-                var formattedEndTime = moment(shift.originalShiftObject.ends_at).format("HH:mm");
+                var formattedStartTime = safeMoment.iso8601Parse(shift.originalShiftObject.starts_at).format("HH:mm");
+                var formattedEndTime = safeMoment.iso8601Parse(shift.originalShiftObject.ends_at).format("HH:mm");
                 var standby = shift.isStandby ? "(SB) " : "";
                 return `${standby} ${staff.first_name} ${staff.surname} (${formattedStartTime} - ${formattedEndTime})`;
             })
