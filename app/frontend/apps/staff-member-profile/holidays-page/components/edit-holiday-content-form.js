@@ -15,7 +15,7 @@ import {
 const validate = values => {
   const errors = {}
   
-  if (!values.get('holidaysType')) {
+  if (!values.get('holidayType')) {
     errors.holidaysType = "You must fill holidays type"
   }
 
@@ -93,7 +93,7 @@ const EditHolidayForm = ({
         <div className="boss-form__field boss-form__field_layout_third">
           <Field
             component={BossFormSelect}
-            name="holidaysType"
+            name="holidayType"
             required
             label="Holiday Type"
             optionLabel="label"
