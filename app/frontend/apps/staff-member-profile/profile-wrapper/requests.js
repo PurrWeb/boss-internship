@@ -28,66 +28,26 @@ export const enableStaffMember = (payload) => {
 
   const {
     staffMemberId,
-    pinCode,
-    gender,
-    phone_number,
-    date_of_birth,
-    starts_at,
-    national_insurance_number,
-    hours_preference,
-    avatar,
-    day_preference,
-    status_statement,
-    first_name,
-    pay_rate,
-    surname,
-    staff_type,
-    master_venue,
-    other_venues,
-    address,
-    postcode,
-    country,
-    county,
-    email_address,
-    sia_badge_number,
-    sia_badge_expiry_date,
+    staffType,
+    siaBadgeNumber,
+    siaBadgeExpiryDate,
   } = payload;
 
-  let requestParams = {
-    pin_code: pinCode,
-    gender: gender,
-    phone_number,
-    date_of_birth,
-    starts_at: safeMoment.iso8601Parse(starts_at).format("DD-MM-YYYY"),
-    national_insurance_number,
-    hours_preference_note: hours_preference,
-    avatar_base64: avatar,
-    day_preference_note: day_preference,
-    employment_status: status_statement,
-    staff_type_id: staff_type,
-    pay_rate_id: pay_rate,
-    other_venue_ids: other_venues,
-    email_address,
-    first_name,
-    surname,
-    address,
-    postcode,
-    country,
-    county,
-    main_venue_id: master_venue,
-  }
+  const values = {...payload, startsAt: safeMoment.iso8601Parse(payload.startsAt).format("DD-MM-YYYY")}
 
-  if (staff_type === SECURITY_TYPE_ID) {
+  let requestParams = {}
+
+  if (staffType === SECURITY_TYPE_ID) {
     requestParams = {
-      ...requestParams,
-      sia_badge_number,
-      sia_badge_expiry_date: safeMoment.uiDateParse(sia_badge_expiry_date).format("DD-MM-YYYY")
+      ...values,
+      siaBadgeNumber,
+      siaBadgeExpiryDate: safeMoment.uiDateParse(siaBadgeExpiryDate).format("DD-MM-YYYY")
     }
   } else {
     requestParams = {
-      ...requestParams,
-      sia_badge_number: null,
-      sia_badge_expiry_date: null,
+      ...values,
+      siaBadgeNumber: null,
+      siaBadgeExpiryDate: null,
     }
   }
 

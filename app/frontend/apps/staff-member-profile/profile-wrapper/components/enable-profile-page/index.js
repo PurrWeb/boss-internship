@@ -19,28 +19,28 @@ const EnableProfilePage = ({
   let dateOfBirth = dateOfBirthString ? safeMoment.uiDateParse(dateOfBirthString) : null;
 
   const initialValues = {
-    first_name: staffMember.get('first_name'),
+    firstName: staffMember.get('first_name'),
     surname: staffMember.get('surname'),
     avatar: staffMember.get('avatar'),
     gender: staffMember.get('gender'),
-    date_of_birth: dateOfBirth,
-    master_venue: staffMember.get('master_venue'),
-    other_venues: staffMember.get('other_venues'),
-    starts_at: safeMoment.uiDateParse(staffMember.get('starts_at')),
-    email_address: staffMember.get('email'),
+    dateOfBirth: dateOfBirth,
+    mainVenue: staffMember.get('master_venue'),
+    otherVenues: staffMember.get('other_venues'),
+    startsAt: safeMoment.uiDateParse(staffMember.get('starts_at')),
+    emailAddress: staffMember.get('email'),
     address: staffMember.get('address'),
     country: staffMember.get('country'),
     county: staffMember.get('county'),
     postcode: staffMember.get('postcode'),
-    phone_number: staffMember.get('phone_number'),
-    staff_type: staffMember.get('staff_type'),
-    national_insurance_number: staffMember.get('national_insurance_number'),
-    day_preference: staffMember.get('day_preference'),
-    hours_preference: staffMember.get('hours_preference'),
-    pay_rate: staffMember.get('pay_rate'),
-    status_statement: staffMember.get('status_statement'),
-    sia_badge_number: staffMember.get('sia_badge_number'),
-    sia_badge_expiry_date: siaBadgeExpiryDate
+    phoneNumber: staffMember.get('phone_number'),
+    staffType: staffMember.get('staff_type'),
+    nationalInsuranceNumber: staffMember.get('national_insurance_number'),
+    dayPreferenceNote: staffMember.get('day_preference'),
+    hoursPreferenceNote: staffMember.get('hours_preference'),
+    payRate: staffMember.get('pay_rate'),
+    employmentStatus: staffMember.get('status_statement'),
+    siaBadgeNumber: staffMember.get('sia_badge_number'),
+    siaBadgeExpiryDate: siaBadgeExpiryDate
   }
   return (
     <EnableProfileForm
