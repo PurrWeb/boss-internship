@@ -8,7 +8,7 @@ import AppComponent from "../app-component"
 export default class RotaApp extends AppComponent {
     componentWillMount(){
         var viewData = this.getViewData();
-        this.store.dispatch(actionCreators.loadInitialRotaAppState(viewData));
+        this.store.dispatch(actionCreators().loadInitialRotaAppState(viewData));
     }
     render() {
         return <Provider store={this.store}>

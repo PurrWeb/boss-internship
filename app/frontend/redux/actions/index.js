@@ -1,3 +1,3 @@
 import {getActionCreators} from "../database"
 
-export default getActionCreators();
+export default getActionCreators;

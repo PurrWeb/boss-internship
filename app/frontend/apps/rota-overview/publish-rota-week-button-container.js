@@ -32,7 +32,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch, ownProps){
     return {
         publishRotaWeek: function(){
-            dispatch(actionCreators.publishRotas({
+            dispatch(actionCreators().publishRotas({
                 venueServerId: ownProps.rotas[0].venue.serverId,
                 date: ownProps.firstDate
             }))

@@ -7,7 +7,7 @@ import actionCreators from "~/redux/actions"
 export default class HoursConfirmationApp extends AppComponent {
     componentWillMount(){
         var viewData = this.getViewData();
-        this.store.dispatch(actionCreators.loadInitialHoursConfirmationAppState(viewData))
+        this.store.dispatch(actionCreators().loadInitialHoursConfirmationAppState(viewData))
     }
     render(){
         return <Provider store={this.store}>

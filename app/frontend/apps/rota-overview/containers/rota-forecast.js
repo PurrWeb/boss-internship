@@ -56,7 +56,7 @@ function mapStateToProps(state, ownProps){
 function mapDispatchToProps(dispatch, ownProps){
     return {
         updateRotaForecastWithAllDetails: function(options){
-            dispatch(actionCreators.updateRotaForecast(options));
+            dispatch(actionCreators().updateRotaForecast(options));
         }
     }
 }

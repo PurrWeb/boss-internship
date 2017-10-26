@@ -171,8 +171,8 @@ function mapStateToProps(state, ownProps){
 
 function mapDispatchToProps(dispatch){
     return {
-        updateRotaShift: (options) => dispatch(actionCreators.updateRotaShift(options)),
-        deleteRotaShift: (options) => dispatch(actionCreators.deleteRotaShift(options))
+        updateRotaShift: (options) => dispatch(actionCreators().updateRotaShift(options)),
+        deleteRotaShift: (options) => dispatch(actionCreators().deleteRotaShift(options))
     }
 }
 

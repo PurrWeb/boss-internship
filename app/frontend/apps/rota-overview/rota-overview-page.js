@@ -174,7 +174,7 @@ class RotaOverviewPage extends Component {
 function mapDispatchToProps(dispatch, ownProps){
   return {
     getRotaWeeklyDay: function(date, venueId){
-      dispatch(actionCreators.getRotaWeeklyDay({
+      dispatch(actionCreators().getRotaWeeklyDay({
         serverVenueId: venueId,
         date: date
       }))

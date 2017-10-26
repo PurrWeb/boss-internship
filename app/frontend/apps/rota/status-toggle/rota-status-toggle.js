@@ -43,7 +43,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch, ownProps){
     return {
         updateStatus: function(options){
-            dispatch(actionCreators.updateRotaStatus(options));
+            dispatch(actionCreators().updateRotaStatus(options));
         }
     }
 }

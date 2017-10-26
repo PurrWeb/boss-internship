@@ -172,13 +172,13 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return {
         completeConfirmationModal: function(confirmationDetails){
-            dispatch(actionCreators.completeConfirmationModal(confirmationDetails));
+            dispatch(actionCreators().completeConfirmationModal(confirmationDetails));
         },
         cancelConfirmationModal: function(){
-            dispatch(actionCreators.cancelConfirmationModal());
+            dispatch(actionCreators().cancelConfirmationModal());
         },
         addNote: function(text, staffMemberObject, clockInDay){
-            dispatch(actionCreators.addClockInNote({
+            dispatch(actionCreators().addClockInNote({
                 text,
                 staffMemberObject,
                 clockInDay

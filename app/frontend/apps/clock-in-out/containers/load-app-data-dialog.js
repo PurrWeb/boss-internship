@@ -19,7 +19,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
     return {
         onApiKeySelected: function(apiKey){
-            dispatch(actionCreators.setApiKeyAndFetchClockInOutAppData(apiKey))
+            dispatch(actionCreators().setApiKeyAndFetchClockInOutAppData(apiKey))
         }
     }
 }

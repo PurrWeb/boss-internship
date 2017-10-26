@@ -170,19 +170,19 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
     return {
         leaveManagerMode: function(){
-            dispatch(actions.clockInOutAppEnterUserMode({
+            dispatch(actions().clockInOutAppEnterUserMode({
                 userMode: "User"
             }))
         },
         selectStaffType: function(selectedStaffTypeClientId){
-            dispatch(actions.clockInOutAppSelectStaffType({
+            dispatch(actions().clockInOutAppSelectStaffType({
                 selectedStaffTypeClientId
             }))
         },
         resetApiKey: function(){
             // reset store also updates the apiKey, which means it'll
             // be updated in localStorage
-            dispatch(actions.resetStore());
+            dispatch(actions().resetStore());
         }
     }
 }
