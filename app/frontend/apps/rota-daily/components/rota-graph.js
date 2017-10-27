@@ -1,7 +1,7 @@
 import React from 'react';
 import d3 from "d3";
 import RotaChart from "./rota-chart";
-import iScroll from 'iscroll';
+import iScroll from 'boss-iscroll';
 import ReactIScroll from 'react-iscroll';
 
 const scrollOptions = {

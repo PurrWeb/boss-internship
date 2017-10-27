@@ -6,7 +6,7 @@ window.d3 = d3; // nvd3 relies on global D3
 import nvd3 from "nvd3"
 import NVD3Chart from "react-nvd3"
 import ReactDOM from "react-dom"
-import iScroll from 'iscroll';
+import iScroll from 'boss-iscroll';
 import ReactIScroll from 'react-iscroll';
 
 const HOVER_INDICATOR_WIDTH = 10;

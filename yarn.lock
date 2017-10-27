@@ -1648,6 +1648,10 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
+"boss-iscroll@git+https://github.com/jsmbars/iscroll.git#6da2b1ceefd1e995bfed86bcedbc7f02c5e1d399":
+  version "5.2.3"
+  resolved "git+https://github.com/jsmbars/iscroll.git#6da2b1ceefd1e995bfed86bcedbc7f02c5e1d399"
+
 bowser@^1.0.0, bowser@^1.6.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/bowser/-/bowser-1.7.0.tgz#169de4018711f994242bff9a8009e77a1f35e003"

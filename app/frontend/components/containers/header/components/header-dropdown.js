@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import HeaderDropdownList from './header-dropdown-list';
 import utils from '~/lib/utils'
-import iScroll from 'iscroll';
+import iScroll from 'boss-iscroll';
 import ReactIScroll from 'react-iscroll';
 
 export default class HeaderDropdown extends Component {
@@ -18,6 +18,7 @@ export default class HeaderDropdown extends Component {
       fadeScrollbars: false,
       click: true,
       scrollbars: true,
+      enable_ofscroll: true,
     };
   }
 
