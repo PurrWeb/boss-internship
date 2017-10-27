@@ -161,7 +161,7 @@ export default class StaffMemberItem extends React.Component {
             className="boss-staff-summary__toggle"
           >Details</button>
           <StaffMemberInfo
-            avatarUrl=""
+            avatarUrl={avatar}
             fullName={fullName}
             staffType={staffType.get('name')}
             staffColor={staffType.get('color')}

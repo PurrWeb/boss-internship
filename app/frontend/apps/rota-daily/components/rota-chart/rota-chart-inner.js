@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import d3 from "d3"
-import RotaDate from "~/lib/rota-date-new"
+import RotaDate from "~/lib/rota-date"
 import safeMoment from "~/lib/safe-moment"
 import _ from 'underscore'
 import utils from "~/lib/utils"

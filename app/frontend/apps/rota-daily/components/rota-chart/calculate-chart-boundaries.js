@@ -1,5 +1,5 @@
 import _ from "underscore"
-import RotaDate from "~/lib/rota-date-new"
+import RotaDate from "~/lib/rota-date"
 import utils from "~/lib/utils"
 import safeMoment from '~/lib/safe-moment';
 
@@ -19,19 +19,19 @@ export default function calculateChartBoundaries(rotaShifts){
     var startOffset = 23; // means 7am based on an 8am start
     var endOffset = 1; // means 9am based on an 8am start
 
-    var rotaDate;
+    var dRotaDate;
     if (_.isEmpty(rotaShifts)) {
         startOffset = 0;
         endOffset = 24;
-        rotaDate = new RotaDate({dateOfRota: safeMoment.iso8601Parse(Date())});
+        dRotaDate = new RotaDate({dateOfRota: safeMoment.iso8601Parse(Date()).toDate()});
     } else {
-        rotaDate = new RotaDate({shiftStartsAt: safeMoment.iso8601Parse(rotaShifts[0].starts_at)});
+        dRotaDate = new RotaDate({shiftStartsAt: safeMoment.iso8601Parse(rotaShifts[0].starts_at).toDate()});
 
         // Adjust offset range everytime we find a shift that's not contained inside it
         rotaShifts.forEach(function(rotaShift){
-            var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(safeMoment.iso8601Parse(rotaShift.starts_at));
+            var shiftStartOffset = dRotaDate.getHoursSinceStartOfDay(safeMoment.iso8601Parse(rotaShift.starts_at).toDate());
             
-            var shiftEndOffset = rotaDate.getHoursSinceStartOfDay(safeMoment.iso8601Parse(rotaShift.ends_at));
+            var shiftEndOffset = dRotaDate.getHoursSinceStartOfDay(safeMoment.iso8601Parse(rotaShift.ends_at).toDate());
             if (shiftStartOffset < startOffset) {
                 startOffset = Math.floor(shiftStartOffset);
             }
@@ -47,8 +47,8 @@ export default function calculateChartBoundaries(rotaShifts){
     }
 
     var boundaries = {
-        start: new Date(rotaDate.startTime.valueOf() + startOffset * MILLISECONDS_PER_HOUR),
-        end: new Date(rotaDate.startTime.valueOf() + endOffset * MILLISECONDS_PER_HOUR),
+        start: new Date(dRotaDate.startTime.valueOf() + startOffset * MILLISECONDS_PER_HOUR),
+        end: new Date(dRotaDate.startTime.valueOf() + endOffset * MILLISECONDS_PER_HOUR),
     };
     return boundaries;
 }   

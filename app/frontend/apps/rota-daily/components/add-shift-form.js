@@ -18,7 +18,7 @@ class AddShiftForm extends React.Component {
       submittion,
       staffMember,
       staffType,
-      shiftRotaDate,
+      rotaDate,
       submitting,
       error,
       handleAfterAdd,
@@ -30,7 +30,7 @@ class AddShiftForm extends React.Component {
         <Fields
           names={['starts_at', 'ends_at']}
           component={BossFormShiftTimeInput}
-          shiftRotaDate={shiftRotaDate}
+          rotaDate={rotaDate}
         />
         <Field
           name="shift_type"

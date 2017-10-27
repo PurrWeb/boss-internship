@@ -1,6 +1,5 @@
 import React from 'react';
 import AddMultipleShiftForm from './add-multiple-shift-form';
-import RotaDate from "~/lib/rota-date-new";
 import { SubmissionError } from 'redux-form/immutable';
 
 import {
@@ -18,15 +17,11 @@ class AddMultipleShift extends React.Component {
       ends_at: null,
       shift_type: "normal",
     }
-    
-    const shiftRotaDate = new RotaDate({
-      dateOfRota: rotaDate,
-    });
-
+        
     return (
       <AddMultipleShiftForm
         initialValues={initialValues}
-        shiftRotaDate={shiftRotaDate}
+        rotaDate={rotaDate}
         rotaStatus={this.props.rotaStatus}
       />
     )

@@ -1,6 +1,5 @@
 import React from 'react';
 import GraphDetailsForm from './graph-details-form';
-import RotaDate from "~/lib/rota-date-new";
 import { SubmissionError } from 'redux-form/immutable';
 import {confirmation} from '~/lib/confirm-utils';
 
@@ -66,10 +65,6 @@ class GraphDetails extends React.Component {
       ends_at: rotaShift.get('ends_at'),
       shift_type: rotaShift.get('shift_type'),
     }
-    
-    const shiftRotaDate = new RotaDate({
-      dateOfRota: rotaDate,
-    });
 
     return (
       <GraphDetailsForm
@@ -77,7 +72,7 @@ class GraphDetails extends React.Component {
         staffMember={staffMember}
         staffType={staffType}
         initialValues={initialValues}
-        shiftRotaDate={shiftRotaDate}
+        rotaDate={rotaDate}
         rotaStatus={this.props.rotaStatus}
       />
     )

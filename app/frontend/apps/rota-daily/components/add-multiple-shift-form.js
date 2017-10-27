@@ -1,4 +1,6 @@
 import React from 'react';
+import safeMoment from '~/lib/safe-moment';
+
 import {
   Field,
   Fields,
@@ -26,11 +28,11 @@ class AddMultipleShiftForm extends React.Component {
       submittion,
       staffMember,
       staffType,
-      shiftRotaDate,
+      rotaDate,
       submitting,
       error,
     } = this.props;
-
+    
     return (
       <div onSubmit={handleSubmit} className="boss-form__group boss-form__group_role_board boss-form__group_position_last">
         <Element className="boss-form__row boss-form__row_position_last boss-form__row_layout_wrap-xs" name="multiple-rota-shift-errors">
@@ -38,7 +40,7 @@ class AddMultipleShiftForm extends React.Component {
             <Fields
               names={['starts_at', 'ends_at']}
               component={BossFormShiftTimeInput}
-              shiftRotaDate={shiftRotaDate}
+              rotaDate={rotaDate}
             />
             { error && <ErrorBlock error={error} />}
           </div>

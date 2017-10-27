@@ -1,41 +1,43 @@
 import React from "react"
 import Select from "react-select"
 import PropTypes from 'prop-types';
-import RotaDate from "~/lib/rota-date.js"
-import moment from "moment"
+import safeMoment from "~/lib/safe-moment";
+import moment from "moment";
+import RotaDate from "~/lib/rota-date";
+
 import { getPossibleShiftStartTimeStrings, getPossibleShiftEndTimeStrings } from "~/lib/possible-shift-time-strings"
 
 class BossFromShiftTimeInput extends React.Component {
     static propTypes = {
     }
 
-    getStartsAtOptions = (input, callback) => {
+    getStartsAtOptions = (input, callback, shiftRotaDate) => {
       callback(null, {
-        options: getPossibleShiftStartTimeStrings(this.props.granularityInMinutes, this.props.shiftRotaDate.startTime).map(timeString => ({value: timeString, label: timeString})),
+        options: getPossibleShiftStartTimeStrings(this.props.granularityInMinutes, shiftRotaDate.startTime).map(timeString => ({value: timeString, label: timeString})),
         complete: true
       })
     }
 
-    getEndsAtOptions = (input, callback) => {
+    getEndsAtOptions = (input, callback, shiftRotaDate) => {
       callback(null, {
-        options: getPossibleShiftEndTimeStrings(this.props.granularityInMinutes, this.props.shiftRotaDate.startTime).map(timeString => ({value: timeString, label: timeString})),
+        options: getPossibleShiftEndTimeStrings(this.props.granularityInMinutes, shiftRotaDate.startTime).map(timeString => ({value: timeString, label: timeString})),
         complete: true
       })
     }
 
-    updateStartsTime(newValue){
+    updateStartsTime(newValue, shiftRotaDate){
       if (!newValue.value) {
           return;
       }
-      const newDate = this.props.shiftRotaDate.getDateFromShiftStartTimeString(newValue);
+      const newDate = shiftRotaDate.getDateFromShiftStartTimeString(newValue);
       this.props.starts_at.input.onChange(newDate);
     }
 
-    updateEndsTime(newValue){
+    updateEndsTime(newValue, shiftRotaDate){
       if (!newValue.value) {
           return;
       }
-      const newDate = this.props.shiftRotaDate.getDateFromShiftEndTimeString(newValue);
+      const newDate = shiftRotaDate.getDateFromShiftEndTimeString(newValue);
       this.props.ends_at.input.onChange(newDate);
     }
 
@@ -43,26 +45,33 @@ class BossFromShiftTimeInput extends React.Component {
         const {
           starts_at,
           ends_at,
+          rotaDate,
         } = this.props;
+
+        const dRotaDate = safeMoment.uiDateParse(rotaDate).toDate();
+        
+        const shiftRotaDate = new RotaDate({
+          dateOfRota: dRotaDate,
+        });
         
         const timeStartsAt = starts_at.input.value;
         const timeEndsAt = ends_at.input.value;
-        const startsAtDateValue = moment(timeStartsAt).format("HH:mm");
-        const endsAtDateValue = moment(timeEndsAt).format("HH:mm");
+        const sStartsAtDateValue = moment(timeStartsAt).format("HH:mm");
+        const sEndsAtDateValue = moment(timeEndsAt).format("HH:mm");
 
         const selectStartAt = <Select.Async
-            value={startsAtDateValue}
-            loadOptions={this.getStartsAtOptions}
+            value={sStartsAtDateValue}
+            loadOptions={(input, callback) => this.getStartsAtOptions(input, callback, shiftRotaDate)}
             clearable={false}
             searchable={true}
-            onChange={(value) => this.updateStartsTime(value)}
+            onChange={(value) => this.updateStartsTime(value, shiftRotaDate)}
         />
         const selectEndsAt = <Select.Async
-            value={endsAtDateValue}
-            loadOptions={this.getEndsAtOptions}
+            value={sEndsAtDateValue}
+            loadOptions={(input, callback) => this.getEndsAtOptions(input, callback, shiftRotaDate)}
             clearable={false}
             searchable={true}
-            onChange={(value) => this.updateEndsTime(value)}
+            onChange={(value) => this.updateEndsTime(value, shiftRotaDate)}
         />
 
         return (

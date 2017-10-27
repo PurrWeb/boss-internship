@@ -27,7 +27,7 @@ class GraphDetailsForm extends React.Component {
       submittion,
       staffMember,
       staffType,
-      shiftRotaDate,
+      rotaDate,
       submitting,
       error,
     } = this.props;
@@ -48,7 +48,7 @@ class GraphDetailsForm extends React.Component {
             <Fields
               names={['starts_at', 'ends_at']}
               component={BossFormShiftTimeInput}
-              shiftRotaDate={shiftRotaDate}
+              rotaDate={rotaDate}
             />
             <Field
               name="shift_type"

@@ -1,6 +1,5 @@
 import React from 'react';
 import AddShiftForm from './add-shift-form';
-import RotaDate from "~/lib/rota-date-new";
 import { SubmissionError } from 'redux-form/immutable';
 import {confirmation} from '~/lib/confirm-utils';
 
@@ -58,15 +57,11 @@ class AddShift extends React.Component {
       shift_type: "normal",
     }
     
-    const shiftRotaDate = new RotaDate({
-      dateOfRota: rotaDate,
-    });
-
     return (
       <AddShiftForm
         submittion={this.handleSubmit}
         initialValues={initialValues}
-        shiftRotaDate={shiftRotaDate}
+        rotaDate={rotaDate}
         rotaStatus={this.props.rotaStatus}
         handleAfterAdd={this.props.handleAfterAdd}
       />
