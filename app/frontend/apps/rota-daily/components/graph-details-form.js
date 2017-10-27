@@ -5,8 +5,12 @@ import {
   reduxForm,
 } from 'redux-form/immutable';
 import StaffMemberInfo from './staff-member-info';
-import BossFromShiftTimeInput from '~/components/boss-form/boss-form-shift-time-input';
-import BossFormCheckbox from '~/components/boss-form/boss-form-checkbox';
+
+import {
+  ErrorBlock,
+  BossFormShiftTimeInput,
+  BossFormCheckbox,
+} from '~/components/boss-form';
 
 class GraphDetailsForm extends React.Component {
   updateShift = (values, dispatch, props) => {
@@ -39,16 +43,11 @@ class GraphDetailsForm extends React.Component {
           />
         </div>
         <div className="boss-modal-window__group">
-          {error && <div className="boss-checklist__alert">
-              <div className="boss-alert">
-                <p className="boss-alert__text">{error}</p>
-              </div>
-            </div>
-          }
+          {error && <ErrorBlock error={error} />}
           <div className="boss-form">
             <Fields
               names={['starts_at', 'ends_at']}
-              component={BossFromShiftTimeInput}
+              component={BossFormShiftTimeInput}
               shiftRotaDate={shiftRotaDate}
             />
             <Field

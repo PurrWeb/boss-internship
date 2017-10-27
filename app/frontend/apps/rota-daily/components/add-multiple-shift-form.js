@@ -4,10 +4,14 @@ import {
   Fields,
   reduxForm,
 } from 'redux-form/immutable';
-import BossFromShiftTimeInput from '~/components/boss-form/boss-form-shift-time-input';
-import BossFormCheckbox from '~/components/boss-form/boss-form-checkbox';
 import {handleSubmit} from './add-shift';
 import { scroller, Element } from 'react-scroll';
+
+import {
+  ErrorBlock,
+  BossFormShiftTimeInput,
+  BossFormCheckbox,
+} from '~/components/boss-form';
 
 function scrollToFirstError(errors) {
   if (errors) {
@@ -30,18 +34,14 @@ class AddMultipleShiftForm extends React.Component {
     return (
       <div onSubmit={handleSubmit} className="boss-form__group boss-form__group_role_board boss-form__group_position_last">
         <Element className="boss-form__row boss-form__row_position_last boss-form__row_layout_wrap-xs" name="multiple-rota-shift-errors">
-          {error && <div className="boss-checklist__alert">
-              <div className="boss-alert">
-                <p className="boss-alert__text">{error}</p>
-              </div>
-            </div>
-          }
-          <Fields
-            names={['starts_at', 'ends_at']}
-            component={BossFromShiftTimeInput}
-            shiftRotaDate={shiftRotaDate}
-            className="boss-form__field_layout_max"
-          />
+          <div className="boss-form__field_layout_max">
+            <Fields
+              names={['starts_at', 'ends_at']}
+              component={BossFormShiftTimeInput}
+              shiftRotaDate={shiftRotaDate}
+            />
+            { error && <ErrorBlock error={error} />}
+          </div>
           <Field
             name="shift_type"
             label="Standby"

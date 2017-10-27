@@ -4,8 +4,12 @@ import {
   Fields,
   reduxForm,
 } from 'redux-form/immutable';
-import BossFromShiftTimeInput from '~/components/boss-form/boss-form-shift-time-input';
-import BossFormCheckbox from '~/components/boss-form/boss-form-checkbox';
+
+import {
+  ErrorBlock,
+  BossFormShiftTimeInput,
+  BossFormCheckbox,
+} from '~/components/boss-form';
 
 class AddShiftForm extends React.Component {
   render() {
@@ -22,15 +26,10 @@ class AddShiftForm extends React.Component {
 
     return (
       <form onSubmit={handleSubmit(submittion)} className="boss-form">
-        {error && <div className="boss-checklist__alert">
-            <div className="boss-alert">
-              <p className="boss-alert__text">{error}</p>
-            </div>
-          </div>
-        }
+        {error && <ErrorBlock error={error} />}
         <Fields
           names={['starts_at', 'ends_at']}
-          component={BossFromShiftTimeInput}
+          component={BossFormShiftTimeInput}
           shiftRotaDate={shiftRotaDate}
         />
         <Field
