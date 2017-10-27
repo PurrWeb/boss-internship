@@ -23,7 +23,7 @@ export default function calculateChartBoundaries(rotaShifts){
     if (_.isEmpty(rotaShifts)) {
         startOffset = 0;
         endOffset = 24;
-        dRotaDate = new RotaDate({dateOfRota: safeMoment.iso8601Parse(Date()).toDate()});
+        dRotaDate = new RotaDate({dateOfRota: new Date()});
     } else {
         dRotaDate = new RotaDate({shiftStartsAt: safeMoment.iso8601Parse(rotaShifts[0].starts_at).toDate()});
 
