@@ -127,7 +127,7 @@ class ProfileWrapper extends React.PureComponent {
     const editAvatarFormInitial = {
       avatar: staffMember.get('avatar'),
     }
-    const jobType = staffTypes.find(type => type.get('id') === staffMember.get('staff_type')).get('name');
+    const jobType = staffTypes.find(type => type.get('id') === staffMember.get('staff_type'));
 
     return (
       <div>
@@ -165,8 +165,8 @@ class ProfileWrapper extends React.PureComponent {
           { !editProfile && !enableProfile &&  <Dashboard>
                 <StaffMemberCard
                   currentPage={currentPage}
-                  staffMember={staffMember}
-                  jobType={jobType}
+                  staffMember={staffMember.toJS()}
+                  jobType={jobType.toJS()}
                   onEditAvatar={showEditAvatarModal}
                 />
                 <StaffMemberProfileActions

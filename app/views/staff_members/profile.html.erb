@@ -8,7 +8,10 @@
 <%= react_component('StaffMemberProfileDetailsApp', {
   staffMember: staff_member,
   accessToken: access_token.token,
-  staffTypes: staff_types,
+  staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_types,
+    serializer: Api::V1::StaffMemberProfile::StaffTypeSerializer,
+  ),
   venues: venues,
   payRates: pay_rates,
   genderValues: gender_values,
