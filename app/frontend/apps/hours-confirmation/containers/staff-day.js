@@ -43,7 +43,7 @@ function mapStateToProps(state, ownProps){
 
 function mapDispatchToProps(dispatch){
     return {
-        boundActions: bindActionCreators(actionCreators, dispatch)
+        boundActions: bindActionCreators(actionCreators(), dispatch)
     }
 }
 
