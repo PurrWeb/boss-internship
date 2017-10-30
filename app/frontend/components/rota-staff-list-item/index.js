@@ -183,7 +183,7 @@ function mapStateToProps(state, ownProps){
 function mapDispatchToProps(dispatch){
     return {
         addRotaShift: function(options){
-            dispatch(actionCreators.addRotaShift(options));
+            dispatch(actionCreators().addRotaShift(options));
         }
     }
 }

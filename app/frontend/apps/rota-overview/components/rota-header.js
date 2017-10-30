@@ -66,7 +66,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch, ownProps){
   return {
     publishRotaWeek: function(){
-      dispatch(actionCreators.publishRotas({
+      dispatch(actionCreators().publishRotas({
         venueServerId: ownProps.rota.venue.serverId,
         date: ownProps.startDate
       }))

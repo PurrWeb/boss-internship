@@ -4,14 +4,14 @@ const BossFormCheckbox = ({
     input,
     label,
     required,
+    className = '',
     type,
     meta: { touched, error, warning },
   }) => {
     return (
-      <div className="boss-form__field">
+      <div className={`boss-form__field ${className}`}>
         <label className="boss-form__checkbox-label">
           <input {...input} type="checkbox" placeholder={label} className={`boss-form__checkbox-input ${touched && error && 'boss-form__checkbox-input_state_error'}`} />
-          <input type="checkbox" className="boss-form__checkbox-input"/>
           <span className="boss-form__checkbox-label-text">
              {label}
           </span>

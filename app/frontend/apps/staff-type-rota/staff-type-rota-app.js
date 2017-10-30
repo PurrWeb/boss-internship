@@ -7,7 +7,7 @@ import actionCreators from "~/redux/actions"
 export default class StaffTypeRotaApp extends AppComponent {
     componentWillMount(){
         let viewData = this.getViewData();
-        this.store.dispatch(actionCreators.loadInitalStaffTypeRotaAppState(viewData));
+        this.store.dispatch(actionCreators().loadInitalStaffTypeRotaAppState(viewData));
     }
     render() {
         return <Provider store={this.store}>

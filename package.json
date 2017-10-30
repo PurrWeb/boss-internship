@@ -2,6 +2,7 @@
   "name": "Boss",
   "devDependencies": {},
   "dependencies": {
+    "1.1.0": "^1.0.0",
     "@types/classnames": "^0.0.32",
     "@types/history": "2.0.41",
     "@types/jest": "^18.1.1",
@@ -151,6 +152,7 @@
     ]
   },
   "engines": {
-    "node": ">= 0.10"
+    "node": "8.7.0",
+    "yarn": "1.1.0"
   }
 }

@@ -8,7 +8,7 @@ export default class StaffHoursOverviewApp extends AppComponent {
   componentWillMount() {
     var viewData = this.getViewData();
     this.store.dispatch(
-      actionCreators.loadInitialStaffHoursOverviewAppState(viewData)
+      actionCreators().loadInitialStaffHoursOverviewAppState(viewData)
     )
   }
 

@@ -25,7 +25,7 @@ describe("makeDataHandler", function(){
         })
 
         expect(dataHandler.actionTypes).toEqual(["ADD_USER"]);
-        expect(dataHandler.actionCreators.addUser).toNotBe(undefined);
+        expect(dataHandler.actionCreators().addUser).toNotBe(undefined);
 
         var action = {
             type: "ADD_USER",

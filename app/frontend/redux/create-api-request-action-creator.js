@@ -99,10 +99,10 @@ export default function createApiRequestActionCreator(actionOptions){
                             JSON.stringify(responseOptions.errors);
 
                         const onRetryClick = function () {
-                            dispatch(actions.enterUserModeWithConfirmation({userMode, staffMemberObject}));
+                            dispatch(actions().enterUserModeWithConfirmation({userMode, staffMemberObject}));
                         };
 
-                        dispatch(actions.showWrongPinMessage(errorMessage, 'WRONG_PIN', onRetryClick));
+                        dispatch(actions().showWrongPinMessage(errorMessage, 'WRONG_PIN', onRetryClick));
                     } else {
                         if (responseOptions.errors.base){
                             alert(responseOptions.errors.base.join("\n"));

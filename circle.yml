@@ -1,12 +1,12 @@
 machine:
   timezone: Europe/London
   node:
-    version: 4.7
+    version: 8.7.0
 checkout:
   post:
     - git submodule sync
     - git submodule update --init
-    - npm install yarn -g
+    - npm install -g yarn@1.1.0
 dependencies:
   override:
     - yarn install

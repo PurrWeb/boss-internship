@@ -16,7 +16,7 @@ export default class RotaApp extends AppComponent {
 
         var localStorageApiKey = localStorage.getItem("clockInOutApiKey")
         if (localStorageApiKey != null && localStorageApiKey != ""){
-            store.dispatch(actionCreators.setApiKeyAndFetchClockInOutAppData(localStorageApiKey))
+            store.dispatch(actionCreators().setApiKeyAndFetchClockInOutAppData(localStorageApiKey))
         }
     }
     ensureOnCorrectDay(){

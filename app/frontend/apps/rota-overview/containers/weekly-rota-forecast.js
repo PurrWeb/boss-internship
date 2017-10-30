@@ -75,7 +75,7 @@ function mapStateToProps(state, ownProps){
 function mapDispatchToProps(dispatch, ownProps){
     return {
         fetchForecast: function(componentId){
-            dispatch(actionCreators.fetchWeeklyRotaForecast({
+            dispatch(actionCreators().fetchWeeklyRotaForecast({
                 serverVenueId: ownProps.serverVenueId,
                 startOfWeek: ownProps.startOfWeek,
                 errorHandlingId: componentId

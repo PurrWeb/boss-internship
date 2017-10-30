@@ -1,6 +1,6 @@
 class RotasController < ApplicationController
   before_action :authorize
-  before_action :set_new_layout, only: [:index]
+  before_action :set_new_layout, only: [:index, :show]
 
   attr_reader :venue
 
@@ -42,30 +42,38 @@ class RotasController < ApplicationController
       start_date: week.start_date,
       end_date: week.end_date
     ).all.includes([:staff_member, :holiday_transitions])
-
+    
     week_start_time = RotaShiftDate.new(week.start_date).start_time
     week_end_time = RotaShiftDate.new(week.end_date).end_time
 
-    rota_shifts = RotaShift.enabled.where(
+    week_rota_shifts = RotaShift.enabled.where(
       staff_member: staff_members,
       starts_at: week_start_time..week_end_time
     ).includes([:rota, :staff_member])
 
+    rota_shifts = RotaShift.enabled.where(
+      rota: rota,
+      staff_member: staff_members,
+    ).includes([:rota, :staff_member])
+
     rotas = Rota.where(
-      id: ([rota.id] + rota_shifts.map(&:rota_id)).uniq.compact
+      id: ([rota.id] + week_rota_shifts.map(&:rota_id)).uniq.compact
     ).includes([:venue, :rota_status_transitions])
 
     venues = Venue.where(id: [rota.venue_id] + rotas.map(&:venue_id).uniq)
+
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
       access_token: access_token,
-      current_rota: rota,
-      rotas: rotas,
+      current_venue: venue_from_params,
       rota_shifts: rota_shifts,
+      week_rota_shifts: week_rota_shifts,
+      rota: rota,
+      rotas: rotas,
+      venues: venues,
       staff_members: staff_members,
       holidays: holidays,
-      venues: venues,
       staff_types: StaffType.all
     }
   end
@@ -146,7 +154,7 @@ class RotasController < ApplicationController
   end
 
   def show_redirect_params
-    redirect_venue = current_venue || current_user.default_venue
+    redirect_venue = venue_from_params || current_venue
     id = params[:id]
     {
       venue_id: redirect_venue.id,

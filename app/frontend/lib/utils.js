@@ -1,6 +1,8 @@
 import moment from "moment"
 import deepEqual from "deep-equal"
 import _ from "underscore"
+import { fromJS, Map, List } from 'immutable';
+import SafeMoment from '~/lib/safe-moment';
 
 function replaceFunctionPropsWithStrings(obj){
     return _(obj).mapValues(function(value){
@@ -12,6 +14,22 @@ function replaceFunctionPropsWithStrings(obj){
 }
 
 var utils =  {
+    calculateStaffRotaShift: function(staffMember, shifts, rotas, venues) {
+      const weekRotaShifts = shifts
+        .filter(shift => shift.get('staff_member') === staffMember.get('id'))
+        .map(rotaShift => {
+          const rota = rotas.find(rota => rota.get('id') === rotaShift.get('rota'));
+          const venue = venues.find(venue => venue.get('id') === rota.get('venue'));
+          return rotaShift.set('venueName', venue.get('name'));
+        });
+      const hoursOnWeek = weekRotaShifts
+        .reduce((result, shift) => {
+          const starts_at = SafeMoment.iso8601Parse(shift.get('starts_at'));
+          const ends_at = SafeMoment.iso8601Parse(shift.get('ends_at'));
+          return ends_at.diff(starts_at, 'minutes') / 60 + result;
+        }, 0);
+        return {weekRotaShifts, hoursOnWeek};
+    },
     parseQueryString: function( queryString ) {
       let params = {}, queries, temp, i, l;
       queries = queryString.split("&");
@@ -248,6 +266,21 @@ var utils =  {
       }, quickMenu).filter(i => !!i.items.length);
       return result;
     },
+    staffMemberFilter(searchQuery, staffMembers) {
+      const searchQueryFilters = searchQuery.split(' ').filter(i => i);
+
+      return searchQueryFilters.reduce((staffMembers, filter) => {
+        const lowerFilter = filter.toLowerCase();
+        const initial = fromJS([]);
+        return staffMembers.reduce((result, staffMember) => {
+          const fullName = `${staffMember.get('first_name')} ${staffMember.get('surname')}`;
+          if (fullName.toLowerCase().indexOf(lowerFilter) >= 0) {
+            return result.push(staffMember);
+          }
+          return result;
+        }, initial);
+      }, staffMembers);
+    }
 }
 
 export default utils;

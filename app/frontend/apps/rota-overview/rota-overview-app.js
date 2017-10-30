@@ -7,7 +7,7 @@ import actionCreators from "~/redux/actions"
 export default class RotaApp extends AppComponent {
     componentWillMount(){
         let viewData = this.props;
-        this.store.dispatch(actionCreators.loadInitialRotaOverviewAppState(viewData));
+        this.store.dispatch(actionCreators().loadInitialRotaOverviewAppState(viewData));
     }
     render() {
         var rotaDetailsObject = this.props.rotaWeeklyDay;

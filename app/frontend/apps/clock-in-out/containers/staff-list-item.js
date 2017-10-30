@@ -426,16 +426,16 @@ class ClockInOutStaffListItem extends Component {
 function mapDispatchToProps(dispatch){
     return {
         updateClockInStatusWithConfirmation: function(options){
-            dispatch(actions.updateClockInStatusWithConfirmation(options))
+            dispatch(actions().updateClockInStatusWithConfirmation(options))
         },
         enterUserMode: function(userMode, staffMemberObject){
-            dispatch(actions.enterUserModeWithConfirmation({userMode, staffMemberObject}));
+            dispatch(actions().enterUserModeWithConfirmation({userMode, staffMemberObject}));
         },
         updateStaffMemberPin: function(options){
-            dispatch(actions.updateStaffMemberPinWithEntryModal(options))
+            dispatch(actions().updateStaffMemberPinWithEntryModal(options))
         },
         addNote: function(staffMemberObject, clockInDay){
-            dispatch(actions.showAddNoteWindow(staffMemberObject.first_name, staffMemberObject.surname, staffMemberObject, clockInDay));
+            dispatch(actions().showAddNoteWindow(staffMemberObject.first_name, staffMemberObject.surname, staffMemberObject, clockInDay));
         }
     }
 }
