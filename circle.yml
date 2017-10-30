@@ -6,7 +6,7 @@ checkout:
   post:
     - git submodule sync
     - git submodule update --init
-    - npm install -g yarn@1.1.0
+    - npm install -g yarn@1.0.1
 dependencies:
   override:
     - yarn install
