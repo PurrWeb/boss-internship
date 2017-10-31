@@ -25,12 +25,20 @@ class AddHolidayContent extends React.PureComponent {
       onSubmit,
     } = this.props;
 
+    const initialValues = {
+      note: null,
+      startDate: null,
+      endDate: null,
+      holidayType: null,
+    }
+
     return (
       <div className="boss-modal-window__form">
         <HolidaysForm
           onDatesChange={this.onDatesChange}
           startDate={startDate}
           endDate={endDate}
+          initialValues={initialValues}
           onSubmit={this.onSubmit}
           onChangeType={this.onChangeType}
           focusedInput={focusedInput}

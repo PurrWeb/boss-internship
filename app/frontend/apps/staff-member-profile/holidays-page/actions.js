@@ -63,17 +63,17 @@ export const deleteHoliday = (holidayId) => (dispatch, getState) => {
   });
 }
 
-export const editHoliady = ({startDate, endDate, holidaysType, note, id}) => (dispatch, getState) => {
+export const editHoliady = ({startDate, endDate, holidayType, note, id}) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id'])
   const formateStartDate = startDate.format('DD-MM-YYYY');
   const formatedEndDate = endDate.format('DD-MM-YYYY');
-  
+
   return axios.put(`/api/v1/staff_members/${staffMemberId}/holidays/${id}`, {
     start_date: formateStartDate,
     end_date: formatedEndDate,
     note: note,
-    holiday_type: holidaysType.value
+    holiday_type: holidayType
   },
   {
     headers: {
@@ -110,7 +110,7 @@ export const addHoliday = ({startDate, endDate, holidayType, note}) => (dispatch
     start_date: formateStartDate,
     end_date: formatedEndDate,
     note: note,
-    holiday_type: holidayType ? holidayType.value || holidayType : null
+    holiday_type: holidayType
   },
   {
     headers: {
