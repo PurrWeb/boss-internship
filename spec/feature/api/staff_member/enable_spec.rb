@@ -50,24 +50,24 @@ RSpec.describe 'Enable Staff Members' do
   end
   let(:valid_params) do
     {
-      starts_at: UIRotaDate.format(new_starts_at),
-      main_venue_id: new_main_venue.id,
-      staff_type_id: new_staff_type.id,
-      other_venue_ids: new_other_venues.map(&:id),
-      pin_code: new_pin_code,
+      startsAt: UIRotaDate.format(new_starts_at),
+      mainVenue: new_main_venue.id,
+      staffType: new_staff_type.id,
+      otherVenues: new_other_venues.map(&:id),
+      pinCode: new_pin_code,
       gender: new_gender,
-      phone_number: new_phone_number,
-      date_of_birth: UIRotaDate.format(new_date_of_birth),
-      national_insurance_number: new_national_insurance_number,
-      pay_rate_id: new_pay_rate.id,
-      employment_status: new_employment_status,
-      first_name: new_first_name,
+      phoneNumber: new_phone_number,
+      dateOfBirth: UIRotaDate.format(new_date_of_birth),
+      nationalInsuranceNumber: new_national_insurance_number,
+      payRate: new_pay_rate.id,
+      employmentStatus: new_employment_status,
+      firstName: new_first_name,
       surname: new_surname,
       address: new_address,
       postcode: new_postcode,
       country: new_country,
       county: new_county,
-      email_address: new_email_address
+      emailAddress: new_email_address
     }
   end
   let(:response) do
@@ -187,9 +187,9 @@ RSpec.describe 'Enable Staff Members' do
     let(:params) do
       valid_params.merge({
         gender: '',
-        first_name: '',
+        firstName: '',
         address: '',
-        pin_code: 'dsd'
+        pinCode: 'dsd'
       })
     end
 
@@ -201,9 +201,9 @@ RSpec.describe 'Enable Staff Members' do
       json = JSON.parse(response.body)
       expect(json).to eq({
         "errors" => {
-          "pin_code" => ["must be numerical"],
+          "pinCode" => ["must be numerical"],
           "gender" => ["is required"],
-          "first_name" => ["can't be blank"],
+          "firstName" => ["can't be blank"],
           "address" => ["can't be blank"]
         }
       })
@@ -229,9 +229,9 @@ RSpec.describe 'Enable Staff Members' do
       json = JSON.parse(response.body)
       expect(json).to eq({
         "errors" => {
-          "main_venue_id" => ["must be blank"],
-          "sia_badge_number" => ["is required"],
-          "sia_badge_expiry_date" => ["is required"]
+          "mainVenue" => ["must be blank"],
+          "siaBadgeNumber" => ["is required"],
+          "siaBadgeExpiryDate" => ["is required"]
         }
       })
     end
@@ -241,9 +241,9 @@ RSpec.describe 'Enable Staff Members' do
       let(:new_sia_badge_expiry_date) { (now + 3.months).to_date }
       let(:params) do
         valid_params.merge({
-          main_venue_id: nil,
-          sia_badge_number: new_sia_badge_number,
-          sia_badge_expiry_date: UIRotaDate.format(new_sia_badge_expiry_date)
+          mainVenue: nil,
+          siaBadgeNumber: new_sia_badge_number,
+          siaBadgeExpiryDate: UIRotaDate.format(new_sia_badge_expiry_date)
         })
       end
 

@@ -51,8 +51,8 @@ class StaffMemberApiUpdateService
     work_venues = Array(params.fetch(:other_venue_ids)).map do |id|
       Venue.find(id)
     end
-    staff_type = StaffType.find(params.fetch(:staff_type_id))
-    pay_rate = PayRate.find(params.fetch(:pay_rate_id))
+    staff_type = StaffType.find_by(id: params.fetch(:staff_type_id))
+    pay_rate = PayRate.find_by(id: params.fetch(:pay_rate_id))
 
     staff_member_params = {
       starts_at: UIRotaDate.parse(params.fetch(:starts_at)),

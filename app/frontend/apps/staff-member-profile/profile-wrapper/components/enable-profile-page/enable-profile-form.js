@@ -9,6 +9,7 @@ import BossFormAvatar from '~/components/boss-form/boss-form-avatar';
 
 import {enableStaffMemberRequest} from '../../actions';
 import {SECURITY_TYPE_ID} from '../../constants';
+import notify from '~/components/global-notification';
 
 const validate = values => {
   const errors = {}
@@ -83,7 +84,7 @@ let EnableProfileForm = ({
         <Field
           component={BossFormInput}
           required
-          name="first_name"
+          name="firstName"
           type="text"
           label="First Name"
         />
@@ -103,7 +104,7 @@ let EnableProfileForm = ({
           options={genderValues.toJS()}
         />
         <Field
-          name="date_of_birth"
+          name="dateOfBirth"
           component={BossFormCalendar}
           label="Date of birth"
           required
@@ -118,7 +119,7 @@ let EnableProfileForm = ({
       <Panel title="Venue">
         <Field
           component={BossFormSelect}
-          name="master_venue"
+          name="mainVenue"
           disabled={isSecurityStaff}
           required
           label="Main Venue"
@@ -129,7 +130,7 @@ let EnableProfileForm = ({
         />
         <Field
           component={BossFormSelect}
-          name="other_venues"
+          name="otherVenues"
           required
           multi
           label="Other Venues"
@@ -139,7 +140,7 @@ let EnableProfileForm = ({
           options={venues}
         />
         <Field
-          name="starts_at"
+          name="startsAt"
           component={BossFormCalendar}
           label="Start Date"
           required
@@ -150,7 +151,7 @@ let EnableProfileForm = ({
         <Field
           component={BossFormInput}
           required
-          name="email_address"
+          name="emailAddress"
           type="text"
           label="Email"
         />
@@ -186,7 +187,7 @@ let EnableProfileForm = ({
         <Field
           component={BossFormInput}
           required
-          name="phone_number"
+          name="phoneNumber"
           type="text"
           label="Phone Number"
         />
@@ -196,7 +197,7 @@ let EnableProfileForm = ({
         <Field
           component={BossFormSelect}
           required
-          name="staff_type"
+          name="staffType"
           label="Staff Type"
           optionLabel="name"
           optionValue="id"
@@ -213,19 +214,19 @@ let EnableProfileForm = ({
         <Field
           component={BossFormInput}
           required
-          name="national_insurance_number"
+          name="nationalInsuranceNumber"
           type="text"
           label="National Insurance Number"
         />
         <Field
           component={BossFormInput}
-          name="day_preference"
+          name="dayPreferenceNote"
           type="text"
           label="Day Preference"
         />
 
         <Field
-          name="hours_preference"
+          name="hoursPreferenceNote"
           component={BossFormInput}
           type="text"
           label="Hours Preference"
@@ -233,7 +234,7 @@ let EnableProfileForm = ({
         <Field
           component={BossFormSelect}
           required
-          name="pay_rate"
+          name="payRate"
           label="Pay Rate"
           optionLabel="name"
           optionValue="id"
@@ -243,7 +244,7 @@ let EnableProfileForm = ({
         <Field
           component={BossFormEmployementStatus}
           required
-          name="status_statement"
+          name="employmentStatus"
           label="Starter Employement Status Statement"
         />
       </Panel>      
@@ -263,10 +264,10 @@ EnableProfileForm = reduxForm({
   form: 'enable-profile-form',
   validate,
   onChange: (values, dispatch, props) => {
-    if(values.get('staff_type') === SECURITY_TYPE_ID) {
-      dispatch(change('enable-profile-form', 'master_venue', null));
+    if(values.get('staffType') === SECURITY_TYPE_ID) {
+      dispatch(change('enable-profile-form', 'mainVenue', null));
     } else {
-      dispatch(change('enable-profile-form', 'master_venue', values.get('master_venue') || props.initialValues.get('master_venue')));
+      dispatch(change('enable-profile-form', 'mainVenue', values.get('mainVenue') || props.initialValues.get('mainVenue')));
     }
   },
 })(EnableProfileForm);
@@ -275,7 +276,7 @@ const selector = formValueSelector('enable-profile-form');
 
 const mapStateToProps = (state) => {
   return {
-    isSecurityStaff: selector(state, 'staff_type') === SECURITY_TYPE_ID,
+    isSecurityStaff: selector(state, 'staffType') === SECURITY_TYPE_ID,
   }
 };
 

@@ -18,10 +18,9 @@ class BossFormCalendar extends React.Component {
           <span className="boss-form__label-text">{`${label} ${required ? '*' : ''}`}</span>
         </label>
         <DatePicker
-          customInput={<CalendarCustomInput />}
+          customInput={<CalendarCustomInput errorClass={`${touched && error && 'boss-input_state_error'}`} />}
           withPortal="withPortal"
-          calendarClassName="date-picker"
-          className={`${touched && error && 'boss-input_state_error'}`}
+          calendarClassName={`date-picker`}
           showMonthDropdown
           showYearDropdown
           selected={value}
