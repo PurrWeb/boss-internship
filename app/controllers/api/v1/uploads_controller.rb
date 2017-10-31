@@ -9,8 +9,7 @@ module Api
         if upload.save
           render json: upload, serializer: UploadSerializer, status: :created
         else
-          render json: upload,
-            serializer: ActiveModel::Serializer::ErrorSerializer,
+          render json: upload.errors.messages,
             status: :unprocessable_entity
         end
       end
