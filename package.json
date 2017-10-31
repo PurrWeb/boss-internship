@@ -36,6 +36,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
     "bluebird": "^3.4.0",
+    "boss-iscroll": "git+https://github.com/jsmbars/iscroll.git#6da2b1ceefd1e995bfed86bcedbc7f02c5e1d399",
     "bowser": "^1.6.0",
     "classnames": "^2.2.5",
     "cropperjs": "^0.5.6",

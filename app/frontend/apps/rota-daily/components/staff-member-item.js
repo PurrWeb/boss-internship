@@ -3,7 +3,7 @@ import StaffMemberInfo from './staff-member-info';
 import AddShift from './add-shift';
 import AddMultipleSubmitButton from './add-multiple-submit-button';
 import safeMoment from '~/lib/safe-moment';
-import iScroll from 'iscroll';
+import iScroll from 'boss-iscroll';
 import ReactIScroll from 'react-iscroll';
 
 const scrollOptions = {
@@ -13,6 +13,7 @@ const scrollOptions = {
   shrinkScrollbars: 'scale',
   fadeScrollbars: false,
   click: true,
+  enable_ofscroll: true,
 };
 
 class HolidayItem extends React.Component {

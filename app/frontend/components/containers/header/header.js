@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import HeaderDropdown from './components/header-dropdown';
-import iScroll from 'iscroll';
+import iScroll from 'boss-iscroll';
 import ReactIScroll from 'react-iscroll';
 import utils from '~/lib/utils';
 import URLSearchParams from 'url-search-params';
@@ -37,6 +37,7 @@ export default class Header extends Component {
       fadeScrollbars: false,
       click: true,
       scrollbars: true,
+      enable_ofscroll: true,
     };
   };
 
