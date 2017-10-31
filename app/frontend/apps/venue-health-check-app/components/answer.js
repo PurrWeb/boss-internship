@@ -53,7 +53,7 @@ export default class Answer extends React.Component {
 
     if (this.props.reviewMode && answer) {
       return (
-        <a className="boss-question__icon boss-question__icon_role_att">Attachment</a>
+        <a href="javascript:;" className="boss-question__icon boss-question__icon_role_att">Attachment</a>
       );
     } else {
       return '';

@@ -34,12 +34,15 @@ export default class QuestionnaireActions extends React.Component {
     if (this.props.reviewMode) {
       return(
         <div className="boss-page-dashboard__buttons-group">
-          <a
-            className="boss-button boss-button_role_success boss-page-dashboard__button"
-            onClick={ this.saveAnswers.bind(this) }
-          >
-            { this.renderButtonState() }
-          </a>
+          {this.props.wrongFiles.length === 0
+            ? <a
+                className="boss-button boss-button_role_success boss-page-dashboard__button"
+                onClick={ this.saveAnswers.bind(this) }
+              >
+                { this.renderButtonState() }
+              </a>
+            : <p>You uploaded files with wrong format, please remove them first</p>
+          }
         </div>
       );
     }

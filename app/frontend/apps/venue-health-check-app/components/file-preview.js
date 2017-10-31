@@ -4,9 +4,7 @@ import classnames from 'classnames';
 export default class FilePreview extends React.Component {
   static displayName = 'FilePreview';
 
-  openModal(e) {
-    e.preventDefault();
-
+  openModal = (e) => {
     let uploadId = parseInt(e.target.getAttribute('data-upload-id'));
 
     let image = this.props.uploads.find((upload) => {
@@ -17,9 +15,7 @@ export default class FilePreview extends React.Component {
     this.props.setModalImage(image)
   }
 
-  openReuploadModal(e) {
-    e.preventDefault();
-
+  openReuploadModal = (e) => {
     let uuidUploadId = e.target.getAttribute('data-upload-uuid');
 
     let image = this.props.uploads.find((upload) => {
@@ -32,7 +28,6 @@ export default class FilePreview extends React.Component {
 
   renderImages() {
     if (!this.props.currentAnswer) return;
-
     let uploads = this.props.uploads.filter((upload) => {
       return upload.questionnaireQuestionId == this.props.currentQuestion.id
     });
@@ -49,12 +44,12 @@ export default class FilePreview extends React.Component {
       if (upload.id) {
         return (
           <a
-            href="#"
+            href="javascript:;"
             className={ `boss-question__preview-link`}
             data-modal={ index }
             key={ upload.id }
             data-upload-id={ upload.id }
-            onClick={ this.openModal.bind(this) }
+            onClick={ this.openModal }
           >
             <img
               src={ upload.url }
@@ -64,16 +59,20 @@ export default class FilePreview extends React.Component {
           </a>
         );
       } else {
+        const isWrong = this.props.wrongFiles.includes(upload.questionnaireQuestionId);
         return (
+          <span>
           <a
-            href="#"
+            href="javascript:;"
+            style={{border: isWrong ? '1px solid red' : ''}}
             className={ `boss-question__preview-link boss-question__preview-link_state_broken`}
             data-modal={ index }
             key={ upload.uuid }
             data-upload-uuid={ upload.uuid }
-            onClick={ this.openReuploadModal.bind(this) }
+            onClick={ this.openReuploadModal }
           >
           </a>
+        </span>
         );
       }
     });

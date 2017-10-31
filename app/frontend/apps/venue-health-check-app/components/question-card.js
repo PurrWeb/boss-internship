@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import QuestionActions from './question-actions';
 import FileUpload from './file-upload';
 import FilePreview from './file-preview';
+import './style.sass';
 
 export default class QuestionCard extends React.Component {
   static displayName = 'QuestionCard';
@@ -18,15 +19,13 @@ export default class QuestionCard extends React.Component {
     }
   }
 
-  toggleDisplayNote(e) {
-    e.preventDefault();
-
+  toggleDisplayNote = (e) => {
     this.setState({
       displayNote: !this.state.displayNote
     })
   }
 
-  activateAnsweredState() {
+  activateAnsweredState = () => {
     this.setState({
       answered: true
     })
@@ -34,8 +33,8 @@ export default class QuestionCard extends React.Component {
 
   actionProps() {
     let cardProps = {
-      activateAnsweredState: this.activateAnsweredState.bind(this),
-      toggleDisplayNote: this.toggleDisplayNote.bind(this),
+      activateAnsweredState: this.activateAnsweredState,
+      toggleDisplayNote: this.toggleDisplayNote,
       displayNote: this.state.displayNote,
     }
 
@@ -50,16 +49,22 @@ export default class QuestionCard extends React.Component {
     }
   }
 
-  saveNote(event) {
+  saveNote = (event) => {
     event.preventDefault();
 
-    this.props.setAnswer({
+    const result = this.props.checkAnswer({
       questionnaireQuestionId: this.props.currentQuestion.id,
       note: this.state.noteValue
-    })
+    });
+    
+    result.then(resp => {
+      if (resp) {
+        this.toggleDisplayNote();
+      }
+    });
   }
 
-  updateNoteValue(event) {
+  updateNoteValue = (event) => {
     this.setState({
       noteValue: event.target.value
     })
@@ -74,7 +79,7 @@ export default class QuestionCard extends React.Component {
             className="boss-question__message-textarea"
             placeholder="Type Notes Here..."
             value={this.state.noteValue}
-            onChange={this.updateNoteValue.bind(this)}
+            onChange={this.updateNoteValue}
           >
           </textarea>
 
@@ -85,9 +90,9 @@ export default class QuestionCard extends React.Component {
             <button
               className="boss-button boss-button_type_small boss-question__submit"
               type="submit"
-              onClick={ this.saveNote.bind(this) }
+              onClick={ this.saveNote }
             >
-              Save
+              Done
             </button>
           </div>
         </div>
@@ -96,8 +101,11 @@ export default class QuestionCard extends React.Component {
   }
 
   render() {
-    let answeredPointerClass = (this.state.answered) ? 'boss-questionnaire__pointer_state_active' : '';
-    let answeredQuestionClass = (this.state.answered) ? 'boss-questionnaire__question_state_active' : '';
+    const isWrong = this.props.wrongFiles.includes(this.props.currentQuestion.id);
+    let answeredPointerActiveClass = (this.state.answered) ? 'boss-questionnaire__pointer_state_active' : '';
+    let answeredQuestionActiveClass = (this.state.answered) ? 'boss-questionnaire__question_state_active' : '';
+    const answeredPointerClass = isWrong ? 'boss-questionnaire__pointer_state_wrong' : answeredPointerActiveClass;
+    const answeredQuestionClass = isWrong ? 'boss-questionnaire__question_state_wrong' : answeredQuestionActiveClass;
 
     return (
       <li className="boss-questionnaire__item">

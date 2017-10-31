@@ -16,6 +16,22 @@ export function setUpload(uploadParams) {
   };
 }
 
+export const checkAnswer = (answer) => (dispatch, getState) => {
+  const uploads = getState().venueHealthCheck.get('uploads');
+  const wrongFiles = getState().venueHealthCheck.get('wrongFiles');
+
+  const hasInvalidUploads = uploads.filter(upload => {
+    return upload.questionnaireQuestionId === answer.questionnaireQuestionId && upload.id === undefined;
+  }).length > 0;
+  if (hasInvalidUploads) {
+    alert(`You have invalid files, please reupload them or delete`);
+    return false;
+  } else {
+    dispatch(setAnswer({...answer}));
+    return true;
+  }
+}
+
 export function deleteUpload(upload) {
   return {
     type: constants.REMOVE_UPLOAD,

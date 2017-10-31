@@ -8,7 +8,7 @@ import QuestionnaireActions from '../components/questionnaire-actions';
 import ImageModal from '../components/image-modal'
 
 import { setInitialData } from '../actions/initial-load'
-import { setAnswer, saveAnswers, setUpload, deleteUpload } from '../actions/answers'
+import { setAnswer, saveAnswers, setUpload, deleteUpload, checkAnswer } from '../actions/answers'
 
 function mapStateToProps(state) {
   return {
@@ -25,7 +25,8 @@ function mapStateToProps(state) {
     questionCount: state.venueHealthCheck.get('questionCount'),
     frontend: state.venueHealthCheck.get('frontend'),
     savedResponseId: state.venueHealthCheck.get('savedResponseId'),
-    uploads: state.venueHealthCheck.get('uploads')
+    uploads: state.venueHealthCheck.get('uploads'),
+    wrongFiles: state.venueHealthCheck.get('wrongFiles')
   };
 }
 
@@ -35,7 +36,8 @@ function mapDispatchToProps(dispatch) {
     setAnswer,
     setUpload,
     saveAnswers,
-    deleteUpload
+    deleteUpload,
+    checkAnswer,
   }, dispatch);
 }
 
@@ -249,7 +251,6 @@ export class QuestionnaireContainer extends React.Component {
       cardProps = Object.assign(this.commonProps(), {
         categoryQuestions: categoryQuestions
       });
-
       return(
         <CollapsibleCard { ...cardProps }></CollapsibleCard>
       )

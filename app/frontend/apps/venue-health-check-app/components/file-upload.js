@@ -72,6 +72,7 @@ export default class FileUpload extends React.Component {
           this.props.setUpload({
             uuid: uuid(),
             file: error.file,
+            error: error.responseJSON.file,
             questionnaireQuestionId: this.props.currentQuestion.id
           });
         });
@@ -88,7 +89,7 @@ export default class FileUpload extends React.Component {
       <span className="boss-question__file-label" onClick={this.openPicker}>
         <ImagesPicker
           multiple={true}
-          onPicked={this.handleChange.bind(this)}
+          onPicked={this.handleChange}
           ref={ref => (this.imagesPicker = ref)}
         />
         <span className="boss-question__file-label-text">Add image</span>
