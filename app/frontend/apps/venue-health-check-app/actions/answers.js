@@ -1,6 +1,7 @@
 import constants from '../constants';
 import { CALL_API } from 'redux-api-middleware';
 import humps from 'humps';
+import confirm from '~/lib/confirm-utils';
 
 export function setAnswer(answerParams) {
   return {
@@ -24,7 +25,10 @@ export const checkAnswer = (answer) => (dispatch, getState) => {
     return upload.questionnaireQuestionId === answer.questionnaireQuestionId && upload.id === undefined;
   }).length > 0;
   if (hasInvalidUploads) {
-    alert(`You have invalid files, please reupload them or delete`);
+    confirm('You have invalid files, please delete them', {
+      title: 'WARNING',
+      actionButtonText: 'Ok',
+    });
     return false;
   } else {
     dispatch(setAnswer({...answer}));
