@@ -156,17 +156,20 @@ const venueHealthCheck = (state = initialState, action) => {
     });
 
     _.remove(uploads, function(u) {
-      return (u.id == upload.id && u.id !== undefined) || u.uuid == upload.uuid;
+      return (u.id === upload.id && u.id !== undefined) || (upload.uuid !== undefined && u.uuid === upload.uuid);
     });
 
     wrongFiles = state.get('wrongFiles');
 
     wrongFiles = wrongFiles.reduce((sum, current) => {
-      if (current === upload.questionnaireQuestionId) {
-        return sum;
-      } else {
+      let wrongUploads = state.get('uploads').filter(item => item.questionnaireQuestionId === upload.questionnaireQuestionId && item.id === undefined);
+      if (current !== upload.questionnaireQuestionId) {
         return sum.concat([current]);
       }
+      if (wrongUploads.length !== 0) {
+        return sum.concat([current] );
+      }
+      return sum;
     }, []);
 
     return state

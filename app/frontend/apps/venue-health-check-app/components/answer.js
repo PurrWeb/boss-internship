@@ -5,7 +5,7 @@ import _ from 'lodash';
 export default class Answer extends React.Component {
   static displayName = 'Answer';
 
-  setOptionForQuestion(event) {
+  setOptionForQuestion = (event) => {
     this.props.activateAnsweredState();
 
     let questionnaireResponse = this.props.questionnaireResponse;
@@ -31,7 +31,7 @@ export default class Answer extends React.Component {
             name={ this.props.currentQuestion.id }
             value={ possibleValue }
             className="boss-question__radio-button"
-            onChange={ this.setOptionForQuestion.bind(this) }
+            onChange={ this.setOptionForQuestion }
             defaultChecked={ answer == possibleValue }
           />
           <span className="boss-question__radio-label-text">{ possibleValue }</span>
@@ -49,14 +49,13 @@ export default class Answer extends React.Component {
   }
 
   renderIcon() {
-    let answer = (this.props.currentAnswer) ? this.props.currentAnswer.value : '';
-
-    if (this.props.reviewMode && answer) {
+    let answer = this.props.answers.find(answer => answer.questionnaireQuestionId === this.props.currentQuestion.id);
+    if (answer && (!!answer.note || answer.image_ids && answer.image_ids.length !== 0)) {
       return (
         <a href="javascript:;" className="boss-question__icon boss-question__icon_role_att">Attachment</a>
       );
     } else {
-      return '';
+      return null;
     }
   }
 
@@ -75,7 +74,7 @@ export default class Answer extends React.Component {
             name={ this.props.currentQuestion.id }
             value={ scaleValue }
             className="boss-question__radio-button"
-            onChange={ this.setOptionForQuestion.bind(this) }
+            onChange={ this.setOptionForQuestion }
             defaultChecked={ answer == scaleValue }
           />
           <span className="boss-question__radio-label-text">{ scaleValue }</span>

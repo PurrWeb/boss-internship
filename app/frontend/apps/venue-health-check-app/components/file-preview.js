@@ -61,7 +61,6 @@ export default class FilePreview extends React.Component {
       } else {
         const isWrong = this.props.wrongFiles.includes(upload.questionnaireQuestionId);
         return (
-          <span>
           <a
             href="javascript:;"
             style={{border: isWrong ? '1px solid red' : ''}}
@@ -72,7 +71,6 @@ export default class FilePreview extends React.Component {
             onClick={ this.openReuploadModal }
           >
           </a>
-        </span>
         );
       }
     });
