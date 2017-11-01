@@ -45,10 +45,6 @@ export const initialLoad = createAction(INITIAL_LOAD);
 
 export const updateStaffMemberShift = (values) => (dispatch, getState) => {
   return updateStaffMemberShiftRequest(values).then(resp => {
-    notify('Rota Shift Updated Successfully', {
-      interval: 5000,
-      status: 'success'
-    });
     dispatch(updateRotaShift(resp.data));
     dispatch(updateStaffMemberShiftInfo(resp.data.staff_member.id));
     dispatch(closeGraphDetails());
@@ -57,10 +53,6 @@ export const updateStaffMemberShift = (values) => (dispatch, getState) => {
 
 export const deleteStaffMemberShift = (shift_id, staffMemberId) => (dispatch, getState) => {
   return deleteStaffMemberShiftRequest(shift_id).then(resp => {
-    notify('Rota Shift Deleted Successfully', {
-      interval: 5000,
-      status: 'success'
-    });
     dispatch(deleteRotaShift(shift_id));
     dispatch(updateStaffMemberShiftInfo(staffMemberId));
     dispatch(closeGraphDetails());
@@ -79,10 +71,6 @@ export const addShift = (values) => (dispatch, getState) => {
   }
 
   return addShiftRequest(values, venueId, rotaDate).then(resp => {
-    notify('Rota Shift Added Successfully', {
-      interval: 5000,
-      status: 'success'
-    });
     dispatch(addRotaShift(resp.data));
     dispatch(updateStaffMemberShiftInfo(values.staff_member_id));
     return resp;
