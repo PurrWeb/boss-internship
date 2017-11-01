@@ -50,13 +50,14 @@ export default class Answer extends React.Component {
 
   renderIcon() {
     let answer = this.props.answers.find(answer => answer.questionnaireQuestionId === this.props.currentQuestion.id);
-    if (answer && (!!answer.note || answer.image_ids && answer.image_ids.length !== 0)) {
-      return (
-        <a href="javascript:;" className="boss-question__icon boss-question__icon_role_att">Attachment</a>
-      );
-    } else {
-      return null;
+    let notes = [];
+    if (answer && !!answer.note) {
+      notes.push(<a href="javascript:;" key="note" className="boss-question__icon boss-question__icon_role_att">Note</a>);
+    } 
+    if (answer && (answer.image_ids && answer.image_ids.length !== 0)) {
+      notes.push(<a href="javascript:;" key="photo" className="boss-question__icon boss-question__icon_role_photo">Photo</a>);
     }
+    return notes.length ? notes : null;
   }
 
   renderScaleQuestionAnswer() {

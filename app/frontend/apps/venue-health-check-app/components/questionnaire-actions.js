@@ -14,7 +14,7 @@ export default class QuestionnaireActions extends React.Component {
     initializeCompletenessCharts();
   }
 
-  saveAnswers() {
+  saveAnswers = () => {
     this.props.saveAnswers(this.props.questionnaire.id, this.props.answers, this.props.currentVenue.id);
   }
 
@@ -35,13 +35,16 @@ export default class QuestionnaireActions extends React.Component {
       return(
         <div className="boss-page-dashboard__buttons-group">
           {this.props.wrongFiles.length === 0
-            ? <a
+            ? <button
+                type="button"
                 className="boss-button boss-button_role_success boss-page-dashboard__button"
-                onClick={ this.saveAnswers.bind(this) }
-              >
-                { this.renderButtonState() }
-              </a>
-            : <p>You uploaded files with wrong format, please remove them first</p>
+                onClick={this.saveAnswers}
+              >{this.renderButtonState()}</button>
+            : <div className="boss-form__error">
+                <p className="boss-form__error-text">
+                  <span className="boss-form__error-line">You uploaded files with wrong format, please remove them first</span>
+                </p>
+              </div>
           }
         </div>
       );

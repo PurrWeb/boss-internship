@@ -1,15 +1,13 @@
 import React from 'react';
 import classnames from 'classnames';
-
 import Answer from './answer';
+import FileReaderInput from 'react-file-reader-input';
 import FileUploadService from '../services/file-upload';
 import ImagesPicker from '~/components/images-picker';
 
 import uuid from 'uuid/v1'
 
 export default class FileUpload extends React.Component {
-  static displayName = 'FileUpload';
-
   constructor(props) {
     super(props);
 
@@ -52,7 +50,7 @@ export default class FileUpload extends React.Component {
     return !!uploadedFilesArray.find(function(f) {  return _.isEqual(f, fileArray) } );
   }
 
-  handleChange(files) {
+  handleChange = (files) => {
     let count = 0;
     let uploadedFiles = this.state.uploadedFiles;
 
