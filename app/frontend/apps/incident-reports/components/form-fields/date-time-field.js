@@ -33,6 +33,7 @@ class DateTimeField extends React.Component {
             className={`${date.meta.touched && date.meta.error && 'boss-input_state_error'}`}
             showMonthDropdown
             showYearDropdown
+            locale="en-gb"
             selected={date.input.value}
             onChange={(value) => date.input.onChange(value)}
             dropdownMode="select"

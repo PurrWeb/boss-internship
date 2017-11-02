@@ -1,6 +1,5 @@
 import React from 'react';
 import { Field, Fields, reduxForm, SubmissionError } from 'redux-form/immutable';
-import DatePicker from 'react-datepicker';
 import { fromJS, Map, List } from 'immutable';
 import oFetch from 'o-fetch';
 

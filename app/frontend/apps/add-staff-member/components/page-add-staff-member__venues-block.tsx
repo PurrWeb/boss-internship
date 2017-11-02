@@ -159,6 +159,7 @@ class Component extends React.Component<PropsFromConnect, State> {
                 withPortal: () => 'withPortal',
                 calendarClassName: () => 'date-picker',
                 className: setInputClass,
+                locale: () => 'en-gb',
                 selected: (props) => props.viewValue,
                 onChange: (props) => {
                   return props.onChange;
