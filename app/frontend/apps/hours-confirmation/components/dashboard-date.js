@@ -36,6 +36,7 @@ export default function DashboardDate({
                 calendarClassName="date-picker"
                 showMonthDropdown
                 showYearDropdown
+                locale="en-gb"
                 dropdownMode="select"
                 selected={safeMoment.uiDateParse(date)}
                 onChange={(date) => onChange({date, venueClientId})}

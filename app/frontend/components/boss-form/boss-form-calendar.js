@@ -23,6 +23,7 @@ class BossFormCalendar extends React.Component {
           calendarClassName={`date-picker`}
           showMonthDropdown
           showYearDropdown
+          locale="en-gb"
           selected={value}
           onChange={(value) => onChange(value)}
           dropdownMode="select"
