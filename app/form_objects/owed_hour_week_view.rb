@@ -1,7 +1,7 @@
 class OwedHourWeekView
   def initialize(owed_hours:)
-    # raise "Models class name should be `ActiveRecord::Relation`" unless owed_hours.class.name == "ActiveRecord::Relation"
-    # raise "Model class name should be `OwedHour`" unless owed_hours.first.class.name == "OwedHour"
+    raise "Models class name should be `ActiveRecord::Relation`" unless owed_hours.class.name == "ActiveRecord::Relation"
+    raise "Model class name should be `OwedHour`" unless owed_hours.first.class.name == "OwedHour"
     @owed_hours = owed_hours
   end
 

@@ -10,7 +10,7 @@ class OwedHourView
     hours_helper = HoursHelper.new(total_minutes: owed_hour.minutes)
     {
       id: owed_hour.id,
-      date: UIRotaDate.format(RotaShiftDate.to_rota_date(owed_hour.date)),
+      date: UIRotaDate.format(owed_hour.date),
       times: {
         startsAtOffset: owed_hour.starts_at && ((owed_hour.starts_at - RotaShiftDate.new(owed_hour.date).start_time) / 60).floor,
         endsAtOffset: owed_hour.ends_at && ((owed_hour.ends_at - RotaShiftDate.new(owed_hour.date).start_time) / 60).floor,
