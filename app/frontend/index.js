@@ -10,8 +10,11 @@ import '~/lib/global-try-catch';
 import Bowser from 'bowser'
 import Spinner from 'react-spinner';
 import 'react-spinner/react-spinner.css';
+import BouncedEmailModal from '~/components/bounced-email-modal';
+import './bounced-emails';
 
 window.Spinner = Spinner;
+window.BouncedEmailModal = BouncedEmailModal;
 window.boss = window.boss || {};
 window.boss.currentLayout = window.boss.currentLayout || 'oldLayout';
 window.debug = window.debug || {};

@@ -1,112 +1,168 @@
-<div class="media-object">
-  <h1><%= user.full_name.titlecase %><%= " (Disabled)" if user.disabled? %></h1>
-  <div class="media-object-section">
-    <% if can?(:disable, user) %>
-      <%= link_to(disable_user_path(user), class: 'boss2-button boss2-button_role_exclamation') do %>
-        Disable User
-      <% end %>
-    <% end %>
-    <% if can?(:enable, user) %>
-      <%= link_to(undestroy_user_path(user), method: :post, class: 'boss2-button boss2-button_role_exclamation') do %>
-        Enable User
-      <% end %>
-    <% end %>
-  </div>
-</div>
-
-<div class="container-fluid">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <span>Personal Details</span>
-      <% if user.enabled? %>
-        <span>
-          <%= link_to(
-                'Edit',
-                edit_personal_details_user_path(user),
-                class: ['boss2-button boss2-button_type_small boss2-button_role_edit'],
-                data: { "control-type" => "button", "button-role" => "edit-personal-details" }
-              ) %>
-        </span>
-      <% end %>
-    </div>
-    <div class="panel-body">
-    <dl>
-      <dt class="show-page-detail-heading">Name</dt>
-      <dd class="show-page-detail" data-detail="name"><%= user.full_name.titlecase %></dd>
-
-      <dt class="show-page-detail-heading">Email Address</dt>
-      <dd class="show-page-detail" data-detail="email"><%= user.email %></dd>
-    </dl>
-    </div>
-  </div>
-
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <span>Access Details</span>
-      <% if user.enabled? %>
-        <span>
-          <%= link_to(
-                'Edit',
-                edit_access_details_user_path(user),
-                class: ['boss2-button boss2-button_type_small boss2-button_role_edit'],
-                data: { "control-type" => "button", "button-role" => "edit-user" }
-              ) %>
-        </span>
-      <% end %>
-    </div>
-    <div class="panel-body">
-      <dl>
-        <dt class="show-page-detail-heading">Role</dt>
-        <dd class="show-page-detail" data-detail="role"><%= user.role.titleize %></dd>
-
-        <dt class="show-page-detail-heading">Venue Access</dt>
-        <% if user.dev? || user.admin? %>
-          <dd class="show-page-detail" data-detail="venues">All</dd>
-        <% else %>
-          <dd class="show-page-detail" data-detail="venues"><%= user.venues.map(&:name).join(', ') %></dd>
-        <% end %>
-      </dl>
-    </div>
-  </div>
-
-  <div class="panel panel-default">
-    <div class="panel-heading">Account Details</div>
-    <div class="panel-body">
-      <dl>
-        <dt class="show-page-detail-heading">Status</dt>
-        <dd class="show-page-detail" data-detail="status"><%= user.status %></dd>
-
-        <% if can? :manage, :staff_members %>
-          <dt class="show-page-detail-heading">Staff Member</dt>
-          <dd class="show-page-detail" data-detail="staff-member">
-            <% if user.staff_member.present? %>
-              <%= link_to(
-                    'View',
-                    staff_member_path(user.staff_member),
-                    class: ['boss2-button view-staff-member-button']
-                  )
-              %>
-            <% else %>
-              <div class="no-assocaited-staff-member-message">
-                No assocaited staff member
+<%= boss_dashboard do %>
+  <div class="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_user-profile">
+    <div class="boss-page-dashboard__group">
+      <div class="boss-page-dashboard__user-summary">
+        <div class="boss-user-summary boss-user-summary_role_user-profile">
+          <div class="boss-user-summary__side">
+            <div class="boss-user-summary__avatar">
+              <div class="boss-user-summary__avatar-inner">
               </div>
-              <% if user.enabled? %>
-                <div>
-                  <%= link_to(
-                        'Create',
-                        new_staff_member_user_path(user),
-                        class: ['boss2-button boss2-button_role_edit'],
-                        data: {
-                          "control-type" => "button",
-                          "button-role" => "create-staff-member"
-                        }
-                      ) %>
-                </div>
-              <% end %>
+            </div>
+          </div>
+          <div class="boss-user-summary__content">
+            <div class="boss-user-summary__header">
+              <h2 class="boss-user-summary__name"><%= user.full_name.titlecase %><%= " (Disabled)" if user.disabled? %></h2>
+            </div>
+            <% if user.disabled? %>
+              <ul class="boss-user-summary__review-list">
+                <li class="boss-user-summary__review-item">
+                  <span class="boss-user-summary__review-label">Disabled by: </span>
+                  <span class="boss-user-summary__review-val">
+                    <span>
+                      <%= user.disabled_by_user.full_name.titlecase %> on 
+                    </span>
+                  </span>
+                </li>
+                <li class="boss-user-summary__review-item">
+                  <span class="boss-user-summary__review-label">Reason for disabling: </span>
+                  <span class="boss-user-summary__review-val"><%= user.disable_reason %></span>
+                </li>
+              </ul>
             <% end %>
-          </dd>
+          </div>
+        </div>
+      </div>
+      <div class="boss-page-dashboard__buttons-group">
+        <% if can?(:disable, user) %>
+          <%= link_to(disable_user_path(user), class: 'boss-button boss-button_role_block boss-page-dashboard__button') do %>
+            Disable User
+          <% end %>
         <% end %>
-      </dl>
+        <% if can?(:enable, user) %>
+          <%= link_to(undestroy_user_path(user), method: :post, class: 'boss-button boss-button_role_unblock boss-page-dashboard__button') do %>
+            Enable User
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
+<% end %>
+
+<%= boss_main_content do %>
+  <div class="boss-page-main__flow">
+    <%= boss_content_isle(number: 1) do %>
+      <h1 class="boss-details__title">
+        <span class="boss-details__title-label">Personal Details</span>
+        <span class="boss-details__title-action">
+          <% if user.enabled? %>
+            <%= link_to(
+              'Edit',
+              edit_personal_details_user_path(user),
+              class: ['boss-button boss-button_role_update boss-button_type_extra-small'],
+              data: { "control-type" => "button", "button-role" => "edit-personal-details" }
+            ) %>
+          <% end %>
+        </span>
+      </h1>
+      <ul class="boss-details__list">
+        <li class="boss-details__item">
+          <p class="boss-details__label boss-details__label_size_small">Name</p>
+          <p class="boss-details__value"><%= user.full_name.titlecase %></p>
+        </li>
+        <li class="boss-details__item">
+          <p class="boss-details__label boss-details__label_size_small">Email Address</p>
+          <% if user.email_address.bounced_data.present? %>
+            <button
+              bounced-email
+              data-bounced-email="<%= user.email_address.bounced_data["email"] %>"
+              data-bounced-reason="<%= user.email_address.bounced_data["reason"] %>"
+              data-bounced-error-code="<%= user.email_address.bounced_data["error_code"] %>"
+              data-bounced-at="<%= user.email_address.bounced_data["bounced_at"] %>"
+              data-bounced-updated-at="<%= user.email_address.bounced_data["updated_at"] %>"
+              class="boss-table__text boss-table__text_role_alert-action boss-table__text_adjust_wrap"
+            ><%= user.email %></button>
+          <% else %>
+            <p class="boss-details__value">
+              <%= user.email %>
+            </p>
+          <% end %>
+        </li>
+      </ul>
+    <% end %>
+    <%= boss_content_isle(number: 2) do %>
+      <h1 class="boss-details__title">
+        <span class="boss-details__title-label">Access Details</span>
+        <span class="boss-details__title-action">
+          <% if user.enabled? %>
+            <%= link_to(
+              'Edit',
+              edit_access_details_user_path(user),
+              class: ['boss-button boss-button_role_update boss-button_type_extra-small'],
+              data: { "control-type" => "button", "button-role" => "edit-personal-details" }
+            ) %>
+          <% end %>
+        </span>
+      </h1>
+      <ul class="boss-details__list">
+        <li class="boss-details__item">
+          <p class="boss-details__label boss-details__label_size_small">Role</p>
+          <p class="boss-details__value"><%= user.role.titleize %></p>
+        </li>
+        <li class="boss-details__item">
+          <p class="boss-details__label boss-details__label_size_small">Venue Access</p>
+          <p class="boss-details__value">
+            <% if user.dev? || user.admin? %>
+              All
+            <% else %>
+              <%= user.venues.present? ? user.venues.map(&:name).join(', ') : 'N/A' %>
+            <% end %>
+          </p>
+        </li>
+      </ul>
+    <% end %>
+    <%= boss_content_isle(number: 3) do %>
+      <h1 class="boss-details__title">
+        <span class="boss-details__title-label">Account Details</span>
+        <span class="boss-details__title-action">
+        </span>
+      </h1>
+      <ul class="boss-details__list">
+        <li class="boss-details__item">
+          <p class="boss-details__label boss-details__label_size_small">Status</p>
+          <p class="boss-details__value"><%= user.status %></p>
+        </li>
+        <% if can? :manage, :staff_members %>
+          <li class="boss-details__item">
+            <p class="boss-details__label boss-details__label_size_small">Staff Member</p>
+            <p class="boss-details__value">
+              <% if user.staff_member.present? %>
+                <span class="boss-details__value-line"><%= user.staff_member.full_name %></span>
+                <%= link_to(
+                      'View',
+                      staff_member_path(user.staff_member),
+                      class: ['boss-button boss-button_role_view-details boss-button_type_small']
+                    )
+                %>
+              <% else %>
+                <span class="boss-details__value-line">No associated staff member</span>
+                <% if user.enabled? %>
+                  <span class="boss-details__value-line">
+                    <%= link_to(
+                      'Create',
+                      new_staff_member_user_path(user),
+                      class: ['boss-button boss-button_role_update boss-button_type_small'],
+                      data: {
+                        "control-type" => "button",
+                        "button-role" => "create-staff-member"
+                      }
+                    ) %>
+                  </span>
+                <% end %>
+              <% end %>
+            </p>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+<% end %>

@@ -7,6 +7,10 @@ class EmailAddress < ActiveRecord::Base
 
   validate :email_address_valid
 
+  def bounced_data
+    BouncedEmailAddress.find_by_email(email: email)
+  end
+
   def email_address_valid
     return unless email.present?
 

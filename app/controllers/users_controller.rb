@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :authorize_admin, except: [:new_staff_member, :create_staff_member]
+  before_filter :set_new_layout, only: [:index, :show]
 
   def show
     user = User.find(params[:id])
