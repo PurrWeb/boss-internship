@@ -1,7 +1,7 @@
 import React from 'react';
 import safeMoment from "~/lib/safe-moment"
-
 import editAvatarModal from '~/lib/content-modal';
+import bouncedEmailModal from '~/components/bounced-email-modal';
 
 const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, currentPage}) => {
   const avatar = staffMember.get('avatar');
@@ -12,6 +12,7 @@ const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, cu
   const disabledByUser = staffMember.get('disabled_by_user');
   const disabledAt = staffMember.get('disabled_at');
   const disabledReason = staffMember.get('disable_reason');
+  const bouncedEmail = staffMember.get('bounced_email');
 
   const renderPhoneNumber = (phoneNumber) => {
     return phoneNumber
@@ -24,11 +25,24 @@ const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, cu
 
   const renderEmail = (email) => {
     return email
-      ? <a
+      ? renderEmailorBounced(email)
+      : null;
+  }
+
+  const showBouncedModal = (bouncedEmail) => {
+    bouncedEmailModal(bouncedEmail);
+  }
+
+  const renderEmailorBounced = (email) => {
+    return bouncedEmail
+      ? <p
+          onClick={() => showBouncedModal(bouncedEmail.toJS())}
+          className="boss-user-summary__link boss-user-summary__link_role_alert-action"
+        >{email}</p>
+      : <a
           href={`mailto:${email}`}
           className="boss-user-summary__link boss-user-summary__link_role_email"
         >{email}</a>
-      : null;
   }
 
   const renderFullName = (fullName, disabled = false) => {
