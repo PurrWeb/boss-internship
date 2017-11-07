@@ -53,6 +53,7 @@ gem 'font-awesome-sass'
 gem 'active_model_serializers', '~> 0.10.0'
 gem "shell-spinner"
 gem 'acts_as_list'
+gem 'sendgrid-ruby'
 
 group :production, :development do
   gem 'redis', '~>3.2'
