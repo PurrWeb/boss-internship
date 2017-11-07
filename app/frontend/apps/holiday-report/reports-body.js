@@ -3,6 +3,7 @@ import _ from "underscore"
 import safeMoment from "~/lib/safe-moment"
 import Select from "react-select"
 import StaffMemberHolidaysLink from "~/components/staff-member-holidays-link"
+import {ColoredMultipleValue, ColoredSingleOption} from '~/components/boss-form/colored-select'
 
 export default class ReportsBody extends React.Component {
   renderHolidayCell(holiday) {
@@ -37,9 +38,6 @@ export default class ReportsBody extends React.Component {
       let staffMemberVenueIds = staffMember.venues.map((venue) => {
         return venue.serverId
       })
-      let venueNames = staffMemberVenueIds.map((venueId) => {
-        return this.props.venues['CLIENT_ID_' + venueId].name
-      });
 
       return (
         <div className="boss-table__row" key={ staffMember.serverId }>
@@ -60,13 +58,6 @@ export default class ReportsBody extends React.Component {
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div className="boss-table__cell">
-            <div className="boss-table__info">
-              <p className="boss-table__label">Venues</p>
-              <p className="boss-table__text">{ venueNames.join(', ') }</p>
             </div>
           </div>
 
@@ -228,6 +219,8 @@ export default class ReportsBody extends React.Component {
                 <Select
                   value={ this.state.filterByStaffType }
                   options={ this.staffTypeOptions() }
+                  valueComponent={ColoredMultipleValue}
+                  optionComponent={ColoredSingleOption}
                   multi={ true }
                   onChange={ this.setStaffTypeFilter.bind(this) }
                 />
