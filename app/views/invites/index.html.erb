@@ -75,7 +75,7 @@
           <div class="boss-table__cell boss-table__cell_role_header"></div>
         </div>
         <% invites.each do |invite| %>
-          <div class="boss-table__row">
+          <div class="boss-table__row" data-invite-id="<%= invite.id %>">
             <% if invite.email_bounced_data.present? %>
               <%= table_cell('Email') do %>
                 <button
