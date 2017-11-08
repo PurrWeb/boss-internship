@@ -84,21 +84,12 @@ export default class ReportsHeader extends React.Component {
                 <div className="boss-popover boss-popover_context_dashboard-calendar" data-popover="1" style={{ display: 'none' }}>
                   <div className="boss-popover__inner">
                     <WeekPicker
-                      selectionStartDate={new Date(this.props.pageOptions.weekStartDate)}
+                      selectionStartDate={safeMoment.uiDateParse(this.props.pageOptions.weekStartDate).toDate()}
                       onChange={(selection) => {
                         let startDate = selection.startDate;
                         let endDate = selection.endDate;
-                        let venueClientId = this.props.venueClientId;
-                        let venue = accessibleVenues[venueClientId];
-                        let venueId;
-
-                        if (venue !== undefined){
-                          venueId = venue.serverId;
-                        }
-
                         location.href = appRoutes.holidays({
                           date: startDate,
-                          venueId: venueId
                         });
                       }}
                     />
