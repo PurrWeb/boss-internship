@@ -10,17 +10,8 @@ class HolidaysController < ApplicationController
 
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
-    filter_venue = venue_from_params
-
-    query_venues = if filter_venue
-      authorize!(:manage, filter_venue)
-      Venue.where(id: filter_venue.id)
-    else
-      accessible_venues
-    end
-
     week = RotaWeek.new(date_from_params)
-    holidays_reports_data = HolidayReportsDataQuery.new(week: week, venues: query_venues)
+    holidays_reports_data = HolidayReportsDataQuery.new(week: week, venue: venue_from_params)
 
     holidays = holidays_reports_data.holidays.includes([:staff_member])
     staff_members = holidays_reports_data
@@ -33,9 +24,7 @@ class HolidaysController < ApplicationController
           week: week,
           holidays: holidays,
           staff_members: staff_members,
-          accessible_venues: accessible_venues,
           staff_types: StaffType.all,
-          filter_venue: filter_venue,
           access_token: access_token
         }
       end
@@ -176,10 +165,10 @@ class HolidaysController < ApplicationController
 
   def index_redirect_params
     venue = venue_from_params || current_user.default_venue
-    date = date_from_params || UIRotaDate.format(Time.zone.now.to_date)
+    date = date_from_params || Time.zone.now.to_date.monday
     {
       venue_id: venue.id,
-      date: date,
+      date: UIRotaDate.format(date),
     }
   end
 
@@ -196,7 +185,7 @@ class HolidaysController < ApplicationController
   end
 
   def date_from_params
-    if params['date'].present?
+    if params[:date].present?
       UIRotaDate.parse(params[:date])
     end
   end

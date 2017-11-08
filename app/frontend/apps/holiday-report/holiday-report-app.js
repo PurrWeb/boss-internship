@@ -16,14 +16,12 @@ export default class HolidayReportApp extends Component {
         var staffTypes = oFetch(data, "staffTypes");
         var staffMembers = oFetch(data, "staffMembers");
         var holidays = oFetch(data, "holidays");
-        var venues = oFetch(data, "venues");
         var pageData = oFetch(data, "pageData");
         this.store = createStore(function(){
             return {
                 staffTypes: utils.indexByClientId(staffTypes),
                 staffMembers: utils.indexByClientId(staffMembers),
                 holidays: utils.indexByClientId(holidays),
-                venues: utils.indexByClientId(venues),
                 pageOptions: pageData
             }
         });
