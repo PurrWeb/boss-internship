@@ -76,11 +76,11 @@
               <div class="boss-table__cell boss-table__cell_role_header">Role</div>
             </div>
             <% users.each do |user| %>
-              <div class="boss-table__row">
+              <div class="boss-table__row" data-user-id="<%= user.id %>">
                 <div class="boss-table__cell">
                   <div class="boss-table__info">
                     <p class="boss-table__label">Name</p>
-                    <p class="boss-table__text">
+                    <p class="boss-table__text" data-role="name">
                       <%= link_to(user_path(user), class: 'boss-table__link') do %>
                           <%= user.full_name.titlecase %>
                       <% end %>
@@ -100,7 +100,7 @@
                 <div class="boss-table__cell">
                   <div class="boss-table__info">
                     <p class="boss-table__label">Email</p>
-                    <p class="boss-table__text">
+                    <p class="boss-table__text" data-role="email">
                       <% if user.email_address.bounced_data.present? %>
                         <button
                           bounced-email
@@ -122,7 +122,7 @@
                 <div class="boss-table__cell">
                   <div class="boss-table__info">
                     <p class="boss-table__label">Role</p>
-                    <p class="boss-table__text">
+                    <p class="boss-table__text" data-role="role">
                       <%= link_to(user_path(user), class: 'boss-table__link') do %>
                           <%= user.role.titleize %>
                       <% end %>

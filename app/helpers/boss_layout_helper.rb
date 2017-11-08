@@ -33,7 +33,7 @@ module BossLayoutHelper
   end
   
   def table_cell(label, &block)
-    content_tag(:div, class: 'boss-table__cell') do
+    content_tag(:div, class: 'boss-table__cell', data: {role: label}) do
       content_tag(:div, class: 'boss-table__info') do
         content_tag(:p, class: 'boss-table__label') do
           label

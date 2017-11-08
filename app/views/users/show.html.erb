@@ -67,7 +67,7 @@
       <ul class="boss-details__list">
         <li class="boss-details__item">
           <p class="boss-details__label boss-details__label_size_small">Name</p>
-          <p class="boss-details__value"><%= user.full_name.titlecase %></p>
+          <p class="boss-details__value" data-detail="name"><%= user.full_name.titlecase %></p>
         </li>
         <li class="boss-details__item">
           <p class="boss-details__label boss-details__label_size_small">Email Address</p>
@@ -82,7 +82,7 @@
               class="boss-table__text boss-table__text_role_alert-action boss-table__text_adjust_wrap"
             ><%= user.email %></button>
           <% else %>
-            <p class="boss-details__value">
+            <p class="boss-details__value" data-detail="email">
               <%= user.email %>
             </p>
           <% end %>
@@ -98,7 +98,7 @@
               'Edit',
               edit_access_details_user_path(user),
               class: ['boss-button boss-button_role_update boss-button_type_extra-small'],
-              data: { "control-type" => "button", "button-role" => "edit-personal-details" }
+              data: { "control-type" => "button", "button-role" => "edit-user" }
             ) %>
           <% end %>
         </span>
@@ -106,7 +106,7 @@
       <ul class="boss-details__list">
         <li class="boss-details__item">
           <p class="boss-details__label boss-details__label_size_small">Role</p>
-          <p class="boss-details__value"><%= user.role.titleize %></p>
+          <p class="boss-details__value" data-detail="role"><%= user.role.titleize %></p>
         </li>
         <li class="boss-details__item">
           <p class="boss-details__label boss-details__label_size_small">Venue Access</p>
@@ -129,12 +129,12 @@
       <ul class="boss-details__list">
         <li class="boss-details__item">
           <p class="boss-details__label boss-details__label_size_small">Status</p>
-          <p class="boss-details__value"><%= user.status %></p>
+          <p class="boss-details__value" data-detail="status"><%= user.status %></p>
         </li>
         <% if can? :manage, :staff_members %>
           <li class="boss-details__item">
             <p class="boss-details__label boss-details__label_size_small">Staff Member</p>
-            <p class="boss-details__value">
+            <p class="boss-details__value" data-detail="staff-member">
               <% if user.staff_member.present? %>
                 <span class="boss-details__value-line"><%= user.staff_member.full_name %></span>
                 <%= link_to(
@@ -144,7 +144,7 @@
                     )
                 %>
               <% else %>
-                <span class="boss-details__value-line">No associated staff member</span>
+                <span class="boss-details__value-line" data-detail="no-staff-member">No associated staff member</span>
                 <% if user.enabled? %>
                   <span class="boss-details__value-line">
                     <%= link_to(
