@@ -35,11 +35,12 @@ module PageObject
 
     private
     def index_listing_for(invite)
-      find(:css, ".invites-index-listing[data-invite-id=\"#{invite.id}\"]")
+      find(:css, ".boss-table__row[data-invite-id=\"#{invite.id}\"]")
     end
 
     def detail_text(listing, column)
       section = listing.find(detail_selector_for(column))
+        .find(:css, '.boss-table__text_adjust_wrap')
       section.text
     end
 
@@ -51,9 +52,9 @@ module PageObject
 
     def column_data
       {
-        email: { detail_selector: 'td[data-role="email"]' },
-        role:  { detail_selector: 'td[data-role="role"]'  },
-        status:  { detail_selector: 'td[data-role="status"]'  }
+        email: { detail_selector: '.boss-table__cell[data-role="Email"]' },
+        role:  { detail_selector: '.boss-table__cell[data-role="Role"]'  },
+        status:  { detail_selector: '.boss-table__cell[data-role="Status"]'  }
       }
     end
 
