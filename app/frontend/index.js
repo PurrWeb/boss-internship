@@ -14,7 +14,6 @@ import BouncedEmailModal from '~/components/bounced-email-modal';
 import './bounced-emails';
 
 window.Spinner = Spinner;
-window.BouncedEmailModal = BouncedEmailModal;
 window.boss = window.boss || {};
 window.boss.currentLayout = window.boss.currentLayout || 'oldLayout';
 window.debug = window.debug || {};
