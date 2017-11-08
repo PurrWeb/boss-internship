@@ -35,6 +35,7 @@ class BouncedEmailAddress
         raise e.message
       end
     end
+    nil
   end
 
   def self.find_by_email(email:)
@@ -104,9 +105,9 @@ class BouncedEmailAddress
   end
 
   def self.entry_valid?(entry:)
-    entry[:email].present? &&
-    entry[:reason].present? && 
-    entry[:bounced_at].present? &&
-    entry[:error_code].present?
+    entry.key?(:email) &&
+    entry.key?(:reason) &&
+    entry.key?(:bounced_at) &&
+    entry.key?(:error_code)
   end
 end

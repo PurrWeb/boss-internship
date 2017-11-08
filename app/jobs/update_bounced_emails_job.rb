@@ -1,17 +1,13 @@
-
 class UpdateBouncedEmailsJob < ActiveJob::Base
+  def perform(env: Rails.env, service: SendgridBouncedEmailService)
+    return unless env == "production"
+    normalised_bounce_data = service.call
 
-  def perform
-    bounced_email_service = if Rails.env.production?
-      SendgridBouncedEmailService
-    else
-      FakeBouncedEmailService
+    unless BouncedEmailAddress.bounce_data_valid?(bounce_data: normalised_bounce_data)
+      raise "API returned Invalid bounced data supplied #{normalised_bounce_data}";
     end
-    normalised_bounce_data = bounced_email_service.call
-    if BouncedEmailAddress.bounce_data_valid?(bounce_data: normalised_bounce_data)
-      BouncedEmailAddress.clear
-      BouncedEmailAddress.update(bounce_data: normalised_bounce_data)
-    end
+    BouncedEmailAddress.clear
+    BouncedEmailAddress.update(bounce_data: normalised_bounce_data)
   end
 end
 
