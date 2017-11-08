@@ -16,29 +16,34 @@ class BouncedEmailAddress
   end
 
   def self.update(bounce_data:)
-    begin
-      redis.multi do
-        redis.set(
-          bounce_list_key,
-          emails_list(bounce_data: bounce_data)
-        )
-        
-        bounce_data.each do |bounce_entry|
+    if bounce_data_valid?(bounce_data:bounce_data)
+      begin
+        redis.multi do
           redis.set(
-            bounce_record_key(email: bounce_entry.fetch(:email)),
-            bounce_record_json(bounce_entry: bounce_entry)
+            bounce_list_key,
+            emails_list(bounce_data: bounce_data)
           )
+          
+          bounce_data.each do |bounce_entry|
+            redis.set(
+              bounce_record_key(email: bounce_entry.fetch(:email)),
+              bounce_record_json(bounce_entry: bounce_entry)
+            )
+          end
         end
+      rescue Exception => e
+        raise e.message
       end
-    rescue Exception => e
-      raise e.message
     end
   end
 
   def self.find_by_email(email:)
-    updated_at = JSON.parse(redis.get(bounce_list_key))["update_time"]
     bounce_record_json = JSON.parse(redis.get(bounce_record_key(email: email)))
-    bounce_record_json.merge("updated_at" => updated_at) if bounce_record_json.present?
+    bounce_record_json.merge("updated_at" => update_time) if bounce_record_json.present?
+  end
+
+  def self.update_time
+    JSON.parse(redis.get(bounce_list_key))["update_time"]
   end
 
   def self.all
@@ -48,10 +53,9 @@ class BouncedEmailAddress
     return [] unless bounced_data.present?
 
     bounced_data_json = JSON.parse(bounced_data)
-    updated_at = bounced_data_json["update_time"]
     bounced_data_json["keys"].map do |email|
       JSON.parse(redis.get(bounce_record_key(email: email)))
-        .merge("updated_at" => updated_at)
+        .merge("updated_at" => update_time)
     end
   end
 
