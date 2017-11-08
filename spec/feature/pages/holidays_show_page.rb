@@ -12,7 +12,7 @@ module PageObject
     def surf_to
       params = {
         date: UIRotaDate.format(date),
-        venue: venue.id
+        venue_id: venue.id
       }
 
       if format == :csv

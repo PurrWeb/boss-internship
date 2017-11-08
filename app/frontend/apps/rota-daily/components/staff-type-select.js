@@ -1,7 +1,7 @@
 import React from 'react';
 
 import BossSelect from './boss-select';
-import {ColoredOption, ColoredValue} from '~/components/boss-form/colored-select';
+import {ColoredOption, ColoredMultipleValue} from '~/components/boss-form/colored-select';
 
 class StaffTypeSelect extends React.Component {
   
@@ -19,7 +19,7 @@ class StaffTypeSelect extends React.Component {
         value="id"
         mappedProps={{
           multi: true,
-          valueComponent: ColoredValue,
+          valueComponent: ColoredMultipleValue,
           optionComponent: ColoredOption
         }}
       />

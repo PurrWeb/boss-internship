@@ -2,36 +2,30 @@ class HolidaysController < ApplicationController
   before_action :set_new_layout, only: [:index]
 
   def index
+    if !index_params_present?
+      return redirect_to holidays_path(index_redirect_params)
+    end
+
     authorize!(:view, :holidays)
 
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
-    query_venues = nil
-    filter_venue = Venue.find_by(id: params[:venue])
-    accessible_venues = AccessibleVenuesQuery.new(current_user).all
+    filter_venue = venue_from_params
 
-    if filter_venue
+    query_venues = if filter_venue
       authorize!(:manage, filter_venue)
-      query_venues = Venue.where(id: filter_venue.id)
+      Venue.where(id: filter_venue.id)
     else
-      query_venues = accessible_venues
+      accessible_venues
     end
 
-    if params[:date]
-      date = UIRotaDate.parse(params[:date])
-    else
-      redirect_to holidays_path(date: UIRotaDate.format(Time.zone.now.to_date))
-      return
-    end
-
-    week = RotaWeek.new(date)
-
+    week = RotaWeek.new(date_from_params)
     holidays_reports_data = HolidayReportsDataQuery.new(week: week, venues: query_venues)
 
     holidays = holidays_reports_data.holidays.includes([:staff_member])
-    staff_members = holidays_reports_data.
-      staff_members.
-      includes([:staff_type, :name, :master_venue])
+    staff_members = holidays_reports_data
+      .staff_members
+      .includes([:staff_type, :name, :master_venue])
 
     respond_to do |format|
       format.html do
@@ -175,6 +169,20 @@ class HolidaysController < ApplicationController
   end
 
   private
+  def index_params_present?
+    venue_from_params.present? &&
+    date_from_params.present?
+  end
+
+  def index_redirect_params
+    venue = venue_from_params || current_user.default_venue
+    date = date_from_params || UIRotaDate.format(Time.zone.now.to_date)
+    {
+      venue_id: venue.id,
+      date: date,
+    }
+  end
+
   def holiday_params
     params.
       require(:holiday).
@@ -187,6 +195,12 @@ class HolidaysController < ApplicationController
       )
   end
 
+  def date_from_params
+    if params['date'].present?
+      UIRotaDate.parse(params[:date])
+    end
+  end
+
   def start_date_from_params
     if params['holiday']['start_date'].present?
       UIRotaDate.parse(params['holiday']['start_date'])
@@ -197,5 +211,13 @@ class HolidaysController < ApplicationController
     if params['holiday']['end_date'].present?
       UIRotaDate.parse(params['holiday']['end_date'])
     end
+  end
+
+  def accessible_venues
+    AccessibleVenuesQuery.new(current_user).all
+  end
+
+  def venue_from_params
+    accessible_venues.find_by(id: params[:venue_id])
   end
 end
