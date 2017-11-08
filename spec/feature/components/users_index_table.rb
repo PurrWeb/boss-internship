@@ -25,7 +25,7 @@ module PageObject
 
     private
     def index_listing_for(user)
-      find(:css, ".users-index-listing[data-user-id=\"#{user.id}\"]")
+      find(:css, ".boss-table__row[data-user-id=\"#{user.id}\"]")
     end
 
     def detail_text(listing, column)
@@ -41,9 +41,9 @@ module PageObject
 
     def column_data
       {
-        name:  { detail_selector: 'td[data-role="name"]'  },
-        email: { detail_selector: 'td[data-role="email"]' },
-        role:  { detail_selector: 'td[data-role="role"]'  }
+        name:  { detail_selector: '.boss-table__text[data-role="name"]'  },
+        email: { detail_selector: '.boss-table__text[data-role="email"]' },
+        role:  { detail_selector: '.boss-table__text[data-role="role"]'  }
       }
     end
 
