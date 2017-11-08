@@ -23,8 +23,8 @@ RSpec.describe "Bounced email address " do
   end
 
   context 'update ' do
-    specify 'should return OK ' do
-      expect(model.update(bounce_data: valid_data)).to eq(["OK", "OK"])
+    before do
+      model.update(bounce_data: valid_data)
     end
 
     specify 'record should be created after update ' do
