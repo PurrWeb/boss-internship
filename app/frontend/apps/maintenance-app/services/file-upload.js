@@ -1,3 +1,5 @@
+import { apiRoutes } from '~/lib/routes'
+
 export default class FileUpload {
   static endpoint = '/api/v1/maintenance_task_image_uploads';
 
@@ -13,7 +15,7 @@ export default class FileUpload {
     if (!file) return;
 
     return new Promise((resolve, reject) => {
-      return this.new(file)
+      return new this(file)
         .upload()
         .then(json => {
           resolve(Object.assign(json, { uuid: uuid }));
@@ -31,18 +33,14 @@ export default class FileUpload {
 
   upload() {
     return $.ajax({
-      url: this.constructor.endpoint,
+      url: apiRoutes.maintenanceTaskImageUpload.getPath(),
       data: this.formData,
-      type: 'POST',
+      type: apiRoutes.maintenanceTaskImageUpload.method,
       contentType: false,
       processData: false,
       headers: {
         Authorization: `Token token=${this.apiKey}`
       }
     });
-  }
-
-  static new(params) {
-    return new this(params);
   }
 }

@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import moment from 'moment';
 
 import constants from '../constants';
-
+import oFetch from 'o-fetch';
 import Select from 'react-select';
 
 export default class TaskComponent extends React.Component {
@@ -12,9 +12,9 @@ export default class TaskComponent extends React.Component {
 
     this.state = {
       editingStatus: false,
-      status: this.props.currentMaintenanceTask.status,
+      status: oFetch(this.props.currentMaintenanceTask, 'status'),
       confirmText: 'Confirm',
-      previousStatus: this.props.currentMaintenanceTask.status
+      previousStatus: oFetch(this.props.currentMaintenanceTask, 'status')
     }
   }
 

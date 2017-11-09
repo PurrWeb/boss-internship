@@ -1,14 +1,12 @@
 import constants from '../constants';
-
+import { apiRoutes } from '~/lib/routes'
 import { CALL_API } from 'redux-api-middleware';
 
 export function queryMaintenanceTasks(filterState) {
-  let queryParams = $.param(filterState);
-
   return {
     [CALL_API]: {
-      endpoint: `/api/v1/maintenance_tasks?${queryParams}`,
-      method: 'GET',
+      endpoint: `${apiRoutes.maintenanceTasks.getPath() + '?' + $.param(filterState)}`,
+      method: apiRoutes.maintenanceTasks.method,
       types: [
         constants.GET_MAINTENANCE_REQUEST,
         constants.GET_MAINTENANCE_RECEIVE,
@@ -24,12 +22,10 @@ export function queryMaintenanceTasks(filterState) {
 }
 
 export function changeStatus(maintenanceTask) {
-  let url = `/api/v1/maintenance_tasks/${maintenanceTask.id}/change_status`;
-
   return {
     [CALL_API]: {
-      endpoint: url,
-      method: 'POST',
+      endpoint: apiRoutes.maintenanceTaskChangeStatus.getPath(maintenanceTask.id),
+      method: apiRoutes.maintenanceTaskChangeStatus.method,
       types: [
         constants.POST_CHANGE_STATUS_REQUEST,
         constants.POST_CHANGE_STATUS_RECEIVE,
@@ -49,12 +45,10 @@ export function changeStatus(maintenanceTask) {
 }
 
 export function addNote(maintenanceTask, noteValue) {
-  let url = `/api/v1/maintenance_tasks/${maintenanceTask.id}/add_note`;
-
   return {
     [CALL_API]: {
-      endpoint: url,
-      method: 'POST',
+      endpoint: apiRoutes.maintenanceTaskNote.getPath(maintenanceTask.id),
+      method: apiRoutes.maintenanceTaskNote.method,
       types: [
         constants.POST_ADD_NOTE_REQUEST,
         constants.POST_ADD_NOTE_RECEIVE,
@@ -75,12 +69,10 @@ export function addNote(maintenanceTask, noteValue) {
 }
 
 export function createTask(params) {
-  let url = `/api/v1/maintenance_tasks`;
-
   return {
     [CALL_API]: {
-      endpoint: url,
-      method: 'POST',
+      endpoint: apiRoutes.createMaintenanceTask.getPath(),
+      method: apiRoutes.createMaintenanceTask.method,
       types: [
         constants.POST_CREATE_MAINTENANCE_TASK_REQUEST,
         constants.POST_CREATE_MAINTENANCE_TASK_RECEIVE,
@@ -97,12 +89,10 @@ export function createTask(params) {
 }
 
 export function deleteMaintenanceTask(maintenanceTask) {
-  let url = `/api/v1/maintenance_tasks/${maintenanceTask.id}`;
-
   return {
     [CALL_API]: {
-      endpoint: url,
-      method: 'DELETE',
+      endpoint: apiRoutes.deleteMaintenanceTask.getPath(maintenanceTask.id),
+      method: apiRoutes.deleteMaintenanceTask.method,
       types: [
         constants.DELETE_MAINTENANCE_TASK_REQUEST,
         constants.DELETE_MAINTENANCE_TASK_RECEIVE,
@@ -118,13 +108,11 @@ export function deleteMaintenanceTask(maintenanceTask) {
   }
 }
 
-export function deleteMaintenanceTaskImage(id) {
-  let url = `/api/v1/maintenance_task_image_uploads/${id}`;
-
+export function deleteMaintenanceTaskImage(maintenanceTaskImageId) {
   return {
     [CALL_API]: {
-      endpoint: url,
-      method: 'DELETE',
+      endpoint: apiRoutes.deleteMaintenanceTaskImage.getPath(maintenanceTaskImageId),
+      method: apiRoutes.deleteMaintenanceTaskImage.method,
       types: [
         constants.DELETE_MAINTENANCE_TASK_IMAGE_REQUEST,
         constants.DELETE_MAINTENANCE_TASK_IMAGE_RECEIVE,
@@ -140,12 +128,10 @@ export function deleteMaintenanceTaskImage(id) {
 }
 
 export function editMaintenanceTask(params) {
-  let url = `/api/v1/maintenance_tasks/${params.id}`;
-
   return {
     [CALL_API]: {
-      endpoint: url,
-      method: 'PUT',
+      endpoint: apiRoutes.updateMaintenanceTask.getPath(params.id),
+      method: apiRoutes.updateMaintenanceTask.method,
       types: [
         constants.EDIT_MAINTENANCE_TASK_REQUEST,
         constants.EDIT_MAINTENANCE_TASK_RECEIVE,

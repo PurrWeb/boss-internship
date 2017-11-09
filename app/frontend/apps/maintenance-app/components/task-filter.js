@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import moment from 'moment';
+import oFetch from 'o-fetch';
 
 import Select from 'react-select';
 import { DateRangePicker } from 'react-dates';
@@ -27,11 +28,11 @@ export default class MainDashboard extends React.Component {
     super(props);
 
     this.state = {
-      venues: this.props.filter.venues,
-      priorities: this.props.filter.priorities,
-      statuses: this.props.filter.statuses,
-      startDate: this.props.filter.startDate,
-      endDate: this.props.filter.startDate,
+      venues: oFetch(this.props.filter, 'venues'),
+      priorities: oFetch(this.props.filter, 'priorities'),
+      statuses: oFetch(this.props.filter, 'statuses'),
+      startDate: oFetch(this.props.filter, 'startDate'),
+      endDate: oFetch(this.props.filter, 'startDate'),
       focusedInput: null,
       incompletedOnlyChecked: true,
       showAllChecked: false
