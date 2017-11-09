@@ -37,6 +37,10 @@ class Invite < ActiveRecord::Base
     end
   end
 
+  def email_bounced_data
+    BouncedEmailAddress.find_by_email(email: email)
+  end
+
   def revoke!
     transition_to!(:revoked)
   end

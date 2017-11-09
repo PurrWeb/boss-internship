@@ -22,7 +22,7 @@ class CustomPaginationLinkRenderer < WillPaginate::ActionView::LinkRenderer
       end
     end
   end
-
+  
   def link(text, target, attributes = {})
     if target.is_a?(Integer)
       attributes[:rel] = rel_value(target)

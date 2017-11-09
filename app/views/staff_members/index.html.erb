@@ -108,7 +108,6 @@
         </div>
       <% end %>
     </div>
-
-    <%= will_paginate staff_members, renderer: CustomPaginationLinkRenderer %>
+    <%= render partial: 'shared/pagination_control_v2', locals: { relation: staff_members } %>
   </div>
 </div>

@@ -2,6 +2,25 @@ class AnonymiseDatabase
   def call
     ActiveRecord::Base.transaction do
       processed_user_ids = []
+      
+      bounced_emails_list = [
+        "bounced1@jsmbars.co.uk",
+        "bounced2@jsmbars.co.uk",
+        "bounced3@jsmbars.co.uk",
+        "bounced4@jsmbars.co.uk",
+        "bounced5@jsmbars.co.uk",
+        "bounced6@jsmbars.co.uk"
+      ]
+
+      bounced_emails_data = bounced_emails_list.map do |email|
+        {
+          email: email,
+          reason: "550 5.5.0 Requested action not taken: mailbox unavailable. [HE1EUR02FT030.eop-EUR02.prod.protection.outlook.com] ",
+          bounced_at: "2017-11-05T23:18:19+00:00",
+          error_code: "5.5.0",
+          updated_at: Time.new
+        }
+      end
 
       puts "Anonymising Addresses"
       Address.find_each do |address|
@@ -12,7 +31,7 @@ class AnonymiseDatabase
           postcode: FactoryHelper::Address.postcode
         )
       end
-
+      
       puts "Anonymising Staff Members"
       StaffMember.find_each do |staff_member|
         male = Random.rand(2) == 1
@@ -97,6 +116,36 @@ class AnonymiseDatabase
       main_venue = Venue.first
       other_venue = Venue.last
 
+      bounced_emails_user_data = [
+        {
+          first_name: 'Bounced 4',
+          surname: 'Manager',
+          email: bounced_emails_list[3],
+          password: 'manager_password',
+          staff_type: manager_staff_type,
+          role: 'manager',
+          venues: [main_venue]
+        },
+        {
+          first_name: 'Bounced 5',
+          surname: 'Manager',
+          email: bounced_emails_list[4],
+          password: 'manager_password',
+          staff_type: manager_staff_type,
+          role: 'manager',
+          venues: [main_venue]
+        },
+        {
+          first_name: 'Bounced 6',
+          surname: 'Manager',
+          email: bounced_emails_list[5],
+          password: 'manager_password',
+          staff_type: manager_staff_type,
+          role: 'manager',
+          venues: [main_venue]
+        },
+      ]
+
       user_data = [
         {
           first_name: 'Dev',
@@ -143,7 +192,7 @@ class AnonymiseDatabase
           role: 'manager',
           venues: [other_venue]
         }
-      ]
+      ] + bounced_emails_user_data
 
       user_data.each_with_index do |user_datum, index|
         user = User.new(
@@ -197,8 +246,27 @@ class AnonymiseDatabase
         end
       end
 
-
       puts "Setting up Staff Members"
+      staff_member_bounced_email_data = [
+        {
+          first_name: 'Bounced Email1',
+          surname: 'StaffMember',
+          email: bounced_emails_list[0],
+          master_venue: main_venue
+        },
+        {
+          first_name: 'Bounced Email2',
+          surname: 'StaffMember',
+          email: bounced_emails_list[1],
+          master_venue: main_venue
+        },
+        {
+          first_name: 'Bounced Email3',
+          surname: 'StaffMember',
+          email: bounced_emails_list[2],
+          master_venue: main_venue
+        },
+      ]
       staff_member_data = [
         {
           first_name: 'Venue',
@@ -212,7 +280,7 @@ class AnonymiseDatabase
           email: 'non_venue_staff_member@jsmbars.co.uk',
           master_venue: Venue.last
         },
-      ]
+      ] + staff_member_bounced_email_data
 
       staff_member_data.each do |staff_member_datum|
         staff_member_name = Name.create!(
@@ -242,6 +310,8 @@ class AnonymiseDatabase
           pay_rate: PayRate.weekly.first
         )
       end
+
+      UpdateBouncedEmailsJob.new.perform(env: "production", service: lambda { bounced_emails_data })
     end
   end
 

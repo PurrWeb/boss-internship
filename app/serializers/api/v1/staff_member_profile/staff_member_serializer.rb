@@ -33,7 +33,8 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :updated_at,
              :is_security_staff,
              :created_at,
-             :has_user
+             :has_user,
+             :bounced_email
 
   def date_of_birth
     UIRotaDate.format(object.date_of_birth) if object.date_of_birth.present?
@@ -143,5 +144,9 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
 
   def has_user
     object.has_user?
+  end
+
+  def bounced_email
+    object.email_address.bounced_data
   end
 end

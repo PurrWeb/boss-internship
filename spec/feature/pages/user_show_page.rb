@@ -29,12 +29,12 @@ module PageObject
 
       expect(
         staff_member_detail_section.
-          find('.no-assocaited-staff-member-message').text
-      ).to eq('No assocaited staff member')
+          find('[data-detail="no-staff-member"]').text
+      ).to eq('No associated staff member')
     end
 
     page_action :click_view_staff_member_button do
-      find('.view-staff-member-button.boss2-button').click
+      find('.boss-button_role_view-details.boss-button').click
     end
 
     page_action :click_create_staff_member_link do
@@ -49,7 +49,7 @@ module PageObject
     end
 
     def assert_on_correct_page
-      expect(find('main h1').text).to eq(user.full_name.titlecase)
+      expect(find('.boss-user-summary__name').text).to eq(user.full_name.titlecase)
     end
 
     private
@@ -58,7 +58,7 @@ module PageObject
     end
 
     def detail_section_selector_for(detail)
-      ".show-page-detail[data-detail=\"#{detail.to_s.gsub('_', '-')}\"]"
+      ".boss-details__value[data-detail=\"#{detail.to_s.gsub('_', '-')}\"]"
     end
   end
 end

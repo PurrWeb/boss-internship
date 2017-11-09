@@ -22,12 +22,12 @@ module PageObject
     end
 
     page_action :ensure_records_returned do |count|
-      expect(records_returned_section.text).to eq(count.to_s)
+      expect(records_returned_section.text).to eq("Displaying all #{count.to_s} invites")
     end
 
     private
     def scope
-      page.find('.invites-index-filter')
+      page.find('.boss-page-dashboard__filter')
     end
 
     def submit_form
@@ -35,7 +35,7 @@ module PageObject
     end
 
     def records_returned_section
-      scope.find('span.records-returned-count')
+      page.find('.boss-page-main__count')
     end
   end
 end

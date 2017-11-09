@@ -10,7 +10,7 @@
     "one-var": [2, "never"],
     "quote-props": [2, "as-needed"],
     "sort-keys": [0, "asc"],
-    "react/jsx-indent", [2, 2]
+    "react/jsx-indent": [2, 2]
   },
   "env": {
     "es6": true,

@@ -1,13 +1,14 @@
 class InvitesController < ApplicationController
   before_action :authorize, except: [:accept]
   skip_before_filter :authenticate_user!, only: [:accept]
-
+  before_filter :set_new_layout, only: [:index]
+  
   def index
     filter = InvitesIndexFilter.new(params[:filter])
     invites = filter.
       query.
       all.
-      includes(:inviter).
+      includes(inviter: [:name]).
       paginate(page: params[:page], per_page: 15)
 
     render locals: { filter: filter, invites: invites }
