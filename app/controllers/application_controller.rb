@@ -63,4 +63,20 @@ class ApplicationController < ActionController::Base
   def current_venue
     CurrentVenueService.new(user: current_user, venue_id: params[:venue_id]).venue
   end
+
+  def camelized_collection_json(collection, serializer, scope = nil, deep_nest = nil)
+    camelized_collection(collection, serializer, scope, deep_nest).to_json.html_safe
+  end
+
+  def camelized_collection(collection, serializer, scope = nil, deep_nest = nil)
+    collection.map do |resource|
+      ActiveModelSerializers::SerializableResource.new(
+        resource,
+        serializer: serializer,
+        key_transform: :camel_lower,
+        scope: scope,
+        include: deep_nest
+      ).as_json
+    end
+  end
 end

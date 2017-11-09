@@ -516,6 +516,56 @@ ActiveRecord::Schema.define(version: 20170929143901) do
   add_index "machines_refloats", ["machine_id"], name: "index_machines_refloats_on_machine_id", using: :btree
   add_index "machines_refloats", ["user_id"], name: "index_machines_refloats_on_user_id", using: :btree
 
+  create_table "maintenance_task_images", force: :cascade do |t|
+    t.string   "file",                limit: 255, null: false
+    t.integer  "maintenance_task_id", limit: 4
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "maintenance_task_images", ["maintenance_task_id"], name: "index_maintenance_task_images_on_maintenance_task_id", using: :btree
+
+  create_table "maintenance_task_notes", force: :cascade do |t|
+    t.integer  "maintenance_task_id", limit: 4,   null: false
+    t.integer  "creator_user_id",     limit: 4,   null: false
+    t.string   "note",                limit: 255, null: false
+    t.datetime "disabled_at"
+    t.integer  "disabled_by_user_id", limit: 4
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "maintenance_task_notes", ["creator_user_id"], name: "index_maintenance_task_notes_on_creator_user_id", using: :btree
+  add_index "maintenance_task_notes", ["maintenance_task_id"], name: "index_maintenance_task_notes_on_maintenance_task_id", using: :btree
+
+  create_table "maintenance_task_transitions", force: :cascade do |t|
+    t.string   "to_state",            limit: 255,   null: false
+    t.text     "metadata",            limit: 65535
+    t.integer  "sort_key",            limit: 4,     null: false
+    t.integer  "maintenance_task_id", limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "maintenance_task_transitions", ["maintenance_task_id", "most_recent"], name: "index_maintenance_task_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "maintenance_task_transitions", ["maintenance_task_id", "sort_key"], name: "index_maintenance_task_transitions_parent_sort", unique: true, using: :btree
+
+  create_table "maintenance_tasks", force: :cascade do |t|
+    t.string   "title",               limit: 255,   null: false
+    t.text     "description",         limit: 65535, null: false
+    t.integer  "priority",            limit: 4,     null: false
+    t.integer  "venue_id",            limit: 4,     null: false
+    t.integer  "creator_user_id",     limit: 4,     null: false
+    t.datetime "disabled_at"
+    t.integer  "disabled_by_user_id", limit: 4
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "maintenance_tasks", ["creator_user_id"], name: "index_maintenance_tasks_on_creator_user_id", using: :btree
+  add_index "maintenance_tasks", ["venue_id"], name: "index_maintenance_tasks_on_venue_id", using: :btree
+
   create_table "names", force: :cascade do |t|
     t.string   "first_name", limit: 255, null: false
     t.string   "surname",    limit: 255, null: false

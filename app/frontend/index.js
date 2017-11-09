@@ -126,6 +126,9 @@ registerComponent("DetailsModal", DetailsModal)
 import VenueHealthCheckReportApp from "./apps/venue-health-check-report-app"
 registerComponent("VenueHealthCheckReportApp", VenueHealthCheckReportApp)
 
+import MaintenanceApp from "./apps/maintenance-app"
+registerComponent("MaintenanceApp", MaintenanceApp)
+
 import WeekPicker from "~/components/week-picker"
 
 import AppVersionChecker from '~/components/app-version-checker';

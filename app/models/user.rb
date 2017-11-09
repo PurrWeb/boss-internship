@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  ROLES = ['admin', 'manager', 'dev', 'ops_manager', 'security_manager']
+  ROLES = ['admin', 'manager', 'dev', 'ops_manager', 'security_manager', 'maintenance_staff']
 
   include Statesman::Adapters::ActiveRecordQueries
 
@@ -142,8 +142,12 @@ class User < ActiveRecord::Base
     role == 'security_manager'
   end
 
+  def maintenance_staff?
+    role == 'maintenance_staff'
+  end
+
   def has_all_venue_access?
-    dev? || admin? || ops_manager?
+    dev? || admin? || ops_manager? || maintenance_staff?
   end
 
   def has_admin_access?

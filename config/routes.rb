@@ -18,6 +18,8 @@ Rails.application.routes.draw do
     resources :check_lists, only: [:index]
     resources :check_list_submissions, path: "checklist_submissions", only: [:index]
 
+    resources :maintenance, only: [:index]
+
     resources :venue_health_check, only: [:index, :new]
     resources :venue_health_check_reports, only: [:show]
 
@@ -43,7 +45,7 @@ Rails.application.routes.draw do
         get :redeem
       end
     end
-    
+
     resources :users, only: [:show, :index, :destroy] do
       member do
         get :disable
@@ -186,6 +188,13 @@ Rails.application.routes.draw do
         resources :check_list_submissions, path: "checklist_submissions", only: [:index]
 
         resources :uploads
+        resources :maintenance_task_image_uploads
+        resources :maintenance_tasks do
+          member do
+            post :change_status
+            post :add_note
+          end
+        end
 
         resources :machines_refloats, only: [:index, :create]
         resources :machines, only: [:index, :show, :create, :update, :destroy] do
@@ -193,7 +202,7 @@ Rails.application.routes.draw do
             post :restore
           end
         end
-        
+
         resources :incident_reports, only: [:index, :show, :create, :update, :destroy]
 
         resources :questionnaires do
