@@ -36,7 +36,7 @@ export default class FileUpload extends React.Component {
       questionnaireQuestionId: this.props.currentQuestion.id,
       url: upload.url,
       id: upload.id
-    })
+    });
   }
 
   hasFilePreviouslyUploaded(file) {

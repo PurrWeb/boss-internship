@@ -120,6 +120,54 @@ export const appRoutes = {
 }
 
 const apiRoutes = {
+    maintenanceTaskImageUpload: {
+        getPath: function() {
+            return '/api/v1/maintenance_task_image_uploads';
+        },
+        method: 'POST'
+    },
+    maintenanceTasks: {
+        getPath: function() {
+            return '/api/v1/maintenance_tasks';
+        },
+        method: 'GET'
+    },
+    maintenanceTaskChangeStatus: {
+        getPath: function(maintenanceTaskId) {
+            return `/api/v1/maintenance_tasks/${maintenanceTaskId}/change_status`;
+        },
+        method: 'POST'
+    },
+    maintenanceTaskNote: {
+        getPath: function(maintenanceTaskId) {
+            return `/api/v1/maintenance_tasks/${maintenanceTaskId}/add_note`;
+        },
+        method: 'POST'
+    },
+    createMaintenanceTask: {
+        getPath: function() {
+            return '/api/v1/maintenance_tasks';
+        },
+        method: 'POST'
+    },
+    deleteMaintenanceTask: {
+        getPath: function(maintenanceTaskId) {
+            return `/api/v1/maintenance_tasks/${maintenanceTaskId}`;
+        },
+        method: 'DELETE'
+    },
+    deleteMaintenanceTaskImage: {
+        getPath: function(maintenanceTaskImageId) {
+            return `/api/v1/maintenance_task_image_uploads/${maintenanceTaskImageId}`;
+        },
+        method: 'DELETE'
+    },
+    updateMaintenanceTask: {
+        getPath: function(maintenanceTaskId) {
+            return `/api/v1/maintenance_tasks/${maintenanceTaskId}`;
+        },
+        method: 'PUT'
+    },
     saveResponse: {
         getPath: function(questionnaireId) {
             return "/questionnaires/" + questionnaireId + "/responses";

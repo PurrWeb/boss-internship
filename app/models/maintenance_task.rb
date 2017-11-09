@@ -59,6 +59,18 @@ class MaintenanceTask < ActiveRecord::Base
   end
   # Statesman methods end
 
+  def associate_uploads_to_maintenance_task_images
+    return if maintenance_task_image_ids.blank?
+
+    image_uploads = MaintenanceTaskImage.where(id: maintenance_task_image_ids)
+
+    return if image_uploads.blank?
+
+    maintenance_task_images << image_uploads
+  end
+
+  private
+
   def disabled?
     disabled_at.present? || disabled_by_user.present?
   end
