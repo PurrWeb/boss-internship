@@ -106,6 +106,13 @@ export default class ImageForm extends React.Component {
           fileObject['status'] = 'failed';
           fileObject['key'] = Math.random();
 
+          if (error.status === 422) {
+            this.props.setFrontendState({
+              showErrorBox: true,
+              errorMessage: error.statusText
+            });
+          }
+
           this.setState({
             uploadedFileObjects: uploadedFileObjects
           }, () => {
