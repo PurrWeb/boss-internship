@@ -115,7 +115,11 @@ class UsersController < ApplicationController
     authorize!(:disable, user)
 
     form = DisableStaffMemberForm.new(OpenStruct.new)
-    result = form.validate(params["disable_staff_member"])
+    disable_staff_member_params = params.fetch("disable_staff_member")
+    result = form.validate(
+      never_rehire: disable_staff_member_params.fetch("never_rehire") == "1",
+      disable_reason: disable_staff_member_params.fetch("disable_reason")
+    )
     if result
       disable_reason = form.disable_reason
       would_rehire = !ActiveRecord::Type::Boolean.new.type_cast_from_user(form.never_rehire)
@@ -131,10 +135,14 @@ class UsersController < ApplicationController
       redirect_to users_path
     else
       flash.now[:error] = "There was a problem disabling this user"
-      render 'disable', locals: {
-        user: user,
-        form: form
-      }
+      render(
+        'disable',
+        locals: {
+          user: user,
+          form: form
+        },
+        status: 422
+      )
     end
   end
 
