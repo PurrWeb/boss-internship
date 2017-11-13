@@ -131,10 +131,14 @@ class UsersController < ApplicationController
       redirect_to users_path
     else
       flash.now[:error] = "There was a problem disabling this user"
-      render 'disable', locals: {
-        user: user,
-        form: form
-      }
+      render(
+        'disable',
+        locals: {
+          user: user,
+          form: form
+        },
+        status: 422
+      )
     end
   end
 
