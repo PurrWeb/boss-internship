@@ -12,6 +12,7 @@ const BossFormInput = ({
     input: { onBlur, value, onChange, name },
     meta,
     unit = '',
+    autocomplete = true
   }) => {
 
     const handleChange = (maskedvalue, floatvalue) => {
@@ -27,7 +28,7 @@ const BossFormInput = ({
           { !!unit && <span className="boss-form__units-value">{unit}</span>}
           {isCurrency
             ? <CurrencyInput disabled={disabled} value={value} onChange={handleChange} className={`boss-form__input ${touched && error && 'boss-form__input_state_error'}`} decimalSeparator="." thousandSeparator=""/>
-            : <input {...input} type={type} disabled={disabled} placeholder={label} className={`boss-form__input ${touched && error && 'boss-form__input_state_error'}`} />
+            : <input autoComplete={autocomplete ? 'on' : 'off'} {...input} type={type} disabled={disabled} placeholder={label} className={`boss-form__input ${touched && error && 'boss-form__input_state_error'}`} />
           }
         </span>
         {
