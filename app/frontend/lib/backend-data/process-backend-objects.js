@@ -167,6 +167,9 @@ export function processHolidayAppViewData(viewData){
         staffTypes: viewData.staffTypes.map(processStaffTypeObject),
         staffMembers: viewData.staffMembers.map(processStaffMemberObject),
         holidays: viewData.holidays.map(processHolidayObject),
+        venues: viewData.venues.map(processVenueObject),
+        holidaysCount: viewData.holidaysCount,
+        staffMembersCount: viewData.staffMembersCount,
         pageData
     }
 }

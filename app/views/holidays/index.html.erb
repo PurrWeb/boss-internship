@@ -1,8 +1,11 @@
 <%= react_component("HolidayReportApp") %>
 
 <%= javascript_tag do %>
-  var holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: holidays } %>;
-
+  var holidays = <%= ActiveModel::Serializer::CollectionSerializer.new(
+    holidays,
+    serializer: Api::V1::Holidays::HolidaySerializer
+  ).to_json.html_safe %>;
+  var accessibleVenueIds = <%= accessible_venues.map(&:id) %>;
   var staffMembers = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members.includes(:work_venues) } %>;
 
   var venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: Venue.all } %>;
@@ -14,11 +17,16 @@
   window.boss.store.holidays = holidays;
   window.boss.store.staffMembers = staffMembers;
   window.boss.store.staffTypes = staffTypes;
+  window.boss.store.venues = venues;
+  window.boss.store.staffMembersCount = <%= staff_members_count %>;
+  window.boss.store.holidaysCount = <%= raw holidays_count.to_json %>;
   window.boss.store.access_token = "<%= access_token.token %>";
 
   window.boss.store.pageData = {
+    currentVenueId: <%= current_venue_id %>,
     weekStartDate: "<%= UIRotaDate.format(week.start_date) %>",
     weekEndDate: "<%= UIRotaDate.format(week.end_date) %>",
-    displayCsvLink: <%= can?(:view, :holidays_csv).to_s %>
+    displayCsvLink: <%= can?(:view, :holidays_csv).to_s %>,
+    accessibleVenueIds: accessibleVenueIds
   }
 <% end %>
