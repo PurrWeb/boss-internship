@@ -6,16 +6,6 @@ class HolidayReportsDataQuery
 
   def holidays
     @holidays ||= begin
-      relation = Holiday.
-        in_state(:enabled)
-
-      relation = relation.
-        joins(:staff_member).
-        merge(
-          StaffMember.
-            where(master_venue: venue)
-        )
-
       HolidayInRangeQuery.new(
         relation: relation,
         start_date: week.start_date,
@@ -24,11 +14,58 @@ class HolidayReportsDataQuery
     end
   end
 
+  def holidays_on_weekday(weekday: nil)
+    unless weekday.present?
+      return holidays
+    end
+    day = week.start_date + (weekday.to_i - 1).days
+    HolidayInRangeQuery.new(
+      relation: relation,
+      start_date: day,
+      end_date: day,
+    ).all
+  end
+
+  def holidays_count
+    holidays_count = {}
+    holidays.each do |holiday|
+      start_date_weekday = holiday.start_date.cwday
+      end_date_weekday = holiday.end_date.cwday
+      
+      (start_date_weekday..end_date_weekday).each do |i|
+        unless holidays_count[i].present?
+          holidays_count[i] = 0
+        end
+        holidays_count[i] = holidays_count[i] + 1
+      end
+    end
+    holidays_count
+  end
+
   def staff_members
     StaffMember.
       joins(:holidays).
       merge(holidays)
   end
 
+  def staff_members_count
+    StaffMember.
+      joins(:holidays).
+      merge(holidays)
+  end
+
   attr_reader :week, :venue
+
+  private
+  def relation
+    relation = Holiday.
+      in_state(:enabled)
+
+    relation = relation.
+      joins(:staff_member).
+      merge(
+        StaffMember.
+          where(master_venue: venue)
+      )
+  end
 end

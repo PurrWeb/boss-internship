@@ -13,10 +13,18 @@ class HolidaysController < ApplicationController
     week = RotaWeek.new(date_from_params)
     holidays_reports_data = HolidayReportsDataQuery.new(week: week, venue: venue_from_params)
 
-    holidays = holidays_reports_data.holidays.includes([:staff_member])
-    staff_members = holidays_reports_data
-      .staff_members
+    holidays = if weekday_from_params.present?
+      holidays_reports_data.holidays_on_weekday(weekday: weekday_from_params)
+    else
+      holidays_reports_data.holidays
+    end.includes([:staff_member, creator: [:name]])
+
+    staff_members = StaffMember.joins(:holidays)
+      .merge(holidays)
       .includes([:staff_type, :name, :master_venue])
+
+    holidays_count = holidays_reports_data.holidays_count
+    staff_members_count = holidays_reports_data.staff_members.size
 
     respond_to do |format|
       format.html do
@@ -24,7 +32,11 @@ class HolidaysController < ApplicationController
           week: week,
           holidays: holidays,
           staff_members: staff_members,
+          accessible_venues: accessible_venues,
+          current_venue_id: venue_from_params.id,
           staff_types: StaffType.all,
+          holidays_count: holidays_reports_data.holidays_count,
+          staff_members_count: staff_members_count,
           access_token: access_token
         }
       end
@@ -157,6 +169,10 @@ class HolidaysController < ApplicationController
     end
   end
 
+  def show_global_venue?
+    false
+  end
+
   private
   def index_params_present?
     venue_from_params.present? &&
@@ -188,6 +204,12 @@ class HolidaysController < ApplicationController
     if params[:date].present?
       UIRotaDate.parse(params[:date])
     end
+  end
+
+  def weekday_from_params
+    weekday = params[:weekday].to_i
+    return nil unless weekday.in?((1..7).to_a)
+    weekday
   end
 
   def start_date_from_params
