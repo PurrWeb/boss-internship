@@ -1,0 +1,14 @@
+<%= javascript_tag do %>
+  venueDashboard = {};
+
+  venueDashboard.venues = <%= camelized_collection_json(venues, Api::V1::VenueSerializer) %>;
+  venueDashboard.messages = <%= camelized_collection_json(messages, Api::V1::DashboardMessageSerializer) %>;
+  venueDashboard.currentUser = <%= Api::V1::UserSerializer.new(current_user).to_json.html_safe %>;
+  venueDashboard.accessToken = "<%= access_token.token %>";
+  venueDashboard.currentVenue = <%= Api::V1::VenueSerializer.new(current_venue).to_json.html_safe %>;
+
+  window.boss = window.boss || {};
+  window.boss.venueDashboard = venueDashboard;
+<% end %>
+
+<%= react_component('VenueDashboardApp') %>

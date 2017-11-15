@@ -120,6 +120,24 @@ export const appRoutes = {
 }
 
 const apiRoutes = {
+    dashboardMessages: {
+        getPath: function() {
+            return '/api/v1/dashboard_messages';
+        },
+        method: 'GET'
+    },
+    disableDashboardMessages: {
+        getPath: function(dashboardMessage) {
+            return `/api/v1/dashboard_messages/${dashboardMessage}/disable`;
+        },
+        method: 'PUT'
+    },
+    restoreDashboardMessages: {
+        getPath: function(dashboardMessage) {
+            return `/api/v1/dashboard_messages/${dashboardMessage}/restore`;
+        },
+        method: 'PUT'
+    },
     maintenanceTaskImageUpload: {
         getPath: function() {
             return '/api/v1/maintenance_task_image_uploads';

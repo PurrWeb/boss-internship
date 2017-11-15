@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171122104956) do
+ActiveRecord::Schema.define(version: 20171127143617) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255
@@ -236,6 +236,25 @@ ActiveRecord::Schema.define(version: 20171122104956) do
   end
 
   add_index "daily_reports", ["venue_id", "date"], name: "index_daily_reports_on_venue_id_and_date", using: :btree
+
+  create_table "dashboard_messages", force: :cascade do |t|
+    t.string   "title",               limit: 255,                   null: false
+    t.text     "message",             limit: 65535,                 null: false
+    t.boolean  "to_all_venues",                     default: false, null: false
+    t.datetime "published_time"
+    t.integer  "created_by_user_id",  limit: 4
+    t.datetime "disabled_at"
+    t.integer  "disabled_by_user_id", limit: 4
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+  end
+
+  create_table "dashboard_messages_venues", force: :cascade do |t|
+    t.integer  "dashboard_message_id", limit: 4
+    t.integer  "venue_id",             limit: 4
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
 
   create_table "email_addresses", force: :cascade do |t|
     t.string   "email",      limit: 255, null: false
@@ -987,9 +1006,11 @@ ActiveRecord::Schema.define(version: 20171122104956) do
     t.datetime "updated_at"
     t.integer  "creator_id",         limit: 4
     t.text     "fruit_order_fields", limit: 65535
-    t.integer  "till_float_cents",   limit: 4,     null: false
-    t.integer  "safe_float_cents",   limit: 4,     null: false
-    t.string   "rollbar_guid",       limit: 255,   null: false
+    t.integer  "till_float_cents",   limit: 4,                              null: false
+    t.integer  "safe_float_cents",   limit: 4,                              null: false
+    t.string   "rollbar_guid",       limit: 255,                            null: false
+    t.decimal  "latitude",                         precision: 10, scale: 6
+    t.decimal  "longitude",                        precision: 10, scale: 6
   end
 
   add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree

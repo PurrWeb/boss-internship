@@ -17,6 +17,14 @@ class UserAbility
         user.maintenance_staff? || can_manage_venue?(user, maintenance_task.venue)
       end
 
+      can :view, :venue_dashboard do
+        !user.security_manager?
+      end
+
+      can :manage, DashboardMessage do
+        user.has_admin_access?
+      end
+
       can :manage, :staff_members
 
       can :manage, :change_orders do
