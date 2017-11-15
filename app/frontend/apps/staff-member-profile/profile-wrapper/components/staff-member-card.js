@@ -1,18 +1,22 @@
 import React from 'react';
 import safeMoment from "~/lib/safe-moment"
+import oFetch from 'o-fetch';
+
 import editAvatarModal from '~/lib/content-modal';
 import bouncedEmailModal from '~/components/bounced-email-modal';
 
-const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, currentPage}) => {
-  const avatar = staffMember.get('avatar');
-  const fullName = `${staffMember.get('first_name')} ${staffMember.get('surname')}`;
-  const email = staffMember.get('email');
-  const phoneNumber = staffMember.get('phone_number');
-  const disabled = staffMember.get('disabled');
-  const disabledByUser = staffMember.get('disabled_by_user');
-  const disabledAt = staffMember.get('disabled_at');
-  const disabledReason = staffMember.get('disable_reason');
-  const bouncedEmail = staffMember.get('bounced_email');
+  const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, currentPage}) => {
+  const avatar = oFetch(staffMember, 'avatar');
+  const fullName = `${oFetch(staffMember, 'first_name')} ${oFetch(staffMember, 'surname')}`;
+  const email = oFetch(staffMember, 'email');
+  const phoneNumber = oFetch(staffMember, 'phone_number');
+  const disabled = oFetch(staffMember, 'disabled');
+  const disabledByUser = oFetch(staffMember, 'disabled_by_user');
+  const disabledAt = oFetch(staffMember, 'disabled_at');
+  const disabledReason = oFetch(staffMember, 'disable_reason');
+  const jobTypeName = oFetch(jobType, 'name');
+  const jobTypeColor = oFetch(jobType, 'color');
+  const bouncedEmail = oFetch(staffMember, 'bounced_email');
 
   const renderPhoneNumber = (phoneNumber) => {
     return phoneNumber
@@ -56,7 +60,7 @@ const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, cu
       <div key={1} className="boss-user-summary__contacts">
         { renderEmail(email) }
         { renderPhoneNumber(phoneNumber) }
-      </div>   
+      </div>
     )
   }
   const isActive = (currentPage, page) => {
@@ -124,8 +128,8 @@ const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, cu
             <h2 className="boss-user-summary__name">
               { renderFullName(fullName, disabled) }
             </h2>
-            <span className="boss-button boss-button_type_small boss-button_type_no-behavior boss-user-summary__label">
-              {jobType}
+            <span style={{backgroundColor: jobTypeColor}} className="boss-button boss-button_type_small boss-button_type_no-behavior boss-user-summary__label">
+              {jobTypeName}
             </span>
           </div>
           { disabled && renderdisabledContent({disabledByUser, disabledAt, disabledReason}) }

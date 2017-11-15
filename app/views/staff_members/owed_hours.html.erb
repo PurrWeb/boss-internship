@@ -11,7 +11,10 @@
       owedHours: owed_hours,
       staffMember: staff_member,
       accessToken: access_token,
-      staffTypes: staff_types,
+      staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
+        staff_types,
+        serializer: Api::V1::StaffMemberProfile::StaffTypeSerializer,
+      ),
       venues: venues,
       accessibleVenueIds: accessible_venue_ids,
       payRates: pay_rates,
