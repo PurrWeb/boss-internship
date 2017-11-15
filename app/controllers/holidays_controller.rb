@@ -24,7 +24,7 @@ class HolidaysController < ApplicationController
       .includes([:staff_type, :name, :master_venue])
 
     holidays_count = holidays_reports_data.holidays_count
-    staff_members_count = holidays_reports_data.staff_members.size
+    staff_members_count = holidays_reports_data.staff_members.uniq.size
 
     respond_to do |format|
       format.html do
@@ -33,7 +33,7 @@ class HolidaysController < ApplicationController
           holidays: holidays,
           staff_members: staff_members,
           accessible_venues: accessible_venues,
-          current_venue_id: venue_from_params.id,
+          current_venue_id: venue_from_params.andand.id,
           staff_types: StaffType.all,
           holidays_count: holidays_reports_data.holidays_count,
           staff_members_count: staff_members_count,
@@ -175,15 +175,12 @@ class HolidaysController < ApplicationController
 
   private
   def index_params_present?
-    venue_from_params.present? &&
     date_from_params.present?
   end
 
   def index_redirect_params
-    venue = venue_from_params || current_user.default_venue
     date = date_from_params || Time.zone.now.to_date.monday
     {
-      venue_id: venue.id,
       date: UIRotaDate.format(date),
     }
   end

@@ -17,6 +17,8 @@ export default class ReportsBody extends React.Component {
           staffMember={staffMember}
           staffTypes={this.props.staffTypes}
           holidays={this.props.holidays}
+          venues={this.props.venues}
+          hasCurrentVenue={!!this.props.pageOptions.currentVenueId}
         />
       );
     });
@@ -44,12 +46,14 @@ export default class ReportsBody extends React.Component {
   }
 
   venueOptions = () => {
-    return _.map(this.props.accessibleVenues, (venue) => {
+    const options = _.map(this.props.accessibleVenues, (venue) => {
       return {
         value: venue.serverId,
         label: venue.name,
       }
     });
+
+    return [{value: 'all', label: 'All'}, ...options];
   }
 
   setTextFilter(event) {
@@ -88,7 +92,7 @@ export default class ReportsBody extends React.Component {
   setVenueFilter = (venue) => {
     this.setState({selectedVenue: venue}, () => {
       const queryString = new URLSearchParams(window.location.search);
-      queryString.set('venue_id', venue.value);
+      venue.value === 'all' ? queryString.delete('venue_id') : queryString.set('venue_id', venue.value);
       const link = `${window.location.href.split('?')[0]}?${queryString.toString()}`
       window.location.href = link;
     });

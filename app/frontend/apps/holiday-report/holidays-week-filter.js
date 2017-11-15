@@ -1,9 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import {RadioGroup, Radio} from 'react-radio-group';
-import safeMoment from '~/lib/safe-moment';
 import URLSearchParams from 'url-search-params';
-import utils from '~/lib/utils';
 
 export default class HolidaysWeekFilter extends React.Component {
 
@@ -28,7 +26,6 @@ export default class HolidaysWeekFilter extends React.Component {
     const weekDaysCount = this.props.holidaysCount;
     let week = [];
     const allStaffMembersCount = this.props.staffMembersCount;
-    const weekStartDate = safeMoment.uiDateParse(this.props.weekStartDate);
     for(let i = 1; i <= 7; i ++) {
       let weekday = moment().isoWeekday(i).format('dddd');
       let weekDayCount = weekDaysCount[i] || 0;
@@ -37,7 +34,6 @@ export default class HolidaysWeekFilter extends React.Component {
           <Radio value={i} className="boss-form__switcher-radio" />
           <p className="boss-form__switcher-label-text">
             <span className="boss-table__text-line">{`${weekday} (${weekDayCount})`}</span>
-            <span className="boss-table__text-meta">{weekStartDate.weekday(i).format(utils.commonDateFormat)}</span>
           </p>
         </label>
       )

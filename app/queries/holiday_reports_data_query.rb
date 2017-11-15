@@ -48,12 +48,6 @@ class HolidayReportsDataQuery
       merge(holidays)
   end
 
-  def staff_members_count
-    StaffMember.
-      joins(:holidays).
-      merge(holidays)
-  end
-
   attr_reader :week, :venue
 
   private
@@ -61,11 +55,14 @@ class HolidayReportsDataQuery
     relation = Holiday.
       in_state(:enabled)
 
-    relation = relation.
-      joins(:staff_member).
-      merge(
-        StaffMember.
-          where(master_venue: venue)
-      )
+    if venue.present?
+      relation = relation.
+        joins(:staff_member).
+        merge(
+          StaffMember.
+            where(master_venue: venue)
+        )
+    end
+    relation
   end
 end

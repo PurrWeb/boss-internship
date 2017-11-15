@@ -150,9 +150,9 @@ export default class HolidayRow extends React.Component {
     const unpaidHoliday = _.filter(holidays, (holiday) => {
       return holiday.holiday_type === UNPAYED_HOLIDAY
     });
-    const staffMemberVenueIds = this.props.staffMember.venues.map((venue) => {
-      return venue.serverId
-    })
+    const staffMemberMasterVenue = _.find(this.props.venues, (venue) => {
+      return venue.serverId === this.props.staffMember.master_venue.serverId;
+    });
 
     const payedCount = paidHoliday.length === 0
       ? 0
@@ -180,6 +180,13 @@ export default class HolidayRow extends React.Component {
               </div>
             </div>
           </div>
+
+          {!this.props.hasCurrentVenue && <div className="boss-table__cell">
+            <div className="boss-table__info">
+              <p className="boss-table__label">Master Venue</p>
+              <p className="boss-table__text boss-table__text_type_faded">{staffMemberMasterVenue.name}</p>
+            </div>
+          </div>}
 
           <div className="boss-table__cell">
             <div className="boss-table__info">
