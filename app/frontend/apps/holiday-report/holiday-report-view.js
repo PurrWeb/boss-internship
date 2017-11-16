@@ -6,10 +6,10 @@ import HolidayReportStaffFinder from "./holiday-report-staff-finder"
 import ReportsHeader from "./reports-header"
 import ReportsBody from "./reports-body"
 import WeekAndVenueSelector from "~/components/week-and-venue-selector"
-
+import _ from 'lodash';
 export class HolidayReportView extends React.Component {
   render() {
-    let accessibleVenues = _.pick(this.props.venues, (venue, clientId) => {
+    const accessibleVenues = Object.values(this.props.venues).filter((venue, clientId) => {
       return this.props.pageOptions.accessibleVenueIds.includes(venue.serverId)
     });
 
@@ -17,7 +17,7 @@ export class HolidayReportView extends React.Component {
       <main className="boss-page-main">
         <ReportsHeader { ...this.props } />
 
-        <ReportsBody { ...this.props } />
+        <ReportsBody accessibleVenues={accessibleVenues} { ...this.props } />
       </main>
     )
   }
@@ -29,7 +29,9 @@ function mapStateToProps(state){
         pageOptions: state.pageOptions,
         holidays: state.holidays,
         staffMembers: state.staffMembers,
-        staffTypes: state.staffTypes
+        staffTypes: state.staffTypes,
+        holidaysCount: state.holidaysCount,
+        staffMembersCount: state.staffMembersCount,
     }
 }
 

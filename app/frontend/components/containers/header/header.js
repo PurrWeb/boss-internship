@@ -146,7 +146,7 @@ export default class Header extends Component {
   }
 
   currentVenueControl(currentVenueId, venues) {
-    if(!this.globalVenueId){
+    if(!this.globalVenueId || !this.props.showGlobalVenue){
       return null;
     }
 

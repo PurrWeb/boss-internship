@@ -2,7 +2,7 @@ import moment from "moment"
 import deepEqual from "deep-equal"
 import _ from "underscore"
 import { fromJS, Map, List } from 'immutable';
-import SafeMoment from '~/lib/safe-moment';
+import safeMoment from '~/lib/safe-moment';
 
 function replaceFunctionPropsWithStrings(obj){
     return _(obj).mapValues(function(value){
@@ -24,8 +24,8 @@ var utils =  {
         });
       const hoursOnWeek = weekRotaShifts
         .reduce((result, shift) => {
-          const starts_at = SafeMoment.iso8601Parse(shift.get('starts_at'));
-          const ends_at = SafeMoment.iso8601Parse(shift.get('ends_at'));
+          const starts_at = safeMoment.iso8601Parse(shift.get('starts_at'));
+          const ends_at = safeMoment.iso8601Parse(shift.get('ends_at'));
           return ends_at.diff(starts_at, 'minutes') / 60 + result;
         }, 0);
         return {weekRotaShifts, hoursOnWeek};
@@ -138,6 +138,7 @@ var utils =  {
     formatRotaUrlDate(date){
         return moment(date).format("DD-MM-YYYY");
     },
+    commonDateFormat: 'DD-MM-YYYY',
     capitalizeFirstCharacter(str) {
         if (str.length === 0) {
             return str;

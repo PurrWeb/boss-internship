@@ -1,115 +1,37 @@
 import React from "react"
 import _ from "underscore"
-import safeMoment from "~/lib/safe-moment"
 import Select from "react-select"
 import StaffMemberHolidaysLink from "~/components/staff-member-holidays-link"
 import {ColoredMultipleValue, ColoredSingleOption} from '~/components/boss-form/colored-select'
+import HolidayRow from './holiday-row';
+import HolidaysWeekFilter from './holidays-week-filter';
+import URLSearchParams from 'url-search-params';
 
 export default class ReportsBody extends React.Component {
-  renderHolidayCell(holiday) {
-    if (holiday) {
-      let startDate = safeMoment.uiDateParse(holiday.start_date).format('DD MMM');
-      let endDate = safeMoment.uiDateParse(holiday.end_date).format('DD MMM');
-
-      if (startDate == endDate) {
-        return startDate;
-      } else {
-        return startDate + ' - ' + endDate;
-      }
-    } else {
-      return 'None this week';
-    }
-  }
-
+  
   renderPeople() {
-    return this.state.staffMemberCollection.map((staffMember) => {
-      let s = this.props;
-      let staffType = this.props.staffTypes['CLIENT_ID_' + staffMember.staff_type.serverId];
-      let client = this.props.holidays['CLIENT_ID_' + staffMember.serverId];
-      let holidays = _.filter(Object.values(this.props.holidays), (holiday) => {
-        return holiday.staff_member.serverId === staffMember.serverId
-      });
-      let paidHoliday = _.find(holidays, (holiday) => {
-        return holiday.holiday_type === "paid_holiday"
-      });
-      let unpaidHoliday = _.find(holidays, (holiday) => {
-        return holiday.holiday_type === "unpaid_holiday"
-      });
-      let staffMemberVenueIds = staffMember.venues.map((venue) => {
-        return venue.serverId
-      })
-
+    return this.state.staffMemberCollection.map((staffMember, key) => {
       return (
-        <div className="boss-table__row" key={ staffMember.serverId }>
-          <div className="boss-table__cell">
-            <div className="boss-user-summary boss-user-summary_role_report">
-              <div className="boss-user-summary__side">
-                <div className="boss-user-summary__avatar">
-                  <div className="boss-user-summary__avatar-inner">
-                    <img src={ staffMember.avatar_url } alt="user avatar" className="boss-user-summary__pic" />
-                  </div>
-                </div>
-              </div>
-              <div className="boss-user-summary__content">
-                <div className="boss-user-summary__header">
-                  <h2 className="boss-user-summary__name">{ staffMember.first_name + ' ' + staffMember.surname }</h2>
-                  <p className="boss-button boss-button_type_label boss-button_role_bar-supervisor boss-user-summary__label" style={{ background: staffType.color }}>
-                    { staffType.name }
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="boss-table__cell">
-            <div className="boss-table__info">
-              <p className="boss-table__label">Paid Holiday</p>
-              <p className="boss-table__text boss-table__text_type_faded boss-table__text_role_date">
-                { this.renderHolidayCell(paidHoliday) }
-              </p>
-            </div>
-          </div>
-
-          <div className="boss-table__cell">
-            <div className="boss-table__info">
-              <p className="boss-table__label">Unpaid Holiday</p>
-              <p className="boss-table__text">{ this.renderHolidayCell(unpaidHoliday) }</p>
-            </div>
-          </div>
-
-          <div className="boss-table__cell">
-            <div className="boss-table__info">
-              <p className="boss-table__label">Paid Holidays Days</p>
-              <p className="boss-table__text">{ (paidHoliday) ? paidHoliday.days : 0 }</p>
-            </div>
-          </div>
-
-          <div className="boss-table__cell">
-            <div className="boss-table__info">
-              <div className="boss-table__actions">
-                <StaffMemberHolidaysLink
-                  className="boss-button boss-button_type_small boss-button_role_details"
-                  staffMemberServerId={staffMember.serverId}
-                  sStartDate={this.props.pageOptions.weekStartDate}
-                  sEndDate={this.props.pageOptions.weekEndDate}
-                >
-                  View All
-                </StaffMemberHolidaysLink>
-              </div>
-            </div>
-          </div>
-        </div>
+        <HolidayRow
+          key={key}
+          staffMember={staffMember}
+          staffTypes={this.props.staffTypes}
+          holidays={this.props.holidays}
+          venues={this.props.venues}
+          hasCurrentVenue={!!this.props.pageOptions.currentVenueId}
+        />
       );
     });
   }
 
   constructor(props) {
     super(props);
-
+    const selectedVenue = this.venueOptions().find(venue => venue.value === props.pageOptions.currentVenueId) || this.venueOptions()[0];
     this.state = {
       filterByText: '',
       filterByStaffType: [],
-      staffMemberCollection: Object.values(this.props.staffMembers)
+      staffMemberCollection: Object.values(this.props.staffMembers),
+      selectedVenue: selectedVenue,
     };
   }
 
@@ -123,17 +45,15 @@ export default class ReportsBody extends React.Component {
     });
   }
 
-  renderOption(options, index, c) {
-    return (
-      <div className="Select-value" style={{ background: options.value.color }}>
-        <span className="Select-value-icon" aria-hidden="true">×</span>
+  venueOptions = () => {
+    const options = _.map(this.props.accessibleVenues, (venue) => {
+      return {
+        value: venue.serverId,
+        label: venue.name,
+      }
+    });
 
-        <span className="Select-value-label" role="option" aria-selected="true" id={ options.id }>
-          { options.value.label }
-          <span className="Select-aria-only">&nbsp;</span>
-        </span>
-      </div>
-    );
+    return [{value: 'all', label: 'All'}, ...options];
   }
 
   setTextFilter(event) {
@@ -163,10 +83,19 @@ export default class ReportsBody extends React.Component {
     });
   }
 
-  setStaffTypeFilter(options) {
+  setStaffTypeFilter = (options) => {
     this.setState({ filterByStaffType: options });
 
     this.filterByStaffType(options);
+  }
+
+  setVenueFilter = (venue) => {
+    this.setState({selectedVenue: venue}, () => {
+      const queryString = new URLSearchParams(window.location.search);
+      venue.value === 'all' ? queryString.delete('venue_id') : queryString.set('venue_id', venue.value);
+      const link = `${window.location.href.split('?')[0]}?${queryString.toString()}`
+      window.location.href = link;
+    });
   }
 
   filterByStaffType(options) {
@@ -201,7 +130,7 @@ export default class ReportsBody extends React.Component {
     return (
       <div className="boss-page-main__filter">
         <form className="boss-form">
-          <div className="boss-form__row boss-form__row_justify_space boss-form__row_position_last">
+          <div className="boss-form__row boss-form__row_justify_space">
             <div className="boss-form__field boss-form__field_layout_max">
               <div className="boss-form__search">
                 <label className="boss-form__label">
@@ -210,6 +139,20 @@ export default class ReportsBody extends React.Component {
               </div>
             </div>
 
+            <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_min">
+              <p className="boss-form__label">
+                <span className="boss-form__label-text">Venue</span>
+              </p>
+
+              <div className="boss-form__select">
+                <Select
+                  value={ this.state.selectedVenue }
+                  options={ this.venueOptions() }
+                  onChange={ this.setVenueFilter }
+                  clearable={false}
+                />
+              </div>
+            </div>
             <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_min">
               <p className="boss-form__label">
                 <span className="boss-form__label-text">Staff Type</span>
@@ -222,11 +165,18 @@ export default class ReportsBody extends React.Component {
                   valueComponent={ColoredMultipleValue}
                   optionComponent={ColoredSingleOption}
                   multi={ true }
-                  onChange={ this.setStaffTypeFilter.bind(this) }
+                  onChange={ this.setStaffTypeFilter }
                 />
               </div>
             </div>
           </div>
+          <HolidaysWeekFilter
+            staffMembers={this.props.staffMembers}
+            holidaysCount={this.props.holidaysCount}
+            holidays={this.props.holidays}
+            weekStartDate={this.props.pageOptions.weekStartDate}
+            staffMembersCount={this.props.staffMembersCount}
+          />
         </form>
       </div>
     );

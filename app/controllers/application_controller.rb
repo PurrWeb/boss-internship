@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   before_filter :bundle_script
   before_filter :set_current_venue_on_redis
 
-  helper_method [:render_navigation?, :render_v2_layout?, :header_data]
+  helper_method [:render_navigation?, :render_v2_layout?, :header_data, :show_global_venue?]
 
   def current_user
     @current_user ||= super && User.includes(:email_address).find(@current_user.id)
@@ -58,6 +58,10 @@ class ApplicationController < ActionController::Base
         venue_id: params[:venue_id]
       ).set_current_venue
     end
+  end
+
+  def show_global_venue?
+    true
   end
 
   def current_venue
