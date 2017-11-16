@@ -34,7 +34,7 @@ export default class TaskModal extends React.Component {
     });
   }
 
-  onClose() {
+  onClose = () => {
     this.props.setFrontendState({ showModal: false });
     this.props.setCurrentMaintenanceTask(null);
   }
@@ -179,6 +179,12 @@ export default class TaskModal extends React.Component {
       dropdownContent.slideToggle().toggleClass('boss-overview__dropdown-content_state_closed');
     });
   }
+  
+  handleEditClick = () => {
+    this.onClose();
+    this.props.setFrontendState({ showNewTaskModal: true });
+    this.props.setCurrentMaintenanceTask(this.props.selectedMaintenanceTask);
+  }
 
   render() {
     let task = this.props.selectedMaintenanceTask;
@@ -190,12 +196,18 @@ export default class TaskModal extends React.Component {
         className={{
           afterOpen: 'boss-modal-window boss-modal-window_role_task-overview',
         }}
-        onRequestClose={ this.onClose.bind(this) }
+        onRequestClose={ this.onClose }
         contentLabel="ReactModalPortal"
       >
-        <button type="button" className="boss-modal-window__close-inner" onClick={ this.onClose.bind(this) }></button>
+        <button type="button" className="boss-modal-window__close-inner" onClick={ this.onClose }></button>
 
-        <div className="boss-modal-window__header">{ task.title }</div>
+        <div className="boss-modal-window__header">
+          {task.title}
+          <button
+            onClick={this.handleEditClick}
+            className="boss-modal-window__action boss-modal-window__action_role_edit boss-modal-window__action_position_after"
+          >Edit</button>
+        </div>
 
         <div className="boss-modal-window__content">
           <div className="boss-modal-window__overview">

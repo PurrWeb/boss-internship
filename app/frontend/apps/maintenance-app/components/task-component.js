@@ -1,10 +1,39 @@
 import React from 'react';
 import classnames from 'classnames';
 import moment from 'moment';
-
+import humanize from 'string-humanize';
 import constants from '../constants';
 import oFetch from 'o-fetch';
 import Select from 'react-select';
+
+const HIGH_PRIORITY = 'high_priority';
+const MEDIUM_PRIORITY = 'medium_priority';
+const LOW_PRIORITY = 'low_priority';
+
+const STATUS_PENDING = 'pending';
+const STATUS_COMPLETED = 'completed';
+const STATUS_REJECTED = 'rejected';
+const STATUS_ACCEPTED = 'accepted';
+
+
+const PRIORITY_TITLES = {
+  [HIGH_PRIORITY]: 'H',
+  [MEDIUM_PRIORITY]: 'M',
+  [LOW_PRIORITY]: 'L',
+};
+
+const PRIORITY_CLASS_SUFFIXES = {
+  [HIGH_PRIORITY]: 'high',
+  [MEDIUM_PRIORITY]: 'medium',
+  [LOW_PRIORITY]: 'low',
+};
+
+const STATUS_CLASS_SUFFIXES = {
+  [STATUS_PENDING]: 'pending',
+  [STATUS_COMPLETED]: 'ok',
+  [STATUS_REJECTED]: 'alert',
+  [STATUS_ACCEPTED]: 'ok',
+};
 
 export default class TaskComponent extends React.Component {
   constructor(props) {
@@ -20,14 +49,14 @@ export default class TaskComponent extends React.Component {
 
   componentDidMount() {
     $('.boss-check[data-task-id="' + this.props.currentMaintenanceTask.id + '"]').each(function() {
-      var panelDropdownIcon = $(this).find('.boss-check__indicator_role_dropdown-switch'),
+      var panelDropdownIcon = $(this).find('.boss-check__dropdown-link'),
           panelDropdown = $(this).find('.boss-check__dropdown'),
           panelStatusLabel = $(this).find('.boss-check__cell_role_status-label');
 
       function togglePanelDropdown(e) {
         e.preventDefault();
-        panelDropdownIcon.toggleClass('boss-check__indicator_state_dropdown-closed');
-        panelDropdown.slideToggle().toggleClass('boss-dropdown_state_closed');
+        panelDropdownIcon.toggleClass('boss-check__dropdown-link_state_closed');
+        panelDropdown.slideToggle().toggleClass('boss-check__dropdown_state_closed');
         panelStatusLabel.toggleClass('boss-check__cell_adjust_single-row');
       }
 
@@ -35,17 +64,12 @@ export default class TaskComponent extends React.Component {
     });
   }
 
-  handleDetailsClick() {
+  handleDetailsClick = () => {
     this.props.setFrontendState({ showModal: true });
     this.props.setCurrentMaintenanceTask(this.props.currentMaintenanceTask);
   }
 
-  handleEditClick() {
-    this.props.setFrontendState({ showNewTaskModal: true });
-    this.props.setCurrentMaintenanceTask(this.props.currentMaintenanceTask);
-  }
-
-  renderOption(option) {
+  renderOption = (option) => {
     return (
       <span>
         <span className={ `Select-color-indicator Select-color-indicator_status_${option.label}` }></span> { option.label }
@@ -53,72 +77,50 @@ export default class TaskComponent extends React.Component {
     );
   }
 
-  renderStatusBar(task) {
-    if (this.state.editingStatus) {
-      return (
-        <div className={ `boss-check__cell boss-check__cell_role_status-label boss-check__cell_status_${task.status} boss-check__cell_adjust_single-row` }>
-          <form className="boss-form">
-            <div className="boss-form__field">
-              <div className="boss-form__select">
-                <Select
-                  name="status"
-                  onChange={ this.handleStatusChange.bind(this) }
-                  options={ this.statusOptions() }
-                  placeholder="Select Status"
-                  value={ this.state.status }
-                  searchable={ false }
-                  clearable={ false }
-                  optionRenderer={ this.renderOption.bind(this) }
-                  valueRenderer={ this.renderOption.bind(this) }
-                />
-              </div>
-            </div>
-          </form>
-        </div>
-      );
-    } else {
-      return (
-        <div className={ `boss-check__cell boss-check__cell_role_status-label boss-check__cell_status_${task.status} boss-check__cell_adjust_single-row` }>
-          <p className="boss-check__text boss-check__text_role_status-label">{ task.status.toUpperCase() }</p>
-        </div>
-      );
-    }
+  renderPriorityBar(task) {
+    return (
+      <div className={`boss-check__indicator boss-check__indicator_priority_${PRIORITY_CLASS_SUFFIXES[task.priority]} boss-check__indicator_position_before`}>
+        {PRIORITY_TITLES[task.priority]}
+      </div>
+    );
   }
 
-  renderStatusUpdateButton() {
-    if (this.state.editingStatus) {
-      return (
-        <button className="boss-button boss-button_type_small boss-button_role_confirm boss-table__action" onClick={ this.saveState.bind(this) }>{ this.state.confirmText }</button>
-      );
-    } else {
-      return (
-        <button
-          className="boss-button boss-button_type_small boss-button_role_update boss-table__action"
-          onClick={ this.enableEditing.bind(this) }
-          disabled={ this.props.currentMaintenanceTask.allowedTransitions.length < 1 }
-        >Update status</button>
-      );
-    }
+  renderStatus(task) {
+    return (
+      <div className="boss-check__header-status">
+        <p className={`boss-button boss-button_type_small boss-button_type_no-behavior boss-button_role_${STATUS_CLASS_SUFFIXES[task.status]} boss-check__title-label`}>
+          {humanize(task.status)}
+        </p>
+      </div>
+    );
+  }
+
+  renderToggleButton(task) {
+    return (
+      <div className="boss-check__dropdown-link boss-check__dropdown-link_type_icon boss-check__dropdown-link_state_closed">
+        Toggle Dropdown
+      </div>
+    )
   }
 
   renderActionsCell() {
     if (this.props.currentUser && this.props.currentUser.role === 'maintenance_staff') {
-      return;
+      return null;
     }
 
     return (
       <div className="boss-table__cell">
         <div className="boss-table__info">
           <div className="boss-table__actions">
-            <button className="boss-button boss-button_type_small boss-button_role_edit-light-alt boss-table__action" onClick={ this.handleEditClick.bind(this) }>Edit</button>
-            <button className="boss-button boss-button_type_small boss-button_role_cancel-light boss-table__action" onClick={ this.handleDelete.bind(this) }>Delete</button>
+            <button className="boss-button boss-button_type_small boss-button_role_view-details-light boss-table__action" onClick={ this.handleDetailsClick }>View/Edit</button>
+            <button className="boss-button boss-button_type_small boss-button_role_cancel-light boss-table__action" onClick={ this.handleDelete }>Delete</button>
           </div>
         </div>
       </div>
     );
   }
 
-  handleDelete() {
+  handleDelete = () => {
     this.props.setCurrentMaintenanceTask(this.props.currentMaintenanceTask);
     this.props.setFrontendState({ showDeleteModal: true });
   }
@@ -127,7 +129,7 @@ export default class TaskComponent extends React.Component {
     this.setState({ editingStatus: true });
   }
 
-  handleStatusChange(object) {
+  handleStatusChange = (object) => {
     this.setState({ status: object.value });
   }
 
@@ -184,7 +186,7 @@ export default class TaskComponent extends React.Component {
 
   render() {
     let currentTask = this.props.currentMaintenanceTask;
-    let tableClass = 'boss-table_page_maintenance-managers-index-card';
+    let tableClass = 'boss-table boss-table_page_maintenance-index-card';
 
     if (this.props.currentUser && this.props.currentUser.role === 'maintenance') {
       tableClass = 'boss-check_page_maintenance-index';
@@ -192,18 +194,13 @@ export default class TaskComponent extends React.Component {
 
     return (
       <div className="boss-check boss-check_role_board boss-check_page_maintenance-index" data-task-id={ currentTask.id }>
-        <div className="boss-check__row boss-check__row_role_status">
-          { this.renderStatusBar(currentTask) }
-
-          <div className="boss-check__cell boss-check__cell_role_status-title">
-            { this.renderTitle(currentTask) }
-
-            <div
-              className={ `boss-check__indicator boss-check__indicator_priority_${currentTask.priority.split('_')[0]} boss-check__indicator_role_dropdown-switch boss-check__indicator_state_dropdown-closed` }
-            >
-              Toggle Dropdown
-            </div>
+        <div className="boss-check__header">
+          <div className="boss-check__header-info">
+            {this.renderPriorityBar(currentTask)}
+            {this.renderTitle(currentTask)}
           </div>
+          {this.renderStatus(currentTask)}
+          {this.renderToggleButton(currentTask)}
         </div>
 
         <div className="boss-check__dropdown boss-check__dropdown_state_closed">
@@ -218,27 +215,6 @@ export default class TaskComponent extends React.Component {
               <div className="boss-table__cell">
                 <div className="boss-table__info">
                   <p className="boss-table__text boss-table__text_role_date">{ moment(currentTask.createdAt).format('ddd L') }</p>
-                </div>
-              </div>
-
-              <div className="boss-table__cell">
-                <div className="boss-table__info">
-                  <div className="boss-table__actions">
-                    <button
-                      className="boss-button boss-button_type_small boss-button_role_view-report boss-table__action"
-                      onClick={ this.handleDetailsClick.bind(this) }
-                    >
-                      View Details
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="boss-table__cell">
-                <div className="boss-table__info">
-                  <div className="boss-table__actions">
-                    { this.renderStatusUpdateButton() }
-                  </div>
                 </div>
               </div>
 
