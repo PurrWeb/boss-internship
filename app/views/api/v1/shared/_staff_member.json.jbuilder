@@ -10,6 +10,6 @@ json.surname staff_member.name.surname
 json.preferred_hours staff_member.hours_preference_note
 json.preferred_days staff_member.day_perference_note
 json.master_venue do
-  json.id staff_member.master_venue.id
-  json.url api_v1_venue_url(staff_member.master_venue)
+  json.id staff_member.master_venue.andand.id
+  json.url staff_member.master_venue && api_v1_venue_url(staff_member.master_venue)
 end
