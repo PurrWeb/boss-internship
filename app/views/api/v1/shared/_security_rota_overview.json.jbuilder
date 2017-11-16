@@ -6,7 +6,14 @@ staff_members = StaffMember.
   includes(:name).
   includes(:master_venue)
 
-rota_shifts = RotaShift.enabled.joins(:rota).merge(rotas).joins(:staff_member).merge(staff_members)
+rota_shifts = RotaShift.
+  enabled.
+  joins(:rota).
+  merge(rotas).
+  joins(:staff_member).
+  merge(staff_members).
+  includes(:rota)
+
 venues = Venue.joins(:rotas).merge(rotas)
 
 json.date date.iso8601
