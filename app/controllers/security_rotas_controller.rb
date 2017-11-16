@@ -50,7 +50,8 @@ class SecurityRotasController < ApplicationController
       enabled.
       joins(:staff_member).
       merge(staff_members).
-      where(starts_at: week_start_time..week_end_time)
+      where(starts_at: week_start_time..week_end_time).
+      includes(:rota)
 
     date_rotas = Rota.where(date: date)
 
