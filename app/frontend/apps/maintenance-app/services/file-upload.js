@@ -15,6 +15,16 @@ export default class FileUpload {
     if (!file) return;
 
     return new Promise((resolve, reject) => {
+      if (file.size > 1000000) {
+        return reject({
+          file: file,
+          status: 422,
+          statusText: 'This image is too large. Image should be less than 1 MB.',
+          responseJSON: {},
+          uuid: uuid
+        });
+      }
+
       return new this(file)
         .upload()
         .then(json => {
