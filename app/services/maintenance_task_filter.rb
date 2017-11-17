@@ -9,6 +9,7 @@ class MaintenanceTaskFilter
     @venues = set_venues(params[:venues] || '')
 
     @maintenance_tasks = MaintenanceTask.priority_order
+      .includes(:venue, :creator_user, :disabled_by_user, :maintenance_task_transitions)
   end
 
   def fetch

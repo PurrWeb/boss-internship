@@ -14,7 +14,7 @@ export default class MainContent extends React.Component {
 
       props = Object.assign(props, { currentMaintenanceTask: venue});
 
-      return (<TaskComponent { ...props } key={ venue.id }/>);
+      return <TaskComponent { ...props } key={ venue.id }/>;
     })
   }
 
@@ -36,7 +36,7 @@ export default class MainContent extends React.Component {
     }
   }
 
-  queryMaintenanceTasks(params = null) {
+  queryMaintenanceTasks = (params = null) => {
     let startDate, endDate;
 
     if (this.props.filter.startDate) {
@@ -65,7 +65,7 @@ export default class MainContent extends React.Component {
     let { ...props } = this.props;
 
     props = Object.assign(props, {
-      queryMaintenanceTasks: this.queryMaintenanceTasks.bind(this),
+      queryMaintenanceTasks: this.queryMaintenanceTasks,
     });
 
     return props;

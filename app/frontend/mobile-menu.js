@@ -23,29 +23,6 @@ window.initMobileMenu = () => {
       })
     }
 
-    if (!!bossCheck) {
-      bossCheck.each(function(){
-        var checkDropdown = $(this).find('.boss-check__dropdown'),
-            checkDropdownLink = $(this).find('.boss-check__dropdown-link');
-
-        function toggleCheckDropdown(e) {
-          e.preventDefault();
-          var text = checkDropdownLink.text();
-          checkDropdownLink.text(text === 'See Total' ? 'Hide Totals' : 'See Totals');
-
-          if(checkDropdown.hasClass('boss-check__dropdown_state_closed')) {
-            checkDropdown.slideToggle().removeClass('boss-check__dropdown_state_closed');
-            $(this).removeClass('boss-check__dropdown-link_state_closed');
-          } else {
-            checkDropdown.slideToggle().addClass('boss-check__dropdown_state_closed');
-            $(this).addClass('boss-check__dropdown-link_state_closed');
-          }
-        }
-
-        checkDropdownLink.on('click', toggleCheckDropdown);
-      });
-    }
-
     function openMobileMenu() {
         document.body.style.overflow = "hidden";
         mobileMenu.classList.add('boss-mobile-menu_state_active');

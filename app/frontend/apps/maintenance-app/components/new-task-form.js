@@ -121,6 +121,7 @@ export default class NewTaskForm extends React.Component {
       this.queryMaintenanceTasks();
       this.setState({ formButtonText: 'Created', description: '', title: '' });
       this.props.setFrontendState({ showNewTaskModal: false });
+      this.props.setCurrentMaintenanceTask(null);
       this.formReset();
     });
   }
@@ -142,13 +143,14 @@ export default class NewTaskForm extends React.Component {
       id: this.props.selectedMaintenanceTask.id,
       title: this.state.title,
       description: this.state.description,
-      priority: this.state.priority.value + '_priority',
+      priority: this.state.priority.value ? this.state.priority.value + '_priority' : this.state.priority + '_priority',
       venue_id: this.state.venue.value,
       maintenance_task_image_ids: this.props.selectedMaintenanceTask.maintenanceTaskImageIds
     }).then((argument) => {
       this.queryMaintenanceTasks();
       this.setState({ formButtonText: 'Edited' });
       this.props.setFrontendState({ showNewTaskModal: false });
+      this.props.setCurrentMaintenanceTask(null);
       this.formReset();
     });
   }
