@@ -4,8 +4,9 @@ import oFetch from 'o-fetch';
 
 import editAvatarModal from '~/lib/content-modal';
 import bouncedEmailModal from '~/components/bounced-email-modal';
+import axios from 'axios'; 
 
-  const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, currentPage}) => {
+const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, currentPage}) => {
   const avatar = oFetch(staffMember, 'avatar');
   const fullName = `${oFetch(staffMember, 'first_name')} ${oFetch(staffMember, 'surname')}`;
   const email = oFetch(staffMember, 'email');
@@ -109,6 +110,14 @@ import bouncedEmailModal from '~/components/bounced-email-modal';
     )
   }
 
+  const sendVerification = () => {
+    axios.defaults.headers.common['Authorization'] = `Token token="${window.boss.store.accessToken}"`;
+    return axios.post(`/api/v1/staff_members/${staffMember.id}/send_verification`)
+      .then(resp => {
+        console.log(resp);
+      });
+  }
+
   return (
     <div className="boss-page-dashboard__user-summary">
       <div className="boss-user-summary">
@@ -132,6 +141,36 @@ import bouncedEmailModal from '~/components/bounced-email-modal';
               {jobTypeName}
             </span>
           </div>
+          
+          {staffMember.verification_sent_at && !staffMember.verified_at &&
+            <div className="boss-user-summary__contacts">
+              <p>{staffMember.verification_sent_at}</p>
+              <button className="boss-button">Resend verification</button>
+            </div>
+          }
+
+          {staffMember.verified_at &&
+            <div className="boss-user-summary__contacts">
+              <dl style={{display: 'flex'}}>
+                <dt><strong>Verified At: </strong></dt>
+                <dd>{safeMoment.iso8601Parse(staffMember.verified_at).format('HH:mm Do MMMM YYYY')}</dd>
+              </dl>
+              <dl style={{display: 'flex'}}>
+                <dt><strong>Verification sent At: </strong></dt>
+                <dd>{safeMoment.iso8601Parse(staffMember.verification_sent_at).format('HH:mm Do MMMM YYYY')}</dd>
+              </dl>
+            </div>
+          }
+
+          {!staffMember.verification_sent_at && !staffMember.verified_at &&
+            <div className="boss-user-summary__contacts">
+              <button
+                onClick={sendVerification}
+                className="boss-button"
+              >Send verification</button>
+            </div>
+          }
+
           { disabled && renderdisabledContent({disabledByUser, disabledAt, disabledReason}) }
           { [renderCardContacts(email, phoneNumber), renderCardActions()] }
         </div>
