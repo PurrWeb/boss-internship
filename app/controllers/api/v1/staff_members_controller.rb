@@ -4,6 +4,22 @@ module Api
       before_filter :web_token_authenticate!, only: [:show, :create, :flagged]
       before_filter :api_token_athenticate!, only: [:change_pin]
 
+      def send_verification
+        staff_member = StaffMember.find(params[:staff_member_id])
+        
+        unless staff_member.present?
+          return render json: {}, status: 404
+        end
+        
+        result = StaffMemberVerificationService.new(staff_member: staff_member).send_verification
+        
+        if result.success?
+          render json: result.staff_member, serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer, status: 200
+        else
+          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+        end
+      end
+
       def show
         staff_member = StaffMember.find(params.fetch(:id))
         authorize! :view, staff_member
