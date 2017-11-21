@@ -1,4 +1,6 @@
 class StaffMember < ActiveRecord::Base
+  has_secure_password validations: false
+
   MALE_GENDER = 'male'
   FEMALE_GENDER = 'female'
 
@@ -92,6 +94,30 @@ class StaffMember < ActiveRecord::Base
   before_validation :check_rollbar_guid
 
   delegate :current_state, to: :state_machine
+
+  def expire_web_tokens!
+    WebApiAccessToken.revoke!(user: self)
+  end
+
+  def current_access_token
+    current_web_access_tokens.last
+  end
+
+  def current_web_access_tokens
+    AppApiAccessToken.find_by_staff_member(staff_member: self)
+  end
+
+  def verified?
+    self.verified_at.present?
+  end
+
+  def verification_expired?
+    self.verification_sent_at >= Time.now.utc
+  end
+
+  def verifiable?
+    !self.verification_expired? && !self.verified? && self.verification_token.present?
+  end
 
   def pay_rate_update_access
     if has_pay_rate_without_access
