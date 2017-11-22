@@ -1,7 +1,7 @@
 import React from 'react';
 import safeMoment from "~/lib/safe-moment"
 import oFetch from 'o-fetch';
-import axios from 'axios'; 
+import axios from 'axios';
 import AsyncButton from 'react-async-button';
 
 import editAvatarModal from '~/lib/content-modal';
@@ -120,53 +120,6 @@ const StaffMemberCard = ({
     )
   }
 
-  const renderVerificationFields = (staffMember) => {
-    if (staffMember.verification_sent_at && !staffMember.verified_at) {
-      return (
-        <div className="boss-user-summary__contacts">
-          <dl style={{display: 'flex'}}>
-            <dt style={{minWidth: '160px'}}><strong>Verification sent at:</strong>&nbsp;</dt>
-            <dd>{safeMoment.iso8601Parse(staffMember.verification_sent_at).format(utils.humanDateFormatWithTime())}</dd>
-          </dl>
-          <AsyncButton
-            className="boss-button"
-            text="Resend verification"
-            pendingText="Sending..."
-            onClick={() => onResendVerification(staffMember)}
-          />
-        </div>
-      )
-    }
-    if (staffMember.verified_at) {
-      return (
-        <div className="boss-user-summary__contacts">
-          <dl style={{display: 'flex'}}>
-            <dt style={{minWidth: '160px'}}><strong>Verified At:</strong>&nbsp;</dt>
-            <dd>{safeMoment.iso8601Parse(staffMember.verified_at).format(utils.humanDateFormatWithTime())}</dd>
-          </dl>
-          <dl style={{display: 'flex'}}>
-            <dt style={{minWidth: '160px'}}><strong>Verification sent At:</strong>&nbsp;</dt>
-            <dd>{safeMoment.iso8601Parse(staffMember.verification_sent_at).format(utils.humanDateFormatWithTime())}</dd>
-          </dl>
-        </div>
-      )
-    }
-    if (!staffMember.verification_sent_at && !staffMember.verified_at) {
-      return (
-        <div className="boss-user-summary__contacts">
-          <AsyncButton
-            className="boss-button"
-            text="Send verification"
-            pendingText="Sending..."
-            onClick={() => onSendVerification(staffMember)}
-          />
-        </div>
-      )
-    }
-
-    return null;
-  }
-
   return (
     <div className="boss-page-dashboard__user-summary">
       <div className="boss-user-summary">
@@ -190,8 +143,6 @@ const StaffMemberCard = ({
               {jobTypeName}
             </span>
           </div>
-          
-          {renderVerificationFields(staffMember)}
 
           { disabled && renderdisabledContent({disabledByUser, disabledAt, disabledReason}) }
           { [renderCardContacts(email, phoneNumber), renderCardActions()] }
