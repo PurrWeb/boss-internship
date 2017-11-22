@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171117082106) do
+ActiveRecord::Schema.define(version: 20171122104956) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255
@@ -880,6 +880,7 @@ ActiveRecord::Schema.define(version: 20171117082106) do
   add_index "staff_members", ["shift_change_occured_at"], name: "index_staff_members_on_shift_change_occured_at", using: :btree
   add_index "staff_members", ["sia_badge_expiry_date"], name: "index_staff_members_on_sia_badge_expiry_date", using: :btree
   add_index "staff_members", ["staff_type_id"], name: "index_staff_members_on_staff_type_id", using: :btree
+  add_index "staff_members", ["verification_token"], name: "index_staff_members_on_verification_token", using: :btree
   add_index "staff_members", ["would_rehire"], name: "index_staff_members_on_would_rehire", using: :btree
 
   create_table "staff_tracking_events", force: :cascade do |t|
