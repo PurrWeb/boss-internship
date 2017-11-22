@@ -192,7 +192,6 @@ Rails.application.routes.draw do
           end
           resource :sessions, only: [] do
             post :sign_in
-            post :set_password
           end
         end
       end
@@ -285,6 +284,7 @@ Rails.application.routes.draw do
 
           collection do
             post :flagged
+            post :set_password
           end
         end
         resources :staff_types,   only: :show

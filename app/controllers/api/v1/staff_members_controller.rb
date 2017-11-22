@@ -1,8 +1,32 @@
 module Api
   module V1
     class StaffMembersController < APIController
-      before_filter :web_token_authenticate!, only: [:show, :create, :flagged]
+      before_filter :web_token_authenticate!, except: [:change_pin, :set_password]
       before_filter :api_token_athenticate!, only: [:change_pin]
+      skip_before_filter :parse_access_tokens, only: [:set_password]
+
+      def set_password
+        password = params.fetch(:password)
+        password_confirmation = params.fetch(:passwordConfirmation)
+        verification_token = params.fetch(:verificationToken)
+
+        staff_member = StaffMember.enabled.find_by(verification_token: verification_token)
+
+        unless staff_member.present?
+          return render json: {}, status: 404
+        end
+
+        result = StaffMemberVerificationService.new(staff_member: staff_member).set_password_and_verify(
+          password: password,
+          password_confirmation: password_confirmation
+        )
+
+        if result.success?
+          render json: {}, status: 200
+        else
+          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+        end
+      end
 
       def send_verification
         staff_member = StaffMember.enabled.find(params[:staff_member_id])
@@ -285,6 +309,14 @@ module Api
         self.class.required_flagged_staff_member_fields.all? do |field|
           params.keys.include?(field)
         end
+      end
+
+      private
+      def authenticate_staff_member
+        StaffMember.enabled.joins(:email_address)
+          .where(email_addresses: {email: params[:email]})
+          .first
+          .try(:authenticate, params[:password]) 
       end
     end
   end
