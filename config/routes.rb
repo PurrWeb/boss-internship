@@ -267,6 +267,7 @@ Rails.application.routes.draw do
         resources :holiday_reports, only: :index
         resources :staff_members, only: [:show, :create] do
           post :send_verification
+          post :resend_verification
           resources :holidays, only: [:index, :update, :destroy, :create] do
             collection do
               get :holidays_count

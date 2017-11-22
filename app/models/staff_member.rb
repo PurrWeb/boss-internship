@@ -47,7 +47,9 @@ class StaffMember < ActiveRecord::Base
   validates :avatar, {
     file_size: { less_than: 1.megabyte }
   }
-
+  
+  validates :password, length: (6..32), confirmation: true, if: :setting_password?
+  
   # Transient attribute used to preserve image uploads
   # during form resubmissions
   attr_accessor \
@@ -95,16 +97,12 @@ class StaffMember < ActiveRecord::Base
 
   delegate :current_state, to: :state_machine
 
-  def expire_web_tokens!
-    WebApiAccessToken.revoke!(user: self)
+  def expire_security_app_tokens!
+    SecurityAppApiAccessToken.revoke!(user: self)
   end
 
-  def current_access_token
-    current_web_access_tokens.last
-  end
-
-  def current_web_access_tokens
-    AppApiAccessToken.find_by_staff_member(staff_member: self)
+  def current_security_app_access_token
+    SecurityAppApiAccessToken.find_by_staff_member(staff_member: self).last
   end
 
   def verified?
@@ -377,6 +375,10 @@ class StaffMember < ActiveRecord::Base
   end
 
   private
+  def setting_password?
+    password || password_confirmation
+  end
+
   # Needed for statesman
   def self.transition_class
     StaffMemberTransition
