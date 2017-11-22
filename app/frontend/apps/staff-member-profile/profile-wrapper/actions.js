@@ -8,6 +8,8 @@ import {
   updateEmploymentDetails,
   updatePersonalDetails,
   updateContactDetails,
+  sendVerificationRequest,
+  resendVerificationRequest,
 } from './requests';
 
 import {
@@ -23,6 +25,22 @@ import {
   HIDE_EDIT_AVATAR_MODAL,
   UPDATE_STAFF_MEMBER,
 } from './constants';
+
+export const sendVerification = (staffMember) => (dispatch, getState) => {
+  return sendVerificationRequest(staffMember)
+    .then(resp => {
+      dispatch(updateStaffMember(resp.data));
+      return resp;
+    })
+}
+
+export const resendVerification = (staffMember) => (dispatch, getState) => {
+  return resendVerificationRequest(staffMember)
+    .then(resp => {
+      dispatch(updateStaffMember(resp.data));
+      return resp;
+    })
+}
 
 export const updateAvatarRequest = (avatarUrl) => (dispatch, getState) => {
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);

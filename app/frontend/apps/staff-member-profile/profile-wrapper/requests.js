@@ -6,6 +6,16 @@ const accessToken = window.boss.store.accessToken;
 
 const http = axios.create();
 
+export const sendVerificationRequest = (staffMember) => {
+  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.store.accessToken}"`;
+  return axios.post(`/api/v1/staff_members/${staffMember.id}/send_verification`);
+}
+
+export const resendVerificationRequest = (staffMember) => {
+  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.store.accessToken}"`;
+  return axios.post(`/api/v1/staff_members/${staffMember.id}/resend_verification`);
+}
+
 export const updateAvatar = ({staffMemberId, avatarUrl}) => {
   http.defaults.headers.common['Authorization'] = `Token token="${window.boss.store.accessToken}"`;
 
