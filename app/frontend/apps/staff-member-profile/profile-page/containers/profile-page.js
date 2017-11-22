@@ -7,6 +7,7 @@ import humanize from 'string-humanize';
 import oFetch from "o-fetch";
 import _ from 'lodash';
 
+import DetailsListItem from '../components/details-list-item';
 import DetailsList from '../components/details-list';
 import {starterEmploymentStatusLabels} from '../../../../constants/other';
 import ProfileWrapper from '../../profile-wrapper';
@@ -32,51 +33,32 @@ const findById = (collection, id) => {
 
 @connect(mapStateToProps)
 class ProfilePage extends React.PureComponent {
-  filledDetailsOptions(options, data) {
-    return options.map(category => {
-      return {
-        categoryName: category.categoryName,
-        items: category.items.map(item => {
-          if (typeof item === 'function') {
-            return item(data);
-          }
-
-          const [realName, name] = item.split(":");
-          const key = realName;
-
-          return {
-            name: humanize(name || realName),
-            value: oFetch(data, key),
-          }
-        }).filter(item => item)
-      }
-    })
+  getCategoryItemsFromProviders(itemProviders, staffMemberData){
+    return itemProviders.map(itemProvider => {
+      return this.getValueFromProvider(itemProvider, staffMemberData);
+    }).filter(itemProvider => itemProvider)
   }
 
-  renderDetailsList(categories) {
-    return categories.map((category, key) => {
-      return <DetailsList key={key} category={category} index={key + 1}/>
-    });
+  getValueFromProvider(itemProvider, staffMemberData){
+    if (typeof itemProvider === 'function') {
+      return itemProvider(staffMemberData);
+    }
+
+    const [realName, name] = itemProvider.split(":");
+    const key = realName;
+
+    return {
+      name: humanize(name || realName),
+      value: oFetch(staffMemberData, key),
+    }
   }
 
-  handleDisableStaffMemberSubmit = (values) => {
-    confirm('This staff member has an associated user account. Disabling here will not disable the user and the will still be able to log in.', {
-      actionButtonText: 'Confirm',
-      title: 'WARNING !!!',
-    }).then(() => {
-      this.props.actions.disableStaffMemberRequest(values.toJS());
-    })
-  }
-
-  initializeData() {
-    let staffMemberData = this.props.staffMember.toJS();
+  employmentDetailItemProviders(staffMemberData){
     let venues = this.props.venues.toJS();
     let staffTypes = this.props.staffTypes.toJS();
-    let payRates = this.props.payRates.toJS();
     let accessiblePayRates = this.props.accessiblePayRates;
-    let accessibleVenues = this.props.accessibleVenues;
 
-    let employmentDetailItems = [
+    let result = [
       (item, name = "other_venues") => ({name: humanize(name), value: findById(venues, oFetch(item, name)).map(item => oFetch(item, 'name')).join(', ')}),
       (item, name = "staff_type") => ({name: "Job Type", value: oFetch(findById(staffTypes, oFetch(item, name)), 'name')}),
       (item, name = "starts_at") => ({name: "Start Date", value: safeMoment.uiDateParse(oFetch(item, name)).format('DD MMMM YYYY')}),
@@ -95,23 +77,22 @@ class ProfilePage extends React.PureComponent {
         }
       }
     ];
-
     if (oFetch(staffMemberData, 'is_security_staff')) {
-      employmentDetailItems.push(
+      result.push(
         (item, name="sia_badge_expiry_date") => ({
           name: humanize(name),
           value: safeMoment.uiDateParse(oFetch(item, name)).format('DD MMM YYYY')
         })
       )
 
-      employmentDetailItems.push(
+      result.push(
         (item, name="sia_badge_number") => ({
           name: humanize(name),
           value: oFetch(item, name)
         })
       )
     } else {
-      employmentDetailItems.unshift(
+      result.unshift(
         (item, name = "master_venue") => ({
           name: "Main Venue",
           value: oFetch(findById(venues, oFetch(item, name)), 'name')
@@ -119,45 +100,122 @@ class ProfilePage extends React.PureComponent {
       )
     }
 
-    this.detailsListOptions = [
-      {
-        categoryName: "Employment Details",
-        items: employmentDetailItems
-      },
-      {
-        categoryName: "Account Details",
-        items: [
-          (item, name = "created_at") => ({name: "Created", value: safeMoment.iso8601Parse(oFetch(item, name)).format('HH:mm DD MMMM YYYY')}),
-          (item, name = "updated_at") => ({name: "Modified", value: safeMoment.iso8601Parse(oFetch(item, name)).format('HH:mm DD MMMM YYYY')})
-        ]
-      },
-      {
-        categoryName: "Personal Details",
-        items: [
-          (item, name = "name") => ({name: humanize(name), value: `${oFetch(item, 'first_name')} ${oFetch(item, 'surname')}` }),
-          (item, name = "gender") => ({name: humanize(name), value: humanize(oFetch(item, name))}),
-          (item, name = "date_of_birth") => ({
-            name: humanize(name),
-            value: this.dateOfBirthMoment(oFetch(item, name)) && this.dateOfBirthMoment(oFetch(item, name)).format("DD-MM-YYYY")
-          }),
-          (item, name = "date_of_birth") => ({
-            name: "Age",
-            value: this.ageDescription(this.dateOfBirthMoment(oFetch(item, name)))
-          })
-        ]
-      },
-      {
-        categoryName: "Contact Details",
-        items: [
-          "address",
-          'county',
-          "country",
-          'postcode',
-          (item, name = "email") => ({name: "Email Address", value: oFetch(item, name)}),
-          "phone_number"
-        ]
-      }
+    return result;
+  }
+
+  accountCategoryContent(staffMemberData){
+    let result = [];
+    let itemIndex = 0;
+
+    let createdAtListItemData = this.getValueFromProvider(
+      (item, name = "created_at") => ({name: "Created", value: safeMoment.iso8601Parse(oFetch(item, name)).format('HH:mm DD MMMM YYYY')}),
+      staffMemberData
+    );
+    result.push(<DetailsListItem key={itemIndex} item={createdAtListItemData} />);
+    itemIndex = itemIndex + 1;
+
+    let updatedAtListItemData = this.getValueFromProvider(
+      (item, name = "updated_at") => ({name: "Modified", value: safeMoment.iso8601Parse(oFetch(item, name)).format('HH:mm DD MMMM YYYY')}),
+      staffMemberData
+    )
+    result.push(<DetailsListItem key={itemIndex} item={updatedAtListItemData} />);
+    itemIndex = itemIndex + 1;
+
+    return result
+  }
+
+  personalDetailItemProviders(){
+    return [
+      (item, name = "name") => ({name: humanize(name), value: `${oFetch(item, 'first_name')} ${oFetch(item, 'surname')}` }),
+      (item, name = "gender") => ({name: humanize(name), value: humanize(oFetch(item, name))}),
+      (item, name = "date_of_birth") => ({
+        name: humanize(name),
+        value: this.dateOfBirthMoment(oFetch(item, name)) && this.dateOfBirthMoment(oFetch(item, name)).format("DD-MM-YYYY")
+      }),
+      (item, name = "date_of_birth") => ({
+        name: "Age",
+        value: this.ageDescription(this.dateOfBirthMoment(oFetch(item, name)))
+      })
     ];
+  }
+
+  contactDetailItemProviders(){
+    return [
+      "address",
+      'county',
+      "country",
+      'postcode',
+      (item, name = "email") => ({name: "Email Address", value: oFetch(item, name)}),
+      "phone_number"
+    ];
+  }
+
+  renderDetailsList() {
+    let staffMemberData = this.props.staffMember.toJS();
+
+    let employmentDetailItems = this.getCategoryItemsFromProviders(this.employmentDetailItemProviders(staffMemberData), staffMemberData);
+    let personalDetailItems = this.getCategoryItemsFromProviders(this.personalDetailItemProviders(), staffMemberData);
+    let contactDetailItems = this.getCategoryItemsFromProviders(this.contactDetailItemProviders(), staffMemberData);
+
+    let index = 0;
+    let listItems = [];
+
+    listItems.push(
+      <DetailsList key={index} categoryName="Employment Details" sectionNumber={index + 1}>
+      {
+        employmentDetailItems.map(
+          (item, key) => {
+            return <DetailsListItem key={key} item={item} />
+          }
+        )
+      }
+      </DetailsList>
+    );
+    index = index + 1;
+
+    listItems.push(
+      <DetailsList key={index} categoryName="Account Details" sectionNumber={index + 1}>
+        { this.accountCategoryContent(staffMemberData) }
+      </DetailsList>
+    );
+    index = index + 1;
+
+    listItems.push(
+      <DetailsList key={index} categoryName="Personal Details" sectionNumber={index + 1}>
+      {
+        personalDetailItems.map(
+          (item, key) => {
+            return <DetailsListItem key={key} item={item} />
+          }
+        )
+      }
+      </DetailsList>
+    );
+    index = index + 1;
+
+    listItems.push(
+      <DetailsList key={index} categoryName="Contact Details" sectionNumber={index + 1}>
+      {
+        contactDetailItems.map(
+          (item, key) => {
+            return <DetailsListItem key={key} item={item} />
+          }
+        )
+      }
+      </DetailsList>
+    );
+    index = index + 1;
+
+    return listItems;
+  }
+
+  handleDisableStaffMemberSubmit = (values) => {
+    confirm('This staff member has an associated user account. Disabling here will not disable the user and the will still be able to log in.', {
+      actionButtonText: 'Confirm',
+      title: 'WARNING !!!',
+    }).then(() => {
+      this.props.actions.disableStaffMemberRequest(values.toJS());
+    })
   }
 
   dateOfBirthMoment(rawValue){
@@ -173,13 +231,10 @@ class ProfilePage extends React.PureComponent {
       staffMember,
     } = this.props;
 
-    this.initializeData();
-    const categories = this.filledDetailsOptions(this.detailsListOptions, staffMember.toJS());
-
     return (
       <ProfileWrapper
         currentPage="profile"
-      >{this.renderDetailsList(categories)}</ProfileWrapper>
+      >{this.renderDetailsList()}</ProfileWrapper>
     )
   }
 }
