@@ -7,6 +7,7 @@ import humanize from 'string-humanize';
 import oFetch from "o-fetch";
 import _ from 'lodash';
 
+import PasswordInformationListItem from '../components/password-information-list-item';
 import DetailsListItem from '../components/details-list-item';
 import DetailsList from '../components/details-list';
 import {starterEmploymentStatusLabels} from '../../../../constants/other';
@@ -120,6 +121,8 @@ class ProfilePage extends React.PureComponent {
     )
     result.push(<DetailsListItem key={itemIndex} item={updatedAtListItemData} />);
     itemIndex = itemIndex + 1;
+
+    result.push(<PasswordInformationListItem key={itemIndex} staffMember={staffMemberData} />)
 
     return result
   }
