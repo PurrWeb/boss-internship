@@ -1,7 +1,7 @@
-class AppApiAccessToken
+class SecurityAppApiAccessToken
   def initialize(token: nil, expires_at: nil, staff_member:)
     unless staff_member.verified?
-      raise "Staff member not verified yet"
+      raise "Staff member with id: #{staff_member.id} not verified yet"
     end
 
     if token.present?
@@ -21,11 +21,11 @@ class AppApiAccessToken
   attr_reader :token, :staff_member, :expires_at
 
   def self.token_key(token)
-    "app_api_token:#{token}"
+    "security_app_api_token:#{token}"
   end
 
   def token_key(token)
-    AppApiAccessToken.token_key(token)
+    SecurityAppApiAccessToken.token_key(token)
   end
 
   def self.revoke!(staff_member:)
@@ -42,7 +42,7 @@ class AppApiAccessToken
   end
 
   def staff_member_key_token_list_key(staff_member)
-    AppApiAccessToken.staff_member_key_token_list_key(staff_member)
+    SecurityAppApiAccessToken.staff_member_key_token_list_key(staff_member)
   end
 
   def self.find_by_token(token:)
@@ -53,7 +53,7 @@ class AppApiAccessToken
       token = token_data[:token]
       staff_member = StaffMember.find(staff_member_id)
 
-      AppApiAccessToken.new(token: token, staff_member: staff_member)
+      SecurityAppApiAccessToken.new(token: token, staff_member: staff_member)
     end
   end
 
@@ -62,7 +62,7 @@ class AppApiAccessToken
     token_data = JSON.parse(token_data_raw)
     return [] unless token_data.present?
     token_data.map do |token|
-      AppApiAccessToken.find_by_token(token: token)
+      SecurityAppApiAccessToken.find_by_token(token: token)
     end
   end
 

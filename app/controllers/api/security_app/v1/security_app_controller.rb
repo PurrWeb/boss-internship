@@ -5,31 +5,36 @@ module Api
         before_filter :parse_access_tokens
 
         def parse_access_tokens
-          app_api_token = nil
+          security_app_api_token = nil
           authenticate_or_request_with_http_token do |supplied_token, other_options|
-            app_api_token = AppApiAccessToken.find_by_token(token: supplied_token)
-            !!app_api_token
+            security_app_api_token = SecurityAppApiAccessToken.find_by_token(token: supplied_token)
+            !!security_app_api_token
           end
-          if app_api_token && (app_api_token.expires_at.nil? || app_api_token.expires_at > Time.current)
-            @app_api_access_token = app_api_token
+          if security_app_api_token && (security_app_api_token.expires_at.nil? || security_app_api_token.expires_at > Time.current)
+            @security_app_api_access_token = security_app_api_token
           end
         end
 
-        def app_api_token_athenticate!
+        def current_staff_member
+          if @security_app_api_access_token.present?
+            @security_app_api_access_token.staff_member
+          end
+        end
+
+        def security_app_api_token_athenticate!
           render(
             json: { errors: "Not authenticated" },
             status: :unauthorized
-          ) unless @app_api_access_token.present?
+          ) unless @security_app_api_access_token.present?
         end
 
         def staff_member_verify!
           render(
             json: { errors: {verification: ["Not verified, please check your email to verify"]} },
             status: 422
-          ) unless @app_api_access_token.present? && @app_api_access_token.staff_member.verified?
+          ) unless @security_app_api_access_token.present? && @security_app_api_access_token.staff_member.verified?
         end
       end
     end
   end
 end
-    

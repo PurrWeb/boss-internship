@@ -2,7 +2,7 @@ module Api
   module SecurityApp
     module V1
       class TestsController < SecurityAppController
-        before_action :app_api_token_athenticate!
+        before_action :security_app_api_token_athenticate!
 
         def get
           render json: {}, status: 200
