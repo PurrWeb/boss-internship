@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'App Api access' do
+RSpec.describe 'Security App Api access' do
   include Rack::Test::Methods
   include HeaderHelpers
 
@@ -17,21 +17,21 @@ RSpec.describe 'App Api access' do
     context 'unverified staff member trying supply token' do
       let(:staff_member) { FactoryGirl.create(:staff_member) }
       let(:access_token) do
-        AppApiAccessToken.new(
+        SecurityAppApiAccessToken.new(
           staff_member: staff_member
         ).persist!
       end
 
       it 'should raise error' do
         response = get(url)
-        expect{ access_token }.to raise_error(RuntimeError, "Staff member not verified yet")
+        expect{ access_token }.to raise_error(RuntimeError, "Staff member with id: #{staff_member.id} not verified yet")
       end
     end
 
     context 'verified staff member active token supplied' do
       let(:staff_member) { FactoryGirl.create(:staff_member, verified_at: Time.now.utc) }
       let(:access_token) do
-        AppApiAccessToken.new(
+        SecurityAppApiAccessToken.new(
           staff_member: staff_member
         ).persist!
       end
@@ -50,7 +50,7 @@ RSpec.describe 'App Api access' do
     context 'expired token supplied' do
       let(:staff_member) { FactoryGirl.create(:staff_member, verified_at: Time.now.utc) }
       let(:access_token) do
-        AppApiAccessToken.new(
+        SecurityAppApiAccessToken.new(
           staff_member: staff_member
         ).persist!
       end
@@ -79,7 +79,7 @@ RSpec.describe 'App Api access' do
     context 'authenticated user' do
       let(:staff_member) { FactoryGirl.create(:staff_member, verified_at: Time.now.utc) }
       let(:access_token) do
-        AppApiAccessToken.new(
+        SecurityAppApiAccessToken.new(
           staff_member: staff_member
         ).persist!
       end

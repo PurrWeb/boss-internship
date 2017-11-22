@@ -84,23 +84,78 @@ RSpec.describe 'Staff member verification' do
     context 'valid params' do
       let(:verification_token) {"validtoken"}
       let(:staff_member) { FactoryGirl.create(:staff_member, verification_token: verification_token, verification_sent_at: Time.now.utc) }
-      let(:params) do
-        {
-          password: 'some password',
-          passwordConfirmation: 'some password',
-          verificationToken: staff_member.verification_token
-        }
+      
+      context 'valid password and token params' do
+        let(:params) do
+          {
+            password: 'some password',
+            passwordConfirmation: 'some password',
+            verificationToken: staff_member.verification_token
+          }
+        end
+  
+        it 'should be unverified' do
+          expect(staff_member.verified?).to eq(false)
+        end
+  
+        it 'new password should be set' do
+          response = post(reset_password_url)
+          staff_member.reload
+          expect(response.status).to eq(ok_status)
+          expect(staff_member.verified?).to eq(true)
+        end
+      end
+      
+      context 'empty password and password_confirmation' do
+        let(:params) do
+          {
+            password: '',
+            passwordConfirmation: '',
+            verificationToken: staff_member.verification_token
+          }
+        end
+    
+        it 'should receive validation errors' do
+          response = post(reset_password_url)
+          json = JSON.parse(response.body)
+          expect(response.status).to eq(unprocessable_entity_status)
+          expect(json["errors"]["password"]).to eq(["Password field can't be empty"])
+          expect(json["errors"]["passwordConfirmation"]).to eq(["Password confirmation field can't be empty"])
+        end
       end
 
-      it 'should be unverified' do
-        expect(staff_member.verified?).to eq(false)
+      context 'password length less than 6' do
+        let(:params) do
+          {
+            password: 'less',
+            passwordConfirmation: 'less',
+            verificationToken: staff_member.verification_token
+          }
+        end
+    
+        it 'should receive validation errors' do
+          response = post(reset_password_url)
+          json = JSON.parse(response.body)
+          expect(response.status).to eq(unprocessable_entity_status)
+          expect(json["errors"]["password"]).to eq(["is too short (minimum is 6 characters)"])
+        end
       end
 
-      it 'new password should be set' do
-        response = post(reset_password_url)
-        staff_member.reload
-        expect(response.status).to eq(ok_status)
-        expect(staff_member.verified?).to eq(true)
+      context "password and password confirmation doesn't match" do
+        let(:params) do
+          {
+            password: 'Pa$$w0rd',
+            passwordConfirmation: 'password',
+            verificationToken: staff_member.verification_token
+          }
+        end
+    
+        it 'should receive validation errors' do
+          response = post(reset_password_url)
+          json = JSON.parse(response.body)
+          expect(response.status).to eq(unprocessable_entity_status)
+          expect(json["errors"]["passwordConfirmation"]).to eq(["doesn't match Password"])
+        end
       end
     end
 
