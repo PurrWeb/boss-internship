@@ -1,7 +1,9 @@
 import axios from 'axios';
 import notify from '~/components/global-notification';
 
-export default function http({successMessage, errorMessage}, interval) {
+export default function http({...messages}, interval) {
+  const {successMessage, errorMessage} = messages;
+
   if (!window.boss.accessToken) {
     throw Error("Access token must be present !!!");
   }
