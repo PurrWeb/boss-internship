@@ -14,7 +14,7 @@ export default function http({...messages}, interval) {
 
   instance.interceptors.response.use(function (response) {
     // Do something with response data
-    notify(successMessage || 'Successfully', {
+    notify(successMessage || 'Action was successful', {
       interval: interval,
       status: 'success'
     });
