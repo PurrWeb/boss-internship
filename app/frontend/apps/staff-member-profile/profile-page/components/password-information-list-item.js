@@ -2,6 +2,7 @@ import React from 'react';
 import oFetch from 'o-fetch';
 import safeMoment from "~/lib/safe-moment";
 import utils from "~/lib/utils";
+import AsyncButton from 'react-async-button';
 
 class PasswordInformationListItem extends React.PureComponent {
   verificationTokenSent(staffMember){
@@ -33,11 +34,28 @@ class PasswordInformationListItem extends React.PureComponent {
     let spanContent;
     if (this.verificationTokenSent(staffMember)){
       spanContent = [
-        <a key={0} href="#" className="boss-details__value-action">Revoke token</a>,
-        <a key={1} href="#" className="boss-details__value-action">Send new password setup email</a>
+        <AsyncButton
+          key={0}
+          className="boss-details__value-action"
+          text="Revoke setup email"
+          pendingText="Revoking..."
+          onClick={() => oFetch(this.props, 'onRevokePasswordSetupEmail')(staffMember)}
+        />,
+        <AsyncButton
+          key={1}
+          className="boss-details__value-action"
+          text="Resend password setup email"
+          pendingText="Resending..."
+          onClick={() => oFetch(this.props, 'onResendPasswordSetupEmail')(staffMember)}
+        />
       ]
     } else {
-      spanContent = <a href="#" className="boss-details__value-action">Send password setup email</a>;
+      spanContent = <AsyncButton
+        className="boss-details__value-action"
+        text="Send password setup email"
+        pendingText="Sending..."
+        onClick={() => oFetch(this.props, 'onSendPasswordSetupEmail')(staffMember)}
+      />;
     }
 
     return <span className="boss-details__value-line">{spanContent}</span>;

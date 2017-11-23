@@ -13,9 +13,7 @@ const StaffMemberCard = ({
   jobType,
   onUpdateAvatar,
   onEditAvatar,
-  currentPage,
-  onSendVerification,
-  onResendVerification,
+  currentPage
 }) => {
   const avatar = oFetch(staffMember, 'avatar');
   const fullName = `${oFetch(staffMember, 'first_name')} ${oFetch(staffMember, 'surname')}`;

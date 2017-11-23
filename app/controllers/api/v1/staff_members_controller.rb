@@ -30,13 +30,13 @@ module Api
 
       def send_verification
         staff_member = StaffMember.enabled.find(params[:staff_member_id])
-        
+
         unless staff_member.present?
           return render json: {}, status: 404
         end
-        
+
         result = StaffMemberVerificationService.new(staff_member: staff_member).send_verification
-        
+
         if result.success?
           render json: result.staff_member, serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer, status: 200
         else
@@ -44,15 +44,24 @@ module Api
         end
       end
 
+      def revoke_verification_token
+        staff_member = StaffMember.enabled.find(params[:staff_member_id])
+        authorize?(:edit, staff_member)
+
+        StaffMemberVerificationService.new(staff_member: staff_member).drop_verification!
+
+        render json: result.staff_member, serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer, status: 200
+      end
+
       def resend_verification
         staff_member = StaffMember.enabled.find(params[:staff_member_id])
-        
+
         unless staff_member.present?
           return render json: {}, status: 404
         end
-        
+
         result = StaffMemberVerificationService.new(staff_member: staff_member).resend_verification
-        
+
         if result.success?
           render json: result.staff_member, serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer, status: 200
         else
@@ -185,7 +194,7 @@ module Api
               national_insurance_number: national_insurance_number
             ).profiles
           end
-          
+
           render json: staff_members,
                  each_serializer: FlaggedStaffMemberSerializer,
                  meta: { existing_profiles: existing_profiles },

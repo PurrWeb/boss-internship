@@ -29,9 +29,7 @@ import {
   hideDisableStaffMemberModal,
   disableStaffMemberRequest,
   showEditAvatarModal,
-  hideEditAvatarModal,
-  sendVerification,
-  resendVerification,
+  hideEditAvatarModal
 } from '../actions';
 
 const mapStateToProps = (state) => {
@@ -61,9 +59,7 @@ const mapDispatchToProps = (dispatch) => {
       hideDisableStaffMemberModal,
       disableStaffMemberRequest,
       showEditAvatarModal,
-      hideEditAvatarModal,
-      sendVerification,
-      resendVerification,
+      hideEditAvatarModal
     }, dispatch)
   };
 }
@@ -114,9 +110,7 @@ class ProfileWrapper extends React.PureComponent {
         hideDisableStaffMemberModal,
         disableStaffMemberRequest,
         showEditAvatarModal,
-        hideEditAvatarModal,
-        sendVerification,
-        resendVerification,
+        hideEditAvatarModal
       }
     } = this.props;
 
@@ -174,8 +168,6 @@ class ProfileWrapper extends React.PureComponent {
                   staffMember={staffMember.toJS()}
                   jobType={jobType.toJS()}
                   onEditAvatar={showEditAvatarModal}
-                  onSendVerification={sendVerification}
-                  onResendVerification={resendVerification}
                 />
                 <StaffMemberProfileActions
                   staffMember={staffMember}

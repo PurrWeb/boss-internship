@@ -87,7 +87,7 @@ class StaffMemberVerificationService
   end
 
   def drop_verification
-    staff_member.update_attributes({
+    staff_member.update_attributes!({
       verification_token: nil,
       verification_sent_at: nil,
       verified_at: nil,

@@ -12,6 +12,11 @@ import DetailsListItem from '../components/details-list-item';
 import DetailsList from '../components/details-list';
 import {starterEmploymentStatusLabels} from '../../../../constants/other';
 import ProfileWrapper from '../../profile-wrapper';
+import {
+  sendPasswordSetupEmail,
+  resendPasswordSetupEmail,
+  revokePasswordSetupEmail
+} from '../actions';
 
 const mapStateToProps = (state) => {
   return {
@@ -122,7 +127,13 @@ class ProfilePage extends React.PureComponent {
     result.push(<DetailsListItem key={itemIndex} item={updatedAtListItemData} />);
     itemIndex = itemIndex + 1;
 
-    result.push(<PasswordInformationListItem key={itemIndex} staffMember={staffMemberData} />)
+    result.push(
+      <PasswordInformationListItem
+        key={itemIndex}
+        staffMember={staffMemberData}
+        onSendPasswordSetupEmail={sendPasswordSetupEmail}
+        onResendPasswordSetupEmail={resendPasswordSetupEmail}
+        onRevokePasswordSetupEmail={revokePasswordSetupEmail} />)
 
     return result
   }
