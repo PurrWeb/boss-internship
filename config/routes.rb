@@ -79,6 +79,7 @@ Rails.application.routes.draw do
           collection do
             get :success
             get :expired
+            get :something_went_wrong
           end
         end
       end
