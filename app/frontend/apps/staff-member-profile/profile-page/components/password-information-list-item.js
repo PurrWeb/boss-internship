@@ -6,11 +6,11 @@ import AsyncButton from 'react-async-button';
 
 class PasswordInformationListItem extends React.PureComponent {
   verificationTokenSent(staffMember){
-    !!(oFetch(staffMember, 'verification_sent_at') && !this.verified(staffMember))
+    return !!(oFetch(staffMember, 'verification_sent_at') && !this.verified(staffMember));
   }
 
   verified(staffMember){
-    !!oFetch(staffMember, 'verified_at')
+    return !!oFetch(staffMember, 'verified_at');
   }
 
   passwordStatusContent(staffMember){
@@ -28,26 +28,27 @@ class PasswordInformationListItem extends React.PureComponent {
 
   tokenActionsContent(staffMember){
     if(this.verified(staffMember)){
-      return;
+      return null;
     }
-
     let spanContent;
     if (this.verificationTokenSent(staffMember)){
       spanContent = [
-        <AsyncButton
-          key={0}
-          className="boss-details__value-action"
-          text="Revoke setup email"
-          pendingText="Revoking..."
-          onClick={() => oFetch(this.props, 'onRevokePasswordSetupEmail')(staffMember)}
-        />,
-        <AsyncButton
-          key={1}
-          className="boss-details__value-action"
-          text="Resend password setup email"
-          pendingText="Resending..."
-          onClick={() => oFetch(this.props, 'onResendPasswordSetupEmail')(staffMember)}
-        />
+        <span key={0} className="boss-details__value-line">
+          <AsyncButton
+            className="boss-details__value-action"
+            text="Revoke setup email"
+            pendingText="Revoking..."
+            onClick={() => oFetch(this.props, 'onRevokePasswordSetupEmail')(staffMember)}
+          />
+        </span>,
+        <span key={1} className="boss-details__value-line">
+          <AsyncButton
+            className="boss-details__value-action"
+            text="Resend password setup email"
+            pendingText="Resending..."
+            onClick={() => oFetch(this.props, 'onResendPasswordSetupEmail')(staffMember)}
+          />
+        </span>
       ]
     } else {
       spanContent = <AsyncButton

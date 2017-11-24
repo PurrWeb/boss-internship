@@ -7,6 +7,10 @@ import {
   revokePasswordSetupEmailRequest
 } from './requests';
 
+import {
+  updateStaffMember
+} from '../profile-wrapper/actions';
+
 export const sendPasswordSetupEmail = (staffMember) => (dispatch, getState) => {
   return sendPasswordSetupEmailRequest(staffMember)
     .then(resp => {
