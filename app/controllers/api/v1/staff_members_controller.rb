@@ -10,11 +10,7 @@ module Api
         password_confirmation = params.fetch(:passwordConfirmation)
         verification_token = params.fetch(:verificationToken)
 
-        staff_member = StaffMember.enabled.find_by(verification_token: verification_token)
-
-        unless staff_member.present?
-          return render json: {}, status: 404
-        end
+        staff_member = StaffMember.enabled.find_by!(verification_token: verification_token)
 
         result = StaffMemberVerificationService.new(staff_member: staff_member).set_password_and_verify(
           password: password,
