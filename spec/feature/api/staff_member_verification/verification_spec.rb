@@ -75,9 +75,8 @@ RSpec.describe 'Staff member verification' do
         }
       end
 
-      it 'should receive 404 when token is wrong' do
-        response = post(reset_password_url)
-        expect(response.status).to eq(not_found_status)
+      it 'should raise error' do
+        expect{ post(reset_password_url)}.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
