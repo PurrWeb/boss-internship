@@ -15,7 +15,9 @@ class PasswordInformationListItem extends React.PureComponent {
 
   passwordStatusContent(staffMember){
     let spanContent;
-    if(this.verified(staffMember)){
+    if(oFetch(staffMember, 'disabled')){
+      spanContent = 'N/A'
+    }else if(this.verified(staffMember)){
       spanContent = `Set at ${safeMoment.iso8601Parse(oFetch(staffMember, 'verified_at')).format(utils.humanDateFormatWithTime())}`
     } else if (this.verificationTokenSent(staffMember)){
      spanContent = `Password setup email send at ${safeMoment.iso8601Parse(oFetch(staffMember, 'verification_sent_at')).format(utils.humanDateFormatWithTime())}`
@@ -69,7 +71,8 @@ class PasswordInformationListItem extends React.PureComponent {
       <p className="boss-details__label boss-details__label_size_small">Application Password</p>
       <p className="boss-details__value">
         { this.passwordStatusContent(staffMember) }
-        { this.tokenActionsContent(staffMember) }
+        { !oFetch(staffMember, 'disabled') &&
+            this.tokenActionsContent(staffMember) }
       </p>
     </li>;
   }
