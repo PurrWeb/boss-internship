@@ -3,10 +3,10 @@ class SetPasswordController < ApplicationController
 
   def show
     if !staff_member_from_verification_token.present? || !staff_member_from_verification_token.enabled?
-      return redirect_to something_went_wrong_set_password_index_path
-    end
-    if staff_member_from_verification_token.verification_expired?
       return redirect_to expired_set_password_index_path
+    end
+    if !staff_member_from_verification_token.enabled?
+      return redirect_to something_went_wrong_set_password_index_path
     end
 
     render(

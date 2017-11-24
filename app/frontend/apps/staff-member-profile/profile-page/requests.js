@@ -18,5 +18,5 @@ export const resendPasswordSetupEmailRequest = (staffMember) => {
 
 export const revokePasswordSetupEmailRequest = (staffMember) => {
   setupAccessToken(window.boss.store.accessToken);
-  return axios.post(`/api/v1/staff_members/${staffMember.id}/resend_verification`);
+  return axios.post(`/api/v1/staff_members/${staffMember.id}/revoke_verification`);
 }

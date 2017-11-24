@@ -38,7 +38,7 @@ class PasswordInformationListItem extends React.PureComponent {
         <span key={0} className="boss-details__value-line">
           <AsyncButton
             className="boss-details__value-action"
-            text="Revoke setup email"
+            text="Revoke password setup email"
             pendingText="Revoking..."
             onClick={() => oFetch(this.props, 'onRevokePasswordSetupEmail')(staffMember)}
           />

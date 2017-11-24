@@ -40,13 +40,13 @@ module Api
         end
       end
 
-      def revoke_verification_token
+      def revoke_verification
         staff_member = StaffMember.enabled.find(params[:staff_member_id])
-        authorize?(:edit, staff_member)
+        authorize!(:edit, staff_member)
 
         StaffMemberVerificationService.new(staff_member: staff_member).drop_verification!
 
-        render json: result.staff_member, serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer, status: 200
+        render json: staff_member, serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer, status: 200
       end
 
       def resend_verification

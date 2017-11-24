@@ -42,7 +42,7 @@ class StaffMemberVerificationService
     if staff_member.verified?
       staff_member.errors.add(:base, :blank, message: "Staff member already verified")
     elsif staff_member.verification_sent_at.present?
-      drop_verification
+      drop_verification!
       generate_confirmation_token
       staff_member.save
       StaffMemberVerificationMailer.send_verification_email(staff_member: staff_member, token: staff_member.verification_token).deliver_now
@@ -86,7 +86,7 @@ class StaffMemberVerificationService
     Result.new(staff_member, success, api_errors)
   end
 
-  def drop_verification
+  def drop_verification!
     staff_member.update_attributes!({
       verification_token: nil,
       verification_sent_at: nil,
