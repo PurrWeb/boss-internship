@@ -60,13 +60,13 @@ RSpec.describe 'Staff member verification' do
         expect(json["errors"]["base"]).to eq(["Staff member already verified"])
       end
     end
-  end  
-  
+  end
+
   describe 'reset password' do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:reset_password_url) { url_helpers.set_password_api_v1_staff_members_path(params) }
-    
-    context 'wrong params' do
+
+    context 'when supplied token is invalid' do
       let(:params) do
         {
           password: 'some password',
