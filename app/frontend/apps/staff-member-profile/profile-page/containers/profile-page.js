@@ -79,14 +79,16 @@ class ProfilePage extends React.PureComponent {
       revokePasswordSetupEmail
     } = this.props.actions;
 
+
+    let masterVenueId = oFetch(staffMember, "master_venue");
+    let masterVenueValue = masterVenueId && oFetch(findById(venues, masterVenueId), 'name');
+
     return (
       <ProfileWrapper
         currentPage="profile"
       >
         <DetailsList key={1} categoryName="Employment Details" sectionNumber={1}>
-          {!isSecurityStaff &&
-            <DetailsListItem item={{name: "Master venue", value: oFetch(findById(venues, 'master_venue'), 'name')}} />
-          }
+          <DetailsListItem item={{name: "Master venue", value: masterVenueValue}} />
           <DetailsListItem item={{name: "Other venues", value: findById(venues, oFetch(staffMember, 'other_venues')).map(item => oFetch(item, 'name')).join(', ')}} />
           <DetailsListItem item={{name: "Job Type", value: oFetch(findById(staffTypes, oFetch(staffMember, 'staff_type')), 'name')}} />
           <DetailsListItem item={{name: "Starts At", value: safeMoment.uiDateParse(oFetch(staffMember, 'starts_at')).format('DD MMMM YYYY')}} />
