@@ -1,1 +1,5 @@
-<%= link_to "Link to verify", set_password_url(token) %>
+<p>Hi <%= staff_member.name.first_name %>,</p>
+
+<p>You can use the link on this email to setup your password on the JSM Bars systems. The process will just take a few seconds and when you are done you will be able to use this password to log into any JSM bars applications or websites you have access to.</p/>
+
+<%= link_to "Click here to setup your password", set_password_url(token) %>
