@@ -64,7 +64,7 @@ RSpec.describe 'Staff member verification' do
   
   describe 'reset password' do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
-    let(:reset_password_url) { url_helpers.set_password_api_security_app_v1_sessions_path(params) }
+    let(:reset_password_url) { url_helpers.set_password_api_v1_staff_members_path(params) }
     
     context 'wrong params' do
       let(:params) do
