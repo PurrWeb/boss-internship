@@ -7,7 +7,7 @@ import {
   enableStaffMember,
   updateEmploymentDetails,
   updatePersonalDetails,
-  updateContactDetails,
+  updateContactDetails
 } from './requests';
 
 import {

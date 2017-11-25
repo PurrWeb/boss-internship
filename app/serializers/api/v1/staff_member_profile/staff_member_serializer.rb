@@ -34,7 +34,10 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :is_security_staff,
              :created_at,
              :has_user,
-             :bounced_email
+             :bounced_email,
+             :verification_sent_at,
+             :verified_at,
+             :password_set_at
 
   def date_of_birth
     UIRotaDate.format(object.date_of_birth) if object.date_of_birth.present?

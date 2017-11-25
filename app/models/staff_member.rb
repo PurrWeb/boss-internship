@@ -1,4 +1,6 @@
 class StaffMember < ActiveRecord::Base
+  has_secure_password validations: false
+
   MALE_GENDER = 'male'
   FEMALE_GENDER = 'female'
 
@@ -45,7 +47,9 @@ class StaffMember < ActiveRecord::Base
   validates :avatar, {
     file_size: { less_than: 1.megabyte }
   }
-
+  
+  validates :password, length: (6..32), confirmation: true, if: :setting_password?
+  
   # Transient attribute used to preserve image uploads
   # during form resubmissions
   attr_accessor \
@@ -92,6 +96,26 @@ class StaffMember < ActiveRecord::Base
   before_validation :check_rollbar_guid
 
   delegate :current_state, to: :state_machine
+
+  def expire_security_app_tokens!
+    SecurityAppApiAccessToken.revoke!(user: self)
+  end
+
+  def current_security_app_access_token
+    SecurityAppApiAccessToken.find_by_staff_member(staff_member: self).last
+  end
+
+  def verified?
+    self.verified_at.present?
+  end
+
+  def verification_expired?
+    self.verification_sent_at >= Time.now.utc
+  end
+
+  def verifiable?
+    !self.verification_expired? && !self.verified? && self.verification_token.present?
+  end
 
   def pay_rate_update_access
     if has_pay_rate_without_access
@@ -351,6 +375,10 @@ class StaffMember < ActiveRecord::Base
   end
 
   private
+  def setting_password?
+    password || password_confirmation
+  end
+
   # Needed for statesman
   def self.transition_class
     StaffMemberTransition

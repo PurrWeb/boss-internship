@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= content_for?(:title) ? yield(:title) : "Boss" %></title>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Boss" %>">
+
+    <%= javascript_include_tag 'rollbar', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+    <script>
+      window.boss = window.boss || {};
+      window.boss.store = window.boss.store || {};
+      window.boss.rollbarData = window.boss.rollbarData || {};
+      window.boss.currentLayout = "<%= @current_layout %>"
+      window.boss.currentVersion = "<%= application_version %>";
+    </script>
+
+    <script src="<%= @bundle_script %>" data-turbolinks-track="true"></script>
+
+    <%= render 'layouts/favicon' %>
+  </head>
+
+  <body class="boss-body">
+    <%= yield %>
+    <%= insert_paloma_hook %>
+  </body>
+</html>

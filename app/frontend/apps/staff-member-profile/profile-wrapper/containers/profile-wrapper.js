@@ -29,7 +29,7 @@ import {
   hideDisableStaffMemberModal,
   disableStaffMemberRequest,
   showEditAvatarModal,
-  hideEditAvatarModal,
+  hideEditAvatarModal
 } from '../actions';
 
 const mapStateToProps = (state) => {
@@ -59,7 +59,7 @@ const mapDispatchToProps = (dispatch) => {
       hideDisableStaffMemberModal,
       disableStaffMemberRequest,
       showEditAvatarModal,
-      hideEditAvatarModal,
+      hideEditAvatarModal
     }, dispatch)
   };
 }
@@ -110,7 +110,7 @@ class ProfileWrapper extends React.PureComponent {
         hideDisableStaffMemberModal,
         disableStaffMemberRequest,
         showEditAvatarModal,
-        hideEditAvatarModal,
+        hideEditAvatarModal
       }
     } = this.props;
 

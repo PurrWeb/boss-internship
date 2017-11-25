@@ -1,11 +1,20 @@
 import React from 'react';
 import safeMoment from "~/lib/safe-moment"
 import oFetch from 'o-fetch';
+import axios from 'axios';
+import AsyncButton from 'react-async-button';
 
 import editAvatarModal from '~/lib/content-modal';
 import bouncedEmailModal from '~/components/bounced-email-modal';
+import utils from '~/lib/utils';
 
-  const StaffMemberCard = ({staffMember, jobType, onUpdateAvatar, onEditAvatar, currentPage}) => {
+const StaffMemberCard = ({
+  staffMember,
+  jobType,
+  onUpdateAvatar,
+  onEditAvatar,
+  currentPage
+}) => {
   const avatar = oFetch(staffMember, 'avatar');
   const fullName = `${oFetch(staffMember, 'first_name')} ${oFetch(staffMember, 'surname')}`;
   const email = oFetch(staffMember, 'email');
@@ -132,6 +141,7 @@ import bouncedEmailModal from '~/components/bounced-email-modal';
               {jobTypeName}
             </span>
           </div>
+
           { disabled && renderdisabledContent({disabledByUser, disabledAt, disabledReason}) }
           { [renderCardContacts(email, phoneNumber), renderCardActions()] }
         </div>

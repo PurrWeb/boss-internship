@@ -39,6 +39,9 @@ import './vendors/owl.carousel';
 
 import "./lib/load-underscore-mixins"
 
+import StaffMemberPasswordReset from "./apps/staff-member-password-reset";
+registerComponent("StaffMemberPasswordReset", StaffMemberPasswordReset);
+
 import RotaDailyApp from "./apps/rota-daily";
 registerComponent("RotaDailyApp", RotaDailyApp);
 
@@ -149,19 +152,19 @@ $(document).ready(function(){
     let countDown = 5 * 60; // In seconds
     ReactDOM.render(<AppVersionChecker countdown={ countDown } checkEvery={ fiveMinutes } />, versionCheckerEl);
 
-    $(".static-week-picker").each(function(){
-        var input = this;
+  $(".static-week-picker").each(function(){
+      var input = this;
 
-        var el = document.createElement("div")
-        input.parentNode.insertBefore(el, input)
-        $(input).hide();
+      var el = document.createElement("div")
+      input.parentNode.insertBefore(el, input)
+      $(input).hide();
 
-        ReactDOM.render(<WeekPicker
-                onChange={({startDate}) => input.value = moment(startDate).format("DD-MM-YYYY")}
-                selectionStartDate={debug.moment(input.value, "DD-MM-YYYY").toDate()} />, el)
-    })
+      ReactDOM.render(<WeekPicker
+              onChange={({startDate}) => input.value = moment(startDate).format("DD-MM-YYYY")}
+              selectionStartDate={debug.moment(input.value, "DD-MM-YYYY").toDate()} />, el)
+  })
 
-    if(Bowser.ios){
-      document.querySelector('html').classList.add('is-ios');
-    }
+  if(Bowser.ios){
+    document.querySelector('html').classList.add('is-ios');
+  }
 })

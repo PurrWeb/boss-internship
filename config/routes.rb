@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       unlocks: 'users/unlocks',
       passwords: 'users/passwords'
     }
-
+    
     resources :machines, only: [:index]
     resources :machine_refloats, only: [:index]
 
@@ -74,6 +74,15 @@ Rails.application.routes.draw do
 
     resources :staff_members, only: [:show, :new, :index] do
       resources :hours_overview, only: :show
+      collection do
+        resources :set_password, only: :show do
+          collection do
+            get :success
+            get :expired
+            get :something_went_wrong
+          end
+        end
+      end
       member do
         get :holidays
         get :profile
@@ -176,6 +185,17 @@ Rails.application.routes.draw do
     end
 
     namespace :api, defaults: { format: 'json' } do
+      namespace :security_app do
+        namespace :v1 do
+          resource :tests, only: [] do
+            get :get
+            post :post
+          end
+          resource :sessions, only: [] do
+            post :sign_in
+          end
+        end
+      end
       namespace :v1 do
         get 'version', to: 'version#version'
 
@@ -246,6 +266,9 @@ Rails.application.routes.draw do
         resources :holidays, only: :show
         resources :holiday_reports, only: :index
         resources :staff_members, only: [:show, :create] do
+          post :send_verification
+          post :resend_verification
+          post :revoke_verification
           resources :holidays, only: [:index, :update, :destroy, :create] do
             collection do
               get :holidays_count
@@ -263,6 +286,7 @@ Rails.application.routes.draw do
 
           collection do
             post :flagged
+            post :set_password
           end
         end
         resources :staff_types,   only: :show
