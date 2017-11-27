@@ -1,22 +1,23 @@
 import axios from 'axios';
-const accessToken = window.boss.store.accessToken;
-const http = axios.create();
-
-const setupAccessToken = (accessToken) => {
-  http.defaults.headers.common['Authorization'] = `Token token="${accessToken}"`;
-}
+import http from '~/lib/request-api';
 
 export const sendPasswordSetupEmailRequest = (staffMember) => {
-  setupAccessToken(window.boss.store.accessToken);
-  return axios.post(`/api/v1/staff_members/${staffMember.id}/send_verification`);
+  return http({
+    successMessage: 'Sending setup email successful',
+    errorMessage: 'There was a problem sending the setup email'
+  }).post(`/api/v1/staff_members/${staffMember.id}/send_verification`);
 }
 
 export const resendPasswordSetupEmailRequest = (staffMember) => {
-  setupAccessToken(window.boss.store.accessToken);
-  return axios.post(`/api/v1/staff_members/${staffMember.id}/resend_verification`);
+  return http({
+    successMessage: 'Resending setup email successful',
+    errorMessage: 'There was a problem resending the setup email'
+  }).post(`/api/v1/staff_members/${staffMember.id}/resend_verification`);
 }
 
 export const revokePasswordSetupEmailRequest = (staffMember) => {
-  setupAccessToken(window.boss.store.accessToken);
-  return axios.post(`/api/v1/staff_members/${staffMember.id}/revoke_verification`);
+  return http({
+    successMessage: 'Revoking setup email successful',
+    errorMessage: 'There was a problem revoking the setup email successful'
+  }).post(`/api/v1/staff_members/${staffMember.id}/revoke_verification`);
 }

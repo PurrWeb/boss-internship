@@ -109,12 +109,8 @@ class StaffMember < ActiveRecord::Base
     self.verified_at.present?
   end
 
-  def verification_expired?
-    self.verification_sent_at >= Time.now.utc
-  end
-
   def verifiable?
-    !self.verification_expired? && !self.verified? && self.verification_token.present?
+    !self.verified? && self.verification_token.present?
   end
 
   def pay_rate_update_access
