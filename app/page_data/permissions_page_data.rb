@@ -143,6 +143,10 @@ class PermissionsPageData
           path: @path.names_path
         },
         {
+          description: "Devs",
+          path: @path.secruity_app_sse_dev_path
+        },
+        {
           description: "Venues",
           path: @path.venues_path
         },
