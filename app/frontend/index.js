@@ -39,6 +39,9 @@ import './vendors/owl.carousel';
 
 import "./lib/load-underscore-mixins"
 
+import DevsApp from "./apps/devs";
+registerComponent("DevsApp", DevsApp);
+
 import StaffMemberPasswordReset from "./apps/staff-member-password-reset";
 registerComponent("StaffMemberPasswordReset", StaffMemberPasswordReset);
 
