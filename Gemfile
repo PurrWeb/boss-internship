@@ -54,6 +54,7 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem "shell-spinner"
 gem 'acts_as_list'
 gem 'sendgrid-ruby'
+gem 'ably-rest', '~> 1.0'
 
 group :production, :development do
   gem 'redis', '~>3.2'
