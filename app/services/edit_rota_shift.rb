@@ -5,9 +5,10 @@ class EditRotaShift
     end
   end
 
-  def initialize(rota_shift:, rota_shift_params:)
+  def initialize(rota_shift:, rota_shift_params:, frontend_updates:)
     @rota_shift = rota_shift
     @rota_shift_params = rota_shift_params
+    @frontend_updates = frontend_updates
   end
 
   def call
@@ -16,6 +17,8 @@ class EditRotaShift
       result = rota_shift.update_attributes(rota_shift_params)
 
       if result
+        frontend_updates.update_shift(shift: rota_shift)
+        
         rota_shift.staff_member.mark_requiring_notification! if rota_shift.rota_published?
         UpdateRotaForecast.new(rota: rota_shift.rota).call if rota_shift.part_of_forecast?
 
@@ -32,5 +35,5 @@ class EditRotaShift
   end
 
   private
-  attr_reader :rota_shift, :rota_shift_params
+  attr_reader :rota_shift, :rota_shift_params, :frontend_updates
 end

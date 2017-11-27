@@ -36,8 +36,14 @@ module Api
         shift = RotaShift.find(params[:id])
         authorize! :manage, shift
 
-        result = EditRotaShift.new(rota_shift: shift, rota_shift_params: rota_shift_params).call
-
+        frontend_updates = FrontendUpdates.new
+        result = EditRotaShift.new(
+          rota_shift: shift,
+          rota_shift_params: rota_shift_params,
+          frontend_updates: frontend_updates
+        ).call
+        frontend_updates.dispatch
+        
         if result.success?
           render 'show', locals: { rota_shift: result.rota_shift }
         else
@@ -53,7 +59,14 @@ module Api
         shift = RotaShift.find(params[:id])
         authorize! :manage, shift
 
-        DisableRotaShift.new(requester: current_user, shift: shift).call
+        frontend_updates = FrontendUpdates.new
+        DisableRotaShift.new(
+          requester: current_user,
+          shift: shift,
+          frontend_updates: frontend_updates
+        ).call
+        frontend_updates.dispatch
+
         render json: {}
       end
 

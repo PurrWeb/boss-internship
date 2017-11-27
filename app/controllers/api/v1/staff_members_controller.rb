@@ -108,15 +108,19 @@ module Api
 
       def disable
         staff_member = StaffMember.find(params[:id])
+        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
-          requester: current_user
+          requester: current_user,
+          frontend_updates: frontend_updates
         ).disable({
           disable_reason: params.fetch("disable_reason"),
           never_rehire: params.fetch("never_rehire")
         })
 
         if result.success?
+          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
@@ -129,10 +133,12 @@ module Api
 
       def enable
         staff_member = StaffMember.find(params[:id])
-
+        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+        
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
-          requester: current_user
+          requester: current_user,
+          frontend_updates: frontend_updates
         ).enable({
           starts_at: params.fetch("startsAt"),
           staff_type_id: params.fetch("staffType"),
@@ -160,6 +166,7 @@ module Api
         })
 
         if result.success?
+          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
@@ -207,15 +214,18 @@ module Api
 
       def update_avatar
         staff_member = StaffMember.find(params[:id])
-
+        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+        
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
-          requester: current_user
+          requester: current_user,
+          frontend_updates: frontend_updates
         ).update_avatar({
           avatar_base64: params.fetch("avatar_base64")
         })
 
         if result.success?
+          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
@@ -228,10 +238,12 @@ module Api
 
       def update_contact_details
         staff_member = StaffMember.find(params.fetch(:id))
-
+        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+        
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
-          requester: current_user
+          requester: current_user,
+          frontend_updates: frontend_updates
         ).update_contact_details({
           phone_number: params.fetch("phone_number"),
           address: params.fetch("address"),
@@ -242,6 +254,7 @@ module Api
         })
 
         if result.success?
+          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
@@ -254,10 +267,12 @@ module Api
 
       def update_personal_details
         staff_member = StaffMember.find(params[:id])
-
+        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+        
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
-          requester: current_user
+          requester: current_user,
+          frontend_updates: frontend_updates
         ).update_personal_details({
           gender: params.fetch(:gender),
           date_of_birth: params.fetch(:date_of_birth),
@@ -266,6 +281,7 @@ module Api
         })
 
         if result.success?
+          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
@@ -278,9 +294,12 @@ module Api
 
       def update_employment_details
         staff_member = StaffMember.find(params[:id])
+        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+        
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
-          requester: current_user
+          requester: current_user,
+          frontend_updates: frontend_updates
         ).update_employment_details({
           national_insurance_number: params["national_insurance_number"],
           hours_preference_note: params["hours_preference_note"],
@@ -296,6 +315,7 @@ module Api
         })
 
         if result.success?
+          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
@@ -314,14 +334,6 @@ module Api
         self.class.required_flagged_staff_member_fields.all? do |field|
           params.keys.include?(field)
         end
-      end
-
-      private
-      def authenticate_staff_member
-        StaffMember.enabled.joins(:email_address)
-          .where(email_addresses: {email: params[:email]})
-          .first
-          .try(:authenticate, params[:password]) 
       end
     end
   end

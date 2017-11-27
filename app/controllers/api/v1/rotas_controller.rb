@@ -33,11 +33,14 @@ module Api
 
         week = RotaWeek.new(date)
 
+        frontend_updates = FrontendUpdates.new
         PublishRotaWeek.new(
           week: week,
           venue: venue,
-          requester: current_user
+          requester: current_user,
+          frontend_updates: frontend_updates,
         ).call
+        frontend_updates.dispatch
 
         render json: {}
       end

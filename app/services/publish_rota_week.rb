@@ -1,8 +1,9 @@
 class PublishRotaWeek
-  def initialize(week:, venue:, requester:)
+  def initialize(week:, venue:, requester:, frontend_updates:)
     @week = week
     @venue = venue
     @requester = requester
+    @frontend_updates = frontend_updates
   end
 
   def call
@@ -25,10 +26,10 @@ class PublishRotaWeek
         includes(:rota_shifts)
 
 
-      PublishRotas.new(rotas: rotas, nested: true).call
+      PublishRotas.new(rotas: rotas, nested: true, frontend_updates: frontend_updates).call
     end
   end
 
   private
-  attr_reader :week, :venue, :requester
+  attr_reader :week, :venue, :requester, :frontend_updates
 end
