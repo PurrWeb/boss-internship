@@ -44,6 +44,14 @@ module Api
           render json: {}, status: 200
         end
 
+        def ably_auth
+          token_request = AblyService.client.auth.request_token({
+            client_id: "#{current_staff_member.id}",
+            capability: "{\"security-app-presence\":[\"presence\"], \"security-app-#{current_staff_member.id}\":[\"subscribe\"]}",
+          })
+          render json: token_request, status: 200
+        end
+
         private
         def authenticate_staff_member
           StaffMember.enabled.joins(:email_address)
