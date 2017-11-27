@@ -2,12 +2,12 @@ import axios from 'axios';
 import safeMoment from "~/lib/safe-moment";
 import {SECURITY_TYPE_ID} from './constants';
 
-const accessToken = window.boss.store.accessToken;
+const accessToken = window.boss.accessToken;
 
 const http = axios.create();
 
 export const updateAvatar = ({staffMemberId, avatarUrl}) => {
-  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.store.accessToken}"`;
+  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.accessToken}"`;
 
   return http.post(`/api/v1/staff_members/${staffMemberId}/update_avatar`, {
     avatar_base64: avatarUrl,
@@ -15,7 +15,7 @@ export const updateAvatar = ({staffMemberId, avatarUrl}) => {
 }
 
 export const disableStaffMember = ({staffMemberId, neverRehire, reason}) => {
-  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.store.accessToken}"`;
+  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.accessToken}"`;
 
   return http.post(`/api/v1/staff_members/${staffMemberId}/disable`, {
     never_rehire: !!neverRehire,
@@ -24,7 +24,7 @@ export const disableStaffMember = ({staffMemberId, neverRehire, reason}) => {
 }
 
 export const enableStaffMember = (payload) => {
-  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.store.accessToken}"`;
+  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.accessToken}"`;
 
   const {
     staffMemberId,
@@ -55,7 +55,7 @@ export const enableStaffMember = (payload) => {
 }
 
 export const updateEmploymentDetails = (payload) => {
-  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.store.accessToken}"`;
+  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.accessToken}"`;
   const {
     staffMemberId,
     national_insurance_number,
@@ -102,7 +102,7 @@ export const updateEmploymentDetails = (payload) => {
 }
 
 export const updatePersonalDetails = (payload) => {
-  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.store.accessToken}"`;
+  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.accessToken}"`;
 
   const {
     staffMemberId,
@@ -121,7 +121,7 @@ export const updatePersonalDetails = (payload) => {
 }
 
 export const updateContactDetails = (payload) => {
-  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.store.accessToken}"`;
+  http.defaults.headers.common['Authorization'] = `Token token="${window.boss.accessToken}"`;
   
   const {
     staffMemberId,

@@ -1,8 +1,8 @@
 <script>
   window.boss = window.boss || {};
+  window.boss.accessToken = "<%= access_token.token %>";
   window.boss.store = window.boss.store || {};
   window.boss.store.staffMember = <%= staff_member.to_json.html_safe %>;
-  window.boss.store.accessToken = "<%= access_token.token %>";
 </script>
 
 <%= react_component('StaffMemberProfileDetailsApp', {

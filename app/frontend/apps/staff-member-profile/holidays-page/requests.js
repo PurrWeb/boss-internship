@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const accessToken = window.boss.store.accessToken;
+const accessToken = window.boss.accessToken;
 
 const http = axios.create({
   headers: {'Authorization': `Token token="${accessToken}"`}
