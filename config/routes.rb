@@ -185,14 +185,14 @@ Rails.application.routes.draw do
     end
 
     namespace :api, defaults: { format: 'json' } do
-      namespace :security_app do
+      namespace :security_app, path: 'security-app' do
         namespace :v1 do
           resource :tests, only: [] do
             get :get
             post :post
           end
           resource :sessions, only: [] do
-            post :sign_in
+            post :sign_in, path: 'sign-in'
           end
         end
       end
