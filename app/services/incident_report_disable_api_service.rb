@@ -3,7 +3,7 @@ class IncidentReportDisableApiService
     @requester = requester
     @incident_report = incident_report
     @now = now
-    @ability = Ability.new(requester)
+    @ability = UserAbility.new(requester)
   end
   attr_reader :requester, :incident_report, :ability, :now
 

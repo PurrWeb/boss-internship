@@ -12,7 +12,7 @@ class StaffMemberApiUpdateService
   def initialize(staff_member:, requester:)
     @staff_member = staff_member
     @requester = requester
-    @ability = Ability.new(requester)
+    @ability = UserAbility.new(requester)
   end
   attr_reader :staff_member, :requester, :ability
 

@@ -8,7 +8,7 @@ class CreateVoucherApiService
   def initialize(venue:, requester:)
     @venue = venue
     @requester = requester
-    @ability = Ability.new(requester)
+    @ability = UserAbility.new(requester)
   end
   attr_reader :venue, :ability, :requester
 

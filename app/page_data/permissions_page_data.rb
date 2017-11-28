@@ -1,6 +1,6 @@
 class PermissionsPageData
   def initialize(user:)
-    @role = Ability.new(user)
+    @role = UserAbility.new(user)
     @user = user
     @path = Rails.application.routes.url_helpers
   end

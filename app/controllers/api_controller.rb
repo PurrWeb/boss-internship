@@ -59,9 +59,9 @@ class APIController < ApplicationController
 
   def current_ability
     if @web_access_token
-      @current_ability ||= Ability.new(@web_access_token.user)
+      @current_ability ||= UserAbility.new(@web_access_token.user)
     elsif @api_access_token
-      @current_ability ||= ApiAbility.new(@api_access_token.staff_member)
+      @current_ability ||= StaffMemberAbility.new(@api_access_token.staff_member)
     end
   end
 end

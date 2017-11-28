@@ -64,6 +64,10 @@ class ApplicationController < ActionController::Base
     true
   end
 
+  def current_ability
+    @current_ability ||= UserAbility.new(current_user)
+  end
+
   def current_venue
     CurrentVenueService.new(user: current_user, venue_id: params[:venue_id]).venue
   end

@@ -1,4 +1,4 @@
-class ApiAbility
+class StaffMemberAbility
   include CanCan::Ability
 
   def initialize(staff_member)
