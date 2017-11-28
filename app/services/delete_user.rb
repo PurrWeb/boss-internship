@@ -4,6 +4,7 @@ class DeleteUser
     user:,
     would_rehire:,
     disable_reason: nil,
+    frontend_updates:,
     now: Time.zone.now
   )
     @requester = requester
@@ -11,6 +12,7 @@ class DeleteUser
     @now = now
     @would_rehire = would_rehire
     @disable_reason = disable_reason
+    @frontend_updates = frontend_updates
   end
 
   def call
@@ -21,7 +23,7 @@ class DeleteUser
   end
 
   private
-  attr_reader :user, :requester, :would_rehire, :disable_reason, :now
+  attr_reader :user, :requester, :would_rehire, :disable_reason, :now, :frontend_updates
 
   def disable_associated_staff_member
     if user.staff_member.present? && user.staff_member.enabled?
@@ -31,6 +33,7 @@ class DeleteUser
         now: now,
         would_rehire: would_rehire,
         disable_reason: disable_reason,
+        frontend_updates: frontend_updates,
         nested: true
       ).call
     end

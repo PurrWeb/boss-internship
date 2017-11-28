@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'DeleteStaffMember service'  do
   include ActiveSupport::Testing::TimeHelpers
 
+  let(:mock_frontend_update_service) { double('mock_frontend_update_service') }
   let(:requester) { FactoryGirl.create(:user) }
   let(:staff_member) { FactoryGirl.create(:staff_member) }
   let(:service) do
@@ -10,11 +11,16 @@ RSpec.describe 'DeleteStaffMember service'  do
       requester: requester,
       staff_member: staff_member,
       would_rehire: would_rehire,
+      frontend_updates: mock_frontend_update_service,
       disable_reason: disable_reason
     )
   end
   let(:would_rehire) { true }
   let(:disable_reason) { "Got nominated for the oscar for best supporting actor in a comedy" }
+
+  before do
+    allow(mock_frontend_update_service).to receive(:delete_shift)
+  end
 
   context 'before call' do
     specify 'staff_member should be enabled' do
@@ -84,6 +90,15 @@ RSpec.describe 'DeleteStaffMember service'  do
       specify 'shifts should be disabled' do
         service.call
         expect(future_shift.reload).to be_disabled
+      end
+
+      specify 'should update the frontend' do
+        staff_member.rota_shifts.each do |rota_shift|
+          expect(mock_frontend_update_service).to(
+            receive(:delete_shift).with(shift: rota_shift)
+          )
+        end
+        service.call
       end
 
       specify 'no shift update emails should be sent' do

@@ -3,6 +3,12 @@ require 'rails_helper'
 describe CreateRotaShift do
   include ActiveSupport::Testing::TimeHelpers
 
+  let(:mock_frontend_updates_service) { double 'mock frontend updates service' }
+
+  before do
+    allow(mock_frontend_updates_service).to(receive(:create_shift))
+  end
+
   context 'when no rota exists for given date' do
     let(:params) do
       {
@@ -17,13 +23,13 @@ describe CreateRotaShift do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:creator) { FactoryGirl.create(:user) }
     let(:authorization_proc) { Proc.new{} }
-
     let(:service) do
       CreateRotaShift.new(
         creator: creator,
         rota_date: rota_date,
         venue: venue,
         rota_shift_params: params,
+        frontend_updates: mock_frontend_updates_service,
         authorization_proc: authorization_proc
       )
     end
@@ -47,6 +53,15 @@ describe CreateRotaShift do
 
         it 'should be a success' do
           expect(result).to be_success
+        end
+
+        it 'should update frontend' do
+          expect(mock_frontend_updates_service).to(
+            receive(:create_shift).with(
+              shift: an_instance_of(RotaShift)
+            )
+          )
+          service.call
         end
 
         it 'should create a shift' do
@@ -139,6 +154,7 @@ describe CreateRotaShift do
         rota_date: rota_date,
         venue: venue,
         rota_shift_params: params,
+        frontend_updates: mock_frontend_updates_service,
         authorization_proc: authorization_proc
       )
     end
@@ -166,6 +182,15 @@ describe CreateRotaShift do
 
         it 'should be a success' do
           expect(result).to be_success
+        end
+
+        it 'should update frontend' do
+          expect(mock_frontend_updates_service).to(
+            receive(:create_shift).with(
+              shift: an_instance_of(RotaShift)
+            )
+          )
+          service.call
         end
 
         it 'should create a shift' do

@@ -108,7 +108,7 @@ module Api
 
       def disable
         staff_member = StaffMember.find(params[:id])
-        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+        frontend_updates = FrontendUpdates.new
 
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
@@ -133,7 +133,7 @@ module Api
 
       def enable
         staff_member = StaffMember.find(params[:id])
-        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+        frontend_updates = FrontendUpdates.new
         
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
@@ -214,7 +214,7 @@ module Api
 
       def update_avatar
         staff_member = StaffMember.find(params[:id])
-        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+        frontend_updates = FrontendUpdates.new
         
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
@@ -238,7 +238,7 @@ module Api
 
       def update_contact_details
         staff_member = StaffMember.find(params.fetch(:id))
-        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+        frontend_updates = FrontendUpdates.new
         
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
@@ -267,7 +267,7 @@ module Api
 
       def update_personal_details
         staff_member = StaffMember.find(params[:id])
-        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+        frontend_updates = FrontendUpdates.new
         
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
@@ -294,7 +294,7 @@ module Api
 
       def update_employment_details
         staff_member = StaffMember.find(params[:id])
-        frontend_updates = FrontendUpdates.new(serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer)
+        frontend_updates = FrontendUpdates.new
         
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,

@@ -13,10 +13,16 @@ export default class LoginForm extends React.Component {
 
   handleSignIn = () => {
     return signInRequest(this.state.email, this.state.password).then(resp => {
-      return this.props.onSignInSuccess({token: resp.headers.token}).catch(error => {
+      const {accessToken, presenceChannel, personalChannel} = resp.data;
+      return this.props.onSignInSuccess({
+        token: accessToken,
+        presenceChannel,
+        personalChannel,
+      }).catch(error => {
         alert(error);
       })
     }).catch(resp => {
+      console.log(resp);
       const errors = resp.response.data.errors;
       if (errors) {
         if (errors.base) {

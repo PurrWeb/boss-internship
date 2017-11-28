@@ -77,6 +77,7 @@ RSpec.describe 'Update Contact Details' do
   let(:old_email_address) { 'old.email@fake.com' }
 
   before do
+    use_dummy_ably_service
     set_authorization_header(access_token.token)
   end
 

@@ -100,3 +100,9 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+def use_dummy_ably_service
+  allow(AblyService).to(
+    receive(:new).with(no_args).and_return(double(AblyService).as_null_object)
+  )
+end

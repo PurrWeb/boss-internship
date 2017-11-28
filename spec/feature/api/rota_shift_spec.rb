@@ -14,8 +14,20 @@ RSpec.describe 'Api access' do
       user: user
     ).persist!
   end
+  # used for specs that don't test the response directly
+  let(:perform_call) do
+    response
+    nil
+  end
+  let(:mock_frontend_update_service) { double('mock frontend updates') }
 
   before do
+    allow(FrontendUpdates).to(
+      receive(:new).
+      with(no_args).
+      and_return(mock_frontend_update_service)
+    )
+
     set_authorization_header(access_token.token)
   end
 
@@ -75,11 +87,23 @@ RSpec.describe 'Api access' do
       end
 
       before do
-        response
+        allow(mock_frontend_update_service).to receive(:dispatch)
+        allow(mock_frontend_update_service).to receive(:create_shift)
       end
 
       it 'should succeed' do
         expect(response.status).to eq(ok_status)
+      end
+
+      specify 'it should update the frontend' do
+        expect(mock_frontend_update_service).to(
+          receive(:create_shift).with(
+            shift: an_instance_of(RotaShift)
+          )
+        )
+        expect(mock_frontend_update_service).to receive(:dispatch).with(no_args)
+
+        perform_call
       end
 
       it 'should return a staff member record' do
@@ -101,6 +125,7 @@ RSpec.describe 'Api access' do
       end
 
       it 'should create a RotaShift record' do
+        perform_call
         expect(RotaShift.count).to eq(1)
       end
     end
@@ -148,6 +173,10 @@ RSpec.describe 'Api access' do
     let(:rota_shift) { FactoryGirl.create(:rota_shift) }
 
     before do
+      allow(mock_frontend_update_service).to(
+        receive(:dispatch).with(no_args)
+      )
+      allow(mock_frontend_update_service).to receive(:delete_shift)
       rota_shift
     end
 
@@ -155,8 +184,19 @@ RSpec.describe 'Api access' do
       expect(response.status).to eq(ok_status)
     end
 
+    specify 'it should update the frontend' do
+      expect(mock_frontend_update_service).to(
+        receive(:delete_shift).with(
+          shift: rota_shift
+        )
+      )
+      expect(mock_frontend_update_service).to receive(:dispatch)
+
+      perform_call
+    end
+
     specify 'shift is disabled' do
-      response
+      perform_call
       rota_shift.reload
       expect(rota_shift).to be_disabled
     end
@@ -175,28 +215,47 @@ RSpec.describe 'Api access' do
         ends_at: original_ends_at
       )
     end
-    let(:params) do
-      {
-        starts_at: new_starts_at.iso8601,
-        ends_at: new_ends_at.iso8601,
-        staff_member_id: rota_shift.staff_member.id
-      }
-    end
     let(:response) { put(url, params) }
 
     before do
       rota_shift
     end
 
-    specify 'it should succeed' do
-      expect(response.status).to eq(ok_status)
-    end
+    context 'when params are valid' do
+      let(:params) do
+        {
+          starts_at: new_starts_at.iso8601,
+          ends_at: new_ends_at.iso8601,
+          staff_member_id: rota_shift.staff_member.id
+        }
+      end
 
-    specify 'times should be updated' do
-      response
-      rota_shift.reload
-      expect(rota_shift.starts_at.utc).to eq(new_starts_at)
-      expect(rota_shift.ends_at.utc).to eq(new_ends_at)
+      before do
+        allow(mock_frontend_update_service).to receive(:dispatch)
+        allow(mock_frontend_update_service).to receive(:update_shift)
+      end
+
+      specify 'it should succeed' do
+        expect(response.status).to eq(ok_status)
+      end
+
+      specify 'it should update the frontend' do
+        expect(mock_frontend_update_service).to(
+          receive(:update_shift).with(
+            shift: rota_shift
+          )
+        )
+        expect(mock_frontend_update_service).to receive(:dispatch)
+
+        perform_call
+      end
+
+      specify 'times should be updated' do
+        response
+        rota_shift.reload
+        expect(rota_shift.starts_at.utc).to eq(new_starts_at)
+        expect(rota_shift.ends_at.utc).to eq(new_ends_at)
+      end
     end
 
     context 'when parameters are invalid' do

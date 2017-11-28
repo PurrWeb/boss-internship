@@ -14,6 +14,7 @@ RSpec.describe 'Api access' do
   end
 
   before do
+    use_dummy_ably_service
     set_authorization_header(access_token.token)
   end
 

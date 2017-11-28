@@ -13,8 +13,11 @@ export default class Devs extends React.Component {
     require('bootstrap/dist/css/bootstrap.css');
   }
 
-  handleSignInSuccess = ({token}) => {
+  handleSignInSuccess = ({token, ablyToken, presenceChannel, personalChannel}) => {
     return new Promise((resolve, reject) => {
+      this.presenceChannel = presenceChannel;
+      this.personalChannel = personalChannel;
+
       this.ably = new Ably.Realtime({authUrl: '/api/security_app/v1/sessions/ably_auth', authHeaders: {
         Authorization: `Token token="${token}"`
       }});
@@ -24,22 +27,26 @@ export default class Devs extends React.Component {
       });
       
       this.ably.connection.once('connected', () => {
-        window.accessToken = token;
-
         const clientId = this.ably.auth.tokenParams.clientId;
-        this.channel_presence = this.ably.channels.get(`security-app-presence`);
-        this.client_channel = this.ably.channels.get(`security-app-${clientId}`)
+        this.channel_presence = this.ably.channels.get(this.presenceChannel);
+
         this.channel_presence.attach((err) => {
           if (err) {return reject('Error attaching to the channel')}
-          this.channel_presence.presence.enter(`Enter`, (err) => {
-            if (err) { return reject('Error presenting the channel')}
-            this.setState({loggedIn: true});
-            resolve();
-          })
-          this.client_channel.subscribe((message) => {
-            console.log(message.data);
-            this.setState({jsonResponse: message.data});
-          });
+          if (this.personalChannel) {
+            this.client_channel = this.ably.channels.get(this.personalChannel)
+            this.channel_presence.presence.enter(`Enter`, (err) => {
+              if (err) { return reject('Error presenting the channel')}
+              this.setState({loggedIn: true}, () => resolve());
+            })
+            this.client_channel.subscribe((message) => {
+              this.setState({jsonResponse: message.data});
+            });
+          } else {
+            this.channel_presence.subscribe((message) => {
+              this.setState({jsonResponse: message.data});
+            });
+            this.setState({loggedIn: true}, () => resolve());
+          }
         })
       });
     })
@@ -47,8 +54,8 @@ export default class Devs extends React.Component {
 
   handleLogOutSuccess = () => {
     return new Promise((resolve, reject) => {
-      this.channel_presence.unsubscribe(`security-app-presence`);
-      this.client_channel.unsubscribe(`security-app-${this.ably.auth.tokenParams.clientId}`);
+      this.channel_presence.unsubscribe(this.presenceChannel);
+      this.client_channel.unsubscribe(this.personalChannel);
       this.channel_presence.presence.leave((err) => {
         if (err) { return reject('Error') };
         this.setState({loggedIn: false, jsonResponse: {}});

@@ -32,7 +32,8 @@ class StaffMemberApiUpdateService
         requester: requester,
         staff_member: staff_member,
         would_rehire: form.would_rehire,
-        disable_reason: form.disable_reason
+        disable_reason: form.disable_reason,
+        frontend_updates: frontend_updates
       ).call
       success = true
     end

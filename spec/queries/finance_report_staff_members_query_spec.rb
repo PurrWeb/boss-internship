@@ -138,6 +138,7 @@ describe FinanceReportStaffMembersQuery do
         staff_member: staff_member,
         would_rehire: true,
         disable_reason: 'no reason',
+        frontend_updates: double(FrontendUpdates).as_null_object,
         requester: requester
       ).call
     end

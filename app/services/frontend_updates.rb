@@ -1,13 +1,12 @@
 class FrontendUpdates
-  def initialize(serializer: nil)
+  def initialize(security_app_update_service: SecurityAppUpdateService.new)
     @shift_updates = {}
     @shift_deletes = {}
     @staff_member_profile_updates = {}
-    @serializer = serializer
+    @security_app_update_service = security_app_update_service
   end
 
   def dispatch
-    security_app_update_service = SecurityAppUpdateService.new(serializer: serializer)
     shift_updates.each_value do |shift_update|
       if shift_update.key?(:rota_published?) || shift_update.key?(:shift_updated?)
         security_app_update_service.update_shift(shift: shift_update.fetch(:shift))
@@ -48,5 +47,5 @@ class FrontendUpdates
     end
   end
 
-  attr_reader :shift_updates, :shift_deletes, :staff_member_profile_updates, :serializer
+  attr_reader :shift_updates, :shift_deletes, :staff_member_profile_updates, :security_app_update_service
 end
