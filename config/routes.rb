@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       unlocks: 'users/unlocks',
       passwords: 'users/passwords'
     }
-    
+
     resources :machines, only: [:index]
     resources :machine_refloats, only: [:index]
 
