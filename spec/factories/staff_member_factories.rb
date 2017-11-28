@@ -57,6 +57,11 @@ FactoryGirl.define do
       shift_change_occured_at 1.hour.ago
     end
 
+    trait :with_password do
+      verified_at { 5.minutes.ago }
+      password 'password'
+    end
+
     trait :security do
       after(:build) do |object|
         security_staff_type = StaffType.security.first

@@ -8,7 +8,7 @@ class OwedHourApiService
   def initialize(owed_hour:, requester:)
     @requester = requester
     @owed_hour = owed_hour
-    @ability = Ability.new(requester)
+    @ability = UserAbility.new(requester)
   end
   attr_reader :owed_hour, :ability, :requester
   

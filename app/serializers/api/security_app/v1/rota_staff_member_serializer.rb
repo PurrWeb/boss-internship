@@ -1,4 +1,4 @@
-class RotaStaffMemberSerializer < ActiveModel::Serializer
+class Api::SecurityApp::V1::RotaStaffMemberSerializer < ActiveModel::Serializer
   attributes \
     :id,
     :firstName,

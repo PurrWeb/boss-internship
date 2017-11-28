@@ -1,4 +1,4 @@
-class HolidaySerializer < ActiveModel::Serializer
+class Api::SecurityApp::V1::HolidaySerializer < ActiveModel::Serializer
   attributes \
     :id,
     :staffMemberId,
