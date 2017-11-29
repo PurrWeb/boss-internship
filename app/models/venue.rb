@@ -15,9 +15,11 @@ class Venue < ActiveRecord::Base
   has_many :maintenance_tasks
   has_and_belongs_to_many :questionnaires
   has_many :vouchers
+  has_and_belongs_to_many :dashboard_messages
 
   before_create :generate_rollbar_guid
   before_validation :check_rollbar_guid
+  after_initialize :set_latitude_and_longitude
 
   # Serializers
   serialize :fruit_order_fields, Array
@@ -28,6 +30,9 @@ class Venue < ActiveRecord::Base
     numericality: { greater_than_or_equal_to: 0 }
   validates :till_float_cents,
     numericality: { greater_than_or_equal_to: 0 }
+  validates :latitude , numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }
+  validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
+
   validates :name, presence: true, uniqueness: true
   validates :creator, presence: true
   validate do |venue|
@@ -44,6 +49,12 @@ class Venue < ActiveRecord::Base
   end
 
   private
+
+  def set_latitude_and_longitude
+    self.latitude = 0
+    self.longitude = 0
+  end
+
   def check_rollbar_guid
     unless rollbar_guid.present?
       generate_rollbar_guid

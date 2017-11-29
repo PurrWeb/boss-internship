@@ -77,6 +77,11 @@ class PermissionsPageData
           permitted: role.can?(:view, MaintenanceTask),
           path: @path.maintenance_index_path
         },
+        {
+          description: "Venue Dashboard",
+          permitted: role.can?(:view, :venue_dashboard),
+          path: @path.venue_dashboard_path
+        },
       ]
     }
 
@@ -144,7 +149,12 @@ class PermissionsPageData
         {
           description: 'API Keys',
           path: @path.api_keys_path,
-        }
+        },
+        {
+          description: "Dashboard Messages",
+          permitted: role.can?(:manage, DashboardMessage),
+          path: @path.message_board_path
+        },
       ]
     }
 

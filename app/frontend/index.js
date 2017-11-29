@@ -132,6 +132,12 @@ registerComponent("VenueHealthCheckReportApp", VenueHealthCheckReportApp)
 import MaintenanceApp from "./apps/maintenance-app"
 registerComponent("MaintenanceApp", MaintenanceApp)
 
+import VenueDashboardApp from "./apps/venue-dashboard-app"
+registerComponent("VenueDashboardApp", VenueDashboardApp)
+
+import MessageBoardApp from './apps/message-board-app';
+registerComponent('MessageBoardApp', MessageBoardApp);
+
 import WeekPicker from "~/components/week-picker"
 
 import AppVersionChecker from '~/components/app-version-checker';

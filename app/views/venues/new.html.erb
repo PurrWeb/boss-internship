@@ -56,5 +56,19 @@
         multiple: true
       ) %>
 
+  <%= form.number_field(
+    :latitude,
+    value: Float(form.object.latitude || 0),
+    label: 'Latitude',
+    step: 0.0000001
+  ) %>
+
+  <%= form.number_field(
+    :longitude,
+    value: Float(form.object.longitude || 0),
+    label: 'Longitude',
+    step: 0.0000001
+  ) %>
+
   <button type="submit" class="boss2-button">Create</button>
 <% end %>

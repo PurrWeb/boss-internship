@@ -1,0 +1,18 @@
+<%= javascript_tag do %>
+  venueMessages = {};
+
+  venueMessages.messages = <%= api_v1_collection_json(messages, Api::V1::MessageSerializer) %>;
+  venueMessages.venues = <%= api_v1_collection_json(accessible_venues, Api::V1::VenueSerializer) %>;
+  venueMessages.currentVenue = <%= Api::V1::VenueSerializer.new(current_venue).to_json.html_safe %>;
+  venueMessages.accessToken = "<%= access_token.token %>";
+  venueMessages.currentUser = <%= Api::V1::UserSerializer.new(current_user).to_json.html_safe %>;
+  venueMessages.newMessagePath = "<%= new_message_path(venue_id: current_venue.id) %>";
+  venueMessages.messagesPath = "<%= messages_path(venue_id: current_venue.id) %>";
+  venueMessages.pageNumber = <%= params[:page].present? ? (params[:page].to_i - 1) : 0 %>;
+  venueMessages.totalPages = <%= ((current_venue.messages.count / 5) > 0) ? (current_venue.messages.count / 5) + 1 : 1 %>;
+
+  window.boss = window.boss || {};
+  window.boss.venueMessages = venueMessages;
+<% end %>
+
+<%= react_component('VenueMessagesApp') %>

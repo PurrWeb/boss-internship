@@ -69,6 +69,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resource :venue_dashboard, only: [:show]
+    resource :message_board, only: [:show]
     resources :holidays, only: [:index, :edit, :update]
     resources :owed_hours, only: [:edit, :update]
 
@@ -209,6 +211,12 @@ Rails.application.routes.draw do
         resources :check_list_submissions, path: "checklist_submissions", only: [:index]
 
         resources :uploads
+        resources :dashboard_messages do
+          member do
+            put :disable
+            put :restore
+          end
+        end
         resources :maintenance_task_image_uploads
         resources :maintenance_tasks do
           member do

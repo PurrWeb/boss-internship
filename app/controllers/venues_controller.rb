@@ -53,7 +53,9 @@ class VenuesController < ApplicationController
   def create_params
     params.require(:venue).
       permit(
-        :name
+        :name,
+        :longitude,
+        :latitude
       ).merge(
         creator: current_user,
         fruit_order_fields: fruit_order_fields_from_params
@@ -65,7 +67,9 @@ class VenuesController < ApplicationController
   def update_params
     params.require(:venue).
       permit(
-        :name
+        :name,
+        :longitude,
+        :latitude
       ).merge(
         fruit_order_fields: fruit_order_fields_from_params
       ).merge(
