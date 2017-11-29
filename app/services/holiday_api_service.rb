@@ -8,10 +8,10 @@ class HolidayApiService
   def initialize(requester:, holiday:)
     @requester = requester
     @holiday = holiday
-    @ability = Ability.new(requester)
+    @ability = UserAbility.new(requester)
   end
   attr_reader :holiday, :requester, :ability
-  
+
   def update(params)
     assert_action_permitted(:update)
 
@@ -27,7 +27,7 @@ class HolidayApiService
       holiday: holiday,
       params: holiday_params
     ).call
-    
+
     api_errors = nil
     unless model_service_result.success?
       api_errors = HolidayApiErrors.new(holiday: model_service_result.holiday)

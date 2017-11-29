@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       unlocks: 'users/unlocks',
       passwords: 'users/passwords'
     }
-    
+
     resources :machines, only: [:index]
     resources :machine_refloats, only: [:index]
 
@@ -185,14 +185,15 @@ Rails.application.routes.draw do
     end
 
     namespace :api, defaults: { format: 'json' } do
-      namespace :security_app do
+      namespace :security_app, path: 'security-app' do
         namespace :v1 do
+          resources :init, only: :index
           resource :tests, only: [] do
             get :get
             post :post
           end
           resource :sessions, only: [] do
-            post :sign_in
+            post :sign_in, path: 'sign-in'
           end
         end
       end

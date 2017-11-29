@@ -4,6 +4,10 @@ module Api
       class SecurityAppController < ActionController::Base
         before_filter :parse_access_tokens
 
+        rescue_from CanCan::AccessDenied do |exception|
+          render json: {}, status: 403
+        end
+
         def parse_access_tokens
           security_app_api_token = nil
           authenticate_or_request_with_http_token do |supplied_token, other_options|
@@ -19,6 +23,10 @@ module Api
           if @security_app_api_access_token.present?
             @security_app_api_access_token.staff_member
           end
+        end
+
+        def current_ability
+          @current_ability ||= StaffMemberAbility.new(current_staff_member)
         end
 
         def security_app_api_token_athenticate!

@@ -3,7 +3,7 @@ class APIController < ApplicationController
   skip_before_filter :authenticate_user!
   skip_before_filter :set_paper_trail_whodunnit
   skip_before_filter :set_current_venue_on_redis
-  
+
   before_filter :parse_access_tokens
 
   def parse_access_tokens
@@ -59,9 +59,9 @@ class APIController < ApplicationController
 
   def current_ability
     if @web_access_token
-      @current_ability ||= Ability.new(@web_access_token.user)
+      @current_ability ||= UserAbility.new(@web_access_token.user)
     elsif @api_access_token
-      @current_ability ||= ApiAbility.new(@api_access_token.staff_member)
+      @current_ability ||= StaffMemberAbility.new(@api_access_token.staff_member)
     end
   end
 end

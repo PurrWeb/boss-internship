@@ -8,7 +8,7 @@ class MachinesRefloatsApiService
   def initialize(requester:, machine:)
     @requester = requester
     @machine = machine
-    @ability = Ability.new(requester)
+    @ability = UserAbility.new(requester)
   end
   attr_reader :requester, :machine, :ability
 

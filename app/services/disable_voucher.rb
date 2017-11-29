@@ -2,7 +2,7 @@ class DisableVoucher
   def initialize(voucher:, requester:)
     @voucher = voucher
     @requester = requester
-    @ability = Ability.new(requester)
+    @ability = UserAbility.new(requester)
   end
   attr_accessor :voucher, :voucher, :ability
 

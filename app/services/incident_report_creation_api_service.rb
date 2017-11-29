@@ -8,7 +8,7 @@ class IncidentReportCreationApiService
   def initialize(requester:, venue:)
     @requester = requester
     @venue = venue
-    @ability = Ability.new(requester)
+    @ability = UserAbility.new(requester)
   end
   attr_reader :requester, :venue, :ability
 
