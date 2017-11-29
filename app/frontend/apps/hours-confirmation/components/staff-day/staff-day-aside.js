@@ -30,7 +30,7 @@ export default (props) => {
   };
 
   let differenceMessage = getDifferenceMessage(rotaedAcceptedHoursDifference);
-
+  
   return <div className="boss-hrc__user-info">
     <div className="boss-user-badge">
       <div className="boss-user-badge__avatar">
@@ -41,7 +41,7 @@ export default (props) => {
       </div>
       <div className="boss-user-badge__info">
         <h2 className="boss-user-badge__name"> {staffMember.first_name} {staffMember.surname}</h2>
-        <span className="boss-button boss-button_type_small boss-button_role_supervisor boss-user-badge__label"> {staffTypeObject.name} </span>
+        <span style={{backgroundColor: `${staffTypeObject.color}`}} className="boss-button boss-button_type_small boss-button_role_supervisor boss-user-badge__label"> {staffTypeObject.name} </span>
       </div>
     </div>
     <ul className="boss-user-badge__meta">
