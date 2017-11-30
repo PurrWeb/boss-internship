@@ -1,4 +1,4 @@
-window.initMobileMenu = () => {
+export default function initMobileMenu() {
     var mobileIcon = document.querySelector('.boss-main-menu__navicon');
     var mobileShadowClose = document.querySelector('.boss-mobile-menu__closearea');
     var mobileMenu = document.querySelector('.boss-mobile-menu');

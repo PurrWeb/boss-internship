@@ -12,6 +12,7 @@ import Spinner from 'react-spinner';
 import 'react-spinner/react-spinner.css';
 import BouncedEmailModal from '~/components/bounced-email-modal';
 import './bounced-emails';
+import initMobileMenu from '~/components/mobile-menu';
 
 window.Spinner = Spinner;
 window.boss = window.boss || {};
@@ -34,7 +35,6 @@ if (window.boss.currentLayout !== 'oldLayout') {
     require ('./assets/sass/quick-menu.sass')
 }
 
-import './mobile-menu';
 import './vendors/owl.carousel';
 
 import "./lib/load-underscore-mixins"
@@ -152,6 +152,9 @@ import VouchersRedeemApp from './apps/vouchers-redeem';
 registerComponent("VouchersRedeemApp", VouchersRedeemApp);
 
 $(document).ready(function(){
+    if (window.boss.currentLayout !== 'oldLayout') {
+      initMobileMenu();
+    }  
     let versionCheckerEl = document.createElement("div");
     document.body.appendChild(versionCheckerEl);
     let fiveMinutes = 5 * 60 * 1000;
