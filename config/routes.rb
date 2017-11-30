@@ -196,6 +196,7 @@ Rails.application.routes.draw do
           end
           resource :sessions, only: [] do
             post :new, path: 'new'
+            post :forgot_password, path: 'forgot-password'
           end
         end
       end
