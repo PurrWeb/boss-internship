@@ -53,7 +53,11 @@ class StaffMembersController < ApplicationController
         access_token: access_token,
         staff_types: StaffType.all,
         venues: Venue.all,
-        pay_rates: PayRate.all,
+        pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
+          PayRate.all,
+          serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
+          scope: current_user
+        ),
         gender_values: StaffMember::GENDERS,
         accessible_venue_ids: Venue.all.pluck(:id),
         accessible_pay_rate_ids: accessible_pay_rate_ids
@@ -126,7 +130,11 @@ class StaffMembersController < ApplicationController
         gender_values: StaffMember::GENDERS,
         venues: Venue.all,
         accessible_venue_ids: Venue.all.pluck(:id),
-        pay_rates: PayRate.all,
+        pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
+          PayRate.all,
+          serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
+          scope: current_user
+        ),
         accessible_pay_rates: accessible_pay_rate_ids
       }
     else
@@ -166,7 +174,11 @@ class StaffMembersController < ApplicationController
         venues: Venue.all,
         gender_values: StaffMember::GENDERS,
         accessible_venue_ids: Venue.all.pluck(:id),
-        pay_rates: PayRate.all,
+        pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
+          PayRate.all,
+          serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
+          scope: current_user
+        ),
         accessible_pay_rate_ids: accessible_pay_rate_ids,
         venues: Venue.all,
         accessible_venue_ids: Venue.all.pluck(:id),
