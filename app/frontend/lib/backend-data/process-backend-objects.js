@@ -130,12 +130,14 @@ export function processRotaForecastObject(rotaForecast){
 export function processClockInDayObject(clockInDay){
     clockInDay = processBackendObject(clockInDay)
     clockInDay.date = new Date(clockInDay.date)
+    clockInDay.readonly = false;
     return clockInDay
 }
 
 export function processReadonlyClockInDayObject(clockInDay){
-    clockInDay = processBackendObject(clockInDay)
-    clockInDay.date = new Date(clockInDay.date)
+    clockInDay = processBackendObject(clockInDay);
+    clockInDay.date = new Date(clockInDay.date);
+    clockInDay.readonly = true;
     return clockInDay
 }
 

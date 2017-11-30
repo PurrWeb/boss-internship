@@ -53,9 +53,7 @@ class PageHeader extends React.Component {
           </DashboardCurrentWrapper>
         }
 
-        return <div>
-          {selector}
-          </div>
+        return selector;
     }
 }
 
