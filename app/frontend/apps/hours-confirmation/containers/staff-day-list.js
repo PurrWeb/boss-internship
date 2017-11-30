@@ -6,7 +6,7 @@ import {
 import _ from "underscore"
 import StaffFilter from '../components/staff-filter';
 
-const PAGE_SIZE = 15;
+const PAGE_SIZE = 5;
 class StaffDayList extends React.Component {
   
   constructor(props) {
