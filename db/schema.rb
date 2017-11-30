@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171127143617) do
+ActiveRecord::Schema.define(version: 20171129125317) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255
@@ -419,8 +419,11 @@ ActiveRecord::Schema.define(version: 20171127143617) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "frozen_by_finance_report_id", limit: 4
+    t.datetime "accepted_at"
+    t.integer  "accepted_by_id",              limit: 4
   end
 
+  add_index "hours_acceptance_periods", ["accepted_by_id"], name: "fk_rails_bbdabe9946", using: :btree
   add_index "hours_acceptance_periods", ["clock_in_day_id"], name: "index_hours_acceptance_periods_on_clock_in_day_id", using: :btree
   add_index "hours_acceptance_periods", ["status"], name: "index_hours_acceptance_periods_on_status", using: :btree
 
@@ -1048,6 +1051,7 @@ ActiveRecord::Schema.define(version: 20171127143617) do
   add_index "vouchers", ["venue_id", "enabled"], name: "index_vouchers_on_venue_id_and_enabled", using: :btree
   add_index "vouchers", ["venue_id"], name: "index_vouchers_on_venue_id", using: :btree
 
+  add_foreign_key "hours_acceptance_periods", "users", column: "accepted_by_id"
   add_foreign_key "incident_reports", "users"
   add_foreign_key "incident_reports", "users", column: "disabled_by_id"
   add_foreign_key "incident_reports", "venues"
