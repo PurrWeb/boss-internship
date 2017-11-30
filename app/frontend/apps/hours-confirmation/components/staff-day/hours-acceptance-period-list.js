@@ -49,11 +49,10 @@ export default class HoursAcceptancePeriodList extends React.Component {
                             overlapsOtherIntervals={!intervalsOverlap.isValid} />
                     </div>
             )}
-            { !readonly && <div>
+            { !readonly &&
+              <div className="boss-hrc__controls">
+                {addShiftButton}
                 {markAsDoneButton}
-                <div className="boss-hrc__controls">
-                  {addShiftButton}
-                </div>
               </div>
             }
 

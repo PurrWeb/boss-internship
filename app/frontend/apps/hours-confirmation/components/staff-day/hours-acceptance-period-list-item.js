@@ -7,6 +7,8 @@ import Modal from "react-modal"
 import Validation from "~/lib/validation"
 import Spinner from "~/components/spinner"
 import _ from "lodash";
+import safeMoment from '~/lib/safe-moment';
+import utils from '~/lib/utils';
 
 const TIME_GRANULARITY_IN_MINUTES = 1;
 
@@ -248,22 +250,30 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
                 </div>
             }
         } else {
-            return <div>
-                <p className="boss-time-shift__status  boss-time-shift__status_state_visible">
-                    {stats.hours}h ACCEPTED
-                </p>
-                { !this.props.readonly &&
-                  <button
-                      type="button"
-                      className="boss-button boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_unaccept-shift boss-time-shift__button_state_visible"
-                      onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
-                          hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
-                          errorHandlingId: this.componentId
-                      })}>
-                      Unaccept
-                  </button>
-                }
-            </div>
+          const acceptedBy = this.props.hoursAcceptancePeriod.accepted_by || 'N/A';
+          const acceptedAt = this.props.hoursAcceptancePeriod.accepted_at
+            ? safeMoment.iso8601Parse(this.props.hoursAcceptancePeriod.accepted_at).format(utils.humanDateFormatWithTime())
+            : 'N/A';
+
+          return (
+            <div>
+              <p className="boss-time-shift__status boss-time-shift__status_state_visible">
+                <span className="boss-time-shift__status-count">{stats.hours}h ACCEPTED</span>
+                <span className="boss-time-shift__status-meta">{`by ${acceptedBy} at ${acceptedAt}`}</span>
+              </p>
+              { !this.props.readonly &&
+                <button
+                    type="button"
+                    className="boss-button boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_unaccept-shift boss-time-shift__button_state_visible"
+                    onClick={() => this.props.boundActions.unacceptHoursAcceptancePeriod({
+                        hoursAcceptancePeriod: this.props.hoursAcceptancePeriod,
+                        errorHandlingId: this.componentId
+                    })}>
+                    Unaccept
+                </button>
+              }
+          </div>
+          )
         }
     }
 }
