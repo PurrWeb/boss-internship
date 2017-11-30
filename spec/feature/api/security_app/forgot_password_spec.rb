@@ -52,6 +52,11 @@ RSpec.describe 'Forgot password endpoint' do
       perform_request
       expect(ActionMailer::Base.deliveries.count).to eq(0)
     end
+
+    it 'should log attempt to rollbar' do
+      expect(Rollbar).to receive(:warning).with("Reset attempt for invalid email address #{email}")
+      perform_request
+    end
   end
 
   def app

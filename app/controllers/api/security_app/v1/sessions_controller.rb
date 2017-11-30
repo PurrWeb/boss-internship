@@ -36,7 +36,10 @@ module Api
 
           if staff_member.present?
             StaffMemberVerificationService.new(staff_member: staff_member).send_verification
+          else
+            Rollbar.warning("Reset attempt for invalid email address #{email}")
           end
+
           render json: {}, status: 200
         end
 
