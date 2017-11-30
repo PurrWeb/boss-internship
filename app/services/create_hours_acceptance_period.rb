@@ -41,6 +41,13 @@ class CreateHoursAcceptancePeriod
         reason_note: reason_note
       )
 
+      if status == HoursAcceptancePeriod::ACCEPTED_STATE
+        hours_acceptance_period.assign_attributes({
+          accepted_at: Time.now.utc,
+          accepted_by: requester,
+        })
+      end
+
       breaks.each do |_break|
         success = _break.update_attributes(
           hours_acceptance_period: hours_acceptance_period

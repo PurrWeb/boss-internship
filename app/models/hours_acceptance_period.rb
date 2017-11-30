@@ -8,6 +8,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   belongs_to :clock_in_day
   belongs_to :creator, polymorphic: true
+  belongs_to :accepted_by, class_name: 'User', foreign_key: 'accepted_by_id'
   belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
   has_many :hours_acceptance_breaks
   has_many :hours_acceptance_breaks_enabled, -> (_o) {
@@ -20,6 +21,8 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   validates :clock_in_day, presence: true
   validates :creator, presence: true
   validates :status, inclusion: { in: STATES, message: 'is required' }
+  validates :accepted_at, presence: true, if: :accepted?
+  validates :accepted_by, presence: true, if: :accepted?
 
   include PeriodTimeValidations
 

@@ -30,6 +30,17 @@ class UpdateHoursAcceptancePeriod
           reason_note: reason_note,
           status: status
         )
+        if status == HoursAcceptancePeriod::ACCEPTED_STATE
+          hours_acceptance_period.assign_attributes({
+            accepted_at: Time.now.utc,
+            accepted_by: requester,
+          })
+        else
+          hours_acceptance_period.assign_attributes({
+            accepted_at: nil,
+            accepted_by: nil,
+          })
+        end
 
         existing_breaks = hours_acceptance_period.hours_acceptance_breaks.enabled
         delete_breaks = existing_breaks
