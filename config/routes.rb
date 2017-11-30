@@ -195,7 +195,7 @@ Rails.application.routes.draw do
             post :post
           end
           resource :sessions, only: [] do
-            post :sign_in, path: 'sign-in'
+            post :new, path: 'new'
           end
         end
       end
