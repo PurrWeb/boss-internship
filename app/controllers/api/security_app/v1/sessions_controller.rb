@@ -2,8 +2,8 @@ module Api
   module SecurityApp
     module V1
       class SessionsController < SecurityAppController
-        before_action :security_app_api_token_athenticate!, except: [:new]
-        skip_before_filter :parse_access_tokens, only: [:new]
+        before_action :security_app_api_token_athenticate!, except: [:new, :forgot_password]
+        skip_before_filter :parse_access_tokens, only: [:new, :forgot_password]
 
         def new
           staff_member = authenticate_staff_member
@@ -28,6 +28,19 @@ module Api
               token: access_token.token
             }, status: 200
           end
+        end
+
+        def forgot_password
+          email = params.fetch("email")
+          staff_member = StaffMember.enabled.joins(:email_address).where(email_addresses: {email: email}).first
+
+          if staff_member.present?
+            StaffMemberVerificationService.new(staff_member: staff_member).send_verification
+          else
+            Rollbar.warning("Reset attempt for invalid email address #{email}")
+          end
+
+          render json: {}, status: 200
         end
 
         private
