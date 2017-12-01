@@ -109,6 +109,8 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             creator: user,
             starts_at: RotaShiftDate.new(date).start_time,
             ends_at: RotaShiftDate.new(date).start_time + 3.hours,
+            accepted_by: user,
+            accepted_at: Time.now.utc,
             status: acceptance_period_status
           )
         end
@@ -142,6 +144,8 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             creator: user,
             starts_at: RotaShiftDate.new(date).start_time,
             ends_at: RotaShiftDate.new(date).start_time + 3.hours,
+            accepted_by: user,
+            accepted_at: Time.now.utc,
             status: acceptance_period_status
           )
         end
@@ -175,6 +179,8 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             creator: user,
             starts_at: RotaShiftDate.new(date).start_time,
             ends_at: RotaShiftDate.new(date).start_time + 3.hours,
+            accepted_by: user,
+            accepted_at: Time.now.utc,
             status: acceptance_period_status
           )
         end

@@ -10,6 +10,17 @@ describe HoursAcceptancePeriod do
         starts_at: starts_at,
         ends_at: ends_at,
         creator: user,
+        accepted_by: user,
+        accepted_at: Time.now.utc,
+        status: HoursAcceptancePeriod::ACCEPTED_STATE
+      )
+    end
+    let(:period_without_acceptor) do
+      HoursAcceptancePeriod.new(
+        clock_in_day: clock_in_day,
+        starts_at: starts_at,
+        ends_at: ends_at,
+        creator: user,
         status: HoursAcceptancePeriod::ACCEPTED_STATE
       )
     end
@@ -30,6 +41,11 @@ describe HoursAcceptancePeriod do
     specify do
       period.validate
       expect(period.errors.to_a).to eq([])
+    end
+
+    specify do
+      period_without_acceptor.validate
+      expect(period_without_acceptor.errors.to_a).to eq(["Accepted at can't be blank", "Accepted by can't be blank"])
     end
 
     context 'times are in wrong order' do
@@ -80,6 +96,8 @@ describe HoursAcceptancePeriod do
           starts_at: existing_period_starts_at,
           ends_at: existing_period_ends_at,
           creator: user,
+          accepted_by: user,
+          accepted_at: Time.now.utc,
           status: HoursAcceptancePeriod::ACCEPTED_STATE
         )
       end
@@ -121,7 +139,9 @@ describe HoursAcceptancePeriod do
             clock_in_day: existing_period_clock_in_day,
             starts_at: existing_period_starts_at,
             ends_at: existing_period_ends_at,
-            creator: user
+            creator: user,
+            accepted_by: user,
+            accepted_at: Time.now.utc,
           )
         end
 

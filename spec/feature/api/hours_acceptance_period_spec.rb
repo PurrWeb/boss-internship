@@ -8,6 +8,7 @@ RSpec.describe 'Hours acceptance endpoints' do
 
   let(:venue) { FactoryGirl.create(:venue) }
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
+  let(:another_user) { FactoryGirl.create(:user, venues: [venue]) }
   let(:staff_member) { FactoryGirl.create(:staff_member, master_venue: venue) }
   let(:date) { Time.current.to_date }
   let(:start_of_day) { RotaShiftDate.new(date).start_time }
@@ -18,6 +19,13 @@ RSpec.describe 'Hours acceptance endpoints' do
     WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
       user: user
+    ).persist!
+  end
+
+  let(:another_user_access_token) do
+    WebApiAccessToken.new(
+      expires_at: 30.minutes.from_now,
+      user: another_user
     ).persist!
   end
 
@@ -214,6 +222,38 @@ RSpec.describe 'Hours acceptance endpoints' do
       expect(hours_acceptance_period.starts_at).to eq(new_start_of_shift)
       expect(hours_acceptance_period.ends_at).to eq(new_end_of_shift)
       expect(hours_acceptance_period.reload.status).to eq('accepted')
+    end
+
+    context ' acceptance' do
+      let(:new_params) do
+        params.merge({status: 'pending'})
+      end
+
+      it ' should be accepted, accepted_by and accepted_at by user' do
+        patch(url, params)
+        hours_acceptance_period.reload
+        expect(hours_acceptance_period.status).to eq('accepted')
+        expect(hours_acceptance_period.accepted_by).to eq(user)
+        expect(hours_acceptance_period.accepted_at).to eq(hours_acceptance_period.updated_at)
+      end
+
+      it ' accepted, accepted_by and accepted_at should be cleared when unaccept' do
+        patch(url, new_params)
+        hours_acceptance_period.reload
+        expect(hours_acceptance_period.status).to eq('pending')
+        expect(hours_acceptance_period.accepted_by).to be_nil
+        expect(hours_acceptance_period.accepted_at).to be_nil
+      end
+
+      it ' when another user accept, accepted by should be same user' do
+        set_authorization_header(another_user_access_token.token)
+        patch(url, params)
+        hours_acceptance_period.reload
+        expect(hours_acceptance_period.status).to eq('accepted')
+        expect(hours_acceptance_period.accepted_by).not_to eq(user)
+        expect(hours_acceptance_period.accepted_by).to eq(another_user)
+        expect(hours_acceptance_period.accepted_at).to eq(hours_acceptance_period.updated_at)
+      end
     end
 
     specify 'should update period version data' do
