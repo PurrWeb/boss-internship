@@ -24,18 +24,21 @@ RSpec.describe 'Security Session spec' do
 
   specify 'return token and expiry date' do
     expected_token = "expected__token__string"
+    expected_expires_at = Time.current + 2.days
 
     mock_access_token = double('Mock access token')
     mock_token_service = double('Mock token service')
     allow(SecurityAppApiAccessToken).to receive(:new).with(staff_member: staff_member).and_return(mock_token_service)
     allow(mock_token_service).to receive(:persist!).and_return(mock_access_token)
     allow(mock_access_token).to receive(:token).and_return(expected_token)
+    allow(mock_access_token).to receive(:expires_at).and_return(expected_expires_at)
 
 
     json_response = JSON.parse(response.body)
 
     expect(json_response).to eq({
-      "token" => expected_token
+      "token" => expected_token,
+      "expiresAt" => expected_expires_at.utc.iso8601
     })
   end
 

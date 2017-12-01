@@ -25,7 +25,8 @@ module Api
             response.headers['TOKEN'] = access_token.token
 
             render json: {
-              token: access_token.token
+              token: access_token.token,
+              expiresAt: access_token.expires_at.utc.iso8601
             }, status: 200
           end
         end
