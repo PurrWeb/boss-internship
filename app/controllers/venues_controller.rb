@@ -28,7 +28,8 @@ class VenuesController < ApplicationController
   end
 
   def edit
-    venue = Venue.find(params[:id])
+    venue = Venue.includes(reminder_users: [:name]).find(params[:id])
+
     render locals: { venue: venue }
   end
 
