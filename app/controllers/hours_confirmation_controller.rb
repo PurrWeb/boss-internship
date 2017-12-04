@@ -34,7 +34,7 @@ class HoursConfirmationController < ApplicationController
 
       hours_acceptance_periods = HoursAcceptancePeriod.enabled.where(
         clock_in_day: clock_in_days
-      ).includes(:hours_acceptance_breaks_enabled)
+      ).includes(:hours_acceptance_breaks_enabled, accepted_by: [:name])
 
       hours_acceptance_breaks = HoursAcceptanceBreak.enabled.where(
         hours_acceptance_period: hours_acceptance_periods

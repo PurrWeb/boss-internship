@@ -5,6 +5,8 @@ end
 json.starts_at hours_acceptance_period.starts_at.iso8601
 json.ends_at hours_acceptance_period.ends_at.iso8601
 json.status hours_acceptance_period.status
+json.accepted_by hours_acceptance_period.accepted_by.andand.name.andand.full_name
+json.accepted_at hours_acceptance_period.accepted_at.andand.iso8601
 json.hours_acceptance_breaks hours_acceptance_period.hours_acceptance_breaks_enabled do |hours_acceptance_break|
   json.id hours_acceptance_break.id
 end

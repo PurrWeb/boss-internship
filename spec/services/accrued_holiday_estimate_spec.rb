@@ -44,6 +44,8 @@ describe AccruedHolidayEstimate do
           starts_at: shift_date.start_time,
           ends_at: shift_date.start_time + 10.hours,
           clock_in_day: clock_in_day,
+          accepted_by: user,
+          accepted_at: Time.now.utc,
           status: HoursAcceptancePeriod::ACCEPTED_STATE
         )
 
@@ -98,6 +100,8 @@ describe AccruedHolidayEstimate do
             starts_at: shift_date.start_time,
             ends_at: shift_date.start_time + 10.hours,
             clock_in_day: clock_in_day,
+            accepted_by: user,
+            accepted_at: Time.now.utc,
             status: HoursAcceptancePeriod::ACCEPTED_STATE
           )
 

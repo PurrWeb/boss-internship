@@ -28,6 +28,8 @@ describe ClockInDaysPendingConfirmationQuery do
         starts_at: start_of_day,
         ends_at: start_of_day + 1.hour,
         status: 'accepted',
+        accepted_by: user,
+        accepted_at: Time.now.utc,
         creator: user
       )
     end
