@@ -200,7 +200,11 @@ class StaffMembersController < ApplicationController
     render locals: {
       access_token: access_token,
       venues: venues,
-      pay_rates: pay_rates,
+      pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
+        pay_rates,
+        serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
+        scope: current_user
+      ),
       staff_types: staff_types,
       gender_values: gender_values
     }
