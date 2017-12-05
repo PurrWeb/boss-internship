@@ -12,7 +12,8 @@ class Api::SecurityApp::V1::ProfileStaffMemberSerializer < ActiveModel::Serializ
     :address,
     :county,
     :country,
-    :postcode
+    :postcode,
+    :dateOfBirth
 
   def firstName
     object.name.first_name
@@ -24,6 +25,10 @@ class Api::SecurityApp::V1::ProfileStaffMemberSerializer < ActiveModel::Serializ
 
   def email
     object.email
+  end
+
+  def dateOfBirth
+    object.date_of_birth && UIRotaDate.format(object.date_of_birth)
   end
 
   def avatarImageUrl

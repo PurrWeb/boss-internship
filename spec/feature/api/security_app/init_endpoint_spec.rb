@@ -84,6 +84,7 @@ RSpec.describe 'Init endpoint' do
           "niNumber" => staff_member.national_insurance_number,
           "siaBadgeExpiryDate" => UIRotaDate.format(staff_member.sia_badge_expiry_date),
           "siaBadgeNumber" => staff_member.sia_badge_number,
+          "dateOfBirth" => UIRotaDate.format(staff_member.date_of_birth),
           "address" => staff_member.address.address,
           "county" => staff_member.address.county,
           "country" => staff_member.address.country,
