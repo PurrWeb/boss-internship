@@ -1,4 +1,5 @@
 import makeDataHandler from "./make-data-handler"
+import _ from 'underscore';
 
 export default makeDataHandler("clockInDays", {
     REPLACE_ALL_CLOCK_IN_DAYS: {
@@ -18,5 +19,11 @@ export default makeDataHandler("clockInDays", {
                 return true;
             }
         }
+    },
+    REMOVE_CLOCK_IN_DAY: function(state, action) {
+      state = _(state).omit(function(clockInDay){
+        return clockInDay.clientId === action.clockInDay.clientId;
+      });
+      return state;
     }
 })

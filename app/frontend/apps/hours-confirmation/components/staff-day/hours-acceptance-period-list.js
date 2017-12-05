@@ -64,7 +64,7 @@ export default class HoursAcceptancePeriodList extends React.Component {
     getMarkAsDoneButton(){
         if (this.areAllShiftsAccepted() && this.hasClockedOut()) {
             return <button
-                onClick={this.props.markDayAsDone}
+                onClick={() => this.props.markDayAsDone(this.props.clockInDay)}
                 className="boss-button boss-button_role_success boss-hrc__button">
                 Done
             </button>

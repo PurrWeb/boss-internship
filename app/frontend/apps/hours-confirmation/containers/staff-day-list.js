@@ -5,6 +5,10 @@ import {
 } from "react-redux"
 import _ from "underscore"
 import StaffFilter from '../components/staff-filter';
+import utils from '~/lib/utils';
+import {fromJS} from 'immutable';
+import { bindActionCreators } from "redux"
+import actionCreators from "~/redux/actions"
 
 const PAGE_SIZE = 5;
 class StaffDayList extends React.Component {
@@ -14,7 +18,9 @@ class StaffDayList extends React.Component {
     
     this.state = {
       filteredClockInDays: props.clockInDays,
-      clockInDays: props.clockInDays.slice(0, PAGE_SIZE)
+      clockInDays: props.clockInDays.slice(0, PAGE_SIZE),
+      filter: '',
+      filteredStaffTypes: [],
     }
   }
   
@@ -27,6 +33,28 @@ class StaffDayList extends React.Component {
     }
 
     return {currentSize, loadSize};
+  }
+
+  handleScroll = () => {
+    const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
+    const windowBottom = windowHeight + window.pageYOffset;
+    if (windowBottom >= docHeight) {
+      const handleLoadMore = this.state.clockInDays.length !== this.state.filteredClockInDays.length;
+      if (handleLoadMore) {
+        this.loadMore();
+      }
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener("scroll", this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
   }
 
   loadMore = () => {
@@ -51,19 +79,55 @@ class StaffDayList extends React.Component {
     )
   }
   
+  componentWillReceiveProps(nextProps) {
+    this.handleStaffFilter(nextProps.clockInDays);
+  }
+
   handleStaffFilter = (clockInDays) => {
+    const staffMembers = clockInDays.map(clockInDay => clockInDay.staff_member.get(this.props.staffMembers))
+    let filteredStaffMembers = [];
+    const query = this.state.filter;
+    const filteredStaffTypes = this.state.filteredStaffTypes;
+    if (filteredStaffTypes.length === 0) {
+      filteredStaffMembers = staffMembers;
+    } else {
+      filteredStaffMembers = staffMembers.filter((staffMember) => {
+        if (!filteredStaffTypes.includes(staffMember.staff_type.serverId)) {
+          return false;
+        }
+        return true;
+      });
+    }
+    
+    filteredStaffMembers = utils.staffMemberFilter(query, fromJS(filteredStaffMembers)).toJS();
+
+    const filteredClockInDays = clockInDays.filter(clockInDay => {
+      return !!filteredStaffMembers.find(staffMember => staffMember.clientId === clockInDay.staff_member.clientId);
+    });
+    
     this.setState(state => {
-      if (state.clockInDays.size === clockInDays.size) {
+      if (state.clockInDays.size === filteredClockInDays.size) {
         return {
-          filteredClockInDays: clockInDays,
-          clockInDays: clockInDays.slice(0, state.clockInDays.size)
+          filteredClockInDays: filteredClockInDays,
+          clockInDays: filteredClockInDays.slice(0, state.clockInDays.size)
         }
       }
       return {
-        filteredClockInDays: clockInDays,
-        clockInDays: clockInDays.slice(0, PAGE_SIZE)
+        filteredClockInDays: filteredClockInDays,
+        clockInDays: filteredClockInDays.slice(0, PAGE_SIZE)
       }
     });
+  }
+
+  onStaffFilterChange = ({filter, filteredStaffTypes}) => {
+    this.setState({filter, filteredStaffTypes}, () => {
+      this.handleStaffFilter(this.props.clockInDays);
+    });
+  }
+
+  handleMarkDayAsDone = (clockInDay) => {
+    console.log(clockInDay);
+    this.props.boundActions.removeClockInDay(clockInDay);
   }
 
   render() {
@@ -77,6 +141,7 @@ class StaffDayList extends React.Component {
         staffMembers={this.props.staffMembers}
         clockInDays={this.props.clockInDays}
         staffTypes={_.values(this.props.staffTypes)}
+        onFilterChange={this.onStaffFilterChange}
         onFilter={this.handleStaffFilter}/>
       { renderNotFound
           ? <div className="boss-page-main__inner boss-page-main__inner_space_regular boss-page-main__inner_opaque">
@@ -87,6 +152,7 @@ class StaffDayList extends React.Component {
                   displayVenue={this.props.displayVenues}
                   displayDate={this.props.displayDates}
                   key={clockInDay.clientId}
+                  onMarkDayAsDone={this.handleMarkDayAsDone}
                   readonly={clockInDay.readonly}
                   clockInDay={clockInDay} />
             )
@@ -103,5 +169,9 @@ function mapStateToProps(state) {
         staffTypes: state.staffTypes,
     }
 }
-
-export default connect(mapStateToProps)(StaffDayList)
+function mapDispatchToProps(dispatch){
+  return {
+      boundActions: bindActionCreators(actionCreators(), dispatch)
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(StaffDayList)
