@@ -19,7 +19,7 @@
         step: 0.01
       ) %>
 
-  <% reminder_users = User.enabled.with_all_venue_access %>
+  <% reminder_users = User.enabled.with_all_venue_access.includes(:name) %>
   <% managers = UsersManagingVenueQuery.new(venue: venue).all %>
   <% if managers.present? %>
     <% reminder_users = reminder_users.where('users.id NOT IN (?)', managers.pluck(:id)) %>
