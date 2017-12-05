@@ -14,6 +14,7 @@ RSpec.describe Api::SecurityApp::V1::ProfileStaffMemberSerializer do
       "avatarImageUrl" => staff_member.avatar_url,
       "phoneNumber" => staff_member.phone_number,
       "niNumber" => staff_member.national_insurance_number,
+      "dateOfBirth" => UIRotaDate.format(staff_member.date_of_birth),
       "siaBadgeExpiryDate" => UIRotaDate.format(staff_member.sia_badge_expiry_date),
       "siaBadgeNumber" => staff_member.sia_badge_number,
       "address" => staff_member.address.address,
