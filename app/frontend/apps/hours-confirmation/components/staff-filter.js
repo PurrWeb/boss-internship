@@ -1,7 +1,4 @@
 import React from 'react';
-import { selectClockInDayDetails } from "~/redux/selectors"
-import utils from '~/lib/utils';
-import {fromJS} from 'immutable';
 import StaffTypeSelect from './staff-type-select';
 
 export default class StaffFilter extends React.Component {
@@ -13,44 +10,19 @@ export default class StaffFilter extends React.Component {
 
   onFilterChange = (value) => {
     this.setState({filter: value}, () => {
-      this.getStaffMembers();
+      this.props.onFilterChange({filter: this.state.filter, filteredStaffTypes: this.state.filteredStaffTypes})
     });
-  }
-
-  getStaffMembers = () => {
-    const staffMembers = this.props.clockInDays.map(clockInDay => clockInDay.staff_member.get(this.props.staffMembers))
-    let filteredStaffMembers = [];
-    const query = this.state.filter;
-    const filteredStaffTypes = this.state.filteredStaffTypes;
-    if (filteredStaffTypes.length === 0) {
-      filteredStaffMembers = staffMembers;
-    } else {
-      filteredStaffMembers = staffMembers.filter((staffMember) => {
-        if (!filteredStaffTypes.includes(staffMember.staff_type.serverId)) {
-          return false;
-        }
-        return true;
-      });
-    }
-    
-    filteredStaffMembers = utils.staffMemberFilter(query, fromJS(filteredStaffMembers)).toJS();
-
-    const clockInDays = this.props.clockInDays.filter(clockInDay => {
-      return !!filteredStaffMembers.find(staffMember => staffMember.clientId === clockInDay.staff_member.clientId);
-    });
-
-    this.props.onFilter(clockInDays);
   }
 
   onStaffTypesChange = (staffTypes) => {
     this.setState({filteredStaffTypes: staffTypes}, () => {
-      this.getStaffMembers();
+      this.props.onFilterChange({filter: this.state.filter, filteredStaffTypes: this.state.filteredStaffTypes})
     })
   }
 
   onClear = () => {
     this.setState({filter: ''}, () => {
-      this.getStaffMembers();
+      this.props.onFilterChange({filter: this.state.filter, filteredStaffTypes: this.state.filteredStaffTypes})
     })
   }
 
