@@ -7,6 +7,8 @@ import _ from "underscore"
 import StaffFilter from '../components/staff-filter';
 import utils from '~/lib/utils';
 import {fromJS} from 'immutable';
+import { bindActionCreators } from "redux"
+import actionCreators from "~/redux/actions"
 
 const PAGE_SIZE = 5;
 class StaffDayList extends React.Component {
@@ -123,6 +125,11 @@ class StaffDayList extends React.Component {
     });
   }
 
+  handleMarkDayAsDone = (clockInDay) => {
+    console.log(clockInDay);
+    this.props.boundActions.removeClockInDay(clockInDay);
+  }
+
   render() {
     var clockInDays = this.state.clockInDays;
     const showLoadMore = this.state.clockInDays.length !== this.state.filteredClockInDays.length;
@@ -145,6 +152,7 @@ class StaffDayList extends React.Component {
                   displayVenue={this.props.displayVenues}
                   displayDate={this.props.displayDates}
                   key={clockInDay.clientId}
+                  onMarkDayAsDone={this.handleMarkDayAsDone}
                   readonly={clockInDay.readonly}
                   clockInDay={clockInDay} />
             )
@@ -161,5 +169,9 @@ function mapStateToProps(state) {
         staffTypes: state.staffTypes,
     }
 }
-
-export default connect(mapStateToProps)(StaffDayList)
+function mapDispatchToProps(dispatch){
+  return {
+      boundActions: bindActionCreators(actionCreators(), dispatch)
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(StaffDayList)

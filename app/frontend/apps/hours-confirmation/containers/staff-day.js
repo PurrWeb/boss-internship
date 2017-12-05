@@ -16,7 +16,7 @@ class StaffDay extends React.Component {
     render(){
         return <StaffDayUi
             markedAsDone={this.state.markedAsDone}
-            markDayAsDone={() => this.setState({markedAsDone: true})}
+            markDayAsDone={(clockInDay) => this.setState({markedAsDone: true}, () => this.props.onMarkDayAsDone(clockInDay))}
             boundActions={this.props.boundActions}
             {...this.props}
         />

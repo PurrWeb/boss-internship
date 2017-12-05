@@ -247,7 +247,14 @@ export const clockInOutAppFetchAppData = createApiRequestActionCreator({
     }
 })
 
+actionTypes.push('REMOVE_CLOCK_IN_DAY');
 
+export const removeClockInDay = function(clockInDay) {
+  return  {
+    type: 'REMOVE_CLOCK_IN_DAY',
+    clockInDay
+  }
+}
 
 export const forceStaffMemberClockOut = createApiRequestActionCreator({
     requestType: "FORCE_STAFF_MEMBER_CLOCK_OUT",
