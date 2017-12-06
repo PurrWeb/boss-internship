@@ -59,7 +59,7 @@ export default class HoursAcceptancePeriodListItem extends React.Component {
         }
 
         return (
-          <div className="boss-time-shift">
+          <div className="boss-time-shift" data-test-marker-hours-acceptance-period-item="true">
             { this.getModal() }
             <div className="boss-time-shift__header">
               <h4 className="boss-time-shift__title">From/To </h4>
