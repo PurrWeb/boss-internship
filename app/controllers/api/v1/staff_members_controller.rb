@@ -5,6 +5,15 @@ module Api
       before_filter :api_token_athenticate!, only: [:change_pin]
       skip_before_filter :parse_access_tokens, only: [:set_password, :reset_password]
 
+      def index
+        staff_members = StaffMemberSearchQuery.new(
+          query: params[:query],
+          venue: venue_from_params
+        ).search
+
+        render json: staff_members, each_serializer: Api::V1::Holidays::StaffMemberSearchSerializer, status: 200
+      end
+
       def set_password
         password = params.fetch(:password)
         password_confirmation = params.fetch(:passwordConfirmation)
@@ -353,6 +362,15 @@ module Api
         self.class.required_flagged_staff_member_fields.all? do |field|
           params.keys.include?(field)
         end
+      end
+
+      private
+      def accessible_venues
+        AccessibleVenuesQuery.new(current_user).all
+      end
+
+      def venue_from_params
+        accessible_venues.find_by(id: params[:venue_id])
       end
     end
   end

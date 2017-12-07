@@ -457,7 +457,7 @@ Rails.application.routes.draw do
         end
         resources :holidays, only: :show
         resources :holiday_reports, only: :index
-        resources :staff_members, only: [:show, :create] do
+        resources :staff_members, only: [:index, :show, :create] do
           post :send_app_download_email
           post :send_verification
           post :resend_verification

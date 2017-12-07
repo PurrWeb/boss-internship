@@ -21,6 +21,7 @@
   window.boss.store.staffMembersCount = <%= staff_members_count %>;
   window.boss.store.holidaysCount = <%= raw holidays_count.to_json %>;
   window.boss.store.access_token = "<%= access_token.token %>";
+  window.boss.accessToken = "<%= access_token.token %>";
 
   window.boss.store.pageData = {
     currentVenueId: <%= current_venue_id || "null" %>,
