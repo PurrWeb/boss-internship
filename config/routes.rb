@@ -169,7 +169,7 @@ Rails.application.routes.draw do
     resources :api_keys, only: [:index, :create, :destroy]
     resource :dev, only: [] do
       collection do
-        get :secruity_app_sse
+        get :secruity_app_sse_test
       end
     end
 
@@ -202,7 +202,7 @@ Rails.application.routes.draw do
           resource :sessions, only: [] do
             post :new, path: 'new'
             post :forgot_password, path: 'forgot-password'
-            get :ably_auth
+            get :ably_auth, path: 'ably-auth'
           end
         end
       end

@@ -21,6 +21,10 @@ module Api
                 serializer: Api::SecurityApp::V1::RotaShiftSerializer
               ),
               venues: ActiveModel::Serializer::CollectionSerializer.new(Venue.all, serializer: Api::SecurityApp::V1::VenueSerializer)
+            },
+            ablyData: {
+              presenceChannelName: SecurityAppUpdateService.security_presence_channel,
+              personalChannelName: SecurityAppUpdateService.personal_channel(id: staff_member.id)
             }
           }, status: 200
         end

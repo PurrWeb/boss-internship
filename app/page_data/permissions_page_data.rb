@@ -143,10 +143,6 @@ class PermissionsPageData
           path: @path.names_path
         },
         {
-          description: "Devs",
-          path: @path.secruity_app_sse_dev_path
-        },
-        {
           description: "Venues",
           path: @path.venues_path
         },
@@ -233,6 +229,17 @@ class PermissionsPageData
       ]
     }
 
+    dev_section = {
+      name: "Dev",
+      color: "#f39c12",
+      items: [
+        {
+          description: "Security App SSE Test",
+          path: @path.secruity_app_sse_test_dev_path
+        }
+      ]
+    }
+
     menu = [
       venue,
       staff_members,
@@ -244,6 +251,10 @@ class PermissionsPageData
       admin_users,
       admin_staff_members,
       admin_reports,
+    ]
+
+    dev_menu = [
+      dev_section
     ]
 
 
@@ -259,10 +270,16 @@ class PermissionsPageData
       serializer: Api::V1::VenueSerializer,
     )
 
+    menu_items = quick_menu
+
     if role.can?(:manage, :admin)
-      { quick_menu: (quick_menu + admin_menu), venues: venues }
-    else
-      { quick_menu: quick_menu, venues: venues }
+      menu_items.concat(admin_menu)
     end
+
+    if role.can?(:manage, :dev_only_pages)
+      menu_items.concat(dev_menu)
+    end
+
+    { quick_menu: menu_items, venues: venues }
   end
 end

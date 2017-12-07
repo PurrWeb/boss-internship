@@ -9,6 +9,10 @@ class UserAbility
         can :manage, :admin
       end
 
+      if user.dev?
+        can :manage, :dev_only_pages
+      end
+
       can :view, MaintenanceTask do |maintenance_task|
         user.maintenance_staff? || can_manage_venue?(user, maintenance_task.venue)
       end

@@ -1,26 +1,35 @@
 import React from 'react';
 import AsyncButton from 'react-async-button';
+import oFetch from 'o-fetch';
 
 import {
   signInRequest,
+  initRequest
 } from './requests';
 
 export default class LoginForm extends React.Component {
   state = {
     email: '',
-    password: '',
+    password: ''
   }
 
   handleSignIn = () => {
     return signInRequest(this.state.email, this.state.password).then(resp => {
-      const {accessToken, presenceChannel, personalChannel} = resp.data;
-      return this.props.onSignInSuccess({
-        token: accessToken,
-        presenceChannel,
-        personalChannel,
-      }).catch(error => {
-        alert(error);
-      })
+      let token = oFetch(resp.data, 'token');
+      let expiresAt = oFetch(resp.data, 'expiresAt');
+
+      return initRequest(token).then(resp => {
+        let ablyData = oFetch(resp.data, 'ablyData');
+        let personalChannelName = oFetch(ablyData, 'personalChannelName');
+        let presenceChannelName = oFetch(ablyData, 'presenceChannelName');
+
+        this.props.onSignInSuccess({
+          token: token,
+          tokenExpiresAt: expiresAt,
+          personalChannelName: personalChannelName,
+          presenceChannelName: presenceChannelName
+        });
+      });
     }).catch(resp => {
       console.log(resp);
       const errors = resp.response.data.errors;
@@ -45,22 +54,15 @@ export default class LoginForm extends React.Component {
       <div className="row">
         <div className="offset-md-4 col-md-6">
           <div className="jumbotron">
-            <h1 className="display-3">Please sign in</h1>
+            <h1 className="display-3">Security App SSE Test </h1>
             <form>
               <div className="form-group">
                 <label htmlFor="email">Email address</label>
                 <input value={this.state.email} onChange={this.handleEmailChange} type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
-                <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
               </div>
               <div className="form-group">
                 <label htmlFor="password">Password</label>
                 <input value={this.state.password} onChange={this.handlePasswordChange} type="password" className="form-control" id="password" placeholder="Password" />
-              </div>
-              <div className="form-check">
-                <label className="form-check-label">
-                  <input type="checkbox" className="form-check-input" />
-                  Check me out
-                </label>
               </div>
               <AsyncButton
                 className="btn btn-primary"
