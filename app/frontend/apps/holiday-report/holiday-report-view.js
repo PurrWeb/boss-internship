@@ -1,9 +1,13 @@
 import React from "react"
 import { connect } from "react-redux"
 import { appRoutes } from "~/lib/routes"
+import { bindActionCreators } from 'redux';
 import ReportsHeader from "./reports-header"
 import ReportsBody from "./reports-body"
 import _ from 'lodash';
+import {
+  createHoliday,
+} from './actions';
 export class HolidayReportView extends React.Component {
   render() {
     const accessibleVenues = Object.values(this.props.venues).filter((venue, clientId) => {
@@ -32,6 +36,14 @@ function mapStateToProps(state){
     }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({
+      createHoliday,
+    }, dispatch)
+  };
+}
+
 function csvDownloadButton(props){
   let holidayCount = Object.keys(props.holidays).length;
 
@@ -51,4 +63,4 @@ function csvDownloadButton(props){
   }
 }
 
-export default connect(mapStateToProps)(HolidayReportView)
+export default connect(mapStateToProps, mapDispatchToProps)(HolidayReportView)

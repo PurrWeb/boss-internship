@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react';
 import BossWeekPicker from '~/components/react-dates/boss-week-picker';
 import { appRoutes } from '~/lib/routes';
@@ -5,6 +6,11 @@ import safeMoment from '~/lib/safe-moment';
 import classNames from 'classnames';
 import Popover from 'react-popover';
 import utils from '~/lib/utils';
+import { createHoliday } from './actions';
+import WeekAndVenueSelector from "~/components/week-and-venue-selector";
+import WeekPicker from "~/components/week-picker";
+import openModal from './boss-modal';
+import AddHoliday from './add-holiday';
 
 export default class ReportsHeader extends React.Component {
   state = {
@@ -31,7 +37,7 @@ export default class ReportsHeader extends React.Component {
     );
   };
 
-  csvDownloadButton(props) {
+  renderCsvDownloadButton(props) {
     let holidayCount = Object.keys(props.holidays).length;
 
     if (props.pageOptions.displayCsvLink && props.pageOptions.weekStartDate && holidayCount > 0) {
@@ -47,6 +53,21 @@ export default class ReportsHeader extends React.Component {
         </a>
       );
     }
+  }
+
+  submit = (hideModal, values) => {
+    return this.props.actions.createHoliday(values, hideModal);
+  }
+
+  renderAddHolidayButton() {
+    return (
+      <button
+        onClick={() => openModal(this.submit, {
+          venueId: this.props.pageOptions.currentVenueId,
+        })(AddHoliday)}
+        className="boss-button boss-button_role_add boss-page-dashboard__button"
+      >Add Holidays</button>
+    )
   }
 
   render() {
@@ -88,7 +109,10 @@ export default class ReportsHeader extends React.Component {
                 </Popover>
               </div>
 
-              <div className="boss-page-dashboard__buttons-group">{this.csvDownloadButton(this.props)}</div>
+              <div className="boss-page-dashboard__buttons-group">
+                { this.renderAddHolidayButton() }
+                { this.renderCsvDownloadButton(this.props) }
+              </div>
             </div>
           </div>
         </div>
