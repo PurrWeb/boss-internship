@@ -58,6 +58,7 @@ gem 'ably-rest', '~> 1.0'
 gem 'search_cop'
 gem 'forecast_io'
 gem 'rack-cors', require: 'rack/cors'
+gem 'search_cop'
 
 group :production, :development do
   gem 'redis', '~>3.2'
