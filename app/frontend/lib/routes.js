@@ -51,6 +51,24 @@ export const appRoutes = {
       let date = oFetch(options, "date");
       return 'change_order_reports?date=' + utils.formatRotaUrlDate(date);
     },
+    dailyReportsPage: function(options) {
+        let dateM = oFetch(options, 'dateM');
+        let venueId = oFetch(options, 'venueId');
+
+        return "daily_reports?date=" +
+          utils.formatRotaUrlDate(dateM) +
+          "&venue_id=" +
+          venueId;
+    },
+    dailyReportsPDFDownload: function(options) {
+        let dateM = oFetch(options, 'dateM');
+        let venueId = oFetch(options, 'venueId');
+
+        return "daily_reports.pdf?date=" +
+          utils.formatRotaUrlDate(dateM) +
+          "&venue_id=" +
+          venueId;
+    },
     holidays: function(options) {
         var date = oFetch(options, "date");
         var venueId = options.venueId; // venueId is optional
@@ -116,6 +134,12 @@ export const appRoutes = {
     checklistSubmissionsPage: function(options){
       let venueId = oFetch(options, "venueId");
       return "/checklist_submissions?venue_id=" + venueId;
+    },
+    weeklyReportsPage: function(options){
+        let venueId = oFetch(options, 'venueId');
+        let weekStartDateM = oFetch(options, 'weekStartDateM');
+      return "/weekly_reports?venue_id=" + venueId +
+        "&week_start=" + utils.formatRotaUrlDate(weekStartDateM);
     }
 }
 

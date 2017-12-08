@@ -140,6 +140,9 @@ registerComponent('MessageBoardApp', MessageBoardApp);
 
 import WeekPicker from "~/components/week-picker"
 
+import DailyReportsApp from './apps/daily-reports';
+registerComponent('DailyReportsApp', DailyReportsApp);
+
 import AppVersionChecker from '~/components/app-version-checker';
 
 import VouchersApp from "./apps/vouchers";
