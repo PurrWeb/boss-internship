@@ -39,8 +39,6 @@ class CreateRotaShift
         UpdateRotaForecast.new(rota: rota).call if rota_shift.part_of_forecast?
 
         DailyReport.mark_for_update!(date: rota.date, venue: rota.venue)
-
-        frontend_updates.create_shift(shift: rota_shift)
       end
 
       ActiveRecord::Rollback unless result

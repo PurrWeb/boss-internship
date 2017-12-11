@@ -13,6 +13,7 @@ import 'react-spinner/react-spinner.css';
 import BouncedEmailModal from '~/components/bounced-email-modal';
 import './bounced-emails';
 import initMobileMenu from '~/components/mobile-menu';
+import AblyService from '~/lib/ably-service';
 
 window.Spinner = Spinner;
 window.boss = window.boss || {};

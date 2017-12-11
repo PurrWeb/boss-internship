@@ -1,11 +1,13 @@
 import React from 'react';
 import AsyncButton from 'react-async-button';
 import oFetch from 'o-fetch';
+import SecurityAuth from '~/lib/security-auth-service';
+
 
 import {
   signInRequest,
   initRequest
-} from './requests';
+} from '../../requests';
 
 export default class LoginForm extends React.Component {
   state = {
@@ -14,31 +16,7 @@ export default class LoginForm extends React.Component {
   }
 
   handleSignIn = () => {
-    return signInRequest(this.state.email, this.state.password).then(resp => {
-      let token = oFetch(resp.data, 'token');
-      let expiresAt = oFetch(resp.data, 'expiresAt');
-
-      return initRequest(token).then(resp => {
-        let ablyData = oFetch(resp.data, 'ablyData');
-        let personalChannelName = oFetch(ablyData, 'personalChannelName');
-        let presenceChannelName = oFetch(ablyData, 'presenceChannelName');
-
-        this.props.onSignInSuccess({
-          token: token,
-          tokenExpiresAt: expiresAt,
-          personalChannelName: personalChannelName,
-          presenceChannelName: presenceChannelName
-        });
-      });
-    }).catch(resp => {
-      console.log(resp);
-      const errors = resp.response.data.errors;
-      if (errors) {
-        if (errors.base) {
-          alert(errors.base[0])
-        }
-      }
-    })
+    return this.props.onSignInSuccess({email: this.state.email, password: this.state.password})
   }
 
   handleEmailChange = (e) => {

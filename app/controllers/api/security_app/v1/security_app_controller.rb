@@ -5,7 +5,9 @@ module Api
         before_filter :parse_access_tokens
 
         rescue_from CanCan::AccessDenied do |exception|
-          render json: {}, status: 403
+          message = {}
+          message = {base: ['Only security staffs can access to this page']} if exception.action == :access
+          render json: {errors: message}, status: 403
         end
 
         def parse_access_tokens

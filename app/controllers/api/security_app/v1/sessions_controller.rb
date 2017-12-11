@@ -22,7 +22,6 @@ module Api
             }, status: 403
           else
             access_token = staff_member.current_security_app_access_token || SecurityAppApiAccessToken.new(staff_member: staff_member).persist!
-            response.headers['TOKEN'] = access_token.token
 
             render json: {
               token: access_token.token,
