@@ -1,8 +1,6 @@
 import React from 'react';
 import AsyncButton from 'react-async-button';
 import oFetch from 'o-fetch';
-import SecurityAuth from '~/lib/security-auth-service';
-
 
 import {
   signInRequest,

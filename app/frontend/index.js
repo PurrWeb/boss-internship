@@ -13,7 +13,6 @@ import 'react-spinner/react-spinner.css';
 import BouncedEmailModal from '~/components/bounced-email-modal';
 import './bounced-emails';
 import initMobileMenu from '~/components/mobile-menu';
-import AblyService from '~/lib/ably-service';
 
 window.Spinner = Spinner;
 window.boss = window.boss || {};
@@ -161,7 +160,7 @@ registerComponent("VouchersRedeemApp", VouchersRedeemApp);
 $(document).ready(function(){
     if (window.boss.currentLayout !== 'oldLayout') {
       initMobileMenu();
-    }  
+    }
     let versionCheckerEl = document.createElement("div");
     document.body.appendChild(versionCheckerEl);
     let fiveMinutes = 5 * 60 * 1000;

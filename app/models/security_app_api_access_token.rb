@@ -1,5 +1,5 @@
 class SecurityAppApiAccessToken
-  def initialize(token: nil, expires_at: nil, staff_member:)
+  def initialize(now: Time.current, token: nil, expires_at: nil, staff_member:)
     unless staff_member.verified?
       raise "Staff member with id: #{staff_member.id} not verified yet"
     end

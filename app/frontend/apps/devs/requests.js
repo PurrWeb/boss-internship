@@ -1,7 +1,9 @@
-import http from './request-api';
+import { httpWithGlobalNotifications } from './request-api';
 
 export const initRequest = (auth) => {
-  return http({successMessage: 'Initial data received successful'}, auth).then(instance => {
-    return instance.get('/api/security-app/v1/init', {});
-  });
+  return httpWithGlobalNotifications(auth, {successMessage: 'Initial data received successfully'}).get('/api/security-app/v1/init', {});
+}
+
+export const sendTestRequest = (auth) => {
+  return httpWithGlobalNotifications(auth, {successMessage: 'Test request successful'}).get('/api/security-app/v1/tests/get');
 }

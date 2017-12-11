@@ -1,47 +1,101 @@
 const Ably = require('ably/browser/static/ably-commonjs.js');
-import globalNotification from '~/components/global-notification';
+import { authenticatedHttp } from './request-api';
+import oFetch from 'o-fetch';
+import _ from 'lodash';
 
-let instance = null;
+class AblyService {
+	constructor(ablyRealtime, personalChannel, presenceChannel) {
+		this.ablyRealtime = ablyRealtime;
+		this.active = true;
 
-export default async function AblyService(authService) {
-  if (instance) { return instance }
+		const ensureActive = () => {
+			if(!this.active){
+				throw new Error('Attempt to use inactive service');
+			}
+		};
 
-  const authToken = await authService.getToken();
+		this.deactivate = () => {
+			return new Promise((resolve, reject) => {
+				ensureActive();
 
-  instance = new Ably.Realtime({
-    authUrl: '/api/security-app/v1/sessions/ably-auth',
-    authHeaders: {
-      Authorization: `Token token="${authToken}"`,
-    },
-  });
+				presenceChannel.presence.leave((err)=> {
+					if(err){
+						return reject(new Error(`Error leaving channel: ${err}`));
+					}
 
-  instance.connection.on('connected', (resp) => {
-    globalNotification('Connected to Ably', {
-      interval: 5000,
-      status: 'success'
-    });
-  });
+					personalChannel.unsubscribe();
 
-  instance.connection.on('disconnected', (resp) => {
-    globalNotification(ablyErrorCodes[resp.reason.code] || 'There was an error', {
-      interval: 5000,
-      status: 'error'
-    });
-    throw new Error('Connection failed');
-  });
+					ablyRealtime.connection.off();
+					ablyRealtime.close();
 
-  instance.connection.on('failed', (resp) => {
-    globalNotification(ablyErrorCodes[resp.reason.code] || 'There was an error', {
-      interval: 5000,
-      status: 'error'
-    });
-    throw new Error('Connection failed');
-  });
+					this.active = false;
+					return resolve();
+				});
+			});
+		};
 
-  return instance;
+		this.subscribeToPersonalChannel = (onUpdate) => {
+			ensureActive();
+			personalChannel.subscribe(onUpdate)
+		}
+	}
+
+	subscribeToPersonalChannel(onUpdate){;
+		this.subscribeToPersonalChannel(onUpdate);
+	}
+
+  deactivate(){
+		this.deactivate();
+	}
 }
 
-const ablyErrorCodes = {
+export function createAblyService(options) {
+	const authService = oFetch(options, 'authService');
+	const personalChannelName = oFetch(options, 'personalChannelName');
+	const presenceChannelName = oFetch(options, 'presenceChannelName');
+	const onTokenObtained = options.onTokenObtained || function(){};
+	const onConnected = options.onConnected || function(){};
+	const onDisconnected = options.onDisconnected || function(){};
+	const onFailed = options.onFailed || function(){};
+
+  let ablyRealtime = new Ably.Realtime({
+    authCallback: (tokenParams, callback) => {
+      authenticatedHttp(authService).get('/api/security-app/v1/sessions/ably-auth').then(resp => {
+				onTokenObtained();
+        callback(null, resp.data);
+      });
+    }
+  });
+
+  ablyRealtime.connection.on('connected', (resp) => {
+		onConnected(resp)
+  });
+
+  ablyRealtime.connection.on('disconnected', (resp) => {
+		onDisconnected(resp);
+    throw new Error('Connection failed');
+  });
+
+  ablyRealtime.connection.on('failed', (resp) => {
+		onFailed(resp);
+    throw new Error('Connection failed');
+	});
+
+	//private stuff
+	let personalChannel = ablyRealtime.channels.get(personalChannelName);
+	let presenceChannel = ablyRealtime.channels.get(presenceChannelName);
+
+	return new Promise((resolve, reject) => {
+	  presenceChannel.presence.enter('Howdy', (err) => {
+			if(err){
+				throw new Error(`Entering presence channel failed: ${err}`);
+			}
+		});
+		return resolve(new AblyService(ablyRealtime, personalChannel, presenceChannel));
+	});
+}
+
+export const ablyErrorCodes = {
 	/* generic error codes */
 	"10000": "no error",
 

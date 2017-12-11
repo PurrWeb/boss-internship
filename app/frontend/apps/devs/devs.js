@@ -2,7 +2,7 @@ import React from 'react';
 import LoginForm from './components/login-form';
 import PrivatePage from './components/private-page';
 import oFetch from 'o-fetch';
-import {authenticateUser} from '~/lib/security-auth-service';
+import {authenticateUser} from './security-auth-service';
 
 export default class Devs extends React.Component {
   state = {
@@ -25,8 +25,8 @@ export default class Devs extends React.Component {
 
   handleLogOutSuccess = () => {
     return new Promise((resolve, reject) => {
-      this.auth.deauthenticateUser();
-      this.setState({isUserAuthenticated: false}, () => resolve());
+      this.state.authService.deauthenticateUser();
+      this.setState({isUserAuthenticated: false, authService: undefined }, () => resolve());
     });
   }
 

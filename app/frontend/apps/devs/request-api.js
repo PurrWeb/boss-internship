@@ -1,21 +1,33 @@
 import axios from 'axios';
 import globalNotification from '~/components/global-notification';
 
-async function http({...params}, auth) {
-  const {successMessage, errorMessage, interval, notify} = params;
-  let instance = null;
-  if (auth) {
-    const token = await auth.getToken();
-    instance = axios.create({
-      headers: {'Authorization': `Token token="${token}"`}
-    });
-  } else {
-    instance = axios.create();
-  }
+export function authenticatedHttp(authService, {...params}) {
+  const {notify, interval } = params;
+  const axiosInstance = axios.create();
 
-  if (notify !== false) {
-    instance.interceptors.response.use(function (response) {
-      // Do something with response data
+  axiosInstance.interceptors.request.use(function (config) {
+    return authService.getToken().then(token => {
+      config.headers.Authorization = `Token token="${token}"`;
+      return config;
+    })
+  }, function (error) {
+    return Promise.reject(error);
+  });
+
+  return axiosInstance;
+};
+
+export function httpWithGlobalNotifications(authService, params){
+  const successMessage = params.successMessage;
+  const errorMessage = params.errorMessage;
+  const interval = params.interval || 5000;
+
+  const httpFactoryParams = _.omit(params, ['successMessage', 'errorMessage', 'interval']);
+  const authenticatedHttpInstance = authenticatedHttp(authService, httpFactoryParams);
+
+  authenticatedHttpInstance.interceptors.response.use(
+    function (response) {
+      //Success
       globalNotification(successMessage || 'Action was successful', {
         interval: interval,
         status: 'success'
@@ -23,25 +35,28 @@ async function http({...params}, auth) {
 
       return response;
     }, function (resp) {
-      // Do something with response error
-      let error = null;
+      //Error
+      let baseErrors = null;
 
       if (resp.response.data.errors) {
         if (resp.response.data.errors.base) {
-          error = resp.response.data.errors.base.join(', ');
+          baseErrors = resp.response.data.errors.base.join(', ');
         }
       }
 
-      globalNotification(errorMessage || error || 'There was an error', {
+      let defaultMessage = "There was an error";
+      if(baseErrors){
+        defaultMessage = defaultMessage + baseErrors
+      }
+
+      globalNotification(errorMessage || defaultMessage , {
         interval: interval,
         status: 'error'
       });
 
       return Promise.reject(resp);
-    });
-  }
+    }
+  );
 
-  return instance;
-};
-
-export default http;
+  return authenticatedHttpInstance;
+}

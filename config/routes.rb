@@ -201,6 +201,7 @@ Rails.application.routes.draw do
           end
           resource :sessions, only: [] do
             post :new, path: 'new'
+            post :renew
             post :forgot_password, path: 'forgot-password'
             get :ably_auth, path: 'ably-auth'
           end

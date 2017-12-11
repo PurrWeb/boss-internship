@@ -1,13 +1,14 @@
 import React from 'react';
-import axios from 'axios';
 import AsyncButton from 'react-async-button';
 import Highlight from 'react-highlight';
 import oFetch from 'o-fetch';
-import Auth from '~/lib/security-auth-service';
-import AblyService from '~/lib/ably-service';
+import Auth from '../../security-auth-service';
+import globalNotification from '~/components/global-notification';
+import {ablyErrorCodes, createAblyService} from '../../ably-service';
 
 import {
   initRequest,
+  sendTestRequest,
 } from '../../requests';
 
 export default class PrivatePage extends React.Component {
@@ -15,14 +16,45 @@ export default class PrivatePage extends React.Component {
     isLoading: true,
     jsonResponse: {},
     profilePageJSON: {},
-    shiftsPageJSON: {},
+    shiftsPageJSON: {}
   }
 
   componentWillMount() {
     require('highlight.js/styles/vs.css');
   }
 
-  componentDidMount() {
+  displayAblyConnectedNotification(resp){
+    globalNotification('Connected to Ably', {
+      interval: 5000,
+      status: 'success'
+    });
+  }
+
+  displayAblyDisconnectedNotification(resp){
+    let message = 'Ably connection disconnected. Reason: ' + oFetch(ablyErrorCodes, resp.reason.code);
+    globalNotification(message, {
+      interval: 5000,
+      status: 'error'
+    });
+  }
+
+  displayAblyConnectionFailedNotification(resp){
+    let message = 'Ably connection failed. Reason: ' + oFetch(ablyErrorCodes, resp.reason.code);
+
+    globalNotification(message, {
+      interval: 5000,
+      status: 'error'
+    });
+  }
+
+  displayAblyTokenObtainedNotification(){
+    globalNotification('Ably Token obtained successfully', {
+      interval: 5000,
+      status: 'success'
+    });
+  }
+
+  componentDidMount(){
     let authService = oFetch(this.props, 'authService');
     initRequest(authService).then(resp => {
       const ablyData = oFetch(resp.data, 'ablyData');
@@ -34,44 +66,36 @@ export default class PrivatePage extends React.Component {
         shiftsPageJSON: shiftsPage,
       });
 
-      this.personalChannelName = oFetch(ablyData, 'personalChannelName');
-      this.presenceChannelName = oFetch(ablyData, 'presenceChannelName');
+      const personalChannelName = oFetch(ablyData, 'personalChannelName');
+      const presenceChannelName = oFetch(ablyData, 'presenceChannelName');
 
-      AblyService(authService).then((ably) => {
-        const clientId = ably.auth.tokenParams.clientId;
-        this.channel_presence = ably.channels.get(oFetch(this, 'presenceChannelName'));
-        this.channel_presence.attach((err) => {
-          if (err) {}
-          this.setState({isLoading: false});
-          if (this.personalChannelName) {
-            this.client_channel = ably.channels.get(oFetch(this, 'personalChannelName'))
-            this.channel_presence.presence.enter(`Enter`, (err) => {
-              if (err) { }
-            })
-            this.client_channel.subscribe((message) => {
-              this.setState({jsonResponse: message.data});
-            });
-          } else {
-            this.channel_presence.subscribe((message) => {
-              this.setState({jsonResponse: message.data});
-            });
-          }
-        })
-      }).catch((err) => {
-        console.log(err);
-      });
-    })
-  }
+      createAblyService({
+        authService: authService,
+        onTokenObtained: this.displayAblyTokenObtainedNotification,
+        onConnected: this.displayAblyConnectedNotification,
+        onDisconnected: this.displayAblyDisconnectedNotification,
+        onFailed: this.displayAblyConnectionFailedNotification,
+        personalChannelName: personalChannelName,
+        presenceChannelName: presenceChannelName
+      }).then((ablyService) => {
+        this.ablyService = ablyService;
+        ablyService.subscribeToPersonalChannel((message) => {
+          this.setState({jsonResponse: message.data});
+        });
 
-  handleLogout = () => {
-    return new Promise((resolve, reject) => {
-      this.channel_presence.unsubscribe(oFetch(this, 'presenceChannelName'));
-      this.client_channel.unsubscribe(oFetch(this, 'personalChannelName'));
-      this.channel_presence.presence.leave((err) => {
-        if (err) { return reject('Error') };
-        resolve(this.props.onLogOutSuccess());
+        this.setState({isLoading: false});
       });
     });
+  }
+
+  handleLogout(){
+    return this.ablyService.deactivate().then(() => {
+      this.props.onLogOutSuccess();
+    });
+  }
+
+  onTestClick = () => {
+    sendTestRequest(oFetch(this.props, 'authService'));
   }
 
   render() {
@@ -95,12 +119,18 @@ export default class PrivatePage extends React.Component {
                     className="btn btn-primary"
                     text="Log Out"
                     pendingText="Loging Out ..."
-                    onClick={this.handleLogout}
+                    onClick={this.handleLogout.bind(this)}
                   />
                 </div>
               </div>
             </div>
             <div className="row">
+              <div className="col-md-6 offset-md-4">
+                <button
+                  onClick={this.onTestClick}
+                  className="btn btn-primary"
+                >Send Api Test Request</button>
+              </div>
               <div className="col-md-6 offset-md-4">
                 <h1>Data from SSE</h1>
                 <Highlight className='json'>
