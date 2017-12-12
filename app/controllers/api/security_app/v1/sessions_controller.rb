@@ -47,6 +47,7 @@ module Api
           capability = SecurityAppUpdateService.capability(staff_member: current_staff_member)
 
           token_request = AblyService.client.auth.request_token({
+            ttl: 20, #seconds
             client_id: "#{current_staff_member.id}",
             capability: capability,
           })
