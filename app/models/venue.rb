@@ -19,7 +19,6 @@ class Venue < ActiveRecord::Base
 
   before_create :generate_rollbar_guid
   before_validation :check_rollbar_guid
-  after_initialize :set_latitude_and_longitude
 
   # Serializers
   serialize :fruit_order_fields, Array
@@ -34,6 +33,7 @@ class Venue < ActiveRecord::Base
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
 
   validates :name, presence: true, uniqueness: true
+  validates :latitude, :longitude, presence: true
   validates :creator, presence: true
   validate do |venue|
     if venue.fruit_order_fields - FruitOrder::FIELDS != []
@@ -49,11 +49,6 @@ class Venue < ActiveRecord::Base
   end
 
   private
-
-  def set_latitude_and_longitude
-    self.latitude = 0
-    self.longitude = 0
-  end
 
   def check_rollbar_guid
     unless rollbar_guid.present?

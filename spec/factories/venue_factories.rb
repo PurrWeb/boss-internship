@@ -8,5 +8,7 @@ FactoryGirl.define do
 
     safe_float_cents 0
     till_float_cents 0
+    latitude 0.0
+    longitude 0.0
   end
 end
