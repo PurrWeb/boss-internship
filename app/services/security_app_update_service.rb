@@ -6,6 +6,11 @@ class SecurityAppUpdateService
   end
   attr_reader :ably_service
 
+  def create_shift(shift:)
+    @updates[:shifts] ||= {}
+    @updates[:shifts][shift.id] = shift
+  end
+
   def update_shift(shift:)
     @updates[:shifts] ||= {}
     @updates[:shifts][shift.id] = shift
