@@ -8,7 +8,6 @@ class FrontendUpdates
     created_shifts.each_value do |shift_data|
       shift = shift_data.fetch(:shift)
       if shift.rota_published?
-
         security_app_update_service.create_shift(shift: shift)
       end
     end
