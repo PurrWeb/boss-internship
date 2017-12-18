@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       passwords: 'users/passwords'
     }
 
+    resources :accessories, only: [:index]
     resources :machines, only: [:index]
     resources :machine_refloats, only: [:index]
 
@@ -217,6 +218,12 @@ Rails.application.routes.draw do
       end
       namespace :v1 do
         get 'version', to: 'version#version'
+
+        resources :accessories, only: [:index, :create, :update, :destroy] do
+          member do
+            post :restore
+          end
+        end
 
         resources :check_lists, only: [:index, :create, :update, :destroy] do
           collection do
