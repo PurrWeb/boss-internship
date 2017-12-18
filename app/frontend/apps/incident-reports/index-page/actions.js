@@ -43,14 +43,7 @@ export const createIncidentReport = (values) => (dispatch, getState) => {
     incidentTime = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
   }
 
-  const parsedValues = {
-    involvedWitnessDetails: convertRichToHtmlAndCheckIfEmpty(values.involvedWitnessDetails),
-    report: convertRichToHtmlAndCheckIfEmpty(values.report),
-    uninvolvedWitnessDetails: convertRichToHtmlAndCheckIfEmpty(values.uninvolvedWitnessDetails),
-    policeOfficerDetails: convertRichToHtmlAndCheckIfEmpty(values.policeOfficerDetails),
-  }
-
-  return createIncidentReportRequest({values: {...values, ...parsedValues, incidentTime}, venueId})
+  return createIncidentReportRequest({values: {...values, incidentTime}, venueId})
     .then((resp) => {
       dispatch(addIncidentReport(resp.data))
       dispatch(hideAddNewReport());
