@@ -41,6 +41,8 @@ import "./lib/load-underscore-mixins"
 
 import DevsApp from "./apps/devs";
 registerComponent("DevsApp", DevsApp);
+import AccessoriesApp from "./apps/accessories";
+registerComponent("AccessoriesApp", AccessoriesApp);
 
 import StaffMemberPasswordReset from "./apps/staff-member-password-reset";
 registerComponent("StaffMemberPasswordReset", StaffMemberPasswordReset);
