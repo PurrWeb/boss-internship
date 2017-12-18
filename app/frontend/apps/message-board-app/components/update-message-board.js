@@ -1,14 +1,16 @@
 import React from 'react';
 import { SubmissionError } from 'redux-form/immutable';
-import RichTextEditor from 'react-rte';
 import notify from '~/components/global-notification';
 import safeMoment from '~/lib/safe-moment';
+import utils from '~/lib/utils';
 
 import MessageBoardForm from './message-board-form';
 import { updateMessageBoard } from '../actions/validations';
 
+
+
 export default class UpdateMessageBoard extends React.Component {
-  submission(values, dispatch) {
+  submission = (values, dispatch) => {
     return dispatch(updateMessageBoard(values.toJS())).catch(resp => {
       let errors = resp.response.data.errors;
 
@@ -61,7 +63,7 @@ export default class UpdateMessageBoard extends React.Component {
       description: message.description,
       toAllVenues: message.toAllVenues,
       title: message.title,
-      message: RichTextEditor.createValueFromString(message.message, 'html'),
+      message: utils.parseHTML(message.message),
     }
   }
 

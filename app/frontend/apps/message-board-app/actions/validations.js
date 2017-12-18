@@ -28,11 +28,7 @@ export const createMessageBoard = (values) => (dispatch, getState) => {
     publishDate = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
   }
 
-  const parsedValues = {
-    message: convertRichToHtmlAndCheckIfEmpty(values.message),
-  }
-
-  return createDashboardMessageRequest({values: {...values, ...parsedValues, publishDate}})
+  return createDashboardMessageRequest({values: {...values, publishDate}})
     .then((resp) => {
       dispatch(getDashboardMessagesRequest({ page: 1 }));
 
@@ -57,11 +53,7 @@ export const updateMessageBoard = (values) => (dispatch, getState) => {
     publishDate = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
   }
 
-  const parsedValues = {
-    message: convertRichToHtmlAndCheckIfEmpty(values.message),
-  }
-
-  return updateDashboardMessageRequest({values: {...values, ...parsedValues, publishDate}})
+  return updateDashboardMessageRequest({values: {...values, publishDate}})
     .then((resp) => {
       dispatch(UpdateDashboardMessage(resp.data));
 

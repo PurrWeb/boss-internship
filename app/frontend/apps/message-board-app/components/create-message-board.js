@@ -1,6 +1,5 @@
 import React from 'react';
 import { SubmissionError } from 'redux-form/immutable';
-import RichTextEditor from 'react-rte';
 import notify from '~/components/global-notification';
 
 import MessageBoardForm from './message-board-form';
@@ -16,11 +15,11 @@ const initialValues = {
   description: '',
   toAllVenues: false,
   title: '',
-  message: RichTextEditor.createEmptyValue(),
+  message: '',
 }
 
 export default class CreateMessageBoard extends React.Component {
-  submission(values, dispatch) {
+  submission = (values, dispatch) => {
     return dispatch(createMessageBoard(values.toJS())).catch(resp => {
       let errors = resp.response.data.errors;
 
