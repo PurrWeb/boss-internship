@@ -204,6 +204,10 @@ class PermissionsPageData
           description: "Checklist Submissions",
           path: @path.check_list_submissions_path
         },
+        {
+          description: "Accessories",
+          path: @path.accessories_path
+        },
       ]
     }
 
@@ -252,6 +256,7 @@ class PermissionsPageData
       admin_users,
       admin_staff_members,
       admin_reports,
+      admin_venues,
     ]
 
     dev_menu = [
