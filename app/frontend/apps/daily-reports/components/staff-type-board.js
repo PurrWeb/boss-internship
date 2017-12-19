@@ -1,6 +1,7 @@
 import React from 'react';
 import {Collapse} from 'react-collapse';
 import oFetch from 'o-fetch';
+import StaffMemberListing from './staff-member-listing';
 
 class StaffTypeBoard extends React.Component {
   constructor(props) {
@@ -19,95 +20,22 @@ class StaffTypeBoard extends React.Component {
     };
   }
 
-  toggleSectionHidden(){
+  toggleSectionHidden = () => {
     this.setState({
         sectionExpanded: !this.state.sectionExpanded
     });
   }
 
-  toggleMobileDetailsSectionShow(index){
-    return () => {
-      const index = oFetch(event.target, 'dataMobileSectionIndex');
-
-      let mergeValue = {};
-      mergeValue[index] = !this.state.listingsExpanded[index];
-
-      this.setState({
-        listingsExpanded: Object.assign({}, this.state.listingsExpanded, mergeValue)
-      });
-    }
-  }
-
   renderListings(staffMemberListings){
-    let index = 1;
-    const result = staffMemberListings.map((staffMemberListing) => {
-      let rowMarkup = this.renderListing({
-        index: index,
-        staffMemberListing: staffMemberListing
-      });
-      index = index + 1;
-      return rowMarkup;
+    return staffMemberListings.map((staffMemberListing, index) => {
+      return <StaffMemberListing key={index} staffMemberListing={staffMemberListing} />
     });
-    return result;
   }
 
   renderListing(options){
-    const index = oFetch(options, 'index')
-    const staffMemberListing = oFetch(options, 'staffMemberListing');
 
-    const name = oFetch(staffMemberListing, 'fullName');
-    const payRateString = oFetch(staffMemberListing, 'payrateDescription');
-    const hoursRotaed = oFetch(staffMemberListing, 'rotaedHours');
-    const rotaedCostCents = oFetch(staffMemberListing, 'rotaedCostCents');
-    const rotaedCostString = `£${rotaedCostCents / 100.0}`;
-    const hoursWorked = oFetch(staffMemberListing, 'workedHours');
-    const breakTimeHours = oFetch(staffMemberListing, 'breakHours')
-    const actualCostCents = oFetch(staffMemberListing, 'hourlyCostCents');
-    const actualCostString = `£${actualCostCents / 100.0}`;
-    const listingExpanded = oFetch(this.state, 'listingsExpanded')[index - 1];
 
-    return <div key={index} className="boss-table__group">
-      <div className="boss-table__row">
-        <div className="boss-table__cell">{name}</div>
-        <div className="boss-table__cell">{payRateString}</div>
-        <div className="boss-table__cell">{hoursRotaed}</div>
-        <div className="boss-table__cell">{rotaedCostString}</div>
-        <div className="boss-table__cell">{hoursWorked}</div>
-        <div className="boss-table__cell">{breakTimeHours}</div>
-        <div className="boss-table__cell">{actualCostString}</div>
-        <div className="boss-table__cell">
-          <div className="boss-table__details-switch boss-table__details-switch_state_closed" onClick={this.toggleMobileDetailsSectionShow(index).bind(this)}>Toggle Details</div>
-        </div>
-      </div>
-      <Collapse isOpened={listingExpanded}>
-        <div className="boss-table__details boss-table__details_state_visible-mobile boss-table__details_state_closed">
-          <div className="boss-table__details-inner">
-            <div className="boss-table__details-item">
-              <p className="boss-table__details-label">Pay rate</p>
-              <p className="boss-table__details-value">{payRateString}</p>
-            </div>
-            <div className="boss-table__details-item">
-              <p className="boss-table__details-label">Hours Rotaed</p>
-              <p className="boss-table__details-value">{hoursRotaed}</p>
-            </div>
-            <div className="boss-table__details-item">
-              <p className="boss-table__details-label">Rotaed Cost</p>
-              <p className="boss-table__details-value">{rotaedCostString}</p>
-            </div>
-            <div className="boss-table__details-item">
-              <p className="boss-table__details-label">Hours Worked</p>
-              <p className="boss-table__details-value">{hoursWorked}</p>
-            </div><div className="boss-table__details-item">
-              <p className="boss-table__details-label">Break Time (Hours)</p>
-              <p className="boss-table__details-value">{breakTimeHours}</p>
-            </div><div className="boss-table__details-item">
-              <p className="boss-table__details-label">Actual Cost</p>
-              <p className="boss-table__details-value">{actualCostString}</p>
-            </div>
-          </div>
-        </div>
-      </Collapse>
-    </div>;
+    return ;
   }
 
   render() {
@@ -127,11 +55,11 @@ class StaffTypeBoard extends React.Component {
             <span className="boss-board__title-text">Actual Cost: <span className="boss-board__title-text-marked">{`£${actualCostCents / 100.0}`}</span></span>
           </span>
         </h2>
-        <div className="boss-board__button-group" onClick={this.toggleSectionHidden.bind(this)}>
+        <div className="boss-board__button-group" onClick={this.toggleSectionHidden}>
           <button type="button" className={`boss-board__switch ${this.state.sectionExpanded && "boss-board__switch_state_opened"}`}></button>
         </div>
       </header>
-      <Collapse isOpened={this.state.sectionExpanded} hasNestedCollapse={true} className="boss-board__content">
+      <Collapse isOpened={this.state.sectionExpanded} hasNestedCollapse={true} className="boss-board__content" style={{display: 'block'}}>
         <div className="boss-board__content-inner">
           <div className="boss-board__table">
             <div className="boss-table boss-table_page_daily-reports">
