@@ -14,6 +14,11 @@ function replaceFunctionPropsWithStrings(obj){
 }
 
 var utils =  {
+    parseHTML(html) {
+      const div = document.createElement("div");
+      div.innerHTML = html;
+      return div.textContent || div.innerText || "";
+    },
     calculateStaffRotaShift: function(staffMember, shifts, rotas, venues) {
       const weekRotaShifts = shifts
         .filter(shift => shift.get('staff_member') === staffMember.get('id'))

@@ -1,7 +1,6 @@
 import React from 'react';
 import { SubmissionError } from 'redux-form/immutable';
 import { fromJS } from 'immutable';
-import RichTextEditor from 'react-rte';
 import RotaDate from "~/lib/rota-date.js";
 import moment from 'moment';
 import safeMoment from "~/lib/safe-moment";
@@ -11,6 +10,13 @@ import IncidentReportForm from '../../components/incident-report-form';
 import {
   saveIncidentReport,
 } from '../actions';
+
+
+function parseHTML(html) {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.textContent || div.innerText || "";
+}
 
 function EditIncidentReport({incidentReport}) {
 
@@ -23,12 +29,12 @@ function EditIncidentReport({incidentReport}) {
     time: safeMoment.iso8601Parse(incidentReport.incidentTime),
     location: incidentReport.location,
     description: incidentReport.description,
-    involvedWitnessDetails: RichTextEditor.createValueFromString(incidentReport.involvedWitnessDetails, 'html'),
+    involvedWitnessDetails: parseHTML(incidentReport.involvedWitnessDetails),
     recordedByName: incidentReport.recordedByName,
     cameraName: incidentReport.cameraName,
-    report: RichTextEditor.createValueFromString(incidentReport.report, 'html'),
-    uninvolvedWitnessDetails: RichTextEditor.createValueFromString(incidentReport.uninvolvedWitnessDetails, 'html'),
-    policeOfficerDetails: RichTextEditor.createValueFromString(incidentReport.policeOfficerDetails, 'html'),
+    report: parseHTML(incidentReport.report),
+    uninvolvedWitnessDetails: parseHTML(incidentReport.uninvolvedWitnessDetails),
+    policeOfficerDetails: parseHTML(incidentReport.policeOfficerDetails),
   }
 
   function submission(values, dispatch) {

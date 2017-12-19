@@ -4,10 +4,13 @@ import { fromJS, Map, List } from 'immutable';
 
 import {
   InputInlineField,
-  TextareaField,
   InputField,
   DateTimeField,
 } from './form-fields';
+
+import {
+  BossFormTextArea,
+} from '~/components/boss-form';
 
 function IncidentReportForm({
   handleSubmit,
@@ -38,19 +41,19 @@ function IncidentReportForm({
         name="uninvolvedWitnessDetails"
         label="Details of Witnesses not directly Involved in the Incident"
         note="(Please include Name, Phone number, and Badge number if applicable)"
-        component={TextareaField}
+        component={BossFormTextArea}
       />
       <Field
         name="involvedWitnessDetails"
         label="Details of Witness Involved in the Incident"
         note="(Please include Name, Phone number, and Badge number if applicable)"
-        component={TextareaField}
+        component={BossFormTextArea}
       />
       <Field
         name="policeOfficerDetails"
         label="Details of Police Officers in attendance"
         note="(Please include Name, Rank, and Collar number if applicable)"
-        component={TextareaField}
+        component={BossFormTextArea}
       />
       <Field
         name="recordedByName"
@@ -65,7 +68,7 @@ function IncidentReportForm({
       <Field
         name="report"
         label="Report"
-        component={TextareaField}
+        component={BossFormTextArea}
       />
       <div className="boss-form__field boss-form__field_justify_end-center">
         <button
