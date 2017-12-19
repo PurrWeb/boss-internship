@@ -6,13 +6,11 @@ import StaffTypeBoard from '../components/staff-type-board';
 
 class DailyReports extends React.Component {
   noContentMessage(){
-    return <section className="boss-board boss-board_context_stack">
-      <div className="boss-board__main">
-        <div className="boss-board__overview">
-          <p>No report exists for this date.</p>
-        </div>
+    return <div className="boss-page-main__note">
+      <div className="boss-page-main__text-placeholder">
+        <p>No report exists for this date.</p>
       </div>
-    </section>
+    </div>;
   }
 
   reportUpdatePendingMessage() {
