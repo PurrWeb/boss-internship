@@ -5,6 +5,6 @@
         venueId: venue.id,
         venueName: venue.name,
         weekStartDate: UIRotaDate.format(RotaWeek.new(date).start_date),
-        dailyReport: Api::V1::DailyReportSerializer.new(daily_report).as_json
+        dailyReport: daily_report && Api::V1::DailyReportSerializer.new(daily_report).as_json
       }
     ) %>

@@ -37,7 +37,7 @@ class DailyReports extends React.Component {
     let dateM = oFetch(this.props, 'dateM');
     let weekStartDateM = oFetch(this.props, 'weekStartDateM');
     const dailyReport = oFetch(this.props, 'dailyReport');
-    const reportUpdatePending = dailyReport.isUpdatePending;
+    const reportUpdatePending = dailyReport && dailyReport.isUpdatePending;
 
     return ( 
       <main className="boss-page-main">
