@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default (props) => {
+export default function StaffDayAside(props) {
 
   let {
     staffMember,
@@ -40,8 +40,8 @@ export default (props) => {
         <span className="boss-user-badge__avatar-icon boss-user-badge__avatar-icon_status_offline">Status</span>
       </div>
       <div className="boss-user-badge__info">
-        <h2 className="boss-user-badge__name"> {staffMember.first_name} {staffMember.surname}</h2>
-        <span style={{backgroundColor: `${staffTypeObject.color}`}} className="boss-button boss-button_type_small boss-button_role_supervisor boss-user-badge__label"> {staffTypeObject.name} </span>
+        <h2 className="boss-user-badge__name">{staffMember.first_name} {staffMember.surname}</h2>
+        <span style={{backgroundColor: `${staffTypeObject.color}`}} className="boss-button boss-button_type_small boss-button_role_supervisor boss-user-badge__label">{staffTypeObject.name}</span>
       </div>
     </div>
     <ul className="boss-user-badge__meta">
