@@ -12,7 +12,7 @@ const SELF_REQUESTABLE_OPTIONS = [
 ];
 
 const STATUS_OPTIONS = [
-  {value: 'enabled', label: 'Endabled'},
+  {value: 'enabled', label: 'Enabled'},
   {value: 'disabled', label: 'Disabled'},
 ];
 

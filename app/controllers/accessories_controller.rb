@@ -19,11 +19,13 @@ class AccessoriesController < ApplicationController
     venue = venue_from_params || current_user.default_venue
     {
       venue_id: venue.id,
+      status: "enabled"
     }
   end
 
   def index_params_present?
-    venue_from_params.present?
+    venue_from_params.present? &&
+    params[:status].present?
   end
 
   def accessible_venues
