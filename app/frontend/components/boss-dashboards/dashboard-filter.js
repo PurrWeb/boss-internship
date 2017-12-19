@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Collapse} from 'react-collapse';
 
 class DashboardFilter extends React.Component {
   state = {
@@ -12,9 +13,11 @@ class DashboardFilter extends React.Component {
 
   renderFilterContent(FilterContentComponent) {
     return (
-      <div className="boss-dropdown__content" style={{display: this.state.isOpen ? 'block' : ''}}>
+      <div id="filter-content" className="boss-dropdown__content" style={{display: 'block'}}>
         <div className="boss-dropdown__content-inner">
-          <FilterContentComponent onFilter={this.props.onFilter} />
+          <Collapse isOpened={this.state.isOpen}>
+            <FilterContentComponent onFilter={this.props.onFilter} />
+          </Collapse>
         </div>
       </div>
     )
