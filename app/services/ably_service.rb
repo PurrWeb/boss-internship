@@ -172,11 +172,18 @@ class AblyService
     managers_channel.publish("data", message)
   end
 
-  def client
-    AblyService.client
+  def request_token(staff_member:)
+    capability = SecurityAppUpdateService.capability(staff_member: staff_member)
+
+    client.auth.request_token({
+      ttl: 5,
+      client_id: "#{staff_member.id}",
+      capability: capability,
+    })
   end
 
-  def self.client
-    @@client ||= Ably::Rest.new(key: ENV.fetch("ABLY_API_KEY"))
+  private
+  def client
+    @client ||= Ably::Rest.new(key: ENV.fetch("ABLY_API_KEY"))
   end
 end

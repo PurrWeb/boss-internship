@@ -64,13 +64,7 @@ module Api
         end
 
         def ably_auth
-          capability = SecurityAppUpdateService.capability(staff_member: current_staff_member)
-
-          token_request = AblyService.client.auth.request_token({
-            ttl: 5,
-            client_id: "#{current_staff_member.id}",
-            capability: capability,
-          })
+          token_request = AblyService.new.request_token(staff_member: staff_member)
           render json: token_request, status: 200
         end
 
