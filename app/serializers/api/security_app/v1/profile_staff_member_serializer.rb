@@ -44,7 +44,7 @@ class Api::SecurityApp::V1::ProfileStaffMemberSerializer < ActiveModel::Serializ
   end
 
   def siaBadgeExpiryDate
-    UIRotaDate.format(object.sia_badge_expiry_date)
+    object.sia_badge_expiry_date && UIRotaDate.format(object.sia_badge_expiry_date)
   end
 
   def siaBadgeNumber
