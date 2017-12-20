@@ -78,6 +78,7 @@ RSpec.describe 'Update Employment Details' do
   before do
     old_master_venue
     pay_rates
+    use_dummy_ably_service
     set_authorization_header(access_token.token)
   end
 

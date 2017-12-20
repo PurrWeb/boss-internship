@@ -39,6 +39,9 @@ import './vendors/owl.carousel';
 
 import "./lib/load-underscore-mixins"
 
+import DevsApp from "./apps/devs";
+registerComponent("DevsApp", DevsApp);
+
 import StaffMemberPasswordReset from "./apps/staff-member-password-reset";
 registerComponent("StaffMemberPasswordReset", StaffMemberPasswordReset);
 
@@ -157,7 +160,7 @@ registerComponent("VouchersRedeemApp", VouchersRedeemApp);
 $(document).ready(function(){
     if (window.boss.currentLayout !== 'oldLayout') {
       initMobileMenu();
-    }  
+    }
     let versionCheckerEl = document.createElement("div");
     document.body.appendChild(versionCheckerEl);
     let fiveMinutes = 5 * 60 * 1000;

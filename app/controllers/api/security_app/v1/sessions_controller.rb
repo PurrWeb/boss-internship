@@ -2,8 +2,8 @@ module Api
   module SecurityApp
     module V1
       class SessionsController < SecurityAppController
-        before_action :security_app_api_token_athenticate!, except: [:new, :forgot_password]
-        skip_before_filter :parse_access_tokens, only: [:new, :forgot_password]
+        before_action :security_app_api_token_athenticate!, except: [:new, :forgot_password, :renew]
+        skip_before_filter :parse_access_tokens, only: [:new, :forgot_password, :renew]
 
         def new
           staff_member = authenticate_staff_member
@@ -21,11 +21,30 @@ module Api
               }
             }, status: 403
           else
+            renew_token = SecurityAppApiRenewToken.issue_new_token!(staff_member)
             access_token = staff_member.current_security_app_access_token || SecurityAppApiAccessToken.new(staff_member: staff_member).persist!
-            response.headers['TOKEN'] = access_token.token
 
             render json: {
-              token: access_token.token,
+              authToken: access_token.token,
+              renewToken: renew_token.token,
+              expiresAt: access_token.expires_at.utc.iso8601
+            }, status: 200
+          end
+        end
+
+        def renew
+          renewalToken = SecurityAppApiRenewToken.find_by_token(token: params.fetch("renewalToken"))
+          if !renewalToken
+            return render json: {}, status: 403
+          else
+            staff_member = renewalToken.staff_member
+            new_renewalToken = SecurityAppApiRenewToken.issue_new_token!(staff_member)
+            SecurityAppApiAccessToken.revoke!(staff_member: staff_member)
+            access_token = SecurityAppApiAccessToken.new(staff_member: staff_member).persist!
+
+            render json: {
+              authToken: access_token.token,
+              renewToken: renewalToken.token,
               expiresAt: access_token.expires_at.utc.iso8601
             }, status: 200
           end
@@ -42,6 +61,17 @@ module Api
           end
 
           render json: {}, status: 200
+        end
+
+        def ably_auth
+          capability = SecurityAppUpdateService.capability(staff_member: current_staff_member)
+
+          token_request = AblyService.client.auth.request_token({
+            ttl: 5,
+            client_id: "#{current_staff_member.id}",
+            capability: capability,
+          })
+          render json: token_request, status: 200
         end
 
         private

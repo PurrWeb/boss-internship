@@ -5,8 +5,12 @@ RSpec.describe do
   let(:service) do
     EditRotaShift.new(
       rota_shift: rota_shift,
-      rota_shift_params: rota_shift_params
+      rota_shift_params: rota_shift_params,
+      frontend_updates: frontend_updates
     )
+  end
+  let(:frontend_updates) do
+    double 'frontend updates'
   end
   let(:rota) do
     FactoryGirl.create(
@@ -25,6 +29,10 @@ RSpec.describe do
   end
   let(:staff_member) { FactoryGirl.create(:staff_member) }
 
+  before do
+    allow(frontend_updates).to receive(:update_shift)
+  end
+
   context 'before call' do
     specify 'staff member does not require notification' do
       expect(staff_member.requires_notification?).to eq(false)
@@ -38,6 +46,11 @@ RSpec.describe do
         starts_at: RotaShiftDate.new(week.start_date).start_time + 2.hours,
         ends_at: RotaShiftDate.new(week.start_date).start_time + 4.hours
       }
+    end
+
+    specify 'should register shift update' do
+      expect(frontend_updates).to receive(:update_shift).with(shift: rota_shift)
+      service.call
     end
 
     specify 'staff member does not require notification' do
@@ -86,6 +99,11 @@ RSpec.describe do
 
     it 'should succeed' do
       expect(result).to be_success
+    end
+
+    specify 'should register shift update' do
+      expect(frontend_updates).to receive(:update_shift).with(shift: rota_shift)
+      service.call
     end
 
     specify 'staff member is marked as requiring notification' do

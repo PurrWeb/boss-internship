@@ -1,8 +1,9 @@
 class DisableRotaShift
-  def initialize(requester:, shift:, notify_staff_member: true)
+  def initialize(requester:, shift:, notify_staff_member: true, frontend_updates:)
     @requester = requester
     @shift = shift
     @notify_staff_member = notify_staff_member
+    @frontend_updates = frontend_updates
   end
 
   def call
@@ -14,6 +15,7 @@ class DisableRotaShift
         disabled_by_user: requester,
         disabled_at: Time.zone.now
       )
+      frontend_updates.delete_shift(shift: shift)
 
       if notify_staff_member && shift.rota_published?
         shift.staff_member.mark_requiring_notification!
@@ -28,5 +30,5 @@ class DisableRotaShift
   end
 
   private
-  attr_reader :requester, :shift, :notify_staff_member
+  attr_reader :requester, :shift, :notify_staff_member, :frontend_updates
 end

@@ -41,6 +41,7 @@ RSpec.describe 'Disable Staff Members' do
 
   before do
     now
+    use_dummy_ably_service
     set_authorization_header(access_token.token)
   end
 

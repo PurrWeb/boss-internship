@@ -6,8 +6,19 @@ describe DisableRotaShift do
   let(:shift) { FactoryGirl.create(:rota_shift, staff_member: staff_member) }
   let(:staff_member) { FactoryGirl.create(:staff_member)}
   let(:user) { FactoryGirl.create(:user) }
-  let(:service) { DisableRotaShift.new(requester: user, shift: shift) }
+  let(:mock_frontend_update_service) { double('mock_frontend_update_service') }
+  let(:service) do
+    DisableRotaShift.new(
+      requester: user,
+      shift: shift,
+      frontend_updates: mock_frontend_update_service
+    )
+  end
   let(:call_time) { Time.zone.now.round }
+
+  before do
+    allow(mock_frontend_update_service).to receive(:delete_shift)
+  end
 
   context 'before call' do
     specify 'staff member should not require notification' do
@@ -18,6 +29,13 @@ describe DisableRotaShift do
   context 'after call' do
     specify 'staff member should not require notification' do
       expect(staff_member.reload.requires_notification?).to eq(false)
+    end
+
+    it 'should update the frontend' do
+      expect(mock_frontend_update_service).to(
+        receive(:delete_shift).with(shift: shift)
+      )
+      service.call
     end
 
     describe 'shift' do

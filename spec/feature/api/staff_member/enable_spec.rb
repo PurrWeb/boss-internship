@@ -109,8 +109,12 @@ RSpec.describe 'Enable Staff Members' do
   let(:old_county) { 'old County' }
   let(:new_email_address) { 'new.email@fake.com' }
   let(:old_email_address) { 'old.email@fake.com' }
+  let(:null_frontend_updates) { double(FrontendUpdates).as_null_object }
+  let(:null_ably_service) { double(AblyService).as_null_object }
 
   before do
+    use_dummy_ably_service
+
     now
     pay_rates
     travel_to(create_time) do
@@ -119,7 +123,8 @@ RSpec.describe 'Enable Staff Members' do
           requester: user,
           staff_member: sm,
           would_rehire: true,
-          disable_reason: 'nothing'
+          disable_reason: 'nothing',
+          frontend_updates: null_frontend_updates
         ).call
       end
     end

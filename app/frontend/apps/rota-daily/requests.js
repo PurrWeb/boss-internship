@@ -11,12 +11,12 @@ export const updateStaffMemberShiftRequest = (values) => {
 };
 
 export const deleteStaffMemberShiftRequest = (shift_id) => {
-  
+
   return http({successMessage: 'Rota Shift Deleted Successfully'}).delete(`/api/v1/rota_shifts/${shift_id}`);
 };
 
 export const addShiftRequest = (values, venueId, rotaDate) => {
-  
+
   return http({successMessage: 'Rota Shift Added Successfully'}).post(`/api/v1/venues/${venueId}/rotas/${rotaDate}/rota_shifts`, {
     ...values,
   });

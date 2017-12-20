@@ -62,6 +62,7 @@ RSpec.describe 'Update Personal Details' do
   let(:new_surname) { "Smitha" }
 
   before do
+    use_dummy_ably_service
     set_authorization_header(access_token.token)
   end
 

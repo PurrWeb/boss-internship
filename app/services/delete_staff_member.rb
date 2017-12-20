@@ -3,8 +3,9 @@ class DeleteStaffMember
     requester:,
     staff_member:,
     would_rehire:,
-    disable_reason: nil,
     nested: false,
+    frontend_updates:,
+    disable_reason: nil,
     now: Time.zone.now
   )
     @requester = requester
@@ -12,6 +13,7 @@ class DeleteStaffMember
     @now = now
     @would_rehire = would_rehire
     @disable_reason = disable_reason
+    @frontend_updates = frontend_updates
     @nested = nested
   end
 
@@ -35,7 +37,7 @@ class DeleteStaffMember
   end
 
   private
-  attr_reader :staff_member, :requester, :would_rehire, :disable_reason, :now, :nested
+  attr_reader :staff_member, :requester, :would_rehire, :disable_reason, :now, :nested, :frontend_updates
 
   def disable_staff_member
     staff_member.
@@ -62,6 +64,7 @@ class DeleteStaffMember
       DisableRotaShift.new(
         requester: requester,
         shift: shift,
+        frontend_updates: frontend_updates,
         notify_staff_member: false
       ).call
     end

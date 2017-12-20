@@ -167,6 +167,11 @@ Rails.application.routes.draw do
     resources :incident_reports, only: [:index, :show]
 
     resources :api_keys, only: [:index, :create, :destroy]
+    resource :dev, only: [] do
+      collection do
+        get :secruity_app_sse_test
+      end
+    end
 
     resources :hours_confirmation, only: [:index] do
       collection do
@@ -196,7 +201,9 @@ Rails.application.routes.draw do
           end
           resource :sessions, only: [] do
             post :new, path: 'new'
+            post :renew
             post :forgot_password, path: 'forgot-password'
+            get :ably_auth, path: 'ably-auth'
           end
         end
       end

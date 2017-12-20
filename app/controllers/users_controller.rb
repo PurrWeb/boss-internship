@@ -121,6 +121,7 @@ class UsersController < ApplicationController
       disable_reason: disable_staff_member_params.fetch("disable_reason")
     )
     if result
+      frontend_updates = FrontendUpdates.new
       disable_reason = form.disable_reason
       would_rehire = !ActiveRecord::Type::Boolean.new.type_cast_from_user(form.never_rehire)
 
@@ -128,8 +129,10 @@ class UsersController < ApplicationController
         requester: current_user,
         user: user,
         would_rehire: would_rehire,
-        disable_reason: disable_reason
+        disable_reason: disable_reason,
+        frontend_updates: frontend_updates
       ).call
+      frontend_updates.dispatch
 
       flash[:success] = "User disabled successfully"
       redirect_to users_path

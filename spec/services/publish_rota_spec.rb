@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe PublishRotas do
   include ActiveSupport::Testing::TimeHelpers
+  let(:mock_frontend_update_service) { double('mock_frontend_update_service') }
 
   around(:each) do |example|
     travel_to Time.zone.now do
@@ -9,8 +10,17 @@ describe PublishRotas do
     end
   end
 
-  let(:service) { PublishRotas.new(rotas: rotas) }
+  let(:service) do
+    PublishRotas.new(
+      rotas: rotas,
+      frontend_updates: mock_frontend_update_service
+    )
+  end
   let(:rotas) { [rota] }
+
+  before do
+    allow(mock_frontend_update_service).to receive(:publish_rota)
+  end
 
   context 'existing rotas' do
     let(:rota)  { FactoryGirl.create(:rota) }
@@ -21,6 +31,13 @@ describe PublishRotas do
       }.to change{
         rota.status
       }.from("in_progress").to("published")
+    end
+
+    it 'should update the frontend' do
+      expect(mock_frontend_update_service).to(
+        receive(:publish_rota).with(rota: rota)
+      )
+      service.call
     end
 
     specify 'not save the rota models' do

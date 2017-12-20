@@ -5,12 +5,14 @@ RSpec.describe 'DeleteUser service'  do
 
   let(:requester) { FactoryGirl.create(:user) }
   let(:user) { FactoryGirl.create(:user) }
+  let(:mock_frontend_update_service) { double('mock_frontend_update_service')}
   let(:service) do
     DeleteUser.new(
       requester: requester,
       user: user,
       would_rehire: would_rehire,
-      disable_reason: disable_reason
+      disable_reason: disable_reason,
+      frontend_updates: mock_frontend_update_service
     )
   end
   let(:would_rehire) { true }

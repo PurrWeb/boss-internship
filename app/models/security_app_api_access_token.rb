@@ -1,5 +1,5 @@
 class SecurityAppApiAccessToken
-  def initialize(token: nil, expires_at: nil, staff_member:)
+  def initialize(now: Time.current, token: nil, expires_at: nil, staff_member:)
     unless staff_member.verified?
       raise "Staff member with id: #{staff_member.id} not verified yet"
     end
@@ -14,7 +14,7 @@ class SecurityAppApiAccessToken
     if expires_at.present?
       @expires_at = expires_at.utc
     else
-      @expires_at = 30.minutes.from_now.utc
+      @expires_at = (now + 20.seconds).utc
     end
   end
 

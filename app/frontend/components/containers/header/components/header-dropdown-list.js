@@ -13,20 +13,20 @@ export const DropDownListItem = ({item, color}) => {
 
 export default ({items}) => {
   return <div className="boss-quick-access">
-    { items.map( (item, key) => 
+    { items.map( (item, key) =>
       <div className="boss-quick-access__group" key={key}>
         <div className="boss-quick-access__group-header">
           <h4 className="boss-quick-access__group-title" dangerouslySetInnerHTML={{__html: item.highlightedName || item.name}}></h4>
         </div>
         <div className="boss-quick-access__aliases">
-          { item.items.map( (childItem, key) => 
+          { item.items.map( (childItem, key) =>
             <div key={key} className="boss-quick-access__alias">
               <DropDownListItem item={childItem} color={item.color} />
             </div>
           )}
         </div>
       </div>
-      ) 
+      )
     }
   </div>
 }

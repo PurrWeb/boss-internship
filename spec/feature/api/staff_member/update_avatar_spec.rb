@@ -47,6 +47,7 @@ RSpec.describe 'Update Staff Member Avatar' do
 
   before do
     old_avatar_url
+    use_dummy_ably_service
     set_authorization_header(access_token.token)
   end
 

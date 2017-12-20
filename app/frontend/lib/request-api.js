@@ -7,7 +7,7 @@ export default function http({...messages}, interval) {
   if (!window.boss.accessToken) {
     throw Error("Access token must be present !!!");
   }
-  
+
   let instance = axios.create({
     headers: {'Authorization': `Token token="${window.boss.accessToken}"`}
   });
@@ -32,4 +32,4 @@ export default function http({...messages}, interval) {
   });
 
   return instance;
-} 
+}
