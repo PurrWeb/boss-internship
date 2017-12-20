@@ -177,6 +177,6 @@ class AblyService
   end
 
   def self.client
-    @@client ||= Ably::Rest.new(key: ENV["ABLY_API_KEY"])
+    @@client ||= Ably::Rest.new(key: ENV.fetch("ABLY_API_KEY"))
   end
 end
