@@ -4,36 +4,7 @@ class FrontendUpdates
     @security_app_update_service = security_app_update_service
   end
 
-  def dispatch(reraise_errors: false)
-    begin
-      created_shifts.each_value do |shift_data|
-        shift = shift_data.fetch(:shift)
-        if shift.rota_published?
-          security_app_update_service.create_shift(shift: shift)
-        end
-      end
-      shift_updates.each_value do |shift_data|
-        shift = shift_data.fetch(:shift)
-        if shift.rota_published?
-          security_app_update_service.update_shift(shift: shift)
-        end
-      end
-      shift_deletes.each_value do |shift_data|
-        shift = shift_data.fetch(:shift)
-        if shift.rota_published?
-          security_app_update_service.delete_shift(shift: shift)
-        end
-      end
-      staff_member_profile_updates.each_value do |update_data|
-        staff_member = update_data.fetch(:staff_member)
-        security_app_update_service
-          .update_staff_member_profile(staff_member: staff_member)
-      end
-      security_app_update_service.call
-    rescue Exception => e
-      Rollbar.error(e)
-      raise e if reraise_errors
-    end
+  def dispatch
   end
 
   def create_shift(shift:)
