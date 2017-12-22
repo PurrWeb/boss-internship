@@ -12,6 +12,9 @@ class DashboardMessage < ActiveRecord::Base
   validates :title, :message, :published_time, presence: true
   validates :venues, presence: true, if: Proc.new { |d| !d.to_all_venues? }
 
+  scope :disabled, -> { where.not(disabled_at: nil) }
+  scope :enabled, -> { where(disabled_at: nil) }
+
   def status
     if disabled_at.present? || disabled_by_user.present?
       STATUS_DISABLED
