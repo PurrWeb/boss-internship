@@ -16,8 +16,9 @@ export default class RotaChart extends Component {
     }
     render(){
         var chartBoundaries = calculateChartBoundaries(this.props.rotaShifts);
+
         return <RotaChartInner
-            rotaShifts={this.props.rotaShifts}
+            rotaShifts={_(this.props.rotaShifts).sortBy((item) => item.starts_at)}
             startTime={chartBoundaries.start}
             endTime={chartBoundaries.end}
             staff={this.props.staff}
