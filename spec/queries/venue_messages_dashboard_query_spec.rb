@@ -11,7 +11,7 @@ describe VenueMessagesDashboardQuery do
     VenueMessagesDashboardQuery.new(venue: venue)
   end
 
-  let(:dashboard_message) do
+  let(:dashboard_messages) do
     FactoryGirl.create_list(:dashboard_message, 10, created_by_user: user, venues: [venue])
   end
 
@@ -23,7 +23,7 @@ describe VenueMessagesDashboardQuery do
 
   context 'dashboard messages' do
     before do
-      dashboard_message
+      dashboard_messages
     end
 
     specify 'query should return messages' do
@@ -32,7 +32,7 @@ describe VenueMessagesDashboardQuery do
 
     specify "query should return -1 message after disable" do
       expect(query.all.count).to eq(10)
-      dashboard_message.last.disable(user)
+      dashboard_messages.last.disable(user)
       expect(query.all.count).to eq(9)
     end
   end
