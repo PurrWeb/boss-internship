@@ -1,4 +1,6 @@
 class VenueMessagesDashboardQuery
+  MESSAGE_DISPLAY_LIMIT = 10
+
   def initialize(venue:)
     @venue = venue
   end
@@ -10,7 +12,7 @@ class VenueMessagesDashboardQuery
 
     messages = messages.select do |message|
       message.published_time < Time.now
-    end[0..9]
+    end[0..(MESSAGE_DISPLAY_LIMIT - 1)]
   end
 
   private
