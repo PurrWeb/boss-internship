@@ -41,6 +41,8 @@ class Venue < ActiveRecord::Base
     end
   end
 
+  auto_strip_attributes :change_order_site_id, delete_whitespaces: true
+
   # Instance Methods
   [:till_float, :safe_float].each do |field_prefix|
     define_method "#{field_prefix}_pound_value" do
