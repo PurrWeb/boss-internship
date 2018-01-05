@@ -7,21 +7,21 @@ import Tooltip from '~/components/boss-form/tooltip';
 export default class BossFormCalculatedInput extends React.Component {
   handleChange = (maskedvalue, floatvalue) => {
     this.props.input.onChange(floatvalue);
-  }   
+  }
 
   render() {
     const {
       label,
       tooltip = '',
-      calculated = 0,
+      calculatedCents = 0,
       disabled = false,
       unit = '£',
       input: { onBlur, value, onChange, name },
       meta: { touched, error, warning },
     } = this.props;
     let calculatedValue = '-';
-    if (calculated !== null) {
-      calculatedValue = `${unit}${numeral(calculated / 100).format('0,0.00')}`;
+    if (calculatedCents !== null) {
+      calculatedValue = `${unit}${numeral(calculatedCents / 100).format('0,0.00')}`;
     }
 
     return(

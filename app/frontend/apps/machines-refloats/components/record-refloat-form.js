@@ -1,5 +1,5 @@
 import React from "react"
-import machineRefloatCalculation from "~/lib/machine-refloat-calculation"
+import { machineRefloatCalculationFromReadings } from "~/lib/machine-refloat-calculation"
 import oFetch from "o-fetch"
 import {
   Field,
@@ -14,8 +14,8 @@ import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormTextarea from '~/components/boss-form/boss-form-textarea';
 import BossInput from '~/components/boss-form/boss-form-input';
 import BossFormCalculatedInput from '~/components/boss-form/boss-form-calculated-input';
-class RecordRefloatForm extends React.Component {
 
+class RecordRefloatForm extends React.Component {
   render() {
     const {
       selectedMachine,
@@ -34,7 +34,7 @@ class RecordRefloatForm extends React.Component {
 
     const errors = submitErrors && submitErrors.toJS();
 
-    let calculatedValues = machineRefloatCalculation({
+    let calculatedValues = machineRefloatCalculationFromReadings({
       selectedMachine: selectedMachine,
       lastMachineRefloat: lastMachineRefloat,
       refillX10p: refillX10p || null,
@@ -43,8 +43,8 @@ class RecordRefloatForm extends React.Component {
     });
 
     let topupAndBankedCanEdit = oFetch(calculatedValues, 'topupAndBankedCanEdit');
-    let calculatedFloatTopup = oFetch(calculatedValues, 'calculatedFloatTopupCents') / 100;
-    let calculatedMoneyBanked = oFetch(calculatedValues, 'calculatedMoneyBankedCents') / 100;
+    let calculatedFloatTopupCents = oFetch(calculatedValues, 'calculatedFloatTopupCents');
+    let calculatedMoneyBankedCents = oFetch(calculatedValues, 'calculatedMoneyBankedCents');
 
     return (
       <form
@@ -80,7 +80,7 @@ class RecordRefloatForm extends React.Component {
           label="Float Topup"
           tooltip="How much the float was topped up after readings."
           disabled={!topupAndBankedCanEdit}
-          calculated={calculatedFloatTopup}
+          calculatedCents={calculatedFloatTopupCents}
           component={BossFormCalculatedInput}
         />
         <Field
@@ -94,7 +94,7 @@ class RecordRefloatForm extends React.Component {
           label="Money Banked"
           disabled={!topupAndBankedCanEdit}
           tooltip="How much money was taken from the machine after readings."
-          calculated={calculatedMoneyBanked}
+          calculatedCents={calculatedMoneyBankedCents}
           component={BossFormCalculatedInput}
         />
         <Field
