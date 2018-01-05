@@ -1,5 +1,5 @@
 import oFetch from 'o-fetch'
-import machineRefloatCalculation from "~/lib/machine-refloat-calculation"
+import { machineRefloatCalculationFromReadings } from "~/lib/machine-refloat-calculation"
 
 describe("machineRefloatCalculation()", () => {
   describe("when machine starts with no topup", () => {

@@ -1,5 +1,5 @@
 import React from "react"
-import machineRefloatCalculation from "~/lib/machine-refloat-calculation"
+import { machineRefloatCalculationFromReadings } from "~/lib/machine-refloat-calculation"
 import oFetch from "o-fetch"
 import {
   Field,
@@ -14,8 +14,8 @@ import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormTextarea from '~/components/boss-form/boss-form-textarea';
 import BossInput from '~/components/boss-form/boss-form-input';
 import BossFormCalculatedInput from '~/components/boss-form/boss-form-calculated-input';
-class RecordRefloatForm extends React.Component {
 
+class RecordRefloatForm extends React.Component {
   render() {
     const {
       selectedMachine,
@@ -34,7 +34,7 @@ class RecordRefloatForm extends React.Component {
 
     const errors = submitErrors && submitErrors.toJS();
 
-    let calculatedValues = machineRefloatCalculation({
+    let calculatedValues = machineRefloatCalculationFromReadings({
       selectedMachine: selectedMachine,
       lastMachineRefloat: lastMachineRefloat,
       refillX10p: refillX10p || null,

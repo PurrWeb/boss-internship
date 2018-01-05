@@ -5,6 +5,7 @@ import URLSearchParams from 'url-search-params';
 import utils from '~/lib/utils';
 import safeMoment from "~/lib/safe-moment";
 import numeral from 'numeral';
+import { calculateRefloatValues, machineRefloatCalculationFromRefloatValues } from "~/lib/machine-refloat-calculation";
 import MachinesReportsItemStat from './machines-reports-item-stat';
 import MachineRefloatIndexReadingsDropdown from './machine-refloat-index-readings-dropdown';
 import oFetch from 'o-fetch';
@@ -73,51 +74,54 @@ export function MachinesRefloatsItem({machineRefloat, machine}) {
   machine = machine.toJS();
   machineRefloat = machineRefloat.toJS();
 
-  const machineFloatCents = oFetch(machine, 'floatCents');
-  const initialCashInCents = oFetch(machine, 'cashInX10p') * 10;
-  const initialCashOutCents = oFetch(machine, 'cashOutX10p') * 10;
-  const initialRefillCents = oFetch(machine, 'refillX10p') * 10;
-  const floatTopupCents = oFetch(machineRefloat, 'floatTopupCents');
-  const moneyBankedCents = oFetch(machineRefloat, 'moneyBankedCents');
-  const refillCents = oFetch(machineRefloat, 'refillX10p') * 10;
-  const cashInCents = oFetch(machineRefloat, 'cashInX10p') * 10;
-  const cashOutCents = oFetch(machineRefloat, 'cashOutX10p') * 10;
-  const lastRefillCents = oFetch(machineRefloat, 'lastRefillCents') * 10;
-  const lastCashInCents = oFetch(machineRefloat, 'lastCashInCents') * 10;
-  const lastCashOutCents = oFetch(machineRefloat, 'lastCashOutCents') * 10;
-  const lastCalculatedFloatTopupCents = oFetch(machineRefloat, 'calculatedFloatTopupCents');
-  const lastCalculatedMoneyBankedCents = oFetch(machineRefloat, 'calculatedMoneyBankedCents');
-  const refillDiffCents = refillCents - lastRefillCents;
-  const cashInDiffCents = cashInCents - lastCashInCents;
-  const cashOutDiffCents = cashOutCents - lastCashOutCents;
-  const cashInDiff = numeral(cashInDiffCents / 100).format('0,0.00');
-  const cashOutDiff = numeral(cashOutDiffCents / 100).format('0,0.00');
-  const refillReading = oFetch(machineRefloat, 'refillX10p');
-  const cashInReading = oFetch(machineRefloat, 'cashInX10p');
-  const cashOutReading = oFetch(machineRefloat, 'cashOutX10p');
+  const refloatValues = calculateRefloatValues({machineRefloat: machineRefloat, selectedMachine: machine});
+
+  const refillX10p = oFetch(refloatValues, 'refillX10p');
+  const cashInX10p = oFetch(refloatValues, 'cashInX10p');
+  const cashOutX10p = oFetch(refloatValues, 'cashOutX10p');
+
+  const calculatedValues = machineRefloatCalculationFromRefloatValues({
+    refloatValues: refloatValues
+  });
+
+  const calculatedFloatTopupCents = oFetch(calculatedValues, 'calculatedFloatTopupCents');
+  const calculatedMoneyBankedCents = oFetch(calculatedValues, 'calculatedMoneyBankedCents');
+
+  const floatTopupCents = oFetch(refloatValues, 'floatTopupCents');
   const lastFloatTopup = numeral(floatTopupCents / 100).format('0,0.00');
-  const lastMoneyBanked = numeral(moneyBankedCents / 100).format('0,0.00');
-  const refillSinceStartCents = refillCents - initialRefillCents;
-  const cashOutSinceStartCents = cashOutCents - initialCashOutCents;
-  const currentFloatCents = machineFloatCents + refillSinceStartCents + floatTopupCents - cashOutSinceStartCents;
-  const currentFloat = numeral(currentFloatCents / 100).format('0,0.00');
-
-  let lastFloatTopupDiff = lastCalculatedFloatTopupCents - floatTopupCents;
-  let lastMoneyBankedDiff = lastCalculatedMoneyBankedCents - moneyBankedCents;
-  const currentFloatDiffCents = machineFloatCents - currentFloatCents;
-
+  const floatTopupDiff = calculatedFloatTopupCents - floatTopupCents;
   let lastFloatTopupExtra = null;
-  if (lastFloatTopupDiff !== 0) {
+  if (floatTopupDiff !== 0) {
     lastFloatTopupExtra = `£${numeral(lastFloatTopupDiff / 100).format('0,0.00')}`;
   }
+
+  const moneyBankedCents = oFetch(machineRefloat, 'moneyBankedCents');
+
+  const lastMoneyBanked = numeral(moneyBankedCents / 100).format('0,0.00');
+  const moneyBankedDiff = calculatedMoneyBankedCents - moneyBankedCents;
   let lastMoneyBankedExtra = null;
-  if (lastMoneyBankedDiff !== 0) {
-    lastMoneyBankedExtra = `£${numeral(lastMoneyBankedDiff / 100).format('0,0.00')}`;
+  if (moneyBankedDiff !== 0) {
+    lastMoneyBankedExtra = `£${numeral(moneyBankedDiff / 100).format('0,0.00')}`;
   }
+
+
+  const currentFloatCents = oFetch(refloatValues, 'currentFloatCents');
+  const currentFloat = numeral(currentFloatCents / 100).format('0,0.00');
+
+  const cashInDiffCents = oFetch(refloatValues, 'cashInDiffCents');
+  const cashInDiff = numeral(cashInDiffCents / 100).format('0,0.00');
+
+  const cashOutDiffCents = oFetch(refloatValues, 'cashOutDiffCents');
+  const cashOutDiff = numeral(cashOutDiffCents / 100).format('0,0.00');
+
+  const currentFloatDiffCents = oFetch(refloatValues, 'currentFloatDiffCents');
   let currentFloatExtra = null;
   if (currentFloatDiffCents !== 0) {
     currentFloatExtra = `£${numeral(currentFloatDiffCents / 100).format('0,0.00')}`;
   }
+
+  let calculatedFloatTopup = calculatedFloatTopupCents / 100;
+  let calculatedMoneyBanked = calculatedMoneyBankedCents / 100;
 
   const floatTopupNote = oFetch(machineRefloat, 'floatTopupNote');
   const moneyBankedNote = oFetch(machineRefloat, 'moneyBankedNote');
@@ -128,9 +132,9 @@ export function MachinesRefloatsItem({machineRefloat, machine}) {
         <MachineRefloatsItemMeta machineRefloat={machineRefloat} machine={machine} />
         <MachinesReportsItemBoard boardClasses="boss-report__group_role_board">
           <MachineRefloatIndexReadingsDropdown
-            refillReading={refillReading}
-            cashInReading={cashInReading}
-            cashOutReading={cashOutReading} />
+            refillReading={refillX10p}
+            cashInReading={cashInX10p}
+            cashOutReading={cashOutX10p} />
         </MachinesReportsItemBoard>
         <MachinesReportsItemBoard boardClasses="boss-report__group_role_middle">
           <div className="boss-report__stats">
@@ -194,12 +198,12 @@ export default function MachinesRefloatsList({
   machinesRefloats = [],
   machines = [],
   pageCount,
-  currentPage,
+  currentPage
 }) {
   const renderMachines = (machines) => {
     return machinesRefloats.map((machineRefloat, index) => {
       const machine = machines.find(machine => machine.get('id') === machineRefloat.get('machineId'));
-      return <MachinesRefloatsItem key={index} machine={machine} machineRefloat={machineRefloat}/>
+      return <MachinesRefloatsItem key={index} machine={machine} machineRefloat={machineRefloat} />
     });
   }
   const handleChangePage = (value) => {
