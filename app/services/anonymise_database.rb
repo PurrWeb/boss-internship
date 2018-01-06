@@ -73,10 +73,14 @@ class AnonymiseDatabase
 
         while !success do
           new_venue_name = FactoryHelper::Commerce.color.titlecase
+          new_site_id = FactoryHelper::Code.isbn
 
           if !used_venue_names.include?(new_venue_name)
             used_venue_names << new_venue_name
-            venue.update_attributes!(name: new_venue_name)
+            venue.update_attributes!(
+              name: new_venue_name,
+              change_order_site_id: new_site_id
+            )
             success = true
           end
         end
