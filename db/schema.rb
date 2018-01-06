@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171129125317) do
+ActiveRecord::Schema.define(version: 20180106131152) do
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255
@@ -1004,16 +1004,17 @@ ActiveRecord::Schema.define(version: 20171129125317) do
   add_index "venue_users", ["enabled"], name: "index_venue_users_on_enabled", using: :btree
 
   create_table "venues", force: :cascade do |t|
-    t.string   "name",               limit: 255
+    t.string   "name",                 limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "creator_id",         limit: 4
-    t.text     "fruit_order_fields", limit: 65535
-    t.integer  "till_float_cents",   limit: 4,                              null: false
-    t.integer  "safe_float_cents",   limit: 4,                              null: false
-    t.string   "rollbar_guid",       limit: 255,                            null: false
-    t.decimal  "latitude",                         precision: 10, scale: 6
-    t.decimal  "longitude",                        precision: 10, scale: 6
+    t.integer  "creator_id",           limit: 4
+    t.text     "fruit_order_fields",   limit: 65535
+    t.integer  "till_float_cents",     limit: 4,                              null: false
+    t.integer  "safe_float_cents",     limit: 4,                              null: false
+    t.string   "rollbar_guid",         limit: 255,                            null: false
+    t.decimal  "latitude",                           precision: 10, scale: 6
+    t.decimal  "longitude",                          precision: 10, scale: 6
+    t.string   "change_order_site_id", limit: 255
   end
 
   add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree

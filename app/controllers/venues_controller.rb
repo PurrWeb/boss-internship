@@ -56,7 +56,8 @@ class VenuesController < ApplicationController
       permit(
         :name,
         :longitude,
-        :latitude
+        :latitude,
+        :change_order_site_id
       ).merge(
         creator: current_user,
         fruit_order_fields: fruit_order_fields_from_params
@@ -70,7 +71,8 @@ class VenuesController < ApplicationController
       permit(
         :name,
         :longitude,
-        :latitude
+        :latitude,
+        :change_order_site_id
       ).merge(
         fruit_order_fields: fruit_order_fields_from_params
       ).merge(

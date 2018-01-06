@@ -29,11 +29,13 @@ class ChangeOrderCompletionPDF
   def page_width
     margin_width = 20
     venue_name_column_width = 25
+    site_id_column_width = 22
     amout_column_width = 20
     total_colum_width = 20
 
     margin_width +
       venue_name_column_width +
+      site_id_column_width +
       (amout_column_width * 6) +
       total_colum_width
   end
@@ -58,6 +60,7 @@ class ChangeOrderCompletionPDF
   def heading_data
     [
       "<b>Venue</b>",
+      "<b>Site ID</b>",
       "<b>£5</b>",
       "<b>£1</b>",
       "<b>50p</b>",
@@ -71,6 +74,7 @@ class ChangeOrderCompletionPDF
   def change_order_row_data(change_order)
     [
       change_order.venue.name.titlecase,
+      change_order.venue.change_order_site_id || "",
         number_to_currency(
           change_order.five_pound_notes,
           unit: '£',
