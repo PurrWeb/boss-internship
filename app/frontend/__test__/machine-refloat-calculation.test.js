@@ -1,7 +1,7 @@
 import oFetch from 'o-fetch'
 import { machineRefloatCalculationFromReadings } from "~/lib/machine-refloat-calculation"
 
-describe("machineRefloatCalculation()", () => {
+describe("machineRefloatCalculationFromReadings()", () => {
   describe("when machine starts with no topup", () => {
     // £400
     let initialFloatCents = 40000
@@ -32,7 +32,7 @@ describe("machineRefloatCalculation()", () => {
       };
       it("should give null and not allow editing", () => {
 
-        let result = machineRefloatCalculation(options);
+        let result = machineRefloatCalculationFromReadings(options);
         expect(result).toEqual({
           calculatedFloatTopupCents: null,
           calculatedMoneyBankedCents: null,
@@ -51,7 +51,7 @@ describe("machineRefloatCalculation()", () => {
       };
       it("should give null and not allow editing", () => {
 
-        let result = machineRefloatCalculation(options);
+        let result = machineRefloatCalculationFromReadings(options);
         expect(result).toEqual({
           calculatedFloatTopupCents: null,
           calculatedMoneyBankedCents: null,
@@ -70,7 +70,7 @@ describe("machineRefloatCalculation()", () => {
       };
       it("should give null and not allow editing", () => {
 
-        let result = machineRefloatCalculation(options);
+        let result = machineRefloatCalculationFromReadings(options);
         expect(result).toEqual({
           calculatedFloatTopupCents: null,
           calculatedMoneyBankedCents: null,
@@ -89,7 +89,7 @@ describe("machineRefloatCalculation()", () => {
       };
       it("should give zero readings", () => {
 
-        let result = machineRefloatCalculation(options);
+        let result = machineRefloatCalculationFromReadings(options);
         expect(result).toEqual({
           calculatedFloatTopupCents: 0,
           calculatedMoneyBankedCents: 0,
@@ -115,7 +115,7 @@ describe("machineRefloatCalculation()", () => {
       };
 
       it("should give correct amounts", () => {
-        let result = machineRefloatCalculation(options);
+        let result = machineRefloatCalculationFromReadings(options);
 
         let expectedFloatTopupPounds = 100;
         let expectedMoneyBankedPounds = 500;
@@ -158,7 +158,7 @@ describe("machineRefloatCalculation()", () => {
         cashOutX10p: initialCashOutX10p
       };
 
-      let result = machineRefloatCalculation(options);
+      let result = machineRefloatCalculationFromReadings(options);
 
       expect(result).toEqual({
         calculatedFloatTopupCents: initialFloatTopupCents,
@@ -207,7 +207,7 @@ describe("machineRefloatCalculation()", () => {
           cashOutX10p: initialCashOutX10p
         };
 
-        let result = machineRefloatCalculation(options);
+        let result = machineRefloatCalculationFromReadings(options);
 
         expect(result).toEqual({
           calculatedFloatTopupCents: 0,
@@ -228,7 +228,7 @@ describe("machineRefloatCalculation()", () => {
       let refloat1FloatTopupCents = 10000;
       // £400
       let refloat1MoneyBankedCents = 40000;
-      let refloat1CalculatedValues = machineRefloatCalculation({
+      let refloat1CalculatedValues = machineRefloatCalculationFromReadings({
         selectedMachine: selectedMachine,
         lastMachineRefloat: null,
         refillX10p: refloat1RefillX10p,
@@ -259,7 +259,7 @@ describe("machineRefloatCalculation()", () => {
       let refloat2FloatTopupCents = 10000;
       // £500 (-£200)
       let refloat2MoneyBankedCents = 50000;
-      let refloat2CalculatedValues = machineRefloatCalculation({
+      let refloat2CalculatedValues = machineRefloatCalculationFromReadings({
         selectedMachine: selectedMachine,
         lastMachineRefloat: refloat1,
         refillX10p: refloat2RefillX10p,
@@ -290,7 +290,7 @@ describe("machineRefloatCalculation()", () => {
           cashOutX10p: refloat2CashOutX10p
         };
 
-        let result = machineRefloatCalculation(options);
+        let result = machineRefloatCalculationFromReadings(options);
 
         let expectedFloatTopupPounds = 100;
         let expectedMoneyBankedPounds = 200;
