@@ -16,7 +16,7 @@ class CompleteChangeOrders
 
       ChangeOrderNotificationMailer.
         completed_change_order_mail(
-          to: ['change@jsmbars.co.uk', 'mike@jsmbars.co.uk'],
+          to: ['change@jsmbars.co.uk'],
           change_order_ids: change_orders.pluck(:id)
         ).deliver_now
     end
