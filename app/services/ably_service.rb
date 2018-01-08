@@ -1,175 +1,34 @@
 class AblyService
   def security_app_data_update(updates:, deletes:)
-    updates_json = {
-      rotaShifts: {},
-      staffMembers: {},
-      rotaStaffMembers: {},
-      holidays: {},
-      venues: []
-    }
-
-    deletes_json = {
-      rotaShifts: {},
-      staffMembers: {},
-      rotaStaffMembers: {},
-      holidays: {},
-      venues: []
-    }
-
-    updates.each do |key, value|
-      case key
-      when :shifts
-        value.each_value do |shift|
-          staff_member = shift.staff_member
-          updates_json[:rotaShifts][staff_member.id] ||= []
-          updates_json[:rotaStaffMembers][staff_member.id] ||= []
-          updates_json[:rotaShifts][staff_member.id] << Api::SecurityApp::V1::RotaShiftSerializer.new(shift)
-          updates_json[:rotaStaffMembers][staff_member.id] << Api::SecurityApp::V1::ProfileStaffMemberSerializer.new(staff_member)
-        end
-      when :staff_members
-        value.each_value do |staff_member|
-          updates_json[:staffMembers][staff_member.id] = Api::SecurityApp::V1::ProfileStaffMemberSerializer.new(staff_member)
-        end
-      when :holidays
-        value.each_value do |holiday|
-          staff_member = holiday.staff_member
-          updates_json[:holidays][staff_member.id] = Api::SecurityApp::V1::ProfileStaffMemberSerializer.new(staff_member)
-        end
-      when :venues
-        value.each_value do |venue|
-          updates_json[:venues] << Api::SecurityApp::V1::ProfileStaffMemberSerializer.new(staff_member)
-        end
-      else
-        raise "unsupported key #{key} supplied"
-      end
-    end
-
-    deletes.each do |key, value|
-      case key
-      when :shifts
-        value.each_value do |shift|
-          staff_member = shift.staff_member
-          deletes_json[:rotaShifts][staff_member.id] = shift.id
-        end
-      when :staff_members
-        value.each_value do |staff_member|
-          deletes_json[:staffMembers] << staff_member.id
-        end
-      else
-        raise "unsupported key #{key} supplied"
-      end
-    end
+    updates_by_staff_member_id = group_by_staff_member_id(updates)
+    deletes_by_staff_member_id = group_by_staff_member_id(deletes)
 
     security_channel_presence = client.channel(SecurityAppUpdateService.security_presence_channel)
-    managers_channel = client.channel(SecurityAppUpdateService.manager_presence_channel)
+    personal_security_channel_member_ids = security_channel_presence.presence.get.items.map(&:client_id)
 
-    security_members = security_channel_presence.presence.get
+    security_staff_members = StaffMember.enabled.security
 
-    message = {
-      venues: [],
-      profilePage: {
-        updates: {
-          staffMembers: []
-        },
-        deletions: []
-      },
-      shiftsPage: {
-        updates: {
-          rotaShifts: [],
-        },
-        deletions: {
-          rotaShifts: []
-        }
-      },
-      rotaPage: {
-        updates: {
-          staffMembers: [],
-          rotaShifts: [],
-          holidays: []
-        },
-        deletions: {
-          staffMembers: [],
-          rotaShifts: [],
-          holidays: []
-        }
-      }
-    }
+    # Send messages relating to staff member related data
+    ###################################
+    security_staff_members.each do |security_staff_member|
+      id = security_staff_member.id
+      staff_member_listening_on_personal_channel = personal_security_channel_member_ids.include?(id)
 
-    security_members.items.map(&:client_id).each do |id|
-      send_message = false
-      if updates_json[:staffMembers][id.to_i].present?
-        send_message = true
-        message[:profilePage][:updates][:staffMembers] = [updates_json[:staffMembers][id.to_i]].flatten
-      end
-      if updates_json[:rotaShifts][id.to_i].present?
-        send_message = true
-        message[:shiftsPage][:updates][:rotaShifts] = [updates_json[:rotaShifts][id.to_i]].flatten
-      end
-      if deletes_json[:rotaShifts][id.to_i].present?
-        send_message = true
-        message[:shiftsPage][:deletions][:rotaShifts] = [deletes_json[:rotaShifts][id.to_i]].flatten
-      end
-      if deletes_json[:staffMembers].include?(id.to_i)
-        send_message = true
-        message[:profilePage][:deletions][:staffMembers] = [id.to_i]
-      end
-      if updates_json[:venues].present?
-        send_message = true
-        message[:venues] = updates_json[:venues]
-      end
-      if send_message
-        security_channel = client.channel(SecurityAppUpdateService.personal_channel(id: id))
-        security_channel.publish("data", message)
+      updates_relating_to_staff_member = extract_staff_member_data(staff_member_id: id, grouped_data: updates_by_staff_member_id)
+      deletes_relating_to_staff_member = extract_staff_member_data(staff_member_id: id, grouped_data: deletes_by_staff_member_id)
+
+      if staff_member_listening_on_personal_channel
+        send_personal_channel_staff_member_update(
+          staff_member_id: id,
+          message: personal_channel_staff_member_update_message(
+            updates_relating_to_staff_member: updates_relating_to_staff_member,
+            deletes_relating_to_staff_member: deletes_relating_to_staff_member,
+            venue_updates: updates[:venues],
+            venue_deletes: deletes[:venues]
+          )
+        )
       end
     end
-
-    message = {
-      venues: [],
-      profilePage: {
-        updates: {
-          staffMembers: []
-        },
-        deletions: []
-      },
-      shiftsPage: {
-        updates: {
-          rotaShifts: [],
-        },
-        deletions: {
-          rotaShifts: []
-        }
-      },
-      rotaPage: {
-        updates: {
-          staffMembers: [],
-          rotaShifts: [],
-          holidays: []
-        },
-        deletions: {
-          staffMembers: [],
-          rotaShifts: [],
-          holidays: []
-        }
-      }
-    }
-
-    if updates_json[:rotaShifts].present?
-      message[:rotaPage][:updates][:rotaShifts] = updates_json[:rotaShifts].map{|k, v| v}.flatten
-    end
-    if updates_json[:rotaStaffMembers].present?
-      message[:rotaPage][:updates][:staffMembers] = updates_json[:rotaStaffMembers].map{|k, v| v}.flatten
-    end
-    if updates_json[:venues].present?
-      message[:venues] = updates_json[:venues]
-    end
-    if deletes_json[:staffMembers].present?
-      message[:rotaPage][:deletions][:staffMembers] = deletes_json[:staffMembers]
-    end
-    if deletes_json[:rotaShifts].present?
-      message[:rotaPage][:deletions][:rotaShifts] = deletes_json[:rotaShifts].map{|k, v| v}.flatten
-    end
-
-    managers_channel.publish("data", message)
   end
 
   def request_token(staff_member:)
@@ -182,7 +41,144 @@ class AblyService
     })
   end
 
+  def extract_staff_member_data(staff_member_id:, grouped_data:)
+    result = {}
+
+    if (extracted_rota_shifts = grouped_data[:rota_shifts][staff_member_id]).count > 0
+      result[:rota_shifts] = extracted_rota_shifts
+    end
+
+    if (extracted_staff_members = grouped_data[:staff_members][staff_member_id]).count > 0
+      result[:staff_members] = extracted_staff_members
+    end
+
+    if (extracted_holidays = grouped_data[:holidays][staff_member_id]).count > 0
+      result[:holidays] = extracted_holidays
+    end
+
+    result
+  end
+
+  def group_by_staff_member_id(ungrouped_entities)
+    result = {}
+
+    ungrouped_entities.each do |entity_type, entities|
+      case entity_type
+      when :shifts
+        entities.each_value do |rota_shift|
+          staff_member = rota_shift.staff_member
+          result[:rota_shifts] ||= {}
+          result[:rota_shifts][staff_member.id] ||= []
+          result[:rota_shifts][staff_member.id] << rota_shift
+        end
+      when :staff_members
+        entities.each_value do |staff_member|
+          result[:staff_members] ||= {}
+          result[:staff_members][staff_member.id] ||= []
+          result[:staff_members][staff_member.id] << staff_member
+        end
+      when :holidays
+        entities.each_value do |holiday|
+          staff_member = holiday.staff_member
+          result[:holidays] ||= {}
+          result[:holidays][staff_member.id] = []
+          result[:holidays][staff_member.id] << holiday
+        end
+      when :venues
+        #Entity Not specific to staff member
+      else
+        raise "unsupported entity type #{entity_type} encountered"
+      end
+
+      result
+    end
+  end
+
+  def personal_channel_staff_member_update_message(
+    updates_relating_to_staff_member:,
+    deletes_relating_to_staff_member:,
+    venue_updates:,
+    venue_deletes:
+  )
+    result = {
+      profile_page_json_key => {
+        "updates": {},
+        "deletes": {}
+      },
+      shifts_page_json_key => {
+        "updates": {},
+        "deletes": {}
+      }
+    }
+
+    updates_relating_to_staff_member.keys.each do |key, records|
+      case key
+      case :rota_shifts
+        result[shifts_page_json_key]["updates"]["rotaShifts"] ||= []
+        records.each do |rota_shift|
+          result[shifts_page_json_key]["updates"]["rotaShifts"] << Api::SecurityApp::V1::RotaShiftSerializer.new(shift)
+        end
+      when :staff_members
+        result[profile_page_json_key]["updates"]["staffMembers"] ||= []
+        records.each do |staff_member|
+          result[profile_page_json_key]["updates"]["staffMembers"] << Api::SecurityApp::V1::ProfileStaffMemberSerializer.new(staff_member)
+        end
+      when :holidays
+        # Not used by personal app
+      else
+        raise "unsupported entity type #{entity_type} encountered"
+      end
+    end
+    venue_updates.each do |venue|
+      result[shifts_page_json_key]["updates"]["venues"] ||= []
+      result[shifts_page_json_key]["updates"]["venues"] << Api::SecurityApp::V1::VenueSerializer.new(venue)
+    end
+
+    deletes_relating_to_staff_member.keys.each do |key, records|
+      case key
+      case :rota_shifts
+        result[shifts_page_json_key]["deletes"]["rotaShifts"] ||= []
+        records.each do |rota_shift|
+          result[profile_page_json_key]["deletes"]["rotaShifts"] << shift.id
+        end
+      when :staff_members
+        result[profile_page_json_key]["deletes"]["staffMembers"] ||= []
+        records.each do |staff_member|
+          result[profile_page_json_key]["deletes"]["staffMembers"] << staff_member.id
+        end
+      when :holidays
+        # Not used by personal app
+      else
+        raise "unsupported entity type #{entity_type} encountered"
+      end
+    end
+    venue_updates.each do |venue|
+      result[shifts_page_json_key]["deletes"]["venues"] ||= []
+      result[shifts_page_json_key]["deletes"]["venues"] << venue.id
+    end
+
+    result
+  end
+
+  def send_personal_channel_staff_member_update(staff_member_id:, message:)
+    channel = client.channel(SecurityAppUpdateService.personal_channel(id: staff_member_id))
+    channel.publish("data", message)
+  end
+
+  def send_mangager_channel_staff_member_update(messsage:)
+    channel = client.channel(SecurityAppUpdateService.manager_channel)
+    channel.publish("data", message)
+  end
+
   private
+  def profile_page_json_key
+    "profilePage"
+  end
+
+  def shifts_page_json_key
+    "shiftsPage"
+  end
+
   def client
     @client ||= Ably::Rest.new(key: ENV.fetch("ABLY_API_KEY"))
   end

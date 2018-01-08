@@ -71,4 +71,8 @@ class SecurityAppUpdateService
   def self.personal_channel(id:)
     "security-app-#{id}"
   end
+
+  def self.manager_channel
+    "security-app-manager"
+  end
 end
