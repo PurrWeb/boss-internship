@@ -39,6 +39,8 @@ function machineRefloatCalculation(options){
 }
 
 export function machineRefloatCalculationFromReadings(options) {
+  const calculationFunction = options["calculationFunction"] || machineRefloatCalculation;
+
   const selectedMachine = oFetch(options, 'selectedMachine');
   const lastMachineRefloat = options.lastMachineRefloat;
   const lastMachineRefloatPresent = !(lastMachineRefloat === null || lastMachineRefloat === undefined)
@@ -57,7 +59,7 @@ export function machineRefloatCalculationFromReadings(options) {
 
   const lastUntoppedupFloatCents = lastMachineRefloat ? lastCalculatedFloatTopupCents - lastFloatTopupCents : 0
 
-  return machineRefloatCalculation({
+  return calculationFunction({
     refillX10p: oFetch(options, 'refillX10p'),
     cashInX10p: oFetch(options, 'cashInX10p'),
     cashOutX10p: oFetch(options, 'cashOutX10p'),
@@ -128,8 +130,9 @@ export function calculateRefloatValues(options){
 
 export function machineRefloatCalculationFromRefloatValues(options) {
   const refloatValues = oFetch(options, 'refloatValues');
+  const calculationFunction = options["calculationFunction"] || machineRefloatCalculation;
 
-  return machineRefloatCalculation({
+  return calculationFunction({
     refillX10p: oFetch(refloatValues, 'refillX10p'),
     cashInX10p: oFetch(refloatValues, 'cashInX10p'),
     cashOutX10p: oFetch(refloatValues, 'cashOutX10p'),
