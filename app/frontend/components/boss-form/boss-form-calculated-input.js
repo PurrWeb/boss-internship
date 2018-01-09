@@ -1,12 +1,16 @@
 import React from "react";
 import numeral from 'numeral';
-import CurrencyInput from 'react-currency-input';
+import Cleave from 'cleave.js/react';
 
 import Tooltip from '~/components/boss-form/tooltip';
 
 export default class BossFormCalculatedInput extends React.Component {
-  handleChange = (maskedvalue, floatvalue) => {
-    this.props.input.onChange(floatvalue);
+  handleChange = (event) => {
+    this.props.input.onChange(this.toCents(event.target.rawValue));
+  }
+
+  toCents(number) {
+    return parseInt(number * 100);
   }
 
   render() {
@@ -37,7 +41,11 @@ export default class BossFormCalculatedInput extends React.Component {
           </span>
           <span className="boss-form__units">
             <span className="boss-form__units-value">{unit}</span>
-            <CurrencyInput disabled={disabled} value={value} onChange={this.handleChange} className="boss-form__input" decimalSeparator="." thousandSeparator="" />
+            <Cleave
+              disabled={disabled}
+              className="boss-form__input"
+              options={{numeral: true, numeralThousandsGroupStyle: 'thousand'}}
+              onChange={this.handleChange} />
           </span>
         </label>
         {error && touched && <div className="boss-form__error">

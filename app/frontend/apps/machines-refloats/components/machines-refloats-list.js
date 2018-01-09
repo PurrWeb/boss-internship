@@ -92,7 +92,7 @@ export function MachinesRefloatsItem({machineRefloat, machine}) {
   const floatTopupDiff = calculatedFloatTopupCents - floatTopupCents;
   let lastFloatTopupExtra = null;
   if (floatTopupDiff !== 0) {
-    lastFloatTopupExtra = `£${numeral(lastFloatTopupDiff / 100).format('0,0.00')}`;
+    lastFloatTopupExtra = `£${numeral(floatTopupDiff / 100).format('0,0.00')}`;
   }
 
   const moneyBankedCents = oFetch(machineRefloat, 'moneyBankedCents');
