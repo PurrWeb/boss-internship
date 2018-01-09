@@ -69,8 +69,8 @@ export default class RecordRefloat extends React.Component {
       refillX10p: null,
       cashInX10p: null,
       cashOutX10p: null,
-      floatTopup: null,
-      moneyBanked: null,
+      floatTopupCents: null,
+      moneyBankedCents: null,
       floatTopupNote: null,
       moneyBankedNote: null,
     }

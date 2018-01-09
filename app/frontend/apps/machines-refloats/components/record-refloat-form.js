@@ -48,7 +48,7 @@ class RecordRefloatForm extends React.Component {
 
     return (
       <form
-        onSubmit={handleSubmit((values, dispatch) => submittion({...values.toJS(), calculatedFloatTopup, calculatedMoneyBanked}, dispatch))}
+        onSubmit={handleSubmit((values, dispatch) => submittion({...values.toJS(), calculatedFloatTopupCents, calculatedMoneyBankedCents}, dispatch))}
         className="boss-form"
       >
         <div className="boss-form__group boss-form__group_role_board-outline">
@@ -76,7 +76,7 @@ class RecordRefloatForm extends React.Component {
           />
         </div>
         <Field
-          name="floatTopup"
+          name="floatTopupCents"
           label="Float Topup"
           tooltip="How much the float was topped up after readings."
           disabled={!topupAndBankedCanEdit}
@@ -90,7 +90,7 @@ class RecordRefloatForm extends React.Component {
           component={BossFormTextarea}
         />
         <Field
-          name="moneyBanked"
+          name="moneyBankedCents"
           label="Money Banked"
           disabled={!topupAndBankedCanEdit}
           tooltip="How much money was taken from the machine after readings."

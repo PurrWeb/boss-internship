@@ -22,12 +22,7 @@ export const addMachinesRefloat = createAction(ADD_MACHINES_REFLOAT);
 export const createMachinesRefloat = (values) => (dispatch, getState) => {
   const venueId = getState().getIn(['page', 'currentVenueId']);
 
-  const formatedValues = {
-    moneyBanked: values.moneyBanked * 100,
-    floatTopup: values.floatTopup * 100,
-  }
-
-  return createMachinesRefloatRequest({ values: {...values, ...formatedValues}, venueId})
+  return createMachinesRefloatRequest({ values , venueId })
     .then((resp) => {
       dispatch(addMachinesRefloat(resp.data))
       dispatch(hideRecordRefloat());
