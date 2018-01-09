@@ -26,6 +26,16 @@ class SecurityAppUpdateService
     @deletes[:shifts][shift.id] = shift
   end
 
+  def create_venue(venue:)
+    @updates[:venues] ||= {}
+    @updates[:venues][venue.id] = venue
+  end
+
+  def update_venue(venue:)
+    @updates[:venues] ||= {}
+    @updates[:venues][venue.id] = venue
+  end
+
   def call
     ably_service.
       security_app_data_update(

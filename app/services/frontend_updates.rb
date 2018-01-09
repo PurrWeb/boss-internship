@@ -29,6 +29,15 @@ class FrontendUpdates
         security_app_update_service
           .update_staff_member_profile(staff_member: staff_member) if staff_member.security?
       end
+      created_venues.each_value do |venue_data|
+        venue = venue_data.fetch(:venue)
+        security_app_update_service.created_venue(venue)
+      end
+      venue_updates.each_value do |venue_data|
+        venue = venue_data.fetch(:venue)
+        security_app_update_service.update_venue(venue)
+      end
+    end
       security_app_update_service.call
     rescue Exception => e
       Rollbar.error(e)
@@ -72,7 +81,21 @@ class FrontendUpdates
     end
   end
 
-  attr_reader :shift_updates, :shift_deletes, :staff_member_profile_updates, :security_app_update_service, :created_shifts
+  def create_venue(venue:)
+    created_venues[venue.id] ||= {}
+    created_venues[venue.id][:venue] = venue
+  end
+
+  def update_venue(venue:)
+    if venue_pending_create?(venue: venue)
+      created_venues[venue.id][:venue] = venue
+    else
+      venue_updates[venue.id] ||= {}
+      venue_updates[venue.id][:venue] = venue
+    end
+  end
+
+  attr_reader :shift_updates, :shift_deletes, :staff_member_profile_updates, :security_app_update_service, :created_shifts, :venue_updates, :created_venues
 
   def shift_pending_create?(shift:)
     created_shifts[shift.id].present?
@@ -83,5 +106,7 @@ class FrontendUpdates
     @shift_updates = {}
     @shift_deletes = {}
     @staff_member_profile_updates = {}
+    @created_venues = {}
+    @venue_updates = {}
   end
 end
