@@ -4,7 +4,7 @@ class FrontendUpdates
     @security_app_update_service = security_app_update_service
   end
 
-  def dispatch(reraise_errors: false)
+  def dispatch(reraise_errors: ENV["RERAISE_SSE_ERRORS"])
     begin
       created_shifts.each_value do |shift_data|
         shift = shift_data.fetch(:shift)
