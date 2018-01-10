@@ -19,6 +19,10 @@ class VenuesController < ApplicationController
 
     result = UpdateVenue.new(venue: venue, params: create_params, reminder_users: reminder_users_from_params).call
     if result.success?
+      frontend_updates = FrontendUpdates.new
+      frontend_updates.create_venue(venue: result.venue)
+      frontend_updates.dispatch
+
       flash[:success] = "Venue added successfully"
       redirect_to action: :index
     else
@@ -38,6 +42,10 @@ class VenuesController < ApplicationController
 
     result = UpdateVenue.new(venue: venue, params: update_params, reminder_users: reminder_users_from_params).call
     if result.success?
+      frontend_updates = FrontendUpdates.new
+      frontend_updates.update_venue(venue: result.venue)
+      frontend_updates.dispatch
+
       flash[:success] = "Venue updated successfully"
       redirect_to action: :index
     else

@@ -4,8 +4,10 @@ development:
   DATABASE_URL: "mysql2://root@localhost/boss_development"
   ROLLBAR_API_ACCESS_TOKEN: "xxx-placeholder-rollbar-api-token-xxx"
   ABLY_API_KEY: "vpodeg.2ry9lg:ZDrSurrr9el4nha-"
+  RERAISE_SSE_ERRORS: "true"
 test:
   REDIS_DB: "1"
   REDIS_URL: "redis://localhost:6379"
   DATABASE_URL: "mysql2://root@localhost/boss_test"
   ROLLBAR_API_ACCESS_TOKEN: "xxx-placeholder-rollbar-api-token-xxx"
+  RERAISE_SSE_ERRORS: "true"
