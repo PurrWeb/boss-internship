@@ -31,13 +31,13 @@ class FrontendUpdates
       end
       created_venues.each_value do |venue_data|
         venue = venue_data.fetch(:venue)
-        security_app_update_service.created_venue(venue)
+        security_app_update_service.create_venue(venue: venue)
       end
       venue_updates.each_value do |venue_data|
         venue = venue_data.fetch(:venue)
-        security_app_update_service.update_venue(venue)
+        security_app_update_service.update_venue(venue: venue)
       end
-    end
+
       security_app_update_service.call
     rescue Exception => e
       Rollbar.error(e)
@@ -99,6 +99,10 @@ class FrontendUpdates
 
   def shift_pending_create?(shift:)
     created_shifts[shift.id].present?
+  end
+
+  def venue_pending_create?(venue:)
+    created_venues[venue.id].present?
   end
 
   def wipe_values

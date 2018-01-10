@@ -44,15 +44,18 @@ class AblyService
   def extract_staff_member_data(staff_member_id:, grouped_data:)
     result = {}
 
-    if (extracted_rota_shifts = grouped_data[:rota_shifts][staff_member_id]).count > 0
+    extracted_rota_shifts = (grouped_data[:rota_shifts] || {})[staff_member_id]
+    if (extracted_rota_shifts || []).count > 0
       result[:rota_shifts] = extracted_rota_shifts
     end
 
-    if (extracted_staff_members = grouped_data[:staff_members][staff_member_id]).count > 0
+    extracted_staff_members = (grouped_data[:staff_members] || {})[staff_member_id]
+    if (extracted_staff_members || []).count > 0
       result[:staff_members] = extracted_staff_members
     end
 
-    if (extracted_holidays = grouped_data[:holidays][staff_member_id]).count > 0
+    extracted_holidays = (grouped_data[:holidays] || {})[staff_member_id]
+    if (extracted_holidays || []).count > 0
       result[:holidays] = extracted_holidays
     end
 
@@ -102,18 +105,18 @@ class AblyService
   )
     result = {
       profile_page_json_key => {
-        "updates": {},
-        "deletes": {}
+        "updates" => {},
+        "deletes" => {}
       },
       shifts_page_json_key => {
-        "updates": {},
-        "deletes": {}
+        "updates" => {},
+        "deletes"=> {}
       }
     }
 
     updates_relating_to_staff_member.keys.each do |key, records|
       case key
-      case :rota_shifts
+      when :rota_shifts
         result[shifts_page_json_key]["updates"]["rotaShifts"] ||= []
         records.each do |rota_shift|
           result[shifts_page_json_key]["updates"]["rotaShifts"] << Api::SecurityApp::V1::RotaShiftSerializer.new(shift)
@@ -136,7 +139,7 @@ class AblyService
 
     deletes_relating_to_staff_member.keys.each do |key, records|
       case key
-      case :rota_shifts
+      when :rota_shifts
         result[shifts_page_json_key]["deletes"]["rotaShifts"] ||= []
         records.each do |rota_shift|
           result[profile_page_json_key]["deletes"]["rotaShifts"] << shift.id
