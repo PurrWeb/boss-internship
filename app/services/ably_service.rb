@@ -92,9 +92,9 @@ class AblyService
       else
         raise "unsupported entity type #{entity_type} encountered"
       end
-
-      result
     end
+
+    result
   end
 
   def personal_channel_staff_member_update_message(
