@@ -14,7 +14,7 @@ class SecurityAppApiAccessToken
     if expires_at.present?
       @expires_at = expires_at.utc
     else
-      @expires_at = (now + 20.seconds).utc
+      @expires_at = (now + 360.seconds).utc
     end
   end
 
