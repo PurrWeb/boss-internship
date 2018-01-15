@@ -191,6 +191,7 @@ Rails.application.routes.draw do
       end
     end
 
+
     namespace :api, defaults: { format: 'json' } do
       namespace :security_app, path: 'security-app' do
         namespace :v1 do
@@ -334,6 +335,10 @@ Rails.application.routes.draw do
     mount Sidekiq::Web, at: "/queue"
   end
 
+  security_app_routes = proc do
+    get 'privacy-policy', to: 'pages#security_app_privacy_policy'
+  end
+
   clock_routes = proc do
     get '/', to: 'clock/clock_in_clock_out#index'
 
@@ -372,9 +377,11 @@ Rails.application.routes.draw do
   if ENV["USE_SUBDOMAINS"]
     constraints subdomain: /^([a-z0-9]+-+)?boss/, &boss_routes
     constraints subdomain: /^([a-z0-9]+-+)?clock/, &clock_routes
+    constraints subdomain: /^([a-z0-9]+-+)?nsecurity-app/, &security_app_routes
   else
     scope "", &boss_routes
     scope "/clock", &clock_routes
+    scope "/nsecurity_app", &security_app_routes
   end
 
   root 'welcome#index'
