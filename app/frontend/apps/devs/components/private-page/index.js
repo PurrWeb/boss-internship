@@ -54,6 +54,16 @@ export default class PrivatePage extends React.Component {
     });
   }
 
+  onRenewTokenFailed = (error) => {
+    const { status } = error.response
+    globalNotification(`Renew token failed, status: ${status}`, {
+      interval: 5000,
+      status: 'error'
+    });
+
+    this.handleLogout();
+  }
+
   componentDidMount(){
     let authService = oFetch(this.props, 'authService');
     initRequest(authService).then(resp => {
@@ -76,7 +86,8 @@ export default class PrivatePage extends React.Component {
         onDisconnected: this.displayAblyDisconnectedNotification,
         onFailed: this.displayAblyConnectionFailedNotification,
         personalChannelName: personalChannelName,
-        presenceChannelName: presenceChannelName
+        presenceChannelName: presenceChannelName,
+        onRenewTokenFailed: this.onRenewTokenFailed
       }).then((ablyService) => {
         this.ablyService = ablyService;
         ablyService.subscribeToPersonalChannel((message) => {
@@ -88,8 +99,10 @@ export default class PrivatePage extends React.Component {
     });
   }
 
-  handleLogout(){
+  handleLogout = () => {
+    console.log('Ably service: ', this.ablyService);
     return this.ablyService.deactivate().then(() => {
+      console.log('Deactivated');
       this.props.onLogOutSuccess();
     });
   }
@@ -119,7 +132,7 @@ export default class PrivatePage extends React.Component {
                     className="btn btn-primary"
                     text="Log Out"
                     pendingText="Loging Out ..."
-                    onClick={this.handleLogout.bind(this)}
+                    onClick={this.handleLogout}
                   />
                 </div>
               </div>
