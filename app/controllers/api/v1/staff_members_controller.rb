@@ -24,6 +24,25 @@ module Api
         end
       end
 
+      def reset_password
+        password = params.fetch(:password)
+        password_confirmation = params.fetch(:passwordConfirmation)
+        verification_token = params.fetch(:verificationToken)
+
+        staff_member = StaffMember.enabled.find_by!(verification_token: verification_token)
+
+        result = StaffMemberPasswordResetService.new(staff_member: staff_member).reset_password(
+          password: password,
+          password_confirmation: password_confirmation
+        )
+
+        if result.success?
+          render json: {}, status: 200
+        else
+          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+        end
+      end
+
       def send_verification
         staff_member = StaffMember.enabled.find(params[:staff_member_id])
 

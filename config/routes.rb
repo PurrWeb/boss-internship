@@ -84,6 +84,13 @@ Rails.application.routes.draw do
             get :something_went_wrong
           end
         end
+        resources :reset_password, only: :show do
+          collection do
+            get :success
+            get :expired
+            get :something_went_wrong
+          end
+        end
       end
       member do
         get :holidays
@@ -305,6 +312,7 @@ Rails.application.routes.draw do
           collection do
             post :flagged
             post :set_password
+            post :reset_password
           end
         end
         resources :staff_types,   only: :show

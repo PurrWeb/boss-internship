@@ -52,10 +52,10 @@ module Api
           email = params.fetch("email")
           staff_member = StaffMember.enabled.joins(:email_address).where(email_addresses: {email: email}).first
 
-          if staff_member.present?
-            StaffMemberVerificationService.new(staff_member: staff_member).send_verification
-          else
+          if !staff_member.present?
             Rollbar.warning("Reset attempt for invalid email address #{email}")
+          else
+            StaffMemberPasswordResetService.new(staff_member: staff_member).send_password_reset_email
           end
 
           render json: {}, status: 200

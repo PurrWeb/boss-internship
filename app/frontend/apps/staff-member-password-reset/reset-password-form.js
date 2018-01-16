@@ -1,3 +1,4 @@
+import oFetch from 'o-fetch'
 import React from 'react';
 import {connect} from 'react-redux';
 import {
@@ -13,13 +14,15 @@ import {
 
 class ResetPasswordForm extends React.Component {
   render() {
-    const {submitting, showPassword} = this.props;
+    const submitting = oFetch(this.props, 'submitting');
+    const actionDescription = oFetch(this.props, 'actionDescription');
+    const showPassword = this.props.showPassword;
 
     return (
       <div className="boss-modal-window boss-modal-window_role_set">
         <div className="boss-modal-window__header">
           <h2 className="boss-modal-window__title">
-            Set Application Password
+            {actionDescription}
           </h2>
         </div>
         <div className="boss-modal-window__content">

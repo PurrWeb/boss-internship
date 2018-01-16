@@ -6,7 +6,7 @@ class StaffMemberVerificationService
   end
 
   attr_accessor :staff_member
-  
+
   def initialize(staff_member:)
     @staff_member = staff_member
   end

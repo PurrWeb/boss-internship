@@ -10,7 +10,7 @@ RSpec.describe 'Forgot password endpoint' do
   let(:staff_member_email) { 'forgotten.password@fake.com' }
   let(:email) { staff_member.email}
   let(:email_address_record) { EmailAddress.create!(email: staff_member_email) }
-  let(:staff_member) { FactoryGirl.create(:staff_member, email_address: email_address_record) }
+  let(:staff_member) { FactoryGirl.create(:staff_member, :with_password, email_address: email_address_record) }
   let(:params) do
     {
       email: email
@@ -26,13 +26,13 @@ RSpec.describe 'Forgot password endpoint' do
     expect(json_response).to eq({})
   end
 
-  it 'sends a verification email' do
+  it 'sends a password reset email' do
     expect(ActionMailer::Base.deliveries.count).to eq(0)
     perform_request
     expect(ActionMailer::Base.deliveries.count).to eq(1)
     mail = ActionMailer::Base.deliveries.last
 
-    expect(mail.subject).to eq("Setup your JSM Bars Password")
+    expect(mail.subject).to eq("Reset your JSM Bars Password")
     expect(mail.to).to eq([email])
   end
 
@@ -47,7 +47,7 @@ RSpec.describe 'Forgot password endpoint' do
       expect(json_response).to eq({})
     end
 
-    it 'should not send a verification email' do
+    it 'should not send a reset email' do
       expect(ActionMailer::Base.deliveries.count).to eq(0)
       perform_request
       expect(ActionMailer::Base.deliveries.count).to eq(0)
