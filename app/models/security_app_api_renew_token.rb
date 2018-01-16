@@ -9,10 +9,11 @@ class SecurityAppApiRenewToken
     else
       @token = SecureRandom.hex
     end
+    @expires_at = 1.day.from_now.utc
     @staff_member = staff_member
   end
 
-  attr_reader :token, :staff_member
+  attr_reader :token, :staff_member, :expires_at
 
   def self.token_lookup_key(token)
     "security_app_api_renew_token-token_lookup:#{token}"
@@ -66,7 +67,8 @@ class SecurityAppApiRenewToken
   def persist!
     redis.set(
       token_lookup_key(token),
-      json
+      json,
+      ex: expires_at.to_i
     )
 
     redis.set(

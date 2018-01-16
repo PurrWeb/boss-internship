@@ -80,7 +80,8 @@ class SecurityAppApiAccessToken
     redis.multi do
       redis.set(
         token_key(token),
-        json
+        json,
+        ex: expires_at.to_i
       )
 
       redis.set(
