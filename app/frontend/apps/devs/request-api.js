@@ -9,6 +9,8 @@ export function authenticatedHttp(authService, {...params}) {
     return authService.getToken().then(token => {
       config.headers.Authorization = `Token token="${token}"`;
       return config;
+    }).catch((error) => {
+      return Promise.reject(error);
     })
   }, function (error) {
     return Promise.reject(error);

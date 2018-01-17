@@ -18,7 +18,7 @@ class AblyService {
 			return new Promise((resolve, reject) => {
 				ensureActive();
 
-				presenceChannel.presence.leave((err)=> {
+        presenceChannel.presence.leave((err)=> {
 					if(err){
 						return reject(new Error(`Error leaving channel: ${err}`));
 					}
@@ -28,7 +28,7 @@ class AblyService {
 					ablyRealtime.connection.off();
 					ablyRealtime.close();
 
-					this.active = false;
+          this.active = false;
 					return resolve();
 				});
 			});
@@ -39,14 +39,6 @@ class AblyService {
 			personalChannel.subscribe(onUpdate)
 		}
 	}
-
-	subscribeToPersonalChannel(onUpdate){;
-		this.subscribeToPersonalChannel(onUpdate);
-	}
-
-  deactivate(){
-		this.deactivate();
-	}
 }
 
 export function createAblyService(options) {
@@ -54,6 +46,7 @@ export function createAblyService(options) {
 	const personalChannelName = oFetch(options, 'personalChannelName');
 	const presenceChannelName = oFetch(options, 'presenceChannelName');
 	const onTokenObtained = options.onTokenObtained || function(){};
+	const onRenewTokenFailed = options.onRenewTokenFailed || function(){};
 	const onConnected = options.onConnected || function(){};
 	const onDisconnected = options.onDisconnected || function(){};
 	const onFailed = options.onFailed || function(){};
@@ -63,6 +56,8 @@ export function createAblyService(options) {
       authenticatedHttp(authService).get('/api/security-app/v1/sessions/ably-auth').then(resp => {
 				onTokenObtained();
         callback(null, resp.data);
+      }).catch((error) => {
+        onRenewTokenFailed(error);
       });
     }
   });
@@ -73,12 +68,10 @@ export function createAblyService(options) {
 
   ablyRealtime.connection.on('disconnected', (resp) => {
 		onDisconnected(resp);
-    throw new Error('Connection failed');
   });
 
   ablyRealtime.connection.on('failed', (resp) => {
 		onFailed(resp);
-    throw new Error('Connection failed');
 	});
 
 	//private stuff

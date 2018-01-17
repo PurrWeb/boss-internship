@@ -67,7 +67,9 @@ class SecurityAppAuth {
         localStorage.setItem(localStorageRenewTokenKey, newRenewalToken);
 
         return resolve(authToken);
-      })
+      }).catch((error) => {
+        return reject(error);
+      });
     })
   }
 
@@ -82,7 +84,9 @@ class SecurityAppAuth {
       if (SecurityAppAuth.isTokenExpired()) {
         this.refreshToken().then(token => {
           return resolve(token);
-        });
+        }).catch((error) => {
+          return reject(error);
+        })
       } else {
         return resolve(token);
       }

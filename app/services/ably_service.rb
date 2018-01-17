@@ -1,5 +1,6 @@
 class AblyService
   def security_app_data_update(updates:, deletes:)
+
     updates_by_staff_member_id = group_by_staff_member_id(updates)
     deletes_by_staff_member_id = group_by_staff_member_id(deletes)
 
@@ -12,19 +13,19 @@ class AblyService
     ###################################
     security_staff_members.each do |security_staff_member|
       id = security_staff_member.id
-      staff_member_listening_on_personal_channel = personal_security_channel_member_ids.include?(id)
-
-      updates_relating_to_staff_member = extract_staff_member_data(staff_member_id: id, grouped_data: updates_by_staff_member_id)
-      deletes_relating_to_staff_member = extract_staff_member_data(staff_member_id: id, grouped_data: deletes_by_staff_member_id)
+      staff_member_listening_on_personal_channel = personal_security_channel_member_ids.include?(id.to_s)
 
       if staff_member_listening_on_personal_channel
+        updates_relating_to_staff_member = extract_staff_member_data(staff_member_id: id, grouped_data: updates_by_staff_member_id)
+        deletes_relating_to_staff_member = extract_staff_member_data(staff_member_id: id, grouped_data: deletes_by_staff_member_id)
+
         send_personal_channel_staff_member_update(
           staff_member_id: id,
           message: personal_channel_staff_member_update_message(
             updates_relating_to_staff_member: updates_relating_to_staff_member,
             deletes_relating_to_staff_member: deletes_relating_to_staff_member,
-            venue_updates: updates[:venues],
-            venue_deletes: deletes[:venues]
+            venue_updates: updates[:venues] || {},
+            venue_deletes: deletes[:venues] || {}
           )
         )
       end
@@ -33,9 +34,8 @@ class AblyService
 
   def request_token(staff_member:)
     capability = SecurityAppUpdateService.capability(staff_member: staff_member)
-
     client.auth.request_token({
-      ttl: 5,
+      ttl: 60,
       client_id: "#{staff_member.id}",
       capability: capability,
     })
@@ -114,12 +114,12 @@ class AblyService
       }
     }
 
-    updates_relating_to_staff_member.keys.each do |key, records|
+    updates_relating_to_staff_member.each do |key, records|
       case key
       when :rota_shifts
         result[shifts_page_json_key]["updates"]["rotaShifts"] ||= []
         records.each do |rota_shift|
-          result[shifts_page_json_key]["updates"]["rotaShifts"] << Api::SecurityApp::V1::RotaShiftSerializer.new(shift)
+          result[shifts_page_json_key]["updates"]["rotaShifts"] << Api::SecurityApp::V1::RotaShiftSerializer.new(rota_shift)
         end
       when :staff_members
         result[profile_page_json_key]["updates"]["staffMembers"] ||= []
@@ -137,7 +137,7 @@ class AblyService
       result[shifts_page_json_key]["updates"]["venues"] << Api::SecurityApp::V1::VenueSerializer.new(venue)
     end
 
-    deletes_relating_to_staff_member.keys.each do |key, records|
+    deletes_relating_to_staff_member.each do |key, records|
       case key
       when :rota_shifts
         result[shifts_page_json_key]["deletes"]["rotaShifts"] ||= []

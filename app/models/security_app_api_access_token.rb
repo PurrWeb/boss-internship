@@ -14,7 +14,7 @@ class SecurityAppApiAccessToken
     if expires_at.present?
       @expires_at = expires_at.utc
     else
-      @expires_at = (now + 20.seconds).utc
+      @expires_at = (now + 360.seconds).utc
     end
   end
 
@@ -80,7 +80,8 @@ class SecurityAppApiAccessToken
     redis.multi do
       redis.set(
         token_key(token),
-        json
+        json,
+        ex: expires_at.to_i
       )
 
       redis.set(

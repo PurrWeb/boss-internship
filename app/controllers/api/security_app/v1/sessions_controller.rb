@@ -36,6 +36,8 @@ module Api
           renewalToken = SecurityAppApiRenewToken.find_by_token(token: params.fetch("renewalToken"))
           if !renewalToken
             return render json: {}, status: 403
+          elsif renewalToken.present? && renewalToken.expires_at > Time.now
+            return render json: {}, status: 403
           else
             staff_member = renewalToken.staff_member
             new_renewalToken = SecurityAppApiRenewToken.issue_new_token!(staff_member)
@@ -45,7 +47,8 @@ module Api
             render json: {
               authToken: access_token.token,
               renewToken: renewalToken.token,
-              expiresAt: access_token.expires_at.utc.iso8601
+              expiresAt: access_token.expires_at.utc.iso8601,
+              expired: renewalToken.expires_at > Time.now,
             }, status: 200
           end
         end
