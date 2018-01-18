@@ -146,6 +146,12 @@ class User < ActiveRecord::Base
     role == 'maintenance_staff'
   end
 
+  def restricted_access?
+    maintenance_staff? || security_manager?
+  end
+
+  # Warning: Couple this to access control for actions as it is used by restricted  # user types who don't have limited views of venues but who shouldn't have
+  # access to certain admin like pages .
   def has_all_venue_access?
     dev? || admin? || ops_manager? || maintenance_staff?
   end

@@ -73,7 +73,7 @@ module Api
       end
 
       def create
-        authorize! :manage, :staff_members
+        authorize! :create, :staff_members
 
         params_json = JSON.parse(request.body)
 

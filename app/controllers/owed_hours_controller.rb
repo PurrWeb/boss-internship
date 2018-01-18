@@ -4,8 +4,8 @@ class OwedHoursController < ApplicationController
     query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
     staff_member = query.first
 
-    authorize! :view, StaffMember
     raise ActiveRecord::RecordNotFound.new unless staff_member.present?
+    authorize! :edit, staff_member
 
     owed_hour = OwedHour.new
     owed_hour_form = CreateOwedHourForm.new(

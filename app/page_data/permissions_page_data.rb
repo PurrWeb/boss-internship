@@ -101,12 +101,12 @@ class PermissionsPageData
         },
         {
           description: "Staff Members List",
-          permitted: role.can?(:manage, :staff_members),
+          permitted: role.can?(:list, :staff_members),
           path: @path.staff_members_path
         },
         {
           description: "Add Staff Member",
-          permitted: role.can?(:manage, :staff_members),
+          permitted: role.can?(:create, :staff_members),
           path: @path.new_staff_member_path
         }
       ]
