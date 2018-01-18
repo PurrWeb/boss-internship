@@ -34,11 +34,11 @@ class UserAbility
       end
 
       can :list, :staff_members do
-        user.security_manager? || !user.restricted_access
+        user.security_manager? || !user.restricted_access?
       end
 
       can :create, :staff_members do
-        user.security_manager? || !user.restricted_access
+        user.security_manager? || !user.restricted_access?
       end
 
       can :manage, :change_orders do
