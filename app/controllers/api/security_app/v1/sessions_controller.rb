@@ -21,7 +21,7 @@ module Api
               }
             }, status: 403
           else
-            renew_token = SecurityAppApiRenewToken.issue_new_token!(staff_member)
+            renew_token = SecurityAppApiRenewToken.issue_new_token!(staff_member: staff_member)
 
             access_token = SecurityAppApiAccessToken.issue_new_token!(staff_member: staff_member)
 

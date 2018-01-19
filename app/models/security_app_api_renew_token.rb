@@ -77,7 +77,7 @@ class SecurityAppApiRenewToken
     )
   end
 
-  def self.issue_new_token!(staff_member)
+  def self.issue_new_token!(staff_member:)
     SecurityAppApiRenewToken.revoke!(staff_member: staff_member)
 
     new_token = SecurityAppApiRenewToken.new(staff_member: staff_member)
