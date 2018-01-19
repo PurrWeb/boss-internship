@@ -9,11 +9,10 @@ class SecurityAppApiRenewToken
     else
       @token = SecureRandom.hex
     end
-    @expires_at = 1.day.from_now.utc
     @staff_member = staff_member
   end
 
-  attr_reader :token, :staff_member, :expires_at
+  attr_reader :token, :staff_member
 
   def self.token_lookup_key(token)
     "security_app_api_renew_token-token_lookup:#{token}"
@@ -27,7 +26,9 @@ class SecurityAppApiRenewToken
     token = find_by_staff_member(staff_member: staff_member)
 
     redis.del(staff_member_lookup_key(staff_member))
-    redis.del(token_lookup_key(token))
+    if token.present?
+      redis.del(token_lookup_key(token))
+    end
   end
 
   def self.staff_member_lookup_key(staff_member)
@@ -67,8 +68,7 @@ class SecurityAppApiRenewToken
   def persist!
     redis.set(
       token_lookup_key(token),
-      json,
-      ex: expires_at.to_i
+      json
     )
 
     redis.set(
@@ -77,7 +77,7 @@ class SecurityAppApiRenewToken
     )
   end
 
-  def self.issue_new_token!(staff_member)
+  def self.issue_new_token!(staff_member:)
     SecurityAppApiRenewToken.revoke!(staff_member: staff_member)
 
     new_token = SecurityAppApiRenewToken.new(staff_member: staff_member)

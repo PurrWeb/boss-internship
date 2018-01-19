@@ -16,7 +16,7 @@ module Api
             security_app_api_token = SecurityAppApiAccessToken.find_by_token(token: supplied_token)
             !!security_app_api_token
           end
-          if security_app_api_token && (security_app_api_token.expires_at.nil? || security_app_api_token.expires_at > Time.current)
+          if security_app_api_token && (security_app_api_token.expires_at > Time.current)
             @security_app_api_access_token = security_app_api_token
           end
         end
