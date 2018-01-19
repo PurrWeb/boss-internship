@@ -19,15 +19,19 @@ class AblyService
         updates_relating_to_staff_member = extract_staff_member_data(staff_member_id: id, grouped_data: updates_by_staff_member_id)
         deletes_relating_to_staff_member = extract_staff_member_data(staff_member_id: id, grouped_data: deletes_by_staff_member_id)
 
-        send_personal_channel_staff_member_update(
-          staff_member_id: id,
-          message: personal_channel_staff_member_update_message(
-            updates_relating_to_staff_member: updates_relating_to_staff_member,
-            deletes_relating_to_staff_member: deletes_relating_to_staff_member,
-            venue_updates: updates[:venues] || {},
-            venue_deletes: deletes[:venues] || {}
+        updates_exist_for_staff_member = !updates_relating_to_staff_member.empty? || !deletes_relating_to_staff_member.empty?
+
+        if updates_exist_for_staff_member
+          send_personal_channel_staff_member_update(
+            staff_member_id: id,
+            message: personal_channel_staff_member_update_message(
+              updates_relating_to_staff_member: updates_relating_to_staff_member,
+              deletes_relating_to_staff_member: deletes_relating_to_staff_member,
+              venue_updates: updates[:venues] || {},
+              venue_deletes: deletes[:venues] || {}
+            )
           )
-        )
+        end
       end
     end
   end
