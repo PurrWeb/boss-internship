@@ -13,6 +13,10 @@ class UserAbility
         can :manage, :dev_only_pages
       end
 
+      can :view, :maintenance_tasks do
+        user.maintenance_staff? || !user.restricted_access?
+      end
+
       can :view, MaintenanceTask do |maintenance_task|
         user.maintenance_staff? || (
           !user.restricted_access? && can_manage_venue?(user, maintenance_task.venue)
@@ -50,7 +54,15 @@ class UserAbility
       end
 
       can :manage, :fruit_orders do
-        !user.security_manager?
+        !user.restricted_access?
+      end
+
+      can :manage, :vouchers do
+        !user.restricted_access?
+      end
+
+      can :manage, :safe_checks do
+        !user.restricted_access?
       end
 
       can :manage, :venue_health_checks do
@@ -189,10 +201,18 @@ class UserAbility
         )
       end
 
+      can :view, :hours_confirmation_page do
+        !user.restricted_access?
+      end
+
       can :update, HoursAcceptancePeriod do |hours_acceptance_period|
         !user.restricted_access? && (
           can_manage_venue?(user, hours_acceptance_period.venue)
         )
+      end
+
+      can :manage, :machines do
+        !user.restricted_access?
       end
 
       can :destroy, FruitOrder do |fruit_order|
