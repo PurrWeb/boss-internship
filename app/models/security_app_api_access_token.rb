@@ -28,6 +28,12 @@ class SecurityAppApiAccessToken
     SecurityAppApiAccessToken.token_key(token)
   end
 
+  def self.issue_new_token!(staff_member:)
+    revoke!(staff_member: staff_member)
+
+    new(staff_member: staff_member).persist!
+  end
+
   def self.revoke!(staff_member:)
     tokens = find_by_staff_member(staff_member: staff_member)
 

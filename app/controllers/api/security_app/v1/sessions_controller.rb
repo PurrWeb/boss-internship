@@ -23,10 +23,7 @@ module Api
           else
             renew_token = SecurityAppApiRenewToken.issue_new_token!(staff_member)
 
-            SecurityAppApiAccessToken.revoke!(staff_member: staff_member)
-            access_token = SecurityAppApiAccessToken.new(
-              staff_member: staff_member
-            ).persist!
+            access_token = SecurityAppApiAccessToken.issue_new_token!(staff_member: staff_member)
 
             render json: {
               authToken: access_token.token,
