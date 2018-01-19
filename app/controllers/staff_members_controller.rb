@@ -2,7 +2,7 @@ class StaffMembersController < ApplicationController
   before_action :set_new_layout, only: [:index, :new, :show, :holidays, :profile, :owed_hours]
 
   def index
-    authorize! :manage, :staff_members
+    authorize! :list, :staff_members
 
     staff_member_index_filter = StaffMemberIndexFilter.new(
       user: current_user,
@@ -188,7 +188,7 @@ class StaffMembersController < ApplicationController
   end
 
   def new
-    authorize! :manage, :staff_members
+    authorize! :create, :staff_members
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     venues = Venue.all
 

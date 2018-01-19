@@ -14,12 +14,12 @@ class PermissionsPageData
       items: [
         {
           description: "Machines",
-          permitted: true,
+          permitted: role.can?(:manage, :machines),
           path: @path.machines_path
         },
         {
           description: "Machines Refloats",
-          permitted: true,
+          permitted: role.can?(:manage, :machines),
           path: @path.machine_refloats_path
         },
         {
@@ -49,7 +49,7 @@ class PermissionsPageData
         },
         {
           description: "Safe Checks",
-          permitted: user.present? && !user.security_manager?,
+          permitted: role.can?(:manage, :safe_checks),
           path: @path.safe_checks_path
         },
         {
@@ -64,17 +64,17 @@ class PermissionsPageData
         },
         {
           description: "Vouchers",
-          permitted: true,
+          permitted: role.can?(:manage, :vouchers),
           path: @path.vouchers_path
         },
         {
           description: "Reedem Vouchers",
-          permitted: true,
+          permitted: role.can?(:manage, :vouchers),
           path: @path.redeem_vouchers_path
         },
         {
           description: "Maintenance Tasks",
-          permitted: role.can?(:view, MaintenanceTask),
+          permitted: role.can?(:view, :maintenance_tasks),
           path: @path.maintenance_index_path
         },
         {
@@ -91,7 +91,7 @@ class PermissionsPageData
       items: [
         {
           description: "Hours Confirmation",
-          permitted: user.present? && !user.security_manager?,
+          permitted: role.can?(:view, :hours_confirmation_page),
           path: @path.current_hours_confirmation_index_path
         },
         {
@@ -101,12 +101,12 @@ class PermissionsPageData
         },
         {
           description: "Staff Members List",
-          permitted: role.can?(:manage, :staff_members),
+          permitted: role.can?(:list, :staff_members),
           path: @path.staff_members_path
         },
         {
           description: "Add Staff Member",
-          permitted: role.can?(:manage, :staff_members),
+          permitted: role.can?(:create, :staff_members),
           path: @path.new_staff_member_path
         }
       ]
@@ -206,6 +206,7 @@ class PermissionsPageData
         },
       ]
     }
+
     admin_reports = {
       name: "Admin: Reports",
       color: "#f39c12",
@@ -240,11 +241,11 @@ class PermissionsPageData
       ]
     }
 
-    menu = [
-      venue,
-      staff_members,
-      reports
-    ]
+    menu = []
+
+    menu << venue if venue.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << staff_members if staff_members.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << reports if reports.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
 
     admin_menu = [
       admin_general,
@@ -256,7 +257,6 @@ class PermissionsPageData
     dev_menu = [
       dev_section
     ]
-
 
     quick_menu = menu.map do |parent_item|
       parent_item[:items] = parent_item[:items].map do |child_item|

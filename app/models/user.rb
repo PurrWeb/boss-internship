@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
-  ROLES = ['admin', 'manager', 'dev', 'ops_manager', 'security_manager', 'maintenance_staff']
+  MARKETING_ROLE = 'marketing'
+  ROLES = ['admin', 'manager', 'dev', 'ops_manager', 'security_manager', 'maintenance_staff', MARKETING_ROLE]
 
   include Statesman::Adapters::ActiveRecordQueries
 
@@ -134,6 +135,10 @@ class User < ActiveRecord::Base
     role == 'manager'
   end
 
+  def marketing_staff?
+    role == MARKETING_ROLE
+  end
+
   def ops_manager?
     role == 'ops_manager'
   end
@@ -146,6 +151,12 @@ class User < ActiveRecord::Base
     role == 'maintenance_staff'
   end
 
+  def restricted_access?
+    maintenance_staff? || security_manager? || marketing_staff?
+  end
+
+  # Warning: Couple this to access control for actions as it is used by restricted  # user types who don't have limited views of venues but who shouldn't have
+  # access to certain admin like pages .
   def has_all_venue_access?
     dev? || admin? || ops_manager? || maintenance_staff?
   end

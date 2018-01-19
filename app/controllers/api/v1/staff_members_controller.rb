@@ -67,13 +67,13 @@ module Api
 
       def show
         staff_member = StaffMember.find(params.fetch(:id))
-        authorize! :view, staff_member
+        authorize! :edit, staff_member
 
         render locals: { staff_member: staff_member }
       end
 
       def create
-        authorize! :manage, :staff_members
+        authorize! :create, :staff_members
 
         params_json = JSON.parse(request.body)
 

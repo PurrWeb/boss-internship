@@ -19,7 +19,7 @@
                   <span class="boss-user-summary__review-label">Disabled by: </span>
                   <span class="boss-user-summary__review-val">
                     <span>
-                      <%= user.disabled_by_user.full_name.titlecase %> on 
+                      <%= user.disabled_by_user.full_name.titlecase %> on
                     </span>
                   </span>
                 </li>
@@ -131,7 +131,7 @@
           <p class="boss-details__label boss-details__label_size_small">Status</p>
           <p class="boss-details__value" data-detail="status"><%= user.status %></p>
         </li>
-        <% if can? :manage, :staff_members %>
+        <% if can? :list, :staff_members %>
           <li class="boss-details__item">
             <p class="boss-details__label boss-details__label_size_small">Staff Member</p>
             <p class="boss-details__value" data-detail="staff-member">
