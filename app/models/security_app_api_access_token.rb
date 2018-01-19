@@ -72,7 +72,7 @@ class SecurityAppApiAccessToken
     return [] unless token_data.present?
     token_data.map do |token|
       SecurityAppApiAccessToken.find_by_token(token: token)
-    end
+    end.compact
   end
 
   def json

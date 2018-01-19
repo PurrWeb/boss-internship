@@ -26,7 +26,9 @@ class SecurityAppApiRenewToken
     token = find_by_staff_member(staff_member: staff_member)
 
     redis.del(staff_member_lookup_key(staff_member))
-    redis.del(token_lookup_key(token))
+    if token.present?
+      redis.del(token_lookup_key(token))
+    end
   end
 
   def self.staff_member_lookup_key(staff_member)
