@@ -22,7 +22,11 @@ module Api
             }, status: 403
           else
             renew_token = SecurityAppApiRenewToken.issue_new_token!(staff_member)
-            access_token = staff_member.current_security_app_access_token || SecurityAppApiAccessToken.new(staff_member: staff_member).persist!
+
+            SecurityAppApiAccessToken.revoke!(staff_member: staff_member)
+            access_token = SecurityAppApiAccessToken.new(
+              staff_member: staff_member
+            ).persist!
 
             render json: {
               authToken: access_token.token,
