@@ -17,7 +17,7 @@ module Api
             shiftsPage: {
               staffMemberId: staff_member.id,
               rotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
-                staff_member.rota_shifts.enabled.includes(:rota),
+                PublishedRotaShiftQuery.new(staff_member: staff_member).all.includes(:rota),
                 serializer: Api::SecurityApp::V1::RotaShiftSerializer
               ),
               venues: ActiveModel::Serializer::CollectionSerializer.new(Venue.all, serializer: Api::SecurityApp::V1::VenueSerializer)
