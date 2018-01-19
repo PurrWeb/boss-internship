@@ -94,15 +94,15 @@ class UserAbility
       end
 
       can :view, :payroll_reports do
-        user.ops_manager? || user.has_admin_access?
+        !user.restricted_access?
       end
 
       can :view, :daily_reports do
-        user.ops_manager? || user.has_admin_access?
+        !user.restricted_access?
       end
 
       can :view, :weekly_reports do
-        user.ops_manager? || user.has_admin_access?
+        !user.restricted_access?
       end
 
       can [:view], QuestionnaireResponse do |questionnaire_response|
