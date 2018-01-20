@@ -87,7 +87,10 @@ class SecurityAppApiAccessToken
     persisted_tokens_keys_raw = redis.get(staff_member_key_token_list_key(staff_member))
     persisted_token_keys = persisted_tokens_keys_raw.present? ? JSON.parse(persisted_tokens_keys_raw) : []
 
-    seconds_to_expiry = [now - expires_at, 1].max
+    seconds_to_expiry = (expires_at - now).to_i
+    if seconds_to_expiry <= 0
+      raise "Can't persist the token, expiration time: #{expires_at} less or equal #{now}"
+    end
 
     redis.multi do
       redis.set(
@@ -98,7 +101,8 @@ class SecurityAppApiAccessToken
 
       redis.set(
         staff_member_key_token_list_key(staff_member),
-        (persisted_token_keys + [token]).to_json
+        (persisted_token_keys + [token]).to_json,
+        ex: seconds_to_expiry
       )
     end
     self
