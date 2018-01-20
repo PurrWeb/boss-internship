@@ -27,7 +27,7 @@ class SecurityAppApiRenewToken
 
     redis.del(staff_member_lookup_key(staff_member))
     if token.present?
-      redis.del(token_lookup_key(token))
+      redis.del(token_lookup_key(token.token))
     end
   end
 
