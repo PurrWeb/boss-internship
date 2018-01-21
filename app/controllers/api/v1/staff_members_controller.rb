@@ -1,9 +1,9 @@
 module Api
   module V1
     class StaffMembersController < APIController
-      before_filter :web_token_authenticate!, except: [:change_pin, :set_password]
+      before_filter :web_token_authenticate!, except: [:change_pin, :set_password, :reset_password]
       before_filter :api_token_athenticate!, only: [:change_pin]
-      skip_before_filter :parse_access_tokens, only: [:set_password]
+      skip_before_filter :parse_access_tokens, only: [:set_password, :reset_password]
 
       def set_password
         password = params.fetch(:password)
