@@ -31,11 +31,10 @@ RSpec.describe 'Security Session spec' do
     mock_renew_token_service = double("Mock renew token service")
     allow(SecurityAppApiRenewToken).to(
       receive(:issue_new_token!).
-        with(staff_member).
+        with(staff_member: staff_member).
         and_return(mock_renew_token)
     )
     allow(mock_renew_token).to receive(:token).and_return(expected_renew_token)
-
 
     mock_access_token = double('Mock access token')
     mock_auth_token_service = double('Mock auth token service')
