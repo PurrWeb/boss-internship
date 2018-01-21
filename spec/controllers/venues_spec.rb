@@ -3,8 +3,11 @@ require 'rails_helper'
 RSpec.describe VenuesController do
   let!(:venue) { FactoryGirl.create(:venue, latitude: 5.555555, longitude: 6.666666) }
   let(:user) { FactoryGirl.create(:user, :admin, venues: [venue]) }
+  let(:mock_ably_service) { double('ably service') }
 
   before do
+    allow(AblyService).to receive(:new).and_return(mock_ably_service)
+    allow(mock_ably_service).to receive(:security_app_data_update)
     allow(request.env['warden']).to receive(:authenticate!).and_return(user)
     allow(controller).to receive(:current_user).and_return(user)
   end

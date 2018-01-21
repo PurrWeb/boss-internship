@@ -18,6 +18,7 @@ RSpec.describe 'Init endpoint' do
   let(:rota_1) do
     FactoryGirl.create(
       :rota,
+      :published,
       venue: venue_1,
       date: rota_1_date.rota_date
     )
@@ -36,6 +37,7 @@ RSpec.describe 'Init endpoint' do
   let(:rota_2) do
     FactoryGirl.create(
       :rota,
+      :published,
       venue: venue_2,
       date: rota_2_date.rota_date
     )

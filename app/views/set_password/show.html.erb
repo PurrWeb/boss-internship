@@ -1,3 +1,6 @@
 <%= react_component('StaffMemberPasswordReset', {
-  verificationToken: verification_token
+  actionDescription: 'Set Application Password',
+  verificationToken: verification_token,
+  requestPath: set_password_api_v1_staff_members_path,
+  successPath: success_set_password_index_path
 }) %>

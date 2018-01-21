@@ -1,9 +1,9 @@
 module Api
   module V1
     class StaffMembersController < APIController
-      before_filter :web_token_authenticate!, except: [:change_pin, :set_password]
+      before_filter :web_token_authenticate!, except: [:change_pin, :set_password, :reset_password]
       before_filter :api_token_athenticate!, only: [:change_pin]
-      skip_before_filter :parse_access_tokens, only: [:set_password]
+      skip_before_filter :parse_access_tokens, only: [:set_password, :reset_password]
 
       def set_password
         password = params.fetch(:password)
@@ -13,6 +13,25 @@ module Api
         staff_member = StaffMember.enabled.find_by!(verification_token: verification_token)
 
         result = StaffMemberVerificationService.new(staff_member: staff_member).set_password_and_verify(
+          password: password,
+          password_confirmation: password_confirmation
+        )
+
+        if result.success?
+          render json: {}, status: 200
+        else
+          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+        end
+      end
+
+      def reset_password
+        password = params.fetch(:password)
+        password_confirmation = params.fetch(:passwordConfirmation)
+        verification_token = params.fetch(:verificationToken)
+
+        staff_member = StaffMember.enabled.find_by!(verification_token: verification_token)
+
+        result = StaffMemberPasswordResetService.new(staff_member: staff_member).reset_password(
           password: password,
           password_confirmation: password_confirmation
         )

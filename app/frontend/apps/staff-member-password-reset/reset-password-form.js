@@ -1,3 +1,4 @@
+import oFetch from 'o-fetch'
 import React from 'react';
 import {connect} from 'react-redux';
 import {
@@ -12,17 +13,31 @@ import {
 } from '~/components/boss-form'
 
 class ResetPasswordForm extends React.Component {
+  renderBaseError(error){
+    return (
+      <div className="boss-modal-window__alert">
+        <div className="boss-alert boss-alert_role_area boss-alert_context_above">
+          <p className="boss-alert__text">{error}</p>
+        </div>
+      </div>
+    )
+  }
+
   render() {
-    const {submitting, showPassword} = this.props;
+    const submitting = oFetch(this.props, 'submitting');
+    const actionDescription = oFetch(this.props, 'actionDescription');
+    const showPassword = this.props.showPassword;
+    const error = this.props.error;
 
     return (
       <div className="boss-modal-window boss-modal-window_role_set">
         <div className="boss-modal-window__header">
           <h2 className="boss-modal-window__title">
-            Set Application Password
+            {actionDescription}
           </h2>
         </div>
         <div className="boss-modal-window__content">
+          { error && this.renderBaseError(error) }
           <div className="boss-modal-window__form">
             <form onSubmit={this.props.handleSubmit} className="boss-form">
               <Field
