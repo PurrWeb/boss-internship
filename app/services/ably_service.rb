@@ -142,7 +142,7 @@ class AblyService
       when :rota_shifts
         result[shifts_page_json_key]["deletes"]["rotaShifts"] ||= []
         records.each do |rota_shift|
-          result[profile_page_json_key]["deletes"]["rotaShifts"] << rota_shift.id
+          result[shifts_page_json_key]["deletes"]["rotaShifts"] << rota_shift.id
         end
       when :staff_members
         result[profile_page_json_key]["deletes"]["staffMembers"] ||= []
