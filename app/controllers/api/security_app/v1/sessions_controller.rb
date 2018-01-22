@@ -71,7 +71,7 @@ module Api
           staff_member = StaffMember.enabled.joins(:email_address)
             .where(email_addresses: {email: params[:username]})
             .first
-          if staff_member.present?
+          if staff_member && staff_member.password_digest.present?
             staff_member.authenticate(params[:password])
           else
             nil
