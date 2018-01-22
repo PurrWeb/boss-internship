@@ -15,7 +15,7 @@ class MaintenanceTaskFilter
   def fetch
     @maintenance_tasks = @maintenance_tasks.select do |maintenance_task|
       maintenance_task.created_at.between?(start_date, end_date)
-    end if start_date.present?
+    end if (start_date.present? && end_date.present?)
 
     @maintenance_tasks = @maintenance_tasks.select do |maintenance_task|
       venues.include?(maintenance_task.venue) &&
