@@ -68,11 +68,14 @@ module Api
 
         private
         def authenticate_staff_member
-          StaffMember.enabled.joins(:email_address)
+          staff_member = StaffMember.enabled.joins(:email_address)
             .where(email_addresses: {email: params[:username]})
             .first
-            .andand
-            .authenticate(params[:password])
+          if staff_member.present?
+            staff_member.authenticate(params[:password])
+          else
+            nil
+          end
         end
       end
     end
