@@ -19,6 +19,33 @@ import {
 import { UserSummary } from '~/components/staff-members';
 
 class AccessoryList extends React.Component {
+  state = {
+    rejectPending: false,
+    acceptPending: false,
+    undoPending: false,
+  };
+
+  onReject = ({ requestId, accessoryId }) => {
+    this.setState({ rejectPending: true });
+    return this.props
+      .onRejectRequest({ requestId, accessoryId })
+      .then(() => this.setState({ rejectPending: false }));
+  };
+
+  onAccept = ({ requestId, accessoryId }) => {
+    this.setState({ acceptPending: true });
+    return this.props
+      .onAcceptRequest({ requestId, accessoryId })
+      .then(() => this.setState({ acceptPending: false }));
+  };
+
+  onUndo = ({ requestId, accessoryId }, action) => {
+    this.setState({ undoPending: true });
+    return action({ requestId, accessoryId }).then(() =>
+      this.setState({ undoPending: false }),
+    );
+  };
+
   renderRequestActions(request, accessoryId) {
     const status = oFetch(request, 'status');
     const requestId = oFetch(request, 'id');
@@ -26,22 +53,22 @@ class AccessoryList extends React.Component {
     if (status === 'pending') {
       return (
         <div className="boss-table__actions">
-          <AsyncButton
-            className="boss-button boss-button_type_small boss-button_role_success boss-table__action"
-            text="Accept"
-            pendingText="Accepting ..."
-            onClick={() =>
-              this.props.onAcceptRequest({ requestId, accessoryId })
-            }
-          />
-          <AsyncButton
-            className="boss-button boss-button_type_small boss-button_role_cancel boss-table__action"
-            text="Reject"
-            pendingText="Rejecting ..."
-            onClick={() =>
-              this.props.onRejectRequest({ requestId, accessoryId })
-            }
-          />
+          {!this.state.rejectPending && (
+            <AsyncButton
+              className="boss-button boss-button_type_small boss-button_role_success boss-table__action"
+              text="Accept"
+              pendingText="Accepting ..."
+              onClick={() => this.onAccept({ requestId, accessoryId })}
+            />
+          )}
+          {!this.state.acceptPending && (
+            <AsyncButton
+              className="boss-button boss-button_type_small boss-button_role_cancel boss-table__action"
+              text="Reject"
+              pendingText="Rejecting ..."
+              onClick={() => this.onReject({ requestId, accessoryId })}
+            />
+          )}
         </div>
       );
     }
@@ -54,18 +81,23 @@ class AccessoryList extends React.Component {
           Accepted
         </p>,
         <div key="actions" className="boss-table__actions">
-          <AsyncButton
-            className="boss-button boss-button_type_extra-small boss-button_role_confirm-light boss-table__action"
-            text="Done"
-            onClick={() =>
-              this.props.onDoneAcceptedRequest(requestId, accessoryId)
-            }
-          />
+          {!this.state.undoPending && (
+            <AsyncButton
+              className="boss-button boss-button_type_extra-small boss-button_role_confirm-light boss-table__action"
+              text="Done"
+              onClick={() =>
+                this.props.onDoneAcceptedRequest(requestId, accessoryId)
+              }
+            />
+          )}
           <AsyncButton
             className="boss-button boss-button_type_extra-small boss-button_role_cancel-light boss-table__action"
             text="Undo"
             onClick={() =>
-              this.props.onUndoAcceptedRequest({ requestId, accessoryId })
+              this.onUndo(
+                { requestId, accessoryId },
+                this.props.onUndoAcceptedRequest,
+              )
             }
           />
         </div>,
@@ -80,16 +112,21 @@ class AccessoryList extends React.Component {
           Rejected
         </p>,
         <div key="actions" className="boss-table__actions">
-          <AsyncButton
-            className="boss-button boss-button_type_extra-small boss-button_role_confirm-light boss-table__action"
-            text="Done"
-            onClick={() => this.props.onDoneRejectedRequest(requestId)}
-          />
+          {!this.state.undoPending && (
+            <AsyncButton
+              className="boss-button boss-button_type_extra-small boss-button_role_confirm-light boss-table__action"
+              text="Done"
+              onClick={() => this.props.onDoneRejectedRequest(requestId)}
+            />
+          )}
           <AsyncButton
             className="boss-button boss-button_type_extra-small boss-button_role_cancel-light boss-table__action"
             text="Undo"
             onClick={() =>
-              this.props.onUndoRejectedRequest({ requestId, accessoryId })
+              this.onUndo(
+                { requestId, accessoryId },
+                this.props.onUndoRejectedRequest,
+              )
             }
           />
         </div>,
@@ -207,7 +244,6 @@ class AccessoryList extends React.Component {
 
   render() {
     const { accessories, accessoryRequests, staffMembers } = this.props;
-
     return (
       <ContentWrapper>
         {this.renderAccessories(accessories, accessoryRequests, staffMembers)}
