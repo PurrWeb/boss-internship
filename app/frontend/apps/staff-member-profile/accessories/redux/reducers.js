@@ -9,19 +9,26 @@ const initialState = fromJS({
   accessoryRequests: [],
 });
 
-const accessoriesReducer = handleActions({
-  [constants.LOAD_INITIAL_STATE]: (state, action) => {
-    const {
-      accessToken,
-      accessories,
-      accessoryRequests,
-    } = action.payload;
+const accessoriesReducer = handleActions(
+  {
+    [constants.LOAD_INITIAL_STATE]: (state, action) => {
+      const { accessToken, accessories, accessoryRequests } = action.payload;
 
-    window.boss.accessToken = accessToken;
-    return state
-      .setIn(['accessories'], fromJS(accessories))
-      .setIn(['accessoryRequests'], fromJS(accessoryRequests))
+      window.boss.accessToken = accessToken;
+
+      return state
+        .setIn(['accessories'], fromJS(accessories))
+        .setIn(['accessoryRequests'], fromJS(accessoryRequests));
+    },
+    [constants.ADD_ACCESSORY]: (state, action) => {
+      const newAccessory = action.payload;
+
+      return state.updateIn(['accessoryRequests'], requests => {
+        return requests.push(fromJS(newAccessory));
+      });
+    },
   },
-}, initialState);
+  initialState,
+);
 
 export default accessoriesReducer;
