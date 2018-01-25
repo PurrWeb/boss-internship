@@ -19,7 +19,6 @@ class AccessoryRequestApiService
       size: params.fetch(:size),
       price_cents: accessory.andand.price_cents,
       accessory_type: accessory.andand.accessory_type,
-      status: AccessoryRequest.statuses[:pending]
     }.merge(staff_member: requester, accessory: accessory)
 
     model_service_result = CreateAccessoryRequest.new(

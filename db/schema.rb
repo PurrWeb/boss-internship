@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171220065518) do
+ActiveRecord::Schema.define(version: 20180125123514) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -25,10 +25,18 @@ ActiveRecord::Schema.define(version: 20171220065518) do
     t.datetime "updated_at",                   null: false
   end
 
+  create_table "accessory_request_transitions", force: :cascade do |t|
+    t.string   "to_state",             limit: 255,   null: false
+    t.text     "metadata",             limit: 65535
+    t.integer  "sort_key",             limit: 4,     null: false
+    t.integer  "accessory_request_id", limit: 4,     null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
   create_table "accessory_requests", force: :cascade do |t|
     t.integer  "accessory_id",    limit: 4,   null: false
     t.integer  "staff_member_id", limit: 4,   null: false
-    t.integer  "status",          limit: 4,   null: false
     t.integer  "accessory_type",  limit: 4,   null: false
     t.integer  "price_cents",     limit: 4,   null: false
     t.string   "size",            limit: 255

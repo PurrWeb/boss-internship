@@ -7,7 +7,11 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
     :size
 
   def createdAt
-    object.created_at.utc
+    object.state_machine.last_transition.created_at.utc
+  end
+
+  def status
+    object.current_state
   end
 
   def accessoryName

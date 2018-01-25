@@ -10,6 +10,10 @@ class Api::V1::AccessoryRequests::AccessoryRequestSerializer < ActiveModel::Seri
     object.staff_member.id
   end
 
+  def status
+    object.current_state
+  end
+
   def accessoryId
     object.accessory.id
   end

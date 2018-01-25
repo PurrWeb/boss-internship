@@ -43,22 +43,22 @@ module Api
       end
 
       def accept
-        request_from_params.accepted!
+        request_from_params.transition_to!(:accepted, requster_user_id: current_user.id)
         render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
       end
 
       def reject
-        request_from_params.rejected!
+        request_from_params.transition_to!(:rejected, requster_user_id: current_user.id)
         render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
       end
 
       def undo_accepted
-        request_from_params.pending!
+        request_from_params.transition_to!(:pending, requster_user_id: current_user.id)
         render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
       end
 
       def undo_rejected
-        request_from_params.pending!
+        request_from_params.transition_to!(:pending, requster_user_id: current_user.id)
         render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
       end
 
