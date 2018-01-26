@@ -10,6 +10,7 @@ module Api
           .accessories
           .where(id: AccessoryRequest.joins(:accessory).where(accessories: {venue_id: venue_from_params}).pluck(:accessory_id))
         accessory_requests = AccessoryRequest.where(accessory_id: accessories.pluck(:id))
+        accessory_refund_requests = AccessoryRefundRequest.where(accessory_request_id: accessory_requests.pluck(:id))
         staff_members = StaffMember.where(id: accessory_requests.pluck(:staff_member_id))
 
         paginated_accessory = accessories.paginate(
@@ -26,6 +27,10 @@ module Api
             accessoryRequests: ActiveModel::Serializer::CollectionSerializer.new(
               accessory_requests,
               serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer
+            ),
+            accessoryRefundRequests: ActiveModel::Serializer::CollectionSerializer.new(
+              accessory_refund_requests,
+              serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer
             ),
             staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
               staff_members,
@@ -52,14 +57,24 @@ module Api
         render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
       end
 
-      def undo_accepted
+      def undo
         request_from_params.transition_to!(:pending, requster_user_id: current_user.id)
         render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
       end
 
-      def undo_rejected
-        request_from_params.transition_to!(:pending, requster_user_id: current_user.id)
-        render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
+      def accept_refund
+        refund_request_from_params.transition_to!(:accepted, requster_user_id: current_user.id)
+        render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
+      end
+
+      def reject_refund
+        refund_request_from_params.transition_to!(:rejected, requster_user_id: current_user.id)
+        render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
+      end
+
+      def undo_refund
+        refund_request_from_params.transition_to!(:pending, requster_user_id: current_user.id)
+        render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
       end
 
       private
@@ -69,9 +84,14 @@ module Api
 
       def request_from_params
         AccessoryRequest.find_by(
-          accessory_id: venue_from_params.accessories.find_by(id: params.fetch(:accessoryId)),
+          accessory: venue_from_params.accessories.find_by(id: params.fetch(:accessoryId)),
           id: params.fetch(:id)
         )
+      end
+
+      def refund_request_from_params
+        accessory = venue_from_params.accessories.find_by(id: params.fetch(:accessoryId))
+        AccessoryRefundRequest.find_by(id: params.fetch(:id)) if accessory.present?
       end
 
       def accessible_venues

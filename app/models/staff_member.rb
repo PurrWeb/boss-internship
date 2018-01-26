@@ -17,6 +17,7 @@ class StaffMember < ActiveRecord::Base
 
   has_many :clock_in_days
   has_many :accessory_requests
+  has_many :accessory_refund_requests
 
   belongs_to :address, inverse_of: :staff_member
   accepts_nested_attributes_for :address, allow_destroy: false

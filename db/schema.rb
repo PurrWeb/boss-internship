@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180125123514) do
+ActiveRecord::Schema.define(version: 20180126074919) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -24,6 +24,27 @@ ActiveRecord::Schema.define(version: 20180125123514) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
   end
+
+  create_table "accessory_refund_request_transitions", force: :cascade do |t|
+    t.string   "to_state",                    limit: 255,   null: false
+    t.text     "metadata",                    limit: 65535
+    t.integer  "sort_key",                    limit: 4,     null: false
+    t.integer  "accessory_refund_request_id", limit: 4,     null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+  end
+
+  create_table "accessory_refund_requests", force: :cascade do |t|
+    t.integer  "accessory_request_id", limit: 4, null: false
+    t.integer  "staff_member_id",      limit: 4, null: false
+    t.integer  "price_cents",          limit: 4
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "accessory_refund_requests", ["accessory_request_id", "staff_member_id"], name: "index_accessory_refund_requests_accessory_request_staff_member", unique: true, using: :btree
+  add_index "accessory_refund_requests", ["accessory_request_id"], name: "index_accessory_refund_requests_on_accessory_request_id", using: :btree
+  add_index "accessory_refund_requests", ["staff_member_id"], name: "index_accessory_refund_requests_on_staff_member_id", using: :btree
 
   create_table "accessory_request_transitions", force: :cascade do |t|
     t.string   "to_state",             limit: 255,   null: false

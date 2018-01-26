@@ -6,6 +6,7 @@ class Accessory < ActiveRecord::Base
   end
 
   belongs_to :venue
+  has_many :accessory_requests
 
   enum accessory_type: [:misc, :uniform]
 

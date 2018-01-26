@@ -225,8 +225,10 @@ Rails.application.routes.draw do
           member do
             post :accept
             post :reject
-            post :undo_accepted, path: 'undo-accepted'
-            post :undo_rejected, path: 'undo-rejected'
+            post :undo, path: 'undo'
+            post :accept_refund, path: 'accept-refund'
+            post :reject_refund, path: 'reject-refund'
+            post :undo_refund, path: 'undo-refund'
           end
         end
         resources :accessories, only: [:index, :create, :update, :destroy] do
@@ -316,7 +318,12 @@ Rails.application.routes.draw do
               get :holidays_count
             end
           end
-          resources :staff_member_accessory_requests, only: [:create], path: 'accessory-requests'
+          resources :staff_member_accessory_requests, only: [:create], path: 'accessory-requests' do
+            member do
+              post :refund_request, path: 'refund'
+              post :cancel_request, path: 'cancel'
+            end
+          end
           resources :owed_hours, only: [:index, :update, :destroy, :create]
           member do
             post :disable

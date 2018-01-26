@@ -4,6 +4,7 @@ class AccessoryRequest < ActiveRecord::Base
   belongs_to :staff_member
   belongs_to :accessory
   has_many :accessory_request_transitions
+  has_one :accessory_refund_request
 
   enum accessory_type: [:misc, :uniform]
 

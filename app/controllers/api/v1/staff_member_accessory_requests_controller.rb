@@ -22,6 +22,35 @@ module Api
         end
       end
 
+      def cancel_request
+        staff_member = staff_member_from_params
+        accessory_request = accessory_request_from_params
+
+        render json: {
+          staffMember: staff_member,
+          accessoryRequest: accessory_request
+        }
+      end
+
+      def refund_request
+        staff_member = staff_member_from_params
+        accessory_request = accessory_request_from_params
+
+        result = AccessoryRequestApiService.new(
+          requester: staff_member_from_params,
+          accessory_request: accessory_request,
+        ).refund
+        if result.success?
+          render(
+            serializer: nil,
+            json: accessory_request,
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
+      end
+
       private
       def accessory_request_params
         params.permit(:size, :accessoryId)
@@ -29,6 +58,10 @@ module Api
 
       def staff_member_from_params
         StaffMember.find_by(id: params.fetch(:staff_member_id))
+      end
+
+      def accessory_request_from_params
+        staff_member_from_params.accessory_requests.find_by(id: params.fetch(:id))
       end
     end
   end

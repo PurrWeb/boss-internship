@@ -4,10 +4,11 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
     :createdAt,
     :status,
     :accessoryName,
-    :size
+    :size,
+    :hasRefundRequest
 
   def createdAt
-    object.state_machine.last_transition.created_at.utc
+    object.updated_at.utc
   end
 
   def status
@@ -16,5 +17,13 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
 
   def accessoryName
     object.accessory.name
+  end
+
+  def hasRefundRequest
+    object.in_state(:accepted) && object.accessory_refund_request.present?
+  end
+
+  def requestTimeLine
+
   end
 end

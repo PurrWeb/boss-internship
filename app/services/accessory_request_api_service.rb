@@ -32,6 +32,34 @@ class AccessoryRequestApiService
     Result.new(model_service_result.success?, model_service_result.accessory_request, api_errors)
   end
 
+  def cancel(params:)
+    model_service_result = CancelAccessoryRequest.new(
+      accessory_request: accessory_request
+    ).call
+
+    api_errors = nil
+    unless model_service_result.success?
+      api_errors = AccessoryRequestApiErrors.new(accessory_request: model_service_result.accessory_request)
+    end
+    Result.new(model_service_result.success?, model_service_result.accessory_request, api_errors)
+  end
+
+  def refund
+    refund_accessory_request_params = {
+      price_cents: accessory_request.price_cents,
+    }.merge(staff_member: requester, accessory_request: accessory_request)
+
+    model_service_result = RefundAccessoryRequest.new(
+      params: refund_accessory_request_params
+    ).call
+
+    api_errors = nil
+    unless model_service_result.success?
+      api_errors = AccessoryRefundRequestApiErrors.new(accessory_refund_request: model_service_result.accessory_refund_request)
+    end
+    Result.new(model_service_result.success?, model_service_result.accessory_refund_request, api_errors)
+  end
+
   attr_reader :requester, :ability, :accessory_request
 
   private

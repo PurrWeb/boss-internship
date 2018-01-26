@@ -1,0 +1,26 @@
+class AccessoryRefundRequest < ActiveRecord::Base
+  include Statesman::Adapters::ActiveRecordQueries
+
+  belongs_to :staff_member
+  belongs_to :accessory_request
+  has_many :accessory_refund_request_transitions
+
+  validates :price_cents, presence: true
+  validates :accessory_request, presence: true
+  validates :staff_member, presence: true
+  validates :accessory_request, uniqueness: { scope: :staff_member, message: "can have only one refund request" }
+
+  def state_machine
+    @state_machine ||= AccessoryRequestStateMachine.new(
+      self,
+      transition_class: AccessoryRefundRequestTransition,
+      association_name: :accessory_refund_request_transitions)
+  end
+
+  delegate \
+    :can_transition_to?,
+    :transition_to!,
+    :transition_to,
+    :current_state,
+    to: :state_machine
+end
