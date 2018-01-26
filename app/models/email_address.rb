@@ -20,6 +20,11 @@ class EmailAddress < ActiveRecord::Base
     ) unless email =~ EmailAddress.email_address_regex
   end
 
+  def assigned_to_user?(enabled_only: false)
+    user_count = enabled_only ? users.enabled.count : users.count
+    user_count > 0
+  end
+
   def unassigned?
     users.enabled.count == 0 &&
       staff_members.enabled.count == 0
