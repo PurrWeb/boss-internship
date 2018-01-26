@@ -73,9 +73,9 @@ class InvitesController < ApplicationController
     ActiveRecord::Base.transaction do
       venues = invite.venue_ids.map { |id| Venue.find_by(id: id) }.compact
 
-      existing_email_free = EmailAddressNotInUseQuery.new.all.where(email: invite.email).present?
-      if existing_email_free
-        email_address = EmailAddress.find_by!(email: invite.email)
+      existing_email_address = EmailAddress.find_by(email: invite.email)
+      if existing_email_address && !existing_email_address.assigned_to_user?
+        email_address = existing_email_address
       else
         email_address = EmailAddress.new(email: invite.email)
       end
@@ -94,6 +94,12 @@ class InvitesController < ApplicationController
         end
 
         invite.transition_to!(:accepted)
+      else
+        if user.errors["email_address.email"].present?
+          user.errors["email_address.email"].each do |error_message|
+            user.errors.add(:base, "Email #{error_message}")
+          end
+        end
       end
 
       raise ActiveRecord::Rollback unless result
