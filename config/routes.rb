@@ -316,7 +316,7 @@ Rails.application.routes.draw do
               get :holidays_count
             end
           end
-          resources :staff_member_accessories, only: [:create], path: 'accessory-requests'
+          resources :staff_member_accessory_requests, only: [:create], path: 'accessory-requests'
           resources :owed_hours, only: [:index, :update, :destroy, :create]
           member do
             post :disable

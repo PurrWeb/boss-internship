@@ -1,6 +1,6 @@
 module Api
   module V1
-    class StaffMemberAccessoriesController < APIController
+    class StaffMemberAccessoryRequestsController < APIController
       before_filter :web_token_authenticate!
       before_filter :set_paper_trail_whodunnit
 
