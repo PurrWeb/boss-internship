@@ -37,6 +37,7 @@
             <h2 class="boss-user-summary__name"><%= staff_member.full_name.titlecase %><span><%= '(Disabled)' if staff_member.disabled? %></span></h2>
             <span class="boss-button boss-button_type_small boss-button_type_no-behavior boss-user-summary__label" style="background-color:#<%= staff_member.staff_type.ui_color %>"><%= staff_member.staff_type.name %></span>
           </div>
+          <% if staff_member.master_venue.present? %>
             <ul class="boss-user-summary__review-list">
               <li class="boss-user-summary__review-item">
                 <span class="boss-user-summary__review-label">Main Venue: </span>
@@ -47,6 +48,7 @@
               <span class="boss-user-summary__review-val boss-user-summary__review-val_marked"><%= staff_member.work_venues.count == 0 ? 'None' : staff_member.work_venues.map(&:name).join(", ") %></span>
               </li>
             </ul>
+          <% end %>
             <% if staff_member.disabled? %>
               <ul class="boss-user-summary__review-list boss-user-summary__review-list_type_box<%= "-alert" if staff_member.flagged? %>">
                 <% if staff_member.flagged? %>
