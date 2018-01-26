@@ -94,6 +94,12 @@ class InvitesController < ApplicationController
         end
 
         invite.transition_to!(:accepted)
+      else
+        if user.errors["email_address.email"].present?
+          user.errors["email_address.email"].each do |error_message|
+            user.errors.add(:base, "Email #{error_message}")
+          end
+        end
       end
 
       raise ActiveRecord::Rollback unless result
