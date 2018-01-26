@@ -130,21 +130,27 @@ class UserAbility
       end
 
       can :enable, StaffMember do |staff_member|
-        !user.restricted_access? && (
-          staff_member.disabled? && can_edit_staff_member?(user, staff_member)
+        (user.security_manager? && staff_member.security?) || (
+          !user.restricted_access? && (
+            staff_member.disabled? && can_edit_staff_member?(user, staff_member)
+          )
         )
       end
 
       can :disable, StaffMember do |staff_member|
-        !user.restricted_access? && (
-          staff_member.enabled? &&
-            user.staff_member != staff_member &&
-            can_edit_staff_member?(user, staff_member)
+        (user.security_manager? && staff_member.security?) || (
+          !user.restricted_access? && (
+            staff_member.enabled? &&
+              user.staff_member != staff_member &&
+              can_edit_staff_member?(user, staff_member)
+          )
         )
       end
 
       can :edit, StaffMember do |staff_member|
-        !user.restricted_access? && can_edit_staff_member?(user, staff_member)
+        (user.security_manager? && staff_member.security?) || (
+          !user.restricted_access? && can_edit_staff_member?(user, staff_member)
+        )
       end
 
       can :manage, Rota do |rota|
