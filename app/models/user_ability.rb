@@ -17,16 +17,14 @@ class UserAbility
         user.maintenance_staff? || !user.restricted_access?
       end
 
-      can :view, MaintenanceTask do |maintenance_task|
+      can [:view, :add_note, :change_status], MaintenanceTask do |maintenance_task|
         user.maintenance_staff? || (
-          !user.restricted_access? && can_manage_venue?(user, maintenance_task.venue)
+          !user.restricted_access && can_manage_venue?(user, maintenance_task.venue)
         )
       end
 
       can :manage, MaintenanceTask do |maintenance_task|
-        user.maintenance_staff? || (
-          !user.restricted_access? && can_manage_venue?(user, maintenance_task.venue)
-        )
+        !user.restricted_access? && can_manage_venue?(user, maintenance_task.venue)
       end
 
       can :view, :venue_dashboard do

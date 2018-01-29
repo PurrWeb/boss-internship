@@ -7,6 +7,7 @@ import Select from 'react-select';
 import Modal from "react-modal";
 import TaskNote from './task-note';
 import ImageGallery from './image-gallery'
+import oFetch from 'o-fetch';
 
 export default class TaskModal extends React.Component {
   constructor(props) {
@@ -179,11 +180,16 @@ export default class TaskModal extends React.Component {
       dropdownContent.slideToggle().toggleClass('boss-overview__dropdown-content_state_closed');
     });
   }
-  
+
   handleEditClick = () => {
     this.onClose();
     this.props.setFrontendState({ showNewTaskModal: true });
     this.props.setCurrentMaintenanceTask(this.props.selectedMaintenanceTask);
+  }
+
+  userHasElevatedAccess(){
+    const currentUser = oFetch(this.props, 'currentUser');
+    return !(oFetch(currentUser, 'role') === 'maintenance_staff');
   }
 
   render() {
@@ -203,10 +209,10 @@ export default class TaskModal extends React.Component {
 
         <div className="boss-modal-window__header">
           {task.title}
-          <button
+          { this.userHasElevatedAccess() && <button
             onClick={this.handleEditClick}
             className="boss-modal-window__action boss-modal-window__action_role_edit boss-modal-window__action_position_after"
-          >Edit</button>
+          >Edit</button>}
         </div>
 
         <div className="boss-modal-window__content">
