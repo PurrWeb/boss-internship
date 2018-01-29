@@ -146,6 +146,9 @@ registerComponent('VenueHealthCheckReportApp', VenueHealthCheckReportApp);
 import MaintenanceApp from './apps/maintenance-app';
 registerComponent('MaintenanceApp', MaintenanceApp);
 
+import MarketingTasksApp from "./apps/marketing-tasks-app"
+registerComponent("MarketingTasksApp", MarketingTasksApp)
+
 import VenueDashboardApp from './apps/venue-dashboard-app';
 registerComponent('VenueDashboardApp', VenueDashboardApp);
 

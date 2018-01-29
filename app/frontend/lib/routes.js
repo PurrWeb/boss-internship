@@ -210,6 +210,54 @@ const apiRoutes = {
         },
         method: 'PUT'
     },
+    marketingTasks: {
+        getPath: function() {
+            return '/api/v1/marketing_tasks';
+        },
+        method: 'GET'
+    },
+    marketingTaskChangeStatus: {
+        getPath: function(marketingTaskId) {
+            return `/api/v1/marketing_tasks/${marketingTaskId}/change_status`;
+        },
+        method: 'PUT'
+    },
+    marketingTaskNote: {
+        getPath: function(marketingTaskId) {
+            return `/api/v1/marketing_tasks/${marketingTaskId}/notes`;
+        },
+        method: 'POST'
+    },
+    createMarketingTask: {
+        getPath: function() {
+            return '/api/v1/marketing_tasks';
+        },
+        method: 'POST'
+    },
+    deleteMarketingTask: {
+        getPath: function(marketingTaskId) {
+            return `/api/v1/marketing_tasks/${marketingTaskId}`;
+        },
+        method: 'DELETE'
+    },
+    restoreMarketingTask: {
+        getPath: function(marketingTaskId) {
+            return `/api/v1/marketing_tasks/${marketingTaskId}/restore`;
+        },
+        method: 'PUT'
+    },
+    deleteMarketingTaskImage: {
+        getPath: function(marketingTaskImageId) {
+            return `/api/v1/marketing_task_image_uploads/${marketingTaskImageId}`;
+        },
+        method: 'DELETE'
+    },
+    updateMarketingTask: {
+        getPath: function(marketingTaskId) {
+            return `/api/v1/marketing_tasks/${marketingTaskId}`;
+        },
+        method: 'PUT'
+    },
     saveResponse: {
         getPath: function(questionnaireId) {
             return "/questionnaires/" + questionnaireId + "/responses";
