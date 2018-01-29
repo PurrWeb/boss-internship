@@ -8,6 +8,8 @@ module Api
       before_action :find_maintenance_task!, except: [:create, :index]
 
       def index
+        authorize! :view, :maintenance_tasks
+
         maintenance_tasks_filter = MaintenanceTaskFilter.new(params).fetch
         maintenance_tasks = maintenance_tasks_filter.paginate(
           page: page_number,
@@ -81,7 +83,7 @@ module Api
       end
 
       def change_status
-        authorize! :manage, @maintenance_task
+        authorize! :change_status, @maintenance_task
 
         state_transition = StateTransition.new({
           requester: current_user,
@@ -103,7 +105,7 @@ module Api
       def add_note
         note = @maintenance_task.maintenance_task_notes.new(maintenance_task_notes_params.merge(creator_user: current_user))
 
-        authorize! :manage, @maintenance_task
+        authorize! :add_note, @maintenance_task
 
         if note.save
           render json: note, serializer: Api::V1::MaintenanceTaskNoteSerializer, status: :created, key_transform: :camel_lower

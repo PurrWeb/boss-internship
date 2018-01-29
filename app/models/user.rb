@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   MARKETING_ROLE = 'marketing'
-  ROLES = ['admin', 'manager', 'dev', 'ops_manager', 'security_manager', 'maintenance_staff', MARKETING_ROLE]
+  MAINTENANCE_ROLE = 'maintenance_staff'
+  ROLES = ['admin', 'manager', 'dev', 'ops_manager', 'security_manager', MAINTENANCE_ROLE, MARKETING_ROLE]
 
   include Statesman::Adapters::ActiveRecordQueries
 
@@ -61,6 +62,10 @@ class User < ActiveRecord::Base
 
   def self.with_email(email)
     joins(:email_address).merge(EmailAddress.where(email: email))
+  end
+
+  def self.maintenance_staff
+    where(role: MAINTENANCE_ROLE)
   end
 
   def self.with_all_venue_access
@@ -148,7 +153,7 @@ class User < ActiveRecord::Base
   end
 
   def maintenance_staff?
-    role == 'maintenance_staff'
+    role == MAINTENANCE_ROLE
   end
 
   def restricted_access?

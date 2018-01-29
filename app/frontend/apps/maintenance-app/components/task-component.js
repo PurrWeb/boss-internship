@@ -103,17 +103,19 @@ export default class TaskComponent extends React.Component {
     )
   }
 
-  renderActionsCell() {
-    if (this.props.currentUser && this.props.currentUser.role === 'maintenance_staff') {
-      return null;
-    }
+  userHasElevatedAccess() {
+    const currentUser = oFetch(this.props, 'currentUser');
+    return !(oFetch(currentUser, 'role') === 'maintenance_staff')
+  }
 
+  renderActionsCell() {
     return (
       <div className="boss-table__cell">
         <div className="boss-table__info">
           <div className="boss-table__actions">
             <button className="boss-button boss-button_type_small boss-button_role_view-details-light boss-table__action" onClick={ this.handleDetailsClick }>View/Edit</button>
-            <button className="boss-button boss-button_type_small boss-button_role_cancel-light boss-table__action" onClick={ this.handleDelete }>Delete</button>
+
+            { this.userHasElevatedAccess() && <button className="boss-button boss-button_type_small boss-button_role_cancel-light boss-table__action" onClick={ this.handleDelete }>Delete</button> }
           </div>
         </div>
       </div>
