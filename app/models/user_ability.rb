@@ -19,7 +19,7 @@ class UserAbility
 
       can [:view, :add_note, :change_status], MaintenanceTask do |maintenance_task|
         user.maintenance_staff? || (
-          !user.restricted_access && can_manage_venue?(user, maintenance_task.venue)
+          !user.restricted_access? && can_manage_venue?(user, maintenance_task.venue)
         )
       end
 
