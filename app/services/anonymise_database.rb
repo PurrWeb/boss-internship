@@ -237,7 +237,7 @@ class AnonymiseDatabase
           employment_status_p45_supplied: true,
           master_venue: user.venues.first,
           staff_member_venues: [],
-          pay_rate: PayRate.weekly.first
+          pay_rate: PayRate.named.first
         }
 
         if staff_member.present?
@@ -311,7 +311,7 @@ class AnonymiseDatabase
           employment_status_p45_supplied: true,
           master_venue: staff_member_datum.fetch(:master_venue),
           staff_member_venues: [],
-          pay_rate: PayRate.weekly.first
+          pay_rate: PayRate.named.first
         )
       end
     end
