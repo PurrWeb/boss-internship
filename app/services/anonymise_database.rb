@@ -314,8 +314,6 @@ class AnonymiseDatabase
           pay_rate: PayRate.weekly.first
         )
       end
-
-      UpdateBouncedEmailsJob.new.perform(env: "production", service: lambda { bounced_emails_data })
     end
   end
 
