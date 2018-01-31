@@ -1,40 +1,64 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BossCheckCardActions from './boss-check-card-actions';
+import BossCheckRow from './boss-check-row';
 import BossCheckCardRow from './boss-check-card-row';
+import BossCheckCardCollapsibleGroup from './boss-check-card-collapsible-group';
 
 class BossCheckCard extends React.PureComponent {
-  renderChildrens() {
-    return React.Children.map(this.props.children, (child, i) => {
+  constructor(props) {
+    super(props);
+
+    this.children = [];
+    this.actionsButtons = null;
+    this.checkRows = [];
+  }
+
+  prepareChildren() {
+    let children = [];
+    let checkRows = [];
+    let actionsButtons = null;
+
+    React.Children.forEach(this.props.children, (child, i) => {
       if (child.type === BossCheckCardActions) {
-        this.actionsButtons = child;
+        actionsButtons = child;
       };
       if (child.type === BossCheckCardRow) {
-        return React.cloneElement(child, {
-          key: `${i}`
-        });
+        children = [...children, React.cloneElement(child, {
+          key: `cardRow${i}`
+        })];
       }
-      return;
-    })
+      if (child.type === BossCheckRow) {
+        checkRows = [...checkRows, React.cloneElement(child, {
+          key: `row${i}`
+        })];
+      }
+      if (child.type === BossCheckCardCollapsibleGroup) {
+        children = [...children, React.cloneElement(child, {
+          key: `collapsibleGroup${i}`
+        })];
+      }
+    });
+
+    return {children, checkRows, actionsButtons};
   }
 
   render() {
+    const {children, checkRows, actionsButtons} = this.prepareChildren();
     return (
       <div className="boss-check boss-check_role_board">
-        <div className="boss-check__row">
-          <div className="boss-check__cell">
-            <p className={`boss-check__title ${this.props.className}`}>
-              {this.props.title}
-              {!!this.props.status && <span className="boss-check__title-status">{this.props.status}</span>}
-            </p>
-          </div>
-        </div>
+        <BossCheckRow
+          className={`boss-check__title ${this.props.className}`}
+          title={this.props.title}
+          status={this.props.status}
+        />
+        { checkRows }
         <div className="boss-check__row boss-check__row_marked">
           <div className="boss-check__info-table">
-            {this.renderChildrens()}
+            { children }
           </div>
         </div>
-        {this.actionsButtons}
+        { actionsButtons }
       </div>
     )
   }

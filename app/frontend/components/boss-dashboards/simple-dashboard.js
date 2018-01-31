@@ -9,20 +9,17 @@ class SimpleDashboard extends React.Component {
   parseChildrens = () => {
     React.Children.map(this.props.children, (child, i) => {
       if (child.type === DashboardFilter) {
-        this.filter = child;
+        this.filter = React.cloneElement(child);
       };
       if (child.type === DashboardActions) {
-        this.actions = child;
+        this.actions = React.cloneElement(child);
       };
       return;
     })
   }
 
-  componentWillMount() {
-    this.parseChildrens();
-  }
-
   render() {
+    this.parseChildrens();
     return (
       <div className="boss-page-main__dashboard">
         <div className="boss-page-main__inner">
@@ -44,7 +41,10 @@ class SimpleDashboard extends React.Component {
 SimpleDashboard.propTypes = {
   title: PropTypes.string.isRequired,
   className: PropTypes.string,
-  children: PropTypes.array,
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.element,
+  ]),
 }
 
 SimpleDashboard.defaultProps = {
