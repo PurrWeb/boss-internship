@@ -53,6 +53,7 @@
     "eslint-plugin-react": "^3.16.1",
     "expect": "^1.12.2",
     "file-loader": "^0.10.0",
+    "flow-babel-webpack-plugin": "^1.1.1",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "humps": "^2.0.0",
     "immutable": "^3.8.1",
@@ -146,19 +147,18 @@
   },
   "scripts": {
     "test": "jest --colors --notify",
-    "start":
-      "rm -rf ./public/assets/bundles && webpack -w --config ./webpack/dev.config.js",
-    "start-hot-dev":
-      "webpack-dev-server --hot --inline --config webpack/hot-dev.config.js",
-    "build":
-      "npm rebuild node-sass && rm -rf ./public/assets/bundles && webpack --bail --config ./webpack/production.config.js"
+    "start": "rm -rf ./public/assets/bundles && webpack -w --config ./webpack/dev.config.js",
+    "start-hot-dev": "webpack-dev-server --hot --inline --config webpack/hot-dev.config.js",
+    "build": "npm rebuild node-sass && rm -rf ./public/assets/bundles && webpack --bail --config ./webpack/production.config.js"
   },
   "license": "",
   "jest": {
     "snapshotSerializers": [
       "<rootDir>/node_modules/enzyme-to-json/serializer"
     ],
-    "roots": ["<rootDir>/app/frontend/__test__"]
+    "roots": [
+      "<rootDir>/app/frontend/__test__"
+    ]
   },
   "engines": {
     "node": "8.7.0",
