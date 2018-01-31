@@ -20,7 +20,7 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
   end
 
   def hasRefundRequest
-    object.in_state(:accepted) && object.accessory_refund_request.present?
+    object.accepted? && object.accessory_refund_request.present?
   end
 
   def requestTimeLine

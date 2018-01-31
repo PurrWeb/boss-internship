@@ -21,6 +21,10 @@ class AccessoryRequest < ActiveRecord::Base
       association_name: :accessory_request_transitions)
   end
 
+  def accepted?
+    state_machine.current_state == "accepted"
+  end
+
   delegate \
     :can_transition_to?,
     :transition_to!,
