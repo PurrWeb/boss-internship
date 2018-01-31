@@ -5,34 +5,29 @@ import BossTableRow from './boss-table-row';
 class BossTable extends React.Component {
   renderChildren() {
     return React.Children.map(this.props.children, (child, i) => {
-      if (child.type === BossTableRow) {
-        return React.cloneElement(child, {
-          key: `${i}`
-        });
-      }
-      return null;
+      return React.cloneElement(child, {
+        key: `${i}`,
+      });
     });
   }
 
   render() {
     return (
       <div className={`boss-table ${this.props.className}`}>
-        { this.renderChildren() }
+        {this.renderChildren()}
       </div>
-    )
+    );
   }
 }
 
 BossTable.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.element,
-  ]).isRequired,
-}
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.element])
+    .isRequired,
+};
 
 BossTable.defaultProps = {
   className: '',
-}
+};
 
 export default BossTable;
