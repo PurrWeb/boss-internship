@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Collapse } from "react-collapse";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Collapse } from 'react-collapse';
 
 class BossCheckCardCollapsibleGroup extends React.PureComponent {
   state = {
-    isOpened: false
+    isOpened: false,
   };
 
   toggleDropDown = () => {
@@ -24,9 +24,11 @@ class BossCheckCardCollapsibleGroup extends React.PureComponent {
             <p
               onClick={this.toggleDropDown}
               className={`boss-check__dropdown-link ${
-                this.state.isOpened
-                  ? ""
-                  : "boss-check__dropdown-link_state_closed"
+                this.props.showCaret
+                  ? this.state.isOpened
+                    ? ''
+                    : 'boss-check__dropdown-link_state_closed'
+                  : 'boss-check__dropdown-link_state_inactive'
               }`}
             >
               {this.props.text}
@@ -36,7 +38,7 @@ class BossCheckCardCollapsibleGroup extends React.PureComponent {
         <Collapse
           isOpened={this.state.isOpened}
           className="boss-check__dropdown"
-          style={{ display: "block" }}
+          style={{ display: 'block' }}
         >
           {this.props.children}
         </Collapse>
@@ -48,11 +50,12 @@ class BossCheckCardCollapsibleGroup extends React.PureComponent {
 BossCheckCardCollapsibleGroup.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 BossCheckCardCollapsibleGroup.defaultProps = {
-  className: ""
+  className: '',
+  showCaret: true,
 };
 
 export default BossCheckCardCollapsibleGroup;
