@@ -15,95 +15,94 @@ import EditAccessory from './edit-accessory';
 import AccessoriesList from './accessories-list';
 
 class AccessoriesPage extends React.Component {
-
   handleLoadMore = () => {
     this.props.actions.loadMoreClick();
-  }
+  };
 
   handleAddAccessorySubmit = (hideModal, values) => {
     return this.props.actions.createAccessory(values).then(resp => {
       hideModal();
       return resp;
     });
-  }
+  };
 
   handleEditAccessorySubmit = (hideModal, values) => {
     return this.props.actions.updateAccessory(values).then(resp => {
       hideModal();
       return resp;
     });
-  }
+  };
 
   handleDisableAccessorySubmit = (hideModal, params) => {
     return this.props.actions.disableAccessory(params.accessory).then(resp => {
       hideModal();
       return resp;
     });
-  }
+  };
 
   handleRestoreAccessorySubmit = (hideModal, params) => {
     return this.props.actions.restoreAccessory(params.accessory).then(resp => {
       hideModal();
       return resp;
     });
-  }
+  };
 
-  handleEdit = (accessory) => {
+  handleEdit = accessory => {
     openContentModal({
       submit: this.handleEditAccessorySubmit,
-      config: {title: 'Edit accessory'},
-      props: {accessory: accessory}
+      config: { title: 'Edit accessory' },
+      props: { accessory: accessory },
     })(EditAccessory);
-  }
+  };
 
-  handleDisable = (accessory) => {
+  handleDisable = accessory => {
     openWarningModal({
       submit: this.handleDisableAccessorySubmit,
       config: {
         title: 'WARNING !!!',
         text: 'Are You Sure?',
-        buttonText: 'Disable'
+        buttonText: 'Disable',
       },
-      props: {accessory}
+      props: { accessory },
     });
-  }
+  };
 
-  handleRestore = (accessory) => {
+  handleRestore = accessory => {
     openWarningModal({
       submit: this.handleRestoreAccessorySubmit,
       config: {
         title: 'WARNING !!!',
         text: 'Are You Sure?',
-        buttonText: 'Restore'
+        buttonText: 'Restore',
       },
-      props: {accessory}
+      props: { accessory },
     });
-  }
+  };
 
   handleAddAccessory = () => {
     openContentModal({
       submit: this.handleAddAccessorySubmit,
-      config: {title: 'Add Accessory'}
+      config: { title: 'Add Accessory' },
     })(AddAccessory);
-  }
+  };
 
-  handleFilter = (values) => {
+  handleFilter = values => {
     const queryString = new URLSearchParams(window.location.search);
     queryString.delete('accessoryType');
     queryString.delete('status');
     queryString.delete('name');
     queryString.delete('userRequestable');
-    for(let value in values) {
+    for (let value in values) {
       if (values[value]) {
-        queryString.set(value, values[value])
+        queryString.set(value, values[value]);
       }
     }
     window.history.pushState('state', 'title', `accessories?${queryString}`);
     return this.props.actions.filter();
-  }
+  };
 
   getAccessories() {
-    const {accessories, pagination: {pageNumber, perPage}} = this.props;
+    const { accessories, pagination: { pageNumber, perPage } } = this.props;
     const slice = pageNumber * perPage;
     if (accessories.length) {
       return accessories.slice(0, slice);
@@ -113,17 +112,23 @@ class AccessoriesPage extends React.Component {
 
   render() {
     const accessories = this.getAccessories();
-    const isShowLoadMore = accessories.length < this.props.pagination.totalCount;
-    return(
+    const isShowLoadMore =
+      accessories.length < this.props.pagination.totalCount;
+    return (
       <div>
         <SimpleDashboard title="Accessories">
           <DashboardActions>
             <button
               className="boss-button boss-button_role_add"
               onClick={this.handleAddAccessory}
-            >Add Accessory</button>
+            >
+              Add Accessory
+            </button>
           </DashboardActions>
-          <DashboardFilter onFilter={this.handleFilter} component={AccessoriesFilter} />
+          <DashboardFilter
+            onFilter={this.handleFilter}
+            component={AccessoriesFilter}
+          />
         </SimpleDashboard>
         <AccessoriesList
           accessories={this.getAccessories()}
@@ -135,7 +140,7 @@ class AccessoriesPage extends React.Component {
           onLoadMoreClick={this.handleLoadMore}
         />
       </div>
-    )
+    );
   }
 }
 
