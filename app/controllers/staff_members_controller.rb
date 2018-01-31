@@ -201,7 +201,7 @@ class StaffMembersController < ApplicationController
     ).page_pay_rates.map(&:id)
 
     venue_accessories = staff_member.master_venue.accessories.enabled.user_requestable
-    accessory_requests = staff_member.accessory_requests.includes(:accessory)
+    accessory_requests = staff_member.accessory_requests.includes([:accessory, :accessory_refund_request])
 
     render locals: {
       staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
@@ -224,8 +224,6 @@ class StaffMembersController < ApplicationController
         serializer: Api::V1::StaffMemberProfile::AccessoryRequestSerializer,
       ),
       accessible_pay_rate_ids: accessible_pay_rate_ids,
-      venues: Venue.all,
-      accessible_venue_ids: Venue.all.pluck(:id),
       accessible_pay_rates: accessible_pay_rate_ids
     }
   end
