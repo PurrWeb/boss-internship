@@ -19,8 +19,9 @@ main() {
   install_redis
   add_github_host_key
   bundle_gems
-  install_npm_modules
   setup_database
+  install_yarn
+  install_node_modules
   append_bashrc 'export PATH=$PATH:/vagrant/bin'
   append_bashrc 'cd /vagrant'
 }
@@ -39,6 +40,13 @@ upgrade_packages() {
 
 install_git() {
   sudo apt-get install -y git
+}
+
+install_yarn(){
+  sudo apt-get install apt-transport-https
+
+  wget https://github.com/yarnpkg/yarn/releases/download/v1.0.1/yarn_1.0.1_all.deb
+  sudo dpkg -i yarn_1.0.1_all.deb
 }
 
 install_ruby() {
@@ -100,8 +108,8 @@ bundle_gems() {
   bundle install
 }
 
-install_npm_modules() {
-  npm install --quiet
+install_node_modules() {
+  yarn install
 }
 
 setup_database() {
