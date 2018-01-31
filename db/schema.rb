@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171212095148) do
+ActiveRecord::Schema.define(version: 20171220065518) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -24,6 +24,20 @@ ActiveRecord::Schema.define(version: 20171212095148) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
   end
+
+  create_table "accessory_requests", force: :cascade do |t|
+    t.integer  "accessory_id",    limit: 4,   null: false
+    t.integer  "staff_member_id", limit: 4,   null: false
+    t.integer  "status",          limit: 4,   null: false
+    t.integer  "accessory_type",  limit: 4,   null: false
+    t.integer  "price_cents",     limit: 4,   null: false
+    t.string   "size",            limit: 255
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "accessory_requests", ["accessory_id"], name: "index_accessory_requests_on_accessory_id", using: :btree
+  add_index "accessory_requests", ["staff_member_id"], name: "index_accessory_requests_on_staff_member_id", using: :btree
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255
