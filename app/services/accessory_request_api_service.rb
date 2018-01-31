@@ -32,8 +32,9 @@ class AccessoryRequestApiService
     Result.new(model_service_result.success?, model_service_result.accessory_request, api_errors)
   end
 
-  def cancel(params:)
+  def cancel
     model_service_result = CancelAccessoryRequest.new(
+      requester: requester,
       accessory_request: accessory_request
     ).call
 

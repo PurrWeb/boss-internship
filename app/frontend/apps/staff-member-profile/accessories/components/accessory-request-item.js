@@ -49,13 +49,17 @@ class AccessoryRequestItem extends React.Component {
     const size = oFetch(accessoryRequest, 'size');
     const hasRefundRequest = oFetch(accessoryRequest, 'hasRefundRequest');
     const requestStatus = hasRefundRequest ? 'requested' : status;
+    const statusClassPrefix =
+      requestStatus === constants.ACCESSORY_REQUEST_STATUS_CANCELED
+        ? 'rejected'
+        : requestStatus;
 
     return (
       <li className="boss-requests__item">
         <div className="boss-requests__meta">
           <div className="boss-requests__date">{requestDate}</div>
           <div
-            className={`boss-requests__status boss-requests__status_role_${requestStatus}`}
+            className={`boss-requests__status boss-requests__status_role_${statusClassPrefix}`}
           >
             {constants.ACCESSORY_REQUEST_STATUS[requestStatus]}
           </div>

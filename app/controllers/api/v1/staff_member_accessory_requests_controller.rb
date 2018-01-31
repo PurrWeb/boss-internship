@@ -24,12 +24,20 @@ module Api
 
       def cancel_request
         staff_member = staff_member_from_params
-        accessory_request = accessory_request_from_params
-
-        render json: {
-          staffMember: staff_member,
-          accessoryRequest: accessory_request
-        }
+        result = AccessoryRequestApiService.new(
+          requester: staff_member_from_params,
+          accessory_request: accessory_request_from_params,
+        ).cancel
+        if result.success?
+          render(
+            json: result.accessory_request,
+            serializer: Api::V1::StaffMemberProfile::AccessoryRequestSerializer,
+            key_transform: :camel_lower,
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
       end
 
       def refund_request
@@ -61,7 +69,7 @@ module Api
       end
 
       def accessory_request_from_params
-        staff_member_from_params.accessory_requests.find_by(id: params.fetch(:id))
+        staff_member_from_params.accessory_requests.find_by(id: params.fetch(:id)) if staff_member_from_params.present?
       end
     end
   end

@@ -5,13 +5,14 @@ class CancelAccessoryRequest
     end
   end
 
-  def initialize(accessory_request:)
+  def initialize(accessory_request:, requester:)
     @accessory_request = accessory_request
+    @requester = requester
   end
 
   def call
     success = false
-    success = true
+    success = accessory_request.transition_to(:canceled)
 
     Result.new(success, accessory_request)
   end

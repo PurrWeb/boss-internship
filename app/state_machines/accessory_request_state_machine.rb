@@ -4,8 +4,7 @@ class AccessoryRequestStateMachine
   state :pending, initial: true
   state :accepted
   state :rejected
+  state :canceled
 
-  transition from: :pending, to: [:accepted, :rejected]
-  transition from: :accepted, to: [:pending]
-  transition from: :rejected, to: [:pending]
+  transition from: :pending, to: [:accepted, :rejected, :canceled]
 end
