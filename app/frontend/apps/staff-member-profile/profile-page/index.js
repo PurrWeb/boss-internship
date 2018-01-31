@@ -8,19 +8,17 @@ import {initialProfileLoad} from '../profile-wrapper/actions';
 import ProfilePage from './containers/profile-page';
 import profileReducer from '../profile-wrapper/reducers';
 
-const store = configureStore(combineReducers({
-  profile: profileReducer,
-  form: formReducer,
-}));
-
 class StaffMemberProfileDetailsApp extends React.Component {
-  constructor(props) {
-    super(props);
-    store.dispatch(initialProfileLoad({...props}));
+  componentWillMount() {
+    this.store = configureStore(combineReducers({
+      profile: profileReducer,
+      form: formReducer,
+    }));
+    this.store.dispatch(initialProfileLoad({...this.props}));
   }
 
   render() {
-    return <Provider store={store}>
+    return <Provider store={this.store}>
       <ProfilePage/>
     </Provider>
   }

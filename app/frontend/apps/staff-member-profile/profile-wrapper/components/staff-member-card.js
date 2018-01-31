@@ -91,6 +91,10 @@ const StaffMemberCard = ({
           href={`owed_hours`}
           className={`${isActive(currentPage ,"owed_hours")} boss-button boss-button_type_small boss-button_role_timelog boss-user-summary__switch`}
         >Owed hours</a>
+        <a
+          href={`accessories`}
+          className={`${isActive(currentPage ,"accessories")} boss-button boss-button_type_small boss-button_role_accessories boss-button_state_active boss-user-summary__switch`}
+        >Accessories</a>
       </div>
     )
   }

@@ -11,21 +11,19 @@ import profileReducer from '../profile-wrapper/reducers';
 import OwedHours from './containers/owed-hours';
 import owedHoursReducers from './reducers';
 
-const store = configureStore(combineReducers({
-  profile: profileReducer,
-  owedHours: owedHoursReducers, 
-  form: formReducer,
-}));
-
 class StaffMemberOwedHoursApp extends React.Component {
-  constructor(props) {
-    super(props);
-    store.dispatch(initialProfileLoad({...props}));
-    store.dispatch(initialLoad({...props}));
+  componentWillMount() {
+    this.store = configureStore(combineReducers({
+      profile: profileReducer,
+      owedHours: owedHoursReducers,
+      form: formReducer,
+    }));
+    this.store.dispatch(initialProfileLoad({...this.props}));
+    this.store.dispatch(initialLoad({...this.props}));
   }
 
   render() {
-    return <Provider store={store}>
+    return <Provider store={this.store}>
       <OwedHours />
     </Provider>
   }
