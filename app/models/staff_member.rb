@@ -16,6 +16,7 @@ class StaffMember < ActiveRecord::Base
   belongs_to :master_venue, class_name: 'Venue', inverse_of: :master_staff_members
 
   has_many :clock_in_days
+  has_many :accessory_requests
 
   belongs_to :address, inverse_of: :staff_member
   accepts_nested_attributes_for :address, allow_destroy: false
@@ -47,9 +48,9 @@ class StaffMember < ActiveRecord::Base
   validates :avatar, {
     file_size: { less_than: 1.megabyte }
   }
-  
+
   validates :password, length: (6..32), confirmation: true, if: :setting_password?
-  
+
   # Transient attribute used to preserve image uploads
   # during form resubmissions
   attr_accessor \

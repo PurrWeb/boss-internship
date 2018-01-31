@@ -1,11 +1,11 @@
-class Api::V1::Accessories::AccessorySerializer < ActiveModel::Serializer
+class Api::V1::AccessoryRequests::AccessorySerializer < ActiveModel::Serializer
   attributes \
     :id,
     :name,
-    :accessory_type,
+    :accessoryType,
     :size,
-    :price_cents,
-    :user_requestable,
+    :priceCents,
+    :userRequestable,
     :enabled
 
   def enabled

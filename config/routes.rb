@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     }
 
     resources :accessories, only: [:index]
+    resources :accessory_requests, only: [:index], path: 'accessory-requests'
     resources :machines, only: [:index]
     resources :machine_refloats, only: [:index]
 
@@ -97,6 +98,7 @@ Rails.application.routes.draw do
         get :holidays
         get :profile
         get :owed_hours
+        get :accessories
       end
     end
 
@@ -219,6 +221,14 @@ Rails.application.routes.draw do
       namespace :v1 do
         get 'version', to: 'version#version'
 
+        resources :accessory_requests, only: [:index, :create, :update, :destroy], path: 'accessory-requests'  do
+          member do
+            post :accept
+            post :reject
+            post :undo_accepted, path: 'undo-accepted'
+            post :undo_rejected, path: 'undo-rejected'
+          end
+        end
         resources :accessories, only: [:index, :create, :update, :destroy] do
           member do
             post :restore
@@ -306,6 +316,7 @@ Rails.application.routes.draw do
               get :holidays_count
             end
           end
+          resources :staff_member_accessories, only: [:create], path: 'accessory-requests'
           resources :owed_hours, only: [:index, :update, :destroy, :create]
           member do
             post :disable

@@ -17,6 +17,7 @@ class Accessory < ActiveRecord::Base
 
   scope :enabled, -> { where(disabled_at: nil) }
   scope :disabled, -> { where.not(disabled_at: nil) }
+  scope :user_requestable, -> { where(user_requestable: true) }
 
   def enabled?
     disabled_at == nil
