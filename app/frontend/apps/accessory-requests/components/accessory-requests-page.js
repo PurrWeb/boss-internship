@@ -7,39 +7,54 @@ import {
 import VenueSelect from './venue-select';
 
 import AccessoryList from './accessory-list';
-
+import AccessoryListItem from './accessory-list-item';
 class AccessoryRequestsPage extends React.Component {
+  handleAcceptRequest = ({ requestId, accessoryId }) => {
+    return this.props.actions.acceptAccessoryRequest({
+      requestId,
+      accessoryId,
+    });
+  };
 
-  handleAcceptRequest = ({requestId, accessoryId}) => {
-    return this.props.actions.acceptAccessoryRequest({requestId, accessoryId});
-  }
+  handleRejectRequest = ({ requestId, accessoryId }) => {
+    return this.props.actions.rejectAccessoryRequest({
+      requestId,
+      accessoryId,
+    });
+  };
 
-  handleRejectRequest = ({requestId, accessoryId}) => {
-    return this.props.actions.rejectAccessoryRequest({requestId, accessoryId});
-  }
+  handleUndoAcceptedRequest = ({ requestId, accessoryId }) => {
+    return this.props.actions.undoAcceptedAccessoryRequest({
+      requestId,
+      accessoryId,
+    });
+  };
 
-  handleUndoAcceptedRequest = ({requestId, accessoryId}) => {
-    return this.props.actions.undoAcceptedAccessoryRequest({requestId, accessoryId});
-  }
+  handleUndoRejectedRequest = ({ requestId, accessoryId }) => {
+    return this.props.actions.undoRejectedAccessoryRequest({
+      requestId,
+      accessoryId,
+    });
+  };
 
-  handleUndoRejectedRequest = ({requestId, accessoryId}) => {
-    return this.props.actions.undoRejectedAccessoryRequest({requestId, accessoryId});
-  }
+  handleDoneRequest = requestId => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(console.log(`done accepted request ${requestId}`));
+      }, 2500);
+    });
+  };
 
-  handleDoneAcceptedRequest = (requestId) => { return new Promise((resolve, reject) => { setTimeout(() => {resolve(console.log(`done accepted request ${requestId}`))}, 2500) }) }
-  // handleUndoAcceptedRequest = (requestId) => { return new Promise((resolve, reject) => { setTimeout(() => {resolve(console.log(`undo accepted request ${requestId}`))}, 2500) }) }
-  handleDoneRejectedRequest = (requestId) => { return new Promise((resolve, reject) => { setTimeout(() => {resolve(console.log(`done rejected request ${requestId}`))}, 2500) }) }
-
-  handleVenueChange = (venue) => {
+  handleVenueChange = venue => {
     this.props.actions.changeVenue(venue);
-  }
+  };
 
   handleLoadMore = () => {
     this.props.actions.loadMoreClick();
-  }
+  };
 
   getAccessories() {
-    const {accessories, pagination: {pageNumber, perPage}} = this.props;
+    const { accessories, pagination: { pageNumber, perPage } } = this.props;
     const slice = pageNumber * perPage;
     if (accessories.length) {
       return accessories.slice(0, slice);
@@ -49,7 +64,8 @@ class AccessoryRequestsPage extends React.Component {
 
   render() {
     const accessories = this.getAccessories();
-    const isShowLoadMore = accessories.length < this.props.pagination.totalCount;
+    const isShowLoadMore =
+      accessories.length < this.props.pagination.totalCount;
 
     return (
       <div>
@@ -65,19 +81,17 @@ class AccessoryRequestsPage extends React.Component {
         <AccessoryList
           accessories={this.getAccessories()}
           accessoryRequests={this.props.accessoryRequests.toJS()}
+          accessoryRefundRequests={this.props.accessoryRefundRequests.toJS()}
           staffMembers={this.props.staffMembers.toJS()}
-          onAcceptRequest={this.handleAcceptRequest}
-          onRejectRequest={this.handleRejectRequest}
           onLoadMoreClick={this.handleLoadMore}
           totalCount={this.props.pagination.totalCount}
           isShowLoadMore={isShowLoadMore}
-          onDoneAcceptedRequest={this.handleDoneAcceptedRequest}
-          onUndoAcceptedRequest={this.handleUndoAcceptedRequest}
-          onDoneRejectedRequest={this.handleDoneRejectedRequest}
-          onUndoRejectedRequest={this.handleUndoRejectedRequest}
+          accessoryItemRenderer={data => (
+            <AccessoryListItem actions={this.props.actions} data={data} />
+          )}
         />
       </div>
-    )
+    );
   }
 }
 
