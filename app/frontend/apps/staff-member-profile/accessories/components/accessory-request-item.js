@@ -5,15 +5,22 @@ import utils from '~/lib/utils';
 import * as constants from './constants';
 
 class AccessoryRequestItem extends React.Component {
-  renderRequestActions(status) {
+  renderRequestActions(accessoryRequest) {
+    const accessoryRequestId = oFetch(accessoryRequest, 'id');
+    const status = oFetch(accessoryRequest, 'status');
+    const hasRefundRequest = oFetch(accessoryRequest, 'hasRefundRequest');
+
     if (status === constants.ACCESSORY_REQUEST_STATUS_ACCEPTED) {
       return (
         <div className="boss-requests__actions">
-          <button
-            className={`boss-requests__action boss-requests__action_role_request`}
-          >
-            Request refund
-          </button>
+          {!hasRefundRequest && (
+            <button
+              onClick={() => this.props.onAccessoryRefund(accessoryRequestId)}
+              className={`boss-requests__action boss-requests__action_role_request`}
+            >
+              Request refund
+            </button>
+          )}
         </div>
       );
     }
@@ -22,32 +29,35 @@ class AccessoryRequestItem extends React.Component {
         <div className="boss-requests__actions">
           <button
             className={`boss-requests__action boss-requests__action_role_cancel`}
+            onClick={() => this.props.onAccessoryCancel(accessoryRequestId)}
           >
             Cancel
           </button>
         </div>
       );
     }
+    return null;
   }
 
   render() {
     const { accessoryRequest } = this.props;
-    console.log(accessoryRequest);
     const requestDate = safeMoment
       .iso8601Parse(oFetch(accessoryRequest, 'createdAt'))
       .format(utils.humanDateFormatWithTime());
     const status = oFetch(accessoryRequest, 'status');
     const accessoryName = oFetch(accessoryRequest, 'accessoryName');
     const size = oFetch(accessoryRequest, 'size');
+    const hasRefundRequest = oFetch(accessoryRequest, 'hasRefundRequest');
+    const requestStatus = hasRefundRequest ? 'requested' : status;
 
     return (
       <li className="boss-requests__item">
         <div className="boss-requests__meta">
           <div className="boss-requests__date">{requestDate}</div>
           <div
-            className={`boss-requests__status boss-requests__status_role_${status}`}
+            className={`boss-requests__status boss-requests__status_role_${requestStatus}`}
           >
-            {constants.ACCESSORY_REQUEST_STATUS[status]}
+            {constants.ACCESSORY_REQUEST_STATUS[requestStatus]}
           </div>
         </div>
         <div className="boss-requests__content">
@@ -60,7 +70,7 @@ class AccessoryRequestItem extends React.Component {
                 {size ? `(${size})` : '(N/A)'}
               </span>
             </h3>
-            {this.renderRequestActions(status)}
+            {this.renderRequestActions(accessoryRequest)}
           </div>
         </div>
       </li>

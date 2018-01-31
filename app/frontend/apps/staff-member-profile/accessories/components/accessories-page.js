@@ -19,18 +19,42 @@ class AccessoriesPage extends React.Component {
       });
   };
 
-  handleCancelRequest = accessoryId => {
-    const staffMemberId = oFetch(this.props.staffMember.toJS(), 'id');
-    return this.props.action
-      .cancelAccessory({ staffMemberId, accessoryId })
-      .then(response => {});
+  handleCancelRequestSubmit = (hideModal, values) => {
+    return this.props.actions.cancelAccessory(values).then(response => {
+      hideModal();
+    });
   };
 
-  handleRefundRequest = accessoryId => {
+  handleCancelRequest = accessoryRequestId => {
     const staffMemberId = oFetch(this.props.staffMember.toJS(), 'id');
-    return this.props.action
-      .refundAccessory({ staffMemberId, accessoryId })
-      .then(response => {});
+    openWarningModal({
+      submit: this.handleCancelRequestSubmit,
+      config: {
+        title: 'WARNING !!!',
+        text: 'Are You Sure, you want to cances accessory request?',
+        buttonText: 'Cancel request',
+      },
+      props: { accessoryRequestId, staffMemberId },
+    });
+  };
+
+  handleRefundRequest = accessoryRequestId => {
+    const staffMemberId = oFetch(this.props.staffMember.toJS(), 'id');
+    openWarningModal({
+      submit: this.handleRefundRequestSubmit,
+      config: {
+        title: 'WARNING !!!',
+        text: 'Are You Sure, you want to refund accessory request?',
+        buttonText: 'Refund request',
+      },
+      props: { accessoryRequestId, staffMemberId },
+    });
+  };
+
+  handleRefundRequestSubmit = (hideModal, values) => {
+    return this.props.actions.refundAccessory(values).then(response => {
+      hideModal();
+    });
   };
 
   openNewRequestModal = () => {
@@ -53,8 +77,8 @@ class AccessoriesPage extends React.Component {
         <AccessoriesContent>
           <AccessoryRequestsList
             accessoryRequests={this.props.accessoryRequests.toJS()}
-            onAccessoryCancel={this.props.handleCancelRequest}
-            onAccessoryRefund={this.props.handleRefundRequest}
+            onAccessoryCancel={this.handleCancelRequest}
+            onAccessoryRefund={this.handleRefundRequest}
           />
         </AccessoriesContent>
       </section>

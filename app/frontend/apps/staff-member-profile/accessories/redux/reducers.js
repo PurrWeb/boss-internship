@@ -27,6 +27,13 @@ const accessoriesReducer = handleActions(
         return requests.push(fromJS(newAccessory));
       });
     },
+    [constants.UPDATE_ACCESSORY_REQUEST]: (state, action) => {
+      const request = action.payload;
+      const index = state
+        .get('accessoryRequests')
+        .findIndex(item => item.get('id') === request.id);
+      return state.setIn(['accessoryRequests', index], fromJS(request));
+    },
   },
   initialState,
 );

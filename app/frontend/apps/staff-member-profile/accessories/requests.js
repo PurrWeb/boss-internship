@@ -76,14 +76,14 @@ export const newAccessoryRequest = (staffMemberId, values) => {
   );
 };
 
-export const cancelAccessoryRequest = (staffMemberId, accessoryId) => {
+export const cancelAccessoryRequest = (staffMemberId, accessoryRequestId) => {
   return http().post(
-    `/api/v1/staff_members/${staffMemberId}/accessory-requests/${accessoryId}/cancel`,
+    `/api/v1/staff_members/${staffMemberId}/accessory-requests/${accessoryRequestId}/cancel`,
   );
 };
 
-export const refundAccessoryRequest = (staffMemberId, accessoryId) => {
+export const refundAccessoryRequest = (staffMemberId, accessoryRequestId) => {
   return http().post(
-    `/api/v1/staff_members/${staffMemberId}/accessory-requests/${accessoryId}/refund`,
+    `/api/v1/staff_members/${staffMemberId}/accessory-requests/${accessoryRequestId}/refund`,
   );
 };
