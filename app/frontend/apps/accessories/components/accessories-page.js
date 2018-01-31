@@ -54,6 +54,7 @@ class AccessoriesPage extends React.Component {
   handleEdit = (accessory) => {
     openContentModal({
       submit: this.handleEditAccessorySubmit,
+      config: {title: 'Edit accessory'},
       props: {accessory: accessory}
     })(EditAccessory);
   }

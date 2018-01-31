@@ -1,8 +1,6 @@
 import { createAction } from 'redux-actions';
 import URLSearchParams from 'url-search-params';
 
-import http from '../requests';
-
 import * as constants from './constants';
 
 import {
