@@ -7,10 +7,7 @@ import {
   DashboardActions,
 } from '~/components/boss-dashboards';
 
-import {
-  openContentModal,
-  openWarningModal,
-} from '~/components/modals';
+import { openWarningModal, openContentModal } from '~/components/modals';
 
 import AccessoriesFilter from './accessories-filter';
 import AddAccessory from './add-accessory';
