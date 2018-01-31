@@ -42,7 +42,7 @@ module Api
         ).refund
         if result.success?
           render(
-            serializer: nil,
+            serializer: Api::V1::StaffMemberProfile::AccessoryRequestSerializer,
             json: accessory_request,
             status: 200
           )
