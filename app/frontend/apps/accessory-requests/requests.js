@@ -105,17 +105,6 @@ export const rejectAccessoryRequestRequest = ({
   });
 };
 
-export const undoAccessoryRequestRequest = ({
-  venueId,
-  accessoryId,
-  requestId,
-}) => {
-  return http().post(`/api/v1/accessory-requests/${requestId}/undo`, {
-    venueId,
-    accessoryId,
-  });
-};
-
 export const acceptAccessoryRefundRequestRequest = ({
   venueId,
   accessoryId,
@@ -133,17 +122,6 @@ export const rejectAccessoryRefundRequestRequest = ({
   requestId,
 }) => {
   return http().post(`/api/v1/accessory-requests/${requestId}/reject-refund`, {
-    venueId,
-    accessoryId,
-  });
-};
-
-export const undoRefundRequestRequest = ({
-  venueId,
-  accessoryId,
-  requestId,
-}) => {
-  return http().post(`/api/v1/accessory-requests/${requestId}/undo-refund`, {
     venueId,
     accessoryId,
   });

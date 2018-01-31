@@ -29,10 +29,8 @@ class AccessoryListItem extends Component {
       actions: {
         acceptAccessoryRequest,
         rejectAccessoryRequest,
-        undoAccessoryRequest,
         acceptAccessoryRefundRequest,
         rejectAccessoryRefundRequest,
-        undoRefundRequest,
       },
     } = this.props;
 
@@ -55,7 +53,6 @@ class AccessoryListItem extends Component {
               <AccessoryRequestItem
                 onRejectRequest={rejectAccessoryRequest}
                 onAcceptRequest={acceptAccessoryRequest}
-                onUndoRequest={undoAccessoryRequest}
                 data={data}
               />
             )}
@@ -75,7 +72,6 @@ class AccessoryListItem extends Component {
                 <AccessoryRequestItem
                   onAcceptRequest={acceptAccessoryRefundRequest}
                   onRejectRequest={rejectAccessoryRefundRequest}
-                  onUndoRequest={undoRefundRequest}
                   data={data}
                 />
               )}

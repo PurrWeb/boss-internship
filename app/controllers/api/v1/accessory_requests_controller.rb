@@ -57,11 +57,6 @@ module Api
         render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
       end
 
-      def undo
-        request_from_params.transition_to!(:pending, requster_user_id: current_user.id)
-        render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
-      end
-
       def accept_refund
         refund_request_from_params.transition_to!(:accepted, requster_user_id: current_user.id)
         render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
@@ -69,11 +64,6 @@ module Api
 
       def reject_refund
         refund_request_from_params.transition_to!(:rejected, requster_user_id: current_user.id)
-        render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
-      end
-
-      def undo_refund
-        refund_request_from_params.transition_to!(:pending, requster_user_id: current_user.id)
         render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
       end
 

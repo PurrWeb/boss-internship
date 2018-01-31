@@ -7,10 +7,8 @@ import {
   loadInitialDataRequest,
   acceptAccessoryRequestRequest,
   rejectAccessoryRequestRequest,
-  undoAccessoryRequestRequest,
   acceptAccessoryRefundRequestRequest,
   rejectAccessoryRefundRequestRequest,
-  undoRefundRequestRequest,
 } from '../requests';
 
 export const loadInitialState = createAction(constants.LOAD_INITIAL_STATE);
@@ -94,25 +92,6 @@ export const rejectAccessoryRequest = ({ requestId, accessoryId }) => (
   });
 };
 
-export const undoAccessoryRequest = ({ requestId, accessoryId }) => (
-  dispatch,
-  getState,
-) => {
-  const currentVenue = getState().getIn([
-    'accessoryRequestsPage',
-    'currentVenue',
-  ]);
-
-  return undoAccessoryRequestRequest({
-    venueId: currentVenue,
-    accessoryId,
-    requestId,
-  }).then(resp => {
-    dispatch(updateRequestInStore(resp.data));
-    return resp;
-  });
-};
-
 export const acceptAccessoryRefundRequest = ({ requestId, accessoryId }) => (
   dispatch,
   getState,
@@ -142,25 +121,6 @@ export const rejectAccessoryRefundRequest = ({ requestId, accessoryId }) => (
   ]);
 
   return rejectAccessoryRefundRequestRequest({
-    venueId: currentVenue,
-    accessoryId,
-    requestId,
-  }).then(resp => {
-    dispatch(updateRefundRequestInStore(resp.data));
-    return resp;
-  });
-};
-
-export const undoRefundRequest = ({ requestId, accessoryId }) => (
-  dispatch,
-  getState,
-) => {
-  const currentVenue = getState().getIn([
-    'accessoryRequestsPage',
-    'currentVenue',
-  ]);
-
-  return undoRefundRequestRequest({
     venueId: currentVenue,
     accessoryId,
     requestId,

@@ -21,6 +21,14 @@ class AccessoryRequest < ActiveRecord::Base
       association_name: :accessory_request_transitions)
   end
 
+  def self.transition_class
+    AccessoryRequestTransition
+  end
+
+  def self.initial_state
+    AccessoryRequestStateMachine.initial_state
+  end
+
   def accepted?
     state_machine.current_state == "accepted"
   end

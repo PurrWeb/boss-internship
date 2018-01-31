@@ -225,10 +225,8 @@ Rails.application.routes.draw do
           member do
             post :accept
             post :reject
-            post :undo, path: 'undo'
             post :accept_refund, path: 'accept-refund'
             post :reject_refund, path: 'reject-refund'
-            post :undo_refund, path: 'undo-refund'
           end
         end
         resources :accessories, only: [:index, :create, :update, :destroy] do

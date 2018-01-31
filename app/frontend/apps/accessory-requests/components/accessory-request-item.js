@@ -51,15 +51,8 @@ class AccessoryRequestItem extends Component {
                 accessoryId: accessoryId,
               })
             }
-            onDoneRequest={() => {}}
             onAcceptRequest={() =>
               this.props.onAcceptRequest({
-                requestId: requestId,
-                accessoryId: accessoryId,
-              })
-            }
-            onUndoRequest={() =>
-              this.props.onUndoRequest({
                 requestId: requestId,
                 accessoryId: accessoryId,
               })
