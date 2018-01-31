@@ -191,6 +191,7 @@ class StaffMembersController < ApplicationController
     query = StaffMember.where(id: params[:id])
     query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
     staff_member = query.first
+    return redirect_to profile_staff_member_path if staff_member.security?
 
     raise ActiveRecord::RecordNotFound.new unless staff_member.present?
 

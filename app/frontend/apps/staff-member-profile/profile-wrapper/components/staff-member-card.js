@@ -29,6 +29,7 @@ const StaffMemberCard = ({
   const jobTypeName = oFetch(jobType, 'name');
   const jobTypeColor = oFetch(jobType, 'color');
   const bouncedEmail = oFetch(staffMember, 'bounced_email');
+  const isSecurityStaff = oFetch(staffMember, 'is_security_staff');
 
   const renderPhoneNumber = phoneNumber => {
     return phoneNumber ? (
@@ -113,15 +114,17 @@ const StaffMemberCard = ({
         >
           Owed hours
         </a>
-        <a
-          href={`accessories`}
-          className={`${isActive(
-            currentPage,
-            'accessories',
-          )} boss-button boss-button_type_small boss-button_role_accessories boss-user-summary__switch`}
-        >
-          Accessories
-        </a>
+        {!isSecurityStaff && (
+          <a
+            href={`accessories`}
+            className={`${isActive(
+              currentPage,
+              'accessories',
+            )} boss-button boss-button_type_small boss-button_role_accessories boss-user-summary__switch`}
+          >
+            Accessories
+          </a>
+        )}
       </div>
     );
   };
