@@ -11,10 +11,18 @@ class AccessoryRefundRequest < ActiveRecord::Base
   validates :accessory_request, uniqueness: { scope: :staff_member, message: "can have only one refund request" }
 
   def state_machine
-    @state_machine ||= AccessoryRequestStateMachine.new(
+    @state_machine ||= AccessoryRefundRequestStateMachine.new(
       self,
       transition_class: AccessoryRefundRequestTransition,
       association_name: :accessory_refund_request_transitions)
+  end
+
+  def self.transition_class
+    AccessoryRefundRequestTransition
+  end
+
+  def self.initial_state
+    AccessoryRefundRequestStateMachine.initial_state
   end
 
   delegate \
@@ -22,5 +30,6 @@ class AccessoryRefundRequest < ActiveRecord::Base
     :transition_to!,
     :transition_to,
     :current_state,
+    :last_transition,
     to: :state_machine
 end
