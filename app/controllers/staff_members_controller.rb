@@ -202,7 +202,7 @@ class StaffMembersController < ApplicationController
     ).page_pay_rates.map(&:id)
 
     venue_accessories = staff_member.master_venue.accessories.enabled.user_requestable
-    accessory_requests = staff_member.accessory_requests.includes([:accessory, :accessory_refund_request])
+    accessory_requests = staff_member.accessory_requests.includes([:accessory, accessory_refund_request: [:staff_member]])
 
     render locals: {
       staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
