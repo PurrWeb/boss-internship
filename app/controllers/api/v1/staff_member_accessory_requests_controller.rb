@@ -7,7 +7,8 @@ module Api
       def create
         staff_member = staff_member_from_params
         result = AccessoryRequestApiService.new(
-          requester: staff_member_from_params,
+          requester: current_user,
+          staff_member: staff_member_from_params,
           accessory_request: AccessoryRequest.new,
         ).create(params: accessory_request_params)
         if result.success?
@@ -25,7 +26,8 @@ module Api
       def cancel_request
         staff_member = staff_member_from_params
         result = AccessoryRequestApiService.new(
-          requester: staff_member_from_params,
+          requester: current_user,
+          staff_member: staff_member_from_params,
           accessory_request: accessory_request_from_params,
         ).cancel
         if result.success?
@@ -45,7 +47,8 @@ module Api
         accessory_request = accessory_request_from_params
 
         result = AccessoryRequestApiService.new(
-          requester: staff_member_from_params,
+          requester: current_user,
+          staff_member: staff_member_from_params,
           accessory_request: accessory_request,
         ).refund
         if result.success?

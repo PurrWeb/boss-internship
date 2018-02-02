@@ -12,11 +12,11 @@ class CancelAccessoryRequest
 
   def call
     success = false
-    success = accessory_request.transition_to(:canceled)
+    success = accessory_request.transition_to(:canceled, requster_user_id: requester.id)
 
     Result.new(success, accessory_request)
   end
 
   private
-  attr_reader :accessory_request
+  attr_reader :accessory_request, :requester
 end

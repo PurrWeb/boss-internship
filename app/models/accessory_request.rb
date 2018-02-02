@@ -33,10 +33,15 @@ class AccessoryRequest < ActiveRecord::Base
     state_machine.current_state == "accepted"
   end
 
+  def has_refund_request?
+    accepted? && accessory_refund_request.present?
+  end
+
   delegate \
     :can_transition_to?,
     :transition_to!,
     :transition_to,
     :current_state,
+    :last_transition,
     to: :state_machine
 end
