@@ -44,10 +44,15 @@ class AccessoryList extends React.Component {
   }
 
   render() {
+    const showAccessoryList =
+      !!this.props.accessories.length &&
+      !!this.props.accessoryRequests.length &&
+      !!this.props.accessoryRefundRequests.length;
+
     return (
       <ContentWrapper>
         {this.renderAccessories()}
-        {!!this.props.accessories.length && (
+        {showAccessoryList && (
           <div className="boss-page-main__count boss-page-main__count_space_large">
             <span className="boss-page-main__count-text">Showing </span>
             <span className="boss-page-main__count-text boss-page-main__count-text_marked">
