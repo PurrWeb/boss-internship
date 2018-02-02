@@ -36,10 +36,6 @@ class AccessoryListItem extends Component {
 
     return (
       <BossCheckCard title={name} className="boss-check__title_role_accessory">
-        <BossCheckRow
-          title="Black Venue"
-          className="boss-check__text boss-check__text_role_venue"
-        />
         <BossCheckCardCollapsibleGroup
           title="Requests"
           text={requestsCount}
