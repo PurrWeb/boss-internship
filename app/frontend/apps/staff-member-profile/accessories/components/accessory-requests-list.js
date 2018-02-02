@@ -1,18 +1,21 @@
 import React from 'react';
-import AccessoryRequestItem from './accessory-request-item';
+import safeMoment from '~/lib/safe-moment';
 
 class AccessoryRequestsList extends React.Component {
   renderAccessoryRequestItems(accessoryRequests) {
-    return accessoryRequests.map((item, index) => {
-      return (
-        <AccessoryRequestItem
-          onAccessoryRefund={this.props.onAccessoryRefund}
-          onAccessoryCancel={this.props.onAccessoryCancel}
-          accessoryRequest={item}
-          key={index}
-        />
-      );
-    });
+    return accessoryRequests
+      .slice()
+      .sort((a, b) => {
+        return (
+          safeMoment.iso8601Parse(b.updatedAt) -
+          safeMoment.iso8601Parse(a.updatedAt)
+        );
+      })
+      .map((item, index) => {
+        return React.cloneElement(this.props.accessoryRequestRendered(item), {
+          key: index,
+        });
+      });
   }
 
   render() {

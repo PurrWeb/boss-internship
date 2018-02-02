@@ -7,6 +7,7 @@ import AccessoriesHeader from './accessories-header';
 import AccessoriesContent from './accessories-content';
 import NewAccessoryRequest from './new-accessory-request';
 import AccessoryRequestsList from './accessory-requests-list';
+import AccessoryRequestItem from './accessory-request-item';
 
 class AccessoriesPage extends React.Component {
   handleNewRequestSubmit = (closeModal, values) => {
@@ -44,7 +45,7 @@ class AccessoriesPage extends React.Component {
       submit: this.handleRefundRequestSubmit,
       config: {
         title: 'WARNING !!!',
-        text: 'Are You Sure, you want to refund accessory request?',
+        text: 'Are you sure you want to request a refund?',
         buttonText: 'Refund request',
       },
       props: { accessoryRequestId, staffMemberId },
@@ -77,8 +78,13 @@ class AccessoriesPage extends React.Component {
         <AccessoriesContent>
           <AccessoryRequestsList
             accessoryRequests={this.props.accessoryRequests.toJS()}
-            onAccessoryCancel={this.handleCancelRequest}
-            onAccessoryRefund={this.handleRefundRequest}
+            accessoryRequestRendered={accessoryRequest => (
+              <AccessoryRequestItem
+                onAccessoryCancel={this.handleCancelRequest}
+                onAccessoryRefund={this.handleRefundRequest}
+                accessoryRequest={accessoryRequest}
+              />
+            )}
           />
         </AccessoriesContent>
       </section>

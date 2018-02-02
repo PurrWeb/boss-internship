@@ -13,7 +13,6 @@ const accessoriesReducer = handleActions(
   {
     [constants.LOAD_INITIAL_STATE]: (state, action) => {
       const { accessToken, accessories, accessoryRequests } = action.payload;
-
       window.boss.accessToken = accessToken;
 
       return state
