@@ -33,6 +33,9 @@ class AccessoryList extends React.Component {
         staffMembers,
         accessory,
       };
+      if (requestsCount == 0 && refundRequestsCount === 0) {
+        return null;
+      }
 
       return React.cloneElement(
         this.props.accessoryItemRenderer(accessoryData),
@@ -44,11 +47,7 @@ class AccessoryList extends React.Component {
   }
 
   render() {
-    const showAccessoryList =
-      !!this.props.accessories.length &&
-      !!this.props.accessoryRequests.length &&
-      !!this.props.accessoryRefundRequests.length;
-
+    const showAccessoryList = !!this.props.accessories.length;
     return (
       <ContentWrapper>
         {this.renderAccessories()}

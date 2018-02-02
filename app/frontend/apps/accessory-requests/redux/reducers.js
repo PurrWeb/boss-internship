@@ -38,12 +38,37 @@ const accessoryRequestsReducer = handleActions(
         .findIndex(item => item.get('id') === request.id);
       return state.setIn(['accessoryRequests', index], fromJS(request));
     },
+    [constants.REMOVE_REQUEST]: (state, action) => {
+      const request = action.payload;
+      return state.updateIn(['accessoryRequests'], accessoryRequests => {
+        return accessoryRequests.filter(item => item.get('id') !== request.id);
+      });
+    },
     [constants.UPDATE_REFUND_REQUEST]: (state, action) => {
       const request = action.payload;
       const index = state
         .get('accessoryRefundRequests')
         .findIndex(item => item.get('id') === request.id);
       return state.setIn(['accessoryRefundRequests', index], fromJS(request));
+    },
+    [constants.REMOVE_REFUND_REQUEST]: (state, action) => {
+      const request = action.payload;
+      return state.updateIn(
+        ['accessoryRefundRequests'],
+        accessoryRefundRequests => {
+          return accessoryRefundRequests.filter(
+            item => item.get('id') !== request.id,
+          );
+        },
+      );
+    },
+    [constants.REMOVE_ACCESSORY]: (state, action) => {
+      const accessoryId = action.payload;
+      return state
+        .updateIn(['accessories'], accessories => {
+          return accessories.filter(item => item.get('id') !== accessoryId);
+        })
+        .updateIn(['pagination', 'totalCount'], totalCount => totalCount - 1);
     },
     [constants.LOAD_INITIAL_ACCESSORY_REQUESTS]: (state, action) => {
       const {

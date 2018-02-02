@@ -19,9 +19,32 @@ export const setVenue = createAction(constants.SET_VENUE);
 export const dropPageNumber = createAction(constants.DROP_PAGE_NUMBER);
 export const loadMore = createAction(constants.LOAD_MORE);
 export const updateRequestInStore = createAction(constants.UPDATE_REQUEST);
+export const removeRequestFromStore = createAction(constants.REMOVE_REQUEST);
 export const updateRefundRequestInStore = createAction(
   constants.UPDATE_REFUND_REQUEST,
 );
+export const removeRefundRequestFromStore = createAction(
+  constants.REMOVE_REFUND_REQUEST,
+);
+export const removeAccessoryFromStore = createAction(
+  constants.REMOVE_ACCESSORY,
+);
+
+const checkRequestsCountAndRemoveAccessory = accessoryId => (
+  dispatch,
+  getState,
+) => {
+  const requestsCount = getState()
+    .getIn(['accessoryRequestsPage', 'accessoryRequests'])
+    .filter(item => item.get('accessoryId') === accessoryId).size;
+  const requestsRefundsCount = getState()
+    .getIn(['accessoryRequestsPage', 'accessoryRefundRequests'])
+    .filter(item => item.get('accessoryId') === accessoryId).size;
+
+  if (requestsCount === 0 && requestsRefundsCount === 0) {
+    dispatch(removeAccessoryFromStore(accessoryId));
+  }
+};
 
 export const changeVenue = venueId => (dispatch, getState) => {
   const queryString = new URLSearchParams(window.location.search);
@@ -68,7 +91,8 @@ export const acceptAccessoryRequest = ({ requestId, accessoryId }) => (
     accessoryId,
     requestId,
   }).then(resp => {
-    dispatch(updateRequestInStore(resp.data));
+    dispatch(removeRequestFromStore(resp.data));
+    dispatch(checkRequestsCountAndRemoveAccessory(accessoryId));
     return resp;
   });
 };
@@ -87,7 +111,8 @@ export const rejectAccessoryRequest = ({ requestId, accessoryId }) => (
     accessoryId,
     requestId,
   }).then(resp => {
-    dispatch(updateRequestInStore(resp.data));
+    dispatch(removeRequestFromStore(resp.data));
+    dispatch(checkRequestsCountAndRemoveAccessory(accessoryId));
     return resp;
   });
 };
@@ -106,7 +131,8 @@ export const acceptAccessoryRefundRequest = ({ requestId, accessoryId }) => (
     accessoryId,
     requestId,
   }).then(resp => {
-    dispatch(updateRefundRequestInStore(resp.data));
+    dispatch(removeRefundRequestFromStore(resp.data));
+    dispatch(checkRequestsCountAndRemoveAccessory(accessoryId));
     return resp;
   });
 };
@@ -125,7 +151,8 @@ export const rejectAccessoryRefundRequest = ({ requestId, accessoryId }) => (
     accessoryId,
     requestId,
   }).then(resp => {
-    dispatch(updateRefundRequestInStore(resp.data));
+    dispatch(removeRefundRequestFromStore(resp.data));
+    dispatch(checkRequestsCountAndRemoveAccessory(accessoryId));
     return resp;
   });
 };
