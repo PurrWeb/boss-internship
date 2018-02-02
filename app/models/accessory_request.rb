@@ -14,6 +14,8 @@ class AccessoryRequest < ActiveRecord::Base
   validates :accessory, presence: true
   validates :staff_member, presence: true
   validates :size, presence: true, if: :uniform?
+  validates :completed_at, presence: true, if: :completed?
+  validates :completed_at, absence: true, unless: :completed?
 
   def state_machine
     @state_machine ||= AccessoryRequestStateMachine.new(
@@ -32,6 +34,10 @@ class AccessoryRequest < ActiveRecord::Base
 
   def accepted?
     state_machine.current_state == "accepted"
+  end
+
+  def completed?
+    state_machine.current_state == "completed"
   end
 
   def has_refund_request?

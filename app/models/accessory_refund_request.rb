@@ -10,6 +10,8 @@ class AccessoryRefundRequest < ActiveRecord::Base
   validates :accessory_request, presence: true
   validates :staff_member, presence: true
   validates :accessory_request, uniqueness: { scope: :staff_member, message: "can have only one refund request" }
+  validates :completed_at, presence: true, if: :completed?
+  validates :completed_at, absence: true, unless: :completed?
 
   def state_machine
     @state_machine ||= AccessoryRefundRequestStateMachine.new(
@@ -24,6 +26,10 @@ class AccessoryRefundRequest < ActiveRecord::Base
 
   def self.initial_state
     AccessoryRefundRequestStateMachine.initial_state
+  end
+
+  def completed?
+    state_machine.current_state == "completed"
   end
 
   delegate \

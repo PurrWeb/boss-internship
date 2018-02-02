@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180202130923) do
+ActiveRecord::Schema.define(version: 20180202143610) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20180202130923) do
     t.integer  "price_cents",          limit: 4
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+    t.datetime "completed_at"
   end
 
   add_index "accessory_refund_requests", ["accessory_request_id", "staff_member_id"], name: "index_accessory_refund_requests_accessory_request_staff_member", unique: true, using: :btree
@@ -64,6 +65,7 @@ ActiveRecord::Schema.define(version: 20180202130923) do
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.integer  "created_by_user_id", limit: 4
+    t.datetime "completed_at"
   end
 
   add_index "accessory_requests", ["accessory_id"], name: "index_accessory_requests_on_accessory_id", using: :btree
