@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import oFetch from 'o-fetch';
-import AsyncButton from 'react-async-button';
 
 class AccessoryRequestActions extends Component {
   state = {
@@ -10,45 +8,50 @@ class AccessoryRequestActions extends Component {
   };
 
   onReject = () => {
-    this.setState({ currentStatus: 'rejected', currentStatusPending: true });
+    this.setState({ currentStatus: 'rejected', requestPendind: true });
+    this.props.onRejectRequest();
   };
 
   onAccept = () => {
-    this.setState({ currentStatus: 'accepted', currentStatusPending: true });
+    this.setState({
+      currentStatus: 'accepted',
+      currentStatusPending: true,
+      requestPendind: true,
+    });
+    this.props.onAcceptRequest().then(resp => {
+      this.setState({ currentStatusPending: false, requestPendind: false });
+    });
   };
 
   onUndo = () => {
     this.setState({
-      currentStatus: this.props.status,
-      currentStatusPending: false,
+      currentStatus: 'undo',
+      requestPendind: true,
+    });
+    this.props.onUndoRequest().then(resp => {
+      this.setState({
+        currentStatus: resp.data.status,
+        requestPendind: false,
+      });
     });
   };
 
-  onDone = action => {
-    this.setState(
-      {
-        currentStatusPending: false,
-        requestPendind: true,
-      },
-      () => {
-        action().then(resp =>
-          this.setState({
-            currentStatus: resp.data.status,
-            requestPendind: false,
-          }),
-        );
-      },
-    );
+  onComplete = () => {
+    this.setState({
+      currentStatus: 'completed',
+      requestPendind: true,
+    });
+    this.props.onCompleteRequest();
   };
 
-  renderDoneUndoButtons(doneAction) {
+  renderDoneUndoButtons() {
     return (
       <div key="actions" className="boss-table__actions">
         <button
           className="boss-button boss-button_type_extra-small boss-button_role_confirm-light boss-table__action"
-          onClick={() => this.onDone(doneAction)}
+          onClick={this.onComplete}
         >
-          Done
+          Complete
         </button>
         <button
           className="boss-button boss-button_type_extra-small boss-button_role_cancel-light boss-table__action"
@@ -61,7 +64,25 @@ class AccessoryRequestActions extends Component {
   }
 
   render() {
-    const { currentStatus } = this.state;
+    const { currentStatus, requestPendind } = this.state;
+    if (currentStatus === 'undo') {
+      return (
+        <div>
+          <p key="status" className="boss-table__text boss-table__text_role_success-status">
+            {requestPendind ? 'Undoing ...' : ''}
+          </p>
+        </div>
+      );
+    }
+    if (currentStatus === 'completed') {
+      return (
+        <div>
+          <p key="status" className="boss-table__text boss-table__text_role_success-status">
+            {requestPendind ? 'Processing ...' : ''}
+          </p>
+        </div>
+      );
+    }
     if (currentStatus === 'pending') {
       return (
         <div className="boss-table__actions">
@@ -83,32 +104,23 @@ class AccessoryRequestActions extends Component {
     if (currentStatus === 'accepted') {
       return (
         <div>
-          <p
-            key="status"
-            className="boss-table__text boss-table__text_role_success-status"
-          >
-            {this.state.requestPendind ? 'Accepting ...' : 'Accepted'}
+          <p key="status" className="boss-table__text boss-table__text_role_success-status">
+            {requestPendind ? 'Accepting ...' : 'Accepted'}
           </p>
-          <div key="actions" className="boss-table__actions">
-            {this.state.currentStatusPending &&
-              this.renderDoneUndoButtons(this.props.onAcceptRequest)}
-          </div>
+          {!requestPendind && (
+            <div key="actions" className="boss-table__actions">
+              {this.renderDoneUndoButtons()}
+            </div>
+          )}
         </div>
       );
     }
     if (currentStatus === 'rejected') {
       return (
         <div>
-          <p
-            key="status"
-            className="boss-table__text boss-table__text_role_alert-status"
-          >
-            {this.state.requestPendind ? 'Rejecting ...' : 'Rejected'}
+          <p key="status" className="boss-table__text boss-table__text_role_alert-status">
+            {requestPendind ? 'Rejecting ...' : ''}
           </p>
-          <div key="actions" className="boss-table__actions">
-            {this.state.currentStatusPending &&
-              this.renderDoneUndoButtons(this.props.onRejectRequest)}
-          </div>
         </div>
       );
     }

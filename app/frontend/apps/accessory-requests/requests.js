@@ -3,17 +3,9 @@ import globalNotification from '~/components/global-notification';
 
 export default function http({ ...params }) {
   const instance = axios.create();
-  instance.defaults.headers.common['Authorization'] = `Token token="${
-    window.boss.accessToken
-  }"`;
+  instance.defaults.headers.common['Authorization'] = `Token token="${window.boss.accessToken}"`;
 
-  const {
-    successMessage,
-    errorMessage,
-    interval,
-    notify,
-    globalLoader,
-  } = params;
+  const { successMessage, errorMessage, interval, notify, globalLoader } = params;
 
   let loader;
 
@@ -66,11 +58,7 @@ export default function http({ ...params }) {
   return instance;
 }
 
-export const loadInitialDataRequest = ({
-  venueId,
-  accessoriesFilter,
-  currentPage,
-}) => {
+export const loadInitialDataRequest = ({ venueId, accessoriesFilter, currentPage }) => {
   return http({
     globalLoader: true,
     notify: false,
@@ -83,45 +71,57 @@ export const loadInitialDataRequest = ({
   });
 };
 
-export const acceptAccessoryRequestRequest = ({
-  venueId,
-  accessoryId,
-  requestId,
-}) => {
+export const acceptAccessoryRequestRequest = ({ venueId, accessoryId, requestId }) => {
   return http().post(`/api/v1/accessory-requests/${requestId}/accept`, {
     venueId,
     accessoryId,
   });
 };
 
-export const rejectAccessoryRequestRequest = ({
-  venueId,
-  accessoryId,
-  requestId,
-}) => {
+export const undoAccessoryRequestRequest = ({ venueId, accessoryId, requestId }) => {
+  return http().post(`/api/v1/accessory-requests/${requestId}/undo`, {
+    venueId,
+    accessoryId,
+  });
+};
+
+export const rejectAccessoryRequestRequest = ({ venueId, accessoryId, requestId }) => {
   return http().post(`/api/v1/accessory-requests/${requestId}/reject`, {
     venueId,
     accessoryId,
   });
 };
 
-export const acceptAccessoryRefundRequestRequest = ({
-  venueId,
-  accessoryId,
-  requestId,
-}) => {
+export const acceptAccessoryRefundRequestRequest = ({ venueId, accessoryId, requestId }) => {
   return http().post(`/api/v1/accessory-requests/${requestId}/accept-refund`, {
     venueId,
     accessoryId,
   });
 };
 
-export const rejectAccessoryRefundRequestRequest = ({
-  venueId,
-  accessoryId,
-  requestId,
-}) => {
+export const undoAccessoryRefundRequestRequest = ({ venueId, accessoryId, requestId }) => {
+  return http().post(`/api/v1/accessory-requests/${requestId}/undo-refund`, {
+    venueId,
+    accessoryId,
+  });
+};
+
+export const rejectAccessoryRefundRequestRequest = ({ venueId, accessoryId, requestId }) => {
   return http().post(`/api/v1/accessory-requests/${requestId}/reject-refund`, {
+    venueId,
+    accessoryId,
+  });
+};
+
+export const completeAccessoryRequestRequest = ({ venueId, accessoryId, requestId }) => {
+  return http().post(`/api/v1/accessory-requests/${requestId}/complete`, {
+    venueId,
+    accessoryId,
+  });
+};
+
+export const completeAccessoryRefundRequestRequest = ({ venueId, accessoryId, requestId }) => {
+  return http().post(`/api/v1/accessory-requests/${requestId}/complete-refund`, {
     venueId,
     accessoryId,
   });

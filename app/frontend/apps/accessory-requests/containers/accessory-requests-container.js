@@ -10,10 +10,12 @@ import {
   loadMoreClick,
   acceptAccessoryRequest,
   rejectAccessoryRequest,
-  undoAccessoryRequest,
   acceptAccessoryRefundRequest,
   rejectAccessoryRefundRequest,
-  undoRefundRequest,
+  undoAccessoryRequest,
+  undoAccessoryRefundRequest,
+  completeAccessoryRequest,
+  completeAccessoryRefundRequest,
 } from '../redux/actions';
 
 const mapStateToProps = state => {
@@ -21,14 +23,8 @@ const mapStateToProps = state => {
     venues: state.getIn(['accessoryRequestsPage', 'venues']),
     currentVenue: state.getIn(['accessoryRequestsPage', 'currentVenue']),
     accessories: state.getIn(['accessoryRequestsPage', 'accessories']),
-    accessoryRequests: state.getIn([
-      'accessoryRequestsPage',
-      'accessoryRequests',
-    ]),
-    accessoryRefundRequests: state.getIn([
-      'accessoryRequestsPage',
-      'accessoryRefundRequests',
-    ]),
+    accessoryRequests: state.getIn(['accessoryRequestsPage', 'accessoryRequests']),
+    accessoryRefundRequests: state.getIn(['accessoryRequestsPage', 'accessoryRefundRequests']),
     staffMembers: state.getIn(['accessoryRequestsPage', 'staffMembers']),
     pagination: state.getIn(['accessoryRequestsPage', 'pagination']),
   };
@@ -45,6 +41,10 @@ const mapDispatchToProps = dispatch => {
         rejectAccessoryRequest,
         acceptAccessoryRefundRequest,
         rejectAccessoryRefundRequest,
+        undoAccessoryRequest,
+        undoAccessoryRefundRequest,
+        completeAccessoryRequest,
+        completeAccessoryRefundRequest,
       },
       dispatch,
     ),

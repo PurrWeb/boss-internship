@@ -9,42 +9,6 @@ import VenueSelect from './venue-select';
 import AccessoryList from './accessory-list';
 import AccessoryListItem from './accessory-list-item';
 class AccessoryRequestsPage extends React.Component {
-  handleAcceptRequest = ({ requestId, accessoryId }) => {
-    return this.props.actions.acceptAccessoryRequest({
-      requestId,
-      accessoryId,
-    });
-  };
-
-  handleRejectRequest = ({ requestId, accessoryId }) => {
-    return this.props.actions.rejectAccessoryRequest({
-      requestId,
-      accessoryId,
-    });
-  };
-
-  handleUndoAcceptedRequest = ({ requestId, accessoryId }) => {
-    return this.props.actions.undoAcceptedAccessoryRequest({
-      requestId,
-      accessoryId,
-    });
-  };
-
-  handleUndoRejectedRequest = ({ requestId, accessoryId }) => {
-    return this.props.actions.undoRejectedAccessoryRequest({
-      requestId,
-      accessoryId,
-    });
-  };
-
-  handleDoneRequest = requestId => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(console.log(`done accepted request ${requestId}`));
-      }, 2500);
-    });
-  };
-
   handleVenueChange = venue => {
     this.props.actions.changeVenue(venue);
   };

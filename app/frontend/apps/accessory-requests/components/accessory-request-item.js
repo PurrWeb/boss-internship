@@ -57,6 +57,18 @@ class AccessoryRequestItem extends Component {
                 accessoryId: accessoryId,
               })
             }
+            onUndoRequest={() =>
+              this.props.onUndoRequest({
+                requestId: requestId,
+                accessoryId: accessoryId,
+              })
+            }
+            onCompleteRequest={() =>
+              this.props.onCompleteRequest({
+                requestId: requestId,
+                accessoryId: accessoryId,
+              })
+            }
           />
         </BossTableCell>
       </BossTableRow>

@@ -10,14 +10,15 @@ module Api
           .accessories
         venue_accessories_requests = AccessoryRequest.where(accessory_id: all_venue_accessories.pluck(:id))
         refund_request_accessory_ids = venue_accessories_requests.inject([]) do |acc, request|
-          request.accessory_refund_request.andand.current_state == "pending" \
+          states = ["pending", "accepted"]
+          request.accessory_refund_request.andand.current_state.in?(states) \
             ? acc << request.accessory_id \
             : acc
         end
         accessories = all_venue_accessories
-          .where(id: (venue_accessories_requests.in_state(:pending).pluck(:accessory_id) + refund_request_accessory_ids))
+          .where(id: (venue_accessories_requests.in_state(:pending, :accepted).pluck(:accessory_id) + refund_request_accessory_ids))
         accessory_requests = AccessoryRequest.where(accessory_id: accessories.pluck(:id))
-        accessory_refund_requests = AccessoryRefundRequest.in_state(:pending).where(accessory_request_id: accessory_requests.pluck(:id))
+        accessory_refund_requests = AccessoryRefundRequest.in_state(:pending, :accepted).where(accessory_request_id: accessory_requests.pluck(:id))
         staff_members = StaffMember.where(id: accessory_requests.pluck(:staff_member_id))
 
         paginated_accessory = accessories.paginate(
@@ -32,7 +33,7 @@ module Api
               serializer: Api::V1::AccessoryRequests::AccessorySerializer
             ),
             accessoryRequests: ActiveModel::Serializer::CollectionSerializer.new(
-              accessory_requests.in_state(:pending),
+              accessory_requests.in_state(:pending, :accepted),
               serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer
             ),
             accessoryRefundRequests: ActiveModel::Serializer::CollectionSerializer.new(
@@ -64,6 +65,16 @@ module Api
         render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
       end
 
+      def undo
+        request_from_params.transition_to!(:pending, requster_user_id: current_user.id, type: "response")
+        render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
+      end
+
+      def complete
+        request_from_params.transition_to!(:completed, requster_user_id: current_user.id, type: "response")
+        render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
+      end
+
       def accept_refund
         refund_request_from_params.transition_to!(:accepted, requster_user_id: current_user.id, type: "response")
         render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
@@ -71,6 +82,16 @@ module Api
 
       def reject_refund
         refund_request_from_params.transition_to!(:rejected, requster_user_id: current_user.id, type: "response")
+        render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
+      end
+
+      def undo_refund
+        refund_request_from_params.transition_to!(:pending, requster_user_id: current_user.id, type: "response")
+        render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
+      end
+
+      def complete_refund
+        refund_request_from_params.transition_to!(:completed, requster_user_id: current_user.id, type: "response")
         render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
       end
 
