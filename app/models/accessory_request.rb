@@ -41,7 +41,7 @@ class AccessoryRequest < ActiveRecord::Base
   end
 
   def has_refund_request?
-    accepted? && accessory_refund_request.present?
+    completed? && accessory_refund_request.present?
   end
 
   delegate \

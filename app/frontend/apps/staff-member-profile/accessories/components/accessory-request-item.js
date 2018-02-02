@@ -10,6 +10,22 @@ const REFUND_REQUEST_STATUSES = {
   pending: 'Refund Requested',
   accepted: 'Refund accepted',
   rejected: 'Refund rejected',
+  completed: 'Refund completed',
+};
+
+const REQUEST_STATUS_CLASS_PREFIXES = {
+  [constants.ACCESSORY_REQUEST_STATUS_ACCEPTED]: 'accepted',
+  [constants.ACCESSORY_REQUEST_STATUS_COMPLETED]: 'accepted',
+  [constants.ACCESSORY_REQUEST_STATUS_PENDING]: 'pending',
+  [constants.ACCESSORY_REQUEST_STATUS_REJECTED]: 'rejected',
+  [constants.ACCESSORY_REQUEST_STATUS_CANCELED]: 'rejected',
+};
+
+const REFUND_REQUEST_STATUS_CLASS_PREFIXES = {
+  pending: 'requested',
+  accepted: 'accepted',
+  rejected: 'rejected',
+  completed: 'accepted',
 };
 
 class AccessoryRequestItem extends React.Component {
@@ -21,12 +37,9 @@ class AccessoryRequestItem extends React.Component {
     const accessoryRequestId = oFetch(accessoryRequest, 'id');
     const status = oFetch(accessoryRequest, 'status');
     const hasRefundRequest = oFetch(accessoryRequest, 'hasRefundRequest');
-    const refundRequestStatus = oFetch(
-      accessoryRequest,
-      'refundRequestStatus',
-    );
+    const refundRequestStatus = oFetch(accessoryRequest, 'refundRequestStatus');
     const refundRequestStatusRejected = refundRequestStatus === 'rejected';
-    if (status === constants.ACCESSORY_REQUEST_STATUS_ACCEPTED) {
+    if (status === constants.ACCESSORY_REQUEST_STATUS_COMPLETED) {
       return (
         <div className="boss-requests__actions">
           {(!hasRefundRequest || refundRequestStatusRejected) && (
@@ -68,9 +81,7 @@ class AccessoryRequestItem extends React.Component {
         .format(utils.humanDateFormatWithTime());
       const requestType = oFetch(timelineItem, 'requestType');
       const requestAction =
-        oFetch(timelineItem, 'state') === 'pending'
-          ? 'Requested'
-          : oFetch(timelineItem, 'state');
+        oFetch(timelineItem, 'state') === 'pending' ? 'Requested' : oFetch(timelineItem, 'state');
       const type = oFetch(timelineItem, 'type');
       const fullName = oFetch(timelineItem, 'requester.fullName');
       return (
@@ -96,26 +107,15 @@ class AccessoryRequestItem extends React.Component {
     const accessoryName = oFetch(accessoryRequest, 'accessoryName');
     const size = oFetch(accessoryRequest, 'size');
     const hasRefundRequest = oFetch(accessoryRequest, 'hasRefundRequest');
-    const refundRequestStatus = oFetch(
-      accessoryRequest,
-      'refundRequestStatus',
-    );
-    const refundStatusClassPrefix =
-      refundRequestStatus === 'pending' ? 'requested' : refundRequestStatus;
-    const requestStatusClassPrefix =
-      status === constants.ACCESSORY_REQUEST_STATUS_CANCELED
-        ? 'rejected'
-        : status;
-    const statusClassPrefix = hasRefundRequest
-      ? refundStatusClassPrefix
-      : requestStatusClassPrefix;
+    const refundRequestStatus = oFetch(accessoryRequest, 'refundRequestStatus');
+    const refundStatusClassPrefix = REFUND_REQUEST_STATUS_CLASS_PREFIXES[refundRequestStatus];
+    const requestStatusClassPrefix = REQUEST_STATUS_CLASS_PREFIXES[status];
+    const statusClassPrefix = hasRefundRequest ? refundStatusClassPrefix : requestStatusClassPrefix;
     return (
       <li className="boss-requests__item">
         <div className="boss-requests__meta">
           <div className="boss-requests__date">{requestDate}</div>
-          <div
-            className={`boss-requests__status boss-requests__status_role_${statusClassPrefix}`}
-          >
+          <div className={`boss-requests__status boss-requests__status_role_${statusClassPrefix}`}>
             {hasRefundRequest
               ? REFUND_REQUEST_STATUSES[refundRequestStatus]
               : constants.ACCESSORY_REQUEST_STATUS[status]}
@@ -124,12 +124,8 @@ class AccessoryRequestItem extends React.Component {
         <div className="boss-requests__content">
           <div className="boss-requests__header">
             <h3 className="boss-requests__title">
-              <span className="boss-requests__title-name">
-                {accessoryName}
-              </span>
-              <span className="boss-requests__title-size">
-                {size ? `(${size})` : '(N/A)'}
-              </span>
+              <span className="boss-requests__title-name">{accessoryName}</span>
+              <span className="boss-requests__title-size">{size ? `(${size})` : '(N/A)'}</span>
             </h3>
             {this.renderRequestActions(accessoryRequest)}
           </div>
