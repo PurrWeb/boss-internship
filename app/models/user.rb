@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
   has_many :machines_refloats
   has_many :disabled_incident_reports, foreign_key: "disabled_by_id", class_name: "IncidentReport"
   has_many :venue_users
+  has_many :accessory_requests, foreign_key: "created_by_user_id", class_name: "AccessoryRequest"
+  has_many :accessory_refund_requests, foreign_key: "created_by_user_id", class_name: "AccessoryRefundRequest"
 
   belongs_to :staff_member
 

@@ -5,6 +5,7 @@ class AccessoryRequest < ActiveRecord::Base
   belongs_to :accessory
   has_many :accessory_request_transitions
   has_one :accessory_refund_request
+  belongs_to :created_by_user, class_name: "User"
 
   enum accessory_type: [:misc, :uniform]
 

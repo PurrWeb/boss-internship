@@ -3,6 +3,7 @@ class AccessoryRefundRequest < ActiveRecord::Base
 
   belongs_to :staff_member
   belongs_to :accessory_request
+  belongs_to :created_by_user, class_name: "User"
   has_many :accessory_refund_request_transitions
 
   validates :price_cents, presence: true
