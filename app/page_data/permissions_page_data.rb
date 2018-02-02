@@ -208,6 +208,10 @@ class PermissionsPageData
           description: "Accessories",
           path: @path.accessories_path
         },
+        {
+          description: "Accessory Requests",
+          path: @path.accessory_requests_path
+        }
       ]
     }
 
