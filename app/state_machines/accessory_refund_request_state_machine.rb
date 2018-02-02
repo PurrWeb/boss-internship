@@ -6,4 +6,5 @@ class AccessoryRefundRequestStateMachine
   state :rejected
 
   transition from: :pending, to: [:accepted, :rejected]
+  transition from: :rejected, to: [:pending]
 end
