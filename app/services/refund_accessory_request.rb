@@ -17,13 +17,18 @@ class RefundAccessoryRequest
     refund_request_rejected = refund_request.present? && refund_request.current_state == "rejected"
 
     accessory_refund_request = if refund_request_rejected
-      refund_request.transition_to(:pending, requster_user_id: requester.id, type: "request")
+      if refund_request.frozen?
+        refund_request.errors.add(:base, "can't refund accessory request that has been frozen")
+        success = false
+      else
+        success = refund_request.transition_to(:pending, requster_user_id: requester.id, type: "request")
+      end
       refund_request
     else
-      AccessoryRefundRequest.new(params)
+      refund_request = AccessoryRefundRequest.new(params)
+      success = refund_request.save
+      refund_request
     end
-    success = accessory_refund_request.save
-
     Result.new(success, accessory_refund_request)
   end
 

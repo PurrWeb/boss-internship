@@ -56,43 +56,147 @@ module Api
       end
 
       def accept
-        request_from_params.transition_to!(:accepted, requster_user_id: current_user.id, type: "response")
-        render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
+        result = AccessoryRequestAdminApiService.new(
+          requster_user: current_user,
+          accessory_request: request_from_params
+        ).accept
+
+        if result.success?
+          render(
+            json: result.accessory_request,
+            serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer,
+            key_transform: :camel_lower,
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
       end
 
       def reject
-        request_from_params.transition_to!(:rejected, requster_user_id: current_user.id, type: "response")
-        render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
+        result = AccessoryRequestAdminApiService.new(
+          requster_user: current_user,
+          accessory_request: request_from_params
+        ).reject
+
+        if result.success?
+          render(
+            json: result.accessory_request,
+            serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer,
+            key_transform: :camel_lower,
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
       end
 
       def undo
-        request_from_params.transition_to!(:pending, requster_user_id: current_user.id, type: "response")
-        render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
+        result = AccessoryRequestAdminApiService.new(
+          requster_user: current_user,
+          accessory_request: request_from_params
+        ).undo
+
+        if result.success?
+          render(
+            json: result.accessory_request,
+            serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer,
+            key_transform: :camel_lower,
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
       end
 
       def complete
-        request_from_params.transition_to!(:completed, requster_user_id: current_user.id, type: "response")
-        render json: request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer, status: 200
+        result = AccessoryRequestAdminApiService.new(
+          requster_user: current_user,
+          accessory_request: request_from_params
+        ).complete
+
+        if result.success?
+          render(
+            json: result.accessory_request,
+            serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer,
+            key_transform: :camel_lower,
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
       end
 
       def accept_refund
-        refund_request_from_params.transition_to!(:accepted, requster_user_id: current_user.id, type: "response")
-        render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
+        result = AccessoryRefundRequestAdminApiService.new(
+          requster_user: current_user,
+          accessory_refund_request: refund_request_from_params
+        ).accept
+
+        if result.success?
+          render(
+            json: result.accessory_refund_request,
+            serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer,
+            key_transform: :camel_lower,
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
       end
 
       def reject_refund
-        refund_request_from_params.transition_to!(:rejected, requster_user_id: current_user.id, type: "response")
-        render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
+        result = AccessoryRefundRequestAdminApiService.new(
+          requster_user: current_user,
+          accessory_refund_request: refund_request_from_params
+        ).reject
+
+        if result.success?
+          render(
+            json: result.accessory_refund_request,
+            serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer,
+            key_transform: :camel_lower,
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
       end
 
       def undo_refund
-        refund_request_from_params.transition_to!(:pending, requster_user_id: current_user.id, type: "response")
-        render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
+        result = AccessoryRefundRequestAdminApiService.new(
+          requster_user: current_user,
+          accessory_refund_request: refund_request_from_params
+        ).undo
+
+        if result.success?
+          render(
+            json: result.accessory_refund_request,
+            serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer,
+            key_transform: :camel_lower,
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
       end
 
       def complete_refund
-        refund_request_from_params.transition_to!(:completed, requster_user_id: current_user.id, type: "response")
-        render json: refund_request_from_params, serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer, status: 200
+        result = AccessoryRefundRequestAdminApiService.new(
+          requster_user: current_user,
+          accessory_refund_request: refund_request_from_params
+        ).complete
+
+        if result.success?
+          render(
+            json: result.accessory_refund_request,
+            serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer,
+            key_transform: :camel_lower,
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
       end
 
       private

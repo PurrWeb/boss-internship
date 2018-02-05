@@ -6,6 +6,7 @@ class AccessoryRefundRequestApiErrors
 
   def errors
     result = {}
+    result[:base] = accessory_refund_request.errors[:base] if accessory_refund_request.errors[:base].present?
     result[:accessoryRequest] = accessory_refund_request.errors[:accessory_request] if accessory_refund_request.errors[:accessory_request].present?
     result
   end
