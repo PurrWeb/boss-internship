@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180205083829) do
+ActiveRecord::Schema.define(version: 20180205115046) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -41,10 +41,12 @@ ActiveRecord::Schema.define(version: 20180205083829) do
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.datetime "completed_at"
+    t.integer  "frozen_by_id",         limit: 4
   end
 
   add_index "accessory_refund_requests", ["accessory_request_id", "staff_member_id"], name: "index_accessory_refund_requests_accessory_request_staff_member", unique: true, using: :btree
   add_index "accessory_refund_requests", ["accessory_request_id"], name: "index_accessory_refund_requests_on_accessory_request_id", using: :btree
+  add_index "accessory_refund_requests", ["frozen_by_id"], name: "index_accessory_refund_requests_on_frozen_by_id", using: :btree
   add_index "accessory_refund_requests", ["staff_member_id"], name: "index_accessory_refund_requests_on_staff_member_id", using: :btree
 
   create_table "accessory_request_transitions", force: :cascade do |t|
@@ -66,10 +68,12 @@ ActiveRecord::Schema.define(version: 20180205083829) do
     t.datetime "updated_at",                     null: false
     t.integer  "created_by_user_id", limit: 4
     t.datetime "completed_at"
+    t.integer  "frozen_by_id",       limit: 4
   end
 
   add_index "accessory_requests", ["accessory_id"], name: "index_accessory_requests_on_accessory_id", using: :btree
   add_index "accessory_requests", ["created_by_user_id"], name: "index_accessory_requests_on_created_by_user_id", using: :btree
+  add_index "accessory_requests", ["frozen_by_id"], name: "index_accessory_requests_on_frozen_by_id", using: :btree
   add_index "accessory_requests", ["staff_member_id"], name: "index_accessory_requests_on_staff_member_id", using: :btree
 
   create_table "addresses", force: :cascade do |t|
@@ -1112,6 +1116,8 @@ ActiveRecord::Schema.define(version: 20180205083829) do
   add_index "vouchers", ["venue_id", "enabled"], name: "index_vouchers_on_venue_id_and_enabled", using: :btree
   add_index "vouchers", ["venue_id"], name: "index_vouchers_on_venue_id", using: :btree
 
+  add_foreign_key "accessory_refund_requests", "finance_reports", column: "frozen_by_id"
+  add_foreign_key "accessory_requests", "finance_reports", column: "frozen_by_id"
   add_foreign_key "accessory_requests", "users", column: "created_by_user_id"
   add_foreign_key "hours_acceptance_periods", "users", column: "accepted_by_id"
   add_foreign_key "incident_reports", "users"

@@ -6,6 +6,7 @@ class AccessoryRequest < ActiveRecord::Base
   has_many :accessory_request_transitions
   has_one :accessory_refund_request
   belongs_to :created_by_user, class_name: "User"
+  belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
 
   enum accessory_type: [:misc, :uniform]
 
@@ -42,6 +43,10 @@ class AccessoryRequest < ActiveRecord::Base
 
   def has_refund_request?
     completed? && accessory_refund_request.present?
+  end
+
+  def frozen?
+    frozen_by.present?
   end
 
   delegate \

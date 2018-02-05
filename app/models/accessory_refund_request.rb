@@ -5,6 +5,7 @@ class AccessoryRefundRequest < ActiveRecord::Base
   belongs_to :accessory_request
   belongs_to :created_by_user, class_name: "User"
   has_many :accessory_refund_request_transitions
+  belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
 
   validates :price_cents, presence: true
   validates :accessory_request, presence: true
@@ -30,6 +31,10 @@ class AccessoryRefundRequest < ActiveRecord::Base
 
   def completed?
     state_machine.current_state == "completed"
+  end
+
+  def frozen?
+    frozen_by.present?
   end
 
   delegate \
