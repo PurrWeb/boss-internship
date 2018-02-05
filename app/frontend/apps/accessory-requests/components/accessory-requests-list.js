@@ -9,8 +9,7 @@ class AccessoryRequestsList extends Component {
 
     return this.props.accessoryRequests.map(request => {
       const staffMember = this.props.staffMembers.find(
-        staffMember =>
-          oFetch(staffMember, 'id') === oFetch(request, 'staffMemberId'),
+        staffMember => oFetch(staffMember, 'id') === oFetch(request, 'staffMemberId'),
       );
       if (!staffMember) {
         throw new Error('Something went wrong, staff member must present');
@@ -23,6 +22,7 @@ class AccessoryRequestsList extends Component {
       const requestId = oFetch(request, 'id');
       const accessoryId = oFetch(this.props.accessory, 'id');
       const requestStatus = oFetch(request, 'status');
+      const frozen = oFetch(request, 'frozen');
 
       const requestData = {
         avatarUrl,
@@ -33,6 +33,7 @@ class AccessoryRequestsList extends Component {
         staffMember,
         requestId,
         requestStatus,
+        frozen,
       };
       return React.cloneElement(this.props.requestItemRenderer(requestData), {
         key: requestId,

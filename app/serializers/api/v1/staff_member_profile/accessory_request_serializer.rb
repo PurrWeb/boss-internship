@@ -8,7 +8,8 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
     :size,
     :hasRefundRequest,
     :refundRequestStatus,
-    :timeline
+    :timeline,
+    :frozen
 
   def updatedAt
     last_refund_state_change = if object.has_refund_request?
@@ -45,5 +46,9 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
 
   def refundRequestStatus
     object.accessory_refund_request.current_state if object.has_refund_request?
+  end
+
+  def frozen
+    object.frozen?
   end
 end

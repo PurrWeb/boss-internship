@@ -4,7 +4,8 @@ class Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer < ActiveModel
     :size,
     :staffMemberId,
     :accessoryId,
-    :status
+    :status,
+    :frozen
 
   def size
     object.accessory_request.size
@@ -20,5 +21,9 @@ class Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer < ActiveModel
 
   def accessoryId
     object.accessory_request.accessory_id
+  end
+
+  def frozen
+    object.frozen?
   end
 end

@@ -4,7 +4,8 @@ class Api::V1::AccessoryRequests::AccessoryRequestSerializer < ActiveModel::Seri
     :size,
     :staffMemberId,
     :accessoryId,
-    :status
+    :status,
+    :frozen
 
   def staffMemberId
     object.staff_member.id
@@ -16,5 +17,9 @@ class Api::V1::AccessoryRequests::AccessoryRequestSerializer < ActiveModel::Seri
 
   def accessoryId
     object.accessory.id
+  end
+
+  def frozen
+    object.frozen?
   end
 end

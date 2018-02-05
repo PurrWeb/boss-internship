@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import {
-  BossTable,
-  BossTableRow,
-  BossTableCell,
-} from '~/components/boss-table';
+import { BossTable, BossTableRow, BossTableCell } from '~/components/boss-table';
 import { UserSummary } from '~/components/staff-members';
 import AccessoryRequestActions from './accessory-request-actions';
 
@@ -17,6 +13,7 @@ class AccessoryRequestItem extends Component {
       staffMember,
       requestId,
       requestStatus,
+      frozen,
     } = this.props.data;
 
     return (
@@ -43,33 +40,35 @@ class AccessoryRequestItem extends Component {
           <p className="boss-table__text">Size: {accessorySize}</p>
         </BossTableCell>
         <BossTableCell>
-          <AccessoryRequestActions
-            status={requestStatus}
-            onRejectRequest={() =>
-              this.props.onRejectRequest({
-                requestId: requestId,
-                accessoryId: accessoryId,
-              })
-            }
-            onAcceptRequest={() =>
-              this.props.onAcceptRequest({
-                requestId: requestId,
-                accessoryId: accessoryId,
-              })
-            }
-            onUndoRequest={() =>
-              this.props.onUndoRequest({
-                requestId: requestId,
-                accessoryId: accessoryId,
-              })
-            }
-            onCompleteRequest={() =>
-              this.props.onCompleteRequest({
-                requestId: requestId,
-                accessoryId: accessoryId,
-              })
-            }
-          />
+          {!frozen && (
+            <AccessoryRequestActions
+              status={requestStatus}
+              onRejectRequest={() =>
+                this.props.onRejectRequest({
+                  requestId: requestId,
+                  accessoryId: accessoryId,
+                })
+              }
+              onAcceptRequest={() =>
+                this.props.onAcceptRequest({
+                  requestId: requestId,
+                  accessoryId: accessoryId,
+                })
+              }
+              onUndoRequest={() =>
+                this.props.onUndoRequest({
+                  requestId: requestId,
+                  accessoryId: accessoryId,
+                })
+              }
+              onCompleteRequest={() =>
+                this.props.onCompleteRequest({
+                  requestId: requestId,
+                  accessoryId: accessoryId,
+                })
+              }
+            />
+          )}
         </BossTableCell>
       </BossTableRow>
     );
