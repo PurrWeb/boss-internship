@@ -1,6 +1,15 @@
 module BossLayoutHelper
   include ActionView::Helpers::TagHelper
 
+  def colorized_amount(amount, negative: 'red', positive: 'green', default: 'black', &block)
+    color = amount < 0 \
+      ? negative \
+      : amount > 0 \
+        ? positive \
+        : default
+    block.call(amount, color)
+  end
+
   def boss_dashboard(&block)
     content_tag(:div, class: 'boss-page-main__dashboard') do
       content_tag(:div, class: 'boss-page-main__inner') do
@@ -24,14 +33,14 @@ module BossLayoutHelper
           content_tag(:span, class: 'boss-details__pointer-text') do
             "#{number}"
           end
-        end + 
+        end +
         content_tag(:div, class: 'boss-details__content') do
           block.call
         end
       end
     end
   end
-  
+
   def table_cell(label, &block)
     content_tag(:div, class: 'boss-table__cell', data: {role: label}) do
       content_tag(:div, class: 'boss-table__info') do
@@ -72,10 +81,10 @@ module BossLayoutHelper
         page_info_wrapper do
           page_info_item_wrapper do
             "Displaying "
-          end + 
+          end +
           page_info_item_bold_wrapper do
             1
-          end + 
+          end +
           page_info_item_wrapper do
             " #{entry_name}"
           end
@@ -84,10 +93,10 @@ module BossLayoutHelper
         page_info_wrapper do
           page_info_item_wrapper do
             "Displaying "
-          end + 
+          end +
           page_info_item_bold_wrapper do
             "all #{collection.size}"
-          end + 
+          end +
           page_info_item_wrapper do
             " #{entry_name.pluralize}"
           end
@@ -97,19 +106,19 @@ module BossLayoutHelper
       page_info_wrapper do
         page_info_item_wrapper do
           "Showing "
-        end + 
+        end +
         page_info_item_bold_wrapper do
           "#{collection.offset + 1}"
-        end + 
+        end +
         page_info_item_wrapper do
           "-"
-        end + 
+        end +
         page_info_item_bold_wrapper do
           "#{collection.offset + collection.length}"
-        end + 
+        end +
         page_info_item_wrapper do
           " of "
-        end + 
+        end +
         page_info_item_bold_wrapper do
           " #{collection.total_entries}"
         end

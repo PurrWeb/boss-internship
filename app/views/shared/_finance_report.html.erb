@@ -2,7 +2,7 @@
 
 <%= bootstrap_form_for('finance_reports_index', url: filter_form_path, html: { method: :get }) do |form| %>
   <div class="mb-base">
-    
+
     <div class="mb-md">
       <%= form.text_field(
           :start_date,
@@ -128,6 +128,7 @@
           <% end %>
           <th class="text-center">Total Hours</th>
           <th class="text-center">Owed Hours</th>
+          <th class="text-center">Accessories</th>
           <% if display_totals %>
             <th class="text-center">Pay Rate</th>
             <th class="text-center">Total</th>
@@ -184,6 +185,14 @@
                     owed_hours_count,
                     staff_member_path(report.staff_member, tab: 'owed-hours')
                   ) %>
+            </td>
+            <td>
+              <%= colorized_amount(report.accessories_cents) { |amount, color| link_to_unless(
+                    amount == 0,
+                    number_to_currency(amount / 100.0, unit: '£'),
+                    accessories_staff_member_path(report.staff_member),
+                    style: "color: #{color}"
+                  ) } %>
             </td>
             <% if display_totals %>
               <td>
