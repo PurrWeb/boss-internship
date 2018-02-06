@@ -4,7 +4,8 @@ class User < ActiveRecord::Base
   MANAGER_ROLE = 'manager';
   MARKETING_ROLE = 'marketing'
   MAINTENANCE_ROLE = 'maintenance_staff'
-  ROLES = [ADMIN_ROLE, MANAGER_ROLE, DEV_ROLE, 'ops_manager', 'security_manager', MAINTENANCE_ROLE, MARKETING_ROLE]
+  OPS_MANAGER_ROLE = 'ops_manager'
+  ROLES = [ADMIN_ROLE, MANAGER_ROLE, DEV_ROLE, OPS_MANAGER_ROLE, 'security_manager', MAINTENANCE_ROLE, MARKETING_ROLE]
 
   include Statesman::Adapters::ActiveRecordQueries
 
@@ -78,7 +79,7 @@ class User < ActiveRecord::Base
       "role = ? OR role = ? OR role = ?",
       DEV_ROLE,
       ADMIN_ROLE,
-      'ops_manager'
+      OPS_MANAGER_ROLE
     )
   end
 
@@ -150,7 +151,7 @@ class User < ActiveRecord::Base
   end
 
   def ops_manager?
-    role == 'ops_manager'
+    role == OPS_MANAGER_ROLE
   end
 
   def security_manager?

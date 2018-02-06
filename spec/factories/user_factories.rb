@@ -41,7 +41,7 @@ FactoryGirl.define do
     end
 
     trait :ops_manager do
-      role "ops_manager"
+      role User::OPS_MANAGER_ROLE
     end
 
     trait :admin do
