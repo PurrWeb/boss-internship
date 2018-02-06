@@ -46,4 +46,24 @@ class AccessLevel
 
     AccessLevel.new(access_level)
   end
+
+  def self.dev_access_level
+    AccessLevel.new(DEV_ACCESS_LEVEL)
+  end
+
+  def self.admin_access_level
+    AccessLevel.new(ADMIN_ACCESS_LEVEL)
+  end
+
+  def self.area_manager_access_level
+    AccessLevel.new(AREA_MANAGER_ACCESS_LEVEL)
+  end
+
+  def self.manager_access_level
+    AccessLevel.new(MANAGER_ACCESS_LEVEL)
+  end
+
+  def self.restricted_access_level
+    AccessLevel.new(RESTRICTED_ACCESS_LEVEL)
+  end
 end

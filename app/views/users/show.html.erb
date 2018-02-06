@@ -111,7 +111,7 @@
         <li class="boss-details__item">
           <p class="boss-details__label boss-details__label_size_small">Venue Access</p>
           <p class="boss-details__value">
-            <% if user.dev? || user.admin? %>
+            <% if user.has_effective_access_level?(AccessLevel.admin_access_level) %>
               All
             <% else %>
               <%= user.venues.present? ? user.venues.map(&:name).join(', ') : 'N/A' %>

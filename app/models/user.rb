@@ -102,7 +102,7 @@ class User < ActiveRecord::Base
   end
 
   def can_create_roles
-    if dev? || admin?
+    if has_effective_access_level?(AccessLevel.admin_access_level)
       ROLES - [DEV_ROLE]
     else
       []
@@ -110,9 +110,9 @@ class User < ActiveRecord::Base
   end
 
   def can_edit_roles
-    if dev?
+    if has_effective_access_level?(AccessLevel.dev_access_level)
       ROLES
-    elsif admin?
+    elsif has_effective_access_level?(AccessLevel.admin_access_level)
       ROLES - [DEV_ROLE]
     else
       []
@@ -133,10 +133,6 @@ class User < ActiveRecord::Base
 
   def disabled?
     state_machine.current_state == 'disabled'
-  end
-
-  def admin?
-    role == ADMIN_ROLE
   end
 
   def dev?
@@ -163,18 +159,12 @@ class User < ActiveRecord::Base
     role == MAINTENANCE_ROLE
   end
 
-  def restricted_access?
-    maintenance_staff? || security_manager? || marketing_staff?
-  end
-
   # Warning: Couple this to access control for actions as it is used by restricted  # user types who don't have limited views of venues but who shouldn't have
   # access to certain admin like pages .
   def has_all_venue_access?
-    dev? || admin? || ops_manager? || maintenance_staff?
-  end
-
-  def has_admin_access?
-    dev? || admin?
+    has_effective_access_level?(AccessLevel.admin_access_level) ||
+      ops_manager? ||
+      maintenance_staff?
   end
 
   def active_for_authentication?
@@ -270,6 +260,10 @@ class User < ActiveRecord::Base
   # Required for devise to work without email field
   def email_required?
     false
+  end
+
+  def has_effective_access_level?(access_level)
+    AccessLevel.for_user_role(role).is_effectively?(access_level)
   end
 
   private

@@ -366,7 +366,7 @@ Rails.application.routes.draw do
   end
 
   require "sidekiq/web"
-  authenticate :user, lambda { |u| u.dev? } do
+  authenticate :user, lambda { |u| u.has_effective_access_level?(AccessLevel.dev_access_level) } do
     mount Sidekiq::Web, at: "/queue"
   end
 
