@@ -58,7 +58,7 @@ export default function http({ ...params }) {
   return instance;
 }
 
-export const loadInitialDataRequest = ({ venueId, accessoriesFilter, currentPage }) => {
+export const loadDataRequest = ({ venueId, accessoriesFilter, currentPage }) => {
   return http({
     globalLoader: true,
     notify: false,

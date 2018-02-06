@@ -204,16 +204,19 @@ module Api
         params[:page].to_i || 1
       end
 
+      def accessory_from_params
+        venue_from_params.accessories.find_by(id: params.fetch(:accessoryId))
+      end
+
       def request_from_params
         AccessoryRequest.find_by(
-          accessory: venue_from_params.accessories.find_by(id: params.fetch(:accessoryId)),
+          accessory: accessory_from_params,
           id: params.fetch(:id)
         )
       end
 
       def refund_request_from_params
-        accessory = venue_from_params.accessories.find_by(id: params.fetch(:accessoryId))
-        AccessoryRefundRequest.find_by(id: params.fetch(:id)) if accessory.present?
+        AccessoryRefundRequest.find_by(id: params.fetch(:id)) if accessory_from_params.present?
       end
 
       def accessible_venues

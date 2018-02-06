@@ -4,7 +4,7 @@ import URLSearchParams from 'url-search-params';
 import * as constants from './constants';
 
 import {
-  loadInitialDataRequest,
+  loadDataRequest,
   acceptAccessoryRequestRequest,
   rejectAccessoryRequestRequest,
   acceptAccessoryRefundRequestRequest,
@@ -26,7 +26,7 @@ export const updateRefundRequestInStore = createAction(constants.UPDATE_REFUND_R
 export const removeRefundRequestFromStore = createAction(constants.REMOVE_REFUND_REQUEST);
 export const removeAccessoryFromStore = createAction(constants.REMOVE_ACCESSORY);
 
-const checkRequestsCountAndRemoveAccessory = accessoryId => (dispatch, getState) => {
+const checkRequestsCountEmpty = accessoryId => (dispatch, getState) => {
   const requestsCount = getState()
     .getIn(['accessoryRequestsPage', 'accessoryRequests'])
     .filter(item => item.get('accessoryId') === accessoryId).size;
@@ -34,9 +34,7 @@ const checkRequestsCountAndRemoveAccessory = accessoryId => (dispatch, getState)
     .getIn(['accessoryRequestsPage', 'accessoryRefundRequests'])
     .filter(item => item.get('accessoryId') === accessoryId).size;
 
-  if (requestsCount === 0 && requestsRefundsCount === 0) {
-    dispatch(removeAccessoryFromStore(accessoryId));
-  }
+  return requestsCount === 0 && requestsRefundsCount === 0;
 };
 
 export const changeVenue = venueId => (dispatch, getState) => {
@@ -44,22 +42,40 @@ export const changeVenue = venueId => (dispatch, getState) => {
   queryString.set('venue_id', venueId);
   window.history.pushState('state', 'title', `accessory-requests?${queryString}`);
   dispatch([setVenue(venueId), dropPageNumber()]);
-  dispatch(loadInitialData());
+  return dispatch(loadData()).then(resp => {
+    return dispatch(loadInitialAccessoryRequests(resp.data));
+  });
 };
 
 export const loadInitialData = () => (dispatch, getState) => {
+  return dispatch(loadData()).then(resp => {
+    return dispatch(loadInitialAccessoryRequests(resp.data));
+  });
+};
+
+export const loadData = () => (dispatch, getState) => {
   const currentVenue = getState().getIn(['accessoryRequestsPage', 'currentVenue']);
 
   const currentPage = parseInt(
     getState().getIn(['accessoryRequestsPage', 'pagination', 'pageNumber']),
   );
 
-  return loadInitialDataRequest({
+  return loadDataRequest({
     venueId: currentVenue,
     currentPage: currentPage,
-  }).then(resp => {
-    dispatch(loadInitialAccessoryRequests(resp.data));
-    return resp;
+  });
+};
+
+export const updatePages = () => (dispatch, getState) => {
+  return dispatch(loadData()).then(loadDataResponse => {
+    const { accessories } = loadDataResponse.data;
+    if (accessories.length === 0) return;
+    const lastAccessory = accessories[accessories.length - 1];
+    const data = {
+      ...loadDataResponse.data,
+      accessories: [lastAccessory],
+    };
+    dispatch(loadInitialAccessoryRequests(data));
   });
 };
 
@@ -90,12 +106,16 @@ export const rejectAccessoryRequest = ({ requestId, accessoryId }) => (dispatch,
     venueId: currentVenue,
     accessoryId,
     requestId,
-  }).then(resp => {
-    dispatch(removeRequestFromStore(resp.data));
-    dispatch(checkRequestsCountAndRemoveAccessory(accessoryId));
-    return resp;
+  }).then(completeResponse => {
+    dispatch(removeRequestFromStore(completeResponse.data));
+    if (dispatch(checkRequestsCountEmpty(accessoryId))) {
+      dispatch(removeAccessoryFromStore(accessoryId));
+      dispatch(updatePages());
+    }
+    return completeResponse;
   });
 };
+
 export const completeAccessoryRequest = ({ requestId, accessoryId }) => (dispatch, getState) => {
   const currentVenue = getState().getIn(['accessoryRequestsPage', 'currentVenue']);
 
@@ -103,10 +123,12 @@ export const completeAccessoryRequest = ({ requestId, accessoryId }) => (dispatc
     venueId: currentVenue,
     accessoryId,
     requestId,
-  }).then(resp => {
-    dispatch(removeRequestFromStore(resp.data));
-    dispatch(checkRequestsCountAndRemoveAccessory(accessoryId));
-    return resp;
+  }).then(completeResponse => {
+    dispatch(removeRequestFromStore(completeResponse.data));
+    if (dispatch(checkRequestsCountEmpty(accessoryId))) {
+      dispatch(removeAccessoryFromStore(accessoryId));
+      dispatch(updatePages());
+    }
   });
 };
 
@@ -143,10 +165,13 @@ export const rejectAccessoryRefundRequest = ({ requestId, accessoryId }) => (
     venueId: currentVenue,
     accessoryId,
     requestId,
-  }).then(resp => {
-    dispatch(removeRefundRequestFromStore(resp.data));
-    dispatch(checkRequestsCountAndRemoveAccessory(accessoryId));
-    return resp;
+  }).then(completeResponse => {
+    dispatch(removeRefundRequestFromStore(completeResponse.data));
+    if (dispatch(checkRequestsCountEmpty(accessoryId))) {
+      dispatch(removeAccessoryFromStore(accessoryId));
+      dispatch(updatePages());
+    }
+    return completeResponse;
   });
 };
 
@@ -160,14 +185,19 @@ export const completeAccessoryRefundRequest = ({ requestId, accessoryId }) => (
     venueId: currentVenue,
     accessoryId,
     requestId,
-  }).then(resp => {
-    dispatch(removeRefundRequestFromStore(resp.data));
-    dispatch(checkRequestsCountAndRemoveAccessory(accessoryId));
-    return resp;
+  }).then(completeResponse => {
+    dispatch(removeRefundRequestFromStore(completeResponse.data));
+    if (dispatch(checkRequestsCountEmpty(accessoryId))) {
+      dispatch(removeAccessoryFromStore(accessoryId));
+      dispatch(updatePages());
+    }
+    return completeResponse;
   });
 };
 
 export const loadMoreClick = () => (dispatch, getState) => {
   dispatch(loadMore());
-  dispatch(loadInitialData());
+  return dispatch(loadData()).then(resp => {
+    return dispatch(loadInitialAccessoryRequests(resp.data));
+  });
 };

@@ -5,11 +5,7 @@ import {
   BossCheckCardCollapsibleGroup,
 } from '~/components/boss-check-card';
 
-import {
-  BossTable,
-  BossTableRow,
-  BossTableCell,
-} from '~/components/boss-table';
+import { BossTable, BossTableRow, BossTableCell } from '~/components/boss-table';
 
 import AccessoryRequestsList from './accessory-requests-list';
 import AccessoryRequestItem from './accessory-request-item';
@@ -49,6 +45,8 @@ class AccessoryListItem extends Component {
             accessory={accessory}
             accessoryRequests={requests}
             staffMembers={staffMembers}
+            paginate
+            pageSize={1}
             requestItemRenderer={data => (
               <AccessoryRequestItem
                 onRejectRequest={rejectAccessoryRequest}
@@ -70,6 +68,8 @@ class AccessoryListItem extends Component {
               accessory={accessory}
               accessoryRequests={refundRequests}
               staffMembers={staffMembers}
+              paginate
+              pageSize={1}
               requestItemRenderer={data => (
                 <AccessoryRequestItem
                   onAcceptRequest={acceptAccessoryRefundRequest}
