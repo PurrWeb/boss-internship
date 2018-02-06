@@ -45,7 +45,7 @@ FactoryGirl.define do
     end
 
     trait :admin do
-       role "admin"
+       role User::ADMIN_ROLE
     end
 
     trait :dev do

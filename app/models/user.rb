@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
+  ADMIN_ROLE = 'admin'
   MARKETING_ROLE = 'marketing'
   MAINTENANCE_ROLE = 'maintenance_staff'
-  ROLES = ['admin', 'manager', 'dev', 'ops_manager', 'security_manager', MAINTENANCE_ROLE, MARKETING_ROLE]
+  ROLES = [ADMIN_ROLE, 'manager', 'dev', 'ops_manager', 'security_manager', MAINTENANCE_ROLE, MARKETING_ROLE]
 
   include Statesman::Adapters::ActiveRecordQueries
 
@@ -74,7 +75,7 @@ class User < ActiveRecord::Base
     where(
       "role = ? OR role = ? OR role = ?",
       'dev',
-      'admin',
+      ADMIN_ROLE,
       'ops_manager'
     )
   end
@@ -131,7 +132,7 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    role == 'admin'
+    role == ADMIN_ROLE
   end
 
   def dev?

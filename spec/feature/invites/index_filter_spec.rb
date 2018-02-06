@@ -49,9 +49,8 @@ RSpec.feature 'Staff members index page filtering' do
 
   context 'filtering by role' do
     let!(:admin_role) { 'admin' }
-    let!(:manager_role) { 'manager' }
     let!(:admin_role_invites) do
-      FactoryGirl.create_list(:invite, 2, role: admin_role, inviter: dev_user)
+      FactoryGirl.create_list(:invite, 2, role: User::ADMIN_ROLE, inviter: dev_user)
     end
     let!(:manager_role_invites) do
       FactoryGirl.create_list(:invite, 3, role: manager_role, inviter: dev_user)

@@ -10,7 +10,7 @@ RSpec.feature 'Editing a users access detials' do
   end
 
   describe 'editing users role' do
-    let(:new_role) { 'admin' }
+    let(:new_role) { User::ADMIN_ROLE }
 
     context 'when editing a user whos role you can edit' do
       let(:edited_user) { FactoryGirl.create(:user, :manager) }
