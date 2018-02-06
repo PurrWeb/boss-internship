@@ -1,8 +1,9 @@
 class User < ActiveRecord::Base
   ADMIN_ROLE = 'admin'
+  MANAGER_ROLE = 'manager';
   MARKETING_ROLE = 'marketing'
   MAINTENANCE_ROLE = 'maintenance_staff'
-  ROLES = [ADMIN_ROLE, 'manager', 'dev', 'ops_manager', 'security_manager', MAINTENANCE_ROLE, MARKETING_ROLE]
+  ROLES = [ADMIN_ROLE, MANAGER_ROLE, 'dev', 'ops_manager', 'security_manager', MAINTENANCE_ROLE, MARKETING_ROLE]
 
   include Statesman::Adapters::ActiveRecordQueries
 
@@ -140,7 +141,7 @@ class User < ActiveRecord::Base
   end
 
   def manager?
-    role == 'manager'
+    role == MANAGER_ROLE
   end
 
   def marketing_staff?

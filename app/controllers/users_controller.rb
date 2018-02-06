@@ -180,7 +180,7 @@ class UsersController < ApplicationController
         :venues
       )
 
-    if result[:role] == 'manager'
+    if result[:role] == User::MANAGER_ROLE
       result = result.merge(
         venues: venues_from_params
       )

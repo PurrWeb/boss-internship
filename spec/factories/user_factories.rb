@@ -21,7 +21,7 @@ FactoryGirl.define do
     end
 
     password "sdlksdsad"
-    role 'manager'
+    role User::MANAGER_ROLE
 
     confirmed_at { 2.weeks.ago }
 
@@ -37,7 +37,7 @@ FactoryGirl.define do
 
     # same as default but included allow explicit coding
     trait :manager do
-      role "manager"
+      role User::MANAGER_ROLE
     end
 
     trait :ops_manager do

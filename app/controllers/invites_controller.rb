@@ -123,7 +123,7 @@ class InvitesController < ApplicationController
 
     permitted_params = [:email]
 
-    if role_from_params == 'manager'
+    if role_from_params == User::MANAGER_ROLE
       permitted_params << { venue_ids: [] }
     end
 

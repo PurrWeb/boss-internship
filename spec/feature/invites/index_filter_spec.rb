@@ -53,7 +53,7 @@ RSpec.feature 'Staff members index page filtering' do
       FactoryGirl.create_list(:invite, 2, role: User::ADMIN_ROLE, inviter: dev_user)
     end
     let!(:manager_role_invites) do
-      FactoryGirl.create_list(:invite, 3, role: manager_role, inviter: dev_user)
+      FactoryGirl.create_list(:invite, 3, role: User::MANAGER_ROLE, inviter: dev_user)
     end
     let(:total_invite_count) { admin_role_invites.count + manager_role_invites.count }
 

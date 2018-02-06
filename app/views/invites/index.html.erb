@@ -93,7 +93,7 @@
             <% end %>
             <%= table_cell_text('Role') { invite.role.titleize } %>
             <%= table_cell_text('Venues') do %>
-              <% if invite.role == 'manager' %>
+              <% if invite.role == User::MANAGER_ROLE %>
                 <% venues = invite.venue_ids.map { |id| Venue.find_by(id: id) }.compact %>
                 <%= venues.map(&:name).to_sentence %>
               <% else %>
@@ -149,7 +149,7 @@
                 </div>
                 <div class="boss-check__info-cell">
                   <p class="boss-check__text boss-check__text_role_primary">
-                    <% if invite.role == 'manager' %>
+                    <% if invite.role == User::MANAGER_ROLE %>
                       <% venues = invite.venue_ids.map { |id| Venue.find_by(id: id) }.compact %>
                       <%= venues.map(&:name).to_sentence %>
                     <% else %>

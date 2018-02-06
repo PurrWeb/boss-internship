@@ -127,7 +127,7 @@ class AnonymiseDatabase
           email: bounced_emails_list[3],
           password: 'manager_password',
           staff_type: manager_staff_type,
-          role: 'manager',
+          role: User::MANAGER_ROLE,
           venues: [main_venue]
         },
         {
@@ -136,7 +136,7 @@ class AnonymiseDatabase
           email: bounced_emails_list[4],
           password: 'manager_password',
           staff_type: manager_staff_type,
-          role: 'manager',
+          role: User::MANAGER_ROLE,
           venues: [main_venue]
         },
         {
@@ -145,7 +145,7 @@ class AnonymiseDatabase
           email: bounced_emails_list[5],
           password: 'manager_password',
           staff_type: manager_staff_type,
-          role: 'manager',
+          role: User::MANAGER_ROLE,
           venues: [main_venue]
         },
       ]
@@ -175,7 +175,7 @@ class AnonymiseDatabase
           email: 'manager@jsmbars.co.uk',
           password: 'manager_password',
           staff_type: manager_staff_type,
-          role: 'manager',
+          role: User::MANAGER_ROLE,
           venues: [main_venue]
         },
         {
@@ -193,7 +193,7 @@ class AnonymiseDatabase
           email: 'other_manager@jsmbars.co.uk',
           password: 'other_manager_password',
           staff_type: manager_staff_type,
-          role: 'manager',
+          role: User::MANAGER_ROLE,
           venues: [other_venue]
         }
       ] + bounced_emails_user_data

@@ -11,8 +11,7 @@ RSpec.feature 'Users index page filtering' do
   context 'filtering by role' do
     let(:dev_role)  { 'dev' }
     let!(:dev_users) { FactoryGirl.create_list(:user, 2, role: dev_role) }
-    let(:manager_role) { 'manager' }
-    let!(:managers) { FactoryGirl.create_list(:user, 3, role: manager_role) }
+    let!(:managers) { FactoryGirl.create_list(:user, 3, role: User::MANAGER_ROLE) }
     let(:total_user_count) { 1 + dev_users.count + managers.count }
 
     scenario 'no filtering should be applied by default' do

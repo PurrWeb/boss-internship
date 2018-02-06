@@ -13,7 +13,7 @@ FactoryGirl.define do
     end
 
     trait :manager do
-      role "manager"
+      role User::MANAGER_ROLE
     end
 
     trait :security_manager do
