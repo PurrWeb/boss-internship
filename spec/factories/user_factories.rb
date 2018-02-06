@@ -49,7 +49,7 @@ FactoryGirl.define do
     end
 
     trait :dev do
-       role "dev"
+       role User::DEV_ROLE
     end
 
     trait :security_manager do

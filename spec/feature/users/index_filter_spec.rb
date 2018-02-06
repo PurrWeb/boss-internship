@@ -9,8 +9,7 @@ RSpec.feature 'Users index page filtering' do
   end
 
   context 'filtering by role' do
-    let(:dev_role)  { 'dev' }
-    let!(:dev_users) { FactoryGirl.create_list(:user, 2, role: dev_role) }
+    let!(:dev_users) { FactoryGirl.create_list(:user, 2, role: User::DEV_ROLE) }
     let!(:managers) { FactoryGirl.create_list(:user, 3, role: User::MANAGER_ROLE) }
     let(:total_user_count) { 1 + dev_users.count + managers.count }
 

@@ -1,9 +1,10 @@
 class User < ActiveRecord::Base
+  DEV_ROLE = 'dev'
   ADMIN_ROLE = 'admin'
   MANAGER_ROLE = 'manager';
   MARKETING_ROLE = 'marketing'
   MAINTENANCE_ROLE = 'maintenance_staff'
-  ROLES = [ADMIN_ROLE, MANAGER_ROLE, 'dev', 'ops_manager', 'security_manager', MAINTENANCE_ROLE, MARKETING_ROLE]
+  ROLES = [ADMIN_ROLE, MANAGER_ROLE, DEV_ROLE, 'ops_manager', 'security_manager', MAINTENANCE_ROLE, MARKETING_ROLE]
 
   include Statesman::Adapters::ActiveRecordQueries
 
@@ -53,7 +54,7 @@ class User < ActiveRecord::Base
     to: :name
 
   def self.dev
-    where(role: 'dev')
+    where(role: DEV_ROLE)
   end
 
   def self.enabled
@@ -75,7 +76,7 @@ class User < ActiveRecord::Base
   def self.with_all_venue_access
     where(
       "role = ? OR role = ? OR role = ?",
-      'dev',
+      DEV_ROLE,
       ADMIN_ROLE,
       'ops_manager'
     )
@@ -100,7 +101,7 @@ class User < ActiveRecord::Base
 
   def can_create_roles
     if dev? || admin?
-      ROLES - ['dev']
+      ROLES - [DEV_ROLE]
     else
       []
     end
@@ -110,7 +111,7 @@ class User < ActiveRecord::Base
     if dev?
       ROLES
     elsif admin?
-      ROLES - ['dev']
+      ROLES - [DEV_ROLE]
     else
       []
     end
@@ -137,7 +138,7 @@ class User < ActiveRecord::Base
   end
 
   def dev?
-    role == 'dev'
+    role == DEV_ROLE
   end
 
   def manager?

@@ -157,7 +157,7 @@ class AnonymiseDatabase
           email: 'dev@jsmbars.co.uk',
           password: 'dev_password',
           staff_type: manager_staff_type,
-          role: 'dev',
+          role: User::DEV_ROLE,
           venues: [main_venue],
         },
         {
