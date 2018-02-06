@@ -5,7 +5,8 @@ class User < ActiveRecord::Base
   MARKETING_ROLE = 'marketing'
   MAINTENANCE_ROLE = 'maintenance_staff'
   OPS_MANAGER_ROLE = 'ops_manager'
-  ROLES = [ADMIN_ROLE, MANAGER_ROLE, DEV_ROLE, OPS_MANAGER_ROLE, 'security_manager', MAINTENANCE_ROLE, MARKETING_ROLE]
+  SECURITY_MANAGER_ROLE = 'security_manager'
+  ROLES = [ADMIN_ROLE, MANAGER_ROLE, DEV_ROLE, OPS_MANAGER_ROLE, SECURITY_MANAGER_ROLE, MAINTENANCE_ROLE, MARKETING_ROLE]
 
   include Statesman::Adapters::ActiveRecordQueries
 
@@ -155,7 +156,7 @@ class User < ActiveRecord::Base
   end
 
   def security_manager?
-    role == 'security_manager'
+    role == SECURITY_MANAGER_ROLE
   end
 
   def maintenance_staff?

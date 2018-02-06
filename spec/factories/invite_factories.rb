@@ -17,7 +17,7 @@ FactoryGirl.define do
     end
 
     trait :security_manager do
-      role 'security_manager'
+      role User::SECURITY_MANAGER_ROLE
     end
 
     trait :accepted do
