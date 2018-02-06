@@ -24,15 +24,15 @@ RSpec.feature 'Users index page filtering' do
     scenario 'filter settings should be persisted between updates' do
       users_index_page.surf_to
       users_index_page.filter.tap do |filter|
-        filter.filter_by_role(dev_role)
-        filter.ui_shows_filtering_by_role(dev_role)
+        filter.filter_by_role(User::DEV_ROLE)
+        filter.ui_shows_filtering_by_role(User::DEV_ROLE)
       end
     end
 
     scenario 'filtering should effect results' do
       users_index_page.surf_to
       users_index_page.filter.tap do |filter|
-        filter.filter_by_role(manager_role)
+        filter.filter_by_role(User::MANAGER_ROLE)
         filter.ensure_records_returned(managers.count)
       end
     end

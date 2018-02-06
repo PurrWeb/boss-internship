@@ -2,7 +2,7 @@
   $(function(){
     function updateVenueField(){
       var role = $('.user-role-select-field').val();
-      if(role == '<%= USER::MANAGER_ROLE %>'){
+      if(role == '<%= User::MANAGER_ROLE %>'){
         $('.venue-access-select-field-section').removeClass('hidden');
         $('.venue-access-detail-section').addClass('hidden');
       } else {
