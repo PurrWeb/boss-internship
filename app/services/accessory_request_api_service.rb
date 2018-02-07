@@ -18,7 +18,7 @@ class AccessoryRequestApiService
       size: params.fetch(:size),
       price_cents: accessory.andand.price_cents,
       accessory_type: accessory.andand.accessory_type,
-    }.merge(staff_member: staff_member, accessory: accessory)
+    }.merge(staff_member: staff_member, accessory: accessory, created_by_user: requester)
 
     model_service_result = CreateAccessoryRequest.new(
       params: accessory_request_params
@@ -47,7 +47,7 @@ class AccessoryRequestApiService
   def refund
     refund_accessory_request_params = {
       price_cents: accessory_request.price_cents,
-    }.merge(staff_member: staff_member, accessory_request: accessory_request)
+    }.merge(staff_member: staff_member, accessory_request: accessory_request, created_by_user: requester)
 
     model_service_result = RefundAccessoryRequest.new(
       params: refund_accessory_request_params,

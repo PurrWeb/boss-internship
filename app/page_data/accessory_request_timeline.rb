@@ -9,8 +9,8 @@ class AccessoryRequestTimeline
 
     requests_timeline_with_initial = [{
       requester: {
-        id: accessory_request.staff_member.id,
-        fullName: accessory_request.staff_member.full_name
+        id: accessory_request.created_by_user.id,
+        fullName: accessory_request.created_by_user.full_name
       },
       createdAt: accessory_request.created_at,
       state: AccessoryRequest.initial_state,
@@ -25,8 +25,8 @@ class AccessoryRequestTimeline
 
       [{
         requester: {
-          id: refund_request.staff_member.id,
-          fullName: refund_request.staff_member.full_name
+          id: refund_request.created_by_user.id,
+          fullName: refund_request.created_by_user.full_name
         },
         createdAt: refund_request.created_at,
         state: AccessoryRefundRequest.initial_state,
