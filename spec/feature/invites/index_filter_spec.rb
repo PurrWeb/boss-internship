@@ -76,7 +76,7 @@ RSpec.feature 'Staff members index page filtering' do
     scenario 'filtering should effect results' do
       invites_index_page.surf_to
       invites_index_page.filter.tap do |filter|
-        filter.filter_by_role(manager_role)
+        filter.filter_by_role(User::MANAGER_ROLE)
         filter.ensure_records_returned(manager_role_invites.count)
       end
     end
