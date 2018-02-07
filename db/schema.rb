@@ -11,7 +11,72 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180106131152) do
+ActiveRecord::Schema.define(version: 20180205115046) do
+
+  create_table "accessories", force: :cascade do |t|
+    t.integer  "venue_id",         limit: 4
+    t.integer  "accessory_type",   limit: 4
+    t.string   "name",             limit: 255
+    t.integer  "price_cents",      limit: 4
+    t.string   "size",             limit: 255
+    t.boolean  "user_requestable"
+    t.datetime "disabled_at"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  create_table "accessory_refund_request_transitions", force: :cascade do |t|
+    t.string   "to_state",                    limit: 255,   null: false
+    t.text     "metadata",                    limit: 65535
+    t.integer  "sort_key",                    limit: 4,     null: false
+    t.integer  "accessory_refund_request_id", limit: 4,     null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+  end
+
+  create_table "accessory_refund_requests", force: :cascade do |t|
+    t.integer  "accessory_request_id", limit: 4, null: false
+    t.integer  "staff_member_id",      limit: 4, null: false
+    t.integer  "price_cents",          limit: 4
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "created_by_user_id",   limit: 4
+    t.datetime "completed_at"
+    t.integer  "frozen_by_id",         limit: 4
+  end
+
+  add_index "accessory_refund_requests", ["accessory_request_id", "staff_member_id"], name: "index_accessory_refund_requests_accessory_request_staff_member", unique: true, using: :btree
+  add_index "accessory_refund_requests", ["accessory_request_id"], name: "index_accessory_refund_requests_on_accessory_request_id", using: :btree
+  add_index "accessory_refund_requests", ["created_by_user_id"], name: "index_accessory_refund_requests_on_created_by_user_id", using: :btree
+  add_index "accessory_refund_requests", ["frozen_by_id"], name: "index_accessory_refund_requests_on_frozen_by_id", using: :btree
+  add_index "accessory_refund_requests", ["staff_member_id"], name: "index_accessory_refund_requests_on_staff_member_id", using: :btree
+
+  create_table "accessory_request_transitions", force: :cascade do |t|
+    t.string   "to_state",             limit: 255,   null: false
+    t.text     "metadata",             limit: 65535
+    t.integer  "sort_key",             limit: 4,     null: false
+    t.integer  "accessory_request_id", limit: 4,     null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  create_table "accessory_requests", force: :cascade do |t|
+    t.integer  "accessory_id",       limit: 4,   null: false
+    t.integer  "staff_member_id",    limit: 4,   null: false
+    t.integer  "accessory_type",     limit: 4,   null: false
+    t.integer  "price_cents",        limit: 4,   null: false
+    t.string   "size",               limit: 255
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "created_by_user_id", limit: 4
+    t.datetime "completed_at"
+    t.integer  "frozen_by_id",       limit: 4
+  end
+
+  add_index "accessory_requests", ["accessory_id"], name: "index_accessory_requests_on_accessory_id", using: :btree
+  add_index "accessory_requests", ["created_by_user_id"], name: "index_accessory_requests_on_created_by_user_id", using: :btree
+  add_index "accessory_requests", ["frozen_by_id"], name: "index_accessory_requests_on_frozen_by_id", using: :btree
+  add_index "accessory_requests", ["staff_member_id"], name: "index_accessory_requests_on_staff_member_id", using: :btree
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255
@@ -284,6 +349,7 @@ ActiveRecord::Schema.define(version: 20180106131152) do
     t.string   "pay_rate_description",    limit: 255, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "accessories_cents",       limit: 4
   end
 
   add_index "finance_reports", ["staff_member_id"], name: "index_finance_reports_on_staff_member_id", using: :btree
@@ -1052,6 +1118,10 @@ ActiveRecord::Schema.define(version: 20180106131152) do
   add_index "vouchers", ["venue_id", "enabled"], name: "index_vouchers_on_venue_id_and_enabled", using: :btree
   add_index "vouchers", ["venue_id"], name: "index_vouchers_on_venue_id", using: :btree
 
+  add_foreign_key "accessory_refund_requests", "finance_reports", column: "frozen_by_id"
+  add_foreign_key "accessory_refund_requests", "users", column: "created_by_user_id"
+  add_foreign_key "accessory_requests", "finance_reports", column: "frozen_by_id"
+  add_foreign_key "accessory_requests", "users", column: "created_by_user_id"
   add_foreign_key "hours_acceptance_periods", "users", column: "accepted_by_id"
   add_foreign_key "incident_reports", "users"
   add_foreign_key "incident_reports", "users", column: "disabled_by_id"

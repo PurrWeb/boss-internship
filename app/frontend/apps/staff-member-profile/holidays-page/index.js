@@ -11,24 +11,19 @@ import Holidays from './containers/holidays';
 import holidaysReducer from './reducers';
 import profileReducer from '../profile-wrapper/reducers';
 
-const reducers = {
-  holidays: holidaysReducer,
-  profile: profileReducer,
-  form: formReducer,
-}
-
-const store = configureStore(combineReducers(reducers));
-
 class StaffMemberHolidaysApp extends React.Component {
-  constructor(props) {
-    super(props);
-
-    store.dispatch(initialProfileLoad({...props}))
-    store.dispatch(initialLoad({...props}));
+  componentWillMount() {
+    this.store = configureStore(combineReducers({
+      holidays: holidaysReducer,
+      profile: profileReducer,
+      form: formReducer,
+    }));
+    this.store.dispatch(initialProfileLoad({...this.props}));
+    this.store.dispatch(initialLoad({...this.props}));
   }
 
   render() {
-    return <Provider store={store}>
+    return <Provider store={this.store}>
       <Holidays />
     </Provider>
   }

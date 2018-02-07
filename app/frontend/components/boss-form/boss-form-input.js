@@ -17,20 +17,42 @@ const BossFormInput = ({
 
     const handleChange = (maskedvalue, floatvalue) => {
       onChange(floatvalue);
-    }   
-  
+    }
+
+    const renderInputs = () => {
+      return (
+        isCurrency
+        ? <CurrencyInput
+            disabled={disabled}
+            value={value}
+            onChange={handleChange}
+            className={`boss-form__input ${touched && error && 'boss-form__input_state_error'}`}
+            decimalSeparator="."
+            thousandSeparator=""
+          />
+        : <input
+            autoComplete={autocomplete ? 'on' : 'off'}
+            {...input}
+            type={type}
+            disabled={disabled}
+            placeholder={label}
+            className={`boss-form__input ${touched && error && 'boss-form__input_state_error'}`}
+          />
+      )
+    }
+
     return (
       <div className="boss-form__field">
         <label className="boss-form__label">
           <span className="boss-form__label-text">{`${label} ${required ? '*' : ''}`}</span>
         </label>
-        <span className="boss-form__units">
-          { !!unit && <span className="boss-form__units-value">{unit}</span>}
-          {isCurrency
-            ? <CurrencyInput disabled={disabled} value={value} onChange={handleChange} className={`boss-form__input ${touched && error && 'boss-form__input_state_error'}`} decimalSeparator="." thousandSeparator=""/>
-            : <input autoComplete={autocomplete ? 'on' : 'off'} {...input} type={type} disabled={disabled} placeholder={label} className={`boss-form__input ${touched && error && 'boss-form__input_state_error'}`} />
-          }
-        </span>
+        { !!unit
+          ? <span className="boss-form__units">
+              <span className="boss-form__units-value">{unit}</span>
+              {renderInputs()}
+            </span>
+          : renderInputs()
+        }
         {
           touched && error &&
             <div className="boss-form__error">

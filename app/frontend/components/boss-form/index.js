@@ -11,3 +11,4 @@ export BossFormTextarea from './boss-form-textarea';
 export BossFormTimeSelect from './boss-form-time-select';
 export Tooltip from './tooltip';
 export BossFormTextArea from './boss-form-textarea';
+export BossFormTagInput from './boss-form-tag-input';

@@ -41,6 +41,11 @@ import "./lib/load-underscore-mixins"
 
 import DevsApp from "./apps/devs";
 registerComponent("DevsApp", DevsApp);
+import AccessoriesApp from "./apps/accessories";
+registerComponent("AccessoriesApp", AccessoriesApp);
+
+import AccessoryRequestsApp from "./apps/accessory-requests";
+registerComponent("AccessoryRequestsApp", AccessoryRequestsApp);
 
 import StaffMemberPasswordReset from "./apps/staff-member-password-reset";
 registerComponent("StaffMemberPasswordReset", StaffMemberPasswordReset);
@@ -74,6 +79,9 @@ registerComponent("StaffMemberHolidaysApp", StaffMemberHolidaysApp)
 
 import {StaffMemberOwedHoursApp} from "./apps/staff-member-profile";
 registerComponent("StaffMemberOwedHoursApp", StaffMemberOwedHoursApp);
+
+import {StaffMemberAccessoriesApp} from "./apps/staff-member-profile";
+registerComponent("StaffMemberAccessoriesApp", StaffMemberAccessoriesApp);
 
 import StaffTypeRotaApp from "./apps/staff-type-rota/staff-type-rota-app"
 registerComponent("StaffTypeRotaApp", StaffTypeRotaApp);

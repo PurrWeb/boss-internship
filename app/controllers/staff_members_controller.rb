@@ -1,5 +1,5 @@
 class StaffMembersController < ApplicationController
-  before_action :set_new_layout, only: [:index, :new, :show, :holidays, :profile, :owed_hours]
+  before_action :set_new_layout, only: [:index, :new, :show, :holidays, :profile, :owed_hours, :accessories]
 
   def index
     authorize! :list, :staff_members
@@ -185,6 +185,48 @@ class StaffMembersController < ApplicationController
         accessible_pay_rates: accessible_pay_rate_ids
       }
     end
+  end
+
+  def accessories
+    query = StaffMember.where(id: params[:id])
+    query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
+    staff_member = query.first
+    return redirect_to profile_staff_member_path if staff_member.security?
+
+    raise ActiveRecord::RecordNotFound.new unless staff_member.present?
+
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+    accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
+      user: current_user,
+      pay_rate: staff_member.pay_rate
+    ).page_pay_rates.map(&:id)
+
+    venue_accessories = staff_member.master_venue.accessories.enabled.user_requestable
+    accessory_requests = staff_member.accessory_requests.includes([:accessory, accessory_refund_request: [:staff_member]])
+
+    render locals: {
+      staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
+      access_token: access_token.token,
+      staff_types: StaffType.all,
+      venues: Venue.all,
+      gender_values: StaffMember::GENDERS,
+      accessible_venue_ids: Venue.all.pluck(:id),
+      pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
+        PayRate.all,
+        serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
+        scope: current_user
+      ),
+      venue_accessories: ActiveModel::Serializer::CollectionSerializer.new(
+        venue_accessories,
+        serializer: Api::V1::StaffMemberProfile::AccessorySerializer,
+      ),
+      accessory_requests: ActiveModel::Serializer::CollectionSerializer.new(
+        accessory_requests,
+        serializer: Api::V1::StaffMemberProfile::AccessoryRequestSerializer,
+      ),
+      accessible_pay_rate_ids: accessible_pay_rate_ids,
+      accessible_pay_rates: accessible_pay_rate_ids
+    }
   end
 
   def new

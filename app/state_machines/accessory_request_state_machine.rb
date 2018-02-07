@@ -1,0 +1,21 @@
+class AccessoryRequestStateMachine
+  include Statesman::Machine
+
+  state :pending, initial: true
+  state :accepted
+  state :rejected
+  state :canceled
+  state :completed
+
+  transition from: :pending, to: [:accepted, :rejected, :canceled]
+  transition from: :accepted, to: [:pending, :completed]
+
+  after_transition(from: :accepted, to: :completed) do |model, transition|
+    model.completed_at = Time.now.utc
+    model.save
+  end
+
+  guard_transition do |model, transition|
+    model.validate
+  end
+end

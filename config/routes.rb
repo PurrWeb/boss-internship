@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       passwords: 'users/passwords'
     }
 
+    resources :accessories, only: [:index]
+    resources :accessory_requests, only: [:index], path: 'accessory-requests'
     resources :machines, only: [:index]
     resources :machine_refloats, only: [:index]
 
@@ -96,6 +98,7 @@ Rails.application.routes.draw do
         get :holidays
         get :profile
         get :owed_hours
+        get :accessories
       end
     end
 
@@ -218,6 +221,24 @@ Rails.application.routes.draw do
       namespace :v1 do
         get 'version', to: 'version#version'
 
+        resources :accessory_requests, only: [:index, :create, :update, :destroy], path: 'accessory-requests'  do
+          member do
+            post :accept
+            post :reject
+            post :undo
+            post :complete
+            post :accept_refund, path: 'accept-refund'
+            post :reject_refund, path: 'reject-refund'
+            post :undo_refund, path: 'undo-refund'
+            post :complete_refund, path: 'complete-refund'
+          end
+        end
+        resources :accessories, only: [:index, :create, :update, :destroy] do
+          member do
+            post :restore
+          end
+        end
+
         resources :check_lists, only: [:index, :create, :update, :destroy] do
           collection do
             post :submit
@@ -297,6 +318,12 @@ Rails.application.routes.draw do
           resources :holidays, only: [:index, :update, :destroy, :create] do
             collection do
               get :holidays_count
+            end
+          end
+          resources :staff_member_accessory_requests, only: [:create], path: 'accessory-requests' do
+            member do
+              post :refund_request, path: 'refund'
+              post :cancel_request, path: 'cancel'
             end
           end
           resources :owed_hours, only: [:index, :update, :destroy, :create]

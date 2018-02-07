@@ -1,5 +1,5 @@
 class GenerateFinanceReportData
-  class Result < Struct.new(:report, :hours_acceptance_periods, :holidays, :owed_hours); end
+  class Result < Struct.new(:report, :hours_acceptance_periods, :holidays, :owed_hours, :accessories_requests, :accessories_refunds); end
 
   def initialize(staff_member:, week:)
     @staff_member = staff_member
@@ -118,6 +118,26 @@ class GenerateFinanceReportData
 
     report.owed_hours_minute_count = owed_hours_minute_count
 
+    accessories_requests = InRangeQuery.new(
+      relation: AccessoryRequest.in_state(:completed).where(staff_member: staff_member),
+      start_value: RotaShiftDate.new(week.start_date).start_time,
+      end_value: RotaShiftDate.new(week.end_date).end_time,
+      start_column_name: 'completed_at',
+      end_column_name: 'completed_at',
+    ).all
+    accessories_requests_cents = accessories_requests.sum(:price_cents)
+
+    accessories_refunds = InRangeQuery.new(
+      relation: AccessoryRefundRequest.in_state(:completed).where(staff_member: staff_member),
+      start_value: RotaShiftDate.new(week.start_date).start_time,
+      end_value: RotaShiftDate.new(week.end_date).end_time,
+      start_column_name: 'completed_at',
+      end_column_name: 'completed_at',
+    ).all
+    accessories_refunds_cents = accessories_refunds.sum(:price_cents)
+
+    report.accessories_cents = accessories_refunds_cents - accessories_requests_cents
+
     if staff_member.pay_rate.weekly?
       report.total_cents = staff_member.pay_rate.cents
     elsif staff_member.pay_rate.hourly?
@@ -129,6 +149,8 @@ class GenerateFinanceReportData
       raise "Unsupported pay rate calculation_type: #{staff_member.pay_rate.calculation_type}"
     end
 
-    Result.new(report, hours_acceptance_periods, holidays, owed_hours)
+    report.total_cents = report.total_cents + report.accessories_cents
+
+    Result.new(report, hours_acceptance_periods, holidays, owed_hours, accessories_requests, accessories_refunds)
   end
 end
