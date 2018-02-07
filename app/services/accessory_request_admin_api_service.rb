@@ -48,7 +48,7 @@ class AccessoryRequestAdminApiService
       accessory_request.errors.add(:base, "can't undo accessory request that has been frozen")
       result = false
     else
-      result = accessory_request.transition_to!(:undo, requster_user_id: requster_user.id, type: "response")
+      result = accessory_request.transition_to!(:pending, requster_user_id: requster_user.id, type: "response")
     end
 
     api_errors = nil

@@ -68,7 +68,7 @@ module Api
       end
 
       def staff_member_from_params
-        StaffMember.find_by(id: params.fetch(:staff_member_id))
+        StaffMember.includes(:name).find_by(id: params.fetch(:staff_member_id))
       end
 
       def accessory_request_from_params
