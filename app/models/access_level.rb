@@ -12,6 +12,19 @@ class AccessLevel
     RESTRICTED_ACCESS_LEVEL => 0
   }
 
+  DEV_ACCESS_ROLES = [User::DEV_ROLE]
+  ADMIN_ACCESS_ROLES = [User::ADMIN_ROLE]
+  AREA_MANAGER_ACCESS_ROLES = [
+    User::OPS_MANAGER_ROLE,
+    User::AREA_MANAGER_ROLE
+  ]
+  MANAGER_ACCESS_ROLES = [User::MANAGER_ROLE]
+  RESTRICTED_ACCESS_ROLES = [
+    User::MAINTENANCE_ROLE,
+    User::MARKETING_ROLE,
+    User::SECURITY_MANAGER_ROLE
+  ]
+
   def initialize(access_level)
     raise "Unsupported access level #{access_level} encounted" unless LEVEL_DATA.keys.include?(access_level)
     @access_level = access_level
@@ -29,16 +42,17 @@ class AccessLevel
   end
 
   def self.for_user_role(role)
+
     access_level = case role
-    when User::DEV_ROLE
+    when *DEV_ACCESS_ROLES
       DEV_ACCESS_LEVEL
-    when User::ADMIN_ROLE
+    when *ADMIN_ACCESS_ROLES
       ADMIN_ACCESS_LEVEL
-    when User::OPS_MANAGER_ROLE, User::AREA_MANAGER_ROLE
+    when *AREA_MANAGER_ACCESS_ROLES
       AREA_MANAGER_ACCESS_LEVEL
-    when User::MANAGER_ROLE
+    when *MANAGER_ACCESS_ROLES
       MANAGER_ACCESS_LEVEL
-    when User::MAINTENANCE_ROLE, User::MARKETING_ROLE, User::SECURITY_MANAGER_ROLE
+    when *RESTRICTED_ACCESS_ROLES
       RESTRICTED_ACCESS_LEVEL
     else
       raise "Unsupported role '#{role}' encountered"
