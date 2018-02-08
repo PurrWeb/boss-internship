@@ -8,10 +8,7 @@ class AccessoryRequestTimeline
       .history.map {|from_history| request_entry(request_history: from_history, request_type: "accessoryRequest")}
 
     requests_timeline_with_initial = [{
-      requester: {
-        id: accessory_request.created_by_user.id,
-        fullName: accessory_request.created_by_user.full_name
-      },
+      requester: requester_entry(id: accessory_request.created_by_user.id),
       createdAt: accessory_request.created_at,
       state: AccessoryRequest.initial_state,
       type: "request",
@@ -24,10 +21,7 @@ class AccessoryRequestTimeline
         .history.map {|from_history| request_entry(request_history: from_history, request_type: "refundRequest")}
 
       [{
-        requester: {
-          id: refund_request.created_by_user.id,
-          fullName: refund_request.created_by_user.full_name
-        },
+        requester: requester_entry(id: refund_request.created_by_user.id),
         createdAt: refund_request.created_at,
         state: AccessoryRefundRequest.initial_state,
         type: "request",

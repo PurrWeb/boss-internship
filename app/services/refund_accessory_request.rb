@@ -25,7 +25,6 @@ class RefundAccessoryRequest
       end
       refund_request
     else
-      byebug
       refund_request = AccessoryRefundRequest.new(params)
       success = refund_request.save
       refund_request
