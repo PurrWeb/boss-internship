@@ -13,6 +13,6 @@ class NamesController < ApplicationController
 
   private
   def authorize
-    authorize! :manage, :admin
+    authorize! :view, :names_page
   end
 end

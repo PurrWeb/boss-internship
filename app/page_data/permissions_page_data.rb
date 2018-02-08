@@ -140,7 +140,7 @@ class PermissionsPageData
       items: [
         {
           description: "Names",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :names_page),
           path: @path.names_path
         },
         {
