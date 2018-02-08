@@ -216,7 +216,7 @@ class PermissionsPageData
         },
         {
           description: "Accessories",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :accessories_page),
           path: @path.accessories_path
         },
         {
