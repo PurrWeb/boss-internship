@@ -21,6 +21,20 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can :view, :users_page do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+      can [:edit, :create_staff_member], User do |target_user|
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+      can [:enable, :disable], User do |target_user|
+        target_user != user &&
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+
       can :view, :maintenance_tasks do
         user.maintenance_staff? || user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
@@ -161,25 +175,6 @@ class UserAbility
         else
           can_manage_venue?(user, rota_shift.venue)
         end
-      end
-
-      can :create_staff_member, User do |target_user|
-        user.has_effective_access_level?(AccessLevel.admin_access_level) || (
-          user.has_effective_access_level?(AccessLevel.manager_access_level) &&
-            user == target_user
-          )
-      end
-
-      can :disable, User do |target_user|
-        target_user.enabled? &&
-          target_user != user &&
-          user.has_effective_access_level?(AccessLevel.admin_access_level)
-      end
-
-      can :enable, User do |target_user|
-        target_user.disabled? &&
-          target_user != user &&
-          user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can :update, ChangeOrder do |change_order|

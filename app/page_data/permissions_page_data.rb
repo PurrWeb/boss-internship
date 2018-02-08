@@ -167,7 +167,7 @@ class PermissionsPageData
       items: [
         {
           description: "Users",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :users_page),
           path: @path.users_path
         },
         {

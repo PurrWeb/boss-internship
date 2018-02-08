@@ -1,13 +1,16 @@
 class UsersController < ApplicationController
-  before_action :authorize_admin, except: [:new_staff_member, :create_staff_member]
   before_filter :set_new_layout, only: [:index, :show]
 
   def show
+    authorize!(:view, :users_page)
+
     user = User.find(params[:id])
     render locals: { user: user }
   end
 
   def index
+    authorize!(:view, :users_page)
+
     filter = UsersIndexFilter.new(params[:filter])
     users = filter.
       query.
@@ -20,11 +23,15 @@ class UsersController < ApplicationController
 
   def edit_access_details
     user = User.find(params[:id])
+    authorize!(:edit, user)
+
     render locals: { user: user }
   end
 
   def update_access_details
     user = User.find(params[:id])
+    authorize!(:edit, user)
+
     assert_update_permitted(user)
 
     if user.update_attributes(user_access_details_params)
@@ -38,11 +45,14 @@ class UsersController < ApplicationController
 
   def edit_personal_details
     user = User.find(params[:id])
+    authorize!(:edit, user)
+
     render locals: { user: user }
   end
 
   def update_personal_details
     user = User.find(params[:id])
+    authorize!(:edit, user)
     assert_update_permitted(user)
 
     if user.update_attributes(user_personal_details_params(user))
@@ -89,6 +99,7 @@ class UsersController < ApplicationController
   def undestroy
     user = User.find(params[:id])
     authorize!(:enable, user)
+    raise 'attempt to revive enabled staff member' if !user.disabled?
 
     ReviveUser.new(
       requester: current_user,
@@ -113,6 +124,7 @@ class UsersController < ApplicationController
   def destroy
     user = User.find(params[:id])
     authorize!(:disable, user)
+    raise 'attempt to disabled already disabled user' if user.disabled?
 
     form = DisableStaffMemberForm.new(OpenStruct.new)
     disable_staff_member_params = params.fetch("disable_staff_member")
@@ -152,12 +164,6 @@ class UsersController < ApplicationController
   private
   def assert_update_permitted(user)
     raise 'Attempt to update disabled user' if user.disabled?
-  end
-
-  def authorize_admin
-    if !can?(:manage, :admin)
-      redirect_to root_path
-    end
   end
 
   def user_personal_details_params(user)
