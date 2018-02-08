@@ -155,7 +155,7 @@ class PermissionsPageData
         },
         {
           description: "Dashboard Messages",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :dashboard_messages_page),
           path: @path.message_board_path
         },
       ]

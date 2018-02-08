@@ -8,6 +8,8 @@ module Api
       before_action :find_dashboard_message!, except: [:create, :index]
 
       def index
+        authorize!(:view, :dashboard_messages_page)
+
         dashboard_messages = (
           DashboardMessage.where(to_all_venues: true).includes([:created_by_user, :disabled_by_user]) + current_venue.dashboard_messages.includes([:created_by_user, :disabled_by_user])
         ).uniq.sort_by(&:published_time).reverse.paginate(page: page_number, per_page: 5)
@@ -29,7 +31,7 @@ module Api
       end
 
       def update
-        authorize! :manage, @dashboard_message
+        authorize! :edit, @dashboard_message
 
         update_dashboard_message = UpdateDashboardMessage.new(@dashboard_message, dashboard_message_params)
 
@@ -47,7 +49,7 @@ module Api
       end
 
       def create
-        authorize! :manage, DashboardMessage.new
+        authorize! :create, DashboardMessage.new
 
         create_params = dashboard_message_params.merge(created_by_user: current_user)
         create_dashboard_message = CreateDashboardMessage.new(create_params)
@@ -67,7 +69,7 @@ module Api
       end
 
       def destroy
-        authorize! :manage, @dashboard_message
+        authorize! :destroy, @dashboard_message
 
         if @dashboard_message.destroy
           render json: {}, status: :ok
@@ -77,7 +79,7 @@ module Api
       end
 
       def disable
-        authorize! :manage, @dashboard_message
+        authorize! :disable, @dashboard_message
 
         if @dashboard_message.disable(current_user)
           render json: @dashboard_message,
@@ -93,7 +95,7 @@ module Api
       end
 
       def restore
-        authorize! :manage, @dashboard_message
+        authorize! :enable, @dashboard_message
 
         if @dashboard_message.restore
           render json: @dashboard_message,

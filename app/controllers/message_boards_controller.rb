@@ -6,7 +6,7 @@ class MessageBoardsController < ApplicationController
   before_action :redirect_to_venue
 
   def show
-    authorize! :manage, DashboardMessage.new
+    authorize! :view, :dashboard_messages_page
 
     current_venue = venue_from_params || current_user.default_venue
     messages = (DashboardMessage.where(to_all_venues: true) + current_venue.dashboard_messages).uniq.sort_by(&:published_time).reverse

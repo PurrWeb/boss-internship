@@ -86,6 +86,13 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can :view, :dashboard_messages_page do
+        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+      end
+
+      can [:edit, :create, :disable, :destroy], DashboardMessage do
+        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+      end
 
       can :view, :maintenance_tasks do
         user.maintenance_staff? || user.has_effective_access_level?(AccessLevel.manager_access_level)
@@ -103,10 +110,6 @@ class UserAbility
 
       can :view, :venue_dashboard do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :manage, DashboardMessage do
-        user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can :list, :staff_members do
