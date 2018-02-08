@@ -9,8 +9,8 @@ class UserAbility
         can :manage, :admin
       end
 
-      if user.has_effective_access_level?(AccessLevel.dev_access_level)
-        can :manage, :dev_only_pages
+      can :view, :sse_tests do
+        user.has_effective_access_level?(AccessLevel.dev_access_level)
       end
 
       can :view, :maintenance_tasks do

@@ -260,7 +260,7 @@ class PermissionsPageData
       items: [
         {
           description: "Security App SSE Test",
-          permitted: role.can?(:manage, :dev_only_pages),
+          permitted: role.can?(:view, :sse_tests),
           path: @path.secruity_app_sse_test_dev_path
         }
       ]
