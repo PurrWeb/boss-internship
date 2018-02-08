@@ -211,7 +211,7 @@ class PermissionsPageData
       items: [
         {
           description: "Checklist Submissions",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :check_list_submissions_page),
           path: @path.check_list_submissions_path
         },
         {

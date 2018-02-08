@@ -98,6 +98,9 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end
 
+      can :view, :check_list_submissions_page do
+        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+      end
 
       can :view, :maintenance_tasks do
         user.maintenance_staff? || user.has_effective_access_level?(AccessLevel.manager_access_level)
