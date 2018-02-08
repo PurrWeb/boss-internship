@@ -189,7 +189,7 @@ class PermissionsPageData
         },
         {
           description: "Pay Rates",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :pay_rates_page),
           path: @path.pay_rates_path
         },
         {
