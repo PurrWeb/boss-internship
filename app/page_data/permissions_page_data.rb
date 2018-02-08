@@ -145,7 +145,7 @@ class PermissionsPageData
         },
         {
           description: "Venues",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :venues_page),
           path: @path.venues_path
         },
         {
