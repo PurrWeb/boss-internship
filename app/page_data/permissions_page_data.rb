@@ -194,7 +194,7 @@ class PermissionsPageData
         },
         {
           description: "Staff Vetting",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :staff_vetting_page),
           path: @path.staff_vetting_index_path
         },
         {
