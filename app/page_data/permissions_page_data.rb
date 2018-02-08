@@ -233,7 +233,7 @@ class PermissionsPageData
       items: [
         {
           description: "Fruit Order Report",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :fruit_order_reports),
           path: @path.fruit_order_reports_path
         },
         {

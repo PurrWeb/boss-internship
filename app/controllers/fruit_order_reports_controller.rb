@@ -3,6 +3,8 @@ class FruitOrderReportsController < ApplicationController
   before_action :set_new_layout, only: [:index, :history]
 
   def index
+    authorize!(:view, :fruit_order_reports)
+
     pending_fruit_orders = FruitOrder.current.includes(:venue)
     pending_show_fields = FruitOrderShowFields.new(pending_fruit_orders)
 
@@ -23,6 +25,8 @@ class FruitOrderReportsController < ApplicationController
   end
 
   def accept
+    authorize!(:accept, :fruit_order_reports)
+
     fruit_order = FruitOrder.find(params[:id])
 
     fruit_order.state_machine.transition_to!(
@@ -35,6 +39,8 @@ class FruitOrderReportsController < ApplicationController
   end
 
   def complete
+    authorize!(:complete, :fruit_order_reports)
+
     fruit_orders = FruitOrder.where(id: params.fetch("fruit_order_ids"))
 
     CompleteFruitOrders.new(
@@ -47,6 +53,8 @@ class FruitOrderReportsController < ApplicationController
   end
 
   def history
+    authorize!(:view, :fruit_order_reports)
+
     fruit_orders = FruitOrder.
       done.
       includes([:fruit_order_transitions, :venue]).
@@ -60,10 +68,6 @@ class FruitOrderReportsController < ApplicationController
   end
 
   private
-  def authorize_admin
-    authorize! :manage, :admin
-  end
-
   def date_from_params
     if params[:id].present?
       UIRotaDate.parse(params[:id])
