@@ -34,7 +34,7 @@ class AccessLevel
       DEV_ACCESS_LEVEL
     when User::ADMIN_ROLE
       ADMIN_ACCESS_LEVEL
-    when User::OPS_MANAGER_ROLE
+    when User::OPS_MANAGER_ROLE, User::AREA_MANAGER_ROLE
       AREA_MANAGER_ACCESS_LEVEL
     when User::MANAGER_ROLE
       MANAGER_ACCESS_LEVEL

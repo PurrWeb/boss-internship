@@ -1,12 +1,22 @@
 class User < ActiveRecord::Base
   DEV_ROLE = 'dev'
   ADMIN_ROLE = 'admin'
+  AREA_MANAGER_ROLE = 'area_manager'
   MANAGER_ROLE = 'manager';
   MARKETING_ROLE = 'marketing'
   MAINTENANCE_ROLE = 'maintenance_staff'
   OPS_MANAGER_ROLE = 'ops_manager'
   SECURITY_MANAGER_ROLE = 'security_manager'
-  ROLES = [ADMIN_ROLE, MANAGER_ROLE, DEV_ROLE, OPS_MANAGER_ROLE, SECURITY_MANAGER_ROLE, MAINTENANCE_ROLE, MARKETING_ROLE]
+  ROLES = [
+    DEV_ROLE,
+    ADMIN_ROLE,
+    AREA_MANAGER_ROLE,
+    MANAGER_ROLE,
+    MARKETING_ROLE,
+    MAINTENANCE_ROLE,
+    OPS_MANAGER_ROLE,
+    SECURITY_MANAGER_ROLE
+  ]
 
   include Statesman::Adapters::ActiveRecordQueries
 
