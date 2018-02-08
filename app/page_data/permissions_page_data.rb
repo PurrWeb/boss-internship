@@ -140,19 +140,22 @@ class PermissionsPageData
       items: [
         {
           description: "Names",
+          permitted: role.can?(:manage, :admin),
           path: @path.names_path
         },
         {
           description: "Venues",
+          permitted: role.can?(:manage, :admin),
           path: @path.venues_path
         },
         {
           description: 'API Keys',
+          permitted: role.can?(:manage, :admin),
           path: @path.api_keys_path,
         },
         {
           description: "Dashboard Messages",
-          permitted: role.can?(:manage, DashboardMessage),
+          permitted: role.can?(:manage, :admin),
           path: @path.message_board_path
         },
       ]
@@ -164,10 +167,12 @@ class PermissionsPageData
       items: [
         {
           description: "Users",
+          permitted: role.can?(:manage, :admin),
           path: @path.users_path
         },
         {
           description: "Invites",
+          permitted: role.can?(:manage, :admin),
           path: @path.invites_path
         }
       ]
@@ -179,18 +184,22 @@ class PermissionsPageData
       items: [
         {
           description: "Staff Type",
+          permitted: role.can?(:manage, :admin),
           path: @path.staff_types_path
         },
         {
           description: "Pay Rates",
+          permitted: role.can?(:manage, :admin),
           path: @path.pay_rates_path
         },
         {
           description: "Staff Vetting",
+          permitted: role.can?(:manage, :admin),
           path: @path.staff_vetting_index_path
         },
         {
           description: "Staff Tracking",
+          permitted: role.can?(:manage, :admin),
           path: @path.staff_tracking_index_path
         }
       ]
@@ -202,14 +211,17 @@ class PermissionsPageData
       items: [
         {
           description: "Checklist Submissions",
+          permitted: role.can?(:manage, :admin),
           path: @path.check_list_submissions_path
         },
         {
           description: "Accessories",
+          permitted: role.can?(:manage, :admin),
           path: @path.accessories_path
         },
         {
           description: "Accessory Requests",
+          permitted: role.can?(:manage, :admin),
           path: @path.accessory_requests_path
         }
       ]
@@ -221,18 +233,22 @@ class PermissionsPageData
       items: [
         {
           description: "Fruit Order Report",
+          permitted: role.can?(:manage, :admin),
           path: @path.fruit_order_reports_path
         },
         {
           description: "Change Order Report",
+          permitted: role.can?(:manage, :admin),
           path: @path.change_order_reports_path
         },
         {
           description: "Finance Report",
+          permitted: role.can?(:manage, :admin),
           path: @path.finance_reports_path
         },
         {
           description: "Yearly Report",
+          permitted: role.can?(:manage, :admin),
           path: @path.yearly_reports_path
         }
       ]
@@ -244,6 +260,7 @@ class PermissionsPageData
       items: [
         {
           description: "Security App SSE Test",
+          permitted: role.can?(:manage, :dev_only_pages),
           path: @path.secruity_app_sse_test_dev_path
         }
       ]
@@ -254,18 +271,13 @@ class PermissionsPageData
     menu << venue if venue.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << staff_members if staff_members.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << reports if reports.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << admin_general if admin_general.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << admin_users if admin_users.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << admin_staff_members if admin_staff_members.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << admin_venues if admin_venues.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << admin_reports if admin_reports.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
 
-    admin_menu = [
-      admin_general,
-      admin_users,
-      admin_staff_members,
-      admin_reports,
-      admin_venues,
-    ]
-
-    dev_menu = [
-      dev_section
-    ]
+    menu << dev_section if dev_section.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
 
     quick_menu = menu.map do |parent_item|
       parent_item[:items] = parent_item[:items].map do |child_item|
@@ -279,16 +291,6 @@ class PermissionsPageData
       serializer: Api::V1::VenueSerializer,
     )
 
-    menu_items = quick_menu
-
-    if role.can?(:manage, :admin)
-      menu_items.concat(admin_menu)
-    end
-
-    if role.can?(:manage, :dev_only_pages)
-      menu_items.concat(dev_menu)
-    end
-
-    { quick_menu: menu_items, venues: venues }
+    { quick_menu: quick_menu, venues: venues }
   end
 end
