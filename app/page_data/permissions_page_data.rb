@@ -184,7 +184,7 @@ class PermissionsPageData
       items: [
         {
           description: "Staff Type",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :staff_types_page),
           path: @path.staff_types_path
         },
         {
