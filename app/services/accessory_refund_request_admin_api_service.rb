@@ -16,7 +16,7 @@ class AccessoryRefundRequestAdminApiService
       accessory_refund_request.errors.add(:base, "can't accept refund for accessory request that has been frozen")
       result = false
     else
-      result = accessory_refund_request.transition_to!(:accepted, requster_user_id: requster_user.id, type: "response")
+      result = accessory_refund_request.transition_to!(:accepted, requster_user_id: requster_user.id)
     end
 
     api_errors = nil
@@ -32,7 +32,7 @@ class AccessoryRefundRequestAdminApiService
       accessory_refund_request.errors.add(:base, "can't reject refund for accessory request that has been frozen")
       result = false
     else
-      result = accessory_refund_request.transition_to!(:rejected, requster_user_id: requster_user.id, type: "response")
+      result = accessory_refund_request.transition_to!(:rejected, requster_user_id: requster_user.id)
     end
 
     api_errors = nil
@@ -48,7 +48,7 @@ class AccessoryRefundRequestAdminApiService
       accessory_refund_request.errors.add(:base, "can't undo accessory request that has been frozen")
       result = false
     else
-      result = accessory_refund_request.transition_to!(:pending, requster_user_id: requster_user.id, type: "response")
+      result = accessory_refund_request.transition_to!(:pending, requster_user_id: requster_user.id)
     end
 
     api_errors = nil
@@ -64,7 +64,7 @@ class AccessoryRefundRequestAdminApiService
       accessory_refund_request.errors.add(:base, "can't complete accessory request that has been frozen")
       result = false
     else
-      result = accessory_refund_request.transition_to!(:completed, requster_user_id: requster_user.id, type: "response")
+      result = accessory_refund_request.transition_to!(:completed, requster_user_id: requster_user.id)
     end
 
     api_errors = nil

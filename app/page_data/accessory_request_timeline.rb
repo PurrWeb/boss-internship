@@ -14,7 +14,6 @@ class AccessoryRequestTimeline
       },
       createdAt: accessory_request.created_at,
       state: AccessoryRequest.initial_state,
-      type: "request",
       requestType: "accessoryRequest"
     }] + requests_timeline
 
@@ -30,7 +29,6 @@ class AccessoryRequestTimeline
         },
         createdAt: refund_request.created_at,
         state: AccessoryRefundRequest.initial_state,
-        type: "request",
         requestType: "refundRequest"
       }] + refund_requests_timeline
     end
@@ -52,7 +50,6 @@ class AccessoryRequestTimeline
       requester: requester_entry(id: request_history.metadata["requster_user_id"]),
       createdAt: request_history.created_at,
       state: request_history.to_state,
-      type: request_history.metadata["type"],
       requestType: request_type
     }
   end

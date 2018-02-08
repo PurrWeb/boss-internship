@@ -82,7 +82,6 @@ class AccessoryRequestItem extends React.Component {
       const requestType = oFetch(timelineItem, 'requestType');
       const requestAction =
         oFetch(timelineItem, 'state') === 'pending' ? 'Requested' : oFetch(timelineItem, 'state');
-      const type = oFetch(timelineItem, 'type');
       const fullName = oFetch(timelineItem, 'requester.fullName');
       return (
         <div key={`${key}`} className="boss-requests__details-record">
@@ -90,7 +89,7 @@ class AccessoryRequestItem extends React.Component {
             {requestType === 'refundRequest'
               ? `Refund ${humanize(requestAction)}`
               : humanize(requestAction)}
-            {` on ${date} ${type === 'response' ? `by ${fullName}` : ''}`}
+            {` on ${date} by ${fullName}`}
             <span className="boss-requests__details-text-marked" />
           </p>
         </div>
