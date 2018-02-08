@@ -172,7 +172,7 @@ class PermissionsPageData
         },
         {
           description: "Invites",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:manage, :user_invites),
           path: @path.invites_path
         }
       ]
