@@ -221,7 +221,7 @@ class PermissionsPageData
         },
         {
           description: "Accessory Requests",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :accessory_requests_page),
           path: @path.accessory_requests_path
         }
       ]
