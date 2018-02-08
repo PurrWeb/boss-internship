@@ -1,6 +1,6 @@
 class FinanceReportsController < ApplicationController
   def index
-    authorize! :manage, :admin
+    authorize!(:view, :finance_reports)
 
     if venue_from_params.present? && week_from_params.present?
       venue = venue_from_params
@@ -44,6 +44,8 @@ class FinanceReportsController < ApplicationController
   end
 
   def render_finance_reports_pdf(week:, venue:, filter_by_weekly_pay_rate:, staff_members:)
+    authorize!(:view, :finance_reports)
+
     pdf = FinanceReportPDF.new(
       report_title: 'Finance Report',
       venue: venue,
@@ -75,7 +77,7 @@ class FinanceReportsController < ApplicationController
   end
 
   def create
-    authorize! :manage, :admin
+    authorize!(:complete, :finance_reports)
 
     week = week_from_params
     staff_member = staff_member_from_params
@@ -96,7 +98,8 @@ class FinanceReportsController < ApplicationController
   end
 
   def complete_multiple
-    authorize! :manage, :admin
+    authorize!(:complete, :finance_reports)
+
     week = week_from_params
     staff_members = staff_members_from_params
     venue = staff_members.first.master_venue

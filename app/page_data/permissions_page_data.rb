@@ -243,7 +243,7 @@ class PermissionsPageData
         },
         {
           description: "Finance Report",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :finance_reports),
           path: @path.finance_reports_path
         },
         {
