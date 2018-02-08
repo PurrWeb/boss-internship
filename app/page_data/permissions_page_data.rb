@@ -238,7 +238,7 @@ class PermissionsPageData
         },
         {
           description: "Change Order Report",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :change_order_reports),
           path: @path.change_order_reports_path
         },
         {

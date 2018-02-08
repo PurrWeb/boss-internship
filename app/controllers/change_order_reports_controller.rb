@@ -3,6 +3,8 @@ class ChangeOrderReportsController < ApplicationController
   before_action :set_new_layout, only: [:history, :index]
 
   def index
+    authorize!(:view, :change_order_reports)
+
     pending_change_orders = ChangeOrder.current.includes(:venue)
     accepted_change_orders = ChangeOrder.accepted.includes(:venue)
 
@@ -18,6 +20,7 @@ class ChangeOrderReportsController < ApplicationController
   end
 
   def accept
+    authorize!(:accept, :change_order_reports)
     change_order = ChangeOrder.find(params[:id])
 
     change_order.state_machine.transition_to!(
@@ -30,6 +33,8 @@ class ChangeOrderReportsController < ApplicationController
   end
 
   def complete
+    authorize!(:complete, :change_order_reports)
+
     change_orders = ChangeOrder.where(
       id: Array(params.fetch(:change_order_ids))
     )
@@ -44,6 +49,8 @@ class ChangeOrderReportsController < ApplicationController
   end
 
   def show
+    authorize!(:view, :change_order_reports)
+
     deadline_date = date_from_params
     submission_deadline = ChangeOrderSubmissionDeadline.from_deadline_date(deadline_date).time
 
@@ -62,12 +69,16 @@ class ChangeOrderReportsController < ApplicationController
   end
 
   def edit
+    authorize!(:edit, :change_order_reports)
+
     change_order = ChangeOrder.find(params[:id])
 
     render locals: { change_order: change_order }
   end
 
   def history
+    authorize!(:view, :change_order_reports)
+
     change_orders = ChangeOrder.
       done.
       includes([:change_order_transitions, :venue]).
