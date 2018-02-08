@@ -248,7 +248,7 @@ class PermissionsPageData
         },
         {
           description: "Yearly Report",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :yearly_reports),
           path: @path.yearly_reports_path
         }
       ]

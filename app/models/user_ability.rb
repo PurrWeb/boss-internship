@@ -58,6 +58,10 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can :view, :yearly_reports do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can :view, :maintenance_tasks do
         user.maintenance_staff? || user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
