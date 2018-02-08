@@ -70,6 +70,14 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can :view, :api_keys_page do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+      can [:destroy, :create], :api_keys do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can :view, :maintenance_tasks do
         user.maintenance_staff? || user.has_effective_access_level?(AccessLevel.manager_access_level)
       end

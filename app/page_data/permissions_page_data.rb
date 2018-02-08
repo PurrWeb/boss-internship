@@ -150,7 +150,7 @@ class PermissionsPageData
         },
         {
           description: 'API Keys',
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :api_keys_page),
           path: @path.api_keys_path,
         },
         {
