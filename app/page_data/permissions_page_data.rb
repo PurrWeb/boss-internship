@@ -199,7 +199,7 @@ class PermissionsPageData
         },
         {
           description: "Staff Tracking",
-          permitted: role.can?(:manage, :admin),
+          permitted: role.can?(:view, :staff_tracking_page),
           path: @path.staff_tracking_index_path
         }
       ]
