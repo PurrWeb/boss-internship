@@ -21,7 +21,7 @@ class RefundAccessoryRequest
         refund_request.errors.add(:base, "can't refund accessory request that has been frozen")
         success = false
       else
-        success = refund_request.transition_to(:pending, requster_user_id: requester.id, type: "request")
+        success = refund_request.transition_to(:pending, requster_user_id: requester.id)
       end
       refund_request
     else
