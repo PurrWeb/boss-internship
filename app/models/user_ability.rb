@@ -272,6 +272,36 @@ class UserAbility
         can_edit_staff_member?(user, holiday.staff_member)
       end
 
+      can :list, :staff_members do
+        user.security_manager? ||
+          user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :create, :staff_members do
+        user.security_manager? ||
+          user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :enable, StaffMember do |staff_member|
+        staff_member.disabled? && can_edit_staff_member?(user, staff_member)
+      end
+
+      can :disable, StaffMember do |staff_member|
+        staff_member.enabled? &&
+          user.staff_member != staff_member &&
+          can_edit_staff_member?(user, staff_member)
+      end
+
+      can :edit, StaffMember do |staff_member|
+        can_edit_staff_member?(user, staff_member)
+      end
+
+      can :perform_clocking_action, StaffMember do |staff_member|
+        user.has_effective_access_level?(AccessLevel.manager_access_level) && (
+          can_edit_staff_member?(user, staff_member)
+        )
+      end
+
 
 
 
@@ -296,16 +326,6 @@ class UserAbility
 
       can :manage, MaintenanceTask do |maintenance_task|
         can_manage_venue?(user, maintenance_task.venue)
-      end
-
-      can :list, :staff_members do
-        user.security_manager? ||
-          user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :create, :staff_members do
-        user.security_manager? ||
-          user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :manage, :vouchers do
@@ -352,32 +372,12 @@ class UserAbility
         can_manage_venue?(user, venue)
       end
 
-      can :enable, StaffMember do |staff_member|
-        staff_member.disabled? && can_edit_staff_member?(user, staff_member)
-      end
-
-      can :disable, StaffMember do |staff_member|
-        staff_member.enabled? &&
-          user.staff_member != staff_member &&
-          can_edit_staff_member?(user, staff_member)
-      end
-
-      can :edit, StaffMember do |staff_member|
-        can_edit_staff_member?(user, staff_member)
-      end
-
       can :manage, RotaShift do |rota_shift|
         if rota_shift.security?
           user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
         else
           can_manage_venue?(user, rota_shift.venue)
         end
-      end
-
-      can :perform_clocking_action, StaffMember do |staff_member|
-        user.has_effective_access_level?(AccessLevel.manager_access_level) && (
-          can_edit_staff_member?(user, staff_member)
-        )
       end
     end
 
