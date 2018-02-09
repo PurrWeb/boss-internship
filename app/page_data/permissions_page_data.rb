@@ -59,7 +59,7 @@ class PermissionsPageData
         },
         {
           description: "Incident Reports",
-          permitted: role.can?(:manage, :incident_reports),
+          permitted: role.can?(:view, :incident_report_page),
           path: @path.incident_reports_path
         },
         {

@@ -13,8 +13,6 @@ class IncidentReportCreationApiService
   attr_reader :requester, :venue, :ability
 
   def call(params)
-    ability.authorize! :manage, venue
-
     incident_report = IncidentReport.new(
       user: requester,
       venue: venue,
@@ -28,6 +26,8 @@ class IncidentReportCreationApiService
       uninvolved_witness_details: params.fetch(:uninvolved_witness_details),
       police_officer_details: params.fetch(:police_officer_details)
     )
+
+    ability.authorize! :create, incident_report
 
     result = incident_report.save
 
