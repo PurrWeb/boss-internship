@@ -19,7 +19,7 @@ class PermissionsPageData
         },
         {
           description: "Machines Refloats",
-          permitted: role.can?(:manage, :machines),
+          permitted: role.can?(:view, :machine_refloats_page),
           path: @path.machine_refloats_path
         },
         {

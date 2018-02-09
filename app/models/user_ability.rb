@@ -130,6 +130,17 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end
 
+      can :view, :machine_refloats_page do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :create, :machines_refloats do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :create, MachinesRefloat do |machines_refloat|
+        can_manage_venue?(user, machines_refloat.venue)
+      end
 
 
 
@@ -297,10 +308,6 @@ class UserAbility
 
       can :update, HoursAcceptancePeriod do |hours_acceptance_period|
         can_manage_venue?(user, hours_acceptance_period.venue)
-      end
-
-      can :manage, :machines do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :destroy, FruitOrder do |fruit_order|
