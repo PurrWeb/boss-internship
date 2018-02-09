@@ -314,6 +314,11 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
+      can [:update, :destroy], OwedHour do |owed_hour|
+        can_edit_staff_member?(user, owed_hour.staff_member)
+      end
+
+
 
 
 
@@ -355,10 +360,6 @@ class UserAbility
 
       can [:view], QuestionnaireResponse do |questionnaire_response|
         can_manage_venue?(user, questionnaire_response.venue)
-      end
-
-      can :manage, OwedHour do |owed_hour|
-        can_edit_staff_member?(user, owed_hour.staff_member)
       end
 
       can :manage, Venue do |venue|
