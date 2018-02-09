@@ -172,6 +172,27 @@ class UserAbility
         )
       end
 
+      can :view, :fruit_orders_page do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :update, FruitOrder do |fruit_order|
+        user.has_effective_access_level?(AccessLevel.manager_access_level) && (
+          can_update_fruit_order?(user, fruit_order)
+        )
+      end
+
+      can :destroy, FruitOrder do |fruit_order|
+        user.has_effective_access_level?(AccessLevel.manager_access_level) && (
+          fruit_order.persisted? &&
+            !(fruit_order.done? || fruit_order.destroyed?) &&
+            can_update_fruit_order?(user, fruit_order)
+        )
+      end
+
+
+
+
 
 
 
@@ -207,10 +228,6 @@ class UserAbility
       end
 
       can :manage, :check_lists do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :manage, :fruit_orders do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
@@ -304,26 +321,12 @@ class UserAbility
         end
       end
 
-      can :update, FruitOrder do |fruit_order|
-        user.has_effective_access_level?(AccessLevel.manager_access_level) && (
-          can_update_fruit_order?(user, fruit_order)
-        )
-      end
-
       can :view, :hours_confirmation_page do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :update, HoursAcceptancePeriod do |hours_acceptance_period|
         can_manage_venue?(user, hours_acceptance_period.venue)
-      end
-
-      can :destroy, FruitOrder do |fruit_order|
-        user.has_effective_access_level?(AccessLevel.manager_access_level) && (
-          fruit_order.persisted? &&
-            !(fruit_order.done? || fruit_order.destroyed?) &&
-            can_update_fruit_order?(user, fruit_order)
-        )
       end
 
       can :perform_clocking_action, StaffMember do |staff_member|

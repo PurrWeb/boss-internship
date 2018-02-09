@@ -39,7 +39,7 @@ class PermissionsPageData
         },
         {
           description: "Fruit Orders",
-          permitted: role.can?(:manage, :fruit_orders),
+          permitted: role.can?(:view, :fruit_orders_page),
           path: @path.fruit_orders_path
         },
         {
