@@ -69,7 +69,7 @@ class PermissionsPageData
         },
         {
           description: "Reedem Vouchers",
-          permitted: role.can?(:manage, :vouchers),
+          permitted: role.can?(:view, :redeem_vouchers_page),
           path: @path.redeem_vouchers_path
         },
         {

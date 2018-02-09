@@ -37,6 +37,7 @@ module Api
 
       def redeem
         voucher = Voucher.find(params.fetch(:id))
+        authorize!(:redeem, voucher)
 
         result = RedeemVoucher.new(
           voucher: voucher,

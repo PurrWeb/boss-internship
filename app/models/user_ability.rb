@@ -235,6 +235,15 @@ class UserAbility
           can_manage_venue?(user, incident_report.venue)
       end
 
+      can :view, :redeem_vouchers_page do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :redeem, Voucher do |voucher|
+        user.has_effective_access_level?(AccessLevel.manager_access_level) &&
+          can_manage_venue?(user, voucher.venue)
+      end
+
 
 
 
