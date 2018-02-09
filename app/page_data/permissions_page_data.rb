@@ -34,7 +34,7 @@ class PermissionsPageData
         },
         {
           description: "Change Orders",
-          permitted: role.can?(:manage, :change_orders),
+          permitted: role.can?(:view, :change_orders_page),
           path: @path.change_orders_path
         },
         {

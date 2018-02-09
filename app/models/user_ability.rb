@@ -150,6 +150,30 @@ class UserAbility
         can_manage_venue?(user, rota.venue)
       end
 
+      can :view, :change_orders_page do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :update, ChangeOrder do |change_order|
+        user.has_effective_access_level!(AccessLevel.manager_access_level) &&
+          can_manage_venue?(user, change_order.venue)
+      end
+
+      can :update, ChangeOrder do |change_order|
+        user.has_effective_access_level?(AccessLevel.manager_access_level) &&
+          can_update_change_order?(user, change_order)
+      end
+
+      can :destroy, ChangeOrder do |change_order|
+        user.has_effective_access_level?(AccessLevel.manager_access_level) && (
+          change_order.persisted? &&
+            !(change_order.done? || change_order.deleted?) &&
+            can_update_change_order?(user, change_order)
+        )
+      end
+
+
+
 
 
 
@@ -180,10 +204,6 @@ class UserAbility
       can :create, :staff_members do
         user.security_manager? ||
           user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :manage, :change_orders do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :manage, :check_lists do
@@ -282,19 +302,6 @@ class UserAbility
         else
           can_manage_venue?(user, rota_shift.venue)
         end
-      end
-
-      can :update, ChangeOrder do |change_order|
-        user.has_effective_access_level?(AccessLevel.manager_access_level) &&
-          can_update_change_order?(user, change_order)
-      end
-
-      can :destroy, ChangeOrder do |change_order|
-        user.has_effective_access_level?(AccessLevel.manager_access_level) && (
-          change_order.persisted? &&
-            !(change_order.done? || change_order.deleted?) &&
-            can_update_change_order?(user, change_order)
-        )
       end
 
       can :update, FruitOrder do |fruit_order|
