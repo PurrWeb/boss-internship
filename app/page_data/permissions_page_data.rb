@@ -49,7 +49,7 @@ class PermissionsPageData
         },
         {
           description: "Safe Checks",
-          permitted: role.can?(:manage, :safe_checks),
+          permitted: role.can?(:view, :safe_checks),
           path: @path.safe_checks_path
         },
         {

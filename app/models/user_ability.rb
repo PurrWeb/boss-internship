@@ -198,6 +198,15 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
+      can [:view, :create], :safe_checks do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can [:create, :view, :update], SafeCheck do |safe_check|
+        can_manage_venue?(user, safe_check.venue)
+      end
+
+
 
 
 
@@ -236,10 +245,6 @@ class UserAbility
       end
 
       can :manage, :vouchers do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :manage, :safe_checks do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
