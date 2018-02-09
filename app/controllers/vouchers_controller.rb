@@ -2,10 +2,12 @@ class VouchersController < ApplicationController
   before_action :set_new_layout
 
   def index
+    authorize!(:view, :vouchers_page)
+
     unless index_params_present?
       return redirect_to(vouchers_path(index_redirect_params))
     end
-    
+
     per_page = 10
 
     vouchers = VouchersIndexQuery.new(
@@ -55,6 +57,8 @@ class VouchersController < ApplicationController
   end
 
   def usages
+    authorize!(:view, :voucher_usages_page)
+
     unless usages_params_present?
       return redirect_to(usages_voucher_path(usages_redirect_params))
     end

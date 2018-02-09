@@ -94,6 +94,22 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can :view, :vouchers_page do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+      can :view, :voucher_usages_page do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+      can :create, :vouchers do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+      can :destroy, Voucher do |voucher|
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can :view, :accessory_requests_page do
         user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end

@@ -64,7 +64,7 @@ class PermissionsPageData
         },
         {
           description: "Vouchers",
-          permitted: role.can?(:manage, :vouchers),
+          permitted: role.can?(:view, :vouchers_page),
           path: @path.vouchers_path
         },
         {
