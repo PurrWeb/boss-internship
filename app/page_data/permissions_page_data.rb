@@ -96,7 +96,7 @@ class PermissionsPageData
         },
         {
           description: "Holidays",
-          permitted: role.can?(:view, :holidays),
+          permitted: role.can?(:view, :holiday_reports_page),
           path: @path.holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday))
         },
         {

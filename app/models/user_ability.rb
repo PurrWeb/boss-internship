@@ -110,6 +110,10 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can :view, :holidays_csv do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can :view, :accessory_requests_page do
         user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end
@@ -256,6 +260,19 @@ class UserAbility
         can_manage_venue?(user, hours_acceptance_period.venue)
       end
 
+      can :view, :holiday_reports_page do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :view, :holidays do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can [:view, :create, :update, :destroy], Holiday do |holiday|
+        can_edit_staff_member?(user, holiday.staff_member)
+      end
+
+
 
 
 
@@ -307,14 +324,6 @@ class UserAbility
         user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
-      can :view, :holidays do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :view, :holidays_csv do
-        user.has_effective_access_level?(AccessLevel.admin_access_level)
-      end
-
       can :view, :payroll_reports do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
@@ -329,10 +338,6 @@ class UserAbility
 
       can [:view], QuestionnaireResponse do |questionnaire_response|
         can_manage_venue?(user, questionnaire_response.venue)
-      end
-
-      can [:view, :create, :update, :destroy], Holiday do |holiday|
-        can_edit_staff_member?(user, holiday.staff_member)
       end
 
       can :manage, Voucher do |voucher|
