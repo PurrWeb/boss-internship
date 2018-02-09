@@ -24,7 +24,7 @@ class PermissionsPageData
         },
         {
           description: "Rota",
-          permitted: role.can?(:manage, :rotas),
+          permitted: role.can?(:view, :rotas_page),
           path: @path.rotas_path
         },
         {

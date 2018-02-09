@@ -142,6 +142,15 @@ class UserAbility
         can_manage_venue?(user, machines_refloat.venue)
       end
 
+      can :view, :rotas_page do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :manage, Rota do |rota|
+        can_manage_venue?(user, rota.venue)
+      end
+
+
 
 
 
@@ -194,10 +203,6 @@ class UserAbility
       end
 
       can :manage, :venue_health_checks do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :manage, :rotas do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
@@ -269,10 +274,6 @@ class UserAbility
 
       can :edit, StaffMember do |staff_member|
         can_edit_staff_member?(user, staff_member)
-      end
-
-      can :manage, Rota do |rota|
-        can_manage_venue?(user, rota.venue)
       end
 
       can :manage, RotaShift do |rota_shift|
