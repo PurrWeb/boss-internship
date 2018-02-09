@@ -44,7 +44,7 @@ class PermissionsPageData
         },
         {
           description: "Check Lists",
-          permitted: role.can?(:manage, :check_lists),
+          permitted: role.can?(:view, :check_lists_page),
           path: @path.check_lists_path
         },
         {

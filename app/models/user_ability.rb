@@ -190,6 +190,14 @@ class UserAbility
         )
       end
 
+      can :view, :check_lists_page do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can [:create, :update, :destroy, :submit], :check_lists do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
 
 
 
@@ -225,10 +233,6 @@ class UserAbility
       can :create, :staff_members do
         user.security_manager? ||
           user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :manage, :check_lists do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :manage, :vouchers do

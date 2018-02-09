@@ -3,23 +3,27 @@ module Api
     class CheckListsController < APIController
       before_filter :web_token_authenticate!
       before_filter :check_venue
-      
+
       def index
+        authorize!(:view, :check_lists_page)
+
         check_lists = venue_from_params
           .check_lists
           .includes(:check_list_items)
-        
+
         access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-        
+
         render json: {
           checklists: ActiveModel::Serializer::CollectionSerializer.new(check_lists, serializer: CheckListSerializer),
           access_token: access_token,
           current_venue: Api::V1::VenueForSelectSerializer.new(venue_from_params),
           venues: ActiveModel::Serializer::CollectionSerializer.new(Venue.all, serializer: Api::V1::VenueForSelectSerializer)
         }
-      end 
+      end
 
       def create
+        authorize!(:create, :check_lists)
+
         check_list_items = checklist_params[:check_list_items] || []
         check_list = CheckList.new({
           name: checklist_params[:name],
@@ -39,11 +43,13 @@ module Api
           )
         end
       end
-      
+
       def update
+        authorize!(:create, :check_lists)
+
         check_list = venue_from_params.check_lists.find(params[:id])
         check_list_items = checklist_params[:check_list_items] || []
-        
+
         check_list.name = checklist_params[:name]
 
         check_list.check_list_items.destroy_all
@@ -64,6 +70,8 @@ module Api
       end
 
       def destroy
+        authorize!(:destroy, :check_lists)
+
         check_list = venue_from_params.check_lists.find(params[:id])
         if check_list.present?
           check_list.destroy
@@ -74,6 +82,8 @@ module Api
       end
 
       def submit
+        authorize!(:submit, :check_lists)
+
         check_list_items = submit_checklist_params.fetch(:items)
         check_list_submission = CheckListSubmission.new({
           user: current_user,
@@ -95,7 +105,7 @@ module Api
           )
         end
       end
-      
+
       private
 
       def check_venue
