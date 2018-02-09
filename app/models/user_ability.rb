@@ -248,6 +248,15 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
+      can :view, :hours_confirmation_page do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :update, HoursAcceptancePeriod do |hours_acceptance_period|
+        can_manage_venue?(user, hours_acceptance_period.venue)
+      end
+
+
 
 
 
@@ -358,14 +367,6 @@ class UserAbility
         else
           can_manage_venue?(user, rota_shift.venue)
         end
-      end
-
-      can :view, :hours_confirmation_page do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :update, HoursAcceptancePeriod do |hours_acceptance_period|
-        can_manage_venue?(user, hours_acceptance_period.venue)
       end
 
       can :perform_clocking_action, StaffMember do |staff_member|
