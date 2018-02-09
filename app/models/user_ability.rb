@@ -244,6 +244,9 @@ class UserAbility
           can_manage_venue?(user, voucher.venue)
       end
 
+      can :view, :venue_dashboard do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
 
 
 
@@ -267,10 +270,6 @@ class UserAbility
 
       can :manage, MaintenanceTask do |maintenance_task|
         can_manage_venue?(user, maintenance_task.venue)
-      end
-
-      can :view, :venue_dashboard do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :list, :staff_members do
