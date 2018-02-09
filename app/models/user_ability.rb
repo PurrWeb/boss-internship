@@ -302,6 +302,19 @@ class UserAbility
         )
       end
 
+      can :view, :payroll_reports do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :view, :daily_reports do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :view, :weekly_reports do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+
 
 
 
@@ -342,18 +355,6 @@ class UserAbility
 
       can :manage, :security_rota do
         user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
-      end
-
-      can :view, :payroll_reports do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :view, :daily_reports do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :view, :weekly_reports do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can [:view], QuestionnaireResponse do |questionnaire_response|
