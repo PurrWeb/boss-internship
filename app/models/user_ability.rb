@@ -166,6 +166,11 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
+      can :publish, Rota do |example_rota|
+        user.has_effective_access_level?(AccessLevel.manager_access_level) &&
+          can_manage_venue?(user, example_rota.venue)
+      end
+
       can :manage, Rota do |rota|
         can_manage_venue?(user, rota.venue)
       end
