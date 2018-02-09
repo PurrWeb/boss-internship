@@ -14,7 +14,7 @@ class PermissionsPageData
       items: [
         {
           description: "Machines",
-          permitted: role.can?(:manage, :machines),
+          permitted: role.can?(:view, :machines_page),
           path: @path.machines_path
         },
         {

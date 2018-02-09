@@ -4,6 +4,8 @@ module Api
       before_filter :web_token_authenticate!
 
       def create
+        authorize!(:create, :machines)
+
         result = MachineApiService.new(
           requester: current_user,
           venue: venue_from_params
@@ -33,6 +35,8 @@ module Api
       end
 
       def update
+        authorize!(:update, :machines)
+
         result = MachineApiService.new(
           requester: current_user,
           venue: venue_from_params
@@ -58,6 +62,8 @@ module Api
       end
 
       def destroy
+        authorize!(:update, :machines)
+
         result = MachineApiService.new(
           requester: current_user,
           venue: venue_from_params
@@ -81,6 +87,8 @@ module Api
       end
 
       def restore
+        authorize!(:restore, :machines)
+
         result = MachineApiService.new(
           requester: current_user,
           venue: venue_from_params

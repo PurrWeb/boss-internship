@@ -1,19 +1,21 @@
 class MachinesController < ApplicationController
   before_filter :set_new_layout
-  
+
   def index
+    authorize!(:view, :machines_page)
+
     unless index_params_present?
       return redirect_to(machines_path(index_redirect_params))
     end
     per_page = 5
-    
+
     machines = MachineIndexQuery.new(
       venue: venue_from_params,
       filter: filter_from_params
     ).all
     .includes(:created_by_user)
     .order("created_at DESC")
-    
+
     paginated_machines = machines.paginate(
       page: page_from_params,
       per_page: per_page
