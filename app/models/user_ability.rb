@@ -172,7 +172,7 @@ class UserAbility
       end
 
       can :manage, Rota do |rota|
-        can_manage_venue?(user, rota.venue)
+        can_manage_rota?(user, rota)
       end
 
       can :view, :change_orders_page do
@@ -323,9 +323,13 @@ class UserAbility
         can_edit_staff_member?(user, owed_hour.staff_member)
       end
 
-
-
-
+      can [:view, :create, :update, :destroy], RotaShift do |rota_shift|
+        if rota_shift.security?
+          user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
+        else
+          can_manage_rota?(user, rota_shift.rota)
+        end
+      end
 
 
 
@@ -369,14 +373,6 @@ class UserAbility
 
       can :manage, Venue do |venue|
         can_manage_venue?(user, venue)
-      end
-
-      can :manage, RotaShift do |rota_shift|
-        if rota_shift.security?
-          user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
-        else
-          can_manage_venue?(user, rota_shift.venue)
-        end
       end
     end
 
@@ -430,6 +426,10 @@ class UserAbility
         end
       )
     end
+  end
+
+  def can_manage_rota?(user, rota)
+    can_manage_venue?(user, rota.venue)
   end
 
   def can_manage_venue?(user, venue)
