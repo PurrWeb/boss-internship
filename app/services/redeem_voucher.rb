@@ -13,7 +13,7 @@ class RedeemVoucher
   attr_accessor :voucher, :requester, :ability
 
   def call(params)
-    ability.authorize! :manage, voucher
+    ability.authorize! :redeem, voucher
     staff_member = StaffMember.find(params.fetch(:staff_member_id))
 
     voucher_usage = VoucherUsage.new(

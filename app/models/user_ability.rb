@@ -341,10 +341,6 @@ class UserAbility
         can_manage_venue?(user, maintenance_task.venue)
       end
 
-      can :manage, :vouchers do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
       can :manage, :venue_health_checks do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
@@ -359,10 +355,6 @@ class UserAbility
 
       can [:view], QuestionnaireResponse do |questionnaire_response|
         can_manage_venue?(user, questionnaire_response.venue)
-      end
-
-      can :manage, Voucher do |voucher|
-        can_manage_venue?(user, voucher.venue)
       end
 
       can :manage, OwedHour do |owed_hour|
