@@ -176,7 +176,7 @@ class User < ActiveRecord::Base
   # Warning: Couple this to access control for actions as it is used by restricted  # user types who don't have limited views of venues but who shouldn't have
   # access to certain admin like pages .
   def has_all_venue_access?
-    has_effective_access_level?(AccessLevel.admin_access_level) ||
+    has_effective_access_level?(AccessLevel.area_manager_access_level) ||
       ops_manager? ||
       maintenance_staff?
   end
