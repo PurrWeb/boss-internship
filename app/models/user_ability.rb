@@ -137,6 +137,7 @@ class UserAbility
       end
 
       can :view, :dashboard_messages_page do
+        user.ops_manager? ||
         user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end
 
@@ -145,11 +146,13 @@ class UserAbility
       end
 
       can :view, :staff_vetting_page do
+        user.ops_manager? ||
         user.payroll_manager? ||
           user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end
 
       can :view, :check_list_submissions_page do
+        user.ops_manager? ||
         user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end
 
@@ -162,6 +165,7 @@ class UserAbility
       end
 
       can :create, QuestionnaireResponse do |questionnaire_response|
+        user.ops_manager? ||
         user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end
 
@@ -374,6 +378,7 @@ class UserAbility
       end
 
       can :view, :venue_health_checks_page do
+        user.ops_manager? ||
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
