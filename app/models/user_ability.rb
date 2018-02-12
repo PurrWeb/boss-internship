@@ -418,6 +418,18 @@ class UserAbility
       can :manage, MaintenanceTask do |maintenance_task|
         can_manage_venue?(user, maintenance_task.venue)
       end
+
+      can :view, MarketingTask do |marketing_task|
+        user.marketing_staff? || (
+          !user.restricted_access? && can_manage_venue?(user, marketing_task.venue)
+        )
+      end
+
+      can :manage, MarketingTask do |marketing_task|
+        user.marketing_staff? || (
+          !user.restricted_access? && can_manage_venue?(user, marketing_task.venue)
+        )
+      end
     end
 
     #

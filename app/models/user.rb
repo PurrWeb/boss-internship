@@ -59,6 +59,8 @@ class User < ActiveRecord::Base
   validates :email_address, presence: true
   validates :invite, presence: true, unless: :first?
 
+  scope :marketing, -> { where(role: MARKETING_ROLE) }
+
   before_create :generate_rollbar_guid
 
   delegate :current_state, to: :state_machine

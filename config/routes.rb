@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     resources :check_list_submissions, path: "checklist_submissions", only: [:index]
 
     resources :maintenance, only: [:index]
+    resources :marketing_tasks, only: [:index]
 
     resources :venue_health_check, only: [:index, :new]
     resources :venue_health_check_reports, only: [:show]
@@ -262,6 +263,25 @@ Rails.application.routes.draw do
           member do
             post :change_status
             post :add_note
+          end
+        end
+        resources :marketing_tasks do
+          collection do
+            post :add_general
+            post :add_live_music
+            post :add_sports
+            post :add_artwork
+          end
+
+          member do
+            post :notes
+            put :edit_general
+            put :edit_live_music
+            put :edit_sports
+            put :edit_artwork
+            put :restore
+            put :change_status
+            put :assign_user
           end
         end
 

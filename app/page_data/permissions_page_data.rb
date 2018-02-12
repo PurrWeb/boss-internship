@@ -78,6 +78,11 @@ class PermissionsPageData
           path: @path.maintenance_index_path
         },
         {
+          description: "Marketing Tasks",
+          permitted: role.can?(:view, MarketingTask),
+          path: @path.marketing_tasks_path
+        },
+        {
           description: "Venue Dashboard",
           permitted: role.can?(:view, :venue_dashboard),
           path: @path.venue_dashboard_path

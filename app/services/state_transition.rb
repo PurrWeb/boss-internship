@@ -41,7 +41,7 @@ class StateTransition
   private
 
   def validate_transition_to_is_acceptable
-    if state_machine.allowed_transitions.exclude?(transition_to) || !state_machine.transition_allowed_for_user?(requester, transition_to)
+    if state_machine.allowed_transitions.exclude?(transition_to)
       api_errors[:transition_to] = ['transition not allowed']
     end
   end
