@@ -43,22 +43,27 @@ class UserAbility
       end
 
       can :view, :pay_rates_page do
+        user.payroll_manager? ||
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can [:create, :destroy, :create_admin, :edit], :pay_rate do
+        user.payroll_manager? ||
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can :view, :staff_tracking_page do
+        user.payroll_manager? ||
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can [:view, :complete], :finance_reports do
+        user.payroll_manager? ||
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can :view, :yearly_reports do
+        user.payroll_manager? ||
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
@@ -140,7 +145,8 @@ class UserAbility
       end
 
       can :view, :staff_vetting_page do
-        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+        user.payroll_manager? ||
+          user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end
 
       can :view, :check_list_submissions_page do
@@ -172,10 +178,12 @@ class UserAbility
       end
 
       can :view, :rotas_page do
+        user.payroll_manager? ||
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :publish, Rota do |example_rota|
+        user.payroll_manager? ||
         user.has_effective_access_level?(AccessLevel.manager_access_level) &&
           can_manage_venue?(user, example_rota.venue)
       end
@@ -271,41 +279,50 @@ class UserAbility
       end
 
       can :view, :hours_confirmation_page do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
+        user.payroll_manager? ||
+          user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :view, HoursConfirmationPage do |hours_confirmation_page|
-        can_manage_venue?(user, hours_confirmation_page.venue)
+        user.payroll_manager? ||
+          can_manage_venue?(user, hours_confirmation_page.venue)
       end
 
       can :update, HoursAcceptancePeriod do |hours_acceptance_period|
-        can_manage_venue?(user, hours_acceptance_period.venue)
+        user.payroll_manager? ||
+          can_manage_venue?(user, hours_acceptance_period.venue)
       end
 
       can :view, :holiday_reports_page do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
+        user.payroll_manager? ||
+          user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :view, :holidays do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
+        user.payroll_manager? ||
+          user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can [:view, :create, :update, :destroy], Holiday do |holiday|
-        can_edit_staff_member?(user, holiday.staff_member)
+        user.payroll_manager? ||
+          can_edit_staff_member?(user, holiday.staff_member)
       end
 
       can :list, :staff_members do
+        user.payroll_manager? ||
         user.security_manager? ||
           user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :create, :staff_members do
+        user.payroll_manager? ||
         user.security_manager? ||
           user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :enable, StaffMember do |staff_member|
-        staff_member.disabled? && can_edit_staff_member?(user, staff_member)
+        staff_member.disabled? &&
+          can_edit_staff_member?(user, staff_member)
       end
 
       can :disable, StaffMember do |staff_member|
@@ -319,13 +336,15 @@ class UserAbility
       end
 
       can :perform_clocking_action, StaffMember do |staff_member|
+        user.payroll_manager? ||
         user.has_effective_access_level?(AccessLevel.manager_access_level) && (
           can_edit_staff_member?(user, staff_member)
         )
       end
 
       can :view, :payroll_reports do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
+        user.payroll_manager? ||
+          user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :view, :daily_reports do
@@ -412,9 +431,11 @@ class UserAbility
   end
 
   def can_edit_staff_member?(user, staff_member)
-    if user.security_manager?
+    user.payroll_manager? ||
+    (
+      user.security_manager? &&
       staff_member.security?
-    else
+    ) || (
       workable_venues = staff_member.workable_venues
 
       user.has_effective_access_level?(AccessLevel.manager_access_level) && (
@@ -424,11 +445,12 @@ class UserAbility
           can_manage_venue?(user, venue)
         end
       )
-    end
+    )
   end
 
   def can_manage_rota?(user, rota)
-    can_manage_venue?(user, rota.venue)
+    user.payroll_manager? ||
+      can_manage_venue?(user, rota.venue)
   end
 
   def can_manage_venue?(user, venue)

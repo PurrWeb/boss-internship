@@ -20,7 +20,8 @@ class AccessLevel
     User::MAINTENANCE_ROLE,
     User::MARKETING_ROLE,
     User::SECURITY_MANAGER_ROLE,
-    User::OPS_MANAGER_ROLE
+    User::OPS_MANAGER_ROLE,
+    User::PAYROLL_MANAGER
   ]
 
   def initialize(access_level)
