@@ -7,7 +7,7 @@ class HoursConfirmationController < ApplicationController
 
   def index
     if venue.present? && date.present?
-      authorize! :manage, venue
+      authorize! :view, HoursConfirmationPage.new(venue: venue)
 
       clock_in_days = ClockInDay.where(
         venue: venue,
@@ -98,7 +98,7 @@ class HoursConfirmationController < ApplicationController
 
   def current
     if venue.present?
-      authorize! :manage, venue
+      authorize! :view, HoursConfirmationPage.new(venue: venue)
 
       clock_in_days = ClockInDaysPendingConfirmationQuery.new(
         venue: venue

@@ -269,6 +269,10 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
+      can :view, HoursConfirmationPage do |hours_confirmation_page|
+        can_manage_venue?(user, hours_confirmation_page.venue)
+      end
+
       can :update, HoursAcceptancePeriod do |hours_acceptance_period|
         can_manage_venue?(user, hours_acceptance_period.venue)
       end
