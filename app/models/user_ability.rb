@@ -359,16 +359,6 @@ class UserAbility
         can_manage_venue?(user, questionnaire_response.venue)
       end
 
-
-
-
-
-
-
-
-
-
-
       can :view, :maintenance_tasks do
         user.maintenance_staff? || user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
