@@ -227,8 +227,12 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
-      can [:view, :create], :safe_checks do
+      can [:view], :safe_checks do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :view, SafeChecksPage do |safe_checks_page|
+        can_manage_venue?(user, safe_checks_page.venue)
       end
 
       can [:create, :view, :update], SafeCheck do |safe_check|

@@ -5,8 +5,7 @@ class SafeChecksController < ApplicationController
     if venue_from_params.present?
       venue = venue_from_params
 
-      authorize! :view, :safe_checks
-      authorize! :manage, venue
+      authorize! :view, SafeChecksPage.new(venue: venue)
 
       safe_checks = SafeCheck.
         where(venue: venue).
@@ -40,8 +39,6 @@ class SafeChecksController < ApplicationController
   end
 
   def new
-    authorize!(:create, :safe_checks)
-
     if venue_from_params.present?
       venue = venue_from_params
       safe_check = SafeCheck.new(
@@ -65,8 +62,6 @@ class SafeChecksController < ApplicationController
   end
 
   def create
-    authorize(:create, :safe_checks)
-
     safe_check = SafeCheck.new(safe_check_params)
 
     safe_check_note = SafeCheckNote.new(
