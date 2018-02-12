@@ -17,7 +17,7 @@ module Api
 
       private
       def authorize
-        authorize! :manage, :security_rota
+        authorize! :view, :security_rota
       end
 
       def date_from_params

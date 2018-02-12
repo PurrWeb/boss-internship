@@ -114,6 +114,10 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can :view, :security_rota do
+        user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can :view, :accessory_requests_page do
         user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end
@@ -357,10 +361,6 @@ class UserAbility
 
       can :manage, :venue_health_checks do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can :manage, :security_rota do
-        user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can [:view], QuestionnaireResponse do |questionnaire_response|
