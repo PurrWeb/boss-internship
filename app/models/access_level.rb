@@ -21,7 +21,8 @@ class AccessLevel
     User::MARKETING_ROLE,
     User::SECURITY_MANAGER_ROLE,
     User::OPS_MANAGER_ROLE,
-    User::PAYROLL_MANAGER
+    User::PAYROLL_MANAGER,
+    User::FOOD_OPS_MANAGER
   ]
 
   def initialize(access_level)

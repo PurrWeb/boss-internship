@@ -178,11 +178,13 @@ class UserAbility
       end
 
       can :view, :rotas_page do
+        user.food_ops_manger? ||
         user.payroll_manager? ||
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :publish, Rota do |example_rota|
+        user.food_ops_manger? ||
         user.payroll_manager? ||
         user.has_effective_access_level?(AccessLevel.manager_access_level) &&
           can_manage_venue?(user, example_rota.venue)
@@ -299,22 +301,26 @@ class UserAbility
       end
 
       can :view, :holidays do
+        user.food_ops_manger? ||
         user.payroll_manager? ||
           user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can [:view, :create, :update, :destroy], Holiday do |holiday|
+        user.food_ops_manger? ||
         user.payroll_manager? ||
           can_edit_staff_member?(user, holiday.staff_member)
       end
 
       can :list, :staff_members do
+        user.food_ops_manger? ||
         user.payroll_manager? ||
         user.security_manager? ||
           user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :create, :staff_members do
+        user.food_ops_manger? ||
         user.payroll_manager? ||
         user.security_manager? ||
           user.has_effective_access_level?(AccessLevel.manager_access_level)
@@ -431,6 +437,7 @@ class UserAbility
   end
 
   def can_edit_staff_member?(user, staff_member)
+    user.food_ops_manger? ||
     user.payroll_manager? ||
     (
       user.security_manager? &&
@@ -449,6 +456,7 @@ class UserAbility
   end
 
   def can_manage_rota?(user, rota)
+    user.food_ops_manger? ||
     user.payroll_manager? ||
       can_manage_venue?(user, rota.venue)
   end

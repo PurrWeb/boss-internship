@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   OPS_MANAGER_ROLE = 'ops_manager'
   SECURITY_MANAGER_ROLE = 'security_manager'
   PAYROLL_MANAGER = 'payroll_manager'
+  FOOD_OPS_MANAGER = 'food_ops_manger'
   ROLES = [
     DEV_ROLE,
     ADMIN_ROLE,
@@ -17,7 +18,8 @@ class User < ActiveRecord::Base
     MAINTENANCE_ROLE,
     OPS_MANAGER_ROLE,
     SECURITY_MANAGER_ROLE,
-    PAYROLL_MANAGER
+    PAYROLL_MANAGER,
+    FOOD_OPS_MANAGER
   ]
 
   include Statesman::Adapters::ActiveRecordQueries
@@ -165,6 +167,10 @@ class User < ActiveRecord::Base
 
   def marketing_staff?
     role == MARKETING_ROLE
+  end
+
+  def food_ops_manager?
+    role == FOOD_OPS_MANAGER
   end
 
   def ops_manager?
