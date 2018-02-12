@@ -54,7 +54,7 @@ class PermissionsPageData
         },
         {
           description: "Venue Health Check",
-          permitted: role.can?(:manage, :venue_health_checks),
+          permitted: role.can?(:view, :venue_health_checks_page),
           path: @path.venue_health_check_index_path
         },
         {

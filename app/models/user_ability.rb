@@ -343,6 +343,14 @@ class UserAbility
         end
       end
 
+      can :view, :venue_health_checks_page do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can [:view, :create], QuestionnaireResponse do |questionnaire_response|
+        can_manage_venue?(user, questionnaire_response.venue)
+      end
+
 
 
 
@@ -365,14 +373,6 @@ class UserAbility
 
       can :manage, MaintenanceTask do |maintenance_task|
         can_manage_venue?(user, maintenance_task.venue)
-      end
-
-      can :manage, :venue_health_checks do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
-      end
-
-      can [:view], QuestionnaireResponse do |questionnaire_response|
-        can_manage_venue?(user, questionnaire_response.venue)
       end
 
       can :manage, Venue do |venue|

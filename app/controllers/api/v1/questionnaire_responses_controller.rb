@@ -7,6 +7,8 @@ module Api
       def create
         questionnaire_response = QuestionnaireResponse.new(create_params.merge(user: current_user))
 
+        authorize! :create, questionnaire_response
+
         if questionnaire_response.save
           render json: {
             questionnaire_response_id: questionnaire_response.id

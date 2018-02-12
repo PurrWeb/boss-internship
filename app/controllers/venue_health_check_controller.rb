@@ -8,6 +8,8 @@ class VenueHealthCheckController < ApplicationController
     end
     venue_from_params = @accessible_venues.detect { |venue| venue.id == params[:venue_id].to_i }
     venue = venue_from_params || current_venue
+    authorize! :view, VenueHealthChecksPage.new(venue: venue)
+
     questionnaire_exists = current_venue.questionnaires.last.present?
     questionnaire_responses = QuestionnaireResponse.
       where(
@@ -31,7 +33,7 @@ class VenueHealthCheckController < ApplicationController
 
   def new
     venue = Venue.find(params[:venue_id])
-    authorize! :manage, venue
+    authorize! :create, QuestionnaireResponse.new(venue: venue)
     questionnaire = venue.questionnaires.last
 
     if questionnaire.present?
