@@ -153,6 +153,10 @@ class User < ActiveRecord::Base
     role == MANAGER_ROLE
   end
 
+  def area_manager?
+    role == AREA_MANAGER_ROLE
+  end
+
   def marketing_staff?
     role == MARKETING_ROLE
   end

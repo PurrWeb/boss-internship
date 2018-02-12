@@ -71,6 +71,7 @@ class UserAbility
       end
 
       can :view, :api_keys_page do
+        user.area_manager? ||
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
