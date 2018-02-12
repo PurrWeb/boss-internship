@@ -154,6 +154,10 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end
 
+      can :create, QuestionnaireResponse do |questionnaire_response|
+        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+      end
+
       can :view, :machine_refloats_page do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
@@ -351,7 +355,7 @@ class UserAbility
         can_manage_venue?(user, venue)
       end
 
-      can [:view, :create], QuestionnaireResponse do |questionnaire_response|
+      can :view, QuestionnaireResponse do |questionnaire_response|
         can_manage_venue?(user, questionnaire_response.venue)
       end
 
