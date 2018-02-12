@@ -13,8 +13,6 @@ class MachineApiService
   attr_reader :requester, :venue, :ability
 
   def create(params)
-    # ability.authorize! :manage, venue
-
     machine = Machine.new(
       created_by_user: requester,
       venue: venue,
