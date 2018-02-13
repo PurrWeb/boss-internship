@@ -203,7 +203,7 @@ class UserAbility
       end
 
       can :update, ChangeOrder do |change_order|
-        user.has_effective_access_level!(AccessLevel.manager_access_level) &&
+        user.has_effective_access_level?(AccessLevel.manager_access_level) &&
           can_manage_venue?(user, change_order.venue)
       end
 
@@ -267,7 +267,7 @@ class UserAbility
       end
 
       can [:view, :update, :destory, :create], IncidentReport do |incident_report|
-        user.has_effective_access_level(AccessLevel.manager_access_level) &&
+        user.has_effective_access_level?(AccessLevel.manager_access_level) &&
           can_manage_venue?(user, incident_report.venue)
       end
 

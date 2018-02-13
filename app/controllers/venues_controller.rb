@@ -1,6 +1,4 @@
 class VenuesController < ApplicationController
-  before_action :authorize
-
   def index
     authorize!(:view, :venues_page)
 
