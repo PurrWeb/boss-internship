@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   OPS_MANAGER_ROLE = 'ops_manager'
   SECURITY_MANAGER_ROLE = 'security_manager'
   PAYROLL_MANAGER = 'payroll_manager'
-  FOOD_OPS_MANAGER = 'food_ops_manger'
+  FOOD_OPS_MANAGER = 'food_ops_manager'
   ROLES = [
     DEV_ROLE,
     ADMIN_ROLE,
