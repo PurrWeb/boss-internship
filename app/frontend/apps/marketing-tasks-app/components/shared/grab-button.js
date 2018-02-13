@@ -9,6 +9,12 @@ export default class GrabButton extends React.Component {
     this.props.setFrontendState({ showAssignedToModal: true });
   }
 
+  assignTaskToSelf() {
+    if (this.props.currentMarketingTask.status === 'completed') return;
+
+    this.props.assignTaskToSelf(this.props.currentMarketingTask)
+  }
+
   render() {
     if (this.props.currentMarketingTask.assignedToUser) {
       return (
@@ -23,7 +29,7 @@ export default class GrabButton extends React.Component {
     } else {
       return (
         <p className="boss-check__text boss-check__text_role_meta boss-check__text_role_user">
-          <button className="boss-button boss-button_type_extra-small" onClick={ this.handleGrabButton.bind(this) }>Grab</button>
+          <button className="boss-button boss-button_type_extra-small" onClick={ this.assignTaskToSelf.bind(this) }>Grab</button>
         </p>
       )
     }

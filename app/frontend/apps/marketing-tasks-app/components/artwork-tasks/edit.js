@@ -26,6 +26,7 @@ export default class EditArtworkTask extends React.Component {
       facebook_booster: this.props.selectedMarketingTask.facebookBooster,
       facebook_announcement: this.props.selectedMarketingTask.facebookAnnouncement,
       print: this.props.selectedMarketingTask.print,
+      quantity: this.props.selectedMarketingTask.quantity
     }
   }
 

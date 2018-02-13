@@ -258,6 +258,12 @@ const apiRoutes = {
         },
         method: 'PUT'
     },
+    assignMarketingTaskToSelf: {
+        getPath: function(marketingTaskId) {
+            return `/api/v1/marketing_tasks/${marketingTaskId}/assign_user`;
+        },
+        method: 'PUT'
+    },
     saveResponse: {
         getPath: function(questionnaireId) {
             return "/questionnaires/" + questionnaireId + "/responses";

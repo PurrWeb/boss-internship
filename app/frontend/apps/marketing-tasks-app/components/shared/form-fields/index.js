@@ -8,3 +8,4 @@ export CheckboxGroupField from './checkbox-group-field';
 export CheckboxField from './checkbox-field';
 export SizeField from './size-field';
 export AssignToUserField from './assign-to-user-field';
+export PrintField from './print-field';

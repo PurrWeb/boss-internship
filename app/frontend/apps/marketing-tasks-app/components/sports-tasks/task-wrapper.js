@@ -31,36 +31,34 @@ export default class SportsTasks extends React.Component {
     let facebookAnnouncement = (this.props.currentMarketingTask.facebookAnnouncement) ? 'Yes' : 'No'
 
     return (
-      <div className="boss-check__row">
-        <div className="boss-check__info-table">
-          <div className="boss-check__info-row">
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text">Start time</p>
-            </div>
-
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text boss-check__text_role_primary">{ startTime }</p>
-            </div>
+      <div className="boss-check__info-table">
+        <div className="boss-check__info-row">
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text">Start time</p>
           </div>
 
-          <div className="boss-check__info-row">
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text">Days</p>
-            </div>
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text boss-check__text_role_primary">{ startTime }</p>
+          </div>
+        </div>
 
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text boss-check__text_role_primary">{ days }</p>
-            </div>
+        <div className="boss-check__info-row">
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text">Days</p>
           </div>
 
-          <div className="boss-check__info-row">
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text">Facebook announcement</p>
-            </div>
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text boss-check__text_role_primary">{ days }</p>
+          </div>
+        </div>
 
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text boss-check__text_role_primary">{ facebookAnnouncement }</p>
-            </div>
+        <div className="boss-check__info-row">
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text">Facebook announcement</p>
+          </div>
+
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text boss-check__text_role_primary">{ facebookAnnouncement }</p>
           </div>
         </div>
       </div>

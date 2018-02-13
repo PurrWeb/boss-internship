@@ -183,6 +183,7 @@ export const createArtworkTaskRequest = (requestData) => {
     facebook_booster: attributes.facebook_booster,
     facebook_announcement: attributes.facebook_announcement,
     print: attributes.print,
+    quantity: attributes.print ? attributes.quantity : null
   });
 }
 
@@ -218,6 +219,7 @@ export const editArtworkTaskRequest = (requestData) => {
     facebook_booster: attributes.facebook_booster,
     facebook_announcement: attributes.facebook_announcement,
     print: attributes.print,
+    quantity: attributes.print ? attributes.quantity : null
   });
 }
 
@@ -340,4 +342,26 @@ export const assignUserToTaskRequest = (requestData) => {
     assign_to_user_id: assignToUserId,
     assign_to_self: attributes.assign_to_self
   });
+}
+
+export function assignTaskToSelf(marketingTask) {
+  return {
+    [CALL_API]: {
+      endpoint: apiRoutes.assignMarketingTaskToSelf.getPath(marketingTask.id),
+      method: apiRoutes.assignMarketingTaskToSelf.method,
+      types: [
+        constants.ASSIGN_TASK_TO_SELF_REQUEST,
+        constants.ASSIGN_TASK_TO_SELF_RECEIVE,
+        constants.ASSIGN_TASK_TO_SELF_FAILURE
+      ],
+      headers: {
+        Authorization: 'Token token=' + window.marketing.accessToken,
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        assign_to_self: true
+      })
+    }
+  }
 }

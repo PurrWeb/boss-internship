@@ -219,6 +219,13 @@ const marketing = (state = initialState, action) => {
       'frontend', Object.assign({}, state.get('frontend'), { updating: false })
     );
 
+  case constants.ASSIGN_TASK_TO_SELF_RECEIVE:
+    marketingTasksObject = getMarketingTasks(state, action.payload);
+
+    return state.set(
+      marketingTasksObject.type, marketingTasksObject.tasks
+    );
+
   case constants.UPDATE_MARKETING_TASK_RECEIVE:
     marketingTasksObject = getMarketingTasks(state, action.payload.data);
 

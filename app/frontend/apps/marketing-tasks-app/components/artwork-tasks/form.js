@@ -11,7 +11,8 @@ import {
   CheckboxGroupField,
   CheckboxField,
   DateTimeField,
-  SizeField
+  SizeField,
+  PrintField
 } from '../shared/form-fields';
 
 import {
@@ -99,10 +100,11 @@ function ArtworkTaskForm({ initialValues, message, handleSubmit, submitting, sub
               component={ CheckboxField }
             />
 
-            <Field
-              name="print"
+
+            <Fields
+              names={['print', 'quantity']}
               label="Print"
-              component={ CheckboxField }
+              component={ PrintField }
             />
           </div>
         </div>

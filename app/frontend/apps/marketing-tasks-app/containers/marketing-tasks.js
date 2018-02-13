@@ -4,15 +4,16 @@ import { bindActionCreators } from 'redux';
 
 import { setInitialData } from '../actions/initial-load'
 import { setFilterParams, queryFilteredMarketingTasks, queryPaginatedMarketingTasks } from '../actions/filter'
-import { setFrontendState, setSelectedMarketingTask } from '../actions/states'
+import { setFrontendState, setSelectedMarketingTask, updateMarketingTask } from '../actions/states'
 import {
   createGeneralTaskRequest,
   addNote,
   deleteMarketingTask,
   restoreMarketingTask,
   changeStatus,
-  queryMarketingTasks
-} from '../actions/api-calls'
+  queryMarketingTasks,
+  assignTaskToSelf
+} from '../actions/api-calls';
 
 import MainDashboard from '../components/main-dashboard'
 import MainContent from '../components/main-content'
@@ -49,7 +50,9 @@ function mapDispatchToProps(dispatch) {
     setFilterParams,
     queryMarketingTasks,
     queryFilteredMarketingTasks,
-    queryPaginatedMarketingTasks
+    queryPaginatedMarketingTasks,
+    assignTaskToSelf,
+    updateMarketingTask
   }, dispatch);
 }
 

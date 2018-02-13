@@ -59,60 +59,58 @@ export default class ArtworkTasks extends React.Component {
     let facebookAnnouncement = (this.props.currentMarketingTask.facebookAnnouncement) ? 'Yes' : 'No';
     let facebookCoverPage = (this.props.currentMarketingTask.facebookCoverPage) ? 'Yes' : 'No';
     let facebookBooster = (this.props.currentMarketingTask.facebookBooster) ? 'Yes' : 'No';
-    let printResponse = (this.props.currentMarketingTask.print) ? 'Yes' : 'No';
+    let printResponse = (this.props.currentMarketingTask.print) ? this.props.currentMarketingTask.quantity : 'No';
 
     return (
-      <div className="boss-check__row">
-        <div className="boss-check__info-table">
-          <div className="boss-check__info-row">
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text">Size</p>
-            </div>
-
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text boss-check__text_role_primary">{ this.props.currentMarketingTask.size }</p>
-            </div>
+      <div className="boss-check__info-table">
+        <div className="boss-check__info-row">
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text">Size</p>
           </div>
 
-          { this.renderSizes() }
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text boss-check__text_role_primary">{ this.props.currentMarketingTask.size }</p>
+          </div>
+        </div>
 
-          <div className="boss-check__info-row">
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text">Facebook Cover page</p>
-            </div>
+        { this.renderSizes() }
 
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text boss-check__text_role_primary">{ facebookCoverPage }</p>
-            </div>
+        <div className="boss-check__info-row">
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text">Facebook Cover page</p>
           </div>
 
-          <div className="boss-check__info-row">
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text">Facebook Booster</p>
-            </div>
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text boss-check__text_role_primary">{ facebookCoverPage }</p>
+          </div>
+        </div>
 
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text boss-check__text_role_primary">{ facebookBooster }</p>
-            </div>
+        <div className="boss-check__info-row">
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text">Facebook Booster</p>
           </div>
 
-          <div className="boss-check__info-row">
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text">Facebook Announcement</p>
-            </div>
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text boss-check__text_role_primary">{ facebookBooster }</p>
+          </div>
+        </div>
 
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text boss-check__text_role_primary">{ facebookAnnouncement }</p>
-            </div>
+        <div className="boss-check__info-row">
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text">Facebook Announcement</p>
           </div>
 
-          <div className="boss-check__info-row">
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text">Print</p>
-            </div>
-            <div className="boss-check__info-cell">
-              <p className="boss-check__text boss-check__text_role_primary">{ printResponse }</p>
-            </div>
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text boss-check__text_role_primary">{ facebookAnnouncement }</p>
+          </div>
+        </div>
+
+        <div className="boss-check__info-row">
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text">Print</p>
+          </div>
+          <div className="boss-check__info-cell">
+            <p className="boss-check__text boss-check__text_role_primary">{ printResponse }</p>
           </div>
         </div>
       </div>

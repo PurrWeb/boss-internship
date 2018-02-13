@@ -101,6 +101,8 @@ export const editMusicTask = (values) => (dispatch, getState) => {
         showEditTaskModal: false,
         taskType: null
       }));
+
+      dispatch(updateMarketingTask(resp));
     });
 }
 
@@ -145,6 +147,8 @@ export const editSportsTask = (values) => (dispatch, getState) => {
         showEditTaskModal: false,
         taskType: null
       }));
+
+      dispatch(updateMarketingTask(resp));
     });
 }
 
@@ -189,6 +193,8 @@ export const editArtworkTask = (values) => (dispatch, getState) => {
         showEditTaskModal: false,
         taskType: null
       }));
+
+      dispatch(updateMarketingTask(resp));
     });
 }
 
@@ -205,5 +211,7 @@ export const assignUserToTask = (values) => (dispatch, getState) => {
         showAssignedToModal: false,
         taskType: null
       }));
+
+      dispatch(updateMarketingTask(resp));
     });
 }

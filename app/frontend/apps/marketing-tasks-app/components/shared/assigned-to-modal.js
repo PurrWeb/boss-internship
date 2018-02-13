@@ -29,10 +29,6 @@ export default class AssignedToModal extends React.Component {
     this.props.setSelectedMarketingTask(null);
   }
 
-  onChangeHander(a,b,c) {
-
-  }
-
   handleAssignedToChange(option) {
     this.setState({ assignedTo: option })
   }

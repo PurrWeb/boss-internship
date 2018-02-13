@@ -20,6 +20,7 @@ const initialValues = {
   facebook_booster: false,
   facebook_announcement: false,
   print: false,
+  quantity: 0
 }
 
 export default class CreateArtworkTask extends React.Component {

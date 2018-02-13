@@ -41,7 +41,7 @@ class AssignToUserField extends React.Component {
             className="boss-form__checkbox-input"
             checked={ assign_to_self.input.value }
           />
-          <span className="boss-form__checkbox-label-text">Assign to self</span>
+          <span className="boss-form__checkbox-label-text">Assign to myself</span>
         </label>
 
         <div className="boss-form__select boss-form__select_role_staff-member">

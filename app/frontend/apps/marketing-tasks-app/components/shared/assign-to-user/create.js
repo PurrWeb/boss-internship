@@ -30,7 +30,6 @@ export default class CreateAssignedTo extends React.Component {
   }
 
   submission = (values, dispatch) => {
-    console.log(values.toJS());
     return dispatch(assignUserToTask(values.toJS())).then(resp => {
       this.props.queryFilteredMarketingTasks(this.props.filter);
     }).catch(resp => {
