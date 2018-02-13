@@ -98,6 +98,10 @@ class User < ActiveRecord::Base
     )
   end
 
+  def root_redirect_path
+    GetRootRedirectPath.new(user: self).call
+  end
+
   def expire_web_tokens!
     WebApiAccessToken.revoke!(user: self)
   end
