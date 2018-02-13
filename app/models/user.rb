@@ -229,7 +229,7 @@ class User < ActiveRecord::Base
   end
 
   def default_venue
-    if manager?
+    if venues.count > 0
       venues.first
     else
       Venue.first
