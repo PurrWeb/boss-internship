@@ -194,7 +194,8 @@ class User < ActiveRecord::Base
   def has_all_venue_access?
     has_effective_access_level?(AccessLevel.area_manager_access_level) ||
       ops_manager? ||
-      maintenance_staff?
+      maintenance_staff? ||
+      payroll_manager?
   end
 
   def active_for_authentication?

@@ -13,7 +13,7 @@ class GetRootRedirectPath
     elsif user.security_manager?
       url_helpers.security_rotas_path
     elsif user.payroll_manager?
-      url_helpers.payroll_reports_path
+      url_helpers.staff_members_path
     elsif user.food_ops_manager?
       url_helpers.staff_members_path
     else
