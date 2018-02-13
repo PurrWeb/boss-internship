@@ -29,7 +29,7 @@ class PermissionsPageData
         },
         {
           description: "Security Rota",
-          permitted: role.can?(:manage, :security_rota),
+          permitted: role.can?(:view, :security_rota),
           path: @path.security_rotas_path
         },
         {
