@@ -703,6 +703,7 @@ ActiveRecord::Schema.define(version: 20180219150758) do
     t.datetime "updated_at",                          null: false
     t.datetime "completed_at"
     t.integer  "completed_by_user_id",  limit: 4
+    t.integer  "quantity",              limit: 4
   end
 
   add_index "marketing_tasks", ["assigned_to_user_id"], name: "index_marketing_tasks_on_assigned_to_user_id", using: :btree

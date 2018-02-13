@@ -315,7 +315,7 @@ module Api
       end
 
       def artwork_params
-        params.permit(:title, :description, :size, :height_cm, :width_cm, :due_at, :venue_id, :facebook_cover_page, :facebook_booster, :facebook_announcement, :print)
+        params.permit(:title, :description, :size, :height_cm, :width_cm, :due_at, :venue_id, :facebook_cover_page, :facebook_booster, :facebook_announcement, :print, :quantity)
       end
 
       def marketing_task_create_params

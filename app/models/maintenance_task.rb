@@ -1,6 +1,7 @@
 class MaintenanceTask < ActiveRecord::Base
   # Plugins
   include Statesman::Adapters::ActiveRecordQueries
+  include Disableable
 
   # Scopes
   scope :priority_order, -> { order('maintenance_tasks.priority DESC') }
@@ -26,7 +27,6 @@ class MaintenanceTask < ActiveRecord::Base
 
   # Validations
   validates :title, :description, :priority, presence: true
-  validates :disabled_at, :disabled_by_user, presence: true, if: :disabled?
 
   accepts_nested_attributes_for :maintenance_task_images
 
@@ -70,10 +70,6 @@ class MaintenanceTask < ActiveRecord::Base
   end
 
   private
-
-  def disabled?
-    disabled_at.present? || disabled_by_user.present?
-  end
 
   def associate_uploads_to_maintenance_task_images
     return if maintenance_task_image_ids.blank?
