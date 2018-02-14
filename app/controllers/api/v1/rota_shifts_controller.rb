@@ -5,7 +5,7 @@ module Api
 
       def show
         rota_shift = RotaShift.find(params.fetch(:id))
-        authorize! :manage, rota_shift.rota
+        authorize! :view, rota_shift
 
         render locals: { rota_shift: rota_shift }
       end
@@ -19,7 +19,7 @@ module Api
           rota_shift_params: rota_shift_params,
           frontend_updates: frontend_updates,
           authorization_proc: lambda do |rota_shift|
-            authorize! :manage, rota_shift
+            authorize! :create, rota_shift
           end
         ).call
 
@@ -37,7 +37,7 @@ module Api
 
       def update
         shift = RotaShift.find(params[:id])
-        authorize! :manage, shift
+        authorize! :update, shift
 
         frontend_updates = FrontendUpdates.new
         result = EditRotaShift.new(
@@ -60,7 +60,7 @@ module Api
 
       def destroy
         shift = RotaShift.find(params[:id])
-        authorize! :manage, shift
+        authorize! :destroy, shift
 
         frontend_updates = FrontendUpdates.new
         DisableRotaShift.new(

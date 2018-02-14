@@ -5,7 +5,7 @@ RSpec.describe 'Disable machine API endpoint' do
   include HeaderHelpers
   include ActiveSupport::Testing::TimeHelpers
 
-  let(:user) { FactoryGirl.create(:user, venues: [venue]) }
+  let(:user) { FactoryGirl.create(:user, :admin) }
   let(:venue) { FactoryGirl.create(:venue) }
   let(:venue_id) { venue.id }
   let(:existing_machine) do

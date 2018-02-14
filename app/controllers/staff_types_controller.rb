@@ -1,12 +1,14 @@
 class StaffTypesController < ApplicationController
-  before_action :authorize
-
   def index
+    authorize!(:view, :staff_types_page)
+
     staff_types = StaffType.all
     render locals: { staff_types: staff_types }
   end
 
   def update_colors
+    authorize!(:edit, :staff_types)
+
     ids = params["staff_type"].map{ |x| x.first }
     ids.each do |id|
       properties = update_color_params(params["staff_type"][id])
@@ -28,10 +30,6 @@ class StaffTypesController < ApplicationController
   end
 
   private
-  def authorize
-    authorize! :manage, :admin
-  end
-
   def color_valid?(form_color)
     form_color =~ hex_color_regex
   end

@@ -29,7 +29,8 @@ module Api
         date = date_from_query_params
         venue = venue_from_params
 
-        authorize! :manage, venue
+        #This dummy rota object is required for cancan permission to work
+        authorize! :publish, Rota.new(venue: venue)
 
         week = RotaWeek.new(date)
 

@@ -5,6 +5,8 @@ module Api
       before_filter :set_paper_trail_whodunnit
 
       def index
+        authorize!(:view, :accessory_requests_page)
+
         per_page = 2
         all_venue_accessories = venue_from_params
           .accessories
@@ -56,6 +58,8 @@ module Api
       end
 
       def accept
+        authorize!(:accept, :accessories_requests)
+
         result = AccessoryRequestAdminApiService.new(
           requster_user: current_user,
           accessory_request: request_from_params
@@ -74,6 +78,8 @@ module Api
       end
 
       def reject
+        authorize!(:reject, :accessories_requests)
+
         result = AccessoryRequestAdminApiService.new(
           requster_user: current_user,
           accessory_request: request_from_params
@@ -92,6 +98,8 @@ module Api
       end
 
       def undo
+        authorize!(:undo, :accessories_requests)
+
         result = AccessoryRequestAdminApiService.new(
           requster_user: current_user,
           accessory_request: request_from_params
@@ -110,6 +118,8 @@ module Api
       end
 
       def complete
+        authorize!(:complete, :accessories_requests)
+
         result = AccessoryRequestAdminApiService.new(
           requster_user: current_user,
           accessory_request: request_from_params
@@ -128,6 +138,8 @@ module Api
       end
 
       def accept_refund
+        authorize!(:accept, :accessories_request_refunds)
+
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
           accessory_refund_request: refund_request_from_params
@@ -146,6 +158,8 @@ module Api
       end
 
       def reject_refund
+        authorize!(:reject, :accessories_request_refunds)
+
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
           accessory_refund_request: refund_request_from_params
@@ -164,6 +178,8 @@ module Api
       end
 
       def undo_refund
+        authorize!(:undo, :accessories_request_refunds)
+
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
           accessory_refund_request: refund_request_from_params
@@ -182,6 +198,8 @@ module Api
       end
 
       def complete_refund
+        authorize!(:complete, :accessories_request_refunds)
+
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
           accessory_refund_request: refund_request_from_params

@@ -14,62 +14,62 @@ class PermissionsPageData
       items: [
         {
           description: "Machines",
-          permitted: role.can?(:manage, :machines),
+          permitted: role.can?(:view, :machines_page),
           path: @path.machines_path
         },
         {
           description: "Machines Refloats",
-          permitted: role.can?(:manage, :machines),
+          permitted: role.can?(:view, :machine_refloats_page),
           path: @path.machine_refloats_path
         },
         {
           description: "Rota",
-          permitted: role.can?(:manage, :rotas),
+          permitted: role.can?(:view, :rotas_page),
           path: @path.rotas_path
         },
         {
           description: "Security Rota",
-          permitted: role.can?(:manage, :security_rota),
+          permitted: role.can?(:view, :security_rota),
           path: @path.security_rotas_path
         },
         {
           description: "Change Orders",
-          permitted: role.can?(:manage, :change_orders),
+          permitted: role.can?(:view, :change_orders_page),
           path: @path.change_orders_path
         },
         {
           description: "Fruit Orders",
-          permitted: role.can?(:manage, :fruit_orders),
+          permitted: role.can?(:view, :fruit_orders_page),
           path: @path.fruit_orders_path
         },
         {
           description: "Check Lists",
-          permitted: role.can?(:manage, :check_lists),
+          permitted: role.can?(:view, :check_lists_page),
           path: @path.check_lists_path
         },
         {
           description: "Safe Checks",
-          permitted: role.can?(:manage, :safe_checks),
+          permitted: role.can?(:view, :safe_checks),
           path: @path.safe_checks_path
         },
         {
           description: "Venue Health Check",
-          permitted: role.can?(:manage, :venue_health_checks),
+          permitted: role.can?(:view, :venue_health_checks_page),
           path: @path.venue_health_check_index_path
         },
         {
           description: "Incident Reports",
-          permitted: role.can?(:manage, :incident_reports),
+          permitted: role.can?(:view, :incident_report_page),
           path: @path.incident_reports_path
         },
         {
           description: "Vouchers",
-          permitted: role.can?(:manage, :vouchers),
+          permitted: role.can?(:view, :vouchers_page),
           path: @path.vouchers_path
         },
         {
           description: "Reedem Vouchers",
-          permitted: role.can?(:manage, :vouchers),
+          permitted: role.can?(:view, :redeem_vouchers_page),
           path: @path.redeem_vouchers_path
         },
         {
@@ -96,7 +96,7 @@ class PermissionsPageData
         },
         {
           description: "Holidays",
-          permitted: role.can?(:view, :holidays),
+          permitted: role.can?(:view, :holiday_reports_page),
           path: @path.holidays_path(date: UIRotaDate.format(Time.zone.now.to_date.monday))
         },
         {
@@ -140,19 +140,22 @@ class PermissionsPageData
       items: [
         {
           description: "Names",
+          permitted: role.can?(:view, :names_page),
           path: @path.names_path
         },
         {
           description: "Venues",
+          permitted: role.can?(:view, :venues_page),
           path: @path.venues_path
         },
         {
           description: 'API Keys',
+          permitted: role.can?(:view, :api_keys_page),
           path: @path.api_keys_path,
         },
         {
           description: "Dashboard Messages",
-          permitted: role.can?(:manage, DashboardMessage),
+          permitted: role.can?(:view, :dashboard_messages_page),
           path: @path.message_board_path
         },
       ]
@@ -164,10 +167,12 @@ class PermissionsPageData
       items: [
         {
           description: "Users",
+          permitted: role.can?(:view, :users_page),
           path: @path.users_path
         },
         {
           description: "Invites",
+          permitted: role.can?(:manage, :user_invites),
           path: @path.invites_path
         }
       ]
@@ -179,18 +184,22 @@ class PermissionsPageData
       items: [
         {
           description: "Staff Type",
+          permitted: role.can?(:view, :staff_types_page),
           path: @path.staff_types_path
         },
         {
           description: "Pay Rates",
+          permitted: role.can?(:view, :pay_rates_page),
           path: @path.pay_rates_path
         },
         {
           description: "Staff Vetting",
+          permitted: role.can?(:view, :staff_vetting_page),
           path: @path.staff_vetting_index_path
         },
         {
           description: "Staff Tracking",
+          permitted: role.can?(:view, :staff_tracking_page),
           path: @path.staff_tracking_index_path
         }
       ]
@@ -202,14 +211,17 @@ class PermissionsPageData
       items: [
         {
           description: "Checklist Submissions",
+          permitted: role.can?(:view, :check_list_submissions_page),
           path: @path.check_list_submissions_path
         },
         {
           description: "Accessories",
+          permitted: role.can?(:view, :accessories_page),
           path: @path.accessories_path
         },
         {
           description: "Accessory Requests",
+          permitted: role.can?(:view, :accessory_requests_page),
           path: @path.accessory_requests_path
         }
       ]
@@ -221,18 +233,22 @@ class PermissionsPageData
       items: [
         {
           description: "Fruit Order Report",
+          permitted: role.can?(:view, :fruit_order_reports),
           path: @path.fruit_order_reports_path
         },
         {
           description: "Change Order Report",
+          permitted: role.can?(:view, :change_order_reports),
           path: @path.change_order_reports_path
         },
         {
           description: "Finance Report",
+          permitted: role.can?(:view, :finance_reports),
           path: @path.finance_reports_path
         },
         {
           description: "Yearly Report",
+          permitted: role.can?(:view, :yearly_reports),
           path: @path.yearly_reports_path
         }
       ]
@@ -244,6 +260,7 @@ class PermissionsPageData
       items: [
         {
           description: "Security App SSE Test",
+          permitted: role.can?(:view, :sse_tests),
           path: @path.secruity_app_sse_test_dev_path
         }
       ]
@@ -254,18 +271,13 @@ class PermissionsPageData
     menu << venue if venue.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << staff_members if staff_members.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << reports if reports.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << admin_general if admin_general.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << admin_users if admin_users.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << admin_staff_members if admin_staff_members.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << admin_venues if admin_venues.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << admin_reports if admin_reports.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
 
-    admin_menu = [
-      admin_general,
-      admin_users,
-      admin_staff_members,
-      admin_reports,
-      admin_venues,
-    ]
-
-    dev_menu = [
-      dev_section
-    ]
+    menu << dev_section if dev_section.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
 
     quick_menu = menu.map do |parent_item|
       parent_item[:items] = parent_item[:items].map do |child_item|
@@ -279,16 +291,6 @@ class PermissionsPageData
       serializer: Api::V1::VenueSerializer,
     )
 
-    menu_items = quick_menu
-
-    if role.can?(:manage, :admin)
-      menu_items.concat(admin_menu)
-    end
-
-    if role.can?(:manage, :dev_only_pages)
-      menu_items.concat(dev_menu)
-    end
-
-    { quick_menu: menu_items, venues: venues }
+    { quick_menu: quick_menu, venues: venues }
   end
 end

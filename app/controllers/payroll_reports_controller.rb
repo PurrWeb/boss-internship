@@ -8,7 +8,6 @@ class PayrollReportsController < ApplicationController
 
       filter_by_weekly_pay_rate = params[:pay_rate_filter] == 'weekly'
 
-
       respond_to do |format|
         format.html do
           render locals: {

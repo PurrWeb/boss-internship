@@ -14,7 +14,7 @@ class SendSiaBadgeExpiryNotifications
         staff_member_email = staff_member.email
         sia_expiry_date = staff_member.sia_badge_expiry_date
         staff_member_name = staff_member.full_name.titlecase
-        managers = User.where('(role = ?) Or (role = ?)', 'admin', 'security_manager')
+        managers = User.where('(role = ?) Or (role = ?)', User::ADMIN_ROLE, User::SECURITY_MANAGER_ROLE)
 
         SiaNotificationMailer.
           sia_expiry_notification_for_staff_member(

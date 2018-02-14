@@ -13,7 +13,7 @@ class IncidentReportUpdateApiService
   attr_reader :requester, :incident_report, :ability
 
   def call(params)
-    ability.authorize! :manage, incident_report
+    ability.authorize! :update, incident_report
 
     result = incident_report.update_attributes(
       venue: Venue.find(params.fetch(:venue_id)),

@@ -1,10 +1,11 @@
 class RotasController < ApplicationController
-  before_action :authorize
   before_action :set_new_layout, only: [:index, :show]
 
   attr_reader :venue
 
   def index
+    authorize! :view, :rotas_page
+
     respond_to do |format|
       format.html do
         render_rota_index
@@ -42,7 +43,7 @@ class RotasController < ApplicationController
       start_date: week.start_date,
       end_date: week.end_date
     ).all.includes([:staff_member, :holiday_transitions])
-    
+
     week_start_time = RotaShiftDate.new(week.start_date).start_time
     week_end_time = RotaShiftDate.new(week.end_date).end_time
 
@@ -116,10 +117,6 @@ class RotasController < ApplicationController
     filename  = "#{venue.name.parameterize}_rota_#{timestamp_start}_#{timestamp_end}.pdf"
     headers['Content-Disposition'] = "attachment; filename=#{filename}"
     render text: pdf.render, content_type: 'application/pdf'
-  end
-
-  def authorize
-    authorize! :manage, :rotas
   end
 
   def accessible_venues_for(user)

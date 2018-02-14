@@ -5,7 +5,7 @@ class SafeChecksController < ApplicationController
     if venue_from_params.present?
       venue = venue_from_params
 
-      authorize! :manage, venue
+      authorize! :view, SafeChecksPage.new(venue: venue)
 
       safe_checks = SafeCheck.
         where(venue: venue).
@@ -28,6 +28,8 @@ class SafeChecksController < ApplicationController
 
   def show
     safe_check = SafeCheck.find(params[:id])
+    authorize!(:view, safe_check)
+
     safe_check_notes = safe_check.notes
 
     render locals: {
@@ -44,7 +46,7 @@ class SafeChecksController < ApplicationController
         till_float_cents: venue.till_float_cents,
         safe_float_cents: venue.safe_float_cents
       )
-      authorize! :manage, safe_check.venue
+      authorize! :create, safe_check
 
       safe_check_note = SafeCheckNote.new
 
@@ -59,7 +61,6 @@ class SafeChecksController < ApplicationController
     end
   end
 
-
   def create
     safe_check = SafeCheck.new(safe_check_params)
 
@@ -72,7 +73,7 @@ class SafeChecksController < ApplicationController
         )
     )
 
-    authorize! :manage, safe_check.venue
+    authorize! :create, safe_check
 
     safe_check.enabled_notes << safe_check_note if safe_check_note.note_text.present?
     success = safe_check.save

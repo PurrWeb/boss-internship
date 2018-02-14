@@ -37,12 +37,12 @@ class HolidayApiService
 
   def destroy
     assert_action_permitted(:destroy)
-    
+
     model_service_result = DeleteHoliday.new(
       requester: requester,
       holiday: holiday,
     ).call
-    
+
     api_errors = nil
     unless model_service_result.success?
       api_errors = HolidayApiErrors.new(holiday: holiday)

@@ -2,6 +2,8 @@ class AccessoryRequestsController < ApplicationController
   before_action :set_new_layout
 
   def index
+    authorize!(:view, :accessory_requests_page)
+
     if !index_params_present?
       return redirect_to(accessory_requests_path(index_redirect_params))
     end

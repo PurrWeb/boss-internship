@@ -1,7 +1,7 @@
 class PayRatesController < ApplicationController
-  before_action :authorize_admin
-
   def index
+    authorize!(:view, :pay_rates_page)
+
     pay_rates = PayRate.named.enabled
     admin_pay_rates = PayRate.admin.enabled
 
@@ -12,11 +12,15 @@ class PayRatesController < ApplicationController
   end
 
   def new
+    authorize!(:create, :pay_rate)
+
     pay_rate = PayRate.new
     render locals: { pay_rate: pay_rate }
   end
 
   def create
+    authorize!(:create, :pay_rate)
+
     pay_rate = PayRate.new(
       pay_rate_type: 'named',
       name: pay_rate_params.fetch(:name),
@@ -36,6 +40,8 @@ class PayRatesController < ApplicationController
   end
 
   def create_admin
+    authorize!(:create_admin, :pay_rate)
+
     pay_rate = PayRate.new(
       pay_rate_type: 'admin',
       name: pay_rate_params.fetch(:name),
@@ -55,11 +61,15 @@ class PayRatesController < ApplicationController
   end
 
   def edit
+    authorize!(:edit, :pay_rate)
+
     pay_rate = PayRate.enabled.where(id: params[:id]).take!
     render locals: { pay_rate: pay_rate }
   end
 
   def update
+    authorize!(:edit, :pay_rate)
+
     pay_rate = PayRate.enabled.where(id: params[:id]).take!
 
     result = UpdatePayRate.new(
@@ -81,6 +91,8 @@ class PayRatesController < ApplicationController
   end
 
   def staff_members
+    authorize!(:view, :pay_rates_page)
+
     pay_rate = PayRate.find(params[:id])
 
     filter = PayRateStaffMembersPageFilter.new(
@@ -105,6 +117,8 @@ class PayRatesController < ApplicationController
   end
 
   def destroy
+    authorize!(:destroy, :pay_rate)
+
     pay_rate = PayRate.enabled.where(id: params[:id]).take!
 
     if pay_rate.staff_members.enabled.count > 0
@@ -118,10 +132,6 @@ class PayRatesController < ApplicationController
   end
 
   private
-  def authorize_admin
-    authorize! :manage, :admin
-  end
-
   def pay_rate_params
     params.
       require(:pay_rate).

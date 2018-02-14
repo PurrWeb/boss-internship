@@ -6,7 +6,7 @@ class HolidaysController < ApplicationController
       return redirect_to holidays_path(index_redirect_params)
     end
 
-    authorize!(:view, :holidays)
+    authorize!(:view, :holiday_reports_page)
 
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 

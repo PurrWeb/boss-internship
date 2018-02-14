@@ -1,6 +1,6 @@
 class StaffVettingController < ApplicationController
   def index
-    authorize! :manage, :admin
+    authorize! :view, :staff_vetting_page
 
     staff_on_wrong_payrate_count = [
       StaffMemberWronglyOn18To20PayrateQuery,
@@ -21,7 +21,7 @@ class StaffVettingController < ApplicationController
   end
 
   def staff_members_without_email
-    authorize! :manage, :admin
+    authorize! :view, :staff_vetting_page
 
     staff_without_email = StaffMembersWithoutEmailQuery.new.all.includes([:name, :master_venue])
 
@@ -29,13 +29,13 @@ class StaffVettingController < ApplicationController
   end
 
   def staff_members_without_ni_number
-    authorize! :manage, :admin
+    authorize! :view, :staff_vetting_page
 
     render locals: { staff_without_ni_number: StaffMembersWithoutNINumberQuery.new.all }
   end
 
   def staff_members_without_address
-    authorize! :manage, :admin
+    authorize! :view, :staff_vetting_page
 
     staff_without_address = StaffMembersWithoutAddressQuery.
       new.
@@ -46,7 +46,7 @@ class StaffVettingController < ApplicationController
   end
 
   def staff_members_without_photo
-    authorize! :manage, :admin
+    authorize! :view, :staff_vetting_page
 
     staff_without_photo = StaffMembersWithoutPhotoQuery.new.all.includes([:name, :master_venue])
 
@@ -54,7 +54,7 @@ class StaffVettingController < ApplicationController
   end
 
   def staff_members_on_wrong_payrate
-    authorize! :manage, :admin
+    authorize! :view, :staff_vetting_page
 
     staff_wrongly_on_18_to_20_payrate = StaffMemberWronglyOn18To20PayrateQuery.new.
       all.
@@ -77,7 +77,7 @@ class StaffVettingController < ApplicationController
   end
 
   def staff_members_with_expired_sia_badge
-    authorize! :manage, :admin
+    authorize! :view, :staff_vetting_page
 
     staff_members_with_expired_sia_badge = StaffMembersWithExpiringSiaBadgeQuery.new.
       all.

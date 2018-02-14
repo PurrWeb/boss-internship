@@ -6,18 +6,18 @@ FactoryGirl.define do
       "fake#{n}@email.com"
     end
 
-    role "admin"
+    role User::ADMIN_ROLE
 
     trait :admin do
-      role "admin"
+      role User::ADMIN_ROLE
     end
 
     trait :manager do
-      role "manager"
+      role User::MANAGER_ROLE
     end
 
     trait :security_manager do
-      role 'security_manager'
+      role User::SECURITY_MANAGER_ROLE
     end
 
     trait :accepted do

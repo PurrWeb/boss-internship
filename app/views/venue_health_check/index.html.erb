@@ -16,10 +16,12 @@
           <!-- Form end -->
         </div>
         <div class="boss-page-dashboard__buttons-group boss-page-dashboard__buttons-group_position_last">
-          <% if questionnaire_exists %>
-            <%= link_to("Add New", new_venue_health_check_path(venue_id: current_venue.id), class: ["boss-button", "boss-button_role_add", "boss-page-dashboard__button"]) %>
-          <% else %>
-            <p style="color: red">No questionnaire exists for <%= current_venue.name.titlecase %></p>
+          <% if can?(:create, QuestionnaireResponse.new) %>
+            <% if questionnaire_exists %>
+              <%= link_to("Add New", new_venue_health_check_path(venue_id: current_venue.id), class: ["boss-button", "boss-button_role_add", "boss-page-dashboard__button"]) %>
+            <% else %>
+              <p style="color: red">No questionnaire exists for <%= current_venue.name.titlecase %></p>
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -81,7 +83,9 @@
                     <div class="boss-table__info">
                       <p class="boss-table__label">Action</p>
                       <div class="boss-table__actions">
-                        <%= link_to("View Report", venue_health_check_report_path(questionnaire_response.id), class: "boss-button boss-button_role_view-report boss-table__action") %>
+                        <% if can?(:view, questionnaire_response) %>
+                          <%= link_to("View Report", venue_health_check_report_path(questionnaire_response.id), class: "boss-button boss-button_role_view-report boss-table__action") %>
+                        <% end %>
                       </div>
                     </div>
                   </div>

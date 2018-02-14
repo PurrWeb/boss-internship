@@ -2,7 +2,7 @@ class SafeCheckNotesController < ApplicationController
   def index
     safe_check = SafeCheck.find(params.fetch(:safe_check_id))
 
-    authorize! :manage, safe_check.venue
+    authorize! :view, safe_check
 
     safe_check_note = SafeCheckNote.new
     safe_check_notes = safe_check.notes
@@ -17,7 +17,7 @@ class SafeCheckNotesController < ApplicationController
   def create
     safe_check = SafeCheck.find(params.fetch(:safe_check_id))
 
-    authorize! :manage, safe_check.venue
+    authorize! :update, safe_check
 
     safe_check_note = SafeCheckNote.new(
       safe_check_note_params.

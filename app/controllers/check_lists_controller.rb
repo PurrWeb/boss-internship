@@ -3,7 +3,7 @@ class CheckListsController < ApplicationController
   before_filter :set_new_layout
 
   def index
-    authorize! :manage, :check_lists
+    authorize! :view, :check_lists_page
 
     check_lists = venue_from_params
       .check_lists

@@ -1,7 +1,7 @@
 class VenuesController < ApplicationController
-  before_action :authorize
-
   def index
+    authorize!(:view, :venues_page)
+
     venues = Venue.all.
       order(:name).
       paginate(page: params[:page], per_page: 25)
@@ -10,11 +10,15 @@ class VenuesController < ApplicationController
   end
 
   def new
+    authorize!(:create, :venues)
+
     venue = Venue.new
     render locals: { venue: venue }
   end
 
   def create
+    authorize!(:create, :venues)
+
     venue = Venue.new
 
     result = UpdateVenue.new(venue: venue, params: create_params, reminder_users: reminder_users_from_params).call
@@ -32,12 +36,15 @@ class VenuesController < ApplicationController
   end
 
   def edit
+    authorize!(:edit, :venues)
+
     venue = Venue.includes(reminder_users: [:name]).find(params[:id])
 
     render locals: { venue: venue }
   end
 
   def update
+    authorize!(:edit, :venues)
     venue = Venue.find(params[:id])
 
     result = UpdateVenue.new(venue: venue, params: update_params, reminder_users: reminder_users_from_params).call
@@ -55,10 +62,6 @@ class VenuesController < ApplicationController
   end
 
   private
-  def authorize
-    authorize! :manage, :admin
-  end
-
   def create_params
     params.require(:venue).
       permit(

@@ -58,7 +58,7 @@ class InvitesController < ApplicationController
 
   private
   def authorize
-    authorize! :manage, :admin
+    authorize! :manage, :user_invites
   end
 
   def accept_new_action(invite)
@@ -123,7 +123,7 @@ class InvitesController < ApplicationController
 
     permitted_params = [:email]
 
-    if role_from_params == 'manager'
+    if role_from_params == User::MANAGER_ROLE
       permitted_params << { venue_ids: [] }
     end
 

@@ -13,7 +13,6 @@ class MachinesRefloatsApiService
   attr_reader :requester, :machine, :ability
 
   def create(params)
-    # ability.authorize! :manage, venue
     machines_refloat = MachinesRefloat.new(
       user: requester,
       machine: machine,
@@ -25,6 +24,8 @@ class MachinesRefloatsApiService
       money_banked_cents: params.fetch(:money_banked_cents),
       money_banked_note: params.fetch(:money_banked_note)
     )
+
+    ability.authorize!(:create, machines_refloat)
 
     result = machines_refloat.save
 

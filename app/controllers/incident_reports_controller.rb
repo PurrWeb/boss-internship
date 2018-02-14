@@ -6,8 +6,7 @@ class IncidentReportsController < ApplicationController
       return redirect_to(incident_reports_path(index_redirect_params))
     end
 
-    authorize! :manage, venue_from_params
-    authorize! :manage, :incident_reports
+    authorize! :view, :incident_report_page
 
     incident_reports = IncidentReportIndexQuery.new(
       venue: venue_from_params,
@@ -20,7 +19,7 @@ class IncidentReportsController < ApplicationController
 
     report_creator_users = User.joins(:incident_reports).includes(:name).uniq{|user| user.id}
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-    
+
     render locals: {
       access_token: access_token.token,
       incident_reports: incident_reports,
@@ -35,10 +34,10 @@ class IncidentReportsController < ApplicationController
 
   def show
     incident_report = IncidentReport.find(params[:id])
+    authorize! :view, incident_report
 
-    authorize! :manage, incident_report
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-    
+
     render locals: {
       access_token: access_token.token,
       incident_report: incident_report

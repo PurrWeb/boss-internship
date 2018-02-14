@@ -177,11 +177,7 @@ Rails.application.routes.draw do
     resources :incident_reports, only: [:index, :show]
 
     resources :api_keys, only: [:index, :create, :destroy]
-    resource :dev, only: [] do
-      collection do
-        get :secruity_app_sse_test
-      end
-    end
+    get 'dev/secruity_app_sse_test', to: 'sse_tests#secruity_app_sse_test', as: 'secruity_app_sse_test_dev'
 
     resources :hours_confirmation, only: [:index] do
       collection do
@@ -366,7 +362,7 @@ Rails.application.routes.draw do
   end
 
   require "sidekiq/web"
-  authenticate :user, lambda { |u| u.dev? } do
+  authenticate :user, lambda { |u| u.has_effective_access_level?(AccessLevel.dev_access_level) } do
     mount Sidekiq::Web, at: "/queue"
   end
 

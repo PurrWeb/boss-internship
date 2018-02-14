@@ -9,7 +9,7 @@ RSpec.describe 'Restore accessory API endpoint' do
     set_authorization_header(access_token.token)
   end
   let(:venue) { FactoryGirl.create(:venue) }
-  let(:user) { FactoryGirl.create(:user, venues: [venue]) }
+  let(:user) { FactoryGirl.create(:user, :admin) }
 
   let(:access_token) do
     WebApiAccessToken.new(

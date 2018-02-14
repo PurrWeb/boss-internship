@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe 'Dashboard Request Specs', type: :request do
   let!(:venue) { FactoryGirl.create(:venue) }
-  let!(:admin_user) { FactoryGirl.create(:user, role: 'admin') }
+  let!(:admin_user) { FactoryGirl.create(:user, role: User::ADMIN_ROLE) }
   let!(:maintenance_staff_user) { FactoryGirl.create(:user, venues: [venue], role: 'maintenance_staff') }
   let!(:dashboard_message_one) { FactoryGirl.create(:dashboard_message, title: '1st', created_by_user: admin_user, published_time: Time.now, venues: [venue]) }
   let!(:dashboard_message_two) { FactoryGirl.create(:dashboard_message, title: '2nd', created_by_user: admin_user, published_time: Time.now, venues: [venue]) }

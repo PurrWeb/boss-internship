@@ -2,6 +2,8 @@ class ChangeOrdersController < ApplicationController
   before_action :set_new_layout, only: [:index, :submitted]
 
   def index
+    authorize!(:view, :change_orders_page)
+
     if venue_from_params.present?
       current_venue = venue_from_params
 
@@ -49,6 +51,8 @@ class ChangeOrdersController < ApplicationController
 
   def show
     change_order = ChangeOrder.find(params[:id])
+
+    authorize!(:view, change_order)
 
     render locals: { change_order: change_order }
   end

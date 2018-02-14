@@ -2,10 +2,12 @@ class VouchersController < ApplicationController
   before_action :set_new_layout
 
   def index
+    authorize!(:view, :vouchers_page)
+
     unless index_params_present?
       return redirect_to(vouchers_path(index_redirect_params))
     end
-    
+
     per_page = 10
 
     vouchers = VouchersIndexQuery.new(
@@ -21,7 +23,7 @@ class VouchersController < ApplicationController
     )
 
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-    
+
     render locals: {
       vouchers: paginated_vouchers,
       venues: Venue.all,
@@ -37,6 +39,8 @@ class VouchersController < ApplicationController
   end
 
   def redeem
+    authorize!(:view, :redeem_vouchers_page)
+
     unless redeem_params_present?
       return redirect_to(redeem_vouchers_path(redeem_redirect_params))
     end
@@ -44,7 +48,7 @@ class VouchersController < ApplicationController
     vouchers = venue_from_params.vouchers
     venue_staff_members = StaffMember.where.not(venues: {id: nil}).includes(:name, :master_venue)
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-    
+
     render locals: {
       vouchers: vouchers,
       venue_staff_members: venue_staff_members,
@@ -55,6 +59,8 @@ class VouchersController < ApplicationController
   end
 
   def usages
+    authorize!(:view, :voucher_usages_page)
+
     unless usages_params_present?
       return redirect_to(usages_voucher_path(usages_redirect_params))
     end

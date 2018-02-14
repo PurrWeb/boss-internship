@@ -4,6 +4,8 @@ module Api
       before_filter :web_token_authenticate!
 
       def index
+        authorize!(:view, :incident_report_page)
+
         incident_reports = IncidentReportIndexQuery.new(
           venue: venue_from_params,
           start_date: start_date_from_params,
@@ -20,7 +22,7 @@ module Api
 
       def show
         incident_report = IncidentReport.find(params.fetch("id"))
-        authorize! :manage, incident_report
+        authorize! :view, incident_report
 
         render(
           json: incident_report,
@@ -30,6 +32,9 @@ module Api
       end
 
       def create
+        #Venue specific permission is handled in service call
+        authorize!(:create, :incident_reports)
+
         result = IncidentReportCreationApiService.new(
           requester: current_user,
           venue: venue_from_params
@@ -62,6 +67,7 @@ module Api
 
       def update
         incident_report = IncidentReport.find(params.fetch("id"))
+        authorize!(:update, incident_report)
 
         result = IncidentReportUpdateApiService.new(
           requester: current_user,
@@ -97,6 +103,8 @@ module Api
       def destroy
         incident_report = IncidentReport.find(params.fetch("id"))
 
+        authorize!(:destroy, incident_report)
+
         IncidentReportDisableApiService.new(
           requester: current_user,
           incident_report: incident_report
@@ -120,7 +128,7 @@ module Api
         rescue; end
         result
       end
-    
+
       def end_date_from_params
         result = nil
         begin

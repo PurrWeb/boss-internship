@@ -1,11 +1,12 @@
 module Api
   module V1
     class CheckListSubmissionsController < APIController
-      before_action :authorize_checklists
       before_filter :web_token_authenticate!
       before_filter :check_venue
 
       def index
+        authorize! :view, :check_list_submissions_page
+
         result = ChecklistSubmissionsIndexFilter.new(user: current_user, params: params)
         query = result.checklist_submissions_index_query
         submissions = query
@@ -14,17 +15,13 @@ module Api
           .includes(:user)
 
         submissions_page_data = ChecklistSubmissionsPageData.new(submissions: submissions, params: params)
-    
+
         render json: {
           current_venue: Api::V1::VenueForSelectSerializer.new(venue_from_params),
         }.merge(submissions_page_data.get_data)
       end
 
       private
-
-      def authorize_checklists
-        authorize! :manage, :check_lists
-      end
 
       def check_venue
         unless venue_from_params.present?

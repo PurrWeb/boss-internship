@@ -5,7 +5,7 @@ module Api
 
       def show
         venue = Venue.find(params.fetch(:id))
-        authorize!(:manage, venue)
+        authorize!(:view, venue)
 
         render locals: { venue: venue }
       end

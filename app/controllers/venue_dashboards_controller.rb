@@ -28,7 +28,8 @@ class VenueDashboardsController < ApplicationController
 
   def redirect_to_venue
     unless venue_from_params.present?
-      redirect_to venue_dashboard_path(venue_id: accessible_venues.first.id)
+      redirect_venue = current_user.default_venue
+      redirect_to venue_dashboard_path(venue_id: redirect_venue.id)
     end
   end
 

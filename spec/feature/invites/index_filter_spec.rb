@@ -49,12 +49,11 @@ RSpec.feature 'Staff members index page filtering' do
 
   context 'filtering by role' do
     let!(:admin_role) { 'admin' }
-    let!(:manager_role) { 'manager' }
     let!(:admin_role_invites) do
-      FactoryGirl.create_list(:invite, 2, role: admin_role, inviter: dev_user)
+      FactoryGirl.create_list(:invite, 2, role: User::ADMIN_ROLE, inviter: dev_user)
     end
     let!(:manager_role_invites) do
-      FactoryGirl.create_list(:invite, 3, role: manager_role, inviter: dev_user)
+      FactoryGirl.create_list(:invite, 3, role: User::MANAGER_ROLE, inviter: dev_user)
     end
     let(:total_invite_count) { admin_role_invites.count + manager_role_invites.count }
 
@@ -77,7 +76,7 @@ RSpec.feature 'Staff members index page filtering' do
     scenario 'filtering should effect results' do
       invites_index_page.surf_to
       invites_index_page.filter.tap do |filter|
-        filter.filter_by_role(manager_role)
+        filter.filter_by_role(User::MANAGER_ROLE)
         filter.ensure_records_returned(manager_role_invites.count)
       end
     end

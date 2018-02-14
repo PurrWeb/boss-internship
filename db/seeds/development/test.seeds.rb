@@ -12,7 +12,7 @@ after ['development:staff_types', 'development:pay_rates'] do
     name: dev_user_name,
     email_address: dev_user_email_address,
     password: 'dev_password',
-    role: 'dev',
+    role: DEV_ROLE,
     first: true
   )
 

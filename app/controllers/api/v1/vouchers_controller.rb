@@ -4,6 +4,8 @@ module Api
       before_filter :web_token_authenticate!
 
       def create
+        authorize!(:create, :vouchers)
+
         venue = Venue.find(params[:venue_id])
 
         result = CreateVoucherApiService.new(
@@ -23,6 +25,8 @@ module Api
       def destroy
         voucher = Voucher.find(params.fetch(:id))
 
+        authorize!(:destroy, voucher)
+
         deleted_voucher = DisableVoucher.new(
           voucher: voucher,
           requester: current_user
@@ -33,6 +37,7 @@ module Api
 
       def redeem
         voucher = Voucher.find(params.fetch(:id))
+        authorize!(:redeem, voucher)
 
         result = RedeemVoucher.new(
           voucher: voucher,

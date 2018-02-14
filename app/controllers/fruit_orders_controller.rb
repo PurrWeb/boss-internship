@@ -2,6 +2,8 @@ class FruitOrdersController < ApplicationController
   before_action :set_new_layout, only: [:index, :submitted]
 
   def index
+    authorize!(:view, :fruit_orders_page)
+
     if venue_from_params.present?
       current_venue = venue_from_params
 
@@ -27,6 +29,7 @@ class FruitOrdersController < ApplicationController
 
   def edit
     fruit_order = FruitOrder.find(params[:id])
+    authorize! :update, fruit_order
 
     render locals: { fruit_order: fruit_order }
   end
@@ -48,6 +51,8 @@ class FruitOrdersController < ApplicationController
 
 
   def submitted
+    authorize!(:view, :fruit_orders_page)
+
     raise ActiveRecord::RecordNotFound unless venue_from_params.present?
 
     fruit_orders = FruitOrder.

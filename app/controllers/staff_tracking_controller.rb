@@ -1,6 +1,6 @@
 class StaffTrackingController < ApplicationController
   def index
-    authorize! :manage, :admin
+    authorize!(:view, :staff_tracking_page)
 
     if week_from_params.present?
       week = week_from_params

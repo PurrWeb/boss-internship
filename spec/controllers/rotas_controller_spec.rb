@@ -10,18 +10,6 @@ RSpec.describe RotasController do
 
   describe '#index' do
     describe 'accessing with no params set' do
-      context 'user has no venue associated' do
-        let(:user) { FactoryGirl.create(:user, :manager, venues: []) }
-        let(:expected_start_date) { Time.zone.now.beginning_of_week.to_date }
-        let(:expected_end_date) { Time.zone.now.beginning_of_week.to_date + 6.days }
-
-        it 'should raise error' do
-          expect{
-            get :index
-          }.to raise_error(NoMethodError, /undefined method .id. for nil:NilClass/)
-        end
-      end
-
       context 'user has venue assciated' do
         let(:user) { FactoryGirl.create(:user, :manager, venues: [venue]) }
         let(:expected_start_date) { Time.zone.now.beginning_of_week.to_date }

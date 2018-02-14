@@ -2,6 +2,8 @@ class ApiKeysController < ApplicationController
   before_action :authorize_admin
 
   def index
+    authorize!(:view, :api_keys_page)
+
     venue_keys = Venue.all.map do |venue|
       [venue, ApiKey.boss.current_for(venue: venue)]
     end
@@ -10,10 +12,12 @@ class ApiKeysController < ApplicationController
   end
 
   def destroy
+    authorize!(:destroy, :api_keys)
+
     key = ApiKey.find(params[:id])
 
     key.state_machine.transition_to!(:deleted, requster_user_id: current_user)
-    
+
     ApiAccessToken.revoke!(api_key: key)
 
     flash[:success] = 'Key revoked successfully'
@@ -21,6 +25,8 @@ class ApiKeysController < ApplicationController
   end
 
   def create
+    authorize!(:create, :api_keys)
+
     ApiKey.create!(
       venue: venue_from_params,
       user: current_user,

@@ -71,7 +71,7 @@ class OwedHoursController < ApplicationController
 
   def edit
     owed_hour = OwedHour.enabled.find(params[:id])
-    authorize! :manage, owed_hour
+    authorize! :update, owed_hour
 
     update_owed_hour_form = UpdateOwedHourForm.new(
       OwedHourViewModel.new(owed_hour)
@@ -82,7 +82,7 @@ class OwedHoursController < ApplicationController
 
   def update
     owed_hour = OwedHour.enabled.find(params[:id])
-    authorize! :manage, owed_hour
+    authorize! :update, owed_hour
 
     new_owed_hour = OwedHour.new(
       owed_hour.attributes.
@@ -122,7 +122,7 @@ class OwedHoursController < ApplicationController
 
   def destroy
     owed_hour = OwedHour.enabled.find(params[:id])
-    authorize! :manage, owed_hour
+    authorize! :destroy, owed_hour
 
     result = DeleteOwedHour.new(
       requester: current_user,

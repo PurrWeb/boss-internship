@@ -9,10 +9,8 @@ RSpec.feature 'Users index page filtering' do
   end
 
   context 'filtering by role' do
-    let(:dev_role)  { 'dev' }
-    let!(:dev_users) { FactoryGirl.create_list(:user, 2, role: dev_role) }
-    let(:manager_role) { 'manager' }
-    let!(:managers) { FactoryGirl.create_list(:user, 3, role: manager_role) }
+    let!(:dev_users) { FactoryGirl.create_list(:user, 2, role: User::DEV_ROLE) }
+    let!(:managers) { FactoryGirl.create_list(:user, 3, role: User::MANAGER_ROLE) }
     let(:total_user_count) { 1 + dev_users.count + managers.count }
 
     scenario 'no filtering should be applied by default' do
@@ -26,15 +24,15 @@ RSpec.feature 'Users index page filtering' do
     scenario 'filter settings should be persisted between updates' do
       users_index_page.surf_to
       users_index_page.filter.tap do |filter|
-        filter.filter_by_role(dev_role)
-        filter.ui_shows_filtering_by_role(dev_role)
+        filter.filter_by_role(User::DEV_ROLE)
+        filter.ui_shows_filtering_by_role(User::DEV_ROLE)
       end
     end
 
     scenario 'filtering should effect results' do
       users_index_page.surf_to
       users_index_page.filter.tap do |filter|
-        filter.filter_by_role(manager_role)
+        filter.filter_by_role(User::MANAGER_ROLE)
         filter.ensure_records_returned(managers.count)
       end
     end

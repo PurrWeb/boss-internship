@@ -1,7 +1,26 @@
 class User < ActiveRecord::Base
+  DEV_ROLE = 'dev'
+  ADMIN_ROLE = 'admin'
+  AREA_MANAGER_ROLE = 'area_manager'
+  MANAGER_ROLE = 'manager';
   MARKETING_ROLE = 'marketing'
   MAINTENANCE_ROLE = 'maintenance_staff'
-  ROLES = ['admin', 'manager', 'dev', 'ops_manager', 'security_manager', MAINTENANCE_ROLE, MARKETING_ROLE]
+  OPS_MANAGER_ROLE = 'ops_manager'
+  SECURITY_MANAGER_ROLE = 'security_manager'
+  PAYROLL_MANAGER = 'payroll_manager'
+  FOOD_OPS_MANAGER = 'food_ops_manager'
+  ROLES = [
+    DEV_ROLE,
+    ADMIN_ROLE,
+    AREA_MANAGER_ROLE,
+    MANAGER_ROLE,
+    MARKETING_ROLE,
+    MAINTENANCE_ROLE,
+    OPS_MANAGER_ROLE,
+    SECURITY_MANAGER_ROLE,
+    PAYROLL_MANAGER,
+    FOOD_OPS_MANAGER
+  ]
 
   include Statesman::Adapters::ActiveRecordQueries
 
@@ -51,7 +70,7 @@ class User < ActiveRecord::Base
     to: :name
 
   def self.dev
-    where(role: 'dev')
+    where(role: DEV_ROLE)
   end
 
   def self.enabled
@@ -73,10 +92,14 @@ class User < ActiveRecord::Base
   def self.with_all_venue_access
     where(
       "role = ? OR role = ? OR role = ?",
-      'dev',
-      'admin',
-      'ops_manager'
+      DEV_ROLE,
+      ADMIN_ROLE,
+      OPS_MANAGER_ROLE
     )
+  end
+
+  def root_redirect_path
+    GetRootRedirectPath.new(user: self).call
   end
 
   def expire_web_tokens!
@@ -97,18 +120,18 @@ class User < ActiveRecord::Base
   end
 
   def can_create_roles
-    if dev? || admin?
-      ROLES - ['dev']
+    if has_effective_access_level?(AccessLevel.admin_access_level)
+      ROLES - [DEV_ROLE]
     else
       []
     end
   end
 
   def can_edit_roles
-    if dev?
+    if has_effective_access_level?(AccessLevel.dev_access_level)
       ROLES
-    elsif admin?
-      ROLES - ['dev']
+    elsif has_effective_access_level?(AccessLevel.admin_access_level)
+      ROLES - [DEV_ROLE]
     else
       []
     end
@@ -130,46 +153,49 @@ class User < ActiveRecord::Base
     state_machine.current_state == 'disabled'
   end
 
-  def admin?
-    role == 'admin'
-  end
-
   def dev?
-    role == 'dev'
+    role == DEV_ROLE
   end
 
   def manager?
-    role == 'manager'
+    role == MANAGER_ROLE
+  end
+
+  def payroll_manager?
+    role == PAYROLL_MANAGER
+  end
+
+  def area_manager?
+    role == AREA_MANAGER_ROLE
   end
 
   def marketing_staff?
     role == MARKETING_ROLE
   end
 
+  def food_ops_manager?
+    role == FOOD_OPS_MANAGER
+  end
+
   def ops_manager?
-    role == 'ops_manager'
+    role == OPS_MANAGER_ROLE
   end
 
   def security_manager?
-    role == 'security_manager'
+    role == SECURITY_MANAGER_ROLE
   end
 
   def maintenance_staff?
     role == MAINTENANCE_ROLE
   end
 
-  def restricted_access?
-    maintenance_staff? || security_manager? || marketing_staff?
-  end
-
   # Warning: Couple this to access control for actions as it is used by restricted  # user types who don't have limited views of venues but who shouldn't have
   # access to certain admin like pages .
   def has_all_venue_access?
-    dev? || admin? || ops_manager? || maintenance_staff?
-  end
-
-  def has_admin_access?
-    dev? || admin?
+    has_effective_access_level?(AccessLevel.area_manager_access_level) ||
+      ops_manager? ||
+      maintenance_staff? ||
+      payroll_manager?
   end
 
   def active_for_authentication?
@@ -208,10 +234,12 @@ class User < ActiveRecord::Base
   end
 
   def default_venue
-    if manager?
+    if has_all_venue_access?
+      Venue.first
+    elsif venues.count > 0
       venues.first
     else
-      Venue.first
+      raise "user with role: #{role} has no venues set"
     end
   end
 
@@ -265,6 +293,10 @@ class User < ActiveRecord::Base
   # Required for devise to work without email field
   def email_required?
     false
+  end
+
+  def has_effective_access_level?(access_level)
+    AccessLevel.for_user_role(role).is_effectively?(access_level)
   end
 
   private

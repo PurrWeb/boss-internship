@@ -80,7 +80,7 @@ class SecurityRotasController < ApplicationController
 
   private
   def authorize
-    authorize! :manage, :security_rota
+    authorize! :view, :security_rota
   end
 
   def accessible_venues_for(user)

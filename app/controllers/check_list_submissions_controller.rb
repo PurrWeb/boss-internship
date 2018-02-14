@@ -3,7 +3,7 @@ class CheckListSubmissionsController < ApplicationController
   before_filter :set_new_layout
 
   def index
-    authorize! :manage, :check_lists
+    authorize! :view, :check_list_submissions_page
 
     result = ChecklistSubmissionsIndexFilter.new(user: current_user, params: params)
     query = result.checklist_submissions_index_query

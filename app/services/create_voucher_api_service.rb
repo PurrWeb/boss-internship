@@ -13,7 +13,7 @@ class CreateVoucherApiService
   attr_reader :venue, :ability, :requester
 
   def call(params)
-    ability.authorize! :manage, venue
+    ability.authorize!(:create, :vouchers)
 
     voucher = Voucher.new(
       creator: requester,

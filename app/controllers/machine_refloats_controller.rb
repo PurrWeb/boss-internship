@@ -2,6 +2,8 @@ class MachineRefloatsController < ApplicationController
   before_action :set_new_layout, only: [:index]
 
   def index
+    authorize!(:view, :machine_refloats_page)
+
     if !index_params_present?
       return redirect_to(machine_refloats_path(index_redirect_params))
     end
@@ -12,14 +14,14 @@ class MachineRefloatsController < ApplicationController
       venue: venue_from_params,
       params: params
     ).all
-    
+
     paginated_machines_refloats = machines_refloats.paginate(
       page: page_from_params,
       per_page: per_page
     )
 
     machines_refloats_users = User.joins([:machines_refloats, :venues]).where(venues: {id: venue_from_params.id}).uniq
-    
+
     render locals: {
       access_token: access_token.token,
       current_venue: venue_from_params,
@@ -33,7 +35,7 @@ class MachineRefloatsController < ApplicationController
       page: page_from_params,
       per_page: per_page,
       size: machines_refloats.size,
-    }    
+    }
   end
 
 

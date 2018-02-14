@@ -1,6 +1,6 @@
 class YearlyReportsController < ApplicationController
   def index
-    authorize! :manage, :admin
+    authorize! :view, :yearly_reports
 
     if venue_from_params.present? && tax_year_from_params.present?
       venue = venue_from_params
@@ -41,7 +41,7 @@ class YearlyReportsController < ApplicationController
   end
 
   def hour_report
-    authorize! :manage, :admin
+    authorize!(:view, :yearly_reports)
 
     staff_member = StaffMember.find(params.fetch(:staff_member_id))
     venue = Venue.find_by!(id: params[:venue_id])

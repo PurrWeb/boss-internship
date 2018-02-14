@@ -4,6 +4,8 @@ module Api
       before_filter :web_token_authenticate!
 
       def index
+        authorize!(:view, :accessories_page)
+
         per_page = 5
 
         accessories = AccessoriesIndexQuery.new(
@@ -32,6 +34,8 @@ module Api
       end
 
       def create
+        authorize!(:create, :accessory)
+
         result = AccessoriesApiService.new(
           requester: current_user,
           accessory: Accessory.new(venue: venue_from_params)
@@ -50,6 +54,8 @@ module Api
       end
 
       def update
+        authorize!(:edit, :accessory)
+
         result = AccessoriesApiService.new(
           requester: current_user,
           accessory: venue_from_params.accessories.enabled.find_by(id: params.fetch(:id))
@@ -68,6 +74,8 @@ module Api
       end
 
       def destroy
+        authorize!(:destroy, :accessory)
+
         result = AccessoriesApiService.new(
           requester: current_user,
           accessory: venue_from_params.accessories.enabled.find_by(id: params.fetch(:id))
@@ -86,6 +94,8 @@ module Api
       end
 
       def restore
+        authorize!(:enable, :accessory)
+
         result = AccessoriesApiService.new(
           requester: current_user,
           accessory: venue_from_params.accessories.disabled.find_by(id: params.fetch(:id))

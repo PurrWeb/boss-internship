@@ -4,6 +4,8 @@ module Api
       before_filter :web_token_authenticate!
 
       def create
+        authorize!(:create, :machines_refloats)
+
         result = MachinesRefloatsApiService.new(
           requester: current_user,
           machine: machine_from_params
