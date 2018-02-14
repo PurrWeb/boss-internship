@@ -51,7 +51,7 @@ module Api
             key_transform: :camel_lower,
             scope: { current_user: current_user }
         else
-          render_unprocessable_entity(@maintenance_task)
+          render_unprocessable_entity(maintenance_task)
         end
       end
 

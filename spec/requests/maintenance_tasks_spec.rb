@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe 'Maintenance Task Request Specs', type: :request do
   let!(:staff_member) { FactoryGirl.create(:staff_member) }
   let!(:venue) { FactoryGirl.create(:venue) }
-  let!(:user) { FactoryGirl.create(:user, venues: [venue]) }
-  let!(:maintenance_staff_user) { FactoryGirl.create(:user, venues: [venue], role: 'maintenance_staff') }
-  let!(:user_without_venue_access) { FactoryGirl.create(:user) }
+  let!(:user) { FactoryGirl.create(:user, :manager, venues: [venue]) }
+  let!(:maintenance_staff_user) { FactoryGirl.create(:user, :maintenance) }
+  let!(:user_without_venue_access) { FactoryGirl.create(:user, :manager, venues: []) }
   let!(:maintenance_task) { FactoryGirl.create(:maintenance_task, venue: venue, creator_user: user) }
 
   describe '#show' do
@@ -162,7 +162,7 @@ RSpec.describe 'Maintenance Task Request Specs', type: :request do
       it 'returns unprocessible entity when status is not in allowed transitions' do
         maintenance_task.state_machine.transition_to!(:completed, requester_user_id: user.id)
 
-        attributes = { venue_id: venue.id, status: 'accepted' }
+        attributes = { venue_id: venue.id, status: 'pending' }
 
         post "/api/v1/maintenance_tasks/#{maintenance_task.id}/change_status", attributes, token_header(maintenance_staff_user)
 
