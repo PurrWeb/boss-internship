@@ -4,7 +4,6 @@ module Api
   module V1
     class MaintenanceTasksController < APIController
       before_action :web_token_authenticate!
-      before_action :find_venue!, except: [:index]
       before_action :find_maintenance_task!, except: [:create, :index]
 
       def index
@@ -33,19 +32,21 @@ module Api
       end
 
       def show
-        authorize! :view, @maintenance_task
+        maintenance_task ||= MaintenanceTask.find(params.fetch(:id))
+        authorize! :view, maintenance_task
 
-        render json: @maintenance_task,
+        render json: maintenance_task,
           serializer: Api::V1::MaintenanceTaskSerializer,
           key_transform: :camel_lower,
           scope: { current_user: current_user }
       end
 
       def update
-        authorize! :manage, @maintenance_task
+        maintenance_task ||= MaintenanceTask.find(params.fetch(:id))
+        authorize! :manage, maintenance_task
 
-        if @maintenance_task.update(maintenance_task_update_params.merge(venue: @venue))
-          render json: @maintenance_task,
+        if maintenance_task.update(maintenance_task_update_params)
+          render json: maintenance_task,
             serializer: Api::V1::MaintenanceTaskSerializer,
             key_transform: :camel_lower,
             scope: { current_user: current_user }
@@ -56,7 +57,7 @@ module Api
 
       def create
         maintenance_task = MaintenanceTask.new(
-          maintenance_task_create_params.merge(creator_user: current_user, venue: @venue)
+          maintenance_task_create_params.merge(creator_user: current_user)
         )
 
         authorize! :manage, maintenance_task
@@ -73,9 +74,10 @@ module Api
       end
 
       def destroy
-        authorize! :manage, @maintenance_task
+        maintenance_task ||= MaintenanceTask.find(params.fetch(:id))
+        authorize! :manage, maintenance_task
 
-        if @maintenance_task.destroy
+        if maintenance_task.destroy
           render json: {}, status: :ok
         else
           render json: {}, status: :unprocessable_entity
@@ -83,16 +85,17 @@ module Api
       end
 
       def change_status
-        authorize! :change_status, @maintenance_task
+        maintenance_task ||= MaintenanceTask.find(params.fetch(:id))
+        authorize! :change_status, maintenance_task
 
         state_transition = StateTransition.new({
           requester: current_user,
-          state_machine: @maintenance_task.state_machine,
+          state_machine: maintenance_task.state_machine,
           transition_to: params[:status]
         })
 
         if state_transition.transition
-          render json: @maintenance_task,
+          render json: maintenance_task,
             serializer: Api::V1::MaintenanceTaskSerializer,
             key_transform: :camel_lower,
             scope: { current_user: current_user },
@@ -103,9 +106,10 @@ module Api
       end
 
       def add_note
-        note = @maintenance_task.maintenance_task_notes.new(maintenance_task_notes_params.merge(creator_user: current_user))
+        maintenance_task ||= MaintenanceTask.find(params.fetch(:id))
+        note = maintenance_task.maintenance_task_notes.new(maintenance_task_notes_params.merge(creator_user: current_user))
 
-        authorize! :add_note, @maintenance_task
+        authorize! :add_note, maintenance_task
 
         if note.save
           render json: note, serializer: Api::V1::MaintenanceTaskNoteSerializer, status: :created, key_transform: :camel_lower
@@ -134,10 +138,6 @@ module Api
 
       def maintenance_task_notes_params
         params.permit(:note)
-      end
-
-      def find_venue!
-        @venue ||= Venue.find(params[:venue_id])
       end
 
       def find_maintenance_task!
