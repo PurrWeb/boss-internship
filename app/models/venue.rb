@@ -17,6 +17,7 @@ class Venue < ActiveRecord::Base
   has_many :vouchers
   has_and_belongs_to_many :dashboard_messages
   has_many :accessories
+  has_many :ops_diaries
 
   before_create :generate_rollbar_guid
   before_validation :check_rollbar_guid
