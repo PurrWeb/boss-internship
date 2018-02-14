@@ -15,7 +15,6 @@ export function setSelectedMarketingTask(marketingTask) {
 }
 
 export function updateMarketingTask(data) {
-  debugger
   return {
     type: constants.UPDATE_MARKETING_TASK_RECEIVE,
     data
