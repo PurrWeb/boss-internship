@@ -11,7 +11,7 @@ RSpec.describe 'Voucher disable endpoint' do
       key_type: ApiKey::BOSS_KEY_TYPE
     )
   end
-  let(:user) { FactoryGirl.create(:user, venues: [venue]) }
+  let(:user) { FactoryGirl.create(:user, :admin) }
   let(:creator) { user }
   let(:venue) { FactoryGirl.create(:venue) }
   let(:access_token) do
