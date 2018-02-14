@@ -56,8 +56,8 @@ FactoryGirl.define do
       role User::SECURITY_MANAGER_ROLE
     end
 
-    trait :marketing_user do
-      role "marketing_user"
+    trait :marketing_staff do
+      role User::MARKETING_ROLE
     end
   end
 end
