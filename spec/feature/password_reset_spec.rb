@@ -7,6 +7,7 @@ RSpec.feature 'Password Reset' do
   let(:sign_in_page) { PageObject::SignInPage.new }
   let(:forgotten_password_page) { PageObject::ForgottenPasswordPage.new }
   let(:home_page) { PageObject::HomePage.new }
+  let(:venue_dashboard_page) { PageObject::VenueDashboardPage.new }
 
   scenario "There should be a 'forgot your password?' link on the sign in page" do
     sign_in_page.surf_to
@@ -46,7 +47,7 @@ RSpec.feature 'Password Reset' do
   context 'user has a password reset' do
     let(:token) { user.send_reset_password_instructions }
     let(:reset_password_page) { PageObject::ResetPasswordPage.new(token) }
-    let(:user) { FactoryGirl.create(:user, password: 'old_password') }
+    let(:user) { FactoryGirl.create(:user, password: 'old_password', venues: [FactoryGirl.create(:venue)]) }
     let(:new_password) { 'new_password' }
 
     before do
@@ -56,7 +57,7 @@ RSpec.feature 'Password Reset' do
     scenario 'user uses password reset token' do
       reset_password_page.surf_to
       reset_password_page.change_password_to(new_password)
-      home_page.ensure_flash_notice_message_displayed('Your password has been changed successfully. You are now signed in.')
+      venue_dashboard_page.ensure_flash_notice_message_displayed('Your password has been changed successfully. You are now signed in.')
       expect(user.reload.valid_password?(new_password)).to eq(true)
     end
 
