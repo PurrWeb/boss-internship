@@ -4,6 +4,8 @@ module Api
       before_filter :web_token_authenticate!
 
       def index
+        authorize!(:view, :ops_diary)
+
         per_page = 2
 
         ops_diaries = OpsDiariesIndexQuery.new(
@@ -27,6 +29,8 @@ module Api
       end
 
       def create
+        authorize!(:create, :ops_diary)
+
         result = OpsDiaryApiService.new(
           requester: current_user,
           ops_diary: OpsDiary.new,
@@ -45,6 +49,8 @@ module Api
       end
 
       def update
+        authorize!(:update, :ops_diary)
+
         ops_diary = OpsDiary.active.find_by(id: params.fetch(:id));
         unless ops_diary.present?
           return render json: {}, status: 404
@@ -68,6 +74,8 @@ module Api
       end
 
       def disable
+        authorize!(:disable, :ops_diary)
+
         ops_diary = OpsDiary.active.find_by(id: params.fetch(:id));
         unless ops_diary.present?
           return render json: {}, status: 404
@@ -92,6 +100,8 @@ module Api
       end
 
       def enable
+        authorize!(:enable, :ops_diary)
+
         ops_diary = OpsDiary.disabled.find_by(id: params.fetch(:id));
         unless ops_diary.present?
           return render json: {}, status: 404

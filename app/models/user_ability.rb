@@ -9,6 +9,14 @@ class UserAbility
         can :manage, :admin
       end
 
+      can :view, :ops_diary do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+      can [:create, :update, :enable, :disable], :ops_diary do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can :view, :sse_tests do
         user.has_effective_access_level?(AccessLevel.dev_access_level)
       end

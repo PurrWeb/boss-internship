@@ -2,6 +2,8 @@ class OpsDiariesController < ApplicationController
   before_action :set_new_layout
 
   def index
+    authorize!(:view, :ops_diary)
+
     if !index_params_present?
       return redirect_to(ops_diaries_path(index_redirect_params))
     end
