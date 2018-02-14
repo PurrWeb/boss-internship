@@ -55,12 +55,6 @@ class NotesList extends Component {
   _handelLoadMoreClick = () => {
     const limit = this.state.notes.length + this.props.pageSize;
     return this.props.onLoadMoreClick(limit);
-    // this.setState(state => ({
-    //   notes: this.props.notes.slice(
-    //     0,
-    //     state.notes.length + this.props.pageSize,
-    //   ),
-    // }));
   };
 
   renderLoadMore() {
