@@ -266,7 +266,7 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
-      can [:view, :update, :destory, :create], IncidentReport do |incident_report|
+      can [:view, :update, :destroy, :create], IncidentReport do |incident_report|
         user.has_effective_access_level?(AccessLevel.manager_access_level) &&
           can_manage_venue?(user, incident_report.venue)
       end
