@@ -139,6 +139,10 @@ class PermissionsPageData
       color: "#e67e22",
       items: [
         {
+          description: "Diaries",
+          path: @path.ops_diaries_path
+        },
+        {
           description: "Names",
           permitted: role.can?(:view, :names_page),
           path: @path.names_path
