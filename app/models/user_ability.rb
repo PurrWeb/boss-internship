@@ -425,23 +425,16 @@ class UserAbility
         )
       end
 
-      can(
-        [
-          :view,
-          :create,
-          :update,
-          :destory,
-          :assign,
-          :restore,
-          :update_status,
-          :create_note
-        ],
-        MarketingTask
-      ) do |marketing_task|
+      can [:view, :assign, :update_status, :create_note, :create], MarketingTask do |marketing_task|
         user.marketing_staff? || (
           user.has_effective_access_level?(AccessLevel.area_manager_access_level) &&
             can_manage_venue?(user, marketing_task.venue)
         )
+      end
+
+      can [:update, :destroy, :restore], MarketingTask do |marketing_task|
+          user.has_effective_access_level?(AccessLevel.area_manager_access_level) &&
+            can_manage_venue?(user, marketing_task.venue)
       end
     end
 
