@@ -14,7 +14,6 @@ class NotesList extends Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       notes: props.paginate
         ? props.notes.slice(0, props.pageSize)

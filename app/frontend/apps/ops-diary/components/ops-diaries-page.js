@@ -73,9 +73,7 @@ class OpsDiariesPage extends Component {
   };
 
   _handleEditDiarySubmit = (hideModal, values) => {
-    console.log(values.toJS());
     return new Promise((resolve, reject) => {
-      console.log('object');
       this.props.actions.updateDiary({
         data: values.toJS(),
         resolve,

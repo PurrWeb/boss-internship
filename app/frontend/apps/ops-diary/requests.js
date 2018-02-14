@@ -22,7 +22,6 @@ export function createDiary(values) {
 }
 
 export function updateDiary(values) {
-  console.log(values);
   return http().put(`/api/v1/ops-diaries/${oFetch(values, 'id')}`, values);
 }
 

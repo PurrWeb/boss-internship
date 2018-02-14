@@ -11,11 +11,6 @@ class OpsDiaryApp extends Component {
       throw new Error('Access token must be present');
     }
     window.boss.accessToken = accessToken;
-    // const props = {
-    //   diaries: [],
-    //   users: this.props.users,
-    //   venues: this.props.venues,
-    // };
 
     this.store = configureStore();
   }

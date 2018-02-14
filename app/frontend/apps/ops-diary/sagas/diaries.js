@@ -30,7 +30,7 @@ export function* enableDiary({ payload }) {
     yield call(Api.enableDiary, diaryId);
     const response = yield call(Api.fetchDiaries, getInitialFilterData());
     yield put({ type: types.DIARIES_FETCH_SUCCEEDED, payload: response.data });
-    // yield put({ type: types.DIARY_UPDATE_SUCCEEDED, payload: response.data });
+    yield put({ type: types.DIARY_ENABLE_SUCCEEDED });
     yield resolve();
   } catch (e) {
     yield put({ type: types.DIARY_ENABLE_FAILED, message: e.message });
@@ -44,7 +44,7 @@ export function* disableDiary({ payload }) {
     yield call(Api.disableDiary, diaryId);
     const response = yield call(Api.fetchDiaries, getInitialFilterData());
     yield put({ type: types.DIARIES_FETCH_SUCCEEDED, payload: response.data });
-    //yield put({ type: types.DIARY_UPDATE_SUCCEEDED, payload: response.data });
+    yield put({ type: types.DIARY_DISABLE_SUCCEEDED });
     yield resolve();
   } catch (e) {
     yield put({ type: types.DIARY_DISABLE_FAILED, message: e.message });
@@ -58,8 +58,7 @@ export function* updateDiary({ payload }) {
     yield call(Api.updateDiary, data);
     const response = yield call(Api.fetchDiaries, getInitialFilterData());
     yield put({ type: types.DIARIES_FETCH_SUCCEEDED, payload: response.data });
-
-    // yield put({ type: types.DIARY_UPDATE_SUCCEEDED, payload: response.data });
+    yield put({ type: types.DIARY_UPDATE_SUCCEEDED });
     yield resolve();
   } catch (error) {
     yield put({ type: types.DIARY_UPDATE_FAILED, message: error.message });
@@ -86,6 +85,7 @@ export function* createDiary({ payload }) {
     yield call(Api.createDiary, data);
     const response = yield call(Api.fetchDiaries, getInitialFilterData());
     yield put({ type: types.DIARIES_FETCH_SUCCEEDED, payload: response.data });
+    yield put({ type: types.DIARY_CREATE_SUCCEEDED });
 
     yield resolve();
   } catch (error) {
