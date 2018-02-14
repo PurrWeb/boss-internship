@@ -28,26 +28,6 @@ RSpec.feature 'Accepting an invite' do
     expect(user.venues).to eq(venues)
   end
 
-  context 'invite is for security manager' do
-    let(:invite) { FactoryGirl.create(:invite, :security_manager, inviter: admin_user, venue_ids: venues.map(&:id)) }
-
-    scenario 'Anonymous user clicks on accept invite link in email and fills out form' do
-      accept_invite_page.surf_to
-
-      accept_invite_page.ensure_sign_up_text_displayed
-      accept_invite_page.user_form.tap do |user_form|
-        user_form.fill_in_for(prospective_user)
-        user_form.submit
-      end
-
-      home_page.assert_on_correct_page
-      expect(invite.reload).to be_accepted
-      user = User.joins(:email_address).merge(EmailAddress.where(email: invite.email)).first
-      expect(user).to be_present
-      expect(user.venues).to eq(venues)
-    end
-  end
-
   scenario 'Anonymous user clicks on accept invite link in email and fills out incorrectly' do
     accept_invite_page.surf_to
 
