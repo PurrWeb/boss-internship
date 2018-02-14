@@ -234,10 +234,12 @@ class User < ActiveRecord::Base
   end
 
   def default_venue
-    if venues.count > 0
+    if has_all_venue_access?
+      Venue.first
+    elsif venues.count > 0
       venues.first
     else
-      Venue.first
+      raise "user with role: #{role} has no venues set"
     end
   end
 
