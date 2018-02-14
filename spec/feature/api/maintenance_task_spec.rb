@@ -153,7 +153,6 @@ RSpec.describe 'Maintenance Task Request Specs', type: :request do
 
         post "/api/v1/maintenance_tasks/#{maintenance_task.id}/change_status", attributes, token_header(user)
 
-        maintenance_task_json = JSON.parse(response.body)
         expect(response.status).to eq(200)
       end
     end
