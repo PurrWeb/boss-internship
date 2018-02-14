@@ -79,7 +79,7 @@ class PermissionsPageData
         },
         {
           description: "Marketing Tasks",
-          permitted: role.can?(:view, MarketingTask),
+          permitted: role.can?(:view, :marketing_tasks_page),
           path: @path.marketing_tasks_path
         },
         {

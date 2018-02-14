@@ -419,15 +419,28 @@ class UserAbility
         can_manage_venue?(user, maintenance_task.venue)
       end
 
-      can :view, MarketingTask do |marketing_task|
+      can :view, :marketing_tasks_page do
         user.marketing_staff? || (
-          !user.restricted_access? && can_manage_venue?(user, marketing_task.venue)
+          user.has_effective_access_level?(AccessLevel.area_manager_access_level)
         )
       end
 
-      can :manage, MarketingTask do |marketing_task|
+      can(
+        [
+          :view,
+          :create,
+          :update,
+          :destory,
+          :assign,
+          :restore,
+          :update_status,
+          :create_note
+        ],
+        MarketingTask
+      ) do |marketing_task|
         user.marketing_staff? || (
-          !user.restricted_access? && can_manage_venue?(user, marketing_task.venue)
+          user.has_effective_access_level?(AccessLevel.area_manager_access_level) &&
+            can_manage_venue?(user, marketing_task.venue)
         )
       end
     end

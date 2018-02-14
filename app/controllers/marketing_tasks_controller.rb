@@ -4,6 +4,8 @@ class MarketingTasksController < ApplicationController
   before_filter :set_new_layout
 
   def index
+    authorize! :view, :marketing_tasks_page
+
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     venues = AccessibleVenuesQuery.new(current_user).all
     marketing_task_filter = MarketingTaskFilter.new(current_user, {})

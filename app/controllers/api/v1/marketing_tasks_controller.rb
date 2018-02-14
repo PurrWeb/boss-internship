@@ -7,6 +7,8 @@ module Api
       before_action :find_marketing_task!, except: [:create, :index, :add_general, :add_live_music, :add_sports, :add_artwork]
 
       def index
+        authorize! :view, :marketing_tasks_page
+
         marketing_task_filter = MarketingTaskFilter.new(current_user, params)
         marketing_tasks = marketing_task_filter.fetch
 
@@ -37,7 +39,7 @@ module Api
       end
 
       def update
-        authorize! :manage, @marketing_task
+        authorize! :update, @marketing_task
 
         if @marketing_task.update(marketing_task_update_params.merge(venue: @venue))
           render json: @marketing_task,
@@ -50,11 +52,10 @@ module Api
       end
 
       def add_general
-        authorize! :manage, GeneralTask.new
-
         general_task = GeneralTask.new(
           general_task_params.merge(created_by_user: current_user)
         )
+        authorize! :create, general_task
 
         if general_task.save
           render json: general_task,
@@ -71,7 +72,7 @@ module Api
       end
 
       def edit_general
-        authorize! :manage, @marketing_task
+        authorize! :update, @marketing_task
 
         if @marketing_task.update(general_task_params)
           render json: @marketing_task,
@@ -88,14 +89,13 @@ module Api
       end
 
       def add_live_music
-        authorize! :manage, MusicTask.new
-
-        live_music = MusicTask.new(
-          live_music_params.merge(created_by_user: current_user)
+        live_music_task = MusicTask.new(
+          live_music_task_params.merge(created_by_user: current_user)
         )
+        authorize! :create, live_music_task
 
-        if live_music.save
-          render json: live_music,
+        if live_music_task.save
+          render json: live_music_task,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
             key_transform: :camel_lower
@@ -103,15 +103,15 @@ module Api
           render(
             'api/v1/shared/api_errors.json',
             status: 422,
-            locals: { api_errors: live_music }
+            locals: { api_errors: live_music_task }
           )
         end
       end
 
       def edit_live_music
-        authorize! :manage, @marketing_task
+        authorize! :update, @marketing_task
 
-        if @marketing_task.update(live_music_params)
+        if @marketing_task.update(live_music_task_params)
           render json: @marketing_task,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
@@ -126,14 +126,14 @@ module Api
       end
 
       def add_sports
-        authorize! :manage, SportsTask.new
-
-        sports = SportsTask.new(
-          sports_params.merge(created_by_user: current_user)
+        sports_task = SportsTask.new(
+          sports_task_params.merge(created_by_user: current_user)
         )
+        authorize! :create, sports_task
 
-        if sports.save
-          render json: sports,
+
+        if sports_task.save
+          render json: sports_task,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
             key_transform: :camel_lower
@@ -141,15 +141,15 @@ module Api
           render(
             'api/v1/shared/api_errors.json',
             status: 422,
-            locals: { api_errors: sports }
+            locals: { api_errors: sports_task }
           )
         end
       end
 
       def edit_sports
-        authorize! :manage, @marketing_task
+        authorize! :update, @marketing_task
 
-        if @marketing_task.update(sports_params)
+        if @marketing_task.update(sports_task_params)
           render json: @marketing_task,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
@@ -185,7 +185,7 @@ module Api
       end
 
       def edit_artwork
-        authorize! :manage, @marketing_task
+        authorize! :update, @marketing_task
 
         if @marketing_task.update(artwork_params)
           render json: @marketing_task,
@@ -202,7 +202,7 @@ module Api
       end
 
       def destroy
-        authorize! :manage, @marketing_task
+        authorize! :destroy, @marketing_task
 
         if @marketing_task.disable(current_user)
           render json: @marketing_task,
@@ -219,7 +219,7 @@ module Api
       end
 
       def restore
-        authorize! :manage, @marketing_task
+        authorize! :restore, @marketing_task
 
         if @marketing_task.restore(current_user)
           render json: @marketing_task,
@@ -236,7 +236,7 @@ module Api
       end
 
       def change_status
-        authorize! :manage, @marketing_task
+        authorize! :update_status, @marketing_task
 
         state_transition = StateTransition.new({
           requester: current_user,
@@ -262,7 +262,7 @@ module Api
       end
 
       def assign_user
-        authorize! :manage, @marketing_task
+        authorize! :assign, @marketing_task
 
         assign_to_user_service = AssignToUserService.new(current_user, @marketing_task, assign_to_user_params)
 
@@ -283,7 +283,7 @@ module Api
       def notes
         note = @marketing_task.marketing_task_notes.new(marketing_task_notes_params.merge(creator_user: current_user))
 
-        authorize! :manage, @marketing_task
+        authorize! :create_note, @marketing_task
 
         if note.save
           render json: note, serializer: Api::V1::MarketingTaskNoteSerializer, status: :created, key_transform: :camel_lower
@@ -306,11 +306,11 @@ module Api
         params.permit(:title, :due_at, :venue_id, :description)
       end
 
-      def live_music_params
+      def live_music_task_params
         params.permit(:title, :due_at, :venue_id, :start_time, :facebook_announcement, days: [])
       end
 
-      def sports_params
+      def sports_task_params
         params.permit(:title, :due_at, :venue_id, :start_time, :facebook_announcement, days: [])
       end
 
