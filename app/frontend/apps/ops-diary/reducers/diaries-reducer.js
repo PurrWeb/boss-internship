@@ -10,9 +10,6 @@ export default handleActions(
       const { diaries } = action.payload;
       return fromJS(diaries);
     },
-    [types.DIARY_CREATE_SUCCEEDED]: (state, action) => {
-      return state.unshift(fromJS(action.payload));
-    },
     [types.DIARY_UPDATE_SUCCEEDED]: (state, action) => {
       const updatedDiary = action.payload;
       return state.update(

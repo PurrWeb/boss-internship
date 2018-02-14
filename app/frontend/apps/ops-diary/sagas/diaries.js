@@ -4,6 +4,7 @@ import * as Api from '../requests';
 import { startSubmit, stopSubmit } from 'redux-form';
 import { SubmissionError } from 'redux-form/immutable';
 import { getInitialFilterData } from '../components/ops-diaries-filter/utils';
+import globalNotification from '~/components/global-notification';
 
 export function* fetchDiaries({ payload }) {
   const { data, formId, resolve, reject } = payload;
@@ -30,10 +31,17 @@ export function* enableDiary({ payload }) {
     yield call(Api.enableDiary, diaryId);
     const response = yield call(Api.fetchDiaries, getInitialFilterData());
     yield put({ type: types.DIARIES_FETCH_SUCCEEDED, payload: response.data });
-    yield put({ type: types.DIARY_ENABLE_SUCCEEDED });
+    globalNotification('Diary was enabled successfull', {
+      interval: 3000,
+      status: 'success',
+    });
     yield resolve();
   } catch (e) {
     yield put({ type: types.DIARY_ENABLE_FAILED, message: e.message });
+    globalNotification(`Diary enabling was failed: ${e.message}`, {
+      interval: 3000,
+      status: 'error',
+    });
     yield reject(e.message);
   }
 }
@@ -44,10 +52,17 @@ export function* disableDiary({ payload }) {
     yield call(Api.disableDiary, diaryId);
     const response = yield call(Api.fetchDiaries, getInitialFilterData());
     yield put({ type: types.DIARIES_FETCH_SUCCEEDED, payload: response.data });
-    yield put({ type: types.DIARY_DISABLE_SUCCEEDED });
+    globalNotification('Diary was disabled successfull', {
+      interval: 3000,
+      status: 'success',
+    });
     yield resolve();
   } catch (e) {
     yield put({ type: types.DIARY_DISABLE_FAILED, message: e.message });
+    globalNotification(`Diary disabling was failed: ${e.message}`, {
+      interval: 3000,
+      status: 'error',
+    });
     yield reject(e.message);
   }
 }
@@ -58,10 +73,17 @@ export function* updateDiary({ payload }) {
     yield call(Api.updateDiary, data);
     const response = yield call(Api.fetchDiaries, getInitialFilterData());
     yield put({ type: types.DIARIES_FETCH_SUCCEEDED, payload: response.data });
-    yield put({ type: types.DIARY_UPDATE_SUCCEEDED });
+    globalNotification('Diary was updated successfull', {
+      interval: 3000,
+      status: 'success',
+    });
     yield resolve();
   } catch (error) {
     yield put({ type: types.DIARY_UPDATE_FAILED, message: error.message });
+    globalNotification(`Diary updating was failed: ${error.message}`, {
+      interval: 3000,
+      status: 'error',
+    });
     if (error.response.status === 422) {
       const errors = error.response.data.errors;
       let base = {};
@@ -85,11 +107,17 @@ export function* createDiary({ payload }) {
     yield call(Api.createDiary, data);
     const response = yield call(Api.fetchDiaries, getInitialFilterData());
     yield put({ type: types.DIARIES_FETCH_SUCCEEDED, payload: response.data });
-    yield put({ type: types.DIARY_CREATE_SUCCEEDED });
-
+    globalNotification('Diary was created successfull', {
+      interval: 3000,
+      status: 'success',
+    });
     yield resolve();
   } catch (error) {
     yield put({ type: types.DIARY_CREATE_FAILED, message: error.message });
+    globalNotification(`Diary creation was failed: ${error.message}`, {
+      interval: 3000,
+      status: 'error',
+    });
     if (error.response.status === 422) {
       const errors = error.response.data.errors;
       let base = {};
