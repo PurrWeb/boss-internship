@@ -6,7 +6,6 @@ RSpec.feature 'Password Reset' do
 
   let(:sign_in_page) { PageObject::SignInPage.new }
   let(:forgotten_password_page) { PageObject::ForgottenPasswordPage.new }
-  let(:home_page) { PageObject::HomePage.new }
   let(:venue_dashboard_page) { PageObject::VenueDashboardPage.new }
 
   scenario "There should be a 'forgot your password?' link on the sign in page" do

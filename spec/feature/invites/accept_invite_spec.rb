@@ -9,7 +9,6 @@ RSpec.feature 'Accepting an invite' do
   let(:prospective_user) { FactoryGirl.build(:user) }
   let(:accept_invite_page) { PageObject::AcceptInvitePage.new(invite) }
   let(:sign_in_page) { PageObject::SignInPage.new }
-  let(:home_page) { PageObject::HomePage.new }
   let(:venue_dashboard_page) { PageObject::VenueDashboardPage.new }
 
   scenario 'Anonymous user clicks on accept invite link in email and fills out form' do
