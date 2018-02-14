@@ -4,7 +4,6 @@ module Api
   module V1
     class MarketingTasksController < APIController
       before_action :web_token_authenticate!
-      before_action :find_marketing_task!, except: [:create, :index, :add_general, :add_live_music, :add_sports, :add_artwork]
 
       def index
         authorize! :view, :marketing_tasks_page
@@ -30,24 +29,26 @@ module Api
       end
 
       def show
-        authorize! :view, @marketing_task
+        marketing_task = MarketingTask.find(params.fetch(:id))
+        authorize! :view, marketing_task
 
-        render json: @marketing_task,
+        render json: marketing_task,
           serializer: Api::V1::MarketingTaskSerializer,
           key_transform: :camel_lower,
           scope: { current_user: current_user }
       end
 
       def update
-        authorize! :update, @marketing_task
+        marketing_task = MarketingTask.find(params.fetch(:id))
+        authorize! :update, marketing_task
 
-        if @marketing_task.update(marketing_task_update_params.merge(venue: @venue))
-          render json: @marketing_task,
+        if marketing_task.update(marketing_task_update_params)
+          render json: marketing_task,
             serializer: Api::V1::MarketingTaskSerializer,
             key_transform: :camel_lower,
             scope: { current_user: current_user }
         else
-          render_unprocessable_entity(@marketing_task)
+          render_unprocessable_entity(marketing_task)
         end
       end
 
@@ -72,10 +73,11 @@ module Api
       end
 
       def edit_general
-        authorize! :update, @marketing_task
+        marketing_task = MarketingTask.find(params.fetch(:id))
+        authorize! :update, marketing_task
 
-        if @marketing_task.update(general_task_params)
-          render json: @marketing_task,
+        if marketing_task.update(general_task_params)
+          render json: marketing_task,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
             key_transform: :camel_lower
@@ -83,7 +85,7 @@ module Api
           render(
             'api/v1/shared/api_errors.json',
             status: 422,
-            locals: { api_errors: @marketing_task }
+            locals: { api_errors: marketing_task }
           )
         end
       end
@@ -109,10 +111,11 @@ module Api
       end
 
       def edit_live_music
-        authorize! :update, @marketing_task
+        marketing_task = MarketingTask.find(params.fetch(:id))
+        authorize! :update, marketing_task
 
-        if @marketing_task.update(live_music_task_params)
-          render json: @marketing_task,
+        if marketing_task.update(live_music_task_params)
+          render json: marketing_task,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
             key_transform: :camel_lower
@@ -120,7 +123,7 @@ module Api
           render(
             'api/v1/shared/api_errors.json',
             status: 422,
-            locals: { api_errors: @marketing_task }
+            locals: { api_errors: marketing_task }
           )
         end
       end
@@ -147,10 +150,11 @@ module Api
       end
 
       def edit_sports
-        authorize! :update, @marketing_task
+        marketing_task = MarketingTask.find(params.fetch(:id))
+        authorize! :update, marketing_task
 
-        if @marketing_task.update(sports_task_params)
-          render json: @marketing_task,
+        if marketing_task.update(sports_task_params)
+          render json: marketing_task,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
             key_transform: :camel_lower
@@ -185,10 +189,11 @@ module Api
       end
 
       def edit_artwork
-        authorize! :update, @marketing_task
+        marketing_task = MarketingTask.find(params.fetch(:id))
+        authorize! :update, marketing_task
 
-        if @marketing_task.update(artwork_params)
-          render json: @marketing_task,
+        if marketing_task.update(artwork_params)
+          render json: marketing_task,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
             key_transform: :camel_lower
@@ -196,16 +201,17 @@ module Api
           render(
             'api/v1/shared/api_errors.json',
             status: 422,
-            locals: { api_errors: @marketing_task }
+            locals: { api_errors: marketing_task }
           )
         end
       end
 
       def destroy
-        authorize! :destroy, @marketing_task
+        marketing_task = MarketingTask.find(params.fetch(:id))
+        authorize! :destroy, marketing_task
 
-        if @marketing_task.disable(current_user)
-          render json: @marketing_task,
+        if marketing_task.disable(current_user)
+          render json: marketing_task,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
             key_transform: :camel_lower
@@ -213,16 +219,17 @@ module Api
           render(
             'api/v1/shared/api_errors.json',
             status: 422,
-            locals: { api_errors: @marketing_task }
+            locals: { api_errors: marketing_task }
           )
         end
       end
 
       def restore
-        authorize! :restore, @marketing_task
+        marketing_task = MarketingTask.find(params.fetch(:id))
+        authorize! :restore, marketing_task
 
-        if @marketing_task.restore(current_user)
-          render json: @marketing_task,
+        if marketing_task.restore(current_user)
+          render json: marketing_task,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
             key_transform: :camel_lower
@@ -230,28 +237,29 @@ module Api
           render(
             'api/v1/shared/api_errors.json',
             status: 422,
-            locals: { api_errors: @marketing_task }
+            locals: { api_errors: marketing_task }
           )
         end
       end
 
       def change_status
-        authorize! :update_status, @marketing_task
+        marketing_task = MarketingTask.find(params.fetch(:id))
+        authorize! :update_status, marketing_task
 
         state_transition = StateTransition.new({
           requester: current_user,
-          state_machine: @marketing_task.state_machine,
+          state_machine: marketing_task.state_machine,
           transition_to: params[:status]
         })
 
         if state_transition.transition
           if params[:status] == 'completed'
-            @marketing_task.update(completed_at: Time.current, completed_by_user: current_user)
+            marketing_task.update(completed_at: Time.current, completed_by_user: current_user)
           else
-            @marketing_task.update(completed_at: nil, completed_by_user: nil)
+            marketing_task.update(completed_at: nil, completed_by_user: nil)
           end
 
-          render json: @marketing_task,
+          render json: marketing_task,
             serializer: Api::V1::MarketingTaskSerializer,
             key_transform: :camel_lower,
             scope: { current_user: current_user },
@@ -262,12 +270,13 @@ module Api
       end
 
       def assign_user
-        authorize! :assign, @marketing_task
+        marketing_task = MarketingTask.find(params.fetch(:id))
+        authorize! :assign, marketing_task
 
-        assign_to_user_service = AssignToUserService.new(current_user, @marketing_task, assign_to_user_params)
+        assign_to_user_service = AssignToUserService.new(current_user, marketing_task, assign_to_user_params)
 
         if assign_to_user_service.assign
-          render json: @marketing_task.reload,
+          render json: marketing_task.reload,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
             key_transform: :camel_lower
@@ -281,9 +290,10 @@ module Api
       end
 
       def notes
-        note = @marketing_task.marketing_task_notes.new(marketing_task_notes_params.merge(creator_user: current_user))
+        marketing_task = MarketingTask.find(params.fetch(:id))
+        note = marketing_task.marketing_task_notes.new(marketing_task_notes_params.merge(creator_user: current_user))
 
-        authorize! :create_note, @marketing_task
+        authorize! :create_note, marketing_task
 
         if note.save
           render json: note, serializer: Api::V1::MarketingTaskNoteSerializer, status: :created, key_transform: :camel_lower
@@ -332,10 +342,6 @@ module Api
 
       def marketing_task_notes_params
         params.permit(:note)
-      end
-
-      def find_marketing_task!
-        @marketing_task ||= MarketingTask.find(params.fetch(:id))
       end
     end
   end
