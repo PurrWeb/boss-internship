@@ -11,6 +11,7 @@ class MaintenanceTaskFilter
     @maintenance_tasks = MaintenanceTask.priority_order
       .includes(
         :venue,
+        :maintenance_task_images,
         :maintenance_task_transitions,
         creator_user: [:name],
         disabled_by_user: [:name]

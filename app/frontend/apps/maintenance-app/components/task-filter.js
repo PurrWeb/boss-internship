@@ -34,7 +34,7 @@ export default class MainDashboard extends React.Component {
       startDate: oFetch(this.props.filter, 'startDate'),
       endDate: oFetch(this.props.filter, 'startDate'),
       focusedInput: null,
-      incompletedOnlyChecked: true,
+      unacceptedOnlyChecked: true,
       showAllChecked: false
     }
   }
@@ -76,12 +76,12 @@ export default class MainDashboard extends React.Component {
 
   setShowAllChecked() {
     this.setState({ showAllChecked: true });
-    this.setState({ incompletedOnlyChecked: false });
+    this.setState({ unacceptedOnlyChecked: false });
   }
 
-  setIncompleteOnly() {
+  setunacceptedOnly() {
     this.setState({ showAllChecked: false });
-    this.setState({ incompletedOnlyChecked: true });
+    this.setState({ unacceptedOnlyChecked: true });
   }
 
   setFilter(e) {
@@ -90,7 +90,7 @@ export default class MainDashboard extends React.Component {
 
       this.props.setFilterParams({ statuses: '' });
     } else {
-      this.setIncompleteOnly();
+      this.setunacceptedOnly();
 
       this.props.setFilterParams({ statuses: 'pending,completed,rejected' });
     }
@@ -164,8 +164,8 @@ export default class MainDashboard extends React.Component {
                   <div className="boss-form__field boss-form__field_layout_fluid">
                     <div className="boss-form__switcher">
                       <label className="boss-form__switcher-label">
-                        <input type="radio" name="display" value="incompletedOnly" className="boss-form__switcher-radio" checked={ this.state.incompletedOnlyChecked } onChange={ this.setFilter.bind(this) } />
-                        <span className="boss-form__switcher-label-text">Incomplete Only</span>
+                        <input type="radio" name="display" value="unacceptedOnly" className="boss-form__switcher-radio" checked={ this.state.unacceptedOnlyChecked } onChange={ this.setFilter.bind(this) } />
+                        <span className="boss-form__switcher-label-text">Unaccepted Only</span>
                       </label>
 
                       <label className="boss-form__switcher-label">
