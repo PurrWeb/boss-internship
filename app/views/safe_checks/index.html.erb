@@ -157,7 +157,7 @@
       </div>
 
       <% safe_checks.each_with_index do |safe_check, index| %>
-        <div class="boss-check boss-check_role_board boss-check_page_safe-checks-index <%= negative?(safe_check.variance_cents) ? 'boss-check_state_alert' : '' %>">
+        <div data-safe-check class="boss-check boss-check_role_board boss-check_page_safe-checks-index <%= negative?(safe_check.variance_cents) ? 'boss-check_state_alert' : '' %>">
           <div class="boss-check__row boss-check__row_role_header">
             <div class="boss-check__cell boss-check__cell_size_half <%= negative?(safe_check.variance_cents) ? 'boss-check__cell_state_alert' : '' %>">
               <p class="boss-check__text boss-check__text_marked <%= negative?(safe_check.variance_cents) ? 'boss-check__text_state_alert' : '' %>">
@@ -300,3 +300,19 @@
     { class: 'react-modal' }
   ) %>
 <% end %>
+<script>
+  $('.boss-check[data-safe-check]').each(function() {
+    var panelDropdownIcon = $(this).find('.boss-check__dropdown-link'),
+        panelDropdown = $(this).find('.boss-check__dropdown'),
+        panelStatusLabel = $(this).find('.boss-check__cell_role_status-label');
+
+    function togglePanelDropdown(e) {
+      e.preventDefault();
+      panelDropdownIcon.toggleClass('boss-check__dropdown-link_state_closed');
+      panelDropdown.slideToggle().toggleClass('boss-check__dropdown_state_closed');
+      panelStatusLabel.toggleClass('boss-check__cell_adjust_single-row');
+    }
+
+    panelDropdownIcon.on('click', togglePanelDropdown);
+  });
+</script>
