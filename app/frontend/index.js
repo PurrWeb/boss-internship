@@ -1,13 +1,13 @@
 import './polyfills';
 
 import React from 'react';
-import ReactDOM from 'react-dom'
-import _ from "underscore"
-import moment from "moment"
-import $ from "jquery"
-import * as selectors from "~/redux/selectors"
+import ReactDOM from 'react-dom';
+import _ from 'underscore';
+import moment from 'moment';
+import $ from 'jquery';
+import * as selectors from '~/redux/selectors';
 import '~/lib/global-try-catch';
-import Bowser from 'bowser'
+import Bowser from 'bowser';
 import Spinner from 'react-spinner';
 import 'react-spinner/react-spinner.css';
 import BouncedEmailModal from '~/components/bounced-email-modal';
@@ -29,165 +29,177 @@ window.ReactDOM = ReactDOM;
 
 // ToDo: Need to remove this condition, after fix old layout issues
 if (window.boss.currentLayout !== 'oldLayout') {
-    // Import all sass from submodule(boss-css repo)
-    require ('./assets/sass/index.sass');
+  // Import all sass from submodule(boss-css repo)
+  require('./assets/sass/index.sass');
 } else {
-    require ('./assets/sass/quick-menu.sass')
+  require('./assets/sass/quick-menu.sass');
 }
 
 import './vendors/owl.carousel';
+import 'react-tippy/dist/tippy.css';
+import './lib/load-underscore-mixins';
 
-import "./lib/load-underscore-mixins"
+import OpsDiaryApp from './apps/ops-diary';
+registerComponent('OpsDiaryApp', OpsDiaryApp);
 
-import DevsApp from "./apps/devs";
-registerComponent("DevsApp", DevsApp);
-import AccessoriesApp from "./apps/accessories";
-registerComponent("AccessoriesApp", AccessoriesApp);
+import DevsApp from './apps/devs';
+registerComponent('DevsApp', DevsApp);
+import AccessoriesApp from './apps/accessories';
+registerComponent('AccessoriesApp', AccessoriesApp);
 
-import AccessoryRequestsApp from "./apps/accessory-requests";
-registerComponent("AccessoryRequestsApp", AccessoryRequestsApp);
+import AccessoryRequestsApp from './apps/accessory-requests';
+registerComponent('AccessoryRequestsApp', AccessoryRequestsApp);
 
-import StaffMemberPasswordReset from "./apps/staff-member-password-reset";
-registerComponent("StaffMemberPasswordReset", StaffMemberPasswordReset);
+import StaffMemberPasswordReset from './apps/staff-member-password-reset';
+registerComponent('StaffMemberPasswordReset', StaffMemberPasswordReset);
 
-import RotaDailyApp from "./apps/rota-daily";
-registerComponent("RotaDailyApp", RotaDailyApp);
+import RotaDailyApp from './apps/rota-daily';
+registerComponent('RotaDailyApp', RotaDailyApp);
 
-import CheckListsApp from "./apps/check-list"
-registerComponent("CheckListsApp", CheckListsApp)
+import CheckListsApp from './apps/check-list';
+registerComponent('CheckListsApp', CheckListsApp);
 
-import Submissions from "./apps/submissions"
-registerComponent("Submissions", Submissions)
+import Submissions from './apps/submissions';
+registerComponent('Submissions', Submissions);
 
-import {MachinesIndexApp} from "./apps/machines"
-registerComponent("MachinesIndexApp", MachinesIndexApp)
+import { MachinesIndexApp } from './apps/machines';
+registerComponent('MachinesIndexApp', MachinesIndexApp);
 
-import MachinesRefloatsApp from "./apps/machines-refloats";
-registerComponent("MachinesRefloatsApp", MachinesRefloatsApp);
+import MachinesRefloatsApp from './apps/machines-refloats';
+registerComponent('MachinesRefloatsApp', MachinesRefloatsApp);
 
-import {IncidentReportsIndexApp} from "./apps/incident-reports"
-registerComponent("IncidentReportsIndexApp", IncidentReportsIndexApp)
+import { IncidentReportsIndexApp } from './apps/incident-reports';
+registerComponent('IncidentReportsIndexApp', IncidentReportsIndexApp);
 
-import {IncidentReportsShowApp} from "./apps/incident-reports"
-registerComponent("IncidentReportsShowApp", IncidentReportsShowApp)
+import { IncidentReportsShowApp } from './apps/incident-reports';
+registerComponent('IncidentReportsShowApp', IncidentReportsShowApp);
 
-import {StaffMemberProfileDetailsApp} from "./apps/staff-member-profile"
-registerComponent("StaffMemberProfileDetailsApp", StaffMemberProfileDetailsApp)
+import { StaffMemberProfileDetailsApp } from './apps/staff-member-profile';
+registerComponent('StaffMemberProfileDetailsApp', StaffMemberProfileDetailsApp);
 
-import {StaffMemberHolidaysApp} from "./apps/staff-member-profile";
-registerComponent("StaffMemberHolidaysApp", StaffMemberHolidaysApp)
+import { StaffMemberHolidaysApp } from './apps/staff-member-profile';
+registerComponent('StaffMemberHolidaysApp', StaffMemberHolidaysApp);
 
-import {StaffMemberOwedHoursApp} from "./apps/staff-member-profile";
-registerComponent("StaffMemberOwedHoursApp", StaffMemberOwedHoursApp);
+import { StaffMemberOwedHoursApp } from './apps/staff-member-profile';
+registerComponent('StaffMemberOwedHoursApp', StaffMemberOwedHoursApp);
 
-import {StaffMemberAccessoriesApp} from "./apps/staff-member-profile";
-registerComponent("StaffMemberAccessoriesApp", StaffMemberAccessoriesApp);
+import { StaffMemberAccessoriesApp } from './apps/staff-member-profile';
+registerComponent('StaffMemberAccessoriesApp', StaffMemberAccessoriesApp);
 
-import StaffTypeRotaApp from "./apps/staff-type-rota/staff-type-rota-app"
-registerComponent("StaffTypeRotaApp", StaffTypeRotaApp);
+import StaffTypeRotaApp from './apps/staff-type-rota/staff-type-rota-app';
+registerComponent('StaffTypeRotaApp', StaffTypeRotaApp);
 
-import AddStaffMemberPageComponent from "./apps/add-staff-member/index"
-registerComponent("AddStaffMemberPageComponent", AddStaffMemberPageComponent);
+import AddStaffMemberPageComponent from './apps/add-staff-member/index';
+registerComponent('AddStaffMemberPageComponent', AddStaffMemberPageComponent);
 
-import ClockInOutApp from "./apps/clock-in-out/clock-in-out-app"
-registerComponent("ClockInOutApp", ClockInOutApp)
+import ClockInOutApp from './apps/clock-in-out/clock-in-out-app';
+registerComponent('ClockInOutApp', ClockInOutApp);
 
-import RotaOverviewApp from "./apps/rota-overview/rota-overview-app"
-registerComponent("RotaOverviewApp", RotaOverviewApp)
+import RotaOverviewApp from './apps/rota-overview/rota-overview-app';
+registerComponent('RotaOverviewApp', RotaOverviewApp);
 
-import StaffMemberFormAvatarImage from "./apps/staff-member-form/staff-member-form-avatar-image"
-registerComponent("StaffMemberFormAvatarImage", StaffMemberFormAvatarImage)
+import StaffMemberFormAvatarImage from './apps/staff-member-form/staff-member-form-avatar-image';
+registerComponent('StaffMemberFormAvatarImage', StaffMemberFormAvatarImage);
 
-import ColorPicker from "./apps/staff-types/color-picker.js";
-registerComponent("ColorPicker", ColorPicker);
+import ColorPicker from './apps/staff-types/color-picker.js';
+registerComponent('ColorPicker', ColorPicker);
 
-import HolidayReportView from "./apps/holiday-report/holiday-report-app"
-registerComponent("HolidayReportApp", HolidayReportView);
+import HolidayReportView from './apps/holiday-report/holiday-report-app';
+registerComponent('HolidayReportApp', HolidayReportView);
 
-import StaffTypeRotaOverviewApp from "./apps/staff-type-rota-overview"
-registerComponent("StaffTypeRotaOverviewApp", StaffTypeRotaOverviewApp);
+import StaffTypeRotaOverviewApp from './apps/staff-type-rota-overview';
+registerComponent('StaffTypeRotaOverviewApp', StaffTypeRotaOverviewApp);
 
-import StaffMembersFilterForm from "./apps/staff-members/components/staff-members-filter-form.js"
-registerComponent("StaffMembersFilterForm", StaffMembersFilterForm);
+import StaffMembersFilterForm from './apps/staff-members/components/staff-members-filter-form.js';
+registerComponent('StaffMembersFilterForm', StaffMembersFilterForm);
 
-import HoursConfirmationApp from "./apps/hours-confirmation"
-registerComponent("HoursConfirmationApp", HoursConfirmationApp);
+import HoursConfirmationApp from './apps/hours-confirmation';
+registerComponent('HoursConfirmationApp', HoursConfirmationApp);
 
-import StaffHoursOverviewApp from "./apps/staff-hours-overview"
-registerComponent("StaffHoursOverviewApp", StaffHoursOverviewApp);
+import StaffHoursOverviewApp from './apps/staff-hours-overview';
+registerComponent('StaffHoursOverviewApp', StaffHoursOverviewApp);
 
-import RollbarErrorTestApp from "./apps/rollbar-error-test/rollbar-error-test-app"
-registerComponent("RollbarErrorTestApp", RollbarErrorTestApp)
+import RollbarErrorTestApp from './apps/rollbar-error-test/rollbar-error-test-app';
+registerComponent('RollbarErrorTestApp', RollbarErrorTestApp);
 
 // import VenueFinder from "./components/shared/venue-finder"
 // registerComponent("VenueFinder", VenueFinder);
 
-import FruitPopover from "./components/shared/fruit-popover"
-registerComponent("FruitPopover", FruitPopover);
+import FruitPopover from './components/shared/fruit-popover';
+registerComponent('FruitPopover', FruitPopover);
 
-import {EmptyHeader} from "./components/containers/header/header.js"
-registerComponent("EmptyHeader", EmptyHeader);
+import { EmptyHeader } from './components/containers/header/header.js';
+registerComponent('EmptyHeader', EmptyHeader);
 
-import VenueHealthCheckApp from "./apps/venue-health-check-app"
-registerComponent("VenueHealthCheckApp", VenueHealthCheckApp)
+import VenueHealthCheckApp from './apps/venue-health-check-app';
+registerComponent('VenueHealthCheckApp', VenueHealthCheckApp);
 
-import Header from "./components/containers/header/header.js"
-registerComponent("Header", Header);
+import Header from './components/containers/header/header.js';
+registerComponent('Header', Header);
 
-import DetailsModal from "./components/safe-checks/details-modal"
-registerComponent("DetailsModal", DetailsModal)
+import DetailsModal from './components/safe-checks/details-modal';
+registerComponent('DetailsModal', DetailsModal);
 
-import VenueHealthCheckReportApp from "./apps/venue-health-check-report-app"
-registerComponent("VenueHealthCheckReportApp", VenueHealthCheckReportApp)
+import VenueHealthCheckReportApp from './apps/venue-health-check-report-app';
+registerComponent('VenueHealthCheckReportApp', VenueHealthCheckReportApp);
 
-import MaintenanceApp from "./apps/maintenance-app"
-registerComponent("MaintenanceApp", MaintenanceApp)
+import MaintenanceApp from './apps/maintenance-app';
+registerComponent('MaintenanceApp', MaintenanceApp);
 
-import VenueDashboardApp from "./apps/venue-dashboard-app"
-registerComponent("VenueDashboardApp", VenueDashboardApp)
+import VenueDashboardApp from './apps/venue-dashboard-app';
+registerComponent('VenueDashboardApp', VenueDashboardApp);
 
 import MessageBoardApp from './apps/message-board-app';
 registerComponent('MessageBoardApp', MessageBoardApp);
 
-import WeekPicker from "~/components/week-picker"
+import WeekPicker from '~/components/week-picker';
 
 import DailyReportsApp from './apps/daily-reports';
 registerComponent('DailyReportsApp', DailyReportsApp);
 
 import AppVersionChecker from '~/components/app-version-checker';
 
-import VouchersApp from "./apps/vouchers";
-registerComponent("VouchersApp", VouchersApp);
+import VouchersApp from './apps/vouchers';
+registerComponent('VouchersApp', VouchersApp);
 
 import VouchersUsageApp from './apps/vouchers-usage';
-registerComponent("VouchersUsageApp", VouchersUsageApp);
+registerComponent('VouchersUsageApp', VouchersUsageApp);
 
 import VouchersRedeemApp from './apps/vouchers-redeem';
-registerComponent("VouchersRedeemApp", VouchersRedeemApp);
+registerComponent('VouchersRedeemApp', VouchersRedeemApp);
 
-$(document).ready(function(){
-    if (window.boss.currentLayout !== 'oldLayout') {
-      initMobileMenu();
-    }
-    let versionCheckerEl = document.createElement("div");
-    document.body.appendChild(versionCheckerEl);
-    let fiveMinutes = 5 * 60 * 1000;
-    let countDown = 5 * 60; // In seconds
-    ReactDOM.render(<AppVersionChecker countdown={ countDown } checkEvery={ fiveMinutes } />, versionCheckerEl);
+$(document).ready(function() {
+  if (window.boss.currentLayout !== 'oldLayout') {
+    initMobileMenu();
+  }
+  let versionCheckerEl = document.createElement('div');
+  document.body.appendChild(versionCheckerEl);
+  let fiveMinutes = 5 * 60 * 1000;
+  let countDown = 5 * 60; // In seconds
+  ReactDOM.render(
+    <AppVersionChecker countdown={countDown} checkEvery={fiveMinutes} />,
+    versionCheckerEl,
+  );
 
-  $(".static-week-picker").each(function(){
-      var input = this;
+  $('.static-week-picker').each(function() {
+    var input = this;
 
-      var el = document.createElement("div")
-      input.parentNode.insertBefore(el, input)
-      $(input).hide();
+    var el = document.createElement('div');
+    input.parentNode.insertBefore(el, input);
+    $(input).hide();
 
-      ReactDOM.render(<WeekPicker
-              onChange={({startDate}) => input.value = moment(startDate).format("DD-MM-YYYY")}
-              selectionStartDate={debug.moment(input.value, "DD-MM-YYYY").toDate()} />, el)
-  })
+    ReactDOM.render(
+      <WeekPicker
+        onChange={({ startDate }) =>
+          (input.value = moment(startDate).format('DD-MM-YYYY'))
+        }
+        selectionStartDate={debug.moment(input.value, 'DD-MM-YYYY').toDate()}
+      />,
+      el,
+    );
+  });
 
-  if(Bowser.ios){
+  if (Bowser.ios) {
     document.querySelector('html').classList.add('is-ios');
   }
-})
+});

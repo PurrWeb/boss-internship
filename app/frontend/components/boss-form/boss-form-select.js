@@ -5,46 +5,48 @@ import _ from 'lodash';
 import { List, Map } from 'immutable';
 
 const BossFormSelect = ({
-    label,
-    options,
-    optionValue,
-    optionLabel,
-    normalizeLabel,
-    required,
-    multi,
-    placeholder,
-    disabled,
-    input: { onBlur, value, onChange, name },
-    meta: { asyncValidating, touched, error },
-  }) => {
-
-  const getItemOption = (option, {value, label}) => {
+  label,
+  options,
+  optionValue,
+  optionLabel,
+  normalizeLabel,
+  required,
+  multi,
+  placeholder,
+  disabled,
+  valueComponent = undefined,
+  optionComponent = undefined,
+  input: { onBlur, value, onChange, name },
+  meta: { asyncValidating, touched, error },
+}) => {
+  const getItemOption = (option, { value, label }) => {
     let normalizedLabel = null;
 
     if (typeof normalizeLabel === 'function') {
       normalizedLabel = normalizeLabel(option);
     }
-    
-    return {
-        value: option[value || 'value'],
-        label: normalizedLabel || option[label || 'label'],
-    };
-  }
 
-  const getOptions = (options, {value, label}) => {
+    return {
+      ...option,
+      value: option[value || 'value'],
+      label: normalizedLabel || option[label || 'label'],
+    };
+  };
+
+  const getOptions = (options, { value, label }) => {
     return options.map((option, key) => {
       if (Object.prototype.toString.call(option) === '[object Object]') {
-        return getItemOption(option, {value, label});
+        return getItemOption(option, { value, label });
       } else {
         return {
           label: option,
-          value: option
-        }
+          value: option,
+        };
       }
     });
-  }
+  };
 
-  const onValueChange = (value) => {
+  const onValueChange = value => {
     if (value) {
       if (!multi) {
         if (Array.isArray(value) && !value.length) return;
@@ -55,45 +57,56 @@ const BossFormSelect = ({
     } else {
       onChange(value);
     }
-  }
-  
-  const getValue = (value) => {
+  };
+
+  const getValue = value => {
     if (List.isList(value)) {
       return value.toJS();
-    };
-    
+    }
+
     return value;
-  }
+  };
 
   return (
     <div className="boss-form__field">
-      { label && (
+      {label && (
         <label htmlFor={name} className="boss-form__label">
-          <span className="boss-form__label-text">{`${label} ${required ? '*' : ''}`}</span>
+          <span className="boss-form__label-text">{`${label} ${
+            required ? '*' : ''
+          }`}</span>
         </label>
       )}
-      <div className={`boss-form__select ${touched && error && 'boss-form__select_state_error'}`}>
+      <div
+        className={`boss-form__select ${touched &&
+          error &&
+          'boss-form__select_state_error'}`}
+      >
         <Select
-          options={getOptions(options, {label: optionLabel, value: optionValue})}
+          options={getOptions(options, {
+            label: optionLabel,
+            value: optionValue,
+          })}
           onChange={onValueChange}
           name={name}
           ignoreCase
           disabled={disabled}
+          valueComponent={valueComponent}
+          optionComponent={optionComponent}
           placeholder={placeholder || 'Select ...'}
           value={getValue(value)}
           multi={multi || false}
         />
       </div>
-      {
-        touched && error &&
+      {touched &&
+        error && (
           <div className="boss-form__error">
             <p className="boss-form__error-text">
               <span className="boss-form__error-line">{error}</span>
             </p>
           </div>
-      }
+        )}
     </div>
-  )
-}
+  );
+};
 
 export default BossFormSelect;

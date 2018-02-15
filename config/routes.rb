@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       passwords: 'users/passwords'
     }
 
+    resources :ops_diaries, only: [:index], path: 'ops-diaries'
     resources :accessories, only: [:index]
     resources :accessory_requests, only: [:index], path: 'accessory-requests'
     resources :machines, only: [:index]
@@ -227,6 +228,12 @@ Rails.application.routes.draw do
             post :reject_refund, path: 'reject-refund'
             post :undo_refund, path: 'undo-refund'
             post :complete_refund, path: 'complete-refund'
+          end
+        end
+        resources :ops_diaries, only: [:index, :create, :update, :destroy], path: 'ops-diaries' do
+          member do
+            post :enable
+            post :disable
           end
         end
         resources :accessories, only: [:index, :create, :update, :destroy] do

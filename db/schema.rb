@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180205115046) do
+ActiveRecord::Schema.define(version: 20180212065333) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -664,6 +664,20 @@ ActiveRecord::Schema.define(version: 20180205115046) do
   add_index "names", ["first_name"], name: "index_names_on_first_name", using: :btree
   add_index "names", ["surname"], name: "index_names_on_surname", using: :btree
 
+  create_table "ops_diaries", force: :cascade do |t|
+    t.string   "title",              limit: 255,   null: false
+    t.text     "text",               limit: 65535, null: false
+    t.integer  "priority",           limit: 4,     null: false
+    t.integer  "venue_id",           limit: 4
+    t.integer  "created_by_user_id", limit: 4
+    t.datetime "disabled_at"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
+  add_index "ops_diaries", ["created_by_user_id"], name: "index_ops_diaries_on_created_by_user_id", using: :btree
+  add_index "ops_diaries", ["venue_id"], name: "index_ops_diaries_on_venue_id", using: :btree
+
   create_table "owed_hours", force: :cascade do |t|
     t.date     "date",                                                     null: false
     t.integer  "minutes",                     limit: 4,                    null: false
@@ -1140,4 +1154,6 @@ ActiveRecord::Schema.define(version: 20180205115046) do
   add_foreign_key "machines", "users", column: "created_by_user_id"
   add_foreign_key "machines", "users", column: "disabled_by_id"
   add_foreign_key "machines", "venues"
+  add_foreign_key "ops_diaries", "users", column: "created_by_user_id"
+  add_foreign_key "ops_diaries", "venues"
 end
