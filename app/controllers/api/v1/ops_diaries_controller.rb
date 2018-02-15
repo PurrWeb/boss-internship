@@ -31,11 +31,10 @@ module Api
       def create
         authorize!(:create, :ops_diary)
 
-        result = OpsDiaryApiService.new(
-          requester: current_user,
-          ops_diary: OpsDiary.new,
-          venue: venue_from_params
-        ).create(params: ops_diary_params)
+        result = CreateOpsDiaryApiService.new(
+          requester: current_user
+        ).call(params: ops_diary_params)
+
 
         if result.success?
           render(
@@ -139,6 +138,7 @@ module Api
           title: params.fetch(:title),
           text: params.fetch(:text),
           priority: params.fetch(:priority),
+          venueId: params.fetch(:venueId)
         }
       end
 

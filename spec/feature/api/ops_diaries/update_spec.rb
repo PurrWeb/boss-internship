@@ -10,7 +10,7 @@ RSpec.describe 'Update OpsDiary API endpoint' do
   end
   let(:venue) { FactoryGirl.create(:venue) }
   let(:new_venue) { FactoryGirl.create(:venue) }
-  let(:user) { FactoryGirl.create(:user, venues: [venue, new_venue]) }
+  let(:user) { FactoryGirl.create(:user, :ops_manager) }
   let(:diary_priority_medium) do
     'medium'
   end

@@ -5,39 +5,21 @@ class OpsDiaryApiService
     end
   end
 
-  def initialize(requester:, ops_diary:, venue:)
+  def initialize(requester:, ops_diary:, ability: UserAbility.new(requester))
     @requester = requester
     @ops_diary = ops_diary
-    @venue = venue
-    @ability = UserAbility.new(requester)
-  end
-
-  def create(params:)
-    # assert_action_permitted(:create)
-
-    ops_diary_params = {
-      title: params.fetch(:title),
-      text: params.fetch(:text),
-      priority: params.fetch(:priority),
-    }.merge(venue: venue, created_by_user: requester)
-
-    model_service_result = CreateOpsDiary.new(
-      params: ops_diary_params
-    ).call
-
-    api_errors = nil
-    unless model_service_result.success?
-      api_errors = OpsDiaryApiErrors.new(ops_diary: model_service_result.ops_diary)
-    end
-    Result.new(model_service_result.success?, model_service_result.ops_diary, api_errors)
+    @ability = ability
   end
 
   def update(params:)
+    ability.authorize!(:update, :ops_diary)
+
     ops_diary_params = {
       title: params.fetch(:title),
       text: params.fetch(:text),
       priority: params.fetch(:priority),
-    }.merge({venue: venue})
+      venue: Venue.find_by(id: params.fetch("venueId"))
+    }
 
     model_service_result = UpdateOpsDiary.new(
       ops_diary: ops_diary,
@@ -52,8 +34,10 @@ class OpsDiaryApiService
   end
 
   def disable
+    ability.authorize!(:disable, :ops_diary)
+
     model_service_result = DisableOpsDiary.new(
-      ops_diary: ops_diary,
+      ops_diary: ops_diary
     ).call
 
     api_errors = nil
@@ -64,8 +48,10 @@ class OpsDiaryApiService
   end
 
   def enable
+    ability.authorize!(:enable, :ops_diary)
+
     model_service_result = EnableOpsDiary.new(
-      ops_diary: ops_diary,
+      ops_diary: ops_diary
     ).call
 
     api_errors = nil
@@ -75,19 +61,5 @@ class OpsDiaryApiService
     Result.new(model_service_result.success?, model_service_result.ops_diary, api_errors)
   end
 
-  attr_reader :requester, :ops_diary, :ability, :venue
-
-  private
-  def assert_action_permitted(action)
-    case action
-    when :create
-      ability.authorize!(:create, ops_diary)
-    when :update
-      ability.authorize!(:update, ops_diary)
-    when :destroy
-      ability.authorize!(:destroy, ops_diary)
-    else
-      raise "unsupported action: #{action} supplied"
-    end
-  end
+  attr_reader :requester, :ops_diary, :ability
 end

@@ -9,7 +9,7 @@ RSpec.describe 'Create OpsDiary API endpoint' do
     set_authorization_header(access_token.token)
   end
   let(:venue) { FactoryGirl.create(:venue) }
-  let(:user) { FactoryGirl.create(:user, venues: [venue]) }
+  let(:user) { FactoryGirl.create(:user, :ops_manager) }
   let(:diary_priority_medium) do
     'medium'
   end
