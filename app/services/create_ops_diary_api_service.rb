@@ -18,7 +18,7 @@ class CreateOpsDiaryApiService
       title: params.fetch(:title),
       text: params.fetch(:text),
       priority: params.fetch(:priority),
-      venue: Venue.find_by(id: params["venueId"]),
+      venue: Venue.find_by(id: params[:venueId]),
       created_by_user: requester
     }
 

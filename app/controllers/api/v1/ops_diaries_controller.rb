@@ -57,8 +57,7 @@ module Api
 
         result = OpsDiaryApiService.new(
           requester: current_user,
-          ops_diary: ops_diary,
-          venue: ops_diary.venue
+          ops_diary: ops_diary
         ).update(params: ops_diary_params)
 
         if result.success?
@@ -82,8 +81,7 @@ module Api
 
         result = OpsDiaryApiService.new(
           requester: current_user,
-          ops_diary: ops_diary,
-          venue: ops_diary.venue
+          ops_diary: ops_diary
         ).disable
 
         if result.success?
@@ -108,8 +106,7 @@ module Api
 
         result = OpsDiaryApiService.new(
           requester: current_user,
-          ops_diary: ops_diary,
-          venue: ops_diary.venue
+          ops_diary: ops_diary
         ).enable
 
         if result.success?

@@ -61,22 +61,28 @@ RSpec.describe 'Update OpsDiary API endpoint' do
 
       it 'it should create ops diary' do
         expect(new_venue.ops_diaries.count).to eq(1)
-        expect(new_venue.ops_diaries.first.title).to eq(title)
-        expect(new_venue.ops_diaries.first.priority).to eq(diary_priority_medium)
-        expect(new_venue.ops_diaries.first.text).to eq(text)
-        expect(new_venue.ops_diaries.first.venue).to eq(new_venue)
-        expect(new_venue.ops_diaries.first.created_by_user).to eq(user)
+
+        ops_diary = new_venue.ops_diaries.first
+        expect(ops_diary.title).to eq(title)
+        expect(ops_diary.priority).to eq(diary_priority_medium)
+        expect(ops_diary.text).to eq(text)
+        expect(ops_diary.venue).to eq(new_venue)
+        expect(ops_diary.created_by_user).to eq(user)
       end
 
       it 'it should return created ops diary' do
         json = JSON.parse(response.body)
+
+        ops_diary = new_venue.ops_diaries.first
         expect(json).to eq({
-          "id" => new_venue.ops_diaries.first.id,
-          "title" => new_venue.ops_diaries.first.title,
-          "text" => new_venue.ops_diaries.first.text,
-          "priority" => new_venue.ops_diaries.first.priority,
-          "venueId" => new_venue.ops_diaries.first.venue_id,
-          "createdByUserId" => new_venue.ops_diaries.first.created_by_user_id,
+          "id" => ops_diary.id,
+          "title" => ops_diary.title,
+          "text" => ops_diary.text,
+          "priority" => ops_diary.priority,
+          "venueId" => ops_diary.venue_id,
+          "createdByUserId" => ops_diary.created_by_user_id,
+          "createdAt" => ops_diary.created_at.utc.iso8601,
+          "active" => ops_diary.enabled? ? true : false
         })
       end
     end

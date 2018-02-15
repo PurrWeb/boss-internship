@@ -72,13 +72,17 @@ RSpec.describe 'Create OpsDiary API endpoint' do
 
       it 'it should return created ops diary' do
         json = JSON.parse(response.body)
+        ops_diary = venue.ops_diaries.first
+
         expect(json).to eq({
-          "id" => venue.ops_diaries.first.id,
-          "title" => venue.ops_diaries.first.title,
-          "text" => venue.ops_diaries.first.text,
-          "priority" => venue.ops_diaries.first.priority,
-          "venueId" => venue.ops_diaries.first.venue_id,
-          "createdByUserId" => venue.ops_diaries.first.created_by_user_id,
+          "id" => ops_diary.id,
+          "title" => ops_diary.title,
+          "text" => ops_diary.text,
+          "priority" => ops_diary.priority,
+          "venueId" => ops_diary.venue.id,
+          "createdByUserId" => ops_diary.created_by_user.id,
+          "active" => ops_diary.enabled? ? true : false,
+          "createdAt" => ops_diary.created_at.utc.iso8601
         })
       end
     end

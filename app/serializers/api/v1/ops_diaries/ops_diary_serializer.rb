@@ -10,7 +10,7 @@ class Api::V1::OpsDiaries::OpsDiarySerializer < ActiveModel::Serializer
     :createdByUserId
 
   def createdAt
-    object.created_at.utc
+    object.created_at.utc.iso8601
   end
 
   def active
