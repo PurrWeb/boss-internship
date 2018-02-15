@@ -392,6 +392,11 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
+      can :view, VenueHealthChecksPage do |venue_health_checks_page|
+        user.has_effective_access_level?(AccessLevel.manager_access_level) &&
+        can_manage_venue?(user, venue_health_checks_page.venue)
+      end
+
       can :view, Venue do |venue|
         can_manage_venue?(user, venue)
       end
