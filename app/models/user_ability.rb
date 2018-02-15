@@ -10,10 +10,12 @@ class UserAbility
       end
 
       can :view, :ops_diary do
+        user.ops_manager? ||
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can [:create, :update, :enable, :disable], :ops_diary do
+        user.ops_manager? ||
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
