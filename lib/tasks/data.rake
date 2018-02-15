@@ -63,6 +63,6 @@ namespace :data do
   end
 
   def production_dump_command
-    "ssh ubuntu@boss.jsmbars.co.uk mysqldump -u root --add-drop-table boss_production"
+    "ssh ubuntu@boss.jsmbars.co.uk mysqldump -u root --password=superpowers --add-drop-table boss_production"
   end
 end
