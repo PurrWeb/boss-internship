@@ -1,5 +1,4 @@
 class FruitOrderReportsController < ApplicationController
-  before_action :authorize_admin
   before_action :set_new_layout, only: [:index, :history]
 
   def index
