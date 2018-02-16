@@ -1,5 +1,4 @@
 class ChangeOrderReportsController < ApplicationController
-  before_action :authorize_admin
   before_action :set_new_layout, only: [:history, :index]
 
   def index
@@ -92,10 +91,6 @@ class ChangeOrderReportsController < ApplicationController
   end
 
   private
-  def authorize_admin
-    authorize! :manage, :admin
-  end
-
   def date_from_params
     if params[:id].present?
       UIRotaDate.parse(params[:id])
