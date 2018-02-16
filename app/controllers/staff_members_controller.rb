@@ -201,7 +201,7 @@ class StaffMembersController < ApplicationController
       pay_rate: staff_member.pay_rate
     ).page_pay_rates.map(&:id)
 
-    venue_accessories = staff_member.master_venue.accessories.enabled.user_requestable
+    venue_accessories = staff_member.master_venue.accessories.enabled
     accessory_requests = staff_member.accessory_requests.includes([:accessory, accessory_refund_request: [:staff_member]])
 
     render locals: {
