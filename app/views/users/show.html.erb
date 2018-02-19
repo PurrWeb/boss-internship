@@ -33,12 +33,12 @@
         </div>
       </div>
       <div class="boss-page-dashboard__buttons-group">
-        <% if can?(:disable, user) %>
+        <% if can?(:disable, user) && user.enabled? %>
           <%= link_to(disable_user_path(user), class: 'boss-button boss-button_role_block boss-page-dashboard__button') do %>
             Disable User
           <% end %>
         <% end %>
-        <% if can?(:enable, user) %>
+        <% if can?(:enable, user) && !user.enabled? %>
           <%= link_to(undestroy_user_path(user), method: :post, class: 'boss-button boss-button_role_unblock boss-page-dashboard__button') do %>
             Enable User
           <% end %>
