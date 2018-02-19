@@ -113,6 +113,7 @@ class UsersController < ApplicationController
   def disable
     user = User.find(params[:id])
     authorize!(:disable, user)
+    raise 'attempt to disabled already disabled user' if user.disabled?
 
     form = DisableStaffMemberForm.new(OpenStruct.new)
     render locals: {
