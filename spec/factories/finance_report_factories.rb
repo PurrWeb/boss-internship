@@ -17,5 +17,6 @@ FactoryGirl.define do
     total_hours_count 0
     total_cents 0
     holiday_days_count 0
+    accessories_cents 0
   end
 end

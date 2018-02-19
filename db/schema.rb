@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180212065333) do
+ActiveRecord::Schema.define(version: 20180219150758) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -349,7 +349,7 @@ ActiveRecord::Schema.define(version: 20180212065333) do
     t.string   "pay_rate_description",    limit: 255, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "accessories_cents",       limit: 4
+    t.integer  "accessories_cents",       limit: 4,   null: false
   end
 
   add_index "finance_reports", ["staff_member_id"], name: "index_finance_reports_on_staff_member_id", using: :btree
