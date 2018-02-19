@@ -4,6 +4,8 @@ import moment from 'moment';
 import humanize from 'string-humanize';
 import constants from '../constants';
 import oFetch from 'o-fetch';
+import utils from "~/lib/utils";
+
 import Select from 'react-select';
 
 const HIGH_PRIORITY = 'high_priority';
@@ -216,7 +218,7 @@ export default class TaskComponent extends React.Component {
 
               <div className="boss-table__cell">
                 <div className="boss-table__info">
-                  <p className="boss-table__text boss-table__text_role_date">{ moment(currentTask.createdAt).format('ddd L') }</p>
+                  <p className="boss-table__text boss-table__text_role_date">{ moment(currentTask.createdAt).format(oFetch(utils, 'commonDateFormat')) }</p>
                 </div>
               </div>
 
