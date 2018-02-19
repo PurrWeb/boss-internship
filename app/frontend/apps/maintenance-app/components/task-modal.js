@@ -8,6 +8,7 @@ import Modal from "react-modal";
 import TaskNote from './task-note';
 import ImageGallery from './image-gallery'
 import oFetch from 'o-fetch';
+import utils from "~/lib/utils";
 
 export default class TaskModal extends React.Component {
   constructor(props) {
@@ -28,7 +29,7 @@ export default class TaskModal extends React.Component {
           <p className="boss-overview__meta">
             <span className="boss-overview__meta-label">{ transition.toState } by </span>
             <span className="boss-overview__meta-user"> { transition.requesterUser.name } </span>
-            <span className="boss-overview__meta-date"> { moment(transition.createdAt).format('HH:mm ddd L') }</span>
+            <span className="boss-overview__meta-date"> { moment(transition.createdAt).format(oFetch(utils, 'commonDateFormat')) }</span>
           </p>
         </li>
       );
@@ -260,7 +261,7 @@ export default class TaskModal extends React.Component {
                         <p className="boss-overview__meta">
                           <span className="boss-overview__meta-label">Created by </span>
                           <span className="boss-overview__meta-user">{ task.creatorUser.name } </span>
-                          <span className="boss-overview__meta-date">{ moment(task.createdAt).format('HH:mm ddd L') }</span>
+                          <span className="boss-overview__meta-date">{ moment(task.createdAt).format(utils.humanDateFormatWithTime()) }</span>
                         </p>
                       </li>
                     </ul>
