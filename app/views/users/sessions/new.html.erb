@@ -1,15 +1,47 @@
-<h1>Sign in</h1>
+<main class="boss-page-main">
+  <div class="boss-page-main__content">
+  <div class="boss-page-main__inner">
+    <div class="boss-modal-window boss-modal-window_role_login">
+      <div class="boss-modal-window__header">
+        <h2 class="boss-modal-window__title">Sign In</h2>
+        <p class="boss-modal-window__subtitle">Please enter your jsm credentials</p>
+      </div>
 
-<%= bootstrap_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <%= f.email_field :devise_email, label: 'Email', autofocus: true %>
 
-  <%= f.password_field :password %>
+      <div class="boss-modal-window__content">
+        <div class="boss-modal-window__form">
+          <%= boss_form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'boss-form' }) do |f| %>
+            <div class="boss-form__field">
+              <label class="boss-form__label">
+              <span class="boss-form__label-text">Email</span>
+              <%= f.email_field :devise_email, label: nil, autofocus: true, class: 'boss-form__input' %>
+            </div>
 
-  <% if devise_mapping.rememberable? -%>
-    <%= f.check_box :remember_me %>
-  <% end -%>
+            <div class="boss-form__field">
+              <label class="boss-form__label">
+              <span class="boss-form__label-text">Password</span>
+              <%= f.password_field :password, class: 'boss-form__input' %>
+            </div>
 
-  <%= f.submit "Sign in", class: ['boss2-button'] %>
-<% end %>
+            <% if devise_mapping.rememberable? -%>
+              <div class="boss-form__field">
+                <label class="boss-form__checkbox-label">
+                  <%= check_box_tag 'remember_me', "1", f.object.remember_me, class: 'boss-form__checkbox-input' %>
+                  <span class="boss-form__checkbox-label-text">Remember me</span>
+                </label>
+              </div>
+            <% end %>
 
-<%= render "users/shared/links" %>
+            <div class="boss-form__field boss-form__field_justify_center">
+              <button class="boss-button boss-button_role_primary" type="submit">Sign In</button>
+            </div>
+
+            <div class="boss-form__field boss-form__field_justify_center boss-form__field_position_last">
+              <%= render "users/shared/links" %>
+            </div>
+          <% end %>
+        </div>
+      </div >
+    </div>
+  </div>
+</main>

@@ -41,5 +41,9 @@ module Boss
     config.action_dispatch.rescue_responses.merge!(
       'AuthorizationException' => :unauthorized
     )
+
+    config.to_prepare do
+      Devise::SessionsController.layout "login_page"
+    end
   end
 end

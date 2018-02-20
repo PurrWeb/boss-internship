@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html class="boss-html">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= content_for?(:title) ? yield(:title) : "Boss" %></title>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Boss" %>">
+
+    <%= javascript_include_tag 'rollbar', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+    <script>
+      window.boss = window.boss || {};
+      window.boss.store = window.boss.store || {};
+      window.boss.rollbarData = window.boss.rollbarData || {};
+      window.boss.currentLayout = "<%= @current_layout %>"
+      window.boss.currentVersion = "<%= application_version %>";
+    </script>
+
+    <script src="<%= @bundle_script %>" data-turbolinks-track="true"></script>
+
+    <%= render 'layouts/favicon' %>
+  </head>
+
+  <body class="boss-body">
+    <!-- Page header start -->
+    <header class="boss-page-header boss-page-header_adjust_security">
+      <div class="boss-page-header__inner">
+        <div class="boss-page-header__group boss-page-header__group_role_logo">
+          <a class="boss-page-header__logo" href="<%= root_path %>">Boss</a>
+        </div>
+      </div>
+    </header>
+    <!-- Page header end -->
+
+    <%= yield %>
+    <%= insert_paloma_hook %>
+  </body>
+</html>
