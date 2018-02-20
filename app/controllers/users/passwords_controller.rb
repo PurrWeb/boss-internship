@@ -1,4 +1,6 @@
 class Users::PasswordsController < Devise::PasswordsController
+  before_filter :set_new_layout
+
   # GET /resource/password/new
   # def new
   #   super
@@ -43,4 +45,12 @@ class Users::PasswordsController < Devise::PasswordsController
   # def after_sending_reset_password_instructions_path_for(resource_name)
   #   super(resource_name)
   # end
+
+  def set_new_layout
+    @current_layout = 'newLayout';
+  end
+
+  def bundle_script
+    @bundle_script = SourcemapHelper.script_path
+  end
 end
