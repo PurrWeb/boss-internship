@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import oFetch from 'o-fetch';
 
 import Dashboard from '../components/dashboard';
 import ChecklistDashboard from '../components/check-list-dashboard';
@@ -40,21 +41,18 @@ class CheckListsApp extends React.Component {
   constructor(props) {
     super(props);
   }
-  
-  render() {
-    const {
-      changeVenue,
-      toggleEditMode,
-      onNotificationClose,
-    } = this.props.actions;
 
-    const {
-      venues,
-      currentVenue,
-      isEditMode,
-      notification,
-    } = this.props;
-    
+  render() {
+    const actions = oFetch(this.props, 'actions');
+    const changeVenue = oFetch(actions, 'changeVenue');
+    const toggleEditMode = oFetch(actions, 'toggleEditMode');
+    const onNotificationClose = oFetch(actions, 'onNotificationClose');
+    const venues = oFetch(this.props, 'venues');
+    const currentVenue = oFetch(this.props, 'currentVenue');
+    const isEditMode = oFetch(this.props, 'isEditMode');
+    const notification = oFetch(this.props, 'notification');
+    const hasAccessToChecklistSubmissionsPage = oFetch(this.props, 'hasAccessToChecklistSubmissionsPage')
+
     return (
       <div>
         {isEditMode && <EditIndicator />}
@@ -65,6 +63,7 @@ class CheckListsApp extends React.Component {
             currentVenue={currentVenue}
             onChangeVenue={changeVenue}
             onToggleEditMode={toggleEditMode}
+            hasAccessToChecklistSubmissionsPage={hasAccessToChecklistSubmissionsPage}
             isEditMode={isEditMode}
           />
         </Dashboard>
