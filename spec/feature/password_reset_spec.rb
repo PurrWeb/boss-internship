@@ -69,7 +69,7 @@ RSpec.feature 'Password Reset' do
 
       scenario 'user attempts to reuse a token that has alerdy been used' do
         reset_password_page.surf_to
-        sign_in_page.ensure_flash_error_message_displayed('The token could not be used because it expired.')
+        sign_in_page.ensure_flash_error_message_displayed('There was a problem signing in. The token could not be used because it expired.')
       end
     end
   end

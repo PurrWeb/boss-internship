@@ -22,11 +22,11 @@ module PageObject
 
     private
     def page_heading
-      page.find('main h1')
+      page.find('h2.boss-modal-window__title')
     end
 
     def expected_page_heading_text
-      'Forgot your password?'
+      'Forgot Your Password?'
     end
   end
 end
