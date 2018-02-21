@@ -163,7 +163,7 @@ class UserAbility
 
       can :view, :check_list_submissions_page do
         user.ops_manager? ||
-        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can [:view, :accept, :complete, :edit], :change_order_reports do
