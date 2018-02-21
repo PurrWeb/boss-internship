@@ -25,13 +25,12 @@ class CheckListSubmissionsController < ApplicationController
   end
 
   private
-
   def check_venue
     unless venue_from_params.present?
       redirect_to(check_list_submissions_path(index_redirect_params))
     end
   end
-  
+
   def index_redirect_params
     {
       venue_id: current_venue.id
