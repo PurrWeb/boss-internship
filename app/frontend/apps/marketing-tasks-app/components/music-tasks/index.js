@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 
 import TaskWrapper from './task-wrapper';
+import AddTaskButton from '../shared/add-task-button';
 
 export default class MusicTasks extends React.Component {
   componentDidMount() {

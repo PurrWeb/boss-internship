@@ -12,6 +12,7 @@ const initialState = Immutable.Map({
   artworkTasks: [],
   musicTasks: [],
   sportsTasks: [],
+  permissions: {},
   currentUser: null,
   selectedMarketingTask: null,
   marketingTaskUsers: [],
@@ -77,6 +78,8 @@ const marketing = (state = initialState, action) => {
       'currentUser', action.initialData.currentUser
     ).set(
       'filter', Object.assign({}, state.get('filter'))
+    ).set(
+      'permissions',action.initialData.userPermissions
     ).set(
       'pagination', Object.assign({}, state.get('pagination'), {
         generalTaskCount: action.initialData.generalTaskCount,

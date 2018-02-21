@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import moment from 'moment';
 import safeMoment from '~/lib/safe-moment';
+import { userPermissions } from "~/lib/user-permissions";
 
 export default class TaskFooter extends React.Component {
   constructor(props) {
@@ -41,9 +42,7 @@ export default class TaskFooter extends React.Component {
   }
 
   renderAdminActions() {
-    if (this.props.currentUser && this.props.currentUser.role === 'marketing_staff') {
-      return null;
-    }
+    if (!userPermissions.marketingTasks.canDestroyTask(this.props.permissions)) return <span></span>;
 
     if (this.props.currentMarketingTask.status !== 'disabled') {
       return (

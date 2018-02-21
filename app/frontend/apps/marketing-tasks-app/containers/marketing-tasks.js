@@ -33,6 +33,7 @@ function mapStateToProps(state) {
     sportsTasks: state.marketing.get('sportsTasks'),
     selectedMarketingTask: state.marketing.get('selectedMarketingTask'),
     marketingTaskUsers: state.marketing.get('marketingTaskUsers'),
+    permissions: state.marketing.get('permissions'),
     forms: state.forms
   };
 }
