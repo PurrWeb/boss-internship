@@ -1,5 +1,6 @@
 class DailyReportPDF
   include ActionView::Helpers::NumberHelper
+  include PdfHelper
 
   def initialize(daily_report:)
     @date = daily_report.date
@@ -13,6 +14,8 @@ class DailyReportPDF
       page_size: [800.00, 1600.00],
       page_layout: :landscape,
     ) do |pdf|
+      use_ttf_font(pdf)
+
       pdf.font_size 26
       pdf.text report_title
       pdf.move_down 7

@@ -3,12 +3,15 @@ class RotaPDF
     @table_data = table_data
   end
   attr_reader :table_data
+  include PdfHelper
 
   def render
     Prawn::Document.new(
       page_size: [800.00, 1500.00],
       page_layout: :landscape,
     ) do |pdf|
+      use_ttf_font(pdf)
+
       pdf.table(
         RotaPDFTableDataArray.new(data: table_data).to_a,
         header: true,

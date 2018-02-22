@@ -1,5 +1,6 @@
 class StaffMemberUpdateDetailsPDF
   include ActionView::Helpers::NumberHelper
+  include PdfHelper
 
   def initialize(user_name:, staff_member_id:, staff_member_name:, changed_attributes:, new_values:, old_values:, update_time:)
     @update_time = update_time
@@ -14,6 +15,8 @@ class StaffMemberUpdateDetailsPDF
 
   def render
     Prawn::Document.new do |pdf|
+      use_ttf_font(pdf)
+
       pdf.text "#{staff_member_name} (id: #{staff_member_id}) - Updates"
       pdf.text "\n"
       pdf.text "Updated by #{user_name} at #{update_time.to_s(:human)}"

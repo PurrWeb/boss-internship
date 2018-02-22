@@ -1,5 +1,6 @@
 class YearlyReportPDF
   include ActionView::Helpers::NumberHelper
+  include PdfHelper
 
   def initialize(venue:, tax_year:, yearly_reports_table:, time_stamp:)
     @venue = venue
@@ -14,6 +15,8 @@ class YearlyReportPDF
       page_size: [800.00, 7300.00],
       page_layout: :landscape,
     ) do |pdf|
+      use_ttf_font(pdf)
+
       pdf.font_size 20
       pdf.text report_header
 
