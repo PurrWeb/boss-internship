@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180219150758) do
+ActiveRecord::Schema.define(version: 20180222161004) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -614,13 +614,13 @@ ActiveRecord::Schema.define(version: 20180219150758) do
   add_index "maintenance_task_images", ["maintenance_task_id"], name: "index_maintenance_task_images_on_maintenance_task_id", using: :btree
 
   create_table "maintenance_task_notes", force: :cascade do |t|
-    t.integer  "maintenance_task_id", limit: 4,   null: false
-    t.integer  "creator_user_id",     limit: 4,   null: false
-    t.string   "note",                limit: 255, null: false
+    t.integer  "maintenance_task_id", limit: 4,     null: false
+    t.integer  "creator_user_id",     limit: 4,     null: false
+    t.text     "note",                limit: 65535, null: false
     t.datetime "disabled_at"
     t.integer  "disabled_by_user_id", limit: 4
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
   end
 
   add_index "maintenance_task_notes", ["creator_user_id"], name: "index_maintenance_task_notes_on_creator_user_id", using: :btree
