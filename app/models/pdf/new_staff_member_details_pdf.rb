@@ -1,5 +1,6 @@
 class NewStaffMemberDetailsPDF
   include ActionView::Helpers::NumberHelper
+  include PdfHelper
 
   def initialize(staff_member)
     @staff_member = staff_member
@@ -8,6 +9,8 @@ class NewStaffMemberDetailsPDF
 
   def render
     Prawn::Document.new do |pdf|
+      use_ttf_font(pdf)
+
       pdf.table(data)
     end.render
   end

@@ -1,5 +1,6 @@
 class ChangeOrderCompletionPDF
   include ActionView::Helpers::NumberHelper
+  include PdfHelper
 
   def initialize(generated_at:, change_orders:)
     @generated_at = generated_at
@@ -12,6 +13,8 @@ class ChangeOrderCompletionPDF
       page_size: [800.00, [1000.00, page_width.to_f].max],
       page_layout: :landscape,
     ) do |pdf|
+      use_ttf_font(pdf)
+
       render_header(
         pdf: pdf,
         generated_at: generated_at

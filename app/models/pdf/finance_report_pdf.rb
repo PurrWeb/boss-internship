@@ -1,5 +1,6 @@
 class FinanceReportPDF
   include ActionView::Helpers::NumberHelper
+  include PdfHelper
 
   def initialize(
     report_title:,
@@ -29,6 +30,8 @@ class FinanceReportPDF
       page_size: [800.00, 1800.00],
       page_layout: :landscape,
     ) do |pdf|
+      use_ttf_font(pdf)
+
       pdf.font_size 20
       pdf.text report_header
 
