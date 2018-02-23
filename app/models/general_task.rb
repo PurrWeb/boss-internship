@@ -1,0 +1,2 @@
+class GeneralTask < MarketingTask
+end

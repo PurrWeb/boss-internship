@@ -87,4 +87,14 @@ class ApplicationController < ActionController::Base
       ).as_json
     end
   end
+
+  def camelized_serializer(resource, serializer, scope = nil, deep_nest = nil)
+    a = ActiveModelSerializers::SerializableResource.new(
+      resource,
+      serializer: serializer,
+      key_transform: :camel_lower,
+      scope: scope,
+      include: deep_nest
+    ).as_json
+  end
 end

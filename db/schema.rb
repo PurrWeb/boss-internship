@@ -654,6 +654,62 @@ ActiveRecord::Schema.define(version: 20180222161004) do
   add_index "maintenance_tasks", ["creator_user_id"], name: "index_maintenance_tasks_on_creator_user_id", using: :btree
   add_index "maintenance_tasks", ["venue_id"], name: "index_maintenance_tasks_on_venue_id", using: :btree
 
+  create_table "marketing_task_notes", force: :cascade do |t|
+    t.integer  "marketing_task_id",   limit: 4,   null: false
+    t.integer  "creator_user_id",     limit: 4,   null: false
+    t.string   "note",                limit: 255, null: false
+    t.datetime "disabled_at"
+    t.integer  "disabled_by_user_id", limit: 4
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "marketing_task_notes", ["creator_user_id"], name: "index_marketing_task_notes_on_creator_user_id", using: :btree
+  add_index "marketing_task_notes", ["marketing_task_id"], name: "index_marketing_task_notes_on_marketing_task_id", using: :btree
+
+  create_table "marketing_task_transitions", force: :cascade do |t|
+    t.string   "to_state",          limit: 255,   null: false
+    t.text     "metadata",          limit: 65535
+    t.integer  "sort_key",          limit: 4,     null: false
+    t.integer  "marketing_task_id", limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "marketing_task_transitions", ["marketing_task_id", "most_recent"], name: "index_marketing_task_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "marketing_task_transitions", ["marketing_task_id", "sort_key"], name: "index_marketing_task_transitions_parent_sort", unique: true, using: :btree
+
+  create_table "marketing_tasks", force: :cascade do |t|
+    t.string   "title",                 limit: 255,   null: false
+    t.string   "type",                  limit: 255,   null: false
+    t.datetime "due_at",                              null: false
+    t.integer  "venue_id",              limit: 4,     null: false
+    t.integer  "created_by_user_id",    limit: 4,     null: false
+    t.integer  "assigned_to_user_id",   limit: 4
+    t.integer  "disabled_by_user_id",   limit: 4
+    t.datetime "disabled_at"
+    t.string   "description",           limit: 255
+    t.string   "size",                  limit: 255
+    t.float    "height_cm",             limit: 24
+    t.float    "width_cm",              limit: 24
+    t.boolean  "facebook_cover_page"
+    t.boolean  "facebook_booster"
+    t.boolean  "print"
+    t.datetime "start_time"
+    t.text     "days",                  limit: 65535
+    t.boolean  "facebook_announcement"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.datetime "completed_at"
+    t.integer  "completed_by_user_id",  limit: 4
+    t.integer  "quantity",              limit: 4
+  end
+
+  add_index "marketing_tasks", ["assigned_to_user_id"], name: "index_marketing_tasks_on_assigned_to_user_id", using: :btree
+  add_index "marketing_tasks", ["completed_by_user_id"], name: "index_marketing_tasks_on_completed_by_user_id", using: :btree
+  add_index "marketing_tasks", ["venue_id"], name: "index_marketing_tasks_on_venue_id", using: :btree
+
   create_table "names", force: :cascade do |t|
     t.string   "first_name", limit: 255, null: false
     t.string   "surname",    limit: 255, null: false

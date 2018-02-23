@@ -8,7 +8,7 @@ class StaffType < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
   validates :role, presence: true, inclusion: { in: ROLES, message: 'is required' }
-  validates :ui_color, presence: true, inclusion: { in: VALID_COLORS, message: 'must be valid' }
+  # validates :ui_color, presence: true, inclusion: { in: VALID_COLORS, message: 'must be valid' }
 
   def security?
     role == SECURITY_ROLE

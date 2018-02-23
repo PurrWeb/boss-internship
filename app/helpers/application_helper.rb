@@ -23,6 +23,16 @@ module ApplicationHelper
     end
   end
 
+  def camelized_serializer(resource, serializer, scope = nil, deep_nest = nil)
+    ActiveModelSerializers::SerializableResource.new(
+      resource,
+      serializer: serializer,
+      key_transform: :camel_lower,
+      scope: scope,
+      include: deep_nest
+    ).to_json.html_safe
+  end
+
   def application_version
     ApplicationVersion.version
   end

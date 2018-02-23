@@ -5,11 +5,12 @@ const BossFormTextarea = ({
   label,
   required,
   style = {},
+  containerClasses = {},
   classNames = '',
   meta: { touched, error, warning },
 }) => {
   return (
-    <div style={style} className="boss-form__field">
+    <div style={style} className={ `boss-form__field ${containerClasses}` }>
       <label className="boss-form__label">
         <span className="boss-form__label-text">{`${label} ${
           required ? '*' : ''

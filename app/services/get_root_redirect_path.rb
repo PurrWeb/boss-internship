@@ -16,6 +16,8 @@ class GetRootRedirectPath
       url_helpers.staff_members_path
     elsif user.food_ops_manager?
       url_helpers.staff_members_path
+    elsif user.marketing_staff?
+      url_helpers.marketing_tasks_path
     else
       raise "unsuppored user role #{user.role} encountered"
     end

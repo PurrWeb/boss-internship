@@ -59,6 +59,8 @@ class User < ActiveRecord::Base
   validates :email_address, presence: true
   validates :invite, presence: true, unless: :first?
 
+  scope :marketing, -> { where(role: MARKETING_ROLE) }
+
   before_create :generate_rollbar_guid
 
   delegate :current_state, to: :state_machine
@@ -91,10 +93,13 @@ class User < ActiveRecord::Base
 
   def self.with_all_venue_access
     where(
-      "role = ? OR role = ? OR role = ?",
+      "role = ? OR role = ? OR role = ? OR role = ? OR role = ? OR role = ?",
       DEV_ROLE,
       ADMIN_ROLE,
-      OPS_MANAGER_ROLE
+      AREA_MANAGER_ROLE,
+      OPS_MANAGER_ROLE,
+      PAYROLL_MANAGER,
+      MARKETING_ROLE
     )
   end
 
@@ -195,7 +200,8 @@ class User < ActiveRecord::Base
     has_effective_access_level?(AccessLevel.area_manager_access_level) ||
       ops_manager? ||
       maintenance_staff? ||
-      payroll_manager?
+      payroll_manager? ||
+      marketing_staff?
   end
 
   def active_for_authentication?
