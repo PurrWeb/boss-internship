@@ -29,7 +29,9 @@ class PayRate < ActiveRecord::Base
   end
 
   def self.selectable_by(user)
-    if user.has_effective_access_level?(AccessLevel.admin_access_level)
+    ability = UserAbility.new(user)
+
+    if ability.can?(:create_admin, :pay_rate)
       pay_rate_options = PayRate.enabled
     else
       pay_rate_options = PayRate.enabled.named
