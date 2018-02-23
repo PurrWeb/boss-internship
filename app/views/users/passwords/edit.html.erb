@@ -6,10 +6,18 @@
 					<h2 class="boss-modal-window__title">Change Password</h2>
 				</div>
 				<div class="boss-modal-window__content">
-					<% if flash["alert"].present? %>
+					<% if flash["alert"].present? || resource.errors.present? %>
 						<div class="boss-modal-window__alert">
 							<div class="boss-alert boss-alert_role_area boss-alert_context_above">
-								<p class="boss-alert__text">There was a problem resetting the password. <%= flash["alert"] %></p>
+								<p class="boss-alert__text">
+                  <span>There was a problem resetting the password.</span>
+                  <% if flash["alert"].present? %>
+                    <span> <%= flash['alert'] %>.</span>
+                  <% end %>
+                  <% if resource.errors["reset_password_token"] %>
+                    <span>Password reset token invalid. Please get a new email and try again.</span>
+                  <% end %>
+                  </p>
 							</div>
 						</div>
 					<% end %>
