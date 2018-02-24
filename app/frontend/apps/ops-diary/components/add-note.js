@@ -11,7 +11,7 @@ class AddNote extends Component {
     const initialValues = {
       title: '',
       text: '',
-      venue: null,
+      venueId: null,
       priority: null,
     };
     return (

@@ -40,9 +40,9 @@ class NoteForm extends Component {
           <div className="boss-form__field boss-form__field_layout_half">
             <Field
               options={this.props.venues}
-              label="Venues"
-              placeholder="Select venues ..."
-              name="venue"
+              label="Venue"
+              placeholder="Select venue ..."
+              name="venueId"
               optionLabel="name"
               optionValue="id"
               component={BossFormSelect}
