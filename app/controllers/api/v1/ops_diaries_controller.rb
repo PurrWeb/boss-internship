@@ -33,7 +33,7 @@ module Api
 
         result = CreateOpsDiaryApiService.new(
           requester: current_user
-        ).call(params: ops_diary_params)
+        ).call(params: create_ops_diary_params)
 
 
         if result.success?
@@ -58,7 +58,7 @@ module Api
         result = OpsDiaryApiService.new(
           requester: current_user,
           ops_diary: ops_diary
-        ).update(params: ops_diary_params)
+        ).update(params: edit_ops_diary_params)
 
         if result.success?
           render(
@@ -130,12 +130,20 @@ module Api
         params[:limit]
       end
 
-      def ops_diary_params
+      def create_ops_diary_params
         {
           title: params.fetch(:title),
           text: params.fetch(:text),
           priority: params.fetch(:priority),
           venueId: params.fetch(:venueId)
+        }
+      end
+
+      def edit_ops_diary_params
+        {
+          title: params.fetch(:title),
+          text: params.fetch(:text),
+          priority: params.fetch(:priority)
         }
       end
 

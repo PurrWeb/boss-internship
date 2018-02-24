@@ -17,8 +17,7 @@ class OpsDiaryApiService
     ops_diary_params = {
       title: params.fetch(:title),
       text: params.fetch(:text),
-      priority: params.fetch(:priority),
-      venue: Venue.find_by(id: params.fetch(:venueId))
+      priority: params.fetch(:priority)
     }
 
     model_service_result = UpdateOpsDiary.new(
