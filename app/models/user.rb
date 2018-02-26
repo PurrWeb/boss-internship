@@ -58,6 +58,7 @@ class User < ActiveRecord::Base
   validates :name, presence: true
   validates :email_address, presence: true
   validates :invite, presence: true, unless: :first?
+  validates_confirmation_of :password
 
   scope :marketing, -> { where(role: MARKETING_ROLE) }
 

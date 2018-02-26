@@ -1,15 +1,62 @@
-<h1>Change your password</h1>
+<main class="boss-page-main">
+	<div class="boss-page-main__content">
+		<div class="boss-page-main__inner">
+			<div class="boss-modal-window boss-modal-window_role_change">
+				<div class="boss-modal-window__header">
+					<h2 class="boss-modal-window__title">Change Password</h2>
+				</div>
+				<div class="boss-modal-window__content">
+					<% if flash["alert"].present? || resource.errors.present? %>
+						<div class="boss-modal-window__alert">
+							<div class="boss-alert boss-alert_role_area boss-alert_context_above">
+								<p class="boss-alert__text">
+                  <span>There was a problem resetting the password.</span>
+                  <% if flash["alert"].present? %>
+                    <span> <%= flash['alert'] %>.</span>
+                  <% end %>
+                  <% if resource.errors["reset_password_token"] %>
+                    <span>Password reset token invalid. Please get a new email and try again.</span>
+                  <% end %>
+                  </p>
+							</div>
+						</div>
+					<% end %>
 
-<%= bootstrap_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= devise_error_messages! %>
+					<div class="boss-modal-window__form">
+						<!-- Form start -->
+						<%= boss_form_for(resource, as: resource_name, url: password_path(resource_name), method: :put, html: { class: 'boss-form'}) do |f| %>
+							<%= f.hidden_field :reset_password_token %>
+							<div class="boss-form__field">
+								<label class="boss-form__label">
+									<span class="boss-form__label-text">New Password</span>
+									<%= f.password_field :password, label: nil, autofocus: true, autocomplete: "off", class: 'boss-form__input' %>
+								</label>
+							</div>
+							<div class="boss-form__field">
+								<label class="boss-form__label">
+										<span class="boss-form__label-text">Confirm Password</span>
+										<%= f.password_field :password_confirmation, label: nil, autocomplete: "off", class: 'boss-form__input' %>
+								</label>
+							</div>
+							<div class="boss-form__field">
+								<label class="boss-form__checkbox-label">
+									<input name="show" value="show" type="checkbox" class="boss-form__checkbox-input">
+									<span class="boss-form__checkbox-label-text">Show Password</span>
+								</label>
+							</div>
+							<div class="boss-form__field boss-form__field_justify_center boss-form__field_position_last">
+								<%= f.submit "Change my password", class: ['boss-button', 'boss-button_role_primary'] %>
+							</div>
 
-  <%= f.hidden_field :reset_password_token %>
+							<div class="boss-form__field boss-form__field_justify_center boss-form__field_position_last">
+								<%= render "users/shared/links" %>
+							</div>
+						<% end %>
+						<!-- Form end -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
 
-  <%= f.password_field :password, autofocus: true, autocomplete: "off" %>
-
-  <%= f.password_field :password_confirmation, autocomplete: "off" %>
-
-  <%= f.submit "Change my password", class: ['boss2-button'] %>
-<% end %>
-
-<%= render "users/shared/links" %>

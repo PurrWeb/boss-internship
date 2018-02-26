@@ -1,4 +1,6 @@
 class Users::PasswordsController < Devise::PasswordsController
+  before_filter :set_new_layout
+
   # GET /resource/password/new
   # def new
   #   super
@@ -21,7 +23,7 @@ class Users::PasswordsController < Devise::PasswordsController
   def edit
     user = User.with_reset_password_token(params[:reset_password_token])
     if user.present? && user.reset_password_sent_at.nil?
-      flash[:error] = 'The token could not be used because it expired.'
+      flash[:alert] = 'The token could not be used because it expired.'
       redirect_to new_user_session_path
     else
       super
@@ -29,9 +31,15 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   # PUT /resource/password
-  # def update
-  #   super
-  # end
+   def update
+    user = User.with_reset_password_token(params[:user][:reset_password_token])
+    if user.present? && user.reset_password_sent_at.nil?
+      flash[:alert] = 'The token could not be used because it expired.'
+      redirect_to new_user_session_path
+    else
+      super
+    end
+   end
 
   # protected
 
@@ -43,4 +51,12 @@ class Users::PasswordsController < Devise::PasswordsController
   # def after_sending_reset_password_instructions_path_for(resource_name)
   #   super(resource_name)
   # end
+
+  def set_new_layout
+    @current_layout = 'newLayout';
+  end
+
+  def bundle_script
+    @bundle_script = SourcemapHelper.script_path
+  end
 end

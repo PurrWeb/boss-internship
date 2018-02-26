@@ -13,13 +13,13 @@ module PageObject
     end
 
     page_action :change_password_to do |new_password|
-      fill_in('Password', with: new_password)
-      fill_in('Password confirmation', with: new_password)
+      fill_in('New Password', with: new_password)
+      fill_in('Confirm Password', with: new_password)
       click_button('Change my password')
     end
 
     def assert_on_correct_page
-      expect(find('h1').text).to  eq('Change your password')
+      expect(find('h2.boss-modal-window__title').text).to  eq('Change Password')
     end
   end
 end

@@ -47,7 +47,7 @@ RSpec.feature 'Accepting an invite' do
 
     scenario 'Attempting to accept an already accepted invite' do
       accept_invite_page.surf_to
-      sign_in_page.ensure_flash_warning_message_displayed('The invite has already been used please sign in to continue')
+      sign_in_page.ensure_flash_error_message_displayed('The invite has already been used please sign in to continue')
     end
   end
 

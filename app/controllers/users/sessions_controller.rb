@@ -1,5 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
-# before_filter :configure_sign_in_params, only: [:create]
+  before_filter :set_new_layout
+  # before_filter :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
   # def new
@@ -23,4 +24,12 @@ class Users::SessionsController < Devise::SessionsController
   # def configure_sign_in_params
   #   devise_parameter_sanitizer.for(:sign_in) << :attribute
   # end
+
+  def set_new_layout
+    @current_layout = 'newLayout';
+  end
+
+  def bundle_script
+    @bundle_script = SourcemapHelper.script_path
+  end
 end

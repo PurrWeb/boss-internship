@@ -1,9 +1,27 @@
-<h1>Forgot your password?</h1>
-
-<%= bootstrap_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= f.email_field :email, label: 'Email', autofocus: true %>
-
-  <%= f.submit "Send me reset password instructions", class: ['boss2-button'] %>
-<% end %>
-
-<%= render "users/shared/links" %>
+<div class="boss-page-main__inner">
+	<div class="boss-modal-window boss-modal-window_role_reset">
+		<div class="boss-modal-window__header">
+			<h2 class="boss-modal-window__title">Forgot Your Password?</h2>
+		</div>
+		<div class="boss-modal-window__content">
+			<div class="boss-modal-window__form">
+				<!-- Form start -->
+				<%= boss_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+					<div class="boss-form__field">
+						<label class="boss-form__label">
+							<span class="boss-form__label-text">Email</span>
+							<%= f.email_field :email, label: nil, autofocus: true, class: 'boss-form__input' %>
+						</label>
+					</div>
+					<div class="boss-form__field boss-form__field_justify_center">
+						<input class="boss-button boss-button_role_primary boss-button_adjust_wrap" type="submit" value="Send me reset password instructions" />
+					</div>
+					<div class="boss-form__field boss-form__field_justify_center boss-form__field_position_last">
+						<%= render "users/shared/links" %>
+					</div>
+				<% end %>
+				<!-- Form end -->
+			</div>
+		</div>
+	</div>
+</div>
