@@ -433,7 +433,7 @@ class UserAbility
       end
 
       can [:update, :destroy, :restore], MarketingTask do |marketing_task|
-          user.has_effective_access_level?(AccessLevel.area_manager_access_level) &&
+          user.has_effective_access_level?(AccessLevel.manager_access_level) &&
             can_manage_venue?(user, marketing_task.venue)
       end
     end

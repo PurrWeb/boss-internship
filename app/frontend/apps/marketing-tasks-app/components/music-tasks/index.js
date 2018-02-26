@@ -23,21 +23,6 @@ export default class MusicTasks extends React.Component {
     });
   }
 
-  handleAddTaskClick() {
-    this.props.setFrontendState({ showCreateTaskModal: true, taskType: 'music' });
-    this.props.setSelectedMarketingTask(null);
-  }
-
-  renderAddButton() {
-    if (this.props.currentUser && this.props.currentUser.role === 'marketing_staff') {
-      return null;
-    }
-
-    return (
-      <button className="boss-button boss-button_type_small boss-button_role_add boss-board__action" type="button" onClick={ this.handleAddTaskClick.bind(this) }>Add</button>
-    );
-  }
-
   renderTasks() {
     if (this.props.musicTasks.length == 0) {
       return (
@@ -81,13 +66,15 @@ export default class MusicTasks extends React.Component {
   }
 
   render() {
+    let props = Object.assign({ ...this.props }, { taskType: 'music' });
+
     return (
       <section className="boss-board boss-board_context_stack" data-section-name="MusicTask">
         <header className="boss-board__header boss-board__header_role_tasks-music">
           <h2 className="boss-board__title boss-board__title_role_tasks-music">Music</h2>
 
           <div className="boss-board__button-group">
-            { this.renderAddButton() }
+            <AddTaskButton { ...props } />
             <button className="boss-board__switch boss-board__switch_type_angle boss-board__switch_state_opened" type="button"></button>
           </div>
         </header>
