@@ -500,6 +500,7 @@ class UserAbility
   end
 
   def can_manage_venue?(user, venue)
+    raise 'Attempt to compare nil venue' unless venue.present?
     user.ops_manager? ||
     user.has_effective_access_level?(AccessLevel.area_manager_access_level) ||
     (
