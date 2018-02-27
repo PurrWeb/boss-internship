@@ -1,9 +1,11 @@
 class AccessLevel
+  # These values must be mirrored in js user-permissions
   DEV_ACCESS_LEVEL = 'dev'
   ADMIN_ACCESS_LEVEL = 'admin'
   AREA_MANAGER_ACCESS_LEVEL = 'area_manager'
   MANAGER_ACCESS_LEVEL = 'manager'
   RESTRICTED_ACCESS_LEVEL = 'restricted'
+  # These values must be mirrored in js user-permissions
   LEVEL_DATA = {
     DEV_ACCESS_LEVEL => 4,
     ADMIN_ACCESS_LEVEL => 3,

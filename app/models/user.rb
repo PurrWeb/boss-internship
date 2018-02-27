@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  # These values must be mirrored in js user-permissions
   DEV_ROLE = 'dev'
   ADMIN_ROLE = 'admin'
   AREA_MANAGER_ROLE = 'area_manager'

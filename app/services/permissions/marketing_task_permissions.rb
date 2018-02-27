@@ -12,7 +12,7 @@ module Permissions
     end
 
     def access_level
-      AccessLevel.area_manager_access_level
+      AccessLevel.for_user_role(user.role)
     end
 
     def can_view_page
@@ -21,6 +21,10 @@ module Permissions
 
     def can_create_tasks
       ability.can?(:create, :marketing_tasks)
+    end
+
+    def accessible_venues
+      AccessibleVenuesQuery.new(user).all
     end
 
     private

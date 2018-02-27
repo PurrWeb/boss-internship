@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import oFetch from 'o-fetch';
 
 import { setInitialData } from '../actions/initial-load'
 import { setFilterParams, queryFilteredMarketingTasks, queryPaginatedMarketingTasks } from '../actions/filter'
@@ -19,22 +20,23 @@ import MainDashboard from '../components/main-dashboard'
 import MainContent from '../components/main-content'
 
 function mapStateToProps(state) {
+  const marketingData = oFetch(state, 'marketing').toJS();
   return {
-    frontend: state.marketing.get('frontend'),
-    filter: state.marketing.get('filter'),
-    pagination: state.marketing.get('pagination'),
-    currentUser: state.marketing.get('currentUser'),
-    venues: state.marketing.get('venues'),
-    statuses: state.marketing.get('statuses'),
-    marketingTasks: state.marketing.get('marketingTasks'),
-    generalTasks: state.marketing.get('generalTasks'),
-    artworkTasks: state.marketing.get('artworkTasks'),
-    musicTasks: state.marketing.get('musicTasks'),
-    sportsTasks: state.marketing.get('sportsTasks'),
-    selectedMarketingTask: state.marketing.get('selectedMarketingTask'),
-    marketingTaskUsers: state.marketing.get('marketingTaskUsers'),
-    permissions: state.marketing.get('permissions'),
-    forms: state.forms
+    frontend: oFetch(marketingData, 'frontend'),
+    filter: oFetch(marketingData, 'filter'),
+    pagination: oFetch(marketingData, 'pagination'),
+    currentUser: oFetch(marketingData, 'currentUser'),
+    venues: oFetch(marketingData, 'venues'),
+    statuses: oFetch(marketingData, 'statuses'),
+    marketingTasks: oFetch(marketingData, 'marketingTasks'),
+    generalTasks: oFetch(marketingData, 'generalTasks'),
+    artworkTasks: oFetch(marketingData, 'artworkTasks'),
+    musicTasks: oFetch(marketingData, 'musicTasks'),
+    sportsTasks: oFetch(marketingData, 'sportsTasks'),
+    selectedMarketingTask: oFetch(marketingData, 'selectedMarketingTask'),
+    marketingTaskUsers: oFetch(marketingData, 'marketingTaskUsers'),
+    permissions: oFetch(marketingData, 'permissions'),
+    forms: oFetch(state, 'forms')
   };
 }
 
@@ -77,7 +79,7 @@ export class MarketingTasksContainer extends React.Component {
   }
 
   componentWillMount() {
-    this.props.setInitialData(window.boss.marketing);
+    this.props.setInitialData(oFetch(window.boss, 'marketing'));
   }
 
   closeErrorBox() {

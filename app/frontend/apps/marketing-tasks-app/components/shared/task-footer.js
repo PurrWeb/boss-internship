@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import moment from 'moment';
 import safeMoment from '~/lib/safe-moment';
+import oFetch from 'o-fetch';
 import { userPermissions } from "~/lib/user-permissions";
 
 export default class TaskFooter extends React.Component {
@@ -42,19 +43,43 @@ export default class TaskFooter extends React.Component {
   }
 
   renderAdminActions() {
-    if (!userPermissions.marketingTasks.canDestroyTask(this.props.permissions)) return <span></span>;
+    const currentMarketingTask = oFetch(this.props, 'currentMarketingTask');
+    if (oFetch(currentMarketingTask, 'status') !== 'disabled') {
+      return this.renderEnabledTaskAdminActions(currentMarketingTask)
+    } else {
+      return this.renderDisabledTaskAdminActions(currentMarketingTask)
+    }
+  }
 
-    if (this.props.currentMarketingTask.status !== 'disabled') {
+  renderEnabledTaskAdminActions(currentMarketingTask){
+    const permissions = oFetch(this.props, 'permissions');
+    const marketingTaskPermissions = oFetch(userPermissions, 'marketingTasks');
+    const canEditTask = marketingTaskPermissions.canEditTask({marketingTask: currentMarketingTask, permissions: this.props.permissions});
+    const canDestroyTask = marketingTaskPermissions.canDestroyTask({marketingTask: currentMarketingTask, permissions: this.props.permissions});
+
+    if (!canEditTask && !canDestroyTask) {
+      return <span></span>;
+    } else{
       return (
         <div className="boss-table__cell">
           <div className="boss-table__info">
             <div className="boss-table__actions">
-              <button className="boss-button boss-button_type_small boss-button_role_edit-light-alt boss-table__action" onClick={ this.handleEditClick.bind(this) }>Edit</button>
-              <button className="boss-button boss-button_type_small boss-button_role_cancel-light boss-table__action" onClick={ this.handleDeleteClick.bind(this) }>Delete</button>
+              { canEditTask && <button className="boss-button boss-button_type_small boss-button_role_edit-light-alt boss-table__action" onClick={ this.handleEditClick.bind(this) }>Edit</button> }
+              { canDestroyTask && <button className="boss-button boss-button_type_small boss-button_role_cancel-light boss-table__action" onClick={ this.handleDeleteClick.bind(this) }>Delete</button> }
             </div>
           </div>
         </div>
-      );
+      )
+    }
+  }
+
+  renderDisabledTaskAdminActions(currentMarketingTask){
+    const permissions = oFetch(this.props, 'permissions');
+    const marketingTaskPermissions = oFetch(userPermissions, 'marketingTasks');
+    const canRestoreTask = marketingTaskPermissions.canRestoreTask({ marketingTask: currentMarketingTask, permissions: permissions });
+
+    if (!canRestoreTask) {
+      return <span></span>
     } else {
       return (
         <div className="boss-table__cell">
