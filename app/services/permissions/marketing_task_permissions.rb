@@ -1,5 +1,5 @@
 module Permissions
-  class MarketingTaskPermission
+  class MarketingTaskPermissions
     include ActiveRecord::Serialization
     attr_reader :user
 

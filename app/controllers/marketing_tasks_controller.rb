@@ -24,7 +24,7 @@ class MarketingTasksController < ApplicationController
       music_task_count: marketing_task_filter.music_tasks.length,
       sports_task_count: marketing_task_filter.sports_tasks.length,
       artwork_task_count: marketing_task_filter.artwork_tasks.length,
-      user_permissions: Permissions::MarketingTaskPermission.new(current_user)
+      user_permissions: Permissions::MarketingTaskPermissions.new(current_user)
     }
   end
 
