@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import moment from 'moment';
 import safeMoment from '~/lib/safe-moment';
+import oFetch from 'o-fetch';
 import { userPermissions } from "~/lib/user-permissions";
 
 import ToolTip from '../../../clock-in-out/components/tooltip';
@@ -25,9 +26,12 @@ export default class StatusBadge extends React.Component {
   }
 
   activateToolTip() {
-    if (!userPermissions.marketingTasks.canUpdateStatusTask(this.props.permissions)) return;
+    const permissions = oFetch(this.props, 'permissions');
+    const marketingTaskPermissions = oFetch(userPermissions, 'marketingTasks');
+    const currentMarketingTask = oFetch(this.props, 'currentMarketingTask');
+    if (!marketingTaskPermissions.canUpdateTaskStatus({marketingTask: currentMarketingTask, permissions: permissions})) return;
 
-    if (this.props.currentMarketingTask.status === 'disabled') return;
+    if (oFetch(currentMarketingTask, 'status') === 'disabled') return;
 
     this.setState({ isTooltipActive: true });
   }
@@ -73,7 +77,10 @@ export default class StatusBadge extends React.Component {
   }
 
   onPendingClick() {
-    if (!userPermissions.marketingTasks.canUpdateStatusTask(this.props.permissions)) return;
+    const permissions = oFetch(this.props, 'permissions');
+    const marketingTaskPermissions = oFetch(userPermissions, 'marketingTasks');
+    const currentMarketingTask = oFetch(this.props, 'currentMarketingTask');
+    if (!marketingTaskPermissions.canUpdateTaskStatus({marketingTask: currentMarketingTask, permissions: permissions})) return;
 
     this.setState({ pendingDisabled: true });
 
@@ -85,7 +92,10 @@ export default class StatusBadge extends React.Component {
   }
 
   onCompletedClick() {
-    if (!userPermissions.marketingTasks.canUpdateStatusTask(this.props.permissions)) return;
+    const permissions = oFetch(this.props, 'permissions');
+    const marketingTaskPermissions = oFetch(userPermissions, 'marketingTasks');
+    const currentMarketingTask = oFetch(this.props, 'currentMarketingTask');
+    if (!marketingTaskPermissions.canUpdateTaskStatus({marketingTask: currentMarketingTask, permissions: permissions})) return;
 
     this.setState({ completedDisabled: true });
 

@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import constants from '../constants';
 import oFetch from "o-fetch";
+import {RESTRICTED_ACCESS_LEVEL, MANAGER_ROLE} from '~/lib/user-permissions';
 
 import notify from '~/components/global-notification';
 
@@ -12,7 +13,12 @@ const initialState = Immutable.Map({
   artworkTasks: [],
   musicTasks: [],
   sportsTasks: [],
-  permissions: {},
+  permissions: {
+    userRole: MANAGER_ROLE,
+    accessLevel: RESTRICTED_ACCESS_LEVEL,
+    canViewPage: 'true',
+    canCreateTasks: 'false'
+  },
   currentUser: null,
   selectedMarketingTask: null,
   marketingTaskUsers: [],
@@ -79,7 +85,7 @@ const marketing = (state = initialState, action) => {
     ).set(
       'filter', Object.assign({}, state.get('filter'))
     ).set(
-      'permissions',action.initialData.userPermissions
+      'permissions', oFetch(action.initialData, 'userPermissions')
     ).set(
       'pagination', Object.assign({}, state.get('pagination'), {
         generalTaskCount: action.initialData.generalTaskCount,

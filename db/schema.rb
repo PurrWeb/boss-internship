@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180222161004) do
+ActiveRecord::Schema.define(version: 20180228113905) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -655,13 +655,13 @@ ActiveRecord::Schema.define(version: 20180222161004) do
   add_index "maintenance_tasks", ["venue_id"], name: "index_maintenance_tasks_on_venue_id", using: :btree
 
   create_table "marketing_task_notes", force: :cascade do |t|
-    t.integer  "marketing_task_id",   limit: 4,   null: false
-    t.integer  "creator_user_id",     limit: 4,   null: false
-    t.string   "note",                limit: 255, null: false
+    t.integer  "marketing_task_id",   limit: 4,     null: false
+    t.integer  "creator_user_id",     limit: 4,     null: false
+    t.text     "note",                limit: 65535, null: false
     t.datetime "disabled_at"
     t.integer  "disabled_by_user_id", limit: 4
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
   end
 
   add_index "marketing_task_notes", ["creator_user_id"], name: "index_marketing_task_notes_on_creator_user_id", using: :btree
@@ -689,7 +689,7 @@ ActiveRecord::Schema.define(version: 20180222161004) do
     t.integer  "assigned_to_user_id",   limit: 4
     t.integer  "disabled_by_user_id",   limit: 4
     t.datetime "disabled_at"
-    t.string   "description",           limit: 255
+    t.text     "description",           limit: 65535
     t.string   "size",                  limit: 255
     t.float    "height_cm",             limit: 24
     t.float    "width_cm",              limit: 24

@@ -425,6 +425,10 @@ class UserAbility
         )
       end
 
+      can :create, :marketing_tasks do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
       can [:view, :assign, :update_status, :create_note, :create], MarketingTask do |marketing_task|
         user.marketing_staff? || (
           user.has_effective_access_level?(AccessLevel.manager_access_level) &&
@@ -500,6 +504,7 @@ class UserAbility
   end
 
   def can_manage_venue?(user, venue)
+    raise 'Attempt to compare nil venue' unless venue.present?
     user.ops_manager? ||
     user.has_effective_access_level?(AccessLevel.area_manager_access_level) ||
     (
