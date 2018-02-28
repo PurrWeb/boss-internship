@@ -257,14 +257,17 @@ class UserAbility
       end
 
       can [:view], :safe_checks do
+        user.payroll_manager? ||
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :view, SafeChecksPage do |safe_checks_page|
+        user.payroll_manager? ||
         can_manage_venue?(user, safe_checks_page.venue)
       end
 
       can [:create, :view, :update], SafeCheck do |safe_check|
+        user.payroll_manager? ||
         can_manage_venue?(user, safe_check.venue)
       end
 
