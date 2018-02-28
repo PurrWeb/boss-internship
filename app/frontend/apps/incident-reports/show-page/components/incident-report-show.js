@@ -1,6 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 import RotaDate from "~/lib/rota-date"
+import oFetch from 'o-fetch';
+import utils from "~/lib/utils";
+import safeMoment from "~/lib/safe-moment";
 
 export default function IncidentReportShow({incidentReport}) {
   function BoardItem({label, children}) {
@@ -17,12 +20,13 @@ export default function IncidentReportShow({incidentReport}) {
   }
 
   function renderBoard(report) {
+    const sIncidentTime = oFetch(report, 'incidentTime');
     return (
       <div className="boss-report__group boss-report__group_role_board">
         <ul className="boss-report__summary">
           <BoardItem label="Date and Time of Incident">
             <p className="boss-report__summary-text boss-report__summary-text_role_time boss-report__summary-text_marked">
-              { moment(new RotaDate({ shiftStartsAt: report.incidentTime }).getDateOfRota()).format('DD-MM-YYYY') }
+              { safeMoment.iso8601Parse(sIncidentTime).format(utils.commonDateFormatTimeOnly()) } {moment(new RotaDate({ shiftStartsAt: sIncidentTime }).getDateOfRota()).format(oFetch(utils, 'commonDateFormat'))}
             </p>
           </BoardItem>
           <BoardItem label="Exact Location of Incident">

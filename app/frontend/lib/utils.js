@@ -144,6 +144,12 @@ var utils =  {
         return moment(date).format("DD-MM-YYYY");
     },
     commonDateFormat: 'DD-MM-YYYY',
+    commonDateFormatWithTime(){
+      return 'HH:mm DD-MM-YYYY';
+    },
+    commonDateFormatTimeOnly(){
+      return 'HH:mm';
+    },
     capitalizeFirstCharacter(str) {
         if (str.length === 0) {
             return str;
