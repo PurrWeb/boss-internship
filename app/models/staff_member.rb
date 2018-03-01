@@ -6,6 +6,8 @@ class StaffMember < ActiveRecord::Base
 
   GENDERS = [MALE_GENDER, FEMALE_GENDER]
 
+  NATIONAL_INSURANCE_NUMBER_REGEX = /^[A-Z]{2}[0-9]{6}(A|B|C|D|F)$/
+
   include Statesman::Adapters::ActiveRecordQueries
 
   belongs_to :creator, class_name: 'User'
@@ -329,20 +331,16 @@ class StaffMember < ActiveRecord::Base
     /^[0-9]+$/
   end
 
-  def national_insurance_number_regex
-    /^[A-Z]{2}[0-9]{6}(A|B|C|D|F)$/
-  end
-
   def normalise_national_insurance_number
     if national_insurance_number.present? &&
-      !national_insurance_number_regex.match(national_insurance_number)
+      !NATIONAL_INSURANCE_NUMBER_REGEX.match(national_insurance_number)
       self.national_insurance_number = national_insurance_number.upcase.gsub(/(\W|_)/,'')
     end
   end
 
   def national_insurance_number_valid
     if national_insurance_number.present? &&
-      !national_insurance_number_regex.match(national_insurance_number)
+      !NATIONAL_INSURANCE_NUMBER_REGEX.match(national_insurance_number)
       errors.add(:national_insurance_number, 'format must be 2 letters, followed by 6 numbers, and a letter ')
     end
   end
