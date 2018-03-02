@@ -820,6 +820,18 @@ ActiveRecord::Schema.define(version: 20180509163419) do
 
   add_index "pay_rates", ["pay_rate_type"], name: "index_pay_rates_on_pay_rate_type", using: :btree
 
+  create_table "payments", force: :cascade do |t|
+    t.integer  "staff_member_id",     limit: 4, null: false
+    t.integer  "created_by_user_id",  limit: 4, null: false
+    t.date     "date",                          null: false
+    t.datetime "disabled_at"
+    t.integer  "cents",               limit: 4, null: false
+    t.datetime "received_at"
+    t.integer  "disabled_by_user_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "pool_loft_table_session_edits", force: :cascade do |t|
     t.string   "guid",                 limit: 255, null: false
     t.integer  "table_session_id",     limit: 4,   null: false
