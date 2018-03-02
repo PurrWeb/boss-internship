@@ -11,6 +11,7 @@ class Payment < ActiveRecord::Base
   validates :date, presence: true
   validates :cents, presence: true
   validates :received_at, presence: true, if: :marked_as_received?
+  validates :received_at, presence: false, unless: :marked_as_received?
 
   def state_machine
     @state_machine ||= PaymentStateMachine.new(
