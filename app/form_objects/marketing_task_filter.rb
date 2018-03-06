@@ -18,8 +18,9 @@ class MarketingTaskFilter
   end
   attr_reader :show_only_incomplete, :due_date_start, :due_date_end, :completed_at_start, :assessible_venues, :completed_at_end, :statuses, :venues, :late_task_only, :page, :assigned_to_user_id, :assigned_to_self, :current_user
 
-  def query
+  def query(relation: nil)
     MarketingTasksIndexQuery.new(
+      relation: relation,
       current_user: current_user,
       assigned_to_user_id: assigned_to_user_id,
       late_task_only: late_task_only,

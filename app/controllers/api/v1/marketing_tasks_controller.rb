@@ -9,7 +9,9 @@ module Api
         authorize! :view, :marketing_tasks_page
 
         marketing_task_filter = MarketingTaskFilter.new(current_user, params)
-        marketing_tasks_query = marketing_task_filter.query
+        marketing_tasks_query = marketing_task_filter.query(
+          relation: MarketingTask.includes(:venue, :created_by_user, :disabled_by_user, :marketing_task_transitions, :assigned_to_user, :completed_by_user, :marketing_task_notes)
+        )
         marketing_tasks = marketing_tasks_query.paginated(
           page: params[:page],
           tasks_per_page: 5

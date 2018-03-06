@@ -1,5 +1,6 @@
 class MarketingTasksIndexQuery
   def initialize(params)
+    @relation = params[:relation] || MarketingTask
     @current_user = params.fetch(:current_user)
     @assigned_to_user = params[:assigned_to_user_id]
     @late_task_only = params[:late_task_only]
@@ -12,7 +13,7 @@ class MarketingTasksIndexQuery
     @completed_at_start = params[:completed_at_start]
     @completed_at_end = params[:completed_at_end]
   end
-  attr_reader :current_user, :assigned_to_user_id, :late_task_only, :now, :date, :statuses, :venues, :due_date_start, :due_date_end, :completed_at_start, :completed_at_end
+  attr_reader :relation, :current_user, :assigned_to_user_id, :late_task_only, :now, :date, :statuses, :venues, :due_date_start, :due_date_end, :completed_at_start, :completed_at_end
 
   def paginated(page:, tasks_per_page:)
     paginate(
@@ -60,7 +61,7 @@ class MarketingTasksIndexQuery
   end
   def marketing_tasks
     @marketing_tasks ||= begin
-      result = MarketingTask.in_state(statuses).where(venue: venues)
+      result = relation.in_state(statuses).where(venue: venues)
 
       if assigned_to_user_id.present?
         result = result.where(assigned_to_user_id: assigned_to_user_id)

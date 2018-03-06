@@ -9,11 +9,14 @@ class MarketingTasksController < ApplicationController
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     venues = AccessibleVenuesQuery.new(current_user).all
     marketing_task_filter = MarketingTaskFilter.new(current_user, {})
-    marketing_tasks_query = marketing_task_filter.query
+    marketing_tasks_query = marketing_task_filter.query(
+      relation: MarketingTask.includes(:venue, :created_by_user, :disabled_by_user, :marketing_task_transitions, :assigned_to_user, :completed_by_user, :marketing_task_notes)
+    )
     marketing_tasks = marketing_tasks_query.paginated(
       page: params[:page],
       tasks_per_page: 5
     )
+
     statuses = (current_user.marketing_staff?) ? ['pending', 'completed'] : MarketingTaskStateMachine.states
     marketing_task_users = User.marketing
 
