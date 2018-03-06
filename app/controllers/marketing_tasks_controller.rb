@@ -9,7 +9,14 @@ class MarketingTasksController < ApplicationController
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     venues = AccessibleVenuesQuery.new(current_user).all
     marketing_task_filter = MarketingTaskFilter.new(current_user, {})
-    marketing_tasks = marketing_task_filter.fetch
+    marketing_tasks_query = marketing_task_filter.query(
+      relation: MarketingTask.includes(:venue, :created_by_user, :disabled_by_user, :marketing_task_transitions, :assigned_to_user, :completed_by_user, :marketing_task_notes)
+    )
+    marketing_tasks = marketing_tasks_query.paginated(
+      page: params[:page],
+      tasks_per_page: 5
+    )
+
     statuses = (current_user.marketing_staff?) ? ['pending', 'completed'] : MarketingTaskStateMachine.states
     marketing_task_users = User.marketing
 
@@ -20,10 +27,10 @@ class MarketingTasksController < ApplicationController
       venues: venues,
       statuses: statuses,
       marketing_task_users: marketing_task_users,
-      general_task_count: marketing_task_filter.general_tasks.length,
-      music_task_count: marketing_task_filter.music_tasks.length,
-      sports_task_count: marketing_task_filter.sports_tasks.length,
-      artwork_task_count: marketing_task_filter.artwork_tasks.length,
+      general_task_count: marketing_tasks_query.general_task_count,
+      music_task_count: marketing_tasks_query.music_task_count,
+      sports_task_count: marketing_tasks_query.sports_task_count,
+      artwork_task_count: marketing_tasks_query.artwork_task_count,
       user_permissions: Permissions::MarketingTaskPermissions.new(current_user)
     }
   end

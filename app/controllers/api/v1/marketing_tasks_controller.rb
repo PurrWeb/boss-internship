@@ -9,7 +9,13 @@ module Api
         authorize! :view, :marketing_tasks_page
 
         marketing_task_filter = MarketingTaskFilter.new(current_user, params)
-        marketing_tasks = marketing_task_filter.fetch
+        marketing_tasks_query = marketing_task_filter.query(
+          relation: MarketingTask.includes(:venue, :created_by_user, :disabled_by_user, :marketing_task_transitions, :assigned_to_user, :completed_by_user, :marketing_task_notes)
+        )
+        marketing_tasks = marketing_tasks_query.paginated(
+          page: params[:page],
+          tasks_per_page: 5
+        )
 
         serialized_marketing_tasks = camelized_collection(
           marketing_tasks,
@@ -21,10 +27,10 @@ module Api
         render json: {
           marketingTasks: serialized_marketing_tasks,
           page: params[:page],
-          generalTaskCount: marketing_task_filter.general_tasks.length,
-          musicTaskCount: marketing_task_filter.music_tasks.length,
-          sportsTaskCount: marketing_task_filter.sports_tasks.length,
-          artworkTaskCount: marketing_task_filter.artwork_tasks.length,
+          generalTaskCount: marketing_tasks_query.general_task_count,
+          musicTaskCount: marketing_tasks_query.music_task_count,
+          sportsTaskCount: marketing_tasks_query.sports_task_count,
+          artworkTaskCount: marketing_tasks_query.artwork_task_count
         }
       end
 
