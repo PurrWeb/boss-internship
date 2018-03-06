@@ -1,17 +1,27 @@
-import React from "react"
-import AppComponent from "../app-component"
-import HoursConfirmationView from "./hours-confirmation-view"
-import { Provider } from "react-redux"
-import actionCreators from "~/redux/actions"
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import configureStore from '~/apps/store';
 
-export default class HoursConfirmationApp extends AppComponent {
-    componentWillMount(){
-        var viewData = this.getViewData();
-        this.store.dispatch(actionCreators().loadInitialHoursConfirmationAppState(viewData))
+import reducers from './redux';
+import { loadInitialData } from './redux/actions';
+import HoursConfirmationContainer from './containers/hours-confirmation-container';
+
+export default class HoursConfirmationApp extends Component {
+  componentWillMount() {
+    const { accessToken } = this.props;
+    if (!accessToken) {
+      throw new Error('Access token must be present');
     }
-    render(){
-        return <Provider store={this.store}>
-            <HoursConfirmationView />
-        </Provider>
-    }
+    window.boss.accessToken = accessToken;
+    this.store = configureStore(reducers);
+    this.store.dispatch(loadInitialData(this.props));
+  }
+
+  render() {
+    return (
+      <Provider store={this.store}>
+        <HoursConfirmationContainer />
+      </Provider>
+    );
+  }
 }

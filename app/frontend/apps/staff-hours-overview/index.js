@@ -2,7 +2,7 @@ import React from "react"
 import AppComponent from "../app-component"
 import { Provider } from "react-redux"
 import actionCreators from "~/redux/actions"
-import StaffDayList from "../hours-confirmation/containers/staff-day-list"
+import StaffDayList from "../hours-confirmation2/containers/staff-day-list"
 
 export default class StaffHoursOverviewApp extends AppComponent {
   componentWillMount() {
