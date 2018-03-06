@@ -1,7 +1,6 @@
 require 'will_paginate/array'
 
 class MarketingTaskFilter
-
   def initialize(current_user, params = {})
     @current_user = current_user
     @accessible_venues = AccessibleVenuesQuery.new(current_user).all
