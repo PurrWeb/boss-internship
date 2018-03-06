@@ -174,11 +174,10 @@ module Api
       end
 
       def add_artwork
-        authorize! :manage, ArtworkTask.new
-
         artwork = ArtworkTask.new(
           artwork_params.merge(created_by_user: current_user)
         )
+        authorize! :create, artwork
 
         if artwork.save
           render json: artwork,
