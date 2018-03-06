@@ -55,7 +55,7 @@ class HoursConfirmationController < ApplicationController
 
       rotas = Rota.where(
         date: clock_in_days.map(&:date).uniq,
-        venue: venues
+        venue: venue
       ).includes(:venue)
 
       rota_shifts = RotaShift.where(
@@ -111,8 +111,8 @@ class HoursConfirmationController < ApplicationController
       staff_types = StaffType.all
 
       clock_in_periods = ClockInPeriod.where(
-        clock_in_day: clock_in_days
-      ).includes(:clock_in_day)
+        clock_in_day: clock_in_days,
+      ).includes(:clock_in_day, :clock_in_events, clock_in_day: [:staff_member, :venue])
 
       clock_in_breaks = ClockInBreak.where(
         clock_in_period: clock_in_periods
@@ -125,7 +125,7 @@ class HoursConfirmationController < ApplicationController
       hours_acceptance_periods = HoursAcceptancePeriod.where(
         clock_in_day: clock_in_days,
         status: HoursAcceptancePeriod::STATES - [HoursAcceptancePeriod::DELETED_STATE]
-      ).includes(:hours_acceptance_breaks_enabled)
+      ).includes(:hours_acceptance_breaks_enabled, :clock_in_day)
 
       hours_acceptance_breaks = HoursAcceptanceBreak.where(
         hours_acceptance_period: hours_acceptance_periods,
@@ -141,7 +141,7 @@ class HoursConfirmationController < ApplicationController
 
       rotas = Rota.where(
         date: clock_in_days.pluck(:date).uniq,
-        venue: venues
+        venue: venue
       ).includes([:venue, :rota_status_transitions])
 
       rota = rotas.select { |r| r.venue_id == venue.id }
@@ -165,7 +165,6 @@ class HoursConfirmationController < ApplicationController
         access_token: access_token,
         staff_members: staff_members,
         staff_types: staff_types,
-        clock_in_days: clock_in_days,
         hours_acceptance_periods: hours_acceptance_periods,
         hours_acceptance_breaks: hours_acceptance_breaks,
         clock_in_notes: clock_in_notes,
