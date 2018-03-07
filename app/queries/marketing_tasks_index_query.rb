@@ -71,6 +71,23 @@ class MarketingTasksIndexQuery
         result = result.where("due_at < ?", date)
       end
 
+      # Custom sorting tricky to do by active record with statesman gem
+      # Without database changes
+      result = result.sort_by do |marketing_task|
+        # Essentially makes tasks with assigned to user be treated as
+        # very far in the furture for the purpose of sorting
+        state_sort_value = if marketing_task.assigned_to_user.present?
+          # This will fail if the due at to_i. becomes more than this value
+          # but should be ok for quite a while at least to 3018
+          1000000000000000
+        else
+          0
+        end
+        due_date_value = marketing_task.due_at.to_i
+
+        state_sort_value + due_date_value
+      end
+
       if (due_date_start.present? && due_date_end.present?)
         result = result.select do |marketing_task|
           marketing_task.due_at.between?(due_date_start, due_date_end)
