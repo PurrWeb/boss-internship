@@ -7,6 +7,10 @@ module Permissions
       @user = user
     end
 
+    def user_id
+      user.id
+    end
+
     def user_role
       user.role
     end
@@ -28,7 +32,6 @@ module Permissions
     end
 
     private
-
     def ability
       @ability ||= UserAbility.new(user)
     end

@@ -276,11 +276,11 @@ module Api
 
       def assign_user
         marketing_task = MarketingTask.find(params.fetch(:id))
-        authorize! :assign, marketing_task
+        authorize! :assign, :marketing_tasks
 
-        assign_to_user_service = AssignToUserService.new(current_user, marketing_task, assign_to_user_params)
+        result = AssignToUserService.new(current_user, marketing_task, assign_to_user_params).call
 
-        if assign_to_user_service.assign
+        if result.success?
           render json: marketing_task.reload,
             serializer: Api::V1::MarketingTaskSerializer,
             status: :created,
@@ -289,7 +289,7 @@ module Api
           render(
             'api/v1/shared/api_errors.json',
             status: 422,
-            locals: { api_errors: assign_to_user_service }
+            locals: { api_errors: result.errors }
           )
         end
       end

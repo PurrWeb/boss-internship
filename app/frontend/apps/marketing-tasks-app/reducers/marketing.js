@@ -14,6 +14,7 @@ const initialState = Immutable.Map({
   musicTasks: [],
   sportsTasks: [],
   permissions: {
+    userId: null,
     userRole: MANAGER_ROLE,
     accessLevel: RESTRICTED_ACCESS_LEVEL,
     canViewPage: 'true',

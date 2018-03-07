@@ -1,33 +1,37 @@
 class AssignToUserService
-  attr_reader :current_user, :marketing_task, :params
-  attr_accessor :errors
+  Result = Struct.new(:success, :errors) do
+    def success?
+      success
+    end
+  end
 
-  def initialize(current_user, marketing_task, params)
-    @current_user = current_user
+  def initialize(requester, marketing_task, params)
+    @requester = requester
     @marketing_task = marketing_task
     @params = params
-    @errors = {}
+    @ability = UserAbility.new(requester)
   end
+  attr_reader :requester, :marketing_task, :params, :ability
 
-  def assign
-    validate_assign_to_user
+  def call
+    errors = {}
+    validate_assign_to_user(errors)
 
-    return false if invalid?
+    marketing_task.assign_attributes(assigned_to_user_id: assigned_user_id)
 
-    marketing_task.update(assigned_to_user_id: assigned_user_id)
-  end
+    #This should never be false in production
+    ability.authorize!(:assign, marketing_task)
 
-  def valid?
-    errors.keys.blank?
-  end
+    result = false
+    if errors.empty?
+      result = marketing_task.save
+    end
 
-  def invalid?
-    !valid?
+    Result.new(result, errors)
   end
 
   private
-
-  def validate_assign_to_user
+  def validate_assign_to_user(errors)
     if !params[:assign_to_self] && !assign_to_user_present?
       errors[:assign_to_user] = ['assigning user is required']
     end
@@ -39,7 +43,7 @@ class AssignToUserService
 
   def assigned_user_id
     if params[:assign_to_self]
-      current_user.id
+      requester.id
     elsif assign_to_user_present?
       params[:assign_to_user_id]
     end
