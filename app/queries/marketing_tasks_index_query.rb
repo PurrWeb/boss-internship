@@ -78,7 +78,7 @@ class MarketingTasksIndexQuery
       end
 
       if (completed_at_start.present? && completed_at_end.present?)
-        result.select do |marketing_task|
+        result = result.select do |marketing_task|
           marketing_task.completed_at.present? && marketing_task.completed_at.between?(completed_at_start, completed_at_end)
         end
       end
