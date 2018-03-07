@@ -12,7 +12,7 @@ class HoursConfirmationController < ApplicationController
       clock_in_days = ClockInDay.where(
         venue: venue,
         date: date
-      )
+      ).includes([:staff_member, :venue])
 
       staff_members = StaffMember.where(
         id: clock_in_days.map(&:staff_member_id).uniq
@@ -22,7 +22,7 @@ class HoursConfirmationController < ApplicationController
 
       clock_in_periods = ClockInPeriod.where(
         clock_in_day: clock_in_days
-      ).includes(:clock_in_day)
+      ).includes([:clock_in_day, :clock_in_events, :clock_in_breaks])
 
       clock_in_breaks = ClockInBreak.where(
         clock_in_period: clock_in_periods
@@ -34,11 +34,11 @@ class HoursConfirmationController < ApplicationController
 
       hours_acceptance_periods = HoursAcceptancePeriod.enabled.where(
         clock_in_day: clock_in_days
-      ).includes(:hours_acceptance_breaks_enabled, accepted_by: [:name])
+      ).includes([:hours_acceptance_breaks_enabled, :clock_in_day, accepted_by: [:name]])
 
       hours_acceptance_breaks = HoursAcceptanceBreak.enabled.where(
         hours_acceptance_period: hours_acceptance_periods
-      )
+      ).includes(:hours_acceptance_period)
 
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
