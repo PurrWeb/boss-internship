@@ -2,7 +2,7 @@ class MarketingTasksIndexQuery
   def initialize(params)
     @relation = params[:relation] || MarketingTask
     @current_user = params.fetch(:current_user)
-    @assigned_to_user = params[:assigned_to_user_id]
+    @assigned_to_user_id = params[:assigned_to_user_id]
     @late_task_only = params[:late_task_only]
     @now = params[:now] || Time.current
     @date = RotaShiftDate.to_rota_date(@now)
@@ -78,7 +78,7 @@ class MarketingTasksIndexQuery
       end
 
       if (completed_at_start.present? && completed_at_end.present?)
-        result.select do |marketing_task|
+        result = result.select do |marketing_task|
           marketing_task.completed_at.present? && marketing_task.completed_at.between?(completed_at_start, completed_at_end)
         end
       end

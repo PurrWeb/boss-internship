@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import safeMoment from "~/lib/safe-moment";
+import oFetch from 'o-fetch';
 
 import TaskFooter from '../shared/task-footer';
 import StatusBadge from '../shared/status-badge';
@@ -72,27 +73,30 @@ export default class SportsTasks extends React.Component {
       taskType: 'sports'
     });
 
+    const currentMarketingTask = oFetch(this.props, 'currentMarketingTask');
+    const currentMarketingTaskVenue = oFetch(currentMarketingTask, 'venue');
+
     return (
-      <div className="boss-check boss-check_role_panel boss-check_page_marketing-index" data-task-id={ this.props.currentMarketingTask.id }>
+      <div className="boss-check boss-check_role_panel boss-check_page_marketing-index" data-task-id={ oFetch(currentMarketingTask, 'id') }>
         <div className="boss-check__header">
           <div className="boss-check__header-info">
             <StatusBadge { ...this.props } />
 
             <div className="boss-check__header-group">
-              <h3 className={ `boss-check__title ${ (this.props.currentMarketingTask.marketingTaskNotes.length) ? 'boss-check__title_indicator_notes' : '' }` }>
-                { this.props.currentMarketingTask.title }
+              <h3 className={ `boss-check__title ${ (oFetch(currentMarketingTask, 'marketingTaskNotes').length) ? 'boss-check__title_indicator_notes' : '' }` }>
+                { oFetch(currentMarketingTask, 'title') }
               </h3>
 
               <div className="boss-check__header-meta">
                 <div className="boss-check__header-meta-item">
                   <p className="boss-check__text boss-check__text_role_meta boss-check__text_role_venue">
-                    { this.props.currentMarketingTask.venue.name }
+                    { oFetch(currentMarketingTaskVenue, 'name') }
                   </p>
                 </div>
 
                 <div className="boss-check__header-meta-item">
                   <p className={ `boss-check__text boss-check__text_role_meta ${(this.props.currentMarketingTask.pastDue) ? 'boss-check__text_role_date-alert' : 'boss-check__text_role_date'}` }>
-                    { safeMoment.uiDateParse(new Date(this.props.currentMarketingTask.dueAt)).format("DD/MM/YYYY") }
+                    { safeMoment.uiDateParse(new Date(oFetch(currentMarketingTask, 'dueAt'))).format("DD/MM/YYYY") }
                   </p>
                 </div>
 

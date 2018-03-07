@@ -63,6 +63,17 @@ export const userPermissions = {
     canViewPage: function(permissions) {
       return !!oFetch(permissions, 'canViewPage');
     },
+    canAssignTask: function(params) {
+      const permissions = oFetch(params, 'permissions');
+      const marketingTask = oFetch(params, 'marketingTask');
+      const taskVenue = oFetch(marketingTask, 'venue');
+
+      return isRole({ targetRole: MARKETING_ROLE, permissions: permissions }) || (
+        hasEffectiveAccessLevel({targetLevel: 'manager', permissions: permissions})
+          && !(oFetch(permissions, 'userId') === (marketingTask.assignToUser || {}).id)
+          && canManageVenue({venueId: oFetch(taskVenue, 'id'), permissions: permissions})
+      );
+    },
     canEditTask: function(params) {
       const permissions = oFetch(params, 'permissions');
       const marketingTask = oFetch(params, 'marketingTask');

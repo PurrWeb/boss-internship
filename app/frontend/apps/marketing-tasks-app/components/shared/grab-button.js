@@ -1,5 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
+import { userPermissions } from "~/lib/user-permissions";
+import oFetch from 'o-fetch';
 
 export default class GrabButton extends React.Component {
   handleGrabButton() {
@@ -16,6 +18,13 @@ export default class GrabButton extends React.Component {
   }
 
   render() {
+    const permissions = oFetch(this.props, 'permissions');
+    const marketingTaskPermissionService = oFetch(userPermissions, 'marketingTasks');
+    const currentMarketingTask = oFetch(this.props, 'currentMarketingTask');
+
+    //Used to drive permission code
+    const grabbedMarketingTask = Object.assign(currentMarketingTask, {assignToUser: {id: oFetch(permissions, 'userId')}})
+
     if (this.props.currentMarketingTask.assignedToUser) {
       return (
         <p className="boss-check__text boss-check__text_role_meta boss-check__text_role_user boss-check__text_role_edit-action" onClick={ this.handleGrabButton.bind(this) }>
@@ -26,6 +35,8 @@ export default class GrabButton extends React.Component {
       return (
         <span></span>
       );
+    } else if(!marketingTaskPermissionService.canAssignTask({marketingTask: grabbedMarketingTask, permissions: permissions})) {
+      return <span></span>;
     } else {
       return (
         <p className="boss-check__text boss-check__text_role_meta boss-check__text_role_user">

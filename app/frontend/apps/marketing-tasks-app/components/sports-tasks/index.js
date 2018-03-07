@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import oFetch from 'o-fetch';
 
 import TaskWrapper from './task-wrapper';
 import AddTaskButton from '../shared/add-task-button';

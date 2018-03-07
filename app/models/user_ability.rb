@@ -432,9 +432,16 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
+      can :assign, :marketing_tasks do
+        user.marketing_staff? || (
+          user.has_effective_access_level?(AccessLevel.manager_access_level)
+        )
+      end
+
       can [:view, :assign, :update_status, :create_note, :create], MarketingTask do |marketing_task|
         user.marketing_staff? || (
           user.has_effective_access_level?(AccessLevel.manager_access_level) &&
+            (marketing_task.assigned_to_user != user)  &&
             can_manage_venue?(user, marketing_task.venue)
         )
       end
