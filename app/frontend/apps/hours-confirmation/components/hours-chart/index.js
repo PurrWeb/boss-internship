@@ -96,7 +96,7 @@ export default class HoursChart extends React.Component {
     var clockedIntervals = [];
     clockInList.forEach(clockIn => {
       clockedIntervals = clockedIntervals.concat(
-        convertClockInPeriodToIntervals(clockIn, this.props.clockInBreaks),
+        convertClockInPeriodToIntervals(clockIn),
       );
     });
     var intervals = clockedIntervals.map(interval => {

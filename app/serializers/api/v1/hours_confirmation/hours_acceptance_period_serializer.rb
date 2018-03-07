@@ -1,6 +1,14 @@
 class Api::V1::HoursConfirmation::HoursAcceptancePeriodSerializer < ActiveModel::Serializer
   attributes :id, :startsAt, :endsAt, :status,
-             :hoursAcceptanceBreaks, :reasonNote, :date, :staffMember
+             :hoursAcceptanceBreaks, :reasonNote, :date, :staffMember, :acceptedAt, :acceptedBy
+
+  def acceptedAt
+    object.accepted_at
+  end
+
+  def acceptedBy
+    object.accepted_by.andand.full_name
+  end
 
   def startsAt
     object.starts_at.iso8601

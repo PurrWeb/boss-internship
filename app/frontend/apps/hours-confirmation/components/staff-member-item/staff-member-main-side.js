@@ -44,18 +44,6 @@ function convertClockInPeriodToIntervals(denormalizedHoursPeriod) {
   return intervals;
 }
 
-function getIntervals(clockInPeriods) {
-  let clockedIntervals = [];
-  clockInPeriods.forEach(clockIn => {
-    clockedIntervals = [
-      ...clockedIntervals,
-      convertClockInPeriodToIntervals(clockIn),
-    ];
-  });
-
-  return clockedIntervals;
-}
-
 class StaffMemberMainSide extends Component {
   render() {
     const {
@@ -93,7 +81,10 @@ class StaffMemberMainSide extends Component {
             hoursAcceptancePeriods={hoursAcceptancePeriods}
             clockedClockInPeriods={clockInPeriods}
             clockInEvents={clockInEvents}
-            clockInBreaks={[]}
+          />
+          <ClockInPeriods
+            periods={hoursAcceptancePeriods}
+            periodRenderer={period => <ClockInPeriod period={period} />}
           />
         </div>
       </div>

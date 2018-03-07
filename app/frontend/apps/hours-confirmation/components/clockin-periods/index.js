@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ClockInPeriod from './clockin-period';
 
 class ClockInPeriods extends Component {
   renderPeriods(periods) {

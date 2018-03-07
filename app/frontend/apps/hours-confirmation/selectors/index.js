@@ -21,14 +21,14 @@ const hoursAcceptanceBreaksSelector = state =>
 const rotasSelector = state => state.get('rotas');
 
 export function addZeroToNumber(number, zeroLimit = 9) {
-  return number < zeroLimit ? `0${number}` : `${number}`;
+  return number <= zeroLimit ? `0${number}` : `${number}`;
 }
 
-function getTimeDiff(items) {
+export function getTimeDiff(items) {
   const diff = items.reduce((acc, item) => {
-    if (item.get('endsAt') === null) return 0;
-    const mStartsAt = safeMoment.iso8601Parse(item.get('startsAt'));
-    const mEndsAt = safeMoment.iso8601Parse(item.get('endsAt'));
+    if (item.endsAt === null) return 0;
+    const mStartsAt = safeMoment.iso8601Parse(item.startsAt);
+    const mEndsAt = safeMoment.iso8601Parse(item.endsAt);
     return acc + mEndsAt.diff(mStartsAt);
   }, 0);
   const hours = Math.trunc(diff / 1000 / 60 / 60);
@@ -126,10 +126,10 @@ export const data = createSelector(
                     item =>
                       safeMoment.uiDateParse(item.get('date')).isSame(mDate) &&
                       item.get('staffMember') === staffMemberId,
-                  ),
+                  ).toJS(),
                 ),
               )
-              .set('clockedStats', getTimeDiff(periodsInStaffMember))
+              .set('clockedStats', getTimeDiff(periodsInStaffMember.toJS()))
               .set(
                 'rotaedStats',
                 getTimeDiff(
@@ -137,7 +137,7 @@ export const data = createSelector(
                     shift =>
                       shift.get('staffMember') === staffMemberId &&
                       shift.get('rota') === rota.get('id'),
-                  ),
+                  ).toJS(),
                 ),
               )
               .set(
