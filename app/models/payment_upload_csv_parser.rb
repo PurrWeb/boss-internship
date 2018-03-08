@@ -191,6 +191,8 @@ class PaymentUploadCSVParser
       )
       normalised_data[:ni_number] = raw_data.fetch(:ni_number_raw).strip
     else
+      payment_data.fetch(:errors)[NI_HEADER] ||= []
+      payment_data.fetch(:errors).fetch(NI_HEADER) << 'format is not valid'
       all_data_valid = false
     end
     # e.g. 08/11/1982
@@ -206,7 +208,13 @@ class PaymentUploadCSVParser
       payment_data.fetch(:errors).fetch(DOB_HEADER) << DATE_FORMAT_INVALID_ERROR_MESSAGE
       all_data_valid = false
     end
-    normalised_data[:net_pay_cents] = (Float(raw_data.fetch(:net_pay_raw).strip) * 100).to_i
+
+    begin
+      parsed_net_pay_float = Float(raw_data.fetch(:net_pay_raw).strip)
+      normalised_data[:net_pay_cents] = (parsed_net_pay_float * 100).to_i
+    rescue ArgumentError => e
+      #Ignore
+    end
     if !normalised_data[:net_pay_cents].present?
       payment_data.fetch(:errors)[NET_PAY_HEADER] ||= []
       payment_data.fetch(:errors).fetch(NET_PAY_HEADER) << "format invalid"
@@ -224,7 +232,7 @@ class PaymentUploadCSVParser
     if !venue.present?
       lookups_successful = false
       payment_data.fetch(:errors)[VENUE_NAME_HEADER] ||= []
-      payment_data.fetch(:errors).fetch(VENUE_NAME_HEADER) << ['does not match venue in system']
+      payment_data.fetch(:errors).fetch(VENUE_NAME_HEADER) << 'does not match venue in system'
     end
 
     staff_member = StaffMember.find_by(
