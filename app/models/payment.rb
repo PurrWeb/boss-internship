@@ -30,16 +30,28 @@ class Payment < ActiveRecord::Base
     disabled_at.present?
   end
 
-  def marked_as_received?
-    current_state == 'received'
-  end
-
   def self.enabled
     where(disabled_at: nil)
   end
 
   def self.disabled
     where('disabled_at IS NOT ?', nil)
+  end
+
+  def mark_pending!
+    state_machine.transition_to!(:pending)
+  end
+
+  def mark_received!
+    state_machine.transition_to!(:received)
+  end
+
+  def pending?
+    current_state == 'pending'
+  end
+
+  def marked_as_received?
+    current_state == 'received'
   end
 
   private
