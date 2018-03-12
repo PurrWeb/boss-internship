@@ -55,22 +55,30 @@ export default class ArtworkTasks extends React.Component {
   }
 
   renderTaskDescription() {
-    let startTime = safeMoment.parse(new Date(this.props.currentMarketingTask.startTime), 'DD/MM/YYYY HH:mm').format('DD/MM/YYYY HH:mm');
-    let days = this.props.currentMarketingTask.days.join(', ');
-    let facebookAnnouncement = (this.props.currentMarketingTask.facebookAnnouncement) ? 'Yes' : 'No';
-    let facebookCoverPage = (this.props.currentMarketingTask.facebookCoverPage) ? 'Yes' : 'No';
-    let facebookBooster = (this.props.currentMarketingTask.facebookBooster) ? 'Yes' : 'No';
-    let printResponse = (this.props.currentMarketingTask.print) ? this.props.currentMarketingTask.quantity : 'No';
+    const currentMarketingTask = oFetch(this.props, 'currentMarketingTask');
+    const days = oFetch(currentMarketingTask, 'days').join(', ');
+    const facebookAnnouncement = oFetch(currentMarketingTask, 'facebookAnnouncement') ? 'Yes' : 'No';
+    const facebookCoverPage = oFetch(currentMarketingTask, 'facebookCoverPage') ? 'Yes' : 'No';
+    const facebookBooster = oFetch(currentMarketingTask, 'facebookBooster') ? 'Yes' : 'No';
+    const printResponse = oFetch(currentMarketingTask, 'print') ? this.props.currentMarketingTask.quantity : 'No';
 
     return (
       <div className="boss-check__info-table">
+        <div className="boss-check__row">
+          <div className="boss-check__cell">
+            <div className="boss-check__box">
+              <p className="boss-check__text">{ oFetch(currentMarketingTask, 'description') }</p>
+            </div>
+          </div>
+        </div>
+
         <div className="boss-check__info-row">
           <div className="boss-check__info-cell">
             <p className="boss-check__text">Size</p>
           </div>
 
           <div className="boss-check__info-cell">
-            <p className="boss-check__text boss-check__text_role_primary">{ this.props.currentMarketingTask.size }</p>
+            <p className="boss-check__text boss-check__text_role_primary">{ oFetch(currentMarketingTask, 'size') }</p>
           </div>
         </div>
 
