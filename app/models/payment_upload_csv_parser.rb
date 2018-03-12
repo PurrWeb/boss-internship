@@ -41,10 +41,9 @@ class PaymentUploadCSVParser
     CSV.parse(csv_data, headers: HEADERS, return_headers: false, skip_blanks: true) do |row|
       if (row_index == 0)
         validate_title_row(row: row, errors: title_row_errors)
-        break unless title_row_errors.empty?
       elsif (row_index == 1)
         validate_header_row(row: row, errors: header_row_errors)
-        break unless header_row_errors.empty?
+        break unless header_row_errors.empty? && title_row_errors.empty?
       else
         payment_data = processRowData(row)
         if payment_data.fetch(:errors).empty?
