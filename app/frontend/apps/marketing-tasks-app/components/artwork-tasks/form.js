@@ -26,6 +26,8 @@ const sizes = [
   { label: 'A4', value: 'a4' },
   { label: 'A5', value: 'a5' },
   { label: 'A6', value: 'a6' },
+  { label: 'Facebook Cover Page', value: 'facebook_cover_page' },
+  { label: 'Facebook Profile Image', value: 'facebook_profile_image' },
   { label: 'Other', value: 'other' }
 ]
 

@@ -5,6 +5,8 @@ class ArtworkTask < MarketingTask
   A4_SIZE = 'a4'
   A5_SIZE = 'a5'
   A6_SIZE = 'a6'
+  FACEBOOK_COVER_PAGE_SIZE = 'facebook_cover_page'
+  FACEBOOK_PROFILE_IMAGE_SIZE = 'facebook_profile_image'
   OTHER_SIZE = 'other'
   SIZES = [
     A1_SIZE,
@@ -13,6 +15,8 @@ class ArtworkTask < MarketingTask
     A4_SIZE,
     A5_SIZE,
     A6_SIZE,
+    FACEBOOK_COVER_PAGE_SIZE,
+    FACEBOOK_PROFILE_IMAGE_SIZE,
     OTHER_SIZE
   ]
 
