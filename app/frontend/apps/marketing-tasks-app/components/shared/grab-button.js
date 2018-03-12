@@ -27,9 +27,9 @@ export default class GrabButton extends React.Component {
 
     if (this.props.currentMarketingTask.assignedToUser) {
       return (
-        <p className="boss-check__text boss-check__text_role_meta boss-check__text_role_user boss-check__text_role_edit-action" onClick={ this.handleGrabButton.bind(this) }>
+        <button className="boss-button boss-button_role_user-light boss-button_type_extra-small" onClick={ this.handleGrabButton.bind(this) }>
           { this.props.currentMarketingTask.assignedToUser.name }
-        </p>
+        </button>
       )
     } else if (this.props.currentMarketingTask.status === 'completed') {
       return (
