@@ -78,7 +78,7 @@ export default class ArtworkTasks extends React.Component {
           </div>
 
           <div className="boss-check__info-cell">
-            <p className="boss-check__text boss-check__text_role_primary">{ oFetch(currentMarketingTask, 'size') }</p>
+            <p className="boss-check__text boss-check__text_role_primary">{ this.sizeDescription(oFetch(currentMarketingTask, 'size')) }</p>
           </div>
         </div>
 
@@ -124,6 +124,21 @@ export default class ArtworkTasks extends React.Component {
         </div>
       </div>
     )
+  }
+
+  sizeDescription(size){
+    const values = {
+      "a1": "A1",
+      "a2": "A2",
+      "a3": "A3",
+      "a4": "A4",
+      "a5": "A5",
+      "a6": "A6",
+      "facebook_cover_page": "Facebook Cover Page",
+      "facebook_profile_image": "Facebook Profile Image",
+      "other": "Other"
+    };
+    return oFetch(values, size);
   }
 
   render() {
