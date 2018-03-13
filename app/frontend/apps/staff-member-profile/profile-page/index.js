@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { combineReducers } from 'redux-immutable';
 import { reducer as formReducer } from 'redux-form/immutable';
+import oFetch from 'o-fetch';
 
 import configureStore from '../store';
 import {initialProfileLoad} from '../profile-wrapper/actions';
@@ -18,8 +19,10 @@ class StaffMemberProfileDetailsApp extends React.Component {
   }
 
   render() {
+    const appDownloadLinks = oFetch(this.props, 'appDownloadLinks');
+
     return <Provider store={this.store}>
-      <ProfilePage/>
+      <ProfilePage appDownloadLinks={appDownloadLinks} />
     </Provider>
   }
 }

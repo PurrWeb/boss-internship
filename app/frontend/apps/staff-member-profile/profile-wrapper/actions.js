@@ -22,6 +22,7 @@ import {
   SHOW_EDIT_AVATAR_MODAL,
   HIDE_EDIT_AVATAR_MODAL,
   UPDATE_STAFF_MEMBER,
+  UPDATE_DOWNLOAD_LINK_LAST_SENT_AT
 } from './constants';
 
 export const updateAvatarRequest = (avatarUrl) => (dispatch, getState) => {
@@ -131,3 +132,4 @@ export const hideDisableStaffMemberModal = createAction(HIDE_DISABLE_MODAL);
 export const showEditAvatarModal = createAction(SHOW_EDIT_AVATAR_MODAL);
 export const hideEditAvatarModal = createAction(HIDE_EDIT_AVATAR_MODAL);
 export const updateStaffMember = createAction(UPDATE_STAFF_MEMBER);
+export const updateDownloadLinkLastSentAt = createAction(UPDATE_DOWNLOAD_LINK_LAST_SENT_AT);

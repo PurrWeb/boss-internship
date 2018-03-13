@@ -10,10 +10,12 @@ import { bindActionCreators } from 'redux';
 
 import PasswordInformationListItem from '../components/password-information-list-item';
 import DetailsListItem from '../components/details-list-item';
+import AppDownloadLinkListItem from '../components/app-download-link-list-item'
 import DetailsList from '../components/details-list';
 import {starterEmploymentStatusLabels} from '../../../../constants/other';
 import ProfileWrapper from '../../profile-wrapper';
 import {
+  sendMobileAppDownloadEmail,
   sendPasswordSetupEmail,
   resendPasswordSetupEmail,
   revokePasswordSetupEmail
@@ -32,6 +34,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     actions: bindActionCreators({
+      sendMobileAppDownloadEmail,
       sendPasswordSetupEmail,
       resendPasswordSetupEmail,
       revokePasswordSetupEmail
@@ -65,13 +68,14 @@ class ProfilePage extends React.PureComponent {
   ageDescription(dobMoment){
     return dobMoment ? moment().diff(dobMoment, 'years') : 'N/A';
   }
-  
+
   render() {
     const staffMember = oFetch(this.props, 'staffMember').toJS();
     const venues = oFetch(this.props, 'venues').toJS();
     const staffTypes = oFetch(this.props, 'staffTypes').toJS();
     const accessiblePayRates = oFetch(this.props, 'accessiblePayRates');
     const isSecurityStaff = oFetch(staffMember, 'is_security_staff');
+    const actions = oFetch(this.props, 'actions');
 
     const {
       sendPasswordSetupEmail,
@@ -79,6 +83,12 @@ class ProfilePage extends React.PureComponent {
       revokePasswordSetupEmail
     } = this.props.actions;
 
+    let linkIndex = 0;
+    const appDownloadLinks = oFetch(this.props, 'appDownloadLinks').map((appDownloadLink)=>{
+      const objectWithIndex = Object.assign({index: linkIndex}, appDownloadLink)
+      linkIndex = linkIndex + 1;
+      return objectWithIndex;
+    });
 
     let masterVenueId = oFetch(staffMember, "master_venue");
     let masterVenueValue = masterVenueId && oFetch(findById(venues, masterVenueId), 'name');
@@ -124,6 +134,23 @@ class ProfilePage extends React.PureComponent {
           <DetailsListItem item={{name: "Email Address", value: oFetch(staffMember, 'email') }} />
           <DetailsListItem item={{name: "Phone number", value: oFetch(staffMember, 'phone_number') }} />
         </DetailsList>
+        { (appDownloadLinks.length > 0) &&
+          <DetailsList key={5} categoryName="Mobile Apps" sectionNumber={5}>
+            { appDownloadLinks.map((appDownloadLink) => {
+                return <AppDownloadLinkListItem
+                  key={oFetch(appDownloadLink, 'index') }
+                  index={oFetch(appDownloadLink, 'index')}
+                  appName={oFetch(appDownloadLink, 'appName')}
+                  lastSentAt={appDownloadLink['lastSentAt']}
+                  onLinkClick={() => {
+                    oFetch(actions, 'sendMobileAppDownloadEmail')(
+                      oFetch(appDownloadLink, 'downloadUrl'),
+                      oFetch(appDownloadLink, 'appName'),
+                      oFetch(appDownloadLink, 'mobileAppId')
+                    )}
+                  } />;
+              }) }
+          </DetailsList> }
       </ProfileWrapper>
     )
   }

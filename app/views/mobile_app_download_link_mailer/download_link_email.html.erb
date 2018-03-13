@@ -1,0 +1,56 @@
+<p>Please follow the instructions to download and install the <%= app_name %> app to your mobile device.</p>
+
+<p>If you have any trouble installing we may need to do something special to support your device. Please contact managment for help.</p>
+
+<h1><u>For Android Devices</u></h1>
+
+<% if google_play_url.present? %>
+  <%= link_to('Download from the Google Play store', google_play_url) %>
+  <p>Go to the app page on the Google Play store at and opt to install.</p>
+<% else %>
+  <p>Sorry this application currently does not support android devices.</p>
+<% end %>
+
+<h1><u>For IOS Devices</u></h1>
+
+<% if ios_download_url.present? %>
+  <%= link_to('Download and install for apple device', ios_download_url) %>
+
+  <p>This app is not on the iTunes store so please follow the steps below to download and install.</p>
+
+  <ol>
+    <li>
+      <p>Click the link above</p>
+    </li>
+
+    <li>
+      <p>You should see the following message</p>
+      <%= image_tag('https://s3-eu-west-1.amazonaws.com/jsmbars-mobile-applications/nsecurity-app/images/install_message.jpeg') %>
+      <p>Click install</p>
+    </li>
+
+    <li>
+      <p>App should now be installed. If you see the following message proceed to next step</p>
+      <%= image_tag('https://s3-eu-west-1.amazonaws.com/jsmbars-mobile-applications/nsecurity-app/images/untrusted_dialog.jpeg') %>
+    </li>
+
+    <li>
+      <p>Go to the Device management page of settings<p>
+      <p>Tap 'Settings' -> Go to 'General' -> 'Scroll to 'Device Management'<p>
+      <%= image_tag('https://s3-eu-west-1.amazonaws.com/jsmbars-mobile-applications/nsecurity-app/images/device_page.jpeg') %>
+      <p>Tap "Pub invest group limited" -> Tap "Trust Pub invest group limited"</p>
+    </li>
+
+    <li>
+      <p>You should see a dialog asking you if you'd like to trust "PUB INVEST GROUP LTD".</p>
+      <%= image_tag('https://s3-eu-west-1.amazonaws.com/jsmbars-mobile-applications/nsecurity-app/images/trust_dialog.jpeg') %>
+      <p>Tap Trust</p>
+    </li>
+
+    <li>
+      <P>You should now be able to runn the app.</p>
+    </li>
+  </ol>
+<% else %>
+  <p>Sorry this application does not currently support ios devices.</p>
+<% end %>

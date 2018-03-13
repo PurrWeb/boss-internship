@@ -48,8 +48,23 @@ class StaffMembersController < ApplicationController
         pay_rate: staff_member.pay_rate
       ).page_pay_rates.map(&:id)
 
+      app_download_link_data = MobileApp.enabled.with_download_url.map do |mobile_app|
+        if StaffMemberAbility.new(staff_member).can?(:access, mobile_app)
+          last_download_sent = MobileAppDownloadLinkSend.find_by(staff_member: staff_member, mobile_app: mobile_app)
+          AppDownloadLink.new(
+            mobile_app_id: mobile_app.id,
+            app_name: mobile_app.name,
+            download_url: api_v1_staff_member_send_app_download_email_path(staff_member.id),
+            last_sent_at: last_download_sent.andand.sent_at
+          )
+        else
+          nil
+        end
+      end.compact
+
       render locals: {
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
+        app_download_link_data: app_download_link_data,
         access_token: access_token,
         staff_types: StaffType.all,
         venues: Venue.all,

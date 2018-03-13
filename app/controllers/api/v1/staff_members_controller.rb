@@ -43,6 +43,29 @@ module Api
         end
       end
 
+      def send_app_download_email
+        staff_member = StaffMember.enabled.find(params[:staff_member_id])
+
+        unless staff_member.present?
+          return render json: {}, status: 404
+        end
+
+        mobile_app = MobileApp.enabled.find(params.fetch(:mobileAppId))
+        endpoint = SendMobileAppDownloadEmailEndpoint.new(
+          staff_member: staff_member,
+          mobile_app: mobile_app
+        )
+        authorize!(:use, endpoint)
+
+        result = SendMobileAppDownloadEmail.new(staff_member: staff_member, mobile_app: mobile_app).call
+
+        if result.success?
+          render json: { sentAt: result.mobile_app_download_link_send.sent_at }, status: 200
+        else
+          render json: {}, status: 422
+        end
+      end
+
       def send_verification
         staff_member = StaffMember.enabled.find(params[:staff_member_id])
 

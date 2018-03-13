@@ -335,6 +335,7 @@ Rails.application.routes.draw do
         resources :holidays, only: :show
         resources :holiday_reports, only: :index
         resources :staff_members, only: [:show, :create] do
+          post :send_app_download_email
           post :send_verification
           post :resend_verification
           post :revoke_verification

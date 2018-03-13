@@ -2,10 +2,14 @@ class StaffMemberAbility
   include CanCan::Ability
 
   def initialize(staff_member)
-    staff_type = staff_member.staff_type
-
-    if staff_type.security?
-      can :access, :security_app
+    can :access, MobileApp do |mobile_app|
+      staff_member.verified? && (
+        if mobile_app.security_app?
+          staff_member.staff_type.security?
+        else
+          raise "attempt to check access to unsupported app #{mobile_app.name}"
+        end
+      )
     end
 
     # Define abilities for the passed in user here. For example:
