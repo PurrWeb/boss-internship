@@ -23,7 +23,10 @@ module BreakTimeValidations
   # validation
   def times_in_correct_order
     if starts_at.present? && ends_at.present?
-      errors.add(:base, 'starts_at must be after ends_at') if starts_at >= ends_at
+      errors.add(:starts_at, "Start time can't be after or equal end time") if starts_at >= ends_at
+      errors.add(:starts_at, "Start time can't be before period start time") if hours_acceptance_period.starts_at > starts_at
+      errors.add(:ends_at, "End time can't be before or equal start time") if ends_at <= starts_at
+      errors.add(:ends_at, "End time can't be after period end time") if hours_acceptance_period.ends_at < ends_at
     end
   end
 
