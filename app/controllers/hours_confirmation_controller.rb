@@ -12,7 +12,7 @@ class HoursConfirmationController < ApplicationController
       clock_in_days = ClockInDay.where(
         venue: venue,
         date: date
-      ).includes([:staff_member, :venue])
+      ).includes([:staff_member, :venue, :clock_in_notes])
 
       staff_members = StaffMember.where(
         id: clock_in_days.map(&:staff_member_id).uniq
@@ -65,14 +65,7 @@ class HoursConfirmationController < ApplicationController
 
       clock_in_notes = ClockInNote.where(
         clock_in_day_id: clock_in_days
-      )
-
-      clock_in_days = clock_in_days.includes(
-        [
-          :venue, :staff_member, :clock_in_notes,
-          :hours_acceptance_periods, :clock_in_periods
-        ]
-      )
+      ).includes(:clock_in_day)
 
       render locals: {
         access_token: access_token,
