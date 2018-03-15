@@ -3,6 +3,7 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 import safeMoment from '~/lib/safe-moment';
 import moment from 'moment';
+import oFetch from 'o-fetch';
 import RotaDate from '~/lib/rota-date';
 
 import {
@@ -12,6 +13,10 @@ import {
 
 class FromTimeInterval extends React.Component {
   static propTypes = {};
+  static defaultProps = {
+    isFromBreaks: false,
+    globalError: false,
+  };
 
   getStartsAtOptions = (input, callback, shiftRotaDate) => {
     callback(null, {
@@ -37,20 +42,47 @@ class FromTimeInterval extends React.Component {
     if (!newValue.value) {
       return;
     }
+
+    let startsAt;
+    const { isFromBreaks } = this.props;
+
+    if (isFromBreaks) {
+      startsAt = this.props.breaks[this.props.index].startsAt;
+    } else {
+      startsAt = oFetch(this.props, 'startsAt');
+    }
+
     const newDate = shiftRotaDate.getDateFromShiftStartTimeString(newValue);
-    this.props.startsAt.input.onChange(newDate);
+    startsAt.input.onChange(newDate);
   }
 
   updateEndsTime(newValue, shiftRotaDate) {
     if (!newValue.value) {
       return;
     }
+    let endsAt;
+    const { isFromBreaks } = this.props;
+
+    if (isFromBreaks) {
+      endsAt = this.props.breaks[this.props.index].endsAt;
+    } else {
+      endsAt = oFetch(this.props, 'endsAt');
+    }
+
     const newDate = shiftRotaDate.getDateFromShiftEndTimeString(newValue);
-    this.props.endsAt.input.onChange(newDate);
+    endsAt.input.onChange(newDate);
   }
 
   render() {
-    const { startsAt, endsAt, rotaDate } = this.props;
+    let startsAt, endsAt;
+    const { rotaDate, isFromBreaks, globalError } = this.props;
+    if (isFromBreaks) {
+      startsAt = this.props.breaks[this.props.index].startsAt;
+      endsAt = this.props.breaks[this.props.index].endsAt;
+    } else {
+      startsAt = oFetch(this.props, 'startsAt');
+      endsAt = oFetch(this.props, 'endsAt');
+    }
 
     const dRotaDate = safeMoment.uiDateParse(rotaDate).toDate();
 
@@ -85,58 +117,45 @@ class FromTimeInterval extends React.Component {
         onChange={value => this.updateEndsTime(value, shiftRotaDate)}
       />
     );
-
     return (
       <div className={`boss-time-shift__time`}>
-        <div className="boss-form__interval">
-          <div className="boss-form__interval-item">
-            <p className="boss-form__label">
-              <span className="boss-form__label-text">Start</span>
+        <div className="boss-time-shift__interval">
+          <div className="boss-time-shift__hours">
+            <p className="boss-time-shift__label">
+              <span className="boss-time-shift__label-text">Start</span>
             </p>
             <div
-              className={`boss-form__select boss-form__select_role_time ${startsAt
-                .meta.touched &&
-                startsAt.meta.error &&
-                'boss-form__select_state_error'}`}
+              className={`boss-time-shift__select ${
+                startsAt.meta.error ? 'boss-time-shift__select_state_error' : ''
+              }`}
             >
               {selectStartAt}
             </div>
-            {startsAt.meta.touched &&
-              startsAt.meta.error && (
-                <div className="boss-form__error">
-                  <p className="boss-form__error-text">
-                    <span className="boss-form__error-line">
-                      {startsAt.meta.error}
-                    </span>
-                  </p>
-                </div>
-              )}
           </div>
-          <div className="boss-form__interval-delimiter" />
-          <div className="boss-form__interval-item">
-            <p className="boss-form__label">
-              <span className="boss-form__label-text">End</span>
+          <div className="boss-time-shift__delimiter" />
+          <div className="boss-time-shift__hours">
+            <p className="boss-time-shift__label">
+              <span className="boss-time-shift__label-text">End</span>
             </p>
             <div
-              className={`boss-form__select boss-form__select_role_time ${endsAt
-                .meta.touched &&
-                endsAt.meta.error &&
-                'boss-form__select_state_error'}`}
+              className={`boss-form__select boss-form__select_role_time ${
+                endsAt.meta.error ? 'boss-form__select_state_error' : ''
+              }`}
             >
               {selectEndsAt}
             </div>
-            {endsAt.meta.touched &&
-              endsAt.meta.error && (
-                <div className="boss-form__error">
-                  <p className="boss-form__error-text">
-                    <span className="boss-form__error-line">
-                      {endsAt.meta.error}
-                    </span>
-                  </p>
-                </div>
-              )}
           </div>
         </div>
+        {(!globalError && (startsAt.meta.error || endsAt.meta.error)) ? (
+          <div className="boss-time-shift__error">
+            {!!startsAt.meta.error ? startsAt.meta.error.map((error, index) => <p key={index} className="boss-time-shift__error-text">
+              {error}
+            </p>) : null}
+            {!!endsAt.meta.error ? endsAt.meta.error.map((error, index) => <p key={index} className="boss-time-shift__error-text">
+              {error}
+            </p>) : null}
+          </div>
+        ) : null}
       </div>
     );
   }

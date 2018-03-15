@@ -1,12 +1,17 @@
 import { createSelector } from 'reselect';
 import { List, Map, Set } from 'immutable';
 import safeMoment from '~/lib/safe-moment';
+import uuid from 'uuid/v1';
 
 function keyIn(...keys) {
   var keySet = Set(keys);
   return function(v, k) {
     return keySet.has(k);
   };
+}
+
+function setFrontendId(id) {
+  return id === null ? uuid() : id;
 }
 
 const rotaShiftsSelector = state => state.get('rotaShifts');
@@ -107,37 +112,39 @@ export const data = createSelector(
                   .map(hoursAcceptancePeriod => {
                     return hoursAcceptancePeriod.set(
                       'breaks',
-                      hoursAcceptancePeriod
-                        .get('hoursAcceptanceBreaks')
-                        .map(hoursAcceptanceBreakId =>
-                          hoursAcceptanceBreaks.find(
-                            hoursAcceptanceBreak =>
-                              hoursAcceptanceBreak.get('id') ===
-                              hoursAcceptanceBreakId,
-                          ),
-                        ),
+                      hoursAcceptanceBreaks.filter(
+                        hoursAcceptanceBreak =>
+                          hoursAcceptanceBreak.get('hoursAcceptancePeriod') ===
+                          hoursAcceptancePeriod.get('frontendId'),
+                      ),
                     );
                   }),
               )
               .set(
                 'hoursAcceptanceStats',
                 getTimeDiff(
-                  hoursAcceptancePeriods.filter(
-                    item =>
-                      safeMoment.uiDateParse(item.get('date')).isSame(mDate) &&
-                      item.get('staffMember') === staffMemberId,
-                  ).toJS(),
+                  hoursAcceptancePeriods
+                    .filter(
+                      item =>
+                        safeMoment
+                          .uiDateParse(item.get('date'))
+                          .isSame(mDate) &&
+                        item.get('staffMember') === staffMemberId,
+                    )
+                    .toJS(),
                 ),
               )
               .set('clockedStats', getTimeDiff(periodsInStaffMember.toJS()))
               .set(
                 'rotaedStats',
                 getTimeDiff(
-                  rotaShifts.filter(
-                    shift =>
-                      shift.get('staffMember') === staffMemberId &&
-                      shift.get('rota') === rota.get('id'),
-                  ).toJS(),
+                  rotaShifts
+                    .filter(
+                      shift =>
+                        shift.get('staffMember') === staffMemberId &&
+                        shift.get('rota') === rota.get('id'),
+                    )
+                    .toJS(),
                 ),
               )
               .set(

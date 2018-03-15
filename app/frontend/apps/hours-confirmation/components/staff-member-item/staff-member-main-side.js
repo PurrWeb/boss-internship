@@ -84,8 +84,24 @@ class StaffMemberMainSide extends Component {
           />
           <ClockInPeriods
             periods={hoursAcceptancePeriods}
-            periodRenderer={period => <ClockInPeriod period={period} />}
+            periodRenderer={period => (
+              <ClockInPeriod
+                onUnacceptPeriod={this.props.onUnacceptPeriod}
+                onDeletePeriod={this.props.onDeletePeriod}
+                onPeriodDataChange={this.props.onPeriodDataChange}
+                onAcceptPeriod={this.props.onAcceptPeriod}
+                onAddBreak={this.props.onAddBreak}
+                hoursAcceptanceBreaks={this.props.hoursAcceptanceBreaks}
+                staffMemberId={staffMemberId}
+                period={period}
+              />
+            )}
           />
+          <div className="boss-hrc__controls">
+            <button onClick={this.props.onAddNewAcceptancePeriod} className="boss-button boss-button_role_add boss-hrc__button boss-hrc__button_role_add">
+              Add shift
+            </button>
+          </div>
         </div>
       </div>
     );

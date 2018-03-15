@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import safeMoment from '~/lib/safe-moment';
 import oFetch from 'o-fetch';
 import { Collapse } from 'react-collapse';
+import AsyncButton from 'react-async-button';
+
+import utils from '~/lib/utils';
 import { getTimeDiff } from '../../selectors';
 
 function TimeView({ label, date }) {
@@ -28,7 +31,9 @@ class AcceptedClockInPeriod extends Component {
     const acceptedBy = oFetch(period, 'acceptedBy') || 'N/A';
     const acceptedAt = oFetch(period, 'acceptedAt');
     const acceptedAtFormatted = acceptedAt
-      ? safeMoment.iso8601Parse(acceptedAt)
+      ? safeMoment
+          .iso8601Parse(acceptedAt)
+          .format(utils.humanDateFormatWithTime())
       : 'N/A';
 
     return (
@@ -41,21 +46,25 @@ class AcceptedClockInPeriod extends Component {
             by {acceptedBy} at {acceptedAtFormatted}
           </span>
         </p>
-        <button className="boss-button boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_unaccept-shift boss-time-shift__button_state_visible">
-          Unaccept
-        </button>
+        <AsyncButton
+          className="boss-button boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_unaccept-shift boss-time-shift__button_state_visible"
+          text="Unaccept"
+          pendingText="Unaccepting ..."
+          onClick={() => this.props.onUnacceptPeriod(period)}
+        />
       </div>
     );
   }
 
   renderBreaks(period) {
     const breaks = oFetch(period, 'breaks');
-    return breaks.map(periodBreak => {
-      const startsAt = oFetch(periodBreak, 'startsAt');
+
+    return breaks.map((periodBreak, index) => {
+      const startsAt = oFetch(periodBreak ,'startsAt');
       const endsAt = oFetch(periodBreak, 'endsAt');
 
       return (
-        <div className="boss-time-shift__break-item">
+        <div key={index} className="boss-time-shift__break-item">
           <div className="boss-time-shift__log boss-time-shift__log_layout_break">
             <div className="boss-time-shift__group">
               <div className="boss-time-shift__time">
@@ -81,7 +90,7 @@ class AcceptedClockInPeriod extends Component {
     const startsAt = oFetch(period, 'startsAt');
     const endsAt = oFetch(period, 'endsAt');
     const reasonNote = oFetch(period, 'reasonNote');
-    console.log(period);
+
     return (
       <div className="boss-time-shift__form">
         <div className="boss-time-shift__log boss-time-shift__log_state_accepted">

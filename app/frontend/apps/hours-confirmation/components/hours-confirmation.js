@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import oFetch from 'o-fetch';
+import uuid from 'uuid/v1';
 
 import getHoursPeriodStats from '~/lib/get-hours-period-stats';
 import RotaDate from '~/lib/rota-date';
@@ -11,6 +12,7 @@ import {
 } from '~/components/boss-dashboards';
 
 import safeMoment from '~/lib/safe-moment';
+import utils from '~/lib/utils';
 
 import StaffMembersList from './staff-members-list';
 import StaffMemberItem from './staff-member-item';
@@ -43,10 +45,67 @@ function timeObjectDiff(rotaed, accepted) {
 class HoursConfirmation extends Component {
   _handleViewByDate = () => {};
 
+  handleUnacceptPeriod = period => {
+    return this.props.actions.unacceptPeriodAction(period);
+  };
+
+  handleDeletePeriod = values => {
+    return this.props.actions.deletePeriodAction(values.toJS());
+  };
+
+  handlePeriodDataChange = periodData => {
+    return this.props.actions.updatePeriodData(periodData);
+  };
+
+  handleAcceptPeriod = period => {
+    return this.props.actions.acceptPeriodAction(period);
+  };
+
+  handleAddNewAcceptancePeriod = data => {
+    return this.props.actions.addNewAcceptancePeriodAction(data);
+  };
+
+  getNewHoursDefaultTimes(hoursAcceptancePeriods, rotaDate) {
+    if (hoursAcceptancePeriods.length === 0) {
+      return {
+        startsAt: rotaDate.getDateFromShiftStartTime(9, 0),
+        endsAt: rotaDate.getDateFromShiftStartTime(10, 0),
+      };
+    }
+
+    const lastExitingHours =
+      hoursAcceptancePeriods[hoursAcceptancePeriods.length - 1];
+
+    const previousShiftHoursOffset = rotaDate.getHoursSinceStartOfDay(
+      safeMoment.iso8601Parse(lastExitingHours.endsAt).toDate(),
+    );
+
+    let newHoursStartOffset = previousShiftHoursOffset + 1;
+    let newHoursEndOffset = newHoursStartOffset + 1;
+
+    newHoursStartOffset = utils.containNumberWithinRange(newHoursStartOffset, [
+      0,
+      23,
+    ]);
+
+    newHoursEndOffset = utils.containNumberWithinRange(newHoursEndOffset, [
+      0,
+      23,
+    ]);
+
+    return {
+      startsAt: rotaDate.getDateNHoursAfterStartTime(newHoursStartOffset),
+      endsAt: rotaDate.getDateNHoursAfterStartTime(newHoursEndOffset),
+    };
+  }
+
   _renderStaffMemberItem({ date, periods }) {
     const clockInPeriods = oFetch(periods, 'clockInPeriods');
     const hoursAcceptancePeriods = oFetch(periods, 'hoursAcceptancePeriods');
     const hoursAcceptanceStats = oFetch(periods, 'hoursAcceptanceStats');
+
+    const hoursAcceptanceBreaks = oFetch(this.props, 'hoursAcceptanceBreaks');
+
     const clockedStats = oFetch(periods, 'clockedStats');
     const rotaedStats = oFetch(periods, 'rotaedStats');
     const rotaedShifts = oFetch(periods, 'rotaedShifts');
@@ -64,6 +123,14 @@ class HoursConfirmation extends Component {
     const staffTypeColor = oFetch(staffType, 'color');
 
     const timeDiff = timeObjectDiff(rotaedStats, hoursAcceptanceStats);
+    const rotaDate = new RotaDate({
+      dateOfRota: mClockInDate.toDate(),
+    });
+
+    const newStartsEndsTime = this.getNewHoursDefaultTimes(
+      hoursAcceptancePeriods,
+      rotaDate,
+    );
 
     return (
       <StaffMemberItem>
@@ -87,9 +154,18 @@ class HoursConfirmation extends Component {
           rotaedShifts={rotaedShifts}
           clockInEvents={clockInEvents}
           hoursAcceptancePeriods={hoursAcceptancePeriods}
-          rotaDate={
-            new RotaDate({
-              dateOfRota: mClockInDate.toDate(),
+          hoursAcceptanceBreaks={hoursAcceptanceBreaks}
+          rotaDate={rotaDate}
+          onUnacceptPeriod={this.handleUnacceptPeriod}
+          onAcceptPeriod={this.handleAcceptPeriod}
+          onDeletePeriod={this.handleDeletePeriod}
+          onPeriodDataChange={this.handlePeriodDataChange}
+          onAddNewAcceptancePeriod={() =>
+            this.handleAddNewAcceptancePeriod({
+              date,
+              staffMemberId,
+              newStartsEndsTime,
+              frontendId: uuid(),
             })
           }
         />

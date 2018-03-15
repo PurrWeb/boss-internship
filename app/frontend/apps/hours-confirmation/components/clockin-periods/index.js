@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 
 class ClockInPeriods extends Component {
   renderPeriods(periods) {
-    return periods.map(period => {
+    return periods.map((period, index) => {
       return React.cloneElement(this.props.periodRenderer(period), {
-        key: period.id,
+        key: index,
+        index,
       });
     });
   }

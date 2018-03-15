@@ -9,6 +9,7 @@ import rotaShifts from './rota-shifts';
 import clockInEvents from './clock-in-events';
 import rotas from './rotas';
 import hoursAcceptanceBreaks from './hours-acceptance-breaks';
+import venue from './venue';
 
 export default combineReducers({
   staffMembers,
@@ -20,5 +21,6 @@ export default combineReducers({
   clockInEvents,
   rotas,
   hoursAcceptanceBreaks,
+  venue,
   form: formReducer,
 });

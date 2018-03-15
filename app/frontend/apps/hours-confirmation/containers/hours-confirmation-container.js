@@ -4,18 +4,35 @@ import { bindActionCreators } from 'redux';
 
 import HoursConfirmation from '../components/hours-confirmation';
 import { data } from '../selectors';
+import {
+  unacceptPeriodAction,
+  deletePeriodAction,
+  updatePeriodData,
+  acceptPeriodAction,
+  addNewAcceptancePeriodAction,
+} from '../redux/actions';
 
 const mapStateToProps = state => {
   return {
     clockInOutData: data(state),
     staffMembers: state.get('staffMembers'),
     staffTypes: state.get('staffTypes'),
+    hoursAcceptanceBreaks: state.get('hoursAcceptanceBreaks'),
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    actions: bindActionCreators({}, dispatch),
+    actions: bindActionCreators(
+      {
+        unacceptPeriodAction,
+        deletePeriodAction,
+        updatePeriodData,
+        acceptPeriodAction,
+        addNewAcceptancePeriodAction,
+      },
+      dispatch,
+    ),
   };
 };
 

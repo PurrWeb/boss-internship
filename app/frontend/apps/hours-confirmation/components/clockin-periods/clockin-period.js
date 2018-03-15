@@ -7,23 +7,46 @@ class ClockInPeriod extends Component {
   renderPeriodByStatus(period) {
     const status = oFetch(period, 'status');
     const id = oFetch(period, 'id');
+    const frontendId = oFetch(period, 'frontendId');
+    const startsAt = oFetch(period, 'startsAt');
+    const endsAt = oFetch(period, 'endsAt');
+    const reasonNote = oFetch(period, 'reasonNote');
+    const breaks = oFetch(period, 'breaks');
+    const date = oFetch(period, 'date');
+    const staffMember = oFetch(period, 'staffMember');
 
     if (status === 'pending') {
       const initialValues = {
-        reasonNote: oFetch(period, 'reasonNote'),
+        id: id || null,
+        date,
+        staffMember,
+        frontendId,
+        startsAt,
+        endsAt,
+        reasonNote,
+        breaks,
       };
 
-      return (
+    return (
         <ClockInPeriodForm
           initialValues={initialValues}
+          onAcceptPeriod={this.props.onAcceptPeriod}
+          onPeriodDataChange={this.props.onPeriodDataChange}
+          onDeletePeriod={this.props.onDeletePeriod}
+          onAddBreak={this.props.onAddBreak}
           period={period}
-          form={`period-${id}`}
+          form={`period-${this.props.staffMemberId}-${this.props.index}`}
         />
       );
     }
 
     if (status === 'accepted') {
-      return <AcceptedClockInPeriod period={period} />;
+      return (
+        <AcceptedClockInPeriod
+          onUnacceptPeriod={this.props.onUnacceptPeriod}
+          period={period}
+        />
+      );
     }
 
     return null;
@@ -31,7 +54,6 @@ class ClockInPeriod extends Component {
 
   render() {
     const { period } = this.props;
-
     return (
       <div className="boss-hrc__shift">
         <div className="boss-time-shift">

@@ -39,9 +39,11 @@ export default class HoursChartUi extends React.Component {
       </div>
     );
   }
+
   componentDidMount() {
     this.renderChart();
   }
+
   componentWillReceiveProps(newProps) {
     var currentPropsExceptInteractionState = { ...this.props };
     delete currentPropsExceptInteractionState.interactionState;
