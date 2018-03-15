@@ -19,7 +19,11 @@
       accessibleVenueIds: accessible_venue_ids,
       payRates: pay_rates,
       accessiblePayRateIds: accessible_pay_rate_ids,
-      genderValues: gender_values
+      genderValues: gender_values,
+      appDownloadLinks: camelized_collection(
+        app_download_link_data,
+        Api::V1::StaffMemberProfile::AppDownloadLinkSerializer
+      )
     }
   )
 %>

@@ -48,19 +48,7 @@ class StaffMembersController < ApplicationController
         pay_rate: staff_member.pay_rate
       ).page_pay_rates.map(&:id)
 
-      app_download_link_data = MobileApp.enabled.with_download_url.map do |mobile_app|
-        if StaffMemberAbility.new(staff_member).can?(:access, mobile_app)
-          last_download_sent = MobileAppDownloadLinkSend.find_by(staff_member: staff_member, mobile_app: mobile_app)
-          AppDownloadLink.new(
-            mobile_app_id: mobile_app.id,
-            app_name: mobile_app.name,
-            download_url: api_v1_staff_member_send_app_download_email_path(staff_member.id),
-            last_sent_at: last_download_sent.andand.sent_at
-          )
-        else
-          nil
-        end
-      end.compact
+      app_download_link_data = get_app_download_link_data(staff_member)
 
       render locals: {
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
@@ -131,8 +119,11 @@ class StaffMembersController < ApplicationController
         pay_rate: staff_member.pay_rate
       ).page_pay_rates.map(&:id)
 
+      app_download_link_data = get_app_download_link_data(staff_member)
+
       render locals: {
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
+        app_download_link_data: app_download_link_data,
         access_token: access_token,
         holidays: ActiveModel::Serializer::CollectionSerializer.new(filtered_holidays, serializer: ::HolidaySerializer),
         paid_holiday_days: paid_holiday_days,
@@ -181,8 +172,11 @@ class StaffMembersController < ApplicationController
         pay_rate: staff_member.pay_rate
       ).page_pay_rates.map(&:id)
 
+      app_download_link_data = get_app_download_link_data(staff_member)
+
       render locals: {
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
+        app_download_link_data: app_download_link_data,
         owed_hours: serialized_owed_hours,
         access_token: access_token.token,
         staff_types: StaffType.all,
@@ -219,9 +213,12 @@ class StaffMembersController < ApplicationController
     venue_accessories = staff_member.master_venue.accessories.enabled
     accessory_requests = staff_member.accessory_requests.includes([:accessory, accessory_refund_request: [:staff_member]])
 
+    app_download_link_data = get_app_download_link_data(staff_member)
+
     render locals: {
       staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
       access_token: access_token.token,
+      app_download_link_data: app_download_link_data,
       staff_types: StaffType.all,
       venues: Venue.all,
       gender_values: StaffMember::GENDERS,
@@ -274,5 +271,21 @@ class StaffMembersController < ApplicationController
 
   def holiday_end_date_from_params
     UIRotaDate.parse!(params['end_date'])
+  end
+
+  def get_app_download_link_data(staff_member)
+    MobileApp.enabled.with_download_url.map do |mobile_app|
+      if StaffMemberAbility.new(staff_member).can?(:access, mobile_app)
+        last_download_sent = MobileAppDownloadLinkSend.find_by(staff_member: staff_member, mobile_app: mobile_app)
+        AppDownloadLink.new(
+          mobile_app_id: mobile_app.id,
+          app_name: mobile_app.name,
+          download_url: api_v1_staff_member_send_app_download_email_path(staff_member.id),
+          last_sent_at: last_download_sent.andand.sent_at
+        )
+      else
+        nil
+      end
+    end.compact
   end
 end
