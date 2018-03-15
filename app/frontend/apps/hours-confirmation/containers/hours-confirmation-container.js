@@ -39,6 +39,7 @@ const mapDispatchToProps = dispatch => {
 @connect(mapStateToProps, mapDispatchToProps)
 class HoursConfirmationContainer extends Component {
   render() {
+    console.log(this.props.clockInOutData.toJS());
     return <HoursConfirmation {...this.props} />;
   }
 }
