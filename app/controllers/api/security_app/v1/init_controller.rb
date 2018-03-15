@@ -7,7 +7,7 @@ module Api
         def index
           staff_member = current_staff_member
 
-          authorize! :access, :security_app
+          authorize! :access, current_mobile_app
 
           render json: {
             profilePage: {

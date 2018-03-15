@@ -13,6 +13,7 @@ import {
   SHOW_EDIT_AVATAR_MODAL,
   HIDE_EDIT_AVATAR_MODAL,
   UPDATE_STAFF_MEMBER,
+  UPDATE_DOWNLOAD_LINK_LAST_SENT_AT
 } from './constants';
 
 const initialState = fromJS({
@@ -29,16 +30,16 @@ const initialState = fromJS({
 
 const profileReducer = handleActions({
   [INITIAL_LOAD]: (state, action) => {
-    const {
-      staffMember,
-      accessToken,
-      staffTypes,
-      venues,
-      payRates,
-      genderValues,
-      accessibleVenueIds,
-      accessiblePayRateIds,
-    } = action.payload;
+    const payload = oFetch(action, 'payload');
+    const staffMember = oFetch(payload, 'staffMember');
+    const accessToken = oFetch(payload, 'accessToken');
+    const staffTypes = oFetch(payload, 'staffTypes');
+    const venues = oFetch(payload, 'venues');
+    const payRates = oFetch(payload, 'payRates');
+    const genderValues = oFetch(payload, 'genderValues');
+    const accessibleVenueIds = oFetch(payload, 'accessibleVenueIds');
+    const accessiblePayRateIds = oFetch(payload, 'accessiblePayRateIds');
+    const appDownloadLinks = oFetch(payload, 'appDownloadLinks');
 
     return state
       .set('staffMember', fromJS(staffMember))
@@ -56,12 +57,30 @@ const profileReducer = handleActions({
         return venues.find(venue => {
           return oFetch(venue, 'id') === id
         })
-      }));
+      }))
+      .set('appDownloadLinks', fromJS(appDownloadLinks));
   },
   [UPDATE_STAFF_MEMBER]: (state, action) => {
     const staffMember = action.payload;
     return state
       .set('staffMember', fromJS(staffMember))
+  },
+  [UPDATE_DOWNLOAD_LINK_LAST_SENT_AT]: (state, action) => {
+    const payload = oFetch(action, 'payload');
+    const mobileAppId = oFetch(payload, 'mobileAppId');
+    const sentAt = oFetch(payload, 'sentAt');
+    const stateData = state.toJS();
+
+    const newAppDownloadLinks = oFetch(stateData, 'appDownloadLinks').map((appDownloadLink) => {
+      if(oFetch(appDownloadLink, 'mobileAppId') == mobileAppId) {
+        return Object.assign(appDownloadLink, { lastSentAt: sentAt });
+      } else {
+        return appDownloadLink;
+      }
+    });
+
+    return state.
+      set('appDownloadLinks', newAppDownloadLinks);
   },
   [EDIT_PROFILE]: (state) => {
     return state

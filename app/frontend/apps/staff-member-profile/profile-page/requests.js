@@ -21,3 +21,10 @@ export const revokePasswordSetupEmailRequest = (staffMember) => {
     errorMessage: 'There was a problem revoking the setup email successful'
   }).post(`/api/v1/staff_members/${staffMember.id}/revoke_verification`);
 }
+
+export const sendMobileAppDownloadEmailRequest = (endpointUrl, appName, mobileAppId) => {
+  return http({
+    successMessage: 'Download Email Sent Successfully for ' + appName,
+    errorMessage: 'There was a problem sending the download email for ' + appName
+  }).post(endpointUrl, {mobileAppId: mobileAppId})
+}

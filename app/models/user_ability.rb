@@ -395,6 +395,14 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
+      can :use, SendMobileAppDownloadEmailEndpoint do |send_mobile_app_download_email_endpoint|
+        mobile_app = send_mobile_app_download_email_endpoint.mobile_app
+        staff_member = send_mobile_app_download_email_endpoint.staff_member
+
+        can_edit_staff_member?(user, staff_member) &&
+          StaffMemberAbility.new(staff_member).can?(:access, mobile_app)
+      end
+
       can :view, VenueHealthChecksPage do |venue_health_checks_page|
         user.has_effective_access_level?(AccessLevel.manager_access_level) &&
         can_manage_venue?(user, venue_health_checks_page.venue)

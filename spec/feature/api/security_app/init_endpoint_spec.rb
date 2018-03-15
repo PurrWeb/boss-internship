@@ -5,6 +5,7 @@ RSpec.describe 'Init endpoint' do
   include HeaderHelpers
 
   let(:now) { Time.current }
+  let(:mobile_app) { MobileApp.create!(name: MobileApp::SECURITY_APP_NAME) }
   let(:params) do
     {}
   end
@@ -54,6 +55,7 @@ RSpec.describe 'Init endpoint' do
   let(:rota_shifts) { [rota_shift_1, rota_shift_2] }
 
   before do
+    mobile_app
     set_authorization_header(access_token.token)
     rota_shifts
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180228113905) do
+ActiveRecord::Schema.define(version: 20180314155555) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -709,6 +709,25 @@ ActiveRecord::Schema.define(version: 20180228113905) do
   add_index "marketing_tasks", ["assigned_to_user_id"], name: "index_marketing_tasks_on_assigned_to_user_id", using: :btree
   add_index "marketing_tasks", ["completed_by_user_id"], name: "index_marketing_tasks_on_completed_by_user_id", using: :btree
   add_index "marketing_tasks", ["venue_id"], name: "index_marketing_tasks_on_venue_id", using: :btree
+
+  create_table "mobile_app_download_link_sends", force: :cascade do |t|
+    t.datetime "sent_at",                   null: false
+    t.integer  "staff_member_id", limit: 4, null: false
+    t.integer  "mobile_app_id",   limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mobile_app_download_link_sends", ["staff_member_id", "mobile_app_id"], name: "no_mobile_dowload_send_dups", unique: true, using: :btree
+
+  create_table "mobile_apps", force: :cascade do |t|
+    t.string   "name",             limit: 255, null: false
+    t.string   "ios_download_url", limit: 255
+    t.string   "google_play_url",  limit: 255
+    t.datetime "disabled_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "names", force: :cascade do |t|
     t.string   "first_name", limit: 255, null: false

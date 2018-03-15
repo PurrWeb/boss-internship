@@ -21,6 +21,10 @@ module Api
           end
         end
 
+        def current_mobile_app
+          @current_mobile_app ||= MobileApp.security_app
+        end
+
         def current_staff_member
           if @security_app_api_access_token.present?
             @security_app_api_access_token.staff_member
