@@ -77,7 +77,6 @@ class MaintenanceTask < ActiveRecord::Base
   end
 
   private
-
   def associate_uploads_to_maintenance_task_images
     return if maintenance_task_image_ids.blank?
 
