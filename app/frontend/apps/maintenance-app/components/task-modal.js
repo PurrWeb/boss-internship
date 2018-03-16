@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import moment from 'moment';
-
+import safeMoment from "~/lib/safe-moment";
 import Select from 'react-select';
 
 import Modal from "react-modal";
@@ -23,17 +23,41 @@ export default class TaskModal extends React.Component {
   }
 
   renderTransitions() {
-    return this.props.selectedMaintenanceTask.maintenanceTaskTransitions.map((transition) => {
+    const selectedMaintenanceTask = oFetch(this.props, 'selectedMaintenanceTask');
+    const sortedTaskTransistions = oFetch(selectedMaintenanceTask, 'maintenanceTaskTransitions').sort((a, b) => {
+      const createdAtA = oFetch(a, 'createdAt');
+      const createdAtB = oFetch(b, 'createdAt');
+
+      if (createdAtA < createdAtB) {
+        return 1;
+      } else if (createdAtA > createdAtB) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+
+    return sortedTaskTransistions.map((transition) => {
       return (
         <li className={ `boss-overview__activity-item boss-overview__activity-item_role_${transition.toState}` } key={ transition.id }>
           <p className="boss-overview__meta">
-            <span className="boss-overview__meta-label">{ transition.toState } by </span>
+            <span className="boss-overview__meta-label">{ this.stateActionLabel(transition.toState) } by </span>
             <span className="boss-overview__meta-user"> { transition.requesterUser.name } </span>
-            <span className="boss-overview__meta-date"> { moment(transition.createdAt).format(oFetch(utils, 'commonDateFormat')) }</span>
+            <span className="boss-overview__meta-date"> { safeMoment.iso8601Parse(oFetch(transition, 'createdAt')).format(oFetch(utils, 'humanDateFormatWithTime')()) }</span>
           </p>
         </li>
       );
     });
+  }
+
+  stateActionLabel = (state) => {
+    const stateMessages = {
+      'accepted': 'Accepted',
+      'completed': 'Completed',
+      'rejected': 'Rejected'
+    }
+
+    return oFetch(stateMessages, state);
   }
 
   onClose = () => {

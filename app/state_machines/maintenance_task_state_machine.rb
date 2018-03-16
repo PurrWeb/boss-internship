@@ -1,6 +1,14 @@
 class MaintenanceTaskStateMachine
   include Statesman::Machine
 
+  #Lower value first by default
+  STATE_SORT_KEYS = {
+    accepted: 0,
+    pending:  -1,
+    completed: -2,
+    rejected: -3,
+  }
+
   state :pending, initial: true
   state :completed
   state :rejected

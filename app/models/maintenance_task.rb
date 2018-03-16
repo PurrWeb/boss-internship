@@ -17,6 +17,13 @@ class MaintenanceTask < ActiveRecord::Base
     high_priority: HIGH_PRIORITY_ENUM_VALUE
   }
 
+  #Lower value first by default
+  PRIORITY_SORT_KEYS = {
+    low_priority: 0,
+    medium_priority: -1,
+    high_priority: -2
+  }
+
   # Associations
   belongs_to :venue
   belongs_to :creator_user, class_name: 'User'
@@ -41,12 +48,12 @@ class MaintenanceTask < ActiveRecord::Base
     )
   end
 
-  def priority_number
-    self.class.priorities.keys.reverse.index(priority)
+  def priority_sort_key
+    PRIORITY_SORT_KEYS.fetch(priority.to_sym)
   end
 
-  def status_number
-    MaintenanceTaskStateMachine.states.index(state_machine.current_state)
+  def status_sort_key
+    MaintenanceTaskStateMachine::STATE_SORT_KEYS.fetch(state_machine.current_state.to_sym)
   end
 
   def self.transition_class
@@ -70,7 +77,6 @@ class MaintenanceTask < ActiveRecord::Base
   end
 
   private
-
   def associate_uploads_to_maintenance_task_images
     return if maintenance_task_image_ids.blank?
 

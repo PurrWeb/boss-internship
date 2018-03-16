@@ -7,8 +7,9 @@ class MaintenanceController < ApplicationController
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     venues = AccessibleVenuesQuery.new(current_user).all
     maintenance_tasks = MaintenanceTaskFilter.new(
-      statuses: 'pending,completed,rejected'
-    ).fetch
+      requester: current_user,
+      params: { statuses: 'pending,completed,rejected' }
+    ).to_a
     statuses = (current_user.maintenance_staff?) ? ['pending', 'completed'] : MaintenanceTaskStateMachine.states
     maintenance_tasks = maintenance_tasks.
       paginate(
@@ -26,8 +27,8 @@ class MaintenanceController < ApplicationController
       statuses: statuses,
       priorities: MaintenanceTask.priorities.keys.map { |p| p.split('_').first },
       page_number: page_number,
-      total_count: MaintenanceTask.count,
-      total_pages: (MaintenanceTask.count / 10) + 1
+      total_count: maintenance_tasks.total_entries,
+      total_pages: maintenance_tasks.total_pages
     }
   end
 
