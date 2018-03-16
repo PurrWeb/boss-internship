@@ -23,7 +23,21 @@ export default class TaskModal extends React.Component {
   }
 
   renderTransitions() {
-    return this.props.selectedMaintenanceTask.maintenanceTaskTransitions.map((transition) => {
+    const selectedMaintenanceTask = oFetch(this.props, 'selectedMaintenanceTask');
+    const sortedTaskTransistions = oFetch(selectedMaintenanceTask, 'maintenanceTaskTransitions').sort((a, b) => {
+      const createdAtA = oFetch(a, 'createdAt');
+      const createdAtB = oFetch(b, 'createdAt');
+
+      if (createdAtA < createdAtB) {
+        return -1;
+      } else if (createdAtA > createdAtB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    return sortedTaskTransistions.map((transition) => {
       return (
         <li className={ `boss-overview__activity-item boss-overview__activity-item_role_${transition.toState}` } key={ transition.id }>
           <p className="boss-overview__meta">
