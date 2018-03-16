@@ -1,7 +1,7 @@
 import React from 'react';
 import oFetch from 'o-fetch';
 import utils from "~/lib/utils";
-import safeMoment from "~/lib/safe-moment"
+import safeMoment from "~/lib/safe-moment";
 
 class OverviewBoard extends React.Component {
   alertClassForCentValue(centValue){
@@ -14,7 +14,7 @@ class OverviewBoard extends React.Component {
     const overheadsCents = oFetch(dailyReport, 'overheadsCents');
     const varianceCents = oFetch(dailyReport, 'varianceCents');
     const rotaedCostCents = oFetch(dailyReport, 'rotaedCostCents');
-    const lastCalculatedAtM = safeMoment.iso8601Parse(oFetch(dailyReport, 'lastCalculatedAt'));
+    const mLastCalculatedAt = safeMoment.iso8601Parse(oFetch(dailyReport, 'lastCalculatedAt'));
 
     return <section className="boss-board boss-board_context_stack">
         <header className="boss-board__header">
@@ -50,7 +50,7 @@ class OverviewBoard extends React.Component {
                 </li>
                 <li className="boss-overview__list-item boss-overview__list-item_role_stats ">
                   <p className="boss-overview__list-name">Last Updated</p>
-                  <p className="boss-overview__list-number">{ lastCalculatedAtM.format(utils.humanDateFormatWithTime()) }</p>
+                  <p className="boss-overview__list-number">{ mLastCalculatedAt.format(utils.humanDateFormatWithTime()) }</p>
                 </li>
               </ul>
             </div>
