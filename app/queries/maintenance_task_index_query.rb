@@ -20,6 +20,10 @@ class MaintenanceTaskIndexQuery
         :venue,
         :maintenance_task_images,
         :maintenance_task_transitions,
+        maintenance_task_notes: [
+          :disabled_by_user,
+          { creator_user: [:name] }
+        ],
         creator_user: [:name],
         disabled_by_user: [:name]
       )
