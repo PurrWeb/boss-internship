@@ -9,7 +9,10 @@ module Api
       def index
         authorize! :view, :maintenance_tasks
 
-        maintenance_tasks_filter = MaintenanceTaskFilter.new(params).fetch
+        maintenance_tasks_filter = MaintenanceTaskFilter.new(
+          requester: current_user,
+          params: params
+        ).to_a
         maintenance_tasks = maintenance_tasks_filter.paginate(
           page: page_number,
           per_page: 10
