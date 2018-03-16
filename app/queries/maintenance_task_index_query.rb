@@ -41,9 +41,9 @@ class MaintenanceTaskIndexQuery
     maintenance_tasks = maintenance_tasks.sort_by do |maintenance_task|
       case sort_type
       when :priority_focused
-        [maintenance_task.priority_sort_key, maintenance_task.status_sort_key, maintenance_task.created_at]
+        [maintenance_task.priority_sort_key, maintenance_task.status_sort_key(sort_type: sort_type), maintenance_task.created_at]
       when :status_focused
-        [maintenance_task.status_sort_key, maintenance_task.priority_sort_key, maintenance_task.created_at]
+        [maintenance_task.status_sort_key(sort_type: sort_type), maintenance_task.priority_sort_key, maintenance_task.created_at]
       else
         raise "Unsupported sort type #{sort_type} encountered"
       end

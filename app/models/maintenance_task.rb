@@ -52,8 +52,10 @@ class MaintenanceTask < ActiveRecord::Base
     PRIORITY_SORT_KEYS.fetch(priority.to_sym)
   end
 
-  def status_sort_key
-    MaintenanceTaskStateMachine::STATE_SORT_KEYS.fetch(state_machine.current_state.to_sym)
+  def status_sort_key(sort_type:)
+    MaintenanceTaskStateMachine.
+      sort_keys(sort_type: sort_type).
+      fetch(state_machine.current_state.to_sym)
   end
 
   def self.transition_class
