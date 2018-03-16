@@ -31,7 +31,7 @@ class MaintenanceTaskIndexQuery
     end
 
     maintenance_tasks = maintenance_tasks.sort_by do |maintenance_task|
-      [maintenance_task.priority_number, maintenance_task.status_number]
+      [maintenance_task.priority_sort_key, maintenance_task.status_sort_key]
     end
   end
 end
