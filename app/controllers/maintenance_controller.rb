@@ -27,8 +27,8 @@ class MaintenanceController < ApplicationController
       statuses: statuses,
       priorities: MaintenanceTask.priorities.keys.map { |p| p.split('_').first },
       page_number: page_number,
-      total_count: MaintenanceTask.count,
-      total_pages: (MaintenanceTask.count / 10) + 1
+      total_count: maintenance_tasks.total_entries,
+      total_pages: maintenance_tasks.total_pages
     }
   end
 
