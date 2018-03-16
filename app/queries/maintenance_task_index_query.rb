@@ -1,13 +1,17 @@
 class MaintenanceTaskIndexQuery
-  def initialize(relation: MaintenanceTask, start_date:, end_date:, venues:, statuses:, priorities:)
+  SORT_TYPES = [:status_focused, :priority_focused]
+
+  def initialize(relation: MaintenanceTask, start_date:, end_date:, venues:, statuses:, priorities:, sort_type:)
     @relation = relation
     @start_date = start_date
     @end_date = end_date
     @venues = venues
     @statuses = statuses
     @priorities = priorities
+    raise "unexpected sort_type #{supplied}. Legal Values: #{SORT_TYPES}" unless SORT_TYPES.include?(sort_type)
+    @sort_type = sort_type
   end
-  attr_reader :relation, :start_date, :end_date, :venues, :statuses, :priorities
+  attr_reader :relation, :start_date, :end_date, :venues, :statuses, :priorities, :sort_type
 
   def to_a
     maintenance_tasks = relation.
@@ -31,7 +35,14 @@ class MaintenanceTaskIndexQuery
     end
 
     maintenance_tasks = maintenance_tasks.sort_by do |maintenance_task|
-      [maintenance_task.priority_sort_key, maintenance_task.status_sort_key]
+      case sort_type
+      when :priority_focused
+        [maintenance_task.priority_sort_key, maintenance_task.status_sort_key]
+      when :status_focused
+        [maintenance_task.status_sort_key, maintenance_task.priority_sort_key]
+      else
+        raise "Unsupported sort type #{sort_type} encountered"
+      end
     end
   end
 end

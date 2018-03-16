@@ -15,8 +15,9 @@ class MaintenanceTaskFilter
       accessible_venues.find_by(id: id)
     end
     @venues = venue_from_params.present? ? venue_from_params : accessible_venues
+    @query_sort_type = requester.maintenance_staff? ? :priority_focused : :status_focused
   end
-  attr_reader :show_only_incomplete, :start_date, :end_date, :statuses, :priorities, :venues
+  attr_reader :show_only_incomplete, :start_date, :end_date, :statuses, :priorities, :venues, :query_sort_type
 
   def to_a
     MaintenanceTaskIndexQuery.new(
@@ -24,7 +25,8 @@ class MaintenanceTaskFilter
       end_date: end_date,
       priorities: priorities,
       venues: venues,
-      statuses: statuses
+      statuses: statuses,
+      sort_type: query_sort_type
     ).to_a
   end
 
