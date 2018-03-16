@@ -88,7 +88,7 @@ export default class MainDashboard extends React.Component {
     if (e.target.value == 'showAll') {
       this.setShowAllChecked();
 
-      this.props.setFilterParams({ statuses: '' });
+      this.props.setFilterParams({ statuses: 'pending,completed,rejected,accepted' });
     } else {
       this.setunacceptedOnly();
 
