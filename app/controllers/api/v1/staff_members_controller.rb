@@ -117,8 +117,6 @@ module Api
       def create
         authorize! :create, :staff_members
 
-        params_json = JSON.parse(request.body)
-
         api_params = AddStaffMemberApiCallParams.new(params_json: params_json, requester: current_user)
 
         model_params = api_params.

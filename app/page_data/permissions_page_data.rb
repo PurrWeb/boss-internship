@@ -193,6 +193,11 @@ class PermissionsPageData
           path: @path.venues_path
         },
         {
+          description: "Payment Uploads",
+          permitted: role.can?(:view, :payment_uploads_page),
+          path: @path.payment_uploads_path
+        },
+        {
           description: 'API Keys',
           permitted: role.can?(:view, :api_keys_page),
           path: @path.api_keys_path,

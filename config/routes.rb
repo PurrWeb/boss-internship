@@ -29,6 +29,8 @@ Rails.application.routes.draw do
     resources :venue_health_check, only: [:index, :new]
     resources :venue_health_check_reports, only: [:show]
 
+    resources :payment_uploads, only: [:index]
+
     resources :change_orders, only: [:index, :show, :edit, :update, :destroy] do
       collection do
         get :submitted
@@ -323,6 +325,12 @@ Rails.application.routes.draw do
         resources :machines, only: [:index, :show, :create, :update, :destroy] do
           member do
             post :restore
+          end
+        end
+
+        resources :payments, only: [] do
+          collection do
+            post :upload_csv
           end
         end
 

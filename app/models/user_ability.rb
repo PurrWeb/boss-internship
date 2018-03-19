@@ -132,6 +132,18 @@ class UserAbility
         user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can :view, :payment_uploads_page do
+        user.payroll_manager? || (
+          user.has_effective_access_level?(AccessLevel.admin_access_level)
+        )
+      end
+
+      can :upload, :payment_csv do
+        user.payroll_manager? || (
+          user.has_effective_access_level?(AccessLevel.admin_access_level)
+        )
+      end
+
       can :view, :accessory_requests_page do
         user.food_ops_manager? ||
         user.has_effective_access_level?(AccessLevel.ops_manager_access_level)

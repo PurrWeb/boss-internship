@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PaymentUploadCSVParser do
+describe ParsePaymentUploadCSV do
   let(:venue) { FactoryGirl.create(:venue, name: 'blue') }
   let(:valid_title_row) { ['Title: Departmental Analysis Gross To Net Portrait', "FileName: EDIT 1.REPORT", nil, nil, nil, nil, nil, nil] }
   let(:valid_header_row) { ['DateParameters.ProcessDate','CompanyDetails.Name','Employees.DepartmentName','Employees.Initials','Employees.Surname','Employees.NINumber','Employees.DateOfBirth','CurrentPay.RndNetPay'] }
@@ -14,7 +14,7 @@ describe PaymentUploadCSVParser do
   let(:net_pay_cents) { 35069 }
   let(:net_pay) { (Float(net_pay_cents) / 100.0).to_s }
   let(:raw_process_date) do
-    process_date.strftime(PaymentUploadCSVParser::UPLOAD_DATE_FORMAT)
+    process_date.strftime(ParsePaymentUploadCSV::UPLOAD_DATE_FORMAT)
   end
   let(:raw_department_name) { department_name + '   ' }
   let(:raw_venue_name) { venue_name + '    ' }
@@ -23,7 +23,7 @@ describe PaymentUploadCSVParser do
   let(:raw_surname) { surname + '   ' }
   let(:raw_net_pay) { net_pay + '  ' }
   let(:raw_date_of_birth) do
-    date_of_birth.strftime(PaymentUploadCSVParser::UPLOAD_DATE_FORMAT) + '   '
+    date_of_birth.strftime(ParsePaymentUploadCSV::UPLOAD_DATE_FORMAT) + '   '
   end
   let(:valid_payment_row) do
     [
@@ -45,7 +45,7 @@ describe PaymentUploadCSVParser do
       end
     end
   end
-  let(:parser) { PaymentUploadCSVParser.new(csv_data: csv_data, requester: requester) }
+  let(:parser) { ParsePaymentUploadCSV.new(csv_data: csv_data, requester: requester) }
 
   context 'Staff Member exists' do
     let(:staff_member) do
@@ -72,14 +72,14 @@ describe PaymentUploadCSVParser do
         let(:staff_member_master_venue) { venue }
 
         it 'should create a valid payment' do
-          result = parser.parse
-          expect(result.fetch(:invalid_payments).count).to eq(0)
-          expect(result.fetch(:valid_payments).count).to eq(1)
+          result = parser.call
+          expect(result.data.fetch(:invalid_payments).count).to eq(0)
+          expect(result.data.fetch(:valid_payments).count).to eq(1)
         end
 
         describe 'valid_payment' do
           it 'should contain raw data' do
-            valid_payment = parser.parse.fetch(:valid_payments).first
+            valid_payment = parser.call.data.fetch(:valid_payments).first
             raw_data = valid_payment.fetch(:raw_data)
 
             expect(raw_data.fetch(:process_date_raw)).to eq(raw_process_date)
@@ -93,7 +93,7 @@ describe PaymentUploadCSVParser do
           end
 
           it 'should contain normalised data' do
-            valid_payment = parser.parse.fetch(:valid_payments).first
+            valid_payment = parser.call.data.fetch(:valid_payments).first
             normalised_data = valid_payment.fetch(:normalised_data)
 
             expect(normalised_data.fetch(:process_date)).to eq(process_date)
@@ -107,19 +107,19 @@ describe PaymentUploadCSVParser do
           end
 
           it 'should contain venue' do
-            valid_payment = parser.parse.fetch(:valid_payments).first
+            valid_payment = parser.call.data.fetch(:valid_payments).first
             returned_venue = valid_payment.fetch(:venue)
             expect(returned_venue).to eq(venue)
           end
 
           it 'should contain staff_member' do
-            valid_payment = parser.parse.fetch(:valid_payments).first
+            valid_payment = parser.call.data.fetch(:valid_payments).first
             returned_staff_member = valid_payment.fetch(:staff_member)
             expect(returned_staff_member).to eq(staff_member)
           end
 
           it 'should have no errors' do
-            valid_payment = parser.parse.fetch(:valid_payments).first
+            valid_payment = parser.call.data.fetch(:valid_payments).first
             expect(valid_payment.fetch(:errors)).to eq({})
           end
         end
@@ -131,14 +131,13 @@ describe PaymentUploadCSVParser do
 
           context 'title row has invalid Title field' do
             let(:invalid_title_row) { ['Tite: Departmental Analysis Gross To Net Portrait', "FileName: EDIT 1.REPORT", nil, nil, nil, nil, nil, nil] }
-            it 'should not process any payments' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(0)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+
+            it 'should not be success' do
+              expect(parser.call.success?).to eq(false)
             end
 
             it 'should return header error' do
-              title_row_errors = parser.parse.fetch(:title_row_errors)
+              title_row_errors = parser.call.data.fetch(:title_row_errors)
               expect(title_row_errors).to eq(
                 title: ["Is invalid should have format 'Title: <Title>'"]
               )
@@ -147,14 +146,12 @@ describe PaymentUploadCSVParser do
 
           context 'title row has invalid Filename field' do
             let(:invalid_title_row) { ['Title: Departmental Analysis Gross To Net Portrait', "Fileame: EDIT 1.REPORT", nil, nil, nil, nil, nil, nil] }
-            it 'should not process any payments' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(0)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+            it 'should not be success' do
+              expect(parser.call.success?).to eq(false)
             end
 
             it 'should return error' do
-              title_row_errors = parser.parse.fetch(:title_row_errors)
+              title_row_errors = parser.call.data.fetch(:title_row_errors)
               expect(title_row_errors).to eq({
                 filename: ["Is invalid should have format 'FileName: <Filename>'"]
               })
@@ -167,18 +164,22 @@ describe PaymentUploadCSVParser do
             [ valid_title_row, invalid_header_row, valid_payment_row ]
           end
 
-          PaymentUploadCSVParser::HEADERS.each do |header|
+          ParsePaymentUploadCSV::HEADERS.each do |header|
             context "header row has invalid #{header} header" do
               let(:invalid_header_row) do
-                row = PaymentUploadCSVParser::HEADERS.clone
+                row = ParsePaymentUploadCSV::HEADERS.clone
                 row[row.index(header)] = nil
                 row
               end
 
+              it 'should not be success' do
+                expect(parser.call.success?).to eq(false)
+              end
+
               it 'should return error for the header' do
-                result = parser.parse
+                result = parser.call
                 expect(
-                  result.fetch(:header_row_errors)
+                  result.data.fetch(:header_row_errors)
                 ).to eq({
                   header => "Was missing or in unexpected position."
                 })
@@ -195,25 +196,29 @@ describe PaymentUploadCSVParser do
           context 'process_date is missing' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::PROCCESS_DATE_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::PROCCESS_DATE_HEADER)
                 row[column_index] = ''
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::PROCCESS_DATE_HEADER => ["must be present"]
+                  ParsePaymentUploadCSV::PROCCESS_DATE_HEADER => ["must be present"]
                 })
               end
             end
@@ -222,25 +227,29 @@ describe PaymentUploadCSVParser do
           context 'process date format wrong' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::PROCCESS_DATE_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::PROCCESS_DATE_HEADER)
                 row[column_index] = process_date.strftime('YYYY-dd-mm')
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::PROCCESS_DATE_HEADER => ["date format invalid"]
+                  ParsePaymentUploadCSV::PROCCESS_DATE_HEADER => ["date format invalid"]
                 })
               end
             end
@@ -249,25 +258,29 @@ describe PaymentUploadCSVParser do
           context 'venue name is missing' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::VENUE_NAME_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::VENUE_NAME_HEADER)
                 row[column_index] = ''
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::VENUE_NAME_HEADER => ["must be present"]
+                  ParsePaymentUploadCSV::VENUE_NAME_HEADER => ["must be present"]
                 })
               end
             end
@@ -276,26 +289,30 @@ describe PaymentUploadCSVParser do
           context 'venue name does not match venue' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::VENUE_NAME_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::VENUE_NAME_HEADER)
                 row[column_index] = 'Fake name'
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
                   base: ['no matching staff member found'],
-                  PaymentUploadCSVParser::VENUE_NAME_HEADER => ["does not match venue in system"]
+                  ParsePaymentUploadCSV::VENUE_NAME_HEADER => ["does not match venue in system"]
                 })
               end
             end
@@ -304,25 +321,29 @@ describe PaymentUploadCSVParser do
           context 'department name is missing' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::DEPARTMENT_NAME_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::DEPARTMENT_NAME_HEADER)
                 row[column_index] = ''
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::DEPARTMENT_NAME_HEADER => ["must be present"]
+                  ParsePaymentUploadCSV::DEPARTMENT_NAME_HEADER => ["must be present"]
                 })
               end
             end
@@ -331,25 +352,29 @@ describe PaymentUploadCSVParser do
           context 'first initial is missing' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::FIRST_INITIAL_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::FIRST_INITIAL_HEADER)
                 row[column_index] = ''
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::FIRST_INITIAL_HEADER => ["must be present"]
+                  ParsePaymentUploadCSV::FIRST_INITIAL_HEADER => ["must be present"]
                 })
               end
             end
@@ -358,25 +383,29 @@ describe PaymentUploadCSVParser do
           context 'surname is missing' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::SURNAME_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::SURNAME_HEADER)
                 row[column_index] = ''
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::SURNAME_HEADER => ["must be present"]
+                  ParsePaymentUploadCSV::SURNAME_HEADER => ["must be present"]
                 })
               end
             end
@@ -385,25 +414,29 @@ describe PaymentUploadCSVParser do
           context 'ni number is missing' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::NI_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::NI_HEADER)
                 row[column_index] = ''
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::NI_HEADER => ["must be present"]
+                  ParsePaymentUploadCSV::NI_HEADER => ["must be present"]
                 })
               end
             end
@@ -412,25 +445,29 @@ describe PaymentUploadCSVParser do
           context 'ni number is invalid' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::NI_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::NI_HEADER)
                 row[column_index] = 'INALVID CRAP'
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::NI_HEADER => ["format is not valid"]
+                  ParsePaymentUploadCSV::NI_HEADER => ["format is not valid"]
                 })
               end
             end
@@ -439,25 +476,29 @@ describe PaymentUploadCSVParser do
           context 'date of birth is missing' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::DOB_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::DOB_HEADER)
                 row[column_index] = ''
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::DOB_HEADER => ["must be present"]
+                  ParsePaymentUploadCSV::DOB_HEADER => ["must be present"]
                 })
               end
             end
@@ -466,25 +507,29 @@ describe PaymentUploadCSVParser do
           context 'date of birth format wrong' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::DOB_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::DOB_HEADER)
                 row[column_index] = process_date.strftime('YYYY-dd-mm')
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::DOB_HEADER => ["date format invalid"]
+                  ParsePaymentUploadCSV::DOB_HEADER => ["date format invalid"]
                 })
               end
             end
@@ -494,25 +539,29 @@ describe PaymentUploadCSVParser do
           context 'net pay is missing' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::NET_PAY_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::NET_PAY_HEADER)
                 row[column_index] = ''
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::NET_PAY_HEADER => ["must be present"]
+                  ParsePaymentUploadCSV::NET_PAY_HEADER => ["must be present"]
                 })
               end
             end
@@ -521,25 +570,29 @@ describe PaymentUploadCSVParser do
           context 'net pay format wrong' do
             let(:invalid_payment_row) do
               valid_payment_row.clone.tap do |row|
-                column_index = PaymentUploadCSVParser::HEADERS.index(PaymentUploadCSVParser::NET_PAY_HEADER)
+                column_index = ParsePaymentUploadCSV::HEADERS.index(ParsePaymentUploadCSV::NET_PAY_HEADER)
                 row[column_index] = process_date.strftime('YYYY-dd-mm')
               end
             end
 
+            it 'should be success' do
+              expect(parser.call.success?).to eq(true)
+            end
+
             it 'should create invalid payment' do
-              result = parser.parse
-              expect(result.fetch(:invalid_payments).count).to eq(1)
-              expect(result.fetch(:valid_payments).count).to eq(0)
+              result = parser.call
+              expect(result.data.fetch(:invalid_payments).count).to eq(1)
+              expect(result.data.fetch(:valid_payments).count).to eq(0)
             end
 
             describe 'invalid payment' do
               it 'should have error for column' do
-                invalid_payment = parser.parse.fetch(:invalid_payments).first
+                invalid_payment = parser.call.data.fetch(:invalid_payments).first
 
                 expect(
                   invalid_payment.fetch(:errors)
                 ).to eq({
-                  PaymentUploadCSVParser::NET_PAY_HEADER => ["format invalid"]
+                  ParsePaymentUploadCSV::NET_PAY_HEADER => ["format invalid"]
                 })
               end
             end
@@ -555,13 +608,13 @@ describe PaymentUploadCSVParser do
         let(:raw_venue_name) { other_venue.name }
 
         it 'should create invalid payment' do
-          result = parser.parse
-          expect(result.fetch(:invalid_payments).count).to eq(1)
-          expect(result.fetch(:valid_payments).count).to eq(0)
+          result = parser.call
+          expect(result.data.fetch(:invalid_payments).count).to eq(1)
+          expect(result.data.fetch(:valid_payments).count).to eq(0)
         end
 
         describe 'invalid payment' do
-          let(:invalid_payment) { parser.parse.fetch(:invalid_payments).first }
+          let(:invalid_payment) { parser.call.data.fetch(:invalid_payments).first }
 
           it 'should not return staff member' do
             expect(invalid_payment[:staff_member]).to eq(nil)
@@ -587,13 +640,13 @@ describe PaymentUploadCSVParser do
         let(:staff_member_master_venue) { venue }
 
         it 'should create invalid payment' do
-          result = parser.parse
-          expect(result.fetch(:invalid_payments).count).to eq(1)
-          expect(result.fetch(:valid_payments).count).to eq(0)
+          result = parser.call
+          expect(result.data.fetch(:invalid_payments).count).to eq(1)
+          expect(result.data.fetch(:valid_payments).count).to eq(0)
         end
 
         describe 'invalid payment' do
-          let(:invalid_payment) { parser.parse.fetch(:invalid_payments).first }
+          let(:invalid_payment) { parser.call.data.fetch(:invalid_payments).first }
 
           it 'should not return staff member' do
             expect(invalid_payment[:staff_member]).to eq(nil)
@@ -619,13 +672,13 @@ describe PaymentUploadCSVParser do
         let(:staff_member_master_venue) { venue }
 
         it 'should create invalid payment' do
-          result = parser.parse
-          expect(result.fetch(:invalid_payments).count).to eq(1)
-          expect(result.fetch(:valid_payments).count).to eq(0)
+          result = parser.call
+          expect(result.data.fetch(:invalid_payments).count).to eq(1)
+          expect(result.data.fetch(:valid_payments).count).to eq(0)
         end
 
         describe 'invalid payment' do
-          let(:invalid_payment) { parser.parse.fetch(:invalid_payments).first }
+          let(:invalid_payment) { parser.call.data.fetch(:invalid_payments).first }
 
           it 'should not return staff member' do
             expect(invalid_payment[:staff_member]).to eq(nil)

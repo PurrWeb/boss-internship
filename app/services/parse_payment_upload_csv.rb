@@ -1,6 +1,12 @@
 require 'csv'
 
-class PaymentUploadCSVParser
+class ParsePaymentUploadCSV
+  class Result < Struct.new(:success, :data)
+    def success?
+      success
+    end
+  end
+
   PROCCESS_DATE_HEADER = 'DateParameters.ProcessDate'
   VENUE_NAME_HEADER = 'CompanyDetails.Name'
   DEPARTMENT_NAME_HEADER = 'Employees.DepartmentName'
@@ -31,13 +37,14 @@ class PaymentUploadCSVParser
   end
   attr_reader :csv_data, :requester
 
-  def parse
+  def call
     valid_payments = []
     invalid_payments = []
     title_row_errors = {}
     header_row_errors = {}
 
     row_index = 0
+    format_valid = false
     CSV.parse(csv_data, headers: HEADERS, return_headers: false, skip_blanks: true) do |row|
       if (row_index == 0)
         validate_title_row(row: row, errors: title_row_errors)
@@ -45,6 +52,7 @@ class PaymentUploadCSVParser
         validate_header_row(row: row, errors: header_row_errors)
         break unless header_row_errors.empty? && title_row_errors.empty?
       else
+        format_valid = true
         payment_data = processRowData(row)
         if payment_data.fetch(:errors).empty?
           valid_payments << payment_data
@@ -55,12 +63,24 @@ class PaymentUploadCSVParser
       row_index = row_index + 1
     end
 
-    return {
-      title_row_errors: title_row_errors,
-      header_row_errors: header_row_errors,
-      valid_payments: valid_payments,
-      invalid_payments: invalid_payments
-    }
+    if format_valid
+      Result.new(
+        true,
+        {
+          valid_payments: valid_payments,
+          invalid_payments: invalid_payments
+        }
+      )
+    else
+      Result.new(
+        false,
+        {
+          header_rows: HEADERS,
+          title_row_errors: title_row_errors,
+          header_row_errors: header_row_errors
+        }
+      )
+    end
   end
 
   private

@@ -199,6 +199,9 @@ registerComponent('VouchersUsageApp', VouchersUsageApp);
 import VouchersRedeemApp from './apps/vouchers-redeem';
 registerComponent('VouchersRedeemApp', VouchersRedeemApp);
 
+import PaymentUploadApp from './apps/payment-upload-app';
+registerComponent('PaymentUploadApp', PaymentUploadApp);
+
 $(document).ready(function() {
   if (window.boss.currentLayout !== 'oldLayout') {
     initMobileMenu();
