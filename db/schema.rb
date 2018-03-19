@@ -820,6 +820,13 @@ ActiveRecord::Schema.define(version: 20180509163419) do
 
   add_index "pay_rates", ["pay_rate_type"], name: "index_pay_rates_on_pay_rate_type", using: :btree
 
+  create_table "payment_csv_uploads", force: :cascade do |t|
+    t.integer  "uploaded_by_user_id", limit: 4,   null: false
+    t.string   "file",                limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "payment_transitions", force: :cascade do |t|
     t.string   "to_state",    limit: 255,   null: false
     t.text     "metadata",    limit: 65535
