@@ -11,6 +11,7 @@ class Api::V1::MarketingTaskSerializer < ActiveModel::Serializer
   has_one :assigned_to_user, serializer: Api::V1::UserSerializer
   has_many :marketing_task_notes, serializer: Api::V1::MarketingTaskNoteSerializer
   has_many :marketing_task_transitions, serializer: Api::V1::MarketingTaskTransitionSerializer
+  has_many :timeline_activities, serializer: Api::V1::MarketingTaskTimelineSerializer
 
   def status
     object.state_machine.current_state

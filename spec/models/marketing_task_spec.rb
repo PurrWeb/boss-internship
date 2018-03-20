@@ -9,6 +9,7 @@ RSpec.describe MarketingTask, type: :model do
     it { is_expected.to belong_to :assigned_to_user }
     it { is_expected.to belong_to :venue }
     it { is_expected.to have_many :marketing_task_transitions }
+    it { is_expected.to have_many :marketing_task_assignments }
   end
 
   describe 'Associations' do

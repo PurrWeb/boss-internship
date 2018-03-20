@@ -12,9 +12,17 @@ class MarketingTask < ActiveRecord::Base
   belongs_to :assigned_to_user, class_name: 'User'
   has_many :marketing_task_transitions, autosave: false
   has_many :marketing_task_notes
+  has_many :marketing_task_assignments
+  has_many :timeline_activities
 
   # Validations
   validates :title, :type, :due_at, :created_by_user, :venue, presence: true
+
+  def timeline_activities
+    [
+      marketing_task_assignments + marketing_task_transitions
+    ].flatten.sort_by { |activity| activity.created_at }.reverse
+  end
 
   def disable(current_user)
     ActiveRecord::Base.transaction do
