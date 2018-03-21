@@ -43,7 +43,6 @@ class StaffMembersList extends Component {
 
   render() {
     const { clockInOutData } = this.props;
-    console.log(this.state.filteredStaffMemberIds);
 
     return (
       <ContentWrapper>

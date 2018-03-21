@@ -8,7 +8,6 @@ import {
 
 class StaffTypeSelect extends React.Component {
   onChange = values => {
-    console.log(values);
     this.props.onChange(values.map(value => value.value));
   };
 
