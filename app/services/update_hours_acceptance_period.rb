@@ -21,7 +21,8 @@ class UpdateHoursAcceptancePeriod
 
     if !hours_acceptance_period.editable?
       hours_acceptance_period.errors.add(:base, "these hours are not editable")
-      Result.new(false, hours_acceptance_period, breaks)
+      api_errors = HourAcceptancePeriodApiErrors.new(hour_acceptance_period: hours_acceptance_period, breaks: breaks)
+      Result.new(false, hours_acceptance_period, breaks, api_errors)
     else
       ActiveRecord::Base.transaction do
         hours_acceptance_period.assign_attributes(

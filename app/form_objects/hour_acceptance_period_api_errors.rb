@@ -7,6 +7,7 @@ class HourAcceptancePeriodApiErrors
 
   def errors
     result = {}
+    result[:base] = hour_acceptance_period.errors[:base] if hour_acceptance_period.errors[:base].present?
     result[:breaks] = breaks.map do |period_break|
       errors = {}
       errors[:startsAt] = period_break.errors[:starts_at] if period_break.errors[:starts_at].present?
