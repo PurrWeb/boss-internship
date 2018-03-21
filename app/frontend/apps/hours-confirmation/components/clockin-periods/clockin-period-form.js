@@ -4,6 +4,7 @@ import _ from 'lodash';
 import uuid from 'uuid/v1';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { openWarningModalBig } from '~/components/modals';
 
 import {
   Field,
@@ -26,7 +27,11 @@ import safeMoment from '~/lib/safe-moment';
 
 import FormReason from './form-components/form-reason';
 import FormTimeInterval from './form-components/form-time-interval';
-import { getTimeDiff } from '../../selectors';
+import {
+  getItemTimeDiff,
+  getItemsTimeDiff,
+  formattedTime,
+} from '../../selectors';
 import humanize from 'string-humanize';
 
 function createGlobalErrors(fieldsErrors) {}
@@ -116,8 +121,36 @@ class ClockInPeriodForm extends Component {
     isOpened: false,
   };
 
+  acceptPeriod = ({ values }) => {
+    return this.props.onAcceptPeriod(values.toJS()).catch(err => {
+      if (err.response.data.errors) {
+        const errors = err.response.data.errors;
+        const breaksErrors = errors.breaks;
+        const breaksErrorsSet = new Set();
+        if (breaksErrors && breaksErrors.length > 0) {
+          breaksErrors.forEach((item, index) => {
+            Object.keys(item).forEach(key => {
+              item[key].forEach(error => {
+                breaksErrorsSet.add(`${humanize(key)} ${error}`);
+              });
+            });
+          });
+        }
+        throw new SubmissionError({
+          ...errors,
+          _error: {
+            breaks: Array.from(breaksErrorsSet),
+          },
+        });
+      }
+      return Promise.reject(new Error(err));
+    });
+  };
+
   renderPendingActions(period) {
-    const acceptanceDiff = getTimeDiff([period]);
+    const acceptanceDiff = getItemTimeDiff(period);
+    const breaksDiff = getItemsTimeDiff(oFetch(period, 'breaks'));
+    const acceptanceStats = formattedTime(acceptanceDiff - breaksDiff);
     const acceptedBy = oFetch(period, 'acceptedBy') || 'N/A';
     const acceptedAt = oFetch(period, 'acceptedAt');
     const acceptedAtFormatted = acceptedAt
@@ -125,23 +158,44 @@ class ClockInPeriodForm extends Component {
       : 'N/A';
     const formInvalid = !oFetch(this.props, 'valid');
 
+    const currentAcceptedRotaedDiff =
+      this.props.rotaedStats -
+      (this.props.hoursAcceptanceStats + acceptanceDiff - breaksDiff);
+
     return (
       <div className="boss-time-shift__actions">
         <button
           disabled={this.props.submitting}
-          onClick={this.props.handleSubmit(values =>
-            this.props.onAcceptPeriod(values.toJS()).catch(err => {
-              if (err.response.data.errors) {
-                throw new SubmissionError(err.response.data.errors);
-              }
-              return Promise.reject(new Error(err));
-            }),
-          )}
+          onClick={this.props.handleSubmit(values => {
+            if (currentAcceptedRotaedDiff >= 0) {
+              return this.acceptPeriod({ values });
+            }
+            return new Promise((resolve, reject) => {
+              openWarningModalBig({
+                closeCallback: () => resolve(),
+                submit: (closeModal, data) => {
+                  closeModal();
+                  return resolve(this.acceptPeriod(data));
+                },
+                config: {
+                  title: 'WARNING !!!',
+                  text: [
+                    'If you accept these hours, the total amount of accepted hours for this staff member will be greater than what was rotaed.',
+                    'Please ensure you have added suitable reason notes to explain the time difference.',
+                    'These will be reviewed by senior management.',
+                  ],
+                  buttonText: 'Accept',
+                  cancel: true,
+                },
+                props: { values },
+              });
+            });
+          })}
           className="boss-button boss-button_role_success boss-time-shift__button boss-time-shift__button_role_accept-shift"
         >
           Accepted{' '}
           <span className="boss-time-shift__button-count">
-            {acceptanceDiff.fullTime}
+            {acceptanceStats}
           </span>
         </button>
         <button
@@ -194,11 +248,10 @@ class ClockInPeriodForm extends Component {
 
   renderBreaks = ({ fields, meta: { error, submitFailed } }) => {
     return (
-      <div className="boss-time-shift__break-inner">
+      <div>
         {fields.map((periodBreak, index) => {
           const { period } = this.props;
           const date = oFetch(period, 'date');
-
           return (
             <div key={index} className="boss-time-shift__break-item">
               <div className="boss-time-shift__log boss-time-shift__log_layout_break">
@@ -241,7 +294,6 @@ class ClockInPeriodForm extends Component {
   render() {
     const { period, handleSubmit } = this.props;
     const date = oFetch(period, 'date');
-
     return (
       <form className="boss-time-shift__form">
         <div className="boss-time-shift__log">
@@ -272,10 +324,23 @@ class ClockInPeriodForm extends Component {
             </button>
           </div>
           <div
-            className="boss-time-shift__break-content boss-time-shift__break_state_opened"
-            style={{ display: this.state.isOpened ? 'block' : 'none' }}
+            className="boss-time-shift__break-content boss-time-shift__break_state_opened boss-time-shift__break-inner"
+            style={{ display: 'block' }}
           >
-            <FieldArray name="breaks" component={this.renderBreaks} />
+            {this.props.error &&
+              this.props.error.breaks &&
+              this.props.error.breaks.length !== 0 && (
+                <div className="boss-time-shift__error">
+                  {this.props.error.breaks.map((errorItem, key) => (
+                    <p key={key} className="boss-time-shift__error-text">
+                      {errorItem}
+                    </p>
+                  ))}
+                </div>
+              )}
+            <div style={{ display: this.state.isOpened ? 'block' : 'none' }}>
+              <FieldArray name="breaks" component={this.renderBreaks} />
+            </div>
           </div>
         </div>
       </form>
