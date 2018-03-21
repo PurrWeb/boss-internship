@@ -34,7 +34,15 @@ class HoursConfirmationController < ApplicationController
 
       hours_acceptance_periods = HoursAcceptancePeriod.enabled.where(
         clock_in_day: clock_in_days
-      ).includes([:hours_acceptance_breaks_enabled, :clock_in_day, accepted_by: [:name]])
+      ).includes([:frozen_by, :hours_acceptance_breaks_enabled, accepted_by: [:name], clock_in_day: [:venue]])
+
+      ability = UserAbility.new(current_user);
+      user_periods_permissions = hours_acceptance_periods.map do |period|
+        {
+          id: period.id,
+          permitted: ability.can?(:update, period)
+        }
+      end
 
       hours_acceptance_breaks = HoursAcceptanceBreak.enabled.where(
         hours_acceptance_period: hours_acceptance_periods
@@ -82,6 +90,7 @@ class HoursConfirmationController < ApplicationController
         rota_shifts: rota_shifts,
         venues: venues,
         venue: venue,
+        user_periods_permissions: user_periods_permissions,
         date: date
       }
     else
@@ -105,7 +114,7 @@ class HoursConfirmationController < ApplicationController
 
       clock_in_periods = ClockInPeriod.where(
         clock_in_day: clock_in_days,
-      ).includes(:clock_in_day, :clock_in_events, clock_in_day: [:staff_member, :venue])
+      ).includes(:clock_in_day, :clock_in_events, :clock_in_breaks, clock_in_day: [:staff_member, :venue])
 
       clock_in_breaks = ClockInBreak.where(
         clock_in_period: clock_in_periods
@@ -118,12 +127,20 @@ class HoursConfirmationController < ApplicationController
       hours_acceptance_periods = HoursAcceptancePeriod.where(
         clock_in_day: clock_in_days,
         status: HoursAcceptancePeriod::STATES - [HoursAcceptancePeriod::DELETED_STATE]
-      ).includes(:hours_acceptance_breaks_enabled, :clock_in_day)
+      ).includes(:frozen_by, :hours_acceptance_breaks_enabled, :accepted_by, clock_in_day: [:venue])
+
+      ability = UserAbility.new(current_user);
+      user_periods_permissions = hours_acceptance_periods.map do |period|
+        {
+          id: period.id,
+          permitted: ability.can?(:update, period)
+        }
+      end
 
       hours_acceptance_breaks = HoursAcceptanceBreak.where(
         hours_acceptance_period: hours_acceptance_periods,
         disabled_at: nil
-      )
+      ).includes(:hours_acceptance_period)
 
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
       venues = if current_user.has_all_venue_access?
@@ -167,6 +184,7 @@ class HoursConfirmationController < ApplicationController
         rotas: rotas,
         rota_shifts: rota_shifts,
         venues: venues,
+        user_periods_permissions: user_periods_permissions,
         venue: venue
       }
     else
