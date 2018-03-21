@@ -10,6 +10,7 @@ import {
   updatePeriodData,
   acceptPeriodAction,
   addNewAcceptancePeriodAction,
+  clockOutAction,
 } from '../redux/actions';
 
 const mapStateToProps = state => {
@@ -18,6 +19,7 @@ const mapStateToProps = state => {
     staffMembers: state.get('staffMembers'),
     staffTypes: state.get('staffTypes'),
     hoursAcceptanceBreaks: state.get('hoursAcceptanceBreaks'),
+    pageOptions: state.get('pageOptions'),
   };
 };
 
@@ -30,6 +32,7 @@ const mapDispatchToProps = dispatch => {
         updatePeriodData,
         acceptPeriodAction,
         addNewAcceptancePeriodAction,
+        clockOutAction,
       },
       dispatch,
     ),
@@ -39,7 +42,6 @@ const mapDispatchToProps = dispatch => {
 @connect(mapStateToProps, mapDispatchToProps)
 class HoursConfirmationContainer extends Component {
   render() {
-    console.log(this.props.clockInOutData.toJS());
     return <HoursConfirmation {...this.props} />;
   }
 }

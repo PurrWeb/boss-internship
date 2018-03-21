@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import oFetch from 'o-fetch';
 import uuid from 'uuid/v1';
 
-import getHoursPeriodStats from '~/lib/get-hours-period-stats';
 import RotaDate from '~/lib/rota-date';
-import { addZeroToNumber } from '../selectors';
+import { addZeroToNumber, formattedTime } from '../selectors';
 
 import {
   SimpleDashboard,
   DashboardActions,
+  DashboardDateSelect,
 } from '~/components/boss-dashboards';
+
+import { appRoutes } from '~/lib/routes';
 
 import safeMoment from '~/lib/safe-moment';
 import utils from '~/lib/utils';
@@ -21,30 +23,16 @@ import StaffMemberLeftSide from './staff-member-item/staff-member-left-side';
 import StaffMemberMainSide from './staff-member-item/staff-member-main-side';
 
 function timeObjectDiff(rotaed, accepted) {
-  const rotaedSeconds = rotaed.hours * 60 * 60 + rotaed.minutes * 60;
-  const acceptedSeconds = accepted.hours * 60 * 60 + accepted.minutes * 60;
-  const secondsDiff = Math.abs(rotaedSeconds - acceptedSeconds);
-  const hours = Math.trunc(secondsDiff / 60 / 60);
-  const minutes = Math.trunc((secondsDiff / 60) % 60);
-  const sign =
-    rotaedSeconds !== acceptedSeconds
-      ? rotaedSeconds < acceptedSeconds ? '+' : '-'
-      : '';
-  const zeroHours = addZeroToNumber(hours);
-  const zeroMinutes = addZeroToNumber(minutes);
+  const diff = rotaed - accepted;
+
+  const sign = rotaed !== accepted ? (rotaed < accepted ? '+' : '-') : '';
   return {
     sign,
-    hours,
-    minutes,
-    zeroHours,
-    zeroMinutes,
-    full: `${sign}${zeroHours}h${zeroMinutes}m`,
+    full: `${sign}${formattedTime(diff)}`,
   };
 }
 
 class HoursConfirmation extends Component {
-  _handleViewByDate = () => {};
-
   handleUnacceptPeriod = period => {
     return this.props.actions.unacceptPeriodAction(period);
   };
@@ -99,14 +87,26 @@ class HoursConfirmation extends Component {
     };
   }
 
+  handleDateChange = ({ date, venueId }) => {
+    location.href = appRoutes.hoursConfirmationDayPage({
+      venueId,
+      date,
+    });
+  };
+
   _renderStaffMemberItem({ date, periods }) {
     const clockInPeriods = oFetch(periods, 'clockInPeriods');
     const hoursAcceptancePeriods = oFetch(periods, 'hoursAcceptancePeriods');
     const hoursAcceptanceStats = oFetch(periods, 'hoursAcceptanceStats');
+    const hoursAcceptanceBreaksStats = oFetch(
+      periods,
+      'hoursAcceptanceBreaksStats',
+    );
 
     const hoursAcceptanceBreaks = oFetch(this.props, 'hoursAcceptanceBreaks');
 
     const clockedStats = oFetch(periods, 'clockedStats');
+    const clockedBreaksStats = oFetch(periods, 'clockedBreaksStats');
     const rotaedStats = oFetch(periods, 'rotaedStats');
     const rotaedShifts = oFetch(periods, 'rotaedShifts');
     const clockInEvents = oFetch(periods, 'clockInEvents');
@@ -122,7 +122,11 @@ class HoursConfirmation extends Component {
     const staffTypeName = oFetch(staffType, 'name');
     const staffTypeColor = oFetch(staffType, 'color');
 
-    const timeDiff = timeObjectDiff(rotaedStats, hoursAcceptanceStats);
+    const timeDiff = timeObjectDiff(
+      rotaedStats,
+      hoursAcceptanceStats - hoursAcceptanceBreaksStats,
+    );
+
     const rotaDate = new RotaDate({
       dateOfRota: mClockInDate.toDate(),
     });
@@ -141,8 +145,10 @@ class HoursConfirmation extends Component {
           staffTypeName={staffTypeName}
           staffTypeColor={staffTypeColor}
           clockedStats={clockedStats}
+          clockedBreaksStats={clockedBreaksStats}
           rotaedStats={rotaedStats}
           hoursAcceptanceStats={hoursAcceptanceStats}
+          hoursAcceptanceBreaksStats={hoursAcceptanceBreaksStats}
           timeDiff={timeDiff}
         />
         <StaffMemberMainSide
@@ -155,11 +161,20 @@ class HoursConfirmation extends Component {
           clockInEvents={clockInEvents}
           hoursAcceptancePeriods={hoursAcceptancePeriods}
           hoursAcceptanceBreaks={hoursAcceptanceBreaks}
+          hoursAcceptanceStats={hoursAcceptanceStats}
           rotaDate={rotaDate}
+          timeDiff={timeDiff}
+          rotaedStats={rotaedStats}
           onUnacceptPeriod={this.handleUnacceptPeriod}
           onAcceptPeriod={this.handleAcceptPeriod}
           onDeletePeriod={this.handleDeletePeriod}
           onPeriodDataChange={this.handlePeriodDataChange}
+          onClockOut={() =>
+            this.props.actions.clockOutAction({
+              date,
+              staffMemberId,
+            })
+          }
           onAddNewAcceptancePeriod={() =>
             this.handleAddNewAcceptancePeriod({
               date,
@@ -174,19 +189,44 @@ class HoursConfirmation extends Component {
   }
 
   render() {
-    const { clockInOutData, staffMembers } = this.props;
+    const { clockInOutData, staffMembers, pageOptions } = this.props;
+    const pageOptionsJs = pageOptions.toJS();
+    const date = oFetch(pageOptionsJs, 'date');
+    const venueId = oFetch(pageOptionsJs, 'venueId');
+    const title = oFetch(pageOptionsJs, 'title');
+    const url = oFetch(pageOptionsJs, 'url');
+    const pageType = oFetch(pageOptionsJs, 'pageType');
+
     return (
       <div>
-        <SimpleDashboard title="Hours confirmation">
-          <DashboardActions>
-            <button
-              className="boss-button boss-button_role_calendar boss-page-dashboard__button"
-              onClick={this._handleViewByDate}
-            >
-              View by date
-            </button>
-          </DashboardActions>
-        </SimpleDashboard>
+        {pageType === 'current' && (
+          <SimpleDashboard title={title}>
+            <DashboardActions>
+              <a
+                href={url}
+                className="boss-button boss-button_role_calendar boss-page-dashboard__button"
+              >
+                View by date
+              </a>
+            </DashboardActions>
+          </SimpleDashboard>
+        )}
+        {pageType === 'daily' && (
+          <DashboardDateSelect
+            title={title}
+            date={date}
+            onDateChange={date => this.handleDateChange({ date, venueId })}
+          >
+            <DashboardActions>
+              <a
+                href={url}
+                className="boss-button boss-button_role_calendar boss-page-dashboard__button"
+              >
+                View by date
+              </a>
+            </DashboardActions>
+          </DashboardDateSelect>
+        )}
         <StaffMembersList
           clockInOutData={clockInOutData}
           staffMembers={staffMembers}

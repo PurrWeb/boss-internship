@@ -10,8 +10,10 @@ import clockInEvents from './clock-in-events';
 import rotas from './rotas';
 import hoursAcceptanceBreaks from './hours-acceptance-breaks';
 import venue from './venue';
+import pageOptions from './page-options';
 
 export default combineReducers({
+  pageOptions,
   staffMembers,
   clockInPeriods,
   clockInBreaks,
