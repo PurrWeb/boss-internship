@@ -14,6 +14,8 @@ class ClockInPeriod extends Component {
     const breaks = oFetch(period, 'breaks');
     const date = oFetch(period, 'date');
     const staffMember = oFetch(period, 'staffMember');
+    const rotaedStats = oFetch(this.props, 'rotaedStats');
+    const hoursAcceptanceStats = oFetch(this.props, 'hoursAcceptanceStats');
 
     if (status === 'pending') {
       const initialValues = {
@@ -35,7 +37,10 @@ class ClockInPeriod extends Component {
           onDeletePeriod={this.props.onDeletePeriod}
           onAddBreak={this.props.onAddBreak}
           period={period}
-          form={`period-${this.props.staffMemberId}-${this.props.index}`}
+          hoursAcceptanceStats={hoursAcceptanceStats}
+          rotaedStats={rotaedStats}
+          timeDiff={oFetch(this.props, 'timeDiff')}
+          form={`period-${this.props.staffMemberId}-${date}-${this.props.index}`}
         />
       );
     }

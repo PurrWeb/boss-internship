@@ -3,9 +3,15 @@ import safeMoment from '~/lib/safe-moment';
 import oFetch from 'o-fetch';
 import { Collapse } from 'react-collapse';
 import AsyncButton from 'react-async-button';
+import { connect } from 'react-redux';
 
 import utils from '~/lib/utils';
-import { getTimeDiff } from '../../selectors';
+import {
+  getItemTimeDiff,
+  getItemsTimeDiff,
+  formattedTime,
+  periodPermissionSelector,
+} from '../../selectors';
 
 function TimeView({ label, date }) {
   const time = safeMoment.iso8601Parse(date).format('HH:mm');
@@ -21,15 +27,30 @@ function TimeView({ label, date }) {
   );
 }
 
+const mapStateToProps = (state, ownProps) => {
+  const periodId = oFetch(ownProps.period, 'id');
+  return {
+    periodPermitted: periodPermissionSelector(state, periodId),
+  };
+};
+
+@connect(mapStateToProps)
 class AcceptedClockInPeriod extends Component {
   state = {
     isOpened: false,
   };
 
   renderAcceptedActions(period) {
-    const acceptanceDiff = getTimeDiff([period]);
+    const acceptanceDiff = getItemTimeDiff(period);
+    const breaksDiff = getItemsTimeDiff(oFetch(period, 'breaks'));
+    const formattedAcceptanceDiff = formattedTime(acceptanceDiff - breaksDiff);
     const acceptedBy = oFetch(period, 'acceptedBy') || 'N/A';
     const acceptedAt = oFetch(period, 'acceptedAt');
+    const frozen = oFetch(period, 'frozen');
+    const periodPermitted = oFetch(this.props, 'periodPermitted');
+
+    const readOnly = frozen || !periodPermitted;
+
     const acceptedAtFormatted = acceptedAt
       ? safeMoment
           .iso8601Parse(acceptedAt)
@@ -40,18 +61,20 @@ class AcceptedClockInPeriod extends Component {
       <div>
         <p className="boss-time-shift__status boss-time-shift__status_state_visible">
           <span className="boss-time-shift__status-count">
-            {acceptanceDiff.fullTime} Accepted
+            {formattedAcceptanceDiff} Accepted
           </span>
           <span className="boss-time-shift__status-meta">
             by {acceptedBy} at {acceptedAtFormatted}
           </span>
         </p>
-        <AsyncButton
-          className="boss-button boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_unaccept-shift boss-time-shift__button_state_visible"
-          text="Unaccept"
-          pendingText="Unaccepting ..."
-          onClick={() => this.props.onUnacceptPeriod(period)}
-        />
+        {!readOnly && (
+          <AsyncButton
+            className="boss-button boss-button_role_cancel boss-time-shift__button boss-time-shift__button_role_unaccept-shift boss-time-shift__button_state_visible"
+            text="Unaccept"
+            pendingText="Unaccepting ..."
+            onClick={() => this.props.onUnacceptPeriod(period)}
+          />
+        )}
       </div>
     );
   }
@@ -60,7 +83,7 @@ class AcceptedClockInPeriod extends Component {
     const breaks = oFetch(period, 'breaks');
 
     return breaks.map((periodBreak, index) => {
-      const startsAt = oFetch(periodBreak ,'startsAt');
+      const startsAt = oFetch(periodBreak, 'startsAt');
       const endsAt = oFetch(periodBreak, 'endsAt');
 
       return (

@@ -17,18 +17,30 @@ export default handleActions(
     [types.UPDATE_PERIOD_DATA]: (state, action) => {
       const breaks = action.payload.get('breaks');
       const frontendId = action.payload.get('frontendId');
-      return state.filterNot(periodBreak => periodBreak.get('hoursAcceptancePeriod') === frontendId).concat(breaks);
+      return state
+        .filterNot(
+          periodBreak =>
+            periodBreak.get('hoursAcceptancePeriod') === frontendId,
+        )
+        .concat(breaks);
     },
     [types.UPDATE_PERIOD_STATUS]: (state, action) => {
       const breaks = oFetch(action.payload, 'breaks');
       const frontendId = oFetch(action.payload, 'frontendId');
 
-      return state.filterNot(periodBreak => periodBreak.get('hoursAcceptancePeriod') === frontendId).concat(fromJS(breaks));
+      return state
+        .filterNot(
+          periodBreak =>
+            periodBreak.get('hoursAcceptancePeriod') === frontendId,
+        )
+        .concat(fromJS(breaks));
     },
     [types.REMOVE_HOURS_ACCEPTANCE_PERIOD]: (state, action) => {
       const frontendId = oFetch(action.payload, 'frontendId');
 
-      return state.filterNot(periodBreak => periodBreak.get('hoursAcceptancePeriod') === frontendId);
+      return state.filterNot(
+        periodBreak => periodBreak.get('hoursAcceptancePeriod') === frontendId,
+      );
     },
   },
   initialState,

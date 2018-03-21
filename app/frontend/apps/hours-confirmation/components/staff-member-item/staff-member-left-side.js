@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import oFetch from 'o-fetch';
+import { STATUSES, STATUS_CLASSES } from './index';
+import { formattedTime } from '../../selectors';
 
 class StaffMemberLeftSide extends Component {
   render() {
@@ -9,10 +12,19 @@ class StaffMemberLeftSide extends Component {
       staffTypeName,
       staffTypeColor,
       clockedStats,
+      clockedBreaksStats,
       rotaedStats,
       hoursAcceptanceStats,
+      hoursAcceptanceBreaksStats,
       timeDiff,
     } = this.props;
+
+    const formattedRotaedStats = formattedTime(rotaedStats);
+    const formattedClockedStats = formattedTime(clockedStats - clockedBreaksStats);
+    const formattedHoursAcceptanceStats = formattedTime(hoursAcceptanceStats - hoursAcceptanceBreaksStats);
+
+    const showAcceptanceDifference = hoursAcceptanceStats !== 0;
+
     return (
       <div className="boss-hrc__side">
         <div className="boss-hrc__user-info">
@@ -26,7 +38,9 @@ class StaffMemberLeftSide extends Component {
                 />
               </div>
               <span
-                className={`boss-user-badge__avatar-icon boss-user-badge__avatar-icon_status_${status}`}
+                className={`boss-user-badge__avatar-icon boss-user-badge__avatar-icon_status_${
+                  STATUS_CLASSES[status]
+                }`}
               />
             </div>
             <div className="boss-user-badge__info">
@@ -42,7 +56,7 @@ class StaffMemberLeftSide extends Component {
               <li className="boss-user-badge__meta-item">
                 <p className="boss-user-badge__time boss-user-badge__time_role_rotaed">
                   <span className="boss-user-badge__time-value">
-                    {rotaedStats.fullTime}
+                    {formattedRotaedStats}
                   </span>
                 </p>
                 <p className="boss-user-badge__time-label">Rotaed</p>
@@ -50,7 +64,7 @@ class StaffMemberLeftSide extends Component {
               <li className="boss-user-badge__meta-item">
                 <p className="boss-user-badge__time boss-user-badge__time_role_clocked">
                   <span className="boss-user-badge__time-value">
-                    {clockedStats.fullTime}
+                    {formattedClockedStats}
                   </span>
                 </p>
                 <p className="boss-user-badge__time-label">Clocked</p>
@@ -58,14 +72,17 @@ class StaffMemberLeftSide extends Component {
               <li className="boss-user-badge__meta-item">
                 <p className="boss-user-badge__time boss-user-badge__time_role_accepted">
                   <span className="boss-user-badge__time-value">
-                    {hoursAcceptanceStats.fullTime}
+                    {formattedHoursAcceptanceStats}
                   </span>
-                  {timeDiff.sign !== '' && <span
-                    style={{ display: 'block' }}
-                    className="boss-user-badge__time-note"
-                  >
-                    ({timeDiff.full})
-                  </span>}
+                  {showAcceptanceDifference &&
+                    timeDiff.sign !== '' && (
+                      <span
+                        style={{ display: 'block' }}
+                        className="boss-user-badge__time-note"
+                      >
+                        ({timeDiff.full})
+                      </span>
+                    )}
                 </p>
                 <p className="boss-user-badge__time-label">Accepted</p>
               </li>
