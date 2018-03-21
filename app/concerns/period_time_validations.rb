@@ -10,8 +10,8 @@ module PeriodTimeValidations
   # validation
   def times_in_correct_order
     if starts_at.present? && ends_at.present?
-      errors.add(:starts_at, "Start time must be before end time") if starts_at >= ends_at
-      errors.add(:ends_at, "End time must be after start time") if ends_at <= starts_at
+      errors.add(:starts_at, " must be before end time") if starts_at >= ends_at
+      errors.add(:ends_at, " must be after start time") if ends_at <= starts_at
     end
   end
 
