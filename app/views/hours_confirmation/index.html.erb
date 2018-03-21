@@ -44,5 +44,13 @@
   rotas: ActiveModel::Serializer::CollectionSerializer.new(
     rotas,
     serializer: Api::V1::HoursConfirmation::RotaSerializer,
-  )
+  ),
+  pageOptions: {
+    date: UIRotaDate.format(date),
+    pageType: 'daily',
+    title: "Hours confirmations for #{venue.name} #{date.strftime('%d %B %Y')}",
+    url: current_hours_confirmation_index_path({venue_id: venue.id}),
+    venueId: venue.id,
+    userPeriodsPermissions: user_periods_permissions
+  },
 }) %>
