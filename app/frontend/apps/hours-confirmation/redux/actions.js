@@ -7,6 +7,7 @@ import {
   unacceptPeriodRequest,
   deletePeriodRequest,
   acceptPeriodRequest,
+  clockOutRequest,
 } from '../requests';
 
 export const loadInitialData = createAction(types.LOAD_INITIAL_DATA);
@@ -25,6 +26,8 @@ export const addNewAcceptancePeriodAction = createAction(
 export const addNewAcceptancePeriodBreakAction = createAction(
   types.ADD_NEW_ACCEPTANCE_PERIOD_BREAK,
 );
+
+export const forceClockOutAction = createAction(types.FORCE_CLOCK_OUT);
 
 export const unacceptPeriodAction = period => (dispatch, getState) => {
   return unacceptPeriodRequest(period).then(response => {
@@ -55,4 +58,17 @@ export const deletePeriodAction = values => (dispatch, getState) => {
       dispatch(removeHoursAcceptancePeriodAction({ frontendId }));
     });
   }
+};
+
+export const clockOutAction = ({ staffMemberId, date }) => (
+  dispatch,
+  getState,
+) => {
+  const venue = getState()
+    .get('venue')
+    .toJS();
+  const venueId = oFetch(venue, 'id');
+  return clockOutRequest({ staffMemberId, date, venueId }).then(response => {
+    dispatch(forceClockOutAction(response.data));
+  });
 };

@@ -12,8 +12,18 @@ class ClockInPeriods extends Component {
 
   render() {
     return (
-      <div className="boss-hrc__shifts">
-        {this.renderPeriods(this.props.periods)}
+      <div>
+        <div className="boss-hrc__shifts">
+          {this.renderPeriods(this.props.periods)}
+        </div>
+        <div className="boss-hrc__controls">
+          <button
+            onClick={this.props.onAddNewAcceptancePeriod}
+            className="boss-button boss-button_role_add boss-hrc__button boss-hrc__button_role_add"
+          >
+            Add shift
+          </button>
+        </div>
       </div>
     );
   }

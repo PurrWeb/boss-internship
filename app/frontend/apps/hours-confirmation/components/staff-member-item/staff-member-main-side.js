@@ -1,48 +1,11 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
+
 import ClockInPeriods from '../clockin-periods';
 import ClockInPeriod from '../clockin-periods/clockin-period';
 import HoursChart from '../hours-chart';
-import _ from 'lodash';
-
-const STATUSES = {
-  clocked_in: 'CLOCKED IN',
-  clocked_out: 'CLOCKED OUT',
-};
-
-function convertClockInPeriodToIntervals(denormalizedHoursPeriod) {
-  var breaksOrderedByStartTime = _.sortBy(
-    denormalizedHoursPeriod.breaks,
-    'startsAt',
-  );
-
-  var lastTime = denormalizedHoursPeriod.startsAt;
-  var intervals = [];
-
-  breaksOrderedByStartTime.forEach(function(breakItem) {
-    intervals.push({
-      startsAt: lastTime,
-      endsAt: breakItem.startsAt,
-      type: 'hours',
-    });
-    if (breakItem.endsAt) {
-      intervals.push({
-        startsAt: breakItem.startsAt,
-        endsAt: breakItem.endsAt,
-        type: 'break',
-      });
-      lastTime = breakItem.endsAt;
-    }
-  });
-
-  if (denormalizedHoursPeriod.endsAt) {
-    intervals.push({
-      startsAt: lastTime,
-      endsAt: denormalizedHoursPeriod.endsAt,
-      type: 'hours',
-    });
-  }
-  return intervals;
-}
+import ClockOutButton from './clock-out-button';
+import { STATUSES, STATUS_CLASSES } from './index';
 
 class StaffMemberMainSide extends Component {
   render() {
@@ -55,6 +18,9 @@ class StaffMemberMainSide extends Component {
       rotaedShifts,
       hoursAcceptancePeriods,
       clockInEvents,
+      timeDiff,
+      rotaedStats,
+      hoursAcceptanceStats,
     } = this.props;
 
     const clockInDateFormated = mClockInDate.format('dddd, DD MMM YYYY');
@@ -65,7 +31,9 @@ class StaffMemberMainSide extends Component {
           <h3 className="boss-hrc__status">
             <span className="boss-hrc__status-text">Status</span>
             <span
-              className={`boss-button boss-button_type_small boss-button_role_alert boss-hrc__status-label`}
+              className={`boss-button boss-button_type_small boss-button_status_${
+                STATUS_CLASSES[status]
+              } boss-hrc__status-label`}
             >
               {STATUSES[status]}
             </span>
@@ -82,26 +50,28 @@ class StaffMemberMainSide extends Component {
             clockedClockInPeriods={clockInPeriods}
             clockInEvents={clockInEvents}
           />
-          <ClockInPeriods
-            periods={hoursAcceptancePeriods}
-            periodRenderer={period => (
-              <ClockInPeriod
-                onUnacceptPeriod={this.props.onUnacceptPeriod}
-                onDeletePeriod={this.props.onDeletePeriod}
-                onPeriodDataChange={this.props.onPeriodDataChange}
-                onAcceptPeriod={this.props.onAcceptPeriod}
-                onAddBreak={this.props.onAddBreak}
-                hoursAcceptanceBreaks={this.props.hoursAcceptanceBreaks}
-                staffMemberId={staffMemberId}
-                period={period}
-              />
-            )}
-          />
-          <div className="boss-hrc__controls">
-            <button onClick={this.props.onAddNewAcceptancePeriod} className="boss-button boss-button_role_add boss-hrc__button boss-hrc__button_role_add">
-              Add shift
-            </button>
-          </div>
+          {status === 'clocked_out' && (
+            <ClockInPeriods
+              periods={hoursAcceptancePeriods}
+              onAddNewAcceptancePeriod={this.props.onAddNewAcceptancePeriod}
+              periodRenderer={period => (
+                <ClockInPeriod
+                  onUnacceptPeriod={this.props.onUnacceptPeriod}
+                  onDeletePeriod={this.props.onDeletePeriod}
+                  onPeriodDataChange={this.props.onPeriodDataChange}
+                  onAcceptPeriod={this.props.onAcceptPeriod}
+                  onAddBreak={this.props.onAddBreak}
+                  hoursAcceptanceBreaks={this.props.hoursAcceptanceBreaks}
+                  staffMemberId={staffMemberId}
+                  period={period}
+                  rotaedStats={rotaedStats}
+                  hoursAcceptanceStats={hoursAcceptanceStats}
+                  timeDiff={timeDiff}
+                />
+              )}
+            />
+          )}
+          <ClockOutButton status={status} onClockOut={this.props.onClockOut} />
         </div>
       </div>
     );

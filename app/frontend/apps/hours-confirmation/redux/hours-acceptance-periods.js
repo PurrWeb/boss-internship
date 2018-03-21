@@ -84,6 +84,15 @@ export default handleActions(
 
       return state.filterNot(period => period.get('frontendId') === frontendId);
     },
+    [types.FORCE_CLOCK_OUT]: (state, action) => {
+      const { hoursAcceptancePeriod } = action.payload;
+      const frontendId = oFetch(hoursAcceptancePeriod, 'id');
+      return state.update(hoursAcceptancePeriods =>
+        hoursAcceptancePeriods.push(
+          fromJS(hoursAcceptancePeriod).set('frontendId', frontendId),
+        ),
+      );
+    },
   },
   initialState,
 );

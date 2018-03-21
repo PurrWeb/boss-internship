@@ -11,6 +11,12 @@ export default handleActions(
       const { clockInEvents } = action.payload;
       return fromJS(clockInEvents);
     },
+    [types.FORCE_CLOCK_OUT]: (state, action) => {
+      const { clockInEvent } = action.payload;
+      return state.update(clockInEvents =>
+        clockInEvents.push(fromJS(clockInEvent)),
+      );
+    },
   },
   initialState,
 );
