@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 import modalDecorator from './modal-decorator';
 
-class WarningModal extends React.Component {
+class WarningModalBig extends React.Component {
   render() {
     const {
       show,
@@ -16,6 +16,8 @@ class WarningModal extends React.Component {
       onClose,
       onSubmit,
       props,
+      cancel,
+      closeCallback,
     } = this.props;
 
     return (
@@ -23,18 +25,26 @@ class WarningModal extends React.Component {
         isOpen={show}
         contentLabel="Modal"
         className={{
-          base: `ReactModal__Content boss-modal-window boss-modal-window_role_danger`,
+          base: `ReactModal__Content boss-modal-window boss-modal-window_role_note`,
           afterOpen: 'ReactModal__Content--after-open',
         }}
       >
-        <button onClick={onClose} className="boss-modal-window__close" />
-        <div className="boss-modal-window__header">{title}</div>
+        <button
+          onClick={() => {
+            onClose();
+            closeCallback();
+          }}
+          className="boss-modal-window__close"
+        />
+        <div className="boss-modal-window__header boss-modal-window__header_warning">
+          {title}
+        </div>
         <div className="boss-modal-window__content">
           <div className="boss-modal-window__message-block">
             {_.isArray(text) ? (
               text.map((message, key) => (
                 <span key={key} className="boss-modal-window__message-text">
-                  {text}
+                  {message}
                 </span>
               ))
             ) : (
@@ -42,8 +52,19 @@ class WarningModal extends React.Component {
             )}
           </div>
           <div className="boss-modal-window__actions">
+            {cancel && (
+              <button
+                onClick={() => {
+                  onClose();
+                  closeCallback();
+                }}
+                className="boss-button boss-button_role_inactive boss-modal-window__button"
+              >
+                Cancel
+              </button>
+            )}
             <AsyncButton
-              className="boss-button boss-button_role_cancel"
+              className="boss-button boss-modal-window__button"
               text={buttonText}
               onClick={() => onSubmit(props)}
             />
@@ -54,25 +75,33 @@ class WarningModal extends React.Component {
   }
 }
 
-function openWarningModal(
-  { title = 'Warning modal', text = 'Are you sure ?', buttonText = 'Confirm' },
+function openWarningModalBig(
+  {
+    title = 'Warning modal',
+    text = 'Are you sure ?',
+    buttonText = 'Confirm',
+    cancel = false,
+  },
   props = {},
   onSubmit,
   onClose,
   wrapper,
+  closeCallback,
 ) {
   ReactDOM.render(
-    <WarningModal
+    <WarningModalBig
       show={true}
+      cancel={cancel}
       title={title || 'Warning modal'}
       text={text || 'Are you sure'}
       buttonText={buttonText || 'Confirm'}
       onClose={onClose}
       onSubmit={onSubmit}
       props={props}
+      closeCallback={closeCallback}
     />,
     wrapper,
   );
 }
 
-export default modalDecorator(openWarningModal);
+export default modalDecorator(openWarningModalBig);
