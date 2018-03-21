@@ -9,19 +9,55 @@ import NoteForm from './note-form';
 
 export default class TimelineModal extends React.Component {
   renderTransitions() {
-    return this.props.selectedMarketingTask.marketingTaskTransitions.map((transition) => {
-      return (
-        <li className={ `boss-overview__activity-item boss-overview__activity-item_role_changed` } key={ transition.id }>
-          <p className="boss-overview__meta">
-            <span className="boss-overview__meta-text">User </span>
-            <span className="boss-overview__meta-marked"> { transition.requesterUser.name } </span>
-            <span className="boss-overview__meta-text">set status to </span>
-            <span className="boss-overview__meta-marked">{ transition.toState } </span>
-            <span className="boss-overview__meta-date"> { moment(transition.createdAt).format('HH:mm ddd L') }</span>
-          </p>
-        </li>
-      );
+    return this.props.selectedMarketingTask.timelineActivities.map((timelineActivity) => {
+      if (timelineActivity.toState == 'assigned') {
+        return this.handleAssignedActivities(timelineActivity);
+      } else if (timelineActivity.toState == 'unassigned') {
+        return this.handleUnassignedActivities(timelineActivity);
+      } else {
+        return this.handleDefaultActivities(timelineActivity);
+      }
     });
+  }
+
+  handleDefaultActivities(timelineActivity) {
+    return (
+      <li className={ `boss-overview__activity-item boss-overview__activity-item_role_changed` } key={ timelineActivity.id }>
+        <p className="boss-overview__meta">
+          <span className="boss-overview__meta-text">User </span>
+          <span className="boss-overview__meta-marked"> { timelineActivity.requesterUser.name } </span>
+          <span className="boss-overview__meta-text">set status to </span>
+          <span className="boss-overview__meta-marked">{ timelineActivity.toState } </span>
+          <span className="boss-overview__meta-date"> { moment(timelineActivity.createdAt).format('HH:mm ddd L') }</span>
+        </p>
+      </li>
+    );
+  }
+
+  handleAssignedActivities(timelineActivity) {
+    return (
+      <li className={ `boss-overview__activity-item boss-overview__activity-item_role_changed` } key={ timelineActivity.id }>
+        <p className="boss-overview__meta">
+          <span className="boss-overview__meta-text">User </span>
+          <span className="boss-overview__meta-marked"> { timelineActivity.requesterUser.name } </span>
+          <span className="boss-overview__meta-text">assigned to task </span>
+          <span className="boss-overview__meta-date"> { moment(timelineActivity.createdAt).format('HH:mm ddd L') }</span>
+        </p>
+      </li>
+    );
+  }
+
+  handleUnassignedActivities(timelineActivity) {
+    return (
+      <li className={ `boss-overview__activity-item boss-overview__activity-item_role_changed` } key={ timelineActivity.id }>
+        <p className="boss-overview__meta">
+          <span className="boss-overview__meta-text">User </span>
+          <span className="boss-overview__meta-marked"> { timelineActivity.requesterUser.name } </span>
+          <span className="boss-overview__meta-text">unassigned from task </span>
+          <span className="boss-overview__meta-date"> { moment(timelineActivity.createdAt).format('HH:mm ddd L') }</span>
+        </p>
+      </li>
+    );
   }
 
   onClose() {
