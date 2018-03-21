@@ -75,7 +75,7 @@ class FromTimeInterval extends React.Component {
 
   render() {
     let startsAt, endsAt;
-    const { rotaDate, isFromBreaks, globalError } = this.props;
+    const { rotaDate, isFromBreaks, globalErrors } = this.props;
     if (isFromBreaks) {
       startsAt = this.props.breaks[this.props.index].startsAt;
       endsAt = this.props.breaks[this.props.index].endsAt;
@@ -138,15 +138,15 @@ class FromTimeInterval extends React.Component {
               <span className="boss-time-shift__label-text">End</span>
             </p>
             <div
-              className={`boss-form__select boss-form__select_role_time ${
-                endsAt.meta.error ? 'boss-form__select_state_error' : ''
+              className={`boss-time-shift__select ${
+                endsAt.meta.error ? 'boss-time-shift__select_state_error' : ''
               }`}
             >
               {selectEndsAt}
             </div>
           </div>
         </div>
-        {(!globalError && (startsAt.meta.error || endsAt.meta.error)) ? (
+        {(!globalErrors && (startsAt.meta.error || endsAt.meta.error)) ? (
           <div className="boss-time-shift__error">
             {!!startsAt.meta.error ? startsAt.meta.error.map((error, index) => <p key={index} className="boss-time-shift__error-text">
               {error}
