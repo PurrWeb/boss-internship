@@ -1,6 +1,6 @@
 class Api::V1::HoursConfirmation::HoursAcceptancePeriodSerializer < ActiveModel::Serializer
   attributes :id, :startsAt, :endsAt, :status,
-             :hoursAcceptanceBreaks, :reasonNote, :date, :staffMember, :acceptedAt, :acceptedBy
+             :hoursAcceptanceBreaks, :reasonNote, :date, :staffMember, :acceptedAt, :acceptedBy, :frozen
 
   def acceptedAt
     object.accepted_at
@@ -28,6 +28,10 @@ class Api::V1::HoursConfirmation::HoursAcceptancePeriodSerializer < ActiveModel:
 
   def staffMember
     object.staff_member.id
+  end
+
+  def frozen
+    object.frozen?
   end
 
   def hoursAcceptanceBreaks
