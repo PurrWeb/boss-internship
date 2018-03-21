@@ -133,10 +133,18 @@ module Api
             clock_in_day: clock_in_day
           ).last
 
-          render locals: {
-            clock_in_day: clock_in_day,
-            clock_in_period: clock_in_period,
-            hours_acceptance_period: hours_acceptance_period
+          render json: {
+            clockInPeriod: Api::V1::HoursConfirmation::ClockInPeriodSerializer.new(clock_in_period),
+            hoursAcceptancePeriod: Api::V1::HoursConfirmation::HoursAcceptancePeriodSerializer.new(hours_acceptance_period),
+            hoursAcceptanceBreaks: ActiveModel::Serializer::CollectionSerializer.new(
+              hours_acceptance_period.hours_acceptance_breaks.enabled,
+              serializer: Api::V1::HoursConfirmation::HoursAcceptanceBreakSerializer,
+            ),
+            clockInEvent: Api::V1::HoursConfirmation::ClockInEventSerializer.new(clock_in_period.clock_in_events.last),
+            clockInBreaks: ActiveModel::Serializer::CollectionSerializer.new(
+              clock_in_period.clock_in_breaks,
+              serializer: Api::V1::HoursConfirmation::ClockInBreakSerializer,
+            )
           }
         else
           render json: { errors: result.errors }, status: 422
