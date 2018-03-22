@@ -3,7 +3,8 @@ class Api::V1::HoursConfirmation::ClockInEventSerializer < ActiveModel::Serializ
     :id,
     :clockInPeriod,
     :at,
-    :eventType
+    :eventType,
+    :role
 
   def clockInPeriod
     object.clock_in_period.id

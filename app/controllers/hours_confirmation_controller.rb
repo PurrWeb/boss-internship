@@ -30,7 +30,7 @@ class HoursConfirmationController < ApplicationController
 
       clock_in_events = ClockInEvent.where(
         clock_in_period: clock_in_periods
-      ).includes(:clock_in_period)
+      ).includes([:clock_in_period, :creator])
 
       hours_acceptance_periods = HoursAcceptancePeriod.enabled.where(
         clock_in_day: clock_in_days
@@ -122,7 +122,7 @@ class HoursConfirmationController < ApplicationController
 
       clock_in_events = ClockInEvent.where(
         clock_in_period: clock_in_periods
-      ).includes(:clock_in_period)
+      ).includes([:clock_in_period, :creator])
 
       hours_acceptance_periods = HoursAcceptancePeriod.where(
         clock_in_day: clock_in_days,

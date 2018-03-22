@@ -25,6 +25,8 @@ var barHeight = 25;
 var outerWidth = innerWidth + padding + paddingRight;
 var outerHeight = innerHeight + padding * 2;
 
+const ICON_ROLE_MANAGER =
+  'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjk3IDI5NyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDI5NyAyOTciPgogIDxnPgogICAgPHBhdGggZD0iTTE0OC41MSwxMTcuMjE2YzMyLjMxNywwLDU4LjYwOC0yNi4yOTEsNTguNjA4LTU4LjYwOFMxODAuODI3LDAsMTQ4LjUxLDBjLTMyLjMxNywwLTU4LjYwOCwyNi4yOTEtNTguNjA4LDU4LjYwOCAgIFMxMTYuMTkzLDExNy4yMTYsMTQ4LjUxLDExNy4yMTZ6IiBmaWxsPSIjZGQwMDAwIi8+CiAgICA8cGF0aCBkPSJtMjI3LjE1NCwxNDUuNjE4Yy0wLjAyNS0wLjAwOC0wLjA3My0wLjAyNi0wLjA5OC0wLjAzMi03LjYzMS0xLjg2NC0zMC45OTktNS4xMzMtMzAuOTk5LTUuMTMzLTIuNjM4LTAuODEyLTUuNDU3LDAuNTg1LTYuNDA2LDMuMTg4bC0zNS4xNzQsOTYuNTA5Yy0yLjAyOSw1LjU2Ny05LjkwMyw1LjU2Ny0xMS45MzIsMGwtMzUuMTc0LTk2LjUwOWMtMC43NjYtMi4xMDItMi43NS0zLjQyLTQuODc2LTMuNDItMC41MDQsMC0yNC41MzEsMy4zNjktMzIuNTMsNS4zNTgtMjEuODU4LDUuNDM1LTM1LjY0NSwyNi45MjktMzUuNjQ1LDQ5LjMyOXY4MC4zMDJjMCwxMi4wMzQgOS43NTYsMjEuNzkgMjEuNzksMjEuNzloMTg0Ljc4MmMxMi4wMzQsMCAyMS43OS05Ljc1NiAyMS43OS0yMS43OXYtODAuNTY5Yy0wLjAwMS0yMi4zMDMtMTQuMzI4LTQyLjA5Ni0zNS41MjgtNDkuMDIzeiIgZmlsbD0iI2RkMDAwMCIvPgogICAgPHBhdGggZD0ibTE2MS43NzUsMTM4LjYxM2MtMS40MDQtMS41My0zLjQ1Ni0yLjI5OS01LjUzMi0yLjI5OWgtMTUuNDg1Yy0yLjA3NiwwLTQuMTI5LDAuNzctNS41MzIsMi4yOTktMi4xNzMsMi4zNjgtMi40ODksNS43ODktMC45NDYsOC40NjJsOC4yNzgsMTIuNDc5LTMuODc1LDMyLjY5IDcuNjMxLDIwLjNjMC43NDQsMi4wNDIgMy42MzEsMi4wNDIgNC4zNzUsMGw3LjYzMS0yMC4zLTMuODc1LTMyLjY5IDguMjc4LTEyLjQ3OWMxLjU0MS0yLjY3MyAxLjIyNS02LjA5NC0wLjk0OC04LjQ2MnoiIGZpbGw9IiNkZDAwMDAiLz4KICA8L2c+Cjwvc3ZnPgo=';
 export default class HoursChartUi extends React.Component {
   render() {
     return (
@@ -161,6 +163,49 @@ export default class HoursChartUi extends React.Component {
       })
       .attr('stroke', 'black')
       .attr('stroke-width', 3);
+
+    var eventIndicator = lineContainers.filter(function(event) {
+      return event.role === 'manager';
+    });
+
+    eventIndicator.append('g').classed('hours-chart__event-indicator', true);
+
+    var eventIndicatorMarker = eventIndicator.selectAll(
+      '.hours-chart__event-indicator',
+    );
+
+    eventIndicatorMarker
+      .append('circle')
+      .attr('cx', 0)
+      .attr('cy', 12)
+      .attr('r', 9)
+      .attr('fill', 'white')
+      .attr('stroke', function(event) {
+        return {
+          clock_in: 'black',
+          clock_out: 'black',
+          start_break: 'red',
+          end_break: 'red',
+        }[event.type];
+      })
+      .attr('stroke-width', 1)
+      .style('shape-rendering', 'geometricPrecision');
+
+    var eventIndicatorIcon = eventIndicator.selectAll(
+      '.hours-chart__event-indicator',
+    );
+
+    eventIndicatorIcon
+      .append('svg:image')
+      .attr('width', 12)
+      .attr('height', 12)
+      .attr('x', -6)
+      .attr('y', 5)
+      .attr('xlink:href', function(event) {
+        return {
+          manager: ICON_ROLE_MANAGER,
+        }['manager'];
+      });
   }
   renderHoursAcceptanceIntervals({ chartContent, xScale }) {
     this.renderIntervals({

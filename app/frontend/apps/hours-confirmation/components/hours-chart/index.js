@@ -44,6 +44,7 @@ export default class HoursChart extends React.Component {
       return {
         timeOffset: this.getHoursSinceStartOfDay(event.at),
         type: event.eventType,
+        role: event.role,
       };
     });
   }

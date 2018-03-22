@@ -32,4 +32,12 @@ class ClockInEvent < ActiveRecord::Base
   def clock_out?
     event_type == 'clock_out'
   end
+
+  def role
+    if creator.id != clock_in_period.andand.staff_member.andand.id
+      'manager'
+    else
+      'staff_member'
+    end
+  end
 end
