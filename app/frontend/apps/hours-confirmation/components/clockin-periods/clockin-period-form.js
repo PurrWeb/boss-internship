@@ -118,7 +118,7 @@ const validate = values => {
 
 class ClockInPeriodForm extends Component {
   state = {
-    isOpened: false,
+    isOpened: true,
   };
 
   acceptPeriod = ({ values }) => {

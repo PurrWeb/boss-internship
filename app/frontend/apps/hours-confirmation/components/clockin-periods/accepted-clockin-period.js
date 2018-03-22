@@ -37,7 +37,7 @@ const mapStateToProps = (state, ownProps) => {
 @connect(mapStateToProps)
 class AcceptedClockInPeriod extends Component {
   state = {
-    isOpened: false,
+    isOpened: true,
   };
 
   renderAcceptedActions(period) {
