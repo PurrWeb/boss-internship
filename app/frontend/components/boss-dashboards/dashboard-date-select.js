@@ -7,12 +7,25 @@ import DatePicker from 'react-datepicker';
 import CalendarCustomInputLeft from '~/components/boss-form/calendar-custom-input-left';
 
 class DashboardDateSelect extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: safeMoment.uiDateParse(props.date),
+    };
+  }
+
   parseChildrens = () => {
     React.Children.map(this.props.children, (child, i) => {
       if (child.type === DashboardActions) {
         this.actions = React.cloneElement(child);
       }
       return;
+    });
+  };
+
+  onDateChange = date => {
+    this.setState({ date: safeMoment.uiDateParse(date) }, () => {
+      this.props.onDateChange(date);
     });
   };
 
@@ -43,8 +56,8 @@ class DashboardDateSelect extends React.Component {
                       showYearDropdown
                       locale="en-gb"
                       dropdownMode="select"
-                      selected={safeMoment.uiDateParse(this.props.date)}
-                      onChange={date => this.props.onDateChange(date)}
+                      selected={this.state.date}
+                      onChange={this.onDateChange}
                       dateFormat="DD-MM-YYYY"
                       allowSameDay
                     />
