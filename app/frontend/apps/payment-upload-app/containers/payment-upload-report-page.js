@@ -82,13 +82,75 @@ class PaymentUploadReportPage extends React.Component {
     );
   }
 
-  render() {
-    const resetApplication = oFetch(this.actions, 'resetApplication');
+  renderFailedParse() {
     const titleRowErrors = oFetch(this.props, 'titleRowErrors');
     const titleRowErrorKeys = Object.keys(titleRowErrors);
     const headerRowErrors = oFetch(this.props, 'headerRowErrors');
     const headerRowErrorKeys = Object.keys(headerRowErrors);
     const headerRowKeys = oFetch(this.props, 'headerRows');
+
+    return <div>
+      { (oFetch(titleRowErrorKeys, 'length') > 0) && <section className="boss-board boss-board_context_stack">
+        <header className="boss-board__header">
+          <h2 className="boss-board__title boss-board__title_role_errors boss-board__title_size_medium">Title row format is incorrect</h2>
+        </header>
+        <div className="boss-board__inner">
+          <div className="boss-board__group">
+            <div className="boss-report">
+              { titleRowErrorKeys.map((key, index) => {
+                  const errors = oFetch(titleRowErrors, key);
+                  return  <div key={key} className="boss-report__record">
+                    <p className="boss-report__text boss-report__text_size_m">                          <b>{ _.capitalize(key) }</b>
+                      <span>{ errors.join(", ") }</span>
+                    </p>
+                  </div>;
+                })
+              }
+            </div>
+          </div>
+        </div>
+      </section> }
+
+      { (oFetch(headerRowErrorKeys, 'length') > 0) && <section className="boss-board boss-board_context_stack">
+        <header className="boss-board__header">
+          <h2 className="boss-board__title boss-board__title_role_errors boss-board__title_size_medium">Header row format is incorrect</h2>
+        </header>
+        <div className="boss-board__inner">
+          <div className="boss-board__group">
+            <div className="boss-report__record">
+              <div className="boss-report__table">
+                <div className="boss-table boss-table_page_csv-upload">
+                  <div className="boss-table__row boss-table__row_state_alert">
+                    { headerRowKeys.map((key) => {
+                        if (_.includes(headerRowErrorKeys, key)) {
+                          return this.renderHeaderRowWithError({
+                            key: key,
+                            errors: oFetch(headerRowErrors, key)
+                          });
+                        } else {
+                          return this.renderHeaderRowWithoutError({key: key});
+                        }
+                      })
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section> }
+    </div>;
+  }
+
+  renderProcessed() {
+    return <div>
+      <p>Done</p>
+    </div>;
+  }
+
+  render() {
+    const mode = oFetch(this.props, 'mode');
+    const resetApplication = oFetch(this.actions, 'resetApplication');
 
     return <div>
       <div className="boss-page-main__dashboard">
@@ -106,57 +168,8 @@ class PaymentUploadReportPage extends React.Component {
 
       <div className="boss-page-main__content">
         <div className="boss-page-main__inner">
-
-          { (oFetch(titleRowErrorKeys, 'length') > 0) && <section className="boss-board boss-board_context_stack">
-            <header className="boss-board__header">
-              <h2 className="boss-board__title boss-board__title_role_errors boss-board__title_size_medium">Title row format is incorrect</h2>
-            </header>
-            <div className="boss-board__inner">
-              <div className="boss-board__group">
-                <div className="boss-report">
-                  { titleRowErrorKeys.map((key, index) => {
-                      const errors = oFetch(titleRowErrors, key);
-                      return  <div key={key} className="boss-report__record">
-                        <p className="boss-report__text boss-report__text_size_m">                          <b>{ _.capitalize(key) }</b>
-                          <span>{ errors.join(", ") }</span>
-                        </p>
-                      </div>;
-                    })
-                  }
-                </div>
-              </div>
-            </div>
-          </section> }
-
-          { (oFetch(headerRowErrorKeys, 'length') > 0) && <section className="boss-board boss-board_context_stack">
-            <header className="boss-board__header">
-              <h2 className="boss-board__title boss-board__title_role_errors boss-board__title_size_medium">Header row format is incorrect</h2>
-            </header>
-            <div className="boss-board__inner">
-              <div className="boss-board__group">
-                <div className="boss-report__record">
-                  <div className="boss-report__table">
-                    <div className="boss-table boss-table_page_csv-upload">
-                      <div className="boss-table__row boss-table__row_state_alert">
-                        { headerRowKeys.map((key) => {
-                            if (_.includes(headerRowErrorKeys, key)) {
-                              return this.renderHeaderRowWithError({
-                                key: key,
-                                errors: oFetch(headerRowErrors, key)
-                              });
-                            } else {
-                              return this.renderHeaderRowWithoutError({key: key});
-                            }
-                          })
-                        }
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section> }
-
+          { (mode === REPORT_PAGE_PARSE_ERROR_MODE) && this.renderFailedParse() }
+          { (mode === REPORT_PAGE_PROCCESSED_MODE) && this.renderProcessed() }
         </div>
       </div>
     </div>;

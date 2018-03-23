@@ -1,12 +1,14 @@
 import oFetch from 'o-fetch';
 import { createAction } from 'redux-actions';
 import { uploadFileRequest } from './requests';
+import notify from '~/components/global-notification';
 import {
   INITIALIZE,
   LOAD_REPORT,
   UPLOAD_ERROR,
   RESET_APPLICATION,
-  SET_UPLOAD_IN_PROGRESS
+  SET_UPLOAD_IN_PROGRESS,
+  PARSE_ERROR_RESULT_TYPE
 } from './constants';
 
 export const initializeState = createAction(INITIALIZE);
@@ -36,7 +38,15 @@ export const uploadFile = (values) => (dispatch, getState) => {
     })
     .then((resp) => {
       const data = oFetch(resp, 'data');
+      const resultType = oFetch(data, 'resultType');
+
       dispatch(loadReportIntoState(data));
+      if(resultType === PARSE_ERROR_RESULT_TYPE) {
+        notify("Upload Failed: CSV Format Invalid", {
+          interval: 10000,//10s
+          status: 'error'
+        });
+      }
     }).catch((resp) => {
       const serverResponse = resp.response;
       let message = 'uploadFileRequestFailed '

@@ -5,6 +5,9 @@ export const UPLOAD_ERROR = 'report_upload_error';
 export const SET_UPLOAD_IN_PROGRESS = 'set_upload_in_progress';
 export const RESET_APPLICATION = 'reset_application';
 
+//Server returned result types
+export const PARSE_ERROR_RESULT_TYPE = 'parse_error';
+
 // Page Identifiers
 export const UPLOAD_PAGE = 'upload_page';
 export const REPORT_PAGE = 'reportPage';
