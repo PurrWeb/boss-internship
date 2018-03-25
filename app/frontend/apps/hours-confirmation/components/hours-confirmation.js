@@ -22,7 +22,7 @@ import StaffMemberItem from './staff-member-item';
 import StaffMemberLeftSide from './staff-member-item/staff-member-left-side';
 import StaffMemberMainSide from './staff-member-item/staff-member-main-side';
 
-function timeObjectDiff(rotaed, accepted) {
+export const timeObjectDiff = (rotaed, accepted) => {
   const diff = rotaed - accepted;
 
   const sign = rotaed !== accepted ? (rotaed < accepted ? '+' : '-') : '';
@@ -102,6 +102,10 @@ class HoursConfirmation extends Component {
       periods,
       'hoursAcceptanceBreaksStats',
     );
+    const pageOptionsJs = this.props.pageOptions.toJS();
+    const pageType = oFetch(pageOptionsJs, 'pageType');
+    const venueId = oFetch(periods, 'venueId');
+    const venue = this.props.getVenueById(venueId);
 
     const hoursAcceptanceBreaks = oFetch(this.props, 'hoursAcceptanceBreaks');
 
@@ -164,6 +168,8 @@ class HoursConfirmation extends Component {
           hoursAcceptanceStats={hoursAcceptanceStats}
           rotaDate={rotaDate}
           timeDiff={timeDiff}
+          venue={venue.toJS()}
+          pageType={pageType}
           rotaedStats={rotaedStats}
           onUnacceptPeriod={this.handleUnacceptPeriod}
           onAcceptPeriod={this.handleAcceptPeriod}
@@ -199,6 +205,9 @@ class HoursConfirmation extends Component {
 
     return (
       <div>
+        {pageType === 'overview' && (
+          <SimpleDashboard title={title} />
+        )}
         {pageType === 'current' && (
           <SimpleDashboard title={title}>
             <DashboardActions>
@@ -230,6 +239,7 @@ class HoursConfirmation extends Component {
         <StaffMembersList
           clockInOutData={clockInOutData}
           staffMembers={staffMembers}
+          pageType={pageType}
           itemRenderer={({ date, periods }) =>
             this._renderStaffMemberItem({ date, periods })
           }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import oFetch from 'o-fetch';
 
 import ClockInPeriods from '../clockin-periods';
 import ClockInPeriod from '../clockin-periods/clockin-period';
@@ -21,6 +22,8 @@ class StaffMemberMainSide extends Component {
       timeDiff,
       rotaedStats,
       hoursAcceptanceStats,
+      pageType,
+      venue,
     } = this.props;
 
     const clockInDateFormated = mClockInDate.format('dddd, DD MMM YYYY');
@@ -38,9 +41,17 @@ class StaffMemberMainSide extends Component {
               {STATUSES[status]}
             </span>
           </h3>
-          <p className="boss-hrc__date">
-            <span className="boss-hrc__date-text">{clockInDateFormated}</span>
-          </p>
+          {pageType === 'overview' ? (
+            <p className="boss-hrc__venue">
+              <span className="boss-hrc__venue-text">
+                {oFetch(venue, 'name')}
+              </span>
+            </p>
+          ) : (
+            <p className="boss-hrc__date">
+              <span className="boss-hrc__date-text">{clockInDateFormated}</span>
+            </p>
+          )}
         </div>
         <div className="boss-hrc__content">
           <HoursChart

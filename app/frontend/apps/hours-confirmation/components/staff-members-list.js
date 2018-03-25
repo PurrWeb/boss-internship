@@ -9,29 +9,31 @@ class StaffMembersList extends Component {
     super(props);
 
     this.state = {
-      filteredStaffMemberIds: props.staffMembers.map(staffMember =>
-        staffMember.get('id'),
-      ).toJS(),
+      filteredStaffMemberIds: props.staffMembers
+        .map(staffMember => staffMember.get('id'))
+        .toJS(),
     };
   }
 
   renderStaffMembers(clockInOutData) {
     const childrens = [];
-    clockInOutData.forEach((dateStaffMembers, date) => {
-      dateStaffMembers.forEach((periods, staffMemberId) => {
-        if (this.state.filteredStaffMemberIds.includes(staffMemberId)) {
-          childrens.push(
-            React.cloneElement(
-              this.props.itemRenderer({
-                date,
-                periods: periods.toJS(),
-              }),
-              {
-                key: `${date}${staffMemberId}`,
-              },
-            ),
-          );
-        }
+    clockInOutData.forEach((dateVenues, date) => {
+      dateVenues.forEach((venueStaffMember, venueId) => {
+        venueStaffMember.forEach((periods, staffMemberId) => {
+          if (this.state.filteredStaffMemberIds.includes(staffMemberId)) {
+            childrens.push(
+              React.cloneElement(
+                this.props.itemRenderer({
+                  date,
+                  periods: periods.toJS(),
+                }),
+                {
+                  key: `${date}${staffMemberId}`,
+                },
+              ),
+            );
+          }
+        });
       });
     });
     return childrens;
@@ -42,14 +44,16 @@ class StaffMembersList extends Component {
   };
 
   render() {
-    const { clockInOutData } = this.props;
+    const { clockInOutData, pageType } = this.props;
 
     return (
       <ContentWrapper>
-        <StaffFilter
-          clockInDays={this.props.clockInDays}
-          onFilterChange={this.onStaffFilterChange}
-        />
+        {pageType !== 'overview' && (
+          <StaffFilter
+            clockInDays={this.props.clockInDays}
+            onFilterChange={this.onStaffFilterChange}
+          />
+        )}
         {this.renderStaffMembers(clockInOutData)}
       </ContentWrapper>
     );

@@ -25,6 +25,7 @@ export const periodPermissionSelector = (state, id) => {
   return permission.get('permitted');
 };
 
+const venuesSelector = state => state.get('venues');
 const rotaShiftsSelector = state => state.get('rotaShifts');
 const staffMembersSelector = state => state.get('staffMembers');
 const clockInPeriodsSelector = state => state.get('clockInPeriods');
@@ -35,6 +36,11 @@ const hoursAcceptancePeriodsSelector = state =>
 const hoursAcceptanceBreaksSelector = state =>
   state.get('hoursAcceptanceBreaks');
 const rotasSelector = state => state.get('rotas');
+
+export const getVenueByIdSelector = createSelector(
+  venuesSelector,
+  venues => venueId => venues.find(venue => venue.get('id') === venueId),
+);
 
 export function addZeroToNumber(number, zeroLimit = 9) {
   return number <= zeroLimit ? `0${number}` : `${number}`;
@@ -92,102 +98,110 @@ export const data = createSelector(
           safeMoment.uiDateParse(rota.get('date')).isSame(mDate),
         );
         return periodsInDate
-          .groupBy(x => x.get('staffMember'))
-          .map((periodsInStaffMember, staffMemberId) => {
-            const events = periodsInStaffMember
-              .reduce(
-                (acc, item) => acc.merge(item.get('clockInEvents')),
-                List([]),
-              )
-              .map(eventId =>
-                clockInEvents.find(event => event.get('id') === eventId),
-              );
-
-            const periods = Map({})
-              .set(
-                'staffMember',
-                staffMembers.find(
-                  staffMember => staffMember.get('id') === staffMemberId,
-                ),
-              )
-              .set('clockInEvents', events)
-              .set(
-                'rotaedShifts',
-                rotaShifts
-                  .filter(
-                    shift =>
-                      shift.get('staffMember') === staffMemberId &&
-                      shift.get('rota') === rota.get('id'),
+          .groupBy(x => x.get('venue'))
+          .map((periodsInVenue, periodVenueId) => {
+            return periodsInVenue
+              .groupBy(x => x.get('staffMember'))
+              .map((periodsInStaffMember, staffMemberId) => {
+                const events = periodsInStaffMember
+                  .reduce(
+                    (acc, item) => acc.merge(item.get('clockInEvents')),
+                    List([]),
                   )
-                  .map(item => item.set('breaks', [])),
-              )
-              .set(
-                'hoursAcceptancePeriods',
-                hoursAcceptancePeriods
-                  .filter(
-                    item =>
-                      safeMoment.uiDateParse(item.get('date')).isSame(mDate) &&
-                      item.get('staffMember') === staffMemberId,
+                  .map(eventId =>
+                    clockInEvents.find(event => event.get('id') === eventId),
+                  );
+
+                const periods = Map({})
+                  .set('venueId', periodVenueId)
+                  .set(
+                    'staffMember',
+                    staffMembers.find(
+                      staffMember => staffMember.get('id') === staffMemberId,
+                    ),
                   )
-                  .map(hoursAcceptancePeriod => {
-                    return hoursAcceptancePeriod.set(
-                      'breaks',
-                      hoursAcceptanceBreaks.filter(
-                        hoursAcceptanceBreak =>
-                          hoursAcceptanceBreak.get('hoursAcceptancePeriod') ===
-                          hoursAcceptancePeriod.get('frontendId'),
+                  .set('clockInEvents', events)
+                  .set(
+                    'rotaedShifts',
+                    rotaShifts
+                      .filter(
+                        shift =>
+                          shift.get('staffMember') === staffMemberId &&
+                          shift.get('rota') === rota.get('id'),
+                      )
+                      .map(item => item.set('breaks', [])),
+                  )
+                  .set(
+                    'hoursAcceptancePeriods',
+                    hoursAcceptancePeriods
+                      .filter(
+                        item =>
+                          safeMoment
+                            .uiDateParse(item.get('date'))
+                            .isSame(mDate) &&
+                          item.get('staffMember') === staffMemberId,
+                      )
+                      .map(hoursAcceptancePeriod => {
+                        return hoursAcceptancePeriod.set(
+                          'breaks',
+                          hoursAcceptanceBreaks.filter(
+                            hoursAcceptanceBreak =>
+                              hoursAcceptanceBreak.get(
+                                'hoursAcceptancePeriod',
+                              ) === hoursAcceptancePeriod.get('frontendId'),
+                          ),
+                        );
+                      }),
+                  )
+                  .set(
+                    'clockInPeriods',
+                    periodsInStaffMember.map(periodInStaffMember =>
+                      periodInStaffMember.set(
+                        'breaks',
+                        periodInStaffMember
+                          .get('clockInBreaks')
+                          .map(clockInBreakId =>
+                            clockInBreaks.find(
+                              clockInBreak =>
+                                clockInBreak.get('id') === clockInBreakId,
+                            ),
+                          ),
                       ),
-                    );
-                  }),
-              )
-              .set(
-                'clockInPeriods',
-                periodsInStaffMember.map(periodInStaffMember =>
-                  periodInStaffMember.set(
-                    'breaks',
-                    periodInStaffMember
-                      .get('clockInBreaks')
-                      .map(clockInBreakId =>
-                        clockInBreaks.find(
-                          clockInBreak =>
-                            clockInBreak.get('id') === clockInBreakId,
-                        ),
-                      ),
-                  ),
-                ),
-              );
+                    ),
+                  );
 
-            const acceptedAcceptancePeriods = periods
-              .get('hoursAcceptancePeriods')
-              .filter(item => item.get('status') === 'accepted');
+                const acceptedAcceptancePeriods = periods
+                  .get('hoursAcceptancePeriods')
+                  .filter(item => item.get('status') === 'accepted');
 
-            const periodsWithStats = periods
-              .set(
-                'hoursAcceptanceStats',
-                getItemsTimeDiff(acceptedAcceptancePeriods.toJS()),
-              )
-              .set(
-                'hoursAcceptanceBreaksStats',
-                acceptedAcceptancePeriods.reduce((acc, item) => {
-                  return acc + getItemsTimeDiff(item.get('breaks').toJS());
-                }, 0),
-              )
-              .set(
-                'clockedStats',
-                getItemsTimeDiff(periods.get('clockInPeriods').toJS()),
-              )
-              .set(
-                'clockedBreaksStats',
-                periods.get('clockInPeriods').reduce((acc, item) => {
-                  return acc + getItemsTimeDiff(item.get('breaks').toJS());
-                }, 0),
-              )
-              .set(
-                'rotaedStats',
-                getItemsTimeDiff(periods.get('rotaedShifts').toJS()),
-              );
+                const periodsWithStats = periods
+                  .set(
+                    'hoursAcceptanceStats',
+                    getItemsTimeDiff(acceptedAcceptancePeriods.toJS()),
+                  )
+                  .set(
+                    'hoursAcceptanceBreaksStats',
+                    acceptedAcceptancePeriods.reduce((acc, item) => {
+                      return acc + getItemsTimeDiff(item.get('breaks').toJS());
+                    }, 0),
+                  )
+                  .set(
+                    'clockedStats',
+                    getItemsTimeDiff(periods.get('clockInPeriods').toJS()),
+                  )
+                  .set(
+                    'clockedBreaksStats',
+                    periods.get('clockInPeriods').reduce((acc, item) => {
+                      return acc + getItemsTimeDiff(item.get('breaks').toJS());
+                    }, 0),
+                  )
+                  .set(
+                    'rotaedStats',
+                    getItemsTimeDiff(periods.get('rotaedShifts').toJS()),
+                  );
 
-            return periodsWithStats;
+                return periodsWithStats;
+              });
           });
       }),
 );

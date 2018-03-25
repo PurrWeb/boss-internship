@@ -11,6 +11,7 @@ import rotas from './rotas';
 import hoursAcceptanceBreaks from './hours-acceptance-breaks';
 import venue from './venue';
 import pageOptions from './page-options';
+import venues from './venues';
 
 export default combineReducers({
   pageOptions,
@@ -24,5 +25,6 @@ export default combineReducers({
   rotas,
   hoursAcceptanceBreaks,
   venue,
+  venues,
   form: formReducer,
 });

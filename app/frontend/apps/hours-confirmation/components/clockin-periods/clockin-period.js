@@ -6,6 +6,7 @@ import oFetch from 'o-fetch';
 class ClockInPeriod extends Component {
   renderPeriodByStatus(period) {
     const status = oFetch(period, 'status');
+    const venueId = oFetch(period, 'venueId');
     const id = oFetch(period, 'id');
     const frontendId = oFetch(period, 'frontendId');
     const startsAt = oFetch(period, 'startsAt');
@@ -27,9 +28,10 @@ class ClockInPeriod extends Component {
         endsAt,
         reasonNote,
         breaks,
+        venueId,
       };
 
-    return (
+      return (
         <ClockInPeriodForm
           initialValues={initialValues}
           onAcceptPeriod={this.props.onAcceptPeriod}
@@ -40,7 +42,9 @@ class ClockInPeriod extends Component {
           hoursAcceptanceStats={hoursAcceptanceStats}
           rotaedStats={rotaedStats}
           timeDiff={oFetch(this.props, 'timeDiff')}
-          form={`period-${this.props.staffMemberId}-${date}-${this.props.index}`}
+          form={`period-${this.props.staffMemberId}-${date}-${
+            this.props.index
+          }`}
         />
       );
     }

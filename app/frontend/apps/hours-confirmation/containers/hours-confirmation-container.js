@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import HoursConfirmation from '../components/hours-confirmation';
-import { data } from '../selectors';
+import { data, getVenueByIdSelector } from '../selectors';
 import {
   unacceptPeriodAction,
   deletePeriodAction,
@@ -20,6 +20,8 @@ const mapStateToProps = state => {
     staffTypes: state.get('staffTypes'),
     hoursAcceptanceBreaks: state.get('hoursAcceptanceBreaks'),
     pageOptions: state.get('pageOptions'),
+    venues: state.get('venues'),
+    getVenueById: getVenueByIdSelector(state),
   };
 };
 

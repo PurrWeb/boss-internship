@@ -10,6 +10,8 @@ import {
   clockOutRequest,
 } from '../requests';
 
+import { getVenueByIdSelector } from '../selectors';
+
 export const loadInitialData = createAction(types.LOAD_INITIAL_DATA);
 export const updatePeriodData = createAction(types.UPDATE_PERIOD_DATA);
 export const updatePeriodStatus = createAction(types.UPDATE_PERIOD_STATUS);
@@ -37,10 +39,7 @@ export const unacceptPeriodAction = period => (dispatch, getState) => {
 };
 
 export const acceptPeriodAction = period => (dispatch, getState) => {
-  const venue = getState()
-    .get('venue')
-    .toJS();
-  const venueId = oFetch(venue, 'id');
+  const venueId = oFetch(period, 'venueId');
 
   return acceptPeriodRequest(period, venueId).then(response => {
     const frontendId = oFetch(period, 'frontendId');
@@ -71,4 +70,8 @@ export const clockOutAction = ({ staffMemberId, date }) => (
   return clockOutRequest({ staffMemberId, date, venueId }).then(response => {
     dispatch(forceClockOutAction(response.data));
   });
+};
+
+export const getVenueById = venueId => (dispatch, getState) => {
+  return getVenueById(venueId)(getState());
 };

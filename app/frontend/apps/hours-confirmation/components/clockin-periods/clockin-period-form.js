@@ -360,7 +360,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 ClockInPeriodForm = reduxForm({
-  values: ['frontendId', 'id', 'date', 'staffMember'],
+  values: ['frontendId', 'id', 'date', 'staffMember', 'venueId'],
   // validate,
   onChange(values, dispatch, props) {
     dispatch(updatePeriodData(values));
