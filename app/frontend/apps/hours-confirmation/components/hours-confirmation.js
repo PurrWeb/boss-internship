@@ -231,7 +231,7 @@ class HoursConfirmation extends Component {
                 href={url}
                 className="boss-button boss-button_role_calendar boss-page-dashboard__button"
               >
-                View by date
+                View current
               </a>
             </DashboardActions>
           </DashboardDateSelect>
