@@ -11,6 +11,7 @@ import {
   acceptPeriodAction,
   addNewAcceptancePeriodAction,
   clockOutAction,
+  handleDonePeriodsAction,
 } from '../redux/actions';
 
 const mapStateToProps = state => {
@@ -35,6 +36,7 @@ const mapDispatchToProps = dispatch => {
         acceptPeriodAction,
         addNewAcceptancePeriodAction,
         clockOutAction,
+        handleDonePeriodsAction,
       },
       dispatch,
     ),

@@ -13,6 +13,7 @@ import {
 import { getVenueByIdSelector } from '../selectors';
 
 export const loadInitialData = createAction(types.LOAD_INITIAL_DATA);
+export const handleDonePeriodsAction = createAction(types.DONE_PERIOD);
 export const updatePeriodData = createAction(types.UPDATE_PERIOD_DATA);
 export const updatePeriodStatus = createAction(types.UPDATE_PERIOD_STATUS);
 export const removeHoursAcceptancePeriodAction = createAction(

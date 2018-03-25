@@ -42,6 +42,16 @@ export default handleActions(
         periodBreak => periodBreak.get('hoursAcceptancePeriod') === frontendId,
       );
     },
+    [types.DONE_PERIOD]: (state, action) => {
+      const periods = oFetch(action.payload, 'periods');
+      const hoursAcceptancePeriods = oFetch(
+        periods,
+        'hoursAcceptancePeriods',
+      );
+      const hoursAcceptancePeriodsIds = hoursAcceptancePeriods.map(period => oFetch(period, 'id'));
+
+      return state.filter(period => !hoursAcceptancePeriodsIds.includes(period.get('hoursAcceptancePeriod')));
+    },
   },
   initialState,
 );

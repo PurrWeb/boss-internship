@@ -175,6 +175,11 @@ class HoursConfirmation extends Component {
           onAcceptPeriod={this.handleAcceptPeriod}
           onDeletePeriod={this.handleDeletePeriod}
           onPeriodDataChange={this.handlePeriodDataChange}
+          onDoneClick={() => this.props.actions.handleDonePeriodsAction({
+            periods,
+            date,
+            staffMemberId,
+          })}
           onClockOut={() =>
             this.props.actions.clockOutAction({
               date,

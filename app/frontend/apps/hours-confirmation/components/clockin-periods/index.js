@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import oFetch from 'o-fetch';
 
 class ClockInPeriods extends Component {
   renderPeriods(periods) {
@@ -10,7 +11,19 @@ class ClockInPeriods extends Component {
     });
   }
 
+  areAllShiftsAccepted() {
+    const unacceptedShifts = this.props.periods.filter(
+      period => oFetch(period, 'status') === 'pending',
+    );
+    return unacceptedShifts.length === 0;
+  }
+
+  isPageTypeCurrent() {
+    return this.props.pageType === 'current';
+  }
+
   render() {
+    const { periods } = this.props;
     return (
       <div>
         <div className="boss-hrc__shifts">
@@ -23,6 +36,15 @@ class ClockInPeriods extends Component {
           >
             Add shift
           </button>
+          {this.areAllShiftsAccepted() &&
+            this.isPageTypeCurrent() && (
+              <button
+                onClick={this.props.onDoneClick}
+                className="boss-button boss-button_role_success boss-hrc__button"
+              >
+                Done
+              </button>
+            )}
         </div>
       </div>
     );

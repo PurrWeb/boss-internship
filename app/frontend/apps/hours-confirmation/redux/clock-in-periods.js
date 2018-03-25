@@ -22,6 +22,15 @@ export default handleActions(
         clockInPeriod => clockInPeriod.merge(fromJS(newClockInPeriod)),
       );
     },
+    [types.DONE_PERIOD]: (state, action) => {
+      const periods = oFetch(action.payload, 'periods');
+      const clockInPeriods = oFetch(
+        periods,
+        'clockInPeriods',
+      );
+      const clockInPeriodsIds = clockInPeriods.map(period => oFetch(period, 'id'));
+      return state.filter(period => !clockInPeriodsIds.includes(period.get('id')));
+    },
   },
   initialState,
 );

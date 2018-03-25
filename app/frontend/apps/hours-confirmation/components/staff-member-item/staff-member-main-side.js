@@ -65,6 +65,8 @@ class StaffMemberMainSide extends Component {
             <ClockInPeriods
               periods={hoursAcceptancePeriods}
               onAddNewAcceptancePeriod={this.props.onAddNewAcceptancePeriod}
+              onDoneClick={this.props.onDoneClick}
+              pageType={pageType}
               periodRenderer={period => (
                 <ClockInPeriod
                   onUnacceptPeriod={this.props.onUnacceptPeriod}
