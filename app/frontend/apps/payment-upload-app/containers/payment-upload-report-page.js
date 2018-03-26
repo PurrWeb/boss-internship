@@ -143,8 +143,40 @@ class PaymentUploadReportPage extends React.Component {
   }
 
   renderProcessed() {
+    const createdCount = oFetch(this.props, 'createdCount');
+    const updatedCount = oFetch(this.props, 'updatedCount');
+
     return <div>
-      <p>Done</p>
+      <section className="boss-board boss-board_context_stack">
+        <header className="boss-board__header">
+          <div className="boss-indicator boss-indicator_status_success boss-board__indicator">
+            <span className="boss-indicator__marker">{createdCount}</span>
+          </div>
+            <h2 className="boss-board__title boss-board__title_size_medium">Created Successfully</h2>
+          <div className="boss-board__button-group">
+            <button type="button" className="boss-board__switch"></button>
+          </div>
+        </header>
+        <div className="boss-board__content" style="display: none;">
+          <div className="boss-board__content-inner">
+            <div className="boss-board__group">
+              <p className="boss-board__text-placeholder">Nothing to display</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="boss-board boss-board_context_stack">
+        <header class="boss-board__header">
+          <div class="boss-indicator boss-indicator_status_success boss-board__indicator">
+            <span class="boss-indicator__marker">{updatedCount}</span>
+          </div>
+          <h2 class="boss-board__title boss-board__title_size_medium">Updated</h2>
+          <div class="boss-board__button-group">
+            <button type="button" class="boss-board__switch boss-board__switch_state_opened"></button>
+          </div>
+        </header>
+      </section>
     </div>;
   }
 
