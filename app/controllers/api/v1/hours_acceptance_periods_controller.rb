@@ -29,12 +29,19 @@ module Api
           ).call
 
           if result.success?
+            ability = UserAbility.new(current_user);
+            user_period_permissions = {
+              id: result.hours_acceptance_period.id,
+              permitted: ability.can?(:update, result.hours_acceptance_period)
+            }
+
             render json: {
               hoursAcceptancePeriod: Api::V1::HoursConfirmation::HoursAcceptancePeriodSerializer.new(result.hours_acceptance_period),
               breaks: ActiveModel::Serializer::CollectionSerializer.new(
                 result.breaks,
                 serializer: Api::V1::HoursConfirmation::HoursAcceptanceBreakSerializer,
-              )
+              ),
+              userPeriodPermissions: user_period_permissions
             }, status: :ok
           else
             render json: {errors: result.api_errors.errors}, status: 422
@@ -64,12 +71,18 @@ module Api
           ).call
 
           if result.success?
+            ability = UserAbility.new(current_user);
+            user_period_permissions = {
+              id: result.hours_acceptance_period.id,
+              permitted: ability.can?(:update, result.hours_acceptance_period)
+            }
             render json: {
               hoursAcceptancePeriod: Api::V1::HoursConfirmation::HoursAcceptancePeriodSerializer.new(result.hours_acceptance_period),
               breaks: ActiveModel::Serializer::CollectionSerializer.new(
                 result.hours_acceptance_breaks,
                 serializer: Api::V1::HoursConfirmation::HoursAcceptanceBreakSerializer,
-              )
+              ),
+              userPeriodPermissions: user_period_permissions
             }, status: :ok
           else
             render json: {errors: result.api_errors.errors}, status: 422
