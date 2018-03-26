@@ -40,13 +40,13 @@ const stepsData: StepData[] = [
     title: 'Upload Photo'
   },
   {
-    title: 'Venue'
-  },
-  {
     title: 'Address'
   },
   {
     title: 'Work'
+  },
+  {
+    title: 'Venue'
   },
   {
     title: 'Preview'
@@ -100,9 +100,9 @@ class Component extends React.Component<PropsFromConnect, State> {
     return {
       [ADD_STAFF_MEMBER_STEPS.BasicInformationBlock]: {form: basicInformationForm, errors: Component.isFormWithoutErrors(basicInformationForm, ADD_STAFF_MEMBER_STEPS.BasicInformationBlock, currentStepIdx)},
       [ADD_STAFF_MEMBER_STEPS.AddAvatarBlock]: {form: uploadPhotoForm, errors: Component.isFormWithoutErrors(uploadPhotoForm, ADD_STAFF_MEMBER_STEPS.AddAvatarBlock, currentStepIdx, this.isAvatarFormValid)},
-      [ADD_STAFF_MEMBER_STEPS.VenuesBlock]: {form: venueForm, errors: Component.isFormWithoutErrors(venueForm, ADD_STAFF_MEMBER_STEPS.VenuesBlock, currentStepIdx)},
       [ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock]: {form: contactDetailsForm, errors: Component.isFormWithoutErrors(contactDetailsForm, ADD_STAFF_MEMBER_STEPS.ContactDetailsBlock, currentStepIdx)},
       [ADD_STAFF_MEMBER_STEPS.WorkBlock]: {form: workForm, errors: Component.isFormWithoutErrors(workForm, ADD_STAFF_MEMBER_STEPS.WorkBlock, currentStepIdx)},
+      [ADD_STAFF_MEMBER_STEPS.VenuesBlock]: {form: venueForm, errors: Component.isFormWithoutErrors(venueForm, ADD_STAFF_MEMBER_STEPS.VenuesBlock, currentStepIdx)},
       [ADD_STAFF_MEMBER_STEPS.PreviewBlock]: {form: null, errors: true}
     };
   }
@@ -145,6 +145,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   drawSteps(currentStepIdx: number) {
     const stepsValidity = this.getStepsValidity(currentStepIdx);
+    console.log(stepsValidity);
     const {stepsInfo} = this.props;
     const stepsInfoKeys = Object.keys(stepsInfo).map((key) => Number(key));
     const maxStepsInfoIdx = Math.max.apply(null, stepsInfoKeys);
@@ -163,7 +164,7 @@ class Component extends React.Component<PropsFromConnect, State> {
 
       const lineBeforeClassName = isLineBefore ? 'boss-steps__step-line_state_completed' : '';
       const lineAfterClassName = isLineAfter ? 'boss-steps__step-line_state_completed' : '';
-      
+
       const currentStepClassName = isCurrentStep ? 'boss-steps__step-title_state_active' : '';
       const unReviewedClassName = (idx === 0 && !this.isStaffMembersReviewed()) ? 'boss-steps-block__step_state_review-error' : '';
       if (isLastStep) {
@@ -185,11 +186,11 @@ class Component extends React.Component<PropsFromConnect, State> {
         if ( isCompleted ) {
           stepCompleteClassname = 'boss-steps__step-index_state_completed';
         }
-        
+
         if ( isShowError ) {
           stepWithErrorClassName = `boss-steps__step-index_state_with-error`;
         }
-      } 
+      }
 
       return (
         <div key={idx} className="boss-steps__step">

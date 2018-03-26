@@ -242,7 +242,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     return Component.renderInformationBlock(
       content,
       'Venue',
-      3
+      5
     );
   }
 
@@ -260,7 +260,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     return Component.renderInformationBlock(
       content,
       'Address',
-      4
+      3
     );
   }
 
@@ -286,7 +286,7 @@ class Component extends React.Component<PropsFromConnect, State> {
     return Component.renderInformationBlock(
       content,
       'Work',
-      5
+      4
     );
   }
 
@@ -303,9 +303,9 @@ class Component extends React.Component<PropsFromConnect, State> {
       <div className="boss-forms-block">
         {this.renderBasicInformationSummaryBlock()}
         {this.renderAvatarSummaryBlock()}
-        {this.renderVenueSummaryBlock()}
         {this.renderAddressSummaryBlock()}
         {this.renderWorkSummaryBlock()}
+        {this.renderVenueSummaryBlock()}
         { !!this.props.errors.messages.length && <div className="boss-form__field ">
           <div className="boss-form__error">
             <p className="boss-form__error-text">
