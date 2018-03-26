@@ -60,8 +60,8 @@ export function formattedTime(timeInMs) {
 
 export function getItemTimeDiff(item) {
   if (item.endsAt === null) return 0;
-  const mStartsAt = safeMoment.iso8601Parse(item.startsAt);
-  const mEndsAt = safeMoment.iso8601Parse(item.endsAt);
+  const mStartsAt = safeMoment.iso8601Parse(item.startsAt).seconds(0);
+  const mEndsAt = safeMoment.iso8601Parse(item.endsAt).seconds(0);
   return mEndsAt.diff(mStartsAt);
 }
 
