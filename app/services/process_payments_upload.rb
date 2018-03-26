@@ -8,11 +8,10 @@ class ProcessPaymentsUpload
   attr_reader :requester, :ability, :parsed_upload, :nested
 
   def call
-    result_data = {}
-    valid_payments = []
-    invalid_payments = parsed_upload.fetch(:invalid_payments).clone
-    skipped_count = invalid_payments.count
-    created_payment_count = 0
+    created_payments = []
+    updated_payments = []
+    skipped_invalid_payments = parsed_upload.fetch(:invalid_payments).clone
+    skipped_existing_payments = []
 
     ActiveRecord::Base.transaction(requires_new: nested) do
       parsed_upload.fetch(:valid_payments).each do |payment_parse_data|
@@ -21,15 +20,31 @@ class ProcessPaymentsUpload
         new_payment_date = normalised_payment_data.fetch(:process_date)
         new_payment_cents = normalised_payment_data.fetch(:net_pay_cents)
 
-        save_successful = false
         payment = Payment.enabled.find_by(
           staff_member: staff_member,
           date: new_payment_date
         )
         if payment.present?
-          if payment.cents != new_payment_cents
-            save_successful = payment.update_attributes(cents: new_payment_cents)
+          payment_updateable = payment.cents != new_payment_cents
+
+          if payment_updateable
+            update_successful = payment.update_attributes(cents: new_payment_cents)
             payment.mark_pending! if payment.marked_as_received?
+
+            if update_successful
+              updated_payments << payment_parse_data.merge({
+                payment: payment
+              })
+            else
+              skipped_invalid_payments << payment_parse_data.merge({
+                errors: { payment: payment.errors.to_h },
+                payment: payment
+              })
+            end
+          else
+            skipped_existing_payments << payment_parse_data.merge({
+             payment: payment
+            })
           end
         else
           payment = Payment.new(
@@ -39,29 +54,25 @@ class ProcessPaymentsUpload
             cents: new_payment_cents
           )
 
-          save_successful = payment.save
-        end
-
-        if save_successful
-          created_payment_count = created_payment_count + 1
-          valid_payments << payment_parse_data.merge(
-            payment: payment
-          )
-        else
-          skipped_count = skipped_count + 1
-          invalid_payments << payment_parse_data.merge({
-            errors: { payment: payment.errors.to_h },
-            payment: payment
-          })
+          if payment.save
+            created_payments << payment_parse_data.merge(
+              payment: payment
+            )
+          else
+            skipped_invalid_payments << payment_parse_data.merge({
+              errors: { payment: payment.errors.to_h },
+              payment: payment
+            })
+          end
         end
       end
     end
 
-    result_data.merge({
-      valid_payments: valid_payments,
-      invalid_payments: invalid_payments,
-      skipped_count: skipped_count,
-      created_count: created_payment_count
-    })
+    {
+      created_payments: created_payments,
+      updated_payments: updated_payments,
+      skipped_invalid_payments: skipped_invalid_payments,
+      skipped_existing_payments: skipped_existing_payments,
+    }
   end
 end

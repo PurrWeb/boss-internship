@@ -61,17 +61,16 @@ describe ProcessPaymentsUpload do
       end
 
       it 'should list new payment in data' do
-        expect(result).to eq(
-          parsed_upload.merge(
-            created_count: 1,
-            skipped_count: invalid_payment_data.count,
-            valid_payments: [
+        expect(result).to eq({
+            created_payments: [
               valid_payment_datum.merge(
                 payment: Payment.first
               )
-            ]
-          )
-        )
+            ],
+            updated_payments: [],
+            skipped_invalid_payments: parsed_upload.fetch(:invalid_payments),
+            skipped_existing_payments: []
+        })
       end
     end
 
@@ -97,10 +96,12 @@ describe ProcessPaymentsUpload do
       end
 
       it 'should list new payment in data' do
-        expect(result.fetch(:created_count)).to eq(0)
-        expect(result.fetch(:skipped_count)).to eq(invalid_payment_data.count + 1)
+        expect(result.fetch(:created_payments).count).to eq(0)
+        expect(result.fetch(:updated_payments).count).to eq(0)
+        expect(result.fetch(:skipped_existing_payments).count).to eq(0)
+        expect(result.fetch(:skipped_invalid_payments).count).to eq(invalid_payment_data.count + 1)
 
-        result_invalid_payments = result.fetch(:invalid_payments)
+        result_invalid_payments = result.fetch(:skipped_invalid_payments)
         expect(result_invalid_payments[0]).to eq(mock_invalid_payment_data)
         result_invalid_payment = result_invalid_payments[1]
         expect(result_invalid_payment.fetch(:raw_data)).to eq(valid_payment_datum.fetch(:raw_data))
@@ -154,7 +155,7 @@ describe ProcessPaymentsUpload do
         let(:existing_payment_cents) { 100 }
         let(:new_payment_cents) { 234 }
 
-        it 'should create new payment' do
+        it 'should not create new payment' do
           expect(Payment.count).to eq(1)
           service.call
           expect(Payment.count).to eq(1)
