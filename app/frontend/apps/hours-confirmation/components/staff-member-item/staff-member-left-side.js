@@ -20,11 +20,16 @@ class StaffMemberLeftSide extends Component {
     } = this.props;
 
     const formattedRotaedStats = formattedTime(rotaedStats);
-    const formattedClockedStats = formattedTime(clockedStats - clockedBreaksStats);
-    const formattedHoursAcceptanceStats = formattedTime(hoursAcceptanceStats - hoursAcceptanceBreaksStats);
+    const formattedClockedStats = formattedTime(
+      clockedStats - clockedBreaksStats,
+    );
+    const formattedHoursAcceptanceStats = formattedTime(
+      hoursAcceptanceStats - hoursAcceptanceBreaksStats,
+    );
 
-    const showAcceptanceDifference = hoursAcceptanceStats !== 0;
-
+    const showAcceptanceDifference =
+      hoursAcceptanceStats !== 0 && timeDiff.sign !== '';
+    const acceptanceDifferenceColor = timeDiff.sign === '-' ? '#86dd75' : '#ef8c8b';
     return (
       <div className="boss-hrc__side">
         <div className="boss-hrc__user-info">
@@ -74,15 +79,13 @@ class StaffMemberLeftSide extends Component {
                   <span className="boss-user-badge__time-value">
                     {formattedHoursAcceptanceStats}
                   </span>
-                  {showAcceptanceDifference &&
-                    timeDiff.sign !== '' && (
-                      <span
-                        style={{ display: 'block' }}
-                        className="boss-user-badge__time-note"
-                      >
-                        ({timeDiff.full})
-                      </span>
-                    )}
+                  {showAcceptanceDifference && (
+                    <span
+                      style={{ display: 'block', color: acceptanceDifferenceColor }}
+                    >
+                      ({timeDiff.full})
+                    </span>
+                  )}
                 </p>
                 <p className="boss-user-badge__time-label">Accepted</p>
               </li>
