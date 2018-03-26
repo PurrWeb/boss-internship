@@ -192,6 +192,7 @@ class HoursConfirmation extends Component {
               staffMemberId,
               newStartsEndsTime,
               frontendId: uuid(),
+              venueId,
             })
           }
         />

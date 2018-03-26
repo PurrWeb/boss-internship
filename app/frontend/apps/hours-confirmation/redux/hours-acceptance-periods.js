@@ -60,9 +60,9 @@ export default handleActions(
         staffMemberId,
         newStartsEndsTime,
         frontendId,
+        venueId,
       } = action.payload;
       const { startsAt, endsAt } = newStartsEndsTime;
-
       return state.push(
         fromJS({
           frontendId,
@@ -76,6 +76,7 @@ export default handleActions(
           acceptedAt: null,
           id: null,
           acceptedBy: null,
+          venueId,
         }),
       );
     },

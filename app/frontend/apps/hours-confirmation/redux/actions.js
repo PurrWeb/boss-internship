@@ -72,7 +72,3 @@ export const clockOutAction = ({ staffMemberId, date }) => (
     dispatch(forceClockOutAction(response.data));
   });
 };
-
-export const getVenueById = venueId => (dispatch, getState) => {
-  return getVenueById(venueId)(getState());
-};
