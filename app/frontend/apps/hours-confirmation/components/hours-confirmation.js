@@ -23,8 +23,7 @@ import StaffMemberLeftSide from './staff-member-item/staff-member-left-side';
 import StaffMemberMainSide from './staff-member-item/staff-member-main-side';
 
 export const timeObjectDiff = (rotaed, accepted) => {
-  const diff = rotaed - accepted;
-
+  const diff = Math.abs(rotaed - accepted);
   const sign = rotaed !== accepted ? (rotaed < accepted ? '+' : '-') : '';
   return {
     sign,
