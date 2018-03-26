@@ -94,7 +94,11 @@ class HoursConfirmationController < ApplicationController
         date: date
       }
     else
-      redirect_to hours_confirmation_index_path(index_redirect_params)
+      if date.present?
+        redirect_to hours_confirmation_index_path({date: UIRotaDate.format(date), venue_id: current_venue.id})
+      else
+        redirect_to current_hours_confirmation_index_path
+      end
     end
   end
 

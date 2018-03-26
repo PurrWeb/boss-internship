@@ -123,7 +123,6 @@ class ClockInPeriodForm extends Component {
 
   acceptPeriod = ({ values }) => {
     return this.props.onAcceptPeriod(values.toJS()).catch(err => {
-      console.log(err);
       if (err.response.data.errors) {
         const errors = err.response.data.errors;
         const breaksErrors = errors.breaks;
