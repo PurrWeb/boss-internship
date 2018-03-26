@@ -21,6 +21,12 @@ export default handleActions(
       const clockInPeriodsIds = clockInPeriods.map(period => oFetch(period, 'id'));
       return state.filter(shift => !clockInPeriodsIds.includes(shift.get('clockInPeriod')));
     },
+    [types.FORCE_CLOCK_OUT]: (state, action) => {
+      const { clockInBreaks } = action.payload;
+      return state.update(clockInBreaks =>
+        clockInBreaks.push(fromJS(clockInBreaks)),
+      );
+    },
   },
   initialState,
 );
