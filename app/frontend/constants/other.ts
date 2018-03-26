@@ -3,9 +3,9 @@ import {StarterEmploymentStatus, AddStaffMemberSteps} from '../interfaces/store-
 export const ADD_STAFF_MEMBER_STEPS: AddStaffMemberSteps = {
   BasicInformationBlock: 0,
   AddAvatarBlock: 1,
-  VenuesBlock: 2,
-  ContactDetailsBlock: 3,
-  WorkBlock: 4,
+  ContactDetailsBlock: 2,
+  WorkBlock: 3,
+  VenuesBlock: 4,
   PreviewBlock: 5,
 };
 
