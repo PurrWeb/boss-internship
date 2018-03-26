@@ -51,7 +51,7 @@ export function formattedTime(timeInMs) {
   const minutes = Math.trunc((timeInMs / 1000 / 60) % 60);
 
   if (hours === 0 && minutes === 0) {
-    return `N/A`;
+    return 0;
   }
   return `${hours === 0 ? '' : `${hours}h`}${
     minutes === 0 ? '' : `${addZeroToNumber(minutes, 9)}m`
