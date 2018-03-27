@@ -4,6 +4,9 @@ Rails.application.configure do
   Bullet.unused_eager_loading_enable = false
   Bullet.console = true
 
+  # Ignore bullet error caused by paper_trail 5.3.0
+  Bullet.add_whitelist type: :counter_cache, class_name: "HoursAcceptanceBreak", association: :versions
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on

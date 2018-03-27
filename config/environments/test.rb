@@ -6,6 +6,9 @@ Rails.application.configure do
   Bullet.unused_eager_loading_enable = false
   Bullet.raise = true # raise an error if n+1 query occurs
 
+  # Ignore bullet error caused by paper_trail 5.3.0
+  Bullet.add_whitelist type: :counter_cache, class_name: "HoursAcceptanceBreak", association: :versions
+
   # The test environment is used exclusively to run your application's
   # test suite. You never need to work with it otherwise. Remember that
   # your test database is "scratch space" for the test suite and is wiped
