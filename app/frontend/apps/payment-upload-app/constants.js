@@ -7,6 +7,7 @@ export const RESET_APPLICATION = 'reset_application';
 
 //Server returned result types
 export const PARSE_ERROR_RESULT_TYPE = 'parse_error';
+export const PROCESSED_RESULT_TYPE = 'process';
 
 // Page Identifiers
 export const UPLOAD_PAGE = 'upload_page';

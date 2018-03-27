@@ -8,7 +8,8 @@ import {
   UPLOAD_ERROR,
   RESET_APPLICATION,
   SET_UPLOAD_IN_PROGRESS,
-  PARSE_ERROR_RESULT_TYPE
+  PARSE_ERROR_RESULT_TYPE,
+  PROCESSED_RESULT_TYPE
 } from './constants';
 
 export const initializeState = createAction(INITIALIZE);
@@ -22,7 +23,8 @@ export const resetApplication = () => (dispatch, getState) => {
 }
 
 export const uploadFile = (values) => (dispatch, getState) => {
-  dispatch(setStateUploadInProgress(true))
+  const uploadFilename = oFetch(values, 'file.name');
+  dispatch(setStateUploadInProgress({uploadInProgress: true, uploadFilename: uploadFilename}))
 
   const state = getState().toJS();
   const globalState = oFetch(state, 'global');
@@ -46,6 +48,11 @@ export const uploadFile = (values) => (dispatch, getState) => {
           interval: 10000,//10s
           status: 'error'
         });
+      } else if (resultType === PROCESSED_RESULT_TYPE) {
+        notify("CSV Uploaded Successfully", {
+          interval: 10000, //10s
+          status: 'success'
+        })
       }
     }).catch((resp) => {
       const serverResponse = resp.response;
@@ -61,7 +68,7 @@ export const uploadFile = (values) => (dispatch, getState) => {
       setTimeout(function() {
         throw new Error(message);
       })
-      dispatch(setStateUploadInProgress(false));
+      dispatch(setStateUploadInProgress({ uploadInProgress: false, uploadFilename: null }));
       dispatch(reportStateUploadError({ message: responseMessage }));
     });
   };

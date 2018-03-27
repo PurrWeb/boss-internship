@@ -40,6 +40,7 @@ const globalReducer = handleActions({
 
 const initialUploadPageState = fromJS({
   uploadInProgress: false,
+  uploadFilename: '',
   uploadErrors: []
 })
 const uploadPageReducer = handleActions({
@@ -60,9 +61,12 @@ const uploadPageReducer = handleActions({
       set('uploadErrors', oFetch(action.payload, 'message'));
   },
   [SET_UPLOAD_IN_PROGRESS]: (state, action) => {
-    const newValue = oFetch(action, 'payload');
+    const payload = oFetch(action, 'payload');
+    const uploadInProgress = oFetch(payload, 'uploadInProgress');
+    const uploadFilename = oFetch(payload, 'uploadFilename');
     return state.
-      set('uploadInProgress', newValue);
+      set('uploadInProgress', uploadInProgress).
+      set('uploadFilename', uploadFilename);
   }
 }, initialUploadPageState);
 
