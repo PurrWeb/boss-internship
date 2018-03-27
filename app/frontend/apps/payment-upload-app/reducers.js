@@ -79,10 +79,10 @@ const reportPageReducer = handleActions({
       case "process":
         return state.
           set('mode', REPORT_PAGE_PROCCESSED_MODE).
-          set('createdCount', oFetch(payload, 'createdCount')).
-          set('skippedCount', oFetch(payload, 'skippedCount')).
-          set('invalidPayments', oFetch(payload, 'invalidPayments')).
-          set('validPayments', oFetch(payload, 'validPayments'));
+          set('createdPayments', oFetch(payload, 'createdPayments')).
+          set('updatedPayments', oFetch(payload, 'updatedPayments')).
+          set('skippedInvalidPayments', oFetch(payload, 'skippedInvalidPayments')).
+          set('skippedExistingPayments', oFetch(payload, 'skippedExistingPayments'))
         break;
       case "parse_error":
         return state.

@@ -18,10 +18,10 @@ const mapStateToProps = (state) => {
   if (mode === REPORT_PAGE_PROCCESSED_MODE) {
     return {
       mode: mode,
-      createdCount: oFetch(reportPageProps, 'createdCount'),
-      skippedCount: oFetch(reportPageProps, 'skippedCount'),
-      invalidPayments: oFetch(reportPageProps, 'invalidPayments'),
-      validPayments: oFetch(reportPageProps, 'validPayments')
+      createdPayments: oFetch(reportPageProps, 'createdPayments'),
+      updatedPayments: oFetch(reportPageProps, 'updatedPayments'),
+      skippedInvalidPayments: oFetch(reportPageProps, 'skippedInvalidPayments'),
+      skippedExistingPayments: oFetch(reportPageProps, 'skippedExistingPayments')
     }
   } else if (mode === REPORT_PAGE_PARSE_ERROR_MODE) {
     return {
@@ -143,6 +143,10 @@ class PaymentUploadReportPage extends React.Component {
   }
 
   renderProcessed() {
+    const createdPayments = oFetch(this.props, 'createdPayments');
+    const updatedPayments = oFetch(this.props, 'updatedPayments');
+    const skippedInvalidPayments = oFetch(this.props, 'skippedInvalidPayments');
+    const skippedExistingPayments = oFetch(this.props, 'skippedExistingPayments');
     const createdCount = oFetch(this.props, 'createdCount');
     const updatedCount = oFetch(this.props, 'updatedCount');
 
