@@ -130,8 +130,12 @@ class ClockInPeriodForm extends Component {
         if (breaksErrors && breaksErrors.length > 0) {
           breaksErrors.forEach((item, index) => {
             Object.keys(item).forEach(key => {
-              item[key].forEach(error => {
-                breaksErrorsSet.add(`${humanize(key)} ${error}`);
+              item[key].filter(item => !!item).forEach(error => {
+                if (key === 'base') {
+                  breaksErrorsSet.add(`${error}`);
+                } else {
+                  breaksErrorsSet.add(`${humanize(key)}: ${error}`);
+                }
               });
             });
           });
