@@ -147,39 +147,128 @@ class PaymentUploadReportPage extends React.Component {
     const updatedPayments = oFetch(this.props, 'updatedPayments');
     const skippedInvalidPayments = oFetch(this.props, 'skippedInvalidPayments');
     const skippedExistingPayments = oFetch(this.props, 'skippedExistingPayments');
-    const createdCount = oFetch(this.props, 'createdCount');
-    const updatedCount = oFetch(this.props, 'updatedCount');
+    const createdPaymentCount = oFetch(createdPayments, 'length');
+    const updatedPaymentCount = oFetch(updatedPayments, 'length');
+    const skippedInvalidPaymentCount = oFetch(skippedInvalidPayments, 'length');
+    const skippedExistingPaymentCount = oFetch(skippedExistingPayments, 'length');
 
     return <div>
       <section className="boss-board boss-board_context_stack">
         <header className="boss-board__header">
           <div className="boss-indicator boss-indicator_status_success boss-board__indicator">
-            <span className="boss-indicator__marker">{createdCount}</span>
+            <span className="boss-indicator__marker">{createdPaymentCount}</span>
           </div>
             <h2 className="boss-board__title boss-board__title_size_medium">Created Successfully</h2>
           <div className="boss-board__button-group">
-            <button type="button" className="boss-board__switch"></button>
+            <button type="button" className="boss-board__switch boss-board__switch_state_opened"></button>
           </div>
         </header>
-        <div className="boss-board__content" style="display: none;">
+
+        <div className="boss-board__content boss-board__content_state_opened" style={ {display: 'block'} }>
           <div className="boss-board__content-inner">
-            <div className="boss-board__group">
-              <p className="boss-board__text-placeholder">Nothing to display</p>
-            </div>
+            { (createdPaymentCount == 0) && <div className="boss-board__group">
+                <p className="boss-board__text-placeholder">Nothing to display</p>
+              </div> }
           </div>
         </div>
       </section>
 
       <section className="boss-board boss-board_context_stack">
-        <header class="boss-board__header">
-          <div class="boss-indicator boss-indicator_status_success boss-board__indicator">
-            <span class="boss-indicator__marker">{updatedCount}</span>
+        <header className="boss-board__header">
+          <div className="boss-indicator boss-indicator_status_success boss-board__indicator">
+            <span className="boss-indicator__marker">{updatedPaymentCount}</span>
           </div>
-          <h2 class="boss-board__title boss-board__title_size_medium">Updated</h2>
-          <div class="boss-board__button-group">
-            <button type="button" class="boss-board__switch boss-board__switch_state_opened"></button>
+          <h2 className="boss-board__title boss-board__title_size_medium">Updated</h2>
+          <div className="boss-board__button-group">
+            <button type="button" className="boss-board__switch boss-board__switch_state_opened"></button>
           </div>
         </header>
+
+        <div className="boss-board__content boss-board__content_state_opened" style={ {display: 'block'} }>
+          <div className="boss-board__content-inner">
+            { (updatedPaymentCount == 0) && <div className="boss-board__group">
+                <p className="boss-board__text-placeholder">Nothing to display</p>
+              </div> }
+          </div>
+        </div>
+      </section>
+
+      <section className="boss-board boss-board_context_stack">
+        <header className="boss-board__header">
+          <div className="boss-indicator boss-indicator_status_error boss-board__indicator">
+            <span className="boss-indicator__marker">{skippedInvalidPaymentCount}</span>
+          </div>
+          <h2 className="boss-board__title boss-board__title_size_medium">Skipped because data invalid</h2>
+          <div className="boss-board__button-group">
+            <button type="button" className="boss-board__switch boss-board__switch_state_opened"></button>
+          </div>
+        </header>
+
+        <div className="boss-board__content boss-board__content_state_opened" style={ {style: 'block'} }>
+          <div className="boss-board__content-inner">
+            { (skippedInvalidPaymentCount === 0) &&
+              <div className="boss-board__group">
+                <p className="boss-board__text-placeholder">Nothing to display</p>
+              </div> }
+            { (skippedInvalidPaymentCount !== 0) &&
+              <div className="boss-board__group">
+                <div className="boss-report">
+                  <p className="boss-report__text boss-report__text_size_m boss-report__text_adjust_wrap">Couldn't read<span className="boss-report__text-marked">CurrentPay.RndNetPay</span></p>
+                  <div className="boss-report__table">
+                    <div className="boss-table boss-table_page_csv-upload">
+                      <div className="boss-table__row boss-table__row_role_header">
+                        <div className="boss-table__cell">
+                          <div className="boss-table__info">
+                            <p className="boss-table__label">DateParameters.ProcessDate</p>
+                            <p className="boss-table__text">28/01/2018</p>
+                          </div>
+                        </div>
+
+                        <div className="boss-table__cell boss-table__cell_role_header">DateParameters.ProcessDate</div>
+                          <div className="boss-table__row boss-table__row_state_alert">
+                            <div className="boss-table__cell boss-table__cell_state_alert js-popover-container" data-popover="2">
+                              <div className="boss-table__info">
+                                <p className="boss-table__label boss-table__label_state_alert">CompanyDetails.Name</p>
+                                <p className="boss-table__text boss-table__text_state_alert">Test</p>
+                              </div>
+
+                              <div className="boss-popover boss-popover_context_csv-upload-error js-popover" data-popover="2">
+                                <a href="#" className="boss-popover__close js-popover-close">Close</a>
+                                <div className="boss-popover__inner">
+                                  <p className="boss-popover__text boss-popover__text_role_primary boss-popover__text_adjust_wrap"><span className="boss-popover__text-marked">CompanyDetails.Name</span> did not match any venues in the system</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </section>
+
+      <section className="boss-board boss-board_context_stack">
+        <header className="boss-board__header">
+          <div className="boss-indicator boss-indicator_status_error boss-board__indicator">
+            <span className="boss-indicator__marker">{skippedExistingPaymentCount}</span>
+          </div>
+          <h2 className="boss-board__title boss-board__title_size_medium">Skipped because already exists</h2>
+          <div className="boss-board__button-group">
+            <button type="button" className="boss-board__switch boss-board__switch_state_opened"></button>
+          </div>
+        </header>
+
+        <div className="boss-board__content boss-board__content_state_opened" style={ {style: 'block'} }>
+          <div className="boss-board__content-inner">
+            { (skippedExistingPaymentCount == 0) && <div className="boss-board__group">
+                <p className="boss-board__text-placeholder">Nothing to display</p>
+              </div> }
+          </div>
+        </div>
       </section>
     </div>;
   }
