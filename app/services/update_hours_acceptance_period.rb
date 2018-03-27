@@ -43,7 +43,7 @@ class UpdateHoursAcceptancePeriod
           })
         end
 
-        existing_breaks = hours_acceptance_period.hours_acceptance_breaks.enabled
+        existing_breaks = hours_acceptance_period.hours_acceptance_breaks.enabled.includes(:disabled_by)
         delete_breaks = existing_breaks
         if update_breaks_ids.count > 0
           delete_breaks = existing_breaks.where('id NOT IN (?)', update_breaks_ids)
