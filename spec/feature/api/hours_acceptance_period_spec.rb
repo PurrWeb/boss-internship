@@ -425,11 +425,12 @@ RSpec.describe 'Hours acceptance endpoints' do
           expect(json).to eq(
             {
               "errors"=> {
-                "hours_acceptance_breaks"=> [
-                  { "id" => break1.id },
-                  { "id" => break2.id },
+                "breaks"=> [
+                  {},
+                  {},
                   {
-                    "id" => nil,
+                    "startsAt" => [""],
+                    "endsAt" => [""],
                     "base" => ["break overlaps existing break"]
                   }
                 ]
