@@ -43,19 +43,19 @@ RSpec.describe 'Hours acceptance endpoints' do
     let(:break2_end) { start_of_day + 5.hours }
     let(:params) do
       {
-        venue_id: venue.id,
+        venueId: venue.id,
         date: date,
-        staff_member_id: staff_member.id,
-        starts_at: start_of_shift,
-        ends_at: end_of_shift,
-        hours_acceptance_breaks: [
+        staffMember: staff_member.id,
+        startsAt: start_of_shift,
+        endsAt: end_of_shift,
+        breaks: [
           {
-            starts_at: break1_start,
-            ends_at: break1_end
+            startsAt: break1_start,
+            endsAt: break1_end
           },
           {
-            starts_at: break2_start,
-            ends_at: break2_end
+            startsAt: break2_start,
+            endsAt: break2_end
           }
         ],
         status: 'accepted'
@@ -187,8 +187,8 @@ RSpec.describe 'Hours acceptance endpoints' do
     let(:new_end_of_shift) { end_of_shift + 1.hour }
     let(:params) do
       {
-        starts_at: new_start_of_shift,
-        ends_at: new_end_of_shift,
+        startsAt: new_start_of_shift,
+        endsAt: new_end_of_shift,
         status: new_status
       }
     end
@@ -286,7 +286,6 @@ RSpec.describe 'Hours acceptance endpoints' do
       specify 'should work' do
         response = patch(url, params)
         json = JSON.parse(response.body)
-
         expect(json.fetch("errors").fetch("base")).to eq(['these hours are not editable'])
       end
     end
@@ -325,18 +324,18 @@ RSpec.describe 'Hours acceptance endpoints' do
         let(:new_break_end) { break1_end + 10.minutes }
         let(:params) do
           {
-            starts_at: new_start_of_shift,
-            ends_at: new_end_of_shift,
+            startsAt: new_start_of_shift,
+            endsAt: new_end_of_shift,
             status: new_status,
-            hours_acceptance_breaks: [
+            breaks: [
               {
                 id: update_break_id,
-                starts_at: update_break_start,
-                ends_at: update_break_end
+                startsAt: update_break_start,
+                endsAt: update_break_end
               },
               {
-                starts_at: new_break_start,
-                ends_at: new_break_end
+                startsAt: new_break_start,
+                endsAt: new_break_end
               }
             ]
           }
@@ -392,23 +391,23 @@ RSpec.describe 'Hours acceptance endpoints' do
       context 'attempting to add overlapping break' do
         let(:params) do
           {
-            starts_at: new_start_of_shift,
-            ends_at: new_end_of_shift,
+            startsAt: new_start_of_shift,
+            endsAt: new_end_of_shift,
             status: new_status,
-            hours_acceptance_breaks: [
+            breaks: [
               {
                 id: break1.id,
-                starts_at: break1.starts_at,
-                ends_at: break1.ends_at
+                startsAt: break1.starts_at,
+                endsAt: break1.ends_at
               },
               {
                 id: break2.id,
-                starts_at: break2.starts_at,
-                ends_at: break2.ends_at
+                startsAt: break2.starts_at,
+                endsAt: break2.ends_at
               },
               {
-                starts_at: break1.starts_at,
-                ends_at: break1.ends_at
+                startsAt: break1.starts_at,
+                endsAt: break1.ends_at
               }
             ]
           }
@@ -426,11 +425,12 @@ RSpec.describe 'Hours acceptance endpoints' do
           expect(json).to eq(
             {
               "errors"=> {
-                "hours_acceptance_breaks"=> [
-                  { "id" => break1.id },
-                  { "id" => break2.id },
+                "breaks"=> [
+                  {},
+                  {},
                   {
-                    "id" => nil,
+                    "startsAt" => [""],
+                    "endsAt" => [""],
                     "base" => ["break overlaps existing break"]
                   }
                 ]
@@ -535,9 +535,9 @@ RSpec.describe 'Hours acceptance endpoints' do
     let(:url) { url_helpers.clock_out_api_v1_hours_acceptance_periods_path }
     let(:params) do
       {
-        staff_member_id: staff_member.id,
+        staffMember: staff_member.id,
         date: date,
-        venue_id: venue.id
+        venueId: venue.id
       }
     end
     let(:clock_in_day) do
@@ -583,7 +583,7 @@ RSpec.describe 'Hours acceptance endpoints' do
       end
 
       json = JSON.parse(response.body)
-      ["clock_in_period", "clock_in_breaks", "hours_acceptance_period", "hours_acceptance_breaks"].each do |key|
+      ["clockInPeriod", "clockInBreaks", "hoursAcceptancePeriod", "hoursAcceptanceBreaks"].each do |key|
         expect(json.keys).to include(key)
       end
     end

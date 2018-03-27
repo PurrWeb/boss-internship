@@ -10,7 +10,7 @@ class ClockInPeriod < ActiveRecord::Base
   validates :starts_at, presence: true
   include PeriodTimeValidations
 
-  delegate :venue, :date, to: :clock_in_day
+  delegate :venue, :date, :staff_member, :clock_in_notes, to: :clock_in_day
 
   def times_overlap_validations
     ClockInPeriodTimeOverlapValidator.new(self).validate
@@ -24,11 +24,29 @@ class ClockInPeriod < ActiveRecord::Base
     where(ends_at: nil)
   end
 
-  def staff_member
-    clock_in_day.andand.staff_member
-  end
-
   def enabled?
     true
+  end
+
+  def current_clock_in_state
+    case last_clock_in_event.andand.event_type
+    when 'clock_in'
+      :clocked_in
+    when 'clock_out'
+      :clocked_out
+    when 'start_break'
+      :on_break
+    when 'end_break'
+      :clocked_in
+    when nil
+      :clocked_out
+    else
+      raise "Usupported event type encountered :#{last_event.event_type}"
+    end
+  end
+
+  private
+  def last_clock_in_event
+    clock_in_events.andand.last
   end
 end

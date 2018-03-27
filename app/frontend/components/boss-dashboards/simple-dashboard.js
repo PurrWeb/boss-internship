@@ -5,18 +5,17 @@ import DashboardFilter from './dashboard-filter';
 import DashboardActions from './dashboard-actions';
 
 class SimpleDashboard extends React.Component {
-
   parseChildrens = () => {
     React.Children.map(this.props.children, (child, i) => {
       if (child.type === DashboardFilter) {
         this.filter = React.cloneElement(child);
-      };
+      }
       if (child.type === DashboardActions) {
         this.actions = React.cloneElement(child);
-      };
+      }
       return;
-    })
-  }
+    });
+  };
 
   render() {
     this.parseChildrens();
@@ -26,7 +25,9 @@ class SimpleDashboard extends React.Component {
           <div className="boss-page-dashboard boss-page-dashboard_updated">
             <div className="boss-page-dashboard__group">
               <div className="boss-page-dashboard__sub-group">
-                <h1 className="boss-page-dashboard__title">{this.props.title}</h1>
+                <h1 className="boss-page-dashboard__title">
+                  {this.props.title}
+                </h1>
               </div>
               {this.actions}
             </div>
@@ -34,21 +35,18 @@ class SimpleDashboard extends React.Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
 SimpleDashboard.propTypes = {
   title: PropTypes.string.isRequired,
   className: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.element,
-  ]),
-}
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]),
+};
 
 SimpleDashboard.defaultProps = {
-  className: ''
-}
+  className: '',
+};
 
 export default SimpleDashboard;

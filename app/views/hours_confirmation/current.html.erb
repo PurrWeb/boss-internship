@@ -1,38 +1,59 @@
-<%= react_component('HoursConfirmationApp') %>
-
-<script>
-  window.boss = window.boss || {};
-  window.boss.store = window.boss.store || {};
-  window.boss.store.access_token = "<%= access_token.token %>";
-
-  window.boss.store.venues = <%= api_v1_collection_json(venues, Api::V1::VenueSerializer) %>;
-  window.boss.store.clockInDays = <%= api_v1_collection_json(clock_in_days, Api::V1::ClockInDaySerializer) %>;
-
-  window.boss.store.clockInPeriods = <%= api_v1_collection_json(clock_in_periods, Api::V1::ClockInPeriodSerializer) %>;
-
-  window.boss.store.hoursAcceptancePeriods = <%= api_v1_collection_json(hours_acceptance_periods, Api::V1::HoursAcceptancePeriodSerializer) %>;
-
-  window.boss.store.clockInEvents = <%= api_v1_collection_json(clock_in_events, Api::V1::ClockInEventSerializer) %>;
-
-  window.boss.store.rotaShifts = <%= api_v1_collection_json(rota_shifts, Api::V1::RotaShiftSerializer) %>;
-
-  window.boss.store.rotas = <%= api_v1_collection_json(rotas, Api::V1::RotaSerializer) %>;
-
-  window.boss.store.clockInBreaks = <%= api_v1_collection_json(clock_in_breaks, Api::V1::ClockInBreakSerializer) %>;
-
-  window.boss.store.hoursAcceptanceBreaks = <%= api_v1_collection_json(hours_acceptance_breaks, Api::V1::HoursAcceptanceBreakSerializer) %>;
-
-  window.boss.store.staffMembers = <%= api_v1_collection_json(staff_members, Api::V1::StaffMemberSerializer) %>;
-
-  window.boss.store.staffTypes = <%= api_v1_collection_json(staff_types, Api::V1::StaffTypeSerializer) %>;
-
-  window.boss.store.clockInNotes = <%= api_v1_collection_json(clock_in_notes, Api::V1::ClockInNoteSerializer) %>;
-
-  window.boss.store.pageOptions = {
-    venue: { id: <%= venue.id %> },
-    pageName: 'Hours Requiring Confirmation',
-    pageDateFormat: {
-      date: "<%= UIRotaDate.format(RotaShiftDate.to_rota_date(Time.current))%>"
-    }
-  }
-</script>
+<%= react_component('HoursConfirmationApp', {
+  accessToken: access_token.token,
+  venues: ActiveModel::Serializer::CollectionSerializer.new(
+    venues,
+    serializer: Api::V1::HoursConfirmation::VenueSerializer,
+  ),
+  venue: Api::V1::HoursConfirmation::VenueSerializer.new(venue),
+  clockInPeriods: ActiveModel::Serializer::CollectionSerializer.new(
+    clock_in_periods,
+    serializer: Api::V1::HoursConfirmation::ClockInPeriodSerializer,
+  ),
+  hoursAcceptancePeriods: ActiveModel::Serializer::CollectionSerializer.new(
+    hours_acceptance_periods,
+    serializer: Api::V1::HoursConfirmation::HoursAcceptancePeriodSerializer,
+  ),
+  clockInEvents: ActiveModel::Serializer::CollectionSerializer.new(
+    clock_in_events,
+    serializer: Api::V1::HoursConfirmation::ClockInEventSerializer,
+  ),
+  clockInBreaks: ActiveModel::Serializer::CollectionSerializer.new(
+    clock_in_breaks,
+    serializer: Api::V1::HoursConfirmation::ClockInBreakSerializer,
+  ),
+  hoursAcceptanceBreaks: ActiveModel::Serializer::CollectionSerializer.new(
+    hours_acceptance_breaks,
+    serializer: Api::V1::HoursConfirmation::HoursAcceptanceBreakSerializer,
+  ),
+  staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_members,
+    serializer: Api::V1::HoursConfirmation::StaffMemberSerializer,
+  ),
+  staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_types,
+    serializer: Api::V1::HoursConfirmation::StaffTypeSerializer,
+  ),
+  clockInNotes: ActiveModel::Serializer::CollectionSerializer.new(
+    clock_in_notes,
+    serializer: Api::V1::HoursConfirmation::ClockInNoteSerializer,
+  ),
+  rotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    rota_shifts,
+    serializer: Api::V1::HoursConfirmation::RotaShiftSerializer,
+  ),
+  rotas: ActiveModel::Serializer::CollectionSerializer.new(
+    rotas,
+    serializer: Api::V1::HoursConfirmation::RotaSerializer,
+  ),
+  pageOptions: {
+    date: UIRotaDate.format(RotaShiftDate.to_rota_date(Time.current)),
+    title: 'Hours confirmations',
+    pageType: 'current',
+    url: hours_confirmation_index_path({
+      venue_id: venue.id,
+      date: UIRotaDate.format(RotaShiftDate.to_rota_date(Time.current))
+    }),
+    venueId: venue.id,
+    userPeriodsPermissions: user_periods_permissions
+  },
+}) %>

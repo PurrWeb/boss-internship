@@ -21,27 +21,30 @@ module Api
             staff_member: staff_member,
             venue: venue,
             date: date,
-            starts_at: params.fetch(:starts_at),
-            ends_at: params.fetch(:ends_at),
+            starts_at: params.fetch(:startsAt),
+            ends_at: params.fetch(:endsAt),
             status: params.fetch(:status),
-            reason_note: params[:reason_note],
+            reason_note: params[:reasonNote],
             breaks: new_breaks_from_params
           ).call
 
-          if result.success
-            render locals: {
-              hours_acceptance_period: result.hours_acceptance_period,
-              hours_acceptance_breaks: result.breaks
+          if result.success?
+            ability = UserAbility.new(current_user);
+            user_period_permissions = {
+              id: result.hours_acceptance_period.id,
+              permitted: ability.can?(:update, result.hours_acceptance_period)
             }
+
+            render json: {
+              hoursAcceptancePeriod: Api::V1::HoursConfirmation::HoursAcceptancePeriodSerializer.new(result.hours_acceptance_period),
+              breaks: ActiveModel::Serializer::CollectionSerializer.new(
+                result.breaks,
+                serializer: Api::V1::HoursConfirmation::HoursAcceptanceBreakSerializer,
+              ),
+              userPeriodPermissions: user_period_permissions
+            }, status: :ok
           else
-            render(
-              'errors',
-              locals: {
-                hours_acceptance_period: result.hours_acceptance_period,
-                hours_acceptance_breaks: result.breaks
-              },
-              status: :unprocessable_entity
-            )
+            render json: {errors: result.api_errors.errors}, status: 422
           end
         end
       end
@@ -59,28 +62,30 @@ module Api
         else
           result = UpdateHoursAcceptancePeriod.new(
             hours_acceptance_period: hours_acceptance_period,
-            starts_at: params.fetch(:starts_at),
-            ends_at: params.fetch(:ends_at),
-            breaks_data: params[:hours_acceptance_breaks] || [],
+            starts_at: params.fetch(:startsAt),
+            ends_at: params.fetch(:endsAt),
+            breaks_data: params[:breaks] || [],
             status: params.fetch(:status),
-            reason_note: params[:reason_note],
+            reason_note: params[:reasonNote],
             requester: current_user
           ).call
 
           if result.success?
-            render locals: {
-              hours_acceptance_period: result.hours_acceptance_period,
-              hours_acceptance_breaks: result.hours_acceptance_breaks
+            ability = UserAbility.new(current_user);
+            user_period_permissions = {
+              id: result.hours_acceptance_period.id,
+              permitted: ability.can?(:update, result.hours_acceptance_period)
             }
+            render json: {
+              hoursAcceptancePeriod: Api::V1::HoursConfirmation::HoursAcceptancePeriodSerializer.new(result.hours_acceptance_period),
+              breaks: ActiveModel::Serializer::CollectionSerializer.new(
+                result.hours_acceptance_breaks,
+                serializer: Api::V1::HoursConfirmation::HoursAcceptanceBreakSerializer,
+              ),
+              userPeriodPermissions: user_period_permissions
+            }, status: :ok
           else
-            render(
-              'errors',
-              locals: {
-                hours_acceptance_period: result.hours_acceptance_period,
-                hours_acceptance_breaks: result.hours_acceptance_breaks
-              },
-              status: :unprocessable_entity
-            )
+            render json: {errors: result.api_errors.errors}, status: 422
           end
         end
       end
@@ -141,10 +146,18 @@ module Api
             clock_in_day: clock_in_day
           ).last
 
-          render locals: {
-            clock_in_day: clock_in_day,
-            clock_in_period: clock_in_period,
-            hours_acceptance_period: hours_acceptance_period
+          render json: {
+            clockInPeriod: Api::V1::HoursConfirmation::ClockInPeriodSerializer.new(clock_in_period),
+            hoursAcceptancePeriod: Api::V1::HoursConfirmation::HoursAcceptancePeriodSerializer.new(hours_acceptance_period),
+            hoursAcceptanceBreaks: ActiveModel::Serializer::CollectionSerializer.new(
+              hours_acceptance_period.hours_acceptance_breaks.enabled,
+              serializer: Api::V1::HoursConfirmation::HoursAcceptanceBreakSerializer,
+            ),
+            clockInEvent: Api::V1::HoursConfirmation::ClockInEventSerializer.new(clock_in_period.clock_in_events.last),
+            clockInBreaks: ActiveModel::Serializer::CollectionSerializer.new(
+              clock_in_period.clock_in_breaks,
+              serializer: Api::V1::HoursConfirmation::ClockInBreakSerializer,
+            )
           }
         else
           render json: { errors: result.errors }, status: 422
@@ -157,7 +170,7 @@ module Api
       end
 
       def venue_from_params
-        Venue.find(params[:venue_id])
+        Venue.find(params[:venueId])
       end
 
       def date_from_params
@@ -165,19 +178,19 @@ module Api
       end
 
       def staff_member_from_params
-        StaffMember.find(params[:staff_member_id])
+        StaffMember.find(params[:staffMember])
       end
 
       def new_breaks_from_params
-        Array(params[:hours_acceptance_breaks]).map do |break_data|
+        Array(params.fetch(:breaks)).map do |break_data|
           initialize_break(break_data)
         end
       end
 
       def initialize_break(data)
         HoursAcceptanceBreak.new(
-          starts_at: data.fetch(:starts_at),
-          ends_at: data.fetch(:ends_at)
+          starts_at: data.fetch(:startsAt),
+          ends_at: data.fetch(:endsAt)
         )
       end
     end

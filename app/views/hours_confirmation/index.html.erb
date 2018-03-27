@@ -1,37 +1,56 @@
-
-<%= react_component('HoursConfirmationApp') %>
-
-<script>
-  window.boss = window.boss || {};
-  window.boss.store = window.boss.store || {};
-
-  window.boss.store.access_token = "<%= access_token.token %>";
-
-  window.boss.store.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: venues } %>;
-  window.boss.store.clockInDays = <%= raw render partial: 'api/v1/shared/clock_in_days.json', locals: { clock_in_days: clock_in_days } %>;
-
-  window.boss.store.clockInPeriods = <%= raw render partial: 'api/v1/shared/clock_in_periods.json', locals: { clock_in_periods: clock_in_periods } %>;
-
-  window.boss.store.hoursAcceptancePeriods = <%= raw render partial: 'api/v1/shared/hours_acceptance_periods.json', locals: { hours_acceptance_periods: hours_acceptance_periods } %>;
-
-  window.boss.store.clockInEvents = <%= raw render partial: 'api/v1/shared/clock_in_events.json', locals: { clock_in_events: clock_in_events } %>;
-
-  window.boss.store.rotaShifts = <%= raw render partial: 'api/v1/shared/rota_shifts.json', locals: { rota_shifts: rota_shifts } %>;
-
-  window.boss.store.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas } %>;
-
-  window.boss.store.clockInBreaks = <%= raw render partial: 'api/v1/shared/clock_in_breaks.json', locals: { clock_in_breaks: clock_in_breaks } %>;
-
-  window.boss.store.hoursAcceptanceBreaks = <%= raw render partial: 'api/v1/shared/hours_acceptance_breaks.json', locals: { hours_acceptance_breaks: hours_acceptance_breaks } %>;
-
-  window.boss.store.staffMembers = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members } %>;
-
-  window.boss.store.staffTypes = <%= raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
-
-  window.boss.store.clockInNotes = <%= raw render partial: 'api/v1/shared/clock_in_notes.json', locals: { clock_in_notes: clock_in_notes } %>;
-
-  window.boss.store.pageOptions = {
-    venue: { id: <%= venue.id %> },
-    date: "<%= date.iso8601 %>"
-  }
-</script>
+<%= react_component('HoursConfirmationApp', {
+  accessToken: access_token.token,
+  venues: ActiveModel::Serializer::CollectionSerializer.new(
+    venues,
+    serializer: Api::V1::HoursConfirmation::VenueSerializer,
+  ),
+  venue: Api::V1::HoursConfirmation::VenueSerializer.new(venue),
+  clockInPeriods: ActiveModel::Serializer::CollectionSerializer.new(
+    clock_in_periods,
+    serializer: Api::V1::HoursConfirmation::ClockInPeriodSerializer,
+  ),
+  hoursAcceptancePeriods: ActiveModel::Serializer::CollectionSerializer.new(
+    hours_acceptance_periods,
+    serializer: Api::V1::HoursConfirmation::HoursAcceptancePeriodSerializer,
+  ),
+  clockInEvents: ActiveModel::Serializer::CollectionSerializer.new(
+    clock_in_events,
+    serializer: Api::V1::HoursConfirmation::ClockInEventSerializer,
+  ),
+  clockInBreaks: ActiveModel::Serializer::CollectionSerializer.new(
+    clock_in_breaks,
+    serializer: Api::V1::HoursConfirmation::ClockInBreakSerializer,
+  ),
+  hoursAcceptanceBreaks: ActiveModel::Serializer::CollectionSerializer.new(
+    hours_acceptance_breaks,
+    serializer: Api::V1::HoursConfirmation::HoursAcceptanceBreakSerializer,
+  ),
+  staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_members,
+    serializer: Api::V1::HoursConfirmation::StaffMemberSerializer,
+  ),
+  staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_types,
+    serializer: Api::V1::HoursConfirmation::StaffTypeSerializer,
+  ),
+  clockInNotes: ActiveModel::Serializer::CollectionSerializer.new(
+    clock_in_notes,
+    serializer: Api::V1::HoursConfirmation::ClockInNoteSerializer,
+  ),
+  rotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    rota_shifts,
+    serializer: Api::V1::HoursConfirmation::RotaShiftSerializer,
+  ),
+  rotas: ActiveModel::Serializer::CollectionSerializer.new(
+    rotas,
+    serializer: Api::V1::HoursConfirmation::RotaSerializer,
+  ),
+  pageOptions: {
+    date: UIRotaDate.format(date),
+    pageType: 'daily',
+    title: "Hours confirmations for #{venue.name} #{date.strftime('%d %B %Y')}",
+    url: current_hours_confirmation_index_path({venue_id: venue.id}),
+    venueId: venue.id,
+    userPeriodsPermissions: user_periods_permissions
+  },
+}) %>

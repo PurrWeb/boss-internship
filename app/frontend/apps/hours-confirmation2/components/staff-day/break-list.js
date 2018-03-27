@@ -57,7 +57,7 @@ export default class BreakList extends React.Component {
                   </button>
                 </div>
               }
-              
+
             </div>
             {/* <div className="boss-time-shift__break-controls">
               {!this.state.breakIsOpen ? (
@@ -86,7 +86,7 @@ export default class BreakList extends React.Component {
 
       var shiftStartOffset = rotaDate.getHoursSinceStartOfDay(hoursAcceptancePeriod.starts_at);
       var breakHoursOffset = shiftStartOffset + 1;
-      if (breakHoursOffset > 23){
+      if (breakHoursOffset > 23) {
           breakHoursOffset = 23;
       }
 

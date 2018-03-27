@@ -292,6 +292,21 @@ var utils =  {
           return result;
         }, initial);
       }, staffMembers);
+    },
+    staffMemberFilterFullName(searchQuery, staffMembers) {
+      const searchQueryFilters = searchQuery.split(' ').filter(i => i);
+
+      return searchQueryFilters.reduce((staffMembers, filter) => {
+        const lowerFilter = filter.toLowerCase();
+        const initial = fromJS([]);
+        return staffMembers.reduce((result, staffMember) => {
+          const fullName = staffMember.get('fullName');
+          if (fullName.toLowerCase().indexOf(lowerFilter) >= 0) {
+            return result.push(staffMember);
+          }
+          return result;
+        }, initial);
+      }, staffMembers);
     }
 }
 

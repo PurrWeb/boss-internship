@@ -1,34 +1,37 @@
-import _ from "underscore"
+import _ from 'underscore';
 
-export default function(denormalizedHoursPeriod){
-    var breaksOrderedByStartTime = _.sortBy(denormalizedHoursPeriod.breaks, "starts_at")
+export default function(denormalizedHoursPeriod) {
+  var breaksOrderedByStartTime = _.sortBy(
+    denormalizedHoursPeriod.breaks,
+    'startsAt',
+  );
 
-    var lastTime = denormalizedHoursPeriod.starts_at;
-    var intervals = [];
+  var lastTime = denormalizedHoursPeriod.startsAt;
+  var intervals = [];
 
-    breaksOrderedByStartTime.forEach(function(breakItem){
-        intervals.push({
-            starts_at: lastTime,
-            ends_at: breakItem.starts_at,
-            type: "hours"
-        })
-        if (breakItem.ends_at) {
-            intervals.push({
-                starts_at: breakItem.starts_at,
-                ends_at: breakItem.ends_at,
-                type: "break"
-            })
-            lastTime = breakItem.ends_at
-        }
-    })
-
-    if (denormalizedHoursPeriod.ends_at) {
-        intervals.push({
-            starts_at: lastTime,
-            ends_at: denormalizedHoursPeriod.ends_at,
-            type: "hours"
-        })
+  breaksOrderedByStartTime.forEach(function(breakItem) {
+    intervals.push({
+      startsAt: lastTime,
+      endsAt: breakItem.startsAt,
+      type: 'hours',
+    });
+    if (breakItem.endsAt) {
+      intervals.push({
+        startsAt: breakItem.startsAt,
+        endsAt: breakItem.endsAt,
+        type: 'break',
+      });
+      lastTime = breakItem.endsAt;
     }
+  });
 
-    return intervals;
+  if (denormalizedHoursPeriod.endsAt) {
+    intervals.push({
+      startsAt: lastTime,
+      endsAt: denormalizedHoursPeriod.endsAt,
+      type: 'hours',
+    });
+  }
+
+  return intervals;
 }

@@ -46,7 +46,8 @@ describe HoursAcceptanceBreak do
 
       specify 'should raise error' do
         _break.validate
-        expect(_break.errors[:base]).to include("starts_at must be after ends_at")
+        expect(_break.errors[:starts_at]).to eq(["can't be after or equal end time"])
+        expect(_break.errors[:ends_at]).to eq(["can't be before or equal start time"])
       end
     end
 

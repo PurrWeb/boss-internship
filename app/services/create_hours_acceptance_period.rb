@@ -1,5 +1,5 @@
 class CreateHoursAcceptancePeriod
-  class Result < Struct.new(:success, :hours_acceptance_period, :breaks)
+  class Result < Struct.new(:success, :hours_acceptance_period, :breaks, :api_errors)
     def success?
       success
     end
@@ -66,7 +66,13 @@ class CreateHoursAcceptancePeriod
       raise ActiveRecord::Rollback unless success
     end
 
-    Result.new(success, hours_acceptance_period, breaks)
+    api_errors = nil
+
+    unless success
+      api_errors = HourAcceptancePeriodApiErrors.new(hour_acceptance_period: hours_acceptance_period, breaks: breaks)
+    end
+
+    Result.new(success, hours_acceptance_period, breaks, api_errors)
   end
 
   private

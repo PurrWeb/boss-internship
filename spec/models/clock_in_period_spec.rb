@@ -37,7 +37,8 @@ describe ClockInPeriod do
 
       specify 'should raise error' do
         period.validate
-        expect(period.errors[:base]).to include("starts_at must be after ends_at")
+        expect(period.errors[:starts_at]).to include(" must be before end time")
+        expect(period.errors[:ends_at]).to include(" must be after start time")
       end
     end
 
@@ -61,6 +62,7 @@ describe ClockInPeriod do
       specify 'should raise error' do
         period.validate
         expect(period.errors[:ends_at]).to eq([
+          " must be after start time",
           ends_at_early_error_message_for(
             time: period.ends_at,
             date: period.date

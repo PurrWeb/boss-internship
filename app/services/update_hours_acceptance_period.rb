@@ -1,5 +1,5 @@
 class UpdateHoursAcceptancePeriod
-  class Result < Struct.new(:success, :hours_acceptance_period, :hours_acceptance_breaks)
+  class Result < Struct.new(:success, :hours_acceptance_period, :hours_acceptance_breaks, :api_errors)
     def success?
       success
     end
@@ -21,7 +21,8 @@ class UpdateHoursAcceptancePeriod
 
     if !hours_acceptance_period.editable?
       hours_acceptance_period.errors.add(:base, "these hours are not editable")
-      Result.new(false, hours_acceptance_period, breaks)
+      api_errors = HourAcceptancePeriodApiErrors.new(hour_acceptance_period: hours_acceptance_period, breaks: breaks)
+      Result.new(false, hours_acceptance_period, breaks, api_errors)
     else
       ActiveRecord::Base.transaction do
         hours_acceptance_period.assign_attributes(
@@ -42,7 +43,7 @@ class UpdateHoursAcceptancePeriod
           })
         end
 
-        existing_breaks = hours_acceptance_period.hours_acceptance_breaks.enabled
+        existing_breaks = hours_acceptance_period.hours_acceptance_breaks.enabled.includes(:disabled_by)
         delete_breaks = existing_breaks
         if update_breaks_ids.count > 0
           delete_breaks = existing_breaks.where('id NOT IN (?)', update_breaks_ids)
@@ -59,8 +60,8 @@ class UpdateHoursAcceptancePeriod
             find_by!(id: break_data.fetch(:id))
 
           break_updated = _break.update_attributes(
-            starts_at: break_data.fetch(:starts_at),
-            ends_at: break_data.fetch(:ends_at)
+            starts_at: break_data.fetch(:startsAt),
+            ends_at: break_data.fetch(:endsAt)
           )
 
           breaks << _break
@@ -69,8 +70,8 @@ class UpdateHoursAcceptancePeriod
 
         new_break_data.each do |break_data|
           _break = HoursAcceptanceBreak.new(
-            starts_at: break_data.fetch(:starts_at),
-            ends_at: break_data.fetch(:ends_at),
+            starts_at: break_data.fetch(:startsAt),
+            ends_at: break_data.fetch(:endsAt),
             hours_acceptance_period: hours_acceptance_period
           )
           break_created = _break.save
@@ -88,12 +89,16 @@ class UpdateHoursAcceptancePeriod
             date: hours_acceptance_period.date,
             venue: hours_acceptance_period.venue
           )
+
         end
 
         raise ActiveRecord::Rollback unless result
       end
-
-      Result.new(result, hours_acceptance_period, breaks)
+      api_errors = nil
+      unless result
+        api_errors = HourAcceptancePeriodApiErrors.new(hour_acceptance_period: hours_acceptance_period, breaks: breaks)
+      end
+      Result.new(result, hours_acceptance_period, breaks, api_errors)
     end
   end
 

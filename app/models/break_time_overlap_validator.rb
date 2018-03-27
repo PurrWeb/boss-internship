@@ -29,6 +29,8 @@ class BreakTimeOverlapValidator
 
       if query.count > 0
         _break.errors.add(:base, 'break overlaps existing break')
+        _break.errors.add(:starts_at, '')
+        _break.errors.add(:ends_at, '')
       end
     end
   end

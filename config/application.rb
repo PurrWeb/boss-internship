@@ -46,5 +46,8 @@ module Boss
       Devise::SessionsController.layout "login_page"
       Devise::PasswordsController.layout "login_page"
     end
+
+    # Ignore bullet error caused by paper_trail 5.3.0
+    Bullet.add_whitelist type: :counter_cache, class_name: "HoursAcceptanceBreak", association: :versions
   end
 end

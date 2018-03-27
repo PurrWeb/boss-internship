@@ -10,7 +10,12 @@ export default function modalDecorator(openModalFn) {
     }, 50);
   };
 
-  return function({ submit = () => {}, config = {}, props }) {
+  return function({
+    submit = () => {},
+    config = {},
+    props,
+    closeCallback = () => {},
+  }) {
     bodyFirst = document.body.firstChild;
     wrapper = document.createElement('div');
     bodyFirst.parentNode.insertBefore(wrapper, bodyFirst);
@@ -19,6 +24,13 @@ export default function modalDecorator(openModalFn) {
       return Promise.resolve(submit(handleClose, ...args));
     };
 
-    return openModalFn(config, props, handleSubmit, handleClose, wrapper);
+    return openModalFn(
+      config,
+      props,
+      handleSubmit,
+      handleClose,
+      wrapper,
+      closeCallback,
+    );
   };
 }

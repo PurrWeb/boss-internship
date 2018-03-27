@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import AsyncButton from 'react-async-button';
+import _ from 'lodash';
 
 import modalDecorator from './modal-decorator';
 
@@ -26,15 +27,19 @@ class WarningModal extends React.Component {
           afterOpen: 'ReactModal__Content--after-open',
         }}
       >
-        <button onClick={onClose} className="boss-modal-window__close"></button>
-        <div className="boss-modal-window__header">
-          {title}
-        </div>
+        <button onClick={onClose} className="boss-modal-window__close" />
+        <div className="boss-modal-window__header">{title}</div>
         <div className="boss-modal-window__content">
           <div className="boss-modal-window__message-block">
-            <span className="boss-modal-window__message-text">
-              {text}
-            </span>
+            {_.isArray(text) ? (
+              text.map((message, key) => (
+                <span key={key} className="boss-modal-window__message-text">
+                  {text}
+                </span>
+              ))
+            ) : (
+              <span className="boss-modal-window__message-text">{text}</span>
+            )}
           </div>
           <div className="boss-modal-window__actions">
             <AsyncButton
@@ -50,7 +55,7 @@ class WarningModal extends React.Component {
 }
 
 function openWarningModal(
-  {title = 'Warning modal', text = 'Are you sure ?', buttonText = 'Confirm'},
+  { title = 'Warning modal', text = 'Are you sure ?', buttonText = 'Confirm' },
   props = {},
   onSubmit,
   onClose,
@@ -66,8 +71,8 @@ function openWarningModal(
       onSubmit={onSubmit}
       props={props}
     />,
-    wrapper
+    wrapper,
   );
 }
 
-export default modalDecorator(openWarningModal)
+export default modalDecorator(openWarningModal);

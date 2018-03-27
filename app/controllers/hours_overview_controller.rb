@@ -1,4 +1,6 @@
 class HoursOverviewController < ApplicationController
+  before_action :set_new_layout
+
   def show
     authorize! :view, :payroll_reports
 
@@ -25,9 +27,9 @@ class HoursOverviewController < ApplicationController
 
     staff_clock_in_days = staff_clock_in_days.
       includes([:venue, :staff_member, :hours_acceptance_periods])
-    
+
     hours_confirmation_page_data = HoursConfirmationPageDataQuery.new(staff_clock_in_days, staff_venues).query
-    
+
     rotas = Rota.
       where(
         date: date
@@ -65,6 +67,15 @@ class HoursOverviewController < ApplicationController
       merge(hours_acceptance_periods)
 
     staff_types = StaffType.all
+
+    ability = UserAbility.new(current_user);
+    user_periods_permissions = hours_acceptance_periods.map do |period|
+      {
+        id: period.id,
+        permitted: ability.can?(:update, period)
+      }
+    end
+
     render(
       locals: {
         access_token: access_token,
@@ -78,7 +89,8 @@ class HoursOverviewController < ApplicationController
         rota_shifts: rota_shifts,
         staff_member: staff_member,
         staff_types: staff_types,
-        date: date
+        date: date,
+        user_periods_permissions: user_periods_permissions,
       }.merge(hours_confirmation_page_data)
     )
   end
