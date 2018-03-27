@@ -121,57 +121,57 @@ class ParsePaymentUploadCSV
     raw_data = {}
 
     all_fields_present = true
-    raw_data[:process_date_raw] = row[PROCCESS_DATE_HEADER]
-    if !raw_data[:process_date_raw].present?
+    raw_data[PROCCESS_DATE_HEADER] = row[PROCCESS_DATE_HEADER]
+    if !raw_data[PROCCESS_DATE_HEADER].present?
       payment_data.fetch(:errors)[PROCCESS_DATE_HEADER] ||= []
       payment_data.fetch(:errors).fetch(PROCCESS_DATE_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
 
-    raw_data[:venue_name_raw] = row[VENUE_NAME_HEADER]
-    if !raw_data[:venue_name_raw].present?
+    raw_data[VENUE_NAME_HEADER] = row[VENUE_NAME_HEADER]
+    if !raw_data[VENUE_NAME_HEADER].present?
       payment_data.fetch(:errors)[VENUE_NAME_HEADER] ||= []
       payment_data.fetch(:errors).fetch(VENUE_NAME_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
 
-    raw_data[:department_name_raw] = row[DEPARTMENT_NAME_HEADER]
-    if !raw_data[:department_name_raw].present?
+    raw_data[DEPARTMENT_NAME_HEADER] = row[DEPARTMENT_NAME_HEADER]
+    if !raw_data[DEPARTMENT_NAME_HEADER].present?
       payment_data.fetch(:errors)[DEPARTMENT_NAME_HEADER] ||= []
       payment_data.fetch(:errors).fetch(DEPARTMENT_NAME_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
 
-    raw_data[:first_initial_raw]= row[FIRST_INITIAL_HEADER]
-    if !raw_data[:first_initial_raw].present?
+    raw_data[FIRST_INITIAL_HEADER]= row[FIRST_INITIAL_HEADER]
+    if !raw_data[FIRST_INITIAL_HEADER].present?
       payment_data.fetch(:errors)[FIRST_INITIAL_HEADER] ||= []
       payment_data.fetch(:errors).fetch(FIRST_INITIAL_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
 
-    raw_data[:surname_raw] = row[SURNAME_HEADER]
-    if !raw_data[:surname_raw].present?
+    raw_data[SURNAME_HEADER] = row[SURNAME_HEADER]
+    if !raw_data[SURNAME_HEADER].present?
       payment_data.fetch(:errors)[SURNAME_HEADER] ||= []
       payment_data.fetch(:errors).fetch(SURNAME_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
 
-    raw_data[:ni_number_raw] = row[NI_HEADER]
-    if !raw_data[:ni_number_raw].present?
+    raw_data[NI_HEADER] = row[NI_HEADER]
+    if !raw_data[NI_HEADER].present?
       payment_data.fetch(:errors)[NI_HEADER] ||= []
       payment_data.fetch(:errors).fetch(NI_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
 
-    raw_data[:date_of_birth_raw] = row[DOB_HEADER]
-    if !raw_data[:date_of_birth_raw].present?
+    raw_data[DOB_HEADER] = row[DOB_HEADER]
+    if !raw_data[DOB_HEADER].present?
       payment_data.fetch(:errors)[DOB_HEADER] ||= []
       payment_data.fetch(:errors).fetch(DOB_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
 
-    raw_data[:net_pay_raw] = row[NET_PAY_HEADER]
-    if !raw_data[:net_pay_raw].present?
+    raw_data[NET_PAY_HEADER] = row[NET_PAY_HEADER]
+    if !raw_data[NET_PAY_HEADER].present?
       payment_data.fetch(:errors)[NET_PAY_HEADER] ||= []
       payment_data.fetch(:errors).fetch(NET_PAY_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
@@ -186,10 +186,10 @@ class ParsePaymentUploadCSV
     all_data_valid = true
 
     # e.g. 28/01/2018
-    normalised_data[:process_date] = nil
+    normalised_data[PROCCESS_DATE_HEADER] = nil
     begin
-      normalised_data[:process_date] = Date.strptime(
-        raw_data.fetch(:process_date_raw).strip,
+      normalised_data[PROCCESS_DATE_HEADER] = Date.strptime(
+        raw_data.fetch(PROCCESS_DATE_HEADER).strip,
         UPLOAD_DATE_FORMAT
       )
     rescue ArgumentError => e
@@ -199,26 +199,26 @@ class ParsePaymentUploadCSV
       payment_data.fetch(:errors).fetch(PROCCESS_DATE_HEADER) << DATE_FORMAT_INVALID_ERROR_MESSAGE
       all_data_valid = false
     end
-    normalised_data[:first_initial] = raw_data.fetch(:first_initial_raw).strip
-    normalised_data[:surname] = raw_data.fetch(:surname_raw).strip
-    normalised_data[:venue_name] = raw_data.fetch(:venue_name_raw).strip
-    normalised_data[:department_name] = raw_data.fetch(:department_name_raw).strip
+    normalised_data[FIRST_INITIAL_HEADER] = raw_data.fetch(FIRST_INITIAL_HEADER).strip
+    normalised_data[SURNAME_HEADER] = raw_data.fetch(SURNAME_HEADER).strip
+    normalised_data[VENUE_NAME_HEADER] = raw_data.fetch(VENUE_NAME_HEADER).strip
+    normalised_data[DEPARTMENT_NAME_HEADER] = raw_data.fetch(DEPARTMENT_NAME_HEADER).strip
     # eg PW622756A PC644304A
-    normalised_data[:ni_number] = nil
+    normalised_data[NI_HEADER] = nil
     if StaffMember::NATIONAL_INSURANCE_NUMBER_REGEX.match(
-        raw_data.fetch(:ni_number_raw).strip
+        raw_data.fetch(NI_HEADER).strip
       )
-      normalised_data[:ni_number] = raw_data.fetch(:ni_number_raw).strip
+      normalised_data[NI_HEADER] = raw_data.fetch(NI_HEADER).strip
     else
       payment_data.fetch(:errors)[NI_HEADER] ||= []
       payment_data.fetch(:errors).fetch(NI_HEADER) << 'format is not valid'
       all_data_valid = false
     end
     # e.g. 08/11/1982
-    normalised_data[:date_of_birth] = nil
+    normalised_data[DOB_HEADER] = nil
     begin
-      normalised_data[:date_of_birth] = Date.strptime(
-        raw_data.fetch(:date_of_birth_raw).strip,
+      normalised_data[DOB_HEADER] = Date.strptime(
+        raw_data.fetch(DOB_HEADER).strip,
         UPLOAD_DATE_FORMAT
       )
     rescue ArgumentError => e
@@ -229,12 +229,12 @@ class ParsePaymentUploadCSV
     end
 
     begin
-      parsed_net_pay_float = Float(raw_data.fetch(:net_pay_raw).strip)
-      normalised_data[:net_pay_cents] = (parsed_net_pay_float * 100).to_i
+      parsed_net_pay_float = Float(raw_data.fetch(NET_PAY_HEADER).strip)
+      normalised_data[NET_PAY_HEADER] = (parsed_net_pay_float * 100).to_i
     rescue ArgumentError => e
       #Ignore
     end
-    if !normalised_data[:net_pay_cents].present?
+    if !normalised_data[NET_PAY_HEADER].present?
       payment_data.fetch(:errors)[NET_PAY_HEADER] ||= []
       payment_data.fetch(:errors).fetch(NET_PAY_HEADER) << "format invalid"
       all_data_valid = false
@@ -246,7 +246,7 @@ class ParsePaymentUploadCSV
     # Perform Lookups
     ##########
     lookups_successful = true
-    venue = Venue.find_by(name: normalised_data.fetch(:venue_name))
+    venue = Venue.find_by(name: normalised_data.fetch(VENUE_NAME_HEADER))
     payment_data[:venue] = venue
     if !venue.present?
       lookups_successful = false
@@ -255,8 +255,8 @@ class ParsePaymentUploadCSV
     end
 
     staff_member = StaffMember.find_by(
-      national_insurance_number: normalised_data.fetch(:ni_number),
-      date_of_birth: normalised_data.fetch(:date_of_birth),
+      national_insurance_number: normalised_data.fetch(NI_HEADER),
+      date_of_birth: normalised_data.fetch(DOB_HEADER),
       master_venue: venue
     )
     payment_data[:staff_member] = staff_member

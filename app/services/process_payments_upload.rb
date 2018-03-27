@@ -17,7 +17,7 @@ class ProcessPaymentsUpload
       parsed_upload.fetch(:valid_payments).each do |payment_parse_data|
         staff_member = payment_parse_data.fetch(:staff_member)
         normalised_payment_data = payment_parse_data.fetch(:normalised_data)
-        new_payment_date = normalised_payment_data.fetch(:process_date)
+        new_payment_date = normalised_payment_data.fetch(PROCCESS_DATE_HEADER)
         new_payment_cents = normalised_payment_data.fetch(:net_pay_cents)
 
         payment = Payment.enabled.find_by(

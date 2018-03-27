@@ -6,18 +6,29 @@ class Api::V1::PaymentCsvProcessResultSerializer < ActiveModel::Serializer
   end
 
   def createdPayments
-    object.fetch(:created_payments)
+    values = object.fetch(:created_payments)
+    transform_values_for_js(values)
   end
 
   def updatedPayments
-    object.fetch(:updated_payments)
+    values = object.fetch(:updated_payments)
+    transform_values_for_js(values)
   end
 
   def skippedInvalidPayments
-    object.fetch(:skipped_invalid_payments)
+    values = object.fetch(:skipped_invalid_payments)
+    transform_values_for_js(values)
   end
 
   def skippedExistingPayments
-    object.fetch(:skipped_existing_payments)
+    values = object.fetch(:skipped_existing_payments)
+    transform_values_for_js(values)
+  end
+
+  private
+  def transform_values_for_js(values)
+    values.map do |value_hash|
+      value_hash.transform_keys{ |key|  key.to_s.camelize(:lower) }
+    end
   end
 end
