@@ -1,4 +1,4 @@
-class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
+class Api::V1::HoursConfirmation::ClockInClockOutSerializer < ActiveModel::Serializer
   attributes :id, :staff_members, :clock_in_notes, :staff_types,
              :venues, :page_data
 
