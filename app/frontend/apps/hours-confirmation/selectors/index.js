@@ -105,7 +105,7 @@ export const data = createSelector(
               .map((periodsInStaffMember, staffMemberId) => {
                 const events = periodsInStaffMember
                   .reduce(
-                    (acc, item) => acc.merge(item.get('clockInEvents')),
+                    (acc, item) => acc.concat(item.get('clockInEvents')),
                     List([]),
                   )
                   .map(eventId =>
