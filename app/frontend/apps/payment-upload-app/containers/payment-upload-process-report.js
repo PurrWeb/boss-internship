@@ -1,5 +1,6 @@
 import React from 'react';
 import oFetch from 'o-fetch';
+import PaymentUploadPageBoard from './payment-upload-page-board';
 
 class PaymentUploadProcessReport extends React.Component {
   constructor(props) {
@@ -83,42 +84,29 @@ class PaymentUploadProcessReport extends React.Component {
       recordsByStaffMemberId[staffMemberId].push(record);
     });
     staffMembers = _.uniq(staffMembers);
+    const openBoard = recordCount > 0;
 
-    return <section key={ key } className="boss-board boss-board_context_stack">
-      <header className="boss-board__header">
-        <div className="boss-indicator boss-indicator_status_success boss-board__indicator">
-          <span className="boss-indicator__marker">{ recordCount }</span>
-        </div>
-        <h2 className="boss-board__title boss-board__title_size_medium">{ title }</h2>
-        <div className="boss-board__button-group">
-          <button type="button" className="boss-board__switch boss-board__switch_state_opened"></button>
-        </div>
-      </header>
-
-      <div className="boss-board__content boss-board__content_state_opened" style={ {display: 'block'} }>
-        <div className="boss-board__content-inner">
-          { (recordCount < 1) && <div className="boss-board__group">
-              <p className="boss-board__text-placeholder">Nothing to display</p>
-            </div> }
-          { (recordCount > 0) && <div className="boss-board__group">
-              <div className="boss-users">
-                { this.renderUserFilter({ showCount: recordCount, total: recordCount }) }
-                <div className="boss-users__flow">
-                  <div className="boss-users__flow-list">
-                    { staffMembers.map((staffMember) => {
-                        const staffMemberId = oFetch(staffMember, 'id');
-                        const records = oFetch(recordsByStaffMemberId, staffMemberId);
-                        return <div key={`staffMemberFlowItem:${staffMemberId}`} className="boss-users__flow-item boss-users__flow-item_size_third">
-                          { this.renderPaymentSectionStaffMemberSummary({ staffMember: staffMember, records: records }) }
-                        </div>;
-                      }) }
-                  </div>
-                </div>
+    return <PaymentUploadPageBoard statusClass='boss-indicator_status_success' isOpened={openBoard} key={key} title={title} count={recordCount} >
+      { (recordCount < 1) && <div className="boss-board__group">
+          <p className="boss-board__text-placeholder">Nothing to display</p>
+        </div> }
+      { (recordCount > 0) && <div className="boss-board__group">
+          <div className="boss-users">
+            { this.renderUserFilter({ showCount: recordCount, total: recordCount }) }
+            <div className="boss-users__flow">
+              <div className="boss-users__flow-list">
+                { staffMembers.map((staffMember) => {
+                    const staffMemberId = oFetch(staffMember, 'id');
+                    const records = oFetch(recordsByStaffMemberId, staffMemberId);
+                    return <div key={`staffMemberFlowItem:${staffMemberId}`} className="boss-users__flow-item boss-users__flow-item_size_third">
+                      { this.renderPaymentSectionStaffMemberSummary({ staffMember: staffMember, records: records }) }
+                    </div>;
+                  }) }
               </div>
-            </div> }
-        </div>
-      </div>
-    </section>;
+            </div>
+          </div>
+        </div> }
+    </PaymentUploadPageBoard>
   }
 
   renderErrorSection(params) {
@@ -126,27 +114,14 @@ class PaymentUploadProcessReport extends React.Component {
     const title = oFetch(params, 'title')
     const records = oFetch(params, 'records');
     const recordCount = oFetch(records, 'length');
+    const isOpened = recordCount > 0;
 
-    return <section key={key} className="boss-board boss-board_context_stack">
-      <header className="boss-board__header">
-        <div className="boss-indicator boss-indicator_status_error boss-board__indicator">
-          <span className="boss-indicator__marker">{recordCount}</span>
-        </div>
-        <h2 className="boss-board__title boss-board__title_size_medium">{title}</h2>
-        <div className="boss-board__button-group">
-          <button type="button" className="boss-board__switch boss-board__switch_state_opened"></button>
-        </div>
-      </header>
-
-      <div className="boss-board__content boss-board__content_state_opened" style={ {style: 'block'} }>
-        <div className="boss-board__content-inner">
-          <div className="boss-board__group">
-            { (recordCount === 0) && <p className="boss-board__text-placeholder">Nothing to display</p> }
-            { (recordCount !== 0) && this.renderErrorReports({records: records}) }
-          </div>
-        </div>
+    return <PaymentUploadPageBoard isOpened={isOpened} statusClass='boss-indicator_status_error' count={recordCount} title={title}>
+      <div className="boss-board__group">
+        { (recordCount === 0) && <p className="boss-board__text-placeholder">Nothing to display</p> }
+        { (recordCount !== 0) && this.renderErrorReports({records: records}) }
       </div>
-    </section>;
+    </PaymentUploadPageBoard>;
   }
 
   renderErrorReports(params) {

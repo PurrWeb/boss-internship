@@ -6,6 +6,7 @@ import safeMoment from "~/lib/safe-moment"
 import notify from '~/components/global-notification';
 import numeral from 'numeral';
 import PaymentUploadFailedParseReport from "./payment-upload-failed-parse-report";
+import PaymentUploadProcessReport from './payment-upload-process-report';
 import {
   REPORT_PAGE_PROCCESSED_MODE,
   REPORT_PAGE_PARSE_ERROR_MODE
@@ -72,7 +73,7 @@ class PaymentUploadReportPage extends React.Component {
       <div className="boss-page-main__content">
         <div className="boss-page-main__inner">
           { (mode === REPORT_PAGE_PARSE_ERROR_MODE) && <PaymentUploadFailedParseReport headerRows={this.props.headerRows} titleRowErrors={this.props.titleRowErrors} headerRowErrors={this.props.headerRowErrors} /> }
-          { (mode === REPORT_PAGE_PROCCESSED_MODE) && <PaymentUploadReportPage createdPayments={this.props.createdPayments} updatedPayments={this.props.updatedPayments} skippedInvalidPayments={this.props.skippedInvalidPayments} skippedExistingPayments={this.props.skippedExistingPayments} /> }
+          { (mode === REPORT_PAGE_PROCCESSED_MODE) && <PaymentUploadProcessReport createdPayments={this.props.createdPayments} updatedPayments={this.props.updatedPayments} skippedInvalidPayments={this.props.skippedInvalidPayments} skippedExistingPayments={this.props.skippedExistingPayments} /> }
         </div>
       </div>
     </div>;
