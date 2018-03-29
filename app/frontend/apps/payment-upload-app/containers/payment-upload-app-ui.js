@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { uploadFile } from '../actions';
 import DropZone from 'react-dropzone';
 import oFetch from 'o-fetch';
 import notify from '~/components/global-notification';
@@ -33,7 +31,6 @@ const mapDispatchToProps = (dispatch) => {
 class PaymentUploadAppUI extends React.Component {
   constructor(props) {
     super(props);
-    this.actions = oFetch(this.props, 'actions');
   }
 
   render() {
