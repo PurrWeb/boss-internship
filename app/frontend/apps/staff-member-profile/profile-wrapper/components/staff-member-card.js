@@ -139,6 +139,16 @@ const StaffMemberCard = ({
             Accessories
           </a>
         )}
+        <a
+          href={`payments`}
+          className={`${isActive(
+            currentPage,
+            'payments',
+          )} boss-button boss-button_type_small boss-button_role_payments boss-user-summary__switch`}
+        >
+          Payments
+        </a>
+
       </div>
     );
   };

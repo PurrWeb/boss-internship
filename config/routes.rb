@@ -103,6 +103,7 @@ Rails.application.routes.draw do
       end
       member do
         get :holidays
+        get :payments
         get :profile
         get :owed_hours
         get :accessories

@@ -87,6 +87,9 @@ registerComponent('IncidentReportsShowApp', IncidentReportsShowApp);
 import { StaffMemberProfileDetailsApp } from './apps/staff-member-profile';
 registerComponent('StaffMemberProfileDetailsApp', StaffMemberProfileDetailsApp);
 
+import { StaffMemberProfilePaymentsApp } from './apps/staff-member-profile';
+registerComponent('StaffMemberProfilePaymentsApp', StaffMemberProfilePaymentsApp);
+
 import { StaffMemberHolidaysApp } from './apps/staff-member-profile';
 registerComponent('StaffMemberHolidaysApp', StaffMemberHolidaysApp);
 

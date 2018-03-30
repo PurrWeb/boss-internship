@@ -229,6 +229,40 @@ class StaffMembersController < ApplicationController
     end
   end
 
+  def payments
+    query = StaffMember.where(id: params[:id])
+    query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
+    staff_member = query.first
+
+    raise ActiveRecord::RecordNotFound.new unless staff_member.present?
+
+    profile_dashboard_data = GetStaffMemberProfileDashboardData.new(staff_member: staff_member, requester: current_user).call
+
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+
+    if can? :edit, staff_member
+      render locals: {
+        staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
+        app_download_link_data: profile_dashboard_data.app_download_link_data,
+        access_token: access_token,
+        staff_types: profile_dashboard_data.staff_types,
+        venues: profile_dashboard_data.venues,
+        pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
+          profile_dashboard_data.pay_rates,
+          serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
+          scope: current_user
+        ),
+        gender_values: profile_dashboard_data.gender_values,
+        accessible_venue_ids: profile_dashboard_data.accessible_venue_ids,
+        accessible_pay_rate_ids: profile_dashboard_data.accessible_pay_rate_ids
+      }
+    else
+      render 'reduced_show', locals: {
+        staff_member: staff_member
+      }
+    end
+  end
+
   def accessories
     query = StaffMember.where(id: params[:id])
     query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
@@ -311,18 +345,6 @@ class StaffMembersController < ApplicationController
   end
 
   def get_app_download_link_data(staff_member)
-    MobileApp.enabled.with_download_url.map do |mobile_app|
-      if StaffMemberAbility.new(staff_member).can?(:access, mobile_app)
-        last_download_sent = MobileAppDownloadLinkSend.find_by(staff_member: staff_member, mobile_app: mobile_app)
-        AppDownloadLink.new(
-          mobile_app_id: mobile_app.id,
-          app_name: mobile_app.name,
-          download_url: api_v1_staff_member_send_app_download_email_path(staff_member.id),
-          last_sent_at: last_download_sent.andand.sent_at
-        )
-      else
-        nil
-      end
-    end.compact
+    GetAppDownloadLinkData.new(staff_member: staff_member).call
   end
 end

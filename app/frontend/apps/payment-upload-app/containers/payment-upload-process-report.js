@@ -5,11 +5,17 @@ import PaymentUploadPageBoard from './payment-upload-page-board';
 class PaymentUploadProcessReport extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      createdFilterString: '',
+      updatedFilterString: ''
+    }
   }
 
   renderUserFilter(params) {
+    const filterString = oFetch(params, 'filterString');
     const showCount = oFetch(params, 'showCount');
     const total = oFetch(params, 'total');
+    const onFilterUpdate = oFetch(params, 'onFilterUpdate');
 
     return  <div className="boss-users__filter">
       <form className="boss-form">
@@ -17,7 +23,7 @@ class PaymentUploadProcessReport extends React.Component {
           <div className="boss-form__field boss-form__field_role_control">
             <p className="boss-form__label boss-form__label_type_light"><span className="boss-form__label-text">Showing { showCount } of { total }</span></p>
             <div className="boss-form__search">
-              <input name="search" type="text" className="boss-form__input" placeholder="Search..." />
+              <input value={filterString} name="search" type="text" className="boss-form__input" placeholder="Search..." onChange={onFilterUpdate}/>
             </div>
           </div>
         </div>
@@ -25,7 +31,7 @@ class PaymentUploadProcessReport extends React.Component {
           <div className="boss-form__field">
             <p className="boss-form__label boss-form__label_justify_center"><span className="boss-form__label-text">Showing { showCount } of { total }</span></p>
             <div className="boss-form__search">
-              <input name="search" type="text" className="boss-form__input" placeholder="Search..." />
+              <input value={filterString} name="search" type="text" className="boss-form__input" placeholder="Search..." onChange={onFilterUpdate} />
             </div>
           </div>
         </div>
@@ -68,34 +74,70 @@ class PaymentUploadProcessReport extends React.Component {
     </div>;
   }
 
+  updateFilterString(params){
+    const filterKey = oFetch(params, 'filterKey');
+
+    return (event) => {
+      const newValue = oFetch(event, 'target.value');
+      const mergeValues = {}
+      mergeValues[filterKey] = newValue;
+
+      this.setState((prevState, props) => {
+        return _.merge(prevState, mergeValues);
+      })
+    };
+  }
+
   renderPaymentSection(params) {
     const key = oFetch(params, 'key');
     const title = oFetch(params, 'title');
     const records = oFetch(params, 'records');
     const recordCount = oFetch(records, 'length');
+    const filterKey = oFetch(params, 'filterKey');
+    const filterString = oFetch(this.state, filterKey);
 
-    let staffMembers = [];
+    let allStaffMembers = [];
     const recordsByStaffMemberId = {};
     records.forEach((record) => {
       const recordStaffMember = oFetch(record, 'staffMember')
       const staffMemberId = oFetch(recordStaffMember, 'id');
-      staffMembers.push(recordStaffMember);
+      allStaffMembers.push(recordStaffMember);
       recordsByStaffMemberId[staffMemberId] = recordsByStaffMemberId[staffMemberId]  || [];
       recordsByStaffMemberId[staffMemberId].push(record);
     });
-    staffMembers = _.uniq(staffMembers);
+    allStaffMembers = _.uniq(allStaffMembers);
+    const total = oFetch(allStaffMembers, 'length');
     const openBoard = recordCount > 0;
 
+    const filteredStaffMembers = allStaffMembers.filter((staffMember) => {
+      const filterFragments = _.compact(
+        filterString.toLowerCase().split(' ')
+      );
+      return _.isEmpty(filterFragments) || _.every(filterFragments, (fragement) => {
+        return oFetch(staffMember, 'name').toLowerCase().includes(fragement);
+      });
+    });
+    const filteredCount = oFetch(filteredStaffMembers, 'length');
+    const filteredStaffMemberIds = filteredStaffMembers.map(staffMember => oFetch(staffMember, 'id'))
+    const filteredRecordsByStaffMemberID = _.pick(recordsByStaffMemberId, filteredStaffMemberIds);
+
     return <PaymentUploadPageBoard statusClass='boss-indicator_status_success' isOpened={openBoard} key={key} title={title} count={recordCount} >
-      { (recordCount < 1) && <div className="boss-board__group">
+      { (total < 1) && <div className="boss-board__group">
           <p className="boss-board__text-placeholder">Nothing to display</p>
         </div> }
-      { (recordCount > 0) && <div className="boss-board__group">
+      { (total > 0) && <div className="boss-board__group">
           <div className="boss-users">
-            { this.renderUserFilter({ showCount: recordCount, total: recordCount }) }
+            { this.renderUserFilter({
+                filterString: filterString,
+                showCount: filteredCount,
+                total: total,
+                onFilterUpdate: this.updateFilterString({
+                  filterKey: filterKey
+                })
+              }) }
             <div className="boss-users__flow">
               <div className="boss-users__flow-list">
-                { staffMembers.map((staffMember) => {
+                { filteredStaffMembers.map((staffMember) => {
                     const staffMemberId = oFetch(staffMember, 'id');
                     const records = oFetch(recordsByStaffMemberId, staffMemberId);
                     return <div key={`staffMemberFlowItem:${staffMemberId}`} className="boss-users__flow-item boss-users__flow-item_size_third">
@@ -213,13 +255,15 @@ class PaymentUploadProcessReport extends React.Component {
       { this.renderPaymentSection({
          key: "section:0",
          title: "Created",
-         records: createdPayments
+         records: createdPayments,
+         filterKey: 'createdFilterString',
         }) }
 
       { this.renderPaymentSection({
           key: "section:1",
           title: "Updated",
-          records: updatedPayments
+          records: updatedPayments,
+          filterKey: 'updatedFilterString'
         }) }
 
       { this.renderErrorSection({
