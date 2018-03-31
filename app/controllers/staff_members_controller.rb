@@ -1,5 +1,5 @@
 class StaffMembersController < ApplicationController
-  before_action :set_new_layout, only: [:index, :new, :show, :holidays, :profile, :owed_hours, :accessories]
+  before_action :set_new_layout, only: [:index, :new, :show, :holidays, :profile, :owed_hours, :accessories, :payments]
 
   def index
     authorize! :list, :staff_members
@@ -238,10 +238,14 @@ class StaffMembersController < ApplicationController
 
     profile_dashboard_data = GetStaffMemberProfileDashboardData.new(staff_member: staff_member, requester: current_user).call
 
+    payments = Payment.enabled.where(staff_member: staff_member).
+      includes([:created_by_user])
+
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     if can? :edit, staff_member
       render locals: {
+        payments: payments,
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
         app_download_link_data: profile_dashboard_data.app_download_link_data,
         access_token: access_token,

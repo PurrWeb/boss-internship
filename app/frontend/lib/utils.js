@@ -211,6 +211,7 @@ var utils =  {
     commonDateFormat: 'DD-MM-YYYY',
     monthDateFormat: 'dddd',
     tableDateFormat: 'DD MMM YYYY',
+    slashDateFormat: 'DD/MM/YYYY',
     commonDateFormatWithTime(){
       return 'HH:mm DD-MM-YYYY';
     },
