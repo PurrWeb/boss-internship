@@ -52,6 +52,12 @@ export default handleActions(
 
       return state.filter(period => !hoursAcceptancePeriodsIds.includes(period.get('hoursAcceptancePeriod')));
     },
+    [types.FORCE_CLOCK_OUT]: (state, action) => {
+      const { hoursAcceptanceBreaks } = action.payload;
+      return state.update(breaks =>
+        breaks.concat(fromJS(hoursAcceptanceBreaks)),
+      );
+    },
   },
   initialState,
 );

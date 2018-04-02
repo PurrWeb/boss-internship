@@ -23,8 +23,8 @@ export default handleActions(
     },
     [types.FORCE_CLOCK_OUT]: (state, action) => {
       const { clockInBreaks } = action.payload;
-      return state.update(clockInBreaks =>
-        clockInBreaks.push(fromJS(clockInBreaks)),
+      return state.update(breaks =>
+        breaks.concat(fromJS(clockInBreaks)),
       );
     },
   },
