@@ -9,6 +9,25 @@ import ClockOutButton from './clock-out-button';
 import { STATUSES, STATUS_CLASSES } from './index';
 
 class StaffMemberMainSide extends Component {
+  renderNotes(clockInNotes) {
+    return (
+      <div className="boss-notes boss-notes_page_hrc">
+        <h4 className="boss-notes__label">Notes</h4>
+        <div className="boss-notes__content">
+          <div className="boss-notes__content-inner">
+            <ul className="boss-notes__list">
+              {clockInNotes.map(note => {
+                return <li key={oFetch(note, 'id')} className="boss-notes__item">
+                  <span className="boss-notes__link">{oFetch(note, 'note')}</span>
+                </li>
+              })}
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const {
       status,
@@ -54,13 +73,16 @@ class StaffMemberMainSide extends Component {
           )}
         </div>
         <div className="boss-hrc__content">
-          <HoursChart
-            rotaDate={rotaDate}
-            rotaedShifts={rotaedShifts}
-            hoursAcceptancePeriods={hoursAcceptancePeriods}
-            clockedClockInPeriods={clockInPeriods}
-            clockInEvents={clockInEvents}
-          />
+          <div className="boss-hrc__info">
+            <HoursChart
+              rotaDate={rotaDate}
+              rotaedShifts={rotaedShifts}
+              hoursAcceptancePeriods={hoursAcceptancePeriods}
+              clockedClockInPeriods={clockInPeriods}
+              clockInEvents={clockInEvents}
+            />
+            {this.renderNotes(this.props.clockInNotes)}
+          </div>
           {status === 'clocked_out' && (
             <ClockInPeriods
               periods={hoursAcceptancePeriods}
