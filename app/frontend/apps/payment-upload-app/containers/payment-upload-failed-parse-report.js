@@ -7,32 +7,34 @@ class PaymentUploadFailedParseReport extends React.Component {
   }
 
   renderHeaderRowWithoutError(params) {
-    const key = oFetch(params, 'key');
+    const reactKey = oFetch(params, 'reactKey');
+    const header = oFetch(params, 'header');
 
     return (
-      <div key={key} className="boss-table__cell">
+      <div key={reactKey} className="boss-table__cell">
         <div className="boss-table__info">
-          <p className="boss-table__text">{ key }</p>
+          <p className="boss-table__text">{ header }</p>
         </div>
       </div>
     );
   }
 
   renderHeaderRowWithError(params) {
-    const key = oFetch(params, 'key');
+    const reactKey = oFetch(params, 'reactKey');
+    const header = oFetch(params, 'header');
     const errors = Array(oFetch(params, 'errors'));
 
     return (
-      <div key={key} className="boss-table__cell boss-table__cell_state_alert js-popover-container">
+      <div key={reactKey} className="boss-table__cell boss-table__cell_state_alert js-popover-container">
         <div className="boss-table__info">
-          <p className="boss-table__text boss-table__text_state_alert">{key}</p>
+          <p className="boss-table__text boss-table__text_state_alert">{ header }</p>
         </div>
 
         <div className="boss-popover boss-popover_context_csv-upload-error js-popover">
           <a href="#" className="boss-popover__close js-popover-close">Close</a>
           <div className="boss-popover__inner">
             <p className="boss-popover__text boss-popover__text_role_primary">
-              <span className="boss-popover__text-marked">{ key }</span>
+              <span className="boss-popover__text-marked">{ header }</span>
               <span>{ errors.join(", ") }</span>
             </p>
           </div>
@@ -59,7 +61,7 @@ class PaymentUploadFailedParseReport extends React.Component {
               { titleRowErrorKeys.map((key, index) => {
                   const errors = oFetch(titleRowErrors, key);
                   return  <div key={`titleRowErrorKeys:${key}`} className="boss-report__record">
-                    <p className="boss-report__text boss-report__text_size_m">                          <b>{ _.capitalize(key) }</b>
+                    <p className="boss-report__text boss-report__text_size_m">                          <b>{ _.capitalize(key) + ":\u00a0" }</b>
                       <span>{ errors.join(", ") }</span>
                     </p>
                   </div>;
@@ -83,11 +85,15 @@ class PaymentUploadFailedParseReport extends React.Component {
                     { headerRowKeys.map((key) => {
                         if (_.includes(headerRowErrorKeys, key)) {
                           return this.renderHeaderRowWithError({
-                            key: `headerRowWithError:${key}`,
+                            header: key,
+                            reactKey: `headerRowWithError:${key}`,
                             errors: oFetch(headerRowErrors, key)
                           });
                         } else {
-                          return this.renderHeaderRowWithoutError({key: `headerRowNoError:${key}`});
+                          return this.renderHeaderRowWithoutError({
+                            header: key,
+                            reactKey: `headerRowNoError:${key}`
+                          });
                         }
                       })
                     }
