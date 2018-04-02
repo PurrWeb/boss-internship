@@ -113,6 +113,7 @@ class HoursConfirmation extends Component {
     const rotaedStats = oFetch(periods, 'rotaedStats');
     const rotaedShifts = oFetch(periods, 'rotaedShifts');
     const clockInEvents = oFetch(periods, 'clockInEvents');
+    const clockInNotes = oFetch(periods, 'clockInNotes');
     const staffMember = oFetch(periods, 'staffMember');
     const status = clockInPeriods[clockInPeriods.length - 1].status;
     const staffType = this.props.staffTypes
@@ -162,6 +163,7 @@ class HoursConfirmation extends Component {
           clockInPeriods={clockInPeriods}
           rotaedShifts={rotaedShifts}
           clockInEvents={clockInEvents}
+          clockInNotes={clockInNotes}
           hoursAcceptancePeriods={hoursAcceptancePeriods}
           hoursAcceptanceBreaks={hoursAcceptanceBreaks}
           hoursAcceptanceStats={hoursAcceptanceStats}

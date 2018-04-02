@@ -12,12 +12,14 @@ import hoursAcceptanceBreaks from './hours-acceptance-breaks';
 import venue from './venue';
 import pageOptions from './page-options';
 import venues from './venues';
+import clockInNotes from './clock-in-notes';
 
 export default combineReducers({
   pageOptions,
   staffMembers,
   clockInPeriods,
   clockInBreaks,
+  clockInNotes,
   staffTypes,
   hoursAcceptancePeriods,
   rotaShifts,

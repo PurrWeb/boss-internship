@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { List, Map, Set } from 'immutable';
+import { List, Map, Set, fromJS } from 'immutable';
 import safeMoment from '~/lib/safe-moment';
 import uuid from 'uuid/v1';
 import oFetch from 'o-fetch';
@@ -31,6 +31,7 @@ const staffMembersSelector = state => state.get('staffMembers');
 const clockInPeriodsSelector = state => state.get('clockInPeriods');
 const clockInBreaksSelector = state => state.get('clockInBreaks');
 const clockInEventsSelector = state => state.get('clockInEvents');
+const clockInNotesSelector = state => state.get('clockInNotes');
 const hoursAcceptancePeriodsSelector = state =>
   state.get('hoursAcceptancePeriods');
 const hoursAcceptanceBreaksSelector = state =>
@@ -80,6 +81,7 @@ export const data = createSelector(
   hoursAcceptancePeriodsSelector,
   clockInEventsSelector,
   hoursAcceptanceBreaksSelector,
+  clockInNotesSelector,
   (
     clockInPeriods,
     staffMembers,
@@ -89,6 +91,7 @@ export const data = createSelector(
     hoursAcceptancePeriods,
     clockInEvents,
     hoursAcceptanceBreaks,
+    clockInNotes,
   ) =>
     clockInPeriods
       .groupBy(x => x.get('date'))
@@ -120,17 +123,20 @@ export const data = createSelector(
                       staffMember => staffMember.get('id') === staffMemberId,
                     ),
                   )
+                  .set('clockInNotes', clockInNotes.filter(note => note.get('staffMember') === staffMemberId && note.get('date') === periodsDate))
                   .set('clockInEvents', events)
-                  .set(
-                    'rotaedShifts',
-                    rotaShifts
+                  .update('rotaedShifts', () => {
+                    if (!rota) {
+                      return List([]);
+                    }
+                    return rotaShifts
                       .filter(
                         shift =>
                           shift.get('staffMember') === staffMemberId &&
                           shift.get('rota') === rota.get('id'),
                       )
-                      .map(item => item.set('breaks', [])),
-                  )
+                      .map(item => item.set('breaks', []));
+                  })
                   .set(
                     'hoursAcceptancePeriods',
                     hoursAcceptancePeriods
@@ -173,7 +179,6 @@ export const data = createSelector(
                 const acceptedAcceptancePeriods = periods
                   .get('hoursAcceptancePeriods')
                   .filter(item => item.get('status') === 'accepted');
-
                 const periodsWithStats = periods
                   .set(
                     'hoursAcceptanceStats',
