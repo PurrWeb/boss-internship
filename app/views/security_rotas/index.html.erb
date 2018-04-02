@@ -1,28 +1,18 @@
-<script type="text/javascript">
-  (function(){
-    var securityRotaOverviews = [];
-
-    <% (week.start_date..week.end_date).each do |date| %>
-      securityRotaOverviews.push(<%= raw(
-        render(
-          partial: 'api/v1/shared/security_rota_overview.json',
-          locals: {
-            date: date,
-            rotas: Rota.where(date: date)
-          }
-        )
-      ) %>);
-    <% end %>
-
-    window.boss = window.boss || {};
-    window.boss.store = window.boss.store || {};
-    window.boss.store.staffTypeSlug = "security";
-    window.boss.store.securityRotaOverviews = securityRotaOverviews;
-    window.boss.store.access_token = "<%= access_token.token %>";
-  })();
-</script>
-
-<div class="container">
-  <h1>Security Rota <%= week.start_date %> to <%= week.end_date %></h1>
-  <%= react_component("StaffTypeRotaOverviewApp") %>
-</div>
+<%= react_component('SecurityRotaOverviewApp', {
+  accessToken: access_token.token,
+  rotas: ActiveModel::Serializer::CollectionSerializer.new(
+    rotas,
+    serializer: Api::V1::SecurityRota::RotaSerializer,
+  ),
+  staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_members,
+    serializer: Api::V1::SecurityRota::StaffMemberSerializer,
+  ),
+  rotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    rota_shifts,
+    serializer: Api::V1::SecurityRota::RotaShiftSerializer,
+  ),
+  venues: ActiveModel::Serializer::CollectionSerializer.new(accessible_venues, serializer: Api::V1::VenueSerializer),
+  startDate: start_date,
+  endDate: end_date,
+}) %>

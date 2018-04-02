@@ -2,26 +2,13 @@ class SecurityRotasController < ApplicationController
   before_action :authorize
 
   def index
-    date = date_from_params
-    week = RotaWeek.new(date || RotaShiftDate.to_rota_date(Time.current))
-
-    if date && (date == week.start_date)
-      respond_to do |format|
-        format.html do
-          access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-
-          render locals: {
-            access_token: access_token,
-            week: week
-          }
-        end
-
-        format.pdf do
-          render_security_rota_pdf(week: week)
-        end
+    respond_to do |format|
+      format.html do
+        render_security_rota_index
       end
-    else
-      redirect_to(security_rotas_path(date: UIRotaDate.format(week.start_date)))
+      format.pdf do
+        render_security_rota_pdf
+      end
     end
   end
 
@@ -83,14 +70,65 @@ class SecurityRotasController < ApplicationController
     authorize! :view, :security_rota
   end
 
+  def render_security_rota_index
+    unless highlight_date_from_params.present?
+      return redirect_to(security_rotas_path(index_redirect_params))
+    end
+
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+    date = highlight_date_from_params
+    week = RotaWeek.new(date)
+    rotas = Rota.where(
+      date: date,
+    )
+
+    staff_types = StaffType.where(role: 'security')
+
+    staff_members = StaffMember
+      .joins(:staff_type)
+      .merge(staff_types)
+      .includes(:staff_type)
+      .includes(:name)
+      .includes(:master_venue)
+
+    rota_shifts = RotaShift
+      .enabled
+      .joins(:rota)
+      .merge(rotas)
+      .joins(:staff_member)
+      .merge(staff_members)
+      .includes(:rota)
+
+    render locals: {
+      access_token: access_token,
+      accessible_venues: accessible_venues_for(current_user),
+      start_date: week.start_date,
+      end_date: week.end_date,
+      rotas: rotas,
+      staff_members: staff_members,
+      rota_shifts: rota_shifts
+    }
+  end
+
   def accessible_venues_for(user)
     AccessibleVenuesQuery.new(user).all
   end
 
-  def date_from_params(param_name: :date)
-    if params[param_name.to_sym].present?
-      UIRotaDate.parse(params[param_name.to_sym])
+  def highlight_date_from_params
+    if params[:highlight_date].present?
+      UIRotaDate.parse(params[:highlight_date])
     end
+  end
+
+  def index_redirect_params
+    highlight_date = highlight_date_from_params || default_highlight_date
+    {
+      highlight_date: UIRotaDate.format(highlight_date)
+    }
+  end
+
+  def default_highlight_date
+    RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date
   end
 
   def render_security_rota_pdf(week:)
