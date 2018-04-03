@@ -312,6 +312,7 @@ Rails.application.routes.draw do
         end
 
         resources :rota_weekly_day_data, only: [:index]
+        resources :security_rota_overview, only: [:show]
 
         resources :venues, only: :show do
           resources :rota_forecasts, only: [:show] do
