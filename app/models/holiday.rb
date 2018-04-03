@@ -23,7 +23,7 @@ class Holiday < ActiveRecord::Base
     HolidayCapValidator.new(holiday).validate
   end
 
-  attr_accessor :validate_as_creation
+  attr_accessor :validate_as_creation, :source_request
 
   def self.paid
     where(holiday_type: PAID_HOLIDAY_TYPE)
