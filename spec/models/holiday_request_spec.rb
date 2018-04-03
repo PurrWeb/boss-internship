@@ -26,4 +26,8 @@ describe HolidayRequest do
   it 'should have correct day_count' do
     expect(holiday_request.days).to eq(holiday_length_days)
   end
+
+  it 'should have correct default state' do
+    expect(holiday_request.current_state).to eq('pending')
+  end
 end
