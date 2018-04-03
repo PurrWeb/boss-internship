@@ -105,6 +105,7 @@ class SecurityRotasController < ApplicationController
       start_date: week.start_date,
       end_date: week.end_date,
       rotas: rotas,
+      current_day: highlight_date_from_params,
       staff_members: staff_members,
       rota_shifts: rota_shifts
     }

@@ -4,6 +4,7 @@
     rotas,
     serializer: Api::V1::SecurityRota::RotaSerializer,
   ),
+  currentDay: UIRotaDate.format(current_day),
   staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
     staff_members,
     serializer: Api::V1::SecurityRota::StaffMemberSerializer,
@@ -13,6 +14,6 @@
     serializer: Api::V1::SecurityRota::RotaShiftSerializer,
   ),
   venues: ActiveModel::Serializer::CollectionSerializer.new(accessible_venues, serializer: Api::V1::VenueSerializer),
-  startDate: start_date,
-  endDate: end_date,
+  startDate: UIRotaDate.format(start_date),
+  endDate: UIRotaDate.format(end_date),
 }) %>
