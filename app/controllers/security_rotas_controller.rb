@@ -13,7 +13,7 @@ class SecurityRotasController < ApplicationController
   end
 
   def show
-    date = date_from_params(param_name: :id)
+    date = rota_date_from_params
     raise ActiveRecord::RecordNotFound unless date.present?
 
     venues = Venue.all
@@ -105,7 +105,7 @@ class SecurityRotasController < ApplicationController
       start_date: week.start_date,
       end_date: week.end_date,
       rotas: rotas,
-      current_day: highlight_date_from_params,
+      date: highlight_date_from_params,
       staff_members: staff_members,
       rota_shifts: rota_shifts
     }
@@ -130,6 +130,10 @@ class SecurityRotasController < ApplicationController
 
   def default_highlight_date
     RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date
+  end
+
+  def rota_date_from_params
+    UIRotaDate.parse(params.fetch(:id))
   end
 
   def render_security_rota_pdf(week:)
