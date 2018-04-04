@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_paper_trail_whodunnit
   before_filter :set_host
-  before_filter :bundle_script
+  before_filter :setup_frontend_bundles
   before_filter :set_current_venue_on_redis
 
   helper_method [:render_navigation?, :render_v2_layout?, :header_data, :show_global_venue?]
@@ -43,8 +43,8 @@ class ApplicationController < ActionController::Base
     Rails.application.routes.default_url_options[:host] = request.host
   end
 
-  def bundle_script
-    @bundle_script = SourcemapHelper.script_path
+  def setup_frontend_bundles
+    @frontend_bundles = SourcemapHelper.bundles
   end
 
   def render_not_found!

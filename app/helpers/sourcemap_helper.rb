@@ -1,4 +1,5 @@
 module SourcemapHelper
+  BUNDLE_NAMES = ["assets", "main", "runtime", "vendors"]
   extend self
 
   def sourcemap_version
@@ -6,13 +7,17 @@ module SourcemapHelper
     json.fetch('metadata').fetch('version')
   end
 
-  def script_path
+  def bundles
     json = get_bundle_assets
-    json.fetch('main').fetch('js')
-  end
-
-  def sourcemap_path
-    script_path + '.map'
+    BUNDLE_NAMES.map do |bundle_name|
+      bundle_path = json.fetch(bundle_name).fetch('js')
+      sourcemap_path = bundle_path + '.map'
+      {
+        name: bundle_name,
+        bundle_path: bundle_path,
+        sourcemap_path: sourcemap_path
+      }
+    end
   end
 
   private

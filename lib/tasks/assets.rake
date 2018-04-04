@@ -11,7 +11,8 @@ namespace :assets do
 
   desc "Upload Sourcemaps"
   task :upload_sourcemaps => :environment do
-    bundle_path = SourcemapHelper.script_path
+    bundles = SourcemapHelper.bundles
+    bundle_count = bundles.count
 
     upload_hosts = []
     if Rails.env.staging?
@@ -24,25 +25,27 @@ namespace :assets do
     end
 
     upload_hosts.each do |host|
-      upload_url = "#{host}#{bundle_path}"
+      bundles.each_with_index do |bundle, index|
+        upload_url = "#{host}#{bundle.fetch(:bundle_path)}"
 
-      upload_command_parts = ["curl https://api.rollbar.com/api/1/sourcemap"]
-      upload_command_parts << %{-F access_token="#{ENV.fetch("ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN")}"}
-      upload_command_parts << %{-F version="#{SourcemapHelper.sourcemap_version}"}
-      upload_command_parts << %{-F minified_url="#{upload_url}"}
-      upload_command_parts << %{-F source_map="@#{Rails.application.config.root}/public#{SourcemapHelper.sourcemap_path}"}
-      upload_command = upload_command_parts.join(" ")
+        upload_command_parts = ["curl https://api.rollbar.com/api/1/sourcemap"]
+        upload_command_parts << %{-F access_token="#{ENV.fetch("ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN")}"}
+        upload_command_parts << %{-F version="#{SourcemapHelper.sourcemap_version}"}
+        upload_command_parts << %{-F minified_url="#{upload_url}"}
+        upload_command_parts << %{-F source_map="@#{Rails.application.config.root}/public#{bundle.fetch(:sourcemap_path)}"}
+        upload_command = upload_command_parts.join(" ")
 
-      puts
-      puts 'Running file upload command'
-      puts upload_command
-      puts
-      response = `#{upload_command}`
-      json_result = JSON.parse(response)
-      if json_result["err"] > 0
-        puts "Sourcemap Upload Failed"
-        puts json_result
-        raise json_result.to_s
+        puts
+        puts "Uploading bundle #{index + 1 } of #{bundle_count}"
+        puts upload_command
+        puts
+        response = `#{upload_command}`
+        json_result = JSON.parse(response)
+        if json_result["err"] > 0
+          puts "Sourcemap Upload Failed"
+          puts json_result
+          raise json_result.to_s
+        end
       end
     end
   end
