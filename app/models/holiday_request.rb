@@ -16,6 +16,8 @@ class HolidayRequest < ActiveRecord::Base
     HolidayRequestDateValidator.new(holiday_request).validate
   end
 
+  attr_accessor :validate_as_creation
+
   def state_machine
     @state_machine ||= HolidayRequestStateMachine.new(
       self,

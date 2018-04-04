@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe OwedHour do
+  include ActiveSupport::Testing::TimeHelpers
+
   describe 'validation' do
     let(:now) { Time.current }
     let(:staff_member) { FactoryGirl.create(:staff_member) }
@@ -73,6 +75,52 @@ describe OwedHour do
       specify 'error should appear on base' do
         owed_hour.valid?
         expect(owed_hour.errors[:base]).to eq(['conflicting hour acceptance exists'])
+      end
+    end
+
+    context 'Holiday exists at conflicting time' do
+      let(:holiday_create_time) { date - 2.weeks }
+      before do
+        travel_to holiday_create_time do
+          FactoryGirl.create(
+            :holiday,
+            staff_member: staff_member,
+            start_date: date,
+            end_date: date
+          )
+        end
+      end
+
+      before 'owed hour should not be valid' do
+        expect(owed_hour).to_not be_valid
+      end
+
+      specify 'error should appear on base' do
+        owed_hour.valid?
+        expect(owed_hour.errors[:base]).to eq(['conflicting holiday exists'])
+      end
+    end
+
+    context 'HolidayRequest exists at conflicting time' do
+      let(:holiday_request_create_time) { date - 2.weeks }
+      before do
+        travel_to holiday_request_create_time do
+          FactoryGirl.create(
+            :holiday_request,
+            staff_member: staff_member,
+            start_date: date,
+            end_date: date
+          )
+        end
+      end
+
+      before 'owed hour should not be valid' do
+        expect(owed_hour).to_not be_valid
+      end
+
+      specify 'error should appear on base' do
+        owed_hour.valid?
+        expect(owed_hour.errors[:base]).to eq(['conflicting holiday request exists'])
       end
     end
   end

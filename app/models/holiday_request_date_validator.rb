@@ -6,9 +6,10 @@ class HolidayRequestDateValidator
   attr_reader :holiday_request, :now
 
   def validate
-    return unless holiday_request.enabled? && [:start_date, :end_date].all? do |method|
+    return unless [:start_date, :end_date].all? do |method|
       holiday_request.public_send(method).present?
     end
+    return unless state_subject_to_date_validation(holiday_request.current_state)
 
     if holiday_request.start_date > holiday_request.end_date
       holiday_request.errors.add(:base, 'Start date cannot be after end date')
@@ -53,10 +54,10 @@ class HolidayRequestDateValidator
       end_date: holiday_request.end_date
     ).all
 
-    if holiday_request.holiday
+    if holiday_request.created_holiday
       overlapping_holidays_exclusive = ExclusiveOfQuery.new(
         relation: overlapping_holidays,
-        excluded: holiday_request.holiday
+        excluded: holiday_request.created_holiday
       ).all
     end
 
@@ -67,14 +68,6 @@ class HolidayRequestDateValidator
     staff_member_holiday_requests = HolidayRequest.
       in_state(:pending).
       where(staff_member: holiday_request.staff_member)
-
-    if holiday_request.source_request.present?
-      # Ignore request holiday will be replacing
-      staff_member_holidays = ExclusiveOfQuery.new(
-        relation: staff_member_holiday_requests,
-        excluded: holiday_request.source_request
-      )
-    end
 
     overlapping_holiday_requests = HolidayInRangeQuery.new(
       relation: staff_member_holiday_requests,
@@ -111,5 +104,16 @@ class HolidayRequestDateValidator
 
   def dates_changed?(holiday_request)
     holiday_request.changed.include?(:start_date) || holiday_request.changed.include?(:end_date)
+  end
+
+  def state_subject_to_date_validation(state)
+    case state
+    when 'pending', 'accepted'
+      true
+    when 'rejected', 'disabled'
+      false
+    else
+      raise "unsupported state #{state} encountered"
+    end
   end
 end

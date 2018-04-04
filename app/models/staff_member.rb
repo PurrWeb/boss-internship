@@ -39,6 +39,8 @@ class StaffMember < ActiveRecord::Base
 
   has_many :holidays, inverse_of: :staff_member
 
+  has_many :holiday_requests, inverse_of: :staff_member
+
   has_many :owed_hours, inverse_of: :staff_member
 
   has_many :staff_member_transitions, autosave: false
@@ -288,6 +290,10 @@ class StaffMember < ActiveRecord::Base
        address.county_changed?   ||
        address.country_changed?  ||
        address.postcode_changed?)
+  end
+
+  def pending_holiday_requests
+    holiday_requests.in_state(:pending)
   end
 
   def active_holidays
