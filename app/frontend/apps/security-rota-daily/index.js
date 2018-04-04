@@ -14,7 +14,6 @@ class RotaDailyApp extends React.Component {
   }
 
   render() {
-    console.log('props', this.props)
     return (
       <Provider store={this.store}>
         <RotaDaily />
