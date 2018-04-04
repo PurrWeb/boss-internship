@@ -1,5 +1,6 @@
 class SecurityRotasController < ApplicationController
   before_action :authorize
+  before_action :set_new_layout
 
   def index
     respond_to do |format|
