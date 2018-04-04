@@ -1,17 +1,17 @@
-const config = require('./../webpack.config');
-var webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-config.plugins.push(
-    // new webpack.optimize.UglifyJsPlugin({
-    //     mangle: true,
-    //     compress: true,
-    //     sourceMap: true
-    // }),
-    new webpack.DefinePlugin({
-        'process.env': {
-            'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }
-    })
-);
+const getConfig = require('./../webpack.config');
 
-module.exports = config;
+module.exports = function(env) {
+  const config = getConfig(env);
+
+  config.mode = 'none';
+  config.devtool = 'source-map';
+  config.optimization.usedExports = true;
+  config.optimization.concatenateModules = true;
+  config.optimization.noEmitOnErrors = true;
+  config.optimization.nodeEnv = 'production';
+  config.optimization.minimize = true;
+
+  return config;
+};
