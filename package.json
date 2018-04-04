@@ -155,7 +155,7 @@
     "build": "npm rebuild node-sass && rm -rf ./public/assets/bundles && webpack --config ./webpack/dev.config.js",
     "build:production": "npm rebuild node-sass && rm -rf ./public/assets/bundles && webpack --config ./webpack/production.config.js"
   },
-  "license": "ISC",
+  "license": "",
   "jest": {
     "snapshotSerializers": [
       "<rootDir>/node_modules/enzyme-to-json/serializer"
