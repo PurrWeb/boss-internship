@@ -99,6 +99,9 @@ registerComponent('ClockInOutApp', ClockInOutApp);
 import RotaOverviewApp from './apps/rota-overview/rota-overview-app';
 registerComponent('RotaOverviewApp', RotaOverviewApp);
 
+import SecurityRotaOverviewApp from './apps/security-rota-overview';
+registerComponent('SecurityRotaOverviewApp', SecurityRotaOverviewApp);
+
 import StaffMemberFormAvatarImage from './apps/staff-member-form/staff-member-form-avatar-image';
 registerComponent('StaffMemberFormAvatarImage', StaffMemberFormAvatarImage);
 
