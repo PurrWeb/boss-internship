@@ -3,12 +3,12 @@ module SourcemapHelper
 
   def sourcemap_version
     json = get_bundle_assets
-    json['metadata']['version']
+    json.fetch('metadata').fetch('version')
   end
 
   def script_path
     json = get_bundle_assets
-    json['main']['js']
+    json.fetch('main').fetch('js')
   end
 
   def sourcemap_path
