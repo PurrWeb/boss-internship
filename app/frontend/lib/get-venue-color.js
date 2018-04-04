@@ -1,21 +1,17 @@
-function color(hue){
-    return `hsl(${hue}, 50%, 40%)`;
-}
-
 const colors = [
-    color(150),
-    color(0),
-    color(210),
-    color(190),
-    color(60),
-    color(30),
-    color(240),
-    color(50),
-    color(130),
-    color(170)
+  '#8395a7',
+  '#eb4d4b',
+  '#6ab04c',
+  '#1289A7',
+  '#D980FA',
+  '#ffa502',
+  '#74b9ff',
+  '#20bf6b',
+  '#82589f',
+  '#ff7f50',
 ];
 
-export default function(index){
-    index = index % colors.length;
-    return colors[index];
-}
+export default id => {
+  const index = id % colors.length;
+  return colors[index];
+};
