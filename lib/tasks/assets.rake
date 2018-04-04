@@ -6,7 +6,6 @@ Rake::Task['assets:precompile'].
 namespace :assets do
   desc 'Generate Webpack assets'
   task :webpack => :environment do
-    clobber_webpack_assets
     build_webpack
   end
 
@@ -59,11 +58,5 @@ namespace :assets do
 
   def build_webpack
     sh "NODE_ENV=#{normalised_node_env} npm run build" # this runs a react_webpack_rails script
-  end
-
-  def clobber_webpack_assets
-    rm_rf "#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js"
-    rm_rf "#{Rails.application.config.root}/app/assets/javascripts/bundles/frontend_bundle.js.map"
-    rm_rf "#{Rails.application.config.root}/app/assets/stylesheets/frontend_bundle.css"
   end
 end
