@@ -288,6 +288,10 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
+      can :view, :holiday_requests_page do
+        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+      end
+
       can :redeem, Voucher do |voucher|
         user.has_effective_access_level?(AccessLevel.manager_access_level) &&
           can_manage_venue?(user, voucher.venue)

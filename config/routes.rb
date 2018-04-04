@@ -76,6 +76,7 @@ Rails.application.routes.draw do
     resource :venue_dashboard, only: [:show]
     resource :message_board, only: [:show]
     resources :holidays, only: [:index, :edit, :update]
+    resources :holiday_requests, only: [:index]
     resources :owed_hours, only: [:edit, :update]
 
     resources :staff_members, only: [:show, :new, :index] do

@@ -135,6 +135,9 @@ registerComponent('RollbarErrorTestApp', RollbarErrorTestApp);
 // import VenueFinder from "./components/shared/venue-finder"
 // registerComponent("VenueFinder", VenueFinder);
 
+import HolidayRequestsApp from './apps/holiday-requests';
+registerComponent('HolidayRequestsApp', HolidayRequestsApp);
+
 import FruitPopover from './components/shared/fruit-popover';
 registerComponent('FruitPopover', FruitPopover);
 
