@@ -69,7 +69,8 @@ class SecurityRotasController < ApplicationController
       staff_members: staff_members,
       rota_shifts: rota_shifts,
       week_rota_shifts: week_rota_shifts,
-      holidays: holidays
+      holidays: holidays,
+      staff_types: staff_types,
     }
   end
 
@@ -115,7 +116,8 @@ class SecurityRotasController < ApplicationController
       rotas: rotas,
       date: highlight_date_from_params,
       staff_members: staff_members,
-      rota_shifts: rota_shifts
+      rota_shifts: rota_shifts,
+      staff_types: staff_types
     }
   end
 

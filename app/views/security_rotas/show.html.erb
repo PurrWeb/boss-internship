@@ -25,4 +25,8 @@
     holidays,
     serializer: Api::V1::RotaDaily::HolidaySerializer,
   ),
+  staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_types,
+    serializer: Api::V1::SecurityRota::StaffTypeSerializer,
+  ),
 }) %>
