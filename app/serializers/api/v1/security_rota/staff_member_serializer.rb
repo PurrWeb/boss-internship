@@ -1,7 +1,7 @@
 class Api::V1::SecurityRota::StaffMemberSerializer < ActiveModel::Serializer
 
   attributes :id, :avatarUrl, :firstName, :surname, :preferredHours,
-             :preferredDays
+             :preferredDays, :staffTypeId
 
   def avatarUrl
     object.avatar_url
@@ -17,6 +17,10 @@ class Api::V1::SecurityRota::StaffMemberSerializer < ActiveModel::Serializer
 
   def preferredHours
     object.hours_preference_note
+  end
+
+  def staffTypeId
+    object.staff_type.id
   end
 
   def preferredDays
