@@ -18,7 +18,7 @@
     serializer: Api::V1::SecurityRota::RotaShiftSerializer,
   ),
   venues: ActiveModel::Serializer::CollectionSerializer.new(
-    accessible_venues,
+    venues,
     serializer: Api::V1::SecurityRota::VenueSerializer,
   ),
   holidays: ActiveModel::Serializer::CollectionSerializer.new(
