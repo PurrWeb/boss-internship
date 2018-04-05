@@ -51,6 +51,8 @@ class SecurityRotasController < ApplicationController
       where(starts_at: week_start_time..week_end_time).
       includes(:rota)
 
+    week_rotas = Rota.where(date: [week.start_date..week.end_date])
+
     rotas = Rota.where(date: date)
 
     rota_shifts = RotaShift.enabled.where(
@@ -71,6 +73,7 @@ class SecurityRotasController < ApplicationController
       week_rota_shifts: week_rota_shifts,
       holidays: holidays,
       staff_types: staff_types,
+      week_rotas: week_rotas
     }
   end
 

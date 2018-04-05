@@ -4,6 +4,10 @@
     rotas,
     serializer: Api::V1::SecurityRota::RotaSerializer,
   ),
+  weekRotas: ActiveModel::Serializer::CollectionSerializer.new(
+    week_rotas,
+    serializer: Api::V1::SecurityRota::RotaSerializer,
+  ),
   date: UIRotaDate.format(date),
   staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
     staff_members,
