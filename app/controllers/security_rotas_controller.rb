@@ -29,11 +29,21 @@ class SecurityRotasController < ApplicationController
       includes(:master_venue).
       uniq
 
-    holidays = Holiday.in_state(:enabled).joins(:staff_member).merge(staff_members)
 
     week = RotaWeek.new(date)
     week_start_time = RotaShiftDate.new(week.start_date).start_time
     week_end_time = RotaShiftDate.new(week.end_date).end_time
+
+    holidays = Holiday.in_state(:enabled).where(
+      staff_member: staff_members
+    )
+
+    holidays = HolidayInRangeQuery.new(
+      relation: holidays,
+      start_date: week.start_date,
+      end_date: week.end_date
+    ).all.includes([:staff_member, :holiday_transitions])
+
     week_rota_shifts = RotaShift.
       enabled.
       joins(:staff_member).
