@@ -34,23 +34,19 @@ class SecurityRotasController < ApplicationController
     week = RotaWeek.new(date)
     week_start_time = RotaShiftDate.new(week.start_date).start_time
     week_end_time = RotaShiftDate.new(week.end_date).end_time
-    rota_shifts = RotaShift.
+    week_rota_shifts = RotaShift.
       enabled.
       joins(:staff_member).
       merge(staff_members).
       where(starts_at: week_start_time..week_end_time).
       includes(:rota)
 
-    date_rotas = Rota.where(date: date)
+    rotas = Rota.where(date: date)
 
-    shift_rotas = Rota.
-      joins('INNER JOIN `rota_shifts` ON `rotas`.`id` = `rota_shifts`.`rota_id`').
-      where('`rota_shifts`.`id` IN (?)', rota_shifts.pluck(:id))
-
-    rotas = Rota.
-      where(id: date_rotas.pluck(:id) + shift_rotas.pluck(:id)).
-      includes(:venue).
-      uniq
+    rota_shifts = RotaShift.enabled.where(
+      rota: rotas,
+      staff_member: staff_members,
+    ).includes([:rota, :staff_member])
 
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
@@ -62,6 +58,7 @@ class SecurityRotasController < ApplicationController
       staff_types: staff_types,
       staff_members: staff_members,
       rota_shifts: rota_shifts,
+      week_rota_shifts: week_rota_shifts,
       holidays: holidays
     }
   end
