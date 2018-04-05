@@ -48,7 +48,6 @@ module.exports = function(env) {
     watch: false,
     mode: 'none',
     devtool: false,
-    node: false,
 
     entry: {
       main: path.resolve('app/frontend/index.js'),
