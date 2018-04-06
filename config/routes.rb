@@ -219,6 +219,8 @@ Rails.application.routes.draw do
       namespace :v1 do
         get 'version', to: 'version#version'
 
+        resources :security_rota_shifts, only: [:create, :update, :destroy], path: 'security-rota-shifts'
+
         resources :accessory_requests, only: [:index, :create, :update, :destroy], path: 'accessory-requests'  do
           member do
             post :accept
