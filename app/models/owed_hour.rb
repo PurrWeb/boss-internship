@@ -16,6 +16,7 @@ class OwedHour < ActiveRecord::Base
   validate :times_valid
   validate :minutes_valid_for_times
   validate :no_time_conflicts
+  validate :no_holiday_conflicts
 
   attr_accessor :validate_as_creation
 
@@ -101,6 +102,14 @@ class OwedHour < ActiveRecord::Base
     if conflicting_hours_acceptances.count > 0
       errors.add(:base, 'conflicting hour acceptance exists')
     end
+  end
+
+  def no_holiday_conflicts
+    return unless (
+      enabled?  &&
+      staff_member.present? &&
+      date.present?
+    )
 
     conflicting_holidays = InRangeQuery.new(
       relation: staff_member.active_holidays,
@@ -111,7 +120,7 @@ class OwedHour < ActiveRecord::Base
     ).all
 
     if conflicting_holidays.count > 0
-      errors.add(:base, 'conflicting holiday exists')
+      errors.add(:base, 'conflicting holiday exist')
     end
 
     conflicting_holiday_requests = InRangeQuery.new(
