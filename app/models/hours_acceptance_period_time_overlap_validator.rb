@@ -44,6 +44,16 @@ class HoursAcceptancePeriodTimeOverlapValidator
       if conflicting_owed_hours.count > 0
         period.errors.add(:base, 'conflicting owed hour exists')
       end
+
+      conflicting_holidays = HolidayInRangeQuery.new(
+        relation: staff_member.holidays.in_state(:enabled),
+        start_date: date,
+        end_date: date
+      ).all
+
+      if conflicting_holidays.count > 0
+        period.errors.add(:base, 'conflicting holidays exist')
+      end
     end
   end
 
