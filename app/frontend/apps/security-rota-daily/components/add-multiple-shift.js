@@ -1,31 +1,37 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import AddMultipleShiftForm from './add-multiple-shift-form';
 import { SubmissionError } from 'redux-form/immutable';
 
-import {
-  addShift,
-} from '../actions';
+import { addShift } from '../actions';
 
 class AddMultipleShift extends React.Component {
   render() {
-    const {
-      rotaDate,
-    } = this.props;
+    const { rotaDate, venues } = this.props;
 
     const initialValues = {
-      starts_at: null,
-      ends_at: null,
-      shift_type: "normal",
-    }
-        
+      startsAt: null,
+      endsAt: null,
+      shiftType: 'normal',
+      venueId: venues.getIn([0, 'id']),
+    };
+
     return (
       <AddMultipleShiftForm
         initialValues={initialValues}
         rotaDate={rotaDate}
-        rotaStatus={this.props.rotaStatus}
+        rotas={this.props.rotas}
+        venues={this.props.venues}
       />
-    )
+    );
   }
 }
+
+AddMultipleShift.PropTypes = {
+  rotaDate: PropTypes.string.isRequired,
+  venues: ImmutablePropTypes.list.isRequired,
+  rotas: ImmutablePropTypes.list.isRequired,
+};
 
 export default AddMultipleShift;

@@ -1,6 +1,7 @@
 import React from 'react';
-import d3 from "d3";
-import RotaChart from "./rota-chart";
+import d3 from 'd3';
+import PropTypes from 'prop-types';
+import RotaChart from './rota-chart';
 import iScroll from 'boss-iscroll';
 import ReactIScroll from 'react-iscroll';
 
@@ -13,17 +14,10 @@ const scrollOptions = {
   shrinkScrollbars: 'scale',
   fadeScrollbars: false,
   eventPassthrough: true,
-  click: true
+  click: true,
 };
 
 class RotaGraph extends React.Component {
-  
-  getShiftColor = (shift) => {
-    const staffMember = this.props.staffMembers.find(staff => staff.id === shift.staff_member);
-    const staffType = this.props.staffTypes.find(staffType => staffType.id === staffMember.staff_type);
-    return staffType.color;
-  }
-
   render() {
     return (
       <div className="boss-rotas__graphs-list">
@@ -32,19 +26,37 @@ class RotaGraph extends React.Component {
             <div className="rota-chart__inner">
               <ReactIScroll iScroll={iScroll} options={scrollOptions}>
                 <RotaChart
-                    rotaShifts={this.props.rotaShifts}
-                    staffTypes={this.props.staffTypes}
-                    staff={this.props.staffMembers}
-                    getShiftColor={(shift) => this.getShiftColor(shift)}
-                    onShiftClick={this.props.onShiftClick}
-                  />
+                  rotaShifts={this.props.rotaShifts}
+                  staffTypes={this.props.staffTypes}
+                  staff={this.props.staffMembers}
+                  onShiftClick={this.props.onShiftClick}
+                />
               </ReactIScroll>
             </div>
+            {this.props.totalRotaShifts === 0 ? null : (
+              <div className="rota-chart__meta">
+                <p className="rota-chart__meta-text">
+                  <span>Showing </span>
+                  <span>{this.props.rotaShifts.length}</span>
+                  <span> out of </span>
+                  <span>{this.props.totalRotaShifts}</span>
+                  <span> shifts.</span>
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
+
+RotaGraph.PropTypes = {
+  rotaShifts: PropTypes.array.isRequired,
+  staffTypes: PropTypes.array.isRequired,
+  staffMembers: PropTypes.array.isRequired,
+  onShiftClick: PropTypes.func.isRequired,
+  totalRotaShifts: PropTypes.number.isRequired,
+};
 
 export default RotaGraph;

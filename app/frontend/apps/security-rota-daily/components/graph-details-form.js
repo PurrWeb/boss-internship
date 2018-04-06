@@ -1,26 +1,28 @@
 import React from 'react';
-import {
-  Field,
-  Fields,
-  reduxForm,
-} from 'redux-form/immutable';
+import { Field, Fields, reduxForm } from 'redux-form/immutable';
 import StaffMemberInfo from './staff-member-info';
-
+import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import {
   ErrorBlock,
-  BossFormShiftTimeInput,
+  BossFormSelect,
   BossFormCheckbox,
 } from '~/components/boss-form';
+import BossFormShiftTimeInput from './boss-form-shift-time-input';
+import {
+  ColoredSingleOption,
+  ColoredSingleValue,
+} from '~/components/boss-form/colored-select';
 
 class GraphDetailsForm extends React.Component {
   updateShift = (values, dispatch, props) => {
     return this.props.onSubmit(values, dispatch, props, 'update');
-  }
-  
+  };
+
   deleteShift = (values, dispatch, props) => {
     return this.props.onSubmit(values, dispatch, props, 'delete');
-  }
-  
+  };
+
   render() {
     const {
       handleSubmit,
@@ -36,8 +38,10 @@ class GraphDetailsForm extends React.Component {
       <div>
         <div className="boss-modal-window__group">
           <StaffMemberInfo
-            avatarUrl={staffMember.get('avatar_url')}
-            fullName={`${staffMember.get('first_name')} ${staffMember.get('surname')}`}
+            avatarUrl={staffMember.get('avatarUrl')}
+            fullName={`${staffMember.get('firstName')} ${staffMember.get(
+              'surname',
+            )}`}
             staffType={staffType.get('name')}
             staffColor={staffType.get('color')}
           />
@@ -45,17 +49,30 @@ class GraphDetailsForm extends React.Component {
         <div className="boss-modal-window__group">
           {error && <ErrorBlock error={error} />}
           <div className="boss-form">
+            <Field
+              name="venueId"
+              component={BossFormSelect}
+              options={this.props.venueTypes}
+              clearable={false}
+              optionValue="id"
+              optionLabel="name"
+              multy={false}
+              placeholder="Select Venue"
+              label="Venue"
+              optionComponent={ColoredSingleOption}
+              valueComponent={ColoredSingleValue}
+            />
             <Fields
-              names={['starts_at', 'ends_at']}
+              names={['startsAt', 'endsAt']}
               component={BossFormShiftTimeInput}
               rotaDate={rotaDate}
             />
             <Field
-              name="shift_type"
+              name="shiftType"
               label="Standby"
               type="checkbox"
-              format={(value) => value === 'standby' ? true : false}
-              normalize={(value) => value ? 'standby' : 'normal'}
+              format={value => (value === 'standby' ? true : false)}
+              normalize={value => (value ? 'standby' : 'normal')}
               component={BossFormCheckbox}
             />
             <div className="boss-form__field boss-form__field_role_controls">
@@ -64,13 +81,17 @@ class GraphDetailsForm extends React.Component {
                 onClick={handleSubmit(this.updateShift)}
                 disabled={submitting}
                 className="boss-button boss-button_role_update boss-form__button_adjust_max boss-form__button_adjust_row"
-              >Update</button>
+              >
+                Update
+              </button>
               <button
                 type="button"
                 onClick={handleSubmit(this.deleteShift)}
                 disabled={submitting}
                 className="boss-button boss-button_role_delete boss-form__button_adjust_max"
-              >Delete</button>
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>
@@ -85,7 +106,7 @@ class GraphDetailsForm extends React.Component {
                   Weekly Hours:
                 </p>
                 <p className="boss-summary__text boss-summary__text_marked">
-                  {staffMember.get('preferred_hours')}
+                  {staffMember.get('preferredHours')}
                 </p>
               </li>
               <li className="boss-summary__item boss-summary__item_layout_row">
@@ -93,18 +114,27 @@ class GraphDetailsForm extends React.Component {
                   Day Preferences:
                 </p>
                 <p className="boss-summary__text boss-summary__text_marked">
-                  {staffMember.get('preferred_days')}
+                  {staffMember.get('preferredDays')}
                 </p>
               </li>
             </ul>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
+GraphDetailsForm.PropTypes = {
+  staffMember: ImmutablePropTypes.map.isRequired,
+  staffType: ImmutablePropTypes.map.isRequired,
+  initialValues: PropTypes.object,
+  rotaDate: PropTypes.string.isRequired,
+  rotaStatus: PropTypes.string.isRequired,
+  venueTypes: PropTypes.array.isRequired,
+};
+
 export default reduxForm({
-  fields: ['shift_id', 'staff_member_id'],
+  fields: ['shiftId', 'staffMemberId'],
   form: 'graph-details-form',
 })(GraphDetailsForm);

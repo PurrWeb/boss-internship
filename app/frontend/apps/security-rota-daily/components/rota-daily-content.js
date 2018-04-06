@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import ModalWrapper from './modal-wrapper';
@@ -15,86 +17,102 @@ import {
   closeGraphDetails,
   openMultipleShift,
   closeMultipleShift,
-  setStaffTypesFilter,
+  setVenuesFilter,
 } from '../actions';
 
-const mapStateToProps = (state) => {
+import {
+  rotasSelector,
+  venueIdsForCurrentDaySelector,
+  venuesSelector,
+  staffTypesSelector,
+  rotaDateSelector,
+  rotaShiftsSelector,
+  staffMembersSelector,
+  venuesFilterIdsSelector,
+  getVenueTypes,
+  getRotaShifts,
+} from '../selectors';
+
+const mapStateToProps = state => {
   return {
-    staffTypes: state.getIn(['page', 'staffTypes']),
-    rotaDate: state.getIn(['page', 'rota', 'date']),
-    rotaStatus: state.getIn(['page', 'rota', 'status']),
-    rotaShifts: state.getIn(['page', 'rotaShifts']),
-    staffMembers: state.getIn(['page', 'staffMembers']),
+    rotas: rotasSelector(state),
+    venueIdsForCurrentDay: venueIdsForCurrentDaySelector(state),
+    venues: venuesSelector(state),
+    staffTypes: staffTypesSelector(state),
+    rotaDate: rotaDateSelector(state),
+    rotaShifts: rotaShiftsSelector(state),
+    filteredRotaShifts: getRotaShifts(state),
+    staffMembers: staffMembersSelector(state),
     isAddingNewShift: state.getIn(['page', 'isAddingNewShift']),
     isGraphDetailsOpen: state.getIn(['page', 'isGraphDetailsOpen']),
     graphDetails: state.getIn(['page', 'graphDetails']),
     isMultipleShift: state.getIn(['page', 'isMultipleShift']),
-    staffTypesFilterIds: state.getIn(['page', 'staffTypesFilterIds']),
+    venuesFilterIds: venuesFilterIdsSelector(state),
+    venueTypes: getVenueTypes(state),
   };
-}
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    actions: bindActionCreators({
-      showGraphDetails,
-      closeGraphDetails,
-      openMultipleShift,
-      closeMultipleShift,
-      setStaffTypesFilter,
-    }, dispatch)
+    actions: bindActionCreators(
+      {
+        showGraphDetails,
+        closeGraphDetails,
+        openMultipleShift,
+        closeMultipleShift,
+        setVenuesFilter,
+      },
+      dispatch,
+    ),
   };
-}
+};
 @connect(mapStateToProps, mapDispatchToProps)
 class RotaDailyContent extends React.Component {
   constructor(props) {
     super(props);
   }
-  
-  handleGraphStaffTypeChange = (staffTypeIds) => {
-    this.props.actions.setStaffTypesFilter(staffTypeIds)
-  }
 
-  getRotaShifts = () => {
-    const staffTypeFilter = this.props.staffTypesFilterIds;
-    if (staffTypeFilter.size === 0) {
-      return this.props.rotaShifts.toJS();
-    } else {
-      return this.props.rotaShifts.filter((rotaShift) => {
-        const staffMember = this.props.staffMembers.find(staffMember => staffMember.get('id') === rotaShift.get('staff_member'));
-        if (!staffTypeFilter.includes(staffMember.get('staff_type'))) {
-          return false;
-        }
-        return true;
-      }).toJS();
-    }
-  }
-  
-  handleShiftClick = (shift) => {
+  handleGraphVenueChange = venueIds => {
+    this.props.actions.setVenuesFilter(venueIds);
+  };
+
+  handleShiftClick = shift => {
     this.props.actions.showGraphDetails(shift);
-  }
+  };
 
   closeGraphDetails = () => {
     this.props.actions.closeGraphDetails();
-  }
+  };
 
   render() {
     const {
+      rotas,
       isAddingNewShift,
       staffTypes,
       rotaDate,
       staffMembers,
-      rotaStatus,
       isGraphDetailsOpen,
       graphDetails,
       isMultipleShift,
-      actions: {
-        openMultipleShift,
-        closeMultipleShift,
-      }
+      venues,
+      venueIdsForCurrentDay,
+      actions: { openMultipleShift, closeMultipleShift },
+      venueTypes,
+      filteredRotaShifts,
     } = this.props;
-    
-    const rotaGraphClassName = isAddingNewShift ? 'boss-rotas__graphs_state_mobile-hidden' : '';
-    const addShiftsClassName =  !isAddingNewShift ? 'boss-rotas__manager_state_mobile-hidden' : '';
+
+    const rotaGraphClassName = isAddingNewShift
+      ? 'boss-rotas__graphs_state_mobile-hidden'
+      : '';
+    const addShiftsClassName = !isAddingNewShift
+      ? 'boss-rotas__manager_state_mobile-hidden'
+      : '';
+    const rotaStatus = graphDetails
+      ? rotas.find(
+          r =>
+            r.get('id') === graphDetails.getIn(['originalShiftObject', 'rota']),
+        ).status
+      : '';
     return (
       <ContentWrapper>
         <div className="boss-rotas">
@@ -103,33 +121,38 @@ class RotaDailyContent extends React.Component {
               show={isGraphDetailsOpen}
               onClose={this.closeGraphDetails}
             >
-              { isGraphDetailsOpen && <GraphDetails
+              {isGraphDetailsOpen && (
+                <GraphDetails
                   rotaShift={graphDetails.get('originalShiftObject')}
                   staffMember={graphDetails.get('staff')}
                   rotaStatus={rotaStatus}
                   staffTypes={staffTypes}
                   rotaDate={rotaDate}
+                  venueTypes={venueTypes}
                 />
-              }
+              )}
             </ModalWrapper>
             <RotaDailyGraphFilter
-              selectedTypes={this.props.staffTypesFilterIds.toJS()}
-              staffTypes={staffTypes.toJS()}
+              selectedTypes={this.props.venuesFilterIds.toJS()}
+              venueTypes={venueTypes}
               rotaDate={rotaDate}
-              onStaffTypesChange={this.handleGraphStaffTypeChange}
+              onVenueChange={this.handleGraphVenueChange}
             />
             <RotaGraph
-              rotaShifts={this.getRotaShifts()}
+              rotaShifts={filteredRotaShifts}
+              totalRotaShifts={this.props.rotaShifts.size}
               staffTypes={staffTypes.toJS()}
               staffMembers={staffMembers.toJS()}
               onShiftClick={this.handleShiftClick}
             />
           </div>
           <AddShifts
+            venueTypes={venueTypes}
+            venues={venues}
             staffTypes={staffTypes}
             staffMembers={this.props.staffMembers}
             rotaDate={rotaDate}
-            rotaStatus={rotaStatus}
+            rotas={rotas}
             className={addShiftsClassName}
             isMultipleShift={isMultipleShift}
             onOpenMultipleShift={openMultipleShift}
@@ -137,8 +160,26 @@ class RotaDailyContent extends React.Component {
           />
         </div>
       </ContentWrapper>
-    )
+    );
   }
 }
+
+RotaDailyContent.PropTypes = {
+  rotas: ImmutablePropTypes.list.isRequired,
+  venueIdsForCurrentDay: ImmutablePropTypes.set.isRequired,
+  venues: ImmutablePropTypes.list.isRequired,
+  staffTypes: ImmutablePropTypes.list.isRequired,
+  rotaDate: PropTypes.string.isRequired,
+  rotaShifts: ImmutablePropTypes.list.isRequired,
+  staffMembers: ImmutablePropTypes.list.isRequired,
+  venuesFilterIds: ImmutablePropTypes.list.isRequired,
+  isAddingNewShift: PropTypes.bool.isRequired,
+  isGraphDetailsOpen: PropTypes.bool.isRequired,
+  isMultipleShift: PropTypes.bool.isRequired,
+  graphDetails: ImmutablePropTypes.map,
+  actions: PropTypes.object.isRequired,
+  venueTypes: PropTypes.array.isRequired,
+  filteredRotaShifts: PropTypes.array.isRequired,
+};
 
 export default RotaDailyContent;

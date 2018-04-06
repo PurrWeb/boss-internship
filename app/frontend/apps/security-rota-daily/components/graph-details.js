@@ -1,14 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import GraphDetailsForm from './graph-details-form';
 import { SubmissionError } from 'redux-form/immutable';
-import {confirmation} from '~/lib/confirm-utils';
+import { confirmation } from '~/lib/confirm-utils';
 
-import {
-  updateStaffMemberShift,
-  deleteStaffMemberShift,
-} from '../actions';
+import { updateStaffMemberShift, deleteStaffMemberShift } from '../actions';
 
-const ROTA_PUBLISHED_STATUS = "published";
+const ROTA_PUBLISHED_STATUS = 'published';
 
 class GraphDetails extends React.Component {
   handleSubmit = (values, dispatch, props, type) => {
@@ -16,28 +15,40 @@ class GraphDetails extends React.Component {
       let errors = resp.response.data.errors;
       if (errors) {
         if (errors.base) {
-          errors._error = errors.base
+          errors._error = errors.base;
         }
 
-        throw new SubmissionError({...errors});
+        throw new SubmissionError({ ...errors });
       }
     }
-    
+
     let action;
     const status = props.rotaStatus;
     if (type === 'update') {
       action = () => dispatch(updateStaffMemberShift(values.toJS()));
     }
     if (type === 'delete') {
-      action = () => dispatch(deleteStaffMemberShift(values.get('shift_id'), values.get('staff_member_id')));
+      action = () =>
+        dispatch(
+          deleteStaffMemberShift(
+            values.get('shiftId'),
+            values.get('staffMemberId'),
+          ),
+        );
     }
     if (!action) throw Error('Wrong Rota shift action');
 
     if (status === ROTA_PUBLISHED_STATUS) {
-      return confirmation(["Publishing a rota will send out email confirmations and can't be undone.", "Do you want to continue?"], {
-        title: 'WARNING !!!',
-        id: 'rota-daily-confirmation'
-      }).then(() => {
+      return confirmation(
+        [
+          "Publishing a rota will send out email confirmations and can't be undone.",
+          'Do you want to continue?',
+        ],
+        {
+          title: 'WARNING !!!',
+          id: 'rota-daily-confirmation',
+        },
+      ).then(() => {
         return action().catch(resp => {
           trowErrors(resp);
         });
@@ -47,24 +58,24 @@ class GraphDetails extends React.Component {
         trowErrors(resp);
       });
     }
-  }
+  };
 
   render() {
-    const {
-      staffMember,
-      staffTypes,
-      rotaShift,
-      rotaDate,
-    } = this.props;
+    const { staffMember, staffTypes, rotaShift, rotaDate } = this.props;
 
-    const staffType = staffMember && staffTypes.find(staffType => staffType.get('id') === staffMember.get('staff_type'));
+    const staffType =
+      staffMember &&
+      staffTypes.find(
+        staffType => staffType.get('id') === staffMember.get('staffTypeId'),
+      );
     const initialValues = {
-      shift_id: rotaShift.get('id'),
-      staff_member_id: staffMember.get('id'),
-      starts_at: rotaShift.get('starts_at'),
-      ends_at: rotaShift.get('ends_at'),
-      shift_type: rotaShift.get('shift_type'),
-    }
+      shiftId: rotaShift.get('id'),
+      staffMemberId: staffMember.get('id'),
+      startsAt: rotaShift.get('startsAt'),
+      endsAt: rotaShift.get('endsAt'),
+      shiftType: rotaShift.get('shiftType'),
+      venueId: rotaShift.get('venueId'),
+    };
 
     return (
       <GraphDetailsForm
@@ -74,9 +85,19 @@ class GraphDetails extends React.Component {
         initialValues={initialValues}
         rotaDate={rotaDate}
         rotaStatus={this.props.rotaStatus}
+        venueTypes={this.props.venueTypes}
       />
-    )
+    );
   }
 }
+
+GraphDetails.PropTypes = {
+  rotaShift: ImmutablePropTypes.list.isRequired,
+  staffMember: ImmutablePropTypes.map.isRequired,
+  rotaStatus: PropTypes.string.isRequired,
+  staffTypes: ImmutablePropTypes.list.isRequired,
+  rotaDate: PropTypes.string.isRequired,
+  venueTypes: PropTypes.array.isRequired,
+};
 
 export default GraphDetails;

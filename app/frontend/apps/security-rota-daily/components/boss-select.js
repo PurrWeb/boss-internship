@@ -11,15 +11,15 @@ class BossSelect extends React.Component {
     value: PropTypes.string,
     label: PropTypes.string,
     multi: PropTypes.bool,
-  }
+  };
 
   constructor(props) {
     super(props);
     this.state = {
       selected: [],
-    }
+    };
   }
-  
+
   getItemOption(option) {
     return {
       value: option[this.props.value || 'value'],
@@ -34,24 +34,22 @@ class BossSelect extends React.Component {
     });
   }
 
-  renderValue = (option) => {
-    return <span style={{backgroundColor: option.color}}>{option.label}</span>;
-  }
+  renderValue = option => {
+    return (
+      <span style={{ backgroundColor: option.color }}>{option.label}</span>
+    );
+  };
 
-  onChange = (newValue) => {
+  onChange = newValue => {
     this.setState({
       selected: newValue,
     });
 
     this.props.onChange(newValue);
-  }
+  };
 
   render() {
-    const {
-      options,
-      mappedProps,
-      multi,
-    } = this.props;
+    const { options, mappedProps, multi } = this.props;
 
     return (
       <div className="boss-form__select">
@@ -63,7 +61,7 @@ class BossSelect extends React.Component {
           {...mappedProps}
         />
       </div>
-    )
+    );
   }
 }
 

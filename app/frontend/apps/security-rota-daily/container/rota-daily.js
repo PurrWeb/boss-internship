@@ -12,7 +12,7 @@ class RotaDaily extends React.Component {
         <RotaDailyDashboard />
         <RotaDailyContent />
       </div>
-    )
+    );
   }
 }
 

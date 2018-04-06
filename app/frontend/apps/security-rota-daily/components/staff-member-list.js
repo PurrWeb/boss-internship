@@ -1,13 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import oFetch from 'o-fetch';
 import StaffMemberItem from './staff-member-item';
 
-function HeaderRow({children}) {
+function HeaderRow({ children }) {
   return (
     <div className="boss-staff-summary__cell boss-staff-summary__cell_role_header">
       {children}
     </div>
-  )
+  );
 }
 
 function Header() {
@@ -19,53 +21,60 @@ function Header() {
       <HeaderRow>Preferences</HeaderRow>
       <HeaderRow>Action</HeaderRow>
     </div>
-  )
+  );
 }
 
 const PAGE_SIZE = 10;
 
 class StaffMemberList extends React.PureComponent {
-
   constructor(props) {
     super(props);
-  
-    document.body.addEventListener('click', (e) => {
-      const rotaDailyConfirmation = document.querySelector('.rota-daily-confirmation');
-      if ((this.node && this.node.contains(e.target)) || (rotaDailyConfirmation && rotaDailyConfirmation.contains(e.target))) {
+
+    document.body.addEventListener('click', e => {
+      const rotaDailyConfirmation = document.querySelector(
+        '.rota-daily-confirmation',
+      );
+      if (
+        (this.node && this.node.contains(e.target)) ||
+        (rotaDailyConfirmation && rotaDailyConfirmation.contains(e.target))
+      ) {
         return;
       }
-      
+
       this.handleCloseTooltip();
     });
 
     this.state = {
       currentStaffId: null,
-      staffMembers: props.staffMembers.slice(0, PAGE_SIZE)
-    }
+      staffMembers: props.staffMembers.slice(0, PAGE_SIZE),
+    };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState(state => {
       if (this.props.staffMembers.size === nextProps.staffMembers.size) {
         return {
-          staffMembers: nextProps.staffMembers.slice(0, state.staffMembers.size)
-        }
+          staffMembers: nextProps.staffMembers.slice(
+            0,
+            state.staffMembers.size,
+          ),
+        };
       }
       return {
-        staffMembers: nextProps.staffMembers.slice(0, PAGE_SIZE)
-      }
-    })
+        staffMembers: nextProps.staffMembers.slice(0, PAGE_SIZE),
+      };
+    });
   }
 
   handleCloseTooltip = () => {
-    document.body.classList.remove("boss-body_state_inactive");
-    this.setState({currentStaffId: null});
-  }
+    document.body.classList.remove('boss-body_state_inactive');
+    this.setState({ currentStaffId: null });
+  };
 
-  handleAddShiftClick = (staffId) => {
-    document.body.classList.add("boss-body_state_inactive");
-    this.setState({currentStaffId: staffId});
-  }
+  handleAddShiftClick = staffId => {
+    document.body.classList.add('boss-body_state_inactive');
+    this.setState({ currentStaffId: staffId });
+  };
 
   renderStaffMembers = () => {
     return this.state.staffMembers.map((staffMember, key) => {
@@ -80,36 +89,40 @@ class StaffMemberList extends React.PureComponent {
           setRef={this.setRef}
           handleAfterAdd={this.handleCloseTooltip}
           isMultipleShift={this.props.isMultipleShift}
-          rotaStatus={this.props.rotaStatus}
+          rotas={this.props.rotas}
+          venues={this.props.venues}
         />
-      )
-    })
-  }
-  setRef = (tooltip) => {
+      );
+    });
+  };
+  setRef = tooltip => {
     this.node = tooltip;
-  }
+  };
 
   getLoadMoreSizes = () => {
     const currentSize = this.state.staffMembers.size;
     const fullSize = this.props.staffMembers.size;
     let loadSize = PAGE_SIZE;
-    if ((fullSize - currentSize) < PAGE_SIZE) {
+    if (fullSize - currentSize < PAGE_SIZE) {
       loadSize = fullSize - currentSize;
     }
 
-    return {currentSize, loadSize};
-  }
+    return { currentSize, loadSize };
+  };
 
   loadMore = () => {
     this.setState(state => {
-      const {currentSize, loadSize} = this.getLoadMoreSizes();
-      const staffMembers = this.props.staffMembers.slice(currentSize, currentSize + loadSize);
-      
+      const { currentSize, loadSize } = this.getLoadMoreSizes();
+      const staffMembers = this.props.staffMembers.slice(
+        currentSize,
+        currentSize + loadSize,
+      );
+
       return {
-        staffMembers: state.staffMembers.concat(staffMembers)
-      }
+        staffMembers: state.staffMembers.concat(staffMembers),
+      };
     });
-  }
+  };
 
   renderLoadMoreButton = () => {
     return (
@@ -117,23 +130,35 @@ class StaffMemberList extends React.PureComponent {
         <button
           onClick={this.loadMore}
           className="boss-button boss-button_role_load-more boss-button_adjust_full-mobile"
-        >Load More</button>
+        >
+          Load More
+        </button>
       </div>
-    )
-  }
+    );
+  };
 
   render() {
-    const showLoadMore = this.state.staffMembers.size !== this.props.staffMembers.size;
+    const showLoadMore =
+      this.state.staffMembers.size !== this.props.staffMembers.size;
     return (
       <div className="boss-rotas__staff">
         <div className="boss-staff-summary boss-staff-summary_page_rotas-daily">
           <Header />
-          { this.renderStaffMembers() }
-          { showLoadMore && this.renderLoadMoreButton() }
+          {this.renderStaffMembers()}
+          {showLoadMore && this.renderLoadMoreButton()}
         </div>
       </div>
-    )
+    );
   }
 }
+
+StaffMemberList.PropTypes = {
+  staffTypes: ImmutablePropTypes.list.isRequired,
+  rotaDate: PropTypes.string.isRequired,
+  staffMembers: ImmutablePropTypes.list.isRequired,
+  isMultipleShift: PropTypes.bool.isRequired,
+  venues: ImmutablePropTypes.list.isRequired,
+  rotas: ImmutablePropTypes.list.isRequired,
+};
 
 export default StaffMemberList;
