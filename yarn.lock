@@ -2522,9 +2522,9 @@ cropperjs@^0.5.6:
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/cropperjs/-/cropperjs-0.5.6.tgz#e762bd38ca7058e4546277e56b669264d2aceb82"
 
-cropperjs@^0.8.0:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/cropperjs/-/cropperjs-0.8.1.tgz#3dc01813e2f6d1df2c8909e1ce092146c692548e"
+cropperjs@v1.0.0-rc.3:
+  version "1.0.0-rc.3"
+  resolved "https://registry.yarnpkg.com/cropperjs/-/cropperjs-1.0.0-rc.3.tgz#50a7c7611befc442702f845ede77d7df4572e82b"
 
 cross-spawn-async@^2.1.1:
   version "2.2.5"
@@ -7995,11 +7995,12 @@ react-confirm@^0.1.14:
   version "0.1.14"
   resolved "https://registry.yarnpkg.com/react-confirm/-/react-confirm-0.1.14.tgz#c4202c1bddd43bd422979f3b804d64f8f0c51ea6"
 
-react-cropper@^0.10.1:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/react-cropper/-/react-cropper-0.10.1.tgz#827df18166581ea3a42da983a49f90ebce066e22"
+react-cropper@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-cropper/-/react-cropper-1.0.1.tgz#6e5595abb8576088ab3e51ecfdcfe5f865d0340f"
   dependencies:
-    cropperjs "^0.8.0"
+    cropperjs v1.0.0-rc.3
+    prop-types "^15.5.8"
 
 react-currency-input@^1.3.4:
   version "1.3.4"
