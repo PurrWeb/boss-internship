@@ -1,7 +1,7 @@
 import moment from "moment"
 import deepEqual from "deep-equal"
 import _ from "underscore"
-import { fromJS, Map, List } from 'immutable';
+import { fromJS, Map, List, Set } from 'immutable';
 import safeMoment from '~/lib/safe-moment';
 
 function replaceFunctionPropsWithStrings(obj){
@@ -34,6 +34,28 @@ var utils =  {
           return ends_at.diff(starts_at, 'minutes') / 60 + result;
         }, 0);
         return {weekRotaShifts, hoursOnWeek};
+    },
+    calculateSecurityRotaShift: function(staffMember, shifts, rotas, venues) {
+      const weekRotaShifts = shifts
+        .filter(shift => shift.get('staffMemberId') === staffMember.get('id'))
+        .map(rotaShift => {
+          const rota = rotas.find(rota => {
+            return rota.get('id') === rotaShift.get('rota')});
+          const venue = venues.find(venue => rota && (venue.get('id') === rota.get('venue')));
+          return rotaShift
+                      .set('venueName', venue.get('name'))
+                      .set('venueId', venue.get('id'));
+        });
+      const hoursOnWeek = weekRotaShifts
+        .reduce((result, shift) => {
+          const starts_at = safeMoment.iso8601Parse(shift.get('startsAt'));
+          const ends_at = safeMoment.iso8601Parse(shift.get('endsAt'));
+          return ends_at.diff(starts_at, 'minutes') / 60 + result;
+        }, 0);
+      const weekVenueIds = weekRotaShifts.reduce((set, shift) => {
+        return set.add(shift.get('venueId'))
+      }, new Set());  
+        return {weekRotaShifts, hoursOnWeek, weekVenueIds};
     },
     parseQueryString: function( queryString ) {
       let params = {}, queries, temp, i, l;
@@ -286,6 +308,21 @@ var utils =  {
         const initial = fromJS([]);
         return staffMembers.reduce((result, staffMember) => {
           const fullName = `${staffMember.get('first_name')} ${staffMember.get('surname')}`;
+          if (fullName.toLowerCase().indexOf(lowerFilter) >= 0) {
+            return result.push(staffMember);
+          }
+          return result;
+        }, initial);
+      }, staffMembers);
+    },
+    staffMemberFilterCamelCase(searchQuery, staffMembers) {
+      const searchQueryFilters = searchQuery.split(' ').filter(i => i);
+
+      return searchQueryFilters.reduce((staffMembers, filter) => {
+        const lowerFilter = filter.toLowerCase();
+        const initial = fromJS([]);
+        return staffMembers.reduce((result, staffMember) => {
+          const fullName = `${staffMember.get('firstName')} ${staffMember.get('surname')}`;
           if (fullName.toLowerCase().indexOf(lowerFilter) >= 0) {
             return result.push(staffMember);
           }
