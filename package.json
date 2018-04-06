@@ -38,7 +38,8 @@
     "babel-preset-stage-1": "^6.24.1",
     "bluebird": "^3.4.0",
     "bootstrap": "4.0.0-beta.2",
-    "boss-iscroll": "git+https://github.com/jsmbars/iscroll.git#6da2b1ceefd1e995bfed86bcedbc7f02c5e1d399",
+    "boss-iscroll":
+      "git+https://github.com/jsmbars/iscroll.git#6da2b1ceefd1e995bfed86bcedbc7f02c5e1d399",
     "bowser": "^1.6.0",
     "classnames": "^2.2.5",
     "cleave.js": "^1.0.9",
@@ -90,6 +91,7 @@
     "react-dropzone": "^3.11.0",
     "react-highlight": "^0.10.0",
     "react-hot-loader": "^1.3.1",
+    "react-immutable-proptypes": "^2.1.0",
     "react-iscroll": "^2.0.3",
     "react-modal": "^2.2.2",
     "react-modal-dialog": "^4.0.2",
@@ -105,7 +107,6 @@
     "react-rte": "^0.16.1",
     "react-scroll": "^1.5.2",
     "react-select": "^1.0.0-rc.3",
-    "react-simple-popover": "^0.2.4",
     "react-spinner": "^0.2.7",
     "react-tabs": "^1.1.0",
     "react-tag-input": "^4.7.2",
@@ -159,12 +160,8 @@
   },
   "license": "",
   "jest": {
-    "snapshotSerializers": [
-      "<rootDir>/node_modules/enzyme-to-json/serializer"
-    ],
-    "roots": [
-      "<rootDir>/app/frontend/__test__"
-    ]
+    "snapshotSerializers": ["<rootDir>/node_modules/enzyme-to-json/serializer"],
+    "roots": ["<rootDir>/app/frontend/__test__"]
   },
   "engines": {
     "node": "^8.7.0",
