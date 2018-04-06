@@ -1,5 +1,5 @@
 module SourcemapHelper
-  BUNDLE_NAMES = ["vendors", "assets", "main", "runtime"]
+  BUNDLE_NAMES = ["runtime", "vendors", "assets", "main"]
   extend self
 
   def sourcemap_version
