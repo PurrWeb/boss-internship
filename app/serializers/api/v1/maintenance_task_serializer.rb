@@ -14,7 +14,7 @@ class Api::V1::MaintenanceTaskSerializer < ActiveModel::Serializer
 
   def allowed_transitions
     if scope[:current_user].maintenance_staff?
-      if ['completed', 'accepted', 'rejected'].include?(object.state_machine.current_state)
+      if ['completed', 'accepted'].include?(object.state_machine.current_state)
         return []
       end
     end
