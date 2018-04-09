@@ -61,9 +61,9 @@ namespace :assets do
 
   def build_webpack
     if normalised_node_env == 'production'
-      sh "NODE_ENV=#{normalised_node_env} npm run build:production"
+      sh "NODE_ENV=#{normalised_node_env} yarn run build:production"
     else
-      sh "NODE_ENV=#{normalised_node_env} npm run build" # this runs a react_webpack_rails script
+      sh "NODE_ENV=#{normalised_node_env} yarn run build" # this runs a react_webpack_rails script
     end
   end
 end
