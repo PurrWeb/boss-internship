@@ -29,7 +29,7 @@ class Users::SessionsController < Devise::SessionsController
     @current_layout = 'newLayout';
   end
 
-  def bundle_script
-    @bundle_script = SourcemapHelper.script_path
+  def setup_frontend_bundles
+    @frontend_bundles = SourcemapHelper.bundles
   end
 end

@@ -16,7 +16,9 @@
       window.boss.currentVersion = "<%= application_version %>";
     </script>
 
-    <script src="<%= @bundle_script %>" data-turbolinks-track="true"></script>
+    <% @frontend_bundles.each do |bundle| %>
+      <script src="<%= bundle.fetch(:bundle_path) %>" data-turbolinks-track="true"></script>
+    <% end %>
 
     <%= render 'layouts/favicon' %>
   </head>

@@ -1,10 +1,11 @@
+import jQuery from 'jquery';
 import bouncedEmailModal from '~/components/bounced-email-modal';
 
 (function ($) {
   $(function() {
     $('[bounced-email]').on('click', function () {
       var $this = $(this);
-  
+
       var bouncedData = {
         email: $this.data('bounced-email'),
         error_code: $this.data('bounced-error-code'),
