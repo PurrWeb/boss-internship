@@ -7,7 +7,7 @@ import {updateContactDetailsRequest} from '../../actions';
 
 const validate = values => {
   const errors = {}
-  
+
   return errors;
 }
 
@@ -16,11 +16,11 @@ const ContactDetailsForm = ({
     submitting,
     onSubmissionComplete
   }) => {
- 
+
   const submission = (values, dispatch) => {
     return dispatch(updateContactDetailsRequest(values.toJS()))
       .catch((resp) => {
-        notify('Updating Staff Member Contact Details was Failed', {
+        notify('Updating Contact Details Failed', {
           interval: 5000,
           status: 'error'
         });

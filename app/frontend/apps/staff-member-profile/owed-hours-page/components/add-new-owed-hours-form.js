@@ -12,13 +12,13 @@ import {addOwedHours} from '../actions';
 
 const validate = values => {
   const errors = {}
-  
+
   return errors;
 }
 
 const submission = (values, dispatch) => {
   return dispatch(addOwedHours(values.toJS())).catch((resp) => {
-    notify('Adding Staff Member Owed Hours was Failed', {
+    notify('Adding Owed Hours Failed', {
       interval: 5000,
       status: 'error'
     });

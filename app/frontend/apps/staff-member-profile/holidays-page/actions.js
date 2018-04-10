@@ -51,12 +51,12 @@ export const deleteHoliday = (holidayId) => (dispatch, getState) => {
         payload: resp.data,
       });
     });
-    notify('Staff Member Holiday Deleted Successfully', {
+    notify('Holiday Deleted Successfully', {
       interval: 5000,
       status: 'success'
     });
   }).catch(() => {
-    notify('Deliting Staff Member Holiday was Failed', {
+    notify('Deleting Holiday Failed', {
       interval: 5000,
       status: 'error'
     });
@@ -105,7 +105,7 @@ export const addHoliday = ({startDate, endDate, holidayType, note}) => (dispatch
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id'])
   const formateStartDate = startDate ? startDate.format('DD-MM-YYYY') : null;
   const formatedEndDate = endDate ? endDate.format('DD-MM-YYYY') : null;
-  
+
   return axios.post(`/api/v1/staff_members/${staffMemberId}/holidays`, {
     start_date: formateStartDate,
     end_date: formatedEndDate,

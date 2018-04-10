@@ -14,7 +14,7 @@ import {
 
 const validate = values => {
   const errors = {}
-  
+
   if (!values.get('holidays_type')) {
     errors.holidays_type = "You must fill holidays type"
   }
@@ -32,7 +32,7 @@ const validate = values => {
 
 const submission = (values, dispatch) => {
   return dispatch(addHoliday(values.toJS())).catch((resp) => {
-    notify('Adding Staff Member Holiday was Failed', {
+    notify('Adding Holiday Failed', {
       interval: 5000,
       status: 'error'
     });
@@ -40,7 +40,7 @@ const submission = (values, dispatch) => {
     const errors = resp.response.data.errors;
     if (errors) {
       let base = {};
-      
+
       if (errors.base) {
         base = {
           _error: errors.base
@@ -57,7 +57,7 @@ const HolidaysForm = ({
     handleSubmit,
     submitting
   }) => {
-  
+
   const renderBaseError = (error) => {
     return (
       <div className="boss-modal-window__alert">
@@ -67,7 +67,7 @@ const HolidaysForm = ({
       </div>
     )
   }
-  
+
   return (
     <form
       className="boss-form"
