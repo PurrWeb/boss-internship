@@ -1,4 +1,5 @@
 import React from 'react';
+import oFetch from 'o-fetch';
 
 export const DisableStaffMemberModalContent = ({onDisable}) => {
   return (
@@ -31,20 +32,21 @@ export const DisableStaffMemberModalContent = ({onDisable}) => {
   )
 }
 
-const StaffMemberProfileActions = ({staffMember, onEditProfile, onEnableProfile, onDisableStaffMember}) => {
+const StaffMemberProfileActions = ({staffMember, onEditProfile, onEnableProfile, onDisableStaffMember, permissions}) => {
   const disabled = staffMember.get('disabled')
+  const canEnable = oFetch(permissions.toJS(), 'canEnable');
 
   const disableStaffMember = () => {
-    
+
   }
 
   return (
-    disabled 
+    disabled
       ? <div className="boss-page-dashboard__buttons-group">
-          <button
+          { canEnable && <button
             onClick={onEnableProfile}
             className="boss-button boss-button_role_unblock boss-page-dashboard__button"
-          >Enable Staff Member</button>
+          >Enable Staff Member</button> }
         </div>
       : <div className="boss-page-dashboard__buttons-group">
           <button
