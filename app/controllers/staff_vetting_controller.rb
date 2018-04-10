@@ -1,4 +1,6 @@
 class StaffVettingController < ApplicationController
+  before_action :set_new_layout
+
   def index
     authorize! :view, :staff_vetting_page
 
@@ -10,82 +12,22 @@ class StaffVettingController < ApplicationController
       query_class.new.all.count
     end.sum
 
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+
+    bounced_emails = BouncedEmailAddress.all.map {|be| be['email']}
+    staff_members_with_bounced_email = StaffMember.joins(:email_address).where({email_addresses: {email: bounced_emails}})
+
     render locals: {
+      access_token: access_token.token,
       staff_without_email_count: StaffMembersWithoutEmailQuery.new.all.count,
       staff_without_ni_number_count: StaffMembersWithoutNINumberQuery.new.all.count,
       staff_without_address_count: StaffMembersWithoutAddressQuery.new.all.count,
       staff_without_photo_count: StaffMembersWithoutPhotoQuery.new.all.count,
       staff_with_expired_sia_badge_count: StaffMembersWithExpiringSiaBadgeQuery.new.all.count,
-      staff_on_wrong_payrate_count: staff_on_wrong_payrate_count
-    }
-  end
-
-  def staff_members_without_email
-    authorize! :view, :staff_vetting_page
-
-    staff_without_email = StaffMembersWithoutEmailQuery.new.all.includes([:name, :master_venue])
-
-    render locals: { staff_without_email: staff_without_email }
-  end
-
-  def staff_members_without_ni_number
-    authorize! :view, :staff_vetting_page
-
-    render locals: { staff_without_ni_number: StaffMembersWithoutNINumberQuery.new.all }
-  end
-
-  def staff_members_without_address
-    authorize! :view, :staff_vetting_page
-
-    staff_without_address = StaffMembersWithoutAddressQuery.
-      new.
-      all.
-      includes([:name, :master_venue])
-
-    render locals: { staff_without_address: staff_without_address }
-  end
-
-  def staff_members_without_photo
-    authorize! :view, :staff_vetting_page
-
-    staff_without_photo = StaffMembersWithoutPhotoQuery.new.all.includes([:name, :master_venue])
-
-    render locals: { staff_without_photo: staff_without_photo }
-  end
-
-  def staff_members_on_wrong_payrate
-    authorize! :view, :staff_vetting_page
-
-    staff_wrongly_on_18_to_20_payrate = StaffMemberWronglyOn18To20PayrateQuery.new.
-      all.
-      includes([:name, :master_venue])
-    staff_wrongly_on_21_to_24_payrate = StaffMemberWronglyOn21To24PayrateQuery.new.
-      all.
-      includes([:name, :master_venue])
-    staff_wrongly_on_25_plus_payrate = StaffMemberWronglyOn25PlusPayrateQuery.new.
-      all.
-      includes([:name, :master_venue])
-
-    render locals: {
-      staff_wrongly_on_18_to_20_payrate: staff_wrongly_on_18_to_20_payrate,
-      _18_20_section_id: "18-20",
-      staff_wrongly_on_21_to_24_payrate: staff_wrongly_on_21_to_24_payrate,
-      _21_24_section_id: "21-24",
-      staff_wrongly_on_25_plus_payrate: staff_wrongly_on_25_plus_payrate,
-      _25_plus_section_id: "25-plus"
-    }
-  end
-
-  def staff_members_with_expired_sia_badge
-    authorize! :view, :staff_vetting_page
-
-    staff_members_with_expired_sia_badge = StaffMembersWithExpiringSiaBadgeQuery.new.
-      all.
-      order(:sia_badge_expiry_date).
-      includes(:name)
-
-    render locals: {
-      staff_members_with_expired_sia_badge: staff_members_with_expired_sia_badge
+      staff_on_wrong_payrate_count: staff_on_wrong_payrate_count,
+      staff_members_with_bounced_email_count: staff_members_with_bounced_email.count,
+      venues: Venue.all,
+      staff_types: StaffType.all,
     }
   end
 end
