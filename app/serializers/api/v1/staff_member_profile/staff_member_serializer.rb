@@ -150,6 +150,6 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
   end
 
   def bounced_email
-    object.email_address.bounced_data
+    object.email_address.andand.bounced_data
   end
 end
