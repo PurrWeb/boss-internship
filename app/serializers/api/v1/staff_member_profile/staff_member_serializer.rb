@@ -37,7 +37,8 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :bounced_email,
              :verification_sent_at,
              :verified_at,
-             :password_set_at
+             :password_set_at,
+             :is_flagged
 
   def date_of_birth
     UIRotaDate.format(object.date_of_birth) if object.date_of_birth.present?
@@ -89,6 +90,10 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
 
   def disabled
     object.disabled?
+  end
+
+  def is_flagged
+    object.flagged?
   end
 
   def day_preference
