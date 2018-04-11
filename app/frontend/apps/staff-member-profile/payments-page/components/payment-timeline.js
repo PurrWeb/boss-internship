@@ -89,16 +89,19 @@ export class PaymentTimeline extends React.Component {
 
   render() {
     const payments = oFetch(this.props, 'payments');
+    const paymentCount = oFetch(payments, 'length');
 
     return <div className="boss-board__manager-timeline">
       <div className="boss-timeline boss-timeline_role_payments">
-        <ul className="boss-timeline__list">
-          { payments.map((payment) => {
-              return this.renderPaymentTimeLineItem({
-                payment: payment
-              })
-            })  }
-        </ul>
+        { (paymentCount <= 0) && <div>No Payments Found</div> }
+        { (paymentCount > 0) &&
+          <ul className="boss-timeline__list">
+            { payments.map((payment) => {
+                return this.renderPaymentTimeLineItem({
+                  payment: payment
+                })
+              })  }
+          </ul> }
       </div>
     </div>;
   }
