@@ -6,7 +6,9 @@ class Api::V1::Accessories::AccessorySerializer < ActiveModel::Serializer
     :size,
     :price_cents,
     :user_requestable,
-    :enabled
+    :enabled,
+    :pending_request_count,
+    :pending_refund_count
 
   def enabled
     object.enabled?
@@ -22,5 +24,15 @@ class Api::V1::Accessories::AccessorySerializer < ActiveModel::Serializer
 
   def userRequestable
     object.user_requestable
+  end
+
+  def pending_request_count
+    object.accessory_requests.in_state(:pending).count
+  end
+
+  def pending_refund_count
+    AccessoryRefundRequest.in_state(:pending).where(
+      accessory_request: object.accessory_requests
+    ).count
   end
 end
