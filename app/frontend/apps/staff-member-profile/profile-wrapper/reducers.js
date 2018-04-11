@@ -26,6 +26,9 @@ const initialState = fromJS({
   payRates: [],
   disableStaffMemberModal: false,
   editAvatarModal: false,
+  permissions: {
+    canEnable: false
+  }
 });
 
 const profileReducer = handleActions({
@@ -40,6 +43,7 @@ const profileReducer = handleActions({
     const accessibleVenueIds = oFetch(payload, 'accessibleVenueIds');
     const accessiblePayRateIds = oFetch(payload, 'accessiblePayRateIds');
     const appDownloadLinks = oFetch(payload, 'appDownloadLinks');
+    const permissions = oFetch(payload, 'permissions');
 
     return state
       .set('staffMember', fromJS(staffMember))
@@ -58,7 +62,8 @@ const profileReducer = handleActions({
           return oFetch(venue, 'id') === id
         })
       }))
-      .set('appDownloadLinks', fromJS(appDownloadLinks));
+      .set('appDownloadLinks', fromJS(appDownloadLinks))
+      .set('permissions', fromJS(permissions));
   },
   [UPDATE_STAFF_MEMBER]: (state, action) => {
     const staffMember = action.payload;

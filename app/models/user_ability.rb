@@ -344,8 +344,13 @@ class UserAbility
       end
 
       can :enable, StaffMember do |staff_member|
-        staff_member.disabled? &&
+        if !staff_member.disabled?
+          false
+        elsif staff_member.flagged?
+          user.has_effective_access_level?(AccessLevel.admin_access_level)
+        else
           can_edit_staff_member?(user, staff_member)
+        end
       end
 
       can :disable, StaffMember do |staff_member|

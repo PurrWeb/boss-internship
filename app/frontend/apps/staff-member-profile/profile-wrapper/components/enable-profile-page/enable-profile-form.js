@@ -19,7 +19,7 @@ const validate = values => {
 
 function submission(values, dispatch) {
   return dispatch(enableStaffMemberRequest(values.toJS())).catch((resp) => {
-    notify('Enabling Staff Member was Failed', {
+    notify('Enabling Staff Member Failed', {
       interval: 5000,
       status: 'error'
     });

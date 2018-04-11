@@ -63,7 +63,11 @@ class StaffMembersController < ApplicationController
         ),
         gender_values: StaffMember::GENDERS,
         accessible_venue_ids: Venue.all.pluck(:id),
-        accessible_pay_rate_ids: accessible_pay_rate_ids
+        accessible_pay_rate_ids: accessible_pay_rate_ids,
+        staff_member_profile_permissions: StaffMemberProfilePermissions.new(
+          staff_member: staff_member,
+          current_user: current_user
+        )
       }
     else
       render 'reduced_show', locals: {
@@ -141,7 +145,11 @@ class StaffMembersController < ApplicationController
           serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
           scope: current_user
         ),
-        accessible_pay_rates: accessible_pay_rate_ids
+        accessible_pay_rates: accessible_pay_rate_ids,
+        staff_member_profile_permissions: StaffMemberProfilePermissions.new(
+          staff_member: staff_member,
+          current_user: current_user
+        )
       }
     else
       flash.now[:alert] = "You're not authorized to view all of this staff member's details. Contact an admin for further assistance."
@@ -191,7 +199,11 @@ class StaffMembersController < ApplicationController
         accessible_pay_rate_ids: accessible_pay_rate_ids,
         venues: Venue.all,
         accessible_venue_ids: Venue.all.pluck(:id),
-        accessible_pay_rates: accessible_pay_rate_ids
+        accessible_pay_rates: accessible_pay_rate_ids,
+        staff_member_profile_permissions: StaffMemberProfilePermissions.new(
+          staff_member: staff_member,
+          current_user: current_user
+        )
       }
     end
   end
@@ -237,7 +249,11 @@ class StaffMembersController < ApplicationController
         serializer: Api::V1::StaffMemberProfile::AccessoryRequestSerializer,
       ),
       accessible_pay_rate_ids: accessible_pay_rate_ids,
-      accessible_pay_rates: accessible_pay_rate_ids
+      accessible_pay_rates: accessible_pay_rate_ids,
+      staff_member_profile_permissions: StaffMemberProfilePermissions.new(
+        staff_member: staff_member,
+        current_user: current_user
+      )
     }
   end
 

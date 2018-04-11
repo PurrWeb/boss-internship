@@ -82,7 +82,7 @@ class StaffMemberApiUpdateService
       sia_badge_expiry_date: params.fetch(:sia_badge_expiry_date)
     }
 
-    new_email_address = params.fetch(:email_address).downcase.strip
+    new_email_address = (params.fetch(:email_address) || '').downcase.strip
     if staff_member.email != new_email_address
       staff_member_params[:email_address_attributes] = {
         email: new_email_address

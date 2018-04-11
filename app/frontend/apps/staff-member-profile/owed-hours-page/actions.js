@@ -33,12 +33,12 @@ export const deleteOwedHours = (owedHourId) => (dispatch, getState) => {
       type: DELETE_OWED_HOURS,
       payload: resp.data,
     });
-    notify('Staff Member Owed Hours Deleted Successfully', {
+    notify('Owed Hours Deleted Successfully', {
       interval: 5000,
       status: 'success'
     });
   }).catch(() => {
-    notify('Deleting Staff Member Owed Hours was Failed', {
+    notify('Deleting Owed Hours Failed', {
       interval: 5000,
       status: 'error'
     });
@@ -49,7 +49,7 @@ export const editOwedHours = ({startsAt, endsAt, date, note, id}) => (dispatch, 
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id'])
   const formatedDate = date.format('DD-MM-YYYY')
-  
+
   return axios.put(`/api/v1/staff_members/${staffMemberId}/owed_hours/${id}`, {
     startsAt: startsAt,
     endsAt: endsAt,

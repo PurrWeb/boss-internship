@@ -23,6 +23,7 @@ const StaffMemberCard = ({
   const email = oFetch(staffMember, 'email');
   const phoneNumber = oFetch(staffMember, 'phone_number');
   const disabled = oFetch(staffMember, 'disabled');
+  const isFlagged = oFetch(staffMember, 'is_flagged');
   const disabledByUser = oFetch(staffMember, 'disabled_by_user');
   const disabledAt = oFetch(staffMember, 'disabled_at');
   const disabledReason = oFetch(staffMember, 'disable_reason');
@@ -130,6 +131,7 @@ const StaffMemberCard = ({
   };
 
   const renderdisabledContent = ({
+    isFlagged,
     disabledByUser,
     disabledAt,
     disabledReason,
@@ -159,7 +161,7 @@ const StaffMemberCard = ({
         </li>
         <li className="boss-user-summary__review-item">
           <span className="boss-button boss-button_type_small boss-button_type_no-behavior boss-button_role_exclamation boss-user-summary__label">
-            Disabled
+            { isFlagged ? 'Flagged' : 'Disabled' }
           </span>
         </li>
       </ul>
@@ -199,6 +201,7 @@ const StaffMemberCard = ({
 
           {disabled &&
             renderdisabledContent({
+              isFlagged,
               disabledByUser,
               disabledAt,
               disabledReason,

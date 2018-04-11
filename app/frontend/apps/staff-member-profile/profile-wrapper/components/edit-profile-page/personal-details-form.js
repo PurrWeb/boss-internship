@@ -21,11 +21,11 @@ const PersonalDetailsForm = ({
     onSubmissionComplete,
     ...props
   }) => {
-  
+
   const submission = (values, dispatch) => {
     return dispatch(updatePersonalDetailsRequest(values.toJS()))
       .catch((resp) => {
-        notify('Updating Staff Member Personal Details was Failed', {
+        notify('Updating Personal Details Failed', {
           interval: 5000,
           status: 'error'
         });

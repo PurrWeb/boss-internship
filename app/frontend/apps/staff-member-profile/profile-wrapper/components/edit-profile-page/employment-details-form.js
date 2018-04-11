@@ -33,7 +33,7 @@ let EmploymentDetailsForm = ({
   const submission = (values, dispatch) => {
     return dispatch(updateEmploymentDetailsRequest(values.toJS()))
     .catch((resp) => {
-        notify('Updating Staff Member Employment Details was Failed', {
+        notify('Updating Employment Details Failed', {
           interval: 5000,
           status: 'error'
         });

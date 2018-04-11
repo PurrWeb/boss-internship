@@ -32,13 +32,13 @@ export const updateAvatarRequest = (avatarUrl) => (dispatch, getState) => {
     .then((resp) => {
       dispatch(hideEditAvatarModal());
       dispatch(updateStaffMember(resp.data));
-      notify('Staff Member Avatar Updated Successfully', {
+      notify('Avatar Updated Successfully', {
         interval: 5000,
         status: 'success'
       });
       window.scrollTo(0, 0);
     }).catch(() => {
-      notify('Updating Staff Member Avatar was Failed', {
+      notify('Updating Avatar Failed', {
         interval: 5000,
         status: 'error'
       });
@@ -56,7 +56,7 @@ export const disableStaffMemberRequest = ({neverRehire, reason}) => (dispatch, g
       status: 'success'
     });
   }).catch(() => {
-    notify('Disabling Staff Member was Failed', {
+    notify('Disabling Staff Member Failed', {
       interval: 5000,
       status: 'error'
     });

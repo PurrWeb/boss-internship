@@ -38,7 +38,7 @@ export function* enableDiary({ payload }) {
     yield resolve();
   } catch (e) {
     yield put({ type: types.DIARY_ENABLE_FAILED, message: e.message });
-    globalNotification(`Diary enabling was failed: ${e.message}`, {
+    globalNotification(`Diary enabling failed: ${e.message}`, {
       interval: 3000,
       status: 'error',
     });
@@ -59,7 +59,7 @@ export function* disableDiary({ payload }) {
     yield resolve();
   } catch (e) {
     yield put({ type: types.DIARY_DISABLE_FAILED, message: e.message });
-    globalNotification(`Diary disabling was failed: ${e.message}`, {
+    globalNotification(`Diary disabling failed: ${e.message}`, {
       interval: 3000,
       status: 'error',
     });
@@ -80,7 +80,7 @@ export function* updateDiary({ payload }) {
     yield resolve();
   } catch (error) {
     yield put({ type: types.DIARY_UPDATE_FAILED, message: error.message });
-    globalNotification(`Diary updating was failed: ${error.message}`, {
+    globalNotification(`Diary updating failed: ${error.message}`, {
       interval: 3000,
       status: 'error',
     });
@@ -114,7 +114,7 @@ export function* createDiary({ payload }) {
     yield resolve();
   } catch (error) {
     yield put({ type: types.DIARY_CREATE_FAILED, message: error.message });
-    globalNotification(`Diary creation was failed: ${error.message}`, {
+    globalNotification(`Diary creation failed: ${error.message}`, {
       interval: 3000,
       status: 'error',
     });
