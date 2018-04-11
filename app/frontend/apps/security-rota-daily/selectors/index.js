@@ -16,10 +16,21 @@ export const venuesFilterIdsSelector = state =>
 export const getVenueTypes = createSelector(
   venuesSelector,
   venueIdsForCurrentDaySelector,
-  (venues, venueIdsForCurrentDay) =>
+  rotaShiftsSelector,
+  (venues, venueIdsForCurrentDay, rotaShifts) =>
     venues
       .filter(v => venueIdsForCurrentDay.has(v.get('id')))
-      .map(v => v.set('color', getVenueColor(v.get('id'))))
+      .map(v => {
+        return v.set('color', getVenueColor(v.get('id'))).set(
+          'count',
+          rotaShifts.reduce((acc, rotaShift) => {
+            if (rotaShift.get('venueId') === v.get('id')) {
+              return acc + 1;
+            }
+            return acc;
+          }, 0),
+        );
+      })
       .toJS(),
 );
 

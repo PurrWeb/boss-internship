@@ -144,6 +144,7 @@ class RotaDailyContent extends React.Component {
               staffTypes={staffTypes.toJS()}
               staffMembers={staffMembers.toJS()}
               onShiftClick={this.handleShiftClick}
+              venueTypes={venueTypes}
             />
           </div>
           <AddShifts
