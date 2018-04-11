@@ -9,7 +9,12 @@ class Api::V1::StaffVettings::StaffMemberSerializer < ActiveModel::Serializer
     :payRateId,
     :siaBadgeExpiryDate,
     :dateOfBirth,
-    :bouncedEmailData
+    :bouncedEmailData,
+    :isSecurityStaff
+
+  def isSecurityStaff
+    object.security?
+  end
 
   def bouncedEmailData
     object.email_address.bounced_data
