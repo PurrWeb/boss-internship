@@ -120,6 +120,9 @@ registerComponent('StaffTypeRotaOverviewApp', StaffTypeRotaOverviewApp);
 import StaffMembersFilterForm from './apps/staff-members/components/staff-members-filter-form.js';
 registerComponent('StaffMembersFilterForm', StaffMembersFilterForm);
 
+import StaffVettingApp from './apps/staff-vetting';
+registerComponent('StaffVettingApp', StaffVettingApp);
+
 import HoursConfirmationApp from './apps/hours-confirmation';
 registerComponent('HoursConfirmationApp', HoursConfirmationApp);
 
