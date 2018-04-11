@@ -65,9 +65,10 @@ class HolidayRequestDateValidator
       holiday_request.errors.add(:base, 'Holiday conflicts with an existing holiday')
     end
 
-    staff_member_holiday_requests = HolidayRequest.
-      in_state(:pending).
-      where(staff_member: holiday_request.staff_member)
+    staff_member_holiday_requests = HolidayRequest
+      .in_state(:pending)
+      .where(staff_member: holiday_request.staff_member)
+      .where.not(id: holiday_request.id)
 
     overlapping_holiday_requests = HolidayInRangeQuery.new(
       relation: staff_member_holiday_requests,
