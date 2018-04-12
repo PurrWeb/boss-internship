@@ -247,12 +247,17 @@ RSpec.describe 'Hours acceptance endpoints' do
 
       it ' when another user accept, accepted by should be same user' do
         set_authorization_header(another_user_access_token.token)
-        patch(url, params)
+        call_time = Time.current.round
+        travel_to call_time do
+          patch(url, params)
+        end
+
         hours_acceptance_period.reload
         expect(hours_acceptance_period.status).to eq('accepted')
         expect(hours_acceptance_period.accepted_by).not_to eq(user)
         expect(hours_acceptance_period.accepted_by).to eq(another_user)
-        expect(hours_acceptance_period.accepted_at).to eq(hours_acceptance_period.updated_at)
+        expect(hours_acceptance_period.accepted_at).to eq(call_time)
+        expect(hours_acceptance_period.updated_at).to eq(call_time)
       end
     end
 

@@ -14,6 +14,7 @@ const BossFormSelect = ({
   multi,
   placeholder,
   disabled,
+  clearable = true,
   valueComponent = undefined,
   optionComponent = undefined,
   input: { onBlur, value, onChange, name },
@@ -88,6 +89,7 @@ const BossFormSelect = ({
           })}
           onChange={onValueChange}
           name={name}
+          clearable={clearable}
           ignoreCase
           disabled={disabled}
           valueComponent={valueComponent}

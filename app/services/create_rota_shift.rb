@@ -1,5 +1,5 @@
 class CreateRotaShift
-  class Result < Struct.new(:success, :rota_shift)
+  class Result < Struct.new(:success, :rota_shift, :api_errors)
     def success?
       success
     end
@@ -16,6 +16,7 @@ class CreateRotaShift
   def call
     result = false
     rota_shift = nil
+    api_errors = nil
 
     ActiveRecord::Base.transaction do
       if !rota.persisted?
@@ -40,11 +41,13 @@ class CreateRotaShift
         UpdateRotaForecast.new(rota: rota).call if rota_shift.part_of_forecast?
         DailyReport.mark_for_update!(date: rota.date, venue: rota.venue)
       end
-
-      ActiveRecord::Rollback unless result
+      unless result
+        api_errors = RotaShiftApiErrors.new(rota_shift: rota_shift)
+        ActiveRecord::Rollback
+      end
     end
 
-    Result.new(result, rota_shift)
+    Result.new(result, rota_shift, api_errors)
   end
 
   private

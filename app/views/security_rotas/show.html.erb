@@ -1,31 +1,36 @@
-<script type="text/javascript">
-  (function(){
-    var rotaData = {};
-
-    rotaData.date = "<%= date.iso8601 %>";
-
-    rotaData.rotas = <%= raw render partial: 'api/v1/shared/rotas.json', locals: { rotas: rotas } %>;
-
-    rotaData.staff_types = <%=  raw render partial: 'api/v1/shared/staff_types.json', locals: { staff_types: staff_types } %>;
-
-    rotaData.rota_shifts = <%= raw render partial: 'api/v1/shared/rota_shifts.json', locals: { rota_shifts: rota_shifts } %>;
-
-    rotaData.staff_members = <%= raw render partial: 'api/v1/shared/staff_members.json', locals: { staff_members: staff_members  } %>
-
-    rotaData.venues = <%= raw render partial: 'api/v1/shared/venues.json', locals: { venues: venues } %>
-
-    rotaData.holidays = <%= raw render partial: 'api/v1/shared/holidays.json', locals: { holidays: holidays } %>
-
-    window.boss = window.boss || {};
-    window.boss.store = window.boss.store || {};
-    window.boss.store.rota = rotaData;
-    window.boss.store.access_token = "<%= access_token.token %>";
-
-    window.boss.store.staffTypeSlug = "security";
-  })()
-</script>
-
-<div class="container">
-  <h1>Security Rota for <%= date %></h1>
-  <%= react_component("StaffTypeRotaApp") %>
-</div>
+<%= react_component('SecurityRotaDailyApp', {
+  accessToken: access_token.token,
+  rotas: ActiveModel::Serializer::CollectionSerializer.new(
+    rotas,
+    serializer: Api::V1::SecurityRota::RotaSerializer,
+  ),
+  weekRotas: ActiveModel::Serializer::CollectionSerializer.new(
+    week_rotas,
+    serializer: Api::V1::SecurityRota::RotaSerializer,
+  ),
+  date: UIRotaDate.format(date),
+  staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_members,
+    serializer: Api::V1::SecurityRota::StaffMemberSerializer,
+  ),
+  weekRotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    week_rota_shifts,
+    serializer: Api::V1::SecurityRota::RotaShiftSerializer,
+  ),
+  rotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    rota_shifts,
+    serializer: Api::V1::SecurityRota::RotaShiftSerializer,
+  ),
+  venues: ActiveModel::Serializer::CollectionSerializer.new(
+    venues,
+    serializer: Api::V1::SecurityRota::VenueSerializer,
+  ),
+  holidays: ActiveModel::Serializer::CollectionSerializer.new(
+    holidays,
+    serializer: Api::V1::RotaDaily::HolidaySerializer,
+  ),
+  staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_types,
+    serializer: Api::V1::SecurityRota::StaffTypeSerializer,
+  ),
+}) %>

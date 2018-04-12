@@ -1,5 +1,5 @@
 class EditRotaShift
-  class Result < Struct.new(:success, :rota_shift)
+  class Result < Struct.new(:success, :rota_shift, :api_errors)
     def success?
       success
     end
@@ -13,12 +13,14 @@ class EditRotaShift
 
   def call
     result = false
+    api_errors = nil
+    
     ActiveRecord::Base.transaction do
       result = rota_shift.update_attributes(rota_shift_params)
 
       if result
         frontend_updates.update_shift(shift: rota_shift)
-        
+
         rota_shift.staff_member.mark_requiring_notification! if rota_shift.rota_published?
         UpdateRotaForecast.new(rota: rota_shift.rota).call if rota_shift.part_of_forecast?
 
@@ -28,10 +30,13 @@ class EditRotaShift
         )
       end
 
-      ActiveRecord::Rollback unless result
+      unless result
+        api_errors = RotaShiftApiErrors.new(rota_shift: rota_shift)
+        ActiveRecord::Rollback
+      end
     end
 
-    Result.new(result, rota_shift)
+    Result.new(result, rota_shift, api_errors)
   end
 
   private

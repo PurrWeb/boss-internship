@@ -105,6 +105,6 @@ export default class WeekPicker extends React.Component {
         $(node).datepicker("setDate", selectionStartDate );
     }
     componentWillUnmount(){
-        React.unmountComponentAtNode(ReactDOM.findDOMNode(this));
+        ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this));
     }
 }

@@ -31,6 +31,10 @@ export const appRoutes = {
             'date=' + utils.formatRotaUrlDate(date)
         ].join("");
     },
+    securityRotaOverview: (options) => {
+        const startDate = oFetch(options, "startDate");
+        return `/security_rotas?highlight_date=${utils.formatRotaUrlDate(startDate)}`;
+    },
     rotaOverview: function(options){
         var [venueId, startDate] = oFetch(options, "venueId", "startDate");
         return [
