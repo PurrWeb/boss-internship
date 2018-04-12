@@ -3,6 +3,7 @@ import classnames from 'classnames';
 
 import Answer from './answer';
 import FileUploadService from '../services/file-upload';
+import ImagesPicker from '~/components/images-picker';
 
 import uuid from 'uuid/v1'
 
@@ -51,9 +52,8 @@ export default class FileUpload extends React.Component {
     return !!uploadedFilesArray.find(function(f) {  return _.isEqual(f, fileArray) } );
   }
 
-  handleChange(e) {
+  handleChange(files) {
     let count = 0;
-    let files = e.target.files;
     let uploadedFiles = this.state.uploadedFiles;
 
     for (count; count < files.length; count++) {
@@ -79,12 +79,20 @@ export default class FileUpload extends React.Component {
     }
   }
 
+  openPicker = () => {
+    this.imagesPicker.open();
+  }
+
   render() {
     return (
-      <label className="boss-question__file-label">
-        <input name="files[]" type="file" multiple={ true } className="boss-question__file-input" onChange={ this.handleChange.bind(this) }/>
+      <span className="boss-question__file-label" onClick={this.openPicker}>
+        <ImagesPicker
+          multiple={true}
+          onPicked={this.handleChange.bind(this)}
+          ref={ref => (this.imagesPicker = ref)}
+        />
         <span className="boss-question__file-label-text">Add image</span>
-      </label>
+      </span>
     )
   }
 }

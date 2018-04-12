@@ -7,7 +7,7 @@ export default class FileUpload {
     this.uuid = uuid;
     this.file = file;
     this.formData = new FormData();
-    this.formData.append('upload[file]', file);
+    this.formData.append('upload[file]', file, file.name);
     this.apiKey = window.boss.maintenance.accessToken;
   }
 
