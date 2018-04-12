@@ -4,6 +4,8 @@ import classnames from 'classnames';
 import FileUploadService from '../services/file-upload';
 import uuid from 'uuid/v1';
 
+import ImagesPicker from '~/components/images-picker';
+
 export default class ImageForm extends React.Component {
   constructor(props) {
     super(props);
@@ -60,9 +62,8 @@ export default class ImageForm extends React.Component {
     });
   }
 
-  handleChange(e) {
+  handleChange(files) {
     let count = 0;
-    let files = e.target.files;
     let uploadedFileObjects = this.props.uploadedImages;
     let currentFile, tempFile, index, uploadedFileObject, fileObject;
 
@@ -211,6 +212,10 @@ export default class ImageForm extends React.Component {
     );
   }
 
+  openPicker = () => {
+    this.imagesPicker.open();
+  }
+
   render() {
     return (
       <div className="boss-form__row boss-form__row_position_last">
@@ -227,8 +232,13 @@ export default class ImageForm extends React.Component {
             <div className="boss-upload__flow">
               { this.renderImages() }
 
-              <div className="boss-upload__field boss-upload__field_adjust_flow">
-                <input name="files[]" type="file" multiple={ true } className="boss-upload__field-input" onChange={ this.handleChange.bind(this) }/>
+              <ImagesPicker
+                multiple={true}
+                onPicked={this.handleChange.bind(this)}
+                ref={ref => (this.imagesPicker = ref)}
+              />
+
+              <div className="boss-upload__field boss-upload__field_adjust_flow" onClick={this.openPicker}>
                 <p className="boss-upload__field-label">Add Images</p>
               </div>
             </div>

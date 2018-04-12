@@ -134,9 +134,11 @@ export function resizeToLimit(file, limit, resolution) {
               lastModified: file.lastModified,
             });
           } catch (e) {
-            blob.name = fileName;
-            blob.type = 'image/jpeg';
-            blob.lastModified = file.lastModified;
+            try {
+              blob.name = fileName;
+              blob.lastModified = file.lastModified;
+            } catch (e) {}
+
             newFile = blob;
           }
 
@@ -203,7 +205,7 @@ export function tryResizeToLimit({ image, resolution, limit, callback }) {
       if (blob.size > limit) {
         setTimeout(
           () =>
-            this.tryResizeToLimit({
+            tryResizeToLimit({
               image,
               limit,
               resolution: resolution * 0.9,
