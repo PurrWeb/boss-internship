@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       unlocks: 'users/unlocks',
       passwords: 'users/passwords'
     }
+
+    resources :security_shift_requests, only: [:index], path: 'security-shift-requests'
     resources :ops_diaries, only: [:index], path: 'ops-diaries'
     resources :accessories, only: [:index]
     resources :accessory_requests, only: [:index], path: 'accessory-requests'
