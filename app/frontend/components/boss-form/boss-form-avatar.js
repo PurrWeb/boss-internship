@@ -1,8 +1,9 @@
 import React from 'react';
 import Cropper from 'react-cropper';
-import DropZone from 'react-dropzone';
 
-const VALID_FILE_TYPES = 'image/jpeg, image/jpg, image/png, image/gif';
+import ImagesPicker from '~/components/images-picker';
+
+const VALID_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
 const MAX_FILE_SIZE = 10000000;
 
 class BossFormAvatar extends React.PureComponent {
@@ -25,7 +26,7 @@ class BossFormAvatar extends React.PureComponent {
   }
 
   openFileDialog = (e) => {
-    this.dropZone.open();
+    this.imagesPicker.open();
   }
 
   onRotateLeft = () => {
@@ -127,51 +128,11 @@ class BossFormAvatar extends React.PureComponent {
   }
 
   onAddNewAvatar = (files) => {
-    if (!files && !!files.length) {
-      return;
-    }
-
-    const file = files[0];
-    const reader = new FileReader();
-
-    reader.addEventListener('load', () => {
-      let dataUrl = reader.result;
-      let image = new Image();
-      image.src = dataUrl;
-
-      image.onload = () => {
-        let canvas = document.createElement('canvas');
-        
-        let iw = image.width;
-        let ih = image.height;
-        
-        let scale = Math.min((1024 / iw), (768 / ih));
-        
-        let iwScaled = iw * scale;
-        let ihScaled = ih * scale;
-        
-        canvas.width = iwScaled;
-        canvas.height = ihScaled;
-
-        let ctx = canvas.getContext('2d');
-        
-        if (ctx === null) {
-          return;
-        }
-
-        ctx.drawImage(image, 0, 0, iwScaled, ihScaled);
-
-        dataUrl = canvas.toDataURL('image/jpeg');
-        this.setState({
-          showCropper: true,
-          touched: true,
-          croppAvatarUrl: dataUrl || ''
-        });
-      };
-
+    this.setState({
+      showCropper: true,
+      touched: true,
+      croppAvatarUrl: files[0] || ''
     });
-
-    reader.readAsDataURL(file);
   }
 
   renderRestoreOriginalButton() {
@@ -208,11 +169,12 @@ class BossFormAvatar extends React.PureComponent {
               <div className="boss-add-avatar-block__preview">
                 <img src={this.state.avatarUrl} alt="Avatar" className="boss-add-avatar-block__preview-image"/>
               </div>
-              <DropZone
-                ref={(node) => { this.dropZone = node; }}
+              <ImagesPicker
+                ref={(ref) => { this.imagesPicker = ref; }}
                 accept={VALID_FILE_TYPES}
-                onDrop={this.onAddNewAvatar}
-                style={{display: 'none'}}
+                asDataURL={true}
+                multiple={false}
+                onPicked={this.onAddNewAvatar}
               />
               <div className="boss-buttons-group boss-edit-image-block_adjust_buttons-group">
                 <button
