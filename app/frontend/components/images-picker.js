@@ -11,7 +11,7 @@ export default class ImagesPicker extends React.Component {
     asDataURL: false,
     bytesLimit: 1024 * 1024,
     preferedResolution: 600,
-    maximalResolution: null
+    maximalResolution: null,
   };
 
   onChange = () => {
@@ -53,7 +53,7 @@ export default class ImagesPicker extends React.Component {
 
     if (this.props.asDataURL) {
       files = files.then(files => {
-        const waiting = files.map(file => geAstDataURL(file));
+        const waiting = files.map(file => getAsDataURL(file));
 
         return Promise.all(waiting);
       });
@@ -86,10 +86,12 @@ export default class ImagesPicker extends React.Component {
 }
 
 export function canvasToBlob(canvas, type, quality) {
-  return new Promise(resolve => canvas.toBlob(resolve, type, quality));
+  return new Promise(resolve =>
+    canvas.toBlob(resolve, type || 'image/png', quality),
+  );
 }
 
-export function geAstDataURL(file) {
+export function getAsDataURL(file) {
   return new Promise(resolve => {
     const reader = new FileReader();
 
@@ -124,14 +126,15 @@ export function resizeToLimit(file, limit, resolution) {
         resolution: resolution,
         callback: blob => {
           let newFile;
+          const fileName = file.name || 'image.jpeg';
 
           try {
-            newFile = new File([blob], file.name, {
+            newFile = new File([blob], fileName, {
               type: 'image/jpeg',
               lastModified: file.lastModified,
             });
           } catch (e) {
-            blob.name = file.name;
+            blob.name = fileName;
             blob.type = 'image/jpeg';
             blob.lastModified = file.lastModified;
             newFile = blob;
@@ -195,22 +198,26 @@ export function tryResizeToLimit({ image, resolution, limit, callback }) {
   const context = canvas.getContext('2d');
   context.drawImage(image, 0, 0, width, height);
 
-  canvas.toBlob(blob => {
-    if (blob.size > limit) {
-      setTimeout(
-        () =>
-          this.tryResizeToLimit({
-            image,
-            limit,
-            resolution: resolution * 0.9,
-            callback: callback,
-          }),
-        1,
-      );
+  canvas.toBlob(
+    blob => {
+      if (blob.size > limit) {
+        setTimeout(
+          () =>
+            this.tryResizeToLimit({
+              image,
+              limit,
+              resolution: resolution * 0.9,
+              callback: callback,
+            }),
+          1,
+        );
 
-      return;
-    }
+        return;
+      }
 
-    callback(blob);
-  }, 'image/jpeg');
+      callback(blob);
+    },
+    'image/jpeg',
+    1,
+  );
 }

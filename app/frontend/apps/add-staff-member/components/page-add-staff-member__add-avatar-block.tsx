@@ -27,6 +27,8 @@ import changingStepInfo from '../../../action-creators/changing-step-info';
 import {ADD_STAFF_MEMBER_STEPS} from '../../../constants/other';
 import changeStep from '../../../action-creators/current-step-changed';
 
+import { resizeToLimit, resizeToResolution, getAsDataURL, canvasToBlob } from '../../../components/images-picker';
+
 interface Props {
 }
 
@@ -130,12 +132,15 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   saveImagePreviewToStore = () => {
-    const croppedImageUrl = this.cropper.getCroppedCanvas().toDataURL();
-    const avatarPreviewChangedAction = avatarPreviewChanged(croppedImageUrl);
-    const sourceImageChangedAction = addingSourceImage(this.state.avatarSrc);
+    canvasToBlob(this.cropper.getCroppedCanvas()).then((blob) => {
+      return resizeToLimit(blob, 1024 * 1024, 600);
+    }).then(getAsDataURL).then(croppedImageUrl => {
+      const avatarPreviewChangedAction = avatarPreviewChanged(croppedImageUrl);
+      const sourceImageChangedAction = addingSourceImage(this.state.avatarSrc);
 
-    this.props.dispatch(avatarPreviewChangedAction);
-    this.props.dispatch(sourceImageChangedAction);
+      this.props.dispatch(avatarPreviewChangedAction);
+      this.props.dispatch(sourceImageChangedAction);
+    });
   };
 
   isAvatarAdded = (file: FileList) => {
@@ -263,46 +268,14 @@ class Component extends React.Component<PropsFromConnect, State> {
     if (!acceptedFiles || !acceptedFiles.length) {
       return;
     } else {
-      const file = acceptedFiles[0];
-      const reader = new FileReader();
-
-      reader.addEventListener('load', () => {
-        let dataUrl = reader.result;
-
-        let image = new Image();
-
-        image.onload = () => {
-            let canvas = document.createElement('canvas');
-            
-            let iw = image.width;
-            let ih = image.height;
-            
-            let scale = Math.min((1024 / iw), (768 / ih));
-            
-            let iwScaled = iw * scale;
-            let ihScaled = ih * scale;
-            
-            canvas.width = iwScaled;
-            canvas.height = ihScaled;
-
-            let ctx = canvas.getContext('2d');
-            
-            if (ctx === null) {
-              return;
-            }
-
-            ctx.drawImage(image, 0, 0, iwScaled, ihScaled);
-
-            dataUrl = canvas.toDataURL('image/jpeg');
-
-            this.setState({
-              toShowCropper: true,
-              avatarSrc: dataUrl || ''
-            });
-        };
-        image.src = dataUrl;
+      // Resize image to 2048px before cropping
+      resizeToResolution(acceptedFiles[0], 2048)
+      .then(getAsDataURL).then(dataUrl => {
+        this.setState({
+          toShowCropper: true,
+          avatarSrc: dataUrl || ''
+        });
       });
-      reader.readAsDataURL(file);
     }
   };
 
