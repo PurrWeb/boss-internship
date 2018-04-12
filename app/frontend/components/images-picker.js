@@ -14,6 +14,16 @@ export default class ImagesPicker extends React.Component {
     maximalResolution: null,
   };
 
+  static propTypes = {
+    accept: PropTypes.arrayOf(PropTypes.string),
+    multiple: PropTypes.bool,
+    asDataURL: PropTypes.bool,
+    bytesLimit: PropTypes.number,
+    preferedResolution: PropTypes.number,
+    maximalResolution: PropTypes.number,
+    onPicked: PropTypes.func.isRequired
+  }
+
   onChange = () => {
     const {
       bytesLimit,
@@ -24,8 +34,6 @@ export default class ImagesPicker extends React.Component {
     } = this.props;
 
     let files = Promise.resolve([].slice.call(this.input.files));
-
-    console.log(files);
 
     if (bytesLimit) {
       files = files.then(files => {

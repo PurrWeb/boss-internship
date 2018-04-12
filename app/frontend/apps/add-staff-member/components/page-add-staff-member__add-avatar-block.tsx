@@ -48,7 +48,8 @@ interface State {
 
 
 const VALID_FILE_TYPES = 'image/jpeg, image/jpg, image/png, image/gif';
-const MAX_FILE_SIZE = 10000000;
+// 30mb (too big even for performing a resize?)
+const MAX_FILE_SIZE = 1024 * 1024 * 30;
 
 class Component extends React.Component<PropsFromConnect, State> {
   dropZone: ImageLoader;
@@ -148,6 +149,10 @@ class Component extends React.Component<PropsFromConnect, State> {
   };
 
   isProperFormat = (files: FileList) => {
+    if (!files || !files.length) {
+      return true;
+    }
+
     const file = files[0];
 
     if (file) {
@@ -160,6 +165,10 @@ class Component extends React.Component<PropsFromConnect, State> {
   
 
   isProperFileSize = (files: FileList) => {
+    if (!files || !files.length) {
+      return true;
+    }
+
     const file = files[0];
 
     if (file) {
