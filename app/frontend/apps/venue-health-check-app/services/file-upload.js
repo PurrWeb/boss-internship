@@ -4,7 +4,7 @@ export default class FileUpload {
   constructor(file) {
     this.file = file;
     this.formData = new FormData();
-    this.formData.append('upload[file]', file);
+    this.formData.append('upload[file]', file, file.name);
     this.apiKey = window.boss.venueHealthCheck.accessToken;
   }
 

@@ -1,8 +1,13 @@
 import React from 'react';
 import Cropper from 'react-cropper';
-import DropZone from 'react-dropzone';
 
-const VALID_FILE_TYPES = 'image/jpeg, image/jpg, image/png, image/gif';
+import ImagesPicker, {
+  canvasToBlob,
+  resizeToLimit,
+  getAsDataURL,
+} from '~/components/images-picker';
+
+const VALID_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
 const MAX_FILE_SIZE = 10000000;
 
 class BossFormAvatar extends React.PureComponent {
@@ -21,47 +26,59 @@ class BossFormAvatar extends React.PureComponent {
       showCropper: false,
       croppAvatarUrl: null,
       touched: false,
-    }
+    };
   }
 
-  openFileDialog = (e) => {
-    this.dropZone.open();
-  }
+  openFileDialog = e => {
+    this.imagesPicker.open();
+  };
 
   onRotateLeft = () => {
     this.cropper.rotate(-90);
-  }
+  };
 
   onRotateRight = () => {
     this.cropper.rotate(90);
-  }
+  };
 
   onCropSubmit = () => {
-    const croppedImageUrl = this.cropper.getCroppedCanvas().toDataURL();
-    this.setState({
-      avatarUrl: croppedImageUrl,
-      showCropper: false,
-      croppAvatarUrl: null,
-    }, () => {
-      this.onChange(croppedImageUrl);
-    });
-  }
+    canvasToBlob(this.cropper.getCroppedCanvas())
+      .then(blob => {
+        return resizeToLimit(blob, 1024 * 1024, 600);
+      })
+      .then(getAsDataURL)
+      .then(croppedImageUrl => {
+        this.setState(
+          {
+            avatarUrl: croppedImageUrl,
+            showCropper: false,
+            croppAvatarUrl: null,
+          },
+          () => {
+            this.onChange(croppedImageUrl);
+          },
+        );
+      });
+  };
 
   onCancelCrop = () => {
     this.setState({
       showCropper: false,
       croppAvatarUrl: null,
     });
-  }
+  };
 
   onRestoreOriginalUrl = () => {
-    this.setState({
-      avatarUrl: this.state.originalAvatarUrl,
-      touched: false,
-    }, () => {
-      this.onChange(this.state.avatarUrl);
-    });
-  }
+    this.setState(
+      {
+        avatarUrl: this.state.originalAvatarUrl,
+        touched: false,
+      },
+      () => {
+        this.onChange(this.state.avatarUrl);
+      },
+    );
+  };
 
   renderCropperBlock() {
     return (
@@ -87,13 +104,15 @@ class BossFormAvatar extends React.PureComponent {
 
             <div className="boss-edit-image-block__cropper">
               <Cropper
-                ref={(cropper) => { this.cropper = cropper; }}
+                ref={cropper => {
+                  this.cropper = cropper;
+                }}
                 src={this.state.croppAvatarUrl}
                 preview="[data-avatarPreview]"
                 style={{
-                height: '100%',
-                width: '100%'
-              }}
+                  height: '100%',
+                  width: '100%',
+                }}
                 aspectRatio={1}
                 guides={true}
               />
@@ -126,64 +145,24 @@ class BossFormAvatar extends React.PureComponent {
     );
   }
 
-  onAddNewAvatar = (files) => {
-    if (!files && !!files.length) {
-      return;
-    }
-
-    const file = files[0];
-    const reader = new FileReader();
-
-    reader.addEventListener('load', () => {
-      let dataUrl = reader.result;
-      let image = new Image();
-      image.src = dataUrl;
-
-      image.onload = () => {
-        let canvas = document.createElement('canvas');
-        
-        let iw = image.width;
-        let ih = image.height;
-        
-        let scale = Math.min((1024 / iw), (768 / ih));
-        
-        let iwScaled = iw * scale;
-        let ihScaled = ih * scale;
-        
-        canvas.width = iwScaled;
-        canvas.height = ihScaled;
-
-        let ctx = canvas.getContext('2d');
-        
-        if (ctx === null) {
-          return;
-        }
-
-        ctx.drawImage(image, 0, 0, iwScaled, ihScaled);
-
-        dataUrl = canvas.toDataURL('image/jpeg');
-        this.setState({
-          showCropper: true,
-          touched: true,
-          croppAvatarUrl: dataUrl || ''
-        });
-      };
-
+  onAddNewAvatar = files => {
+    this.setState({
+      showCropper: true,
+      touched: true,
+      croppAvatarUrl: files[0] || '',
     });
-
-    reader.readAsDataURL(file);
-  }
+  };
 
   renderRestoreOriginalButton() {
-    return this.state.touched
-      ? <button
-          type="button"
-          className="boss-button boss-buttons-group_adjust_button"
-          onClick={this.onRestoreOriginalUrl}
-        >
-          Restore original
-        </button>
-      : null;
+    return this.state.touched ? (
+      <button
+        type="button"
+        className="boss-button boss-buttons-group_adjust_button"
+        onClick={this.onRestoreOriginalUrl}
+      >
+        Restore original
+      </button>
+    ) : null;
   }
 
   render() {
@@ -194,43 +173,53 @@ class BossFormAvatar extends React.PureComponent {
 
     return (
       <div className="boss-form__field">
-        {
-          touched && error &&
+        {touched &&
+          error && (
             <div className="boss-form__error">
               <p className="boss-form__error-text">
                 <span className="boss-form__error-line">{error}</span>
               </p>
             </div>
-        }
-        { this.state.showCropper
-          ? this.renderCropperBlock()
-          : <div className="boss-add-avatar-block">
-              <div className="boss-add-avatar-block__preview">
-                <img src={this.state.avatarUrl} alt="Avatar" className="boss-add-avatar-block__preview-image"/>
-              </div>
-              <DropZone
-                ref={(node) => { this.dropZone = node; }}
-                accept={VALID_FILE_TYPES}
-                onDrop={this.onAddNewAvatar}
-                style={{display: 'none'}}
+          )}
+        {this.state.showCropper ? (
+          this.renderCropperBlock()
+        ) : (
+          <div className="boss-add-avatar-block">
+            <div className="boss-add-avatar-block__preview">
+              <img
+                src={this.state.avatarUrl}
+                alt="Avatar"
+                className="boss-add-avatar-block__preview-image"
               />
-              <div className="boss-buttons-group boss-edit-image-block_adjust_buttons-group">
-                <button
-                  type="button"
-                  className="boss-button boss-button_role_file boss-buttons-group_adjust_button"
-                  onClick={this.openFileDialog}
-                >
-                  Choose File
-                </button>
-                { this.renderRestoreOriginalButton() }
-              </div>
-              <span className="boss-add-avatar-block__file-label">
-                Drag and drop file here or click choose file to upload new photo
-              </span>
             </div>
-          }
+            <ImagesPicker
+              ref={ref => {
+                this.imagesPicker = ref;
+              }}
+              accept={VALID_FILE_TYPES}
+              asDataURL={true}
+              multiple={false}
+              onPicked={this.onAddNewAvatar}
+              bytesLimit={null}
+              maximalResolution={2048}
+            />
+            <div className="boss-buttons-group boss-edit-image-block_adjust_buttons-group">
+              <button
+                type="button"
+                className="boss-button boss-button_role_file boss-buttons-group_adjust_button"
+                onClick={this.openFileDialog}
+              >
+                Choose File
+              </button>
+              {this.renderRestoreOriginalButton()}
+            </div>
+            <span className="boss-add-avatar-block__file-label">
+              Drag and drop file here or click choose file to upload new photo
+            </span>
+          </div>
+        )}
       </div>
-    )
+    );
   }
 }
 

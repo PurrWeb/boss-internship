@@ -7,7 +7,7 @@ export default class FileUpload {
     this.uuid = uuid;
     this.file = file;
     this.formData = new FormData();
-    this.formData.append('upload[file]', file);
+    this.formData.append('upload[file]', file, file.name);
     this.apiKey = window.boss.maintenance.accessToken;
   }
 
@@ -15,7 +15,7 @@ export default class FileUpload {
     if (!file) return;
 
     return new Promise((resolve, reject) => {
-      if (file.size > 1000000) {
+      if (file.size > 1024 * 1024) {
         return reject({
           file: file,
           status: 422,
