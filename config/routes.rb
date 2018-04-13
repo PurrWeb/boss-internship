@@ -10,7 +10,6 @@ Rails.application.routes.draw do
       unlocks: 'users/unlocks',
       passwords: 'users/passwords'
     }
-
     resources :ops_diaries, only: [:index], path: 'ops-diaries'
     resources :accessories, only: [:index]
     resources :accessory_requests, only: [:index], path: 'accessory-requests'
@@ -76,7 +75,7 @@ Rails.application.routes.draw do
     resource :venue_dashboard, only: [:show]
     resource :message_board, only: [:show]
     resources :holidays, only: [:index, :edit, :update]
-    resources :holiday_requests, only: [:index]
+    resources :holiday_requests, only: [:index], path: 'holiday-requests'
     resources :owed_hours, only: [:edit, :update]
 
     resources :staff_members, only: [:show, :new, :index] do
@@ -222,6 +221,13 @@ Rails.application.routes.draw do
             get :staff_with_expired_sia_badge, path: 'staff-with-expired-sia-badge'
             get :staff_on_wrong_payrate, path: 'staff-on-wrong-payrate'
             get :staff_with_bounced_email, path: 'staff-with-bounced-email'
+          end
+        end
+
+        resources :holiday_requests, only: [:create, :destroy, :update], path: 'holiday-requests' do
+          member do
+            post :accept
+            post :reject
           end
         end
 
