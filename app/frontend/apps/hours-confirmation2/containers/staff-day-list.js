@@ -12,10 +12,10 @@ import actionCreators from "~/redux/actions"
 
 const PAGE_SIZE = 5;
 class StaffDayList extends React.Component {
-  
+
   constructor(props) {
     super(props);
-    
+
     this.state = {
       filteredClockInDays: props.clockInDays,
       clockInDays: props.clockInDays.slice(0, PAGE_SIZE),
@@ -23,7 +23,7 @@ class StaffDayList extends React.Component {
       filteredStaffTypes: [],
     }
   }
-  
+
   getLoadMoreSizes = () => {
     const currentSize = this.state.clockInDays.length;
     const fullSize = this.state.filteredClockInDays.length;
@@ -61,7 +61,7 @@ class StaffDayList extends React.Component {
     this.setState(state => {
       const {currentSize, loadSize} = this.getLoadMoreSizes();
       const clockInDays = this.state.filteredClockInDays.slice(currentSize, currentSize + loadSize);
-      
+
       return {
         clockInDays: state.clockInDays.concat(clockInDays)
       }
@@ -78,7 +78,7 @@ class StaffDayList extends React.Component {
       </div>
     )
   }
-  
+
   componentWillReceiveProps(nextProps) {
     this.handleStaffFilter(nextProps.clockInDays);
   }
@@ -98,13 +98,13 @@ class StaffDayList extends React.Component {
         return true;
       });
     }
-    
+
     filteredStaffMembers = utils.staffMemberFilter(query, fromJS(filteredStaffMembers)).toJS();
 
     const filteredClockInDays = clockInDays.filter(clockInDay => {
       return !!filteredStaffMembers.find(staffMember => staffMember.clientId === clockInDay.staff_member.clientId);
     });
-    
+
     this.setState(state => {
       if (state.clockInDays.size === filteredClockInDays.size) {
         return {
@@ -126,7 +126,6 @@ class StaffDayList extends React.Component {
   }
 
   handleMarkDayAsDone = (clockInDay) => {
-    console.log(clockInDay);
     this.props.boundActions.removeClockInDay(clockInDay);
   }
 

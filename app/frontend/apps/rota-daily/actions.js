@@ -86,7 +86,5 @@ export const setRotaStatus = (status) => (dispatch, getState) => {
   const venueId = getState().getIn(['page', 'currentVenue', 'id']);
   const rotaDate = getState().getIn(['page', 'rota', 'date']);
 
-  return setRotaStatusRequest(status, venueId, rotaDate).then(resp => {
-    console.log(resp.data);
-  });
+  return setRotaStatusRequest(status, venueId, rotaDate);
 };

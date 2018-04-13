@@ -100,9 +100,7 @@ export default class PrivatePage extends React.Component {
   }
 
   handleLogout = () => {
-    console.log('Ably service: ', this.ablyService);
     return this.ablyService.deactivate().then(() => {
-      console.log('Deactivated');
       this.props.onLogOutSuccess();
     });
   }

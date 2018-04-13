@@ -41,13 +41,11 @@ export const createVoucher = (description) => (dispatch, getState) => {
     dispatch({
       type: CLOSE_ADD_VOUCHER_MODAL
     })
-  }).catch((error) => {
-    console.log(error);
-  })
+  });
 }
 
 export const deleteVoucher = (voucher_id) => (dispatch, getState) => {
-  
+
   const currentVenue = getState().get('currentVenue');
   const accessToken = getState().get('accessToken');
 
