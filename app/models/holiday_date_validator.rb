@@ -80,7 +80,7 @@ class HolidayDateValidator
       end_date: holiday.end_date
     ).all
 
-    if overlapping_holiday_requests.present?
+    if overlapping_holiday_requests.present? && !holiday.validate_as_assignment
       holiday.errors.add(:base, 'Holiday conflicts with an existing holiday request')
     end
 
