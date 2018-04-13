@@ -30,7 +30,7 @@ export function handleSubmit(values, dispatch, props) {
   if (status === ROTA_PUBLISHED_STATUS) {
     return confirmation(
       [
-        "Publishing a rota will send out email confirmations and can't be undone.",
+        "Editing a shift on a published rota will send out email confirmations.",
         'Do you want to continue?',
       ],
       {

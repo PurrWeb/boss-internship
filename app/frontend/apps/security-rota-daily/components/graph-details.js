@@ -41,7 +41,7 @@ class GraphDetails extends React.Component {
     if (status === ROTA_PUBLISHED_STATUS) {
       return confirmation(
         [
-          "Publishing a rota will send out email confirmations and can't be undone.",
+          "Updating a shift on a published rota will send out confirmation emails.",
           'Do you want to continue?',
         ],
         {
