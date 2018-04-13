@@ -30,32 +30,12 @@ const validate = values => {
   return errors;
 }
 
-const submission = (values, dispatch) => {
-  return dispatch(editHoliady(values.toJS())).catch((resp) => {
-    notify('Updating Holiday Failed', {
-      interval: 5000,
-      status: 'error'
-    });
-
-    const errors = resp.response.data.errors;
-    if (errors) {
-      let base = {};
-
-      if (errors.base) {
-        base = {
-          _error: errors.base
-        }
-      }
-      throw new SubmissionError({...errors, ...base});
-    }
-  });
-}
-
-
 const EditHolidayForm = ({
     error,
     handleSubmit,
     submitting,
+    submission,
+    buttonTitle,
   }) => {
 
   const renderBaseError = (error) => {
@@ -113,7 +93,7 @@ const EditHolidayForm = ({
           disabled={submitting}
           className="boss-button boss-button_role_add boss-form__submit"
         >
-            Update Holiday
+          {buttonTitle}
         </button>
       </div>
     </form>

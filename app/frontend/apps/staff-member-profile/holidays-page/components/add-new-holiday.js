@@ -3,7 +3,7 @@ import AddHolidayContent from './add-holiday-content';
 
 const AddNewHoliday = (props) => {
   return (
-    <AddHolidayContent startDate={props.startDate} endDate={props.endDate} onSubmit={props.proceed} />
+    <AddHolidayContent buttonTitle={props.buttonTitle} startDate={props.startDate} endDate={props.endDate} onSubmit={props.onSubmit} />
   )
 }
 
