@@ -36,7 +36,15 @@ class HolidayRequest < ActiveRecord::Base
   end
 
   def accepted?
-    current_state == :accepted
+    current_state == 'accepted'
+  end
+
+  def pending?
+    current_state == 'pending'
+  end
+
+  def editable?
+    pending?
   end
 
   private
