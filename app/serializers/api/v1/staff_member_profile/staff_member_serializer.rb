@@ -38,7 +38,8 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :verification_sent_at,
              :verified_at,
              :password_set_at,
-             :is_flagged
+             :is_flagged,
+             :is_weekly_payrate
 
   def date_of_birth
     UIRotaDate.format(object.date_of_birth) if object.date_of_birth.present?
@@ -156,5 +157,9 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
 
   def bounced_email
     object.email_address.andand.bounced_data
+  end
+
+  def is_weekly_payrate
+    object.pay_rate.weekly?
   end
 end
