@@ -165,16 +165,7 @@ Rails.application.routes.draw do
 
     resources :safe_check_notes, only: [:index, :create]
 
-    resources :staff_vetting, only: [:index] do
-      collection do
-        get :staff_members_without_email
-        get :staff_members_without_ni_number
-        get :staff_members_without_address
-        get :staff_members_without_photo
-        get :staff_members_on_wrong_payrate
-        get :staff_members_with_expired_sia_badge
-      end
-    end
+    resources :staff_vetting, only: [:index]
 
     resources :incident_reports, only: [:index, :show]
 
@@ -220,6 +211,18 @@ Rails.application.routes.draw do
         get 'version', to: 'version#version'
 
         resources :security_rota_shifts, only: [:create, :update, :destroy], path: 'security-rota-shifts'
+
+        resources :staff_vetting, only: [] do
+          collection do
+            get :staff_without_email, path: 'staff-without-email'
+            get :staff_without_ni_number, path: 'staff-without-ni-number'
+            get :staff_without_address, path: 'staff-without-address'
+            get :staff_without_photo, path: 'staff-without-photo'
+            get :staff_with_expired_sia_badge, path: 'staff-with-expired-sia-badge'
+            get :staff_on_wrong_payrate, path: 'staff-on-wrong-payrate'
+            get :staff_with_bounced_email, path: 'staff-with-bounced-email'
+          end
+        end
 
         resources :accessory_requests, only: [:index, :create, :update, :destroy], path: 'accessory-requests'  do
           member do

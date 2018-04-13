@@ -4,6 +4,12 @@ import PropTypes from 'prop-types';
 import DashboardFilter from './dashboard-filter';
 import DashboardActions from './dashboard-actions';
 
+function isFunction(functionToCheck) {
+  return (
+    functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
+  );
+}
+
 class SimpleDashboard extends React.Component {
   parseChildrens = () => {
     React.Children.map(this.props.children, (child, i) => {
@@ -19,15 +25,20 @@ class SimpleDashboard extends React.Component {
 
   render() {
     this.parseChildrens();
+
     return (
       <div className="boss-page-main__dashboard">
         <div className="boss-page-main__inner">
           <div className="boss-page-dashboard boss-page-dashboard_updated">
             <div className="boss-page-dashboard__group">
               <div className="boss-page-dashboard__sub-group">
-                <h1 className="boss-page-dashboard__title">
-                  {this.props.title}
-                </h1>
+                {isFunction(this.props.title) ? (
+                  this.props.title()
+                ) : (
+                  <h1 className="boss-page-dashboard__title">
+                    {this.props.title}
+                  </h1>
+                )}
               </div>
               {this.actions}
             </div>
@@ -40,7 +51,10 @@ class SimpleDashboard extends React.Component {
 }
 
 SimpleDashboard.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]).isRequired,
   className: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]),
 };

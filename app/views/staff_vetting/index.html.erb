@@ -1,62 +1,19 @@
-<h1>Staff Vetting</h1>
-
-<div class="row">
-  <div class="shrink column">
-    <div class="list-group">
-      <%= link_to(staff_members_without_email_staff_vetting_index_path, class: "boss2-button") do %>
-        <div class="row align-middle">
-          <div class="column">
-            Staff without Email Address
-          </div>
-          <div class="shrink column">
-            <span class="badge"><%= staff_without_email_count %></span>
-          </div>
-        </div>
-      <% end %>
-      <%= link_to(staff_members_without_ni_number_staff_vetting_index_path, class: "boss2-button") do %>
-        <div class="row align-middle">
-          <div class="column">
-            Staff without NI Number
-          </div>
-          <div class="shrink column">
-            <span class="badge"><%= staff_without_ni_number_count %></span>
-          </div>
-        </div>
-      <% end %>
-      <%= link_to(staff_members_without_address_staff_vetting_index_path, class: "boss2-button") do %>
-        <div class="row align-middle">
-          <div class="column">
-            Staff without Address
-          </div>
-          <div class="shrink column">
-            <span class="badge"><%= staff_without_address_count %></span>
-          </div>
-        </div>
-      <% end %>
-      <%= link_to(staff_members_without_photo_staff_vetting_index_path, class: "boss2-button") do %>
-        <div class="row align-middle">
-          <div class="column">
-            Staff without Photo
-          </div>
-          <div class="shrink column">
-            <span class="badge"><%= staff_without_photo_count %></span>
-          </div>
-        </div>
-      <% end %>
-      <%= link_to(staff_members_on_wrong_payrate_staff_vetting_index_path, class: "boss2-button") do %>
-        <div class="row align-middle">
-          <div class="column">
-            Staff On Wrong Pay Rate
-          </div>
-          <div class="shrink column">
-            <span class="badge"><%= staff_on_wrong_payrate_count %></span>
-          </div>
-        </div>
-      <% end %>
-      <%= link_to(staff_members_with_expired_sia_badge_staff_vetting_index_path, class: 'boss2-button') do %>
-        Security Staff with Expired SIA Badge
-        <span class="badge"><%= staff_with_expired_sia_badge_count %></span>
-      <% end %>
-    </div>
-  </div>
-</div>
+<%= react_component('StaffVettingApp', {
+  accessToken: access_token,
+  staffWithoutEmailCount: staff_without_email_count,
+  staffWithoutNiNumberCount: staff_without_ni_number_count,
+  staffWithoutAddressCount: staff_without_address_count,
+  staffWithoutPhotoCount: staff_without_photo_count,
+  staffWithExpiredSiaBadgeCount: staff_with_expired_sia_badge_count,
+  staffOnWrongPayrateCount: staff_on_wrong_payrate_count,
+  staffMembersWithBouncedEmailCount: staff_members_with_bounced_email_count,
+  venues: ActiveModel::Serializer::CollectionSerializer.new(
+    venues,
+    serializer: Api::V1::SimpleVenueSerializer
+  ),
+  staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_types,
+    serializer: Api::V1::SimpleStaffTypeSerializer
+  ),
+})
+%>
