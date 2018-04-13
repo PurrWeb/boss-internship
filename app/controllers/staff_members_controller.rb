@@ -94,14 +94,22 @@ class StaffMembersController < ApplicationController
       end
 
       filtered_holidays = InRangeQuery.new(
-        relation: staff_member.active_holidays,
+          relation: staff_member.active_holidays.includes([:creator]),
+          start_value: holiday_start_date,
+          end_value: holiday_end_date,
+          start_column_name: 'start_date',
+          end_column_name: 'end_date'
+        )
+        .all
+
+      filtered_holiday_requests = InRangeQuery.new(
+        relation: staff_member.holiday_requests.in_state(:pending, :rejected).includes([:creator]),
         start_value: holiday_start_date,
         end_value: holiday_end_date,
         start_column_name: 'start_date',
         end_column_name: 'end_date'
-      ).
-      all.
-      order(start_date: :desc)
+      )
+      .all
 
       holidays_in_tax_year = HolidayInTaxYearQuery.new(
        relation: staff_member.active_holidays,
@@ -126,10 +134,19 @@ class StaffMembersController < ApplicationController
       app_download_link_data = get_app_download_link_data(staff_member)
 
       render locals: {
-        staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
+        staff_member: staff_member,
         app_download_link_data: app_download_link_data,
         access_token: access_token,
-        holidays: ActiveModel::Serializer::CollectionSerializer.new(filtered_holidays, serializer: ::HolidaySerializer),
+        holidays: ActiveModel::Serializer::CollectionSerializer.new(
+          filtered_holidays,
+          serializer: ::HolidaySerializer,
+          scope: current_user
+        ),
+        holiday_requests: ActiveModel::Serializer::CollectionSerializer.new(
+          filtered_holiday_requests,
+          serializer: Api::V1::StaffMemberProfile::HolidayRequestSerializer,
+          scope: current_user
+        ),
         paid_holiday_days: paid_holiday_days,
         unpaid_holiday_days: unpaid_holiday_days,
         estimated_accrued_holiday_days: estimated_accrued_holiday_days,
@@ -149,11 +166,11 @@ class StaffMembersController < ApplicationController
         staff_member_profile_permissions: StaffMemberProfilePermissions.new(
           staff_member: staff_member,
           current_user: current_user
-        )
+        ),
+        is_admin: current_user.admin?
       }
     else
       flash.now[:alert] = "You're not authorized to view all of this staff member's details. Contact an admin for further assistance."
-
       render 'reduced_show', locals: {
         staff_member: staff_member
       }
