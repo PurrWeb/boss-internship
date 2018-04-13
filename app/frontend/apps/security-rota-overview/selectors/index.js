@@ -29,21 +29,22 @@ export const getVenueStaffCountList = createSelector(
   (venues, rotas, rotaShifts) =>
     rotas
       .map(rota => {
-        const rotaId = rota.get('id');
-        const venueId = rota.get('venue');
+        const rotaData = rota.toJS();
+        const rotaId = oFetch(rotaData, 'id');
+        const venueId = oFetch(rotaData, 'venue');
 
-        const venue = venues.find(venue => venue.get('id') === venueId);
+        const venue = venues.find(venue => oFetch(venue.toJS(), 'id') === venueId).toJS();
         const currentRotaShifts = rotaShifts.filter(
-          shift => shift.get('rota') === rotaId,
-        );
+          shift => oFetch(shift.toJS(), 'rota') === rotaId,
+        ).toJS();
         const currentRotaStaffCount = currentRotaShifts.reduce(
-          (acc, shift) => acc.add(shift.get('staffMemberId')),
+          (acc, shift) => acc.add(oFetch(shift, 'staffMemberId')),
           new Set([]),
         ).size;
 
         return {
           id: venueId,
-          name: venue.get('name'),
+          name: oFetch(venue, 'name'),
           count: currentRotaStaffCount,
         };
       })

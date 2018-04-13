@@ -113,7 +113,7 @@ class SecurityRotasController < ApplicationController
 
     render locals: {
       access_token: access_token,
-      accessible_venues: accessible_venues_for(current_user),
+      accessible_venues: Venue.all,
       start_date: week.start_date,
       end_date: week.end_date,
       rotas: rotas,
@@ -122,10 +122,6 @@ class SecurityRotasController < ApplicationController
       rota_shifts: rota_shifts,
       staff_types: staff_types
     }
-  end
-
-  def accessible_venues_for(user)
-    AccessibleVenuesQuery.new(user).all
   end
 
   def highlight_date_from_params
