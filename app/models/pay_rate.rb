@@ -69,11 +69,11 @@ class PayRate < ActiveRecord::Base
   end
 
   def hourly?
-    calculation_type == 'incremental_per_hour'
+    calculation_type == HOURLY_CALCULATION_TYPE
   end
 
   def weekly?
-    calculation_type == 'salary_per_week'
+    calculation_type == WEEKLY_CALCULATION_TYPE
   end
 
   def deletable?
