@@ -49,6 +49,8 @@ class AccessoriesList extends React.Component {
     return accessories.map((accessory, index) => {
       const price = numeral(oFetch(accessory, 'priceCents') / 100).format('0,0.00');
       const isEnabled = oFetch(accessory, 'enabled');
+      const pendingRefundCount = oFetch(accessory, 'pendingRefundCount');
+      const pendingRequestCount = oFetch(accessory, 'pendingRequestCount');
       return (
         <BossCheckCard
           key={index}
@@ -60,8 +62,8 @@ class AccessoriesList extends React.Component {
           <BossCheckCardRow title="Type" text={accessoriesConstants.ACCESSORY_TYPE_LABELS[oFetch(accessory, 'accessoryType')]} />
           <BossCheckCardRow title="Size" text={this.getSizes(oFetch(accessory, 'size'))} />
           <BossCheckCardRow title="Self requestable" text={oFetch(accessory, 'userRequestable') ? 'Yes' : 'No'} />
-          <BossCheckCardRow title="Current requests" text={0} />
-          <BossCheckCardRow title="Current refunds" text={0} />
+          <BossCheckCardRow title="Current requests" text={pendingRequestCount} />
+          <BossCheckCardRow title="Current refunds" text={pendingRefundCount} />
           { isEnabled
               ? this.renderEnabledButtons(accessory)
               : this.renderDisabledButtons(accessory)

@@ -46,7 +46,7 @@ class AccessoryListItem extends Component {
             accessoryRequests={requests}
             staffMembers={staffMembers}
             paginate
-            pageSize={1}
+            pageSize={5}
             requestItemRenderer={data => (
               <AccessoryRequestItem
                 onRejectRequest={rejectAccessoryRequest}
@@ -69,7 +69,7 @@ class AccessoryListItem extends Component {
               accessoryRequests={refundRequests}
               staffMembers={staffMembers}
               paginate
-              pageSize={1}
+              pageSize={5}
               requestItemRenderer={data => (
                 <AccessoryRequestItem
                   onAcceptRequest={acceptAccessoryRefundRequest}

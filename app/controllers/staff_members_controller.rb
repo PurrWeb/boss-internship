@@ -223,7 +223,7 @@ class StaffMembersController < ApplicationController
     ).page_pay_rates.map(&:id)
 
     venue_accessories = staff_member.master_venue.accessories.enabled
-    accessory_requests = staff_member.accessory_requests.includes([:accessory, accessory_refund_request: [:staff_member]])
+    accessory_requests = staff_member.accessory_requests.includes([:frozen_by, :created_by_user, :accessory, accessory_refund_request: [:staff_member]])
 
     app_download_link_data = get_app_download_link_data(staff_member)
 

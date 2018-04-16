@@ -37,5 +37,4 @@ class AccessoriesController < ApplicationController
   def venue_from_params
     accessible_venues.find_by(id: params[:venue_id])
   end
-
 end
