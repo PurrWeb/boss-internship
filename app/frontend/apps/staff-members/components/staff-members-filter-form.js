@@ -1,5 +1,6 @@
 import React from "react"
 import Select from 'react-select';
+import oFetch from 'o-fetch';
 
 export default class StaffMembersFilterForm extends React.Component {
   componentDidMount() {
@@ -26,6 +27,7 @@ export default class StaffMembersFilterForm extends React.Component {
     this.state = {
       name: this.props.selected_name,
       email: this.props.selected_email,
+      filterByMasterVenue: this.props.filter_master_venue,
       status: { value: this.props.selected_status, label: this.props.selected_status },
       venue: this.buildHashFor(this.props.selected_venue),
       staff_type: this.buildHashFor(this.props.selected_staff_type)
@@ -38,6 +40,12 @@ export default class StaffMembersFilterForm extends React.Component {
     } else {
       return { value: 'Any', label: 'Any' }
     }
+  }
+
+  changeVenueSearchType(filterByMasterVenue) {
+    this.setState({
+      filterByMasterVenue: filterByMasterVenue
+    })
   }
 
   changeStatusHandler(status) {
@@ -144,13 +152,26 @@ export default class StaffMembersFilterForm extends React.Component {
 
   renderManagerFilter() {
     if (this.props.isSecurityManager) return '';
+    const filterByMasterVenue = oFetch(this.state, 'filterByMasterVenue');
 
     return(
       <div className="boss-form__group boss-form__group_layout_half">
         <div className="boss-form__field">
-          <label className="boss-form__label">
-            <span className="boss-form__label-text">Venue</span>
-          </label>
+          <div className="boss-form__label-group">
+            <p className="boss-form__label">
+              <span className="boss-form__label-text">Venue</span>
+            </p>
+            <label className="boss-form__checkbox-label boss-form__checkbox-label_context_label-group">
+              <input type="checkbox"
+                name="filter_master_venue"
+                className="boss-form__checkbox-input"
+                onChange={(e) => this.changeVenueSearchType(e.target.checked)}
+                checked={!!filterByMasterVenue}
+                value={!!filterByMasterVenue}
+              />
+              <span className="boss-form__checkbox-label-text">Master venue only</span>
+            </label>
+          </div>
 
           <div className="boss-form__select">
             <Select

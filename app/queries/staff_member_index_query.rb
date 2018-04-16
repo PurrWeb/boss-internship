@@ -7,6 +7,7 @@ class StaffMemberIndexQuery
     email_text:,
     venue:,
     accessible_venues:,
+    filter_master_venue:,
     filter_venues: true
   )
     @relation = relation
@@ -17,6 +18,7 @@ class StaffMemberIndexQuery
     @filter_venues = filter_venues
     @venue = venue
     @accessible_venues = accessible_venues
+    @filter_master_venue = filter_master_venue
   end
 
   def all
@@ -44,8 +46,12 @@ class StaffMemberIndexQuery
       end
 
       if filter_venues
-        if venue.present?
-          result = result.for_venue(venue)
+        if venue.present? && accessible_venues.include?(venue)
+          if filter_master_venue
+            result = result.where(master_venue_id: venue.id)
+          else
+            result = result.for_venue(venue)
+          end
         else
           result = result.for_venues(venue_ids: accessible_venues.pluck(:id))
         end
@@ -56,7 +62,7 @@ class StaffMemberIndexQuery
   end
 
   private
-  attr_reader :relation, :staff_type_proc, :status_proc, :email_text, :name_text, :venue, :accessible_venues, :filter_venues
+  attr_reader :relation, :staff_type_proc, :status_proc, :email_text, :name_text, :venue, :accessible_venues, :filter_venues, :filter_master_venue
 
   def self.filter_by_status(status:, relation:)
     case status

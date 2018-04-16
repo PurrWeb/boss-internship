@@ -7,10 +7,11 @@ class StaffMemberIndexFilter < Reform::Form
     @status = normalised_params.fetch(:status)
     @staff_type = StaffType.find_by(id: normalised_params.fetch(:staff_type))
     @venue = Venue.find_by(id: normalised_params.fetch(:venue))
+    @filter_master_venue = normalised_params.fetch(:filter_master_venue)
     super(OpenStruct.new)
   end
 
-  attr_reader :staff_type, :venue, :status, :name_text, :email_text
+  attr_reader :staff_type, :venue, :status, :name_text, :email_text, :filter_master_venue
 
   property :venue
   property :staff_type
@@ -41,6 +42,7 @@ class StaffMemberIndexFilter < Reform::Form
       name_text: name_text,
       email_text: email_text,
       filter_venues: false,
+      filter_master_venue: filter_master_venue,
       venue: nil,
       accessible_venues: nil,
       status_proc: lambda do |relation|
@@ -64,6 +66,7 @@ class StaffMemberIndexFilter < Reform::Form
       name_text: name_text,
       email_text: email_text,
       venue: venue,
+      filter_master_venue: filter_master_venue,
       accessible_venues: accessible_venues,
       filter_venues: venue && !(staff_type && staff_type.security?),
       status_proc: lambda do |relation|
@@ -89,6 +92,7 @@ class StaffMemberIndexFilter < Reform::Form
       name_text: name_text,
       email_text: email_text,
       filter_venues: false,
+      filter_master_venue: filter_master_venue,
       venue: nil,
       accessible_venues: nil,
       status_proc: lambda do |relation|
@@ -109,7 +113,8 @@ class StaffMemberIndexFilter < Reform::Form
       email_text: '',
       status: 'enabled',
       staff_type: nil,
-      venue: nil
+      venue: nil,
+      filter_master_venue: false
     }
   end
 end

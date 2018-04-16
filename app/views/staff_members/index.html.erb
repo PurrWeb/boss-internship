@@ -26,6 +26,7 @@
           staff_type: filter.staff_type,
           staff_types: filter.accessible_staff_types,
           statuses: filter.select_statuses,
+          filter_master_venue: filter.filter_master_venue,
           is_security_manager: true,
           venues: filter.accessible_venues
         )
@@ -44,7 +45,8 @@
         <div class="boss-table__cell boss-table__cell_role_header">Modified</div>
         <div class="boss-table__cell boss-table__cell_role_header">Status</div>
         <div class="boss-table__cell boss-table__cell_role_header">Type</div>
-        <div class="boss-table__cell boss-table__cell_role_header">Venue</div>
+        <div class="boss-table__cell boss-table__cell_role_header">Master Venue</div>
+        <div class="boss-table__cell boss-table__cell_role_header">Work Venues</div>
       </div>
 
       <% staff_members.each do |staff_member| %>
@@ -98,10 +100,27 @@
           </div>
 
           <div class="boss-table__cell">
-            <div class="boss-table__info" data-role="venues">
-              <p class="boss-table__label">Venue</p>
+            <div class="boss-table__info" data-role="master-venue">
+              <p class="boss-table__label">Master Venue</p>
               <p class="boss-table__text">
-                <%= link_to venues_for(staff_member), staff_member_path(id: staff_member.id), class: 'boss-table__link' %>
+                <% if staff_member.master_venue.present? %>
+                  <%= link_to staff_member.master_venue.name.titlecase, staff_member_path(id: staff_member.id), class: 'boss-table__link' %>
+                <% else %>
+                  <span>N/A</span>
+                <% end %>
+              </p>
+            </div>
+          </div>
+
+          <div class="boss-table__cell">
+            <div class="boss-table__info" data-role="work-venues">
+              <p class="boss-table__label">Work Venues</p>
+              <p class="boss-table__text">
+                <% if staff_member.work_venues.present? %>
+                  <%= link_to(staff_member.work_venues.map(&:name).join(", "), staff_member_path(id: staff_member.id), class: 'boss-table__link') %>
+                <% else %>
+                  <span>N/A</span>
+                <% end %>
               </p>
             </div>
           </div>
