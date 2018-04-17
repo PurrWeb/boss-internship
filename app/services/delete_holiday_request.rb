@@ -8,10 +8,13 @@ class DeleteHolidayRequest
   def initialize(requester:, holiday_request:)
     @requester = requester
     @holiday_request = holiday_request
+    @ability = UserAbility.new(requester)
   end
 
   def call
     result = true
+    ability.authorize(:destroy, holiday_request)
+
     if holiday_request.pending?
       holiday_request.destroy
     else
@@ -23,5 +26,5 @@ class DeleteHolidayRequest
   end
 
   private
-  attr_reader :requester, :holiday_request
+  attr_reader :requester, :holiday_request, :ability
 end

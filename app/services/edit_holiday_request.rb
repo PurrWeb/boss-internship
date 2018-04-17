@@ -8,6 +8,7 @@ class EditHolidayRequest
   def initialize(requester:, holiday_request:, params:)
     @requester = requester
     @holiday_request = holiday_request
+    @ability = UserAbility.new(requester)
     @params = params
     assert_params
   end
@@ -21,6 +22,8 @@ class EditHolidayRequest
 
       ActiveRecord::Base.transaction do
         holiday_request.assign_attributes(update_params)
+        ability.authorize!(:update, holiday_request)
+
         success = holiday_request.save
 
         raise ActiveRecord::Rollback unless success
@@ -31,7 +34,7 @@ class EditHolidayRequest
   end
 
   private
-  attr_reader :requester, :holiday_request, :params
+  attr_reader :requester, :holiday_request, :params, :ability
 
   def assert_params
     if params.keys.map(&:to_sym).sort != edit_attributes.sort

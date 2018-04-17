@@ -8,11 +8,13 @@ class RejectHolidayRequest
   def initialize(requester:, holiday_request:)
     @requester = requester,
     @holiday_request = holiday_request
+    @ability = UserAbility.new(requester)
   end
 
   def call
     success = false
 
+    ability.authorize!(:reject, holiday_request)
     ActiveRecord::Base.transaction do
       success = holiday_request.state_machine.transition_to(:rejected)
     end
@@ -21,5 +23,5 @@ class RejectHolidayRequest
   end
 
   private
-  attr_reader :requester, :holiday_request
+  attr_reader :requester, :holiday_request, :ability
 end

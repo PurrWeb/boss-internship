@@ -1,5 +1,5 @@
 class HolidayRequestApiErrors
-  def initialize(holiday_request:, holiday:)
+  def initialize(holiday_request:, holiday: nil)
     @holiday_request = holiday_request
     @holiday = holiday
   end
@@ -15,7 +15,7 @@ class HolidayRequestApiErrors
       end
     end
 
-    if holiday.errors[:base].present?
+    if holiday.present? && holiday.errors[:base].present?
       result[:base] ||= []
       holiday.errors[:base].each do |error|
         result[:base] << error

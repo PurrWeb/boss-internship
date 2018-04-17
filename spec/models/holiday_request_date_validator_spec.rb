@@ -7,9 +7,10 @@ describe HolidayRequestDateValidator do
      HolidayRequest.new(
        start_date: request_start_date,
        end_date: request_end_date,
-       staff_member: staff_member,
-       validate_as_creation: true
-     )
+       staff_member: staff_member
+     ).tap do |holiday_request|
+      holiday_request.validate_as_creation = true
+     end
   end
   let(:validator) { HolidayRequestDateValidator.new(holiday_request, call_time) }
   let(:staff_member) { FactoryGirl.create(:staff_member) }

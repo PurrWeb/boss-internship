@@ -5,8 +5,10 @@ class CreateHolidayRequest
     end
   end
 
-  def initialize(params:)
+  def initialize(params:, requester:)
     @params = params
+    @requester = requester
+    @ability = UserAbility.new(requester)
   end
 
   def call
@@ -14,11 +16,13 @@ class CreateHolidayRequest
     holiday_request = nil
 
     holiday_request = HolidayRequest.new(params)
+    ability.authorize!(:create, holiday_request)
+
     success = holiday_request.save
 
     Result.new(success, holiday_request)
   end
 
   private
-  attr_reader :params
+  attr_reader :params, :requester, :ability
 end

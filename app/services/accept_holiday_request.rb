@@ -8,6 +8,7 @@ class AcceptHolidayRequest
   def initialize(requester:, holiday_request:)
     @requester = requester
     @holiday_request = holiday_request
+    @ability = UserAbility.new(requester)
   end
 
   def call
@@ -16,6 +17,7 @@ class AcceptHolidayRequest
     create_holiday_result = nil
     holiday_request_result = nil
 
+    ability.authorize!(:accept, holiday_request)
     ActiveRecord::Base.transaction do
       holiday_params = {
         start_date: holiday_request.start_date,
@@ -46,5 +48,5 @@ class AcceptHolidayRequest
   end
 
   private
-  attr_reader :requester, :holiday_request
+  attr_reader :requester, :holiday_request, :ability
 end

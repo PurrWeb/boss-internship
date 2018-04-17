@@ -310,6 +310,14 @@ class StaffMember < ActiveRecord::Base
     end
   end
 
+  def on_weekly_pay_rate?
+    pay_rate.andand.weekly?
+  end
+
+  def on_hourly_pay_rate?
+    pay_rate.andand.hourly?
+  end
+
   def disable_reason
     state_machine.last_transition.metadata.fetch("disable_reason") if disabled?
   end

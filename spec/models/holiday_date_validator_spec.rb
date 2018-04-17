@@ -9,8 +9,9 @@ describe HolidayDateValidator do
       staff_member: staff_member,
       start_date: start_date,
       end_date: end_date,
-      validate_as_creation: true
-    )
+    ).tap do |holiday|
+      holiday.validate_as_creation = true
+    end
   end
   let(:now) { RotaWeek.new(Time.current.to_date).start_date }
   let(:staff_member) { FactoryGirl.build(:staff_member) }
