@@ -34,7 +34,7 @@ const initialState = fromJS({
   newHoliday: false,
   editHoliday: false,
   editedHoliday: {},
-  isAdmin: null,
+  isAdminPlus: null,
 });
 
 const holidaysReducer = handleActions({
@@ -49,7 +49,7 @@ const holidaysReducer = handleActions({
       estimatedAccruedHolidayDays,
       holidayStartDate,
       holidayEndDate,
-      isAdmin
+      isAdminPlus
     } = action.payload;
 
     return state
@@ -62,7 +62,7 @@ const holidaysReducer = handleActions({
       .set('estimatedAccruedHolidayDays', fromJS(estimatedAccruedHolidayDays))
       .set('holidayStartDate', safeMoment.uiDateParse(holidayStartDate))
       .set('holidayEndDate', safeMoment.uiDateParse(holidayEndDate))
-      .set('isAdmin', isAdmin)
+      .set('isAdminPlus', isAdminPlus)
   },
   [UPDATE_HOLIDAYS_COUNT]: (state, action) => {
     const {
@@ -122,8 +122,8 @@ const holidaysReducer = handleActions({
   },
   [ADD_HOLIDAY_SUCCESS]: (state, action) => {
     const newHoliday = fromJS(action.payload);
-    const isAdmin = state.get('isAdmin');
-    if (isAdmin) {
+    const isAdminPlus = state.get('isAdminPlus');
+    if (isAdminPlus) {
       return state.update('holidays', holidays => holidays.push(newHoliday));
     } else {
       return state.update('holidayRequests', holidays => holidays.push(newHoliday));

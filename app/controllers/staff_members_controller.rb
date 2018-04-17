@@ -167,7 +167,7 @@ class StaffMembersController < ApplicationController
           staff_member: staff_member,
           current_user: current_user
         ),
-        is_admin: current_user.admin?
+        is_admin_plus: current_user.has_effective_access_level?(AccessLevel.admin_access_level)
       }
     else
       flash.now[:alert] = "You're not authorized to view all of this staff member's details. Contact an admin for further assistance."

@@ -49,7 +49,7 @@ const mapStateToProps = state => {
     editHoliday: state.getIn(['holidays', 'editHoliday']),
     editedHoliday: state.getIn(['holidays', 'editedHoliday']),
     disabled: state.getIn(['profile', 'staffMember', 'disabled']),
-    isAdmin: state.getIn(['holidays', 'isAdmin']),
+    isAdminPlus: state.getIn(['holidays', 'isAdminPlus']),
   };
 };
 
@@ -206,7 +206,7 @@ class Holidays extends React.PureComponent {
   };
 
   canCreateHoliday() {
-    return (this.props.isAdmin && this.props.isStaffMemberWeeklyPayrate) || !this.props.isStaffMemberWeeklyPayrate;
+    return this.props.isAdminPlus || !this.props.isStaffMemberWeeklyPayrate;
   }
 
   render() {
