@@ -13,10 +13,8 @@ class CreateHolidayRequest
     success = false
     holiday_request = nil
 
-    ActiveRecord::Base.transaction do
-      holiday_request = HolidayRequest.new(params)
-      success = holiday_request.save
-    end
+    holiday_request = HolidayRequest.new(params)
+    success = holiday_request.save
 
     Result.new(success, holiday_request)
   end
