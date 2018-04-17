@@ -103,6 +103,21 @@ class RotaDate {
         }
         return date;
     }
+    isShiftBelongsToRotaDay({ shiftStartsAt, shiftEndsAt }) {
+        if (shiftStartsAt) {
+            const shiftStartTime = new Date(shiftStartsAt);
+            return (
+                this.startTime <= shiftStartTime && shiftStartTime < this.endTime
+            );
+        } else if (shiftEndsAt) {
+            const shiftEndTime = new Date(shiftEndsAt);
+            return (
+                this.startTime < shiftEndTime && shiftEndTime <= this.endTime
+            );
+        } else {
+            throw new Error('RotaDate needs shiftStartsAt or shiftEndsAt option.');
+        }
+    };
 }
 
 export default RotaDate;
