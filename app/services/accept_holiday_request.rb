@@ -1,5 +1,5 @@
 class AcceptHolidayRequest
-  Result = Struct.new(:success, :holiday_request) do
+  Result = Struct.new(:success, :holiday_request, :created_holiday) do
     def success?
       success
     end
@@ -42,7 +42,7 @@ class AcceptHolidayRequest
       success = create_holiday_result.success? || accept_success || holiday_request_result.andand.success?
       raise ActiveRecord::Rollback unless success
     end
-    Result.new(success, holiday_request)
+    Result.new(success, holiday_request, create_holiday_result.holiday)
   end
 
   private

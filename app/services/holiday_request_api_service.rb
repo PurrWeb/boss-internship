@@ -72,7 +72,7 @@ class HolidayRequestApiService
 
     api_errors = nil
     unless result.success?
-      api_errors = HolidayRequestApiErrors.new(holiday_request: holiday_request)
+      api_errors = HolidayRequestApiErrors.new(holiday_request: holiday_request, holiday: result.created_holiday)
     end
     Result.new(holiday_request, result.success?, api_errors)
   end
