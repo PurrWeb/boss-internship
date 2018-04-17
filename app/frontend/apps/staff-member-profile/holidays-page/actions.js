@@ -51,13 +51,13 @@ export const deleteHoliday = holidayId => (dispatch, getState) => {
           payload: resp.data,
         });
       });
-      notify('Staff Member Holiday Deleted Successfully', {
+      notify('Holiday Deleted Successfully', {
         interval: 5000,
         status: 'success',
       });
     })
     .catch(() => {
-      notify('Deliting Staff Member Holiday was Failed', {
+      notify('Deleting Holiday Failed', {
         interval: 5000,
         status: 'error',
       });
@@ -82,13 +82,13 @@ export const deleteHolidayRequest = holidayId => (dispatch, getState) => {
         type: DELETE_HOLIDAY_REQUEST,
         payload: resp.data,
       });
-      notify('Staff Member Holiday request Deleted Successfully', {
+      notify('Holiday Request Deleted Successfully', {
         interval: 5000,
         status: 'success',
       });
     })
     .catch(() => {
-      notify('Deliting Staff Member Holiday request was Failed', {
+      notify('Deleting Holiday Request Failed', {
         interval: 5000,
         status: 'error',
       });
@@ -133,7 +133,7 @@ export const editHoliady = ({ startDate, endDate, holidayType, note, id }) => (
       dispatch({
         type: CLOSE_EDIT_HOLIDAY_MODAL,
       });
-      notify('Staff Member Holiday Updated Successfully', {
+      notify('Holiday Updated Successfully', {
         interval: 5000,
         status: 'success',
       });
@@ -176,7 +176,7 @@ export const editHolidayRequest = ({
       dispatch({
         type: CLOSE_EDIT_HOLIDAY_MODAL,
       });
-      notify('Staff Member Holiday request Updated Successfully', {
+      notify('Holiday request Updated Successfully', {
         interval: 5000,
         status: 'success',
       });
@@ -221,7 +221,7 @@ export const addHoliday = ({ startDate, endDate, holidayType, note }) => (
       dispatch({
         type: CLOSE_HOLIDAY_MODAL,
       });
-      notify('Staff Member Holiday Added Successfully', {
+      notify('Holiday Added Successfully', {
         interval: 5000,
         status: 'success',
       });
@@ -263,7 +263,7 @@ export const addHolidayRequest = ({
       dispatch({
         type: CLOSE_HOLIDAY_MODAL,
       });
-      notify('Staff Member Holiday Added Successfully', {
+      notify('Holiday Request Added Successfully', {
         interval: 5000,
         status: 'success',
       });
