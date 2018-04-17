@@ -1,0 +1,11 @@
+<%= react_component('SecurityRotaShiftRequestsApp', {
+  accessToken: access_token,
+  date: UIRotaDate.format(date),
+  securityShiftRequests: [],
+  venues: ActiveModel::Serializer::CollectionSerializer.new(
+    venues,
+    serializer: Api::V1::SecurityRota::VenueSerializer,
+  ),
+  startDate: UIRotaDate.format(start_date),
+  endDate: UIRotaDate.format(end_date),
+}) %>

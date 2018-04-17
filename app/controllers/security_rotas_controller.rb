@@ -77,6 +77,26 @@ class SecurityRotasController < ApplicationController
     }
   end
 
+  def requests
+    date = rota_date_from_params
+    raise ActiveRecord::RecordNotFound unless date.present?
+    
+    venues = Venue.all
+    week = RotaWeek.new(date)
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+
+    accepted_security_shift_requests = []
+
+    render locals: {
+      access_token: access_token.token,
+      date: date,
+      venues: venues,
+      security_shift_requests: accepted_security_shift_requests,
+      start_date: week.start_date,
+      end_date: week.end_date,
+    }
+  end
+
   private
   def authorize
     authorize! :view, :security_rota

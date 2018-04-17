@@ -140,7 +140,11 @@ Rails.application.routes.draw do
 
     resources :admin_pay_rates, only: [:new, :create]
 
-    resources :security_rotas, only: [:index, :show]
+    resources :security_rotas, only: [:index, :show] do
+      member do
+        get :requests
+      end
+    end
 
     resources :change_order_reports, only: [:index, :show] do
       member do
