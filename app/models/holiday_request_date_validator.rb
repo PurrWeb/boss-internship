@@ -1,7 +1,7 @@
 class HolidayRequestDateValidator
-  def initialize(holiday_request)
+  def initialize(holiday_request, now = Time.current)
     @holiday_request = holiday_request
-    @now = Time.current
+    @now = now
   end
   attr_reader :holiday_request, :now
 
@@ -55,14 +55,14 @@ class HolidayRequestDateValidator
     ).all
 
     if holiday_request.created_holiday
-      overlapping_holidays_exclusive = ExclusiveOfQuery.new(
+      overlapping_holidays = ExclusiveOfQuery.new(
         relation: overlapping_holidays,
         excluded: holiday_request.created_holiday
       ).all
     end
 
-    if overlapping_holidays_exclusive.present?
-      holiday_request.errors.add(:base, 'Holiday conflicts with an existing holiday')
+    if overlapping_holidays.present?
+      holiday_request.errors.add(:base, 'Request conflicts with an existing holiday')
     end
 
     staff_member_holiday_requests = HolidayRequest
