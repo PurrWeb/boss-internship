@@ -2,7 +2,7 @@ import React from 'react';
 import utils from '~/lib/utils';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import VenueSelect from './venue-select';
+import VenueSelect from '~/components/security-rota/venue-select';
 import StaffMemberList from './staff-member-list';
 import AddMultipleShift from './add-multiple-shift';
 class AddShifts extends React.Component {

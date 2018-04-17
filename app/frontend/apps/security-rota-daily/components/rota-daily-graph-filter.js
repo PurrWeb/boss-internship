@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import VenueSelect from './venue-select';
-import RotaFilter from './rota-filter';
+import VenueSelect from '~/components/security-rota/venue-select';
+import RotaFilter from '~/components/security-rota/security-rota-filter';
 import RotaDayFilter from './rota-day-filter';
 
 class RotaDailyGraphFilter extends React.Component {
@@ -21,7 +21,7 @@ class RotaDailyGraphFilter extends React.Component {
                 onChange={this.props.onVenueChange}
               />
             </div>
-            <RotaFilter currentRotaDay={this.props.rotaDate} />
+            <RotaFilter currentRotaDay={this.props.rotaDate} page="daily" />
           </div>
           <RotaDayFilter currentRotaDay={this.props.rotaDate} />
           <div className="boss-form__row boss-form__row_justify_space boss-form__row_mobile boss-form__row_position_last">
