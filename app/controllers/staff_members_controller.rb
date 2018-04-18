@@ -138,7 +138,7 @@ class StaffMembersController < ApplicationController
         app_download_link_data: app_download_link_data,
         access_token: access_token,
         holidays: ActiveModel::Serializer::CollectionSerializer.new(
-          filtered_holidays,
+          filtered_holidays.includes(:holiday_request),
           serializer: ::HolidaySerializer,
           scope: current_user
         ),
