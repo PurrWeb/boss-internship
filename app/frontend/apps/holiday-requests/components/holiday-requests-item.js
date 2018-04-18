@@ -38,7 +38,7 @@ class HolidayRequestsItem extends Component {
         const errors = oFetch(response, 'data.errors.base')
         this.setState({ errors: errors });
       } else {
-        if (Rollbar) {
+        if(typeof Rollbar !== 'undefined') {
           Rollbar.error("Unexpected response code encountered", payload);
         }
         if (typeof window.console !== 'undefined') {
