@@ -342,7 +342,7 @@ class UserAbility
 
       can [:update, :destroy], Holiday do |holiday|
         if holiday.created_from_request?
-          user.has_effective_access_level(AccessLevel.admin_access_level)
+          user.has_effective_access_level?(AccessLevel.admin_access_level)
         else
           can_view_holiday?(user, holiday)
         end
@@ -355,7 +355,7 @@ class UserAbility
       end
 
       can [:accept, :reject, :update, :destroy], HolidayRequest do |holiday_request|
-        user.has_effective_access_level(AccessLevel.admin_access_level)
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can :list, :staff_members do
