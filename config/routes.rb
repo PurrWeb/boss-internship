@@ -11,7 +11,8 @@ Rails.application.routes.draw do
       passwords: 'users/passwords'
     }
 
-    resources :security_shift_requests, only: [:index], path: 'security-shift-requests'
+    resources :security_shift_requests, only: [:index, :show], path: 'security-shift-requests'
+    resources :security_shift_request_reviews, only: [:index, :show], path: 'security-shift-request-reviews'
     resources :ops_diaries, only: [:index], path: 'ops-diaries'
     resources :accessories, only: [:index]
     resources :accessory_requests, only: [:index], path: 'accessory-requests'
@@ -209,10 +210,20 @@ Rails.application.routes.draw do
           end
         end
       end
+
       namespace :v1 do
         get 'version', to: 'version#version'
 
         resources :venue_dashboard_forecasts, only: [:show]
+
+        resources :security_shift_requests, only: [:create, :update], path: 'security-shift-requests' do
+          member do
+            post :accept
+            post :reject
+            post :undo
+            post :assign
+          end
+        end
 
         resources :security_rota_shifts, only: [:create, :update, :destroy], path: 'security-rota-shifts'
 
