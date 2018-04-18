@@ -10,6 +10,7 @@ class SecurityShiftRequestApiService
     @security_shift_request = security_shift_request
     @ability = UserAbility.new(requester)
   end
+
   attr_reader :security_shift_request, :requester, :ability
 
   def update(params)
@@ -92,6 +93,20 @@ class SecurityShiftRequestApiService
   def reject
     result = RejectSecurityShiftRequest.new(
       requester: requester,
+      security_shift_request: security_shift_request
+    ).call
+
+    api_errors = nil
+    unless result.success?
+      api_errors = SecurityShiftRequestApiErrors.new(security_shift_request: result.security_shift_request)
+    end
+    Result.new(result.security_shift_request, result.success?, api_errors)
+  end
+
+  def assign(staff_member:)
+    result = AssignSecurityShiftRequest.new(
+      requester: requester,
+      staff_member: staff_member,
       security_shift_request: security_shift_request
     ).call
 
