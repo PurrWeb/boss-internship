@@ -7,7 +7,8 @@ class HolidaySerializer < ActiveModel::Serializer
     :creator,
     :note,
     :created_at,
-    :editable
+    :editable,
+    :state
 
   def start_date
     UIRotaDate.format(object.start_date)
@@ -23,6 +24,10 @@ class HolidaySerializer < ActiveModel::Serializer
 
   def editable
     object.editable? && user_can_edit
+  end
+
+  def state
+    object.created_from_request? ? 'accepted' : ''
   end
 
   def user_can_edit
