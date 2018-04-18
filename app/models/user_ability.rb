@@ -492,6 +492,22 @@ class UserAbility
           user.has_effective_access_level?(AccessLevel.manager_access_level) &&
             can_manage_venue?(user, marketing_task.venue)
       end
+
+      can :visit, :stock_application do
+        user.food_ops_manager? ||
+        user.payroll_manager? ||
+          user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :visit, :bookings_application do
+        user.payroll_manager? ||
+          user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :visit, :cashing_up_application do
+        user.payroll_manager? ||
+          user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
     end
 
     #

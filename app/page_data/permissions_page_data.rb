@@ -139,6 +139,28 @@ class PermissionsPageData
       ]
     }
 
+    applications = {
+      name: "Applications",
+      color: '#000000',
+      items: [
+        {
+          description: "Stock",
+          permitted: role.can?(:visit, :stock_application),
+          path: 'https://beta-stock.jsmbars.online/'
+        },
+        {
+          description: "Bookings",
+          permitted: role.can?(:visit, :bookings_application),
+          path: 'https://bookings.jsmbars.online/'
+        },
+        {
+          description: "Cashing Up",
+          permitted: role.can?(:visit, :cashing_up_application),
+          path: 'https://cashup.jsmbars.online/'
+        },
+      ]
+    }
+
     admin_general = {
       name: "Admin: General",
       color: "#e67e22",
@@ -286,6 +308,7 @@ class PermissionsPageData
     menu << venue if venue.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << staff_members if staff_members.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << reports if reports.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << applications if applications.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << admin_general if admin_general.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << admin_users if admin_users.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << admin_staff_members if admin_staff_members.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
