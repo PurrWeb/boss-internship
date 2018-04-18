@@ -6,6 +6,8 @@ class SecurityShiftRequest < ActiveRecord::Base
   belongs_to :venue
   has_many :security_shift_request_transitions
 
+  scope :accepted, -> { in_state(:accepted) }
+
   validates :creator, presence: true
   validates :starts_at, presence: true
   validates :ends_at, presence: true
