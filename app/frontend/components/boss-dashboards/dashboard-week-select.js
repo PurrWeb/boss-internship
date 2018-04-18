@@ -44,8 +44,10 @@ class DashboardWeekSelect extends React.Component {
     return (
       <div className="boss-page-main__dashboard">
         <div className="boss-page-main__inner">
-          <div className="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_rotas-weekly-security">
-            <h1 className="boss-page-dashboard__title">{this.props.title}</h1>
+          <div className="boss-page-dashboard boss-page-dashboard_updated">
+            <div className="boss-page-dashboard__group">
+              <h1 className="boss-page-dashboard__title">{this.props.title}</h1>
+            </div>
             <div className="boss-page-dashboard__group">
               <div className="boss-page-dashboard__meta">
                 <Popover
