@@ -80,18 +80,46 @@ class SecurityRotasController < ApplicationController
   def requests
     date = rota_date_from_params
     raise ActiveRecord::RecordNotFound unless date.present?
-    
-    venues = Venue.all
-    week = RotaWeek.new(date)
-    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
-    accepted_security_shift_requests = []
+    venues = Venue.all
+
+    week = RotaWeek.new(date)
+    week_start_time = RotaShiftDate.new(week.start_date).start_time
+    week_end_time = RotaShiftDate.new(week.end_date).end_time
+    staff_types = StaffType.where(role: 'security')
+
+    staff_members = StaffMember
+                    .enabled
+                    .joins(:staff_type)
+                    .merge(staff_types)
+                    .includes(:name)
+                    .includes(:staff_type)
+                    .includes(:master_venue)
+                    .uniq
+
+    week_rota_shifts = RotaShift
+                        .enabled
+                        .joins(:staff_member)
+                        .merge(staff_members)
+                        .where(starts_at: week_start_time..week_end_time)
+                        .includes(:rota)
+    week_shift_requests = SecurityShiftRequest
+                          .accepted
+                          .where(starts_at: week_start_time..week_end_time)
+
+    week_rotas = Rota.where(date: [week.start_date..week.end_date])
+
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
       access_token: access_token.token,
       date: date,
       venues: venues,
-      security_shift_requests: accepted_security_shift_requests,
+      week_rotas: week_rotas,
+      week_rota_shifts: week_rota_shifts,
+      week_shift_requests: week_shift_requests,
+      staff_members: staff_members,
+      staff_types: staff_types,
       start_date: week.start_date,
       end_date: week.end_date,
     }
