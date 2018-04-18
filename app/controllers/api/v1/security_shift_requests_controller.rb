@@ -97,7 +97,27 @@ module Api
       end
 
       def assign
+        security_shift_request = security_request_from_params
 
+        result = SecurityShiftRequestApiService.new(
+          requester: current_user,
+          security_shift_request: security_shift_request,
+        ).assign(staff_member: staff_member_from_params)
+
+        if result.success?
+          assigned_security_shift_request = result.security_shift_request
+          assigned_rota_shift = assigned_security_shift_request.created_shift
+          rota = assigned_rota_shift.rota
+          render(
+            json: {
+              rotaShift: assigned_rota_shift,
+              rota: rota,
+            },
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
       end
 
       private
@@ -109,6 +129,16 @@ module Api
           note: params.fetch(:note),
           venue: venue_from_params,
         }
+      end
+
+      def staff_member_from_params
+        security_staff_types = StaffType.where(role: 'security')
+        StaffMember
+          .enabled
+          .joins(:staff_type)
+          .merge(security_staff_types)
+          .uniq
+          .find(params.fetch(:staffMemberId))
       end
 
       def security_request_from_params
