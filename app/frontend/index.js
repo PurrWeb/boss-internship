@@ -43,6 +43,9 @@ import './lib/load-underscore-mixins';
 import SecurityShiftRequestsApp from './apps/security-shift-requests';
 registerComponent('SecurityShiftRequestsApp', SecurityShiftRequestsApp);
 
+import SecurityShiftRequestReviewsApp from './apps/security-shift-request-reviews';
+registerComponent('SecurityShiftRequestReviewsApp', SecurityShiftRequestReviewsApp);
+
 import DevsApp from './apps/devs';
 registerComponent('DevsApp', DevsApp);
 import AccessoriesApp from './apps/accessories';
