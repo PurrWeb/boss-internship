@@ -28,6 +28,11 @@ class PermissionsPageData
           path: @path.rotas_path
         },
         {
+          description: "Security Shift Requests",
+          permitted: true,
+          path: @path.security_shift_requests_path
+        },
+        {
           description: "Security Rota",
           permitted: role.can?(:view, :security_rota),
           path: @path.security_rotas_path
