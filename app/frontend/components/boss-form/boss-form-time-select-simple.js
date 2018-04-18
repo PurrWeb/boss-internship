@@ -40,12 +40,6 @@ const BossFormTimeSelect = ({
     })
   }
 
-  const onValueChange = (value) => {
-    console.log(value);
-    if (Array.isArray(value) && !value.length) return;
-    onChange(value);
-  }
-  
   return (
     <div className="boss-form__field">
       <label htmlFor={name} className="boss-form__label">
@@ -54,8 +48,9 @@ const BossFormTimeSelect = ({
       <div className={`boss-form__select ${touched && error && 'boss-form__select_state_error'}`}>
         <Select
           options={getOptions(interval, getRotaDate(date))}
-          onChange={onValueChange}
+          onChange={onChange}
           name={name}
+          simpleValue
           placeholder={placeholder || 'Select ...'}
           value={value}
           disabled={disabled}
