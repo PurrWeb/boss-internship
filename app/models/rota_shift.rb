@@ -6,6 +6,7 @@ class RotaShift < ActiveRecord::Base
   belongs_to :disabled_by_user, class_name: "User"
   belongs_to :staff_member
   belongs_to :rota
+  has_one :security_shift_request, foreign_key: "created_shift_id", class_name: "SecurityShiftRequest"
 
   validates :shift_type, inclusion: { in: SHIFT_TYPES, message: 'is required' }
   validates :creator, presence: true

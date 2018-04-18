@@ -33,6 +33,7 @@ class User < ActiveRecord::Base
   has_many :venue_users
   has_many :accessory_requests, foreign_key: "created_by_user_id", class_name: "AccessoryRequest"
   has_many :accessory_refund_requests, foreign_key: "created_by_user_id", class_name: "AccessoryRefundRequest"
+  has_many :security_shift_requests, foreign_key: "creator_id", class_name: "SecurityShiftRequest"
 
   belongs_to :staff_member
 
