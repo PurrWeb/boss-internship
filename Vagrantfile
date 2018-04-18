@@ -15,6 +15,8 @@ Vagrant.configure(2) do |config|
     vb.customize ["modifyvm", :id, "--memory", ENV["BOSS_VAGRANT_MEMORY"] || "2048"]
   end
 
+  config.vm.synced_folder "./", "/vagrant", type: "nfs", :mount_options => ["lookupcache=none"]
+
   # run provision script
   config.vm.provision "shell", path: "vagrant/provision.sh", privileged: false
 end

@@ -62,6 +62,28 @@ class HolidayDateValidator
       holiday.errors.add(:base, 'Holiday conflicts with an existing holiday')
     end
 
+    staff_member_holiday_requests = HolidayRequest.
+      in_state(:pending).
+      where(staff_member: holiday.staff_member)
+
+    if holiday.source_request.present?
+      # Ignore request holiday will be replacing
+      staff_member_holidays = ExclusiveOfQuery.new(
+        relation: staff_member_holiday_requests,
+        excluded: holiday.source_request
+      )
+    end
+
+    overlapping_holiday_requests = HolidayInRangeQuery.new(
+      relation: staff_member_holiday_requests,
+      start_date: holiday.start_date,
+      end_date: holiday.end_date
+    ).all
+
+    if overlapping_holiday_requests.present? && !holiday.validate_as_assignment
+      holiday.errors.add(:base, 'Holiday conflicts with an existing holiday request')
+    end
+
     conflicting_shifts = ShiftInDateRangeQuery.new(
       staff_member: holiday.staff_member,
       start_date: holiday.start_date,

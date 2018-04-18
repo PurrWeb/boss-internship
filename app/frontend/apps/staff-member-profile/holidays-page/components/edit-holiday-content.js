@@ -14,7 +14,9 @@ class EditHolidayContent extends React.PureComponent {
 
   render() {
     const {
-      holiday
+      holiday,
+      onSubmit,
+      buttonTitle,
     } = this.props;
 
     let holidayData = holiday.toJS();
@@ -31,6 +33,8 @@ class EditHolidayContent extends React.PureComponent {
       <div className="boss-modal-window__form">
         <EditHolidayForm
           initialValues={initialValues}
+          submission={onSubmit}
+          buttonTitle={buttonTitle}
         />
       </div>
     )

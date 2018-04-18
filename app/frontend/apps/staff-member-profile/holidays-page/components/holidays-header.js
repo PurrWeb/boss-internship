@@ -1,7 +1,7 @@
 import React from 'react';
 
-const HolidaysHeader = ({title, onAddNew, isStaffMemberDisabled}) => {
-  
+const HolidaysHeader = ({title, onAddNew, isStaffMemberDisabled, buttonText = ''}) => {
+
   return (
     <header className="boss-board__header">
       <h2 className="boss-board__title">
@@ -11,7 +11,7 @@ const HolidaysHeader = ({title, onAddNew, isStaffMemberDisabled}) => {
         { !isStaffMemberDisabled && <button
             onClick={onAddNew}
             className="boss-button boss-button_role_add"
-          >Add Holidays</button>
+          >{buttonText}</button>
         }
       </div>
     </header>

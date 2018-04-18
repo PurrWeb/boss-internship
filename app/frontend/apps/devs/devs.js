@@ -18,8 +18,6 @@ export default class Devs extends React.Component {
       this.setState({
         authService: authService,
       });
-    }).catch(resp => {
-      console.log(resp);
     });
   }
 

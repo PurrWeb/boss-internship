@@ -17,12 +17,15 @@ import {
   EDIT_HOLIDAY_SUCCESS,
   FILTER,
   UPDATE_HOLIDAYS_COUNT,
+  DELETE_HOLIDAY_REQUEST,
+  EDIT_HOLIDAY_REQUEST_SUCCESS,
 } from './constants';
 
 const initialState = fromJS({
   staffMember: {},
   accessToken: null,
   holidays: [],
+  holidayRequests: [],
   paidHolidayDays: null,
   unpaidHolidayDays: null,
   estimatedAccruedHolidayDays: null,
@@ -30,31 +33,36 @@ const initialState = fromJS({
   holidayEndDate: null,
   newHoliday: false,
   editHoliday: false,
-  editedHoliday: {}
+  editedHoliday: {},
+  isAdminPlus: null,
 });
 
 const holidaysReducer = handleActions({
   [INITIAL_LOAD]: (state, action) => {
-    const { 
+    const {
       staffMember,
       accessToken,
       holidays,
+      holidayRequests,
       paidHolidayDays,
       unpaidHolidayDays,
       estimatedAccruedHolidayDays,
       holidayStartDate,
       holidayEndDate,
+      isAdminPlus
     } = action.payload;
 
     return state
       .set('staffMember', fromJS(staffMember))
       .set('accessToken', fromJS(accessToken))
       .set('holidays', fromJS(holidays))
+      .set('holidayRequests', fromJS(holidayRequests))
       .set('paidHolidayDays', fromJS(paidHolidayDays))
       .set('unpaidHolidayDays', fromJS(unpaidHolidayDays))
       .set('estimatedAccruedHolidayDays', fromJS(estimatedAccruedHolidayDays))
       .set('holidayStartDate', safeMoment.uiDateParse(holidayStartDate))
       .set('holidayEndDate', safeMoment.uiDateParse(holidayEndDate))
+      .set('isAdminPlus', isAdminPlus)
   },
   [UPDATE_HOLIDAYS_COUNT]: (state, action) => {
     const {
@@ -62,7 +70,7 @@ const holidaysReducer = handleActions({
       unpaidHolidayDays,
       estimatedAccruedHolidayDays,
     } = action.payload;
-    
+
     return state
       .set('paidHolidayDays', paidHolidayDays)
       .set('unpaidHolidayDays', unpaidHolidayDays)
@@ -78,9 +86,19 @@ const holidaysReducer = handleActions({
   },
   [DELETE_HOLIDAY]: (state, action) => {
     const id = action.payload.id
-    
+
     return state
       .update('holidays',
+      (holidays) => holidays.filter(
+        (item) => item.get('id') !== id
+      )
+    )
+  },
+  [DELETE_HOLIDAY_REQUEST]: (state, action) => {
+    const id = action.payload.id
+
+    return state
+      .update('holidayRequests',
       (holidays) => holidays.filter(
         (item) => item.get('id') !== id
       )
@@ -94,11 +112,22 @@ const holidaysReducer = handleActions({
     return state
       .setIn(['holidays', index], editedItem)
   },
-  [ADD_HOLIDAY_SUCCESS]: (state, action) => {
-    const newHoliday = fromJS(action.payload);
+  [EDIT_HOLIDAY_REQUEST_SUCCESS]: (state, action) => {
+    const editedItem = fromJS(action.payload);
+    const id = editedItem.get('id');
+    const index = state.get('holidayRequests').findIndex(item => item.get("id") === id);
 
     return state
-      .update('holidays', holidays => holidays.push(newHoliday));
+      .setIn(['holidayRequests', index], editedItem)
+  },
+  [ADD_HOLIDAY_SUCCESS]: (state, action) => {
+    const newHoliday = fromJS(action.payload);
+    const isAdminPlus = state.get('isAdminPlus');
+    if (isAdminPlus) {
+      return state.update('holidays', holidays => holidays.push(newHoliday));
+    } else {
+      return state.update('holidayRequests', holidays => holidays.push(newHoliday));
+    }
   },
   [CLOSE_HOLIDAY_MODAL]: (state) => {
     return state
@@ -126,10 +155,12 @@ const holidaysReducer = handleActions({
       estimated_accrued_holiday_days,
       holidayStartDate,
       holidayEndDate,
+      holiday_requests,
     } = action.payload;
 
     return state
       .set('holidays', fromJS(holidays))
+      .set('holidayRequests', fromJS(holiday_requests))
       .set('paidHolidayDays', fromJS(paid_holiday_days))
       .set('unpaidHolidayDays', fromJS(unpaid_holiday_days))
       .set('estimatedAccruedHolidayDays', fromJS(estimated_accrued_holiday_days))

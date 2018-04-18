@@ -12,9 +12,10 @@
 </script>
 
 <%= react_component('StaffMemberHolidaysApp', {
-  staffMember: staff_member,
+  staffMember: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
   accessToken: access_token.token,
   holidays: holidays,
+  holidayRequests: holiday_requests,
   paidHolidayDays: paid_holiday_days,
   unpaidHolidayDays: unpaid_holiday_days,
   estimatedAccruedHolidayDays: estimated_accrued_holiday_days,
@@ -33,5 +34,6 @@
     app_download_link_data,
     Api::V1::StaffMemberProfile::AppDownloadLinkSerializer
   ),
-  permissions: Api::V1::StaffMemberProfile::PermissionsSerializer.new(staff_member_profile_permissions)
+  permissions: Api::V1::StaffMemberProfile::PermissionsSerializer.new(staff_member_profile_permissions),
+  isAdminPlus: is_admin_plus,
 }) %>

@@ -1,12 +1,9 @@
 import React from 'react';
 
-import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
+import { Field, reduxForm } from 'redux-form/immutable';
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormTextarea from '~/components/boss-form/boss-form-textarea';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
-import notify from '~/components/global-notification';
-
-import {addHoliday} from '../actions';
 
 import {
   HOLIDAYS_OPTIONS
@@ -30,32 +27,12 @@ const validate = values => {
   return errors;
 }
 
-const submission = (values, dispatch) => {
-  return dispatch(addHoliday(values.toJS())).catch((resp) => {
-    notify('Adding Holiday Failed', {
-      interval: 5000,
-      status: 'error'
-    });
-
-    const errors = resp.response.data.errors;
-    if (errors) {
-      let base = {};
-
-      if (errors.base) {
-        base = {
-          _error: errors.base
-        }
-      }
-      throw new SubmissionError({...errors, ...base});
-    }
-  });
-}
-
-
 const HolidaysForm = ({
     error,
     handleSubmit,
-    submitting
+    submitting,
+    submission,
+    buttonTitle,
   }) => {
 
   const renderBaseError = (error) => {
@@ -67,7 +44,6 @@ const HolidaysForm = ({
       </div>
     )
   }
-
   return (
     <form
       className="boss-form"
@@ -114,7 +90,7 @@ const HolidaysForm = ({
           disabled={submitting}
           className="boss-button boss-button_role_add boss-form__submit"
         >
-            Add Holiday
+          {buttonTitle}
         </button>
       </div>
     </form>

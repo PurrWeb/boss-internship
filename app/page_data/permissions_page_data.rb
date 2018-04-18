@@ -203,6 +203,11 @@ class PermissionsPageData
           path: @path.pay_rates_path
         },
         {
+          description: "Holiday Requests",
+          permitted: role.can?(:view, :holiday_requests_page),
+          path: @path.holiday_requests_path
+        },
+        {
           description: "Staff Vetting",
           permitted: role.can?(:view, :staff_vetting_page),
           path: @path.staff_vetting_index_path

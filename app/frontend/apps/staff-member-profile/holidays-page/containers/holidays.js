@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import humanize from 'string-humanize';
 import pluralize from 'pluralize';
+import { SubmissionError } from 'redux-form/immutable';
 
+import notify from '~/components/global-notification';
+import { HOLIDAY_TYPE, HOLIDAY_REQUEST_TYPE } from '../selectors';
 import ProfileWrapper from '../../profile-wrapper';
 import HolidayasMobileItems from '../components/holidays-mobile-items';
 
@@ -14,8 +17,15 @@ import {
   deleteHoliday,
   openEditModal,
   closeEditModal,
-  filter
+  filter,
+  addHolidayRequest,
+  addHoliday,
+  deleteHolidayRequest,
+  editHolidayRequest,
+  editHoliady,
 } from '../actions';
+
+import { getHolidaysData } from '../selectors';
 
 import Stats from '../components/stats';
 import HolidaysHeader from '../components/holidays-header';
@@ -25,57 +35,178 @@ import AddNewHoliday from '../components/add-new-holiday';
 import ContentModal from '~/components/content-modal';
 import EditHoliday from '../components/edit-holiday';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    staffMember: state.getIn(['profile','staffMember']),
-    holidays: state.getIn(['holidays','holidays']),
-    paidHolidayDays: state.getIn(['holidays','paidHolidayDays']),
-    unpaidHolidayDays: state.getIn(['holidays','unpaidHolidayDays']),
-    estimatedAccruedHolidayDays: state.getIn(['holidays','estimatedAccruedHolidayDays']),
+    staffMember: state.getIn(['profile', 'staffMember']),
+    isStaffMemberWeeklyPayrate: state.getIn(['profile', 'staffMember', 'is_weekly_payrate']),
+    holidays: getHolidaysData(state),
+    paidHolidayDays: state.getIn(['holidays', 'paidHolidayDays']),
+    unpaidHolidayDays: state.getIn(['holidays', 'unpaidHolidayDays']),
+    estimatedAccruedHolidayDays: state.getIn(['holidays', 'estimatedAccruedHolidayDays']),
     holidayStartDate: state.getIn(['holidays', 'holidayStartDate']),
-    holidayEndDate: state.getIn(['holidays','holidayEndDate']),
+    holidayEndDate: state.getIn(['holidays', 'holidayEndDate']),
     newHoliday: state.getIn(['holidays', 'newHoliday']),
     editHoliday: state.getIn(['holidays', 'editHoliday']),
     editedHoliday: state.getIn(['holidays', 'editedHoliday']),
     disabled: state.getIn(['profile', 'staffMember', 'disabled']),
+    isAdminPlus: state.getIn(['holidays', 'isAdminPlus']),
   };
-}
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    actions: bindActionCreators({
-      updateAvatarRequest,
-      addNewHoliday,
-      cancelAddNewHoliday,
-      deleteHoliday,
-      openEditModal,
-      closeEditModal,
-      filter
-    }, dispatch)
+    actions: bindActionCreators(
+      {
+        updateAvatarRequest,
+        addNewHoliday,
+        addHoliday,
+        cancelAddNewHoliday,
+        deleteHoliday,
+        openEditModal,
+        closeEditModal,
+        filter,
+        addHolidayRequest,
+        deleteHolidayRequest,
+        editHolidayRequest,
+        editHoliady,
+      },
+      dispatch,
+    ),
   };
-}
+};
 
 @connect(mapStateToProps, mapDispatchToProps)
 class Holidays extends React.PureComponent {
-
-  constructor(props){
+  constructor(props) {
     super(props);
   }
-  
+
   onAddNew = () => {
     this.props.actions.addNewHoliday();
-  }
+  };
+
+  onAddNewRequest = () => {
+    this.props.actions.addNewHoliday();
+  };
 
   onCancelAddNew = () => {
     this.props.actions.cancelAddNewHoliday();
-  }
+  };
 
   onOpenEdit = () => {
     this.props.actions.openEditModal();
-  }
+  };
 
   onCloseEdit = () => {
     this.props.actions.closeEditModal();
+  };
+
+  handleNewHolidaySubmit = (values, dispatch) => {
+    return this.props.actions.addHoliday(values.toJS()).catch(resp => {
+      notify('Adding Staff Member Holiday was Failed', {
+        interval: 5000,
+        status: 'error',
+      });
+
+      const errors = resp.response.data.errors;
+      if (errors) {
+        let base = {};
+
+        if (errors.base) {
+          base = {
+            _error: errors.base,
+          };
+        }
+        throw new SubmissionError({ ...errors, ...base });
+      }
+    });
+  };
+
+  handleNewHolidayRequestSubmit = (values, dispatch) => {
+    return this.props.actions.addHolidayRequest(values.toJS()).catch(resp => {
+      notify('Adding Staff Member Holiday was Failed', {
+        interval: 5000,
+        status: 'error',
+      });
+
+      const errors = resp.response.data.errors;
+      if (errors) {
+        let base = {};
+
+        if (errors.base) {
+          base = {
+            _error: errors.base,
+          };
+        }
+        throw new SubmissionError({ ...errors, ...base });
+      }
+    });
+  };
+
+  handleEditHolidayRequestSubmit = (values, dispatch) => {
+    return this.props.actions.editHolidayRequest(values.toJS()).catch(resp => {
+      notify('Updating Staff Member Holiday request was Failed', {
+        interval: 5000,
+        status: 'error',
+      });
+
+      const errors = resp.response.data.errors;
+      if (errors) {
+        let base = {};
+
+        if (errors.base) {
+          base = {
+            _error: errors.base,
+          };
+        }
+        throw new SubmissionError({ ...errors, ...base });
+      }
+    });
+  };
+
+  handleEditHolidaySubmit = (values, dispatch) => {
+    return this.props.actions.editHoliady(values.toJS()).catch(resp => {
+      notify('Updating Staff Member Holiday was Failed', {
+        interval: 5000,
+        status: 'error',
+      });
+
+      const errors = resp.response.data.errors;
+      if (errors) {
+        let base = {};
+
+        if (errors.base) {
+          base = {
+            _error: errors.base,
+          };
+        }
+        throw new SubmissionError({ ...errors, ...base });
+      }
+    });
+  };
+
+  handleEditSubmit = (values, dispatch) => {
+    const type = this.props.editedHoliday.get('type');
+    if (type === HOLIDAY_TYPE) {
+      return this.handleEditHolidaySubmit(values, dispatch);
+    } else {
+      return this.handleEditHolidayRequestSubmit(values, dispatch);
+    }
+  };
+
+  handleDeleteHoliday = holiday => {
+    const type = holiday.get('type');
+    const id = holiday.get('id');
+
+    if (type === HOLIDAY_TYPE) {
+      return this.props.actions.deleteHoliday(id);
+    } else {
+      return this.props.actions.deleteHolidayRequest(id);
+    }
+  };
+
+  canCreateHoliday() {
+    return this.props.isAdminPlus || !this.props.isStaffMemberWeeklyPayrate;
   }
 
   render() {
@@ -98,8 +229,8 @@ class Holidays extends React.PureComponent {
         deleteHoliday,
         openEditModal,
         closeEditModal,
-        filter
-      }
+        filter,
+      },
     } = this.props;
 
     const hasHolidays = !!holidays.size;
@@ -110,45 +241,88 @@ class Holidays extends React.PureComponent {
           <ContentModal
             show={newHoliday}
             onClose={() => this.onCancelAddNew()}
-            title="Add holiday"
+            title={this.canCreateHoliday() ? 'Add holiday' : 'Request holiday'}
           >
             <AddNewHoliday
-              title="Add Holiday"
+              buttonTitle={this.canCreateHoliday() ? 'Add holiday' : 'Request holiday'}
+              onSubmit={this.canCreateHoliday() ? this.handleNewHolidaySubmit : this.handleNewHolidayRequestSubmit}
               startDate={holidayStartDate}
               endDate={holidayEndDate}
-              />
+            />
           </ContentModal>
           <ContentModal
             show={editHoliday}
             onClose={() => this.onCloseEdit()}
-            title="Edit holiday"
+            title={editedHoliday.get('type') === HOLIDAY_TYPE ? 'Edit holiday' : 'Edit holiday request'}
           >
-            <EditHoliday holiday={editedHoliday}/>
+            <EditHoliday
+              buttonTitle={editedHoliday.get('type') === HOLIDAY_TYPE ? 'Update holiday' : 'Update holiday request'}
+              onSubmit={this.handleEditSubmit}
+              holiday={editedHoliday}
+            />
           </ContentModal>
-          <HolidaysHeader isStaffMemberDisabled={disabled} title="Holidays" onAddNew={this.onAddNew} />
+
+          {this.canCreateHoliday() && (
+            <HolidaysHeader
+              isStaffMemberDisabled={disabled}
+              buttonText="Add Holiday"
+              title="Holidays and holiday requests"
+              onAddNew={this.onAddNew}
+            />
+          )}
+          {!this.canCreateHoliday() && (
+              <HolidaysHeader
+                isStaffMemberDisabled={disabled}
+                buttonText="Request Holiday"
+                title="Holidays and holiday requests"
+                onAddNew={this.onAddNewRequest}
+              />
+            )}
+
           <div className="boss-board__main">
             <div className="boss-board__manager">
               <div className="boss-board__manager-stats boss-board__manager-stats_layout_row">
-                <Stats value={estimatedAccruedHolidayDays} label={`${pluralize('Day', estimatedAccruedHolidayDays)} accrued in current tax year (Estimated)`} />
-                <Stats value={paidHolidayDays} label={`Paid ${pluralize('day', paidHolidayDays)} logged in current tax year`} />
-                <Stats value={unpaidHolidayDays} label={`Unpaid ${pluralize('day', unpaidHolidayDays)} logged in current tax year`} />
+                <Stats
+                  value={estimatedAccruedHolidayDays}
+                  label={`${pluralize('Day', estimatedAccruedHolidayDays)} accrued in current tax year (Estimated)`}
+                />
+                <Stats
+                  value={paidHolidayDays}
+                  label={`Paid ${pluralize('day', paidHolidayDays)} logged in current tax year`}
+                />
+                <Stats
+                  value={unpaidHolidayDays}
+                  label={`Unpaid ${pluralize('day', unpaidHolidayDays)} logged in current tax year`}
+                />
               </div>
               <div className="boss-board__manager-data">
                 <HolidaysFilter startDate={holidayStartDate} endDate={holidayEndDate} filter={filter} />
-                { hasHolidays
-                    ? [<HolidaysTable key="desktop" isStaffMemberDisabled={disabled} holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={openEditModal}/>,
-                      <HolidayasMobileItems key="mobile" isStaffMemberDisabled={disabled} holidays={holidays} deleteHoliday={deleteHoliday} onEditHoliday={openEditModal}/>]
-                    : <h1 className="boss-table__cell boss-table__cell_role_header">
-                        NO HOLIDAYS FOUND
-                      </h1>
-                }
-                
+                {hasHolidays ? (
+                  [
+                    <HolidaysTable
+                      key="desktop"
+                      isStaffMemberDisabled={disabled}
+                      holidays={holidays}
+                      deleteHoliday={this.handleDeleteHoliday}
+                      onEditHoliday={openEditModal}
+                    />,
+                    <HolidayasMobileItems
+                      key="mobile"
+                      isStaffMemberDisabled={disabled}
+                      holidays={holidays}
+                      deleteHoliday={this.handleDeleteHoliday}
+                      onEditHoliday={openEditModal}
+                    />,
+                  ]
+                ) : (
+                  <h1 className="boss-table__cell boss-table__cell_role_header">NO HOLIDAYS FOUND</h1>
+                )}
               </div>
             </div>
-          </div> 
+          </div>
         </section>
       </ProfileWrapper>
-    )
+    );
   }
 }
 

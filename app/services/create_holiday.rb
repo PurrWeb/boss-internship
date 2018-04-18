@@ -15,6 +15,7 @@ class CreateHoliday
     holiday = nil
     ActiveRecord::Base.transaction do
       holiday = Holiday.new(params)
+      holiday.validate_as_assignment = params[:validate_as_assignment]
       holiday.validate_as_creation = true
       success = holiday.save
     end

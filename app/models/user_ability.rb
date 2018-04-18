@@ -288,6 +288,10 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
+      can :view, :holiday_requests_page do
+        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+      end
+
       can :redeem, Voucher do |voucher|
         user.has_effective_access_level?(AccessLevel.manager_access_level) &&
           can_manage_venue?(user, voucher.venue)
@@ -323,10 +327,35 @@ class UserAbility
           user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
-      can [:view, :create, :update, :destroy], Holiday do |holiday|
+      can [:view], Holiday do |holiday|
+        can_view_holiday?(user, holiday)
+      end
+
+      can [:create], Holiday do |holiday|
+        if user.has_effective_access_level?(AccessLevel.admin_access_level)
+          true
+        else
+          staff_member = holiday.staff_member
+          staff_member.on_hourly_pay_rate? && can_view_holiday?(user, holiday)
+        end
+      end
+
+      can [:update, :destroy], Holiday do |holiday|
+        if holiday.created_from_request?
+          user.has_effective_access_level?(AccessLevel.admin_access_level)
+        else
+          can_view_holiday?(user, holiday)
+        end
+      end
+
+      can [:create], HolidayRequest do |holiday_request|
         user.food_ops_manager? ||
         user.payroll_manager? ||
-          can_edit_staff_member?(user, holiday.staff_member)
+          can_edit_staff_member?(user, holiday_request.staff_member)
+      end
+
+      can [:accept, :reject, :update, :destroy], HolidayRequest do |holiday_request|
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can :list, :staff_members do
@@ -483,6 +512,12 @@ class UserAbility
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+  end
+
+  def can_view_holiday?(user, holiday)
+    user.food_ops_manager? ||
+    user.payroll_manager? ||
+      can_edit_staff_member?(user, holiday.staff_member)
   end
 
   def can_update_change_order?(user, change_order)

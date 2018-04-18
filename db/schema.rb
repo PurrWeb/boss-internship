@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180320115625) do
+ActiveRecord::Schema.define(version: 20180403110129) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -428,6 +428,31 @@ ActiveRecord::Schema.define(version: 20180320115625) do
   end
 
   add_index "fruit_orders", ["venue_id"], name: "index_fruit_orders_on_venue_id", using: :btree
+
+  create_table "holiday_request_transitions", force: :cascade do |t|
+    t.string   "to_state",           limit: 255,   null: false
+    t.text     "metadata",           limit: 65535
+    t.integer  "sort_key",           limit: 4,     null: false
+    t.integer  "holiday_request_id", limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
+  add_index "holiday_request_transitions", ["holiday_request_id", "most_recent"], name: "index_holiday_request_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "holiday_request_transitions", ["holiday_request_id", "sort_key"], name: "index_holiday_request_transitions_parent_sort", unique: true, using: :btree
+
+  create_table "holiday_requests", force: :cascade do |t|
+    t.date     "start_date"
+    t.date     "end_date"
+    t.string   "holiday_type",       limit: 255
+    t.integer  "created_by_user_id", limit: 4
+    t.integer  "staff_member_id",    limit: 4
+    t.text     "note",               limit: 65535
+    t.integer  "created_holiday_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "holiday_transitions", force: :cascade do |t|
     t.string   "to_state",    limit: 255,   null: false

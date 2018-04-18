@@ -3,6 +3,16 @@ import humanize from 'string-humanize';
 import safeMoment from "~/lib/safe-moment";
 import confirm from '~/lib/confirm-utils';
 
+const PENDING_STATUS = 'pending';
+const ACCEPTED_STATUS = 'accepted';
+const REJECTED_STATUS = 'rejected';
+
+const statusClasses = {
+  [PENDING_STATUS]: 'boss-table__text_role_pending-status',
+  [ACCEPTED_STATUS]: 'boss-table__text_role_success-status',
+  [REJECTED_STATUS]: 'boss-table__text_role_alert-status',
+};
+
 const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled}) => {
 
   const onEdit = (holiday) => {
@@ -21,6 +31,7 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
   const type = humanize(holiday.get('holiday_type'));
   const note = holiday.get('note') || '-';
   const creator = holiday.get('creator');
+  const status = humanize(holiday.get('state'));
   const cerated = `(${safeMoment.iso8601Parse(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
   const startDate = safeMoment.uiDateParse(holiday.get('start_date')).format('DD MMM Y')
   const endDate = safeMoment.uiDateParse(holiday.get('end_date')).format('DD MMM Y')
@@ -30,6 +41,11 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
     <div className="boss-check__row">
       <div className="boss-check__cell">
         <p className="boss-check__title">{type}</p>
+      </div>
+    </div>
+    <div className="boss-check__row">
+      <div className="boss-check__cell">
+        <p className={`boss-check__text_marked ${statusClasses[holiday.get('state')]}`}>{status}</p>
       </div>
     </div>
     <div className="boss-check__row">
@@ -49,7 +65,7 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
       </div>
     </div>
     {
-    note !== '-' && 
+    note !== '-' &&
       <div className="boss-check__row">
         <div className="boss-check__cell">
           <div className="boss-check__box">

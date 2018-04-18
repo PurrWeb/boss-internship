@@ -9,7 +9,6 @@ import AccessoryForm from './accessory-form';
 class EditAccessory extends React.Component {
   handleSubmit = (values, dispatch) => {
     return this.props.onSubmit(values.toJS(), dispatch).catch((resp) => {
-      console.log(resp);
       const errors = resp.response.data.errors;
 
       if (errors) {

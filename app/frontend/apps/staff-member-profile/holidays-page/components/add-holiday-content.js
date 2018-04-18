@@ -23,6 +23,7 @@ class AddHolidayContent extends React.PureComponent {
 
     const {
       onSubmit,
+      buttonTitle,
     } = this.props;
 
     const initialValues = {
@@ -39,9 +40,10 @@ class AddHolidayContent extends React.PureComponent {
           startDate={startDate}
           endDate={endDate}
           initialValues={initialValues}
-          onSubmit={this.onSubmit}
+          submission={onSubmit}
           onChangeType={this.onChangeType}
           focusedInput={focusedInput}
+          buttonTitle={buttonTitle}
         />
       </div>
     )

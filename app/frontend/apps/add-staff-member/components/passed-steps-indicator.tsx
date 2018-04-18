@@ -145,7 +145,6 @@ class Component extends React.Component<PropsFromConnect, State> {
 
   drawSteps(currentStepIdx: number) {
     const stepsValidity = this.getStepsValidity(currentStepIdx);
-    console.log(stepsValidity);
     const {stepsInfo} = this.props;
     const stepsInfoKeys = Object.keys(stepsInfo).map((key) => Number(key));
     const maxStepsInfoIdx = Math.max.apply(null, stepsInfoKeys);

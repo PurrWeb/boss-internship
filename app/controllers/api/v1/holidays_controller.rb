@@ -10,17 +10,26 @@ module Api
         raise ActiveRecord::RecordNotFound.new unless staff_member.present?
         if can? :edit, staff_member
           tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
-          
+
           holiday_start_date = holiday_start_date_from_params
           holiday_end_date = holiday_end_date_from_params
-    
+
           filtered_holidays = InRangeQuery.new(
-            relation: staff_member.active_holidays,
+            relation: staff_member.active_holidays.includes([:creator]),
             start_value: holiday_start_date,
             end_value: holiday_end_date,
             start_column_name: 'start_date',
             end_column_name: 'end_date'
           ).all.includes(:creator)
+
+          filtered_holiday_requests = InRangeQuery.new(
+            relation: staff_member.holiday_requests.includes([:creator]),
+            start_value: holiday_start_date,
+            end_value: holiday_end_date,
+            start_column_name: 'start_date',
+            end_column_name: 'end_date'
+          )
+          .all
 
           holidays_in_tax_year = HolidayInTaxYearQuery.new(
            relation: staff_member.active_holidays,
@@ -41,7 +50,8 @@ module Api
             json: {
               staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
               access_token: access_token.token,
-              holidays: ActiveModel::Serializer::CollectionSerializer.new(filtered_holidays, serializer: ::HolidaySerializer),
+              holidays: ActiveModel::Serializer::CollectionSerializer.new(filtered_holidays, serializer: ::HolidaySerializer, scope: current_user),
+              holiday_requests: ActiveModel::Serializer::CollectionSerializer.new(filtered_holiday_requests, serializer: Api::V1::StaffMemberProfile::HolidayRequestSerializer),
               paid_holiday_days: paid_holiday_days,
               unpaid_holiday_days: unpaid_holiday_days,
               estimated_accrued_holiday_days: estimated_accrued_holiday_days,
@@ -49,7 +59,7 @@ module Api
               holiday_end_date: holiday_end_date,
             },
             status: :ok
-          ) 
+          )
         else
           render(
             json: {},
@@ -66,7 +76,7 @@ module Api
 
       def update
         staff_member = StaffMember.find(params.fetch(:staff_member_id))
-        holiday = staff_member.holidays.find(params.fetch(:id))        
+        holiday = staff_member.holidays.find(params.fetch(:id))
 
         result = HolidayApiService.new(
           requester: current_user,
@@ -77,14 +87,15 @@ module Api
           render(
             json: result.holiday,
             serializer: ::HolidaySerializer,
+            scope: current_user,
             status: 200
           )
         else
           render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
         end
-        
+
       end
-      
+
       def destroy
         staff_member = StaffMember.find(params[:staff_member_id])
         holiday = staff_member.holidays.in_state(:enabled).where(id: params[:id]).first
@@ -99,6 +110,7 @@ module Api
           render(
             json: result.holiday,
             serializer: ::HolidaySerializer,
+            scope: current_user,
             status: 200
           )
         else
@@ -118,6 +130,7 @@ module Api
           render(
             json: result.holiday,
             serializer: ::HolidaySerializer,
+            scope: current_user,
             status: 200
           )
         else
@@ -171,7 +184,7 @@ module Api
           tax_year.start_date
         end
       end
-    
+
       def holiday_end_date_from_params
         end_date_from_params = UIRotaDate.parse!(params['end_date'])
         if end_date_from_params.present?

@@ -164,6 +164,10 @@ class User < ActiveRecord::Base
     role == DEV_ROLE
   end
 
+  def admin?
+    role == ADMIN_ROLE
+  end
+
   def manager?
     role == MANAGER_ROLE
   end

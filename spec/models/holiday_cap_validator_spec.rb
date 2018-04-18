@@ -7,11 +7,12 @@ describe HolidayCapValidator do
     FactoryGirl.build(
       :holiday,
       holiday_type: holiday_type,
-      validate_as_creation: true,
       staff_member: staff_member,
       start_date: start_date,
       end_date: end_date
-    )
+    ).tap do |holiday|
+      holiday.validate_as_creation = true
+    end
   end
   let(:holiday_type) { Holiday::PAID_HOLIDAY_TYPE }
   let(:call_time) { tax_year.start_date + 1.day }

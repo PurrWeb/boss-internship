@@ -39,6 +39,8 @@ class StaffMember < ActiveRecord::Base
 
   has_many :holidays, inverse_of: :staff_member
 
+  has_many :holiday_requests, inverse_of: :staff_member
+
   has_many :owed_hours, inverse_of: :staff_member
 
   has_many :staff_member_transitions, autosave: false
@@ -290,6 +292,10 @@ class StaffMember < ActiveRecord::Base
        address.postcode_changed?)
   end
 
+  def pending_holiday_requests
+    holiday_requests.in_state(:pending)
+  end
+
   def active_holidays
     holidays.in_state(:enabled)
   end
@@ -302,6 +308,14 @@ class StaffMember < ActiveRecord::Base
     if pin_code.present?
       errors.add(:pin_code, 'must be numerical') unless pin_code.match(pin_code_regex)
     end
+  end
+
+  def on_weekly_pay_rate?
+    pay_rate.andand.weekly?
+  end
+
+  def on_hourly_pay_rate?
+    pay_rate.andand.hourly?
   end
 
   def disable_reason
