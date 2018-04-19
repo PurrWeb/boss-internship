@@ -25,7 +25,7 @@ class StaffMemberProfilePermissions
   def holiday_requests
     result = {}
     @holiday_requests.map do |holiday_request|
-      result[holiday.id] = {
+      result[holiday_request.id] = {
         isEditable: user_ability.can?(:edit, holiday_request),
         isDeletable: user_ability.can?(:destroy, holiday_request)
       }
