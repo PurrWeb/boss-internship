@@ -84,7 +84,7 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
     </div> }
   </div>
 }
-export default class HolidayasMobileItems extends React.Component {
+export default class HolidayMobileItems extends React.Component {
   constructor(props) {
     super(props);
   }

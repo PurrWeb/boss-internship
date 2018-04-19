@@ -8,7 +8,7 @@ import { SubmissionError } from 'redux-form/immutable';
 import notify from '~/components/global-notification';
 import { HOLIDAY_TYPE, HOLIDAY_REQUEST_TYPE } from '../selectors';
 import ProfileWrapper from '../../profile-wrapper';
-import HolidayasMobileItems from '../components/holidays-mobile-items';
+import HolidayMobileItems from '../components/holiday-mobile-items';
 
 import {
   updateAvatarRequest,
@@ -306,7 +306,7 @@ class Holidays extends React.PureComponent {
                       deleteHoliday={this.handleDeleteHoliday}
                       onEditHoliday={openEditModal}
                     />,
-                    <HolidayasMobileItems
+                    <HolidayMobileItems
                       key="mobile"
                       isStaffMemberDisabled={disabled}
                       holidays={holidays}
