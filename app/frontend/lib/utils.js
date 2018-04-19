@@ -172,6 +172,12 @@ var utils =  {
     commonDateFormatTimeOnly(){
       return 'HH:mm';
     },
+    commonDateFormatCalendar(){
+      return 'dddd, D MMMM YYYY';
+    },
+    humanDateFormatWithDayOfWeek(){
+      return 'HH:mm ddd DD/MM/YYYY';
+    },
     capitalizeFirstCharacter(str) {
         if (str.length === 0) {
             return str;
