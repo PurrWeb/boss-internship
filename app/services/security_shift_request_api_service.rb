@@ -90,11 +90,11 @@ class SecurityShiftRequestApiService
     Result.new(result.security_shift_request, result.success?, api_errors)
   end
 
-  def reject
+  def reject(reject_reason:)
     result = RejectSecurityShiftRequest.new(
       requester: requester,
       security_shift_request: security_shift_request
-    ).call
+    ).call(reject_reason: reject_reason)
 
     api_errors = nil
     unless result.success?
