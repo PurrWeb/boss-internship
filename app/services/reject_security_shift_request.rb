@@ -10,12 +10,12 @@ class RejectSecurityShiftRequest
     @security_shift_request = security_shift_request
   end
 
-  def call
+  def call(reject_reason:)
     success = false
 
     ActiveRecord::Base.transaction do
-      success = security_shift_request.transition_to(:rejected)
-
+      security_shift_request.transition_to(:rejected)
+      success = security_shift_request.update(reject_reason: reject_reason)
       raise ActiveRecord::Rollback unless success
     end
     Result.new(success, security_shift_request)
