@@ -10,7 +10,7 @@
   ),
   weekRotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
     week_rota_shifts,
-    serializer: Api::V1::SecurityRotaShiftRequests::SecurityShiftRequestSerializer,
+    serializer: Api::V1::SecurityRotaShiftRequests::RotaShiftSerializer,
   ),
   staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
     staff_members,
