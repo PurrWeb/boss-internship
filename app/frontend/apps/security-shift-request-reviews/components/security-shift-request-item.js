@@ -6,15 +6,53 @@ import AsyncButton from 'react-async-button';
 import RotaDate from '~/lib/rota-date';
 import safeMoment from '~/lib/safe-moment';
 import oFetch from 'o-fetch';
+import { appRoutes } from '~/lib/routes';
+import utils from '~/lib/utils';
 import { openContentModal } from '~/components/modals';
 import EditSecurityShiftRequest from './edit-security-shift-request';
 import RejectSecurityShiftRequest from './reject-security-shift-request';
 import { getDiffFromRotaDayStartInMinutes } from '../utils';
 
+function getFormattedDate(startsAt, endsAt) {
+  const formattedStartsAt = safeMoment.iso8601Parse(startsAt).format(utils.commonDateFormatTimeOnly());
+  const formattedEndsAt = safeMoment.iso8601Parse(endsAt).format(utils.humanDateFormatWithTime());
+  return `${formattedStartsAt} - ${formattedEndsAt}`;
+}
+
 class SecurityShiftRequestItem extends Component {
   state = {
     isSending: false,
   };
+
+  renderCreatedShift(createdShift) {
+    const firstName = oFetch(createdShift, 'staffMember.firstName');
+    const surname = oFetch(createdShift, 'staffMember.surname');
+    const fullName = `${firstName} ${surname}`;
+    const startsAt = oFetch(createdShift, 'startsAt');
+    const endsAt = oFetch(createdShift, 'endsAt');
+    const startsAtDate = safeMoment.iso8601Parse(startsAt).format(utils.commonDateFormat);
+
+    return (
+      <div className="boss-table__info">
+        <p className="boss-table__label">Rotaed Shift</p>
+        <div className="boss-table__info-group">
+          <p className="boss-table__text">
+            <span className="boss-table__text-line">{fullName}</span>
+            <span className="boss-table__text-line">{getFormattedDate(startsAt, endsAt)}</span>
+          </p>
+          <div className="boss-table__actions">
+            <a
+              target="_blank"
+              href={appRoutes.securityRotaDaily(startsAtDate)}
+              className="boss-button boss-button_type_extra-small boss-button_role_view-details-light"
+            >
+              View Rota
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   onButtonClick = action => {
     this.setState({ isSending: true });
@@ -24,24 +62,18 @@ class SecurityShiftRequestItem extends Component {
   };
 
   handleEditRequest = (hideModal, values) => {
-    const editSecurityShiftRequest = oFetch(
-      this.props,
-      'editSecurityShiftRequest',
-    );
+    const editSecurityShiftRequest = oFetch(this.props, 'editSecurityShiftRequest');
     return editSecurityShiftRequest(values).then(response => {
       hideModal();
-    })
+    });
   };
 
   handleRejectRequest = (hideModal, values) => {
-    const rejectSecurityShiftRequest = oFetch(
-      this.props,
-      'rejectSecurityShiftRequest',
-    );
+    const rejectSecurityShiftRequest = oFetch(this.props, 'rejectSecurityShiftRequest');
 
     return rejectSecurityShiftRequest(values).then(response => {
       hideModal();
-    })
+    });
   };
 
   handleOpenEditSecurityShiftRequest = editRequestFormInitialValues => {
@@ -67,14 +99,11 @@ class SecurityShiftRequestItem extends Component {
     const endsAt = oFetch(securityShiftRequest, 'endsAt');
     const status = oFetch(securityShiftRequest, 'status');
     const venueId = oFetch(securityShiftRequest, 'venueId');
+    const createdShift = oFetch(securityShiftRequest, 'createdShift');
 
     const { note, rotaShiftId } = securityShiftRequest;
 
-    const {
-      isCompleted,
-      undoSecurityShiftRequest,
-      acceptSecurityShiftRequest,
-    } = this.props;
+    const { isCompleted, undoSecurityShiftRequest, acceptSecurityShiftRequest } = this.props;
 
     const statusClassName =
       status === 'assigned'
@@ -102,9 +131,9 @@ class SecurityShiftRequestItem extends Component {
         <div className="boss-table__cell">
           <div className="boss-table__info">
             <p className="boss-table__label">Requested times</p>
-            <p className="boss-table__text">{`${moment(startsAt).format(
-              'HH:mm',
-            )} - ${moment(endsAt).format('HH:mm DD/MM/YYYY')}`}</p>
+            <p className="boss-table__text">{`${moment(startsAt).format('HH:mm')} - ${moment(endsAt).format(
+              'HH:mm DD/MM/YYYY',
+            )}`}</p>
           </div>
         </div>
         <div className="boss-table__cell">
@@ -113,42 +142,13 @@ class SecurityShiftRequestItem extends Component {
             <p className="boss-table__text">{note}</p>
           </div>
         </div>
-        {isCompleted && (
-          <div className="boss-table__cell">
-            {rotaShiftId && (
-              <div className="boss-table__info">
-                <p className="boss-table__label">Rotaed Shift</p>
-                <div className="boss-table__info-group">
-                  <p className="boss-table__text">
-                    <span className="boss-table__text-line">{rotaShiftId}</span>
-                    <span className="boss-table__text-line">{`${moment(
-                      startsAt,
-                    ).format('HH:mm')} - ${moment(endsAt).format(
-                      'HH:mm',
-                    )}`}</span>
-                  </p>
-                  <div className="boss-table__actions">
-                    <a
-                      href="#"
-                      className="boss-button boss-button_type_extra-small boss-button_role_view-details-light"
-                    >
-                      View Rota
-                    </a>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+        {isCompleted && <div className="boss-table__cell">{createdShift && this.renderCreatedShift(createdShift)}</div>}
         {isCompleted ? (
           <div className="boss-table__cell">
             <div className="boss-table__info">
               <p className="boss-table__label">Status</p>
               <div className="boss-table__info-group">
-                <p
-                  style={{ textTransform: 'capitalize' }}
-                  className={`boss-table__text ${statusClassName}`}
-                >
+                <p style={{ textTransform: 'capitalize' }} className={`boss-table__text ${statusClassName}`}>
                   {status}
                 </p>
                 {status !== 'assigned' && (
@@ -173,19 +173,13 @@ class SecurityShiftRequestItem extends Component {
                   disabled={this.state.isSending}
                   text="Acccept"
                   pendingText="Acccepting ..."
-                  onClick={() =>
-                    this.onButtonClick(() => acceptSecurityShiftRequest({ id }))
-                  }
+                  onClick={() => this.onButtonClick(() => acceptSecurityShiftRequest({ id }))}
                   type="button"
                   className="boss-button boss-button_role_accept boss-button_type_extra-small boss-table__action"
                 />
                 <button
                   disabled={this.state.isSending}
-                  onClick={() =>
-                    this.handleOpenEditSecurityShiftRequest(
-                      editRequestFormInitialValues,
-                    )
-                  }
+                  onClick={() => this.handleOpenEditSecurityShiftRequest(editRequestFormInitialValues)}
                   type="button"
                   className="boss-button boss-button_role_edit boss-button_type_extra-small boss-table__action"
                 >
@@ -193,11 +187,7 @@ class SecurityShiftRequestItem extends Component {
                 </button>
                 <button
                   disabled={this.state.isSending}
-                  onClick={() =>
-                    this.handleOpenRejectSecurityShiftRequest(
-                      rejectRequestFormInitialValues,
-                    )
-                  }
+                  onClick={() => this.handleOpenRejectSecurityShiftRequest(rejectRequestFormInitialValues)}
                   type="button"
                   className="boss-button boss-button_role_cancel-light boss-button_type_extra-small boss-table__action"
                 >

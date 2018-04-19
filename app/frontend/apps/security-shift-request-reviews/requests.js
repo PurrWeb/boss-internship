@@ -23,11 +23,11 @@ export const updateSecurityShiftRequestRequest = values => {
   );
 };
 
-export const rejectSecurityShiftRequestRequest = (securityShiftRequestId, rejectNote) => {
+export const rejectSecurityShiftRequestRequest = (securityShiftRequestId, rejectReason) => {
   return http({ successMessage: 'Security Shift Request Rejected Successfully' }).post(
     `/api/v1/security-shift-requests/${securityShiftRequestId}/reject`,
     {
-      rejectNote,
+      rejectReason,
     },
   );
 };
