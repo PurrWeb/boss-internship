@@ -77,7 +77,7 @@ class SecurityShiftRequestForm extends React.Component {
                 <Field
                   name="startsAt"
                   label="Starts At"
-                  interval={15}
+                  interval={30}
                   required
                   date={date}
                   disabled={!date}
@@ -88,7 +88,7 @@ class SecurityShiftRequestForm extends React.Component {
                 <Field
                   name="endsAt"
                   label="Ends At"
-                  interval={15}
+                  interval={30}
                   required
                   date={date}
                   disabled={!date}
