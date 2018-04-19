@@ -64,7 +64,7 @@ module Api
         result = SecurityShiftRequestApiService.new(
           requester: current_user,
           security_shift_request: security_shift_request,
-        ).reject
+        ).reject(reject_reason: security_request_reject_reason_from_params)
 
         if result.success?
           render(
@@ -129,6 +129,10 @@ module Api
           note: params.fetch(:note),
           venue: venue_from_params,
         }
+      end
+
+      def security_request_reject_reason_from_params
+        params.fetch(:rejectReason)
       end
 
       def staff_member_from_params
