@@ -12,6 +12,7 @@ class SecurityShiftRequestApiErrors
     result[:endsAt] = security_shift_request.errors[:ends_at] if security_shift_request.errors[:ends_at].present?
     result[:note] = security_shift_request.errors[:note] if security_shift_request.errors[:note].present?
     result[:state] = security_shift_request.errors[:state] if security_shift_request.errors[:state].present?
+    result[:rejectReason] = security_shift_request.errors[:reject_reason] if security_shift_request.errors[:reject_reason].present?
 
     result
   end
