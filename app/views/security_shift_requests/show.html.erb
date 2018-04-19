@@ -5,7 +5,14 @@
     security_shift_requests,
     serializer: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer,
   ),
-  rotaShifts: rota_shifts,
+  rotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    rota_shifts,
+    serializer: Api::V1::SecurityShiftRequests::RotaShiftSerializer,
+  ),
+  staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_members,
+    serializer: Api::V1::SecurityShiftRequests::StaffMemberSerializer,
+  ),
   startDate: UIRotaDate.format(start_date),
   endDate: UIRotaDate.format(end_date),
   venueId: current_venue.id,
