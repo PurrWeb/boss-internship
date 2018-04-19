@@ -5,6 +5,7 @@ import Popover from 'react-popover';
 import DashboardActions from './dashboard-actions';
 import safeMoment from '~/lib/safe-moment';
 import WeekPicker from '~/components/week-picker';
+import utils from '~/lib/utils';
 
 class DashboardWeekSelect extends React.Component {
   constructor(props) {
@@ -32,10 +33,10 @@ class DashboardWeekSelect extends React.Component {
 
     const startDate = safeMoment
       .uiDateParse(this.props.startDate)
-      .format('dddd, D MMMM YYYY');
+      .format(utils.commonDateFormatCalendar());
     const endDate = safeMoment
       .uiDateParse(this.props.endDate)
-      .format('dddd, D MMMM YYYY');
+      .format(utils.commonDateFormatCalendar());
 
     const popoverClass = classNames({
       'boss-page-dashboard__meta-item boss-page-dashboard__meta-item_type_faded boss-page-dashboard__meta-item_role_date boss-page-dashboard__meta-item_role_popover': true,
