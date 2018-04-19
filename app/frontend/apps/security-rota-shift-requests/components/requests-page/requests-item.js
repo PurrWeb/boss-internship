@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
 import moment from 'moment';
+import utils from '~/lib/utils';
 import { openContentModal } from '~/components/modals';
 import RejectSecurityShiftRequest from './reject-security-shift-request';
 
-
-class SecurityRotaShiftRequestsItem extends Component {
+class RequestsItem extends PureComponent {
   handleOpenRejectSecurityShiftRequest = rejectRequestFormInitialValues => {
     openContentModal({
       submit: this.handleRejectRequest,
@@ -20,17 +20,14 @@ class SecurityRotaShiftRequestsItem extends Component {
       this.props,
       'rejectSecurityShiftRequest',
     );
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        rejectSecurityShiftRequest(values);
-        resolve();
-        hideModal();
-      }, 1000);
+    return rejectSecurityShiftRequest(values).then(response => {
+      hideModal();
     });
   };
 
   render() {
     const shiftRequest = oFetch(this.props, 'shiftRequest');
+    const onOpenAssignPage = oFetch(this.props, 'onOpenAssignPage');
     const startsAt = oFetch(shiftRequest, 'startsAt');
     const endsAt = oFetch(shiftRequest, 'endsAt');
     const venueName = oFetch(shiftRequest, 'venueName');
@@ -48,8 +45,8 @@ class SecurityRotaShiftRequestsItem extends Component {
           <div className="boss-check__header-group">
             <h3 className="boss-check__title boss-check__title_role_time">
               {`${moment(startsAt).format(
-              'HH:mm',
-            )} - ${moment(endsAt).format('HH:mm ddd DD/MM/YYYY')}`}
+                utils.commonDateFormatTimeOnly(),
+              )} - ${moment(endsAt).format(utils.humanDateFormatWithDayOfWeek())}`}
             </h3>
             <div className="boss-check__header-meta">
               <div className="boss-check__header-meta-item">
@@ -61,17 +58,18 @@ class SecurityRotaShiftRequestsItem extends Component {
           </div>
           <div className="boss-check__header-actions">
             <button
+              onClick={() => onOpenAssignPage(shiftRequest)}
               type="button"
               className="boss-button boss-button_role_confirm boss-button_type_small boss-check__header-action"
             >
               Assign
             </button>
             <button
-            onClick={() =>
-                    this.handleOpenRejectSecurityShiftRequest(
-                      rejectRequestFormInitialValues,
-                    )
-                  }
+              onClick={() =>
+                this.handleOpenRejectSecurityShiftRequest(
+                  rejectRequestFormInitialValues,
+                )
+              }
               type="button"
               className="boss-button boss-button_role_cancel boss-button_type_small boss-check__header-action"
             >
@@ -84,11 +82,10 @@ class SecurityRotaShiftRequestsItem extends Component {
   }
 }
 
-SecurityRotaShiftRequestsItem.propTypes = {
+RequestsItem.propTypes = {
   shiftRequest: PropTypes.shape({
     startsAt: PropTypes.string.isRequired,
     endsAt: PropTypes.string.isRequired,
-    shiftType: PropTypes.string.isRequired,
     note: PropTypes.string,
     status: PropTypes.string.isRequired,
     rotaShiftId: PropTypes.number,
@@ -98,4 +95,4 @@ SecurityRotaShiftRequestsItem.propTypes = {
   rejectSecurityShiftRequest: PropTypes.func.isRequired,
 };
 
-export default SecurityRotaShiftRequestsItem;
+export default RequestsItem;

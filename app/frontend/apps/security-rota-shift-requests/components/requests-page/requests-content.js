@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
-class SecurityRotaShiftRequestsContent extends Component {
+class RequestsContent extends PureComponent {
   renderItems() {
     const itemRenderer = oFetch(this.props, 'itemRenderer');
     const shiftRequests = oFetch(this.props, 'shiftRequests');
@@ -39,9 +39,9 @@ class SecurityRotaShiftRequestsContent extends Component {
   }
 }
 
-SecurityRotaShiftRequestsContent.propTypes = {
+RequestsContent.propTypes = {
   itemRenderer: PropTypes.func.isRequired,
   shiftRequests: ImmutablePropTypes.list.isRequired,
 };
 
-export default SecurityRotaShiftRequestsContent;
+export default RequestsContent;

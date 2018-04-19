@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
-import VenueFilter from './security-rota-shift-requests-venue-filter';
+import VenueFilter from './requests-venue-filter';
 import RotaFilter from '~/components/security-rota/security-rota-filter';
-import WeekFilter from './security-rota-shift-requests-week-filter';
+import WeekFilter from './requests-week-filter';
 
-class SecurityRotaShiftRequestsFilter extends Component {
+class RequestsFilter extends PureComponent {
   render() {
     const selectedVenues = oFetch(this.props, 'selectedVenues');
     const venueTypes = oFetch(this.props, 'venueTypes');
@@ -33,7 +33,7 @@ class SecurityRotaShiftRequestsFilter extends Component {
   }
 }
 
-SecurityRotaShiftRequestsFilter.propTypes = {
+RequestsFilter.propTypes = {
   changeWeekDay: PropTypes.func.isRequired,
   selectVenue: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
@@ -42,4 +42,4 @@ SecurityRotaShiftRequestsFilter.propTypes = {
   venueTypes: ImmutablePropTypes.list.isRequired,
 };
 
-export default SecurityRotaShiftRequestsFilter;
+export default RequestsFilter;

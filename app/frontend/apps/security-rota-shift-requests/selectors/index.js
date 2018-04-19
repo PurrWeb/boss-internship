@@ -5,6 +5,9 @@ import oFetch from 'o-fetch';
 import moment from 'moment';
 import RotaDate from '~/lib/rota-date';
 import getVenueColor from '~/lib/get-venue-color';
+import staffMembers from '../../../reducers/staff-member';
+import rotaShifts from '../../hours-confirmation/redux/rota-shifts';
+import { isShiftRequestOverlapped } from '../utils';
 
 export const startDateSelector = state =>
   oFetch(state.get('page'), 'startDate');
@@ -12,13 +15,18 @@ export const chosenDateSelector = state =>
   oFetch(state.get('page'), 'chosenDate');
 export const selectedVenuesSelector = state =>
   oFetch(state.get('page'), 'selectedVenues');
-export const securityShiftRequestsSelector = state =>
-  state.get('shiftRequests');
+export const weekShiftRequestsSelector = state =>
+  state.get('weekShiftRequests');
 export const venuesSelector = state => state.get('venues');
+export const weekRotasSelector = state => state.get('weekRotas');
+export const staffMembersSelector = state => state.get('staffMembers');
+export const weekRotaShiftsSelector = state => state.get('weekRotaShifts');
+export const assigningShiftRequestSelector = state =>
+  state.get('assigningShiftRequest');
 
 export const getShiftRequestForEachWeekDay = createSelector(
   startDateSelector,
-  securityShiftRequestsSelector,
+  weekShiftRequestsSelector,
   (uiDate, securityShiftRequests) => {
     const date = safeMoment.uiDateParse(uiDate);
 
@@ -118,9 +126,9 @@ export const getWeekDaysWithCount = createSelector(
   },
 );
 
-export const getVenueTypes = createSelector(
+export const getVenueTypesForWeek = createSelector(
   venuesSelector,
-  securityShiftRequestsSelector,
+  weekShiftRequestsSelector,
   (venues, shiftRequests) => {
     return venues
       .map(venue => {
@@ -131,5 +139,92 @@ export const getVenueTypes = createSelector(
           .groupBy(shiftRequest => shiftRequest.get('venueId'))
           .has(venue.get('id')),
       );
+  },
+);
+
+export const getRotaShiftsForChosenDay = createSelector(
+  assigningShiftRequestSelector,
+  weekRotaShiftsSelector,
+  weekRotasSelector,
+  (assigningShiftRequest, weekRotaShifts, weekRotas) => {
+    if (!assigningShiftRequest) {
+      return Immutable.List();
+    }
+    const rotaDate = new RotaDate({
+      shiftStartsAt: assigningShiftRequest.startsAt,
+    });
+
+    return weekRotaShifts
+      .filter(rotaShift => {
+        return rotaDate.isShiftBelongsToRotaDay({
+          shiftStartsAt: rotaShift.get('startsAt'),
+        });
+      })
+      .map(rotaShift => {
+        const venueId = weekRotas
+          .find(rota => rota.get('id') === rotaShift.get('rotaId'))
+          .get('venueId');
+        return rotaShift.set('venueId', venueId);
+      });
+  },
+);
+
+export const getStaffMembersWithIsConflicting = createSelector(
+  staffMembersSelector,
+  getRotaShiftsForChosenDay,
+  assigningShiftRequestSelector,
+  (staffMembers, rotaShifts, shiftRequest) => {
+    if (!shiftRequest) {
+      return Immutable.List();
+    }
+    const shiftRequestStartDate = new Date(oFetch(shiftRequest, 'startsAt'));
+    const shiftRequestEndDate = new Date(oFetch(shiftRequest, 'endsAt'));
+
+    return staffMembers.map(staffMember => {
+      const staffMemberId = staffMember.get('id');
+
+      const isOverlapped = isShiftRequestOverlapped({
+        rotaShifts,
+        staffMemberId,
+        shiftRequestStartDate,
+        shiftRequestEndDate,
+      });
+      return staffMember.set('isOverlapped', isOverlapped);
+    });
+  },
+);
+
+export const getRotasForChosenDay = createSelector(
+  getRotaShiftsForChosenDay,
+  weekRotasSelector,
+  (rotaShifts, weekRotas) => {
+    return weekRotas.filter(rota => {
+      return rotaShifts
+        .groupBy(rotaShift => rotaShift.get('rotaId'))
+        .has(rota.get('id'));
+    });
+  },
+);
+
+export const getVenueTypesForChosenDate = createSelector(
+  venuesSelector,
+  getRotasForChosenDay,
+  getRotaShiftsForChosenDay,
+  (venues, rotas, rotaShifts) => {
+    return venues
+      .filter(venue =>
+        rotas.groupBy(rota => rota.get('venueId')).has(venue.get('id')),
+      )
+      .map(venue => {
+        return venue.set('color', getVenueColor(venue.get('id'))).set(
+          'count',
+          rotaShifts.reduce((acc, rotaShift) => {
+            if (rotaShift.get('venueId') === venue.get('id')) {
+              return acc + 1;
+            }
+            return acc;
+          }, 0),
+        );
+      });
   },
 );

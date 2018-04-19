@@ -5,7 +5,7 @@ import oFetch from 'o-fetch';
 import safeMoment from '~/lib/safe-moment';
 import { RadioGroup, Radio } from 'react-radio-group';
 
-export default class WeekFilter extends React.Component {
+export default class WeekFilter extends React.PureComponent {
   state = {
     weekday: this.props.date,
   };

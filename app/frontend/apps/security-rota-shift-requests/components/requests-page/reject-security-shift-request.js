@@ -6,7 +6,7 @@ import { modalRedux } from '~/components/modals';
 
 import SecurityShiftRejectRequestForm from '~/components/security-shift-requests/security-shift-reject-request-form';
 
-class RejectSecurityShiftRequest extends React.Component {
+class RejectSecurityShiftRequest extends React.PureComponent {
   render() {
     return (
       <SecurityShiftRejectRequestForm

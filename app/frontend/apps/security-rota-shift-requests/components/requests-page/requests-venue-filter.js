@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
 import VenueSelect from '~/components/security-rota/venue-select';
 
-class SecurityRotaShiftRequestsVenueFilter extends Component {
+class RequestsVenueFilter extends PureComponent {
   render() {
     const selectedVenues = oFetch(this.props, 'selectedVenues');
     const venueTypes = oFetch(this.props, 'venueTypes');
@@ -23,10 +23,10 @@ class SecurityRotaShiftRequestsVenueFilter extends Component {
   }
 }
 
-SecurityRotaShiftRequestsVenueFilter.propTypes = {
+RequestsVenueFilter.propTypes = {
   selectedVenues: PropTypes.array.isRequired,
   venueTypes: PropTypes.array.isRequired,
   onChangeSelectedVenues: PropTypes.func.isRequired,
 };
 
-export default SecurityRotaShiftRequestsVenueFilter;
+export default RequestsVenueFilter;

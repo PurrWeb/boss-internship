@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { appRoutes } from '~/lib/routes';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import oFetch from 'o-fetch';
 import DashboardWeekSelect from '~/components/boss-dashboards/dashboard-week-select-inline';
-import SecurityRotaShiftRequestsContent from './security-rota-shift-requests-content';
-import SecurityRotaShiftRequestsFilter from './security-rota-shift-requests-filter';
-import SecurityRotaShiftRequestItem from './security-rota-shift-requests-item';
+import RequestsContent from './requests-content';
+import RequestsFilter from './requests-filter';
+import RequestItem from './requests-item';
 
-const getDateFromURL = () => window.location.pathname.split('/')[2];
-
-class SecurityRotaShiftRequestsPage extends Component {
+class RequestsPage extends PureComponent {
   handleDateChage = selection => {
     this.goToSecurityRotaShiftRequestsPage({
       startDate: selection.startDate,
@@ -23,6 +21,14 @@ class SecurityRotaShiftRequestsPage extends Component {
     });
   }
 
+  handleOpenAssignPage = (shiftRequest) => {
+    const setAssigningShiftRequest = oFetch(
+      this.props,
+      'setAssigningShiftRequest',
+    );
+    setAssigningShiftRequest(shiftRequest);
+  };
+
   render() {
     const startDate = oFetch(this.props, 'startDate');
     const endDate = oFetch(this.props, 'endDate');
@@ -30,13 +36,14 @@ class SecurityRotaShiftRequestsPage extends Component {
     const shiftRequests = oFetch(this.props, 'shiftRequests');
     const changeWeekDay = oFetch(this.props, 'changeWeekDay');
     const selectVenue = oFetch(this.props, 'selectVenue');
+
     const rejectSecurityShiftRequest = oFetch(
       this.props,
       'rejectSecurityShiftRequest',
     );
     const selectedVenues = oFetch(this.props, 'selectedVenues');
     const venueTypes = oFetch(this.props, 'venueTypes');
-    const date = oFetch(this.props, 'date');
+    const chosenDate = oFetch(this.props, 'chosenDate');
     return (
       <div className="boss-page-main">
         <DashboardWeekSelect
@@ -45,34 +52,35 @@ class SecurityRotaShiftRequestsPage extends Component {
           onDateChange={this.handleDateChage}
           title="Security Rota"
         />
-        <SecurityRotaShiftRequestsContent
+        <RequestsContent
           shiftRequests={shiftRequests}
           itemRenderer={shiftRequest => {
             return (
-              <SecurityRotaShiftRequestItem
+              <RequestItem
+                onOpenAssignPage={this.handleOpenAssignPage}
                 shiftRequest={shiftRequest}
                 rejectSecurityShiftRequest={rejectSecurityShiftRequest}
               />
             );
           }}
         >
-          <SecurityRotaShiftRequestsFilter
-            date={date}
+          <RequestsFilter
+            date={chosenDate}
             weekDates={weekDates}
             changeWeekDay={changeWeekDay}
             selectVenue={selectVenue}
             selectedVenues={selectedVenues}
             venueTypes={venueTypes}
           />
-        </SecurityRotaShiftRequestsContent>
+        </RequestsContent>
       </div>
     );
   }
 }
 
-SecurityRotaShiftRequestsPage.propTypes = {
+RequestsPage.propTypes = {
   startDate: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
+  chosenDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
   weekDates: ImmutablePropTypes.list.isRequired,
   shiftRequests: ImmutablePropTypes.list.isRequired,
@@ -81,6 +89,7 @@ SecurityRotaShiftRequestsPage.propTypes = {
   rejectSecurityShiftRequest: PropTypes.func.isRequired,
   selectedVenues: PropTypes.array.isRequired,
   venueTypes: ImmutablePropTypes.list.isRequired,
+  setAssigningShiftRequest: PropTypes.func.isRequired,
 };
 
-export default SecurityRotaShiftRequestsPage;
+export default RequestsPage;

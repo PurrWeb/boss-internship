@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import { handleActions } from 'redux-actions';
 import oFetch from 'o-fetch';
 
-import * as types from './types';
+import * as types from '../types';
 
 const initialState = {};
 export default handleActions(
@@ -12,7 +12,7 @@ export default handleActions(
       const endDate = oFetch(action, 'payload.endDate');
       const date = oFetch(action, 'payload.date');
       const chosenDate = oFetch(action, 'payload.date');
-      return { startDate, endDate, date, chosenDate, selectedVenues: [] };
+      return { startDate, endDate, date, chosenDate, selectedVenues: []};
     },
     [types.CHANGE_WEEK_DAY]: (state, action) => {
       const chosenDate = oFetch(action, 'payload.chosenDate');
