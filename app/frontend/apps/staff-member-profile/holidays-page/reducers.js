@@ -1,6 +1,7 @@
 import { fromJS, Map, List } from 'immutable';
 import { combineReducers } from 'redux-immutable';
 import { handleActions } from 'redux-actions';
+import oFetch from 'o-fetch';
 
 import { reducer as formReducer } from 'redux-form/immutable';
 import safeMoment from "~/lib/safe-moment";
@@ -35,6 +36,7 @@ const initialState = fromJS({
   editHoliday: false,
   editedHoliday: {},
   isAdminPlus: null,
+  permissions: {}
 });
 
 const holidaysReducer = handleActions({
@@ -52,6 +54,8 @@ const holidaysReducer = handleActions({
       isAdminPlus
     } = action.payload;
 
+    const permissions = oFetch(action.payload, 'permissions');
+
     return state
       .set('staffMember', fromJS(staffMember))
       .set('accessToken', fromJS(accessToken))
@@ -63,6 +67,7 @@ const holidaysReducer = handleActions({
       .set('holidayStartDate', safeMoment.uiDateParse(holidayStartDate))
       .set('holidayEndDate', safeMoment.uiDateParse(holidayEndDate))
       .set('isAdminPlus', isAdminPlus)
+      .set('permissions', permissions)
   },
   [UPDATE_HOLIDAYS_COUNT]: (state, action) => {
     const {

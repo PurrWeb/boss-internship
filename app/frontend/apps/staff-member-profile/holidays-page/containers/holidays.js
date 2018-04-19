@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import humanize from 'string-humanize';
 import pluralize from 'pluralize';
 import { SubmissionError } from 'redux-form/immutable';
+import oFetch from 'o-fetch';
 
 import notify from '~/components/global-notification';
 import { HOLIDAY_TYPE, HOLIDAY_REQUEST_TYPE } from '../selectors';
@@ -50,6 +51,7 @@ const mapStateToProps = state => {
     editedHoliday: state.getIn(['holidays', 'editedHoliday']),
     disabled: state.getIn(['profile', 'staffMember', 'disabled']),
     isAdminPlus: state.getIn(['holidays', 'isAdminPlus']),
+    permissions: state.getIn(['holidays', 'permissions'])
   };
 };
 
@@ -233,6 +235,7 @@ class Holidays extends React.PureComponent {
       },
     } = this.props;
 
+    const permissions = oFetch(this.props, 'permissions');
     const hasHolidays = !!holidays.size;
 
     return (
@@ -305,6 +308,7 @@ class Holidays extends React.PureComponent {
                       holidays={holidays}
                       deleteHoliday={this.handleDeleteHoliday}
                       onEditHoliday={openEditModal}
+                      permissions={permissions}
                     />,
                     <HolidayMobileItems
                       key="mobile"
@@ -312,6 +316,7 @@ class Holidays extends React.PureComponent {
                       holidays={holidays}
                       deleteHoliday={this.handleDeleteHoliday}
                       onEditHoliday={openEditModal}
+                      permissions={permissions}
                     />,
                   ]
                 ) : (
