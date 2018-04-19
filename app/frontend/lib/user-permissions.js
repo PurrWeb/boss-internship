@@ -89,6 +89,22 @@ export const userPermissions = {
       return oFetch(specificPermissions, 'isDeletable');
     }
   },
+  holidayRequestPage: {
+    canAcceptHolidayRequest: function(params) {
+      const permissions = oFetch(params, 'permissions');
+      const allHolidayRequestPermissions = oFetch(permissions, 'holidayRequests');
+      const holidayRequestId = oFetch(params, 'id');
+      const specificPermissions = oFetch(allHolidayRequestPermissions, holidayRequestId)
+      return oFetch(specificPermissions, 'canAccept');
+    },
+    canRejectHolidayRequest: function(params) {
+      const permissions = oFetch(params, 'permissions');
+      const allHolidayRequestPermissions = oFetch(permissions, 'holidayRequests');
+      const holidayRequestId = oFetch(params, 'id');
+      const specificPermissions = oFetch(allHolidayRequestPermissions, holidayRequestId)
+      return oFetch(specificPermissions, 'canReject');
+    }
+  },
   marketingTasks: {
     canViewPage: function(permissions) {
       return !!oFetch(permissions, 'canViewPage');

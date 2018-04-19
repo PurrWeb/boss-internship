@@ -1,5 +1,5 @@
 class Api::V1::StaffMemberProfile::PermissionsSerializer < ActiveModel::Serializer
-  attributes :canEnable, :holidays, :holiday_requests
+  attributes :canEnable, :holidays, :holidayRequests
 
   def canEnable
     object.can_enable?
@@ -9,7 +9,7 @@ class Api::V1::StaffMemberProfile::PermissionsSerializer < ActiveModel::Serializ
     object.holidays
   end
 
-  def holiday_requests
+  def holidayRequests
     object.holiday_requests
   end
 end
