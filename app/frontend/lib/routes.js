@@ -47,6 +47,9 @@ export const appRoutes = {
         const startDate = oFetch(options, "startDate");
         return `/security_rotas/${utils.formatRotaUrlDate(startDate)}/requests`;
     },
+    securityRotaDaily: (date) => {
+        return `/security_rotas/${date}`;
+    },
     rotaOverview: function(options){
         var [venueId, startDate] = oFetch(options, "venueId", "startDate");
         return [
