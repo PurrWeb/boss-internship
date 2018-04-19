@@ -15,7 +15,7 @@ const securityShiftRequests = handleActions(
     },
     [types.ADD_ROTA]: (state, action) => {
       const rota = oFetch(action, 'payload.rota');
-      return state.push(fromJS(rota));
+      return state.push(Immutable.fromJS(rota));
     },
   },
   initialGlobalState,
