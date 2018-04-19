@@ -110,8 +110,8 @@ module Api
           rota = assigned_rota_shift.rota
           render(
             json: {
-              rotaShift: assigned_rota_shift,
-              rota: rota,
+              rotaShift: Api::V1::SecurityShiftRequests::RotaShiftSerializer.new(assigned_rota_shift),
+              rota: Api::V1::SecurityShiftRequests::RotaSerializer.new(rota),
             },
             status: 200
           )
