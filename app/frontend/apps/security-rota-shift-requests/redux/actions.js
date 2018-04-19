@@ -31,8 +31,9 @@ export const assignShiftRequest = params => (dispatch, getState) => {
   const id = oFetch(params, 'id');
   const staffMemberId = oFetch(params, 'staffMemberId');
   return assignShiftRequestRequest({ id, staffMemberId }).then(response => {
-    const rotaShift = response.data.rotaShift;
-    const responseRota = response.data.rota;
+    const rotaShift = oFetch(response, 'data.rotaShift');
+    const responseRota = oFetch(response, 'data.rota');
+
     dispatch(removeRequestAction({ id }));
     dispatch(addRotaShift({ rotaShift }));
     const isRotaExists = !!getState()
