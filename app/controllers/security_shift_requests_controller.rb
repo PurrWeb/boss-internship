@@ -24,6 +24,7 @@ class SecurityShiftRequestsController < ApplicationController
     rota_shifts = RotaShift
                     .joins(:security_shift_request)
                     .where(security_shift_requests: {id: assigned_security_shift_requests})
+    staff_members = StaffMember.where(id: rota_shifts.pluck(:staff_member_id).uniq)
 
     render locals: {
       access_token: access_token.token,
@@ -32,6 +33,7 @@ class SecurityShiftRequestsController < ApplicationController
       rota_shifts: rota_shifts,
       start_date: week.start_date,
       end_date: week.end_date,
+      staff_members: staff_members,
       current_venue: venue_from_params,
     }
   end
