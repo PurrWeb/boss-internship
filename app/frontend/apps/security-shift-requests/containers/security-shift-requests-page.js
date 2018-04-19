@@ -15,6 +15,7 @@ const mapStateToProps = state => {
     completedSecurityShiftRequests: getCompletedSecurityShiftRequests(state),
     startDate: state.getIn(['pageOptions', 'startDate']),
     endDate: state.getIn(['pageOptions', 'endDate']),
+    date: state.getIn(['pageOptions', 'date']),
   };
 };
 

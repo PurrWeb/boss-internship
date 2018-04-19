@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
+import safeMoment from '~/lib/safe-moment';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { DashboardActions } from '~/components/boss-dashboards';
 import ContentWrapper from '~/components/content-wrapper';
@@ -26,16 +27,24 @@ class SecurityShiftRequestsPage extends Component {
   };
 
   handleOpenAddNewRequest = () => {
+    const date = oFetch(this.props, 'date');
     openContentModal({
       submit: this.handleAddNewRequest,
       config: { title: 'Add new shift request' },
+      props: { date: safeMoment.parse(date, 'DD-MM-YYYY') },
     })(AddSecurityShiftRequest);
   };
 
   render() {
     const { startDate, endDate } = this.props;
-    const pendingSecurityShiftRequests = oFetch(this.props, 'pendingSecurityShiftRequests');
-    const completedSecurityShiftRequests = oFetch(this.props, 'completedSecurityShiftRequests');
+    const pendingSecurityShiftRequests = oFetch(
+      this.props,
+      'pendingSecurityShiftRequests',
+    );
+    const completedSecurityShiftRequests = oFetch(
+      this.props,
+      'completedSecurityShiftRequests',
+    );
     return (
       <div>
         <DashboardWeekSelect
@@ -59,7 +68,11 @@ class SecurityShiftRequestsPage extends Component {
             <SecurityShiftRequestList
               securityShiftRequests={pendingSecurityShiftRequests}
               itemRenderer={securityShiftRequest => {
-                return <SecurityShiftRequestItem securityShiftRequest={securityShiftRequest} />;
+                return (
+                  <SecurityShiftRequestItem
+                    securityShiftRequest={securityShiftRequest}
+                  />
+                );
               }}
             />
           </SecurityShiftRequestCard>
@@ -68,7 +81,12 @@ class SecurityShiftRequestsPage extends Component {
               isCompleted
               securityShiftRequests={completedSecurityShiftRequests}
               itemRenderer={securityShiftRequest => {
-                return <SecurityShiftRequestItem isCompleted securityShiftRequest={securityShiftRequest} />;
+                return (
+                  <SecurityShiftRequestItem
+                    isCompleted
+                    securityShiftRequest={securityShiftRequest}
+                  />
+                );
               }}
             />
           </SecurityShiftRequestCard>
@@ -81,6 +99,7 @@ class SecurityShiftRequestsPage extends Component {
 SecurityShiftRequestsPage.propTypes = {
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
   completedSecurityShiftRequests: ImmutablePropTypes.list.isRequired,
   pendingSecurityShiftRequests: ImmutablePropTypes.list.isRequired,
   addSecurityShiftRequest: PropTypes.func.isRequired,
