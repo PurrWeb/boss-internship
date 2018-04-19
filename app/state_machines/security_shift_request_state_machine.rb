@@ -8,7 +8,7 @@ class SecurityShiftRequestStateMachine
 
   transition from: :pending, to: [:accepted, :rejected]
   transition from: :rejected, to: [:pending]
-  transition from: :accepted, to: [:pending, :assigned]
+  transition from: :accepted, to: [:pending, :assigned, :rejected]
 
   after_transition(from: :rejected, to: :pending) do |model, transition|
     model.reject_reason = nil
