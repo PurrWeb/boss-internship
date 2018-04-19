@@ -289,7 +289,7 @@ class UserAbility
       end
 
       can :view, :holiday_requests_page do
-        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+        can_view_holidays_requests_page?(user)
       end
 
       can :redeem, Voucher do |voucher|
@@ -355,7 +355,7 @@ class UserAbility
       end
 
       can [:accept, :reject, :update, :destroy], HolidayRequest do |holiday_request|
-        user.has_effective_access_level?(AccessLevel.admin_access_level)
+        can_view_holidays_requests_page?(user)
       end
 
       can :list, :staff_members do
@@ -528,6 +528,13 @@ class UserAbility
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+  end
+
+  def can_view_holidays_requests_page?(user)
+    user.payroll_manager? ||
+      user.ops_manager? ||
+      user.food_ops_manager? ||
+      user.has_effective_access_level?(AccessLevel.area_manager_access_level)
   end
 
   def can_view_holiday?(user, holiday)
