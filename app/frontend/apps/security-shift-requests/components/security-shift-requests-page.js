@@ -41,7 +41,6 @@ class SecurityShiftRequestsPage extends Component {
     const pendingSecurityShiftRequests = oFetch(this.props, 'pendingSecurityShiftRequests');
     const completedSecurityShiftRequests = oFetch(this.props, 'completedSecurityShiftRequests');
     const canCreate = oFetch(this.props, 'canCreate');
-    console.log(canCreate);
     return (
       <div>
         <DashboardWeekSelect
