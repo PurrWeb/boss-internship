@@ -21,12 +21,12 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
     onEditHoliday(holiday);
   }
 
-  const onDelete = (id) => {
+  const onDelete = (holiday) => {
     confirm('Are you sure ?', {
       title: 'Delete Holiday',
       actionButtonText: 'Delete',
     }).then(() => {
-      deleteHoliday(id);
+      deleteHoliday(holiday);
     });
   }
 
@@ -84,7 +84,7 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
       { isEditable && <button className="boss-button boss-button_role_update boss-check__action" onClick={() => (onEdit(holiday))}>
           Edit
         </button> }
-      { isDeletable && <button className="boss-button boss-button_role_cancel boss-check__action" onClick={() => (onDelete(holiday.get('id')))}>
+      { isDeletable && <button className="boss-button boss-button_role_cancel boss-check__action" onClick={() => (onDelete(holiday))}>
           Delete
         </button> }
     </div>
