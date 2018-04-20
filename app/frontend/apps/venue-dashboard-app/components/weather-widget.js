@@ -58,7 +58,6 @@ export default class WeatherWidget extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.lat !== prevProps.lat || this.props.long !== prevProps.long) {
-      this.setState({ data: null });
       this.fetchData();
     }
   }
