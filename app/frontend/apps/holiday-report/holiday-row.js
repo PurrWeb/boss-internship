@@ -7,8 +7,8 @@ const PAYED_HOLIDAY = 'paid_holiday';
 const UNPAYED_HOLIDAY = 'unpaid_holiday';
 
 const holidayTypes = {
-  [PAYED_HOLIDAY]: 'Payed Holiday',
-  [UNPAYED_HOLIDAY]: 'Unpayed Holiday'
+  [PAYED_HOLIDAY]: 'Paid Holiday',
+  [UNPAYED_HOLIDAY]: 'Unpaid Holiday'
 }
 
 const DetailsCell = ({children, label}) => {

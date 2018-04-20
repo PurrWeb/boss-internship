@@ -11,6 +11,15 @@ class StaffMemberProfilePermissions
     user_ability.can?(:enable, staff_member)
   end
 
+  def holidays_tab
+    {
+      canCreateHolidays: user_ability.can?(:create, Holiday.new(staff_member: staff_member)),
+      holidays: holidays,
+      holidayRequests: holiday_requests
+    }
+  end
+
+  private
   def holidays
     result = {}
     @holidays.each do |holiday|
