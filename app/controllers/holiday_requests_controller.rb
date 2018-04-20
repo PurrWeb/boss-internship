@@ -17,7 +17,7 @@ class HolidayRequestsController < ApplicationController
       access_token: access_token.token,
       holiday_requests: pending_holiday_requests,
       staff_members: staff_members,
-      permissions: HolidayRequestPagePermissions.new(
+      permissionsData: HolidayRequestPagePermissions.new(
         holiday_requests: pending_holiday_requests,
         requester: current_user
       )

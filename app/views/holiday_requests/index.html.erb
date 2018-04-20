@@ -2,5 +2,5 @@
   accessToken: access_token,
   holidayRequests: ActiveModel::Serializer::CollectionSerializer.new(holiday_requests, serializer: Api::V1::HolidayRequests::HolidayRequestSerializer),
   staffMembers: ActiveModel::Serializer::CollectionSerializer.new(staff_members, serializer: Api::V1::HolidayRequests::StaffMemberSerializer),
-  permissions: Api::V1::HolidayRequests::PermissionsSerializer.new(permissions)
+  permissionsData: Api::V1::HolidayRequests::PermissionsSerializer.new(permissionsData)
 }) %>

@@ -61,15 +61,15 @@ function canManageVenue(params){
 export const userPermissions = {
   holidayRequestPage: {
     canAcceptHolidayRequest: function(params) {
-      const permissions = oFetch(params, 'permissions');
-      const allHolidayRequestPermissions = oFetch(permissions, 'holidayRequests');
+      const permissionsData = oFetch(params, 'permissionsData').toJS();
+      const allHolidayRequestPermissions = oFetch(permissionsData, 'holidayRequests');
       const holidayRequestId = oFetch(params, 'id');
       const specificPermissions = oFetch(allHolidayRequestPermissions, holidayRequestId)
       return oFetch(specificPermissions, 'canAccept');
     },
     canRejectHolidayRequest: function(params) {
-      const permissions = oFetch(params, 'permissions');
-      const allHolidayRequestPermissions = oFetch(permissions, 'holidayRequests');
+      const permissionsData = oFetch(params, 'permissionsData').toJS();
+      const allHolidayRequestPermissions = oFetch(permissionsData, 'holidayRequests');
       const holidayRequestId = oFetch(params, 'id');
       const specificPermissions = oFetch(allHolidayRequestPermissions, holidayRequestId)
       return oFetch(specificPermissions, 'canReject');

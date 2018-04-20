@@ -32,9 +32,9 @@ export const DisableStaffMemberModalContent = ({onDisable}) => {
   )
 }
 
-const StaffMemberProfileActions = ({staffMember, onEditProfile, onEnableProfile, onDisableStaffMember, permissions}) => {
+const StaffMemberProfileActions = ({staffMember, onEditProfile, onEnableProfile, onDisableStaffMember, permissionsData}) => {
   const disabled = staffMember.get('disabled')
-  const canEnable = oFetch(permissions.toJS(), 'canEnable');
+  const canEnable = oFetch(permissionsData.toJS(), 'canEnable');
 
   const disableStaffMember = () => {
 

@@ -2,31 +2,31 @@ import oFetch from 'o-fetch';
 
 export const staffMemberProfileHolidaysPermissions = {
   canEditHoliday: function(params){
-    const permissions = oFetch(params, 'permissions');
-    const allHolidayPermissions = oFetch(permissions, 'holidays')
+    const permissionsData = oFetch(params, 'permissionsData');
+    const allHolidayPermissions = oFetch(permissionsData, 'holidays')
     const holidayId = oFetch(params, 'id');
-    const specificPermissions = oFetch(allHolidayPermissions, holidayId)
-    return oFetch(specificPermissions, 'isEditable');
+    const specificPermissionsData = oFetch(allHolidayPermissions, holidayId)
+    return oFetch(specificPermissionsData, 'isEditable');
   },
   canDestroyHoliday: function(params){
-    const permissions = oFetch(params, 'permissions');
-    const allHolidayPermissions = oFetch(permissions, 'holidays')
+    const permissionsData = oFetch(params, 'permissionsData');
+    const allHolidayPermissions = oFetch(permissionsData, 'holidays')
     const holidayId = oFetch(params, 'id');
-    const specificPermissions = oFetch(allHolidayPermissions, holidayId)
-    return oFetch(specificPermissions, 'isDeletable');
+    const specificPermissionsData = oFetch(allHolidayPermissions, holidayId)
+    return oFetch(specificPermissionsData, 'isDeletable');
   },
   canEditHolidayRequest: function(params){
-    const permissions = oFetch(params, 'permissions');
-    const allHolidayRequestPermissions = oFetch(permissions, 'holidayRequests');
+    const permissionsData = oFetch(params, 'permissionsData');
+    const allHolidayRequestPermissions = oFetch(permissionsData, 'holidayRequests');
     const holidayRequestId = oFetch(params, 'id');
-    const specificPermissions = oFetch(allHolidayRequestPermissions, holidayRequestId)
-    return oFetch(specificPermissions, 'isEditable');
+    const specificPermissionsData = oFetch(allHolidayRequestPermissions, holidayRequestId)
+    return oFetch(specificPermissionsData, 'isEditable');
   },
   canDestroyHolidayRequest: function(params){
-    const permissions = oFetch(params, 'permissions');
-    const allHolidayRequestPermissions = oFetch(permissions, 'holidayRequests');
+    const permissionsData = oFetch(params, 'permissionsData');
+    const allHolidayRequestPermissions = oFetch(permissionsData, 'holidayRequests');
     const holidayRequestId = oFetch(params, 'id');
-    const specificPermissions = oFetch(allHolidayRequestPermissions, holidayRequestId)
-    return oFetch(specificPermissions, 'isDeletable');
+    const specificPermissionsData = oFetch(allHolidayRequestPermissions, holidayRequestId)
+    return oFetch(specificPermissionsData, 'isDeletable');
   }
 }

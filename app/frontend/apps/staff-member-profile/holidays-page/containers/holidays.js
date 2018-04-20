@@ -51,7 +51,7 @@ const mapStateToProps = state => {
     editedHoliday: state.getIn(['holidays', 'editedHoliday']),
     disabled: state.getIn(['profile', 'staffMember', 'disabled']),
     isAdminPlus: state.getIn(['holidays', 'isAdminPlus']),
-    permissions: state.getIn(['holidays', 'permissions'])
+    permissionsData: state.getIn(['holidays', 'permissionsData'])
   };
 };
 
@@ -235,7 +235,7 @@ class Holidays extends React.PureComponent {
       },
     } = this.props;
 
-    const permissions = oFetch(this.props, 'permissions');
+    const permissionsData = oFetch(this.props, 'permissionsData');
     const hasHolidays = !!holidays.size;
 
     return (
@@ -308,7 +308,7 @@ class Holidays extends React.PureComponent {
                       holidays={holidays}
                       deleteHoliday={this.handleDeleteHoliday}
                       onEditHoliday={openEditModal}
-                      permissions={permissions}
+                      permissionsData={permissionsData}
                     />,
                     <HolidayMobileItems
                       key="mobile"
@@ -316,7 +316,7 @@ class Holidays extends React.PureComponent {
                       holidays={holidays}
                       deleteHoliday={this.handleDeleteHoliday}
                       onEditHoliday={openEditModal}
-                      permissions={permissions}
+                      permissionsData={permissionsData}
                     />,
                   ]
                 ) : (

@@ -11,7 +11,7 @@ const PermissionsReducer = handleActions(
   {
     [types.INITIAL_LOAD]: (state, action) => {
       const payload = oFetch(action, 'payload');
-      return Immutable.fromJS(oFetch(payload, 'permissions'));
+      return Immutable.fromJS(oFetch(payload, 'permissionsData'));
     },
   },
   initialState,

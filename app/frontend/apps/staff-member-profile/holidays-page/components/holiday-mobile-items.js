@@ -15,7 +15,7 @@ const statusClasses = {
   [REJECTED_STATUS]: 'boss-table__text_role_alert-status',
 };
 
-const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, permissions}) => {
+const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, permissionsData}) => {
 
   const onEdit = (holiday) => {
     onEditHoliday(holiday);
@@ -40,8 +40,8 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
   const holidayData = holiday.toJS();
   const id = oFetch(holidayData, 'id');
 
-  const isEditable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canEditHoliday')({ permissions: permissions, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canEditHolidayRequest')({ permissions: permissions, id: id });
-  const isDeletable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHoliday')({ permissions: permissions, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHolidayRequest')({ permissions: permissions, id: id });
+  const isEditable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canEditHoliday')({ permissionsData: permissionsData, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canEditHolidayRequest')({ permissionsData: permissionsData, id: id });
+  const isDeletable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHoliday')({ permissionsData: permissionsData, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHolidayRequest')({ permissionsData: permissionsData, id: id });
 
   return <div className="boss-check boss-check_role_panel boss-check_page_smp-holidays">
     <div className="boss-check__row">
@@ -96,7 +96,7 @@ export default class HolidayMobileItems extends React.Component {
   }
 
   renderMobileItems = (holidays) => {
-    const permissions = oFetch(this.props, 'permissions');
+    const permissionsData = oFetch(this.props, 'permissionsData');
     return holidays.map(holiday => {
       const holidayId = oFetch(holiday.toJS(), 'id');
       return <HolidayMobileItem
@@ -105,7 +105,7 @@ export default class HolidayMobileItems extends React.Component {
         onEditHoliday={this.props.onEditHoliday}
         key={holidayId}
         isStaffMemberDisabled={this.props.isStaffMemberDisabled}
-        permissions={permissions}
+        permissionsData={permissionsData}
       />
     })
   };
@@ -115,7 +115,7 @@ export default class HolidayMobileItems extends React.Component {
       {
         this.renderMobileItems(
           oFetch(this.props, 'holidays'),
-          oFetch(this.props, 'permissions')
+          oFetch(this.props, 'permissionsData')
         )
       }
     </div>

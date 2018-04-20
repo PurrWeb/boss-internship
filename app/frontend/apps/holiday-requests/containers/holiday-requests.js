@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
   return {
     staffMembers: state.get('staffMembers'),
     holidayRequests: state.get('holidayRequests'),
-    permissions: state.get('permissions')
+    permissionsData: state.get('permissionsData')
   };
 };
 

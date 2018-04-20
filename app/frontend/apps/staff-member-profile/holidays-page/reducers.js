@@ -36,7 +36,7 @@ const initialState = fromJS({
   editHoliday: false,
   editedHoliday: {},
   isAdminPlus: null,
-  permissions: {}
+  permissionsData: {}
 });
 
 const holidaysReducer = handleActions({
@@ -54,7 +54,7 @@ const holidaysReducer = handleActions({
       isAdminPlus
     } = action.payload;
 
-    const permissions = oFetch(action.payload, 'permissions');
+    const permissionsData = oFetch(action.payload, 'permissionsData');
 
     return state
       .set('staffMember', fromJS(staffMember))
@@ -67,7 +67,7 @@ const holidaysReducer = handleActions({
       .set('holidayStartDate', safeMoment.uiDateParse(holidayStartDate))
       .set('holidayEndDate', safeMoment.uiDateParse(holidayEndDate))
       .set('isAdminPlus', isAdminPlus)
-      .set('permissions', permissions)
+      .set('permissionsData', permissionsData)
   },
   [UPDATE_HOLIDAYS_COUNT]: (state, action) => {
     const {
