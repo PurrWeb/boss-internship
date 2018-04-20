@@ -37,11 +37,11 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
   const cerated = `(${safeMoment.iso8601Parse(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
   const startDate = safeMoment.uiDateParse(holiday.get('start_date')).format('DD MMM Y')
   const endDate = safeMoment.uiDateParse(holiday.get('end_date')).format('DD MMM Y')
-  const holidayData = holiday.toJS();
-  const id = oFetch(holidayData, 'id');
+  const jsHoliday = holiday.toJS();
+  const id = oFetch(jsHoliday, 'id');
 
-  const isEditable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canEditHoliday')({ permissionsData: permissionsData, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canEditHolidayRequest')({ permissionsData: permissionsData, id: id });
-  const isDeletable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHoliday')({ permissionsData: permissionsData, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHolidayRequest')({ permissionsData: permissionsData, id: id });
+  const isEditable = oFetch(jsHoliday, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canEditHoliday')({ permissionsData: permissionsData, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canEditHolidayRequest')({ permissionsData: permissionsData, id: id });
+  const isDeletable = oFetch(jsHoliday, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHoliday')({ permissionsData: permissionsData, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHolidayRequest')({ permissionsData: permissionsData, id: id });
 
   return <div className="boss-check boss-check_role_panel boss-check_page_smp-holidays">
     <div className="boss-check__row">
