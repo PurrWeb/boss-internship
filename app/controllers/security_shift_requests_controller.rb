@@ -9,6 +9,8 @@ class SecurityShiftRequestsController < ApplicationController
     unless show_params_present?
       return redirect_to(security_shift_request_path(show_redirect_params))
     end
+    authorize! :view, :security_shift_requests
+
     date = date_from_params
     week = RotaWeek.new(date)
 
@@ -38,6 +40,11 @@ class SecurityShiftRequestsController < ApplicationController
       end_date: week.end_date,
       staff_members: staff_members,
       current_venue: venue_from_params,
+      permissions: SecurityShiftRequestsPermissions.new(
+        current_user: current_user,
+        shift_requests: security_shift_requests,
+      ),
+      can_create: current_user.has_effective_access_level?(AccessLevel.manager_access_level)
     }
   end
 

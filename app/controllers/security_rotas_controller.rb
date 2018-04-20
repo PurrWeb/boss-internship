@@ -29,7 +29,6 @@ class SecurityRotasController < ApplicationController
       includes(:master_venue).
       uniq
 
-
     week = RotaWeek.new(date)
     week_start_time = RotaShiftDate.new(week.start_date).start_time
     week_end_time = RotaShiftDate.new(week.end_date).end_time
@@ -122,6 +121,10 @@ class SecurityRotasController < ApplicationController
       staff_types: staff_types,
       start_date: week.start_date,
       end_date: week.end_date,
+      permissions: SecurityShiftRequestsPermissions.new(
+        current_user: current_user,
+        shift_requests: week_shift_requests,
+      ),
     }
   end
 

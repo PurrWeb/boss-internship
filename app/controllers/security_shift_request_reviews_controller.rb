@@ -39,6 +39,10 @@ class SecurityShiftRequestReviewsController < ApplicationController
       end_date: week.end_date,
       staff_members: staff_members,
       venues: venues,
+      permissions: SecurityShiftRequestsPermissions.new(
+        current_user: current_user,
+        shift_requests: security_shift_requests,
+      ),
     }
   end
 

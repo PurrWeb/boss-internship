@@ -19,4 +19,5 @@
   ),
   startDate: UIRotaDate.format(start_date),
   endDate: UIRotaDate.format(end_date),
+  permissions: Api::V1::SecurityShiftRequests::PermissionsSerializer.new(permissions),
 }) %>
