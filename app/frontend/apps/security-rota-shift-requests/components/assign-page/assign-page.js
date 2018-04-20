@@ -24,9 +24,7 @@ class AssignPage extends PureComponent {
   handleFilterStaffMembers = searchQuery => {
     const staffMembers = oFetch(this.props, 'staffMembers');
     this.setState({
-      staffMembers: utils
-        .staffMemberFilterCamelCase(searchQuery, staffMembers)
-        .toJS(),
+      staffMembers: utils.staffMemberFilterCamelCase(searchQuery, staffMembers).toJS(),
     });
   };
 
@@ -46,21 +44,18 @@ class AssignPage extends PureComponent {
     return assignShiftRequest({ id, staffMemberId })
       .then(() => {
         hideModal();
-        this.handleCloseAssignPage();
+        setTimeout(() => {
+          this.handleCloseAssignPage();
+        }, 1000);
       })
       .catch(err => {
-        this.setError(
-          'There was an error assigning this shift. Please check for errors and try again',
-        );
+        this.setError('There was an error assigning this shift. Please check for errors and try again');
         hideModal();
       });
   };
 
   handleCloseAssignPage = () => {
-    const setAssigningShiftRequest = oFetch(
-      this.props,
-      'setAssigningShiftRequest',
-    );
+    const setAssigningShiftRequest = oFetch(this.props, 'setAssigningShiftRequest');
     setAssigningShiftRequest(null);
   };
 
@@ -74,10 +69,7 @@ class AssignPage extends PureComponent {
 
     return (
       <div className="boss-page-main">
-        <AssignDashboard
-          shiftRequest={shiftRequest}
-          title="Assign Shift Request"
-        >
+        <AssignDashboard shiftRequest={shiftRequest} title="Assign Shift Request">
           <a
             onClick={this.handleCloseAssignPage}
             className="boss-button boss-button_role_cancel boss-page-dashboard__button"

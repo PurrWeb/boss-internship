@@ -9,20 +9,25 @@ import staffMembers from '../../../reducers/staff-member';
 import rotaShifts from '../../hours-confirmation/redux/rota-shifts';
 import { isShiftRequestOverlapped } from '../utils';
 
-export const startDateSelector = state =>
-  oFetch(state.get('page'), 'startDate');
-export const chosenDateSelector = state =>
-  oFetch(state.get('page'), 'chosenDate');
-export const selectedVenuesSelector = state =>
-  oFetch(state.get('page'), 'selectedVenues');
+export const shiftRequestsPermissionsSelector = state => state.getIn(['permissions', 'shiftRequests']);
+export const startDateSelector = state => oFetch(state.get('page'), 'startDate');
+export const chosenDateSelector = state => oFetch(state.get('page'), 'chosenDate');
+export const selectedVenuesSelector = state => oFetch(state.get('page'), 'selectedVenues');
 export const weekShiftRequestsSelector = state =>
-  state.get('weekShiftRequests');
+  state
+    .get('weekShiftRequests')
+    .map(weekShiftRequest =>
+      weekShiftRequest.set(
+        'permissions',
+        shiftRequestsPermissionsSelector(state).find((shiftRequestPermission, id) => id == weekShiftRequest.get('id')),
+      ),
+    );
 export const venuesSelector = state => state.get('venues');
 export const weekRotasSelector = state => state.get('weekRotas');
 export const staffMembersSelector = state => state.get('staffMembers');
 export const weekRotaShiftsSelector = state => state.get('weekRotaShifts');
-export const assigningShiftRequestSelector = state =>
-  state.get('assigningShiftRequest');
+
+export const assigningShiftRequestSelector = state => state.get('assigningShiftRequest');
 
 export const getShiftRequestForEachWeekDay = createSelector(
   startDateSelector,
@@ -73,24 +78,18 @@ export const getShiftRequestsForChosenDate = createSelector(
         .map(shiftRequest =>
           shiftRequest.set(
             'venueName',
-            venues
-              .find(venue => venue.get('id') === shiftRequest.get('venueId'))
-              .get('name'),
+            venues.find(venue => venue.get('id') === shiftRequest.get('venueId')).get('name'),
           ),
         );
     } else {
       return shiftRequestsForEachWeekDay
         .find(day => day.get('date') === chosenDate)
         .get('shiftRequests')
-        .filter(shiftRequest =>
-          selectedVenues.includes(shiftRequest.get('venueId')),
-        )
+        .filter(shiftRequest => selectedVenues.includes(shiftRequest.get('venueId')))
         .map(shiftRequest =>
           shiftRequest.set(
             'venueName',
-            venues
-              .find(venue => venue.get('id') === shiftRequest.get('venueId'))
-              .get('name'),
+            venues.find(venue => venue.get('id') === shiftRequest.get('venueId')).get('name'),
           ),
         );
     }
@@ -113,9 +112,7 @@ export const getWeekDaysWithCount = createSelector(
       return shiftRequestsForEachWeekDay.map(day => {
         const count = day
           .get('shiftRequests')
-          .filter(shiftRequest =>
-            selectedVenues.includes(shiftRequest.get('venueId')),
-          ).size;
+          .filter(shiftRequest => selectedVenues.includes(shiftRequest.get('venueId'))).size;
         return Immutable.Map({
           weekDay: day.get('weekDay'),
           date: day.get('date'),
@@ -134,11 +131,7 @@ export const getVenueTypesForWeek = createSelector(
       .map(venue => {
         return venue.set('color', getVenueColor(venue.get('id')));
       })
-      .filter(venue =>
-        shiftRequests
-          .groupBy(shiftRequest => shiftRequest.get('venueId'))
-          .has(venue.get('id')),
-      );
+      .filter(venue => shiftRequests.groupBy(shiftRequest => shiftRequest.get('venueId')).has(venue.get('id')));
   },
 );
 
@@ -161,9 +154,7 @@ export const getRotaShiftsForChosenDay = createSelector(
         });
       })
       .map(rotaShift => {
-        const venueId = weekRotas
-          .find(rota => rota.get('id') === rotaShift.get('rotaId'))
-          .get('venueId');
+        const venueId = weekRotas.find(rota => rota.get('id') === rotaShift.get('rotaId')).get('venueId');
         return rotaShift.set('venueId', venueId);
       });
   },
@@ -199,9 +190,7 @@ export const getRotasForChosenDay = createSelector(
   weekRotasSelector,
   (rotaShifts, weekRotas) => {
     return weekRotas.filter(rota => {
-      return rotaShifts
-        .groupBy(rotaShift => rotaShift.get('rotaId'))
-        .has(rota.get('id'));
+      return rotaShifts.groupBy(rotaShift => rotaShift.get('rotaId')).has(rota.get('id'));
     });
   },
 );
@@ -211,20 +200,16 @@ export const getVenueTypesForChosenDate = createSelector(
   getRotasForChosenDay,
   getRotaShiftsForChosenDay,
   (venues, rotas, rotaShifts) => {
-    return venues
-      .filter(venue =>
-        rotas.groupBy(rota => rota.get('venueId')).has(venue.get('id')),
-      )
-      .map(venue => {
-        return venue.set('color', getVenueColor(venue.get('id'))).set(
-          'count',
-          rotaShifts.reduce((acc, rotaShift) => {
-            if (rotaShift.get('venueId') === venue.get('id')) {
-              return acc + 1;
-            }
-            return acc;
-          }, 0),
-        );
-      });
+    return venues.filter(venue => rotas.groupBy(rota => rota.get('venueId')).has(venue.get('id'))).map(venue => {
+      return venue.set('color', getVenueColor(venue.get('id'))).set(
+        'count',
+        rotaShifts.reduce((acc, rotaShift) => {
+          if (rotaShift.get('venueId') === venue.get('id')) {
+            return acc + 1;
+          }
+          return acc;
+        }, 0),
+      );
+    });
   },
 );

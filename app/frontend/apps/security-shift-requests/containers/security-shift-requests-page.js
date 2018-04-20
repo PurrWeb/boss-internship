@@ -16,6 +16,7 @@ const mapStateToProps = state => {
     startDate: state.getIn(['pageOptions', 'startDate']),
     endDate: state.getIn(['pageOptions', 'endDate']),
     date: state.getIn(['pageOptions', 'date']),
+    canCreate: state.getIn(['pageOptions', 'canCreate']),
   };
 };
 

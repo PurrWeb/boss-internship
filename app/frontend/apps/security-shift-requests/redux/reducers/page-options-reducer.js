@@ -19,12 +19,14 @@ const pageOptionsReducer = handleActions(
       const startDate = oFetch(action, 'payload.startDate');
       const endDate = oFetch(action, 'payload.endDate');
       const venueId = oFetch(action, 'payload.venueId');
+      const canCreate = oFetch(action, 'payload.canCreate');
 
       return Immutable.fromJS({
         date,
         startDate,
         endDate,
         venueId,
+        canCreate,
       });
     },
   },

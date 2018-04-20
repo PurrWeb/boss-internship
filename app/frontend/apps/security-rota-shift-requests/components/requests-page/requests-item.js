@@ -16,10 +16,7 @@ class RequestsItem extends PureComponent {
   };
 
   handleRejectRequest = (hideModal, values) => {
-    const rejectSecurityShiftRequest = oFetch(
-      this.props,
-      'rejectSecurityShiftRequest',
-    );
+    const rejectSecurityShiftRequest = oFetch(this.props, 'rejectSecurityShiftRequest');
     return rejectSecurityShiftRequest(values).then(response => {
       hideModal();
     });
@@ -27,6 +24,8 @@ class RequestsItem extends PureComponent {
 
   render() {
     const shiftRequest = oFetch(this.props, 'shiftRequest');
+    const isAssignable = oFetch(shiftRequest, 'permissions.isAssignable');
+    const isRejectable = oFetch(shiftRequest, 'permissions.isRejectable');
     const onOpenAssignPage = oFetch(this.props, 'onOpenAssignPage');
     const startsAt = oFetch(shiftRequest, 'startsAt');
     const endsAt = oFetch(shiftRequest, 'endsAt');
@@ -44,37 +43,35 @@ class RequestsItem extends PureComponent {
         <div className="boss-check__header">
           <div className="boss-check__header-group">
             <h3 className="boss-check__title boss-check__title_role_time">
-              {`${moment(startsAt).format(
-                utils.commonDateFormatTimeOnly(),
-              )} - ${moment(endsAt).format(utils.humanDateFormatWithDayOfWeek())}`}
+              {`${moment(startsAt).format(utils.commonDateFormatTimeOnly())} - ${moment(endsAt).format(
+                utils.humanDateFormatWithDayOfWeek(),
+              )}`}
             </h3>
             <div className="boss-check__header-meta">
               <div className="boss-check__header-meta-item">
-                <p className="boss-check__text boss-check__text_role_main boss-check__text_role_venue">
-                  {venueName}
-                </p>
+                <p className="boss-check__text boss-check__text_role_main boss-check__text_role_venue">{venueName}</p>
               </div>
             </div>
           </div>
           <div className="boss-check__header-actions">
-            <button
-              onClick={() => onOpenAssignPage(shiftRequest)}
-              type="button"
-              className="boss-button boss-button_role_confirm boss-button_type_small boss-check__header-action"
-            >
-              Assign
-            </button>
-            <button
-              onClick={() =>
-                this.handleOpenRejectSecurityShiftRequest(
-                  rejectRequestFormInitialValues,
-                )
-              }
-              type="button"
-              className="boss-button boss-button_role_cancel boss-button_type_small boss-check__header-action"
-            >
-              Reject
-            </button>
+            {isAssignable && (
+              <button
+                onClick={() => onOpenAssignPage(shiftRequest)}
+                type="button"
+                className="boss-button boss-button_role_confirm boss-button_type_small boss-check__header-action"
+              >
+                Assign
+              </button>
+            )}
+            {isRejectable && (
+              <button
+                onClick={() => this.handleOpenRejectSecurityShiftRequest(rejectRequestFormInitialValues)}
+                type="button"
+                className="boss-button boss-button_role_cancel boss-button_type_small boss-check__header-action"
+              >
+                Reject
+              </button>
+            )}
           </div>
         </div>
       </div>

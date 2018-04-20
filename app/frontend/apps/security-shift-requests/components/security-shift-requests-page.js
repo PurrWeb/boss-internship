@@ -36,15 +36,12 @@ class SecurityShiftRequestsPage extends Component {
   };
 
   render() {
-    const { startDate, endDate } = this.props;
-    const pendingSecurityShiftRequests = oFetch(
-      this.props,
-      'pendingSecurityShiftRequests',
-    );
-    const completedSecurityShiftRequests = oFetch(
-      this.props,
-      'completedSecurityShiftRequests',
-    );
+    const startDate = oFetch(this.props, 'startDate');
+    const endDate = oFetch(this.props, 'endDate');
+    const pendingSecurityShiftRequests = oFetch(this.props, 'pendingSecurityShiftRequests');
+    const completedSecurityShiftRequests = oFetch(this.props, 'completedSecurityShiftRequests');
+    const canCreate = oFetch(this.props, 'canCreate');
+    console.log(canCreate);
     return (
       <div>
         <DashboardWeekSelect
@@ -53,26 +50,24 @@ class SecurityShiftRequestsPage extends Component {
           onDateChange={this.handleDateChage}
           title="Security Shift Requests"
         >
-          <DashboardActions>
-            <button
-              onClick={this.handleOpenAddNewRequest}
-              type="button"
-              className="boss-button boss-button_role_add boss-page-dashboard__button"
-            >
-              Add New
-            </button>
-          </DashboardActions>
+          {canCreate && (
+            <DashboardActions>
+              <button
+                onClick={this.handleOpenAddNewRequest}
+                type="button"
+                className="boss-button boss-button_role_add boss-page-dashboard__button"
+              >
+                Add New
+              </button>
+            </DashboardActions>
+          )}
         </DashboardWeekSelect>
         <ContentWrapper>
           <SecurityShiftRequestCard title="Pending">
             <SecurityShiftRequestList
               securityShiftRequests={pendingSecurityShiftRequests}
               itemRenderer={securityShiftRequest => {
-                return (
-                  <SecurityShiftRequestItem
-                    securityShiftRequest={securityShiftRequest}
-                  />
-                );
+                return <SecurityShiftRequestItem securityShiftRequest={securityShiftRequest} />;
               }}
             />
           </SecurityShiftRequestCard>
@@ -81,12 +76,7 @@ class SecurityShiftRequestsPage extends Component {
               isCompleted
               securityShiftRequests={completedSecurityShiftRequests}
               itemRenderer={securityShiftRequest => {
-                return (
-                  <SecurityShiftRequestItem
-                    isCompleted
-                    securityShiftRequest={securityShiftRequest}
-                  />
-                );
+                return <SecurityShiftRequestItem isCompleted securityShiftRequest={securityShiftRequest} />;
               }}
             />
           </SecurityShiftRequestCard>

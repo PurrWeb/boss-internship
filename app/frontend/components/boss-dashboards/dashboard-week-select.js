@@ -14,28 +14,13 @@ class DashboardWeekSelect extends React.Component {
     };
   }
 
-  parseChildrens = () => {
-    React.Children.map(this.props.children, (child, i) => {
-      if (child.type === DashboardActions) {
-        this.actions = React.cloneElement(child);
-      }
-      return;
-    });
-  };
-
   togglePopover = () => {
     this.setState({ isCalendarOpen: !this.state.isCalendarOpen });
   };
 
   render() {
-    this.parseChildrens();
-
-    const startDate = safeMoment
-      .uiDateParse(this.props.startDate)
-      .format('dddd, D MMMM YYYY');
-    const endDate = safeMoment
-      .uiDateParse(this.props.endDate)
-      .format('dddd, D MMMM YYYY');
+    const startDate = safeMoment.uiDateParse(this.props.startDate).format('dddd, D MMMM YYYY');
+    const endDate = safeMoment.uiDateParse(this.props.endDate).format('dddd, D MMMM YYYY');
 
     const popoverClass = classNames({
       'boss-page-dashboard__meta-item boss-page-dashboard__meta-item_type_faded boss-page-dashboard__meta-item_role_date boss-page-dashboard__meta-item_role_popover': true,
@@ -60,17 +45,13 @@ class DashboardWeekSelect extends React.Component {
                   style={{ marginTop: '10px' }}
                 >
                   <p className={popoverClass} onClick={this.togglePopover}>
-                    <span className="boss-page-dashboard__meta-text">
-                      {startDate}
-                    </span>
+                    <span className="boss-page-dashboard__meta-text">{startDate}</span>
                     {' - '}
-                    <span className="boss-page-dashboard__meta-text">
-                      {endDate}
-                    </span>
+                    <span className="boss-page-dashboard__meta-text">{endDate}</span>
                   </p>
                 </Popover>
               </div>
-              {this.actions}
+              {this.props.children}
             </div>
           </div>
         </div>
@@ -81,9 +62,7 @@ class DashboardWeekSelect extends React.Component {
     return (
       <div className="boss-popover__inner">
         <WeekPicker
-          selectionStartDate={safeMoment
-            .uiDateParse(this.props.startDate)
-            .toDate()}
+          selectionStartDate={safeMoment.uiDateParse(this.props.startDate).toDate()}
           onChange={selection => this.props.onDateChange(selection)}
         />
       </div>
@@ -97,7 +76,6 @@ DashboardWeekSelect.propTypes = {
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
   onDateChange: PropTypes.func.isRequired,
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]),
 };
 
 DashboardWeekSelect.defaultProps = {

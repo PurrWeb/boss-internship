@@ -7,6 +7,7 @@ import weekRotaShifts from './week-rota-shifts';
 import weekRotas from './week-rotas';
 import weekShiftRequests from './week-shift-requests';
 import assigningShiftRequest from './assigning-shift-request';
+import permissions from './permissions-reducer';
 
 export default combineReducers({
   staffMembers,
@@ -17,4 +18,5 @@ export default combineReducers({
   weekRotas,
   weekShiftRequests,
   assigningShiftRequest,
+  permissions,
 });

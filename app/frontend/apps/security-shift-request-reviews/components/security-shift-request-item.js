@@ -100,6 +100,10 @@ class SecurityShiftRequestItem extends Component {
     const status = oFetch(securityShiftRequest, 'status');
     const venueId = oFetch(securityShiftRequest, 'venueId');
     const createdShift = oFetch(securityShiftRequest, 'createdShift');
+    const isAcceptable = oFetch(securityShiftRequest, 'permissions.isAcceptable');
+    const isEditable = oFetch(securityShiftRequest, 'permissions.isEditable');
+    const isRejectable = oFetch(securityShiftRequest, 'permissions.isRejectable');
+    const isUndoable = oFetch(securityShiftRequest, 'permissions.isUndoable');
 
     const { note, rotaShiftId } = securityShiftRequest;
 
@@ -151,16 +155,17 @@ class SecurityShiftRequestItem extends Component {
                 <p style={{ textTransform: 'capitalize' }} className={`boss-table__text ${statusClassName}`}>
                   {status}
                 </p>
-                {status !== 'assigned' && (
-                  <div className="boss-table__actions">
-                    <AsyncButton
-                      text="Undo"
-                      pendingText="Undoing ..."
-                      onClick={() => undoSecurityShiftRequest({ id })}
-                      className="boss-button boss-button_type_extra-small boss-button_role_cancel-light boss-table__action"
-                    />
-                  </div>
-                )}
+                {status !== 'assigned' &&
+                  isUndoable && (
+                    <div className="boss-table__actions">
+                      <AsyncButton
+                        text="Undo"
+                        pendingText="Undoing ..."
+                        onClick={() => undoSecurityShiftRequest({ id })}
+                        className="boss-button boss-button_type_extra-small boss-button_role_cancel-light boss-table__action"
+                      />
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -169,30 +174,36 @@ class SecurityShiftRequestItem extends Component {
             <div className="boss-table__info">
               <p className="boss-table__label">Actions</p>
               <div className="boss-table__actions">
-                <AsyncButton
-                  disabled={this.state.isSending}
-                  text="Acccept"
-                  pendingText="Acccepting ..."
-                  onClick={() => this.onButtonClick(() => acceptSecurityShiftRequest({ id }))}
-                  type="button"
-                  className="boss-button boss-button_role_accept boss-button_type_extra-small boss-table__action"
-                />
-                <button
-                  disabled={this.state.isSending}
-                  onClick={() => this.handleOpenEditSecurityShiftRequest(editRequestFormInitialValues)}
-                  type="button"
-                  className="boss-button boss-button_role_edit boss-button_type_extra-small boss-table__action"
-                >
-                  Edit
-                </button>
-                <button
-                  disabled={this.state.isSending}
-                  onClick={() => this.handleOpenRejectSecurityShiftRequest(rejectRequestFormInitialValues)}
-                  type="button"
-                  className="boss-button boss-button_role_cancel-light boss-button_type_extra-small boss-table__action"
-                >
-                  Reject
-                </button>
+                {isAcceptable && (
+                  <AsyncButton
+                    disabled={this.state.isSending}
+                    text="Acccept"
+                    pendingText="Acccepting ..."
+                    onClick={() => this.onButtonClick(() => acceptSecurityShiftRequest({ id }))}
+                    type="button"
+                    className="boss-button boss-button_role_accept boss-button_type_extra-small boss-table__action"
+                  />
+                )}
+                {isEditable && (
+                  <button
+                    disabled={this.state.isSending}
+                    onClick={() => this.handleOpenEditSecurityShiftRequest(editRequestFormInitialValues)}
+                    type="button"
+                    className="boss-button boss-button_role_edit boss-button_type_extra-small boss-table__action"
+                  >
+                    Edit
+                  </button>
+                )}
+                {isRejectable && (
+                  <button
+                    disabled={this.state.isSending}
+                    onClick={() => this.handleOpenRejectSecurityShiftRequest(rejectRequestFormInitialValues)}
+                    type="button"
+                    className="boss-button boss-button_role_cancel-light boss-button_type_extra-small boss-table__action"
+                  >
+                    Reject
+                  </button>
+                )}
               </div>
             </div>
           </div>

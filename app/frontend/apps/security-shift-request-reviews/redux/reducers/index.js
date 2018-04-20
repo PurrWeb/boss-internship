@@ -4,6 +4,7 @@ import venues from './venues-reducer';
 import pageOptions from './page-options-reducer';
 import staffMembers from './staff-members-reducer';
 import rotaShifts from './rota-shifts-reducer';
+import permissions from './permissions-reducer';
 
 export default combineReducers({
   securityShiftRequests,
@@ -11,4 +12,5 @@ export default combineReducers({
   pageOptions,
   staffMembers,
   rotaShifts,
+  permissions,
 });
