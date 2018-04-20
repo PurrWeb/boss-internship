@@ -12,6 +12,7 @@ class StaffMember < ActiveRecord::Base
   belongs_to :staff_type
 
   has_many :staff_member_venues, inverse_of: :staff_member
+  has_many :finance_reports
   has_many :work_venues, through: :staff_member_venues, source: :venue
   belongs_to :master_venue, class_name: 'Venue', inverse_of: :master_staff_members
 
@@ -46,6 +47,8 @@ class StaffMember < ActiveRecord::Base
   has_many :staff_member_transitions, autosave: false
 
   belongs_to :pay_rate
+
+  scope :weekly_finance_reports, -> (date) { joins(:finance_reports).where(finance_reports: {week_start: date})  }
 
   mount_uploader :avatar, AvatarUploader
   validates :avatar, {
