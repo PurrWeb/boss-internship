@@ -21,7 +21,7 @@ export default class MainContent extends React.Component {
 
           <section className="boss-board boss-board_context_stack boss-board_role_panel">
             <header className="boss-board__header">
-              <h2 className="boss-board__title boss-board__title_size_small">Weather</h2>
+              <h2 className="boss-board__title boss-board__title_size_small">Weekly Weather</h2>
             </header>
             <div className="boss-board__main">
               <div className="boss-board__manager">
