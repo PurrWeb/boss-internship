@@ -3,7 +3,7 @@ import humanize from 'string-humanize';
 import safeMoment from "~/lib/safe-moment";
 import oFetch from 'o-fetch';
 import confirm from '~/lib/confirm-utils';
-import { userPermissions } from "~/lib/user-permissions";
+import { staffMemberProfileHolidaysPermissions } from '~/lib/permissions';
 
 const PENDING_STATUS = 'pending';
 const ACCEPTED_STATUS = 'accepted';
@@ -39,9 +39,9 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
   const endDate = safeMoment.uiDateParse(holiday.get('end_date')).format('DD MMM Y')
   const holidayData = holiday.toJS();
   const id = oFetch(holidayData, 'id');
-  const holidayTabPermissions = oFetch(userPermissions, 'staffMemberProfileHolidaysTab');
-  const isEditable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(holidayTabPermissions, 'canEditHoliday')({ permissions: permissions, id: id }) : oFetch(holidayTabPermissions, 'canEditHolidayRequest')({ permissions: permissions, id: id });
-  const isDeletable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(holidayTabPermissions, 'canDestroyHoliday')({ permissions: permissions, id: id }) : oFetch(holidayTabPermissions, 'canDestroyHolidayRequest')({ permissions: permissions, id: id });
+
+  const isEditable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canEditHoliday')({ permissions: permissions, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canEditHolidayRequest')({ permissions: permissions, id: id });
+  const isDeletable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHoliday')({ permissions: permissions, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHolidayRequest')({ permissions: permissions, id: id });
 
   return <div className="boss-check boss-check_role_panel boss-check_page_smp-holidays">
     <div className="boss-check__row">
