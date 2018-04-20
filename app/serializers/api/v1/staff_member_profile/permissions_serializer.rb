@@ -1,15 +1,11 @@
 class Api::V1::StaffMemberProfile::PermissionsSerializer < ActiveModel::Serializer
-  attributes :canEnable, :holidays, :holidayRequests
+  attributes :canEnable, :holidaysTab
 
   def canEnable
     object.can_enable?
   end
 
-  def holidays
-    object.holidays
-  end
-
-  def holidayRequests
-    object.holiday_requests
+  def holidaysTab
+    object.holidays_tab
   end
 end

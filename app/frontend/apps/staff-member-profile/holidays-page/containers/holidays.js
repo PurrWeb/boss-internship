@@ -5,6 +5,7 @@ import humanize from 'string-humanize';
 import pluralize from 'pluralize';
 import { SubmissionError } from 'redux-form/immutable';
 import oFetch from 'o-fetch';
+import { staffMemberProfileHolidaysPermissions } from '~/lib/permissions';
 
 import notify from '~/components/global-notification';
 import { HOLIDAY_TYPE, HOLIDAY_REQUEST_TYPE } from '../selectors';
@@ -207,10 +208,6 @@ class Holidays extends React.PureComponent {
     }
   };
 
-  canCreateHoliday() {
-    return this.props.isAdminPlus || !this.props.isStaffMemberWeeklyPayrate;
-  }
-
   render() {
     const {
       staffMember,
@@ -236,6 +233,7 @@ class Holidays extends React.PureComponent {
     } = this.props;
 
     const permissionsData = oFetch(this.props, 'permissionsData');
+    const canCreateHolidays = oFetch(staffMemberProfileHolidaysPermissions, 'canCreateHolidays')({ permissionsData: permissionsData });
     const hasHolidays = !!holidays.size;
 
     return (
@@ -244,11 +242,11 @@ class Holidays extends React.PureComponent {
           <ContentModal
             show={newHoliday}
             onClose={() => this.onCancelAddNew()}
-            title={this.canCreateHoliday() ? 'Add holiday' : 'Request holiday'}
+            title={canCreateHolidays ? 'Add holiday' : 'Request holiday'}
           >
             <AddNewHoliday
-              buttonTitle={this.canCreateHoliday() ? 'Add holiday' : 'Request holiday'}
-              onSubmit={this.canCreateHoliday() ? this.handleNewHolidaySubmit : this.handleNewHolidayRequestSubmit}
+              buttonTitle={canCreateHolidays ? 'Add holiday' : 'Request holiday'}
+              onSubmit={canCreateHolidays ? this.handleNewHolidaySubmit : this.handleNewHolidayRequestSubmit}
               startDate={holidayStartDate}
               endDate={holidayEndDate}
             />
@@ -265,7 +263,7 @@ class Holidays extends React.PureComponent {
             />
           </ContentModal>
 
-          {this.canCreateHoliday() && (
+          { canCreateHolidays && (
             <HolidaysHeader
               isStaffMemberDisabled={disabled}
               buttonText="Add Holiday"
@@ -273,7 +271,7 @@ class Holidays extends React.PureComponent {
               onAddNew={this.onAddNew}
             />
           )}
-          {!this.canCreateHoliday() && (
+          { !canCreateHolidays && (
               <HolidaysHeader
                 isStaffMemberDisabled={disabled}
                 buttonText="Request Holiday"
