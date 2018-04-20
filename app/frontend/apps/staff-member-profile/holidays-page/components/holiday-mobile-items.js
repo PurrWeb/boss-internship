@@ -1,7 +1,9 @@
 import React from 'react';
 import humanize from 'string-humanize';
 import safeMoment from "~/lib/safe-moment";
+import oFetch from 'o-fetch';
 import confirm from '~/lib/confirm-utils';
+import { staffMemberProfileHolidaysPermissions } from '~/lib/permissions';
 
 const PENDING_STATUS = 'pending';
 const ACCEPTED_STATUS = 'accepted';
@@ -13,7 +15,7 @@ const statusClasses = {
   [REJECTED_STATUS]: 'boss-table__text_role_alert-status',
 };
 
-const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled}) => {
+const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, permissionsData}) => {
 
   const onEdit = (holiday) => {
     onEditHoliday(holiday);
@@ -35,7 +37,11 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
   const cerated = `(${safeMoment.iso8601Parse(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
   const startDate = safeMoment.uiDateParse(holiday.get('start_date')).format('DD MMM Y')
   const endDate = safeMoment.uiDateParse(holiday.get('end_date')).format('DD MMM Y')
-  const editable = holiday.get('editable');
+  const holidayData = holiday.toJS();
+  const id = oFetch(holidayData, 'id');
+
+  const isEditable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canEditHoliday')({ permissionsData: permissionsData, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canEditHolidayRequest')({ permissionsData: permissionsData, id: id });
+  const isDeletable = oFetch(holidayData, 'type') === 'holiday' ? oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHoliday')({ permissionsData: permissionsData, id: id }) : oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHolidayRequest')({ permissionsData: permissionsData, id: id });
 
   return <div className="boss-check boss-check_role_panel boss-check_page_smp-holidays">
     <div className="boss-check__row">
@@ -74,36 +80,44 @@ const HolidayMobileItem = ({holiday, deleteHoliday, onEditHoliday, isStaffMember
         </div>
       </div>
     }
-    { (editable && !isStaffMemberDisabled) && <div className="boss-check__row boss-check__row_role_actions">
-      <button className="boss-button boss-button_role_update boss-check__action" onClick={() => (onEdit(holiday))}>
-        Edit
-      </button>
-      <button className="boss-button boss-button_role_cancel boss-check__action" onClick={() => (onDelete(holiday.get('id')))}>
-        Delete
-      </button>
-    </div> }
+    <div className="boss-check__row boss-check__row_role_actions">
+      { isEditable && <button className="boss-button boss-button_role_update boss-check__action" onClick={() => (onEdit(holiday))}>
+          Edit
+        </button> }
+      { isDeletable && <button className="boss-button boss-button_role_cancel boss-check__action" onClick={() => (onDelete(holiday.get('id')))}>
+          Delete
+        </button> }
+    </div>
   </div>
 }
-export default class HolidayasMobileItems extends React.Component {
+export default class HolidayMobileItems extends React.Component {
   constructor(props) {
     super(props);
   }
 
   renderMobileItems = (holidays) => {
+    const permissionsData = oFetch(this.props, 'permissionsData');
     return holidays.map(holiday => {
+      const holidayId = oFetch(holiday.toJS(), 'id');
       return <HolidayMobileItem
         holiday={holiday}
         deleteHoliday={this.props.deleteHoliday}
         onEditHoliday={this.props.onEditHoliday}
-        key={holiday.get('id')}
+        key={holidayId}
         isStaffMemberDisabled={this.props.isStaffMemberDisabled}
+        permissionsData={permissionsData}
       />
     })
   };
 
   render(){
     return <div>
-      {this.renderMobileItems(this.props.holidays)}
+      {
+        this.renderMobileItems(
+          oFetch(this.props, 'holidays'),
+          oFetch(this.props, 'permissionsData')
+        )
+      }
     </div>
   }
 }

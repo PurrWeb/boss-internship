@@ -45,7 +45,7 @@ const mapStateToProps = (state) => {
     accessibleVenues: state.getIn(['profile', 'accessibleVenues']),
     payRates: state.getIn(['profile', 'payRates']),
     accessiblePayRates: state.getIn(['profile', 'accessiblePayRates']),
-    permissions: state.getIn(['profile', 'permissions'])
+    permissionsData: state.getIn(['profile', 'permissionsData'])
   };
 }
 
@@ -102,7 +102,7 @@ class ProfileWrapper extends React.PureComponent {
       editAvatarModal,
       onStaffMemberChanged,
       currentPage,
-      permissions,
+      permissionsData,
       actions: {
         startEditProfile,
         cancelEditProfile,
@@ -124,7 +124,7 @@ class ProfileWrapper extends React.PureComponent {
       accessiblePayRates,
       genderValues,
       staffMember,
-      permissions
+      permissionsData
     };
 
     const editAvatarFormInitial = {
@@ -174,7 +174,7 @@ class ProfileWrapper extends React.PureComponent {
                 />
                 <StaffMemberProfileActions
                   staffMember={staffMember}
-                  permissions={permissions}
+                  permissionsData={permissionsData}
                   onEditProfile={() => startEditProfile()}
                   onDisableStaffMember={() => showDisableStaffMemberModal()}
                   onEnableProfile={() => startEnableProfile()}

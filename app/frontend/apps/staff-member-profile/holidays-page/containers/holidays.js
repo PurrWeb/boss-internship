@@ -4,11 +4,12 @@ import { bindActionCreators } from 'redux';
 import humanize from 'string-humanize';
 import pluralize from 'pluralize';
 import { SubmissionError } from 'redux-form/immutable';
+import oFetch from 'o-fetch';
 
 import notify from '~/components/global-notification';
 import { HOLIDAY_TYPE, HOLIDAY_REQUEST_TYPE } from '../selectors';
 import ProfileWrapper from '../../profile-wrapper';
-import HolidayasMobileItems from '../components/holidays-mobile-items';
+import HolidayMobileItems from '../components/holiday-mobile-items';
 
 import {
   updateAvatarRequest,
@@ -50,6 +51,7 @@ const mapStateToProps = state => {
     editedHoliday: state.getIn(['holidays', 'editedHoliday']),
     disabled: state.getIn(['profile', 'staffMember', 'disabled']),
     isAdminPlus: state.getIn(['holidays', 'isAdminPlus']),
+    permissionsData: state.getIn(['holidays', 'permissionsData'])
   };
 };
 
@@ -233,6 +235,7 @@ class Holidays extends React.PureComponent {
       },
     } = this.props;
 
+    const permissionsData = oFetch(this.props, 'permissionsData');
     const hasHolidays = !!holidays.size;
 
     return (
@@ -305,13 +308,15 @@ class Holidays extends React.PureComponent {
                       holidays={holidays}
                       deleteHoliday={this.handleDeleteHoliday}
                       onEditHoliday={openEditModal}
+                      permissionsData={permissionsData}
                     />,
-                    <HolidayasMobileItems
+                    <HolidayMobileItems
                       key="mobile"
                       isStaffMemberDisabled={disabled}
                       holidays={holidays}
                       deleteHoliday={this.handleDeleteHoliday}
                       onEditHoliday={openEditModal}
+                      permissionsData={permissionsData}
                     />,
                   ]
                 ) : (

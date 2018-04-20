@@ -32,6 +32,7 @@ class HolidayRequestsPage extends Component {
   }
 
   render() {
+    const permissionsData = oFetch(this.props, 'permissionsData');
     const holidayRequests = oFetch(this.props, 'holidayRequests');
     const staffMembers = oFetch(this.props, 'staffMembers');
 
@@ -59,6 +60,7 @@ class HolidayRequestsPage extends Component {
                         }
                         holidayRequest={holidayRequest}
                         viewReportUrl={this.getViewReportUrl(staffMember, holidayRequest)}
+                        permissionsData={permissionsData}
                       />
                     );
                   }}

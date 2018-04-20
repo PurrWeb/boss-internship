@@ -3,6 +3,7 @@ import oFetch from 'o-fetch';
 import humanize from 'string-humanize';
 import AsyncButton from 'react-async-button';
 import errorHandler from '~/lib/error-handlers';
+import { userPermissions } from '~/lib/user-permissions';
 
 import safeMoment from '~/lib/safe-moment';
 
@@ -66,6 +67,11 @@ class HolidayRequestsItem extends Component {
     const onRejectClick = oFetch(this.props, 'onRejectClick');
     const errors = oFetch(this.state, 'errors');
 
+    const permissionsData = oFetch(this.props, 'permissionsData');
+    const holidayRequestPagePermissions = oFetch(userPermissions, 'holidayRequestPage');
+    const canAccept = oFetch(holidayRequestPagePermissions, 'canAcceptHolidayRequest')({permissionsData: permissionsData, id: holidayRequestId });
+    const canReject = oFetch(holidayRequestPagePermissions, 'canRejectHolidayRequest')({permissionsData: permissionsData, id: holidayRequestId });
+
     return (
       <div className="boss-table__group">
         { (errors.length) > 0 && <div className="boss-alert boss-alert_role_area">
@@ -93,24 +99,25 @@ class HolidayRequestsItem extends Component {
               </a>
             </div>
           </Cell>
-          <Cell label="Action">
+
+          { canAccept && canReject && <Cell label="Action">
             <div className="boss-table__actions">
-              <AsyncButton
+              { canAccept && <AsyncButton
                 disabled={this.state.isSending}
                 className="boss-button boss-button_type_extra-small boss-button_role_success boss-table__action"
                 text="Accept"
                 pendingText="Accepting ..."
                 onClick={() => this.onButtonClick(onAcceptClick)}
-              />
-              <AsyncButton
+              /> }
+              { canReject && <AsyncButton
                 disabled={this.state.isSending}
                 className="boss-button boss-button_type_extra-small boss-button_role_cancel-light boss-table__action"
                 text="Reject"
                 pendingText="Rejecting ..."
                 onClick={() => this.onButtonClick(onRejectClick)}
-              />
+              /> }
             </div>
-          </Cell>
+          </Cell> }
         </div>
       </div>
     );

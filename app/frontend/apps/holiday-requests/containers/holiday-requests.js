@@ -5,10 +5,13 @@ import HolidayRequestsPage from '../components/holiday-requests-page';
 
 import { acceptHolidayRequest, rejectHolidayRequest } from '../redux/actions';
 
-const mapStateToProps = state => ({
-  staffMembers: state.get('staffMembers'),
-  holidayRequests: state.get('holidayRequests'),
-});
+const mapStateToProps = (state) => {
+  return {
+    staffMembers: state.get('staffMembers'),
+    holidayRequests: state.get('holidayRequests'),
+    permissionsData: state.get('permissionsData')
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
