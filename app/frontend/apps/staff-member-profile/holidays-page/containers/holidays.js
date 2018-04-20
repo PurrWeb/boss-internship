@@ -105,7 +105,7 @@ class Holidays extends React.PureComponent {
 
   handleNewHolidaySubmit = (values, dispatch) => {
     return this.props.actions.addHoliday(values.toJS()).catch(resp => {
-      notify('Adding Staff Member Holiday was Failed', {
+      notify('Adding Staff Member Holiday Failed', {
         interval: 5000,
         status: 'error',
       });
@@ -126,7 +126,7 @@ class Holidays extends React.PureComponent {
 
   handleNewHolidayRequestSubmit = (values, dispatch) => {
     return this.props.actions.addHolidayRequest(values.toJS()).catch(resp => {
-      notify('Adding Staff Member Holiday was Failed', {
+      notify('Adding Staff Member Holiday Failed', {
         interval: 5000,
         status: 'error',
       });
@@ -147,7 +147,7 @@ class Holidays extends React.PureComponent {
 
   handleEditHolidayRequestSubmit = (values, dispatch) => {
     return this.props.actions.editHolidayRequest(values.toJS()).catch(resp => {
-      notify('Updating Staff Member Holiday request was Failed', {
+      notify('Updating Staff Member Holiday request Failed', {
         interval: 5000,
         status: 'error',
       });
@@ -168,7 +168,7 @@ class Holidays extends React.PureComponent {
 
   handleEditHolidaySubmit = (values, dispatch) => {
     return this.props.actions.editHoliady(values.toJS()).catch(resp => {
-      notify('Updating Staff Member Holiday was Failed', {
+      notify('Updating Staff Member Holiday Failed', {
         interval: 5000,
         status: 'error',
       });
