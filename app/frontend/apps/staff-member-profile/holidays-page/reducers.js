@@ -36,7 +36,7 @@ const initialState = fromJS({
   editHoliday: false,
   editedHoliday: {},
   isAdminPlus: null,
-  permissionsData: {}
+  permissionsData: fromJS({})
 });
 
 const holidaysReducer = handleActions({
@@ -67,7 +67,7 @@ const holidaysReducer = handleActions({
       .set('holidayStartDate', safeMoment.uiDateParse(holidayStartDate))
       .set('holidayEndDate', safeMoment.uiDateParse(holidayEndDate))
       .set('isAdminPlus', isAdminPlus)
-      .set('permissionsData', permissionsData)
+      .set('permissionsData', fromJS(permissionsData))
   },
   [UPDATE_HOLIDAYS_COUNT]: (state, action) => {
     const {
