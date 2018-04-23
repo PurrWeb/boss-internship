@@ -55,4 +55,4 @@ function openConfirmationModal(
   }
 }
 
-export default modalDecorator(openConfirmationModal)
+export default modalDecorator(openConfirmationModal);
