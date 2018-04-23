@@ -1,4 +1,6 @@
 class FinanceReportsController < ApplicationController
+  before_action :set_new_layout
+
   def index
     return redirect_to(finance_report_path(show_redirect_params))
   end
@@ -35,6 +37,7 @@ class FinanceReportsController < ApplicationController
     end
 
     finance_reports = reports + generated_reports
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
       staff_members: ActiveModelSerializers::SerializableResource.new(
@@ -49,7 +52,8 @@ class FinanceReportsController < ApplicationController
       finance_reports: ActiveModelSerializers::SerializableResource.new(
         finance_reports,
         each_serializer: Api::V1::FinanceReports::FinanceReportSerializer
-      )
+      ),
+      access_token: access_token.token
     }
 
   end
