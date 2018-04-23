@@ -39,6 +39,8 @@ class FinanceReportsController < ApplicationController
     finance_reports = reports + generated_reports
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+
     render locals: {
       staff_members: ActiveModelSerializers::SerializableResource.new(
         staff_members,
