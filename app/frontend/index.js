@@ -111,6 +111,9 @@ registerComponent('SecurityRotaDailyApp', SecurityRotaDailyApp);
 import SecurityRotaShiftRequestsApp from './apps/security-rota-shift-requests';
 registerComponent('SecurityRotaShiftRequestsApp', SecurityRotaShiftRequestsApp);
 
+import FinanceReportsApp from './apps/finance-reports';
+registerComponent('FinanceReportsApp', FinanceReportsApp);
+
 import StaffMemberFormAvatarImage from './apps/staff-member-form/staff-member-form-avatar-image';
 registerComponent('StaffMemberFormAvatarImage', StaffMemberFormAvatarImage);
 
