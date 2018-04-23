@@ -15,7 +15,8 @@ const initialState = Immutable.Map({
     errorMessage: '',
     successMessage: '',
   },
-  accessToken: null
+  accessToken: null,
+  renderWeatherWidget: false
 });
 
 const venueDashboard = (state = initialState, action) => {
@@ -33,6 +34,8 @@ const venueDashboard = (state = initialState, action) => {
       'currentVenue', action.initialData.currentVenue
     ).set(
       'accessToken', oFetch(action.initialData, 'accessToken')
+    ).set(
+      'renderWeatherWidget', oFetch(action.initialData, 'renderWeatherWidget')
     );
 
   default:

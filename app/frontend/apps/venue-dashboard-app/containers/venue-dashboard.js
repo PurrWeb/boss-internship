@@ -14,6 +14,7 @@ function mapStateToProps(state) {
     currentVenue: state.venueDashboard.get('currentVenue'),
     venues: state.venueDashboard.get('venues'),
     messages: state.venueDashboard.get('messages'),
+    renderWeatherWidget: state.venueDashboard.get('renderWeatherWidget')
   };
 }
 

@@ -11,12 +11,15 @@ class VenueDashboardsController < ApplicationController
       venue: venue_from_params
     ).all
 
+    render_weather_widget = Rails.configuration.use_darksky_api
+
     render locals: {
       access_token: access_token,
       current_user: current_user,
       current_venue: venue_from_params,
       venues: accessible_venues,
-      messages: messages
+      messages: messages,
+      render_weather_widget: render_weather_widget
     }
   end
 

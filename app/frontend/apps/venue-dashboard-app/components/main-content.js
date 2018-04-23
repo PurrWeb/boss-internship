@@ -9,6 +9,7 @@ export default class MainContent extends React.Component {
   render() {
     const currentVenue = oFetch(this.props, 'currentVenue');
     const accessToken = oFetch(this.props, 'accessToken');
+    const renderWeatherWidget = oFetch(this.props, 'renderWeatherWidget');
 
     if (!currentVenue) {
       return(
@@ -28,10 +29,11 @@ export default class MainContent extends React.Component {
             <div className="boss-board__main">
               <div className="boss-board__manager">
                 <div className="boss-board__manager-weather">
-                  <WeatherWidget
+                  { renderWeatherWidget && <WeatherWidget
                     venueId={oFetch(currentVenue, 'id')}
                     accessToken={accessToken}
-                  />
+                  /> }
+                  { !renderWeatherWidget && <p>Disabled</p> }
                 </div>
               </div>
             </div>
