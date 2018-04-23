@@ -168,5 +168,4 @@ ReportItem.propTypes = {
   onMarkCompleted: PropTypes.func.isRequired,
 };
 
-
 export default ReportItem;

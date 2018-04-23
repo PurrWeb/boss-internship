@@ -25,7 +25,7 @@ export const markReportsCompleted = options => (dispatch, getState) => {
   const date = getState().getIn(['page', 'date']);
   const staffMemberIds = oFetch(options, 'staffMemberIds');
   const reportsIds = oFetch(options, 'reportsIds');
-  
+
   return markReportsCompletedRequest({ date, staffMemberIds }).then(response => {
     dispatch(markReportsCompletedAction({ reportsIds }));
   });
