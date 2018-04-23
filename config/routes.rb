@@ -225,6 +225,13 @@ Rails.application.routes.draw do
           end
         end
 
+        resources :finance_reports, only: [] do
+          member do
+            post :complete
+            post :complete_multiply
+          end
+        end
+
         resources :security_rota_shifts, only: [:create, :update, :destroy], path: 'security-rota-shifts'
 
         resources :staff_vetting, only: [] do
