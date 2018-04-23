@@ -48,7 +48,7 @@ function openConfirmationModal(
         title={title}
         onClose={onClose}
       >
-        <Component onSubmit={onSubmit} {...props} />
+        <Component onSubmit={onSubmit} onClose={onClose} {...props} />
       </ConfirmationModal>,
       wrapper
     );
