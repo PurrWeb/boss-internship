@@ -204,7 +204,7 @@ class FinanceReportsController < ApplicationController
   end
 
   def week_from_params
-    RotaWeek.new(UIRotaDate.parse(params[:id])) if params[:id].present?
+    RotaWeek.new(UIRotaDate.parse(params.fetch(:id))) if params[:id].present?
   end
 
   def date_from_params
