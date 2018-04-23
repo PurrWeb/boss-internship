@@ -210,6 +210,8 @@ Rails.application.routes.draw do
       namespace :v1 do
         get 'version', to: 'version#version'
 
+        resources :venue_dashboard_forecasts, only: [:show]
+
         resources :security_rota_shifts, only: [:create, :update, :destroy], path: 'security-rota-shifts'
 
         resources :staff_vetting, only: [] do

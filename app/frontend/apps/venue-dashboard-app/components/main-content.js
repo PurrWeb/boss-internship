@@ -1,12 +1,14 @@
 import React from 'react';
 import classnames from 'classnames';
+import oFetch from 'o-fetch';
 
 import MessageCarousel from './message-carousel';
 import WeatherWidget from './weather-widget';
 
 export default class MainContent extends React.Component {
   render() {
-    const { currentVenue } = this.props;
+    const currentVenue = oFetch(this.props, 'currentVenue');
+    const accessToken = oFetch(this.props, 'accessToken');
 
     if (!currentVenue) {
       return(
@@ -27,8 +29,8 @@ export default class MainContent extends React.Component {
               <div className="boss-board__manager">
                 <div className="boss-board__manager-weather">
                   <WeatherWidget
-                    lat={currentVenue.latitude}
-                    long={currentVenue.longitude}
+                    venueId={oFetch(currentVenue, 'id')}
+                    accessToken={accessToken}
                   />
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import React from 'react';
-import axios from 'axios';
 import oFetch from 'o-fetch';
+import axios from 'axios';
 
 import Skycons from '~/components/skycons';
 
@@ -63,12 +63,12 @@ export default class WeatherWidget extends React.Component {
   }
 
   fetchData() {
-    const { lat, long } = this.props;
+    const [venueId, accessToken] = oFetch(this.props, 'venueId', 'accessToken');
 
-    axios.get('http://localhost:3001/forecast', {
-      params: {
-        lat: lat,
-        long: long
+    axios.get(`api/v1/venue_dashboard_forecasts/${venueId}`, {
+      params: {},
+      headers: {
+        Authorization: `Token token="${accessToken}"`
       }
     }).then(({ data }) => {
       this.setState({ data });
