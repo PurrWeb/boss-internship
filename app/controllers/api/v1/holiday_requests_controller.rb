@@ -4,6 +4,8 @@ module Api
       before_action :web_token_authenticate!
 
       def create
+        user_ability = UserAbility.new(current_user)
+
         result = HolidayRequestApiService.new(
           requester: current_user,
           holiday_request: HolidayRequest.new(staff_member: staff_member_from_params),
@@ -11,9 +13,16 @@ module Api
 
         if result.success?
           render(
-            json: result.holiday_request,
-            serializer: Api::V1::StaffMemberProfile::HolidayRequestSerializer,
-            scope: current_user,
+            json: {
+              holiday_request: Api::V1::StaffMemberProfile::HolidayRequestSerializer.new(
+                result.holiday_request,
+                scope: current_user
+              ),
+              permissions: {
+                isEditable: user_ability.can?(:edit, result.holiday_request),
+                isDeletable: user_ability.can?(:destroy, result.holiday_request)
+              }
+            },
             status: 200
           )
         else

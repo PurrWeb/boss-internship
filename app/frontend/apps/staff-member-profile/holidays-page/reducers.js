@@ -20,6 +20,7 @@ import {
   UPDATE_HOLIDAYS_COUNT,
   DELETE_HOLIDAY_REQUEST,
   EDIT_HOLIDAY_REQUEST_SUCCESS,
+  ADD_HOLIDAY_REQUEST_SUCCESS,
 } from './constants';
 
 const initialState = fromJS({
@@ -126,13 +127,26 @@ const holidaysReducer = handleActions({
       .setIn(['holidayRequests', index], editedItem)
   },
   [ADD_HOLIDAY_SUCCESS]: (state, action) => {
-    const newHoliday = fromJS(action.payload);
-    const isAdminPlus = state.get('isAdminPlus');
-    if (isAdminPlus) {
-      return state.update('holidays', holidays => holidays.push(newHoliday));
-    } else {
-      return state.update('holidayRequests', holidays => holidays.push(newHoliday));
-    }
+    const newHoliday = oFetch(action, 'payload.newHoliday');
+    const newPermissions = oFetch(action, 'payload.newPermissions');
+    const newHolidayId = oFetch(newHoliday, 'id');
+
+    return state
+      .update('holidays', holidays => holidays.push(fromJS(newHoliday)))
+      .updateIn(['permissionsData', 'holidaysTab', 'holidays'], holidayRequestsPermissions =>
+        holidayRequestsPermissions.set(newHolidayId, fromJS(newPermissions)),
+      );
+  },
+  [ADD_HOLIDAY_REQUEST_SUCCESS]: (state, action) => {
+    const newHolidayRequest = oFetch(action, 'payload.newHolidayRequest');
+    const newPermissions = oFetch(action, 'payload.newPermissions');
+    const newHolidayRequestId = oFetch(newHolidayRequest, 'id');
+
+    return state
+      .update('holidayRequests', holidays => holidays.push(fromJS(newHolidayRequest)))
+      .updateIn(['permissionsData', 'holidaysTab', 'holidayRequests'], holidayRequestsPermissions =>
+        holidayRequestsPermissions.set(newHolidayRequestId, fromJS(newPermissions)),
+      );
   },
   [CLOSE_HOLIDAY_MODAL]: (state) => {
     return state

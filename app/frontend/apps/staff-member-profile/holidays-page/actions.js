@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
 import axios from 'axios';
+import oFetch from 'o-fetch';
 import notify from '~/components/global-notification';
 
 import { updateAvatar } from './requests';
@@ -10,6 +11,7 @@ import {
   ADD_NEW_HOLIDAY,
   CANCEL_ADD_NEW_HOLIDAY,
   ADD_HOLIDAY_SUCCESS,
+  ADD_HOLIDAY_REQUEST_SUCCESS,
   CLOSE_HOLIDAY_MODAL,
   DELETE_HOLIDAY,
   OPEN_EDIT_HOLIDAY_MODAL,
@@ -19,6 +21,8 @@ import {
   UPDATE_HOLIDAYS_COUNT,
   DELETE_HOLIDAY_REQUEST,
   EDIT_HOLIDAY_REQUEST_SUCCESS,
+  ADD_NEW_HOLIDAY_PERMISSION,
+  ADD_NEW_HOLIDAY_REQUEST_PERMISSION,
 } from './constants';
 
 export const updateAvatarRequest = (staffMemberId, avatarUrl) => (
@@ -208,14 +212,18 @@ export const addHoliday = ({ startDate, endDate, holidayType, note }) => (
       },
     )
     .then(resp => {
+      const newHoliday = oFetch(resp, 'data.holiday');
+      const newPermissions = oFetch(resp, 'data.permissions');
+      const newHolidayId = oFetch(newHoliday, 'id');
+
       dispatch({
         type: ADD_HOLIDAY_SUCCESS,
-        payload: resp.data,
+        payload: {newHoliday, newPermissions},
       });
       updateHolidaysCount(accessToken, staffMemberId).then(resp => {
         dispatch({
           type: UPDATE_HOLIDAYS_COUNT,
-          payload: resp.data,
+          payload: newHoliday,
         });
       });
       dispatch({
@@ -256,9 +264,12 @@ export const addHolidayRequest = ({
       },
     )
     .then(resp => {
+      const newHolidayRequest = oFetch(resp, 'data.holiday_request');
+      const newPermissions = oFetch(resp, 'data.permissions');
+
       dispatch({
-        type: ADD_HOLIDAY_SUCCESS,
-        payload: resp.data,
+        type: ADD_HOLIDAY_REQUEST_SUCCESS,
+        payload: {newHolidayRequest, newPermissions},
       });
       dispatch({
         type: CLOSE_HOLIDAY_MODAL,
