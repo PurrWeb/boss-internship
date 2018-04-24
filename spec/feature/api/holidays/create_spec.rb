@@ -82,14 +82,16 @@ RSpec.describe 'Create holiday API endpoint' do
 
       it 'it should return created holiday' do
         json = JSON.parse(response.body)
-        expect(json["id"]).to eq(staff_member.holidays.first.id)
-        expect(json["start_date"]).to eq(UIRotaDate.format(staff_member.holidays.first.start_date))
-        expect(json["end_date"]).to eq(UIRotaDate.format(staff_member.holidays.first.end_date))
-        expect(json["holiday_type"]).to eq(staff_member.holidays.first.holiday_type)
-        expect(json["creator"]).to eq(staff_member.holidays.first.creator.full_name)
+        holiday_json = json.fetch("holiday")
+
+        expect(holiday_json["id"]).to eq(staff_member.holidays.first.id)
+        expect(holiday_json["start_date"]).to eq(UIRotaDate.format(staff_member.holidays.first.start_date))
+        expect(holiday_json["end_date"]).to eq(UIRotaDate.format(staff_member.holidays.first.end_date))
+        expect(holiday_json["holiday_type"]).to eq(staff_member.holidays.first.holiday_type)
+        expect(holiday_json["creator"]).to eq(staff_member.holidays.first.creator.full_name)
       end
     end
-    
+
     context ' with empty params' do
       let(:params) do
         valid_params.merge({
