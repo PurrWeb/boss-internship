@@ -56,6 +56,7 @@ gem 'acts_as_list'
 gem 'sendgrid-ruby'
 gem 'ably-rest', '~> 1.0'
 gem 'search_cop'
+gem 'forecast_io'
 
 group :production, :development do
   gem 'redis', '~>3.2'

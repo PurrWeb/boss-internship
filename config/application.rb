@@ -46,5 +46,7 @@ module Boss
       Devise::SessionsController.layout "login_page"
       Devise::PasswordsController.layout "login_page"
     end
+
+    config.use_darksky_api = true
   end
 end

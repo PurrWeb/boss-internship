@@ -6,6 +6,7 @@
   venueDashboard.currentUser = <%= Api::V1::UserSerializer.new(current_user).to_json.html_safe %>;
   venueDashboard.accessToken = "<%= access_token.token %>";
   venueDashboard.currentVenue = <%= Api::V1::VenueSerializer.new(current_venue).to_json.html_safe %>;
+  venueDashboard.renderWeatherWidget = <%= render_weather_widget.to_s %>;
 
   window.boss = window.boss || {};
   window.boss.venueDashboard = venueDashboard;
