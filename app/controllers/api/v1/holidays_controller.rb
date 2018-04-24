@@ -120,6 +120,7 @@ module Api
 
       def create
         staff_member = StaffMember.find(params.fetch(:staff_member_id))
+        user_ability = UserAbility.new(current_user)
 
         result = HolidayApiService.new(
           requester: current_user,
@@ -128,9 +129,13 @@ module Api
 
         if result.success?
           render(
-            json: result.holiday,
-            serializer: ::HolidaySerializer,
-            scope: current_user,
+            json: {
+              holiday: ::HolidaySerializer.new(result.holiday, scope: current_user),
+              permissions: {
+                isEditable: user_ability.can?(:edit, result.holiday),
+                isDeletable: user_ability.can?(:destroy, result.holiday)
+              }
+            },
             status: 200
           )
         else
