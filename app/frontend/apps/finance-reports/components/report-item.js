@@ -123,9 +123,6 @@ class ReportItem extends Component {
           </div>
         )}
         <div className="boss-table__cell">
-          <p className="boss-table__text">£0.00 what?</p>
-        </div>
-        <div className="boss-table__cell">
           <p className={statusClassName}>{status}</p>
           {status === 'ready' && (
             <div className="boss-table__actions">
