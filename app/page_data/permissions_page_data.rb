@@ -29,13 +29,20 @@ class PermissionsPageData
         },
         {
           description: "Security Shift Requests",
-          permitted: true,
+          permitted: role.can?(:view, :security_shift_requests),
           path: @path.security_shift_requests_path
         },
         {
           description: "Security Rota",
           permitted: role.can?(:view, :security_rota),
           path: @path.security_rotas_path
+        },
+        {
+          description: "Security Rota Requests",
+          permitted: role.can?(:view, :security_rota),
+          path: @path.requests_security_rota_path(
+            UIRotaDate.format(RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date)
+          )
         },
         {
           description: "Change Orders",
@@ -184,6 +191,11 @@ class PermissionsPageData
           description: "Venues",
           permitted: role.can?(:view, :venues_page),
           path: @path.venues_path
+        },
+        {
+          description: "Security Shift Request Reviews",
+          permitted: role.can?(:view, :security_shift_request_reviews),
+          path: @path.security_shift_request_reviews_path
         },
         {
           description: 'API Keys',
