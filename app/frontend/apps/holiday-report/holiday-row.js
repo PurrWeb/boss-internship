@@ -44,16 +44,7 @@ export default class HolidayRow extends React.Component {
     }
 
     return holidays.map((holiday, key) => {
-      let startDate = safeMoment.uiDateParse(holiday.start_date).format('ddd Do MMM');
-      let endDate = safeMoment.uiDateParse(holiday.end_date).format('ddd Do MMM');
-      let dates;
-
-      if (startDate === endDate) {
-        dates = startDate;
-      } else {
-        dates = startDate + ' - ' + endDate;
-      }
-      return <p key={key} className="boss-table__text boss-table__text_type_faded">{dates}</p>
+      return <p key={key} className="boss-table__text boss-table__text_type_faded">{utils.formatDateForHoliday(holiday)}</p>
     })
   }
 
@@ -158,6 +149,8 @@ export default class HolidayRow extends React.Component {
       ? 0
       : paidHoliday.reduce((summ, holiday) => summ = summ + holiday.days, 0);
 
+    const payedLength = paidHoliday.length;
+
     return (
       <div className="boss-table__group" key={ this.props.staffMember.serverId }>
         <div className="boss-table__row">
@@ -190,7 +183,7 @@ export default class HolidayRow extends React.Component {
 
           <div className="boss-table__cell">
             <div className="boss-table__info">
-              <p className="boss-table__label">Paid Holiday</p>
+              <p className="boss-table__label">{payedLength === 1 ? `${payedLength} Paid Holiday` : `${payedLength} Paid Holidays`}</p>
                 { this.renderHolidayCell(paidHoliday) }
             </div>
           </div>
