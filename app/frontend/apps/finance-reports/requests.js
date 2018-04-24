@@ -1,5 +1,6 @@
 import oFetch from 'o-fetch';
 import http from '~/lib/request-api';
+import { openErrorModal } from '~/components/modals';
 
 export const markReportCompletedRequest = params => {
   const staffMemberId = oFetch(params, 'staffMemberId');
@@ -7,6 +8,8 @@ export const markReportCompletedRequest = params => {
 
   return http({ successMessage: 'Report marked successfully' }).post(`/api/v1/finance_reports/${date}/complete`, {
     staffMemberId,
+  }).catch(error => {
+    openErrorModal();
   });
 };
 
@@ -19,5 +22,7 @@ export const markReportsCompletedRequest = params => {
     {
       staffMemberIds,
     },
-  );
+  ).catch(error => {
+    openErrorModal();
+  });
 };
