@@ -1,0 +1,21 @@
+<%= react_component('SecurityShiftRequestsApp', {
+  accessToken: access_token,
+  date: UIRotaDate.format(date),
+  securityShiftRequests: ActiveModel::Serializer::CollectionSerializer.new(
+    security_shift_requests,
+    serializer: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer,
+  ),
+  rotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    rota_shifts,
+    serializer: Api::V1::SecurityShiftRequests::RotaShiftSerializer,
+  ),
+  staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_members,
+    serializer: Api::V1::SecurityShiftRequests::StaffMemberSerializer,
+  ),
+  startDate: UIRotaDate.format(start_date),
+  endDate: UIRotaDate.format(end_date),
+  venueId: current_venue.id,
+  permissions: Api::V1::SecurityShiftRequests::PermissionsSerializer.new(permissions),
+  canCreate: can_create,
+}) %>

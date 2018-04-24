@@ -420,6 +420,34 @@ class UserAbility
         end
       end
 
+      can :view, :security_shift_requests do
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :view, :security_shift_request_reviews do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+      can [:create], SecurityShiftRequest do |security_shift_request|
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can [:accept, :edit, :undo], SecurityShiftRequest do |security_shift_request|
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+      can [:assign], SecurityShiftRequest do |security_shift_request|
+        user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+      can [:reject], SecurityShiftRequest do |security_shift_request|
+        if security_shift_request.accepted?
+          user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
+        else
+          user.has_effective_access_level?(AccessLevel.admin_access_level)
+        end
+      end
+
       can :view, :venue_health_checks_page do
         user.ops_manager? ||
         user.has_effective_access_level?(AccessLevel.manager_access_level)

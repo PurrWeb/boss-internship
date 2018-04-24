@@ -24,7 +24,6 @@ export default class RotaChart extends Component {
         startTime={chartBoundaries.start}
         endTime={chartBoundaries.end}
         staff={this.props.staff}
-        staffTypes={this.props.staffTypes}
         onShiftClick={this.props.onShiftClick}
       />
     );
@@ -33,7 +32,6 @@ export default class RotaChart extends Component {
 
 RotaChart.propTypes = {
   rotaShifts: PropTypes.array.isRequired,
-  staffTypes: PropTypes.array.isRequired,
   staff: PropTypes.array.isRequired,
   onShiftClick: PropTypes.func.isRequired,
 };

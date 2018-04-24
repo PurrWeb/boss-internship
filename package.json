@@ -39,8 +39,7 @@
     "bluebird": "^3.4.0",
     "blueimp-canvas-to-blob": "^3.14.0",
     "bootstrap": "4.0.0-beta.2",
-    "boss-iscroll":
-      "git+https://github.com/jsmbars/iscroll.git#6da2b1ceefd1e995bfed86bcedbc7f02c5e1d399",
+    "boss-iscroll": "git+https://github.com/jsmbars/iscroll.git#6da2b1ceefd1e995bfed86bcedbc7f02c5e1d399",
     "bowser": "^1.6.0",
     "classnames": "^2.2.5",
     "cleave.js": "^1.0.9",
@@ -66,6 +65,7 @@
     "lodash": "^4.17.4",
     "minimatch": "3.0.4",
     "moment": "^2.17.1",
+    "moment-range": "^4.0.0",
     "node-sass": "^4.5.3",
     "numeral": "^2.0.6",
     "nvd3": "^1.8.5",
@@ -162,8 +162,12 @@
   },
   "license": "",
   "jest": {
-    "snapshotSerializers": ["<rootDir>/node_modules/enzyme-to-json/serializer"],
-    "roots": ["<rootDir>/app/frontend/__test__"]
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/enzyme-to-json/serializer"
+    ],
+    "roots": [
+      "<rootDir>/app/frontend/__test__"
+    ]
   },
   "engines": {
     "node": "^8.7.0",

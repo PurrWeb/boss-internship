@@ -10,6 +10,9 @@ Rails.application.routes.draw do
       unlocks: 'users/unlocks',
       passwords: 'users/passwords'
     }
+
+    resources :security_shift_requests, only: [:index, :show], path: 'security-shift-requests'
+    resources :security_shift_request_reviews, only: [:index, :show], path: 'security-shift-request-reviews'
     resources :ops_diaries, only: [:index], path: 'ops-diaries'
     resources :accessories, only: [:index]
     resources :accessory_requests, only: [:index], path: 'accessory-requests'
@@ -137,7 +140,11 @@ Rails.application.routes.draw do
 
     resources :admin_pay_rates, only: [:new, :create]
 
-    resources :security_rotas, only: [:index, :show]
+    resources :security_rotas, only: [:index, :show] do
+      member do
+        get :requests
+      end
+    end
 
     resources :change_order_reports, only: [:index, :show] do
       member do
@@ -207,10 +214,20 @@ Rails.application.routes.draw do
           end
         end
       end
+
       namespace :v1 do
         get 'version', to: 'version#version'
 
         resources :venue_dashboard_forecasts, only: [:show]
+
+        resources :security_shift_requests, only: [:create, :update], path: 'security-shift-requests' do
+          member do
+            post :accept
+            post :reject
+            post :undo
+            post :assign
+          end
+        end
 
         resources :security_rota_shifts, only: [:create, :update, :destroy], path: 'security-rota-shifts'
 

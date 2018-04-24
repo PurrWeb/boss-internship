@@ -8,7 +8,6 @@ import reducers from './redux/reducers';
 
 class HolidayRequestsApp extends Component {
   componentWillMount() {
-    console.log(this.props);
     const { accessToken } = this.props;
     if (!accessToken) {
       throw new Error('Access token must be present');

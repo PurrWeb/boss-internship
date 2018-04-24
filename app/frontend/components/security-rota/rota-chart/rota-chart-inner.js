@@ -278,7 +278,6 @@ RotaChartInner.propTypes = {
   startTime: PropTypes.instanceOf(Date),
   endTime: PropTypes.instanceOf(Date),
   staff: PropTypes.array.isRequired,
-  staffTypes: PropTypes.array.isRequired,
   onShiftClick: PropTypes.func.isRequired,
 };
 

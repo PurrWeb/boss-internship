@@ -15,6 +15,7 @@ const BossFormTimeSelect = ({
     date,
     input: { onBlur, value, onChange, name },
     meta: { asyncValidating, touched, error },
+    disabled = false,
   }) => {
 
   const getRotaDate = (date) => {
@@ -40,6 +41,7 @@ const BossFormTimeSelect = ({
   }
 
   const onValueChange = (value) => {
+    console.log(value);
     if (Array.isArray(value) && !value.length) return;
     onChange(value);
   }
@@ -56,6 +58,7 @@ const BossFormTimeSelect = ({
           name={name}
           placeholder={placeholder || 'Select ...'}
           value={value}
+          disabled={disabled}
         />
       </div>
       {

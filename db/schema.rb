@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180403110129) do
+ActiveRecord::Schema.define(version: 20180413124525) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -1025,6 +1025,35 @@ ActiveRecord::Schema.define(version: 20180403110129) do
 
   add_index "safe_checks", ["created_at", "venue_id"], name: "index_safe_checks_on_created_at_and_venue_id", using: :btree
 
+  create_table "security_shift_request_transitions", force: :cascade do |t|
+    t.string   "to_state",                  limit: 255,   null: false
+    t.text     "metadata",                  limit: 65535
+    t.integer  "sort_key",                  limit: 4,     null: false
+    t.integer  "security_shift_request_id", limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
+  add_index "security_shift_request_transitions", ["security_shift_request_id", "most_recent"], name: "index_security_shift_request_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "security_shift_request_transitions", ["security_shift_request_id", "sort_key"], name: "index_security_shift_request_transitions_parent_sort", unique: true, using: :btree
+
+  create_table "security_shift_requests", force: :cascade do |t|
+    t.integer  "creator_id",       limit: 4,     null: false
+    t.integer  "created_shift_id", limit: 4
+    t.integer  "venue_id",         limit: 4,     null: false
+    t.datetime "starts_at",                      null: false
+    t.datetime "ends_at",                        null: false
+    t.text     "note",             limit: 65535
+    t.text     "reject_reason",    limit: 65535
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "security_shift_requests", ["created_shift_id"], name: "index_security_shift_requests_on_created_shift_id", using: :btree
+  add_index "security_shift_requests", ["creator_id"], name: "index_security_shift_requests_on_creator_id", using: :btree
+  add_index "security_shift_requests", ["venue_id"], name: "index_security_shift_requests_on_venue_id", using: :btree
+
   create_table "staff_member_transitions", force: :cascade do |t|
     t.string   "to_state",        limit: 255,   null: false
     t.text     "metadata",        limit: 65535
@@ -1211,17 +1240,6 @@ ActiveRecord::Schema.define(version: 20180403110129) do
   add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree
   add_index "venues", ["name"], name: "index_venues_on_name", using: :btree
 
-  create_table "venues_users", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4, null: false
-    t.integer  "venue_id",   limit: 4, null: false
-    t.boolean  "enabled",              null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "venues_users", ["created_at"], name: "index_venues_users_on_created_at", using: :btree
-  add_index "venues_users", ["enabled"], name: "index_venues_users_on_enabled", using: :btree
-
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",  limit: 255,        null: false
     t.integer  "item_id",    limit: 4,          null: false
@@ -1267,4 +1285,7 @@ ActiveRecord::Schema.define(version: 20180403110129) do
   add_foreign_key "machines", "venues"
   add_foreign_key "ops_diaries", "users", column: "created_by_user_id"
   add_foreign_key "ops_diaries", "venues"
+  add_foreign_key "security_shift_requests", "rota_shifts", column: "created_shift_id"
+  add_foreign_key "security_shift_requests", "users", column: "creator_id"
+  add_foreign_key "security_shift_requests", "venues"
 end

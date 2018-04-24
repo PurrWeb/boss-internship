@@ -40,8 +40,11 @@ import './vendors/owl.carousel';
 import 'react-tippy/dist/tippy.css';
 import './lib/load-underscore-mixins';
 
-import OpsDiaryApp from './apps/ops-diary';
-registerComponent('OpsDiaryApp', OpsDiaryApp);
+import SecurityShiftRequestsApp from './apps/security-shift-requests';
+registerComponent('SecurityShiftRequestsApp', SecurityShiftRequestsApp);
+
+import SecurityShiftRequestReviewsApp from './apps/security-shift-request-reviews';
+registerComponent('SecurityShiftRequestReviewsApp', SecurityShiftRequestReviewsApp);
 
 import DevsApp from './apps/devs';
 registerComponent('DevsApp', DevsApp);
@@ -104,6 +107,9 @@ registerComponent('SecurityRotaOverviewApp', SecurityRotaOverviewApp);
 
 import SecurityRotaDailyApp from './apps/security-rota-daily';
 registerComponent('SecurityRotaDailyApp', SecurityRotaDailyApp);
+
+import SecurityRotaShiftRequestsApp from './apps/security-rota-shift-requests';
+registerComponent('SecurityRotaShiftRequestsApp', SecurityRotaShiftRequestsApp);
 
 import StaffMemberFormAvatarImage from './apps/staff-member-form/staff-member-form-avatar-image';
 registerComponent('StaffMemberFormAvatarImage', StaffMemberFormAvatarImage);

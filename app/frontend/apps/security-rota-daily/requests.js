@@ -1,4 +1,3 @@
-import axios from 'axios';
 import http from '~/lib/request-api';
 
 export const updateStaffMemberShiftRequest = values => {

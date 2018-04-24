@@ -1,10 +1,10 @@
 import React from 'react';
 import d3 from 'd3';
 import PropTypes from 'prop-types';
-import RotaChart from './rota-chart';
+import RotaChart from '~/components/security-rota/rota-chart';
 import iScroll from 'boss-iscroll';
 import ReactIScroll from 'react-iscroll';
-import RotaGraphLegend from './rota-graph-legend';
+import RotaGraphLegend from '~/components/security-rota/rota-graph-legend';
 
 const scrollOptions = {
   scrollX: true,
