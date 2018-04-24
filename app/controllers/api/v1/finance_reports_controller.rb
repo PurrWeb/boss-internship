@@ -9,22 +9,15 @@ module Api
         week = week_from_params
         staff_members = staff_members_from_params
 
-        result = CreateFinanceReportsApiService.new(
-          requester: current_user
-        ).call(params: {
+        SaveFinanceReports.new(
           staff_members: staff_members,
           week: week
-        })
+        ).call
 
-        if result.success?
-          render(
-            json: result.finance_reports,
-            each_serializer: Api::V1::FinanceReports::FinanceReportSerializer,
-            status: 200
-          )
-        else
-          render json: { errors: result.api_errors.errors}, status: 422
-        end
+        render(
+          json: {},
+          status: 200
+        )
       end
 
       def complete
@@ -33,22 +26,15 @@ module Api
         week = week_from_params
         staff_member = staff_member_from_params
 
-        result = CreateFinanceReportApiService.new(
-          requester: current_user
-        ).call(params: {
+        SaveFinanceReport.new(
           staff_member: staff_member,
           week: week
-        })
+        ).call
 
-        if result.success?
-          render(
-            json: result.finance_report,
-            serializer: Api::V1::FinanceReports::FinanceReportSerializer,
-            status: 200
-          )
-        else
-          render json: { errors: result.api_errors.errors}, status: 422
-        end
+        render(
+          json: {},
+          status: 200
+        )
       end
 
       private
