@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import oFetch from 'o-fetch';
 import classNames from 'classnames';
 import utils from '~/lib/utils';
+import {appRoutes} from '~/lib/routes';
 
 class ReportItem extends Component {
   renderWeekDaysCells() {
@@ -78,7 +79,7 @@ class ReportItem extends Component {
       <div className="boss-table__row">
         <div className="boss-table__cell">
           <p className={fullNameCellClassName}>
-            <a href="#" className="boss-table__link" style={{ textTransform: 'capitalize' }}>
+            <a href={appRoutes.staffMember(staffMemberId)} className="boss-table__link" style={{ textTransform: 'capitalize' }}>
               {fullName}
             </a>
           </p>
