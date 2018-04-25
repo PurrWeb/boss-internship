@@ -166,6 +166,8 @@ var utils =  {
         return moment(date).format("DD-MM-YYYY");
     },
     commonDateFormat: 'DD-MM-YYYY',
+    monthDateFormat: 'dddd',
+    tableDateFormat: 'DD MMM YYYY',
     commonDateFormatWithTime(){
       return 'HH:mm DD-MM-YYYY';
     },
@@ -350,6 +352,16 @@ var utils =  {
           return result;
         }, initial);
       }, staffMembers);
+    },
+    round(number, precision) {
+      const shift = (number, precision, reverseShift) => {
+        if (reverseShift) {
+          precision = -precision;
+        }  
+        const numArray = ("" + number).split("e");
+        return +(numArray[0] + "e" + (numArray[1] ? (+numArray[1] + precision) : precision));
+      };
+      return shift(Math.round(shift(number, precision, false)), precision, true);
     }
 }
 

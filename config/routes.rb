@@ -107,11 +107,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :finance_reports, only: [:index, :create] do
-      collection do
-        post :complete_multiple
-      end
-    end
+    resources :finance_reports, only: [:index, :show]
 
     resources :yearly_reports, only: [:index] do
       collection do
@@ -226,6 +222,13 @@ Rails.application.routes.draw do
             post :reject
             post :undo
             post :assign
+          end
+        end
+
+        resources :finance_reports, only: [] do
+          member do
+            post :complete
+            post :complete_multiply
           end
         end
 

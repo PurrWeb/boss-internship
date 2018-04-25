@@ -31,6 +31,12 @@ export const appRoutes = {
             'date=' + utils.formatRotaUrlDate(date)
         ].join("");
     },
+    financeReportsPdfDownload: function(options){
+        var date = oFetch(options, "date");
+        var venueId = oFetch(options, "venueId");
+        var payRateFilter = oFetch(options, "payRateFilter");
+        return `/finance_reports/${utils.formatRotaUrlDate(date)}.pdf?venue_id=${venueId}&pay_rate_filter=${payRateFilter}`;
+    },
     securityRotaOverview: (options) => {
         const startDate = oFetch(options, "startDate");
         return `/security_rotas?highlight_date=${utils.formatRotaUrlDate(startDate)}`;
@@ -49,6 +55,11 @@ export const appRoutes = {
     },
     securityRotaDaily: (date) => {
         return `/security_rotas/${date}`;
+    },
+    financeReports: (options) => {
+        const startDate = oFetch(options, "startDate");
+        const venueId = oFetch(options, "venueId");
+        return `/finance_reports/${utils.formatRotaUrlDate(startDate)}?venue_id=${venueId}`;
     },
     rotaOverview: function(options){
         var [venueId, startDate] = oFetch(options, "venueId", "startDate");

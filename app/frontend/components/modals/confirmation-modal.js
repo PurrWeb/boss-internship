@@ -48,11 +48,11 @@ function openConfirmationModal(
         title={title}
         onClose={onClose}
       >
-        <Component onSubmit={onSubmit} {...props} />
+        <Component onSubmit={onSubmit} onClose={onClose} {...props} />
       </ConfirmationModal>,
       wrapper
     );
   }
 }
 
-export default modalDecorator(openConfirmationModal)
+export default modalDecorator(openConfirmationModal);
