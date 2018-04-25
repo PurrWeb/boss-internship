@@ -31,10 +31,12 @@ class Dashboard extends Component {
 
   render() {
     const { title } = this.props;
+    const venueId = oFetch(this.props, 'venueId');
     const date = safeMoment.uiDateParse(oFetch(this.props, 'date'));
     const startDate = safeMoment.uiDateParse(this.props.startDate).format(utils.commonDateFormatCalendar());
     const endDate = safeMoment.uiDateParse(this.props.endDate).format(utils.commonDateFormatCalendar());
     const onPayRateChange = oFetch(this.props, 'onPayRateChange');
+    const payRateFilter = oFetch(this.props, 'payRateFilter');
     const popoverClass = classNames({
       'boss-page-dashboard__meta-item boss-page-dashboard__meta-item_type_faded boss-page-dashboard__meta-item_role_date boss-page-dashboard__meta-item_role_popover': true,
       'boss-page-dashboard__meta-item_state_opened': this.state.isCalendarOpen,
@@ -47,7 +49,7 @@ class Dashboard extends Component {
               <h1 className="boss-page-dashboard__title">{title}</h1>
               <div className="boss-page-dashboard__buttons-group">
                 <a
-                  href={appRoutes.financeReportsPdfDownload({ date })}
+                  href={appRoutes.financeReportsPdfDownload({ date, venueId, payRateFilter })}
                   className="boss-button boss-button_role_download boss-page-dashboard__button"
                 >
                   Download PDF
@@ -86,6 +88,7 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
   title: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
+  venueId: PropTypes.number.isRequired,
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
   onDateChange: PropTypes.func.isRequired,

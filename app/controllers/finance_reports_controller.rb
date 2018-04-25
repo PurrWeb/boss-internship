@@ -10,6 +10,17 @@ class FinanceReportsController < ApplicationController
       return redirect_to(finance_report_path(show_redirect_params))
     end
 
+    respond_to do |format|
+      format.html do
+        render_finance_reports_html
+      end
+      format.pdf do
+        render_finance_reports_pdf
+      end
+    end
+  end
+
+  def render_finance_reports_html
     date = date_from_params
     week = week_from_params
     venue = venue_from_params
@@ -28,7 +39,9 @@ class FinanceReportsController < ApplicationController
     reports = FinanceReport.joins(:staff_member)
                 .where(staff_member: staff_members)
                 .where(week_start: week.start_date).all
+
     staffs_without_requests = staff_members - staff_members_with_reports
+
     generated_reports = staffs_without_requests.map do |staff_member|
       GenerateFinanceReportData.new(
         staff_member: staff_member,
@@ -37,8 +50,6 @@ class FinanceReportsController < ApplicationController
     end
 
     finance_reports = reports + generated_reports
-    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
@@ -57,11 +68,22 @@ class FinanceReportsController < ApplicationController
       ),
       access_token: access_token.token
     }
-
   end
 
-  def render_finance_reports_pdf(week:, venue:, filter_by_weekly_pay_rate:, staff_members:)
+  def render_finance_reports_pdf
     authorize!(:view, :finance_reports)
+
+    date = date_from_params
+    week = week_from_params
+    venue = venue_from_params
+    filter_by_weekly_pay_rate = params.fetch(:pay_rate_filter) == 'weekly'
+
+    staff_members = FinanceReportStaffMembersQuery.new(
+      venue: venue,
+      start_date: week.start_date,
+      end_date: week.end_date,
+      filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
+    ).all
 
     pdf = FinanceReportPDF.new(
       report_title: 'Finance Report',

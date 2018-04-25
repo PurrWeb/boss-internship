@@ -33,10 +33,9 @@ export const appRoutes = {
     },
     financeReportsPdfDownload: function(options){
         var date = oFetch(options, "date");
-        return [
-            '/finance_reports.pdf?',
-            'date=' + utils.formatRotaUrlDate(date)
-        ].join("");
+        var venueId = oFetch(options, "venueId");
+        var payRateFilter = oFetch(options, "payRateFilter");
+        return `/finance_reports/${utils.formatRotaUrlDate(date)}.pdf?venue_id=${venueId}&pay_rate_filter=${payRateFilter}`;
     },
     securityRotaOverview: (options) => {
         const startDate = oFetch(options, "startDate");

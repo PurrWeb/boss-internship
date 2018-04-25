@@ -11,12 +11,14 @@ import {
 const mapStateToProps = state => {
   return {
     date: state.getIn(['page', 'date']),
+    venueId: state.getIn(['page', 'venueId']),
     startDate: state.getIn(['page', 'startDate']),
     endDate: state.getIn(['page', 'endDate']),
     venueId: state.getIn(['page', 'venueId']),
     staffTypesWithFinanceReports: getStaffTypesWithFinanceReports(state),
     weekDates: getWeekDates(state),
     allReady: getAllReady(state),
+    payRateFilter: state.getIn(['page', 'payRateFilter']),
   };
 };
 

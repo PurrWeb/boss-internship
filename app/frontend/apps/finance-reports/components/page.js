@@ -67,6 +67,8 @@ class Page extends Component {
     const startDate = oFetch(this.props, 'startDate');
     const endDate = oFetch(this.props, 'endDate');
     const date = oFetch(this.props, 'date');
+    const venueId = oFetch(this.props, 'venueId');
+    const payRateFilter = oFetch(this.props, 'payRateFilter');
     const weekDates = oFetch(this.props, 'weekDates');
     const allReady = oFetch(this.props, 'allReady');
     const staffTypesWithFinanceReports = oFetch(this.props, 'staffTypesWithFinanceReports');
@@ -92,6 +94,8 @@ class Page extends Component {
           date={date}
           startDate={startDate}
           endDate={endDate}
+          venueId={venueId}
+          payRateFilter={payRateFilter}
           onDateChange={this.handleDateChange}
           onPayRateChange={this.handlePayRateChange}
         />
@@ -141,6 +145,7 @@ Page.propTypes = {
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
   venueId: PropTypes.number.isRequired,
+  payRateFilter: PropTypes.string.isRequired,
   staffTypesWithFinanceReports: ImmutablePropTypes.list.isRequired,
   weekDates: ImmutablePropTypes.list.isRequired,
   changePayRateFilter: PropTypes.func.isRequired,
