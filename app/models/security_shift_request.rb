@@ -12,10 +12,11 @@ class SecurityShiftRequest < ActiveRecord::Base
   validates :creator, presence: true
   validates :starts_at, presence: true
   validates :ends_at, presence: true
-  validate :times_in_correct_order
-  validate :times_in_fifteen_minute_increments, if: :pending?
   validates :created_shift, presence: true, if: :assigned?
   validates :reject_reason, presence: true, if: :rejected?
+  validate :times_in_correct_order
+  validate :time_not_in_past
+  validate :times_in_fifteen_minute_increments
 
   def state_machine
     @state_machine ||= SecurityShiftRequestStateMachine.new(self,
@@ -62,6 +63,15 @@ class SecurityShiftRequest < ActiveRecord::Base
     if starts_at.present? && ends_at.present?
       errors.add(:base, 'starts time must be after end time') if starts_at >= ends_at
     end
+  end
+
+  def time_not_in_past
+    return unless [:starts_at, :ends_at].all? do |method|
+      public_send(method).present?
+    end
+    current_rota_start_time = RotaShiftDate.new(RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date).start_time
+    errors.add(:starts_at, "can't be in past") if starts_at < current_rota_start_time
+    errors.add(:ends_at, "can't be in past") if ends_at < current_rota_start_time
   end
 
   # validation
