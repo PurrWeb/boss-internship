@@ -7,6 +7,10 @@ class SecurityShiftRequestVenueList extends Component {
   renderItems(securityShiftRequestsGrouppedByVenueId) {
     const venueCardRenderer = oFetch(this.props, 'venueCardRenderer');
 
+    if (securityShiftRequestsGrouppedByVenueId.size === 0) {
+      return <h1 className="boss-page-main__text-placeholder">No requests found</h1>
+    }
+
     return securityShiftRequestsGrouppedByVenueId.entrySeq().map(([venueId, securityShiftRequests]) => {
       if (securityShiftRequests.size === 0) return;
       return React.cloneElement(venueCardRenderer(securityShiftRequests, venueId), {

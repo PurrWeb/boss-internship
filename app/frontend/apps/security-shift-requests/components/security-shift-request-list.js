@@ -20,29 +20,27 @@ class SecurityShiftRequestList extends Component {
     const securityShiftRequests = oFetch(this.props, 'securityShiftRequests');
     const isCompleted = oFetch(this.props, 'isCompleted');
 
+    if (securityShiftRequests.size === 0) {
+      return (
+        <div className="boss-board__inner">
+          <div className="boss-board__cards">
+            <h1 className="boss-page-main__text-placeholder">No requests found</h1>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="boss-board__inner">
         <div className="boss-board__table">
-          <div
-            className={`boss-table boss-table_page_ssr-${
-              isCompleted ? 'completed' : 'pending'
-            }`}
-          >
+          <div className={`boss-table boss-table_page_ssr-${isCompleted ? 'completed' : 'pending'}`}>
             <div className="boss-table__row">
-              <div className="boss-table__cell boss-table__cell_role_header">
-                Requested times
-              </div>
-              <div className="boss-table__cell boss-table__cell_role_header">
-                Note
-              </div>
+              <div className="boss-table__cell boss-table__cell_role_header">Requested times</div>
+              <div className="boss-table__cell boss-table__cell_role_header">Note</div>
               {this.props.isCompleted && (
-                <div className="boss-table__cell boss-table__cell_role_header">
-                  Rotaed Shift
-                </div>
+                <div className="boss-table__cell boss-table__cell_role_header">Rotaed Shift</div>
               )}
-              <div className="boss-table__cell boss-table__cell_role_header">
-                Status
-              </div>
+              <div className="boss-table__cell boss-table__cell_role_header">Status</div>
             </div>
             {this.renderItems(securityShiftRequests)}
           </div>
@@ -60,6 +58,6 @@ SecurityShiftRequestList.propTypes = {
 
 SecurityShiftRequestList.defaultProps = {
   isCompleted: false,
-}
+};
 
 export default SecurityShiftRequestList;
