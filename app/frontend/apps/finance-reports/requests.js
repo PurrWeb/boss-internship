@@ -10,6 +10,7 @@ export const markReportCompletedRequest = params => {
     staffMemberId,
   }).catch(error => {
     openErrorModal();
+    return Promise.reject(error);
   });
 };
 
@@ -24,5 +25,6 @@ export const markReportsCompletedRequest = params => {
     },
   ).catch(error => {
     openErrorModal();
+    return Promise.reject(error);
   });
 };
