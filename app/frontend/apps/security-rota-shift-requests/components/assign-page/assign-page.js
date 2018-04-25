@@ -44,9 +44,7 @@ class AssignPage extends PureComponent {
     return assignShiftRequest({ id, staffMemberId })
       .then(() => {
         hideModal();
-        setTimeout(() => {
-          this.handleCloseAssignPage();
-        }, 1000);
+        this.handleCloseAssignPage();
       })
       .catch(err => {
         this.setError('There was an error assigning this shift. Please check for errors and try again');

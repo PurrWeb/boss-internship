@@ -11,16 +11,17 @@ class RequestsFilter extends PureComponent {
     const selectedVenues = oFetch(this.props, 'selectedVenues');
     const venueTypes = oFetch(this.props, 'venueTypes');
     const selectVenue = oFetch(this.props, 'selectVenue');
+    const date = oFetch(this.props, 'date');
     return (
       <div className="boss-page-main__filter">
         <div className="boss-form">
           <div className="boss-form__row  boss-form__row_justify_space">
-            <VenueFilter 
+            <VenueFilter
             onChangeSelectedVenues={selectVenue}
             selectedVenues={selectedVenues}
             venueTypes={venueTypes.toJS()}
             />
-            <RotaFilter page="requests" currentRotaDay="19-09-2017" />
+            <RotaFilter page="requests" currentRotaDay={date} />
           </div>
           <WeekFilter
             date={this.props.date}
