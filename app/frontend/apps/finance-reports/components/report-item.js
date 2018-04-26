@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import oFetch from 'o-fetch';
 import classNames from 'classnames';
 import utils from '~/lib/utils';
-import {appRoutes} from '~/lib/routes';
+import { appRoutes } from '~/lib/routes';
 
 class ReportItem extends Component {
   renderWeekDaysCells() {
@@ -40,7 +40,7 @@ class ReportItem extends Component {
         return (
           <div key={index} className="boss-table__cell">
             <p className="boss-table__text">
-              <a href={`/staff_members/${staffMemberId}/hours_overview/${weekDate}`} className="boss-table__link">
+              <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className="boss-table__link">
                 {dayHoursCount}
               </a>
             </p>
@@ -58,10 +58,11 @@ class ReportItem extends Component {
 
     const status = oFetch(report, 'status');
     const acessories = utils.round(oFetch(report, 'acessories'), 2);
+    const acessoriesColor = utils.colorizedAmount(acessories);
     const payRateDescription = oFetch(report, 'payRateDescription');
-    const totalHoursCount = utils.round(oFetch(report, 'totalHoursCount'), 2);
+    const totalHoursCount = utils.round(oFetch(report, 'totalHoursCount') + owedHours, 2);
     const total = utils.round(oFetch(report, 'total'), 2);
-    const holidayDaysCount = oFetch(report, 'total');
+    const holidayDaysCount = oFetch(report, 'holidayDaysCount');
     const onMarkCompleted = oFetch(this.props, 'onMarkCompleted');
     const staffMemberId = oFetch(report, 'staffMemberId');
 
@@ -79,7 +80,11 @@ class ReportItem extends Component {
       <div className="boss-table__row">
         <div className="boss-table__cell">
           <p className={fullNameCellClassName}>
-            <a href={appRoutes.staffMember(staffMemberId)} className="boss-table__link" style={{ textTransform: 'capitalize' }}>
+            <a
+              href={appRoutes.staffMember(staffMemberId)}
+              className="boss-table__link"
+              style={{ textTransform: 'capitalize' }}
+            >
               {fullName}
             </a>
           </p>
@@ -94,14 +99,22 @@ class ReportItem extends Component {
           </div>
         ) : (
           <div className="boss-table__cell">
-            <a href={`/staff_members/${staffMemberId}?tab=owed-hours`} className="boss-table__link">
+            <a href={appRoutes.staffMemberOwedHours(staffMemberId)} className="boss-table__link">
               {owedHours}
             </a>
           </div>
         )}
 
         <div className="boss-table__cell">
-          <p className="boss-table__text">£{acessories}</p>
+          {acessories === 0 ? (
+            <p className="boss-table__text">
+              {utils.moneyFormat(acessories)}
+            </p>
+          ) : (
+            <a href={appRoutes.staffMemberAccessories(staffMemberId)} className="boss-table__text" style={{ color: acessoriesColor }}>
+              {utils.moneyFormat(acessories)}
+            </a>
+          )}
         </div>
         <div className="boss-table__cell">
           <p className="boss-table__text">{payRateDescription}</p>
@@ -110,7 +123,7 @@ class ReportItem extends Component {
           <p className="boss-table__text boss-table__text_role_important">{totalHoursCount}</p>
         </div>
         <div className="boss-table__cell">
-          <p className="boss-table__text">£{total}</p>
+          <p className="boss-table__text">{utils.moneyFormat(total)}</p>
         </div>
         {holidayDaysCount === 0 ? (
           <div className="boss-table__cell">
@@ -118,7 +131,7 @@ class ReportItem extends Component {
           </div>
         ) : (
           <div className="boss-table__cell">
-            <a href={`/staff_members/${staffMemberId}?tab=holidays`} className="boss-table__link">
+            <a href={appRoutes.staffMemberHolidays(staffMemberId)} className="boss-table__link">
               {holidayDaysCount}
             </a>
           </div>

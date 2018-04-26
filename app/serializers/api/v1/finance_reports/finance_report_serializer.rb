@@ -14,7 +14,7 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :owedHoursMinuteCount,
     :payRateDescription,
     :accessoriesCents,
-    :totalCents,
+    :total,
     :totalHoursCount,
     :status
 
@@ -70,8 +70,8 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     object.accessories_cents
   end
 
-  def totalCents
-    object.total_cents
+  def total
+    object.total
   end
 
   def totalHoursCount

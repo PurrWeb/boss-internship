@@ -2,7 +2,30 @@ import moment from "moment"
 import deepEqual from "deep-equal"
 import _ from "underscore"
 import { fromJS, Map, List, Set } from 'immutable';
+import numeral from 'numeral';
 import safeMoment from '~/lib/safe-moment';
+
+numeral.register('locale', 'en-gb', {
+  delimiters: {
+    thousands: ',',
+    decimal: '.',
+  },
+  abbreviations: {
+    thousand: 'k',
+    million: 'm',
+    billion: 'b',
+    trillion: 't',
+  },
+  ordinal: function(number) {
+    var b = number % 10;
+    return ~~((number % 100) / 10) === 1 ? 'th' : b === 1 ? 'st' : b === 2 ? 'nd' : b === 3 ? 'rd' : 'th';
+  },
+  currency: {
+    symbol: '£',
+  },
+});
+
+numeral.locale('en-gb');
 
 function replaceFunctionPropsWithStrings(obj){
     return _(obj).mapValues(function(value){
@@ -14,6 +37,16 @@ function replaceFunctionPropsWithStrings(obj){
 }
 
 var utils =  {
+    moneyFormat(amount) {
+      return numeral(amount).format('$0,0.00');
+    },
+    colorizedAmount(amount, negative = 'red', positive = 'green', byDefault = 'black') {
+      return amount < 0
+        ? negative
+        : amount > 0
+          ? positive
+          : byDefault;
+    },
     parseHTML(html) {
       const div = document.createElement("div");
       div.innerHTML = html;
@@ -54,7 +87,7 @@ var utils =  {
         }, 0);
       const weekVenueIds = weekRotaShifts.reduce((set, shift) => {
         return set.add(shift.get('venueId'))
-      }, new Set());  
+      }, new Set());
         return {weekRotaShifts, hoursOnWeek, weekVenueIds};
     },
     parseQueryString: function( queryString ) {
@@ -357,7 +390,7 @@ var utils =  {
       const shift = (number, precision, reverseShift) => {
         if (reverseShift) {
           precision = -precision;
-        }  
+        }
         const numArray = ("" + number).split("e");
         return +(numArray[0] + "e" + (numArray[1] ? (+numArray[1] + precision) : precision));
       };

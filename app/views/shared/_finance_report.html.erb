@@ -82,21 +82,6 @@
       </p>
     <% end %>
 
-    <% if display_manager_actions && reports.all?(&:can_complete?) %>
-      <p>
-        <%= link_to(
-          'Mark all complete',
-          complete_multiple_finance_reports_path(
-            staff_member_ids: reports.map(&:staff_member_id),
-            venue_id: venue.id,
-            week_start: UIRotaDate.format(week.start_date)
-          ),
-          method: "post",
-          class: 'boss2-button'
-        ) %>
-      </p>
-    <% end %>
-
     <table class="text-center mb-lg">
       <thead>
         <tr>
@@ -114,9 +99,6 @@
             <th></th>
           <% end %>
           <th></th>
-          <% if display_manager_actions %>
-            <th></th>
-          <% end %>
         </tr>
         <tr>
           <th class="text-center">Name</th>
@@ -134,9 +116,6 @@
             <th class="text-center">Total</th>
           <% end %>
           <th class="text-center">Paid Holiday (Days)</th>
-          <% if display_manager_actions %>
-            <th class="text-center">Status</th>
-          <% end %>
         </tr>
       </thead>
       <tbody>
@@ -211,14 +190,6 @@
                     staff_member_path(report.staff_member, tab: 'holidays')
                   ) %>
             </td>
-            <% if display_manager_actions %>
-              <td>
-                <%= report.status.titlecase %>
-                <% if report.can_complete? %>
-                  <%= link_to('Mark Completed' , finance_reports_path(staff_member_id: report.staff_member.id, week_start: UIRotaDate.format(report.week.start_date)), class: 'boss2-button', method: :post) %>
-                <% end %>
-              </td>
-            <% end %>
           </tr>
         <% end %>
       </tbody>
@@ -227,24 +198,3 @@
 <% end %>
 
 <% all_reports = finance_reports_table.staff_types.map{|st|finance_reports_table.reports(st)}.flatten %>
-<% if all_reports.all?(&:can_complete?) %>
-<div class="panel radius">
-  <h3> Complete all reports</h3>
-  <p>All Reports on this page are completable</p>
-  <p>Clicking here will complete all reports on this week after which no edits will be possible.</p>
-  <p>
-    <em>Do not</em> click unless you are <em>sure</em> the numbers are correct.
-  </p>
-      <%= link_to(
-        'Mark all complete',
-        complete_multiple_finance_reports_path(
-          staff_member_ids: all_reports.map(&:staff_member_id),
-          venue_id: venue.id,
-          week_start: UIRotaDate.format(week.start_date)
-        ),
-        method: "post",
-        class: 'boss2-button'
-      ) %>
-</div>
-<% end %>
-

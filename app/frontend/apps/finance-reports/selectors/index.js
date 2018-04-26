@@ -40,6 +40,7 @@ export const getStaffTypesWithStaffMembers = createSelector(
 
 export const getReportsWithCalculations = createSelector(getFilteredFinanceReports, financeReports =>
   financeReports.map(financeReport => {
+    const owedHours = financeReport.get('owedHoursMinuteCount') / 60;
     const weeklyHours =
       financeReport.get('mondayHoursCount') +
       financeReport.get('tuesdayHoursCount') +
@@ -48,11 +49,10 @@ export const getReportsWithCalculations = createSelector(getFilteredFinanceRepor
       financeReport.get('fridayHoursCount') +
       financeReport.get('saturdayHoursCount') +
       financeReport.get('sundayHoursCount');
-    const owedHours = financeReport.get('owedHoursMinuteCount') / 60;
     const payRateType = _.last(financeReport.get('payRateDescription').split('/')) === 'h' ? 'hourly' : 'weekly';
     const payRateAmount = _.first(financeReport.get('payRateDescription').split('/')).slice(1);
     const acessories = financeReport.get('accessoriesCents') / 100;
-    const total = financeReport.get('totalCents') / 100;
+    const total = financeReport.get('total');
     return financeReport
       .set('weeklyHours', weeklyHours)
       .set('owedHours', owedHours)
@@ -79,7 +79,9 @@ export const getStaffTypesWithFinanceReports = createSelector(
         staffType.get('staffMembers').has(financeReport.get('staffMemberId')),
       );
       const total = reports.reduce((acc, report) => acc + report.get('total'), 0);
-      const allReady = reports.size === reports.filter(report => report.get('status') === 'ready').size;
+      const allReady =
+        reports.filter(report => report.get('status') === 'incomplete').size === 0 &&
+        reports.filter(report => report.get('status') === 'ready').size > 0;
       return staffType
         .set('total', total)
         .set('reports', reports)
@@ -89,6 +91,6 @@ export const getStaffTypesWithFinanceReports = createSelector(
 
 export const getAllReady = createSelector(getStaffTypesWithFinanceReports, staffTypesWithFinanceReports =>
   staffTypesWithFinanceReports.reduce((acc, staffType) => {
-    return acc && staffType.get('allReady');
-  }, true),
+    return acc || staffType.get('allReady');
+  }, false),
 );
