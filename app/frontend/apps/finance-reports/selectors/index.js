@@ -79,7 +79,9 @@ export const getStaffTypesWithFinanceReports = createSelector(
         staffType.get('staffMembers').has(financeReport.get('staffMemberId')),
       );
       const total = reports.reduce((acc, report) => acc + report.get('total'), 0);
-      const allReady = reports.size === reports.filter(report => report.get('status') === 'ready').size;
+      const allReady =
+        reports.filter(report => report.get('status') === 'incomplete').size === 0 &&
+        reports.filter(report => report.get('status') === 'ready').size > 0;
       return staffType
         .set('total', total)
         .set('reports', reports)
@@ -89,6 +91,6 @@ export const getStaffTypesWithFinanceReports = createSelector(
 
 export const getAllReady = createSelector(getStaffTypesWithFinanceReports, staffTypesWithFinanceReports =>
   staffTypesWithFinanceReports.reduce((acc, staffType) => {
-    return acc && staffType.get('allReady');
-  }, true),
+    return acc || staffType.get('allReady');
+  }, false),
 );
