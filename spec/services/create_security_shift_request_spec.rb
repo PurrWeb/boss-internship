@@ -8,10 +8,10 @@ describe CreateSecurityShiftRequest do
   end
 
   let(:creator) { FactoryGirl.create(:user) }
-  let(:valid_params) do
+  let(:params) do
     {
-      starts_at: starts_at_in_past,
-      ends_at: ends_at_in_past,
+      starts_at: starts_at,
+      ends_at: ends_at,
       creator: creator
     }
   end
@@ -28,14 +28,8 @@ describe CreateSecurityShiftRequest do
     end
 
     context 'starts_at or ends_at in the past' do
-      let(:starts_at_in_past) { rota_week_start_date - 2.days}
-      let(:ends_at_in_past) { rota_week_start_date - 1.days}
-      let(:params) do
-        valid_params.merge({
-          starts_at: starts_at_in_past,
-          ends_at: ends_at_in_past
-        })
-      end
+      let(:starts_at) { rota_week_start_date - 2.days}
+      let(:ends_at) { rota_week_start_date - 1.days}
 
       describe 'result ' do
         let(:result) { service.call }
@@ -55,12 +49,6 @@ describe CreateSecurityShiftRequest do
     context 'ends at less than starts at ' do
       let(:starts_at) { rota_week_start_date + 5.hours}
       let(:ends_at) { rota_week_start_date + 1.hours}
-      let(:params) do
-        valid_params.merge({
-          starts_at: starts_at,
-          ends_at: ends_at
-        })
-      end
 
       describe 'result ' do
         let(:result) { service.call }
