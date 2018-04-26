@@ -3,6 +3,7 @@ import oFetch from 'o-fetch';
 import axios from 'axios';
 
 import Skycons from '~/components/skycons';
+import '../styles.css';
 
 const CURRENT_DAY_LABEL = 'Current';
 const WEEK_DAY_LABELS = [
@@ -187,22 +188,9 @@ export default class WeatherWidget extends React.Component {
 
         <div className="boss-weather__timeline">
           <div className="boss-weather__timeline-conditions">
-            {dayTimeline.map((condition, i) => {
-              const className = `boss-weather__timeline-condition boss-weather__timeline-condition_${ICON_TO_CONDITION_CLASS[condition.icon]}`;
-
-              return <div
-                key={i}
-                className={className}
-                style={{
-                  width: 100 / 24 * condition.hours + '%',
-                }}
-                title={condition.summary}
-              >
-                <p className="boss-weather__timeline-label">
-                  {condition.summary}
-                </p>
-              </div>
-            })}
+            {dayTimeline.map((condition, i) => (
+              <WeatherCondition {...condition} key={i} />
+            ))}
           </div>
           <div className="boss-weather__timeline-intervals">
             {hourly.map((hour, i) => {
@@ -309,4 +297,51 @@ function ForecastDay({ label, icon, high, low, highest, lowest, direction, summa
       </div>
     </div>
   </div>
+}
+
+class WeatherCondition extends React.Component {
+  state = {
+    tooltipVisible: false
+  };
+
+  onEnter = (e) => {
+    // If pointing target is the label itself and not the text element
+    if (e.target === e.currentTarget) {
+      this.setState({ tooltipVisible: true });
+    }
+  }
+
+  onLeave = (e) => {
+    // If pointing target is the label itself and not the text element
+    if (e.target === e.currentTarget) {
+      this.setState({ tooltipVisible: false });
+    }
+  }
+
+  render() {
+    const { hours, summary, icon } = this.props;
+    const { tooltipVisible } = this.state;
+
+    const className = `boss-weather__timeline-condition boss-weather__timeline-condition_${ICON_TO_CONDITION_CLASS[icon]}`;
+
+    return <div
+      className={className}
+      style={{
+        width: 100 / 24 * hours + '%',
+      }}
+    >
+      <p
+        className="boss-weather__timeline-label"
+        onMouseEnter={this.onEnter}
+        onMouseLeave={this.onLeave}
+      >
+        <span className="boss-weather__timeline-label_text">
+          {summary}
+        </span>
+      </p>
+      {tooltipVisible ? <div className="boss-weather__timeline-tooltip">
+        {summary}
+      </div> : null}
+    </div>
+  }
 }

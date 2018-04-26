@@ -1,0 +1,55 @@
+.boss-weather__timeline-conditions {
+  overflow: visible !important;
+}
+
+.boss-weather__timeline-condition {
+  padding: 0 !important;
+  position: relative;
+}
+
+.boss-weather__timeline-label {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  text-overflow: inherit !important;
+  line-height: 60px !important;
+  height: 60px;
+}
+
+.boss-weather__timeline-label::before,
+.boss-weather__timeline-label::after {
+  content: '';
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 60px;
+}
+
+.boss-weather__timeline-label_text {
+  flex-grow: 10000;
+}
+
+.boss-weather__timeline-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-bottom: 6px;
+  transform: translate(-50%, 0);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 8px;
+  font-size: 14px;
+  text-align: center;
+  border-radius: 3px;
+}
+
+.boss-weather__timeline-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -3px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 3px 0 3px;
+  border-color: rgba(0, 0, 0, 0.6) transparent transparent transparent;
+}
