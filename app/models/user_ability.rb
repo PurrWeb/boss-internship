@@ -213,6 +213,10 @@ class UserAbility
         can_view_main_vettings_page?(user)
       end
 
+      can :mark_retake_avatar, StaffMember do |staff_member|
+        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+      end
+
       can :view, :check_list_submissions_page do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
