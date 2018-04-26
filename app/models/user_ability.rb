@@ -425,7 +425,8 @@ class UserAbility
       end
 
       can :view, :security_shift_request_reviews do
-        user.has_effective_access_level?(AccessLevel.admin_access_level)
+        user.ops_manager? ||
+          user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can [:create], SecurityShiftRequest do |security_shift_request|
@@ -433,7 +434,8 @@ class UserAbility
       end
 
       can [:accept, :edit, :undo], SecurityShiftRequest do |security_shift_request|
-        user.has_effective_access_level?(AccessLevel.admin_access_level)
+        user.ops_manager? ||
+          user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can [:assign], SecurityShiftRequest do |security_shift_request|
