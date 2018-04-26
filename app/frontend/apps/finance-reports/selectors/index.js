@@ -40,6 +40,7 @@ export const getStaffTypesWithStaffMembers = createSelector(
 
 export const getReportsWithCalculations = createSelector(getFilteredFinanceReports, financeReports =>
   financeReports.map(financeReport => {
+    const owedHours = financeReport.get('owedHoursMinuteCount') / 60;
     const weeklyHours =
       financeReport.get('mondayHoursCount') +
       financeReport.get('tuesdayHoursCount') +
@@ -48,11 +49,10 @@ export const getReportsWithCalculations = createSelector(getFilteredFinanceRepor
       financeReport.get('fridayHoursCount') +
       financeReport.get('saturdayHoursCount') +
       financeReport.get('sundayHoursCount');
-    const owedHours = financeReport.get('owedHoursMinuteCount') / 60;
     const payRateType = _.last(financeReport.get('payRateDescription').split('/')) === 'h' ? 'hourly' : 'weekly';
     const payRateAmount = _.first(financeReport.get('payRateDescription').split('/')).slice(1);
     const acessories = financeReport.get('accessoriesCents') / 100;
-    const total = financeReport.get('totalCents') / 100;
+    const total = financeReport.get('total');
     return financeReport
       .set('weeklyHours', weeklyHours)
       .set('owedHours', owedHours)
