@@ -48,6 +48,12 @@ var utils =  {
           ? positive
           : byDefault;
     },
+    getDaysCountFromInterval(uiStartDate, uiEndDate) {
+      const mStartDate = safeMoment.uiDateParse(uiStartDate);
+      const mEndDate = safeMoment.uiDateParse(uiEndDate);
+
+      return mEndDate.diff(mStartDate, 'days') + 1;
+    },
     parseHTML(html) {
       const div = document.createElement("div");
       div.innerHTML = html;
