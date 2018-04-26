@@ -128,6 +128,27 @@ export const appRoutes = {
         }
         return result;
     },
+    staffMemberOwedHours: function(staffMemberId, dStartDate, dEndDate){
+        if (staffMemberId === undefined) {
+            throw new Error("No staff member id supplied to appRoutes.staffMemberOwedHours")
+        }
+        return "/staff_members/" + staffMemberId + "/owed_hours";
+    },
+    staffMemberHoursOverview: function(staffMemberId, dDate){
+        if (staffMemberId === undefined) {
+            throw new Error("No staff member id supplied to appRoutes.staffMemberHoursOverview")
+        }
+        if (dDate === undefined) {
+          throw new Error("No date supplied to appRoutes.staffMemberHoursOverview")
+        }
+        return "/staff_members/" + staffMemberId + "/hours_overview" + dDate;
+    },
+    staffMemberAccessories: function(staffMemberId){
+        if (staffMemberId === undefined) {
+            throw new Error("No staff member id supplied to appRoutes.staffMemberAccessories")
+        }
+        return "/staff_members/" + staffMemberId + "/accessories";
+    },
     holidaysCsv: function(options){
         var date = oFetch(options, "date");
         var venueId = options.venueId; //optional
