@@ -35,12 +35,12 @@ export const assignShiftRequest = params => (dispatch, getState) => {
     const responseRota = oFetch(response, 'data.rota');
 
     dispatch(removeRequestAction({ id }));
-    dispatch(addRotaShift({ rotaShift }));
     const isRotaExists = !!getState()
       .get('weekRotas')
       .find(rota => rota.get('id') === oFetch(responseRota, 'id'));
     if (!isRotaExists) {
-      dispatch(addRota({ rota }));
+      dispatch(addRota({ rota: responseRota }));
     }
+    dispatch(addRotaShift({ rotaShift }));
   });
 };

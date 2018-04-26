@@ -193,11 +193,6 @@ class PermissionsPageData
           path: @path.venues_path
         },
         {
-          description: "Security Shift Request Reviews",
-          permitted: role.can?(:view, :security_shift_request_reviews),
-          path: @path.security_shift_request_reviews_path
-        },
-        {
           description: 'API Keys',
           permitted: role.can?(:view, :api_keys_page),
           path: @path.api_keys_path,
@@ -245,6 +240,11 @@ class PermissionsPageData
           description: "Holiday Requests",
           permitted: role.can?(:view, :holiday_requests_page),
           path: @path.holiday_requests_path
+        },
+        {
+          description: "Security Shift Review",
+          permitted: role.can?(:view, :security_shift_request_reviews),
+          path: @path.security_shift_request_reviews_path
         },
         {
           description: "Staff Vetting",
