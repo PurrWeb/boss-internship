@@ -40,6 +40,9 @@ import './vendors/owl.carousel';
 import 'react-tippy/dist/tippy.css';
 import './lib/load-underscore-mixins';
 
+import OpsDiaryApp from './apps/ops-diary';
+registerComponent('OpsDiaryApp', OpsDiaryApp);
+
 import SecurityShiftRequestsApp from './apps/security-shift-requests';
 registerComponent('SecurityShiftRequestsApp', SecurityShiftRequestsApp);
 
