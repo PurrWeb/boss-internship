@@ -3,13 +3,15 @@ class AccessLevel
   DEV_ACCESS_LEVEL = 'dev'
   ADMIN_ACCESS_LEVEL = 'admin'
   AREA_MANAGER_ACCESS_LEVEL = 'area_manager'
+  OPS_MANAGER_ACCESS_LEVEL = 'ops_manager'
   MANAGER_ACCESS_LEVEL = 'manager'
   RESTRICTED_ACCESS_LEVEL = 'restricted'
   # These values must be mirrored in js user-permissions
   LEVEL_DATA = {
-    DEV_ACCESS_LEVEL => 4,
-    ADMIN_ACCESS_LEVEL => 3,
-    AREA_MANAGER_ACCESS_LEVEL => 2,
+    DEV_ACCESS_LEVEL => 5,
+    ADMIN_ACCESS_LEVEL => 4,
+    AREA_MANAGER_ACCESS_LEVEL => 3,
+    OPS_MANAGER_ACCESS_LEVEL => 2,
     MANAGER_ACCESS_LEVEL => 1,
     RESTRICTED_ACCESS_LEVEL => 0
   }
@@ -17,10 +19,8 @@ class AccessLevel
   DEV_ACCESS_ROLES = [User::DEV_ROLE]
   ADMIN_ACCESS_ROLES = [User::ADMIN_ROLE]
   AREA_MANAGER_ACCESS_ROLES = [User::AREA_MANAGER_ROLE]
-  MANAGER_ACCESS_ROLES = [
-    User::MANAGER_ROLE,
-    User::OPS_MANAGER_ROLE
-  ]
+  OPS_MANAGER_ACCESS_ROLES = [User::OPS_MANAGER_ROLE]
+  MANAGER_ACCESS_ROLES = [User::MANAGER_ROLE]
   RESTRICTED_ACCESS_ROLES = [
     User::MAINTENANCE_ROLE,
     User::MARKETING_ROLE,
@@ -54,6 +54,8 @@ class AccessLevel
       ADMIN_ACCESS_LEVEL
     when *AREA_MANAGER_ACCESS_ROLES
       AREA_MANAGER_ACCESS_LEVEL
+    when *OPS_MANAGER_ACCESS_ROLES
+      OPS_MANAGER_ACCESS_LEVEL
     when *MANAGER_ACCESS_ROLES
       MANAGER_ACCESS_LEVEL
     when *RESTRICTED_ACCESS_ROLES
@@ -75,6 +77,10 @@ class AccessLevel
 
   def self.area_manager_access_level
     AccessLevel.new(AREA_MANAGER_ACCESS_LEVEL)
+  end
+
+  def self.ops_manager_access_level
+    AccessLevel.new(OPS_MANAGER_ACCESS_LEVEL)
   end
 
   def self.manager_access_level
