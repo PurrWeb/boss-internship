@@ -10,13 +10,11 @@ class UserAbility
       end
 
       can :view, :ops_diary do
-        user.ops_manager? ||
-        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+        user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
       end
 
       can [:create, :update, :enable, :disable], :ops_diary do
-        user.ops_manager? ||
-        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+        user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
       end
 
       can :view, :sse_tests do
@@ -147,8 +145,7 @@ class UserAbility
       end
 
       can :view, :dashboard_messages_page do
-        user.ops_manager? ||
-        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+        user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
       end
 
       can [:edit, :create, :disable, :destroy], DashboardMessage do
@@ -156,13 +153,11 @@ class UserAbility
       end
 
       can :view, :staff_vetting_page do
-        user.ops_manager? ||
         user.payroll_manager? ||
-          user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+          user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
       end
 
       can :view, :check_list_submissions_page do
-        user.ops_manager? ||
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
@@ -175,8 +170,7 @@ class UserAbility
       end
 
       can :create, QuestionnaireResponse do |questionnaire_response|
-        user.ops_manager? ||
-        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+        user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
       end
 
       can :view, :machine_refloats_page do
@@ -425,8 +419,7 @@ class UserAbility
       end
 
       can :view, :security_shift_request_reviews do
-        user.ops_manager? ||
-          user.has_effective_access_level?(AccessLevel.admin_access_level)
+        user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
       end
 
       can [:create], SecurityShiftRequest do |security_shift_request|
@@ -434,8 +427,7 @@ class UserAbility
       end
 
       can [:accept, :edit, :undo], SecurityShiftRequest do |security_shift_request|
-        user.ops_manager? ||
-          user.has_effective_access_level?(AccessLevel.admin_access_level)
+          user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
       end
 
       can [:assign], SecurityShiftRequest do |security_shift_request|
@@ -451,7 +443,6 @@ class UserAbility
       end
 
       can :view, :venue_health_checks_page do
-        user.ops_manager? ||
         user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
@@ -558,9 +549,8 @@ class UserAbility
 
   def can_view_holidays_requests_page?(user)
     user.payroll_manager? ||
-      user.ops_manager? ||
       user.food_ops_manager? ||
-      user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+      user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
   end
 
   def can_view_holiday?(user, holiday)
@@ -612,8 +602,7 @@ class UserAbility
 
   def can_manage_venue?(user, venue)
     raise 'Attempt to compare nil venue' unless venue.present?
-    user.ops_manager? ||
-    user.has_effective_access_level?(AccessLevel.area_manager_access_level) ||
+    user.has_effective_access_level?(AccessLevel.ops_manager_access_level) ||
     (
       user.has_effective_access_level?(AccessLevel.manager_access_level) &&
         user.venues.include?(venue)
