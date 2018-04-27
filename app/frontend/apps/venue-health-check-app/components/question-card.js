@@ -56,12 +56,11 @@ export default class QuestionCard extends React.Component {
       questionnaireQuestionId: this.props.currentQuestion.id,
       note: this.state.noteValue
     });
-    
-    result.then(resp => {
-      if (resp) {
-        this.toggleDisplayNote();
-      }
-    });
+
+
+    if (result) {
+      this.toggleDisplayNote();
+    }
   }
 
   updateNoteValue = (event) => {

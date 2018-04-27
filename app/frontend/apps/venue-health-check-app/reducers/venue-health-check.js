@@ -31,10 +31,10 @@ const venueHealthCheck = (state = initialState, action) => {
   let updatedAnswer;
   let id;
   let wrongFiles;
-  
+
   switch (action.type) {
   case constants.INITIAL_LOAD:
-    let questions = action.initialData.questions.slice(0, 5);
+    let questions = action.initialData.questions;
 
     return state.set(
       'questionnaire', action.initialData.questionnaire

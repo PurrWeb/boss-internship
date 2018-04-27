@@ -61,7 +61,9 @@ export default class AnswersTable extends React.Component {
 
     return this.state.categoryQuestions.map(question => {
       answer = this.getAnswerForQuestion(question);
-
+      if (!answer) {
+        return null;
+      }
       if (question.type !== 'ScaledQuestion') {
         if (answer.passed) {
           statusIcon = 'boss-results__cell_status_approved';

@@ -1,5 +1,5 @@
 import constants from '../constants';
-import { CALL_API } from 'redux-api-middleware';
+import { RSAA } from 'redux-api-middleware';
 import humps from 'humps';
 import confirm from '~/lib/confirm-utils';
 
@@ -52,9 +52,8 @@ export function saveAnswers(questionnaireId, answers, venueId) {
       questionnaire_answers_attributes: humps.decamelizeKeys(answers)
     }
   }
-
   return {
-    [CALL_API]: {
+    [RSAA]: {
       endpoint: `/api/v1/questionnaires/${questionnaireId}/questionnaire_responses`,
       method: 'POST',
       types: [
