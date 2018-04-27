@@ -3,7 +3,6 @@ import oFetch from 'o-fetch';
 import axios from 'axios';
 
 import Skycons from '~/components/skycons';
-import '../styles.css';
 
 const CURRENT_DAY_LABEL = 'Current';
 const WEEK_DAY_LABELS = [
