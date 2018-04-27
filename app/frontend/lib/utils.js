@@ -4,6 +4,7 @@ import _ from "underscore"
 import { fromJS, Map, List, Set } from 'immutable';
 import numeral from 'numeral';
 import safeMoment from '~/lib/safe-moment';
+import oFetch from 'o-fetch';
 
 numeral.register('locale', 'en-gb', {
   delimiters: {
@@ -46,6 +47,12 @@ var utils =  {
         : amount > 0
           ? positive
           : byDefault;
+    },
+    getDaysCountFromInterval(uiStartDate, uiEndDate) {
+      const mStartDate = safeMoment.uiDateParse(uiStartDate);
+      const mEndDate = safeMoment.uiDateParse(uiEndDate);
+
+      return mEndDate.diff(mStartDate, 'days') + 1;
     },
     parseHTML(html) {
       const div = document.createElement("div");
@@ -395,6 +402,21 @@ var utils =  {
         return +(numArray[0] + "e" + (numArray[1] ? (+numArray[1] + precision) : precision));
       };
       return shift(Math.round(shift(number, precision, false)), precision, true);
+    },
+    formatDateForHoliday(holiday) {
+      let startDate = safeMoment.uiDateParse(oFetch(holiday, 'start_date'));
+      let endDate = safeMoment.uiDateParse(oFetch(holiday, 'end_date'));
+      let dates;
+
+      if (startDate === endDate) {
+        dates = startDate.format('ddd DD MMM YYYY');
+      } else if (startDate.format('YYYY') === endDate.format('YYYY')) {
+        dates = startDate.format('ddd DD MMM YYYY') + ' - ' + endDate.format('ddd DD MMM');
+      } else {
+        dates = startDate.format('ddd DD MMM YYYY') + ' - ' + endDate.format('ddd DD MMM YYYY');
+      }
+
+    return dates;
     }
 }
 
