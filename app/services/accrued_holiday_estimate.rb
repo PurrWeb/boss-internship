@@ -45,7 +45,8 @@ class AccruedHolidayEstimate
   end
 
   def scaling_factor
-    # This is as specified by client not sure what these numbers represent
+    # 12% is the number of hours accrued then we convert to days
+    # based on an 8 hours shift
     0.12 / 8
   end
 end
