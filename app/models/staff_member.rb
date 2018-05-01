@@ -121,6 +121,14 @@ class StaffMember < ActiveRecord::Base
 
   delegate :current_state, to: :state_machine
 
+  def clear_update_avatar!
+    update_attributes!(
+      marked_retake_avatar_at: nil,
+      marked_retake_avatar_user: nil,
+      override_retake_avatar_restrictions: false
+    )
+  end
+
   def expire_security_app_tokens!
     SecurityAppApiAccessToken.revoke!(user: self)
   end
