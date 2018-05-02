@@ -15,27 +15,17 @@ export default class QuestionActions extends React.Component {
   }
 
   renderNote() {
-    if (this.props.displayNote) {
+    if (!this.props.displayNote) {
+      let answer = this.props.answers.find(answer => answer.questionnaireQuestionId === this.props.currentQuestion.id);
+
       return (
         <div className="boss-question__helpers">
           <a
-            href="#"
-            className="boss-question__helpers-link boss-question__helpers-link_role_cancel"
-            onClick={ this.props.toggleDisplayNote }
-          >
-          Cancel
-          </a>
-        </div>
-      )
-    } else {
-      return (
-        <div className="boss-question__helpers">
-          <a
-            href="#"
+            href="javascript:;"
             className="boss-question__helpers-link boss-question__helpers-link_role_add"
             onClick={ this.props.toggleDisplayNote }
           >
-            Add note
+            {answer && !!answer.note ? 'Edit note' : 'Add note' }
           </a>
         </div>
       )

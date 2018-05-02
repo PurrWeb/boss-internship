@@ -14,7 +14,7 @@ export default class CollapsibleCard extends React.Component {
     };
   }
 
-  handleClick(e) {
+  handleClick = (e) => {
     e.preventDefault();
 
     let $content = $(e.target).closest('.boss-board').find('.boss-board__content');
@@ -36,11 +36,10 @@ export default class CollapsibleCard extends React.Component {
       currentAnswer = this.props.answers.find(answer => {
         return answer.questionnaireQuestionId == question.id;
       });
-
       cardProps = Object.assign({
         currentQuestion: question,
         currentAnswer: currentAnswer,
-        questionNumber: questionNumber
+        questionNumber: questionNumber,
       }, this.props);
 
       questionNumber = questionNumber + 1;
@@ -75,7 +74,7 @@ export default class CollapsibleCard extends React.Component {
             <a
               className={ `boss-board__switch boss-board__switch_type_angle ${iconStateClass}` }
               href="#"
-              onClick={ this.handleClick.bind(this) }
+              onClick={ this.handleClick }
             ></a>
           </div>
         </header>

@@ -1,6 +1,7 @@
 import constants from '../constants';
-import { CALL_API } from 'redux-api-middleware';
+import { RSAA } from 'redux-api-middleware';
 import humps from 'humps';
+import confirm from '~/lib/confirm-utils';
 
 export function setAnswer(answerParams) {
   return {
@@ -14,6 +15,25 @@ export function setUpload(uploadParams) {
     type: constants.SET_UPLOAD,
     uploadParams
   };
+}
+
+export const checkAnswer = (answer) => (dispatch, getState) => {
+  const uploads = getState().venueHealthCheck.get('uploads');
+  const wrongFiles = getState().venueHealthCheck.get('wrongFiles');
+
+  const hasInvalidUploads = uploads.filter(upload => {
+    return upload.questionnaireQuestionId === answer.questionnaireQuestionId && upload.id === undefined;
+  }).length > 0;
+  if (hasInvalidUploads) {
+    confirm('You have invalid files, please delete them', {
+      title: 'WARNING',
+      actionButtonText: 'Ok',
+    });
+    return false;
+  } else {
+    dispatch(setAnswer({...answer}));
+    return true;
+  }
 }
 
 export function deleteUpload(upload) {
@@ -32,9 +52,8 @@ export function saveAnswers(questionnaireId, answers, venueId) {
       questionnaire_answers_attributes: humps.decamelizeKeys(answers)
     }
   }
-
   return {
-    [CALL_API]: {
+    [RSAA]: {
       endpoint: `/api/v1/questionnaires/${questionnaireId}/questionnaire_responses`,
       method: 'POST',
       types: [

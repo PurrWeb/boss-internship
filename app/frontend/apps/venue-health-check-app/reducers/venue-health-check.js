@@ -16,6 +16,7 @@ const initialState = Immutable.Map({
   questionCount: 0,
   answerCount: 0,
   uploadCount: 0,
+  wrongFiles: [],
   frontend: {
     loading: true,
     saving: false,
@@ -28,13 +29,17 @@ const venueHealthCheck = (state = initialState, action) => {
   let answers;
   let existingAnswer;
   let updatedAnswer;
+  let id;
+  let wrongFiles;
 
   switch (action.type) {
   case constants.INITIAL_LOAD:
+    let questions = action.initialData.questions;
+
     return state.set(
       'questionnaire', action.initialData.questionnaire
     ).set(
-      'questions', action.initialData.questions
+      'questions', questions
     ).set(
       'categories', action.initialData.categories
     ).set(
@@ -49,7 +54,7 @@ const venueHealthCheck = (state = initialState, action) => {
     ).set(
       'currentVenue', action.initialData.currentVenue
     ).set(
-      'questionCount', action.initialData.questions.length
+      'questionCount', questions.length
     ).set(
       'frontend', Object.assign({}, state.get('frontend'), { loading: true })
     );
@@ -124,7 +129,19 @@ const venueHealthCheck = (state = initialState, action) => {
       }
     }
 
-    return state.set('uploads', uploads).set('answers', answers).set('uploadCount', uploads.length);
+    let wrongFiles = state.get('wrongFiles');
+    if (action.uploadParams.id === undefined) {
+      if (!wrongFiles.includes(action.uploadParams.questionnaireQuestionId)) {
+        wrongFiles = wrongFiles.concat([action.uploadParams.questionnaireQuestionId]);
+      }
+    }
+
+    return state
+      .set('uploads', uploads)
+      .set('answers', answers)
+      .set('uploadCount', uploads.length)
+      .set('wrongFiles', wrongFiles)
+
 
   case constants.REMOVE_UPLOAD:
     let upload = action.upload;
@@ -139,10 +156,27 @@ const venueHealthCheck = (state = initialState, action) => {
     });
 
     _.remove(uploads, function(u) {
-      return (u.id == upload.id && u.id !== undefined) || u.uuid == upload.uuid;
+      return (u.id === upload.id && u.id !== undefined) || (upload.uuid !== undefined && u.uuid === upload.uuid);
     });
 
-    return state.set('answers', answers).set('uploads', uploads).set('uploadCount', uploads.length);
+    wrongFiles = state.get('wrongFiles');
+
+    wrongFiles = wrongFiles.reduce((sum, current) => {
+      let wrongUploads = state.get('uploads').filter(item => item.questionnaireQuestionId === upload.questionnaireQuestionId && item.id === undefined);
+      if (current !== upload.questionnaireQuestionId) {
+        return sum.concat([current]);
+      }
+      if (wrongUploads.length !== 0) {
+        return sum.concat([current] );
+      }
+      return sum;
+    }, []);
+
+    return state
+      .set('answers', answers)
+      .set('uploads', uploads)
+      .set('uploadCount', uploads.length)
+      .set('wrongFiles', wrongFiles)
 
   case constants.SAVE_ANSWERS_REQUEST:
     return state.set(
