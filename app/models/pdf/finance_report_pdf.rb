@@ -79,7 +79,7 @@ class FinanceReportPDF
         # Set minimum width
         cell.width = [cell.width, 100].max
         # Set maximum width
-        cell.width = [cell.width, 120].min
+        cell.width = [cell.width, 130].min
       end
 
       (0..row_length).each do |index|
@@ -135,6 +135,7 @@ class FinanceReportPDF
     heading << ''
     heading << '' if display_totals
     heading << '' if display_totals
+    heading << '' if display_totals
     heading << ''
     heading
   end
@@ -148,6 +149,7 @@ class FinanceReportPDF
     end
     heading << '<b>Total Hours</b>'
     heading << '<b>Owed Hours</b>'
+    heading << '<b>Accessories</b>' if display_totals
     heading << '<b>Pay Rate</b>' if display_totals
     heading << '<b>Total</b>' if display_totals
     heading << '<b>Paid Holiday (Days)</b>'
@@ -182,6 +184,7 @@ class FinanceReportPDF
       strip_insignificant_zeros: true
     )
     if display_totals
+      columns << number_to_currency(report.accessories_cents / 100.0, unit: '£')
       columns << report.pay_rate_description
       columns << "<b>#{number_to_currency(report.total_cents / 100.0, unit: '£')}</b>"
     end
