@@ -22,6 +22,10 @@ class ReviveStaffMember
       # Sage ID changes when restarting a staff member
       staff_member.sage_id = nil
 
+      staff_member.marked_retake_avatar = true
+      staff_member.marked_retake_avatar_user = User.first #system user
+      staff_member.marked_retake_avatar_at = now
+
       StaffMemberPostAssignAccessiblePayRateValidation.new(requester: requester).call(staff_member: staff_member)
 
       result = staff_member.save && starts_at_changed
