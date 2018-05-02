@@ -9,7 +9,7 @@ export const addVenueAction = createAction(types.ADD_VENUE);
 export const editVenueAction = createAction(types.EDIT_VENUE);
 
 export const addVenue = params => (dispatch, getState) => {
-  const { name, address } = params;
+  const { name, address, lat, lng } = params;
   // addVenueRequest
   return new Promise((res, rej) => {
     setTimeout(
@@ -27,7 +27,7 @@ export const addVenue = params => (dispatch, getState) => {
       1000,
     );
   }).then(response => {
-    dispatch(addVenueAction({ name, address, id: response.data.id }));
+    dispatch(addVenueAction({ name, address, lat, lng, id: response.data.id }));
   });
 };
 

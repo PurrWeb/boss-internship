@@ -19,16 +19,20 @@ const venues = handleActions(
       const id = oFetch(action, 'payload.id');
       const name = oFetch(action, 'payload.name');
       const address = oFetch(action, 'payload.address');
+      const lat = oFetch(action, 'payload.lat');
+      const lng = oFetch(action, 'payload.lng');
 
-      return state.push(fromJS.Venue({ id, name, address }));
+      return state.push(fromJS.Venue({ id, name, address, lat, lng }));
     },
     [types.EDIT_VENUE]: (state, action) => {
       const id = oFetch(action, 'payload.id');
       const name = oFetch(action, 'payload.name');
       const address = oFetch(action, 'payload.address');
+      const lat = oFetch(action, 'payload.lat');
+      const lng = oFetch(action, 'payload.lng');
 
       const venueIndex = state.findIndex(venue => venue.id === id);
-      return state.update(venueIndex, venue => fromJS.Venue({ id, name, address }));
+      return state.update(venueIndex, venue => fromJS.Venue({ id, name, address, lat, lng }));
     },
   },
   initialGlobalState,

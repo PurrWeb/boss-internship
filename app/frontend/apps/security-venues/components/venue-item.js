@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import { Venue } from '../models';
 import oFetch from 'o-fetch';
 
+
 class VenueItem extends Component {
   render() {
     const venue = oFetch(this.props, 'venue');
     const onEditClick = oFetch(this.props, 'onEditClick');
     const name = oFetch(venue, 'name');
     const address = oFetch(venue, 'address');
+    const lat = oFetch(venue, 'lat');
+    const lng = oFetch(venue, 'lng');
     return (
       <div className="boss-check boss-check_role_board boss-check_page_security-venues">
         <div className="boss-check__row">
@@ -20,7 +23,7 @@ class VenueItem extends Component {
           <div className="boss-check__cell">
             <p className="boss-check__text boss-check__text_role_location">{address}</p>
             <a
-              href={`https://www.google.com/maps/place/${encodeURIComponent(address)}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`}
               target="_blank"
               rel="noopener noreferrer"
               className="boss-button boss-button_role_view-details-light boss-button_type_extra-small boss-check__button  boss-check__button_position_below"

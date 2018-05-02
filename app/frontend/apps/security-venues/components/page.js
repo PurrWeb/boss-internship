@@ -25,8 +25,8 @@ class Page extends Component {
   };
 
   handleOpenEditVenueModal = venue => {
-    const { id, name, address } = venue;
-    const initialValues = { id, name, address };
+    const { id, name, address, lat, lng } = venue;
+    const initialValues = { id, name, address, lat, lng };
     openContentModal({
       submit: this.handleEditVenue,
       config: { title: `Edit ${name}` },

@@ -4,6 +4,8 @@ export const Venue = Immutable.Record({
   id: undefined,
   name: undefined,
   address: undefined,
+  lat: undefined,
+  lng: undefined,
 });
 
 export const knownRecordTypes = new Immutable.Map({
