@@ -1,5 +1,6 @@
 import React from 'react';
 import oFetch from 'o-fetch';
+import { appRoutes } from "~/lib/routes";
 import PaymentUploadPageBoard from './payment-upload-page-board';
 
 class PaymentUploadProcessReport extends React.Component {
@@ -68,7 +69,9 @@ class PaymentUploadProcessReport extends React.Component {
             })}
         </ul>
         <div className="boss-user-summary__footer">
-          <button className="boss-button boss-button_role_view-details-light boss-button_type_extra-small">View Details</button>
+          <a target="_blank" href={appRoutes.staffMemberPayments(staffMemberId)} >
+            <button className="boss-button boss-button_role_view-details-light boss-button_type_extra-small">View Details</button>
+          </a>
         </div>
       </div>
     </div>;

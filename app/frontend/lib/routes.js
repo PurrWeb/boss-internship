@@ -154,6 +154,12 @@ export const appRoutes = {
         }
         return "/staff_members/" + staffMemberId + "/hours_overview/" + dDate;
     },
+    staffMemberPayments: function(staffMemberId) {
+      if (staffMemberId === undefined) {
+        throw new Error("No staff member id supplied to appRoutes.staffMember")
+      }
+      return `/staff_members/${staffMemberId}/payments`
+    },
     staffMemberAccessories: function(staffMemberId){
         if (staffMemberId === undefined) {
             throw new Error("No staff member id supplied to appRoutes.staffMemberAccessories")
