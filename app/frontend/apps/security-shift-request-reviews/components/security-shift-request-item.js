@@ -74,7 +74,6 @@ class SecurityShiftRequestItem extends Component {
   };
 
   handleOpenEditSecurityShiftRequest = editRequestFormInitialValues => {
-    console.log(editRequestFormInitialValues);
     openContentModal({
       submit: this.handleEditRequest,
       config: { title: 'Edit Shift Request' },
@@ -138,7 +137,6 @@ class SecurityShiftRequestItem extends Component {
       id,
       venueId,
     };
-    console.log('status: ', status);
     return (
       <div className="boss-table__row">
         <div className="boss-table__cell">
