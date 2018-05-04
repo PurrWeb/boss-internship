@@ -236,16 +236,28 @@ class StaffMembersController < ApplicationController
 
     raise ActiveRecord::RecordNotFound.new unless staff_member.present?
 
+    if !payment_index_params_present?
+      return redirect_to(payments_staff_member_path(payment_index_params(staff_member)))
+    end
+
+    payments = StaffMemberPaymentsIndexQuery.new(
+      staff_member: staff_member,
+      start_date: payment_filter_start_date_from_params,
+      end_date: payment_filter_end_date_from_params,
+      status_filter: payment_filter_status_filter_from_params
+    ).
+      all.
+      includes([:created_by_user, staff_member: :name])
+
     profile_dashboard_data = GetStaffMemberProfileDashboardData.new(staff_member: staff_member, requester: current_user).call
 
-    payments = Payment.enabled.where(staff_member: staff_member).
-      includes([:created_by_user])
 
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     if can? :edit, staff_member
       render locals: {
         payments: payments,
+        payment_filter: payment_filter_values,
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
         app_download_link_data: profile_dashboard_data.app_download_link_data,
         access_token: access_token,
@@ -344,6 +356,51 @@ class StaffMembersController < ApplicationController
   end
 
   private
+  def payment_index_params_present?
+    payment_filter_start_date_from_params.present? && payment_filter_end_date_from_params.present? && payment_filter_status_filter_from_params.present?
+  end
+
+  def payment_index_params(staff_member)
+    {
+      staff_member_id: staff_member.id,
+      start_date: payment_filter_start_date_from_params || UIRotaDate.format(default_payment_filter_start_date),
+      end_date: payment_filter_end_date_from_params || UIRotaDate.format(default_payment_filter_end_date),
+      status_filter: payment_filter_status_filter_from_params || default_payment_filter_status_filter
+    }
+  end
+
+  def payment_filter_values
+    {
+      start_date: payment_filter_start_date_from_params,
+      end_date: payment_filter_end_date_from_params,
+      status_filter: payment_filter_status_filter_from_params
+    }
+  end
+
+  def payment_filter_start_date_from_params
+    UIRotaDate.safe_parse(params[:start_date])
+  end
+
+  def payment_filter_end_date_from_params
+    UIRotaDate.safe_parse(params[:end_date])
+  end
+
+  def payment_filter_status_filter_from_params
+    params[:status_filter] if params[:status_filter].present? && StaffMemberPaymentPageFilter::STATUS_FILTER_VALUES.include?(params[:status_filter])
+  end
+
+  def default_payment_filter_start_date
+    current_tax_year.start_date
+  end
+
+  def default_payment_filter_end_date
+    current_tax_year.end_date
+  end
+
+  def default_payment_filter_status_filter
+    StaffMemberPaymentPageFilter::SHOW_ALL_STATUS_FILTER_VALUE
+  end
+
   def holiday_start_date_from_params
     UIRotaDate.parse_if_present(params['start_date'])
   end
@@ -354,5 +411,9 @@ class StaffMembersController < ApplicationController
 
   def get_app_download_link_data(staff_member)
     GetAppDownloadLinkData.new(staff_member: staff_member).call
+  end
+
+  def current_tax_year
+    @current_tax_year ||= TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
   end
 end

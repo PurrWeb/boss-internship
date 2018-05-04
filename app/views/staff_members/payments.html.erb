@@ -1,7 +1,6 @@
 <script>
   window.boss = window.boss || {};
-  window.boss.store = window.boss.store || {};
-  window.boss.store.accessToken = "<%= access_token %>";
+  window.boss.accessToken = "<%= access_token %>";
 </script>
 
  <%= react_component(
@@ -11,6 +10,11 @@
         payments,
         serializer: Api::V1::StaffMemberProfile::PaymentSerializer,
       ),
+      paymentFilter: {
+        sStartDate: UIRotaDate.format(payment_filter.fetch(:start_date)),
+        sEndDate: UIRotaDate.format(payment_filter.fetch(:end_date)),
+        statusFilter: payment_filter.fetch(:status_filter)
+      },
       staffMember: staff_member,
       accessToken: access_token.token,
       staffTypes: ActiveModel::Serializer::CollectionSerializer.new(

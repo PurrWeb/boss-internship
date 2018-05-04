@@ -154,11 +154,23 @@ export const appRoutes = {
         }
         return "/staff_members/" + staffMemberId + "/hours_overview/" + dDate;
     },
-    staffMemberPayments: function(staffMemberId) {
+    staffMemberPayments: function(staffMemberId, queryStringParams) {
       if (staffMemberId === undefined) {
         throw new Error("No staff member id supplied to appRoutes.staffMember")
       }
-      return `/staff_members/${staffMemberId}/payments`
+      const baseUrl = `/staff_members/${staffMemberId}/payments`;
+
+      if((typeof queryStringParams === undefined) || _.isEmpty(queryStringParams)) {
+        return baseUrl;
+      } else {
+        let queryString = '?';
+        let paramIndex = 0;
+        for( let key in queryStringParams) {
+          queryString = `${queryString}${paramIndex > 0 ? '&' : ''}${key}=${queryStringParams[key]}`;
+          paramIndex = paramIndex + 1;
+        }
+        return baseUrl + queryString;
+      }
     },
     staffMemberAccessories: function(staffMemberId){
         if (staffMemberId === undefined) {
@@ -337,6 +349,27 @@ const apiRoutes = {
             return "/questionnaires/" + questionnaireId + "/responses";
         },
         method: 'POST'
+    },
+    staffMemberPayments: {
+      getPath: function(staffMemberId, queryStringParams) {
+        if (staffMemberId === undefined) {
+          throw new Error("No staff member id supplied to appRoutes.staffMember")
+        }
+        const baseUrl = `/api/v1/staff_members/${staffMemberId}/payments`;
+
+        if((typeof queryStringParams === 'undefined') || _.isEmpty(queryStringParams)) {
+          return baseUrl;
+        } else {
+          let queryString = '?';
+          let paramIndex = 0;
+          for( let key in queryStringParams) {
+            queryString = `${queryString}${paramIndex > 0 ? '&' : ''}${key}=${queryStringParams[key]}`;
+            paramIndex = paramIndex + 1;
+          }
+          return baseUrl + queryString;
+        }
+      },
+      method: 'GET'
     },
     addShift: {
         getPath: function(venueId, date){

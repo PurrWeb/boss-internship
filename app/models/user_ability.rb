@@ -556,6 +556,10 @@ class UserAbility
         user.payroll_manager? ||
           user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
+
+      can :view_payments, StaffMember do |staff_member|
+        can_edit_staff_member?(user, staff_member)
+      end
     end
 
     #
