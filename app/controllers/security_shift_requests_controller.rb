@@ -18,7 +18,7 @@ class SecurityShiftRequestsController < ApplicationController
                     WebApiAccessToken.new(user: current_user).persist!
 
     security_shift_requests = InRangeQuery.new({
-                                relation: venue_from_params.security_shift_requests,
+                                relation: venue_from_params.security_shift_requests.includes([:created_shift, :creator]),
                                 start_value: week.start_date,
                                 end_value: week.end_date,
                               }).all
