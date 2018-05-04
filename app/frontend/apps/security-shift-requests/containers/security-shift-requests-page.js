@@ -3,11 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import SecurityShiftRequestsPage from '../components/security-shift-requests-page';
-import {
-  getPendingSecurityShiftRequests,
-  getCompletedSecurityShiftRequests,
-} from '../selectors';
-import { addSecurityShiftRequest } from '../redux/actions';
+import { getPendingSecurityShiftRequests, getCompletedSecurityShiftRequests } from '../selectors';
+import { addSecurityShiftRequest, editSecurityShiftRequest, deleteSecurityShiftRequest } from '../redux/actions';
 
 const mapStateToProps = state => {
   return {
@@ -22,8 +19,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   addSecurityShiftRequest,
+  editSecurityShiftRequest,
+  deleteSecurityShiftRequest,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  SecurityShiftRequestsPage,
-);
+export default connect(mapStateToProps, mapDispatchToProps)(SecurityShiftRequestsPage);

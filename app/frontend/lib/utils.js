@@ -417,7 +417,28 @@ var utils =  {
       }
 
     return dates;
-    }
+    },
+    intervalDatesFormat(startsAt, endsAt) {
+      const startsFormat = 'ddd DD/MM/YYYY HH:mm';
+      const endsFormat = 'HH:mm';
+      const mStartsAt = safeMoment.iso8601Parse(startsAt);
+      const mEndsAt = safeMoment.iso8601Parse(endsAt);
+      return `${mStartsAt.format(startsFormat)} - ${mEndsAt.format(endsFormat)}`;
+    },
+    getDiffFromRotaDayInMinutes(startDateTimeISO, endDateTimeISO) {
+      const beginningOfRotaDay = safeMoment
+        .iso8601Parse(startDateTimeISO)
+        .hours(8)
+        .minutes(0)
+        .seconds(0)
+        .milliseconds(0);
+      const mStartsAt = safeMoment.iso8601Parse(startDateTimeISO);
+      const mEndsAt = safeMoment.iso8601Parse(endDateTimeISO);
+      const startMinutes = safeMoment.iso8601Parse(mStartsAt).diff(beginningOfRotaDay, 'minutes');
+      const endMinutes = safeMoment.iso8601Parse(mEndsAt).diff(beginningOfRotaDay, 'minutes');
+
+      return { startMinutes, endMinutes };
+    },
 }
 
 export default utils;

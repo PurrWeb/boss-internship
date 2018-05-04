@@ -6,7 +6,8 @@ class Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer < ActiveMod
     :endsAt,
     :createdShiftId,
     :status,
-    :note
+    :note,
+    :rejectReason
 
   def venueId
     object.venue_id
@@ -26,5 +27,9 @@ class Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer < ActiveMod
 
   def status
     object.current_state
+  end
+
+  def rejectReason
+    object.reject_reason
   end
 end

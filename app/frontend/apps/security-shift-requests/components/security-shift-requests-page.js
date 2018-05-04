@@ -12,13 +12,51 @@ import AddSecurityShiftRequest from './add-security-shift-request';
 import SecurityShiftRequestCard from '~/components/security-shift-requests/security-shift-request-card';
 import SecurityShiftRequestList from './security-shift-request-list';
 import SecurityShiftRequestItem from './security-shift-request-item';
+import EditSecurityShiftRequest from './edit-security-shift-request';
+import utils from '~/lib/utils';
 
 class SecurityShiftRequestsPage extends Component {
+  handleEditRequest = (hideModal, values) => {
+    const editSecurityShiftRequest = oFetch(this.props, 'editSecurityShiftRequest');
+    return editSecurityShiftRequest(values).then(response => {
+      hideModal();
+    });
+  };
+
+  handleOpenEditSecurityShiftRequest = securityShiftRequest => {
+    const id = oFetch(securityShiftRequest, 'id');
+    const startsAt = oFetch(securityShiftRequest, 'startsAt');
+    const endsAt = oFetch(securityShiftRequest, 'endsAt');
+    const status = oFetch(securityShiftRequest, 'status');
+    const venueId = oFetch(securityShiftRequest, 'venueId');
+    const note = oFetch(securityShiftRequest, 'note');
+    const shiftMinutes = utils.getDiffFromRotaDayInMinutes(startsAt, endsAt);
+    const editRequestFormInitialValues = {
+      startsAt: oFetch(shiftMinutes, 'startMinutes'),
+      endsAt: oFetch(shiftMinutes, 'endMinutes'),
+      venueId,
+      note,
+      date: safeMoment.iso8601Parse(startsAt),
+      id,
+    };
+    openContentModal({
+      submit: this.handleEditRequest,
+      config: { title: 'Edit Shift Request' },
+      props: { editRequestFormInitialValues },
+    })(EditSecurityShiftRequest);
+  };
+
   handleDateChage = ({ startDate }) => {
     location.href = appRoutes.securityShiftRequests({
       startDate,
     });
   };
+
+  handleDeleteSecurityShiftRequest = id => {
+    const deleteSecurityShiftRequestAction = oFetch(this.props, 'deleteSecurityShiftRequest');
+
+    return deleteSecurityShiftRequestAction(id);
+  }
 
   handleAddNewRequest = (hideModal, values) => {
     return this.props.addSecurityShiftRequest(values).then(response => {
@@ -66,7 +104,13 @@ class SecurityShiftRequestsPage extends Component {
             <SecurityShiftRequestList
               securityShiftRequests={pendingSecurityShiftRequests}
               itemRenderer={securityShiftRequest => {
-                return <SecurityShiftRequestItem securityShiftRequest={securityShiftRequest} />;
+                return (
+                  <SecurityShiftRequestItem
+                    onOpenEditSecurityShiftRequest={() => this.handleOpenEditSecurityShiftRequest(securityShiftRequest)}
+                    onDeleteSecurityShiftRequest={() => this.handleDeleteSecurityShiftRequest(oFetch(securityShiftRequest, 'id'))}
+                    securityShiftRequest={securityShiftRequest}
+                  />
+                );
               }}
             />
           </SecurityShiftRequestCard>
@@ -75,7 +119,14 @@ class SecurityShiftRequestsPage extends Component {
               isCompleted
               securityShiftRequests={completedSecurityShiftRequests}
               itemRenderer={securityShiftRequest => {
-                return <SecurityShiftRequestItem isCompleted securityShiftRequest={securityShiftRequest} />;
+                return (
+                  <SecurityShiftRequestItem
+                    isCompleted
+                    onOpenEditSecurityShiftRequest={() => this.handleOpenEditSecurityShiftRequest(securityShiftRequest)}
+                    onDeleteSecurityShiftRequest={() => this.handleDeleteSecurityShiftRequest(oFetch(securityShiftRequest, 'id'))}
+                    securityShiftRequest={securityShiftRequest}
+                  />
+                );
               }}
             />
           </SecurityShiftRequestCard>

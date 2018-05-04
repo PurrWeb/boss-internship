@@ -43,9 +43,7 @@ class RequestsItem extends PureComponent {
         <div className="boss-check__header">
           <div className="boss-check__header-group">
             <h3 className="boss-check__title boss-check__title_role_time">
-              {`${moment(startsAt).format(utils.commonDateFormatTimeOnly())} - ${moment(endsAt).format(
-                utils.humanDateFormatWithDayOfWeek(),
-              )}`}
+              {utils.intervalDatesFormat(startsAt, endsAt)}
             </h3>
             <div className="boss-check__header-meta">
               <div className="boss-check__header-meta-item">

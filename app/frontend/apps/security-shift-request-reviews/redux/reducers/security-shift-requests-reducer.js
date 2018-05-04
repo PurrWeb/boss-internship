@@ -14,13 +14,14 @@ const securityShiftRequests = handleActions(
       return Immutable.fromJS(securityShiftRequests);
     },
     [types.UPDATE_SECURITY_SHIFT_REQUEST]: (state, action) => {
-      const id = oFetch(action, 'payload.id');
-      const note = oFetch(action, 'payload.note');
-      const venueId = oFetch(action, 'payload.venueId');
-      const startsAt = oFetch(action, 'payload.startsAt');
-      const endsAt = oFetch(action, 'payload.endsAt');
-      const createdShiftId = oFetch(action, 'payload.createdShiftId');
-      const status = oFetch(action, 'payload.status');
+      const updatedSecurityShiftRequest = oFetch(action, 'payload.securityShiftRequest');
+      const id = oFetch(updatedSecurityShiftRequest, 'id');
+      const note = oFetch(updatedSecurityShiftRequest, 'note');
+      const venueId = oFetch(updatedSecurityShiftRequest, 'venueId');
+      const startsAt = oFetch(updatedSecurityShiftRequest, 'startsAt');
+      const endsAt = oFetch(updatedSecurityShiftRequest, 'endsAt');
+      const createdShiftId = oFetch(updatedSecurityShiftRequest, 'createdShiftId');
+      const status = oFetch(updatedSecurityShiftRequest, 'status');
 
       const shiftRequestIndex = state.findIndex(
         securityShiftRequest => securityShiftRequest.get('id') === id,
