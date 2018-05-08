@@ -41,6 +41,7 @@ class SecurityShiftRequestList extends Component {
                 <div className="boss-table__cell boss-table__cell_role_header">Rotaed Shift</div>
               )}
               <div className="boss-table__cell boss-table__cell_role_header">Status</div>
+              <div className="boss-table__cell boss-table__cell_role_header">Actions</div>
             </div>
             {this.renderItems(securityShiftRequests)}
           </div>

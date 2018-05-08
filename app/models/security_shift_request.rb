@@ -3,6 +3,7 @@ class SecurityShiftRequest < ActiveRecord::Base
 
   belongs_to :created_shift, class_name: "RotaShift"
   belongs_to :creator, class_name: "User"
+  belongs_to :deleted_by, class_name: "User"
   belongs_to :venue
   has_many :security_shift_request_transitions
   validates_associated :created_shift
@@ -14,6 +15,7 @@ class SecurityShiftRequest < ActiveRecord::Base
   validates :ends_at, presence: true
   validates :created_shift, presence: true, if: :assigned?
   validates :reject_reason, presence: true, if: :rejected?
+  validates :deleted_by, presence: true, if: :deleted?
   validate :times_in_correct_order
   validate :time_not_in_past
   validate :times_in_fifteen_minute_increments
@@ -47,6 +49,22 @@ class SecurityShiftRequest < ActiveRecord::Base
 
   def rejected?
     current_state == 'rejected'
+  end
+
+  def deleted?
+    current_state == 'deleted'
+  end
+
+  def deletable?(requester:)
+    can_transition_to?(:deleted) && creator == requester
+  end
+
+  def acceptable?
+    can_transition_to?(:accepted)
+  end
+
+  def rejectable?
+    can_transition_to?(:rejected)
   end
 
   delegate \

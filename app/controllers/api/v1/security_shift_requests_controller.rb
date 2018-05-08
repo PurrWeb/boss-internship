@@ -11,8 +11,39 @@ module Api
 
         if result.success?
           render(
-            json: result.security_shift_request,
-            serializer: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer,
+            json: {
+              securityShiftRequest: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer.new(
+                result.security_shift_request,
+              ),
+              permissions: SecurityShiftRequestsPermissions
+                .new(current_user: current_user)
+                .shift_request(request: result.security_shift_request)
+            },
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
+      end
+
+      def destroy
+        security_shift_request = security_request_from_params
+
+        result = SecurityShiftRequestApiService.new(
+          requester: current_user,
+          security_shift_request: security_shift_request,
+        ).destroy
+
+        if result.success?
+          render(
+            json: {
+              securityShiftRequest: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer.new(
+                result.security_shift_request,
+              ),
+              permissions: SecurityShiftRequestsPermissions
+                .new(current_user: current_user)
+                .shift_request(request: result.security_shift_request)
+            },
             status: 200
           )
         else
@@ -30,8 +61,14 @@ module Api
 
         if result.success?
           render(
-            json: result.security_shift_request,
-            serializer: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer,
+            json: {
+              securityShiftRequest: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer.new(
+                result.security_shift_request,
+              ),
+              permissions: SecurityShiftRequestsPermissions
+                .new(current_user: current_user)
+                .shift_request(request: result.security_shift_request)
+            },
             status: 200
           )
         else
@@ -49,8 +86,14 @@ module Api
 
         if result.success?
           render(
-            json: result.security_shift_request,
-            serializer: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer,
+            json: {
+              securityShiftRequest: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer.new(
+                result.security_shift_request,
+              ),
+              permissions: SecurityShiftRequestsPermissions
+                .new(current_user: current_user)
+                .shift_request(request: result.security_shift_request)
+            },
             status: 200
           )
         else
@@ -68,8 +111,14 @@ module Api
 
         if result.success?
           render(
-            json: result.security_shift_request,
-            serializer: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer,
+            json: {
+              securityShiftRequest: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer.new(
+                result.security_shift_request,
+              ),
+              permissions: SecurityShiftRequestsPermissions
+                .new(current_user: current_user)
+                .shift_request(request: result.security_shift_request)
+            },
             status: 200
           )
         else
@@ -87,8 +136,14 @@ module Api
 
         if result.success?
           render(
-            json: result.security_shift_request,
-            serializer: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer,
+            json: {
+              securityShiftRequest: Api::V1::SecurityShiftRequests::SecurityShiftRequestSerializer.new(
+                result.security_shift_request,
+              ),
+              permissions: SecurityShiftRequestsPermissions
+                .new(current_user: current_user)
+                .shift_request(request: result.security_shift_request)
+            },
             status: 200
           )
         else
@@ -130,6 +185,11 @@ module Api
           venue: venue_from_params,
         }
       end
+
+      def user_ability
+        UserAbility.new(current_user)
+      end
+
 
       def security_request_reject_reason_from_params
         params.fetch(:rejectReason)

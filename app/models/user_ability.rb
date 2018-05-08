@@ -415,30 +415,46 @@ class UserAbility
       end
 
       can :view, :security_shift_requests do
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
+        can_view_shift_requests_page?(user)
       end
 
       can :view, :security_shift_request_reviews do
-        user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+        can_view_shift_request_reviews_page?(user)
       end
 
       can [:create], SecurityShiftRequest do |security_shift_request|
-        user.has_effective_access_level?(AccessLevel.manager_access_level)
+        can_view_shift_requests_page?(user)
       end
 
-      can [:accept, :edit, :undo], SecurityShiftRequest do |security_shift_request|
-          user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+      can [:delete], SecurityShiftRequest do |security_shift_request|
+        can_delete_shift_request?(user, security_shift_request)
+      end
+
+      can [:accept], SecurityShiftRequest do |security_shift_request|
+        can_accept_shift_request?(user, security_shift_request) &&
+          can_view_shift_request_reviews_page?(user)
+      end
+
+      can [:undo], SecurityShiftRequest do |security_shift_request|
+        can_undo_shift_request?(user, security_shift_request) &&
+          can_view_shift_request_reviews_page?(user)
+      end
+
+      can [:edit], SecurityShiftRequest do |security_shift_request|
+        can_edit_shift_requests?(user, security_shift_request)
       end
 
       can [:assign], SecurityShiftRequest do |security_shift_request|
-        user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
+        can_assign_shift_request?(user, security_shift_request) &&
+          (user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level))
       end
 
       can [:reject], SecurityShiftRequest do |security_shift_request|
+        next unless can_reject_shift_request?(user, security_shift_request)
         if security_shift_request.accepted?
           user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
         else
-          user.has_effective_access_level?(AccessLevel.admin_access_level)
+          user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
         end
       end
 
@@ -557,6 +573,40 @@ class UserAbility
     user.food_ops_manager? ||
     user.payroll_manager? ||
       can_edit_staff_member?(user, holiday.staff_member)
+  end
+
+  def can_view_shift_requests_page?(user)
+    user.has_effective_access_level?(AccessLevel.manager_access_level)
+  end
+
+  def can_edit_shift_requests?(user, shift_request)
+    return unless shift_request.pending?
+    (can_view_shift_requests_page?(user) && shift_request.creator == user) ||
+          can_view_shift_request_reviews_page?(user)
+  end
+
+  def can_view_shift_request_reviews_page?(user)
+    user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+  end
+
+  def can_delete_shift_request?(user, shift_request)
+    shift_request.can_transition_to?(:deleted) && shift_request.creator == user
+  end
+
+  def can_reject_shift_request?(user, shift_request)
+    shift_request.can_transition_to?(:rejected)
+  end
+
+  def can_assign_shift_request?(user, shift_request)
+    shift_request.can_transition_to?(:assigned)
+  end
+
+  def can_accept_shift_request?(user, shift_request)
+    shift_request.can_transition_to?(:accepted)
+  end
+
+  def can_undo_shift_request?(user, shift_request)
+    shift_request.can_transition_to?(:pending)
   end
 
   def can_update_change_order?(user, change_order)

@@ -27,13 +27,13 @@ class SecurityShiftRequestApiService
 
     api_errors = nil
     unless result.success?
-      api_errors = security_shift_requestApiErrors.new(security_shift_request: result.security_shift_request)
+      api_errors = SecurityShiftRequestApiErrors.new(security_shift_request: result.security_shift_request)
     end
     Result.new(result.security_shift_request, result.success?, api_errors)
   end
 
   def destroy
-    result = DeleteSecurityShiftRequest.new(
+    result = DestroySecurityShiftRequest.new(
       requester: requester,
       security_shift_request: security_shift_request,
     ).call

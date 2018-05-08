@@ -15,9 +15,32 @@ const securityShiftRequests = handleActions(
       return Immutable.fromJS(securityShiftRequests);
     },
     [types.ADD_SECURITY_SHIFT_REQUEST]: (state, action) => {
-      const newShiftRequest = oFetch(action, 'payload');
+      const newShiftRequest = oFetch(action, 'payload.securityShiftRequest');
 
       return state.push(Immutable.fromJS(newShiftRequest));
+    },
+    [types.UPDATE_SECURITY_SHIFT_REQUEST]: (state, action) => {
+      const updatedSecurityShiftRequest = oFetch(action, 'payload.securityShiftRequest');
+      const id = oFetch(updatedSecurityShiftRequest, 'id');
+      const note = oFetch(updatedSecurityShiftRequest, 'note');
+      const venueId = oFetch(updatedSecurityShiftRequest, 'venueId');
+      const startsAt = oFetch(updatedSecurityShiftRequest, 'startsAt');
+      const endsAt = oFetch(updatedSecurityShiftRequest, 'endsAt');
+      const createdShiftId = oFetch(updatedSecurityShiftRequest, 'createdShiftId');
+      const status = oFetch(updatedSecurityShiftRequest, 'status');
+
+      const shiftRequestIndex = state.findIndex(
+        securityShiftRequest => securityShiftRequest.get('id') === id,
+      );
+
+      return state.update(shiftRequestIndex, shiftRequest =>
+        shiftRequest
+          .set('startsAt', startsAt)
+          .set('endsAt', endsAt)
+          .set('note', note)
+          .set('createdShiftId', createdShiftId)
+          .set('status', status)
+      );
     },
   },
   initialGlobalState,

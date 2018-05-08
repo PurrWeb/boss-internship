@@ -7,9 +7,7 @@ import { appRoutes } from '~/lib/routes';
 import utils from '~/lib/utils';
 
 function getFormattedDate(startsAt, endsAt) {
-  const formattedStartsAt = safeMoment.iso8601Parse(startsAt).format(utils.commonDateFormatTimeOnly());
-  const formattedEndsAt = safeMoment.iso8601Parse(endsAt).format(utils.humanDateFormatWithTime());
-  return `${formattedStartsAt} - ${formattedEndsAt}`;
+  return utils.intervalDatesFormat(startsAt, endsAt);
 }
 
 class SecurityShiftRequestItem extends Component {
@@ -43,14 +41,32 @@ class SecurityShiftRequestItem extends Component {
     );
   }
 
+  renderRejectMessage(rejectReason) {
+    return (
+      <div className="boss-table__box boss-table__box_role_alert">
+        <p className="boss-table__text">
+          <span className="boss-table__text-line boss-table__text-marked">Reason for Rejecting:</span>
+          <span className="boss-table__text-line">{rejectReason}</span>
+        </p>
+      </div>
+    );
+  }
+
   render() {
     const securityShiftRequest = oFetch(this.props, 'securityShiftRequest');
+    const onOpenEditSecurityShiftRequest = oFetch(this.props, 'onOpenEditSecurityShiftRequest');
+    const onDeleteSecurityShiftRequest = oFetch(this.props, 'onDeleteSecurityShiftRequest');
     const startsAt = oFetch(securityShiftRequest, 'startsAt');
     const endsAt = oFetch(securityShiftRequest, 'endsAt');
     const status = oFetch(securityShiftRequest, 'status');
     const note = oFetch(securityShiftRequest, 'note');
     const createdShift = oFetch(securityShiftRequest, 'createdShift');
     const isCompleted = oFetch(this.props, 'isCompleted');
+    const permissions = oFetch(securityShiftRequest, 'permissions');
+    const isEditable = oFetch(permissions, 'isEditable');
+    const isDeletable = oFetch(permissions, 'isDeletable');
+    const rejectReason = oFetch(securityShiftRequest, 'rejectReason');
+
     return (
       <div className="boss-table__row">
         <div className="boss-table__cell">
@@ -62,20 +78,48 @@ class SecurityShiftRequestItem extends Component {
         <div className="boss-table__cell">
           <div className="boss-table__info">
             <p className="boss-table__label">Note</p>
-            <p className="boss-table__text">{note}</p>
+            <div className="boss-table__info-group">
+              <p className="boss-table__text">{note}</p>
+              {status === 'rejected' && this.renderRejectMessage(rejectReason)}
+            </div>
           </div>
         </div>
         {isCompleted && <div className="boss-table__cell">{createdShift && this.renderCreatedShift(createdShift)}</div>}
         <div className="boss-table__cell">
           <div className="boss-table__info">
             <p className="boss-table__label">Status</p>
-            <div className="boss-table__text">
+            <div className="boss-table__actions">
               <p
                 style={{ textTransform: 'capitalize' }}
-                className={`boss-button boss-button_type_extra-small boss-button_role_${status.toLowerCase()} boss-button_type_no-behavior boss-table__action`}
+                className={`boss-button boss-button_role_${status.toLowerCase()} boss-button_type_extra-small boss-table__action boss-button_type_no-behavior`}
               >
                 {status}
               </p>
+            </div>
+          </div>
+        </div>
+        <div className="boss-table__cell">
+          <div className="boss-table__info">
+            <p className="boss-table__label">Actions</p>
+            <div className="boss-table__actions">
+              {isEditable && (
+                <button
+                  onClick={onOpenEditSecurityShiftRequest}
+                  type="button"
+                  className="boss-button boss-button_role_edit-light boss-button_type_extra-small boss-table__action"
+                >
+                  Edit
+                </button>
+              )}
+              {isDeletable && (
+                <button
+                  onClick={onDeleteSecurityShiftRequest}
+                  type="button"
+                  className="boss-button boss-button_role_cancel-light boss-button_type_extra-small boss-table__action"
+                >
+                  Delete
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -92,6 +136,7 @@ SecurityShiftRequestItem.propTypes = {
     status: PropTypes.string.isRequired,
     rotaShiftId: PropTypes.number,
   }),
+  onOpenEditSecurityShiftRequest: PropTypes.func.isRequired,
   isCompleted: PropTypes.bool,
 };
 

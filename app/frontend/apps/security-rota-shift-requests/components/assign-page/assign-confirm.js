@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import AsyncButton from 'react-async-button';
 import oFetch from 'o-fetch';
 import moment from 'moment';
+import utils from '~/lib/utils';
 
 class AssignConfirm extends PureComponent {
   render() {
@@ -35,9 +36,7 @@ class AssignConfirm extends PureComponent {
               </div>
               <ul className="boss-user-summary__review-list">
                 <li className="boss-user-summary__review-item boss-user-summary__review-item_role_time">
-                  {`${moment(startsAt).format('HH:mm')} - ${moment(
-                    endsAt,
-                  ).format('HH:mm ddd DD/MM/YYYY')}`}
+                  {utils.intervalDatesFormat(startsAt, endsAt)}
                 </li>
                 <li className="boss-user-summary__review-item boss-user-summary__review-item_role_venue">
                   {venueName}
