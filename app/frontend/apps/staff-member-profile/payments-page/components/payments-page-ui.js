@@ -27,13 +27,16 @@ const mapDispatchToProps = (dispatch) => {
   };
 }
 
+const PAGE_SIZE = 6;
 @connect(mapStateToProps, mapDispatchToProps)
 export class PaymentsPageUI extends React.Component {
+
   constructor(props){
     super(props);
 
     this.state = {
-      requestInProgress: false
+      requestInProgress: false,
+      displayedPayments: props.payments.slice(0, PAGE_SIZE),
     }
   }
 
@@ -49,14 +52,44 @@ export class PaymentsPageUI extends React.Component {
 
     this.updateHistoryForFilter({ staffMemberId, filterParams });
     this.setState({
-      requestInProgress: true
+      requestInProgress: true,
+      displayedPayments: []
     });
     this.props.actions.filterPayments({ accessToken, staffMemberId, filterParams })
-      .then(() => {
+      .then((something) => {
         this.setState({
-          requestInProgress: false
+          requestInProgress: false,
+          displayedPayments: this.props.payments.slice(0, PAGE_SIZE),
         })
       });
+  }
+
+  getLoadMoreSizes = () => {
+    const payments = oFetch(this.props, 'payments');
+    const paymentCount = oFetch(payments, 'length');
+    const displayedPayments = oFetch(this.state, 'displayedPayments');
+    const displayedPaymentCount = oFetch(displayedPayments, 'length');
+
+    let loadSize = PAGE_SIZE;
+    if ((paymentCount - displayedPaymentCount) < PAGE_SIZE) {
+      loadSize = paymentCount - displayedPaymentCount;
+    }
+
+    return { currentSize: displayedPaymentCount, loadSize };
+  };
+
+  loadMore = () => {
+    this.setState(state => {
+      const { currentSize, loadSize } = this.getLoadMoreSizes();
+      const newPayments = this.props.payments.slice(
+        currentSize,
+        currentSize + loadSize,
+      );
+
+      return {
+        displayedPayments: state.displayedPayments.concat(newPayments),
+      };
+    });
   }
 
   updateHistoryForFilter(params) {
@@ -73,11 +106,29 @@ export class PaymentsPageUI extends React.Component {
     window.history.pushState('', '', url);
   }
 
+  renderLoadMore() {
+    return <div className="boss-staff-summary__actions">
+      <button
+        onClick={this.loadMore}
+        className="boss-button boss-button_role_load-more boss-button_adjust_full-mobile"
+      >
+        Load More
+      </button>
+    </div>;
+  }
+
   render() {
     const payments = oFetch(this.props, 'payments');
+    const paymentCount = oFetch(payments, 'length');
+
     const paymentFilter = oFetch(this.props, 'paymentFilter');
     const [mFilterStartDate, mFilterEndDate, filterStatusFilter] = oFetch(paymentFilter, 'mStartDate', 'mEndDate', 'statusFilter');
     const requestInProgress = oFetch(this.state, 'requestInProgress');
+
+    const displayedPayments = oFetch(this.state, 'displayedPayments');
+    const displayedPaymentCount = oFetch(displayedPayments, 'length');
+
+    const showLoadMore = !requestInProgress && (paymentCount > 0) && (paymentCount > displayedPaymentCount);
 
     return <ProfileWrapper currentPage="payments">
       <section className="boss-board">
@@ -89,8 +140,9 @@ export class PaymentsPageUI extends React.Component {
             <div className="boss-board__manager-group boss-board__manager-group_role_data">
               <PaymentFilter requestInProgress={requestInProgress} mStartDate={mFilterStartDate} mEndDate={mFilterEndDate} statusFilter={filterStatusFilter} onUpdate={this.onPaymentFilterUpdate.bind(this)} />
               { requestInProgress && <div className="boss-spinner" />}
-							{ !requestInProgress && <PaymentTimeline payments={payments}/> }
+							{ !requestInProgress && <PaymentTimeline payments={displayedPayments}/> }
               <div className="boss-board__manager-actions">
+                { showLoadMore && this.renderLoadMore() }
               </div>
             </div>
           </div>
