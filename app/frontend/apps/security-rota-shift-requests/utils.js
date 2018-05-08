@@ -4,7 +4,7 @@ import { extendMoment } from 'moment-range';
 const momentRange = extendMoment(Moment);
 
 function isRangesOverlapped(range1, range2) {
-  return range1.overlaps(range2, { adjacent: true });
+  return range1.overlaps(range2, { adjacent: false });
 }
 
 export const isShiftRequestOverlapped = ({
