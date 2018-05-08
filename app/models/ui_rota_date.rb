@@ -11,6 +11,17 @@ class UIRotaDate
     end
   end
 
+  def self.safe_parse(date_param)
+    return nil unless date_param.present?
+    result = nil
+    begin
+      result = parse(date_param)
+    rescue
+      #do nothing
+    end
+    result
+  end
+
   def self.format(date)
     date.strftime(URL_DATE_FORMAT)
   end
