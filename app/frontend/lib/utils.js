@@ -5,6 +5,9 @@ import { fromJS, Map, List, Set } from 'immutable';
 import numeral from 'numeral';
 import safeMoment from '~/lib/safe-moment';
 import oFetch from 'o-fetch';
+import { extendMoment } from 'moment-range';
+
+const momentRange = extendMoment(moment);
 
 numeral.register('locale', 'en-gb', {
   delimiters: {
@@ -416,7 +419,7 @@ var utils =  {
         dates = startDate.format('ddd DD MMM YYYY') + ' - ' + endDate.format('ddd DD MMM YYYY');
       }
 
-    return dates;
+      return dates;
     },
     intervalDatesFormat(startsAt, endsAt) {
       const startsFormat = 'ddd DD/MM/YYYY HH:mm';
@@ -439,6 +442,17 @@ var utils =  {
 
       return { startMinutes, endMinutes };
     },
+    shiftInRotaWeek(weekStartDate, weekEndDate, shift) {
+      const mWeekStartDate = safeMoment.uiDateParse(weekStartDate).hours(8);
+      const mWeekEndDate = safeMoment.uiDateParse(weekEndDate).add(1, 'day').hours(8);
+      const mShiftStartsAt = safeMoment.iso8601Parse(oFetch(shift, 'startsAt'));
+      const mShiftEndsAt = safeMoment.iso8601Parse(oFetch(shift, 'endsAt'));
+
+      const rotaWeek = momentRange.range(mWeekStartDate, mWeekEndDate);
+      const rotaShift = momentRange.range(mShiftStartsAt, mShiftEndsAt);
+
+      return rotaWeek.contains(rotaShift);
+    }
 }
 
 export default utils;
