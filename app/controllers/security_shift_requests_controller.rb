@@ -19,9 +19,10 @@ class SecurityShiftRequestsController < ApplicationController
 
     security_shift_requests = InRangeQuery.new({
                                 relation: venue_from_params.security_shift_requests.includes([:created_shift, :creator]),
-                                start_value: week.start_date,
-                                end_value: week.end_date,
+                                start_value: RotaShiftDate.new(week.start_date).start_time,
+                                end_value: RotaShiftDate.new(week.end_date).end_time,
                               }).all
+
     assigned_security_shift_requests = security_shift_requests.in_state(:assigned)
     rota_shifts = RotaShift
                     .joins(:security_shift_request)
