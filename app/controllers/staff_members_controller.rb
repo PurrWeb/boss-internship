@@ -345,11 +345,11 @@ class StaffMembersController < ApplicationController
 
   private
   def holiday_start_date_from_params
-    UIRotaDate.parse!(params['start_date'])
+    UIRotaDate.parse_if_present(params['start_date'])
   end
 
   def holiday_end_date_from_params
-    UIRotaDate.parse!(params['end_date'])
+    UIRotaDate.parse_if_present(params['end_date'])
   end
 
   def get_app_download_link_data(staff_member)

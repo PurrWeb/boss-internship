@@ -181,7 +181,7 @@ module Api
       end
 
       def holiday_start_date_from_params
-        start_date_from_params = UIRotaDate.parse!(params['start_date'])
+        start_date_from_params = UIRotaDate.parse_if_present(params['start_date'])
         if start_date_from_params.present?
           start_date_from_params
         else
@@ -191,7 +191,7 @@ module Api
       end
 
       def holiday_end_date_from_params
-        end_date_from_params = UIRotaDate.parse!(params['end_date'])
+        end_date_from_params = UIRotaDate.parse_if_present(params['end_date'])
         if end_date_from_params.present?
           end_date_from_params
         else

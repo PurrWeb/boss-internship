@@ -16,8 +16,8 @@ class HolidayApiService
     assert_action_permitted(:update)
 
     holiday_params = {
-      start_date: UIRotaDate.parse!(params.fetch(:start_date)),
-      end_date: UIRotaDate.parse!(params.fetch(:end_date)),
+      start_date: UIRotaDate.parse_if_present(params.fetch(:start_date)),
+      end_date: UIRotaDate.parse_if_present(params.fetch(:end_date)),
       holiday_type: params.fetch(:holiday_type),
       note: params[:note]
     }
@@ -54,8 +54,8 @@ class HolidayApiService
     assert_action_permitted(:create)
 
     holiday_params = {
-      start_date: UIRotaDate.parse!(params.fetch(:start_date)),
-      end_date: UIRotaDate.parse!(params.fetch(:end_date)),
+      start_date: UIRotaDate.parse_if_present(params.fetch(:start_date)),
+      end_date: UIRotaDate.parse_if_present(params.fetch(:end_date)),
       holiday_type: params.fetch(:holiday_type),
       note: params[:note]
     }.merge(staff_member: holiday.staff_member, creator: requester)
