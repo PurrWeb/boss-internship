@@ -1,0 +1,1 @@
+export const INITIAL_LOAD = 'SHIFTS/INITIAL_LOAD';
