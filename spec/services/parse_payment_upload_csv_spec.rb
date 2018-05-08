@@ -82,28 +82,28 @@ describe ParsePaymentUploadCSV do
             valid_payment = parser.call.data.fetch(:valid_payments).first
             raw_data = valid_payment.fetch(:raw_data)
 
-            expect(raw_data.fetch(:process_date_raw)).to eq(raw_process_date)
-            expect(raw_data.fetch(:venue_name_raw)).to eq(raw_venue_name)
-            expect(raw_data.fetch(:department_name_raw)).to eq(raw_department_name)
-            expect(raw_data.fetch(:first_initial_raw)).to eq(raw_first_initial)
-            expect(raw_data.fetch(:surname_raw)).to eq(raw_surname)
-            expect(raw_data.fetch(:ni_number_raw)).to eq(raw_ni_number)
-            expect(raw_data.fetch(:date_of_birth_raw)).to eq(raw_date_of_birth)
-            expect(raw_data.fetch(:net_pay_raw)).to eq(raw_net_pay)
+            expect(raw_data.fetch(ParsePaymentUploadCSV::PROCCESS_DATE_HEADER)).to eq(raw_process_date)
+            expect(raw_data.fetch(ParsePaymentUploadCSV::VENUE_NAME_HEADER)).to eq(raw_venue_name)
+            expect(raw_data.fetch(ParsePaymentUploadCSV::DEPARTMENT_NAME_HEADER)).to eq(raw_department_name)
+            expect(raw_data.fetch(ParsePaymentUploadCSV::FIRST_INITIAL_HEADER)).to eq(raw_first_initial)
+            expect(raw_data.fetch(ParsePaymentUploadCSV::SURNAME_HEADER)).to eq(raw_surname)
+            expect(raw_data.fetch(ParsePaymentUploadCSV::NI_HEADER)).to eq(raw_ni_number)
+            expect(raw_data.fetch(ParsePaymentUploadCSV::DOB_HEADER)).to eq(raw_date_of_birth)
+            expect(raw_data.fetch(ParsePaymentUploadCSV::NET_PAY_HEADER)).to eq(raw_net_pay)
           end
 
           it 'should contain normalised data' do
             valid_payment = parser.call.data.fetch(:valid_payments).first
             normalised_data = valid_payment.fetch(:normalised_data)
 
-            expect(normalised_data.fetch(:process_date)).to eq(process_date)
-            expect(normalised_data.fetch(:venue_name)).to eq(venue_name)
-            expect(normalised_data.fetch(:department_name)).to eq(department_name)
-            expect(normalised_data.fetch(:first_initial)).to eq(first_initial)
-            expect(normalised_data.fetch(:surname)).to eq(surname)
-            expect(normalised_data.fetch(:ni_number)).to eq(ni_number)
-            expect(normalised_data.fetch(:date_of_birth)).to eq(date_of_birth)
-            expect(normalised_data.fetch(:net_pay_cents)).to eq(net_pay_cents)
+            expect(normalised_data.fetch(ParsePaymentUploadCSV::PROCCESS_DATE_HEADER)).to eq(process_date)
+            expect(normalised_data.fetch(ParsePaymentUploadCSV::VENUE_NAME_HEADER)).to eq(venue_name)
+            expect(normalised_data.fetch(ParsePaymentUploadCSV::DEPARTMENT_NAME_HEADER)).to eq(department_name)
+            expect(normalised_data.fetch(ParsePaymentUploadCSV::FIRST_INITIAL_HEADER)).to eq(first_initial)
+            expect(normalised_data.fetch(ParsePaymentUploadCSV::SURNAME_HEADER)).to eq(surname)
+            expect(normalised_data.fetch(ParsePaymentUploadCSV::NI_HEADER)).to eq(ni_number)
+            expect(normalised_data.fetch(ParsePaymentUploadCSV::DOB_HEADER)).to eq(date_of_birth)
+            expect(normalised_data.fetch(ParsePaymentUploadCSV::NET_PAY_HEADER)).to eq(net_pay_cents)
           end
 
           it 'should contain venue' do
