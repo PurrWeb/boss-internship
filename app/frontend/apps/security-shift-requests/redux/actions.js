@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
 import oFetch from 'o-fetch';
+import utils from '~/lib/utils';
 import * as types from './types';
 import {
   addSecurityShiftRequestRequest,
@@ -12,6 +13,11 @@ export const addSecurityShiftRequestAction = createAction(types.ADD_SECURITY_SHI
 export const updateSecurityShiftRequestAction = createAction(types.UPDATE_SECURITY_SHIFT_REQUEST);
 
 export const addSecurityShiftRequest = params => (dispatch, getState) => {
+  const pageOptions = getState()
+    .get('pageOptions')
+    .toJS();
+  const weekStartDate = oFetch(pageOptions, 'startDate');
+  const weekEndDate = oFetch(pageOptions, 'endDate');
   const startsAt = oFetch(params, 'startsAt').toISOString();
   const endsAt = oFetch(params, 'endsAt').toISOString();
   const venueId = getState().getIn(['pageOptions', 'venueId']);
@@ -22,7 +28,9 @@ export const addSecurityShiftRequest = params => (dispatch, getState) => {
     note,
     venueId,
   }).then(resp => {
-    dispatch(addSecurityShiftRequestAction(resp.data));
+    if (utils.shiftInRotaWeek(weekStartDate, weekEndDate, resp.data)) {
+      dispatch(addSecurityShiftRequestAction(resp.data));
+    }
   });
 };
 
@@ -46,7 +54,6 @@ export const editSecurityShiftRequest = values => (dispatch, getState) => {
 };
 
 export const deleteSecurityShiftRequest = id => (dispatch, getState) => {
-
   return deleteSecurityShiftRequestRequest({ id }).then(response => {
     dispatch(updateSecurityShiftRequestAction(response.data));
     return response;
