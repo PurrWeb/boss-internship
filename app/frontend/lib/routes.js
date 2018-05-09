@@ -141,7 +141,7 @@ export const appRoutes = {
         if (dDate === undefined) {
           throw new Error("No date supplied to appRoutes.staffMemberHoursOverview")
         }
-        return "/staff_members/" + staffMemberId + "/hours_overview" + dDate;
+        return "/staff_members/" + staffMemberId + "/hours_overview/" + dDate;
     },
     staffMemberAccessories: function(staffMemberId){
         if (staffMemberId === undefined) {
