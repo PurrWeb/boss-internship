@@ -59,7 +59,7 @@ class FinanceReportsController < ApplicationController
       start_date: week.start_date,
       end_date: week.end_date,
       venue: venue,
-      financeReports: finance_reports,
+      finance_reports: finance_reports,
       access_token: access_token.token
     }
   end

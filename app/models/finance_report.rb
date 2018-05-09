@@ -30,6 +30,20 @@ class FinanceReport < ActiveRecord::Base
    (owed_hours_minute_count && owed_hours_minute_count / 60.0) || 0
   end
 
+  def net_wages_cents
+    wage_payments.sum(:cents)
+  end
+
+  def wage_payments
+    InRangeQuery.new(
+      relation: Payment.enabled.where(staff_member: staff_member),
+      start_value: week.start_date,
+      end_value: week.end_date,
+      start_column_name: 'date',
+      end_column_name: 'date'
+    ).all
+  end
+
   def status
     if new_record?
       can_complete? ? 'ready' : 'incomplete'

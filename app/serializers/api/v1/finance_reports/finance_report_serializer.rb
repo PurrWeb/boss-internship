@@ -16,7 +16,8 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :accessoriesCents,
     :total,
     :totalHoursCount,
-    :status
+    :status,
+    :netWagesCents
 
   def staffMemberId
     object.staff_member_id
@@ -76,5 +77,9 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
 
   def totalHoursCount
     object.total_hours_count
+  end
+
+  def netWagesCents
+    object.net_wages_cents
   end
 end
