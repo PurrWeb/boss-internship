@@ -1040,10 +1040,8 @@ ActiveRecord::Schema.define(version: 20180413124525) do
 
   create_table "security_shift_requests", force: :cascade do |t|
     t.integer  "creator_id",       limit: 4,     null: false
-    t.integer  "deleted_by_id",    limit: 4
     t.integer  "created_shift_id", limit: 4
     t.integer  "venue_id",         limit: 4,     null: false
-    t.datetime "deleted_at"
     t.datetime "starts_at",                      null: false
     t.datetime "ends_at",                        null: false
     t.text     "note",             limit: 65535
@@ -1054,7 +1052,6 @@ ActiveRecord::Schema.define(version: 20180413124525) do
 
   add_index "security_shift_requests", ["created_shift_id"], name: "index_security_shift_requests_on_created_shift_id", using: :btree
   add_index "security_shift_requests", ["creator_id"], name: "index_security_shift_requests_on_creator_id", using: :btree
-  add_index "security_shift_requests", ["deleted_by_id"], name: "index_security_shift_requests_on_deleted_by_id", using: :btree
   add_index "security_shift_requests", ["venue_id"], name: "index_security_shift_requests_on_venue_id", using: :btree
 
   create_table "staff_member_transitions", force: :cascade do |t|
@@ -1290,6 +1287,5 @@ ActiveRecord::Schema.define(version: 20180413124525) do
   add_foreign_key "ops_diaries", "venues"
   add_foreign_key "security_shift_requests", "rota_shifts", column: "created_shift_id"
   add_foreign_key "security_shift_requests", "users", column: "creator_id"
-  add_foreign_key "security_shift_requests", "users", column: "deleted_by_id"
   add_foreign_key "security_shift_requests", "venues"
 end
