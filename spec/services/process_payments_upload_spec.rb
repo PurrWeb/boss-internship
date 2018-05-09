@@ -42,14 +42,14 @@ describe ProcessPaymentsUpload do
     context 'payment data is valid' do
       let(:valid_normalised_payment_data) do
         {
-          process_date: now.to_date,
-          first_initial: 'd',
-          surname: 'Foo',
-          venue_name: 'bar',
-          department_name: 'Paaadf',
-          ni_number: '23DFFDS23',
-          date_of_birth: now.to_date - 20.years,
-          net_pay_cents: 234
+          ParsePaymentUploadCSV::PROCCESS_DATE_HEADER => now.to_date,
+          ParsePaymentUploadCSV::FIRST_INITIAL_HEADER => 'd',
+          ParsePaymentUploadCSV::SURNAME_HEADER => 'Foo',
+          ParsePaymentUploadCSV::VENUE_NAME_HEADER => 'bar',
+          ParsePaymentUploadCSV::DEPARTMENT_NAME_HEADER => 'Paaadf',
+          ParsePaymentUploadCSV::NI_HEADER => '23DFFDS23',
+          ParsePaymentUploadCSV::DOB_HEADER => now.to_date - 20.years,
+          ParsePaymentUploadCSV::NET_PAY_HEADER => 234
         }
       end
       let(:normalised_payment_data) { valid_normalised_payment_data }
@@ -77,14 +77,14 @@ describe ProcessPaymentsUpload do
     context 'payment data is invalid' do
       let(:invalid_normalised_payment_data) do
         {
-          process_date: now.to_date,
-          first_initial: 'd',
-          surname: 'Foo',
-          venue_name: 'bar',
-          department_name: 'Paaadf',
-          ni_number: '23DFFDS23',
-          date_of_birth: now.to_date - 20.years,
-          net_pay_cents: nil
+          ParsePaymentUploadCSV::PROCCESS_DATE_HEADER => now.to_date,
+          ParsePaymentUploadCSV::FIRST_INITIAL_HEADER => 'd',
+          ParsePaymentUploadCSV::SURNAME_HEADER => 'Foo',
+          ParsePaymentUploadCSV::VENUE_NAME_HEADER => 'bar',
+          ParsePaymentUploadCSV::DEPARTMENT_NAME_HEADER => 'Paaadf',
+          ParsePaymentUploadCSV::NI_HEADER => '23DFFDS23',
+          ParsePaymentUploadCSV::DOB_HEADER => now.to_date - 20.years,
+          ParsePaymentUploadCSV::NET_PAY_HEADER => nil
         }
       end
       let(:normalised_payment_data) { invalid_normalised_payment_data }
@@ -122,14 +122,14 @@ describe ProcessPaymentsUpload do
   context 'staff member has existing payment' do
     let(:valid_normalised_payment_data) do
       {
-        process_date: existing_process_date,
-        first_initial: 'd',
-        surname: 'Foo',
-        venue_name: 'bar',
-        department_name: 'Paaadf',
-        ni_number: '23DFFDS23',
-        date_of_birth: now.to_date - 20.years,
-        net_pay_cents: new_payment_cents
+        ParsePaymentUploadCSV::PROCCESS_DATE_HEADER => existing_process_date,
+        ParsePaymentUploadCSV::FIRST_INITIAL_HEADER => 'd',
+        ParsePaymentUploadCSV::SURNAME_HEADER => 'Foo',
+        ParsePaymentUploadCSV::VENUE_NAME_HEADER => 'bar',
+        ParsePaymentUploadCSV::DEPARTMENT_NAME_HEADER => 'Paaadf',
+        ParsePaymentUploadCSV::NI_HEADER => '23DFFDS23',
+        ParsePaymentUploadCSV::DOB_HEADER => now.to_date - 20.years,
+        ParsePaymentUploadCSV::NET_PAY_HEADER => new_payment_cents
       }
     end
     let(:normalised_payment_data) { valid_normalised_payment_data }
