@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180413124525) do
+ActiveRecord::Schema.define(version: 20180509163419) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -1048,10 +1048,13 @@ ActiveRecord::Schema.define(version: 20180413124525) do
     t.text     "reject_reason",    limit: 65535
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+    t.integer  "deleted_by_id",    limit: 4
+    t.datetime "deleted_at"
   end
 
   add_index "security_shift_requests", ["created_shift_id"], name: "index_security_shift_requests_on_created_shift_id", using: :btree
   add_index "security_shift_requests", ["creator_id"], name: "index_security_shift_requests_on_creator_id", using: :btree
+  add_index "security_shift_requests", ["deleted_at"], name: "index_security_shift_requests_on_deleted_at", using: :btree
   add_index "security_shift_requests", ["venue_id"], name: "index_security_shift_requests_on_venue_id", using: :btree
 
   create_table "staff_member_transitions", force: :cascade do |t|
