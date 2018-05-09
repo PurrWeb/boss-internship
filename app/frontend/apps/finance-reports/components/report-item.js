@@ -76,6 +76,7 @@ class ReportItem extends Component {
       'boss-table__text': true,
       'boss-table__text_indicator_accessory': acessories !== 0,
     });
+
     return (
       <div className="boss-table__row">
         <div className="boss-table__cell">
@@ -136,6 +137,9 @@ class ReportItem extends Component {
             </a>
           </div>
         )}
+        <div className="boss-table__cell">
+          <p className="boss-table__text">{"TBC"}</p>
+        </div>
         <div className="boss-table__cell">
           <p className={statusClassName}>{status}</p>
           {status === 'ready' && (
