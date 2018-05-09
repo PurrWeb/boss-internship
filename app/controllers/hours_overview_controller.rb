@@ -54,7 +54,8 @@ class HoursOverviewController < ApplicationController
     clock_in_events = ClockInEvent.
       joins(:clock_in_period).
       merge(clock_in_periods).
-      includes(:clock_in_period)
+      includes(:clock_in_period).
+      preload(:creator)
 
     hours_acceptance_periods = HoursAcceptancePeriod.
       enabled.
