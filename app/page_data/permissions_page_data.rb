@@ -282,6 +282,11 @@ class PermissionsPageData
           description: "Accessory Requests",
           permitted: role.can?(:view, :accessory_requests_page),
           path: @path.accessory_requests_path
+        },
+        {
+          description: "Security Venues",
+          permitted: role.can?(:view, :security_venues),
+          path: @path.security_venues_path
         }
       ]
     }
