@@ -1,65 +1,82 @@
 require 'rails_helper'
 
 describe Payment do
+  include ActiveSupport::Testing::TimeHelpers
+  let(:now) { Time.current }
+  let(:create_time) { now - 1.month }
+
   describe 'Creating a payment' do
-    let(:date) { Time.current.to_date - 2.weeks }
+    let(:date) { now - 2.weeks }
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:creator) { FactoryGirl.create(:user) }
     let(:cents) { 21312 }
 
     it 'should be pending by default' do
-      payment = Payment.create!(
-        staff_member: staff_member,
-        date: date,
-        cents: cents,
-        created_by_user: creator
-      )
+      payment = nil
+      travel_to create_time do
+        payment = Payment.create!(
+          staff_member: staff_member,
+          date: date,
+          cents: cents,
+          created_by_user: creator
+        )
+      end
       expect(payment.current_state).to eq("pending")
     end
 
     it 'should be not be disabled' do
-      payment = Payment.create!(
-        staff_member: staff_member,
-        date: date,
-        cents: cents,
-        created_by_user: creator
-      )
+      payment = nil
+      travel_to create_time do
+        payment = Payment.create!(
+          staff_member: staff_member,
+          date: date,
+          cents: cents,
+          created_by_user: creator
+        )
+      end
       expect(payment.disabled?).to eq(false)
     end
 
     it 'should match enabled scope' do
-      payment = Payment.create!(
-        staff_member: staff_member,
-        date: date,
-        cents: cents,
-        created_by_user: creator
-      )
+      payment = nil
+      travel_to create_time do
+        payment = Payment.create!(
+          staff_member: staff_member,
+          date: date,
+          cents: cents,
+          created_by_user: creator
+        )
+      end
       expect(Payment.enabled.all.to_a).to eq([payment])
     end
 
     it 'should not match disabled scope' do
-      Payment.create!(
-        staff_member: staff_member,
-        date: date,
-        cents: cents,
-        created_by_user: creator
-      )
+      travel_to create_time do
+        Payment.create!(
+          staff_member: staff_member,
+          date: date,
+          cents: cents,
+          created_by_user: creator
+        )
+      end
       expect(Payment.disabled.all.to_a).to eq([])
     end
   end
 
   describe 'disabling a payment' do
-    let(:date) { Time.current.to_date - 2.weeks }
+    let(:date) { now.to_date - 2.weeks }
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:creator) { FactoryGirl.create(:user) }
     let(:cents) { 21312 }
     let(:payment) do
-      Payment.create!(
-        staff_member: staff_member,
-        date: date,
-        cents: cents,
-        created_by_user: creator
-      )
+      travel_to create_time do
+        Payment.create!(
+          staff_member: staff_member,
+          date: date,
+          cents: cents,
+          created_by_user: creator
+        )
+      end
     end
 
     before do
@@ -72,7 +89,7 @@ describe Payment do
 
     context 'with valid params' do
       let(:disabler) { FactoryGirl.create(:user) }
-      let(:disabled_at) { Time.current + 5.minutes }
+      let(:disabled_at) { now + 5.minutes }
 
       it 'should be valid' do
         expect(payment.reload).to be_valid
