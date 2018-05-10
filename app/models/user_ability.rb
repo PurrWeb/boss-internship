@@ -128,6 +128,10 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can :view, :security_venues do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can :view, :security_rota do
         user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
