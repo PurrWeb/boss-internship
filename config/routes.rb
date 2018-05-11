@@ -219,6 +219,8 @@ Rails.application.routes.draw do
 
         resources :venue_dashboard_forecasts, only: [:show]
 
+        resources :security_venues, only: [:create, :update]
+
         resources :security_shift_requests, only: [:create, :update, :destroy], path: 'security-shift-requests' do
           member do
             post :accept
