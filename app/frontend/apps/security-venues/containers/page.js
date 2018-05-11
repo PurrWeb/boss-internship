@@ -1,17 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Page from '../components/page';
-import { addVenue, editVenue } from '../redux/actions';
+import { addSecurityVenue, editSecurityVenue } from '../redux/actions';
+import { getSecurityVenues } from '../selectors';
 
 const mapStateToProps = state => {
   return {
-    venues: state.get('venues'),
+    securityVenues: getSecurityVenues(state),
   };
 };
 
 const mapDispatchToProps = {
-  addVenue,
-  editVenue,
+  addSecurityVenue,
+  editSecurityVenue,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Page);

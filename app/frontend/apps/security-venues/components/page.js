@@ -10,45 +10,44 @@ import AddVenue from './add-venue';
 import EditVenue from './edit-venue';
 
 class Page extends Component {
-  handleOpenAddVenueModal = () => {
+  handleOpenAddSecurityVenueModal = () => {
     openContentModal({
-      submit: this.handleAddVenue,
+      submit: this.handleSecurityAddVenue,
       config: { title: 'Add Venue' },
       props: {},
     })(AddVenue);
   };
 
-  handleAddVenue = (hideModal, values) => {
-    const addVenue = oFetch(this.props, 'addVenue');
+  handleSecurityAddVenue = (hideModal, values) => {
+    const addSecurityVenue = oFetch(this.props, 'addSecurityVenue');
 
-    return addVenue(values.toJS()).then(hideModal);
+    return addSecurityVenue(values.toJS()).then(hideModal);
   };
 
-  handleOpenEditVenueModal = venue => {
-    const { id, name, address, lat, lng } = venue;
-    const initialValues = { id, name, address, lat, lng };
+  handleOpenEditSecurityVenueModal = securityVenue => {
+    const securityVenueName = oFetch(securityVenue, 'name');
     openContentModal({
-      submit: this.handleEditVenue,
-      config: { title: `Edit ${name}` },
-      props: { initialValues },
+      submit: this.handleEditSecurityVenue,
+      config: { title: `Edit ${securityVenueName}` },
+      props: { securityVenue },
     })(EditVenue);
   };
 
-  handleEditVenue = (hideModal, values) => {
-    const editVenue = oFetch(this.props, 'editVenue');
+  handleEditSecurityVenue = (hideModal, values) => {
+    const editSecurityVenue = oFetch(this.props, 'editSecurityVenue');
 
-    return editVenue(values.toJS()).then(hideModal);
+    return editSecurityVenue(values.toJS()).then(hideModal);
   };
 
   render() {
-    const venues = oFetch(this.props, 'venues');
+    const securityVenues = oFetch(this.props, 'securityVenues');
     const total = 10;
     return (
       <div>
         <SimpleDashboard title="Security Venues">
           <DashboardActions>
             <button
-              onClick={this.handleOpenAddVenueModal}
+              onClick={this.handleOpenAddSecurityVenueModal}
               className="boss-button boss-button_role_add boss-page-dashboard__button"
             >
               Add Venue
@@ -56,9 +55,10 @@ class Page extends Component {
           </DashboardActions>
         </SimpleDashboard>
         <VenueList
-          venues={venues}
-          total={total}
-          itemRenderer={venue => <VenueItem venue={venue} onEditClick={() => this.handleOpenEditVenueModal(venue)} />}
+          venues={securityVenues}
+          listObjectName="venues"
+          perPage={10}
+          itemRenderer={venue => <VenueItem venue={venue} onEditClick={() => this.handleOpenEditSecurityVenueModal(venue)} />}
         />
       </div>
     );

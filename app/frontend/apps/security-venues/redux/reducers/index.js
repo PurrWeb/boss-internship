@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux-immutable';
-import venues from './venues';
+import securityVenues from './security-venues-reducer';
 
 export default combineReducers({
-  venues,
+  securityVenues,
 });

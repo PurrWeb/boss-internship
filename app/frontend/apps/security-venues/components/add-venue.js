@@ -8,9 +8,17 @@ import AddVenueForm from './add-venue-form';
 
 class AddVenue extends React.Component {
   render() {
+    const initialValues = {
+      name: null,
+      address: null,
+      lat: null,
+      lng: null,
+    }
+
     return (
       <AddVenueForm
         onFormSubmit={this.props.onSubmit}
+        initialValues={initialValues}
         buttonText="Create"
       />
     );
