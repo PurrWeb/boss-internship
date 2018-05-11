@@ -128,7 +128,7 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
-      can :view, :security_venues do
+      can [:view, :create, :update], :security_venues do
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
