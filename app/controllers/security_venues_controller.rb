@@ -3,7 +3,12 @@ class SecurityVenuesController < ApplicationController
 
   def index
     authorize!(:view, :security_venues)
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+    security_venues = SecurityVenue.all
 
-    render locals: {}
+    render locals: {
+      access_token: access_token.token,
+      security_venues: security_venues
+    }
   end
 end
