@@ -13,7 +13,7 @@ import EditSecurityShiftRequest from './edit-security-shift-request';
 import RejectSecurityShiftRequest from './reject-security-shift-request';
 
 function getFormattedDate(startsAt, endsAt) {
-  return utils.intervalRotaDatesFormat(startsAt, endsAt);
+  return utils.intervalRotaDatesFormat(safeMoment.iso8601Parse(startsAt), safeMoment.iso8601Parse(endsAt));
 }
 
 class SecurityShiftRequestItem extends Component {
@@ -123,13 +123,16 @@ class SecurityShiftRequestItem extends Component {
         : status === 'accepted'
           ? 'boss-table__text_role_success-status'
           : 'boss-table__text_role_alert-status';
-    const shiftMinutes = utils.getDiffFromRotaDayInMinutes(startsAt, endsAt);
+    const shiftMinutes = utils.getDiffFromRotaDayInMinutes(
+      safeMoment.iso8601Parse(startsAt),
+      safeMoment.iso8601Parse(endsAt),
+    );
     const editRequestFormInitialValues = {
       startsAt: oFetch(shiftMinutes, 'startMinutes'),
       endsAt: oFetch(shiftMinutes, 'endMinutes'),
       venueId,
       note,
-      date: utils.getBuisnessDay(startsAt),
+      date: utils.getBuisnessDay(safeMoment.iso8601Parse(startsAt)),
       id,
     };
 

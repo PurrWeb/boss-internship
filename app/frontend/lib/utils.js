@@ -421,36 +421,31 @@ var utils =  {
 
       return dates;
     },
-    getBuisnessDay(dateTime) {
-      const mDateTime = safeMoment.iso8601Parse(dateTime);
-      if (mDateTime.hours() >= 0 && mDateTime.hours() <= 7 && mDateTime.minutes() <= 59) {
-        mDateTime.subtract(1, 'day');
+    getBuisnessDay(mDate) {
+      if (mDate.hours() >= 0 && mDate.hours() <= 7 && mDate.minutes() <= 59) {
+        mDate.subtract(1, 'day');
       }
-      return mDateTime.hours(8).startOf('hour');
+      return mDate.hours(8).startOf('hour');
     },
-    intervalRotaDatesFormat(startsAt, endsAt) {
+    intervalRotaDatesFormat(mStartsAt, mEndsAt) {
       const dayFormat = 'ddd DD/MM/YYYY';
       const hoursFormat = 'HH:mm';
-      const mBuisnessDay = this.getBuisnessDay(startsAt);
-      const mStartsAt = safeMoment.iso8601Parse(startsAt);
-      const mEndsAt = safeMoment.iso8601Parse(endsAt);
+      const mBuisnessDay = this.getBuisnessDay(mStartsAt);
 
       return `${mBuisnessDay.format(dayFormat)} ${mStartsAt.format(hoursFormat)} - ${mEndsAt.format(hoursFormat)}`;
     },
-    getDiffFromRotaDayInMinutes(startDateTimeISO, endDateTimeISO) {
-      const beginningOfRotaDay = this.getBuisnessDay(startDateTimeISO);
-      const mStartsAt = safeMoment.iso8601Parse(startDateTimeISO);
-      const mEndsAt = safeMoment.iso8601Parse(endDateTimeISO);
+    getDiffFromRotaDayInMinutes(mStartsAt, mEndsAt) {
+      const beginningOfRotaDay = this.getBuisnessDay(mStartsAt);
       const startMinutes = safeMoment.iso8601Parse(mStartsAt).diff(beginningOfRotaDay, 'minutes');
       const endMinutes = safeMoment.iso8601Parse(mEndsAt).diff(beginningOfRotaDay, 'minutes');
 
       return { startMinutes, endMinutes };
     },
-    shiftInRotaWeek(weekStartDate, weekEndDate, shift) {
-      const mWeekStartDate = safeMoment.uiDateParse(weekStartDate).hours(8);
-      const mWeekEndDate = safeMoment.uiDateParse(weekEndDate).add(1, 'day').hours(8);
-      const mShiftStartsAt = safeMoment.iso8601Parse(oFetch(shift, 'startsAt'));
-      const mShiftEndsAt = safeMoment.iso8601Parse(oFetch(shift, 'endsAt'));
+    shiftInRotaWeek(params) {
+      const mWeekStartDate = oFetch(params, 'mWeekStartDate').hours(8);
+      const mWeekEndDate = oFetch(params, 'mWeekEndsDate').add(1, 'day').hours(8);
+      const mShiftStartsAt = oFetch(params, 'mShiftStartsAt');
+      const mShiftEndsAt = oFetch(params, 'mShiftEndsAt');
 
       const rotaWeek = momentRange.range(mWeekStartDate, mWeekEndDate);
       const rotaShift = momentRange.range(mShiftStartsAt, mShiftEndsAt);

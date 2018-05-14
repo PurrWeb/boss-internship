@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 import Immutable from 'immutable';
 import utils from '~/lib/utils';
+import safeMoment from '~/lib/safe-moment';
+import oFetch from 'o-fetch';
 
 export const shiftRequestsPermissionsSelector = state => state.getIn(['permissions', 'shiftRequests']);
 export const securityShiftRequestsSelector = state => state.get('securityShiftRequests');
@@ -21,7 +23,16 @@ export const inWeekShiftRequestsSelector = createSelector(
   (securityShiftRequests, weekStartDate, weekEndDate) => {
     return securityShiftRequests.filter(securityShiftRequest => {
       const jsSecurityShiftRequest = securityShiftRequest.toJS();
-      return utils.shiftInRotaWeek(weekStartDate, weekEndDate, jsSecurityShiftRequest);
+      const mWeekStartDate = safeMoment.uiDateParse(weekStartDate);
+      const mWeekEndsDate = safeMoment.uiDateParse(weekEndDate);
+      const mShiftStartsAt = safeMoment.iso8601Parse(oFetch(jsSecurityShiftRequest, 'startsAt'));
+      const mShiftEndsAt = safeMoment.iso8601Parse(oFetch(jsSecurityShiftRequest, 'startsAt'));
+      return utils.shiftInRotaWeek({
+        mWeekStartDate,
+        mWeekEndsDate,
+        mShiftStartsAt,
+        mShiftEndsAt,
+      });
     });
   },
 );

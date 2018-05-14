@@ -4,6 +4,7 @@ import oFetch from 'o-fetch';
 import moment from 'moment';
 import utils from '~/lib/utils';
 import { openContentModal } from '~/components/modals';
+import safeMoment from '~/lib/safe-moment'
 import RejectSecurityShiftRequest from './reject-security-shift-request';
 
 class RequestsItem extends PureComponent {
@@ -43,7 +44,7 @@ class RequestsItem extends PureComponent {
         <div className="boss-check__header">
           <div className="boss-check__header-group">
             <h3 className="boss-check__title boss-check__title_role_time">
-              {utils.intervalRotaDatesFormat(startsAt, endsAt)}
+              {utils.intervalRotaDatesFormat(safeMoment.iso8601Parse(startsAt), safeMoment.iso8601Parse(endsAt))}
             </h3>
             <div className="boss-check__header-meta">
               <div className="boss-check__header-meta-item">
