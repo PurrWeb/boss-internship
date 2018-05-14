@@ -36,7 +36,7 @@ class AssignConfirm extends PureComponent {
               </div>
               <ul className="boss-user-summary__review-list">
                 <li className="boss-user-summary__review-item boss-user-summary__review-item_role_time">
-                  {utils.intervalDatesFormat(startsAt, endsAt)}
+                  {utils.intervalRotaDatesFormat(startsAt, endsAt)}
                 </li>
                 <li className="boss-user-summary__review-item boss-user-summary__review-item_role_venue">
                   {venueName}

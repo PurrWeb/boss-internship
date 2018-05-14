@@ -24,7 +24,7 @@ class AssignDashboard extends PureComponent {
               <div className="boss-page-dashboard__meta">
                 <p className="boss-page-dashboard__meta-item boss-page-dashboard__meta-item_role_subtitle boss-page-dashboard__meta-item_role_time">
                   <span className="boss-page-dashboard__meta-text">
-                    {utils.intervalDatesFormat(startsAt, endsAt)}
+                    {utils.intervalRotaDatesFormat(startsAt, endsAt)}
                   </span>
                 </p>
                 <p className="boss-page-dashboard__meta-item boss-page-dashboard__meta-item_role_subtitle boss-page-dashboard__meta-item_role_venue">

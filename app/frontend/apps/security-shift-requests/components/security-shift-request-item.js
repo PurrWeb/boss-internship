@@ -7,7 +7,7 @@ import { appRoutes } from '~/lib/routes';
 import utils from '~/lib/utils';
 
 function getFormattedDate(startsAt, endsAt) {
-  return utils.intervalDatesFormat(startsAt, endsAt);
+  return utils.intervalRotaDatesFormat(startsAt, endsAt);
 }
 
 class SecurityShiftRequestItem extends Component {
