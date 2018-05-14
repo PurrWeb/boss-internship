@@ -421,20 +421,24 @@ var utils =  {
 
       return dates;
     },
-    intervalDatesFormat(startsAt, endsAt) {
-      const startsFormat = 'ddd DD/MM/YYYY HH:mm';
-      const endsFormat = 'HH:mm';
+    getBuisnessDay(dateTime) {
+      const mDateTime = safeMoment.iso8601Parse(dateTime);
+      if (mDateTime.hours() >= 0 && mDateTime.hours() <= 7 && mDateTime.minutes() <= 59) {
+        mDateTime.subtract(1, 'day');
+      }
+      return mDateTime.hours(8).startOf('hour');
+    },
+    intervalRotaDatesFormat(startsAt, endsAt) {
+      const dayFormat = 'ddd DD/MM/YYYY';
+      const hoursFormat = 'HH:mm';
+      const mBuisnessDay = this.getBuisnessDay(startsAt);
       const mStartsAt = safeMoment.iso8601Parse(startsAt);
       const mEndsAt = safeMoment.iso8601Parse(endsAt);
-      return `${mStartsAt.format(startsFormat)} - ${mEndsAt.format(endsFormat)}`;
+
+      return `${mBuisnessDay.format(dayFormat)} ${mStartsAt.format(hoursFormat)} - ${mEndsAt.format(hoursFormat)}`;
     },
     getDiffFromRotaDayInMinutes(startDateTimeISO, endDateTimeISO) {
-      const beginningOfRotaDay = safeMoment
-        .iso8601Parse(startDateTimeISO)
-        .hours(8)
-        .minutes(0)
-        .seconds(0)
-        .milliseconds(0);
+      const beginningOfRotaDay = this.getBuisnessDay(startDateTimeISO);
       const mStartsAt = safeMoment.iso8601Parse(startDateTimeISO);
       const mEndsAt = safeMoment.iso8601Parse(endDateTimeISO);
       const startMinutes = safeMoment.iso8601Parse(mStartsAt).diff(beginningOfRotaDay, 'minutes');
