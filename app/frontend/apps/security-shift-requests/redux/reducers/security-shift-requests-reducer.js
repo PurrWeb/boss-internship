@@ -42,11 +42,6 @@ const securityShiftRequests = handleActions(
           .set('status', status)
       );
     },
-    [types.REMOVE_SECURITY_SHIFT_REQUEST]: (state, action) => {
-      const securityShiftRequest = oFetch(action, 'payload.securityShiftRequest');
-      const securityShiftRequestId = oFetch(securityShiftRequest, 'id');
-      return state.filter(shiftRequest => shiftRequest.get('id') !== securityShiftRequestId);
-    }
   },
   initialGlobalState,
 );

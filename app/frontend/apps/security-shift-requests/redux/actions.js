@@ -11,14 +11,8 @@ import {
 export const loadInitialData = createAction(types.INITIAL_LOAD);
 export const addSecurityShiftRequestAction = createAction(types.ADD_SECURITY_SHIFT_REQUEST);
 export const updateSecurityShiftRequestAction = createAction(types.UPDATE_SECURITY_SHIFT_REQUEST);
-export const removeSecurityShiftRequestAction = createAction(types.REMOVE_SECURITY_SHIFT_REQUEST);
 
 export const addSecurityShiftRequest = params => (dispatch, getState) => {
-  const pageOptions = getState()
-    .get('pageOptions')
-    .toJS();
-  const weekStartDate = oFetch(pageOptions, 'startDate');
-  const weekEndDate = oFetch(pageOptions, 'endDate');
   const startsAt = oFetch(params, 'startsAt').toISOString();
   const endsAt = oFetch(params, 'endsAt').toISOString();
   const venueId = getState().getIn(['pageOptions', 'venueId']);
@@ -29,19 +23,12 @@ export const addSecurityShiftRequest = params => (dispatch, getState) => {
     note,
     venueId,
   }).then(resp => {
-    const securityShiftRequest = oFetch(resp, 'data.securityShiftRequest');
-    if (utils.shiftInRotaWeek(weekStartDate, weekEndDate, securityShiftRequest)) {
-      dispatch(addSecurityShiftRequestAction(resp.data));
-    }
+    dispatch(addSecurityShiftRequestAction(resp.data));
+    return resp;
   });
 };
 
 export const editSecurityShiftRequest = values => (dispatch, getState) => {
-  const pageOptions = getState()
-    .get('pageOptions')
-    .toJS();
-  const weekStartDate = oFetch(pageOptions, 'startDate');
-  const weekEndDate = oFetch(pageOptions, 'endDate');
   const startsAt = oFetch(values, 'startsAt').toISOString();
   const endsAt = oFetch(values, 'endsAt').toISOString();
   const venueId = oFetch(values, 'venueId');
@@ -55,12 +42,7 @@ export const editSecurityShiftRequest = values => (dispatch, getState) => {
     id,
     note,
   }).then(response => {
-    const securityShiftRequest = oFetch(response, 'data.securityShiftRequest');
-    if (utils.shiftInRotaWeek(weekStartDate, weekEndDate, securityShiftRequest)) {
-      dispatch(updateSecurityShiftRequestAction(response.data));
-    } else {
-      dispatch(removeSecurityShiftRequestAction(response.data))
-    }
+    dispatch(updateSecurityShiftRequestAction(response.data));
     return response;
   });
 };
