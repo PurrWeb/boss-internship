@@ -36,7 +36,7 @@ class SecurityShiftRequestsPage extends Component {
       endsAt: oFetch(shiftMinutes, 'endMinutes'),
       venueId,
       note,
-      date: safeMoment.iso8601Parse(startsAt),
+      date: utils.getBuisnessDay(startsAt),
       id,
     };
     openContentModal({

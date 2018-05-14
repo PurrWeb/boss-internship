@@ -13,7 +13,7 @@ import EditSecurityShiftRequest from './edit-security-shift-request';
 import RejectSecurityShiftRequest from './reject-security-shift-request';
 
 function getFormattedDate(startsAt, endsAt) {
-  return utils.intervalDatesFormat(startsAt, endsAt);
+  return utils.intervalRotaDatesFormat(startsAt, endsAt);
 }
 
 class SecurityShiftRequestItem extends Component {
@@ -129,7 +129,7 @@ class SecurityShiftRequestItem extends Component {
       endsAt: oFetch(shiftMinutes, 'endMinutes'),
       venueId,
       note,
-      date: safeMoment.iso8601Parse(startsAt),
+      date: utils.getBuisnessDay(startsAt),
       id,
     };
 
