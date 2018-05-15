@@ -13,11 +13,6 @@ export const addSecurityShiftRequestAction = createAction(types.ADD_SECURITY_SHI
 export const updateSecurityShiftRequestAction = createAction(types.UPDATE_SECURITY_SHIFT_REQUEST);
 
 export const addSecurityShiftRequest = params => (dispatch, getState) => {
-  const pageOptions = getState()
-    .get('pageOptions')
-    .toJS();
-  const weekStartDate = oFetch(pageOptions, 'startDate');
-  const weekEndDate = oFetch(pageOptions, 'endDate');
   const startsAt = oFetch(params, 'startsAt').toISOString();
   const endsAt = oFetch(params, 'endsAt').toISOString();
   const venueId = getState().getIn(['pageOptions', 'venueId']);
@@ -28,9 +23,8 @@ export const addSecurityShiftRequest = params => (dispatch, getState) => {
     note,
     venueId,
   }).then(resp => {
-    if (utils.shiftInRotaWeek(weekStartDate, weekEndDate, resp.data)) {
-      dispatch(addSecurityShiftRequestAction(resp.data));
-    }
+    dispatch(addSecurityShiftRequestAction(resp.data));
+    return resp;
   });
 };
 

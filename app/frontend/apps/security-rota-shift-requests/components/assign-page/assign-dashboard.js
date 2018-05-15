@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
-import moment from 'moment';
 import utils from '~/lib/utils';
+import safeMoment from '~/lib/safe-moment'
 
 class AssignDashboard extends PureComponent {
 
@@ -24,7 +24,7 @@ class AssignDashboard extends PureComponent {
               <div className="boss-page-dashboard__meta">
                 <p className="boss-page-dashboard__meta-item boss-page-dashboard__meta-item_role_subtitle boss-page-dashboard__meta-item_role_time">
                   <span className="boss-page-dashboard__meta-text">
-                    {utils.intervalDatesFormat(startsAt, endsAt)}
+                    {utils.intervalRotaDatesFormat(safeMoment.iso8601Parse(startsAt), safeMoment.iso8601Parse(endsAt))}
                   </span>
                 </p>
                 <p className="boss-page-dashboard__meta-item boss-page-dashboard__meta-item_role_subtitle boss-page-dashboard__meta-item_role_venue">

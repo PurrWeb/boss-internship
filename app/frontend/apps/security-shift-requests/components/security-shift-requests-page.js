@@ -30,13 +30,16 @@ class SecurityShiftRequestsPage extends Component {
     const status = oFetch(securityShiftRequest, 'status');
     const venueId = oFetch(securityShiftRequest, 'venueId');
     const note = oFetch(securityShiftRequest, 'note');
-    const shiftMinutes = utils.getDiffFromRotaDayInMinutes(startsAt, endsAt);
+    const shiftMinutes = utils.getDiffFromRotaDayInMinutes(
+      safeMoment.iso8601Parse(startsAt),
+      safeMoment.iso8601Parse(endsAt),
+    );
     const editRequestFormInitialValues = {
       startsAt: oFetch(shiftMinutes, 'startMinutes'),
       endsAt: oFetch(shiftMinutes, 'endMinutes'),
       venueId,
       note,
-      date: safeMoment.iso8601Parse(startsAt),
+      date: utils.getBuisnessDay(safeMoment.iso8601Parse(startsAt)),
       id,
     };
     openContentModal({
@@ -56,7 +59,7 @@ class SecurityShiftRequestsPage extends Component {
     const deleteSecurityShiftRequestAction = oFetch(this.props, 'deleteSecurityShiftRequest');
 
     return deleteSecurityShiftRequestAction(id);
-  }
+  };
 
   handleAddNewRequest = (hideModal, values) => {
     return this.props.addSecurityShiftRequest(values).then(response => {
@@ -107,7 +110,9 @@ class SecurityShiftRequestsPage extends Component {
                 return (
                   <SecurityShiftRequestItem
                     onOpenEditSecurityShiftRequest={() => this.handleOpenEditSecurityShiftRequest(securityShiftRequest)}
-                    onDeleteSecurityShiftRequest={() => this.handleDeleteSecurityShiftRequest(oFetch(securityShiftRequest, 'id'))}
+                    onDeleteSecurityShiftRequest={() =>
+                      this.handleDeleteSecurityShiftRequest(oFetch(securityShiftRequest, 'id'))
+                    }
                     securityShiftRequest={securityShiftRequest}
                   />
                 );
@@ -123,7 +128,9 @@ class SecurityShiftRequestsPage extends Component {
                   <SecurityShiftRequestItem
                     isCompleted
                     onOpenEditSecurityShiftRequest={() => this.handleOpenEditSecurityShiftRequest(securityShiftRequest)}
-                    onDeleteSecurityShiftRequest={() => this.handleDeleteSecurityShiftRequest(oFetch(securityShiftRequest, 'id'))}
+                    onDeleteSecurityShiftRequest={() =>
+                      this.handleDeleteSecurityShiftRequest(oFetch(securityShiftRequest, 'id'))
+                    }
                     securityShiftRequest={securityShiftRequest}
                   />
                 );

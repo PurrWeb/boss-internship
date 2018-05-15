@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
 import oFetch from 'o-fetch';
+import utils from '~/lib/utils';
 import * as types from './types';
 
 import {

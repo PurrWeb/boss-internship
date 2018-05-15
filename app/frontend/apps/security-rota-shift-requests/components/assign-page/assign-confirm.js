@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AsyncButton from 'react-async-button';
 import oFetch from 'o-fetch';
-import moment from 'moment';
 import utils from '~/lib/utils';
+import safeMoment from '~/lib/safe-moment'
 
 class AssignConfirm extends PureComponent {
   render() {
@@ -36,7 +36,7 @@ class AssignConfirm extends PureComponent {
               </div>
               <ul className="boss-user-summary__review-list">
                 <li className="boss-user-summary__review-item boss-user-summary__review-item_role_time">
-                  {utils.intervalDatesFormat(startsAt, endsAt)}
+                  {utils.intervalRotaDatesFormat(safeMoment.iso8601Parse(startsAt), safeMoment.iso8601Parse(endsAt))}
                 </li>
                 <li className="boss-user-summary__review-item boss-user-summary__review-item_role_venue">
                   {venueName}
