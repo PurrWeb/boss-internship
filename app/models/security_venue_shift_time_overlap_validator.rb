@@ -1,28 +1,28 @@
-class ShiftTimeOverlapValidator
+class SecurityVenueShiftTimeOverlapValidator
   def initialize(shift)
     @shift = shift
   end
 
   def validate
-    if prerequisites_present?
+    if prerequisites_persent?
       shift_query = ShiftInRangeQuery.new(
         staff_member: shift.staff_member,
         starts_at: shift.starts_at,
         ends_at: shift.ends_at
       ).all.enabled
-      if shift.class == RotaShift && shift.persisted?
-        shift_query = ExclusiveOfQuery.new(
-          relation: shift_query,
-          excluded: shift
-        ).all
-      end
 
       security_venue_shift_query = SecurityVenueShiftInRangeQuery.new(
         staff_member: shift.staff_member,
         starts_at: shift.starts_at,
         ends_at: shift.ends_at
       ).all.enabled
-      if shift.class == SecurityVenueShift && shift.persisted?
+
+      if shift.persisted?
+        shift_query = ExclusiveOfQuery.new(
+          relation: shift_query,
+          excluded: shift
+        ).all
+
         security_venue_shift_query = ExclusiveOfQuery.new(
           relation: security_venue_shift_query,
           excluded: shift
@@ -30,12 +30,11 @@ class ShiftTimeOverlapValidator
       end
 
       if shift_query.count > 0
-        overlapped_times = query.map {|q| "#{q.starts_at.strftime("%H:%M")}-#{q.ends_at.strftime("%H:%M")}"}
-        shift.errors.add(:base, "Shift overlaps existing (#{shift_query.count}) shifts: " + overlapped_times.join(", "))
+        shift.errors.add(:base, 'security venue shift overlaps existing shift')
       end
 
       if security_venue_shift_query.count > 0
-        shift.errors.add(:base, 'shift overlaps existing security venue shift')
+        shift.errors.add(:base, 'security venue shift overlaps existing security venue shift')
       end
     end
   end
@@ -43,10 +42,9 @@ class ShiftTimeOverlapValidator
   private
   attr_accessor :shift
 
-  def prerequisites_present?
+  def prerequisites_persent?
     shift.starts_at.present? &&
       shift.ends_at.present? &&
-      shift.staff_member.present? &&
-      shift.rota.present?
+      shift.staff_member.present?
   end
 end
