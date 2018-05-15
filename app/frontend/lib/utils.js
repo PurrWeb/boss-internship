@@ -422,10 +422,11 @@ var utils =  {
       return dates;
     },
     getBuisnessDay(mDate) {
-      if (mDate.hours() >= 0 && mDate.hours() <= 7 && mDate.minutes() <= 59) {
-        mDate.subtract(1, 'day');
+      const newMDate = mDate.clone();
+      if (newMDate.hours() >= 0 && newMDate.hours() <= 7 && newMDate.minutes() <= 59) {
+        newMDate.subtract(1, 'day');
       }
-      return mDate.hours(8).startOf('hour');
+      return newMDate.hours(8).startOf('hour');
     },
     intervalRotaDatesFormat(mStartsAt, mEndsAt) {
       const dayFormat = 'ddd DD/MM/YYYY';
