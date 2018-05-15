@@ -237,6 +237,7 @@ Rails.application.routes.draw do
           end
         end
 
+        resources :security_venue_shifts, only: [:create, :update, :destroy], path: 'security-venue-shifts'
         resources :security_rota_shifts, only: [:create, :update, :destroy], path: 'security-rota-shifts'
 
         resources :staff_vetting, only: [] do
