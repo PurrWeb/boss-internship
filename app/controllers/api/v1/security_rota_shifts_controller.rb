@@ -23,9 +23,11 @@ module Api
 
         if result.success?
           frontend_updates.dispatch
-          render json: {
-            rotaShift: Api::V1::SecurityRota::RotaShiftSerializer.new(result.rota_shift)
-          }
+          render(
+            json: result.rota_shift,
+            serializer: Api::V1::SecurityRota::RotaShiftSerializer,
+            status: 200
+          )
         else
           render json: {errors: result.api_errors.errors}, status: 422
         end
@@ -50,7 +52,7 @@ module Api
           frontend_updates.dispatch
           render json: {
             rotaShift: Api::V1::SecurityRota::RotaShiftSerializer.new(result.rota_shift)
-          } 
+          }
         else
           render json: {errors: result.api_errors.errors}, status: 422
         end
