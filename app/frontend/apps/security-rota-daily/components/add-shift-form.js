@@ -3,16 +3,9 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Field, Fields, reduxForm } from 'redux-form/immutable';
 import getVenueColor from '~/lib/get-venue-color';
-import {
-  ErrorBlock,
-  BossFormCheckbox,
-  BossFormSelect,
-} from '~/components/boss-form';
+import { ErrorBlock, BossFormCheckbox, BossFormSelect } from '~/components/boss-form';
 import BossFormShiftTimeInput from './boss-form-shift-time-input';
-import {
-  ColoredSingleOption,
-  ColoredSingleValue,
-} from '~/components/boss-form/colored-select';
+import { ColoredSingleOption, ColoredSingleValue } from '~/components/boss-form/colored-select';
 
 class AddShiftForm extends React.Component {
   render() {
@@ -32,7 +25,9 @@ class AddShiftForm extends React.Component {
         <Field
           name="venueId"
           component={BossFormSelect}
-          options={this.props.venues.map(v => v.set('color', getVenueColor(v.get('id')))).toJS()}
+          options={this.props.venues
+            .map(v => v.set('color', getVenueColor(v.get('id').split(`_`)[1])))
+            .toJS()}
           optionValue="id"
           optionLabel="name"
           multy={false}
@@ -42,11 +37,7 @@ class AddShiftForm extends React.Component {
           optionComponent={ColoredSingleOption}
           valueComponent={ColoredSingleValue}
         />
-        <Fields
-          names={['startsAt', 'endsAt']}
-          component={BossFormShiftTimeInput}
-          rotaDate={rotaDate}
-        />
+        <Fields names={['startsAt', 'endsAt']} component={BossFormShiftTimeInput} rotaDate={rotaDate} />
         {error && <ErrorBlock error={error} />}
         <Field
           name="shiftType"

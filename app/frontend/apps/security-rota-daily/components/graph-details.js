@@ -11,7 +11,7 @@ const ROTA_PUBLISHED_STATUS = 'published';
 
 class GraphDetails extends React.Component {
   handleSubmit = (values, dispatch, props, type) => {
-    function trowErrors(resp) {
+    function throwErrors(resp) {
       let errors = resp.response.data.errors;
       if (errors) {
         if (errors.base) {
@@ -33,6 +33,7 @@ class GraphDetails extends React.Component {
           deleteStaffMemberShift(
             values.get('shiftId'),
             values.get('staffMemberId'),
+            values.get('venueType'),
           ),
         );
     }
@@ -50,12 +51,12 @@ class GraphDetails extends React.Component {
         },
       ).then(() => {
         return action().catch(resp => {
-          trowErrors(resp);
+          throwErrors(resp);
         });
       });
     } else {
       return action().catch(resp => {
-        trowErrors(resp);
+        throwErrors(resp);
       });
     }
   };
@@ -74,7 +75,8 @@ class GraphDetails extends React.Component {
       startsAt: rotaShift.get('startsAt'),
       endsAt: rotaShift.get('endsAt'),
       shiftType: rotaShift.get('shiftType'),
-      venueId: rotaShift.get('venueId'),
+      venueId: `${rotaShift.get('venueType')}_${rotaShift.get('venueId')}`,
+      venueType: rotaShift.get('venueType'),
     };
 
     return (
@@ -85,7 +87,7 @@ class GraphDetails extends React.Component {
         initialValues={initialValues}
         rotaDate={rotaDate}
         rotaStatus={this.props.rotaStatus}
-        venueTypes={this.props.venueTypes}
+        venueTypes={this.props.venueTypes.toJS()}
       />
     );
   }

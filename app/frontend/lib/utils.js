@@ -7,6 +7,9 @@ import safeMoment from '~/lib/safe-moment';
 import oFetch from 'o-fetch';
 import { extendMoment } from 'moment-range';
 
+export const BOSS_VENUE_TYPE = 'normal';
+export const SECURITY_VENUE_TYPE = 'security';
+
 const momentRange = extendMoment(moment);
 
 numeral.register('locale', 'en-gb', {
@@ -83,9 +86,17 @@ var utils =  {
       const weekRotaShifts = shifts
         .filter(shift => shift.get('staffMemberId') === staffMember.get('id'))
         .map(rotaShift => {
-          const rota = rotas.find(rota => {
-            return rota.get('id') === rotaShift.get('rota')});
-          const venue = venues.find(venue => rota && (venue.get('id') === rota.get('venue')));
+          let venue = Map();
+          if (rotaShift.get('venueType') === BOSS_VENUE_TYPE) {
+            const rota = rotas.find(rota => {
+              return rota.get('id') === rotaShift.get('rota')});
+            venue = venues.find(venue => rota && (venue.get('id') === rota.get('venue')) && venue.get('type') === BOSS_VENUE_TYPE);
+          } else if (rotaShift.get('venueType') === SECURITY_VENUE_TYPE) {
+            venue = venues.find(venue => venue.get('id') === rotaShift.get('securityVenueId') && venue.get('type') === SECURITY_VENUE_TYPE);
+          } else {
+            throw new Error('Unknow venue type');
+          }
+
           return rotaShift
                       .set('venueName', venue.get('name'))
                       .set('venueId', venue.get('id'));
@@ -97,7 +108,7 @@ var utils =  {
           return ends_at.diff(starts_at, 'minutes') / 60 + result;
         }, 0);
       const weekVenueIds = weekRotaShifts.reduce((set, shift) => {
-        return set.add(shift.get('venueId'))
+        return set.add(`${shift.get('venueType')}_${shift.get('venueId')}`);
       }, new Set());
         return {weekRotaShifts, hoursOnWeek, weekVenueIds};
     },

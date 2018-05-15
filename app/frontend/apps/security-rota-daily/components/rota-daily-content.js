@@ -11,6 +11,7 @@ import RotaGraph from './rota-graph';
 import AddShifts from './add-shifts';
 import StaffMemberInfo from './staff-member-info';
 import GraphDetails from './graph-details';
+import { BOSS_VENUE_TYPE, SECURITY_VENUE_TYPE } from '~/lib/utils';
 
 import {
   showGraphDetails,
@@ -84,6 +85,10 @@ class RotaDailyContent extends React.Component {
     this.props.actions.closeGraphDetails();
   };
 
+  getVenueTypes() {
+    return this.props.venueTypes.map(venue => venue.set('id', `${venue.get('type')}_${venue.get('id')}`));
+  }
+
   render() {
     const {
       rotas,
@@ -100,14 +105,13 @@ class RotaDailyContent extends React.Component {
       venueTypes,
       filteredRotaShifts,
     } = this.props;
-
     const rotaGraphClassName = isAddingNewShift
       ? 'boss-rotas__graphs_state_mobile-hidden'
       : '';
     const addShiftsClassName = !isAddingNewShift
       ? 'boss-rotas__manager_state_mobile-hidden'
       : '';
-    const rotaStatus = graphDetails
+    const rotaStatus = graphDetails && graphDetails.getIn(['originalShiftObject', 'venueType']) === BOSS_VENUE_TYPE
       ? rotas.find(
           r =>
             r.get('id') === graphDetails.getIn(['originalShiftObject', 'rota']),
@@ -128,13 +132,13 @@ class RotaDailyContent extends React.Component {
                   rotaStatus={rotaStatus}
                   staffTypes={staffTypes}
                   rotaDate={rotaDate}
-                  venueTypes={venueTypes}
+                  venueTypes={this.getVenueTypes()}
                 />
               )}
             </ModalWrapper>
             <RotaDailyGraphFilter
               selectedTypes={this.props.venuesFilterIds.toJS()}
-              venueTypes={venueTypes}
+              venueTypes={this.getVenueTypes()}
               rotaDate={rotaDate}
               onVenueChange={this.handleGraphVenueChange}
             />
@@ -144,11 +148,11 @@ class RotaDailyContent extends React.Component {
               staffTypes={staffTypes.toJS()}
               staffMembers={staffMembers.toJS()}
               onShiftClick={this.handleShiftClick}
-              venueTypes={venueTypes}
+              venueTypes={this.getVenueTypes()}
             />
           </div>
           <AddShifts
-            venueTypes={venueTypes}
+            venueTypes={this.getVenueTypes()}
             venues={venues}
             staffTypes={staffTypes}
             staffMembers={this.props.staffMembers}

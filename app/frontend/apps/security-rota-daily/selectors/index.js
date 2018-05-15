@@ -24,14 +24,13 @@ export const getVenueTypes = createSelector(
         return v.set('color', getVenueColor(v.get('id'))).set(
           'count',
           rotaShifts.reduce((acc, rotaShift) => {
-            if (rotaShift.get('venueId') === v.get('id')) {
+            if (rotaShift.get('venueId') === v.get('id') && rotaShift.get('venueType') === v.get('type')) {
               return acc + 1;
             }
             return acc;
           }, 0),
         );
-      })
-      .toJS(),
+      }),
 );
 
 export const getRotaShifts = createSelector(
@@ -42,7 +41,7 @@ export const getRotaShifts = createSelector(
       return rotaShifts.toJS();
     } else {
       return rotaShifts
-        .filter(rotaShift => venuesFilterIds.includes(rotaShift.get('venueId')))
+        .filter(rotaShift => venuesFilterIds.includes(`${rotaShift.get('venueType')}_${rotaShift.get('venueId')}`))
         .toJS();
     }
   },

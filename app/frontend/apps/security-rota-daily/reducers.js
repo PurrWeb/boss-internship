@@ -4,7 +4,8 @@ import { combineReducers } from 'redux-immutable';
 import { handleActions } from 'redux-actions';
 import { reducer as formReducer } from 'redux-form/immutable';
 import SafeMoment from '~/lib/safe-moment';
-import utils from '~/lib/utils';
+import utils, { BOSS_VENUE_TYPE, SECURITY_VENUE_TYPE } from '~/lib/utils';
+import oFetch from 'o-fetch';
 
 import {
   INITIAL_LOAD,
@@ -20,6 +21,7 @@ import {
   SET_MULTIPLE_SHIFT_STAFF_ID,
   SET_VENUES_FILTER,
   UPDATE_STAFF_MEMBER_SHIFT_INFO,
+  ADD_SECURITY_VENUE_SHIFT,
 } from './constants';
 
 const initialState = fromJS({
@@ -48,30 +50,30 @@ const rotaDailyReducer = handleActions(
         staffTypes,
         staffMembers,
         venues,
+        securityVenues,
         weekRotas,
         weekRotaShifts,
+        securityVenueShifts,
+        weekSecurityVenueShifts,
       } = action.payload;
 
-      const imWeekRotaShifts = fromJS(weekRotaShifts);
+      const imWeekSecurityVenueShifts = fromJS(weekSecurityVenueShifts);
+      const imWeekRotaShifts = fromJS(weekRotaShifts).concat(imWeekSecurityVenueShifts);
       const imHolidays = fromJS(holidays);
-      const imVenues = fromJS(venues);
+      const imSecurityVenues = fromJS(securityVenues);
+      const imVenues = fromJS(venues).concat(imSecurityVenues);
       const imRotas = fromJS(rotas);
+      const imSecurityVenueShifts = fromJS(securityVenueShifts);
       const imWeekRotas = fromJS(weekRotas);
       const imStaffMembers = fromJS(staffMembers).map(staffMember => {
-        const {
-          weekRotaShifts,
-          hoursOnWeek,
-          weekVenueIds,
-        } = utils.calculateSecurityRotaShift(
+        const { weekRotaShifts, hoursOnWeek, weekVenueIds } = utils.calculateSecurityRotaShift(
           staffMember,
           imWeekRotaShifts,
           imWeekRotas,
           imVenues,
         );
 
-        const holidays = imHolidays.filter(
-          holiday => holiday.get(['staffMemberId']) === staffMember.get('id'),
-        );
+        const holidays = imHolidays.filter(holiday => holiday.get(['staffMemberId']) === staffMember.get('id'));
         const holidaysOnWeek = holidays.reduce((summ, holiday) => {
           return (summ = summ + holiday.get('days'));
         }, 0);
@@ -84,12 +86,21 @@ const rotaDailyReducer = handleActions(
           .set('weekVenueIds', weekVenueIds);
       });
       let venueIdsForCurrentDay = new Set();
-      const rotaShiftsWithVenueId = fromJS(rotaShifts).map(shift => {
-        const rota = imRotas.find(r => shift.get('rota') === r.get('id'));
-        const venueId = rota.get('venue');
-        venueIdsForCurrentDay = venueIdsForCurrentDay.add(venueId);
-        return shift.set('venueId', venueId);
-      });
+      const rotaShiftsWithVenueId = fromJS(rotaShifts)
+        .concat(imSecurityVenueShifts)
+        .map(shift => {
+          let venueId;
+          if (shift.get('venueType') === BOSS_VENUE_TYPE) {
+            const rota = imRotas.find(r => shift.get('rota') === r.get('id'));
+            venueId = rota.get('venue');
+          } else if (shift.get('venueType') === SECURITY_VENUE_TYPE) {
+            venueId = shift.get('securityVenueId');
+          } else {
+            throw new Error('Unknow venue type');
+          }
+          venueIdsForCurrentDay = venueIdsForCurrentDay.add(venueId);
+          return shift.set('venueId', venueId);
+        });
       return state
         .set('accessToken', accessToken)
         .set('staffTypes', fromJS(staffTypes))
@@ -101,7 +112,8 @@ const rotaDailyReducer = handleActions(
         .set('venues', imVenues)
         .set('holidays', imHolidays)
         .set('date', date)
-        .set('venueIdsForCurrentDay', venueIdsForCurrentDay);
+        .set('venueIdsForCurrentDay', venueIdsForCurrentDay)
+        .set('securityVenueShifts', fromJS(securityVenueShifts));
     },
     [ADD_NEW_SHIFT]: state => {
       return state.set('isAddingNewShift', true);
@@ -110,9 +122,7 @@ const rotaDailyReducer = handleActions(
       return state.set('isAddingNewShift', false);
     },
     [SHOW_GRAPH_DETAILS]: (state, action) => {
-      return state
-        .set('graphDetails', fromJS(action.payload))
-        .set('isGraphDetailsOpen', true);
+      return state.set('graphDetails', fromJS(action.payload)).set('isGraphDetailsOpen', true);
     },
     [CLOSE_GRAPH_DETAILS]: state => {
       return state.set('graphDetails', null).set('isGraphDetailsOpen', false);
@@ -128,11 +138,7 @@ const rotaDailyReducer = handleActions(
           const imWeekRotaShifts = state.get('weekRotaShifts');
           const imWeekRotas = state.get('weekRotas');
           const imVenues = state.get('venues');
-          const {
-            weekRotaShifts,
-            hoursOnWeek,
-            weekVenueIds,
-          } = utils.calculateSecurityRotaShift(
+          const { weekRotaShifts, hoursOnWeek, weekVenueIds } = utils.calculateSecurityRotaShift(
             staffMember,
             imWeekRotaShifts,
             imWeekRotas,
@@ -146,14 +152,15 @@ const rotaDailyReducer = handleActions(
       });
     },
     [UPDATE_ROTA_SHIFT]: (state, action) => {
-      const { id, startsAt, endsAt, shiftType, venueId } = action.payload;
-
-      const shiftIndex = state
-        .get('rotaShifts')
-        .findIndex(shift => shift.get('id') === id);
-      const weekShiftIndex = state
-        .get('weekRotaShifts')
-        .findIndex(shift => shift.get('id') === id);
+      const { id, startsAt, endsAt, shiftType, venueType } = action.payload;
+      const venueCombinedId = oFetch(action, 'payload.venueId');
+      const [type, stringVenueId] = venueCombinedId.split('_');
+      const venueId = Number(stringVenueId);
+      if (![BOSS_VENUE_TYPE, SECURITY_VENUE_TYPE].includes(type)) {
+        throw new Error('Unknow venue type');
+      }
+      const shiftIndex = state.get('rotaShifts').findIndex(shift => shift.get('id') === id);
+      const weekShiftIndex = state.get('weekRotaShifts').findIndex(shift => shift.get('id') === id);
 
       return state
         .update('rotaShifts', shifts => {
@@ -162,7 +169,8 @@ const rotaDailyReducer = handleActions(
               .set('startsAt', startsAt)
               .set('endsAt', endsAt)
               .set('venueId', venueId)
-              .set('shiftType', shiftType);
+              .set('shiftType', shiftType)
+              .set('venueType', venueType)
           });
         })
         .update('weekRotaShifts', shifts => {
@@ -170,20 +178,13 @@ const rotaDailyReducer = handleActions(
             return shift
               .set('startsAt', startsAt)
               .set('endsAt', endsAt)
-              .set('shiftType', shiftType);
+              .set('shiftType', shiftType)
+              .set('venueType', venueType)
           });
         });
     },
     [ADD_ROTA_SHIFT]: (state, action) => {
-      const {
-        id,
-        rota,
-        staffMemberId,
-        startsAt,
-        endsAt,
-        shiftType,
-        venueId,
-      } = action.payload;
+      const { id, rota, staffMemberId, startsAt, endsAt, shiftType, venueId, venueType } = action.payload;
 
       const newRotaShift = {
         id,
@@ -193,6 +194,7 @@ const rotaDailyReducer = handleActions(
         staffMemberId,
         rota,
         venueId,
+        venueType,
       };
       const date = state.get('date');
       const isRotaExists = !!state.get('rotas').find(r => r.get('id') === rota);
@@ -206,33 +208,25 @@ const rotaDailyReducer = handleActions(
       return state
         .update('rotaShifts', shifts => shifts.push(fromJS(newRotaShift)))
         .update('weekRotaShifts', shifts => shifts.push(fromJS(newRotaShift)))
-        .update(
-          'rotas',
-          rotas => (isRotaExists ? rotas : rotas.push(fromJS(newRota))),
-        )
-        .update(
-          'weekRotas',
-          weekRotas =>
-            isRotaExists ? weekRotas : weekRotas.push(fromJS(newRota)),
-        )
+        .update('rotas', rotas => (isRotaExists ? rotas : rotas.push(fromJS(newRota))))
+        .update('weekRotas', weekRotas => (isRotaExists ? weekRotas : weekRotas.push(fromJS(newRota))))
         .set('venueIdsForCurrentDay', venueIdsForCurrentDay.add(venueId));
     },
+    [ADD_SECURITY_VENUE_SHIFT]: (state, action) => {
+      const securityVenueShift = oFetch(action, 'payload');
+
+      return state.update('rotaShifts', shifts => shifts.push(fromJS(securityVenueShift)));
+    },
     [DELETE_ROTA_SHIFT]: (state, action) => {
-      const shiftId = action.payload;
-      const shiftIndex = state
-        .get('rotaShifts')
-        .findIndex(shift => shift.get('id') === shiftId);
-      const weekShiftIndex = state
-        .get('weekRotaShifts')
-        .findIndex(shift => shift.get('id') === shiftId);
+      const { shiftId, venueType } = action.payload;
 
       return state
-        .update('rotaShifts', shifts => {
-          return shifts.delete(shiftIndex);
-        })
-        .update('weekRotaShifts', shifts => {
-          return shifts.delete(weekShiftIndex);
-        });
+        .update('rotaShifts', rotaShifts =>
+          rotaShifts.filter(shift => !(shift.get('id') === shiftId && shift.get('venueType') === venueType)),
+        )
+        .update('weekRotaShifts', weekRotaShifts =>
+          weekRotaShifts.filter(shift => !(shift.get('id') === shiftId && shift.get('venueType') === venueType)),
+        );
     },
     [OPEN_MULTIPLE_SHIFT]: state => {
       return state.set('isMultipleShift', true);

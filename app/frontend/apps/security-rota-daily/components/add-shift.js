@@ -52,6 +52,10 @@ class AddShift extends React.Component {
     });
   };
 
+  getVenues() {
+    return this.props.venues.map(venue => venue.set('id', `${venue.get('type')}_${venue.get('id')}`));
+  }
+
   render() {
     const { staffMember, rotaDate, venues } = this.props;
 
@@ -70,7 +74,7 @@ class AddShift extends React.Component {
         rotaDate={rotaDate}
         rotas={this.props.rotas}
         handleAfterAdd={this.props.handleAfterAdd}
-        venues={this.props.venues}
+        venues={this.getVenues()}
       />
     );
   }

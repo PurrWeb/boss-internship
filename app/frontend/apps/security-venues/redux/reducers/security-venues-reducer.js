@@ -15,7 +15,7 @@ const venues = handleActions(
       return Immutable.fromJS(securityVenues);
     },
     [types.ADD_VENUE]: (state, action) => {
-      return state.push(Immutable.fromJS(action.payload));
+      return state.unshift(Immutable.fromJS(action.payload));
     },
     [types.EDIT_VENUE]: (state, action) => {
       const id = oFetch(action, 'payload.id');

@@ -57,7 +57,7 @@ class Page extends Component {
         <VenueList
           venues={securityVenues}
           listObjectName="venues"
-          perPage={10}
+          perPage={3}
           itemRenderer={venue => <VenueItem venue={venue} onEditClick={() => this.handleOpenEditSecurityVenueModal(venue)} />}
         />
       </div>
