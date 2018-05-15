@@ -148,6 +148,10 @@ class UserAbility
         )
       end
 
+      can [:create, :destroy], :security_venue_shifts do
+        user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can :view, :accessory_requests_page do
         user.food_ops_manager? ||
         user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
@@ -437,6 +441,10 @@ class UserAbility
         else
           can_manage_rota?(user, rota_shift.rota)
         end
+      end
+
+      can [:view, :create, :update, :destroy], SecurityVenueShift do |rota_shift|
+        user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can :view, :security_shift_requests do
