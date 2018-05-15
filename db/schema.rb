@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180510114119) do
+ActiveRecord::Schema.define(version: 20180511080848) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -1082,6 +1082,24 @@ ActiveRecord::Schema.define(version: 20180510114119) do
   add_index "security_shift_requests", ["deleted_at"], name: "index_security_shift_requests_on_deleted_at", using: :btree
   add_index "security_shift_requests", ["venue_id"], name: "index_security_shift_requests_on_venue_id", using: :btree
 
+  create_table "security_venue_shifts", force: :cascade do |t|
+    t.date     "date",                          null: false
+    t.integer  "staff_member_id",     limit: 4, null: false
+    t.integer  "creator_user_id",     limit: 4, null: false
+    t.integer  "security_venue_id",   limit: 4, null: false
+    t.datetime "starts_at",                     null: false
+    t.datetime "ends_at",                       null: false
+    t.datetime "disabled_at"
+    t.integer  "disabled_by_user_id", limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "security_venue_shifts", ["creator_user_id"], name: "index_security_venue_shifts_on_creator_user_id", using: :btree
+  add_index "security_venue_shifts", ["disabled_by_user_id"], name: "index_security_venue_shifts_on_disabled_by_user_id", using: :btree
+  add_index "security_venue_shifts", ["security_venue_id"], name: "index_security_venue_shifts_on_security_venue_id", using: :btree
+  add_index "security_venue_shifts", ["staff_member_id"], name: "index_security_venue_shifts_on_staff_member_id", using: :btree
+
   create_table "security_venues", force: :cascade do |t|
     t.string   "name",            limit: 255,   null: false
     t.integer  "creator_user_id", limit: 4,     null: false
@@ -1339,4 +1357,9 @@ ActiveRecord::Schema.define(version: 20180510114119) do
   add_foreign_key "security_shift_requests", "rota_shifts", column: "created_shift_id"
   add_foreign_key "security_shift_requests", "users", column: "creator_id"
   add_foreign_key "security_shift_requests", "venues"
+  add_foreign_key "security_venue_shifts", "security_venues"
+  add_foreign_key "security_venue_shifts", "staff_members"
+  add_foreign_key "security_venue_shifts", "users", column: "creator_user_id"
+  add_foreign_key "security_venue_shifts", "users", column: "disabled_by_user_id"
+  add_foreign_key "security_venues", "users", column: "creator_user_id"
 end
