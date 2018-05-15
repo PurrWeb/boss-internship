@@ -218,7 +218,7 @@ var utils =  {
       return 'HH:mm';
     },
     commonDateFormatCalendar(){
-      return 'dddd, D MMMM YYYY';
+      return 'ddd DD/MM/YYYY';
     },
     humanDateFormatWithDayOfWeek(){
       return 'HH:mm ddd DD/MM/YYYY';
