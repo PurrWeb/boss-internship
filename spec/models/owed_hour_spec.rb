@@ -114,7 +114,7 @@ describe OwedHour do
         end
       end
 
-      before 'owed hour should not be valid' do
+      specify 'owed hour should not be valid' do
         expect(owed_hour).to_not be_valid
       end
 
