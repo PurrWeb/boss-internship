@@ -8,19 +8,19 @@ class FrontendUpdates
     begin
       created_shifts.each_value do |shift_data|
         shift = shift_data.fetch(:shift)
-        if shift.rota_published?
+        if shift.venue_type == SecurityVenueShift::SHIFT_VENUE_TYPE || shift.rota_published?
           security_app_update_service.create_shift(shift: shift) if shift.staff_member.security?
         end
       end
       shift_updates.each_value do |shift_data|
         shift = shift_data.fetch(:shift)
-        if shift.rota_published?
+        if shift.venue_type == SecurityVenueShift::SHIFT_VENUE_TYPE || shift.rota_published?
           security_app_update_service.update_shift(shift: shift) if shift.staff_member.security?
         end
       end
       shift_deletes.each_value do |shift_data|
         shift = shift_data.fetch(:shift)
-        if shift.rota_published?
+        if shift.venue_type == SecurityVenueShift::SHIFT_VENUE_TYPE || shift.rota_published?
           security_app_update_service.delete_shift(shift: shift) if shift.staff_member.security?
         end
       end

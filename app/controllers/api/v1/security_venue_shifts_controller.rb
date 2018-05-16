@@ -57,13 +57,15 @@ module Api
 
       def destroy
         authorize! :destroy, security_venue_shift_from_params
-
+        frontend_updates = FrontendUpdates.new
         result = DisableSecurityVenueShift.new(
           requester: current_user,
           security_venue_shift: security_venue_shift_from_params,
+          frontend_updates: frontend_updates
         ).call
 
         if result.success?
+          frontend_updates.dispatch
           render(
             json: result.security_venue_shift,
             serializer: Api::V1::SecurityRota::SecurityVenueShiftSerializer,

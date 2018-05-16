@@ -17,7 +17,6 @@ class CreateSecurityVenueShift
     result = false
     security_venue_shift = nil
     api_errors = nil
-
     ActiveRecord::Base.transaction do
       security_venue_shift = SecurityVenueShift.new(
         security_venue_shift_params.merge(
@@ -28,8 +27,10 @@ class CreateSecurityVenueShift
       )
 
       result = security_venue_shift.save
-
-      unless result
+      if result
+        security_venue_shift.staff_member.mark_requiring_notification!
+        frontend_updates.create_shift(shift: security_venue_shift)
+      else
         api_errors = RotaShiftApiErrors.new(rota_shift: security_venue_shift)
         ActiveRecord::Rollback
       end

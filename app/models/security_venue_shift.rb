@@ -4,6 +4,8 @@ class SecurityVenueShift < ActiveRecord::Base
   belongs_to :creator_user, class_name: "User"
   belongs_to :disabled_by_user, class_name: "User"
 
+  SHIFT_VENUE_TYPE = "security".freeze
+
   validates :date, presence: true
   validates :starts_at, presence: true
   validates :ends_at, presence: true
@@ -27,6 +29,10 @@ class SecurityVenueShift < ActiveRecord::Base
 
   def enabled?
     !disabled?
+  end
+
+  def venue_type
+    SHIFT_VENUE_TYPE
   end
 
   private

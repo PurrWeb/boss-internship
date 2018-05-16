@@ -5,9 +5,10 @@ class DisableSecurityVenueShift
     end
   end
 
-  def initialize(requester:, security_venue_shift:)
+  def initialize(requester:, security_venue_shift:, frontend_updates:)
     @requester = requester
     @security_venue_shift = security_venue_shift
+    @frontend_updates = frontend_updates
   end
 
   def call
@@ -21,7 +22,11 @@ class DisableSecurityVenueShift
         disabled_by_user: requester,
         disabled_at: Time.zone.now
       )
-      unless success
+
+      if success
+        frontend_updates.delete_shift(shift: security_venue_shift)
+        security_venue_shift.staff_member.mark_requiring_notification!
+      else
         api_errors = RotaShiftApiErrors.new(rota_shift: security_venue_shift)
         ActiveRecord::Rollback
       end
@@ -31,5 +36,5 @@ class DisableSecurityVenueShift
   end
 
   private
-  attr_reader :requester, :security_venue_shift
+  attr_reader :requester, :security_venue_shift, :frontend_updates
 end
