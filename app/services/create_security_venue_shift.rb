@@ -29,7 +29,7 @@ class CreateSecurityVenueShift
       result = security_venue_shift.save
       if result
         security_venue_shift.staff_member.mark_requiring_notification!
-        frontend_updates.create_shift(shift: security_venue_shift)
+        frontend_updates.create_security_venue_shift(security_venue_shift: security_venue_shift)
       else
         api_errors = RotaShiftApiErrors.new(rota_shift: security_venue_shift)
         ActiveRecord::Rollback

@@ -11,9 +11,19 @@ class SecurityAppUpdateService
     @updates[:shifts][shift.id] = shift
   end
 
+  def create_security_venue_shift(security_venue_shift:)
+    @updates[:security_venue_shifts] ||= {}
+    @updates[:security_venue_shifts][security_venue_shift.id] = security_venue_shift
+  end
+
   def update_shift(shift:)
     @updates[:shifts] ||= {}
     @updates[:shifts][shift.id] = shift
+  end
+
+  def update_security_venue_shift(security_venue_shift:)
+    @updates[:security_venue_shifts] ||= {}
+    @updates[:security_venue_shifts][security_venue_shift.id] = security_venue_shift
   end
 
   def update_staff_member_profile(staff_member:)
@@ -24,6 +34,11 @@ class SecurityAppUpdateService
   def delete_shift(shift:)
     @deletes[:shifts] ||= {}
     @deletes[:shifts][shift.id] = shift
+  end
+
+  def delete_security_venue_shift(security_venue_shift:)
+    @deletes[:security_venue_shifts] ||= {}
+    @deletes[:security_venue_shifts][security_venue_shift.id] = security_venue_shift
   end
 
   def create_venue(venue:)

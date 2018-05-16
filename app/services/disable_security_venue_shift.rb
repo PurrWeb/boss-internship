@@ -24,7 +24,7 @@ class DisableSecurityVenueShift
       )
 
       if success
-        frontend_updates.delete_shift(shift: security_venue_shift)
+        frontend_updates.delete_security_venue_shift(security_venue_shift: security_venue_shift)
         security_venue_shift.staff_member.mark_requiring_notification!
       else
         api_errors = RotaShiftApiErrors.new(rota_shift: security_venue_shift)

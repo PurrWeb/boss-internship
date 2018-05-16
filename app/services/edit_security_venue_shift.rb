@@ -19,7 +19,7 @@ class EditSecurityVenueShift
       result = security_venue_shift.update_attributes(security_venue_shift_params)
 
       if result
-        frontend_updates.update_shift(shift: security_venue_shift)
+        frontend_updates.update_security_venue_shift(security_venue_shift: security_venue_shift)
         security_venue_shift.staff_member.mark_requiring_notification!
       else
         api_errors = RotaShiftApiErrors.new(rota_shift: security_venue_shift)
