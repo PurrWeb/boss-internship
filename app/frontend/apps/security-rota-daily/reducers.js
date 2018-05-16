@@ -98,7 +98,7 @@ const rotaDailyReducer = handleActions(
           } else {
             throw new Error('Unknow venue type');
           }
-          venueIdsForCurrentDay = venueIdsForCurrentDay.add(venueId);
+          venueIdsForCurrentDay = venueIdsForCurrentDay.add(`${shift.get('venueType')}_${venueId}`);
           return shift.set('venueId', venueId);
         });
       return state
@@ -170,7 +170,7 @@ const rotaDailyReducer = handleActions(
               .set('endsAt', endsAt)
               .set('venueId', venueId)
               .set('shiftType', shiftType)
-              .set('venueType', venueType)
+              .set('venueType', venueType);
           });
         })
         .update('weekRotaShifts', shifts => {
@@ -179,7 +179,7 @@ const rotaDailyReducer = handleActions(
               .set('startsAt', startsAt)
               .set('endsAt', endsAt)
               .set('shiftType', shiftType)
-              .set('venueType', venueType)
+              .set('venueType', venueType);
           });
         });
     },
@@ -210,12 +210,16 @@ const rotaDailyReducer = handleActions(
         .update('weekRotaShifts', shifts => shifts.push(fromJS(newRotaShift)))
         .update('rotas', rotas => (isRotaExists ? rotas : rotas.push(fromJS(newRota))))
         .update('weekRotas', weekRotas => (isRotaExists ? weekRotas : weekRotas.push(fromJS(newRota))))
-        .set('venueIdsForCurrentDay', venueIdsForCurrentDay.add(venueId));
+        .set('venueIdsForCurrentDay', venueIdsForCurrentDay.add(`${venueType}_${venueId}`));
     },
     [ADD_SECURITY_VENUE_SHIFT]: (state, action) => {
       const securityVenueShift = oFetch(action, 'payload');
-
-      return state.update('rotaShifts', shifts => shifts.push(fromJS(securityVenueShift)));
+      const venueId = oFetch(securityVenueShift, 'securityVenueId');
+      const venueType = oFetch(securityVenueShift, 'venueType');
+      const venueIdsForCurrentDay = state.get('venueIdsForCurrentDay');
+      return state
+        .update('rotaShifts', shifts => shifts.push(fromJS(securityVenueShift)))
+        .set('venueIdsForCurrentDay', venueIdsForCurrentDay.add(`${venueType}_${venueId}`));
     },
     [DELETE_ROTA_SHIFT]: (state, action) => {
       const { shiftId, venueType } = action.payload;
