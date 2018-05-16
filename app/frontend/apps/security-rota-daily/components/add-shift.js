@@ -1,21 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import oFetch from 'o-fetch';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import AddShiftForm from './add-shift-form';
 import { SubmissionError } from 'redux-form/immutable';
 import { confirmation } from '~/lib/confirm-utils';
-
+import { BOSS_VENUE_TYPE, SECURITY_VENUE_TYPE } from '~/lib/utils';
 import { addShift } from '../actions';
 
 const ROTA_PUBLISHED_STATUS = 'published';
 
 export function handleSubmit(values, dispatch, props) {
-  const status = props.rotas.size > 0 && props.rotas
-    .find(r => r.get('venue') === values.get('venueId'))
-    && props.rotas.find(r => r.get('venue') === values.get('venueId'))
-    .get('status');
+  const status =
+    props.rotas.size > 0 &&
+    props.rotas.find(r => r.get('venue') === values.get('venueId')) &&
+    props.rotas.find(r => r.get('venue') === values.get('venueId')).get('status');
+  const jsValues = values.toJS();
   const action = () => {
-    return dispatch(addShift(values.toJS())).catch(resp => {
+    return dispatch(addShift(jsValues)).catch(resp => {
       let errors = resp.response.data.errors;
       if (errors) {
         if (errors.base) {
@@ -27,17 +29,19 @@ export function handleSubmit(values, dispatch, props) {
     });
   };
 
-  if (status === ROTA_PUBLISHED_STATUS) {
-    return confirmation(
-      [
-        "Editing a shift on a published rota will send out email confirmations.",
-        'Do you want to continue?',
-      ],
-      {
-        title: 'WARNING !!!',
-        id: 'rota-daily-confirmation',
-      },
-    ).then(() => {
+  const venueCombinedId = oFetch(jsValues, 'venueId');
+  const [type, stringVenueId] = venueCombinedId.split('_');
+  if (status === ROTA_PUBLISHED_STATUS || type === SECURITY_VENUE_TYPE) {
+    let messageText = null;
+    if (status === ROTA_PUBLISHED_STATUS) {
+      messageText = "Publishing a rota will send out email confirmations and can't be undone.";
+    } else if (type === SECURITY_VENUE_TYPE) {
+      messageText = 'Creating this shift will send an email notification to the staff member';
+    }
+    return confirmation([messageText, 'Do you want to continue?'], {
+      title: 'WARNING !!!',
+      id: 'rota-daily-confirmation',
+    }).then(() => {
       return action();
     });
   } else {

@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import oFetch from 'o-fetch';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import GraphDetailsForm from './graph-details-form';
 import { SubmissionError } from 'redux-form/immutable';
 import { confirmation } from '~/lib/confirm-utils';
+import { BOSS_VENUE_TYPE, SECURITY_VENUE_TYPE } from '~/lib/utils';
 
 import { updateStaffMemberShift, deleteStaffMemberShift } from '../actions';
 
@@ -11,6 +13,7 @@ const ROTA_PUBLISHED_STATUS = 'published';
 
 class GraphDetails extends React.Component {
   handleSubmit = (values, dispatch, props, type) => {
+    const jsValues = values.toJS();
     function throwErrors(resp) {
       let errors = resp.response.data.errors;
       if (errors) {
@@ -25,31 +28,33 @@ class GraphDetails extends React.Component {
     let action;
     const status = props.rotaStatus;
     if (type === 'update') {
-      action = () => dispatch(updateStaffMemberShift(values.toJS()));
+      action = () => dispatch(updateStaffMemberShift(jsValues));
     }
     if (type === 'delete') {
       action = () =>
         dispatch(
           deleteStaffMemberShift(
-            values.get('shiftId'),
-            values.get('staffMemberId'),
-            values.get('venueType'),
+            oFetch(jsValues, 'shiftId'),
+            oFetch(jsValues, 'staffMemberId'),
+            oFetch(jsValues, 'venueType'),
           ),
         );
     }
     if (!action) throw Error('Wrong Rota shift action');
-
-    if (status === ROTA_PUBLISHED_STATUS) {
-      return confirmation(
-        [
-          "Updating a shift on a published rota will send out confirmation emails.",
-          'Do you want to continue?',
-        ],
-        {
-          title: 'WARNING !!!',
-          id: 'rota-daily-confirmation',
-        },
-      ).then(() => {
+    const venueCombinedId = oFetch(jsValues, 'venueId');
+    const [venueType, stringVenueId] = venueCombinedId.split('_');
+    if (status === ROTA_PUBLISHED_STATUS || venueType === SECURITY_VENUE_TYPE) {
+      let messageText = null;
+      let actionTypeText = type === 'update' ? 'Updating' : 'Deleting';
+      if (status === ROTA_PUBLISHED_STATUS) {
+        messageText = `${actionTypeText} a shift on a published rota will send out confirmation emails.`;
+      } else if (venueType === SECURITY_VENUE_TYPE) {
+        messageText = `${actionTypeText} this shift will send an email notification to the staff member`;
+      }
+      return confirmation([messageText, 'Do you want to continue?'], {
+        title: 'WARNING !!!',
+        id: 'rota-daily-confirmation',
+      }).then(() => {
         return action().catch(resp => {
           throwErrors(resp);
         });
