@@ -96,7 +96,19 @@ class OwedHour < ActiveRecord::Base
       ).all
 
       if conflicting_holidays.count > 0
-        errors.add(:base, 'conflicting holidays exist')
+        errors.add(:base, 'conflicting holiday exists')
+      end
+
+      conflicting_holiday_requests = InRangeQuery.new(
+        relation: staff_member.holiday_requests.enabled,
+        start_value: date,
+        end_value: date,
+        start_column_name: 'start_date',
+        end_column_name: 'end_date'
+      ).all
+
+      if conflicting_holiday_requests.count > 0
+        errors.add(:base, 'conflicting holiday request exists')
       end
     end
 
