@@ -10,14 +10,14 @@ module Services
         cmd = []
         cmd << "mysqldump"
         cmd << "-u #{uri.user}"
-        cmd << "-p#{uri.password}" if uri.password
+        cmd << "--password=#{uri.password}" if uri.password
         cmd << name
         cmd << "|"
         cmd << "gzip -9"
 
         path = "#{dir}/#{name}-#{Time.zone.now.strftime("%Y.%m.%d-%H.%M.%S")}.sql.gz"
 
-        out = `#{cmd.join(" ")} 2>&1 >#{path}`
+        out = `#{cmd.join(" ")} 2>&1 > #{path}`
         unless $?.success?
           raise "mysqldump failed: #{out}"
         end
