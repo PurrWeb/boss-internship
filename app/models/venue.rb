@@ -1,4 +1,5 @@
 class Venue < ActiveRecord::Base
+  VENUE_TYPE = "normal".freeze
   # Associations
   belongs_to :creator, class_name: 'User'
   has_many :rotas, inverse_of: :venue
@@ -51,6 +52,10 @@ class Venue < ActiveRecord::Base
     define_method "#{field_prefix}_pound_value" do
       Float(public_send("#{field_prefix}_cents") || 0.0) / 100.0
     end
+  end
+
+  def venue_type
+    VENUE_TYPE
   end
 
   private
