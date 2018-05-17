@@ -1,5 +1,5 @@
 class BackupUploader < CarrierWave::Uploader::Base
-  if Rails.env.staging? || Rails.env.production?
+  if Rails.env.production?
     storage :fog
 
     configure do |config|
