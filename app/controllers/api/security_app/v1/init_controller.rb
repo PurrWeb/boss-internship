@@ -20,7 +20,12 @@ module Api
                 PublishedRotaShiftQuery.new(staff_member: staff_member).all.includes(:rota),
                 serializer: Api::SecurityApp::V1::RotaShiftSerializer
               ),
-              venues: ActiveModel::Serializer::CollectionSerializer.new(Venue.all, serializer: Api::SecurityApp::V1::VenueSerializer)
+              securityVenueShifts: ActiveModel::Serializer::CollectionSerializer.new(
+                SecurityVenueShift.enabled.where(staff_member: staff_member),
+                serializer: Api::SecurityApp::V1::SecurityVenueShiftSerializer
+              ),
+              venues: ActiveModel::Serializer::CollectionSerializer.new(Venue.all, serializer: Api::SecurityApp::V1::VenueSerializer),
+              securityVenues: ActiveModel::Serializer::CollectionSerializer.new(SecurityVenue.all, serializer: Api::SecurityApp::V1::VenueSerializer)
             },
             ablyData: {
               presenceChannelName: SecurityAppUpdateService.security_presence_channel,
