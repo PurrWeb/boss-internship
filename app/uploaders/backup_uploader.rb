@@ -1,5 +1,5 @@
 class BackupUploader < CarrierWave::Uploader::Base
-  if Rails.env.production?
+  if BooleanEnvVariable.new("BACKUP_TO_S3").value
     storage :fog
 
     configure do |config|
