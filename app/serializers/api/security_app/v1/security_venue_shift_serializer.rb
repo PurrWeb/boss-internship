@@ -5,7 +5,8 @@ class Api::SecurityApp::V1::SecurityVenueShiftSerializer < ActiveModel::Serializ
     :venueId,
     :date,
     :startsAt,
-    :endsAt
+    :endsAt,
+    :venueType,
 
   def staffMemberId
     object.staff_member_id
@@ -13,6 +14,10 @@ class Api::SecurityApp::V1::SecurityVenueShiftSerializer < ActiveModel::Serializ
 
   def venueId
     object.security_venue_id
+  end
+
+  def venueType
+    object.venue_type
   end
 
   def date

@@ -6,7 +6,8 @@ class Api::SecurityApp::V1::RotaShiftSerializer < ActiveModel::Serializer
     :date,
     :shiftType,
     :startsAt,
-    :endsAt
+    :endsAt,
+    :venueType,
 
   def staffMemberId
     object.staff_member_id
@@ -14,6 +15,10 @@ class Api::SecurityApp::V1::RotaShiftSerializer < ActiveModel::Serializer
 
   def venueId
     object.rota.venue_id
+  end
+
+  def venueType
+    object.venue_type
   end
 
   def date
