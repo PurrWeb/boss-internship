@@ -47,7 +47,6 @@ class CardList extends Component {
           {staffTypesWithFinanceReports.size === 0
             ? this.renderEmptyReports()
             : this.renderItems(staffTypesWithFinanceReports)}
-          {this.renderNotification()}
         </div>
       </div>
     );

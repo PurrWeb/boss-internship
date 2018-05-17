@@ -183,7 +183,7 @@ Rails.application.routes.draw do
 
     resources :staff_tracking, only: [:index]
 
-    resources :payroll_reports, only: [:index]
+    resources :payroll_reports, only: [:index, :show]
     resources :daily_reports, only: [:index]
     resources :weekly_reports, only: [:index]
 

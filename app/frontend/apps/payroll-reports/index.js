@@ -4,9 +4,9 @@ import configureStore from '~/apps/store';
 
 import reducers from './redux/reducers';
 import { loadInitialData } from './redux/actions';
-import FinanceReportsPage from './containers/page';
+import PayrollReportsPage from './containers/page';
 
-export default class FinanceReportsApp extends Component {
+export default class PayrollReportsApp extends Component {
   componentWillMount() {
     const { accessToken } = this.props;
     if (!accessToken) {
@@ -21,7 +21,7 @@ export default class FinanceReportsApp extends Component {
   render() {
     return (
       <Provider store={this.store}>
-        <FinanceReportsPage />
+        <PayrollReportsPage />
       </Provider>
     );
   }

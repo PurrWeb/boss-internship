@@ -1,0 +1,13 @@
+<%= react_component('PayrollReportsApp', {
+  accessToken: access_token,
+  date: UIRotaDate.format(date),
+  startDate: UIRotaDate.format(start_date),
+  endDate: UIRotaDate.format(end_date),
+  staffMembers: staff_members,
+  financeReports: finance_reports,
+  staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_types,
+    serializer: Api::V1::FinanceReports::StaffTypeSerializer,
+  ),
+  venue: Api::V1::FinanceReports::VenueSerializer.new(venue)
+}) %>

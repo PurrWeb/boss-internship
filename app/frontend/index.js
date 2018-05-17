@@ -40,6 +40,9 @@ import './vendors/owl.carousel';
 import 'react-tippy/dist/tippy.css';
 import './lib/load-underscore-mixins';
 
+import PayrollReportsApp from './apps/payroll-reports';
+registerComponent('PayrollReportsApp', PayrollReportsApp);
+
 import OpsDiaryApp from './apps/ops-diary';
 registerComponent('OpsDiaryApp', OpsDiaryApp);
 
