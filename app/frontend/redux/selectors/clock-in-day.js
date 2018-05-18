@@ -7,13 +7,28 @@ import {
 } from "./api-requests"
 
 export function selectClockInDay(state, {staffMemberClientId, date}) {
+    let staffMemberIdFromClockInDay;
+    let staffMemberIdFromList;
+    let dateFromClockInDay;
+    let dateFromPageOptions;
+
     var clockInDay = _.find(state.clockInDays, function(clockInDay){
+        staffMemberIdFromClockInDay = clockInDay.staff_member.clientId;
+        staffMemberIdFromList = staffMemberClientId;
+        dateFromClockInDay = clockInDay.date;
+        dateFromPageOptions = date;
         return clockInDay.staff_member.clientId === staffMemberClientId &&
             utils.datesAreEqual(clockInDay.date, date)
     })
 
     if (!clockInDay) {
-        throw Error('Clock in day not found');
+        throw new Error(`
+            Clock in day not found.
+            StaffIdFromClockInDay: ${staffMemberIdFromClockInDay},
+            StaffIdFromList: ${staffMemberIdFromList},
+            DateFromClockInDay: ${dateFromClockInDay},
+            DateFromPageOptions: ${dateFromPageOptions},
+        `);
     }
 
     return clockInDay;
