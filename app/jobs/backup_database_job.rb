@@ -1,6 +1,8 @@
 class BackupDatabaseJob < ActiveJob::Base
   def perform
-    Services::UploadBackup.new.call
+    if BooleanEnvVariable.new("BACKUP_TO_S3").value
+      Services::UploadBackup.new.call
+    end
   end
 end
 
