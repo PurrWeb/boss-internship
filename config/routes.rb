@@ -468,7 +468,7 @@ Rails.application.routes.draw do
     end
   end
 
-  if ENV["USE_SUBDOMAINS"]
+  if BooleanEnvVariable.new("USE_SUBDOMAINS").value
     constraints subdomain: /^([a-z0-9]+-+)?boss/, &boss_routes
     constraints subdomain: /^([a-z0-9]+-+)?clock/, &clock_routes
     constraints subdomain: /^([a-z0-9]+-+)?nsecurity-app/, &security_app_routes
