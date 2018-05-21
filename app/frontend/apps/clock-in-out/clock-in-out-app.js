@@ -7,8 +7,8 @@ import utils from "~/lib/utils"
 
 export default class RotaApp extends AppComponent {
     componentWillMount(){
-        this.ensureOnCorrectDay();
-        
+        this.interval = setInterval(() => this.ensureOnCorrectDay(), 2000)
+
         var store = this.store;
         store.subscribe(function(){
     		  localStorage.setItem("clockInOutApiKey", store.getState().apiKey)
@@ -18,6 +18,9 @@ export default class RotaApp extends AppComponent {
         if (localStorageApiKey != null && localStorageApiKey != ""){
             store.dispatch(actionCreators().setApiKeyAndFetchClockInOutAppData(localStorageApiKey))
         }
+    }
+    componentWillUnmount(){
+        clearInterval(this.interval);
     }
     ensureOnCorrectDay(){
       let time = new Date();
@@ -39,7 +42,7 @@ export default class RotaApp extends AppComponent {
     render() {
         // window.boss.rollbarData.currentUser - use as additional(person) information in Rollbar
         // In Clocking App we using StaffMember instead of authenticated user
-        // So we just delete this object 
+        // So we just delete this object
         delete window.boss.rollbarData.currentUser;
 
         return <Provider store={this.store}>
