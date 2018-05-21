@@ -86,7 +86,7 @@ class OwedHour < ActiveRecord::Base
       end
     end
 
-    if date.present?
+    if has_times?
       conflicting_holidays = InRangeQuery.new(
         relation: staff_member.active_holidays,
         start_value: date,
