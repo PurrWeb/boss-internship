@@ -115,7 +115,7 @@ class OwedHour < ActiveRecord::Base
     if has_times?
       conflicting_hours_acceptances = InRangeQuery.new(
         relation: HoursAcceptancePeriod.
-          enabled.
+          accepted.
           joins(:clock_in_day).
           where(
             clock_in_days: { staff_member_id: staff_member }

@@ -51,7 +51,7 @@ describe OwedHour do
       end
     end
 
-    context 'HoursAcceptancePeriod aready exists at conflicting time' do
+    context 'accepted HoursAcceptancePeriod aready exists at conflicting time' do
       before do
         clock_in_day = ClockInDay.create!(
           staff_member: staff_member,
@@ -61,6 +61,9 @@ describe OwedHour do
         )
 
         HoursAcceptancePeriod.create!(
+          status: HoursAcceptancePeriod::ACCEPTED_STATE,
+          accepted_by_id: user.id,
+          accepted_at: now,
           clock_in_day: clock_in_day,
           starts_at: starts_at,
           ends_at: ends_at,
