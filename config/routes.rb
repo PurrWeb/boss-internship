@@ -108,6 +108,7 @@ Rails.application.routes.draw do
         get :profile
         get :owed_hours
         get :accessories
+        get :shifts
       end
     end
 
