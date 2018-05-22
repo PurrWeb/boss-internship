@@ -78,9 +78,10 @@ class HoursOverviewController < ApplicationController
         permitted: ability.can?(:update, period)
       }
     end
-
     render(
       locals: {
+        venues: staff_venues,
+        venue: staff_venues[0],
         access_token: access_token,
         clock_in_breaks: clock_in_breaks,
         clock_in_notes: clock_in_notes,
