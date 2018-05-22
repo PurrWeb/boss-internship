@@ -476,6 +476,33 @@ var utils =  {
       const rotaShift = momentRange.range(mShiftStartsAt, mShiftEndsAt);
 
       return rotaWeek.contains(rotaShift);
+    },
+    addZeroToNumber(number, zeroLimit = 9) {
+      return number <= zeroLimit ? `0${number}` : `${number}`;
+    },
+    formattedTime(timeInMs) {
+      const hours = Math.trunc(timeInMs / 1000 / 60 / 60);
+      const minutes = Math.trunc((timeInMs / 1000 / 60) % 60);
+
+      if (hours === 0 && minutes === 0) {
+        return 0;
+      }
+      return `${hours === 0 ? '' : `${hours}h`}${
+        minutes === 0 ? '' : `${this.addZeroToNumber(minutes, 9)}m`
+      }`;
+    },
+    getTimeDiff(startsAt, endsAt) {
+      if (endsAt === null) return 0;
+      const mStartsAt = safeMoment.iso8601Parse(startsAt).seconds(0);
+      const mEndsAt = safeMoment.iso8601Parse(endsAt).seconds(0);
+      return mEndsAt.diff(mStartsAt);
+    },
+    getStartsEndsTimeDiff(items) {
+      return items.reduce((acc, item) => {
+        const startsAt = oFetch(item, 'startsAt');
+        const endsAt = oFetch(item, 'endsAt');
+        return acc + this.getTimeDiff(startsAt, endsAt);
+      }, 0);
     }
 }
 
