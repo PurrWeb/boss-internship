@@ -1,0 +1,42 @@
+<script>
+  window.boss = window.boss || {};
+  window.boss.accessToken = "<%= access_token.token %>";
+  window.boss.store = window.boss.store || {};
+  window.boss.store.staffMember = <%= staff_member.to_json.html_safe %>;
+</script>
+
+<%= react_component('StaffMemberShiftsApp', {
+  staffMember: staff_member,
+  accessToken: access_token.token,
+  staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
+    staff_types,
+    serializer: Api::V1::StaffMemberProfile::StaffTypeSerializer,
+  ),
+  venues: venues,
+  payRates: pay_rates,
+  genderValues: gender_values,
+  accessiblePayRateIds: accessible_pay_rate_ids,
+  accessibleVenueIds: accessible_venue_ids,
+  appDownloadLinks: camelized_collection(
+    app_download_link_data,
+    Api::V1::StaffMemberProfile::AppDownloadLinkSerializer
+  ),
+  rotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    rota_shifts,
+    serializer: Api::V1::StaffMemberProfile::RotaShiftSerializer,
+  ),
+  hoursAcceptancePeriods: ActiveModel::Serializer::CollectionSerializer.new(
+    hours_acceptance_periods,
+    serializer: Api::V1::StaffMemberProfile::HoursAcceptancePeriodSerializer,
+  ),
+  hoursAcceptanceBreaks: ActiveModel::Serializer::CollectionSerializer.new(
+    hours_acceptance_breaks,
+    serializer: Api::V1::StaffMemberProfile::HoursAcceptanceBreakSerializer,
+  ),
+  permissionsData: Api::V1::StaffMemberProfile::PermissionsSerializer.new(staff_member_profile_permissions),
+  pageOptions: {
+    startDate: start_date,
+    endDate: end_date,
+    venueId: venue.andand.id
+  }
+}) %>

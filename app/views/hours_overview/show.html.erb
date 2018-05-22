@@ -4,7 +4,7 @@
     venues,
     serializer: Api::V1::HoursConfirmation::VenueSerializer,
   ),
-  venue: Api::V1::HoursConfirmation::VenueSerializer.new(venues[0] || Venue.new),
+  venue: Api::V1::HoursConfirmation::VenueSerializer.new(venue || Venue.new),
   clockInPeriods: ActiveModel::Serializer::CollectionSerializer.new(
     clock_in_periods,
     serializer: Api::V1::HoursConfirmation::ClockInPeriodSerializer,
