@@ -5,23 +5,25 @@ import { DateRangePicker } from 'react-dates';
 import Select from 'react-select';
 import URLSearchParams from 'url-search-params';
 import safeMoment from '~/lib/safe-moment';
+import oFetch from 'o-fetch';
 
 import { ColoredSingleOption, ColoredSingleValue } from '~/components/boss-form/colored-select';
 
 class ShiftsFilter extends React.Component {
   constructor(props) {
     super(props);
-    const queryString = new URLSearchParams(window.location.search);
 
-    const startDate = queryString.get('startDate');
-    const endDate = queryString.get('endDate');
-    const venueId = queryString.get('venueId');
+    const pageOptions = oFetch(this.props, 'pageOptions');
+    const startDate = oFetch(pageOptions, 'startDate');
+    const endDate = oFetch(pageOptions, 'endDate');
+    const venueId = oFetch(pageOptions, 'venueId');
 
     this.state = {
       focusedInput: null,
-      startDate: startDate ? safeMoment.uiDateParse(startDate) : undefined,
-      endDate: endDate ? safeMoment.uiDateParse(endDate) : undefined,
-      venueId: venueId ? Number(venueId) : undefined,
+      startDate: safeMoment.uiDateParse(startDate),
+      endDate: safeMoment.uiDateParse(endDate),
+      venueId: venueId,
+      updateClicked: false,
     };
   }
 
@@ -33,23 +35,25 @@ class ShiftsFilter extends React.Component {
   };
 
   onVenueSelect = selection => {
-    this.setState({ venueId: selection ? selection.value : null });
+    this.setState({ venueId: selection });
   };
 
   onUpdate = () => {
+    this.setState({ updateClicked: true });
     const { venueId } = this.state;
     if (this.state.startDate && this.state.endDate) {
       const formatedStartDate = this.state.startDate.format('DD-MM-YYYY');
       const formatedEndDate = this.state.endDate.format('DD-MM-YYYY');
-      this.props.onFilter({ startDate: formatedStartDate, endDate: formatedEndDate, venueId });
+      this.props.onFilter({ start_date: formatedStartDate, end_date: formatedEndDate, venue_id: venueId });
       return;
     }
-    this.props.onFilter({ venueId });
+    this.props.onFilter({ venue_id: venueId });
   };
 
   render() {
     const { focusedInput, startDate, endDate } = this.state;
-    const venueOptions = this.props.venues.map(venue => ({ value: venue.id, label: venue.name }));
+    const venues = oFetch(this.props, 'venues');
+
     return (
       <div className="boss-board__manager-filter">
         <div className="boss-form">
@@ -77,10 +81,13 @@ class ShiftsFilter extends React.Component {
             <div className="boss-form__field boss-form__field_layout_min">
               <div className="boss-form__select boss-form__select_size_small">
                 <Select
-                  options={venueOptions}
+                  options={venues}
                   onChange={this.onVenueSelect}
                   clearable
+                  simpleValue
                   ignoreCase
+                  valueKey="id"
+                  labelKey="name"
                   optionComponent={ColoredSingleOption}
                   valueComponent={ColoredSingleValue}
                   placeholder={'Venue Name'}
@@ -90,7 +97,7 @@ class ShiftsFilter extends React.Component {
               </div>
             </div>
             <div className="boss-form__field boss-form__field_layout_min">
-              <button className="boss-button boss-form__submit" onClick={this.onUpdate}>
+              <button disabled={this.state.updateClicked} className="boss-button boss-form__submit" onClick={this.onUpdate}>
                 Update
               </button>
             </div>
@@ -118,10 +125,13 @@ class ShiftsFilter extends React.Component {
             <div className="boss-form__field boss-form__field_layout_min">
               <div className="boss-form__select">
                 <Select
-                  options={venueOptions}
+                  options={venues}
                   onChange={this.onVenueSelect}
                   clearable
                   ignoreCase
+                  simpleValue
+                  valueKey="id"
+                  labelKey="name"
                   optionComponent={ColoredSingleOption}
                   valueComponent={ColoredSingleValue}
                   placeholder={'Venue Name'}
@@ -130,7 +140,7 @@ class ShiftsFilter extends React.Component {
                 />
               </div>
               <div className="boss-form__field boss-form__field_layout_min">
-                <button className="boss-button boss-form__submit" onClick={this.onUpdate}>
+                <button disabled={this.state.updateClicked} className="boss-button boss-form__submit" onClick={this.onUpdate}>
                   Update
                 </button>
               </div>

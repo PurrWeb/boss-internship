@@ -7,29 +7,33 @@ import {initialProfileLoad} from '../profile-wrapper/actions';
 import { initialLoad } from './redux/actions';
 import { combineReducers } from 'redux-immutable';
 
-import Shifts from './containers/shifts';
+import ShiftsContainer from './containers/shifts-container';
 
 import profileReducer from '../profile-wrapper/reducers';
-import shifts from './redux/reducers/shifts';
-import venues from './redux/reducers/venues';
-
-import fixtures from './fixtures';
+import venues from './redux/reducers/venues-reducer';
+import pageOptions from './redux/reducers/page-options-reducer';
+import hoursAcceptancePeriods from './redux/reducers/hours-acceptance-periods-reducer';
+import hoursAcceptanceBreaks from './redux/reducers/hours-acceptance-breaks-reducer';
+import rotaShifts from './redux/reducers/rota-shifts-reducer';
 
 class StaffMemberShiftsApp extends React.Component {
   componentWillMount() {
     this.store = configureStore(combineReducers({
       venues,
-      shifts,
+      rotaShifts,
+      pageOptions,
+      hoursAcceptancePeriods,
+      hoursAcceptanceBreaks,
       profile: profileReducer,
       form: formReducer,
     }));
     this.store.dispatch(initialProfileLoad({...this.props}));
-    this.store.dispatch(initialLoad({...this.props, ...fixtures}));
+    this.store.dispatch(initialLoad({...this.props}));
   }
 
   render() {
     return <Provider store={this.store}>
-      <Shifts />
+      <ShiftsContainer />
     </Provider>
   }
 }

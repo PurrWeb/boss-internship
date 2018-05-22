@@ -2,20 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
 
-class ShiftList extends Component {
-  renderItems(shifts) {
-    const shiftRenderer = oFetch(this.props, 'shiftRenderer');
-    return shifts.map(shift => {
-      return React.cloneElement(shiftRenderer(shift), {
-        key: shift.get('id').toString(),
+class Day extends Component {
+  renderItems(shiftsByVenue) {
+    const venueShiftsRenderer = oFetch(this.props, 'venueShiftsRenderer');
+    return shiftsByVenue.map((venueShifts, venueId) => {
+      return React.cloneElement(venueShiftsRenderer({ venueShifts, venueId }), {
+        key: venueId.toString(),
       });
-    });
+    }).toArray();
   }
 
   render() {
-    const rotaShifts = oFetch(this.props, 'rotaShifts');
-    const date = rotaShifts.get('date');
-    const shifts = rotaShifts.get('shifts');
+    const shiftsByVenue = oFetch(this.props, 'shiftsByVenue');
+    const date = oFetch(this.props, 'date');
     return (
       <li className="boss-timeline__item boss-timeline__item_role_card">
         <div className="boss-timeline__inner boss-timeline__inner_role_card">
@@ -25,7 +24,7 @@ class ShiftList extends Component {
             </h3>
           </div>
           <div className="boss-timeline__content boss-timeline__content_role_card">
-            <div className="boss-timeline__records">{this.renderItems(shifts)}</div>
+            {this.renderItems(shiftsByVenue)}
           </div>
         </div>
       </li>
@@ -33,6 +32,6 @@ class ShiftList extends Component {
   }
 }
 
-ShiftList.propTypes = {};
+Day.propTypes = {};
 
-export default ShiftList;
+export default Day;

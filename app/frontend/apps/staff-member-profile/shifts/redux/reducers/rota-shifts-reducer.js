@@ -6,14 +6,14 @@ import * as types from '../types';
 
 const initialGlobalState = Immutable.List();
 
-const shiftsReducer = handleActions(
+const rotaShiftsReducer = handleActions(
   {
     [types.INITIAL_LOAD]: (state, action) => {
-      const shifts = oFetch(action, 'payload.shifts');
-      return Immutable.fromJS(shifts);
+      const rotaShifts = oFetch(action, 'payload.rotaShifts');
+      return Immutable.fromJS(rotaShifts);
     },
   },
   initialGlobalState,
 );
 
-export default shiftsReducer;
+export default rotaShiftsReducer;

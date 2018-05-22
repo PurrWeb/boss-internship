@@ -15,13 +15,7 @@ class Shift extends Component {
   render() {
     const shift = oFetch(this.props, 'shift');
     const { isOpen } = this.state;
-    const venueName = shift.get('venueName');
-    const fromTo = shift.get('fromTo');
-    const breaks = shift.get('breaks');
-    const rotaed = shift.get('rotaed');
-    const accepted = shift.get('accepted');
-    const acceptedBy = shift.get('acceptedBy');
-    const acceptedOn = shift.get('acceptedOn');
+    const venueName = oFetch(shift, 'venue.name');
 
     return (
       <div className="boss-timeline__record">
@@ -29,8 +23,8 @@ class Shift extends Component {
         <div className="boss-timeline__details">
           <div className="boss-timeline__details-header">
             <p className="boss-timeline__text boss-timeline__text_role_hours">
-              <span className="boss-timeline__text-marked">{rotaed}</span> rotaed
-              <span className="boss-timeline__text-marked">{' '}{accepted}{' '}</span> accepted
+              {/* <span className="boss-timeline__text-marked">{rotaed}</span> rotaed
+              <span className="boss-timeline__text-marked">{' '}{accepted}{' '}</span> accepted */}
             </p>
             <div
               onClick={this.toggleOpen}
@@ -45,9 +39,9 @@ class Shift extends Component {
           >
             <div className="boss-timeline__details-inner">
               <p className="boss-timeline__text">
-                <span className="boss-timeline__text-faded">From/To:</span> {fromTo}
+                {/* <span className="boss-timeline__text-faded">From/To:</span> {fromTo} */}
               </p>
-              {breaks && (
+              {/* {breaks && (
                 <p className="boss-timeline__text">
                   <span className="boss-timeline__text-faded">Breaks:</span>
                   {breaks}
@@ -69,7 +63,7 @@ class Shift extends Component {
                 <a href="#" className="boss-timeline__link boss-timeline__link_role_details">
                   View Rota
                 </a>
-              )}
+              )} */}
             </div>
           </Collapse>
         </div>
