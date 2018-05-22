@@ -15,13 +15,15 @@ export const FOOD_OPS_MANAGER = 'food_ops_manager';
 export const DEV_ACCESS_LEVEL = 'dev';
 export const ADMIN_ACCESS_LEVEL = 'admin';
 export const AREA_MANAGER_ACCESS_LEVEL = 'area_manager';
+export const OPS_MANAGER_ACCESS_LEVEL = 'ops_manager';
 export const MANAGER_ACCESS_LEVEL = 'manager';
 export const RESTRICTED_ACCESS_LEVEL = 'restricted';
 
 let LEVEL_DATA = {};
-LEVEL_DATA[DEV_ACCESS_LEVEL] = 4;
-LEVEL_DATA[ADMIN_ACCESS_LEVEL] = 3;
-LEVEL_DATA[AREA_MANAGER_ACCESS_LEVEL] = 2;
+LEVEL_DATA[DEV_ACCESS_LEVEL] = 5;
+LEVEL_DATA[ADMIN_ACCESS_LEVEL] = 4;
+LEVEL_DATA[AREA_MANAGER_ACCESS_LEVEL] = 3;
+LEVEL_DATA[OPS_MANAGER_ACCESS_LEVEL] = 2
 LEVEL_DATA[MANAGER_ACCESS_LEVEL] = 1;
 LEVEL_DATA[RESTRICTED_ACCESS_LEVEL] = 0;
 
@@ -46,9 +48,8 @@ function canManageVenue(params){
   const userRole = oFetch(permissions, 'userRole');
   const accessibleVenueIds = oFetch(permissions, 'accessibleVenueIds');
 
-  return userRole == OPS_MANAGER_ROLE ||
-    hasEffectiveAccessLevel({
-      targetLevel: AREA_MANAGER_ACCESS_LEVEL,
+  return hasEffectiveAccessLevel({
+      targetLevel: OPS_MANAGER_ACCESS_LEVEL,
       permissions: permissions
     }) || (
       hasEffectiveAccessLevel({
