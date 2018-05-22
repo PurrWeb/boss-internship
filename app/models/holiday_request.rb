@@ -18,6 +18,10 @@ class HolidayRequest < ActiveRecord::Base
 
   attr_accessor :validate_as_creation
 
+  def self.enabled
+    not_in_state([:disabled, :rejected])
+  end
+
   def state_machine
     @state_machine ||= HolidayRequestStateMachine.new(
       self,

@@ -1243,6 +1243,17 @@ ActiveRecord::Schema.define(version: 20180509163419) do
   add_index "venues", ["creator_id"], name: "index_venues_on_creator_id", using: :btree
   add_index "venues", ["name"], name: "index_venues_on_name", using: :btree
 
+  create_table "venues_users", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4, null: false
+    t.integer  "venue_id",   limit: 4, null: false
+    t.boolean  "enabled",              null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "venues_users", ["created_at"], name: "index_venues_users_on_created_at", using: :btree
+  add_index "venues_users", ["enabled"], name: "index_venues_users_on_enabled", using: :btree
+
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",  limit: 255,        null: false
     t.integer  "item_id",    limit: 4,          null: false

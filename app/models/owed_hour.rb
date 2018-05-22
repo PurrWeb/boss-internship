@@ -66,64 +66,67 @@ class OwedHour < ActiveRecord::Base
   def no_time_conflicts
     return unless (
       enabled?  &&
-      staff_member.present? &&
-      starts_at.present?  &&
-      ends_at.present?
+      staff_member.present?
     )
+    if has_times?
+      staff_member_active_owed_hours = staff_member.active_owed_hours
+      if persisted?
+        staff_member_active_owed_hours = staff_member_active_owed_hours.
+          where("id != ?", id)
+      end
 
-    staff_member_active_owed_hours = staff_member.active_owed_hours
-    if persisted?
-      staff_member_active_owed_hours = staff_member_active_owed_hours.
-        where("id != ?", id)
+      conflicting_owed_hours = InRangeQuery.new(
+        relation: staff_member_active_owed_hours,
+        start_value: starts_at,
+        end_value: ends_at
+      ).all
+
+      if conflicting_owed_hours.count > 0
+        errors.add(:base, 'conflicting owed hour exists')
+      end
     end
 
-    conflicting_owed_hours = InRangeQuery.new(
-      relation: staff_member_active_owed_hours,
-      start_value: starts_at,
-      end_value: ends_at
-    ).all
+    if has_times?
+      conflicting_holidays = InRangeQuery.new(
+        relation: staff_member.active_holidays,
+        start_value: date,
+        end_value: date,
+        start_column_name: 'start_date',
+        end_column_name: 'end_date'
+      ).all
 
-    if conflicting_owed_hours.count > 0
-      errors.add(:base, 'conflicting owed hour exists')
+      if conflicting_holidays.count > 0
+        errors.add(:base, 'conflicting holiday exists')
+      end
+
+      conflicting_holiday_requests = InRangeQuery.new(
+        relation: staff_member.holiday_requests.enabled,
+        start_value: date,
+        end_value: date,
+        start_column_name: 'start_date',
+        end_column_name: 'end_date'
+      ).all
+
+      if conflicting_holiday_requests.count > 0
+        errors.add(:base, 'conflicting holiday request exists')
+      end
     end
 
-    conflicting_hours_acceptances = InRangeQuery.new(
-      relation: HoursAcceptancePeriod.
-        enabled.
-        joins(:clock_in_day).
-        where(
-          clock_in_days: { staff_member_id: staff_member }
-        ),
-      start_value: starts_at,
-      end_value: ends_at
-    ).all
+    if has_times?
+      conflicting_hours_acceptances = InRangeQuery.new(
+        relation: HoursAcceptancePeriod.
+          accepted.
+          joins(:clock_in_day).
+          where(
+            clock_in_days: { staff_member_id: staff_member }
+          ),
+        start_value: starts_at,
+        end_value: ends_at
+      ).all
 
-    if conflicting_hours_acceptances.count > 0
-      errors.add(:base, 'conflicting hour acceptance exists')
-    end
-
-    conflicting_holidays = InRangeQuery.new(
-      relation: staff_member.active_holidays,
-      start_value: date,
-      end_value: date,
-      start_column_name: 'start_date',
-      end_column_name: 'end_date'
-    ).all
-
-    if conflicting_holidays.count > 0
-      errors.add(:base, 'conflicting holiday exists')
-    end
-
-    conflicting_holiday_requests = InRangeQuery.new(
-      relation: staff_member.pending_holiday_requests,
-      start_value: date,
-      end_value: date,
-      start_column_name: 'start_date',
-      end_column_name: 'end_date'
-    ).all
-
-    if conflicting_holiday_requests.count > 0
-      errors.add(:base, 'conflicting holiday request exists')
+      if conflicting_hours_acceptances.count > 0
+        errors.add(:base, 'conflicting hour acceptance exists')
+      end
     end
   end
 
