@@ -10,7 +10,7 @@ class MarketingTasksController < ApplicationController
     venues = AccessibleVenuesQuery.new(current_user).all
     marketing_task_filter = MarketingTaskFilter.new(current_user, {})
     marketing_tasks_query = marketing_task_filter.query(
-      relation: MarketingTask.includes(:venue, :created_by_user, :disabled_by_user, :marketing_task_transitions, :assigned_to_user, :completed_by_user, :marketing_task_notes)
+      relation: MarketingTask.includes(:venue, :disabled_by_user, :marketing_task_transitions, :marketing_task_notes, marketing_task_assignments: :user, assigned_to_user: :name, created_by_user: :name, completed_by_user: :name)
     )
     marketing_tasks = marketing_tasks_query.paginated(
       page: params[:page],
@@ -18,7 +18,7 @@ class MarketingTasksController < ApplicationController
     )
 
     statuses = (current_user.marketing_staff?) ? ['pending', 'completed'] : MarketingTaskStateMachine.states
-    marketing_task_users = User.marketing
+    marketing_task_users = User.marketing.includes(:name)
 
     render locals: {
       access_token: access_token,
