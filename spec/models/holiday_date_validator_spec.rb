@@ -62,13 +62,17 @@ describe HolidayDateValidator do
 
   context 'a holiday exists' do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
-    let!(:existing_holiday) do
+    let(:existing_holiday) do
       FactoryGirl.create(
         :holiday,
         staff_member: staff_member,
         start_date: existing_holiday_start_date,
         end_date: existing_holiday_end_date
       )
+    end
+
+    before do
+      existing_holiday
     end
 
     context 'validating the existing holiday' do
@@ -144,7 +148,7 @@ describe HolidayDateValidator do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:user) { FactoryGirl.create(:user) }
     let(:existing_holiday_request_holiday_type) { Holiday::HOLIDAY_TYPES.first }
-    let!(:existing_holiday_request) do
+    let(:existing_holiday_request) do
       HolidayRequest.create!(
         staff_member: staff_member,
         creator: user,
@@ -152,6 +156,10 @@ describe HolidayDateValidator do
         end_date: existing_holiday_request_end_date,
         holiday_type: existing_holiday_request_holiday_type
       )
+    end
+
+    before do
+      existing_holiday_request
     end
 
     context 'end of holiday_request overlaps with existing' do
@@ -252,7 +260,7 @@ describe HolidayDateValidator do
     let(:end_date) { start_date }
     let(:owed_hour_starts_at) { start_date.beginning_of_day + 10.hours }
     let(:owed_hour_ends_at) { owed_hour_starts_at + 2.hours }
-    let!(:owed_hour) do
+    let(:owed_hour) do
       FactoryGirl.create(
         :owed_hour,
         date: start_date,
@@ -263,11 +271,84 @@ describe HolidayDateValidator do
       )
     end
 
+    before do
+      owed_hour
+    end
+
     specify 'an error message should be added on base' do
       validator.validate
       expect(
         holiday.errors['base']
       ).to eq([overlapping_owed_hour_error_message])
+    end
+
+    specify 'only an error should be added for base' do
+      validator.validate
+      expect(holiday.errors.keys).to eq([:base])
+    end
+  end
+
+  context 'holiday is not conatined within one week' do
+    let(:start_date) do
+      # Saturday
+      Time.zone.now.beginning_of_week.to_date + 6.days
+    end
+    let(:end_date) do
+      # the next Wednesday
+      start_date + 4.days
+    end
+
+    specify 'an error message should be added on base' do
+      validator.validate
+      expect(
+        holiday.errors['base']
+      ).to eq([mulitple_week_error_message])
+    end
+
+    specify 'only an error should be added for base' do
+      validator.validate
+      expect(holiday.errors.keys).to eq([:base])
+    end
+  end
+
+  context 'overlapping hours acceptance period' do
+    let(:now) { Time.current }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:venue) { FactoryGirl.create(:venue) }
+    let(:start_date) { RotaShiftDate.to_rota_date(now) }
+    let(:end_date) { start_date }
+    let(:hour_acceptance_period_starts_at) { start_date.beginning_of_day + 10.hours }
+    let(:hour_acceptance_period_ends_at) { hour_acceptance_period_starts_at + 2.hours }
+    let(:clock_in_day) do
+      result = ClockInDay.find_by(staff_member: staff_member, date: start_date, venue: venue)
+      result || ClockInDay.create!(
+        creator: user,
+        staff_member: staff_member,
+        date: start_date,
+        venue: venue
+      )
+    end
+    let(:hour_acceptance_period) do
+      HoursAcceptancePeriod.create!(
+        creator: user,
+        clock_in_day: clock_in_day,
+        starts_at: hour_acceptance_period_starts_at,
+        ends_at: hour_acceptance_period_ends_at,
+        status: 'accepted',
+        accepted_at: now,
+        accepted_by: user
+      )
+    end
+
+    before do
+      hour_acceptance_period
+    end
+
+    specify 'an error message should be added on base' do
+      validator.validate
+      expect(
+        holiday.errors['base']
+      ).to eq([overlapping_hour_acceptance_period_error_message])
     end
 
     specify 'only an error should be added for base' do
@@ -318,5 +399,9 @@ describe HolidayDateValidator do
 
   def mulitple_week_error_message
     "Holiday must be within a single week"
+  end
+
+  def overlapping_hour_acceptance_period_error_message
+    "Staff member has hours accepted for the day in question"
   end
 end
