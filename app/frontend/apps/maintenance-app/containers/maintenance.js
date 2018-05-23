@@ -44,7 +44,7 @@ function mapDispatchToProps(dispatch) {
 
 export class MaintenanceContainer extends React.Component {
   componentWillMount() {
-    this.props.setInitialData(window.boss.maintenance);
+    // this.props.setInitialData(window.boss.maintenance);
   }
 
   closeErrorBox() {

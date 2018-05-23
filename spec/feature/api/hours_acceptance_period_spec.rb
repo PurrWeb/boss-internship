@@ -230,11 +230,14 @@ RSpec.describe 'Hours acceptance endpoints' do
       end
 
       it ' should be accepted, accepted_by and accepted_at by user' do
-        patch(url, params)
+        call_time = start_of_day + 5.hours
+        travel_to call_time do
+          patch(url, params)
+        end
         hours_acceptance_period.reload
         expect(hours_acceptance_period.status).to eq('accepted')
         expect(hours_acceptance_period.accepted_by).to eq(user)
-        expect(hours_acceptance_period.accepted_at).to eq(hours_acceptance_period.updated_at)
+        expect(hours_acceptance_period.accepted_at).to eq(call_time)
       end
 
       it ' accepted, accepted_by and accepted_at should be cleared when unaccept' do

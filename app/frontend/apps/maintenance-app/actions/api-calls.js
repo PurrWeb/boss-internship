@@ -13,7 +13,7 @@ export function queryMaintenanceTasks(filterState) {
         constants.GET_MAINTENANCE_FAILURE
       ],
       headers: {
-        Authorization: 'Token token=' + window.maintenance.accessToken,
+        Authorization: 'Token token=' + window.boss.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json'
       }
@@ -32,7 +32,7 @@ export function changeStatus(maintenanceTask) {
         constants.POST_CHANGE_STATUS_FAILURE
       ],
       headers: {
-        Authorization: 'Token token=' + window.maintenance.accessToken,
+        Authorization: 'Token token=' + window.boss.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json'
       },
@@ -55,7 +55,7 @@ export function addNote(maintenanceTask, noteValue) {
         constants.POST_ADD_NOTE_FAILURE
       ],
       headers: {
-        Authorization: 'Token token=' + window.maintenance.accessToken,
+        Authorization: 'Token token=' + window.boss.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json'
       },
@@ -79,7 +79,7 @@ export function createTask(params) {
         constants.POST_CREATE_MAINTENANCE_TASK_FAILURE
       ],
       headers: {
-        Authorization: 'Token token=' + window.maintenance.accessToken,
+        Authorization: 'Token token=' + window.boss.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json'
       },
@@ -99,7 +99,7 @@ export function deleteMaintenanceTask(maintenanceTask) {
         constants.DELETE_MAINTENANCE_TASK_FAILURE
       ],
       headers: {
-        Authorization: 'Token token=' + window.maintenance.accessToken,
+        Authorization: 'Token token=' + window.boss.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json'
       },
@@ -119,7 +119,7 @@ export function deleteMaintenanceTaskImage(maintenanceTaskImageId) {
         constants.DELETE_MAINTENANCE_TASK_IMAGE_FAILURE
       ],
       headers: {
-        Authorization: 'Token token=' + window.maintenance.accessToken,
+        Authorization: 'Token token=' + window.boss.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json'
       }
@@ -138,7 +138,7 @@ export function editMaintenanceTask(params) {
         constants.EDIT_MAINTENANCE_TASK_FAILURE
       ],
       headers: {
-        Authorization: 'Token token=' + window.maintenance.accessToken,
+        Authorization: 'Token token=' + window.boss.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json'
       },

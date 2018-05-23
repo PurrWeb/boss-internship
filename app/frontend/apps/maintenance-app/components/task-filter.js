@@ -2,25 +2,27 @@ import React from 'react';
 import classnames from 'classnames';
 import moment from 'moment';
 import oFetch from 'o-fetch';
+import URLSearchParams from 'url-search-params';
 
 import Select from 'react-select';
 import { DateRangePicker } from 'react-dates';
 
 export default class MainDashboard extends React.Component {
   componentDidMount() {
-    $('.boss-dropdown').each(function(){
+    $('.boss-dropdown').each(function () {
       let filterSwitch = $(this).find('.boss-dropdown__switch'),
         filterContent = $(this).find('.boss-dropdown__content'),
         pageContent = $('.boss-page-main__content');
 
-      function toggleFilter(e) {
-        e.preventDefault();
-
+      function toggleFilter() {
         filterSwitch.toggleClass('boss-dropdown__switch_state_opened');
         filterContent.slideToggle().end().toggleClass('boss-dropdown__content_state_opened');
       }
 
       filterSwitch.on('click', toggleFilter);
+      if (window.location.search !== '') {
+        filterSwitch.click();
+      }
     });
   }
 
@@ -95,14 +97,12 @@ export default class MainDashboard extends React.Component {
       this.props.setFilterParams({ statuses: 'pending,completed,rejected' });
     }
 
-    setTimeout(function() {
+    setTimeout(() => {
       this.queryMaintenanceTasks();
-    }.bind(this), 500);
+    }, 500);
   }
 
-  setAndQueryMaintenanceTasks(e) {
-    e.preventDefault();
-
+  setAndQueryMaintenanceTasks = () => {
     this.props.setFilterParams({
       startDate: this.props.filter.startDate,
       endDate: this.props.filter.endDate,
@@ -111,23 +111,46 @@ export default class MainDashboard extends React.Component {
       venues: this.props.filter.venues
     });
 
-    this.queryMaintenanceTasks(e);
+    this.queryMaintenanceTasks();
   }
 
-  queryMaintenanceTasks(event = null) {
-    if (event) {
-      event.preventDefault();
-    }
-
+  queryMaintenanceTasks = () => {
+    const queryString = new URLSearchParams(window.location.search);
     let startDate, endDate;
+    const statuses = this.props.filter.statuses.split(',').filter(x => x);
+    const venueIds = this.props.filter.venues.split(',').filter(x => x);
+    const priorities = this.props.filter.priorities.split(',').filter(x => x);
+
+    queryString.delete('statuses[]');
+    queryString.delete('start_date');
+    queryString.delete('end_date');
+    queryString.delete('venue_ids[]');
+    queryString.delete('priorities[]');
 
     if (this.props.filter.startDate) {
-      startDate = this.props.filter.startDate.format('DD/MM/YYYY');
+      startDate = this.props.filter.startDate.format('DD-MM-YYYY');
+      queryString.append('start_date', startDate);
     }
 
     if (this.props.filter.endDate) {
-      endDate = this.props.filter.endDate.format('DD/MM/YYYY');
+      endDate = this.props.filter.endDate.format('DD-MM-YYYY');
+      queryString.append('end_date', endDate);
     }
+
+    statuses.forEach((status) => {
+      queryString.append('statuses[]', status);
+    })
+
+    venueIds.forEach((venueId) => {
+      queryString.append('venue_ids[]', venueId);
+    })
+
+    priorities.forEach((priority) => {
+      queryString.append('priorities[]', priority);
+    })
+
+    console.log(decodeURI(queryString.toString()));
+    window.history.pushState('state', 'title', `maintenance?${decodeURI(queryString)}`);
 
     this.props.queryMaintenanceTasks({
       startDate: startDate,
@@ -140,11 +163,7 @@ export default class MainDashboard extends React.Component {
   }
 
   renderFilterUpdate() {
-    if (this.props.filter.updating) {
-      return <button className="boss-button boss-form__submit boss-form__submit_adjust_single">Updating</button>
-    } else {
-      return <button className="boss-button boss-form__submit boss-form__submit_adjust_single" type="submit" onClick={ this.setAndQueryMaintenanceTasks.bind(this) }>Update</button>
-    }
+    return <button disabled={this.props.filter.updating} className="boss-button boss-form__submit boss-form__submit_adjust_single" type="button" onClick={this.setAndQueryMaintenanceTasks}>Update</button>
   }
 
   handleDateChange(dates) {
@@ -164,12 +183,12 @@ export default class MainDashboard extends React.Component {
                   <div className="boss-form__field boss-form__field_layout_fluid">
                     <div className="boss-form__switcher">
                       <label className="boss-form__switcher-label">
-                        <input type="radio" name="display" value="unacceptedOnly" className="boss-form__switcher-radio" checked={ this.state.unacceptedOnlyChecked } onChange={ this.setFilter.bind(this) } />
+                        <input type="radio" name="display" value="unacceptedOnly" className="boss-form__switcher-radio" checked={this.state.unacceptedOnlyChecked} onChange={this.setFilter.bind(this)} />
                         <span className="boss-form__switcher-label-text">Unaccepted Only</span>
                       </label>
 
                       <label className="boss-form__switcher-label">
-                        <input type="radio" name="display" value="showAll" className="boss-form__switcher-radio" checked={ this.state.showAllChecked } onChange={ this.setFilter.bind(this) } />
+                        <input type="radio" name="display" value="showAll" className="boss-form__switcher-radio" checked={this.state.showAllChecked} onChange={this.setFilter.bind(this)} />
                         <span className="boss-form__switcher-label-text">Show All</span>
                       </label>
                     </div>
@@ -187,16 +206,16 @@ export default class MainDashboard extends React.Component {
                     <p className="boss-form__label"><span className="boss-form__label-text">Date</span></p>
                     <div className="date-range-picker date-range-picker_type_icon date-range-picker_type_interval-fluid date-range-picker_adjust_third">
                       <DateRangePicker
-                        startDate={ this.props.filter.startDate }
-                        endDate={ this.props.filter.endDate }
+                        startDate={this.props.filter.startDate}
+                        endDate={this.props.filter.endDate}
                         numberOfMonths={1}
                         withPortal
                         showClearDates
-                        displayFormat={ 'DD-MM-YYYY' }
-                        isOutsideRange={ () => false }
-                        onDatesChange={ this.handleDateChange.bind(this) }
-                        onFocusChange={ focusedInput => this.setState({ focusedInput }) }
-                        focusedInput={ this.state.focusedInput }
+                        displayFormat={'DD-MM-YYYY'}
+                        isOutsideRange={() => false}
+                        onDatesChange={this.handleDateChange.bind(this)}
+                        onFocusChange={focusedInput => this.setState({ focusedInput })}
+                        focusedInput={this.state.focusedInput}
                       />
                     </div>
                   </div>
@@ -250,7 +269,7 @@ export default class MainDashboard extends React.Component {
                 </div>
 
                 <div className="boss-form__field boss-form__field_justify_end boss-form__field_position_last">
-                  { this.renderFilterUpdate() }
+                  {this.renderFilterUpdate()}
                 </div>
               </form>
             </div>
