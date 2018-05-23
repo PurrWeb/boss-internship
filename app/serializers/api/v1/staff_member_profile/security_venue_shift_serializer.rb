@@ -1,10 +1,9 @@
-class Api::V1::StaffMemberProfile::RotaShiftSerializer < ActiveModel::Serializer
+class Api::V1::StaffMemberProfile::SecurityVenueShiftSerializer < ActiveModel::Serializer
   attributes \
     :id,
     :staffMemberId,
     :venueId,
     :date,
-    :shiftType,
     :startsAt,
     :endsAt,
     :venueType
@@ -14,7 +13,7 @@ class Api::V1::StaffMemberProfile::RotaShiftSerializer < ActiveModel::Serializer
   end
 
   def venueId
-    object.rota.venue_id
+    object.security_venue_id
   end
 
   def venueType
@@ -22,11 +21,7 @@ class Api::V1::StaffMemberProfile::RotaShiftSerializer < ActiveModel::Serializer
   end
 
   def date
-    UIRotaDate.format(object.rota.date)
-  end
-
-  def shiftType
-    object.shift_type
+    UIRotaDate.format(object.date)
   end
 
   def startsAt

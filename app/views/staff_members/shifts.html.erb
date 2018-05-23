@@ -12,7 +12,14 @@
     staff_types,
     serializer: Api::V1::StaffMemberProfile::StaffTypeSerializer,
   ),
-  venues: venues,
+  venues: ActiveModel::Serializer::CollectionSerializer.new(
+    venues,
+    serializer: Api::V1::StaffMemberProfile::VenueSerializer,
+  ),
+  securityVenues: ActiveModel::Serializer::CollectionSerializer.new(
+    security_venues,
+    serializer: Api::V1::StaffMemberProfile::SecurityVenueSerializer,
+  ),
   payRates: pay_rates,
   genderValues: gender_values,
   accessiblePayRateIds: accessible_pay_rate_ids,
@@ -24,6 +31,10 @@
   rotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
     rota_shifts,
     serializer: Api::V1::StaffMemberProfile::RotaShiftSerializer,
+  ),
+  securityVenueShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    security_venue_shifts,
+    serializer: Api::V1::StaffMemberProfile::SecurityVenueShiftSerializer,
   ),
   hoursAcceptancePeriods: ActiveModel::Serializer::CollectionSerializer.new(
     hours_acceptance_periods,
@@ -37,6 +48,7 @@
   pageOptions: {
     startDate: start_date,
     endDate: end_date,
-    venueId: venue.andand.id
+    venueId: venue.andand.id,
+    venueType: venue_type,
   }
 }) %>

@@ -178,9 +178,7 @@ class StaffMembersController < ApplicationController
     unless (shifts_params_present?)
       return redirect_to(shifts_staff_member_path(shifts_redirect_params))
     end
-    query = StaffMember.where(id: params[:id])
-    query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
-    staff_member = query.first
+    staff_member = staff_member_from_params
 
     raise ActiveRecord::RecordNotFound.new unless staff_member.present?
 
@@ -192,45 +190,14 @@ class StaffMembersController < ApplicationController
       ).page_pay_rates.map(&:id)
 
       app_download_link_data = get_app_download_link_data(staff_member)
-      clock_in_days = if shifts_venue_from_params.present?
-        ClockInDay.where({staff_member: staff_member, venue: shifts_venue_from_params})
-      else
-        ClockInDay.where({staff_member: staff_member})
-      end
-      staff_clock_in_days = InRangeQuery.new(
-        relation: clock_in_days.includes([:staff_member, :venue]),
-        start_value: shifts_start_date_from_params,
-        end_value: shifts_end_date_from_params,
-        start_column_name: 'date',
-        end_column_name: 'date'
+
+      staff_shifts_data = StaffMemberShiftsIndexQuery.new(
+        staff_member: staff_member,
+        venue_id_from_filter: params[:venue_id],
+        start_date_from_filter: shifts_start_date_from_params,
+        end_date_from_filter: shifts_end_date_from_params,
+        venue_type_from_filter: shifts_venue_type_from_params,
       ).all
-
-      rotas = if shifts_venue_from_params.present?
-        Rota.where(venue: shifts_venue_from_params)
-      else
-        Rota.all
-      end
-
-      shifts_rotas = InRangeQuery.new(
-        relation: rotas,
-        start_value: shifts_start_date_from_params,
-        end_value: shifts_end_date_from_params,
-        start_column_name: 'date',
-        end_column_name: 'date'
-      ).all
-
-      rota_shifts = RotaShift.enabled.where(staff_member: staff_member, rota: shifts_rotas).includes([:rota])
-
-      hours_acceptance_periods = HoursAcceptancePeriod
-        .enabled
-        .joins(:clock_in_day)
-        .where(clock_in_day: staff_clock_in_days)
-        .includes([:accepted_by, :frozen_by, :hours_acceptance_breaks_enabled, clock_in_day: [:venue, :staff_member]])
-
-      hours_acceptance_breaks = HoursAcceptanceBreak
-        .enabled
-        .joins(:hours_acceptance_period)
-        .merge(hours_acceptance_periods)
 
       accessible_venues = if current_user.has_all_venue_access?
         Venue.all
@@ -252,9 +219,7 @@ class StaffMembersController < ApplicationController
         gender_values: StaffMember::GENDERS,
         accessible_venue_ids: Venue.all.pluck(:id),
         accessible_pay_rate_ids: accessible_pay_rate_ids,
-        hours_acceptance_periods: hours_acceptance_periods,
-        hours_acceptance_breaks: hours_acceptance_breaks,
-        rota_shifts: rota_shifts,
+        security_venues: SecurityVenue.all,
         accessible_venues: accessible_venues,
         staff_member_profile_permissions: StaffMemberProfilePermissions.new(
           staff_member: staff_member,
@@ -263,7 +228,8 @@ class StaffMembersController < ApplicationController
         start_date: UIRotaDate.format(shifts_start_date_from_params),
         end_date: UIRotaDate.format(shifts_end_date_from_params),
         venue: shifts_venue_from_params,
-      }
+        venue_type: shifts_venue_type_from_params,
+      }.merge(staff_shifts_data)
     else
       render 'reduced_show', locals: {
         staff_member: staff_member
@@ -626,6 +592,12 @@ class StaffMembersController < ApplicationController
     UIRotaDate.parse!(params[:end_date])
   end
 
+  def staff_member_from_params
+    query = StaffMember.where(id: params.fetch(:id))
+    query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
+    query.first
+  end
+
   def shifts_params_present?
     shifts_start_date_from_params.present? &&
       shifts_end_date_from_params.present?
@@ -633,6 +605,10 @@ class StaffMembersController < ApplicationController
 
   def shifts_venue_from_params
     accessible_venues.find_by(id: params[:venue_id])
+  end
+
+  def shifts_venue_type_from_params
+    params[:venue_type]
   end
 
   def holiday_start_date_from_params
