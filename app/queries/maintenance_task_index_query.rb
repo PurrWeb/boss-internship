@@ -37,7 +37,6 @@ class MaintenanceTaskIndexQuery
         statuses.include?(maintenance_task.state_machine.current_state) &&
         priorities.include?(maintenance_task.priority)
     end
-
     maintenance_tasks = maintenance_tasks.sort_by do |maintenance_task|
       case sort_type
       when :priority_focused

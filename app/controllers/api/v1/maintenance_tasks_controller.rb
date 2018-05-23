@@ -18,11 +18,10 @@ module Api
           per_page: 10
         )
 
-        serialized_maintenance_tasks = camelized_collection(
+        serialized_maintenance_tasks = ActiveModel::Serializer::CollectionSerializer.new(
           maintenance_tasks,
-          Api::V1::MaintenanceTaskSerializer,
-          { current_user: current_user },
-          '**'
+          serializer: Api::V1::MaintenanceTasks::MaintenanceTaskSerializer,
+          scope: { current_user: current_user }
         )
 
         render json: {

@@ -1,7 +1,7 @@
 class MaintenanceTaskFilter
   def initialize(requester:, params:)
-    @start_date = Date.parse(params[:startDate]) if params[:startDate].present?
-    @end_date = Date.parse(params[:endDate]) if params[:endDate].present?
+    @start_date = params[:startDate] if params[:startDate].present?
+    @end_date = params[:endDate] if params[:endDate].present?
     @statuses = (params[:statuses] || '').split(',').map do |state_from_params|
       raise "invalid state #{state_from_params} supplied" unless MaintenanceTaskStateMachine.states.include?(state_from_params)
       state_from_params
@@ -32,8 +32,7 @@ class MaintenanceTaskFilter
 
   private
   def priority_enum_from_form_value(form_value)
-    enum_key = form_value + "_priority"
-    MaintenanceTask.priorities.fetch(enum_key)
+    form_value + "_priority"
   end
 
   def default_priorities

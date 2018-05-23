@@ -1,19 +1,27 @@
-<%= javascript_tag do %>
-  maintenance = {};
 
-  maintenance.maintenanceTasks = <%= camelized_collection_json(maintenance_tasks, Api::V1::MaintenanceTaskSerializer, { current_user: current_user }, '**') %>;
-  maintenance.venues = <%= camelized_collection_json(venues, Api::V1::VenueSerializer) %>;
-  maintenance.currentUser = <%= Api::V1::UserSerializer.new(current_user).to_json.html_safe %>;
-  maintenance.accessToken = "<%= access_token.token %>";
-  maintenance.currentPageNumber = <%= current_page_number %>;
-  maintenance.priorities = <%= priorities.to_json.html_safe %>;
-  maintenance.statuses = <%= statuses.to_json.html_safe %>;
-  maintenance.totalPages = <%= total_pages %>;
-  maintenance.totalCount = <%= total_count %>;
-  maintenance.pageNumber = <%= page_number %>;
-
-  window.boss = window.boss || {};
-  window.boss.maintenance = maintenance;
-<% end %>
-
-<%= react_component('MaintenanceApp') %>
+<%= react_component('MaintenanceApp', {
+  accessToken: access_token.token,
+  maintenanceTasks: ActiveModel::Serializer::CollectionSerializer.new(
+    maintenance_tasks,
+    serializer: Api::V1::MaintenanceTasks::MaintenanceTaskSerializer,
+    scope: { current_user: current_user }
+  ),
+  venues: ActiveModel::Serializer::CollectionSerializer.new(
+    venues,
+    serializer: Api::V1::MaintenanceTasks::VenueSerializer
+  ),
+  currentUser: Api::V1::MaintenanceTasks::UserSerializer.new(current_user),
+  currentPageNumber: current_page_number,
+  priorities: priorities,
+  statuses: statuses,
+  totalPages: total_pages,
+  totalCount: total_count,
+  pageNumber: page_number,
+  filter: {
+    startDate: filter[:start_date].present? ? UIRotaDate.format(filter[:start_date]) : nil,
+    endDate: filter[:end_date].present? ? UIRotaDate.format(filter[:end_date]) : nil,
+    venueIds: filter[:venue_ids].map(&:id),
+    statuses: filter[:statuses],
+    priorities: filter[:priorities],
+  }
+}) %>
