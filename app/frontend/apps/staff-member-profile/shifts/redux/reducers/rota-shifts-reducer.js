@@ -10,7 +10,8 @@ const rotaShiftsReducer = handleActions(
   {
     [types.INITIAL_LOAD]: (state, action) => {
       const rotaShifts = oFetch(action, 'payload.rotaShifts');
-      return Immutable.fromJS(rotaShifts);
+      const securityVenueShifts = oFetch(action, 'payload.securityVenueShifts');
+      return Immutable.fromJS(rotaShifts).concat(Immutable.fromJS(securityVenueShifts));
     },
   },
   initialGlobalState,

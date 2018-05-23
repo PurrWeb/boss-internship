@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
 import { Collapse } from 'react-collapse';
-import utils from '~/lib/utils'
+import utils, { SECURITY_VENUE_TYPE } from '~/lib/utils'
 import safeMoment from '~/lib/safe-moment'
 import { appRoutes } from '~/lib/routes'
 
@@ -65,7 +65,7 @@ class VenueShifts extends Component {
 
   render() {
     const venueShifts = oFetch(this.props, 'venueShifts');
-    const venueId = oFetch(this.props, 'venueId');
+    const venueCombinedId = oFetch(this.props, 'venueId');
     const staffMemberId = oFetch(this.props, 'staffMemberId');
     const date = oFetch(this.props, 'date');
     const isOpen = oFetch(this.state, 'isOpen');
@@ -81,6 +81,11 @@ class VenueShifts extends Component {
     const hoursAcceptancePeriodsDiff = utils.getStartsEndsTimeDiff(hoursAcceptancePeriods);
     const hoursAcceptancePeriodsTotalTime = utils.formattedTime(hoursAcceptancePeriodsDiff);
 
+    const [venueType, stringVenueId] = venueCombinedId.split('_');
+    const venueId = Number(stringVenueId);
+
+    const isSecurityVenue = venueType === SECURITY_VENUE_TYPE
+
     return (
       <div className="boss-timeline__records">
         <div className="boss-timeline__record">
@@ -89,7 +94,12 @@ class VenueShifts extends Component {
             <div className="boss-timeline__details-header">
               <p className="boss-timeline__text boss-timeline__text_role_hours">
                 <span className="boss-timeline__text-marked">{rotaShiftsTotalTime}</span> rotaed
-                <span className="boss-timeline__text-marked">{' '}{hoursAcceptancePeriodsTotalTime}{' '}</span> accepted
+                {!isSecurityVenue && (
+                  <span>
+                    <span className="boss-timeline__text-marked">{' '}{hoursAcceptancePeriodsTotalTime}{' '}</span>
+                    <span>{' '}accepted</span>
+                  </span>
+                )}
               </p>
               <div
                 onClick={this.toggleOpen}
@@ -104,7 +114,7 @@ class VenueShifts extends Component {
             >
               <div className="boss-timeline__details-inner">
                 {this.renderShiftsRotaed(rotaShifts)}
-                {!hasHoursAcceptancePeriods && <a href={appRoutes.rotaDaily(date, venueId)} target="_blank" className="boss-timeline__link boss-timeline__link_role_details">View Rota</a>}
+                {!hasHoursAcceptancePeriods && <a href={isSecurityVenue ? appRoutes.securityRotaDaily(date) : appRoutes.rotaDaily(date, venueId)} target="_blank" className="boss-timeline__link boss-timeline__link_role_details">View Rota</a>}
               </div>
               <div className="boss-timeline__details-inner">
                 {this.renderHoursAcceptancePeriodsFromTo(hoursAcceptancePeriods)}

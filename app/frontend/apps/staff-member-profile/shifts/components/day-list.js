@@ -23,7 +23,7 @@ class DayList extends Component {
             <ul className="boss-timeline__list">{this.renderItems(shiftsByDateAndVenue)}</ul>
           )}
           {!hasShiftsByDateAndVenue && (
-            <div className="boss-page-main__text-placeholder">No data by selected period present</div>
+            <div className="boss-page-main__text-placeholder">No shifts found</div>
           )}
         </div>
       </div>

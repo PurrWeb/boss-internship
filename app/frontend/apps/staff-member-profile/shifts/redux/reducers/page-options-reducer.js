@@ -13,7 +13,9 @@ const venuesReducer = handleActions(
       const startDate = oFetch(pageOptions, 'startDate');
       const endDate = oFetch(pageOptions, 'endDate');
       const venueId = oFetch(pageOptions, 'venueId');
-      return Immutable.fromJS({ startDate, endDate, venueId });
+      const venueType = oFetch(pageOptions, 'venueType');
+
+      return Immutable.fromJS({ startDate, endDate, venueId, venueType });
     },
   },
   initialGlobalState,

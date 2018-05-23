@@ -17,12 +17,13 @@ class ShiftsFilter extends React.Component {
     const startDate = oFetch(pageOptions, 'startDate');
     const endDate = oFetch(pageOptions, 'endDate');
     const venueId = oFetch(pageOptions, 'venueId');
+    const venueType = oFetch(pageOptions, 'venueType');
 
     this.state = {
       focusedInput: null,
       startDate: safeMoment.uiDateParse(startDate),
       endDate: safeMoment.uiDateParse(endDate),
-      venueId: venueId,
+      venueId: `${venueType}_${venueId}`,
       updateClicked: false,
     };
   }
@@ -45,14 +46,19 @@ class ShiftsFilter extends React.Component {
       const formatedStartDate = this.state.startDate.format('DD-MM-YYYY');
       const formatedEndDate = this.state.endDate.format('DD-MM-YYYY');
       this.props.onFilter({ start_date: formatedStartDate, end_date: formatedEndDate, venue_id: venueId });
-      return;
+    } else {
+      this.props.onFilter({ venue_id: venueId });
     }
-    this.props.onFilter({ venue_id: venueId });
   };
 
   render() {
     const { focusedInput, startDate, endDate } = this.state;
     const venues = oFetch(this.props, 'venues');
+    const mappedVenues = venues.map(venue => ({
+      value: `${oFetch(venue, 'type')}_${oFetch(venue, 'id')}`,
+      label: oFetch(venue, 'name'),
+      color: oFetch(venue, 'color'),
+    }));
 
     return (
       <div className="boss-board__manager-filter">
@@ -81,13 +87,11 @@ class ShiftsFilter extends React.Component {
             <div className="boss-form__field boss-form__field_layout_min">
               <div className="boss-form__select boss-form__select_size_small">
                 <Select
-                  options={venues}
+                  options={mappedVenues}
                   onChange={this.onVenueSelect}
                   clearable
-                  simpleValue
                   ignoreCase
-                  valueKey="id"
-                  labelKey="name"
+                  simpleValue
                   optionComponent={ColoredSingleOption}
                   valueComponent={ColoredSingleValue}
                   placeholder={'Venue Name'}
@@ -125,13 +129,11 @@ class ShiftsFilter extends React.Component {
             <div className="boss-form__field boss-form__field_layout_min">
               <div className="boss-form__select">
                 <Select
-                  options={venues}
+                  options={mappedVenues}
                   onChange={this.onVenueSelect}
                   clearable
                   ignoreCase
                   simpleValue
-                  valueKey="id"
-                  labelKey="name"
                   optionComponent={ColoredSingleOption}
                   valueComponent={ColoredSingleValue}
                   placeholder={'Venue Name'}

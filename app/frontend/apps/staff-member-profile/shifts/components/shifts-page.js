@@ -10,16 +10,19 @@ import DayList from './day-list';
 import Day from './day';
 import VenueShifts from './venue-shifts';
 
+
 class Shifts extends Component {
-  onFilter = (values) => {
+  onFilter = ({ venue_id, ...values }) => {
     const queryString = new URLSearchParams(window.location.search);
     queryString.delete('start_date');
     queryString.delete('end_date');
     queryString.delete('venue_id');
-
-    for (let value in values) {
-      if (values[value]) {
-        queryString.set(value, values[value]);
+    queryString.delete('venue_type');
+    const [venueType, stringVenueId] = venue_id ? venue_id.split('_') : [null, null];
+    const mappedValues = { ...values, venue_id: Number(stringVenueId), venue_type: venueType };
+    for (let value in mappedValues) {
+      if (mappedValues[value]) {
+        queryString.set(value, mappedValues[value]);
       }
     }
     const link = `${window.location.href.split('?')[0]}?${queryString.toString()}`

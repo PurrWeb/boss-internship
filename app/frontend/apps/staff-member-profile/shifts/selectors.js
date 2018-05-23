@@ -3,7 +3,7 @@ import oFetch from 'o-fetch';
 import Immutable from 'immutable';
 import safeMoment from '~/lib/safe-moment';
 import getVenueColor from '~/lib/get-venue-color';
-import utils from '~/lib/utils'
+import utils, { BOSS_VENUE_TYPE } from '~/lib/utils'
 
 import { HoursAcceptancePeriod, VenueShifts, RotaShift, HoursAcceptanceBreak } from './models'
 
@@ -11,7 +11,7 @@ export const venuesSelector = state => state.get('venues');
 export const rotaShiftsSelector = state => state.get('rotaShifts');
 export const hoursAcceptancePeriodsSelector = state => state.get('hoursAcceptancePeriods');
 export const hoursAcceptanceBreaksSelector = state => state.get('hoursAcceptanceBreaks');
-export const staffMEmberIdSelector = state => state.getIn(['profile', 'staffMember', 'id']);
+export const staffMemberIdSelector = state => state.getIn(['profile', 'staffMember', 'id']);
 
 export const getVenuesWithColor = createSelector(
   venuesSelector,
@@ -24,9 +24,14 @@ export const getMappedHoursAcceptancePeriods = createSelector(
   venuesSelector,
   (hoursAcceptancePeriods, hoursAcceptanceBreaks, venues) => {
     return hoursAcceptancePeriods.groupBy(x => x.get('date'))
-      .map((hoursAcceptancePeriodsInDate, hoursAcceptancePeriodDate) => hoursAcceptancePeriodsInDate.groupBy(x => x.get('venueId'))
-        .map((hoursAcceptancePeriodsInVenue, periodVenueId) => {
-          const venue = venues.find(venue => venue.get('id') === periodVenueId);
+      .map((hoursAcceptancePeriodsInDate, hoursAcceptancePeriodDate) => hoursAcceptancePeriodsInDate.groupBy(x => `${BOSS_VENUE_TYPE}_${x.get('venueId')}`)
+        .map((hoursAcceptancePeriodsInVenue, venueCombinedId) => {
+          const [venueType, stringVenueId] = venueCombinedId.split('_');
+          const periodVenueId = Number(stringVenueId);
+
+          const venue = venues.find(venue => {
+            return venue.get('id') === periodVenueId && venue.get('type') === venueType
+          });
           if (!venue) {
             throw new Error('Unknow venue');
           }
@@ -63,9 +68,13 @@ export const getMappedRotaShifts = createSelector(
   (rotaShifts, venues) => {
     return rotaShifts
       .groupBy(x => x.get('date'))
-      .map((rotaShiftsInDate, rotaShiftDate) => rotaShiftsInDate.groupBy(x => x.get('venueId'))
-        .map((rotaShiftsInVenue, periodVenueId) => {
-          const venue = venues.find(venue => venue.get('id') === periodVenueId);
+      .map((rotaShiftsInDate, rotaShiftDate) => rotaShiftsInDate.groupBy(x => `${x.get('venueType')}_${x.get('venueId')}`)
+        .map((rotaShiftsInVenue, venueCombinedId) => {
+          const [venueType, stringVenueId] = venueCombinedId.split('_');
+          const periodVenueId = Number(stringVenueId);
+          const venue = venues.find(venue => {
+            return venue.get('id') === periodVenueId && venue.get('type') === venueType
+          });
           if (!venue) {
             throw new Error('Unknow venue');
           }

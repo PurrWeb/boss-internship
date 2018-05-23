@@ -10,7 +10,8 @@ const venuesReducer = handleActions(
   {
     [types.INITIAL_LOAD]: (state, action) => {
       const venues = oFetch(action, 'payload.venues');
-      return Immutable.fromJS(venues);
+      const securityVenues = oFetch(action, 'payload.securityVenues');
+      return Immutable.fromJS(venues).concat(Immutable.fromJS(securityVenues));
     },
   },
   initialGlobalState,
