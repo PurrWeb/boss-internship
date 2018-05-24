@@ -149,7 +149,6 @@ export default class MainDashboard extends React.Component {
       queryString.append('priorities[]', priority);
     })
 
-    console.log(decodeURI(queryString.toString()));
     window.history.pushState('state', 'title', `maintenance?${decodeURI(queryString)}`);
 
     this.props.queryMaintenanceTasks({

@@ -73,7 +73,7 @@ export default class MainContent extends React.Component {
 
   render() {
     const { updating } = this.props.filter;
-    console.log(updating)
+
     return (
       <div className="boss-page-main__content">
         <div className="boss-page-main__inner">
