@@ -11,7 +11,7 @@ class MaintenanceController < ApplicationController
       params: {
         startDate: filter_start_date_from_params,
         endDate: filter_end_date_from_params,
-        venues: filter_venues_from_params.join(','),
+        venues: filter_venues_from_params.map(&:id).join(','),
         statuses: filter_statuses_from_params.join(','),
         priorities: filter_priorities_from_params.join(',')
       }

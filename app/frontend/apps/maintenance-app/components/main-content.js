@@ -12,27 +12,27 @@ export default class MainContent extends React.Component {
     return this.props.maintenanceTasks.map((venue, index) => {
       let props = { ...this.props }
 
-      props = Object.assign(props, { currentMaintenanceTask: venue});
+      props = Object.assign(props, { currentMaintenanceTask: venue });
 
-      return <TaskComponent { ...props } key={ venue.id }/>;
+      return <TaskComponent {...props} key={venue.id} />;
     })
   }
 
   renderTaskModal() {
     if (this.props.frontend.showModal) {
-      return <TaskModal { ...this.commonProps() } />
+      return <TaskModal {...this.commonProps()} />
     }
   }
 
   renderNewTaskModal() {
     if (this.props.frontend.showNewTaskModal) {
-      return <NewTaskModal { ...this.commonProps() } />
+      return <NewTaskModal {...this.commonProps()} />
     }
   }
 
   renderDeleteModal() {
     if (this.props.frontend.showDeleteModal) {
-      return <DeleteTaskModal { ...this.commonProps() } />
+      return <DeleteTaskModal {...this.commonProps()} />
     }
   }
 
@@ -72,16 +72,20 @@ export default class MainContent extends React.Component {
   }
 
   render() {
+    const { updating } = this.props.filter;
+
     return (
       <div className="boss-page-main__content">
         <div className="boss-page-main__inner">
-          { this.renderTaskComponents() }
-
-          <Pagination { ...this.props } />
-
-          { this.renderTaskModal() }
-          { this.renderNewTaskModal() }
-          { this.renderDeleteModal() }
+          {updating ? <div className="boss-spinner"></div> : (
+            <div>
+              {this.renderTaskComponents()}
+              <Pagination {...this.props} />
+            </div>
+          )}
+          {this.renderTaskModal()}
+          {this.renderNewTaskModal()}
+          {this.renderDeleteModal()}
         </div>
       </div>
     )

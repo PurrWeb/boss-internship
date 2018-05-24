@@ -9,7 +9,7 @@ class MaintenanceTaskFilter
     priorties_from_params = (params[:priorities] || '').split(',').map do |form_value|
       priority_enum_from_form_value(form_value)
     end
-    @priorities = priorties_from_params.present? ? priorties_from_params : default_priorities
+    @priorities = priorties_from_params
     accessible_venues = AccessibleVenuesQuery.new(requester).all
     venue_from_params = (params[:venues] || '').split(',').map do |id|
       accessible_venues.find_by(id: id)
@@ -32,7 +32,8 @@ class MaintenanceTaskFilter
 
   private
   def priority_enum_from_form_value(form_value)
-    form_value + "_priority"
+    form_value = form_value + "_priority"
+    MaintenanceTask.priorities[form_value]
   end
 
   def default_priorities

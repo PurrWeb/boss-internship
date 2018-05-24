@@ -23,6 +23,7 @@ const initialState = Immutable.Map({
     startDate: null,
     endDate: null,
     saving: false,
+    updating: false,
   },
   frontend: {
     loading: true,

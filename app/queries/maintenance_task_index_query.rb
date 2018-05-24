@@ -15,6 +15,7 @@ class MaintenanceTaskIndexQuery
 
   def to_a
     maintenance_tasks = relation.
+      where(venue: venues).
       priority_order.
       includes(
         :venue,
@@ -28,24 +29,26 @@ class MaintenanceTaskIndexQuery
         disabled_by_user: [:name]
       )
 
-    maintenance_tasks = maintenance_tasks.select do |maintenance_task|
-      maintenance_task.created_at.between?(start_date, end_date)
-    end if (start_date.present? && end_date.present?)
+    if (start_date.present? && end_date.present?)
+      maintenance_tasks = InRangeQuery.new(
+        relation: maintenance_tasks,
+        start_value: start_date,
+        end_value: end_date,
+        start_column_name: 'created_at',
+        end_column_name: 'created_at',
+        table_name: 'maintenance_tasks'
+      )
+      .all
+    end
 
-    maintenance_tasks = maintenance_tasks.select do |maintenance_task|
-      venues.include?(maintenance_task.venue) &&
-        statuses.include?(maintenance_task.state_machine.current_state) &&
-        priorities.include?(maintenance_task.priority)
+    if statuses.present?
+      maintenance_tasks = maintenance_tasks.in_state(statuses)
     end
-    maintenance_tasks = maintenance_tasks.sort_by do |maintenance_task|
-      case sort_type
-      when :priority_focused
-        [maintenance_task.priority_sort_key, maintenance_task.status_sort_key(sort_type: sort_type), maintenance_task.created_at]
-      when :status_focused
-        [maintenance_task.status_sort_key(sort_type: sort_type), maintenance_task.priority_sort_key, maintenance_task.created_at]
-      else
-        raise "Unsupported sort type #{sort_type} encountered"
-      end
+
+    if priorities.present?
+      maintenance_tasks = maintenance_tasks.where(priority: priorities)
     end
+
+    maintenance_tasks
   end
 end
