@@ -11,11 +11,7 @@ class MaintenanceTask < ActiveRecord::Base
   MEDIUM_PRIORITY_ENUM_VALUE = 1
   HIGH_PRIORITY_ENUM_VALUE = 2
 
-  enum priority: {
-    low_priority: LOW_PRIORITY_ENUM_VALUE,
-    medium_priority: MEDIUM_PRIORITY_ENUM_VALUE,
-    high_priority: HIGH_PRIORITY_ENUM_VALUE
-  }
+  enum priority: [:low_priority, :medium_priority, :high_priority]
 
   #Lower value first by default
   PRIORITY_SORT_KEYS = {
