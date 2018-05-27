@@ -15,7 +15,7 @@ class ReportItem extends Component {
     const thursdayHoursCount = utils.round(oFetch(report, 'thursdayHoursCount'), 2);
     const fridayHoursCount = utils.round(oFetch(report, 'fridayHoursCount'), 2);
     const saturdayHoursCount = utils.round(oFetch(report, 'saturdayHoursCount'), 2);
-    const sundayHoursCount = utils.round(oFetch(report, 'saturdayHoursCount'), 2);
+    const sundayHoursCount = utils.round(oFetch(report, 'sundayHoursCount'), 2);
     const staffMemberId = oFetch(this.props, 'report.staffMemberId');
     const weekDates = oFetch(this.props, 'weekDates');
 
