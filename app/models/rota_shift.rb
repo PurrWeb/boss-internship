@@ -18,10 +18,10 @@ class RotaShift < ActiveRecord::Base
   validate :times_within_rota_boundary
   validate :times_in_fifteen_minute_increments
   validate do |rota_shift|
-    ShiftTimeOverlapValidator.new(rota_shift).validate
+    ShiftTimeOverlapValidator.new(rota_shift).validate if enabled?
   end
   validate do |rota_shift|
-    NotOnHolidayValidator.new(rota_shift).validate
+    NotOnHolidayValidator.new(rota_shift).validate if enabled?
   end
 
   def date
