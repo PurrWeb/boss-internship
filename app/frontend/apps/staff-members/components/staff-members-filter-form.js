@@ -6,9 +6,9 @@ export default class StaffMembersFilterForm extends React.Component {
     var filter = $('.boss-dropdown');
 
     filter.each(function(){
-      var filterSwitch = $(this).find('.boss-dropdown__switch'),
-          filterContent = $(this).find('.boss-dropdown__content'),
-          pageContent = $('.boss-page-main__content');
+      var filterSwitch = $(this).find('.boss-dropdown__switch');
+      var filterContent = $(this).find('.boss-dropdown__content');
+      var pageContent = $('.boss-page-main__content');
 
       function toggleFilter(e) {
         e.preventDefault();
