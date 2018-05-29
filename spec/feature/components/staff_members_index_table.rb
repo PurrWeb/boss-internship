@@ -1,7 +1,7 @@
 module PageObject
   class StaffMembersIndexTable < Component
     def self.columns
-      [:name, :venues, :staff_type]
+      [:name, :master_venue, :work_venues, :staff_type]
     end
 
     page_action :click_on_detail do |column, staff_member:|
@@ -14,9 +14,12 @@ module PageObject
 
       expect(detail_text(listing, :name)).to eq(staff_member.full_name.titlecase)
 
-      venues = (Array(staff_member.master_venue) + staff_member.work_venues.to_a).compact
-      venues_text = venues.length > 0 ? venues.map(&:name).to_sentence : 'N / A'
-      expect(detail_text(listing, :venues)).to eq(venues_text)
+      master_venue_text = staff_member.master_venue.present? ? staff_member.master_venue.name : 'N / A'
+      expect(detail_text(listing, :master_venue)).to eq(master_venue_text)
+
+      work_venues = staff_member.work_venues.to_a
+      work_venues_text = work_venues.length > 0 ? work_venues.map(&:name).to_sentence : 'N / A'
+      expect(detail_text(listing, :work_venues)).to eq(work_venues_text)
 
       expect(detail_text(listing, :staff_type)).to eq(staff_member.staff_type.name.titlecase)
     end
@@ -52,7 +55,8 @@ module PageObject
     def column_data
       {
         name:  { detail_selector: '.boss-table__info[data-role="name"] > .boss-table__text'  },
-        venues:  { detail_selector: '.boss-table__info[data-role="venues"] > .boss-table__text'  },
+        master_venue:  { detail_selector: '.boss-table__info[data-role="master-venue"] > .boss-table__text'  },
+        work_venues: { detail_selector: '.boss-table__info[data-role="work-venues"] > .boss-table__text'},
         staff_type:  { detail_selector: '.boss-table__info[data-role="staff-type"] > .boss-table__text'  }
       }
     end
