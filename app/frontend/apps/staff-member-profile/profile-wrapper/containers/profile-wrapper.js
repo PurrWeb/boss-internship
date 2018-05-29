@@ -103,6 +103,7 @@ class ProfileWrapper extends React.PureComponent {
       onStaffMemberChanged,
       currentPage,
       permissionsData,
+      venues,
       actions: {
         startEditProfile,
         cancelEditProfile,
@@ -171,6 +172,7 @@ class ProfileWrapper extends React.PureComponent {
                   staffMember={staffMember.toJS()}
                   jobType={jobType.toJS()}
                   onEditAvatar={showEditAvatarModal}
+                  venues={venues.toJS()}
                 />
                 <StaffMemberProfileActions
                   staffMember={staffMember}

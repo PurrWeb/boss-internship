@@ -14,12 +14,18 @@ const StaffMemberCard = ({
   onUpdateAvatar,
   onEditAvatar,
   currentPage,
+  venues
 }) => {
   const avatar = oFetch(staffMember, 'avatar');
   const fullName = `${oFetch(staffMember, 'first_name')} ${oFetch(
     staffMember,
     'surname',
   )}`;
+  const masterVenueId = oFetch(staffMember, 'master_venue');
+  const masterVenue = _.find(venues, venue => { return oFetch(venue, 'id') === masterVenueId });
+  if(!masterVenue) {
+    throw new Error('No venue found with id ' + masterVenueId)
+  }
   const email = oFetch(staffMember, 'email');
   const phoneNumber = oFetch(staffMember, 'phone_number');
   const disabled = oFetch(staffMember, 'disabled');
@@ -72,6 +78,16 @@ const StaffMemberCard = ({
   const renderFullName = (fullName, disabled = false) => {
     return disabled ? `${fullName} (Disabled)` : fullName;
   };
+
+  const renderMasterVenue = (masterVenue) => {
+    return (
+      <ul className="boss-user-summary__review-list">
+        <li className="boss-user-summary__review-item boss-user-summary__review-item_role_venue">
+          <span className="boss-user-summary__review-marked">{oFetch(masterVenue, 'name')}</span>
+        </li>
+      </ul>
+    )
+  }
 
   const renderCardContacts = (email, phoneNumber) => {
     return (
@@ -206,6 +222,7 @@ const StaffMemberCard = ({
               disabledAt,
               disabledReason,
             })}
+          {renderMasterVenue(masterVenue)}
           {[renderCardContacts(email, phoneNumber), renderCardActions()]}
         </div>
       </div>
