@@ -21,7 +21,7 @@ class OwedHour < ActiveRecord::Base
 
   #validation
   def date_valid
-    return unless date.present?
+    return unless enabled? && date.present?
 
     current_date = RotaShiftDate.to_rota_date(Time.current)
     if date > current_date
@@ -31,7 +31,7 @@ class OwedHour < ActiveRecord::Base
 
   #validation
   def times_valid
-    return unless require_times
+    return unless enabled? && require_times
 
     if !starts_at.present?
       errors.add(:starts_at, "can't be blank")
@@ -54,7 +54,7 @@ class OwedHour < ActiveRecord::Base
 
   #validatation
   def minutes_valid_for_times
-    return unless minutes.present? && starts_at.present? && ends_at.present?
+    return unless enabled? && minutes.present? && starts_at.present? && ends_at.present?
 
     times_delta_minutes = (ends_at - starts_at) / 60
     if times_delta_minutes != minutes
