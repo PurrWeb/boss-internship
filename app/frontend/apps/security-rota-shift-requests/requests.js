@@ -15,9 +15,10 @@ export const assignShiftRequestRequest = params => {
 
 export const rejectShiftRequestRequest = params => {
   const id = oFetch(params, 'id');
+  const rejectReason = oFetch(params, 'rejectReason');
 
   return http({
     successMessage: 'Request Rejected Successfully',
     errorMessage: 'Request Rejecting Failed',
-  }).post(`/api/v1/security-shift-requests/${id}/reject`)
+  }).post(`/api/v1/security-shift-requests/${id}/reject`, { rejectReason });
 };

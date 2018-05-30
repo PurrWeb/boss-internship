@@ -22,7 +22,7 @@ export const rejectSecurityShiftRequest = params => (dispatch, getState) => {
   const rejectReason = oFetch(params, 'rejectReason');
   const venueId = oFetch(params, 'venueId');
   const id = oFetch(params, 'id');
-  return rejectShiftRequestRequest({ id }).then(() =>
+  return rejectShiftRequestRequest({ id, rejectReason }).then(() =>
     dispatch(removeRequestAction({ id })),
   );
 };
