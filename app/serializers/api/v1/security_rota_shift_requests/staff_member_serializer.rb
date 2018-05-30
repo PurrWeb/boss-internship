@@ -5,7 +5,9 @@ class Api::V1::SecurityRotaShiftRequests::StaffMemberSerializer < ActiveModel::S
     :avatarUrl,
     :firstName,
     :surname,
-    :staffTypeId
+    :staffTypeId,
+    :preferredDays,
+    :preferredHours,
 
   def avatarUrl
     object.avatar_url
@@ -21,5 +23,13 @@ class Api::V1::SecurityRotaShiftRequests::StaffMemberSerializer < ActiveModel::S
 
   def staffTypeId
     object.staff_type.id
+  end
+
+  def preferredDays
+    object.day_perference_note
+  end
+
+  def preferredHours
+    object.hours_preference_note
   end
 end

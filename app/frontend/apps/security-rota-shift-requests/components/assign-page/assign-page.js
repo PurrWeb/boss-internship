@@ -10,6 +10,8 @@ import StaffMember from './assign-staff-member';
 import { openConfirmationModal } from '~/components/modals';
 import AssignConfirm from './assign-confirm';
 import Graph from './graph';
+import ModalWrapper from './modal-wrapper';
+import GraphDetails from './graph-details';
 
 class AssignPage extends PureComponent {
   state = {
@@ -64,13 +66,26 @@ class AssignPage extends PureComponent {
     setAssigningShiftRequest(null);
   };
 
+  handleShiftClick = shift => {
+    const showGraphDetails = oFetch(this.props, 'showGraphDetails');
+    showGraphDetails({ graphDetails: shift });
+  };
+
+  closeGraphDetails = () => {
+    const closeGraphDetails = oFetch(this.props, 'closeGraphDetails');
+    closeGraphDetails();
+  };
+
   render() {
     const shiftRequest = oFetch(this.props, 'shiftRequest');
     const rotaShifts = oFetch(this.props, 'rotaShifts');
+    const isGraphDetailsOpen = oFetch(this.props, 'isGraphDetailsOpen');
+    const graphDetails = oFetch(this.props, 'graphDetails');
     const staffMembers = oFetch(this.state, 'staffMembers');
     const staffMembersFromProps = oFetch(this.props, 'staffMembers');
 
     const venueTypes = oFetch(this.props, 'venueTypes');
+    const staffTypes = oFetch(this.props, 'staffTypes');
 
     return (
       <div className="boss-page-main">
@@ -97,10 +112,20 @@ class AssignPage extends PureComponent {
               );
             }}
           />
+          <ModalWrapper show={isGraphDetailsOpen} onClose={this.closeGraphDetails}>
+            {graphDetails && (
+              <GraphDetails
+                graphDetails={graphDetails.toJS()}
+                staffTypes={staffTypes.toJS()}
+                venueTypes={venueTypes.toJS()}
+              />
+            )}
+          </ModalWrapper>
           <Graph
             rotaShifts={rotaShifts.toJS()}
             staffMembers={staffMembersFromProps.toJS()}
             venueTypes={venueTypes.toJS()}
+            onShiftClick={this.handleShiftClick}
           />
         </ContentWrapper>
       </div>
@@ -112,8 +137,13 @@ AssignPage.propTypes = {
   shiftRequest: PropTypes.object.isRequired,
   staffMembers: ImmutablePropTypes.list.isRequired,
   rotaShifts: ImmutablePropTypes.list.isRequired,
+  staffTypes: ImmutablePropTypes.list.isRequired,
   assignShiftRequest: PropTypes.func.isRequired,
   venueTypes: ImmutablePropTypes.list.isRequired,
+  closeGraphDetails: PropTypes.func.isRequired,
+  showGraphDetails: PropTypes.func.isRequired,
+  isGraphDetailsOpen: PropTypes.bool.isRequired,
+  graphDetails: ImmutablePropTypes.map,
 };
 
 export default AssignPage;

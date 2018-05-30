@@ -29,7 +29,7 @@ class RotaGraph extends React.Component {
                 <RotaChart
                   rotaShifts={this.props.rotaShifts}
                   staff={this.props.staffMembers}
-                  onShiftClick={() => {}}
+                  onShiftClick={this.props.onShiftClick}
                 />
               </ReactIScroll>
             </div>
@@ -44,6 +44,7 @@ RotaGraph.PropTypes = {
   rotaShifts: PropTypes.array.isRequired,
   staffMembers: PropTypes.array.isRequired,
   venueTypes: PropTypes.array.isRequired,
+  onShiftClick: PropTypes.func.isRequired,
 };
 
 export default RotaGraph;
