@@ -102,16 +102,20 @@ RSpec.describe 'Init endpoint' do
             "id" => rota_shift.id,
             "staffMemberId" => staff_member.id,
             "venueId" => rota_shift.venue.id,
-            "shiftType" => rota_shift.shift_type,
             "date" => UIRotaDate.format(rota_shift.date),
+            "shiftType" => rota_shift.shift_type,
             "startsAt" => rota_shift.starts_at.utc.iso8601,
-            "endsAt" => rota_shift.ends_at.utc.iso8601
+            "endsAt" => rota_shift.ends_at.utc.iso8601,
+            "venueType" => rota_shift.venue.venue_type
           }
         end,
+        "securityVenues" => [],
+        "securityVenueShifts" => [],
         "venues" => Venue.all.map do |venue|
           {
             "id" => venue.id,
-            "name" => venue.name
+            "name" => venue.name,
+            "venueType" => venue.venue_type
           }
         end
       }
