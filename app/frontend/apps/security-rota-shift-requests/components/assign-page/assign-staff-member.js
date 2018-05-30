@@ -8,6 +8,7 @@ class StaffMember extends PureComponent {
   render() {
     const staffMember = oFetch(this.props, 'staffMember');
     const staffMemberId = oFetch(staffMember, 'id');
+    const rotaShifts = oFetch(staffMember, 'rotaShifts');
     const avatarUrl = oFetch(staffMember, 'avatarUrl');
     const firstName = oFetch(staffMember, 'firstName');
     const surname = oFetch(staffMember, 'surname');
@@ -40,12 +41,12 @@ class StaffMember extends PureComponent {
 
         <div className="boss-table__cell">
           <button
-            disabled={isDisabled}
             onClick={() =>
               this.props.handleOpenConfirmationModal({
                 avatarUrl,
                 fullName,
                 staffMemberId,
+                rotaShifts,
               })
             }
             className="boss-button boss-button_type_extra-small boss-button_role_confirm"

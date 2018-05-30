@@ -28,19 +28,25 @@ class AssignPage extends PureComponent {
     });
   };
 
-  handleOpenConfirmationModal = ({ avatarUrl, fullName, staffMemberId }) => {
+  handleOpenConfirmationModal = ({ avatarUrl, fullName, staffMemberId, rotaShifts }) => {
     const shiftRequest = oFetch(this.props, 'shiftRequest');
     openConfirmationModal({
       submit: this.handleAssignRequest,
       config: { title: 'CONFIRM SHIFT ASSIGNMENT' },
-      props: { avatarUrl, fullName, staffMemberId, shiftRequest },
+      props: { avatarUrl, fullName, staffMemberId, shiftRequest, rotaShifts },
     })(AssignConfirm);
   };
 
-  handleAssignRequest = (hideModal, staffMemberId) => {
+  handleAssignRequest = (hideModal, values) => {
+
+    const staffMemberId = oFetch(values, 'staffMemberId');
+    const startsAt = oFetch(values, 'startsAt');
+    const endsAt = oFetch(values, 'endsAt');
+
     const assignShiftRequest = oFetch(this.props, 'assignShiftRequest');
     const shiftRequest = oFetch(this.props, 'shiftRequest');
     const id = oFetch(shiftRequest, 'id');
+    
     return assignShiftRequest({ id, staffMemberId })
       .then(() => {
         hideModal();
