@@ -5,6 +5,9 @@ import oFetch from 'o-fetch';
 import classNames from 'classnames';
 import utils from '~/lib/utils';
 import { appRoutes } from '~/lib/routes';
+import { Tooltip } from 'react-tippy';
+
+const cellStyle = { flexDirection: 'row', alignItems: 'center' };
 
 class ReportItem extends Component {
   renderWeekDaysCells() {
@@ -18,6 +21,8 @@ class ReportItem extends Component {
     const sundayHoursCount = utils.round(oFetch(report, 'sundayHoursCount'), 2);
     const staffMemberId = oFetch(this.props, 'report.staffMemberId');
     const weekDates = oFetch(this.props, 'weekDates');
+    const status = oFetch(report, 'status');
+    const isIncomplete = status === 'incomplete';
 
     return [
       mondayHoursCount,
@@ -30,24 +35,67 @@ class ReportItem extends Component {
     ].map((dayHoursCount, index) => {
       const weekDate = weekDates.get(index);
 
+      const tooltipContent =
+        'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum ';
+
       if (dayHoursCount === 0) {
         return (
-          <div key={index} className="boss-table__cell">
-            <p className="boss-table__text">-</p>
+          <div key={index} className={this.getCellClassName(tooltipContent)} style={cellStyle}>
+            <p className={this.getTextClassName(tooltipContent)}>-</p>
+            {tooltipContent && isIncomplete && this.renderTooltip(tooltipContent)}
           </div>
         );
       } else {
         return (
-          <div key={index} className="boss-table__cell">
-            <p className="boss-table__text">
-              <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className="boss-table__link">
+          <div key={index} className={this.getCellClassName(tooltipContent)} style={cellStyle}>
+            <p className={this.getTextClassName(tooltipContent)}>
+              <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className={`${this.getTextClassName(tooltipContent)} boss-table__link`}>
                 {dayHoursCount}
               </a>
             </p>
+            {tooltipContent && isIncomplete && this.renderTooltip(tooltipContent)}
           </div>
         );
       }
     });
+  }
+
+  getCellClassName(tooltipContent = null) {
+    const report = oFetch(this.props, 'report');
+    const status = oFetch(report, 'status');
+    const isIncomplete = status === 'incomplete';
+    return classNames({
+      'boss-table__cell': true,
+      'boss-table__cell_state_alert': !!tooltipContent && isIncomplete,
+    });
+  }
+
+  getTextClassName(tooltipContent = null) {
+    const report = oFetch(this.props, 'report');
+    const status = oFetch(report, 'status');
+    const isIncomplete = status === 'incomplete';
+    return classNames({
+      'boss-boss-table__text': true,
+      'boss-table__text_state_alert': !!tooltipContent && isIncomplete,
+    });
+  }
+
+  renderTooltip(content) {
+    return (
+      <Tooltip
+        arrow
+        theme="light"
+        position="right"
+        html={<span>{content}</span>}
+        style={{ marginLeft: 5, marginBottom: 7 }}
+      >
+        <span className="boss-table__tooltip">
+          <span className="boss-tooltip boss-tooltip_role_alert">
+            <span className="boss-tooltip__icon" />
+          </span>
+        </span>
+      </Tooltip>
+    );
   }
 
   render() {
@@ -69,10 +117,12 @@ class ReportItem extends Component {
     const canSeeNetWages = oFetch(report, 'canSeeNetWages');
     const sageId = oFetch(report, 'staffMemberSageId');
 
+    const isIncomplete = status === 'incomplete';
+
     const statusClassName = classNames({
       'boss-table__text': true,
       'boss-table__text_role_pending-status': status === 'ready',
-      'boss-table__text_role_alert-status': status === 'incomplete',
+      'boss-table__text_role_alert-status': isIncomplete,
       'boss-table__text_role_success-status': status === 'done',
     });
     const fullNameCellClassName = classNames({
@@ -81,7 +131,7 @@ class ReportItem extends Component {
     });
 
     return (
-      <div className="boss-table__row">
+      <div className={rowClassName}>
         <div className="boss-table__cell">
           <p className={fullNameCellClassName}>
             <a
@@ -110,50 +160,64 @@ class ReportItem extends Component {
             </a>
           </div> }
         {this.renderWeekDaysCells()}
-        <div className="boss-table__cell">
-          <p className="boss-table__text">{weeklyHours}</p>
+        <div className={this.getCellClassName(tooltipContent)} style={cellStyle}>
+          <p className={this.getTextClassName(tooltipContent)}>{weeklyHours}</p>
+          {tooltipContent && isIncomplete && this.renderTooltip(tooltipContent)}
         </div>
         {owedHours === 0 ? (
-          <div className="boss-table__cell">
-            <p className="boss-table__text">{owedHours}</p>
+          <div className={this.getCellClassName(tooltipContent2)} style={cellStyle}>
+            <p className={this.getTextClassName(tooltipContent2)}>{owedHours}</p>
+            {tooltipContent2 && isIncomplete && this.renderTooltip(tooltipContent2)}
           </div>
         ) : (
-          <div className="boss-table__cell">
-            <a href={appRoutes.staffMemberOwedHours(staffMemberId)} className="boss-table__link">
+          <div className={this.getCellClassName(tooltipContent2)} style={cellStyle}>
+            <a href={appRoutes.staffMemberOwedHours(staffMemberId)} className={`${this.getTextClassName(tooltipContent2)} boss-table__link`}>
               {owedHours}
             </a>
+            {tooltipContent2 && isIncomplete && this.renderTooltip(tooltipContent2)}
           </div>
         )}
 
-        <div className="boss-table__cell">
+        <div className={this.getCellClassName(tooltipContent)} style={cellStyle}>
           {acessories === 0 ? (
-            <p className="boss-table__text">
-              {utils.moneyFormat(acessories)}
-            </p>
+            <p className={this.getTextClassName(tooltipContent)}>{utils.moneyFormat(acessories)}</p>
           ) : (
-            <a href={appRoutes.staffMemberAccessories(staffMemberId)} className="boss-table__text" style={{ color: acessoriesColor }}>
+            <a
+              href={appRoutes.staffMemberAccessories(staffMemberId)}
+              className={this.getTextClassName(tooltipContent)}
+              style={{ color: acessoriesColor }}
+            >
               {utils.moneyFormat(acessories)}
             </a>
           )}
+          {tooltipContent && isIncomplete && this.renderTooltip(tooltipContent)}
         </div>
-        <div className="boss-table__cell">
-          <p className="boss-table__text">{payRateDescription}</p>
+        <div className={this.getCellClassName(tooltipContent)} style={cellStyle}>
+          <p className={this.getTextClassName(tooltipContent)}>{payRateDescription}</p>
+          {tooltipContent && isIncomplete && this.renderTooltip(tooltipContent)}
         </div>
-        <div className="boss-table__cell">
-          <p className="boss-table__text boss-table__text_role_important">{totalHoursCount}</p>
+        <div className={this.getCellClassName(tooltipContent)} style={cellStyle}>
+          <p className={`${this.getTextClassName(tooltipContent)} boss-table__text_role_important`}>{totalHoursCount}</p>
+          {tooltipContent && isIncomplete && this.renderTooltip(tooltipContent)}
         </div>
-        <div className="boss-table__cell">
-          <p className="boss-table__text">{utils.moneyFormat(total)}</p>
+        <div className={this.getCellClassName(tooltipContent)} style={cellStyle}>
+          <p className={this.getTextClassName(tooltipContent)}>{utils.moneyFormat(total)}</p>
+          {tooltipContent && isIncomplete && this.renderTooltip(tooltipContent)}
         </div>
         {holidayDaysCount === 0 ? (
-          <div className="boss-table__cell">
-            <p className="boss-table__text">{holidayDaysCount}</p>
+          <div className={this.getCellClassName(tooltipContent)} style={cellStyle}>
+            <p className={this.getTextClassName(tooltipContent)}>{holidayDaysCount}</p>
+            {tooltipContent && isIncomplete && this.renderTooltip(tooltipContent)}
           </div>
         ) : (
-          <div className="boss-table__cell">
-            <a href={appRoutes.staffMemberHolidays(staffMemberId)} className="boss-table__link">
+          <div className={this.getCellClassName(tooltipContent)} style={cellStyle}>
+            <a
+              href={appRoutes.staffMemberHolidays(staffMemberId)}
+              className={`${this.getTextClassName(tooltipContent)} boss-table__link`}
+            >
               {holidayDaysCount}
             </a>
+            {tooltipContent && isIncomplete && this.renderTooltip(tooltipContent)}
           </div>
         )}
         <div className="boss-table__cell">
