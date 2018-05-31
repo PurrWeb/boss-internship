@@ -82,7 +82,7 @@ class AssignConfirmForm extends PureComponent {
     const rotaShifts = oFetch(this.props, 'rotaShifts');
 
     return (
-      <form onSubmit={this.props.handleSubmit}>
+      <form onSubmit={this.props.handleSubmit} className={submitting ? 'submitting' : ''}>
         <div className="boss-modal-window__message-block">
           <div className="boss-user-summary boss-user-summary_role_ssr-assign-confirmation">
             <div className="boss-user-summary__side">
