@@ -5,6 +5,7 @@ import oFetch from 'o-fetch';
 import safeMoment from '~/lib/safe-moment';
 import confirm from '~/lib/confirm-utils';
 import utils from '~/lib/utils';
+import classNames from 'classnames';
 import { staffMemberProfileHolidaysPermissions } from '~/lib/permissions';
 
 const PENDING_STATUS = 'pending';
@@ -27,6 +28,7 @@ const ActionsCell = ({
   isStaffMemberDisabled,
   isEditable,
   isDeletable,
+  isFrozen,
 }) => {
   const openEditHoliday = () => {
     onEditHoliday(holiday);
@@ -45,26 +47,27 @@ const ActionsCell = ({
     <div className="boss-table__cell">
       <div className="boss-table__info">
         <p className="boss-table__label">{label}</p>
-        {!isStaffMemberDisabled && (
-          <p className="boss-table__actions">
-            {isEditable && (
-              <button
-                onClick={openEditHoliday}
-                className="boss-button boss-button_type_small boss-button_role_update boss-table__action"
-              >
-                Edit
-              </button>
-            )}
-            {isDeletable && (
-              <button
-                onClick={() => onDelete(holiday)}
-                className="boss-button boss-button_type_small boss-button_role_cancel boss-table__action"
-              >
-                Delete
-              </button>
-            )}
-          </p>
-        )}
+        {!isStaffMemberDisabled &&
+          !isFrozen && (
+            <p className="boss-table__actions">
+              {isEditable && (
+                <button
+                  onClick={openEditHoliday}
+                  className="boss-button boss-button_type_small boss-button_role_update boss-table__action"
+                >
+                  Edit
+                </button>
+              )}
+              {isDeletable && (
+                <button
+                  onClick={() => onDelete(holiday)}
+                  className="boss-button boss-button_type_small boss-button_role_cancel boss-table__action"
+                >
+                  Delete
+                </button>
+              )}
+            </p>
+          )}
       </div>
     </div>
   );
@@ -106,6 +109,7 @@ const Row = ({ holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, per
   const creator = oFetch(jsHoliday, 'creator');
   const cerated = `(${safeMoment.iso8601Parse(oFetch(jsHoliday, 'created_at')).format('Do MMMM YYYY - HH:mm')})`;
   const editable = oFetch(jsHoliday, 'editable');
+  const isFrozen = oFetch(jsHoliday, 'frozen');
 
   const holidayDaysCount = utils.getDaysCountFromInterval(
     oFetch(jsHoliday, 'start_date'),
@@ -127,8 +131,12 @@ const Row = ({ holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, per
           id: id,
         });
 
+  const rowClass = classNames({
+    'boss-table__row': true,
+    'boss-table__row_state_frozen': isFrozen,
+  });
   return (
-    <div className="boss-table__row">
+    <div className={rowClass}>
       <SimpleCell label="type" text={`${holidayDaysCount} ${pluralize(type, holidayDaysCount)}`} />
       <SimpleCell label="status" text={status} classNames={statusClasses[oFetch(jsHoliday, 'state')]} />
       <SimpleCell label="dates" text={utils.formatDateForHoliday(holiday.toJS())} />
@@ -143,6 +151,7 @@ const Row = ({ holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, per
         holiday={holiday}
         deleteHoliday={deleteHoliday}
         onEditHoliday={onEditHoliday}
+        isFrozen={isFrozen}
       />
     </div>
   );
