@@ -12,6 +12,10 @@ import { openContentModal } from '~/components/modals';
 import EditSecurityShiftRequest from './edit-security-shift-request';
 import RejectSecurityShiftRequest from './reject-security-shift-request';
 
+function getFormattedTimeOnly(isoString) {
+  return safeMoment.iso8601Parse(isoString).format(utils.commonDateFormatTimeOnly());
+}
+
 function getFormattedDate(startsAt, endsAt) {
   return utils.intervalRotaDatesFormat(safeMoment.iso8601Parse(startsAt), safeMoment.iso8601Parse(endsAt));
 }
@@ -19,6 +23,30 @@ function getFormattedDate(startsAt, endsAt) {
 class SecurityShiftRequestItem extends Component {
   state = {
     isSending: false,
+  };
+
+  chekIfStartsAtChanged = (createdShift, PreviousStartsAt) => {
+    if (!createdShift) {
+      throw new Error('No created Shift');
+    } else if (!PreviousStartsAt) {
+      throw new Error('No startsAt');
+    } else {
+      const createdShiftStartsAt = oFetch(createdShift, 'startsAt');
+      const isStartsAtChanged = createdShiftStartsAt !== PreviousStartsAt;
+      return isStartsAtChanged;
+    }
+  };
+
+  chekIfEndsAtChanged = (createdShift, previousEndsAt) => {
+    if (!createdShift) {
+      throw new Error('No created Shift');
+    } else if (!previousEndsAt) {
+      throw new Error('No endsAt');
+    } else {
+      const createdShiftEndsAt = oFetch(createdShift, 'endsAt');
+      const isEndsAtChanged = createdShiftEndsAt !== previousEndsAt;
+      return isEndsAtChanged;
+    }
   };
 
   renderCreatedShift(createdShift) {
@@ -29,13 +57,32 @@ class SecurityShiftRequestItem extends Component {
     const endsAt = oFetch(createdShift, 'endsAt');
     const startsAtDate = safeMoment.iso8601Parse(startsAt).format(utils.commonDateFormat);
 
+    const securityShiftRequest = oFetch(this.props, 'securityShiftRequest');
+    const shiftRequestStartsAt = oFetch(securityShiftRequest, 'startsAt');
+    const shiftRequestEndsAt = oFetch(securityShiftRequest, 'endsAt');
+
+    const isStartsAtChanged = startsAt !== shiftRequestStartsAt;
+    const isEndsAtChanged = endsAt !== shiftRequestEndsAt;
+
     return (
       <div className="boss-table__info">
         <p className="boss-table__label">Rotaed Shift</p>
         <div className="boss-table__info-group">
           <p className="boss-table__text">
             <span className="boss-table__text-line">{fullName}</span>
-            <span className="boss-table__text-line">{getFormattedDate(startsAt, endsAt)}</span>
+            <span className="boss-table__text-line">
+              {isStartsAtChanged ? (
+                <span className="boss-table__text-alert">{getFormattedTimeOnly(startsAt)}</span>
+              ) : (
+                getFormattedTimeOnly(startsAt)
+              )}
+              {' - '}
+              {isEndsAtChanged ? (
+                <span className="boss-table__text-alert">{getFormattedTimeOnly(endsAt)}</span>
+              ) : (
+                getFormattedTimeOnly(endsAt)
+              )}
+            </span>
           </p>
           <div className="boss-table__actions">
             <a
@@ -114,6 +161,11 @@ class SecurityShiftRequestItem extends Component {
     const isUndoable = oFetch(securityShiftRequest, 'permissions.isUndoable');
     const note = oFetch(securityShiftRequest, 'note');
     const rejectReason = oFetch(securityShiftRequest, 'rejectReason');
+    const isStartsAtChanged = createdShift && this.chekIfStartsAtChanged(createdShift, startsAt);
+
+    const isEndsAtChanged = createdShift && this.chekIfEndsAtChanged(createdShift, endsAt);
+    const isEdited = createdShift && (isStartsAtChanged || isEndsAtChanged);
+    const isEditedClass = isEdited ? 'boss-table__row_state_edited' : '';
 
     const { isCompleted, undoSecurityShiftRequest, acceptSecurityShiftRequest } = this.props;
 
@@ -141,11 +193,13 @@ class SecurityShiftRequestItem extends Component {
       venueId,
     };
     return (
-      <div className="boss-table__row">
+      <div className={`boss-table__row ${isEditedClass}`}>
         <div className="boss-table__cell">
           <div className="boss-table__info">
             <p className="boss-table__label">Requested times</p>
-            <p className="boss-table__text">{getFormattedDate(startsAt, endsAt)}</p>
+            <p className="boss-table__text">
+              {getFormattedDate(startsAt, endsAt)}
+            </p>
           </div>
         </div>
         <div className="boss-table__cell">

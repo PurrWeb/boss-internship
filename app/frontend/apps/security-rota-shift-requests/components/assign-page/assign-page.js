@@ -46,15 +46,16 @@ class AssignPage extends PureComponent {
     const assignShiftRequest = oFetch(this.props, 'assignShiftRequest');
     const shiftRequest = oFetch(this.props, 'shiftRequest');
     const id = oFetch(shiftRequest, 'id');
-    
-    return assignShiftRequest({ id, staffMemberId })
+
+    return assignShiftRequest({ id, staffMemberId, startsAt, endsAt })
       .then(() => {
         hideModal();
         this.handleCloseAssignPage();
       })
       .catch(err => {
         this.setError('There was an error assigning this shift. Please check for errors and try again');
-        hideModal();
+        // hideModal();
+        return Promise.reject(err);
       });
   };
 

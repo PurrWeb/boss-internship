@@ -5,10 +5,12 @@ class AssignSecurityShiftRequest
     end
   end
 
-  def initialize(requester:, security_shift_request:, staff_member:)
+  def initialize(requester:, security_shift_request:, staff_member:, starts_at:, ends_at:)
     @requester = requester
     @staff_member = staff_member
     @security_shift_request = security_shift_request
+    @starts_at = starts_at
+    @ends_at = ends_at
   end
 
   def call
@@ -22,8 +24,8 @@ class AssignSecurityShiftRequest
         rota_date: RotaShiftDate.to_rota_date(security_shift_request.starts_at),
         venue: security_shift_request.venue,
         rota_shift_params: {
-          starts_at: security_shift_request.starts_at,
-          ends_at: security_shift_request.ends_at,
+          starts_at: starts_at,
+          ends_at: ends_at,
           shift_type: 'normal',
           staff_member: staff_member,
         },
@@ -41,5 +43,5 @@ class AssignSecurityShiftRequest
   end
 
   private
-  attr_reader :requester, :security_shift_request, :staff_member
+  attr_reader :requester, :security_shift_request, :staff_member, :starts_at, :ends_at
 end

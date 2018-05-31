@@ -30,7 +30,10 @@ export const rejectSecurityShiftRequest = params => (dispatch, getState) => {
 export const assignShiftRequest = params => (dispatch, getState) => {
   const id = oFetch(params, 'id');
   const staffMemberId = oFetch(params, 'staffMemberId');
-  return assignShiftRequestRequest({ id, staffMemberId }).then(response => {
+  const startsAt = oFetch(params, 'startsAt');
+  const endsAt = oFetch(params, 'endsAt');
+
+  return assignShiftRequestRequest({ id, staffMemberId, startsAt, endsAt }).then(response => {
     const rotaShift = oFetch(response, 'data.rotaShift');
     const responseRota = oFetch(response, 'data.rota');
 

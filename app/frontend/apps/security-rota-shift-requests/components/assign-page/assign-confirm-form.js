@@ -35,13 +35,16 @@ const validate = (values, props) => {
 
   const overlappedRotaShifts = getOveplappedRotaShifts(rotaShifts, startsAt, endsAt);
 
-  if (overlappedRotaShifts.length > 0)
-    errors._error = overlappedRotaShifts.map(rotaShift => {
+  if (overlappedRotaShifts.length > 0) {
+    const overlappingTimes = overlappedRotaShifts.map(rotaShift => {
       const startTime = safeMoment.iso8601Parse(rotaShift.startsAt);
       const endTime = safeMoment.iso8601Parse(rotaShift.endsAt);
       const formattedTime = utils.shiftRequestIntervalFormat(startTime, endTime);
       return formattedTime;
     });
+
+    errors._error = [`Shift overlaps existing (${overlappedRotaShifts.length}) shifts: ${overlappingTimes.join(", ")}`]
+  }
   return errors;
 };
 
@@ -50,7 +53,6 @@ const renderBaseError = errors => {
     <li key={index.toString()} className="boss-user-summary__review-item boss-user-summary__review-item_space_extra">
       <div className="boss-alert">
         <p className="boss-alert__text">
-          Time is overlapping:
           <span className="boss-alert__text-marked">{error}</span>
         </p>
       </div>

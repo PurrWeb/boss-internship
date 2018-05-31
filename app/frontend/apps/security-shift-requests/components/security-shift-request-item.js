@@ -10,6 +10,10 @@ function getFormattedTimeOnly(isoString) {
   return safeMoment.iso8601Parse(isoString).format(utils.commonDateFormatTimeOnly());
 }
 
+function getFormattedDate(startsAt, endsAt) {
+  return utils.intervalRotaDatesFormat(safeMoment.iso8601Parse(startsAt), safeMoment.iso8601Parse(endsAt));
+}
+
 class SecurityShiftRequestItem extends Component {
   chekIfStartsAtChanged = (createdShift, PreviousStartsAt) => {
     if (!createdShift) {
@@ -56,6 +60,7 @@ class SecurityShiftRequestItem extends Component {
           <p className="boss-table__text">
             <span className="boss-table__text-line">{fullName}</span>
             <span className="boss-table__text-line">
+              <div>{safeMoment.iso8601Parse(startsAt).format(utils.commonDateFormatCalendar())}</div>
               {isStartsAtChanged ? (
                 <span className="boss-table__text-alert">{getFormattedTimeOnly(startsAt)}</span>
               ) : (
@@ -121,9 +126,7 @@ class SecurityShiftRequestItem extends Component {
           <div className="boss-table__info">
             <p className="boss-table__label">Requested times</p>
             <p className="boss-table__text">
-              {getFormattedTimeOnly(startsAt)}
-              {' - '}
-              {getFormattedTimeOnly(endsAt)}
+              {getFormattedDate(startsAt, endsAt)}
             </p>
           </div>
         </div>
