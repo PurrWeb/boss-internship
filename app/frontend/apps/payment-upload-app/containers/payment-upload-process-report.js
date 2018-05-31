@@ -205,7 +205,7 @@ class PaymentUploadProcessReport extends React.Component {
 
           <div className="boss-table__row boss-table__row_state_alert">
             { headers.map((header) => {
-                if (_.includes(rowErrors, header)) {
+                if (_.has(rowErrors, header)) {
                   return <div key={ `tableCell:${header}` } className="boss-table__cell boss-table__cell_state_alert js-popover-container" data-popover="2">
                     <div className="boss-table__info">
                       <p className="boss-table__label boss-table__label_state_alert">{ header }</p>
