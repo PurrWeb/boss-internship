@@ -35,7 +35,7 @@ describe ShiftTimeOverlapValidator do
     end
 
     it 'should not produce a validation error' do
-      expect(new_shift.errors[:base]).to_not include('shift overlaps existing shift')
+      expect(new_shift.errors[:base]).to_not include("Shift overlaps existing (1) shifts: #{starts_at.strftime("%H:%M")}-#{ends_at.strftime("%H:%M")}")
     end
   end
 
@@ -56,7 +56,7 @@ describe ShiftTimeOverlapValidator do
     end
 
     it 'should not produce a validation error' do
-      expect(new_shift.errors[:base]).to include('shift overlaps existing shift')
+      expect(new_shift.errors[:base]).to include("Shift overlaps existing (1) shifts: #{starts_at.strftime("%H:%M")}-#{ends_at.strftime("%H:%M")}")
     end
   end
 
@@ -77,7 +77,7 @@ describe ShiftTimeOverlapValidator do
     end
 
     it 'should not produce a validation error' do
-      expect(new_shift.errors[:base]).to_not include('shift overlaps existing shift')
+      expect(new_shift.errors[:base]).to_not include("Shift overlaps existing (1) shifts: #{starts_at.strftime("%H:%M")}-#{ends_at.strftime("%H:%M")}")
     end
   end
 
@@ -98,7 +98,7 @@ describe ShiftTimeOverlapValidator do
     end
 
     it 'should not produce a validation error' do
-      expect(new_shift.errors[:base]).to_not include('shift overlaps existing shift')
+      expect(new_shift.errors[:base]).to_not include("Shift overlaps existing (1) shifts: #{starts_at.strftime("%H:%M")}-#{ends_at.strftime("%H:%M")}")
     end
   end
 end
