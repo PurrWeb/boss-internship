@@ -2,6 +2,7 @@ import React from 'react';
 import oFetch from 'o-fetch';
 import { appRoutes } from "~/lib/routes";
 import PaymentUploadPageBoard from './payment-upload-page-board';
+import PaymentUploadCellWithError from '../components/payment-upload-cell-with-error';
 
 class PaymentUploadProcessReport extends React.Component {
   constructor(props) {
@@ -206,19 +207,11 @@ class PaymentUploadProcessReport extends React.Component {
           <div className="boss-table__row boss-table__row_state_alert">
             { headers.map((header) => {
                 if (_.has(rowErrors, header)) {
-                  return <div key={ `tableCell:${header}` } className="boss-table__cell boss-table__cell_state_alert js-popover-container" data-popover="2">
-                    <div className="boss-table__info">
-                      <p className="boss-table__label boss-table__label_state_alert">{ header }</p>
-                      <p className="boss-table__text boss-table__text_state_alert">{ oFetch(rawData, header) }</p>
-                    </div>
-
-                    <div className="boss-popover boss-popover_context_csv-upload-error js-popover" data-popover="2">
-                      <a href="#" className="boss-popover__close js-popover-close">Close</a>
-                      <div className="boss-popover__inner">
-                        <p className="boss-popover__text boss-popover__text_role_primary boss-popover__text_adjust_wrap"><span className="boss-popover__text-marked">{ header }</span> { oFetch(rowErrors, header) }</p>
-                      </div>
-                    </div>
-                  </div>
+                  return <PaymentUploadCellWithError
+                    header={ header }
+                    rawValue={ oFetch(rawData, header) }
+                    error={ oFetch(rowErrors, header) }
+                  />
                 } else {
                   return <div key={ `tableCell:${header}` } className="boss-table__cell">
                     <div className="boss-table__info">
