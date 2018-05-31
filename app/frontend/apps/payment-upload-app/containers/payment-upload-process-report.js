@@ -69,7 +69,7 @@ class PaymentUploadProcessReport extends React.Component {
             })}
         </ul>
         <div className="boss-user-summary__footer">
-          <a target="_blank" href={appRoutes.staffMemberPayments(staffMemberId)} >
+          <a target="_blank" href={ appRoutes.staffMemberPaymentHighlight({staffMemberId: staffMemberId, mStartDate: oFetch(payment, 'mStartDate'), mEndDate: oFetch(payment, 'mEndDate')}) } >
             <button className="boss-button boss-button_role_view-details-light boss-button_type_extra-small">View Details</button>
           </a>
         </div>

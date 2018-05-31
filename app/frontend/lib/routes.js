@@ -154,23 +154,19 @@ export const appRoutes = {
         }
         return "/staff_members/" + staffMemberId + "/hours_overview/" + dDate;
     },
-    staffMemberPayments: function(staffMemberId, queryStringParams) {
-      if (staffMemberId === undefined) {
-        throw new Error("No staff member id supplied to appRoutes.staffMember")
-      }
-      const baseUrl = `/staff_members/${staffMemberId}/payments`;
+    staffMemberPayments: staffMemberPaymentsAppPath,
+    staffMemberPaymentHighlight: function(params){
+      staffMemberId = oFetch(params, 'staffMemberId');
+      mStartDate = oFetch(params, 'mStartDate');
+      mEndDate = oFetch(params, 'mEndDate');
 
-      if((typeof queryStringParams === undefined) || _.isEmpty(queryStringParams)) {
-        return baseUrl;
-      } else {
-        let queryString = '?';
-        let paramIndex = 0;
-        for( let key in queryStringParams) {
-          queryString = `${queryString}${paramIndex > 0 ? '&' : ''}${key}=${queryStringParams[key]}`;
-          paramIndex = paramIndex + 1;
+      return staffMemberPaymentsAppPath(
+        staffMemberId,
+        {
+          start_date: mStartDate.format(utils.apiDateFormat),
+          end_date: mEndDate.format(utils.apiDateFormat)
         }
-        return baseUrl + queryString;
-      }
+      );
     },
     staffMemberAccessories: function(staffMemberId){
         if (staffMemberId === undefined) {
@@ -221,6 +217,25 @@ export const appRoutes = {
       return "/weekly_reports?venue_id=" + venueId +
         "&week_start=" + utils.formatRotaUrlDate(weekStartDateM);
     }
+}
+
+const staffMemberPaymentsAppPath = function(staffMemberId, queryStringParams) {
+  if (staffMemberId === undefined) {
+    throw new Error("No staff member id supplied to appRoutes.staffMember")
+  }
+  const baseUrl = `/staff_members/${staffMemberId}/payments`;
+
+  if((typeof queryStringParams === undefined) || _.isEmpty(queryStringParams)) {
+    return baseUrl;
+  } else {
+    let queryString = '?';
+    let paramIndex = 0;
+    for( let key in queryStringParams) {
+      queryString = `${queryString}${paramIndex > 0 ? '&' : ''}${key}=${queryStringParams[key]}`;
+      paramIndex = paramIndex + 1;
+    }
+    return baseUrl + queryString;
+  }
 }
 
 const apiRoutes = {
