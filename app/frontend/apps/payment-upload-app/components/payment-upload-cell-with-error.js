@@ -42,27 +42,27 @@ class PaymentUploadPageBoard extends React.Component {
     const toolTipOpen = oFetch(this.state, "toolTipOpen");
 
     return (
-      <Tooltip
-        html={<ToolTipContent onCloseClick={this.closeTooltip} contentComponent={() => {
-          return (
-            <div>
-              <span className="boss-popover__text-marked">{header}</span>
-              <div>{error}</div>
-            </div>
-          )
-        }} />}
-        open={this.state.toolTipOpen}
-        hideOnClick={false}
-        arrow
-        theme="light"
-        style={{display: 'block'}}
-      >
-        <div onClick={this.openTooltip} className="boss-table__cell boss-table__cell_state_alert">
+      <div onClick={this.openTooltip} className="boss-table__cell boss-table__cell_state_alert">
+        <Tooltip
+          html={<ToolTipContent onCloseClick={this.closeTooltip} contentComponent={() => {
+            return (
+              <div>
+                <span className="boss-popover__text-marked">{header}</span>
+                <div>{error}</div>
+              </div>
+            )
+          }} />}
+          open={this.state.toolTipOpen}
+          hideOnClick={false}
+          arrow
+          theme="light"
+          style={{ display: 'block' }}
+        >
           <div className="boss-table__info">
             <p className="boss-table__text boss-table__text_state_alert">{header}</p>
           </div>
-        </div>
-      </Tooltip >
+        </Tooltip>
+      </div>
     )
   }
 }
