@@ -205,9 +205,10 @@ class PaymentUploadProcessReport extends React.Component {
           </div>
 
           <div className="boss-table__row boss-table__row_state_alert">
-            { headers.map((header) => {
+            { headers.map((header, index) => {
                 if (_.has(rowErrors, header)) {
                   return <PaymentUploadCellWithError
+                    key={index}
                     header={ header }
                     rawValue={ oFetch(rawData, header) }
                     error={ oFetch(rowErrors, header) }
