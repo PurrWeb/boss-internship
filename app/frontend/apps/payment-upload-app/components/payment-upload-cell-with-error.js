@@ -1,51 +1,68 @@
-import React from 'react';
-import oFetch from 'o-fetch';
-import { Tooltip } from 'react-tippy';
+import React from "react";
+import oFetch from "o-fetch";
+import { Tooltip } from "react-tippy";
+
+class ToolTipContent extends React.Component {
+  render() {
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={this.props.onCloseClick}
+          style={{ pointerEvents: 'all' }}
+          className="boss-popover__close js-popover-close"
+        >Close</button>
+        <div className="boss-popover__inner">
+          <p className="boss-popover__text boss-popover__text_role_primary">
+            {this.props.contentComponent()}
+          </p>
+        </div>
+      </div>
+    )
+  }
+}
 
 class PaymentUploadPageBoard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      toolTipOpen: false
-    }
+  state = {
+    toolTipOpen: false,
   }
 
-  popup(){
-    const header = oFetch(this.props, 'header');
-    const error = oFetch(this.props, 'error');
-
-    return <div className="" data-popover="2">
-      <a href="#" className="boss-popover__close js-popover-close" onClick={this.toggleToolTip} >Close</a>
-      <div className="boss-popover__inner">
-        <p className="boss-popover__text boss-popover__text_role_primary boss-popover__text_adjust_wrap"><span className="boss-popover__text-marked">{ header }</span> { error }</p>
-      </div>
-    </div>
+  openTooltip = () => {
+    this.setState({ toolTipOpen: true });
   }
 
-  toggleToolTip() {
-    console.log("toggleToolTip()")
-    this.setState((prevState, props) => {
-      return {
-        toolTipOpen: !prevState.toolTipOpen
-      }
-    })
+  closeTooltip = () => {
+    this.setState({ toolTipOpen: false });
   }
 
   render() {
-    const header = oFetch(this.props, 'header');
-    const rawValue = oFetch(this.props, 'rawValue');
-    const error = oFetch(this.props, 'error');
-    const toolTipOpen = oFetch(this.state, 'toolTipOpen');
+    const header = oFetch(this.props, "header");
+    const rawValue = oFetch(this.props, "rawValue");
+    const error = oFetch(this.props, "error");
+    const toolTipOpen = oFetch(this.state, "toolTipOpen");
 
-    return <Tooltip key={`tableCell:${header}`} position="bottom" trigger="click" open={toolTipOpen} html={ this.popup() } onRequestClose={() => { console.log('onRequestClose()'); setIsOpen(false) }} >
-      <div className="boss-table__cell boss-table__cell_state_alert js-popover-container" data-popover="2">
-        <div className="boss-table__info">
-          <p className="boss-table__label boss-table__label_state_alert">{ header }</p>
-          <p className="boss-table__text boss-table__text_state_alert">{ rawValue }</p>
+    return (
+      <Tooltip
+        html={<ToolTipContent onCloseClick={this.closeTooltip} contentComponent={() => {
+          return (
+            <div>
+              <span className="boss-popover__text-marked">{header}</span>
+              <div>{error}</div>
+            </div>
+          )
+        }} />}
+        open={this.state.toolTipOpen}
+        hideOnClick={false}
+        arrow
+        theme="light"
+        style={{display: 'block'}}
+        className="boss-table__cell boss-table__cell_state_alert"
+      >
+        <div onClick={this.openTooltip} className="boss-table__info">
+          <p className="boss-table__text boss-table__text_state_alert">{header}</p>
         </div>
-
-      </div>
-    </Tooltip>
+      </Tooltip >
+    )
   }
 }
 
