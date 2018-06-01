@@ -13,9 +13,9 @@ class ToolTipContent extends React.Component {
           className="boss-popover__close js-popover-close"
         >Close</button>
         <div className="boss-popover__inner">
-          <p className="boss-popover__text boss-popover__text_role_primary">
+          <div className="boss-popover__text boss-popover__text_role_primary">
             {this.props.contentComponent()}
-          </p>
+          </div>
         </div>
       </div>
     )
