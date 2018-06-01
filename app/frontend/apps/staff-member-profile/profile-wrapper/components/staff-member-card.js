@@ -22,10 +22,7 @@ const StaffMemberCard = ({
     'surname',
   )}`;
   const masterVenueId = oFetch(staffMember, 'master_venue');
-  const masterVenue = _.find(venues, venue => { return oFetch(venue, 'id') === masterVenueId });
-  if(!masterVenue) {
-    throw new Error('No venue found with id ' + masterVenueId)
-  }
+  const masterVenue = masterVenueId &&  _.find(venues, venue => { return oFetch(venue, 'id') === masterVenueId });
   const email = oFetch(staffMember, 'email');
   const phoneNumber = oFetch(staffMember, 'phone_number');
   const disabled = oFetch(staffMember, 'disabled');
@@ -222,7 +219,8 @@ const StaffMemberCard = ({
               disabledAt,
               disabledReason,
             })}
-          {renderMasterVenue(masterVenue)}
+
+          {masterVenue && renderMasterVenue(masterVenue)}
           {[renderCardContacts(email, phoneNumber), renderCardActions()]}
         </div>
       </div>
