@@ -90,8 +90,8 @@ class ProfilePage extends React.PureComponent {
       return objectWithIndex;
     });
 
-    let masterVenueId = oFetch(staffMember, "master_venue");
-    let masterVenueValue = masterVenueId && oFetch(findById(venues, masterVenueId), 'name');
+    let masterVenueId = staffMember["master_venue"];
+    let masterVenueValue = masterVenueId ? oFetch(findById(venues, masterVenueId), 'name') : 'N/A';
 
     return (
       <ProfileWrapper
