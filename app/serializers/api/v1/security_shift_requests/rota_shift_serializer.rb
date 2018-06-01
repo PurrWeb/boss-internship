@@ -4,10 +4,15 @@ class Api::V1::SecurityShiftRequests::RotaShiftSerializer < ActiveModel::Seriali
     :rotaId,
     :startsAt,
     :endsAt,
-    :staffMemberId
+    :staffMemberId,
+    :venueId
 
   def rotaId
     object.rota_id
+  end
+
+  def venueId
+    object.rota.venue_id
   end
 
   def startsAt

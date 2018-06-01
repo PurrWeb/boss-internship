@@ -55,7 +55,9 @@ class SecurityShiftRequestItem extends Component {
     const fullName = `${firstName} ${surname}`;
     const startsAt = oFetch(createdShift, 'startsAt');
     const endsAt = oFetch(createdShift, 'endsAt');
-    const startsAtDate = safeMoment.iso8601Parse(startsAt).format(utils.commonDateFormat);
+    const mStartsAtDate = safeMoment.iso8601Parse(startsAt);
+    const startsAtDate = mStartsAtDate.format(utils.commonDateFormat);
+    const venueId = oFetch(createdShift, 'venueId');
 
     const securityShiftRequest = oFetch(this.props, 'securityShiftRequest');
     const shiftRequestStartsAt = oFetch(securityShiftRequest, 'startsAt');
@@ -87,7 +89,7 @@ class SecurityShiftRequestItem extends Component {
           <div className="boss-table__actions">
             <a
               target="_blank"
-              href={appRoutes.securityRotaDaily(startsAtDate)}
+              href={appRoutes.rota({venueId: venueId, date: mStartsAtDate })}
               className="boss-button boss-button_type_extra-small boss-button_role_view-details-light"
             >
               View Rota
