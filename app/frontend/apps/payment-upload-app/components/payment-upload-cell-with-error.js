@@ -56,10 +56,11 @@ class PaymentUploadPageBoard extends React.Component {
         arrow
         theme="light"
         style={{display: 'block'}}
-        className="boss-table__cell boss-table__cell_state_alert"
       >
-        <div onClick={this.openTooltip} className="boss-table__info">
-          <p className="boss-table__text boss-table__text_state_alert">{header}</p>
+        <div onClick={this.openTooltip} className="boss-table__cell boss-table__cell_state_alert">
+          <div className="boss-table__info">
+            <p className="boss-table__text boss-table__text_state_alert">{header}</p>
+          </div>
         </div>
       </Tooltip >
     )
