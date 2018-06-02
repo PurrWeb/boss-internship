@@ -435,6 +435,15 @@ var utils =  {
 
       return `${mBuisnessDay.format(dayFormat)} ${mStartsAt.format(hoursFormat)} - ${mEndsAt.format(hoursFormat)}`;
     },
+    shiftRequestIntervalFormat(mStartsAt, mEndsAt) {
+      const hoursFormat = 'HH:mm';
+      return `${mStartsAt.format(hoursFormat)} - ${mEndsAt.format(hoursFormat)}`;
+    },
+    shiftRequestDayFormat(mStartsAt) {
+      const dayFormat = 'ddd DD/MM/YYYY';
+      const mBuisnessDay = this.getBuisnessDay(mStartsAt);
+      return `${mBuisnessDay.format(dayFormat)}`;
+    },
     getDiffFromRotaDayInMinutes(mStartsAt, mEndsAt) {
       const beginningOfRotaDay = this.getBuisnessDay(mStartsAt);
       const startMinutes = safeMoment.iso8601Parse(mStartsAt).diff(beginningOfRotaDay, 'minutes');

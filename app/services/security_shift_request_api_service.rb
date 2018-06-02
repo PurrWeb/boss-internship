@@ -103,11 +103,13 @@ class SecurityShiftRequestApiService
     Result.new(result.security_shift_request, result.success?, api_errors)
   end
 
-  def assign(staff_member:)
+  def assign(staff_member:, starts_at:, ends_at:)
     result = AssignSecurityShiftRequest.new(
       requester: requester,
       staff_member: staff_member,
-      security_shift_request: security_shift_request
+      security_shift_request: security_shift_request,
+      starts_at: starts_at,
+      ends_at: ends_at,
     ).call
 
     api_errors = nil

@@ -18,6 +18,8 @@ import {
   changeWeekDay,
   selectVenue,
   rejectSecurityShiftRequest,
+  closeGraphDetails,
+  showGraphDetails,
 } from '../redux/actions';
 
 const mapStateToProps = state => {
@@ -38,6 +40,9 @@ const mapStateToProps = state => {
     shiftRequests: getShiftRequestsForChosenDate(state),
     weekDates: getWeekDaysWithCount(state),
     venues: state.get('venues'),
+    isGraphDetailsOpen: state.getIn(['graphDetails', 'isOpen']),
+    graphDetails: state.getIn(['graphDetails', 'graphDetails']),
+    staffTypes: state.get('staffTypes'),
   };
 };
 
@@ -47,6 +52,8 @@ const mapDispatchToProps = {
   changeWeekDay,
   selectVenue,
   rejectSecurityShiftRequest,
+  closeGraphDetails,
+  showGraphDetails,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Page);

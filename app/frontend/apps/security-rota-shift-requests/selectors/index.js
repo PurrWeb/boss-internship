@@ -180,7 +180,10 @@ export const getStaffMembersWithIsConflicting = createSelector(
         shiftRequestStartDate,
         shiftRequestEndDate,
       });
-      return staffMember.set('isOverlapped', isOverlapped);
+
+      const ownRotaShifts = rotaShifts.filter(rotaShift => rotaShift.get('staffMemberId') === staffMemberId);
+
+      return staffMember.set('isOverlapped', isOverlapped).set('rotaShifts', ownRotaShifts);
     });
   },
 );

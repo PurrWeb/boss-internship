@@ -1,68 +1,49 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import AsyncButton from 'react-async-button';
 import oFetch from 'o-fetch';
 import utils from '~/lib/utils';
-import safeMoment from '~/lib/safe-moment'
+import safeMoment from '~/lib/safe-moment';
+import { combineReducers } from 'redux-immutable';
+import { reducer as formReducer, SubmissionError } from 'redux-form/immutable';
+import { modalRedux } from '~/components/modals';
+import AssignConfirmForm from './assign-confirm-form';
 
-class AssignConfirm extends PureComponent {
+class AssignConfirm extends React.PureComponent {
   render() {
     const avatarUrl = oFetch(this.props, 'avatarUrl');
+    const staffMemberId = oFetch(this.props, 'staffMemberId');
     const fullName = oFetch(this.props, 'fullName');
     const shiftRequest = oFetch(this.props, 'shiftRequest');
+    const onSubmit = oFetch(this.props, 'onSubmit');
+    const rotaShifts = oFetch(this.props, 'rotaShifts');
+
     const startsAt = oFetch(shiftRequest, 'startsAt');
     const endsAt = oFetch(shiftRequest, 'endsAt');
     const venueName = oFetch(shiftRequest, 'venueName');
-    const staffMemberId = oFetch(this.props, 'staffMemberId');
-    const onSubmit = oFetch(this.props, 'onSubmit');
-    return (
-      <div>
-        <div className="boss-modal-window__message-block">
-          <div className="boss-user-summary boss-user-summary_role_ssr-assign-confirmation">
-            <div className="boss-user-summary__side">
-              <div className="boss-user-summary__avatar">
-                <div className="boss-user-summary__avatar-inner">
-                  <img
-                    src={avatarUrl}
-                    alt="John Doe"
-                    className="boss-user-summary__pic"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="boss-user-summary__content">
-              <div className="boss-user-summary__header">
-                <h2 className="boss-user-summary__name">{fullName}</h2>
-              </div>
-              <ul className="boss-user-summary__review-list">
-                <li className="boss-user-summary__review-item boss-user-summary__review-item_role_time">
-                  {utils.intervalRotaDatesFormat(safeMoment.iso8601Parse(startsAt), safeMoment.iso8601Parse(endsAt))}
-                </li>
-                <li className="boss-user-summary__review-item boss-user-summary__review-item_role_venue">
-                  {venueName}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
 
-        <div className="boss-modal-window__actions">
-          <AsyncButton
-            text="Confirm"
-            pendingText="Confirming ..."
-            onClick={() => onSubmit(staffMemberId)}
-            className="boss-button boss-button_role_confirm"
-          />
-        </div>
-      </div>
+    const initialValues = {
+      staffMemberId,
+      startsAt,
+      endsAt,
+    };
+
+    return (
+      <AssignConfirmForm
+        avatarUrl={avatarUrl}
+        fullName={fullName}
+        venueName={venueName}
+        startsAt={startsAt}
+        endsAt={endsAt}
+        onFormSubmit={onSubmit}
+        initialValues={initialValues}
+        rotaShifts={rotaShifts}
+      />
     );
   }
 }
 
 AssignConfirm.propTypes = {
-  avatarUrl: PropTypes.string.isRequired,
-  fullName: PropTypes.string.isRequired,
-  shiftRequest: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
-export default AssignConfirm;
+export default modalRedux(combineReducers({ form: formReducer }))(AssignConfirm);

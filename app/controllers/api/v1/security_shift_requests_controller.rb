@@ -157,7 +157,11 @@ module Api
         result = SecurityShiftRequestApiService.new(
           requester: current_user,
           security_shift_request: security_shift_request,
-        ).assign(staff_member: staff_member_from_params)
+        ).assign(
+          staff_member: staff_member_from_params,
+          starts_at: starts_at_from_params,
+          ends_at: ends_at_from_params,
+        )
 
         if result.success?
           assigned_security_shift_request = result.security_shift_request
@@ -177,10 +181,18 @@ module Api
 
       private
 
+      def starts_at_from_params
+        params.fetch(:startsAt)
+      end
+
+      def ends_at_from_params
+        params.fetch(:endsAt)
+      end
+
       def security_request_data_from_params
         {
-          starts_at: params.fetch(:startsAt),
-          ends_at: params.fetch(:endsAt),
+          starts_at: starts_at_from_params,
+          ends_at: ends_at_from_params,
           note: params.fetch(:note),
           venue: venue_from_params,
         }

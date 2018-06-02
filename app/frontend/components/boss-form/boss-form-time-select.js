@@ -21,18 +21,18 @@ const BossFormTimeSelect = ({
   const getRotaDate = (date) => {
     return moment(date).hours(8).minutes(0).seconds(0);
   }
-  
+
   const getPosibleTimeValues = (interval) => {
     return getSamplingTimeOffsetsForDay(interval);
   }
-  
+
   const getOptions = (interval, date) => {
     let time = date.clone();
     return getPosibleTimeValues(interval).map((offset, index) => {
       if (index !== 0) {
         time.add(interval, 'minutes');
       }
-      
+
       return  {
         value: offset,
         label: moment(time).format("HH:mm"),
@@ -41,11 +41,10 @@ const BossFormTimeSelect = ({
   }
 
   const onValueChange = (value) => {
-    console.log(value);
     if (Array.isArray(value) && !value.length) return;
     onChange(value);
   }
-  
+
   return (
     <div className="boss-form__field">
       <label htmlFor={name} className="boss-form__label">

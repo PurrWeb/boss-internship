@@ -20,6 +20,9 @@ class Page extends PureComponent {
     const shiftRequests = oFetch(this.props, 'shiftRequests');
     const changeWeekDay = oFetch(this.props, 'changeWeekDay');
     const selectVenue = oFetch(this.props, 'selectVenue');
+    const closeGraphDetails = oFetch(this.props, 'closeGraphDetails');
+    const showGraphDetails = oFetch(this.props, 'showGraphDetails');
+
     const rejectSecurityShiftRequest = oFetch(
       this.props,
       'rejectSecurityShiftRequest',
@@ -30,7 +33,9 @@ class Page extends PureComponent {
       'setAssigningShiftRequest',
     );
     const venueTypesForWeek = oFetch(this.props, 'venueTypesForWeek');
-
+    const isGraphDetailsOpen = oFetch(this.props, 'isGraphDetailsOpen');
+    const graphDetails = oFetch(this.props, 'graphDetails');
+    const staffTypes = oFetch(this.props, 'staffTypes');
     return (
       <div>
         {shiftRequest ? (
@@ -41,6 +46,11 @@ class Page extends PureComponent {
             shiftRequest={shiftRequest}
             assignShiftRequest={assignShiftRequest}
             setAssigningShiftRequest={setAssigningShiftRequest}
+            showGraphDetails={showGraphDetails}
+            closeGraphDetails={closeGraphDetails}
+            isGraphDetailsOpen={isGraphDetailsOpen}
+            graphDetails={graphDetails}
+            staffTypes={staffTypes}
           />
         ) : (
           <RequestsPage
@@ -78,7 +88,12 @@ Page.propTypes = {
   rejectSecurityShiftRequest: PropTypes.func.isRequired,
   selectedVenues: PropTypes.array.isRequired,
   venueTypes: ImmutablePropTypes.list.isRequired,
+  staffTypes: ImmutablePropTypes.list.isRequired,
   setAssigningShiftRequest: PropTypes.func.isRequired,
+  closeGraphDetails: PropTypes.func.isRequired,
+  showGraphDetails: PropTypes.func.isRequired,
+  isGraphDetailsOpen: PropTypes.bool.isRequired,
+  graphDetails: ImmutablePropTypes.map,
 };
 
 export default Page;
