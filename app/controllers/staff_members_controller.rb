@@ -99,8 +99,10 @@ class StaffMembersController < ApplicationController
           end_value: holiday_end_date,
           start_column_name: 'start_date',
           end_column_name: 'end_date'
-        )
-        .all
+        ).
+        all.
+        includes(holiday_request: [:creator])
+
 
       filtered_holiday_requests = InRangeQuery.new(
         relation: staff_member.holiday_requests.in_state(:pending, :rejected).includes([:creator]),
