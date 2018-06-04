@@ -341,13 +341,13 @@ class UserAbility
         end
       end
 
-      can [:create], HolidayRequest do |holiday_request|
+      can [:create, :destroy], HolidayRequest do |holiday_request|
         user.food_ops_manager? ||
         user.payroll_manager? ||
           can_edit_staff_member?(user, holiday_request.staff_member)
       end
 
-      can [:accept, :reject, :update, :destroy], HolidayRequest do |holiday_request|
+      can [:accept, :reject, :update], HolidayRequest do |holiday_request|
         holiday_request.creator != user && can_view_holidays_requests_page?(user)
       end
 

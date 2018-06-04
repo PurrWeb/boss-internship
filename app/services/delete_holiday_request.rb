@@ -13,7 +13,7 @@ class DeleteHolidayRequest
 
   def call
     result = true
-    ability.authorize(:destroy, holiday_request)
+    ability.authorize!(:destroy, holiday_request)
 
     if holiday_request.pending?
       holiday_request.destroy
