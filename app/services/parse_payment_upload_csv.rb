@@ -8,7 +8,7 @@ class ParsePaymentUploadCSV
   end
 
   PROCCESS_DATE_HEADER = 'DateParameters.ProcessDate'
-  VENUE_NAME_HEADER = 'CompanyDetails.Name'
+  COMPANY_NAME_HEADER = 'CompanyDetails.Name'
   # Had to include this for some reason
   REDUNDANT_PROCESS_DATE_HEADER = 'ProcessDate'
   DEPARTMENT_NAME_HEADER = 'Employees.DepartmentName'
@@ -19,7 +19,7 @@ class ParsePaymentUploadCSV
   NET_PAY_HEADER = 'CurrentPay.RndNetPay'
   HEADERS = [
     PROCCESS_DATE_HEADER,
-    VENUE_NAME_HEADER,
+    COMPANY_NAME_HEADER,
     REDUNDANT_PROCESS_DATE_HEADER,
     DEPARTMENT_NAME_HEADER,
     FIRST_INITIAL_HEADER,
@@ -125,7 +125,7 @@ class ParsePaymentUploadCSV
 
     all_fields_present = true
     raw_data[PROCCESS_DATE_HEADER] = row[PROCCESS_DATE_HEADER]
-    raw_data[VENUE_NAME_HEADER] = row[VENUE_NAME_HEADER]
+    raw_data[COMPANY_NAME_HEADER] = row[COMPANY_NAME_HEADER]
     raw_data[REDUNDANT_PROCESS_DATE_HEADER] = row[REDUNDANT_PROCESS_DATE_HEADER]
     raw_data[DEPARTMENT_NAME_HEADER] = row[DEPARTMENT_NAME_HEADER]
     raw_data[FIRST_INITIAL_HEADER]= row[FIRST_INITIAL_HEADER]
@@ -140,9 +140,9 @@ class ParsePaymentUploadCSV
       payment_data.fetch(:errors).fetch(PROCCESS_DATE_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
-    if !raw_data[VENUE_NAME_HEADER].present?
-      payment_data.fetch(:errors)[VENUE_NAME_HEADER] ||= []
-      payment_data.fetch(:errors).fetch(VENUE_NAME_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
+    if !raw_data[DEPARTMENT_NAME_HEADER].present?
+      payment_data.fetch(:errors)[DEPARTMENT_NAME_HEADER] ||= []
+      payment_data.fetch(:errors).fetch(DEPARTMENT_NAME_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
     if !raw_data[DEPARTMENT_NAME_HEADER].present?
@@ -199,7 +199,7 @@ class ParsePaymentUploadCSV
     normalised_data[REDUNDANT_PROCESS_DATE_HEADER] = raw_data.fetch(REDUNDANT_PROCESS_DATE_HEADER).strip
     normalised_data[FIRST_INITIAL_HEADER] = raw_data.fetch(FIRST_INITIAL_HEADER).strip
     normalised_data[SURNAME_HEADER] = raw_data.fetch(SURNAME_HEADER).strip
-    normalised_data[VENUE_NAME_HEADER] = raw_data.fetch(VENUE_NAME_HEADER).strip
+    normalised_data[COMPANY_NAME_HEADER] = raw_data.fetch(COMPANY_NAME_HEADER).strip
     normalised_data[DEPARTMENT_NAME_HEADER] = raw_data.fetch(DEPARTMENT_NAME_HEADER).strip
     # eg PW622756A PC644304A
     normalised_data[NI_HEADER] = nil
@@ -244,12 +244,12 @@ class ParsePaymentUploadCSV
     # Perform Lookups
     ##########
     lookups_successful = true
-    venue = Venue.find_by(name: normalised_data.fetch(VENUE_NAME_HEADER))
+    venue = Venue.find_by(name: normalised_data.fetch(DEPARTMENT_NAME_HEADER))
     payment_data[:venue] = venue
     if !venue.present?
       lookups_successful = false
-      payment_data.fetch(:errors)[VENUE_NAME_HEADER] ||= []
-      payment_data.fetch(:errors).fetch(VENUE_NAME_HEADER) << 'does not match venue in system'
+      payment_data.fetch(:errors)[DEPARTMENT_NAME_HEADER] ||= []
+      payment_data.fetch(:errors).fetch(DEPARTMENT_NAME_HEADER) << 'does not match venue in system'
     end
 
     staff_member = StaffMember.find_by(
