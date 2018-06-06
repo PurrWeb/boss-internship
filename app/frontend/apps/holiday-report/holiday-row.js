@@ -59,6 +59,7 @@ export default class HolidayRow extends React.Component {
         <div className="boss-table__cell boss-table__cell_role_header">Dates</div>
         <div className="boss-table__cell boss-table__cell_role_header">Note</div>
         <div className="boss-table__cell boss-table__cell_role_header">Created By</div>
+        <div className="boss-table__cell boss-table__cell_role_header">Payslip Date</div>
       </div>
     )
   }
@@ -69,6 +70,7 @@ export default class HolidayRow extends React.Component {
       const endDate = safeMoment.uiDateParse(holiday.end_date).format('ddd Do MMM');
       const createdAt = safeMoment.iso8601Parse(holiday.created_at).format(utils.humanDateFormatWithTime());
       const date = startDate === endDate ? startDate : `${startDate} - ${endDate}`
+      const payslipDate = '20/11/2016!'; //HARDCODED, BACKEND INTEGRATION NEED
       return (
         <div className="boss-table__row" key={key}>
           <DetailsCell label="Types">
@@ -84,6 +86,9 @@ export default class HolidayRow extends React.Component {
             <span className="boss-table__text-line">{holiday.created_by}</span>
             <span className="boss-table__text-meta">{`(${createdAt})`}</span>
           </DetailsCell>
+          <DetailsCell label="Payslip Date">
+            {payslipDate}
+          </DetailsCell>
         </div>
       )
     })
@@ -94,7 +99,8 @@ export default class HolidayRow extends React.Component {
       const startDate = safeMoment.uiDateParse(holiday.start_date).format('ddd Do MMM');
       const endDate = safeMoment.uiDateParse(holiday.end_date).format('ddd Do MMM');
       const createdAt = safeMoment.iso8601Parse(holiday.created_at).format(utils.humanDateFormatWithTime());
-      const date = startDate === endDate ? startDate : `${startDate} - ${endDate}`
+      const date = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
+      const payslipDate = '20/11/2016!'; //HARDCODED, BACKEND INTEGRATION NEED
       return (
         <div className="boss-check boss-check_role_panel boss-check_page_holidays-report-details" key={key}>
           <DetailsMobileRow>
@@ -124,6 +130,10 @@ export default class HolidayRow extends React.Component {
               </div>
             </DetailsMobileRow>
           }
+          <DetailsMobileRow>
+            <p className="boss-check__text boss-check__text_role_date">
+            <span className="boss-check__text-label">Payslip Date: </span>{payslipDate}</p>
+          </DetailsMobileRow>
         </div>
       )
     })
