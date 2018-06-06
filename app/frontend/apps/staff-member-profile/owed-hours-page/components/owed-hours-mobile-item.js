@@ -28,6 +28,7 @@ const OwedHourMobileItem = ({owedHour, deleteOwedHour, openEditModal, isStaffMem
     created,
     note,
     editable,
+    payslipDate,
   } = getOwedHourUIData(owedHour);
   
   const duration = `${durationHours} hours ${durationMinutes} minutes`;
@@ -72,6 +73,14 @@ const OwedHourMobileItem = ({owedHour, deleteOwedHour, openEditModal, isStaffMem
         </div>
       </div>
     }
+    <div className="boss-check__row">
+      <div className="boss-check__cell">
+        <p className="boss-check__text boss-check__text_role_date">
+          <span className="boss-check__text-label">Payslip Date: </span>
+          {payslipDate}
+        </p>
+      </div>
+    </div>
     { (editable && !isStaffMemberDisabled) && <div className="boss-check__row boss-check__row_role_actions">
         <button
           onClick={() => onEdit(owedHour)}

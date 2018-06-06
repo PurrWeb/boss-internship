@@ -20,8 +20,8 @@ export const getOwedHourUIData = (owedHour) => {
   const creator = owedHour.get('createdBy');
   const created = safeMoment.iso8601Parse(owedHour.get('createdAt')).utcOffset(owedHour.get('createdAt')).format('Do MMMM YYYY - HH:mm');
   const editable = owedHour.get('editable');
-
-  return { hasDate, date, times, durationHours, durationMinutes, note, creator, created, editable };
+  const payslipDate = '20/11/2016!'; //HARDCODED, BACKEND INTEGRATION NEED
+  return { hasDate, date, times, durationHours, durationMinutes, note, creator, created, editable, payslipDate };
 }
 
 const ActionsCell = ({
@@ -105,6 +105,7 @@ const Row = ({owedHour, deleteOwedHours, openEditModal, isStaffMemberDisabled}) 
     created,
     note,
     editable,
+    payslipDate,
   } = getOwedHourUIData(owedHour);
 
   return (
@@ -115,6 +116,7 @@ const Row = ({owedHour, deleteOwedHours, openEditModal, isStaffMemberDisabled}) 
       <SimpleCell label="Duration (minutes)" text={durationMinutes} />      
       <CreatedByCell label="CreatedBy" creator={creator} created={created} />
       <SimpleCell label="Note" text={note} />
+      <SimpleCell label="Payslip Date" text={payslipDate} />
       <ActionsCell
         editable={editable}
         label="Actions"
@@ -137,6 +139,7 @@ const Header = () => {
       <div className="boss-table__cell boss-table__cell_role_header">Duration (minuts)</div>
       <div className="boss-table__cell boss-table__cell_role_header">Created By</div>
       <div className="boss-table__cell boss-table__cell_role_header">Note</div>
+      <div className="boss-table__cell boss-table__cell_role_header">Payslip Date</div>
       <div className="boss-table__cell boss-table__cell_role_header"></div>
     </div>
   )
