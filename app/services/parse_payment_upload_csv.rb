@@ -122,62 +122,55 @@ class ParsePaymentUploadCSV
 
     all_fields_present = true
     raw_data[PROCCESS_DATE_HEADER] = row[PROCCESS_DATE_HEADER]
+    raw_data[VENUE_NAME_HEADER] = row[VENUE_NAME_HEADER]
+    raw_data[DEPARTMENT_NAME_HEADER] = row[DEPARTMENT_NAME_HEADER]
+    raw_data[FIRST_INITIAL_HEADER]= row[FIRST_INITIAL_HEADER]
+    raw_data[SURNAME_HEADER] = row[SURNAME_HEADER]
+    raw_data[NI_HEADER] = row[NI_HEADER]
+    raw_data[DOB_HEADER] = row[DOB_HEADER]
+    raw_data[NET_PAY_HEADER] = row[NET_PAY_HEADER]
+    payment_data[:raw_data] = raw_data
+
     if !raw_data[PROCCESS_DATE_HEADER].present?
       payment_data.fetch(:errors)[PROCCESS_DATE_HEADER] ||= []
       payment_data.fetch(:errors).fetch(PROCCESS_DATE_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
-
-    raw_data[VENUE_NAME_HEADER] = row[VENUE_NAME_HEADER]
     if !raw_data[VENUE_NAME_HEADER].present?
       payment_data.fetch(:errors)[VENUE_NAME_HEADER] ||= []
       payment_data.fetch(:errors).fetch(VENUE_NAME_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
-
-    raw_data[DEPARTMENT_NAME_HEADER] = row[DEPARTMENT_NAME_HEADER]
     if !raw_data[DEPARTMENT_NAME_HEADER].present?
       payment_data.fetch(:errors)[DEPARTMENT_NAME_HEADER] ||= []
       payment_data.fetch(:errors).fetch(DEPARTMENT_NAME_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
-
-    raw_data[FIRST_INITIAL_HEADER]= row[FIRST_INITIAL_HEADER]
     if !raw_data[FIRST_INITIAL_HEADER].present?
       payment_data.fetch(:errors)[FIRST_INITIAL_HEADER] ||= []
       payment_data.fetch(:errors).fetch(FIRST_INITIAL_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
-
-    raw_data[SURNAME_HEADER] = row[SURNAME_HEADER]
     if !raw_data[SURNAME_HEADER].present?
       payment_data.fetch(:errors)[SURNAME_HEADER] ||= []
       payment_data.fetch(:errors).fetch(SURNAME_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
-
-    raw_data[NI_HEADER] = row[NI_HEADER]
     if !raw_data[NI_HEADER].present?
       payment_data.fetch(:errors)[NI_HEADER] ||= []
       payment_data.fetch(:errors).fetch(NI_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
-
-    raw_data[DOB_HEADER] = row[DOB_HEADER]
     if !raw_data[DOB_HEADER].present?
       payment_data.fetch(:errors)[DOB_HEADER] ||= []
       payment_data.fetch(:errors).fetch(DOB_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
-
-    raw_data[NET_PAY_HEADER] = row[NET_PAY_HEADER]
     if !raw_data[NET_PAY_HEADER].present?
       payment_data.fetch(:errors)[NET_PAY_HEADER] ||= []
       payment_data.fetch(:errors).fetch(NET_PAY_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
-
-    payment_data[:raw_data] = raw_data
     return payment_data unless all_fields_present
 
     # Validate Data
