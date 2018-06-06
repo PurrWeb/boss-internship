@@ -9,6 +9,8 @@ class ParsePaymentUploadCSV
 
   PROCCESS_DATE_HEADER = 'DateParameters.ProcessDate'
   VENUE_NAME_HEADER = 'CompanyDetails.Name'
+  # Had to include this for some reason
+  REDUNDANT_PROCESS_DATE_HEADER = 'ProcessDate'
   DEPARTMENT_NAME_HEADER = 'Employees.DepartmentName'
   FIRST_INITIAL_HEADER = 'Employees.Initials'
   SURNAME_HEADER = 'Employees.Surname'
@@ -18,6 +20,7 @@ class ParsePaymentUploadCSV
   HEADERS = [
     PROCCESS_DATE_HEADER,
     VENUE_NAME_HEADER,
+    REDUNDANT_PROCESS_DATE_HEADER,
     DEPARTMENT_NAME_HEADER,
     FIRST_INITIAL_HEADER,
     SURNAME_HEADER,
@@ -123,6 +126,7 @@ class ParsePaymentUploadCSV
     all_fields_present = true
     raw_data[PROCCESS_DATE_HEADER] = row[PROCCESS_DATE_HEADER]
     raw_data[VENUE_NAME_HEADER] = row[VENUE_NAME_HEADER]
+    raw_data[REDUNDANT_PROCESS_DATE_HEADER] = row[REDUNDANT_PROCESS_DATE_HEADER]
     raw_data[DEPARTMENT_NAME_HEADER] = row[DEPARTMENT_NAME_HEADER]
     raw_data[FIRST_INITIAL_HEADER]= row[FIRST_INITIAL_HEADER]
     raw_data[SURNAME_HEADER] = row[SURNAME_HEADER]
@@ -192,6 +196,7 @@ class ParsePaymentUploadCSV
       payment_data.fetch(:errors).fetch(PROCCESS_DATE_HEADER) << DATE_FORMAT_INVALID_ERROR_MESSAGE
       all_data_valid = false
     end
+    normalised_data[REDUNDANT_PROCESS_DATE_HEADER] = raw_data.fetch(REDUNDANT_PROCESS_DATE_HEADER).strip
     normalised_data[FIRST_INITIAL_HEADER] = raw_data.fetch(FIRST_INITIAL_HEADER).strip
     normalised_data[SURNAME_HEADER] = raw_data.fetch(SURNAME_HEADER).strip
     normalised_data[VENUE_NAME_HEADER] = raw_data.fetch(VENUE_NAME_HEADER).strip
