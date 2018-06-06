@@ -62,7 +62,7 @@ export const uploadFile = (values) => (dispatch, getState) => {
       }
       const responseMessage = (serverResponse && serverResponse.message) || resp.message;
       if (responseMessage) {
-        message = message + responseMessage
+        message = message + ' ' + responseMessage;
       }
 
       setTimeout(function() {
