@@ -22,7 +22,7 @@ class ToolTipContent extends React.Component {
   }
 }
 
-class PaymentUploadPageBoard extends React.Component {
+class PaymentUploadCellWithError extends React.Component {
   state = {
     toolTipOpen: false,
   }
@@ -67,4 +67,4 @@ class PaymentUploadPageBoard extends React.Component {
   }
 }
 
-export default PaymentUploadPageBoard;
+export default PaymentUploadCellWithError;
