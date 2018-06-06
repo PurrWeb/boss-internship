@@ -145,11 +145,6 @@ class ParsePaymentUploadCSV
       payment_data.fetch(:errors).fetch(DEPARTMENT_NAME_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
       all_fields_present = false
     end
-    if !raw_data[DEPARTMENT_NAME_HEADER].present?
-      payment_data.fetch(:errors)[DEPARTMENT_NAME_HEADER] ||= []
-      payment_data.fetch(:errors).fetch(DEPARTMENT_NAME_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
-      all_fields_present = false
-    end
     if !raw_data[FIRST_INITIAL_HEADER].present?
       payment_data.fetch(:errors)[FIRST_INITIAL_HEADER] ||= []
       payment_data.fetch(:errors).fetch(FIRST_INITIAL_HEADER) << MUST_BE_PRESENT_ERROR_MESSAGE
@@ -196,7 +191,20 @@ class ParsePaymentUploadCSV
       payment_data.fetch(:errors).fetch(PROCCESS_DATE_HEADER) << DATE_FORMAT_INVALID_ERROR_MESSAGE
       all_data_valid = false
     end
-    normalised_data[REDUNDANT_PROCESS_DATE_HEADER] = raw_data.fetch(REDUNDANT_PROCESS_DATE_HEADER).strip
+    # e.g. 28/01/2018
+    normalised_data[REDUNDANT_PROCESS_DATE_HEADER] = nil
+    begin
+      normalised_data[REDUNDANT_PROCESS_DATE_HEADER] = Date.strptime(
+        raw_data.fetch(REDUNDANT_PROCESS_DATE_HEADER).strip,
+        UPLOAD_DATE_FORMAT
+      )
+    rescue ArgumentError => e
+      raise unless e.message == DATE_INVALID_PARSE_ERROR_MESSAGE
+
+      payment_data.fetch(:errors)[REDUNDANT_PROCESS_DATE_HEADER] ||= []
+      payment_data.fetch(:errors).fetch(REDUNDANT_PROCESS_DATE_HEADER) << DATE_FORMAT_INVALID_ERROR_MESSAGE
+      all_data_valid = false
+    end
     normalised_data[FIRST_INITIAL_HEADER] = raw_data.fetch(FIRST_INITIAL_HEADER).strip
     normalised_data[SURNAME_HEADER] = raw_data.fetch(SURNAME_HEADER).strip
     normalised_data[COMPANY_NAME_HEADER] = raw_data.fetch(COMPANY_NAME_HEADER).strip
