@@ -59,7 +59,8 @@ class PaymentUploadCellWithError extends React.Component {
           style={{ display: 'block' }}
         >
           <div className="boss-table__info">
-            <p className="boss-table__text boss-table__text_state_alert">{header}</p>
+            <p className="boss-table__label boss-table__label_state_alert">{header}</p>
+            <p className="boss-table__text boss-table__text_state_alert">{rawValue}</p>
           </div>
         </Tooltip>
       </div>
