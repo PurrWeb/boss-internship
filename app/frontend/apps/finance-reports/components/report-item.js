@@ -65,6 +65,7 @@ class ReportItem extends Component {
     const holidayDaysCount = oFetch(report, 'holidayDaysCount');
     const onMarkCompleted = oFetch(this.props, 'onMarkCompleted');
     const staffMemberId = oFetch(report, 'staffMemberId');
+    const netWagesCents = oFetch(report, 'netWagesCents');
 
     const statusClassName = classNames({
       'boss-table__text': true,
@@ -76,6 +77,7 @@ class ReportItem extends Component {
       'boss-table__text': true,
       'boss-table__text_indicator_accessory': acessories !== 0,
     });
+
     return (
       <div className="boss-table__row">
         <div className="boss-table__cell">
@@ -136,6 +138,9 @@ class ReportItem extends Component {
             </a>
           </div>
         )}
+        <div className="boss-table__cell">
+          <p className="boss-table__text">{utils.moneyFormat(netWagesCents / 100.0)}</p>
+        </div>
         <div className="boss-table__cell">
           <p className={statusClassName}>{status}</p>
           {status === 'ready' && (

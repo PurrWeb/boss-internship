@@ -5,10 +5,21 @@ class UIRotaDate
     Date.strptime(date_param, URL_DATE_FORMAT)
   end
 
-  def self.parse!(date_param)
+  def self.parse_if_present(date_param)
     if date_param.present?
       Date.strptime(date_param, URL_DATE_FORMAT)
     end
+  end
+
+  def self.safe_parse(date_param)
+    return nil unless date_param.present?
+    result = nil
+    begin
+      result = parse(date_param)
+    rescue
+      #do nothing
+    end
+    result
   end
 
   def self.format(date)

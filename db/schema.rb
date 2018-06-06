@@ -820,6 +820,31 @@ ActiveRecord::Schema.define(version: 20180509163419) do
 
   add_index "pay_rates", ["pay_rate_type"], name: "index_pay_rates_on_pay_rate_type", using: :btree
 
+  create_table "payment_transitions", force: :cascade do |t|
+    t.string   "to_state",    limit: 255,   null: false
+    t.text     "metadata",    limit: 65535
+    t.integer  "sort_key",    limit: 4,     null: false
+    t.integer  "payment_id",  limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "payment_transitions", ["payment_id", "most_recent"], name: "index_payment_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "payment_transitions", ["payment_id", "sort_key"], name: "index_payment_transitions_parent_sort", unique: true, using: :btree
+
+  create_table "payments", force: :cascade do |t|
+    t.integer  "staff_member_id",     limit: 4, null: false
+    t.integer  "created_by_user_id",  limit: 4, null: false
+    t.date     "date",                          null: false
+    t.datetime "disabled_at"
+    t.integer  "cents",               limit: 4, null: false
+    t.datetime "received_at"
+    t.integer  "disabled_by_user_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "pool_loft_table_session_edits", force: :cascade do |t|
     t.string   "guid",                 limit: 255, null: false
     t.integer  "table_session_id",     limit: 4,   null: false

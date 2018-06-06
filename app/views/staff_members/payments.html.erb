@@ -1,0 +1,36 @@
+<script>
+  window.boss = window.boss || {};
+  window.boss.accessToken = "<%= access_token %>";
+</script>
+
+ <%= react_component(
+    'StaffMemberProfilePaymentsApp',
+    {
+      payments: ActiveModel::Serializer::CollectionSerializer.new(
+        payments,
+        serializer: Api::V1::StaffMemberProfile::PaymentSerializer,
+      ),
+      paymentFilter: {
+        sStartDate: UIRotaDate.format(payment_filter.fetch(:start_date)),
+        sEndDate: UIRotaDate.format(payment_filter.fetch(:end_date)),
+        statusFilter: payment_filter.fetch(:status_filter)
+      },
+      staffMember: staff_member,
+      accessToken: access_token.token,
+      staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
+        staff_types,
+        serializer: Api::V1::StaffMemberProfile::StaffTypeSerializer,
+      ),
+      venues: venues,
+      accessibleVenueIds: accessible_venue_ids,
+      payRates: pay_rates,
+      accessiblePayRateIds: accessible_pay_rate_ids,
+      genderValues: gender_values,
+      appDownloadLinks: camelized_collection(
+        app_download_link_data,
+        Api::V1::StaffMemberProfile::AppDownloadLinkSerializer
+      ),
+      permissionsData: Api::V1::StaffMemberProfile::PermissionsSerializer.new(staff_member_profile_permissions)
+    }
+  )
+%>

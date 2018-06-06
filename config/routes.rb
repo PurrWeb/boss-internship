@@ -29,6 +29,8 @@ Rails.application.routes.draw do
     resources :venue_health_check, only: [:index, :new]
     resources :venue_health_check_reports, only: [:show]
 
+    resources :payment_uploads, only: [:index]
+
     resources :change_orders, only: [:index, :show, :edit, :update, :destroy] do
       collection do
         get :submitted
@@ -101,6 +103,7 @@ Rails.application.routes.draw do
       end
       member do
         get :holidays
+        get :payments
         get :profile
         get :owed_hours
         get :accessories
@@ -326,6 +329,12 @@ Rails.application.routes.draw do
           end
         end
 
+        resources :payments, only: [] do
+          collection do
+            post :upload_csv
+          end
+        end
+
         resources :incident_reports, only: [:index, :show, :create, :update, :destroy]
 
         resources :questionnaires do
@@ -379,6 +388,7 @@ Rails.application.routes.draw do
               get :holidays_count
             end
           end
+          resources :payments, only: [:index]
           resources :staff_member_accessory_requests, only: [:create], path: 'accessory-requests' do
             member do
               post :refund_request, path: 'refund'

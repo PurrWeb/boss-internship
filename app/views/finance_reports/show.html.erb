@@ -3,8 +3,14 @@
   date: UIRotaDate.format(date),
   startDate: UIRotaDate.format(start_date),
   endDate: UIRotaDate.format(end_date),
-  staffMembers: staff_members,
-  financeReports: finance_reports,
+  staffMembers: ActiveModelSerializers::SerializableResource.new(
+    staff_members,
+    each_serializer: Api::V1::FinanceReports::StaffMemberSerializer
+  ),
+  financeReports: ActiveModelSerializers::SerializableResource.new(
+    finance_reports,
+    each_serializer: Api::V1::FinanceReports::FinanceReportSerializer
+  ),
   staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
     staff_types,
     serializer: Api::V1::FinanceReports::StaffTypeSerializer,

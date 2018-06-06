@@ -93,7 +93,7 @@ class ReportList extends Component {
                 className="boss-board__scroll boss-board__scroll_type_native"
               >
                 <div className="boss-board__scroll-content">
-                  <div className="boss-table boss-table_page_finance-reports-no-net-wages">
+                  <div className="boss-table boss-table_page_finance-reports">
                     <ReportTableHeader startDate={startDate} />
                     {this.renderItems()}
                   </div>

@@ -87,6 +87,9 @@ registerComponent('IncidentReportsShowApp', IncidentReportsShowApp);
 import { StaffMemberProfileDetailsApp } from './apps/staff-member-profile';
 registerComponent('StaffMemberProfileDetailsApp', StaffMemberProfileDetailsApp);
 
+import { StaffMemberProfilePaymentsApp } from './apps/staff-member-profile';
+registerComponent('StaffMemberProfilePaymentsApp', StaffMemberProfilePaymentsApp);
+
 import { StaffMemberHolidaysApp } from './apps/staff-member-profile';
 registerComponent('StaffMemberHolidaysApp', StaffMemberHolidaysApp);
 
@@ -198,6 +201,9 @@ registerComponent('VouchersUsageApp', VouchersUsageApp);
 
 import VouchersRedeemApp from './apps/vouchers-redeem';
 registerComponent('VouchersRedeemApp', VouchersRedeemApp);
+
+import PaymentUploadApp from './apps/payment-upload-app';
+registerComponent('PaymentUploadApp', PaymentUploadApp);
 
 $(document).ready(function() {
   if (window.boss.currentLayout !== 'oldLayout') {

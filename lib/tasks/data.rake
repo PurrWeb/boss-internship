@@ -45,7 +45,7 @@ namespace :data do
         options[:filename] = filename
       end
     end
-    parser.parse!(arguments)
+    parser.parse_if_present(arguments)
 
     raise '"--filename" arg missing' unless options[:filename].present?
 

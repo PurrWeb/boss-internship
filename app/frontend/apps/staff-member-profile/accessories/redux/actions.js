@@ -32,7 +32,7 @@ export const cancelAccessory = params => (dispatch, getState) => {
   const accessoryRequestId = oFetch(params, 'accessoryRequestId');
   return cancelAccessoryRequest(staffMemberId, accessoryRequestId).then(
     response => {
-      dispatch(updateAccessoryRequestInStore(response.data));
+      updateAccessoryRequestInStore(response.data);
     },
   );
 };

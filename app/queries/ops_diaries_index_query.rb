@@ -14,8 +14,8 @@ class OpsDiariesIndexQuery
     if filter[:start_date].present? && filter[:end_date].present?
       ops_diaries = InRangeQuery.new(
         relation: ops_diaries,
-        start_value: UIRotaDate.parse!(filter[:start_date]).beginning_of_day,
-        end_value: UIRotaDate.parse!(filter[:end_date]).end_of_day,
+        start_value: UIRotaDate.parse_if_present(filter[:start_date]).beginning_of_day,
+        end_value: UIRotaDate.parse_if_present(filter[:end_date]).end_of_day,
         start_column_name: 'created_at',
         end_column_name: 'created_at'
       ).all

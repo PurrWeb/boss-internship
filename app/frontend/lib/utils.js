@@ -40,6 +40,7 @@ function replaceFunctionPropsWithStrings(obj){
     })
 }
 
+const API_DATE_FORMAT = 'DD-MM-YYYY';
 var utils =  {
     moneyFormat(amount) {
       return numeral(amount).format('$0,0.00');
@@ -205,12 +206,15 @@ var utils =  {
     humanDateFormatWithTime(){
       return 'HH:mm ddd DD-MM-YYYY';
     },
+    //Deprecated: Prefer direct use of apiDateFormat
     formatRotaUrlDate(date){
-        return moment(date).format("DD-MM-YYYY");
+        return moment(date).format(API_DATE_FORMAT);
     },
+    apiDateFormat: API_DATE_FORMAT,
     commonDateFormat: 'DD-MM-YYYY',
     monthDateFormat: 'dddd',
     tableDateFormat: 'DD MMM YYYY',
+    slashDateFormat: 'DD/MM/YYYY',
     commonDateFormatWithTime(){
       return 'HH:mm DD-MM-YYYY';
     },

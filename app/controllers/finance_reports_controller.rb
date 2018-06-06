@@ -53,19 +53,13 @@ class FinanceReportsController < ApplicationController
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
-      staff_members: ActiveModelSerializers::SerializableResource.new(
-        staff_members,
-        each_serializer: Api::V1::FinanceReports::StaffMemberSerializer
-      ),
+      staff_members: staff_members,
       staff_types: staff_types,
       date: date,
       start_date: week.start_date,
       end_date: week.end_date,
       venue: venue,
-      finance_reports: ActiveModelSerializers::SerializableResource.new(
-        finance_reports,
-        each_serializer: Api::V1::FinanceReports::FinanceReportSerializer
-      ),
+      finance_reports: finance_reports,
       access_token: access_token.token
     }
   end
