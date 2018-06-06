@@ -69,6 +69,15 @@ class ReportItem extends Component {
       'boss-table__text': true,
       'boss-table__text_indicator_accessory': acessories !== 0,
     });
+
+    const owedHoursClassName = classNames({
+      'boss-table__cell': true,
+      'boss-table__cell_indicator_clock-warning': owedHours !== 0,
+    });
+    const holidayDaysCountClassName = classNames({
+      'boss-table__cell': true,
+      'boss-table__cell_indicator_clock-warning': holidayDaysCount !== 0,
+    });
     return (
       <div className="boss-table__row">
         <div className="boss-table__cell">
@@ -92,11 +101,11 @@ class ReportItem extends Component {
           <p className="boss-table__text">{weeklyHours}</p>
         </div>
         {owedHours === 0 ? (
-          <div className="boss-table__cell">
+          <div className={owedHoursClassName}>
             <p className="boss-table__text">{owedHours}</p>
           </div>
         ) : (
-          <div className="boss-table__cell">
+          <div className={owedHoursClassName}>
             <a href={appRoutes.staffMemberOwedHours(staffMemberId)} className="boss-table__link">
               {owedHours}
             </a>
@@ -120,11 +129,11 @@ class ReportItem extends Component {
           <p className="boss-table__text boss-table__text_role_important">{totalHoursCount}</p>
         </div>
         {holidayDaysCount === 0 ? (
-          <div className="boss-table__cell">
+          <div className={holidayDaysCountClassName}>
             <p className="boss-table__text">{holidayDaysCount}</p>
           </div>
         ) : (
-          <div className="boss-table__cell">
+          <div className={holidayDaysCountClassName}>
             <a href={appRoutes.staffMemberHolidays(staffMemberId)} className="boss-table__link">
               {holidayDaysCount}
             </a>

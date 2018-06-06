@@ -132,12 +132,18 @@ class ReportItem extends Component {
       'boss-table__text': true,
       'boss-table__text_indicator_accessory': acessories !== 0,
     });
-
     const rowClassName = classNames({
       'boss-table__row': true,
       'boss-table__row_state_alert': hasIncompleteDays,
     });
-
+    const owedHoursClassName = classNames({
+      'boss-table__cell': true,
+      'boss-table__cell_indicator_clock-warning': owedHours !== 0,
+    });
+    const holidayDaysCountClassName = classNames({
+      'boss-table__cell': true,
+      'boss-table__cell_indicator_clock-warning': holidayDaysCount !== 0,
+    });
     return (
       <div className={rowClassName}>
         <div className="boss-table__cell">
@@ -172,11 +178,11 @@ class ReportItem extends Component {
           <p className={this.getTextClassName()}>{weeklyHours}</p>
         </div>
         {owedHours === 0 ? (
-          <div className={this.getCellClassName()} style={cellStyle}>
+          <div className={owedHoursClassName} style={cellStyle}>
             <p className={this.getTextClassName()}>{owedHours}</p>
           </div>
         ) : (
-          <div className={this.getCellClassName()} style={cellStyle}>
+          <div className={owedHoursClassName} style={cellStyle}>
             <a href={appRoutes.staffMemberOwedHours(staffMemberId)} className={`${this.getTextClassName()} boss-table__link`}>
               {owedHours}
             </a>
@@ -206,11 +212,11 @@ class ReportItem extends Component {
           <p className={this.getTextClassName()}>{utils.moneyFormat(total)}</p>
         </div>
         {holidayDaysCount === 0 ? (
-          <div className={this.getCellClassName()} style={cellStyle}>
+          <div className={holidayDaysCountClassName} style={cellStyle}>
             <p className={this.getTextClassName()}>{holidayDaysCount}</p>
           </div>
         ) : (
-          <div className={this.getCellClassName()} style={cellStyle}>
+          <div className={holidayDaysCountClassName} style={cellStyle}>
             <a
               href={appRoutes.staffMemberHolidays(staffMemberId)}
               className={`${this.getTextClassName()} boss-table__link`}
