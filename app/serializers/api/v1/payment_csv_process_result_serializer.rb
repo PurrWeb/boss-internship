@@ -47,7 +47,8 @@ class Api::V1::PaymentCsvProcessResultSerializer < ActiveModel::Serializer
           payment: {
             id: payment.id,
             amount: amount,
-            dateRange: date_range
+            dateRange: date_range,
+            sWeekStartDate: UIRotaDate.format(week.start_date)
           }
         )
       else

@@ -1,5 +1,7 @@
 import React from 'react';
 import oFetch from 'o-fetch';
+import safeMoment from "~/lib/safe-moment";
+import _ from 'lodash';
 import { appRoutes } from "~/lib/routes";
 import PaymentUploadPageBoard from './payment-upload-page-board';
 import PaymentUploadCellWithError from '../components/payment-upload-cell-with-error';
@@ -45,6 +47,14 @@ class PaymentUploadProcessReport extends React.Component {
     const staffMember = oFetch(params, 'staffMember');
     const staffMemberId = oFetch(staffMember, 'id');
     const records = oFetch(params, 'records');
+    const payments = _.map(records, (record) => {
+      return oFetch(record, 'payment');
+    });
+    const mPaymentWeekStartDates = payments.map((payment) => {
+      return safeMoment.uiDateParse(oFetch(payment, 'sWeekStartDate'))
+    });
+    const mEarliestPaymentDate = _.min(mPaymentWeekStartDates);
+    const mLatestPaymentDate = _.max(mPaymentWeekStartDates);
     const staffMemberName = oFetch(staffMember, 'name');
     const staffTypeName = oFetch(staffMember, 'staffTypeName');
     const staffTypeBadgeColor = oFetch(staffMember, 'staffTypeBadgeColor');
@@ -70,7 +80,7 @@ class PaymentUploadProcessReport extends React.Component {
             })}
         </ul>
         <div className="boss-user-summary__footer">
-          <a target="_blank" href={ appRoutes.staffMemberPaymentHighlight({staffMemberId: staffMemberId, mStartDate: oFetch(payment, 'mStartDate'), mEndDate: oFetch(payment, 'mEndDate')}) } >
+          <a target="_blank" href={ appRoutes.staffMemberPaymentHighlight({staffMemberId: staffMemberId, mStartDate: mEarliestPaymentDate, mEndDate: mLatestPaymentDate}) } >
             <button className="boss-button boss-button_role_view-details-light boss-button_type_extra-small">View Details</button>
           </a>
         </div>

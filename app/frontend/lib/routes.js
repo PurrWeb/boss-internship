@@ -156,9 +156,9 @@ export const appRoutes = {
     },
     staffMemberPayments: staffMemberPaymentsAppPath,
     staffMemberPaymentHighlight: function(params){
-      staffMemberId = oFetch(params, 'staffMemberId');
-      mStartDate = oFetch(params, 'mStartDate');
-      mEndDate = oFetch(params, 'mEndDate');
+      const staffMemberId = oFetch(params, 'staffMemberId');
+      const mStartDate = oFetch(params, 'mStartDate');
+      const mEndDate = oFetch(params, 'mEndDate');
 
       return staffMemberPaymentsAppPath(
         staffMemberId,
