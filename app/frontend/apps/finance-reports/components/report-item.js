@@ -66,6 +66,7 @@ class ReportItem extends Component {
     const onMarkCompleted = oFetch(this.props, 'onMarkCompleted');
     const staffMemberId = oFetch(report, 'staffMemberId');
     const netWagesCents = oFetch(report, 'netWagesCents');
+    const netWagesHidden = typeof netWagesCents !== 'number';
 
     const statusClassName = classNames({
       'boss-table__text': true,
@@ -139,7 +140,8 @@ class ReportItem extends Component {
           </div>
         )}
         <div className="boss-table__cell">
-          <p className="boss-table__text">{utils.moneyFormat(netWagesCents / 100.0)}</p>
+          { !netWagesHidden && <p className="boss-table__text">{ utils.moneyFormat(netWagesCents / 100.0)}</p>}
+          { netWagesHidden && <p className="boss-table__text">XXXX</p>}
         </div>
         <div className="boss-table__cell">
           <p className={statusClassName}>{status}</p>

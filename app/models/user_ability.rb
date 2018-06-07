@@ -377,6 +377,12 @@ class UserAbility
           user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
+      can :see_net_wages, StaffMember do |staff_member|
+        user.payroll_manager? ||
+        user.has_effective_access_level?(AccessLevel.admin_access_level) ||
+        (user.has_effective_access_level?(AccessLevel.manager_access_level) && staff_member.on_hourly_pay_rate? )
+      end
+
       can :enable, StaffMember do |staff_member|
         if !staff_member.disabled?
           false

@@ -80,6 +80,7 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
   end
 
   def netWagesCents
-    object.net_wages_cents
+    ability = scope.fetch(:ability)
+    object.net_wages_cents if ability.can?(:see_net_wages, StaffMember.find(object.staff_member_id))
   end
 end
