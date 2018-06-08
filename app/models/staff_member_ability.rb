@@ -23,7 +23,7 @@ class StaffMemberAbility
       has_manager_mode_access?(staff_member)
     end
 
-    can :add_note, StaffMember do |other_staff_member|
+    can [:add_note, :edit_note], StaffMember do |other_staff_member|
       has_manager_mode_access?(staff_member)
     end
   end
