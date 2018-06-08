@@ -25,6 +25,7 @@
     "node": true
   },
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "react/no-deprecated": "off"
   }
 }
