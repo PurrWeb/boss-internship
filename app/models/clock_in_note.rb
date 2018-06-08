@@ -4,6 +4,7 @@ class ClockInNote < ActiveRecord::Base
 
   validates :creator, presence: true
   validates :clock_in_day, presence: true
+  validates :note, presence: true
 
   delegate :staff_member, :venue, :date, to: :clock_in_day
 end
