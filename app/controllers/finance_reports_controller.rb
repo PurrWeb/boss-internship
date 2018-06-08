@@ -10,6 +10,8 @@ class FinanceReportsController < ApplicationController
       return redirect_to(finance_report_path(show_redirect_params))
     end
 
+    authorize!(:view, :finance_reports)
+
     respond_to do |format|
       format.html do
         render_finance_reports_html
