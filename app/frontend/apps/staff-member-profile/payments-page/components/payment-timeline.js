@@ -67,7 +67,7 @@ export class PaymentTimeline extends React.Component {
         <div className="boss-timeline__header boss-timeline__header_role_card">
           <h3 className="boss-timeline__title">
             <span className="boss-timeline__title-primary">{ mWeekStartDate.format(slashDateFormat) } - { mWeekEndDate.format(slashDateFormat) }</span>
-            <span className="boss-timeline__title-secondary">£{ amount }</span>
+            <span className="boss-timeline__title-secondary">£{ cents ? amount : 'XXXX' }</span>
           </h3>
           <div className="boss-timeline__indicator">
             <div className={`boss-indicator ${statusClass} boss-indicator_position_after`}>

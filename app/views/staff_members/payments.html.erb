@@ -9,6 +9,7 @@
       payments: ActiveModel::Serializer::CollectionSerializer.new(
         payments,
         serializer: Api::V1::StaffMemberProfile::PaymentSerializer,
+        scope: { ability: ability }
       ),
       paymentFilter: {
         sStartDate: UIRotaDate.format(payment_filter.fetch(:start_date)),
