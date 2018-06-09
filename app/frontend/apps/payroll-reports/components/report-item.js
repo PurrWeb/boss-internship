@@ -62,6 +62,8 @@ class ReportItem extends Component {
     const holidayDaysCount = oFetch(report, 'holidayDaysCount');
     const staffMemberId = oFetch(report, 'staffMemberId');
     const payRateType = oFetch(report, 'payRateType');
+    const netWagesCents = oFetch(report, 'netWagesCents');
+    const netWagesHidden = typeof netWagesCents !== 'number';
 
     const fullNameCellClassName = classNames({
       'boss-table__text': true,
@@ -128,6 +130,10 @@ class ReportItem extends Component {
             </a>
           </div>
         )}
+        <div className="boss-table__cell">
+          { !netWagesHidden && <p className="boss-table__text">{ utils.moneyFormat(netWagesCents / 100.0)}</p>}
+          { netWagesHidden && <p className="boss-table__text">XXXX</p>}
+        </div>
       </div>
     );
   }

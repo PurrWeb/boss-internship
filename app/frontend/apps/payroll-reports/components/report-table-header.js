@@ -27,6 +27,7 @@ class ReportTableHeader extends Component {
         <div className="boss-table__cell boss-table__cell_role_header">Accessories</div>
         <div className="boss-table__cell boss-table__cell_role_header">Total Hours</div>
         <div className="boss-table__cell boss-table__cell_role_header">Paid Holidays (Days)</div>
+        <div className="boss-table__cell boss-table__cell_role_header">Net Wages</div>
       </div>
     );
   }

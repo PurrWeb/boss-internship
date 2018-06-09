@@ -51,6 +51,7 @@ class PayrollReportsController < ApplicationController
 
     finance_reports = reports + generated_reports
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+    ability = UserAbility.new(current_user)
 
     render locals: {
       staff_members: ActiveModelSerializers::SerializableResource.new(
@@ -62,9 +63,10 @@ class PayrollReportsController < ApplicationController
       start_date: week.start_date,
       end_date: week.end_date,
       venue: venue,
-      finance_reports: ActiveModelSerializers::SerializableResource.new(
+      finance_reports: ActiveModel::Serializer::CollectionSerializer.new(
         finance_reports,
-        each_serializer: Api::V1::FinanceReports::FinanceReportSerializer
+        serializer: Api::V1::FinanceReports::FinanceReportSerializer,
+        scope: { ability: ability }
       ),
       access_token: access_token.token
     }

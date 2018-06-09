@@ -1,3 +1,4 @@
+<% ability = UserAbility.new(current_user) %>
 <%= react_component('FinanceReportsApp', {
   accessToken: access_token,
   date: UIRotaDate.format(date),
@@ -7,9 +8,10 @@
     staff_members,
     each_serializer: Api::V1::FinanceReports::StaffMemberSerializer
   ),
-  financeReports: ActiveModelSerializers::SerializableResource.new(
+  financeReports: ActiveModel::Serializer::CollectionSerializer.new(
     finance_reports,
-    each_serializer: Api::V1::FinanceReports::FinanceReportSerializer
+    serializer: Api::V1::FinanceReports::FinanceReportSerializer,
+    scope: { ability: ability }
   ),
   staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
     staff_types,

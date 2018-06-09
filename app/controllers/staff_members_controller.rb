@@ -251,11 +251,13 @@ class StaffMembersController < ApplicationController
 
     profile_dashboard_data = GetStaffMemberProfileDashboardData.new(staff_member: staff_member, requester: current_user).call
 
-
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+
+    ability = UserAbility.new(current_user)
 
     if can? :edit, staff_member
       render locals: {
+        ability: ability,
         payments: payments,
         payment_filter: payment_filter_values,
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),

@@ -1,6 +1,11 @@
 class Api::V1::StaffMemberProfile::PaymentSerializer < ActiveModel::Serializer
   attributes :id, :processDate, :weekStartDate, :weekEndDate, :cents, :createdByUserName, :staffMemberId, :status, :isLate, :receivedAt
 
+  def cents
+    ability = scope.fetch(:ability)
+    object.cents if ability.can?(:see_net_wages, object.staff_member)
+  end
+
   def staffMemberId
     object.staff_member.id
   end
