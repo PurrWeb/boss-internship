@@ -147,6 +147,14 @@ let EmploymentDetailsForm = ({
       />
 
       <Field
+       component={BossFormInput}
+       required
+       name="sage_id"
+       type="text"
+       label="Sage ID"
+      />
+
+      <Field
         component={BossFormEmployementStatus}
         required
         name="employment_status"

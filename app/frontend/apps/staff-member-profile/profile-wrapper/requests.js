@@ -59,6 +59,7 @@ export const updateEmploymentDetails = (payload) => {
   const {
     staffMemberId,
     national_insurance_number,
+    sage_id,
     hours_preference,
     day_preference,
     starts_at,
@@ -73,6 +74,7 @@ export const updateEmploymentDetails = (payload) => {
 
   let fields = {
     national_insurance_number,
+    sage_id,
     hours_preference_note: hours_preference,
     day_preference_note: day_preference,
     starts_at: safeMoment.iso8601Parse(starts_at).format("DD-MM-YYYY"),

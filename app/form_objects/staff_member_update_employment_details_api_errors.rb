@@ -13,6 +13,7 @@ class StaffMemberUpdateEmploymentDetailsApiErrors
     result[:staff_type] = staff_member.errors[:staff_type] if staff_member.errors[:staff_type].present?
     result[:pay_rate] = staff_member.errors[:pay_rate] if staff_member.errors[:pay_rate].present?
     result[:national_insurance_number] = staff_member.errors[:national_insurance_number] if staff_member.errors[:national_insurance_number].present?
+    result[:sage_id] = staff_member.errors[:sage_id] if staff_member.errors[:sage_id].present?
     result[:hours_preference_note] = staff_member.errors[:hours_preference_note] if staff_member.errors[:hours_preference_note].present?
     result[:day_preference_note] = staff_member.errors[:day_preference_note] if staff_member.errors[:day_preference_note].present?
     result[:starts_at] = staff_member.errors[:starts_at] if staff_member.errors[:starts_at].present?

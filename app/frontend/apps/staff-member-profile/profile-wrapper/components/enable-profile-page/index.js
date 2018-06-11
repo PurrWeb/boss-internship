@@ -40,7 +40,8 @@ const EnableProfilePage = ({
     payRate: staffMember.get('pay_rate'),
     employmentStatus: staffMember.get('status_statement'),
     siaBadgeNumber: staffMember.get('sia_badge_number'),
-    siaBadgeExpiryDate: siaBadgeExpiryDate
+    siaBadgeExpiryDate: siaBadgeExpiryDate,
+    sageId: oFetch(staffMemberData, 'sage_id')
   }
   return (
     <EnableProfileForm

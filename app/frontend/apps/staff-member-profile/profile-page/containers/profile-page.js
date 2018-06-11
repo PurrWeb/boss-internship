@@ -105,6 +105,7 @@ class ProfilePage extends React.PureComponent {
           <DetailsListItem item={{name: "Pay Rate", value: oFetch(findById(accessiblePayRates, oFetch(staffMember, 'pay_rate')), 'name')}} />
           <DetailsListItem item={{name: "Hours Preference", value: oFetch(staffMember, 'hours_preference')}} />
           <DetailsListItem item={{name: "National Insurance Number", value: oFetch(staffMember, 'national_insurance_number')}} />
+          <DetailsListItem item={{name: 'Sage ID', value: oFetch(staffMember, 'sageId') || 'Not Set'}} />
           <DetailsListItem item={{name: "Status Statement", value: oFetch(staffMember, 'status_statement') ? oFetch(starterEmploymentStatusLabels, oFetch(staffMember, 'status_statement')) : ''}} />
           {isSecurityStaff && <DetailsListItem item={{name: "Sia badge expiry date", value: safeMoment.uiDateParse(oFetch(staffMember, 'sia_badge_expiry_date')).format('DD MMM YYYY')}} />}
           {isSecurityStaff && <DetailsListItem item={{name: "Sia badge number", value: oFetch(staffMember, 'sia_badge_number')}} />}
