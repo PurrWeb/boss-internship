@@ -1,11 +1,12 @@
 class FinanceReportStaffMembersQuery
-  def initialize(venue:, start_date:, end_date:, filter_by_weekly_pay_rate:)
+  def initialize(venue:, start_date:, end_date:, filter_by_weekly_pay_rate:, with_sage_id_only: false)
     @venue = venue
     @start_date = start_date
     @end_date = end_date
     @filter_by_weekly_pay_rate = filter_by_weekly_pay_rate
+    @with_sage_id_only = with_sage_id_only
   end
-  attr_reader :venue, :start_date, :end_date, :filter_by_weekly_pay_rate
+  attr_reader :venue, :start_date, :end_date, :filter_by_weekly_pay_rate, :with_sage_id_only
 
   # Returns staff member records with finance data over the time period
   def to_a
@@ -112,6 +113,11 @@ class FinanceReportStaffMembersQuery
           ).arel
         )
       )
+
+    if with_sage_id_only
+      base_query = base_query.
+        where(staff_members[:sage_id].not_eq(nil))
+    end
 
     if filter_by_weekly_pay_rate
       base_query = base_query.
