@@ -20,6 +20,7 @@ class ReportTableHeader extends Component {
     return (
       <div className="boss-table__row">
         <div className="boss-table__cell boss-table__cell_role_header">Name</div>
+        <div className="boss-table__cell boss-table__cell_role_header">Sage ID</div>
         {this.renderWeekCells()}
         <div className="boss-table__cell boss-table__cell_role_header">Weekly Hours</div>
         <div className="boss-table__cell boss-table__cell_role_header">Owed Hours</div>
