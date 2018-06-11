@@ -17,7 +17,8 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :total,
     :totalHoursCount,
     :status,
-    :netWagesCents
+    :netWagesCents,
+    :canSeeNetWages
 
   def staffMemberId
     object.staff_member_id
@@ -79,8 +80,12 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     object.total_hours_count
   end
 
-  def netWagesCents
+  def canSeeNetWages
     ability = scope.fetch(:ability)
-    object.net_wages_cents if ability.can?(:see_net_wages, StaffMember.find(object.staff_member_id))
+    ability.can?(:see_net_wages, StaffMember.find(object.staff_member_id))
+  end
+
+  def netWagesCents
+    object.net_wages_cents if (canSeeNetWages && object.wage_payments.count > 0)
   end
 end
