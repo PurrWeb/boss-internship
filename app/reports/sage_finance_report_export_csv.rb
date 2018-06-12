@@ -10,9 +10,9 @@ class SageFinanceReportExportCSV
   def to_s
     CSV.generate do |csv|
       csv << [
-        'Sage ID',
-        'Date',
-        'Weekly Hours'
+        'Employee Reference',
+        'Payment Reference',
+        'Hours'
       ]
 
       staff_members.each do |staff_member|
@@ -30,7 +30,7 @@ class SageFinanceReportExportCSV
 
         csv << [
           staff_member.sage_id,
-          UIRotaDate.format(report.week_start),
+          1, # This is a basic payrate refrence setup in sage
           report.total_hours_count
         ]
       end
