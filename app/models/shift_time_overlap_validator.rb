@@ -30,7 +30,7 @@ class ShiftTimeOverlapValidator
       end
 
       if shift_query.count > 0
-        overlapped_times = query.map {|q| "#{q.starts_at.strftime("%H:%M")}-#{q.ends_at.strftime("%H:%M")}"}
+        overlapped_times = shift_query.map {|q| "#{q.starts_at.strftime("%H:%M")}-#{q.ends_at.strftime("%H:%M")}"}
         shift.errors.add(:base, "Shift overlaps existing (#{shift_query.count}) shifts: " + overlapped_times.join(", "))
       end
 
