@@ -40,7 +40,7 @@ class YearlyReportsTable
       start_date: tax_year.start_date,
       end_date: tax_year.end_date,
       filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
-    ).all
+    ).to_a
     ActiveRecord::Associations::Preloader.new.preload(staff_members, [:staff_type, :pay_rate, :name])
 
 

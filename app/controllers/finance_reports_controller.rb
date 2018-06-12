@@ -32,7 +32,7 @@ class FinanceReportsController < ApplicationController
       start_date: week.start_date,
       end_date: week.end_date,
       filter_by_weekly_pay_rate: false
-    ).all
+    ).to_a
 
     staff_types = StaffType.all
     staff_members_with_reports = StaffMember.where(id: staff_members.map(&:id))
@@ -79,7 +79,7 @@ class FinanceReportsController < ApplicationController
       start_date: week.start_date,
       end_date: week.end_date,
       filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
-    ).all
+    ).to_a
 
     pdf = FinanceReportPDF.new(
       report_title: 'Finance Report',
