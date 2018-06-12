@@ -24,7 +24,7 @@ const loadMore = WrappedComponent => {
 
     componentWillReceiveProps(nextProps) {
       this.setState(state => {
-        const currentReducedListSize = state.reducedList.size;
+        const currentReducedListSize = state.reducedList.size <= this.props.perPage ? this.props.perPage : state.reducedList.size;
         const fullList = nextProps[this.getListName()];
         return {
           fullList: fullList,

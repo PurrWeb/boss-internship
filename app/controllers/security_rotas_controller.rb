@@ -18,6 +18,7 @@ class SecurityRotasController < ApplicationController
     raise ActiveRecord::RecordNotFound unless date.present?
 
     venues = Venue.all
+    security_venues = SecurityVenue.all
     staff_types = StaffType.where(role: 'security')
 
     staff_members = StaffMember.
@@ -50,6 +51,12 @@ class SecurityRotasController < ApplicationController
       where(starts_at: week_start_time..week_end_time).
       includes(:rota)
 
+    week_security_venue_shifts = SecurityVenueShift.
+      enabled.
+      joins(:staff_member).
+      merge(staff_members).
+      where(starts_at: week_start_time..week_end_time)
+
     week_rotas = Rota.where(date: [week.start_date..week.end_date])
 
     rotas = Rota.where(date: date)
@@ -59,6 +66,11 @@ class SecurityRotasController < ApplicationController
       staff_member: staff_members,
     ).includes([:rota, :staff_member])
 
+    security_venue_shifts = SecurityVenueShift.enabled.where(
+      date: date,
+      staff_member: staff_members,
+    ).includes([:staff_member])
+
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
@@ -66,10 +78,13 @@ class SecurityRotasController < ApplicationController
       date: date,
       rotas: rotas,
       venues: venues,
+      security_venues: security_venues,
       staff_types: staff_types,
       staff_members: staff_members,
       rota_shifts: rota_shifts,
+      security_venue_shifts: security_venue_shifts,
       week_rota_shifts: week_rota_shifts,
+      week_security_venue_shifts: week_security_venue_shifts,
       holidays: holidays,
       staff_types: staff_types,
       week_rotas: week_rotas

@@ -1,0 +1,8 @@
+<%= react_component('SecurityVenuesApp', {
+  accessToken: access_token,
+  securityVenues: ActiveModel::Serializer::CollectionSerializer.new(
+    security_venues,
+    serializer: Api::V1::SecurityVenues::SecurityVenueSerializer,
+  )
+})
+%>

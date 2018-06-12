@@ -67,7 +67,7 @@ class AddShifts extends React.Component {
                 </p>
                 <VenueSelect
                   selectedTypes={this.state.filteredAddShiftsVenues}
-                  venueTypes={this.props.venueTypes}
+                  venueTypes={this.props.venueTypes.toJS()}
                   onChange={this.onVenueChange}
                 />
               </div>

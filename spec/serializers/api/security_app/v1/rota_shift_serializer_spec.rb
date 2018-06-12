@@ -10,6 +10,7 @@ RSpec.describe Api::SecurityApp::V1::RotaShiftSerializer do
       "id" => rota_shift.id,
       "staffMemberId" => staff_member.id,
       "venueId" => rota_shift.venue.id,
+      "venueType" => rota_shift.venue.venue_type,
       "date" => UIRotaDate.format(rota_shift.date),
       "shiftType" => rota_shift.shift_type,
       "startsAt" => rota_shift.starts_at.utc.iso8601,

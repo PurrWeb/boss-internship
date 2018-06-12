@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       unlocks: 'users/unlocks',
       passwords: 'users/passwords'
     }
-
+    resources :security_venues, only: [:index]
     resources :security_shift_requests, only: [:index, :show], path: 'security-shift-requests'
     resources :security_shift_request_reviews, only: [:index, :show], path: 'security-shift-request-reviews'
     resources :ops_diaries, only: [:index], path: 'ops-diaries'
@@ -219,6 +219,8 @@ Rails.application.routes.draw do
 
         resources :venue_dashboard_forecasts, only: [:show]
 
+        resources :security_venues, only: [:create, :update]
+
         resources :security_shift_requests, only: [:create, :update, :destroy], path: 'security-shift-requests' do
           member do
             post :accept
@@ -235,6 +237,7 @@ Rails.application.routes.draw do
           end
         end
 
+        resources :security_venue_shifts, only: [:create, :update, :destroy], path: 'security-venue-shifts'
         resources :security_rota_shifts, only: [:create, :update, :destroy], path: 'security-rota-shifts'
 
         resources :staff_vetting, only: [] do

@@ -38,9 +38,7 @@ class HolidayItem extends React.Component {
 
 class RotaShiftItem extends React.Component {
   holidayDate = (startsAt, endsAt) => {
-    return `${safeMoment
-      .iso8601Parse(startsAt)
-      .format('DD MMM HH:mm')} to ${safeMoment
+    return `${safeMoment.iso8601Parse(startsAt).format('DD MMM HH:mm')} to ${safeMoment
       .iso8601Parse(endsAt)
       .format('HH:mm')}`;
   };
@@ -52,9 +50,7 @@ class RotaShiftItem extends React.Component {
     const venueName = rotaShift.get('venueName');
     return (
       <div>
-        <p className="boss-summary__text">
-          {this.holidayDate(startsAt, endsAt)}
-        </p>
+        <p className="boss-summary__text">{this.holidayDate(startsAt, endsAt)}</p>
         <p className="boss-summary__text boss-summary__text_faded">{`(${venueName})`}</p>
       </div>
     );
@@ -99,12 +95,8 @@ class Summary extends React.Component {
   render() {
     const { className, count, suffix, text, items } = this.props;
 
-    const isOpenClass = this.state.isOpen
-      ? 'boss-summary__action_state_opened'
-      : '';
-    const isContentClosedClass = this.state.isOpen
-      ? ''
-      : 'boss-summary__content_state_closed';
+    const isOpenClass = this.state.isOpen ? 'boss-summary__action_state_opened' : '';
+    const isContentClosedClass = this.state.isOpen ? '' : 'boss-summary__content_state_closed';
 
     return (
       <div className={`boss-staff-summary__info-item ${className}`}>
@@ -118,21 +110,13 @@ class Summary extends React.Component {
               {text}
             </p>
           </div>
-          <div
-            style={{ height: '180px' }}
-            className={`boss-summary__content ${isContentClosedClass}`}
-          >
+          <div style={{ height: '180px' }} className={`boss-summary__content ${isContentClosedClass}`}>
             <ReactIScroll iScroll={iScroll} options={scrollOptions}>
-              <div className="boss-summary__content-inner">
-                {this.renderItems(this.props.items)}
-              </div>
+              <div className="boss-summary__content-inner">{this.renderItems(this.props.items)}</div>
             </ReactIScroll>
           </div>
           {count > 0 && (
-            <button
-              onClick={this.toggleSummary}
-              className={`boss-summary__action ${isOpenClass}`}
-            >
+            <button onClick={this.toggleSummary} className={`boss-summary__action ${isOpenClass}`}>
               Details
             </button>
           )}
@@ -155,29 +139,20 @@ class StaffMemberItem extends React.Component {
     const staffMember = this.props.staffMember;
     const staffId = staffMember.get('id');
     const avatar = staffMember.get('avatarUrl');
-    const fullName = `${staffMember.get('firstName')} ${staffMember.get(
-      'surname',
-    )}`;
-    const staffType = this.props.staffTypes.find(
-      staffType => staffType.get('id') === staffMember.get('staffTypeId'),
-    );
+    const fullName = `${staffMember.get('firstName')} ${staffMember.get('surname')}`;
+    const staffType = this.props.staffTypes.find(staffType => staffType.get('id') === staffMember.get('staffTypeId'));
     const weeklyHours = staffMember.get('preferredHours');
     const dayPreferences = staffMember.get('preferredDays');
     const rotaedOnThisWeek = staffMember.get('hoursOnWeek');
     const weekRotaShifts = staffMember.get('weekRotaShifts');
     const holidays = staffMember.get('holidays');
 
-    const isOpenClass = this.state.isOpen
-      ? 'boss-staff-summary__cell_state_opened'
-      : '';
+    const isOpenClass = this.state.isOpen ? 'boss-staff-summary__cell_state_opened' : '';
 
     return (
       <div className="boss-staff-summary__row">
         <div className="boss-staff-summary__cell boss-staff-summary__cell_role_name">
-          <button
-            onClick={this.toggleDetails}
-            className="boss-staff-summary__toggle"
-          >
+          <button onClick={this.toggleDetails} className="boss-staff-summary__toggle">
             Details
           </button>
           <StaffMemberInfo
@@ -187,9 +162,7 @@ class StaffMemberItem extends React.Component {
             staffColor={staffType.get('color')}
           />
         </div>
-        <div
-          className={`boss-staff-summary__cell boss-staff-summary__cell_role_info ${isOpenClass}`}
-        >
+        <div className={`boss-staff-summary__cell boss-staff-summary__cell_role_info ${isOpenClass}`}>
           <div className="boss-staff-summary__info">
             <Summary
               count={rotaedOnThisWeek}
@@ -209,26 +182,16 @@ class StaffMemberItem extends React.Component {
               <HolidayItem />
             </Summary>
             <div className="boss-staff-summary__info-item boss-staff-summary__info-item_role_preferences">
-              <p className="boss-staff-summary__label boss-staff-summary__label_adjust_rd">
-                Preferences
-              </p>
+              <p className="boss-staff-summary__label boss-staff-summary__label_adjust_rd">Preferences</p>
               <div className="boss-summary">
                 <ul className="boss-summary__list">
                   <li className="boss-summary__item boss-summary__item_layout_row boss-summary__item_role_header">
-                    <p className="boss-summary__text boss-summary__text_context_row">
-                      Weekly Hours:
-                    </p>
-                    <p className="boss-summary__text boss-summary__text_marked">
-                      {weeklyHours}
-                    </p>
+                    <p className="boss-summary__text boss-summary__text_context_row">Weekly Hours:</p>
+                    <p className="boss-summary__text boss-summary__text_marked">{weeklyHours}</p>
                   </li>
                   <li className="boss-summary__item boss-summary__item_layout_row">
-                    <p className="boss-summary__text boss-summary__text_context_row">
-                      Day Preferences:
-                    </p>
-                    <p className="boss-summary__text boss-summary__text_marked">
-                      {dayPreferences}
-                    </p>
+                    <p className="boss-summary__text boss-summary__text_context_row">Day Preferences:</p>
+                    <p className="boss-summary__text boss-summary__text_marked">{dayPreferences}</p>
                   </li>
                 </ul>
               </div>

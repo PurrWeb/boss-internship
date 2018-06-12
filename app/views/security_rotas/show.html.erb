@@ -17,13 +17,25 @@
     week_rota_shifts,
     serializer: Api::V1::SecurityRota::RotaShiftSerializer,
   ),
+  weekSecurityVenueShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    week_security_venue_shifts,
+    serializer: Api::V1::SecurityRota::SecurityVenueShiftSerializer,
+  ),
   rotaShifts: ActiveModel::Serializer::CollectionSerializer.new(
     rota_shifts,
     serializer: Api::V1::SecurityRota::RotaShiftSerializer,
   ),
+  securityVenueShifts: ActiveModel::Serializer::CollectionSerializer.new(
+    security_venue_shifts,
+    serializer: Api::V1::SecurityRota::SecurityVenueShiftSerializer,
+  ),
   venues: ActiveModel::Serializer::CollectionSerializer.new(
     venues,
     serializer: Api::V1::SecurityRota::VenueSerializer,
+  ),
+  securityVenues: ActiveModel::Serializer::CollectionSerializer.new(
+    security_venues,
+    serializer: Api::V1::SecurityRota::SecurityVenueSerializer,
   ),
   holidays: ActiveModel::Serializer::CollectionSerializer.new(
     holidays,

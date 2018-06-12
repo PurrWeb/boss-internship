@@ -59,7 +59,7 @@ class AddMultipleShiftForm extends React.Component {
             <Field
               name="venueId"
               component={BossFormSelect}
-              options={this.props.venues.map(v => v.set('color', getVenueColor(v.get('id')))).toJS()}
+              options={this.props.venues.map(v => v.set('color', getVenueColor(v.get('id').split(`_`)[1]))).toJS()}
               clearable={false}
               optionValue="id"
               optionLabel="name"

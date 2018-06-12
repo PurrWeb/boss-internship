@@ -7,6 +7,9 @@ import { SubmissionError } from 'redux-form/immutable';
 import { addShift } from '../actions';
 
 class AddMultipleShift extends React.Component {
+  getVenues() {
+    return this.props.venues.map(venue => venue.set('id', `${venue.get('type')}_${venue.get('id')}`));
+  }
   render() {
     const { rotaDate, venues } = this.props;
 
@@ -22,7 +25,7 @@ class AddMultipleShift extends React.Component {
         initialValues={initialValues}
         rotaDate={rotaDate}
         rotas={this.props.rotas}
-        venues={this.props.venues}
+        venues={this.getVenues()}
       />
     );
   }

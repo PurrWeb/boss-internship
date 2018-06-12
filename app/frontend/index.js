@@ -46,6 +46,9 @@ registerComponent('PayrollReportsApp', PayrollReportsApp);
 import OpsDiaryApp from './apps/ops-diary';
 registerComponent('OpsDiaryApp', OpsDiaryApp);
 
+import SecurityVenuesApp from './apps/security-venues';
+registerComponent('SecurityVenuesApp', SecurityVenuesApp);
+
 import SecurityShiftRequestsApp from './apps/security-shift-requests';
 registerComponent('SecurityShiftRequestsApp', SecurityShiftRequestsApp);
 

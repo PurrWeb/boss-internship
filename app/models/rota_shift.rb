@@ -2,6 +2,8 @@ class RotaShift < ActiveRecord::Base
   SHIFT_TYPES = ['normal', 'standby']
   include Enableable
 
+  SHIFT_VENUE_TYPE = "normal".freeze
+
   belongs_to :creator, class_name: "User"
   belongs_to :disabled_by_user, class_name: "User"
   belongs_to :staff_member
@@ -26,6 +28,10 @@ class RotaShift < ActiveRecord::Base
 
   def date
     rota.andand.date
+  end
+
+  def venue_type
+    SHIFT_VENUE_TYPE
   end
 
   def venue

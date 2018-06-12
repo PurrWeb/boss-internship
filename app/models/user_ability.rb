@@ -128,6 +128,10 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can [:view, :create, :update], :security_venues do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can :view, :security_rota do
         user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
@@ -142,6 +146,10 @@ class UserAbility
         user.payroll_manager? || (
           user.has_effective_access_level?(AccessLevel.admin_access_level)
         )
+      end
+
+      can [:create, :destroy], :security_venue_shifts do
+        user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can :view, :accessory_requests_page do
@@ -433,6 +441,10 @@ class UserAbility
         else
           can_manage_rota?(user, rota_shift.rota)
         end
+      end
+
+      can [:view, :create, :update, :destroy], SecurityVenueShift do |rota_shift|
+        user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
       can :view, :security_shift_requests do

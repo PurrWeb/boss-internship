@@ -17,7 +17,7 @@ class RotaDailyGraphFilter extends React.Component {
               </p>
               <VenueSelect
                 selectedTypes={this.props.selectedTypes}
-                venueTypes={this.props.venueTypes}
+                venueTypes={this.props.venueTypes.toJS()}
                 onChange={this.props.onVenueChange}
               />
             </div>
@@ -31,7 +31,7 @@ class RotaDailyGraphFilter extends React.Component {
               </p>
               <VenueSelect
                 selectedTypes={this.props.selectedTypes}
-                venueTypes={this.props.venueTypes}
+                venueTypes={this.props.venueTypes.toJS()}
                 onChange={this.props.onVenueChange}
               />
             </div>

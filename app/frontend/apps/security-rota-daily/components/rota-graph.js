@@ -25,7 +25,7 @@ class RotaGraph extends React.Component {
         <div className="boss-rotas__graphs-item">
           <div className="boss-rotas__graphs-content">
             <div className="rota-chart">
-              <RotaGraphLegend venueTypes={this.props.venueTypes} />
+              <RotaGraphLegend venueTypes={this.props.venueTypes.toJS()} />
               <div className="rota-chart__inner">
                 <ReactIScroll iScroll={iScroll} options={scrollOptions}>
                   <RotaChart

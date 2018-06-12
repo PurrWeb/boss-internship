@@ -53,6 +53,11 @@ class AblyService
       result[:rota_shifts] = extracted_rota_shifts
     end
 
+    extracted_security_venue_shifts = (grouped_data[:security_venue_shifts] || {})[staff_member_id]
+    if (extracted_security_venue_shifts || []).count > 0
+      result[:security_venue_shifts] = extracted_security_venue_shifts
+    end
+
     extracted_staff_members = (grouped_data[:staff_members] || {})[staff_member_id]
     if (extracted_staff_members || []).count > 0
       result[:staff_members] = extracted_staff_members
@@ -77,6 +82,13 @@ class AblyService
           result[:rota_shifts] ||= {}
           result[:rota_shifts][staff_member.id] ||= []
           result[:rota_shifts][staff_member.id] << rota_shift
+        end
+      when :security_venue_shifts
+        entities.each_value do |security_venue_shift|
+          staff_member = security_venue_shift.staff_member
+          result[:security_venue_shifts] ||= {}
+          result[:security_venue_shifts][staff_member.id] ||= []
+          result[:security_venue_shifts][staff_member.id] << security_venue_shift
         end
       when :staff_members
         entities.each_value do |staff_member|
@@ -125,6 +137,11 @@ class AblyService
         records.each do |rota_shift|
           result[shifts_page_json_key]["updates"]["rotaShifts"] << Api::SecurityApp::V1::RotaShiftSerializer.new(rota_shift)
         end
+      when :security_venue_shifts
+        result[shifts_page_json_key]["updates"]["securityVenueShifts"] ||= []
+        records.each do |security_venue_shift|
+          result[shifts_page_json_key]["updates"]["securityVenueShifts"] << Api::SecurityApp::V1::SecurityVenueShiftSerializer.new(security_venue_shift)
+        end
       when :staff_members
         result[profile_page_json_key]["updates"]["staffMembers"] ||= []
         records.each do |staff_member|
@@ -146,7 +163,12 @@ class AblyService
       when :rota_shifts
         result[shifts_page_json_key]["deletes"]["rotaShifts"] ||= []
         records.each do |rota_shift|
-          result[shifts_page_json_key]["deletes"]["rotaShifts"] << rota_shift.id
+          result[shifts_page_json_key]["deletes"]["rotaShifts"] << "#{rota_shift.venue_type}_#{rota_shift.id}"
+        end
+      when :security_venue_shifts
+        result[shifts_page_json_key]["deletes"]["securityVenueShifts"] ||= []
+        records.each do |security_venue_shift|
+          result[shifts_page_json_key]["deletes"]["securityVenueShifts"] << "#{security_venue_shift.venue_type}_#{security_venue_shift.id}"
         end
       when :staff_members
         result[profile_page_json_key]["deletes"]["staffMembers"] ||= []

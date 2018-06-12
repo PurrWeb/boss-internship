@@ -1,5 +1,12 @@
 class Api::V1::SecurityRota::RotaShiftSerializer < ActiveModel::Serializer
-  attributes :id, :rota, :startsAt, :endsAt, :staffMemberId, :shiftType
+  attributes \
+    :id,
+    :rota,
+    :startsAt,
+    :endsAt,
+    :staffMemberId,
+    :shiftType,
+    :venueType
 
   def rota
     object.rota.id
@@ -19,5 +26,9 @@ class Api::V1::SecurityRota::RotaShiftSerializer < ActiveModel::Serializer
 
   def staffMemberId
     object.staff_member.id
+  end
+
+  def venueType
+    "normal"
   end
 end
