@@ -109,7 +109,7 @@ class FinanceReportsController < ApplicationController
     #TODO: Extract File Timestamp Format to somewhere
     timestamp_start = week.start_date.strftime('%d-%b-%Y')
     timestamp_end = week.end_date.strftime('%d-%b-%Y')
-    filename  = "#{venue.name.parameterize}_finance_report_#{timestamp_start}_#{timestamp_end}.pdf"
+    filename  = "#{venue.name.parameterize}_#{timestamp_start}_#{timestamp_end}.pdf"
     headers['Content-Disposition'] = "attachment; filename=#{filename}"
     render text: pdf.render, content_type: 'application/pdf'
   end
