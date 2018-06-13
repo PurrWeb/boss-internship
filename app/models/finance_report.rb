@@ -1,4 +1,8 @@
 class FinanceReport < ActiveRecord::Base
+  REPORT_STATUS_INCOMPLETE_STATUS = 'incomplete'
+  REPORT_STATUS_READY_STATUS = 'ready'
+  REPORT_STATUS_DONE_STATUS = 'done'
+
   belongs_to :staff_member
   belongs_to :venue
 
@@ -46,9 +50,9 @@ class FinanceReport < ActiveRecord::Base
 
   def status
     if new_record?
-      can_complete? ? 'ready' : 'incomplete'
+      can_complete? ? REPORT_STATUS_READY_STATUS : REPORT_STATUS_INCOMPLETE_STATUS
     else
-      'done'
+      REPORT_STATUS_DONE_STATUS
     end
   end
 
@@ -56,6 +60,7 @@ class FinanceReport < ActiveRecord::Base
     return false if !new_record?
     return false if !(venue.present? && week.present? && staff_member.present?)
     return false if week >= RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
+    return false unless staff_member.sage_id.present?
 
     pending_clock_in_days = ClockInDaysPendingConfirmationQuery.new(
       venue: venue

@@ -18,7 +18,8 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :totalHoursCount,
     :status,
     :netWagesCents,
-    :canSeeNetWages
+    :canSeeNetWages,
+    :staffMemberSageId
 
   def staffMemberId
     object.staff_member_id
@@ -87,5 +88,9 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
 
   def netWagesCents
     object.net_wages_cents if (canSeeNetWages && object.wage_payments.count > 0)
+  end
+
+  def staffMemberSageId
+    object.staff_member.sage_id
   end
 end

@@ -337,13 +337,14 @@ module Api
       def update_employment_details
         staff_member = StaffMember.find(params[:id])
         frontend_updates = FrontendUpdates.new
-        
+
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
           frontend_updates: frontend_updates
         ).update_employment_details({
           national_insurance_number: params["national_insurance_number"],
+          sage_id: params.fetch("sage_id"),
           hours_preference_note: params["hours_preference_note"],
           day_preference_note: params["day_preference_note"],
           starts_at: params.fetch("starts_at"),

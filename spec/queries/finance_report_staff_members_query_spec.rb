@@ -13,9 +13,9 @@ shared_examples "staff member has stuff on week" do
 
     specify 'staff member should be returned' do
       if _return_expectation
-        expect(query.all.map(&:id)).to eq([staff_member.id])
+        expect(query.to_a.map(&:id)).to eq([staff_member.id])
       else
-        expect(query.all.map(&:id)).to eq([])
+        expect(query.to_a.map(&:id)).to eq([])
       end
     end
   end
@@ -41,9 +41,9 @@ shared_examples "staff member has stuff on week" do
 
     specify 'staff member should be returned' do
       if _return_expectation
-        expect(query.all.map(&:id)).to eq([staff_member.id])
+        expect(query.to_a.map(&:id)).to eq([staff_member.id])
       else
-        expect(query.all.map(&:id)).to eq([])
+        expect(query.to_a.map(&:id)).to eq([])
       end
     end
   end
@@ -74,9 +74,9 @@ shared_examples "staff member has stuff on week" do
 
     specify 'staff member should be returned' do
       if _return_expectation
-        expect(query.all.map(&:id)).to eq([staff_member.id])
+        expect(query.to_a.map(&:id)).to eq([staff_member.id])
       else
-        expect(query.all.map(&:id)).to eq([])
+        expect(query.to_a.map(&:id)).to eq([])
       end
     end
   end
@@ -111,7 +111,7 @@ describe FinanceReportStaffMembersQuery do
   end
 
   specify 'staff member should be returned' do
-    expect(query.all.map(&:id)).to eq([staff_member.id])
+    expect(query.to_a.map(&:id)).to eq([staff_member.id])
   end
 
   context 'staff member is not associated with venue' do
@@ -121,7 +121,7 @@ describe FinanceReportStaffMembersQuery do
     end
 
     specify 'staff_member should not be returned' do
-      expect(query.all.map(&:id)).to_not eq([staff_member.id])
+      expect(query.to_a.map(&:id)).to_not eq([staff_member.id])
     end
 
     include_examples "staff member has stuff on week" do
@@ -144,7 +144,7 @@ describe FinanceReportStaffMembersQuery do
     end
 
     specify 'staff_member should not be returned' do
-      expect(query.all.map(&:id)).to_not eq([staff_member.id])
+      expect(query.to_a.map(&:id)).to_not eq([staff_member.id])
     end
 
     include_examples "staff member has stuff on week" do
@@ -169,7 +169,7 @@ describe FinanceReportStaffMembersQuery do
       end
 
       specify 'staff member should be returned' do
-        expect(query.all.map(&:id)).to eq([staff_member.id])
+        expect(query.to_a.map(&:id)).to eq([staff_member.id])
       end
 
       context 'owed hours are disabled' do
@@ -184,7 +184,7 @@ describe FinanceReportStaffMembersQuery do
         end
 
         specify 'staff member should not be returned' do
-          expect(query.all.map(&:id)).to_not eq([staff_member.id])
+          expect(query.to_a.map(&:id)).to_not eq([staff_member.id])
         end
       end
     end
@@ -206,7 +206,7 @@ describe FinanceReportStaffMembersQuery do
       end
 
       specify 'staff member should be returned' do
-        expect(query.all.map(&:id)).to eq([staff_member.id])
+        expect(query.to_a.map(&:id)).to eq([staff_member.id])
       end
 
       context 'holidays is disabled' do
@@ -221,7 +221,7 @@ describe FinanceReportStaffMembersQuery do
         end
 
         specify 'staff member should not be returned' do
-          expect(query.all.map(&:id)).to_not eq([staff_member.id])
+          expect(query.to_a.map(&:id)).to_not eq([staff_member.id])
         end
       end
     end
@@ -233,7 +233,7 @@ describe FinanceReportStaffMembersQuery do
     end
 
     specify 'staff_member should not be returned' do
-      expect(query.all.map(&:id)).to_not eq([staff_member.id])
+      expect(query.to_a.map(&:id)).to_not eq([staff_member.id])
     end
 
     include_examples "staff member has stuff on week" do

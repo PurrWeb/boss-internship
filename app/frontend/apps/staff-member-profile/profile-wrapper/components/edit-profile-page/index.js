@@ -39,6 +39,7 @@ const EditProfilePage = ({
   const employmentDetailsFormInitial = {
     master_venue: oFetch(staffMemberData, 'master_venue'),
     other_venues: oFetch(staffMemberData, 'other_venues'),
+    sage_id: oFetch(staffMemberData, 'sageId'),
     starts_at: safeMoment.uiDateParse(oFetch(staffMemberData, 'starts_at')),
     staff_type: oFetch(staffMemberData, 'staff_type'),
     sia_badge_number: oFetch(staffMemberData, 'sia_badge_number'),

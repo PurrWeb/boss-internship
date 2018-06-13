@@ -59,6 +59,8 @@ class StaffMember < ActiveRecord::Base
 
   validates :password, length: (6..32), confirmation: true, if: :setting_password?
 
+  auto_strip_attributes :sage_id, convert_non_breaking_spaces: true, squish: true
+
   # Transient attribute used to preserve image uploads
   # during form resubmissions
   attr_accessor \

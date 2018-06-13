@@ -37,6 +37,12 @@ export const appRoutes = {
         var payRateFilter = oFetch(options, "payRateFilter");
         return `/finance_reports/${utils.formatRotaUrlDate(date)}.pdf?venue_id=${venueId}&pay_rate_filter=${payRateFilter}`;
     },
+    financeReportsCSVExport: function(options){
+      var date = oFetch(options, "date");
+      var venueId = oFetch(options, "venueId");
+      var payRateFilter = oFetch(options, "payRateFilter");
+      return `/finance_reports/${utils.formatRotaUrlDate(date)}.csv?venue_id=${venueId}&pay_rate_filter=${payRateFilter}`;
+    },
     payrollReportsPdfDownload: function(options){
         var date = oFetch(options, "date");
         var venueId = oFetch(options, "venueId");

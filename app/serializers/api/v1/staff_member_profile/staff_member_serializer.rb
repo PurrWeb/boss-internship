@@ -39,7 +39,8 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :verified_at,
              :password_set_at,
              :is_flagged,
-             :is_weekly_payrate
+             :is_weekly_payrate,
+             :sageId
 
   def date_of_birth
     UIRotaDate.format(object.date_of_birth) if object.date_of_birth.present?
@@ -161,5 +162,9 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
 
   def is_weekly_payrate
     object.pay_rate.weekly?
+  end
+
+  def sageId
+    object.sage_id
   end
 end

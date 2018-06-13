@@ -12,7 +12,8 @@ RSpec.describe 'Update Employment Details' do
       pay_rate: old_pay_rate,
       staff_type: old_staff_type,
       starts_at: old_starts_at,
-      national_insurance_number: old_national_insurance_number
+      national_insurance_number: old_national_insurance_number,
+      sage_id: old_sage_id
     }
     EmploymentStatusApiEnum.new(value: old_employment_status).to_params do |param, value|
       create_params[param] = value
@@ -47,7 +48,8 @@ RSpec.describe 'Update Employment Details' do
       starts_at: UIRotaDate.format(new_starts_at),
       employment_status: new_employment_status,
       pay_rate_id: new_pay_rate.id,
-      national_insurance_number: new_national_insurance_number
+      national_insurance_number: new_national_insurance_number,
+      sage_id: new_sage_id,
     }
   end
   let(:response) do
@@ -74,6 +76,8 @@ RSpec.describe 'Update Employment Details' do
   let(:new_pay_rate) { FactoryGirl.create(:pay_rate) }
   let(:old_national_insurance_number) { 'SE350280A' }
   let(:new_national_insurance_number) { 'JM352380D' }
+  let(:new_sage_id) { 'N3WS@GE!D' }
+  let(:old_sage_id) { '0LDS@GE!D' }
 
   before do
     old_master_venue

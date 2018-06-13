@@ -32,7 +32,7 @@ class FinanceReportTable
       start_date: week.start_date,
       end_date: week.end_date,
       filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
-    ).all
+    ).to_a
 
     ActiveRecord::Associations::Preloader.new.preload(staff_members, [:pay_rate])
 

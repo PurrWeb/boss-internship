@@ -67,6 +67,7 @@ class ReportItem extends Component {
     const staffMemberId = oFetch(report, 'staffMemberId');
     const netWagesCents = oFetch(report, 'netWagesCents');
     const canSeeNetWages = oFetch(report, 'canSeeNetWages');
+    const sageId = oFetch(report, 'staffMemberSageId');
 
     const statusClassName = classNames({
       'boss-table__text': true,
@@ -92,6 +93,22 @@ class ReportItem extends Component {
             </a>
           </p>
         </div>
+        { sageId && <div className="boss-table__cell">
+          <div className="boss-table__text">
+            {sageId}
+          </div>
+        </div> }
+        { !sageId && <div className="boss-table__cell boss-table__cell_state_alert">
+            <a href={appRoutes.staffMember(staffMemberId)} >
+              <p className="boss-table__text boss-table__text_state_alert">
+                <span className="boss-table__tooltip">
+                  <span className="boss-tooltip boss-tooltip_role_alert">
+                    <span className="boss-tooltip__icon"></span>
+                  </span>
+                </span>
+              </p>
+            </a>
+          </div> }
         {this.renderWeekDaysCells()}
         <div className="boss-table__cell">
           <p className="boss-table__text">{weeklyHours}</p>

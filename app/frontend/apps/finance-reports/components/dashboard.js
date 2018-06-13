@@ -41,6 +41,8 @@ class Dashboard extends Component {
       'boss-page-dashboard__meta-item boss-page-dashboard__meta-item_type_faded boss-page-dashboard__meta-item_role_date boss-page-dashboard__meta-item_role_popover': true,
       'boss-page-dashboard__meta-item_state_opened': this.state.isCalendarOpen,
     });
+    const canExportToCSV = oFetch(this.props, 'canExportToCSV');
+
     return (
       <div className="boss-page-main__dashboard">
         <div className="boss-page-main__inner">
@@ -48,12 +50,16 @@ class Dashboard extends Component {
             <div className="boss-page-dashboard__group">
               <h1 className="boss-page-dashboard__title">{title}</h1>
               <div className="boss-page-dashboard__buttons-group">
-                <a
-                  href={appRoutes.financeReportsPdfDownload({ date, venueId, payRateFilter })}
-                  className="boss-button boss-button_role_download boss-page-dashboard__button"
-                >
+
+                <a href={appRoutes.financeReportsPdfDownload({ date, venueId, payRateFilter })}
+                  className="boss-button boss-button_role_download boss-page-dashboard__button" >
                   Download PDF
                 </a>
+                { canExportToCSV && <a href={appRoutes.financeReportsCSVExport({ date, venueId, payRateFilter })}
+                  className="boss-button boss-button_role_download boss-page-dashboard__button"
+                >
+                  Export CSV
+                </a> }
               </div>
             </div>
             <div className="boss-page-dashboard__group">

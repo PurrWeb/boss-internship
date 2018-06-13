@@ -19,6 +19,9 @@ class FinanceReportsController < ApplicationController
       format.pdf do
         render_finance_reports_pdf
       end
+      format.any(:csv) do
+        render_finance_reports_csv
+      end
     end
   end
 
@@ -32,17 +35,20 @@ class FinanceReportsController < ApplicationController
       start_date: week.start_date,
       end_date: week.end_date,
       filter_by_weekly_pay_rate: false
-    ).all
+    ).to_a
 
     staff_types = StaffType.all
     staff_members_with_reports = StaffMember.where(id: staff_members.map(&:id))
                                   .weekly_finance_reports(week.start_date)
-                                  .includes([:name, :staff_type])
+
     reports = FinanceReport.joins(:staff_member)
                 .where(staff_member: staff_members)
-                .where(week_start: week.start_date).all
+                .where(week_start: week.start_date)
+                .includes(staff_member: [:name, :staff_type])
+                .all
 
-    staffs_without_requests = staff_members - staff_members_with_reports
+    staffs_without_requests = StaffMember.where(id: (staff_members - staff_members_with_reports).map(&:id)).
+      includes([:name, :staff_type, :pay_rate, :master_venue])
 
     generated_reports = staffs_without_requests.map do |staff_member|
       GenerateFinanceReportData.new(
@@ -79,7 +85,7 @@ class FinanceReportsController < ApplicationController
       start_date: week.start_date,
       end_date: week.end_date,
       filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
-    ).all
+    ).to_a
 
     pdf = FinanceReportPDF.new(
       report_title: 'Finance Report',
@@ -106,9 +112,37 @@ class FinanceReportsController < ApplicationController
     #TODO: Extract File Timestamp Format to somewhere
     timestamp_start = week.start_date.strftime('%d-%b-%Y')
     timestamp_end = week.end_date.strftime('%d-%b-%Y')
-    filename  = "#{venue.name.parameterize}_finance_report_#{timestamp_start}_#{timestamp_end}.pdf"
+    filename  = "#{venue.name.parameterize}_#{timestamp_start}_#{timestamp_end}.pdf"
     headers['Content-Disposition'] = "attachment; filename=#{filename}"
     render text: pdf.render, content_type: 'application/pdf'
+  end
+
+  def render_finance_reports_csv
+    authorize!(:view, :finance_reports)
+
+    week = week_from_params
+    venue = venue_from_params
+    filter_by_weekly_pay_rate = params.fetch(:pay_rate_filter) == 'weekly'
+
+    staff_members = FinanceReportStaffMembersQuery.new(
+      venue: venue,
+      start_date: week.start_date,
+      end_date: week.end_date,
+      filter_by_weekly_pay_rate: filter_by_weekly_pay_rate,
+      with_sage_id_only: true
+    ).to_a
+
+    csv = SageFinanceReportExportCSV.new({
+      staff_members: staff_members,
+      week: week
+    })
+
+    #TODO: Extract File Timestamp Format to somewhere
+    timestamp_start = week.start_date.strftime('%d-%b-%Y')
+    timestamp_end = week.end_date.strftime('%d-%b-%Y')
+    filename  = "#{venue.name.parameterize}_finance_report_#{timestamp_start}_#{timestamp_end}.csv"
+    headers['Content-Disposition'] = "attachment; filename=#{filename}"
+    render text: csv.to_s, content_type: 'text/csv'
   end
 
   private
