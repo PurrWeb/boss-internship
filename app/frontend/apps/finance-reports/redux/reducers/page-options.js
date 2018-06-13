@@ -8,10 +8,13 @@ const initialState = Immutable.Map();
 export default handleActions(
   {
     [types.LOAD_INITIAL_DATA]: (state, action) => {
-      const startDate = oFetch(action, 'payload.startDate');
-      const endDate = oFetch(action, 'payload.endDate');
-      const date = oFetch(action, 'payload.date');
-      const venueId = oFetch(action, 'payload.venue.id');
+      const payload = oFetch(action, 'payload');
+
+      const startDate = oFetch(payload, 'startDate');
+      const endDate = oFetch(payload, 'endDate');
+      const date = oFetch(payload, 'date');
+      const venue = oFetch(payload, 'venue');
+      const venueId = oFetch(venue, 'id');
       const payRateFilter = 'all';
       return Immutable.fromJS({ date, startDate, endDate, venueId, payRateFilter });
     },

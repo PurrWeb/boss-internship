@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Page from '../components/page';
 import { getStaffTypesWithFinanceReports, getWeekDates, getAllReady } from '../selectors';
+import oFetch from 'o-fetch'
 import {
   changePayRateFilter,
   markReportCompleted,
@@ -9,16 +10,18 @@ import {
 } from '../redux/actions';
 
 const mapStateToProps = state => {
+  const stateJS = state.toJS();
+  const page = oFetch(stateJS, 'page')
   return {
-    date: state.getIn(['page', 'date']),
-    venueId: state.getIn(['page', 'venueId']),
-    startDate: state.getIn(['page', 'startDate']),
-    endDate: state.getIn(['page', 'endDate']),
-    venueId: state.getIn(['page', 'venueId']),
+    date: oFetch(page, 'date'),
+    venueId: oFetch(page, 'venueId'),
+    startDate: oFetch(page, 'startDate'),
+    endDate: oFetch(page, 'endDate'),
+    venueId: oFetch(page, 'venueId'),
     staffTypesWithFinanceReports: getStaffTypesWithFinanceReports(state),
     weekDates: getWeekDates(state),
     allReady: getAllReady(state),
-    payRateFilter: state.getIn(['page', 'payRateFilter']),
+    payRateFilter: oFetch(page, 'payRateFilter')
   };
 };
 

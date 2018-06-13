@@ -41,8 +41,7 @@ class Dashboard extends Component {
       'boss-page-dashboard__meta-item boss-page-dashboard__meta-item_type_faded boss-page-dashboard__meta-item_role_date boss-page-dashboard__meta-item_role_popover': true,
       'boss-page-dashboard__meta-item_state_opened': this.state.isCalendarOpen,
     });
-    //TODO: Pleceholder. Replace with real value.
-    const canExportToCSV = true;
+    const canExportToCSV = oFetch(this.props, 'canExportToCSV');
 
     return (
       <div className="boss-page-main__dashboard">

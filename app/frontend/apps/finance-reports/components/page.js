@@ -10,6 +10,8 @@ import CardList from './card-list';
 import ReportList from './report-list';
 import ReportItem from './report-item';
 import Confirm from './confirm';
+import * as _ from 'lodash';
+import { FINANCE_REPORT_STATUS_DONE_STATUS } from '../constants';
 
 class Page extends Component {
   handleDateChange = selection => {
@@ -63,6 +65,35 @@ class Page extends Component {
       .catch(hideModal);
   };
 
+  canExportToCSV(options){
+    const staffTypesWithFinanceReports = oFetch(options, 'staffTypesWithFinanceReports');
+    const staffTypesJS = staffTypesWithFinanceReports.toJS();
+
+    const staffMembersWithSageIdByIdJS = _.reduce(staffTypesJS, (acc, staffType) => {
+      _.forEach(oFetch(staffType, 'staffMembers'), (value, key) => {
+        //values are always a 1 element array for some reason
+        const staffMember = value[0];
+        if(staffMember.sageId) {
+          acc[key] = staffMember;
+        }
+      });
+      return acc;
+    }, {});
+    const sageIdStaffMemberReportsJS = _.reduce(staffTypesJS, (acc, staffType) => {
+      return acc.concat(
+        _.filter(oFetch(staffType, 'reports'), (report) => {
+          const staffMemberId = oFetch(report, 'staffMemberId');
+          return _.includes(_.keys(staffMembersWithSageIdByIdJS), staffMemberId.toString())
+        })
+      );
+    }, []);
+
+    return (oFetch(sageIdStaffMemberReportsJS, 'length') > 0) &&
+      _.every(sageIdStaffMemberReportsJS, (report) => {
+        return oFetch(report, 'status') === FINANCE_REPORT_STATUS_DONE_STATUS
+      });
+  }
+
   render() {
     const startDate = oFetch(this.props, 'startDate');
     const endDate = oFetch(this.props, 'endDate');
@@ -87,6 +118,8 @@ class Page extends Component {
       )
       .toJS();
 
+    const canExportToCSV = this.canExportToCSV({ staffTypesWithFinanceReports });
+
     return (
       <div className="boss-page-main boss-page-main_adjust_finance-reports">
         <Dashboard
@@ -98,6 +131,7 @@ class Page extends Component {
           payRateFilter={payRateFilter}
           onDateChange={this.handleDateChange}
           onPayRateChange={this.handlePayRateChange}
+          canExportToCSV={canExportToCSV}
         />
         <CardList
           staffTypesWithFinanceReports={staffTypesWithFinanceReports}
