@@ -3,6 +3,34 @@ class FinanceReportStatusService
     @finance_report = finance_report
   end
 
+  def call
+    days_needing_completion = days_with_pending_hour_acceptances.inject({}) do |acc, day|
+      acc[UIRotaDate.format(day.date)] ||= []
+      acc[UIRotaDate.format(day.date)] << "Pending hours acceptance period"
+      acc
+    end
+
+    days_needing_completion = days_with_incomplete_clock_in_periods.inject(days_needing_completion) do |acc, day|
+      acc[UIRotaDate.format(day.date)] ||= []
+      acc[UIRotaDate.format(day.date)] << "Incomplete clock in period"
+      acc
+    end
+
+    status_text = if finance_report.new_record?
+      can_complete?(days_needing_completion: days_needing_completion) ? 'ready' : 'incomplete'
+    else
+      'done'
+    end
+
+    {
+      can_complete: can_complete?(days_needing_completion: days_needing_completion),
+      status_text: status_text,
+      days_needing_completion: days_needing_completion
+    }
+  end
+
+  private
+
   def staff_member_clocking_days
     InRangeQuery.new(
       relation: ClockInDay.where(venue: finance_report.venue, staff_member: finance_report.staff_member),
@@ -29,32 +57,6 @@ class FinanceReportStatusService
     ClockInDay.where(
       id: incomplete_clock_in_periods.map(&:clock_in_day_id)
     )
-  end
-
-  def call
-    days_needing_completion = days_with_pending_hour_acceptances.inject({}) do |acc, day|
-      acc[UIRotaDate.format(day.date)] ||= []
-      acc[UIRotaDate.format(day.date)] << "Pending hours acceptance period"
-      acc
-    end
-
-    days_needing_completion = days_with_incomplete_clock_in_periods.inject(days_needing_completion) do |acc, day|
-      acc[UIRotaDate.format(day.date)] ||= []
-      acc[UIRotaDate.format(day.date)] << "Incomplete clock in period"
-      acc
-    end
-
-    status_text = if finance_report.new_record?
-      can_complete?(days_needing_completion: days_needing_completion) ? 'ready' : 'incomplete'
-    else
-      'done'
-    end
-
-    {
-      can_complete: can_complete?(days_needing_completion: days_needing_completion),
-      status_text: status_text,
-      days_needing_completion: days_needing_completion
-    }
   end
 
   def can_complete?(days_needing_completion:)
