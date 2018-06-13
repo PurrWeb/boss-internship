@@ -58,7 +58,7 @@ class Dashboard extends Component {
                 { canExportToCSV && <a href={appRoutes.financeReportsCSVExport({ date, venueId, payRateFilter })}
                   className="boss-button boss-button_role_download boss-page-dashboard__button"
                 >
-                  Export to CSV
+                  Export CSV
                 </a> }
               </div>
             </div>
