@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180611142325) do
+ActiveRecord::Schema.define(version: 20180614155503) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -425,6 +425,8 @@ ActiveRecord::Schema.define(version: 20180611142325) do
     t.integer  "kiwi_fruits",        limit: 4, null: false
     t.integer  "vanilla_pods",       limit: 4, null: false
     t.integer  "edible_flowers",     limit: 4, null: false
+    t.integer  "green_grapes",       limit: 4, null: false
+    t.integer  "red_grapes",         limit: 4, null: false
   end
 
   add_index "fruit_orders", ["venue_id"], name: "index_fruit_orders_on_venue_id", using: :btree
