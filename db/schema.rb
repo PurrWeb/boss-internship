@@ -1177,6 +1177,7 @@ ActiveRecord::Schema.define(version: 20180614155503) do
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
   add_index "staff_members", ["name_id"], name: "index_staff_members_on_name_id", using: :btree
+  add_index "staff_members", ["date_of_birth"], name: "index_staff_members_on_date_of_birth", using: :btree
   add_index "staff_members", ["notified_of_sia_expiry_at"], name: "index_staff_members_on_notified_of_sia_expiry_at", using: :btree
   add_index "staff_members", ["pay_rate_id"], name: "index_staff_members_on_pay_rate_id", using: :btree
   add_index "staff_members", ["phone_number"], name: "index_staff_members_on_phone_number", using: :btree
