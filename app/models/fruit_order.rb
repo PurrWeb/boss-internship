@@ -37,7 +37,9 @@ class FruitOrder < ActiveRecord::Base
     :cranberries,
     :kiwi_fruits,
     :vanilla_pods,
-    :edible_flowers
+    :edible_flowers,
+    :red_grapes,
+    :green_grapes
   ]
 
   include Statesman::Adapters::ActiveRecordQueries
@@ -141,7 +143,9 @@ class FruitOrder < ActiveRecord::Base
       cranberries: 'Cranberries (Punnet)',
       kiwi_fruits: 'Kiwi Fruits (Each)',
       vanilla_pods: 'Vanilla Pods (10x Pods)',
-      edible_flowers: 'Edible Flowers (30g Tub)'
+      edible_flowers: 'Edible Flowers (30g Tub)',
+      red_grapes: 'Red Grapes (Punnet)',
+      green_grapes: 'Green Grapes (Punnet)'
     }.fetch(property)
   end
 
