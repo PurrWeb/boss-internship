@@ -1,4 +1,5 @@
 import React from 'react';
+import oFetch from 'o-fetch';
 
 import EnableProfileForm from './enable-profile-form';
 import moment from 'moment';
@@ -41,7 +42,7 @@ const EnableProfilePage = ({
     employmentStatus: staffMember.get('status_statement'),
     siaBadgeNumber: staffMember.get('sia_badge_number'),
     siaBadgeExpiryDate: siaBadgeExpiryDate,
-    sageId: oFetch(staffMemberData, 'sage_id')
+    sageId: oFetch(staffMemberData, 'sageId')
   }
   return (
     <EnableProfileForm
