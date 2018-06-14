@@ -8,6 +8,34 @@ class PayRate < ActiveRecord::Base
   NAME_21_TO_24_ENDING = "21-24"
   NAME_25_PLUS_ENDING  = "25+"
 
+  NORMAL_18_20_PAY_RATE = 'Age 18-20'
+  NORMAL_21_24_PAY_RATE = 'Age 21-24'
+  NORMAL_25_PLUS_PAY_RATE = 'Age 25+'
+
+  BAR_SUPERVISOR_PAY_RATE = 'Bar Supervisor'
+  BAR_SUPERVISOR_25_PLUS_PAY_RATE = 'Bar Supervisor 25+'
+
+  BOLTON_LEVEL_18_20_PAY_RATE = 'Bolton - Level - 18-20'
+  BOLTON_LEVEL_21_24_PAY_RATE = 'Bolton - Level - 21-24'
+  BOLTON_LEVEL_25_PLUS_PAY_RATE = 'Bolton - Level - 25+'
+
+  PAY_RATE_GROUPS = {
+    normal: [
+      PayRate::NORMAL_18_20_PAY_RATE,
+      PayRate::NORMAL_21_24_PAY_RATE,
+      PayRate::NORMAL_25_PLUS_PAY_RATE
+    ],
+    bar_supervisor: [
+      PayRate::BAR_SUPERVISOR_PAY_RATE,
+      PayRate::BAR_SUPERVISOR_25_PLUS_PAY_RATE
+    ],
+    bolton: [
+      PayRate::BOLTON_LEVEL_18_20_PAY_RATE,
+      PayRate::BOLTON_LEVEL_21_24_PAY_RATE,
+      PayRate::BOLTON_LEVEL_25_PLUS_PAY_RATE
+    ]
+  }
+
   include ActionView::Helpers::NumberHelper
   include Enableable
 
