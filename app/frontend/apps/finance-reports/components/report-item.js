@@ -41,14 +41,16 @@ class ReportItem extends Component {
         const tooltipContent = <span><a target="_blank" href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)}>{daysNeedingCompletion[weekDate].join(', ')}</a></span>;
         return (
           <div key={index} className={this.getCellClassName(true)} style={cellStyle}>
-            <p className={this.getTextClassName(true)}>-</p>
+            <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className={`${this.getTextClassName(true)} boss-table__link`}>
+              {dayHoursCount}
+            </a>
             {this.renderTooltip(tooltipContent)}
           </div>
         );
       } else {
         return (
           <div key={index} className={this.getCellClassName()} style={cellStyle}>
-            <p className={this.getTextClassName()}>
+            <p style={{marginBottom: 0}} className={this.getTextClassName()}>
               <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className={`${this.getTextClassName()} boss-table__link`}>
                 {dayHoursCount}
               </a>
@@ -87,7 +89,6 @@ class ReportItem extends Component {
         position="right"
         interactive
         html={content}
-        style={{ marginLeft: 5, marginBottom: 7 }}
       >
         <span className="boss-table__tooltip">
           <span className="boss-tooltip boss-tooltip_role_alert">
