@@ -1,15 +1,7 @@
-class StaffMemberPayRateCheck
+class StaffMemberRealPayRate
   def initialize(now: Time.now, staff_member:)
     @now = now
     @staff_member = staff_member
-  end
-
-  def pay_rate_id_by_name(pay_rate_name:)
-    pay_rate = PayRate.find_by(name: pay_rate_name)
-    unless pay_rate.present?
-      raise "PayRate (#{pay_rate_name}) doesn't present in data base"
-    end
-    pay_rate.id
   end
 
   def call
@@ -25,6 +17,7 @@ class StaffMemberPayRateCheck
     end
   end
 
+  private
   def pay_rate_from_normal_group
     case staff_member_age
     when 18..20
@@ -62,16 +55,17 @@ class StaffMemberPayRateCheck
     end
   end
 
-  private
+  def pay_rate_by_name(pay_rate_name:)
+    pay_rate = PayRate.find_by(name: pay_rate_name)
+    unless pay_rate.present?
+      raise "PayRate (#{pay_rate_name}) doesn't present in data base"
+    end
+    pay_rate
+  end
 
   def new_payrate_data(new_pay_rate_name:)
     if new_pay_rate_name != staff_member_pay_rate_name
-      {
-        name: new_pay_rate_name,
-        id: pay_rate_id_by_name(pay_rate_name: new_pay_rate_name),
-        was: staff_member_pay_rate_name,
-        age: staff_member_age
-      }
+      pay_rate_by_name(pay_rate_name: new_pay_rate_name)
     else
       nil
     end
