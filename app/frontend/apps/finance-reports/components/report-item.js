@@ -65,7 +65,7 @@ class ReportItem extends Component {
     const isIncomplete = status === 'incomplete';
     return classNames({
       'boss-table__cell': true,
-      'boss-table__cell_state_alert': isIncomplete && hasIncompleteDay,
+      'boss-table__cell_state_alert': hasIncompleteDay,
     });
   }
 
@@ -75,7 +75,7 @@ class ReportItem extends Component {
     const isIncomplete = status === 'incomplete';
     return classNames({
       'boss-boss-table__text': true,
-      'boss-table__text_state_alert': isIncomplete && hasIncompleteDay,
+      'boss-table__text_state_alert': hasIncompleteDay,
     });
   }
 
@@ -116,13 +116,15 @@ class ReportItem extends Component {
     const netWagesCents = oFetch(report, 'netWagesCents');
     const canSeeNetWages = oFetch(report, 'canSeeNetWages');
     const sageId = oFetch(report, 'staffMemberSageId');
+    const daysNeedingCompletion = oFetch(report, 'status.days_needing_completion');
 
     const isIncomplete = status === 'incomplete';
+    const hasIncompleteDays = Object.values(daysNeedingCompletion).length > 0;
 
     const statusClassName = classNames({
       'boss-table__text': true,
       'boss-table__text_role_pending-status': status === 'ready',
-      'boss-table__text_role_alert-status': isIncomplete,
+      'boss-table__text_role_alert-status': isIncomplete || hasIncompleteDays,
       'boss-table__text_role_success-status': status === 'done',
     });
     const fullNameCellClassName = classNames({
@@ -132,7 +134,7 @@ class ReportItem extends Component {
 
     const rowClassName = classNames({
       'boss-table__row': true,
-      'boss-table__row_state_alert': isIncomplete,
+      'boss-table__row_state_alert': hasIncompleteDays,
     });
 
     return (
@@ -258,7 +260,7 @@ ReportItem.propTypes = {
     staffMemberName: PropTypes.string.isRequired,
     acessories: PropTypes.number.isRequired,
     payRateDescription: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
+    status: PropTypes.object.isRequired,
   }).isRequired,
   weekDates: ImmutablePropTypes.list.isRequired,
   onMarkCompleted: PropTypes.func.isRequired,
