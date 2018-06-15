@@ -1,0 +1,2 @@
+class PayRateException < StandardError
+end
