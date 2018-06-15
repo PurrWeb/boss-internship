@@ -4,7 +4,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import oFetch from 'o-fetch';
 import classNames from 'classnames';
 import utils from '~/lib/utils';
+import safeMoment from '~/lib/safe-moment';
 import { appRoutes } from '~/lib/routes';
+import { Tooltip } from 'react-tippy';
+
+const cellStyle = { flexDirection: 'row', alignItems: 'center' };
 
 class ReportItem extends Component {
   renderWeekDaysCells() {
@@ -18,6 +22,10 @@ class ReportItem extends Component {
     const sundayHoursCount = utils.round(oFetch(report, 'sundayHoursCount'), 2);
     const staffMemberId = oFetch(this.props, 'report.staffMemberId');
     const weekDates = oFetch(this.props, 'weekDates');
+    const status = oFetch(report, 'status.status_text');
+    const canComplete = oFetch(report, 'status.can_complete');
+    const daysNeedingCompletion = oFetch(report, 'status.days_needing_completion');
+    const isIncomplete = status === 'incomplete';
 
     return [
       mondayHoursCount,
@@ -29,18 +37,21 @@ class ReportItem extends Component {
       sundayHoursCount,
     ].map((dayHoursCount, index) => {
       const weekDate = weekDates.get(index);
-
-      if (dayHoursCount === 0) {
+      if (canComplete === false && daysNeedingCompletion[weekDate]) {
+        const tooltipContent = <span><a target="_blank" href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)}>{daysNeedingCompletion[weekDate].join(', ')}</a></span>;
         return (
-          <div key={index} className="boss-table__cell">
-            <p className="boss-table__text">-</p>
+          <div key={index} className={this.getCellClassName(true)} style={cellStyle}>
+            <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className={`${this.getTextClassName(true)} boss-table__link`}>
+              {dayHoursCount}
+            </a>
+            {this.renderTooltip(tooltipContent)}
           </div>
         );
       } else {
         return (
-          <div key={index} className="boss-table__cell">
-            <p className="boss-table__text">
-              <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className="boss-table__link">
+          <div key={index} className={this.getCellClassName()} style={cellStyle}>
+            <p style={{marginBottom: 0}} className={this.getTextClassName()}>
+              <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className={`${this.getTextClassName()} boss-table__link`}>
                 {dayHoursCount}
               </a>
             </p>
@@ -50,13 +61,51 @@ class ReportItem extends Component {
     });
   }
 
+  getCellClassName(hasIncompleteDay = false) {
+    const report = oFetch(this.props, 'report');
+    const status = oFetch(report, 'status.status_text');
+    const isIncomplete = status === 'incomplete';
+    return classNames({
+      'boss-table__cell': true,
+      'boss-table__cell_state_alert': hasIncompleteDay,
+    });
+  }
+
+  getTextClassName(hasIncompleteDay = false) {
+    const report = oFetch(this.props, 'report');
+    const status = oFetch(report, 'status.status_text');
+    const isIncomplete = status === 'incomplete';
+    return classNames({
+      'boss-boss-table__text': true,
+      'boss-table__text_state_alert': hasIncompleteDay,
+    });
+  }
+
+  renderTooltip(content) {
+    return (
+      <Tooltip
+        arrow
+        theme="light"
+        position="right"
+        interactive
+        html={content}
+      >
+        <span className="boss-table__tooltip">
+          <span className="boss-tooltip boss-tooltip_role_alert">
+            <span className="boss-tooltip__icon" />
+          </span>
+        </span>
+      </Tooltip>
+    );
+  }
+
   render() {
     const report = oFetch(this.props, 'report');
     const fullName = oFetch(report, 'staffMemberName');
     const weeklyHours = utils.round(oFetch(report, 'weeklyHours'), 2);
     const owedHours = utils.round(oFetch(report, 'owedHours'), 2);
 
-    const status = oFetch(report, 'status');
+    const status = oFetch(report, 'status.status_text');
     const acessories = utils.round(oFetch(report, 'acessories'), 2);
     const acessoriesColor = utils.colorizedAmount(acessories);
     const payRateDescription = oFetch(report, 'payRateDescription');
@@ -68,11 +117,15 @@ class ReportItem extends Component {
     const netWagesCents = oFetch(report, 'netWagesCents');
     const canSeeNetWages = oFetch(report, 'canSeeNetWages');
     const sageId = oFetch(report, 'staffMemberSageId');
+    const daysNeedingCompletion = oFetch(report, 'status.days_needing_completion');
+
+    const isIncomplete = status === 'incomplete';
+    const hasIncompleteDays = Object.values(daysNeedingCompletion).length > 0;
 
     const statusClassName = classNames({
       'boss-table__text': true,
       'boss-table__text_role_pending-status': status === 'ready',
-      'boss-table__text_role_alert-status': status === 'incomplete',
+      'boss-table__text_role_alert-status': isIncomplete || hasIncompleteDays,
       'boss-table__text_role_success-status': status === 'done',
     });
     const fullNameCellClassName = classNames({
@@ -80,8 +133,13 @@ class ReportItem extends Component {
       'boss-table__text_indicator_accessory': acessories !== 0,
     });
 
+    const rowClassName = classNames({
+      'boss-table__row': true,
+      'boss-table__row_state_alert': hasIncompleteDays,
+    });
+
     return (
-      <div className="boss-table__row">
+      <div className={rowClassName}>
         <div className="boss-table__cell">
           <p className={fullNameCellClassName}>
             <a
@@ -110,48 +168,53 @@ class ReportItem extends Component {
             </a>
           </div> }
         {this.renderWeekDaysCells()}
-        <div className="boss-table__cell">
-          <p className="boss-table__text">{weeklyHours}</p>
+        <div className={this.getCellClassName()} style={cellStyle}>
+          <p className={this.getTextClassName()}>{weeklyHours}</p>
         </div>
         {owedHours === 0 ? (
-          <div className="boss-table__cell">
-            <p className="boss-table__text">{owedHours}</p>
+          <div className={this.getCellClassName()} style={cellStyle}>
+            <p className={this.getTextClassName()}>{owedHours}</p>
           </div>
         ) : (
-          <div className="boss-table__cell">
-            <a href={appRoutes.staffMemberOwedHours(staffMemberId)} className="boss-table__link">
+          <div className={this.getCellClassName()} style={cellStyle}>
+            <a href={appRoutes.staffMemberOwedHours(staffMemberId)} className={`${this.getTextClassName()} boss-table__link`}>
               {owedHours}
             </a>
           </div>
         )}
 
-        <div className="boss-table__cell">
+        <div className={this.getCellClassName()} style={cellStyle}>
           {acessories === 0 ? (
-            <p className="boss-table__text">
-              {utils.moneyFormat(acessories)}
-            </p>
+            <p className={this.getTextClassName()}>{utils.moneyFormat(acessories)}</p>
           ) : (
-            <a href={appRoutes.staffMemberAccessories(staffMemberId)} className="boss-table__text" style={{ color: acessoriesColor }}>
+            <a
+              href={appRoutes.staffMemberAccessories(staffMemberId)}
+              className={this.getTextClassName()}
+              style={{ color: acessoriesColor }}
+            >
               {utils.moneyFormat(acessories)}
             </a>
           )}
         </div>
-        <div className="boss-table__cell">
-          <p className="boss-table__text">{payRateDescription}</p>
+        <div className={this.getCellClassName()} style={cellStyle}>
+          <p className={this.getTextClassName()}>{payRateDescription}</p>
         </div>
-        <div className="boss-table__cell">
-          <p className="boss-table__text boss-table__text_role_important">{totalHoursCount}</p>
+        <div className={this.getCellClassName()} style={cellStyle}>
+          <p className={`${this.getTextClassName()} boss-table__text_role_important`}>{totalHoursCount}</p>
         </div>
-        <div className="boss-table__cell">
-          <p className="boss-table__text">{utils.moneyFormat(total)}</p>
+        <div className={this.getCellClassName()} style={cellStyle}>
+          <p className={this.getTextClassName()}>{utils.moneyFormat(total)}</p>
         </div>
         {holidayDaysCount === 0 ? (
-          <div className="boss-table__cell">
-            <p className="boss-table__text">{holidayDaysCount}</p>
+          <div className={this.getCellClassName()} style={cellStyle}>
+            <p className={this.getTextClassName()}>{holidayDaysCount}</p>
           </div>
         ) : (
-          <div className="boss-table__cell">
-            <a href={appRoutes.staffMemberHolidays(staffMemberId)} className="boss-table__link">
+          <div className={this.getCellClassName()} style={cellStyle}>
+            <a
+              href={appRoutes.staffMemberHolidays(staffMemberId)}
+              className={`${this.getTextClassName()} boss-table__link`}
+            >
               {holidayDaysCount}
             </a>
           </div>
@@ -198,7 +261,7 @@ ReportItem.propTypes = {
     staffMemberName: PropTypes.string.isRequired,
     acessories: PropTypes.number.isRequired,
     payRateDescription: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
+    status: PropTypes.object.isRequired,
   }).isRequired,
   weekDates: ImmutablePropTypes.list.isRequired,
   onMarkCompleted: PropTypes.func.isRequired,

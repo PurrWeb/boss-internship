@@ -80,8 +80,8 @@ export const getStaffTypesWithFinanceReports = createSelector(
       );
       const total = reports.reduce((acc, report) => acc + report.get('total'), 0);
       const allReady =
-        reports.filter(report => report.get('status') === 'incomplete').size === 0 &&
-        reports.filter(report => report.get('status') === 'ready').size > 0;
+        reports.filter(report => report.getIn(['status', 'can_complete']) === false).size === 0 &&
+        reports.filter(report => report.getIn(['status', 'can_complete'])).size > 0;
       return staffType
         .set('total', total)
         .set('reports', reports)

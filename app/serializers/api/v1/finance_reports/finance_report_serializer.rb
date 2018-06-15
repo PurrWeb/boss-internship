@@ -21,6 +21,10 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :canSeeNetWages,
     :staffMemberSageId
 
+  def status
+    FinanceReportStatusService.new(finance_report: object).call
+  end
+
   def staffMemberId
     object.staff_member_id
   end
