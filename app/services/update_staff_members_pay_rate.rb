@@ -4,20 +4,18 @@ class UpdateStaffMembersPayRate
   end
 
   def call
-    errors = {}
-    staff_members_payrates = StaffMember.enabled.with_aged_payrates.inject({}) do |acc, staff_member|
-      begin
-        pay_rate = StaffMemberRealPayRate.new(now: now, staff_member: staff_member).call
-        if pay_rate.present?
-          acc[staff_member.id] = pay_rate
+    ActiveRecord::Base.transaction do
+      staff_members_payrates = StaffMember.enabled.with_aged_payrates.each do |staff_member|
+        begin
+          pay_rate = StaffMemberRealPayRate.new(now: now, staff_member: staff_member).call
+          if pay_rate.present?
+              staff_member.update!(pay_rate: pay_rate)
+          end
+        rescue PayRateException => e
+          pp e.message
         end
-      rescue StandardError => error
-        errors[staff_member.id] = error.message
       end
-      acc
     end
-
-    [errors, staff_members_payrates]
   end
 
   attr_reader :now
