@@ -57,4 +57,5 @@ module Clockwork
   every(1.day, "SiaBadgeExpiryNotificationJob", at: "9:00")
   every(1.day, "CleanupForecastsJob", at: "10:00")
   every(2.hour, "UpdateBouncedEmailsJob", at: "**:00")
+  every(1.day, "MoveStaffMembersToCorrectPayRateJob", at: "10:00")
 end
