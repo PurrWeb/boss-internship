@@ -12,7 +12,7 @@ class UpdateStaffMembersPayRate
               staff_member.update!(pay_rate: pay_rate)
           end
         rescue PayRateException => e
-          pp e.message
+          Rollbar.error(e.message)
         end
       end
     end
