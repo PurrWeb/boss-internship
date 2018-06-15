@@ -93,6 +93,7 @@ class ClockInOutStaffListItem extends Component {
         return {
             clocked_in: 'clocked_out',
             clocked_out: 'clocked_in',
+            on_break: 'clocked_out',
         }[currentStatus];
     }
     getBreakStatusAfterClicking(currentStatus) {
