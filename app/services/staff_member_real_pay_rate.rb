@@ -13,7 +13,7 @@ class StaffMemberRealPayRate
     when *PayRate::PAY_RATE_GROUPS[:bolton]
       new_payrate_data(new_pay_rate_name: pay_rate_from_bolton_group)
     else
-      raise "#{staff_member.full_name}'s has wrong pay rate (#{staff_member_pay_rate_name})"
+      raise_wrond_pay_rate_exception
     end
   end
 
@@ -27,7 +27,7 @@ class StaffMemberRealPayRate
     when 25..100
       PayRate::NORMAL_25_PLUS_PAY_RATE
     else
-      raise "#{staff_member.full_name}: has a wrong age(#{staff_member_age}) or staff type (#{staff_member.staff_type.name})"
+      raise_wrond_age_exception
     end
   end
 
@@ -40,7 +40,7 @@ class StaffMemberRealPayRate
     when 25..100
       PayRate::BOLTON_LEVEL_25_PLUS_PAY_RATE
     else
-      raise "#{staff_member.full_name}: has a wrong age(#{staff_member_age}) or staff type (#{staff_member.staff_type.name})"
+      raise_wrond_age_exception
     end
   end
 
@@ -51,14 +51,15 @@ class StaffMemberRealPayRate
     when 25..100
       PayRate::BAR_SUPERVISOR_25_PLUS_PAY_RATE
     else
-      raise "#{staff_member.full_name}: has a wrong age(#{staff_member_age}) or staff type (#{staff_member.staff_type.name})"
+      raise_wrond_age_exception
     end
   end
 
   def pay_rate_by_name(pay_rate_name:)
     pay_rate = PayRate.find_by(name: pay_rate_name)
     unless pay_rate.present?
-      raise "PayRate (#{pay_rate_name}) doesn't present in data base"
+      raise PayRateException.new("PayRate (#{pay_rate_name}) doesn't present in data base")
+      # raise "PayRate (#{pay_rate_name}) doesn't present in data base"
     end
     pay_rate
   end
@@ -77,9 +78,17 @@ class StaffMemberRealPayRate
 
   def staff_member_age
     unless staff_member.date_of_birth.present?
-      raise "#{staff_member.full_name} doesn't have date of birth setup"
+      raise PayRateException.new("#{staff_member.full_name} with ID: #{staff_member.id}, from #{staff_member.master_venue.andand.name} venue: doesn't have date of birth setup")
     end
     now.year - staff_member.date_of_birth.year
+  end
+
+  def raise_wrond_age_exception
+    raise PayRateException.new("#{staff_member.full_name} with ID: #{staff_member.id}, from #{staff_member.master_venue.andand.name} venue: has a wrong age(#{staff_member_age})")
+  end
+
+  def raise_wrond_pay_rate_exception
+    raise PayRateException.new("#{staff_member.full_name} with ID: #{staff_member.id}, from #{staff_member.master_venue.andand.name} venue: has wrong pay rate (#{staff_member_pay_rate_name})")
   end
 
   attr_reader :now, :staff_member
