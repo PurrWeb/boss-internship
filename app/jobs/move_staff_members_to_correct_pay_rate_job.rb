@@ -1,5 +1,5 @@
 class MoveStaffMembersToCorrectPayRateJob < ActiveJob::Base
   def perform
-    UpdateStaffMembersPayRate.new.call
+    UpdateStaffMembersOnAgedPayRates.new.call
   end
 end

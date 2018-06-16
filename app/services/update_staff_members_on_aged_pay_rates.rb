@@ -1,4 +1,4 @@
-class UpdateStaffMembersPayRate
+class UpdateStaffMembersOnAgedPayRates
   def initialize(now: Time.now)
     @now = now
   end
