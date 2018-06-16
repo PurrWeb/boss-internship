@@ -5,7 +5,7 @@ class UpdateStaffMembersOnAgedPayRates
 
   def call
     ActiveRecord::Base.transaction do
-      staff_members_payrates = StaffMember.enabled.with_aged_payrates.each do |staff_member|
+      StaffMember.enabled.with_aged_payrates.each do |staff_member|
         begin
           pay_rate = StaffMemberRealPayRate.new(now: now, staff_member: staff_member).call
           if pay_rate.present?
