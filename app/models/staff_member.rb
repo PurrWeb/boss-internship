@@ -51,7 +51,7 @@ class StaffMember < ActiveRecord::Base
   belongs_to :pay_rate
 
   scope :weekly_finance_reports, -> (date) { joins(:finance_reports).where(finance_reports: {week_start: date})  }
-  scope :with_aged_payrates, -> { joins(:pay_rate).where(pay_rates: { name: PayRate::AGED_PAYRATES }) }
+  scope :with_aged_payrates, -> { joins(:pay_rate).where(pay_rates: { name: PayRate::AGED_PAYRATE_NAMES }) }
 
   mount_uploader :avatar, AvatarUploader
   validates :avatar, {
