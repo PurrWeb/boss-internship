@@ -2,6 +2,7 @@ class UpdateStaffMembersOnAgedPayRates
   def initialize(now: Time.now)
     @now = now
   end
+  attr_reader :now
 
   def call
     ActiveRecord::Base.transaction do
@@ -17,6 +18,4 @@ class UpdateStaffMembersOnAgedPayRates
       end
     end
   end
-
-  attr_reader :now
 end
