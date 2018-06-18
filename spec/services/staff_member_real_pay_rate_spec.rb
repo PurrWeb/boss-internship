@@ -80,14 +80,13 @@ describe StaffMemberRealPayRate do
 
   before do
     setup_existing_pay_rates
-    staff_member
   end
 
   specify 'a test case exists for all ages pay rates' do
     expect(
       PayRate::AGED_PAYRATE_NAMES.all? do |pay_rate_name|
         pay_rate = PayRate.from_name(pay_rate_name)
-        SETUP_TEST_DATA.any?{ |test_datum| PayRate.from_name(test_datum.fetch(:pay_rate_name)) == pay_rate }
+        SETUP_TEST_DATA.any? { |test_datum| PayRate.from_name(test_datum.fetch(:pay_rate_name)) == pay_rate }
       end
     ).to eq(true)
   end
@@ -96,6 +95,10 @@ describe StaffMemberRealPayRate do
     context "when payrate is #{test_datum.fetch(:pay_rate_name)}" do
       let(:original_pay_rate) do
         PayRate.from_name(test_datum.fetch(:pay_rate_name))
+      end
+
+      before do
+        staff_member
       end
 
       context 'when_staff_member_has no date of birth' do
