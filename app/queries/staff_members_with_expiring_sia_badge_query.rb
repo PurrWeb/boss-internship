@@ -6,6 +6,7 @@ class StaffMembersWithExpiringSiaBadgeQuery
 
   def all
     relation.
+      enabled.
       where(
         '`staff_members`.sia_badge_expiry_date < ?',
         expiring_before
