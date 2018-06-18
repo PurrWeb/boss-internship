@@ -61,7 +61,7 @@ class StaffMemberRealPayRate
   end
 
   def raise_wrond_age_exception
-    raise PayRateException.new("Staff Member with ID: #{staff_member.id}, has invalid age(#{staff_member.age})")
+    raise PayRateException.new("Staff Member with ID: #{staff_member.id}, has invalid age: #{staff_member.age ? staff_member.age : 'nil' }")
   end
 
   def raise_wrond_pay_rate_exception
