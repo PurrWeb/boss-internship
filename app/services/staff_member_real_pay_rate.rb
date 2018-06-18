@@ -32,7 +32,7 @@ class StaffMemberRealPayRate
     end
   end
 
-  def pay_rate_from_bolton_group(age:)
+  def pay_rate_from_bolton_group_for(age:)
     case age
     when 18..20
       PayRate.from_name(PayRate::BOLTON_LEVEL_18_20_PAY_RATE)
