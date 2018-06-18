@@ -79,6 +79,10 @@ class PayRate < ActiveRecord::Base
     end
   end
 
+  def self.from_name(name)
+    PayRate.find_by!(name: name)
+  end
+
   def self.is_18_to_20
     where("TRIM(`name`) LIKE '%#{NAME_18_TO_20_ENDING}'")
   end
