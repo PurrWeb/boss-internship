@@ -15,7 +15,7 @@ class StaffVettingController < ApplicationController
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     bounced_emails = BouncedEmailAddress.all.map {|be| be['email']}
-    staff_members_with_bounced_email = StaffMember.joins(:email_address).where({email_addresses: {email: bounced_emails}})
+    staff_members_with_bounced_email = StaffMember.enabled.joins(:email_address).where({email_addresses: {email: bounced_emails}})
 
     render locals: {
       access_token: access_token.token,
