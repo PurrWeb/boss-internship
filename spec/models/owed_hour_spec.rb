@@ -8,6 +8,7 @@ describe OwedHour do
     let(:staff_member) { FactoryGirl.create(:staff_member) }
     let(:user) { FactoryGirl.create(:user) }
     let(:date) { RotaShiftDate.to_rota_date(now - 1.week) }
+    let(:payslip_week) { RotaWeek.new(date + 1.week) }
     let(:note) { 'Test note' }
     let(:starts_at) { RotaShiftDate.new(date).start_time }
     let(:ends_at) { starts_at + 2.hours }
@@ -15,6 +16,7 @@ describe OwedHour do
     let(:owed_hour) do
       OwedHour.new(
         staff_member: staff_member,
+        payslip_date: payslip_week.start_date,
         date: date,
         starts_at: starts_at,
         ends_at: ends_at,
@@ -32,6 +34,7 @@ describe OwedHour do
       before do
         OwedHour.create!(
           staff_member: staff_member,
+          payslip_date: payslip_week.start_date,
           date: date,
           starts_at: starts_at,
           ends_at: ends_at,
@@ -87,6 +90,7 @@ describe OwedHour do
         travel_to holiday_create_time do
           FactoryGirl.create(
             :holiday,
+            payslip_date: payslip_week.start_date,
             staff_member: staff_member,
             start_date: date,
             end_date: date
