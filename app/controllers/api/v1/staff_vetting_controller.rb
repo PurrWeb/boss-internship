@@ -60,7 +60,7 @@ module Api
 
       def staff_with_bounced_email
         bounced_emails = BouncedEmailAddress.all.map {|be| be['email']}
-        staff_members_with_bounced_email = StaffMember.joins(:email_address).where({email_addresses: {email: bounced_emails}})
+        staff_members_with_bounced_email = StaffMember.enabled.joins(:email_address).where({email_addresses: {email: bounced_emails}})
 
         render json: {
           staffMembersWithBouncedEmail: ActiveModel::Serializer::CollectionSerializer.new(
