@@ -45,6 +45,7 @@ class StaffMemberList extends Component {
       <div className="boss-users__flow">
         <div className="boss-users__flow-list">
           {staffMembers.map(staffMember => {
+            const bouncedEmailData = staffMember.get('bouncedEmailData');
             return (
               <StaffMemberInfo
                 key={staffMember.get('id')}
@@ -69,7 +70,7 @@ class StaffMemberList extends Component {
                   this.getStaffMemberSiaBadgeExpiryDate(staffMember)
                 }
                 bouncedEmailData={
-                  withBouncedEmail && staffMember.get('bouncedEmailData').toJS()
+                  withBouncedEmail && bouncedEmailData && bouncedEmailData.toJS()
                 }
               />
             );
