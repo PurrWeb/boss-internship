@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180614155503) do
+ActiveRecord::Schema.define(version: 20180619163415) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -480,6 +480,7 @@ ActiveRecord::Schema.define(version: 20180614155503) do
     t.datetime "updated_at"
     t.integer  "parent_holiday_id",           limit: 4
     t.integer  "frozen_by_finance_report_id", limit: 4
+    t.date     "payslip_date",                              null: false
   end
 
   add_index "holidays", ["end_date"], name: "index_holidays_on_end_date", using: :btree
@@ -806,6 +807,7 @@ ActiveRecord::Schema.define(version: 20180614155503) do
     t.boolean  "require_times",                             default: true, null: false
     t.datetime "starts_at"
     t.datetime "ends_at"
+    t.date     "payslip_date",                                             null: false
   end
 
   add_index "owed_hours", ["date"], name: "index_owed_hours_on_date", using: :btree
