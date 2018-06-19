@@ -135,23 +135,23 @@ export default class HolidayRow extends React.Component {
     const holidays = _.filter(Object.values(this.props.holidays), (holiday) => {
       return holiday.staff_member.serverId === this.props.staffMember.serverId
     });
-    const paidHoliday = _.filter(holidays, (holiday) => {
+    const paidHolidays = _.filter(holidays, (holiday) => {
       return holiday.holiday_type === PAYED_HOLIDAY
     });
-    const unpaidHoliday = _.filter(holidays, (holiday) => {
+    const unpaidHolidays = _.filter(holidays, (holiday) => {
       return holiday.holiday_type === UNPAYED_HOLIDAY
     });
     const staffMemberMasterVenue = _.find(this.props.venues, (venue) => {
       return venue.serverId === this.props.staffMember.master_venue.serverId;
     });
 
-    const payedCount = paidHoliday.length === 0
+    const paidCount = paidHolidays.length === 0
       ? 0
-      : paidHoliday.reduce((summ, holiday) => summ = summ + holiday.days, 0);
+      : paidHolidays.reduce((sum, holiday) => sum = sum + holiday.days, 0);
 
-    const unpaidCount = unpaidHoliday.length === 0
+    const unpaidCount = unpaidHolidays.length === 0
       ? 0
-      : unpaidHoliday.reduce((sum, holiday) => sum = sum + holiday.days, 0);
+      : unpaidHolidays.reduce((sum, holiday) => sum = sum + holiday.days, 0);
 
     return (
       <div className="boss-table__group" key={ this.props.staffMember.serverId }>
@@ -185,22 +185,22 @@ export default class HolidayRow extends React.Component {
 
           <div className="boss-table__cell">
             <div className="boss-table__info">
-              <p className="boss-table__label">{payedCount === 1 ? `${payedCount} Paid Holiday` : `${payedCount} Paid Holidays`}</p>
-                { this.renderHolidayCell(paidHoliday) }
+              <p className="boss-table__label">{paidCount === 1 ? `${paidCount} Paid Holiday` : `${paidCount} Paid Holidays`}</p>
+                { this.renderHolidayCell(paidHolidays) }
             </div>
           </div>
 
           <div className="boss-table__cell">
             <div className="boss-table__info">
               <p className="boss-table__label">{ unpaidCount === 1 ? `${unpaidCount} Unpaid Holiday` : `${unpaidCount} Unpaid Holidays` }</p>
-              { this.renderHolidayCell(unpaidHoliday) }
+              { this.renderHolidayCell(unpaidHolidays) }
             </div>
           </div>
 
           <div className="boss-table__cell">
             <div className="boss-table__info">
               <p className="boss-table__label">Paid Holidays Days</p>
-              <p className="boss-table__text">{ payedCount }</p>
+              <p className="boss-table__text">{ paidCount }</p>
             </div>
           </div>
 
