@@ -6,6 +6,7 @@ FactoryGirl.define do
 
     start_date { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current + 1.week)).start_date }
     end_date { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current + 1.week)).start_date + 2.days }
+    payslip_date { RotaWeek.new(RotaShiftDate.to_rota_date(Time.current + 2.weeks)).start_date }
     staff_member
     association :creator, factory: :user
     holiday_type { Holiday::PAID_HOLIDAY_TYPE }
