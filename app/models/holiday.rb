@@ -17,6 +17,7 @@ class Holiday < ActiveRecord::Base
   validates :end_date, presence: true
   validates :creator, presence: true
   validates :staff_member, presence: true
+  validates :payslip_date, presence: true
   validates :holiday_type, inclusion: { in: HOLIDAY_TYPES, message: 'is required' }
 
   validate do |holiday|

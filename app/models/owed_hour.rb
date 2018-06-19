@@ -11,6 +11,7 @@ class OwedHour < ActiveRecord::Base
   validates :staff_member, presence: true
   validates :note, presence: true
   validates :disabled_by, presence: true, if: :disabled?
+  validates :payslip_date, presence: true
 
   validate :date_valid
   validate :times_valid
