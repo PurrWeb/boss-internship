@@ -149,7 +149,9 @@ export default class HolidayRow extends React.Component {
       ? 0
       : paidHoliday.reduce((summ, holiday) => summ = summ + holiday.days, 0);
 
-    const payedLength = paidHoliday.length;
+    const unpaidCount = unpaidHoliday.length === 0
+      ? 0
+      : unpaidHoliday.reduce((sum, holiday) => sum = sum + holiday.days, 0);
 
     return (
       <div className="boss-table__group" key={ this.props.staffMember.serverId }>
@@ -183,14 +185,14 @@ export default class HolidayRow extends React.Component {
 
           <div className="boss-table__cell">
             <div className="boss-table__info">
-              <p className="boss-table__label">{payedLength === 1 ? `${payedLength} Paid Holiday` : `${payedLength} Paid Holidays`}</p>
+              <p className="boss-table__label">{payedCount === 1 ? `${payedCount} Paid Holiday` : `${payedCount} Paid Holidays`}</p>
                 { this.renderHolidayCell(paidHoliday) }
             </div>
           </div>
 
           <div className="boss-table__cell">
             <div className="boss-table__info">
-              <p className="boss-table__label">Unpaid Holiday</p>
+              <p className="boss-table__label">{ unpaidCount === 1 ? `${unpaidCount} Unpaid Holiday` : `${unpaidCount} Unpaid Holidays` }</p>
               { this.renderHolidayCell(unpaidHoliday) }
             </div>
           </div>
