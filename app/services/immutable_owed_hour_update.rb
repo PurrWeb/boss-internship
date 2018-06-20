@@ -51,7 +51,7 @@ class ImmutableOwedHourUpdate
   attr_reader :requester, :owed_hour, :params
 
   def edit_attributes
-    [:date, :starts_at, :ends_at, :note, :minutes]
+    [:date, :payslip_date, :starts_at, :ends_at, :note, :minutes]
   end
 
   def assert_params
