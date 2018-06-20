@@ -83,6 +83,7 @@ module Api
       def owed_hour_from_params
         {
           date: UIRotaDate.parse_if_present(params.fetch(:date)),
+          payslip_date: UIRotaDate.parse_if_present(params.fetch(:payslipDate)),
           starts_at: params.fetch(:startsAt) && Integer(params.fetch(:startsAt)),
           ends_at: params.fetch(:endsAt) && Integer(params.fetch(:endsAt)),
           note: params[:note]

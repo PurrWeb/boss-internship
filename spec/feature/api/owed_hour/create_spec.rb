@@ -16,8 +16,9 @@ RSpec.describe 'Create owed hour API endpoint' do
   end
   let(:venue) { staff_member.master_venue }
   let(:user) { FactoryGirl.create(:user, venues: [venue]) }
-  let(:date) do
-    (now - 1.week).strftime('%d-%m-%Y')
+  let(:date) { (now - 1.week).to_date }
+  let(:payslip_week) do
+    RotaWeek.new(date + 1.week)
   end
   let(:starts_at_offset) do
     0
@@ -40,7 +41,8 @@ RSpec.describe 'Create owed hour API endpoint' do
   end
   let(:valid_params) do
     {
-      date: date,
+      date: UIRotaDate.format(date),
+      payslipDate: UIRotaDate.format(payslip_week.start_date),
       startsAt: starts_at_offset,
       endsAt: ends_at_offset,
       note: "TEST"
@@ -49,6 +51,7 @@ RSpec.describe 'Create owed hour API endpoint' do
   let(:empty_params) do
     {
       date: nil,
+      payslipDate: nil,
       startsAt: nil,
       endsAt: nil,
       note: nil
@@ -63,11 +66,12 @@ RSpec.describe 'Create owed hour API endpoint' do
     before do
       response
     end
-    
+
     it 'should return validation errors' do
       json = JSON.parse(response.body)
 
       expect(json["errors"]["date"]).to eq(["can't be blank"])
+      expect(json["errors"]["payslipDate"]).to eq(["can't be blank"])
       expect(json["errors"]["startsAt"]).to eq(["can't be blank"])
       expect(json["errors"]["endsAt"]).to eq(["can't be blank"])
     end

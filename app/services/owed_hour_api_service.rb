@@ -63,12 +63,14 @@ class OwedHourApiService
 
   def owed_hour_params(params:)
     date = params.fetch(:date)
+    payslip_date = params.fetch(:payslip_date)
 
     starts_at = starts_at_param(date: date, starts_at: params.fetch(:starts_at))
     ends_at = ends_at_param(date: date, ends_at: params.fetch(:ends_at))
     minutes = (starts_at.present? && ends_at.present?) && ((ends_at - starts_at) / 60)
     {
       date: date,
+      payslip_date: payslip_date,
       starts_at: starts_at,
       ends_at: ends_at,
       minutes: minutes,

@@ -19,6 +19,9 @@ RSpec.describe 'Destroy owed hour API endpoint' do
   let(:old_date) do
     (now - 1.week).to_date
   end
+  let(:old_pay_slip_week) do
+    RotaWeek.new(old_date + 1.week)
+  end
   let(:old_starts_at) do
     RotaShiftDate.new(old_date).start_time
   end
@@ -31,6 +34,7 @@ RSpec.describe 'Destroy owed hour API endpoint' do
       :owed_hour,
       staff_member: staff_member,
       date: old_date,
+      payslip_date: old_pay_slip_week.start_date,
       starts_at: old_starts_at,
       ends_at: old_ends_at,
     )
