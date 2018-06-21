@@ -17,6 +17,7 @@ RSpec.describe 'Edit Holiday service'  do
     {
       start_date: holiday.start_date,
       end_date: holiday.end_date,
+      payslip_date: holiday.payslip_date,
       holiday_type: holiday.holiday_type,
       note: holiday.note
     }
@@ -141,6 +142,7 @@ RSpec.describe 'Edit Holiday service'  do
       {
         start_date: nil,
         end_date: holiday.end_date,
+        payslip_date: holiday.payslip_date,
         holiday_type: holiday.holiday_type,
         note: holiday.note
       }
