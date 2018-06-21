@@ -205,9 +205,8 @@ class StaffMember < ActiveRecord::Base
 
   def age(from: Time.current.utc)
     if date_of_birth.present?
-      (
-        (from - date_of_birth.to_time.utc) / 60 / 60 / 24 / 365
-      ).floor
+      from_date = from.to_date
+      from_date.year - date_of_birth.year - ((from_date.month > date_of_birth.month || (from_date.month == date_of_birth.month && from_date.day >= date_of_birth.day)) ? 0 : 1)
     end
   end
 
