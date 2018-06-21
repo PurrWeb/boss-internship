@@ -52,12 +52,12 @@ class EditHoliday
 
   def assert_params
     if params.keys.map(&:to_sym).sort != edit_attributes.sort
-      raise ArgumentError.new(":start_date, :end_date :holiday_type :note holiday params required, got:#{params.keys}")
+      raise ArgumentError.new(":start_date, :payslip_date, :end_date :holiday_type :note holiday params required, got:#{params.keys}")
     end
   end
 
   def edit_attributes
-    [:start_date, :end_date, :holiday_type, :note]
+    [:start_date, :end_date, :payslip_date, :holiday_type, :note]
   end
 
   def update_params
