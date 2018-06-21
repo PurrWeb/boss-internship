@@ -175,6 +175,7 @@ module Api
         {
           start_date: params.fetch(:start_date),
           end_date: params.fetch(:end_date),
+          payslip_date: params.fetch(:payslip_date),
           holiday_type: params.fetch(:holiday_type),
           note: params[:note]
         }

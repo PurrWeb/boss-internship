@@ -31,7 +31,7 @@ class EditHoliday
             merge(creator: requester)
         )
         success = new_holiday.save
-      
+
         raise ActiveRecord::Rollback unless success
         holiday.update_attributes!(parent: new_holiday)
       end

@@ -21,6 +21,9 @@ RSpec.describe 'Create holiday API endpoint' do
   let(:end_date) do
     (now + 2.week + 2.days).to_date
   end
+  let(:payslip_date) do
+    RotaWeek.new(start_date + 1.week).start_date
+  end
   let(:holiday_type) do
     Holiday::HOLIDAY_TYPES[1]
   end
@@ -47,6 +50,7 @@ RSpec.describe 'Create holiday API endpoint' do
     {
       start_date: UIRotaDate.format(start_date),
       end_date: UIRotaDate.format(end_date),
+      payslip_date: UIRotaDate.format(payslip_date),
       holiday_type: holiday_type,
       note: ""
     }
