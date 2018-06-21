@@ -143,7 +143,9 @@ RSpec.describe 'Enable Staff Members' do
     end
 
     before do
-      response
+      travel_to call_time do
+        response
+      end
     end
 
     it 'should return ok status' do
@@ -151,14 +153,17 @@ RSpec.describe 'Enable Staff Members' do
     end
 
     it 'should return staff member json' do
-      test_member = StaffMember.find(staff_member.id)
+      travel_to call_time do
+        test_member = StaffMember.find(staff_member.id)
 
-      response_json = JSON.parse(response.body)
-      expect(response_json).to eq(
-        JSON.parse(
-          Api::V1::StaffMemberProfile::StaffMemberSerializer.new(test_member).to_json
+        response_json = JSON.parse(response.body)
+
+        expect(response_json).to eq(
+          JSON.parse(
+            Api::V1::StaffMemberProfile::StaffMemberSerializer.new(test_member.reload).to_json
+          )
         )
-      )
+      end
     end
 
     it 'should have updated the staff member' do

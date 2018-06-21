@@ -6,6 +6,7 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :avatar,
              :first_name,
              :surname,
+             :age,
              :email,
              :phone_number,
              :master_venue,
@@ -41,6 +42,10 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :is_flagged,
              :is_weekly_payrate,
              :sageId
+
+  def age
+    object.age
+  end
 
   def date_of_birth
     UIRotaDate.format(object.date_of_birth) if object.date_of_birth.present?

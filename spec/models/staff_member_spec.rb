@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe StaffMember do
+  let(:now) { Time.current }
   let(:staff_member) { FactoryGirl.build(:staff_member) }
 
   describe 'avatar' do
@@ -47,6 +48,19 @@ describe StaffMember do
           expect(StaffMember.for_venue(venue_2)).to eq([venue_2_staff_member])
         end
       end
+    end
+  end
+
+  describe 'age' do
+    let(:staff_member) do
+      FactoryGirl.build(:staff_member, date_of_birth: date_of_birth)
+    end
+    # Example date derived from production bug. This was being returned as 25
+    let(:date_of_birth) { (now - (expected_age + 1).years + 5.days).to_date }
+    let(:expected_age) { 24 }
+
+    specify 'should calculate dob correctly' do
+      expect(staff_member.age).to eq(expected_age)
     end
   end
 end
