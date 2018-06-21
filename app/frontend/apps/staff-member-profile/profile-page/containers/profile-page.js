@@ -65,8 +65,8 @@ class ProfilePage extends React.PureComponent {
     return rawValue ? safeMoment.uiDateParse(rawValue) : null;
   }
 
-  ageDescription(dobMoment){
-    return dobMoment ? moment().diff(dobMoment, 'years') : 'N/A';
+  ageDescription(age){
+    return age ? age : 'N/A';
   }
 
   render() {
@@ -125,7 +125,7 @@ class ProfilePage extends React.PureComponent {
           <DetailsListItem item={{name: "Name", value: `${oFetch(staffMember, 'first_name')} ${oFetch(staffMember, 'surname')}`}} />
           <DetailsListItem item={{name: "Gender", value: humanize(oFetch(staffMember, 'gender')) }} />
           <DetailsListItem item={{name: "Date or birth", value: this.dateOfBirthMoment(oFetch(staffMember, 'date_of_birth')) && this.dateOfBirthMoment(oFetch(staffMember, 'date_of_birth')).format("DD-MM-YYYY") }} />
-          <DetailsListItem item={{name: "Age", value: this.ageDescription(this.dateOfBirthMoment(oFetch(staffMember, 'date_of_birth'))) }} />
+          <DetailsListItem item={{name: "Age", value: this.ageDescription(oFetch(staffMember, 'age')) }} />
         </DetailsList>
         <DetailsList key={4} categoryName="Personal Details" sectionNumber={4}>
           <DetailsListItem item={{name: "Address", value: oFetch(staffMember, 'address') }} />
