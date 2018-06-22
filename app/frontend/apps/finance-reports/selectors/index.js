@@ -78,10 +78,19 @@ export const getStaffTypesWithFinanceReports = createSelector(
       const reports = financeReports.filter(financeReport =>
         staffType.get('staffMembers').has(financeReport.get('staffMemberId')),
       );
-      const total = reports.reduce((acc, report) => acc + report.get('total'), 0);
-      const allReady =
-        reports.filter(report => report.getIn(['status', 'can_complete']) === false).size === 0 &&
-        reports.filter(report => report.getIn(['status', 'can_complete'])).size > 0;
+      const reportsJS = reports.toJS();
+      const total = reportsJS.reduce((acc, report) => acc + oFetch(report, 'total'), 0);
+      const incompleteReportsJS = reportsJS.filter((report) => {
+        return oFetch(report, 'status.status_text') !== 'done'
+      });
+      const noIncompletableReportsExist = incompleteReportsJS.filter((report) => {
+        return oFetch(report, 'status.can_complete') === false
+      }).length === 0;
+      const completeableReportsExist = incompleteReportsJS.filter((report) => {
+        return oFetch(report, 'status.can_complete')
+      }).length > 0;
+
+      const allReady = noIncompletableReportsExist && completeableReportsExist;
       return staffType
         .set('total', total)
         .set('reports', reports)
