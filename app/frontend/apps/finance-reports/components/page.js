@@ -138,17 +138,19 @@ class Page extends Component {
           onMarkAllPageCompleted={() => this.handleOpenMarkAllCompletedModal({ reportsIds, staffMemberIds })}
           allReady={allReady}
           itemRenderer={staffType => {
-            const staffMemberIds = staffType
-              .get('reports')
-              .filter(report => report.getIn(['status', 'status_text']) === 'ready')
-              .map(report => report.get('staffMemberId'))
-              .toJS();
+            const staffTypeJS = staffType.toJS();
+            const reportsJS = oFetch(staffTypeJS, 'reports');
 
-            const reportsIds = staffType
-              .get('reports')
-              .filter(report => report.getIn(['status', 'status_text']) === 'ready')
-              .map(report => report.get('frontendId'))
-              .toJS();
+            const staffMemberIds = reportsJS.filter((report) => {
+              return oFetch(report, 'status.status_text') === 'ready'
+            })
+            .map(report => oFetch(report, 'staffMemberId'));
+
+            const reportsIds = reportsJS.filter(report => (report) => {
+              return oFetch(report, 'status.status_text') === 'ready'
+            })
+            .map(report => oFetch(report, 'frontendId'));
+
             return (
               <ReportList
                 staffType={staffType}
