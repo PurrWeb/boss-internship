@@ -17,7 +17,7 @@ export default handleActions(
     [types.MARK_REPORT_COMPLETED]: (state, action) => {
       const reportsId = oFetch(action, 'payload.reportsId');
       const reportIndex = state.findIndex(report => report.get('frontendId') === reportsId);
-      return state.setIn([reportIndex, 'status'], 'done');
+      return state.setIn([reportIndex, 'status', 'status_text'], 'done');
     },
     [types.MARK_REPORTS_COMPLETED]: (state, action) => {
       const reportsIds = oFetch(action, 'payload.reportsIds');
@@ -26,7 +26,7 @@ export default handleActions(
         if (!reportsIds.includes(financeReport.get('frontendId'))) {
           return financeReport;
         }
-        return financeReport.set('status', 'done');
+        return financeReport.setIn(['status', 'status_text'], 'done');
       })
 
     },

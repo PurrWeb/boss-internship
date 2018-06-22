@@ -90,7 +90,7 @@ class Page extends Component {
 
     return (oFetch(sageIdStaffMemberReportsJS, 'length') > 0) &&
       _.every(sageIdStaffMemberReportsJS, (report) => {
-        return oFetch(report, 'status') === FINANCE_REPORT_STATUS_DONE_STATUS
+        return oFetch(report, ['status', 'status_text']) === FINANCE_REPORT_STATUS_DONE_STATUS
       });
   }
 
