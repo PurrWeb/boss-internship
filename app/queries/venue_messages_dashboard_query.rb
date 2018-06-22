@@ -7,7 +7,8 @@ class VenueMessagesDashboardQuery
 
   def all
     messages = (
-      DashboardMessage.where(to_all_venues: true).enabled + venue.dashboard_messages.enabled
+      DashboardMessage.where(to_all_venues: true).enabled.includes(preload_fields) +
+      venue.dashboard_messages.enabled.includes(preload_fields)
     ).uniq.sort_by(&:published_time).reverse
 
     messages = messages.select do |message|
@@ -17,4 +18,8 @@ class VenueMessagesDashboardQuery
 
   private
   attr_reader :venue
+
+  def preload_fields
+    [:disabled_by_user, :created_by_user]
+  end
 end

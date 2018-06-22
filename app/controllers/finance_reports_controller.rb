@@ -44,7 +44,7 @@ class FinanceReportsController < ApplicationController
     reports = FinanceReport.joins(:staff_member)
                 .where(staff_member: staff_members)
                 .where(week_start: week.start_date)
-                .includes(staff_member: [:name, :staff_type])
+                .includes(:venue, staff_member: [:name, :staff_type])
                 .all
 
     staffs_without_requests = StaffMember.where(id: (staff_members - staff_members_with_reports).map(&:id)).
