@@ -7,6 +7,9 @@ module BreakTimeValidations
     validate do |_break|
       BreakTimeOverlapValidator.new(_break: _break, break_class: _break.class, period_association: period_association).validate
     end
+    validate do |_break|
+      BreakWithinParentTimeframeValidator.new(_break: _break, break_class: _break.class, period_association: period_association).validate
+    end
   end
 
   def period_association

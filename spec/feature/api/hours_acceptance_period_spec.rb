@@ -183,8 +183,9 @@ RSpec.describe 'Hours acceptance endpoints' do
       )
     end
     let(:new_status) { 'accepted' }
-    let(:new_start_of_shift) { start_of_shift + 1.hour }
-    let(:new_end_of_shift) { end_of_shift + 1.hour }
+    let(:update_shift_hours) { 1.hour }
+    let(:new_start_of_shift) { start_of_shift + update_shift_hours }
+    let(:new_end_of_shift) { end_of_shift + update_shift_hours }
     let(:params) do
       {
         startsAt: new_start_of_shift,
@@ -326,10 +327,10 @@ RSpec.describe 'Hours acceptance endpoints' do
 
       context 'updating one break' do
         let(:update_break_id) { break1.id }
-        let(:update_break_start) { break2_start - 10.minutes }
-        let(:update_break_end) { break2_end + 10.minutes }
-        let(:new_break_start) { break1_start + 10.minutes }
-        let(:new_break_end) { break1_end + 10.minutes }
+        let(:update_break_start) { break2_start + update_shift_hours }
+        let(:update_break_end) { break2_end + update_shift_hours }
+        let(:new_break_start) { break1_start + update_shift_hours }
+        let(:new_break_end) { break1_end + update_shift_hours }
         let(:params) do
           {
             startsAt: new_start_of_shift,
@@ -405,17 +406,17 @@ RSpec.describe 'Hours acceptance endpoints' do
             breaks: [
               {
                 id: break1.id,
-                startsAt: break1.starts_at,
-                endsAt: break1.ends_at
+                startsAt: break1.starts_at + update_shift_hours,
+                endsAt: break1.ends_at + update_shift_hours
               },
               {
                 id: break2.id,
-                startsAt: break2.starts_at,
-                endsAt: break2.ends_at
+                startsAt: break2.starts_at + update_shift_hours,
+                endsAt: break2.ends_at + update_shift_hours
               },
               {
-                startsAt: break1.starts_at,
-                endsAt: break1.ends_at
+                startsAt: break1.starts_at + update_shift_hours,
+                endsAt: break1.ends_at + update_shift_hours
               }
             ]
           }

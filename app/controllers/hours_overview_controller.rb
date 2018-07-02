@@ -44,7 +44,8 @@ class HoursOverviewController < ApplicationController
 
     clock_in_periods = ClockInPeriod.
       joins(:clock_in_day).
-      merge(staff_clock_in_days)
+      merge(staff_clock_in_days).
+      includes(:clock_in_events)
 
     clock_in_breaks = ClockInBreak.
       joins(:clock_in_period).
@@ -60,7 +61,8 @@ class HoursOverviewController < ApplicationController
     hours_acceptance_periods = HoursAcceptancePeriod.
       enabled.
       joins(:clock_in_day).
-      merge(staff_clock_in_days)
+      merge(staff_clock_in_days).
+      includes(:accepted_by, :frozen_by)
 
     hours_acceptance_breaks = HoursAcceptanceBreak.
       enabled.

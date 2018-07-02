@@ -39,10 +39,10 @@ class BreakTimeOverlapValidator
   attr_accessor :_break, :break_class, :period_association
 
   def prerequisites_persent?
-    _break.starts_at.present? &&
-      _break.ends_at.present? &&
-      period.present? &&
-      !_break.disabled?
+    !break_disabled? &&
+      starts_at.present? &&
+      ends_at.present? &&
+      period.present?
   end
 
   def starts_at
@@ -55,5 +55,9 @@ class BreakTimeOverlapValidator
 
   def period
     _break.public_send(period_association)
+  end
+
+  def break_disabled?
+    _break.disabled?
   end
 end
