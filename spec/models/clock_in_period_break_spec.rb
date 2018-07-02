@@ -106,6 +106,8 @@ describe ClockInBreak do
       context 'existing break is for different period' do
         let(:start_of_existing_period) { end_of_period }
         let(:end_of_existing_period) { end_of_period + 6.hours }
+        let(:existing_break_starts_at) { start_of_existing_period }
+        let(:existing_break_ends_at) { start_of_existing_period + 2.hours }
         let(:existing_break_clock_in_period) do
           ClockInPeriod.create!(
             clock_in_day: clock_in_day,

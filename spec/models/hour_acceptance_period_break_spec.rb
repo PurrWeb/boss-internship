@@ -40,6 +40,24 @@ describe HoursAcceptanceBreak do
       expect(_break.errors.to_a).to eq([])
     end
 
+    context 'hours outside left boundary of parent period' do
+      let(:starts_at) { start_of_period - 1.hour }
+
+      specify 'should raise error' do
+        _break.validate
+        expect(_break.errors[:starts_at]).to eq([BreakWithinParentTimeframeValidator::OUTSIDE_OF_PERIOD_VALIDATION_MESSAGE])
+      end
+    end
+
+    context 'hours outside right boundary of parent period' do
+      let(:ends_at) { end_of_period + 1.hour }
+
+      specify 'should raise error' do
+        _break.validate
+        expect(_break.errors[:ends_at]).to eq([BreakWithinParentTimeframeValidator::OUTSIDE_OF_PERIOD_VALIDATION_MESSAGE])
+      end
+    end
+
     context 'times are in wrong order' do
       let(:starts_at) { start_of_period + 2.hours }
       let(:ends_at) { start_of_period + 1.hour }
@@ -107,6 +125,8 @@ describe HoursAcceptanceBreak do
       context 'existing break is for different period' do
         let(:start_of_existing_period) { end_of_period }
         let(:end_of_existing_period) { end_of_period + 6.hours }
+        let(:existing_break_starts_at) { start_of_existing_period }
+        let(:existing_break_ends_at) { start_of_existing_period + 2.hours }
         let(:existing_break_hours_acceptance_period) do
           HoursAcceptancePeriod.create!(
             clock_in_day: clock_in_day,
