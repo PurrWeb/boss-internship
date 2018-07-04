@@ -9,7 +9,9 @@ class MessageBoardsController < ApplicationController
     authorize! :view, :dashboard_messages_page
 
     current_venue = venue_from_params || current_user.default_venue
-    messages = (DashboardMessage.where(to_all_venues: true) + current_venue.dashboard_messages).uniq.sort_by(&:published_time).reverse
+    messages = (
+      DashboardMessage.where(to_all_venues: true).includes(disabled_by_user: [:name], created_by_user: [:name]) + current_venue.dashboard_messages.includes(disabled_by_user: [:name], created_by_user: [:name])
+    ).uniq.sort_by(&:published_time).reverse
 
     render locals: {
       current_venue: current_venue,

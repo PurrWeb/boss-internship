@@ -168,11 +168,11 @@ class UserAbility
       end
 
       can :view, :dashboard_messages_page do
-        user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+        can_access_dashboard_messages_page?(user)
       end
 
-      can [:edit, :create, :disable, :destroy], DashboardMessage do
-        user.has_effective_access_level?(AccessLevel.area_manager_access_level)
+      can [:edit, :create, :disable, :enable], DashboardMessage do
+        can_access_dashboard_messages_page?(user)
       end
 
       can :view, :staff_vetting_page do
@@ -598,6 +598,10 @@ class UserAbility
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+  end
+
+  def can_access_dashboard_messages_page?(user)
+    user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
   end
 
   def can_view_holidays_requests_page?(user)
