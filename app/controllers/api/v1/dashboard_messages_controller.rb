@@ -68,16 +68,6 @@ module Api
         end
       end
 
-      def destroy
-        authorize! :destroy, @dashboard_message
-
-        if @dashboard_message.destroy
-          render json: {}, status: :ok
-        else
-          render json: {}, status: :unprocessable_entity
-        end
-      end
-
       def disable
         authorize! :disable, @dashboard_message
 
