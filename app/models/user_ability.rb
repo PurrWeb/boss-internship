@@ -171,7 +171,7 @@ class UserAbility
         can_access_dashboard_messages_page?(user)
       end
 
-      can [:edit, :create, :disable], DashboardMessage do
+      can [:edit, :create, :disable, :enable], DashboardMessage do
         can_access_dashboard_messages_page?(user)
       end
 
