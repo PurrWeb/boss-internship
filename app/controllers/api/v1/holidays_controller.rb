@@ -50,7 +50,7 @@ module Api
             json: {
               staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
               access_token: access_token.token,
-              holidays: ActiveModel::Serializer::CollectionSerializer.new(filtered_holidays, serializer: ::HolidaySerializer, scope: current_user),
+              holidays: ActiveModel::Serializer::CollectionSerializer.new(filtered_holidays, serializer: Api::V1::StaffMemberProfile::HolidaySerializer, scope: current_user),
               holiday_requests: ActiveModel::Serializer::CollectionSerializer.new(filtered_holiday_requests, serializer: Api::V1::StaffMemberProfile::HolidayRequestSerializer),
               paid_holiday_days: paid_holiday_days,
               unpaid_holiday_days: unpaid_holiday_days,
@@ -86,7 +86,7 @@ module Api
         if result.success?
           render(
             json: result.holiday,
-            serializer: ::HolidaySerializer,
+            serializer: Api::V1::StaffMemberProfile::HolidaySerializer,
             scope: current_user,
             status: 200
           )
@@ -109,7 +109,7 @@ module Api
         if result.success?
           render(
             json: result.holiday,
-            serializer: ::HolidaySerializer,
+            serializer: Api::V1::StaffMemberProfile::HolidaySerializer,
             scope: current_user,
             status: 200
           )
@@ -130,7 +130,7 @@ module Api
         if result.success?
           render(
             json: {
-              holiday: ::HolidaySerializer.new(result.holiday, scope: current_user),
+              holiday: Api::V1::StaffMemberProfile::HolidaySerializer.new(result.holiday, scope: current_user),
               permissions: {
                 isEditable: user_ability.can?(:edit, result.holiday),
                 isDeletable: user_ability.can?(:destroy, result.holiday)

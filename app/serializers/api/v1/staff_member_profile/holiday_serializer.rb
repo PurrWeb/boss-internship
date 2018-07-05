@@ -1,4 +1,4 @@
-class HolidaySerializer < ActiveModel::Serializer
+class Api::V1::StaffMemberProfile::HolidaySerializer < ActiveModel::Serializer
   attributes \
     :id,
     :holiday_type,

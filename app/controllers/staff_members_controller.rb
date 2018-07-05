@@ -141,7 +141,7 @@ class StaffMembersController < ApplicationController
         access_token: access_token,
         holidays: ActiveModel::Serializer::CollectionSerializer.new(
           filtered_holidays.includes(:holiday_request),
-          serializer: ::HolidaySerializer,
+          serializer: Api::V1::StaffMemberProfile::HolidaySerializer,
           scope: current_user
         ),
         holiday_requests: ActiveModel::Serializer::CollectionSerializer.new(
