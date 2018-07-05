@@ -5,6 +5,7 @@ import oFetch from 'o-fetch';
 import pluralize from 'pluralize';
 import confirm from '~/lib/confirm-utils';
 import utils from '~/lib/utils';
+import classNames from 'classnames';
 import { staffMemberProfileHolidaysPermissions } from '~/lib/permissions';
 
 const PENDING_STATUS = 'pending';
@@ -60,8 +61,14 @@ const HolidayMobileItem = ({ holiday, deleteHoliday, onEditHoliday, isStaffMembe
           id: id,
         });
 
+  const isFrozen = oFetch(jsHoliday, 'frozen');
+  const itemClass = classNames({
+    'boss-check boss-check_role_panel boss-check_page_smp-holidays': true,
+    'boss-check_state_frozen': isFrozen,
+  });
+
   return (
-    <div className="boss-check boss-check_role_panel boss-check_page_smp-holidays">
+    <div className={itemClass}>
       <div className="boss-check__row">
         <div className="boss-check__cell">
           <p className="boss-check__title">
@@ -99,18 +106,23 @@ const HolidayMobileItem = ({ holiday, deleteHoliday, onEditHoliday, isStaffMembe
           </div>
         </div>
       )}
-      <div className="boss-check__row boss-check__row_role_actions">
-        {isEditable && (
-          <button className="boss-button boss-button_role_update boss-check__action" onClick={() => onEdit(holiday)}>
-            Edit
-          </button>
-        )}
-        {isDeletable && (
-          <button className="boss-button boss-button_role_cancel boss-check__action" onClick={() => onDelete(holiday)}>
-            Delete
-          </button>
-        )}
-      </div>
+      {!isFrozen && (
+        <div className="boss-check__row boss-check__row_role_actions">
+          {isEditable && (
+            <button className="boss-button boss-button_role_update boss-check__action" onClick={() => onEdit(holiday)}>
+              Edit
+            </button>
+          )}
+          {isDeletable && (
+            <button
+              className="boss-button boss-button_role_cancel boss-check__action"
+              onClick={() => onDelete(holiday)}
+            >
+              Delete
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

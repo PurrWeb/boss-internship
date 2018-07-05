@@ -8,7 +8,8 @@ class HolidaySerializer < ActiveModel::Serializer
     :note,
     :created_at,
     :editable,
-    :state
+    :state,
+    :frozen
 
   def start_date
     UIRotaDate.format(object.start_date)
@@ -33,5 +34,9 @@ class HolidaySerializer < ActiveModel::Serializer
   def user_can_edit
     current_user = instance_options[:scope]
     object.creator.id == current_user.id || current_user.admin?
+  end
+
+  def frozen
+    object.frozen?
   end
 end

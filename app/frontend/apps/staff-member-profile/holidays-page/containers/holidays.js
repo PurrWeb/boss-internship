@@ -296,7 +296,7 @@ class Holidays extends React.PureComponent {
                   label={`Unpaid ${pluralize('day', unpaidHolidayDays)} logged in current tax year`}
                 />
               </div>
-              <div className="boss-board__manager-data">
+              <div className="boss-board__manager-group boss-board__manager-group_role_data">
                 <HolidaysFilter startDate={holidayStartDate} endDate={holidayEndDate} filter={filter} />
                 {hasHolidays ? (
                   [
