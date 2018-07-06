@@ -48,14 +48,6 @@ class FinanceReport < ActiveRecord::Base
     ).all
   end
 
-  def status
-    FinanceReportService.new(finance_report: self).status_text
-  end
-
-  def can_complete?
-    FinanceReportService.new(finance_report: self).can_complete?
-  end
-
   def week
     RotaWeek.new(week_start)
   end
