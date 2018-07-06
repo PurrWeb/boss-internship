@@ -30,6 +30,10 @@ class HolidayRequest < ActiveRecord::Base
     )
   end
 
+  def frozen?
+    false
+  end
+
   def current_state
     state_machine.current_state
   end
