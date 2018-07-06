@@ -1,9 +1,9 @@
-class FinanceReportStatusService
+class FinanceReportService
   def initialize(finance_report: )
     @finance_report = finance_report
   end
 
-  def call
+  def status_data
     {
       can_complete: can_complete?,
       status_text: status_text,

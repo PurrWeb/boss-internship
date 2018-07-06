@@ -49,11 +49,11 @@ class FinanceReport < ActiveRecord::Base
   end
 
   def status
-    FinanceReportStatusService.new(finance_report: self).status_text
+    FinanceReportService.new(finance_report: self).status_text
   end
 
   def can_complete?
-    FinanceReportStatusService.new(finance_report: self).can_complete?
+    FinanceReportService.new(finance_report: self).can_complete?
   end
 
   def week
