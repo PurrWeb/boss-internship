@@ -48,35 +48,6 @@ class FinanceReport < ActiveRecord::Base
     ).all
   end
 
-  def status
-    if new_record?
-      can_complete? ? REPORT_STATUS_READY_STATUS : REPORT_STATUS_INCOMPLETE_STATUS
-    else
-      REPORT_STATUS_DONE_STATUS
-    end
-  end
-
-  def can_complete?
-    return false if !new_record?
-    return false if !(venue.present? && week.present? && staff_member.present?)
-    return false if week >= RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
-
-    pending_clock_in_days = ClockInDaysPendingConfirmationQuery.new(
-      venue: venue
-    ).all.
-      where(staff_member: staff_member)
-
-    clock_in_days = InRangeQuery.new(
-      relation: pending_clock_in_days,
-      start_value: week.start_date,
-      end_value: week.end_date,
-      start_column_name: 'date',
-      end_column_name: 'date'
-    ).all
-
-    clock_in_days.count == 0
-  end
-
   def week
     RotaWeek.new(week_start)
   end

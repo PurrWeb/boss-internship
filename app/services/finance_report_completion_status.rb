@@ -1,29 +1,46 @@
-class FinanceReportStatusService
+class FinanceReportCompletionStatus
   def initialize(finance_report: )
     @finance_report = finance_report
   end
 
-  def call
-    days_needing_completion = days_with_pending_hour_acceptances.inject({}) do |acc, day|
+  def status_data
+    {
+      can_complete: can_complete?,
+      status_text: status_text,
+      days_needing_completion: days_needing_completion
+    }
+  end
+
+  def can_complete?
+    return false if finance_report.persisted?
+    return false if finance_report.week >= RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
+
+    days_needing_completion.size == 0
+  end
+
+  def status_text
+    if finance_report.new_record?
+      can_complete? ? FinanceReport::REPORT_STATUS_READY_STATUS : FinanceReport::REPORT_STATUS_INCOMPLETE_STATUS
+    else
+      FinanceReport::REPORT_STATUS_DONE_STATUS
+    end
+  end
+
+  private
+  def days_needing_completion
+    pending_hours_acceptance_priod_days_data = days_with_pending_hour_acceptances.inject({}) do |acc, day|
       acc[UIRotaDate.format(day.date)] ||= []
       acc[UIRotaDate.format(day.date)] << "Pending hours acceptance period"
       acc
     end
 
-    days_needing_completion = days_with_incomplete_clock_in_periods.inject(days_needing_completion) do |acc, day|
+    all_issued_days_data = days_with_incomplete_clock_in_periods.inject(pending_hours_acceptance_priod_days_data) do |acc, day|
       acc[UIRotaDate.format(day.date)] ||= []
       acc[UIRotaDate.format(day.date)] << "Incomplete clock in period"
       acc
     end
-
-    {
-      can_complete: finance_report.can_complete?,
-      status_text: finance_report.status,
-      days_needing_completion: days_needing_completion
-    }
+    all_issued_days_data
   end
-
-  private
 
   def staff_member_clocking_days
     InRangeQuery.new(
