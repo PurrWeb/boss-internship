@@ -4,6 +4,7 @@ class Api::V1::StaffMemberProfile::HolidaySerializer < ActiveModel::Serializer
     :holiday_type,
     :start_date,
     :end_date,
+    :payslip_date,
     :creator,
     :note,
     :created_at,
@@ -17,6 +18,10 @@ class Api::V1::StaffMemberProfile::HolidaySerializer < ActiveModel::Serializer
 
   def end_date
     UIRotaDate.format(object.end_date)
+  end
+
+  def payslip_date
+    UIRotaDate.format(object.payslip_date)
   end
 
   def creator
