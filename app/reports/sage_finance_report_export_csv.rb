@@ -26,7 +26,7 @@ class SageFinanceReportExportCSV
           week: week
         ).call.report
 
-        raise "Attempt to export incomplete finance report for staff member #{staff_member.id}" unless report.status === FinanceReport::REPORT_STATUS_DONE_STATUS
+        raise "Attempt to export incomplete finance report for staff member #{staff_member.id}" unless FinanceReportService.new(finance_report: report).status_text === FinanceReport::REPORT_STATUS_DONE_STATUS
 
         csv << [
           staff_member.sage_id,

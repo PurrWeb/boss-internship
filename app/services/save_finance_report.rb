@@ -11,7 +11,7 @@ class SaveFinanceReport
       week: week
     ).call
 
-    raise "Attempt to complete incompleatable finanace report with id: #{result.report.id}" unless result.report.can_complete?
+    raise "Attempt to complete incompleatable finanace report with id: #{result.report.id}" unless FinanceReportService.new(finance_report: result.report).can_complete?
 
     ActiveRecord::Base.transaction do
       report = result.report
