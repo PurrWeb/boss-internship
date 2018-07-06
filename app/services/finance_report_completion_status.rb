@@ -1,4 +1,4 @@
-class FinanceReportService
+class FinanceReportCompletionStatus
   def initialize(finance_report: )
     @finance_report = finance_report
   end

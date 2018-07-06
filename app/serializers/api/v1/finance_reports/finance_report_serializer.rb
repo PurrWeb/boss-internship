@@ -22,7 +22,7 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :staffMemberSageId
 
   def status
-    FinanceReportService.new(finance_report: object).status_data
+    FinanceReportCompletionStatus.new(finance_report: object).status_data
   end
 
   def staffMemberId

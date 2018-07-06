@@ -13,7 +13,7 @@ class SaveFinanceReports
       ).call
     end
 
-    unsaveable_reports = report_results.map(&:report).reject{ |report| FinanceReportService.new(finance_report: report).can_complete? }
+    unsaveable_reports = report_results.map(&:report).reject{ |report| FinanceReportCompletionStatus.new(finance_report: report).can_complete? }
     if unsaveable_reports.length > 0
       raise "Attempt to complete incompletable finanace report for staff members with ids: #{ unsaveable_reports.map{ |report| report.staff_member_id }.join(', ') }"
     end
