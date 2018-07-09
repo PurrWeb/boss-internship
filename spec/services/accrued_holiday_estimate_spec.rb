@@ -139,6 +139,7 @@ describe AccruedHolidayEstimate do
             creator: user,
             starts_at: rota_shift_date.start_time,
             ends_at: rota_shift_date.start_time + minutes_to_create.minutes,
+            payslip_date: rota_shift_date.rota_date + 1.week,
             note: 'Test minutes'
           )
 
@@ -186,7 +187,8 @@ describe AccruedHolidayEstimate do
                 creator: user,
                 note: 'Test minutes',
                 starts_at: rota_shift_date.start_time,
-                ends_at: rota_shift_date.start_time + minutes_to_create.minutes
+                ends_at: rota_shift_date.start_time + minutes_to_create.minutes,
+                payslip_date: rota_shift_date.rota_date
               )
 
               date += 1.day

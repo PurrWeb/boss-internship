@@ -199,6 +199,7 @@ describe HoursAcceptancePeriod do
           staff_member: staff_member,
           starts_at: starts_at,
           ends_at: ends_at,
+          payslip_date: date,
           minutes: minutes,
           creator: user,
           note: 'test note'
