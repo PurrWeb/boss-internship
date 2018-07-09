@@ -46,17 +46,25 @@ module Api
 
           access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
+          staff_member_profile_permissions = StaffMemberProfilePermissions.new(
+            staff_member: staff_member,
+            current_user: current_user,
+            holidays: filtered_holidays,
+            holiday_requests: filtered_holiday_requests
+          )
+
           render(
             json: {
               staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
               access_token: access_token.token,
               holidays: ActiveModel::Serializer::CollectionSerializer.new(filtered_holidays, serializer: Api::V1::StaffMemberProfile::HolidaySerializer, scope: current_user),
-              holiday_requests: ActiveModel::Serializer::CollectionSerializer.new(filtered_holiday_requests, serializer: Api::V1::StaffMemberProfile::HolidayRequestSerializer),
+              holiday_requests: ActiveModel::Serializer::CollectionSerializer.new(filtered_holiday_requests, serializer: Api::V1::StaffMemberProfile::HolidayRequestSerializer, scope: current_user),
               paid_holiday_days: paid_holiday_days,
               unpaid_holiday_days: unpaid_holiday_days,
               estimated_accrued_holiday_days: estimated_accrued_holiday_days,
               holiday_start_date: holiday_start_date,
               holiday_end_date: holiday_end_date,
+              permissions_data: Api::V1::StaffMemberProfile::PermissionsSerializer.new(staff_member_profile_permissions)
             },
             status: :ok
           )

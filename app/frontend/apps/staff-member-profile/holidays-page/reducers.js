@@ -101,20 +101,20 @@ const holidaysReducer = handleActions({
 
     return state
       .update('holidays',
-      (holidays) => holidays.filter(
-        (item) => item.get('id') !== id
+        (holidays) => holidays.filter(
+          (item) => item.get('id') !== id
+        )
       )
-    )
   },
   [DELETE_HOLIDAY_REQUEST]: (state, action) => {
     const id = action.payload.id
 
     return state
       .update('holidayRequests',
-      (holidays) => holidays.filter(
-        (item) => item.get('id') !== id
+        (holidays) => holidays.filter(
+          (item) => item.get('id') !== id
+        )
       )
-    )
   },
   [EDIT_HOLIDAY_SUCCESS]: (state, action) => {
     const payloadJS = oFetch(action, 'payload');
@@ -127,7 +127,7 @@ const holidaysReducer = handleActions({
       .setIn(['holidays', index], fromJS(holidayJS))
       .updateIn(['permissionsData', 'holidaysTab', 'holidays'], holidayRequestsPermissions =>
         holidayRequestsPermissions.set(holidayId, fromJS(permissions)),
-      );
+    );
   },
   [EDIT_HOLIDAY_REQUEST_SUCCESS]: (state, action) => {
     const payloadJS = fromJS(action.payload);
@@ -140,7 +140,7 @@ const holidaysReducer = handleActions({
       .setIn(['holidayRequests', index], fromJS(editedHolidayRequestJS))
       .updateIn(['permissionsData', 'holidaysTab', 'holidayRequests'], holidayRequestsPermissions =>
         holidayRequestsPermissions.set(holidayRequestId, fromJS(holidayRequestsPermissions)),
-      );
+    );
   },
   [ADD_HOLIDAY_SUCCESS]: (state, action) => {
     const newHoliday = oFetch(action, 'payload.newHoliday');
@@ -151,7 +151,7 @@ const holidaysReducer = handleActions({
       .update('holidays', holidays => holidays.push(fromJS(newHoliday)))
       .updateIn(['permissionsData', 'holidaysTab', 'holidays'], holidayRequestsPermissions =>
         holidayRequestsPermissions.set(newHolidayId, fromJS(newPermissions)),
-      );
+    );
   },
   [ADD_HOLIDAY_REQUEST_SUCCESS]: (state, action) => {
     const newHolidayRequest = oFetch(action, 'payload.newHolidayRequest');
@@ -162,7 +162,7 @@ const holidaysReducer = handleActions({
       .update('holidayRequests', holidays => holidays.push(fromJS(newHolidayRequest)))
       .updateIn(['permissionsData', 'holidaysTab', 'holidayRequests'], holidayRequestsPermissions =>
         holidayRequestsPermissions.set(newHolidayRequestId, fromJS(newPermissions)),
-      );
+    );
   },
   [CLOSE_HOLIDAY_MODAL]: (state) => {
     return state
@@ -171,7 +171,7 @@ const holidaysReducer = handleActions({
   [OPEN_EDIT_HOLIDAY_MODAL]: (state, action) => {
     return state
       .set('editHoliday', true)
-      .set('editedHoliday',fromJS(action.payload))
+      .set('editedHoliday', fromJS(action.payload))
   },
   [CLOSE_EDIT_HOLIDAY_MODAL]: (state) => {
     return state
@@ -193,6 +193,7 @@ const holidaysReducer = handleActions({
       start_payslip_date,
       end_payslip_date,
       holiday_requests,
+      permissions_data,
     } = action.payload;
 
     return state
@@ -205,6 +206,7 @@ const holidaysReducer = handleActions({
       .set('holidayEndDate', safeMoment.parse(holiday_end_date, 'YYYY-MM-DD'))
       .set('startPayslipDate', start_payslip_date ? safeMoment.uiDateParse(start_payslip_date) : null)
       .set('endPayslipDate', end_payslip_date ? safeMoment.uiDateParse(end_payslip_date) : null)
+      .set('permissionsData', fromJS(permissions_data))
   }
 }, initialState);
 
