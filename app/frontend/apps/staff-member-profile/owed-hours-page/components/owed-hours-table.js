@@ -1,26 +1,28 @@
 import React from 'react';
 import humanize from 'string-humanize';
 import safeMoment from "~/lib/safe-moment";
+import oFetch from 'o-fetch';
 import confirm from '~/lib/confirm-utils';
 
 import OwedHoursMobileItem from './owed-hours-mobile-item';
 
-export const getOwedHourUIData = (owedHour) => {
-  let hasDate = owedHour.get('hasDate');
-  const date = safeMoment.uiDateParse(owedHour.get('date')).format('ddd DD MMM YYYY');
+export const getOwedHourUIData = (owedHourJS) => {
+  let hasDate = oFetch(owedHourJS, 'hasDate');
+  const date = safeMoment.uiDateParse(oFetch(owedHourJS, 'date')).format('ddd DD MMM YYYY');
   let times = 'N/A';
   if (hasDate) {
-    const startTime = safeMoment.iso8601Parse(owedHour.getIn(['times', 'startsAt'])).utcOffset(owedHour.getIn(['times', 'startsAt'])).format('HH:mm');
-    const endTime = safeMoment.iso8601Parse(owedHour.getIn(['times', 'endsAt'])).utcOffset(owedHour.getIn(['times', 'endsAt'])).format('HH:mm');
+    const startTime = safeMoment.iso8601Parse(oFetch(owedHourJS, 'times.startsAt')).utcOffset(oFetch(owedHourJS, 'times.startsAt')).format('HH:mm');
+    const endTime = safeMoment.iso8601Parse(oFetch(owedHourJS, 'times.endsAt')).utcOffset(oFetch(owedHourJS, 'times.endsAt')).format('HH:mm');
     times = `${startTime} - ${endTime}`;
   }
-  const durationHours = owedHour.getIn(['duration','hours']);
-  const durationMinutes = owedHour.getIn(['duration', 'minutes']);
-  const note = owedHour.get('note') || '-';
-  const creator = owedHour.get('createdBy');
-  const created = safeMoment.iso8601Parse(owedHour.get('createdAt')).utcOffset(owedHour.get('createdAt')).format('Do MMMM YYYY - HH:mm');
-  const editable = owedHour.get('editable');
-  const payslipDate = '20/11/2016!'; //HARDCODED, BACKEND INTEGRATION NEED
+  const durationHours = oFetch(owedHourJS, 'duration.hours');
+  const durationMinutes = oFetch(owedHourJS, 'duration.minutes');
+  const note = owedHourJS.note || '-';
+  const creator = oFetch(owedHourJS, 'createdBy');
+  const created = safeMoment.iso8601Parse(oFetch(owedHourJS, 'createdAt')).utcOffset(oFetch(owedHourJS, 'createdAt')).format('Do MMMM YYYY - HH:mm');
+  const editable = oFetch(owedHourJS, 'editable');
+  const payslipDate = oFetch(owedHourJS, 'payslipDate');
+
   return { hasDate, date, times, durationHours, durationMinutes, note, creator, created, editable, payslipDate };
 }
 
@@ -96,36 +98,37 @@ const CreatedByCell = ({label, creator, created}) => {
 }
 
 const Row = ({owedHour, deleteOwedHours, openEditModal, isStaffMemberDisabled}) => {
-  const {
-    date,
-    times,
-    durationHours,
-    durationMinutes,
-    creator,
-    created,
-    note,
-    editable,
-    payslipDate,
-  } = getOwedHourUIData(owedHour);
+    const owedHourJS = owedHour.toJS();
+    const [
+      date,
+      times,
+      durationHours,
+      durationMinutes,
+      creator,
+      created,
+      note,
+      editable,
+      payslipDate,
+    ] = oFetch(getOwedHourUIData(owedHourJS), "date", "times", "durationHours", "durationMinutes", "creator", "created", "note", "editable", "payslipDate");
 
   return (
     <div className="boss-table__row">
       <SimpleCell label="Date" text={date} />
       <SimpleCell label="Times" text={times} />
       <SimpleCell label="Duration (hours)" text={durationHours} />
-      <SimpleCell label="Duration (minutes)" text={durationMinutes} />      
+      <SimpleCell label="Duration (minutes)" text={durationMinutes} />
       <CreatedByCell label="CreatedBy" creator={creator} created={created} />
       <SimpleCell label="Note" text={note} />
       <SimpleCell label="Payslip Date" text={payslipDate} />
       <ActionsCell
         editable={editable}
         label="Actions"
-        owedHourId={owedHour.get('id')}
+        owedHourId={oFetch(owedHourJS, 'id')}
         deleteOwedHours={deleteOwedHours}
         openEditModal={openEditModal}
         owedHour={owedHour}
         isStaffMemberDisabled={isStaffMemberDisabled}
-      />      
+      />
     </div>
   )
 }
@@ -161,7 +164,7 @@ const OwedStats = ({week}) => {
 };
 
 
-const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal, isStaffMemberDisabled}) => {    
+const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal, isStaffMemberDisabled}) => {
   const renderRows = (owedHours, deleteOwedHours, openEditModal) => {
     return owedHours.map(owedHour => {
       return <Row
@@ -200,7 +203,7 @@ const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal, isStaffMembe
               <Header />
               {renderRows(owedHour.get('owedHours'), deleteOwedHours, openEditModal)}
             </div>
-            {renderMobileItems(owedHour.get('owedHours'), deleteOwedHours, openEditModal)}   
+            {renderMobileItems(owedHour.get('owedHours'), deleteOwedHours, openEditModal)}
           </div>
         </div>
       )

@@ -25,7 +25,8 @@ class OwedHourView
       createdAt: owed_hour.created_at.iso8601,
       note: owed_hour.note,
       editable: owed_hour.editable?,
-      hasDate: owed_hour.has_times?
+      hasDate: owed_hour.has_times?,
+      payslipDate: UIRotaDate.format(owed_hour.payslip_date)
     }
   end
 end

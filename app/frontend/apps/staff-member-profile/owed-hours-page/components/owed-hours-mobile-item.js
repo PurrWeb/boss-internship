@@ -2,7 +2,7 @@ import React from 'react';
 import humanize from 'string-humanize';
 import confirm from '~/lib/confirm-utils';
 import {getOwedHourUIData} from './owed-hours-table';
-
+import oFetch from 'o-fetch';
 
 const OwedHourMobileItem = ({owedHour, deleteOwedHour, openEditModal, isStaffMemberDisabled}) => {
   
@@ -18,8 +18,9 @@ const OwedHourMobileItem = ({owedHour, deleteOwedHour, openEditModal, isStaffMem
       deleteOwedHour(id);
     });
   }
-  
-  const {
+
+  const owedHourJS = owedHour.toJS();
+  const [
     date,
     times,
     durationHours,
@@ -29,10 +30,10 @@ const OwedHourMobileItem = ({owedHour, deleteOwedHour, openEditModal, isStaffMem
     note,
     editable,
     payslipDate,
-  } = getOwedHourUIData(owedHour);
-  
+  ] = oFetch(getOwedHourUIData(owedHourJS), "date", "times", "durationHours", "durationMinutes", "creator", "created", "note", "editable", "payslipDate");
+
   const duration = `${durationHours} hours ${durationMinutes} minutes`;
-  const owedHourId = owedHour.get('id');
+  const owedHourId = oFetch(owedHourJS, 'id');
 
   return <div className="boss-check boss-check_role_panel boss-check_page_smp-owed-hours">
     <div className="boss-check__row">
