@@ -2,6 +2,7 @@ import React from 'react';
 import safeMoment from "~/lib/safe-moment";
 import ToggleButton from '~/components/toggle-button';
 import utils from '~/lib/utils';
+import oFetch from 'o-fetch';
 
 const PAYED_HOLIDAY = 'paid_holiday';
 const UNPAYED_HOLIDAY = 'unpaid_holiday';
@@ -70,7 +71,7 @@ export default class HolidayRow extends React.Component {
       const endDate = safeMoment.uiDateParse(holiday.end_date).format('ddd Do MMM');
       const createdAt = safeMoment.iso8601Parse(holiday.created_at).format(utils.humanDateFormatWithTime());
       const date = startDate === endDate ? startDate : `${startDate} - ${endDate}`
-      const payslipDate = '20/11/2016!'; //HARDCODED, BACKEND INTEGRATION NEED
+      const payslipDate = oFetch(holiday, 'payslip_date');
       return (
         <div className="boss-table__row" key={key}>
           <DetailsCell label="Types">
@@ -100,7 +101,7 @@ export default class HolidayRow extends React.Component {
       const endDate = safeMoment.uiDateParse(holiday.end_date).format('ddd Do MMM');
       const createdAt = safeMoment.iso8601Parse(holiday.created_at).format(utils.humanDateFormatWithTime());
       const date = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
-      const payslipDate = '20/11/2016!'; //HARDCODED, BACKEND INTEGRATION NEED
+      const payslipDate = oFetch(holiday, 'payslip_date');
       return (
         <div className="boss-check boss-check_role_panel boss-check_page_holidays-report-details" key={key}>
           <DetailsMobileRow>

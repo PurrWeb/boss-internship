@@ -17,6 +17,7 @@ export default class HolidayReportApp extends Component {
         var staffTypes = oFetch(data, "staffTypes");
         var staffMembers = oFetch(data, "staffMembers");
         var holidays = oFetch(data, "holidays");
+        holidays = holidays.map(holiday => ({ ...holiday, payslip_date: '11-11-2016!'})) // HARDCODED, MUST BE REMOVED AFTER BACKEND INTEGRATION
         var venues = oFetch(data, "venues");
         var pageData = oFetch(data, "pageData");
         var holidaysCount = oFetch(data, "holidaysCount");
