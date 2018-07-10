@@ -45,16 +45,18 @@ export const deleteOwedHours = (owedHourId) => (dispatch, getState) => {
   });
 }
 
-export const editOwedHours = ({startsAt, endsAt, date, note, id}) => (dispatch, getState) => {
+export const editOwedHours = ({startsAt, endsAt, date, note, id, payslipDate}) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id'])
   const formatedDate = date.format('DD-MM-YYYY')
+  const formatedPayslipDate = payslipDate.format('DD-MM-YYYY')
 
   return axios.put(`/api/v1/staff_members/${staffMemberId}/owed_hours/${id}`, {
     startsAt: startsAt,
     endsAt: endsAt,
     note: note,
     date: formatedDate,
+    payslipDate: formatedPayslipDate,
   },
   {
     headers: {
