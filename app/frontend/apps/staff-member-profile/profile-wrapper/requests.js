@@ -1,6 +1,8 @@
 import axios from 'axios';
 import safeMoment from "~/lib/safe-moment";
 import {SECURITY_TYPE_ID} from './constants';
+import oFetch from 'o-fetch';
+import utils from "~/lib/utils";
 
 const accessToken = window.boss.accessToken;
 
@@ -26,29 +28,67 @@ export const disableStaffMember = ({staffMemberId, neverRehire, reason}) => {
 export const enableStaffMember = (payload) => {
   http.defaults.headers.common['Authorization'] = `Token token="${window.boss.accessToken}"`;
 
-  const {
+  const staffMemberId = oFetch(payload, 'staffMemberId');
+  const staffType = oFetch(payload, 'staffType');
+  const siaBadgeNumber = oFetch(payload, 'siaBadgeNumber');
+  const siaBadgeExpiryDate = oFetch(payload, 'siaBadgeExpiryDate');
+  const address = oFetch(payload, 'address');
+  const avatar = oFetch(payload, 'avatar');
+  const country = oFetch(payload, 'country');
+  const county = oFetch(payload, 'county');
+  const dateOfBirth = safeMoment.iso8601Parse(oFetch(payload, 'dateOfBirth')).format(utils.apiDateFormat);
+  const dayPreferenceNote = oFetch(payload, 'dayPreferenceNote');
+  const emailAddress = oFetch(payload, 'emailAddress');
+  const firstName = oFetch(payload, 'firstName');
+  const surname = oFetch(payload, 'surname');
+  const gender = oFetch(payload, 'gender');
+  const hoursPreferenceNote = oFetch(payload, 'hoursPreferenceNote');
+  const mainVenue = oFetch(payload, 'mainVenue');
+  const nationalInsuranceNumber = oFetch(payload, 'nationalInsuranceNumber');
+  const otherVenues = oFetch(payload, 'otherVenues');
+  const payRate = oFetch(payload, 'payRate');
+  const phoneNumber = oFetch(payload, 'phoneNumber');
+  const postcode = oFetch(payload, 'postcode');
+  const employmentStatus = oFetch(payload, 'employmentStatus');
+  const sageId = oFetch(payload, 'sageId');
+  const startsAt = safeMoment.iso8601Parse(oFetch(payload, 'startsAt')).format(utils.apiDateFormat)
+
+  let requestParams = {
     staffMemberId,
     staffType,
     siaBadgeNumber,
     siaBadgeExpiryDate,
-  } = payload;
-
-  const values = {...payload, startsAt: safeMoment.iso8601Parse(payload.startsAt).format("DD-MM-YYYY")}
-
-  let requestParams = {}
+    employmentStatus,
+    address,
+    avatar,
+    country,
+    county,
+    dateOfBirth,
+    dayPreferenceNote,
+    emailAddress,
+    firstName,
+    surname,
+    gender,
+    hoursPreferenceNote,
+    mainVenue,
+    nationalInsuranceNumber,
+    otherVenues,
+    payRate,
+    phoneNumber,
+    postcode,
+    sageId,
+    staffType,
+    startsAt
+  };
 
   if (staffType === SECURITY_TYPE_ID) {
-    requestParams = {
-      ...values,
-      siaBadgeNumber,
-      siaBadgeExpiryDate: safeMoment.uiDateParse(siaBadgeExpiryDate).format("DD-MM-YYYY")
-    }
+    const siaBadgeExpiryDate = oFetch(payload, 'siaBadgeExpiryDate');
+    const siaBadgeNumber = oFetch(payload, 'siaBadgeNumber');
+    requestParams['siaBadgeNumber'] = siaBadgeNumber;
+    requestParams['siaBadgeExpiryDate'] = safeMoment.uiDateParse(siaBadgeExpiryDate).format(utils.apiDateFormat)
   } else {
-    requestParams = {
-      ...values,
-      siaBadgeNumber: null,
-      siaBadgeExpiryDate: null,
-    }
+    requestParams['siaBadgeNumber'] = null;
+    requestParams['siaBadgeExpiryDate'] = null;
   }
 
   return http.post(`/api/v1/staff_members/${staffMemberId}/enable`, requestParams);

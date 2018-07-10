@@ -66,7 +66,7 @@ class StaffMemberApiUpdateService
       staff_type: staff_type,
       gender: params.fetch(:gender),
       phone_number: params.fetch(:phone_number),
-      date_of_birth: params.fetch(:date_of_birth),
+      date_of_birth: UIRotaDate.parse(params.fetch(:date_of_birth)),
       national_insurance_number: params.fetch(:national_insurance_number),
       name_attributes: {
         first_name: params.fetch(:first_name),
@@ -79,7 +79,7 @@ class StaffMemberApiUpdateService
         postcode: params.fetch(:postcode)
       },
       sia_badge_number: params.fetch(:sia_badge_number),
-      sia_badge_expiry_date: params.fetch(:sia_badge_expiry_date)
+      sia_badge_expiry_date: params.fetch(:sia_badge_expiry_date).present? && UIRotaDate.parse(params.fetch(:sia_badge_expiry_date))
     }
 
     new_email_address = (params.fetch(:email_address) || '').downcase.strip
@@ -190,7 +190,7 @@ class StaffMemberApiUpdateService
       update_params[param] = value
     end
     update_params[:sia_badge_number] = params[:sia_badge_number] if params[:sia_badge_number].present?
-    update_params[:sia_badge_expiry_date] = params[:sia_badge_expiry_date] if params[:sia_badge_expiry_date].present?
+    update_params[:sia_badge_expiry_date] = UIRotaDate.parse(params[:sia_badge_expiry_date]) if params[:sia_badge_expiry_date].present?
 
     model_service_result = UpdateStaffMemberEmploymentDetails.new(
       requester: requester,
