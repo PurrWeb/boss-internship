@@ -9,6 +9,7 @@ describe HolidayDateValidator do
       staff_member: staff_member,
       start_date: start_date,
       end_date: end_date,
+      payslip_date: payslip_date
     ).tap do |holiday|
       holiday.validate_as_creation = true
     end
@@ -16,10 +17,39 @@ describe HolidayDateValidator do
   let(:now) { RotaWeek.new(Time.current.to_date).start_date }
   let(:staff_member) { FactoryGirl.build(:staff_member) }
   let(:validator) { HolidayDateValidator.new(holiday) }
+  let(:payslip_date) { now }
 
   around(:each) do |example|
     travel_to now do
       example.run
+    end
+  end
+
+  context 'dates are in the past' do
+    let(:past_week) { RotaWeek.new(now - 3.weeks) }
+    let(:past_week_start ) { past_week.start_date }
+    let(:start_date) { past_week_start }
+    let(:end_date) { past_week_start + 1.day}
+
+    it 'should not raise error' do
+      validator.validate
+      expect(holiday.errors.keys).to eq([])
+    end
+  end
+
+  context 'payslip date is in the past' do
+    let(:future_week) { RotaWeek.new(now + 3.weeks) }
+    let(:future_week_start ) { future_week.start_date }
+    let(:start_date) { future_week_start }
+    let(:end_date) { future_week_start + 1.day}
+    let(:payslip_date) { now - 3.weeks }
+
+    it 'should raise error' do
+      validator.validate
+      expect(holiday.errors.keys).to eq([:base])
+      expect(holiday.errors[:base]).to eq(
+        [HolidayDateValidator::PAYSLIP_DATE_IN_PAST_CREATION_VALIDATION_MESSAGE]
+      )
     end
   end
 
