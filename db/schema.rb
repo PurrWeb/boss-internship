@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180619163415) do
+ActiveRecord::Schema.define(version: 20180710114709) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -485,6 +485,7 @@ ActiveRecord::Schema.define(version: 20180619163415) do
 
   add_index "holidays", ["end_date"], name: "index_holidays_on_end_date", using: :btree
   add_index "holidays", ["holiday_type"], name: "index_holidays_on_holiday_type", using: :btree
+  add_index "holidays", ["payslip_date"], name: "index_holidays_on_payslip_date", using: :btree
   add_index "holidays", ["staff_member_id"], name: "index_holidays_on_staff_member_id", using: :btree
   add_index "holidays", ["start_date"], name: "index_holidays_on_start_date", using: :btree
 
@@ -812,6 +813,7 @@ ActiveRecord::Schema.define(version: 20180619163415) do
 
   add_index "owed_hours", ["date"], name: "index_owed_hours_on_date", using: :btree
   add_index "owed_hours", ["disabled_at"], name: "index_owed_hours_on_disabled_at", using: :btree
+  add_index "owed_hours", ["payslip_date"], name: "index_owed_hours_on_payslip_date", using: :btree
   add_index "owed_hours", ["staff_member_id"], name: "index_owed_hours_on_staff_member_id", using: :btree
 
   create_table "pay_rates", force: :cascade do |t|
