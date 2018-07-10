@@ -164,6 +164,16 @@ export const appRoutes = {
         }
         return result;
     },
+    staffMemberHolidaysFromFinanceReport: function(staffMemberId, dStartDate, dEndDate){
+        if (staffMemberId === undefined) {
+            throw new Error("No staff member id supplied to appRoutes.staffMemberHolidays")
+        }
+        let result = "/staff_members/" + staffMemberId + "/holidays";
+        if(dStartDate !== undefined && dEndDate !== undefined){
+          result = result + `?start_date=${dStartDate}&end_date=${dEndDate}`;
+        }
+        return result;
+    },
     staffMemberOwedHours: function(staffMemberId, dStartDate, dEndDate){
         if (staffMemberId === undefined) {
             throw new Error("No staff member id supplied to appRoutes.staffMemberOwedHours")
