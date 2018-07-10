@@ -17,8 +17,18 @@ class OwedHour < ActiveRecord::Base
   validate :times_valid
   validate :minutes_valid_for_times
   validate :no_time_conflicts
+  validate :payslip_date_valid
 
   attr_accessor :validate_as_creation
+
+  #validation
+  def payslip_date_valid(now: Time.current)
+    return unless enabled? && payslip_date.present?
+
+    if changed.include?("payslip_date")
+      errors.add(:payslip_date, "can't be in the past") if payslip_date < RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+    end
+  end
 
   #validation
   def date_valid
