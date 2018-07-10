@@ -99,7 +99,7 @@ export const deleteHolidayRequest = holidayId => (dispatch, getState) => {
     });
 };
 
-export const editHoliady = ({ startDate, endDate, holidayType, note, id }) => (
+export const editHoliady = ({ startDate, endDate, holidayType, note, id, payslipDate }) => (
   dispatch,
   getState,
 ) => {
@@ -107,6 +107,7 @@ export const editHoliady = ({ startDate, endDate, holidayType, note, id }) => (
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   const formateStartDate = startDate.format('DD-MM-YYYY');
   const formatedEndDate = endDate.format('DD-MM-YYYY');
+  const formatedPayslipDate = payslipDate.format('DD-MM-YYYY');
 
   return axios
     .put(
@@ -116,6 +117,7 @@ export const editHoliady = ({ startDate, endDate, holidayType, note, id }) => (
         end_date: formatedEndDate,
         note: note,
         holiday_type: holidayType,
+        payslip_date: formatedPayslipDate,
       },
       {
         headers: {
