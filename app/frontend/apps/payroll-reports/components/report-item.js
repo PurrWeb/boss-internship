@@ -52,6 +52,8 @@ class ReportItem extends Component {
 
   render() {
     const report = oFetch(this.props, 'report');
+    const startDate = oFetch(this.props, 'startDate');
+    const endDate = oFetch(this.props, 'endDate');
     const fullName = oFetch(report, 'staffMemberName');
     const weeklyHours = utils.round(oFetch(report, 'weeklyHours'), 2);
     const owedHours = utils.round(oFetch(report, 'owedHours'), 2);
@@ -134,7 +136,7 @@ class ReportItem extends Component {
           </div>
         ) : (
           <div className={holidayDaysCountClassName}>
-            <a href={appRoutes.staffMemberHolidays(staffMemberId)} className="boss-table__link">
+            <a href={appRoutes.staffMemberHolidaysFromFinanceReport(staffMemberId, startDate, endDate)} className="boss-table__link">
               {holidayDaysCount}
             </a>
           </div>

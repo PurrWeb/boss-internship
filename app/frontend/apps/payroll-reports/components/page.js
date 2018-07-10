@@ -90,6 +90,8 @@ class Page extends Component {
                     <ReportItem
                       weekDates={weekDates}
                       report={report}
+                      startDate={startDate}
+                      endDate={endDate}
                     />
                   );
                 }}
