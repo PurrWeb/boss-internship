@@ -1,6 +1,8 @@
 import React from 'react';
 import { HashRouter as Router, Route } from 'react-router-dom';
 import Immutable from 'immutable';
+import oFetch from 'o-fetch';
+import PrivateRoute from './components/private-route';
 
 import StaffVetting from './routes/staff-vetting';
 import StaffWithoutEmailAddress from './routes/staff-members-without-email-address';
@@ -33,6 +35,29 @@ class StaffVettingApp extends React.Component {
       venues,
       staffTypes,
     } = this.props;
+    const permissions = {
+      staffWithoutEmail: {
+        canView: false,
+      },
+      staffWithoutNiNumber: {
+        canView: true,
+      },
+      staffWithoutAddress: {
+        canView: false,
+      },
+      staffWithoutPhoto: {
+        canView: true,
+      },
+      staffOnWrongPayrate: {
+        canView: true,
+      },
+      staffWithExpiredSiaBadge: {
+        canView: false,
+      },
+      staffWithBouncedEmails: {
+        canView: false,
+      },
+    };
 
     const staffVettingProps = {
       staffWithoutEmailCount,
@@ -42,9 +67,18 @@ class StaffVettingApp extends React.Component {
       staffOnWrongPayrateCount,
       staffWithExpiredSiaBadgeCount,
       staffMembersWithBouncedEmailCount,
+      permissions,
     };
     const imVenues = Immutable.fromJS(venues);
     const imStaffTypes = Immutable.fromJS(staffTypes);
+    const canViewWithoutAddress = oFetch(permissions, 'staffWithoutAddress.canView');
+    const canViewWithoutEmail = oFetch(permissions, 'staffWithoutEmail.canView');
+    const canViewWithouNiNumber = oFetch(permissions, 'staffWithoutNiNumber.canView');
+
+    const canViewWithoutPhoto = oFetch(permissions, 'staffWithoutPhoto.canView');
+    const canViewOnWrongPayrate = oFetch(permissions, 'staffOnWrongPayrate.canView');
+    const canViewWithExpiredSiaBadge = oFetch(permissions, 'staffWithExpiredSiaBadge.canView');
+    const canViewWithBouncedEmails = oFetch(permissions, 'staffWithBouncedEmails.canView');
     return (
       <Router>
         <div>
@@ -55,9 +89,10 @@ class StaffVettingApp extends React.Component {
               return <StaffVetting {...props} {...staffVettingProps} />;
             }}
           />
-          <Route
+          <PrivateRoute
             exact
             path="/staff_members_without_email"
+            canView={canViewWithoutEmail}
             render={props => (
               <StaffWithoutEmailAddress
                 venues={imVenues}
@@ -67,9 +102,10 @@ class StaffVettingApp extends React.Component {
               />
             )}
           />
-          <Route
+          <PrivateRoute
             exact
             path="/staff_members_without_ni_number"
+            canView={canViewWithouNiNumber}
             render={props => (
               <StaffMembersWithoutNINumber
                 venues={imVenues}
@@ -79,9 +115,10 @@ class StaffVettingApp extends React.Component {
               />
             )}
           />
-          <Route
+          <PrivateRoute
             exact
             path="/staff_members_without_address"
+            canView={canViewWithoutAddress}
             render={props => (
               <StaffWithoutAddress
                 venues={imVenues}
@@ -91,9 +128,10 @@ class StaffVettingApp extends React.Component {
               />
             )}
           />
-          <Route
+          <PrivateRoute
             exact
             path="/staff_members_without_photo"
+            canView={canViewWithoutPhoto}
             render={props => (
               <StaffMembersWithoutPhoto
                 venues={imVenues}
@@ -103,9 +141,10 @@ class StaffVettingApp extends React.Component {
               />
             )}
           />
-          <Route
+          <PrivateRoute
             exact
             path="/staff_members_on_wrong_payrate"
+            canView={canViewOnWrongPayrate}
             render={props => (
               <StaffMembersOnWrongPayrate
                 venues={imVenues}
@@ -115,9 +154,10 @@ class StaffVettingApp extends React.Component {
               />
             )}
           />
-          <Route
+          <PrivateRoute
             exact
             path="/staff_members_with_expired_sia_badge"
+            canView={canViewWithExpiredSiaBadge}
             render={props => (
               <StaffMembersWithExpiredSiaBadge
                 venues={imVenues}
@@ -127,9 +167,10 @@ class StaffVettingApp extends React.Component {
               />
             )}
           />
-          <Route
+          <PrivateRoute
             exact
             path="/staff_members_with_bounced_emails"
+            canView={canViewWithBouncedEmails}
             render={props => (
               <StaffMembersWithBouncedEmails
                 venues={imVenues}
