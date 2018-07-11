@@ -35,6 +35,14 @@ RSpec.describe 'Clocking actions' do
       api_key: api_key
     ).persist!
   end
+  let(:now) { Time.current }
+  let(:call_time) { now }
+
+  around(:each) do |example|
+    travel_to call_time do
+      example.run
+    end
+  end
 
   before do
     set_authorization_header(access_token.token)
@@ -125,6 +133,7 @@ RSpec.describe 'Clocking actions' do
 
   describe '#clock_out' do
     let(:url) { url_helpers.clock_out_api_v1_clocking_index_path }
+    let(:call_time) { day_start + 2.hours }
 
     context 'when last event is a clock_in' do
       let(:params) do
@@ -180,16 +189,14 @@ RSpec.describe 'Clocking actions' do
       end
 
       specify 'should associate event with create period' do
-        call_time = day_start + 2.hours
-        travel_to call_time do
-          token = ApiAccessToken.new(
-            expires_at: 30.minutes.from_now,
-            api_key: api_key,
-            staff_member: staff_member
-          ).persist!
-          set_authorization_header(token.token)
-          post(url, params)
-        end
+        token = ApiAccessToken.new(
+          expires_at: 30.minutes.from_now,
+          api_key: api_key,
+          staff_member: staff_member
+        ).persist!
+
+        set_authorization_header(token.token)
+        post(url, params)
         set_authorization_header(access_token.token)
 
         expect(ClockInPeriod.count).to eq(1)
@@ -274,17 +281,12 @@ RSpec.describe 'Clocking actions' do
       end
 
       specify 'should work' do
-        response = nil
-        travel_to call_time do
-          response = post(url, params)
-        end
+        response = post(url, params)
         expect(response.status).to eq(ok_status)
       end
 
       specify 'hours acceptance period should be created with a matching break' do
-        travel_to call_time do
-          post(url, params)
-        end
+        post(url, params)
         expect(HoursAcceptancePeriod.count).to eq(1)
         clock_in_period = ClockInPeriod.last
         hours_acceptance_period = HoursAcceptancePeriod.last
@@ -312,17 +314,12 @@ RSpec.describe 'Clocking actions' do
         end
 
         specify 'should work' do
-          response = nil
-          travel_to call_time do
-            response = post(url, params)
-          end
+          response = post(url, params)
           expect(response.status).to eq(ok_status)
         end
 
         specify 'should not create conflicting hours acceptance period' do
-          travel_to call_time do
-            post(url, params)
-          end
+          post(url, params)
           expect(HoursAcceptancePeriod.count).to eq(1)
         end
       end
