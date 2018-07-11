@@ -111,20 +111,30 @@ const holidaysReducer = handleActions({
     )
   },
   [EDIT_HOLIDAY_SUCCESS]: (state, action) => {
-    const editedItem = fromJS(action.payload);
-    const id = editedItem.get('id');
-    const index = state.get('holidays').findIndex(item => item.get("id") === id);
+    const payloadJS = oFetch(action, 'payload');
+    const holidayJS = oFetch(payloadJS, 'holiday');
+    const holidayId = oFetch(holidayJS, 'id');
+    const permissions = oFetch(payloadJS, 'permissions');
+    const index = state.get('holidays').findIndex(item => item.get("id") === holidayId);
 
     return state
-      .setIn(['holidays', index], editedItem)
+      .setIn(['holidays', index], fromJS(holidayJS))
+      .updateIn(['permissionsData', 'holidaysTab', 'holidays'], holidayRequestsPermissions =>
+        holidayRequestsPermissions.set(holidayId, fromJS(permissions)),
+      );
   },
   [EDIT_HOLIDAY_REQUEST_SUCCESS]: (state, action) => {
-    const editedItem = fromJS(action.payload);
-    const id = editedItem.get('id');
-    const index = state.get('holidayRequests').findIndex(item => item.get("id") === id);
+    const payloadJS = fromJS(action.payload);
+    const editedHolidayRequestJS = oFetch(payloadJS, 'holidayRequest');
+    const holidayRequestPermissions = oFetch(payloadJS, 'permissions');
+    const holidayRequestId = oFetch(editedHolidayRequestJS, 'id');
+    const index = state.get('holidayRequests').findIndex(item => item.get("id") === holidayRequestId);
 
     return state
-      .setIn(['holidayRequests', index], editedItem)
+      .setIn(['holidayRequests', index], fromJS(editedHolidayRequestJS))
+      .updateIn(['permissionsData', 'holidaysTab', 'holidayRequests'], holidayRequestsPermissions =>
+        holidayRequestsPermissions.set(holidayRequestId, fromJS(holidayRequestsPermissions)),
+      );
   },
   [ADD_HOLIDAY_SUCCESS]: (state, action) => {
     const newHoliday = oFetch(action, 'payload.newHoliday');

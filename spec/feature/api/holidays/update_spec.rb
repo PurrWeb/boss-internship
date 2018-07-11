@@ -102,16 +102,31 @@ RSpec.describe 'Update holiday API endpoint' do
       expect(holiday.parent.holiday_type).to eq(new_holiday_type)
     end
 
-    it 'it should return created holiday' do
+    it 'should return created holiday' do
       json = JSON.parse(response.body)
       holiday = staff_member.holidays.last
 
-      expect(json.fetch("id")).to eq(holiday.id)
-      expect(json.fetch("start_date")).to eq(UIRotaDate.format(holiday.start_date))
-      expect(json.fetch("end_date")).to eq(UIRotaDate.format(holiday.end_date))
-      expect(json.fetch("payslip_date")).to eq(UIRotaDate.format(holiday.payslip_date))
-      expect(json.fetch("holiday_type")).to eq(holiday.holiday_type)
-      expect(json.fetch("creator")).to eq(holiday.creator.full_name)
+      holiday_json = json.fetch("holiday")
+      expect(holiday_json.fetch("id")).to eq(holiday.id)
+      expect(holiday_json.fetch("start_date")).to eq(UIRotaDate.format(holiday.start_date))
+      expect(holiday_json.fetch("end_date")).to eq(UIRotaDate.format(holiday.end_date))
+      expect(holiday_json.fetch("payslip_date")).to eq(UIRotaDate.format(holiday.payslip_date))
+      expect(holiday_json.fetch("holiday_type")).to eq(holiday.holiday_type)
+      expect(holiday_json.fetch("creator")).to eq(holiday.creator.full_name)
+  end
+
+  it 'should return permissions for holiday' do
+    json = JSON.parse(response.body)
+    holiday = staff_member.holidays.last
+    user_ability = UserAbility.new(user)
+
+    permissions_json = json.fetch("permissions")
+    expect(permissions_json.fetch("isEditable")).to eq(
+      user_ability.can?(:edit, holiday)
+    )
+    expect(permissions_json.fetch("isDeletable")).to eq(
+      user_ability.can?(:destroy, holiday)
+    )
   end
 
   end

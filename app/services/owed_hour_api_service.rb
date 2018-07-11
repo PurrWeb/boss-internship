@@ -11,14 +11,14 @@ class OwedHourApiService
     @ability = UserAbility.new(requester)
   end
   attr_reader :owed_hour, :ability, :requester
-  
+
   def update(params)
     assert_action_permitted(:update)
 
     model_service_result = ImmutableOwedHourUpdate.new(
       requester: requester,
       owed_hour: owed_hour,
-      params: owed_hour_params(params: params)
+      params: owed_hour_update_params(params: params)
     ).call
     api_errors = nil
     unless model_service_result.success?
@@ -29,14 +29,14 @@ class OwedHourApiService
 
   def create(params)
     assert_action_permitted(:create)
-    
-    create_owed_hour_params = owed_hour_params(params: params)
+
+    create_owed_hour_params = owed_hour_create_params(params: params)
       .merge(staff_member: owed_hour.staff_member, creator: requester)
 
     model_service_result = CreateOwedHour.new(
       params: create_owed_hour_params
     ).call
-    
+
     api_errors = nil
     unless model_service_result.success?
       api_errors = OwedHourApiErrors.new(owed_hour: model_service_result.owed_hour)
@@ -61,21 +61,25 @@ class OwedHourApiService
 
   private
 
-  def owed_hour_params(params:)
+  def owed_hour_create_params(params:)
     date = params.fetch(:date)
-    payslip_date = params.fetch(:payslip_date)
-
     starts_at = starts_at_param(date: date, starts_at: params.fetch(:starts_at))
     ends_at = ends_at_param(date: date, ends_at: params.fetch(:ends_at))
     minutes = (starts_at.present? && ends_at.present?) && ((ends_at - starts_at) / 60)
     {
       date: date,
-      payslip_date: payslip_date,
       starts_at: starts_at,
       ends_at: ends_at,
       minutes: minutes,
       note: params[:note]
     }
+  end
+
+  def owed_hour_update_params(params:)
+    payslip_date = params.fetch(:payslip_date)
+    owed_hour_create_params(params: params).merge(
+      payslip_date: payslip_date,
+    )
   end
 
   def starts_at_param(date:, starts_at:)

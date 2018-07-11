@@ -12,9 +12,12 @@ class CreateOwedHour
   def call
     success = false
     owed_hour = nil
-    
+
     ActiveRecord::Base.transaction do
-      owed_hour = OwedHour.new(params)
+      payslip_date = params[:date].present? && GetPayslipDate.new(item_date: params.fetch(:date)).call
+      owed_hour = OwedHour.new(params.merge(
+        payslip_date: payslip_date
+      ))
       owed_hour.validate_as_creation = true
       success = owed_hour.save
     end

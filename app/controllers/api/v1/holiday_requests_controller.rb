@@ -64,9 +64,16 @@ module Api
 
         if result.success?
           render(
-            json: result.holiday_request,
-            serializer: Api::V1::StaffMemberProfile::HolidayRequestSerializer,
-            scope: current_user,
+            json: {
+              holiday_request: Api::V1::StaffMemberProfile::HolidayRequestSerializer.new(
+                result.holiday_request,
+                scope: current_user
+              ),
+              permissions: {
+                isEditable: can?(:edit, result.holiday_request),
+                isDeletable: can?(:destroy, result.holiday_request)
+              }
+            },
             status: 200
           )
         else

@@ -42,7 +42,6 @@ RSpec.describe 'Create owed hour API endpoint' do
   let(:valid_params) do
     {
       date: UIRotaDate.format(date),
-      payslipDate: UIRotaDate.format(payslip_week.start_date),
       startsAt: starts_at_offset,
       endsAt: ends_at_offset,
       note: "TEST"
@@ -51,7 +50,6 @@ RSpec.describe 'Create owed hour API endpoint' do
   let(:empty_params) do
     {
       date: nil,
-      payslipDate: nil,
       startsAt: nil,
       endsAt: nil,
       note: nil

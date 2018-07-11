@@ -5,20 +5,20 @@ module Api
 
       def update
         staff_member = StaffMember.find(params.fetch(:staff_member_id))
-        owed_hour = staff_member.owed_hours.find(params.fetch(:id))        
+        owed_hour = staff_member.owed_hours.find(params.fetch(:id))
 
         result = OwedHourApiService.new(
           requester: current_user,
           owed_hour: owed_hour,
-        ).update(owed_hour_from_params)
+        ).update(owed_hour_update_params)
 
         if result.success?
           owed_hours = OwedHour.enabled
             .where(staff_member: staff_member)
             .includes(creator: [:name]).all
-        
-          serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize      
-          
+
+          serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize
+
           render(
             json: serialized_owed_hours,
             status: 200
@@ -35,15 +35,15 @@ module Api
         result = OwedHourApiService.new(
           requester: current_user,
           owed_hour: OwedHour.new(staff_member: staff_member),
-        ).create(owed_hour_from_params)
+        ).create(owed_hour_create_params)
 
         if result.success?
           owed_hours = OwedHour.enabled
             .where(staff_member: staff_member)
             .includes(creator: [:name]).all
-          
-          serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize      
-            
+
+          serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize
+
           render(
             json: serialized_owed_hours,
             status: 200
@@ -67,9 +67,9 @@ module Api
           owed_hours = OwedHour.enabled
             .where(staff_member: staff_member)
             .includes(creator: [:name]).all
-          
-          serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize      
-            
+
+          serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize
+
           render(
             json: serialized_owed_hours,
             status: 200
@@ -80,14 +80,18 @@ module Api
       end
 
       private
-      def owed_hour_from_params
+      def owed_hour_create_params
         {
           date: UIRotaDate.parse_if_present(params.fetch(:date)),
-          payslip_date: UIRotaDate.parse_if_present(params.fetch(:payslipDate)),
           starts_at: params.fetch(:startsAt) && Integer(params.fetch(:startsAt)),
           ends_at: params.fetch(:endsAt) && Integer(params.fetch(:endsAt)),
           note: params[:note]
         }
+      end
+
+      def owed_hour_update_params
+        owed_hour_create_params.
+          merge(payslip_date: UIRotaDate.parse_if_present(params.fetch(:payslipDate)))
       end
     end
   end

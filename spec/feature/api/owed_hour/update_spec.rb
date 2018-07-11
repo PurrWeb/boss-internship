@@ -103,10 +103,11 @@ RSpec.describe 'Update owed hour API endpoint' do
     it 'should return validation errors' do
       json = JSON.parse(response.body)
 
-      expect(json["errors"]["date"]).to eq(["can't be blank"])
-      expect(json["errors"]["startsAt"]).to eq(["can't be blank"])
-      expect(json["errors"]["endsAt"]).to eq(["can't be blank"])
-      expect(json["errors"]["payslipDate"]).to eq(["can't be blank"])
+      json_errors = json.fetch("errors")
+      expect(json_errors.fetch("date")).to eq(["can't be blank"])
+      expect(json_errors.fetch("startsAt")).to eq(["can't be blank"])
+      expect(json_errors.fetch("endsAt")).to eq(["can't be blank"])
+      expect(json_errors.fetch("payslipDate")).to eq(["can't be blank"])
     end
   end
 

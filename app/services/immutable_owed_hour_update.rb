@@ -61,11 +61,11 @@ class ImmutableOwedHourUpdate
   end
 
   def owed_hours_match?(owed_hour_1, owed_hour_2)
-    [:date, :minutes, :note].all? do |attribute|
+    [:date, :payslip_date, :minutes, :note].all? do |attribute|
       owed_hour_1.public_send(attribute) == owed_hour_2.public_send(attribute)
     end
   end
-  
+
   def update_params
     @update_params ||= begin
       result = {}

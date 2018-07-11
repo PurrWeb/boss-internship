@@ -108,7 +108,8 @@ const Row = ({ holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, per
   const cerated = `(${safeMoment.iso8601Parse(oFetch(jsHoliday, 'created_at')).format('Do MMMM YYYY - HH:mm')})`;
   const editable = oFetch(jsHoliday, 'editable');
   const isFrozen = oFetch(jsHoliday, 'frozen');
-  const payslipDate = oFetch(jsHoliday, 'payslip_date');
+  const sPayslipDate = oFetch(jsHoliday, 'payslip_date');
+  const payslipDateText = sPayslipDate ? safeMoment.uiDateParse(sPayslipDate).format(utils.commonDateFormat) : 'N/A';
 
   const holidayDaysCount = utils.getDaysCountFromInterval(
     oFetch(jsHoliday, 'start_date'),
@@ -141,7 +142,7 @@ const Row = ({ holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, per
       <SimpleCell label="dates" text={utils.formatDateForHoliday(holiday.toJS())} />
       <SimpleCell label="note" text={note} />
       <CreatedByCell label="createdBy" creator={creator} created={cerated} />
-      <SimpleCell label="payslipDate" text={payslipDate} />
+      <SimpleCell label="payslipDate" text={payslipDateText} />
       <ActionsCell
         label="actions"
         isEditable={isEditable}
