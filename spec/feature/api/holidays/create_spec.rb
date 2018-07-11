@@ -28,10 +28,10 @@ RSpec.describe 'Create holiday API endpoint' do
     Holiday::HOLIDAY_TYPES[1]
   end
   let(:invalid_start_date) do
-    (now - 2.week).to_date
+    (now - 2.week + 2.days).to_date
   end
   let(:invalid_end_date) do
-    (now - 2.week + 2.days).to_date
+    (now - 2.week).to_date
   end
   let(:now) { Time.current }
   let(:access_token) do
@@ -55,7 +55,7 @@ RSpec.describe 'Create holiday API endpoint' do
       note: ""
     }
   end
-  
+
   context 'before call' do
     it 'no holidays for staff member should exist' do
       expect(staff_member.holidays.count).to eq(0)
@@ -67,15 +67,15 @@ RSpec.describe 'Create holiday API endpoint' do
       let(:params) do
         valid_params
       end
-      
+
       before do
         response
       end
-  
+
       it 'should return ok status' do
         expect(response.status).to eq(ok_status)
       end
-  
+
       it 'it should create holiday' do
         expect(staff_member.holidays.count).to eq(1)
         expect(staff_member.holidays.first.start_date).to eq(start_date)
@@ -104,15 +104,15 @@ RSpec.describe 'Create holiday API endpoint' do
           holiday_type: ''
         })
       end
-        
+
       before do
         response
       end
-  
+
       it 'should return unprocessable_entity status' do
         expect(response.status).to eq(unprocessable_entity_status)
       end
-  
+
       it 'it shouldn\'t create staff member' do
         expect(staff_member.holidays.count).to eq(0)
       end
@@ -123,6 +123,7 @@ RSpec.describe 'Create holiday API endpoint' do
           "errors" => {
             "startDate" => ["can't be blank"],
             "endDate" => ["can't be blank"],
+            "payslipDate" => ["can't be blank"],
             "holidayType" => ["is required"]
           }
         })
@@ -136,15 +137,15 @@ RSpec.describe 'Create holiday API endpoint' do
           end_date: UIRotaDate.format(invalid_end_date),
         })
       end
-        
+
       before do
         response
       end
-  
+
       it 'should return unprocessable_entity status' do
         expect(response.status).to eq(unprocessable_entity_status)
       end
-  
+
       it 'it shouldn\'t create holiday' do
         expect(staff_member.holidays.count).to eq(0)
       end
@@ -153,7 +154,7 @@ RSpec.describe 'Create holiday API endpoint' do
         json = JSON.parse(response.body)
         expect(json).to eq({
           "errors" => {
-            "base" => ["can't create holidays in the past"],
+            "base" => ["Start date cannot be after end date"],
           }
         })
       end

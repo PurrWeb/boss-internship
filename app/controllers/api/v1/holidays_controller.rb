@@ -81,7 +81,7 @@ module Api
         result = HolidayApiService.new(
           requester: current_user,
           holiday: holiday,
-        ).update(holiday_from_params)
+        ).update(holiday_update_params)
 
         if result.success?
           render(
@@ -125,7 +125,7 @@ module Api
         result = HolidayApiService.new(
           requester: current_user,
           holiday: Holiday.new(staff_member: staff_member),
-        ).create(holiday_from_params)
+        ).create(holiday_create_params)
 
         if result.success?
           render(
@@ -171,14 +171,19 @@ module Api
       end
 
       private
-      def holiday_from_params
+      def holiday_create_params
         {
           start_date: params.fetch(:start_date),
           end_date: params.fetch(:end_date),
-          payslip_date: params.fetch(:payslip_date),
           holiday_type: params.fetch(:holiday_type),
           note: params[:note]
         }
+      end
+
+      def holiday_update_params
+        holiday_create_params.merge(
+          payslip_date: params.fetch(:payslip_date),
+        )
       end
 
       def holiday_start_date_from_params

@@ -57,7 +57,6 @@ class HolidayApiService
     holiday_params = {
       start_date: UIRotaDate.parse_if_present(params.fetch(:start_date)),
       end_date: UIRotaDate.parse_if_present(params.fetch(:end_date)),
-      payslip_date: UIRotaDate.parse_if_present(params.fetch(:payslip_date)),
       holiday_type: params.fetch(:holiday_type),
       note: params[:note]
     }.merge(staff_member: holiday.staff_member, creator: requester)

@@ -14,7 +14,10 @@ class CreateHoliday
     success = false
     holiday = nil
     ActiveRecord::Base.transaction do
-      holiday = Holiday.new(params)
+      payslip_date = params[:start_date].present? && GetPayslipDate.new(item_date: params.fetch(:start_date)).call
+      holiday = Holiday.new(params.merge(
+        payslip_date: payslip_date
+      ))
       holiday.validate_as_assignment = params[:validate_as_assignment]
       holiday.validate_as_creation = true
       success = holiday.save
