@@ -14,6 +14,7 @@ import SecurityShiftRequestList from './security-shift-request-list';
 import SecurityShiftRequestItem from './security-shift-request-item';
 import EditSecurityShiftRequest from './edit-security-shift-request';
 import utils from '~/lib/utils';
+import WeekFilter from './requests-week-filter';
 
 class SecurityShiftRequestsPage extends Component {
   handleEditRequest = (hideModal, values) => {
@@ -82,6 +83,10 @@ class SecurityShiftRequestsPage extends Component {
     const pendingSecurityShiftRequests = oFetch(this.props, 'pendingSecurityShiftRequests');
     const completedSecurityShiftRequests = oFetch(this.props, 'completedSecurityShiftRequests');
     const canCreate = oFetch(this.props, 'canCreate');
+    const date = oFetch(this.props, 'date');
+    const changeWeekDay = oFetch(this.props, 'changeWeekDay');
+    const weekDates = oFetch(this.props, 'weekDates');
+    const venueId = oFetch(this.props, 'venueId');
     return (
       <div>
         <DashboardWeekSelect
@@ -103,6 +108,12 @@ class SecurityShiftRequestsPage extends Component {
           )}
         </DashboardWeekSelect>
         <ContentWrapper>
+          <WeekFilter
+              date={date}
+              onChange={changeWeekDay}
+              weekDates={weekDates.toJS()}
+              venueId={venueId}
+            />
           <SecurityShiftRequestCard title="Pending">
             <SecurityShiftRequestList
               securityShiftRequests={pendingSecurityShiftRequests}
@@ -150,6 +161,9 @@ SecurityShiftRequestsPage.propTypes = {
   completedSecurityShiftRequests: ImmutablePropTypes.list.isRequired,
   pendingSecurityShiftRequests: ImmutablePropTypes.list.isRequired,
   addSecurityShiftRequest: PropTypes.func.isRequired,
+  changeWeekDay: PropTypes.func.isRequired,
+  weekDates: ImmutablePropTypes.list.isRequired,
+  venueId: PropTypes.number.isRequired,
 };
 
 export default SecurityShiftRequestsPage;

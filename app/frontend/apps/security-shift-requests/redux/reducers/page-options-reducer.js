@@ -20,6 +20,7 @@ const pageOptionsReducer = handleActions(
       const endDate = oFetch(action, 'payload.endDate');
       const venueId = oFetch(action, 'payload.venueId');
       const canCreate = oFetch(action, 'payload.canCreate');
+      const chosenDate = oFetch(action, 'payload.date');
 
       return Immutable.fromJS({
         date,
@@ -27,7 +28,12 @@ const pageOptionsReducer = handleActions(
         endDate,
         venueId,
         canCreate,
+        chosenDate,
       });
+    },
+    [types.CHANGE_WEEK_DAY]: (state, action) => {
+      const chosenDate = oFetch(action, 'payload.chosenDate');
+      return state.set('chosenDate', chosenDate);
     },
   },
   initialGlobalState,
