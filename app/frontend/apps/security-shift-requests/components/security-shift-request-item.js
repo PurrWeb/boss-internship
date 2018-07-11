@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import AsyncButton from 'react-async-button';
 import oFetch from 'o-fetch';
 import safeMoment from '~/lib/safe-moment';
 import { appRoutes } from '~/lib/routes';
@@ -169,13 +169,13 @@ class SecurityShiftRequestItem extends Component {
                 </button>
               )}
               {isDeletable && (
-                <button
+                <AsyncButton
+                  text="Delete"
+                  pendingText="Deleting..."
                   onClick={onDeleteSecurityShiftRequest}
                   type="button"
                   className="boss-button boss-button_role_cancel-light boss-button_type_extra-small boss-table__action"
-                >
-                  Delete
-                </button>
+                />
               )}
             </div>
           </div>
